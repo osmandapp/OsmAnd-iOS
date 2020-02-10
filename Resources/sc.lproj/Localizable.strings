@@ -1293,7 +1293,7 @@
 "key_hint_deselect" = "De-ischerta";
 "get_discount_first_few_parts" = "%@ pro sos primos %@";
 "osmand_live_deleted_object" = "Ogetu iscantzelladu";
-"osm_editing_loading_poi" = "Carrighende sas informatziones de sos PDI";
+"osm_editing_loading_poi" = "Carrighende sas informatziones de su PDI";
 "start_navigation" = "Avia sa navigatzione";
 "fav_show" = "Ammustra sos preferidos";
 "fav_hide" = "Cua sos preferidos";
@@ -1451,6 +1451,23 @@
 "displayed_route_save" = "Sarva in OsmAnd Biàgios";
 "trip_name" = "Nùmene de su biàgiu";
 "trip_hint" = "Inserta su nùmene de su biàgiu";
-
 "res_elliptic_mercator" = "Mercatore ellitticu";
 "res_url" = "URL";
+"routing_attr_avoid_ice_roads_fords_name" = "Istransi sos caminos de astra e sos bados";
+"routing_attr_avoid_ice_roads_fords_description" = "Istransi sos caminos de astra e sos bados.";
+"routing_attr_avoid_sett_name" = "Istransi sos impredados e su pavè";
+"routing_attr_avoid_sett_description" = "Chircat de istransire sas carreras e sos caminos impredados o cun su pavè.";
+"shared_string_maximum" = "Màssimu";
+"res_edit_online_map" = "Modìfica sa mitza de sa mapa in lìnia";
+"res_online_name_descr" = "Fruni unu nùmene pro sa mitza in lìnia";
+"res_online_url_descr" = "Inserta o còpia s'URL pro sa mitza in lìnia";
+"res_zoom_levels" = "Livellos de ismanniamentu";
+"res_expire_time" = "Tempus de iscadida";
+"res_mercator" = "Projetzione de Mercadore";
+"res_pseudo_mercator" = "Projetzione de pseudo-Mercadore";
+"res_zoom_levels_desc" = "Custos paràmetros ant a influentzare s'aspetu de sa mapa cando benit impreada comente casta de mapa o istratu superioreinferiore.\n\nCasta de mapa: sa mapa at a èssere limitada a sos ismanniamentos ischertados.\n\nIstratu superiore / Inferiore: Sos livellos de ismanniamentu in ue sos tasseddos ant a èssere visìbiles. B'ant a èssere mudaduras de risolutzione in subra o in suta de sos valores impostados.";
+"res_expire_time_desc" = "Tempus de iscadida in minutos. Sos tassedos s'ant a torrare a carrigare a pustis de su tempus dislindadu. Lassa custu campu bòidu si non tenes bisòngiu de torrare a carrigare sos tasseddos pro custa mitza.\nUna die sunt 1440 minutos.\nUna chida sunt 10 080 minutos.\n30 dies sunt 43 200 minutos.";
+"res_name_warning" = "Su nùmene de su documentu non podet èssere bòidu";
+"res_url_warning" = "S'URL non podet èssere bòidu";
+"res_zoom_warning" = "Su livellu de ismanniamentu mìnimu non podet èssere uguale a s'ismanniamentu màssimu o prus mannu";
+"res_expire_warning" = "Su tempus de iscadida diat dèpere èssere unu nùmeru intre 0 e 10000000";

@@ -84,6 +84,9 @@
         self.bottomBtnView.text = [OALocalizedString(@"sett_show") upperCase];
     }
     [self applySafeAreaMargins];
+    
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 -(UIView *) getTopView
@@ -211,11 +214,11 @@
     return [OAPOISearchHelper getHeightForHeader];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAPOICategory* item = _dataArray[indexPath.row];
-    return [OAIconTextSwitchCell getHeight:item.nameLocalized descHidden:YES detailsIconHidden:NO cellWidth:tableView.bounds.size.width];
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    OAPOICategory* item = _dataArray[indexPath.row];
+//    return [OAIconTextSwitchCell getHeight:item.nameLocalized descHidden:YES detailsIconHidden:NO cellWidth:tableView.bounds.size.width];
+//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -247,7 +250,7 @@
             [cell.iconView setImage: [item icon]];
             cell.descView.hidden = NO;
             cell.switchView.on = YES;
-            
+            //cell showDescription = 
             NSSet<NSString *> *subtypes = [_filter getAcceptedSubtypes:item];
             if (subtypes == [OAPOIBaseType nullSet])
             {

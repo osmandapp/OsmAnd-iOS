@@ -109,6 +109,7 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
                                 @"text": OALocalizedString(@"res_source_one_per_tile"),
                                 @"img": _sourceFormat == EOASourceFormatOnline ? @"menu_cell_selected.png" : @""
             }];
+            break;
         }
         default:
             break;

@@ -28,9 +28,6 @@
     long _expirationTimeMillis;
     BOOL _isEllipsoid;
     BOOL _invertedY;
-    NSString *_randoms;
-    QList<QString> _randomsArray;
-    NSString *_rule;
 }
 
 - (instancetype)initWithFilePath:(NSString *)filePath
@@ -536,6 +533,11 @@
     return _isEllipsoid;
 }
 
+- (BOOL) isInvertedYTile
+{
+    return _invertedY;
+}
+
 - (long)getExpirationTimeMinutes
 {
     if(_expirationTimeMillis  < 0) {
@@ -581,6 +583,57 @@
 - (BOOL) supportsTileDownload
 {
     return _urlTemplate != nil;
+}
+
++ (BOOL) createNewTileSourceDbAtPath:(NSString *)path parameters:(NSDictionary *)parameters
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:path])
+        [fileManager removeItemAtPath:path error:nil];
+    
+    sqlite3 *tmpDatabase;
+    sqlite3_stmt *statement;
+    if (sqlite3_open([path UTF8String], &tmpDatabase) == SQLITE_OK)
+    {
+        const char *sqlInfoStatement = "CREATE TABLE info (minzoom TEXT, maxzoom TEXT, url TEXT, ellipsoid INTEGER, rule TEXT, timeSupported TEXT, expireminutes TEXT, timecolumn TEXT, referer TEXT, tilenumbering TEXT)";
+        const char *sqlTilesStatement = "CREATE TABLE tiles (x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, s INTEGER, image BLOB, time INTEGER, PRIMARY KEY (x, y, z))";
+        // TODO indexes don't work FIXME
+        const char *sqlSIndexStatement = "CREATE INDEX index_tiles_on_s ON tiles (s)";
+        const char *sqlXIndexStatement = "CREATE INDEX index_tiles_on_x ON tiles (x)";
+        const char *sqlYIndexStatement = "CREATE INDEX index_tiles_on_y ON tiles (y)";
+        const char *sqlZIndexStatement = "CREATE INDEX index_tiles_on_z ON tiles (z)";
+        
+        char *error;
+        sqlite3_exec(tmpDatabase, sqlInfoStatement, NULL, NULL, &error);
+        sqlite3_exec(tmpDatabase, sqlTilesStatement, NULL, NULL, &error);
+        sqlite3_exec(tmpDatabase, sqlSIndexStatement, NULL, NULL, &error);
+        sqlite3_exec(tmpDatabase, sqlXIndexStatement, NULL, NULL, &error);
+        sqlite3_exec(tmpDatabase, sqlYIndexStatement, NULL, NULL, &error);
+        sqlite3_exec(tmpDatabase, sqlZIndexStatement, NULL, NULL, &error);
+        
+        NSString *query = @"INSERT OR REPLACE INTO info(minzoom, maxzoom, url, ellipsoid, rule, timeSupported, expireminutes, timecolumn, referer, tilenumbering) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        const char *update_stmt = [query UTF8String];
+        sqlite3_prepare_v2(tmpDatabase, update_stmt, -1, &statement, NULL);
+        
+        sqlite3_bind_text(statement, 1, [parameters[@"minzoom"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 2, [parameters[@"maxzoom"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 3, [parameters[@"url"] UTF8String], -1, 0);
+        sqlite3_bind_int(statement, 4, [parameters[@"ellipsoid"] intValue]);
+        sqlite3_bind_text(statement, 5, [parameters[@"rule"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 6, [parameters[@"timeSupported"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 7, [parameters[@"expireminutes"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 8, [parameters[@"timecolumn"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 9, [parameters[@"referer"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 10, [parameters[@"tilenumbering"] UTF8String], -1, 0);
+        
+        sqlite3_step(statement);
+        sqlite3_finalize(statement);
+        
+        sqlite3_close(tmpDatabase);
+        return error == NULL;
+    }
+    return NO;
 }
 
 @end

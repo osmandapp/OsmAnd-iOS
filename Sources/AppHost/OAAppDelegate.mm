@@ -18,6 +18,7 @@
 #import "OANativeUtilities.h"
 #import "OAMapRendererView.h"
 #import "OALaunchScreenViewController.h"
+#import "OAOnlineTilesEditingViewController.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
 #import "OAMapViewState.h"
@@ -120,7 +121,7 @@
             {
                 if ([loadedURL.scheme isEqualToString:@"file"])
                     [_rootViewController handleIncomingURL:loadedURL];
-                else if ([loadedURL.scheme isEqualToString:@"osmandmaps"])
+                else if ([loadedURL.scheme isEqualToString:@"osmandmaps"] || [loadedURL.lastPathComponent isEqualToString:@"add-tile-source"])
                     [self handleIncomingURL:loadedURL];
                 loadedURL = nil;
             }
@@ -144,7 +145,15 @@
 - (BOOL)handleIncomingURL:(NSURL * _Nonnull)url
 {
     NSDictionary *params = [OAUtilities parseUrlQuery:url];
-    if (params.count != 0){
+    if ([url.lastPathComponent isEqualToString:@"add-tile-source"])
+    {
+        // https://osmand.net/add-tile-source?name=&url_template=&min_zoom=&max_zoom=
+        OAOnlineTilesEditingViewController *editTileSourceController = [[OAOnlineTilesEditingViewController alloc] initWithUrlParameters:params];
+        [_rootViewController.navigationController pushViewController:editTileSourceController animated:NO];
+        return YES;
+    }
+    else if (params.count != 0)
+    {
         // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
         double lat = [params[@"lat"] doubleValue];
         double lon = [params[@"lon"] doubleValue];
@@ -200,7 +209,16 @@
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
-    return [self handleIncomingURL:userActivity.webpageURL];
+    if (_rootViewController)
+    {
+        return [self handleIncomingURL:userActivity.webpageURL];
+    }
+    else
+    {
+        loadedURL = userActivity.webpageURL;
+        return YES;
+    }
+        
 }
 
 - (void) performUpdateCheck

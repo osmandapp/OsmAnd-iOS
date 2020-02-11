@@ -18,9 +18,11 @@
 #import "OAOnlineTilesSettingsViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAManageResourcesViewController.h"
+#import "OAMapCreatorHelper.h"
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
+#include <QXmlStreamAttributes>
 
 #define kNameSection 0
 #define kURLSection 1
@@ -45,8 +47,8 @@
 @implementation OAOnlineTilesEditingViewController
 {
     std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> _tileSource;
+    OASQLiteTileSource *_sqliteSource;
     OsmAndAppInstance _app;
-    OnlineTilesResourceItem *_item;
     OAResourcesBaseViewController *_baseController;
     
     NSString *_itemName;
@@ -77,37 +79,86 @@
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
--(id) initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController
+- (void)setupParametersFromTileSource
+{
+    _itemName = _tileSource->name.toNSString();
+    _itemURL = _tileSource->urlToLoad.toNSString();
+    _minZoom = _tileSource->minZoom;
+    _maxZoom = _tileSource->maxZoom;
+    _expireTimeMillis = _tileSource->expirationTimeMillis;
+    _isEllipticYTile = _tileSource->ellipticYTile;
+    _sourceFormat = EOASourceFormatOnline;
+    _expireTimeMinutes = _expireTimeMillis == -1 ? @"" : [NSString stringWithFormat:@"%ld", (_expireTimeMillis / 1000 / 60)];
+}
+
+- (void)setupParametersFromSqlite
+{
+    _itemName = _sqliteSource.name;
+    _itemURL = _sqliteSource.urlTemplate;
+    _minZoom = _sqliteSource.minimumZoomSupported;
+    _maxZoom = _sqliteSource.maximumZoomSupported;
+    _expireTimeMillis = _sqliteSource.getExpirationTimeMillis;
+    _isEllipticYTile = _sqliteSource.isEllipticYTile;
+    _sourceFormat = EOASourceFormatSQLite;
+    _expireTimeMinutes = _expireTimeMillis == -1 ? @"" : [NSString stringWithFormat:@"%ld", (_expireTimeMillis / 1000 / 60)];
+}
+
+-(instancetype) initWithLocalItem:(LocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController
 {
     self = [super init];
     if (self) {
-        _item = item;
         _app = [OsmAndApp instance];
         _baseController = baseController;
         
-        const auto& resource = _app.resourcesManager->getResource(QStringLiteral("online_tiles"));
-        if (resource != nullptr)
+        if ([item isKindOfClass:OnlineTilesResourceItem.class])
         {
-            const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
-            for(const auto& onlineTileSource : onlineTileSources->getCollection())
+            const auto& resource = _app.resourcesManager->getResource(QStringLiteral("online_tiles"));
+            if (resource != nullptr)
             {
-                if (QString::compare(QString::fromNSString(item.title), onlineTileSource->name) == 0)
+                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
+                for(const auto& onlineTileSource : onlineTileSources->getCollection())
                 {
-                    _tileSource = onlineTileSource;
+                    if (QString::compare(QString::fromNSString(item.title), onlineTileSource->name) == 0)
+                    {
+                        _tileSource = onlineTileSource;
+                        break;
+                    }
                 }
             }
+                
+            [self setupParametersFromTileSource];
         }
-            
-        _itemName = _tileSource->name.toNSString();
-        _itemURL = _tileSource->urlToLoad.toNSString();
-        _minZoom = _tileSource->minZoom;
-        _maxZoom = _tileSource->maxZoom;
-        _expireTimeMillis = _tileSource->expirationTimeMillis;
-        _isEllipticYTile = _tileSource->ellipticYTile;
-        _sourceFormat = EOASourceFormatOnline;
-        _expireTimeMinutes = _expireTimeMillis == -1 ? @"" : [NSString stringWithFormat:@"%ld", (_expireTimeMillis / 1000 / 60)];
+        else if ([item isKindOfClass:SqliteDbResourceItem.class])
+        {
+            SqliteDbResourceItem *sqliteItem = (SqliteDbResourceItem *) item;
+            _sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:sqliteItem.path];
+            [self setupParametersFromSqlite];
+        }
+        
     }
     return self;
+}
+
+- (instancetype) initWithUrlParameters:(NSDictionary *)params
+{
+    self = [super init];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _tileSource = OsmAnd::OnlineTileSources::createTileSourceTemplate([self attributesFromParams:params]);
+        [self setupParametersFromTileSource];
+    }
+    return self;
+}
+
+- (QXmlStreamAttributes) attributesFromParams:(NSDictionary *)params
+{
+    QXmlStreamAttributes attrs = QXmlStreamAttributes();
+    for (NSString *key in params)
+    {
+        attrs.append(QString::fromNSString(key), QString::fromNSString(params[key]));
+    }
+    return attrs;
 }
 
 -(UIView *) getTopView
@@ -152,8 +203,8 @@
 {
     [self applySafeAreaMargins];
     
-    _nameCell = [self getInputFloatingCell:[_data objectAtIndex:0][@"title"] tag:kNameCellTag];
-    _URLCell = [self getInputFloatingCell:[_data objectAtIndex:1][@"title"] tag:kURLCellTag];
+    _nameCell = [self getInputFloatingCell:_itemName tag:kNameCellTag];
+    _URLCell = [self getInputFloatingCell:_itemURL tag:kURLCellTag];
     
     [self.tableView reloadData];
 }
@@ -178,22 +229,28 @@
     
     NSMutableArray *tableData = [NSMutableArray new];
     [tableData addObject:@{
-                        @"title" : _itemName,
-                        @"type" : kCellTypeFloatTextInput,
-                    }];
+        @"type" : kCellTypeFloatTextInput,
+    }];
     [tableData addObject:@{
-                        @"title" : _itemURL,
-                        @"type" : kCellTypeFloatTextInput,
-                    }];
+        @"type" : kCellTypeFloatTextInput,
+    }];
     [tableData addObject: zoomArr];
     [tableData addObject:@{
-                        @"placeholder" : OALocalizedString(@"shared_string_not_set"),
-                        @"type" : kCellTypeTextInput,
-                    }];
+        @"placeholder" : OALocalizedString(@"shared_string_not_set"),
+        @"type" : kCellTypeTextInput,
+    }];
+    
     [tableData addObject:@{
-                        @"title": OALocalizedString(@"res_mercator"),
-                        @"type" : kCellTypeSetting,
-                    }];
+        @"title": OALocalizedString(@"res_mercator"),
+        @"type" : kCellTypeSetting,
+        @"key" : @"mercator_sett"
+    }];
+    
+    [tableData addObject:@{
+        @"title": OALocalizedString(@"res_source_format"),
+        @"type" : kCellTypeSetting,
+        @"key" : @"format_sett"
+    }];
     _data = [NSArray arrayWithArray:tableData];
 
     NSMutableArray *sectionArr = [NSMutableArray new];
@@ -212,10 +269,6 @@
     [sectionArr addObject:@{
                         @"header" : OALocalizedString(@"res_expire_time"),
                         @"footer" : OALocalizedString(@"res_expire_time_desc")
-                        }];
-    [sectionArr addObject:@{
-                        @"header" : @"",
-                        @"footer" : @""
                         }];
     _sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];
 }
@@ -250,15 +303,29 @@
     result->expirationTimeMillis = _expireTimeMillis;
     result->ellipticYTile = _isEllipticYTile;
     
-    result->priority = _tileSource->priority;
-    result->tileSize = _tileSource->tileSize;
-    result->ext = _tileSource->ext;
-    result->avgSize = _tileSource->avgSize;
-    result->bitDensity = _tileSource->bitDensity;
-    result->invertedYTile = _tileSource->invertedYTile;
-    result->randoms = _tileSource->randoms;
-    result->randomsArray = _tileSource->randomsArray;
-    result->rule = _tileSource->rule;
+    if (_tileSource != nullptr)
+    {
+        result->priority = _tileSource->priority;
+        result->tileSize = _tileSource->tileSize;
+        result->ext = _tileSource->ext;
+        result->avgSize = _tileSource->avgSize;
+        result->bitDensity = _tileSource->bitDensity;
+        result->invertedYTile = _tileSource->invertedYTile;
+        result->randoms = _tileSource->randoms;
+        result->randomsArray = _tileSource->randomsArray;
+        result->rule = _tileSource->rule;
+    }
+    else if (_sqliteSource != nil)
+    {
+        result->tileSize = _sqliteSource.tileSize;
+        result->ext = QString::fromNSString(_sqliteSource.tileFormat);
+        result->bitDensity = _sqliteSource.bitDensity;
+        result->invertedYTile = _sqliteSource.isInvertedYTile;
+        result->randoms = QString::fromNSString(_sqliteSource.randoms);
+        result->randomsArray = _sqliteSource.randomsArray;
+        result->rule = QString::fromNSString(_sqliteSource.rule);
+    }
+    
     
     return result;
 }
@@ -310,15 +377,46 @@
     }
     else
     {
-        [[NSFileManager defaultManager] removeItemAtPath:_item.path error:nil];
-        _app.resourcesManager->uninstallTilesResource(_tileSource->name);
+        if (_tileSource != nullptr)
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:[_app.cachePath stringByAppendingPathComponent:_tileSource->name.toNSString()] error:nil];
+            _app.resourcesManager->uninstallTilesResource(_tileSource->name);
+        }
+        else if (_sqliteSource != nil)
+        {
+            [[OAMapCreatorHelper sharedInstance] removeFile:_sqliteSource.name];
+        }
         
-        const auto item = [self createEditedTileSource];
+        if (_sourceFormat == EOASourceFormatOnline)
+        {
+            const auto item = [self createEditedTileSource];
 
-        OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
-        _app.resourcesManager->installTilesResource(item);
+            OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
+            _app.resourcesManager->installTilesResource(item);
+        }
+        else if (_sourceFormat == EOASourceFormatSQLite)
+        {
+            NSMutableDictionary *params = [NSMutableDictionary new];
+            params[@"minzoom"] = [NSString stringWithFormat:@"%d", _minZoom];
+            params[@"maxzoom"] = [NSString stringWithFormat:@"%d", _maxZoom];
+            params[@"url"] = _itemURL;
+            params[@"ellipsoid"] = _isEllipticYTile ? @(1) : @(0);
+            params[@"timeSupported"] = _expireTimeMillis != -1 ? @"yes" : @"no";
+            params[@"expireminutes"] = _expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", _expireTimeMillis * 60000] : @"";
+            params[@"timecolumn"] = _expireTimeMillis != -1 ? @"yes" : @"no";
+            
+            if (_tileSource != nullptr)
+                params[@"rule"] = _tileSource->rule.toNSString();
+            else if (_sqliteSource != nil)
+                params[@"rule"] = _sqliteSource.rule;
+            
+            NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:_itemName];
+            
+            if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
+                [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
+        }
+        
         _baseController.dataInvalidated = YES;
-
         [self.navigationController popViewControllerAnimated:NO];
         if (_delegate)
             [_delegate onTileSourceSaved];
@@ -387,6 +485,16 @@
     return [NSDictionary new];
 }
 
+- (NSString *) getFormatString:(EOASourceFormat)sourceFormat
+{
+    if (sourceFormat == EOASourceFormatOnline)
+        return OALocalizedString(@"res_source_one_per_tile");
+    else if (sourceFormat == EOASourceFormatSQLite)
+        return OALocalizedString(@"res_source_sqlite");
+    
+    return @"";
+}
+
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item =  [self getItem:indexPath];
     
@@ -428,7 +536,15 @@
 
         if (cell) {
             [cell.textView setText:item[@"title"]];
-            cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"res_pseudo_mercator");
+            NSString *key = item[@"key"];
+            if ([key isEqualToString:@"mercator_sett"])
+            {
+                cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"res_pseudo_mercator");
+            }
+            else if ([key isEqualToString:@"format_sett"])
+            {
+                cell.descriptionView.text = [self getFormatString:_sourceFormat];
+            }
         }
         return cell;
     }
@@ -477,8 +593,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *data =  [self getItem:indexPath];
-    if ([data[@"type"] isEqualToString:kCellTypeZoom])
+    NSDictionary *item =  [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:kCellTypeZoom])
     {
         [self.tableView beginUpdates];
 
@@ -498,9 +614,15 @@
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
-    else if ([data[@"type"] isEqualToString:kCellTypeSetting])
+    else if ([item[@"type"] isEqualToString:kCellTypeSetting])
     {
-        OAOnlineTilesSettingsViewController *settingsViewController = [[OAOnlineTilesSettingsViewController alloc] initWithEllipticYTile:_isEllipticYTile];
+        OAOnlineTilesSettingsViewController *settingsViewController;
+        NSString *key = item[@"key"];
+        if ([key isEqualToString:@"mercator_sett"])
+            settingsViewController = [[OAOnlineTilesSettingsViewController alloc] initWithEllipticYTile:_isEllipticYTile];
+        else if ([key isEqualToString:@"format_sett"])
+            settingsViewController = [[OAOnlineTilesSettingsViewController alloc] initWithSourceFormat:_sourceFormat];
+        
         settingsViewController.delegate = self;
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
@@ -518,12 +640,12 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return _sectionHeaderFooterTitles[section][@"header"];
+    return section < _sectionHeaderFooterTitles.count ? _sectionHeaderFooterTitles[section][@"header"] : @"";
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return _sectionHeaderFooterTitles[section][@"footer"];
+    return section < _sectionHeaderFooterTitles.count ? _sectionHeaderFooterTitles[section][@"footer"] : @"";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -555,9 +677,8 @@
     {
         if ([indexPath isEqual:_pickerIndexPath])
             return 162.0;
-        else
-            return 44.0;
     }
+    return 44.0;
 }
 
 #pragma mark - UITextViewDelegate

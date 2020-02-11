@@ -32,6 +32,8 @@ typedef NS_ENUM(NSInteger, EOASourceFormat)
 
 @property (nonatomic) id<OAOnlineTilesEditingViewControllerDelegate> delegate;
 
--(id) initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController;
+- (instancetype) initWithLocalItem:(LocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController;
+- (instancetype) initWithUrlParameters:(NSDictionary *)params;
+
 @end
 

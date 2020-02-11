@@ -455,7 +455,7 @@
         // Get the parameter value
         NSString *value = [[qs componentsSeparatedByString:@"="] objectAtIndex:1];
         value = [value stringByReplacingOccurrencesOfString:@"+" withString:@" "];
-        value = [value stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        value = [value stringByRemovingPercentEncoding];
         
         queryStrings[key] = value;
     }

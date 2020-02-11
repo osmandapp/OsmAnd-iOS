@@ -684,8 +684,8 @@
 "routing_attr_weight_description" = "Gewicht des Fahrzeugs für Streckenberechnung angeben";
 "routing_attr_height_name" = "Höhenbeschränkung";
 "routing_attr_height_description" = "Höhe des Fahrzeugs für Streckenberechnung angeben";
-"routing_attr_avoid_shuttle_train_name" = "Shuttlezug vermeiden";
-"routing_attr_avoid_shuttle_train_description" = "Pendelzug vermeiden";
+"routing_attr_avoid_shuttle_train_name" = "Pendelzug vermeiden";
+"routing_attr_avoid_shuttle_train_description" = "Vermeidet die Nutzung von Pendelzügen";
 "routing_attr_short_way_name" = "Kraftstoffsparende Route";
 "routing_attr_short_way_description" = "Kraftstoffsparende Route verwenden (in der Regel kürzer)";
 "routing_attr_allow_motorway_name" = "Autobahnen erlauben";
@@ -1441,7 +1441,6 @@
 "stats_select_graph_data" = "Diagrammdaten auswählen";
 "available_map_styles" = "Verfügbare Kartenstile";
 "available_map_sources" = "Verfügbare Kartenquellen";
-
 "rendering_attr_tracktype_grade4_name" = "Überwiegend weich";
 "res_url" = "URL";
 "rendering_attr_tracktype_grade5_name" = "Weich";
@@ -1449,3 +1448,13 @@
 "rendering_attr_tracktype_grade3_name" = "Überwiegend fest";
 "rendering_attr_tracktype_grade1_name" = "Fest (befestigt)";
 "res_elliptic_mercator" = "Elliptischer Merkator";
+"shared_string_clear_cache" = "Cache löschen";
+"gpx_analyze" = "Analysieren";
+"routing_attr_avoid_ice_roads_fords_name" = "Eisige Straßen, Furten vermeiden";
+"routing_attr_avoid_ice_roads_fords_description" = "Vermeidet die Nutzung von eisigen Straßen und Furten";
+"routing_attr_avoid_sett_name" = "Kopfsteinpflaster oder Pflastersteine vermeiden";
+"routing_attr_avoid_sett_description" = "Vermeidet die Nutzung von Straßen und Wegen mit Kopfsteinpflaster und Pflastersteinen.";
+"shared_string_maximum" = "Maximum";
+"res_zoom_levels" = "Zoomstufen";
+"res_name_warning" = "Dateiname darf nicht leer sein";
+"res_url_warning" = "URL darf nicht leer sein";

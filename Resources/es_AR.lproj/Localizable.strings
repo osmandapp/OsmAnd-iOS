@@ -1452,6 +1452,23 @@
 "displayed_route_save" = "Guardar para OsmAnd Viajes";
 "trip_name" = "Nombre del viaje";
 "trip_hint" = "Ingresa el nombre del viaje";
-
 "res_url" = "URL";
 "res_elliptic_mercator" = "Mercator elíptica";
+"routing_attr_avoid_ice_roads_fords_name" = "Sin caminos de hielo ni vados";
+"routing_attr_avoid_ice_roads_fords_description" = "Evitar caminos con hielo y vados.";
+"routing_attr_avoid_sett_name" = "Sin empedrado ni adoquinado";
+"routing_attr_avoid_sett_description" = "Evitar las calles empedradas y adoquinadas.";
+"shared_string_maximum" = "Máximo";
+"res_edit_online_map" = "Editar fuente del mapa en línea";
+"res_online_name_descr" = "Proporcionar el nombre de la fuente en línea";
+"res_online_url_descr" = "Ingresa o copia y pega la URL de la fuente en línea";
+"res_zoom_levels" = "Niveles de zoom";
+"res_expire_time" = "Tiempo de expiración";
+"res_mercator" = "Proyección de Mercator";
+"res_pseudo_mercator" = "Proyección de pseudo-Mercator";
+"res_zoom_levels_desc" = "Estos parámetros afectarán a la visualización del mapa cuando se utilice como un tipo de mapa o como superposición/subyacencia.\n\nTipo de mapa: el mapa se limitará a los zooms elegidos.\n\nSuperposición/Subyacencia: Niveles de zoom en los que las teselas serán visibles. Se producirá un aumento o disminución de la escala por encima o por debajo de los valores definidos.";
+"res_expire_time_desc" = "Tiempo de expiración en minutos. Las teselas almacenadas serán recargadas luego del tiempo definido. Deja este campo vacío si no necesitas recargar las teselas para esta fuente.\nUn día son 1440 minutos.\nUna semana son 10080 minutos.\n30 días son 43200 minutos.";
+"res_name_warning" = "El nombre del archivo no puede estar vacío";
+"res_url_warning" = "La URL no puede estar vacía";
+"res_zoom_warning" = "El valor mínimo de zoom no puede ser igual o mayor que el valor máximo de zoom";
+"res_expire_warning" = "El tiempo de expiración debería ser un número entre 0 y 10000000";

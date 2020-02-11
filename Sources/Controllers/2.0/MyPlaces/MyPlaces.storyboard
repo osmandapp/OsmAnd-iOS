@@ -12,8 +12,8 @@
             <objects>
                 <viewController id="Pg1-zp-xNx" customClass="OAOsmEditsListViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="cRg-fI-zKf"/>
-                        <viewControllerLayoutGuide type="bottom" id="76j-wq-ch0"/>
+                        <viewControllerLayoutGuide type="top" id="zaH-JS-L8a"/>
+                        <viewControllerLayoutGuide type="bottom" id="ws5-rf-6Zs"/>
                     </layoutGuides>
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="HiK-Id-V8n">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -102,8 +102,8 @@
             <objects>
                 <viewController id="o7u-wO-gzA" customClass="OAFavoriteListViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="X7U-Kj-zLc"/>
-                        <viewControllerLayoutGuide type="bottom" id="Nif-9r-9f1"/>
+                        <viewControllerLayoutGuide type="top" id="gcu-f5-hd3"/>
+                        <viewControllerLayoutGuide type="bottom" id="G1m-3O-PwK"/>
                     </layoutGuides>
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="OPG-OS-sNg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -229,8 +229,8 @@
             <objects>
                 <viewController id="rfa-sK-jEQ" customClass="OAGPXListViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ZRa-4Y-2sA"/>
-                        <viewControllerLayoutGuide type="bottom" id="9dJ-Yi-1Bd"/>
+                        <viewControllerLayoutGuide type="top" id="eum-77-kHV"/>
+                        <viewControllerLayoutGuide type="bottom" id="jcT-GK-5gJ"/>
                     </layoutGuides>
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="PSJ-dc-387">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -249,10 +249,10 @@
                                             <action selector="goRootScreen:" destination="rfa-sK-jEQ" eventType="touchUpInside" id="kMu-Se-U5O"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SsY-mo-F9Q" userLabel="Cancel">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SsY-mo-F9Q" userLabel="Cancel">
                                         <rect key="frame" x="60" y="20" width="70" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Cancel"/>
                                         <connections>
@@ -355,7 +355,7 @@
         <image name="ic_tabbar_osm_edits.png" width="31" height="28"/>
         <image name="ic_tabbar_trips.png" width="31" height="28"/>
         <image name="icon_direction.png" width="25" height="24.5"/>
-        <image name="icon_edit.png" width="23.5" height="23"/>
+        <image name="icon_edit.png" width="24" height="23"/>
         <image name="left_menu_icon_map.png" width="30" height="30"/>
         <image name="move_items.png" width="25" height="25"/>
     </resources>

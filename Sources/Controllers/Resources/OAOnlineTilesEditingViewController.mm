@@ -330,6 +330,30 @@
     return result;
 }
 
+- (NSMutableDictionary *)generateSqlParams
+{
+    NSMutableDictionary *params = [NSMutableDictionary new];
+    params[@"minzoom"] = [NSString stringWithFormat:@"%d", _minZoom];
+    params[@"maxzoom"] = [NSString stringWithFormat:@"%d", _maxZoom];
+    params[@"url"] = _itemURL;
+    params[@"ellipsoid"] = _isEllipticYTile ? @(1) : @(0);
+    params[@"timeSupported"] = _expireTimeMillis != -1 ? @"yes" : @"no";
+    params[@"expireminutes"] = _expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", _expireTimeMillis / 60000] : @"";
+    params[@"timecolumn"] = _expireTimeMillis != -1 ? @"yes" : @"no";
+    
+    if (_tileSource != nullptr)
+    {
+        params[@"rule"] = _tileSource->rule.toNSString();
+        params[@"randoms"] = _tileSource->randoms.toNSString();
+    }
+    else if (_sqliteSource != nil)
+    {
+        params[@"rule"] = _sqliteSource.rule;
+        params[@"randoms"] = _sqliteSource.randoms;
+    }
+    return params;
+}
+
 - (IBAction)saveButtonPressed:(UIButton *)sender
 {
     NSMutableArray *errorArray = [NSMutableArray new];
@@ -396,19 +420,7 @@
         }
         else if (_sourceFormat == EOASourceFormatSQLite)
         {
-            NSMutableDictionary *params = [NSMutableDictionary new];
-            params[@"minzoom"] = [NSString stringWithFormat:@"%d", _minZoom];
-            params[@"maxzoom"] = [NSString stringWithFormat:@"%d", _maxZoom];
-            params[@"url"] = _itemURL;
-            params[@"ellipsoid"] = _isEllipticYTile ? @(1) : @(0);
-            params[@"timeSupported"] = _expireTimeMillis != -1 ? @"yes" : @"no";
-            params[@"expireminutes"] = _expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", _expireTimeMillis / 60000] : @"";
-            params[@"timecolumn"] = _expireTimeMillis != -1 ? @"yes" : @"no";
-            
-            if (_tileSource != nullptr)
-                params[@"rule"] = _tileSource->rule.toNSString();
-            else if (_sqliteSource != nil)
-                params[@"rule"] = _sqliteSource.rule;
+            NSMutableDictionary *params = [self generateSqlParams];
                         
             NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
             

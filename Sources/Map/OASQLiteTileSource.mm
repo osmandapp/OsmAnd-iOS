@@ -610,7 +610,14 @@
         sqlite3_exec(tmpDatabase, sqlYIndexStatement, NULL, NULL, &error);
         sqlite3_exec(tmpDatabase, sqlZIndexStatement, NULL, NULL, &error);
         
-        NSString *query = @"INSERT OR REPLACE INTO info(minzoom, maxzoom, url, ellipsoid, rule, timeSupported, expireminutes, timecolumn, referer, tilenumbering) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        BOOL hasRandoms = parameters[@"randoms"];
+        if (hasRandoms)
+        {
+            const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE info ADD COLUMN randoms TEXT"] UTF8String];
+            sqlite3_exec(tmpDatabase, sql_stmt, NULL, NULL, NULL);
+        }
+        
+        NSString *query = hasRandoms ? @"INSERT OR REPLACE INTO info(minzoom, maxzoom, url, ellipsoid, rule, timeSupported, expireminutes, timecolumn, referer, tilenumbering, randoms) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" : @"INSERT OR REPLACE INTO info(minzoom, maxzoom, url, ellipsoid, rule, timeSupported, expireminutes, timecolumn, referer, tilenumbering) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         const char *update_stmt = [query UTF8String];
         sqlite3_prepare_v2(tmpDatabase, update_stmt, -1, &statement, NULL);
@@ -625,6 +632,9 @@
         sqlite3_bind_text(statement, 8, [parameters[@"timecolumn"] UTF8String], -1, 0);
         sqlite3_bind_text(statement, 9, [parameters[@"referer"] UTF8String], -1, 0);
         sqlite3_bind_text(statement, 10, [parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : @"BigPlanet" UTF8String], -1, 0);
+        
+        if (hasRandoms)
+            sqlite3_bind_text(statement, 11, [parameters[@"randoms"] UTF8String], -1, 0);
         
         sqlite3_step(statement);
         sqlite3_finalize(statement);

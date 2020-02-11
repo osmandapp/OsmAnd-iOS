@@ -574,7 +574,7 @@
             trkpt->name = QString::fromNSString(p.name);
             trkpt->description = QString::fromNSString(p.desc);
             trkpt->elevation = p.elevation;
-            trkpt->timestamp = QDateTime::fromTime_t(p.time);
+            trkpt->timestamp = p.time == 0 ? QDateTime() : QDateTime::fromTime_t(p.time);
             trkpt->magneticVariation = p.magneticVariation;
             trkpt->geoidHeight = p.geoidHeight;
             trkpt->comment = QString::fromNSString(p.comment);

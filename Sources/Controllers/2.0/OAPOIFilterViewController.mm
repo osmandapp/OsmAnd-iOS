@@ -91,9 +91,6 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIView *applyView;
 @property (weak, nonatomic) IBOutlet UIButton *applyButton;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonHiddenHeight;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonShownHeight;
-
 @end
 
 @implementation OAPOIFilterViewController
@@ -204,8 +201,6 @@ typedef enum
     bottomSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_textFieldHeaderView addSubview:bottomSeparatorView];
     [self applySafeAreaMargins];
-    
-    _tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -727,16 +722,13 @@ typedef enum
     {
         if (!_applyViewVisible)
         {
-            //_applyView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _applyView.bounds.size.height);
+            _applyView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _applyView.bounds.size.height);
             _applyView.hidden = NO;
-           // CGRect tableFrame = _tableView.frame;
-           // tableFrame.size.height -= _applyView.bounds.size.height;
+            CGRect tableFrame = _tableView.frame;
+            tableFrame.size.height -= _applyView.bounds.size.height;
             [UIView animateWithDuration:.25 animations:^{
-                _applyButtonShownHeight.active = YES;
-                _applyButtonHiddenHeight.active = NO;
-                
-                //_tableView.frame = tableFrame;
-               // _applyView.frame = CGRectMake(0, self.view.bounds.size.height - _applyView.bounds.size.height, self.view.bounds.size.width, _applyView.bounds.size.height);
+                _tableView.frame = tableFrame;
+                _applyView.frame = CGRectMake(0, self.view.bounds.size.height - _applyView.bounds.size.height, self.view.bounds.size.width, _applyView.bounds.size.height);
             }];
         }
         _applyViewVisible = YES;
@@ -746,13 +738,11 @@ typedef enum
     {
         if (_applyViewVisible)
         {
-//            CGRect tableFrame = _tableView.frame;
-//            tableFrame.size.height = self.view.bounds.size.height - tableFrame.origin.y;
+            CGRect tableFrame = _tableView.frame;
+            tableFrame.size.height = self.view.bounds.size.height - tableFrame.origin.y;
             [UIView animateWithDuration:.25 animations:^{
-                _applyButtonShownHeight.active = NO;
-                _applyButtonHiddenHeight.active = YES;
-//                _tableView.frame = tableFrame;
-//                _applyView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _applyView.bounds.size.height);
+                _tableView.frame = tableFrame;
+                _applyView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _applyView.bounds.size.height);
             } completion:^(BOOL finished) {
                 _applyView.hidden = YES;
             }];
@@ -806,7 +796,7 @@ typedef enum
     if (!item || item.type != SWITCH_ITEM)
         return 51.0;
     else
-        return 51;//[OAIconTextSwitchCell getHeight:item.text descHidden:YES detailsIconHidden:YES cellWidth:tableView.bounds.size.width];
+        return [OAIconTextSwitchCell getHeight:item.text descHidden:YES detailsIconHidden:YES cellWidth:tableView.bounds.size.width];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

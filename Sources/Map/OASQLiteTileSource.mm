@@ -166,7 +166,7 @@
                     {
                         int minutes = sqlite3_column_int(statement, [expireminutes intValue]);
                         if (minutes > 0)
-                            _expirationTimeMillis = minutes * 60 * 1000;
+                            _expirationTimeMillis = (long) minutes * 60 * 1000;
                     }
                     else
                     {
@@ -597,7 +597,6 @@
     {
         const char *sqlInfoStatement = "CREATE TABLE info (minzoom TEXT, maxzoom TEXT, url TEXT, ellipsoid INTEGER, rule TEXT, timeSupported TEXT, expireminutes TEXT, timecolumn TEXT, referer TEXT, tilenumbering TEXT)";
         const char *sqlTilesStatement = "CREATE TABLE tiles (x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, s INTEGER, image BLOB, time INTEGER, PRIMARY KEY (x, y, z))";
-        // TODO indexes don't work FIXME
         const char *sqlSIndexStatement = "CREATE INDEX index_tiles_on_s ON tiles (s)";
         const char *sqlXIndexStatement = "CREATE INDEX index_tiles_on_x ON tiles (x)";
         const char *sqlYIndexStatement = "CREATE INDEX index_tiles_on_y ON tiles (y)";
@@ -625,7 +624,7 @@
         sqlite3_bind_text(statement, 7, [parameters[@"expireminutes"] UTF8String], -1, 0);
         sqlite3_bind_text(statement, 8, [parameters[@"timecolumn"] UTF8String], -1, 0);
         sqlite3_bind_text(statement, 9, [parameters[@"referer"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 10, [parameters[@"tilenumbering"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 10, [parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : @"BigPlanet" UTF8String], -1, 0);
         
         sqlite3_step(statement);
         sqlite3_finalize(statement);

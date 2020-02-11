@@ -384,7 +384,7 @@
         }
         else if (_sqliteSource != nil)
         {
-            [[OAMapCreatorHelper sharedInstance] removeFile:_sqliteSource.name];
+            [[OAMapCreatorHelper sharedInstance] removeFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"]];
         }
         
         if (_sourceFormat == EOASourceFormatOnline)
@@ -402,15 +402,15 @@
             params[@"url"] = _itemURL;
             params[@"ellipsoid"] = _isEllipticYTile ? @(1) : @(0);
             params[@"timeSupported"] = _expireTimeMillis != -1 ? @"yes" : @"no";
-            params[@"expireminutes"] = _expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", _expireTimeMillis * 60000] : @"";
+            params[@"expireminutes"] = _expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", _expireTimeMillis / 60000] : @"";
             params[@"timecolumn"] = _expireTimeMillis != -1 ? @"yes" : @"no";
             
             if (_tileSource != nullptr)
                 params[@"rule"] = _tileSource->rule.toNSString();
             else if (_sqliteSource != nil)
                 params[@"rule"] = _sqliteSource.rule;
-            
-            NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:_itemName];
+                        
+            NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
             
             if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
                 [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];

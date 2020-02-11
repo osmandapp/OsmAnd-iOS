@@ -1351,3 +1351,8 @@
 "rendering_attr_tracktype_grade3_name" = "Väčšinou pevný";
 "rendering_attr_tracktype_grade4_name" = "Väčšinou mäkký";
 "rendering_attr_tracktype_grade5_name" = "Mäkký";
+
+"res_elliptic_mercator" = "Eliptický mercator";
+"res_url" = "URL";
+"show_notes" = "Zobraziť OSM poznámky";
+"hide_notes" = "Skryť OSM poznámky";

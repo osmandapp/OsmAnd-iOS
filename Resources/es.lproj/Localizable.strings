@@ -1427,3 +1427,10 @@
 "rendering_attr_smoothness_horrible_name" = "Horrible";
 "rendering_attr_highway_class_steps_name" = "Escalera";
 "rendering_attr_surface_cobblestone_name" = "Empedrado (adoquín)";
+"rendering_attr_tracktype_grade5_name" = "Suave (con rodaduras apenas visibles entre la vegetación)";
+"res_elliptic_mercator" = "Mercator elíptica";
+"rendering_attr_tracktype_grade2_name" = "Sólido (sin pavimento)";
+"rendering_attr_tracktype_grade1_name" = "Sólido (pavimentado)";
+"rendering_attr_tracktype_grade3_name" = "Mayormente sólido (de áridos con vegetación entre rodaduras)";
+"rendering_attr_tracktype_grade4_name" = "Mayormente suave (de tierra con vegetación entre rodaduras)";
+"res_url" = "URL";

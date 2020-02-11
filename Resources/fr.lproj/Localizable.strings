@@ -1283,3 +1283,8 @@
 "rendering_attr_tracktype_grade3_name" = "Principalement compact";
 "rendering_attr_tracktype_grade4_name" = "Principalement non-compact";
 "rendering_attr_tracktype_grade5_name" = "Non-compact";
+
+"show_notes" = "Afficher les notes OSM";
+"hide_notes" = "Masquer les notes OSM";
+"res_url" = "Lien";
+"res_elliptic_mercator" = "Mercator elliptique";

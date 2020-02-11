@@ -1420,3 +1420,11 @@
 "rendering_attr_smoothness_good_name" = "ロードバイクを含め車両全般が走行可";
 "rendering_attr_surface_fine_gravel_name" = "砂利と砂の複数舗装";
 "gpx_avg_altitude" = "平均標高";
+
+"rendering_attr_tracktype_grade5_name" = "軟らかい";
+"rendering_attr_tracktype_grade1_name" = "硬い(舗装済み)";
+"res_url" = "URL";
+"rendering_attr_tracktype_grade4_name" = "やや軟らか";
+"rendering_attr_tracktype_grade3_name" = "やや硬め";
+"rendering_attr_tracktype_grade2_name" = "硬い(未舗装)";
+"res_elliptic_mercator" = "楕円メルカトル";

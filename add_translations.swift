@@ -45,7 +45,8 @@ let languageDict = [
                     "sl" : "sl",
                     "sq" : "sq",
                     "tr" : "tr",
-                    "uk" : "uk"
+                    "uk" : "uk",
+                    "el" : "el"
 ]
 
 func addTranslations(language: String, initial: Bool) {

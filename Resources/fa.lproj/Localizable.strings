@@ -1173,3 +1173,8 @@
 "rendering_attr_tracktype_grade3_name" = "تقریباً سفت";
 "rendering_attr_tracktype_grade4_name" = "تقریباً نرم";
 "rendering_attr_tracktype_grade5_name" = "نرم";
+
+"hide_notes" = "پنهان‌کردن یادداشت‌های OSM";
+"res_elliptic_mercator" = "مرکاتور بیضوی";
+"res_url" = "نشانی اینترنتی";
+"show_notes" = "آشکارکردن یادداشت‌های OSM";

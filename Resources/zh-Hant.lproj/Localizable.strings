@@ -1243,3 +1243,8 @@
 "rendering_attr_tracktype_grade3_name" = "大多堅實";
 "rendering_attr_tracktype_grade4_name" = "大多鬆軟";
 "rendering_attr_tracktype_grade5_name" = "鬆軟";
+
+"res_url" = "URL";
+"hide_notes" = "隱藏 OSM 註記";
+"res_elliptic_mercator" = "橢圓麥卡托投影";
+"show_notes" = "顯示 OSM 註記";

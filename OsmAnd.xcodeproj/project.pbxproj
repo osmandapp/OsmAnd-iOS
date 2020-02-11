@@ -6877,6 +6877,7 @@
 		8A6CBCA721CE25F0004033C7 /* img_logo_38dp_sea_depth@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "img_logo_38dp_sea_depth@2x.png"; sourceTree = "<group>"; };
 		8A6CBCFC21CEBC3A004033C7 /* OAChoosePlanHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAChoosePlanHelper.h; sourceTree = "<group>"; };
 		8A6CBCFD21CEBC3A004033C7 /* OAChoosePlanHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAChoosePlanHelper.mm; sourceTree = "<group>"; };
+		8A6E582023F003BD001C9A04 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A7077141A83C25A005E019B /* OATextViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewCell.xib; path = Resources/Controllers/Cells/OATextViewCell.xib; sourceTree = "<group>"; };
 		8A70771B1A84A7BF005E019B /* OAFavoriteImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAFavoriteImportViewController.h; path = Sources/Controllers/2.0/OAFavoriteImportViewController.h; sourceTree = "<group>"; };
 		8A70771C1A84A7BF005E019B /* OAFavoriteImportViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAFavoriteImportViewController.mm; path = Sources/Controllers/2.0/OAFavoriteImportViewController.mm; sourceTree = "<group>"; };
@@ -12624,6 +12625,7 @@
 				hsb,
 				ja,
 				et,
+				el,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -17553,6 +17555,7 @@
 				8A0DF07B23942D47000A1D4B /* hsb */,
 				8A5BD75B2397F68300ADE5C2 /* ja */,
 				8A4D82C623C1CD85003DC887 /* et */,
+				8A6E582023F003BD001C9A04 /* el */,
 			);
 			name = Localizable.strings;
 			path = Resources;

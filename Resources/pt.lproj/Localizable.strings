@@ -1422,3 +1422,10 @@
 "hide_contour_lines" = "Ocultar curvas de nível";
 "gpx_descent" = "Descida";
 "region_others" = "Outros mapas";
+"res_url" = "URL";
+"rendering_attr_tracktype_grade3_name" = "Maioritariamente sólido";
+"rendering_attr_tracktype_grade2_name" = "Sólido (não pavimentado)";
+"rendering_attr_tracktype_grade5_name" = "Macio";
+"res_elliptic_mercator" = "Mercator elíptico";
+"rendering_attr_tracktype_grade1_name" = "Sólido (pavimentado)";
+"rendering_attr_tracktype_grade4_name" = "Maioritariamente macio";

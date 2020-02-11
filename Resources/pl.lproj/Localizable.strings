@@ -1437,3 +1437,6 @@
 "routing_attr_avoid_ice_roads_fords_name" = "Omijaj drogi lodowe, brody";
 "routing_attr_avoid_ice_roads_fords_description" = "Omijaj drogi lodowe i brody";
 "routing_attr_avoid_sett_name" = "Unikanie bruku lub kostki brukowej";
+
+"res_url" = "Adres URL";
+"res_elliptic_mercator" = "Eliptyczna Merkatora";

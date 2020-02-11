@@ -1136,3 +1136,13 @@
 "osm_target_modified" = "PDI di OSM modificato";
 "rendering_attr_highway_class_track_grade1_name" = "Grado 1";
 "route_roundabout_short" = "Prendere la %d uscita e proseguire";
+
+"rendering_attr_tracktype_grade5_name" = "Morbido";
+"rendering_attr_tracktype_grade3_name" = "Per lo più solido";
+"res_url" = "URL";
+"res_elliptic_mercator" = "Mercatore ellittico";
+"rendering_attr_tracktype_grade4_name" = "Per lo più morbido";
+"show_notes" = "Mostra le note OSM";
+"hide_notes" = "Nascondi le note OSM";
+"rendering_attr_tracktype_grade1_name" = "Solido (pavimentato)";
+"rendering_attr_tracktype_grade2_name" = "Solido (non pavimentato)";

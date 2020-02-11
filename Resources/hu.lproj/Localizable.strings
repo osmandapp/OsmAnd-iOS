@@ -1114,3 +1114,13 @@
 "translucent_lightblue" = "Átlátszó világoskék";
 "tile_cache" = "Csempegyorsítótár";
 "hide_contour_lines" = "Szintvonalak elrejtése";
+
+"rendering_attr_tracktype_grade1_name" = "Szilárd (burkolt)";
+"hide_notes" = "OSM-jegyzetek elrejtése";
+"rendering_attr_tracktype_grade3_name" = "Jórészt szilárd";
+"rendering_attr_tracktype_grade4_name" = "Jórészt laza";
+"show_notes" = "OSM-jegyzetek megjelenítése";
+"res_elliptic_mercator" = "Elliptikus Merkátor";
+"res_url" = "URL";
+"rendering_attr_tracktype_grade5_name" = "Laza";
+"rendering_attr_tracktype_grade2_name" = "Szilárd (burkolatlan)";

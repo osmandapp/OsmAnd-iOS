@@ -1221,3 +1221,12 @@
 "prev_route" = "Předchozí trasa";
 "rendering_attr_highway_class_path_name" = "Pěšina";
 "rendering_attr_surface_wood_name" = "Dřevo";
+"rendering_attr_tracktype_grade1_name" = "Pevný (zpevněný)";
+"show_notes" = "Zobrazit OSM poznámky";
+"rendering_attr_tracktype_grade5_name" = "Měkký";
+"res_url" = "URL";
+"rendering_attr_tracktype_grade3_name" = "Většinou pevný";
+"rendering_attr_tracktype_grade2_name" = "Pevný (nezpevněný)";
+"rendering_attr_tracktype_grade4_name" = "Většinou měkký";
+"res_elliptic_mercator" = "Eliptický mercator";
+"hide_notes" = "Skrýt OSM poznámky";

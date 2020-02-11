@@ -41,5 +41,7 @@
 
 - (void) changeChartMode:(EOARouteStatisticsMode)mode chart:(LineChartView *)chart modeCell:(OARouteStatisticsModeCell *)statsModeCell;
 
+- (double) getRoundedDouble:(double)toRound;
+
 @end
 

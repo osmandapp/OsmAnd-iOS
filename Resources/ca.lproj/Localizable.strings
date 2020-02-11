@@ -1450,3 +1450,6 @@
 "displayed_route_save" = "Desa a OsmAnd Trips";
 "trip_name" = "Nom del viatge";
 "trip_hint" = "Introduïu el nom del viatge";
+
+"res_elliptic_mercator" = "Mercator el·líptica";
+"res_url" = "URL";

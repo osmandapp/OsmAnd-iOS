@@ -17,10 +17,11 @@
 #import "OAUtilities.h"
 #import "OAMapCreatorHelper.h"
 #import "OASizes.h"
+#import "OAOnlineTilesEditingViewController.h"
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
-@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource> {
+@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource, OAOnlineTilesEditingViewControllerDelegate> {
     
     NSArray *tableKeys;
     NSArray *tableValues;
@@ -134,6 +135,13 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
    }];
 }
 
+- (void) editClicked
+{
+    OAOnlineTilesEditingViewController *editViewController = [[OAOnlineTilesEditingViewController alloc] initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)_localItem baseController: (OAResourcesBaseViewController *)self.baseController];
+    editViewController.delegate = self;
+    [self.navigationController pushViewController:editViewController animated:YES];
+}
+
 - (void)initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item;
 {
     self.localItem = item;
@@ -226,6 +234,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [tValues addObject:OALocalizedString(@"calculating_progress")];
     
     [tButtons addObject:@"clear_cache"];
+    [tButtons addObject:@"edit"];
     [tButtons addObject:@"delete"];
     
     tableKeys = tKeys;
@@ -346,6 +355,11 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
             [cell.button setTitle:OALocalizedString(@"shared_string_clear_cache") forState:UIControlStateNormal];
             [cell.button addTarget:self action:@selector(clearCacheClicked) forControlEvents:UIControlEventTouchDown];
         }
+        else if ([type isEqual:@"edit"])
+        {
+            [cell.button setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
+            [cell.button addTarget:self action:@selector(editClicked) forControlEvents:UIControlEventTouchDown];
+        }
     }
     return cell;
 }
@@ -424,6 +438,13 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
     purchasesViewController.openFromSplash = _openFromSplash;
     [self.navigationController pushViewController:purchasesViewController animated:NO];
+}
+
+#pragma mark - OAOnlineTilesEditingViewControllerDelegate
+
+- (void) onTileSourceSaved
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

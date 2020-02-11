@@ -1150,3 +1150,8 @@
 "rendering_attr_tracktype_grade3_name" = "Змяшанае";
 "rendering_attr_tracktype_grade4_name" = "Амаль мяккае";
 "rendering_attr_tracktype_grade5_name" = "Мяккае";
+
+"res_elliptic_mercator" = "Эліптычны меркатар";
+"hide_notes" = "Схаваць OSM-нататкі";
+"res_url" = "URL";
+"show_notes" = "Паказаць OSM-нататкі";

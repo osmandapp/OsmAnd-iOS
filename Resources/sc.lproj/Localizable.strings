@@ -1451,3 +1451,6 @@
 "displayed_route_save" = "Sarva in OsmAnd Biàgios";
 "trip_name" = "Nùmene de su biàgiu";
 "trip_hint" = "Inserta su nùmene de su biàgiu";
+
+"res_elliptic_mercator" = "Mercatore ellitticu";
+"res_url" = "URL";

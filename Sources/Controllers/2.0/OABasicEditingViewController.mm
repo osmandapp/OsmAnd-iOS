@@ -285,6 +285,7 @@ static const NSInteger _contactInfoSectionCount = 5;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
+            [cell showImage:NO];
         }
         if (cell)
         {
@@ -379,7 +380,6 @@ static const NSInteger _contactInfoSectionCount = 5;
     if (!_isKeyboardShown) {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
             [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 44.0, insets.right)];
-            //        [[self view] layoutIfNeeded];
         } completion:nil];
     }
     _isKeyboardShown = YES;

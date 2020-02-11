@@ -63,7 +63,10 @@
     
     _routingHelper = [OARoutingHelper sharedInstance];
     [_routingHelper addListener:self];
-    
+}
+
+- (void)onMenuShown
+{
     [self centerMapOnRoute];
 }
 
@@ -167,6 +170,11 @@
     NSInteger nowMinutes = [components minute];
     nowHours = nowMinutes + minutes >= 60 ? nowHours + 1 : nowHours;
     return [NSString stringWithFormat:@"%02ld:%02ld", (nowHours + hours) % 24, (nowMinutes + minutes) % 60];
+}
+
+- (double) getRoundedDouble:(double)toRound
+{
+    return floorf(toRound * 100 + 0.5) / 100;
 }
 
 - (void)setupRouteInfo

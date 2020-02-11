@@ -1249,7 +1249,7 @@
 "quick_action_name_alert" = "Zmieniono nazwę szybkiej czynności na %@ by uniknąć duplikacji.";
 "quick_action_screen_header" = "Ekran %ld";
 "fav_add_group" = "Dodaj grupę";
-"add_group" = "Dodaj grupę ";
+"add_group" = "Dodaj grupę";
 "poi_list" = "Lista użytecznych miejsc";
 "select_map_style" = "Wybierz styl mapy";
 "select_map_source" = "Wybierz źródło mapy";
@@ -1429,3 +1429,14 @@
 "rendering_attr_highway_class_track_grade3_name" = "Klasa 3";
 "rendering_attr_highway_class_track_grade4_name" = "Klasa 4";
 "rendering_attr_highway_class_track_grade5_name" = "Klasa 5";
+"rendering_attr_tracktype_grade1_name" = "Stałe (utwardzone)";
+"rendering_attr_tracktype_grade2_name" = "Stałe (nieutwardzone)";
+"rendering_attr_tracktype_grade3_name" = "Głównie stałe";
+"rendering_attr_tracktype_grade4_name" = "Głównie miękkie";
+"rendering_attr_tracktype_grade5_name" = "Miękkie";
+"routing_attr_avoid_ice_roads_fords_name" = "Omijaj drogi lodowe, brody";
+"routing_attr_avoid_ice_roads_fords_description" = "Omijaj drogi lodowe i brody";
+"routing_attr_avoid_sett_name" = "Unikanie bruku lub kostki brukowej";
+
+"res_url" = "Adres URL";
+"res_elliptic_mercator" = "Eliptyczna Merkatora";

@@ -1461,3 +1461,11 @@
 "rendering_attr_highway_class_track_grade3_name" = "Класс 3";
 "rendering_attr_highway_class_track_grade4_name" = "Класс 4";
 "rendering_attr_highway_class_track_grade5_name" = "Класс 5";
+
+"rendering_attr_tracktype_grade1_name" = "Твёрдое";
+"rendering_attr_tracktype_grade5_name" = "Мягкое";
+"rendering_attr_tracktype_grade3_name" = "Смешанное";
+"rendering_attr_tracktype_grade2_name" = "Почти твёрдое";
+"res_elliptic_mercator" = "Эллиптическая проекция Меркатора";
+"rendering_attr_tracktype_grade4_name" = "Почти мягкое";
+"res_url" = "URL";

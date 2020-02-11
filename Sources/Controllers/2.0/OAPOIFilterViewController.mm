@@ -220,11 +220,6 @@ typedef enum
     [self unregisterKeyboardNotifications];
 }
 
-- (void)viewWillLayoutSubviews
-{
-    _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, DeviceScreenWidth - 88, _tableView.frame.size.height);
-}
-
 -(UIView *) getTopView
 {
     return _topView;

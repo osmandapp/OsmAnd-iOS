@@ -610,7 +610,7 @@
         sqlite3_exec(tmpDatabase, sqlYIndexStatement, NULL, NULL, &error);
         sqlite3_exec(tmpDatabase, sqlZIndexStatement, NULL, NULL, &error);
         
-        BOOL hasRandoms = parameters[@"randoms"];
+        BOOL hasRandoms = parameters[@"randoms"] != nil;
         if (hasRandoms)
         {
             const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE info ADD COLUMN randoms TEXT"] UTF8String];

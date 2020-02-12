@@ -15,6 +15,7 @@ class OAHillshadeMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 {
 
 private:
+    virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
 protected:
 public:
     OAHillshadeMapLayerProvider();

@@ -72,3 +72,7 @@ OsmAnd::ZoomLevel OAHillshadeMapLayerProvider::getMaxZoom() const
 {
     return OsmAnd::ZoomLevel11;
 }
+
+void OAHillshadeMapLayerProvider::performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap)
+{
+}

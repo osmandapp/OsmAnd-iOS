@@ -53,4 +53,6 @@
 - (int) getTileSize;
 - (BOOL) supportsTileDownload;
 
+- (void) setTileSize:(int)tileSize;
+
 @end

@@ -791,3 +791,7 @@ OsmAnd::ZoomLevel OAMapillaryTilesProvider::getVectorTileZoom() const
 {
     return _vectorZoomLevel;
 }
+
+void OAMapillaryTilesProvider::performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap)
+{
+}

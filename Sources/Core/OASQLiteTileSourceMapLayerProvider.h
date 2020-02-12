@@ -32,6 +32,8 @@ private:
     
     void lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
     void unlockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
+    
+    virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
 protected:
 public:
     OASQLiteTileSourceMapLayerProvider(const QString& fileName);

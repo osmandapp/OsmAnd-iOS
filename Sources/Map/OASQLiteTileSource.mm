@@ -523,6 +523,13 @@
     });
 }
 
+- (void) setTileSize:(int)tileSize
+{
+    _tileSize = tileSize;
+    _tileSizeSpecified = YES;
+    [self addInfoColumn:@"tilesize" value:[NSString stringWithFormat:@"%d", _tileSize]];
+}
+
 - (int)getFileZoom:(int)zoom
 {
     return _inversiveZoom ? 17 - zoom : zoom;

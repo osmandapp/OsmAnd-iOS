@@ -446,9 +446,9 @@
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
-+ (NSDictionary *) parseUrlQuery:(NSURL *)url
++ (NSDictionary<NSString *, NSString *> *) parseUrlQuery:(NSURL *)url
 {
-    NSMutableDictionary *queryStrings = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary<NSString *, NSString *> *queryStrings = [[NSMutableDictionary alloc] init];
     for (NSString *qs in [url.query componentsSeparatedByString:@"&"]) {
         // Get the parameter name
         NSString *key = [[qs componentsSeparatedByString:@"="] objectAtIndex:0];

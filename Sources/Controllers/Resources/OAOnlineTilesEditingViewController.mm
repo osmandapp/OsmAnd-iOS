@@ -139,7 +139,7 @@
     return self;
 }
 
-- (instancetype) initWithUrlParameters:(NSDictionary *)params
+- (instancetype) initWithUrlParameters:(NSDictionary<NSString *, NSString *> *)params
 {
     self = [super init];
     if (self)
@@ -151,7 +151,7 @@
     return self;
 }
 
-- (QXmlStreamAttributes) attributesFromParams:(NSDictionary *)params
+- (QXmlStreamAttributes) attributesFromParams:(NSDictionary<NSString *, NSString *> *)params
 {
     QXmlStreamAttributes attrs = QXmlStreamAttributes();
     for (NSString *key in params)

@@ -144,7 +144,7 @@
 
 - (BOOL)handleIncomingURL:(NSURL * _Nonnull)url
 {
-    NSDictionary *params = [OAUtilities parseUrlQuery:url];
+    NSDictionary<NSString *, NSString *> *params = [OAUtilities parseUrlQuery:url];
     if ([url.lastPathComponent isEqualToString:@"add-tile-source"])
     {
         // https://osmand.net/add-tile-source?name=&url_template=&min_zoom=&max_zoom=

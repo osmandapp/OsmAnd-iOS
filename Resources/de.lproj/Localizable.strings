@@ -1458,3 +1458,13 @@
 "res_zoom_levels" = "Zoomstufen";
 "res_name_warning" = "Dateiname darf nicht leer sein";
 "res_url_warning" = "URL darf nicht leer sein";
+"res_del_cache_not_supported" = "Das Löschen des Caches für Offline-SQLite-Maps wird nicht unterstützt";
+"res_edit_online_map" = "Online-Kartenquelle bearbeiten";
+"res_online_name_descr" = "Geben Sie den Namen der Online-Quelle an";
+"res_online_url_descr" = "URL für Online-Quelle eingeben oder kopieren und einfügen";
+"res_expire_time" = "Verfallszeit";
+"res_mercator" = "Mercator-Projektion";
+"res_pseudo_mercator" = "Pseudo-Mercator-Projektion";
+"res_expire_time_desc" = "Verfallszeit in Minuten. Zwischengespeicherte Kacheln werden nach einer bestimmten Zeit wieder geladen. Lassen Sie dieses Feld leer, wenn Sie für diese Quelle keine Kacheln neu laden müssen.\nEin Tag entspricht 1440 Minuten.\nEine Woche entspricht 10080 Minuten.\n30 Tage entsprechen 43200 Minuten.";
+"res_zoom_warning" = "Der minimale Zoomwert kann nicht gleich oder größer als der maximale Zoom sein";
+"res_expire_warning" = "Die Verfallszeit sollte eine Zahl zwischen 0 und 10000000 sein";

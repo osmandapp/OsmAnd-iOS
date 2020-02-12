@@ -18,6 +18,7 @@
 #import "QuadRect.h"
 
 #define distanceClosestToIntermediate 400.0
+#define distanceThresholdToIntroduceFirstAndLastPoints 50
 
 @implementation OANextDirectionInfo
 
@@ -733,27 +734,11 @@
  */
 + (void) introduceFirstPointAndLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segs:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start end:(CLLocation *)end
 {
-    if (locations.count > 0 && [locations[0] distanceFromLocation:start] > 50)
-    {
-        // add start point
-        [locations insertObject:start atIndex:0];
-        if (segs.size() > 0)
-        {
-            segs.insert(segs.begin(), segs[0]);
-        }
-        if (directions && directions.count > 0)
-        {
-            for (OARouteDirectionInfo *i in directions)
-            {
-                i.routePointOffset++;
-            }
-            OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:directions[0].averageSpeed turnType:TurnType::ptrStraight()];
-            info.routePointOffset = 0;
-            // info.setDescriptionRoute(ctx.getString( R.string.route_head));//; //$NON-NLS-1$
-            [directions insertObject:info atIndex:0];
-        }
+    BOOL firstPointIntroduced = [self.class introduceFirstPoint:locations directions:directions segments:segs start:start];
+    BOOL lastPointIntroduced = [self.class introduceLastPoint:locations directions:directions segments:segs end:end];
+    if (firstPointIntroduced || lastPointIntroduced)
         [self.class checkForDuplicatePoints:locations directions:directions];
-    }
+    
     OARouteDirectionInfo *lastDirInf = directions.count > 0 ? directions[directions.count - 1] : nil;
     if ((!lastDirInf || lastDirInf.routePointOffset < locations.count - 1) && locations.count - 1 > 0)
     {
@@ -787,6 +772,81 @@
         info.routePointOffset = (int)locations.count - 1;
         [directions addObject:info];
     }
+}
+
++ (BOOL) introduceFirstPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs start:(CLLocation *)start
+{
+    if (locations.count > 0 && [locations[0] distanceFromLocation:start] > distanceThresholdToIntroduceFirstAndLastPoints)
+    {
+        // add start point
+        [locations insertObject:start atIndex:0];
+        if (segs.size() > 0)
+        {
+            segs.insert(segs.begin(), segs[0]);
+        }
+        if (directions && directions.count > 0)
+        {
+            for (OARouteDirectionInfo *i in directions)
+            {
+                i.routePointOffset++;
+            }
+            OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:directions[0].averageSpeed turnType:TurnType::ptrStraight()];
+            info.routePointOffset = 0;
+            // info.setDescriptionRoute(ctx.getString( R.string.route_head));//; //$NON-NLS-1$
+            [directions insertObject:info atIndex:0];
+        }
+        return YES;
+    }
+    return NO;
+}
+
++ (BOOL) introduceLastPoint:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions segments:(std::vector<std::shared_ptr<RouteSegmentResult>>&)segs end:(CLLocation *)end
+{
+    if (locations.count > 0)
+    {
+        CLLocation *lastFoundLocation = locations[locations.count - 1];
+
+        CLLocation *endLocation = [[CLLocation alloc] initWithLatitude:end.coordinate.latitude longitude:end.coordinate.longitude];
+
+        if ([lastFoundLocation distanceFromLocation:endLocation] > distanceThresholdToIntroduceFirstAndLastPoints)
+        {
+            if (directions && directions.count > 0)
+            {
+                if (locations.count > 2)
+                {
+                    int type = TurnType::C;
+                    CLLocation *prevLast = locations[locations.count - 2];
+                    double lastBearing = [prevLast bearingTo:lastFoundLocation];
+                    double bearingToEnd = [lastFoundLocation bearingTo:endLocation];
+                    double diff = degreesDiff(lastBearing, bearingToEnd);
+                    if (abs(diff) > 10)
+                    {
+                        if (abs(diff) < 60)
+                        {
+                            type = diff > 0 ? TurnType::TSLL : TurnType::TSLR;
+                        }
+                        else
+                        {
+                            type = diff > 0 ? TurnType::TL : TurnType::TR;
+                        }
+                    }
+
+                    OARouteDirectionInfo *lastDirInf = directions[directions.count - 1];
+                    OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:lastDirInf ? lastDirInf.averageSpeed : 1 turnType:std::make_shared<TurnType>(TurnType::valueOf(type, false))];
+                    info.routePointOffset = (int) locations.count - 1;
+                    [directions addObject:info];
+                }
+            }
+            // add end point
+            [locations addObject:endLocation];
+            if (segs.size() > 0)
+            {
+                segs.push_back(segs[segs.size() - 1]);
+            }
+            return YES;
+        }
+    }
+    return NO;
 }
 
 /**

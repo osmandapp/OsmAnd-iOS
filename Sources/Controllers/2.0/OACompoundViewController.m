@@ -75,7 +75,7 @@
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self applySafeAreaMargins:size];
+        [self applySafeAreaMargins:self.view.frame.size];
     } completion:nil];
 }
 

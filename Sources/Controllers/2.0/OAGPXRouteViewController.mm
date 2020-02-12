@@ -365,20 +365,6 @@
     return gpxItemNavBarHeight;
 }
 
--(void) applySafeAreaMargins:(CGSize)screenSize
-{
-    CGFloat toolBarHeight = [self getToolBarHeight];
-    [OAUtilities adjustViewsToNotch:screenSize topView:[self getTopView] middleView:[self getMiddleView]
-                         bottomView:toolBarHeight == 0 ? nil : [self getBottomView] navigationBarHeight:[self getNavBarHeight] toolBarHeight:toolBarHeight];
-}
-
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self applySafeAreaMargins:size];
-    } completion:nil];
-}
-
 - (void)updateMap
 {
     [[OARootViewController instance].mapPanel displayGpxOnMap:_gpxRouter.gpx];

@@ -52,7 +52,7 @@ static UIFont *_textFont;
 {
     [super layoutSubviews];
     
-    CGFloat w = self.bounds.size.width;
+    CGFloat w = self.bounds.size.width - (OAUtilities.getLeftMargin * 2);
     CGFloat h = self.bounds.size.height;
     
     self.iconView.center = CGPointMake(imageSize / 2, h / 2);

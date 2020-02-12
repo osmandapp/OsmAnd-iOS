@@ -83,6 +83,11 @@
         self.textView.text = OALocalizedString(@"create_custom_poi");
         self.bottomBtnView.text = [OALocalizedString(@"sett_show") upperCase];
     }
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self applySafeAreaMargins];
 }
 
@@ -247,7 +252,6 @@
             [cell.iconView setImage: [item icon]];
             cell.descView.hidden = NO;
             cell.switchView.on = YES;
-            
             NSSet<NSString *> *subtypes = [_filter getAcceptedSubtypes:item];
             if (subtypes == [OAPOIBaseType nullSet])
             {

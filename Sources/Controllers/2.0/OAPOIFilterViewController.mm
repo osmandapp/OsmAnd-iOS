@@ -200,13 +200,13 @@ typedef enum
     bottomSeparatorView.backgroundColor = _tableView.separatorColor;
     bottomSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_textFieldHeaderView addSubview:bottomSeparatorView];
-    [self applySafeAreaMargins];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self registerForKeyboardNotifications];
+    [self applySafeAreaMargins];
 }
 
 -(void)viewWillDisappear:(BOOL)animated

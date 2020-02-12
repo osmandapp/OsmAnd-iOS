@@ -49,6 +49,7 @@
 #define kAlertViewRemoveId -3
 #define kAlertViewShareId -4
 #define kAlertViewCancelButtonIndex -1
+#define kMaxCancelButtonWidth 100
 
 #define GPX_EXT @"gpx"
 #define KML_EXT @"kml"
@@ -486,9 +487,12 @@ static UIViewController *parentController;
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     
     _editActive = NO;
-    
-    self.cancelButton.frame = self.backButton.frame;
+
     self.mapButton.frame = self.checkButton.frame;
+    CGRect frame = self.backButton.frame;
+    frame.size.width =  kMaxCancelButtonWidth;
+    self.cancelButton.frame = frame;
+    
     [self updateButtons];
 }
 
@@ -496,6 +500,7 @@ static UIViewController *parentController;
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+    [self updateButtons];
 }
 
 -(void)viewWillAppear:(BOOL)animated {

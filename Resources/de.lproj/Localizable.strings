@@ -605,7 +605,7 @@
 "select_route_start_on_map" = "Startpunkt der Route auswählen";
 "select_route_finish_on_map" = "Endpunkt der Route auswählen";
 "sort_by_distance" = "Nach Entfernung sortieren";
-"sort_by_name" = "Nach Name sortieren";
+"sort_by_name" = "Nach Namen sortieren";
 "map_markers_other" = "Andere Markierungen";
 "directions_other" = "Andere Richtungen";
 "shared_string_turn" = "Abbiegung";
@@ -788,7 +788,7 @@
 "map_widget_next_turn" = "Nächste Abzweigung";
 "map_widget_next_turn_small" = "Nächste Abzweigung (klein)";
 "map_widget_next_next_turn" = "Übernächste Abzweigung";
-"always_center_position_on_map" = "Standort immer in Bildschirmmitte anzeigen";
+"always_center_position_on_map" = "Standort immer in der Bildschirmmitte anzeigen";
 "map_widget_appearance_rem" = "Verbleibende Elemente";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Zwischenziel";

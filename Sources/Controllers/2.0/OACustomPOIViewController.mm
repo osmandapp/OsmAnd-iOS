@@ -83,10 +83,12 @@
         self.textView.text = OALocalizedString(@"create_custom_poi");
         self.bottomBtnView.text = [OALocalizedString(@"sett_show") upperCase];
     }
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self applySafeAreaMargins];
-    
-//    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-//    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 -(UIView *) getTopView

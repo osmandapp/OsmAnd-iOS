@@ -49,6 +49,7 @@
 #define kAlertViewRemoveId -3
 #define kAlertViewShareId -4
 #define kAlertViewCancelButtonIndex -1
+#define kMaxCancelButtonWidth 100
 
 #define GPX_EXT @"gpx"
 #define KML_EXT @"kml"
@@ -486,9 +487,12 @@ static UIViewController *parentController;
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     
     _editActive = NO;
-    
-    self.cancelButton.frame = self.backButton.frame;
+
     self.mapButton.frame = self.checkButton.frame;
+    CGRect frame = self.backButton.frame;
+    frame.size.width =  kMaxCancelButtonWidth;
+    self.cancelButton.frame = frame;
+    
     [self updateButtons];
 }
 
@@ -553,9 +557,6 @@ static UIViewController *parentController;
     self.cancelButton.hidden = !_editActive;
     self.mapButton.hidden = _editActive;
     self.checkButton.hidden = !_editActive;
-    CGRect frame = self.backButton.frame;
-    frame.size.width = 100;
-    self.cancelButton.frame = frame;
 }
 
 - (void)onTrackRecordingChanged

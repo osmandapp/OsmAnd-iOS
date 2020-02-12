@@ -137,7 +137,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (void) editClicked
 {
-    OAOnlineTilesEditingViewController *editViewController = [[OAOnlineTilesEditingViewController alloc] initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)_localItem baseController: (OAResourcesBaseViewController *)self.baseController];
+    OAOnlineTilesEditingViewController *editViewController = [[OAOnlineTilesEditingViewController alloc] initWithLocalItem:_localItem baseController:self.baseController];
     editViewController.delegate = self;
     [self.navigationController pushViewController:editViewController animated:YES];
 }
@@ -175,6 +175,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         
         [tValues addObject:[NSString stringWithFormat:@"%@", [formatter stringFromDate:d]]];
         [tButtons addObject:@"clear_cache"];
+        [tButtons addObject:@"edit"];
         [tButtons addObject:@"delete"];
     }
     

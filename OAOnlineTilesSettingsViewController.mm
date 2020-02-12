@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
     return self;
 }
 
--(instancetype) initWithStorageFormat:(EOASourceFormat)sourceFormat
+-(instancetype) initWithSourceFormat:(EOASourceFormat)sourceFormat
 {
     self = [super init];
     if (self)
@@ -71,6 +71,11 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
             _titleLabel.text = OALocalizedString(@"res_mercator");
             break;
         }
+        case EOAOnlineSourceSettingSourceFormat:
+        {
+            _titleLabel.text = OALocalizedString(@"res_source_format");
+            break;
+        }
         default:
             break;
     }
@@ -78,12 +83,12 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
 
 - (void) generateData
 {
+    NSMutableArray *data = [NSMutableArray new];
     switch (_settingsType)
     {
         case EOAOnlineSourceSettingMercatorProjection:
         {
-            NSMutableArray *data;
-            data = [NSMutableArray new];
+            
             [data addObject:@{
                                 @"text": OALocalizedString(@"res_elliptic_mercator"),
                                 @"img": _isEllipticYTile ? @"menu_cell_selected.png" : @""
@@ -92,12 +97,24 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
                                 @"text": OALocalizedString(@"res_pseudo_mercator"),
                                 @"img": !_isEllipticYTile ? @"menu_cell_selected.png" : @""
             }];
-            _data = [NSArray arrayWithArray:data];
+            break;
+        }
+        case EOAOnlineSourceSettingSourceFormat:
+        {
+            [data addObject:@{
+                                @"text": OALocalizedString(@"res_source_sqlite"),
+                                @"img": _sourceFormat == EOASourceFormatSQLite ? @"menu_cell_selected.png" : @""
+            }];
+            [data addObject:@{
+                                @"text": OALocalizedString(@"res_source_one_per_tile"),
+                                @"img": _sourceFormat == EOASourceFormatOnline ? @"menu_cell_selected.png" : @""
+            }];
             break;
         }
         default:
             break;
     }
+    _data = [NSArray arrayWithArray:data];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -143,10 +160,9 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
            {
                if ((indexPath.row == 0 && _isEllipticYTile) || (indexPath.row == 1 && !_isEllipticYTile))
                    break;
-               BOOL newValue = indexPath.row == 0 ? YES : NO;
+               _isEllipticYTile = indexPath.row == 0 ? YES : NO;
                if (_delegate)
-                   [_delegate onMercatorChanged: newValue];
-               _isEllipticYTile = newValue;
+                   [_delegate onMercatorChanged:_isEllipticYTile];
                [self generateData];
                [_tableView reloadData];
                break;
@@ -155,8 +171,11 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
            {
                if ((indexPath.row == 0 && _sourceFormat == EOASourceFormatSQLite) || (indexPath.row == 1 && _sourceFormat == EOASourceFormatOnline))
                    break;
-//               if [(_delegate)
-//                   [_delegate onStorageFormatChanged:]
+               _sourceFormat = indexPath.row == 0 ? EOASourceFormatSQLite : EOASourceFormatOnline;
+               if (_delegate)
+                   [_delegate onStorageFormatChanged:_sourceFormat];
+               [self generateData];
+               [_tableView reloadData];
                break;
            }
            default:

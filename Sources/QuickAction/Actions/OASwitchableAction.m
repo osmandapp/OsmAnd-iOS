@@ -20,7 +20,7 @@
     return [super initWithAction:action];
 }
 
-- (void)executeWithParams:(NSString *)params
+- (void)executeWithParams:(NSArray<NSString *> *)params
 {
 }
 

@@ -1409,7 +1409,7 @@
 		847A1D1A1DF94E9B003C1246 /* OAOutdatedResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */; };
 		847A1D1B1DF94E9B003C1246 /* OAIconTextDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B371ABCABC600504DA7 /* OAIconTextDescCell.m */; };
 		847A1D1C1DF94E9B003C1246 /* OAUserInteractionPassThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335617C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m */; };
-		847A1D1D1DF94E9B003C1246 /* OAHillshadeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.m */; };
+		847A1D1D1DF94E9B003C1246 /* OAHillshadeLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.mm */; };
 		847A1D1E1DF94E9B003C1246 /* OAGPXEditWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84064DF31B83907600033C47 /* OAGPXEditWptViewController.mm */; };
 		847A1D1F1DF94E9B003C1246 /* OAIconTextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE661A0E5A7C00900A47 /* OAIconTextTableViewCell.m */; };
 		847A1D201DF94E9B003C1246 /* OAHUDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F70119890A4100AB40D1 /* OAHUDButton.m */; };
@@ -1468,7 +1468,7 @@
 		847A1D571DF94E9B003C1246 /* OAHistoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766481B7355DD002A08CB /* OAHistoryViewController.mm */; };
 		847A1D581DF94E9B003C1246 /* OAGPXDocumentPrimitives.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84B4FD531A90F74800A147BA /* OAGPXDocumentPrimitives.mm */; };
 		847A1D591DF94E9B003C1246 /* OAWikiMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A819F91CFACC80000C9E8C /* OAWikiMenuViewController.m */; };
-		847A1D5A1DF94E9B003C1246 /* OAHillshadeTileSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB61B6A6C2F0016F6F4 /* OAHillshadeTileSource.m */; };
+		847A1D5A1DF94E9B003C1246 /* OAHillshadeTileSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB61B6A6C2F0016F6F4 /* OAHillshadeTileSource.mm */; };
 		847A1D5B1DF94E9B003C1246 /* OAMapStyleSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84B4FD5D1A91C7FB00A147BA /* OAMapStyleSettings.mm */; };
 		847A1D5C1DF94E9B003C1246 /* OAGpxRouteWptItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F3A8811B4AE92C00D16EBC /* OAGpxRouteWptItem.mm */; };
 		847A1D5D1DF94E9B003C1246 /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2A5190D186F00D90F0A /* OsmAndAppImpl.mm */; };
@@ -2410,8 +2410,8 @@
 		848A14D61B223A4C00A31AE7 /* bg_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14CF1B223A4C00A31AE7 /* bg_title@2x.png */; };
 		848A14D91B223A4C00A31AE7 /* bg_title@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14D01B223A4C00A31AE7 /* bg_title@3x.png */; };
 		848A3EAF1B6A14030016F6F4 /* OASQLiteTileSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EAC1B6A14030016F6F4 /* OASQLiteTileSource.mm */; };
-		848A3EB41B6A141B0016F6F4 /* OAHillshadeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.m */; };
-		848A3EB91B6A6C2F0016F6F4 /* OAHillshadeTileSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB61B6A6C2F0016F6F4 /* OAHillshadeTileSource.m */; };
+		848A3EB41B6A141B0016F6F4 /* OAHillshadeLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.mm */; };
+		848A3EB91B6A6C2F0016F6F4 /* OAHillshadeTileSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB61B6A6C2F0016F6F4 /* OAHillshadeTileSource.mm */; };
 		848A3EC31B6A6F0B0016F6F4 /* QuadRect.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EC01B6A6F0B0016F6F4 /* QuadRect.m */; };
 		848A3EC81B6A6F180016F6F4 /* QuadTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EC51B6A6F180016F6F4 /* QuadTree.m */; };
 		848A3ECE1B6BABCB0016F6F4 /* OAMapCreatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A3ECB1B6BABCB0016F6F4 /* OAMapCreatorHelper.m */; };
@@ -6151,9 +6151,9 @@
 		848A3EAB1B6A14030016F6F4 /* OASQLiteTileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASQLiteTileSource.h; sourceTree = "<group>"; };
 		848A3EAC1B6A14030016F6F4 /* OASQLiteTileSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASQLiteTileSource.mm; sourceTree = "<group>"; };
 		848A3EB01B6A141B0016F6F4 /* OAHillshadeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHillshadeLayer.h; sourceTree = "<group>"; };
-		848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHillshadeLayer.m; sourceTree = "<group>"; };
+		848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHillshadeLayer.mm; sourceTree = "<group>"; };
 		848A3EB51B6A6C2F0016F6F4 /* OAHillshadeTileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHillshadeTileSource.h; sourceTree = "<group>"; };
-		848A3EB61B6A6C2F0016F6F4 /* OAHillshadeTileSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHillshadeTileSource.m; sourceTree = "<group>"; };
+		848A3EB61B6A6C2F0016F6F4 /* OAHillshadeTileSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHillshadeTileSource.mm; sourceTree = "<group>"; };
 		848A3EBF1B6A6F0B0016F6F4 /* QuadRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadRect.h; sourceTree = "<group>"; };
 		848A3EC01B6A6F0B0016F6F4 /* QuadRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuadRect.m; sourceTree = "<group>"; };
 		848A3EC41B6A6F180016F6F4 /* QuadTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadTree.h; sourceTree = "<group>"; };
@@ -10629,7 +10629,7 @@
 				848A3EC91B6BABB70016F6F4 /* MapCreator */,
 				848A3EAA1B6A13F40016F6F4 /* TileSources */,
 				848A3EB01B6A141B0016F6F4 /* OAHillshadeLayer.h */,
-				848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.m */,
+				848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.mm */,
 				848A3EBF1B6A6F0B0016F6F4 /* QuadRect.h */,
 				848A3EC01B6A6F0B0016F6F4 /* QuadRect.m */,
 				848A3EC41B6A6F180016F6F4 /* QuadTree.h */,
@@ -10644,7 +10644,7 @@
 				848A3EAB1B6A14030016F6F4 /* OASQLiteTileSource.h */,
 				848A3EAC1B6A14030016F6F4 /* OASQLiteTileSource.mm */,
 				848A3EB51B6A6C2F0016F6F4 /* OAHillshadeTileSource.h */,
-				848A3EB61B6A6C2F0016F6F4 /* OAHillshadeTileSource.m */,
+				848A3EB61B6A6C2F0016F6F4 /* OAHillshadeTileSource.mm */,
 			);
 			name = TileSources;
 			sourceTree = "<group>";
@@ -16689,7 +16689,7 @@
 				8AC405C720F9E08400F85CC9 /* OATransportStop.mm in Sources */,
 				8476E1F31F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
 				847A1D1C1DF94E9B003C1246 /* OAUserInteractionPassThroughView.m in Sources */,
-				847A1D1D1DF94E9B003C1246 /* OAHillshadeLayer.m in Sources */,
+				847A1D1D1DF94E9B003C1246 /* OAHillshadeLayer.mm in Sources */,
 				DA6A2B85233CEC42005D2F4A /* OATitleIconRoundCell.m in Sources */,
 				DA6B36222265F92200FBB46D /* OAFavoritesTabBarViewController.m in Sources */,
 				DAF3F551225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */,
@@ -16859,7 +16859,7 @@
 				846F035D1E12550D00DB4772 /* OAIconTextSwitchCell.m in Sources */,
 				847A1D591DF94E9B003C1246 /* OAWikiMenuViewController.m in Sources */,
 				84FF0C401F3CB85B00AD1029 /* OARouteInfoView.mm in Sources */,
-				847A1D5A1DF94E9B003C1246 /* OAHillshadeTileSource.m in Sources */,
+				847A1D5A1DF94E9B003C1246 /* OAHillshadeTileSource.mm in Sources */,
 				847A1D5B1DF94E9B003C1246 /* OAMapStyleSettings.mm in Sources */,
 				847A1D5C1DF94E9B003C1246 /* OAGpxRouteWptItem.mm in Sources */,
 				DA4B982021F85C7F00CED009 /* OAEntityInfo.m in Sources */,
@@ -17280,7 +17280,7 @@
 				846F035A1E12550D00DB4772 /* OAIconButtonCell.m in Sources */,
 				DA1605B922FEF2F1001E02AD /* OAMapSourceBaseAction.mm in Sources */,
 				84E297531E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */,
-				848A3EB41B6A141B0016F6F4 /* OAHillshadeLayer.m in Sources */,
+				848A3EB41B6A141B0016F6F4 /* OAHillshadeLayer.mm in Sources */,
 				DA71EAA92346232E00B9D7F3 /* OARouteAvoidSettingsViewController.mm in Sources */,
 				8456654F1FED41E8003149C9 /* OALocationPointWrapper.mm in Sources */,
 				84686AC11E056F0500DA09BC /* OAPOISearchHelper.mm in Sources */,
@@ -17429,7 +17429,7 @@
 				8485FA461FC95B21005991FE /* OADayNightHelper.m in Sources */,
 				DA6A2B84233CEC42005D2F4A /* OATitleIconRoundCell.m in Sources */,
 				84A819FD1CFACC80000C9E8C /* OAWikiMenuViewController.m in Sources */,
-				848A3EB91B6A6C2F0016F6F4 /* OAHillshadeTileSource.m in Sources */,
+				848A3EB91B6A6C2F0016F6F4 /* OAHillshadeTileSource.mm in Sources */,
 				DA540DB0229E8F1C0069201E /* OAInstallMapillaryBottomSheetViewController.mm in Sources */,
 				84594F641FB1A30200813D6A /* OALanesControl.mm in Sources */,
 				8411B3A81EDB065A00FED72E /* OAHeaderCell.m in Sources */,

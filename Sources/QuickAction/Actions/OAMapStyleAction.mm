@@ -106,11 +106,11 @@
         if (index >= 0 && index < mapStyles.count - 1)
             nextStyle = mapStyles[index + 1];
         
-        [self executeWithParams:nextStyle];
+        [self executeWithParamsString:nextStyle];
     }
 }
 
-- (void)executeWithParams:(NSString *)params
+- (void)executeWithParamsString:(NSString *)params
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     

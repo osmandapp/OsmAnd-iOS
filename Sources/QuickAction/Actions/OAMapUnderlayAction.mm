@@ -50,12 +50,14 @@
         }
         
         NSInteger index = -1;
-        NSString *name = [OsmAndApp instance].data.underlayMapSource.variant;
-        NSString *currentSource = name ? name : KEY_NO_UNDERLAY;
+        OAMapSource *currSource = [OsmAndApp instance].data.underlayMapSource;
+        NSString *currentSource = currSource.name ? currSource.name : KEY_NO_UNDERLAY;
+        BOOL noUnderlay = currSource.name == nil;
         
         for (NSInteger idx = 0; idx < sources.count; idx++)
         {
-            if ([sources[idx].firstObject isEqualToString:currentSource])
+            NSArray *source = sources[idx];
+            if ([source[source.count - 1] isEqualToString:currentSource] || ([source.firstObject isEqualToString:currentSource] && noUnderlay))
             {
                 index = idx;
                 break;
@@ -67,20 +69,22 @@
         if (index >= 0 && index < sources.count - 1)
             nextSource = sources[index + 1];
         
-        [self executeWithParams:nextSource.firstObject];
+        [self executeWithParams:nextSource];
     }
 }
 
-- (void) executeWithParams:(NSString *)params
+- (void) executeWithParams:(NSArray<NSString *> *)params
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    BOOL hasUnderlay = ![params isEqualToString:KEY_NO_UNDERLAY];
+    NSString *variant = params.firstObject;
+    NSString *name = params.count > 1 ? params[params.count - 1] : @"";
+    BOOL hasUnderlay = ![variant isEqualToString:KEY_NO_UNDERLAY];
     if (hasUnderlay)
     {
         OAMapSource *newMapSource = nil;
         for (OAMapSource *mapSource in self.onlineMapSources)
         {
-            if ([mapSource.variant isEqualToString:params])
+            if ([mapSource.variant isEqualToString:variant] && [mapSource.name isEqualToString:name])
             {
                 newMapSource = mapSource;
                 break;

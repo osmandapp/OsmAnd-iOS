@@ -12,7 +12,7 @@
 
 @interface OASwitchableAction<ObjectType> : OAQuickAction
 
--(void) executeWithParams:(NSString *) params;
+-(void) executeWithParams:(NSArray<NSString *> *) params;
 
 -(NSString *) getTranslatedItemName:(NSString *) item;
 

@@ -47,7 +47,8 @@
         NSInteger index = -1;
         for (NSInteger idx = 0; idx < sources.count; idx++)
         {
-            if ([sources[idx].firstObject isEqualToString:currSource.variant])
+            NSArray *source = sources[idx];
+            if ([source[source.count - 1] isEqualToString:currSource.name] || ([source.firstObject isEqualToString:currSource.variant] && currSource.variant.length > 0))
             {
                 index = idx;
                 break;
@@ -59,14 +60,16 @@
         if (index >= 0 && index < sources.count - 1)
             nextSource = sources[index + 1];
         
-        [self executeWithParams:nextSource.firstObject];
+        [self executeWithParams:nextSource];
     }
 }
 
-- (void)executeWithParams:(NSString *)params
+- (void)executeWithParams:(NSArray<NSString *> *)params
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    if ([params isEqualToString:LAYER_OSM_VECTOR])
+    NSString *variant = params.firstObject;
+    NSString *name = params.count > 1 ? params[params.count - 1] : @"";
+    if ([variant isEqualToString:LAYER_OSM_VECTOR])
     {
         OAMapSource *mapSource = app.data.prevOfflineSource;
         if (!mapSource)
@@ -81,7 +84,7 @@
         OAMapSource *newMapSource = nil;
         for (OAMapSource *mapSource in self.onlineMapSources)
         {
-            if ([mapSource.variant isEqualToString:params])
+            if ([mapSource.variant isEqualToString:variant] && [mapSource.name isEqualToString:name])
             {
                 newMapSource = mapSource;
                 break;

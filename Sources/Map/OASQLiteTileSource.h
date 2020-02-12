@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+#include <OsmAndCore/QtExtensions.h>
+#include <QList>
+#include <QString>
+
 @class QuadRect;
 
 @interface OASQLiteTileSource : NSObject
@@ -17,6 +21,11 @@
 @property (nonatomic, readonly) int tileSize;
 @property (nonatomic, readonly) NSString *referer;
 @property (nonatomic, readonly) NSString *urlTemplate;
+@property (nonatomic, readonly) NSString *randoms;
+@property (nonatomic, readonly) QList<QString> randomsArray;
+@property (nonatomic, readonly) NSString *rule;
+
++ (BOOL) createNewTileSourceDbAtPath:(NSString *)path parameters:(NSDictionary *)parameters;
 
 - (instancetype)initWithFilePath:(NSString *)filePath;
 
@@ -37,6 +46,7 @@
 - (NSString *)getUrlToLoad:(int) x y:(int) y zoom:(int) zoom;
 - (int)getFileZoom:(int)zoom;
 - (BOOL)isEllipticYTile;
+- (BOOL)isInvertedYTile;
 - (long)getExpirationTimeMinutes;
 - (long)getExpirationTimeMillis;
 - (BOOL) expired:(NSNumber *)time;

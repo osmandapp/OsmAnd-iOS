@@ -24,7 +24,7 @@
 @property (nonatomic) id<OAOnlineTilesSettingsViewControllerDelegate> delegate;
 
 -(instancetype) initWithEllipticYTile:(BOOL)isEllipticYTile;
--(instancetype) initWithStorageFormat:(EOASourceFormat)sourceFormat;
+-(instancetype) initWithSourceFormat:(EOASourceFormat)sourceFormat;
 
 @end
 

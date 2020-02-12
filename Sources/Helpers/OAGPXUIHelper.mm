@@ -31,8 +31,8 @@
         {
             OAGpxTrkPt *point = [[OAGpxTrkPt alloc] init];
             [point setPosition:l.coordinate];
-//            if (l.hasAltitude())
-//            {
+            if (l.altitude != 0)
+            {
                 gpx.hasAltitude = YES;
                 CLLocationDistance h = l.altitude;
                 point.elevation = h;
@@ -45,7 +45,7 @@
                     }
                 }
                 lastHeight = h;
-//            }
+            }
             [segPoints addObject:point];
         }
         seg.points = segPoints;

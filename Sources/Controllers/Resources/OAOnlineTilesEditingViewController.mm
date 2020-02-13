@@ -290,6 +290,7 @@
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return resultCell;
 }
 
@@ -435,9 +436,66 @@
     }
 }
 
+- (BOOL)hasChangesBeenMade
+{
+    long expireTimeMillis;
+    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
+        && [_expireTimeMinutes integerValue] <= kMaxExpireMin
+        && [_expireTimeMinutes integerValue] >= 0)
+    {
+        if ([_expireTimeMinutes isEqualToString:@""])
+            expireTimeMillis = -1;
+        else
+            expireTimeMillis = [_expireTimeMinutes integerValue] * 60 * 1000;
+    }
+    else
+    {
+        return YES;
+    }
+    
+    if (_tileSource != nullptr)
+    {
+        if (![_itemName isEqualToString:_tileSource->name.toNSString()] ||
+        ![_itemURL isEqualToString:_tileSource->urlToLoad.toNSString()] ||
+        _minZoom != _tileSource->minZoom ||
+        _maxZoom != _tileSource->maxZoom ||
+        expireTimeMillis != _tileSource->expirationTimeMillis ||
+        _isEllipticYTile != _tileSource->ellipticYTile ||
+        _sourceFormat != EOASourceFormatOnline)
+        {
+            return YES;
+        }
+    }
+    else if (_sqliteSource != nil)
+    {
+        if (![_itemName isEqualToString:_sqliteSource.name] ||
+        ![_itemURL isEqualToString:_sqliteSource.urlTemplate] ||
+        _minZoom != _sqliteSource.minimumZoomSupported ||
+        _maxZoom != _sqliteSource.maximumZoomSupported ||
+        expireTimeMillis != _sqliteSource.getExpirationTimeMillis ||
+        _isEllipticYTile != _sqliteSource.isEllipticYTile ||
+        _sourceFormat != EOASourceFormatSQLite)
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 - (IBAction)backButtonPressed:(UIButton *)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self hasChangesBeenMade])
+    {
+       UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_editing_lost_changes_title") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
+       [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+       [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+           [self.navigationController popViewControllerAnimated:YES];
+       }]];
+       [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+       [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (BOOL)pickerIsShown
@@ -450,6 +508,14 @@
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row inSection:_pickerIndexPath.section]]
                           withRowAnimation:UITableViewRowAnimationFade];
     _pickerIndexPath = nil;
+}
+
+- (void)hidePicker
+{
+    [self.tableView beginUpdates];
+    if ([self pickerIsShown])
+        [self hideExistingPicker];
+    [self.tableView endUpdates];
 }
 
 - (NSIndexPath *)calculateIndexPathForNewPicker:(NSIndexPath *)selectedIndexPath {
@@ -528,6 +594,7 @@
             cell = (OATextInputCell *)[nib objectAtIndex:0];
         }
         cell.inputField.text = _expireTimeMinutes;
+        cell.inputField.delegate = self;
         cell.inputField.placeholder = item[@"placeholder"];
         cell.userInteractionEnabled = YES;
         [cell.inputField removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
@@ -636,6 +703,8 @@
             settingsViewController = [[OAOnlineTilesSettingsViewController alloc] initWithSourceFormat:_sourceFormat];
         
         settingsViewController.delegate = self;
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self hidePicker];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
 }
@@ -703,9 +772,21 @@
         _itemURL = textView.text;
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    [self hidePicker];
+}
+
 - (void)textChanged:(UITextView *)textView
 {
     _expireTimeMinutes = textView.text;
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self hidePicker];
 }
 
 #pragma mark - MDCMultilineTextInputLayoutDelegate

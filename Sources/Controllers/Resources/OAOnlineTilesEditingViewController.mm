@@ -73,8 +73,6 @@
     
     OATextInputFloatingCell *_nameCell;
     OATextInputFloatingCell *_URLCell;
-    
-    BOOL _isKeyboardShown;
 }
 -(void)applyLocalization
 {
@@ -759,18 +757,15 @@
 - (void) keyboardWillShow:(NSNotification *)notification;
 {
     NSDictionary *userInfo = [notification userInfo];
+    CGRect keyboardBounds;
+    [[userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    UIEdgeInsets insets = [_tableView contentInset];
-    NSValue* keyboardFrameBegin = [userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-    CGFloat keyboardHeight = keyboardFrameBeginRect.size.height;
-    if (!_isKeyboardShown) {
-        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            [_tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
-        } completion:nil];
-    }
-    _isKeyboardShown = YES;
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        UIEdgeInsets insets = [self.tableView contentInset];
+        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
+        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
+    } completion:nil];
 }
 
 - (void) keyboardWillHide:(NSNotification *)notification;
@@ -778,15 +773,11 @@
     NSDictionary *userInfo = [notification userInfo];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    UIEdgeInsets insets = [_tableView contentInset];
-    if (_isKeyboardShown)
-    {
-        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            [_tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
-            [self.view layoutIfNeeded];
-        } completion:nil];
-    }
-    _isKeyboardShown = NO;
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        UIEdgeInsets insets = [self.tableView contentInset];
+        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
+        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
+    } completion:nil];
 }
 
 -(void) clearButtonPressed:(UIButton *)sender

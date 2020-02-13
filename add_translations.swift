@@ -48,6 +48,9 @@ let languageDict = [
                     "uk" : "uk"
 ]
 
+var allLanguagesDict = languageDict
+allLanguagesDict["en"] = ""
+
 func addTranslations(language: String, initial: Bool) {
     let iosDict = parseIos(language: language, initial: initial)
     parseAndroidAndCompare(language: language, iosDict: iosDict, initial: initial)
@@ -215,6 +218,58 @@ func modifyVariables(dict: [String : String]) -> [String : String] {
     return androidDict
 }
 
+func addRoutingParams (language: String) {
+    var routeDict: [String:String] = [:]
+    var outputArray: [String] = []
+    
+    let url = URL(fileURLWithPath: "Resources/" + language + ".lproj/Localizable.strings")
+    let path = url.path
+    
+    var str: String = ""
+    do {
+        str = try String(contentsOfFile: path)
+    } catch {
+        return
+    }
+    var iosArr = str.components(separatedBy: "\n")
+    
+    
+    var myLang: String = ""
+    if language != "en" {
+        if let lang = languageDict[language] {
+            myLang = "-" + lang
+        }
+    }
+    let androidURL = URL(fileURLWithPath: "../android/OsmAnd/res/values" + myLang + "/strings.xml")
+    let myparser = Parser()
+    let androidDict = myparser.myparser(path: androidURL)
+    for elem in androidDict {
+       if elem.key.hasPrefix("routeInfo_") || elem.key.hasPrefix("routing_attr_") || elem.key.hasPrefix("rendering_attr_") || elem.key.hasPrefix("rendering_value_") {
+           routeDict[elem.key] = elem.value
+       }
+    }
+  
+    for elem in iosArr {
+        if elem.hasPrefix("\"routeInfo_") || elem.hasPrefix("\"routing_attr_") || elem.hasPrefix("\"rendering_attr_") || elem.hasPrefix("\"rendering_value_") {
+            if let index = iosArr.firstIndex(of: elem) {
+                iosArr.remove(at: index)
+            }
+        }
+    }
+    
+    for elem in routeDict {
+        outputArray.append(makeOutputString(str1: elem.key, str2: elem.value))
+    }
+    print(language, outputArray.count)
+    let joined1 = iosArr.joined(separator: "\n")
+    let joined2 = outputArray.joined(separator: "")
+    let joined = joined1 + joined2
+    do {
+        try joined.write(to: url, atomically: false, encoding: .utf8)
+    }
+    catch {return}
+}
+
 class Parser: NSObject, XMLParserDelegate {
 
     var key = String()
@@ -251,6 +306,10 @@ class Parser: NSObject, XMLParserDelegate {
         }
         return dict
     }
+}
+
+for lang in allLanguagesDict {
+    addRoutingParams(language:lang.key)
 }
 
 for lang in languageDict {

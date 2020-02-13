@@ -1468,3 +1468,8 @@
 "res_url_warning" = "L'adreça URL no pot estar buida";
 "res_zoom_warning" = "L'escala mínima no pot ser igual o superior a l'escala màxima";
 "res_expire_warning" = "El temps de caducitat hauria de ser un nombre entre 0 i 10.000.000";
+"res_expire_time" = "Caducitat";
+"res_pseudo_mercator" = "Projecció Pseudo-Mercator";
+"res_source_format" = "Format de la font";
+"res_source_sqlite" = "Fitxer SQLiteDB";
+"res_source_one_per_tile" = "Un fitxer d'imatge per tessel·la";

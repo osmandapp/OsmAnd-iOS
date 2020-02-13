@@ -1466,3 +1466,6 @@
 "res_url_warning" = "لا يمكن أن يكون عنوان URL فارغًا";
 "res_zoom_warning" = "لا يمكن أن تكون قيمة التكبير الأدنى مساوية أو أكبر من التكبير الأقصى";
 "res_expire_warning" = "يجب أن يكون وقت انتهاء الصلاحية رقماً بين 0 و 10000000";
+"res_source_format" = "صيغة المصدر";
+"res_source_sqlite" = "ملف SQLiteDB";
+"res_source_one_per_tile" = "ملف صورة واحد لكل إطار متجانب";

@@ -185,8 +185,8 @@
 "shared_string_sound" = "صدا";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
-"sort_by_distance" = "ترتیب براساس مسافت";
-"sort_by_name" = "ترتیب براساس نام";
+"sort_by_distance" = "ترتیب بر اساس مسافت";
+"sort_by_name" = "ترتیب بر اساس نام";
 "map_markers_other" = "نشانه‌های دیگر";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
@@ -1173,7 +1173,6 @@
 "rendering_attr_tracktype_grade3_name" = "تقریباً سفت";
 "rendering_attr_tracktype_grade4_name" = "تقریباً نرم";
 "rendering_attr_tracktype_grade5_name" = "نرم";
-
 "hide_notes" = "پنهان‌کردن یادداشت‌های OSM";
 "res_elliptic_mercator" = "مرکاتور بیضوی";
 "res_url" = "نشانی اینترنتی";

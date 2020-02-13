@@ -1450,6 +1450,21 @@
 "displayed_route_save" = "Desa a OsmAnd Trips";
 "trip_name" = "Nom del viatge";
 "trip_hint" = "Introduïu el nom del viatge";
-
 "res_elliptic_mercator" = "Mercator el·líptica";
 "res_url" = "URL";
+"routing_attr_avoid_ice_roads_fords_name" = "Evita vies glaçades, guals";
+"routing_attr_avoid_ice_roads_fords_description" = "Evita vies glaçades i guals";
+"routing_attr_avoid_sett_name" = "Evita els empedrats i els llambordins";
+"routing_attr_avoid_sett_description" = "Intenta evitar carrers i camins que estiguin pavimentats amb empedrats i llambordins.";
+"shared_string_maximum" = "Màxim";
+"res_edit_online_map" = "Edita la font en connexió del mapa";
+"res_online_name_descr" = "Proporcioneu un nom per a la font en línia";
+"res_online_url_descr" = "Introduïu o copieu i enganxeu l’URL de la font en línia";
+"res_zoom_levels" = "Nivells de zoom";
+"res_mercator" = "Projecció de Mercator";
+"res_zoom_levels_desc" = "Aquests paràmetres afectaran com es veu el mapa quan s'utilitzi com un mapa tipus o com una superposició/capa de fons.\n\nMapa tipus: el mapa estarà limitat a les escales seleccionades.\n\nSuperposició / Capa de fons: Escales on es mostren les tessel·les. Per sobre o per sota d'aquestes escales hi haurà els valors establerts.";
+"res_expire_time_desc" = "Temps de caducitat en minuts. Les tessel·les en memòria es carregaran després del temps especificat. Deixeu aquest camp buit si no necessiteu recarregar tessel·les per a aquesta font.\nUn dia té 1.440 minuts.\nUna setmana té 10.080 minuts.\n30 dies són 43.200 minuts.";
+"res_name_warning" = "El nom del fitxer no pot estar buit";
+"res_url_warning" = "L'adreça URL no pot estar buida";
+"res_zoom_warning" = "L'escala mínima no pot ser igual o superior a l'escala màxima";
+"res_expire_warning" = "El temps de caducitat hauria de ser un nombre entre 0 i 10.000.000";

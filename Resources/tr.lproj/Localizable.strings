@@ -1603,3 +1603,7 @@
 "rendering_attr_ice_road_name" = "Buz yolu";
 "routing_attr_piste_type_sled_name" = "Kızak";
 "rendering_attr_surface_paved_name" = "Kaplamalı";
+
+"res_source_format" = "Kaynak formatı";
+"res_source_sqlite" = "SQLiteDB dosyası";
+"res_source_one_per_tile" = "Döşeme başına bir görüntü dosyası";

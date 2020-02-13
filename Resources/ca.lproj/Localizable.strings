@@ -1602,3 +1602,9 @@
 "rendering_attr_piste_type_connection_name" = "Connexió";
 "rendering_attr_smoothness_intermediate_name" = "Intermèdia";
 "rendering_attr_highway_class_footway_name" = "Peatonal";
+
+"res_expire_time" = "Caducitat";
+"res_pseudo_mercator" = "Projecció Pseudo-Mercator";
+"res_source_format" = "Format de la font";
+"res_source_sqlite" = "Fitxer SQLiteDB";
+"res_source_one_per_tile" = "Un fitxer d'imatge per tessel·la";

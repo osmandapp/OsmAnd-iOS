@@ -1604,3 +1604,7 @@
 "rendering_attr_highway_class_steps_name" = "خطوات";
 "rendering_attr_surface_sand_name" = "الرمال";
 "rendering_value_car_name" = "سيارة";
+
+"res_source_format" = "صيغة المصدر";
+"res_source_sqlite" = "ملف SQLiteDB";
+"res_source_one_per_tile" = "ملف صورة واحد لكل إطار متجانب";

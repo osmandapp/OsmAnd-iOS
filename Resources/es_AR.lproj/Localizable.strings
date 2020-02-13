@@ -1608,3 +1608,7 @@
 "rendering_attr_surface_unpaved_name" = "Sin pavimento";
 "rendering_attr_roadColors_description" = "Elige un esquema de color vial:";
 "rendering_attr_highway_class_track_name" = "Camino rural";
+
+"res_source_format" = "Formato de fuente";
+"res_source_sqlite" = "Archivo SQLiteDB";
+"res_source_one_per_tile" = "Un archivo de imagen por tesela";

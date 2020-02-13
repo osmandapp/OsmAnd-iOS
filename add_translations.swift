@@ -308,8 +308,10 @@ class Parser: NSObject, XMLParserDelegate {
     }
 }
 
-for lang in allLanguagesDict {
-    addRoutingParams(language:lang.key)
+if (CommandLine.arguments.count == 2) && (CommandLine.arguments[1] == "-routing") {
+    for lang in allLanguagesDict {
+        addRoutingParams(language:lang.key)
+    }
 }
 
 for lang in languageDict {

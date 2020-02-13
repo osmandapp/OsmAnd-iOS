@@ -32,10 +32,13 @@ private:
     
     void lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
     void unlockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
+
     QByteArray downloadTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
     const std::shared_ptr<const SkBitmap> downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const NSData *data, double offsetY);
     const std::shared_ptr<const SkBitmap> createShiftedTileBitmap(const NSData *data, const NSData* dataNext, double offsetY);
     const std::shared_ptr<const SkBitmap> decodeBitmap(const NSData *data);
+
+    virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
 
 protected:
 public:

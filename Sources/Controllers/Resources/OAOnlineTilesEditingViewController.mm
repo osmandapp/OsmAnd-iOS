@@ -34,6 +34,9 @@
 
 #define kMaxExpireMin 10000000
 
+#define kMinAllowedZoom 1
+#define kMaxAllowedZoom 22
+
 #define kCellTypeFloatTextInput @"text_input_floating_cell"
 #define kCellTypeSetting @"settings_cell"
 #define kCellTypeZoom @"time_cell"
@@ -70,8 +73,6 @@
     
     OATextInputFloatingCell *_nameCell;
     OATextInputFloatingCell *_URLCell;
-    
-    BOOL _isKeyboardShown;
 }
 -(void)applyLocalization
 {
@@ -199,6 +200,15 @@
     _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [_tableView beginUpdates];
+        [_tableView endUpdates];
+    } completion:nil];
+}
+
 - (void) setupView
 {
     [self applySafeAreaMargins];
@@ -290,6 +300,7 @@
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return resultCell;
 }
 
@@ -359,13 +370,16 @@
     NSMutableArray *errorArray = [NSMutableArray new];
     
     if ([_itemName isEqualToString:(@"")])
-        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_name_warning")]];
+        [errorArray addObject:OALocalizedString(@"res_name_warning")];
     
     if ([_itemURL isEqualToString:(@"")])
-        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_url_warning")]];
+        [errorArray addObject:OALocalizedString(@"res_url_warning")];
     
     if (_minZoom >= _maxZoom)
-        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_zoom_warning")]];
+        [errorArray addObject:OALocalizedString(@"res_zoom_warning")];
+    
+    if (_minZoom < kMinAllowedZoom || _minZoom > kMaxAllowedZoom || _maxZoom < kMinAllowedZoom || _maxZoom > kMaxAllowedZoom)
+        [errorArray addObject:OALocalizedString(@"res_zoom_invalid_value")];
     
     NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
     if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
@@ -379,7 +393,7 @@
     }
     else
     {
-        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_expire_warning")]];
+        [errorArray addObject:OALocalizedString(@"res_expire_warning")];
     }
     
     
@@ -387,12 +401,7 @@
     {
         NSString *title = [errorArray componentsJoinedByString: @"\n\n"];
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"" preferredStyle:UIAlertControllerStyleAlert];
-        
-        NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
-        paragraphStyle.alignment = NSTextAlignmentLeft;
-        NSAttributedString *attributedString = [NSAttributedString.alloc initWithString:title attributes: @{NSParagraphStyleAttributeName: paragraphStyle}];
-        [alert setValue:attributedString forKey:@"attributedTitle"];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:title preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil];
         [alert addAction: cancelAction];
@@ -435,9 +444,66 @@
     }
 }
 
+- (BOOL)hasChangesBeenMade
+{
+    long expireTimeMillis;
+    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
+        && [_expireTimeMinutes integerValue] <= kMaxExpireMin
+        && [_expireTimeMinutes integerValue] >= 0)
+    {
+        if ([_expireTimeMinutes isEqualToString:@""])
+            expireTimeMillis = -1;
+        else
+            expireTimeMillis = [_expireTimeMinutes integerValue] * 60 * 1000;
+    }
+    else
+    {
+        return YES;
+    }
+    
+    if (_tileSource != nullptr)
+    {
+        if (![_itemName isEqualToString:_tileSource->name.toNSString()] ||
+        ![_itemURL isEqualToString:_tileSource->urlToLoad.toNSString()] ||
+        _minZoom != _tileSource->minZoom ||
+        _maxZoom != _tileSource->maxZoom ||
+        expireTimeMillis != _tileSource->expirationTimeMillis ||
+        _isEllipticYTile != _tileSource->ellipticYTile ||
+        _sourceFormat != EOASourceFormatOnline)
+        {
+            return YES;
+        }
+    }
+    else if (_sqliteSource != nil)
+    {
+        if (![_itemName isEqualToString:_sqliteSource.name] ||
+        ![_itemURL isEqualToString:_sqliteSource.urlTemplate] ||
+        _minZoom != _sqliteSource.minimumZoomSupported ||
+        _maxZoom != _sqliteSource.maximumZoomSupported ||
+        expireTimeMillis != _sqliteSource.getExpirationTimeMillis ||
+        _isEllipticYTile != _sqliteSource.isEllipticYTile ||
+        _sourceFormat != EOASourceFormatSQLite)
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
 - (IBAction)backButtonPressed:(UIButton *)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self hasChangesBeenMade])
+    {
+       UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_editing_lost_changes_title") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
+       [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+       [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+           [self.navigationController popViewControllerAnimated:YES];
+       }]];
+       [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+       [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (BOOL)pickerIsShown
@@ -450,6 +516,14 @@
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row inSection:_pickerIndexPath.section]]
                           withRowAnimation:UITableViewRowAnimationFade];
     _pickerIndexPath = nil;
+}
+
+- (void)hidePicker
+{
+    [self.tableView beginUpdates];
+    if ([self pickerIsShown])
+        [self hideExistingPicker];
+    [self.tableView endUpdates];
 }
 
 - (NSIndexPath *)calculateIndexPathForNewPicker:(NSIndexPath *)selectedIndexPath {
@@ -528,6 +602,7 @@
             cell = (OATextInputCell *)[nib objectAtIndex:0];
         }
         cell.inputField.text = _expireTimeMinutes;
+        cell.inputField.delegate = self;
         cell.inputField.placeholder = item[@"placeholder"];
         cell.userInteractionEnabled = YES;
         [cell.inputField removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
@@ -594,7 +669,9 @@
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dataArray = _possibleZoomValues;
-        [cell.picker selectRow:indexPath.row == 1 ? _minZoom - 1 : _maxZoom - 1 inComponent:0 animated:NO];
+        int minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
+        int maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
+        [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
         return cell;
@@ -636,6 +713,8 @@
             settingsViewController = [[OAOnlineTilesSettingsViewController alloc] initWithSourceFormat:_sourceFormat];
         
         settingsViewController.delegate = self;
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self hidePicker];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
 }
@@ -703,9 +782,21 @@
         _itemURL = textView.text;
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    [self hidePicker];
+}
+
 - (void)textChanged:(UITextView *)textView
 {
     _expireTimeMinutes = textView.text;
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [self hidePicker];
 }
 
 #pragma mark - MDCMultilineTextInputLayoutDelegate
@@ -744,37 +835,30 @@
 
 #pragma mark - Keyboard Notifications
 
-- (void) keyboardWillShow:(NSNotification *)notification;
+- (void) keyboardWillShow:(NSNotification *)notification
 {
     NSDictionary *userInfo = [notification userInfo];
+    CGRect keyboardBounds;
+    [[userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    UIEdgeInsets insets = [_tableView contentInset];
-    NSValue* keyboardFrameBegin = [userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-    CGFloat keyboardHeight = keyboardFrameBeginRect.size.height;
-    if (!_isKeyboardShown) {
-        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            [_tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
-        } completion:nil];
-    }
-    _isKeyboardShown = YES;
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        UIEdgeInsets insets = [self.tableView contentInset];
+        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
+        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
+    } completion:nil];
 }
 
-- (void) keyboardWillHide:(NSNotification *)notification;
+- (void) keyboardWillHide:(NSNotification *)notification
 {
     NSDictionary *userInfo = [notification userInfo];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    UIEdgeInsets insets = [_tableView contentInset];
-    if (_isKeyboardShown)
-    {
-        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            [_tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
-            [self.view layoutIfNeeded];
-        } completion:nil];
-    }
-    _isKeyboardShown = NO;
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        UIEdgeInsets insets = [self.tableView contentInset];
+        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
+        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
+    } completion:nil];
 }
 
 -(void) clearButtonPressed:(UIButton *)sender

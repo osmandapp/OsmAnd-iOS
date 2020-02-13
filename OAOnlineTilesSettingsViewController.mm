@@ -183,6 +183,7 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
        }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

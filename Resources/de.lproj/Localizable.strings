@@ -605,7 +605,7 @@
 "select_route_start_on_map" = "Startpunkt der Route auswählen";
 "select_route_finish_on_map" = "Endpunkt der Route auswählen";
 "sort_by_distance" = "Nach Entfernung sortieren";
-"sort_by_name" = "Nach Name sortieren";
+"sort_by_name" = "Nach Namen sortieren";
 "map_markers_other" = "Andere Markierungen";
 "directions_other" = "Andere Richtungen";
 "shared_string_turn" = "Abbiegung";
@@ -788,7 +788,7 @@
 "map_widget_next_turn" = "Nächste Abzweigung";
 "map_widget_next_turn_small" = "Nächste Abzweigung (klein)";
 "map_widget_next_next_turn" = "Übernächste Abzweigung";
-"always_center_position_on_map" = "Standort immer in Bildschirmmitte anzeigen";
+"always_center_position_on_map" = "Standort immer in der Bildschirmmitte anzeigen";
 "map_widget_appearance_rem" = "Verbleibende Elemente";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Zwischenziel";
@@ -1458,3 +1458,13 @@
 "res_zoom_levels" = "Zoomstufen";
 "res_name_warning" = "Dateiname darf nicht leer sein";
 "res_url_warning" = "URL darf nicht leer sein";
+"res_del_cache_not_supported" = "Das Löschen des Caches für Offline-SQLite-Maps wird nicht unterstützt";
+"res_edit_online_map" = "Online-Kartenquelle bearbeiten";
+"res_online_name_descr" = "Geben Sie den Namen der Online-Quelle an";
+"res_online_url_descr" = "URL für Online-Quelle eingeben oder kopieren und einfügen";
+"res_expire_time" = "Verfallszeit";
+"res_mercator" = "Mercator-Projektion";
+"res_pseudo_mercator" = "Pseudo-Mercator-Projektion";
+"res_expire_time_desc" = "Verfallszeit in Minuten. Zwischengespeicherte Kacheln werden nach einer bestimmten Zeit wieder geladen. Lassen Sie dieses Feld leer, wenn Sie für diese Quelle keine Kacheln neu laden müssen.\nEin Tag entspricht 1440 Minuten.\nEine Woche entspricht 10080 Minuten.\n30 Tage entsprechen 43200 Minuten.";
+"res_zoom_warning" = "Der minimale Zoomwert kann nicht gleich oder größer als der maximale Zoom sein";
+"res_expire_warning" = "Die Verfallszeit sollte eine Zahl zwischen 0 und 10000000 sein";

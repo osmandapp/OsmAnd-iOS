@@ -8,6 +8,7 @@
 
 #include "OAWebClient.h"
 
+#define kTimeout 10.0
 
 OARequestResult::OARequestResult(const bool successful) : successful(successful)
 {
@@ -60,8 +61,8 @@ QByteArray OAWebClient::downloadData(
     if (url != nullptr && !url.isEmpty())
     {
         NSURLRequest *request = [NSURLRequest requestWithURL:
-                                 [NSURL URLWithString:url.toNSString()]];
-        
+                                 [NSURL URLWithString:url.toNSString()] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+
         NSURLResponse *response = nil;
         NSError *error = nil;
         NSData *data = [NSURLConnection sendSynchronousRequest:request
@@ -101,8 +102,8 @@ QString OAWebClient::downloadString(
     if (url != nullptr && !url.isEmpty())
     {
         NSURLRequest *request = [NSURLRequest requestWithURL:
-                                 [NSURL URLWithString:url.toNSString()]];
-        
+                                 [NSURL URLWithString:url.toNSString()] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+
         NSURLResponse *response = nil;
         NSError *error = nil;
         NSData *data = [NSURLConnection sendSynchronousRequest:request
@@ -163,8 +164,8 @@ bool OAWebClient::downloadFile(
     if (url != nullptr && !url.isEmpty() && fileName != nullptr && !fileName.isEmpty())
     {
         NSURLRequest *request = [NSURLRequest requestWithURL:
-                                 [NSURL URLWithString:url.toNSString()]];
-        
+                                 [NSURL URLWithString:url.toNSString()] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+
         NSURLResponse *response = nil;
         NSError *error = nil;
         NSData *data = [NSURLConnection sendSynchronousRequest:request

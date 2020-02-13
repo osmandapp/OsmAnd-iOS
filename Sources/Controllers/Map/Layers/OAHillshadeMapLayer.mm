@@ -16,7 +16,7 @@
 #include "OAHillshadeMapLayerProvider.h"
 #include <OsmAndCore/Utilities.h>
 
-#define kHillshadeOpacity 0.7f
+#define kHillshadeOpacity 0.45f
 
 @implementation OAHillshadeMapLayer
 {

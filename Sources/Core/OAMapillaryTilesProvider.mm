@@ -10,6 +10,7 @@
 #import "OANativeUtilities.h"
 #import "OAAppSettings.h"
 #import "OAColors.h"
+#import "OAWebClient.h"
 
 #include <OsmAndCore/Map/MapDataProviderHelpers.h>
 #include <OsmAndCore/Data/Amenity.h>
@@ -40,7 +41,7 @@ OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFac
 , _rasterName(QStringLiteral("mapillary_raster"))
 , _rasterPathSuffix(QString(_rasterName).replace(QRegExp(QLatin1String("\\W+")), QLatin1String("_")))
 , _rasterUrlPattern(QStringLiteral("https://d6a1v2w10ny40.cloudfront.net/v0.1/${osm_zoom}/${osm_x}/${osm_y}.png"))
-, _webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OsmAnd::WebClient()))
+, _webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OAWebClient()))
 , _networkAccessAllowed(true)
 , _displayDensityFactor(displayDensityFactor)
 , _physicalMemory(physicalMemory)

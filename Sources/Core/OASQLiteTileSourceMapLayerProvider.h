@@ -25,13 +25,18 @@ class OASQLiteTileSourceMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 {
 private:
     const std::shared_ptr<const OsmAnd::IWebClient> _webClient;
-    
+
     mutable QMutex _tilesInProcessMutex;
     std::array< QSet< OsmAnd::TileId >, OsmAnd::ZoomLevelsCount > _tilesInProcess;
     QWaitCondition _waitUntilAnyTileIsProcessed;
     
     void lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
     void unlockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
+    QByteArray downloadTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
+    const std::shared_ptr<const SkBitmap> downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const NSData *data, double offsetY);
+    const std::shared_ptr<const SkBitmap> createShiftedTileBitmap(const NSData *data, const NSData* dataNext, double offsetY);
+    const std::shared_ptr<const SkBitmap> decodeBitmap(const NSData *data);
+
 protected:
 public:
     OASQLiteTileSourceMapLayerProvider(const QString& fileName);
@@ -40,9 +45,13 @@ public:
     OASQLiteTileSource *ts;
     
     virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
+    virtual const std::shared_ptr<const SkBitmap> obtainImageBitmap(
+        const OsmAnd::IMapTiledDataProvider::Request& request);
+    virtual bool supportsObtainImageBitmap() const;
+
     virtual void obtainImageAsync(
-                                  const OsmAnd::IMapTiledDataProvider::Request& request,
-                                  const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage);
+        const OsmAnd::IMapTiledDataProvider::Request& request,
+        const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage);
     
     virtual OsmAnd::AlphaChannelPresence getAlphaChannelPresence() const;
     virtual OsmAnd::MapStubStyle getDesiredStubsStyle() const;

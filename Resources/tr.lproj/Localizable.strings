@@ -1465,3 +1465,6 @@
 "res_url_warning" = "URL boş olamaz";
 "res_zoom_warning" = "Minimum yakınlaştırma değeri, Maksimum yakınlaştırma değerine eşit veya ondan daha büyük olamaz";
 "res_expire_warning" = "Geçerliliğin sona erme süresi 0 ile 10000000 arasında bir sayı olmalıdır";
+"res_source_format" = "Kaynak formatı";
+"res_source_sqlite" = "SQLiteDB dosyası";
+"res_source_one_per_tile" = "Döşeme başına bir görüntü dosyası";

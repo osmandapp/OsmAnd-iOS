@@ -2,9 +2,6 @@
 "shared_string_no" = "Jo";
 "shared_string_and" = "dhe";
 "shared_string_or" = "ose";
-"rendering_attr_roadStyle_name" = "Stil i rrugës";
-"rendering_attr_hideBuildings_name" = "Hiç ndërtesat";
-"rendering_attr_alpineHiking_name" = "Shkalla malore e ecjes në këmbë/eskursion (SAC)";
 
 "menu_my_places" = "Vendet e mia";
 "driving_region_canada" = "Kanada";
@@ -27,3 +24,8 @@
 "help_about" = "Rreth";
 "speak_street_names" = "Njofto emrat e rrugëve (TTS)";
 "gpx_start" = "Fillo";
+"rendering_attr_hideHouseNumbers_name" = "Hiç numrat e shtëpive";
+"routing_attr_no_new_routing_name" = "Jo v1.9 rregullat e llogaritjes së rrugëtimit";
+"rendering_attr_roadStyle_name" = "Stil i rrugës";
+"rendering_attr_alpineHiking_name" = "Shkalla malore e ecjes në këmbë/eskursion (SAC)";
+"rendering_attr_hideBuildings_name" = "Hiç ndërtesat";

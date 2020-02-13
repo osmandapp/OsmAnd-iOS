@@ -145,7 +145,6 @@
 "osmand_live_donations" = "Bexş bike";
 "shared_string_buy" = "Bikirre";
 "osmand_live_update_now" = "Niha rojane bike";
-"rendering_attr_whiteWaterSports_name" = "Werzîşên avê yên ekstrem";
 "menu_feedback" = "Gotinên we";
 "help_features" = "Taybetmendî";
 "actions" = "Çalakî";
@@ -154,7 +153,6 @@
 "osmand_live_weekly" = "Hefteyî";
 "product_title_track_recording" = "Qeydkirina gerrê";
 "osm_edits_advanced" = "Pêş";
-"rendering_attr_horseRoutes_name" = "Riyên Hespan";
 "shared_string_save_as" = "Bi awayekî cuda qeyd bike";
 "osm_working_days" = "Rojên Karê";
 "intro_next" = "Dû re";
@@ -170,3 +168,6 @@
 "clear_all_intermediates" = "Hemû nuqteyên li navberê paqij bike";
 "osmand_live_available_maps" = "Nexşeyên ku hene";
 "help_other_header" = "A din";
+"rendering_attr_hidePOILabels_name" = "Nîşana POIyê";
+"rendering_attr_whiteWaterSports_name" = "Werzîşên avê yên ekstrem";
+"rendering_attr_horseRoutes_name" = "Riyên Hespan";

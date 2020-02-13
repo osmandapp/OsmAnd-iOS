@@ -8,6 +8,8 @@
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include <OsmAndCore/WebClient.h>
+#include <SKBitmap.h>
+
 #include "Logging.h"
 
 OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QString& fileName)
@@ -135,4 +137,12 @@ OsmAnd::ZoomLevel OASQLiteTileSourceMapLayerProvider::getMinZoom() const
 OsmAnd::ZoomLevel OASQLiteTileSourceMapLayerProvider::getMaxZoom() const
 {
     return (OsmAnd::ZoomLevel)[ts maximumZoomSupported];
+}
+
+void OASQLiteTileSourceMapLayerProvider::performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap)
+{
+    if (ts.tileSize != bitmap->width() && bitmap->width() != 0)
+    {
+        [ts setTileSize:bitmap->width()];
+    }
 }

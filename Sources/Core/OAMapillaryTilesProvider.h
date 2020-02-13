@@ -101,6 +101,8 @@ private:
     QByteArray getRasterTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
     
     QByteArray getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
+    
+    virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
 
 protected:
 public:

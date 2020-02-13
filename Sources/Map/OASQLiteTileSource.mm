@@ -221,14 +221,24 @@
 
 - (void)addInfoColumn:(NSString *)columnName value:(NSString *)value
 {
-    char *errMsg;
-    const char *sql_stmt = [[NSString stringWithFormat:@"alter table info add column %@ TEXT", columnName] UTF8String];
-    sqlite3_exec(_db, sql_stmt, NULL, NULL, &errMsg);
-    if (errMsg != NULL) sqlite3_free(errMsg);
+    dispatch_async(_dbQueue, ^{
     
-    sql_stmt = [[NSString stringWithFormat:@"update info set %@ = '%@'", columnName, value] UTF8String];
-    sqlite3_exec(_db, sql_stmt, NULL, NULL, &errMsg);
-    if (errMsg != NULL) sqlite3_free(errMsg);
+        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
+        {
+            const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE info ADD COLUMN %@ TEXT", columnName] UTF8String];
+            sqlite3_exec(_db, sql_stmt, NULL, NULL, NULL);
+            
+            sqlite3_stmt *statement;
+            sql_stmt = [[NSString stringWithFormat:@"UPDATE info SET %@ = ?", columnName] UTF8String];
+            sqlite3_prepare_v2(_db, sql_stmt, -1, &statement, NULL);
+            
+            sqlite3_bind_text(statement, 1, [value UTF8String], -1, 0);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(_db);
+        }
+    });
 }
 
 - (BOOL)hasTimeColumn
@@ -521,6 +531,13 @@
             sqlite3_close(_db);
         }
     });
+}
+
+- (void) setTileSize:(int)tileSize
+{
+    _tileSize = tileSize;
+    _tileSizeSpecified = YES;
+    [self addInfoColumn:@"tilesize" value:[NSString stringWithFormat:@"%d", _tileSize]];
 }
 
 - (int)getFileZoom:(int)zoom

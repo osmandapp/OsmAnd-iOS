@@ -1472,3 +1472,6 @@
 "res_url_warning" = "La URL no puede estar vacía";
 "res_zoom_warning" = "El valor mínimo de zoom no puede ser igual o mayor que el valor máximo de zoom";
 "res_expire_warning" = "El tiempo de expiración debería ser un número entre 0 y 10000000";
+"res_source_format" = "Formato de fuente";
+"res_source_sqlite" = "Archivo SQLiteDB";
+"res_source_one_per_tile" = "Un archivo de imagen por tesela";

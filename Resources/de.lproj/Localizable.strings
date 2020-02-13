@@ -1315,7 +1315,6 @@
 "res_expire_time_desc" = "Verfallszeit in Minuten. Zwischengespeicherte Kacheln werden nach einer bestimmten Zeit wieder geladen. Lassen Sie dieses Feld leer, wenn Sie für diese Quelle keine Kacheln neu laden müssen.\nEin Tag entspricht 1440 Minuten.\nEine Woche entspricht 10080 Minuten.\n30 Tage entsprechen 43200 Minuten.";
 "res_zoom_warning" = "Der minimale Zoomwert kann nicht gleich oder größer als der maximale Zoom sein";
 "res_expire_warning" = "Die Verfallszeit sollte eine Zahl zwischen 0 und 10000000 sein";
-
 "routing_attr_piste_type_downhill_name" = "Ski Alpin/Abfahrtslauf";
 "routing_attr_width_name" = "Breitenbegrenzung";
 "routing_attr_driving_style_name" = "Fahrweise";
@@ -1416,7 +1415,7 @@
 "rendering_attr_showRoadMaps_name" = "Reine Straßenkarten";
 "rendering_attr_piste_type_downhill_name" = "Downhill";
 "rendering_attr_whiteWaterSports_name" = "Wildwasser-Sportarten";
-"routing_attr_avoid_borders_description" = "VermeidetÜberquerung von Landesgrenzen";
+"routing_attr_avoid_borders_description" = "Vermeidet Überquerung von Landesgrenzen";
 "rendering_value_medium_w_name" = "Mittel";
 "rendering_attr_highway_class_state_road_name" = "Staatsstraße";
 "routing_attr_avoid_tram_name" = "Keine Straßenbahnen";

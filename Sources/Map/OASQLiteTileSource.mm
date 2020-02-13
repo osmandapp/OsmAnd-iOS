@@ -639,8 +639,14 @@
         const char *update_stmt = [query UTF8String];
         sqlite3_prepare_v2(tmpDatabase, update_stmt, -1, &statement, NULL);
         
-        sqlite3_bind_text(statement, 1, [parameters[@"minzoom"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 2, [parameters[@"maxzoom"] UTF8String], -1, 0);
+        int minZoom = [parameters[@"minzoom"] intValue];
+        int maxZoom = [parameters[@"maxzoom"] intValue];
+        int cachedMax = maxZoom;
+        maxZoom = 17 - minZoom;
+        minZoom = 17 - cachedMax;
+        
+        sqlite3_bind_text(statement, 1, [[NSString stringWithFormat:@"%d", minZoom] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 2, [[NSString stringWithFormat:@"%d", maxZoom] UTF8String], -1, 0);
         sqlite3_bind_text(statement, 3, [parameters[@"url"] UTF8String], -1, 0);
         sqlite3_bind_int(statement, 4, [parameters[@"ellipsoid"] intValue]);
         sqlite3_bind_text(statement, 5, [parameters[@"rule"] UTF8String], -1, 0);

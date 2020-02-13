@@ -754,7 +754,7 @@
 
 #pragma mark - Keyboard Notifications
 
-- (void) keyboardWillShow:(NSNotification *)notification;
+- (void) keyboardWillShow:(NSNotification *)notification
 {
     NSDictionary *userInfo = [notification userInfo];
     CGRect keyboardBounds;
@@ -768,7 +768,7 @@
     } completion:nil];
 }
 
-- (void) keyboardWillHide:(NSNotification *)notification;
+- (void) keyboardWillHide:(NSNotification *)notification
 {
     NSDictionary *userInfo = [notification userInfo];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];

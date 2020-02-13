@@ -34,6 +34,9 @@
 
 #define kMaxExpireMin 10000000
 
+#define kMinAllowedZoom 1
+#define kMaxAllowedZoom 22
+
 #define kCellTypeFloatTextInput @"text_input_floating_cell"
 #define kCellTypeSetting @"settings_cell"
 #define kCellTypeZoom @"time_cell"
@@ -359,13 +362,16 @@
     NSMutableArray *errorArray = [NSMutableArray new];
     
     if ([_itemName isEqualToString:(@"")])
-        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_name_warning")]];
+        [errorArray addObject:OALocalizedString(@"res_name_warning")];
     
     if ([_itemURL isEqualToString:(@"")])
-        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_url_warning")]];
+        [errorArray addObject:OALocalizedString(@"res_url_warning")];
     
     if (_minZoom >= _maxZoom)
-        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_zoom_warning")]];
+        [errorArray addObject:OALocalizedString(@"res_zoom_warning")];
+    
+    if (_minZoom < kMinAllowedZoom || _minZoom > kMaxAllowedZoom || _maxZoom < kMinAllowedZoom || _maxZoom > kMaxAllowedZoom)
+        [errorArray addObject:OALocalizedString(@"res_zoom_invalid_value")];
     
     NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
     if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
@@ -379,7 +385,7 @@
     }
     else
     {
-        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_expire_warning")]];
+        [errorArray addObject:OALocalizedString(@"res_expire_warning")];
     }
     
     
@@ -387,12 +393,7 @@
     {
         NSString *title = [errorArray componentsJoinedByString: @"\n\n"];
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"" preferredStyle:UIAlertControllerStyleAlert];
-        
-        NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
-        paragraphStyle.alignment = NSTextAlignmentLeft;
-        NSAttributedString *attributedString = [NSAttributedString.alloc initWithString:title attributes: @{NSParagraphStyleAttributeName: paragraphStyle}];
-        [alert setValue:attributedString forKey:@"attributedTitle"];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:title preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil];
         [alert addAction: cancelAction];
@@ -594,7 +595,9 @@
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dataArray = _possibleZoomValues;
-        [cell.picker selectRow:indexPath.row == 1 ? _minZoom - 1 : _maxZoom - 1 inComponent:0 animated:NO];
+        int minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
+        int maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
+        [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
         return cell;

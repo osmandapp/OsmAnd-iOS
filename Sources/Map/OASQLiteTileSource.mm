@@ -599,7 +599,7 @@
 
 - (BOOL) supportsTileDownload
 {
-    return _urlTemplate != nil;
+    return _urlTemplate != nil && _urlTemplate.length > 0;
 }
 
 + (BOOL) createNewTileSourceDbAtPath:(NSString *)path parameters:(NSDictionary *)parameters

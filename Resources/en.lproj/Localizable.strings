@@ -707,7 +707,6 @@
 "res_updates_exp" = "Please purchase continent(s) to update the maps";
 "res_confirmation_delete" = "Are you sure you want to delete %@?";
 "res_confirmation_clear_cache" = "Are you sure you want to clear cache for %@?";
-"res_del_cache_not_supported" = "Deleting cache for offline SQLite maps is not supported";
 "res_edit_online_map" = "Edit online map source";
 "res_online_name_descr" = "Provide name for online source";
 "res_online_url_descr" = "Enter or copy and paste URL for online source";

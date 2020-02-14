@@ -16,6 +16,7 @@
 #import "OAPluginsViewController.h"
 #import "OAUtilities.h"
 #import "OAMapCreatorHelper.h"
+#import "OASQLiteTileSource.h"
 #import "OASizes.h"
 #import "OAOnlineTilesEditingViewController.h"
 
@@ -174,7 +175,11 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         }
         
         [tValues addObject:[NSString stringWithFormat:@"%@", [formatter stringFromDate:d]]];
-        [tButtons addObject:@"clear_cache"];
+        
+        OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
+        if ([ts supportsTileDownload])
+            [tButtons addObject:@"clear_cache"];
+        
         [tButtons addObject:@"edit"];
         [tButtons addObject:@"delete"];
     }

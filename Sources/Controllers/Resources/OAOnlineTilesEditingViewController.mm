@@ -9,7 +9,7 @@
 #import "OAOnlineTilesEditingViewController.h"
 #import "Localization.h"
 #import "OASQLiteTileSource.h"
-#import "OATextInputFloatingCell.h"
+#import "OATextViewResizingCell.h"
 #import "OAColors.h"
 #import "OATimeTableViewCell.h"
 #import "OASettingsTableViewCell.h"
@@ -43,7 +43,7 @@
 #define kCellTypePicker @"picker"
 #define kCellTypeTextInput @"text_input_cell"
 
-@interface OAOnlineTilesEditingViewController () <UITextViewDelegate, UITextFieldDelegate, MDCMultilineTextInputLayoutDelegate, OACustomPickerTableViewCellDelegate, OAOnlineTilesSettingsViewControllerDelegate>
+@interface OAOnlineTilesEditingViewController () <UITextViewDelegate, UITextFieldDelegate, OACustomPickerTableViewCellDelegate, OAOnlineTilesSettingsViewControllerDelegate>
 
 @end
 
@@ -70,9 +70,6 @@
     
     NSArray<NSString *> *_possibleZoomValues;
     NSIndexPath *_pickerIndexPath;
-    
-    OATextInputFloatingCell *_nameCell;
-    OATextInputFloatingCell *_URLCell;
 }
 -(void)applyLocalization
 {
@@ -193,9 +190,11 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.estimatedRowHeight = 44.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     [self generateData];
-    [self setupView];
+    [self applySafeAreaMargins];
 
     _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
 }
@@ -207,16 +206,6 @@
         [_tableView beginUpdates];
         [_tableView endUpdates];
     } completion:nil];
-}
-
-- (void) setupView
-{
-    [self applySafeAreaMargins];
-    
-    _nameCell = [self getInputFloatingCell:_itemName tag:kNameCellTag];
-    _URLCell = [self getInputFloatingCell:_itemURL tag:kURLCellTag];
-    
-    [self.tableView reloadData];
 }
 
 - (void) generateData
@@ -281,27 +270,6 @@
                         @"footer" : OALocalizedString(@"res_expire_time_desc")
                         }];
     _sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];
-}
-
-- (OATextInputFloatingCell *)getInputFloatingCell:(NSString *)text tag:(NSInteger)tag
-{
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
-    OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
-    
-    MDCMultilineTextField *textField = resultCell.inputField;
-    [textField.underline removeFromSuperview];
-    [textField.textView setText:text];
-    textField.textView.delegate = self;
-    textField.layoutDelegate = self;
-    textField.textView.tag = tag;
-    textField.clearButton.tag = tag;
-    [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    textField.font = [UIFont systemFontOfSize:17.0];
-    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
-    resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
-    return resultCell;
 }
 
 -(std::shared_ptr<OsmAnd::IOnlineTileSources::Source>) createEditedTileSource
@@ -584,13 +552,30 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item =  [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput] && indexPath.section == kNameSection)
+    if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput])
     {
-        return _nameCell;
-    }
-    else if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput] && indexPath.section == kURLSection)
-    {
-        return _URLCell;
+        static NSString* const identifierCell = @"OATextViewResizingCell";
+        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OATextViewResizingCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            BOOL isURL = indexPath.section == kURLSection;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.inputField.text = isURL ? _itemURL : _itemName;
+            cell.inputField.delegate = self;
+            cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
+            cell.inputField.tag = isURL ? kURLCellTag : kNameCellTag;
+            cell.clearButton.tag = cell.inputField.tag;
+            [cell.clearButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        return cell;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeTextInput])
     {
@@ -746,30 +731,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    if (indexPath.section != kZoomSection)
-    {
-        if ([item[@"type"] isEqualToString:kCellTypeSetting])
-            return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:self.tableView.bounds.size.width];
-        else if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput] && indexPath.section == kNameSection)
-        {
-            return MAX(_nameCell.inputField.intrinsicContentSize.height, 44.0);
-        }
-        else if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput] && indexPath.section == kURLSection)
-        {
-            return MAX(_URLCell.inputField.intrinsicContentSize.height, 44.0);
-        }
-        else if ([item[@"type"] isEqualToString:kCellTypeTextInput] && indexPath.section == kExpireSection)
-        {
-            return 44.0;
-        }
-    }
-    else
-    {
-        if ([indexPath isEqual:_pickerIndexPath])
-            return 162.0;
-    }
-    return 44.0;
+    if ([indexPath isEqual:_pickerIndexPath])
+        return 162.0;
+    
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITextViewDelegate
@@ -780,6 +745,10 @@
         _itemName = textView.text;
     else if (textView.tag == kURLCellTag)
         _itemURL = textView.text;
+    
+    [textView sizeToFit];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
@@ -797,14 +766,6 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     [self hidePicker];
-}
-
-#pragma mark - MDCMultilineTextInputLayoutDelegate
-- (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
-      didChangeContentSize:(CGSize)size
-{
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
 }
 
 #pragma mark - OACustomPickerTableViewCellDelegate
@@ -867,6 +828,13 @@
         _itemName = @"";
     else if (sender.tag == kURLCellTag)
         _itemURL = @"";
+    
+    [_tableView beginUpdates];
+    UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:sender.tag == kNameCellTag ? kNameSection : kURLSection]];
+    if ([cell isKindOfClass:OATextViewResizingCell.class])
+        ((OATextViewResizingCell *) cell).inputField.text = @"";
+    
+    [_tableView endUpdates];
 }
 
 @end

@@ -4199,6 +4199,10 @@
 		DA98A0332109FC7D00BB32D0 /* zh_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0312109FC7D00BB32D0 /* zh_tts.js */; };
 		DA98A035210A039500BB32D0 /* hu_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A034210A039400BB32D0 /* hu_tts.js */; };
 		DA98A036210A039500BB32D0 /* hu_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A034210A039400BB32D0 /* hu_tts.js */; };
+		DA99919023F6AE6000784994 /* OATextViewResizingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA99918F23F6AE6000784994 /* OATextViewResizingCell.xib */; };
+		DA99919123F6AE6000784994 /* OATextViewResizingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA99918F23F6AE6000784994 /* OATextViewResizingCell.xib */; };
+		DA99919423F6AED300784994 /* OATextViewResizingCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA99919223F6AED300784994 /* OATextViewResizingCell.mm */; };
+		DA99919523F6AED300784994 /* OATextViewResizingCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA99919223F6AED300784994 /* OATextViewResizingCell.mm */; };
 		DA9A061A2297E9EE000A80F1 /* OACollapsableCardsView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9A06182297E9ED000A80F1 /* OACollapsableCardsView.mm */; };
 		DA9A061D2297EF47000A80F1 /* OAImageCardCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9A061C2297EF47000A80F1 /* OAImageCardCell.mm */; };
 		DA9A061E2297EF47000A80F1 /* OAImageCardCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9A061C2297EF47000A80F1 /* OAImageCardCell.mm */; };
@@ -7704,6 +7708,9 @@
 		DA98A02E2109EBBF00BB32D0 /* pl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pl_tts.js; path = ../resources/voice/pl/pl_tts.js; sourceTree = "<group>"; };
 		DA98A0312109FC7D00BB32D0 /* zh_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = zh_tts.js; path = ../resources/voice/zh/zh_tts.js; sourceTree = "<group>"; };
 		DA98A034210A039400BB32D0 /* hu_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hu_tts.js; path = ../resources/voice/hu/hu_tts.js; sourceTree = "<group>"; };
+		DA99918F23F6AE6000784994 /* OATextViewResizingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewResizingCell.xib; path = Resources/Controllers/Cells/OATextViewResizingCell.xib; sourceTree = "<group>"; };
+		DA99919223F6AED300784994 /* OATextViewResizingCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATextViewResizingCell.mm; path = Controllers/Cells/OATextViewResizingCell.mm; sourceTree = "<group>"; };
+		DA99919323F6AED300784994 /* OATextViewResizingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATextViewResizingCell.h; path = Controllers/Cells/OATextViewResizingCell.h; sourceTree = "<group>"; };
 		DA9A06182297E9ED000A80F1 /* OACollapsableCardsView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACollapsableCardsView.mm; path = Sources/Controllers/2.0/OACollapsableCardsView.mm; sourceTree = "<group>"; };
 		DA9A06192297E9ED000A80F1 /* OACollapsableCardsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableCardsView.h; path = Sources/Controllers/2.0/OACollapsableCardsView.h; sourceTree = "<group>"; };
 		DA9A061B2297EF46000A80F1 /* OAImageCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAImageCardCell.h; path = Controllers/Cells/OAImageCardCell.h; sourceTree = "<group>"; };
@@ -8397,6 +8404,7 @@
 				DAFCB01423AA1AEA00CFBA58 /* OALineChartCell.xib */,
 				DAFCB01723AA1B0F00CFBA58 /* OARouteInfoCell.xib */,
 				DA66731C23AE4AFD00499F76 /* OAFilledButtonCell.xib */,
+				DA99918F23F6AE6000784994 /* OATextViewResizingCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -8404,6 +8412,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA99919323F6AED300784994 /* OATextViewResizingCell.h */,
+				DA99919223F6AED300784994 /* OATextViewResizingCell.mm */,
 				780DC7A423DED7C70022D56A /* OACustomPickerTableViewCell.h */,
 				780DC7A523DED7C70022D56A /* OACustomPickerTableViewCell.m */,
 				DAB3E54823BB466C00EAE6A5 /* OARouteStatisticsModeCell.h */,
@@ -12903,6 +12913,7 @@
 				8476E2531F6C1EEC00EC274F /* map_bicycle_location_lost_night@3x.png in Resources */,
 				847A1E0B1DF94E9B003C1246 /* menu_share_icon@2x.png in Resources */,
 				8476E2C11F6C1EEC00EC274F /* map_pedestrian_location_lost_night.png in Resources */,
+				DA99919123F6AE6000784994 /* OATextViewResizingCell.xib in Resources */,
 				847A1E0C1DF94E9B003C1246 /* Images.xcassets in Resources */,
 				8AB2BBC623ACBAEB00D2AD03 /* desert.render.xml in Resources */,
 				847A1E0D1DF94E9B003C1246 /* parking_position.png in Resources */,
@@ -16002,6 +16013,7 @@
 				84F3A9211B4E7FBA00D16EBC /* ic_coordinates_disable.png in Resources */,
 				BBA3AFDD197FC4BB0039D991 /* HUD_debug_pin_button.png in Resources */,
 				84185AE61AAA11B600F70328 /* ic_favorite_7@3x.png in Resources */,
+				DA99919023F6AE6000784994 /* OATextViewResizingCell.xib in Resources */,
 				DA45DA66230EE05A0083DFA2 /* img_mapstyle_default@3x.png in Resources */,
 				845E07341B616E4700DFC2A7 /* ic_restore_purchase@3x.png in Resources */,
 				84F3A9841B4FC7FB00D16EBC /* selection_disabled@3x.png in Resources */,
@@ -16632,6 +16644,7 @@
 				847A1D0B1DF94E9B003C1246 /* OALocalResourceInfoCell.m in Sources */,
 				DA0C1569223A54EC00777974 /* OATextEditingBottomSheetViewController.mm in Sources */,
 				848B28BC1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */,
+				DA99919523F6AED300784994 /* OATextViewResizingCell.mm in Sources */,
 				DA5AA2D82351C8D500DF0B7B /* OAHomeWorkCell.mm in Sources */,
 				DA5793D122A0040200750C8F /* OAFirstMapillaryBottomSheetViewController.mm in Sources */,
 				DAB854BD23055895002566A6 /* OAParkingAction.mm in Sources */,
@@ -17234,6 +17247,7 @@
 				DA8EB2FE21C8E8DE00A76BFB /* OAOsmAndLiveSelectionViewController.mm in Sources */,
 				DA4B982F21F89B5800CED009 /* OAOsmMapUtils.mm in Sources */,
 				BBA3AF53197FC4BB0039D991 /* OALog.mm in Sources */,
+				DA99919423F6AED300784994 /* OATextViewResizingCell.mm in Sources */,
 				78D57B93238D30550068CF48 /* OAHillshadeAction.m in Sources */,
 				DA9A062B229974C9000A80F1 /* OANoImagesCell.mm in Sources */,
 				84216B621FEE4DF90001EDC5 /* OACommandBuilder.mm in Sources */,

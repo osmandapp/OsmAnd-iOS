@@ -897,14 +897,6 @@ static BOOL dataInvalidated = NO;
          {
              [ts deleteCache:block];
          }
-         else
-         {
-             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_del_cache_not_supported") preferredStyle:UIAlertControllerStyleAlert];
-             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil];
-             [alert addAction: cancelAction];
-             [alert setPreferredAction:cancelAction];
-             [self presentViewController: alert animated: YES completion: nil];
-         }
      }
      if ([item isKindOfClass:[OnlineTilesResourceItem class]])
      {

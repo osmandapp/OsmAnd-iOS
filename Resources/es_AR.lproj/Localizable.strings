@@ -1319,7 +1319,6 @@
 "res_url_warning" = "La URL no puede estar vacía";
 "res_zoom_warning" = "El valor mínimo de zoom no puede ser igual o mayor que el valor máximo de zoom";
 "res_expire_warning" = "El tiempo de expiración debería ser un número entre 0 y 10000000";
-
 "routing_attr_allow_classic_only_description" = "Rutas preparadas sólo para el estilo clásico sin pistas de patinaje. Esto incluye rutas preparadas por una moto de nieve más pequeña con pistas más sueltas y senderos hechos manualmente por los esquiadores.";
 "routing_attr_allow_motorway_name" = "Usar autopistas";
 "routing_attr_piste_type_skitour_description" = "Rutas para esquí de travesía.";
@@ -1339,7 +1338,7 @@
 "rendering_attr_highway_class_state_road_name" = "Carretera/ruta estatal";
 "routing_attr_driving_style_speed_name" = "Rutas más cortas";
 "routing_attr_no_new_routing_name" = "Sin reglas de navegación v1.9";
-"routing_attr_allow_private_description" = "Permite acceder aáreas privadas.";
+"routing_attr_allow_private_description" = "Permite acceder a áreas privadas.";
 "rendering_attr_tracktype_grade4_name" = "Mayormente suave (de tierra con vegetación entre rodaduras)";
 "rendering_value_car_name" = "Automóvil";
 "rendering_value_translucent_orange_name" = "Anaranjado translúcido";
@@ -1608,7 +1607,7 @@
 "rendering_attr_surface_unpaved_name" = "Sin pavimento";
 "rendering_attr_roadColors_description" = "Elige un esquema de color vial:";
 "rendering_attr_highway_class_track_name" = "Camino rural";
-
 "res_source_format" = "Formato de fuente";
 "res_source_sqlite" = "Archivo SQLiteDB";
 "res_source_one_per_tile" = "Un archivo de imagen por tesela";
+"res_zoom_invalid_value" = "Los valores de zoom deben estar en el rango 1 - 22";

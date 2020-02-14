@@ -968,7 +968,7 @@
 "product_title_wikivoyage" = "Seyahat Rehberleri";
 "map_styles" = "Harita stilleri";
 "poi_type" = "POI Tipi";
-"modify_poi_short" = "İÇN düzenle";
+"modify_poi_short" = "POI düzenle";
 "osm_website" = "Web sitesi";
 "gpx_ascent" = "Yükseklikte artış";
 "translucent_blue" = "Yarı saydam açık mavi";
@@ -1314,12 +1314,11 @@
 "res_url_warning" = "URL boş olamaz";
 "res_zoom_warning" = "Minimum yakınlaştırma değeri, Maksimum yakınlaştırma değerine eşit veya ondan daha büyük olamaz";
 "res_expire_warning" = "Geçerliliğin sona erme süresi 0 ile 10000000 arasında bir sayı olmalıdır";
-
-"rendering_attr_roadColors_description" = "Yol renkşemasını seç:";
+"rendering_attr_roadColors_description" = "Bir yol rengi şeması seçin:";
 "rendering_attr_showMtbRoutes_name" = "Dağ bisikleti parkurlarını göster";
 "rendering_attr_showRoadMaps_description" = "Yalnızca yol haritalarının ne zaman görüntüleneceğini seçin:";
 "routing_attr_driving_style_prefer_unpaved_name" = "Asfaltsız yolları tercih et";
-"rendering_attr_hikingRoutesOSMC_description" = "OSMC izlerine göre yolları oluşturun.";
+"rendering_attr_hikingRoutesOSMC_description" = "OSMC izlerine göre yolları görselleştir.";
 "rendering_attr_surface_dirt_name" = "Toprak";
 "routing_attr_allow_motorway_description" = "Otoyollara izin verir.";
 "routing_attr_prefer_motorway_name" = "Otoyolları tercih et";
@@ -1350,7 +1349,7 @@
 "rendering_attr_streetLightingNight_name" = "Sadece geceleri göster";
 "rendering_attr_piste_type_hike_name" = "Yürüyüş";
 "rendering_attr_piste_difficulty_undefined_name" = "Tanımlanmamış";
-"rendering_attr_roadColors_name" = "Yol renkşeması";
+"rendering_attr_roadColors_name" = "Yol renk şeması";
 "routing_attr_avoid_subway_name" = "Metro yok";
 "routeInfo_surface_name" = "Yüzey";
 "rendering_value_pink_name" = "Pembe";
@@ -1359,7 +1358,7 @@
 "rendering_attr_contourDensity_description" = "Eş yükselti eğrisi yoğunluğu";
 "routeInfo_winter_ice_road_name" = "Kış ve buz yolları";
 "routing_attr_difficulty_preference_name" = "Tercih edilen zorluk";
-"routing_attr_freeride_policy_description" = "\'Serbest\' ve \'pist dışı sürüşler\', resmi olmayan yollar ve geçitlerdir. Tipik olarak düzenlenmemiş, bakımı yapılmamış ve akşamları kontrol edilmemiştir. Riski göze alarak girin.";
+"routing_attr_freeride_policy_description" = "'Serbest' ve 'pist dışı sürüşler', resmi olmayan yollar ve geçitlerdir. Tipik olarak düzenlenmemiş, bakımı yapılmamış ve akşamları kontrol edilmemiştir. Riski göze alarak girin.";
 "rendering_value_thin_name" = "İnce";
 "routing_attr_allow_private_description" = "Özel-arazi alanlarına erişime izin ver.";
 "routing_attr_no_new_routing_name" = "Hiçbir v1.9 yönlendirme kuralları";
@@ -1391,7 +1390,7 @@
 "rendering_attr_surface_sand_name" = "Kum";
 "rendering_attr_appMode_description" = "Için haritayı optimize et";
 "rendering_attr_surface_mud_name" = "Çamur";
-"rendering_attr_hideOverground_name" = "Yerüstü nesneleri";
+"rendering_attr_hideOverground_name" = "Yer üstü nesneleri";
 "routeInfo_piste_type_name" = "Pist türü";
 "rendering_attr_hideWaterPolygons_name" = "Suyu gizle";
 "rendering_value_defaultTranslucentCyan_name" = "Varsayılan (yarı saydam camgöbeği)";
@@ -1411,7 +1410,7 @@
 "rendering_attr_piste_difficulty_intermediate_name" = "Orta düzey";
 "routing_attr_driving_style_balance_name" = "Dengeli";
 "rendering_attr_hideAccess_name" = "Erişim kısıtlamaları";
-"rendering_attr_alpineHiking_description" = "SACölçeğine göre yolları oluşturun.";
+"rendering_attr_alpineHiking_description" = "SAC ölçeğine göre yolları görselleştir.";
 "routing_attr_piste_type_downhill_name" = "Alp/yokuş aşağı kayak";
 "routing_attr_allow_skating_only_description" = "Klasik yollar olmadan serbest stil ya da sadece paten için düzenlenmiş rotalar.";
 "rendering_attr_showAccess_name" = "Geçiş hakkındaki kısıtlamaları ve geçiş ücretlerini göster";
@@ -1428,7 +1427,7 @@
 "rendering_value_car_name" = "Araba";
 "rendering_attr_piste_difficulty_easy_name" = "Kolay";
 "rendering_attr_showLez_description" = "Haritada Düşük Emisyon Bölgelerini göster. Yönlendirmeyi etkilemez.";
-"routing_attr_no_new_routing_description" = "V1.9\'da tanıtılan yönlendirme kuralları kullanmayın.";
+"routing_attr_no_new_routing_description" = "V1.9'da tanıtılan yönlendirme kuralları kullanmayın.";
 "rendering_value_translucent_purple_name" = "Yarı saydam mor";
 "routing_attr_avoid_tram_name" = "Tramvay yok";
 "rendering_attr_smoothness_bad_name" = "Kötü";
@@ -1490,7 +1489,7 @@
 "rendering_attr_transportStops_name" = "Ulaşım durakları";
 "rendering_attr_highway_class_steps_name" = "Basamak";
 "rendering_attr_depthContours_name" = "Denizel derinlik konturları";
-"rendering_attr_buildings15zoom_name" = "Binalarüzerinde yakınlaştırma 15";
+"rendering_attr_buildings15zoom_name" = "Binalar üzerinde yakınlaştırma 15";
 "rendering_attr_subwayMode_name" = "Metro güzergah";
 "rendering_attr_OSMMapperAssistant_name" = "OSM Eşleştiricisi Yardımcısı";
 "routing_attr_avoid_borders_description" = "Ulusal sınırları geçmekten kaçınır";
@@ -1513,7 +1512,7 @@
 "rendering_value_browse_map_name" = "Haritaya göz at";
 "rendering_attr_streetLighting_name" = "Sokak Aydınlatma";
 "rendering_attr_hideUnderground_name" = "Yeraltı nesneleri";
-"routing_attr_difficulty_preference_description" = "Daha zor ya da daha kolay pistlerüzerinde yönlendirme daha kısa ise hala mümkün olmasına rağmen, bu zorluktaki yolları tercih edin.";
+"routing_attr_difficulty_preference_description" = "Bu zorluktaki rotaları tercih et, ancak eğer daha kısa ise daha zor veya daha kolay pistler üzerinden yönlendirmek yine de mümkündür.";
 "routing_attr_prefer_motorway_description" = "Otoyolları tercih et";
 "rendering_attr_surface_concrete_name" = "Beton";
 "rendering_attr_piste_difficulty_connection_name" = "Bağlantı";
@@ -1551,7 +1550,7 @@
 "rendering_attr_tramRoutes_name" = "Tramvay yolları";
 "routing_attr_width_description" = "Rotalarda izin verilen araç genişlik sınırını belirtin.";
 "rendering_attr_noPolygons_description" = "Tüm arazi alan özelliklerini harita üzerinde şeffaf hale getirin.";
-"routing_attr_allow_expert_description" = "Tehlikeli engeller veçevreye sahip son derece zor rotalar.";
+"routing_attr_allow_expert_description" = "Tehlikeli engeller ve çevreye sahip son derece zor rotalar.";
 "rendering_attr_hmRendered_description" = "Haritanın gösterilen detay miktarını artırın.";
 "rendering_attr_surface_cobblestone_name" = "Parke taşı";
 "rendering_attr_hmRendered_name" = "Haritayı daha detaylı göster";
@@ -1559,7 +1558,7 @@
 "routeInfo_tracktype_name" = "Yüzey sertliği";
 "routing_attr_width_name" = "Genişlik sınırı";
 "rendering_attr_showRoadMaps_name" = "Yollar-sadece haritalar";
-"rendering_attr_depthContours_description" = "Derinlikçizgilerini ve noktalarını göster.";
+"rendering_attr_depthContours_description" = "Eş derinlik eğrilerini ve noktalarını göster.";
 "routing_attr_height_obstacles_name" = "Yükseklik verisi kullan";
 "routing_attr_prefer_unpaved_name" = "Asfaltsız yolları tercih et";
 "rendering_value_default13_name" = "Varsayılan (13)";
@@ -1587,7 +1586,7 @@
 "rendering_value_walkingRoutesScopeOSMC_name" = "Ağ bağlantısına göre renk";
 "rendering_value_translucent_green_name" = "Yarı saydam yeşil";
 "rendering_attr_highway_class_state_road_name" = "Devlet yolu";
-"rendering_attr_appMode_name" = "işleme modu";
+"rendering_attr_appMode_name" = "Görselleştirme modu";
 "rendering_value_boldOutline_name" = "Kalın anahat";
 "rendering_attr_surface_metal_name" = "Metal";
 "rendering_attr_tracktype_grade3_name" = "Çoğunlukla sert";
@@ -1603,7 +1602,7 @@
 "rendering_attr_ice_road_name" = "Buz yolu";
 "routing_attr_piste_type_sled_name" = "Kızak";
 "rendering_attr_surface_paved_name" = "Kaplamalı";
-
 "res_source_format" = "Kaynak formatı";
 "res_source_sqlite" = "SQLiteDB dosyası";
 "res_source_one_per_tile" = "Döşeme başına bir görüntü dosyası";
+"res_zoom_invalid_value" = "Yakınlaştırma değerleri 1 - 22 aralığında olmalıdır";

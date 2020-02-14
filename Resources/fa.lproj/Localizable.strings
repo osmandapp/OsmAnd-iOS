@@ -1031,7 +1031,6 @@
 "res_elliptic_mercator" = "مرکاتور بیضوی";
 "res_url" = "نشانی اینترنتی";
 "show_notes" = "آشکارکردن یادداشت‌های OSM";
-
 "routing_attr_piste_type_sled_name" = "سورتمه";
 "rendering_attr_tracktype_grade3_name" = "تقریباً سفت";
 "rendering_attr_hideIcons_name" = "نماد POIها";
@@ -1088,7 +1087,7 @@
 "routing_attr_driving_style_balance_name" = "متعادل";
 "routing_attr_width_name" = "محدودیت عرض";
 "rendering_value_disabled_name" = "غیرفعال";
-"rendering_attr_hideProposed_name" = "عارضه‌های پیشنهادی (Proposed)";
+"rendering_attr_hideProposed_name" = "طرح‌های آینده (Proposed)";
 "routing_attr_height_description" = "ارتفاع مجاز خودرو در راه‌ها چقدر است.";
 "rendering_attr_whiteWaterSports_name" = "ورزش‌‌های آب‌های خروشان";
 "routing_attr_avoid_bus_name" = "اتوبوس";

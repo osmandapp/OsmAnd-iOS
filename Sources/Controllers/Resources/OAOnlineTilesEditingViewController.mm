@@ -36,6 +36,7 @@
 
 #define kMinAllowedZoom 1
 #define kMaxAllowedZoom 22
+#define maxSaveButtonWidth 105
 
 #define kCellTypeFloatTextInput @"text_input_floating_cell"
 #define kCellTypeSetting @"settings_cell"
@@ -192,6 +193,10 @@
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = 44.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    
+    CGFloat width = MIN(_saveButton.intrinsicContentSize.width, maxSaveButtonWidth);
+    [_saveButton.widthAnchor constraintEqualToConstant:width].active = YES;
+    [_titleView setNeedsUpdateConstraints];
     
     [self generateData];
     [self applySafeAreaMargins];
@@ -412,6 +417,13 @@
     }
 }
 
+- (BOOL) isOfflineSQLiteDB
+{
+    if (_sqliteSource != nil && ![_sqliteSource supportsTileDownload])
+        return YES;
+    return NO;
+}
+
 - (BOOL)hasChangesBeenMade
 {
     long expireTimeMillis;
@@ -573,6 +585,13 @@
             cell.clearButton.tag = cell.inputField.tag;
             [cell.clearButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            if ([self isOfflineSQLiteDB] && isURL)
+            {
+                cell.userInteractionEnabled = NO;
+                cell.inputField.text = OALocalizedString(@"res_offlineSQL_URL_warning");
+                cell.inputField.textColor = [UIColor lightGrayColor];
+                cell.clearButton.hidden = YES;
+            }
         }
         
         return cell;
@@ -593,7 +612,11 @@
         [cell.inputField removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
         [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
         cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
-        
+        if ([self isOfflineSQLiteDB])
+        {
+            cell.userInteractionEnabled = NO;
+            cell.inputField.placeholder = OALocalizedString(@"res_offlineSQL_URL_warning");
+        }
         return cell;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeSetting])
@@ -616,6 +639,11 @@
             else if ([key isEqualToString:@"format_sett"])
             {
                 cell.descriptionView.text = [self getFormatString:_sourceFormat];
+                if ([self isOfflineSQLiteDB])
+                {
+                    cell.userInteractionEnabled = NO;
+                    cell.textView.textColor = [UIColor lightGrayColor];
+                }
             }
         }
         return cell;

@@ -1316,7 +1316,6 @@
 "res_url_warning" = "URL-адреса не може бути порожньою";
 "res_zoom_warning" = "Найменше значення масштабу не може бути рівним або більшим найбільшому значенню";
 "res_expire_warning" = "Строк дії має бути числом від 0 до 10000000";
-
 "rendering_attr_surface_stone_name" = "Камінь";
 "rendering_attr_highway_class_road_name" = "Дорога";
 "rendering_value_bicycle_name" = "Велосипед";
@@ -1361,7 +1360,7 @@
 "rendering_attr_smoothness_bad_name" = "Погана";
 "rendering_attr_hideAccess_name" = "Обмеження доступу";
 "routing_attr_avoid_train_description" = "Уникати потягів";
-"routing_attr_piste_type_downhill_name" = "Високогір\'я / гірські лижі";
+"routing_attr_piste_type_downhill_name" = "Високогір'я / гірські лижі";
 "routing_attr_avoid_ice_roads_fords_description" = "Уникає льодових доріг і бродів.";
 "rendering_attr_hikingRoutesOSMC_description" = "Візуалізація шляху відповідно до треків OSMC.";
 "rendering_value_yellow_name" = "Жовтий";
@@ -1390,7 +1389,7 @@
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Рівнинно";
 "rendering_attr_piste_difficulty_expert_name" = "Досвідчений";
 "rendering_attr_surface_concrete_name" = "Бетон";
-"rendering_attr_piste_difficulty_connection_name" = "З\'єднання";
+"rendering_attr_piste_difficulty_connection_name" = "З'єднання";
 "rendering_value_translucent_lightblue_name" = "Напівпрозорий світло-блакитний";
 "routing_attr_allow_private_description" = "Дозволити доступ на приватну територію.";
 "rendering_attr_surface_mud_name" = "Мул";
@@ -1446,7 +1445,7 @@
 "rendering_attr_highway_class_track_grade4_name" = "4клас";
 "rendering_value_pink_name" = "рожевий";
 "routing_attr_allow_private_name" = "Дозволити приватний доступ";
-"rendering_attr_tracktype_grade4_name" = "Переважно м\'яке";
+"rendering_attr_tracktype_grade4_name" = "Переважно м'яке";
 "rendering_attr_piste_type_hike_name" = "Похід";
 "rendering_attr_piste_type_snow_park_name" = "Ландшафтний парк";
 "rendering_value_fine_name" = "Дуже тонкий";
@@ -1459,7 +1458,7 @@
 "rendering_attr_surface_compacted_name" = "Ущільнена";
 "routing_attr_allow_expert_name" = "Дозволити експертні маршрути";
 "rendering_value_walkingRoutesOSMC_name" = "Розмальовування відповідно пішохідній символіці OSMC";
-"rendering_attr_piste_type_connection_name" = "З\'єднання";
+"rendering_attr_piste_type_connection_name" = "З'єднання";
 "rendering_value_translucent_orange_name" = "Напівпрозорий помаранчевий";
 "rendering_value_light_brown_name" = "Світло-коричневий";
 "rendering_value_translucent_red_name" = "Напівпрозорий червоний";
@@ -1489,7 +1488,7 @@
 "rendering_attr_surface_paving_stones_name" = "Тротуарна плитка";
 "rendering_attr_smoothness_impassable_name" = "Непрохідна";
 "rendering_attr_subwayMode_name" = "Маршрути метро";
-"rendering_attr_tracktype_grade5_name" = "М\'яке";
+"rendering_attr_tracktype_grade5_name" = "М'яке";
 "routing_attr_weight_description" = "Вказати дозволений ліміт ваги автомобіля на маршрутах.";
 "routing_attr_driving_style_name" = "Стиль водіння";
 "routing_attr_difficulty_preference_name" = "Бажана складність";
@@ -1605,3 +1604,7 @@
 "routing_attr_avoid_shuttle_train_description" = "Уникати приміських поїздів";
 "routing_attr_allow_motorway_description" = "Дозволяє автомагістралі.";
 "rendering_attr_moreDetailed_name" = "Докладніше";
+"res_source_format" = "Формат джерела";
+"res_source_sqlite" = "Файл SQLiteDB";
+"res_source_one_per_tile" = "Один файл зображення на плитку";
+"res_zoom_invalid_value" = "Значення масштабування повинні бути у проміжку 1 - 22";

@@ -36,6 +36,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OASubscribeEmailView.h"
 #import "OANetworkUtilities.h"
+#import "OASQLiteTileSource.h"
 
 #include "Localization.h"
 
@@ -965,6 +966,7 @@ static BOOL _lackOfResources;
     
     // Map Creator sqlitedb files
     [_localSqliteItems removeAllObjects];
+    [_localOnlineTileSources removeAllObjects];
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
     {
         SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
@@ -972,7 +974,14 @@ static BOOL _lackOfResources;
         item.fileName = filePath.lastPathComponent;
         item.path = filePath;
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
-        [_localSqliteItems addObject:item];
+        if ([OASQLiteTileSource isOnlineTileSource:filePath])
+        {
+            [_localOnlineTileSources addObject:item];
+        }
+        else
+        {
+            [_localSqliteItems addObject:item];
+        }
     }
     
     [_localSqliteItems sortUsingComparator:^NSComparisonResult(SqliteDbResourceItem *obj1, SqliteDbResourceItem *obj2) {
@@ -980,7 +989,6 @@ static BOOL _lackOfResources;
     }];
     
     // Installed online tile sources
-    [_localOnlineTileSources removeAllObjects];
     const auto& resource = _app.resourcesManager->getResource(QStringLiteral("online_tiles"));
     if (resource != nullptr)
     {
@@ -1611,7 +1619,7 @@ static BOOL _lackOfResources;
             if (section == _regionMapSection)
                 return OALocalizedString(@"res_world_map");
             else if (section == _localSqliteSection)
-                return OALocalizedString(@"map_creator");
+                return OALocalizedString(@"offline_raster_maps");
             else if (section == _localOnlineTileSourcesSection)
                 return OALocalizedString(@"map_settings_online");
             else
@@ -2008,11 +2016,14 @@ static BOOL _lackOfResources;
         }
         else if (indexPath.section == _localOnlineTileSourcesSection)
         {
-            OnlineTilesResourceItem *item = [_localOnlineTileSources objectAtIndex:indexPath.row];
+            LocalResourceItem *item = [_localOnlineTileSources objectAtIndex:indexPath.row];
             cellTypeId = localResourceCell;
             
             title = item.title;
-            subtitle = OALocalizedString(@"tile_data");
+            if ([item isKindOfClass:SqliteDbResourceItem.class])
+                subtitle = [NSString stringWithFormat:@"%@ • %@", OALocalizedString(@"online_map"), [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
+            else
+                subtitle = OALocalizedString(@"online_map");
         }
     }
 
@@ -2024,8 +2035,8 @@ static BOOL _lackOfResources;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
+            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
             
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
@@ -2039,8 +2050,8 @@ static BOOL _lackOfResources;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
+            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
@@ -2055,8 +2066,8 @@ static BOOL _lackOfResources;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
 
-            cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
+            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -2097,7 +2108,7 @@ static BOOL _lackOfResources;
             if (self.region && [self.region isInPurchasedArea])
             {
                 UILabel *labelGet = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 100.0)];
-                labelGet.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:13];
+                labelGet.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
                 labelGet.textAlignment = NSTextAlignmentCenter;
                 labelGet.textColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
                 labelGet.text = [OALocalizedString(@"purchase_get") uppercaseStringWithLocale:[NSLocale currentLocale]];

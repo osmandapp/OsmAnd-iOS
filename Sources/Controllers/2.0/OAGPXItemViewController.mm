@@ -1375,6 +1375,7 @@
         if (newName.length > 0)
         {
             self.gpx.gpxTitle = newName;
+            self.gpx.gpxFileName = [self.gpx.gpxTitle stringByAppendingPathExtension:@"gpx"];
             [[OAGPXDatabase sharedDb] save];
             
             OAGpxMetadata *metadata;
@@ -1393,6 +1394,7 @@
                 if (self.doc.tracks.count > 0)
                 {
                     OAGpxTrk *track = self.doc.tracks[0];
+                    track.name = newName;
                     if (track.segments.count > 0)
                     {
                         OAGpxTrkSeg *seg = track.segments[0];
@@ -1414,6 +1416,10 @@
             metadata.name = newName;
             
             NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+            if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
+                [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
+            
+            self.doc.fileName = path;
             [_mapViewController updateMetadata:metadata docPath:path];
             
             self.titleView.text = newName;

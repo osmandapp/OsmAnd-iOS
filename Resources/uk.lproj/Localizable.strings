@@ -1608,3 +1608,6 @@
 "res_source_sqlite" = "Файл SQLiteDB";
 "res_source_one_per_tile" = "Один файл зображення на плитку";
 "res_zoom_invalid_value" = "Значення масштабування повинні бути у проміжку 1 - 22";
+"online_raster_map" = "Мережева растрова мапа";
+"offline_raster_map" = "Безмережева растрова мапа";
+"offline_raster_maps" = "Безмережеві растрові мапи";

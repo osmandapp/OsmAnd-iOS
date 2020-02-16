@@ -1095,7 +1095,6 @@
 "region_nautical" = "航海地圖";
 "map_overlays" = "地圖上圖層";
 "change_map_source" = "更改地圖來源";
-
 "res_url" = "URL";
 "hide_notes" = "隱藏 OSM 註記";
 "res_elliptic_mercator" = "橢圓麥卡托投影";
@@ -1122,7 +1121,7 @@
 "rendering_attr_highway_class_path_name" = "路徑";
 "rendering_attr_smoothness_impassable_name" = "無法通行";
 "rendering_attr_contourDensity_description" = "等高線的密度";
-"rendering_attr_hidePOILabels_name" = "POI標籤";
+"rendering_attr_hidePOILabels_name" = "POI 標籤";
 "routing_attr_allow_expert_name" = "允許專家路線";
 "rendering_attr_piste_difficulty_easy_name" = "簡單";
 "rendering_attr_surface_sett_name" = "枕木";
@@ -1149,7 +1148,7 @@
 "rendering_value__name" = "預設";
 "rendering_value_green_name" = "綠";
 "rendering_attr_tracktype_grade2_name" = "堅實（無鋪面）";
-"rendering_attr_hideIcons_name" = "POI圖示";
+"rendering_attr_hideIcons_name" = "POI 圖示";
 "rendering_attr_surface_grass_name" = "草";
 "rendering_attr_coloredBuildings_name" = "按類型用色碼區分建築物";
 "routing_attr_avoid_borders_name" = "避開跨越邊界";
@@ -1201,13 +1200,13 @@
 "rendering_attr_moreDetailed_name" = "更多細節";
 "routing_attr_max_num_changes_name" = "變更數量";
 "routing_attr_piste_type_downhill_name" = "高山／下坡滑雪";
-"rendering_attr_currentTrackWidth_name" = "GPX的寬度";
+"rendering_attr_currentTrackWidth_name" = "GPX 的寬度";
 "rendering_attr_ice_road_name" = "冰路";
 "rendering_attr_showCycleRoutes_name" = "顯示自行車路線";
 "rendering_value_translucent_yellow_name" = "半透明的黃色";
 "rendering_attr_piste_difficulty_freeride_name" = "自由滑雪";
 "routing_attr_allow_intermediate_description" = "更困難且更陡峭的路線。一般來說應該避免一些障礙。";
-"routing_attr_freeride_policy_description" = "\'Freeride\'與 \'Off-piste\' 是非正式的路線與通道。通常是未整理、維護，也不會在晚上檢查。風險自負。";
+"routing_attr_freeride_policy_description" = "'Freeride' 與 'Off-piste' 是非正式的路線與通道。通常是未整理、維護，也不會在晚上檢查。風險自負。";
 "rendering_attr_whiteWaterSports_name" = "激流運動";
 "routing_attr_avoid_unpaved_description" = "避開無鋪面道路";
 "routing_attr_avoid_tram_description" = "避免電車";
@@ -1228,12 +1227,12 @@
 "rendering_value_black_name" = "黑色";
 "rendering_attr_trolleybusRoutes_name" = "無軌電車路線";
 "routeInfo_piste_difficulty_name" = "滑雪難度";
-"rendering_attr_currentTrackColor_description" = "GPX的顏色";
+"rendering_attr_currentTrackColor_description" = "GPX 的顏色";
 "rendering_attr_surface_metal_name" = "金屬";
 "routing_attr_no_new_routing_description" = "在 v1.9 不使用路徑規則引導。";
 "routing_attr_prefer_unpaved_name" = "偏好無鋪面道路";
 "rendering_value_yellow_name" = "黃";
-"rendering_attr_currentTrackWidth_description" = "GPX的寬度";
+"rendering_attr_currentTrackWidth_description" = "GPX 的寬度";
 "rendering_attr_alpineHiking_name" = "登山健行等級（SAC）";
 "rendering_attr_depthContours_name" = "航海等深線";
 "routing_attr_short_way_name" = "省油的方式";
@@ -1252,7 +1251,7 @@
 "rendering_attr_depthContours_description" = "顯示等深線和標記。";
 "rendering_attr_hideHouseNumbers_name" = "門牌號碼";
 "routing_attr_max_num_changes_description" = "指定變更上限";
-"rendering_attr_OSMMapperAssistant_name" = "OSM製圖助手";
+"rendering_attr_OSMMapperAssistant_name" = "OSM 製圖助手";
 "routing_attr_avoid_tram_name" = "避免電車";
 "rendering_value_low_name" = "低";
 "routing_attr_piste_type_sled_name" = "雪橇";
@@ -1263,7 +1262,7 @@
 "rendering_attr_piste_difficulty_expert_name" = "專家";
 "routing_attr_weight_description" = "指定在道路上許可的車輛重量。";
 "rendering_value_walkingRoutesScopeOSMC_name" = "依網絡從屬著色";
-"rendering_attr_currentTrackColor_name" = "GPX的顏色";
+"rendering_attr_currentTrackColor_name" = "GPX 的顏色";
 "rendering_attr_pisteRoutes_name" = "滑雪斜坡";
 "routing_attr_allow_private_name" = "允許私人進入";
 "rendering_attr_surface_paved_name" = "有鋪面";

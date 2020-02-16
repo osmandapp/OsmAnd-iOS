@@ -1287,7 +1287,7 @@
 // World Regions
 "region_antarctica" = "Antarktis";
 "region_others" = "Andere Karten";
-"download_depth_countours" = "Nautische Tiefenkonturen";
+"download_depth_countours" = "Nautische Tiefenlinien";
 // Route info
 "gpx_avg_altitude" = "Durchschnittliche Höhe";
 "gpx_alt_range" = "Höhenbereich";

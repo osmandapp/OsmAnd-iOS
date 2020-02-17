@@ -420,9 +420,7 @@
 
 - (BOOL) isOfflineSQLiteDB
 {
-    if (_sqliteSource != nil && ![OASQLiteTileSource isOnlineTileSource:_sqliteDbItem.path])
-        return YES;
-    return NO;
+    return _sqliteSource != nil && ![OASQLiteTileSource isOnlineTileSource:_sqliteDbItem.path];
 }
 
 - (BOOL)hasChangesBeenMade

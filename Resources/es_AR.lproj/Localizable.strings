@@ -1611,3 +1611,6 @@
 "res_source_sqlite" = "Archivo SQLiteDB";
 "res_source_one_per_tile" = "Un archivo de imagen por tesela";
 "res_zoom_invalid_value" = "Los valores de zoom deben estar en el rango 1 - 22";
+"online_raster_map" = "Mapa de trama en línea";
+"offline_raster_map" = "Mapa de trama sin conexión";
+"offline_raster_maps" = "Mapas de tramas sin conexión";

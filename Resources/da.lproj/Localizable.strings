@@ -1299,7 +1299,6 @@
 "res_confirmation_delete" = "Bekræft sletning af %@?";
 "res_confirmation_clear_cache" = "Bekræft sletning af cache for %@?";
 "res_del_cache_not_supported" = "Sletning af cache for offline-SQLite-kort understøttes ikke";
-
 "res_url" = "URL";
 "res_elliptic_mercator" = "Elliptisk mercator";
 "rendering_attr_tracktype_grade4_name" = "Mest blød";
@@ -1318,13 +1317,13 @@
 "rendering_attr_showLez_name" = "Vis Miljøzoner";
 "rendering_attr_tramTrainRoutes_name" = "Tog- og sporvognsruter";
 "rendering_attr_contourDensity_description" = "Tæthed på højdekurver";
-"routing_attr_avoid_borders_name" = "Undgå grænseovergange";
+"routing_attr_avoid_borders_name" = "Ingen grænseovergange";
 "rendering_value_disabled_name" = "Deaktiveret";
 "rendering_value_translucent_green_name" = "Gennemsigtig grøn";
 "rendering_value_translucent_purple_name" = "Gennemsigtig lilla";
 "routing_attr_prefer_unpaved_name" = "Foretræk ikke-asfalterede veje";
 "rendering_attr_whiteWaterSports_name" = "Rafting";
-"routing_attr_avoid_unpaved_description" = "Undgå grusveje.";
+"routing_attr_avoid_unpaved_description" = "Undgår ikke asfalterede veje";
 "rendering_attr_horseRoutes_name" = "Rideruter";
 "rendering_attr_hideBuildings_name" = "Bygninger";
 "rendering_value_blue_name" = "Blå";
@@ -1351,7 +1350,7 @@
 "rendering_attr_showAccess_name" = "Vis adgangsbegrænsninger og vejafgifter";
 "routing_attr_allow_intermediate_name" = "Tillad mellemliggende ruter";
 "rendering_value_browse_map_name" = "Gennemse kort";
-"routing_attr_avoid_stairs_name" = "Undgå trapper";
+"routing_attr_avoid_stairs_name" = "Ingen trapper";
 "rendering_value_brown_name" = "Brun";
 "routing_attr_no_new_routing_description" = "Brug ikke ruteplanlægningsregler indført i v1.9.";
 "routing_attr_allow_classic_only_name" = "Tillad kun klassiske ruter";
@@ -1380,9 +1379,9 @@
 "rendering_value_pedestrian_name" = "Fodgænger";
 "routing_attr_relief_smoothness_factor_name" = "Vælg terræntype";
 "rendering_attr_streetLighting_name" = "Gadebelysning";
-"routing_attr_avoid_toll_description" = "Undgå betalingsveje";
+"routing_attr_avoid_toll_description" = "Undgår betalingsveje";
 "rendering_attr_surface_cobblestone_name" = "Natursten";
-"routing_attr_avoid_ferries_description" = "Undgå færger";
+"routing_attr_avoid_ferries_description" = "Undgår færger";
 "rendering_attr_depthContours_description" = "Vis dybdekonturer og -punkter.";
 "routing_attr_width_name" = "Breddegrænse";
 "rendering_value_highContrastRoads_name" = "Veje med høj kontrast";
@@ -1401,7 +1400,7 @@
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Vis cykelrute-knudepunkter";
 "rendering_attr_shareTaxiRoutes_name" = "Delebilruter";
 "rendering_attr_surface_grass_paver_name" = "Befæstet græs";
-"routing_attr_avoid_ferries_name" = "Undgå færger";
+"routing_attr_avoid_ferries_name" = "Ingen færger";
 "routing_attr_allow_motorway_name" = "Brug motorveje";
 "rendering_attr_contourWidth_name" = "Bredde på højdekurver";
 "rendering_attr_smoothness_horrible_name" = "Forfærdelig";
@@ -1439,7 +1438,7 @@
 "routing_attr_avoid_tram_description" = "Undgår sporvogne";
 "rendering_attr_surface_ice_name" = "Is";
 "rendering_attr_noAdminboundaries_description" = "Undertryk visning af regionalegrænser (niveau 5–9).";
-"routing_attr_avoid_motorway_description" = "Undgå motorveje";
+"routing_attr_avoid_motorway_description" = "Undgår motorveje";
 "routing_attr_avoid_sett_description" = "Undgå brosten og natursten";
 "rendering_attr_highway_class_footway_name" = "Fortov";
 "rendering_attr_hidePOILabels_name" = "IP-etiketter";
@@ -1475,7 +1474,7 @@
 "routing_attr_allow_private_name" = "Tillad privat adgang";
 "rendering_attr_highway_class_street_name" = "Gade";
 "routing_attr_avoid_share_taxi_name" = "Ingen deletaxi";
-"routing_attr_avoid_motorway_name" = "Undgå motorveje";
+"routing_attr_avoid_motorway_name" = "Ingen motorveje";
 "rendering_value_low_name" = "Lav";
 "rendering_attr_hideText_name" = "Tekst";
 "rendering_attr_tramRoutes_name" = "Sporvognsruter";
@@ -1503,7 +1502,7 @@
 "routing_attr_prefer_unpaved_description" = "Foretræk ikke-asfalterede veje.";
 "rendering_attr_highway_class_track_grade3_name" = "Grad 3";
 "rendering_attr_winter_road_name" = "Vintervej";
-"routing_attr_avoid_unpaved_name" = "Undgå grusveje";
+"routing_attr_avoid_unpaved_name" = "Ingen ikke-asfalterede veje";
 "rendering_attr_highway_class_state_road_name" = "Statsvej";
 "rendering_attr_contourWidth_description" = "Bredde på højdekurver";
 "rendering_attr_subwayMode_name" = "Metroruter";
@@ -1517,7 +1516,7 @@
 "rendering_attr_currentTrackColor_name" = "GPX-farve";
 "routing_attr_avoid_subway_description" = "Undgår metro og letbane";
 "rendering_value_darkyellow_name" = "Mørkegul";
-"routing_attr_avoid_stairs_description" = "Undgå trapper";
+"routing_attr_avoid_stairs_description" = "Undgår trapper";
 "rendering_attr_showLez_description" = "Vis miljøzoner på kortet. Påvirker ikke routing.";
 "routing_attr_avoid_share_taxi_description" = "Undgår deletaxi";
 "routing_attr_allow_intermediate_description" = "Mere vanskelige ruter med stejlere sektioner. Generelt bør nogle hindringer undgås.";
@@ -1535,7 +1534,7 @@
 "rendering_attr_roadColors_description" = "Vælg et farveskema til veje:";
 "rendering_attr_highway_class_track_grade1_name" = "Grad 1";
 "rendering_attr_tracktype_grade5_name" = "Blød";
-"routing_attr_avoid_toll_name" = "Undgå betalingsveje";
+"routing_attr_avoid_toll_name" = "Ingen betalingsveje";
 "routing_attr_short_way_description" = "Brug brændstofbesparende rute (normalt kortere).";
 "routing_attr_allow_skating_only_name" = "Tillad kun skøjteløb ruter";
 "rendering_attr_smoothness_very_horrible_name" = "Meget forfærdelig";
@@ -1543,7 +1542,7 @@
 "rendering_attr_hmRendered_name" = "Vis flere kortdetaljer";
 "routing_attr_allow_advanced_name" = "Tillad avancerede ruter";
 "rendering_attr_showSurfaceGrade_name" = "Vis vejkvaliteten";
-"routing_attr_avoid_borders_description" = "Undgå at krydse landegrænser";
+"routing_attr_avoid_borders_description" = "Undgår at krydse nationale grænser";
 "rendering_attr_roadStyle_description" = "Vejformat";
 "rendering_attr_contourColorScheme_name" = "Farveskema for højdekurver";
 "routing_attr_avoid_ferry_description" = "Undgår færger";
@@ -1559,7 +1558,7 @@
 "routing_attr_freeride_policy_name" = "Off-piste";
 "rendering_attr_piste_type_sleigh_name" = "Kane";
 "rendering_attr_hikingRoutesOSMC_name" = "Vandresymbol overlejring";
-"routing_attr_driving_style_prefer_unpaved_description" = "Foretræk ikke-asfalterede veje.";
+"routing_attr_driving_style_prefer_unpaved_description" = "Foretræk ikke-asfalterede veje fremfor asfalterede veje.";
 "rendering_value_defaultTranslucentCyan_name" = "Standard (gennemsigtig cyan)";
 "rendering_attr_tracktype_grade2_name" = "Fast (ikke befæstet)";
 "rendering_attr_ice_road_name" = "Isvej";
@@ -1590,3 +1589,25 @@
 "routeInfo_road_types_name" = "Vejtyper";
 "rendering_attr_surfaceIntegrity_name" = "Vejoverfladens integritet";
 "rendering_attr_moreDetailed_name" = "Flere detaljer";
+"gpx_analyze" = "Analyser";
+"displayed_route_save" = "Gem i ture";
+"trip_name" = "Turnavn";
+"trip_hint" = "Angiv turnavn";
+"shared_string_maximum" = "Max.";
+"res_edit_online_map" = "Redigere onlinekortkilde";
+"res_online_name_descr" = "Angiv navn til onlinekilde";
+"res_online_url_descr" = "Angiv eller kopiere og indsæt URL-adresse til onlinekilde";
+"res_zoom_levels" = "Zoomniveauer";
+"res_expire_time" = "Udløbstid";
+"res_mercator" = "Mercator-projektion";
+"res_pseudo_mercator" = "Pseudo-Mercator-projektion";
+"res_zoom_levels_desc" = "Parametre vil påvirkerkortvisningen, når det bruges som korttype eller over-/underlejring.\n\nKorttype: Kortet begrænses til de valgte zoomniveauer.\n\nOver-/underlejring: Zoomniveauer, hvor fliser vil være synlige. \nOp- eller nedskalering vil forekomme over eller under de indstillede værdier.";
+"res_expire_time_desc" = "Udløbstid i minutter. Cachelagrede felter genindlæses efter angivet tid. Lad feltet være tomt, hvis der ikke er brug for at genindlæse felter til kilden.\nEn dag er 1.440 minutter.\nEn uge er 10.080 minutter.\n30 dage er 43.200 minutter.";
+"res_name_warning" = "Filnavnet må ikke være tomt";
+"res_url_warning" = "Webadressen kan ikke være tom";
+"res_zoom_warning" = "Minimum zoomværdi må ikke være lig med eller større end maksimal zoom";
+"res_expire_warning" = "Udløbstiden skal være et tal mellem 0 og 10.000.000";
+"res_source_format" = "Kildeformat";
+"res_source_sqlite" = "SQLiteDB fil";
+"res_source_one_per_tile" = "En billedfil pr. flise";
+"res_zoom_invalid_value" = "Zoomværdier skal være inden for området 1 - 22";

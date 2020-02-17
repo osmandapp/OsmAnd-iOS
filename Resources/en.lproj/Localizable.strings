@@ -828,7 +828,6 @@
 "mapillary_turn_on_widget" = "Turn on Mapillary widget";
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Tile cache";
-"tile_data" = "Tile data";
 "shared_string_reload" = "Reload";
 "shared_string_show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
@@ -1289,7 +1288,9 @@
 "routing_import_please_restart" = "To use the new routing.xml please restart the application.";
 "sqlitedb_import_title" = "Import Map Creator file";
 "sqlitedb_import_already_exists" = "The specified sqlitedb file is already exists. Please choose action.";
-"map_creator" = "Map Creator";
+"online_raster_map" = "Online raster map";
+"offline_raster_map" = "Offline raster map";
+"offline_raster_maps" = "Offline raster maps";
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
 "local_names" = "Local names";

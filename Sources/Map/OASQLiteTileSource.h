@@ -26,6 +26,7 @@
 @property (nonatomic, readonly) NSString *rule;
 
 + (BOOL) createNewTileSourceDbAtPath:(NSString *)path parameters:(NSDictionary *)parameters;
++ (BOOL) isOnlineTileSource:(NSString *)filePath;
 
 - (instancetype)initWithFilePath:(NSString *)filePath;
 

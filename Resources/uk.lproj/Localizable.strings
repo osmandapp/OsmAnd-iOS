@@ -671,7 +671,7 @@
 "voice_provider_descr" = "Виберіть голосові вказівки для навігації";
 "choose_audio_stream" = "Вивід голосових вказівок";
 "choose_audio_stream_descr" = "Виберіть канал для голосових вказівок";
-"map_markers" = "Позначки мапи";
+"map_markers" = "Позначки";
 "select_gpx" = "Виберіть GPX…";
 "layer_map_appearance" = "Налаштувати екран";
 "map_widget_right" = "Права панель";

@@ -1272,7 +1272,6 @@
 "sett_deg180" = "180 grados";
 "sett_deg360" = "360 grados";
 "online_map" = "Mapa en línea";
-
 "region_others" = "Otros mapas";
 "download_depth_countours" = "Curvas de profundidad náuticas";
 "show_contour_lines" = "Mostrar curvas de nivel";
@@ -1572,3 +1571,4 @@
 "rendering_value_disabled_name" = "Desactivado";
 "rendering_attr_piste_difficulty_connection_name" = "Conexión";
 "rendering_attr_buildings15zoom_name" = "Edificios en zoom 15";
+"rendering_attr_streetLightingNight_name" = "Mostrar sólo por la noche";

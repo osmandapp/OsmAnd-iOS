@@ -1318,7 +1318,6 @@
 "res_url_warning" = "O URL não pode estar vazio";
 "res_zoom_warning" = "O valor mínimo do zoom não pode ser igual ou superior ao zoom máximo";
 "res_expire_warning" = "O tempo de expiração deve ser um número entre 0 e 10000000";
-
 "routing_attr_difficulty_preference_name" = "Dificuldade preferida";
 "routing_attr_avoid_sett_name" = "Sem pedras irregulares ou paralelepípedo";
 "routing_attr_allow_private_name" = "Permitir acesso privado";
@@ -1328,7 +1327,7 @@
 "routing_attr_difficulty_preference_description" = "Prefira rotas dessa dificuldade, embora o roteamento em pistas mais difíceis ou mais fáceis ainda seja possível se for mais curto.";
 "rendering_attr_roadColors_name" = "Esquema de cores das vias";
 "rendering_attr_surface_snow_name" = "Neve";
-"rendering_attr_noPolygons_name" = "Polígonos de áreas";
+"rendering_attr_noPolygons_name" = "Polígonos";
 "rendering_attr_roadStyle_name" = "Estilo das vias";
 "rendering_attr_showLez_description" = "Mostrar zonas de baixa emissão no mapa. Não afeta o roteamento.";
 "routing_attr_driving_style_name" = "Estilo de condução";
@@ -1548,7 +1547,7 @@
 "routing_attr_allow_expert_name" = "Permitir rotas especializadas";
 "rendering_attr_trainLightrailRoutes_name" = "Linhas de trem";
 "rendering_value_translucent_orange_name" = "Laranja translúcido";
-"routing_attr_freeride_policy_description" = "\'Freeride\' e \'Fora de pista\' são rotas e passagens não oficiais. Normalmente não-preparado, sem manutenção e não verificado à noite. Entre por seu próprio risco.";
+"routing_attr_freeride_policy_description" = "'Freeride' e 'Fora de pista' são rotas e passagens não oficiais. Normalmente não-preparado, sem manutenção e não verificado à noite. Entre por seu próprio risco.";
 "rendering_value_defaultTranslucentCyan_name" = "Predefinido (ciano translúcido)";
 "routing_attr_height_description" = "Especifique a altura permitida do veículo nas rotas.";
 "rendering_attr_currentTrackColor_description" = "Cor do GPX";
@@ -1607,3 +1606,7 @@
 "routing_attr_width_description" = "Especifique o limite permitido de largura do veículo nas rotas.";
 "routing_attr_avoid_toll_name" = "Sem pedágios";
 "rendering_attr_buildings15zoom_name" = "Edifícios em zoom 15";
+"res_source_format" = "Formato de fonte";
+"res_source_sqlite" = "Arquivo SQLiteDB";
+"res_source_one_per_tile" = "Um arquivo de imagem por mosaico";
+"res_zoom_invalid_value" = "Os valores do zoom devem estar no intervalo de 1 a 22";

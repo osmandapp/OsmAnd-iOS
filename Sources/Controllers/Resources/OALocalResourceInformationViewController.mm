@@ -146,6 +146,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 - (void)initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item;
 {
     self.localItem = item;
+    BOOL isOnlineSql = [OASQLiteTileSource isOnlineTileSource:item.path];
     
     NSMutableArray *tKeys = [NSMutableArray array];
     NSMutableArray *tValues = [NSMutableArray array];
@@ -153,7 +154,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     
     // Type
     [tKeys addObject:OALocalizedString(@"res_type")];
-    [tValues addObject:OALocalizedString(@"map_creator")];
+    [tValues addObject:isOnlineSql ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map")];
     
     // Size
     [tKeys addObject:OALocalizedString(@"res_size")];
@@ -176,8 +177,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         
         [tValues addObject:[NSString stringWithFormat:@"%@", [formatter stringFromDate:d]]];
         
-        OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
-        if ([ts supportsTileDownload])
+        if (isOnlineSql)
             [tButtons addObject:@"clear_cache"];
         
         [tButtons addObject:@"edit"];

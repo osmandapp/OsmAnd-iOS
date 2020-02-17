@@ -84,7 +84,7 @@
     return [self.name isEqualToString:obj.name];
 }
 
-- (NSString *)getValueOf:(int)fieldIndex statement:(sqlite3_stmt *)statement
++ (NSString *)getValueOf:(int)fieldIndex statement:(sqlite3_stmt *)statement
 {
     if (sqlite3_column_text(statement, fieldIndex) != nil)
         return [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, fieldIndex)];
@@ -119,23 +119,23 @@
                     
                     NSNumber *ruleId = [mapper objectForKey:@"rule"];
                     if(ruleId)
-                        _rule = [self getValueOf:[ruleId intValue] statement:statement];
+                        _rule = [self.class getValueOf:[ruleId intValue] statement:statement];
                     
                     NSNumber *refererId = [mapper objectForKey:@"referer"];
                     if (refererId)
-                        _referer = [self getValueOf:[refererId intValue] statement:statement];
+                        _referer = [self.class getValueOf:[refererId intValue] statement:statement];
                     
                     NSNumber *urlTemplateId = [mapper objectForKey:@"url"];
                     if (urlTemplateId)
                     {
-                        QString urlTemplate = QString::fromNSString([self getValueOf:[urlTemplateId intValue] statement:statement]);
+                        QString urlTemplate = QString::fromNSString([self.class getValueOf:[urlTemplateId intValue] statement:statement]);
                         _urlTemplate = OsmAnd::OnlineTileSources::normalizeUrl(urlTemplate).toNSString();
                     }
                     
                     NSNumber *tnumbering = [mapper objectForKey:@"tilenumbering"];
                     if (tnumbering)
                     {
-                        _inversiveZoom = ([@"BigPlanet" caseInsensitiveCompare:[self getValueOf:[tnumbering intValue] statement:statement]] == NSOrderedSame);
+                        _inversiveZoom = ([@"BigPlanet" caseInsensitiveCompare:[self.class getValueOf:[tnumbering intValue] statement:statement]] == NSOrderedSame);
                     }
                     else
                     {
@@ -146,8 +146,8 @@
                     NSNumber *timecolumn = [mapper objectForKey:@"timecolumn"];
                     if (timecolumn)
                     {
-                        NSLog(@"%@", [self getValueOf:[timecolumn intValue] statement:statement]);
-                        _timeSupported = ([@"yes" caseInsensitiveCompare:[self getValueOf:[timecolumn intValue] statement:statement]] == NSOrderedSame);
+                        NSLog(@"%@", [self.class getValueOf:[timecolumn intValue] statement:statement]);
+                        _timeSupported = ([@"yes" caseInsensitiveCompare:[self.class getValueOf:[timecolumn intValue] statement:statement]] == NSOrderedSame);
                     }
                     else
                     {
@@ -190,7 +190,7 @@
                     NSNumber *randomsId = [mapper objectForKey:@"randoms"];
                     if(randomsId)
                     {
-                        _randoms = [self getValueOf:[randomsId intValue] statement:statement];
+                        _randoms = [self.class getValueOf:[randomsId intValue] statement:statement];
                         _randomsArray = OsmAnd::OnlineTileSources::parseRandoms(QString::fromNSString(_randoms));
                     }
 
@@ -664,6 +664,32 @@
         
         sqlite3_close(tmpDatabase);
         return error == NULL;
+    }
+    return NO;
+}
+
++ (BOOL) isOnlineTileSource:(NSString *)filePath
+{
+    sqlite3 *db;
+    if (sqlite3_open([filePath UTF8String], &db) == SQLITE_OK)
+    {
+        NSString *querySQL = @"SELECT url FROM info LIMIT 1";
+        sqlite3_stmt *statement;
+        
+        const char *query_stmt = [querySQL UTF8String];
+        if (sqlite3_prepare_v2(db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+        {
+            while (sqlite3_step(statement) == SQLITE_ROW)
+            {
+                int columnCount = sqlite3_column_count(statement);
+                if (columnCount == 1)
+                {
+                    NSString *urlTemplate = [self.class getValueOf:0 statement:statement];
+                    return urlTemplate != nil && urlTemplate.length > 0;
+                }
+            }
+        }
+        sqlite3_close(db);
     }
     return NO;
 }

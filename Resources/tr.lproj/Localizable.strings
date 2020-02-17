@@ -1299,7 +1299,6 @@
 "trip_name" = "Seyahat adı";
 "trip_hint" = "Seyahat adını girin";
 "shared_string_maximum" = "Maksimum";
-"res_edit_online_map" = "Çevrim içi harita kaynağını düzenle";
 "res_online_name_descr" = "Çevrim içi kaynak için isim sağlayın";
 "res_online_url_descr" = "Çevrim içi kaynak için URL girin veya kopyalayıp yapıştırın";
 "res_url" = "URL";

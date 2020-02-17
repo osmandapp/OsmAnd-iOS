@@ -1306,7 +1306,6 @@
 "res_name_warning" = "Dateiname darf nicht leer sein";
 "res_url_warning" = "URL darf nicht leer sein";
 "res_del_cache_not_supported" = "Das Löschen des Caches für Offline-SQLite-Maps wird nicht unterstützt";
-"res_edit_online_map" = "Online-Kartenquelle bearbeiten";
 "res_online_name_descr" = "Geben Sie den Namen der Online-Quelle an";
 "res_online_url_descr" = "URL für Online-Quelle eingeben oder kopieren und einfügen";
 "res_expire_time" = "Verfallszeit";

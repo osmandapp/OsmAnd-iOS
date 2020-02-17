@@ -1302,7 +1302,6 @@
 "res_elliptic_mercator" = "نموذج مركتور البيضوي";
 "res_url" = "الرابط";
 "shared_string_maximum" = "الحد الاقصي";
-"res_edit_online_map" = "تحرير مصدر الخريطة على الانترنت";
 "res_online_name_descr" = "اكتب اسمًا للمصدر عبر الإنترنت";
 "res_online_url_descr" = "أدخل أو انسخ والصق عنوان URL للمصدر عبر الإنترنت";
 "res_zoom_levels" = "مستويات التكبير";

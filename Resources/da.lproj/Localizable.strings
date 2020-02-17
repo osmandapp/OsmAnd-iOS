@@ -1594,7 +1594,6 @@
 "trip_name" = "Turnavn";
 "trip_hint" = "Angiv turnavn";
 "shared_string_maximum" = "Max.";
-"res_edit_online_map" = "Redigere onlinekortkilde";
 "res_online_name_descr" = "Angiv navn til onlinekilde";
 "res_online_url_descr" = "Angiv eller kopiere og indsæt URL-adresse til onlinekilde";
 "res_zoom_levels" = "Zoomniveauer";

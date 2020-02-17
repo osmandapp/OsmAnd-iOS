@@ -54,6 +54,7 @@
     OASQLiteTileSource *_sqliteSource;
     OsmAndAppInstance _app;
     OAResourcesBaseViewController *_baseController;
+    SqliteDbResourceItem *_sqliteDbItem;
     
     NSString *_itemName;
     NSString *_itemURL;
@@ -74,7 +75,7 @@
 }
 -(void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"res_edit_online_map");
+    _titleView.text = OALocalizedString(@"res_edit_map_source");
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -129,8 +130,8 @@
         }
         else if ([item isKindOfClass:SqliteDbResourceItem.class])
         {
-            SqliteDbResourceItem *sqliteItem = (SqliteDbResourceItem *) item;
-            _sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:sqliteItem.path];
+            _sqliteDbItem = (SqliteDbResourceItem *) item;
+            _sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:_sqliteDbItem.path];
             [self setupParametersFromSqlite];
         }
         
@@ -419,7 +420,7 @@
 
 - (BOOL) isOfflineSQLiteDB
 {
-    if (_sqliteSource != nil && ![_sqliteSource supportsTileDownload])
+    if (_sqliteSource != nil && ![OASQLiteTileSource isOnlineTileSource:_sqliteDbItem.path])
         return YES;
     return NO;
 }
@@ -578,7 +579,6 @@
         {
             BOOL isURL = indexPath.section == kURLSection;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.inputField.text = isURL ? _itemURL : _itemName;
             cell.inputField.delegate = self;
             cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
             cell.inputField.tag = isURL ? kURLCellTag : kNameCellTag;
@@ -591,6 +591,13 @@
                 cell.inputField.text = OALocalizedString(@"res_offlineSQL_URL_warning");
                 cell.inputField.textColor = [UIColor lightGrayColor];
                 cell.clearButton.hidden = YES;
+            }
+            else
+            {
+                cell.userInteractionEnabled = YES;
+                cell.inputField.text = isURL ? _itemURL : _itemName;
+                cell.inputField.textColor = [UIColor blackColor];
+                cell.clearButton.hidden = NO;
             }
         }
         
@@ -607,7 +614,6 @@
         }
         cell.inputField.text = _expireTimeMinutes;
         cell.inputField.delegate = self;
-        cell.inputField.placeholder = item[@"placeholder"];
         cell.userInteractionEnabled = YES;
         [cell.inputField removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
         [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
@@ -616,6 +622,11 @@
         {
             cell.userInteractionEnabled = NO;
             cell.inputField.placeholder = OALocalizedString(@"res_offlineSQL_URL_warning");
+        }
+        else
+        {
+            cell.userInteractionEnabled = YES;
+            cell.inputField.placeholder = item[@"placeholder"];
         }
         return cell;
     }
@@ -643,6 +654,11 @@
                 {
                     cell.userInteractionEnabled = NO;
                     cell.textView.textColor = [UIColor lightGrayColor];
+                }
+                else
+                {
+                    cell.userInteractionEnabled = YES;
+                    cell.textView.textColor = [UIColor blackColor];
                 }
             }
         }

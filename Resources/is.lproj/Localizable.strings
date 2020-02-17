@@ -1301,7 +1301,6 @@
 "trip_name" = "Heiti ferðar";
 "trip_hint" = "Settu inn nafn á ferðina";
 "shared_string_maximum" = "Hámark";
-"res_edit_online_map" = "Breyta nettengdum kortagjafa";
 "res_online_name_descr" = "Settu inn nafn á nettengdum kortagjafa";
 "res_online_url_descr" = "Settu inn eða afritaðu og límdu slóð á nettengdan kortagjafa";
 "res_url" = "Slóð";

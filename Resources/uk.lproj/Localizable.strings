@@ -1301,7 +1301,7 @@
 "trip_name" = "Назва поїздки";
 "trip_hint" = "Уведіть назву поїздки";
 "shared_string_maximum" = "Найбільше";
-"res_edit_online_map" = "Редагувати джерело мережевих мап";
+"res_edit_map_source" = "Редагувати джерело мапи";
 "res_online_name_descr" = "Укажіть назву для мережевого джерела";
 "res_online_url_descr" = "Уведіть або скопіюйте та вставте URL-адресу для мережевого джерела";
 "res_url" = "URL";

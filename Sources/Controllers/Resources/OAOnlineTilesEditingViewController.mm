@@ -36,6 +36,7 @@
 
 #define kMinAllowedZoom 1
 #define kMaxAllowedZoom 22
+#define maxSaveButtonWidth 105
 
 #define kCellTypeFloatTextInput @"text_input_floating_cell"
 #define kCellTypeSetting @"settings_cell"
@@ -53,6 +54,7 @@
     OASQLiteTileSource *_sqliteSource;
     OsmAndAppInstance _app;
     OAResourcesBaseViewController *_baseController;
+    SqliteDbResourceItem *_sqliteDbItem;
     
     NSString *_itemName;
     NSString *_itemURL;
@@ -73,7 +75,7 @@
 }
 -(void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"res_edit_online_map");
+    _titleView.text = OALocalizedString(@"res_edit_map_source");
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -128,8 +130,8 @@
         }
         else if ([item isKindOfClass:SqliteDbResourceItem.class])
         {
-            SqliteDbResourceItem *sqliteItem = (SqliteDbResourceItem *) item;
-            _sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:sqliteItem.path];
+            _sqliteDbItem = (SqliteDbResourceItem *) item;
+            _sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:_sqliteDbItem.path];
             [self setupParametersFromSqlite];
         }
         
@@ -192,6 +194,10 @@
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = 44.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
+    
+    CGFloat width = MIN(_saveButton.intrinsicContentSize.width, maxSaveButtonWidth);
+    [_saveButton.widthAnchor constraintEqualToConstant:width].active = YES;
+    [_titleView setNeedsUpdateConstraints];
     
     [self generateData];
     [self applySafeAreaMargins];
@@ -412,6 +418,11 @@
     }
 }
 
+- (BOOL) isOfflineSQLiteDB
+{
+    return _sqliteSource != nil && ![OASQLiteTileSource isOnlineTileSource:_sqliteDbItem.path];
+}
+
 - (BOOL)hasChangesBeenMade
 {
     long expireTimeMillis;
@@ -566,13 +577,26 @@
         {
             BOOL isURL = indexPath.section == kURLSection;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.inputField.text = isURL ? _itemURL : _itemName;
             cell.inputField.delegate = self;
             cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
             cell.inputField.tag = isURL ? kURLCellTag : kNameCellTag;
             cell.clearButton.tag = cell.inputField.tag;
             [cell.clearButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            if ([self isOfflineSQLiteDB] && isURL)
+            {
+                cell.userInteractionEnabled = NO;
+                cell.inputField.text = OALocalizedString(@"res_offlineSQL_URL_warning");
+                cell.inputField.textColor = [UIColor lightGrayColor];
+                cell.clearButton.hidden = YES;
+            }
+            else
+            {
+                cell.userInteractionEnabled = YES;
+                cell.inputField.text = isURL ? _itemURL : _itemName;
+                cell.inputField.textColor = [UIColor blackColor];
+                cell.clearButton.hidden = NO;
+            }
         }
         
         return cell;
@@ -588,12 +612,20 @@
         }
         cell.inputField.text = _expireTimeMinutes;
         cell.inputField.delegate = self;
-        cell.inputField.placeholder = item[@"placeholder"];
         cell.userInteractionEnabled = YES;
         [cell.inputField removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
         [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
         cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
-        
+        if ([self isOfflineSQLiteDB])
+        {
+            cell.userInteractionEnabled = NO;
+            cell.inputField.placeholder = OALocalizedString(@"res_offlineSQL_URL_warning");
+        }
+        else
+        {
+            cell.userInteractionEnabled = YES;
+            cell.inputField.placeholder = item[@"placeholder"];
+        }
         return cell;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeSetting])
@@ -616,6 +648,16 @@
             else if ([key isEqualToString:@"format_sett"])
             {
                 cell.descriptionView.text = [self getFormatString:_sourceFormat];
+                if ([self isOfflineSQLiteDB])
+                {
+                    cell.userInteractionEnabled = NO;
+                    cell.textView.textColor = [UIColor lightGrayColor];
+                }
+                else
+                {
+                    cell.userInteractionEnabled = YES;
+                    cell.textView.textColor = [UIColor blackColor];
+                }
             }
         }
         return cell;

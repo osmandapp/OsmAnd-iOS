@@ -821,7 +821,7 @@ static BOOL dataInvalidated = NO;
                                  if (block)
                                      block();
                              }
-                             if ([item isKindOfClass:[OnlineTilesResourceItem class]])
+                             else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
                              {
                                  OnlineTilesResourceItem *tilesItem = (OnlineTilesResourceItem *)item;
                                  [[NSFileManager defaultManager] removeItemAtPath:tilesItem.path error:nil];

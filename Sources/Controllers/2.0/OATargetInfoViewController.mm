@@ -90,6 +90,21 @@
     return YES;
 }
 
+- (BOOL) supportMapInteraction
+{
+    return YES;
+}
+
+- (BOOL) supportsForceClose
+{
+    return YES;
+}
+
+- (BOOL)shouldEnterContextModeManually
+{
+    return YES;
+}
+
 + (UIImage *) getIcon:(NSString *)fileName
 {
     UIImage *img = nil;

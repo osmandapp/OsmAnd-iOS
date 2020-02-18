@@ -94,6 +94,21 @@
     return self;
 }
 
+- (BOOL) supportMapInteraction
+{
+    return YES;
+}
+
+- (BOOL) supportsForceClose
+{
+    return YES;
+}
+
+- (BOOL)shouldEnterContextModeManually
+{
+    return YES;
+}
+
 - (NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"favorite");

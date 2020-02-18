@@ -720,7 +720,17 @@
         return NO;
 }
 
+- (BOOL) shouldEnterContextModeManually
+{
+    return NO; // override
+}
+
 - (BOOL) supportMapInteraction
+{
+    return NO; // override
+}
+
+- (BOOL) supportsForceClose
 {
     return NO; // override
 }

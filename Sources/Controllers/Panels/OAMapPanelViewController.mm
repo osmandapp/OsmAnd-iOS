@@ -912,9 +912,15 @@ typedef enum
     }
 }
 
-- (void) processNoSymbolFound:(CLLocationCoordinate2D)coord
+- (void) processNoSymbolFound:(CLLocationCoordinate2D)coord forceHide:(BOOL)forceHide
 {
-    [self.targetMenuView hideByMapGesture];
+    if (forceHide)
+    {
+        if ([self.targetMenuView forceHideIfSupported])
+            [self targetHideContextPinMarker];
+    }
+    else
+        [self.targetMenuView hideByMapGesture];
 
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     targetPoint.type = OATargetNone;
@@ -1000,8 +1006,12 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
 {
-    if (_activeTargetType == OATargetImpassableRoadSelection || _activeTargetActive)
+    if (_activeTargetType == OATargetImpassableRoadSelection
+        || _activeTargetType == OATargetRouteDetailsGraph
+        || _activeTargetType == OATargetRouteDetails)
+    {
         return;
+    }
     
     if (targetPoint.type == OATargetMapillaryImage)
     {
@@ -1024,6 +1034,9 @@ typedef enum
         
         if (_activeTargetType == OATargetGPXEdit && targetPoint.type != OATargetWpt)
             [self targetPointAddWaypoint];
+        
+        if (_targetMenuView.needsManualContextMode)
+            [self enterContextMenuMode];
     }];
 }
 
@@ -2078,6 +2091,9 @@ typedef enum
     
     if (_activeTargetType != OATargetNone && !_activeTargetActive && !_activeTargetChildPushed && !hideActiveTarget && animationDuration > .1)
         animationDuration = .1;
+    
+    if (_targetMenuView.needsManualContextMode)
+        [self restoreFromContextMenuMode];
     
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
         

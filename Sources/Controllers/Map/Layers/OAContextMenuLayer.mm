@@ -458,7 +458,7 @@
     return targetPoint;
 }
 
-- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
+- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
     NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
     if (selectedObjects.count > 0)
@@ -477,7 +477,7 @@
     else
     {
         CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
-        [[OARootViewController instance].mapPanel processNoSymbolFound:coord];
+        [[OARootViewController instance].mapPanel processNoSymbolFound:coord forceHide:forceHide];
     }
 }
 

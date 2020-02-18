@@ -66,7 +66,7 @@
 - (void) hideContextMenu;
 - (BOOL) isContextMenuVisible;
 - (BOOL) isRouteInfoVisible;
-- (void) processNoSymbolFound:(CLLocationCoordinate2D)coord;
+- (void) processNoSymbolFound:(CLLocationCoordinate2D)coord forceHide:(BOOL)forceHide;
 
 - (void) closeDashboard;
 - (void) closeDashboardWithDuration:(CGFloat)duration;

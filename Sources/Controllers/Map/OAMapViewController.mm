@@ -1198,7 +1198,7 @@
     {
         OAQuickActionHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.quickActionController;
         [quickAction hideActionsSheetAnimated];
-        [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress];
+        [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         return YES;
     }
     return NO;

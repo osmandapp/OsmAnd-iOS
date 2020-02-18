@@ -1084,6 +1084,29 @@ static const NSInteger _buttonsCount = 4;
         return YES;
 }
 
+- (BOOL) forceHideIfSupported
+{
+    if (self.customController)
+    {
+        if ([self.customController supportsForceClose])
+        {
+            [self.menuViewDelegate targetHideMenuByMapGesture];
+            return YES;
+        }
+    }
+    else
+    {
+        [self.menuViewDelegate targetHideMenuByMapGesture];
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL) needsManualContextMode
+{
+    return self.customController && [self.customController shouldEnterContextModeManually];
+}
+
 - (void) hideByMapGesture
 {
     if (self.customController)
@@ -2536,7 +2559,7 @@ static const NSInteger _buttonsCount = 4;
     }
 
     if (!_zoomView.superview)
-        [self updateZoomViewFrameAnimated:NO];
+        [self updateZoomViewFrameAnimated:YES];
     
     
 }

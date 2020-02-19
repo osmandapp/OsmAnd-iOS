@@ -1608,3 +1608,5 @@
 "online_raster_map" = "Çevrim içi raster haritası";
 "offline_raster_map" = "Çevrim dışı raster haritası";
 "offline_raster_maps" = "Çevrim dışı raster haritaları";
+"res_edit_map_source" = "Harita kaynağını düzenle";
+"res_offlineSQL_URL_warning" = "Bu harita türü için desteklenmiyor";

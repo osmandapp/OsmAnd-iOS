@@ -1285,7 +1285,6 @@
 "gpx_descent" = "Zjazdy";
 "stats_select_graph_data" = "Wybierz dane wykresu";
 "region_nautical" = "Mapy morskie";
-
 "res_url" = "Adres URL";
 "res_elliptic_mercator" = "Eliptyczna Merkatora";
 "rendering_attr_roadColors_description" = "Wybierz zestaw kolorów dróg:";
@@ -1539,7 +1538,7 @@
 "routing_attr_piste_type_skitour_name" = "Turystyka narciarska";
 "routing_attr_allow_skating_only_name" = "Zezwalaj na jazdę na łyżwach tylko na trasach";
 "routing_attr_driving_style_name" = "Styl jazdy";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "Pokaż trasy cyklu sieci węzłów";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "Pokaż punkt sieci tras rowerowych";
 "rendering_attr_piste_type_nordic_name" = "Skandynawski";
 "routeInfo_piste_difficulty_name" = "Trudność stoku";
 "rendering_attr_piste_difficulty_freeride_name" = "Bardzo trudna";

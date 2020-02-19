@@ -12,11 +12,11 @@
 #include <SkImageEncoder.h>
 #include <SkStream.h>
 #include <SkData.h>
+#include <SkBitmap.h>
 
 #include <OsmAndCore/WebClient.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/SkiaUtilities.h>
-#include <SKBitmap.h>
 
 #include "Logging.h"
 #import "OAWebClient.h"
@@ -43,17 +43,20 @@ QByteArray OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTil
     return nullptr;
 }
 
-QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
+QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
+    const OsmAnd::TileId tileId,
+    const OsmAnd::ZoomLevel zoom,
+    const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/)
 {
     NSString *url = [ts getUrlToLoad:tileId.x y:tileId.y zoom:zoom];
     if (url != nil)
     {
         QString tileUrl = QString::fromNSString(url);
         std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-        const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult);
+        const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, queryController);
         
         // If there was error, check what the error was
-        if (!requestResult->isSuccessful())
+        if (!requestResult->isSuccessful() || downloadResult.isEmpty())
         {
             const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
             
@@ -184,7 +187,7 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::obtain
     else
     {
         // download tile
-        const auto& downloadResult = downloadTile(tileId, zoom);
+        const auto& downloadResult = downloadTile(tileId, zoom, request.queryController);
         if (!downloadResult.isNull())
         {
             if (shiftedTile)

@@ -483,7 +483,7 @@
             sqlite3_step(deleteStatement);
             sqlite3_finalize(deleteStatement);
 
-            NSString *vacuumSQL = @"VACUUM tiles";
+            NSString *vacuumSQL = @"VACUUM";
             const char *vacuum_stmt = [vacuumSQL UTF8String];
             sqlite3_prepare_v2(_db, vacuum_stmt, -1, &vacuumStatement, NULL);
             sqlite3_step(vacuumStatement);
@@ -581,7 +581,7 @@
     if (zoom > _maxZoom)
         return nil;
     
-    if(!_db || _urlTemplate == nil)
+    if(_urlTemplate == nil)
         return nil;
 
     if (_invertedY)

@@ -1610,3 +1610,5 @@
 "online_raster_map" = "Nettengt rastakort";
 "offline_raster_map" = "Ónettengt rastakort";
 "offline_raster_maps" = "Ónettengd rastakort";
+"res_edit_map_source" = "Breyta uppruna korts";
+"res_offlineSQL_URL_warning" = "Ekki stutt fyrir þessa gerð korta";

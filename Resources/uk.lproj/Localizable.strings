@@ -1611,3 +1611,4 @@
 "online_raster_map" = "Мережева растрова мапа";
 "offline_raster_map" = "Безмережева растрова мапа";
 "offline_raster_maps" = "Безмережеві растрові мапи";
+"res_offlineSQL_URL_warning" = "Не підтримується для цього виду мапи";

@@ -1039,7 +1039,7 @@
 "shared_string_end_date" = "Lokadagsetning";
 "shared_string_not_set" = "Ekki stillt";
 "shared_string_reset" = "Frumstilla";
-"tile_cache" = "Tiglaskyndiminni";
+"tile_cache" = "Kortaflísaskyndiminni";
 "shared_string_reload" = "Endurnýja";
 "shared_string_filter" = "Sía";
 "mapil_filter_user_descr" = "Sía myndir eftir notanda";
@@ -1052,7 +1052,7 @@
 "mapil_contribute" = "Sendu inn þínar eigin götumyndir";
 "mapillary_turn_on_widget" = "Kveikja á Mapillary-viðmótshlutanum";
 "mapillary_turn_on_widget_descr" = "Þetta gerir þér kleift að senda gögn inn í Mapillary á fljótlegan hátt";
-"mapil_reload_cache" = "Endurlestu kortatígla til að sjá nýjustu gögnin";
+"mapil_reload_cache" = "Endurlestu kortaflísar til að sjá nýjustu gögnin";
 "day_short" = "D";
 "week_short" = "Vk";
 "weeks_short" = "Vikur";
@@ -1315,7 +1315,6 @@
 "res_url_warning" = "Slóð má ekki vera auð";
 "res_zoom_warning" = "Lágmarksaðdráttargildi getur ekki verið sama eða stærra en hámarksaðdráttargildið";
 "res_expire_warning" = "Gildistími ætti að vera tala á milli 0 og 10000000";
-
 "rendering_attr_surface_stone_name" = "Steinn";
 "rendering_attr_piste_difficulty_freeride_name" = "Frjáls aðferð";
 "routing_attr_prefer_unpaved_name" = "Velja vegi með óbundnu slitlagi";
@@ -1336,10 +1335,10 @@
 "routing_attr_freeride_policy_description" = "Frjálsar brekkur (freeride) og utanbrautaleiðir eru óopinberar leiðir. Venjulega ótroðnar, ekki viðhaldið af starfsmönnum skíðasvæðis og oft ekki skoðaðar í lok dags. Umferð er leyfð á eigin ábyrgð.";
 "routing_attr_driving_style_balance_name" = "Jafnvægi";
 "rendering_attr_piste_type_connection_name" = "Tenging";
-"rendering_attr_hideOverground_name" = "Hlutirá yfirborði";
+"rendering_attr_hideOverground_name" = "Hlutir á yfirborði";
 "rendering_attr_noAdminboundaries_description" = "Sleppa birtingu héraðsmarka (stjórnsýslustig 5-9).";
 "rendering_attr_surface_paved_name" = "Bundið slitlag";
-"rendering_attr_buildings15zoom_name" = "Byggingarí aðdrætti 15";
+"rendering_attr_buildings15zoom_name" = "Byggingar í aðdrætti 15";
 "routing_attr_avoid_train_description" = "Forðast járnbrautalestir";
 "rendering_attr_smoothness_very_bad_name" = "Mjög slæmt";
 "rendering_attr_tramRoutes_name" = "Leiðir sporvagna";
@@ -1349,7 +1348,7 @@
 "rendering_attr_surface_wood_name" = "Viður";
 "rendering_attr_highway_class_track_grade5_name" = "Gráða 5";
 "rendering_value_green_name" = "Grænt";
-"routing_attr_height_obstacles_description" = "Notaí yfirborðshæðargögnum (í gegnum SRTM, ASTER og EU-DEM).";
+"routing_attr_height_obstacles_description" = "Nota yfirborðshæðargögn (í gegnum SRTM, ASTER og EU-DEM).";
 "rendering_attr_noAdminboundaries_name" = "Afmarkanir";
 "rendering_attr_coloredBuildings_name" = "Lita byggingar eftir gerð";
 "routing_attr_driving_style_safety_name" = "Velja frekar hjáleiðir";
@@ -1435,7 +1434,7 @@
 "rendering_attr_pisteRoutes_name" = "Skíðabrekkur";
 "rendering_attr_highway_class_state_road_name" = "Þjóðvegur";
 "routing_attr_width_description" = "Tilgreindu takmörk á breidd farartækja á leiðum.";
-"rendering_attr_showRoadMaps_description" = "Velduþegar birta á kort einungis með vegum:";
+"rendering_attr_showRoadMaps_description" = "Veldu þegar birta á kort einungis með vegum:";
 "rendering_value_lightgreen_name" = "Ljósgrænt";
 "routeInfo_steepness_name" = "Bratti";
 "routing_attr_avoid_tram_description" = "Forðast sporvagna";
@@ -1449,7 +1448,7 @@
 "routing_attr_allow_expert_name" = "Leyfa leiðir fyrir sérþjálfaða";
 "rendering_attr_currentTrackWidth_description" = "Breidd GPX";
 "rendering_attr_undefined_name" = "Óskilgreint";
-"routing_attr_weight_description" = "Tilgreinduþyngd farartækis sem leyfð er á leiðum.";
+"routing_attr_weight_description" = "Tilgreindu þyngd farartækis sem leyfð er á leiðum.";
 "rendering_attr_showLez_name" = "Birta svæði með takmörkunum á útblæstri";
 "rendering_attr_showSurfaceGrade_name" = "Sýna gæði vega";
 "rendering_attr_hidePOILabels_name" = "Merkingar merkisstaða";
@@ -1549,7 +1548,7 @@
 "rendering_attr_streetLightingNight_name" = "Sýna aðeins á nóttunni";
 "routing_attr_avoid_unpaved_name" = "Forðast vegi með óbundnu slitlagi";
 "routeInfo_roadClass_name" = "Gerð vegar";
-"rendering_attr_tracktype_grade3_name" = "Mestmegnisþétt";
+"rendering_attr_tracktype_grade3_name" = "Mestmegnis þétt";
 "rendering_attr_busRoutes_name" = "Leiðir strætisvagna";
 "routing_attr_avoid_ferries_description" = "Forðast ferjur";
 "rendering_attr_shareTaxiRoutes_name" = "Leiðir deilileigubíla";
@@ -1570,7 +1569,7 @@
 "rendering_value_translucent_green_name" = "Hálfgegnsætt grænt";
 "rendering_attr_piste_type_nordic_name" = "Gönguskíði";
 "rendering_attr_tramTrainRoutes_name" = "Leiðir lesta og sporvagna";
-"rendering_value_boldOutline_name" = "Feitútlína";
+"rendering_value_boldOutline_name" = "Feit útlína";
 "rendering_value_highContrastRoads_name" = "Götukort með mikil birtuskil";
 "rendering_value_translucent_pink_name" = "Hálfgegnsætt bleikt";
 "routing_attr_avoid_toll_description" = "Forðast gjaldskylda vegi";
@@ -1604,3 +1603,10 @@
 "rendering_attr_contourWidth_description" = "Breidd hæðarlína";
 "rendering_attr_piste_difficulty_extreme_name" = "Ofur";
 "rendering_attr_noPolygons_description" = "Gera allar svæðamerkingar á korti gegnsæjar.";
+"res_source_format" = "Snið frumkóða";
+"res_source_sqlite" = "SQLiteDB-skrá";
+"res_source_one_per_tile" = "Ein myndskrá á hverja kortaflís";
+"res_zoom_invalid_value" = "Aðdráttargildi ætti að vera á bilinu 1 - 22";
+"online_raster_map" = "Nettengt rastakort";
+"offline_raster_map" = "Ónettengt rastakort";
+"offline_raster_maps" = "Ónettengd rastakort";

@@ -589,7 +589,7 @@
 "auto_zoom_close" = "Zbliżenie";
 "auto_zoom_far" = "Widok pośredni";
 "auto_zoom_farthest" = "Widok szeroki";
-"keep_informing_never" = "Tylko ręcznie (naciśnij strzałkę)";
+"keep_informing_never" = "Tylko ręcznie (po naciśnięciu strzałki nawigacji)";
 "arrival_distance_factor_early" = "Wcześnie";
 "arrival_distance_factor_normally" = "Normalnie";
 "arrival_distance_factor_late" = "Późno";

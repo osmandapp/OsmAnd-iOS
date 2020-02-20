@@ -1442,7 +1442,7 @@
 "routing_attr_driving_style_prefer_unpaved_description" = "Надати перевагу незаасфальтованим над асфальтованими дорогами для прокладки.";
 "rendering_value_translucent_purple_name" = "Напівпрозорий пурпурний";
 "rendering_attr_ice_road_name" = "Льодова дорога";
-"rendering_attr_highway_class_track_grade4_name" = "4клас";
+"rendering_attr_highway_class_track_grade4_name" = "4 клас";
 "rendering_value_pink_name" = "рожевий";
 "routing_attr_allow_private_name" = "Дозволити приватний доступ";
 "rendering_attr_tracktype_grade4_name" = "Переважно м'яке";
@@ -1492,7 +1492,7 @@
 "routing_attr_weight_description" = "Вказати дозволений ліміт ваги автомобіля на маршрутах.";
 "routing_attr_driving_style_name" = "Стиль водіння";
 "routing_attr_difficulty_preference_name" = "Бажана складність";
-"rendering_value__name" = "За замовчуванням";
+"rendering_value__name" = "Усталено";
 "rendering_attr_roadColors_description" = "Виберіть кольорову схему доріг:";
 "rendering_attr_hikingRoutesOSMC_name" = "Шар символів для пішого туризму";
 "rendering_attr_OSMMapperAssistant_name" = "Помічник мапера OSM";
@@ -1549,7 +1549,7 @@
 "routing_attr_piste_type_skitour_description" = "Маршрути для лижних турів.";
 "rendering_attr_roadColors_name" = "Кольорова схема доріг";
 "rendering_attr_highway_class_footway_name" = "Пішохідна доріжка";
-"rendering_attr_highway_class_track_grade2_name" = "2клас";
+"rendering_attr_highway_class_track_grade2_name" = "2 клас";
 "rendering_attr_piste_difficulty_advanced_name" = "Розширений";
 "routing_attr_difficulty_preference_description" = "Надавати перевагу маршрутам такої складності, хоча маршрутизація через складніші або легші треки все ж можлива, якщо коротша.";
 "rendering_attr_contourWidth_description" = "Товщина поземистостей";
@@ -1568,7 +1568,7 @@
 "rendering_attr_noAdminboundaries_name" = "Кордони";
 "rendering_attr_highway_class_path_name" = "Стежка";
 "routing_attr_short_way_name" = "Паливно-ефективний шлях";
-"rendering_attr_highway_class_track_grade3_name" = "3клас";
+"rendering_attr_highway_class_track_grade3_name" = "3 клас";
 "rendering_attr_whiteWaterSports_name" = "Сплавний спорт";
 "rendering_attr_noPolygons_name" = "Полігони";
 "rendering_value_car_name" = "Автівка";
@@ -1578,7 +1578,7 @@
 "routing_attr_avoid_ice_roads_fords_name" = "Уникати льодових доріг і бродів";
 "rendering_attr_highway_class_cycleway_name" = "Велодоріжка";
 "routing_attr_avoid_toll_description" = "Уникати платних доріг";
-"rendering_attr_highway_class_track_grade5_name" = "5клас";
+"rendering_attr_highway_class_track_grade5_name" = "5 клас";
 "routing_attr_piste_type_nordic_name" = "Бігові лижі / скандинавська ходьба";
 "routing_attr_avoid_unpaved_description" = "Уникати ґрунтових доріг";
 "routing_attr_max_num_changes_name" = "Кількість змін";
@@ -1597,7 +1597,7 @@
 "rendering_value_purple_name" = "Пурпурний";
 "routing_attr_height_description" = "Вкажіть висоту транспортного засобу для розрахунку маршрутів.";
 "routing_attr_avoid_ferries_description" = "Уникати поромних переправ";
-"rendering_attr_highway_class_track_grade1_name" = "1клас";
+"rendering_attr_highway_class_track_grade1_name" = "1 клас";
 "rendering_attr_hmRendered_description" = "Відображати більше деталей на мапі.";
 "rendering_attr_trainLightrailRoutes_name" = "Маршрути поїздів";
 "rendering_value_defaultTranslucentCyan_name" = "Усталено (напівпрозорий блакитний)";

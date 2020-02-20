@@ -1541,3 +1541,4 @@
 "online_raster_map" = "Mappe raster Online";
 "offline_raster_map" = "Mappa raster Offline";
 "offline_raster_maps" = "Mappe raster Offline";
+"res_edit_map_source" = "Modifica il sorgente della mappa";

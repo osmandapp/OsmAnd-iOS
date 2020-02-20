@@ -557,9 +557,9 @@
 "starting_point_too_far" = "Puntu de mòida tropu distante dae su caminu prus a curtzu.";
 "ending_point_too_far" = "Puntu finale tropu indedda dae su caminu prus a curtzu.";
 "intermediate_point_too_far" = "Sa tapa %d est tropu indedda dae su caminu prus a curtzu.";
-"error_calculating_route" = "Errore in su càlculu de s'àndala";
+"error_calculating_route" = "Errore in su càrculu de s'àndala";
 "internet_connection_required_for_online_route" = "Est istadu ischertadu unu servìtziu de navigatzione in lìnia, ma sa connessione ìnternet no est disponìbile.";
-"empty_route_calculated" = "Errore: s’àndala calculada est bòida";
+"empty_route_calculated" = "Errore: s’àndala carculada est bòida";
 "route_to" = "A";
 "route_via" = "Via";
 "route_from" = "Dae";
@@ -578,14 +578,14 @@
 "shared_string_turn" = "Borta";
 "stop_routing_confirm" = "Ses seguru de chèrrere firmare sa navigatzione?";
 "cancel_route" = "Iscantzella s’àndala";
-"route_is_too_long_v2" = "B'est sa possibilidade chi s'àndala siat tropu longa pro èssere calculada. Si no at a èssere pronta in 10 minutos pro praghere agiunghe carchi destinatzione intermèdia.";
+"route_is_too_long_v2" = "B'at sa possibilidade chi s'àndala siat tropu longa pro èssere carculada. Si no at a èssere pronta in 10 minutos pro praghere annanghe carchi destinatzione intermèdia.";
 "navigation_over_track" = "Incumentzare sa navigatzione in su biàgiu?";
 "use_displayed_track_for_navigation" = "Cheres impreare su biàgiu ammustradu pro sa navigatzione?";
-"gpx_option_calculate_first_last_segment" = "Càlcula un’àndala cun OsmAnd pro su primu e s’ùrtimu segmentu de sa caminera";
+"gpx_option_calculate_first_last_segment" = "Càrcula un’àndala cun OsmAnd pro su primu e s’ùrtimu segmentu de sa caminera";
 "gpx_option_from_start_point" = "Rucra totu sa rasta";
 "gpx_option_reverse_route" = "Furria diretzione GPX";
-"use_points_as_intermediates" = "Càlcula s’àndala intre sos puntos";
-"calculate_osmand_route_without_internet" = "Càlcula un'àndala cun OsmAnd chene impreare internet";
+"use_points_as_intermediates" = "Càrcula s’àndala intre sos puntos";
+"calculate_osmand_route_without_internet" = "Càrcula un'àndala cun OsmAnd chene impreare internet";
 "routing_settings_2" = "Impostatziones de navigatzione";
 "gpx_navigation" = "Sighi su biàgiu";
 "impassable_road" = "Istransi caminos";
@@ -596,7 +596,7 @@
 "voice_provider" = "Ghia vocale";
 "shared_string_sound" = "Sonu";
 "fast_route_mode" = "Àndala prus lestra";
-"fast_route_mode_descr" = "Abìlita pro calculare s’àndala prus lestra o disabìlita pro s’àndala cun consumos prus bassos";
+"fast_route_mode_descr" = "Abìlita pro carculare s’àndala prus lestra o disabìlita pro s’àndala cun consumos prus bassos";
 "avoid_in_routing_title" = "Istransi…";
 "avoid_in_routing_descr" = "Istransi sos caminos a pagamentu, sos isterrados, sos traghetos";
 "prefer_in_routing_title" = "Preferre…";
@@ -607,7 +607,7 @@
 "auto_zoom_map" = "Ismanniamentu automàticu mapa";
 "auto_zoom_map_descr" = "Ismanniamentu mapa automàticu relativu a sa lestresa (si sa mapa est sincronizzata cun sa positzione currente)";
 "guidance_preferences_descr" = "Preferèntzias de navigatzione";
-"routing_preferences_descr" = "Preferèntzias de càlculu de s’àndala";
+"routing_preferences_descr" = "Preferèntzias de càrculu de s’àndala";
 "routing_settings" = "Navigatzione";
 "app_mode_bus" = "Postale";
 "app_mode_train" = "Trenu";
@@ -716,9 +716,9 @@
 "day_night_info" = "Informatziones die/note";
 "daynight_mode_auto" = "Arbèschida/intrinada";
 "route_simulation" = "Simulatzione de s'àndala";
-"animate_routing_route_not_calculated" = "Pro praghere càlcula s’andala in antis";
+"animate_routing_route_not_calculated" = "Pro praghere càrcula s’andala in antis";
 "simulate_routing" = "Dispinta/Sìmula sa positzione tua";
-"simulate_routing_descr" = "Sìmula sa positzione tua impreende un'àndala calculada";
+"simulate_routing_descr" = "Sìmula sa positzione tua impreende un'àndala carculada";
 "shared_string_info" = "Informatziones";
 "shared_string_go" = "Bae";
 "error_avoid_specific_road" = "No est istada agatada peruna tangentziale";
@@ -808,7 +808,7 @@
 "twitter" = "Twitter";
 "product_desc_ext_skimap" = "OsmAnd Mapas pro s'Iscì est un'estensione pro s'aplicatzione OsmAnd Mapas e Navigatzione progetada pro navigare in tzentros isportivos pro s'ierru. Frunit informatziones a pitzu de sas pistas pro s'iscì e de sas funivias e fintzas lìnias coloradas pro indicare sa dificultade de cada rasta. Podes otènnere informatziones a pitzu de sas rastas e fintzas de sas infrastruturas a fùrriu.\n\nIstrutziones de impreu: abìlita s'estensione dae s'aplicatzione de OsmAnd, toca su butone de sa mapa e imposta sa casta de mapa comente mapa pro s'iscì.";
 "product_desc_ext_track_recording" = "Registra sos biàgios tuos e sarva·los manualmente impreende s'estensione pro sa registratzione de biàgios de OsmAnd. Esporta su biàgiu tuo in unu documentu gpx, cumpartzi·lu o imprea·lu pro contribuire a su progetu OpenStreetMap.  Un'aina discansosa pro curridores, escursionistas e totu sos àteros chi podent èssere interessados a registrare sos biàgios issoro.";
-"product_desc_ext_trip_planning" = "S'estensione pro pranificare sos biàgios ti permitit de creare sos biàgios tuos in sa mapa, de los sarvare, de medire sa distàntzia intre puntos connessos cun lìnias retas etz. Est istadu creadu pro una pranificatzione preliminare, non pro calculare un'àndala cumprida.";
+"product_desc_ext_trip_planning" = "S'estensione pro pranificare sos biàgios ti permitit de creare sos biàgios tuos in sa mapa, de los sarvare, de medire sa distàntzia intre puntos connessos cun lìnias retas etz. Est istadu creadu pro una pranificatzione preliminare, non pro carculare un'àndala cumprida.";
 "product_desc_ext_wiki" = "Otene informatziones a pitzu de puntos de interesse dae Wikipedia. Est sa ghia non in lìnia tua de mantènnere in butzaca - abìlita s'estensione Wikipedia e ispassia·ti cun sos artìculos a pitzu de sos ogetos a fùrriu de tie.";
 "product_desc_ext_srtm" = "Custa estensione frunit sas curvas de livellu e sas umbraduras de sos rilievos, chi podent èssere ammustradas in sas mapas non in lìnia de OsmAnd. Sas curvas de livellu frunint sas informatziones a pitzu de s'artària de s'àrea cando sas umbraduras las ammustrant. Abbàida sos nùmenes de sos cùcuros de sos montes e sas caraterìsticas particulares de su terrinu impreende custa estensione . \n \nSos datos globales (intre sos 70 grados nord e sos 70 grados sud) sunt basados in supra de sas medidas de su SRTM (Shuttle Radar Topography Mission) e de s’ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), un’aina medidora in subra de Terra, su satèllite de su sistema di osservatzione de sa terra de sa NASA. ASTER est un’isfortzu de cooperatzione intre sa NASA, su Ministeru de s’Economia Cummèrtziu e Industria (METI) de su Giapone, e su sistema ispatziale giaponesu (J-spacesystems).";
 "shared_string_close" = "Serra";
@@ -1271,7 +1271,7 @@
 "map_settings_install_more" = "Installa àteru…";
 "tile_data" = "Datos de sos tasseddos";
 "online_map" = "Mapa in lìnia";
-"calculating_progress" = "Calculende…";
+"calculating_progress" = "Carculende…";
 "quick_action_hillshade_descr" = "Incarchende custu butone as a ammustrare o cuare su livellu de sas umbraduras de sos rilievos in sa mapa.";
 "show_hillshade" = "Ammustra sas umbraduras";
 "hide_hillshade" = "Cua sas umbraduras";
@@ -1332,7 +1332,7 @@
 "rendering_attr_trainLightrailRoutes_name" = "Àndalas in trenu";
 "rendering_attr_currentTrackColor_description" = "Colore GPX";
 "rendering_attr_roadColors_description" = "Issèbera una cumbinatzione de colores pro sos caminos:";
-"routing_attr_no_new_routing_name" = "No impreare su càlculu de s’àndala v1.9";
+"routing_attr_no_new_routing_name" = "No imprees su càrculu de s’àndala v1.9";
 "rendering_attr_highway_class_track_grade1_name" = "Gradu 1";
 "rendering_attr_smoothness_very_horrible_name" = "Orrorosa a beru";
 "rendering_attr_streetLighting_name" = "Illuminatzione pùblica";
@@ -1342,7 +1342,7 @@
 "rendering_value_bold_name" = "Grussu";
 "routing_attr_avoid_ferries_name" = "Perunu navile";
 "rendering_value_translucent_pink_name" = "Rosa translùtzidu";
-"routing_attr_no_new_routing_description" = "No impreare su càlculu de s’àndala v1.9.";
+"routing_attr_no_new_routing_description" = "No imprees su càrculu de s’àndala v1.9.";
 "routing_attr_avoid_ice_roads_fords_description" = "Istransit sos caminos de astra e sos bados.";
 "rendering_attr_smoothness_good_name" = "Bona";
 "rendering_value_translucent_green_name" = "Birde translùcidu";
@@ -1498,7 +1498,7 @@
 "routing_attr_allow_intermediate_name" = "Permite àndalas intermèdias";
 "rendering_attr_hmRendered_name" = "Ammustra prus minujas in sa mapa";
 "rendering_attr_piste_difficulty_connection_name" = "Connessione";
-"rendering_attr_showLez_description" = "Ammustra sas zonas de emissione bassa in sa mapa. No influentzat su càlculu de s'àndala.";
+"rendering_attr_showLez_description" = "Ammustra sas zonas de emissione bassa in sa mapa. No influentzat su càrculu de s'àndala.";
 "routing_attr_avoid_sett_name" = "Perunu impredadu o pavè";
 "rendering_value_translucent_orange_name" = "Arantzu translùcidu";
 "routing_attr_allow_motorway_description" = "Permitit s'impreu de sas autostradas.";
@@ -1613,3 +1613,5 @@
 "online_raster_map" = "Mapa non vetoriale (raster) in lìnia";
 "offline_raster_map" = "Mapa non vetoriale (raster) non in lìnia";
 "offline_raster_maps" = "Mapa non vetoriale (raster) non in lìnia";
+"res_edit_map_source" = "Modìfica sa mitza de sa mapa";
+"res_offlineSQL_URL_warning" = "No est suportadu pro custa casta de mapa";

@@ -399,13 +399,13 @@ QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledD
     .replace(QLatin1String("${osm_y}"), QString::number(req.tileId.y));
     
     std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-    const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult);
+    const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, req.queryController);
 
     // Ensure that all directories are created in path to local tile
     rasterFile.dir().mkpath(QLatin1String("."));
     
     // If there was error, check what the error was
-    if (!requestResult->isSuccessful())
+    if (!requestResult->isSuccessful() || downloadResult.isEmpty())
     {
         const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
         
@@ -606,13 +606,13 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     .replace(QLatin1String("${osm_y}"), QString::number(tileId.y));
     
     std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-    const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult);
+    const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, req.queryController);
     
     // Ensure that all directories are created in path to local tile
     localFile.dir().mkpath(QLatin1String("."));
     
     // If there was error, check what the error was
-    if (!requestResult->isSuccessful())
+    if (!requestResult->isSuccessful() || downloadResult.isEmpty())
     {
         const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
         

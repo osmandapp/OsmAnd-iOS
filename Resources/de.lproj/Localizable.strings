@@ -1602,3 +1602,8 @@
 "rendering_attr_piste_difficulty_expert_name" = "Experte";
 "rendering_attr_showRoadMaps_description" = "Wählen Sie aus, wann reine Straßenkarten angezeigt werden sollen:";
 "rendering_value_thin_name" = "Dünn";
+"res_source_sqlite" = "SQLiteDB-Datei";
+"res_source_one_per_tile" = "Eine Bilddatei pro Kachel";
+"res_zoom_invalid_value" = "Zoomwerte sollten im Bereich 1 - 22 liegen";
+"res_edit_map_source" = "Kartenquelle bearbeiten";
+"res_offlineSQL_URL_warning" = "Wird für diesen Kartentyp nicht unterstützt";

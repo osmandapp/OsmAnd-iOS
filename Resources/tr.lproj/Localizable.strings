@@ -1605,3 +1605,8 @@
 "res_source_sqlite" = "SQLiteDB dosyası";
 "res_source_one_per_tile" = "Döşeme başına bir görüntü dosyası";
 "res_zoom_invalid_value" = "Yakınlaştırma değerleri 1 - 22 aralığında olmalıdır";
+"online_raster_map" = "Çevrim içi raster haritası";
+"offline_raster_map" = "Çevrim dışı raster haritası";
+"offline_raster_maps" = "Çevrim dışı raster haritaları";
+"res_edit_map_source" = "Harita kaynağını düzenle";
+"res_offlineSQL_URL_warning" = "Bu harita türü için desteklenmiyor";

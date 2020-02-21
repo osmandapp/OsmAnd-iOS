@@ -398,7 +398,7 @@
 "map_settings_mode" = "تطبيق نمط";
 "map_settings_day" = "نهاري";
 "map_settings_night" = "ليلي";
-"map_settings_style" = "نمط الخريطة";
+"map_settings_style" = "وضع الخريطة";
 "map_settings_overunder" = "الخريطة العلوية/ السفلية";
 "map_settings_over" = "الخريطة العلوية";
 "map_settings_under" = "الخريطة السفلية";
@@ -1314,16 +1314,15 @@
 "res_url_warning" = "لا يمكن أن يكون عنوان URL فارغًا";
 "res_zoom_warning" = "لا يمكن أن تكون قيمة التكبير الأدنى مساوية أو أكبر من التكبير الأقصى";
 "res_expire_warning" = "يجب أن يكون وقت انتهاء الصلاحية رقماً بين 0 و 10000000";
-
 "rendering_attr_surface_compacted_name" = "مضغوط";
 "rendering_attr_piste_difficulty_aerialway_name" = "طريق تلفريك";
 "rendering_attr_surface_stone_name" = "حجر";
 "rendering_value_germanRoadAtlas_name" = "أطلس الطرق الألمانية";
 "rendering_attr_tracktype_grade2_name" = "الصلبة (غير المعبدة)";
-"routing_attr_avoid_toll_name" = "تجنب الطرق ذات الرسوم";
+"routing_attr_avoid_toll_name" = "لا توجد طرق رسوم";
 "rendering_attr_piste_type_skitour_name" = "التزلج";
 "rendering_attr_highway_class_street_name" = "شارع";
-"routing_attr_avoid_ferries_description" = "تجنب العبّارات المائية";
+"routing_attr_avoid_ferries_description" = "تجنب العبّارات";
 "rendering_attr_surface_dirt_name" = "تراب";
 "rendering_attr_piste_type_snow_park_name" = "حديقة التضاريس";
 "rendering_value_light_brown_name" = "بني فاتح";
@@ -1347,7 +1346,7 @@
 "rendering_value_orange_name" = "برتقالي";
 "rendering_attr_surface_snow_name" = "ثلج";
 "rendering_attr_highway_class_road_name" = "طريق";
-"routing_attr_freeride_policy_description" = "Freerideو offpiste طرق ومسارات غير رسمية. عادة ما يكون غير مرتب ، غير مصبوغ من قبل المسؤولين ولا يتم تسجيله دخوله في المساء. الدخول على مسؤوليتك الخاصة.";
+"routing_attr_freeride_policy_description" = "Freeride و offpiste طرق ومسارات غير رسمية. عادة ما يكون غير مرتب ، غير مصبوغ من قبل المسؤولين ولا يتم تسجيله دخوله في المساء. الدخول على مسؤوليتك الخاصة.";
 "rendering_attr_surface_paved_name" = "طريق معبد";
 "rendering_attr_piste_difficulty_connection_name" = "اتصال";
 "rendering_value_low_name" = "منخفض";
@@ -1373,7 +1372,7 @@
 "rendering_value_translucent_purple_name" = "بنفسجي فاتح";
 "rendering_attr_hikingRoutesOSMC_description" = "تقديم المسارات وفقاً لآثار OSMC.";
 "rendering_value_defaultTranslucentCyan_name" = "الافتراضي (سماوي فاتح)";
-"routing_attr_avoid_stairs_name" = "تجنب الأدراج";
+"routing_attr_avoid_stairs_name" = "لا سلالم";
 "rendering_attr_piste_type_downhill_name" = "انحدار";
 "rendering_value_brown_name" = "بني";
 "rendering_attr_highway_class_path_name" = "مسار";
@@ -1392,7 +1391,7 @@
 "rendering_attr_highway_class_bridleway_name" = "طريق أحصنة";
 "routing_attr_allow_expert_name" = "السماح بطرق المتخصصين";
 "rendering_attr_hmRendered_description" = "زيادة كمية خريطة التفصيل هو مبين.";
-"routing_attr_avoid_motorway_name" = "تجنب الطرق السريعة";
+"routing_attr_avoid_motorway_name" = "لا طرق السريعة";
 "rendering_attr_highway_class_service_name" = "خدمة";
 "rendering_attr_contourLines_name" = "أظهر الخطوط المحيطية (الكنتورية)";
 "routing_attr_avoid_subway_description" = "تجنب قطارالأنفاق والنقل بالسكك الحديدية خفيفة الوزن";
@@ -1405,7 +1404,7 @@
 "rendering_value_blue_name" = "أزرق";
 "routing_attr_driving_style_safety_name" = "تفضيل الشوارع الجانبية";
 "routing_attr_max_num_changes_name" = "عدد التغييرات";
-"routing_attr_avoid_shuttle_train_name" = "تجنب قطار المدينة";
+"routing_attr_avoid_shuttle_train_name" = "لا خدمة نقل القطار";
 "rendering_attr_hmRendered_name" = "أظهر المزيد من تفاصيل الخريطة";
 "rendering_value_translucent_lightgreen_name" = "أخضر فاتح جداً";
 "routing_attr_prefer_unpaved_description" = "تفضيل الطرق الغير معبدة.";
@@ -1426,9 +1425,9 @@
 "rendering_attr_piste_difficulty_freeride_name" = "الدراجات الجبلية";
 "rendering_attr_hideText_name" = "النص";
 "rendering_attr_showMtbRoutes_name" = "إظهار مسارات الدراجة الجبلية";
-"routing_attr_avoid_ferries_name" = "تجنب العبّارات";
+"routing_attr_avoid_ferries_name" = "لا العبارات";
 "routing_attr_avoid_train_name" = "بدون قطارات";
-"rendering_attr_hidePOILabels_name" = "POIتسميات";
+"rendering_attr_hidePOILabels_name" = "تسميات POI";
 "routing_attr_avoid_bus_description" = "تجنب الحافلات والعربات";
 "rendering_attr_piste_difficulty_undefined_name" = "غير محدد";
 "rendering_attr_surface_ice_name" = "جليد";
@@ -1492,7 +1491,7 @@
 "rendering_value_translucent_green_name" = "أخضر فاتح";
 "rendering_attr_highway_class_track_grade1_name" = "الصف 1";
 "routing_attr_weight_name" = "وزن المركبة";
-"rendering_attr_depthContours_name" = "محيطات الأعماق البحرية";
+"rendering_attr_depthContours_name" = "معالم العمق البحري";
 "rendering_attr_surface_pebblestone_name" = "حصاة حصبة";
 "rendering_attr_smoothness_good_name" = "جيد";
 "routing_attr_allow_private_description" = "السماح بالوصول إلى المناطق الخاصة.";
@@ -1512,7 +1511,7 @@
 "routing_attr_avoid_shuttle_train_description" = "يتجنب استخدام القطارات المكوكية";
 "routing_attr_avoid_ice_roads_fords_name" = "تجنب طرق الثلوج والطين";
 "routing_attr_allow_motorway_name" = "استخدام الطرق السريعة";
-"routing_attr_avoid_borders_description" = "تجنب عبور الحدود إلى بلد آخر";
+"routing_attr_avoid_borders_description" = "تجنب عبور الحدود الوطنية";
 "rendering_value_pedestrian_name" = "مشي";
 "rendering_value_browse_map_name" = "استعراض الخريطة";
 "routing_attr_avoid_sett_description" = "تجنب الحصى والطرق المرصوفة";
@@ -1585,7 +1584,7 @@
 "routing_attr_allow_intermediate_description" = "طرق أكثر صعوبة مع أقسام أكثر حدة. بعض العقبات التي ينبغي تجنبها.";
 "rendering_attr_coloredBuildings_name" = "تلوين المباني حسب النوع";
 "rendering_attr_highway_class_track_grade2_name" = "الصف 2";
-"routing_attr_avoid_stairs_description" = "تجنب الأدراج";
+"routing_attr_avoid_stairs_description" = "تجنب السلالم";
 "rendering_attr_highway_class_footway_name" = "طريق للمشاة";
 "rendering_attr_surface_ground_name" = "الأرض";
 "rendering_attr_contourDensity_description" = "كثافة الخط المحيطي";
@@ -1603,7 +1602,10 @@
 "rendering_attr_highway_class_steps_name" = "خطوات";
 "rendering_attr_surface_sand_name" = "الرمال";
 "rendering_value_car_name" = "سيارة";
-
 "res_source_format" = "صيغة المصدر";
 "res_source_sqlite" = "ملف SQLiteDB";
 "res_source_one_per_tile" = "ملف صورة واحد لكل إطار متجانب";
+"res_zoom_invalid_value" = "يجب أن تكون قيم التكبير في النطاق 1 - 22";
+"online_raster_map" = "الخريطة النقطية على الانترنت";
+"offline_raster_map" = "خريطة النقطية دون اتصال";
+"offline_raster_maps" = "خرائط النقطية دون اتصال";

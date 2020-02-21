@@ -56,19 +56,22 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
         const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, queryController);
         
         // If there was error, check what the error was
-        if (!requestResult->isSuccessful() || downloadResult.isEmpty())
+        if (!requestResult || !requestResult->isSuccessful() || downloadResult.isEmpty())
         {
-            const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
-            
-            LogPrintf(OsmAnd::LogSeverityLevel::Warning,
-                      "Failed to download tile from %s (HTTP status %d)",
-                      qPrintable(tileUrl),
-                      httpStatus);
-            
-            // 404 means that this tile does not exist, so delete it
-            if (httpStatus == 404)
+            if (requestResult)
             {
-                [ts deleteImage:tileId.x y:tileId.y zoom:zoom];
+                const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
+                
+                LogPrintf(OsmAnd::LogSeverityLevel::Warning,
+                          "Failed to download tile from %s (HTTP status %d)",
+                          qPrintable(tileUrl),
+                          httpStatus);
+                
+                // 404 means that this tile does not exist, so delete it
+                if (httpStatus == 404)
+                {
+                    [ts deleteImage:tileId.x y:tileId.y zoom:zoom];
+                }
             }
             requestResult.reset();
             return nullptr;

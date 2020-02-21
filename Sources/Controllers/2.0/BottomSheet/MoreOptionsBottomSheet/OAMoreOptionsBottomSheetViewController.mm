@@ -95,7 +95,7 @@
     {
         [arr addObject:@{ @"title" : OALocalizedString(@"change_object_posiotion"),
                           @"key" : @"change_object_posiotion",
-                          @"img" : @"ic_custom_show_on_map",
+                          @"img" : @"ic_custom_change_object_position",
                           @"type" : @"OAMenuSimpleCell" } ];
     }
     // Plugins

@@ -215,6 +215,8 @@
 
     OAMapViewController *mapVC = OARootViewController.instance.mapPanel.mapViewController;
     [mapVC goToPosition:point andZoom:mapVC.mapView.zoomLevel animated:NO];
+    
+    [self onMapMoved];
 }
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width

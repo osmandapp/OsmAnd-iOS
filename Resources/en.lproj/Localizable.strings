@@ -884,7 +884,6 @@
 "add_destination" = "Add destination";
 "add_start" = "Add starting point";
 "add_intermediate" = "Add intermediate point";
-"intermediate_point" = "Intermediate point";
 "add_home" = "Add home";
 "add_work" = "Add work";
 "home_pt" = "Home";

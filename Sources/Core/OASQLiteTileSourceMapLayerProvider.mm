@@ -82,26 +82,39 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
 
 const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::createShiftedTileBitmap(const NSData *data, const NSData* dataNext, double offsetY)
 {
-    if (data.length > 0 && dataNext.length > 0)
+    if (data.length == 0 && dataNext.length == 0)
+        return nullptr;
+
+    std::shared_ptr<SkBitmap> firstBitmap;
+    std::shared_ptr<SkBitmap> secondBitmap;
+    if (data.length > 0)
     {
-        const std::shared_ptr<SkBitmap> firstBitmap(new SkBitmap());
-        const std::shared_ptr<SkBitmap> secondBitmap(new SkBitmap());
-        if (SkImageDecoder::DecodeMemory(
-            data.bytes, data.length,
-            firstBitmap.get(),
-            SkColorType::kUnknown_SkColorType,
-            SkImageDecoder::kDecodePixels_Mode) &&
-            
-            SkImageDecoder::DecodeMemory(
-            dataNext.bytes, dataNext.length,
-            secondBitmap.get(),
-            SkColorType::kUnknown_SkColorType,
-            SkImageDecoder::kDecodePixels_Mode))
+        firstBitmap.reset(new SkBitmap());
+        if (!SkImageDecoder::DecodeMemory(
+             data.bytes, data.length,
+             firstBitmap.get(),
+             SkColorType::kUnknown_SkColorType,
+             SkImageDecoder::kDecodePixels_Mode))
         {
-            return OsmAnd::SkiaUtilities::createTileBitmap(firstBitmap, secondBitmap, offsetY);
+            firstBitmap.reset();
         }
     }
-    return nullptr;
+    if (dataNext.length > 0)
+    {
+        secondBitmap.reset(new SkBitmap());
+        if (!SkImageDecoder::DecodeMemory(
+             dataNext.bytes, dataNext.length,
+             secondBitmap.get(),
+             SkColorType::kUnknown_SkColorType,
+             SkImageDecoder::kDecodePixels_Mode))
+        {
+            secondBitmap.reset();
+        }
+    }
+    if (!firstBitmap && !secondBitmap)
+        return nullptr;
+    
+    return OsmAnd::SkiaUtilities::createTileBitmap(firstBitmap, secondBitmap, offsetY);
 }
 
 const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const NSData *data, double offsetY)
@@ -117,11 +130,7 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::downlo
     {
         // download next tile
         const auto& downloadResult = downloadTile(tileIdNext, zoom);
-        if (!downloadResult.isNull())
-        {
-            const auto shiftedTile = createShiftedTileBitmap(data, downloadResult.toNSData(), offsetY);
-            return shiftedTile;
-        }
+        return createShiftedTileBitmap(data, downloadResult.toNSData(), offsetY);
     }
     return nullptr;
 }

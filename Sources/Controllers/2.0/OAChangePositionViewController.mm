@@ -417,6 +417,7 @@
                                                                 _favoriteLocation->getTitle(),
                                                                 _favoriteLocation->getGroup(),
                                                                 _favoriteLocation->getColor());
+                [_app saveFavoritesToPermamentStorage];
             }
             break;
         }

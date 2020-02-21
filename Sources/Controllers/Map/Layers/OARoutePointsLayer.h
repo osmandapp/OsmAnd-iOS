@@ -16,4 +16,8 @@
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getRouteMarkersCollection;
 
+- (void) setFinishMarkerVisibility:(BOOL)hidden;
+- (void) setStartMarkerVisibility:(BOOL)hidden;
+- (void) setIntermediateMarkerVisibility:(CLLocationCoordinate2D)location hidden:(BOOL)hidden;
+
 @end

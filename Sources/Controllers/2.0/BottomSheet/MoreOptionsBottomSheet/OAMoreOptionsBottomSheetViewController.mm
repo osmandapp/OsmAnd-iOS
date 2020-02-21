@@ -90,6 +90,14 @@
                       @"key" : @"nearby_search",
                       @"img" : @"ic_custom_search",
                       @"type" : @"OAMenuSimpleCell" } ];
+    // Change marker psition
+    if (_targetPoint.isMovable)
+    {
+        [arr addObject:@{ @"title" : OALocalizedString(@"change_object_posiotion"),
+                          @"key" : @"change_object_posiotion",
+                          @"img" : @"ic_custom_show_on_map",
+                          @"type" : @"OAMenuSimpleCell" } ];
+    }
     // Plugins
     NSInteger addonsCount = _iapHelper.functionalAddons.count;
     if (addonsCount > 0)
@@ -289,6 +297,10 @@
         else if ([key isEqualToString:@"nearby_search"]) {
             [vwController.menuViewDelegate targetHide];
             [mapPanel openSearch:OAQuickSearchType::REGULAR location:menuLocation tabIndex:1];
+        }
+        else if ([key isEqualToString:@"change_object_posiotion"])
+        {
+            [mapPanel openTargetViewWithMovableTarget:_targetPoint];
         }
         else if ([key isEqualToString:@"addon_edit_poi_modify"] && _editingAddon)
         {

@@ -98,6 +98,18 @@
     }
 }
 
+- (void)setPointVisibility:(OADestination *)point hidden:(BOOL)hidden
+{
+    const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.latitude, point.longitude));
+    for (const auto& marker : _destinationsMarkersCollection->getMarkers())
+    {
+        if (pos == marker->getPosition())
+        {
+            marker->setIsHidden(hidden);
+        }
+    }
+}
+
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getDestinationsMarkersCollection
 {
     return _destinationsMarkersCollection;

@@ -91,6 +91,19 @@
     }];
 }
 
+- (void)setPointVisibility:(NSNumber *)point hidden:(BOOL)hidden
+{
+    CLLocation *location = [_avoidRoads getLocation:OsmAnd::ObfObjectId::fromRawId(point.unsignedLongLongValue)];
+    const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
+    for (const auto& marker : _markersCollection->getMarkers())
+    {
+        if (pos == marker->getPosition())
+        {
+            marker->setIsHidden(hidden);
+        }
+    }
+}
+
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getImpassableMarkersCollection
 {
     return _markersCollection;

@@ -9,6 +9,7 @@
 //  git revision b2e637ae441908003348ba9ac02d6594ad4d8c67
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)addOpenstreetmap:(OAOpenStreetMapPoint *)point;
 -(void)deletePOI:(OAOpenStreetMapPoint *) point;
 -(long long) getMinID;
+
+- (void) updateEditLocation:(long long) editId newPosition:(CLLocationCoordinate2D)newPosition;
 
 @end
 

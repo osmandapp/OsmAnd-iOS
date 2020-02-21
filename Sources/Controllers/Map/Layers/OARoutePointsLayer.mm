@@ -182,6 +182,28 @@
     }];
 }
 
+- (void) setFinishMarkerVisibility:(BOOL)hidden
+{
+    _targetPointMarker->setIsHidden(hidden);
+}
+
+- (void) setStartMarkerVisibility:(BOOL)hidden
+{
+    _startPointMarker->setIsHidden(hidden);
+}
+
+- (void) setIntermediateMarkerVisibility:(CLLocationCoordinate2D)location hidden:(BOOL)hidden
+{
+    const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
+    for (const auto& marker : _markersCollection->getMarkers())
+    {
+        if (pos == marker->getPosition())
+        {
+            marker->setIsHidden(hidden);
+        }
+    }
+}
+
 #pragma mark - OAStateChangedListener
 
 - (void) stateChanged:(id)change

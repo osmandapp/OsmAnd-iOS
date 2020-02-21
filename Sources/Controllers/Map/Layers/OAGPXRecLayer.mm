@@ -111,6 +111,18 @@
     return nullptr;
 }
 
+- (void)setPointVisibility:(OAGpxWptItem *)point hidden:(BOOL)hidden
+{
+    const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.point.getLatitude, point.point.getLongitude));
+    for (const auto& marker : self.markersCollection->getMarkers())
+    {
+        if (pos == marker->getPosition())
+        {
+            marker->setIsHidden(hidden);
+        }
+    }
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation

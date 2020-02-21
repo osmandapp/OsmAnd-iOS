@@ -47,6 +47,9 @@
     
     BOOL _initDone;
     
+    BOOL _isInChangePositionMode;
+    UIImageView *_changePositionPin;
+    
     NSArray<NSString *> *_publicTransportTypes;
 }
 
@@ -76,8 +79,44 @@
     }];
 }
 
+- (void) enterChangePositionMode:(UIImage *)icon
+{
+    if (!_changePositionPin)
+    {
+        _changePositionPin = [[UIImageView alloc] initWithImage:icon];
+        _changePositionPin.frame = CGRectMake(0., 0., 30., 30.);
+        _changePositionPin.contentMode = UIViewContentModeCenter;
+    }
+    else
+    {
+        _changePositionPin.image = icon;
+    }
+    [_changePositionPin sizeToFit];
+    
+    CGPoint targetPoint;
+    OsmAnd::PointI targetPositionI = self.mapView.target31;
+    if ([self.mapView convert:&targetPositionI toScreen:&targetPoint])
+    {
+        CGFloat iconHeight = _changePositionPin.frame.size.height;
+        _changePositionPin.center = CGPointMake(targetPoint.x, targetPoint.y - (iconHeight > 30. ? iconHeight / 2 : 0));
+    }
+    
+    [self.mapView addSubview:_changePositionPin];
+    _isInChangePositionMode = YES;
+}
+
+- (void) exitChangePositionMode
+{
+    if (_changePositionPin && _changePositionPin.superview)
+        [_changePositionPin removeFromSuperview];
+    
+    _isInChangePositionMode = NO;
+}
+
 - (void) onMapFrameRendered
 {
+    CGPoint targetPoint;
+    OsmAnd::PointI targetPositionI;
     if (_initDone && _animatedPin)
     {
         if (_animationDone)
@@ -86,12 +125,21 @@
         }
         else
         {
-            CGPoint targetPoint;
-            OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
+            targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
             if ([self.mapView convert:&targetPositionI toScreen:&targetPoint])
                 _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
         }
     }
+    
+    targetPositionI = self.mapView.target31;
+    if (_isInChangePositionMode && [self.mapView convert:&targetPositionI toScreen:&targetPoint])
+    {
+        CGFloat iconHeight = _changePositionPin.frame.size.height;
+        _changePositionPin.center = CGPointMake(targetPoint.x, targetPoint.y - (iconHeight > 30. ? iconHeight / 2 : 0));
+    }
+    
+    if (_isInChangePositionMode && self.changePositionDelegate)
+        [self.changePositionDelegate onMapMoved];
 }
 
 - (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker

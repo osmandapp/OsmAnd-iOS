@@ -12,7 +12,18 @@
 
 @class OATargetPoint;
 
+@protocol OAChangePositionModeDelegate <NSObject>
+
+- (void) onMapMoved;
+
+@end
+
 @interface OAContextMenuLayer : OASymbolMapLayer
+
+@property (nonatomic) id<OAChangePositionModeDelegate> changePositionDelegate;
+
+- (void) enterChangePositionMode:(UIImage *)icon;
+- (void) exitChangePositionMode;
 
 - (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker;
 

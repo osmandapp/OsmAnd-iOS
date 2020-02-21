@@ -90,6 +90,18 @@
     }
 }
 
+- (void) setPointVisibility:(NSArray<NSNumber *> *)point hidden:(BOOL)hidden
+{
+    const auto& pos = OsmAnd::PointI(point[0].intValue, point[1].intValue);
+    for (const auto& marker : _favoritesMarkersCollection->getMarkers())
+    {
+        if (pos == marker->getPosition())
+        {
+            marker->setIsHidden(hidden);
+        }
+    }
+}
+
 - (void) show
 {
     [self.mapViewController runWithRenderSync:^{

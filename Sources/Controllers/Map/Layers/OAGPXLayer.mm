@@ -199,6 +199,18 @@
     }
 }
 
+- (void)setPointVisibility:(OAGpxWptItem *)point hidden:(BOOL)hidden
+{
+    const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.point.getLatitude, point.point.getLongitude));
+    for (const auto& marker : _markersCollection->getMarkers())
+    {
+        if (pos == marker->getPosition())
+        {
+            marker->setIsHidden(hidden);
+        }
+    }
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj

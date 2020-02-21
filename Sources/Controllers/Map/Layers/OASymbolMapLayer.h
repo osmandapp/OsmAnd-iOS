@@ -14,4 +14,6 @@
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder;
 
+- (void) setPointVisibility:(id)point hidden:(BOOL)hidden;
+
 @end

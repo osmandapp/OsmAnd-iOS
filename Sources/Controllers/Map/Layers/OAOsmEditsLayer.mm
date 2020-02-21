@@ -100,6 +100,18 @@
     }
 }
 
+- (void) setPointVisibility:(OAOsmPoint *)point hidden:(BOOL)hidden
+{
+    const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon([point getLatitude], [point getLongitude]));
+    for (const auto& marker : _osmEditsCollection->getMarkers())
+    {
+        if (pos == marker->getPosition())
+        {
+            marker->setIsHidden(hidden);
+        }
+    }
+}
+
 - (void) show
 {
     [self.mapViewController runWithRenderSync:^{

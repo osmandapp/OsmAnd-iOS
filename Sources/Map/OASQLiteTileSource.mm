@@ -472,23 +472,10 @@
 {
     dispatch_async(_dbQueue, ^{
 
-        sqlite3_stmt    *deleteStatement;
-        sqlite3_stmt    *vacuumStatement;
-        
         if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
         {
-            NSString *deleteCacheSQL = @"DELETE FROM tiles";
-            const char *update_stmt = [deleteCacheSQL UTF8String];
-            sqlite3_prepare_v2(_db, update_stmt, -1, &deleteStatement, NULL);
-            sqlite3_step(deleteStatement);
-            sqlite3_finalize(deleteStatement);
-
-            NSString *vacuumSQL = @"VACUUM";
-            const char *vacuum_stmt = [vacuumSQL UTF8String];
-            sqlite3_prepare_v2(_db, vacuum_stmt, -1, &vacuumStatement, NULL);
-            sqlite3_step(vacuumStatement);
-            sqlite3_finalize(vacuumStatement);
-            
+            sqlite3_exec(_db, "DELETE FROM tiles", NULL, NULL, NULL);
+            sqlite3_exec(_db, "VACUUM", NULL, NULL, NULL);
             sqlite3_close(_db);
             if (block)
                 block();
@@ -670,6 +657,7 @@
 
 + (BOOL) isOnlineTileSource:(NSString *)filePath
 {
+    BOOL res = NO;
     sqlite3 *db;
     if (sqlite3_open([filePath UTF8String], &db) == SQLITE_OK)
     {
@@ -685,13 +673,14 @@
                 if (columnCount == 1)
                 {
                     NSString *urlTemplate = [self.class getValueOf:0 statement:statement];
-                    return urlTemplate != nil && urlTemplate.length > 0;
+                    res = urlTemplate != nil && urlTemplate.length > 0;
                 }
             }
+            sqlite3_finalize(statement);
         }
         sqlite3_close(db);
     }
-    return NO;
+    return res;
 }
 
 @end

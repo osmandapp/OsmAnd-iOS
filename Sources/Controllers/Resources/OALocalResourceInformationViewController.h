@@ -12,7 +12,6 @@
 #import "OAWorldRegion.h"
 #import "OAResourcesBaseViewController.h"
 
-
 @interface OALocalResourceInformationViewController : OACompoundViewController
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;

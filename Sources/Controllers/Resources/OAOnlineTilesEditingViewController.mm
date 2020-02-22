@@ -385,6 +385,7 @@
             SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
             item.path = [[[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
             item.fileName = _itemName;
+            item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
             
             if (self.delegate)
                 [self.delegate onTileSourceSaved:item];
@@ -504,6 +505,7 @@
         SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
         item.path = path;
         item.fileName = _itemName;
+        item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil] fileSize];
         
         if (self.delegate)
             [self.delegate onTileSourceSaved:item];

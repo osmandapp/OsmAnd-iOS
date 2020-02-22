@@ -520,7 +520,7 @@
     });
 }
 
-- (void) updateExpirationTime:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile
+- (void) updateInfoTableWithTime:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile
 {
     dispatch_async(_dbQueue, ^{
         

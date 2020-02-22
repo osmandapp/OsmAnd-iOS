@@ -49,6 +49,7 @@
 
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _followTheRouteObserver;
+    OAAutoObserverProxy* _simulateRoutingObserver;
 
     BOOL _waitingForAuthorization;
 
@@ -107,6 +108,10 @@
     _followTheRouteObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onFollowTheRouteChanged)
                                                           andObserve:_app.followTheRouteObservable];
+
+    _simulateRoutingObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onSimulateRoutingChanged)
+                                                          andObserve:_app.simulateRoutingObservable];
 
     _waitingForAuthorization = NO;
 
@@ -511,6 +516,12 @@
         [self updateRequestedAccuracy];
     else
         [self start];
+}
+
+- (void) onSimulateRoutingChanged
+{
+    if (!_settings.simulateRouting && [_locationSimulation isRouteAnimating])
+        [_locationSimulation startStopRouteAnimation];
 }
 
 - (void) onDeviceOrientationDidChange

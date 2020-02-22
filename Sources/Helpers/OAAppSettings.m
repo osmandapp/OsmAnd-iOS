@@ -2097,6 +2097,7 @@
 {
     _simulateRouting = simulateRouting;
     [[NSUserDefaults standardUserDefaults] setBool:_simulateRouting forKey:simulateRoutingKey];
+    [[[OsmAndApp instance] simulateRoutingObservable] notifyEvent];
 }
 
 - (void) setUseOsmLiveForRouting:(BOOL)useOsmLiveForRouting

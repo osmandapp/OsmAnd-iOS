@@ -22,7 +22,7 @@
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
-@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource> {
+@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource, OATilesEditingViewControllerDelegate> {
     
     NSArray *tableKeys;
     NSArray *tableValues;
@@ -139,6 +139,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 - (void) editClicked
 {
     OAOnlineTilesEditingViewController *editViewController = [[OAOnlineTilesEditingViewController alloc] initWithLocalItem:_localItem baseController:self.baseController];
+    editViewController.delegate = self;
     [self.navigationController pushViewController:editViewController animated:YES];
 }
 
@@ -443,6 +444,26 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
     purchasesViewController.openFromSplash = _openFromSplash;
     [self.navigationController pushViewController:purchasesViewController animated:NO];
+}
+
+#pragma mark - OATilesEditingViewControllerDelegate
+
+- (void) onTileSourceSaved:(LocalResourceItem *)item
+{
+    if ([item isKindOfClass:SqliteDbResourceItem.class])
+    {
+        SqliteDbResourceItem *sqlite = (SqliteDbResourceItem *)item;
+        self.regionTitle = sqlite.fileName;
+        [self initWithLocalSqliteDbItem:sqlite];
+    }
+    else if ([item isKindOfClass:OnlineTilesResourceItem.class])
+    {
+        OnlineTilesResourceItem *tileSource = (OnlineTilesResourceItem *)item;
+        self.regionTitle = tileSource.title;
+        [self initWithLocalOnlineSourceItem:tileSource];
+    }
+    
+    [self.tableView reloadData];
 }
 
 @end

@@ -347,6 +347,71 @@
     return _sqliteSource != nil ? [_sqliteSource supportsTileDownload] : YES;
 }
 
+- (void)clearAndUpdateSource
+{
+    if (_tileSource != nullptr)
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:[_app.cachePath stringByAppendingPathComponent:_tileSource->name.toNSString()] error:nil];
+        _app.resourcesManager->uninstallTilesResource(_tileSource->name);
+    }
+    else if (_sqliteSource != nil)
+    {
+        [[OAMapCreatorHelper sharedInstance] removeFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"]];
+    }
+    
+    if (_sourceFormat == EOASourceFormatOnline)
+    {
+        const auto item = [self createEditedTileSource];
+        
+        OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
+        _app.resourcesManager->installTilesResource(item);
+        
+        OnlineTilesResourceItem *res = [[OnlineTilesResourceItem alloc] init];
+        res.path = [_app.cachePath stringByAppendingPathComponent:_itemName];
+        res.title = _itemName;
+        
+        if (self.delegate)
+            [self.delegate onTileSourceSaved:res];
+    }
+    else if (_sourceFormat == EOASourceFormatSQLite)
+    {
+        NSMutableDictionary *params = [self generateSqlParams];
+        
+        NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
+        
+        if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
+        {
+            [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
+            SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+            item.path = [[[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
+            item.fileName = _itemName;
+            
+            if (self.delegate)
+                [self.delegate onTileSourceSaved:item];
+        }
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)updateTileSource
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager moveItemAtURL:[NSURL fileURLWithPath:[_app.cachePath stringByAppendingPathComponent:_tileSource->name.toNSString()]] toURL:[NSURL fileURLWithPath:[_app.cachePath stringByAppendingPathComponent:_itemName]] error:nil];
+    
+    _app.resourcesManager->uninstallTilesResource(_tileSource->name);
+    const auto& item = [self createEditedTileSource];
+    OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
+    _app.resourcesManager->installTilesResource(item);
+    [_app.localResourcesChangedObservable notifyEvent];
+    
+    OnlineTilesResourceItem *res = [[OnlineTilesResourceItem alloc] init];
+    res.path = [_app.cachePath stringByAppendingPathComponent:_itemName];
+    res.title = _itemName;
+    
+    if (self.delegate)
+        [self.delegate onTileSourceSaved:res];
+}
+
 - (IBAction)saveButtonPressed:(UIButton *)sender
 {
     NSMutableArray *errorArray = [NSMutableArray new];
@@ -381,7 +446,6 @@
         [errorArray addObject:OALocalizedString(@"res_expire_warning")];
     }
     
-    
     if (errorArray.count > 0)
     {
         NSString *title = [errorArray componentsJoinedByString: @"\n\n"];
@@ -395,77 +459,54 @@
     }
     else
     {
-        if (![self isOnlineSource])
+        if ([self needsClearCache] && [self isOnlineSource])
         {
-            // TODO
-            [[OAMapCreatorHelper sharedInstance] renameFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"] toName:[_itemName stringByAppendingPathExtension:@"sqlitedb"]];
-            
-        }
-        else if ([self needsClearCache])
-        {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_warning") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_warning") message:OALocalizedString(@"res_online_source_cache_alert") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                if (_tileSource != nullptr)
-                {
-                    [[NSFileManager defaultManager] removeItemAtPath:[_app.cachePath stringByAppendingPathComponent:_tileSource->name.toNSString()] error:nil];
-                    _app.resourcesManager->uninstallTilesResource(_tileSource->name);
-                }
-                else if (_sqliteSource != nil)
-                {
-                    [[OAMapCreatorHelper sharedInstance] removeFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"]];
-                }
-                
-                if (_sourceFormat == EOASourceFormatOnline)
-                {
-                    const auto item = [self createEditedTileSource];
-
-                    OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
-                    _app.resourcesManager->installTilesResource(item);
-                }
-                else if (_sourceFormat == EOASourceFormatSQLite)
-                {
-                    NSMutableDictionary *params = [self generateSqlParams];
-                                
-                    NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
-                    
-                    if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
-                        [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
-                }
-                [self.navigationController popViewControllerAnimated:YES];
+                [self clearAndUpdateSource];
             }]];
             [self presentViewController:alert animated:YES completion:nil];
         }
         else
         {
-            NSFileManager *fileManager = [NSFileManager defaultManager];
             if (_tileSource != nullptr && _sourceFormat == EOASourceFormatOnline)
             {
-                [fileManager moveItemAtURL:[NSURL fileURLWithPath:[_app.cachePath stringByAppendingPathComponent:_tileSource->name.toNSString()]] toURL:[NSURL fileURLWithPath:[_app.cachePath stringByAppendingPathComponent:_itemName]] error:nil];
-                
-                _app.resourcesManager->uninstallTilesResource(_tileSource->name);
-                const auto& item = [self createEditedTileSource];
-                OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
-                _app.resourcesManager->installTilesResource(item);
-                [_app.localResourcesChangedObservable notifyEvent];
+                [self updateTileSource];
             }
             else if (_sqliteSource != nil && _sourceFormat == EOASourceFormatSQLite)
             {
-                if ([_itemName isEqualToString:_sqliteSource.name])
-                {
-                    [_sqliteSource updateExpirationTime:_expireTimeMillis url:_itemURL];
-                }
-                else
-                {
-                    NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
-                    [[OAMapCreatorHelper sharedInstance] renameFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"] toName:path.lastPathComponent];
-                    OASQLiteTileSource *newSource = [[OASQLiteTileSource alloc] initWithFilePath:path];
-                    [newSource updateExpirationTime:_expireTimeMillis url:_itemURL];
-                }
+                [self updateSqliteSource];
             }
         }
         _baseController.dataInvalidated = YES;
         [self.navigationController popViewControllerAnimated:NO];
+    }
+}
+
+- (void) updateSqliteSource
+{
+    if ([_itemName isEqualToString:_sqliteSource.name])
+    {
+        [_sqliteSource updateExpirationTime:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile];
+        
+        if (self.delegate && _sqliteDbItem)
+            [self.delegate onTileSourceSaved:_sqliteDbItem];
+    }
+    else
+    {
+        OAMapCreatorHelper *helper = [OAMapCreatorHelper sharedInstance];
+        NSString *path = [[helper.filesDir stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
+        [helper renameFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"] toName:path.lastPathComponent];
+        OASQLiteTileSource *newSource = [[OASQLiteTileSource alloc] initWithFilePath:path];
+        [newSource updateExpirationTime:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile];
+        
+        SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+        item.path = path;
+        item.fileName = _itemName;
+        
+        if (self.delegate)
+            [self.delegate onTileSourceSaved:item];
     }
 }
 
@@ -474,9 +515,12 @@
     return _sqliteSource != nil && ![_sqliteSource supportsTileDownload];
 }
 
-- (BOOL)needsClearCache
+- (long) getExpireTimeMillis
 {
-    long expireTimeMillis;
+    if (!_expireTimeMinutes)
+        _expireTimeMinutes = @"";
+    
+    long expireTimeMillis = -1;
     NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
     if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
         && [_expireTimeMinutes integerValue] <= kMaxExpireMin
@@ -487,6 +531,12 @@
         else
             expireTimeMillis = [_expireTimeMinutes integerValue] * 60 * 1000;
     }
+    return expireTimeMillis;
+}
+
+- (BOOL)needsClearCache
+{
+    long expireTimeMillis = [self getExpireTimeMillis];
     
     if (_tileSource != nullptr)
     {
@@ -517,21 +567,7 @@
 
 - (BOOL)hasChangesBeenMade
 {
-    long expireTimeMillis;
-    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-    if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
-        && [_expireTimeMinutes integerValue] <= kMaxExpireMin
-        && [_expireTimeMinutes integerValue] >= 0)
-    {
-        if ([_expireTimeMinutes isEqualToString:@""])
-            expireTimeMillis = -1;
-        else
-            expireTimeMillis = [_expireTimeMinutes integerValue] * 60 * 1000;
-    }
-    else
-    {
-        return YES;
-    }
+    long expireTimeMillis = [self getExpireTimeMillis];
     
     if (_tileSource != nullptr)
     {

@@ -108,7 +108,7 @@
 - (void)renameFile:(NSString *)fileName toName:(NSString *)newName
 {
     NSString *path = self.files[fileName];
-    NSString *newPath = [[path stringByDeletingLastPathComponent] stringByAppendingPathComponent:newName];
+    NSString *newPath = [self.filesDir stringByAppendingPathComponent:newName];;
 
     if ([path isEqualToString:newPath])
         return;
@@ -117,7 +117,7 @@
 
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:self.files];
     [dictionary removeObjectForKey:fileName];
-    [dictionary setValue:newName forKey:newPath];
+    [dictionary setValue:newPath forKey:newName];
     _files = [NSDictionary dictionaryWithDictionary:dictionary];
 
     [_sqlitedbResourcesChangedObservable notifyEvent];

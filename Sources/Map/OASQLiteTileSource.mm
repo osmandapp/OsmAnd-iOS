@@ -520,7 +520,7 @@
     });
 }
 
-- (void) updateExpirationTime:(long)expireTimeMillis url:(NSString *)url
+- (void) updateExpirationTime:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile
 {
     dispatch_async(_dbQueue, ^{
         
@@ -528,18 +528,29 @@
         
         if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
         {
-            NSString *query = @"UPDATE info SET timeSupported = ?, timecolumn = ?, expireminutes = ?, url = ?";
+            NSString *query = @"UPDATE info SET timeSupported = ?, timecolumn = ?, expireminutes = ?, url = ?, ellipsoid = ?, minzoom = ?, maxzoom = ?";
             
             const char *update_stmt = [query UTF8String];
             sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
 
             NSString *timeSupported = expireTimeMillis != -1 ? @"yes" : @"no";
             NSString *timeInMinutes = expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", expireTimeMillis / 60000] : @"";
+            int minZ = minZoom;
+            int maxZ = maxZoom;
+            if (_inversiveZoom)
+            {
+                int cachedMax = maxZ;
+                maxZ = 17 - minZ;
+                minZ = 17 - cachedMax;
+            }
             
             sqlite3_bind_text(statement, 1, [timeSupported UTF8String], -1, 0);
             sqlite3_bind_text(statement, 2, [timeSupported UTF8String], -1, 0);
             sqlite3_bind_text(statement, 3, [timeInMinutes UTF8String], -1, 0);
             sqlite3_bind_text(statement, 4, [url UTF8String], -1, 0);
+            sqlite3_bind_int(statement, 5, isEllipticYTile ? 1 : 0);
+            sqlite3_bind_text(statement, 6, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
+            sqlite3_bind_text(statement, 7, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
 
             sqlite3_step(statement);
             sqlite3_finalize(statement);

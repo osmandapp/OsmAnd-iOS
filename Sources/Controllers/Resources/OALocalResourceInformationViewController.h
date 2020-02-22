@@ -12,6 +12,12 @@
 #import "OAWorldRegion.h"
 #import "OAResourcesBaseViewController.h"
 
+@protocol OALocalResourceChangeDelegate <NSObject>
+
+- (void) onLocalItemChanged:(OAResourcesBaseViewController__LocalResourceItem *)item;
+
+@end
+
 
 @interface OALocalResourceInformationViewController : OACompoundViewController
 

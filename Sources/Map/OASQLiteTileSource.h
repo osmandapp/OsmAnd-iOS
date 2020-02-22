@@ -53,6 +53,7 @@
 - (BOOL) expired:(NSNumber *)time;
 - (int) getTileSize;
 - (BOOL) supportsTileDownload;
+- (void) updateExpirationTime:(long)expireTimeMillis url:(NSString *)url;
 
 - (void) setTileSize:(int)tileSize;
 

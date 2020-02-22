@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IJe-CP-IdY">
-                        <rect key="frame" x="16" y="4" width="336" height="36"/>
+                        <rect key="frame" x="15" y="4" width="337" height="36"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="h0Y-sQ-bES"/>
@@ -39,7 +39,7 @@
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="eRC-rd-TEK" secondAttribute="trailing" constant="16" id="0Ad-kt-xYo"/>
                     <constraint firstItem="IJe-CP-IdY" firstAttribute="trailing" secondItem="eRC-rd-TEK" secondAttribute="leading" constant="-16" id="0Wv-vN-750"/>
-                    <constraint firstItem="IJe-CP-IdY" firstAttribute="leading" secondItem="ayZ-dq-azB" secondAttribute="leading" constant="16" id="Jff-zm-LL9"/>
+                    <constraint firstItem="IJe-CP-IdY" firstAttribute="leading" secondItem="ayZ-dq-azB" secondAttribute="leadingMargin" id="Jff-zm-LL9"/>
                     <constraint firstItem="eRC-rd-TEK" firstAttribute="centerY" secondItem="ayZ-dq-azB" secondAttribute="centerY" id="PBU-1d-79m"/>
                     <constraint firstItem="IJe-CP-IdY" firstAttribute="top" secondItem="ayZ-dq-azB" secondAttribute="top" constant="4" id="X0T-jI-QLG"/>
                     <constraint firstAttribute="bottom" secondItem="IJe-CP-IdY" secondAttribute="bottom" constant="4" id="l8J-qM-s4B"/>

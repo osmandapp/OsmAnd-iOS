@@ -533,6 +533,35 @@
     });
 }
 
+- (void) updateExpirationTime:(long)expireTimeMillis url:(NSString *)url
+{
+    dispatch_async(_dbQueue, ^{
+        
+        sqlite3_stmt *statement;
+        
+        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
+        {
+            NSString *query = @"UPDATE info SET timeSupported = ?, timecolumn = ?, expireminutes = ?, url = ?";
+            
+            const char *update_stmt = [query UTF8String];
+            sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
+
+            NSString *timeSupported = expireTimeMillis != -1 ? @"yes" : @"no";
+            NSString *timeInMinutes = expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", expireTimeMillis / 60000] : @"";
+            
+            sqlite3_bind_text(statement, 1, [timeSupported UTF8String], -1, 0);
+            sqlite3_bind_text(statement, 2, [timeSupported UTF8String], -1, 0);
+            sqlite3_bind_text(statement, 3, [timeInMinutes UTF8String], -1, 0);
+            sqlite3_bind_text(statement, 4, [url UTF8String], -1, 0);
+
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(_db);
+        }
+    });
+}
+
 - (void) setTileSize:(int)tileSize
 {
     _tileSize = tileSize;

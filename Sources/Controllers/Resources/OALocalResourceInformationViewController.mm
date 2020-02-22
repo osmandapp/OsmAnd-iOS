@@ -22,7 +22,7 @@
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
-@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource, OAOnlineTilesEditingViewControllerDelegate> {
+@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource> {
     
     NSArray *tableKeys;
     NSArray *tableValues;
@@ -139,7 +139,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 - (void) editClicked
 {
     OAOnlineTilesEditingViewController *editViewController = [[OAOnlineTilesEditingViewController alloc] initWithLocalItem:_localItem baseController:self.baseController];
-    editViewController.delegate = self;
     [self.navigationController pushViewController:editViewController animated:YES];
 }
 
@@ -444,13 +443,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
     purchasesViewController.openFromSplash = _openFromSplash;
     [self.navigationController pushViewController:purchasesViewController animated:NO];
-}
-
-#pragma mark - OAOnlineTilesEditingViewControllerDelegate
-
-- (void) onTileSourceSaved
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

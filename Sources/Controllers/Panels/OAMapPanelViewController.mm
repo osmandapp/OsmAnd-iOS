@@ -278,7 +278,7 @@ typedef enum
 
 - (void) viewWillLayoutSubviews
 {
-    if ([self contextMenuMode])
+    if ([self contextMenuMode] && ![self.targetMenuView needsManualContextMode])
     {
         [self doUpdateContextMenuToolbarLayout];
     }

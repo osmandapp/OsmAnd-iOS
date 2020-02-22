@@ -190,6 +190,9 @@
 {
     [super viewDidLoad];
     
+    [self.navigationController.interactivePopGestureRecognizer addTarget:self
+                                                                  action:@selector(swipeToCloseRecognized:)];
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = 44.0;
@@ -339,6 +342,11 @@
     return params;
 }
 
+- (BOOL) isOnlineSource
+{
+    return _sqliteSource != nil ? [_sqliteSource supportsTileDownload] : YES;
+}
+
 - (IBAction)saveButtonPressed:(UIButton *)sender
 {
     NSMutableArray *errorArray = [NSMutableArray new];
@@ -347,7 +355,10 @@
         [errorArray addObject:OALocalizedString(@"res_name_warning")];
     
     if ([_itemURL isEqualToString:(@"")])
-        [errorArray addObject:OALocalizedString(@"res_url_warning")];
+    {
+        if ([self isOnlineSource])
+            [errorArray addObject:OALocalizedString(@"res_url_warning")];
+    }
     
     if (_minZoom >= _maxZoom)
         [errorArray addObject:OALocalizedString(@"res_zoom_warning")];
@@ -384,43 +395,124 @@
     }
     else
     {
-        if (_tileSource != nullptr)
+        if (![self isOnlineSource])
         {
-            [[NSFileManager defaultManager] removeItemAtPath:[_app.cachePath stringByAppendingPathComponent:_tileSource->name.toNSString()] error:nil];
-            _app.resourcesManager->uninstallTilesResource(_tileSource->name);
-        }
-        else if (_sqliteSource != nil)
-        {
-            [[OAMapCreatorHelper sharedInstance] removeFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"]];
-        }
-        
-        if (_sourceFormat == EOASourceFormatOnline)
-        {
-            const auto item = [self createEditedTileSource];
-
-            OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
-            _app.resourcesManager->installTilesResource(item);
-        }
-        else if (_sourceFormat == EOASourceFormatSQLite)
-        {
-            NSMutableDictionary *params = [self generateSqlParams];
-                        
-            NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
+            // TODO
+            [[OAMapCreatorHelper sharedInstance] renameFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"] toName:[_itemName stringByAppendingPathExtension:@"sqlitedb"]];
             
-            if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
-                [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
         }
-        
+        else if ([self needsClearCache])
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_warning") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                if (_tileSource != nullptr)
+                {
+                    [[NSFileManager defaultManager] removeItemAtPath:[_app.cachePath stringByAppendingPathComponent:_tileSource->name.toNSString()] error:nil];
+                    _app.resourcesManager->uninstallTilesResource(_tileSource->name);
+                }
+                else if (_sqliteSource != nil)
+                {
+                    [[OAMapCreatorHelper sharedInstance] removeFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"]];
+                }
+                
+                if (_sourceFormat == EOASourceFormatOnline)
+                {
+                    const auto item = [self createEditedTileSource];
+
+                    OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
+                    _app.resourcesManager->installTilesResource(item);
+                }
+                else if (_sourceFormat == EOASourceFormatSQLite)
+                {
+                    NSMutableDictionary *params = [self generateSqlParams];
+                                
+                    NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
+                    
+                    if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
+                        [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
+                }
+                [self.navigationController popViewControllerAnimated:YES];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else
+        {
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            if (_tileSource != nullptr && _sourceFormat == EOASourceFormatOnline)
+            {
+                [fileManager moveItemAtURL:[NSURL fileURLWithPath:[_app.cachePath stringByAppendingPathComponent:_tileSource->name.toNSString()]] toURL:[NSURL fileURLWithPath:[_app.cachePath stringByAppendingPathComponent:_itemName]] error:nil];
+                
+                _app.resourcesManager->uninstallTilesResource(_tileSource->name);
+                const auto& item = [self createEditedTileSource];
+                OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
+                _app.resourcesManager->installTilesResource(item);
+                [_app.localResourcesChangedObservable notifyEvent];
+            }
+            else if (_sqliteSource != nil && _sourceFormat == EOASourceFormatSQLite)
+            {
+                if ([_itemName isEqualToString:_sqliteSource.name])
+                {
+                    [_sqliteSource updateExpirationTime:_expireTimeMillis url:_itemURL];
+                }
+                else
+                {
+                    NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
+                    [[OAMapCreatorHelper sharedInstance] renameFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"] toName:path.lastPathComponent];
+                    OASQLiteTileSource *newSource = [[OASQLiteTileSource alloc] initWithFilePath:path];
+                    [newSource updateExpirationTime:_expireTimeMillis url:_itemURL];
+                }
+            }
+        }
         _baseController.dataInvalidated = YES;
         [self.navigationController popViewControllerAnimated:NO];
-        if (_delegate)
-            [_delegate onTileSourceSaved];
     }
 }
 
 - (BOOL) isOfflineSQLiteDB
 {
-    return _sqliteSource != nil && ![OASQLiteTileSource isOnlineTileSource:_sqliteDbItem.path];
+    return _sqliteSource != nil && ![_sqliteSource supportsTileDownload];
+}
+
+- (BOOL)needsClearCache
+{
+    long expireTimeMillis;
+    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
+        && [_expireTimeMinutes integerValue] <= kMaxExpireMin
+        && [_expireTimeMinutes integerValue] >= 0)
+    {
+        if ([_expireTimeMinutes isEqualToString:@""])
+            expireTimeMillis = -1;
+        else
+            expireTimeMillis = [_expireTimeMinutes integerValue] * 60 * 1000;
+    }
+    
+    if (_tileSource != nullptr)
+    {
+        if ((![_itemName isEqualToString:_tileSource->name.toNSString()] ||
+        ![_itemURL isEqualToString:_tileSource->urlToLoad.toNSString()] || expireTimeMillis != _tileSource->expirationTimeMillis) &&
+        _minZoom == _tileSource->minZoom &&
+        _maxZoom == _tileSource->maxZoom &&
+        _isEllipticYTile == _tileSource->ellipticYTile &&
+        _sourceFormat == EOASourceFormatOnline)
+        {
+            return NO;
+        }
+    }
+    else if (_sqliteSource != nil)
+    {
+        if ((![_itemName isEqualToString:_sqliteSource.name] ||
+        ![_itemURL isEqualToString:_sqliteSource.urlTemplate] || expireTimeMillis != _sqliteSource.getExpirationTimeMillis) &&
+        _minZoom == _sqliteSource.minimumZoomSupported &&
+        _maxZoom == _sqliteSource.maximumZoomSupported &&
+        _isEllipticYTile == _sqliteSource.isEllipticYTile &&
+        _sourceFormat == EOASourceFormatSQLite)
+        {
+            return NO;
+        }
+    }
+    return YES;
 }
 
 - (BOOL)hasChangesBeenMade
@@ -470,16 +562,31 @@
     return NO;
 }
 
+- (void) swipeToCloseRecognized:(UIGestureRecognizer *)recognizer
+{
+    if ([self hasChangesBeenMade])
+    {
+        recognizer.enabled = NO;
+        recognizer.enabled = YES;
+        [self showExitWithoutChangesDialog];
+    }
+}
+
+- (void)showExitWithoutChangesDialog
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_editing_lost_changes_title") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (IBAction)backButtonPressed:(UIButton *)sender
 {
     if ([self hasChangesBeenMade])
     {
-       UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_editing_lost_changes_title") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
-       [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
-       [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-           [self.navigationController popViewControllerAnimated:YES];
-       }]];
-       [self presentViewController:alert animated:YES completion:nil];
+        [self showExitWithoutChangesDialog];
     }
     else
        [self.navigationController popViewControllerAnimated:YES];

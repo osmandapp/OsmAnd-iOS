@@ -1610,3 +1610,8 @@
 "res_source_sqlite" = "Arquivo SQLiteDB";
 "res_source_one_per_tile" = "Um arquivo de imagem por mosaico";
 "res_zoom_invalid_value" = "Os valores do zoom devem estar no intervalo de 1 a 22";
+"online_raster_map" = "Mapa raster online";
+"offline_raster_map" = "Mapa raster offline";
+"offline_raster_maps" = "Mapas de varredura offline";
+"res_edit_map_source" = "Editar fonte do mapa";
+"res_offlineSQL_URL_warning" = "Não suportado para este tipo de mapa";

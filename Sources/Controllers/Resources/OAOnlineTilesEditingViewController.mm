@@ -489,7 +489,7 @@
 {
     if ([_itemName isEqualToString:_sqliteSource.name])
     {
-        [_sqliteSource updateInfoTableWithTime:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile];
+        [_sqliteSource updateInfo:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile];
         
         if (self.delegate && _sqliteDbItem)
             [self.delegate onTileSourceSaved:_sqliteDbItem];
@@ -500,7 +500,7 @@
         NSString *path = [[helper.filesDir stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
         [helper renameFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"] toName:path.lastPathComponent];
         OASQLiteTileSource *newSource = [[OASQLiteTileSource alloc] initWithFilePath:path];
-        [newSource updateInfoTableWithTime:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile];
+        [newSource updateInfo:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile];
         
         SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
         item.path = path;

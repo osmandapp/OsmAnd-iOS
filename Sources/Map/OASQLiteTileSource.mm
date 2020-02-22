@@ -674,6 +674,7 @@
                 {
                     NSString *urlTemplate = [self.class getValueOf:0 statement:statement];
                     res = urlTemplate != nil && urlTemplate.length > 0;
+                    break;
                 }
             }
             sqlite3_finalize(statement);

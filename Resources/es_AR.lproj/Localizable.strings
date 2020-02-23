@@ -1614,3 +1614,7 @@
 "online_raster_map" = "Mapa de trama en línea";
 "offline_raster_map" = "Mapa de trama sin conexión";
 "offline_raster_maps" = "Mapas de tramas sin conexión";
+"res_edit_map_source" = "Editar fuente del mapa";
+"res_offlineSQL_URL_warning" = "No admitido para este tipo de mapa";
+"shared_string_warning" = "Advertencia";
+"res_online_source_cache_alert" = "Al aplicar estos cambios, los datos almacenados serán borrados para esta fuente de teselas";

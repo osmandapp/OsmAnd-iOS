@@ -1572,3 +1572,8 @@
 "rendering_attr_piste_difficulty_connection_name" = "Conexión";
 "rendering_attr_buildings15zoom_name" = "Edificios en zoom 15";
 "rendering_attr_streetLightingNight_name" = "Mostrar sólo por la noche";
+"map_settings_install_maps" = "Elija mapas para instalar o actualizar";
+"map_settings_install_more" = "Instalar más...";
+"available_map_styles" = "Estilos de mapa disponibles";
+"res_confirmation_delete" = "¿Está seguro de querer borrar %@?";
+"shared_string_maximum" = "Máximo";

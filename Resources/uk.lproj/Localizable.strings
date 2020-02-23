@@ -371,9 +371,9 @@
 "product_title_wiki" = "Вікіпедія";
 "product_desc_wiki" = "Дані Вікіпедії";
 "product_desc_ext_wiki" = "Отримайте відомості про цікаві точки з Вікіпедії. Якщо у вашій кишені немає довідника — просто увімкніть втулок Вікіпедії та насолоджуйтеся статтями про об’єкти навколо вас.";
-"product_title_srtm" = "Поземистості";
-"product_desc_srtm" = "Відображення поземистостей";
-"product_desc_ext_srtm" = "Цей втулок забезпечує поземистості та рельєф місцевості, які можуть відображатися в автономному режимі мапи OsmAnd. Поземистості надають відомості про висоти області в той час як рельєф місцевості є їхньою візуалізацією. Див. назви гірських вершин та особливостей рельєфу місцевості за допомогою цього втулка.\n\nВсесвітні дані (між 70° північної широти та 70° південної широти) засновані на вимірах за допомогою SRTM (Shuttle Radar Topography Mission) і ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), інструменту відмальовування на борту Terra, флагмані супутнику NASA's Earth Observing System. ASTER є результатом спільних зусиль між НАСА, японським Міністерством економіки, торгівлі й промисловості (METI) та Японськими космічними системами (J-spacesystems).";
+"product_title_srtm" = "Горизонталі";
+"product_desc_srtm" = "Відображення горизонталей";
+"product_desc_ext_srtm" = "Цей втулок забезпечує горизонталі та рельєф місцевості, які можуть відображатися в автономному режимі мапи OsmAnd. Горизонталі надають відомості про висоти області в той час як рельєф місцевості є їхньою візуалізацією. Див. назви гірських вершин та особливостей рельєфу місцевості за допомогою цього втулка.\n\nВсесвітні дані (між 70° північної широти та 70° південної широти) засновані на вимірах за допомогою SRTM (Shuttle Radar Topography Mission) і ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), інструменту відмальовування на борту Terra, флагмані супутнику NASA's Earth Observing System. ASTER є результатом спільних зусиль між НАСА, японським Міністерством економіки, торгівлі й промисловості (METI) та Японськими космічними системами (J-spacesystems).";
 "my_location" = "Моє місцезнаходження";
 "all_categories" = "Усі категорії";
 "get_unlimited_access" = "Отримати необмежений доступ";
@@ -440,8 +440,8 @@
 "plugin_popup_wiki_desc" = "Щоб почати користуватися втулком Вікіпедії, будь ласка, спершу завантажте дані Вікіпедії для будь-якого регіону";
 "plugin_popup_wiki_ask" = "Для завантаження даних Вікіпедії Вам необхідно активувати плагін: <b>Вікіпедія</b>";
 "plugin_popup_srtm_title" = "Завантажити контурні лінії";
-"plugin_popup_srtm_desc" = "Щоб почати користуватися втулком „Поземистості“, будь ласка, спершу завантажте контурні лінії деякого регіону";
-"plugin_popup_srtm_ask" = "Для завантаження поземистостей Вам необхідно активувати плагін: <b>Поземистості</b>";
+"plugin_popup_srtm_desc" = "Щоб почати користуватися втулком „Горизонталі“, будь ласка, спершу завантажте контурні лінії деякого регіону";
+"plugin_popup_srtm_ask" = "Для завантаження горизонталей Вам необхідно активувати плагін: <b>Горизонталі</b>";
 "plugin_popup_nautical_title" = "Завантажте морські мапи";
 "plugin_popup_nautical_desc" = "Будь ласка, завантажте спочатку морські мапи.\nПотім перейдіть в <b>Налаштування мапи</b> » <b>Тип мапи</b> та увімкніть стиль <b>Морський</b> (Nautical)";
 "plugin_popup_trip_planning_ask" = "Будь ласка, активуйте спочатку плагін: <b>Планування подорожей</b>";
@@ -657,7 +657,7 @@
 "show_warnings_descr" = "Налаштувати попередження дорожнього руху (обмеження швидкості, вимушені зупинки, лежачі поліцейські, тунелі), попередження про камери контролю швидкості та відомості про рух по смугах";
 "speak_title" = "Оголошувати…";
 "speak_descr" = "Налаштувати оголошення назв вулиць, дорожніх обмежень (вимушені зупинки, лежачі поліцейські), попередження про камери контролю швидкості, обмеження швидкості";
-"keep_informing" = "Повторювати навігаційні інструкції";
+"keep_informing" = "Повторювати навігаційні вказівки";
 "keep_informing_descr" = "Повторювати навігаційні інструкції через регулярні проміжки часу";
 "arrival_distance" = "Оголошення про прибуття";
 "arrival_distance_descr" = "Як швидко Ви хочете чути повідомлення про прибуття?";
@@ -936,7 +936,7 @@
 "wikivoyage_offline" = "Вікімандри в автономному режимі";
 "unlimited_downloads" = "Необмежені завантаження";
 "wikipedia_offline" = "Вікіпедія в автономному режимі";
-"contour_lines_hillshade_maps" = "Поземистості і Мапи рельєфу місцевості";
+"contour_lines_hillshade_maps" = "Горизонталі і Мапи рельєфу місцевості";
 "index_item_depth_contours_osmand_ext" = "Контури морських глибин";
 "donation_to_osm" = "Пожертва для спільноти OpenStreetMap";
 "in_app_purchase" = "Купівля в застосунку";
@@ -1319,7 +1319,7 @@
 "rendering_attr_surface_stone_name" = "Камінь";
 "rendering_attr_highway_class_road_name" = "Дорога";
 "rendering_value_bicycle_name" = "Велосипед";
-"rendering_attr_contourDensity_name" = "Крок поземистостей";
+"rendering_attr_contourDensity_name" = "Щільність горизонталей";
 "routeInfo_piste_type_name" = "Складність траси";
 "rendering_attr_showSurfaceGrade_name" = "Показувати якість доріг";
 "routing_attr_avoid_share_taxi_name" = "Уникати маршрутних таксі";
@@ -1364,7 +1364,7 @@
 "routing_attr_avoid_ice_roads_fords_description" = "Уникає льодових доріг і бродів.";
 "rendering_attr_hikingRoutesOSMC_description" = "Візуалізація шляху відповідно до треків OSMC.";
 "rendering_value_yellow_name" = "Жовтий";
-"rendering_attr_contourColorScheme_description" = "Колірна схема поземистостей";
+"rendering_attr_contourColorScheme_description" = "Колірна схема горизонталей";
 "routing_attr_width_description" = "Вкажіть дозволену межу ширини транспортного засобу на маршрутах.";
 "routing_attr_allow_intermediate_name" = "Дозволити проміжні маршрути";
 "routeInfo_surface_name" = "Поверхня";
@@ -1416,7 +1416,7 @@
 "routing_attr_avoid_ferry_description" = "Уникати поромних переправ";
 "rendering_value_highContrastRoads_name" = "Контрастні дороги";
 "rendering_attr_piste_difficulty_easy_name" = "Легко";
-"rendering_attr_contourLines_name" = "Показувати поземистості";
+"rendering_attr_contourLines_name" = "Показувати горизонталі";
 "rendering_attr_hideProposed_name" = "Заплановані обʼєкти";
 "rendering_attr_smoothness_very_horrible_name" = "Дуже жахлива";
 "routing_attr_avoid_ferries_name" = "Без поромних переправ";
@@ -1457,7 +1457,7 @@
 "rendering_attr_showLez_description" = "Показати на мапі зони низьких викидів. Не впливає на маршрутизацію.";
 "rendering_attr_surface_compacted_name" = "Ущільнена";
 "routing_attr_allow_expert_name" = "Дозволити експертні маршрути";
-"rendering_value_walkingRoutesOSMC_name" = "Розмальовування відповідно пішохідній символіці OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "Розмальовування відповідно пішій символіці OSMC";
 "rendering_attr_piste_type_connection_name" = "З'єднання";
 "rendering_value_translucent_orange_name" = "Напівпрозорий помаранчевий";
 "rendering_value_light_brown_name" = "Світло-коричневий";
@@ -1473,7 +1473,7 @@
 "rendering_attr_tracktype_grade3_name" = "Переважно тверде";
 "routing_attr_avoid_motorway_description" = "Уникати автомагістралей";
 "routing_attr_avoid_tram_description" = "Уникати трамваїв";
-"rendering_attr_contourDensity_description" = "Крок поземистостей";
+"rendering_attr_contourDensity_description" = "Щільність горизонталей";
 "rendering_attr_hideIcons_name" = "Значки POI";
 "routing_attr_freeride_policy_description" = "\"Безкоштовні проїзди\" та \"позатрекові\" є неофіційними маршрутами та проїздами. Зазвичай недоглянуті, непомічені чиновниками і не перевіряються по вечорам. Заходьте лише на власний ризик.";
 "routing_attr_avoid_bus_description" = "Уникати автобусів і тролейбусів";
@@ -1512,7 +1512,7 @@
 "rendering_value_default_name" = "Усталено";
 "routeInfo_piste_difficulty_name" = "Складність траси";
 "routing_attr_allow_classic_only_name" = "Дозволити тільки класичні маршрути";
-"rendering_attr_contourWidth_name" = "Товщина поземистостей";
+"rendering_attr_contourWidth_name" = "Товщина горизонталей";
 "rendering_attr_surface_grass_name" = "Трава";
 "rendering_attr_showCycleRoutes_name" = "Показати веломаршрути";
 "rendering_attr_streetLighting_name" = "Вуличне освітлення";
@@ -1542,17 +1542,17 @@
 "rendering_value_walkingRoutesScopeOSMC_name" = "Забарвлення згідно приналежності мережі";
 "rendering_attr_surface_dirt_name" = "Бруд";
 "rendering_attr_surface_snow_name" = "Сніг";
-"rendering_attr_contourColorScheme_name" = "Колірна схема поземистостей";
+"rendering_attr_contourColorScheme_name" = "Колірна схема горизонталей";
 "rendering_attr_surface_asphalt_name" = "Асфальт";
 "rendering_attr_hideWoodScrubs_name" = "Дерева та кущі";
 "rendering_attr_highway_class_service_name" = "Проїзд";
 "routing_attr_piste_type_skitour_description" = "Маршрути для лижних турів.";
 "rendering_attr_roadColors_name" = "Кольорова схема доріг";
-"rendering_attr_highway_class_footway_name" = "Пішохідна доріжка";
+"rendering_attr_highway_class_footway_name" = "Піша доріжка";
 "rendering_attr_highway_class_track_grade2_name" = "2 клас";
 "rendering_attr_piste_difficulty_advanced_name" = "Розширений";
 "routing_attr_difficulty_preference_description" = "Надавати перевагу маршрутам такої складності, хоча маршрутизація через складніші або легші треки все ж можлива, якщо коротша.";
-"rendering_attr_contourWidth_description" = "Товщина поземистостей";
+"rendering_attr_contourWidth_description" = "Товщина горизонталей";
 "routing_attr_freeride_policy_name" = "Позатрековий";
 "routeInfo_steepness_name" = "Крутість";
 "rendering_attr_tracktype_grade1_name" = "Тверде (з покриттям)";
@@ -1612,3 +1612,5 @@
 "offline_raster_map" = "Безмережева растрова мапа";
 "offline_raster_maps" = "Безмережеві растрові мапи";
 "res_offlineSQL_URL_warning" = "Не підтримується для цього виду мапи";
+"shared_string_warning" = "Попередження";
+"res_online_source_cache_alert" = "Застосування цих змін очистить кешовані дані для цього джерела плитки";

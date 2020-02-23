@@ -1615,3 +1615,5 @@
 "offline_raster_maps" = "Mapas de varredura offline";
 "res_edit_map_source" = "Editar fonte do mapa";
 "res_offlineSQL_URL_warning" = "Não suportado para este tipo de mapa";
+"shared_string_warning" = "Alerta";
+"res_online_source_cache_alert" = "A aplicação dessas alterações limpará os dados em cache dessa origem de bloco";

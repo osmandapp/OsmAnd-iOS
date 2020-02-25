@@ -573,28 +573,32 @@
     
     if (_tileSource != nullptr)
     {
-        if (![_itemName isEqualToString:_tileSource->name.toNSString()] ||
-        ![_itemURL isEqualToString:_tileSource->urlToLoad.toNSString()] ||
-        _minZoom != _tileSource->minZoom ||
-        _maxZoom != _tileSource->maxZoom ||
-        expireTimeMillis != _tileSource->expirationTimeMillis ||
-        _isEllipticYTile != _tileSource->ellipticYTile ||
-        _sourceFormat != EOASourceFormatOnline)
-        {
-            return YES;
-        }
+        return (![_itemName isEqualToString:_tileSource->name.toNSString()] ||
+                ![_itemURL isEqualToString:_tileSource->urlToLoad.toNSString()] ||
+                _minZoom != _tileSource->minZoom ||
+                _maxZoom != _tileSource->maxZoom ||
+                expireTimeMillis != _tileSource->expirationTimeMillis ||
+                _isEllipticYTile != _tileSource->ellipticYTile ||
+                _sourceFormat != EOASourceFormatOnline);
     }
     else if (_sqliteSource != nil)
     {
-        if (![_itemName isEqualToString:_sqliteSource.name] ||
-        ![_itemURL isEqualToString:_sqliteSource.urlTemplate] ||
-        _minZoom != _sqliteSource.minimumZoomSupported ||
-        _maxZoom != _sqliteSource.maximumZoomSupported ||
-        expireTimeMillis != _sqliteSource.getExpirationTimeMillis ||
-        _isEllipticYTile != _sqliteSource.isEllipticYTile ||
-        _sourceFormat != EOASourceFormatSQLite)
+        if ([_sqliteSource supportsTileDownload])
         {
-            return YES;
+            return (![_itemName isEqualToString:_sqliteSource.name] ||
+                    ![_itemURL isEqualToString:_sqliteSource.urlTemplate] ||
+                    _minZoom != _sqliteSource.minimumZoomSupported ||
+                    _maxZoom != _sqliteSource.maximumZoomSupported ||
+                    expireTimeMillis != _sqliteSource.getExpirationTimeMillis ||
+                    _isEllipticYTile != _sqliteSource.isEllipticYTile ||
+                    _sourceFormat != EOASourceFormatSQLite);
+        }
+        else
+        {
+            return (![_itemName isEqualToString:_sqliteSource.name] ||
+                    _minZoom != _sqliteSource.minimumZoomSupported ||
+                    _maxZoom != _sqliteSource.maximumZoomSupported ||
+                    _isEllipticYTile != _sqliteSource.isEllipticYTile);
         }
     }
     return NO;

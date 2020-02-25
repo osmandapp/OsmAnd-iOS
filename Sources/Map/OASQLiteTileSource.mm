@@ -179,6 +179,11 @@
                         if (set == 1)
                             _isEllipsoid = YES;
                     }
+                    else
+                    {
+                        _isEllipsoid = NO;
+                        [self addInfoColumnInt:@"ellipsoid" value:0];
+                    }
                     NSNumber *invertedY = [mapper objectForKey:@"inverted_y"];
                     if(invertedY)
                     {
@@ -233,6 +238,28 @@
             sqlite3_prepare_v2(_db, sql_stmt, -1, &statement, NULL);
             
             sqlite3_bind_text(statement, 1, [value UTF8String], -1, 0);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(_db);
+        }
+    });
+}
+
+- (void)addInfoColumnInt:(NSString *)columnName value:(int)value
+{
+    dispatch_async(_dbQueue, ^{
+    
+        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
+        {
+            const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE info ADD COLUMN %@ INTEGER", columnName] UTF8String];
+            sqlite3_exec(_db, sql_stmt, NULL, NULL, NULL);
+            
+            sqlite3_stmt *statement;
+            sql_stmt = [[NSString stringWithFormat:@"UPDATE info SET %@ = ?", columnName] UTF8String];
+            sqlite3_prepare_v2(_db, sql_stmt, -1, &statement, NULL);
+            
+            sqlite3_bind_int(statement, 1, value);
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             
@@ -528,7 +555,8 @@
         
         if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
         {
-            NSString *query = @"UPDATE info SET timeSupported = ?, timecolumn = ?, expireminutes = ?, url = ?, ellipsoid = ?, minzoom = ?, maxzoom = ?";
+            BOOL isOnlineSqlite = [self supportsTileDownload];
+            NSString *query = isOnlineSqlite ? @"UPDATE info SET timeSupported = ?, timecolumn = ?, expireminutes = ?, url = ?, ellipsoid = ?, minzoom = ?, maxzoom = ?" : @"UPDATE info SET ellipsoid = ?, minzoom = ?, maxzoom = ?";
             
             const char *update_stmt = [query UTF8String];
             sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
@@ -544,13 +572,22 @@
                 minZ = 17 - cachedMax;
             }
             
-            sqlite3_bind_text(statement, 1, [timeSupported UTF8String], -1, 0);
-            sqlite3_bind_text(statement, 2, [timeSupported UTF8String], -1, 0);
-            sqlite3_bind_text(statement, 3, [timeInMinutes UTF8String], -1, 0);
-            sqlite3_bind_text(statement, 4, [url UTF8String], -1, 0);
-            sqlite3_bind_int(statement, 5, isEllipticYTile ? 1 : 0);
-            sqlite3_bind_text(statement, 6, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
-            sqlite3_bind_text(statement, 7, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
+            if (isOnlineSqlite)
+            {
+                sqlite3_bind_text(statement, 1, [timeSupported UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 2, [timeSupported UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 3, [timeInMinutes UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 4, [url UTF8String], -1, 0);
+                sqlite3_bind_int(statement, 5, isEllipticYTile ? 1 : 0);
+                sqlite3_bind_text(statement, 6, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 7, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
+            }
+            else
+            {
+                sqlite3_bind_int(statement, 1, isEllipticYTile ? 1 : 0);
+                sqlite3_bind_text(statement, 2, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 3, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
+            }
 
             sqlite3_step(statement);
             sqlite3_finalize(statement);

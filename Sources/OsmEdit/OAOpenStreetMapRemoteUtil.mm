@@ -264,8 +264,6 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     xmlWriter.writeAttribute(QStringLiteral("version"), QStringLiteral("0.6"));
     xmlWriter.writeAttribute(QStringLiteral("generator"), QString::fromNSString([self getAppFullName]));
     xmlWriter.writeStartElement(QString::fromNSString([OAOsmPoint getStringAction][[NSNumber numberWithInteger:action]]));
-    xmlWriter.writeAttribute(QStringLiteral("version"), QStringLiteral("0.6"));
-    xmlWriter.writeAttribute(QStringLiteral("generator"), QString::fromNSString([self getAppFullName]));
     if ([entity isKindOfClass:OANode.class])
         [self writeNode:(OANode *)entity entityInfo:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName];
     else if ([entity isKindOfClass:OAWay.class])

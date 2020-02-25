@@ -34,6 +34,8 @@
 
 @interface OAOsmEditingViewController : OACompoundViewController
 
+@property (nonatomic) id<OAOsmEditingBottomSheetDelegate> delegate;
+
 +(void)commitEntity:(EOAAction)action
              entity:(OAEntity *)entity
          entityInfo:(OAEntityInfo *)info

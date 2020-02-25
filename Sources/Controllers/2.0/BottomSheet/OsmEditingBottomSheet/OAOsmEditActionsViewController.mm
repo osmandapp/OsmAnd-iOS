@@ -264,6 +264,7 @@
         if (_point.getGroup == POI)
         {
             OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithEntity:((OAOpenStreetMapPoint *)_point).getEntity];
+            editingScreen.delegate = vwController.delegate;
             [[OARootViewController instance].mapPanel.navigationController pushViewController:editingScreen animated:YES];
             [self.vwController dismiss];
         }

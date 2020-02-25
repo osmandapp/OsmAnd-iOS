@@ -195,7 +195,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     NSMutableArray *tValues = [NSMutableArray array];
     
     [tKeys addObject:OALocalizedString(@"res_type")];
-    [tValues addObject:OALocalizedString(@"map_creator")];
+    [tValues addObject:[OASQLiteTileSource isOnlineTileSource:item.path] ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map")];
     
     [tKeys addObject:OALocalizedString(@"res_size")];
     [tValues addObject:[NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];

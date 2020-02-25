@@ -2195,6 +2195,24 @@
     }
 }
 
+- (void) makeGpxTemp:(NSString *)fileName
+{
+    @synchronized(_rendererSync)
+    {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        if ([settings hideGpxFile:fileName])
+        {
+            _tempTrackShowing = YES;
+            if (![_gpxDocFileTemp isEqualToString:fileName] || _gpxDocsTemp.isEmpty()) {
+                _gpxDocsTemp.clear();
+                _gpxDocFileTemp = [fileName copy];
+                NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+                _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
+            }
+        }
+    }
+}
+
 - (void) showTempGpxTrack:(NSString *)fileName
 {
     if (_recTrackShowing)

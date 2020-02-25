@@ -494,6 +494,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (void) updateGpx:(NSArray<NSString *> *)fileNames;
 - (void) hideGpx:(NSArray<NSString *> *)fileNames;
 - (void) hideRemovedGpx;
+- (BOOL) hideGpxFile:(NSString *)fileName;
 
 - (NSString *) getFormattedTrackInterval:(int)value;
 - (NSString *) getDefaultVoiceProvider;

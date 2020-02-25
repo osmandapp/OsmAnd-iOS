@@ -2205,7 +2205,6 @@
         OAAppSettings *settings = [OAAppSettings sharedManager];
         if ([settings.mapSettingVisibleGpx containsObject:fileName]) {
             _gpxDocFileTemp = nil;
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
             return;
         }
         

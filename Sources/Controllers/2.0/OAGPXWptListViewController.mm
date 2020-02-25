@@ -16,6 +16,7 @@
 #import "OAMultiselectableHeaderView.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAColors.h"
+#import "OADefaultFavorite.h"
 
 #import "OsmAndApp.h"
 
@@ -378,15 +379,13 @@
             [cell.titleView setText:item.point.name];
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:[item.point getColor]];
+            [cell.titleIcon setImage:favCol.icon];
             
-            if (!cell.titleIcon.hidden) {
-                cell.titleIcon.hidden = YES;
-                CGRect f = cell.titleView.frame;
-                cell.titleView.frame = CGRectMake(f.origin.x - 23.0, f.origin.y, f.size.width + 23.0, f.size.height);
-                cell.directionImageView.frame = CGRectMake(cell.directionImageView.frame.origin.x - 23.0, cell.directionImageView.frame.origin.y, cell.directionImageView.frame.size.width, cell.directionImageView.frame.size.height);
+            if (![cell.directionImageView.tintColor isEqual:UIColorFromRGB(color_elevation_chart)])
+            {
                 cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
-                cell.distanceView.frame = CGRectMake(cell.distanceView.frame.origin.x - 23.0, cell.distanceView.frame.origin.y, cell.distanceView.frame.size.width, cell.distanceView.frame.size.height);
             }
         }
         return cell;

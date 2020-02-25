@@ -1247,6 +1247,7 @@
     else if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName])
     {
         [settings hideGpx:@[self.gpx.gpxFileName]];
+        [_mapViewController showTempGpxTrack:self.gpx.gpxFileName];
         [[_app mapSettingsChangeObservable] notifyEvent];
     }
     return NO;

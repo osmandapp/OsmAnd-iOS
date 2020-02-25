@@ -1621,7 +1621,7 @@ static BOOL _lackOfResources;
             else if (section == _localSqliteSection)
                 return OALocalizedString(@"offline_raster_maps");
             else if (section == _localOnlineTileSourcesSection)
-                return OALocalizedString(@"map_settings_online");
+                return OALocalizedString(@"online_raster_maps");
             else
                 return OALocalizedString(@"res_mapsres");
         }

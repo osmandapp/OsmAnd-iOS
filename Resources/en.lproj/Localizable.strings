@@ -1288,11 +1288,12 @@
 "res_import_success" = "%@ was successfully imported";
 "res_import_unsupported" = "Incorrect file type. Only routing.xml and *.render.xml files are supported.";
 "routing_import_please_restart" = "To use the new routing.xml please restart the application.";
-"sqlitedb_import_title" = "Import Map Creator file";
+"sqlitedb_import_title" = "Import raster map file";
 "sqlitedb_import_already_exists" = "The specified sqlitedb file is already exists. Please choose action.";
 "online_raster_map" = "Online raster map";
 "offline_raster_map" = "Offline raster map";
 "offline_raster_maps" = "Offline raster maps";
+"online_raster_maps" = "Online raster maps";
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
 "local_names" = "Local names";
@@ -1303,6 +1304,8 @@
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Go to Map";
+"import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
+"import_raster_map_failed" = "Raster map import failed";
 
 "device_memory" = "Device memory";
 "free_memory" = "Free %@";

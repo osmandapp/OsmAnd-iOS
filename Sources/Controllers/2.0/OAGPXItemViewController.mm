@@ -953,7 +953,8 @@
                                      else
                                      {
                                          if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
-                                             [_mapViewController makeGpxTemp:self.gpx.gpxFileName];
+                                             [settings hideGpx:@[self.gpx.gpxFileName]];
+                                             [_mapViewController hideTempGpxTrack];
                                              [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
                                          }
                                          
@@ -1240,14 +1241,12 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (sw.isOn)
     {
-        [settings showGpx:@[self.gpx.gpxFileName]];
-        [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+        [_mapViewController makeGpxVisible:self.gpx.gpxFileName];
+//        [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     }
     else if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName])
     {
-        [settings hideGpx:@[self.gpx.gpxFileName]];
-        [_mapViewController showTempGpxTrack:self.gpx.gpxFileName];
-        [[_app mapSettingsChangeObservable] notifyEvent];
+        [_mapViewController makeGpxTemp:self.gpx.gpxFileName];
     }
     return NO;
 }

@@ -1952,7 +1952,20 @@
     }
 }
 
-- (BOOL) hideGpxFile:(NSString *)fileName
+- (BOOL) addGpxToVisible:(NSString *)fileName
+{
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
+    if (![arr containsObject:fileName])
+    {
+        [arr addObject:fileName];
+        self.mapSettingVisibleGpx = arr;
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (BOOL) removeGpxFromVisible:(NSString *)fileName
 {
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
     NSString *toDelete = [arr containsObject:fileName] ? fileName : nil;

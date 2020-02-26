@@ -160,6 +160,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 
 - (void) showTempGpxTrack:(NSString *)fileName;
 - (void) makeGpxTemp:(NSString *)fileName;
+- (void) makeGpxVisible:(NSString *)fileName;
 - (void) hideTempGpxTrack;
 - (void) keepTempGpxTrackVisible;
 

@@ -278,7 +278,7 @@ typedef enum
 
 - (void) viewWillLayoutSubviews
 {
-    if ([self contextMenuMode])
+    if ([self contextMenuMode] && ![self.targetMenuView needsManualContextMode])
     {
         [self doUpdateContextMenuToolbarLayout];
     }
@@ -2555,7 +2555,7 @@ typedef enum
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
     [self closeRouteInfo];
-    [self.view.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [UIApplication.sharedApplication.keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];

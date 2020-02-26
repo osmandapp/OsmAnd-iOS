@@ -45,6 +45,11 @@ static BOOL dataInvalidated = NO;
     return self.resourceId.compare(((ResourceItem*)object).resourceId) == 0;
 }
 
+- (void) updateSize
+{
+    // override
+}
+
 @end
 
 @implementation RepositoryResourceItem
@@ -57,6 +62,12 @@ static BOOL dataInvalidated = NO;
 @end
 
 @implementation SqliteDbResourceItem
+
+- (void) updateSize
+{
+    self.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:nil] fileSize];
+}
+
 @end
 
 @implementation OnlineTilesResourceItem

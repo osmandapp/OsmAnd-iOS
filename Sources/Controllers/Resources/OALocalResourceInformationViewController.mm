@@ -22,7 +22,7 @@
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
-@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource, OAOnlineTilesEditingViewControllerDelegate> {
+@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource, OATilesEditingViewControllerDelegate> {
     
     NSArray *tableKeys;
     NSArray *tableValues;
@@ -191,11 +191,13 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (void)updateLocalSqliteDbItem:(SqliteDbResourceItem *)item
 {
+    [item updateSize];
+    
     NSMutableArray *tKeys = [NSMutableArray array];
     NSMutableArray *tValues = [NSMutableArray array];
     
     [tKeys addObject:OALocalizedString(@"res_type")];
-    [tValues addObject:OALocalizedString(@"map_creator")];
+    [tValues addObject:[OASQLiteTileSource isOnlineTileSource:item.path] ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map")];
     
     [tKeys addObject:OALocalizedString(@"res_size")];
     [tValues addObject:[NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
@@ -446,11 +448,24 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [self.navigationController pushViewController:purchasesViewController animated:NO];
 }
 
-#pragma mark - OAOnlineTilesEditingViewControllerDelegate
+#pragma mark - OATilesEditingViewControllerDelegate
 
-- (void) onTileSourceSaved
+- (void) onTileSourceSaved:(LocalResourceItem *)item
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([item isKindOfClass:SqliteDbResourceItem.class])
+    {
+        SqliteDbResourceItem *sqlite = (SqliteDbResourceItem *)item;
+        self.regionTitle = sqlite.fileName;
+        [self initWithLocalSqliteDbItem:sqlite];
+    }
+    else if ([item isKindOfClass:OnlineTilesResourceItem.class])
+    {
+        OnlineTilesResourceItem *tileSource = (OnlineTilesResourceItem *)item;
+        self.regionTitle = tileSource.title;
+        [self initWithLocalOnlineSourceItem:tileSource];
+    }
+    
+    [self.tableView reloadData];
 }
 
 @end

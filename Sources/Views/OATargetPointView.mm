@@ -2059,7 +2059,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (UIStatusBarStyle) getStatusBarStyle:(BOOL)contextMenuMode defaultStyle:(UIStatusBarStyle)defaultStyle
 {
-    if (contextMenuMode)
+    if (contextMenuMode && ![self needsManualContextMode])
     {
         if ([self isToolbarVisible] || [self isInFullScreenMode] || [self isLandscape])
             return UIStatusBarStyleLightContent;
@@ -2499,7 +2499,7 @@ static const NSInteger _buttonsCount = 4;
     }
 
     if (slidingDown && !goFull && !goFullScreen)
-        needCloseMenu = ![self isLandscape] && !_showFull && [self preHide] && !(self.customController && [self.customController supportMapInteraction]);
+        needCloseMenu = ![self isLandscape] && !_showFull && [self preHide] && !(self.customController && [self.customController supportMapInteraction] && ![self.customController supportsForceClose]);
     
     if (needCloseMenu)
     {

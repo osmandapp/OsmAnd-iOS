@@ -241,7 +241,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         else
         {
             [self.navigationController popViewControllerAnimated:YES];
-            [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO];
+            [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO editingDelegate:self.delegate];
         }
     }
     else if ([self testTooManyCapitalLetters:[_editPoiData getTag:[OAOSMSettings getOSMKey:NAME]]])
@@ -251,7 +251,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     else
     {
         [self.navigationController popViewControllerAnimated:YES];
-        [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO];
+        [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO editingDelegate:self.delegate];
     }
 }
 
@@ -297,7 +297,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         {
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self.navigationController popViewControllerAnimated:YES];
-                [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO];
+                [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO editingDelegate:self.delegate];
             }]];
         }
         
@@ -305,7 +305,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     });
 }
 
-+ (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset
++ (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset editingDelegate:(id<OAOsmEditingBottomSheetDelegate>)editingDelegate
 {
     OAEntity *original = poiData.getEntity;
     
@@ -351,7 +351,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
     EOAAction action = original.getId <= 0 ? CREATE : MODIFY;
     [OAOsmEditingViewController commitEntity:action entity:entity entityInfo:[editingUtil getEntityInfo:poiData.getEntity.getId] comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:^(OAEntity *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (result)
+            if (editingDelegate)
+            {
+                [editingDelegate refreshData];
+            }
+            else if (result)
             {
                 OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
                 NSArray<OAOpenStreetMapPoint *> *points = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
@@ -364,6 +368,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
             }
         });
     }];
+}
+
++ (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset
+{
+    [self savePoi:comment poiData:poiData editingUtil:editingUtil closeChangeSet:closeChangeset editingDelegate:nil];
 }
 
 

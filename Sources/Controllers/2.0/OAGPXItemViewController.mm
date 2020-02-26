@@ -1242,7 +1242,6 @@
     if (sw.isOn)
     {
         [_mapViewController makeGpxVisible:self.gpx.gpxFileName];
-//        [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     }
     else if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName])
     {

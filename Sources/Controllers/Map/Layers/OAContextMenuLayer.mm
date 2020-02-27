@@ -153,7 +153,7 @@
         else if (horizontalAlignment == OsmAnd::MapMarker::CenterHorizontal)
             iconHalfWidth = 0;
         
-        _changePositionPin.center = CGPointMake(targetPoint.x - iconHalfHeight, targetPoint.y - iconHalfHeight);
+        _changePositionPin.center = CGPointMake(targetPoint.x - iconHalfWidth, targetPoint.y - iconHalfHeight);
     }
     
     [self.mapView addSubview:_changePositionPin];

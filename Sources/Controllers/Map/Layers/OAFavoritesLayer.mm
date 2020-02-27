@@ -227,8 +227,7 @@
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }
 
-
-- (std::shared_ptr<OsmAnd::MapMarker>) getMarker:(id)object
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
 {
     if (object && [self isObjectMovable:object])
     {
@@ -238,34 +237,20 @@
         {
             if (pos == marker->getPosition())
             {
-                return marker;
+                marker->setIsHidden(hidden);
             }
         }
     }
-    return nullptr;
 }
 
-- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment
 {
-    const auto& marker = [self getMarker:object];
-    if (marker != nullptr)
-        marker->setIsHidden(hidden);
-}
-
-- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment:(id)object
-{
-    const auto& marker = [self getMarker:object];
-    if (marker != nullptr)
-        return marker->pinIconVerticalAlignment;
     return OsmAnd::MapMarker::CenterVertical;
 }
 
 
-- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment:(id)object
+- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment
 {
-    const auto& marker = [self getMarker:object];
-    if (marker != nullptr)
-        return marker->pinIconHorisontalAlignment;
     return OsmAnd::MapMarker::CenterHorizontal;
 }
 

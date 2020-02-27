@@ -197,13 +197,6 @@
 
 - (void)setPointVisibility:(id)object hidden:(BOOL)hidden
 {
-    const auto& marker = [self getMarker:object];
-    if (marker != nullptr)
-        marker->setIsHidden(hidden);
-}
-
-- (std::shared_ptr<OsmAnd::MapMarker>) getMarker:(id)object
-{
     if (object && [self isObjectMovable:object])
     {
         CLLocation *location = [_avoidRoads getLocation:OsmAnd::ObfObjectId::fromRawId(((NSNumber *) object).unsignedLongLongValue)];
@@ -212,11 +205,10 @@
         {
             if (pos == marker->getPosition())
             {
-                return marker;
+                marker->setIsHidden(hidden);
             }
         }
     }
-    return nullptr;
 }
 
 - (UIImage *)getPointIcon:(id)object
@@ -224,20 +216,14 @@
     return [UIImage imageNamed:@"map_pin_avoid_road"];
 }
 
-- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment:(id)object
+- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment
 {
-    const auto& marker = [self getMarker:object];
-    if (marker != nullptr)
-        return marker->pinIconVerticalAlignment;
-    return OsmAnd::MapMarker::CenterVertical;
+    return OsmAnd::MapMarker::Top;
 }
 
 
-- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment:(id)object
+- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment
 {
-    const auto& marker = [self getMarker:object];
-    if (marker != nullptr)
-        return marker->pinIconHorisontalAlignment;
     return OsmAnd::MapMarker::CenterHorizontal;
 }
 

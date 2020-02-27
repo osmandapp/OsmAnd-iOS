@@ -140,20 +140,22 @@
     {
         CGFloat iconHalfHeight = _changePositionPin.frame.size.height /2;
         CGFloat iconHalfWidth = _changePositionPin.frame.size.width / 2;
-        const auto& verticalAlignment = [_selectedObjectContextMenuProvider getVerticalAlignment:targetObject];
-        const auto& horizontalAlignment = [_selectedObjectContextMenuProvider getHorizontalAlignment:targetObject];
-        
-        if (verticalAlignment == OsmAnd::MapMarker::Bottom)
-            iconHalfHeight = -iconHalfHeight;
-        else if (verticalAlignment == OsmAnd::MapMarker::CenterVertical)
-            iconHalfHeight = 0;
+        CGFloat shiftX = iconHalfWidth;
+        CGFloat shiftY = iconHalfHeight;
+        const auto& verticalAlignment = [_selectedObjectContextMenuProvider getVerticalAlignment];
+        const auto& horizontalAlignment = [_selectedObjectContextMenuProvider getHorizontalAlignment];
         
         if (horizontalAlignment == OsmAnd::MapMarker::Right)
-            iconHalfWidth = -iconHalfWidth;
+            shiftX = -iconHalfWidth;
         else if (horizontalAlignment == OsmAnd::MapMarker::CenterHorizontal)
-            iconHalfWidth = 0;
+            shiftX = 0;
         
-        _changePositionPin.center = CGPointMake(targetPoint.x - iconHalfWidth, targetPoint.y - iconHalfHeight);
+        if (verticalAlignment == OsmAnd::MapMarker::Bottom)
+            shiftY = -iconHalfHeight;
+        else if (verticalAlignment == OsmAnd::MapMarker::CenterVertical)
+            shiftY = 0;
+        
+        _changePositionPin.center = CGPointMake(targetPoint.x - shiftX, targetPoint.y - shiftY);
     }
     
     [self.mapView addSubview:_changePositionPin];

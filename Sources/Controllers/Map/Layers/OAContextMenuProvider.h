@@ -41,7 +41,7 @@ const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 - (void) setPointVisibility:(id) object hidden:(BOOL)hidden;
 - (UIImage *) getPointIcon:(id)object;
 
-- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment:(id) object;
-- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment:(id) object;
+- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment;
+- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment;
 
 @end

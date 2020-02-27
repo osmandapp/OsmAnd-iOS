@@ -253,15 +253,15 @@
     }
 }
 
-- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment
+- (EOAPinVerticalAlignment) getPointIconVerticalAlignment
 {
-    return OsmAnd::MapMarker::CenterVertical;
+    return EOAPinAlignmentCenterVertical;
 }
 
 
-- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment
+- (EOAPinHorizontalAlignment) getPointIconHorizontalAlignment
 {
-    return OsmAnd::MapMarker::CenterHorizontal;
+    return EOAPinAlignmentCenterHorizontal;
 }
 
 @end

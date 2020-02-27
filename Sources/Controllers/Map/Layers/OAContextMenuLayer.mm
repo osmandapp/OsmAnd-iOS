@@ -142,17 +142,17 @@
         CGFloat iconHalfWidth = _changePositionPin.frame.size.width / 2;
         CGFloat shiftX = iconHalfWidth;
         CGFloat shiftY = iconHalfHeight;
-        const auto& verticalAlignment = [_selectedObjectContextMenuProvider getVerticalAlignment];
-        const auto& horizontalAlignment = [_selectedObjectContextMenuProvider getHorizontalAlignment];
+        EOAPinVerticalAlignment verticalAlignment = [_selectedObjectContextMenuProvider getPointIconVerticalAlignment];
+        EOAPinHorizontalAlignment horizontalAlignment = [_selectedObjectContextMenuProvider getPointIconHorizontalAlignment];
         
-        if (horizontalAlignment == OsmAnd::MapMarker::Right)
+        if (horizontalAlignment == EOAPinAlignmentRight)
             shiftX = -iconHalfWidth;
-        else if (horizontalAlignment == OsmAnd::MapMarker::CenterHorizontal)
+        else if (horizontalAlignment == EOAPinAlignmentCenterHorizontal)
             shiftX = 0;
         
-        if (verticalAlignment == OsmAnd::MapMarker::Bottom)
+        if (verticalAlignment == EOAPinAlignmentBottom)
             shiftY = -iconHalfHeight;
-        else if (verticalAlignment == OsmAnd::MapMarker::CenterVertical)
+        else if (verticalAlignment == EOAPinAlignmentCenterVertical)
             shiftY = 0;
         
         _changePositionPin.center = CGPointMake(targetPoint.x - shiftX, targetPoint.y - shiftY);

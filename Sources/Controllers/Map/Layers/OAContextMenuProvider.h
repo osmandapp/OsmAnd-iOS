@@ -15,6 +15,20 @@ const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 
 @class OATargetPoint, OAPointDescription;
 
+typedef NS_ENUM(NSInteger, EOAPinVerticalAlignment)
+{
+    EOAPinAlignmentTop = 0,
+    EOAPinAlignmentCenterVertical,
+    EOAPinAlignmentBottom
+};
+
+typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
+{
+    EOAPinAlignmentLeft = 0,
+    EOAPinAlignmentCenterHorizontal,
+    EOAPinAlignmentRight
+};
+
 @protocol OAContextMenuProvider<NSObject>
 
 @required
@@ -41,7 +55,7 @@ const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 - (void) setPointVisibility:(id) object hidden:(BOOL)hidden;
 - (UIImage *) getPointIcon:(id)object;
 
-- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment;
-- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment;
+- (EOAPinVerticalAlignment) getPointIconVerticalAlignment;
+- (EOAPinHorizontalAlignment) getPointIconHorizontalAlignment;
 
 @end

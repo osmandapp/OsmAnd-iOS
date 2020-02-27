@@ -290,22 +290,6 @@
     }
 }
 
-- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
-{
-    if (object && [self isObjectMovable:object])
-    {
-        OAGpxWptItem *point = (OAGpxWptItem *)object;
-        const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.point.getLatitude, point.point.getLongitude));
-        for (const auto& marker : self.markersCollection->getMarkers())
-        {
-            if (pos == marker->getPosition())
-            {
-                marker->setIsHidden(hidden);
-            }
-        }
-    }
-}
-
 - (UIImage *)getPointIcon:(id)object
 {
     if (object && [self isObjectMovable:object])
@@ -317,9 +301,45 @@
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }
 
-- (BOOL) shouldCorrectMarkerPosition
+- (std::shared_ptr<OsmAnd::MapMarker>) getMarker:(id)object
 {
-    return NO;
+    if (object && [self isObjectMovable:object])
+    {
+        OAGpxWptItem *point = (OAGpxWptItem *)object;
+        const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.point.getLatitude, point.point.getLongitude));
+        for (const auto& marker : self.markersCollection->getMarkers())
+        {
+            if (pos == marker->getPosition())
+            {
+                return marker;
+            }
+        }
+    }
+    return nullptr;
+}
+
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+{
+    const auto& marker = [self getMarker:object];
+    if (marker != nullptr)
+        marker->setIsHidden(hidden);
+}
+
+- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment:(id)object
+{
+    const auto& marker = [self getMarker:object];
+    if (marker != nullptr)
+        return marker->pinIconVerticalAlignment;
+    return OsmAnd::MapMarker::CenterVertical;
+}
+
+
+- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment:(id)object
+{
+    const auto& marker = [self getMarker:object];
+    if (marker != nullptr)
+        return marker->pinIconHorisontalAlignment;
+    return OsmAnd::MapMarker::CenterHorizontal;
 }
 
 @end

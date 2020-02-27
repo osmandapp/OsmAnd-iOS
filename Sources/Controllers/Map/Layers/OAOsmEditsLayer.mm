@@ -232,7 +232,12 @@
     }
 }
 
-- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+- (UIImage *) getPointIcon:(id)object
+{
+    return [UIImage imageNamed:@"map_osm_edit"];
+}
+
+- (std::shared_ptr<OsmAnd::MapMarker>) getMarker:(id)object
 {
     if (object && [self isObjectMovable:object])
     {
@@ -242,20 +247,35 @@
         {
             if (pos == marker->getPosition())
             {
-                marker->setIsHidden(hidden);
+                return marker;
             }
         }
     }
+    return nullptr;
 }
 
-- (UIImage *) getPointIcon:(id)object
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
 {
-    return [UIImage imageNamed:@"map_osm_edit"];
+    const auto& marker = [self getMarker:object];
+    if (marker != nullptr)
+        marker->setIsHidden(hidden);
 }
 
-- (BOOL) shouldCorrectMarkerPosition
+- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment:(id)object
 {
-    return NO;
+    const auto& marker = [self getMarker:object];
+    if (marker != nullptr)
+        return marker->pinIconVerticalAlignment;
+    return OsmAnd::MapMarker::CenterVertical;
+}
+
+
+- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment:(id)object
+{
+    const auto& marker = [self getMarker:object];
+    if (marker != nullptr)
+        return marker->pinIconHorisontalAlignment;
+    return OsmAnd::MapMarker::CenterHorizontal;
 }
 
 @end

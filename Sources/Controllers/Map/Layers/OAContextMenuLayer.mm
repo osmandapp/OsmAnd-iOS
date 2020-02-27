@@ -138,9 +138,22 @@
     OsmAnd::PointI targetPositionI = self.mapView.target31;
     if ([self.mapView convert:&targetPositionI toScreen:&targetPoint])
     {
-        CGFloat iconHeight = _changePositionPin.frame.size.height;
-        BOOL correctCenter = [_selectedObjectContextMenuProvider shouldCorrectMarkerPosition];
-        _changePositionPin.center = CGPointMake(targetPoint.x, targetPoint.y - (correctCenter ? iconHeight / 2 : 0));
+        CGFloat iconHalfHeight = _changePositionPin.frame.size.height /2;
+        CGFloat iconHalfWidth = _changePositionPin.frame.size.width / 2;
+        const auto& verticalAlignment = [_selectedObjectContextMenuProvider getVerticalAlignment:targetObject];
+        const auto& horizontalAlignment = [_selectedObjectContextMenuProvider getHorizontalAlignment:targetObject];
+        
+        if (verticalAlignment == OsmAnd::MapMarker::Bottom)
+            iconHalfHeight = -iconHalfHeight;
+        else if (verticalAlignment == OsmAnd::MapMarker::CenterVertical)
+            iconHalfHeight = 0;
+        
+        if (horizontalAlignment == OsmAnd::MapMarker::Right)
+            iconHalfWidth = -iconHalfWidth;
+        else if (horizontalAlignment == OsmAnd::MapMarker::CenterHorizontal)
+            iconHalfWidth = 0;
+        
+        _changePositionPin.center = CGPointMake(targetPoint.x - iconHalfHeight, targetPoint.y - iconHalfHeight);
     }
     
     [self.mapView addSubview:_changePositionPin];

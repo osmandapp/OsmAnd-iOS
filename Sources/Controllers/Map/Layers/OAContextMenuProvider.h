@@ -9,6 +9,8 @@
 #import <CoreLocation/CoreLocation.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
 
+#include <OsmAndCore/Map/MapMarker.h>
+
 const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 
 @class OATargetPoint, OAPointDescription;
@@ -39,6 +41,7 @@ const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 - (void) setPointVisibility:(id) object hidden:(BOOL)hidden;
 - (UIImage *) getPointIcon:(id)object;
 
-- (BOOL) shouldCorrectMarkerPosition;
+- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment:(id) object;
+- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment:(id) object;
 
 @end

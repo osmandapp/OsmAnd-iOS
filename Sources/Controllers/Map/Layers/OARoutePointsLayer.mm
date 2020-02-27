@@ -298,23 +298,6 @@
     }
 }
 
-- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
-{
-    if (object && [self isObjectMovable:object])
-    {
-        OARTargetPoint *point = (OARTargetPoint *)object;
-        
-        const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.getLatitude, point.getLongitude));
-        for (const auto& marker : _markersCollection->getMarkers())
-        {
-            if (pos == marker->getPosition())
-            {
-                marker->setIsHidden(hidden);
-            }
-        }
-    }
-}
-
 - (UIImage *)getPointIcon:(id)object
 {
     if (object && [self isObjectMovable:object])
@@ -330,9 +313,46 @@
     return nil;
 }
 
-- (BOOL) shouldCorrectMarkerPosition
+- (std::shared_ptr<OsmAnd::MapMarker>) getMarker:(id)object
 {
-    return YES;
+    if (object && [self isObjectMovable:object])
+    {
+        OARTargetPoint *point = (OARTargetPoint *)object;
+        
+        const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.getLatitude, point.getLongitude));
+        for (const auto& marker : _markersCollection->getMarkers())
+        {
+            if (pos == marker->getPosition())
+            {
+                return marker;
+            }
+        }
+    }
+    return nullptr;
+}
+
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+{
+    const auto& marker = [self getMarker:object];
+    if (marker != nullptr)
+        marker->setIsHidden(hidden);
+}
+
+- (OsmAnd::MapMarker::PinIconVerticalAlignment) getVerticalAlignment:(id)object
+{
+    const auto& marker = [self getMarker:object];
+    if (marker != nullptr)
+        return marker->pinIconVerticalAlignment;
+    return OsmAnd::MapMarker::CenterVertical;
+}
+
+
+- (OsmAnd::MapMarker::PinIconHorisontalAlignment) getHorizontalAlignment:(id)object
+{
+    const auto& marker = [self getMarker:object];
+    if (marker != nullptr)
+        return marker->pinIconHorisontalAlignment;
+    return OsmAnd::MapMarker::CenterHorizontal;
 }
 
 @end

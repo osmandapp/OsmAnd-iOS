@@ -90,18 +90,6 @@
     }
 }
 
-- (void) setPointVisibility:(NSArray<NSNumber *> *)point hidden:(BOOL)hidden
-{
-    const auto& pos = OsmAnd::PointI(point[0].intValue, point[1].intValue);
-    for (const auto& marker : _favoritesMarkersCollection->getMarkers())
-    {
-        if (pos == marker->getPosition())
-        {
-            marker->setIsHidden(hidden);
-        }
-    }
-}
-
 - (void) show
 {
     [self.mapViewController runWithRenderSync:^{
@@ -157,6 +145,11 @@
         targetPoint.title = favLoc->getTitle().toNSString();
         targetPoint.icon = [UIImage imageNamed:favCol.iconName];
         
+        OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
+        const auto& sharedItem = std::shared_ptr<const OsmAnd::IFavoriteLocation>(favLoc);
+        item.favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(sharedItem);
+        targetPoint.targetObj = item;
+        
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
@@ -190,6 +183,64 @@
             }
         }
     }
+}
+
+#pragma mark - OAMoveObjectProvider
+
+- (BOOL)isObjectMovable:(id)object
+{
+    return [object isKindOfClass:OAFavoriteItem.class];
+}
+
+- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OAFavoriteItem *item = (OAFavoriteItem *)object;
+        const auto& favorite = item.favorite;
+        if (favorite != nullptr)
+        {
+            QString title = favorite->getTitle();
+            QString group = favorite->getGroup();
+            OsmAnd::ColorRGB color = favorite->getColor();
+            
+            self.app.favoritesCollection->removeFavoriteLocation(favorite);
+            self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
+                                                            title,
+                                                            group,
+                                                            color);
+            [self.app saveFavoritesToPermamentStorage];
+        }
+    }
+}
+
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OAFavoriteItem *item = (OAFavoriteItem *)object;
+        const auto& pos = item.favorite->getPosition31();
+        for (const auto& marker : _favoritesMarkersCollection->getMarkers())
+        {
+            if (pos == marker->getPosition())
+            {
+                marker->setIsHidden(hidden);
+            }
+        }
+    }
+}
+
+- (UIImage *)getPointIcon:(id)object
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OAFavoriteItem *item = (OAFavoriteItem *)object;
+        const auto& favLoc = item.favorite;
+        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
+        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        return favCol.icon;
+    }
+    return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }
 
 @end

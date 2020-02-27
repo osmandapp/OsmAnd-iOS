@@ -64,11 +64,6 @@
     return _pd;
 }
 
-- (BOOL) isMovable
-{
-    return _type == OATargetFavorite || _type == OATargetOsmEdit || _type == OATargetOsmNote || _type == OATargetRouteStart || _type == OATargetRouteIntermediate || _type == OATargetRouteFinish || _type == OATargetParking || _type == OATargetDestination || _type == OATargetWpt || _type == OATargetImpassableRoad;
-}
-
 - (BOOL) isEqual:(id)o
 {
     if (self == o)

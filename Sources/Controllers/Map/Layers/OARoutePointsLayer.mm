@@ -182,28 +182,6 @@
     }];
 }
 
-- (void) setFinishMarkerVisibility:(BOOL)hidden
-{
-    _targetPointMarker->setIsHidden(hidden);
-}
-
-- (void) setStartMarkerVisibility:(BOOL)hidden
-{
-    _startPointMarker->setIsHidden(hidden);
-}
-
-- (void) setIntermediateMarkerVisibility:(CLLocationCoordinate2D)location hidden:(BOOL)hidden
-{
-    const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.latitude, location.longitude));
-    for (const auto& marker : _markersCollection->getMarkers())
-    {
-        if (pos == marker->getPosition())
-        {
-            marker->setIsHidden(hidden);
-        }
-    }
-}
-
 #pragma mark - OAStateChangedListener
 
 - (void) stateChanged:(id)change
@@ -290,6 +268,66 @@
             }
         }
     }
+}
+
+#pragma mark - OAMoveObjectProvider
+
+- (BOOL)isObjectMovable:(id)object
+{
+    return [object isKindOfClass:OARTargetPoint.class];
+}
+
+- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OARTargetPoint *point = (OARTargetPoint *)object;
+        if (point.start)
+        {
+            [_targetPoints setStartPoint:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] updateRoute:YES name:nil];
+        }
+        else if (point.intermediate)
+        {
+            [_targetPoints removeWayPoint:YES index:point.index];
+            [_targetPoints navigateToPoint:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] updateRoute:YES intermediate:point.index];
+        }
+        else
+        {
+            [_targetPoints navigateToPoint:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] updateRoute:YES intermediate:-1];
+        }
+    }
+}
+
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OARTargetPoint *point = (OARTargetPoint *)object;
+        
+        const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.getLatitude, point.getLongitude));
+        for (const auto& marker : _markersCollection->getMarkers())
+        {
+            if (pos == marker->getPosition())
+            {
+                marker->setIsHidden(hidden);
+            }
+        }
+    }
+}
+
+- (UIImage *)getPointIcon:(id)object
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OARTargetPoint *point = (OARTargetPoint *)object;
+        if (point.start)
+            return [UIImage imageNamed:@"map_start_point"];
+        else if (point.intermediate)
+            return [UIImage imageNamed:@"map_intermediate_point"];
+        else
+            return [UIImage imageNamed:@"map_target_point"];
+    }
+    return nil;
 }
 
 @end

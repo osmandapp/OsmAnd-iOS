@@ -1949,7 +1949,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (IBAction) buttonMoreClicked:(id)sender
 {
-    OAMoreOprionsBottomSheetViewController *controller = [[OAMoreOprionsBottomSheetViewController alloc] initWithTargetPoint:_targetPoint];
+    OAMoreOprionsBottomSheetViewController *controller = [[OAMoreOprionsBottomSheetViewController alloc] initWithTargetPoint:_targetPoint targetType:(NSString *)[self.customController getCommonTypeStr]];
     controller.menuViewDelegate = _menuViewDelegate;
     [controller show];
 }

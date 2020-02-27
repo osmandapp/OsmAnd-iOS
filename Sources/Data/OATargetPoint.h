@@ -76,7 +76,6 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSString *ctrlTypeStr;
 
 @property (nonatomic, readonly) OAPointDescription *pointDescription;
-@property (nonatomic, readonly) BOOL isMovable;
 
 @property (nonatomic) int symbolId;
 @property (nonatomic) unsigned long long obfId;

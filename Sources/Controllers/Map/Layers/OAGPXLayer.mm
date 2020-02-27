@@ -16,6 +16,8 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDatabase.h"
 #import "OAGpxWptItem.h"
+#import "OASelectedGPXHelper.h"
+#import "OASavingTrackHelper.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -199,18 +201,6 @@
     }
 }
 
-- (void)setPointVisibility:(OAGpxWptItem *)point hidden:(BOOL)hidden
-{
-    const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.point.getLatitude, point.point.getLongitude));
-    for (const auto& marker : _markersCollection->getMarkers())
-    {
-        if (pos == marker->getPosition())
-        {
-            marker->setIsHidden(hidden);
-        }
-    }
-}
-
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -261,6 +251,70 @@
                 [found addObject:targetPoint];
         }
     }
+}
+
+#pragma mark - OAMoveObjectProvider
+
+- (BOOL)isObjectMovable:(id)object
+{
+    return [object isKindOfClass:OAGpxWptItem.class];
+}
+
+- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OAGpxWptItem *item = (OAGpxWptItem *)object;
+        
+        if (item.docPath)
+        {
+            item.point.position = position;
+            item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
+            const auto activeGpx = [OASelectedGPXHelper instance].activeGpx;
+            const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(activeGpx[QString::fromNSString(item.docPath)]);
+            if (doc != nullptr)
+            {
+                doc->saveTo(QString::fromNSString(item.docPath));
+                QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
+                docs[QString::fromNSString(item.docPath)] = doc;
+                [self refreshGpxTracks:docs];
+            }
+        }
+        else
+        {
+            OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+            [helper updatePointCoordinates:item.point newLocation:position];
+            item.point.wpt->position = OsmAnd::LatLon(position.latitude, position.longitude);
+            [self.app.trackRecordingObservable notifyEventWithKey:@(YES)];
+        }
+    }
+}
+
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OAGpxWptItem *point = (OAGpxWptItem *)object;
+        const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.point.getLatitude, point.point.getLongitude));
+        for (const auto& marker : self.markersCollection->getMarkers())
+        {
+            if (pos == marker->getPosition())
+            {
+                marker->setIsHidden(hidden);
+            }
+        }
+    }
+}
+
+- (UIImage *)getPointIcon:(id)object
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OAGpxWptItem *point = (OAGpxWptItem *)object;
+        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:point.color];
+        return favCol.icon;
+    }
+    return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }
 
 @end

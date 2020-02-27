@@ -28,3 +28,15 @@ const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 //- (BOOL) runExclusiveAction:(OATargetPoint *)o unknownLocation:(BOOL)unknownLocation;
 
 @end
+
+@protocol OAMoveObjectProvider<NSObject>
+
+@required
+
+- (BOOL) isObjectMovable:(id) object;
+
+- (void) applyNewObjectPosition:(id) object position:(CLLocationCoordinate2D)position;
+- (void) setPointVisibility:(id) object hidden:(BOOL)hidden;
+- (UIImage *) getPointIcon:(id)object;
+
+@end

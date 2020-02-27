@@ -22,8 +22,4 @@
     return self;
 }
 
-- (void) setPointVisibility:(id)point hidden:(BOOL)hidden
-{
-}
-
 @end

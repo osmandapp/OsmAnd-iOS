@@ -22,8 +22,9 @@
 
 @property (nonatomic) id<OAChangePositionModeDelegate> changePositionDelegate;
 
-- (void) enterChangePositionMode:(UIImage *)icon;
-- (void) exitChangePositionMode;
+- (void) enterChangePositionMode:(id)targetObject;
+- (void) exitChangePositionMode:(id)targetObject applyNewPosition:(BOOL)applyNewPosition;
+- (BOOL) isObjectMovable:(id)object;
 
 - (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker;
 

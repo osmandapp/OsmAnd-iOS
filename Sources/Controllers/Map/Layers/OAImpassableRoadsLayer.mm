@@ -91,19 +91,6 @@
     }];
 }
 
-- (void)setPointVisibility:(NSNumber *)point hidden:(BOOL)hidden
-{
-    CLLocation *location = [_avoidRoads getLocation:OsmAnd::ObfObjectId::fromRawId(point.unsignedLongLongValue)];
-    const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
-    for (const auto& marker : _markersCollection->getMarkers())
-    {
-        if (pos == marker->getPosition())
-        {
-            marker->setIsHidden(hidden);
-        }
-    }
-}
-
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getImpassableMarkersCollection
 {
     return _markersCollection;
@@ -188,6 +175,45 @@
             }
         }
     }
+}
+
+#pragma mark - OAMoveObjectProvider
+
+- (BOOL)isObjectMovable:(id)object
+{
+    return [object isKindOfClass:NSNumber.class];
+}
+
+- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+{
+    if (object && [self isObjectMovable:object])
+    {
+        NSNumber *item = (NSNumber *)object;
+        const auto& road = [_avoidRoads getRoadById:item.unsignedLongLongValue];
+        [_avoidRoads removeImpassableRoad:road];
+        [_avoidRoads addImpassableRoad:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] showDialog:NO skipWritingSettings:NO];
+    }
+}
+
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+{
+    if (object && [self isObjectMovable:object])
+    {
+        CLLocation *location = [_avoidRoads getLocation:OsmAnd::ObfObjectId::fromRawId(((NSNumber *) object).unsignedLongLongValue)];
+        const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
+        for (const auto& marker : _markersCollection->getMarkers())
+        {
+            if (pos == marker->getPosition())
+            {
+                marker->setIsHidden(hidden);
+            }
+        }
+    }
+}
+
+- (UIImage *)getPointIcon:(id)object
+{
+    return [UIImage imageNamed:@"map_pin_avoid_road"];
 }
 
 @end

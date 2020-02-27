@@ -28,6 +28,8 @@
 #import "OAOsmEditingViewController.h"
 #import "OAOsmNoteBottomSheetViewController.h"
 #import "OAPOI.h"
+#import "OAMapLayers.h"
+#import "OAContextMenuLayer.h"
 
 @implementation OAMoreOptionsBottomSheetScreen
 {
@@ -91,7 +93,7 @@
                       @"img" : @"ic_custom_search",
                       @"type" : @"OAMenuSimpleCell" } ];
     // Change marker psition
-    if (_targetPoint.isMovable)
+    if ([OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer isObjectMovable:_targetPoint.targetObj])
     {
         [arr addObject:@{ @"title" : OALocalizedString(@"change_object_posiotion"),
                           @"key" : @"change_object_posiotion",
@@ -365,8 +367,9 @@
 
 @implementation OAMoreOprionsBottomSheetViewController
 
-- (instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint
+- (instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint targetType:(NSString *)targetType
 {
+    targetPoint.ctrlTypeStr = targetType;
     return [super initWithParam:targetPoint];
 }
 

@@ -81,8 +81,7 @@
 "will_open_tomorrow_at" = "Will open tomorrow at";
 
 "error_avoid_specific_road" = "No bypass found";
-"road_blocked" = "Road blocked";
-"blocked_road_type" = "Blocked road";
+"road_blocked" = "Blocked road";
 "starting_point" = "Starting point";
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Road";
@@ -493,10 +492,6 @@
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "import_from_docs" = "Import from documents";
 "gpx_no_tracks" = "There are no trips";
-
-"route_start_point" = "Start point";
-"route_end_point" = "End point";
-"route_intermediate" = "Intermediate point";
 
 "gpx_remove" = "Remove trip?";
 "gpx_stat" = "Statistics";

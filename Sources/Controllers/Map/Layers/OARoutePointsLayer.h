@@ -12,7 +12,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
-@interface OARoutePointsLayer : OASymbolMapLayer<OAContextMenuProvider>
+@interface OARoutePointsLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getRouteMarkersCollection;
 

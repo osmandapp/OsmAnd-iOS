@@ -17,6 +17,7 @@
 #import "OARTargetPoint.h"
 #import "OAStateChangedListener.h"
 #import "OATargetPoint.h"
+#import "OADestinationsHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -95,18 +96,6 @@
     {
         [_destinationRemoveObserver detach];
         _destinationRemoveObserver = nil;
-    }
-}
-
-- (void)setPointVisibility:(OADestination *)point hidden:(BOOL)hidden
-{
-    const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.latitude, point.longitude));
-    for (const auto& marker : _destinationsMarkersCollection->getMarkers())
-    {
-        if (pos == marker->getPosition())
-        {
-            marker->setIsHidden(hidden);
-        }
     }
 }
 
@@ -323,6 +312,53 @@
             }
         }
     }
+}
+
+#pragma mark - OAMoveObjectProvider
+
+- (BOOL)isObjectMovable:(id)object
+{
+    return [object isKindOfClass:OADestination.class];
+}
+
+- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OADestination *dest = (OADestination *)object;
+        OADestinationsHelper *helper = [OADestinationsHelper instance];
+        [helper removeDestination:dest];
+        dest.latitude = position.latitude;
+        dest.longitude = position.longitude;
+        [helper addDestination:dest];
+    }
+}
+
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OADestination *item = (OADestination *)object;
+        const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(item.latitude, item.longitude));
+        for (const auto& marker : _destinationsMarkersCollection->getMarkers())
+        {
+            if (pos == marker->getPosition())
+            {
+                marker->setIsHidden(hidden);
+            }
+        }
+        
+    }
+}
+
+- (UIImage *)getPointIcon:(id)object
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OADestination *item = (OADestination *)object;
+        return [UIImage imageNamed:item.markerResourceName];
+    }
+    return nil;
 }
 
 @end

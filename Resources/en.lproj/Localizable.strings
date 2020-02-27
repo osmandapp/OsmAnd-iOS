@@ -805,7 +805,6 @@
 "osm_edits_notes" = "Notes";
 "osm_poi_id_label" = "POI id:";
 "osm_edits_title" = "OSM Edits";
-"osm_edit" = "OSM Edit";
 "osm_edits_edits_label" = "Edits";
 "upload_to_osm" = "Upload modifications to OSM";
 "osm_edit_show_on_map" = "Show modification on the map";

@@ -17,6 +17,7 @@
 #import "OARTargetPoint.h"
 #import "OAStateChangedListener.h"
 #import "OATargetPoint.h"
+#import "OADestinationsHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -311,6 +312,64 @@
             }
         }
     }
+}
+
+#pragma mark - OAMoveObjectProvider
+
+- (BOOL)isObjectMovable:(id)object
+{
+    return [object isKindOfClass:OADestination.class];
+}
+
+- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OADestination *dest = (OADestination *)object;
+        OADestination *destCopy = [dest copy];
+        OADestinationsHelper *helper = [OADestinationsHelper instance];
+        [helper removeDestination:dest];
+        destCopy.latitude = position.latitude;
+        destCopy.longitude = position.longitude;
+        [helper addDestination:destCopy];
+    }
+}
+
+- (UIImage *)getPointIcon:(id)object
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OADestination *item = (OADestination *)object;
+        return [UIImage imageNamed:item.markerResourceName];
+    }
+    return nil;
+}
+
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OADestination *item = (OADestination *)object;
+        const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(item.latitude, item.longitude));
+        for (const auto& marker : _destinationsMarkersCollection->getMarkers())
+        {
+            if (pos == marker->getPosition())
+            {
+                marker->setIsHidden(hidden);
+            }
+        }
+    }
+}
+
+- (EOAPinVerticalAlignment) getPointIconVerticalAlignment
+{
+    return EOAPinAlignmentTop;
+}
+
+
+- (EOAPinHorizontalAlignment) getPointIconHorizontalAlignment
+{
+    return EOAPinAlignmentCenterHorizontal;
 }
 
 @end

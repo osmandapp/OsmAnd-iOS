@@ -300,6 +300,35 @@
     [self checkOpenstreetmapPoints];
 }
 
+- (void) updateEditLocation:(long long) editId newPosition:(CLLocationCoordinate2D)newPosition
+{
+    dispatch_async(dbQueue, ^{
+        sqlite3_stmt *statement;
+        
+        const char *dbpath = [self.dbFilePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &osmEditsDB) == SQLITE_OK)
+        {
+            NSString *updateStmt = [NSString stringWithFormat:@"UPDATE %@ SET %@ = ?, %@ = ? WHERE %@ = ?",
+                                    OPENSTREETMAP_TABLE_NAME,
+                                    OPENSTREETMAP_COL_LAT,
+                                    OPENSTREETMAP_COL_LON,
+                                    OPENSTREETMAP_COL_ID];
+            
+            const char *update_stmt = [updateStmt UTF8String];
+            
+            sqlite3_prepare_v2(osmEditsDB, update_stmt, -1, &statement, NULL);
+            sqlite3_bind_double(statement, 1, newPosition.latitude);
+            sqlite3_bind_double(statement, 2, newPosition.longitude);
+            sqlite3_bind_int64(statement, 3, editId);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            sqlite3_close(osmEditsDB);
+        }
+    });
+    [self checkOpenstreetmapPoints];
+}
+
 -(long long) getMinID
 {
     __block long long minId = -1;

@@ -90,6 +90,11 @@
     return OALocalizedString(@"gpx_waypoint");
 }
 
+- (BOOL)shouldEnterContextModeManually
+{
+    return self.newItem;
+}
+
 - (void) applyLocalization
 {
     [super applyLocalization];

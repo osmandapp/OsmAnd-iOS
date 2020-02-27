@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class OAGPXMutableDocument;
 @class OAGPX;
@@ -38,6 +39,7 @@
 - (void)deleteWpt:(OAGpxWpt *)wpt;
 - (void)deleteAllWpts;
 - (void)saveWpt:(OAGpxWpt *)wpt;
+- (void)updatePointCoordinates:(OAGpxWpt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
 
 - (BOOL) getIsRecording;
 

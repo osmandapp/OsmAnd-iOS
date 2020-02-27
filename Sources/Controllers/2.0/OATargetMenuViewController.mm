@@ -36,6 +36,7 @@
 #import "OAOsmEditTargetViewController.h"
 #import "OAOsmNotesOnlineTargetViewController.h"
 #import "OARouteDetailsGraphViewController.h"
+#import "OAChangePositionViewController.h"
 #import "OASizes.h"
 #import "OAPointDescription.h"
 #import "OAWorldRegion.h"
@@ -307,6 +308,11 @@
             
             break;
         }
+        case OATargetChangePosition:
+        {
+            controller = [[OAChangePositionViewController alloc] initWithTargetPoint:targetPoint.targetObj];
+            break;
+        }
             
         default:
         {
@@ -322,7 +328,8 @@
         targetPoint.type != OATargetGPXRoute &&
         targetPoint.type != OATargetRouteDetails &&
         targetPoint.type != OATargetRouteDetailsGraph &&
-        targetPoint.type != OATargetImpassableRoadSelection)
+        targetPoint.type != OATargetImpassableRoadSelection &&
+        targetPoint.type != OATargetChangePosition)
     {
         [controller requestMapDownloadInfo:targetPoint.location];
     }

@@ -14,7 +14,7 @@
 
 @class OAOsmEditingPlugin;
 
-@interface OAOsmEditsLayer : OASymbolMapLayer<OAContextMenuProvider>
+@interface OAOsmEditsLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 -(id) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder;
 

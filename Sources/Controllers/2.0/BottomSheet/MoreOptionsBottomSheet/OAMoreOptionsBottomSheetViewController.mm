@@ -28,6 +28,8 @@
 #import "OAOsmEditingViewController.h"
 #import "OAOsmNoteBottomSheetViewController.h"
 #import "OAPOI.h"
+#import "OAMapLayers.h"
+#import "OAContextMenuLayer.h"
 
 @implementation OAMoreOptionsBottomSheetScreen
 {
@@ -90,6 +92,14 @@
                       @"key" : @"nearby_search",
                       @"img" : @"ic_custom_search",
                       @"type" : @"OAMenuSimpleCell" } ];
+    // Change marker psition
+    if ([OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer isObjectMovable:_targetPoint.targetObj])
+    {
+        [arr addObject:@{ @"title" : OALocalizedString(@"change_object_posiotion"),
+                          @"key" : @"change_object_posiotion",
+                          @"img" : @"ic_custom_change_object_position",
+                          @"type" : @"OAMenuSimpleCell" } ];
+    }
     // Plugins
     NSInteger addonsCount = _iapHelper.functionalAddons.count;
     if (addonsCount > 0)
@@ -290,6 +300,10 @@
             [vwController.menuViewDelegate targetHide];
             [mapPanel openSearch:OAQuickSearchType::REGULAR location:menuLocation tabIndex:1];
         }
+        else if ([key isEqualToString:@"change_object_posiotion"])
+        {
+            [mapPanel openTargetViewWithMovableTarget:_targetPoint];
+        }
         else if ([key isEqualToString:@"addon_edit_poi_modify"] && _editingAddon)
         {
             [mapPanel targetHide];
@@ -353,8 +367,9 @@
 
 @implementation OAMoreOprionsBottomSheetViewController
 
-- (instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint
+- (instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint targetType:(NSString *)targetType
 {
+    targetPoint.ctrlTypeStr = targetType;
     return [super initWithParam:targetPoint];
 }
 

@@ -139,7 +139,7 @@
     if ([self.mapView convert:&targetPositionI toScreen:&targetPoint])
     {
         CGFloat iconHeight = _changePositionPin.frame.size.height;
-        BOOL correctCenter = iconHeight != _changePositionPin.frame.size.width;
+        BOOL correctCenter = [_selectedObjectContextMenuProvider shouldCorrectMarkerPosition];
         _changePositionPin.center = CGPointMake(targetPoint.x, targetPoint.y - (correctCenter ? iconHeight / 2 : 0));
     }
     
@@ -173,8 +173,6 @@
 
 - (void) onMapFrameRendered
 {
-    CGPoint targetPoint;
-    OsmAnd::PointI targetPositionI;
     if (_initDone && _animatedPin)
     {
         if (_animationDone)
@@ -183,18 +181,11 @@
         }
         else
         {
-            targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
+            CGPoint targetPoint;
+            OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
             if ([self.mapView convert:&targetPositionI toScreen:&targetPoint])
                 _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
         }
-    }
-    
-    targetPositionI = self.mapView.target31;
-    if (_isInChangePositionMode && [self.mapView convert:&targetPositionI toScreen:&targetPoint])
-    {
-        CGFloat iconHeight = _changePositionPin.frame.size.height;
-        BOOL correctCenter = iconHeight != _changePositionPin.frame.size.width;
-        _changePositionPin.center = CGPointMake(targetPoint.x, targetPoint.y - (correctCenter ? iconHeight / 2 : 0));
     }
     
     if (_isInChangePositionMode && self.changePositionDelegate)

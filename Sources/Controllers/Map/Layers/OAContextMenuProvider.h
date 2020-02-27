@@ -39,4 +39,6 @@ const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 - (void) setPointVisibility:(id) object hidden:(BOOL)hidden;
 - (UIImage *) getPointIcon:(id)object;
 
+- (BOOL) shouldCorrectMarkerPosition;
+
 @end

@@ -317,4 +317,9 @@
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }
 
+- (BOOL) shouldCorrectMarkerPosition
+{
+    return NO;
+}
+
 @end

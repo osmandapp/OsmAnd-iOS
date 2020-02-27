@@ -253,4 +253,9 @@
     return [UIImage imageNamed:@"map_osm_edit"];
 }
 
+- (BOOL) shouldCorrectMarkerPosition
+{
+    return NO;
+}
+
 @end

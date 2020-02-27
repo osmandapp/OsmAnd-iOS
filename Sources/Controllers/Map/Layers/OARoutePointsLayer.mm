@@ -330,4 +330,9 @@
     return nil;
 }
 
+- (BOOL) shouldCorrectMarkerPosition
+{
+    return YES;
+}
+
 @end

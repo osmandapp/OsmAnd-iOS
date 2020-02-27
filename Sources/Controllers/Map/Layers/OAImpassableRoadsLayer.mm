@@ -216,4 +216,9 @@
     return [UIImage imageNamed:@"map_pin_avoid_road"];
 }
 
+- (BOOL) shouldCorrectMarkerPosition
+{
+    return YES;
+}
+
 @end

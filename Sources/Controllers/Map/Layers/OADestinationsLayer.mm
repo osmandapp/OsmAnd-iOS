@@ -326,11 +326,12 @@
     if (object && [self isObjectMovable:object])
     {
         OADestination *dest = (OADestination *)object;
+        OADestination *destCopy = [dest copy];
         OADestinationsHelper *helper = [OADestinationsHelper instance];
         [helper removeDestination:dest];
-        dest.latitude = position.latitude;
-        dest.longitude = position.longitude;
-        [helper addDestination:dest];
+        destCopy.latitude = position.latitude;
+        destCopy.longitude = position.longitude;
+        [helper addDestination:destCopy];
     }
 }
 
@@ -359,6 +360,11 @@
         return [UIImage imageNamed:item.markerResourceName];
     }
     return nil;
+}
+
+- (BOOL) shouldCorrectMarkerPosition
+{
+    return YES;
 }
 
 @end

@@ -191,6 +191,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (void)updateLocalSqliteDbItem:(SqliteDbResourceItem *)item
 {
+    [item updateSize];
+    
     NSMutableArray *tKeys = [NSMutableArray array];
     NSMutableArray *tValues = [NSMutableArray array];
     

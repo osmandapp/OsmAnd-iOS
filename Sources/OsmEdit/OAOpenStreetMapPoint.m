@@ -68,7 +68,7 @@
 
 -(NSString *) toNSString
 {
-    return [NSString stringWithFormat:@"Openstreetmap Point %@ %@ (%ld): [%@/%@ (%f, %f)]", [self getActionString], [self getName],
+    return [NSString stringWithFormat:@"Openstreetmap Point %@ %@ (%lld): [%@/%@ (%f, %f)]", [self getActionString], [self getName],
             [self getId], [self getType], [self getSubType], [self getLatitude], [self getLongitude]];
 }
 

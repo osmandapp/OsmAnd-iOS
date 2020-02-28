@@ -1607,3 +1607,11 @@
 "res_source_one_per_tile" = "Un fitxer d'imatge per tessel·la";
 "res_zoom_invalid_value" = "Els valors del zoom han de estar entre 1 - 22";
 "rendering_attr_piste_type_sled_name" = "Trineu";
+"rendering_attr_piste_type_skitour_name" = "Esquí de muntanya";
+"online_raster_map" = "Mapa de bits en línia";
+"offline_raster_map" = "Mapa de bits en local";
+"offline_raster_maps" = "Mapes de bits en local";
+"res_edit_map_source" = "Edita l'origen del mapa";
+"res_offlineSQL_URL_warning" = "No s'admet per a aquest tipus de mapa";
+"shared_string_warning" = "Avís";
+"res_online_source_cache_alert" = "L'aplicació d'aquests canvis esborrarà les dades de la memòria cau per a aquesta font de tessel·les";

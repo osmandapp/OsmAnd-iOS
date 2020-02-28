@@ -197,8 +197,8 @@
 "res_banner_no" = "Du hast keine kostenlosen Karten zum herunterladen";
 "res_catalog_upd" = "Katalog Aktualisierung";
 "res_region_map" = "Umgebungskarte";
-"res_deleting" = "löschen…";
-"res_wsea_map" = "Weltweite Seemarken Basiskarte";
+"res_deleting" = "Wird gelöscht …";
+"res_wsea_map" = "Weltweite Seemarken-Basiskarte";
 "res_wmap" = "Weltweite Übersichtskarte";
 "res_dmap" = "detaillierte Übersichtskarte";
 "res_map_of_region" = "Karte der Umgebung";
@@ -1607,3 +1607,13 @@
 "res_zoom_invalid_value" = "Zoomwerte sollten im Bereich 1 - 22 liegen";
 "res_edit_map_source" = "Kartenquelle bearbeiten";
 "res_offlineSQL_URL_warning" = "Wird für diesen Kartentyp nicht unterstützt";
+"res_confirmation_delete" = "Bist du sicher, dass du %@ löschen möchtest?";
+"res_source_format" = "Quellformat";
+"res_confirmation_clear_cache" = "Bist du sicher, dass du den Cache für %@ leeren möchtest?";
+"trip_name" = "Streckenname";
+"trip_hint" = "Streckenname eingeben";
+"online_raster_map" = "Online-Rasterkarte";
+"offline_raster_map" = "Offline-Rasterkarte";
+"offline_raster_maps" = "Offline-Rasterkarten";
+"shared_string_warning" = "Warnung";
+"res_online_source_cache_alert" = "Durch die Anwendung dieser Änderungen werden die zwischengespeicherten Daten für diese Kachelquelle gelöscht";

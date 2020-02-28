@@ -206,4 +206,62 @@
     }
 }
 
+#pragma mark - OAMoveObjectProvider
+
+- (BOOL)isObjectMovable:(id)object
+{
+    return [object isKindOfClass:OAOsmPoint.class];
+}
+
+- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OAOsmPoint *p = (OAOsmPoint *)object;
+        if ([p isKindOfClass:OAOpenStreetMapPoint.class])
+        {
+            OAOpenStreetMapPoint *point = (OAOpenStreetMapPoint *)p;
+            [[OAOsmEditsDBHelper sharedDatabase] updateEditLocation:point.getId newPosition:position];
+        }
+        else if ([p isKindOfClass:OAOsmNotePoint.class])
+        {
+            OAOsmNotePoint *point = (OAOsmNotePoint *) p;
+            [[OAOsmBugsDBHelper sharedDatabase] updateOsmBugLocation:point.getId newPosition:position];
+        }
+        [self.app.osmEditsChangeObservable notifyEvent];
+    }
+}
+
+- (UIImage *) getPointIcon:(id)object
+{
+    return [UIImage imageNamed:@"map_osm_edit"];
+}
+
+- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+{
+    if (object && [self isObjectMovable:object])
+    {
+        OAOsmPoint *p = (OAOsmPoint *)object;
+        const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon([p getLatitude], [p getLongitude]));
+        for (const auto& marker : _osmEditsCollection->getMarkers())
+        {
+            if (pos == marker->getPosition())
+            {
+                marker->setIsHidden(hidden);
+            }
+        }
+    }
+}
+
+- (EOAPinVerticalAlignment) getPointIconVerticalAlignment
+{
+    return EOAPinAlignmentCenterVertical;
+}
+
+
+- (EOAPinHorizontalAlignment) getPointIconHorizontalAlignment
+{
+    return EOAPinAlignmentCenterHorizontal;
+}
+
 @end

@@ -46,7 +46,8 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetHomeSelection,
     OATargetWorkSelection,
     OATargetRouteDetails,
-    OATargetRouteDetailsGraph
+    OATargetRouteDetailsGraph,
+    OATargetChangePosition
 };
 
 @interface OATargetPoint : NSObject

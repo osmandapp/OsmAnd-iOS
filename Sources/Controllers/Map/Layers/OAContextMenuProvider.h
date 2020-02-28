@@ -9,9 +9,25 @@
 #import <CoreLocation/CoreLocation.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
 
+#include <OsmAndCore/Map/MapMarker.h>
+
 const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 
 @class OATargetPoint, OAPointDescription;
+
+typedef NS_ENUM(NSInteger, EOAPinVerticalAlignment)
+{
+    EOAPinAlignmentTop = 0,
+    EOAPinAlignmentCenterVertical,
+    EOAPinAlignmentBottom
+};
+
+typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
+{
+    EOAPinAlignmentLeft = 0,
+    EOAPinAlignmentCenterHorizontal,
+    EOAPinAlignmentRight
+};
 
 @protocol OAContextMenuProvider<NSObject>
 
@@ -26,5 +42,20 @@ const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 //- (BOOL) disableLongPressOnMap;
 //- (BOOL) isObjectClickable:(OATargetPoint *)o;
 //- (BOOL) runExclusiveAction:(OATargetPoint *)o unknownLocation:(BOOL)unknownLocation;
+
+@end
+
+@protocol OAMoveObjectProvider<NSObject>
+
+@required
+
+- (BOOL) isObjectMovable:(id) object;
+
+- (void) applyNewObjectPosition:(id) object position:(CLLocationCoordinate2D)position;
+- (void) setPointVisibility:(id) object hidden:(BOOL)hidden;
+- (UIImage *) getPointIcon:(id)object;
+
+- (EOAPinVerticalAlignment) getPointIconVerticalAlignment;
+- (EOAPinHorizontalAlignment) getPointIconHorizontalAlignment;
 
 @end

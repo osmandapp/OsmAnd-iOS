@@ -15,7 +15,7 @@
 
 #define kDefaultTrackColor 0xFFFF0000
 
-@interface OAGPXLayer : OASymbolMapLayer<OAContextMenuProvider>
+@interface OAGPXLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 @property (nonatomic) QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > gpxDocs;
 

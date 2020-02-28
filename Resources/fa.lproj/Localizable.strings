@@ -678,7 +678,7 @@
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Go to Map";
-"device_memory" = "‎حافظهٔ دستگاه";
+"device_memory" = "حافظهٔ دستگاه";
 "free_memory" = "Free %@";
 "first_usage_greeting" = "مسیریابی و کشف جاهای تازه بدون اتصال به اینترنت";
 "get_started" = "شروع";
@@ -747,7 +747,7 @@
 "shared_string_search" = "جست‌وجو";
 // Shared Strings
 "shared_string_apply" = "به‌کارگیری";
-"replace_destination_point" = "جایگزین مقصد کن";
+"replace_destination_point" = "جانشین مقصد کن";
 "shared_string_current" = "کنونی";
 "keep_and_add_destination_point" = "افزودن به‌عنوان مقصد آخر";
 "subsequent_dest_description" = "مقصد کنونی جلوتر می‌آید و مقصد جدیدی ایجاد می‌شود";

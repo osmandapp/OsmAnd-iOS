@@ -20,6 +20,6 @@
 @property (nonatomic, readonly) OATargetPoint *targetPoint;
 @property (strong, nonatomic) id<OATargetPointViewDelegate> menuViewDelegate;
 
-- (instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint;
+- (instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint targetType:(NSString *)targetType;
 
 @end

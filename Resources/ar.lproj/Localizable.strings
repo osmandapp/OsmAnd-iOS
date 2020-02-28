@@ -777,14 +777,14 @@
 "in_app_purchase" = "الشراء داخل التطبيق";
 "in_app_purchase_desc" = "دفع مرة واحدة";
 "in_app_purchase_desc_ex" = "بمجرد الشراء ، ستكون متوفرة بشكل دائم.";
-"unlock_all_features" = "فتح جميع المميزات";
+"unlock_all_features" = "فتح جميع ميزات أوسماند";
 "osm_live_enter_email" = "الرجاء إدخال عنوان بريد إلكتروني صالح";
 "osm_live_enter_user_name" = "فضلًا أدخل اسمًا عموميًّا";
 "shared_string_unexpected_error" = "حدث خطأ غير متوقع";
 "osm_live_payment_desc" = "رُسوم الاشتراك سَتُقتَرضُ كُل شهرٍ. يمكنك إلغاء اشتراكك متى أردت عبر أب ستور";
 "osm_live_ask_for_purchase" = "يرجى شراء اشتراك أوسماند لايف أولا";
 "shared_string_io_error" = "حدث خطا";
-"index_item_depth_contours_osmand_ext" = "محيطات الأعماق البحرية";
+"index_item_depth_contours_osmand_ext" = "معالم العمق البحري";
 "shared_string_time" = "الوقت";
 "poi_opening_hours" = "ساعات العمل";
 "privacy_policy" = "سياسة الخصوصية";
@@ -1242,7 +1242,7 @@
 "select_favorite" = "اختر المفضلة";
 "select_manually" = "تحديد يدويا";
 "avoid_by_type" = "تجنب حسب النوع";
-"select_map_marker" = "اختر علامة موضعية";
+"select_map_marker" = "حدد علامة الخريطة";
 "parking_place" = "إضافة مكان موقف";
 "add_start" = "إضافه نقطه البداية";
 "add_intermediate" = "إضافة نقطة وسيطة";
@@ -1609,3 +1609,7 @@
 "online_raster_map" = "الخريطة النقطية على الانترنت";
 "offline_raster_map" = "خريطة النقطية دون اتصال";
 "offline_raster_maps" = "خرائط النقطية دون اتصال";
+"res_edit_map_source" = "تحرير مصدر الخريطة";
+"res_offlineSQL_URL_warning" = "هذا النوع من الخرائط غير معتمدة";
+"shared_string_warning" = "تحذير";
+"res_online_source_cache_alert" = "سيؤدي تطبيق هذه التغييرات إلى مسح البيانات المخزنة مؤقتًا لمصدر الطبقات";

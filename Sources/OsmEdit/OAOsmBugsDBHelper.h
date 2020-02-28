@@ -9,6 +9,7 @@
 //  git revision 042c22d408f8d8c00b27736014073bcdde971e9e
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)addOsmBug:(OAOsmNotePoint *)point;
 -(void)deleteAllBugModifications:(OAOsmNotePoint *) point;
 -(long long) getMinID;
+
+- (void) updateOsmBugLocation:(long long)identifier newPosition:(CLLocationCoordinate2D)newPosition;
 
 @end
 

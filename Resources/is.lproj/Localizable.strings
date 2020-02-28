@@ -283,7 +283,7 @@
 "region_africa" = "Afríka";
 "region_asia" = "Asía";
 "region_ausralia_and_oceania" = "Ástralía og Eyjaálfa";
-"region_central_america" = "MIð-Ameríka";
+"region_central_america" = "Mið-Ameríka";
 "region_europe" = "Evrópa";
 "region_north_america" = "Norður-Ameríka";
 "region_russia" = "Rússland";
@@ -1193,7 +1193,7 @@
 "quick_action_enter_message" = "Settu inn skilaboð";
 "osm_note_action_field_descr" = "Þessi skilaboð eru innifalin í athugasemdareitnum.";
 "quick_action_source_switch_descr" = "Ef ýtt er á þennan aðgerðahnapp verður flett í gegnum listann hér fyrir neðan.";
-"quick_action_poi_add_descr" = "Með því að banka á þennan aðgerðarhnapp er hægt að bæta fljótt við merkisstað á kortið með fyrirfram skilgreindri gerð og merkjum.";
+"quick_action_poi_add_descr" = "Með því að ýta á þennan aðgerðarhnapp er hægt að bæta fljótt við merkisstað á kortið með fyrirfram skilgreindri gerð og merkjum.";
 "quick_action_day_night_descr" = "Ef ýtt er á þennan aðgerðahnapp verður skipt á milli dags- og næturhams.";
 "quick_action_parking_descr" = "Ef ýtt er á þennan aðgerðahnapp verður staðsetningu bílastæðis bætt á miðju skjásins.";
 "quick_action_marker_descr" = "Ef ýtt er á þennan aðgerðahnapp verður kortamerki bætt á miðju skjásins.";
@@ -1612,3 +1612,5 @@
 "offline_raster_maps" = "Ónettengd rastakort";
 "res_edit_map_source" = "Breyta uppruna korts";
 "res_offlineSQL_URL_warning" = "Ekki stutt fyrir þessa gerð korta";
+"shared_string_warning" = "Aðvörun";
+"res_online_source_cache_alert" = "Séu þessar breytingar virkjaðar mun það hreinsa skyndiminnið fyrir þennan kortatíglagjafa";

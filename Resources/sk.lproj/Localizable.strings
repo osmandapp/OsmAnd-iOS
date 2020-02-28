@@ -1204,7 +1204,6 @@
 "map_styles" = "Štýly mapy";
 "offline_vector_maps" = "Vektorové OSM mapy";
 "add_first_inermediate" = "Pridať prvý prechodný bod";
-
 "res_elliptic_mercator" = "Eliptický mercator";
 "res_url" = "URL";
 "show_notes" = "Zobraziť OSM poznámky";
@@ -1218,7 +1217,7 @@
 "rendering_value_translucent_red_name" = "Priehľadná červená";
 "rendering_attr_surface_fine_gravel_name" = "Jemné kamienky";
 "rendering_value_translucent_lightblue_name" = "Priehľadná svetlomodrá";
-"routing_attr_avoid_unpaved_name" = "Vyhnúť sa nespevneným cestám";
+"routing_attr_avoid_unpaved_name" = "Žiadne nespevnené cesty";
 "rendering_value_translucent_pink_name" = "Priehľadná ružová";
 "rendering_value_lightgreen_name" = "Svetlozelená";
 "rendering_value_translucent_green_name" = "Priehľadná zelená";
@@ -1285,7 +1284,7 @@
 "rendering_attr_surface_grass_name" = "Tráva";
 "rendering_attr_piste_difficulty_undefined_name" = "Neurčená";
 "rendering_attr_hideIcons_name" = "Ikony bodov záujmu (POI)";
-"routing_attr_avoid_ferries_name" = "Vyhnúť sa trajektom";
+"routing_attr_avoid_ferries_name" = "Žiadne trajekty";
 "rendering_attr_transportStops_name" = "Zastávky verejnej dopravy";
 "rendering_attr_publicTransportMode_name" = "Linky autobusov a trolejbusov";
 "rendering_attr_contourColorScheme_name" = "Farebná schéma vrstevníc";
@@ -1295,7 +1294,7 @@
 "rendering_attr_smoothness_horrible_name" = "Hrozná";
 "routing_attr_avoid_share_taxi_name" = "Žiadne zdieľané taxi";
 "rendering_attr_contourWidth_name" = "Hrúbka vrstevníc";
-"routing_attr_avoid_stairs_description" = "Vyhnúť sa schodom";
+"routing_attr_avoid_stairs_description" = "Vyhne sa schodom";
 "routing_attr_allow_motorway_name" = "Použiť diaľnice";
 "rendering_attr_showSurfaceGrade_name" = "Zobraziť kvalitu ciest";
 "rendering_attr_showAccess_name" = "Zobraziť obmedzenia prístupu a mýto";
@@ -1343,7 +1342,7 @@
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Zobraziť sieť cyklotrás";
 "routing_attr_short_way_name" = "Ekonomická trasa";
 "rendering_attr_noPolygons_name" = "Polygóny";
-"routing_attr_width_description" = "Zadajtešírku vozidla, ktorá musí byť povolená na cestách.";
+"routing_attr_width_description" = "Zadajte šírku vozidla, ktorá musí byť povolená na cestách.";
 "rendering_attr_piste_difficulty_expert_name" = "Pre expertov";
 "routeInfo_piste_difficulty_name" = "Obtiažnosť zjazdovky";
 "routing_attr_allow_intermediate_name" = "Povoliť trasy strednej náročnosti";
@@ -1354,7 +1353,7 @@
 "rendering_attr_smoothness_very_horrible_name" = "Veľmi hrozná";
 "rendering_attr_buildings15zoom_name" = "Budovy pri priblížení 15";
 "rendering_attr_streetLighting_name" = "Pouličné osvetlenie";
-"routing_attr_avoid_borders_name" = "Vyhnúť sa hraničným priechodom";
+"routing_attr_avoid_borders_name" = "Žiadne hraničné priechody";
 "routing_attr_height_name" = "Výškový limit";
 "rendering_attr_pisteGrooming_name" = "Úprava zjazdovky";
 "rendering_value_bicycle_name" = "Bicykel";
@@ -1403,13 +1402,13 @@
 "routing_attr_relief_smoothness_factor_hills_name" = "Pahorkatý";
 "routing_attr_avoid_tram_name" = "Žiadne električky";
 "routing_attr_piste_type_skitour_description" = "Trasy lyžiarskych okruhov.";
-"routing_attr_width_name" = "Limitšírky";
+"routing_attr_width_name" = "Limit šírky";
 "rendering_value_black_name" = "Čierna";
 "rendering_attr_piste_type_hike_name" = "Putovanie";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Rovinatý";
 "rendering_value_yellow_name" = "Žltá";
 "rendering_attr_hideProposed_name" = "Plánované objekty";
-"routing_attr_avoid_motorway_name" = "Vyhnúť sa diaľniciam";
+"routing_attr_avoid_motorway_name" = "Žiadne diaľnice";
 "rendering_value_lightblue_name" = "Svetlomodrá";
 "rendering_attr_surfaceIntegrity_name" = "Celistvosť povrchu ciest";
 "rendering_attr_currentTrackWidth_name" = "Šírka GPX";
@@ -1428,21 +1427,21 @@
 "rendering_value_defaultTranslucentCyan_name" = "Predvolená (priehľadná azúrová)";
 "rendering_attr_tracktype_grade4_name" = "Väčšinou mäkký";
 "routing_attr_avoid_bus_description" = "Vyhnúť sa autobusom a trolejbusom";
-"routing_attr_avoid_stairs_name" = "Vyhnúť sa schodom";
+"routing_attr_avoid_stairs_name" = "Žiadne schody";
 "rendering_attr_hideWaterPolygons_name" = "Skryť vodu";
 "rendering_attr_hideNonVehicleHighways_name" = "Cesty, ktoré nie sú pre vozidlá";
 "rendering_attr_contourLines_description" = "Zobraziť od úrovne priblíženia (vyžaduje dátový súbor vrstevníc):";
 "routing_attr_avoid_subway_description" = "Vyhnúť sa metru a ľahkej železnici";
 "rendering_attr_piste_type_sled_name" = "Sánkovanie";
-"routing_attr_avoid_motorway_description" = "Vyhnúť sa diaľniciam";
+"routing_attr_avoid_motorway_description" = "Vyhne sa diaľniciam";
 "rendering_attr_coloredBuildings_name" = "Vyfarbiť budovy podľa typu";
 "routing_attr_allow_intermediate_description" = "Náročnejšie trasy so strmejšími úsekmi. S možnými prekážkami, ktoré je nutné obísť.";
 "rendering_value_pink_name" = "Ružová";
 "routing_attr_driving_style_speed_name" = "Kratšie trasy";
 "rendering_attr_surface_asphalt_name" = "Asfalt";
 "routing_attr_no_new_routing_description" = "Nepoužívať pravidlá výpočtu trasy zavedené vo verzii 1.9.";
-"rendering_value_pedestrian_name" = "Chodec";
-"routing_attr_avoid_borders_description" = "Vyhnúť sa prekročeniu hraníc krajín";
+"rendering_value_pedestrian_name" = "Peši";
+"routing_attr_avoid_borders_description" = "Vyhne sa prekročeniu hraníc krajín";
 "rendering_attr_roadColors_name" = "Farebná schéma ciest";
 "routing_attr_prefer_motorway_name" = "Uprednostniť diaľnice";
 "rendering_value_default_name" = "Predvolené";
@@ -1450,8 +1449,8 @@
 "routing_attr_height_obstacles_name" = "Použiť údaje nadmorskej výšky";
 "routing_attr_avoid_train_description" = "Vyhnúť sa vlakom";
 "rendering_attr_tracktype_grade2_name" = "Pevný (nespevnený)";
-"routing_attr_avoid_unpaved_description" = "Vyhnúť sa nespevneným cestám.";
-"routing_attr_avoid_toll_description" = "Vyhnúť sa spoplatneným cestám";
+"routing_attr_avoid_unpaved_description" = "Vyhnúť sa nespevneným cestám";
+"routing_attr_avoid_toll_description" = "Vyhne sa spoplatneným cestám";
 "routeInfo_roadClass_name" = "Typ cesty";
 "rendering_attr_surface_unpaved_name" = "Nespevnený";
 "rendering_attr_hmRendered_description" = "Zvýšiť počet zobrazených detailov na mape.";

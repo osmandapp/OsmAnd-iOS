@@ -29,6 +29,9 @@
 @property id<OADownloadTask> __weak downloadTask;
 @property OAWorldRegion* worldRegion;
 @property BOOL disabled;
+
+- (void) updateSize;
+
 @end
 
 #define RepositoryResourceItem public(RepositoryResourceItem)

@@ -81,7 +81,7 @@
 "will_open_tomorrow_at" = "Will open tomorrow at";
 
 "error_avoid_specific_road" = "No bypass found";
-"road_blocked" = "Road blocked";
+"road_blocked" = "Blocked road";
 "starting_point" = "Starting point";
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Road";
@@ -1245,6 +1245,8 @@
 
 "directions_more_options" = "Directions from";
 "nearby_search" = "Search nearby";
+"change_object_posiotion" = "Change object's position";
+"change_position_descr" = "Move the map to change object's position";
 
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";

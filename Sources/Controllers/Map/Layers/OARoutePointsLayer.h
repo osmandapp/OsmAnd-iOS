@@ -12,8 +12,12 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
-@interface OARoutePointsLayer : OASymbolMapLayer<OAContextMenuProvider>
+@interface OARoutePointsLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getRouteMarkersCollection;
+
+- (void) setFinishMarkerVisibility:(BOOL)hidden;
+- (void) setStartMarkerVisibility:(BOOL)hidden;
+- (void) setIntermediateMarkerVisibility:(CLLocationCoordinate2D)location hidden:(BOOL)hidden;
 
 @end

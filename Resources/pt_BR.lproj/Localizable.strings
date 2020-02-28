@@ -420,7 +420,7 @@
 "sqlitedb_import_already_exists" = "O arquivo sqlitedb especificado já existe. Por favor, escolha a ação.";
 "map_creator" = "Criador de mapa";
 "local_names" = "Nomes locais";
-"sqlitedb_import_title" = "Importar arquivo de criador de mapa";
+"sqlitedb_import_title" = "Importar arquivo de mapa raster";
 "history" = "Histórico";
 "today" = "Hoje";
 "yesterday" = "Ontem";
@@ -1617,3 +1617,8 @@
 "res_offlineSQL_URL_warning" = "Não suportado para este tipo de mapa";
 "shared_string_warning" = "Alerta";
 "res_online_source_cache_alert" = "A aplicação dessas alterações limpará os dados em cache dessa origem de bloco";
+"change_object_posiotion" = "Alterar a posição do objeto";
+"change_position_descr" = "Mover o mapa para mudar a posição do objeto";
+"online_raster_maps" = "Mapas raster online";
+"import_raster_map_success" = "O mapa de raster foi importado. Abra as Configurações do mapa e ative-o através de sobreposição";
+"import_raster_map_failed" = "Falha na importação do mapa de varredura";

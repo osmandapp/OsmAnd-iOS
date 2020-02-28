@@ -1241,13 +1241,13 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (sw.isOn)
     {
-        [settings showGpx:@[self.gpx.gpxFileName]];
+        [settings showGpx:@[self.gpx.gpxFileName] update:NO];
         [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     }
     else if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName])
     {
-        [settings hideGpx:@[self.gpx.gpxFileName]];
-        [[_app mapSettingsChangeObservable] notifyEvent];
+        [settings hideGpx:@[self.gpx.gpxFileName] update:NO];
+        [_mapViewController showTempGpxTrack:self.gpx.gpxFileName update:NO];
     }
     return NO;
 }

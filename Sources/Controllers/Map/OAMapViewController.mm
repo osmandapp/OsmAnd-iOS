@@ -2197,6 +2197,11 @@
 
 - (void) showTempGpxTrack:(NSString *)fileName
 {
+    [self showTempGpxTrack:fileName update:YES];
+}
+
+- (void) showTempGpxTrack:(NSString *)fileName update:(BOOL)update
+{
     if (_recTrackShowing)
         [self hideRecGpxTrack];
 
@@ -2205,7 +2210,6 @@
         OAAppSettings *settings = [OAAppSettings sharedManager];
         if ([settings.mapSettingVisibleGpx containsObject:fileName]) {
             _gpxDocFileTemp = nil;
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
             return;
         }
         
@@ -2218,7 +2222,8 @@
             _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
         }
         
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        if (update)
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
 
@@ -2288,7 +2293,7 @@
     if (!_selectedGpxHelper.activeGpx.contains(qPath))
     {
         _selectedGpxHelper.activeGpx[qPath] = doc;
-     
+
         NSString *gpxDocFileTemp = _gpxDocFileTemp;
         @synchronized(_rendererSync)
         {
@@ -2297,7 +2302,7 @@
             _gpxDocFileTemp = nil;
         }
 
-        [[OAAppSettings sharedManager] showGpx:@[gpxDocFileTemp]];
+        [[OAAppSettings sharedManager] showGpx:@[gpxDocFileTemp] update:NO];
     }
 }
 

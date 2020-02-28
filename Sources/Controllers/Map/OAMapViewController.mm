@@ -2231,16 +2231,16 @@
 - (void) hideTempGpxTrack:(BOOL)update
 {
     @synchronized(_rendererSync)
-       {
-           BOOL wasTempTrackShowing = _tempTrackShowing;
-           _tempTrackShowing = NO;
-           
-           _gpxDocsTemp.clear();
-           _gpxDocFileTemp = nil;
-
-           if (wasTempTrackShowing && update)
-               [[_app updateGpxTracksOnMapObservable] notifyEvent];
-       }
+    {
+        BOOL wasTempTrackShowing = _tempTrackShowing;
+        _tempTrackShowing = NO;
+        
+        _gpxDocsTemp.clear();
+        _gpxDocFileTemp = nil;
+        
+        if (wasTempTrackShowing && update)
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
 }
 
 - (void) hideTempGpxTrack

@@ -1611,3 +1611,5 @@
 "offline_raster_maps" = "خرائط النقطية دون اتصال";
 "res_edit_map_source" = "تحرير مصدر الخريطة";
 "res_offlineSQL_URL_warning" = "هذا النوع من الخرائط غير معتمدة";
+"shared_string_warning" = "تحذير";
+"res_online_source_cache_alert" = "سيؤدي تطبيق هذه التغييرات إلى مسح البيانات المخزنة مؤقتًا لمصدر الطبقات";

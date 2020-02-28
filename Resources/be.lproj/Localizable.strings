@@ -1002,7 +1002,6 @@
 "osm_note_comment" = "Каментар";
 "map_widget_radius_ruler" = "Радыусная лінейка";
 "quick_action_no_underlay" = "Няма падкладкі";
-
 "res_elliptic_mercator" = "Эліптычны меркатар";
 "hide_notes" = "Схаваць OSM-нататкі";
 "res_url" = "URL";
@@ -1043,7 +1042,7 @@
 "rendering_attr_pisteRoutes_name" = "Лыжныя трасы";
 "rendering_attr_smoothness_horrible_name" = "Жудасная";
 "rendering_value_disabled_name" = "Выключана";
-"rendering_attr_hideOverground_name" = "Надземныя аб\'екты";
+"rendering_attr_hideOverground_name" = "Надземныя аб'екты";
 "rendering_attr_ice_road_name" = "Ледзяная дарога";
 "routing_attr_avoid_unpaved_name" = "Без грунтавых дарог";
 "rendering_attr_piste_difficulty_connection_name" = "Злучэнне";
@@ -1066,7 +1065,7 @@
 "rendering_attr_piste_type_hike_name" = "Паход";
 "rendering_attr_hmRendered_description" = "Адлюстроўваць больш дэталяў на мапе.";
 "rendering_attr_roadStyle_name" = "Стыль аўтадарог";
-"rendering_attr_hideProposed_name" = "Плануемыя аб\'екты";
+"rendering_attr_hideProposed_name" = "Плануемыя аб'екты";
 "rendering_attr_tramRoutes_name" = "Трамвайныя маршруты";
 "rendering_value_pedestrian_name" = "Пешшу";
 "rendering_attr_showRoadMaps_name" = "Мапы толькі дарог";
@@ -1074,7 +1073,7 @@
 "rendering_value_translucent_lightgreen_name" = "Празрысты светла-зялёны";
 "routing_attr_avoid_train_description" = "Пазбягаць цягнікоў";
 "rendering_attr_surface_metal_name" = "Метал";
-"rendering_attr_highway_class_track_grade3_name" = "3клас";
+"rendering_attr_highway_class_track_grade3_name" = "3 клас";
 "routing_attr_piste_type_nordic_description" = "Трасы для лыжных гонак і іх паўночных тыпаў.";
 "routing_attr_driving_style_name" = "Стыль язды";
 "routing_attr_allow_expert_description" = "Надзвычай складаныя трасы, з небяспечным наваколлем і перашкодамі.";
@@ -1130,14 +1129,14 @@
 "rendering_attr_coloredBuildings_name" = "Пазначаць тып будынка колерам";
 "routing_attr_avoid_share_taxi_name" = "Без маршрутных таксі";
 "rendering_attr_showMtbRoutes_name" = "Паказваць маршруты горных ровараў";
-"routing_attr_allow_classic_only_description" = "Маршруты, падрыхтаваныя толькі для класічнага стылю без канькабежных трас. Сюды ўваходзяць маршруты, падрыхтаваныя невялікім снегаходам з больш свабоднай лыжнёйі трасамі, падрыхтаваныя непасрэдна лыжнікамі.";
+"routing_attr_allow_classic_only_description" = "Маршруты, падрыхтаваныя толькі для класічнага стылю без канькабежных трас. Сюды ўваходзяць маршруты, падрыхтаваныя невялікім снегаходам з больш свабоднай лыжнёй і трасамі, падрыхтаваныя непасрэдна лыжнікамі.";
 "rendering_attr_showLez_description" = "Паказваць на мапе зоны з нізкім узроўнем выкідаў. Не ўплывае на маршрутызацыю.";
 "rendering_attr_piste_difficulty_advanced_name" = "Высокая";
 "rendering_value_medium_name" = "Сярэдні";
 "rendering_attr_hideWaterPolygons_name" = "Схаваць ваду";
 "routing_attr_weight_name" = "Абмежаванне вагі";
 "rendering_attr_showRoadMaps_description" = "Абярыце калі паказваць толькі дарожныя мапы:";
-"routing_attr_piste_type_downhill_description" = "Схілы для горных лыжаў і доступ да пад\'ёмнікаў.";
+"routing_attr_piste_type_downhill_description" = "Схілы для горных лыжаў і доступ да пад'ёмнікаў.";
 "rendering_attr_alpineHiking_description" = "Візуалізацыя шляху па шкале SAC.";
 "routing_attr_avoid_ferry_name" = "Без паромаў";
 "routing_attr_piste_type_skitour_description" = "Трасы для гарналыжных тураў.";
@@ -1168,7 +1167,7 @@
 "rendering_attr_smoothness_very_bad_name" = "Вельмі дрэнная";
 "routing_attr_prefer_unpaved_name" = "Аддаваць перавагу грунтавым дарогам";
 "rendering_attr_highway_class_cycleway_name" = "Роварная дарожка";
-"routing_attr_avoid_sett_name" = "Пазбягаць брукаваных дарог";
+"routing_attr_avoid_sett_name" = "Без брукаваных дарог";
 "rendering_attr_showAccess_name" = "Паказаць абмежаванні доступу і аплату";
 "rendering_attr_contourColorScheme_name" = "Каляровая схема гарызанталяў";
 "rendering_attr_hideAccess_name" = "Абмежаванні доступу";
@@ -1181,7 +1180,7 @@
 "rendering_attr_smoothness_very_horrible_name" = "Вельмі жудасная";
 "rendering_value_translucent_yellow_name" = "Празрысты жоўты";
 "routing_attr_relief_smoothness_factor_hills_name" = "Гарысты";
-"routing_attr_freeride_policy_description" = "Freeridesі offpiste - неафіцыйныя маршруты і праходы. Як правіла, недагледжаныя, неразмечаныя, не асвятляюцца ўвечары. Будзьце вельмі ўважлівымі.";
+"routing_attr_freeride_policy_description" = "Freerides і offpiste - неафіцыйныя маршруты і праходы. Як правіла, недагледжаныя, неразмечаныя, не асвятляюцца ўвечары. Будзьце вельмі ўважлівымі.";
 "routing_attr_avoid_subway_name" = "Без метро";
 "routing_attr_avoid_train_name" = "Без цягнікоў";
 "rendering_attr_currentTrackColor_name" = "Колер GPX";
@@ -1201,7 +1200,7 @@
 "rendering_attr_transportStops_name" = "Прыпынкі транспарту";
 "rendering_attr_noPolygons_description" = "Адлюстроўваць толькі контуры, без залівання.";
 "rendering_attr_highway_class_footway_name" = "Ходнік";
-"rendering_attr_highway_class_track_grade1_name" = "1клас";
+"rendering_attr_highway_class_track_grade1_name" = "1 клас";
 "routing_attr_avoid_borders_description" = "Пазбягаць перасячэння нацыянальных межаў";
 "rendering_attr_contourWidth_name" = "Таўшчыня гарызанталяў";
 "routing_attr_avoid_toll_name" = "Без платных дарог";
@@ -1226,7 +1225,7 @@
 "routing_attr_avoid_ferries_name" = "Без паромных перапраў";
 "rendering_attr_showSurfaces_name" = "Адлюстроўваць тып пакрыцця";
 "rendering_attr_surface_salt_name" = "Соль";
-"rendering_attr_highway_class_track_grade4_name" = "4клас";
+"rendering_attr_highway_class_track_grade4_name" = "4 клас";
 "rendering_attr_surface_fine_gravel_name" = "Шматпластовы жвір";
 "rendering_value_translucent_pink_name" = "Паўпразрысты ружовы";
 "routing_attr_no_new_routing_name" = "Без правілаў маршрутызацыі v1.9";
@@ -1255,7 +1254,7 @@
 "rendering_attr_surface_compacted_name" = "Утрамбавана";
 "routing_attr_allow_advanced_name" = "Дазволіць дадатковыя трасы";
 "rendering_attr_contourColorScheme_description" = "Каляровая схема гарызанталяў";
-"rendering_attr_hideUnderground_name" = "Падземныя аб\'екты";
+"rendering_attr_hideUnderground_name" = "Падземныя аб'екты";
 "routeInfo_steepness_name" = "Пакатасць";
 "rendering_attr_piste_difficulty_extreme_name" = "Экстрым";
 "rendering_value_walkingRoutesOSMC_name" = "Афарбоўка па пешаходнаму сімвалу OSMC";
@@ -1274,11 +1273,11 @@
 "routing_attr_relief_smoothness_factor_name" = "Абраць перасечанасць мясцовасці";
 "rendering_attr_surface_mud_name" = "Іл";
 "rendering_attr_shareTaxiRoutes_name" = "Маршрутныя таксі";
-"rendering_attr_highway_class_track_grade2_name" = "2клас";
+"rendering_attr_highway_class_track_grade2_name" = "2 клас";
 "routing_attr_width_description" = "Увядзіце шырыню транспартнага сродку для ўліку пры разліку маршруту.";
 "routing_attr_avoid_motorway_name" = "Без аўтамагістраляў";
 "rendering_value_translucent_purple_name" = "Празрысты фіялетавы";
-"rendering_attr_highway_class_track_grade5_name" = "5клас";
+"rendering_attr_highway_class_track_grade5_name" = "5 клас";
 "rendering_value_car_name" = "Аўтамабіль";
 "rendering_attr_pisteGrooming_name" = "Дагляд трасы";
 "rendering_attr_surface_unpaved_name" = "Без пакрыцця";
@@ -1294,3 +1293,4 @@
 "routing_attr_avoid_ferry_description" = "Пазбягаць паромаў";
 "rendering_value_browse_map_name" = "Прагляд мапы";
 "routing_attr_allow_classic_only_name" = "Дазволіць толькі класічныя трасы";
+"start_navigation" = "Пачаць навігацыю";

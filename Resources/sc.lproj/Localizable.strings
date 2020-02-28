@@ -1615,3 +1615,5 @@
 "offline_raster_maps" = "Mapa non vetoriale (raster) non in lìnia";
 "res_edit_map_source" = "Modìfica sa mitza de sa mapa";
 "res_offlineSQL_URL_warning" = "No est suportadu pro custa casta de mapa";
+"shared_string_warning" = "Atentzione";
+"res_online_source_cache_alert" = "Aplichende custas modìficas as a isboidare sa memòria temporànea pro custa mitza de tasseddos";

@@ -454,16 +454,16 @@
     _prevMapMode = OAMapModeFree;
     _mapModeObservable = [[OAObservable alloc] init];
 
-    _locationServices = [[OALocationServices alloc] initWith:self];
-    if (_locationServices.available && _locationServices.allowed)
-        [_locationServices start];
-
     _downloadsManager = [[OADownloadsManager alloc] init];
     _downloadsManagerActiveTasksCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                                      withHandler:@selector(onDownloadManagerActiveTasksCollectionChanged)
                                                                                       andObserve:_downloadsManager.activeTasksCollectionChangedObservable];
     
     _resourcesInstaller = [[OAResourcesInstaller alloc] init];
+
+    _locationServices = [[OALocationServices alloc] initWith:self];
+    if (_locationServices.available && _locationServices.allowed)
+        [_locationServices start];
 
     [self updateScreenTurnOffSetting];
 

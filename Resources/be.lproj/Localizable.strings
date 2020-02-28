@@ -1293,3 +1293,4 @@
 "routing_attr_avoid_ferry_description" = "Пазбягаць паромаў";
 "rendering_value_browse_map_name" = "Прагляд мапы";
 "routing_attr_allow_classic_only_name" = "Дазволіць толькі класічныя трасы";
+"start_navigation" = "Пачаць навігацыю";

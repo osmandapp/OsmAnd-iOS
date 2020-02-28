@@ -2195,39 +2195,12 @@
     }
 }
 
-- (void) makeGpxTemp:(NSString *)fileName
-{
-    @synchronized(_rendererSync)
-    {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        if ([settings removeGpxFromVisible:fileName])
-        {
-            _tempTrackShowing = YES;
-            if (![_gpxDocFileTemp isEqualToString:fileName] || _gpxDocsTemp.isEmpty()) {
-                _gpxDocsTemp.clear();
-                _gpxDocFileTemp = [fileName copy];
-                NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
-                _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
-            }
-        }
-    }
-}
-
-- (void) makeGpxVisible:(NSString *)fileName
-{
-    @synchronized(_rendererSync)
-    {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        if ([settings addGpxToVisible:fileName])
-        {
-            _tempTrackShowing = NO;
-            _gpxDocsTemp.clear();
-            _gpxDocFileTemp = nil;
-        }
-    }
-}
-
 - (void) showTempGpxTrack:(NSString *)fileName
+{
+    [self showTempGpxTrack:fileName update:YES];
+}
+
+- (void) showTempGpxTrack:(NSString *)fileName update:(BOOL)update
 {
     if (_recTrackShowing)
         [self hideRecGpxTrack];
@@ -2249,11 +2222,17 @@
             _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
         }
         
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        if (update)
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
 
 - (void) hideTempGpxTrack
+{
+    [self hideTempGpxTrack:YES];
+}
+
+- (void) hideTempGpxTrack:(BOOL)update
 {
     @synchronized(_rendererSync)
     {
@@ -2263,7 +2242,7 @@
         _gpxDocsTemp.clear();
         _gpxDocFileTemp = nil;
 
-        if (wasTempTrackShowing)
+        if (wasTempTrackShowing && update)
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
@@ -2318,7 +2297,17 @@
     QString qPath = QString::fromNSString(path);
     if (!_selectedGpxHelper.activeGpx.contains(qPath))
     {
-        [self makeGpxVisible:_gpxDocFileTemp];
+        _selectedGpxHelper.activeGpx[qPath] = doc;
+
+        NSString *gpxDocFileTemp = _gpxDocFileTemp;
+        @synchronized(_rendererSync)
+        {
+            _tempTrackShowing = NO;
+            _gpxDocsTemp.clear();
+            _gpxDocFileTemp = nil;
+        }
+
+        [[OAAppSettings sharedManager] showGpx:@[gpxDocFileTemp] update:NO];
     }
 }
 

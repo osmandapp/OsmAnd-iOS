@@ -491,8 +491,10 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (void) clearImpassableRoads;
 
 - (void) showGpx:(NSArray<NSString *> *)fileNames;
+- (void) showGpx:(NSArray<NSString *> *)fileNames update:(BOOL)update;
 - (void) updateGpx:(NSArray<NSString *> *)fileNames;
 - (void) hideGpx:(NSArray<NSString *> *)fileNames;
+- (void) hideGpx:(NSArray<NSString *> *)fileNames update:(BOOL)update;
 - (void) hideRemovedGpx;
 - (BOOL) addGpxToVisible:(NSString *)fileName;
 - (BOOL) removeGpxFromVisible:(NSString *)fileName;

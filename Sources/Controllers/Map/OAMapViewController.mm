@@ -2228,19 +2228,24 @@
     }
 }
 
-- (void) hideTempGpxTrack
+- (void) hideTempGpxTrack:(BOOL)update
 {
     @synchronized(_rendererSync)
-    {
-        BOOL wasTempTrackShowing = _tempTrackShowing;
-        _tempTrackShowing = NO;
-        
-        _gpxDocsTemp.clear();
-        _gpxDocFileTemp = nil;
+       {
+           BOOL wasTempTrackShowing = _tempTrackShowing;
+           _tempTrackShowing = NO;
+           
+           _gpxDocsTemp.clear();
+           _gpxDocFileTemp = nil;
 
-        if (wasTempTrackShowing)
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    }
+           if (wasTempTrackShowing && update)
+               [[_app updateGpxTracksOnMapObservable] notifyEvent];
+       }
+}
+
+- (void) hideTempGpxTrack
+{
+    [self hideTempGpxTrack:YES];
 }
 
 - (void) showRecGpxTrack:(BOOL)refreshData

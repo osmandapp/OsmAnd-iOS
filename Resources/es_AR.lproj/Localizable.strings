@@ -419,7 +419,7 @@
 "show_region_on_map_go" = "Ir al mapa";
 "offline_maps" = "Mapas sin conexión";
 "download_map" = "Mapa descargado";
-"sqlitedb_import_title" = "Importar archivo creador de mapa";
+"sqlitedb_import_title" = "Importar archivo del mapa de tramas";
 "sqlitedb_import_already_exists" = "El archivo sqlitedb elegido ya existe. Elija una acción.";
 "map_creator" = "Creador de mapa";
 "local_names" = "Nombres locales";
@@ -1618,3 +1618,8 @@
 "res_offlineSQL_URL_warning" = "No admitido para este tipo de mapa";
 "shared_string_warning" = "Advertencia";
 "res_online_source_cache_alert" = "Al aplicar estos cambios, los datos almacenados serán borrados para esta fuente de teselas";
+"change_object_posiotion" = "Cambiar la ubicación del objeto";
+"change_position_descr" = "Mueve el mapa para cambiar la ubicación del objeto";
+"online_raster_maps" = "Mapa de trama en línea";
+"import_raster_map_success" = "Se ha importado un mapa de tramas. Abre los ajustes del mapa y actívalo desde «Superposición/Subyacencia»";
+"import_raster_map_failed" = "Error al importar el mapa de tramas";

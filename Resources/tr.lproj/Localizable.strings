@@ -409,7 +409,7 @@
 "show_region_on_map_title" = "İndirilen harita";
 "show_region_on_map_desc" = "% Haritası yüklendi. Bunu kullanmaya başlamak için harita için gidin.";
 "show_region_on_map_go" = "Harita git";
-"sqlitedb_import_title" = "Harita Oluşturucusu dosyası al";
+"sqlitedb_import_title" = "Raster harita dosyasını içe aktar";
 "sqlitedb_import_already_exists" = "Belirtilen SqliteDb dosya zaten var olduğunu. Eylemi seçiniz.";
 "map_creator" = "Harita Oluşturucusu";
 "local_names" = "Yerel adları";
@@ -671,7 +671,7 @@
 "shared_string_search" = "Arama";
 "targets" = "Varış noktaları";
 "poi" = "POI";
-"road_blocked" = "Yol kapalı";
+"road_blocked" = "Kapalı yol";
 "starting_point" = "Başlangıç noktası";
 "shared_string_road" = "Yol";
 "shared_string_go" = "Git";
@@ -1612,3 +1612,8 @@
 "res_offlineSQL_URL_warning" = "Bu harita türü için desteklenmiyor";
 "shared_string_warning" = "Uyarı";
 "res_online_source_cache_alert" = "Bu değişiklikleri uygulamak, bu döşeme kaynağı için önbelleğe alınan verileri temizleyecektir";
+"change_object_posiotion" = "Nesnenin konumunu değiştir";
+"change_position_descr" = "Nesnenin konumunu değiştirmek için haritayı hareket ettirin";
+"online_raster_maps" = "Çevrim içi raster haritaları";
+"import_raster_map_success" = "Raster haritası içe aktarıldı. Harita Ayarları'nı açın ve Üst katman/Alt katman ile etkinleştirin";
+"import_raster_map_failed" = "Raster harita içe aktarma başarısız oldu";

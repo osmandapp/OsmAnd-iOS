@@ -2209,6 +2209,7 @@
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         if ([settings.mapSettingVisibleGpx containsObject:fileName]) {
+            _gpxDocsTemp.clear();
             _gpxDocFileTemp = nil;
             return;
         }
@@ -2290,7 +2291,7 @@
     std::shared_ptr<const OsmAnd::GeoInfoDocument> doc = _gpxDocsTemp.first();
     NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpxDocFileTemp];
     QString qPath = QString::fromNSString(path);
-    if (!_selectedGpxHelper.activeGpx.contains(qPath))
+    if (![[OAAppSettings sharedManager].mapSettingVisibleGpx containsObject:_gpxDocFileTemp])
     {
         _selectedGpxHelper.activeGpx[qPath] = doc;
 

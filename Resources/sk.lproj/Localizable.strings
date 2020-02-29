@@ -1233,7 +1233,7 @@
 "routing_attr_difficulty_preference_description" = "Preferovať trasy s touto náročnosťou, ale navigovanie cez náročnejšie alebo jednoduchšie zjazdovky je možné ak sú kratšie.";
 "rendering_attr_highway_class_track_grade4_name" = "Stupeň 4";
 "rendering_attr_alpineHiking_name" = "Alpinistická stupnica (SAC)";
-"routing_attr_avoid_sett_name" = "Vyhnúť sa dlažobným kameňom";
+"routing_attr_avoid_sett_name" = "Žiadne nerovné dlažobné kamene";
 "routing_attr_prefer_motorway_description" = "Uprednostniť diaľnice";
 "rendering_attr_piste_type_snow_park_name" = "Snežný terénny areál";
 "rendering_attr_showRoadMaps_description" = "Vyberte, kedy zobraziť mapy ciest:";
@@ -1324,7 +1324,7 @@
 "rendering_attr_highway_class_bridleway_name" = "Cesta pre kone";
 "routing_attr_piste_type_sled_description" = "Svahy pre sánkovanie.";
 "routing_attr_avoid_shuttle_train_name" = "Nepoužiť autovlak";
-"routing_attr_freeride_policy_description" = "Voľný zjazd mimo zjazdovky cez neoficiálne trasy a prejazdy. Obyčajne neupravované a neudržiavané prevádzkarom, bez večernej kontroly. Vstup na vlastné riziko.";
+"routing_attr_freeride_policy_description" = "Voľný zjazd mimo zjazdovky cez neoficiálne trasy a prejazdy. Obyčajne neupravované a neudržiavané, bez večernej kontroly. Vstup na vlastné riziko.";
 "rendering_attr_highway_class_street_name" = "Ulica";
 "rendering_attr_busRoutes_name" = "Autobusové linky";
 "rendering_value__name" = "Predvolené";
@@ -1378,7 +1378,7 @@
 "rendering_attr_trolleybusRoutes_name" = "Trolejbusové linky";
 "rendering_attr_showSurfaces_name" = "Zobraziť povrch ciest";
 "routing_attr_piste_type_skitour_name" = "Lyžiarske okruhy";
-"routing_attr_allow_skating_only_description" = "Trasy upravované pre voľný štýl alebo korčuľovanie na lyžiach, nie pre klasické lyžovanie.";
+"routing_attr_allow_skating_only_description" = "Trasy upravované len pre voľný štýl alebo korčuľovanie na lyžiach, nie pre klasické lyžovanie.";
 "rendering_attr_showCycleRoutes_name" = "Zobraziť cyklotrasy";
 "routeInfo_winter_ice_road_name" = "Zimné a ľadové cesty";
 "routing_attr_weight_name" = "Hmotnostný limit";
@@ -1419,7 +1419,7 @@
 "rendering_attr_smoothness_very_bad_name" = "Veľmi zlá";
 "rendering_attr_surface_mud_name" = "Blato";
 "rendering_attr_piste_difficulty_novice_name" = "Pre začiatočníkov";
-"routing_attr_avoid_sett_description" = "Vyhnúť sa nerovným dlažobným kameňom a kockám";
+"routing_attr_avoid_sett_description" = "Vyhne sa nerovným dlažobným kameňom a kockám";
 "rendering_attr_hideWaterPolygons_description" = "Voda";
 "rendering_attr_surface_stone_name" = "Kameň";
 "rendering_value_white_name" = "Biela";

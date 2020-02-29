@@ -732,7 +732,7 @@
 "auto_follow_location_enabled" = "Kartennachführung aktiv.";
 "do_not_send_anonymous_data_desc" = "Wir sammeln keine Standortdaten. Nur App-Nutzung und Karten-Download-Statistiken.";
 "error_avoid_specific_road" = "Keine Umgehungsstraße gefunden";
-"road_blocked" = "Straße gesperrt";
+"road_blocked" = "Gesperrte Straße";
 "starting_point" = "Startpunkt";
 "shared_string_road" = "Straße";
 "avoid_roads_msg" = "Sie können eine Alternativroute einleiten, indem Sie Straßen auswählen, die vermieden werden sollen";
@@ -1617,3 +1617,4 @@
 "offline_raster_maps" = "Offline-Rasterkarten";
 "shared_string_warning" = "Warnung";
 "res_online_source_cache_alert" = "Durch die Anwendung dieser Änderungen werden die zwischengespeicherten Daten für diese Kachelquelle gelöscht";
+"change_object_posiotion" = "Position des Objekts ändern";

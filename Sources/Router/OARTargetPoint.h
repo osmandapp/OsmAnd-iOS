@@ -23,7 +23,6 @@
 - (instancetype) initWithPoint:(CLLocation *)point name:(OAPointDescription *)name;
 - (instancetype) initWithPoint:(CLLocation *)point name:(OAPointDescription *)name index:(int)index;
 
-- (OAPointDescription *) getPointDescription;
 - (NSString *) getOnlyName;
 - (BOOL) isSearchingAddress;
 

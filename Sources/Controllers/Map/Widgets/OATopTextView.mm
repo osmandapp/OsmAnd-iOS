@@ -295,12 +295,12 @@
         id<OALocationPoint> point = pnt.point;
         _waypointImage.image = [pnt getImage:NO];
         
-        NSString *descr;
+        NSString *descr = @"";
         OAPointDescription *pd = [point getPointDescription];
-        if (pd.name.length == 0)
-            descr = pd.typeName;
-        else
+        if (pd.name && pd.name.length > 0)
             descr = pd.name;
+        else if (pd.typeName && pd.typeName.length > 0)
+            descr = pd.typeName;
         
         NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
         

@@ -866,14 +866,14 @@
 "osmand_live_title" = "أوسماند لايف";
 "osmand_live_updates" = "تحديثات مباشرة";
 "osmand_live_available_maps" = "الخرائط المتاحة";
-"osmand_live_last_changed" = "آخر تغيير للخريطة:% @";
-"osmand_live_last_live_update" = "آخر تحديث:% @";
+"osmand_live_last_changed" = "آخر تغيير للخريطة:%@";
+"osmand_live_last_live_update" = "آخر تحديث:%@";
 "osmand_live_not_updated" = "لم يتم تحديثها بعد";
 "osmand_live_hourly" = "كل ساعة";
 "osmand_live_daily" = "كل يوم";
 "osmand_live_weekly" = "كل أسبوع";
 "osmand_live_reports" = "تقارير";
-"osmand_live_server_date" = "آخر تحديث للخادم:% @";
+"osmand_live_server_date" = "آخر تحديث للخادم:%@";
 "osm_live_plan_pricing" = "الأسعار والاشتراك";
 "osm_live_payment_monthly_title" = "دفع شهريا";
 "osm_live_payment_3_months_title" = "الدفع مرة واحدة في 3 أشهر";
@@ -890,7 +890,7 @@
 "osm_live_payment_contribute_descr" = "جزء من الدخل يذهب إلى المساهمين خريطة الشارع المفتوح.";
 "osmand_live_upd_frequency" = "تحديث التردد";
 "osmand_live_wifi_only" = "تحديث واي فاي فقط";
-"free_version_message" = "يمكنك تنزيل الخرائط% d أو تحديثها";
+"free_version_message" = "يمكنك تنزيل الخرائط%d أو تحديثها";
 "get_osmand_live" = "الحصول علي أوسماند لايف لفتح جميع الميزات:";
 "osm_live_subscription" = "اشتراك أوسماند لايف";
 "wikivoyage_offline" = "ويكي الرحلات دون اتصال";
@@ -929,8 +929,8 @@
 "subscriptions_public_info" = "سيتم احتساب الدفع علي حساب آيتونز الخاص بك عند تاكيد الشراء. سيتم تجديد الاشتراك تلقائيا ما لم يتم إيقاف التجديد التلقائي قبل 24 ساعة علي الأقل من نهاية الفترة الحالية. سيتم احتساب حسابك وفقا لخطة التجديد الخاصة بك في غضون 24 ساعة قبل نهاية الفترة الحالية. يمكنك إداره أو إيقاف التجديد التلقائي في إعدادات الحساب بعد الشراء. إذا قمت بشراء اشتراك خلال فتره تجريبية مجانية ، سيتم احتساب الجزء غير المستخدم من هذه الفترة.";
 "terms_of_use" = "شروط الاستخدام";
 "already_has_subscription" = "لقد اشتركت بالفعل في أوسماند لايف وتم إلغاء قفل جميع الوظائف.";
-"already_has_inapp" = "لقد اشتركت بالفعل في % @.";
-"inapp_not_found" = "لم يتم العثور علي% @ في أوسماند. ربما تم الإلغاء.";
+"already_has_inapp" = "لقد اشتركت بالفعل في %@.";
+"inapp_not_found" = "لم يتم العثور علي%@ في أوسماند. ربما تم الإلغاء.";
 "osmand_live_update_now" = "تحديث الآن";
 // GPX colors
 "red" = "أحمر";

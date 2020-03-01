@@ -146,9 +146,15 @@
         targetPoint.icon = [UIImage imageNamed:favCol.iconName];
         
         OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
-        const auto& sharedItem = std::shared_ptr<const OsmAnd::IFavoriteLocation>(favLoc);
-        item.favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(sharedItem);
-        targetPoint.targetObj = item;
+        for (const auto& favLocPtr : self.app.favoritesCollection->getFavoriteLocations())
+        {
+            if (favLoc->isEqual(favLocPtr.get()))
+            {
+                item.favorite = favLocPtr;
+                targetPoint.targetObj = item;
+                break;
+            }
+        }
         
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;

@@ -560,7 +560,7 @@
 "traffic_warning_pedestrian" = "Pas de vianants";
 "traffic_warning_hazard" = "Perill informat";
 "destination_point" = "Destinació %@";
-"intermediate_point" = "Destinació intermitja % @";
+"intermediate_point" = "Destinació intermitja %@";
 "arrived_at_intermediate_point" = "Heu arribat a la vostra destinació intermèdia";
 "starting_point_too_far" = "El punt d'inici és massa lluny de la carretera més propera.";
 "ending_point_too_far" = "El punt final és massa lluny de la carretera més propera.";
@@ -1114,7 +1114,7 @@
 "product_desc_europe_short" = "Mapes de les regions d'Europa";
 "product_desc_northamerica_short" = "Mapes de les regions d'Amèrica del Nord";
 "routing_import_please_restart" = "Per utilitzar el routing.xml nou heu de reiniciar l'aplicació.";
-"get_discount_short_descr" = "%@ durant %d % @, després %@";
+"get_discount_short_descr" = "%@ durant %d %@, després %@";
 "get_discount_first_part" = "%@ els primers %@";
 "get_discount_second_part" = "després %@";
 "day_short" = "d";
@@ -1607,3 +1607,11 @@
 "res_source_one_per_tile" = "Un fitxer d'imatge per tessel·la";
 "res_zoom_invalid_value" = "Els valors del zoom han de estar entre 1 - 22";
 "rendering_attr_piste_type_sled_name" = "Trineu";
+"rendering_attr_piste_type_skitour_name" = "Esquí de muntanya";
+"online_raster_map" = "Mapa de bits en línia";
+"offline_raster_map" = "Mapa de bits en local";
+"offline_raster_maps" = "Mapes de bits en local";
+"res_edit_map_source" = "Edita l'origen del mapa";
+"res_offlineSQL_URL_warning" = "No s'admet per a aquest tipus de mapa";
+"shared_string_warning" = "Avís";
+"res_online_source_cache_alert" = "L'aplicació d'aquests canvis esborrarà les dades de la memòria cau per a aquesta font de tessel·les";

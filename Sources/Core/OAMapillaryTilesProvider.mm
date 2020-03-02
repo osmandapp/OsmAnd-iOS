@@ -399,48 +399,50 @@ QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledD
     .replace(QLatin1String("${osm_y}"), QString::number(req.tileId.y));
     
     std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-    const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult);
+    const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, req.queryController);
 
     // Ensure that all directories are created in path to local tile
     rasterFile.dir().mkpath(QLatin1String("."));
     
     // If there was error, check what the error was
-    if (!requestResult->isSuccessful())
+    if (!requestResult || !requestResult->isSuccessful() || downloadResult.isEmpty())
     {
-        const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
-        
-        LogPrintf(OsmAnd::LogSeverityLevel::Warning,
-                  "Failed to download tile from %s (HTTP status %d)",
-                  qPrintable(tileUrl),
-                  httpStatus);
-        
-        // 404 means that this tile does not exist, so create a zero file
-        if (httpStatus == 404)
+        if (requestResult)
         {
-            // Save to a file
-            QFile tileFile(rasterFile.absoluteFilePath());
-            if (tileFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+            const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
+            
+            LogPrintf(OsmAnd::LogSeverityLevel::Warning,
+                      "Failed to download tile from %s (HTTP status %d)",
+                      qPrintable(tileUrl),
+                      httpStatus);
+            
+            // 404 means that this tile does not exist, so create a zero file
+            if (httpStatus == 404)
             {
-                tileFile.close();
-                
-                // Unlock the tile
-                unlockTile(req.tileId, req.zoom);
-                requestResult.reset();
-                return nullptr;
-            }
-            else
-            {
-                LogPrintf(OsmAnd::LogSeverityLevel::Error,
-                          "Failed to mark tile as non-existent with empty file '%s'",
-                          qPrintable(rasterFile.absoluteFilePath()));
-                
-                // Unlock the tile
-                unlockTile(req.tileId, req.zoom);
-                requestResult.reset();
-                return nullptr;
+                // Save to a file
+                QFile tileFile(rasterFile.absoluteFilePath());
+                if (tileFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+                {
+                    tileFile.close();
+                    
+                    // Unlock the tile
+                    unlockTile(req.tileId, req.zoom);
+                    requestResult.reset();
+                    return nullptr;
+                }
+                else
+                {
+                    LogPrintf(OsmAnd::LogSeverityLevel::Error,
+                              "Failed to mark tile as non-existent with empty file '%s'",
+                              qPrintable(rasterFile.absoluteFilePath()));
+                    
+                    // Unlock the tile
+                    unlockTile(req.tileId, req.zoom);
+                    requestResult.reset();
+                    return nullptr;
+                }
             }
         }
-        
         // Unlock the tile
         unlockTile(req.tileId, req.zoom);
         requestResult.reset();
@@ -606,48 +608,50 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     .replace(QLatin1String("${osm_y}"), QString::number(tileId.y));
     
     std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-    const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult);
+    const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, req.queryController);
     
     // Ensure that all directories are created in path to local tile
     localFile.dir().mkpath(QLatin1String("."));
     
     // If there was error, check what the error was
-    if (!requestResult->isSuccessful())
+    if (!requestResult || !requestResult->isSuccessful() || downloadResult.isEmpty())
     {
-        const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
-        
-        LogPrintf(OsmAnd::LogSeverityLevel::Warning,
-                  "Failed to download tile from %s (HTTP status %d)",
-                  qPrintable(tileUrl),
-                  httpStatus);
-        
-        // 404 means that this tile does not exist, so create a zero file
-        if (httpStatus == 404)
+        if (requestResult)
         {
-            // Save to a file
-            QFile tileFile(localFile.absoluteFilePath());
-            if (tileFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+            const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
+            
+            LogPrintf(OsmAnd::LogSeverityLevel::Warning,
+                      "Failed to download tile from %s (HTTP status %d)",
+                      qPrintable(tileUrl),
+                      httpStatus);
+            
+            // 404 means that this tile does not exist, so create a zero file
+            if (httpStatus == 404)
             {
-                tileFile.close();
-                
-                // Unlock the tile
-                unlockTile(req.tileId, req.zoom);
-                requestResult.reset();
-                return nullptr;
-            }
-            else
-            {
-                LogPrintf(OsmAnd::LogSeverityLevel::Error,
-                          "Failed to mark tile as non-existent with empty file '%s'",
-                          qPrintable(localFile.absoluteFilePath()));
-                
-                // Unlock the tile
-                unlockTile(req.tileId, req.zoom);
-                requestResult.reset();
-                return nullptr;
+                // Save to a file
+                QFile tileFile(localFile.absoluteFilePath());
+                if (tileFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+                {
+                    tileFile.close();
+                    
+                    // Unlock the tile
+                    unlockTile(req.tileId, req.zoom);
+                    requestResult.reset();
+                    return nullptr;
+                }
+                else
+                {
+                    LogPrintf(OsmAnd::LogSeverityLevel::Error,
+                              "Failed to mark tile as non-existent with empty file '%s'",
+                              qPrintable(localFile.absoluteFilePath()));
+                    
+                    // Unlock the tile
+                    unlockTile(req.tileId, req.zoom);
+                    requestResult.reset();
+                    return nullptr;
+                }
             }
         }
-        
         // Unlock the tile
         unlockTile(req.tileId, req.zoom);
         requestResult.reset();

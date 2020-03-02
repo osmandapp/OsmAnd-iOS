@@ -729,6 +729,40 @@
     });
 }
 
+- (void) updatePointCoordinates:(OAGpxWpt *)wpt newLocation:(CLLocationCoordinate2D)newLocation
+{
+    dispatch_async(dbQueue, ^{
+        sqlite3_stmt    *statement;
+        
+        const char *dbpath = [databasePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
+        {
+            NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@=?, %@=? WHERE %@=? AND %@=? AND %@=? AND %@=? AND %@=?", POINT_NAME,
+                               POINT_COL_LAT, POINT_COL_LON, POINT_COL_DESC, POINT_COL_DESCRIPTION, POINT_COL_COLOR, POINT_COL_GROUP, POINT_COL_DATE];
+            
+            const char *update_stmt = [query UTF8String];
+            
+            sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
+            sqlite3_bind_double(statement, 1, newLocation.latitude);
+            sqlite3_bind_double(statement, 2, newLocation.longitude);
+            sqlite3_bind_text(statement, 3, [(wpt.desc ? wpt.desc : @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 4, [(wpt.name ? wpt.name : @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 5, [(wpt.color ? wpt.color : @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 6, [(wpt.type ? wpt.type : @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_int64(statement, 7, wpt.time);
+            
+            int res = sqlite3_step(statement);
+            if (res != SQLITE_OK && res != SQLITE_DONE)
+                NSLog(@"updatePointCoordinates failed: sqlite3_step=%d", res);
+
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(tracksDB);
+        }
+    });
+}
+
 - (void) doUpdatePointsLat:(double)lat lon:(double)lon time:(long)time desc:(NSString *)desc name:(NSString *)name color:(NSString *)color group:(NSString *)group
 {
     dispatch_async(dbQueue, ^{

@@ -91,6 +91,7 @@
 @property(readonly) OAObservable* followTheRouteObservable;
 @property(readonly) OAObservable* osmEditsChangeObservable;
 @property(readonly) OAObservable* mapillaryImageChangedObservable;
+@property(readonly) OAObservable* simulateRoutingObservable;
 
 @property(readonly) OAObservable* trackRecordingObservable;
 

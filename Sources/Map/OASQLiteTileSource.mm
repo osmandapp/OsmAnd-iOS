@@ -179,6 +179,11 @@
                         if (set == 1)
                             _isEllipsoid = YES;
                     }
+                    else
+                    {
+                        _isEllipsoid = NO;
+                        [self addInfoColumnInt:@"ellipsoid" value:0];
+                    }
                     NSNumber *invertedY = [mapper objectForKey:@"inverted_y"];
                     if(invertedY)
                     {
@@ -233,6 +238,28 @@
             sqlite3_prepare_v2(_db, sql_stmt, -1, &statement, NULL);
             
             sqlite3_bind_text(statement, 1, [value UTF8String], -1, 0);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(_db);
+        }
+    });
+}
+
+- (void)addInfoColumnInt:(NSString *)columnName value:(int)value
+{
+    dispatch_async(_dbQueue, ^{
+    
+        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
+        {
+            const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE info ADD COLUMN %@ INTEGER", columnName] UTF8String];
+            sqlite3_exec(_db, sql_stmt, NULL, NULL, NULL);
+            
+            sqlite3_stmt *statement;
+            sql_stmt = [[NSString stringWithFormat:@"UPDATE info SET %@ = ?", columnName] UTF8String];
+            sqlite3_prepare_v2(_db, sql_stmt, -1, &statement, NULL);
+            
+            sqlite3_bind_int(statement, 1, value);
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             
@@ -472,23 +499,10 @@
 {
     dispatch_async(_dbQueue, ^{
 
-        sqlite3_stmt    *deleteStatement;
-        sqlite3_stmt    *vacuumStatement;
-        
         if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
         {
-            NSString *deleteCacheSQL = @"DELETE FROM tiles";
-            const char *update_stmt = [deleteCacheSQL UTF8String];
-            sqlite3_prepare_v2(_db, update_stmt, -1, &deleteStatement, NULL);
-            sqlite3_step(deleteStatement);
-            sqlite3_finalize(deleteStatement);
-
-            NSString *vacuumSQL = @"VACUUM tiles";
-            const char *vacuum_stmt = [vacuumSQL UTF8String];
-            sqlite3_prepare_v2(_db, vacuum_stmt, -1, &vacuumStatement, NULL);
-            sqlite3_step(vacuumStatement);
-            sqlite3_finalize(vacuumStatement);
-            
+            sqlite3_exec(_db, "DELETE FROM tiles", NULL, NULL, NULL);
+            sqlite3_exec(_db, "VACUUM", NULL, NULL, NULL);
             sqlite3_close(_db);
             if (block)
                 block();
@@ -525,6 +539,56 @@
             if (_timeSupported)
                 sqlite3_bind_int64(statement, 6, (int64_t)([[NSDate date] timeIntervalSince1970] * 1000.0));
             
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(_db);
+        }
+    });
+}
+
+- (void) updateInfo:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile
+{
+    dispatch_async(_dbQueue, ^{
+        
+        sqlite3_stmt *statement;
+        
+        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
+        {
+            BOOL isOnlineSqlite = [self supportsTileDownload];
+            NSString *query = isOnlineSqlite ? @"UPDATE info SET timeSupported = ?, timecolumn = ?, expireminutes = ?, url = ?, ellipsoid = ?, minzoom = ?, maxzoom = ?" : @"UPDATE info SET ellipsoid = ?, minzoom = ?, maxzoom = ?";
+            
+            const char *update_stmt = [query UTF8String];
+            sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
+
+            NSString *timeSupported = expireTimeMillis != -1 ? @"yes" : @"no";
+            NSString *timeInMinutes = expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", expireTimeMillis / 60000] : @"";
+            int minZ = minZoom;
+            int maxZ = maxZoom;
+            if (_inversiveZoom)
+            {
+                int cachedMax = maxZ;
+                maxZ = 17 - minZ;
+                minZ = 17 - cachedMax;
+            }
+            
+            if (isOnlineSqlite)
+            {
+                sqlite3_bind_text(statement, 1, [timeSupported UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 2, [timeSupported UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 3, [timeInMinutes UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 4, [url UTF8String], -1, 0);
+                sqlite3_bind_int(statement, 5, isEllipticYTile ? 1 : 0);
+                sqlite3_bind_text(statement, 6, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 7, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
+            }
+            else
+            {
+                sqlite3_bind_int(statement, 1, isEllipticYTile ? 1 : 0);
+                sqlite3_bind_text(statement, 2, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 3, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
+            }
+
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             
@@ -581,7 +645,7 @@
     if (zoom > _maxZoom)
         return nil;
     
-    if(!_db || _urlTemplate == nil)
+    if(_urlTemplate == nil)
         return nil;
 
     if (_invertedY)
@@ -670,6 +734,7 @@
 
 + (BOOL) isOnlineTileSource:(NSString *)filePath
 {
+    BOOL res = NO;
     sqlite3 *db;
     if (sqlite3_open([filePath UTF8String], &db) == SQLITE_OK)
     {
@@ -685,13 +750,15 @@
                 if (columnCount == 1)
                 {
                     NSString *urlTemplate = [self.class getValueOf:0 statement:statement];
-                    return urlTemplate != nil && urlTemplate.length > 0;
+                    res = urlTemplate != nil && urlTemplate.length > 0;
+                    break;
                 }
             }
+            sqlite3_finalize(statement);
         }
         sqlite3_close(db);
     }
-    return NO;
+    return res;
 }
 
 @end

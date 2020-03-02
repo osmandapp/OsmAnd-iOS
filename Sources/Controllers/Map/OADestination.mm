@@ -119,4 +119,25 @@
     return self;
 }
 
+#pragma mark NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    OADestination* clone = [[OADestination alloc] initWithDesc:_desc latitude:_latitude longitude:_longitude];
+    clone.color = _color;
+    clone.markerResourceName = _markerResourceName;
+    clone.parking = _parking;
+    clone.carPickupDateEnabled = _carPickupDateEnabled;
+    clone.carPickupDate = _carPickupDate;
+    clone.eventIdentifier = _eventIdentifier;
+    clone.index = _index;
+    clone.routePoint = _routePoint;
+    clone.routeTargetPoint = _routeTargetPoint;
+    clone.routePointIndex = _routePointIndex;
+    clone.hidden = _hidden;
+    clone.manual = _manual;
+
+    return clone;
+}
+
 @end

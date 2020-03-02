@@ -15,9 +15,9 @@ typedef NS_ENUM(NSInteger, EOASourceFormat)
     EOASourceFormatOnline
 };
 
-@protocol OAOnlineTilesEditingViewControllerDelegate <NSObject>
+@protocol OATilesEditingViewControllerDelegate <NSObject>
 
-- (void) onTileSourceSaved;
+- (void) onTileSourceSaved:(LocalResourceItem *)item;
 
 @end
 
@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger, EOASourceFormat)
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) IBOutlet UIView *navBarView;
 
-@property (nonatomic) id<OAOnlineTilesEditingViewControllerDelegate> delegate;
+@property (nonatomic) id<OATilesEditingViewControllerDelegate> delegate;
 
 - (instancetype) initWithLocalItem:(LocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController;
 - (instancetype) initWithUrlParameters:(NSDictionary<NSString *, NSString *> *)params;

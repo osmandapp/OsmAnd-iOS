@@ -53,6 +53,7 @@
 - (BOOL) expired:(NSNumber *)time;
 - (int) getTileSize;
 - (BOOL) supportsTileDownload;
+- (void) updateInfo:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile;
 
 - (void) setTileSize:(int)tileSize;
 

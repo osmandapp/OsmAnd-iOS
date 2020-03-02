@@ -786,6 +786,9 @@ public enum GPXDataSetAxisType: String {
     
     private static func calculateElevationArray(analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType, divX: Double, convEle: Double, useGeneralTrackPoints: Bool) -> Array<ChartDataEntry> {
         var values: Array<ChartDataEntry> = []
+        if (analysis.elevationData == nil) {
+            return values
+        }
         let elevationData: Array<OAElevation> = analysis.elevationData
         var nextX: Double = 0
         var nextY: Double

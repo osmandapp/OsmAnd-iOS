@@ -1580,8 +1580,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)stateChanged:(id)change
 {
-    [self updateData];
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateData];
+        [self.tableView reloadData];
+    });
 }
 
 #pragma mark - OARouteCalculationProgressCallback

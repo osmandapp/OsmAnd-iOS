@@ -130,7 +130,9 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (BOOL) showTopControls;
 - (BOOL) supportMapInteraction;
+- (BOOL) supportsForceClose;
 - (BOOL) showNearestWiki;
+- (BOOL) shouldEnterContextModeManually;
 
 - (BOOL) hasTopToolbar;
 - (BOOL) hasBottomToolbar;

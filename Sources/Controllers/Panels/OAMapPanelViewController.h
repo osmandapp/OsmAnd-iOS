@@ -66,7 +66,7 @@
 - (void) hideContextMenu;
 - (BOOL) isContextMenuVisible;
 - (BOOL) isRouteInfoVisible;
-- (void) processNoSymbolFound:(CLLocationCoordinate2D)coord;
+- (void) processNoSymbolFound:(CLLocationCoordinate2D)coord forceHide:(BOOL)forceHide;
 
 - (void) closeDashboard;
 - (void) closeDashboardWithDuration:(CGFloat)duration;
@@ -119,6 +119,7 @@
 - (void) openTargetViewWithImpassableRoadSelection;
 - (void) openTargetViewWithRouteDetails:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
 - (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
+- (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
 
 - (BOOL) hasGpxActiveTargetType;
 - (void) displayGpxOnMap:(OAGPX *)item;

@@ -119,6 +119,7 @@
 @synthesize followTheRouteObservable = _followTheRouteObservable;
 @synthesize osmEditsChangeObservable = _osmEditsChangeObservable;
 @synthesize mapillaryImageChangedObservable = _mapillaryImageChangedObservable;
+@synthesize simulateRoutingObservable = _simulateRoutingObservable;
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
@@ -444,6 +445,7 @@
     _followTheRouteObservable = [[OAObservable alloc] init];
     _osmEditsChangeObservable = [[OAObservable alloc] init];
     _mapillaryImageChangedObservable = [[OAObservable alloc] init];
+    _simulateRoutingObservable = [[OAObservable alloc] init];
 
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];
@@ -452,16 +454,16 @@
     _prevMapMode = OAMapModeFree;
     _mapModeObservable = [[OAObservable alloc] init];
 
-    _locationServices = [[OALocationServices alloc] initWith:self];
-    if (_locationServices.available && _locationServices.allowed)
-        [_locationServices start];
-
     _downloadsManager = [[OADownloadsManager alloc] init];
     _downloadsManagerActiveTasksCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                                      withHandler:@selector(onDownloadManagerActiveTasksCollectionChanged)
                                                                                       andObserve:_downloadsManager.activeTasksCollectionChangedObservable];
     
     _resourcesInstaller = [[OAResourcesInstaller alloc] init];
+
+    _locationServices = [[OALocationServices alloc] initWith:self];
+    if (_locationServices.available && _locationServices.allowed)
+        [_locationServices start];
 
     [self updateScreenTurnOffSetting];
 

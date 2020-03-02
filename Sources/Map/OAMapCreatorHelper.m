@@ -113,6 +113,24 @@
     return (error == nil);
 }
 
+- (void)renameFile:(NSString *)fileName toName:(NSString *)newName
+{
+    NSString *path = self.files[fileName];
+    NSString *newPath = [self.filesDir stringByAppendingPathComponent:newName];;
+
+    if ([path isEqualToString:newPath])
+        return;
+    
+    [[NSFileManager defaultManager] moveItemAtPath:path toPath:newPath error:nil];
+
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:self.files];
+    [dictionary removeObjectForKey:fileName];
+    [dictionary setValue:newPath forKey:newName];
+    _files = [NSDictionary dictionaryWithDictionary:dictionary];
+
+    [_sqlitedbResourcesChangedObservable notifyEvent];
+}
+
 - (void)removeFile:(NSString *)fileName
 {
     NSString *path = self.files[fileName];

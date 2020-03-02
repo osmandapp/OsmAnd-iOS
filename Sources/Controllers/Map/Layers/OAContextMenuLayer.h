@@ -12,14 +12,26 @@
 
 @class OATargetPoint;
 
+@protocol OAChangePositionModeDelegate <NSObject>
+
+- (void) onMapMoved;
+
+@end
+
 @interface OAContextMenuLayer : OASymbolMapLayer
+
+@property (nonatomic) id<OAChangePositionModeDelegate> changePositionDelegate;
+
+- (void) enterChangePositionMode:(id)targetObject;
+- (void) exitChangePositionMode:(id)targetObject applyNewPosition:(BOOL)applyNewPosition;
+- (BOOL) isObjectMovable:(id)object;
 
 - (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker;
 
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;
 
-- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation;
+- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide;
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
 

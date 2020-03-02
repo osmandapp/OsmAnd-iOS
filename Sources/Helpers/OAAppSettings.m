@@ -1903,7 +1903,7 @@
     [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
 }
 
-- (void) showGpx:(NSArray<NSString *> *)fileNames
+- (void) showGpx:(NSArray<NSString *> *)fileNames update:(BOOL)update
 {
     BOOL added = NO;
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
@@ -1919,8 +1919,16 @@
     if (added)
     {
         self.mapSettingVisibleGpx = arr;
-        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
+        if (update)
+        {
+            [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
+        }
     }
+}
+
+- (void) showGpx:(NSArray<NSString *> *)fileNames
+{
+    [self showGpx:fileNames update:YES];
 }
 
 - (void) updateGpx:(NSArray<NSString *> *)fileNames
@@ -1954,6 +1962,11 @@
 
 - (void) hideGpx:(NSArray<NSString *> *)fileNames
 {
+    [self hideGpx:fileNames update:YES];
+}
+
+- (void) hideGpx:(NSArray<NSString *> *)fileNames update:(BOOL)update
+{
     BOOL removed = NO;
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
     NSMutableArray *arrToDelete = [NSMutableArray array];
@@ -1968,7 +1981,7 @@
     [arr removeObjectsInArray:arrToDelete];
     self.mapSettingVisibleGpx = arr;
     
-    if (removed)
+    if (removed && update)
         [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
 }
 
@@ -2097,6 +2110,7 @@
 {
     _simulateRouting = simulateRouting;
     [[NSUserDefaults standardUserDefaults] setBool:_simulateRouting forKey:simulateRoutingKey];
+    [[[OsmAndApp instance] simulateRoutingObservable] notifyEvent];
 }
 
 - (void) setUseOsmLiveForRouting:(BOOL)useOsmLiveForRouting

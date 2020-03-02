@@ -12,11 +12,11 @@
 #include <SkImageEncoder.h>
 #include <SkStream.h>
 #include <SkData.h>
+#include <SkBitmap.h>
 
 #include <OsmAndCore/WebClient.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/SkiaUtilities.h>
-#include <SKBitmap.h>
 
 #include "Logging.h"
 #import "OAWebClient.h"
@@ -43,29 +43,35 @@ QByteArray OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTil
     return nullptr;
 }
 
-QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
+QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
+    const OsmAnd::TileId tileId,
+    const OsmAnd::ZoomLevel zoom,
+    const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/)
 {
     NSString *url = [ts getUrlToLoad:tileId.x y:tileId.y zoom:zoom];
     if (url != nil)
     {
         QString tileUrl = QString::fromNSString(url);
         std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-        const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult);
+        const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, queryController);
         
         // If there was error, check what the error was
-        if (!requestResult->isSuccessful())
+        if (!requestResult || !requestResult->isSuccessful() || downloadResult.isEmpty())
         {
-            const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
-            
-            LogPrintf(OsmAnd::LogSeverityLevel::Warning,
-                      "Failed to download tile from %s (HTTP status %d)",
-                      qPrintable(tileUrl),
-                      httpStatus);
-            
-            // 404 means that this tile does not exist, so delete it
-            if (httpStatus == 404)
+            if (requestResult)
             {
-                [ts deleteImage:tileId.x y:tileId.y zoom:zoom];
+                const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
+                
+                LogPrintf(OsmAnd::LogSeverityLevel::Warning,
+                          "Failed to download tile from %s (HTTP status %d)",
+                          qPrintable(tileUrl),
+                          httpStatus);
+                
+                // 404 means that this tile does not exist, so delete it
+                if (httpStatus == 404)
+                {
+                    [ts deleteImage:tileId.x y:tileId.y zoom:zoom];
+                }
             }
             requestResult.reset();
             return nullptr;
@@ -79,26 +85,39 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(const OsmAnd::TileId
 
 const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::createShiftedTileBitmap(const NSData *data, const NSData* dataNext, double offsetY)
 {
-    if (data.length > 0 && dataNext.length > 0)
+    if (data.length == 0 && dataNext.length == 0)
+        return nullptr;
+
+    std::shared_ptr<SkBitmap> firstBitmap;
+    std::shared_ptr<SkBitmap> secondBitmap;
+    if (data.length > 0)
     {
-        const std::shared_ptr<SkBitmap> firstBitmap(new SkBitmap());
-        const std::shared_ptr<SkBitmap> secondBitmap(new SkBitmap());
-        if (SkImageDecoder::DecodeMemory(
-            data.bytes, data.length,
-            firstBitmap.get(),
-            SkColorType::kUnknown_SkColorType,
-            SkImageDecoder::kDecodePixels_Mode) &&
-            
-            SkImageDecoder::DecodeMemory(
-            dataNext.bytes, dataNext.length,
-            secondBitmap.get(),
-            SkColorType::kUnknown_SkColorType,
-            SkImageDecoder::kDecodePixels_Mode))
+        firstBitmap.reset(new SkBitmap());
+        if (!SkImageDecoder::DecodeMemory(
+             data.bytes, data.length,
+             firstBitmap.get(),
+             SkColorType::kUnknown_SkColorType,
+             SkImageDecoder::kDecodePixels_Mode))
         {
-            return OsmAnd::SkiaUtilities::createTileBitmap(firstBitmap, secondBitmap, offsetY);
+            firstBitmap.reset();
         }
     }
-    return nullptr;
+    if (dataNext.length > 0)
+    {
+        secondBitmap.reset(new SkBitmap());
+        if (!SkImageDecoder::DecodeMemory(
+             dataNext.bytes, dataNext.length,
+             secondBitmap.get(),
+             SkColorType::kUnknown_SkColorType,
+             SkImageDecoder::kDecodePixels_Mode))
+        {
+            secondBitmap.reset();
+        }
+    }
+    if (!firstBitmap && !secondBitmap)
+        return nullptr;
+    
+    return OsmAnd::SkiaUtilities::createTileBitmap(firstBitmap, secondBitmap, offsetY);
 }
 
 const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(const OsmAnd::TileId tileIdNext, const OsmAnd::ZoomLevel zoom, const NSData *data, double offsetY)
@@ -114,11 +133,7 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::downlo
     {
         // download next tile
         const auto& downloadResult = downloadTile(tileIdNext, zoom);
-        if (!downloadResult.isNull())
-        {
-            const auto shiftedTile = createShiftedTileBitmap(data, downloadResult.toNSData(), offsetY);
-            return shiftedTile;
-        }
+        return createShiftedTileBitmap(data, downloadResult.toNSData(), offsetY);
     }
     return nullptr;
 }
@@ -184,7 +199,7 @@ const std::shared_ptr<const SkBitmap> OASQLiteTileSourceMapLayerProvider::obtain
     else
     {
         // download tile
-        const auto& downloadResult = downloadTile(tileId, zoom);
+        const auto& downloadResult = downloadTile(tileId, zoom, request.queryController);
         if (!downloadResult.isNull())
         {
             if (shiftedTile)

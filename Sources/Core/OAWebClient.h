@@ -52,18 +52,21 @@ public:
     virtual ~OAWebClient();
     
     virtual QByteArray downloadData(
-                                    const QString& url,
-                                    std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult = nullptr,
-                                    const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback = nullptr) const;
+        const QString& url,
+        std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult = nullptr,
+        const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback = nullptr,
+        const std::shared_ptr<const OsmAnd::IQueryController>& queryController = nullptr) const;
     virtual QString downloadString(
-                                   const QString& url,
-                                   std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult = nullptr,
-                                   const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback = nullptr) const;
+        const QString& url,
+        std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult = nullptr,
+        const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback = nullptr,
+        const std::shared_ptr<const OsmAnd::IQueryController>& queryController = nullptr) const;
     virtual bool downloadFile(
-                              const QString& url,
-                              const QString& fileName,
-                              std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult = nullptr,
-                              const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback = nullptr) const;
+        const QString& url,
+        const QString& fileName,
+        std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult = nullptr,
+        const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback = nullptr,
+        const std::shared_ptr<const OsmAnd::IQueryController>& queryController = nullptr) const;
 };
 
 

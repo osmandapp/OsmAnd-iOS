@@ -1199,10 +1199,10 @@ static NSDictionary *screenVoiceProviders;
         {
             [cell.textView setText: item[@"title"]];
             id v = item[@"value"];
+            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OAProfileBoolean class]])
             {
                 OAProfileBoolean *value = v;
-                [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
                 cell.switchView.on = [value get:_am];
             }
             else

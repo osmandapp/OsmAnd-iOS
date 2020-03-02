@@ -1278,7 +1278,6 @@
 "gpx_descent" = "下り";
 "download_depth_countours" = "海洋等深線データ";
 "gpx_avg_altitude" = "平均標高";
-
 "res_url" = "URL";
 "res_elliptic_mercator" = "楕円メルカトル";
 "routing_attr_avoid_shuttle_train_description" = "移動手段にカートレインを使用しません";
@@ -1307,7 +1306,7 @@
 "rendering_value_translucent_purple_name" = "半透明パープル";
 "rendering_value_fine_name" = "美麗";
 "routing_attr_piste_type_skitour_name" = "スキーツーリング";
-"rendering_attr_streetLightingNight_name" = "夜にのみ表示";
+"rendering_attr_streetLightingNight_name" = "夜間限定表示";
 "rendering_attr_contourColorScheme_name" = "等高線の配色";
 "routing_attr_piste_type_sled_name" = "ソリ";
 "routing_attr_width_name" = "幅制限";
@@ -1328,7 +1327,7 @@
 "routing_attr_avoid_share_taxi_name" = "乗合タクシーを使わない";
 "routing_attr_avoid_motorway_description" = "移動時に高速道路を使用しません";
 "rendering_attr_smoothness_intermediate_name" = "シティバイク、スポーツカー、車椅子、スクーター及びオフロードバイクや車も走行可能";
-"routing_attr_height_description" = "ルート上で通行可能な車両の高さを指定します";
+"routing_attr_height_description" = "ルート上で通行可能な車両の高さを指定します。";
 "rendering_attr_noPolygons_description" = "マップ上の土地の特徴を透明にする";
 "routing_attr_allow_skating_only_name" = "スケートルートのみを許可";
 "routing_attr_allow_expert_description" = "周辺に危険な障害物や環境を伴う非常に困難なルートです。";
@@ -1350,7 +1349,7 @@
 "rendering_attr_tracktype_grade4_name" = "やや軟らか";
 "rendering_attr_piste_type_skitour_name" = "スキーツアー用コース";
 "rendering_attr_appMode_description" = "マップを最適化";
-"rendering_attr_showMtbRoutes_name" = "マウンテンバイク用ルートを表示";
+"rendering_attr_showMtbRoutes_name" = "マウンテンバイク用ルート";
 "rendering_attr_contourDensity_name" = "等高線密度";
 "rendering_attr_piste_difficulty_advanced_name" = "上級者向け";
 "rendering_value_translucent_lightblue_name" = "半透明ライトブルー";
@@ -1374,8 +1373,8 @@
 "rendering_attr_shareTaxiRoutes_name" = "タクシーのルート共有";
 "routing_attr_height_obstacles_name" = "標高データを使用";
 "rendering_attr_surface_paved_name" = "舗装有り";
-"rendering_attr_hideWaterPolygons_name" = "水域を非表示";
-"rendering_attr_moreDetailed_name" = "詳細";
+"rendering_attr_hideWaterPolygons_name" = "水域ポリゴン";
+"rendering_attr_moreDetailed_name" = "詳細を表示";
 "rendering_attr_surface_sett_name" = "敷石舗装";
 "rendering_value_blue_name" = "ブルー";
 "rendering_attr_hideHouseNumbers_name" = "番地";
@@ -1400,7 +1399,7 @@
 "routing_attr_avoid_bus_description" = "移動手段にバスおよびトロリーバスを使いません";
 "rendering_attr_smoothness_impassable_name" = "2輪4輪問わず車両は走行不可";
 "rendering_attr_streetLighting_name" = "街路照明";
-"rendering_attr_showCycleRoutes_name" = "自転車ルートを表示";
+"rendering_attr_showCycleRoutes_name" = "自転車ルート";
 "routing_attr_prefer_unpaved_name" = "未舗装道路を優先";
 "routeInfo_steepness_name" = "勾配";
 "routeInfo_smoothness_name" = "滑らかさ";
@@ -1413,7 +1412,7 @@
 "rendering_attr_piste_type_connection_name" = "リフト間接続";
 "routing_attr_no_new_routing_name" = "ver1.9のルート検索をしない";
 "routing_attr_width_description" = "ルート上で通行可能な車幅を指定します。";
-"routing_attr_freeride_policy_description" = "\'フリーライド\'や\'ゲレンデ外\'は非公式のルートです。通常は手入れされていないうえ、職員によってメンテナンスされておらずクローズ時間にもチェックされません。マップデータは自己責任で利用し、禁止されている場所には決して入らないでください。";
+"routing_attr_freeride_policy_description" = "'フリーライド'や'ゲレンデ外'は非公式のルートです。通常は手入れされていないうえ、職員によってメンテナンスされておらずクローズ時間にもチェックされません。マップデータは自己責任で利用し、禁止されている場所には決して入らないでください。";
 "rendering_attr_appMode_name" = "描画方法";
 "rendering_attr_piste_difficulty_undefined_name" = "定義なし";
 "rendering_attr_smoothness_good_name" = "ロードバイクを含め車両全般が走行可";
@@ -1440,7 +1439,7 @@
 "rendering_value_germanRoadAtlas_name" = "ドイツの道路マップ";
 "routing_attr_avoid_ferry_name" = "フェリーを使わない";
 "rendering_attr_surface_fine_gravel_name" = "砂利と砂の複数舗装";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "自転車ルートのノードネットワーク表示";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "自転車ルートのノードネットワーク";
 "rendering_attr_noAdminboundaries_description" = "地域の境界線(管理レベル 5-9)を非表示";
 "rendering_attr_hikingRoutesOSMC_description" = "OSMCトレースに従って道を描写";
 "routing_attr_allow_motorway_description" = "高速道路を利用可能とみなします。";
@@ -1549,7 +1548,7 @@
 "routing_attr_difficulty_preference_description" = "ここで選択した難易度をベースにルート検索をしますが、短い距離ならば難しいゲレンデや簡単なゲレンデへのルーティングも可能です。";
 "rendering_attr_piste_difficulty_aerialway_name" = "索道(リフトやロープウェイなど)";
 "rendering_attr_showRoadMaps_name" = "道路のみのマップ";
-"rendering_attr_whiteWaterSports_name" = "リバースポーツ(川遊び、リバーアクティビティ)";
+"rendering_attr_whiteWaterSports_name" = "リバースポーツ";
 "routing_attr_piste_type_downhill_name" = "アルペン/ダウンヒルスキー";
 "rendering_value_translucent_blue_name" = "半透明ブルー";
 "rendering_attr_surface_sand_name" = "砂";
@@ -1569,3 +1568,37 @@
 "routeInfo_tracktype_name" = "表面硬度";
 "rendering_value_translucent_yellow_name" = "半透明イエロー";
 "routing_attr_avoid_train_description" = "移動手段に鉄道を使いません";
+// World Regions
+"region_antarctica" = "南極大陸";
+"stats_select_graph_data" = "グラフデータを選択";
+"available_map_styles" = "利用可能なマップスタイル";
+"available_map_sources" = "利用可能なマップソース";
+"shared_string_clear_cache" = "キャッシュの消去";
+"res_confirmation_delete" = "%@を消去してもよろしいですか ？";
+"res_confirmation_clear_cache" = "%@用キャッシュを消去してもよろしいですか？";
+"gpx_analyze" = "分析";
+"displayed_route_save" = "OsmAnd Tripsに保存";
+"trip_name" = "旅程の名前";
+"trip_hint" = "旅程に名前を付けてください";
+"shared_string_maximum" = "最大";
+"res_online_name_descr" = "オンラインソースの名前を入力してください";
+"res_online_url_descr" = "オンラインソースのURLを入力、または貼り付けしてください";
+"res_zoom_levels" = "ズームレベル";
+"res_expire_time" = "有効期限";
+"res_mercator" = "メルカトル図法";
+"res_pseudo_mercator" = "擬似メルカトル図法";
+"res_zoom_levels_desc" = "このパラメーターはマップタイプまたはオーバーレイ/アンダーレイマップを使用する場合に影響します。\n\nマップタイプの場合:該当マップは選択したズームに制限されます。\n\nオーバーレイ/アンダーレイの場合:ズームレベルはタイルの表示制限となり、設定値の上下によってアップスケールまたはダウンスケールが発生します。";
+"res_expire_time_desc" = "分単位の有効期限を示しています。キャッシュされたタイルは指定された時間後に再読み込みされます。タイルを再読み込みする必要がない場合は、このフィールドを空のままにします。\n1日は1,440分です。\n1週間は10,080分です。\n30日は43,200分です。";
+"res_name_warning" = "ファイル名は空にできません";
+"res_url_warning" = "URLは空にできません";
+"res_zoom_warning" = "最小ズーム値は最大ズーム以上にすることはできません";
+"res_expire_warning" = "有効期限は0〜10000000の数値である必要があります";
+"res_source_format" = "ソースフォーマット";
+"res_source_sqlite" = "SQLite DBファイル";
+"res_source_one_per_tile" = "タイル毎に1画像ファイル";
+"res_zoom_invalid_value" = "ズーム値は1～22の範囲でなければなりません";
+"online_raster_map" = "オンラインラスターマップ";
+"offline_raster_map" = "オフラインラスターマップ";
+"offline_raster_maps" = "オフラインラスターマップ";
+"res_edit_map_source" = "マップソースの編集";
+"res_offlineSQL_URL_warning" = "このマップタイプはサポートされていません";

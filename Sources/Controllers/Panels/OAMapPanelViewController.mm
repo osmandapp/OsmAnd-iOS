@@ -278,7 +278,7 @@ typedef enum
 
 - (void) viewWillLayoutSubviews
 {
-    if ([self contextMenuMode])
+    if ([self contextMenuMode] && ![self.targetMenuView needsManualContextMode])
     {
         [self doUpdateContextMenuToolbarLayout];
     }
@@ -917,9 +917,15 @@ typedef enum
     }
 }
 
-- (void) processNoSymbolFound:(CLLocationCoordinate2D)coord
+- (void) processNoSymbolFound:(CLLocationCoordinate2D)coord forceHide:(BOOL)forceHide
 {
-    [self.targetMenuView hideByMapGesture];
+    if (forceHide)
+    {
+        if ([self.targetMenuView forceHideIfSupported])
+            [self targetHideContextPinMarker];
+    }
+    else
+        [self.targetMenuView hideByMapGesture];
 
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     targetPoint.type = OATargetNone;
@@ -1005,8 +1011,12 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
 {
-    if (_activeTargetType == OATargetImpassableRoadSelection || _activeTargetActive)
+    if (_activeTargetType == OATargetImpassableRoadSelection
+        || _activeTargetType == OATargetRouteDetailsGraph
+        || _activeTargetType == OATargetRouteDetails)
+    {
         return;
+    }
     
     if (targetPoint.type == OATargetMapillaryImage)
     {
@@ -1029,6 +1039,9 @@ typedef enum
         
         if (_activeTargetType == OATargetGPXEdit && targetPoint.type != OATargetWpt)
             [self targetPointAddWaypoint];
+        
+        if (_targetMenuView.needsManualContextMode)
+            [self enterContextMenuMode];
     }];
 }
 
@@ -1112,7 +1125,7 @@ typedef enum
             }
 
             [self hideTargetPointMenu];
-            [[OARootViewController instance].mapPanel showRouteInfo];
+            [self showRouteInfo];
             
             return NO;
         }
@@ -1915,6 +1928,7 @@ typedef enum
         case OATargetImpassableRoadSelection:
         case OATargetRouteDetails:
         case OATargetRouteDetailsGraph:
+        case OATargetChangePosition:
         {
             if (controller)
                 [self.targetMenuView doInit:NO];
@@ -2084,6 +2098,9 @@ typedef enum
     if (_activeTargetType != OATargetNone && !_activeTargetActive && !_activeTargetChildPushed && !hideActiveTarget && animationDuration > .1)
         animationDuration = .1;
     
+    if (_targetMenuView.needsManualContextMode)
+        [self restoreFromContextMenuMode];
+    
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
         
         if (_activeTargetType != OATargetNone)
@@ -2130,6 +2147,9 @@ typedef enum
     _mapStateSaved = NO;
     
     [self destroyShadowButton];
+    
+    if (_targetMenuView.needsManualContextMode)
+        [self restoreFromContextMenuMode];
     
     if (_activeTargetType == OATargetNone || _activeTargetActive)
     {
@@ -2540,7 +2560,7 @@ typedef enum
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
     [self closeRouteInfo];
-    [self.view.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    [UIApplication.sharedApplication.keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
@@ -2564,6 +2584,39 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+    }];
+}
+
+- (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+    
+    OATargetPoint *target = [[OATargetPoint alloc] init];
+    
+    target.type = OATargetChangePosition;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = nil;
+
+    target.title = _formattedTargetName;
+    target.toolbarNeeded = NO;
+    target.centerMap = YES;
+    target.location = targetPoint.location;
+    
+    target.targetObj = targetPoint;
+    
+    _activeTargetType = target.type;
+    _activeTargetObj = target.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+
+    [_targetMenuView setTargetPoint:target];
+    [self applyTargetPoint:target];
+
     [self enterContextMenuMode];
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
         _activeTargetActive = YES;

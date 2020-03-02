@@ -12,7 +12,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
-@interface OAFavoritesLayer : OASymbolMapLayer<OAContextMenuProvider>
+@interface OAFavoritesLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getFavoritesMarkersCollection;
 

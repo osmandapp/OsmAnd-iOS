@@ -47,7 +47,12 @@
     
     BOOL _initDone;
     
+    BOOL _isInChangePositionMode;
+    UIImageView *_changePositionPin;
+    
     NSArray<NSString *> *_publicTransportTypes;
+    
+    id<OAMoveObjectProvider> _selectedObjectContextMenuProvider;
 }
 
 - (NSString *) layerId
@@ -76,6 +81,111 @@
     }];
 }
 
+- (BOOL) isObjectMovable:(id)object
+{
+    for (OAMapLayer *layer in self.mapViewController.mapLayers.getLayers)
+    {
+        if ([layer conformsToProtocol:@protocol(OAMoveObjectProvider)])
+        {
+            id<OAMoveObjectProvider> provider = (id<OAMoveObjectProvider>) layer;
+            if ([provider isObjectMovable:object])
+            {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+- (void) applyMoveProvider:(id)object
+{
+    _selectedObjectContextMenuProvider = nil;
+    for (OAMapLayer *layer in self.mapViewController.mapLayers.getLayers)
+    {
+        if ([layer conformsToProtocol:@protocol(OAMoveObjectProvider)])
+        {
+            id<OAMoveObjectProvider> provider = (id<OAMoveObjectProvider>) layer;
+            if ([provider isObjectMovable:object])
+            {
+                _selectedObjectContextMenuProvider = provider;
+                break;
+            }
+        }
+    }
+}
+
+- (void) enterChangePositionMode:(id)targetObject
+{
+    [self applyMoveProvider:targetObject];
+    if (!_selectedObjectContextMenuProvider)
+        return;
+    
+    UIImage *icon = [_selectedObjectContextMenuProvider getPointIcon:targetObject];
+    [_selectedObjectContextMenuProvider setPointVisibility:targetObject hidden:YES];
+    if (!_changePositionPin)
+    {
+        _changePositionPin = [[UIImageView alloc] initWithImage:icon];
+        _changePositionPin.frame = CGRectMake(0., 0., 30., 30.);
+        _changePositionPin.contentMode = UIViewContentModeCenter;
+    }
+    else
+    {
+        _changePositionPin.image = icon;
+    }
+    [_changePositionPin sizeToFit];
+    
+    CGPoint targetPoint;
+    OsmAnd::PointI targetPositionI = self.mapView.target31;
+    if ([self.mapView convert:&targetPositionI toScreen:&targetPoint])
+    {
+        CGFloat iconHalfHeight = _changePositionPin.frame.size.height /2;
+        CGFloat iconHalfWidth = _changePositionPin.frame.size.width / 2;
+        CGFloat shiftX = iconHalfWidth;
+        CGFloat shiftY = iconHalfHeight;
+        EOAPinVerticalAlignment verticalAlignment = [_selectedObjectContextMenuProvider getPointIconVerticalAlignment];
+        EOAPinHorizontalAlignment horizontalAlignment = [_selectedObjectContextMenuProvider getPointIconHorizontalAlignment];
+        
+        if (horizontalAlignment == EOAPinAlignmentRight)
+            shiftX = -iconHalfWidth;
+        else if (horizontalAlignment == EOAPinAlignmentCenterHorizontal)
+            shiftX = 0;
+        
+        if (verticalAlignment == EOAPinAlignmentBottom)
+            shiftY = -iconHalfHeight;
+        else if (verticalAlignment == EOAPinAlignmentCenterVertical)
+            shiftY = 0;
+        
+        _changePositionPin.center = CGPointMake(targetPoint.x - shiftX, targetPoint.y - shiftY);
+    }
+    
+    [self.mapView addSubview:_changePositionPin];
+    _isInChangePositionMode = YES;
+}
+
+- (void) exitChangePositionMode:(id)targetObject applyNewPosition:(BOOL)applyNewPosition
+{
+    if (!_isInChangePositionMode)
+        return;
+    
+    if (_changePositionPin && _changePositionPin.superview)
+        [_changePositionPin removeFromSuperview];
+    
+    if (_selectedObjectContextMenuProvider)
+    {
+        if (applyNewPosition)
+        {
+            const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(self.mapView.target31);
+            [_selectedObjectContextMenuProvider applyNewObjectPosition:targetObject position:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
+        }
+        else
+        {
+            [_selectedObjectContextMenuProvider setPointVisibility:targetObject hidden:NO];
+        }
+    }
+    _selectedObjectContextMenuProvider = nil;
+    _isInChangePositionMode = NO;
+}
+
 - (void) onMapFrameRendered
 {
     if (_initDone && _animatedPin)
@@ -92,6 +202,9 @@
                 _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
         }
     }
+    
+    if (_isInChangePositionMode && self.changePositionDelegate)
+        [self.changePositionDelegate onMapMoved];
 }
 
 - (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker
@@ -458,7 +571,7 @@
     return targetPoint;
 }
 
-- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
+- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
     NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
     if (selectedObjects.count > 0)
@@ -477,7 +590,7 @@
     else
     {
         CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
-        [[OARootViewController instance].mapPanel processNoSymbolFound:coord];
+        [[OARootViewController instance].mapPanel processNoSymbolFound:coord forceHide:forceHide];
     }
 }
 

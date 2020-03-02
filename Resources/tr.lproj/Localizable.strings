@@ -43,7 +43,7 @@
 "fav_export_select" = "Sık kullanılanları vermek için lütfen seçin";
 "fav_create_group" = "Yeni grup oluştur";
 "fav_enter_group_name" = "Grup adını girin";
-"fav_exists" = "Favori adı ile \"% @\" zaten var";
+"fav_exists" = "Favori adı ile \"%@\" zaten var";
 "fav_ignore" = "Yoksay";
 "fav_rename" = "Yeniden Adlandır";
 "fav_replace" = "Değiştir";
@@ -150,26 +150,26 @@
 // Purchases
 "prch_addons" = "Eklentileri";
 "prch_nau_q1" = "Lütfen harita ayarları \"Deniz\" tarzında açmak ve dünya seamarks basemap yükleyin.";
-"prch_nau_q2_cell" = "İndirme % @ hücresel şebeke üzerinden gerektirir.";
+"prch_nau_q2_cell" = "İndirme %@ hücresel şebeke üzerinden gerektirir.";
 "incur_high_charges" = "Bu yüksek ücrete tabi olabilir.";
 "sett_deg_min" = "Dereceler ve dakikalar";
 "sett_arr" = "Harita okları";
 "sett_arr_loc" = "Konum";
 "sett_arr_map" = "Harita merkezi";
 "sett_lang_local" = "Yerel";
-"prch_nau_q2_wifi" = "İndirme % @ WiFi ağ üzerinden gerektirir.";
+"prch_nau_q2_wifi" = "İndirme %@ WiFi ağ üzerinden gerektirir.";
 "prch_nau_q3" = "Daha sonra haritalar ve kaynaklar yükleyebilir.";
 "proceed_q" = "Devam edilsin mi?";
 "download" = "İndir";
 "nothanks" = "Hayır, Teşekkürler";
 "download_now" = "Şimdi harita indir";
-"prch_failed" = "Bir satın alma \"% @\" başarısız oldu";
+"prch_failed" = "Bir satın alma \"%@\" başarısız oldu";
 "prch_items_failed" = "Ürün (ler) restore. Lütfen yeniden deneyin.";
 // Resources
 "res_mapsres" = "Haritalar ve kaynakları";
 "res_installed" = "Yüklü";
-"res_banner_free_maps_title" = "%D ücretsiz haritalar var!";
-"res_banner_free_maps_desc" = "%D güncelleştirmeler olmadan ücretsiz haritalar indirebilir miyim";
+"res_banner_free_maps_title" = "%d ücretsiz haritalar var!";
+"res_banner_free_maps_desc" = "%d güncelleştirmeler olmadan ücretsiz haritalar indirebilir miyim";
 "res_banner_no_free_maps_title" = "Ücretsiz hiçbir haritalar var!";
 "res_banner_no_free_maps_desc" = "Lütfen bölge haritaları satın almak ya da tüm dünya haritaları";
 "res_search_world" = "Dünya çapında arama";
@@ -190,11 +190,11 @@
 "res_no_space_free" = "gereklidir. Lütfen biraz yer boşaltın.";
 "res_free_exp" = "Tüm ücretsiz indirme geçirdi. Mutlu etmek download / güncelleme haritalar için kıtaya satın almak.";
 "res_upd_avail_q" = "Bir güncelleştirme kullanılabilir";
-"res_inst_avail_cell_q" = "Yükleme % % @ hücresel şebeke üzerinden indirilebilir gerekiyor.";
-"res_inst_avail_wifi_q" = "Yükleme % % @ WiFi ağ üzerinden karşıdan yüklenmesi gerekiyor.";
-"res_cancel_upd_q" = "% @ Doğru güncelleştirmeyi iptal olacak.";
+"res_inst_avail_cell_q" = "Yükleme %@ %@ hücresel şebeke üzerinden indirilebilir gerekiyor.";
+"res_inst_avail_wifi_q" = "Yükleme %@ %@ WiFi ağ üzerinden karşıdan yüklenmesi gerekiyor.";
+"res_cancel_upd_q" = "%@ Doğru güncelleştirmeyi iptal olacak.";
 "data_will_be_lost" = "Tüm indirilen veri kaybı olur.";
-"res_cancel_inst_q" = "% @ Doğru yükleme iptal olacak.";
+"res_cancel_inst_q" = "%@ Doğru yükleme iptal olacak.";
 "res_uninst_managed_q" = "% Kaldırmak olacak @. Kataloğu'ndan daha sonra yeniden yükleyebilirsiniz.";
 "res_uninst_unmanaged_q" = "% Silmek olacak @. Katalogdan, yani değil lütfen gerekirse bir yedekleme olduğundan emin olun.";
 "res_details" = "Ayrıntılar";
@@ -203,7 +203,7 @@
 "res_size" = "Boyutu";
 "res_created_on" = "Oluşturulma";
 "res_update_all" = "Hepsini güncelle";
-"res_updates_no_space" = "%D için güncelleştirmeleri yüklemek için yeterli alan yok. % @ gereklidir. Lütfen biraz yer boşaltın.";
+"res_updates_no_space" = "%d için güncelleştirmeleri yüklemek için yeterli alan yok. %@ gereklidir. Lütfen biraz yer boşaltın.";
 "res_updates_avail_q" = "için güncelleştirmeleri kullanılabilir.";
 "res_updates_exp" = "Haritalar güncellemek için kıta (lar) satın alın";
 // Menu
@@ -409,7 +409,7 @@
 "show_region_on_map_title" = "İndirilen harita";
 "show_region_on_map_desc" = "% Haritası yüklendi. Bunu kullanmaya başlamak için harita için gidin.";
 "show_region_on_map_go" = "Harita git";
-"sqlitedb_import_title" = "Harita Oluşturucusu dosyası al";
+"sqlitedb_import_title" = "Raster harita dosyasını içe aktar";
 "sqlitedb_import_already_exists" = "Belirtilen SqliteDb dosya zaten var olduğunu. Eylemi seçiniz.";
 "map_creator" = "Harita Oluşturucusu";
 "local_names" = "Yerel adları";
@@ -671,7 +671,7 @@
 "shared_string_search" = "Arama";
 "targets" = "Varış noktaları";
 "poi" = "POI";
-"road_blocked" = "Yol kapalı";
+"road_blocked" = "Kapalı yol";
 "starting_point" = "Başlangıç noktası";
 "shared_string_road" = "Yol";
 "shared_string_go" = "Git";
@@ -1605,3 +1605,15 @@
 "res_source_sqlite" = "SQLiteDB dosyası";
 "res_source_one_per_tile" = "Döşeme başına bir görüntü dosyası";
 "res_zoom_invalid_value" = "Yakınlaştırma değerleri 1 - 22 aralığında olmalıdır";
+"online_raster_map" = "Çevrim içi raster haritası";
+"offline_raster_map" = "Çevrim dışı raster haritası";
+"offline_raster_maps" = "Çevrim dışı raster haritaları";
+"res_edit_map_source" = "Harita kaynağını düzenle";
+"res_offlineSQL_URL_warning" = "Bu harita türü için desteklenmiyor";
+"shared_string_warning" = "Uyarı";
+"res_online_source_cache_alert" = "Bu değişiklikleri uygulamak, bu döşeme kaynağı için önbelleğe alınan verileri temizleyecektir";
+"change_object_posiotion" = "Nesnenin konumunu değiştir";
+"change_position_descr" = "Nesnenin konumunu değiştirmek için haritayı hareket ettirin";
+"online_raster_maps" = "Çevrim içi raster haritaları";
+"import_raster_map_success" = "Raster haritası içe aktarıldı. Harita Ayarları'nı açın ve Üst katman/Alt katman ile etkinleştirin";
+"import_raster_map_failed" = "Raster harita içe aktarma başarısız oldu";

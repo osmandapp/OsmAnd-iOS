@@ -72,6 +72,8 @@
 - (BOOL) preHide;
 
 - (void) hideByMapGesture;
+- (BOOL) forceHideIfSupported;
+- (BOOL) needsManualContextMode;
 
 - (void) applyTargetObjectChanges;
 

@@ -12,7 +12,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
-@interface OAImpassableRoadsLayer : OASymbolMapLayer<OAContextMenuProvider>
+@interface OAImpassableRoadsLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getImpassableMarkersCollection;
 

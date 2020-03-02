@@ -410,7 +410,7 @@
 "hist_remove_q" = "Möchten Sie Chronikelemente entfernen?";
 "gpx_edit_mode" = "Bearbeitungsmodus";
 "go_to_map" = "Zur Karte gehen";
-"sqlitedb_import_title" = "Map-Creator-Datei importieren";
+"sqlitedb_import_title" = "Rasterkarten-Datei importieren";
 // HUD
 "hud_heading" = "Richtung";
 "product_desc_trip_planning" = "Mit diesem Plugin können Sie Strecken planen, Wegpunkte hinzufügen und die Entfernung zu ihrem Ziel messen";
@@ -1618,3 +1618,7 @@
 "shared_string_warning" = "Warnung";
 "res_online_source_cache_alert" = "Durch die Anwendung dieser Änderungen werden die zwischengespeicherten Daten für diese Kachelquelle gelöscht";
 "change_object_posiotion" = "Position des Objekts ändern";
+"change_position_descr" = "Bewegen Sie die Karte, um die Position des Objekts zu ändern";
+"online_raster_maps" = "Online-Rasterkarten";
+"import_raster_map_success" = "Rasterkarte wurde importiert. Öffnen Sie die Karteneinstellungen und aktivieren Sie diese über Overlay/Underlay-Karte";
+"import_raster_map_failed" = "Rasterkarten-Import fehlgeschlagen";

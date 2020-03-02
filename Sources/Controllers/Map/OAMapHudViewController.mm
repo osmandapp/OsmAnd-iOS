@@ -294,7 +294,7 @@
             
             CGFloat w = x2 - x1;
             CGFloat h = [_overlayUnderlayView getHeight:w];
-            _overlayUnderlayView.frame = CGRectMake(x1, DeviceScreenHeight - h - 15.0, w, h);
+            _overlayUnderlayView.frame = CGRectMake(x1, CGRectGetMinY(_driveModeButton.frame), w, h);
         }
         else
         {
@@ -303,7 +303,7 @@
             
             CGFloat w = x2 - x1;
             CGFloat h = [_overlayUnderlayView getHeight:w];
-            _overlayUnderlayView.frame = CGRectMake(x1, DeviceScreenHeight - h - 15.0 - _optionsMenuButton.frame.size.height - 8.0, w, h);
+            _overlayUnderlayView.frame = CGRectMake(x1, CGRectGetMinY(_driveModeButton.frame) - 16. - h, w, h);
         }
     }
     

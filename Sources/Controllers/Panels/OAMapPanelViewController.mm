@@ -354,6 +354,11 @@ typedef enum
     [self.hudViewController updateOverlayUnderlayView:show];
 }
 
+- (BOOL) isOverlayUnderlayViewVisible
+{
+    return [self.hudViewController isOverlayUnderlayViewVisible];
+}
+
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     if (_dashboard || !_mapillaryController.view.hidden)

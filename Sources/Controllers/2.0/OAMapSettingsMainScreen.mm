@@ -23,6 +23,7 @@
 #import "OAUtilities.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
+#import "OAMapSettingsOverlayUnderlayScreen.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -300,25 +301,42 @@
                                     @"value": @"",
                                     @"type": @"OASwitchCell"}];
     }
-    NSString *overlayMapSourceName;
-    if ([_app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
-        overlayMapSourceName = [[_app.data.overlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-    else
-        overlayMapSourceName = _app.data.overlayMapSource.name;
-    
-    [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_over"),
-                                    @"value": (_app.data.overlayMapSource != nil) ? overlayMapSourceName : OALocalizedString(@"map_settings_none"),
-                                    @"type": @"OASettingsCell"}];
 
-    NSString *underlayMapSourceName;
-    if ([_app.data.underlayMapSource.name isEqualToString:@"sqlitedb"])
-        underlayMapSourceName = [[_app.data.underlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-    else
-        underlayMapSourceName = _app.data.underlayMapSource.name;
+//    NSString *overlayMapSourceName;
+//    if ([_app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
+//        overlayMapSourceName = [[_app.data.overlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+//    else
+//        overlayMapSourceName = _app.data.overlayMapSource.name;
+//    [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_over"),
+//                                    @"description": @"",
+//                                    @"secondaryImg": @"OASettingsCell"}];
+//
+//    NSString *underlayMapSourceName;
+//    if ([_app.data.underlayMapSource.name isEqualToString:@"sqlitedb"])
+//        underlayMapSourceName = [[_app.data.underlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+//    else
+//        underlayMapSourceName = _app.data.underlayMapSource.name;
+//
+//    [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_under"),
+//                                    @"value": (_app.data.underlayMapSource != nil) ? underlayMapSourceName : OALocalizedString(@"map_settings_none"),
+//                                    @"type": @"OASettingsCell"}];
 
-    [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_under"),
-                                    @"value": (_app.data.underlayMapSource != nil) ? underlayMapSourceName : OALocalizedString(@"map_settings_none"),
-                                    @"type": @"OASettingsCell"}];
+    NSMutableDictionary *overlay = [NSMutableDictionary dictionary];
+    [overlay setObject:OALocalizedString(@"map_settings_over") forKey:@"name"];
+    [overlay setObject:@"" forKey:@"description"];
+    [overlay setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
+    [overlay setObject:@"OASettingSwitchCell" forKey:@"type"];
+    [overlay setObject:@"overlay_layer" forKey:@"key"];
+    [arrOverlayUnderlay addObject: overlay];
+
+    NSMutableDictionary *underlay = [NSMutableDictionary dictionary];
+    [underlay setObject:OALocalizedString(@"map_settings_under") forKey:@"name"];
+    [underlay setObject:@"" forKey:@"description"];
+    [underlay setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
+    [underlay setObject:@"OASettingSwitchCell" forKey:@"type"];
+    [underlay setObject:@"underlay_layer" forKey:@"key"];
+    [arrOverlayUnderlay addObject: underlay];
+
 
     NSArray *arrOverlayUnderlaySection = @[@{@"groupName": OALocalizedString(@"map_settings_overunder"),
                                              @"cells": arrOverlayUnderlay,
@@ -477,6 +495,7 @@
         
         if (cell)
         {
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             if ([data[@"key"] isEqualToString:@"mapillary_layer"])
             {
                 [cell.switchView setOn:[OsmAndApp instance].data.mapillary];
@@ -490,6 +509,16 @@
                     contourLinesOn = false;
                 [cell.switchView setOn: contourLinesOn];
                 [cell.switchView addTarget:self action:@selector(contourLinesChanged:) forControlEvents:UIControlEventValueChanged];
+            }
+            if ([data[@"key"] isEqualToString:@"overlay_layer"])
+            {
+                [cell.switchView setOn:_app.data.overlayMapSource != nil];
+                [cell.switchView addTarget:self action:@selector(overlayChanged:) forControlEvents:UIControlEventValueChanged];
+            }
+            if ([data[@"key"] isEqualToString:@"underlay_layer"])
+            {
+                [cell.switchView setOn:_app.data.underlayMapSource != nil];
+                [cell.switchView addTarget:self action:@selector(underlayChanged:) forControlEvents:UIControlEventValueChanged];
             }
             cell.textView.text = data[@"name"];
             NSString *desc = data[@"description"];
@@ -536,6 +565,38 @@
         OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
         parameter.value = switchView.isOn ? [_settings.contourLinesZoom get] : @"disabled";
         [styleSettings save:parameter];
+    }
+}
+
+- (void) overlayChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+    {
+        if (switchView.isOn)
+            _app.data.overlayMapSource = _app.data.lastOverlayMapSource;
+        else
+            _app.data.overlayMapSource = nil;
+    }
+}
+
+- (void) underlayChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+    {
+        OAMapStyleSettings *_styleSettings = [OAMapStyleSettings sharedInstance];
+        OAMapStyleParameter *_hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+        if (switchView.isOn)
+        {
+            _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
+        }
+        else
+        {
+            _hidePolygonsParameter.value = @"false";
+            [_styleSettings save:_hidePolygonsParameter];
+            _app.data.underlayMapSource = nil;
+        }
     }
 }
 

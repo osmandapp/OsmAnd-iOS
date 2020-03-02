@@ -294,12 +294,12 @@ typedef enum : NSUInteger {
 
 - (void) sqliteDbImportedAlert
 {
-    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:@"Map Creator file has been imported. Open Map Settings and activate it via Overlay/Underlay" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
+    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:OALocalizedString(@"res_sqliteDb_import_success") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
 }
 
 - (void) sqliteDbImportFailedAlert
 {
-    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:@"Map Creator file import failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
+    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:OALocalizedString(@"res_sqliteDb_import_fail") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
 }
 
 - (void) installSqliteDbFile:(NSString *)path newFileName:(NSString *)newFileName

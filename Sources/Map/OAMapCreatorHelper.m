@@ -54,15 +54,23 @@
         BOOL isDir = YES;
         if (![fileManager fileExistsAtPath:_filesDir isDirectory:&isDir])
             [fileManager createDirectoryAtPath:_filesDir withIntermediateDirectories:YES attributes:nil error:nil];
+        [self fetchSQLiteDBFiles:NO];
         
-        NSMutableDictionary *filesArray = [NSMutableDictionary dictionary];
-        
-        [self addSqliteFilePaths:filesArray path:_filesDir];
-        [self addSqliteFilePaths:filesArray path:_documentsDir];
-        
-        _files = [NSDictionary dictionaryWithDictionary:filesArray];
     }
     return self;
+}
+
+- (void) fetchSQLiteDBFiles:(BOOL)notifyChange
+{
+    NSMutableDictionary *filesArray = [NSMutableDictionary dictionary];
+    
+    [self addSqliteFilePaths:filesArray path:_filesDir];
+    [self addSqliteFilePaths:filesArray path:_documentsDir];
+    
+    _files = [NSDictionary dictionaryWithDictionary:filesArray];
+    
+    if (notifyChange)
+        [_sqlitedbResourcesChangedObservable notifyEvent];
 }
 
 - (BOOL)installFile:(NSString *)filePath newFileName:(NSString *)newFileName

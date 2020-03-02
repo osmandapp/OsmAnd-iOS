@@ -702,7 +702,7 @@
 "show_region_on_map_title" = "تم تحميل الخريطة";
 "show_region_on_map_desc" = "الخريطة من%@ . تم تنزلها انتقل للخرائط للبدء في استخدامها.";
 "show_region_on_map_go" = "الانتقال إلى الخريطة";
-"sqlitedb_import_title" = "استيراد ملف منشئ الخريطة";
+"sqlitedb_import_title" = "استيراد ملف خريطة نقطية";
 "sqlitedb_import_already_exists" = "ملف sqlitedb المحدد موجود بالفعل. يرجى اختيار الإجراء.";
 "map_creator" = "الخريطة المنشأة";
 "local_names" = "الأسماء المحلية";
@@ -1613,3 +1613,8 @@
 "res_offlineSQL_URL_warning" = "هذا النوع من الخرائط غير معتمدة";
 "shared_string_warning" = "تحذير";
 "res_online_source_cache_alert" = "سيؤدي تطبيق هذه التغييرات إلى مسح البيانات المخزنة مؤقتًا لمصدر الطبقات";
+"change_object_posiotion" = "تغيير موضع الكائن";
+"change_position_descr" = "انقل الخريطة لتغيير موضع الكائن";
+"online_raster_maps" = "الخريطة النقطية على الانترنت";
+"import_raster_map_success" = "تم استيراد الخريطة النقطية. افتح \"إعدادات الخريطة\" وقم بتنشيطها عبر \"تراكب / تحجيم\"";
+"import_raster_map_failed" = "فشل استيراد الخريطة النقطية";

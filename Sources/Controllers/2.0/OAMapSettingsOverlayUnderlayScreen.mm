@@ -430,7 +430,6 @@ static NSInteger kButtonsSection;
             [cell.checkButton setImage:[UIImage imageNamed:@"menu_cell_selected.png"] forState:UIControlStateNormal];
         else
             [cell.checkButton setImage:nil forState:UIControlStateNormal];
-        [cell.dividerIcon.layer setCornerRadius:0.5f];
         cell.delegate = self;
         cell.checkButton.tag = indexPath.row;
         return cell;

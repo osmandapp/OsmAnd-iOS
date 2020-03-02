@@ -302,25 +302,6 @@
                                     @"type": @"OASwitchCell"}];
     }
 
-//    NSString *overlayMapSourceName;
-//    if ([_app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
-//        overlayMapSourceName = [[_app.data.overlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-//    else
-//        overlayMapSourceName = _app.data.overlayMapSource.name;
-//    [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_over"),
-//                                    @"description": @"",
-//                                    @"secondaryImg": @"OASettingsCell"}];
-//
-//    NSString *underlayMapSourceName;
-//    if ([_app.data.underlayMapSource.name isEqualToString:@"sqlitedb"])
-//        underlayMapSourceName = [[_app.data.underlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-//    else
-//        underlayMapSourceName = _app.data.underlayMapSource.name;
-//
-//    [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_under"),
-//                                    @"value": (_app.data.underlayMapSource != nil) ? underlayMapSourceName : OALocalizedString(@"map_settings_none"),
-//                                    @"type": @"OASettingsCell"}];
-
     NSMutableDictionary *overlay = [NSMutableDictionary dictionary];
     [overlay setObject:OALocalizedString(@"map_settings_over") forKey:@"name"];
     [overlay setObject:@"" forKey:@"description"];

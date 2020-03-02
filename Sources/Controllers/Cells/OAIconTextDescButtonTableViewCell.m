@@ -13,6 +13,8 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+
+    [self.dividerIcon.layer setCornerRadius:0.5f];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

@@ -22,6 +22,6 @@
 - (BOOL)installFile:(NSString *)filePath newFileName:(NSString *)newFileName;
 - (void)removeFile:(NSString *)fileName;
 - (NSString *)getNewNameIfExists:(NSString *)fileName;
-- (void) fetchSQLiteDBFiles:(BOOL)notifyChange;
+- (void)renameFile:(NSString *)fileName toName:(NSString *)newName;
 
 @end

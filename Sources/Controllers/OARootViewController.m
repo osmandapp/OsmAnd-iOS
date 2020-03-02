@@ -294,12 +294,16 @@ typedef enum : NSUInteger {
 
 - (void) sqliteDbImportedAlert
 {
-    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:OALocalizedString(@"res_sqliteDb_import_success") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"import_title") message:OALocalizedString(@"import_raster_map_success") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) sqliteDbImportFailedAlert
 {
-    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:OALocalizedString(@"res_sqliteDb_import_fail") delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"import_title") message:OALocalizedString(@"import_raster_map_failed") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) installSqliteDbFile:(NSString *)path newFileName:(NSString *)newFileName

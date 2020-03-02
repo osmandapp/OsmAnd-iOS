@@ -81,7 +81,7 @@
 "will_open_tomorrow_at" = "Will open tomorrow at";
 
 "error_avoid_specific_road" = "No bypass found";
-"road_blocked" = "Road blocked";
+"road_blocked" = "Blocked road";
 "starting_point" = "Starting point";
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Road";
@@ -417,6 +417,7 @@
 "shared_string_off" = "Off";
 "shared_string_clear_cache" = "Clear cache";
 "shared_string_maximum" = "Maximum";
+"shared_string_warning" = "Warning";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -568,11 +569,6 @@
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "map_settings_mapillary" = "Mapillary";
-"map_settings_show_slider_map" = "Show slider on the map";
-"map_settings_add_online_source" = "Add online source";
-"map_settings_hide_polygons" = "Hide polygons";
-"map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
-"map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
 
 // Intro
 "intro_skip" = "Skip";
@@ -732,8 +728,7 @@
 "res_expire_warning" = "Expiration time should be a number between 0 and 10000000";
 "res_zoom_invalid_value" = "Zoom values should be in range 1 - 22";
 "res_offlineSQL_URL_warning" = "Not supported for this map type";
-"res_sqliteDb_import_success" = "Raster map file has been imported. Open Map Settings and activate it via Overlay/Underlay";
-"res_sqliteDb_import_fail" = "Raster map file import failed";
+"res_online_source_cache_alert" = "Applying these changes will clear the cached data for this tile source";
 
 // Menu
 "menu_my_places" = "My Places";
@@ -1250,6 +1245,8 @@
 
 "directions_more_options" = "Directions from";
 "nearby_search" = "Search nearby";
+"change_object_posiotion" = "Change object's position";
+"change_position_descr" = "Move the map to change object's position";
 
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -1293,11 +1290,12 @@
 "res_import_success" = "%@ was successfully imported";
 "res_import_unsupported" = "Incorrect file type. Only routing.xml and *.render.xml files are supported.";
 "routing_import_please_restart" = "To use the new routing.xml please restart the application.";
-"sqlitedb_import_title" = "Import Map Creator file";
+"sqlitedb_import_title" = "Import raster map file";
 "sqlitedb_import_already_exists" = "The specified sqlitedb file is already exists. Please choose action.";
 "online_raster_map" = "Online raster map";
 "offline_raster_map" = "Offline raster map";
 "offline_raster_maps" = "Offline raster maps";
+"online_raster_maps" = "Online raster maps";
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
 "local_names" = "Local names";
@@ -1308,6 +1306,8 @@
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Go to Map";
+"import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
+"import_raster_map_failed" = "Raster map import failed";
 
 "device_memory" = "Device memory";
 "free_memory" = "Free %@";

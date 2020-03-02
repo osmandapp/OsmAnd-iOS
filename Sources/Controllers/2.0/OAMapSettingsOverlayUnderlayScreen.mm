@@ -80,7 +80,7 @@ static NSInteger kMapVisibilitySection = 1;
 static NSInteger kAvailableLayersSection = 2;
 static NSInteger kButtonsSection;
 
-@interface OAMapSettingsOverlayUnderlayScreen () <OAIconTextDescButtonCellDelegate, OAOnlineTilesEditingViewControllerDelegate>
+@interface OAMapSettingsOverlayUnderlayScreen () <OAIconTextDescButtonCellDelegate, OATilesEditingViewControllerDelegate>
 
 @end
 
@@ -659,9 +659,9 @@ static NSInteger kButtonsSection;
     [self switchLayer:tag];
 }
 
-#pragma mark - OAOnlineTilesEditingViewControllerDelegate
+#pragma mark - OATilesEditingViewControllerDelegate
 
-- (void) onTileSourceSaved
+- (void) onTileSourceSaved:(LocalResourceItem *)item
 {
     [tblView reloadData];
 }

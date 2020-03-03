@@ -3520,6 +3520,14 @@
 		DA1E80A423ACF83800AD9868 /* OARouteInfoAltitudeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA1E80A223ACF83800AD9868 /* OARouteInfoAltitudeCell.xib */; };
 		DA1E80A723ACF87E00AD9868 /* OARouteInfoAltitudeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1E80A523ACF87D00AD9868 /* OARouteInfoAltitudeCell.m */; };
 		DA1E80A823ACF87E00AD9868 /* OARouteInfoAltitudeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1E80A523ACF87D00AD9868 /* OARouteInfoAltitudeCell.m */; };
+		DA22679E240E55C900FFEA91 /* OAWikiLinkBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA22679D240E55C900FFEA91 /* OAWikiLinkBottomSheetViewController.mm */; };
+		DA22679F240E55C900FFEA91 /* OAWikiLinkBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA22679D240E55C900FFEA91 /* OAWikiLinkBottomSheetViewController.mm */; };
+		DA2267A2240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2267A0240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m */; };
+		DA2267A3240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2267A0240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m */; };
+		DA2267A5240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2267A4240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib */; };
+		DA2267A6240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2267A4240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib */; };
+		DA2267A9240E697A00FFEA91 /* OAWikiArticleHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2267A8240E697A00FFEA91 /* OAWikiArticleHelper.m */; };
+		DA2267AA240E697A00FFEA91 /* OAWikiArticleHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2267A8240E697A00FFEA91 /* OAWikiArticleHelper.m */; };
 		DA23424423477F33003911B8 /* ic_custom_route@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA23423823477F2F003911B8 /* ic_custom_route@3x.png */; };
 		DA23424523477F33003911B8 /* ic_custom_route@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA23423823477F2F003911B8 /* ic_custom_route@3x.png */; };
 		DA23424623477F33003911B8 /* ic_custom_alert_color.png in Resources */ = {isa = PBXBuildFile; fileRef = DA23423923477F2F003911B8 /* ic_custom_alert_color.png */; };
@@ -7283,6 +7291,13 @@
 		DA1E80A223ACF83800AD9868 /* OARouteInfoAltitudeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OARouteInfoAltitudeCell.xib; path = Resources/Controllers/Cells/OARouteInfoAltitudeCell.xib; sourceTree = "<group>"; };
 		DA1E80A523ACF87D00AD9868 /* OARouteInfoAltitudeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARouteInfoAltitudeCell.m; path = Controllers/Cells/OARouteInfoAltitudeCell.m; sourceTree = "<group>"; };
 		DA1E80A623ACF87E00AD9868 /* OARouteInfoAltitudeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARouteInfoAltitudeCell.h; path = Controllers/Cells/OARouteInfoAltitudeCell.h; sourceTree = "<group>"; };
+		DA22679C240E55C800FFEA91 /* OAWikiLinkBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiLinkBottomSheetViewController.h; sourceTree = "<group>"; };
+		DA22679D240E55C900FFEA91 /* OAWikiLinkBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWikiLinkBottomSheetViewController.mm; sourceTree = "<group>"; };
+		DA2267A0240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OABottomSheetHeaderDescrButtonCell.m; path = Controllers/Cells/OABottomSheetHeaderDescrButtonCell.m; sourceTree = "<group>"; };
+		DA2267A1240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OABottomSheetHeaderDescrButtonCell.h; path = Controllers/Cells/OABottomSheetHeaderDescrButtonCell.h; sourceTree = "<group>"; };
+		DA2267A4240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OABottomSheetHeaderDescrButtonCell.xib; path = Resources/Controllers/Cells/OABottomSheetHeaderDescrButtonCell.xib; sourceTree = "<group>"; };
+		DA2267A7240E697A00FFEA91 /* OAWikiArticleHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAWikiArticleHelper.h; path = Helpers/OAWikiArticleHelper.h; sourceTree = "<group>"; };
+		DA2267A8240E697A00FFEA91 /* OAWikiArticleHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAWikiArticleHelper.m; path = Helpers/OAWikiArticleHelper.m; sourceTree = "<group>"; };
 		DA23423823477F2F003911B8 /* ic_custom_route@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_route@3x.png"; path = "Resources/Icons/ic_custom_route@3x.png"; sourceTree = "<group>"; };
 		DA23423923477F2F003911B8 /* ic_custom_alert_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_alert_color.png; path = Resources/Icons/ic_custom_alert_color.png; sourceTree = "<group>"; };
 		DA23423A23477F30003911B8 /* ic_custom_undo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_undo.png; path = Resources/Icons/ic_custom_undo.png; sourceTree = "<group>"; };
@@ -8337,6 +8352,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA2267A4240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib */,
 				780DC7A623DED7C70022D56A /* OACustomPickerCell.xib */,
 				DAB3E54523BB462600EAE6A5 /* OARouteStatisticsModeCell.xib */,
 				DAF7027723B64BC200E065F9 /* OARouteInfoLegendCell.xib */,
@@ -8428,6 +8444,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA2267A1240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.h */,
+				DA2267A0240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m */,
 				DA99919323F6AED300784994 /* OATextViewResizingCell.h */,
 				DA99919223F6AED300784994 /* OATextViewResizingCell.mm */,
 				780DC7A423DED7C70022D56A /* OACustomPickerTableViewCell.h */,
@@ -10840,6 +10858,7 @@
 				84F13EA9207CA71600BA82CB /* TargetOptionsBottomSheet */,
 				84AB9D8C2073842F009DA206 /* AddWaypointBottomSheet */,
 				DAAB2F3D21A7EAA000EE3108 /* ImportGPXBottomSheet */,
+				DA226797240E548000FFEA91 /* WikiLinkBottomSheet */,
 				84AB9D9420738481009DA206 /* OABottomSheetScreen.h */,
 				84AB9D8D20738455009DA206 /* OABottomSheetViewController.h */,
 				84AB9D8E20738455009DA206 /* OABottomSheetViewController.mm */,
@@ -11985,6 +12004,8 @@
 				DA33F35B232CE2F10006C0FB /* UIColor+RGB.swift */,
 				DAA738E223E2E0B600FAB0DE /* OASaveGpxToTripsActivity.h */,
 				DAA738E323E2E0B600FAB0DE /* OASaveGpxToTripsActivity.m */,
+				DA2267A7240E697A00FFEA91 /* OAWikiArticleHelper.h */,
+				DA2267A8240E697A00FFEA91 /* OAWikiArticleHelper.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -12094,6 +12115,15 @@
 				DA03184722DF4757008FC564 /* OAFileImportHelper.mm */,
 			);
 			name = MapImport;
+			sourceTree = "<group>";
+		};
+		DA226797240E548000FFEA91 /* WikiLinkBottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				DA22679C240E55C800FFEA91 /* OAWikiLinkBottomSheetViewController.h */,
+				DA22679D240E55C900FFEA91 /* OAWikiLinkBottomSheetViewController.mm */,
+			);
+			path = WikiLinkBottomSheet;
 			sourceTree = "<group>";
 		};
 		DA261E3422F972B800D0D441 /* Actions */ = {
@@ -13440,6 +13470,7 @@
 				847A1EEB1DF94E9B003C1246 /* ic_arrow_up@2x.png in Resources */,
 				84B6E0812073CF55002CA15B /* ic_action_route_first_intermediate.png in Resources */,
 				DA13A0362345FA0100C1A1A8 /* ic_custom_allow_private_access@3x.png in Resources */,
+				DA2267A6240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib in Resources */,
 				8A1CF1E8227ED4A70083A04E /* warnings_tunnel_us.png in Resources */,
 				DA68B403233B826E00F5ACCC /* ic_custom_add.png in Resources */,
 				841AD01F1F54048B00E3191E /* ic_collapse.png in Resources */,
@@ -16082,6 +16113,7 @@
 				8432579A1A9DAE4100A7964E /* ic_arrow_down@3x.png in Resources */,
 				847777451FAA260E00CA8C1F /* widget_time_night@3x.png in Resources */,
 				DA5F21FA229551A300B0D7B6 /* ic_custom_mapillary_symbol@3x.png in Resources */,
+				DA2267A5240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib in Resources */,
 				DA65834022BBB6FA0095B03D /* ic_custom_failure.png in Resources */,
 				84CC52561AA5DD55000063CF /* three_dots@2x.png in Resources */,
 				DA83601F23449C6B003374B5 /* ic_custom_slider@3x.png in Resources */,
@@ -16720,6 +16752,7 @@
 				847424741E4A0AAC001C1F35 /* OADiscountToolbarViewController.mm in Sources */,
 				DAFC00C5226724400024CE23 /* OAOsmEditsListViewController.mm in Sources */,
 				844E079D1E3C82F400EFC525 /* OAQuickSearchViewController.mm in Sources */,
+				DA2267A3240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m in Sources */,
 				844E07C01E3F97FB00EFC525 /* OACity.mm in Sources */,
 				845AFB481E261E9000170026 /* OASearchPhrase.mm in Sources */,
 				847A1D161DF94E9B003C1246 /* OALog.mm in Sources */,
@@ -16775,6 +16808,7 @@
 				847A1D271DF94E9B003C1246 /* OAPhrasesParser.m in Sources */,
 				8A13FEDD20EFA2EE0029B2EE /* OAMyLocationViewController.mm in Sources */,
 				845AFB5C1E264EE800170026 /* OASearchUICore.mm in Sources */,
+				DA22679F240E55C900FFEA91 /* OAWikiLinkBottomSheetViewController.mm in Sources */,
 				847A1D291DF94E9B003C1246 /* OAHistoryCardController.mm in Sources */,
 				847A1D2A1DF94E9B003C1246 /* OAHUDRegularButton.m in Sources */,
 				DA9D549722D48410003AD7F9 /* OAOsmLiveCardView.m in Sources */,
@@ -16908,6 +16942,7 @@
 				847A1D581DF94E9B003C1246 /* OAGPXDocumentPrimitives.mm in Sources */,
 				DA540D9A229E83F40069201E /* OAMapillaryPlugin.mm in Sources */,
 				846F035D1E12550D00DB4772 /* OAIconTextSwitchCell.m in Sources */,
+				DA2267AA240E697A00FFEA91 /* OAWikiArticleHelper.m in Sources */,
 				847A1D591DF94E9B003C1246 /* OAWikiMenuViewController.m in Sources */,
 				84FF0C401F3CB85B00AD1029 /* OARouteInfoView.mm in Sources */,
 				847A1D5A1DF94E9B003C1246 /* OAHillshadeTileSource.mm in Sources */,
@@ -17085,6 +17120,7 @@
 				DABA3DC222684D7F005BB777 /* OAMultiIconTextDescCell.m in Sources */,
 				84FF0C3F1F3CB85B00AD1029 /* OARouteInfoView.mm in Sources */,
 				DAE2D488230D3A76006A3F7D /* OATextInputIconCell.mm in Sources */,
+				DA2267A2240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m in Sources */,
 				84B6E06E2073C1C9002CA15B /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				845E06721B5F95E300DFC2A7 /* OAPluginsViewController.mm in Sources */,
 				DA1C18BF23116C1800613732 /* OAMapStyleTitles.m in Sources */,
@@ -17174,6 +17210,7 @@
 				3AFEEE601A0E516900900A47 /* OAPointTableViewCell.m in Sources */,
 				780DC7AE23E324740022D56A /* OAOnlineTilesSettingsViewController.mm in Sources */,
 				844E07AA1E3E3D6B00EFC525 /* OAQuickSearchTableController.mm in Sources */,
+				DA22679E240E55C900FFEA91 /* OAWikiLinkBottomSheetViewController.mm in Sources */,
 				84772BAD1E0AB3F900E65884 /* OAMapUtils.mm in Sources */,
 				DA45DA37230ECF4F0083DFA2 /* OAActionAddMapStyleViewController.mm in Sources */,
 				DAC0470F221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */,
@@ -17357,6 +17394,7 @@
 				844F32B61E0EB96E00B5CDBC /* OASearchByNameFilter.mm in Sources */,
 				84185A7A1AA8BC6200F70328 /* OASliderCell.m in Sources */,
 				849E17E72074C917002E5A75 /* OAMenuSimpleCell.mm in Sources */,
+				DA2267A9240E697A00FFEA91 /* OAWikiArticleHelper.m in Sources */,
 				DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */,
 				841766411B722396002A08CB /* OAHistoryItem.m in Sources */,
 				847F8FD51EE0813D00CF5EA5 /* OAEmptySearchCell.m in Sources */,
@@ -17895,7 +17933,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.29;
+				CURRENT_PROJECT_VERSION = 3.30;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -17950,7 +17988,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.29;
+				CURRENT_PROJECT_VERSION = 3.30;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

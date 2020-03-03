@@ -28,8 +28,15 @@
 #import "OAAppSettings.h"
 #import "OAPointDescription.h"
 #import "OACollapsableCoordinatesView.h"
+#import "OAIAPHelper.h"
+#import "OAPluginPopupViewController.h"
+
+// TODO: temp
+#import "OAWikiLinkBottomSheetViewController.h"
 
 #include <OsmAndCore/Utilities.h>
+
+#define kWikiLink @".wikipedia.org/w"
 
 @implementation OARowInfo
 
@@ -582,7 +589,23 @@
     }
     else if (info.isUrl)
     {
-        [OAUtilities callUrl:info.text];
+        if ([info.text containsString:kWikiLink])
+        {
+            OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+            if ([helper.wiki isPurchased])
+            {
+                OAWikiLinkBottomSheetViewController *wikiBottomSheet = [[OAWikiLinkBottomSheetViewController alloc] initWithParam:info.text];
+                [wikiBottomSheet show];
+            }
+            else
+            {
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+            }
+        }
+        else
+        {
+            [OAUtilities callUrl:info.text];
+        }
     }
     else if (info.isText && info.moreText)
     {

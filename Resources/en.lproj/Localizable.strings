@@ -1336,7 +1336,7 @@
 "items_selected" = "%d selected";
 
 "wiki_sheet_title" = "How to open Wikipedia articles?";
-"download_wiki_data" = "Download Wikipedia data";
+"download_wiki_data" = "Download Wikipedia data for %@";
 "open_wiki_online" = "Open article online";
 
 "custom_search" = "Custom search";
@@ -1399,7 +1399,7 @@
 
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
-"map_an_region" = "an region";
+"map_an_region" = "this region";
 
 "osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";

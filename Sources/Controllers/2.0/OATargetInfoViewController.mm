@@ -30,9 +30,7 @@
 #import "OACollapsableCoordinatesView.h"
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
-
-// TODO: temp
-#import "OAWikiLinkBottomSheetViewController.h"
+#import "OAWikiArticleHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -594,8 +592,7 @@
             OAIAPHelper *helper = [OAIAPHelper sharedInstance];
             if ([helper.wiki isPurchased])
             {
-                OAWikiLinkBottomSheetViewController *wikiBottomSheet = [[OAWikiLinkBottomSheetViewController alloc] initWithParam:info.text];
-                [wikiBottomSheet show];
+                [OAWikiArticleHelper showWikiArticle:self.location url:info.text];
             }
             else
             {

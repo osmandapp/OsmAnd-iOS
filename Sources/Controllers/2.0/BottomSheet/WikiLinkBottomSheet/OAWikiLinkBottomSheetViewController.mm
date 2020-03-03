@@ -7,7 +7,6 @@
 //
 
 #import "OAWikiLinkBottomSheetViewController.h"
-#import "OAActionConfigurationViewController.h"
 #import "Localization.h"
 #import "OABottomSheetHeaderDescrButtonCell.h"
 #import "OAUtilities.h"
@@ -15,15 +14,11 @@
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OATitleIconRoundCell.h"
-#import "OACollectionViewCell.h"
-#import "OADestinationsHelper.h"
-#import "OADestination.h"
-#import "OAFavoriteItem.h"
-#import "OATargetPointsHelper.h"
-#import "OAPointDescription.h"
-#import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
 #import "OADestinationItemsListViewController.h"
+#import "OAWorldRegion.h"
+#import "OAWikiArticleHelper.h"
+#import "OAResourcesBaseViewController.h"
+#import "OARootViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -42,8 +37,12 @@
 {
     OsmAndAppInstance _app;
     OAWikiLinkBottomSheetViewController *vwController;
-    NSArray* _data;
+    NSDictionary <NSNumber *, NSArray *> *_data;
     NSString *_url;
+    NSString *_regionName;
+    
+    OAWorldRegion *_worldRegion;
+    RepositoryResourceItem *_resourceItem;
 }
 
 @synthesize tableData, tblView;
@@ -62,6 +61,12 @@
 - (void) initOnConstruct:(UITableView *)tableView viewController:(OAWikiLinkBottomSheetViewController *)viewController
 {
     _app = [OsmAndApp instance];
+    _resourceItem = viewController.localItem;
+    
+    if (viewController.localItem)
+        _regionName = [viewController.localItem title];
+    else
+        _regionName = OALocalizedString(@"map_an_region");
     
     vwController = viewController;
     tblView = tableView;
@@ -73,31 +78,33 @@
 {
     tblView.separatorColor = UIColorFromRGB(color_tint_gray);
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
-    NSMutableArray *arr = [NSMutableArray array];
-    [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderDescrButtonCell",
-                     @"title" : OALocalizedString(@"wiki_sheet_title"),
-                     @"description" : _url,
-                     @"img" : @"ic_custom_wikipedia"
-                     }];
+    NSMutableDictionary<NSNumber *, NSArray *> *dict = [NSMutableDictionary new];
+    [dict setObject:@[@{
+                         @"type" : @"OABottomSheetHeaderDescrButtonCell",
+                         @"title" : OALocalizedString(@"wiki_sheet_title"),
+                         @"description" : _url,
+                         @"img" : @"ic_custom_wikipedia"
+    }] forKey:@(0)];
     
-    [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
-        @"title" : OALocalizedString(@"download_wiki_data"),
-        @"img" : @"ic_custom_download",
-        @"round_bottom" : @(NO),
-        @"round_top" : @(YES)
-    }];
+    [dict setObject:@[@{
+                          @"type" : kTitleIconRoundCell,
+                          @"title" : [NSString stringWithFormat:OALocalizedString(@"download_wiki_data"), _regionName],
+                          @"img" : @"ic_custom_download",
+                          @"round_bottom" : @(NO),
+                          @"round_top" : @(YES),
+                          @"key" : @"download_wiki_map"
+                      },
+                      @{
+                          @"type" : kTitleIconRoundCell,
+                          @"title" : OALocalizedString(@"open_wiki_online"),
+                          @"img" : @"ic_custom_online",
+                          @"round_bottom" : @(YES),
+                          @"round_top" : @(NO),
+                          @"key" : @"open_in_browser"
+                      }
+    ] forKey:@(1)];
     
-    [arr addObject:@{
-        @"type" : kTitleIconRoundCell,
-        @"title" : OALocalizedString(@"open_wiki_online"),
-        @"img" : @"ic_custom_online",
-        @"round_bottom" : @(YES),
-        @"round_top" : @(NO)
-    }];
-    
-    _data = [NSArray arrayWithArray:arr];
+    _data = [NSDictionary dictionaryWithDictionary:dict];
 }
 
 - (void) initData
@@ -128,12 +135,12 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return _data.count;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.count;
+    return _data[@(section)].count;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -194,7 +201,7 @@
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
-    return _data[indexPath.row];
+    return _data[@(indexPath.section)][indexPath.row];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -226,6 +233,32 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"key"] isEqualToString:@"download_wiki_map"])
+    {
+        if (item)
+        {
+            OsmAndAppInstance app = [OsmAndApp instance];
+            if ([app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:_resourceItem.resourceId.toNSString()]].count == 0)
+            {
+                NSString *resourceName = [OAResourcesBaseViewController titleOfResource:_resourceItem.resource
+                                                                                       inRegion:_resourceItem.worldRegion
+                                                                                 withRegionName:YES
+                                                                               withResourceType:YES];
+                        
+                [OAResourcesBaseViewController startBackgroundDownloadOf:_resourceItem.resource resourceName:resourceName];
+            }
+        }
+        else
+        {
+                OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+                [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
+        }
+    }
+    else if ([item[@"key"] isEqualToString:@"open_in_browser"])
+    {
+        [OAUtilities callUrl:_url];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.vwController dismiss];
 }
@@ -239,6 +272,16 @@
 @end
 
 @implementation OAWikiLinkBottomSheetViewController
+
+- (instancetype) initWithUrl:(NSString *)url localItem:(RepositoryResourceItem *)localItem
+{
+    self = [super initWithParam:url];
+    if (self)
+    {
+        _localItem = localItem;
+    }
+    return self;
+}
 
 - (void) setupView
 {

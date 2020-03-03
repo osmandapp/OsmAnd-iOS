@@ -15,8 +15,6 @@
 - (void) awakeFromNib
 {
     self.sliderView.layer.cornerRadius = 3.;
-    self.closeButton.layer.cornerRadius = 15.;
-    self.closeButton.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.2];
     [super awakeFromNib];
 }
 

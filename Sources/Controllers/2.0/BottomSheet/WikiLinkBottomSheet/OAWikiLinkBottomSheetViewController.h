@@ -8,13 +8,17 @@
 
 #import "OABottomSheetViewController.h"
 #import "OABottomSheetTwoButtonsViewController.h"
-
+#import "OAResourcesBaseViewController.h"
 
 @interface OAWikiLinkBottomSheetScreen : NSObject<OABottomSheetScreen>
 
 @end
 
 @interface OAWikiLinkBottomSheetViewController : OABottomSheetTwoButtonsViewController
+
+- (instancetype) initWithUrl:(NSString *)url localItem:(RepositoryResourceItem *)localItem;
+
+@property (nonatomic, readonly) RepositoryResourceItem *localItem;
 
 @end
 

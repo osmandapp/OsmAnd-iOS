@@ -16,6 +16,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="67"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ah2-FI-gpg">
+                        <rect key="frame" x="0.0" y="66" width="320" height="1"/>
+                        <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="E5z-gW-xCd"/>
+                        </constraints>
+                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ryS-ae-NqK">
                         <rect key="frame" x="62" y="16" width="196" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -45,14 +52,13 @@
                     </label>
                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kCa-db-nBd">
                         <rect key="frame" x="274" y="14" width="30" height="30"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="8k8-0I-PEL"/>
                             <constraint firstAttribute="width" constant="30" id="hhq-ik-be0"/>
                         </constraints>
                         <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                        <state key="normal" image="ic_navbar_close.png"/>
+                        <state key="normal" image="ic_custom_close.png"/>
                     </button>
                 </subviews>
                 <constraints>
@@ -60,11 +66,14 @@
                     <constraint firstItem="Uli-7F-dN1" firstAttribute="leading" secondItem="9Uu-OT-AHV" secondAttribute="trailing" constant="16" id="9V2-Ir-mDv"/>
                     <constraint firstItem="a9L-gE-DfK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="6" id="Mpn-VD-W0n"/>
                     <constraint firstItem="kCa-db-nBd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="14" id="PkP-p0-Iuz"/>
+                    <constraint firstAttribute="bottom" secondItem="Ah2-FI-gpg" secondAttribute="bottom" id="Q83-oL-Cbm"/>
                     <constraint firstItem="ryS-ae-NqK" firstAttribute="leading" secondItem="9Uu-OT-AHV" secondAttribute="trailing" constant="16" id="QKY-Xj-HHT"/>
                     <constraint firstItem="Uli-7F-dN1" firstAttribute="top" secondItem="ryS-ae-NqK" secondAttribute="bottom" constant="2" id="WMn-xV-oIR"/>
                     <constraint firstItem="a9L-gE-DfK" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="WP7-eB-kll"/>
+                    <constraint firstItem="Ah2-FI-gpg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Y2t-oR-GnB"/>
                     <constraint firstItem="9Uu-OT-AHV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="ioJ-m8-ONv"/>
                     <constraint firstItem="kCa-db-nBd" firstAttribute="leading" secondItem="ryS-ae-NqK" secondAttribute="trailing" constant="16" id="jkM-vh-cYd"/>
+                    <constraint firstAttribute="trailing" secondItem="Ah2-FI-gpg" secondAttribute="trailing" id="spk-Op-QHb"/>
                     <constraint firstAttribute="trailing" secondItem="kCa-db-nBd" secondAttribute="trailing" constant="16" id="uWQ-Yb-Ub1"/>
                     <constraint firstItem="kCa-db-nBd" firstAttribute="leading" secondItem="Uli-7F-dN1" secondAttribute="trailing" constant="16" id="xpu-ID-2Xd"/>
                     <constraint firstItem="9Uu-OT-AHV" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="ydM-Jm-hzs"/>
@@ -83,6 +92,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_navbar_close.png" width="28" height="28"/>
+        <image name="ic_custom_close.png" width="30" height="30"/>
     </resources>
 </document>

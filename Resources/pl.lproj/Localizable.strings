@@ -237,9 +237,9 @@
 "record_trip" = "Nagraj swój ślad";
 "gpx_distance_points" = "Odległość (punkty)";
 "sett_lang_local" = "Lokalne";
-"prch_nau_q2_cell" = "Pobieranie wymaga % @ za pośrednictwem sieci komórkowej.";
+"prch_nau_q2_cell" = "Pobieranie wymaga %@ za pośrednictwem sieci komórkowej.";
 "incur_high_charges" = "Może to wiązać się z wysokimi opłatami.";
-"prch_nau_q2_wifi" = "Pobieranie wymaga % @ za pośrednictwem sieci Wi-Fi.";
+"prch_nau_q2_wifi" = "Pobieranie wymaga %@ za pośrednictwem sieci Wi-Fi.";
 "prch_items_failed" = "elementy nie zostały przywrócone. Proszę spróbować ponownie.";
 "res_banner_free_maps_desc" = "Możesz pobrać darmowe mapy %d, bez aktualizacji";
 "res_banner_no_free_maps_desc" = "Należy zakupić mapy regionów lub mapy całego świata";
@@ -249,15 +249,15 @@
 "res_install_no_space" = "Za mało miejsca, aby zainstalować";
 "res_no_space_free" = "jest potrzebne. Proszę zwolnić trochę miejsca.";
 "res_upd_avail_q" = "Aktualizacja jest dostępna";
-"res_inst_avail_cell_q" = "Instalacja % @ potrzebuje % @ za pośrednictwem sieci komórkowej.";
-"res_inst_avail_wifi_q" = "Instalacja % @ potrzebuje % @ za pośrednictwem sieci Wi-Fi.";
+"res_inst_avail_cell_q" = "Instalacja %@ potrzebuje %@ za pośrednictwem sieci komórkowej.";
+"res_inst_avail_wifi_q" = "Instalacja %@ potrzebuje %@ za pośrednictwem sieci Wi-Fi.";
 "data_will_be_lost" = "Wszystkie pobrane dane zostaną utracone.";
-"res_uninst_managed_q" = "Masz zamiar odinstalować % @. Można go ponownie zainstalować go później z katalogu.";
+"res_uninst_managed_q" = "Masz zamiar odinstalować %@. Można go ponownie zainstalować go później z katalogu.";
 "res_details" = "Szczegóły";
 "res_unknown" = "Nieznany";
 "res_size" = "Rozmiar";
 "res_update_all" = "Aktualizuj wszystko";
-"res_updates_no_space" = "Za mało miejsca, aby zainstalować aktualizacje %d. % @ jest potrzebne. Proszę zwolnić trochę miejsca.";
+"res_updates_no_space" = "Za mało miejsca, aby zainstalować aktualizacje %d. %@ jest potrzebne. Proszę zwolnić trochę miejsca.";
 "res_updates_avail_q" = "aktualizacje są dostępne.";
 // Menu
 "menu_my_places" = "Miejsca";
@@ -1120,7 +1120,7 @@
 "obf_import_already_exists" = "Plik o tej nazwie już istnieje. Proszę wybrać działanie.";
 "obf_import_success" = "Plik został pomyślnie zaimportowany";
 "obf_import_failed" = "Importowanie plików nie powiodło się";
-"res_import_success" = "% @ został pomyślnie zaimportowany";
+"res_import_success" = "%@ został pomyślnie zaimportowany";
 "res_import_unsupported" = "Nieprawidłowy typ pliku. Obsługiwane są tylko pliki routing.xml i *.render.xml.";
 "routing_import_please_restart" = "Aby użyć nowego routing.xml proszę zrestartować aplikację.";
 "download_pending" = "Pobieranie w toku";

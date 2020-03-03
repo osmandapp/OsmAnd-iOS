@@ -1317,7 +1317,6 @@
 "gpx_descent" = "Спуск";
 "stats_select_graph_data" = "Выбрать данные графика";
 "region_nautical" = "Морские карты";
-
 "res_elliptic_mercator" = "Эллиптическая проекция Меркатора";
 "res_url" = "URL";
 "routing_attr_driving_style_name" = "Стиль вождения";
@@ -1607,3 +1606,4 @@
 "routing_attr_prefer_unpaved_description" = "Предпочитать грунтовые дороги.";
 "rendering_value_darkyellow_name" = "Темно-желтый";
 "rendering_attr_surface_unpaved_name" = "Грунтовая";
+"rendering_attr_streetLightingNight_name" = "Показывать только ночью";

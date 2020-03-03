@@ -50,7 +50,7 @@
 "fav_export_select" = "Merci de sélectionner les favoris à exporter";
 "fav_create_group" = "Créer un nouveau groupe";
 "fav_enter_group_name" = "Entrez le nom du groupe";
-"fav_exists" = "Un favori avec le nom \"% @\" existe déjà";
+"fav_exists" = "Un favori avec le nom \"%@\" existe déjà";
 "fav_ignore" = "Ignorer";
 "fav_rename" = "Renommer";
 "fav_replace" = "Remplacer";
@@ -223,14 +223,14 @@
 "restore_all_purchases" = "Restaurer tous les achats";
 "no_statistics" = "Aucune statistique";
 "show_region_on_map_go" = "Aller à la carte";
-"prch_failed" = "L'achat de \"% @\" a échoué";
+"prch_failed" = "L'achat de \"%@\" a échoué";
 // Resources
 "res_mapsres" = "Cartes & Ressources";
 "res_install_no_space" = "Espace disque insuffisant pour installer";
 "res_update_no_space" = "Espace disque insuffisant pour mettre à jour";
 "res_no_space_free" = "est nécessaire. Veuillez libérer de l'espace.";
-"res_inst_avail_cell_q" = "L’installation de % @ a besoin de télécharger % @ via le réseau cellulaire.";
-"res_inst_avail_wifi_q" = "L’installation de % @ a besoin de télécharger % @ via le réseau WiFi.";
+"res_inst_avail_cell_q" = "L’installation de %@ a besoin de télécharger %@ via le réseau cellulaire.";
+"res_inst_avail_wifi_q" = "L’installation de %@ a besoin de télécharger %@ via le réseau WiFi.";
 "res_cancel_upd_q" = "Vous allez annuler la mise de %@.";
 "res_cancel_inst_q" = "Vous allez annuler l'installation de %@.";
 "menu_my_trips" = "Mes voyages";

@@ -456,7 +456,7 @@
 "show_region_on_map_title" = "Мапа завантажена";
 "show_region_on_map_desc" = "Мапа %@ завантажена. Перейдіть у вікно мапи для перегляду даних.";
 "show_region_on_map_go" = "Перейти до мапи";
-"sqlitedb_import_title" = "Імпорт файлу Map Creator";
+"sqlitedb_import_title" = "Імпортувати файл растрової мапи";
 "sqlitedb_import_already_exists" = "Зазначений файл sqlitedb вже існує. Будь ласка, виберіть дію.";
 "map_creator" = "Створити мапу";
 "local_names" = "Місцеві назви";
@@ -728,7 +728,7 @@
 "shared_string_info" = "Відомості";
 "shared_string_go" = "Вирушаємо";
 "error_avoid_specific_road" = "Об'їзд не знайдений";
-"road_blocked" = "Дорога заблокована";
+"road_blocked" = "Перекрита дорога";
 "starting_point" = "Відправна точка";
 "shared_string_select_avoid_road_on_map" = "Виберіть дорогу, яку слід уникати під час маршрутизації";
 "shared_string_road" = "Дорога";
@@ -1614,3 +1614,8 @@
 "res_offlineSQL_URL_warning" = "Не підтримується для цього виду мапи";
 "shared_string_warning" = "Попередження";
 "res_online_source_cache_alert" = "Застосування цих змін очистить кешовані дані для цього джерела плитки";
+"change_object_posiotion" = "Змінити позицію об'єкта";
+"change_position_descr" = "Перемістіть мапу, щоб змінити положення об'єкта";
+"online_raster_maps" = "Мережеві растрові мапи";
+"import_raster_map_success" = "Растрову мапу імпортовано. Відкрийте Налаштування мапи та задійте її за допомогою Накладки/Підкладки";
+"import_raster_map_failed" = "Помилка імпорту растрової мапи";

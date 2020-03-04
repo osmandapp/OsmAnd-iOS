@@ -425,7 +425,7 @@
 "show_region_on_map_title" = "Búið að ná í kort";
 "show_region_on_map_desc" = "Kort af %@ hefur verið sótt, þú getur núna byrjað að nota það.";
 "show_region_on_map_go" = "Fara á landakortið";
-"sqlitedb_import_title" = "Flytja inn skrá úr kortagerð";
+"sqlitedb_import_title" = "Flytja inn rastakortaskrá";
 "sqlitedb_import_already_exists" = "Tiltekna sqlitedb-skráin er þegar til. Veldu einhverja aðgerð.";
 "map_creator" = "Kortagerð";
 "local_names" = "Staðvær nöfn";
@@ -725,7 +725,7 @@
 "do_not_send_anonymous_data_desc" = "Við söfnum ekki staðsetningargögnum. Einungis upplýsingum um notkun forritsins og tölfræði varðandi niðurhal korta.";
 "confirm_usage_speed_cameras" = "Í mörgum löndum (Þýskalandi, Frakklandi, Ítalíu og fleirum) er notkun aðvarana vegna hraðamyndavéla ólögleg. OsmAnd tekur ekki neina ábyrgð á því ef þú brýtur lög. Ekki samþykkja þetta nema þú hafir leyfi til að nota þennan eiginleika.";
 "error_avoid_specific_road" = "Engin hjáleið fannst";
-"road_blocked" = "Vegur er lokaður";
+"road_blocked" = "Lokaður vegur";
 "starting_point" = "Upphafspunktur";
 "shared_string_select_avoid_road_on_map" = "Veldu veg sem á að forðast við skipulagningu leiðar";
 "shared_string_road" = "Vegur";
@@ -1614,3 +1614,8 @@
 "res_offlineSQL_URL_warning" = "Ekki stutt fyrir þessa gerð korta";
 "shared_string_warning" = "Aðvörun";
 "res_online_source_cache_alert" = "Séu þessar breytingar virkjaðar mun það hreinsa skyndiminnið fyrir þennan kortatíglagjafa";
+"change_object_posiotion" = "Breyta staðsetningu hlutar";
+"change_position_descr" = "Færa kortið til að breyta staðsetningu hlutarins";
+"online_raster_maps" = "Rastakort á netinu";
+"import_raster_map_success" = "Rastakort var flutt inn. Opnaðu kortastillingar og virkjaðu það í gegnum Yfirlag/Undirlag";
+"import_raster_map_failed" = "Innflutningur rastakorts mistókst";

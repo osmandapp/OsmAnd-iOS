@@ -182,10 +182,6 @@
         cell.descView.hidden = YES;
         cell.iconView.image = img;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        if (_selectedSources.contains(item))
-        {
-            [tblView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-        }
     }
     return cell;
 }

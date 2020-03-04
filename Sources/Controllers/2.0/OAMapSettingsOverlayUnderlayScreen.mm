@@ -360,21 +360,20 @@ static NSInteger kButtonsSection;
         OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-           NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
-           cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.descriptionView.hidden = YES;
         }
         if (cell)
         {
-            cell.descriptionView.hidden = YES;
-            
             cell.textView.text = _isEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             NSString *imgName = _isEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.imgView.tintColor = _isEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
-            [cell.switchView setOn:_isEnabled];
-
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView setOn:_isEnabled];
             [cell.switchView addTarget:self action:@selector(turnLayerOnOff:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
@@ -496,6 +495,8 @@ static NSInteger kButtonsSection;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
+            [cell showImage:NO];
+            [cell.button setTitleColor:[UIColor colorWithRed:87.0/255.0 green:20.0/255.0 blue:204.0/255.0 alpha:1] forState:UIControlStateNormal];
         }
         if (cell)
         {
@@ -510,8 +511,6 @@ static NSInteger kButtonsSection;
                 else if (indexPath.row == 1)
                     [cell.button addTarget:self action:@selector(importPressed) forControlEvents:UIControlEventTouchDown];
             }
-            [cell showImage:NO];
-            [cell.button setTitleColor:[UIColor colorWithRed:87.0/255.0 green:20.0/255.0 blue:204.0/255.0 alpha:1] forState:UIControlStateNormal];
         }
         return cell;
     }
@@ -570,8 +569,10 @@ static NSInteger kButtonsSection;
             {
                 _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
             }
+            [tblView beginUpdates];
             [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
             [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tblView endUpdates];
         }
         else
         {
@@ -584,8 +585,10 @@ static NSInteger kButtonsSection;
                 [self hidePolygons:NO];
                 _app.data.underlayMapSource = nil;
             }
+            [tblView beginUpdates];
             [tblView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
             [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tblView endUpdates];
         }
     }
 }

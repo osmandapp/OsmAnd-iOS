@@ -105,14 +105,6 @@
         self.titleView.text = OALocalizedString(@"edit_waypoint_short");
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    
-    OAAppSettings* settings = [OAAppSettings sharedManager];
-    [settings setMapSettingShowFavorites:YES];
-}
-
 - (BOOL) isItemExists:(NSString *)name
 {
     return NO;

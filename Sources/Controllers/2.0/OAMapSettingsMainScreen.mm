@@ -139,7 +139,7 @@
     [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
 
     NSMutableDictionary *section0fav = [NSMutableDictionary dictionary];
-    [section0fav setObject:OALocalizedString(@"favorite") forKey:@"name"];
+    [section0fav setObject:OALocalizedString(@"favorites") forKey:@"name"];
     [section0fav setObject:@"" forKey:@"value"];
     [section0fav setObject:@"OASwitchCell" forKey:@"type"];
     

@@ -90,6 +90,16 @@
     return OALocalizedString(@"gpx_waypoint");
 }
 
+- (BOOL)supportMapInteraction
+{
+    return YES;
+}
+
+- (BOOL)supportsForceClose
+{
+    return YES;
+}
+
 - (BOOL)shouldEnterContextModeManually
 {
     return self.newItem;

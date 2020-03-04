@@ -15,6 +15,7 @@
 #import "OAPOI.h"
 #import "OAWikiWebViewController.h"
 #import "OARootViewController.h"
+#import "Localization.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -94,7 +95,7 @@
         }
         else
         {
-            [OAUtilities callUrl:url];
+            [self warnAboutExternalLoad:url];
         }
     }
     else
@@ -102,6 +103,16 @@
         OAWikiLinkBottomSheetViewController *bottomSheet = [[OAWikiLinkBottomSheetViewController alloc] initWithUrl:url localItem:item];
         [bottomSheet show];
     }
+}
+
++ (void) warnAboutExternalLoad:(NSString *)url
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:url message:OALocalizedString(@"online_webpage_warning") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [OAUtilities callUrl:url];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
 

@@ -1338,6 +1338,7 @@
 "wiki_sheet_title" = "How to open Wikipedia articles?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_wiki_online" = "Open article online";
+"online_webpage_warning" = "Page only available online. Open in web browser?";
 
 "custom_search" = "Custom search";
 "poi_filter_custom_filter" = "Custom filter";

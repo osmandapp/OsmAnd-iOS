@@ -34,6 +34,7 @@ typedef NS_ENUM(NSInteger, EOASourceFormat)
 
 - (instancetype) initWithLocalItem:(LocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController;
 - (instancetype) initWithUrlParameters:(NSDictionary<NSString *, NSString *> *)params;
+- (instancetype) initWithEmptyItem;
 
 @end
 

@@ -13,6 +13,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapCreatorHelper.h"
+#import "OABottomSheetActionCell.h"
 
 #include <QSet>
 
@@ -91,6 +92,8 @@
                                                 return s1->priority < s2->priority;
                                             });
             dispatch_async(dispatch_get_main_queue(), ^(void) {
+                tblView.allowsMultipleSelectionDuringEditing = YES;
+                [tblView setEditing:YES];
                 [tblView reloadData];
             });
         }
@@ -158,37 +161,29 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    static NSString* const mapSourceItemCell = @"mapSourceItemCell";
-    
-    // Get content for cell and it's type id
-    NSString* caption = nil;
-    NSString* description = nil;
-    
     const auto& item = _onlineMapSources[(int) indexPath.row];
-    caption = item->name.toNSString();
+    NSString* caption = item->name.toNSString();
     
-    // Obtain reusable cell or create one
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:mapSourceItemCell];
+    static NSString* const identifierCell = @"OABottomSheetActionCell";
+    OABottomSheetActionCell* cell = nil;
+    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mapSourceItemCell];
-    
-    // Fill cell content
-    cell.textLabel.text = caption;
-    cell.detailTextLabel.text = description;
-    
-    if (_selectedSources.contains(item))
     {
-        cell.accessoryView.hidden = NO;
-        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
-    }
-    else
-    {
-        cell.accessoryView.hidden = YES;
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
     }
     
+    if (cell)
+    {
+        UIImage *img = nil;
+        img = [UIImage imageNamed:@"ic_custom_map_style"];
+        
+        cell.textView.text = caption;
+        cell.descView.hidden = YES;
+        cell.iconView.image = img;
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    }
     return cell;
-    
 }
 
 #pragma mark - UITableViewDelegate
@@ -198,12 +193,16 @@
     return 0.01;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    const auto& item = _onlineMapSources[(int) indexPath.row];
+    return [OABottomSheetActionCell getHeight:item->name.toNSString() value:nil cellWidth:tableView.bounds.size.width];
+}
+
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     const auto& item = _onlineMapSources[(int) indexPath.row];
     _selectedSources.append(item);
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [tableView reloadData];
 }
 
 @end

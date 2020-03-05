@@ -410,7 +410,7 @@
 "show_region_on_map_title" = "Mapa iscarrigada";
 "show_region_on_map_desc" = "Sa mapa %@ est istada iscarrigada. Bae a sa mapa pro incumentzare a l’impreare.";
 "show_region_on_map_go" = "Bae a sa mapa";
-"sqlitedb_import_title" = "Importa documentu de su Creadore Mapa";
+"sqlitedb_import_title" = "Importa su documentu de sa mapa raster";
 "sqlitedb_import_already_exists" = "Su documentu sqlitedb dislindadu esistit giai. Pro piaghere issèbera un'atzione.";
 "map_creator" = "Creadore Mapa";
 "local_names" = "Nùmenes locales";
@@ -1312,7 +1312,7 @@
 "res_expire_time" = "Tempus de iscadida";
 "res_mercator" = "Projetzione de Mercadore";
 "res_pseudo_mercator" = "Projetzione de pseudo-Mercadore";
-"res_zoom_levels_desc" = "Custos paràmetros ant a influentzare s'aspetu de sa mapa cando benit impreada comente casta de mapa o istratu superioreinferiore.\n\nCasta de mapa: sa mapa at a èssere limitada a sos ismanniamentos ischertados.\n\nIstratu superiore / Inferiore: Sos livellos de ismanniamentu in ue sos tasseddos ant a èssere visìbiles. B'ant a èssere mudaduras de risolutzione in subra o in suta de sos valores impostados.";
+"res_zoom_levels_desc" = "Custos paràmetros ant a influentzare s'aspetu de sa mapa cando benit impreada comente casta de mapa o istratu superiore/inferiore.\n\nCasta de mapa: sa mapa at a èssere limitada a sos ismanniamentos ischertados.\n\nIstratu superiore / Inferiore: Sos livellos de ismanniamentu in ue sos tasseddos ant a èssere visìbiles. B'ant a èssere mudaduras de risolutzione in subra o in suta de sos valores impostados.";
 "res_expire_time_desc" = "Tempus de iscadida in minutos. Sos tassedos s'ant a torrare a carrigare a pustis de su tempus dislindadu. Lassa custu campu bòidu si non tenes bisòngiu de torrare a carrigare sos tasseddos pro custa mitza.\nUna die sunt 1440 minutos.\nUna chida sunt 10 080 minutos.\n30 dies sunt 43 200 minutos.";
 "res_name_warning" = "Su nùmene de su documentu non podet èssere bòidu";
 "res_url_warning" = "S'URL non podet èssere bòidu";
@@ -1617,3 +1617,8 @@
 "res_offlineSQL_URL_warning" = "No est suportadu pro custa casta de mapa";
 "shared_string_warning" = "Atentzione";
 "res_online_source_cache_alert" = "Aplichende custas modìficas as a isboidare sa memòria temporànea pro custa mitza de tasseddos";
+"change_object_posiotion" = "Muda sa positzione de s'ogetu";
+"change_position_descr" = "Moe sa mapa pro mudare sa positzione de s'ogetu";
+"online_raster_maps" = "Mapas raster in lìnia";
+"import_raster_map_success" = "As importadu sa mapa raster. Aberi sas impostatziones de sa mapa e ativa·la pro mèdiu de un'istratu superiore o inferiore";
+"import_raster_map_failed" = "Importadura de sa mapa raster fallida";

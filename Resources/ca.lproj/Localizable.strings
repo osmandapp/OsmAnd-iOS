@@ -417,7 +417,7 @@
 "show_region_on_map_desc" = "El mapa de %@ ja s'ha baixat. Aneu al mapa per començar a utilitzar-lo.";
 "show_region_on_map_go" = "Ves al mapa";
 "map_settings_hillshade" = "Ombrejat del relleu";
-"sqlitedb_import_title" = "Importa fitxer del creador de mapes";
+"sqlitedb_import_title" = "Importa el fitxer de mapa de bits";
 "sqlitedb_import_already_exists" = "El fitxer sqlitedb indicat ja existeix. Trieu una acció.";
 "map_creator" = "Creador de mapes";
 "local_names" = "Denominacions locals";
@@ -1615,3 +1615,8 @@
 "res_offlineSQL_URL_warning" = "No s'admet per a aquest tipus de mapa";
 "shared_string_warning" = "Avís";
 "res_online_source_cache_alert" = "L'aplicació d'aquests canvis esborrarà les dades de la memòria cau per a aquesta font de tessel·les";
+"change_object_posiotion" = "Canvia la posició de l'objecte";
+"change_position_descr" = "Arrossegueu el mapa per canviar la posició de l'objecte";
+"online_raster_maps" = "Mapes de bits en línia";
+"import_raster_map_success" = "S'ha importat el mapa de bits.Obriu Configuració de Mapes i activeu-lo via Superposició/Mapa de fons";
+"import_raster_map_failed" = "Ha fallat la importació del mapa de bits";

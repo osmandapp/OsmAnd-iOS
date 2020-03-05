@@ -858,7 +858,6 @@
 "shared_string_on" = "Omogočeno";
 "shared_string_off" = "Izključeno";
 "online_map" = "Spletni zemljevid";
-
 "osm_live_cancel_subscription" = "Prekliči naročnino";
 "quick_actions_show_dialog" = "Pokaži vmesno pogovorno okno";
 "purple" = "Vijolična";
@@ -1086,7 +1085,7 @@
 "rendering_attr_surface_grass_paver_name" = "Travnati tlakovci";
 "rendering_attr_hideIcons_name" = "Skrij ikone točk POI";
 "rendering_attr_trolleybusRoutes_name" = "Proge trolejbusa";
-"routing_attr_avoid_subway_name" = "Izogni se podzemniželeznici";
+"routing_attr_avoid_subway_name" = "Izogni se podzemni železnici";
 "rendering_attr_showLez_description" = "Prikaži področja z omejitvijo izpustov. Določilo ne vpliva na usmerjanje.";
 "routeInfo_roadClass_name" = "Vrsta ceste";
 "rendering_attr_tracktype_grade3_name" = "Pretežno trdna";
@@ -1122,7 +1121,7 @@
 "rendering_value_black_name" = "Črna";
 "routing_attr_allow_expert_description" = "Izjemno zahtevne poti z nevarnimi preprekami in okolico.";
 "rendering_attr_surface_dirt_name" = "Prst";
-"rendering_attr_subwayMode_name" = "Proge podzemneželeznice";
+"rendering_attr_subwayMode_name" = "Proge podzemne železnice";
 "routing_attr_avoid_ice_roads_fords_name" = "Izogni se zaledenelim cestam in plitvinam";
 "rendering_value_car_name" = "Vožnja z avtomobilom";
 "routing_attr_weight_name" = "Omejitev teže vozila";

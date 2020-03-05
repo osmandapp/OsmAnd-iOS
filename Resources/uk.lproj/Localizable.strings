@@ -1619,3 +1619,8 @@
 "online_raster_maps" = "Мережеві растрові мапи";
 "import_raster_map_success" = "Растрову мапу імпортовано. Відкрийте Налаштування мапи та задійте її за допомогою Накладки/Підкладки";
 "import_raster_map_failed" = "Помилка імпорту растрової мапи";
+"map_settings_show_slider_map" = "Показати повзунок на мапі";
+"map_settings_add_online_source" = "Додати мережеве джерело";
+"map_settings_hide_polygons" = "Сховати багатокутники";
+"map_settings_hide_polygons_desc" = "Цей параметр впливає тільки на безмережеві векторні мапи";
+"map_settings_add_maps_desc" = "Ви можете додавати нові мапи за посиланням чи імпортом файлів SQLite.";

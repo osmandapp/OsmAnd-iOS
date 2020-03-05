@@ -129,7 +129,7 @@
 "show_region_on_map_title" = "Mapa stiahnutá";
 "show_region_on_map_desc" = "Mapa %@ bola stiahnutá. Prejdite na mapu a začnite ju používať.";
 "show_region_on_map_go" = "Prejsť na mapu";
-"sqlitedb_import_title" = "Importovať súbor z Map Creatora";
+"sqlitedb_import_title" = "Importovať súbor rastrovej mapy";
 "sqlitedb_import_already_exists" = "Zadaný sqlitedb súbor už existuje. Vyberte akciu.";
 "map_creator" = "Map Creator";
 "local_names" = "Lokálne názvy";

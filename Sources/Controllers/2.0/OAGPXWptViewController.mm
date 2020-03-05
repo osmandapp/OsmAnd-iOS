@@ -90,6 +90,16 @@
     return OALocalizedString(@"gpx_waypoint");
 }
 
+- (BOOL)supportMapInteraction
+{
+    return YES;
+}
+
+- (BOOL)supportsForceClose
+{
+    return YES;
+}
+
 - (BOOL)shouldEnterContextModeManually
 {
     return self.newItem;
@@ -103,14 +113,6 @@
         self.titleView.text = OALocalizedString(@"add_waypoint_short");
     else
         self.titleView.text = OALocalizedString(@"edit_waypoint_short");
-}
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    
-    OAAppSettings* settings = [OAAppSettings sharedManager];
-    [settings setMapSettingShowFavorites:YES];
 }
 
 - (BOOL) isItemExists:(NSString *)name

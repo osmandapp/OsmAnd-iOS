@@ -96,6 +96,16 @@
     self.titleView.text = OALocalizedString(@"parking_marker");
 }
 
+- (BOOL)supportsForceClose
+{
+    return YES;
+}
+
+- (BOOL)shouldEnterContextModeManually
+{
+    return YES;
+}
+
 - (void) viewDidLoad
 {
     [self applySafeAreaMargins];

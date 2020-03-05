@@ -1610,3 +1610,14 @@
 "res_source_sqlite" = "SQLiteDB fil";
 "res_source_one_per_tile" = "En billedfil pr. flise";
 "res_zoom_invalid_value" = "Zoomværdier skal være inden for området 1 - 22";
+"online_raster_map" = "Online rasterkort";
+"offline_raster_map" = "Offline rasterkort";
+"offline_raster_maps" = "Offline rasterkort";
+"res_edit_map_source" = "Redigere kortkilde";
+"res_offlineSQL_URL_warning" = "Ikke understøttet for denne type kort";
+"shared_string_warning" = "Advarsel";
+"change_object_posiotion" = "Skift objektets position";
+"change_position_descr" = "Flyt kortet for at ændre objektets position";
+"online_raster_maps" = "Online rasterkort";
+"import_raster_map_success" = "Raster-kort er blevet importeret. Åbn Kort-Indstillinger, og aktiver via Over-/Underlejring";
+"import_raster_map_failed" = "Import af raster-kort mislykkedes";

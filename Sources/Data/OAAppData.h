@@ -20,7 +20,9 @@
 @property OAMapSource* prevOfflineSource;
 
 @property OAMapSource* overlayMapSource;
+@property OAMapSource* lastOverlayMapSource;
 @property OAMapSource* underlayMapSource;
+@property OAMapSource* lastUnderlayMapSource;
 @property (nonatomic) double overlayAlpha;
 @property (nonatomic) double underlayAlpha;
 

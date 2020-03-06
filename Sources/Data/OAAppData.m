@@ -215,6 +215,25 @@
     }
 }
 
+@synthesize lastOverlayMapSource = _lastOverlayMapSource;
+
+- (OAMapSource*) lastOverlayMapSource
+{
+    @synchronized(_lock)
+    {
+        return _lastOverlayMapSource;
+    }
+}
+
+- (void) setLastOverlayMapSource:(OAMapSource*)lastOverlayMapSource
+{
+    @synchronized(_lock)
+    {
+        _lastOverlayMapSource = [lastOverlayMapSource copy];
+    }
+}
+
+
 @synthesize underlayMapSource = _underlayMapSource;
 
 - (OAMapSource*) underlayMapSource
@@ -233,6 +252,25 @@
         [_underlayMapSourceChangeObservable notifyEventWithKey:self andValue:_underlayMapSource];
     }
 }
+
+@synthesize lastUnderlayMapSource = _lastUnderlayMapSource;
+
+- (OAMapSource*) lastUnderlayMapSource
+{
+    @synchronized(_lock)
+    {
+        return _lastUnderlayMapSource;
+    }
+}
+
+- (void) setLastUnderlayMapSource:(OAMapSource*)lastUnderlayMapSource
+{
+    @synchronized(_lock)
+    {
+        _lastUnderlayMapSource = [lastUnderlayMapSource copy];
+    }
+}
+
 
 @synthesize overlayAlpha = _overlayAlpha;
 @synthesize underlayAlpha = _underlayAlpha;
@@ -394,7 +432,8 @@
 
     defaults.overlayAlpha = 0.5;
     defaults.underlayAlpha = 0.5;
-    
+    defaults.lastOverlayMapSource = NULL;
+    defaults.lastUnderlayMapSource = NULL;
     // Imagine that last viewed location was center of the world
     Point31 centerOfWorld;
     centerOfWorld.x = centerOfWorld.y = INT32_MAX>>1;
@@ -419,7 +458,9 @@
 #define kDestinations @"destinations"
 
 #define kOverlayMapSource @"overlay_map_source"
+#define kLastOverlayMapSource @"last_overlay_map_source"
 #define kUnderlayMapSource @"underlay_map_source"
+#define kLastUnderlayMapSource @"last_underlay_map_source"
 #define kOverlayAlpha @"overlay_alpha"
 #define kUnderlayAlpha @"underlay_alpha"
 
@@ -447,7 +488,9 @@
     [aCoder encodeObject:_destinations forKey:kDestinations];
 
     [aCoder encodeObject:_overlayMapSource forKey:kOverlayMapSource];
+    [aCoder encodeObject:_lastOverlayMapSource forKey:kLastOverlayMapSource];
     [aCoder encodeObject:_underlayMapSource forKey:kUnderlayMapSource];
+    [aCoder encodeObject:_lastUnderlayMapSource forKey:kLastUnderlayMapSource];
     [aCoder encodeObject:[NSNumber numberWithDouble:_overlayAlpha] forKey:kOverlayAlpha];
     [aCoder encodeObject:[NSNumber numberWithDouble:_underlayAlpha] forKey:kUnderlayAlpha];
 
@@ -477,7 +520,9 @@
         _destinations = [aDecoder decodeObjectForKey:kDestinations];
 
         _overlayMapSource = [aDecoder decodeObjectForKey:kOverlayMapSource];
+        _lastOverlayMapSource = [aDecoder decodeObjectForKey:kLastOverlayMapSource];
         _underlayMapSource = [aDecoder decodeObjectForKey:kUnderlayMapSource];
+        _lastUnderlayMapSource = [aDecoder decodeObjectForKey:kLastUnderlayMapSource];
         _overlayAlpha = [[aDecoder decodeObjectForKey:kOverlayAlpha] doubleValue];
         _underlayAlpha = [[aDecoder decodeObjectForKey:kUnderlayAlpha] doubleValue];
 

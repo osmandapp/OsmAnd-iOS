@@ -72,6 +72,8 @@
     
     NSArray<NSString *> *_possibleZoomValues;
     NSIndexPath *_pickerIndexPath;
+    
+    BOOL _isNewItem;
 }
 -(void)applyLocalization
 {
@@ -147,6 +149,22 @@
         _app = [OsmAndApp instance];
         _tileSource = OsmAnd::OnlineTileSources::createTileSourceTemplate([self attributesFromParams:params]);
         [self setupParametersFromTileSource];
+    }
+    return self;
+}
+
+- (instancetype) initWithEmptyItem
+{
+    self = [super init];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        const auto& emptySource = std::shared_ptr<OsmAnd::IOnlineTileSources::Source>(new OsmAnd::OnlineTileSources::Source(QStringLiteral("")));
+        emptySource->minZoom = OsmAnd::ZoomLevel4;
+        emptySource->maxZoom = OsmAnd::ZoomLevel18;
+        _tileSource = emptySource;
+        [self setupParametersFromTileSource];
+        _isNewItem = YES;
     }
     return self;
 }
@@ -352,7 +370,8 @@
     if (_tileSource != nullptr)
     {
         [[NSFileManager defaultManager] removeItemAtPath:[_app.cachePath stringByAppendingPathComponent:_tileSource->name.toNSString()] error:nil];
-        _app.resourcesManager->uninstallTilesResource(_tileSource->name);
+        if (!_isNewItem)
+            _app.resourcesManager->uninstallTilesResource(_tileSource->name);
     }
     else if (_sqliteSource != nil)
     {

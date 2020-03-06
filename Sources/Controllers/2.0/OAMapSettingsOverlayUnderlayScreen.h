@@ -10,4 +10,6 @@
 
 @interface OAMapSettingsOverlayUnderlayScreen : NSObject<OAMapSettingsScreen>
 
+- (void) hidePolygons:(BOOL)hide;
+
 @end

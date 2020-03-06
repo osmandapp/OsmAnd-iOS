@@ -4533,6 +4533,8 @@
 		DAD1DF9B22FAAF5B009C3D90 /* OADayNightModeAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD1DF9922FAAF5B009C3D90 /* OADayNightModeAction.m */; };
 		DAD1DF9E22FAB598009C3D90 /* OAFavoriteAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD1DF9D22FAB598009C3D90 /* OAFavoriteAction.mm */; };
 		DAD1DF9F22FAB598009C3D90 /* OAFavoriteAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD1DF9D22FAB598009C3D90 /* OAFavoriteAction.mm */; };
+		DAD228A02410E6F600D4D9DC /* OACollapsableWaypointsView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD2289E2410E6F600D4D9DC /* OACollapsableWaypointsView.mm */; };
+		DAD228A12410E6F600D4D9DC /* OACollapsableWaypointsView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD2289E2410E6F600D4D9DC /* OACollapsableWaypointsView.mm */; };
 		DAD49D8A229D597A0050751B /* OAAbstractCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD49D89229D597A0050751B /* OAAbstractCard.m */; };
 		DAD49D8B229D597A0050751B /* OAAbstractCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD49D89229D597A0050751B /* OAAbstractCard.m */; };
 		DAD49D8E229D5B3E0050751B /* OANoImagesCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD49D8D229D5B3E0050751B /* OANoImagesCard.m */; };
@@ -7953,6 +7955,8 @@
 		DAD1DF9922FAAF5B009C3D90 /* OADayNightModeAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OADayNightModeAction.m; sourceTree = "<group>"; };
 		DAD1DF9C22FAB598009C3D90 /* OAFavoriteAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoriteAction.h; sourceTree = "<group>"; };
 		DAD1DF9D22FAB598009C3D90 /* OAFavoriteAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteAction.mm; sourceTree = "<group>"; };
+		DAD2289E2410E6F600D4D9DC /* OACollapsableWaypointsView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACollapsableWaypointsView.mm; path = Sources/Controllers/2.0/OACollapsableWaypointsView.mm; sourceTree = "<group>"; };
+		DAD2289F2410E6F600D4D9DC /* OACollapsableWaypointsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableWaypointsView.h; path = Sources/Controllers/2.0/OACollapsableWaypointsView.h; sourceTree = "<group>"; };
 		DAD49D88229D597A0050751B /* OAAbstractCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCard.h; sourceTree = "<group>"; };
 		DAD49D89229D597A0050751B /* OAAbstractCard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAbstractCard.m; sourceTree = "<group>"; };
 		DAD49D8C229D5B3E0050751B /* OANoImagesCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANoImagesCard.h; sourceTree = "<group>"; };
@@ -10751,6 +10755,8 @@
 				DA31EDFF22CB9D7B0038AB49 /* OACollapsableLabelView.h */,
 				DACB92B423E06A0100771E40 /* OARouteBaseViewController.h */,
 				DACB92B523E06A0100771E40 /* OARouteBaseViewController.mm */,
+				DAD2289F2410E6F600D4D9DC /* OACollapsableWaypointsView.h */,
+				DAD2289E2410E6F600D4D9DC /* OACollapsableWaypointsView.mm */,
 			);
 			name = TargetMenu;
 			sourceTree = "<group>";
@@ -16599,6 +16605,7 @@
 				DA4B982421F865E500CED009 /* OANode.m in Sources */,
 				DAD10FDC2226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm in Sources */,
 				8AFD2DA0210E1D2E007AA07D /* OATransportRouteToolbarViewController.mm in Sources */,
+				DAD228A12410E6F600D4D9DC /* OACollapsableWaypointsView.mm in Sources */,
 				DA6D51E821F33B2800EC84E2 /* OAOsmPoint.m in Sources */,
 				847A1CD81DF94E9B003C1246 /* OAPOIHistoryType.mm in Sources */,
 				8AF3C81F20F656F3006C86AA /* OATransportStopType.m in Sources */,
@@ -17573,6 +17580,7 @@
 				842034021FB3023D002784EF /* OATurnResource.m in Sources */,
 				84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				DAFCB01023A90BC500CFBA58 /* OARouteDetailsViewController.mm in Sources */,
+				DAD228A02410E6F600D4D9DC /* OACollapsableWaypointsView.mm in Sources */,
 				84185A7F1AA99ABE00F70328 /* OAIAPHelper.mm in Sources */,
 				8417A6711B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */,
 				848A3EAF1B6A14030016F6F4 /* OASQLiteTileSource.mm in Sources */,

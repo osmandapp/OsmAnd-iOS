@@ -95,7 +95,7 @@
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "پرهیز از…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
-"prefer_in_routing_title" = "ترجیح‌دادن…";
+"prefer_in_routing_title" = "ترجیحِ…";
 "prefer_in_routing_descr" = "Prefer motorways";
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
 "choose_auto_follow_route" = "نمای نقشه خودکار-مرکز";
@@ -1174,7 +1174,7 @@
 "rendering_attr_currentTrackColor_description" = "رنگ GPX";
 "rendering_value_medium_name" = "متوسط";
 "rendering_value_browse_map_name" = "مرور نقشه";
-"routing_attr_driving_style_prefer_unpaved_description" = "جاده‌های روسازی‌نشده را به روسازی‌شده ترجیح می‌دهم.";
+"routing_attr_driving_style_prefer_unpaved_description" = "در مسیریابی، جاده‌های روسازی‌نشده را به روسازی‌شده ترجیح می‌دهد.";
 "rendering_attr_surface_stone_name" = "سنگ";
 "rendering_attr_highway_class_service_name" = "خدماتی";
 "rendering_attr_trainLightrailRoutes_name" = "مسیرهای قطار";
@@ -1296,9 +1296,9 @@
 "rendering_value_walkingRoutesOSMCNodes_name" = "شبکه‌های گره";
 "rendering_attr_hideOverground_name" = "اشیای روی زمین";
 "rendering_attr_piste_difficulty_easy_name" = "آسان";
-"routing_attr_prefer_unpaved_description" = "جاده‌های روسازی‌نشده را ترجیح می‌دهم.";
+"routing_attr_prefer_unpaved_description" = "اولویت را به جاده‌های روسازی‌نشده می‌دهد.";
 "rendering_attr_surface_ground_name" = "زمین";
-"routing_attr_prefer_motorway_description" = "آزادراه‌ها را ترجیح می‌دهم";
+"routing_attr_prefer_motorway_description" = "اولویت را به آزادراه‌ها می‌دهد";
 "rendering_attr_highway_class_track_grade1_name" = "سطح ۱";
 "rendering_value_thin_name" = "باریک";
 "routing_attr_allow_advanced_name" = "مسیرهای دشوار مجاز باشد";

@@ -2566,7 +2566,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (BOOL) isScrollAllowed
 {
-    BOOL scrollDisabled = self.customController && (self.customController.showingKeyboard || (self.customController.editing && [self.customController disablePanWhileEditing]));
+    BOOL scrollDisabled = self.customController && (self.customController.showingKeyboard || (self.customController.editing && [self.customController disablePanWhileEditing]) || self.customController.disableScroll);
     
     if (!scrollDisabled)
     {

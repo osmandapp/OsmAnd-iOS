@@ -918,6 +918,11 @@
     return NO; // override
 }
 
+- (BOOL) disableScroll
+{
+    return NO; // override
+}
+
 - (BOOL) supportEditing
 {
     return NO; // override

@@ -1618,3 +1618,8 @@
 "online_raster_maps" = "الخريطة النقطية على الانترنت";
 "import_raster_map_success" = "تم استيراد الخريطة النقطية. افتح \"إعدادات الخريطة\" وقم بتنشيطها عبر \"تراكب / تحجيم\"";
 "import_raster_map_failed" = "فشل استيراد الخريطة النقطية";
+"map_settings_show_slider_map" = "إظهار شريط التمرير على الخريطة";
+"map_settings_add_online_source" = "إضافة مصدر عبر الإنترنت";
+"map_settings_hide_polygons" = "إخفاء المضلعات";
+"map_settings_hide_polygons_desc" = "يؤثر هذا الخيار على خرائط متجهات أوسماند دون اتصال فقط";
+"map_settings_add_maps_desc" = "يمكنك إضافة خرائط جديدة عبر الرابط، أو عن طريق استيراد ملفات SQLite.";

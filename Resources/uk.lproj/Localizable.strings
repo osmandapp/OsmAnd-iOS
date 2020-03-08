@@ -615,9 +615,9 @@
 "prefer_in_routing_title" = "Надавати перевагу…";
 "prefer_in_routing_descr" = "Надавати перевагу автомагістралям";
 "relief_smoothness_factor_descr" = "Переважний рельєф: рівнинний або гористий";
-"choose_auto_follow_route" = "Самочинне осереднення мапи";
+"choose_auto_follow_route" = "Самоосереднення мапи";
 "choose_auto_follow_route_descr" = "Час, через який мапа повернеться до поточної позиції";
-"auto_zoom_map" = "Самочинне зменшення/збільшення";
+"auto_zoom_map" = "Самозменшення/збільшення";
 "auto_zoom_map_descr" = "Автоматично зменшувати/збільшувати мапу згідно Вашої швидкості (якщо мапа синхронізується з чинним положенням)";
 "guidance_preferences_descr" = "Навігаційні налаштування";
 "routing_preferences_descr" = "Налаштування маршрутизації";
@@ -640,7 +640,7 @@
 "general_settings_2" = "Загальні параметри";
 "general_settings_descr" = "Налаштування екрану і загальні настройки застосунку";
 "routing_settings_descr" = "Визначити налаштування навігації";
-"auto_zoom_none" = "Без самочинного масштабування";
+"auto_zoom_none" = "Без автоматичного масштабування";
 "auto_zoom_close" = "Крупніше";
 "auto_zoom_far" = "Для середнього масштабу";
 "auto_zoom_farthest" = "Дрібніше";
@@ -695,7 +695,7 @@
 "map_widget_next_turn" = "Наступний поворот";
 "map_widget_next_turn_small" = "Наступний поворот (невеликий)";
 "map_widget_next_next_turn" = "Другий наступний поворот";
-"auto_follow_location_enabled" = "Використовується режим самочинного осереднення мапи.";
+"auto_follow_location_enabled" = "Використовується режим автоматичного осереднення мапи.";
 "unknown_location" = "Розташування ще не визначено";
 "settings_preset" = "Усталений профіль";
 "settings_preset_descr" = "Вид мапи й налаштування навігації зберігаються для кожного окремого профілю. Встановіть Ваш типовий профіль.";
@@ -718,7 +718,7 @@
 "rotate_map_bearing_opt" = "За напрямком руху";
 "rotate_map_none_opt" = "Не обертати (північ угорі)";
 "driving_region_descr" = "Виберіть регіон водіння: США, Європа, Великобританія, Азія та інші.";
-"driving_region_automatic" = "Самочинно";
+"driving_region_automatic" = "Автоматично";
 "map_widget_magnetic_bearing" = "Магнітний пеленг";
 "map_widget_bearing" = "Курсовий кут";
 "map_widget_transparent" = "Прозорі віджети";

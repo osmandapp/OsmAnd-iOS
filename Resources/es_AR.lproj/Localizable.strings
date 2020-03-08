@@ -1623,3 +1623,8 @@
 "online_raster_maps" = "Mapa de trama en línea";
 "import_raster_map_success" = "Se ha importado un mapa de tramas. Abre los ajustes del mapa y actívalo desde «Superposición/Subyacencia»";
 "import_raster_map_failed" = "Error al importar el mapa de tramas";
+"map_settings_show_slider_map" = "Mostrar deslizador en el mapa";
+"map_settings_add_online_source" = "Añadir fuente en línea";
+"map_settings_hide_polygons" = "Ocultar polígonos";
+"map_settings_hide_polygons_desc" = "Esta opción sólo afecta a los mapas vectoriales sin conexión de OsmAnd";
+"map_settings_add_maps_desc" = "Puedes añadir nuevos mapas a través de un enlace o importando archivos SQLite.";

@@ -1033,7 +1033,7 @@
 "rendering_attr_piste_difficulty_undefined_name" = "Ongedefinieerd";
 "rendering_attr_highway_class_track_grade3_name" = "Toestand 3";
 "rendering_attr_moreDetailed_name" = "Toon meer details";
-"routing_attr_driving_style_prefer_unpaved_description" = "Voorkeur voor onverharde wegen.";
+"routing_attr_driving_style_prefer_unpaved_description" = "Voorkeur voor onverharde boven verharde wegen voor begeleiding.";
 "routing_attr_driving_style_safety_name" = "Bij voorkeur secundaire wegen";
 "routing_attr_allow_motorway_name" = "Autosnelwegen gebruiken";
 "routing_attr_allow_intermediate_description" = "Moeilijkere routes met steilere delen. Bevat in het algemeen mogelijke obstakels die beter vermeden kunnen worden.";

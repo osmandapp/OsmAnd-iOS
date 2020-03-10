@@ -344,19 +344,14 @@
     return self.gpx;
 }
 
+- (BOOL) disableScroll
+{
+    return self.isLandscape && _segmentType == kSegmentWaypoints;
+}
+
 - (CGFloat) contentHeight
 {
-    CGFloat h = 0.0;
-    for (NSInteger i = 0; i < [_tableView numberOfSections]; i++)
-    {
-        h += 44.0;
-        h += [self.tableView numberOfRowsInSection:i] * 44.0;
-    }
-    
-    if (_sectionsCount == 0)
-        h = _headerView.bounds.size.height;
-    
-    return MIN(160.0, h);
+    return self.isLandscape || OAUtilities.isIPad ? DeviceScreenHeight - self.delegate.getHeaderViewHeight - self.getNavBarHeight - OAUtilities.getStatusBarHeight : DeviceScreenHeight - self.getNavBarHeight - OAUtilities.getStatusBarHeight;
 }
 
 - (void) applyLocalization
@@ -402,7 +397,7 @@
         _headerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _tableView.frame.size.width, 100.0)];
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:_headerView.bounds];
         headerLabel.textAlignment = NSTextAlignmentCenter;
-        headerLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:19.0];
+        headerLabel.font = [UIFont systemFontOfSize:19.0];
         headerLabel.text = OALocalizedString(@"no_statistics");
         headerLabel.textColor = [UIColor lightGrayColor];
         headerLabel.numberOfLines = 3;
@@ -438,6 +433,8 @@
         });
     }
     
+    self.editToolbarView.hidden = YES;
+    
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
@@ -459,7 +456,7 @@
     }
     
     UILabel *badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 50.0)];
-    badgeLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:11.0];
+    badgeLabel.font = [UIFont systemFontOfSize:11.0];
     badgeLabel.text = [NSString stringWithFormat:@"%d", (int) self.doc.locationMarks.count];
     badgeLabel.textColor = UIColorFromRGB(0xFF8F00);
     badgeLabel.textAlignment = NSTextAlignmentCenter;
@@ -558,8 +555,10 @@
                 [_waypointsController updateSortButton:self.buttonSort];
                 _waypointsController.allGroups = [self readGroups];
             }
-
-            _waypointsController.view.frame = self.tableView.frame;
+            
+            if (self.delegate)
+                [self.delegate contentChanged];
+            _waypointsController.view.frame = self.isLandscape ? CGRectMake(0.0, 0.0, self.contentView.frame.size.width, [self contentHeight]) : self.contentView.bounds;
             [_waypointsController doViewAppear];
             [self.contentView addSubview:_waypointsController.view];
 
@@ -804,6 +803,11 @@
     [[OARootViewController instance].mapPanel displayGpxOnMap:self.gpx];
 }
 
+- (BOOL) isLandscape
+{
+    return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;;
+}
+
 - (IBAction)updateClicked:(id)sender
 {
     [self updateCurrentGPXData];
@@ -825,7 +829,21 @@
 - (IBAction)editClicked:(id)sender
 {
     _editing = !_editing;
+    if (self.delegate)
+        [self.delegate requestFullScreenMode];
     [self updateEditingMode:self.editing animated:YES];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if (self.delegate && _editing)
+            [self.delegate requestFullScreenMode];
+        if (self.delegate && self.isLandscape)
+            [self.delegate contentChanged];
+        [self updateEditingMode:_editing animated:NO];
+    } completion:nil];
 }
 
 - (void)updateEditingMode:(BOOL)value animated:(BOOL)animated
@@ -845,12 +863,12 @@
 
         CGSize cs = self.contentView.bounds.size;
         CGRect f = self.editToolbarView.frame;
-        f.size.height = favoritesToolBarHeight + [OAUtilities getBottomMargin] * 2;
-        f.origin.y = cs.height - f.size.height;
-        
+        f.size.height = favoritesToolBarHeight + [OAUtilities getBottomMargin];
+        f.origin.y = [self contentHeight] - f.size.height;
+        self.editToolbarView.hidden = NO;
         [UIView animateWithDuration:(animated ? .3 : 0.0) animations:^{
             self.editToolbarView.frame = f;
-            _waypointsController.view.frame = CGRectMake(0.0, 0.0, cs.width, cs.height - f.size.height);
+            _waypointsController.view.frame = CGRectMake(0.0, 0.0, cs.width, [self contentHeight] - f.size.height);
         }];
     }
     else
@@ -861,7 +879,9 @@
         
         [UIView animateWithDuration:(animated ? .3 : 0.0) animations:^{
             self.editToolbarView.frame = f;
-            _waypointsController.view.frame = self.contentView.bounds;
+            _waypointsController.view.frame = self.isLandscape ? CGRectMake(0.0, 0.0, cs.width, [self contentHeight]) : self.contentView.bounds;
+        } completion:^(BOOL finished) {
+            self.editToolbarView.hidden = YES;
         }];
     }
     [_waypointsController.tableView endUpdates];

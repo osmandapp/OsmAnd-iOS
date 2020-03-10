@@ -37,6 +37,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) requestFullMode;
 
 - (CGFloat) getVisibleHeight;
+- (CGFloat) getHeaderViewHeight;
 
 - (BOOL) isInFullMode;
 - (BOOL) isInFullScreenMode;
@@ -149,6 +150,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha;
 
+- (BOOL) disableScroll;
 - (BOOL) disablePanWhileEditing;
 - (BOOL) supportEditing;
 - (void) activateEditing;

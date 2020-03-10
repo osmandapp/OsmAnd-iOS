@@ -880,7 +880,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
     
     _topView.frame = frame;
-    _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height - (_bottomViewVisible ? _bottomView.bounds.size.height : 0.0));
+    _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, self.view.frame.size.height - frame.size.height - (_bottomViewVisible ? _bottomView.bounds.size.height : 0.0));
     _pageController.view.frame = _tableView.frame;
 }
 

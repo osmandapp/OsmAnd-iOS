@@ -17,6 +17,7 @@
 #import "OAGPXDocument.h"
 #import "OAMapViewController.h"
 #import "OAGpxRoutePoint.h"
+#import "OACollapsableWaypointsView.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -38,6 +39,14 @@
     {
         _app = [OsmAndApp instance];
         self.wpt = wpt;
+        
+        OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
+        [collapsableView setData:wpt];
+        collapsableView.collapsed = YES;
+        self.collapsableView = collapsableView;
+        
+        self.groupTitle = self.wpt.docPath == nil ? OALocalizedString(@"track_recording_name") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
+        self.groupColor = self.wpt.color;
         
         self.name = [self getItemName];
         self.desc = [self getItemDesc];

@@ -17,6 +17,8 @@
 #import "OARootViewController.h"
 #import "OAUtilities.h"
 #import "OAIconTextTableViewCell.h"
+#import "OATargetInfoCollapsableViewCell.h"
+#import "OACollapsableView.h"
 #import <UIAlertView+Blocks.h>
 
 #import "OAColorViewCell.h"
@@ -256,7 +258,7 @@
 
 - (CGFloat) contentHeight
 {
-    return ([self.tableView numberOfRowsInSection:0] - 1) * 44.0 + _descHeight + dy;
+    return ([self.tableView numberOfRowsInSection:0] - 1) * 44.0 + _descHeight + dy + (_collapsableView.collapsed ? 0 : _collapsableView.frame.size.height);
 }
 
 - (IBAction) deletePressed:(id)sender
@@ -546,9 +548,9 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.editing)
-        return 5 - (![self hasDescription] ? 1 : 0);
+        return 6 - (![self hasDescription] ? 1 : 0);
     else
-        return 4 - (![self hasDescription] ? 1 : 0);
+        return 5 - (![self hasDescription] ? 1 : 0);
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -558,6 +560,7 @@
     static NSString* const reusableIdentifierGroupCell = @"OAGroupViewCell";
     static NSString* const reusableIdentifierTextViewCell = @"OATextViewTableViewCell";
     static NSString* const reusableIdentifierTextMultiViewCell = @"OATextMultiViewCell";
+    static NSString* const reusableIdentifierCollapsable = @"OATargetInfoCollapsableViewCell";
     
     NSInteger index = indexPath.row;
     if (!self.editing)
@@ -600,7 +603,7 @@
             {
                 [cell.textView setText:self.name];
                 [cell.textView setPlaceholder:OALocalizedString(@"enter_name")];
-                [cell.textView setFont:[UIFont fontWithName:@"AvenirNext-Regular" size:16]];
+                [cell.textView setFont:[UIFont systemFontOfSize:16]];
                 [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
                 [cell.textView addTarget:self action:@selector(editFavName:) forControlEvents:UIControlEventEditingChanged];
                 [cell.textView setDelegate:self];
@@ -663,7 +666,7 @@
             
             if (self.desc.length == 0)
             {
-                cell.textView.font = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
+                cell.textView.font = [UIFont systemFontOfSize:16.0];
                 cell.textView.textContainerInset = UIEdgeInsetsMake(11,11,0,0);
                 cell.textView.text = OALocalizedString(@"enter_description");
                 cell.textView.textColor = [UIColor lightGrayColor];
@@ -671,7 +674,7 @@
             }
             else
             {
-                cell.textView.font = [UIFont fontWithName:@"AvenirNext-Regular" size:14.0];
+                cell.textView.font = [UIFont systemFontOfSize:14.0];
                 
                 if (_descSingleLine)
                     cell.textView.textContainerInset = UIEdgeInsetsMake(12,11,0,35);
@@ -686,6 +689,28 @@
             }
             cell.textView.backgroundColor = UIColorFromRGB(0xffffff);
             cell.backgroundColor = UIColorFromRGB(0xffffff);
+            
+            return cell;
+        }
+        case 4:
+        {
+            OATargetInfoCollapsableViewCell* cell;
+            cell = (OATargetInfoCollapsableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierCollapsable owner:self options:nil];
+                cell = (OATargetInfoCollapsableViewCell *)[nib objectAtIndex:0];
+            }
+            cell.iconView.contentMode = UIViewContentModeCenter;
+            
+            [cell setImage:[[UIImage imageNamed:@"ic_custom_folder"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            cell.iconView.tintColor = self.groupColor;
+            cell.textView.text = self.groupTitle;
+            cell.descrLabel.hidden = NO;
+            cell.descrLabel.text = OALocalizedString(@"all_group_points");
+
+            cell.collapsableView = self.collapsableView;
+            [cell setCollapsed:self.collapsableView.collapsed rawHeight:64.];
             
             return cell;
         }
@@ -718,7 +743,9 @@
     if (!self.editing)
         index++;
     
-    if (index == 3) // description
+    if (index == 4) // points
+        return 64. + (self.collapsableView.collapsed ? 0. : self.collapsableView.frame.size.height);
+    else if (index == 3) // description
         return _descHeight;
     else
         return 44.0;
@@ -755,7 +782,20 @@
             [self changeDescriptionClicked];
             break;
         }
-        case 4: // coords
+        case 4: // wpts
+        {
+            UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
+            if ([cell isKindOfClass:OATargetInfoCollapsableViewCell.class])
+            {
+                self.collapsableView.collapsed = !self.collapsableView.collapsed;
+                [self.collapsableView adjustHeightForWidth:tableView.frame.size.width];
+                if (self.delegate)
+                    [self.delegate contentHeightChanged:0];
+                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            break;
+        }
+        case 5: // coords
         {
             break;
         }

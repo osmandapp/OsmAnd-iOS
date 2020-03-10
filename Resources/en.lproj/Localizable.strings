@@ -1191,6 +1191,7 @@
 "add_as" = "Add as";
 "make_call" = "Make a call";
 
+"all_group_points" = "All points of the group";
 "enter_description" = "Enter description";
 "description" = "Description";
 "enter_fav_name" = "Enter favorite name";

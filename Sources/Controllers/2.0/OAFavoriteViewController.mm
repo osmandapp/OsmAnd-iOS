@@ -14,6 +14,8 @@
 #import "OADefaultFavorite.h"
 #import "OANativeUtilities.h"
 #import "OAUtilities.h"
+#import "OACollapsableView.h"
+#import "OACollapsableWaypointsView.h"
 #import <UIAlertView+Blocks.h>
 
 #include <OsmAndCore.h>
@@ -37,6 +39,15 @@
 
         self.name = [self getItemName];
         self.desc = [self getItemDesc];
+        
+        OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
+        [collapsableView setData:favorite];
+        collapsableView.collapsed = YES;
+        self.collapsableView = collapsableView;
+        
+        NSString *groupName = self.favorite.favorite->getGroup().toNSString();
+        self.groupTitle = groupName.length == 0 ? OALocalizedString(@"favorite") : groupName;
+        self.groupColor = [self.favorite getColor];
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
 }
@@ -88,6 +99,15 @@
                                                                        OsmAnd::FColorRGB(r,g,b));
         self.favorite = fav;
         [_app saveFavoritesToPermamentStorage];
+        
+        OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
+        [collapsableView setData:fav];
+        collapsableView.collapsed = YES;
+        self.collapsableView = collapsableView;
+        
+        NSString *groupStr = self.favorite.favorite->getGroup().toNSString();
+        self.groupTitle = groupStr.length == 0 ? OALocalizedString(@"favorite") : groupStr;
+        self.groupColor = [self.favorite getColor];
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }

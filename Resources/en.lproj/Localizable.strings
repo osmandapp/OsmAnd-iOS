@@ -1265,7 +1265,7 @@
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
 "plugin_popup_wiki_title" = "Download Wikipedia";
 "plugin_popup_wiki_desc" = "To start using Wikipedia plugin, please download Wikipedia data of an region first";
-"plugin_popup_wiki_ask" = "To download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
+"plugin_popup_wiki_ask" = "In order to download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
 "plugin_popup_srtm_title" = "Download contour lines";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
@@ -1341,6 +1341,11 @@
 "categories" = "Categories";
 "items_selected" = "%d selected";
 
+"wiki_sheet_title" = "How to open Wikipedia articles?";
+"download_wiki_data" = "Download Wikipedia data for %@";
+"open_wiki_online" = "Open article online";
+"online_webpage_warning" = "Page only available online. Open in web browser?";
+
 "custom_search" = "Custom search";
 "poi_filter_custom_filter" = "Custom filter";
 "poi_filter_closest_poi" = "Nearest POIs";
@@ -1401,7 +1406,7 @@
 
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
-"map_an_region" = "an region";
+"map_an_region" = "this region";
 
 "osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";

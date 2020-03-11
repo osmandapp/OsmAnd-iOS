@@ -952,26 +952,17 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (CGFloat) getTopMargin
 {
-    if (@available(iOS 11.0, *)) {
-        return [UIApplication sharedApplication].keyWindow.safeAreaInsets.top;
-    }
-    return 0.0;
+    return [UIApplication sharedApplication].keyWindow.safeAreaInsets.top;
 }
 
 + (CGFloat) getBottomMargin
 {
-    if (@available(iOS 11.0, *)) {
-        return [UIApplication sharedApplication].keyWindow.safeAreaInsets.bottom;
-    }
-    return 0.0;
+    return [UIApplication sharedApplication].keyWindow.safeAreaInsets.bottom;
 }
 
 + (CGFloat) getLeftMargin
 {
-    if (@available(iOS 11.0, *)) {
-        return [UIApplication sharedApplication].keyWindow.safeAreaInsets.left;
-    }
-    return 0.0;
+    return [UIApplication sharedApplication].keyWindow.safeAreaInsets.left;
 }
 
 + (CGFloat) calculateScreenWidth

@@ -457,11 +457,8 @@
 {
     CGRect frame = self.scrollView.frame;
     CGFloat w = frame.size.width;
-    if (@available(iOS 11.0, *))
-    {
-        w -= self.scrollView.safeAreaInsets.left + self.scrollView.safeAreaInsets.right;
-        self.scrollView.contentInset = UIEdgeInsetsMake(0, self.scrollView.safeAreaInsets.left, 0, self.scrollView.safeAreaInsets.right);
-    }
+    w -= self.scrollView.safeAreaInsets.left + self.scrollView.safeAreaInsets.right;
+    self.scrollView.contentInset = UIEdgeInsetsMake(0, self.scrollView.safeAreaInsets.left, 0, self.scrollView.safeAreaInsets.right);
 
     CGRect nf = self.navBarView.frame;
     nf.size.width = frame.size.width;

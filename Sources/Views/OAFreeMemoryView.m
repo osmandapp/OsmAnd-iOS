@@ -108,13 +108,12 @@
         NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
         deviceMemoryCapacity = [fileSystemSizeInBytes unsignedLongLongValue];
         
-        if (@available(iOS 11.0, *))
-        {
-            NSURL *home = [NSURL fileURLWithPath:NSHomeDirectory()];
-            NSDictionary *results = [home resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
-            if (results)
-                deviceMemoryAvailable = [results[NSURLVolumeAvailableCapacityForImportantUsageKey] unsignedLongLongValue];
-        }
+        
+        NSURL *home = [NSURL fileURLWithPath:NSHomeDirectory()];
+        NSDictionary *results = [home resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
+        if (results)
+            deviceMemoryAvailable = [results[NSURLVolumeAvailableCapacityForImportantUsageKey] unsignedLongLongValue];
+
         if (deviceMemoryAvailable == 0)
         {
             NSNumber *fileSystemFreeSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];

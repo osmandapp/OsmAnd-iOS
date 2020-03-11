@@ -118,13 +118,10 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
     CGFloat sideMargin = [OAUtilities getLeftMargin];
     CGFloat w = self.view.frame.size.width;
     CGFloat h = self.view.frame.size.height;
-    if (@available(iOS 11.0, *))
-    {
-        w -= sideMargin * 2.0;
-        h -=  [OAUtilities getBottomMargin];
-        self.scrollView.contentInset = UIEdgeInsetsMake([OAUtilities getTopMargin] + 0.0, sideMargin, 0, sideMargin);
-        
-    }
+    
+    w -= sideMargin * 2.0;
+    h -=  [OAUtilities getBottomMargin];
+    self.scrollView.contentInset = UIEdgeInsetsMake([OAUtilities getTopMargin] + 0.0, sideMargin, 0, sideMargin);
     
     CGFloat iw = self.imageView.bounds.size.width;
     CGFloat ih = self.imageView.bounds.size.height;

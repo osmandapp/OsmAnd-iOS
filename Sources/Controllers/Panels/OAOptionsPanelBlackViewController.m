@@ -11,7 +11,6 @@
 #import "OASettingsViewController.h"
 #import "OAFavoriteListViewController.h"
 #import "OAGPXListViewController.h"
-#import "OAWebViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAHelpViewController.h"

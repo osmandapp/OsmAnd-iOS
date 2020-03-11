@@ -8,13 +8,15 @@
 
 #import "OACompoundViewController.h"
 
+#import <WebKit/WebKit.h>
+
 @interface OAWikiWebViewController : OACompoundViewController
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonBack;
 @property (weak, nonatomic) IBOutlet UIButton *localeButton;
-@property (weak, nonatomic) IBOutlet UIWebView *contentView;
+@property (weak, nonatomic) IBOutlet WKWebView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
 @property (weak, nonatomic) IBOutlet UIButton *bottomButton;
 

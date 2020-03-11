@@ -8,6 +8,8 @@
 
 #import "OACompoundViewController.h"
 
+#import <WebKit/WebKit.h>
+
 @protocol OAEditDescriptionViewControllerDelegate <NSObject>
 
 @optional
@@ -24,7 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
+@property (weak, nonatomic) IBOutlet WKWebView *webView;
 
 @property (weak, nonatomic) id delegate;
 

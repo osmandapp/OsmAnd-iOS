@@ -14,7 +14,7 @@
 
 NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script.text = \"var coll = document.getElementsByTagName(\'H2\'); var i; for (i = 0; i < coll.length; i++){   coll[i].addEventListener(\'click\', function() { this.classList.toggle(\'active\'); var content = this.nextElementSibling; if (content.style.display === \'block\') { content.style.display = \'none\'; } else { content.style.display = \'block\';}}); } \"; document.head.appendChild(script);";
 
-@interface OAWikiWebViewController () <UIActionSheetDelegate, UIWebViewDelegate>
+@interface OAWikiWebViewController () <UIActionSheetDelegate, WKNavigationDelegate>
 
 @end
 
@@ -88,7 +88,7 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     [_localeButton setTitle:locBtnStr forState:UIControlStateNormal];
     
     [self buildBaseUrl];
-    _contentView.delegate = self;
+    _contentView.navigationDelegate = self;
     if (content)
     {
         content = [self appendHeadToContent:content];
@@ -122,22 +122,6 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     _baseUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@.wikipedia.org/wiki/%@", (_contentLocale.length == 0 ? @"en" : _contentLocale), [_titleView.text isEqualToString:@"Wikipedia"] ? @"" : [[_titleView.text stringByReplacingOccurrencesOfString:@" " withString:@"_"] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
     
     //NSLog(@"baseUrl=%@", _baseUrl);
-}
-
-- (void) webViewDidFinishLoad:(UIWebView *)webView
-{
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"article_style" ofType:@"css"];
-    NSString *cssContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    cssContents = [cssContents stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-    NSString *javascriptString = @"var style = document.createElement('style'); style.innerHTML = '%@'; document.head.appendChild(style); var title = document.createElement('H1'); title.innerHTML = '%@'; var main = document.getElementsByClassName('main')[0]; main.insertAdjacentElement('afterbegin', title);";
-    NSString *javascriptWithCSSString = [NSString stringWithFormat:javascriptString, cssContents, [[self getLocalizedTitle] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]];
-    [webView stringByEvaluatingJavaScriptFromString:COLLAPSE_JS];
-    [webView stringByEvaluatingJavaScriptFromString:javascriptWithCSSString];
-    if ([[OAAppSettings sharedManager].rtlLanguages containsObject:_contentLocale])
-    {
-        NSString *appendRtl = @"document.body.setAttribute('dir', 'rtl');";
-        [webView stringByEvaluatingJavaScriptFromString:appendRtl];
-    }
 }
 
 - (void)viewWillLayoutSubviews
@@ -230,6 +214,24 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
         [self buildBaseUrl];
         if (content)
             [_contentView loadHTMLString:content baseURL:_baseUrl];
+    }
+}
+
+#pragma mark - WKNavigationDelegate
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"article_style" ofType:@"css"];
+    NSString *cssContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+    cssContents = [cssContents stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+    NSString *javascriptString = @"var style = document.createElement('style'); style.innerHTML = '%@'; document.head.appendChild(style); var title = document.createElement('H1'); title.innerHTML = '%@'; var main = document.getElementsByClassName('main')[0]; main.insertAdjacentElement('afterbegin', title);";
+    NSString *javascriptWithCSSString = [NSString stringWithFormat:javascriptString, cssContents, [[self getLocalizedTitle] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]];
+    [webView evaluateJavaScript:COLLAPSE_JS completionHandler:nil];
+    [webView evaluateJavaScript:javascriptWithCSSString completionHandler:nil];
+    if ([[OAAppSettings sharedManager].rtlLanguages containsObject:_contentLocale])
+    {
+        NSString *appendRtl = @"document.body.setAttribute('dir', 'rtl');";
+        [webView evaluateJavaScript:appendRtl completionHandler:nil];
     }
 }
 

@@ -1622,3 +1622,8 @@
 "online_raster_maps" = "Mapas raster online";
 "import_raster_map_success" = "O mapa de raster foi importado. Abra as Configurações do mapa e ative-o através de sobreposição";
 "import_raster_map_failed" = "Falha na importação do mapa de varredura";
+"map_settings_show_slider_map" = "Mostrar controle deslizante no mapa";
+"map_settings_add_online_source" = "Adicionar fonte online";
+"map_settings_hide_polygons" = "Ocultar polígonos";
+"map_settings_hide_polygons_desc" = "Esta opção afeta apenas mapas vetoriais do OsmAnd Offline";
+"map_settings_add_maps_desc" = "Você pode adicionar novos mapas via link ou importando arquivos SQLite.";

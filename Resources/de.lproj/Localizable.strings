@@ -1622,3 +1622,8 @@
 "online_raster_maps" = "Online-Rasterkarten";
 "import_raster_map_success" = "Rasterkarte wurde importiert. Öffnen Sie die Karteneinstellungen und aktivieren Sie diese über Overlay/Underlay-Karte";
 "import_raster_map_failed" = "Rasterkarten-Import fehlgeschlagen";
+"map_settings_show_slider_map" = "Schieberegler auf der Karte anzeigen";
+"map_settings_add_online_source" = "Online-Quelle hinzufügen";
+"map_settings_hide_polygons" = "Polygone ausblenden";
+"map_settings_hide_polygons_desc" = "Diese Option betrifft nur OsmAnd Offline-Vektorkarten";
+"map_settings_add_maps_desc" = "Sie können neue Karten über einen Link oder durch den Import von SQLite-Dateien hinzufügen.";

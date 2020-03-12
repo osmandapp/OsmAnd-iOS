@@ -122,7 +122,7 @@
 "arrival_distance_factor_early" = "Early";
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Late";
-"arrival_distance_factor_at_last" = "In the last meters";
+"arrival_distance_factor_at_last" = "In de laatste meters";
 "map_orientation_change_in_accordance_with_speed" = "Snelheidsdrempel kaart oriëntatie";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "fast_route_mode" = "Fastest route";
@@ -419,8 +419,8 @@
 "sett_settings" = "Settings";
 "sett_units" = "Units";
 "sett_lang" = "Map Language";
-"sett_km" = "Kilometers";
-"sett_ml" = "Miles";
+"sett_km" = "Kilometer";
+"sett_ml" = "Mijl";
 "sett_zoom" = "Zoom button";
 "sett_show" = "Show";
 "sett_notshow" = "Don't show";
@@ -1022,7 +1022,6 @@
 "change_map_underlay" = "Underlay-kaart wijzigen";
 "quick_action_no_overlay" = "Geen overlay";
 "osmand_live_donation_switch_title" = "Doneer aan de OpenStreetMap-gemeenschap";
-
 "res_url" = "URL";
 "show_notes" = "Toon OSM-opmerkingen";
 "res_elliptic_mercator" = "Elliptische Mercator";
@@ -1034,7 +1033,7 @@
 "rendering_attr_piste_difficulty_undefined_name" = "Ongedefinieerd";
 "rendering_attr_highway_class_track_grade3_name" = "Toestand 3";
 "rendering_attr_moreDetailed_name" = "Toon meer details";
-"routing_attr_driving_style_prefer_unpaved_description" = "Voorkeur voor onverharde wegen.";
+"routing_attr_driving_style_prefer_unpaved_description" = "Voorkeur voor onverharde boven verharde wegen voor begeleiding.";
 "routing_attr_driving_style_safety_name" = "Bij voorkeur secundaire wegen";
 "routing_attr_allow_motorway_name" = "Autosnelwegen gebruiken";
 "routing_attr_allow_intermediate_description" = "Moeilijkere routes met steilere delen. Bevat in het algemeen mogelijke obstakels die beter vermeden kunnen worden.";
@@ -1236,7 +1235,7 @@
 "rendering_attr_highway_class_path_name" = "Pad";
 "rendering_attr_surface_sand_name" = "Zand";
 "rendering_attr_hideWaterPolygons_name" = "Verberg watervlakten";
-"routing_attr_freeride_policy_description" = "Freeride en off-piste zijn officieuze routes en passages. Officieel meestal niet geprepareerd en onderhouden, en niet \'s avonds gecheckt. Op eigen risico betreden.";
+"routing_attr_freeride_policy_description" = "Freeride en off-piste zijn officieuze routes en passages. Officieel meestal niet geprepareerd en onderhouden, en niet 's avonds gecheckt. Op eigen risico betreden.";
 "rendering_attr_piste_difficulty_advanced_name" = "Gevorderd";
 "rendering_attr_surface_pebblestone_name" = "Kiezelstenen";
 "rendering_attr_highway_class_cycleway_name" = "Fietspad";
@@ -1314,3 +1313,4 @@
 "rendering_value_medium_name" = "Gemiddeld";
 "routing_attr_avoid_unpaved_description" = "Vermijdt onverharde wegen";
 "rendering_attr_currentTrackWidth_name" = "GPX breedte";
+"rendering_attr_streetLightingNight_name" = "Enkel 's nachts tonen";

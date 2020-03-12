@@ -1620,3 +1620,8 @@
 "online_raster_maps" = "Mapes de bits en línia";
 "import_raster_map_success" = "S'ha importat el mapa de bits.Obriu Configuració de Mapes i activeu-lo via Superposició/Mapa de fons";
 "import_raster_map_failed" = "Ha fallat la importació del mapa de bits";
+"map_settings_show_slider_map" = "Mostra arrossegador al mapa";
+"map_settings_add_online_source" = "Afegeix orígen en connexió";
+"map_settings_hide_polygons" = "Amaga polígons";
+"map_settings_hide_polygons_desc" = "Aquesta opció només afecta els mapes vectorials d'OsmAnd en local";
+"map_settings_add_maps_desc" = "Podeu afegir nous mapes mitjançant un enllaç o important arxius SQLite.";

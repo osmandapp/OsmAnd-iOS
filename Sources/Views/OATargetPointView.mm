@@ -207,8 +207,7 @@ static const NSInteger _buttonsCount = 4;
     self.alwaysBounceVertical = YES;
     self.decelerationRate = UIScrollViewDecelerationRateFast;
     
-    if (@available(iOS 11.0, *))
-        self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     
     self.delegate = self;
     self.oaDelegate = self;
@@ -2566,7 +2565,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (BOOL) isScrollAllowed
 {
-    BOOL scrollDisabled = self.customController && (self.customController.showingKeyboard || (self.customController.editing && [self.customController disablePanWhileEditing]));
+    BOOL scrollDisabled = self.customController && (self.customController.showingKeyboard || (self.customController.editing && [self.customController disablePanWhileEditing]) || self.customController.disableScroll);
     
     if (!scrollDisabled)
     {

@@ -24,6 +24,7 @@
 #import "OAPluginDetailsViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAManageResourcesViewController.h"
+#import "OAWikiArticleHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -81,12 +82,12 @@
     {
         OsmAndAppInstance app = [OsmAndApp instance];
         _worldRegion = [app.worldRegion findAtLat:_latitude lon:_longitude];
-        _worldRegion = [self findWorldRegionWiki:_worldRegion];
+        _worldRegion = [OAWikiArticleHelper findWikiRegion:_worldRegion];
         
         NSString *regionName;
         if (_worldRegion)
         {
-            [self findResourceItem];
+            _resourceItem = [OAWikiArticleHelper findResourceItem:_worldRegion];
             regionName = _worldRegion.localizedName;
         }
         else
@@ -109,13 +110,13 @@
             
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
             label.numberOfLines = 0;
-            label.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13.0];
+            label.font = [UIFont systemFontOfSize:13.0];
             label.textColor = [UIColor whiteColor];
             label.backgroundColor = UIColorFromRGB(0x7bca62);
             
             UIButton *actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
             actionButton.frame = CGRectMake(0, 0, 100, 20);
-            actionButton.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Bold" size:13.0];
+            actionButton.titleLabel.font = [UIFont systemFontOfSize:13.0];
             actionButton.titleLabel.textColor = [UIColor whiteColor];
             actionButton.layer.cornerRadius = 4.0;
             actionButton.layer.masksToBounds = YES;
@@ -271,53 +272,6 @@
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
-}
-
-- (OAWorldRegion *) findWorldRegionWiki:(OAWorldRegion *)worldRegion
-{
-    if (worldRegion)
-    {
-        if ([worldRegion.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::WikiMapRegion)])
-            return worldRegion;
-        else if (worldRegion.superregion)
-            return [self findWorldRegionWiki:worldRegion.superregion];
-    }
-    return nil;
-}
-
-- (BOOL) findResourceItem
-{
-    _resourceItem = nil;
-    if (_worldRegion)
-    {
-        OsmAndAppInstance app = [OsmAndApp instance];
-        NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:_worldRegion];
-        if (ids.count > 0)
-        {
-            for (NSString *resourceId in ids)
-            {
-                const auto resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-                if (resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion)
-                {
-                    RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
-                    item.resourceId = resource->id;
-                    item.resourceType = resource->type;
-                    item.title = [OAResourcesBaseViewController titleOfResource:resource
-                                                                       inRegion:_worldRegion
-                                                                 withRegionName:YES
-                                                               withResourceType:NO];
-                    item.resource = resource;
-                    item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
-                    item.size = resource->size;
-                    item.sizePkg = resource->packageSize;
-                    item.worldRegion = _worldRegion;
-                    _resourceItem = item;
-                    break;
-                }
-            }
-        }
-    }
-    return _resourceItem != nil;
 }
 
 - (void) actionButtonPress:(id)sender

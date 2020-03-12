@@ -9,17 +9,23 @@
 #import "OATargetMenuViewController.h"
 #import <CoreLocation/CoreLocation.h>
 
+@class OACollapsableView;
+
 @interface OAEditTargetViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
 @property (assign, nonatomic) BOOL newItem;
+@property (nonatomic) OACollapsableView *collapsableView;
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, assign) NSInteger savedColorIndex;
 @property (nonatomic, copy) NSString *savedGroupName;
 @property (nonatomic, copy) NSString *desc;
+
+@property (nonatomic, copy) NSString *groupTitle;
+@property (nonatomic, copy) UIColor *groupColor;
 
 - (id) initWithItem:(id)item;
 - (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation;

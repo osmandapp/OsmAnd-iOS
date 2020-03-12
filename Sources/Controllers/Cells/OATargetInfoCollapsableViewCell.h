@@ -12,6 +12,7 @@
 
 @interface OATargetInfoCollapsableViewCell : UITableViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *descrLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UIImageView *rightIconView;

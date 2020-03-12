@@ -14,11 +14,7 @@
 - (void)awakeFromNib {
     
     self.descView.textContainer.lineFragmentPadding = 0;
-    if ([OAUtilities iosVersionIsAtLeast:@"7.0"]) {
-        self.descView.textContainerInset = UIEdgeInsetsZero;
-    } else {
-        self.descView.contentInset = UIEdgeInsetsZero;
-    }
+    self.descView.textContainerInset = UIEdgeInsetsZero;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

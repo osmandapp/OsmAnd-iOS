@@ -17,5 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIView *separatorView1;
 @property (weak, nonatomic) IBOutlet UIView *separatorView2;
 
+- (void) setupSeparators;
+
 @end
 

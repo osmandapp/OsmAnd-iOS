@@ -564,9 +564,9 @@
 {
     OAApplicationMode *am = [self getApplicationMode];
     OsmAndAppInstance app = [OsmAndApp instance];
-    auto rm = app.defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
+    auto rm = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
     if (!rm && am.parent)
-        rm = app.defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
+        rm = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
     
     auto& params = rm->getParametersList();
     for (auto& r : params)

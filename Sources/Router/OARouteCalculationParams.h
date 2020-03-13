@@ -28,6 +28,10 @@
 @property (nonatomic) BOOL onlyStartPointChanged;
 @property (nonatomic) BOOL fast;
 @property (nonatomic) BOOL leftSide;
+@property (nonatomic) BOOL inSnapToRoadMode;
+@property (nonatomic) BOOL inPublicTransportMode;
+@property (nonatomic) BOOL startTransportStop;
+@property (nonatomic) BOOL targetTransportStop;
 @property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
 
 @end

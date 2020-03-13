@@ -8,8 +8,11 @@
 
 #import "OAPublicTransportShieldsView.h"
 
+#define kShieldHeight 32
+
 @implementation OAPublicTransportShieldsView
 {
+    NSArray<UIView *> *_shiledViews;
     NSNumber *_quantity;
 }
 
@@ -26,7 +29,10 @@
     return self;
 }
 
-
+- (void) buildViews
+{
+    f
+}
 
 
 @end

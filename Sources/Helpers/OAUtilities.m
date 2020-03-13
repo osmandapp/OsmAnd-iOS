@@ -1248,4 +1248,23 @@ static const double d180PI = 180.0 / M_PI_2;
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
 }
 
++ (BOOL) colorIsBright:(UIColor *)color
+{
+    CGFloat luminance = 0;
+
+    CGColorSpaceRef colorSpace = CGColorGetColorSpace(color.CGColor);
+    CGColorSpaceModel colorSpaceModel = CGColorSpaceGetModel(colorSpace);
+
+    if(colorSpaceModel == kCGColorSpaceModelRGB)
+    {
+        const CGFloat *componentColors = CGColorGetComponents(color.CGColor);
+
+        luminance = 1 - ((componentColors[0] * 299) + (componentColors[1] * 587) + (componentColors[2] * 114)) / 255;
+    } else {
+        [color getWhite:&luminance alpha:0];
+    }
+
+    return luminance >= .5f;
+}
+
 @end

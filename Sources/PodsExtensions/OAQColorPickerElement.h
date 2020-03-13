@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-//#import <UIKit/UIKit.h>
-//
-//#import <QuickDialog.h>
-//#import <QColorPickerElement.h>
-//
-//@interface OAQColorPickerElement : QColorPickerElement
-//
-//@end
+#import <UIKit/UIKit.h>
+
+#import <QuickDialog.h>
+#import <QColorPickerElement.h>
+
+@interface OAQColorPickerElement : QColorPickerElement
+
+@end

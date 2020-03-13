@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-//#import <QuickDialog.h>
-//#import <QuickDialogTableView.h>
+#import <QuickDialog.h>
+#import <QuickDialogTableView.h>
 
-//@interface QuickDialogTableView (ElementByIndexAccessor)
+@interface QuickDialogTableView (ElementByIndexAccessor)
 
-//- (QElement*)elementForIndexPath:(NSIndexPath*)indexPath;
-//- (NSArray*)elementsForIndexPaths:(NSArray*)indexPaths;
+- (QElement*)elementForIndexPath:(NSIndexPath*)indexPath;
+- (NSArray*)elementsForIndexPaths:(NSArray*)indexPaths;
 
-//@end
+@end

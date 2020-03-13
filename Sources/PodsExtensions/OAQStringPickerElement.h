@@ -8,18 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-//#import <QuickDialog.h>
-//#import <QRadioElement.h>
+#import <QuickDialog.h>
+#import <QRadioElement.h>
 
-//@interface OAQStringPickerElement : QRadioElement
-//
-//- (instancetype)initWithItems:(NSArray*)stringArray
-//                     selected:(NSInteger)selected
-//                        title:(NSString*)title;
-//- (instancetype)initWithItems:(NSArray*)stringArray
-//                     selected:(NSInteger)selected
-//                        title:(NSString*)title
-//                 newItemTitle:(NSString*)newItemTitle
-//                 newItemPlaceholder:(NSString*)newItemPlaceholder;
-//
-//@end
+@interface OAQStringPickerElement : QRadioElement
+
+- (instancetype)initWithItems:(NSArray*)stringArray
+                     selected:(NSInteger)selected
+                        title:(NSString*)title;
+- (instancetype)initWithItems:(NSArray*)stringArray
+                     selected:(NSInteger)selected
+                        title:(NSString*)title
+                 newItemTitle:(NSString*)newItemTitle
+                 newItemPlaceholder:(NSString*)newItemPlaceholder;
+
+@end

@@ -1427,3 +1427,6 @@
 "rendering_attr_contourColorScheme_name" = "Couleurs des courbes de niveau";
 "rendering_value_pedestrian_name" = "À pied";
 "rendering_attr_trainLightrailRoutes_name" = "Itinéraires de chemin de fer";
+"day_short" = "D";
+"week_short" = "Wk";
+"weeks_short" = "Wks";

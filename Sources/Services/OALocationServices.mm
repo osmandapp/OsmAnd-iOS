@@ -218,9 +218,7 @@
         {
             _waitingForAuthorization = !self.allowed;
 
-            // For iOS 8.0+ explicit authorization request is needed
             if (!self.allowed &&
-                [OAUtilities iosVersionIsAtLeast:@"8.0"] &&
                 [_manager respondsToSelector:@selector(requestAlwaysAuthorization)])
             {
                 [_manager requestAlwaysAuthorization];

@@ -547,7 +547,6 @@
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
-"m_style_pulic_transport" = "Public transport";
 
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";

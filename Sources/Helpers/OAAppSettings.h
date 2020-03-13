@@ -384,8 +384,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
 @property (nonatomic) OAProfileInteger *rotateMap;
 
-@property (nonatomic) OAProfileString *routingProfile;
-
 @property (nonatomic) OAProfileDouble *mapDensity;
 @property (nonatomic) OAProfileDouble *textSize;
 

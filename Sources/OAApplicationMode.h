@@ -43,8 +43,6 @@
 + (OAApplicationMode *) TRUCK;
 + (OAApplicationMode *) BUS;
 + (OAApplicationMode *) TRAIN;
-+ (OAApplicationMode *) PUBLIC_TRANSPORT;
-+ (OAApplicationMode *) SKI;
 
 + (NSArray<OAApplicationMode *> *) values;
 + (NSArray<OAApplicationMode *> *) allPossibleValues;
@@ -58,9 +56,6 @@
 + (NSSet<OAApplicationMode *> *) regWidgetVisibility:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am;
 - (BOOL) isWidgetCollapsible:(NSString *)key;
 - (BOOL) isWidgetVisible:(NSString *)key;
-
-- (NSString *) getRoutingProfile;
-- (void) setRoutingProfile:(NSString *) routingProfile;
 
 + (NSSet<OAApplicationMode *> *) regWidgetAvailability:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am;
 - (BOOL) isWidgetAvailable:(NSString *)key;

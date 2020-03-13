@@ -675,9 +675,9 @@
 
 - (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
 {
-    auto router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
+    auto router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
     if (!router && am.parent)
-        router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
+        router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
     
     return router;
 }

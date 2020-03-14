@@ -1,7 +1,7 @@
 "OsmAnd Maps" = "Cartes OsmAnd";
 // Shared Strings
 "shared_string_back" = "Précédent";
-"shared_string_ok" = "Ok";
+"shared_string_ok" = "OK";
 "shared_string_cancel" = "Annuler";
 "shared_string_no" = "Non";
 "shared_string_yes" = "Oui";
@@ -29,7 +29,7 @@
 "shared_string_edit" = "Modifier";
 "shared_string_dismiss" = "Ignorer";
 "description" = "Description";
-"shared_string_update" = "Mise à jour";
+"shared_string_update" = "Mettre à jour";
 "shared_string_install" = "Installer";
 "shared_string_uninstall" = "Désinstaller";
 "shared_string_done" = "Effectué";
@@ -678,7 +678,7 @@
 "map_widget_next_next_turn" = "Bifurcation suivante (2e)";
 "settings_preset" = "Profil par défaut";
 "settings_preset_descr" = "Les paramètres d’affichage et de navigation sont mémorisés dans un profil. Définissez votre profil par défaut ici.";
-"unit_of_length" = "Unités de distance";
+"unit_of_length" = "Unités de longueur";
 "unit_of_length_descr" = "Modifier les unités de mesure de distance";
 "coords_format" = "Format des coordonnées";
 "coords_format_descr" = "Format des coordonnées géographiques.";

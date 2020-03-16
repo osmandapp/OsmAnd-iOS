@@ -69,6 +69,12 @@
 		526FF546DD6B4B0F45CF84E1 /* libPods-OsmAnd Maps DEV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9AC62E897E956760B72D089 /* libPods-OsmAnd Maps DEV.a */; };
 		784B3E1423D9C22F003A22CB /* OAOnlineTilesEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 784B3E1223D9C22F003A22CB /* OAOnlineTilesEditingViewController.mm */; };
 		784B3E1523D9C22F003A22CB /* OAOnlineTilesEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 784B3E1323D9C22F003A22CB /* OAOnlineTilesEditingViewController.xib */; };
+		7851F2F6241A54D300F7F1ED /* OAMapSettingsTerrainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7851F2F4241A54D000F7F1ED /* OAMapSettingsTerrainScreen.mm */; };
+		7851F2F7241A54D300F7F1ED /* OAMapSettingsTerrainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7851F2F4241A54D000F7F1ED /* OAMapSettingsTerrainScreen.mm */; };
+		7851F2FB241A97FA00F7F1ED /* OASegmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7851F2F9241A97FA00F7F1ED /* OASegmentTableViewCell.m */; };
+		7851F2FC241A97FA00F7F1ED /* OASegmentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7851F2F9241A97FA00F7F1ED /* OASegmentTableViewCell.m */; };
+		7851F300241A987200F7F1ED /* OASegmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7851F2FF241A987100F7F1ED /* OASegmentTableViewCell.xib */; };
+		7851F301241A987200F7F1ED /* OASegmentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7851F2FF241A987100F7F1ED /* OASegmentTableViewCell.xib */; };
 		78A5C1E423FAE8E500312FC4 /* OATitleSliderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A5C1E223FAE8E500312FC4 /* OATitleSliderCell.xib */; };
 		78A5C1EB23FAF2CF00312FC4 /* OATitleSliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A5C1EA23FAF2CF00312FC4 /* OATitleSliderTableViewCell.m */; };
 		78A5C1ED23FBDF0D00312FC4 /* OACustomPickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A5C1EC23FBDF0C00312FC4 /* OACustomPickerCell.xib */; };
@@ -4988,6 +4994,11 @@
 		784B3E1123D9C22F003A22CB /* OAOnlineTilesEditingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOnlineTilesEditingViewController.h; path = Controllers/Resources/OAOnlineTilesEditingViewController.h; sourceTree = "<group>"; };
 		784B3E1223D9C22F003A22CB /* OAOnlineTilesEditingViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOnlineTilesEditingViewController.mm; path = Controllers/Resources/OAOnlineTilesEditingViewController.mm; sourceTree = "<group>"; };
 		784B3E1323D9C22F003A22CB /* OAOnlineTilesEditingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAOnlineTilesEditingViewController.xib; path = Controllers/Resources/OAOnlineTilesEditingViewController.xib; sourceTree = "<group>"; };
+		7851F2F4241A54D000F7F1ED /* OAMapSettingsTerrainScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsTerrainScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsTerrainScreen.mm; sourceTree = "<group>"; };
+		7851F2F5241A54D200F7F1ED /* OAMapSettingsTerrainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsTerrainScreen.h; path = Sources/Controllers/2.0/OAMapSettingsTerrainScreen.h; sourceTree = "<group>"; };
+		7851F2F8241A97FA00F7F1ED /* OASegmentTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASegmentTableViewCell.h; path = Controllers/Cells/OASegmentTableViewCell.h; sourceTree = "<group>"; };
+		7851F2F9241A97FA00F7F1ED /* OASegmentTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OASegmentTableViewCell.m; path = Controllers/Cells/OASegmentTableViewCell.m; sourceTree = "<group>"; };
+		7851F2FF241A987100F7F1ED /* OASegmentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OASegmentTableViewCell.xib; path = Resources/Controllers/Cells/OASegmentTableViewCell.xib; sourceTree = "<group>"; };
 		78A5C1E223FAE8E500312FC4 /* OATitleSliderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATitleSliderCell.xib; path = Resources/Controllers/Cells/OATitleSliderCell.xib; sourceTree = "<group>"; };
 		78A5C1E923FAF2CE00312FC4 /* OATitleSliderTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATitleSliderTableViewCell.h; path = Controllers/Cells/OATitleSliderTableViewCell.h; sourceTree = "<group>"; };
 		78A5C1EA23FAF2CF00312FC4 /* OATitleSliderTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OATitleSliderTableViewCell.m; path = Controllers/Cells/OATitleSliderTableViewCell.m; sourceTree = "<group>"; };
@@ -8399,6 +8410,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				7851F2FF241A987100F7F1ED /* OASegmentTableViewCell.xib */,
 				DA2267A4240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib */,
 				78A5C1FE23FC37B100312FC4 /* OAIconTextDescButtonTableViewCell.xib */,
 				78A5C1E223FAE8E500312FC4 /* OATitleSliderCell.xib */,
@@ -8493,6 +8505,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				7851F2F8241A97FA00F7F1ED /* OASegmentTableViewCell.h */,
+				7851F2F9241A97FA00F7F1ED /* OASegmentTableViewCell.m */,
 				DA2267A1240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.h */,
 				DA2267A0240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m */,
 				78A5C1F723FC373600312FC4 /* OAIconTextDescButtonTableViewCell.h */,
@@ -11195,6 +11209,8 @@
 				78D57B83238D2F680068CF48 /* OAMapSettingsContourLinesScreen.mm */,
 				DAF06700238FE94900210E60 /* OAMapSettingsOnlineSourcesScreen.h */,
 				DAF066FF238FE94900210E60 /* OAMapSettingsOnlineSourcesScreen.mm */,
+				7851F2F5241A54D200F7F1ED /* OAMapSettingsTerrainScreen.h */,
+				7851F2F4241A54D000F7F1ED /* OAMapSettingsTerrainScreen.mm */,
 			);
 			name = MapSettings;
 			sourceTree = "<group>";
@@ -13961,6 +13977,7 @@
 				841AD02B1F54048B00E3191E /* ic_prev.png in Resources */,
 				8A1CF1E6227ED4A70083A04E /* warnings_tunnel@3x.png in Resources */,
 				847A1FB41DF94E9B003C1246 /* menu_direction_icon_2@3x.png in Resources */,
+				7851F301241A987200F7F1ED /* OASegmentTableViewCell.xib in Resources */,
 				DAEC05F42296C6C500045298 /* ic_custom_trouble@2x.png in Resources */,
 				DA8660862268A2870041F57D /* ic_custom_show_on_map@2x.png in Resources */,
 				DA45DA67230EE05A0083DFA2 /* img_mapstyle_default@3x.png in Resources */,
@@ -16095,6 +16112,7 @@
 				844E07F11E44D8E900EFC525 /* ic_action_world_globe@2x.png in Resources */,
 				8476E1DF1F6AA01000EC274F /* ic_action_truck_dark@3x.png in Resources */,
 				843E5D9B1AB341E000BE14BE /* menu_star_icon@3x.png in Resources */,
+				7851F300241A987200F7F1ED /* OASegmentTableViewCell.xib in Resources */,
 				84C102791FBDC10800D3E5EE /* warnings_railways_us@3x.png in Resources */,
 				845E07131B60E72300DFC2A7 /* ic_checkmark_big_enable.png in Resources */,
 				8454DA3F1B31774F00E5A5C5 /* ic_mode_bike@2x.png in Resources */,
@@ -16631,6 +16649,7 @@
 				DAFCB01D23AA1B5000CFBA58 /* OARouteInfoCell.m in Sources */,
 				DA1605B222FEB971001E02AD /* OASwitchableAction.m in Sources */,
 				840021481E28D4D70035F944 /* OASearchResultMatcher.mm in Sources */,
+				7851F2F7241A54D300F7F1ED /* OAMapSettingsTerrainScreen.mm in Sources */,
 				DA835FEC23436F1A003374B5 /* OADestinationItemsListViewController.mm in Sources */,
 				847A1CC31DF94E9B003C1246 /* OAMapRulerView.m in Sources */,
 				847A1CC41DF94E9B003C1246 /* OATrackIntervalDialogView.m in Sources */,
@@ -16709,6 +16728,7 @@
 				847A1CDC1DF94E9B003C1246 /* MGSwipeTableCell.m in Sources */,
 				847A1CDD1DF94E9B003C1246 /* OAIconTextExTableViewCell.m in Sources */,
 				84C12C841FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */,
+				7851F2FC241A97FA00F7F1ED /* OASegmentTableViewCell.m in Sources */,
 				847A1CDE1DF94E9B003C1246 /* OAMapSettingsMainScreen.mm in Sources */,
 				847A1CDF1DF94E9B003C1246 /* OAGPXRouteWaypointTableViewCell.m in Sources */,
 				847A1CE01DF94E9B003C1246 /* OAGPXRouteWptListViewController.mm in Sources */,
@@ -17218,6 +17238,7 @@
 				84DE415B2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */,
 				3A8314881A07ECCF00473C38 /* OATargetPointView.mm in Sources */,
 				84C3D8451B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
+				7851F2F6241A54D300F7F1ED /* OAMapSettingsTerrainScreen.mm in Sources */,
 				840E702C1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */,
 				8AF3C82220F65BD0006C86AA /* OATransportStopRoute.mm in Sources */,
 				84C41E721AB962420089EABB /* OAPOIHelper.mm in Sources */,
@@ -17296,6 +17317,7 @@
 				84F13EAC207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */,
 				84354D5F1F06A1C70046F2CE /* OAAlarmInfo.mm in Sources */,
 				BBA3AF45197FC4BB0039D991 /* OALocationServices.mm in Sources */,
+				7851F2FB241A97FA00F7F1ED /* OASegmentTableViewCell.m in Sources */,
 				8A3F02F821C790FB0043797E /* OAChoosePlanViewController.mm in Sources */,
 				BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				845AFB431E261E3B00170026 /* OASearchCoreAPI.mm in Sources */,

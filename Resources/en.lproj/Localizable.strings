@@ -569,11 +569,22 @@
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "map_settings_mapillary" = "Mapillary";
+"map_settings_terrain" = "Terrain";
+"map_settings_layer_transparency" = "Layer transparency";
+"map_settings_slopes_legend" = "You can read more about Slopes in Wikipedia";
+"map_settings_slopes_description" = "Slope is colorized visualisation on terrain";
+"map_settings_hillshade_description" = "Hillshade map using dark shades to show slopes, peaks and lowlands";
+"map_settings_zoom_level_description" = "Set the minimum and maximum zoom levels at which the layer will be displayed";
+"map_settings_add_maps_hillshade" = "Additional maps are needed to view Hillshade on the map";
+"map_settings_add_maps_slopes" = "Additional maps are needed to view Slopes on the map";
+"map_settings_legend" = "Legend";
+
 "map_settings_show_slider_map" = "Show slider on the map";
 "map_settings_add_online_source" = "Add online source";
 "map_settings_hide_polygons" = "Hide polygons";
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
+
 
 // Intro
 "intro_skip" = "Skip";

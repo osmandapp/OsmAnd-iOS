@@ -510,7 +510,7 @@
 "do_not_send_anonymous_data" = "Keine anonymen Daten senden";
 "wiki_buy_description" = "Kaufen Sie das Wikipedia Plugin und laden Sie die Daten von %@ herunter, damit Sie komplette Artikel lesen können";
 "wiki_download_description" = "Laden Sie die Wikipedia Daten von %@ herunter um komplette Artikel lesen zu können";
-"map_an_region" = "eine Region";
+"map_an_region" = "diese Region";
 "right_side_navigation" = "Rechtsverkehr";
 "si_mi_meters" = "Meilen/Meter";
 "no_address_found" = "Keine Adresse bekannt";
@@ -1627,3 +1627,7 @@
 "map_settings_hide_polygons" = "Polygone ausblenden";
 "map_settings_hide_polygons_desc" = "Diese Option betrifft nur OsmAnd Offline-Vektorkarten";
 "map_settings_add_maps_desc" = "Sie können neue Karten über einen Link oder durch den Import von SQLite-Dateien hinzufügen.";
+"wiki_sheet_title" = "Wie öffnet man Wikipedia-Artikel?";
+"download_wiki_data" = "Wikipedia-Daten für %@ herunterladen";
+"open_wiki_online" = "Artikel online öffnen";
+"online_webpage_warning" = "Seite nur online verfügbar. Im Webbrowser öffnen?";

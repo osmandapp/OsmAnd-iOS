@@ -20,7 +20,6 @@
 "years_5" = "Ani";
 "price_free" = "Gratuit";
 "months_3" = "Trei luni";
-
 "units_minutes_short" = "min";
 "traffic_warning_railways" = "Trecere de cale ferată";
 "speak_title" = "Anunță…";
@@ -779,3 +778,10 @@
 "routing_attr_relief_smoothness_factor_hills_name" = "Deluros";
 "routing_attr_avoid_stairs_description" = "Evită treptele";
 "rendering_attr_tracktype_grade2_name" = "Solid (neasfaltat)";
+"day_short" = "Z";
+"week_short" = "S";
+"clear_all_intermediates" = "Eliminați toate punctele intermediare";
+"sett_no_ext_input" = "Niciunul";
+"wikivoyage_offline" = "Wikivoyage offline";
+"wikipedia_offline" = "Wikipedia offline";
+"rendering_attr_streetLightingNight_name" = "Afișați doar noaptea";

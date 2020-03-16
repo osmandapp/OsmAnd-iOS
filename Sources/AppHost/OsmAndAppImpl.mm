@@ -9,7 +9,6 @@
 #import "OsmAndAppImpl.h"
 
 #import <UIKit/UIKit.h>
-#import <QuickDialog.h>
 #import <QElement.h>
 #import <QElement+Appearance.h>
 
@@ -469,8 +468,7 @@
 
     _appearance = [[OADaytimeAppearance alloc] init];
     _appearanceChangeObservable = [[OAObservable alloc] init];
-    if ([OAUtilities iosVersionIsAtLeast:@"7.0"])
-        QElement.appearance = [[OAQFlatAppearance alloc] init];
+    QElement.appearance = [[OAQFlatAppearance alloc] init];
     
     [OAMapStyleSettings sharedInstance];
 

@@ -635,7 +635,7 @@
 "transport_stop" = "Стоп";
 "cancel_navigation" = "Остановить навигацию";
 "switch_start_finish" = "Обратить пункты старта и назначения";
-"shared_string_options" = "Опции";
+"shared_string_options" = "Функции";
 "new_destination_point_dialog" = "Вы уже установили пункт назначения";
 "replace_destination_point" = "Заменить пункт назначения";
 "shared_string_search" = "Поиск";
@@ -1363,7 +1363,7 @@
 "routing_attr_avoid_stairs_description" = "Избегать лестницы и ступеньки";
 "rendering_attr_piste_difficulty_extreme_name" = "Экстрим";
 "rendering_value_translucent_pink_name" = "Прозрачно-розовый";
-"rendering_attr_appMode_name" = "Режим рендеринга";
+"rendering_attr_appMode_name" = "Режим отрисовки";
 "rendering_value_lightgreen_name" = "Светло-зеленый";
 "rendering_attr_trainLightrailRoutes_name" = "Маршруты поездов";
 "routing_attr_avoid_bus_description" = "Избегать автобусы и троллейбусы";

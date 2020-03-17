@@ -496,7 +496,7 @@
 "do_not_send_anonymous_data" = "No enviar datos anónimos";
 "wiki_buy_description" = "Para leer los artículos completos - compra el complemento de Wikipedia y descarga los datos Wikipedia de %@";
 "wiki_download_description" = "Para leer los artículos completos - descarga los datos Wikipedia de %@";
-"map_an_region" = "una región";
+"map_an_region" = "esta región";
 "select_street" = "Elegir la calle";
 "shared_string_in_name" = "en %@";
 "select_city" = "Elegir la ciudad o pueblo";
@@ -1628,3 +1628,8 @@
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_hide_polygons_desc" = "Esta opción sólo afecta a los mapas vectoriales sin conexión de OsmAnd";
 "map_settings_add_maps_desc" = "Puedes añadir nuevos mapas a través de un enlace o importando archivos SQLite.";
+"all_group_points" = "Todos los puntos del grupo";
+"wiki_sheet_title" = "¿Cómo abrir artículos de Wikipedia?";
+"download_wiki_data" = "Descargar datos de Wikipedia para «%@»";
+"open_wiki_online" = "Abrir artículo en línea";
+"online_webpage_warning" = "La página sólo está disponible en línea. ¿Abrirla en el navegador web?";

@@ -488,7 +488,7 @@
 "do_not_send_anonymous_data" = "No imbies datos anònimos";
 "wiki_buy_description" = "Pro lègere artìculos intreos - còmpora su plugin Wikipedia e iscàrriga sos datos de %@";
 "wiki_download_description" = "Pro lègere artìculos intreos - iscàrriga sos datos Wikipedia de %@";
-"map_an_region" = "una regione";
+"map_an_region" = "custa regione";
 "nothing_found" = "Nudda de agatadu :(";
 "nothing_found_descr" = "Muda sos critèrios de chirca o a ismànnia su raju de chirca";
 "select_street" = "Ischerta sos caminos";
@@ -1622,3 +1622,13 @@
 "online_raster_maps" = "Mapas raster in lìnia";
 "import_raster_map_success" = "As importadu sa mapa raster. Aberi sas impostatziones de sa mapa e ativa·la pro mèdiu de un'istratu superiore o inferiore";
 "import_raster_map_failed" = "Importadura de sa mapa raster fallida";
+"map_settings_show_slider_map" = "Ammustra su cursore in sa mapa";
+"map_settings_add_online_source" = "Annanghe una mitza in lìnia";
+"map_settings_hide_polygons" = "Cua sos polìgonos";
+"map_settings_hide_polygons_desc" = "Custa optzione influentzat sas mapas vetoriales non in lìnia de OsmAnd ebbia";
+"map_settings_add_maps_desc" = "Podes annànghere mapas noas pro mèdiu de unu ligàmene, o importende documentos SQLite.";
+"all_group_points" = "Totu sos puntos de su grupu";
+"wiki_sheet_title" = "Comente potzo abèrrere artìculos de Wikipedia?";
+"download_wiki_data" = "Iscàrriga sos datos de Wikipedia pro %@";
+"open_wiki_online" = "Aberi s'artìculu in lìnia";
+"online_webpage_warning" = "Custa pàgina est disponìbile in lìnia ebbia. La cheres abèrrere in s'esploradore/navigadore (browser) web?";

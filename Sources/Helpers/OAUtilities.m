@@ -1257,10 +1257,13 @@ static const double d180PI = 180.0 / M_PI_2;
 
     if(colorSpaceModel == kCGColorSpaceModelRGB)
     {
-        const CGFloat *componentColors = CGColorGetComponents(color.CGColor);
+        CGFloat red = 0.0, green = 0.0, blue = 0.0, alpha = 0.0;
+        [color getRed:&red green:&green blue:&blue alpha:&alpha];
 
-        luminance = 1 - ((componentColors[0] * 299) + (componentColors[1] * 587) + (componentColors[2] * 114)) / 255;
-    } else {
+        luminance = ((red * 0.299) + (green * 0.587) + (blue * 0.114));
+    }
+    else
+    {
         [color getWhite:&luminance alpha:0];
     }
 

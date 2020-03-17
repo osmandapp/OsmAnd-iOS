@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAPublicTransportShieldsView : UIView
 
+- (void)setData:(NSNumber *)data;
+
 @end
 
 NS_ASSUME_NONNULL_END

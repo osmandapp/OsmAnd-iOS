@@ -89,6 +89,7 @@ struct RouteSegmentResult;
 - (void) recalculateRouteDueToSettingsChange;
 - (void) notifyIfRouteIsCalculated;
 - (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;
+- (BOOL) isPublicTransportRoute;
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards;
 

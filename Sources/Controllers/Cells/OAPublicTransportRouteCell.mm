@@ -8,6 +8,7 @@
 
 #import "OAPublicTransportRouteCell.h"
 #import "OAUtilities.h"
+#import "Localization.h"
 
 @implementation OAPublicTransportRouteCell
 
@@ -15,6 +16,8 @@
 {
     [super awakeFromNib];
     // Initialization code
+    _detailsButton.layer.cornerRadius = 6.;
+    _showOnMapButton.layer.cornerRadius = 6.;
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated

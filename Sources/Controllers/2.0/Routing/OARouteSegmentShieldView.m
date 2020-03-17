@@ -7,6 +7,7 @@
 //
 
 #import "OARouteSegmentShieldView.h"
+#import "OAColors.h"
 
 @implementation OARouteSegmentShieldView
 {
@@ -14,24 +15,9 @@
     UIColor *_color;
     NSString *_title;
     NSString *_iconName;
-}
-
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
-    self = [super initWithCoder:coder];
-    if (self) {
-        [self customInit];
-    }
-    return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self customInit];
-    }
-    return self;
+    
+    UITapGestureRecognizer *_tapRecognizer;
+    UILongPressGestureRecognizer *_longTapRecognizer;
 }
 
 - (instancetype) initWithColor:(UIColor *)color title:(NSString *)title iconName:(NSString *)iconName type:(EOATransportShiledType)type
@@ -51,6 +37,15 @@
 {
     [NSBundle.mainBundle loadNibNamed:NSStringFromClass([self class]) owner:self options:nil];
     
+    _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onViewTapped:)];
+    _tapRecognizer.numberOfTapsRequired = 1;
+    _longTapRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onViewPressed:)];
+    _longTapRecognizer.numberOfTouchesRequired = 1;
+    _longTapRecognizer.minimumPressDuration = .2;
+    
+    [self addGestureRecognizer:_tapRecognizer];
+    [self addGestureRecognizer:_longTapRecognizer];
+    
     [self addSubview:_contentView];
     _contentView.frame = self.bounds;
     
@@ -60,11 +55,12 @@
     
     if (_type == EOATransportShiledPedestrian)
     {
-        _contentView.layer.borderColor = _color.CGColor;
+        UIColor *primaryColor = UIColorFromRGB(color_primary_purple);
+        _contentView.layer.borderColor = primaryColor.CGColor;
         _contentView.layer.borderWidth = 2.0;
-        _shieldLabel.textColor = _color;
+        _shieldLabel.textColor = primaryColor;
         _contentView.backgroundColor = UIColor.whiteColor;
-        _shieldImage.tintColor = _color;
+        _shieldImage.tintColor = primaryColor;
     }
     else
     {
@@ -72,6 +68,72 @@
         _contentView.backgroundColor = _color;
         _shieldLabel.textColor = tintColor;
         _shieldImage.tintColor = tintColor;
+    }
+}
+
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(6.0 + _shieldImage.frame.size.width + 6.0 + _shieldLabel.frame.size.width + 12.0, 32.0);
+}
+
+- (void)restoreShieldState {
+    [UIView animateWithDuration:.2 animations:^{
+        if (_type == EOATransportShiledPedestrian)
+        {
+            [_shieldImage setTintColor:UIColorFromRGB(color_primary_purple)];
+            _shieldLabel.textColor = UIColorFromRGB(color_primary_purple);
+            _contentView.backgroundColor = UIColor.whiteColor;
+        }
+        else
+        {
+            [UIView animateWithDuration:.2 animations:^{
+                UIColor *tintColor = [OAUtilities colorIsBright:_color] ? [UIColor.blackColor colorWithAlphaComponent:0.9] : UIColor.whiteColor;
+                _shieldLabel.textColor = tintColor;
+                _shieldImage.tintColor = tintColor;
+            }];
+        }
+    }];
+}
+
+- (void)animatePress:(BOOL)longPress
+{
+    [UIView animateWithDuration:.2 animations:^{
+        if (_type == EOATransportShiledPedestrian)
+        {
+            [_shieldImage setTintColor:UIColor.whiteColor];
+            _shieldLabel.textColor = UIColor.whiteColor;
+            _contentView.backgroundColor = UIColorFromRGB(color_primary_purple);
+        }
+        else
+        {
+            [_shieldImage setTintColor:UIColor.grayColor];
+            _shieldLabel.textColor = UIColor.grayColor;
+        }
+    } completion:^(BOOL finished) {
+        if (!longPress)
+        {
+            [self restoreShieldState];
+        }
+    }];
+}
+
+- (void) onViewTapped:(UIGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateEnded)
+        [self animatePress:NO];
+        // TODO: notify route was pressed
+}
+
+- (void) onViewPressed:(UIGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        [self animatePress:YES];
+    }
+    else if (recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        [self restoreShieldState];
+        // TODO: notify route was pressed
     }
 }
 

@@ -2216,7 +2216,7 @@ typedef enum
     [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.targetMultiMenuView transitionToSize];
-        [self.routeInfoView layoutSubviews];
+        [self.routeInfoView onOrientationChange];
     } completion:nil];
 }
 

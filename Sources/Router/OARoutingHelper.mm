@@ -1216,4 +1216,9 @@ static BOOL _isDeviatedFromRoute = false;
         [_voiceRouter newRouteIsCalculated:true];
 }
 
+- (BOOL) isPublicTransportRoute
+{
+    return [_mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
+}
+
 @end

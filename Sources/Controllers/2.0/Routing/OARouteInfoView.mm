@@ -51,6 +51,8 @@
 #import "OARouteProgressBarCell.h"
 #import "OARouteStatisticsHelper.h"
 #import "OAFilledButtonCell.h"
+#import "OAPublicTransportRouteCell.h"
+#import "OAPublicTransportShieldsView.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -453,33 +455,51 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     if ([_routingHelper isRouteCalculated])
     {
-        [section addObject:@{
-            @"cell" : @"OADividerCell",
-            @"custom_insets" : @(NO)
-        }];
-        [section addObject:@{
-            @"cell" : @"OARoutingInfoCell"
-        }];
-        [section addObject:@{
-            @"cell" : kCellReuseIdentifier
-        }];
-        [section addObject:@{
-            @"cell" : @"OAFilledButtonCell",
-            @"title" : OALocalizedString(@"res_details")
-        }];
-        [section addObject:@{
-            @"cell" : @"OADividerCell",
-            @"custom_insets" : @(NO)
-        }];
-        [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
-        
-        OAGPXTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
-        if (_needChartUpdate)
+        if ([_routingHelper isPublicTransportRoute])
         {
-            [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.lineChartView analysis:trackAnalysis useGesturesAndScale:NO];
-            _needChartUpdate = NO;
+            [section addObject:@{
+                @"cell" : @"OAPublicTransportRouteCell"
+            }];
+            
+            [section addObject:@{
+                @"cell" : @"OAPublicTransportRouteCell"
+            }];
+            
+            [section addObject:@{
+                @"cell" : @"OAPublicTransportRouteCell"
+            }];
+            [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
+            [section removeAllObjects];
         }
-        
+        else
+        {
+            [section addObject:@{
+                @"cell" : @"OADividerCell",
+                @"custom_insets" : @(NO)
+            }];
+            [section addObject:@{
+                @"cell" : @"OARoutingInfoCell"
+            }];
+            [section addObject:@{
+                @"cell" : kCellReuseIdentifier
+            }];
+            [section addObject:@{
+                @"cell" : @"OAFilledButtonCell",
+                @"title" : OALocalizedString(@"res_details")
+            }];
+            [section addObject:@{
+                @"cell" : @"OADividerCell",
+                @"custom_insets" : @(NO)
+            }];
+            [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
+            
+            OAGPXTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
+            if (_needChartUpdate)
+            {
+                [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.lineChartView analysis:trackAnalysis useGesturesAndScale:NO];
+                _needChartUpdate = NO;
+            }
+        }
         _currentState = EOARouteInfoMenuStateExpanded;
     }
     else if (![_routingHelper isRouteBeingCalculated])
@@ -1250,6 +1270,31 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         return cell;
     }
+    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+    {
+        static NSString* const identifierCell = item[@"cell"];
+        OAPublicTransportRouteCell* cell = nil;
+        
+        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OAPublicTransportRouteCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            // TODO: set route labels and correct data
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell.detailsButton setTitle:OALocalizedString(@"res_details") forState:UIControlStateNormal];
+            [cell.showOnMapButton setTitle:OALocalizedString(@"sett_show") forState:UIControlStateNormal];
+            [cell.shieldsView setData:@(3)];
+            [cell setNeedsLayout];
+            [cell layoutIfNeeded];
+        }
+        
+        return cell;
+    }
     return nil;
 }
 
@@ -1361,7 +1406,20 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
         return 2.0;
+    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+        return UITableViewAutomaticDimension;
     return 44.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+        return 200.;
+    else if ([item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
+        return 58.;
+    
+    return kEstimatedRowHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -1607,6 +1665,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)requestPrivateAccessRouting
 {
+}
+
+- (void)onOrientationChange
+{
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+    
+    // This is needed to refresh transport cards layout
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 @end

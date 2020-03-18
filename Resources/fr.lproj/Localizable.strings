@@ -1430,3 +1430,4 @@
 "day_short" = "D";
 "week_short" = "Wk";
 "weeks_short" = "Wks";
+"online_webpage_warning" = "Page accessible uniquement en ligne. Souhaitez-vous l’ouvrir dans un navigateur web ?";

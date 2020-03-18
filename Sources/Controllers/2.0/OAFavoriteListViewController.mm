@@ -70,7 +70,6 @@ typedef enum
     
     BOOL isDecelerating;
 }
-
     @property (strong, nonatomic) NSMutableArray* groupsAndFavorites;
     @property (strong, nonatomic) NSArray*  menuItems;
     @property (strong, nonatomic) UIDocumentInteractionController* exportController;
@@ -412,6 +411,7 @@ static UIViewController *parentController;
     for (FavoriteTableGroup *group in self.groupsAndFavorites)
     {
         OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
+        [headerView.selectAllBtn setHidden:YES];
         headerView.section = i++;
         headerView.delegate = self;
         [headerViews addObject:headerView];
@@ -1039,6 +1039,54 @@ static UIViewController *parentController;
         return NO;
 }
 
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row != 0)
+        return UITableViewCellEditingStyleDelete;
+    else
+        return UITableViewCellEditingStyleNone;
+}
+
+- (void)removeFavoriteItem:(NSIndexPath *)indexPath
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSInteger dataIndex = indexPath.row - 1;
+    
+    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+    OAFavoriteItem* item = [groupData.groupItems objectAtIndex:dataIndex];
+    
+    app.favoritesCollection->removeFavoriteLocation(item.favorite);
+    
+    [app saveFavoritesToPermamentStorage];
+    [self generateData];
+        
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        UIAlertController *alert = [UIAlertController
+                                    alertControllerWithTitle:nil
+                                    message:OALocalizedString(@"fav_remove_q")
+                                    preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction *yesButton = [UIAlertAction
+                                    actionWithTitle:OALocalizedString(@"shared_string_yes")
+                                    style:UIAlertActionStyleDefault
+                                    handler:^(UIAlertAction * _Nonnull action) {
+            [self removeFavoriteItem:indexPath];
+        }];
+        UIAlertAction *cancelButton = [UIAlertAction
+                                 actionWithTitle:OALocalizedString(@"shared_string_no")
+                                 style:UIAlertActionStyleCancel
+                                 handler:nil];
+        [alert addAction:yesButton];
+        [alert addAction:cancelButton];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
 #pragma mark -
 #pragma mark Deferred image loading (UIScrollViewDelegate)
 
@@ -1072,14 +1120,22 @@ static UIViewController *parentController;
         if (indexPath.row == 0 && (groupData.type == kFavoriteCellTypeGrouped
             || groupData.type == kFavoriteCellTypeUngrouped)){
             FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
-            if (groupData.isOpen) {
+            if (groupData.isOpen)
+            {
                 groupData.isOpen = false;
                 NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
                 [self.favoriteTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
-            } else {
+            }
+            else
+            {
                 groupData.isOpen = true;
                 NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
                 [self.favoriteTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
+                if ([self.favoriteTableView isEditing])
+                {
+                    //select all the items inside the group
+                    
+                }
             }
         } else {
             [self didSelectRowAtIndexPathUnsorter:indexPath];

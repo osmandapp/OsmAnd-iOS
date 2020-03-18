@@ -8,6 +8,7 @@
 
 #import "OAFavoriteListViewController.h"
 #import "OAPointTableViewCell.h"
+#import "OAPointHeaderTableViewCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAFavoriteItem.h"
 #import "OAMapViewController.h"
@@ -49,6 +50,7 @@ typedef enum
 #define FavoriteTableGroup _(FavoriteTableGroup)
 @interface FavoriteTableGroup : NSObject
     @property int type;
+    @property bool isOpen;
     @property NSString* groupName;
     @property NSMutableArray*  groupItems;
 @end
@@ -239,7 +241,7 @@ static UIViewController *parentController;
                 {
                     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:i.section];
                     if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped)
-                        item = [groupData.groupItems objectAtIndex:i.row];
+                        item = [groupData.groupItems objectAtIndex:i.row - 1];
                 }
 
                 if (item)
@@ -350,6 +352,7 @@ static UIViewController *parentController;
             FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
             itemData.groupName = groupName.toNSString();
             itemData.type = kFavoriteCellTypeGrouped;
+            itemData.isOpen = false;
             for(const auto& favorite : groupedFavorites[groupName]) {
                 OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
                 favData.favorite = favorite;
@@ -380,6 +383,7 @@ static UIViewController *parentController;
         FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
         itemData.groupName = OALocalizedString(@"favorites");
         itemData.type = kFavoriteCellTypeUngrouped;
+        itemData.isOpen = false;
         
         for (const auto& favorite : ungroupedFavorites)
         {
@@ -408,7 +412,7 @@ static UIViewController *parentController;
     for (FavoriteTableGroup *group in self.groupsAndFavorites)
     {
         OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
-        [headerView setTitleText:group.groupName];
+        //[headerView setTitleText:group.groupName];
         headerView.section = i++;
         headerView.delegate = self;
         [headerViews addObject:headerView];
@@ -542,7 +546,7 @@ static UIViewController *parentController;
             {
                 FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
                 if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped)
-                    item = [groupData.groupItems objectAtIndex:indexPath.row];
+                    item = [groupData.groupItems objectAtIndex:indexPath.row - 1];
             }
             
             if (item)
@@ -587,7 +591,7 @@ static UIViewController *parentController;
             {
                 FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
                 if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped)
-                    item = [groupData.groupItems objectAtIndex:indexPath.row];
+                    item = [groupData.groupItems objectAtIndex:indexPath.row - 1];
             }
             
             if (item)
@@ -622,7 +626,7 @@ static UIViewController *parentController;
     {
         [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
             FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:path.section];
-            [itemList addObject:[groupData.groupItems objectAtIndex:path.row]];
+            [itemList addObject:[groupData.groupItems objectAtIndex:path.row - 1]];
         }];
     }
     return itemList;
@@ -772,6 +776,10 @@ static UIViewController *parentController;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:section];
+    if (groupData.type == kFavoriteCellTypeGrouped && self.directionButton.tag == 0) {
+        return 16.0;
+    }
     return 46.0;
 }
 
@@ -815,7 +823,18 @@ static UIViewController *parentController;
 }
 
 -(NSInteger)getUnsortedNumberOfRowsInSection:(NSInteger)section {
-    return [((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupItems count];
+    
+    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:section];
+    
+    if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
+        if (groupData.isOpen) {
+            return [((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupItems count] + 1;
+        }
+        return 1;
+    } else {
+        return [((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupItems count];
+    }
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -881,57 +900,103 @@ static UIViewController *parentController;
 - (UITableViewCell*)getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
-    
     if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped)
     {
-        static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-        
-        OAPointTableViewCell* cell;
-        cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
-            cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+        if (indexPath.row == 0) {
+            return [self getGroupHeaderCellForRowAtIndexPath:indexPath];
         }
-
-        if (cell) {
-            
-            OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
-            [cell.titleView setText:item.favorite->getTitle().toNSString()];
-            UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
-
-            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-            cell.titleIcon.image = favCol.cellIcon;
-            cell.titleIcon.tintColor = favCol.color;
-
-            [cell.distanceView setText:item.distance];
-            cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
-            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-            
+        else {
+            return [self getGroupElementCellForRowAtIndexPath:indexPath];
         }
-        
-        return cell;
-        
     } else {
-        
-        static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
-        
-        OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell) {
-            NSDictionary* item = [groupData.groupItems objectAtIndex:indexPath.row];
-            [cell.textView setText:[item objectForKey:@"text"]];
-            [cell.iconView setImage: [UIImage imageNamed:[item objectForKey:@"icon"]]];
-        }
-        return cell;
+        return [self getActionCellForRowAtIndexPath:indexPath];
     }
+}
+
+- (UITableViewCell*)getGroupHeaderCellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+    
+    static NSString* const reusableIdentifierPoint = @"OAPointHeaderTableViewCell";
+    OAPointHeaderTableViewCell* cell;
+    cell = (OAPointHeaderTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointHeaderCell" owner:self options:nil];
+        cell = (OAPointHeaderTableViewCell *)[nib objectAtIndex:0];
+    }
+    if (cell) {
+        OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
+        if (item.favorite->getGroup().toNSString().length == 0) {
+            [cell.groupTitle setText:@"Favorites"];
+        } else {
+            [cell.groupTitle setText:item.favorite->getGroup().toNSString()];
+        }
+        
+        cell.folderIcon.image = [[UIImage imageNamed:@"ic_custom_folder"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.folderIcon.tintColor = UIColorFromRGB(color_tint_gray);
+        
+        if (groupData.isOpen) {
+            cell.arrowImage.image = [[UIImage imageNamed:@"ic_custom_arrow_up"]
+            imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        } else {
+            cell.arrowImage.image = [[UIImage imageNamed:@"ic_custom_arrow_down"]
+            imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        }
+        cell.arrowImage.tintColor = UIColorFromRGB(color_tint_gray);
+    }
+    return cell;
+}
+
+- (UITableViewCell*)getGroupElementCellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+    
+    NSInteger dataIndex = indexPath.row - 1;
+    static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
+    OAPointTableViewCell* cell;
+    cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+        cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+    }
+    if (cell) {
+        OAFavoriteItem* item = [groupData.groupItems objectAtIndex:dataIndex];
+        [cell.titleView setText:item.favorite->getTitle().toNSString()];
+        UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
+
+        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        cell.titleIcon.image = favCol.cellIcon;
+        cell.titleIcon.tintColor = favCol.color;
+
+        [cell.distanceView setText:item.distance];
+        cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
+        cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+    }
+    return cell;
+}
+
+- (UITableViewCell*)getActionCellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+    
+    static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
+    OAIconTextTableViewCell* cell;
+    cell = (OAIconTextTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+    }
+    
+    if (cell) {
+        NSDictionary* item = [groupData.groupItems objectAtIndex:indexPath.row];
+        [cell.textView setText:[item objectForKey:@"text"]];
+        [cell.iconView setImage: [UIImage imageNamed:[item objectForKey:@"icon"]]];
+    }
+    return cell;
 }
 
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1008,8 +1073,24 @@ static UIViewController *parentController;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.directionButton.tag == 1)
         [self didSelectRowAtIndexPathSorter:indexPath];
-    else
-        [self didSelectRowAtIndexPathUnsorter:indexPath];
+    else {
+        FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+        if (indexPath.row == 0 && (groupData.type == kFavoriteCellTypeGrouped
+            || groupData.type == kFavoriteCellTypeUngrouped)){
+            FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+            if (groupData.isOpen) {
+                groupData.isOpen = false;
+                NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
+                [self.favoriteTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
+            } else {
+                groupData.isOpen = true;
+                NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
+                [self.favoriteTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
+            }
+        } else {
+            [self didSelectRowAtIndexPathUnsorter:indexPath];
+        }
+    }
 }
 
 -(void)didSelectRowAtIndexPathSorter:(NSIndexPath *)indexPath {
@@ -1035,9 +1116,9 @@ static UIViewController *parentController;
         return;
     }
     
-    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];//
     if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
-        OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
+        OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row - 1];
         [self doPush];
         [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item pushed:YES];
         

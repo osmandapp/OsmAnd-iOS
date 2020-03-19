@@ -11,9 +11,20 @@
 #import "OARouteCalculationResult.h"
 #import "OAMapStyleSettings.h"
 #import "OARouteProvider.h"
+#import "OARoutingHelper.h"
 
 #include <OsmAndCore.h>
 #include <routeCalculationProgress.h>
+
+@class OARouteCalculationResult;
+
+@protocol OARouteCalculationResultListener <NSObject>
+
+@required
+
+- (void) onRouteCalculated:(OARouteCalculationResult *) route;
+
+@end
 
 @interface OARouteCalculationParams : NSObject
 
@@ -33,5 +44,7 @@
 @property (nonatomic) BOOL startTransportStop;
 @property (nonatomic) BOOL targetTransportStop;
 @property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
+@property (nonatomic) id<OARouteCalculationProgressCallback> calculationProgressCallback;
+@property (nonatomic) id<OARouteCalculationResultListener> resultListener;
 
 @end

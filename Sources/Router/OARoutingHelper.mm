@@ -606,7 +606,11 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (void) updateProgress:(OARouteCalculationParams *)params
 {
-    if (_progressRoutes.count > 0)
+    id<OARouteCalculationProgressCallback> progressRoute = nil;
+    if (params.calculationProgressCallback)
+        progressRoute = params.calculationProgressCallback;
+    
+    if (_progressRoutes.count > 0 || progressRoute)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
@@ -618,6 +622,8 @@ static BOOL _isDeviatedFromRoute = false;
                 if (all > 0)
                 {
                     int t = (int) MIN(p * p / (all * all) * 100.0, 99);
+                    if (progressRoute)
+                        [progressRoute updateProgress:t];
                     for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
                         [progressRoute updateProgress:t];
                 }
@@ -646,6 +652,8 @@ static BOOL _isDeviatedFromRoute = false;
                     [_progressRoute requestPrivateAccessRouting];
                 }
                  */
+                if (progressRoute)
+                    [progressRoute finish];
                 for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
                     [progressRoute finish];
             }
@@ -1219,6 +1227,60 @@ static BOOL _isDeviatedFromRoute = false;
 - (BOOL) isPublicTransportRoute
 {
     return [_mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
+}
+
+- (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress
+{
+    @synchronized (self) {
+        NSThread *prevRunningJob = _currentRunningJob;
+        _settings.lastRoutingApplicationMode = [self getAppMode];
+        OARouteRecalculationThread *newThread = [[OARouteRecalculationThread alloc] initWithName:@"Calculating route" params:params paramsChanged:paramsChanged helper:self];
+        _currentRunningJob = newThread;
+        [self startProgress:params];
+        if (updateProgress)
+            [self updateProgress:params];
+        if (prevRunningJob)
+        {
+            [newThread setWaitPrevJob:prevRunningJob];
+        }
+        [_currentRunningJob start];
+    }
+}
+// TODO: check correctness
+- (void) startProgress:(OARouteCalculationParams *) params
+{
+    if (params.calculationProgressCallback)
+    {
+        [params.calculationProgressCallback start];
+    }
+    else if (_progressRoutes)
+    {
+        for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+        {
+            [progressRoute start];
+        }
+    }
+}
+
+- (void) finishProgress:(OARouteCalculationParams *) params
+{
+    id<OARouteCalculationProgressCallback> progressRoute = params.calculationProgressCallback;
+    if (progressRoute)
+    {
+        [progressRoute finish];
+    }
+    else
+    {
+        for (id<OARouteCalculationProgressCallback> callback in _progressRoutes)
+            [callback finish];
+    }
+}
+
++ (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    params.leftSide = [OADrivingRegion isLeftHandDriving:settings.drivingRegion];
+    params.fast = [settings.fastRouteMode get:mode];
 }
 
 @end

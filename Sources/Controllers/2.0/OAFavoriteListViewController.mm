@@ -545,7 +545,8 @@ static UIViewController *parentController;
             {
                 FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
                 if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped)
-                    item = [groupData.groupItems objectAtIndex:indexPath.row - 1];
+                    if (indexPath.row != 0)
+                        item = [groupData.groupItems objectAtIndex:indexPath.row - 1];
             }
             
             if (item)
@@ -590,7 +591,8 @@ static UIViewController *parentController;
             {
                 FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
                 if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped)
-                    item = [groupData.groupItems objectAtIndex:indexPath.row - 1];
+                    if (indexPath.row != 0)
+                        item = [groupData.groupItems objectAtIndex:indexPath.row - 1];
             }
             
             if (item)
@@ -625,7 +627,8 @@ static UIViewController *parentController;
     {
         [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
             FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:path.section];
-            [itemList addObject:[groupData.groupItems objectAtIndex:path.row - 1]];
+            if (path.row != 0)
+                [itemList addObject:[groupData.groupItems objectAtIndex:path.row - 1]];
         }];
     }
     return itemList;
@@ -648,6 +651,7 @@ static UIViewController *parentController;
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
         [self.backButton setHidden:YES];
         [self.directionButton setHidden:YES];
+        [self.favoriteTableView reloadData];
     }
     else
     {
@@ -926,16 +930,19 @@ static UIViewController *parentController;
             [cell.groupTitle setText:item.favorite->getGroup().toNSString()];
         cell.folderIcon.tintColor = UIColorFromRGB(color_tint_gray);
         
+        cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
+        [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([self.favoriteTableView isEditing])
+            [cell.openCloseGroupButton setHidden:NO];
+        else
+            [cell.openCloseGroupButton setHidden:YES];
+        
         if (groupData.isOpen)
-        {
             cell.arrowImage.image = [[UIImage imageNamed:@"ic_custom_arrow_down"]
             imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        }
         else
-        {
             cell.arrowImage.image = [[UIImage imageNamed:@"ic_custom_arrow_right"]
             imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        }
         cell.arrowImage.tintColor = UIColorFromRGB(color_tint_gray);
     }
     return cell;
@@ -1110,35 +1117,99 @@ static UIViewController *parentController;
     //[self refreshVisibleRows];
 }
 
+#pragma mark - Favorite group's item editing operations
+
+- (void)openCloseGroupButtonAction:(id)sender
+{
+    UIButton *button = (UIButton *)sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+    
+    [self openCloseFavoriteGroup:indexPath];
+}
+
+
+- (void)selectAllItemsInGroup:(NSIndexPath *)indexPath select:(BOOL)select
+{
+    NSInteger rowsCount = [self.favoriteTableView numberOfRowsInSection:indexPath.section];
+    
+    [self.favoriteTableView beginUpdates];
+    if (select)
+        for (int i = 0; i < rowsCount; i++)
+            [self.favoriteTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+    else
+        for (int i = 0; i < rowsCount; i++)
+            [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section] animated:YES];
+    [self.favoriteTableView endUpdates];
+}
+
+- (void)checkIfGroupSelected:(NSIndexPath *)indexPath
+{
+    BOOL isGroupHeaderSelected = [self.favoriteTableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+    if (!groupData.isOpen)
+        [self openCloseFavoriteGroup:indexPath];
+    NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
+    NSInteger rowsCount = [self.favoriteTableView numberOfRowsInSection:indexPath.section];
+    
+    if (rowsCount != selectedRows.count && isGroupHeaderSelected)
+        [self selectAllItemsInGroup:indexPath select:YES];
+    else
+        [self selectAllItemsInGroup:indexPath select:NO];
+}
+
+- (void)openCloseFavoriteGroup:(NSIndexPath *)indexPath
+{
+    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+    if (groupData.isOpen)
+    {
+        groupData.isOpen = false;
+        NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
+        [self.favoriteTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
+    }
+    else
+    {
+        groupData.isOpen = true;
+        NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
+        [self.favoriteTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if (self.directionButton.tag == 1)
         [self didSelectRowAtIndexPathSorter:indexPath];
-    else {
+    else
+    {
         FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
-        if (indexPath.row == 0 && (groupData.type == kFavoriteCellTypeGrouped
-            || groupData.type == kFavoriteCellTypeUngrouped)){
-            FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
-            if (groupData.isOpen)
-            {
-                groupData.isOpen = false;
-                NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
-                [self.favoriteTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
-            }
+        if ((groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped))
+        {
+            if (indexPath.row == 0 && ![self.favoriteTableView isEditing])
+                [self openCloseFavoriteGroup:indexPath];
+            else if (indexPath.row == 0 && [self.favoriteTableView isEditing])
+                [self checkIfGroupSelected:indexPath];
             else
-            {
-                groupData.isOpen = true;
-                NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
-                [self.favoriteTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
-                if ([self.favoriteTableView isEditing])
-                {
-                    //select all the items inside the group
-                    
-                }
-            }
-        } else {
-            [self didSelectRowAtIndexPathUnsorter:indexPath];
+                [self didSelectRowAtIndexPathUnsorter:indexPath];
+        }
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.directionButton.tag == 1)
+        [self didSelectRowAtIndexPathSorter:indexPath];
+    else
+    {
+        FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+        if ((groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped))
+        {
+            if (indexPath.row == 0 && ![self.favoriteTableView isEditing])
+                [self openCloseFavoriteGroup:indexPath];
+            else if (indexPath.row == 0 && [self.favoriteTableView isEditing])
+                [self checkIfGroupSelected:indexPath];
+            else
+                [self didSelectRowAtIndexPathUnsorter:indexPath];
         }
     }
 }
@@ -1162,7 +1233,16 @@ static UIViewController *parentController;
 }
 
 -(void)didSelectRowAtIndexPathUnsorter:(NSIndexPath *)indexPath {
-    if ([self.favoriteTableView isEditing]) {
+    if ([self.favoriteTableView isEditing])
+    {
+        BOOL isGroupHeaderSelected = [self.favoriteTableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+        NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
+        NSInteger rowsCount = [self.favoriteTableView numberOfRowsInSection:indexPath.section];
+        
+        if (rowsCount != selectedRows.count && isGroupHeaderSelected)
+            [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
+        else if ((rowsCount - 1) == selectedRows.count && !isGroupHeaderSelected)
+            [self.favoriteTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
         return;
     }
     

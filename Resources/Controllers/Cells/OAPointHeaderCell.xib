@@ -15,13 +15,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Yp-A5-8et">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6Yp-A5-8et">
                         <rect key="frame" x="16" y="15" width="30" height="30"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="HKU-n3-Clt"/>
+                        </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Group Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EIU-2W-XB6">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Group Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EIU-2W-XB6">
                         <rect key="frame" x="61" y="20" width="94" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -33,17 +34,36 @@
                             <constraint firstAttribute="width" constant="30" id="sO8-ri-Qvw"/>
                         </constraints>
                     </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0MJ-1w-tv5">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <state key="normal">
+                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                    </button>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="6Yp-A5-8et" firstAttribute="leading" secondItem="uo5-6M-bow" secondAttribute="leadingMargin" id="87P-QR-QfB"/>
+                    <constraint firstAttribute="trailing" secondItem="0MJ-1w-tv5" secondAttribute="trailing" id="BI9-nz-GqQ"/>
                     <constraint firstAttribute="bottom" secondItem="qd5-3M-q8K" secondAttribute="bottom" constant="15" id="TYx-fC-bg5"/>
+                    <constraint firstItem="0MJ-1w-tv5" firstAttribute="leading" secondItem="uo5-6M-bow" secondAttribute="leading" id="Tms-qP-Yr9"/>
                     <constraint firstItem="qd5-3M-q8K" firstAttribute="top" secondItem="uo5-6M-bow" secondAttribute="top" constant="15" id="VX7-iH-6Vg"/>
                     <constraint firstAttribute="trailing" secondItem="qd5-3M-q8K" secondAttribute="trailing" constant="16" id="asZ-Dr-1IN"/>
+                    <constraint firstItem="6Yp-A5-8et" firstAttribute="top" secondItem="qd5-3M-q8K" secondAttribute="top" id="bjm-QR-Lp8"/>
+                    <constraint firstItem="0MJ-1w-tv5" firstAttribute="top" secondItem="uo5-6M-bow" secondAttribute="top" id="d6p-i9-MGB"/>
+                    <constraint firstItem="0MJ-1w-tv5" firstAttribute="centerY" secondItem="6Yp-A5-8et" secondAttribute="centerY" id="gjH-QH-oxa"/>
+                    <constraint firstItem="0MJ-1w-tv5" firstAttribute="centerY" secondItem="EIU-2W-XB6" secondAttribute="centerY" id="ie6-s9-fKq"/>
+                    <constraint firstItem="EIU-2W-XB6" firstAttribute="leading" secondItem="6Yp-A5-8et" secondAttribute="trailing" constant="15" id="lhY-4q-vKi"/>
+                    <constraint firstItem="0MJ-1w-tv5" firstAttribute="centerY" secondItem="qd5-3M-q8K" secondAttribute="centerY" id="rPA-cA-dO7"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="arrowImage" destination="qd5-3M-q8K" id="DZq-4h-RPL"/>
                 <outlet property="folderIcon" destination="6Yp-A5-8et" id="zwK-Cp-VnM"/>
                 <outlet property="groupTitle" destination="EIU-2W-XB6" id="yIK-pJ-NgD"/>
+                <outlet property="openCloseGroupButton" destination="0MJ-1w-tv5" id="QZS-Gk-X3o"/>
             </connections>
             <point key="canvasLocation" x="118.84057971014494" y="139.28571428571428"/>
         </tableViewCell>

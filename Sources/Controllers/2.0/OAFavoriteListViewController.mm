@@ -1214,6 +1214,7 @@ static UIViewController *parentController;
             else
                 [self didSelectRowAtIndexPathUnsorter:indexPath];
         }
+        [self didSelectRowAtIndexPathUnsorter:indexPath];
     }
 }
 

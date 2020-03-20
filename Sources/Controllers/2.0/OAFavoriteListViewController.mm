@@ -1048,13 +1048,26 @@ static UIViewController *parentController;
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row != 0)
+    if ((indexPath.row != 0 && self.directionButton.tag == 0) || self.directionButton.tag == 1)
         return UITableViewCellEditingStyleDelete;
     else
         return UITableViewCellEditingStyleNone;
 }
 
-- (void)removeFavoriteItem:(NSIndexPath *)indexPath
+- (void)removeItemFromSortedFavoriteItems:(NSIndexPath *)indexPath
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
+    
+    [self.favoriteTableView beginUpdates];
+    app.favoritesCollection->removeFavoriteLocation(item.favorite);
+    [self.sortedFavoriteItems removeObjectAtIndex:indexPath.row];
+    [self.favoriteTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
+    [self.favoriteTableView endUpdates];
+    [app saveFavoritesToPermamentStorage];
+}
+
+- (void)removeItemFromUnsortedFavoriteItems:(NSIndexPath *)indexPath
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     NSInteger dataIndex = indexPath.row - 1;
@@ -1067,8 +1080,15 @@ static UIViewController *parentController;
     [groupData.groupItems removeObjectAtIndex:indexPath.row - 1];
     [self.favoriteTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationLeft];
     [self.favoriteTableView endUpdates];
-    
     [app saveFavoritesToPermamentStorage];
+}
+
+- (void)removeFavoriteItem:(NSIndexPath *)indexPath
+{
+    if (self.directionButton.tag == 0)
+        [self removeItemFromUnsortedFavoriteItems:indexPath];
+    else
+        [self removeItemFromSortedFavoriteItems:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {

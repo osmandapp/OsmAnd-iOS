@@ -925,7 +925,7 @@ static UIViewController *parentController;
     {
         OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
         if (item.favorite->getGroup().toNSString().length == 0)
-            [cell.groupTitle setText:@"Favorites"];
+            [cell.groupTitle setText:OALocalizedString(@"favorites")];
         else
             [cell.groupTitle setText:item.favorite->getGroup().toNSString()];
         cell.folderIcon.tintColor = UIColorFromRGB(color_tint_gray);
@@ -1062,11 +1062,13 @@ static UIViewController *parentController;
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
     OAFavoriteItem* item = [groupData.groupItems objectAtIndex:dataIndex];
     
+    [self.favoriteTableView beginUpdates];
     app.favoritesCollection->removeFavoriteLocation(item.favorite);
+    [groupData.groupItems removeObjectAtIndex:indexPath.row - 1];
+    [self.favoriteTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationLeft];
+    [self.favoriteTableView endUpdates];
     
     [app saveFavoritesToPermamentStorage];
-    [self generateData];
-        
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {

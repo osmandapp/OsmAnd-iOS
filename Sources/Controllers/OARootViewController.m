@@ -404,60 +404,31 @@ typedef enum : NSUInteger {
     }
     else if ([ext caseInsensitiveCompare:@"gpx"] == NSOrderedSame)
     {
-        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title")
-                                    message:OALocalizedString(@"import_choose_type")
-                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")
-                                                                 action:^{
-                                                                 }]
-                           otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"import_favorite")
-                                                                 action:^{
-                                                                     
-                                                                     UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
-                                                                     if (incomingURLViewController == nil)
-                                                                         return;
-                                                                     
-                                                                     if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
-                                                                     {
-                                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                                             
-                                                                             [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_failed") message:OALocalizedString(@"import_cannot") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-                                                                             
-                                                                         });
-                                                                         
-                                                                         incomingURLViewController = nil;
-                                                                         return;
-                                                                     }
-                                                                     
-                                                                     [self closeMenuAndPanelsAnimated:NO];
-                                                                     
-                                                                     [self.navigationController pushViewController:incomingURLViewController
-                                                                                                          animated:YES];
-                                                                     // Open incoming-URL view controller as menu
-                                                                     /*
-                                                                      [self openMenu:incomingURLViewController
-                                                                      fromRect:CGRectZero
-                                                                      inView:self.view
-                                                                      ofParent:self
-                                                                      animated:YES];
-                                                                      */
-                                                                     
-                                                                 }],
-          
-          [RIButtonItem itemWithLabel:OALocalizedString(@"import_gpx")
-                               action:^{
-                                   [self importAsGPX:url];
-                                   // Open incoming-URL view controller as menu
-                                   /*
-                                    [self openMenu:incomingURLViewController
-                                    fromRect:CGRectZero
-                                    inView:self.view
-                                    ofParent:self
-                                    animated:YES];
-                                    */
-                                   
-                               }],
-          nil] show];
+        if ([fileName isEqual:@"favorites.gpx"] || [fileName isEqual:@"favourites.gpx"])
+        {
+            UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
+            if (incomingURLViewController == nil)
+                return nil;
+            
+            if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_failed") message:OALocalizedString(@"import_cannot") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                    
+                });
+                
+                incomingURLViewController = nil;
+            }
+            
+            [self closeMenuAndPanelsAnimated:NO];
+            
+            [self.navigationController pushViewController:incomingURLViewController animated:YES];
+        }
+        else
+            [self importAsGPX:url];
     }
+
     else if ([ext caseInsensitiveCompare:@"kml"] == NSOrderedSame || [ext caseInsensitiveCompare:@"kmz"] == NSOrderedSame)
     {
         [self importAsGPX:url];

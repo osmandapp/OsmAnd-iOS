@@ -130,5 +130,6 @@
                         thatContainsResource:(const QString&)resourceId;
 + (NSString *)getCountryName:(ResourceItem *)item;
 + (BOOL)checkIfDownloadAvailable:(OAWorldRegion *)region;
++ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<ResourceItem *>*))onComplete;
 
 @end

@@ -26,6 +26,7 @@
 #import "OASizes.h"
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
+#import "OATargetMenuViewController.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -1120,6 +1121,86 @@ static BOOL dataInvalidated = NO;
     }
 
     return nil;
+}
+
++ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<ResourceItem *>*))onComplete
+{
+    NSMutableArray<ResourceItem *>* res;
+    res = [NSMutableArray new];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *sortedSelectedRegions;
+        OsmAndAppInstance app = [OsmAndApp instance];
+        NSMutableArray<OAWorldRegion *> *mapRegions = [[app.worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude] mutableCopy];
+        NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:mapRegions];
+        if (mapRegions.count > 0)
+        {
+            [copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (![region contain:coordinate.latitude lon:coordinate.longitude])
+                    [mapRegions removeObject:region];
+            }];
+        }
+        
+        if (mapRegions.count > 0)
+        {
+            sortedSelectedRegions = [mapRegions sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+                NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
+                NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
+                return [first compare:second];
+            }];
+            
+            for (OAWorldRegion *region in sortedSelectedRegions)
+            {
+                NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:region];
+                if (ids.count > 0)
+                {
+                    for (NSString *resourceId in ids)
+                    {
+                        const auto resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                        if (resource->type == resourceType)
+                        {
+                            if (app.resourcesManager->isResourceInstalled(resource->id))
+                            {
+                                LocalResourceItem *item = [[LocalResourceItem alloc] init];
+                                item.resourceId = resource->id;
+                                item.resourceType = resource->type;
+                                item.title = [self.class titleOfResource:resource
+                                                                inRegion:region
+                                                          withRegionName:YES
+                                                        withResourceType:NO];
+                                item.resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+                                item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+                                item.size = resource->size;
+                                item.worldRegion = region;
+                                [res addObject:item];
+                            }
+                            else
+                            {
+                                RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+                                item.resourceId = resource->id;
+                                item.resourceType = resource->type;
+                                item.title = [OAResourcesBaseViewController titleOfResource:resource
+                                                                                   inRegion:region
+                                                                             withRegionName:YES
+                                                                           withResourceType:NO];
+                                item.resource = resource;
+                                item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+                                item.size = resource->size;
+                                item.sizePkg = resource->packageSize;
+                                item.worldRegion = region;
+                                [res addObject:item];
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+           if (onComplete)
+               onComplete(res);
+        });
+    });
 }
 
 - (void) updateTableLayout

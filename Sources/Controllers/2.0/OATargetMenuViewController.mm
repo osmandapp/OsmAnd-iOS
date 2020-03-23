@@ -59,13 +59,15 @@
 
 @interface OATargetMenuViewController ()
 
+@property (nonatomic) RepositoryResourceItem *localMapIndexItem;
+
 @end
 
 @implementation OATargetMenuViewController
 {
     OsmAndAppInstance _app;
     
-    RepositoryResourceItem *_localMapIndexItem;
+    
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
@@ -331,7 +333,42 @@
         targetPoint.type != OATargetImpassableRoadSelection &&
         targetPoint.type != OATargetChangePosition)
     {
-        [controller requestMapDownloadInfo:targetPoint.location];
+        __weak OATargetMenuViewController* weakSelf = self;
+        
+        [OAResourcesBaseViewController requestMapDownloadInfo:targetPoint.location
+                                                 resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
+                                                   onComplete:^(NSArray<ResourceItem *>* res) {
+            OsmAndAppInstance app = [OsmAndApp instance];
+            if (res.count > 0 && weakSelf)
+            {
+                for (ResourceItem * item in res)
+                {
+                    if ([item isKindOfClass:LocalResourceItem.class])
+                    {
+                        weakSelf.localMapIndexItem = nil;
+                        [weakSelf createMapDownloadControls];
+                        return ;
+                    }
+                }
+                RepositoryResourceItem *item = (RepositoryResourceItem*)res[0];
+                
+                BOOL isDownloading = [app.downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
+                        [weakSelf.delegate showProgressBar];
+                    else if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(hideProgressBar)])
+                        [weakSelf.delegate hideProgressBar];
+                });
+                
+                if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable || isDownloading)
+                {
+                    weakSelf.localMapIndexItem = item;
+                }
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf createMapDownloadControls];
+            });
+        }];
     }
     return controller;
 }
@@ -481,95 +518,6 @@
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-}
-
-- (void) requestMapDownloadInfo:(CLLocationCoordinate2D) coordinate
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSMutableArray<OAWorldRegion *> *mapRegions = [[_app.worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude] mutableCopy];
-        NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:mapRegions];
-        OAWorldRegion *selectedRegion = nil;
-        if (mapRegions.count > 0)
-        {
-            [copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
-                if (![region contain:coordinate.latitude lon:coordinate.longitude])
-                    [mapRegions removeObject:region];
-            }];
-            
-            double smallestArea = DBL_MAX;
-            for (OAWorldRegion *region : mapRegions)
-            {
-                BOOL isRegionMapDownload = NO;
-                NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:region];
-                for (NSString *resourceId in ids)
-                {
-                    const auto resource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-                    if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-                    {
-                        if (_app.resourcesManager->isResourceInstalled(resource->id))
-                        {
-                            _localMapIndexItem = nil;
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [self createMapDownloadControls];
-                            });
-                            return;
-                        }
-                        isRegionMapDownload = YES;
-                    }
-                }
-                
-                double area = [region getArea];
-                if (area < smallestArea && isRegionMapDownload)
-                {
-                    smallestArea = area;
-                    selectedRegion = region;
-                }
-            }
-        }
-        
-        if (selectedRegion)
-        {
-            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:selectedRegion];
-            if (ids.count > 0)
-            {
-                for (NSString *resourceId in ids)
-                {
-                    const auto resource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-                    if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-                    {
-                        BOOL isDownloading = [_app.downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", resource->id.toNSString()]];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
-                                [self.delegate showProgressBar];
-                            else if (self.delegate && [self.delegate respondsToSelector:@selector(hideProgressBar)])
-                                [self.delegate hideProgressBar];
-                        });
-                        RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
-                        item.resourceId = resource->id;
-                        item.resourceType = resource->type;
-                        item.title = [OAResourcesBaseViewController titleOfResource:resource
-                                                                           inRegion:selectedRegion
-                                                                     withRegionName:YES
-                                                                   withResourceType:NO];
-                        item.resource = resource;
-                        item.downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
-                        item.size = resource->size;
-                        item.sizePkg = resource->packageSize;
-                        item.worldRegion = selectedRegion;
-                        if ((!_app.resourcesManager->isResourceInstalled(resource->id) &&
-                            [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable) || isDownloading)
-                        {
-                            _localMapIndexItem = item;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self createMapDownloadControls];
-        });
-    });
 }
 
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value

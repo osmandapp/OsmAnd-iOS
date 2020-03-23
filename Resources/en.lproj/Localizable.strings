@@ -581,6 +581,7 @@
 "map_settings_appearance" = "Appearance";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
+"map_settings_SRTM" = "SRTM";
 
 // Intro
 "intro_skip" = "Skip";

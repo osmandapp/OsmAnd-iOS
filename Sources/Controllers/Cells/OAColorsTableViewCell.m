@@ -22,6 +22,12 @@
     [self.collectionView registerNib:[UINib nibWithNibName:@"OAColorsCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAColorsCollectionViewCell"];
 }
 
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    self.collectionViewHeight.constant = self.collectionView.collectionViewLayout.collectionViewContentSize.height;
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];

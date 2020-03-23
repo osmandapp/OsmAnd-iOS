@@ -20,7 +20,14 @@
 #import "OASettingSwitchCell.h"
 #import "OAColors.h"
 #import "OAColorsTableViewCell.h"
+#import "OAIconTextDescButtonTableViewCell.h"
+#import "OAResourcesBaseViewController.h"
+#import "OARootViewController.h"
 #import "OAUtilities.h"
+#import <FFCircularProgressView.h>
+#import <MBProgressHUD.h>
+#import "FFCircularProgressView+isSpinning.h"
+#import "OAAutoObserverProxy.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -40,7 +47,7 @@
 #define kDefaultZoomLevel @"13"
 
 
-@interface OAMapSettingsContourLinesScreen() <OACustomPickerTableViewCellDelegate, OAColorsTableViewCellDelegate>
+@interface OAMapSettingsContourLinesScreen() <OACustomPickerTableViewCellDelegate, OAColorsTableViewCellDelegate, OAIconTextDescButtonCellDelegate>
 
 @end
 
@@ -48,11 +55,14 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    
+    OAAutoObserverProxy* _downloadTaskProgressObserver;
+    OAAutoObserverProxy* _downloadTaskCompletedObserver;
 
     OAMapStyleSettings *_styleSettings;
 
     NSArray<NSArray *> *_data;
-    NSArray *_availableMaps;
+    BOOL _availableMaps;
     NSArray<NSString *> *_visibleZoomValues;
     NSArray<NSString *> *_visibleWidthValues;
     NSArray<NSString *> *_visibleDensityValues;
@@ -61,6 +71,9 @@
     NSArray<NSDictionary *> *_sectionHeaderFooterTitles;
     NSString *_minZoom;
     NSInteger _currentColor;
+    NSIndexPath *_mapIndexPath;
+    NSArray<RepositoryResourceItem *> *_mapItems;
+    RepositoryResourceItem *_mapItem;
 }
 
 
@@ -105,6 +118,12 @@
 
 - (void) setupView
 {
+    _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
+                                                               andObserve:_app.downloadsManager.progressCompletedObservable];
+    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                                andObserve:_app.downloadsManager.completedObservable];
     _styleSettings = [OAMapStyleSettings sharedInstance];
     title = OALocalizedString(@"product_title_srtm");
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
@@ -129,7 +148,6 @@
         p1.value = kDefaultColorScheme;
         [_styleSettings save:p1];
     }
-    
     _currentColor = [_visibleColorValues indexOfObject:p1.value];
     
     OAMapStyleParameter *p2 = [_styleSettings getParameter:kContourLinesDensity];
@@ -153,7 +171,13 @@
         [_styleSettings save:p4];
         [[OAAppSettings sharedManager].contourLinesZoom set:p4.value];
     }
+    [self updateAvailableMaps];
+    
+    [self generateData];
+}
 
+- (void) generateData
+{
     NSMutableArray *switchArr = [NSMutableArray array];
     [switchArr addObject:@{
         @"type" : kCellTypeSwitch
@@ -191,9 +215,14 @@
     NSMutableArray *availableMapsArr = [NSMutableArray array];
     if (_availableMaps)
     {
-       //fill array
-        //kCellTypeMap
-        //OAIconTextDescButtonTableViewCell
+        for (RepositoryResourceItem* item in _mapItems)
+        {
+            [availableMapsArr addObject:@{
+                @"type" : kCellTypeMap,
+                @"title" : item.title,
+                @"size" : [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]
+            }];
+        }
     }
     
     NSMutableArray *result = [NSMutableArray array];
@@ -226,6 +255,77 @@
                         }];
     }
     _sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];
+}
+
+- (void) updateAvailableMaps
+{
+    CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+    CLLocationCoordinate2D loca = loc.coordinate;
+    [OAResourcesBaseViewController requestMapDownloadInfo:loca resourceType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion onComplete:^(NSArray<ResourceItem *>* res) {
+        NSMutableArray<RepositoryResourceItem *> *availableItems;
+        availableItems = [NSMutableArray new];
+        if (res.count > 0)
+        {
+            for (ResourceItem * item in res)
+            {
+                if ([item isKindOfClass:RepositoryResourceItem.class])
+                {
+                    RepositoryResourceItem *resource = (RepositoryResourceItem*)item;
+                    [availableItems addObject:resource];
+                }
+            }
+            
+            _mapItems = availableItems.count > 0 ? [availableItems copy] : NULL;
+        }
+        _availableMaps = _mapItems.count > 0 ? YES : NO;
+        
+        [self generateData];
+        [tblView reloadData];
+    }];
+    
+    
+}
+
+- (void) downloadMap:(NSIndexPath*)indexPath
+{
+    RepositoryResourceItem *localMapIndexItem = _mapItems[indexPath.row];
+    if (localMapIndexItem)
+    {
+        _mapItem = localMapIndexItem;
+//       if (localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion &&
+//           ![OAResourcesBaseViewController checkIfDownloadAvailable:localMapIndexItem.worldRegion])
+//       {
+//           UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_free_exp") preferredStyle:UIAlertControllerStyleAlert];
+//           [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+//           [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+//           return;
+//       }
+       
+       NSString *resourceName = [OAResourcesBaseViewController titleOfResource:localMapIndexItem.resource
+                                                                      inRegion:localMapIndexItem.worldRegion
+                                                                withRegionName:YES
+                                                              withResourceType:YES];
+       
+       if (![OAResourcesBaseViewController verifySpaceAvailableDownloadAndUnpackResource:localMapIndexItem.resource
+                                                     withResourceName:resourceName
+                                                             asUpdate:YES])
+       {
+           UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_install_no_space") preferredStyle:UIAlertControllerStyleAlert];
+           [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+           [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+           return;
+       }
+       
+       [OAResourcesBaseViewController startBackgroundDownloadOf:localMapIndexItem.resource resourceName:resourceName];
+    }
+
+    OAIconTextDescButtonCell* cell = [tblView cellForRowAtIndexPath:indexPath];
+    cell.checkButton.hidden = YES;
+    FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+    progressView.iconView = [[UIView alloc] init];
+    cell.accessoryView = progressView;
+    progressView.tintColor = UIColorFromRGB(color_primary_purple);
+    _mapIndexPath = indexPath;
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -336,6 +436,7 @@
             cell.valueLabel.text = [p getValueTitle];
             cell.currentColor = _currentColor;
             [cell.collectionView reloadData];
+            [cell layoutIfNeeded];
         }
         return cell;
     }
@@ -374,6 +475,28 @@
     
     else if ([item[@"type"] isEqualToString: kCellTypeMap])
     {
+        static NSString* const identifierCell = @"OAIconTextDescButtonCell";
+        OAIconTextDescButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescButtonTableViewCell" owner:self options:nil];
+            cell = (OAIconTextDescButtonCell *)[nib objectAtIndex:0];
+            cell.leftIconView.image = [UIImage imageNamed:@"ic_custom_contour_lines"];
+            cell.dividerIcon.backgroundColor = [UIColor clearColor];
+//            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
+        }
+
+        
+        NSString *description = OALocalizedString(@"map_settings_SRTM");
+
+        cell.titleLabel.text = item[@"title"];
+        cell.descLabel.text = [[description stringByAppendingString:@" • "] stringByAppendingString:item[@"size"]];
+
+        [cell.checkButton setImage:[UIImage imageNamed:@"ic_custom_download.png"] forState:UIControlStateNormal];
+
+        cell.delegate = self;
+        cell.checkButton.tag = indexPath.row;
+        return cell;
     }
     
     else
@@ -406,8 +529,15 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString: kCellTypeMap])
+    {
+        [self downloadMap:indexPath];
+    }
     [tblView deselectRowAtIndexPath:indexPath animated:NO];
 }
+
+#pragma mark - Selectors
 
 - (void) widthChanged:(UISlider*)sender
 {
@@ -489,6 +619,54 @@
     parameter.value = _visibleColorValues[row];
     [_styleSettings save:parameter];
     [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+#pragma mark - OAIconTextDescButtonCellDelegate
+
+- (void) onButtonPressed:(NSInteger)tag
+{
+    [self downloadMap:[NSIndexPath indexPathForRow:tag inSection:3]];
+}
+
+- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"] || task.state != OADownloadTaskStateRunning)
+        return;
+    
+    if (!task.silentInstall)
+        task.silentInstall = YES;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_mapItem && [_mapItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
+        {
+            OAIconTextDescButtonCell* cell = [tblView cellForRowAtIndexPath:_mapIndexPath];
+            FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
+            progressView.progress = task.progressCompleted;
+        }
+        
+    });
+}
+
+- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"])
+        return;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateAvailableMaps];
+
+        if (_mapItem && [_mapItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
+        {
+
+        }
+        
+    });
 }
 
 @end

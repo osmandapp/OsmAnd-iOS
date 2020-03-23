@@ -1387,3 +1387,4 @@
 "routing_attr_allow_motorway_description" = "允許進高速公路。";
 "rendering_attr_contourColorScheme_name" = "等高線的顏色調配";
 "rendering_attr_piste_type_sleigh_name" = "雪橇";
+"online_webpage_warning" = "此頁面僅在線上狀態提供。您想在網頁瀏覽器中開啟它嗎？";

@@ -402,7 +402,7 @@
 "plugin_popup_nautical_title" = "Baixar mapas náuticos";
 "plugin_popup_nautical_desc" = "Primeiro baixe mapas náuticos.\nEntão vá para as <b>Configurações de mapa</b> > <b>Tipo do mapa</b> e ative o estilo <b>Náutico</b>";
 "go_to_downloads" = "Ir para transferências";
-"plugin_popup_wiki_ask" = "Para baixar dados Wikipédia, você precisa ativar o plugin: <b>Wikipédia</b>";
+"plugin_popup_wiki_ask" = "Para fazer o download dos dados da Wikipédia, você precisa ativar o plugin: <b>Wikipédia</b>";
 "plugin_popup_srtm_ask" = "Para baixar Curvas de nível, você precisa ativar o complemento: <b>Curvas de nível</b>";
 "turn_on_plugin" = "Ativar complemento";
 "all_world_popup_desc" = "Baixar Mapa base mundial para ver nomes de estados, fronteiras e outras informações";
@@ -847,7 +847,7 @@
 "do_not_send_anonymous_data" = "Não enviar dados anônimos";
 "wiki_buy_description" = "Para ler artigos completos - compre o plugin Wikipedia e faça o download dos dados da Wikipedia sobre %@";
 "wiki_download_description" = "Para ler artigos completos - baixar dados da Wikipedia de %@";
-"map_an_region" = "uma região";
+"map_an_region" = "esta região";
 "osm_live_plan_pricing" = "Planos e Preços";
 "osm_live_payment_monthly_title" = "Pague mensalmente";
 "osm_live_payment_3_months_title" = "Pague 3 meses";
@@ -1627,3 +1627,8 @@
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_hide_polygons_desc" = "Esta opção afeta apenas mapas vetoriais do OsmAnd Offline";
 "map_settings_add_maps_desc" = "Você pode adicionar novos mapas via link ou importando arquivos SQLite.";
+"all_group_points" = "Todos os pontos do grupo";
+"wiki_sheet_title" = "Como abrir artigos da Wikipédia?";
+"download_wiki_data" = "Faça o download dos dados da Wikipédia para %@";
+"open_wiki_online" = "Abrir artigo online";
+"online_webpage_warning" = "Página disponível só online. Abrir num navegador web?";

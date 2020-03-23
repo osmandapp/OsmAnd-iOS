@@ -50,7 +50,7 @@ typedef enum
 #define FavoriteTableGroup _(FavoriteTableGroup)
 @interface FavoriteTableGroup : NSObject
     @property int type;
-    @property bool isOpen;
+    @property BOOL isOpen;
     @property NSString* groupName;
     @property NSMutableArray*  groupItems;
 @end
@@ -351,7 +351,7 @@ static UIViewController *parentController;
             FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
             itemData.groupName = groupName.toNSString();
             itemData.type = kFavoriteCellTypeGrouped;
-            itemData.isOpen = false;
+            itemData.isOpen = NO;
             for(const auto& favorite : groupedFavorites[groupName]) {
                 OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
                 favData.favorite = favorite;
@@ -382,7 +382,7 @@ static UIViewController *parentController;
         FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
         itemData.groupName = OALocalizedString(@"favorites");
         itemData.type = kFavoriteCellTypeUngrouped;
-        itemData.isOpen = false;
+        itemData.isOpen = NO;
         
         for (const auto& favorite : ungroupedFavorites)
         {
@@ -487,9 +487,25 @@ static UIViewController *parentController;
         return;
     }
     
-    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
-    removeAlert.tag = kAlertViewRemoveId;
-    [removeAlert show];
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:nil
+                                message:OALocalizedString(@"fav_remove_q")
+                                preferredStyle:UIAlertControllerStyleAlert];
+
+    UIAlertAction *yesButton = [UIAlertAction
+                                actionWithTitle:OALocalizedString(@"shared_string_yes")
+                                style:UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * _Nonnull action) {
+        [self removeFavoriteItems:selectedRows];
+    }];
+    UIAlertAction *cancelButton = [UIAlertAction
+                             actionWithTitle:OALocalizedString(@"shared_string_no")
+                             style:UIAlertActionStyleCancel
+                             handler:nil];
+    [alert addAction:yesButton];
+    [alert addAction:cancelButton];
+    [self presentViewController:alert animated:YES completion:nil];
+ 
 }
 
 - (IBAction)favoriteChangeColorClicked:(id)sender
@@ -566,7 +582,7 @@ static UIViewController *parentController;
     }
     
     [self editButtonClicked:nil];
-    [self generateData];
+    [self.favoriteTableView reloadData];
 }
 
 - (void)setupGroup
@@ -1083,6 +1099,69 @@ static UIViewController *parentController;
     [app saveFavoritesToPermamentStorage];
 }
 
+- (void)removeItemsFromSortedFavoriteItems:(NSArray *)selectedRows
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
+    NSArray* selectedItems = [self getItemsForRows:selectedRows];
+    [selectedItems enumerateObjectsUsingBlock:^(OAFavoriteItem* obj, NSUInteger idx, BOOL *stop) {
+        app.favoritesCollection->removeFavoriteLocation(obj.favorite);
+    }];
+    [app saveFavoritesToPermamentStorage];
+    [self editButtonClicked:nil];
+    [self generateData];
+}
+
+- (void)removeGroupHeader:(NSIndexPath *)indexPath{
+    
+    NSInteger numberOfRows = [self.favoriteTableView numberOfRowsInSection:[indexPath section]];
+    
+    if (numberOfRows == 1)
+    {
+        [self.favoriteTableView beginUpdates];
+        [self.groupsAndFavorites removeObjectAtIndex:indexPath.section];
+        [self.favoriteTableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                              withRowAnimation:UITableViewRowAnimationFade];
+        [self.favoriteTableView endUpdates];
+    }
+}
+
+- (void)removeItemsFromUnsortedFavoriteItems:(NSArray *)selectedRows
+{
+    NSSortDescriptor *rowDescriptor = [[NSSortDescriptor alloc] initWithKey:@"row" ascending:NO];
+    NSSortDescriptor *sectionDescriptor = [[NSSortDescriptor alloc] initWithKey:@"section" ascending:NO];
+    NSArray *sortedArray = [selectedRows sortedArrayUsingDescriptors:@[sectionDescriptor, rowDescriptor]];
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
+    for (NSIndexPath *selectedItem in sortedArray)
+    {
+        if (selectedItem.row == 0)
+            [self removeGroupHeader:selectedItem];
+        else
+        {
+            NSInteger dataIndex = selectedItem.row - 1;
+            FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:selectedItem.section];
+            OAFavoriteItem* item = [groupData.groupItems objectAtIndex:dataIndex];
+            
+            [self.favoriteTableView beginUpdates];
+            app.favoritesCollection->removeFavoriteLocation(item.favorite);
+            [groupData.groupItems removeObjectAtIndex:dataIndex];
+            [self.favoriteTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:selectedItem.row inSection:selectedItem.section]] withRowAnimation:UITableViewRowAnimationLeft];
+            [self.favoriteTableView endUpdates];
+            [app saveFavoritesToPermamentStorage];
+        }
+    }
+    [self editButtonClicked:nil];
+}
+
+- (void)removeFavoriteItems:(NSArray *)selectedRows
+{
+    if (self.directionButton.tag == 0)
+        [self removeItemsFromUnsortedFavoriteItems:selectedRows];
+    else
+        [self removeItemsFromSortedFavoriteItems:selectedRows];
+}
+
 - (void)removeFavoriteItem:(NSIndexPath *)indexPath
 {
     if (self.directionButton.tag == 0)
@@ -1164,7 +1243,7 @@ static UIViewController *parentController;
     [self.favoriteTableView endUpdates];
 }
 
-- (void)checkIfGroupSelected:(NSIndexPath *)indexPath
+- (void)selectGroupForEditing:(NSIndexPath *)indexPath
 {
     BOOL isGroupHeaderSelected = [self.favoriteTableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
@@ -1184,13 +1263,13 @@ static UIViewController *parentController;
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
     if (groupData.isOpen)
     {
-        groupData.isOpen = false;
+        groupData.isOpen = NO;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
         [self.favoriteTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
     }
     else
     {
-        groupData.isOpen = true;
+        groupData.isOpen = YES;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndex:indexPath.section];
         [self.favoriteTableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
     }
@@ -1210,11 +1289,12 @@ static UIViewController *parentController;
             if (indexPath.row == 0 && ![self.favoriteTableView isEditing])
                 [self openCloseFavoriteGroup:indexPath];
             else if (indexPath.row == 0 && [self.favoriteTableView isEditing])
-                [self checkIfGroupSelected:indexPath];
+                [self selectGroupForEditing:indexPath];
             else
-                [self didSelectRowAtIndexPathUnsorter:indexPath];
+                [self didSelectRowAtIndexPathUnsorted:indexPath];
         }
-        [self didSelectRowAtIndexPathUnsorter:indexPath];
+        else
+            [self didSelectRowAtIndexPathUnsorted:indexPath];
     }
 }
 
@@ -1230,9 +1310,9 @@ static UIViewController *parentController;
             if (indexPath.row == 0 && ![self.favoriteTableView isEditing])
                 [self openCloseFavoriteGroup:indexPath];
             else if (indexPath.row == 0 && [self.favoriteTableView isEditing])
-                [self checkIfGroupSelected:indexPath];
+                [self selectGroupForEditing:indexPath];
             else
-                [self didSelectRowAtIndexPathUnsorter:indexPath];
+                [self didSelectRowAtIndexPathUnsorted:indexPath];
         }
     }
 }
@@ -1255,17 +1335,22 @@ static UIViewController *parentController;
     }
 }
 
--(void)didSelectRowAtIndexPathUnsorter:(NSIndexPath *)indexPath {
+-(void)didSelectRowAtIndexPathUnsorted:(NSIndexPath *)indexPath {
     if ([self.favoriteTableView isEditing])
     {
         BOOL isGroupHeaderSelected = [self.favoriteTableView.indexPathsForSelectedRows containsObject:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
         NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
-        NSInteger rowsCount = [self.favoriteTableView numberOfRowsInSection:indexPath.section];
-        
-        if (rowsCount != selectedRows.count && isGroupHeaderSelected)
-            [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
-        else if ((rowsCount - 1) == selectedRows.count && !isGroupHeaderSelected)
+        NSInteger numberOfRowsInSection = [self.favoriteTableView numberOfRowsInSection:indexPath.section] - 1;
+        NSInteger numberOfSelectedRowsInSection = 0;
+        for (NSIndexPath *item in selectedRows)
+        {
+            if(item.section == indexPath.section)
+                numberOfSelectedRowsInSection++;
+        }
+        if (numberOfSelectedRowsInSection == numberOfRowsInSection && !isGroupHeaderSelected)
             [self.favoriteTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+        else
+            [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
         return;
     }
     
@@ -1337,12 +1422,12 @@ static UIViewController *parentController;
     [self.favoriteTableView beginUpdates];
     if (value)
     {
-        for (int i = 0; i < rowsCount; i++)
+        for (NSInteger i = 0; i < rowsCount; i++)
             [self.favoriteTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     else
     {
-        for (int i = 0; i < rowsCount; i++)
+        for (NSInteger i = 0; i < rowsCount; i++)
             [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
     }
     [self.favoriteTableView endUpdates];

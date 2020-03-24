@@ -12707,14 +12707,14 @@
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = OsmAnd;
 				TargetAttributes = {
-                    847A1CA51DF94E9B003C1246 = {
+					847A1CA51DF94E9B003C1246 = {
                         DevelopmentTeam = LM67P5MQ23;
                         LastSwiftMigration = 1020;
-                    };
+					};
 					BBA3AF30197FC4BB0039D991 = {
                         DevelopmentTeam = LM67P5MQ23;
                         LastSwiftMigration = 1020;
-                        ProvisioningStyle = Automatic;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;

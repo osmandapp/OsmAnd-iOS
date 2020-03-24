@@ -12706,7 +12706,8 @@
 				CLASSPREFIX = OA;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = OsmAnd;
-				847A1CA51DF94E9B003C1246 = {
+				TargetAttributes = {
+                    847A1CA51DF94E9B003C1246 = {
                         DevelopmentTeam = LM67P5MQ23;
                         LastSwiftMigration = 1020;
                     };

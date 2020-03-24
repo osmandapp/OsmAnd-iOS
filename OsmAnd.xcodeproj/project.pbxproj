@@ -12708,9 +12708,11 @@
 				ORGANIZATIONNAME = OsmAnd;
 				TargetAttributes = {
 					847A1CA51DF94E9B003C1246 = {
+                        DevelopmentTeam = LM67P5MQ23;
 						LastSwiftMigration = 1020;
 					};
 					BBA3AF30197FC4BB0039D991 = {
+                        DevelopmentTeam = LM67P5MQ23;
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -17807,7 +17809,6 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "$(ARCHS_STANDARD)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -17864,7 +17865,6 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps DEV-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "$(ARCHS_STANDARD)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

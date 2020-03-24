@@ -30,8 +30,6 @@
 #include "Localization.h"
 
 #define _(name) OAFavoriteListViewController__##name
-#define kAlertViewRemoveId -3
-#define kAlertViewShareId -4
 typedef enum
 {
     kFavoriteCellTypeGrouped = 0,
@@ -482,8 +480,15 @@ static UIViewController *parentController;
 {
     NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
     if ([selectedRows count] == 0) {
-        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_select_remove") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-        [removeAlert show];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@""
+                                   message:OALocalizedString(@"fav_select_remove")
+                                   preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        
         return;
     }
     
@@ -512,8 +517,15 @@ static UIViewController *parentController;
 {
     NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
     if ([selectedRows count] == 0) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_select") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-        [alert show];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@""
+                                   message:OALocalizedString(@"fav_select")
+                                   preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+       
         return;
     }
 
@@ -526,8 +538,15 @@ static UIViewController *parentController;
 {
     NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
     if ([selectedRows count] == 0) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_select") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-        [alert show];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@""
+                                   message:OALocalizedString(@"fav_select")
+                                   preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        
         return;
     }
 
@@ -700,8 +719,15 @@ static UIViewController *parentController;
     NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
     if ([selectedRows count] == 0)
     {
-        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_export_select") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-        [removeAlert show];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@""
+                                   message:OALocalizedString(@"fav_export_select")
+                                   preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+       
         return;
     }
 
@@ -738,8 +764,14 @@ static UIViewController *parentController;
 
 -(void)onImportClicked {
     NSString* favoritesImportText = OALocalizedString(@"fav_import_desc");
-    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-    [importHelpAlert show];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@""
+                                message:favoritesImportText
+                                preferredStyle:UIAlertControllerStyleAlert];
+
+     UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+
+     [alert addAction:defaultAction];
+     [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(void)onExportClicked
@@ -758,24 +790,6 @@ static UIViewController *parentController;
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.view
                                          animated:YES];
-}
-
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    if (alertView.tag == kAlertViewRemoveId) {
-        if (buttonIndex != alertView.cancelButtonIndex) {
-            
-            NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
-            NSArray* selectedItems = [self getItemsForRows:selectedRows];
-            [selectedItems enumerateObjectsUsingBlock:^(OAFavoriteItem* obj, NSUInteger idx, BOOL *stop) {
-                app.favoritesCollection->removeFavoriteLocation(obj.favorite);
-            }];
-            [app saveFavoritesToPermamentStorage];
-            [self editButtonClicked:nil];
-            [self generateData];
-        }
-    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -1252,10 +1266,7 @@ static UIViewController *parentController;
     NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
     NSInteger rowsCount = [self.favoriteTableView numberOfRowsInSection:indexPath.section];
     
-    if (rowsCount != selectedRows.count && isGroupHeaderSelected)
-        [self selectAllItemsInGroup:indexPath select:YES];
-    else
-        [self selectAllItemsInGroup:indexPath select:NO];
+    [self selectAllItemsInGroup:indexPath select:(rowsCount != selectedRows.count && isGroupHeaderSelected)];
 }
 
 - (void)openCloseFavoriteGroup:(NSIndexPath *)indexPath

@@ -9,6 +9,8 @@
 #import "OARouteSegmentShieldView.h"
 #import "OAColors.h"
 
+static UIFont *_shieldFont;
+
 @implementation OARouteSegmentShieldView
 {
     EOATransportShiledType _type;
@@ -73,7 +75,7 @@
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(6.0 + _shieldImage.frame.size.width + 6.0 + _shieldLabel.frame.size.width + 12.0, 32.0);
+    return CGSizeMake(6.0 + 20. + 6.0 + _shieldLabel.frame.size.width + 12.0, 32.0);
 }
 
 - (void)restoreShieldState {
@@ -135,6 +137,13 @@
         [self restoreShieldState];
         // TODO: notify route was pressed
     }
+}
+
++ (CGFloat) getViewWidth:(NSString *)text
+{
+    if (!_shieldFont)
+        _shieldFont = [UIFont systemFontOfSize:15.];
+    return 6.0 + 20. + 6.0 + MIN(86.0, [OAUtilities calculateTextBounds:text width:86.0 font:_shieldFont].width) + 12.0;
 }
 
 @end

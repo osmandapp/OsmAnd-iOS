@@ -37,6 +37,7 @@
 #import "OAOsmNotesOnlineTargetViewController.h"
 #import "OARouteDetailsGraphViewController.h"
 #import "OAChangePositionViewController.h"
+#import "OATrsansportRouteDetailsViewController.h"
 #import "OASizes.h"
 #import "OAPointDescription.h"
 #import "OAWorldRegion.h"
@@ -313,6 +314,11 @@
             controller = [[OAChangePositionViewController alloc] initWithTargetPoint:targetPoint.targetObj];
             break;
         }
+        case OATargetTransportRouteDetails:
+        {
+            controller = [[OATrsansportRouteDetailsViewController alloc] init];
+            break;
+        }
             
         default:
         {
@@ -329,7 +335,8 @@
         targetPoint.type != OATargetRouteDetails &&
         targetPoint.type != OATargetRouteDetailsGraph &&
         targetPoint.type != OATargetImpassableRoadSelection &&
-        targetPoint.type != OATargetChangePosition)
+        targetPoint.type != OATargetChangePosition &&
+        targetPoint.type != OATargetTransportRouteDetails)
     {
         [controller requestMapDownloadInfo:targetPoint.location];
     }
@@ -473,8 +480,8 @@
 -(void) adjustBackButtonPosition
 {
     CGRect buttonFrame = self.buttonBack.frame;
-    buttonFrame.origin.x = 5.0 + [OAUtilities getLeftMargin];
-    buttonFrame.origin.y = [OAUtilities getStatusBarHeight];
+    buttonFrame.origin.x = 16.0 + [OAUtilities getLeftMargin];
+    buttonFrame.origin.y = [OAUtilities getStatusBarHeight] + 7.;
     self.buttonBack.frame = buttonFrame;
 }
 
@@ -831,6 +838,7 @@
         {
             case ETopToolbarTypeFloating:
             case ETopToolbarTypeMiddleFixed:
+            case ETopToolbarTypeFloatingFixedButton:
                 if (self.navBar.alpha != alpha)
                     self.navBar.alpha = alpha;
                 break;
@@ -853,6 +861,8 @@
         CGFloat backButtonAlpha = alpha;
         if (self.topToolbarType != ETopToolbarTypeFloating)
             backButtonAlpha = 0;
+        if (self.topToolbarType == ETopToolbarTypeFloatingFixedButton)
+            backButtonAlpha = 1;
         
         if (self.buttonBack.alpha != backButtonAlpha)
             self.buttonBack.alpha = backButtonAlpha;

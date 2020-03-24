@@ -1929,6 +1929,7 @@ typedef enum
         case OATargetRouteDetails:
         case OATargetRouteDetailsGraph:
         case OATargetChangePosition:
+        case OATargetTransportRouteDetails:
         {
             if (controller)
                 [self.targetMenuView doInit:NO];
@@ -2569,6 +2570,41 @@ typedef enum
     
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = OALocalizedString(@"impassable_road_desc");
+    
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+    targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    _targetLatitude = latLon.latitude;
+    _targetLongitude = latLon.longitude;
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.toolbarNeeded = NO;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+    }];
+}
+
+- (void) openTargetViewWithTransportRouteDetails
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+    [UIApplication.sharedApplication.keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    targetPoint.type = OATargetTransportRouteDetails;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = @"";
     
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
     targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);

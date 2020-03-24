@@ -120,6 +120,8 @@
 - (void) openTargetViewWithRouteDetails:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
 - (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
+// TODO: refactor according to route
+- (void) openTargetViewWithTransportRouteDetails;
 
 - (BOOL) hasGpxActiveTargetType;
 - (void) displayGpxOnMap:(OAGPX *)item;

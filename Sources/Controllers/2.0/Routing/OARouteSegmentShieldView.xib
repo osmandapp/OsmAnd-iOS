@@ -25,7 +25,7 @@
                         <constraint firstAttribute="width" constant="20" id="GYp-AS-P6s"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="baN-fz-0dN">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="baN-fz-0dN">
                     <rect key="frame" x="32" y="7" width="56" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <nil key="textColor"/>
@@ -34,6 +34,7 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="130" id="AMZ-4S-YvY"/>
                 <constraint firstAttribute="trailing" secondItem="baN-fz-0dN" secondAttribute="trailing" constant="12" id="KMP-6p-WRD"/>
                 <constraint firstItem="baN-fz-0dN" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="UEt-hA-tax"/>
                 <constraint firstItem="xfC-eF-B3s" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="6" id="VfJ-BX-Vmn"/>

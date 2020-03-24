@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OAPublicTransportShieldsView.h"
 
-NS_ASSUME_NONNULL_BEGIN
+
+typedef NS_ENUM(NSInteger, EOATransportShiledType)
+{
+    EOATransportShiledPedestrian = 0,
+    EOATransportShiledTransport
+};
 
 @interface OARouteSegmentShieldView : UIView
 
@@ -19,6 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) initWithColor:(UIColor *)color title:(NSString *)title iconName:(NSString *)iconName type:(EOATransportShiledType)type;
 
-@end
++ (CGFloat) getViewWidth:(NSString *)text;
 
-NS_ASSUME_NONNULL_END
+@end

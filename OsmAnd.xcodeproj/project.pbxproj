@@ -12708,11 +12708,11 @@
 				ORGANIZATIONNAME = OsmAnd;
 				TargetAttributes = {
 					847A1CA51DF94E9B003C1246 = {
-                        DevelopmentTeam = LM67P5MQ23;
+                                               DevelopmentTeam = LM67P5MQ23;
 						LastSwiftMigration = 1020;
 					};
 					BBA3AF30197FC4BB0039D991 = {
-                        DevelopmentTeam = LM67P5MQ23;
+                                               DevelopmentTeam = LM67P5MQ23;
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -18033,7 +18033,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.33;
+				CURRENT_PROJECT_VERSION = 3.32;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -18105,7 +18105,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 3.13;
+				MARKETING_VERSION = 3.14;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

@@ -1261,7 +1261,7 @@
 "rendering_attr_trolleybusRoutes_name" = "مسیرهای اتوبوس برقی";
 "rendering_attr_highway_class_track_grade5_name" = "سطح ۵";
 "routing_attr_avoid_stairs_description" = "از پله پرهیز می‌کند";
-"rendering_attr_hideWaterPolygons_name" = "مخفی‌کردن آب";
+"rendering_attr_hideWaterPolygons_name" = "محدوده‌های آب";
 "rendering_attr_piste_difficulty_advanced_name" = "دشوار";
 "routing_attr_short_way_description" = "انتخاب راه مناسب برای مصرف سوخت کمتر (معمولاً کوتاه‌تر).";
 "rendering_attr_winter_road_name" = "جادهٔ زمستانی";
@@ -1317,3 +1317,4 @@
 "rendering_value_translucent_red_name" = "قرمز شفاف";
 "rendering_attr_contourWidth_name" = "ضخامت منحنی میزان";
 "rendering_attr_smoothness_bad_name" = "بد";
+"online_webpage_warning" = "این صفحه فقط به‌صورت آنلاین در دسترس است. با مرورگر اینترنت باز شود؟";

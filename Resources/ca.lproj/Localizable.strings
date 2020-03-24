@@ -496,7 +496,7 @@
 "do_not_send_anonymous_data" = "No enviïs dades anònimes";
 "wiki_buy_description" = "Si voleu llegir articles sencers - compreu el connector de la Viquipèdia i baixeu-ne les dades de %@";
 "wiki_download_description" = "Si voleu llegir articles sencers - baixeu dades de la Viquipèdia de %@";
-"map_an_region" = "una regió";
+"map_an_region" = "aquesta regió";
 "select_street" = "Selecciona el carrer";
 "shared_string_in_name" = "dins %@";
 "select_city" = "Selecciona el municipi";
@@ -1625,3 +1625,8 @@
 "map_settings_hide_polygons" = "Amaga polígons";
 "map_settings_hide_polygons_desc" = "Aquesta opció només afecta els mapes vectorials d'OsmAnd en local";
 "map_settings_add_maps_desc" = "Podeu afegir nous mapes mitjançant un enllaç o important arxius SQLite.";
+"all_group_points" = "Tots els punts del grup";
+"wiki_sheet_title" = "Com obrir els articles de la Viquipèdia?";
+"download_wiki_data" = "Baixa les dades de la Viquipèdia de %@";
+"open_wiki_online" = "Obre l'article en línia";
+"online_webpage_warning" = "La pàgina només es pot consultar en línia.  La voleu obrir en un navegador?";

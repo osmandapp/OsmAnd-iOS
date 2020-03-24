@@ -1456,7 +1456,7 @@
 "rendering_value_bold_name" = "Gruby";
 "rendering_attr_highway_class_service_name" = "Dojazdowa";
 "rendering_attr_piste_type_connection_name" = "Połączenia";
-"routing_attr_avoid_unpaved_description" = "Unikaj nieutwardzonych dróg.";
+"routing_attr_avoid_unpaved_description" = "Unikaj nieutwardzonych dróg";
 "rendering_attr_surfaceIntegrity_name" = "Spójność nawierzchni dróg";
 "rendering_value_blue_name" = "Niebieski";
 "rendering_attr_transportStops_name" = "Przystanki transportu miejskiego";

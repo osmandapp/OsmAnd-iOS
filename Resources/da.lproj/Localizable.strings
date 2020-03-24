@@ -1621,3 +1621,9 @@
 "online_raster_maps" = "Online rasterkort";
 "import_raster_map_success" = "Raster-kort er blevet importeret. Åbn Kort-Indstillinger, og aktiver via Over-/Underlejring";
 "import_raster_map_failed" = "Import af raster-kort mislykkedes";
+"res_online_source_cache_alert" = "Anvendelse af disse ændringer rydder cache-data for denne flisekilde";
+"map_settings_show_slider_map" = "Vis skyder på kortet";
+"map_settings_add_online_source" = "Tilføj onlinekilde";
+"map_settings_hide_polygons" = "Skjul polygoner";
+"map_settings_hide_polygons_desc" = "Indstillingen påvirker kun Offline-vektorkort";
+"map_settings_add_maps_desc" = "Tilføj nye kort via link eller ved at importere SQLite-filer.";

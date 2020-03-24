@@ -635,7 +635,7 @@
 "transport_stop" = "Стоп";
 "cancel_navigation" = "Остановить навигацию";
 "switch_start_finish" = "Обратить пункты старта и назначения";
-"shared_string_options" = "Опции";
+"shared_string_options" = "Функции";
 "new_destination_point_dialog" = "Вы уже установили пункт назначения";
 "replace_destination_point" = "Заменить пункт назначения";
 "shared_string_search" = "Поиск";
@@ -1363,7 +1363,7 @@
 "routing_attr_avoid_stairs_description" = "Избегать лестницы и ступеньки";
 "rendering_attr_piste_difficulty_extreme_name" = "Экстрим";
 "rendering_value_translucent_pink_name" = "Прозрачно-розовый";
-"rendering_attr_appMode_name" = "Режим рендеринга";
+"rendering_attr_appMode_name" = "Режим отрисовки";
 "rendering_value_lightgreen_name" = "Светло-зеленый";
 "rendering_attr_trainLightrailRoutes_name" = "Маршруты поездов";
 "routing_attr_avoid_bus_description" = "Избегать автобусы и троллейбусы";
@@ -1394,7 +1394,7 @@
 "rendering_attr_surface_sett_name" = "Брусчатка";
 "rendering_attr_highway_class_track_grade4_name" = "Класс 4";
 "routing_attr_relief_smoothness_factor_hills_name" = "Холмистый";
-"rendering_attr_showMtbRoutes_name" = "Показывать маршруты горных велосипедов";
+"rendering_attr_showMtbRoutes_name" = "Трассы для горных велосипедов";
 "rendering_attr_piste_type_hike_name" = "Хайк";
 "rendering_attr_surface_snow_name" = "Снег";
 "rendering_attr_tramTrainRoutes_name" = "Маршруты трамваев и поездов";
@@ -1417,7 +1417,7 @@
 "rendering_attr_surface_concrete_name" = "Бетон";
 "rendering_attr_smoothness_horrible_name" = "Ужасная";
 "rendering_attr_hideBuildings_name" = "Строения";
-"rendering_attr_showSurfaces_name" = "Отображать тип покрытия";
+"rendering_attr_showSurfaces_name" = "Тип дорожного покрытия";
 "rendering_attr_surface_paved_name" = "Твердая";
 "rendering_attr_pisteRoutes_name" = "Горнолыжные маршруты";
 "rendering_attr_hmRendered_name" = "Больше деталей";
@@ -1429,7 +1429,7 @@
 "rendering_attr_highway_class_track_grade1_name" = "Класс 1";
 "routing_attr_allow_private_description" = "Разрешить доступ на частную территорию.";
 "rendering_attr_transportStops_name" = "Остановки транспорта";
-"rendering_attr_showSurfaceGrade_name" = "Отображать качество дорог";
+"rendering_attr_showSurfaceGrade_name" = "Качество дорог";
 "rendering_attr_contourLines_name" = "Показывать контурные линии";
 "rendering_attr_moreDetailed_name" = "Более подробно";
 "routing_attr_weight_name" = "Максимальная масса";
@@ -1540,7 +1540,7 @@
 "routing_attr_prefer_motorway_name" = "Предпочитать автомагистрали";
 "rendering_attr_roadStyle_description" = "Стиль отображения дорог";
 "routing_attr_allow_motorway_name" = "Использовать автомагистрали";
-"rendering_attr_showLez_name" = "Отображать зоны с низким уровнем выбросов";
+"rendering_attr_showLez_name" = "Зоны с низким уровнем выбросов";
 "rendering_value_translucent_purple_name" = "Полупрозрачный фиолетовый";
 "rendering_attr_piste_difficulty_aerialway_name" = "Канатная дорога";
 "rendering_attr_hideWaterPolygons_name" = "Скрыть воду";
@@ -1561,7 +1561,7 @@
 "rendering_attr_noPolygons_description" = "Отображать только контуры, без заливки.";
 "routing_attr_avoid_tram_name" = "Без трамваев";
 "rendering_attr_surface_stone_name" = "Камень";
-"rendering_attr_showAccess_name" = "Отображать ограничения доступа";
+"rendering_attr_showAccess_name" = "Ограничения доступа и платный проезд";
 "routing_attr_avoid_borders_description" = "Избегать пересечение национальных границ";
 "rendering_value_dark_brown_name" = "Темно-коричневый";
 "routeInfo_roadClass_name" = "Тип дороги";
@@ -1593,7 +1593,7 @@
 "rendering_attr_piste_type_sleigh_name" = "Самоходные и несамоходные сани (упряжки)";
 "rendering_attr_piste_difficulty_novice_name" = "Новичок";
 "routing_attr_avoid_sett_description" = "Избегать булыжники и брусчатку";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "Отображать узловые сети велосипедных маршрутов";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "Узловые сети велосипедных маршрутов";
 "rendering_value_brown_name" = "Коричневый";
 "routing_attr_avoid_motorway_description" = "Избегать автомагистрали";
 "rendering_value_lightblue_name" = "Голубой";
@@ -1607,3 +1607,4 @@
 "rendering_value_darkyellow_name" = "Темно-желтый";
 "rendering_attr_surface_unpaved_name" = "Грунтовая";
 "rendering_attr_streetLightingNight_name" = "Показывать только ночью";
+"online_webpage_warning" = "Страница доступна только онлайн. Открыть ее в браузере?";

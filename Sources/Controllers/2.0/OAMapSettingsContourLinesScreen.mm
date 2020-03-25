@@ -28,6 +28,7 @@
 #import <MBProgressHUD.h>
 #import "FFCircularProgressView+isSpinning.h"
 #import "OAAutoObserverProxy.h"
+#import "OAImageDescTableViewCell.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -40,6 +41,7 @@
 #define kCellTypeCollection @"collectionCell"
 #define kCellTypeSlider @"sliderCell"
 #define kCellTypeMap @"MapCell"
+#define kCellTypeInfo @"imageDescButtonCell"
 
 #define kDefaultDensity @"high"
 #define kDefaultWidth @"thin"
@@ -498,7 +500,19 @@
         cell.checkButton.tag = indexPath.row;
         return cell;
     }
-    
+    else if ([item[@"type"] isEqualToString: kCellTypeInfo])
+    {
+        static NSString* const identifierCell = @"OAImageDescTableViewCell";
+        OAImageDescTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAImageDescTableViewCell" owner:self options:nil];
+            cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
+
+        }
+
+        return cell;
+    }
     else
         return nil;
 }

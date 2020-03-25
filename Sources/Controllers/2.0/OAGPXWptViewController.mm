@@ -111,7 +111,7 @@
 
 - (BOOL)shouldEnterContextModeManually
 {
-    return self.newItem;
+    return YES;
 }
 
 - (void) applyLocalization

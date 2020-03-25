@@ -647,22 +647,14 @@
 {
     UISwitch *switchView = (UISwitch*)sender;
 
-     if (switchView)
-       {
-           OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
-           parameter.value = switchView.isOn ? [_settings.contourLinesZoom get] : @"disabled";
-           [_styleSettings save:parameter];
-//           [tblView beginUpdates];
-//           if (switchView.isOn)
-//               [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
-//           else
-//               [tblView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
-//           [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-//           //tblView
-//           [tblView endUpdates];
-           [self generateData];
-           [tblView reloadData];
-       }
+    if (switchView)
+    {
+       OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
+       parameter.value = switchView.isOn ? [_settings.contourLinesZoom get] : @"disabled";
+       [_styleSettings save:parameter];
+       [self generateData];
+       [tblView reloadData];
+    }
 }
 
 #pragma mark - OACustomPickerTableViewCellDelegate

@@ -29,6 +29,7 @@
 #import "FFCircularProgressView+isSpinning.h"
 #import "OAAutoObserverProxy.h"
 #import "OAImageDescTableViewCell.h"
+#import "OAButtonIconTableViewCell.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -41,7 +42,8 @@
 #define kCellTypeCollection @"collectionCell"
 #define kCellTypeSlider @"sliderCell"
 #define kCellTypeMap @"MapCell"
-#define kCellTypeInfo @"imageDescButtonCell"
+#define kCellTypeInfo @"imageDescCell"
+#define kCellTypeButton @"buttonIconCell"
 
 #define kDefaultDensity @"high"
 #define kDefaultWidth @"thin"
@@ -180,60 +182,77 @@
 
 - (void) generateData
 {
+    NSMutableArray *result = [NSMutableArray array];
     NSMutableArray *switchArr = [NSMutableArray array];
     [switchArr addObject:@{
         @"type" : kCellTypeSwitch
     }];
-    
-    NSMutableArray *zoomArr = [NSMutableArray array];
-    [zoomArr addObject:@{
-        @"type" : kCellTypeValue,
-        @"title" : OALocalizedString(@"display_starting_at_zoom_level"),
-        @"parameter" : [_styleSettings getParameter:kContourLinesZoomLevel]
-    }];
-    [zoomArr addObject:@{
-        @"type" : kCellTypePicker,
-        @"value" : _visibleZoomValues,
-        @"parameter" : [_styleSettings getParameter:kContourLinesZoomLevel]
-    }];
-    
-    NSMutableArray *linesArr = [NSMutableArray array];
-    [linesArr addObject:@{
-        @"type" : kCellTypeCollection,
-        @"title" : OALocalizedString(@"map_settings_color_scheme"),
-        @"parameter" : [_styleSettings getParameter:kContourLinesColorScheme]
-    }];
-    [linesArr addObject:@{
-        @"type" : kCellTypeSlider,
-        @"parameter" : [_styleSettings getParameter:kContourLinesWidth],
-        @"name" : OALocalizedString(@"map_settings_line_width")
-    }];
-    [linesArr addObject:@{
-        @"type" : kCellTypeSlider,
-        @"parameter" : [_styleSettings getParameter:kContourLinesDensity],
-        @"name" : OALocalizedString(@"map_settings_line_density")
-    }];
-    
-    NSMutableArray *availableMapsArr = [NSMutableArray array];
-    if (_availableMaps)
+    if ([self isContourLinesOn])
     {
-        for (RepositoryResourceItem* item in _mapItems)
+        NSMutableArray *zoomArr = [NSMutableArray array];
+        [zoomArr addObject:@{
+            @"type" : kCellTypeValue,
+            @"title" : OALocalizedString(@"display_starting_at_zoom_level"),
+            @"parameter" : [_styleSettings getParameter:kContourLinesZoomLevel]
+        }];
+        [zoomArr addObject:@{
+            @"type" : kCellTypePicker,
+            @"value" : _visibleZoomValues,
+            @"parameter" : [_styleSettings getParameter:kContourLinesZoomLevel]
+        }];
+        
+        NSMutableArray *linesArr = [NSMutableArray array];
+        [linesArr addObject:@{
+            @"type" : kCellTypeCollection,
+            @"title" : OALocalizedString(@"map_settings_color_scheme"),
+            @"parameter" : [_styleSettings getParameter:kContourLinesColorScheme]
+        }];
+        [linesArr addObject:@{
+            @"type" : kCellTypeSlider,
+            @"parameter" : [_styleSettings getParameter:kContourLinesWidth],
+            @"name" : OALocalizedString(@"map_settings_line_width")
+        }];
+        [linesArr addObject:@{
+            @"type" : kCellTypeSlider,
+            @"parameter" : [_styleSettings getParameter:kContourLinesDensity],
+            @"name" : OALocalizedString(@"map_settings_line_density")
+        }];
+        
+        NSMutableArray *availableMapsArr = [NSMutableArray array];
+        if (_availableMaps)
         {
-            [availableMapsArr addObject:@{
-                @"type" : kCellTypeMap,
-                @"title" : item.title,
-                @"size" : [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]
-            }];
+            for (RepositoryResourceItem* item in _mapItems)
+            {
+                [availableMapsArr addObject:@{
+                    @"type" : kCellTypeMap,
+                    @"title" : item.title,
+                    @"size" : [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]
+                }];
+            }
         }
+        [result addObject: switchArr];
+        [result addObject: zoomArr];
+        [result addObject: linesArr];
+        if (_availableMaps)
+            [result addObject: availableMapsArr];
     }
-    
-    NSMutableArray *result = [NSMutableArray array];
-    [result addObject: switchArr];
-    [result addObject: zoomArr];
-    [result addObject: linesArr];
-    if (_availableMaps)
-        [result addObject: availableMapsArr];
-    
+    else
+    {
+        NSMutableArray *imageArr = [NSMutableArray array];
+        [imageArr addObject:@{
+            @"type" : kCellTypeInfo,
+            @"desc" : OALocalizedString(@"AAAaaaaaaaaaaaldks;alsdka;lsdkals;dkalsdka;dskasdfasdfasdfadsf"),
+            @"img" : @""
+        }];
+        [imageArr addObject:@{
+            @"type" : kCellTypeButton,
+            @"title" : OALocalizedString(@"shared_string_read_more"),
+            @"link" : @"",
+            @"img" : @"ic_custom_safari.png"
+        }];
+        [result addObject: switchArr];
+        [result addObject: imageArr];
+    }
     _data = [NSArray arrayWithArray:result];
     
     NSMutableArray *sectionArr = [NSMutableArray new];
@@ -241,20 +260,30 @@
                         @"header" : OALocalizedString(@""),
                         @"footer" : OALocalizedString(@"")
                         }];
-    [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@""),
-                        @"footer" : OALocalizedString(@"map_settings_contour_zoom_level_descr")
-                        }];
-    [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@"map_settings_appearance"),
-                        @"footer" : OALocalizedString(@"map_settings_line_density_slowdown_warning")
-                        }];
-    if (_availableMaps)
+    if ([self isContourLinesOn])
     {
         [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@"osmand_live_available_maps"),
-                        @"footer" : OALocalizedString(@"map_settings_available_srtm_maps_descr")
-                        }];
+                            @"header" : OALocalizedString(@""),
+                            @"footer" : OALocalizedString(@"map_settings_contour_zoom_level_descr")
+                            }];
+        [sectionArr addObject:@{
+                            @"header" : OALocalizedString(@"map_settings_appearance"),
+                            @"footer" : OALocalizedString(@"map_settings_line_density_slowdown_warning")
+                            }];
+        if (_availableMaps)
+        {
+            [sectionArr addObject:@{
+                            @"header" : OALocalizedString(@"osmand_live_available_maps"),
+                            @"footer" : OALocalizedString(@"map_settings_available_srtm_maps_descr")
+                            }];
+        }
+    }
+    else
+    {
+        [sectionArr addObject:@{
+            @"header" : OALocalizedString(@""),
+            @"footer" : OALocalizedString(@"")
+        }];
     }
     _sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];
 }
@@ -345,7 +374,8 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self isContourLinesOn] ? _data.count : 1;
+    return _data.count;
+//    return [self isContourLinesOn] ? _data.count : 1;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -485,17 +515,11 @@
             cell = (OAIconTextDescButtonCell *)[nib objectAtIndex:0];
             cell.leftIconView.image = [UIImage imageNamed:@"ic_custom_contour_lines"];
             cell.dividerIcon.backgroundColor = [UIColor clearColor];
-//            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
-
-        
         NSString *description = OALocalizedString(@"map_settings_SRTM");
-
         cell.titleLabel.text = item[@"title"];
         cell.descLabel.text = [[description stringByAppendingString:@" • "] stringByAppendingString:item[@"size"]];
-
         [cell.checkButton setImage:[UIImage imageNamed:@"ic_custom_download.png"] forState:UIControlStateNormal];
-
         cell.delegate = self;
         cell.checkButton.tag = indexPath.row;
         return cell;
@@ -508,9 +532,27 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAImageDescTableViewCell" owner:self options:nil];
             cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
-
+            cell.descView.text = item[@"desc"];
+            cell.imageView.image = [UIImage imageNamed:item[@"img"]];
         }
 
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString: kCellTypeButton])
+    {
+        static NSString* const identifierCell = @"OAButtonIconTableViewCell";
+        OAButtonIconTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonIconTableViewCell" owner:self options:nil];
+            cell = (OAButtonIconTableViewCell *)[nib objectAtIndex:0];
+            cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+            [cell.buttonView setTitle:item[@"title"] forState:UIControlStateNormal];
+        }
+        [cell.buttonView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
+        [cell.buttonView addTarget:self action:@selector(linkButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+        
         return cell;
     }
     else
@@ -552,7 +594,15 @@
 }
 
 #pragma mark - Selectors
-
+- (void) linkButtonPressed:(UIButton*)sender
+{
+    if (sender)
+    {
+        NSURL *url = [NSURL URLWithString:@"https://osmand.net/features/contour-lines-plugin"];
+        if ([[UIApplication sharedApplication] canOpenURL:url])
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }
+}
 - (void) widthChanged:(UISlider*)sender
 {
     if (sender)
@@ -602,13 +652,16 @@
            OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
            parameter.value = switchView.isOn ? [_settings.contourLinesZoom get] : @"disabled";
            [_styleSettings save:parameter];
-           [tblView beginUpdates];
-           if (switchView.isOn)
-               [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
-           else
-               [tblView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
-           [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-           [tblView endUpdates];
+//           [tblView beginUpdates];
+//           if (switchView.isOn)
+//               [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
+//           else
+//               [tblView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
+//           [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+//           //tblView
+//           [tblView endUpdates];
+           [self generateData];
+           [tblView reloadData];
        }
 }
 

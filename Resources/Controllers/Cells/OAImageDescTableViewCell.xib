@@ -31,6 +31,10 @@
                 </subviews>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="descView" destination="Y2Z-m2-Bti" id="oW4-U8-JmX"/>
+                <outlet property="imageView" destination="QZa-dq-tFg" id="fOx-Yb-oX0"/>
+            </connections>
             <point key="canvasLocation" x="131.8840579710145" y="173.10267857142856"/>
         </tableViewCell>
     </objects>

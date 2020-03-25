@@ -10,5 +10,8 @@
 
 @interface OAImageDescTableViewCell : UITableViewCell
 
+@property (strong, nonatomic) IBOutlet UILabel *descView;
+@property (strong, nonatomic) IBOutlet UIImageView *imageView;
+
 @end
 

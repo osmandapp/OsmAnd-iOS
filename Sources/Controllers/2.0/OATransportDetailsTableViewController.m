@@ -30,7 +30,7 @@
                   @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_start_point", @"title" : @"Start", @"time" : @"0:00", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
                   @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_profile_pedestrian", @"title" : @"By foot", @"time" : @"0:05", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
                   @{@"cell" : @"OAPublicTransportPointCell", @"title" : @"Hotel ABC", @"descr" : @"Board at stop", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(YES)},
-                @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_destination", @"title" : @"Independence Square", @"descr" : @"Exit at", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(NO)}];
+                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_destination", @"title" : @"Independence Square", @"descr" : @"Exit at", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(NO), @"small_icon" : @(YES)}];
     }
     return self;
 }
@@ -138,6 +138,7 @@
             
             cell.timeLabel.text = item[@"time"];
             
+            [cell showSmallIcon:[item[@"small_icon"] boolValue]];
         }
         
         return cell;

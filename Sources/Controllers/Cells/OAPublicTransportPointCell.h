@@ -21,4 +21,10 @@
 @property (weak, nonatomic) IBOutlet UIView *bottomRouteLineView;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconViewLeftConstraint;
+
+- (void) showSmallIcon:(BOOL)smallIcon;
+
 @end

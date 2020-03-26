@@ -340,6 +340,22 @@ typedef enum : NSUInteger {
     [self closeMenuAndPanelsAnimated:NO];
 }
 
+- (void)showInfoAlertWithTitle:(NSString*)title message:(NSString*)message
+{
+    UIAlertController* alert = [UIAlertController
+                                alertControllerWithTitle:title
+                                message:message
+                                preferredStyle:UIAlertControllerStyleAlert];
+
+    UIAlertAction* defaultAction = [UIAlertAction
+                                actionWithTitle:OALocalizedString(@"shared_string_ok")
+                                style:UIAlertActionStyleDefault
+                                handler:^(UIAlertAction * action) {}];
+
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (BOOL) handleIncomingURL:(NSURL *)url
 {
     NSString *path = url.path;
@@ -351,19 +367,34 @@ typedef enum : NSUInteger {
         NSString *newFileName = [[OAMapCreatorHelper sharedInstance] getNewNameIfExists:fileName];
         if (newFileName)
         {
-            [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"sqlitedb_import_title") message:OALocalizedString(@"sqlitedb_import_already_exists")
-                cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")
-                                    action:^{
-                                    }]
-                otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"fav_replace")
-                                    action:^{
-                                        [self installSqliteDbFile:path newFileName:nil];
-                                    }],
-                                 [RIButtonItem itemWithLabel:OALocalizedString(@"gpx_add_new")
-                                    action:^{
-                                        [self installSqliteDbFile:path newFileName:newFileName];
-                                    }],
-                nil] show];
+            UIAlertController *alert = [UIAlertController
+                                            alertControllerWithTitle:OALocalizedString(@"sqlitedb_import_title")
+                                            message:OALocalizedString(@"sqlitedb_import_already_exists")
+                                            preferredStyle:UIAlertControllerStyleAlert];
+
+            UIAlertAction *cancelButtonItem = [UIAlertAction
+                                            actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                            style:UIAlertActionStyleCancel
+                                            handler:nil];
+
+            UIAlertAction *replaceButtonItem = [UIAlertAction
+                                            actionWithTitle:OALocalizedString(@"fav_replace")
+                                            style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+                                    [self installSqliteDbFile:path newFileName:nil];
+                                }];
+
+            UIAlertAction *addNewButtonItem = [UIAlertAction
+                                            actionWithTitle:OALocalizedString(@"gpx_add_new")
+                                            style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * _Nonnull action) {
+                                    [self installSqliteDbFile:path newFileName:newFileName];
+                                }];
+
+            [alert addAction:replaceButtonItem];
+            [alert addAction:addNewButtonItem];
+            [alert addAction:cancelButtonItem];
+            [self presentViewController:alert animated:YES completion:nil];
         }
         else
         {
@@ -404,60 +435,31 @@ typedef enum : NSUInteger {
     }
     else if ([ext caseInsensitiveCompare:@"gpx"] == NSOrderedSame)
     {
-        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title")
-                                    message:OALocalizedString(@"import_choose_type")
-                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")
-                                                                 action:^{
-                                                                 }]
-                           otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"import_favorite")
-                                                                 action:^{
-                                                                     
-                                                                     UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
-                                                                     if (incomingURLViewController == nil)
-                                                                         return;
-                                                                     
-                                                                     if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
-                                                                     {
-                                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                                             
-                                                                             [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_failed") message:OALocalizedString(@"import_cannot") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-                                                                             
-                                                                         });
-                                                                         
-                                                                         incomingURLViewController = nil;
-                                                                         return;
-                                                                     }
-                                                                     
-                                                                     [self closeMenuAndPanelsAnimated:NO];
-                                                                     
-                                                                     [self.navigationController pushViewController:incomingURLViewController
-                                                                                                          animated:YES];
-                                                                     // Open incoming-URL view controller as menu
-                                                                     /*
-                                                                      [self openMenu:incomingURLViewController
-                                                                      fromRect:CGRectZero
-                                                                      inView:self.view
-                                                                      ofParent:self
-                                                                      animated:YES];
-                                                                      */
-                                                                     
-                                                                 }],
-          
-          [RIButtonItem itemWithLabel:OALocalizedString(@"import_gpx")
-                               action:^{
-                                   [self importAsGPX:url];
-                                   // Open incoming-URL view controller as menu
-                                   /*
-                                    [self openMenu:incomingURLViewController
-                                    fromRect:CGRectZero
-                                    inView:self.view
-                                    ofParent:self
-                                    animated:YES];
-                                    */
-                                   
-                               }],
-          nil] show];
+        if ([fileName isEqual:@"favorites.gpx"] || [fileName isEqual:@"favourites.gpx"])
+        {
+            UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
+            if (incomingURLViewController == nil)
+                return nil;
+            
+            if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [self showInfoAlertWithTitle:OALocalizedString(@"import_failed") message:OALocalizedString(@"import_cannot")];
+                    
+                });
+                
+                incomingURLViewController = nil;
+            }
+            
+            [self closeMenuAndPanelsAnimated:NO];
+            
+            [self.navigationController pushViewController:incomingURLViewController animated:YES];
+        }
+        else
+            [self importAsGPX:url];
     }
+
     else if ([ext caseInsensitiveCompare:@"kml"] == NSOrderedSame || [ext caseInsensitiveCompare:@"kmz"] == NSOrderedSame)
     {
         [self importAsGPX:url];
@@ -492,10 +494,9 @@ typedef enum : NSUInteger {
 
 - (void) showNoInternetAlertFor:(NSString*)actionTitle
 {
-    [[[UIAlertView alloc] initWithTitle:actionTitle
-                                message:OALocalizedString(@"alert_inet_needed")
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_ok")]
-                       otherButtonItems:nil] show];
+    
+    [self showInfoAlertWithTitle:actionTitle message:OALocalizedString(@"alert_inet_needed")];
+
 }
 
 - (MBProgressHUD *) showProgress:(EOAProgressType)progressType
@@ -646,9 +647,7 @@ typedef enum : NSUInteger {
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if ([_iapHelper.liveUpdates getPurchasedSubscription])
-        {
-            [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"already_has_subscription") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-        }
+            [self showInfoAlertWithTitle:@"" message:OALocalizedString(@"already_has_subscription")];
         else
         {
             OAProduct *p = [_iapHelper product:payment.productIdentifier];
@@ -657,7 +656,8 @@ typedef enum : NSUInteger {
                 if ([p isPurchased])
                 {
                     NSString *text = [NSString stringWithFormat:OALocalizedString(@"already_has_inapp"), p.localizedTitle];
-                    [[[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                    
+                    [self showInfoAlertWithTitle:@"" message:text];
                 }
                 else
                 {
@@ -669,7 +669,8 @@ typedef enum : NSUInteger {
             else
             {
                 NSString *text = [NSString stringWithFormat:OALocalizedString(@"inapp_not_found"), p.localizedTitle];
-                [[[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                
+                [self showInfoAlertWithTitle:@"" message:text];
             }
         }
     });
@@ -721,8 +722,7 @@ typedef enum : NSUInteger {
         {
             NSString *title = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
             NSString *text = notification.userInfo ? notification.userInfo[@"error"] : nil;
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:title message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-            [alert show];
+            [self showInfoAlertWithTitle:title message:text];
         }
     });
 }
@@ -740,8 +740,7 @@ typedef enum : NSUInteger {
         {
             NSString *text = [NSString stringWithFormat:@"%d %@", errorsCount, OALocalizedString(@"prch_items_failed")];
             
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-            [alert show];
+            [self showInfoAlertWithTitle:@"" message:text];
         }
     });
     

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1586E11F242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
+		1586E120242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
+		1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */; };
+		1586E124242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */; };
 		3A02BFB71A31F2FA0019377F /* OAGPXListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A02BFB31A31F2FA0019377F /* OAGPXListViewController.mm */; };
 		3A02BFBF1A31FA820019377F /* icon_gpx_fill@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A02BFBB1A31FA820019377F /* icon_gpx_fill@2x.png */; };
 		3A02BFC21A31FA820019377F /* icon_star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A02BFBC1A31FA820019377F /* icon_star@2x.png */; };
@@ -4900,6 +4904,9 @@
 
 /* Begin PBXFileReference section */
 		1282460E521223DA0F804AE7 /* Pods-OsmAnd Maps DEV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps DEV.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV.release.xcconfig"; sourceTree = "<group>"; };
+		1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointHeaderCell.xib; path = Resources/Controllers/Cells/OAPointHeaderCell.xib; sourceTree = "<group>"; };
+		1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointHeaderTableViewCell.m; path = Controllers/Cells/OAPointHeaderTableViewCell.m; sourceTree = "<group>"; };
+		1586E122242209F300DA5625 /* OAPointHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointHeaderTableViewCell.h; path = Controllers/Cells/OAPointHeaderTableViewCell.h; sourceTree = "<group>"; };
 		2CFA9B52B7169930B7654453 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
 		3A02BFB21A31F2FA0019377F /* OAGPXListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXListViewController.h; path = Sources/Controllers/2.0/OAGPXListViewController.h; sourceTree = "<group>"; };
 		3A02BFB31A31F2FA0019377F /* OAGPXListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXListViewController.mm; path = Sources/Controllers/2.0/OAGPXListViewController.mm; sourceTree = "<group>"; };
@@ -8395,6 +8402,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */,
 				DA2267A4240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib */,
 				78A5C1FE23FC37B100312FC4 /* OAIconTextDescButtonTableViewCell.xib */,
 				78A5C1E223FAE8E500312FC4 /* OATitleSliderCell.xib */,
@@ -8489,6 +8497,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				1586E122242209F300DA5625 /* OAPointHeaderTableViewCell.h */,
+				1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */,
 				DA2267A1240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.h */,
 				DA2267A0240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m */,
 				78A5C1F723FC373600312FC4 /* OAIconTextDescButtonTableViewCell.h */,
@@ -14314,6 +14324,7 @@
 				847A20591DF94E9B003C1246 /* menu_star_icon@2x.png in Resources */,
 				847A205A1DF94E9B003C1246 /* btn_map_type_icon_car@3x.png in Resources */,
 				847A205B1DF94E9B003C1246 /* HUD_menu_narrowbutton.png in Resources */,
+				1586E120242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */,
 				841AD0211F54048B00E3191E /* ic_collapse@2x.png in Resources */,
 				847A205C1DF94E9B003C1246 /* ic_tabbar_purchases_selected@2x.png in Resources */,
 				842034131FB5FC05002784EF /* ic_action_next_turn@2x.png in Resources */,
@@ -15377,6 +15388,7 @@
 				DAF3456522F4482B009E2EB6 /* ic_custom_osm_note_unresolved@3x.png in Resources */,
 				DAF7A4FA21786BED00FB94FD /* widget_ruler_circle_day@2x.png in Resources */,
 				84D97CAA1FCDB0DD000563E6 /* icon_start_navigation@2x.png in Resources */,
+				1586E11F242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */,
 				8441CB611B1370580033AC95 /* selection_unchecked.png in Resources */,
 				DA71B7E0214B9F4A00FE8B7E /* navigation.html in Resources */,
 				846F43151FE51F0F00AFEA8E /* ic_action_change_order@2x.png in Resources */,
@@ -16832,6 +16844,7 @@
 				847A1D151DF94E9B003C1246 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				DA796663220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */,
 				DA26408A2201B03600A554AD /* OAOsmBugResult.m in Sources */,
+				1586E124242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */,
 				DAB2A55221F1E4FC00D9F01A /* OAOsmEditingPlugin.mm in Sources */,
 				847424741E4A0AAC001C1F35 /* OADiscountToolbarViewController.mm in Sources */,
 				DAFC00C5226724400024CE23 /* OAOsmEditsListViewController.mm in Sources */,
@@ -17418,6 +17431,7 @@
 				DAF7027C23B64C1A00E065F9 /* OARouteInfoLegendCell.m in Sources */,
 				DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */,
 				DAF6A8E323508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */,
+				1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */,
 				84E3704D2059254900959B94 /* OAWaypointsMainScreen.mm in Sources */,
 				846F036A1E12D54C00DB4772 /* OACustomPOIViewController.mm in Sources */,
 				DAFC00C4226724400024CE23 /* OAOsmEditsListViewController.mm in Sources */,

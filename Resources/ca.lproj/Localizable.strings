@@ -1484,7 +1484,7 @@
 "routeInfo_piste_type_name" = "Tipus de pista";
 "rendering_attr_tracktype_grade3_name" = "Bàsicament compacte";
 "routing_attr_width_description" = "Indica el límit d'amplada de vehicle permesa en les rutes.";
-"rendering_value_pedestrian_name" = "Vianant";
+"rendering_value_pedestrian_name" = "A peu";
 "rendering_attr_moreDetailed_name" = "Més detalls";
 "routing_attr_no_new_routing_description" = "No utilitzeu les preferències de navegació introduïdes a la v1.9.";
 "rendering_attr_contourLines_name" = "Mostra les corbes de nivell";

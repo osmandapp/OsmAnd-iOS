@@ -1103,7 +1103,7 @@
 "rendering_attr_surfaceIntegrity_name" = "یکپارچگی سطح جاده‌ها";
 "rendering_attr_contourLines_description" = "از این زوم نمایان شود (نیازمند داده‌های منحنی میزان):";
 "rendering_attr_tramRoutes_name" = "مسیرهای تراموا";
-"routing_attr_height_obstacles_description" = "فاکتور ارتفاع‌دهی عوارض (با استفاده از داده‌های SRTM،‏ ASTER و EU-DEM).";
+"routing_attr_height_obstacles_description" = "فاکتور ارتفاع‌دهی عارضه‌ها (با استفاده از داده‌های SRTM،‏ ASTER و EU-DEM).";
 "routing_attr_avoid_borders_description" = "از گذر از مرزهای ملی پرهیز می‌کند";
 "routing_attr_no_new_routing_name" = "استفاده‌نکردن از قواعد مسیریابی نسخهٔ ۱٫۹";
 "rendering_attr_surface_pebblestone_name" = "ریگ";

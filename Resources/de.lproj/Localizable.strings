@@ -1633,3 +1633,4 @@
 "online_webpage_warning" = "Seite nur online verfügbar. Im Webbrowser öffnen?";
 "all_group_points" = "Alle Punkte der Gruppe";
 "displayed_route_save" = "In OsmAnd-Fahrten speichern";
+"res_zoom_levels_desc" = "Diese Parameter wirken sich auf die Kartenanzeige aus, wenn sie als Kartentyp oder als Overlay/Underlay verwendet werden.\n\nKartentyp: Die Karte wird auf die ausgewählten Zooms beschränkt.\n\nÜberlagerung/Unterlagerung: Zoomstufen, in denen die Kacheln sichtbar sind. Über oder unter den eingestellten Werten wird eine Vergrößerung oder Verkleinerung vorgenommen.";

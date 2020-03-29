@@ -1496,3 +1496,4 @@
 "rendering_attr_currentTrackColor_name" = "Farba GPX";
 "routing_attr_avoid_subway_name" = "Žiadne metro";
 "rendering_attr_surface_salt_name" = "Soľ";
+"online_webpage_warning" = "Stránka je dostupná len online. Otvoriť vo webovom prehliadači?";

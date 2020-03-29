@@ -361,7 +361,7 @@
 "plugin_popup_srtm_title" = "Stiahnuť vrstevnice";
 "plugin_popup_srtm_desc" = "Ak chcete začať používať funkciu vrstevníc, prosím stiahnite si najprv vrstevnice regiónu";
 "plugin_popup_srtm_ask" = "Na stiahnutie vrstevní musíte zaktivovať modul: <b>Vrstevnice</b>";
-"plugin_popup_wiki_ask" = "Na stiahnutie údajov z Wikipédie údajov musíte aktivovať plugin: <b>Wikipedia</b>";
+"plugin_popup_wiki_ask" = "Pre stiahnutie údajov z Wikipédie údajov musíte aktivovať plugin: <b>Wikipedia</b>";
 "time_open" = "Otvorené";
 "time_closed" = "Zatvorené";
 "time_will_close" = "Zatvorí o";
@@ -494,7 +494,7 @@
 "do_not_send_anonymous_data" = "Neodosielať anonymné údaje";
 "wiki_buy_description" = "Pre čítanie celých článkov - kúpte si doplnok Wikipedia a stiahnite údaje Wikipedie pre %@";
 "wiki_download_description" = "Pre čítanie celých článkov - stiahnite údaje Wikipedie pre %@";
-"map_an_region" = "región";
+"map_an_region" = "tento región";
 "select_street" = "Zvoľte ulicu";
 "shared_string_in_name" = "v %@";
 "select_city" = "Zvoľte mesto";

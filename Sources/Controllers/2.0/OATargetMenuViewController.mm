@@ -320,7 +320,8 @@
         {
         }
     }
-    if (targetPoint.type != OATargetImpassableRoad &&
+    if (controller &&
+        targetPoint.type != OATargetImpassableRoad &&
         targetPoint.type != OATargetRouteFinishSelection &&
         targetPoint.type != OATargetRouteStartSelection &&
         targetPoint.type != OATargetRouteIntermediateSelection &&
@@ -334,41 +335,33 @@
         targetPoint.type != OATargetImpassableRoadSelection &&
         targetPoint.type != OATargetChangePosition)
     {
-        __weak OATargetMenuViewController* weakSelf = self;
-        
         [OAResourcesBaseViewController requestMapDownloadInfo:targetPoint.location
                                                  resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
                                                    onComplete:^(NSArray<ResourceItem *>* res) {
-            OsmAndAppInstance app = [OsmAndApp instance];
-            if (res.count > 0 && weakSelf)
+            if (res.count > 0)
             {
                 for (ResourceItem * item in res)
                 {
                     if ([item isKindOfClass:LocalResourceItem.class])
                     {
-                        weakSelf.localMapIndexItem = nil;
-                        [weakSelf createMapDownloadControls];
+                        controller.localMapIndexItem = nil;
+                        [controller createMapDownloadControls];
                         return ;
                     }
                 }
-                RepositoryResourceItem *item = (RepositoryResourceItem*)res[0];
-                
-                BOOL isDownloading = [app.downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
+                RepositoryResourceItem *item = (RepositoryResourceItem *)res[0];
+                BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
-                        [weakSelf.delegate showProgressBar];
-                    else if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(hideProgressBar)])
-                        [weakSelf.delegate hideProgressBar];
+                    if (controller.delegate && [controller.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
+                        [controller.delegate showProgressBar];
+                    else if (controller.delegate && [controller.delegate respondsToSelector:@selector(hideProgressBar)])
+                        [controller.delegate hideProgressBar];
                 });
                 
                 if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable || isDownloading)
-                {
-                    weakSelf.localMapIndexItem = item;
-                }
+                    controller.localMapIndexItem = item;
             }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf createMapDownloadControls];
-            });
+            [controller createMapDownloadControls];
         }];
     }
     return controller;

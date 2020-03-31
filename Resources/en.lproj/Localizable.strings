@@ -1764,3 +1764,25 @@
 "routing_attr_allow_motorway_description" = "Allows motorways.";
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
+
+"app_mode_default" = "Browse map";
+"app_mode_car" = "Driving";
+"app_mode_bicycle" = "Cycling";
+"app_mode_pedestrian" = "Walking";
+"app_mode_taxi" = "Taxi";
+"app_mode_shuttle_bus" = "Shuttle bus";
+"app_mode_subway" = "Subway";
+"app_mode_horse" = "Horse";
+"app_mode_helicopter" = "Helicopter";
+"app_mode_skiing" = "Skiing";
+"app_mode_personal_transporter" = "Personal transporter";
+"app_mode_monowheel" = "Monowheel";
+"app_mode_scooter" = "Scooter";
+"app_mode_ufo" = "UFO";
+"app_mode_offroad" = "Offroad";
+"app_mode_camper" = "Camper";
+"app_mode_campervan" = "Campervan (RV)";
+"app_mode_wagon" = "Wagon";
+"app_mode_pickup_truck" = "Pickup truck";
+"app_mode_utv" = "Side by Side";
+"app_mode_osm" = "OSM";

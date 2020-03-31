@@ -116,4 +116,25 @@
 
 #define color_slider_gray 0xe4e4e6
 
+#define profile_icon_color_blue_light_default 0x237BFF
+#define profile_icon_color_purple_light 0x732EEB
+#define profile_icon_color_green_light 0x0EBE92
+#define profile_icon_color_blue_light 0x007EB3
+#define profile_icon_color_red_light 0xFF2200
+#define profile_icon_color_yellow_light 0xF0B400
+#define profile_icon_color_magenta_light 0xCC0063
+
+#define profile_icon_color_blue_dark_default 0x237BFF
+#define profile_icon_color_purple_dark 0x732EEB
+#define profile_icon_color_green_dark 0x0EBE92
+#define profile_icon_color_blue_dark 0x007EB3
+#define profile_icon_color_red_dark 0xFF2200
+#define profile_icon_color_yellow_dark 0xF0B400
+#define profile_icon_color_magenta_dark 0xCC0063
+
+#define profile_icon_color_outdated_light 0x727272
+#define profile_icon_color_outdated_dark 0x727272
+
+#define profile_icon_color_inactive 0x727272
+
 #endif /* OAColors_h */

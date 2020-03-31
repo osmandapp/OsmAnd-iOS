@@ -535,7 +535,7 @@
 "traffic_warning_payment" = "Mautstelle";
 "traffic_warning_stop" = "Stoppzeichen";
 "traffic_warning_calming" = "Verkehrsberuhigung";
-"traffic_warning_speed_camera" = "Geschwindigkeitskontrolle";
+"traffic_warning_speed_camera" = "Blitzer";
 "traffic_warning" = "Verkehrswarnung";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "USA";
@@ -1632,3 +1632,5 @@
 "open_wiki_online" = "Artikel online öffnen";
 "online_webpage_warning" = "Seite nur online verfügbar. Im Webbrowser öffnen?";
 "all_group_points" = "Alle Punkte der Gruppe";
+"displayed_route_save" = "In OsmAnd-Fahrten speichern";
+"res_zoom_levels_desc" = "Diese Parameter wirken sich auf die Kartenanzeige aus, wenn sie als Kartentyp oder als Overlay/Underlay verwendet werden.\n\nKartentyp: Die Karte wird auf die ausgewählten Zooms beschränkt.\n\nÜberlagerung/Unterlagerung: Zoomstufen, in denen die Kacheln sichtbar sind. Über oder unter den eingestellten Werten wird eine Vergrößerung oder Verkleinerung vorgenommen.";

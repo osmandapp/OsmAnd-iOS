@@ -1444,3 +1444,9 @@
 "app_mode_shuttle_bus" = "Bus navette";
 "app_mode_scooter" = "Scooter";
 "app_mode_ufo" = "OVNI";
+"app_mode_offroad" = "Tout terrain";
+"app_mode_helicopter" = "Hélicoptère";
+"app_mode_taxi" = "Taxi";
+"app_mode_personal_transporter" = "Gyropode";
+"app_mode_campervan" = "Camping-car";
+"app_mode_osm" = "OSM";

@@ -11,6 +11,8 @@
 #import "OAColors.h"
 #import "OAUtilities.h"
 
+#define kWhiteColor 1157627903
+
 @implementation OAColorsTableViewCell
 
 - (void)awakeFromNib
@@ -46,7 +48,7 @@
     
     int color = [_dataArray[indexPath.row] intValue];
     cell.colorView.backgroundColor = UIColorFromRGB(color);
-    if (color == color_contour_lines_white)
+    if (color == kWhiteColor)
     {
         cell.colorView.layer.borderWidth = 1;
         cell.colorView.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;

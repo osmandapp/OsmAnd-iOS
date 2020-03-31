@@ -11,7 +11,8 @@
 @interface OAImageDescTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *descView;
-@property (strong, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) IBOutlet UIImageView *iconView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconViewHeight;
 
 @end
 

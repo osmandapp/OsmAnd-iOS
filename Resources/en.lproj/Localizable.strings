@@ -964,6 +964,7 @@
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";
 "show_contour_lines" = "Show contour lines";
+"enable_contour_lines" = "Enable to view contour lines on the map";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

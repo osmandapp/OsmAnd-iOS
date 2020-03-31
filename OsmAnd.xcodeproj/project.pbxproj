@@ -77,6 +77,8 @@
 		780AB028242B3730001DF5EF /* ic_custom_safari@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */; };
 		780AB029242B3730001DF5EF /* ic_custom_safari@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */; };
 		780AB02A242B3730001DF5EF /* ic_custom_safari@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */; };
+		780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */; };
+		780AB02E242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */; };
 		78496C3C2410FF53006EA39E /* OASegmentSliderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78496C3B2410FF53006EA39E /* OASegmentSliderCell.xib */; };
 		78496C3D2410FF53006EA39E /* OASegmentSliderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78496C3B2410FF53006EA39E /* OASegmentSliderCell.xib */; };
 		78496C402410FFB8006EA39E /* OASegmentSliderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 78496C3E2410FFB7006EA39E /* OASegmentSliderTableViewCell.m */; };
@@ -5015,6 +5017,7 @@
 		780AB022242B372E001DF5EF /* ic_custom_safari.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_safari.png; path = Resources/Icons/ic_custom_safari.png; sourceTree = "<group>"; };
 		780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@2x.png"; path = "Resources/Icons/ic_custom_safari@2x.png"; sourceTree = "<group>"; };
 		780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@3x.png"; path = "Resources/Icons/ic_custom_safari@3x.png"; sourceTree = "<group>"; };
+		780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_empty_state_contour_lines@3x.png"; path = "Resources/Icons/img_empty_state_contour_lines@3x.png"; sourceTree = "<group>"; };
 		78496C3B2410FF53006EA39E /* OASegmentSliderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OASegmentSliderCell.xib; path = Resources/Controllers/Cells/OASegmentSliderCell.xib; sourceTree = "<group>"; };
 		78496C3E2410FFB7006EA39E /* OASegmentSliderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASegmentSliderTableViewCell.m; path = Controllers/Cells/OASegmentSliderTableViewCell.m; sourceTree = "<group>"; };
 		78496C3F2410FFB8006EA39E /* OASegmentSliderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASegmentSliderTableViewCell.h; path = Controllers/Cells/OASegmentSliderTableViewCell.h; sourceTree = "<group>"; };
@@ -8733,6 +8736,7 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				780AB02C242B683A001DF5EF /* img_empty_state_contour_lines@3x.png */,
 				780AB022242B372E001DF5EF /* ic_custom_safari.png */,
 				780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */,
 				780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */,
@@ -12879,6 +12883,7 @@
 				8476E2B91F6C1EEC00EC274F /* map_intermediate_point@3x.png in Resources */,
 				DA13A0122345FA0100C1A1A8 /* ic_custom_altitude_and_slope.png in Resources */,
 				DA1CAF32211EC7DA00B0662E /* ja_tts.js in Resources */,
+				780AB02E242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */,
 				847A1DA41DF94E9B003C1246 /* btn_map_type_icon_walk_selected@3x.png in Resources */,
 				8A7A4CA2210A036E00EC1B06 /* map_transport_stop_bus@3x.png in Resources */,
 				DABF818E228BDE9300651A91 /* map_mapillary_location@2x.png in Resources */,
@@ -14886,6 +14891,7 @@
 				84F3A9331B4EA79E00D16EBC /* ic_connection_dot@3x.png in Resources */,
 				8490B1AB20600207007694A5 /* OARadiusCellEx.xib in Resources */,
 				846F430A1FE51F0F00AFEA8E /* ic_action_route_start.png in Resources */,
+				780AB02D242B683B001DF5EF /* img_empty_state_contour_lines@3x.png in Resources */,
 				84C102781FBDC10800D3E5EE /* warnings_railways_us.png in Resources */,
 				3A2D892E1A28DD1600511A5C /* favorite_share_icon@2x.png in Resources */,
 				DAF345CB22F4482C009E2EB6 /* ic_custom_sunset.png in Resources */,

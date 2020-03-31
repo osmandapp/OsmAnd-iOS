@@ -30,6 +30,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAImageDescTableViewCell.h"
 #import "OAButtonIconTableViewCell.h"
+#import "OAMapViewController.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -59,11 +60,12 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    OAMapViewController *_mapViewController;
+    OAMapStyleSettings *_styleSettings;
+    NSObject* _dataLock;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
-
-    OAMapStyleSettings *_styleSettings;
 
     NSArray<NSArray *> *_data;
     BOOL _availableMaps;
@@ -75,9 +77,7 @@
     NSArray<NSDictionary *> *_sectionHeaderFooterTitles;
     NSString *_minZoom;
     NSInteger _currentColor;
-    NSIndexPath *_mapIndexPath;
     NSArray<RepositoryResourceItem *> *_mapItems;
-    RepositoryResourceItem *_mapItem;
 }
 
 
@@ -110,6 +110,7 @@
 
 - (void) commonInit
 {
+    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
 }
 
 - (void) deinit
@@ -133,18 +134,26 @@
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
     
     _visibleZoomValues = @[@"11", @"12", @"13", @"14", @"15", @"16"];
-    _visibleColorValues = @[@"white", @"yellow", @"green", @"light_brown", @"brown", @"dark_brown", @"red"];
     _visibleWidthValues = @[@"thin", @"medium", @"thick"];
     _visibleDensityValues = @[@"low", @"medium_w", @"high"];
+    NSString *isNightMode = _settings.nightMode ? @"true" : @"false";
     
     _colors = [NSMutableArray new];
-    [_colors addObject: [NSNumber numberWithInt:color_contour_lines_white]];
-    [_colors addObject: [NSNumber numberWithInt:color_contour_lines_yellow]];
-    [_colors addObject: [NSNumber numberWithInt:color_contour_lines_green]];
-    [_colors addObject: [NSNumber numberWithInt:color_contour_lines_light_brown]];
-    [_colors addObject: [NSNumber numberWithInt:color_contour_lines_brown]];
-    [_colors addObject: [NSNumber numberWithInt:color_contour_lines_dark_brown]];
-    [_colors addObject: [NSNumber numberWithInt:color_contour_lines_red]];
+    NSMutableArray *colorNames = [NSMutableArray new];
+    OAMapStyleParameter *colorParameter = [_styleSettings getParameter:kContourLinesColorScheme];
+    NSArray *colorValues = [colorParameter possibleValues];
+    for (OAMapStyleParameterValue *value in colorValues)
+    {
+        if (![value.name isEqualToString:@""])
+        {
+            [colorNames addObject:value.name];
+            NSDictionary<NSString *, NSNumber *> *renderingAttrs = [_mapViewController getRoadRenderingAttributes:@"contourLineColor" additionalSettings:@{@"contourColorScheme":value.name, @"nightMode" : isNightMode}];
+            NSString *name = renderingAttrs.allKeys.firstObject;
+            NSNumber *colorIntValue = renderingAttrs[name];
+            [_colors addObject:colorIntValue];
+        }
+    }
+    _visibleColorValues = [colorNames copy];
     
     OAMapStyleParameter *p1 = [_styleSettings getParameter:kContourLinesColorScheme];
     if ([p1.value isEqualToString:@""])
@@ -241,8 +250,8 @@
         NSMutableArray *imageArr = [NSMutableArray array];
         [imageArr addObject:@{
             @"type" : kCellTypeInfo,
-            @"desc" : OALocalizedString(@"AAAaaaaaaaaaaaldks;alsdka;lsdkals;dkalsdka;dskasdfasdfasdfadsf"),
-            @"img" : @""
+            @"desc" : OALocalizedString(@"enable_contour_lines"),
+            @"img" : @"img_empty_state_contour_lines.png"
         }];
         [imageArr addObject:@{
             @"type" : kCellTypeButton,
@@ -317,12 +326,31 @@
     
 }
 
+- (void) deleteMap:(NSIndexPath *)indexPath
+{
+    if (_data[indexPath.section].count > 1)
+    {
+        NSMutableArray *tempData = [_data mutableCopy];
+        NSMutableArray *tempMaps = [_data[indexPath.section] mutableCopy];
+        [tempMaps removeObjectAtIndex:indexPath.row];
+        [tempData replaceObjectAtIndex:indexPath.section withObject:tempMaps];
+        _data = [tempData copy];
+        [tblView reloadData];
+    }
+    else if (_data[indexPath.section].count == 1)
+    {
+        NSMutableArray *tempData = [_data mutableCopy];
+        [tempData removeObjectAtIndex:indexPath.section];
+        _data = [tempData copy];
+        [tblView reloadData];
+    }
+}
+
 - (void) downloadMap:(NSIndexPath*)indexPath
 {
     RepositoryResourceItem *localMapIndexItem = _mapItems[indexPath.row];
     if (localMapIndexItem)
     {
-        _mapItem = localMapIndexItem;
 //       if (localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion &&
 //           ![OAResourcesBaseViewController checkIfDownloadAvailable:localMapIndexItem.worldRegion])
 //       {
@@ -352,11 +380,11 @@
 
     OAIconTextDescButtonCell* cell = [tblView cellForRowAtIndexPath:indexPath];
     cell.checkButton.hidden = YES;
-    FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-    progressView.iconView = [[UIView alloc] init];
-    cell.accessoryView = progressView;
-    progressView.tintColor = UIColorFromRGB(color_primary_purple);
-    _mapIndexPath = indexPath;
+//    FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(cell.additionalView.frame.origin.x, cell.additionalView.frame.origin.y, 25.0f, 25.0f)];
+//    progressView.iconView = [[UIView alloc] init];
+//    cell.additionalView = progressView;
+//    cell.additionalView.hidden = NO;
+//    progressView.tintColor = UIColorFromRGB(color_primary_purple);
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -505,25 +533,97 @@
         return cell;
     }
     
-    else if ([item[@"type"] isEqualToString: kCellTypeMap])
+    if (indexPath.section == 3)
     {
+        NSString* cellTypeId = nil;
+        static NSString* const downloadingResourceCell = @"downloadingResourceCell";
+        ResourceItem *mapItem = _mapItems[indexPath.row];
+        if (mapItem.downloadTask != nil)
+            cellTypeId = downloadingResourceCell;
+        
         static NSString* const identifierCell = @"OAIconTextDescButtonCell";
         OAIconTextDescButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescButtonTableViewCell" owner:self options:nil];
             cell = (OAIconTextDescButtonCell *)[nib objectAtIndex:0];
-            cell.leftIconView.image = [UIImage imageNamed:@"ic_custom_contour_lines"];
+            cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_contour_lines"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.dividerIcon.backgroundColor = [UIColor clearColor];
+            [cell.checkButton setImage:[[UIImage imageNamed:@"ic_custom_download.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+            cell.checkButton.tintColor = UIColorFromRGB(color_primary_purple);
         }
+
         NSString *description = OALocalizedString(@"map_settings_SRTM");
         cell.titleLabel.text = item[@"title"];
         cell.descLabel.text = [[description stringByAppendingString:@" • "] stringByAppendingString:item[@"size"]];
-        [cell.checkButton setImage:[UIImage imageNamed:@"ic_custom_download.png"] forState:UIControlStateNormal];
         cell.delegate = self;
         cell.checkButton.tag = indexPath.row;
+        
+        FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+        progressView.iconView = [[UIView alloc] init];
+        cell.accessoryView = progressView;
+        
+        if ([cellTypeId isEqualToString:downloadingResourceCell])
+        {
+            FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+            progressView.iconView = [[UIView alloc] init];
+            cell.accessoryView = progressView;
+                
+            float progressCompleted = mapItem.downloadTask.progressCompleted;
+            if (progressCompleted >= 0.001f && mapItem.downloadTask.state == OADownloadTaskStateRunning)
+            {
+                progressView.iconPath = nil;
+                if (progressView.isSpinning)
+                    [progressView stopSpinProgressBackgroundLayer];
+                progressView.progress = progressCompleted - 0.001;
+            }
+            else if (mapItem.downloadTask.state == OADownloadTaskStateFinished)
+            {
+               // progressView.iconPath = [self tickPath:progressView];
+                progressView.progress = 0.0f;
+                if (!progressView.isSpinning)
+                    [progressView startSpinProgressBackgroundLayer];
+            }
+            else
+            {
+                progressView.iconPath = [UIBezierPath bezierPath];
+                progressView.progress = 0.0;
+                if (!progressView.isSpinning)
+                    [progressView startSpinProgressBackgroundLayer];
+                [progressView setNeedsDisplay];
+            }
+        }
         return cell;
     }
+    
+//    else if ([item[@"type"] isEqualToString: kCellTypeMap])
+//    {
+//        static NSString* const identifierCell = @"OAIconTextDescButtonCell";
+//        OAIconTextDescButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+//        if (cell == nil)
+//        {
+//            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescButtonTableViewCell" owner:self options:nil];
+//            cell = (OAIconTextDescButtonCell *)[nib objectAtIndex:0];
+//            cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_contour_lines"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+//            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
+//            cell.dividerIcon.backgroundColor = [UIColor clearColor];
+//
+//
+//        }
+//        [cell.checkButton setImage:[[UIImage imageNamed:@"ic_custom_download.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+//        cell.checkButton.tintColor = UIColorFromRGB(color_primary_purple);
+//        NSString *description = OALocalizedString(@"map_settings_SRTM");
+//        cell.titleLabel.text = item[@"title"];
+//        cell.descLabel.text = [[description stringByAppendingString:@" • "] stringByAppendingString:item[@"size"]];
+//       //
+//        cell.delegate = self;
+//        cell.checkButton.tag = indexPath.row;
+//        return cell;
+//    }
+    
+    
+    
     else if ([item[@"type"] isEqualToString: kCellTypeInfo])
     {
         static NSString* const identifierCell = @"OAImageDescTableViewCell";
@@ -533,11 +633,14 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAImageDescTableViewCell" owner:self options:nil];
             cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
             cell.descView.text = item[@"desc"];
-            cell.imageView.image = [UIImage imageNamed:item[@"img"]];
+            cell.iconView.image = [UIImage imageNamed:item[@"img"]];
         }
-
+        CGFloat ratio = cell.iconView.image.size.height / cell.iconView.image.size.width;
+        cell.iconViewHeight.constant = cell.iconView.frame.size.width * ratio;
+        [cell layoutIfNeeded];
         return cell;
     }
+    
     else if ([item[@"type"] isEqualToString: kCellTypeButton])
     {
         static NSString* const identifierCell = @"OAButtonIconTableViewCell";
@@ -546,12 +649,13 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonIconTableViewCell" owner:self options:nil];
             cell = (OAButtonIconTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+            cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];;
             [cell.buttonView setTitle:item[@"title"] forState:UIControlStateNormal];
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         [cell.buttonView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
         [cell.buttonView addTarget:self action:@selector(linkButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+        
         
         return cell;
     }
@@ -594,6 +698,7 @@
 }
 
 #pragma mark - Selectors
+
 - (void) linkButtonPressed:(UIButton*)sender
 {
     if (sender)
@@ -603,6 +708,7 @@
             [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
     }
 }
+
 - (void) widthChanged:(UISlider*)sender
 {
     if (sender)
@@ -699,14 +805,73 @@
         task.silentInstall = YES;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_mapItem && [_mapItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
-        {
-            OAIconTextDescButtonCell* cell = [tblView cellForRowAtIndexPath:_mapIndexPath];
-            FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
-            progressView.progress = task.progressCompleted;
-        }
-        
+
+//            OAIconTextDescButtonCell* cell = [tblView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:mapIndex.integerValue inSection:3]];
+//            FFCircularProgressView* progressView = (FFCircularProgressView*)cell.additionalView;
+//            progressView.progress = task.progressCompleted;
+
+        [self refreshDownloadingContent:task.key];
     });
+}
+
+- (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
+
+    RepositoryResourceItem *item = [_mapItems objectAtIndex:indexPath.row];
+        
+    if (item.downloadTask != nil)
+    {
+        FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
+        progressView.progress = item.downloadTask.progressCompleted;
+    }
+    
+//    if ([cellTypeId isEqualToString:downloadingResourceCell])
+//    {
+        //ResourceItem* item = (ResourceItem*)item_;
+        //FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
+        
+//        float progressCompleted = item.downloadTask.progressCompleted;
+//        if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
+//        {
+//            progressView.iconPath = nil;
+//            if (progressView.isSpinning)
+//                [progressView stopSpinProgressBackgroundLayer];
+//            progressView.progress = progressCompleted - 0.001;
+//        }
+//        else if (item.downloadTask.state == OADownloadTaskStateFinished)
+//        {
+//            //progressView.iconPath = [self tickPath:progressView];
+//            if (!progressView.isSpinning)
+//                [progressView startSpinProgressBackgroundLayer];
+//            progressView.progress = 0.0f;
+//        }
+//        else
+//        {
+//            progressView.iconPath = [UIBezierPath bezierPath];
+//            progressView.progress = 0.0;
+//            if (!progressView.isSpinning)
+//                [progressView startSpinProgressBackgroundLayer];
+//        }
+ //   }
+
+}
+
+- (void) refreshDownloadingContent:(NSString *)downloadTaskKey
+{
+    @synchronized(_dataLock)
+    {
+        
+        for (int i = 0; i < _mapItems.count; i++)
+        {
+            ResourceItem *item = (ResourceItem *)_mapItems[i];
+            NSLog(@"%@ %@", [item.downloadTask key], downloadTaskKey);
+            if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
+            {
+                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:3]];
+            }
+        }
+    }
 }
 
 - (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
@@ -718,14 +883,11 @@
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateAvailableMaps];
-
-        if (_mapItem && [_mapItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
-        {
-
-        }
+        //[self deleteMap:[NSIndexPath indexPathForRow:mapIndex.integerValue inSection:3]];
         
     });
 }
+
+
 
 @end

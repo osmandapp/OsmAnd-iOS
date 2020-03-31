@@ -21,4 +21,11 @@
     // Configure the view for the selected state
 }
 
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
+    self.iconViewHeight.constant = self.iconView.frame.size.width * ratio;
+}
+
 @end

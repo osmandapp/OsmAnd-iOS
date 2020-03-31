@@ -703,7 +703,7 @@
 "routing_preferences_descr" = "路线首选项";
 "routing_settings" = "导航";
 "speak_favorites" = "附近的收藏夹";
-"routing_settings_descr" = "指定导航选项。";
+"routing_settings_descr" = "指定导航选项";
 "auto_zoom_none" = "不自动缩放";
 "auto_zoom_close" = "近距";
 "auto_zoom_far" = "中距";
@@ -995,7 +995,7 @@
 "rendering_value_brown_name" = "棕色";
 "routing_attr_avoid_motorway_name" = "避免机动车路";
 "rendering_attr_trainLightrailRoutes_name" = "铁路线路";
-"rendering_attr_showSurfaceGrade_name" = "";
+"rendering_attr_showSurfaceGrade_name" = "显示道路质量";
 "rendering_attr_busRoutes_name" = "公交线路";
 "rendering_value_disabled_name" = "已禁用";
 "rendering_value_fine_name" = "精细";
@@ -1169,7 +1169,7 @@
 "rendering_value_thin_name" = "细的";
 "routing_attr_avoid_stairs_name" = "避免阶梯";
 "rendering_attr_showMtbRoutes_name" = "显示 MTB 路线";
-"rendering_attr_currentTrackColor_name" = "GPX颜色";
+"rendering_attr_currentTrackColor_name" = "GPX 颜色";
 "rendering_attr_hideWoodScrubs_name" = "木材和磨砂";
 "rendering_attr_highway_class_service_name" = "服务站";
 "rendering_value_translucent_purple_name" = "半透明紫色";
@@ -1188,3 +1188,15 @@
 "years_short" = "年";
 "day" = "";
 "get_free_trial_title" = "开始您的 %d %@ 免费试用。";
+"routing_attr_width_name" = "宽度限制";
+"app_mode_horse" = "骑马";
+"app_mode_subway" = "地铁";
+"app_mode_shuttle_bus" = "班车";
+"app_mode_pedestrian" = "走路";
+"app_mode_bicycle" = "自行车出行";
+"app_mode_car" = "驾驶";
+"app_mode_default" = "浏览地图";
+"app_mode_helicopter" = "直升机";
+"app_mode_taxi" = "出租车";
+"app_mode_pickup_truck" = "皮卡";
+"start_navigation" = "开始导航";

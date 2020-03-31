@@ -1431,3 +1431,16 @@
 "week_short" = "Wk";
 "weeks_short" = "Wks";
 "online_webpage_warning" = "Page accessible uniquement en ligne. Souhaitez-vous l’ouvrir dans un navigateur web ?";
+"app_mode_camper" = "Campeur";
+"app_mode_pickup_truck" = "Camionnette";
+"app_mode_wagon" = "Wagon";
+"app_mode_utv" = "Côte à côte";
+"app_mode_pedestrian" = "À pied";
+"app_mode_bicycle" = "À vélo";
+"app_mode_car" = "En voiture";
+"app_mode_default" = "Parcourir la carte";
+"app_mode_skiing" = "À ski";
+"app_mode_horse" = "À cheval";
+"app_mode_shuttle_bus" = "Bus navette";
+"app_mode_scooter" = "Scooter";
+"app_mode_ufo" = "OVNI";

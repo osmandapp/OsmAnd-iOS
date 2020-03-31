@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OsmAndAppProtocol.h"
+#import "OsmAndApp.h"
+#import "OAQuickAction.h"
+#import "OAQuickActionRegistry.h"
+#import "OASQLiteTileSource.h"
 
 typedef enum : NSUInteger {
     EOAGlobal = 0,
@@ -34,19 +37,15 @@ typedef enum : NSUInteger {
 
 - (instancetype) initWithType:(EOASettingsItemType)type;
 - (instancetype) initWithType:(EOASettingsItemType)type json:(NSDictionary*)json;
-- (EOASettingsItemType) getType;
 - (BOOL) shouldReadOnCollecting;
-- (void) setShouldReplace:(BOOL)shouldReplace;
 - (EOASettingsItemType) parseItemType:(NSDictionary*)json;
 - (void) readFromJSON:(NSDictionary*)json;
 - (void) writeToJSON:(NSDictionary*)json;
 - (NSString *)toJSON;
-- (NSUInteger) hash;
-- (BOOL) isEqual:(id)object;
 
 @end
 
-#pragma mark - SettingsItemReader
+#pragma mark - OASettingsItemReader
 
 @interface OASettingsItemReader<ObjectType : OASettingsItem *> : NSObject
 
@@ -55,7 +54,7 @@ typedef enum : NSUInteger {
 
 @end
 
-#pragma mark - SettingsItemWriter
+#pragma mark - OASettingsItemWriter
 
 @interface OASettingsItemWriter<ObjectType : OASettingsItem *> : NSObject
 
@@ -64,9 +63,17 @@ typedef enum : NSUInteger {
 
 @end
 
-#pragma mark - StreamSettingsItemReader
+#pragma mark - OAStreamSettingsItemReader
 
-@interface StreamSettingsItemReader : OASettingsItemReader<OASettingsItem *>
+@interface OAStreamSettingsItemReader : OASettingsItemReader<OASettingsItem *>
+
+- (instancetype)initWithItem:(OASettingsItem *)item;
+
+@end
+
+#pragma mark - OAStreamSettingsItemWriter
+
+@interface OAStreamSettingsItemWriter : OASettingsItemWriter<OASettingsItem *>
 
 - (instancetype)initWithItem:(OASettingsItem *)item;
 
@@ -81,9 +88,6 @@ typedef enum : NSUInteger {
 - (instancetype) initWithType:(EOASettingsItemType)type name:(NSString*)name;
 - (instancetype) initWithType:(EOASettingsItemType)type json:(NSDictionary*)json;
 - (instancetype) initWithType:(EOASettingsItemType)type inputStream:(NSInputStream*)inputStream name:(NSString*)name;
-- (NSInputStream *) getInputStream;
-- (void) setInputStream:(NSInputStream *)inputStream;
-- (NSString *) getName;
 - (NSString *) getPublicName;
 - (void) readFromJSON:(NSDictionary *)json;
 - (OASettingsItemWriter*) getWriter;
@@ -93,7 +97,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - OADataSettingsItemReader
 
-@interface OADataSettingsItemReader: StreamSettingsItemReader
+@interface OADataSettingsItemReader: OAStreamSettingsItemReader
 
 - (instancetype)initWithItem:(OASettingsItem *)item;
 
@@ -109,7 +113,6 @@ typedef enum : NSUInteger {
 - (instancetype) initWithJson:(NSDictionary *)json;
 - (instancetype) initWithData:(NSData *)data name:(NSString *)name;
 - (NSString *) getFileName;
-- (NSData *) getData;
 - (OASettingsItemReader *) getReader;
 - (OASettingsItemWriter *) getWriter;
 
@@ -117,7 +120,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - OAFileSettingsItemReader
 
-@interface OAFileSettingsItemReader: StreamSettingsItemReader
+@interface OAFileSettingsItemReader: OAStreamSettingsItemReader
 
 - (instancetype)initWithItem:(OASettingsItem *)item;
 
@@ -133,10 +136,56 @@ typedef enum : NSUInteger {
 - (instancetype) initWithFile:(NSString *)filePath;
 - (instancetype) initWithJSON:(NSDictionary*)json;
 - (NSString *) getFileName;
-- (NSString *) getFile;
 - (BOOL) exists;
 - (NSString *) renameFile:(NSString*)file;
 - (OASettingsItemReader *) getReader;
 - (OASettingsItemWriter *) getWriter;
+
+@end
+
+#pragma mark - OACollectionSettingsItem
+
+@interface OACollectionSettingsItem<ObjectType> : OASettingsItem
+
+@property(nonatomic, retain, readonly) NSMutableArray<ObjectType> *items;
+@property(nonatomic, retain, readonly) NSMutableArray<ObjectType> *duplicateItems;
+@property(nonatomic, retain) NSArray<ObjectType> *existingItems;
+
+- (instancetype) initWithType:(EOASettingsItemType)type items:(NSMutableArray<id>*) items;
+- (instancetype) initWithType:(EOASettingsItemType)type json:(NSDictionary *)json;
+- (NSMutableArray<id> *) excludeDuplicateItems;
+
+@end
+
+#pragma mark - OAQuickActionSettingsItemReader
+
+@interface OAQuickActionSettingsItemReader: OAStreamSettingsItemReader
+
+- (instancetype)initWithItem:(OASettingsItem *)item;
+
+@end
+
+#pragma mark - OAQuickActionSettingsItemWriter
+
+@interface OAQuickActionSettingsItemWriter : OAStreamSettingsItemWriter
+
+
+
+@end
+
+
+#pragma mark - OAQuickActionSettingsItem
+
+@interface OAQuickActionSettingsItem : OACollectionSettingsItem<OAQuickAction *>
+
+
+
+@end
+
+
+#pragma mark - OAMapSourcesSettingsItem
+
+@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<OAMapSource *>
+
 
 @end

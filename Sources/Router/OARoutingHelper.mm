@@ -22,6 +22,7 @@
 #import "OAGPXUIHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
+#import "OATransportRoutingHelper.h"
 
 #import <Reachability.h>
 
@@ -43,6 +44,8 @@
 @property (nonatomic) long recalculateCountInInterval;
 @property (nonatomic) NSTimeInterval evalWaitInterval;
 @property (nonatomic) BOOL waitingNextJob;
+
+@property (nonatomic) OARouteCalculationResult *originalRoute;
 
 - (void) showMessage:(NSString *)msg;
 - (void) setNewRoute:(OARouteCalculationResult *)prevRoute res:(OARouteCalculationResult *)res start:(CLLocation *)start;
@@ -142,6 +145,15 @@
     {
         if ([res isCalculated])
         {
+            if (!_params.inSnapToRoadMode && !_params.inPublicTransportMode)
+            {
+                _helper.route = res;
+                [self updateOriginalRoute];
+            }
+            if (_params.resultListener)
+            {
+                [_params.resultListener onRouteCalculated:res];
+            }
             _helper.route = res;
         }
         else
@@ -180,6 +192,12 @@
     _helper.lastTimeEvaluatedRoute = [[NSDate date] timeIntervalSince1970];
 }
 
+- (void) updateOriginalRoute
+{
+    if (!_helper.originalRoute)
+        _helper.originalRoute = _helper.route;
+}
+
 @end
 
 @implementation OARoutingHelper
@@ -207,6 +225,8 @@
     BOOL _voiceRouterStopped;
     
     NSMutableArray<id<OARouteCalculationProgressCallback>> *_progressRoutes;
+    
+    OATransportRoutingHelper *_transportRoutingHelper;
 }
 
 static BOOL _isDeviatedFromRoute = false;
@@ -227,6 +247,7 @@ static BOOL _isDeviatedFromRoute = false;
         _provider = [[OARouteProvider alloc] init];
         [self setAppMode:_settings.applicationMode];
         _progressRoutes = [NSMutableArray new];
+        _transportRoutingHelper = OATransportRoutingHelper.sharedInstance;
     }
     return self;
 }
@@ -326,6 +347,7 @@ static BOOL _isDeviatedFromRoute = false;
     {
         if (![_listeners containsObject:l])
             [_listeners addObject:l];
+        [_transportRoutingHelper addListener:l];
     }
 }
 
@@ -566,7 +588,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (BOOL) identifyUTurnIsNeeded:(CLLocation *)currentLocation posTolerance:(float)posTolerance
 {
-    if (!_finalLocation || !currentLocation || ![_route isCalculated])
+    if (!_finalLocation || !currentLocation || ![_route isCalculated] || self.isPublicTransportMode)
         return false;
     
     BOOL isOffRoute = false;
@@ -867,7 +889,15 @@ static BOOL _isDeviatedFromRoute = false;
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation previousRoute:(OARouteCalculationResult *)previousRoute targetPointsChanged:(BOOL)targetPointsChanged
 {
     CLLocation *locationProjection = currentLocation;
-    if (!_finalLocation || !currentLocation)
+    if (self.isPublicTransportMode && currentLocation != nil && _finalLocation != nil &&
+        (targetPointsChanged || _transportRoutingHelper.startLocation == nil))
+    {
+        _lastFixedLocation = currentLocation;
+        _lastProjection = locationProjection;
+        _transportRoutingHelper.applicationMode = _mode;
+        [_transportRoutingHelper setFinalAndCurrentLocation:_finalLocation currentLocation:[[CLLocation alloc] initWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude]];
+    }
+    if (_finalLocation == nil || currentLocation == nil || self.isPublicTransportMode)
     {
         _isDeviatedFromRoute = false;
         return locationProjection;
@@ -1137,6 +1167,7 @@ static BOOL _isDeviatedFromRoute = false;
             _lastProjection = nil;
             [self setFollowingMode:NO];
         }
+        [_transportRoutingHelper clearCurrentRoute:newFinalLocation];
     }
 }
 
@@ -1215,7 +1246,24 @@ static BOOL _isDeviatedFromRoute = false;
 - (void) recalculateRouteDueToSettingsChange
 {
     [self clearCurrentRoute:_finalLocation newIntermediatePoints:_intermediatePoints];
-    [self recalculateRouteInBackground:_lastFixedLocation end:_finalLocation intermediates:_intermediatePoints gpxRoute:_currentGPXRoute previousRoute:_route paramsChanged:YES onlyStartPointChanged:NO];
+    if (self.isPublicTransportMode)
+    {
+        CLLocation *start = _lastFixedLocation;
+        CLLocation *finish = _finalLocation;
+        _transportRoutingHelper.applicationMode = _mode;
+        if (start != nil && finish != nil)
+        {
+            [_transportRoutingHelper setFinalAndCurrentLocation:finish currentLocation:[[CLLocation alloc] initWithLatitude:start.coordinate.latitude longitude:start.coordinate.longitude]];
+        }
+        else
+        {
+            [_transportRoutingHelper recalculateRouteDueToSettingsChange];
+        }
+    }
+    else
+    {
+        [self recalculateRouteInBackground:_lastFixedLocation end:_finalLocation intermediates:_intermediatePoints gpxRoute:_currentGPXRoute previousRoute:_route paramsChanged:YES onlyStartPointChanged:NO];
+    }
 }
 
 - (void) notifyIfRouteIsCalculated
@@ -1224,7 +1272,7 @@ static BOOL _isDeviatedFromRoute = false;
         [_voiceRouter newRouteIsCalculated:true];
 }
 
-- (BOOL) isPublicTransportRoute
+- (BOOL) isPublicTransportMode
 {
     return [_mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
 }

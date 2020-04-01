@@ -90,7 +90,7 @@ struct RouteSegmentResult;
 - (void) recalculateRouteDueToSettingsChange;
 - (void) notifyIfRouteIsCalculated;
 - (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;
-- (BOOL) isPublicTransportRoute;
+- (BOOL) isPublicTransportMode;
 
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
 

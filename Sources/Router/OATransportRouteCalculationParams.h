@@ -13,14 +13,13 @@
 
 #include <OsmAndCore.h>
 #include <routeCalculationProgress.h>
-
-@class OATransportRouteResult;
+#include <transportRouteResult.h>
 
 @protocol OATransportRouteCalculationResultListener <NSObject>
 
 @required
 
-- (void) onRouteCalculated:(NSArray<OATransportRouteResult *> *) route;
+- (void) onRouteCalculated:(std::vector<SHARED_PTR<TransportRouteResult>>) route;
 
 @end
 
@@ -31,7 +30,7 @@
 
 @property (nonatomic) OAApplicationMode *mode;
 @property (nonatomic) EOARouteService type;
-@property (nonatomic) NSDictionary<NSString *, NSString *> *params;
+@property (nonatomic) MAP_STR_STR params;
 @property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
 @property (nonatomic) id<OATransportRouteCalculationResultListener> resultListener;
 

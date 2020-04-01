@@ -7,6 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
+
+#import "OARoutingHelper.h"
 
 @protocol OATransportRouteCalculationProgressCallback <NSObject>
 
@@ -18,9 +21,25 @@
 
 @end
 
+@class OARouteCalculationResult;
+@class OATransportRouteResultSegment;
+@class OAApplicationMode;
+
 @interface OATransportRoutingHelper : NSObject
 
 + (OATransportRoutingHelper *) sharedInstance;
+
+@property (nonatomic) NSDictionary<NSArray<OATransportRouteResultSegment *> *, OARouteCalculationResult *> *walkingRouteSegments;
+
+@property (nonatomic, readonly) CLLocation *startLocation;
+@property (nonatomic, readonly) CLLocation *endLocation;
+@property (nonatomic) OAApplicationMode *applicationMode;
+
+- (void) setFinalAndCurrentLocation:(CLLocation *) finalLocation currentLocation:(CLLocation *)currentLocation;
+- (void) addListener:(id<OARouteInformationListener>)l;
+
+- (void) clearCurrentRoute:(CLLocation *) newFinalLocation;
+- (void) recalculateRouteDueToSettingsChange;
 
 @end
 

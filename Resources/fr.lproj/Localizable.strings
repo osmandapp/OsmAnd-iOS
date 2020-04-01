@@ -924,8 +924,8 @@
 "osm_add_timespan" = "Ajouter une période de temps";
 "osm_opening_hours_time" = "Heure";
 "osm_around_the_clock" = "24 heures sur 24, 7 jours sur 7";
-"osm_opens_at" = "Ouvre à:";
-"osm_closes_at" = "Ferme à";
+"osm_opens_at" = "Ouvre à :";
+"osm_closes_at" = "Ferme à :";
 "osm_building_num" = "Numéro de bâtiment";
 "osm_target_modified" = "Point d'intérêt OSM modifié";
 "osm_target_deleted" = "Point d'intérêt OSM supprimé";

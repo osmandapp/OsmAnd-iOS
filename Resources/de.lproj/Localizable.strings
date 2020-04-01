@@ -1447,7 +1447,7 @@
 "rendering_attr_smoothness_bad_name" = "Schlecht";
 "rendering_attr_smoothness_excellent_name" = "Hervorragend";
 "rendering_attr_smoothness_very_horrible_name" = "Grauenhaft";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "Radroutennetzknoten anzeigen";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "Knotenpunktsystem von Radrouten anzeigen";
 "rendering_attr_hideWaterPolygons_description" = "Wasser";
 "routeInfo_smoothness_name" = "Oberflächenbeschaffenheit";
 "routing_attr_prefer_unpaved_name" = "Unbefestigte Straßen bevorzugen";

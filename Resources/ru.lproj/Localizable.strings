@@ -1608,3 +1608,4 @@
 "rendering_attr_surface_unpaved_name" = "Грунтовая";
 "rendering_attr_streetLightingNight_name" = "Показывать только ночью";
 "online_webpage_warning" = "Страница доступна только онлайн. Открыть ее в браузере?";
+"app_mode_osm" = "OSM";

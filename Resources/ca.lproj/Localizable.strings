@@ -388,7 +388,7 @@
 "shared_string_later" = "Més tard";
 "open_map_settings" = "Obre la configuració del mapa";
 "plugin_popup_wiki_title" = "Baixa dades de Viquipèdia";
-"plugin_popup_wiki_ask" = "Per baixar dades de Viquipèdia us cal activar el connector:  <b>Viquipèdia </b>";
+"plugin_popup_wiki_ask" = "Per baixar dades de Viquipèdia us cal activar el connector: <b>Viquipèdia </b>";
 "plugin_popup_srtm_title" = "Baixa corbes de nivell";
 "plugin_popup_srtm_desc" = "Per començar a utilitzar la funció Corbes de nivell, primer heu de baixar Corbes de nivell d'una regió";
 "plugin_popup_srtm_ask" = "Per baixar Corbes de nivell heu de tenir activat el connector: <b>Corbes de nivell </b>";
@@ -1368,7 +1368,7 @@
 "rendering_attr_appMode_description" = "Optimitza el mapa per";
 "rendering_attr_showLez_description" = "Mostra les zones de baixes emissions al mapa. No afecta el càlcul de ruta.";
 "routing_attr_avoid_stairs_description" = "Sense escales";
-"routing_attr_height_obstacles_description" = "Revisa l'elevació del terreny (mitjançant dades  SRTM, ASTER i EU-DEM).";
+"routing_attr_height_obstacles_description" = "Revisa l'elevació del terreny (mitjançant dades SRTM, ASTER i EU-DEM).";
 "rendering_attr_depthContours_name" = "Isòbates";
 "rendering_attr_buildings15zoom_name" = "Edificis al detall 15 de zoom";
 "rendering_attr_horseRoutes_name" = "Rutes a cavall";
@@ -1629,7 +1629,7 @@
 "wiki_sheet_title" = "Com obrir els articles de la Viquipèdia?";
 "download_wiki_data" = "Baixa les dades de la Viquipèdia de %@";
 "open_wiki_online" = "Obre l'article en línia";
-"online_webpage_warning" = "La pàgina només es pot consultar en línia.  La voleu obrir en un navegador?";
+"online_webpage_warning" = "La pàgina només es pot consultar en línia. La voleu obrir en un navegador?";
 "app_mode_osm" = "OSM";
 "app_mode_utv" = "Costat a costat";
 "app_mode_pickup_truck" = "Camioneta descoberta";

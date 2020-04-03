@@ -1269,7 +1269,7 @@
 "routing_attr_weight_name" = "وزن مجاز";
 "rendering_value_thick_name" = "ضخیم";
 "rendering_attr_smoothness_very_horrible_name" = "خیلی افتضاح";
-"routing_attr_allow_classic_only_description" = "مسیرهایی که فقط برای سبک کلاسیک آماده شده  و مسیر اسکیت ندارند. مسیرهای سُست‌تر و آماده‌شده با برف‌روهای کوچک‌تر و مسیرهای دست‌ساز اسکی‌بازان را نیز شامل می‌شود.";
+"routing_attr_allow_classic_only_description" = "مسیرهایی که فقط برای سبک کلاسیک آماده شده و مسیر اسکیت ندارند. مسیرهای سُست‌تر و آماده‌شده با برف‌روهای کوچک‌تر و مسیرهای دست‌ساز اسکی‌بازان را نیز شامل می‌شود.";
 "rendering_attr_contourWidth_description" = "عرض منحنی میزان";
 "rendering_attr_piste_difficulty_freeride_name" = "آزادرانی";
 "rendering_value_fine_name" = "خوب";

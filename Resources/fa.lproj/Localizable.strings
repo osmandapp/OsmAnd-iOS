@@ -1336,3 +1336,5 @@
 "app_mode_wagon" = "واگن";
 "app_mode_utv" = "UTV";
 "app_mode_osm" = "OSM";
+"app_mode_bicycle" = "دوچرخه‌سواری";
+"app_mode_skiing" = "اسکی";

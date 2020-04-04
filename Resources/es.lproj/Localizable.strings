@@ -499,7 +499,7 @@
 "do_not_send_anonymous_data" = "No enviar datos anónimos";
 "wiki_buy_description" = "Para leer los artículos completos - compra el complemento de Wikipedia y descarga los datos Wikipedia de %@";
 "wiki_download_description" = "Para leer los artículos completos - descarga los datos Wikipedia de %@";
-"map_an_region" = "una región";
+"map_an_region" = "esta región";
 "nothing_found" = "¡Nada por aquí! :-(";
 "nothing_found_descr" = "Modifica la consulta de búsqueda o aumenta el radio de búsqueda";
 "select_street" = "Elegir la calle";
@@ -1577,3 +1577,4 @@
 "available_map_styles" = "Estilos de mapa disponibles";
 "res_confirmation_delete" = "¿Está seguro de querer borrar %@?";
 "shared_string_maximum" = "Máximo";
+"available_map_sources" = "Repositorios de mapas disponible";

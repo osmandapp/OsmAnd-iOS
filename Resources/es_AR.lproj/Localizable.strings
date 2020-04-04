@@ -30,7 +30,7 @@
 "fav_export_title" = "Exportar favorito";
 "fav_select_remove" = "Seleccione favoritos a quitar";
 "fav_export_select" = "Seleccione favoritos a exportar";
-"fav_import_desc" = "Puedes importar tus favoritos como puntos de ruta en un archivo GPX (formato común de datos GPS)\n\nPara compartir el archivo «favorites.gpx», puedes abrir el archivo desde Dropbox, correo electrónico u otra fuente - Usa la función «Abrir en».";
+"fav_import_desc" = "Puedes importar tus favoritos como puntos de ruta en un archivo GPX (formato común de datos GPS)\n\nPara compartir el archivo «favorites.gpx», puedes abrir el archivo desde Dropbox, correo electrónico u otro repositorio - Usa la función «Abrir en».";
 "fav_create_group" = "Crear nuevo grupo";
 "fav_enter_group_name" = "Ingresar nombre del grupo";
 "fav_exists" = "El favorito con nombre «%@», ya existe";
@@ -65,7 +65,7 @@
 "gpx_cannot_import" = "No se pudo importar el archivo GPX indicado";
 "gpx_export_title" = "Exportar viaje";
 "gpx_export_select_track" = "Elija el viaje a exportar";
-"gpx_import_desc" = "Para importar los archivos GPX (formato común de datos GPS) desde Dropbox, correo electrónico u otra fuente, usa la opción «Copiar a los mapas de OsmAnd»";
+"gpx_import_desc" = "Para importar los archivos GPX (formato común de datos GPS) desde Dropbox, correo electrónico u otro repositorio, usa la opción «Copiar a los mapas de OsmAnd»";
 // Rendering categories
 "rendering_category_hide" = "Ocultar";
 "rendering_category_routes" = "Rutas";
@@ -1136,9 +1136,9 @@
 "map_overlays" = "Mapas superpuestos";
 "map_underlays" = "Mapas subyacentes";
 "offline_vector_maps" = "Mapas vectoriales sin conexión";
-"add_map_source" = "Añadir fuente del mapa";
+"add_map_source" = "Añadir repositorio de mapa";
 "add_map_style" = "Añadir estilo de mapa";
-"map_sources" = "Fuentes del mapa";
+"map_sources" = "Repositorio de mapas";
 "map_styles" = "Estilos de mapa";
 "add_action" = "Añadir acción";
 "create_items" = "Crear elementos";
@@ -1154,7 +1154,7 @@
 "toggle_local_edits" = "Alternar ediciones locales de OSM";
 "add_poi" = "Añadir PDI";
 "change_map_style" = "Cambiar estilo del mapa";
-"change_map_source" = "Cambiar fuente del mapa";
+"change_map_source" = "Cambiar repositorio del mapa";
 "change_map_overlay" = "Cambiar mapa superpuesto";
 "change_map_underlay" = "Cambiar mapa subyacente";
 "replace_destination" = "Reemplazar destino";
@@ -1174,7 +1174,7 @@
 "add_group" = "Añadir grupo";
 "poi_list" = "Lista de PDI";
 "select_map_style" = "Elegir estilo del mapa";
-"select_map_source" = "Elegir fuente del mapa";
+"select_map_source" = "Elegir repositorio del mapa";
 "select_overlay" = "Elegir mapa superpuesto";
 "select_underlay" = "Elegir mapa subyacente";
 "confirm_bulk_delete" = "¿Borrar %ld elementos?";
@@ -1294,7 +1294,7 @@
 "stats_select_graph_data" = "Elegir datos del gráfico";
 "region_nautical" = "Mapas náuticos";
 "available_map_styles" = "Estilos de mapas disponibles";
-"available_map_sources" = "Fuentes de mapas disponibles";
+"available_map_sources" = "Repositorio de mapas disponible";
 "shared_string_clear_cache" = "Limpiar cache";
 "res_confirmation_delete" = "¿Borrar «%@»?";
 "res_confirmation_clear_cache" = "¿Limpiar el caché de «%@»?";
@@ -1307,14 +1307,14 @@
 "res_elliptic_mercator" = "Mercator elíptica";
 "shared_string_maximum" = "Máximo";
 "res_edit_online_map" = "Editar fuente del mapa en línea";
-"res_online_name_descr" = "Proporcionar el nombre de la fuente en línea";
-"res_online_url_descr" = "Ingresa o copia y pega la URL de la fuente en línea";
+"res_online_name_descr" = "Proporcionar el nombre del repositorio en línea";
+"res_online_url_descr" = "Ingresa o copia y pega la URL del repositorio en línea";
 "res_zoom_levels" = "Niveles de zoom";
 "res_expire_time" = "Tiempo de expiración";
 "res_mercator" = "Proyección de Mercator";
 "res_pseudo_mercator" = "Proyección de pseudo-Mercator";
 "res_zoom_levels_desc" = "Estos parámetros afectarán a la visualización del mapa cuando se utilice como un tipo de mapa o como superposición/subyacencia.\n\nTipo de mapa: el mapa se limitará a los zooms elegidos.\n\nSuperposición/Subyacencia: Niveles de zoom en los que las teselas serán visibles. Se producirá un aumento o disminución de la escala por encima o por debajo de los valores definidos.";
-"res_expire_time_desc" = "Tiempo de expiración en minutos. Las teselas almacenadas serán recargadas luego del tiempo definido. Deja este campo vacío si no necesitas recargar las teselas para esta fuente.\nUn día son 1440 minutos.\nUna semana son 10080 minutos.\n30 días son 43200 minutos.";
+"res_expire_time_desc" = "Tiempo de expiración en minutos. Las teselas almacenadas serán recargadas luego del tiempo definido. Deja este campo vacío si no necesitas recargar las teselas para este repositorio.\nUn día son 1440 minutos.\nUna semana son 10080 minutos.\n30 días son 43200 minutos.";
 "res_name_warning" = "El nombre del archivo no puede estar vacío";
 "res_url_warning" = "La URL no puede estar vacía";
 "res_zoom_warning" = "El valor mínimo de zoom no puede ser igual o mayor que el valor máximo de zoom";
@@ -1614,17 +1614,17 @@
 "online_raster_map" = "Mapa de trama en línea";
 "offline_raster_map" = "Mapa de trama sin conexión";
 "offline_raster_maps" = "Mapas de tramas sin conexión";
-"res_edit_map_source" = "Editar fuente del mapa";
+"res_edit_map_source" = "Editar repositorio del mapa";
 "res_offlineSQL_URL_warning" = "No admitido para este tipo de mapa";
 "shared_string_warning" = "Advertencia";
-"res_online_source_cache_alert" = "Al aplicar estos cambios, los datos almacenados serán borrados para esta fuente de teselas";
+"res_online_source_cache_alert" = "Al aplicar estos cambios, los datos almacenados serán borrados para este repositorio de teselas";
 "change_object_posiotion" = "Cambiar la ubicación del objeto";
 "change_position_descr" = "Mueve el mapa para cambiar la ubicación del objeto";
 "online_raster_maps" = "Mapa de trama en línea";
 "import_raster_map_success" = "Se ha importado un mapa de tramas. Abre los ajustes del mapa y actívalo desde «Superposición/Subyacencia»";
 "import_raster_map_failed" = "Error al importar el mapa de tramas";
 "map_settings_show_slider_map" = "Mostrar deslizador en el mapa";
-"map_settings_add_online_source" = "Añadir fuente en línea";
+"map_settings_add_online_source" = "Añadir repositorio en línea";
 "map_settings_hide_polygons" = "Ocultar polígonos";
 "map_settings_hide_polygons_desc" = "Esta opción sólo afecta a los mapas vectoriales sin conexión de OsmAnd";
 "map_settings_add_maps_desc" = "Puedes añadir nuevos mapas a través de un enlace o importando archivos SQLite.";

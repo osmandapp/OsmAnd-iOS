@@ -40,7 +40,7 @@
 {
     self = [super init];
     if (self) {
-        _propertyName = propertyName == nil ? UNDEFINED_ATTR : propertyName;
+        _propertyName = propertyName == nil ? kUndefinedAttr : propertyName;
         _slopeIndex = slopeIndex >= 0 && [boundariesClass[slopeIndex] hasSuffix:_propertyName] ? slopeIndex : -1;
         _color = color;
     }

@@ -11,7 +11,7 @@
 #import "OAInAppCell.h"
 #import <StoreKit/StoreKit.h>
 #import "OALog.h"
-#import "OAResourcesBaseViewController.h"
+#import "OAResourcesUIHelper.h"
 #import "OAPluginsViewController.h"
 #import "OsmAndApp.h"
 #include "Localization.h"
@@ -384,11 +384,11 @@
         
         if (repositoryMap)
         {
-            NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
-                                                                   inRegion:[OsmAndApp instance].worldRegion
-                                                             withRegionName:YES withResourceType:NO];
+            NSString *name = [OAResourcesUIHelper titleOfResource:repositoryMap
+                                                         inRegion:[OsmAndApp instance].worldRegion
+                                                   withRegionName:YES withResourceType:NO];
             
-            [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+            [OAResourcesUIHelper startBackgroundDownloadOf:repositoryMap resourceName:name];
         }
     }
 }

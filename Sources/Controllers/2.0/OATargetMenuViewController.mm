@@ -41,7 +41,7 @@
 #import "OAPointDescription.h"
 #import "OAWorldRegion.h"
 #import "OAManageResourcesViewController.h"
-#import "OAResourcesBaseViewController.h"
+#import "OAResourcesUIHelper.h"
 #import "Reachability.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
@@ -335,9 +335,9 @@
         targetPoint.type != OATargetImpassableRoadSelection &&
         targetPoint.type != OATargetChangePosition)
     {
-        [OAResourcesBaseViewController requestMapDownloadInfo:targetPoint.location
-                                                 resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
-                                                   onComplete:^(NSArray<ResourceItem *>* res) {
+        [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
+                                       resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
+                                         onComplete:^(NSArray<ResourceItem *>* res) {
             if (res.count > 0)
             {
                 for (ResourceItem * item in res)
@@ -920,7 +920,7 @@
     if (_localMapIndexItem)
     {
         if (_localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::MapRegion &&
-            ![OAResourcesBaseViewController checkIfDownloadAvailable:_localMapIndexItem.worldRegion])
+            ![OAResourcesUIHelper checkIfDownloadAvailable:_localMapIndexItem.worldRegion])
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_free_exp") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
@@ -928,14 +928,14 @@
             return;
         }
         
-        NSString *resourceName = [OAResourcesBaseViewController titleOfResource:_localMapIndexItem.resource
-                                                                       inRegion:_localMapIndexItem.worldRegion
-                                                                 withRegionName:YES
-                                                               withResourceType:YES];
+        NSString *resourceName = [OAResourcesUIHelper titleOfResource:_localMapIndexItem.resource
+                                                             inRegion:_localMapIndexItem.worldRegion
+                                                       withRegionName:YES
+                                                     withResourceType:YES];
         
-        if (![OAResourcesBaseViewController verifySpaceAvailableDownloadAndUnpackResource:_localMapIndexItem.resource
-                                                      withResourceName:resourceName
-                                                              asUpdate:YES])
+        if (![OAResourcesUIHelper verifySpaceAvailableDownloadAndUnpackResource:_localMapIndexItem.resource
+                                                              withResourceName:resourceName
+                                                                      asUpdate:YES])
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_install_no_space") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
@@ -943,7 +943,7 @@
             return;
         }
         
-        [OAResourcesBaseViewController startBackgroundDownloadOf:_localMapIndexItem.resource resourceName:resourceName];
+        [OAResourcesUIHelper startBackgroundDownloadOf:_localMapIndexItem.resource resourceName:resourceName];
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)])
             [self.delegate showProgressBar];

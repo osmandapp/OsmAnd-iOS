@@ -12,7 +12,7 @@
 #import "OARootViewController.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
-#import "OAResourcesBaseViewController.h"
+#import "OAResourcesUIHelper.h"
 #import "OAPluginsViewController.h"
 #import "OAWorldRegion.h"
 
@@ -532,10 +532,10 @@ static NSMutableArray *activePopups;
 - (void) downloadWorldMap
 {
     const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldBasemapKey);
-    NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
-                                                           inRegion:[OsmAndApp instance].worldRegion
-                                                     withRegionName:YES withResourceType:NO];
-    [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+    NSString* name = [OAResourcesUIHelper titleOfResource:repositoryMap
+                                                 inRegion:[OsmAndApp instance].worldRegion
+                                           withRegionName:YES withResourceType:NO];
+    [OAResourcesUIHelper startBackgroundDownloadOf:repositoryMap resourceName:name];
     
     [self hide];
     
@@ -558,11 +558,11 @@ static NSMutableArray *activePopups;
 
     if (repositoryMap)
     {
-        NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
-                                                               inRegion:[OsmAndApp instance].worldRegion
-                                                         withRegionName:YES withResourceType:NO];
+        NSString* name = [OAResourcesUIHelper titleOfResource:repositoryMap
+                                                     inRegion:[OsmAndApp instance].worldRegion
+                                               withRegionName:YES withResourceType:NO];
         
-        [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+        [OAResourcesUIHelper startBackgroundDownloadOf:repositoryMap resourceName:name];
         
         [[OARootViewController instance].navigationController popToRootViewControllerAnimated:YES];
     }

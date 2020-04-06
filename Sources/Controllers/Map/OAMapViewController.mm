@@ -113,9 +113,6 @@
 #import "OALog.h"
 #include "Localization.h"
 
-#define kGpxLayerIndex 9
-#define kGpxRecLayerIndex 12
-
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
@@ -3119,7 +3116,7 @@
     }
     else
     {
-        return @{UNDEFINED_ATTR : @(0xFFFFFFFF)};
+        return @{kUndefinedAttr : @(0xFFFFFFFF)};
     }
 }
 

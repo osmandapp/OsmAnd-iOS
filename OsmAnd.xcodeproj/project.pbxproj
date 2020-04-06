@@ -3378,6 +3378,8 @@
 		8A836B5D227B43DF005EE20E /* widget_intermediate_time_day.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B57227B43DF005EE20E /* widget_intermediate_time_day.png */; };
 		8A8C1174242FB50B00E47052 /* OALocationIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A8C1173242FB50B00E47052 /* OALocationIcon.m */; };
 		8A8C1175242FB50B00E47052 /* OALocationIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A8C1173242FB50B00E47052 /* OALocationIcon.m */; };
+		8AB1ACC224374AD500D8C0AC /* OAResourcesUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AB1ACC124374AD400D8C0AC /* OAResourcesUIHelper.mm */; };
+		8AB1ACC324374AD500D8C0AC /* OAResourcesUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AB1ACC124374AD400D8C0AC /* OAResourcesUIHelper.mm */; };
 		8AB2BBC523ACBAEB00D2AD03 /* desert.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */; };
 		8AB2BBC623ACBAEB00D2AD03 /* desert.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */; };
 		8AC405C620F9E08400F85CC9 /* OATransportStop.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AC405C520F9E08400F85CC9 /* OATransportStop.mm */; };
@@ -7245,6 +7247,8 @@
 		8A837E0620E51FD60063E3A6 /* OAContextMenuProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAContextMenuProvider.h; sourceTree = "<group>"; };
 		8A8C1172242FB50B00E47052 /* OALocationIcon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OALocationIcon.h; sourceTree = "<group>"; };
 		8A8C1173242FB50B00E47052 /* OALocationIcon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OALocationIcon.m; sourceTree = "<group>"; };
+		8AB1ACC024374AD400D8C0AC /* OAResourcesUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAResourcesUIHelper.h; path = Helpers/OAResourcesUIHelper.h; sourceTree = "<group>"; };
+		8AB1ACC124374AD400D8C0AC /* OAResourcesUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAResourcesUIHelper.mm; path = Helpers/OAResourcesUIHelper.mm; sourceTree = "<group>"; };
 		8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = desert.render.xml; path = ../resources/rendering_styles/desert.render.xml; sourceTree = "<group>"; };
 		8AC405C420F9E08400F85CC9 /* OATransportStop.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStop.h; sourceTree = "<group>"; };
 		8AC405C520F9E08400F85CC9 /* OATransportStop.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATransportStop.mm; sourceTree = "<group>"; };
@@ -12353,6 +12357,8 @@
 			isa = PBXGroup;
 			children = (
 				DA92BC0D22E06AF700238C86 /* kml2gpx.xslt */,
+				8AB1ACC024374AD400D8C0AC /* OAResourcesUIHelper.h */,
+				8AB1ACC124374AD400D8C0AC /* OAResourcesUIHelper.mm */,
 				DA68628822CCB0A400C32E32 /* OpenLocationCode.swift */,
 				DA68628922CCB0A400C32E32 /* OpenLocationCodeObjCBridge.swift */,
 				DA4B981221F74EAD00CED009 /* OrderedDictionary.h */,
@@ -17124,6 +17130,7 @@
 				84F13EAD207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */,
 				DA4B982821F865F500CED009 /* OAWay.m in Sources */,
 				8AE0658A229140F200D3CB56 /* OAMapillaryTilesProvider.mm in Sources */,
+				8AB1ACC324374AD500D8C0AC /* OAResourcesUIHelper.mm in Sources */,
 				8404B3252040760100018DB3 /* OAScrollView.m in Sources */,
 				84EE96B01F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */,
 				845B0C041F0A9B4E00D38964 /* OARouteCalculationParams.mm in Sources */,
@@ -17720,6 +17727,7 @@
 				DAD10FDB2226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm in Sources */,
 				847936571FED546300503D09 /* OAAmenityLocationPoint.mm in Sources */,
 				8417663C1B721E58002A08CB /* NSData+CRC32.m in Sources */,
+				8AB1ACC224374AD500D8C0AC /* OAResourcesUIHelper.mm in Sources */,
 				DAC04718221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */,
 				DAFE4D492216A472009731CA /* OAOsmEditTargetViewController.mm in Sources */,
 				8474ABAD1E1CE22300355F88 /* OAIconTextCollapseCell.m in Sources */,

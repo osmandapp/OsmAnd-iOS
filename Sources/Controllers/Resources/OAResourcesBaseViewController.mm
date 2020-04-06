@@ -13,7 +13,6 @@
 #import <FFCircularProgressView.h>
 #import <MBProgressHUD.h>
 
-#import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OALog.h"
@@ -36,44 +35,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 static BOOL dataInvalidated = NO;
 
-@implementation ResourceItem
-
-- (BOOL) isEqual:(id)object
-{
-    if (self.resourceId == nullptr || ((ResourceItem*)object).resourceId == nullptr)
-        return NO;
-    
-    return self.resourceId.compare(((ResourceItem*)object).resourceId) == 0;
-}
-
-- (void) updateSize
-{
-    // override
-}
-
-@end
-
-@implementation RepositoryResourceItem
-@end
-
-@implementation LocalResourceItem
-@end
-
-@implementation OutdatedResourceItem
-@end
-
-@implementation SqliteDbResourceItem
-
-- (void) updateSize
-{
-    self.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:self.path error:nil] fileSize];
-}
-
-@end
-
-@implementation OnlineTilesResourceItem
-@end
-
 @interface OAResourcesBaseViewController ()
 
 @end
@@ -87,17 +48,16 @@ static BOOL dataInvalidated = NO;
     OAAutoObserverProxy* _repositoryUpdatedObserver;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
-
     OAAutoObserverProxy* _sqlitedbResourcesChangedObserver;
 
     MBProgressHUD* _deleteResourceProgressHUD;
-    
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
+- (instancetype) initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
-    if (self) {
+    if (self)
+    {
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
 
@@ -154,7 +114,7 @@ static BOOL dataInvalidated = NO;
     return self;
 }
 
--(void)dealloc
+- (void) dealloc
 {
     if (_downloadTaskProgressObserver)
     {
@@ -178,19 +138,19 @@ static BOOL dataInvalidated = NO;
     }
 }
 
-+ (BOOL)isDataInvalidated
++ (BOOL) isDataInvalidated
 {
     return dataInvalidated;
 }
 
-+ (void)setDataInvalidated
++ (void) setDataInvalidated
 {
     dataInvalidated = YES;
 }
 
 @synthesize resourceItemsComparator = _resourceItemsComparator;
 
--(void)applyLocalization
+- (void) applyLocalization
 {
     [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
     [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
@@ -201,7 +161,7 @@ static BOOL dataInvalidated = NO;
     [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
 
@@ -209,12 +169,11 @@ static BOOL dataInvalidated = NO;
     _deleteResourceProgressHUD.labelText = OALocalizedString(@"res_deleting");
     [self.view addSubview:_deleteResourceProgressHUD];
     
-    // IOS-178 Add download view
     if (_app.downloadsManager.hasDownloadTasks)
         [self showDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]]];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -226,46 +185,51 @@ static BOOL dataInvalidated = NO;
     }
     
     if (self.downloadView)
+    {
         if (_app.downloadsManager.hasDownloadTasks)
             [self validateDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]]];
         else
             [self.downloadView removeFromSuperview];
-    else {
+    }
+    else
+    {
         if (_app.downloadsManager.hasDownloadTasks)
             [self showDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]]];
     }
 }
 
-#pragma mark - IOS-178 Add download view
--(void)showDownloadViewForTask:(id<OADownloadTask>)task
+- (void) showDownloadViewForTask:(id<OADownloadTask>)task
 {
-    if (self.downloadView && self.downloadView.superview)
-        [self.downloadView removeFromSuperview];
-    
-    self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(0, DeviceScreenHeight - kOADownloadProgressViewHeight, DeviceScreenWidth, kOADownloadProgressViewHeight)];
-    [self.downloadView setTaskName:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]];
-    self.downloadView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.downloadView.delegate = self;
-    [self validateDownloadViewForTask:task];
-    
-    [self.view insertSubview:self.downloadView aboveSubview:[self getTableView]];
-    
-    // Constraints
-    NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.toolbarView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.f];
-    [self.view addConstraint:constraint];
-    
-    constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
-    [self.view addConstraint:constraint];
-    
-    constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
-    [self.view addConstraint:constraint];
-    
-    constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:kOADownloadProgressViewHeight];
-    [self.view addConstraint:constraint];
-    
+    UITableView *tableView = [self getTableView];
+    if (tableView)
+    {
+        if (self.downloadView && self.downloadView.superview)
+            [self.downloadView removeFromSuperview];
+        
+        self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(0, DeviceScreenHeight - kOADownloadProgressViewHeight, DeviceScreenWidth, kOADownloadProgressViewHeight)];
+        [self.downloadView setTaskName:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]];
+        self.downloadView.translatesAutoresizingMaskIntoConstraints = NO;
+        self.downloadView.delegate = self;
+        [self validateDownloadViewForTask:task];
+        
+        [self.view insertSubview:self.downloadView aboveSubview:tableView];
+        
+        // Constraints
+        NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.toolbarView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.f];
+        [self.view addConstraint:constraint];
+        
+        constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
+        [self.view addConstraint:constraint];
+        
+        constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
+        [self.view addConstraint:constraint];
+        
+        constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:kOADownloadProgressViewHeight];
+        [self.view addConstraint:constraint];
+    }
 }
 
--(void) validateDownloadViewForTask:(id<OADownloadTask>)task
+- (void) validateDownloadViewForTask:(id<OADownloadTask>)task
 {
     [self.downloadView setProgress:task.progressCompleted];
     [self.downloadView setTitle:task.name];
@@ -277,12 +241,12 @@ static BOOL dataInvalidated = NO;
 }
 
 
--(UIView *) getBottomView
+- (UIView *) getBottomView
 {
     return self.toolbarView;
 }
 
--(CGFloat) getToolBarHeight
+- (CGFloat) getToolBarHeight
 {
     return defaultToolBarHeight;
 }
@@ -299,638 +263,70 @@ static BOOL dataInvalidated = NO;
 {
 }
 
-+ (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &)resource
-                      inRegion:(OAWorldRegion *)region
-                withRegionName:(BOOL)includeRegionName
-              withResourceType:(BOOL)includeResourceType
+- (void) offerDownloadAndInstallOf:(RepositoryResourceItem *)item
 {
-    if (region == [OsmAndApp instance].worldRegion)
-    {
-        if (resource->id == QLatin1String(kWorldBasemapKey))
-        {
-            if (includeRegionName)
-                return OALocalizedString(@"res_wmap");
-            else
-                return OALocalizedString(@"res_dmap");
-        }
-        else if (resource->id == QLatin1String(kWorldSeamarksKey) || resource->id == QLatin1String(kWorldSeamarksOldKey))
-        {
-            if (includeRegionName)
-                return OALocalizedString(@"res_wsea_map");
-            else
-                return OALocalizedString(@"res_wsea_map");
-        }
-
-        // By default, world region has only predefined set of resources
-        return nil;
-    }
-    else if ([region.regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()])
-    {
-        if (resource->id == QLatin1String(kWorldSeamarksKey) || resource->id == QLatin1String(kWorldSeamarksOldKey))
-            return OALocalizedString(@"res_wsea_map");
-
-        auto name = resource->id;
-        name = name.remove(QStringLiteral("_osmand_ext")).remove(QStringLiteral(".depth.obf")).mid(6).replace('_', ' ');
-        return [[NSString alloc] initWithFormat:@"%@ %@", OALocalizedString(@"download_depth_countours"), [OAUtilities capitalizeFirstLetterAndLowercase:name.toNSString()]];
-    }
-    NSString *nameStr;
-    switch (resource->type)
-    {
-        case OsmAndResourceType::MapRegion:
-        //case OsmAndResourceType::RoadMapRegion:
-        case OsmAndResourceType::SrtmMapRegion:
-        case OsmAndResourceType::WikiMapRegion:
-        case OsmAndResourceType::HillshadeRegion:
-            
-            if ([region.subregions count] > 0)
-            {
-                if (!includeRegionName || region == nil)
-                    nameStr = OALocalizedString(@"res_mapsres");
-                else
-                    nameStr =  OALocalizedString(@"%@", region.name);
-            }
-            else
-            {
-                if (!includeRegionName || region == nil)
-                    nameStr =  OALocalizedString(@"res_mapsres");
-                else
-                    nameStr =  OALocalizedString(@"%@", region.name);
-            }
-            break;
-
-        default:
-            nameStr = nil;
-    }
-    
-    if (!nameStr)
-        return nil;
-    
-    if (includeResourceType)
-        nameStr = [nameStr stringByAppendingString:[NSString stringWithFormat:@" - %@", [OAResourcesBaseViewController resourceTypeLocalized:resource->type]]];
-    
-    return nameStr;
-}
-
-+ (BOOL) isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem *)item_
-{
-    if ([item_ isKindOfClass:[RepositoryResourceItem class]])
-    {
-        RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
-
-        return [self isSpaceEnoughToDownloadAndUnpackResource:item.resource];
-    }
-    else if ([item_ isKindOfClass:[LocalResourceItem class]])
-    {
-        OsmAndAppInstance _app = [OsmAndApp instance];
-        const auto resource = _app.resourcesManager->getResourceInRepository(item_.resourceId);
-
-        return [self isSpaceEnoughToDownloadAndUnpackResource:resource];
-    }
-
-    return NO;
-}
-
-+ (BOOL) isSpaceEnoughToDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
-{
-    OsmAndAppInstance _app = [OsmAndApp instance];
-    uint64_t spaceNeeded = resource->packageSize + resource->size;
-    return (_app.freeSpaceAvailableOnDevice >= spaceNeeded);
-}
-
-+ (BOOL) verifySpaceAvailableToDownloadAndUnpackOf:(ResourceItem*)item_
-                                         asUpdate:(BOOL)isUpdate
-{
-    if ([item_ isKindOfClass:[RepositoryResourceItem class]])
-    {
-        RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
-
-        return [self verifySpaceAvailableDownloadAndUnpackResource:item.resource
-                                                  withResourceName:[self.class titleOfResource:item.resource
-                                                                                inRegion:item.worldRegion
-                                                                          withRegionName:YES
-                                                                        withResourceType:YES]
-                                                          asUpdate:isUpdate];
-    }
-    else if ([item_ isKindOfClass:[LocalResourceItem class]])
-    {
-        LocalResourceItem* item = (LocalResourceItem*)item_;
-
-        OsmAndAppInstance _app = [OsmAndApp instance];
-        const auto resource = _app.resourcesManager->getResourceInRepository(item.resourceId);
-
-        return [self verifySpaceAvailableDownloadAndUnpackResource:resource
-                                                  withResourceName:[self.class titleOfResource:item.resource
-                                                                                inRegion:item.worldRegion
-                                                                          withRegionName:YES
-                                                                        withResourceType:YES]
-                                                          asUpdate:isUpdate];
-    }
-    
-    return NO;
-}
-
-+ (BOOL)verifySpaceAvailableDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
-                                     withResourceName:(NSString*)resourceName
-                                             asUpdate:(BOOL)isUpdate
-{
-    OsmAndAppInstance _app = [OsmAndApp instance];
-    uint64_t spaceNeeded = resource->packageSize + resource->size;
-    BOOL isEnoughSpace = (_app.freeSpaceAvailableOnDevice >= spaceNeeded);
-
-    if (!isEnoughSpace)
-    {
-        [self showNotEnoughSpaceAlertFor:resourceName
-                                withSize:spaceNeeded
-                                asUpdate:isUpdate];
-    }
-    
-    return isEnoughSpace;
-}
-
-+ (void)showNotEnoughSpaceAlertFor:(NSString*)resourceName
-                          withSize:(unsigned long long)size
-                          asUpdate:(BOOL)isUpdate
-{
-    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:size
-                                                               countStyle:NSByteCountFormatterCountStyleFile];
-
-    NSMutableString* text;
-    if (isUpdate)
-    {
-        text = [OALocalizedString(@"res_update_no_space") mutableCopy];
-        [text appendString:@" "];
-        [text appendString:resourceName];
-        [text appendString:@"."];
-        [text appendString:@" "];
-        [text appendString:stringifiedSize];
-        [text appendString:@" "];
-        [text appendString:OALocalizedString(@"res_no_space_free")];
-    }
-    else
-    {
-        text = [OALocalizedString(@"res_install_no_space") mutableCopy];
-        [text appendString:@" "];
-        [text appendString:resourceName];
-        [text appendString:@"."];
-        [text appendString:@" "];
-        [text appendString:stringifiedSize];
-        [text appendString:@" "];
-        [text appendString:OALocalizedString(@"res_no_space_free")];
-    }
-
-    [[[UIAlertView alloc] initWithTitle:nil
-                                message:text
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_ok")]
-                       otherButtonItems:nil] show];
-}
-
-+ (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region
-{
-#if defined(OSMAND_IOS_DEV)
-    return YES;
-#endif
-    
-    NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
-    
-    if (region.regionId == nil || [region isInPurchasedArea] || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]))
-        return YES;
-    
-    return NO;
-}
-
-- (BOOL)checkIfDownloadEnabled:(OAWorldRegion *)region
-{
-    BOOL isAvailable = [self.class checkIfDownloadAvailable:region];
-        
-    if (!isAvailable)
-    {
-        [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"res_free_exp") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-        
-        return NO;
-    }
-    return isAvailable;
-}
-
-- (BOOL)checkIfUpdateEnabled:(OAWorldRegion *)region
-{
-#if defined(OSMAND_IOS_DEV)
-    return YES;
-#endif
-    
-    if (region.regionId == nil || [region isInPurchasedArea]) {
-        return YES;
-        
-    } else {
-        
-        [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"res_updates_exp") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-        
-        return NO;
-    }
-}
-
-- (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item
-{
-    if (![self checkIfUpdateEnabled:item.worldRegion])
-        return;
-    
-    const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
-
-    NSString* resourceName = [self.class titleOfResource:item.resource
-                                          inRegion:item.worldRegion
-                                    withRegionName:YES
-                                  withResourceType:YES];
-
-    if (![self.class verifySpaceAvailableDownloadAndUnpackResource:resourceInRepository
-                                            withResourceName:resourceName
-                                                    asUpdate:YES])
-    {
-        return;
-    }
-
-    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:resourceInRepository->packageSize
-                                                               countStyle:NSByteCountFormatterCountStyleFile];
-
-    NSMutableString* message;
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-    {
-        message = [OALocalizedString(@"res_upd_avail_q") mutableCopy];
-        [message appendString:@" "];
-        [message appendString:resourceName];
-        [message appendString:@"."];
-        [message appendString:@" "];
-        [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"incur_high_charges")];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];        
-    }
-    else
-    {
-        message = [OALocalizedString(@"res_upd_avail_q") mutableCopy];
-        [message appendString:@" "];
-        [message appendString:resourceName];
-        [message appendString:@"."];
-        [message appendString:@" "];
-        [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"), stringifiedSize]];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-    }
-
-    [[[UIAlertView alloc] initWithTitle:nil
-                                message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_update")
-                                                             action:^{
-                                                                 [self startDownloadOf:resourceInRepository resourceName:resourceName];
-                                                             }], nil] show];
-}
-
-- (void)offerDownloadAndInstallOf:(RepositoryResourceItem*)item
-{
-    if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self checkIfDownloadEnabled:item.worldRegion]))
-        return;
-
-    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:item.resource->packageSize
-                                                               countStyle:NSByteCountFormatterCountStyleFile];
-    
-    NSString* resourceName = [self.class titleOfResource:item.resource
-                                          inRegion:item.worldRegion
-                                    withRegionName:YES
-                                  withResourceType:YES];
-
-    if (![self.class verifySpaceAvailableDownloadAndUnpackResource:item.resource
-                                            withResourceName:resourceName
-                                                    asUpdate:YES])
-    {
-        return;
-    }
-
-    NSMutableString* message;
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-    {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_inst_avail_cell_q"),
-                                    resourceName,
-                                    stringifiedSize] mutableCopy];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"incur_high_charges")];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-        
-    }
-    else
-    {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_inst_avail_wifi_q"),
-                    resourceName,
-                    stringifiedSize] mutableCopy];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-    }
-
-    [[[UIAlertView alloc] initWithTitle:nil
-                                message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_install")
-                                                             action:^{
-                                                                 [self startDownloadOfItem:item];
-                                                             }], nil] show];
-}
-
-- (void)startDownloadOfItem:(RepositoryResourceItem*)item
-{
-    // Create download tasks
-    NSString* ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSURL* pureUrl = item.resource->url.toNSURL();
-    NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [pureUrl absoluteString], params];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest* request = [NSURLRequest requestWithURL:url];
-    
-    NSLog(@"%@", url);
-    
-    NSString* name = [self.class titleOfResource:item.resource
-                                        inRegion:item.worldRegion
-                                  withRegionName:YES
-                                withResourceType:YES];
-    
-    id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
-                                                                      andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()]
-                                                                     andName:name];
-    
-    [self updateContent];
-    
-    // Resume task only if it's other resource download tasks are not running
-    if ([_app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
-    {
-        [task resume];
+    [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
+        [self updateContent];
+    } onTaskResumed:^(id<OADownloadTask> task) {
         [self showDownloadViewForTask:task];
-    }
-}
-
-- (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name
-{
-    // Create download tasks
-    NSString* ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSURL* pureUrl = resource->url.toNSURL();
-    NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [pureUrl absoluteString], params];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest* request = [NSURLRequest requestWithURL:url];
-    
-    NSLog(@"%@", url);
-    
-    id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
-                                                                      andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
-                               andName:name];
-
-    [self updateContent];
-
-    // Resume task only if it's other resource download tasks are not running
-    if ([_app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil) {
-        [task resume];
-        [self showDownloadViewForTask:task];
-    }
-}
-
-+ (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name
-{
-    [self startBackgroundDownloadOf:resource->url.toNSURL() resourceId:resource->id.toNSString() resourceName:name];
-}
-
-+ (void)startBackgroundDownloadOf:(const std::shared_ptr<const IncrementalUpdate>&)resource
-{
-    [self startBackgroundDownloadOf:resource->url.toNSURL() resourceId:resource->resId.toNSString() resourceName:resource->fileName.toNSString()];
-}
-
-+ (void)startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name
-{
-    // Create download tasks
-    NSString* ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [resourceUrl absoluteString], params];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest* request = [NSURLRequest requestWithURL:url];
-    
-    NSLog(@"%@", url);
-    
-    id<OADownloadTask> task = [[OsmAndApp instance].downloadsManager downloadTaskWithRequest:request
-                                                                                      andKey:[@"resource:" stringByAppendingString:resourceId]
-                                                                                     andName:name];
-    
-    if ([[OsmAndApp instance].downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
-        [task resume];
-}
-
-
-
-- (void)offerCancelDownloadOf:(ResourceItem*)item_
-{
-    BOOL isUpdate = NO;
-    std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
-    if ([item_ isKindOfClass:[LocalResourceItem class]])
-    {
-        LocalResourceItem* item = (LocalResourceItem*)item_;
-
-        resource = item.resource;
-        isUpdate = [item isKindOfClass:[OutdatedResourceItem class]];
-    }
-    else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
-    {
-        RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
-
-        resource = item.resource;
-    }
-    if (!resource)
-        return;
-
-    NSMutableString* message;
-    if (isUpdate)
-    {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_cancel_upd_q"),
-                                    [self.class titleOfResource:resource
-                                                 inRegion:item_.worldRegion
-                                           withRegionName:YES
-                                         withResourceType:YES]] mutableCopy];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"data_will_be_lost")];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-    }
-    else
-    {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_cancel_inst_q"),
-                                    [self.class titleOfResource:resource
-                                                 inRegion:item_.worldRegion
-                                           withRegionName:YES
-                                         withResourceType:YES]] mutableCopy];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"data_will_be_lost")];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-    }
-
-    [[[UIAlertView alloc] initWithTitle:nil
-                                message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_yes")
-                                                             action:^{
-                                                                 [self cancelDownloadOf:item_];
-                                                             }], nil] show];
-}
-
-- (void)cancelDownloadOf:(ResourceItem*)item
-{
-    if ([[item.resourceId.toNSString() stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
-        [self.downloadView removeFromSuperview];
-    
-    [item.downloadTask stop];
-}
-
-- (void)offerDeleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
-{
-    //BOOL isInstalled = (std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(item.resource) != nullptr);
-    
-    NSString *title;
-    
-    if ([item isKindOfClass:[SqliteDbResourceItem class]])
-        title = ((SqliteDbResourceItem *)item).title;
-    else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
-        title = ((OnlineTilesResourceItem *)item).title;
-    else
-        title = [self.class titleOfResource:item.resource
-                                   inRegion:item.worldRegion
-                             withRegionName:YES
-                           withResourceType:YES];
-    
-    NSString* message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_delete"), title];
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self deleteResourceOf:item executeAfterSuccess:block];
     }];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil];
-    [alert addAction: cancelAction];
-    [alert addAction: okAction];
-    [alert setPreferredAction:cancelAction];
-    [self presentViewController: alert animated: YES completion: nil];
 }
 
-- (void)offerDeleteResourceOf:(LocalResourceItem*)item
+- (void) offerDownloadAndUpdateOf:(OutdatedResourceItem *)item
+{
+    [OAResourcesUIHelper offerDownloadAndUpdateOf:item onTaskCreated:^(id<OADownloadTask> task) {
+        [self updateContent];
+    } onTaskResumed:^(id<OADownloadTask> task) {
+        [self showDownloadViewForTask:task];
+    }];
+}
+
+- (void) startDownloadOfItem:(RepositoryResourceItem *)item
+{
+    [OAResourcesUIHelper startDownloadOfItem:item onTaskCreated:^(id<OADownloadTask>  _Nonnull task) {
+        [self updateContent];
+    } onTaskResumed:^(id<OADownloadTask>  _Nonnull task) {
+        [self showDownloadViewForTask:task];
+    }];
+}
+
+- (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name
+{
+    [OAResourcesUIHelper startDownloadOf:resource resourceName:name onTaskCreated:^(id<OADownloadTask>  _Nonnull task) {
+        [self updateContent];
+    } onTaskResumed:^(id<OADownloadTask>  _Nonnull task) {
+        [self showDownloadViewForTask:task];
+    }];
+}
+
+- (void) offerCancelDownloadOf:(ResourceItem *)item_
+{
+    [OAResourcesUIHelper offerCancelDownloadOf:item_ onTaskStop:^(id<OADownloadTask>  _Nonnull task) {
+        if ([[item_.resourceId.toNSString() stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
+            [self.downloadView removeFromSuperview];
+    }];
+}
+
+- (void) offerDeleteResourceOf:(LocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
+{
+    [OAResourcesUIHelper offerDeleteResourceOf:item viewController:self progressHUD:_deleteResourceProgressHUD executeAfterSuccess:block];
+}
+
+- (void) offerDeleteResourceOf:(LocalResourceItem *)item
 {
     [self offerDeleteResourceOf:item executeAfterSuccess:nil];
 }
 
-- (void)deleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
+- (void) offerClearCacheOf:(LocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
 {
-    [[[[UIApplication sharedApplication] windows] lastObject] addSubview:_deleteResourceProgressHUD];
-    [_deleteResourceProgressHUD showAnimated:YES
-                         whileExecutingBlock:^{
-                             
-                             if ([item isKindOfClass:[SqliteDbResourceItem class]])
-                             {
-                                 SqliteDbResourceItem *sqliteItem = (SqliteDbResourceItem *)item;
-                                 [[OAMapCreatorHelper sharedInstance] removeFile:sqliteItem.fileName];
-                                 
-                                 if (block)
-                                     block();
-                             }
-                             else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
-                             {
-                                 OnlineTilesResourceItem *tilesItem = (OnlineTilesResourceItem *)item;
-                                 [[NSFileManager defaultManager] removeItemAtPath:tilesItem.path error:nil];
-                                 _app.resourcesManager->uninstallTilesResource(QString::fromNSString(item.title));
-                                 _dataInvalidated = YES;
-                                 if ([tilesItem.title isEqualToString:@"OsmAnd (online tiles)"])
-                                     _app.resourcesManager->installOsmAndOnlineTileSource();
-                                 if (block)
-                                     block();
-                             }
-                             else
-                             {
-                                 if (item.resourceType == OsmAndResourceType::HillshadeRegion)
-                                 {
-                                     NSString *filename = [_app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString() lastPathComponent];
-                                     [[OAHillshadeLayer sharedInstance] removeFromDB:filename];
-                                 }
-                                 
-                                 const auto success = item.resourceId.isEmpty() || _app.resourcesManager->uninstallResource(item.resourceId);
-                                 if (!success)
-                                 {
-                                     OALog(@"Failed to uninstall resource %@ from %@",
-                                           item.resourceId.toNSString(),
-                                           item.resource != nullptr ? item.resource->localPath.toNSString() : @"?");
-                                 }
-                                 else
-                                 {
-                                     if (item.resourceType == OsmAndResourceType::HillshadeRegion)
-                                         [_app.data.hillshadeResourcesChangeObservable notifyEvent];
-                                     
-                                     if (block)
-                                         block();
-                                 }
-                             }
-                         }];
+    [OAResourcesUIHelper offerClearCacheOf:item viewController:self executeAfterSuccess:block];
 }
 
-- (void)deleteResourceOf:(LocalResourceItem*)item
-{
-    [self deleteResourceOf:item executeAfterSuccess:nil];
-}
-
-- (void)offerClearCacheOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
-{
-    NSString* message;
-    NSString *title;
-    
-    if ([item isKindOfClass:[SqliteDbResourceItem class]])
-        title = ((SqliteDbResourceItem *)item).title;
-    else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
-        title = ((OnlineTilesResourceItem *)item).title;
-    
-    message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_clear_cache"), title];
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"poi_clear") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self clearCacheOf:item executeAfterSuccess:block];
-    }];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil];
-    [alert addAction: cancelAction];
-    [alert addAction: okAction];
-    [alert setPreferredAction:cancelAction];
-    [self presentViewController: alert animated: YES completion: nil];
-}
-
-- (void)clearCacheOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
-{
-     if ([item isKindOfClass:[SqliteDbResourceItem class]])
-     {
-         SqliteDbResourceItem *sqliteItem = (SqliteDbResourceItem *)item;
-         OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:sqliteItem.path];
-         if ([ts supportsTileDownload])
-         {
-             [ts deleteCache:block];
-         }
-     }
-     if ([item isKindOfClass:[OnlineTilesResourceItem class]])
-     {
-         OnlineTilesResourceItem *sqliteItem = (OnlineTilesResourceItem *)item;
-         NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sqliteItem.path error:NULL];
-         for (NSString *elem in dirs)
-         {
-             if (![elem isEqual:(@".metainfo")])
-             {
-                 [[NSFileManager defaultManager] removeItemAtPath:[sqliteItem.path stringByAppendingPathComponent:elem] error:NULL];
-             }
-         }
-         if (block)
-             block();
-     }
-}
-
-- (void)showDetailsOf:(LocalResourceItem*)item
+- (void) showDetailsOf:(LocalResourceItem*)item
 {
 }
 
-- (UITableView *)getTableView
+- (UITableView *) getTableView
 {
     return nil;
 }
@@ -939,69 +335,42 @@ static BOOL dataInvalidated = NO;
 {
     if ([senderItem isKindOfClass:[ResourceItem class]])
     {
-        ResourceItem* item_ = (ResourceItem*)senderItem;
+        ResourceItem* item_ = (ResourceItem *)senderItem;
 
         if (item_.downloadTask != nil)
         {
-            [self offerCancelDownloadOf:item_];
+            [OAResourcesUIHelper offerCancelDownloadOf:item_];
         }
         else if ([item_ isKindOfClass:[OutdatedResourceItem class]])
         {
-            OutdatedResourceItem* item = (OutdatedResourceItem*)item_;
+            OutdatedResourceItem* item = (OutdatedResourceItem *)item_;
             [self offerDownloadAndUpdateOf:item];
         }
         else if ([item_ isKindOfClass:[LocalResourceItem class]])
         {
-            LocalResourceItem* item = (LocalResourceItem*)item_;
+            LocalResourceItem* item = (LocalResourceItem *)item_;
             [self showDetailsOf:item];
         }
         else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
         {
-            RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
+            RepositoryResourceItem* item = (RepositoryResourceItem *)item_;
             
             if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion) && ![_iapHelper.srtm isActive])
-            {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
-            }
             else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isActive])
-            {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
-            }
             else
-            {
                 [self offerDownloadAndInstallOf:item];
-            }
         }
     }
 }
 
-+ (NSString *) resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type
-{
-    switch (type)
-    {
-        case OsmAnd::ResourcesManager::ResourceType::MapRegion:
-        case OsmAnd::ResourcesManager::ResourceType::DepthContourRegion:
-            return OALocalizedString(@"map_settings_map");
-        case OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion:
-            return OALocalizedString(@"res_srtm");
-        case OsmAnd::ResourcesManager::ResourceType::WikiMapRegion:
-            return OALocalizedString(@"res_wiki");
-        case OsmAnd::ResourcesManager::ResourceType::RoadMapRegion:
-            return OALocalizedString(@"res_roads");
-        case OsmAnd::ResourcesManager::ResourceType::HillshadeRegion:
-            return OALocalizedString(@"res_hillshade");
-            
-        default:
-            return OALocalizedString(@"res_unknown");
-    }
-}
-
-- (id<OADownloadTask>)getDownloadTaskFor:(NSString*)resourceId
+- (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId
 {
     return [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
 }
 
-- (void)onRepositoryUpdated:(id<OAObservableProtocol>)observer withKey:(id)key
+- (void) onRepositoryUpdated:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
@@ -1014,7 +383,7 @@ static BOOL dataInvalidated = NO;
     });
 }
 
-- (void)onSqlitedbResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+- (void) onSqlitedbResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
@@ -1027,7 +396,7 @@ static BOOL dataInvalidated = NO;
     });
 }
 
-- (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+- (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
@@ -1040,7 +409,7 @@ static BOOL dataInvalidated = NO;
     });
 }
 
-- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
 
@@ -1062,7 +431,7 @@ static BOOL dataInvalidated = NO;
     });
 }
 
-- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void) onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
 
@@ -1104,132 +473,13 @@ static BOOL dataInvalidated = NO;
     });
 }
 
-+ (OAWorldRegion*)findRegionOrAnySubregionOf:(OAWorldRegion*)region
-                        thatContainsResource:(const QString&)resourceId
-{
-    const auto& downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
-
-    if (resourceId.startsWith(downloadsIdPrefix))
-        return region;
-
-    for (OAWorldRegion* subregion in region.subregions)
-    {
-        OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:subregion
-                                                                    thatContainsResource:resourceId];
-        if (match)
-            return match;
-    }
-
-    return nil;
-}
-
-+ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<ResourceItem *>*))onComplete
-{
-    NSMutableArray<ResourceItem *>* res;
-    res = [NSMutableArray new];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray *sortedSelectedRegions;
-        OsmAndAppInstance app = [OsmAndApp instance];
-        NSMutableArray<OAWorldRegion *> *mapRegions = [[app.worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude] mutableCopy];
-        NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:mapRegions];
-        if (mapRegions.count > 0)
-        {
-            [copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
-                if (![region contain:coordinate.latitude lon:coordinate.longitude])
-                    [mapRegions removeObject:region];
-            }];
-        }
-        
-        if (mapRegions.count > 0)
-        {
-            sortedSelectedRegions = [mapRegions sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-                NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
-                NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
-                return [first compare:second];
-            }];
-            
-            for (OAWorldRegion *region in sortedSelectedRegions)
-            {
-                NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:region];
-                if (ids.count > 0)
-                {
-                    for (NSString *resourceId in ids)
-                    {
-                        const auto resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-                        if (resource->type == resourceType)
-                        {
-                            if (app.resourcesManager->isResourceInstalled(resource->id))
-                            {
-                                LocalResourceItem *item = [[LocalResourceItem alloc] init];
-                                item.resourceId = resource->id;
-                                item.resourceType = resource->type;
-                                item.title = [self.class titleOfResource:resource
-                                                                inRegion:region
-                                                          withRegionName:YES
-                                                        withResourceType:NO];
-                                item.resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
-                                item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
-                                item.size = resource->size;
-                                item.worldRegion = region;
-                                [res addObject:item];
-                            }
-                            else
-                            {
-                                RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
-                                item.resourceId = resource->id;
-                                item.resourceType = resource->type;
-                                item.title = [OAResourcesBaseViewController titleOfResource:resource
-                                                                                   inRegion:region
-                                                                             withRegionName:YES
-                                                                           withResourceType:NO];
-                                item.resource = resource;
-                                item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
-                                item.size = resource->size;
-                                item.sizePkg = resource->packageSize;
-                                item.worldRegion = region;
-                                [res addObject:item];
-                            }
-                            
-                        }
-                    }
-                }
-            }
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-           if (onComplete)
-               onComplete(res);
-        });
-    });
-}
-
 - (void) updateTableLayout
 {
 }
 
-+ (NSString *)getCountryName:(ResourceItem *)item
-{
-    NSString *countryName;
-    
-    OAWorldRegion *worldRegion = [OsmAndApp instance].worldRegion;
-    OAWorldRegion *region = item.worldRegion;
-    
-    if (region.superregion)
-    {
-        while (region.superregion != worldRegion)
-            region = region.superregion;
-        
-        if ([region.regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])
-            countryName = region.name;
-        else if (item.worldRegion.superregion.superregion != worldRegion)
-            countryName = item.worldRegion.superregion.name;
-    }
-    
-    return countryName;
-}
-
 #pragma mark - OADownloadProgressViewDelegate
--(void) resumeDownloadButtonClicked:(OADownloadProgressView *)view {
+
+- (void) resumeDownloadButtonClicked:(OADownloadProgressView *)view {
     if (_app.downloadsManager.hasDownloadTasks) {
         id<OADownloadTask> task = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]];
         if (task)
@@ -1237,7 +487,7 @@ static BOOL dataInvalidated = NO;
     }
 }
 
--(void) pauseDownloadButtonClicked:(OADownloadProgressView *)view {
+- (void) pauseDownloadButtonClicked:(OADownloadProgressView *)view {
     if (_app.downloadsManager.hasActiveDownloadTasks) {
         id<OADownloadTask> task = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]];
         if (task)
@@ -1245,12 +495,12 @@ static BOOL dataInvalidated = NO;
     }
 }
 
-- (void)downloadProgressViewDidAppear:(OADownloadProgressView *)view
+- (void) downloadProgressViewDidAppear:(OADownloadProgressView *)view
 {
     [self updateTableLayout];
 }
 
-- (void)downloadProgressViewDidDisappear:(OADownloadProgressView *)view
+- (void) downloadProgressViewDidDisappear:(OADownloadProgressView *)view
 {
     [self updateTableLayout];
 }

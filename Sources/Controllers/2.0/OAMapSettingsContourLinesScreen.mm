@@ -21,16 +21,22 @@
 #import "OAColors.h"
 #import "OAColorsTableViewCell.h"
 #import "OAIconTextDescButtonTableViewCell.h"
-#import "OAResourcesBaseViewController.h"
+#import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
 #import "OAUtilities.h"
-#import <FFCircularProgressView.h>
 #import <MBProgressHUD.h>
-#import "FFCircularProgressView+isSpinning.h"
 #import "OAAutoObserverProxy.h"
 #import "OAImageDescTableViewCell.h"
 #import "OAButtonIconTableViewCell.h"
 #import "OAMapViewController.h"
+#import "OAIAPHelper.h"
+#import "OAPluginPopupViewController.h"
+#import "OAManageResourcesViewController.h"
+
+#include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/QKeyValueIterator.h>
+#include <OsmAndCore/WorldRegions.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -51,8 +57,9 @@
 #define kDefaultColorScheme @"light_brown"
 #define kDefaultZoomLevel @"13"
 
+typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAMapSettingsContourLinesScreen() <OACustomPickerTableViewCellDelegate, OAColorsTableViewCellDelegate, OAIconTextDescButtonCellDelegate>
+@interface OAMapSettingsContourLinesScreen() <OACustomPickerTableViewCellDelegate, OAColorsTableViewCellDelegate>
 
 @end
 
@@ -60,15 +67,16 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    OAIAPHelper *_iapHelper;
     OAMapViewController *_mapViewController;
     OAMapStyleSettings *_styleSettings;
-    NSObject* _dataLock;
+    NSObject *_dataLock;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    OAAutoObserverProxy* _localResourcesChangedObserver;
 
     NSArray<NSArray *> *_data;
-    BOOL _availableMaps;
     NSArray<NSString *> *_visibleZoomValues;
     NSArray<NSString *> *_visibleWidthValues;
     NSArray<NSString *> *_visibleDensityValues;
@@ -80,9 +88,7 @@
     NSArray<RepositoryResourceItem *> *_mapItems;
 }
 
-
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
-
 
 -(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
@@ -91,7 +97,9 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-
+        _iapHelper = [OAIAPHelper sharedInstance];
+        _dataLock = [[NSObject alloc] init];
+        
         settingsScreen = EMapSettingsScreenContourLines;
         
         vwController = viewController;
@@ -105,6 +113,22 @@
 
 - (void) dealloc
 {
+    if (_downloadTaskProgressObserver)
+    {
+        [_downloadTaskProgressObserver detach];
+        _downloadTaskProgressObserver = nil;
+    }
+    if (_downloadTaskCompletedObserver)
+    {
+        [_downloadTaskCompletedObserver detach];
+        _downloadTaskCompletedObserver = nil;
+    }
+    if (_localResourcesChangedObserver)
+    {
+        [_localResourcesChangedObserver detach];
+        _localResourcesChangedObserver = nil;
+    }
+    
     [self deinit];
 }
 
@@ -129,36 +153,86 @@
     _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
                                                                 andObserve:_app.downloadsManager.completedObservable];
+    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                                andObserve:_app.localResourcesChangedObservable];
     _styleSettings = [OAMapStyleSettings sharedInstance];
     title = OALocalizedString(@"product_title_srtm");
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
+    tblView.estimatedRowHeight = kEstimatedRowHeight;
     
-    _visibleZoomValues = @[@"11", @"12", @"13", @"14", @"15", @"16"];
-    _visibleWidthValues = @[@"thin", @"medium", @"thick"];
-    _visibleDensityValues = @[@"low", @"medium_w", @"high"];
-    NSString *isNightMode = _settings.nightMode ? @"true" : @"false";
+    OAMapStyleParameter *zoomLevelParameter = [_styleSettings getParameter:kContourLinesZoomLevel];
+    NSArray *zoomValues = [zoomLevelParameter possibleValues];
+    NSMutableArray<NSString *> *visibleZoomValues = [NSMutableArray array];
+    for (OAMapStyleParameterValue* v in zoomValues)
+    {
+        if (v.name.length > 0 && ![v.name isEqualToString:@"disabled"])
+            [visibleZoomValues addObject:v.name];
+    }
+    _visibleZoomValues = visibleZoomValues;
+    
+    OAMapStyleParameter *widthParameter = [_styleSettings getParameter:kContourLinesWidth];
+    NSArray *widthValues = [widthParameter possibleValuesUnsorted];
+    NSMutableArray<NSString *> *visibleWidthValues = [NSMutableArray array];
+    for (OAMapStyleParameterValue* v in widthValues)
+    {
+        if (v.name.length > 0)
+            [visibleWidthValues addObject:v.name];
+    }
+    _visibleWidthValues = visibleWidthValues;
+    
+    OAMapStyleParameter *densityParameter = [_styleSettings getParameter:kContourLinesDensity];
+    NSArray *densityValues = [densityParameter possibleValuesUnsorted];
+    NSMutableArray<NSString *> *visibleDensityValues = [NSMutableArray array];
+    for (OAMapStyleParameterValue* v in densityValues)
+    {
+        if (v.name.length > 0)
+            [visibleDensityValues addObject:v.name];
+    }
+    _visibleDensityValues = visibleDensityValues;
     
     _colors = [NSMutableArray new];
     NSMutableArray *colorNames = [NSMutableArray new];
     OAMapStyleParameter *colorParameter = [_styleSettings getParameter:kContourLinesColorScheme];
-    NSArray *colorValues = [colorParameter possibleValues];
+    NSArray *colorValues = [colorParameter possibleValuesUnsorted];
+    BOOL nightMode = _settings.nightMode;
+    NSString *defaultColorScheme = kDefaultColorScheme;
+    NSNumber *defaultColor = nil;
     for (OAMapStyleParameterValue *value in colorValues)
     {
-        if (![value.name isEqualToString:@""])
+        NSDictionary<NSString *, NSNumber *> *renderingAttrs;
+        NSMutableDictionary<NSString *, NSString *> *additionalSettings = [NSMutableDictionary dictionary];
+        if (value.name.length > 0)
+            additionalSettings[@"contourColorScheme"] = value.name;
+        if (nightMode)
+            additionalSettings[@"nightMode"] = @"true";
+        
+        renderingAttrs = [_mapViewController getRoadRenderingAttributes:@"contourLineColor" additionalSettings:additionalSettings];
+        if (renderingAttrs.count > 0)
         {
-            [colorNames addObject:value.name];
-            NSDictionary<NSString *, NSNumber *> *renderingAttrs = [_mapViewController getRoadRenderingAttributes:@"contourLineColor" additionalSettings:@{@"contourColorScheme":value.name, @"nightMode" : isNightMode}];
-            NSString *name = renderingAttrs.allKeys.firstObject;
-            NSNumber *colorIntValue = renderingAttrs[name];
-            [_colors addObject:colorIntValue];
+            if (value.name.length > 0)
+            {
+                [colorNames addObject:value.name];
+                [_colors addObject:renderingAttrs.allValues.firstObject];
+            }
+            else
+            {
+                defaultColor = renderingAttrs.allValues.firstObject;
+            }
         }
     }
     _visibleColorValues = [colorNames copy];
+    if (defaultColor)
+    {
+        NSUInteger defaultColorIndex = [_colors indexOfObject:defaultColor];
+        if (defaultColorIndex != NSNotFound)
+            defaultColorScheme = colorNames[defaultColorIndex];
+    }
     
     OAMapStyleParameter *p1 = [_styleSettings getParameter:kContourLinesColorScheme];
     if ([p1.value isEqualToString:@""])
     {
-        p1.value = kDefaultColorScheme;
+        p1.value = defaultColorScheme;
         [_styleSettings save:p1];
     }
     _currentColor = [_visibleColorValues indexOfObject:p1.value];
@@ -228,21 +302,18 @@
         }];
         
         NSMutableArray *availableMapsArr = [NSMutableArray array];
-        if (_availableMaps)
+        for (RepositoryResourceItem* item in _mapItems)
         {
-            for (RepositoryResourceItem* item in _mapItems)
-            {
-                [availableMapsArr addObject:@{
-                    @"type" : kCellTypeMap,
-                    @"title" : item.title,
-                    @"size" : [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]
-                }];
-            }
+            [availableMapsArr addObject:@{
+                @"type" : kCellTypeMap,
+                @"item" : item,
+            }];
         }
+
         [result addObject: switchArr];
         [result addObject: zoomArr];
         [result addObject: linesArr];
-        if (_availableMaps)
+        if (availableMapsArr.count > 0)
             [result addObject: availableMapsArr];
     }
     else
@@ -279,7 +350,7 @@
                             @"header" : OALocalizedString(@"map_settings_appearance"),
                             @"footer" : OALocalizedString(@"map_settings_line_density_slowdown_warning")
                             }];
-        if (_availableMaps)
+        if (_mapItems.count > 0)
         {
             [sectionArr addObject:@{
                             @"header" : OALocalizedString(@"osmand_live_available_maps"),
@@ -301,90 +372,27 @@
 {
     CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
     CLLocationCoordinate2D loca = loc.coordinate;
-    [OAResourcesBaseViewController requestMapDownloadInfo:loca resourceType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion onComplete:^(NSArray<ResourceItem *>* res) {
-        NSMutableArray<RepositoryResourceItem *> *availableItems;
-        availableItems = [NSMutableArray new];
-        if (res.count > 0)
+    [OAResourcesUIHelper requestMapDownloadInfo:loca resourceType:OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion onComplete:^(NSArray<ResourceItem *>* res) {
+        @synchronized(_dataLock)
         {
-            for (ResourceItem * item in res)
+            NSMutableArray<RepositoryResourceItem *> *availableItems = [NSMutableArray array];
+            if (res.count > 0)
             {
-                if ([item isKindOfClass:RepositoryResourceItem.class])
+                for (ResourceItem * item in res)
                 {
-                    RepositoryResourceItem *resource = (RepositoryResourceItem*)item;
-                    [availableItems addObject:resource];
+                    if ([item isKindOfClass:RepositoryResourceItem.class])
+                    {
+                        RepositoryResourceItem *resource = (RepositoryResourceItem*)item;
+                        [availableItems addObject:resource];
+                    }
                 }
+                _mapItems = availableItems;
             }
             
-            _mapItems = availableItems.count > 0 ? [availableItems copy] : NULL;
+            [self generateData];
+            [tblView reloadData];
         }
-        _availableMaps = _mapItems.count > 0 ? YES : NO;
-        
-        [self generateData];
-        [tblView reloadData];
     }];
-    
-    
-}
-
-- (void) deleteMap:(NSIndexPath *)indexPath
-{
-    if (_data[indexPath.section].count > 1)
-    {
-        NSMutableArray *tempData = [_data mutableCopy];
-        NSMutableArray *tempMaps = [_data[indexPath.section] mutableCopy];
-        [tempMaps removeObjectAtIndex:indexPath.row];
-        [tempData replaceObjectAtIndex:indexPath.section withObject:tempMaps];
-        _data = [tempData copy];
-        [tblView reloadData];
-    }
-    else if (_data[indexPath.section].count == 1)
-    {
-        NSMutableArray *tempData = [_data mutableCopy];
-        [tempData removeObjectAtIndex:indexPath.section];
-        _data = [tempData copy];
-        [tblView reloadData];
-    }
-}
-
-- (void) downloadMap:(NSIndexPath*)indexPath
-{
-    RepositoryResourceItem *localMapIndexItem = _mapItems[indexPath.row];
-    if (localMapIndexItem)
-    {
-//       if (localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion &&
-//           ![OAResourcesBaseViewController checkIfDownloadAvailable:localMapIndexItem.worldRegion])
-//       {
-//           UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_free_exp") preferredStyle:UIAlertControllerStyleAlert];
-//           [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-//           [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-//           return;
-//       }
-       
-       NSString *resourceName = [OAResourcesBaseViewController titleOfResource:localMapIndexItem.resource
-                                                                      inRegion:localMapIndexItem.worldRegion
-                                                                withRegionName:YES
-                                                              withResourceType:YES];
-       
-       if (![OAResourcesBaseViewController verifySpaceAvailableDownloadAndUnpackResource:localMapIndexItem.resource
-                                                     withResourceName:resourceName
-                                                             asUpdate:YES])
-       {
-           UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_install_no_space") preferredStyle:UIAlertControllerStyleAlert];
-           [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-           [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-           return;
-       }
-       
-       [OAResourcesBaseViewController startBackgroundDownloadOf:localMapIndexItem.resource resourceName:resourceName];
-    }
-
-    OAIconTextDescButtonCell* cell = [tblView cellForRowAtIndexPath:indexPath];
-    cell.checkButton.hidden = YES;
-//    FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(cell.additionalView.frame.origin.x, cell.additionalView.frame.origin.y, 25.0f, 25.0f)];
-//    progressView.iconView = [[UIView alloc] init];
-//    cell.additionalView = progressView;
-//    cell.additionalView.hidden = NO;
-//    progressView.tintColor = UIColorFromRGB(color_primary_purple);
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -403,7 +411,6 @@
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return _data.count;
-//    return [self isContourLinesOn] ? _data.count : 1;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -415,7 +422,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString: kCellTypeSwitch])
+    if ([item[@"type"] isEqualToString:kCellTypeSwitch])
     {
         static NSString* const identifierCell = @"OASettingSwitchCell";
         OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -439,8 +446,7 @@
         }
         return cell;
     }
-    
-    else if ([item[@"type"] isEqualToString: kCellTypeValue])
+    else if ([item[@"type"] isEqualToString:kCellTypeValue])
     {
         static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
@@ -458,8 +464,7 @@
         
         return cell;
     }
-    
-    else if ([item[@"type"] isEqualToString: kCellTypePicker])
+    else if ([item[@"type"] isEqualToString:kCellTypePicker])
     {
         static NSString* const identifierCell = @"OACustomPickerTableViewCell";
         OACustomPickerTableViewCell* cell;
@@ -468,6 +473,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.dataArray = _visibleZoomValues;
         OAMapStyleParameter *p = item[@"parameter"];
@@ -476,8 +482,7 @@
         cell.delegate = self;
         return cell;
     }
-    
-    else if ([item[@"type"] isEqualToString: kCellTypeCollection])
+    else if ([item[@"type"] isEqualToString:kCellTypeCollection])
     {
         static NSString* const identifierCell = @"OAColorsTableViewCell";
         OAColorsTableViewCell *cell = nil;
@@ -487,6 +492,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorsTableViewCell" owner:self options:nil];
             cell = (OAColorsTableViewCell *)[nib objectAtIndex:0];
             cell.dataArray = _colors;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -500,8 +506,7 @@
         }
         return cell;
     }
-    
-    else if ([item[@"type"] isEqualToString: kCellTypeSlider])
+    else if ([item[@"type"] isEqualToString:kCellTypeSlider])
     {
         static NSString* const identifierCell = @"OASegmentSliderTableViewCell";
         OASegmentSliderTableViewCell* cell = nil;
@@ -510,6 +515,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASegmentSliderCell" owner:self options:nil];
             cell = (OASegmentSliderTableViewCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -518,7 +524,7 @@
             cell.valueLabel.text = [p getValueTitle];            
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpOutside];
-            if ([p.name  isEqualToString:kContourLinesDensity])
+            if ([p.name isEqualToString:kContourLinesDensity])
             {
                 [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
                 cell.sliderView.value = (CGFloat)[_visibleDensityValues indexOfObject:p.value]/(CGFloat)(_visibleDensityValues.count - 1);
@@ -532,99 +538,88 @@
         }
         return cell;
     }
-    
-    if (indexPath.section == 3)
+    else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        NSString* cellTypeId = nil;
+        static NSString* const repositoryResourceCell = @"repositoryResourceCell";
         static NSString* const downloadingResourceCell = @"downloadingResourceCell";
         ResourceItem *mapItem = _mapItems[indexPath.row];
-        if (mapItem.downloadTask != nil)
-            cellTypeId = downloadingResourceCell;
+        NSString* cellTypeId = mapItem.downloadTask ? downloadingResourceCell : repositoryResourceCell;
         
-        static NSString* const identifierCell = @"OAIconTextDescButtonCell";
-        OAIconTextDescButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        uint64_t _sizePkg = mapItem.sizePkg;
+        if ((mapItem.resourceType == OsmAndResourceType::SrtmMapRegion || mapItem.resourceType == OsmAndResourceType::HillshadeRegion)
+            && ![_iapHelper.srtm isActive])
+        {
+            mapItem.disabled = YES;
+        }
+        NSString *title = mapItem.title;
+        NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+
+        UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescButtonTableViewCell" owner:self options:nil];
-            cell = (OAIconTextDescButtonCell *)[nib objectAtIndex:0];
-            cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_contour_lines"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.dividerIcon.backgroundColor = [UIColor clearColor];
-            [cell.checkButton setImage:[[UIImage imageNamed:@"ic_custom_download.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-            cell.checkButton.tintColor = UIColorFromRGB(color_primary_purple);
-        }
+            if ([cellTypeId isEqualToString:repositoryResourceCell])
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                              reuseIdentifier:cellTypeId];
 
-        NSString *description = OALocalizedString(@"map_settings_SRTM");
-        cell.titleLabel.text = item[@"title"];
-        cell.descLabel.text = [[description stringByAppendingString:@" • "] stringByAppendingString:item[@"size"]];
-        cell.delegate = self;
-        cell.checkButton.tag = indexPath.row;
-        
-        FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-        progressView.iconView = [[UIView alloc] init];
-        cell.accessoryView = progressView;
-        
-        if ([cellTypeId isEqualToString:downloadingResourceCell])
-        {
-            FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-            progressView.iconView = [[UIView alloc] init];
-            cell.accessoryView = progressView;
-                
-            float progressCompleted = mapItem.downloadTask.progressCompleted;
-            if (progressCompleted >= 0.001f && mapItem.downloadTask.state == OADownloadTaskStateRunning)
-            {
-                progressView.iconPath = nil;
-                if (progressView.isSpinning)
-                    [progressView stopSpinProgressBackgroundLayer];
-                progressView.progress = progressCompleted - 0.001;
+                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
+
+                UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
+                UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
+                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc setImage:iconImage forState:UIControlStateNormal];
+                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
+                [cell setAccessoryView:btnAcc];
             }
-            else if (mapItem.downloadTask.state == OADownloadTaskStateFinished)
+            else if ([cellTypeId isEqualToString:downloadingResourceCell])
             {
-               // progressView.iconPath = [self tickPath:progressView];
-                progressView.progress = 0.0f;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                              reuseIdentifier:cellTypeId];
+
+                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
+
+                FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+                progressView.iconView = [[UIView alloc] init];
+
+                cell.accessoryView = progressView;
+            }
+        }
+        
+        if ([cellTypeId isEqualToString:repositoryResourceCell])
+        {
+            if (!mapItem.disabled)
+            {
+                cell.textLabel.textColor = [UIColor blackColor];
+                UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
+                UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
+                [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc setImage:iconImage forState:UIControlStateNormal];
+                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
+                [cell setAccessoryView:btnAcc];
             }
             else
             {
-                progressView.iconPath = [UIBezierPath bezierPath];
-                progressView.progress = 0.0;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
-                [progressView setNeedsDisplay];
+                cell.textLabel.textColor = [UIColor lightGrayColor];
+                cell.accessoryView = nil;
             }
         }
+        
+        cell.imageView.image = [[UIImage imageNamed:@"ic_custom_contour_lines"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
+        cell.textLabel.text = title;
+        if (cell.detailTextLabel != nil)
+            cell.detailTextLabel.text = subtitle;
+        
+        if ([cellTypeId isEqualToString:downloadingResourceCell])
+            [self updateDownloadingCell:cell indexPath:indexPath];
+
         return cell;
     }
-    
-//    else if ([item[@"type"] isEqualToString: kCellTypeMap])
-//    {
-//        static NSString* const identifierCell = @"OAIconTextDescButtonCell";
-//        OAIconTextDescButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-//        if (cell == nil)
-//        {
-//            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescButtonTableViewCell" owner:self options:nil];
-//            cell = (OAIconTextDescButtonCell *)[nib objectAtIndex:0];
-//            cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_contour_lines"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-//            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
-//            cell.dividerIcon.backgroundColor = [UIColor clearColor];
-//
-//
-//        }
-//        [cell.checkButton setImage:[[UIImage imageNamed:@"ic_custom_download.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-//        cell.checkButton.tintColor = UIColorFromRGB(color_primary_purple);
-//        NSString *description = OALocalizedString(@"map_settings_SRTM");
-//        cell.titleLabel.text = item[@"title"];
-//        cell.descLabel.text = [[description stringByAppendingString:@" • "] stringByAppendingString:item[@"size"]];
-//       //
-//        cell.delegate = self;
-//        cell.checkButton.tag = indexPath.row;
-//        return cell;
-//    }
-    
-    
-    
-    else if ([item[@"type"] isEqualToString: kCellTypeInfo])
+    else if ([item[@"type"] isEqualToString:kCellTypeInfo])
     {
         static NSString* const identifierCell = @"OAImageDescTableViewCell";
         OAImageDescTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -634,14 +629,14 @@
             cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
             cell.descView.text = item[@"desc"];
             cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         CGFloat ratio = cell.iconView.image.size.height / cell.iconView.image.size.width;
         cell.iconViewHeight.constant = cell.iconView.frame.size.width * ratio;
         [cell layoutIfNeeded];
         return cell;
     }
-    
-    else if ([item[@"type"] isEqualToString: kCellTypeButton])
+    else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
         static NSString* const identifierCell = @"OAButtonIconTableViewCell";
         OAButtonIconTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -656,23 +651,28 @@
         [cell.buttonView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
         [cell.buttonView addTarget:self action:@selector(linkButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
-        
         return cell;
     }
     else
+    {
         return nil;
+    }
+}
+
+- (void) accessoryButtonTapped:(UIControl *)button withEvent:(UIEvent *)event
+{
+    NSIndexPath *indexPath = [tblView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:tblView]];
+    if (!indexPath)
+        return;
+    
+    [tblView.delegate tableView: tblView accessoryButtonTappedForRowWithIndexPath: indexPath];
 }
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return kEstimatedRowHeight;
-}
-
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[self getItem:indexPath][@"type"] isEqualToString: kCellTypePicker])
+    if ([[self getItem:indexPath][@"type"] isEqualToString:kCellTypePicker])
         return 162.0;
     return UITableViewAutomaticDimension;
 }
@@ -689,15 +689,54 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString: kCellTypeMap])
-    {
-        [self downloadMap:indexPath];
-    }
+    [self onItemClicked:indexPath];
+    
     [tblView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
+- (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    [self onItemClicked:indexPath];
+}
+
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *type = item[@"type"];
+    if ([type isEqualToString:kCellTypePicker] || [type isEqualToString:kCellTypeCollection] || [type isEqualToString:kCellTypeSlider] || [type isEqualToString:kCellTypeInfo])
+        return nil;
+    
+    return indexPath;
+}
+
 #pragma mark - Selectors
+
+- (void) onItemClicked:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:kCellTypeMap])
+    {
+        ResourceItem *mapItem = _mapItems[indexPath.row];
+        if (mapItem.downloadTask != nil)
+        {
+            [OAResourcesUIHelper offerCancelDownloadOf:mapItem];
+        }
+        else if ([mapItem isKindOfClass:[RepositoryResourceItem class]])
+        {
+            RepositoryResourceItem* item = (RepositoryResourceItem*)mapItem;
+            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion) && ![_iapHelper.srtm isActive])
+            {
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
+            }
+            else
+            {
+                [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
+                    [self updateAvailableMaps];
+                } onTaskResumed:nil];
+            }
+        }
+    }
+}
 
 - (void) linkButtonPressed:(UIButton*)sender
 {
@@ -709,7 +748,7 @@
     }
 }
 
-- (void) widthChanged:(UISlider*)sender
+- (void) widthChanged:(UISlider *)sender
 {
     if (sender)
     {
@@ -729,7 +768,7 @@
     [tblView endUpdates];
 }
 
-- (void) densityChanged:(UISlider*)sender
+- (void) densityChanged:(UISlider *)sender
 {
     if (sender)
     {
@@ -751,8 +790,7 @@
 
 - (void) mapSettingSwitchChanged:(id)sender
 {
-    UISwitch *switchView = (UISwitch*)sender;
-
+    UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
        OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
@@ -765,7 +803,7 @@
 
 #pragma mark - OACustomPickerTableViewCellDelegate
 
-- (void)zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
+- (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
 {
     _minZoom = zoom;
     OAMapStyleParameter *parameter = [_styleSettings getParameter:kContourLinesZoomLevel];
@@ -786,108 +824,111 @@
     [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
-#pragma mark - OAIconTextDescButtonCellDelegate
-
-- (void) onButtonPressed:(NSInteger)tag
-{
-    [self downloadMap:[NSIndexPath indexPathForRow:tag inSection:3]];
-}
-
-- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
-{
-    id<OADownloadTask> task = key;
-    
-    // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"] || task.state != OADownloadTaskStateRunning)
-        return;
-    
-    if (!task.silentInstall)
-        task.silentInstall = YES;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-
-//            OAIconTextDescButtonCell* cell = [tblView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:mapIndex.integerValue inSection:3]];
-//            FFCircularProgressView* progressView = (FFCircularProgressView*)cell.additionalView;
-//            progressView.progress = task.progressCompleted;
-
-        [self refreshDownloadingContent:task.key];
-    });
-}
-
 - (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
+    [self updateDownloadingCell:cell indexPath:indexPath];
+}
 
-    RepositoryResourceItem *item = [_mapItems objectAtIndex:indexPath.row];
-        
-    if (item.downloadTask != nil)
+- (void) updateDownloadingCell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath
+{
+    ResourceItem *mapItem = _mapItems[indexPath.row];
+    if (mapItem.downloadTask)
     {
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
-        progressView.progress = item.downloadTask.progressCompleted;
-    }
-    
-//    if ([cellTypeId isEqualToString:downloadingResourceCell])
-//    {
-        //ResourceItem* item = (ResourceItem*)item_;
-        //FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
         
-//        float progressCompleted = item.downloadTask.progressCompleted;
-//        if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
-//        {
-//            progressView.iconPath = nil;
-//            if (progressView.isSpinning)
-//                [progressView stopSpinProgressBackgroundLayer];
-//            progressView.progress = progressCompleted - 0.001;
-//        }
-//        else if (item.downloadTask.state == OADownloadTaskStateFinished)
-//        {
-//            //progressView.iconPath = [self tickPath:progressView];
-//            if (!progressView.isSpinning)
-//                [progressView startSpinProgressBackgroundLayer];
-//            progressView.progress = 0.0f;
-//        }
-//        else
-//        {
-//            progressView.iconPath = [UIBezierPath bezierPath];
-//            progressView.progress = 0.0;
-//            if (!progressView.isSpinning)
-//                [progressView startSpinProgressBackgroundLayer];
-//        }
- //   }
-
+        float progressCompleted = mapItem.downloadTask.progressCompleted;
+        if (progressCompleted >= 0.001f && mapItem.downloadTask.state == OADownloadTaskStateRunning)
+        {
+            progressView.iconPath = nil;
+            if (progressView.isSpinning)
+                [progressView stopSpinProgressBackgroundLayer];
+            progressView.progress = progressCompleted - 0.001;
+        }
+        else if (mapItem.downloadTask.state == OADownloadTaskStateFinished)
+        {
+            progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
+            if (!progressView.isSpinning)
+                [progressView startSpinProgressBackgroundLayer];
+            progressView.progress = 0.0f;
+        }
+        else
+        {
+            progressView.iconPath = [UIBezierPath bezierPath];
+            progressView.progress = 0.0;
+            if (!progressView.isSpinning)
+                [progressView startSpinProgressBackgroundLayer];
+        }
+    }
 }
 
 - (void) refreshDownloadingContent:(NSString *)downloadTaskKey
 {
     @synchronized(_dataLock)
     {
-        
         for (int i = 0; i < _mapItems.count; i++)
         {
             ResourceItem *item = (ResourceItem *)_mapItems[i];
-            NSLog(@"%@ %@", [item.downloadTask key], downloadTaskKey);
             if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
-            {
                 [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:3]];
-            }
         }
     }
 }
 
-- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
-    
+
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"])
+        return;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!vwController.isViewLoaded || vwController.view.window == nil)
+            return;
+        
+        [self refreshDownloadingContent:task.key];
+    });
+}
+
+- (void) onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+
     // Skip all downloads that are not resources
     if (![task.key hasPrefix:@"resource:"])
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        //[self deleteMap:[NSIndexPath indexPathForRow:mapIndex.integerValue inSection:3]];
+        if (!vwController.isViewLoaded || vwController.view.window == nil)
+            return;
         
+        if (task.progressCompleted < 1.0)
+        {
+            if ([_app.downloadsManager.keysOfDownloadTasks count] > 0) {
+                id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+                [nextTask resume];
+            }
+            [self updateAvailableMaps];
+        }
+        else
+        {
+            [self refreshDownloadingContent:task.key];
+        }
     });
 }
 
+- (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!vwController.isViewLoaded || vwController.view.window == nil)
+        {
+            return;
+        }
 
+        [OAManageResourcesViewController prepareData];
+        [self updateAvailableMaps];
+    });
+}
 
 @end

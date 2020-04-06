@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define UNDEFINED_ATTR @"undefined"
-
 @interface OARouteSegmentAttribute : NSObject
 
 @property (nonatomic, readonly) NSInteger color;

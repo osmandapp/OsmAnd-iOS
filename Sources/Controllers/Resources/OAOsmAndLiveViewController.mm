@@ -8,7 +8,7 @@
 
 #import "OAOsmAndLiveViewController.h"
 
-#import "OAResourcesBaseViewController.h"
+#import "OAResourcesUIHelper.h"
 #import "OAOsmAndLiveSelectionViewController.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
@@ -28,7 +28,6 @@
 #import "OAChoosePlanHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAWorldRegion.h"
-#import "OAManageResourcesViewController.h"
 
 #import "OAOsmAndLiveHelper.h"
 
@@ -187,7 +186,7 @@ static const NSInteger sectionCount = 2;
         
         NSString *itemId = item.resourceId.toNSString();
         BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".map.obf")).toNSString()];
-        NSString *countryName = [OAResourcesBaseViewController getCountryName:item];
+        NSString *countryName = [OAResourcesUIHelper getCountryName:item];
         NSString *title = countryName == nil ? item.title : [NSString stringWithFormat:@"%@ %@", countryName, item.title];
         // Convert to seconds
         NSString * description = isLive ? [self getLiveDescription:item.resourceId] : [self getDescription:item.resourceId];
@@ -343,20 +342,20 @@ static const NSInteger sectionCount = 2;
     for (const auto& resource : _app.resourcesManager->getLocalResources())
     {
         
-        OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:_app.worldRegion
-                                                                      thatContainsResource:resource->id];
+        OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion
+                                                          thatContainsResource:resource->id];
         
         if (!match || (resource->type != OsmAnd::ResourcesManager::ResourceType::MapRegion))
             continue;
         
-        LocalResourceItem* item = [[LocalResourceItem alloc] init];
+        LocalResourceItem *item = [[LocalResourceItem alloc] init];
         item.resourceId = resource->id;
         item.resourceType = resource->type;
         if (match)
-            item.title = [OAManageResourcesViewController titleOfResource:resource
-                                            inRegion:match
-                                      withRegionName:YES
-                                    withResourceType:NO];
+            item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                     inRegion:match
+                                               withRegionName:YES
+                                             withResourceType:NO];
         else
             item.title = resource->id.toNSString();
         

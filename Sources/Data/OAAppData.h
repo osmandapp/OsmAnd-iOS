@@ -14,6 +14,13 @@
 #import "OAMapLayersConfiguration.h"
 #import "OARTargetPoint.h"
 
+typedef NS_ENUM(NSInteger, EOATerrainType)
+{
+    EOATerrainTypeDisabled = 0,
+    EOATerrainTypeHillshade,
+    EOATerrainTypeSlope
+};
+
 @interface OAAppData : NSObject <NSCoding>
 
 @property OAMapSource* lastMapSource;
@@ -31,9 +38,12 @@
 @property (readonly) OAObservable* overlayAlphaChangeObservable;
 @property (readonly) OAObservable* underlayAlphaChangeObservable;
 
-@property (nonatomic) BOOL hillshade;
+@property (nonatomic) EOATerrainType hillshade;
+@property (nonatomic) EOATerrainType lastHillshade;
+@property (nonatomic) double hillshadeAlpha;
 @property (readonly) OAObservable* hillshadeChangeObservable;
 @property (readonly) OAObservable* hillshadeResourcesChangeObservable;
+@property (readonly) OAObservable* hillshadeAlphaChangeObservable;
 
 @property (nonatomic) BOOL mapillary;
 @property (readonly) OAObservable* mapillaryChangeObservable;

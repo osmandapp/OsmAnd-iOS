@@ -580,8 +580,8 @@
 - (void) terrainChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
-    if (switchView)
-        [[OsmAndApp instance].data setHillshade:switchView.isOn];
+    //if (switchView)
+        //[[OsmAndApp instance].data setHillshade:switchView.isOn];
 }
 
 - (void) showFavoriteChanged:(id)sender
@@ -692,17 +692,12 @@
                     mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenTerrain];
                     break;
                 }
-            }
-            else
-            {
                 index++;
             }
-            
             if (indexPath.row == index)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
             else if (indexPath.row == index + 1)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
-            
             break;
         }
         case 4:

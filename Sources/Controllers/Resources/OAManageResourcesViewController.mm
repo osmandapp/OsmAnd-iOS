@@ -717,6 +717,7 @@ static BOOL _lackOfResources;
                     case OsmAndResourceType::MapRegion:
                     case OsmAndResourceType::WikiMapRegion:
                     case OsmAndResourceType::HillshadeRegion:
+                    case OsmAndResourceType::SlopeRegion:
                     case OsmAndResourceType::DepthContourRegion:
                         [typesArray addObject:[NSNumber numberWithInt:(int)resource->type]];
                         break;
@@ -1903,7 +1904,7 @@ static BOOL _lackOfResources;
                     }
                 }
                 
-                if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion)
+                if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
                     && ![_iapHelper.srtm isActive] && ![self.region isInPurchasedArea])
                 {
                     disabled = YES;
@@ -1964,7 +1965,7 @@ static BOOL _lackOfResources;
                 }
             }
             
-            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion)
+            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
                 && ![_iapHelper.srtm isActive] && ![self.region isInPurchasedArea])
             {
                 disabled = YES;

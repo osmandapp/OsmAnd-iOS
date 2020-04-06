@@ -50,6 +50,7 @@
     _underlayAlphaChangeObservable = [[OAObservable alloc] init];
     _hillshadeChangeObservable = [[OAObservable alloc] init];
     _hillshadeResourcesChangeObservable = [[OAObservable alloc] init];
+    _hillshadeAlphaChangeObservable = [[OAObservable alloc] init];
     _mapLayerChangeObservable = [[OAObservable alloc] init];
     _mapillaryChangeObservable = [[OAObservable alloc] init];
 
@@ -193,6 +194,7 @@
 @synthesize destinationRemoveObservable = _destinationRemoveObservable;
 @synthesize hillshadeChangeObservable = _hillshadeChangeObservable;
 @synthesize hillshadeResourcesChangeObservable = _hillshadeResourcesChangeObservable;
+@synthesize hillshadeAlphaChangeObservable = _hillshadeAlphaChangeObservable;
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 @synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
 
@@ -295,7 +297,7 @@
 
 @synthesize hillshade = _hillshade;
 
-- (BOOL) hillshade
+- (EOATerrainType) hillshade
 {
     @synchronized(_lock)
     {
@@ -303,12 +305,44 @@
     }
 }
 
-- (void) setHillshade:(BOOL)hillshade
+- (void) setHillshade:(EOATerrainType)hillshade
 {
     @synchronized(_lock)
     {
         _hillshade = hillshade;
-        [_hillshadeChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithBool:_hillshade]];
+        if (hillshade == EOATerrainTypeHillshade || hillshade == EOATerrainTypeSlope)
+            [_hillshadeChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithBool:YES]];
+        else
+            [_hillshadeChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithBool:NO]];
+    }
+}
+
+@synthesize lastHillshade = _lastHillshade;
+
+- (EOATerrainType) lastHillshade
+{
+    @synchronized(_lock)
+    {
+        return _lastHillshade;
+    }
+}
+
+- (void) setLastHillshade:(EOATerrainType)lastHillshade
+{
+    @synchronized(_lock)
+    {
+        _lastHillshade = lastHillshade;
+    }
+}
+
+@synthesize hillshadeAlpha = _hillshadeAlpha;
+
+- (void) setHillshadeAlpha:(double)hillshadeAlpha
+{
+    @synchronized(_lock)
+    {
+        _hillshadeAlpha = hillshadeAlpha;
+        [_hillshadeAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_hillshadeAlpha]];
     }
 }
 
@@ -434,6 +468,9 @@
     defaults.underlayAlpha = 0.5;
     defaults.lastOverlayMapSource = NULL;
     defaults.lastUnderlayMapSource = NULL;
+    defaults.hillshade = EOATerrainTypeHillshade;
+    //defaults.lastHillshade = EOATerrainTypeHillshade;
+    defaults.hillshadeAlpha = 0.45;
     // Imagine that last viewed location was center of the world
     Point31 centerOfWorld;
     centerOfWorld.x = centerOfWorld.y = INT32_MAX>>1;
@@ -465,6 +502,8 @@
 #define kUnderlayAlpha @"underlay_alpha"
 
 #define kHillshade @"hillshade"
+#define kLastHillshade @"lastHillshade"
+#define kHillshadeAlpha @"hillshade_alpha"
 #define kMapillary @"mapillary"
 
 #define kPointToStart @"pointToStart"
@@ -495,6 +534,8 @@
     [aCoder encodeObject:[NSNumber numberWithDouble:_underlayAlpha] forKey:kUnderlayAlpha];
 
     [aCoder encodeObject:[NSNumber numberWithBool:_hillshade] forKey:kHillshade];
+    [aCoder encodeObject:[NSNumber numberWithBool:_lastHillshade] forKey:kLastHillshade];
+    [aCoder encodeObject:[NSNumber numberWithDouble:_hillshadeAlpha] forKey:kHillshadeAlpha];
     [aCoder encodeObject:[NSNumber numberWithBool:_mapillary] forKey:kMapillary];
     
     [aCoder encodeObject:_pointToStart forKey:kPointToStart];
@@ -527,6 +568,8 @@
         _underlayAlpha = [[aDecoder decodeObjectForKey:kUnderlayAlpha] doubleValue];
 
         _hillshade = [[aDecoder decodeObjectForKey:kHillshade] boolValue];
+        _lastHillshade = [[aDecoder decodeObjectForKey:kLastHillshade] boolValue];
+        _hillshadeAlpha = [[aDecoder decodeObjectForKey:kHillshadeAlpha] doubleValue];
         _mapillary = [[aDecoder decodeObjectForKey:kMapillary] boolValue];
 
         _pointToStart = [aDecoder decodeObjectForKey:kPointToStart];

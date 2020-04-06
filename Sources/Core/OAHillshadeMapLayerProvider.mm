@@ -8,6 +8,7 @@
 
 #include "OAHillshadeMapLayerProvider.h"
 #import "OAHillshadeLayer.h"
+#import "OsmAndApp.h"
 
 OAHillshadeMapLayerProvider::OAHillshadeMapLayerProvider() 
 {
@@ -24,7 +25,12 @@ OsmAnd::AlphaChannelPresence OAHillshadeMapLayerProvider::getAlphaChannelPresenc
 
 QByteArray OAHillshadeMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
-    NSData *data = [[OAHillshadeLayer sharedInstance] getBytes:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
+    NSData *data;
+    OsmAndAppInstance app = [OsmAndApp instance];
+    if (app.data.hillshade == EOATerrainTypeHillshade)
+        data = [[OAHillshadeLayer sharedInstanceHillshade] getBytes:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
+    else if (app.data.hillshade == EOATerrainTypeSlope)
+        data = [[OAHillshadeLayer sharedInstanceSlope] getBytes:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
     if (data)
         return QByteArray::fromNSData(data);
     else

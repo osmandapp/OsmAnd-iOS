@@ -29,17 +29,27 @@ const static int ZOOM_BOUNDARY = 15;
     OAAutoObserverProxy* _hillshadeChangeObserver;
 }
 
-+ (OAHillshadeLayer *)sharedInstance
++ (OAHillshadeLayer *)sharedInstanceHillshade
 {
     static dispatch_once_t once;
     static OAHillshadeLayer * sharedInstance;
     dispatch_once(&once, ^{
-        sharedInstance = [[self alloc] init];
+        sharedInstance = [[self alloc] init:YES];
     });
     return sharedInstance;
 }
 
-- (instancetype)init
++ (OAHillshadeLayer *)sharedInstanceSlope
+{
+    static dispatch_once_t once;
+    static OAHillshadeLayer * sharedInstance;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init:NO];
+    });
+    return sharedInstance;
+}
+
+- (instancetype)init:(BOOL)isHillshade
 {
     self = [super init];
     if (self)
@@ -55,8 +65,10 @@ const static int ZOOM_BOUNDARY = 15;
         _tilesDir = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources"];
         
         NSString *dir = [NSHomeDirectory() stringByAppendingString:@"/Library/HillshadeDatabase"];
-        _databasePath = [dir stringByAppendingString:@"/hillshade.cache"];
-        
+        if (isHillshade)
+            _databasePath = [dir stringByAppendingString:@"/hillshade.cache"];
+        else
+            _databasePath = [dir stringByAppendingString:@"/slope.cache"];
         BOOL isDir = YES;
         if (![[NSFileManager defaultManager] fileExistsAtPath:dir isDirectory:&isDir])
             [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
@@ -232,7 +244,7 @@ const static int ZOOM_BOUNDARY = 15;
                 NSString *fileName = [f lastPathComponent];
                 NSString *ext = [[f pathExtension] lowercaseString];
                 NSString *type = [[[f stringByDeletingPathExtension] pathExtension] lowercaseString];
-                if([ext isEqualToString:@"sqlitedb"] && [type isEqualToString:@"hillshade"])
+                if([ext isEqualToString:@"sqlitedb"] && ([type isEqualToString:@"hillshade"] || [type isEqualToString:@"hillshade"]))
                 {
                     OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:f];
                     [rs setObject:ts forKey:fileName];

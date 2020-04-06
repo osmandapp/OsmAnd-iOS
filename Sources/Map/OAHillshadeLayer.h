@@ -10,7 +10,8 @@
 
 @interface OAHillshadeLayer : NSObject
 
-+ (OAHillshadeLayer *)sharedInstance;
++ (OAHillshadeLayer *)sharedInstanceHillshade;
++ (OAHillshadeLayer *)sharedInstanceSlope;
 
 - (void)indexHillshadeFiles;
 

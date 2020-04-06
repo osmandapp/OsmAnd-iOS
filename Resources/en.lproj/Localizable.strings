@@ -1211,6 +1211,7 @@
 "res_srtm" = "Contour lines";
 "res_wiki" = "Wikipedia";
 "res_hillshade" = "Hillshade";
+"res_slope" = "Slope";
 
 "select_language" = "Select language";
 "language_short" = "Lang";

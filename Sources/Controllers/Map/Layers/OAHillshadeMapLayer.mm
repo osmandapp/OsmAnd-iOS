@@ -16,12 +16,13 @@
 #include "OAHillshadeMapLayerProvider.h"
 #include <OsmAndCore/Utilities.h>
 
-#define kHillshadeOpacity 0.45f
+#define kHillshadeOpacity 0.45f ///fix
 
 @implementation OAHillshadeMapLayer
 {
     std::shared_ptr<OsmAnd::IMapLayerProvider> _hillshadeMapProvider;
     OAAutoObserverProxy* _hillshadeChangeObserver;
+    OAAutoObserverProxy* _hillshadeAlphaChangeObserver;
 }
 
 - (NSString *) layerId
@@ -34,6 +35,9 @@
     _hillshadeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onHillshadeLayerChanged)
                                                           andObserve:self.app.data.hillshadeChangeObservable];
+    _hillshadeAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onHillshadeLayerAlphaChanged)
+                                                               andObserve:self.app.data.hillshadeAlphaChangeObservable];
 }
 
 - (void) deinitLayer
@@ -42,6 +46,11 @@
     {
         [_hillshadeChangeObserver detach];
         _hillshadeChangeObserver = nil;
+    }
+    if (_hillshadeAlphaChangeObserver)
+    {
+        [_hillshadeAlphaChangeObserver detach];
+        _hillshadeAlphaChangeObserver = nil;
     }
 }
 
@@ -59,7 +68,7 @@
         [self.mapView setProvider:_hillshadeMapProvider forLayer:self.layerIndex];
         
         OsmAnd::MapLayerConfiguration config;
-        config.setOpacityFactor(kHillshadeOpacity);
+        config.setOpacityFactor(self.app.data.hillshadeAlpha);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         return YES;
     }
@@ -80,6 +89,17 @@
             _hillshadeMapProvider.reset();
         }
     }];
+}
+
+- (void) onHillshadeLayerAlphaChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor(self.app.data.hillshadeAlpha);
+            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        }];
+    });
 }
 
 @end

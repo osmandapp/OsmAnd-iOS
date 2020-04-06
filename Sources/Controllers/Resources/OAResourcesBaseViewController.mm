@@ -340,6 +340,7 @@ static BOOL dataInvalidated = NO;
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::WikiMapRegion:
         case OsmAndResourceType::HillshadeRegion:
+        case OsmAndResourceType::SlopeRegion:
             
             if ([region.subregions count] > 0)
             {
@@ -848,7 +849,11 @@ static BOOL dataInvalidated = NO;
                                  if (item.resourceType == OsmAndResourceType::HillshadeRegion)
                                  {
                                      NSString *filename = [_app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString() lastPathComponent];
-                                     [[OAHillshadeLayer sharedInstance] removeFromDB:filename];
+                                     if (_app.data.hillshade == EOATerrainTypeHillshade)
+                                         [[OAHillshadeLayer sharedInstanceHillshade] removeFromDB:filename];
+                                     else if (_app.data.hillshade == EOATerrainTypeSlope)
+                                         [[OAHillshadeLayer sharedInstanceSlope] removeFromDB:filename];
+                                     //[[OAHillshadeLayer sharedInstance] removeFromDB:filename];
                                  }
                                  
                                  const auto success = item.resourceId.isEmpty() || _app.resourcesManager->uninstallResource(item.resourceId);
@@ -989,6 +994,8 @@ static BOOL dataInvalidated = NO;
             return OALocalizedString(@"res_roads");
         case OsmAnd::ResourcesManager::ResourceType::HillshadeRegion:
             return OALocalizedString(@"res_hillshade");
+        case OsmAnd::ResourcesManager::ResourceType::SlopeRegion:
+            return OALocalizedString(@"res_slope");
             
         default:
             return OALocalizedString(@"res_unknown");

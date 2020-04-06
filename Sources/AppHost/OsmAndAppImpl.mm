@@ -483,7 +483,8 @@
     [OAGPXRouter sharedInstance];
     
     [OAMapCreatorHelper sharedInstance];
-    [OAHillshadeLayer sharedInstance];
+    [OAHillshadeLayer sharedInstanceHillshade];
+    [OAHillshadeLayer sharedInstanceSlope];
     
     [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     [OAPlugin initPlugins];

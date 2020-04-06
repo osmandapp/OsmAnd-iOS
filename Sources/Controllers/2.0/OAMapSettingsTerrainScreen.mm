@@ -30,12 +30,12 @@
 
 #define kZoomSection 2
 
-typedef NS_ENUM(NSInteger, EOATerrainScreenType)
-{
-    EOATerrainScreenTypeDisabled = 0,
-    EOATerrainScreenTypeHillshade,
-    EOATerrainScreenTypeSlope
-};
+//typedef NS_ENUM(NSInteger, EOATerrainScreenType)
+//{
+//    EOATerrainScreenTypeDisabled = 0,
+//    EOATerrainScreenTypeHillshade,
+//    EOATerrainScreenTypeSlope
+//};
 
 @interface OAMapSettingsTerrainScreen() <OACustomPickerTableViewCellDelegate>
 
@@ -43,11 +43,11 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
 
 @implementation OAMapSettingsTerrainScreen
 {
-   // OsmAndAppInstance _app;
+    OsmAndAppInstance _app;
    // OAAppSettings *_settings;
 
     OAMapStyleSettings *_styleSettings;
-    EOATerrainScreenType _terrainType;
+    //EOATerrainType _terrainType;
     BOOL _availableMaps;
     
     NSArray<NSArray *> *_data;
@@ -69,7 +69,7 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
     self = [super init];
     if (self)
     {
-      //  _app = [OsmAndApp instance];
+      _app = [OsmAndApp instance];
       //  _settings = [OAAppSettings sharedManager];
 
         settingsScreen = EMapSettingsScreenTerrain;
@@ -77,8 +77,8 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
         vwController = viewController;
         tblView = tableView;
         
-//        [self commonInit];
-//        [self initData];
+        [self commonInit];
+        [self initData];
     }
     return self;
 }
@@ -164,7 +164,8 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
 
     _data = [NSArray arrayWithArray:result];
 
-    NSString *availableSectionFooter = _terrainType == EOATerrainScreenTypeSlope ? OALocalizedString(@"map_settings_add_maps_slopes") : OALocalizedString(@"map_settings_add_maps_hillshade");
+    
+    NSString *availableSectionFooter = _app.data.hillshade == EOATerrainTypeSlope ? OALocalizedString(@"map_settings_add_maps_slopes") : OALocalizedString(@"map_settings_add_maps_hillshade");
     NSMutableArray *sectionArr = [NSMutableArray new];
     [sectionArr addObject:@{
                         @"header" : @"",
@@ -178,7 +179,7 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
                         @"header" : OALocalizedString(@"res_zoom_levels"),
                         @"footer" : OALocalizedString(@"map_settings_zoom_level_description")
                         }];
-    if (_terrainType == EOATerrainScreenTypeSlope)
+    if (_app.data.hillshade == EOATerrainTypeSlope)
     {
         [sectionArr addObject:@{
                         @"header" : OALocalizedString(@"map_settings_legend"),
@@ -262,9 +263,9 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
 
 - (NSString *) getSwitchSectionFooter
 {
-    if (_terrainType == EOATerrainScreenTypeHillshade)
+    if (_app.data.hillshade == EOATerrainTypeHillshade)
         return OALocalizedString(@"map_settings_hillshade_description");
-    else if (_terrainType == EOATerrainScreenTypeSlope)
+    else if (_app.data.hillshade == EOATerrainTypeSlope)
         return OALocalizedString(@"map_settings_slopes_description");
     else
         return @"";
@@ -289,12 +290,12 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _terrainType == EOATerrainScreenTypeDisabled ? 1 : _data.count;
+    return _app.data.hillshade == EOATerrainTypeDisabled ? 1 : _data.count;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_terrainType == EOATerrainScreenTypeDisabled)
+    if (_app.data.hillshade == EOATerrainTypeDisabled)
     {
         return 1;
     }
@@ -388,6 +389,7 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
         if (cell)
         {
             cell.titleLabel.text = item[@"name"];
+            cell.sliderView.value = _app.data.hillshadeAlpha;
 //            if (_terrainType == EOATerrainScreenTypeSlope)
 //                //cell.sliderView.value =
 //            else if (_terrainType == EOATerrainScreenTypeHillshade)
@@ -411,7 +413,7 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
         }
         if (cell)
         {
-            [cell.segmentControl setSelectedSegmentIndex:_terrainType == EOATerrainScreenTypeHillshade ? 0 : 1];
+            [cell.segmentControl setSelectedSegmentIndex:_app.data.hillshade == EOATerrainTypeHillshade ? 0 : 1];
         }
         return cell;
     }
@@ -482,6 +484,10 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
 - (void) sliderValueChanged:(id)sender
 {
     UISlider *slider = sender;
+   // if (_mapSettingType == EMapSettingOverlay)
+        _app.data.hillshadeAlpha = slider.value;
+   // else if (_mapSettingType == EMapSettingUnderlay)
+    //    _app.data.underlayAlpha = slider.value;
 
 }
 
@@ -490,20 +496,30 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
     {
-        [[OsmAndApp instance].data setHillshade:switchView.isOn];
+        if (switchView.isOn)
+        {
+            [[OsmAndApp instance].data setHillshade:_app.data.lastHillshade];
+        }
+        else
+        {
+            //[[OsmAndApp instance].data setHillshade:switchView.isOn];
+            _app.data.lastHillshade = _app.data.hillshade;
+            [_app.data setHillshade:EOATerrainTypeDisabled];
+        }
+        //[[OsmAndApp instance].data setHillshade:switchView.isOn];
         NSMutableArray *indexPathsArray = [NSMutableArray new];
         NSIndexPath *segmentIndexPath = [NSIndexPath indexPathForRow:1 inSection:0];
         [indexPathsArray addObject:segmentIndexPath];
         [tblView beginUpdates];
         if (switchView.isOn)
         {
-            _terrainType = EOATerrainScreenTypeHillshade;
+            //_terrainType = EOATerrainScreenTypeHillshade;
             [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
             [tblView insertRowsAtIndexPaths:indexPathsArray withRowAnimation:UITableViewRowAnimationFade];
         }
         else
         {
-            _terrainType = EOATerrainScreenTypeDisabled;
+            //_terrainType = EOATerrainScreenTypeDisabled;
             [tblView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
             [tblView deleteRowsAtIndexPaths:indexPathsArray withRowAnimation:UITableViewRowAnimationFade];
         }
@@ -520,12 +536,14 @@ typedef NS_ENUM(NSInteger, EOATerrainScreenType)
     {
         if (segment.selectedSegmentIndex == 0)
         {
-            _terrainType = EOATerrainScreenTypeHillshade;
+            [_app.data setHillshade: EOATerrainTypeHillshade];
+            //_terrainType = EOATerrainScreenTypeHillshade;
 
         }
         else if (segment.selectedSegmentIndex == 1)
         {
-            _terrainType = EOATerrainScreenTypeSlope;
+            [_app.data setHillshade: EOATerrainTypeSlope];
+            //_terrainType = EOATerrainScreenTypeSlope;
         }
         [self setupView];
         [tblView reloadData];

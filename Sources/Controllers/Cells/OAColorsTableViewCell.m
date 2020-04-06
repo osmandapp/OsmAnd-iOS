@@ -11,7 +11,7 @@
 #import "OAColors.h"
 #import "OAUtilities.h"
 
-#define kWhiteColor 1157627903
+#define kWhiteColor 0x44FFFFFF
 
 @implementation OAColorsTableViewCell
 
@@ -24,10 +24,9 @@
     [self.collectionView registerNib:[UINib nibWithNibName:@"OAColorsCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAColorsCollectionViewCell"];
 }
 
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
+- (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
     self.collectionViewHeight.constant = self.collectionView.collectionViewLayout.collectionViewContentSize.height;
+    return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

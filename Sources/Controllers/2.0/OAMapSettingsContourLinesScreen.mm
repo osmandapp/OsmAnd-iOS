@@ -492,12 +492,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorsTableViewCell" owner:self options:nil];
             cell = (OAColorsTableViewCell *)[nib objectAtIndex:0];
             cell.dataArray = _colors;
+            cell.delegate = self;
+            cell.titleLabel.text = item[@"title"];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
-            cell.delegate = self;
-            cell.titleLabel.text = item[@"title"];
             OAMapStyleParameter *p = item[@"parameter"];
             cell.valueLabel.text = [p getValueTitle];
             cell.currentColor = _currentColor;

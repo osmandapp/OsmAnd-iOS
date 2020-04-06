@@ -1462,7 +1462,7 @@
 "routing_attr_avoid_ferry_name" = "Sense ferris";
 "rendering_value_green_name" = "Verd";
 "routing_attr_allow_advanced_description" = "Rutes difícils, amb obstacles perillosos i seccions amb pendents fortes.";
-"rendering_attr_showRoadMaps_description" = "Indiqueu quan mostrar mapes de només carreteres:";
+"rendering_attr_showRoadMaps_description" = "Trieu quan mostrar mapes de carreteres i prou:";
 "rendering_value_translucent_red_name" = "Vermell translúcid";
 "routing_attr_avoid_borders_description" = "Evita creuar les fronteres";
 "rendering_attr_tramRoutes_name" = "Rutes de tramvia";

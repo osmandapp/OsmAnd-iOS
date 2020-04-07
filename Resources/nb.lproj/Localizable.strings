@@ -1259,7 +1259,6 @@
 "sett_deg180" = "180 grader";
 "sett_deg360" = "360 grader";
 "region_others" = "Andre kart";
-
 "show_contour_lines" = "Vis koter";
 "gpx_alt_range" = "Høydeintervall";
 "display_starting_at_zoom_level" = "Vis fra og med forstørrelsesnivå";
@@ -1559,3 +1558,4 @@
 "routing_attr_prefer_unpaved_description" = "Foretrekk veier uten fast dekke.";
 "rendering_attr_hideNonVehicleHighways_name" = "Veier - ikke for kjøretøy";
 "rendering_attr_tracktype_grade1_name" = "Fast (asfaltert)";
+"rendering_attr_streetLightingNight_name" = "Kun vis om natten";

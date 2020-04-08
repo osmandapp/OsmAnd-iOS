@@ -492,12 +492,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorsTableViewCell" owner:self options:nil];
             cell = (OAColorsTableViewCell *)[nib objectAtIndex:0];
             cell.dataArray = _colors;
+            cell.delegate = self;
+            cell.titleLabel.text = item[@"title"];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
-            cell.delegate = self;
-            cell.titleLabel.text = item[@"title"];
             OAMapStyleParameter *p = item[@"parameter"];
             cell.valueLabel.text = [p getValueTitle];
             cell.currentColor = _currentColor;
@@ -632,9 +632,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        CGFloat ratio = cell.iconView.image.size.height / cell.iconView.image.size.width;
-        cell.iconViewHeight.constant = cell.iconView.frame.size.width * ratio;
-        [cell layoutIfNeeded];
+        if ([cell needsUpdateConstraints])
+            [cell setNeedsUpdateConstraints];
         return cell;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])

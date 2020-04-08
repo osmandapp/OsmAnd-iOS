@@ -919,34 +919,10 @@
 {
     if (_localMapIndexItem)
     {
-        if (_localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::MapRegion &&
-            ![OAResourcesUIHelper checkIfDownloadAvailable:_localMapIndexItem.worldRegion])
-        {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_free_exp") preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-            [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-            return;
-        }
-        
-        NSString *resourceName = [OAResourcesUIHelper titleOfResource:_localMapIndexItem.resource
-                                                             inRegion:_localMapIndexItem.worldRegion
-                                                       withRegionName:YES
-                                                     withResourceType:YES];
-        
-        if (![OAResourcesUIHelper verifySpaceAvailableDownloadAndUnpackResource:_localMapIndexItem.resource
-                                                              withResourceName:resourceName
-                                                                      asUpdate:YES])
-        {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_install_no_space") preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-            [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-            return;
-        }
-        
-        [OAResourcesUIHelper startBackgroundDownloadOf:_localMapIndexItem.resource resourceName:resourceName];
-        
-        if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)])
-            [self.delegate showProgressBar];
+        [OAResourcesUIHelper offerDownloadAndInstallOf:_localMapIndexItem onTaskCreated:^(id<OADownloadTask> task) {
+            if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)])
+                [self.delegate showProgressBar];
+        } onTaskResumed:nil];
     }
 }
 

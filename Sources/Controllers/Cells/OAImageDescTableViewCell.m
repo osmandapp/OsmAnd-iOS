@@ -12,7 +12,8 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    
+    self.iconView.layer.cornerRadius = 6.0;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -21,11 +22,23 @@
     // Configure the view for the selected state
 }
 
-- (void) layoutSubviews
+- (void)updateConstraints
 {
-    [super layoutSubviews];
     CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
     self.iconViewHeight.constant = self.iconView.frame.size.width * ratio;
+
+    [super updateConstraints];
+}
+
+- (BOOL)needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
+        res |= self.iconViewHeight.constant != self.iconView.frame.size.width * ratio;
+    }
+    return res;
 }
 
 @end

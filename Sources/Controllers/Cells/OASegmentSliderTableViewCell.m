@@ -9,55 +9,112 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OAColors.h"
 
+#define kMarkTag 100
+
 @implementation OASegmentSliderTableViewCell
+{
+    NSMutableArray<UIView*> *_markViews;
+}
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
-    [_separatorView0.layer setCornerRadius:_separatorView0.frame.size.width/2.0];
-    [_separatorView1.layer setCornerRadius:_separatorView1.frame.size.width/2.0];
-    [_separatorView2.layer setCornerRadius:_separatorView2.frame.size.width/2.0];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
 }
 
-- (void) setupSeparators
+
+- (void) layoutSubviews
 {
-    _separatorView0.backgroundColor = _sliderView.value > 0 ? UIColorFromRGB(color_menu_button) : UIColorFromRGB(color_slider_gray);
-    _separatorView1.backgroundColor = _sliderView.value > 0.5 ? UIColorFromRGB(color_menu_button) : UIColorFromRGB(color_slider_gray);
-    _separatorView2.backgroundColor = _sliderView.value == 1 ? UIColorFromRGB(color_menu_button) : UIColorFromRGB(color_slider_gray);
+    [super layoutSubviews];
+    if (_numberOfMarks > 1)
+        [self setupSeparators:_numberOfMarks];
+}
+
+- (void) setupSeparators:(NSInteger)marks
+{
+    _markViews = [NSMutableArray new];
+    CGFloat segments = marks - 1;
+    CGFloat markHeight = 16;
+    CGFloat markWidth = 2;
+    CGFloat sliderViewWidth = self.frame.size.width - 2 * 14 - OAUtilities.getLeftMargin;
+    CGFloat sliderViewHeight = self.sliderView.frame.size.height;
+    CGRect sliderViewBounds = CGRectMake(0, 0, sliderViewWidth, sliderViewHeight);
+    CGRect trackRect = [self.sliderView trackRectForBounds:sliderViewBounds];
+    CGFloat trackWidth = trackRect.size.width - markWidth;
+    
+    CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2;
+    
+    CGFloat x = inset;
+    CGFloat y = trackRect.origin.y + trackRect.size.height / 2 - markHeight / 2;
+    NSArray *viewsToRemove = [self.sliderView subviews];
+    for (UIView *v in viewsToRemove)
+    {
+        if (v.tag == kMarkTag)
+            [v removeFromSuperview];
+    }
+    
+    for (int i = 0; i < marks; i++)
+    {
+        UIView *mark = [[UIView alloc] initWithFrame:CGRectMake(x, y, markWidth, markHeight)];
+        [mark.layer setCornerRadius:markWidth/2.0];
+        x += trackWidth / segments;
+        mark.tag = kMarkTag;
+        [self.sliderView addSubview:mark];
+        [self.sliderView sendSubviewToBack:mark];
+        [_markViews addObject:mark];
+    }
+    [self paintMarks];
+}
+
+- (void) paintMarks
+{
+    for (int i = 0; i < _markViews.count; i++)
+    {
+        CGFloat step = (CGFloat)i / (_markViews.count - 1);
+        if (_sliderView.value > step)
+            _markViews[i].backgroundColor = UIColorFromRGB(color_menu_button);
+        else
+            _markViews[i].backgroundColor = UIColorFromRGB(color_slider_gray);
+    }
+    
+    if (self.sliderView.value == 1)
+        [_markViews lastObject].backgroundColor = [UIColor clearColor];
+    else if (self.sliderView.value == 0)
+        [_markViews firstObject].backgroundColor = [UIColor clearColor];
 }
 
 - (IBAction)sliderValueChanged:(id)sender
 {
     UISlider *slider = sender;
     if (slider)
-    {
-        [self setupSeparators];
-    }
+        [self paintMarks];
 }
 
 - (IBAction)sliderDidEndEditing:(UISlider *)sender
 {
-    if (sender.value < 0.25)
+    CGFloat step = 1.0 / (_markViews.count - 1);
+    int nextMark = 0;
+    for (int i = 0; i < _markViews.count; i++)
     {
-        [sender setValue:0.0];
-        _separatorView0.backgroundColor = UIColorFromRGB(color_slider_gray);
+        if (i * step > sender.value)
+        {
+            nextMark = i;
+            break;
+        }
     }
-    else if (sender.value < 0.75)
-    {
-        [sender setValue:0.5];
-    }
+    if ((nextMark*step - sender.value) < (sender.value - (nextMark - 1) * step))
+        [sender setValue:nextMark * step];
     else
-    {
-        [sender setValue:1];
-        _separatorView2.backgroundColor = UIColorFromRGB(color_menu_button);
-    }
+        [sender setValue:(nextMark - 1) * step];
+    
+    if (self.sliderView.value == 1)
+        [_markViews lastObject].backgroundColor = [UIColor clearColor];
+    else if (self.sliderView.value == 0)
+        [_markViews firstObject].backgroundColor = [UIColor clearColor];
 }
 
 @end

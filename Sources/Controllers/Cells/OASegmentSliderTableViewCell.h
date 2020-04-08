@@ -13,11 +13,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *valueLabel;
 @property (weak, nonatomic) IBOutlet UISlider *sliderView;
-@property (weak, nonatomic) IBOutlet UIView *separatorView0;
-@property (weak, nonatomic) IBOutlet UIView *separatorView1;
-@property (weak, nonatomic) IBOutlet UIView *separatorView2;
-
-- (void) setupSeparators;
+@property (nonatomic) NSInteger numberOfMarks;
 
 @end
 

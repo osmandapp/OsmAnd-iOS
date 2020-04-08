@@ -16,32 +16,11 @@
                 <rect key="frame" x="0.0" y="0.0" width="420" height="95"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ASD-Ww-Jah" userLabel="Separator0">
-                        <rect key="frame" x="16" y="59" width="2" height="16"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="16" id="e63-0M-b8h"/>
-                            <constraint firstAttribute="width" constant="2" id="jMz-5D-pzP"/>
-                        </constraints>
-                    </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WZo-be-mKH" userLabel="Separator1">
-                        <rect key="frame" x="209" y="59" width="2" height="16"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="16" id="JYe-4c-kFW"/>
-                            <constraint firstAttribute="width" constant="2" id="OxV-jR-rCf"/>
-                        </constraints>
-                    </view>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JA1-Bg-2rM" userLabel="Separator2">
-                        <rect key="frame" x="402" y="59" width="2" height="16"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="16" id="Z67-t2-Un9"/>
-                            <constraint firstAttribute="width" constant="2" id="pD5-p7-qWk"/>
-                        </constraints>
-                    </view>
                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sAt-3a-33r">
                         <rect key="frame" x="14" y="52" width="392" height="31"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="Ys9-U6-ax7"/>
+                        </constraints>
                         <connections>
                             <action selector="sliderDidEndEditing:" destination="XBX-Uh-gh9" eventType="touchUpOutside" id="IZB-cd-AIv"/>
                             <action selector="sliderDidEndEditing:" destination="XBX-Uh-gh9" eventType="touchUpInside" id="i4N-6a-8WM"/>
@@ -72,24 +51,15 @@
                     <constraint firstItem="PdR-al-82O" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" constant="13" id="BYi-Lp-KqD"/>
                     <constraint firstItem="PdR-al-82O" firstAttribute="leading" secondItem="sEM-QO-aGw" secondAttribute="trailing" constant="16" id="Dhm-4r-08T"/>
                     <constraint firstItem="sEM-QO-aGw" firstAttribute="width" secondItem="PdR-al-82O" secondAttribute="width" id="DyE-yL-zpj"/>
-                    <constraint firstItem="JA1-Bg-2rM" firstAttribute="centerY" secondItem="sAt-3a-33r" secondAttribute="centerY" id="FxJ-J6-Tyc"/>
                     <constraint firstItem="sEM-QO-aGw" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" constant="13" id="Mpp-Q0-SmX"/>
                     <constraint firstItem="sEM-QO-aGw" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leading" constant="16" id="POa-HF-vgV"/>
-                    <constraint firstItem="WZo-be-mKH" firstAttribute="centerX" secondItem="sAt-3a-33r" secondAttribute="centerX" id="T4l-g3-qTJ"/>
                     <constraint firstItem="sAt-3a-33r" firstAttribute="top" secondItem="sEM-QO-aGw" secondAttribute="bottom" constant="17" id="UDM-je-weR"/>
                     <constraint firstAttribute="bottom" secondItem="sAt-3a-33r" secondAttribute="bottom" constant="13" id="bga-Xy-AwK"/>
-                    <constraint firstItem="WZo-be-mKH" firstAttribute="centerY" secondItem="sAt-3a-33r" secondAttribute="centerY" id="bmB-oL-1J5"/>
                     <constraint firstAttribute="trailing" secondItem="sAt-3a-33r" secondAttribute="trailing" constant="16" id="dcQ-d2-GJM"/>
                     <constraint firstAttribute="trailing" secondItem="PdR-al-82O" secondAttribute="trailing" constant="16" id="dzQ-sv-a01"/>
-                    <constraint firstItem="ASD-Ww-Jah" firstAttribute="leading" secondItem="sAt-3a-33r" secondAttribute="leading" id="ecf-0L-WsD"/>
-                    <constraint firstItem="ASD-Ww-Jah" firstAttribute="centerY" secondItem="sAt-3a-33r" secondAttribute="centerY" id="qVG-E3-EG4"/>
-                    <constraint firstItem="JA1-Bg-2rM" firstAttribute="trailing" secondItem="sAt-3a-33r" secondAttribute="trailing" id="z2e-n9-TOE"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="separatorView0" destination="ASD-Ww-Jah" id="Odr-eL-cKH"/>
-                <outlet property="separatorView1" destination="WZo-be-mKH" id="s71-rE-lbD"/>
-                <outlet property="separatorView2" destination="JA1-Bg-2rM" id="qHX-Dh-YiW"/>
                 <outlet property="sliderView" destination="sAt-3a-33r" id="1J2-17-YdW"/>
                 <outlet property="titleLabel" destination="sEM-QO-aGw" id="QQD-a2-ysY"/>
                 <outlet property="valueLabel" destination="PdR-al-82O" id="bIJ-n4-l1I"/>

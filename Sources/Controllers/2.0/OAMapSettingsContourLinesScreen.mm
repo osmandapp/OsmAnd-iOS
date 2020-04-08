@@ -528,13 +528,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
                 cell.sliderView.value = (CGFloat)[_visibleDensityValues indexOfObject:p.value]/(CGFloat)(_visibleDensityValues.count - 1);
+                cell.numberOfMarks = _visibleDensityValues.count;
             }
             else if ([p.name isEqualToString:kContourLinesWidth])
             {
                 [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
                 cell.sliderView.value = (CGFloat)[_visibleWidthValues indexOfObject:p.value]/(CGFloat)(_visibleWidthValues.count - 1);
+                cell.numberOfMarks = _visibleWidthValues.count;
             }
-            [cell setupSeparators];
         }
         return cell;
     }
@@ -748,17 +749,29 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
+- (NSInteger) getIndex:(CGFloat)value marks:(NSInteger)marks
+{
+    CGFloat step = 1.0 / (marks - 1);
+    int nextMark = 0;
+    for (int i = 0; i < marks; i++)
+    {
+        if (i * step >= value)
+        {
+            nextMark = i;
+            break;
+        }
+    }
+    if ((nextMark*step - value) < (value - (nextMark - 1) * step))
+        return nextMark;
+    else
+        return nextMark - 1;
+}
+
 - (void) widthChanged:(UISlider *)sender
 {
     if (sender)
     {
-        NSInteger index;
-        if (sender.value < 0.25)
-            index = 0;
-        else if (sender.value < 0.75)
-            index = 1;
-        else
-            index = 2;
+        NSInteger index = [self getIndex:sender.value marks:_visibleWidthValues.count];
         OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesWidth];
         p.value = _visibleWidthValues[index];
         [_styleSettings save:p];
@@ -772,13 +785,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     if (sender)
     {
-        NSInteger index;
-        if (sender.value < 0.25)
-            index = 0;
-        else if (sender.value < 0.75)
-            index = 1;
-        else
-            index = 2;
+        NSInteger index = [self getIndex:sender.value marks:_visibleDensityValues.count];
         OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesDensity];
         p.value = _visibleDensityValues[index];
         [_styleSettings save:p];

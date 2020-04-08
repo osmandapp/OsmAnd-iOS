@@ -639,7 +639,7 @@
 "shared_string_select_on_map" = "Kijelölése a térképen";
 "shared_string_my_location" = "Saját pozícióm";
 // Shared Strings
-"shared_string_apply" = "Alkalmazás";
+"shared_string_apply" = "Alkalmaz";
 "shared_string_near" = "Közel";
 "shared_string_sound" = "Hang";
 "show_traffic_warnings" = "Forgalmi figyelmeztetések";
@@ -984,7 +984,6 @@
 "translucent_lightblue" = "Átlátszó világoskék";
 "tile_cache" = "Csempegyorsítótár";
 "hide_contour_lines" = "Szintvonalak elrejtése";
-
 "hide_notes" = "OSM-jegyzetek elrejtése";
 "show_notes" = "OSM-jegyzetek megjelenítése";
 "res_elliptic_mercator" = "Elliptikus Merkátor";

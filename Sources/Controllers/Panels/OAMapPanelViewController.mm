@@ -2088,9 +2088,6 @@ typedef enum
     
     if (!hideActiveTarget)
     {
-        if (_mapStateSaved)
-            [self restoreMapAfterReuseAnimated];
-        
         _mapStateSaved = NO;
     }
     

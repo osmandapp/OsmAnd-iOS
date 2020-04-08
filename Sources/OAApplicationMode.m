@@ -70,8 +70,6 @@ static OAApplicationMode *_SKI;
     _cachedFilteredValues = [NSMutableArray array];
     
     _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_overview") stringKey:@"default"];
-    _DEFAULT.modeId = 1;
-    _DEFAULT.defaultSpeed = 1.5f;
     _DEFAULT.minDistanceForTurn = 5;
     _DEFAULT.arrivalDistance = 90;
     [self defLocation:_DEFAULT];
@@ -80,8 +78,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_DEFAULT];
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
-    _CAR.modeId = 2;
-    _CAR.defaultSpeed = 15.3f;
     _CAR.minDistanceForTurn = 35;
     [self carLocation:_CAR];
     _CAR.mapIcon = @"map_action_car_dark";
@@ -89,8 +85,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_CAR];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
-    _BICYCLE.modeId = 3;
-    _BICYCLE.defaultSpeed = 5.5f;
     _BICYCLE.minDistanceForTurn = 15;
     _BICYCLE.arrivalDistance = 60;
     [self bicycleLocation:_BICYCLE];
@@ -99,8 +93,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_BICYCLE];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
-    _PEDESTRIAN.modeId = 4;
-    _PEDESTRIAN.defaultSpeed = 1.5f;
     _PEDESTRIAN.minDistanceForTurn = 5;
     _PEDESTRIAN.arrivalDistance = 45;
     [self pedestrianLocation:_PEDESTRIAN];
@@ -109,7 +101,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_PEDESTRIAN];
     
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
-    _PUBLIC_TRANSPORT.modeId = 5;
     _PUBLIC_TRANSPORT.defaultSpeed = 15.3f;
     _PUBLIC_TRANSPORT.minDistanceForTurn = 35;
     [self carLocation:_PUBLIC_TRANSPORT];
@@ -118,7 +109,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_PUBLIC_TRANSPORT];
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
-    _AIRCRAFT.modeId = 6;
     _AIRCRAFT.defaultSpeed = 40.0f;
     _AIRCRAFT.minDistanceForTurn = 100;
     [self carLocation:_AIRCRAFT];
@@ -127,7 +117,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_AIRCRAFT];
     
     _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
-    _BOAT.modeId = 7;
     _BOAT.defaultSpeed = 5.5f;
     _BOAT.minDistanceForTurn = 20;
     [self carLocation:_BOAT];
@@ -136,7 +125,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_BOAT];
 
     _HIKING = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_hiking") stringKey:@"hiking"];
-    _HIKING.modeId = 8;
     _HIKING.defaultSpeed = 1.5f;
     _HIKING.minDistanceForTurn = 5;
     [self pedestrianLocation:_HIKING];
@@ -146,7 +134,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_HIKING];
     
     _MOTORCYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_motorcycle") stringKey:@"motorcycle"];
-    _MOTORCYCLE.modeId = 9;
     _MOTORCYCLE.defaultSpeed = 15.3f;
     _MOTORCYCLE.minDistanceForTurn = 40;
     [self carLocation:_MOTORCYCLE];
@@ -156,7 +143,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_MOTORCYCLE];
     
     _TRUCK = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_truck") stringKey:@"truck"];
-    _TRUCK.modeId = 10;
     _TRUCK.defaultSpeed = 15.3f;
     _TRUCK.minDistanceForTurn = 40;
     [self carLocation:_TRUCK];
@@ -166,7 +152,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_TRUCK];
     
     _BUS = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_bus") stringKey:@"bus"];
-    _BUS.modeId = 11;
     _BUS.defaultSpeed = 15.3f;
     _BUS.minDistanceForTurn = 40;
     [self carLocation:_BUS];
@@ -176,7 +161,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_BUS];
     
     _TRAIN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_train") stringKey:@"train"];
-    _TRAIN.modeId = 12;
     _TRAIN.defaultSpeed = 25.0f;
     _TRAIN.minDistanceForTurn = 40;
     [self carLocation:_TRAIN];
@@ -186,7 +170,6 @@ static OAApplicationMode *_SKI;
     [_values addObject:_TRAIN];
     
     _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_train") stringKey:@"train"];
-    _SKI.modeId = 13;
     _SKI.minDistanceForTurn = 15;
     _SKI.arrivalDistance = 60;
     _SKI.offRouteDistance = 50;
@@ -420,15 +403,6 @@ static OAApplicationMode *_SKI;
         if ([p.stringKey isEqualToString:key])
             return p;
 
-    return def;
-}
-
-+ (OAApplicationMode *) getAppModeById:(NSInteger)modeId def:(OAApplicationMode *)def
-{
-    for (OAApplicationMode *p in _values)
-        if (p.modeId == modeId)
-            return p;
-    
     return def;
 }
 

@@ -499,7 +499,7 @@
 "do_not_send_anonymous_data" = "No enviar datos anónimos";
 "wiki_buy_description" = "Para leer los artículos completos - compra el complemento de Wikipedia y descarga los datos Wikipedia de %@";
 "wiki_download_description" = "Para leer los artículos completos - descarga los datos Wikipedia de %@";
-"map_an_region" = "una región";
+"map_an_region" = "esta región";
 "nothing_found" = "¡Nada por aquí! :-(";
 "nothing_found_descr" = "Modifica la consulta de búsqueda o aumenta el radio de búsqueda";
 "select_street" = "Elegir la calle";
@@ -1572,8 +1572,12 @@
 "rendering_attr_piste_difficulty_connection_name" = "Conexión";
 "rendering_attr_buildings15zoom_name" = "Edificios en zoom 15";
 "rendering_attr_streetLightingNight_name" = "Mostrar sólo por la noche";
-"map_settings_install_maps" = "Elija mapas para instalar o actualizar";
+"map_settings_install_maps" = "Elige mapas para instalar o actualizar";
 "map_settings_install_more" = "Instalar más...";
 "available_map_styles" = "Estilos de mapa disponibles";
 "res_confirmation_delete" = "¿Está seguro de querer borrar %@?";
 "shared_string_maximum" = "Máximo";
+"available_map_sources" = "Repositorios de mapas disponible";
+"stats_select_graph_data" = "Seleccionar dato del gráfico";
+"gpx_analyze" = "Analizar";
+"shared_string_clear_cache" = "Limpiar caché";

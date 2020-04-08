@@ -463,7 +463,7 @@
 "traffic_warning_calming" = "Moderatore del traffico";
 "traffic_warning_speed_camera" = "Autovelox";
 "traffic_warning" = "Avviso di traffico";
-"traffic_warning_railways" = "Passaggio a livello";
+"traffic_warning_railways" = "Attraversamento ferroviario";
 "traffic_warning_pedestrian" = "Attraversamento pedonale";
 "traffic_warning_hazard" = "Pericolo";
 "driving_region" = "Regione di guida";

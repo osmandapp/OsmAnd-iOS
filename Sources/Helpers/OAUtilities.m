@@ -639,6 +639,44 @@
     }
 }
 
++ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top
+{
+    @autoreleasepool
+    {
+        CGSize size = bottom.size;
+        if (size.width < center.size.width || size.height < center.size.height)
+            size = center.size;
+        if (size.width < top.size.width || size.height < top.size.height)
+            size = top.size;
+
+        UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+        
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [color setFill];
+        
+        CGContextTranslateCTM(context, 0, size.height);
+        CGContextScaleCTM(context, 1.0, -1.0);
+        
+        CGContextSetBlendMode(context, kCGBlendModeNormal);
+        CGRect rect = CGRectMake(size.width / 2.0 - bottom.size.width / 2.0, size.height / 2.0 - bottom.size.height / 2.0, bottom.size.width, bottom.size.height);
+        CGContextDrawImage(context, rect, bottom.CGImage);
+
+        rect = CGRectMake(size.width / 2.0 - center.size.width / 2.0, size.height / 2.0 - center.size.height / 2.0, center.size.width, center.size.height);
+        CGContextDrawImage(context, rect, center.CGImage);
+        CGContextClipToMask(context, rect, center.CGImage);
+        CGContextAddRect(context, rect);
+        CGContextDrawPath(context, kCGPathFill);
+        
+        rect = CGRectMake(size.width / 2.0 - top.size.width / 2.0, size.height / 2.0 - top.size.height / 2.0, top.size.width, top.size.height);
+        CGContextDrawImage(context, rect, top.CGImage);
+
+        UIImage *res = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        return res;
+    }
+}
+
 + (NSString *) colorToString:(UIColor *)color
 {
     CGFloat r,g,b,a;

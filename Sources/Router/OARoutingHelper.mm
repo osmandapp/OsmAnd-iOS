@@ -1299,13 +1299,13 @@ static BOOL _isDeviatedFromRoute = false;
 {
     if (params.calculationProgressCallback)
     {
-        [params.calculationProgressCallback start];
+        [params.calculationProgressCallback startProgress];
     }
     else if (_progressRoutes)
     {
         for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
         {
-            [progressRoute start];
+            [progressRoute startProgress];
         }
     }
 }

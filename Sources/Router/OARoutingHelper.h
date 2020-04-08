@@ -27,7 +27,7 @@
 
 @required
 // set visibility
-- (void) start;
+- (void) startProgress;
 - (void) updateProgress:(int)progress;
 - (void) requestPrivateAccessRouting;
 - (void) finish;

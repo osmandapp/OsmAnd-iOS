@@ -107,6 +107,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (UIImage *) getTintableImage:(UIImage *)image;
 + (UIImage *) getTintableImageNamed:(NSString *)name;
 + (UIImage *) tintImageWithColor:(UIImage *)source color:(UIColor *)color;
++ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top;
 
 + (NSString *) colorToString:(UIColor *)color;
 + (UIColor *) colorFromString:(NSString *)colorStr;

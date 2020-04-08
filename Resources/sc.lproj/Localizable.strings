@@ -107,7 +107,7 @@
 // Map settings
 "m_style_overview" = "Resumu";
 "m_style_car" = "Màchina";
-"m_style_walk" = "A pedes";
+"m_style_walk" = "A pee";
 "m_style_bicycle" = "Bitzicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Ammustra in sa mapa";
@@ -1632,3 +1632,24 @@
 "download_wiki_data" = "Iscàrriga sos datos de Wikipedia pro %@";
 "open_wiki_online" = "Aberi s'artìculu in lìnia";
 "online_webpage_warning" = "Custa pàgina est disponìbile in lìnia ebbia. La cheres abèrrere in s'esploradore/navigadore (browser) web?";
+"app_mode_pedestrian" = "A pee";
+"app_mode_bicycle" = "Bitzicleta";
+"app_mode_car" = "Màchina";
+"app_mode_camper" = "Camper";
+"app_mode_osm" = "OSM";
+"app_mode_utv" = "Costa a costa";
+"app_mode_pickup_truck" = "Camieddu";
+"app_mode_wagon" = "Vagone pro sas mertzes";
+"app_mode_campervan" = "Camper (RV)";
+"app_mode_offroad" = "In foras de caminu";
+"app_mode_ufo" = "OVNI (UFO)";
+"app_mode_scooter" = "Motorinu (Scooter)";
+"app_mode_monowheel" = "Monoroda";
+"app_mode_personal_transporter" = "Trasportadore personale";
+"app_mode_skiing" = "Iscì";
+"app_mode_helicopter" = "Elicòteru";
+"app_mode_horse" = "Caddu";
+"app_mode_subway" = "Metropolitana";
+"app_mode_shuttle_bus" = "Bus naveta";
+"app_mode_taxi" = "Taxi";
+"app_mode_default" = "Esplora sa mapa";

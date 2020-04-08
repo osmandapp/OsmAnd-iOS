@@ -4,7 +4,7 @@
 "shared_string_no" = "Não";
 "shared_string_or" = "ou";
 "shared_string_save" = "Gravar";
-"shared_string_delete" = "eliminar";
+"shared_string_delete" = "Apagar";
 "shared_string_add" = "Adicionar";
 // Rendering categories
 "rendering_category_hide" = "Ocultar";
@@ -423,7 +423,7 @@
 "shared_string_search" = "Pesquisar";
 "targets" = "Destinos";
 "poi" = "POI";
-"day_off_label" = "Desligado";
+"day_off_label" = "desligado";
 "error_avoid_specific_road" = "Nenhum desvio encontrado";
 "road_blocked" = "Estrada bloqueada";
 "starting_point" = "Ponto de partida";
@@ -815,7 +815,7 @@
 "shared_string_in_name" = "em %@";
 "shared_string_modify" = "Modificar";
 "shared_string_of" = "de";
-"shared_string_time" = "tempo";
+"shared_string_time" = "Tempo";
 "shared_string_distance" = "Distância";
 "offline_maps" = "Mapas off-line";
 "amenity" = "Serviço";
@@ -1355,7 +1355,7 @@
 "rendering_value_translucent_purple_name" = "Roxo translúcido";
 "routing_attr_avoid_shuttle_train_description" = "Evitar usar transporte de comboio";
 "rendering_attr_tracktype_grade3_name" = "Maioritariamente sólido";
-"routing_attr_allow_private_description" = "Permitir acesso aáreas privadas.";
+"routing_attr_allow_private_description" = "Permitir acesso a áreas privadas.";
 "routing_attr_allow_skating_only_name" = "Permitir apenas rotas de patinação";
 "rendering_value_brown_name" = "Castanho";
 "routing_attr_allow_intermediate_description" = "Rotas mais difíceis com seções mais íngremas. Geralmente, contém alguns obstáculos que deviam ser evitados.";
@@ -1373,7 +1373,7 @@
 "rendering_attr_surface_compacted_name" = "Compactado";
 "routing_attr_allow_classic_only_description" = "Rotas preparadas apenas para o estilo clássico sem pistas de patinação. Isso inclui rotas preparadas por uma moto de neve menor com pista mais solta e pistas feitas manualmente por esquiadores.";
 "rendering_attr_subwayMode_name" = "Rotas de metropolitano";
-"rendering_attr_hideOverground_name" = "Objetosà superfície";
+"rendering_attr_hideOverground_name" = "Objetos à superfície";
 "rendering_attr_appMode_name" = "Modo de Visualização";
 "rendering_attr_transportStops_name" = "Paragens de transporte";
 "rendering_attr_hikingRoutesOSMC_name" = "Sobreposição de símbolo de montanhismo";
@@ -1520,7 +1520,7 @@
 "routing_attr_piste_type_sled_name" = "Trenó";
 "routing_attr_allow_skating_only_description" = "Rotas preparadas para o estilo livre ou patinação apenas sem trilhas clássicas.";
 "rendering_value_medium_w_name" = "Médio";
-"rendering_attr_contourLines_description" = "Mostrar desde o nível de ampliação  (requer dados de contorno):";
+"rendering_attr_contourLines_description" = "Mostrar desde o nível de ampliação (requer dados de contorno):";
 "rendering_attr_hideWaterPolygons_description" = "Água";
 "rendering_value_fine_name" = "Mais fino";
 "rendering_attr_trolleybusRoutes_name" = "Rotas de trólebus";
@@ -1537,7 +1537,7 @@
 "rendering_attr_moreDetailed_name" = "Mais detalhes";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
 "routing_attr_avoid_sett_name" = "Evitar paralelepípedo";
-"rendering_attr_hideWaterPolygons_name" = "Esconderágua";
+"rendering_attr_hideWaterPolygons_name" = "Ocultar água";
 "rendering_value_black_name" = "Preto";
 "rendering_attr_contourDensity_name" = "Densidade de linhas de contorno";
 "rendering_attr_piste_type_snow_park_name" = "Parque do terreno";
@@ -1567,3 +1567,26 @@
 "rendering_value_bicycle_name" = "Bicicleta";
 "rendering_attr_piste_type_sled_name" = "Trenó";
 "rendering_attr_trainLightrailRoutes_name" = "Rotas de comboio";
+"app_mode_pedestrian" = "Caminhando";
+"app_mode_bicycle" = "Ciclismo";
+"app_mode_car" = "Condução";
+"app_mode_default" = "Explorar mapa";
+"online_webpage_warning" = "Página disponível apenas on-line. Abrir no navegador da web?";
+"app_mode_skiing" = "Esqui";
+"app_mode_helicopter" = "Helicóptero";
+"app_mode_horse" = "Cavalo";
+"app_mode_subway" = "Metropolitano";
+"app_mode_shuttle_bus" = "Autocarro de vaivem";
+"app_mode_taxi" = "Táxi";
+"app_mode_scooter" = "Scooter";
+"app_mode_monowheel" = "Monoroda";
+"app_mode_personal_transporter" = "Transportador pessoal";
+"app_mode_ufo" = "OVNI";
+"app_mode_offroad" = "Off-road";
+"app_mode_campervan" = "Autocaravana (RV)";
+"app_mode_camper" = "Campista";
+"app_mode_pickup_truck" = "Caminhonete";
+"app_mode_wagon" = "Vagão";
+"app_mode_utv" = "Lado a Lado";
+"app_mode_osm" = "OSM";
+"rendering_attr_streetLightingNight_name" = "Mostrar apenas à noite";

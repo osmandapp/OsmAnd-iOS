@@ -181,7 +181,6 @@ static NSInteger kButtonsSection;
         }
     }
     
-    [tblView reloadData];
     NSArray *arr = [_onlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_OnlineTileSource* obj1, Item_OnlineTileSource* obj2) {
         NSString *caption1 = obj1.onlineTileSource->name.toNSString();
         NSString *caption2 = obj2.onlineTileSource->name.toNSString();
@@ -212,7 +211,8 @@ static NSInteger kButtonsSection;
     NSMutableArray *sliderArr = [NSMutableArray new];
     [sliderArr addObject:@{
                         @"type" : kCellTypeTitleSlider,
-                        @"title" : OALocalizedString(@"map_settings_transp"),
+                        @"title" : _mapSettingType == EMapSettingOverlay ? OALocalizedString(@"map_settings_transp")
+                                                                        : OALocalizedString(@"map_settings_base_transp"),
                          }];
     [sliderArr addObject:@{
                         @"type" : kCellTypeSwitch,
@@ -493,7 +493,7 @@ static NSInteger kButtonsSection;
         
         if (cell)
         {
-            cell.titleLabel.text = _mapSettingType == EMapSettingOverlay ? item[@"title"] : OALocalizedString(@"map_settings_base_transp");
+            cell.titleLabel.text = item[@"title"];
             if (_mapSettingType == EMapSettingOverlay)
                 cell.sliderView.value = _app.data.overlayAlpha;
             else if (_mapSettingType == EMapSettingUnderlay)
@@ -688,6 +688,7 @@ static NSInteger kButtonsSection;
 
 - (void) onTileSourceSaved:(LocalResourceItem *)item
 {
+    [self setupView];
     [tblView reloadData];
 }
 

@@ -522,18 +522,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             OAMapStyleParameter *p = (OAMapStyleParameter *)item[@"parameter"];
             cell.titleLabel.text = item[@"name"];
             cell.valueLabel.text = [p getValueTitle];            
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpOutside];
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
+            cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             if ([p.name isEqualToString:kContourLinesDensity])
             {
-                [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
-                cell.sliderView.value = (CGFloat)[_visibleDensityValues indexOfObject:p.value]/(CGFloat)(_visibleDensityValues.count - 1);
+                [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside];
+                cell.sliderView.value = (CGFloat)[_visibleDensityValues indexOfObject:p.value] / (_visibleDensityValues.count - 1);
                 cell.numberOfMarks = _visibleDensityValues.count;
             }
             else if ([p.name isEqualToString:kContourLinesWidth])
             {
-                [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
-                cell.sliderView.value = (CGFloat)[_visibleWidthValues indexOfObject:p.value]/(CGFloat)(_visibleWidthValues.count - 1);
+                [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside];
+                cell.sliderView.value = (CGFloat)[_visibleWidthValues indexOfObject:p.value] / (_visibleWidthValues.count - 1);
                 cell.numberOfMarks = _visibleWidthValues.count;
             }
         }
@@ -748,50 +748,38 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (NSInteger) getIndex:(CGFloat)value marks:(NSInteger)marks
-{
-    CGFloat step = 1.0 / (marks - 1);
-    int nextMark = 0;
-    for (int i = 0; i < marks; i++)
-    {
-        if (i * step >= value)
-        {
-            nextMark = i;
-            break;
-        }
-    }
-    if ((nextMark*step - value) < (value - (nextMark - 1) * step))
-        return nextMark;
-    else
-        return nextMark - 1;
-}
-
 - (void) widthChanged:(UISlider *)sender
 {
     if (sender)
     {
-        NSInteger index = [self getIndex:sender.value marks:_visibleWidthValues.count];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
+        OASegmentSliderTableViewCell *cell = (OASegmentSliderTableViewCell *) [tblView cellForRowAtIndexPath:indexPath];
+        NSInteger index = [cell getIndex];
         OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesWidth];
-        p.value = _visibleWidthValues[index];
-        [_styleSettings save:p];
+        if (![p.value isEqualToString:_visibleWidthValues[index]])
+        {
+            p.value = _visibleWidthValues[index];
+            [_styleSettings save:p];
+            [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     }
-    [tblView beginUpdates];
-    [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:2]] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [tblView endUpdates];
 }
 
 - (void) densityChanged:(UISlider *)sender
 {
     if (sender)
     {
-        NSInteger index = [self getIndex:sender.value marks:_visibleDensityValues.count];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
+        OASegmentSliderTableViewCell *cell = (OASegmentSliderTableViewCell *) [tblView cellForRowAtIndexPath:indexPath];
+        NSInteger index = [cell getIndex];
         OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesDensity];
-        p.value = _visibleDensityValues[index];
-        [_styleSettings save:p];
+        if (![p.value isEqualToString:_visibleDensityValues[index]])
+        {
+            p.value = _visibleDensityValues[index];
+            [_styleSettings save:p];
+            [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     }
-    [tblView beginUpdates];
-    [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:2]] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [tblView endUpdates];
 }
 
 - (void) mapSettingSwitchChanged:(id)sender
@@ -811,23 +799,29 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
 {
-    _minZoom = zoom;
     OAMapStyleParameter *parameter = [_styleSettings getParameter:kContourLinesZoomLevel];
-    parameter.value = zoom;
-    [_styleSettings save:parameter];
-    [[OAAppSettings sharedManager].contourLinesZoom set:zoom];
-    [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+    if (parameter.value != zoom)
+    {
+        _minZoom = zoom;
+        parameter.value = zoom;
+        [_styleSettings save:parameter];
+        [[OAAppSettings sharedManager].contourLinesZoom set:zoom];
+        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 #pragma mark - OAColorsTableViewCellDelegate
 
 - (void) colorChanged:(NSInteger)row
 {
-    _currentColor = row;
     OAMapStyleParameter *parameter = [_styleSettings getParameter:kContourLinesColorScheme];
-    parameter.value = _visibleColorValues[row];
-    [_styleSettings save:parameter];
-    [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
+    if (parameter.value != _visibleColorValues[row])
+    {
+        _currentColor = row;
+        parameter.value = _visibleColorValues[row];
+        [_styleSettings save:parameter];
+        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 - (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath

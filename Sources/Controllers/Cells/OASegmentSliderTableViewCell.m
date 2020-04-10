@@ -9,112 +9,153 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OAColors.h"
 
-#define kMarkTag 100
+#define kMarkTag 1000
+const CGFloat kMarkHeight = 16.0;
+const CGFloat kMarkWidth = 2.0;
 
 @implementation OASegmentSliderTableViewCell
 {
-    NSMutableArray<UIView*> *_markViews;
+    NSMutableArray<UIView *> *_markViews;
 }
 
-- (void)awakeFromNib
+- (void) awakeFromNib
 {
     [super awakeFromNib];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
 }
 
+- (void) setNumberOfMarks:(NSInteger)numberOfMarks
+{
+    _numberOfMarks = numberOfMarks;
+    [self createMarks:_numberOfMarks];
+}
 
 - (void) layoutSubviews
 {
     [super layoutSubviews];
-    if (_numberOfMarks > 1)
-        [self setupSeparators:_numberOfMarks];
+    [self layoutMarks];
 }
 
-- (void) setupSeparators:(NSInteger)marks
+- (void) createMarks:(NSInteger)marks
 {
-    _markViews = [NSMutableArray new];
-    CGFloat segments = marks - 1;
-    CGFloat markHeight = 16;
-    CGFloat markWidth = 2;
-    CGFloat sliderViewWidth = self.frame.size.width - 2 * 14 - OAUtilities.getLeftMargin;
-    CGFloat sliderViewHeight = self.sliderView.frame.size.height;
-    CGRect sliderViewBounds = CGRectMake(0, 0, sliderViewWidth, sliderViewHeight);
-    CGRect trackRect = [self.sliderView trackRectForBounds:sliderViewBounds];
-    CGFloat trackWidth = trackRect.size.width - markWidth;
-    
-    CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2;
-    
-    CGFloat x = inset;
-    CGFloat y = trackRect.origin.y + trackRect.size.height / 2 - markHeight / 2;
-    NSArray *viewsToRemove = [self.sliderView subviews];
-    for (UIView *v in viewsToRemove)
-    {
-        if (v.tag == kMarkTag)
+    for (UIView *v in self.sliderView.subviews)
+        if (v.tag >= kMarkTag)
             [v removeFromSuperview];
-    }
-    
+
+    _markViews = [NSMutableArray new];
+    if (marks < 2)
+        return;
+
     for (int i = 0; i < marks; i++)
     {
-        UIView *mark = [[UIView alloc] initWithFrame:CGRectMake(x, y, markWidth, markHeight)];
-        [mark.layer setCornerRadius:markWidth/2.0];
-        x += trackWidth / segments;
-        mark.tag = kMarkTag;
+        UIView *mark = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kMarkWidth, kMarkHeight)];
+        [mark.layer setCornerRadius:kMarkWidth / 2.0];
+        mark.tag = kMarkTag + i;
         [self.sliderView addSubview:mark];
         [self.sliderView sendSubviewToBack:mark];
         [_markViews addObject:mark];
     }
+    
+    [self layoutMarks];
     [self paintMarks];
+}
+
+- (UIView *) getMarkView:(NSInteger)markIndex
+{
+    for (UIView *v in self.sliderView.subviews)
+        if (v.tag == kMarkTag + markIndex)
+            return v;
+    
+    return nil;
+}
+
+- (void) layoutMarks
+{
+    if (_numberOfMarks < 2)
+        return;
+    
+    CGFloat segments = _numberOfMarks - 1;
+    CGFloat sliderViewWidth = self.frame.size.width - 2 * 14 - OAUtilities.getLeftMargin;
+    CGFloat sliderViewHeight = self.sliderView.frame.size.height;
+    CGRect sliderViewBounds = CGRectMake(0, 0, sliderViewWidth, sliderViewHeight);
+    CGRect trackRect = [self.sliderView trackRectForBounds:sliderViewBounds];
+    CGFloat trackWidth = trackRect.size.width - kMarkWidth;
+    
+    CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2;
+    
+    CGFloat x = inset;
+    CGFloat y = trackRect.origin.y + trackRect.size.height / 2 - kMarkHeight / 2;
+    
+    for (int i = 0; i < _numberOfMarks; i++)
+    {
+        UIView *mark = [self getMarkView:i];
+        mark.frame = CGRectMake(x, y, kMarkWidth, kMarkHeight);
+        x += trackWidth / segments;
+    }
 }
 
 - (void) paintMarks
 {
+    CGFloat value = self.sliderView.value;
     for (int i = 0; i < _markViews.count; i++)
     {
         CGFloat step = (CGFloat)i / (_markViews.count - 1);
-        if (_sliderView.value > step)
-            _markViews[i].backgroundColor = UIColorFromRGB(color_menu_button);
-        else
-            _markViews[i].backgroundColor = UIColorFromRGB(color_slider_gray);
+        _markViews[i].backgroundColor = UIColorFromRGB(value > step ? color_menu_button : color_slider_gray);
     }
     
-    if (self.sliderView.value == 1)
-        [_markViews lastObject].backgroundColor = [UIColor clearColor];
-    else if (self.sliderView.value == 0)
-        [_markViews firstObject].backgroundColor = [UIColor clearColor];
+    if (value == 1)
+        _markViews.lastObject.backgroundColor = UIColor.clearColor;
+    else if (value == 0)
+        _markViews.firstObject.backgroundColor = UIColor.clearColor;
 }
 
-- (IBAction)sliderValueChanged:(id)sender
+- (IBAction) sliderValueChanged:(id)sender
 {
-    UISlider *slider = sender;
-    if (slider)
-        [self paintMarks];
+    [self paintMarks];
 }
 
-- (IBAction)sliderDidEndEditing:(UISlider *)sender
+- (IBAction) sliderDidEndEditing:(UISlider *)sender
 {
     CGFloat step = 1.0 / (_markViews.count - 1);
     int nextMark = 0;
     for (int i = 0; i < _markViews.count; i++)
     {
-        if (i * step > sender.value)
+        if (i * step >= sender.value)
         {
             nextMark = i;
             break;
         }
     }
-    if ((nextMark*step - sender.value) < (sender.value - (nextMark - 1) * step))
-        [sender setValue:nextMark * step];
+    if ((nextMark * step - sender.value) < (sender.value - (nextMark - 1) * step))
+        sender.value = nextMark * step;
     else
-        [sender setValue:(nextMark - 1) * step];
+        sender.value = (nextMark - 1) * step;
     
-    if (self.sliderView.value == 1)
-        [_markViews lastObject].backgroundColor = [UIColor clearColor];
-    else if (self.sliderView.value == 0)
-        [_markViews firstObject].backgroundColor = [UIColor clearColor];
+    [self paintMarks];
+}
+
+- (NSInteger) getIndex
+{
+    CGFloat value = self.sliderView.value;
+    NSInteger marks = _numberOfMarks;
+    CGFloat step = 1.0 / (marks - 1);
+    int nextMark = 0;
+    for (int i = 0; i < marks; i++)
+    {
+        if (i * step >= value)
+        {
+            nextMark = i;
+            break;
+        }
+    }
+    if ((nextMark * step - value) < (value - (nextMark - 1) * step))
+        return nextMark;
+    else
+        return nextMark - 1;
 }
 
 @end

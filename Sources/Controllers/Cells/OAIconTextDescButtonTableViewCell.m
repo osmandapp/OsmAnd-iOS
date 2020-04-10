@@ -15,6 +15,7 @@
     [super awakeFromNib];
 
     [self.dividerIcon.layer setCornerRadius:0.5f];
+    self.additionalView.hidden = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

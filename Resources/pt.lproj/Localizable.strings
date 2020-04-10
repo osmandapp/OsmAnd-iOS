@@ -1520,7 +1520,7 @@
 "routing_attr_piste_type_sled_name" = "Trenó";
 "routing_attr_allow_skating_only_description" = "Rotas preparadas para o estilo livre ou patinação apenas sem trilhas clássicas.";
 "rendering_value_medium_w_name" = "Médio";
-"rendering_attr_contourLines_description" = "Mostrar desde o nível de ampliação  (requer dados de contorno):";
+"rendering_attr_contourLines_description" = "Mostrar desde o nível de ampliação (requer dados de contorno):";
 "rendering_attr_hideWaterPolygons_description" = "Água";
 "rendering_value_fine_name" = "Mais fino";
 "rendering_attr_trolleybusRoutes_name" = "Rotas de trólebus";

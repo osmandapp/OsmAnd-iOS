@@ -76,8 +76,9 @@
     CGFloat h = self.scrollView.bounds.size.height;
     CGFloat w = 50.0;
     NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];
-    for (OAApplicationMode *mode in availableModes)
+    for (NSInteger i = 0; i < availableModes.count; i++)
     {
+        OAApplicationMode *mode = availableModes[i];
         if (mode == [OAApplicationMode DEFAULT] && !_showDefault)
             continue;
         
@@ -86,7 +87,7 @@
         btn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         [btn setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
         btn.tintColor = _selectedMode == mode ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
-        btn.tag = mode.modeId;
+        btn.tag = i;
         [btn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         if ([btn isDirectionRTL])
             btn.transform =  CGAffineTransformMakeRotation(M_PI);
@@ -100,18 +101,29 @@
 - (void) updateSelection
 {
     for (UIButton *btn in _modeButtons)
-        btn.tintColor = _selectedMode.modeId == btn.tag ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
+        btn.tintColor = [self getAppModeIndex:_selectedMode] == btn.tag ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
 }
 
 - (void) onButtonClick:(id)sender
 {
-    OAApplicationMode *mode = [OAApplicationMode getAppModeById:((UIButton *) sender).tag def:[OAApplicationMode DEFAULT]] ;
+    OAApplicationMode *mode = [self getAppModeByIndex:((UIButton *) sender).tag] ;
     self.selectedMode = mode;
     
     if (self.delegate)
         [self.delegate appModeChanged:mode];
     
     [self setupModeButtons];
+}
+
+- (NSInteger) getAppModeIndex:(OAApplicationMode *)appMode
+{
+    return [[OAApplicationMode values] indexOfObject:appMode];
+}
+
+- (OAApplicationMode *) getAppModeByIndex:(NSInteger)index
+{
+    NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];
+    return index >= 0 && index < availableModes.count ? availableModes[index] : [OAApplicationMode DEFAULT];
 }
 
 @end

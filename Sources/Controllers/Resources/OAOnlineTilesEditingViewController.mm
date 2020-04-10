@@ -500,7 +500,7 @@
             }
         }
         _baseController.dataInvalidated = YES;
-        [self.navigationController popViewControllerAnimated:NO];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

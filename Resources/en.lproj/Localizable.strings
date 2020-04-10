@@ -566,6 +566,7 @@
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online maps";
 "map_settings_transp" = "Transparency";
+"map_settings_base_transp" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "map_settings_mapillary" = "Mapillary";

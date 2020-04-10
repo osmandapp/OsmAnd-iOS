@@ -25,7 +25,7 @@
 - (void)updateConstraints
 {
     CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
-    self.iconViewHeight.constant = self.iconView.frame.size.width * ratio;
+    self.iconViewHeight.constant = (self.frame.size.width - 2 * 16 - OAUtilities.getLeftMargin) * ratio;
 
     [super updateConstraints];
 }
@@ -36,7 +36,7 @@
     if (!res)
     {
         CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
-        res |= self.iconViewHeight.constant != self.iconView.frame.size.width * ratio;
+        res |= self.iconViewHeight.constant != (self.frame.size.width - 2 * 16 - OAUtilities.getLeftMargin) * ratio;
     }
     return res;
 }

@@ -152,7 +152,7 @@
             }
             if (_params.resultListener)
             {
-                [_params.resultListener onRouteCalculated:res];
+                [_params.resultListener onRouteCalculated:res segment:_params.walkingRouteSegment];
             }
             _helper.route = res;
         }
@@ -165,7 +165,8 @@
     }
     if ([res isCalculated])
     {
-        [_helper setNewRoute:prev res:res start:_params.start];
+        if (!_helper.isPublicTransportMode /*&& !params.inSnapToRoadMode */)
+            [_helper setNewRoute:prev res:res start:_params.start];
     }
     else if (onlineSourceWithoutInternet)
     {

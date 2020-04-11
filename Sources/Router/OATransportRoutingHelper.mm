@@ -19,13 +19,11 @@
 #import "QuadRect.h"
 
 #include <OsmAndCore/Utilities.h>
-#include <transportRouteResultSegment.h>
 #include <transportRoutingObjects.h>
 #include <routingConfiguration.h>
 #include <transportRoutingConfiguration.h>
 #include <transportRoutePlanner.h>
 #include <transportRoutingContext.h>
-#include <transportRouteResult.h>
 
 @interface OAWalkingRouteSegment : NSObject
 
@@ -87,10 +85,6 @@
 
 @end
 
-@interface OATransportRouteResultSegment : NSObject
-@property std::shared_ptr<TransportRouteResultSegment> segment;
-- (instancetype) initWithSegment:(std::shared_ptr<TransportRouteResultSegment>)seg;
-@end
 @implementation OATransportRouteResultSegment
 - (instancetype) initWithSegment:(std::shared_ptr<TransportRouteResultSegment>)seg
 {
@@ -100,6 +94,22 @@
     }
     return self;
 }
+
+- (BOOL)isEqual:(id)other
+{
+    if (other == self) {
+        return YES;
+    } else {
+        OATransportRouteResultSegment *seg = other;
+        return _segment == seg->_segment;
+    }
+}
+
+- (NSUInteger)hash
+{
+    return _segment->getStart()->id;
+}
+
 @end
 
 @interface OATransportRoutingHelper()
@@ -191,11 +201,10 @@
 - (vector<SHARED_PTR<TransportRouteResult>>) calculateRouteImpl:(OATransportRouteCalculationParams *)params
 {
     auto config = _app.defaultRoutingConfig;
-    params.params.clear();
+    MAP_STR_STR paramsRes;
     auto router = [self getRouter:params.mode];
     auto paramsMap = router->getParameters();
-    auto it = paramsMap.begin();
-    for (;it != paramsMap.end(); it++)
+    for (auto it = paramsMap.begin(); it != paramsMap.end(); ++it)
     {
         std::string key = it->first;
         RoutingParameter pr = it->second;
@@ -212,8 +221,9 @@
         }
         
         if (vl.length() > 0)
-            params.params[key] = vl;
+            paramsRes.insert(std::pair<string, string>(key, vl));
     }
+    params.params = paramsRes;
     
     const auto cfg = std::make_shared<TransportRoutingConfiguration>(router, params.params);
     const auto planner = std::make_shared<TransportRoutePlanner>();
@@ -312,6 +322,7 @@
     params.calculationProgress = std::make_shared<RouteCalculationProgress>();
     params.calculationProgressCallback = self;
     params.resultListener = self;
+    params.walkingRouteSegment = walkingRouteSegment;
 
     return params;
 }
@@ -326,10 +337,10 @@
     [_walkingRouteSegments removeAllObjects];
     if (routes.size() > 0)
     {
-        for (SHARED_PTR<TransportRouteResult> r : routes)
+        for (SHARED_PTR<TransportRouteResult>& r : routes)
         {
             SHARED_PTR<TransportRouteResultSegment> prev = nullptr;
-            for (SHARED_PTR<TransportRouteResultSegment> s : r->segments)
+            for (SHARED_PTR<TransportRouteResultSegment>& s : r->segments)
             {
                 CLLocation *start = prev != nullptr ? [[CLLocation alloc] initWithLatitude:prev->getEnd()->lat longitude:prev->getEnd()->lon] : _params.start;
                 CLLocation *end = [[CLLocation alloc] initWithLatitude:s->getStart()->lat longitude:s->getStart()->lon];
@@ -343,13 +354,19 @@
                             seg = [[OAWalkingRouteSegment alloc] initWithStartLocation:start segment:s];
                         else
                             seg = [[OAWalkingRouteSegment alloc] initWithTransportRouteResultSegment:prev s2:s];
-                        [_walkingSegmentsToCalculate addObject:seg];
+                        dispatch_sync(_queue, ^{
+                            [_walkingSegmentsToCalculate addObject:seg];
+                        });
                     }
                 }
                 prev = s;
             }
             if (prev != nullptr)
-                [_walkingSegmentsToCalculate addObject:[[OAWalkingRouteSegment alloc] initWithRouteResultSegment:prev end:_params.end]];
+            {
+                dispatch_sync(_queue, ^{
+                    [_walkingSegmentsToCalculate addObject:[[OAWalkingRouteSegment alloc] initWithRouteResultSegment:prev end:_params.end]];
+                });
+            }
         }
         OARouteCalculationParams *walkingRouteParams = [self getWalkingRouteParams];
         if (walkingRouteParams != nil)
@@ -475,14 +492,12 @@
 
 #pragma mark - OARouteCalculationResultListener
 
-- (void)onRouteCalculated:(OARouteCalculationResult *)route
+- (void)onRouteCalculated:(OARouteCalculationResult *)route segment:(OAWalkingRouteSegment *)segment
 {
-    __block OAWalkingRouteSegment *seg;
-    dispatch_sync(_queue, ^{
-        seg = _walkingSegmentsToCalculate.firstObject;
-        [_walkingSegmentsToCalculate removeObjectAtIndex:0];
-    });
-    [_walkingRouteSegments setObject:route forKey:@[[[OATransportRouteResultSegment alloc] initWithSegment:seg.s1], [[OATransportRouteResultSegment alloc] initWithSegment:seg.s2]]];
+    if (segment)
+    {
+        [_walkingRouteSegments setObject:route forKey:@[[[OATransportRouteResultSegment alloc] initWithSegment:segment.s1], [[OATransportRouteResultSegment alloc] initWithSegment:segment.s2]]];
+    }
 }
 
 @end
@@ -491,8 +506,6 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
-    
-    NSInteger _currentRoute;
     
     id<OATransportRouteCalculationProgressCallback> _progressRoute;
 }
@@ -773,7 +786,6 @@
             {
                 [listener routeWasCancelled];
             }
-            [_listeners removeAllObjects];
         });
         
         

@@ -15,6 +15,8 @@
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OARouteStatisticsHelper.h"
+#import "OATransportRoutingHelper.h"
+#import "OAColors.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -26,9 +28,12 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
+#include <transportRouteResultSegment.h>
+
 @implementation OARouteLayer
 {
     OARoutingHelper *_routingHelper;
+    OATransportRoutingHelper *_transportHelper;
 
     std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
     
@@ -51,6 +56,7 @@
 - (void) initLayer
 {
     _routingHelper = [OARoutingHelper sharedInstance];
+    _transportHelper = [OATransportRoutingHelper sharedInstance];
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _currentGraphPosition = std::make_shared<OsmAnd::MapMarkersCollection>();
@@ -88,10 +94,113 @@
     return YES;
 }
 
+- (void) drawTransportSegment:(SHARED_PTR<TransportRouteResultSegment>)routeSegment
+{
+    [self.mapViewController runWithRenderSync:^{
+        std::string str = routeSegment->route->color;
+        OsmAnd::ColorARGB colorARGB;
+        UIColor *color = [self.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:[NSString stringWithUTF8String:str.c_str()]];
+        CGFloat red, green, blue, alpha;
+        if (color)
+        {
+            [color getRed:&red green:&green blue:&blue alpha:&alpha];
+        }
+        else
+        {
+            color = UIColorFromARGB(color_nav_route_default_argb);
+            [color getRed:&red green:&green blue:&blue alpha:&alpha];
+        }
+        colorARGB = OsmAnd::ColorARGB(255 * alpha, 255 * red, 255 * green, 255 * blue);
+        
+        int baseOrder = self.baseOrder;
+        for (const auto& way : routeSegment->getGeometry())
+        {
+            QVector<OsmAnd::PointI> points;
+            for (const auto& node : way->nodes)
+            {
+                points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(node->lat, node->lon)));
+            }
+            if (points.size() > 1)
+            {
+                OsmAnd::VectorLineBuilder builder;
+                builder.setBaseOrder(baseOrder--)
+                .setIsHidden(way->nodes.size() == 0)
+                .setLineId(1)
+                .setLineWidth(30)
+                .setPoints(points)
+                .setFillColor(colorARGB);
+                builder.buildAndAddToCollection(_collection);
+            }
+        }
+    }];
+}
+
+- (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points addToExsisting:(BOOL)addToExsisting {
+    [self.mapViewController runWithRenderSync:^{
+        const auto& lines = _collection->getLines();
+        if (lines.empty() || addToExsisting)
+        {
+            int baseOrder = self.baseOrder;
+            BOOL isNight = [OAAppSettings sharedManager].nightMode;
+            
+            NSDictionary<NSString *, NSNumber *> *result = [self.mapViewController getLineRenderingAttributes:@"route"];
+            NSNumber *val = [result valueForKey:@"color"];
+            OsmAnd::ColorARGB lineColor = (val && val.intValue != -1) ? OsmAnd::ColorARGB(val.intValue) : isNight ?
+            OsmAnd::ColorARGB(0xff, 0xff, 0xdf, 0x3d) : OsmAnd::ColorARGB(0x88, 0x2a, 0x4b, 0xd1);
+            
+            OsmAnd::VectorLineBuilder builder;
+            builder.setBaseOrder(baseOrder--)
+            .setIsHidden(points.size() == 0)
+            .setLineId(1)
+            .setLineWidth(30)
+            .setPoints(points);
+            
+            builder.setFillColor(lineColor)
+            .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_black_nobg"])
+            .setPathIconStep(40);
+            
+            builder.buildAndAddToCollection(_collection);
+        }
+        else
+        {
+            lines[0]->setPoints(points);
+        }
+    }];
+}
+
 - (void) refreshRoute
 {
     OARouteCalculationResult *route = [_routingHelper getRoute];
-    if ([_routingHelper getFinalLocation] && route && [route isCalculated])
+    if ([_routingHelper isPublicTransportMode])
+    {
+        // TODO: set route in progress
+        _transportHelper.currentRoute = 0;
+        NSInteger currentRoute = _transportHelper.currentRoute;
+        const auto routes = [_transportHelper getRoutes];
+        const auto route = currentRoute != -1 && routes.size() > currentRoute ? routes[currentRoute] : nullptr;
+        [self.mapViewController runWithRenderSync:^{
+            [self resetLayer];
+        }];
+        if (route != nullptr)
+        {
+            CLLocation *start = _transportHelper.startLocation;
+            CLLocation *end = _transportHelper.endLocation;
+            
+            CLLocation *p = start;
+            SHARED_PTR<TransportRouteResultSegment> prev = nullptr;
+            
+            for (const auto &seg : route->segments)
+            {
+                [self drawTransportSegment:seg];
+                CLLocation *floc = [[CLLocation alloc] initWithLatitude:seg->getStart()->lat longitude:seg->getStart()->lon];
+                [self addWalkRoute:prev s2:seg start:p end:floc];
+                p = [[CLLocation alloc] initWithLatitude:seg->getEnd()->lat longitude:seg->getEnd()->lon];
+                prev = seg;
+            }
+            [self addWalkRoute:prev s2:nullptr start:p end:end];
+        }
+    }
+    else if ([_routingHelper getFinalLocation] && route && [route isCalculated])
     {
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
         int currentRoute = route.currentRoute;
@@ -111,36 +220,7 @@
         
         if (points.size() > 1)
         {
-            [self.mapViewController runWithRenderSync:^{
-                const auto& lines = _collection->getLines();
-                if (lines.empty())
-                {
-                    int baseOrder = self.baseOrder;
-                    BOOL isNight = [OAAppSettings sharedManager].nightMode;
-                    
-                    NSDictionary<NSString *, NSNumber *> *result = [self.mapViewController getLineRenderingAttributes:@"route"];
-                    NSNumber *val = [result valueForKey:@"color"];
-                    OsmAnd::ColorARGB lineColor = (val && val.intValue != -1) ? OsmAnd::ColorARGB(val.intValue) : isNight ?
-                    OsmAnd::ColorARGB(0xff, 0xff, 0xdf, 0x3d) : OsmAnd::ColorARGB(0x88, 0x2a, 0x4b, 0xd1);
-                    
-                    OsmAnd::VectorLineBuilder builder;
-                    builder.setBaseOrder(baseOrder--)
-                    .setIsHidden(points.size() == 0)
-                    .setLineId(1)
-                    .setLineWidth(30)
-                    .setPoints(points);
-                    
-                    builder.setFillColor(lineColor)
-                    .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_black_nobg"])
-                    .setPathIconStep(40);
-                    
-                    builder.buildAndAddToCollection(_collection);
-                }
-                else
-                {
-                    lines[0]->setPoints(points);
-                }
-            }];
+            [self drawRouteSegment:points addToExsisting:NO];
         }
         else
         {
@@ -155,6 +235,27 @@
             [self resetLayer];
         }];
     }
+}
+                 
+- (void) addWalkRoute:(SHARED_PTR<TransportRouteResultSegment>) s1 s2:(SHARED_PTR<TransportRouteResultSegment>)s2 start:(CLLocation *)start end:(CLLocation *)end
+{
+    OARouteCalculationResult *res = _transportHelper.walkingRouteSegments[@[[[OATransportRouteResultSegment alloc] initWithSegment:s1], [[OATransportRouteResultSegment alloc] initWithSegment:s2]]];
+    NSArray<CLLocation *> *locations = [res getRouteLocations];
+    if (res && locations.count > 0)
+    {
+        QVector<OsmAnd::PointI> points;
+        for (NSInteger i = 0; i < locations.count; i++)
+        {
+            CLLocation *p = locations[i];
+            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(p.coordinate.latitude, p.coordinate.longitude)));
+        }
+        [self drawRouteSegment:points addToExsisting:YES];
+    }
+    else
+    {
+        
+    }
+    
 }
 
 - (void) showCurrentStatisticsLocation:(OATrackChartPoints *) trackPoints

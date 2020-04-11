@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#include <CommonCollections.h>
+#include <commonOsmAndCore.h>
+#include <transportRouteResult.h>
+#include <transportRouteResultSegment.h>
+
 #import "OARoutingHelper.h"
 
 @protocol OATransportRouteCalculationProgressCallback <NSObject>
@@ -22,8 +27,12 @@
 @end
 
 @class OARouteCalculationResult;
-@class OATransportRouteResultSegment;
 @class OAApplicationMode;
+
+@interface OATransportRouteResultSegment : NSObject
+@property std::shared_ptr<TransportRouteResultSegment> segment;
+- (instancetype) initWithSegment:(std::shared_ptr<TransportRouteResultSegment>)seg;
+@end
 
 @interface OATransportRoutingHelper : NSObject
 
@@ -35,11 +44,15 @@
 @property (nonatomic, readonly) CLLocation *endLocation;
 @property (nonatomic) OAApplicationMode *applicationMode;
 
+@property (nonatomic) NSInteger currentRoute;
+
 - (void) setFinalAndCurrentLocation:(CLLocation *) finalLocation currentLocation:(CLLocation *)currentLocation;
 - (void) addListener:(id<OARouteInformationListener>)l;
 
 - (void) clearCurrentRoute:(CLLocation *) newFinalLocation;
 - (void) recalculateRouteDueToSettingsChange;
+
+- (std::vector<SHARED_PTR<TransportRouteResult>>) getRoutes;
 
 @end
 

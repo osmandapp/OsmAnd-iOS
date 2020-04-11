@@ -17,12 +17,13 @@
 #include <routeCalculationProgress.h>
 
 @class OARouteCalculationResult;
+@class OAWalkingRouteSegment;
 
 @protocol OARouteCalculationResultListener <NSObject>
 
 @required
 
-- (void) onRouteCalculated:(OARouteCalculationResult *) route;
+- (void) onRouteCalculated:(OARouteCalculationResult *) route segment:(OAWalkingRouteSegment *)segment;
 
 @end
 
@@ -46,5 +47,7 @@
 @property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
 @property (nonatomic) id<OARouteCalculationProgressCallback> calculationProgressCallback;
 @property (nonatomic) id<OARouteCalculationResultListener> resultListener;
+
+@property (nonatomic) OAWalkingRouteSegment *walkingRouteSegment;
 
 @end

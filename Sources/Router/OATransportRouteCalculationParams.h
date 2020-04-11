@@ -30,7 +30,7 @@
 
 @property (nonatomic) OAApplicationMode *mode;
 @property (nonatomic) EOARouteService type;
-@property (nonatomic) MAP_STR_STR params;
+@property (nonatomic, assign) MAP_STR_STR params;
 @property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
 @property (nonatomic) id<OATransportRouteCalculationResultListener> resultListener;
 

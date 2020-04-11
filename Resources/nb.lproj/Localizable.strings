@@ -242,7 +242,7 @@
 "select_work_point" = "Select work point";
 "sort_by_distance" = "Sorter etter avstand";
 "sort_by_name" = "Sorter etter navn";
-"by_name" = "Etter navn";
+"by_name" = "Ved navn";
 "by_dist" = "By distance";
 "sort_by" = "Sorter";
 "map_markers_other" = "Andre markører";

@@ -1651,3 +1651,12 @@
 "app_mode_bicycle" = "Bicicleta";
 "app_mode_car" = "Cotxe";
 "app_mode_default" = "Mapa esquemàtic";
+"enable_contour_lines" = "Activeu per veure les corbes de nivell en el mapa";
+"map_settings_available_srtm_maps_descr" = "Es necessiten mapes addicionals per veure l'ombrejat de relleu al mapa";
+"map_settings_line_density_slowdown_warning" = "Una alta densitat de línia pot retardar la representació del mapa";
+"map_settings_appearance" = "Aparença";
+"map_settings_contour_zoom_level_descr" = "Seleccioneu el nivell de zoom inicial on ja es mostraran les corbes de nivell";
+"map_settings_line_density" = "Densitat de la línia";
+"map_settings_line_width" = "Gruix de la línia";
+"map_settings_color_scheme" = "Combinació de colors";
+"map_settings_base_transp" = "Transparència del mapa base";

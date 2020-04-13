@@ -419,7 +419,7 @@
 "apply_filters" = "Applica filtri";
 "filter_poi_hint" = "Filtra per nome";
 "city_type_suburb" = "Frazione";
-"city_type_hamlet" = "Borgata";
+"city_type_hamlet" = "Piccolo borgo";
 // Shared Strings
 "shared_string_select" = "Seleziona";
 "shared_string_from" = "da";
@@ -513,8 +513,8 @@
 "shared_string_is_open_24_7" = "Aperto 24/7";
 "shared_string_is_open" = "Aperto adesso";
 "poi_filter_by_name" = "Ricerca per nome";
-"city_type_village" = "Villaggio";
-"city_type_town" = "Città";
+"city_type_village" = "Paese";
+"city_type_town" = "Cittadina";
 "city_type_district" = "Distretto";
 "city_type_neighbourhood" = "Quartiere";
 "postcode" = "Codice postale";

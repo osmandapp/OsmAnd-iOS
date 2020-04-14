@@ -14,4 +14,6 @@
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 @property (weak, nonatomic) IBOutlet UIView *pageControlContainer;
 
+- (instancetype) initWithRouteIndex:(NSInteger)routeIndex;
+
 @end

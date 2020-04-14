@@ -19,7 +19,6 @@
 #include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/Logging.h>
 
-#include "Logging.h"
 #import "OAWebClient.h"
 
 OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QString& fileName)

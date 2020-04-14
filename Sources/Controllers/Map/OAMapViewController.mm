@@ -56,6 +56,7 @@
 #import "OARouteStatistics.h"
 
 #import "OARoutingHelper.h"
+#import "OATransportRoutingHelper.h"
 #import "OAPointDescription.h"
 #import "OARouteCalculationResult.h"
 #import "OATargetPointsHelper.h"
@@ -3236,15 +3237,20 @@
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
     OARoutingHelper *helper = [OARoutingHelper sharedInstance];
+    OATransportRoutingHelper *transportHelper = OATransportRoutingHelper.sharedInstance;
     NSString *error = [helper getLastRouteCalcError];
     OABBox routeBBox;
     routeBBox.top = DBL_MAX;
     routeBBox.bottom = DBL_MAX;
     routeBBox.left = DBL_MAX;
     routeBBox.right = DBL_MAX;
-    if ([helper isRouteCalculated] && !error)
+    if ([helper isRouteCalculated] && !error && !helper.isPublicTransportMode)
     {
         routeBBox = [helper getBBox];
+    }
+    else if (helper.isPublicTransportMode && transportHelper.getRoutes.size() > 0)
+    {
+        routeBBox = [transportHelper getBBox];
     }
     else
     {

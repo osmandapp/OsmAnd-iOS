@@ -8,6 +8,7 @@
 
 #import "OARouteSegmentShieldView.h"
 #import "OAColors.h"
+#import "OATargetInfoViewController.h"
 
 static UIFont *_shieldFont;
 
@@ -52,7 +53,6 @@ static UIFont *_shieldFont;
     _contentView.frame = self.bounds;
     
     _contentView.layer.cornerRadius = 4.0;
-    _shieldImage.image = [[UIImage imageNamed:_iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _shieldLabel.text = _title;
     
     if (_type == EOATransportShiledPedestrian)
@@ -62,6 +62,7 @@ static UIFont *_shieldFont;
         _contentView.layer.borderWidth = 2.0;
         _shieldLabel.textColor = primaryColor;
         _contentView.backgroundColor = UIColor.whiteColor;
+        _shieldImage.image = [[UIImage imageNamed:_iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _shieldImage.tintColor = primaryColor;
     }
     else
@@ -69,6 +70,7 @@ static UIFont *_shieldFont;
         UIColor *tintColor = [OAUtilities colorIsBright:_color] ? [UIColor.blackColor colorWithAlphaComponent:0.9] : UIColor.whiteColor;
         _contentView.backgroundColor = _color;
         _shieldLabel.textColor = tintColor;
+        _shieldImage.image = [[OATargetInfoViewController getIcon:_iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _shieldImage.tintColor = tintColor;
     }
 }

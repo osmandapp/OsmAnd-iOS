@@ -60,5 +60,7 @@
 - (NSInteger) getWalkingTime:(vector<SHARED_PTR<TransportRouteResultSegment>>) segments;
 - (NSInteger) getWalkingDistance:(vector<SHARED_PTR<TransportRouteResultSegment>>) segments;
 
+- (OABBox) getBBox;
+
 @end
 

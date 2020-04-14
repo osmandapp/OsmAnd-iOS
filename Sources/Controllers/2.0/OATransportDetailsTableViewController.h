@@ -12,6 +12,8 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+- (instancetype)initWithRouteIndex:(NSInteger) routeIndex;
+
 - (CGFloat) getMinimizedContentHeight;
 
 @end

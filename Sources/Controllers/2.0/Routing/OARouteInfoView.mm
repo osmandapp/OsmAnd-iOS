@@ -35,6 +35,7 @@
 #import "OAAppModeView.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "OAMapLayers.h"
 #import "OAAddDestinationBottomSheetViewController.h"
 #import "OARoutingSettingsCell.h"
 #import "OAHomeWorkCell.h"
@@ -754,8 +755,18 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if ([sender isKindOfClass:UIButton.class])
     {
         UIButton *btn = (UIButton *) sender;
-        // TODO: pass route index
-        [OARootViewController.instance.mapPanel openTargetViewWithTransportRouteDetails];
+        [_transportHelper setCurrentRoute:btn.tag];
+        [OARootViewController.instance.mapPanel openTargetViewWithTransportRouteDetails:btn.tag showFullScreen:YES];
+    }
+}
+
+- (void) onTransportShowOnMapPressed:(id)sender
+{
+    if ([sender isKindOfClass:UIButton.class])
+    {
+        UIButton *btn = (UIButton *) sender;
+        [_transportHelper setCurrentRoute:btn.tag];
+        [OARootViewController.instance.mapPanel openTargetViewWithTransportRouteDetails:btn.tag showFullScreen:NO];
     }
 }
 
@@ -1364,6 +1375,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.showOnMapButton setTitle:OALocalizedString(@"sett_show") forState:UIControlStateNormal];
+            cell.showOnMapButton.tag = routeIndex;
+            [cell.showOnMapButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.showOnMapButton addTarget:self action:@selector(onTransportShowOnMapPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         
         return cell;
@@ -1382,6 +1396,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         if (cell)
         {
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             NSInteger routeIndex = [item[@"route_index"] integerValue];
             const auto& routes = _transportHelper.getRoutes;
             [cell setData:routes[routeIndex]];
@@ -1670,9 +1685,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                     routeBBox.bottom = DBL_MAX;
                     routeBBox.left = DBL_MAX;
                     routeBBox.right = DBL_MAX;
-                    if ([_routingHelper isRouteCalculated] && !error)
+                    if (([_routingHelper isRouteCalculated] && !error) || (_routingHelper.isPublicTransportMode && !_transportHelper.isRouteBeingCalculated && _transportHelper.getRoutes.size() > 0 && _transportHelper.currentRoute != -1))
                     {
-                        routeBBox = [_routingHelper getBBox];
+                        routeBBox = _routingHelper.isPublicTransportMode? [_transportHelper getBBox] : [_routingHelper getBBox];
                         if ([_routingHelper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
                         {
                             [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];

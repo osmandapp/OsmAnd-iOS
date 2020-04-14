@@ -17,7 +17,6 @@
 #include <OsmAndCore/LatLon.h>
 #include <OsmAndCore/IWebClient.h>
 #include <OsmAndCore/Map/VectorLine.h>
-#include "Logging.h"
 #include "OAWebClient.h"
 
 OAOsmNotesMapLayerProvider::OAOsmNotesMapLayerProvider()

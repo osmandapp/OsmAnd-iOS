@@ -755,6 +755,48 @@
     return [_currentRunningJob isKindOfClass:OATransportRouteRecalculationThread.class] || _waitingNextJob;
 }
 
+- (OABBox) getBBox
+{
+    double left = DBL_MAX;
+    double top = DBL_MAX;
+    double right = DBL_MAX;
+    double bottom = DBL_MAX;
+    if (![self isRouteBeingCalculated] && _routes.size() > 0 && _currentRoute != -1)
+    {
+        const auto& segments = _routes[_currentRoute]->segments;
+        
+        for (const auto& seg : segments)
+        {
+            for (const auto& way : seg->getGeometry())
+            {
+                for (const auto& node : way->nodes)
+                {
+                    if (left == DBL_MAX)
+                    {
+                        left = node->lon;
+                        right = node->lon;
+                        top = node->lat;
+                        bottom = node->lat;
+                    }
+                    else
+                    {
+                        left = MIN(left, node->lon);
+                        right = MAX(right, node->lon);
+                        top = MAX(top, node->lat);
+                        bottom = MIN(bottom, node->lat);
+                    }
+                }
+            }
+        }
+    }
+    OABBox result;
+    result.bottom = bottom;
+    result.top = top;
+    result.left = left;
+    result.right = right;
+    return result;
+}
+
 - (void) setNewRoute:(std::vector<SHARED_PTR<TransportRouteResult>>)res
 {
     dispatch_async(dispatch_get_main_queue(), ^{

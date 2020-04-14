@@ -4891,8 +4891,8 @@
 		DAA864262304403D000E1900 /* OAShowHideLocalOSMChanges.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA864242304403D000E1900 /* OAShowHideLocalOSMChanges.m */; };
 		DAA86429230440C9000E1900 /* OAShowHidePoiAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA86428230440C9000E1900 /* OAShowHidePoiAction.m */; };
 		DAA8642A230440C9000E1900 /* OAShowHidePoiAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA86428230440C9000E1900 /* OAShowHidePoiAction.m */; };
-		DAA88900241BC1340057722C /* OARouteSegmentShieldView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA888FF241BC1340057722C /* OARouteSegmentShieldView.m */; };
-		DAA88901241BC1340057722C /* OARouteSegmentShieldView.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA888FF241BC1340057722C /* OARouteSegmentShieldView.m */; };
+		DAA88900241BC1340057722C /* OARouteSegmentShieldView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA888FF241BC1340057722C /* OARouteSegmentShieldView.mm */; };
+		DAA88901241BC1340057722C /* OARouteSegmentShieldView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA888FF241BC1340057722C /* OARouteSegmentShieldView.mm */; };
 		DAA88903241BC1450057722C /* OARouteSegmentShieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAA88902241BC1450057722C /* OARouteSegmentShieldView.xib */; };
 		DAA88904241BC1450057722C /* OARouteSegmentShieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAA88902241BC1450057722C /* OARouteSegmentShieldView.xib */; };
 		DAA8890B241BCD2A0057722C /* ic_small_arrow_forward@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA88905241BCD270057722C /* ic_small_arrow_forward@3x.png */; };
@@ -8729,7 +8729,7 @@
 		DAA86427230440C9000E1900 /* OAShowHidePoiAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHidePoiAction.h; sourceTree = "<group>"; };
 		DAA86428230440C9000E1900 /* OAShowHidePoiAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAShowHidePoiAction.m; sourceTree = "<group>"; };
 		DAA888FE241BC1340057722C /* OARouteSegmentShieldView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteSegmentShieldView.h; sourceTree = "<group>"; };
-		DAA888FF241BC1340057722C /* OARouteSegmentShieldView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARouteSegmentShieldView.m; sourceTree = "<group>"; };
+		DAA888FF241BC1340057722C /* OARouteSegmentShieldView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteSegmentShieldView.mm; sourceTree = "<group>"; };
 		DAA88902241BC1450057722C /* OARouteSegmentShieldView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARouteSegmentShieldView.xib; sourceTree = "<group>"; };
 		DAA88905241BCD270057722C /* ic_small_arrow_forward@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_arrow_forward@3x.png"; path = "Resources/Icons/ic_small_arrow_forward@3x.png"; sourceTree = "<group>"; };
 		DAA88906241BCD290057722C /* ic_small_arrow_forward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_small_arrow_forward.png; path = Resources/Icons/ic_small_arrow_forward.png; sourceTree = "<group>"; };
@@ -12225,7 +12225,7 @@
 				DA18B0BE23AA3447009A89CC /* OARouteStatistics.h */,
 				DA18B0BF23AA3447009A89CC /* OARouteStatistics.m */,
 				DAA888FE241BC1340057722C /* OARouteSegmentShieldView.h */,
-				DAA888FF241BC1340057722C /* OARouteSegmentShieldView.m */,
+				DAA888FF241BC1340057722C /* OARouteSegmentShieldView.mm */,
 				DAA88902241BC1450057722C /* OARouteSegmentShieldView.xib */,
 			);
 			name = RouteInfoMenu;
@@ -18478,7 +18478,7 @@
 				DAA021EE23A24792006C94FF /* OARouteSettingsParameterController.mm in Sources */,
 				8444999E1F8A05EE004D5314 /* OAMapInfoController.mm in Sources */,
 				844E08111E48C76600EFC525 /* OAToolbarViewController.mm in Sources */,
-				DAA88901241BC1340057722C /* OARouteSegmentShieldView.m in Sources */,
+				DAA88901241BC1340057722C /* OARouteSegmentShieldView.mm in Sources */,
 				DA80939F226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */,
 				DACB92B723E06A0100771E40 /* OARouteBaseViewController.mm in Sources */,
 				847A1CD31DF94E9B003C1246 /* NSData+CRC32.m in Sources */,
@@ -19080,7 +19080,7 @@
 				8438B8191EEDC44E007AEF77 /* OARouteLayer.mm in Sources */,
 				84BFC22A1A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				8438B81D1EEDC7E6007AEF77 /* OAPOILayer.mm in Sources */,
-				DAA88900241BC1340057722C /* OARouteSegmentShieldView.m in Sources */,
+				DAA88900241BC1340057722C /* OARouteSegmentShieldView.mm in Sources */,
 				84F3A9121B4E671B00D16EBC /* OAGPXRouteWaypointTableViewCell.m in Sources */,
 				8483D3B21FA5B9B900A985CF /* OAPlugin.mm in Sources */,
 				845AFB471E261E9000170026 /* OASearchPhrase.mm in Sources */,

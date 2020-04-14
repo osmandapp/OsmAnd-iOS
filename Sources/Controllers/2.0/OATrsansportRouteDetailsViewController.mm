@@ -13,10 +13,12 @@
 #import "OAColors.h"
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
+#import "OAMapLayers.h"
 #import "Localization.h"
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OATransportDetailsTableViewController.h"
+#import "OATransportRoutingHelper.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -29,10 +31,21 @@
 @implementation OATrsansportRouteDetailsViewController
 {
     OsmAndAppInstance _app;
+    OATransportRoutingHelper *_transportHelper;
     
     UIPageViewController *_pageController;
     NSArray<OATransportDetailsTableViewController *> *_tableViews;
     NSInteger _currentRoute;
+    NSInteger _numberOfRoutes;
+}
+
+- (instancetype) initWithRouteIndex:(NSInteger)routeIndex
+{
+    self = [super init];
+    if (self) {
+        _currentRoute = routeIndex;
+    }
+    return self;
 }
 
 - (BOOL)hasControlButtons
@@ -55,31 +68,45 @@
     return nil;
 }
 
+- (BOOL)isLandscape
+{
+    return (super.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
+}
+
+- (void)refreshRouteLayer
+{
+    [OARootViewController.instance.mapPanel.mapViewController runWithRenderSync:^{
+        OARouteLayer *routeLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.routeMapLayer;
+        [routeLayer resetLayer];
+        [routeLayer refreshRoute];
+    }];
+    OABBox routeBBox = _transportHelper.getBBox;
+    [[OARootViewController instance].mapPanel displayAreaOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) zoom:-1 bottomInset:self.isLandscape ? 0. : self.contentHeight leftInset:self.isLandscape ? self.contentView.frame.size.width : 0.];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    _currentRoute = 0;
+    _transportHelper = OATransportRoutingHelper.sharedInstance;
+    _numberOfRoutes = _transportHelper.getRoutes.size();
     
     _pageControlContainer.layer.cornerRadius = 6.;
-    _pageControl.currentPage = 0/*route index*/;
-    _pageControl.numberOfPages = 5;
+    _pageControl.currentPage = _currentRoute;
+    _pageControl.numberOfPages = _numberOfRoutes;
     CGRect pageControlFrame = _pageControl.frame;
-    pageControlFrame.size = [_pageControl sizeForNumberOfPages:5];
+    pageControlFrame.size = [_pageControl sizeForNumberOfPages:_numberOfRoutes];
     _pageControl.frame = pageControlFrame;
     
     CGRect pageControlContainerFrame = _pageControlContainer.frame;
     pageControlContainerFrame.size.width = _pageControl.frame.size.width + kPageControlMargin * 2;
     _pageControlContainer.frame = pageControlContainerFrame;
     
-    _currentRoute = 0;
-    
     [self setupPageController];
     
     NSMutableArray<OATransportDetailsTableViewController *> *viewControllers = [NSMutableArray new];
-    for (NSInteger i = 0; i < 5; i++)
+    for (NSInteger i = 0; i < _numberOfRoutes; i++)
     {
-        OATransportDetailsTableViewController *tableController = [[OATransportDetailsTableViewController alloc] init];
+        OATransportDetailsTableViewController *tableController = [[OATransportDetailsTableViewController alloc] initWithRouteIndex:i];
         tableController.view.frame = _pageController.view.frame;
         tableController.view.tag = i;
         [viewControllers addObject:tableController];
@@ -91,6 +118,8 @@
         [OAUtilities setMaskTo:_pageController.view byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
     }
+    
+    [self refreshRouteLayer];
 }
 
 - (void)setupPageController
@@ -158,6 +187,16 @@
 - (BOOL)supportsForceClose
 {
     return YES;
+}
+
+- (void)cancelPressed
+{
+    [[OARootViewController instance].mapPanel showRouteInfo];
+}
+
+- (void)backPressed
+{
+    [[OARootViewController instance].mapPanel showRouteInfo];
 }
 
 - (ETopToolbarType) topToolbarType
@@ -242,13 +281,13 @@
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
-    NSInteger prevIndex = _currentRoute == 0 ? 4 : (_currentRoute - 1);
+    NSInteger prevIndex = _currentRoute == 0 ? _numberOfRoutes - 1 : (_currentRoute - 1);
     return _tableViews[prevIndex];
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
-    NSInteger nextIndex = (_currentRoute + 1) % 5;
+    NSInteger nextIndex = (_currentRoute + 1) % _numberOfRoutes;
     return _tableViews[nextIndex];
 }
 
@@ -260,6 +299,8 @@
         return;
     _currentRoute = pageViewController.viewControllers.firstObject.view.tag;
     _pageControl.currentPage = _currentRoute;
+    [_transportHelper setCurrentRoute:_currentRoute];
+    [self refreshRouteLayer];
 }
 
 @end

@@ -2589,7 +2589,7 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithTransportRouteDetails
+- (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen
 {
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
@@ -2611,6 +2611,7 @@ typedef enum
     
     targetPoint.title = _formattedTargetName;
     targetPoint.toolbarNeeded = NO;
+    targetPoint.targetObj = @(routeIndex);
     
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;
@@ -2620,6 +2621,8 @@ typedef enum
     
     [self enterContextMenuMode];
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        if (showFullScreeen)
+            [_targetMenuView requestFullScreenMode];
         _activeTargetActive = YES;
     }];
 }

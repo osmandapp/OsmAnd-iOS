@@ -176,9 +176,6 @@
         NSInteger currentRoute = _transportHelper.currentRoute;
         const auto routes = [_transportHelper getRoutes];
         const auto route = currentRoute != -1 && routes.size() > currentRoute ? routes[currentRoute] : nullptr;
-        [self.mapViewController runWithRenderSync:^{
-            [self resetLayer];
-        }];
         if (route != nullptr)
         {
             CLLocation *start = _transportHelper.startLocation;

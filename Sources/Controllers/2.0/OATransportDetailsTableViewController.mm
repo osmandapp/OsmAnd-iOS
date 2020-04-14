@@ -10,7 +10,10 @@
 #import "OAPublicTransportRouteCell.h"
 #import "OAPublicTransportShieldCell.h"
 #import "OAPublicTransportPointCell.h"
+#import "OATransportRoutingHelper.h"
 #import "Localization.h"
+#import "OAColors.h"
+#import "OsmAndApp.h"
 
 @interface OATransportDetailsTableViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -18,19 +21,24 @@
 
 @implementation OATransportDetailsTableViewController
 {
+    OATransportRoutingHelper *_transportHelper;
+    NSInteger _routeIndex;
     NSArray<NSDictionary *> *_data;
 }
 
-- (instancetype)init
+- (instancetype)initWithRouteIndex:(NSInteger) routeIndex
 {
     self = [super init];
     if (self) {
+        _transportHelper = OATransportRoutingHelper.sharedInstance;
+        _routeIndex = routeIndex;
         _data = @[@{@"cell" : @"OAPublicTransportShieldCell"},
                   @{@"cell" : @"OAPublicTransportRouteCell"},
-                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_start_point", @"title" : @"Start", @"time" : @"0:00", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
-                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_profile_pedestrian", @"title" : @"By foot", @"time" : @"0:05", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
-                  @{@"cell" : @"OAPublicTransportPointCell", @"title" : @"Hotel ABC", @"descr" : @"Board at stop", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(YES)},
-                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_destination", @"title" : @"Independence Square", @"descr" : @"Exit at", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(NO), @"small_icon" : @(YES)}];
+//                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_start_point", @"title" : @"Start", @"time" : @"0:00", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
+//                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_profile_pedestrian", @"title" : @"By foot", @"time" : @"0:05", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
+//                  @{@"cell" : @"OAPublicTransportPointCell", @"title" : @"Hotel ABC", @"descr" : @"Board at stop", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(YES)},
+//                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_destination", @"title" : @"Independence Square", @"descr" : @"Exit at", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(NO), @"small_icon" : @(YES)}];
+                  ];
     }
     return self;
 }
@@ -58,6 +66,59 @@
     return res;
 }
 
+- (NSAttributedString *) getFirstLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
+{
+    NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
+    vector<SHARED_PTR<TransportRouteResultSegment>> segments = res->segments;
+    NSString *name = [NSString stringWithUTF8String:segments[0]->getStart()->name.c_str()];
+    
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:name attributes:mainAttributes]];
+
+    if (segments.size() > 1)
+    {
+        [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"  •  %@ %lu", OALocalizedString(@"transfers"), segments.size() - 1] attributes:secondaryAttributes]];
+    }
+
+    return attributedStr;
+}
+
+- (NSAttributedString *) getSecondLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
+{
+    NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
+    const auto& segments = res->segments;
+    NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
+    NSInteger walkTimePT = (NSInteger) res->getWalkTime();
+    NSInteger walkTime = walkTimeReal > 0 ? walkTimeReal : walkTimePT;
+    NSString *walkTimeStr = [OsmAndApp.instance getFormattedTimeInterval:walkTime shortFormat:NO];
+    NSInteger walkDistanceReal = [_transportHelper getWalkingDistance:segments];
+    NSInteger walkDistancePT = (NSInteger) res->getWalkDist();
+    NSInteger walkDistance = walkDistanceReal > 0 ? walkDistanceReal : walkDistancePT;
+    NSString *walkDistanceStr = [OsmAndApp.instance getFormattedDistance:walkDistance];
+    NSInteger travelTime = (NSInteger) res->getTravelTime() + walkTime;
+    NSString *travelTimeStr = [OsmAndApp.instance getFormattedTimeInterval:travelTime shortFormat:NO];
+    NSInteger travelDist = (NSInteger) res->getTravelDist() + walkDistance;
+    NSString *travelDistStr = [OsmAndApp.instance getFormattedDistance:travelDist];
+
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"total") stringByAppendingString:@" "] attributes:secondaryAttributes]];
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:travelTimeStr attributes:mainAttributes]];
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@  •  %@ ", travelDistStr, OALocalizedString(@"walk")] attributes:secondaryAttributes]];
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:walkTimeStr attributes:mainAttributes]];
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@", walkDistanceStr] attributes:secondaryAttributes]];
+
+    return attributedStr;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -65,7 +126,7 @@
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
     {
-        NSString* identifierCell = item[@"cell"];
+        static NSString* const identifierCell = item[@"cell"];
         OAPublicTransportRouteCell* cell = nil;
         
         cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -77,17 +138,24 @@
         
         if (cell)
         {
-            // TODO: set route labels and correct data
+            cell.topInfoLabel.attributedText = [self getFirstLineDescrAttributed:_transportHelper.getRoutes[_routeIndex]];
+            cell.bottomInfoLabel.attributedText = [self getSecondLineDescrAttributed:_transportHelper.getRoutes[_routeIndex]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.detailsButton setTitle:OALocalizedString(@"res_details") forState:UIControlStateNormal];
+            cell.detailsButton.tag = _routeIndex;
+            [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.showOnMapButton setTitle:OALocalizedString(@"sett_show") forState:UIControlStateNormal];
+            cell.showOnMapButton.tag = _routeIndex;
+            [cell.showOnMapButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.showOnMapButton addTarget:self action:@selector(onTransportShowOnMapPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         
         return cell;
     }
     else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
     {
-        NSString* identifierCell = item[@"cell"];
+        static NSString* const identifierCell = item[@"cell"];
         OAPublicTransportShieldCell* cell = nil;
         
         cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -99,9 +167,10 @@
         
         if (cell)
         {
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell needsSafeAreaInsets:NO];
-//            [cell setData:@(4)];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            const auto& routes = _transportHelper.getRoutes;
+            [cell setData:routes[_routeIndex]];
         }
         
         return cell;
@@ -173,7 +242,7 @@
     if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"] || [item[@"cell"] isEqualToString:@"OAPublicTransportPointCell"])
         return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
-        return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:nullptr needsSafeArea:NO];
+        return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[_routeIndex] needsSafeArea:NO];
     return 44.0;
 }
 

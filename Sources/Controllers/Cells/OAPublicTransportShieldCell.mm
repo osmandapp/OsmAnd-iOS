@@ -17,6 +17,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
+#import "OATransportStopType.h"
 
 #include <transportRouteResultSegment.h>
 #include <transportRoutingObjects.h>
@@ -69,7 +70,8 @@ static UIFont *_shieldFont;
     
     SHARED_PTR<TransportRouteResultSegment> prevSegment = nullptr;
     NSMutableArray<UIView *> *arr = [NSMutableArray new];
-    for (auto it = _route->segments.begin(); it != _route->segments.end(); ++it)
+    auto it = _route->segments.begin();
+    for (; it != _route->segments.end(); it++)
     {
         const auto& s = *it;
         OARouteCalculationResult *walkingSegment = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:prevSegment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:s]];
@@ -109,13 +111,13 @@ static UIFont *_shieldFont;
         }
         
         const auto& r = s->route;
-        NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(true).c_str()];
+        NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(false).c_str()];
         NSString *colorName = [NSString stringWithUTF8String:r->color.c_str()];
-        // TODO: night mode
-        UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:NO renderAttrName:colorName];
+        OATransportStopType *stopType = [OATransportStopType findType:[NSString stringWithUTF8String:r->type.c_str()]];
+        UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:colorName];
         if (!color)
             color = UIColorFromARGB(color_nav_route_default_argb);
-        OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:color title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledTransport];
+        OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:color title:title iconName:stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS] type:EOATransportShiledTransport];
         [arr addObject:shield];
         [self addSubview:shield];
         
@@ -156,6 +158,7 @@ static UIFont *_shieldFont;
                 }
             }
         }
+        prevSegment = s;
     }
     _views = [NSArray arrayWithArray:arr];
 }
@@ -165,13 +168,14 @@ static UIFont *_shieldFont;
     CGFloat margin = _needsSafeAreaInset ? OAUtilities.getLeftMargin : 0.;
     CGFloat width = self.frame.size.width - margin - kShieldMargin * 2;
     CGFloat currWidth = 0.0;
-    NSInteger rowsCount = 1;
+    NSInteger rowsCount = 0;
     
     for (NSInteger i = 0; i < _views.count; i++)
     {
         UIView *currView = _views[i];
         CGRect viewFrame = currView.frame;
-        if ([currView isKindOfClass:OARouteSegmentShieldView.class])
+        BOOL isShield = [currView isKindOfClass:OARouteSegmentShieldView.class];
+        if (isShield)
         {
             OARouteSegmentShieldView *shieldView = (OARouteSegmentShieldView *) currView;
             viewFrame.size = CGSizeMake([OARouteSegmentShieldView getViewWidth:shieldView.shieldLabel.text], 36.);
@@ -191,16 +195,16 @@ static UIFont *_shieldFont;
             currWidth += kViewSpacing;
             if (currWidth < width)
             {
-                CGFloat additionalHeight = kRowHeight * (rowsCount - 1);
+                CGFloat additionalHeight = kRowHeight * rowsCount;
                 CGRect prevRect = _views[i - 1].frame;
-                viewFrame.origin = CGPointMake(CGRectGetMaxX(prevRect) + kViewSpacing, (i % 2) == 0 ? kShieldY + additionalHeight : kArrowY + additionalHeight);
+                viewFrame.origin = CGPointMake(CGRectGetMaxX(prevRect) + kViewSpacing, isShield ? kShieldY + additionalHeight : kArrowY + additionalHeight);
             }
             else
             {
                 currWidth = viewFrame.size.width + kViewSpacing;
                 rowsCount++;
-                CGFloat additionalHeight = kRowHeight * (rowsCount - 1);
-                viewFrame.origin = CGPointMake(margin + kShieldMargin, (i % 2) == 0. ? kShieldY + additionalHeight : (kShieldY * 2) + additionalHeight);
+                CGFloat additionalHeight = kRowHeight * rowsCount;
+                viewFrame.origin = CGPointMake(margin + kShieldMargin, isShield ? kShieldY + additionalHeight : kArrowY + additionalHeight);
             }
         }
         currView.frame = viewFrame;
@@ -269,6 +273,7 @@ static UIFont *_shieldFont;
                 }
             }
         }
+        prevSegment = s;
     }
     return [NSArray arrayWithArray:titles];
 }
@@ -299,7 +304,7 @@ static UIFont *_shieldFont;
             currWidth += 20.;
         }
         
-        currWidth += kViewSpacing;
+        currWidth += kViewSpacing * 2;
         if (currWidth >= width)
         {
             rowsCount++;

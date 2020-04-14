@@ -318,7 +318,7 @@
         }
         case OATargetTransportRouteDetails:
         {
-            controller = [[OATrsansportRouteDetailsViewController alloc] init];
+            controller = [[OATrsansportRouteDetailsViewController alloc] initWithRouteIndex:[targetPoint.targetObj integerValue]];
             break;
         }
             

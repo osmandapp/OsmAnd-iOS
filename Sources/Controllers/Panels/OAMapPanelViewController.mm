@@ -48,6 +48,7 @@
 #import "OARouteSettingsViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OARoutePreferencesParameters.h"
+#import "OATransportRoutingHelper.h"
 
 #import <EventKit/EventKit.h>
 
@@ -120,7 +121,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OARouteInformationListener>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
@@ -213,6 +214,7 @@ typedef enum
 
     [_routingHelper addListener:self];
     [_routingHelper addProgressBar:self];
+    [OATransportRoutingHelper.sharedInstance addProgressBar:self];
     
     _toolbars = [NSMutableArray array];
     _topControlsVisible = YES;
@@ -2214,7 +2216,6 @@ typedef enum
     [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.targetMultiMenuView transitionToSize];
-        [self.routeInfoView onOrientationChange];
     } completion:nil];
 }
 
@@ -3494,6 +3495,11 @@ typedef enum
 }
 
 - (void) requestPrivateAccessRouting
+{
+    
+}
+
+- (void) start
 {
     
 }

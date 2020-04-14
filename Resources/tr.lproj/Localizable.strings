@@ -198,7 +198,7 @@
 "res_uninst_managed_q" = "% Kaldırmak olacak @. Kataloğu'ndan daha sonra yeniden yükleyebilirsiniz.";
 "res_uninst_unmanaged_q" = "% Silmek olacak @. Katalogdan, yani değil lütfen gerekirse bir yedekleme olduğundan emin olun.";
 "res_details" = "Ayrıntılar";
-"res_type" = "Türü";
+"res_type" = "Tür";
 "res_unknown" = "Bilinmiyor";
 "res_size" = "Boyutu";
 "res_created_on" = "Oluşturulma";

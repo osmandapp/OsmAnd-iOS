@@ -51,8 +51,14 @@
 
 - (void) clearCurrentRoute:(CLLocation *) newFinalLocation;
 - (void) recalculateRouteDueToSettingsChange;
+- (void) addProgressBar:(id<OATransportRouteCalculationProgressCallback>) progressRoute;
 
 - (std::vector<SHARED_PTR<TransportRouteResult>>) getRoutes;
+
+- (BOOL) isRouteBeingCalculated;
+- (OARouteCalculationResult *) getWalkingRouteSegment:(OATransportRouteResultSegment *)s1 s2:(OATransportRouteResultSegment *)s2;
+- (NSInteger) getWalkingTime:(vector<SHARED_PTR<TransportRouteResultSegment>>) segments;
+- (NSInteger) getWalkingDistance:(vector<SHARED_PTR<TransportRouteResultSegment>>) segments;
 
 @end
 

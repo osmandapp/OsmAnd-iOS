@@ -26,6 +26,8 @@
 #include <routingContext.h>
 #include <routeResultPreparation.h>
 
+#include <OsmAndCore/Logging.h>
+
 #define kBorder 6.0
 #define kLanesViewHeight 36.0
 #define kTextViewHeight 20.0

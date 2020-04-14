@@ -9,6 +9,7 @@
 #import "OARouteInfoView.h"
 #import "OATargetPointsHelper.h"
 #import "OARoutingHelper.h"
+#import "OATransportRoutingHelper.h"
 #import "OAAppModeCell.h"
 #import "OARoutingTargetCell.h"
 #import "OARoutingInfoCell.h"
@@ -71,7 +72,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     EOARouteInfoMenuStateFullScreen
 };
 
-@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback>
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback>
 
 @end
 
@@ -79,6 +80,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     OATargetPointsHelper *_pointsHelper;
     OARoutingHelper *_routingHelper;
+    OATransportRoutingHelper *_transportHelper;
     OsmAndAppInstance _app;
     
     NSDictionary<NSNumber *, NSArray *> *_data;
@@ -232,6 +234,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _app = [OsmAndApp instance];
     _pointsHelper = [OATargetPointsHelper sharedInstance];
     _routingHelper = [OARoutingHelper sharedInstance];
+    _transportHelper = [OATransportRoutingHelper sharedInstance];
 
     [_routingHelper addListener:self];
     [_pointsHelper addListener:self];
@@ -418,6 +421,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
 }
 
+- (BOOL) isRouteCalculated
+{
+    return [_routingHelper isRouteCalculated] || (_routingHelper.isPublicTransportMode && _transportHelper.getRoutes.size() > 0);
+}
+
 - (void) updateData
 {
     int sectionIndex = 0;
@@ -444,7 +452,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [section addObject:@{
         @"cell" : @"OARoutingSettingsCell"
     }];
-    if (![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated])
+    if ((![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated]) || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
     {
         [section addObject:@{
             @"cell" : @"OARouteProgressBarCell"
@@ -453,32 +461,26 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
     [section removeAllObjects];
     
-    if ([_routingHelper isRouteCalculated])
+    if ([self isRouteCalculated])
     {
-//        if ([_routingHelper isPublicTransportRoute])
-//        {
-        [section addObject:@{@"cell" : @"OAPublicTransportShieldCell"}];
-            [section addObject:@{
-                @"cell" : @"OAPublicTransportRouteCell",
-                @"route_index" : @(0)
-            }];
-            
-        [section addObject:@{@"cell" : @"OAPublicTransportShieldCell"}];
-            [section addObject:@{
-                @"cell" : @"OAPublicTransportRouteCell",
-                @"route_index" : @(1)
-            }];
-            
-        [section addObject:@{@"cell" : @"OAPublicTransportShieldCell"}];
-            [section addObject:@{
-                @"cell" : @"OAPublicTransportRouteCell",
-                @"route_index" : @(2)
-            }];
-//            [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
-//            [section removeAllObjects];
-//        }
-//        else
-//        {
+        if ([_routingHelper isPublicTransportMode])
+        {
+            for (NSInteger i = 0; i < _transportHelper.getRoutes.size(); i++)
+            {
+                [section addObject:@{
+                    @"cell" : @"OAPublicTransportShieldCell",
+                    @"route_index" : @(i)
+                }];
+                [section addObject:@{
+                    @"cell" : @"OAPublicTransportRouteCell",
+                    @"route_index" : @(i)
+                }];
+                [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
+                [section removeAllObjects];
+            }
+        }
+        else
+        {
             [section addObject:@{
                 @"cell" : @"OADividerCell",
                 @"custom_insets" : @(NO)
@@ -505,10 +507,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.lineChartView analysis:trackAnalysis useGesturesAndScale:NO];
                 _needChartUpdate = NO;
             }
-//        }
+        }
         _currentState = EOARouteInfoMenuStateExpanded;
     }
-    else if (![_routingHelper isRouteBeingCalculated])
+    else if (!_routingHelper.isRouteBeingCalculated && !_transportHelper.isRouteBeingCalculated)
     {
         [section addObject:@{
             @"cell" : @"OADividerCell",
@@ -536,6 +538,59 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _data = [NSDictionary dictionaryWithDictionary:dictionary];
     
     [self setupGoButton];
+}
+
+- (NSAttributedString *) getFirstLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
+{
+    NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
+    vector<SHARED_PTR<TransportRouteResultSegment>> segments = res->segments;
+    NSString *name = [NSString stringWithUTF8String:segments[0]->getStart()->name.c_str()];
+    
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:name attributes:mainAttributes]];
+
+    if (segments.size() > 1)
+    {
+        [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"  •  %@ %lu", OALocalizedString(@"transfers"), segments.size() - 1] attributes:secondaryAttributes]];
+    }
+
+    return attributedStr;
+}
+
+- (NSAttributedString *) getSecondLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
+{
+    NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
+    const auto& segments = res->segments;
+    NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
+    NSInteger walkTimePT = (NSInteger) res->getWalkTime();
+    NSInteger walkTime = walkTimeReal > 0 ? walkTimeReal : walkTimePT;
+    NSString *walkTimeStr = [OsmAndApp.instance getFormattedTimeInterval:walkTime shortFormat:NO];
+    NSInteger walkDistanceReal = [_transportHelper getWalkingDistance:segments];
+    NSInteger walkDistancePT = (NSInteger) res->getWalkDist();
+    NSInteger walkDistance = walkDistanceReal > 0 ? walkDistanceReal : walkDistancePT;
+    NSString *walkDistanceStr = [OsmAndApp.instance getFormattedDistance:walkDistance];
+    NSInteger travelTime = (NSInteger) res->getTravelTime() + walkTime;
+    NSString *travelTimeStr = [OsmAndApp.instance getFormattedTimeInterval:travelTime shortFormat:NO];
+    NSInteger travelDist = (NSInteger) res->getTravelDist() + walkDistance;
+    NSString *travelDistStr = [OsmAndApp.instance getFormattedDistance:travelDist];
+
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"total") stringByAppendingString:@" "] attributes:secondaryAttributes]];
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:travelTimeStr attributes:mainAttributes]];
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@  •  %@ ", travelDistStr, OALocalizedString(@"walk")] attributes:secondaryAttributes]];
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:walkTimeStr attributes:mainAttributes]];
+    
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@", walkDistanceStr] attributes:secondaryAttributes]];
+
+    return attributedStr;
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -1300,10 +1355,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         if (cell)
         {
-            // TODO: set route labels and correct data
+            NSInteger routeIndex = [item[@"route_index"] integerValue];
+            cell.topInfoLabel.attributedText = [self getFirstLineDescrAttributed:_transportHelper.getRoutes[routeIndex]];
+            cell.bottomInfoLabel.attributedText = [self getSecondLineDescrAttributed:_transportHelper.getRoutes[routeIndex]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.detailsButton setTitle:OALocalizedString(@"res_details") forState:UIControlStateNormal];
-            cell.detailsButton.tag = [item[@"route_index"] integerValue];
+            cell.detailsButton.tag = routeIndex;
             [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.showOnMapButton setTitle:OALocalizedString(@"sett_show") forState:UIControlStateNormal];
@@ -1325,7 +1382,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         if (cell)
         {
-            [cell setData:@(3)];
+            NSInteger routeIndex = [item[@"route_index"] integerValue];
+            const auto& routes = _transportHelper.getRoutes;
+            [cell setData:routes[routeIndex]];
         }
         
         return cell;
@@ -1444,7 +1503,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
         return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
-        return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width shields:@[@"abcdefg", @"abcdefg", @"abcdefg"]];
+        return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[[item[@"route_index"] integerValue]]];
     return 44.0;
 }
 
@@ -1708,17 +1767,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
 }
 
-- (void)onOrientationChange
-{
-//    if (self.superview)
-//    {
-//        [self setNeedsLayout];
-//        [self layoutIfNeeded];
-//
-//        // This is needed to refresh transport cards layout
-//        [self.tableView beginUpdates];
-//        [self.tableView endUpdates];
-//    }
+- (void)startProgress {
 }
 
 @end

@@ -8,14 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+#include <CommonCollections.h>
+#include <commonOsmAndCore.h>
+#include <transportRouteResult.h>
+
+@class OATransportRouteResult;
+
 @interface OAPublicTransportShieldCell : UITableViewCell
 
-@property (nonatomic, readonly) NSArray<NSString *> *titles;
-
--(void) setData:(NSNumber *)data;
+-(void) setData:(SHARED_PTR<TransportRouteResult>)data;
 -(void) needsSafeAreaInsets:(BOOL)needsInsets;
 
-+ (CGFloat) getCellHeight:(CGFloat)width shields:(NSArray<NSString *> *)shields;
-+ (CGFloat) getCellHeight:(CGFloat)width shields:(NSArray<NSString *> *)shields needsSafeArea:(BOOL)needsSafeArea;
++ (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route;
++ (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route needsSafeArea:(BOOL)needsSafeArea;
 
 @end

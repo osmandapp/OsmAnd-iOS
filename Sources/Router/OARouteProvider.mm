@@ -23,6 +23,8 @@
 #include <routingConfiguration.h>
 #include <routingContext.h>
 
+#include <OsmAndCore/Logging.h>
+
 #define OSMAND_ROUTER @"OsmAndRouter"
 #define MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT 60
 

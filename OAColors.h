@@ -83,6 +83,7 @@
 #define color_tint_gray 0xCBC7D1
 
 #define color_primary_purple 0x5714CC
+#define color_primary_purple_50 0x805714CC
 #define color_bottom_sheet_secondary 0xD8D5DD
 #define color_bottom_sheet_secondary_night 0x3F3D43
 
@@ -114,6 +115,8 @@
 #define color_route_button_inactive 0xE0DDE3
 
 #define color_icon_inactive 0xA49DAF
+
+#define color_slider_gray 0xe4e4e6
 
 #define profile_icon_color_blue_light_default 0x237BFF
 #define profile_icon_color_purple_light 0x732EEB

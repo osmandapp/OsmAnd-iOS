@@ -101,7 +101,7 @@
         {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell needsSafeAreaInsets:NO];
-            [cell setData:@(4)];
+//            [cell setData:@(4)];
         }
         
         return cell;
@@ -173,7 +173,7 @@
     if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"] || [item[@"cell"] isEqualToString:@"OAPublicTransportPointCell"])
         return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
-        return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width shields:@[@"abcdefg", @"abcdefg", @"abcdefg", @"abcdefg"] needsSafeArea:NO];
+        return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:nullptr needsSafeArea:NO];
     return 44.0;
 }
 

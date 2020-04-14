@@ -17,6 +17,7 @@
 #include <OsmAndCore/WebClient.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/SkiaUtilities.h>
+#include <OsmAndCore/Logging.h>
 
 #include "Logging.h"
 #import "OAWebClient.h"

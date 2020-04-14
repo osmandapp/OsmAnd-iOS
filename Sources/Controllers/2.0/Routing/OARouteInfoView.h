@@ -31,6 +31,4 @@
 - (void) update;
 - (void) updateMenu;
 
-- (void) onOrientationChange;
-
 @end

@@ -11,6 +11,15 @@
 #import "Localization.h"
 #import "OARouteSegmentShieldView.h"
 #import "OAColors.h"
+#import "OATransportRoutingHelper.h"
+#import "OARouteCalculationResult.h"
+#import "OsmAndApp.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+
+#include <transportRouteResultSegment.h>
+#include <transportRoutingObjects.h>
 
 #define kRowHeight 54
 #define kShieldHeight 32
@@ -19,30 +28,37 @@
 #define kViewSpacing 3.0
 #define kArrowY 25.0
 
+#define MIN_WALK_TIME 120
+
 static UIFont *_shieldFont;
 
 @implementation OAPublicTransportShieldCell
 {
     NSArray<UIView *> *_views;
     UIImage *_arrowIcon;
-    NSNumber *_quantity;
+    
+    SHARED_PTR<TransportRouteResult> _route;
+    OATransportRoutingHelper *_transportHelper;
     
     BOOL _needsSafeAreaInset;
 }
 
-/*
- TODO: change to actual data
- */
--(void) setData:(NSNumber *)data
+-(void) setData:(SHARED_PTR<TransportRouteResult>)data
 {
+    _transportHelper = OATransportRoutingHelper.sharedInstance;
     _arrowIcon = [[UIImage imageNamed:@"ic_small_arrow_forward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _quantity = data;
+    _route = data;
     [self buildViews];
+}
+
+- (void)drawArrowView:(NSMutableArray<UIView *> *)arr {
+    UIImageView *arrowView = [self createArrowImageView];
+    [arr addObject:arrowView];
+    [self addSubview:arrowView];
 }
 
 - (void) buildViews
 {
-    NSMutableArray<NSString *> *titles = [NSMutableArray new];
     if (_views)
     {
         for (UIView *vw in _views)
@@ -50,23 +66,97 @@ static UIFont *_shieldFont;
             [vw removeFromSuperview];
         }
     }
+    
+    SHARED_PTR<TransportRouteResultSegment> prevSegment = nullptr;
     NSMutableArray<UIView *> *arr = [NSMutableArray new];
-    for (NSInteger i = 0; i < _quantity.integerValue; i++)
+    for (auto it = _route->segments.begin(); it != _route->segments.end(); ++it)
     {
-        OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:@"abcdefg" iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
-        [titles addObject:@"abcdefg"];
+        const auto& s = *it;
+        OARouteCalculationResult *walkingSegment = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:prevSegment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:s]];
+        if (walkingSegment)
+        {
+            float walkTime = walkingSegment.routingTime;
+            if (walkTime > MIN_WALK_TIME)
+            {
+                NSString *title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
+                [arr addObject:shield];
+                [self addSubview:shield];
+                [self drawArrowView:arr];
+            }
+        }
+        else if (s->walkDist > 0)
+        {
+            float walkTime = s->walkDist / _route->getWalkSpeed();
+            if (walkTime > MIN_WALK_TIME)
+            {
+                CLLocation *start;
+                CLLocation *end = [[CLLocation alloc] initWithLatitude:s->getStart()->lat longitude:s->getStart()->lon];
+                if (prevSegment != nullptr)
+                {
+                    start = [[CLLocation alloc] initWithLatitude:prevSegment->getEnd()->lat longitude:prevSegment->getEnd()->lon];
+                }
+                else
+                {
+                    start = _transportHelper.startLocation;
+                }
+                NSString *title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
+                [arr addObject:shield];
+                [self addSubview:shield];
+                [self drawArrowView:arr];
+            }
+        }
         
+        const auto& r = s->route;
+        NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(true).c_str()];
+        NSString *colorName = [NSString stringWithUTF8String:r->color.c_str()];
+        // TODO: night mode
+        UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:NO renderAttrName:colorName];
+        if (!color)
+            color = UIColorFromARGB(color_nav_route_default_argb);
+        OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:color title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledTransport];
         [arr addObject:shield];
         [self addSubview:shield];
         
-        if (i != _quantity.integerValue - 1)
+        
+        if (_route->segments.end() - it != 1)
         {
-            UIImageView *arrowView = [self createArrowImageView];
-            [arr addObject:arrowView];
-            [self addSubview:arrowView];
+            [self drawArrowView:arr];
+        }
+        else
+        {
+            walkingSegment = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:s] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nil]];
+            if (walkingSegment != nil)
+            {
+                float walkTime = walkingSegment.routingTime;
+                if (walkTime > MIN_WALK_TIME)
+                {
+                    [self drawArrowView:arr];
+                    title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                    OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
+                    [arr addObject:shield];
+                    [self addSubview:shield];
+                }
+            } else {
+                float finishWalkDist = _route->finishWalkDist;
+                if (finishWalkDist > 0)
+                {
+                    float walkTime = finishWalkDist / _route->getWalkSpeed();
+                    if (walkTime > MIN_WALK_TIME)
+                    {
+                        CLLocation *start = [[CLLocation alloc] initWithLatitude:s->getEnd()->lat longitude:s->getEnd()->lon];
+                        CLLocation *end = _transportHelper.endLocation;
+                        [self drawArrowView:arr];
+                        title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                        OARouteSegmentShieldView *shield = [[OARouteSegmentShieldView alloc] initWithColor:UIColor.blueColor title:title iconName:@"ic_small_pedestrian" type:EOATransportShiledPedestrian];
+                        [arr addObject:shield];
+                        [self addSubview:shield];
+                    }
+                }
+            }
         }
     }
-    _titles = [NSArray arrayWithArray:titles];
     _views = [NSArray arrayWithArray:arr];
 }
 
@@ -125,13 +215,72 @@ static UIFont *_shieldFont;
     return imgView;
 }
 
-+ (CGFloat) getCellHeight:(CGFloat)width shields:(NSArray<NSString *> *)shields
++ (NSArray<NSString *> *)generateTitlesForFoute:(SHARED_PTR<TransportRouteResult>)route
 {
-    return [self getCellHeight:width shields:shields needsSafeArea:YES];
+    NSMutableArray<NSString *> *titles = [NSMutableArray new];
+    
+    SHARED_PTR<TransportRouteResultSegment> prevSegment = nullptr;
+    for (auto it = route->segments.begin(); it != route->segments.end(); ++it)
+    {
+        const auto& s = *it;
+        OARouteCalculationResult *walkingSegment = [OATransportRoutingHelper.sharedInstance getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:prevSegment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:s]];
+        if (walkingSegment)
+        {
+            float walkTime = walkingSegment.routingTime;
+            if (walkTime > MIN_WALK_TIME)
+            {
+                NSString *title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                [titles addObject:title];
+            }
+        }
+        else if (s->walkDist > 0)
+        {
+            float walkTime = s->walkDist / route->getWalkSpeed();
+            if (walkTime > MIN_WALK_TIME)
+            {
+                NSString *title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                [titles addObject:title];
+            }
+        }
+        const auto& r = s->route;
+        NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(true).c_str()];
+        [titles addObject:title];
+        if (route->segments.end() - it == 1)
+        {
+            walkingSegment = [OATransportRoutingHelper.sharedInstance getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:s] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nil]];
+            if (walkingSegment != nil)
+            {
+                float walkTime = walkingSegment.routingTime;
+                if (walkTime > MIN_WALK_TIME)
+                {
+                    title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                    [titles addObject:title];
+                }
+            } else {
+                float finishWalkDist = route->finishWalkDist;
+                if (finishWalkDist > 0)
+                {
+                    float walkTime = finishWalkDist / route->getWalkSpeed();
+                    if (walkTime > MIN_WALK_TIME)
+                    {
+                        title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];
+                        [titles addObject:title];
+                    }
+                }
+            }
+        }
+    }
+    return [NSArray arrayWithArray:titles];
 }
 
-+ (CGFloat) getCellHeight:(CGFloat)width shields:(NSArray<NSString *> *)shields needsSafeArea:(BOOL)needsSafeArea
++ (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route
 {
+    return [self getCellHeight:width route:route needsSafeArea:YES];
+}
+
++ (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route needsSafeArea:(BOOL)needsSafeArea
+{
+    NSArray<NSString *> *shields = [self generateTitlesForFoute:route];
     CGFloat margin = needsSafeArea ? OAUtilities.getLeftMargin : 0.;
     width = width - margin - kShieldMargin * 2;
     if (!_shieldFont)

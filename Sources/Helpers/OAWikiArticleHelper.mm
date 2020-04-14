@@ -50,10 +50,10 @@
                     RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
                     item.resourceId = resource->id;
                     item.resourceType = resource->type;
-                    item.title = [OAResourcesBaseViewController titleOfResource:resource
-                                                                       inRegion:worldRegion
-                                                                 withRegionName:YES
-                                                               withResourceType:NO];
+                    item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                             inRegion:worldRegion
+                                                       withRegionName:YES
+                                                     withResourceType:NO];
                     item.resource = resource;
                     item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
                     item.size = resource->size;

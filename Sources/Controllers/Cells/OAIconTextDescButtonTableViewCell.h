@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *dividerIcon;
+@property (strong, nonatomic) IBOutlet UIView *additionalView;
 
 @property (weak, nonatomic) id<OAIconTextDescButtonCellDelegate> delegate;
 

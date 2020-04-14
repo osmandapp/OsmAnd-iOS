@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 #import "OAMapViewController.h"
-#import "OACommonTypes.h"
 #import "OATargetPointView.h"
 #import "OAGPXRouteViewController.h"
 

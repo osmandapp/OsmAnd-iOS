@@ -290,6 +290,7 @@
 "route_to" = "To";
 "route_via" = "Via";
 "route_from" = "From";
+"transfers" = "Transfers:";
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Error calculating route";
@@ -567,6 +568,7 @@
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online maps";
 "map_settings_transp" = "Transparency";
+"map_settings_base_transp" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "map_settings_mapillary" = "Mapillary";
@@ -575,6 +577,13 @@
 "map_settings_hide_polygons" = "Hide polygons";
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
+"map_settings_color_scheme" = "Color scheme";
+"map_settings_line_width" = "Line width";
+"map_settings_line_density" = "Line density";
+"map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
+"map_settings_appearance" = "Appearance";
+"map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
+"map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
 // Intro
 "intro_skip" = "Skip";
@@ -957,6 +966,7 @@
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";
 "show_contour_lines" = "Show contour lines";
+"enable_contour_lines" = "Enable to view contour lines on the map";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -1230,6 +1240,8 @@
 "menu_active_trips" = "Active";
 "menu_all_trips" = "All Trips";
 
+"total" = "Total";
+"walk" = "Walk";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
 "change_group" = "Change group";

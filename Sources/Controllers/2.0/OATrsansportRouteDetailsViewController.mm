@@ -68,20 +68,15 @@
     return nil;
 }
 
-- (BOOL)isLandscape
-{
-    return (super.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
-}
-
 - (void)refreshRouteLayer
 {
+    OARouteLayer *routeLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.routeMapLayer;
     [OARootViewController.instance.mapPanel.mapViewController runWithRenderSync:^{
-        OARouteLayer *routeLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.routeMapLayer;
         [routeLayer resetLayer];
-        [routeLayer refreshRoute];
     }];
-    OABBox routeBBox = _transportHelper.getBBox;
-    [[OARootViewController instance].mapPanel displayAreaOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) zoom:-1 bottomInset:self.isLandscape ? 0. : self.contentHeight leftInset:self.isLandscape ? self.contentView.frame.size.width : 0.];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [routeLayer refreshRoute];
+    });
 }
 
 - (void)viewDidLoad

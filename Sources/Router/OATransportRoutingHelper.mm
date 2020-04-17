@@ -16,6 +16,7 @@
 #import "Localization.h"
 #import "OAWaypointHelper.h"
 #import "QuadRect.h"
+#import "OARouteProvider.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <transportRoutingObjects.h>
@@ -157,8 +158,6 @@
     NSMutableDictionary<NSArray<OATransportRouteResultSegment *> *, OARouteCalculationResult *> *_walkingRouteSegments;
     
     double _currentDistanceFromBegin;
-    
-    NSMutableSet<NSString *> *_nativeFiles;
 }
 
 - (instancetype)initWithName:(NSString *)name params:(OATransportRouteCalculationParams *)params helper:(OATransportRoutingHelper *)helper
@@ -176,7 +175,6 @@
         _queue = dispatch_queue_create("array_queue", DISPATCH_QUEUE_CONCURRENT);
         _walkingSegmentsToCalculate = [NSMutableArray new];
         _walkingRouteSegments = [NSMutableDictionary new];
-        _nativeFiles = [NSMutableSet set];
 
         if (!params.calculationProgress)
         {
@@ -252,51 +250,9 @@
     bottomY = MAX(get31TileNumberY(l.coordinate.latitude), bottomY);
     topY = MIN(get31TileNumberY(l.coordinate.latitude), topY);
     
-    [self checkInitialized:15 leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
+    [OARoutingHelper.sharedInstance.getRouteProvider checkInitialized:15 leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
     
     return planner->buildTransportRoute(ctx);
-}
-
-- (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    const auto& localResource = app.resourcesManager->getLocalResource(QString::fromNSString([localResourceId lastPathComponent]));
-    if (localResource)
-    {
-        const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(localResource->metadata);
-        if (obfMetadata)
-        {
-            OsmAnd::AreaI pBbox31 = OsmAnd::AreaI((int)rect.top, (int)rect.left, (int)rect.bottom, (int)rect.right);
-            if (zoomLevel == OsmAnd::InvalidZoomLevel)
-                return obfMetadata->obfFile->obfInfo->containsDataFor(&pBbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, desiredDataTypes);
-            else
-                return obfMetadata->obfFile->obfInfo->containsDataFor(&pBbox31, zoomLevel, zoomLevel, desiredDataTypes);
-        }
-    }
-    return NO;
-}
-
-- (void) checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
-    const auto& localResources = app.resourcesManager->getLocalResources();
-    QuadRect *rect = [[QuadRect alloc] initWithLeft:leftX top:topY right:rightX bottom:bottomY];
-    auto dataTypes = OsmAnd::ObfDataTypesMask();
-    dataTypes.set(OsmAnd::ObfDataType::Map);
-    dataTypes.set(OsmAnd::ObfDataType::Routing);
-    for (const auto& resource : localResources)
-    {
-        if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
-        {
-            NSString *localPath = resource->localPath.toNSString();
-            if (![_nativeFiles containsObject:localPath] && [self containsData:localPath rect:rect desiredDataTypes:dataTypes zoomLevel:(OsmAnd::ZoomLevel)zoom])
-            {
-                [_nativeFiles addObject:localPath];
-                initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting, true);
-            }
-        }
-    }
 }
 
 - (OARouteCalculationParams *) getWalkingRouteParams
@@ -347,7 +303,7 @@
         for (SHARED_PTR<TransportRouteResult>& r : routes)
         {
             SHARED_PTR<TransportRouteResultSegment> prev = nullptr;
-            for (SHARED_PTR<TransportRouteResultSegment>& s : r->segments)
+            for (SHARED_PTR<TransportRouteResultSegment> s : r->segments)
             {
                 CLLocation *start = prev != nullptr ? [[CLLocation alloc] initWithLatitude:prev->getEnd()->lat longitude:prev->getEnd()->lon] : _params.start;
                 CLLocation *end = [[CLLocation alloc] initWithLatitude:s->getStart()->lat longitude:s->getStart()->lon];

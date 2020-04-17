@@ -34,7 +34,7 @@
 
 @end
 
-@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams;
+@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider;
 
 struct TurnType;
 struct RouteSegmentResult;
@@ -45,6 +45,8 @@ struct RouteSegmentResult;
 
 - (void) setAppMode:(OAApplicationMode *)mode;
 - (OAApplicationMode *) getAppMode;
+
+- (OARouteProvider *) getRouteProvider;
 
 - (BOOL) isFollowingMode;
 - (NSString *) getLastRouteCalcError;

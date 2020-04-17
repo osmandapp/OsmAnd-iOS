@@ -4224,6 +4224,7 @@
 		DA357C5722A689E400A1F82D /* OAUsernameFilterViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA357C5322A689E300A1F82D /* OAUsernameFilterViewController.mm */; };
 		DA357C5822A689E400A1F82D /* OAUsernameFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA357C5422A689E300A1F82D /* OAUsernameFilterViewController.xib */; };
 		DA357C5922A689E400A1F82D /* OAUsernameFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA357C5422A689E300A1F82D /* OAUsernameFilterViewController.xib */; };
+		DA443A682449D3A2005EAF7B /* OATransportDetailsTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DADBC61824250AB3008B7423 /* OATransportDetailsTableViewController.xib */; };
 		DA446E6523A3AB2600178651 /* OARouteStatisticsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA446E6423A3AB2600178651 /* OARouteStatisticsHelper.mm */; };
 		DA446E6623A3AB2600178651 /* OARouteStatisticsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA446E6423A3AB2600178651 /* OARouteStatisticsHelper.mm */; };
 		DA453493221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA453491221D7E4100701D98 /* OABasicEditingViewController.mm */; };
@@ -18033,6 +18034,7 @@
 				BBA3AFE1197FC4BB0039D991 /* HUD_search_icon.png in Resources */,
 				84185A751AA8BC0600F70328 /* OASliderCell.xib in Resources */,
 				DAF3457322F4482C009E2EB6 /* ic_custom_sound@3x.png in Resources */,
+				DA443A682449D3A2005EAF7B /* OATransportDetailsTableViewController.xib in Resources */,
 				8441CB5E1B1370580033AC95 /* selection_checked@3x.png in Resources */,
 				84E2DB461AB720FA001A7FEC /* HUD_compass.png in Resources */,
 				DA1340FE243DC5A80039D214 /* map_action_motorcycle.png in Resources */,

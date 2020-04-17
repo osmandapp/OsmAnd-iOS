@@ -248,6 +248,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _historyItemsLimit = kHistoryItemLimitDefault;
     
     [_routingHelper addProgressBar:self];
+    [_transportHelper addProgressBar:self];
 }
 
 + (int) getDirectionInfo
@@ -462,7 +463,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
     [section removeAllObjects];
     
-    if ([self isRouteCalculated])
+    if ([self isRouteCalculated] && ![_routingHelper isRouteBeingCalculated] && ![_transportHelper isRouteBeingCalculated])
     {
         if ([_routingHelper isPublicTransportMode])
         {
@@ -1783,6 +1784,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 }
 
 - (void)startProgress {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!_progressBarView)
+        {
+            [self updateData];
+            [self.tableView reloadData];
+        }
+        if (_progressBarView)
+            [_progressBarView setProgress:0.];
+    });
 }
 
 @end

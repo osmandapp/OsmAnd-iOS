@@ -274,6 +274,11 @@ static BOOL _isDeviatedFromRoute = false;
     return _mode;
 }
 
+- (OARouteProvider *) getRouteProvider
+{
+    return _provider;
+}
+
 - (BOOL) isFollowingMode
 {
     return _isFollowingMode;

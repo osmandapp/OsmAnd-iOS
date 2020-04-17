@@ -14,6 +14,8 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAndApp.h"
+#import "OATargetPointsHelper.h"
+#import "OARouteCalculationResult.h"
 
 @interface OATransportDetailsTableViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -24,6 +26,8 @@
     OATransportRoutingHelper *_transportHelper;
     NSInteger _routeIndex;
     NSArray<NSDictionary *> *_data;
+    
+    OsmAndAppInstance _app;
 }
 
 - (instancetype)initWithRouteIndex:(NSInteger) routeIndex
@@ -32,15 +36,83 @@
     if (self) {
         _transportHelper = OATransportRoutingHelper.sharedInstance;
         _routeIndex = routeIndex;
-        _data = @[@{@"cell" : @"OAPublicTransportShieldCell"},
-                  @{@"cell" : @"OAPublicTransportRouteCell"},
-//                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_start_point", @"title" : @"Start", @"time" : @"0:00", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
-//                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_profile_pedestrian", @"title" : @"By foot", @"time" : @"0:05", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
-//                  @{@"cell" : @"OAPublicTransportPointCell", @"title" : @"Hotel ABC", @"descr" : @"Board at stop", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(YES)},
-//                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_destination", @"title" : @"Independence Square", @"descr" : @"Exit at", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(NO), @"small_icon" : @(YES)}];
-                  ];
+        _app = [OsmAndApp instance];
+        [self generateData];
     }
     return self;
+}
+
+- (void) generateData
+{
+    //                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_start_point", @"title" : @"Start", @"time" : @"0:00", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
+     //                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_profile_pedestrian", @"title" : @"By foot", @"time" : @"0:05", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
+     //                  @{@"cell" : @"OAPublicTransportPointCell", @"title" : @"Hotel ABC", @"descr" : @"Board at stop", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(YES)},
+     //                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_destination", @"title" : @"Independence Square", @"descr" : @"Exit at", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(NO), @"small_icon" : @(YES)}];
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:@[@{@"cell" : @"OAPublicTransportShieldCell"},
+                                                           @{@"cell" : @"OAPublicTransportRouteCell"}
+    ]];
+    const auto route = _transportHelper.getRoutes[_routeIndex];
+    OATargetPointsHelper *pointsHelper = OATargetPointsHelper.sharedInstance;
+    OARTargetPoint *start = pointsHelper.getPointToStart;
+    OARTargetPoint *end = pointsHelper.getPointToNavigate;
+    NSMutableArray<NSNumber *> *startTime = [NSMutableArray new];
+    [startTime addObject:@(0)];
+    
+    const auto segments = route->segments;
+    for (NSInteger i = 0; i < segments.size(); i++)
+    {
+        BOOL first = i == 0;
+        BOOL last = i == segments.size() - 1;
+        const auto& segment = segments[i];
+        if (first)
+        {
+            NSString *title = @"";
+            if (start != nil)
+            {
+                title = start.getOnlyName.length > 0 ? start.getOnlyName :
+                    [NSString stringWithFormat:OALocalizedString(@"map_coords"), start.getLatitude, start.getLongitude];
+            }
+            
+            [arr addObject:@{
+                @"cell" : @"OAPublicTransportPointCell",
+                @"img" : start != nil ? @"ic_custom_start_point" : @"map_pedestrian_location",
+                @"title" : title,
+                @"top_route_line" : @(NO),
+                @"bottom_route_line" : @(NO),
+                @"time" : [_app getFormattedTimeInterval:startTime.firstObject.doubleValue shortFormat:YES]
+            }];
+            
+            double walkDist = [self getWalkDistance:nullptr next:segment dist:segment->walkDist];
+            NSInteger time = [self getWalkTime:nullptr next:segment dist:walkDist speed:route->getWalkSpeed()];
+            if (time < 60)
+                time = 60;
+            
+            [arr addObject:@{
+                @"cell" : @"OAPublicTransportPointCell",
+                @"img" : @"ic_profile_pedestrian",
+                @"title" : [NSString stringWithFormat:@"%@ ~%@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO]],
+                @"top_route_line" : @(NO),
+                @"bottom_route_line" : @(NO)
+            }];
+        }
+    }
+    _data = [NSArray arrayWithArray:arr];
+}
+
+- (double) getWalkDistance:(SHARED_PTR<TransportRouteResultSegment>) segment next:(SHARED_PTR<TransportRouteResultSegment>)next dist:(double) dist
+{
+    OARouteCalculationResult *walkingRouteSegment = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:segment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:next]];
+    if (walkingRouteSegment)
+        return walkingRouteSegment.getWholeDistance;
+    return dist;
+}
+
+- (double) getWalkTime:(SHARED_PTR<TransportRouteResultSegment>) segment next:(SHARED_PTR<TransportRouteResultSegment>)next dist:(double) dist speed:(double)speed
+{
+    OARouteCalculationResult *walkingRouteSegment = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:segment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:next]];
+    if (walkingRouteSegment)
+        return walkingRouteSegment.routingTime;
+    return dist / speed;
 }
 
 - (void)viewDidLoad
@@ -205,7 +277,7 @@
             cell.topRouteLineView.hidden = ![item[@"top_route_line"] boolValue];
             cell.bottomRouteLineView.hidden = ![item[@"bottom_route_line"] boolValue];
             
-            cell.timeLabel.text = item[@"time"];
+            cell.timeLabel.text = item[@"time"] ? item[@"time"] : @"";
             
             [cell showSmallIcon:[item[@"small_icon"] boolValue]];
         }

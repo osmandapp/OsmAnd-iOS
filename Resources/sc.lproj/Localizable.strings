@@ -1653,3 +1653,12 @@
 "app_mode_shuttle_bus" = "Bus naveta";
 "app_mode_taxi" = "Taxi";
 "app_mode_default" = "Esplora sa mapa";
+"enable_contour_lines" = "Abìlita pro bìdere sas curvas de livellu in sa mapa";
+"map_settings_available_srtm_maps_descr" = "Pro bìdere sas umbraduras de sos rilievos in sa mapa b'at bisòngiu de mapas additzionales";
+"map_settings_line_density_slowdown_warning" = "Una densidade de lìnias arta diat pòdere rallentare sa renderizatzione de sa mapa";
+"map_settings_contour_zoom_level_descr" = "Ischerta su livellu de ismanniamentu pro ammustrare sas curvas de livellu";
+"map_settings_line_width" = "Largària de sas lìnias";
+"map_settings_line_density" = "Densidade de sas lìnias";
+"map_settings_appearance" = "Aparèntzia";
+"map_settings_color_scheme" = "Ischema de colores";
+"map_settings_base_transp" = "Trasparèntzia mapa de base";

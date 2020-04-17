@@ -1652,5 +1652,5 @@
 "map_settings_add_online_source" = "Добавить онлайн-источник";
 "gpx_analyze" = "Анализировать";
 "shared_string_warning" = "Предупреждение";
-"map_settings_base_transp" = "Прозрачность базовой карты";
+"map_settings_base_transp" = "Прозрачность основной карты";
 "map_settings_color_scheme" = "Цветовая схема";

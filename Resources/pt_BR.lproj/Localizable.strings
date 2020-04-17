@@ -1653,3 +1653,12 @@
 "app_mode_bicycle" = "Bicicleta";
 "app_mode_car" = "Carro";
 "app_mode_default" = "Navegar no mapa";
+"enable_contour_lines" = "Ativar para visualizar linhas de contorno no mapa";
+"map_settings_available_srtm_maps_descr" = "Mapas adicionais são necessários para visualizar sombras de relevo no mapa";
+"map_settings_line_density_slowdown_warning" = "Alta densidade de linha pode diminuir a renderização do mapa";
+"map_settings_appearance" = "Aparência";
+"map_settings_contour_zoom_level_descr" = "Selecione o nível de zoom, a partir das linhas de contorno que serão exibidas";
+"map_settings_line_density" = "Densidade da linha";
+"map_settings_line_width" = "Espessura da linha";
+"map_settings_color_scheme" = "Esquema de cores";
+"map_settings_base_transp" = "Transparência do mapa base";

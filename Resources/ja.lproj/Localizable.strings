@@ -1602,3 +1602,13 @@
 "offline_raster_maps" = "オフラインラスターマップ";
 "res_edit_map_source" = "マップソースの編集";
 "res_offlineSQL_URL_warning" = "このマップタイプはサポートされていません";
+"map_settings_line_density" = "線密度";
+"map_settings_line_width" = "線幅";
+"map_settings_color_scheme" = "カラースキーム";
+"map_settings_add_maps_desc" = "新しいマップの利用にはリンクの指定、またはSQLiteファイルのインポートが利用できます。";
+"map_settings_hide_polygons_desc" = "このオプションはOsmAndがオフライン時に使用するベクターマップにのみ影響します";
+"map_settings_hide_polygons" = "ポリゴンを非表示";
+"map_settings_add_online_source" = "オンラインソースを追加";
+"map_settings_show_slider_map" = "マップにスライダーを表示";
+"map_settings_base_transp" = "ベースマップの透明度";
+"shared_string_warning" = "警告";

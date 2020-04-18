@@ -1106,7 +1106,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     self.duplicateItems = [NSMutableArray array];
 }
 
-- (instancetype) initWithItems:(NSArray<id>*) items
+- (instancetype) initWithItems:(NSArray<id> *) items
 {
     self = [super init];
     if (self)
@@ -1416,10 +1416,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @implementation OAMapSourcesSettingsItem
 {
-    QHash<QString, std::shared_ptr<OsmAnd::IOnlineTileSources::Source>> _newSources;
+    QHash<QString, std::shared_ptr<const OsmAnd::IOnlineTileSources::Source>> _newSources;
     NSMutableDictionary<NSString *, NSMutableDictionary *> *_newSqliteData;
-    QHash<QString, std::shared_ptr<OsmAnd::IOnlineTileSources::Source>> _existingSources;
-    NSMutableDictionary<NSString *, NSMutableDictionary *> *_existingSqliteData;
 }
 
 @dynamic items, appliedItems, existingItems;
@@ -1450,6 +1448,63 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [self.existingItems addObject:item];
         }
     }
+}
+
+- (instancetype) initWithItems:(NSArray<LocalResourceItem *> *)items
+{
+    self = [super initWithItems:items];
+    if (self)
+    {
+        if (self.items.count > 0)
+        {
+            for (LocalResourceItem *localItem in self.items)
+            {
+                if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+                {
+                    SqliteDbResourceItem *item = (SqliteDbResourceItem *)localItem;
+                    OASQLiteTileSource *sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
+                    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+                    params[@"minzoom"] = [NSString stringWithFormat:@"%d", sqliteSource.minimumZoomSupported];
+                    params[@"maxzoom"] = [NSString stringWithFormat:@"%d", sqliteSource.maximumZoomSupported];
+                    params[@"url"] = sqliteSource.urlTemplate;
+                    params[@"ellipsoid"] = sqliteSource.isEllipticYTile ? @(1) : @(0);
+                    params[@"inverted_y"] = sqliteSource.isInvertedYTile ? @(1) : @(0);
+                    params[@"expireminutes"] = sqliteSource.getExpirationTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", sqliteSource.getExpirationTimeMillis / 60000] : @"";
+                    params[@"timecolumn"] = sqliteSource.isTimeSupported ? @"yes" : @"no";
+                    params[@"rule"] = sqliteSource.rule;
+                    params[@"randoms"] = sqliteSource.randoms;
+                    params[@"referer"] = sqliteSource.referer;
+                    params[@"inversiveZoom"] = sqliteSource.isInversiveZoom ? @(1) : @(0);
+                    params[@"ext"] = sqliteSource.tileFormat;
+                    params[@"tileSize"] = [NSString stringWithFormat:@"%d", sqliteSource.tileSize];
+                    params[@"bitDensity"] = [NSString stringWithFormat:@"%d", sqliteSource.bitDensity];
+
+                    _newSqliteData[item.title] = params;
+                }
+                else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+                {
+                    OnlineTilesResourceItem *item = (OnlineTilesResourceItem *)localItem;
+                    std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> tileSource;
+                    const auto& resource = [OsmAndApp instance].resourcesManager->getResource(QStringLiteral("online_tiles"));
+                    if (resource)
+                    {
+                        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
+                        for(const auto& onlineTileSource : onlineTileSources->getCollection())
+                        {
+                            if (QString::compare(QString::fromNSString(item.title), onlineTileSource->name) == 0)
+                            {
+                                tileSource = onlineTileSource;
+                                break;
+                            }
+                        }
+                    }
+                    if (tileSource)
+                        _newSources[QString::fromNSString(item.title)] = tileSource;
+                }
+            }
+        }
+    }
+    return self;
 }
 
 - (EOASettingsItemType) type
@@ -1598,7 +1653,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         NSString *randoms = object[@"randoms"];
         BOOL ellipsoid = object[@"ellipsoid"] ? [object[@"ellipsoid"] boolValue] : NO;
         BOOL invertedY = object[@"inverted_y"] ? [object[@"inverted_y"] boolValue] : NO;
-        NSString *referer = object.[@"referer"];
+        NSString *referer = object[@"referer"];
         BOOL timesupported = object[@"timesupported"] ? [object[@"timesupported"] boolValue] : NO;
         long expire = [object[@"expire"] longValue];
         BOOL inversiveZoom = object[@"inversiveZoom"] ? [object[@"inversiveZoom"] boolValue] : NO;
@@ -1627,8 +1682,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             result->randomsArray = OsmAnd::OnlineTileSources::parseRandoms(QString::fromNSString(randoms));
             result->rule = QString::fromNSString(rule);
 
-            OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
-            _app.resourcesManager->installTilesResource(item);
+            OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
+            app.resourcesManager->installTilesResource(result);
 
             OnlineTilesResourceItem *item = [[OnlineTilesResourceItem alloc] init];
             item.path = [app.cachePath stringByAppendingPathComponent:name];
@@ -1644,12 +1699,17 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             params[@"maxzoom"] = [NSString stringWithFormat:@"%d", maxZoom];
             params[@"url"] = url;
             params[@"ellipsoid"] = ellipsoid ? @(1) : @(0);
-            params[@"timeSupported"] = expire != -1 ? @"yes" : @"no";
+            params[@"inverted_y"] = invertedY ? @(1) : @(0);
             params[@"expireminutes"] = expire != -1 ? [NSString stringWithFormat:@"%ld", expire / 60000] : @"";
-            params[@"timecolumn"] = expire != -1 ? @"yes" : @"no";
+            params[@"timecolumn"] = timesupported ? @"yes" : @"no";
             params[@"rule"] = rule;
             params[@"randoms"] = randoms;
-            
+            params[@"referer"] = referer;
+            params[@"inversiveZoom"] = inversiveZoom ? @(1) : @(0);
+            params[@"ext"] = ext;
+            params[@"tileSize"] = [NSString stringWithFormat:@"%d", tileSize];
+            params[@"bitDensity"] = [NSString stringWithFormat:@"%d", bitDensity];
+
             NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"sqlitedb"];
             if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
             {
@@ -1659,6 +1719,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 item.fileName = name;
                 item.path = [[[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"sqlitedb"];
                 item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
+                _newSqliteData[name] = params;
                 
                 [self.items addObject:item];
             }
@@ -1677,30 +1738,47 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             if ([localItem isKindOfClass:SqliteDbResourceItem.class])
             {
                 SqliteDbResourceItem *item = (SqliteDbResourceItem *)localItem;
-
-                jsonObject[@"params"] = [action getParams];
-                
-                jsonObject[@"sql"] = sql;
-                jsonObject[@"name"] = template.getName();
-                jsonObject[@"minZoom"] = template.getMinimumZoomSupported);
-                jsonObject[@"maxZoom"] = template.getMaximumZoomSupported();
-                jsonObject[@"url"] = template.getUrlTemplate);
-                jsonObject[@"randoms"] = template.getRandoms();
-                jsonObject[@"ellipsoid"] = template.isEllipticYTile);
-                jsonObject[@"inverted_y"] = template.isInvertedYTile();
-                jsonObject[@"referer"] = template.getReferer();
-                jsonObject[@"timesupported"] = template.isTimeSupported);
-                jsonObject[@"expire"] = template.getExpirationTimeMillis();
-                jsonObject[@"inversiveZoom"] = template.getInversiveZoom();
-                jsonObject[@"ext"] = template.getTileFormat();
-                jsonObject[@"tileSize"] = template.getTileSize();
-                jsonObject[@"bitDensity"] = template.getBitDensity();
-                jsonObject[@"avgSize"] = template.getAvgSize();
-                jsonObject[@"rule"] = template.getRule();
+                NSDictionary *params = _newSqliteData[item.title];
+                jsonObject[@"sql"] = @(YES);
+                jsonObject[@"name"] = item.title;
+                jsonObject[@"minZoom"] = params[@"minzoom"];
+                jsonObject[@"maxZoom"] = params[@"maxzoom"];
+                jsonObject[@"url"] = params[@"url"];
+                jsonObject[@"randoms"] = params[@"randoms"];
+                jsonObject[@"ellipsoid"] = [@(1) isEqual:params[@"ellipsoid"]] ? @"true" : @"false";
+                jsonObject[@"inverted_y"] = [@(1) isEqual:params[@"inverted_y"]] ? @"true" : @"false";
+                jsonObject[@"referer"] = params[@"referer"];
+                jsonObject[@"timesupported"] = params[@"timecolumn"];
+                NSString *expMinStr = params[@"expireminutes"];
+                jsonObject[@"expire"] = expMinStr ? [NSString stringWithFormat:@"%lld", expMinStr.longLongValue * 60000] : @"0";
+                jsonObject[@"inversiveZoom"] = [@(1) isEqual:params[@"inversiveZoom"]] ? @"true" : @"false";
+                jsonObject[@"ext"] = params[@"ext"];
+                jsonObject[@"tileSize"] = params[@"tileSize"];
+                jsonObject[@"bitDensity"] = params[@"bitDensity"];
+                jsonObject[@"rule"] = params[@"rule"];
             }
             else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
             {
                 OnlineTilesResourceItem *item = (OnlineTilesResourceItem *)localItem;
+                const auto& source = _newSources[QString::fromNSString(item.title)];
+                if (source)
+                {
+                    jsonObject[@"sql"] = @(NO);
+                    jsonObject[@"name"] = item.title;
+                    jsonObject[@"minZoom"] = [NSString stringWithFormat:@"%d", source->minZoom];
+                    jsonObject[@"maxZoom"] = [NSString stringWithFormat:@"%d", source->maxZoom];
+                    jsonObject[@"url"] = source->urlToLoad.toNSString();
+                    jsonObject[@"randoms"] = source->randoms.toNSString();
+                    jsonObject[@"ellipsoid"] = source->ellipticYTile ? @"true" : @"false";
+                    jsonObject[@"inverted_y"] = source->invertedYTile ? @"true" : @"false";
+                    jsonObject[@"timesupported"] = source->expirationTimeMillis != -1 ? @"true" : @"false";
+                    jsonObject[@"expire"] = [NSString stringWithFormat:@"%ld", source->expirationTimeMillis];
+                    jsonObject[@"ext"] = source->ext.toNSString();
+                    jsonObject[@"tileSize"] = [NSString stringWithFormat:@"%d", source->tileSize];
+                    jsonObject[@"bitDensity"] = [NSString stringWithFormat:@"%d", source->bitDensity];
+                    jsonObject[@"avgSize"] = [NSString stringWithFormat:@"%d", source->avgSize];
+                    jsonObject[@"rule"] = source->rule.toNSString();
+                }
             }
             [jsonArray addObject:jsonObject];
         }
@@ -1795,128 +1873,3 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 }
 
 @end
-
-#pragma mark - OAAvoidRoadsSettingsItemReader
-
-@interface OAAvoidRoadsSettingsItemReader()
-
-@property (nonatomic, retain) OAAvoidRoadsSettingsItem *avoidRoadsSettingsItem;
-
-@end
-
-@implementation OAAvoidRoadsSettingsItemReader
-
-- (instancetype)initWithItem:(OAAvoidRoadsSettingsItem *)item
-{
-    self = [super initWithItem:item];
-    _avoidRoadsSettingsItem = item;
-    return self;
-}
-
-- (void)readFromStream:(NSInputStream *)inputStream
-{
-    NSMutableString *buf = [[NSMutableString alloc] init];
-        @try {
-            uint8_t buffer[_buffer];
-            NSInteger len;
-            while ([inputStream hasBytesAvailable]) {
-                len = [inputStream read:buffer maxLength:sizeof(buffer)];
-                if (len > 0) {
-                    [buf appendString: [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding]];
-                }
-            }
-        } @catch (NSException *exception) {
-            NSLog(@"Cannot read json body %@", exception);
-        }
-        NSString *jsonStr = [buf description];
-        if (![jsonStr length])
-            NSLog(@"Cannot find json body");
-        @try {
-            NSError *jsonError;
-            NSData* jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&jsonError];
-            NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
-            for (NSData* item in itemsJson)
-            {
-//                NSDictionary *object = [NSJSONSerialization JSONObjectWithData:item options:kNilOptions error:&jsonError];
-//                double latitude = [[object objectForKey:@"latitude"] doubleValue];
-//                double longitude = [[object objectForKey:@"longitude"] doubleValue];
-//                NSString *name = [object objectForKey:@"name"];
-//                NSString *appModeKey = [object objectForKey:@"appModeKey"];
-//                //AvoidRoadInfo roadInfo = new AvoidRoadInfo();
-//                //roadInfo.id = 0;
-//                //roadInfo.latitude = latitude;
-//                //roadInfo.longitude = longitude;
-//                //roadInfo.name = name;
-//                if ([OAApplicationMode valueOfStringKey:appModeKey def:NULL])
-//                {
-//                    //roadInfo.appModeKey = appModeKey;
-//                } else
-//                {
-//                    //roadInfo.appModeKey = app.getRoutingHelper().getAppMode().getStringKey();
-//                }
-//                //[_avoidRoadsSettingsItem.items addObject:roadInfo];
-            }
-        } @catch (NSException *exception) {
-            NSLog(@"Json parse error %@", exception);
-        }
-}
-
-@end
-
-#pragma mark - OAAvoidRoadsSettingsItemWriter
-
-@interface OAAvoidRoadsSettingsItemWriter()
-
-@property (nonatomic, retain) OAAvoidRoadsSettingsItem *avoidRoadsSettingsItem;
-
-@end
-
-@implementation OAAvoidRoadsSettingsItemWriter
-
-- (instancetype)initWithItem:(OAAvoidRoadsSettingsItem *)item
-{
-    self = [super initWithItem:item];
-    _avoidRoadsSettingsItem = item;
-    return self;
-}
-
-- (BOOL)writeToStream:(NSOutputStream *)outputStream
-{
-    NSMutableDictionary *json = [[NSMutableDictionary alloc]init];
-    NSMutableArray *jsonArray = [[NSMutableArray alloc]init];
-    if (!_avoidRoadsSettingsItem.items.count)
-    {
-        @try {
-//            for ( *avoidRoad in _avoidRoadsSettingsItem.items) //AvoidRoadInfo
-//            {
-//                NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc]init];
-//
-//                [jsonObject setValue:[avoidRoad] forKey:@"latitude"]; //avoidRoad.latitude
-//                [jsonObject setValue:[avoidRoad] forKey:@"longitude"]; //avoidRoad.longitude
-//                [jsonObject setValue:[avoidRoad] forKey:@"name"]; //avoidRoad.name
-//                [jsonObject setValue:[avoidRoad] forKey:@"appModeKey"]; //avoidRoad.appModeKey
-//
-//                [jsonArray addObject:jsonObject];
-//            }
-            [json setValue:jsonArray forKey:@"items"];
-        } @catch (NSException *exception) {
-            NSLog(@"Failed write to json %@", exception);
-        }
-    }
-    if ([json count] > 0)
-    {
-        @try {
-            NSError *jsonError;
-            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&jsonError];
-            [outputStream write:(uint8_t *)[jsonData bytes] maxLength:[jsonData length]];
-        } @catch (NSException *exception) {
-            NSLog(@"Failed to write json to stream %@", exception);
-        }
-        return YES;
-    }
-    return NO;
-}
-
-@end
-

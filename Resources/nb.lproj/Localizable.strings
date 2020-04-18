@@ -1459,7 +1459,7 @@
 "routing_attr_allow_skating_only_name" = "Tillat løyper kun for skøyting";
 "rendering_attr_lessDetailed_name" = "Færre detaljer";
 "rendering_attr_piste_difficulty_easy_name" = "Enkelt";
-"routing_attr_avoid_stairs_description" = "Unngår trapper.";
+"routing_attr_avoid_stairs_description" = "Unngår trapper";
 "rendering_attr_hideText_name" = "Tekst";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Farge etter rutenettverk";
 "rendering_attr_hideWaterPolygons_name" = "Skjul vann";
@@ -1559,3 +1559,4 @@
 "rendering_attr_hideNonVehicleHighways_name" = "Veier - ikke for kjøretøy";
 "rendering_attr_tracktype_grade1_name" = "Fast (asfaltert)";
 "rendering_attr_streetLightingNight_name" = "Kun vis om natten";
+"app_mode_scooter" = "Scooter";

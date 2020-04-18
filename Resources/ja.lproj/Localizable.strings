@@ -1133,7 +1133,7 @@
 "res_import_success" = "%@は正常にインポートされました";
 "res_import_unsupported" = "ファイル形式が正しくありません。インポートは『routing.xml』と『*.render.xml』のみサポートされています。";
 "routing_import_please_restart" = "新しいrouting.xmlを使用するには、アプリケーションを再起動してください。";
-"sqlitedb_import_title" = "Map Creatorファイルをインポート";
+"sqlitedb_import_title" = "ラスターマップファイルのインポート";
 "sqlitedb_import_already_exists" = "指定されたSQLiteDBファイルは既に存在します。どのように処理するかを選択してください。";
 "map_creator" = "Map Creator";
 "online_map" = "オンラインマップ";
@@ -1612,3 +1612,16 @@
 "map_settings_show_slider_map" = "マップにスライダーを表示";
 "map_settings_base_transp" = "ベースマップの透明度";
 "shared_string_warning" = "警告";
+"app_mode_osm" = "OSM";
+"import_raster_map_failed" = "ラスターマップのインポートに失敗しました";
+"import_raster_map_success" = "ラスターマップがインポートされました。マップ設定からオーバーレイ/アンダーレイの項目から表示が可能です";
+"online_raster_maps" = "オンラインラスターマップ";
+"change_position_descr" = "マップを動かしてオブジェクトの位置を変更します";
+"change_object_posiotion" = "オブジェクト位置の変更";
+"all_group_points" = "グループ内のすべての地点";
+"enable_contour_lines" = "このオプションを有効にすると、マップ上に等高線が表示されます";
+"res_online_source_cache_alert" = "変更を適用すると、タイルソースのキャッシュデータが消去されます";
+"map_settings_available_srtm_maps_descr" = "地形の陰影起伏図をマップ上に表示するには、追加の地図が必要です";
+"map_settings_line_density_slowdown_warning" = "線密度が高いとマップの表示が遅くなります";
+"map_settings_appearance" = "外観";
+"map_settings_contour_zoom_level_descr" = "等高線表示を開始するズームレベルを選択します";

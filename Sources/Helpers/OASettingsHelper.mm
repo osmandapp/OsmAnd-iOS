@@ -14,7 +14,83 @@
 #import "OASettingsImporter.h"
 #import "OASettingsExporter.h"
 
-static const NSInteger _buffer = 1024;
+#import "OsmAndApp.h"
+#import "OAAppSettings.h"
+#import "OAQuickActionRegistry.h"
+#import "OASQLiteTileSource.h"
+#import "OAMapCreatorHelper.h"
+#import "OAAvoidSpecificRoads.h"
+#import "OAPOIFiltersHelper.h"
+#import "OAQuickSearchHelper.h"
+#import "OAPOIHelper.h"
+#import "Localization.h"
+
+#include <OsmAndCore/ArchiveReader.h>
+#include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
+
+NSString *const kSettingsHelperErrorDomain = @"SettingsHelper";
+
+NSInteger const kSettingsHelperErrorCodeNoTypeField = 1;
+NSInteger const kSettingsHelperErrorCodeIllegalType = 2;
+NSInteger const kSettingsHelperErrorCodeUnknownFileSubtype = 3;
+NSInteger const kSettingsHelperErrorCodeUnknownFilePath = 4;
+NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
+
+@implementation OASettingsItemType
+
++ (NSString * _Nullable) typeName:(EOASettingsItemType)type
+{
+    switch (type)
+    {
+        case EOASettingsItemTypeGlobal:
+            return @"GLOBAL";
+        case EOASettingsItemTypeProfile:
+            return @"PROFILE";
+        case EOASettingsItemTypePlugin:
+            return @"PLUGIN";
+        case EOASettingsItemTypeData:
+            return @"DATA";
+        case EOASettingsItemTypeFile:
+            return @"FILE";
+        case EOASettingsItemTypeQuickActions:
+            return @"QUICK_ACTIONS";
+        case EOASettingsItemTypePoiUIFilters:
+            return @"POI_UI_FILTERS";
+        case EOASettingsItemTypeMapSources:
+            return @"MAP_SOURCES";
+        case EOASettingsItemTypeAvoidRoads:
+            return @"AVOID_ROADS";
+        default:
+            return nil;
+    }
+}
+
++ (EOASettingsItemType) parseType:(NSString *)typeName
+{
+    if ([typeName isEqualToString:@"GLOBAL"])
+        return EOASettingsItemTypeGlobal;
+    if ([typeName isEqualToString:@"PROFILE"])
+        return EOASettingsItemTypeProfile;
+    if ([typeName isEqualToString:@"PLUGIN"])
+        return EOASettingsItemTypePlugin;
+    if ([typeName isEqualToString:@"DATA"])
+        return EOASettingsItemTypeData;
+    if ([typeName isEqualToString:@"FILE"])
+        return EOASettingsItemTypeFile;
+    if ([typeName isEqualToString:@"QUICK_ACTIONS"])
+        return EOASettingsItemTypeQuickActions;
+    if ([typeName isEqualToString:@"POI_UI_FILTERS"])
+        return EOASettingsItemTypePoiUIFilters;
+    if ([typeName isEqualToString:@"MAP_SOURCES"])
+        return EOASettingsItemTypeMapSources;
+    if ([typeName isEqualToString:@"AVOID_ROADS"])
+        return EOASettingsItemTypeAvoidRoads;
+    
+    return EOASettingsItemTypeUnknown;
+}
+
+@end
 
 @interface OASettingsHelper()
 
@@ -28,7 +104,7 @@ static const NSInteger _buffer = 1024;
 @implementation OASettingsHelper
 
 
-+ (OASettingsHelper*)sharedInstance
++ (OASettingsHelper *) sharedInstance
 {
     static OASettingsHelper *_sharedInstance = nil;
     static dispatch_once_t onceToken;
@@ -38,53 +114,45 @@ static const NSInteger _buffer = 1024;
     return _sharedInstance;
 }
 
-- (void) finishImport:(OASettingsImport *)listener success:(BOOL)success items:(NSMutableArray*)items
+- (void) finishImport:(OASettingsImport * _Nullable)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items
 {
-    _importTask = NULL;
-    if (listener != NULL)
+    _importTask = nil;
+    if (listener)
         [_settingsImportDelegate onSettingsImportFinished:success items:items];
 }
 
-- (void) collectSettings:(NSString*)settingsFile latestChanges:(NSString*)latestChanges version:(NSInteger)version listener:(OASettingsCollect*)listener
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version listener:(OASettingsCollect * _Nullable)listener
 {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version collectListener:listener] executeParameters];
-        });
+    });
 }
  
-- (void) checkDuplicates:(NSString *)settingsFile items:(NSMutableArray <OASettingsItem*> *)items selectedItems:(NSMutableArray <OASettingsItem*> *)selectedItems listener:(OACheckDuplicates*)listener
+- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems listener:(OACheckDuplicates * _Nullable)listener
 {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[[OAImportAsyncTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems duplicatesListener:listener] executeParameters];
-        });
+    });
 }
 
-- (void) importSettings:(NSString *)settingsFile items:(NSMutableArray <OASettingsItem*> *)items latestChanges:(NSString*)latestChanges version:(NSInteger)version listener:(OASettingsImport*)listener
+- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version listener:(OASettingsImport * _Nullable)listener
 {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version importListener:listener] executeParameters];
-        });
+    });
 }
 
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport*)listener items:(NSMutableArray <OASettingsItem*> *)items
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport * _Nullable)listener items:(NSArray<OASettingsItem *> *)items
 {
-    NSString* file = [NSString stringWithString:fileName];
-    OAExportAsyncTask* exportAsyncTask = [[OAExportAsyncTask alloc] initWith:file listener:listener items:items];
+    NSString *file = [NSString stringWithString:fileName];
+    OAExportAsyncTask *exportAsyncTask = [[OAExportAsyncTask alloc] initWithFile:file listener:listener items:items];
     [exportAsyncTask setValue:exportAsyncTask forKey:file];
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [exportAsyncTask executeParameters];
-        });
-
+        [exportAsyncTask execute];
+    });
 }
 
- /*
- public void exportSettings(@NonNull File fileDir, @NonNull String fileName, @Nullable SettingsExportListener listener,
-                            @NonNull SettingsItem... items) {
-     exportSettings(fileDir, fileName, listener, new ArrayList<>(Arrays.asList(items)));
- }
- */
-
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport*)listener
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport * _Nullable)listener
 {
     //exportSettings(fileDir, fileName, listener, new ArrayList<>(Arrays.asList(items)));
 }
@@ -94,40 +162,54 @@ static const NSInteger _buffer = 1024;
 
 #pragma mark - OASettingsItem
 
+@interface OASettingsItem()
+
+@property (nonatomic) NSString *pluginId;
+@property (nonatomic) NSString *fileName;
+@property (nonatomic) NSString *defaultName;
+@property (nonatomic) NSString *defaultFileExtension;
+@property (nonatomic) NSMutableArray<NSString *> *warnings;
+
+- (void) initialization;
+- (void) readFromJson:(id)json error:(NSError * _Nullable *)error;
+- (void) writeToJson:(id)json error:(NSError * _Nullable *)error;
+- (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error;
+- (void) writeItemsToJson:(id)json error:(NSError * _Nullable *)error;
+
+@end
+
 @implementation OASettingsItem
 
-- (instancetype) initWithType:(EOASettingsItemType)type
+- (instancetype) init
 {
     self = [super init];
-    if (self) {
-        _type = type;
-    }
+    if (self)
+        [self initialization];
+    
     return self;
 }
  
-- (instancetype) initWithType:(EOASettingsItemType)type json:(NSDictionary*)json
+- (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error
 {
     self = [super init];
-    if (self) {
-        _type = type;
-        [self readFromJSON:json];
+    if (self)
+    {
+        [self initialization];
+        NSError *readError;
+        [self readFromJson:json error:&readError];
+        if (readError)
+        {
+            if (error)
+                *error = readError;
+            return nil;
+        }
     }
     return self;
 }
 
-- (NSString *) getName
+- (void) initialization
 {
-    return nil;
-}
-
-- (NSString *) getPublicName
-{
-    return nil;
-}
-
-- (NSString *) getFileName
-{
-    return nil;
+    self.warnings = [NSMutableArray array];
 }
 
 - (BOOL) shouldReadOnCollecting
@@ -135,27 +217,19 @@ static const NSInteger _buffer = 1024;
     return NO;
 }
 
-- (EOASettingsItemType) parseItemType:(NSDictionary*)json
+- (NSString *) defaultFileName
 {
-    NSString *str = [json objectForKey:@"type"];
-    if ([str isEqualToString:@"GLOBAL"])
-        return EOAGlobal;
-    if ([str isEqualToString:@"PROFILE"])
-        return EOAProfile;
-    if ([str isEqualToString:@"PLUGIN"])
-        return EOAPlugin;
-    if ([str isEqualToString:@"DATA"])
-        return EOAData;
-    if ([str isEqualToString:@"FILE"])
-        return EOAFile;
-    if ([str isEqualToString:@"QUICK_ACTION"])
-        return EOAQuickAction;
-    if ([str isEqualToString:@"POI_UI_FILTERS"])
-        return EOAPoiUIFilters;
-    if ([str isEqualToString:@"MAP_SOURCES"])
-        return EOAMapSources;
-    if ([str isEqualToString:@"AVOID_ROADS"])
-        return EOAAvoidRoads;
+    return [self.name stringByAppendingString:self.defaultFileExtension];
+}
+
+- (NSString *) defaultFileExtension
+{
+    return @".json";
+}
+
+- (BOOL) applyFileName:(NSString *)fileName
+{
+    return [fileName hasSuffix:self.fileName];
 }
 
 - (BOOL) exists
@@ -168,26 +242,100 @@ static const NSInteger _buffer = 1024;
     // non implemented
 }
 
-- (void) readFromJSON:(NSDictionary*)json
++ (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error
 {
-}
-
-- (void) writeToJSON:(NSDictionary*)json
-{
-    [json setValue:[NSNumber numberWithInteger:_type] forKey:[self getName]];
-    [json setValue:[self getName] forKey:@"name"];
+    NSString *typeStr = json[@"type"];
+    if (!typeStr)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeNoTypeField userInfo:nil];
+        return EOASettingsItemTypeUnknown;
+    }
+    if ([typeStr isEqualToString:@"QUICK_ACTION"])
+        typeStr = @"QUICK_ACTIONS";
     
+    EOASettingsItemType type = [OASettingsItemType parseType:typeStr];
+    if (type == EOASettingsItemTypeUnknown)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeIllegalType userInfo:nil];
+    }
+    return type;
 }
 
-- (NSString *)toJSON
+- (void) readFromJson:(id)json error:(NSError * _Nullable *)error
 {
-    NSDictionary *JSONDic=[[NSDictionary alloc] init];
-    NSError *error;
-    [self writeToJSON:JSONDic];
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:JSONDic
-                                            options:NSJSONWritingPrettyPrinted
-                                            error:&error];
+    self.pluginId = json[@"pluginId"];
+    if (json[@"name"])
+        self.fileName = [NSString stringWithFormat:@"%@%@", json[@"name"], self.defaultFileExtension];
+    if (json[@"file"])
+        self.fileName = json[@"file"];
+
+    NSError* readError;
+    [self readItemsFromJson:json error:&readError];
+    if (error && readError)
+        *error = readError;
+}
+
+- (void) writeToJson:(id)json error:(NSError * _Nullable *)error
+{
+    json[@"type"] = [OASettingsItemType typeName:self.type];
+    if (self.pluginId.length > 0)
+        json[@"pluginId"] = self.pluginId;
+    
+    if ([self getWriter]) {
+        if (!self.fileName || self.fileName.length == 0)
+            self.fileName = self.defaultFileName;
+        
+        json[@"file"] = self.fileName;
+    }
+
+    NSError *writeError;
+    [self writeItemsToJson:json error:&writeError];
+    if (error && writeError)
+        *error = writeError;
+}
+
+- (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error
+{
+    // override
+}
+
+- (void) writeItemsToJson:(id)json error:(NSError * _Nullable *)error
+{
+    // override
+}
+
+- (nullable NSString *) toJson:(NSError * _Nullable *)error
+{
+    id JsonDic = [[NSDictionary alloc] init];
+    NSError *writeError;
+    [self writeToJson:JsonDic error:&writeError];
+    if (writeError)
+    {
+        if (error)
+            *error = writeError;
+        return nil;
+    }
+    NSError *jsonError;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:JsonDic options:NSJSONWritingPrettyPrinted error:&jsonError];
+    if (jsonError)
+    {
+        if (error)
+            *error = jsonError;
+        return nil;
+    }
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+}
+
+- (OASettingsItemReader *) getJsonReader
+{
+    return [[OASettingsItemJsonReader alloc] initWithItem:self];
+}
+
+- (OASettingsItemWriter *) getJsonWriter
+{
+    return [[OASettingsItemJsonWriter alloc] initWithItem:self];
 }
 
 - (OASettingsItemReader *) getReader
@@ -203,8 +351,9 @@ static const NSInteger _buffer = 1024;
 - (NSUInteger) hash
 {
     NSInteger result = _type;
-    NSString *name = [self getName];
-    result = 31 * result + (name != nil ? [name hash] : 0);
+    result = 31 * result + (self.name != nil ? [self.name hash] : 0);
+    result = 31 * result + (self.fileName != nil ? [self.fileName hash] : 0);
+    result = 31 * result + (self.pluginId != nil ? [self.pluginId hash] : 0);
     return result;
 }
 
@@ -218,23 +367,21 @@ static const NSInteger _buffer = 1024;
     if ([object isKindOfClass:self.class])
     {
         OASettingsItem *item = (OASettingsItem *) object;
-        return _type == item.type &&
-                        [[item getName] isEqual:[self getName]] &&
-                        [[item getFileName] isEqual:[self getFileName]];
+        return _type == item.type
+            && (item.name == self.name || [item.name isEqualToString:self.name])
+            && (item.fileName == self.fileName || [item.fileName isEqualToString:self.fileName])
+            && (item.pluginId == self.pluginId || [item.pluginId isEqualToString:self.pluginId]);
     }
-    else
-    {
-        return NO;
-    }
+    return NO;
 }
 
 @end
 
 #pragma mark - OASettingsItemReader
 
-@interface OASettingsItemReader<ObjectType : OASettingsItem *>()
+@interface OASettingsItemReader<__covariant ObjectType : OASettingsItem *>()
 
-@property (nonatomic, assign) ObjectType item;
+@property (nonatomic) ObjectType item;
 
 @end
 
@@ -246,18 +393,17 @@ static const NSInteger _buffer = 1024;
     return self;
 }
 
-- (void) readFromStream:(NSInputStream*)inputStream
+- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    return;
 }
 
 @end
 
 #pragma mark - OSSettingsItemWriter
 
-@interface OASettingsItemWriter<ObjectType : OASettingsItem *>()
+@interface OASettingsItemWriter<__covariant ObjectType : OASettingsItem *>()
 
-@property (nonatomic, assign) ObjectType item;
+@property (nonatomic) ObjectType item;
 
 @end
 
@@ -269,296 +415,714 @@ static const NSInteger _buffer = 1024;
     return self;
 }
 
-- (BOOL) writeToStream:(NSOutputStream*)outputStream
+- (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
     return NO;
 }
 
 @end
 
-#pragma mark - StreamSettingsItemReader
+#pragma mark - OASettingsItemJsonReader
 
-@implementation OAStreamSettingsItemReader
+@implementation OASettingsItemJsonReader
 
-- (instancetype)initWithItem:(OASettingsItem *)item
+- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    self = [super initWithItem:item];
-    return self;
+    NSError *readError;
+    NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
+    if (readError)
+    {
+        if (error)
+            *error = readError;
+        
+        return NO;
+    }
+    if (data.length == 0)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeEmptyJson userInfo:nil];
+        
+        return NO;
+    }
+    
+    NSError *jsonError;
+    id json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
+    if (jsonError)
+    {
+        if (error)
+            *error = jsonError;
+        
+        return NO;
+    }
+    
+    NSError *readItemsError;
+    [self.item readItemsFromJson:json error:&readItemsError];
+    if (readItemsError)
+    {
+        if (error)
+            *error = readItemsError;
+        
+        return NO;
+    }
+    return YES;
 }
 
 @end
 
-#pragma mark - OAStreamSettingsItemWriter
+#pragma mark - OASettingsItemJsonWriter
 
-@implementation OAStreamSettingsItemWriter
+@implementation OASettingsItemJsonWriter
 
-- (instancetype)initWithItem:(OASettingsItem *)item
+- (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    self = [super initWithItem:item];
-    return self;
-}
-
-@end
-
-#pragma mark - OAStreamSettingsItem
-
-@interface OAStreamSettingsItem()
-
-@property (nonatomic, retain) NSInputStream* inputStream;
-@property (nonatomic, retain) NSString* name;
-
-@end
-
-@implementation OAStreamSettingsItem
-
-- (instancetype) initWithType:(EOASettingsItemType)type name:(NSString*)name
-{
-    [super setType:type];
-    _name = name;
-    return self;
-}
-
-- (instancetype) initWithType:(EOASettingsItemType)type json:(NSDictionary*)json
-{
-    self = [super initWithType:type json:json];
-    return self;
-}
-
-- (instancetype) initWithType:(EOASettingsItemType)type inputStream:(NSInputStream*)inputStream name:(NSString*)name
-{
-    [super setType:type];
-    _name = name;
-    _inputStream = inputStream;
-    return self;
-}
-
-- (NSString *) getPublicName
-{
-    return self.name;
-}
-
-- (void) readFromJSON:(NSDictionary *)json
-{
-    [super readFromJSON:json];
-    _name = [[NSString alloc] initWithData:[json objectForKey:@"name"] encoding:NSUTF8StringEncoding];
-}
-
--(OASettingsItemWriter*)getWriter
-{
-    OASettingsItemWriter *itemWriter = [[OASettingsItemWriter alloc] initWithItem:self];
-    return itemWriter;
+    NSMutableDictionary *json = [NSMutableDictionary dictionary];
+    NSError *writeItemsError;
+    [self.item writeItemsToJson:json error:&writeItemsError];
+    if (writeItemsError)
+    {
+        if (error)
+            *error = writeItemsError;
+        return NO;
+    }
+    if (json.count > 0)
+    {
+        NSError *writeJsonError;
+        NSData *data = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&writeJsonError];
+        if (writeJsonError)
+        {
+            if (error)
+                *error = writeJsonError;
+            return NO;
+        }
+        
+        NSError *writeError;
+        [data writeToFile:filePath options:NSDataWritingAtomic error:&writeError];
+        if (writeError)
+        {
+            if (error)
+                *error = writeError;
+            return NO;
+        }
+        
+        return YES;
+    }
+    if (error)
+        *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeEmptyJson userInfo:nil];
+    
+    return NO;
 }
 
 @end
 
 #pragma mark - OADataSettingsItemReader
 
-@interface OADataSettingsItemReader()
-
-@property (nonatomic, retain) OADataSettingsItem *dataSettingsItem;
-
-@end
-
 @implementation OADataSettingsItemReader
 
-- (instancetype)initWithItem:(OADataSettingsItem *)item
+- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    self = [super initWithItem:item];
-    _dataSettingsItem = item;
-    return self;
-}
-
-
-- (void)readFromStream:(NSInputStream *)inputStream
-{
-    NSOutputStream *buffer = [[NSOutputStream alloc] init];
-    uint8_t data[_buffer];
-    NSInteger nRead;
-    [buffer open];
-    while ([inputStream hasBytesAvailable]) {
-        nRead = [inputStream read:data maxLength:sizeof(data)];
-        if (nRead > 0) {
-            [buffer write:data maxLength:nRead];
-        }
+    NSError *readError;
+    NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
+    if (error && readError)
+    {
+        *error = readError;
+        return NO;
     }
-    _dataSettingsItem.data = [buffer propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
-    [buffer close];
+    self.item.data = data;
+    return YES;
 }
 
 @end
 
+#pragma mark - OADataSettingsItemWriter
 
-#pragma mark - OAFileSettingsItemReader
+@implementation OADataSettingsItemWriter
 
-@interface OAFileSettingsItemReader()
-
-@property (nonatomic, retain) OAFileSettingsItem *fileSettingsItem;
-
-
-@end
-
-@implementation OAFileSettingsItemReader
-
-- (instancetype)initWithItem:(OAFileSettingsItem *)item
+- (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    self = [super initWithItem:item];
-    _fileSettingsItem = item;
-    return self;
-}
-
-- (void)readFromStream:(NSInputStream *)inputStream
-{
-    NSOutputStream *output;
-    NSString *filePath = _fileSettingsItem.filePath;
-    if (![_fileSettingsItem exists] || [_fileSettingsItem shouldReplace])
-        output = [NSOutputStream outputStreamToFileAtPath:filePath append:NO];
-    else
-        output = [NSOutputStream outputStreamToFileAtPath:[_fileSettingsItem renameFile:filePath] append:NO];
-    uint8_t buffer[_buffer];
-    NSInteger count;
-    [output open];
-    @try {
-        while ([inputStream hasBytesAvailable]) {
-            count = [inputStream read:buffer maxLength:count];
-            if (count > 0) {
-                [output write:buffer maxLength:count];
-            }
-        }
-    } @finally {
-        [output close];
+    NSError *writeError;
+    [self.item.data writeToFile:filePath options:NSDataWritingAtomic error:&writeError];
+    if (error && writeError)
+    {
+        *error = writeError;
+        return NO;
     }
+    return YES;
 }
 
 @end
-
 
 #pragma mark - OADataSettingsItem
 
+@interface OADataSettingsItem()
+
+@property (nonatomic) NSString *name;
+
+@end
+
 @implementation OADataSettingsItem
+
+@dynamic type, name, fileName;
 
 - (instancetype) initWithName:(NSString *)name
 {
-    self = [super initWithType:EOAData name:name];
-    return self;
-}
+    self = [super init];
+    if (self)
+        self.name = name;
 
-- (instancetype) initWithJson:(NSDictionary *)json
-{
-    self = [super initWithType:EOAData json:json];
     return self;
 }
 
 - (instancetype) initWithData:(NSData *)data name:(NSString *)name
 {
-    self = [super initWithType:EOAData name:name];
-    _data = data;
+    self = [super init];
+    if (self)
+    {
+        self.name = name;
+        _data = data;
+    }
     return self;
 }
 
-- (NSString *) getFileName
+- (EOASettingsItemType) type
 {
-    return [[self getName] stringByAppendingString:@".dat"];
+    return EOASettingsItemTypeData;
+}
+
+- (NSString *) defaultFileExtension
+{
+    return @".dat";
+}
+
+- (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    NSError *readError;
+    [super readFromJson:json error:&readError];
+    if (readError)
+    {
+        if (error)
+            *error = readError;
+        return;
+    }
+    self.name = json[@"name"];
+    NSString *fileName = self.fileName;
+    if (fileName.length > 0)
+        self.name = [fileName stringByDeletingPathExtension];
 }
 
 - (OASettingsItemReader *) getReader
 {
-    OADataSettingsItemReader *reader = [[OADataSettingsItemReader alloc] initWithItem:self];
-    [reader readFromStream: super.inputStream];
-    return reader;
+   return [[OADataSettingsItemReader alloc] initWithItem:self];
 }
 
 - (OASettingsItemWriter *) getWriter
 {
-    NSInputStream *inputStream = [[NSInputStream alloc] initWithData:_data];
-    [self setInputStream:inputStream];
-    return [super getWriter];
+    return [[OADataSettingsItemWriter alloc] initWithItem:self];
 }
 
 @end
 
+#pragma mark - OAFileSettingsItemReader
+
+@implementation OAFileSettingsItemReader
+
+- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
+{
+    NSString *destFilePath = self.item.filePath;
+    if (![self.item exists] || [self.item shouldReplace])
+        destFilePath = self.item.filePath;
+    else
+        destFilePath = [self.item renameFile:destFilePath];
+
+    NSError *copyError;
+    BOOL res = [[NSFileManager defaultManager] copyItemAtPath:filePath toPath:destFilePath error:&copyError];
+    if (error && copyError)
+        *error = copyError;
+    
+    return res;
+}
+
+@end
+
+#pragma mark - OAFileSettingsItemWriter
+
+@implementation OAFileSettingsItemWriter
+
+- (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
+{
+    NSError *copyError;
+    [[NSFileManager defaultManager] copyItemAtPath:self.item.fileName toPath:filePath error:&copyError];
+    if (error && copyError)
+    {
+        *error = copyError;
+        return NO;
+    }
+    return YES;
+}
+
+@end
+
+#pragma mark - OAFileSettingsItemFileSubtype
+
+@implementation OAFileSettingsItemFileSubtype
+
++ (NSString *) getSubtypeName:(EOASettingsItemFileSubtype)subtype
+{
+    switch (subtype)
+    {
+        case EOASettingsItemFileSubtypeOther:
+            return @"other";
+        case EOASettingsItemFileSubtypeRoutingConfig:
+            return @"routing_config";
+        case EOASettingsItemFileSubtypeRenderingStyle:
+            return @"rendering_style";
+        case EOASettingsItemFileSubtypeObfMap:
+            return @"obf_map";
+        case EOASettingsItemFileSubtypeTilesMap:
+            return @"tiles_map";
+        case EOASettingsItemFileSubtypeGpx:
+            return @"gpx";
+        case EOASettingsItemFileSubtypeVoice:
+            return @"voice";
+        case EOASettingsItemFileSubtypeTravel:
+            return @"travel";
+        default:
+            return @"";
+    }
+}
+
++ (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype
+{
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    switch (subtype)
+    {
+        case EOASettingsItemFileSubtypeOther:
+        case EOASettingsItemFileSubtypeObfMap:
+        case EOASettingsItemFileSubtypeRoutingConfig:
+        case EOASettingsItemFileSubtypeRenderingStyle:
+        case EOASettingsItemFileSubtypeTravel:
+            return documentsPath;
+        case EOASettingsItemFileSubtypeTilesMap:
+            return [documentsPath stringByAppendingPathComponent:@"Tiles"];
+        case EOASettingsItemFileSubtypeGpx:
+            return [documentsPath stringByAppendingPathComponent:@"GPX"];
+        case EOASettingsItemFileSubtypeVoice:
+            return [documentsPath stringByAppendingPathComponent:@"Voice"];
+        default:
+            return @"";
+    }
+}
+
++ (EOASettingsItemFileSubtype) getSubtypeByName:(NSString *)name
+{
+    for (int i = 0; i < EOASettingsItemFileSubtypesCount; i++)
+    {
+        NSString *subtypeName = [self.class getSubtypeName:(EOASettingsItemFileSubtype)i];
+        if ([subtypeName isEqualToString:name])
+            return (EOASettingsItemFileSubtype)i;
+    }
+}
+
++ (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName
+{
+    NSString *name = fileName;
+    if ([fileName hasPrefix:@"/"]) {
+        name = [fileName substringFromIndex:1];
+    }
+    for (int i = 0; i < EOASettingsItemFileSubtypesCount; i++)
+    {
+        EOASettingsItemFileSubtype subtype = (EOASettingsItemFileSubtype)i;
+        switch (subtype) {
+            case EOASettingsItemFileSubtypeUnknown:
+            case EOASettingsItemFileSubtypeOther:
+                break;
+            case EOASettingsItemFileSubtypeObfMap:
+            {
+                if ([name hasSuffix:@".obf"])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeGpx:
+            {
+                if ([name hasSuffix:@".gpx"])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeVoice:
+            {
+                if ([name hasSuffix:@"tts.js"])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeTravel:
+            {
+                if ([name hasSuffix:@".sqlite"] && [name.lowercaseString containsString:@"travel"])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeTilesMap:
+            {
+                if ([name hasSuffix:@"tts.js"])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeRoutingConfig:
+            {
+                if ([name hasSuffix:@".xml"] && ![name hasSuffix:@".render.xml"])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeRenderingStyle:
+            {
+                if ([name hasSuffix:@".render.xml"])
+                    return subtype;
+                break;
+            }
+
+            default:
+            {
+                NSString *subtypeFolder = [self.class getSubtypeFolder:subtype];
+                if ([name hasPrefix:subtypeFolder])
+                    return subtype;
+                break;
+            }
+        }
+    }
+    return EOASettingsItemFileSubtypeUnknown;
+}
+
+@end
 
 #pragma mark - OAFileSettingsItem
 
+@interface OAFileSettingsItem()
+
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *docPath;
+@property (nonatomic) NSString *libPath;
+
+@end
+
 @implementation OAFileSettingsItem
 
-- (instancetype) initWithFile:(NSString *)filePath
+@dynamic name;
+
+- (void) commonInit
 {
-    self = [super initWithType:EOAFile name:filePath];
-    _filePath = filePath;
+    _docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    _libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+}
+
+- (instancetype) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error
+{
+    self = [super init];
+    if (self)
+    {
+        [self commonInit];
+        if ([filePath hasPrefix:_docPath])
+        {
+            self.name = [filePath stringByReplacingOccurrencesOfString:_docPath withString:@""];
+        }
+        else if ([filePath hasPrefix:_libPath])
+        {
+            self.name = [filePath stringByReplacingOccurrencesOfString:_libPath withString:@""];
+        }
+        else
+        {
+            if (error)
+                *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
+            return nil;
+        }
+            
+        _filePath = filePath;
+        _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath];
+        if (self.subtype == EOASettingsItemFileSubtypeUnknown)
+        {
+            if (error)
+                *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFileSubtype userInfo:nil];
+            return nil;
+        }
+    }
     return self;
 }
 
-- (instancetype) initWithJSON:(NSDictionary*)json
+- (instancetype _Nullable) initWithJson:(NSDictionary *)json error:(NSError * _Nullable *)error
 {
-    self = [super initWithType:EOAFile json:json];
-    
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    _filePath = [fileManager currentDirectoryPath];
-    
+    NSError *initError;
+    self = [super initWithJson:json error:&initError];
+    if (initError)
+    {
+        if (error)
+            *error = initError;
+        return nil;
+    }
+    if (self)
+    {
+        [self commonInit];
+        if (self.subtype == EOASettingsItemFileSubtypeOther)
+        {
+            _filePath = [_docPath stringByAppendingString:self.name];
+        }
+        else if (self.subtype == EOASettingsItemFileSubtypeUnknown)
+        {
+            if (error)
+                *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFileSubtype userInfo:nil];
+            return nil;
+        }
+        else
+        {
+            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingString:self.name];
+        }
+    }
     return self;
 }
 
-- (NSString *) getFileName
+- (EOASettingsItemType) type
 {
-    return [super getName];
+    return EOASettingsItemTypeFile;
+}
+
+- (NSString *) fileName
+{
+    return self.name;
 }
 
 - (BOOL) exists
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-
-    return [fileManager fileExistsAtPath: _filePath];
+    return [[NSFileManager defaultManager] fileExistsAtPath:_filePath];
 }
 
 - (NSString *) renameFile:(NSString*)filePath
 {
-    NSFileManager *filemaneger = [NSFileManager defaultManager];
-    NSError *error = nil;
-    [filemaneger moveItemAtPath:_filePath toPath: filePath error: &error];
-    return _filePath;
+    int number = 0;
+    NSString *path = [filePath stringByDeletingLastPathComponent];
+    NSString *fileName = [filePath lastPathComponent];
+    NSString *fileExt = [fileName pathExtension];
+    NSString *fileTitle = [fileName stringByDeletingPathExtension];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^(.+)(_(\\d+)\\..+)$" options:0 error:nil];
+    NSArray<NSTextCheckingResult *> *matches = [regex matchesInString:fileName options:0 range:NSMakeRange(0, fileName.length)];
+    if (matches.count == 1 && matches[0].numberOfRanges == 4)
+    {
+        NSRange numStrRange = [matches[0] rangeAtIndex:3];
+        number = [fileName substringWithRange:numStrRange].intValue;
+        fileTitle = [fileName substringToIndex:numStrRange.location - 1];
+    }
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    while (true)
+    {
+        number++;
+        NSString *newFilePath = [NSString stringWithFormat:@"%@_%d.%@", [path stringByAppendingPathComponent:fileTitle], number, fileExt];
+        if (![fileManager fileExistsAtPath:newFilePath])
+            return newFilePath;
+    }
+}
+
+- (NSString *) getPluginPath
+{
+    if (self.pluginId.length > 0)
+        return [[_libPath stringByAppendingPathComponent:@"Plugins"] stringByAppendingPathComponent:self.pluginId];
+    
+    return @"";
+}
+
+- (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    NSError *readError;
+    [super readFromJson:json error:&readError];
+    if (readError)
+    {
+        if (error)
+            *error = readError;
+        return;
+    }
+    self.name = json[@"name"];
+    NSString *fileName = self.fileName;
+    if (self.subtype == EOASettingsItemFileSubtypeUnknown)
+    {
+        NSString *subtypeStr = json[@"subtype"];
+        if (subtypeStr.length > 0)
+            _subtype = [OAFileSettingsItemFileSubtype getSubtypeByName:subtypeStr];
+        else if (fileName.length > 0)
+            _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:fileName];
+    }
+    if (fileName.length > 0)
+    {
+        if (self.subtype == EOASettingsItemFileSubtypeOther)
+            self.name = fileName;
+        else if (self.subtype != EOASettingsItemFileSubtypeUnknown)
+            self.name = [fileName lastPathComponent];
+    }
+}
+
+- (void) writeToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    NSError *writeError;
+    [super writeToJson:json error:&writeError];
+    if (writeError)
+    {
+        if (error)
+            *error = writeError;
+        return;
+    }
+    if (self.subtype != EOASettingsItemFileSubtypeUnknown)
+        json[@"subtype"] = [OAFileSettingsItemFileSubtype getSubtypeName:self.subtype];
 }
 
 - (OASettingsItemReader *) getReader
 {
-    OAFileSettingsItemReader *reader = [[OAFileSettingsItemReader alloc] initWithItem:self];
-    [reader readFromStream: super.inputStream];
-    return reader;
+    return [[OAFileSettingsItemReader alloc] initWithItem:self];
 }
 
 - (OASettingsItemWriter *) getWriter
 {
-    NSInputStream *inputStream = [NSInputStream inputStreamWithFileAtPath:_filePath];
-    @try {
-        [self setInputStream:inputStream];
-    } @catch (NSException *exception) {
-        NSLog(@"Failed to set input stream from file: %@", _filePath);
-    }
-    return [super getWriter];
+    return [[OAFileSettingsItemWriter alloc] initWithItem:self];
 }
 
 @end
 
+#pragma mark - OAResourcesSettingsItem
+
+@interface OAResourcesSettingsItem()
+
+@property (nonatomic) NSString *filePath;
+@property (nonatomic) NSString *fileName;
+@property (nonatomic) EOASettingsItemFileSubtype subtype;
+
+@end
+
+@implementation OAResourcesSettingsItem
+
+@dynamic filePath, fileName, subtype;
+
+- (instancetype _Nullable) initWithJson:(NSDictionary *)json error:(NSError * _Nullable *)error
+{
+    NSError *initError;
+    self = [super initWithJson:json error:&initError];
+    if (initError)
+    {
+        if (error)
+            *error = initError;
+        return nil;
+    }
+    if (self)
+    {
+        self.shouldReplace = YES;
+        [self commonInit];
+        NSString *fileName = self.fileName;
+        if (fileName.length > 0 && ![fileName hasSuffix:@"/"])
+            self.fileName = [fileName stringByAppendingString:@"/"];
+    }
+    return self;
+}
+
+- (EOASettingsItemType) type
+{
+    return EOASettingsItemTypeResources;
+}
+
+- (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    self.subtype = EOASettingsItemFileSubtypeOther;
+    NSError *readError;
+    [super readFromJson:json error:&readError];
+    if (readError)
+    {
+        if (error)
+            *error = readError;
+        return;
+    }
+}
+
+- (void) writeToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    NSError *writeError;
+    [super writeToJson:json error:&writeError];
+    if (writeError)
+    {
+        if (error)
+            *error = writeError;
+        return;
+    }
+    NSString *fileName = self.fileName;
+    if (fileName.length > 0)
+    {
+        if ([fileName hasSuffix:@"/"])
+        {
+            fileName = [fileName substringToIndex:fileName.length - 1];
+        }
+        json[@"file"] = fileName;
+    }
+}
+
+- (BOOL) applyFileName:(NSString *)fileName
+{
+    if ([fileName hasSuffix:@"/"])
+        return NO;
+
+    NSString *itemFileName = self.fileName;
+    if ([itemFileName hasSuffix:@"/"])
+    {
+        if ([fileName hasPrefix:itemFileName])
+        {
+            self.filePath = [[self getPluginPath] stringByAppendingString:fileName];
+            return YES;
+        }
+        else
+        {
+            return NO;
+        }
+    }
+    else
+    {
+        return [super applyFileName:fileName];
+    }
+}
+
+- (OASettingsItemWriter *) getWriter
+{
+    return nil;
+}
+
+@end
 
 #pragma mark - OACollectionSettingsItem
 
+@interface OACollectionSettingsItem()
+
+@property (nonatomic) NSMutableArray<id> *items;
+@property (nonatomic) NSMutableArray<id> *appliedItems;
+@property (nonatomic) NSMutableArray<id> *duplicateItems;
+@property (nonatomic) NSMutableArray<id> *existingItems;
+
+@end
+
 @implementation OACollectionSettingsItem
 
-- (instancetype) initWithType:(EOASettingsItemType)type items:(NSMutableArray<id>*) items
+- (void) initialization
 {
-    self = [super initWithType:type];
-    _items = items;
+    [super initialization];
+    
+    self.items = [NSMutableArray array];
+    self.appliedItems = [NSMutableArray array];
+    self.duplicateItems = [NSMutableArray array];
+}
+
+- (instancetype) initWithItems:(NSArray<id>*) items
+{
+    self = [super init];
+    if (self)
+        _items = items.mutableCopy;
+    
     return self;
 }
 
-- (instancetype) initWithType:(EOASettingsItemType)type json:(NSDictionary *)json
+- (EOASettingsItemType) type
 {
-    self = [super initWithType:type json:json];
-    return self;
+    return EOASettingsItemTypeUnknown;
 }
 
-- (NSMutableArray<id> *) excludeDuplicateItems
+- (NSArray<id> *) processDuplicateItems
 {
-    if (!_items.count)
+    if (_items.count > 0)
     {
         for (id item in _items)
             if ([self isDuplicate:item])
@@ -567,187 +1131,77 @@ static const NSInteger _buffer = 1024;
     return _duplicateItems;
 }
 
+- (NSArray<id> *) getNewItems
+{
+    NSMutableArray<id> *res = [NSMutableArray arrayWithArray:_items];
+    [res removeObjectsInArray:_duplicateItems];
+    return res;
+}
+
 - (BOOL) isDuplicate:(id)item
 {
     return NO;
 }
 
-- (id) renameItem:(id) item
+- (id) renameItem:(id)item
 {
     return nil;
 }
 
 @end
 
-#pragma mark - OAQuickActionSettingsItemReader
+#pragma mark - OAQuickActionsSettingsItem
 
-@interface OAQuickActionSettingsItemReader()
+@interface OAQuickActionsSettingsItem()
 
-@property (nonatomic, retain) OAQuickActionSettingsItem *quickActionSettingsItem;
-
-@end
-
-@implementation OAQuickActionSettingsItemReader
-
-- (instancetype)initWithItem:(OAQuickActionSettingsItem *)item
-{
-    self = [super initWithItem:item];
-    _quickActionSettingsItem = item;
-    return self;
-}
-
-- (void)readFromStream:(NSInputStream *)inputStream
-{
-    NSMutableString *buf = [[NSMutableString alloc] init];
-    @try {
-        uint8_t buffer[_buffer];
-        NSInteger len;
-        while ([inputStream hasBytesAvailable]) {
-            len = [inputStream read:buffer maxLength:sizeof(buffer)];
-            if (len > 0) {
-                [buf appendString: [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding]];
-            }
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"Cannot read json body %@", exception);
-    }
-    NSString *jsonStr = [buf description];
-    if (![jsonStr length])
-        NSLog(@"Cannot find json body");
-    @try {
-        NSError *jsonError;
-        NSData* jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&jsonError];
-        OAQuickActionRegistry *quickActionRegistry = [OAQuickActionRegistry sharedInstance];
-        NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
-        for (NSData* item in itemsJson)
-        {
-            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:item options:kNilOptions error:&jsonError];
-            NSString *name = [object objectForKey:@"name"];
-            OAQuickAction *quickAction = NULL;
-//            if ([object objectForKey:@"actionType"])
-//                //quickAction = quickActionRegistry .newActionByStringType(object.getString("actionType"));
-//                //quickAction = [quickActionRegistry ];
-//            else if ([object objectForKey:@"type"])
-//                //quickAction = quickActionRegistry .newActionByType(object.getInt("type"));
-//                //quickAction = [quickActionRegistry ];
-            if (quickAction != NULL)
-            {
-                NSDictionary *params = [json objectForKey:@"params"];
-                if (!name.length)
-                    [quickAction setName:name];
-                [quickAction setParams:params];
-                [_quickActionSettingsItem.items addObject:quickAction];
-            }
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"Json parse error %@", exception);
-    }
-}
+@property (nonatomic) NSMutableArray<OAQuickAction *> *items;
+@property (nonatomic) NSMutableArray<OAQuickAction *> *appliedItems;
+@property (nonatomic) NSMutableArray<NSString *> *warnings;
 
 @end
 
-#pragma mark - OAQuickActionSettingsItemWriter
-
-@interface OAQuickActionSettingsItemWriter()
-
-@property (nonatomic, retain) OAQuickActionSettingsItem *quickActionSettingsItem;
-
-@end
-
-@implementation OAQuickActionSettingsItemWriter
-
-- (instancetype)initWithItem:(OAQuickActionSettingsItem *)item
+@implementation OAQuickActionsSettingsItem
 {
-    self = [super initWithItem:item];
-    _quickActionSettingsItem = item;
-    return self;
+    OAQuickActionRegistry *_actionsRegistry;
 }
 
-- (BOOL)writeToStream:(NSOutputStream *)outputStream
+@dynamic items, appliedItems, warnings;
+
+- (void) initialization
 {
-    NSMutableDictionary *json = [[NSMutableDictionary alloc]init];
-    NSMutableArray *jsonArray = [[NSMutableArray alloc]init];
-    if (!_quickActionSettingsItem.items.count)
-    {
-        @try {
-            for (OAQuickAction *action in _quickActionSettingsItem.items)
-            {
-                NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc]init];
-                [jsonObject setValue:[action getName] forKey:@"name"];
-                [jsonObject setValue:[NSString stringWithFormat:@"%ld", [action getType]] forKey:@"actionType"];
-                [jsonObject setValue:[action getParams] forKey:@"params"];
-                [jsonArray addObject:jsonObject];
-            }
-            [json setValue:jsonArray forKey:@"items"];
-        } @catch (NSException *exception) {
-            NSLog(@"Failed write to json %@", exception);
-        }
-    }
-    if ([json count] > 0)
-    {
-        @try {
-            NSError *jsonError;
-            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&jsonError];
-            [outputStream write:(uint8_t *)[jsonData bytes] maxLength:[jsonData length]];
-        } @catch (NSException *exception) {
-            NSLog(@"Failed to write json to stream %@", exception);
-        }
-        return YES;
-    }
-    return NO;
+    [super initialization];
+    _actionsRegistry = [OAQuickActionRegistry sharedInstance];
+    self.existingItems = [_actionsRegistry getQuickActions].mutableCopy;
 }
 
-@end
-
-
-#pragma mark - OAQuickActionSettingsItem
-
-@interface OAQuickActionSettingsItem()
-
-@property (nonatomic, retain) OAQuickActionRegistry *actionRegistry;
-
-@end
-
-@implementation OAQuickActionSettingsItem
-
-- (instancetype) initWithItems:(NSMutableArray<id> *)items
+- (EOASettingsItemType) type
 {
-    self = [super initWithType:EOAQuickAction items:items];
-    _actionRegistry = [OAQuickActionRegistry sharedInstance];
-    self.existingItems = _actionRegistry.getQuickActions;
-    return self;
-}
-
-- (instancetype) initWithJSON:(NSDictionary *)json
-{
-    self = [super initWithType:EOAQuickAction json:json];
-    _actionRegistry = [OAQuickActionRegistry sharedInstance];
-    self.existingItems = _actionRegistry.getQuickActions;
-    return self;
+    return EOASettingsItemTypeQuickActions;
 }
 
 - (BOOL) isDuplicate:(OAQuickAction *)item
 {
-    return ![_actionRegistry isNameUnique:item];
+    return ![_actionsRegistry isNameUnique:item];
 }
 
 - (OAQuickAction *) renameItem:(OAQuickAction *)item
 {
-    return [_actionRegistry generateUniqueName:item];
+    return [_actionsRegistry generateUniqueName:item];
 }
 
 - (void) apply
 {
-    if (!self.items.count || !self.duplicateItems.count)
+    NSArray<OAQuickAction *> *newItems = [self getNewItems];
+    if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
-        NSMutableArray *newActions = [NSMutableArray arrayWithObjects: self.existingItems, nil];
-        if (!self.duplicateItems.count)
+        self.appliedItems = [NSMutableArray arrayWithArray:newItems];
+        NSMutableArray<OAQuickAction *> *newActions = [NSMutableArray arrayWithArray:self.existingItems];
+        if (self.duplicateItems.count > 0)
         {
-            if ([self shouldReplace])
+            if (self.shouldReplace)
             {
-                for (OAQuickAction * duplicateItem in self.duplicateItems)
-                    for (OAQuickAction * savedAction in self.existingItems)
+                for (OAQuickAction *duplicateItem in self.duplicateItems)
+                    for (OAQuickAction *savedAction in self.existingItems)
                         if ([duplicateItem.name isEqualToString:savedAction.name])
                             [newActions removeObject:savedAction];
             }
@@ -756,10 +1210,10 @@ static const NSInteger _buffer = 1024;
                 for (OAQuickAction * duplicateItem in self.duplicateItems)
                     [self renameItem:duplicateItem];
             }
-            [newActions addObjectsFromArray:self.duplicateItems];
+            [self.appliedItems addObjectsFromArray:self.duplicateItems];
         }
-        [newActions addObjectsFromArray:self.items];
-        [_actionRegistry updateQuickActions:newActions];
+        [newActions addObjectsFromArray:self.appliedItems];
+        [_actionsRegistry updateQuickActions:newActions];
     }
 }
 
@@ -769,33 +1223,63 @@ static const NSInteger _buffer = 1024;
     return YES;
 }
 
-- (NSString *) getName
+- (NSString *) name
 {
     return @"quick_actions";
-}
-
-- (NSString *) getPublicName
-{
-    return @"quick_actions";
-}
-
-- (NSString *) getFileName
-{
-    return [[self getName] stringByAppendingString:@".dat"];
 }
 
 - (OASettingsItemReader *) getReader
 {
-    OAQuickActionSettingsItemReader *reader = [[OAQuickActionSettingsItemReader alloc] initWithItem:self];
-    //[reader readFromStream: inputStream];
-    return reader;
+    return [self getJsonReader];
 }
 
-- (OASettingsItemWriter *) getWriter
+- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
-    OAQuickActionSettingsItemWriter *writer = [[OAQuickActionSettingsItemWriter alloc] initWithItem:self];
-    //[writer writeToStream: inputStream];
-    return writer;
+    NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
+    if (itemsJson.count == 0)
+        return;
+    
+    for (id object in itemsJson)
+    {
+        NSString *name = object[@"name"];
+        NSString *actionType = object[@"actionType"];
+        NSString *type = object[@"type"];
+        OAQuickAction *quickAction = nil;
+        if (actionType)
+            quickAction = [_actionsRegistry newActionByStringType:actionType];
+        else if (type)
+            quickAction = [_actionsRegistry newActionByType:type.intValue];
+        
+        if (quickAction)
+        {
+            NSDictionary *params = object[@"params"];
+            if (name.length > 0)
+                [quickAction setName:name];
+            
+            [quickAction setParams:params];
+            [self.items addObject:quickAction];
+        } else {
+            [self.warnings addObject:OALocalizedString(@"settings_item_read_error", self.name)];
+        }
+    }
+}
+
+- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    NSMutableArray *jsonArray = [NSMutableArray array];
+    if (self.items.count > 0)
+    {
+        for (OAQuickAction *action in self.items)
+        {
+            NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
+            // TODO!!!
+            //jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
+            //jsonObject[@"actionType"] = [[action getActionType] getStringId];
+            jsonObject[@"params"] = [action getParams];
+            [jsonArray addObject:jsonObject];
+        }
+        json[@"items"] = jsonArray;
+    }
 }
 
 @end
@@ -803,77 +1287,67 @@ static const NSInteger _buffer = 1024;
 
 #pragma mark - OAPoiUiFilterSettingsItem
 
+@interface OAPoiUiFilterSettingsItem()
+
+@property (nonatomic) NSMutableArray<OAPOIUIFilter *> *items;
+@property (nonatomic) NSMutableArray<OAPOIUIFilter *> *appliedItems;
+
+@end
+
 @implementation OAPoiUiFilterSettingsItem
 {
-     OsmAndAppInstance _app;
+    OAPOIHelper *_helper;
+    OAPOIFiltersHelper *_filtersHelper;
 }
 
-- (instancetype) initWithItem:(NSMutableArray<id>*)items
-{
-    self = [super initWithType:EOAPoiUIFilters items:items];
-    _app = [OsmAndApp instance];
-    //existingItems = app.getPoiFilters().getUserDefinedPoiFilters(false);
-    //self.existingItems =
-    return self;
-}
+@dynamic items, appliedItems;
 
-- (instancetype) initWithJSON:(NSDictionary*)json
+- (void) initialization
 {
-    self = [super initWithType:EOAPoiUIFilters json:json];
-    _app = [OsmAndApp instance];
-    //existingItems = app.getPoiFilters().getUserDefinedPoiFilters(false);
-    //self.existingItems =
-    return self;
+    _helper = [OAPOIHelper sharedInstance];
+    _filtersHelper = [OAPOIFiltersHelper sharedInstance];
+    self.existingItems = [_filtersHelper getUserDefinedPoiFilters].mutableCopy;
 }
 
 - (void) apply
 {
-    if (!self.items.count || !self.duplicateItems.count)
+    NSArray<OAPOIUIFilter *> *newItems = [self getNewItems];
+    if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
-        for (OAPOIUIFilter* duplicate in self.duplicateItems)
-            [self.items addObject:[self shouldReplace] ? duplicate : [self renameItem:duplicate]];
-        for (OAPOIUIFilter* filter in self.items)
-        {
-            //app.getPoiFilters().createPoiFilter(filter, false);
-            
-        }
-        //app.getSearchUICore().refreshCustomPoiFilters();
+        self.appliedItems = [NSMutableArray arrayWithArray:newItems];
+        for (OAPOIUIFilter *duplicate in self.duplicateItems)
+            [self.appliedItems addObject:self.shouldReplace ? duplicate : [self renameItem:duplicate]];
         
+        for (OAPOIUIFilter *filter in self.appliedItems)
+            [_filtersHelper createPoiFilter:filter];
+
+        [[OAQuickSearchHelper instance] refreshCustomPoiFilters];
     }
 }
 
-- (BOOL) isDuplicate:(OAPOIUIFilter*)item
+- (BOOL) isDuplicate:(OAPOIUIFilter *)item
 {
     NSString *savedName = item.name;
-    for (OAPOIUIFilter* filter in self.existingItems)
-    {
+    for (OAPOIUIFilter *filter in self.existingItems)
         if ([filter.name isEqualToString:savedName])
             return YES;
-    }
+
     return NO;
 }
 
 - (OAPOIUIFilter *) renameItem:(OAPOIUIFilter *)item
 {
-    NSInteger number = 0;
-    while (true) {
+    int number = 0;
+    while (true)
+    {
         number++;
-        //PoiUIFilter renamedItem = new PoiUIFilter(item,
-        //      item.getName() + "_" + number,
-        //      item.getFilterId() + "_" + number);
-        OAPOIUIFilter *renamedItem = [[OAPOIUIFilter alloc] init];
-        if (![self isDuplicate:renamedItem]) {
+        OAPOIUIFilter *renamedItem = [[OAPOIUIFilter alloc] initWithFilter:item name:[NSString stringWithFormat:@"%@_%d", item.name, number] filterId:[NSString stringWithFormat:@"%@_%d", item.filterId, number]];
+        if (![self isDuplicate:renamedItem])
             return renamedItem;
-        }
     }
 }
 
-- (NSString *)getName
-{
-    return @"poi_ui_filters";
-}
-
-- (NSString *)getPublicName
+- (NSString *) name
 {
     return @"poi_ui_filters";
 }
@@ -883,144 +1357,49 @@ static const NSInteger _buffer = 1024;
     return YES;
 }
 
-- (NSString *) getFileName
-{
-    return [[self getName] stringByAppendingString:@".json"];
-}
-
 - (OASettingsItemReader *) getReader
 {
-    OAPoiUiFilterSettingsItemReader *reader = [[OAPoiUiFilterSettingsItemReader alloc] initWithItem:self];
-    //[reader readFromStream: inputStream];
-    return reader;
+    return [self getJsonReader];
 }
 
-- (OASettingsItemWriter *) getWriter
+- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
-    OAPoiUiFilterSettingsItemWriter *writer = [[OAPoiUiFilterSettingsItemWriter alloc] initWithItem:self];
-    //[writer writeToStream: inputStream];
-    return writer;
-}
-
-@end
-
-#pragma mark - OAPoiUiFilterSettingsItemReader
-
-@interface OAPoiUiFilterSettingsItemReader()
-
-@property (nonatomic, retain) OAPoiUiFilterSettingsItem *poiUiFilterSettingsItem;
-
-@end
-
-@implementation OAPoiUiFilterSettingsItemReader
-
-- (instancetype)initWithItem:(OAPoiUiFilterSettingsItem *)item
-{
-    self = [super initWithItem:item];
-    _poiUiFilterSettingsItem = item;
-    return self;
-}
-
-- (void)readFromStream:(NSInputStream *)inputStream
-{
-    NSMutableString *buf = [[NSMutableString alloc] init];
-    @try {
-        uint8_t buffer[_buffer];
-        NSInteger len;
-        while ([inputStream hasBytesAvailable]) {
-            len = [inputStream read:buffer maxLength:sizeof(buffer)];
-            if (len > 0) {
-                [buf appendString: [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding]];
-            }
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"Cannot read json body %@", exception);
-    }
-    NSString *jsonStr = [buf description];
-    if (![jsonStr length])
-        NSLog(@"Cannot find json body");
-    @try {
-        NSError *jsonError;
-        NSData* jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&jsonError];
-        NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
-        //MapPoiTypes poiTypes = app.getPoiTypes();
-        for (NSData* item in itemsJson)
+    NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
+    if (itemsJson.count == 0)
+        return;
+    
+    for (id object in itemsJson)
+    {
+        NSString *name = object[@"name"];
+        NSString *filterId = object[@"filterId"];
+        NSDictionary<NSString *, NSMutableSet<NSString *> *> *acceptedTypes = object[@"acceptedTypes"];
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypesDone = [NSMapTable strongToStrongObjectsMapTable];
+        for (NSString *key in acceptedTypes.allKeys)
         {
-            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:item options:kNilOptions error:&jsonError];
-            NSString *name = [object objectForKey:@"name"];
-            NSString *filterId = [object objectForKey:@"filterId"];
-            NSString *acceptedTypesString = [object objectForKey:@"acceptedTypes"];
-            //NSDictionary acceptedTypes = ;
-            //HashMap<String, LinkedHashSet<String>> acceptedTypes = gson.fromJson(acceptedTypesString, type);
-            //Map<PoiCategory, LinkedHashSet<String>> acceptedTypesDone = new HashMap<>();
-            //for (Map.Entry<String, LinkedHashSet<String>> mapItem : acceptedTypes.entrySet()) {
-            //    final PoiCategory a = poiTypes.getPoiCategoryByName(mapItem.getKey());
-            //    acceptedTypesDone.put(a, mapItem.getValue());
-            //}
-            //OAPoiUIFilter *filter =  new PoiUIFilter(name, filterId, acceptedTypesDone, app);
-            OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] init];
-            [_poiUiFilterSettingsItem.items addObject:filter];
-            
-            
+            NSMutableSet<NSString *> *value = acceptedTypes[key];
+            OAPOICategory *a = [_helper getPoiCategoryByName:key];
+            [acceptedTypesDone setObject:value forKey:a];
         }
-    } @catch (NSException *exception) {
-        NSLog(@"Json parse error %@", exception);
+        OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithName:name filterId:filterId acceptedTypes:acceptedTypesDone];
+        [self.items addObject:filter];
     }
 }
 
-
-@end
-
-#pragma mark - OAPoiUiFilterSettingsItemWriter
-
-@interface OAPoiUiFilterSettingsItemWriter()
-
-@property (nonatomic, retain) OAPoiUiFilterSettingsItem *poiUiFilterSettingsItem;
-
-@end
-
-@implementation OAPoiUiFilterSettingsItemWriter
-
-- (instancetype)initWithItem:(OAPoiUiFilterSettingsItem *)item
+- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
-    self = [super initWithItem:item];
-    _poiUiFilterSettingsItem = item;
-    return self;
-}
-
-- (BOOL)writeToStream:(NSOutputStream *)outputStream
-{
-    NSMutableDictionary *json = [[NSMutableDictionary alloc]init];
-    NSMutableArray *jsonArray = [[NSMutableArray alloc]init];
-    if (!_poiUiFilterSettingsItem.items.count)
+    NSMutableArray *jsonArray = [NSMutableArray array];
+    if (self.items.count > 0)
     {
-        @try {
-            for (OAPOIUIFilter *filter in _poiUiFilterSettingsItem.items)
-            {
-                NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc]init];
-                [jsonObject setValue:[filter getName] forKey:@"name"];
-                [jsonObject setValue:filter.filterId forKey:@"filterId"];
-                [jsonObject setValue:[filter getAcceptedTypes] forKey:@"acceptedTypes"];
-                [jsonArray addObject:jsonObject];
-            }
-            [json setValue:jsonArray forKey:@"items"];
-        } @catch (NSException *exception) {
-            NSLog(@"Failed write to json %@", exception);
+        for (OAPOIUIFilter *filter in self.items)
+        {
+            NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
+            jsonObject[@"name"] = filter.name;
+            jsonObject[@"filterId"] = filter.filterId;
+            jsonObject[@"acceptedTypes"] = [filter getAcceptedTypes];
+            [jsonArray addObject:jsonObject];
         }
+        json[@"items"] = jsonArray;
     }
-    if ([json count] > 0)
-    {
-        @try {
-            NSError *jsonError;
-            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&jsonError];
-            [outputStream write:(uint8_t *)[jsonData bytes] maxLength:[jsonData length]];
-        } @catch (NSException *exception) {
-            NSLog(@"Failed to write json to stream %@", exception);
-        }
-        return YES;
-    }
-    return NO;
 }
 
 @end
@@ -1029,176 +1408,165 @@ static const NSInteger _buffer = 1024;
 
 @interface OAMapSourcesSettingsItem()
 
-@property (nonatomic, retain) NSMutableArray<NSString *> *existingItemsNames;
+@property (nonatomic) NSMutableArray<LocalResourceItem *> *items;
+@property (nonatomic) NSMutableArray<LocalResourceItem *> *appliedItems;
+@property (nonatomic) NSMutableArray<LocalResourceItem *> *existingItems;
 
 @end
 
 @implementation OAMapSourcesSettingsItem
 {
-    OsmAndAppInstance _app;
+    QHash<QString, std::shared_ptr<OsmAnd::IOnlineTileSources::Source>> _newSources;
+    NSMutableDictionary<NSString *, NSMutableDictionary *> *_newSqliteData;
+    QHash<QString, std::shared_ptr<OsmAnd::IOnlineTileSources::Source>> _existingSources;
+    NSMutableDictionary<NSString *, NSMutableDictionary *> *_existingSqliteData;
 }
 
-- (instancetype) initWithItems:(NSMutableArray<id>*)items
+@dynamic items, appliedItems, existingItems;
+
+- (void) initialization
 {
-    self = [super initWithType:EOAMapSources items:items];
-    _app = [OsmAndApp instance];
+    _newSqliteData = [NSMutableDictionary dictionary];
     
+    OsmAndAppInstance app = [OsmAndApp instance];
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
     {
         SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
         item.title = [[filePath.lastPathComponent stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         item.fileName = filePath.lastPathComponent;
-        [_existingItemsNames addObject:item.fileName];
+        item.path = filePath;
+        item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
+        [self.existingItems addObject:item];
     }
-    const auto& resource = _app.resourcesManager->getResource(QStringLiteral("online_tiles"));
+    const auto& resource = app.resourcesManager->getResource(QStringLiteral("online_tiles"));
     if (resource != nullptr)
     {
         const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
         for(const auto& onlineTileSource : onlineTileSources->getCollection())
         {
             OnlineTilesResourceItem* item = [[OnlineTilesResourceItem alloc] init];
-            
             item.title = onlineTileSource->name.toNSString();
-            item.path = [_app.cachePath stringByAppendingPathComponent:item.title];
-            [_existingItemsNames addObject:item.title];
+            item.path = [app.cachePath stringByAppendingPathComponent:item.title];
+            [self.existingItems addObject:item];
         }
     }
-    return self;
 }
 
-- (instancetype) initWithJSON:(NSDictionary *)json
+- (EOASettingsItemType) type
 {
-    self = [super initWithType:EOAMapSources json:json];
-    _app = [OsmAndApp instance];
-    
-    for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
-    {
-        SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
-        item.title = [[filePath.lastPathComponent stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-        item.fileName = filePath.lastPathComponent;
-        [_existingItemsNames addObject:item.fileName];
-    }
-    const auto& resource = _app.resourcesManager->getResource(QStringLiteral("online_tiles"));
-    if (resource != nullptr)
-    {
-        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
-        for(const auto& onlineTileSource : onlineTileSources->getCollection())
-        {
-            OnlineTilesResourceItem* item = [[OnlineTilesResourceItem alloc] init];
-            
-            item.title = onlineTileSource->name.toNSString();
-            item.path = [_app.cachePath stringByAppendingPathComponent:item.title];
-            [_existingItemsNames addObject:item.title];
-        }
-    }
-    return self;
+    return EOASettingsItemTypeMapSources;
 }
-
 
 - (void) apply
 {
-    if (!self.items.count || !self.duplicateItems.count)
+    NSArray<LocalResourceItem *> *newItems = [self getNewItems];
+    if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        self.appliedItems = [NSMutableArray arrayWithArray:newItems];
         if ([self shouldReplace])
         {
-            for (LocalResourceItem *tileSource in self.duplicateItems)
+            for (LocalResourceItem *localItem in self.duplicateItems)
             {
-                if ([tileSource isKindOfClass: SqliteDbResourceItem.class])
+                if ([localItem isKindOfClass:SqliteDbResourceItem.class])
                 {
-                    SqliteDbResourceItem* item = (SqliteDbResourceItem *)tileSource;
-                    
-                    NSFileManager *fileManager = [NSFileManager defaultManager];
-
-                    if (item.path != NULL && [fileManager fileExistsAtPath: item.path])
+                    SqliteDbResourceItem *item = (SqliteDbResourceItem *)localItem;
+                    if (item.path && [fileManager fileExistsAtPath:item.path])
                     {
-                        [[OAMapCreatorHelper alloc] removeFile:item.path];
-                        [self.items addObject:tileSource];
+                        [[OAMapCreatorHelper sharedInstance] removeFile:item.path];
+                        [self.appliedItems addObject:localItem];
                     }
                 }
-                else if ([tileSource isKindOfClass: OnlineTilesResourceItem.class])
+                else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
                 {
-                    OnlineTilesResourceItem* item = (OnlineTilesResourceItem *)tileSource;
-                    
-                    NSFileManager *fileManager = [NSFileManager defaultManager];
-                    BOOL isDir;
-                    if (item.path != NULL && [fileManager fileExistsAtPath: item.path isDirectory:&isDir] && isDir)
+                    OnlineTilesResourceItem *item = (OnlineTilesResourceItem *)localItem;
+                    if (item.path)
                     {
-                        [[OAMapCreatorHelper alloc] removeFile:item.path];
-                        [self.items addObject:tileSource];
+                        [[NSFileManager defaultManager] removeItemAtPath:item.path error:nil];
+                        app.resourcesManager->uninstallTilesResource(QString::fromNSString([item.path lastPathComponent]));
+                        [self.appliedItems addObject:localItem];
                     }
                 }
             }
         }
         else
         {
-            for (LocalResourceItem *tileSource in self.duplicateItems)
-                [self.items addObject:tileSource];
+            for (LocalResourceItem *localItem in self.duplicateItems)
+                [self.appliedItems addObject:[self renameItem:localItem]];
         }
-//        for (LocalResourceItem *tileSource in self.duplicateItems)
-//        {
-//            if ([tileSource isKindOfClass: OnlineTilesResourceItem.class])
-//            {
-//                //app.getSettings().installTileSource((TileSourceManager.TileSourceTemplate) tileSource);
-//                _app.
-//            }
-//            else if ([tileSource isKindOfClass: SqliteDbResourceItem.class])
-//            {
-//                //((SQLiteTileSource) tileSource).createDataBase();
-//                //[(OASQLiteTileSource*) tileSource createDataBase]; -> installFile
-//            }
-//        }
+        for (LocalResourceItem *localItem in self.appliedItems)
+        {
+            if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+            {
+                NSMutableDictionary *params = _newSqliteData[localItem.title];
+                if (params)
+                {
+                    NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:localItem.title] stringByAppendingPathExtension:@"sqlitedb"];
+                    if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
+                        [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
+                }
+            }
+            else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+            {
+                const auto source = _newSources.value(QString::fromNSString(localItem.title));
+                if (source)
+                {
+                    OsmAnd::OnlineTileSources::installTileSource(source, QString::fromNSString(app.cachePath));
+                    app.resourcesManager->installTilesResource(source);
+                }
+            }
+        }
     }
 }
 
-//
-////public ITileSource renameItem(@NonNull ITileSource item) {
-//- (LocalResourceItem *)renameItem:(LocalResourceItem *)item
-//{
-//    NSInteger number  = 0;
-//    while (true)
-//    {
-//        number++;
-//        //if (item instanceof SQLiteTileSource) {
-//        if ([item isKindOfClass:SqliteDbResourceItem.class])
-//        {
-//            //SQLiteTileSource oldItem = (SQLiteTileSource) item;
-//            LocalResourceItem *oldItem = (LocalResourceItem *)item;
-//            //SQLiteTileSource renamedItem = new SQLiteTileSource(
-//            //        oldItem,
-//            //        oldItem.getName() + "_" + number,
-//            //        app);
-//            SqliteDbResourceItem *renamedItem = [[SqliteDbResourceItem alloc] ]; //???
-//            if (![self isDuplicate:renamedItem])
-//                return renamedItem;
-//        }
-//        //} else if (item instanceof TileSourceManager.TileSourceTemplate) {
-//        else if ([item isKindOfClass: .class])
-//        {
-//            //TileSourceManager.TileSourceTemplate oldItem = (TileSourceManager.TileSourceTemplate) item;
-//            //oldItem.setName(oldItem.getName() + "_" + number);
-//            if (![self isDuplicate:<#(id)#>])
-//                return ;
-//        }
-//    }
-//}
-
-//- (BOOL) isDuplicate:(LocalResourceItem *)item
-//{
-//    for (NSString * name in _existingItemsNames)
-//    {
-//        if ([name isEqualToString:item.name])
-//            return YES;
-//    }
-//    return NO;
-//}
-
-
-- (NSString *)getName
+- (LocalResourceItem *) renameItem:(LocalResourceItem *)localItem
 {
-    return @"map_sources";
+    int number = 0;
+    while (true)
+    {
+        number++;
+        if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+        {
+            SqliteDbResourceItem *oldItem = (SqliteDbResourceItem *)localItem;
+            SqliteDbResourceItem *renamedItem = [[SqliteDbResourceItem alloc] init];
+            renamedItem.fileName = [NSString stringWithFormat:@"%@_%d", oldItem.fileName, number];
+            if (![self isDuplicate:renamedItem])
+            {
+                renamedItem.title = [[renamedItem.fileName stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                renamedItem.path = oldItem.path;
+                renamedItem.size = oldItem.size;
+                _newSqliteData[renamedItem.fileName] = _newSqliteData[oldItem.fileName];
+                [_newSqliteData removeObjectForKey:oldItem.fileName];
+                return renamedItem;
+            }
+        }
+        else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+        {
+            OnlineTilesResourceItem *oldItem = (OnlineTilesResourceItem *)localItem;
+            OnlineTilesResourceItem *renamedItem = [[OnlineTilesResourceItem alloc] init];
+            renamedItem.title = [NSString stringWithFormat:@"%@_%d", oldItem.title, number];
+            if (![self isDuplicate:renamedItem])
+            {
+                renamedItem.path = oldItem.path;
+                _newSources[QString::fromNSString(renamedItem.title)] = _newSources[QString::fromNSString(oldItem.title)];
+                _newSources.remove(QString::fromNSString(oldItem.title));
+                return renamedItem;
+            }
+        }
+    }
 }
 
-- (NSString *)getPublicName
+- (BOOL) isDuplicate:(LocalResourceItem *)item
+{
+    for (LocalResourceItem *existingItem in self.existingItems)
+        if ([existingItem.title isEqualToString:item.title])
+            return YES;
+
+    return NO;
+}
+
+- (NSString *) name
 {
     return @"map_sources";
 }
@@ -1208,174 +1576,139 @@ static const NSInteger _buffer = 1024;
     return YES;
 }
 
-- (NSString *)getFileName
-{
-    return [[self getName] stringByAppendingString:@".json"];
-}
-
 - (OASettingsItemReader *) getReader
 {
-    OAMapSourcesSettingsItemReader *reader = [[OAMapSourcesSettingsItemReader alloc] initWithItem:self];
-    //[reader readFromStream: inputStream];
-    return reader;
+    return [self getJsonReader];
 }
 
-- (OASettingsItemWriter *) getWriter
+- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
-    OAMapSourcesSettingsItemWriter *writer = [[OAMapSourcesSettingsItemWriter alloc] initWithItem:self];
-    //[writer writeToStream: inputStream];
-    return writer;
-}
+    NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
+    if (itemsJson.count == 0)
+        return;
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    for (id object in itemsJson)
+    {
+        BOOL sql = [object[@"sql"] boolValue];
+        NSString *name = object[@"name"];
+        int minZoom = [object[@"minZoom"] intValue];
+        int maxZoom = [object[@"maxZoom"] intValue];
+        NSString *url = object[@"url"];
+        NSString *randoms = object[@"randoms"];
+        BOOL ellipsoid = object[@"ellipsoid"] ? [object[@"ellipsoid"] boolValue] : NO;
+        BOOL invertedY = object[@"inverted_y"] ? [object[@"inverted_y"] boolValue] : NO;
+        NSString *referer = object.[@"referer"];
+        BOOL timesupported = object[@"timesupported"] ? [object[@"timesupported"] boolValue] : NO;
+        long expire = [object[@"expire"] longValue];
+        BOOL inversiveZoom = object[@"inversiveZoom"] ? [object[@"inversiveZoom"] boolValue] : NO;
+        NSString *ext = object[@"ext"];
+        int tileSize = [object[@"tileSize"] intValue];
+        int bitDensity = [object[@"bitDensity"] intValue];
+        int avgSize = [object[@"avgSize"] intValue];
+        NSString *rule = object[@"rule"];
 
-@end
-
-#pragma mark - OAMapSourcesSettingsItemReader
-
-@interface OAMapSourcesSettingsItemReader()
-
-@property (nonatomic, retain) OAMapSourcesSettingsItem *mapSourcesSettingsItem;
-
-@end
-
-@implementation OAMapSourcesSettingsItemReader
-
-- (instancetype)initWithItem:(OAMapSourcesSettingsItem *)item
-{
-    self = [super initWithItem:item];
-    _mapSourcesSettingsItem = item;
-    return self;
-}
-
-- (void)readFromStream:(NSInputStream *)inputStream
-{
-    NSMutableString *buf = [[NSMutableString alloc] init];
-    @try {
-        uint8_t buffer[_buffer];
-        NSInteger len;
-        while ([inputStream hasBytesAvailable]) {
-            len = [inputStream read:buffer maxLength:sizeof(buffer)];
-            if (len > 0) {
-                [buf appendString: [[NSString alloc] initWithBytes:buffer length:len encoding:NSASCIIStringEncoding]];
-            }
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"Cannot read json body %@", exception);
-    }
-    NSString *jsonStr = [buf description];
-    if (![jsonStr length])
-        NSLog(@"Cannot find json body");
-    @try {
-        NSError *jsonError;
-        NSData* jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&jsonError];
-        NSArray* jsonArray = [json mutableArrayValueForKey:@"items"];
-        for (NSData* item in jsonArray)
+        if (!sql)
         {
-            NSDictionary *object = [NSJSONSerialization JSONObjectWithData:item options:kNilOptions error:&jsonError];
-            BOOL sql = [object objectForKey:@"sql"];
-//            NSString *name = [object objectForKey:@"name"];
-//            NSInteger minZoom = (NSInteger)[object objectForKey:@"minZoom"];
-//            NSInteger maxZoom = (NSInteger)[object objectForKey:@"maxZoom"];
-//            NSString *url = [object objectForKey:@"url"];
-//            NSString *randoms = [object objectForKey:@"randoms"];
-//            BOOL ellipsoid = [object objectForKey:@"ellipsoid"];
-//            BOOL invertedY = [object objectForKey:@"invertedY"];
-//            NSString *referer = [object objectForKey:@"referer"];
-//            BOOL timesupported = [object objectForKey:@"timesupported"];
-//            NSInteger expire = (NSInteger)[object objectForKey:@"expire"];
-//            BOOL inversiveZoom = [object objectForKey:@"inversiveZoom"];
-//            NSString *ext = [object objectForKey:@"ext"];
-//            NSInteger tileSize = (NSInteger)[object objectForKey:@"tileSize"];
-//            NSInteger bitDensity = (NSInteger)[object objectForKey:@"bitDensity"];
-//            NSInteger avgSize = (NSInteger)[object objectForKey:@"avgSize"];
-//            NSString *rule = [object objectForKey:@"rule"];
-            LocalResourceItem *tileSource;
-            if (!sql)
-                //template = new TileSourceManager.TileSourceTemplate(name, url, ext, maxZoom, minZoom, tileSize, bitDensity, avgSize);
-                tileSource = [[OnlineTilesResourceItem alloc] init];
-            else
-                //template = new SQLiteTileSource(app, name, minZoom, maxZoom, url, randoms, ellipsoid, invertedY, referer, timesupported, expire, inversiveZoom);
-                tileSource = [[SqliteDbResourceItem alloc] init];
-            [_mapSourcesSettingsItem.items addObject:tileSource];
+            const auto result = std::make_shared<OsmAnd::IOnlineTileSources::Source>(QString::fromNSString(name));
+
+            result->urlToLoad = QString::fromNSString(url);
+            result->minZoom = OsmAnd::ZoomLevel(minZoom);
+            result->maxZoom = OsmAnd::ZoomLevel(maxZoom);
+            result->expirationTimeMillis = expire;
+            result->ellipticYTile = ellipsoid;
+            //result->priority = _tileSource->priority;
+            result->tileSize = tileSize;
+            result->ext = QString::fromNSString(ext);
+            result->avgSize = avgSize;
+            result->bitDensity = bitDensity;
+            result->invertedYTile = invertedY;
+            result->randoms = QString::fromNSString(randoms);
+            result->randomsArray = OsmAnd::OnlineTileSources::parseRandoms(QString::fromNSString(randoms));
+            result->rule = QString::fromNSString(rule);
+
+            OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
+            _app.resourcesManager->installTilesResource(item);
+
+            OnlineTilesResourceItem *item = [[OnlineTilesResourceItem alloc] init];
+            item.path = [app.cachePath stringByAppendingPathComponent:name];
+            item.title = name;
+            _newSources[QString::fromNSString(name)] = result;
+
+            [self.items addObject:item];
+        }
+        else
+        {
+            NSMutableDictionary *params = [NSMutableDictionary new];
+            params[@"minzoom"] = [NSString stringWithFormat:@"%d", minZoom];
+            params[@"maxzoom"] = [NSString stringWithFormat:@"%d", maxZoom];
+            params[@"url"] = url;
+            params[@"ellipsoid"] = ellipsoid ? @(1) : @(0);
+            params[@"timeSupported"] = expire != -1 ? @"yes" : @"no";
+            params[@"expireminutes"] = expire != -1 ? [NSString stringWithFormat:@"%ld", expire / 60000] : @"";
+            params[@"timecolumn"] = expire != -1 ? @"yes" : @"no";
+            params[@"rule"] = rule;
+            params[@"randoms"] = randoms;
             
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"Json parse error %@", exception);
-    }
-
-}
-
-@end
-
-#pragma mark - OAMapSourcesSettingsItemWriter
-
-@interface OAMapSourcesSettingsItemWriter()
-
-@property (nonatomic, retain) OAMapSourcesSettingsItem *mapSourcesSettingsItem;
-
-@end
-
-@implementation OAMapSourcesSettingsItemWriter
-
-- (instancetype)initWithItem:(OAMapSourcesSettingsItem *)item
-{
-    self = [super initWithItem:item];
-    _mapSourcesSettingsItem = item;
-    return self;
-}
-
-- (BOOL)writeToStream:(NSOutputStream *)outputStream
-{
-    NSMutableDictionary *json = [[NSMutableDictionary alloc]init];
-    NSMutableArray *jsonArray = [[NSMutableArray alloc]init];
-    if (!_mapSourcesSettingsItem.items.count)
-    {
-        @try {
-            for (LocalResourceItem *tileSource in _mapSourcesSettingsItem.items)
+            NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"sqlitedb"];
+            if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
             {
-                NSMutableDictionary *jsonObject = [[NSMutableDictionary alloc]init];
-//                BOOL sql = [tileSource isKindOfClass:SqliteDbResourceItem.class];
-//                [jsonObject setValue:sql forKey:@"sql"];
-//                [jsonObject setValue:[tileSource] forKey:@"name"]; //template.getName()
-//                [jsonObject setValue:[tileSource] forKey:@"minZoom"]; //template.getMinimumZoomSupported()
-//                [jsonObject setValue:[tileSource] forKey:@"maxZoom"]; //template.getMaximumZoomSupported()
-//                [jsonObject setValue:[tileSource] forKey:@"url"]; //template.getUrlTemplate()
-//                [jsonObject setValue:[tileSource] forKey:@"randoms"]; //template.getRandoms()
-//                [jsonObject setValue:[tileSource] forKey:@"ellipsoid"]; //template.isEllipticYTile()
-//                [jsonObject setValue:[tileSource] forKey:@"inverted_y"]; //template.isInvertedYTile()
-//                [jsonObject setValue:[tileSource] forKey:@"referer"]; //template.getReferer()
-//                [jsonObject setValue:[tileSource] forKey:@"timesupported"]; //template.isTimeSupported()
-//                [jsonObject setValue:[tileSource] forKey:@"expire"]; //template.getExpirationTimeMillis()
-//                [jsonObject setValue:[tileSource] forKey:@"inversiveZoom"]; //template.getInversiveZoom()
-//                [jsonObject setValue:[tileSource] forKey:@"ext"]; //template.getTileFormat()
-//                [jsonObject setValue:[tileSource] forKey:@"tileSize"]; //template.getTileSize()
-//                [jsonObject setValue:[tileSource] forKey:@"bitDensity"]; //template.getBitDensity()
-//                [jsonObject setValue:[tileSource] forKey:@"avgSize"]; template.getAvgSize()
-//                [jsonObject setValue:[tileSource] forKey:@"rule"]; //template.getRule()
-//
-                [jsonArray addObject:jsonObject];
+                [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
+                SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+                item.title = [[name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                item.fileName = name;
+                item.path = [[[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"sqlitedb"];
+                item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
+                
+                [self.items addObject:item];
             }
-            [json setValue:jsonArray forKey:@"items"];
-        } @catch (NSException *exception) {
-            NSLog(@"Failed write to json %@", exception);
         }
     }
-    if ([json count] > 0)
+}
+
+- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    NSMutableArray *jsonArray = [NSMutableArray array];
+    if (self.items.count > 0)
     {
-        @try {
-            NSError *jsonError;
-            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&jsonError];
-            [outputStream write:(uint8_t *)[jsonData bytes] maxLength:[jsonData length]];
-        } @catch (NSException *exception) {
-            NSLog(@"Failed to write json to stream %@", exception);
+        for (LocalResourceItem *localItem in self.items)
+        {
+            NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
+            if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+            {
+                SqliteDbResourceItem *item = (SqliteDbResourceItem *)localItem;
+
+                jsonObject[@"params"] = [action getParams];
+                
+                jsonObject[@"sql"] = sql;
+                jsonObject[@"name"] = template.getName();
+                jsonObject[@"minZoom"] = template.getMinimumZoomSupported);
+                jsonObject[@"maxZoom"] = template.getMaximumZoomSupported();
+                jsonObject[@"url"] = template.getUrlTemplate);
+                jsonObject[@"randoms"] = template.getRandoms();
+                jsonObject[@"ellipsoid"] = template.isEllipticYTile);
+                jsonObject[@"inverted_y"] = template.isInvertedYTile();
+                jsonObject[@"referer"] = template.getReferer();
+                jsonObject[@"timesupported"] = template.isTimeSupported);
+                jsonObject[@"expire"] = template.getExpirationTimeMillis();
+                jsonObject[@"inversiveZoom"] = template.getInversiveZoom();
+                jsonObject[@"ext"] = template.getTileFormat();
+                jsonObject[@"tileSize"] = template.getTileSize();
+                jsonObject[@"bitDensity"] = template.getBitDensity();
+                jsonObject[@"avgSize"] = template.getAvgSize();
+                jsonObject[@"rule"] = template.getRule();
+            }
+            else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+            {
+                OnlineTilesResourceItem *item = (OnlineTilesResourceItem *)localItem;
+            }
+            [jsonArray addObject:jsonObject];
         }
-        return YES;
+        json[@"items"] = jsonArray;
     }
-    return NO;
 }
 
 @end
-
 
 #pragma mark - OAAvoidRoadsSettingsItem
 
@@ -1388,7 +1721,7 @@ static const NSInteger _buffer = 1024;
 
 - (instancetype) initWithItems:(NSMutableArray<id>*)items
 {
-    self = [super initWithType:EOAAvoidRoads items:items];
+    self = [super initWithType:EOASettingsItemTypeAvoidRoads items:items];
     _app = [OsmAndApp instance];
     //settings = app.getSettings();
     //_settings =
@@ -1401,7 +1734,7 @@ static const NSInteger _buffer = 1024;
 
 - (instancetype) initWithJSON:(NSDictionary*)json
 {
-    self = [super initWithType:EOAAvoidRoads json:json];
+    self = [super initWithType:EOASettingsItemTypeAvoidRoads json:json];
     _app = [OsmAndApp instance];
     //settings = app.getSettings();
     //_settings =

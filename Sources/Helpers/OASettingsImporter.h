@@ -7,14 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OASettingsHelper.h"
 #import "OASettingsCollect.h"
 #import "OACheckDuplicates.h"
 #import "OASettingsImport.h"
 
 #pragma mark - OASettingsImporter
 
-//@class OASettingsItem;
+@class OASettingsItem, OASettingsCollect, OASettingsImport, OACheckDuplicates;
 
 @interface OASettingsImporter : NSObject
 
@@ -26,7 +25,7 @@
 
 @interface OASettingsItemsFactory : NSObject
 
-- (instancetype) initWithJSON:(NSString*)jsonStr;
+- (instancetype) initWithJSON:(NSString *)jsonStr;
 - (NSArray<OASettingsItem *> *) getItems;
 
 @end
@@ -35,18 +34,17 @@
 
 @interface OAImportAsyncTask : NSObject
 
-- (instancetype) initWithFile:(NSString*)filePath latestChanges:(NSString*)latestChanges version:(NSInteger)version
-              collectListener:(OASettingsCollect*)collectListener;
-- (instancetype) initWithFile:(NSString*)filePath items:(NSMutableArray<OASettingsItem *>*)items latestChanges:(NSString*)latestChanges version:(NSInteger)version importListener:(OASettingsImport*) importListener;
-- (instancetype) initWithFile:(NSString*)filePath items:(NSMutableArray<OASettingsItem *>*)items selectedItems:(NSMutableArray<OASettingsItem *>*)selectedItems duplicatesListener:(OACheckDuplicates*) duplicatesListener;
+- (instancetype) initWithFile:(NSString *)filePath latestChanges:(NSString *)latestChanges version:(NSInteger)version collectListener:(OASettingsCollect *)collectListener;
+- (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version importListener:(OASettingsImport *)importListener;
+- (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems duplicatesListener:(OACheckDuplicates *)duplicatesListener;
 - (void) executeParameters;
-- (NSMutableArray<OASettingsItem *> *) getItems;
+- (NSArray<OASettingsItem *> *) getItems;
 - (NSString *) getFile;
 - (EOAImportType) getImportType;
 - (BOOL) isImportDone;
-- (NSArray<id>*) getDuplicates;
-- (NSMutableArray<OASettingsItem *> *) getSelectedItems;
-- (NSArray<id>*) getDuplicatesData:(NSMutableArray<OASettingsItem *> *)items;
+- (NSArray<id> *) getDuplicates;
+- (NSArray<OASettingsItem *> *) getSelectedItems;
+- (NSArray<id> *) getDuplicatesData:(NSArray<OASettingsItem *> *)items;
 
 @end
 
@@ -54,7 +52,7 @@
 
 @interface OAImportItemsAsyncTask : NSObject
 
-- (instancetype) initWithFile:(NSString *)file listener:()listener items:(NSMutableArray<OASettingsItem*>*)items;
+- (instancetype) initWithFile:(NSString *)file listener:(OASettingsImport *)listener items:(NSArray<OASettingsItem *> *)items;
 - (void) executeParameters;
 
 @end

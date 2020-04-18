@@ -8,10 +8,9 @@
 
 #import "OAObservable.h"
 #import <Foundation/Foundation.h>
+#import "OAQuickAction.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@class OAQuickAction;
 
 @interface OAQuickActionRegistry : NSObject
 
@@ -19,21 +18,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (OAQuickActionRegistry *)sharedInstance;
 
--(NSArray<OAQuickAction *> *) getQuickActions;
--(NSArray<OAQuickAction *> *) getFilteredQuickActions;
+- (NSArray<OAQuickAction *> *) getQuickActions;
+- (NSArray<OAQuickAction *> *) getFilteredQuickActions;
 
--(void) addQuickAction:(OAQuickAction *) action;
--(void) updateQuickAction:(OAQuickAction *) action;
--(void) updateQuickActions:(NSArray<OAQuickAction *> *) quickActions;
--(OAQuickAction *) getQuickAction:(long) identifier;
+- (void) addQuickAction:(OAQuickAction *)action;
+- (void) updateQuickAction:(OAQuickAction *)action;
+- (void) updateQuickActions:(NSArray<OAQuickAction *> *)quickActions;
+- (OAQuickAction *) getQuickAction:(long)identifier;
 
 // Unused in Android
 //-(void) deleteQuickAction:(OAQuickAction *) action;
-//-(void) deleteQuickActionById:(long) identifier;
 
--(BOOL) isNameUnique:(OAQuickAction *) action;
+- (BOOL) isNameUnique:(OAQuickAction *) action;
 
--(OAQuickAction *) generateUniqueName:(OAQuickAction *) action;
+- (OAQuickAction *) generateUniqueName:(OAQuickAction *) action;
+- (OAQuickAction *) newActionByStringType:(NSString *)actionType;
+- (OAQuickAction *) newActionByType:(int)type;
 
 @end
 

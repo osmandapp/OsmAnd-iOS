@@ -7,7 +7,9 @@
 //
 
 #import "OASettingsExporter.h"
+#import "OASettingsHelper.h"
 #import "OASettingsExport.h"
+#import "OAAppSettings.h"
 
 static const NSInteger _buffer = 1024;
 
@@ -15,8 +17,8 @@ static const NSInteger _buffer = 1024;
 
 @interface OASettingsExporter()
 
-@property(nonatomic, retain)NSMutableDictionary* items;
-@property(nonatomic, retain)NSMutableDictionary* additionalParams;
+@property (nonatomic) NSMutableDictionary *items;
+@property (nonatomic) NSMutableDictionary *additionalParams;
 
 @end
 
@@ -25,16 +27,16 @@ static const NSInteger _buffer = 1024;
 - (instancetype) init
 {
     self = [super init];
-    _items = [[NSMutableDictionary alloc] init];
-    _additionalParams = [[NSMutableDictionary alloc] init];
+    _items = [NSMutableDictionary dictionary];
+    _additionalParams = [NSMutableDictionary dictionary];
     return self;
 }
  
-- (void) addSettingsItem:(OASettingsItem*)item
+- (void) addSettingsItem:(OASettingsItem *)item
 {
-    if ([_items objectForKey:[item getName]])
-        NSLog(@"Already has such item: %@", [item getName]);
-    [_items setObject:item forKey:[item getName]];
+    if (_items[item.name])
+        NSLog(@"Already has such item: %@", item.name);
+    _items[item.name] = item;
 }
  
 - (void) addAdditionalParam:(NSString *)key value:(NSString *)value
@@ -42,16 +44,16 @@ static const NSInteger _buffer = 1024;
     [_additionalParams setValue:value forKey:key];
 }
  
-- (void) exportSettings:(NSString *)file
+- (void) exportSettings:(NSString *)file error:(NSError * _Nullable *)error
 {
-    NSDictionary *json=[[NSDictionary alloc] init];
-    [json setValue:[NSString stringWithFormat:@"%ld", OAAppSettings.version] forKey:@"osmand_settings_version"];
-    for (NSString*key in _additionalParams)
-        [json setValue:[_additionalParams objectForKey:key] forKey:key];
-    NSMutableArray *itemsJson = [[NSMutableArray alloc]init];
-    for (OASettingsItem *item in [_items allValues])
+    NSMutableDictionary *json = [NSMutableDictionary dictionary];
+    json[@"osmand_settings_version"] = [NSString stringWithFormat:@"%ld", OAAppSettings.version];
+    for (NSString *key in _additionalParams)
+        json[key] = _additionalParams[key];
+    NSMutableArray *itemsJson = [NSMutableArray array];
+    for (OASettingsItem *item in _items.allValues)
         [itemsJson addObject:item];
-    [json setValue:itemsJson forKey:@"items"];
+    json[@"items"] = itemsJson;
     
     // not completed
 }
@@ -62,32 +64,34 @@ static const NSInteger _buffer = 1024;
 
 @interface OAExportAsyncTask()
 
-@property(nonatomic, retain) NSString *filePath;
+@property (nonatomic) NSString *filePath;
 @property (weak, nonatomic) id<OASettingsExportDelegate> settingsExportDelegate;
-
 
 @end
 
 @implementation OAExportAsyncTask
 {
-    OASettingsHelper* _settingsHelper;
+    OASettingsHelper *_settingsHelper;
     OASettingsExporter *_exporter;
     OASettingsExport *_exportListener;
 }
  
-- (instancetype) initWith:(NSString *)settingsFile listener:(OASettingsExport*)listener items:(NSMutableArray<OASettingsItem *>*)items
+- (instancetype) initWithFile:(NSString *)settingsFile listener:(OASettingsExport * _Nullable)listener items:(NSArray<OASettingsItem *> *)items
 {
     self = [super init];
-    _settingsHelper = [OASettingsHelper sharedInstance];
-    _filePath = settingsFile;
-    _exportListener = listener;
-    _exporter = [[OASettingsExporter alloc] init];
-    for (OASettingsItem *item in items)
-         [_exporter addSettingsItem:item];
+    if (self)
+    {
+        _settingsHelper = [OASettingsHelper sharedInstance];
+        _filePath = settingsFile;
+        _exportListener = listener;
+        _exporter = [[OASettingsExporter alloc] init];
+        for (OASettingsItem *item in items)
+            [_exporter addSettingsItem:item];
+    }
     return self;
 }
 
-- (void) executeParameters
+- (void) execute
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self doInBackground];
@@ -99,19 +103,20 @@ static const NSInteger _buffer = 1024;
 
 - (BOOL) doInBackground
 {
-    @try {
-        [_exporter exportSettings:_filePath];
-        return YES;
-    } @catch (NSException *exception) {
-        NSLog(@"Failed to export items to: %@ %@", _filePath, exception);
+    NSError *exportError;
+    [_exporter exportSettings:_filePath error:&exportError];
+    if (exportError)
+    {
+        NSLog(@"Failed to export items to: %@ %@", _filePath, exportError);
+        return NO;
     }
-    return NO;
+    return YES;
 }
 
-- (void) onPostExecute:(BOOL) success
+- (void) onPostExecute:(BOOL)success
 {
     [_settingsHelper.exportTask removeObjectForKey:_filePath];
-    if (_exportListener != NULL)
+    if (_exportListener)
         [_settingsExportDelegate onSettingsExportFinished:_filePath succeed:success];
     
 }

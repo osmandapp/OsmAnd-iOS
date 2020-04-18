@@ -10,7 +10,7 @@
 
 @protocol OASettingsImportDelegate <NSObject>
 
-- (void) onSettingsImportFinished:(BOOL)succeed items:(NSMutableArray<OASettingsItem *>*)items;
+- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items;
 
 @end
 

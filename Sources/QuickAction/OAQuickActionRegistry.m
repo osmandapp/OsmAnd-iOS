@@ -24,7 +24,7 @@
     NSArray<OAQuickAction *> *_quickActions;
 }
 
-+ (OAQuickActionRegistry *)sharedInstance
++ (OAQuickActionRegistry *) sharedInstance
 {
     static OAQuickActionRegistry *_sharedInstance = nil;
     static dispatch_once_t onceToken;
@@ -34,7 +34,7 @@
     return _sharedInstance;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self) {
@@ -55,12 +55,12 @@
 //    if (updatesListener != null) updatesListener.onActionsUpdated();
 //}
 
--(NSArray<OAQuickAction *> *) getQuickActions
+- (NSArray<OAQuickAction *> *) getQuickActions
 {
     return [NSArray arrayWithArray:_quickActions];
 }
 
--(NSArray<OAQuickAction *> *) getFilteredQuickActions
+- (NSArray<OAQuickAction *> *) getFilteredQuickActions
 {
     NSArray<OAQuickAction *> *actions = [self getQuickActions];
     NSMutableArray<OAQuickAction *> *filteredActions = [NSMutableArray new];
@@ -102,14 +102,14 @@
     return filteredActions;
 }
 
--(void) addQuickAction:(OAQuickAction *) action
+- (void) addQuickAction:(OAQuickAction *)action
 {
     _quickActions = [_quickActions arrayByAddingObject:action];
     [_settings setQuickActionsList:[_factory quickActionListToString:_quickActions]];
 }
 
-
-// UNUSED in Android
+//TODO implement!!!
+//
 //-(void) deleteQuickAction:(OAQuickAction *) action
 //{
 //    NSInteger index = [_quickActions indexOfObject:action];
@@ -121,26 +121,9 @@
 //    }
 //    [_settings setQuickActionsList:_factory quickActionListToString:_quickActions];
 //}
-//-(void) deleteQuickActionById:(long) identifier
-//{
-//    NSInteger index = -1;
-//    for (NSInteger i = 0; i < _quickActions.count; i++)
-//    {
-//        if (action.identifier == identifier)
-//            index = i;
-//
-//    }
-//    if (index >= 0)
-//    {
-//        NSMutableArray<OAQuickAction *> *mutableActions = [NSMutableArray arrayWithArray:_quickActions];
-//        [mutableActions removeObjectAtIndex:index];
-//        _quickActions = [NSArray arrayWithArray:mutableActions];
-//    }
-//    [_settings setQuickActionsList:_factory quickActionListToString:_quickActions];
-//}
 
 
--(void) updateQuickAction:(OAQuickAction *) action
+- (void) updateQuickAction:(OAQuickAction *)action
 {
     NSInteger index = [_quickActions indexOfObject:action];
     if (index != NSNotFound)
@@ -158,7 +141,7 @@
     [_settings setQuickActionsList:[_factory quickActionListToString:_quickActions]];
 }
 
--(OAQuickAction *) getQuickAction:(long) identifier
+- (OAQuickAction *) getQuickAction:(long)identifier
 {
     for (OAQuickAction *action in _quickActions)
     {
@@ -168,7 +151,7 @@
     return nil;
 }
 
--(BOOL) isNameUnique:(OAQuickAction *) action
+- (BOOL) isNameUnique:(OAQuickAction *)action
 {
     for (OAQuickAction *a in _quickActions)
     {
@@ -181,7 +164,7 @@
     return YES;
 }
 
--(OAQuickAction *) generateUniqueName:(OAQuickAction *) action
+- (OAQuickAction *) generateUniqueName:(OAQuickAction *)action
 {
     NSInteger number = 0;
     NSString *name = action.getName;
@@ -192,6 +175,28 @@
         if ([self isNameUnique:action])
             return action;
     }
+}
+
+- (OAQuickAction *) newActionByStringType:(NSString *)actionType
+{
+//    TODO refactor quick actions!
+//
+//    QuickActionType quickActionType = quickActionTypesStr.get(actionType);
+//    if (quickActionType != null) {
+//        return quickActionType.createNew();
+//    }
+    return nil;
+}
+
+- (OAQuickAction *) newActionByType:(int)type
+{
+//    TODO refactor quick actions!
+//
+//    QuickActionType quickActionType = quickActionTypesInt.get(type);
+//    if (quickActionType != null) {
+//        return quickActionType.createNew();
+//    }
+    return nil;
 }
 
 @end

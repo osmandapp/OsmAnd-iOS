@@ -1755,3 +1755,5 @@
 "routing_attr_allow_motorway_description" = "Allows motorways.";
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
+
+"settings_item_read_error" = "Could not read %@.";

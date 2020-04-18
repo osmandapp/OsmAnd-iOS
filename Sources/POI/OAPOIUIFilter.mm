@@ -59,7 +59,7 @@
     OsmAndAppInstance app;
 }
 
-@synthesize acceptedTypes, poiAdditionals, standardIconId, filterId, isStandardFilter, name, distanceInd, distanceToSearchValues, currentSearchResult;
+@synthesize acceptedTypes, poiAdditionals, standardIconId, filterId, isStandardFilter, name, distanceInd, distanceToSearchValues, currentSearchResult, filterByName, savedFilterByName;
 
 // search by name standard
 - (instancetype)init
@@ -147,6 +147,22 @@
         [self combineWithPoiFilters:filtersToMerge];
         filterId = [STD_PREFIX stringByAppendingString:@"combined"];
         name = [filtersHelper getFiltersName:filtersToMerge];
+    }
+    return self;
+}
+
+- (instancetype)initWithFilter:(OAPOIUIFilter *)filter name:(NSString *)nm filterId:(NSString *)fId
+{
+    self = [self init];
+    if (self)
+    {
+        isStandardFilter = NO;
+        filterId = fId;
+        name = nm;
+        acceptedTypes = filter.acceptedTypes;
+        poiAdditionals = filter.poiAdditionals;
+        filterByName = filter.filterByName;
+        savedFilterByName = filter.savedFilterByName;
     }
     return self;
 }

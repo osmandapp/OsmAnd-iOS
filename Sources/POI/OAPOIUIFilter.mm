@@ -59,7 +59,7 @@
     OsmAndAppInstance app;
 }
 
-@synthesize acceptedTypes, poiAdditionals, standardIconId, filterId, isStandardFilter, name, distanceInd, distanceToSearchValues, currentSearchResult, filterByName, savedFilterByName;
+@synthesize acceptedTypes, poiAdditionals, standardIconId, filterId, isStandardFilter, name, distanceInd, distanceToSearchValues, currentSearchResult;
 
 // search by name standard
 - (instancetype)init
@@ -161,8 +161,8 @@
         name = nm;
         acceptedTypes = filter.acceptedTypes;
         poiAdditionals = filter.poiAdditionals;
-        filterByName = filter.filterByName;
-        savedFilterByName = filter.savedFilterByName;
+        _filterByName = filter.filterByName;
+        _savedFilterByName = filter.savedFilterByName;
     }
     return self;
 }

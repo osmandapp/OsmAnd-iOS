@@ -17,6 +17,15 @@
 
 @protocol OAStateChangedListener;
 
+@interface OAAvoidRoadInfo : NSObject
+
+@property (nonatomic) unsigned long long roadId;
+@property (nonatomic) CLLocationCoordinate2D location;
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *appModeKey;
+
+@end
+
 @interface OAAvoidSpecificRoads : NSObject
 
 + (OAAvoidSpecificRoads *) instance;

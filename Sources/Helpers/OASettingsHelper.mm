@@ -23,6 +23,8 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAQuickSearchHelper.h"
 #import "OAPOIHelper.h"
+#import "OARoutingHelper.h"
+#import "OAApplicationMode.h"
 #import "Localization.h"
 
 #include <OsmAndCore/ArchiveReader.h>
@@ -1140,7 +1142,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (BOOL) isDuplicate:(id)item
 {
-    return NO;
+    return [self.existingItems containsObject:item];
 }
 
 - (id) renameItem:(id)item
@@ -1170,6 +1172,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) initialization
 {
     [super initialization];
+    
     _actionsRegistry = [OAQuickActionRegistry sharedInstance];
     self.existingItems = [_actionsRegistry getQuickActions].mutableCopy;
 }
@@ -1304,6 +1307,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) initialization
 {
+    [super initialization];
+
     _helper = [OAPOIHelper sharedInstance];
     _filtersHelper = [OAPOIFiltersHelper sharedInstance];
     self.existingItems = [_filtersHelper getUserDefinedPoiFilters].mutableCopy;
@@ -1424,6 +1429,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) initialization
 {
+    [super initialization];
+    
     _newSqliteData = [NSMutableDictionary dictionary];
     
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -1790,62 +1797,84 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 #pragma mark - OAAvoidRoadsSettingsItem
 
+@interface OAAvoidRoadsSettingsItem()
+
+@property (nonatomic) NSMutableArray<OAAvoidRoadInfo *> *items;
+@property (nonatomic) NSMutableArray<OAAvoidRoadInfo *> *appliedItems;
+@property (nonatomic) NSMutableArray<OAAvoidRoadInfo *> *existingItems;
+
+@end
+
 @implementation OAAvoidRoadsSettingsItem
 {
-    OsmAndAppInstance _app;
-    OAAppSettings* settings;
-    OAAvoidSpecificRoads *specificRoads;
+    OAAvoidSpecificRoads *_specificRoads;
 }
 
-- (instancetype) initWithItems:(NSMutableArray<id>*)items
+@dynamic items, appliedItems, existingItems;
+
+- (void) initialization
 {
-    self = [super initWithType:EOASettingsItemTypeAvoidRoads items:items];
-    _app = [OsmAndApp instance];
-    //settings = app.getSettings();
-    //_settings =
-    //specificRoads = app.getAvoidSpecificRoads();
-    //_specificRoads =
-    //existingItems = new ArrayList<>(specificRoads.getImpassableRoads().values());
-    //self.existingItems =
-    return self;
+    [super initialization];
+    
+    _specificRoads = [OAAvoidSpecificRoads instance];
+    //self.existingItems = [_specificRoads getImpassableRoads];
 }
 
-- (instancetype) initWithJSON:(NSDictionary*)json
+- (EOASettingsItemType) type
 {
-    self = [super initWithType:EOASettingsItemTypeAvoidRoads json:json];
-    _app = [OsmAndApp instance];
-    //settings = app.getSettings();
-    //_settings =
-    //specificRoads = app.getAvoidSpecificRoads();
-    //_specificRoads =
-    //existingItems = new ArrayList<>(specificRoads.getImpassableRoads().values());
-    //self.existingItems =
-    return self;
+    return EOASettingsItemTypeAvoidRoads;
 }
 
-- (NSString *) getName
+- (NSString *) name
 {
     return @"avoid_roads";
-}
-
-- (NSString *) getPublicName
-{
-    return @"avoid_roads";
-}
-
-- (NSString *) getFileName
-{
-    return [[self getName] stringByAppendingString:@".json"];
 }
 
 - (void) apply
 {
-    
+    NSArray<OAAvoidRoadInfo *> *newItems = [self getNewItems];
+    if (newItems.count > 0 || self.duplicateItems.count > 0)
+    {
+        self.appliedItems = [NSMutableArray arrayWithArray:newItems];
+        for (OAAvoidRoadInfo *duplicate in self.duplicateItems)
+        {
+            if ([self shouldReplace])
+            {
+//                LatLon latLon = new LatLon(duplicate.latitude, duplicate.longitude);
+//                if (settings.removeImpassableRoad(latLon)) {
+//                    settings.addImpassableRoad(duplicate);
+//                }
+            }
+            else
+            {
+//                settings.addImpassableRoad(renameItem(duplicate));
+            }
+        }
+        for (OAAvoidRoadInfo *avoidRoad in self.appliedItems)
+        {
+//            settings.addImpassableRoad(avoidRoad);
+        }
+//        specificRoads.loadImpassableRoads();
+//        specificRoads.initRouteObjects(true);
+    }
 }
 
-- (BOOL) isDuplicate:()item // AvoidRoadInfo
+- (OAAvoidRoadInfo *) renameItem:(OAAvoidRoadInfo *)item
 {
-    return [self.existingItems containsObject:item];
+    int number = 0;
+    while (true)
+    {
+        number++;
+        OAAvoidRoadInfo *renamedItem = [[OAAvoidRoadInfo alloc] init];
+        renamedItem.name = [NSString stringWithFormat:@"%@_%d", item.name, number];
+        if (![self isDuplicate:renamedItem])
+        {
+            renamedItem.roadId = item.roadId;
+            renamedItem.location = item.location;
+            renamedItem.appModeKey = item.appModeKey;
+            return renamedItem;
+        }
+    }
 }
 
 - (BOOL) shouldReadOnCollecting
@@ -1853,23 +1882,52 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return YES;
 }
 
-//- () renameItem:() item //AvoidRoadInfo
-//{
-//
-//}
-
 - (OASettingsItemReader *) getReader
 {
-    OAAvoidRoadsSettingsItemReader *reader = [[OAAvoidRoadsSettingsItemReader alloc] initWithItem:self];
-    //[reader readFromStream: super.inputStream];
-    return reader;
+    return [self getJsonReader];
 }
 
-- (OASettingsItemWriter *) getWriter
+- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
-    OAAvoidRoadsSettingsItemWriter *writer = [[OAAvoidRoadsSettingsItemWriter alloc] initWithItem:self];
-    //[writer writeToStream: super.inputStream];
-    return writer;
+    NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
+    if (itemsJson.count == 0)
+        return;
+    
+    for (id object in itemsJson)
+    {
+        double latitude = [object[@"latitude"] doubleValue];
+        double longitude = [object[@"longitude"] doubleValue];
+        NSString *name = object[@"name"];
+        NSString *appModeKey = object[@"appModeKey"];
+        OAAvoidRoadInfo *roadInfo = [[OAAvoidRoadInfo alloc] init];
+        roadInfo.roadId = 0;
+        roadInfo.location = CLLocationCoordinate2DMake(latitude, longitude);
+        roadInfo.name = name;
+        if ([OAApplicationMode valueOfStringKey:appModeKey def:nil])
+            roadInfo.appModeKey = appModeKey;
+        else
+            roadInfo.appModeKey = [[OARoutingHelper sharedInstance] getAppMode].stringKey;
+
+        [self.items addObject:roadInfo];
+    }
+}
+
+- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    NSMutableArray *jsonArray = [NSMutableArray array];
+    if (self.items.count > 0)
+    {
+        for (OAAvoidRoadInfo *avoidRoad in self.items)
+        {
+            NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
+            jsonObject[@"latitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.latitude];
+            jsonObject[@"longitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.longitude];
+            jsonObject[@"name"] = avoidRoad.name;
+            jsonObject[@"appModeKey"] = avoidRoad.appModeKey;
+            [jsonArray addObject:jsonObject];
+        }        
+        json[@"items"] = jsonArray;
+    }
 }
 
 @end

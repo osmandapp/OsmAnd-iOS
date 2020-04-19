@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAImportAsyncTask, OAExportAsyncTask, OASettingsImport, OASettingsExport, OASettingsCollect, OACheckDuplicates;
 @class OASettingsItem;
-@class OAQuickAction, OAPOIUIFilter, OAAvoidSpecificRoads;
+@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo;
 
 FOUNDATION_EXTERN NSString *const kSettingsHelperErrorDomain;
 
@@ -246,7 +246,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - OAAvoidRoadsSettingsItem
 
-@interface OAAvoidRoadsSettingsItem : OACollectionSettingsItem<OAAvoidSpecificRoads *>
+@interface OAAvoidRoadsSettingsItem : OACollectionSettingsItem<OAAvoidRoadInfo *>
 
 @end
 

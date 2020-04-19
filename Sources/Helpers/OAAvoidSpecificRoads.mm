@@ -17,6 +17,10 @@
 
 #include <OsmAndCore/Utilities.h>
 
+@implementation OAAvoidRoadInfo
+
+@end
+
 @implementation OAAvoidSpecificRoads
 {
     OsmAndAppInstance _app;

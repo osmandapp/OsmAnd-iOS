@@ -1541,3 +1541,10 @@
 "shared_string_clear_cache" = "Vymazať vyrovnávaciu pamäť";
 "selected_roads" = "Vybrané cesty";
 "no_active_route" = "Žiadna aktívna trasa";
+"map_settings_base_transp" = "Priehľadnosť základnej mapy";
+"stats_select_graph_data" = "Zvoľte údaje grafu";
+"displayed_route_save" = "Uložiť do výletov OsmAnd";
+"displayed_trips" = "Zobrazené výlety";
+"select_work_point" = "Zvoľte bod pracoviska";
+"select_home" = "Zvoľte bod domova";
+"select_route_intermediate" = "Zvoľte prechodný bod";

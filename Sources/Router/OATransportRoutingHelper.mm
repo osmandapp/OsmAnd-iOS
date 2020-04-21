@@ -303,7 +303,7 @@
         for (SHARED_PTR<TransportRouteResult>& r : routes)
         {
             SHARED_PTR<TransportRouteResultSegment> prev = nullptr;
-            for (SHARED_PTR<TransportRouteResultSegment> s : r->segments)
+            for (SHARED_PTR<TransportRouteResultSegment>& s : r->segments)
             {
                 CLLocation *start = prev != nullptr ? [[CLLocation alloc] initWithLatitude:prev->getEnd()->lat longitude:prev->getEnd()->lon] : _params.start;
                 CLLocation *end = [[CLLocation alloc] initWithLatitude:s->getStart()->lat longitude:s->getStart()->lon];

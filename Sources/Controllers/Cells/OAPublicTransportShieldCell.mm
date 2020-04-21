@@ -247,7 +247,7 @@ static UIFont *_shieldFont;
             }
         }
         const auto& r = s->route;
-        NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(true).c_str()];
+        NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(false).c_str()];
         [titles addObject:title];
         if (route->segments.end() - it == 1)
         {
@@ -299,12 +299,9 @@ static UIFont *_shieldFont;
         NSString *shieldTitle = shields[i];
         currWidth += [OARouteSegmentShieldView getViewWidth:shieldTitle];
         
-        if (i != shields.count - 1)
-        {
-            currWidth += 20.;
-        }
-        
+        currWidth += 20.;
         currWidth += kViewSpacing * 2;
+        
         if (currWidth >= width)
         {
             rowsCount++;

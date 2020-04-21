@@ -215,12 +215,12 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.detailsButton setTitle:OALocalizedString(@"res_details") forState:UIControlStateNormal];
             cell.detailsButton.tag = _routeIndex;
-            [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
+//            [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+//            [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
             [cell.showOnMapButton setTitle:OALocalizedString(@"sett_show") forState:UIControlStateNormal];
             cell.showOnMapButton.tag = _routeIndex;
-            [cell.showOnMapButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.showOnMapButton addTarget:self action:@selector(onTransportShowOnMapPressed:) forControlEvents:UIControlEventTouchUpInside];
+//            [cell.showOnMapButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+//            [cell.showOnMapButton addTarget:self action:@selector(onTransportShowOnMapPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         
         return cell;

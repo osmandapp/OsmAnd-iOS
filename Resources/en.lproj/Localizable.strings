@@ -1240,6 +1240,11 @@
 "menu_active_trips" = "Active";
 "menu_all_trips" = "All Trips";
 
+"public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
+"calc_pedestrian_route" = "Calculate pedestrian route";
+"public_transport_warning_title" = "Public transport navigation is currently in beta testing, expect errors and inaccuracies.";
+"public_transport_warning_descr_blog" = "Read more about OsmAnd routing on our blog.";
+
 "total" = "Total";
 "walk" = "Walk";
 "total_time" = "Total time";

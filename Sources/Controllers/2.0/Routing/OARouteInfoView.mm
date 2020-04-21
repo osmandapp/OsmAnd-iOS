@@ -55,6 +55,7 @@
 #import "OAFilledButtonCell.h"
 #import "OAPublicTransportRouteCell.h"
 #import "OAPublicTransportShieldCell.h"
+#import "OATableViewCustomFooterView.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -62,6 +63,9 @@
 
 #define kCellReuseIdentifier @"emptyCell"
 #define kHeaderId @"TableViewSectionHeader"
+#define kFooterId @"TableViewSectionFooter"
+
+#define MAX_PEDESTRIAN_ROUTE_DURATION (30 * 60)
 
 static int directionInfo = -1;
 static BOOL visible = false;
@@ -168,6 +172,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [_tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setShowsHorizontalScrollIndicator:NO];
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
@@ -428,6 +433,80 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     return [_routingHelper isRouteCalculated] || (_routingHelper.isPublicTransportMode && _transportHelper.getRoutes.size() > 0);
 }
 
+- (void)generateTransportCells:(NSMutableDictionary *)dictionary section:(NSMutableArray *)section sectionIndex:(int &)sectionIndex {
+    for (NSInteger i = 0; i < _transportHelper.getRoutes.size(); i++)
+    {
+        [section addObject:@{
+            @"cell" : @"OADividerCell",
+            @"custom_insets" : @(NO)
+        }];
+        
+        [section addObject:@{
+            @"cell" : @"OAPublicTransportShieldCell",
+            @"route_index" : @(i)
+        }];
+        [section addObject:@{
+            @"cell" : @"OAPublicTransportRouteCell",
+            @"route_index" : @(i)
+        }];
+        
+        [section addObject:@{
+            @"cell" : @"OADividerCell",
+            @"custom_insets" : @(NO)
+        }];
+        [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
+        [section removeAllObjects];
+    }
+}
+
+- (void)addPedestrianRouteWarningIfNeeded:(NSMutableDictionary *)dictionary section:(NSMutableArray *)section sectionIndex:(int &)sectionIndex {
+    const auto route = _transportHelper.getRoutes[0];
+    NSInteger walkTimeReal = [_transportHelper getWalkingTime:route->segments];
+    NSInteger walkTimePT = (NSInteger) route->getWalkTime();
+    NSInteger walkTime = walkTimeReal > 0 ? walkTimeReal : walkTimePT;
+    NSInteger travelTime = route->getTravelTime() + walkTime;
+    NSInteger approxPedestrianTime = (NSInteger) getDistance(_transportHelper.startLocation.coordinate.latitude,
+                                                             _transportHelper.startLocation.coordinate.longitude,
+                                                             _transportHelper.endLocation.coordinate.latitude,
+                                                             _transportHelper.endLocation.coordinate.longitude);
+    BOOL showPedestrianCard = approxPedestrianTime < travelTime + 60 && approxPedestrianTime < MAX_PEDESTRIAN_ROUTE_DURATION;
+    if (showPedestrianCard)
+    {
+        [section addObject:@{
+            @"cell" : @"OADividerCell",
+            @"custom_insets" : @(NO)
+        }];
+        
+        NSString *time = [_app getFormattedTimeInterval:approxPedestrianTime shortFormat:NO];
+        NSString *formattedStr = [NSString stringWithFormat:OALocalizedString(@"public_transport_ped_route_title"), time];
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:formattedStr attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17]}];
+        
+        NSRange range = [formattedStr rangeOfString:time];
+        [str setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]} range:range];
+        
+        [section addObject:@{
+            @"cell" : @"OADescrTitleIconCell",
+            @"title" : str,
+            @"img" : @"ic_profile_pedestrian",
+            @"key" : @"pedestrian_short"
+        }];
+        
+        [section addObject:@{
+            @"cell" : @"OAFilledButtonCell",
+            @"title" : OALocalizedString(@"calc_pedestrian_route"),
+            @"key": @"calc_pedestrian"
+        }];
+        
+        [section addObject:@{
+            @"cell" : @"OADividerCell",
+            @"custom_insets" : @(NO)
+        }];
+        
+        [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
+        [section removeAllObjects];
+    }
+}
+
 - (void) updateData
 {
     int sectionIndex = 0;
@@ -467,19 +546,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         if ([_routingHelper isPublicTransportMode])
         {
-            for (NSInteger i = 0; i < _transportHelper.getRoutes.size(); i++)
-            {
-                [section addObject:@{
-                    @"cell" : @"OAPublicTransportShieldCell",
-                    @"route_index" : @(i)
-                }];
-                [section addObject:@{
-                    @"cell" : @"OAPublicTransportRouteCell",
-                    @"route_index" : @(i)
-                }];
-                [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
-                [section removeAllObjects];
-            }
+            [self generateTransportCells:dictionary section:section sectionIndex:sectionIndex];
+            [self addPedestrianRouteWarningIfNeeded:dictionary section:section sectionIndex:sectionIndex];
         }
         else
         {
@@ -495,7 +563,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             }];
             [section addObject:@{
                 @"cell" : @"OAFilledButtonCell",
-                @"title" : OALocalizedString(@"res_details")
+                @"title" : OALocalizedString(@"res_details"),
+                @"key" : @"route_details"
             }];
             [section addObject:@{
                 @"cell" : @"OADividerCell",
@@ -807,6 +876,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:_gpx analysis:_trackAnalysis];
 }
 
+- (void) calcPedestrianRoute
+{
+    [_appModeView setSelectedMode:OAApplicationMode.PEDESTRIAN];
+    [self appModeChanged:OAApplicationMode.PEDESTRIAN];
+    [_pointsHelper updateRouteAndRefresh:YES];
+}
+
 - (void) switchStartAndFinish
 {
     OARTargetPoint *start = [_pointsHelper getPointToStart];
@@ -995,6 +1071,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) update
 {
+    [self updateData];
     [self.tableView reloadData];
 }
 
@@ -1215,7 +1292,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.button addTarget:self action:@selector(openRouteDetails) forControlEvents:UIControlEventTouchUpInside];
+            NSString *key = item[@"key"];
+            if ([key isEqualToString:@"route_details"])
+                [cell.button addTarget:self action:@selector(openRouteDetails) forControlEvents:UIControlEventTouchUpInside];
+            else if ([key isEqualToString:@"calc_pedestrian"])
+                [cell.button addTarget:self action:@selector(calcPedestrianRoute) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
     }
@@ -1309,9 +1390,29 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
+            NSString *key = item[@"key"];
+            if ([key isEqualToString:@"pedestrian_short"])
+            {
+                [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
+                cell.textView.attributedText = item[@"title"];
+                cell.backgroundColor = UIColor.whiteColor;
+            }
+            else if ([key isEqualToString:@"pt_beta_warning"])
+            {
+                [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+                cell.textView.attributedText = item[@"title"];
+                cell.backgroundColor = UIColor.clearColor;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            else
+            {
+                [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+                [cell.textView setText:item[@"title"]];
+                cell.backgroundColor = UIColor.whiteColor;
+            }
             [cell.descView setText:item[@"descr"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
         }
@@ -1536,6 +1637,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
+    if (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated] && section == _data.count - 1)
+    {
+        return [OAUtilities calculateTextBounds:[self getAttributedBetaWarning] width:tableView.bounds.size.width].height + 8.0;
+    }
     return 0.001;
 }
 
@@ -1562,6 +1667,38 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     
     vw.label.text = [title upperCase];
+    return vw;
+}
+
+- (NSAttributedString *)getAttributedBetaWarning
+{
+    NSString *mainText = OALocalizedString(@"public_transport_warning_title");
+    NSString *additionalText = OALocalizedString(@"public_transport_warning_descr_blog");
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:15], NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
+    
+    NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@", mainText, additionalText] attributes:attributes];
+    
+    NSRange range = [[res string] rangeOfString:@" " options:NSBackwardsSearch];
+    NSRange lastWordRange = NSMakeRange(range.location + range.length, res.length - range.location - 1);
+    [res addAttributes:@{NSLinkAttributeName: @"https://osmand.net/blog/guideline-pt",
+                         NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
+                         NSFontAttributeName: [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]
+    } range:lastWordRange];
+    return [[NSAttributedString alloc] initWithAttributedString:res];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+    if (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated] && section == _data.count - 1)
+    {
+        NSAttributedString* res = [self getAttributedBetaWarning];
+        vw.label.attributedText = res;
+    }
+    else
+    {
+        vw.label.attributedText = nil;
+    }
     return vw;
 }
 

@@ -101,7 +101,7 @@
         OsmAnd::ColorARGB colorARGB;
         UIColor *color = [self.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:[NSString stringWithUTF8String:str.c_str()]];
         CGFloat red, green, blue, alpha;
-        if (color)
+        if (str.length() > 0 && color)
         {
             [color getRed:&red green:&green blue:&blue alpha:&alpha];
         }
@@ -116,15 +116,15 @@
         for (const auto& way : routeSegment->getGeometry())
         {
             QVector<OsmAnd::PointI> points;
-            for (const auto& node : way->nodes)
+            for (const auto& node : way.nodes)
             {
-                points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(node->lat, node->lon)));
+                points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(node.lat, node.lon)));
             }
             if (points.size() > 1)
             {
                 OsmAnd::VectorLineBuilder builder;
                 builder.setBaseOrder(baseOrder--)
-                .setIsHidden(way->nodes.size() == 0)
+                .setIsHidden(way.nodes.size() == 0)
                 .setLineId(1)
                 .setLineWidth(30)
                 .setPoints(points)

@@ -101,6 +101,7 @@
 #define followTheRouteKey @"followTheRoute"
 #define followTheGpxRouteKey @"followTheGpxRoute"
 #define arrivalDistanceFactorKey @"arrivalDistanceFactor"
+#define enableTimeConditionalRoutingKey @"enableTimeConditionalRouting"
 #define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
 #define disableOffrouteRecalcKey @"disableOffrouteRecalc"
 #define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
@@ -1329,6 +1330,7 @@
         _followTheRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheRouteKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:followTheRouteKey] : NO;
         _followTheGpxRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheGpxRouteKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:followTheGpxRouteKey] : nil;
         _arrivalDistanceFactor = [OAProfileDouble withKey:arrivalDistanceFactorKey defValue:1.0];
+        _enableTimeConditionalRouting = [OAProfileBoolean withKey:enableTimeConditionalRoutingKey defValue:NO];
         _useIntermediatePointsNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:useIntermediatePointsNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useIntermediatePointsNavigationKey] : NO;
         _disableOffrouteRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableOffrouteRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableOffrouteRecalcKey] : NO;
         _disableWrongDirectionRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableWrongDirectionRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableWrongDirectionRecalcKey] : NO;

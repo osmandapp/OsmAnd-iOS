@@ -399,6 +399,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL disableComplexRouting;
 @property (assign, nonatomic) BOOL followTheRoute;
 @property (nonatomic) NSString *followTheGpxRoute;
+@property (nonatomic) OAProfileBoolean *enableTimeConditionalRouting;
 @property (nonatomic) OAProfileDouble *arrivalDistanceFactor;
 @property (assign, nonatomic) BOOL useIntermediatePointsNavigation;
 @property (assign, nonatomic) BOOL disableOffrouteRecalc;

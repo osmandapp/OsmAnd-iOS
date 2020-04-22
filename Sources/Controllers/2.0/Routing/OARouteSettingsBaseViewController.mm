@@ -10,6 +10,7 @@
 #import "OARoutePreferencesParameters.h"
 #import "OARouteTripSettingsViewController.h"
 #import "OARouteSettingsParameterController.h"
+#import "OARouteAvoidTransportSettingsViewController.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
@@ -231,6 +232,7 @@
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *list = [NSMutableArray array];
     NSInteger section = 0;
+    BOOL isPublicTransport = [am isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
     
     OAMuteSoundRoutingParameter *muteSoundRoutingParameter = [[OAMuteSoundRoutingParameter alloc] initWithAppMode:am];
     muteSoundRoutingParameter.delegate = self;
@@ -239,26 +241,50 @@
     [model setObject:[NSArray arrayWithArray:list] forKey:@(section++)];
     [list removeAllObjects];
     
-    OAAvoidRoadsRoutingParameter *avoidRoadsRoutingParameter = [[OAAvoidRoadsRoutingParameter alloc] initWithAppMode:am];
-    avoidRoadsRoutingParameter.delegate = self;
-    [list addObject:avoidRoadsRoutingParameter];
-
-    [list addObjectsFromArray:[self getNonAvoidRoutingParameters:am]];
-    [model setObject:[NSArray arrayWithArray:list] forKey:@(section++)];
-    [list removeAllObjects];
-    
-    OAGpxLocalRoutingParameter *gpxRoutingParameter = [[OAGpxLocalRoutingParameter alloc] initWithAppMode:am];
-    gpxRoutingParameter.delegate = self;
-    [list addObject:gpxRoutingParameter];
+    if (!isPublicTransport)
+    {
+        OAAvoidRoadsRoutingParameter *avoidRoadsRoutingParameter = [[OAAvoidRoadsRoutingParameter alloc] initWithAppMode:am];
+        avoidRoadsRoutingParameter.delegate = self;
+        [list addObject:avoidRoadsRoutingParameter];
+        
+        [list addObjectsFromArray:[self getNonAvoidRoutingParameters:am]];
+        
+        OAConsiderLimitationsParameter *considerLimitations = [[OAConsiderLimitationsParameter alloc] initWithAppMode:am];
+        considerLimitations.delegate = self;
+        [list addObject:considerLimitations];
+        
+        [model setObject:[NSArray arrayWithArray:list] forKey:@(section++)];
+        [list removeAllObjects];
+        
+        OAGpxLocalRoutingParameter *gpxRoutingParameter = [[OAGpxLocalRoutingParameter alloc] initWithAppMode:am];
+        gpxRoutingParameter.delegate = self;
+        [list addObject:gpxRoutingParameter];
+        
+    }
+    else
+    {
+        OAAvoidTransportTypesRoutingParameter *avoidTransportTypesParameter = [[OAAvoidTransportTypesRoutingParameter alloc] initWithAppMode:am];
+        avoidTransportTypesParameter.delegate = self;
+        [list addObject:avoidTransportTypesParameter];
+        [model setObject:[NSArray arrayWithArray:list] forKey:@(section++)];
+        [list removeAllObjects];
+    }
     
     OAOtherSettingsRoutingParameter *otherSettingsRoutingParameter = [[OAOtherSettingsRoutingParameter alloc] initWithAppMode:am];
     otherSettingsRoutingParameter.delegate = self;
     [list addObject:otherSettingsRoutingParameter];
     
-    OASimulationRoutingParameter *simulationRoutingParameter = [[OASimulationRoutingParameter alloc] initWithAppMode:am];
-    simulationRoutingParameter.delegate = self;
-    [list addObject:simulationRoutingParameter];
-    [model setObject:[NSArray arrayWithArray:list] forKey:@(section++)];
+    if (!isPublicTransport)
+    {
+        OASimulationRoutingParameter *simulationRoutingParameter = [[OASimulationRoutingParameter alloc] initWithAppMode:am];
+        simulationRoutingParameter.delegate = self;
+        [list addObject:simulationRoutingParameter];
+        [model setObject:[NSArray arrayWithArray:list] forKey:@(section++)];
+    }
+    else
+    {
+        [model setObject:[NSArray arrayWithArray:list] forKey:@(section++)];
+    }
 
     return [NSDictionary dictionaryWithDictionary:model];
 }
@@ -329,6 +355,13 @@
     OARouteTripSettingsViewController *tripsController = [[OARouteTripSettingsViewController alloc] init];
     tripsController.delegate = self;
     [self presentViewController:tripsController animated:YES completion:nil];
+}
+
+- (void) showAvoidTransportScreen
+{
+    OARouteAvoidTransportSettingsViewController *avoidTransportController = [[OARouteAvoidTransportSettingsViewController alloc] init];
+    avoidTransportController.delegate = self;
+    [self presentViewController:avoidTransportController animated:YES completion:nil];
 }
 
 - (void)doneButtonPressed

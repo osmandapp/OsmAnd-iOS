@@ -725,21 +725,21 @@
         {
             for (const auto& way : seg->getGeometry())
             {
-                for (const auto& node : way->nodes)
+                for (const auto& node : way.nodes)
                 {
                     if (left == DBL_MAX)
                     {
-                        left = node->lon;
-                        right = node->lon;
-                        top = node->lat;
-                        bottom = node->lat;
+                        left = node.lon;
+                        right = node.lon;
+                        top = node.lat;
+                        bottom = node.lat;
                     }
                     else
                     {
-                        left = MIN(left, node->lon);
-                        right = MAX(right, node->lon);
-                        top = MAX(top, node->lat);
-                        bottom = MIN(bottom, node->lat);
+                        left = MIN(left, node.lon);
+                        right = MAX(right, node.lon);
+                        top = MAX(top, node.lat);
+                        bottom = MIN(bottom, node.lat);
                     }
                 }
             }

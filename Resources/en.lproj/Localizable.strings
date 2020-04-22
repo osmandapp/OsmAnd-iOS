@@ -256,6 +256,8 @@
 "routing_settings_2" = "Navigation settings";
 "gpx_navigation" = "Follow trip";
 "impassable_road" = "Avoid roads";
+"avoid_transport_type" = "Avoid transport types";
+"consider_limitations_param" = "Consider temporary limitations";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";

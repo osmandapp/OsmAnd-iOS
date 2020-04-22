@@ -651,9 +651,14 @@ static BOOL _isDeviatedFromRoute = false;
                 {
                     int t = (int) MIN(p * p / (all * all) * 100.0, 99);
                     if (progressRoute)
+                    {
                         [progressRoute updateProgress:t];
-                    for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
-                        [progressRoute updateProgress:t];
+                    }
+                    else
+                    {
+                        for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                            [progressRoute updateProgress:t];
+                    }
                 }
                 NSThread *t = _currentRunningJob;
                 if ([t isKindOfClass:[OARouteRecalculationThread class]] && ((OARouteRecalculationThread *) t).params != params)
@@ -681,9 +686,14 @@ static BOOL _isDeviatedFromRoute = false;
                 }
                  */
                 if (progressRoute)
+                {
                     [progressRoute finish];
-                for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
-                    [progressRoute finish];
+                }
+                else
+                {
+                    for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                        [progressRoute finish];
+                }
             }
         });
     }

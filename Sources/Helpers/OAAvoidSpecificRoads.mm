@@ -13,11 +13,34 @@
 #import "OsmAndApp.h"
 #import "OAStateChangedListener.h"
 #import "PXAlertView.h"
+#import "OAUtilities.h"
 #import "Localization.h"
 
 #include <OsmAndCore/Utilities.h>
 
 @implementation OAAvoidRoadInfo
+
+- (NSUInteger) hash
+{
+    NSInteger result = self.roadId;
+    result = 31 * result + (self.location.latitude * 10000.0);
+    result = 31 * result + (self.location.longitude * 10000.0);
+    result = 31 * result + [self.name hash];
+    result = 31 * result + [self.appModeKey hash];
+    return result;
+}
+
+- (BOOL) isEqual:(id)object
+{
+    if (self == object)
+        return YES;
+    
+    if (![object isKindOfClass:[OAAvoidRoadInfo class]])
+          return NO;
+    
+    OAAvoidRoadInfo *other = object;
+    return [OAUtilities isCoordEqual:self.location.latitude srcLon:self.location.longitude destLat:other.location.latitude destLon:other.location.longitude] && (self.name == other.name || [self.name isEqualToString:other.name]);
+}
 
 @end
 

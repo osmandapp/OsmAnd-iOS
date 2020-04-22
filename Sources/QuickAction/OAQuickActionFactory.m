@@ -401,7 +401,7 @@
             return @"ic_custom_poi";
             
         case EOAQuickActionTypeParking:
-            return @"ic_action_parking_dark";
+            return @"ic_custom_parking";
             
             //        case TakeAudioNoteAction.TYPE:
             //            return new TakeAudioNoteAction();

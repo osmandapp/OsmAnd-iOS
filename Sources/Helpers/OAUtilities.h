@@ -87,6 +87,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize;
 + (UIImage *) applyScaleFactorToImage:(UIImage *)image;
 + (NSString *) drawablePostfix;
++ (NSString *) drawablePath:(NSString *)resId;
 + (void) layoutComplexButton:(UIButton*)button;
 
 + (UIImage *) imageWithColor:(UIColor *)color;

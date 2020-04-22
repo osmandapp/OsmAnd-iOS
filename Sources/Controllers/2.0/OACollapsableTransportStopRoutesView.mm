@@ -46,9 +46,9 @@
         NSString *resId = route.type.topResId;
         UIImage *img;
         if (resId.length > 0)
-            img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/%@.png", [OAUtilities drawablePostfix], resId]];
+            img = [UIImage imageNamed:[OAUtilities drawablePath:resId]];
         if (!img)
-            img = [OATargetInfoViewController getIcon:@"mx_public_transport.png"];
+            img = [OATargetInfoViewController getIcon:@"mx_public_transport"];
         
         CGFloat imgSize = [[UIScreen mainScreen] scale] * 8.0;
         img = [OAUtilities resizeImage:img newSize:{ imgSize, imgSize }];

@@ -27,7 +27,7 @@
     UIImage *img = [super icon];
     if (!img)
     {
-        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.category.name]];
+        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", self.category.name]]];
         return [OAUtilities applyScaleFactorToImage:img];
     }
     return img;

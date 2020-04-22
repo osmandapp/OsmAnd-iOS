@@ -379,6 +379,11 @@
     }
 }
 
++ (NSString *) drawablePath:(NSString *)resId
+{
+    return [NSString stringWithFormat:@"%@/drawable-%@/%@", [resId hasPrefix:@"mx_"] ? @"mx-png-icons" : @"style-icons", [OAUtilities drawablePostfix], resId];
+}
+
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners
 {
     [self.class setMaskTo:view byRoundingCorners:corners radius:10.];
@@ -905,7 +910,7 @@
 
 + (UIImage *) getMxIcon:(NSString *)name
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], name]];
+    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", name]]];
     if (img)
         return [OAUtilities applyScaleFactorToImage:img];
     else

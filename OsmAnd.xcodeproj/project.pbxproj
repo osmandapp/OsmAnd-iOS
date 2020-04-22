@@ -7753,6 +7753,7 @@
 		8AE0194324505C8A00DA5C33 /* ic_custom_parking.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_parking.png; path = Resources/Icons/ic_custom_parking.png; sourceTree = "<group>"; };
 		8AE0194424505C8B00DA5C33 /* ic_custom_parking@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_parking@2x.png"; path = "Resources/Icons/ic_custom_parking@2x.png"; sourceTree = "<group>"; };
 		8AE0194524505C8B00DA5C33 /* ic_custom_parking@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_parking@3x.png"; path = "Resources/Icons/ic_custom_parking@3x.png"; sourceTree = "<group>"; };
+		8AE0197224505D4400DA5C33 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8AE06587229140F200D3CB56 /* OAMapillaryTilesProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapillaryTilesProvider.h; path = Core/OAMapillaryTilesProvider.h; sourceTree = "<group>"; };
 		8AE06588229140F200D3CB56 /* OAMapillaryTilesProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapillaryTilesProvider.mm; path = Core/OAMapillaryTilesProvider.mm; sourceTree = "<group>"; };
 		8AE0658B2291426500D3CB56 /* OAMapillaryLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapillaryLayer.h; sourceTree = "<group>"; };
@@ -14075,6 +14076,7 @@
 				ja,
 				et,
 				el,
+				kab,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -19702,6 +19704,7 @@
 				8A5BD75B2397F68300ADE5C2 /* ja */,
 				8A4D82C623C1CD85003DC887 /* et */,
 				8A6E582023F003BD001C9A04 /* el */,
+				8AE0197224505D4400DA5C33 /* kab */,
 			);
 			name = Localizable.strings;
 			path = Resources;

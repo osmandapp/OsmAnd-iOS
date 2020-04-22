@@ -1650,3 +1650,7 @@
 "app_mode_bicycle" = "Велосипед";
 "app_mode_car" = "Водіння";
 "app_mode_default" = "Огляд мапи";
+
+"map_settings_base_transp" = "Прозорість мапи";
+"map_settings_color_scheme" = "Схема кольорів";
+"map_settings_appearance" = "Вигляд";

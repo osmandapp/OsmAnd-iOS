@@ -1200,3 +1200,13 @@
 "app_mode_taxi" = "出租车";
 "app_mode_pickup_truck" = "皮卡";
 "start_navigation" = "开始导航";
+
+"map_settings_appearance" = "外观";
+"shared_string_warning" = "警告";
+"all_group_points" = "组中所有的点";
+"map_settings_base_transp" = "基础地图透明度";
+"routing_attr_width_description" = "指定路线上允许的车辆宽度。";
+"app_mode_skiing" = "滑雪";
+"open_wiki_online" = "在线打开条目";
+"wiki_sheet_title" = "如何打开维基百科文章？";
+"map_settings_color_scheme" = "颜色方案";

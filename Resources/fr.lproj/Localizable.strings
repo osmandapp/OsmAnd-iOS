@@ -1550,3 +1550,9 @@
 "osmand_live_deleted_object" = "Objet supprimé";
 "available_map_styles" = "Styles de cartes disponibles";
 "select_map_style" = "Choisissez un style de carte";
+
+"res_zoom_levels" = "Niveaux de zoom";
+"all_group_points" = "Tous les points du groupe";
+"map_settings_base_transp" = "Transparence de la carte";
+"map_settings_color_scheme" = "Couleur du thème";
+"map_settings_appearance" = "Apparence";

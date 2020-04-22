@@ -1590,3 +1590,13 @@
 "app_mode_utv" = "Lado a Lado";
 "app_mode_osm" = "OSM";
 "rendering_attr_streetLightingNight_name" = "Mostrar apenas à noite";
+
+"all_group_points" = "Todos os pontos do grupo";
+"res_zoom_levels" = "Níveis de zoom";
+"region_antarctica" = "Antártida";
+"open_wiki_online" = "Abrir artigo on-line";
+"map_settings_color_scheme" = "Esquema de cores";
+"wiki_sheet_title" = "Como se abre artigos da Wikipédia\?";
+"map_settings_base_transp" = "Transparência do mapa base";
+"map_settings_appearance" = "Aparência";
+"shared_string_warning" = "Aviso";

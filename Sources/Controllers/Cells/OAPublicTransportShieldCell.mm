@@ -93,10 +93,10 @@ static UIFont *_shieldFont;
             if (walkTime > MIN_WALK_TIME)
             {
                 CLLocation *start;
-                CLLocation *end = [[CLLocation alloc] initWithLatitude:s->getStart()->lat longitude:s->getStart()->lon];
+                CLLocation *end = [[CLLocation alloc] initWithLatitude:s->getStart().lat longitude:s->getStart().lon];
                 if (prevSegment != nullptr)
                 {
-                    start = [[CLLocation alloc] initWithLatitude:prevSegment->getEnd()->lat longitude:prevSegment->getEnd()->lon];
+                    start = [[CLLocation alloc] initWithLatitude:prevSegment->getEnd().lat longitude:prevSegment->getEnd().lon];
                 }
                 else
                 {
@@ -147,7 +147,7 @@ static UIFont *_shieldFont;
                     float walkTime = finishWalkDist / _route->getWalkSpeed();
                     if (walkTime > MIN_WALK_TIME)
                     {
-                        CLLocation *start = [[CLLocation alloc] initWithLatitude:s->getEnd()->lat longitude:s->getEnd()->lon];
+                        CLLocation *start = [[CLLocation alloc] initWithLatitude:s->getEnd().lat longitude:s->getEnd().lon];
                         CLLocation *end = _transportHelper.endLocation;
                         [self drawArrowView:arr];
                         title = [[OsmAndApp instance] getFormattedTimeInterval:walkTime shortFormat:NO];

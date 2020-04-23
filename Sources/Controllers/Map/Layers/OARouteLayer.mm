@@ -113,7 +113,9 @@
         colorARGB = OsmAnd::ColorARGB(255 * alpha, 255 * red, 255 * green, 255 * blue);
         
         int baseOrder = self.baseOrder;
-        for (const auto& way : routeSegment->getGeometry())
+        vector<Way> list;
+        routeSegment->getGeometry(list);
+        for (const auto& way : list)
         {
             QVector<OsmAnd::PointI> points;
             for (const auto& node : way.nodes)
@@ -187,9 +189,9 @@
             for (const auto &seg : route->segments)
             {
                 [self drawTransportSegment:seg];
-                CLLocation *floc = [[CLLocation alloc] initWithLatitude:seg->getStart()->lat longitude:seg->getStart()->lon];
+                CLLocation *floc = [[CLLocation alloc] initWithLatitude:seg->getStart().lat longitude:seg->getStart().lon];
                 [self addWalkRoute:prev s2:seg start:p end:floc];
-                p = [[CLLocation alloc] initWithLatitude:seg->getEnd()->lat longitude:seg->getEnd()->lon];
+                p = [[CLLocation alloc] initWithLatitude:seg->getEnd().lat longitude:seg->getEnd().lon];
                 prev = seg;
             }
             [self addWalkRoute:prev s2:nullptr start:p end:end];

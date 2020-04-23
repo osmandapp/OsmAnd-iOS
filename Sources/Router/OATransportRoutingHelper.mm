@@ -50,8 +50,8 @@
         _s1 = s1;
         _s2 = s2;
 
-        _start = [[CLLocation alloc] initWithLatitude:s1->getEnd()->lat longitude:s1->getEnd()->lon];
-        _end = [[CLLocation alloc] initWithLatitude:s2->getStart()->lat longitude:s2->getStart()->lon];
+        _start = [[CLLocation alloc] initWithLatitude:s1->getEnd().lat longitude:s1->getEnd().lon];
+        _end = [[CLLocation alloc] initWithLatitude:s2->getStart().lat longitude:s2->getStart().lon];
         
         _startTransportStop = YES;
         _endTransportStop = YES;
@@ -65,7 +65,7 @@
     if (self) {
         _start = start;
         _s2 = s;
-        _end = [[CLLocation alloc] initWithLatitude:_s2->getStart()->lat longitude:_s2->getStart()->lon];
+        _end = [[CLLocation alloc] initWithLatitude:_s2->getStart().lat longitude:_s2->getStart().lon];
         _endTransportStop = YES;
     }
     return self;
@@ -77,7 +77,7 @@
     if (self) {
         _s1 = s;
         _end = end;
-        _start = [[CLLocation alloc] initWithLatitude:_s1->getEnd()->lat longitude:_s1->getEnd()->lon];
+        _start = [[CLLocation alloc] initWithLatitude:_s1->getEnd().lat longitude:_s1->getEnd().lon];
         _startTransportStop = true;
     }
     return self;
@@ -111,10 +111,10 @@
     if (_segment == nullptr)
         return hash;
     
-    if (_segment->getStart() != nullptr)
-        hash += (_segment->getStart()->id);
-    if (_segment->getEnd() != nullptr)
-        hash += (_segment->getEnd()->id);
+    if (_segment->getStart().x31 != -1 && _segment->getStart().y31 != -1)
+        hash += (_segment->getStart().id);
+    if (_segment->getEnd().x31 != -1 && _segment->getEnd().y31 != -1)
+        hash += (_segment->getEnd().id);
     return hash^(hash >> 32);
 }
 
@@ -205,6 +205,7 @@
 
 - (vector<SHARED_PTR<TransportRouteResult>>) calculateRouteImpl:(OATransportRouteCalculationParams *)params
 {
+    vector<SHARED_PTR<TransportRouteResult>> res;
     auto config = _app.defaultRoutingConfig;
     MAP_STR_STR paramsRes;
     auto router = [self getRouter:params.mode];
@@ -230,9 +231,9 @@
     }
     params.params = paramsRes;
     
-    const auto cfg = std::make_shared<TransportRoutingConfiguration>(router, params.params);
-    const auto planner = std::make_shared<TransportRoutePlanner>();
-    auto ctx = std::make_shared<TransportRoutingContext>(cfg);
+    auto cfg = unique_ptr<TransportRoutingConfiguration>(new TransportRoutingConfiguration(router, params.params));
+    const auto planner = unique_ptr<TransportRoutePlanner>(new TransportRoutePlanner());
+    auto ctx = unique_ptr<TransportRoutingContext>(new TransportRoutingContext(cfg));
     ctx->startX = get31TileNumberX(params.start.coordinate.longitude);
     ctx->startY = get31TileNumberY(params.start.coordinate.latitude);
     ctx->targetX = get31TileNumberX(params.end.coordinate.longitude);
@@ -252,7 +253,9 @@
     
     [OARoutingHelper.sharedInstance.getRouteProvider checkInitialized:15 leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
     
-    return planner->buildTransportRoute(ctx);
+    planner->buildTransportRoute(ctx, res);
+    
+    return res;
 }
 
 - (OARouteCalculationParams *) getWalkingRouteParams
@@ -305,8 +308,8 @@
             SHARED_PTR<TransportRouteResultSegment> prev = nullptr;
             for (SHARED_PTR<TransportRouteResultSegment>& s : r->segments)
             {
-                CLLocation *start = prev != nullptr ? [[CLLocation alloc] initWithLatitude:prev->getEnd()->lat longitude:prev->getEnd()->lon] : _params.start;
-                CLLocation *end = [[CLLocation alloc] initWithLatitude:s->getStart()->lat longitude:s->getStart()->lon];
+                CLLocation *start = prev != nullptr ? [[CLLocation alloc] initWithLatitude:prev->getEnd().lat longitude:prev->getEnd().lon] : _params.start;
+                CLLocation *end = [[CLLocation alloc] initWithLatitude:s->getStart().lat longitude:s->getStart().lon];
 
                 if (start != nil && end != nil)
                 {
@@ -723,7 +726,9 @@
         
         for (const auto& seg : segments)
         {
-            for (const auto& way : seg->getGeometry())
+            vector<Way> list;
+            seg->getGeometry(list);
+            for (const auto& way : list)
             {
                 for (const auto& node : way.nodes)
                 {

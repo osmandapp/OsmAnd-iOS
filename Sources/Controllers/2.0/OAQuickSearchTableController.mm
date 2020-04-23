@@ -54,7 +54,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Search/AmenitiesByNameSearch.h>
+#include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
 #include <OsmAndCore/FunctorQueryController.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Data/Address.h>
@@ -111,35 +111,30 @@
 
 + (OAPOI *) findAmenity:(NSString *)name lat:(double)lat lon:(double)lon lang:(NSString *)lang transliterate:(BOOL)transliterate
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-
+    auto keyword = QString::fromNSString(name);
     OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    
-    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
-    
-    searchCriteria->name = QString::fromNSString(name);
+    const auto& searchCriteria = std::make_shared<OsmAnd::AmenitiesInAreaSearch::Criteria>();
     searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(15, pointI);
-    searchCriteria->xy31 = pointI;
     
-    const auto& obfsCollection = app.resourcesManager->obfsCollection;
-    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+    const auto& obfsCollection = [OsmAndApp instance].resourcesManager->obfsCollection;
+    const auto search = std::make_shared<const OsmAnd::AmenitiesInAreaSearch>(obfsCollection);
 
     std::shared_ptr<const OsmAnd::Amenity> amenity;
-
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([self, &amenity]
                                                   (const OsmAnd::IQueryController* const controller)
                                                   {
                                                       return amenity != nullptr;
                                                   }));
-
     search->performSearch(*searchCriteria,
-                          [self, &amenity]
+                          [self, &amenity, &keyword]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                              amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                              auto a = ((OsmAnd::AmenitiesInAreaSearch::ResultEntry&)resultEntry).amenity;
+                              if (a->nativeName == keyword || a->localizedNames.contains(keyword))
+                                  amenity = qMove(a);
+        
                           }, ctrl);
-
     if (amenity)
         return [OAPOIHelper parsePOIByAmenity:amenity];
 
@@ -164,8 +159,7 @@
         for (const auto& point : app.favoritesCollection->getFavoriteLocations())
         {
             OsmAnd::LatLon latLon = point->getLatLon();
-            if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.latitude destination:item.latitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:latLon.longitude destination:item.longitude] && [item.name isEqualToString:point->getTitle().toNSString()])
+            if ([OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude] && [item.name isEqualToString:point->getTitle().toNSString()])
             {
                 OAFavoriteItem *fav = [[OAFavoriteItem alloc] init];
                 fav.favorite = point;
@@ -173,6 +167,25 @@
                 originFound = YES;
                 break;
             }
+        }
+    }
+    else if (item.hType == OAHistoryTypeWpt)
+    {
+        CLLocationCoordinate2D point = CLLocationCoordinate2DMake(item.latitude, item.longitude);
+        OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+        if ([mapVC findWpt:point])
+        {
+            OAGpxWpt *wpt = mapVC.foundWpt;
+            NSArray *foundWptGroups = mapVC.foundWptGroups;
+            NSString *foundWptDocPath = mapVC.foundWptDocPath;
+            
+            OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
+            wptItem.point = wpt;
+            wptItem.groups = foundWptGroups;
+            wptItem.docPath = foundWptDocPath;
+            
+            [[OARootViewController instance].mapPanel openTargetViewWithWpt:wptItem pushed:NO showFullMenu:NO saveState:NO];
+            originFound = YES;
         }
     }
     if (!originFound)

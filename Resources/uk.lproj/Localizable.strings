@@ -1650,7 +1650,12 @@
 "app_mode_bicycle" = "Велосипед";
 "app_mode_car" = "Водіння";
 "app_mode_default" = "Огляд мапи";
-
 "map_settings_base_transp" = "Прозорість мапи";
 "map_settings_color_scheme" = "Схема кольорів";
 "map_settings_appearance" = "Вигляд";
+"enable_contour_lines" = "Увімкнути для перегляду горизонталей на мапі";
+"map_settings_available_srtm_maps_descr" = "Потрібні додаткові мапи для перегляду пагорбів.";
+"map_settings_line_density_slowdown_warning" = "Висока щільність смуги може уповільнити відмалювання мапи";
+"map_settings_contour_zoom_level_descr" = "Виберіть рівень масштабування, на якому будуть відображені смуги контуру";
+"map_settings_line_density" = "Щільність смуги";
+"map_settings_line_width" = "Ширина смуги";

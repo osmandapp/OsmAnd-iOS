@@ -1217,7 +1217,7 @@
 "key_hint_goback" = "戻る";
 "wiki_buy_description" = "記事全文を読むにはWikipediaプラグインを購入し、%@のWikipediaデータをダウンロードする必要があります";
 "wiki_download_description" = "記事全文を読むには、%@のWikipediaデータをダウンロードしてください";
-"map_an_region" = "an region";
+"map_an_region" = "当該地域";
 "osm_live_plan_pricing" = "プランと料金";
 "osm_live_payment_monthly_title" = "1ヶ月分支払い";
 "osm_live_payment_3_months_title" = "3ヶ月分支払い";
@@ -1625,7 +1625,6 @@
 "map_settings_line_density_slowdown_warning" = "線密度が高いとマップの表示が遅くなります";
 "map_settings_appearance" = "外観";
 "map_settings_contour_zoom_level_descr" = "等高線表示を開始するズームレベルを選択します";
-
 "app_mode_helicopter" = "ヘリコプター";
 "app_mode_default" = "地図閲覧";
 "wiki_sheet_title" = "どの方法でWikipedia記事を開きますか？";
@@ -1649,3 +1648,4 @@
 "app_mode_camper" = "キャンパー";
 "app_mode_personal_transporter" = "個人輸送業者";
 "open_wiki_online" = "記事をオンラインで開く";
+"download_wiki_data" = "%@のWikipediaデータをダウンロード";

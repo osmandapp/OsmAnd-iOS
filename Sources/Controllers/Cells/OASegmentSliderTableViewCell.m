@@ -10,17 +10,21 @@
 #import "OAColors.h"
 
 #define kMarkTag 1000
-const CGFloat kMarkHeight = 16.0;
+const CGFloat kMarkHeight = 14.0;
 const CGFloat kMarkWidth = 2.0;
 
 @implementation OASegmentSliderTableViewCell
 {
     NSMutableArray<UIView *> *_markViews;
+    UIImpactFeedbackGenerator *_feedbackGenerator;
+    NSInteger _selectingMark;
 }
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    self.sliderView.minimumTrackTintColor = UIColorFromRGB(color_menu_button);
+    self.sliderView.maximumTrackTintColor = UIColorFromRGB(color_slider_gray);
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
@@ -32,6 +36,14 @@ const CGFloat kMarkWidth = 2.0;
 {
     _numberOfMarks = numberOfMarks;
     [self createMarks:_numberOfMarks];
+}
+
+- (void) setSelectedMark:(NSInteger)selectedMark
+{
+    _selectedMark = selectedMark;
+    _selectingMark = selectedMark;
+    self.sliderView.value = (CGFloat)selectedMark / (_numberOfMarks - 1);
+    [self paintMarks];
 }
 
 - (void) layoutSubviews
@@ -83,8 +95,10 @@ const CGFloat kMarkWidth = 2.0;
     CGFloat sliderViewHeight = self.sliderView.frame.size.height;
     CGRect sliderViewBounds = CGRectMake(0, 0, sliderViewWidth, sliderViewHeight);
     CGRect trackRect = [self.sliderView trackRectForBounds:sliderViewBounds];
-    CGFloat trackWidth = trackRect.size.width - kMarkWidth;
-    
+    CGFloat trackWidth = trackRect.size.width;
+    CGFloat markWidth = trackRect.size.height;
+    CGFloat markWidthH = trackRect.size.height / 2.0;
+
     CGFloat inset = (sliderViewWidth - trackRect.size.width) / 2;
     
     CGFloat x = inset;
@@ -93,7 +107,13 @@ const CGFloat kMarkWidth = 2.0;
     for (int i = 0; i < _numberOfMarks; i++)
     {
         UIView *mark = [self getMarkView:i];
-        mark.frame = CGRectMake(x, y, kMarkWidth, kMarkHeight);
+        if (i == 0)
+            mark.frame = CGRectMake(x, y, markWidth, kMarkHeight);
+        else if (i == _numberOfMarks - 1)
+            mark.frame = CGRectMake(x - markWidth, y, markWidth, kMarkHeight);
+        else
+            mark.frame = CGRectMake(x - markWidthH, y, markWidth, kMarkHeight);
+        
         x += trackWidth / segments;
     }
 }
@@ -113,8 +133,33 @@ const CGFloat kMarkWidth = 2.0;
         _markViews.firstObject.backgroundColor = UIColor.clearColor;
 }
 
-- (IBAction) sliderValueChanged:(id)sender
+- (void) generateFeedback
 {
+    NSLog(@"+++");
+
+    if (!_feedbackGenerator)
+    {
+        // Instantiate a new generator.
+        _feedbackGenerator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
+        // Prepare the generator when the gesture begins.
+        [_feedbackGenerator prepare];
+    }
+    // Trigger selection feedback.
+    [_feedbackGenerator impactOccurred];
+    // Keep the generator in a prepared state.
+    [_feedbackGenerator prepare];
+}
+
+- (IBAction) sliderValueChanged:(UISlider *)sender
+{
+    NSInteger selectingMark = _selectingMark;
+    CGFloat selectingMarkValue = (CGFloat)selectingMark / (_numberOfMarks - 1);
+    CGFloat step = 1.0 / (_markViews.count - 1);
+    if (ABS(sender.value - selectingMarkValue) >= step)
+    {
+        _selectingMark += sender.value - selectingMarkValue > 0 ? 1 : -1;
+        [self generateFeedback];
+    }
     [self paintMarks];
 }
 
@@ -134,7 +179,16 @@ const CGFloat kMarkWidth = 2.0;
         sender.value = nextMark * step;
     else
         sender.value = (nextMark - 1) * step;
+ 
+    _selectedMark = [self getIndex];
+    if (_selectedMark != _selectingMark)
+        [self generateFeedback];
+
+    _selectingMark = _selectedMark;
     
+    // Release the current generator.
+    _feedbackGenerator = nil;
+
     [self paintMarks];
 }
 

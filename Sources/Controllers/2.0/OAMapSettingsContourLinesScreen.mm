@@ -86,6 +86,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString *_minZoom;
     NSInteger _currentColor;
     NSArray<RepositoryResourceItem *> *_mapItems;
+    BOOL _showZoomPicker;
+    NSString *_defaultColorScheme;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -135,6 +137,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) commonInit
 {
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    _showZoomPicker = NO;
 }
 
 - (void) deinit
@@ -196,7 +199,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OAMapStyleParameter *colorParameter = [_styleSettings getParameter:kContourLinesColorScheme];
     NSArray *colorValues = [colorParameter possibleValuesUnsorted];
     BOOL nightMode = _settings.nightMode;
-    NSString *defaultColorScheme = kDefaultColorScheme;
+    _defaultColorScheme = kDefaultColorScheme;
     NSNumber *defaultColor = nil;
     for (OAMapStyleParameterValue *value in colorValues)
     {
@@ -226,40 +229,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         NSUInteger defaultColorIndex = [_colors indexOfObject:defaultColor];
         if (defaultColorIndex != NSNotFound)
-            defaultColorScheme = colorNames[defaultColorIndex];
+            _defaultColorScheme = colorNames[defaultColorIndex];
     }
+    _currentColor = [_visibleColorValues indexOfObject:colorParameter.value.length == 0 ? _defaultColorScheme : colorParameter.value];
     
-    OAMapStyleParameter *p1 = [_styleSettings getParameter:kContourLinesColorScheme];
-    if ([p1.value isEqualToString:@""])
-    {
-        p1.value = defaultColorScheme;
-        [_styleSettings save:p1];
-    }
-    _currentColor = [_visibleColorValues indexOfObject:p1.value];
-    
-    OAMapStyleParameter *p2 = [_styleSettings getParameter:kContourLinesDensity];
-    if ([p2.value isEqualToString:@""])
-    {
-        p2.value = kDefaultDensity;
-        [_styleSettings save:p2];
-    }
-    
-    OAMapStyleParameter *p3 = [_styleSettings getParameter:kContourLinesWidth];
-    if ([p3.value isEqualToString:@""])
-    {
-        p3.value = kDefaultWidth;
-        [_styleSettings save:p3];
-    }
-    
-    OAMapStyleParameter *p4 = [_styleSettings getParameter:kContourLinesZoomLevel];
-    if ([p4.value isEqualToString:@""])
-    {
-        p4.value = kDefaultZoomLevel;
-        [_styleSettings save:p4];
-        [[OAAppSettings sharedManager].contourLinesZoom set:p4.value];
-    }
     [self updateAvailableMaps];
-    
     [self generateData];
 }
 
@@ -278,11 +252,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             @"title" : OALocalizedString(@"display_starting_at_zoom_level"),
             @"parameter" : [_styleSettings getParameter:kContourLinesZoomLevel]
         }];
-        [zoomArr addObject:@{
-            @"type" : kCellTypePicker,
-            @"value" : _visibleZoomValues,
-            @"parameter" : [_styleSettings getParameter:kContourLinesZoomLevel]
-        }];
+        if (_showZoomPicker)
+        {
+            [zoomArr addObject:@{
+                @"type" : kCellTypePicker,
+                @"value" : _visibleZoomValues,
+                @"parameter" : [_styleSettings getParameter:kContourLinesZoomLevel]
+            }];
+        }
         
         NSMutableArray *linesArr = [NSMutableArray array];
         [linesArr addObject:@{
@@ -406,6 +383,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return [parameter.value isEqual:@"disabled"] ? false : true;
 }
 
+- (NSString *) getLocalizedParamValue:(NSString *)value
+{
+    return OALocalizedString([NSString stringWithFormat:@"rendering_value_%@_name", value]);
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -455,13 +437,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            cell.lbTime.textColor = UIColorFromRGB(color_text_footer);
         }
         OAMapStyleParameter *p = item[@"parameter"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.lbTitle.text = item[@"title"];
-        cell.lbTime.text = [p getValueTitle];
-        cell.lbTime.textColor = [UIColor blackColor];
-        
+        NSString *title = p.value.length == 0 ? kDefaultZoomLevel : p.value;
+        cell.lbTime.text = title;
         return cell;
     }
     else if ([item[@"type"] isEqualToString:kCellTypePicker])
@@ -477,8 +458,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         cell.dataArray = _visibleZoomValues;
         OAMapStyleParameter *p = item[@"parameter"];
-        NSInteger index = [_visibleZoomValues indexOfObject:p.value];
-        [cell.picker selectRow:index inComponent:0 animated:NO];
+        NSString *v = p.value.length == 0 ? kDefaultZoomLevel : p.value;
+        NSInteger index = [_visibleZoomValues indexOfObject:v];
+        if (index != NSNotFound)
+            [cell.picker selectRow:index inComponent:0 animated:NO];
+        
         cell.delegate = self;
         return cell;
     }
@@ -499,7 +483,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (cell)
         {
             OAMapStyleParameter *p = item[@"parameter"];
-            cell.valueLabel.text = [p getValueTitle];
+            cell.valueLabel.text = [self getLocalizedParamValue:p.value.length == 0 ? _defaultColorScheme : p.value];
             cell.currentColor = _currentColor;
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -510,7 +494,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         static NSString* const identifierCell = @"OASegmentSliderTableViewCell";
         OASegmentSliderTableViewCell* cell = nil;
-        cell = (OASegmentSliderTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        cell = (OASegmentSliderTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASegmentSliderCell" owner:self options:nil];
@@ -519,22 +503,25 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             OAMapStyleParameter *p = (OAMapStyleParameter *)item[@"parameter"];
             cell.titleLabel.text = item[@"name"];
-            cell.valueLabel.text = [p getValueTitle];            
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             if ([p.name isEqualToString:kContourLinesDensity])
             {
-                [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside];
-                cell.sliderView.value = (CGFloat)[_visibleDensityValues indexOfObject:p.value] / (_visibleDensityValues.count - 1);
+                NSString *v = p.value.length == 0 ? kDefaultDensity : p.value;
+                cell.valueLabel.text = [self getLocalizedParamValue:v];
                 cell.numberOfMarks = _visibleDensityValues.count;
+                cell.selectedMark = [_visibleDensityValues indexOfObject:v];
+                [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside];
             }
             else if ([p.name isEqualToString:kContourLinesWidth])
             {
-                [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside];
-                cell.sliderView.value = (CGFloat)[_visibleWidthValues indexOfObject:p.value] / (_visibleWidthValues.count - 1);
+                NSString *v = p.value.length == 0 ? kDefaultWidth : p.value;
+                cell.valueLabel.text = [self getLocalizedParamValue:v];
                 cell.numberOfMarks = _visibleWidthValues.count;
+                cell.selectedMark = [_visibleWidthValues indexOfObject:v];
+                [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside];
             }
         }
         return cell;
@@ -670,10 +657,29 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - UITableViewDelegate
 
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
+    {
+        UITableViewHeaderFooterView *v = (UITableViewHeaderFooterView *) view;
+        v.textLabel.textColor = UIColorFromRGB(color_text_footer);
+    }
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
+    {
+        UITableViewHeaderFooterView *v = (UITableViewHeaderFooterView *) view;
+        v.textLabel.textColor = UIColorFromRGB(color_text_footer);
+    }
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([[self getItem:indexPath][@"type"] isEqualToString:kCellTypePicker])
         return 162.0;
+    
     return UITableViewAutomaticDimension;
 }
 
@@ -690,7 +696,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self onItemClicked:indexPath];
-    
     [tblView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
@@ -714,7 +719,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) onItemClicked:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeMap])
+    if ([item[@"type"] isEqualToString:kCellTypeValue])
+    {
+        _showZoomPicker = !_showZoomPicker;
+        [self generateData];
+        if (_showZoomPicker)
+            [self.tblView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationTop];
+        else
+            [self.tblView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationTop];
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
         ResourceItem *mapItem = _mapItems[indexPath.row];
         if (mapItem.downloadTask != nil)
@@ -754,11 +768,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
         OASegmentSliderTableViewCell *cell = (OASegmentSliderTableViewCell *) [tblView cellForRowAtIndexPath:indexPath];
-        NSInteger index = [cell getIndex];
+        NSInteger index = cell.selectedMark;
         OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesWidth];
-        if (![p.value isEqualToString:_visibleWidthValues[index]])
+        NSString *currentValue = p.value.length == 0 ? kDefaultWidth : p.value;
+        NSString *selectedValue = _visibleWidthValues[index];
+        if (![currentValue isEqualToString:selectedValue])
         {
-            p.value = _visibleWidthValues[index];
+            p.value = selectedValue;
             [_styleSettings save:p];
             [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
@@ -771,11 +787,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
         OASegmentSliderTableViewCell *cell = (OASegmentSliderTableViewCell *) [tblView cellForRowAtIndexPath:indexPath];
-        NSInteger index = [cell getIndex];
+        NSInteger index = cell.selectedMark;
         OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesDensity];
-        if (![p.value isEqualToString:_visibleDensityValues[index]])
+        NSString *currentValue = p.value.length == 0 ? kDefaultDensity : p.value;
+        NSString *selectedValue = _visibleDensityValues[index];
+        if (![currentValue isEqualToString:selectedValue])
         {
-            p.value = _visibleDensityValues[index];
+            p.value = selectedValue;
             [_styleSettings save:p];
             [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
@@ -814,12 +832,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) colorChanged:(NSInteger)row
 {
-    OAMapStyleParameter *parameter = [_styleSettings getParameter:kContourLinesColorScheme];
-    if (parameter.value != _visibleColorValues[row])
+    OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesColorScheme];
+    NSString *currentValue = p.value.length == 0 ? _defaultColorScheme : p.value;
+    NSString *selectedValue = _visibleColorValues[row];
+    if (![currentValue isEqualToString:selectedValue])
     {
         _currentColor = row;
-        parameter.value = _visibleColorValues[row];
-        [_styleSettings save:parameter];
+        p.value = selectedValue;
+        [_styleSettings save:p];
         [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
     }
 }

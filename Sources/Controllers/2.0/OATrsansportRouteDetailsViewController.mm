@@ -24,7 +24,7 @@
 
 #define kPageControlMargin 4.0
 
-@interface OATrsansportRouteDetailsViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
+@interface OATrsansportRouteDetailsViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OATransportDetailsControllerDelegate>
 
 @end
 
@@ -102,6 +102,7 @@
     for (NSInteger i = 0; i < _numberOfRoutes; i++)
     {
         OATransportDetailsTableViewController *tableController = [[OATransportDetailsTableViewController alloc] initWithRouteIndex:i];
+        tableController.delegate = self;
         tableController.view.frame = _pageController.view.frame;
         tableController.view.tag = i;
         [viewControllers addObject:tableController];
@@ -296,6 +297,69 @@
     _pageControl.currentPage = _currentRoute;
     [_transportHelper setCurrentRoute:_currentRoute];
     [self refreshRouteLayer];
+}
+
+#pragma mark - OATransportDetailsControllerDelegate
+
+- (void)onContentHeightChanged
+{
+    [self.delegate contentHeightChanged:[self contentHeight]];
+}
+
+- (void) onDetailsRequested
+{
+    [self.delegate requestFullScreenMode];
+}
+
+- (void) onStartPressed
+{
+    [[OARootViewController instance].mapPanel targetHide];
+}
+
+- (void) showSegmentOnMap:(NSArray<CLLocation *> *)locations
+{
+    if (!locations || locations.count == 0)
+    {
+        return;
+    }
+    else if (locations.count == 1)
+    {
+        CLLocationCoordinate2D point = locations.firstObject.coordinate;
+        [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:point bottomRight:point];
+    }
+    else
+    {
+        double left = DBL_MAX;
+        double top = DBL_MAX;
+        double right = DBL_MAX;
+        double bottom = DBL_MAX;
+        
+        for (CLLocation* loc : locations)
+        {
+            if (left == DBL_MAX)
+            {
+                left = loc.coordinate.longitude;
+                right = loc.coordinate.longitude;
+                top = loc.coordinate.latitude;
+                bottom = loc.coordinate.latitude;
+            }
+            else
+            {
+                left = MIN(left, loc.coordinate.longitude);
+                right = MAX(right, loc.coordinate.longitude);
+                top = MAX(top, loc.coordinate.latitude);
+                bottom = MIN(bottom, loc.coordinate.latitude);
+            }
+        }
+        OABBox result;
+        result.bottom = bottom;
+        result.top = top;
+        result.left = left;
+        result.right = right;
+        
+        [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(result.top, result.left) bottomRight:CLLocationCoordinate2DMake(result.bottom, result.right)];
+    }
+    [self.delegate requestHeaderOnlyMode];
 }
 
 @end

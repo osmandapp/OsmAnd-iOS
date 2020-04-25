@@ -1,21 +1,15 @@
 //
-//  OAPublicTransportPointCell.m
+//  OAPublicTransportCollapsableCell.m
 //  OsmAnd
 //
 //  Created by Paul on 17/10/19.
 //  Copyright (c) 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAPublicTransportPointCell.h"
+#import "OAPublicTransportCollapsableCell.h"
 #import "OAUtilities.h"
 
-#define kIconSizeBig 30.0
-#define kIconSizeSmall 24.0
-
-#define kIconMarginLeftBig 16.0
-#define kIconMarginLeftSmall 19.0
-
-@implementation OAPublicTransportPointCell
+@implementation OAPublicTransportCollapsableCell
 
 - (void)awakeFromNib
 {
@@ -25,34 +19,6 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-}
-
-- (void) showSmallIcon:(BOOL)smallIcon
-{
-    BOOL needsUpdate = NO;
-    CGFloat newConstant = smallIcon ? kIconSizeSmall : kIconSizeBig;
-    CGFloat newLeftMargin = smallIcon ? kIconMarginLeftSmall : kIconMarginLeftBig;
-    if (_iconHeightConstraint.constant != newConstant)
-    {
-        _iconHeightConstraint.constant = newConstant;
-        needsUpdate = YES;
-    }
-    if (_iconWidthConstraint.constant != newConstant)
-    {
-        _iconWidthConstraint.constant = newConstant;
-        needsUpdate = YES;
-    }
-    if (_iconViewLeftConstraint.constant != newLeftMargin)
-    {
-        _iconViewLeftConstraint.constant = newLeftMargin;
-        needsUpdate = YES;
-    }
-    
-    if (needsUpdate)
-    {
-        [self setNeedsUpdateConstraints];
-        [self updateFocusIfNeeded];
-    }
 }
 
 - (void) updateConstraints

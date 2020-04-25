@@ -125,7 +125,7 @@ static UIFont *_shieldFont;
 {
     if (recognizer.state == UIGestureRecognizerStateEnded)
         [self animatePress:NO];
-        // TODO: notify route was pressed
+        [_delegate onShieldPressed:self.tag];
 }
 
 - (void) onViewPressed:(UIGestureRecognizer *)recognizer
@@ -137,7 +137,7 @@ static UIFont *_shieldFont;
     else if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         [self restoreShieldState];
-        // TODO: notify route was pressed
+        [_delegate onShieldPressed:self.tag];
     }
 }
 

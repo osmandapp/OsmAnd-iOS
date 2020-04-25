@@ -693,6 +693,18 @@
     _favoritesCollection->saveTo(QString::fromNSString(_favoritesFilename));
 }
 
+- (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
+{
+    int hours, minutes, seconds;
+    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
+    
+    NSMutableString *time = [NSMutableString string];
+    [time appendFormat:@"%02d:", hours];
+    [time appendFormat:@"%02d", minutes];
+    
+    return time;
+}
+
 - (NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat
 {
     int hours, minutes, seconds;

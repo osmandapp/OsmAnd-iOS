@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "OATransportDetailsTableViewController.h"
+
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <transportRouteResult.h>
@@ -15,6 +17,8 @@
 @class OATransportRouteResult;
 
 @interface OAPublicTransportShieldCell : UITableViewCell
+
+@property (nonatomic) id<OATransportDetailsControllerDelegate> delegate;
 
 -(void) setData:(SHARED_PTR<TransportRouteResult>)data;
 -(void) needsSafeAreaInsets:(BOOL)needsInsets;

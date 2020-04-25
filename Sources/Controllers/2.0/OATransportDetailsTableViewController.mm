@@ -16,8 +16,18 @@
 #import "OsmAndApp.h"
 #import "OATargetPointsHelper.h"
 #import "OARouteCalculationResult.h"
+#import "OATransportStopRoute.h"
+#import "OATargetInfoViewController.h"
+#import "OAPublicTransportCollapsableCell.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAPointDescription.h"
+#import "OAReverseGeocoder.h"
+#import "OAPublicTransportRouteShieldCell.h"
+#import "OADividerCell.h"
 
-@interface OATransportDetailsTableViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OATransportDetailsTableViewController () <UITableViewDelegate, UITableViewDataSource, OATransportShieldDelegate>
 
 @end
 
@@ -28,6 +38,9 @@
     NSArray<NSDictionary *> *_data;
     
     OsmAndAppInstance _app;
+    
+    NSInteger _offset;
+    NSInteger _lastCollapsible;
 }
 
 - (instancetype)initWithRouteIndex:(NSInteger) routeIndex
@@ -42,23 +55,249 @@
     return self;
 }
 
+- (void)addStartItems:(NSMutableArray *)arr route:(const std::shared_ptr<TransportRouteResult> &)route segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment start:(OARTargetPoint *)start startTime:(NSMutableArray<NSNumber *> *)startTime {
+    NSString *title = @"";
+    if (start != nil)
+    {
+        title = start.getOnlyName.length > 0 ? start.getOnlyName :
+        [NSString stringWithFormat:OALocalizedString(@"map_coords"), start.getLatitude, start.getLongitude];
+    }
+    
+    [arr addObject:@{
+        @"cell" : @"OAPublicTransportPointCell",
+        @"img" : start != nil ? @"ic_custom_start_point" : @"map_pedestrian_location",
+        @"title" : title,
+        @"top_route_line" : @(NO),
+        @"bottom_route_line" : @(NO),
+        @"time" : [_app getFormattedTimeHM:startTime.firstObject.doubleValue],
+        @"coords" : @[start.point]
+    }];
+    
+    double walkDist = [self getWalkDistance:nullptr next:segment dist:segment->walkDist];
+    NSInteger time = [self getWalkTime:nullptr next:segment dist:walkDist speed:route->getWalkSpeed()];
+    OARouteCalculationResult *seg = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:nullptr] s2:[[OATransportRouteResultSegment alloc] initWithSegment:segment]];
+    if (time < 60)
+        time = 60;
+    
+    [arr addObject:@{
+        @"cell" : @"OAPublicTransportPointCell",
+        @"img" : @"ic_profile_pedestrian",
+        @"title" : [NSString stringWithFormat:@"%@ ~%@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO]],
+        @"top_route_line" : @(NO),
+        @"bottom_route_line" : @(NO),
+        @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
+    }];
+    [startTime setObject:@(startTime.firstObject.integerValue + time) atIndexedSubscript:0];
+    
+    [arr addObject:@{
+        @"cell" : @"OADividerCell",
+        @"custom_insets" : @(YES)
+    }];
+}
+
+- (void)addLastItems:(NSMutableArray *)arr end:(OARTargetPoint *)end routeRes:(const std::shared_ptr<TransportRouteResult> &)routeRes segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment startTime:(NSMutableArray<NSNumber *> *)startTime {
+    double walkDist = [self getWalkDistance:segment next:nullptr dist:segment->walkDist];
+    NSInteger time = [self getWalkTime:segment next:nullptr dist:walkDist speed:routeRes->getWalkSpeed()];
+    OARouteCalculationResult *seg = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:segment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nullptr]];
+    if (time < 60)
+        time = 60;
+    
+    [arr addObject:@{
+        @"cell" : @"OAPublicTransportPointCell",
+        @"img" : @"ic_profile_pedestrian",
+        @"title" : [NSString stringWithFormat:@"%@ ~%@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO]],
+        @"top_route_line" : @(NO),
+        @"bottom_route_line" : @(NO),
+        @"coords" : seg != nil ? seg.getImmutableAllLocations : @[],
+        @"offset" : @(_offset),
+        @"last_collapsable" : @(_lastCollapsible)
+    }];
+    [startTime setObject:@(startTime.firstObject.integerValue + time) atIndexedSubscript:0];
+    
+    [arr addObject:@{
+        @"cell" : @"OADividerCell",
+        @"custom_insets" : @(YES),
+        @"offset" : @(_offset),
+        @"last_collapsable" : @(_lastCollapsible)
+    }];
+    
+    NSString *title = @"";
+    if (end != nil)
+    {
+        title = end.getOnlyName.length > 0 ? end.getOnlyName :
+        [NSString stringWithFormat:OALocalizedString(@"map_coords"), end.getLatitude, end.getLongitude];
+    }
+    
+    NSString *destAddress = [[OAReverseGeocoder instance] lookupAddressAtLat:end.getLatitude lon:end.getLongitude];
+    if ([destAddress isEqualToString:title] || destAddress.length == 0)
+        destAddress = OALocalizedString(@"map_widget_distance");
+    
+    [arr addObject:@{
+        @"cell" : @"OAPublicTransportPointCell",
+        @"img" : @"ic_custom_destination",
+        @"title" : title,
+        @"descr" : destAddress,
+        @"top_route_line" : @(NO),
+        @"bottom_route_line" : @(NO),
+        @"time" : [_app getFormattedTimeHM:startTime.firstObject.doubleValue],
+        @"coords" : @[end.point]
+    }];
+    
+    [arr addObject:@{
+        @"cell" : @"OADividerCell",
+        @"custom_insets" : @(NO)
+    }];
+}
+
+- (void)buildCollapsibleCells:(NSMutableArray *)arr color:(UIColor *)color segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment stopType:(OATransportStopType *)stopType stops:(const std::vector<std::shared_ptr<TransportStop>, std::allocator<std::shared_ptr<TransportStop> > > &)stops {
+    OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
+    r.type = stopType;
+    NSMutableDictionary *collapsableCell = [NSMutableDictionary new];
+    NSMutableArray *subItems = [NSMutableArray new];
+    NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray new];
+    [collapsableCell setObject:@"OAPublicTransportCollapsableCell" forKey:@"cell"];
+    [collapsableCell setObject:[NSString stringWithFormat:OALocalizedString(@"by_type"), [r getTypeStr]] forKey:@"descr"];
+    [collapsableCell setObject:[NSString stringWithFormat:@"%lu %@ • %@", stops.size(), OALocalizedString(@"num_stops"), [_app getFormattedDistance:segment->getTravelDist()]] forKey:@"title"];
+    [collapsableCell setObject:@(YES) forKey:@"collapsed"];
+    [collapsableCell setObject:color forKey:@"line_color"];
+    NSInteger row = arr.count;
+    _lastCollapsible = row;
+    for (NSInteger i = 1; i < stops.size() - 1; i++)
+    {
+        const auto& stop = stops[i];
+        [subItems addObject:@{
+            @"cell" : @"OAPublicTransportPointCell",
+            @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
+            @"title" : [NSString stringWithUTF8String:stop->name.c_str()],
+            @"top_route_line" : @(YES),
+            @"bottom_route_line" : @(YES),
+            @"small_icon" : @(YES),
+            @"collapsible" : @(YES),
+            @"custom_icon" : @(YES),
+            @"header_cell" : @(row),
+            @"line_color" : color,
+            @"coords" : @[[[CLLocation alloc] initWithLatitude:stop->lat longitude:stop->lon]]
+        }];
+        [indexPaths addObject:[NSIndexPath indexPathForRow:(row + i) inSection:0]];
+    }
+    _offset += subItems.count;
+    [collapsableCell setObject:indexPaths forKey:@"indexes"];
+    
+    [arr addObject:collapsableCell];
+    [arr addObjectsFromArray:subItems];
+}
+
+- (NSMutableArray<CLLocation *> *)generateLocationsFor:(const std::shared_ptr<TransportRouteResultSegment> &)segment {
+    NSMutableArray<CLLocation *> *locations = [NSMutableArray new];
+    vector<Way> geometry;
+    segment->getGeometry(geometry);
+    for (const auto& w : geometry)
+    {
+        for (const auto& n : w.nodes)
+        {
+            [locations addObject:[[CLLocation alloc] initWithLatitude:n.lat longitude:n.lon]];
+        }
+    }
+    return locations;
+}
+
+- (void)buildTransportSegmentItems:(NSMutableArray *)arr routeRes:(const std::shared_ptr<TransportRouteResult> &)routeRes segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment startTime:(NSMutableArray<NSNumber *> *)startTime {
+    const auto& route = segment->route;
+    const auto stops = segment->getTravelStops();
+    const auto startStop = stops[0];
+    OATransportStopType *stopType = [OATransportStopType findType:[NSString stringWithUTF8String:route->type.c_str()]];
+    [startTime setObject:@(startTime.firstObject.integerValue + routeRes->getBoardingTime()) atIndexedSubscript:0];
+    NSString *timeText = [_app getFormattedTimeHM:startTime.firstObject.doubleValue];
+    string str = route->color;
+    UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:[NSString stringWithUTF8String:str.c_str()]];
+    
+    [arr addObject:@{
+        @"cell" : @"OAPublicTransportPointCell",
+        @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
+        @"title" : [NSString stringWithUTF8String:startStop->name.c_str()],
+        @"descr" : OALocalizedString(@"board_at"),
+        @"time" : timeText,
+        @"top_route_line" : @(NO),
+        @"bottom_route_line" : @(YES),
+        @"custom_icon" : @(YES),
+        @"line_color" : color,
+        @"coords" : @[[[CLLocation alloc] initWithLatitude:startStop->lat longitude:startStop->lon]],
+        @"offset" : @(_offset),
+        @"last_collapsable" : @(_lastCollapsible)
+    }];
+    // TODO: fix later for schedule
+    [startTime setObject:@(startTime.firstObject.integerValue + segment->travelTime) atIndexedSubscript:0];
+    timeText = [_app getFormattedTimeHM:startTime.firstObject.doubleValue];
+    
+    NSMutableArray<CLLocation *> * locations = [self generateLocationsFor:segment];
+    
+    [arr addObject:@{
+        @"cell" : @"OAPublicTransportRouteShieldCell",
+        @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
+        @"title" : [NSString stringWithUTF8String:route->name.c_str()],
+        @"line_color" : color,
+        @"coords" : locations,
+        @"offset" : @(_offset),
+        @"last_collapsable" : @(_lastCollapsible)
+    }];
+    
+    [arr addObject:@{
+        @"cell" : @"OADividerCell",
+        @"custom_insets" : @(YES),
+        @"offset" : @(_offset),
+        @"last_collapsable" : @(_lastCollapsible)
+    }];
+    
+    if (stops.size() > 2)
+    {
+        [self buildCollapsibleCells:arr color:color segment:segment stopType:stopType stops:stops];
+    }
+    
+    const auto endStop = stops[stops.size() - 1];
+    [arr addObject:@{
+        @"cell" : @"OAPublicTransportPointCell",
+        @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
+        @"title" : [NSString stringWithUTF8String:endStop->name.c_str()],
+        @"descr" : OALocalizedString(@"exit_at"),
+        @"time" : timeText,
+        @"top_route_line" : @(YES),
+        @"bottom_route_line" : @(NO),
+        @"custom_icon" : @(YES),
+        @"line_color" : color,
+        @"coords" : @[[[CLLocation alloc] initWithLatitude:endStop->lat longitude:endStop->lon]],
+        @"offset" : @(_offset),
+        @"last_collapsable" : @(_lastCollapsible)
+    }];
+    
+    [arr addObject:@{
+        @"cell" : @"OADividerCell",
+        @"custom_insets" : @(YES),
+        @"offset" : @(_offset),
+        @"last_collapsable" : @(_lastCollapsible)
+    }];
+}
+
 - (void) generateData
 {
-    //                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_start_point", @"title" : @"Start", @"time" : @"0:00", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
-     //                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_profile_pedestrian", @"title" : @"By foot", @"time" : @"0:05", @"top_route_line" : @(NO), @"bottom_route_line" : @(NO)},
-     //                  @{@"cell" : @"OAPublicTransportPointCell", @"title" : @"Hotel ABC", @"descr" : @"Board at stop", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(YES)},
-     //                  @{@"cell" : @"OAPublicTransportPointCell", @"img" : @"ic_custom_destination", @"title" : @"Independence Square", @"descr" : @"Exit at", @"time" : @"0:10", @"top_route_line" : @(YES), @"bottom_route_line" : @(NO), @"small_icon" : @(YES)}];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:@[@{@"cell" : @"OAPublicTransportShieldCell"},
-                                                           @{@"cell" : @"OAPublicTransportRouteCell"}
-    ]];
-    const auto route = _transportHelper.getRoutes[_routeIndex];
+                                                           @{@"cell" : @"OAPublicTransportRouteCell"},
+                                                           @{
+                                                               @"cell" : @"OADividerCell",
+                                                               @"custom_insets" : @(NO)
+                                                           }]];
+    
+    _offset = 0;
+    _lastCollapsible = 0;
+    
+    const auto routeRes = _transportHelper.getRoutes[_routeIndex];
     OATargetPointsHelper *pointsHelper = OATargetPointsHelper.sharedInstance;
     OARTargetPoint *start = pointsHelper.getPointToStart;
     OARTargetPoint *end = pointsHelper.getPointToNavigate;
     NSMutableArray<NSNumber *> *startTime = [NSMutableArray new];
     [startTime addObject:@(0)];
     
-    const auto segments = route->segments;
+    const auto segments = routeRes->segments;
+    
     for (NSInteger i = 0; i < segments.size(); i++)
     {
         BOOL first = i == 0;
@@ -66,34 +305,47 @@
         const auto& segment = segments[i];
         if (first)
         {
-            NSString *title = @"";
-            if (start != nil)
-            {
-                title = start.getOnlyName.length > 0 ? start.getOnlyName :
-                    [NSString stringWithFormat:OALocalizedString(@"map_coords"), start.getLatitude, start.getLongitude];
+            [self addStartItems:arr route:routeRes segment:segment start:start startTime:startTime];
+        }
+        [self buildTransportSegmentItems:arr routeRes:routeRes segment:segment startTime:startTime];
+        
+        if (i < segments.size() - 1)
+        {
+            const auto& nextSegment = segments[i + 1];
+            
+            if (nextSegment != nullptr) {
+                double walkDist = [self getWalkDistance:segment next:nextSegment dist:segment->walkDist];
+                if (walkDist > 0)
+                {
+                    NSInteger time = [self getWalkTime:segment next:nextSegment dist:walkDist speed:routeRes->getWalkSpeed()];
+                    if (time < 60)
+                        time = 60;
+                    OARouteCalculationResult *seg = [_transportHelper getWalkingRouteSegment:[[OATransportRouteResultSegment alloc] initWithSegment:segment] s2:[[OATransportRouteResultSegment alloc] initWithSegment:nextSegment]];
+                    [arr addObject:@{
+                        @"cell" : @"OAPublicTransportPointCell",
+                        @"img" : @"ic_profile_pedestrian",
+                        @"title" : [NSString stringWithFormat:@"%@ ~%@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO]],
+                        @"top_route_line" : @(NO),
+                        @"bottom_route_line" : @(NO),
+                        @"coords" : seg != nil ? seg.getImmutableAllLocations : @[],
+                        @"offset" : @(_offset),
+                        @"last_collapsable" : @(_lastCollapsible)
+                    }];
+                    [startTime setObject:@(startTime.firstObject.integerValue + time) atIndexedSubscript:0];
+                    
+                    [arr addObject:@{
+                        @"cell" : @"OADividerCell",
+                        @"custom_insets" : @(YES),
+                        @"offset" : @(_offset),
+                        @"last_collapsable" : @(_lastCollapsible)
+                    }];
+                }
             }
-            
-            [arr addObject:@{
-                @"cell" : @"OAPublicTransportPointCell",
-                @"img" : start != nil ? @"ic_custom_start_point" : @"map_pedestrian_location",
-                @"title" : title,
-                @"top_route_line" : @(NO),
-                @"bottom_route_line" : @(NO),
-                @"time" : [_app getFormattedTimeInterval:startTime.firstObject.doubleValue shortFormat:YES]
-            }];
-            
-            double walkDist = [self getWalkDistance:nullptr next:segment dist:segment->walkDist];
-            NSInteger time = [self getWalkTime:nullptr next:segment dist:walkDist speed:route->getWalkSpeed()];
-            if (time < 60)
-                time = 60;
-            
-            [arr addObject:@{
-                @"cell" : @"OAPublicTransportPointCell",
-                @"img" : @"ic_profile_pedestrian",
-                @"title" : [NSString stringWithFormat:@"%@ ~%@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO]],
-                @"top_route_line" : @(NO),
-                @"bottom_route_line" : @(NO)
-            }];
+        }
+        
+        if (last)
+        {
+            [self addLastItems:arr end:end routeRes:routeRes segment:segment startTime:startTime];
         }
     }
     _data = [NSArray arrayWithArray:arr];
@@ -123,9 +375,44 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
+- (void) onTransportDetailsPressed:(id)sender
+{
+    [self.delegate onDetailsRequested];
+}
+
+- (void) onStartPressed:(id)sender
+{
+    [self.delegate onStartPressed];
+}
+
 - (NSDictionary *) getItem:(NSIndexPath *) indexPath
 {
-    return _data[indexPath.row];
+    NSDictionary *item = _data[indexPath.row];
+    NSInteger offset = [item[@"offset"] integerValue];
+    NSInteger lastCollapsable = [item[@"last_collapsable"] integerValue];
+    if ([item[@"collapsible"] boolValue])
+    {
+        NSNumber *headerSection = item[@"header_cell"];
+        NSDictionary *headerCell = _data[headerSection.integerValue];
+        if (![headerCell[@"collapsed"] boolValue])
+        {
+            return item;
+        }
+        else
+        {
+            NSInteger toSkip = ((NSArray *)headerCell[@"indexes"]).count;
+            return _data[headerSection.integerValue + toSkip + (indexPath.row - headerSection.integerValue)];
+        }
+    }
+    else if (offset != 0 && lastCollapsable != 0)
+    {
+        NSDictionary *headerCell = _data[lastCollapsable];
+        if ([headerCell[@"collapsed"] boolValue])
+        {
+            return _data[indexPath.row + offset];
+        }
+    }
+    return item;
 }
 
 - (CGFloat) getMinimizedContentHeight
@@ -215,12 +502,12 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.detailsButton setTitle:OALocalizedString(@"res_details") forState:UIControlStateNormal];
             cell.detailsButton.tag = _routeIndex;
-//            [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-//            [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.showOnMapButton setTitle:OALocalizedString(@"sett_show") forState:UIControlStateNormal];
+            [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.showOnMapButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
             cell.showOnMapButton.tag = _routeIndex;
-//            [cell.showOnMapButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-//            [cell.showOnMapButton addTarget:self action:@selector(onTransportShowOnMapPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.showOnMapButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.showOnMapButton addTarget:self action:@selector(onStartPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         
         return cell;
@@ -243,6 +530,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             const auto& routes = _transportHelper.getRoutes;
             [cell setData:routes[_routeIndex]];
+            cell.delegate = self.delegate;
         }
         
         return cell;
@@ -265,7 +553,15 @@
             if (imageName)
             {
                 cell.iconView.hidden = NO;
-                [cell.iconView setImage:[UIImage imageNamed:imageName]];
+                if ([item[@"custom_icon"] boolValue])
+                {
+                    [cell.iconView setImage:[[OATargetInfoViewController getIcon:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                    cell.iconView.tintColor = UIColorFromRGB(color_chart_orange);
+                }
+                else
+                {
+                    [cell.iconView setImage:[UIImage imageNamed:imageName]];
+                }
             }
             else
             {
@@ -277,11 +573,98 @@
             cell.topRouteLineView.hidden = ![item[@"top_route_line"] boolValue];
             cell.bottomRouteLineView.hidden = ![item[@"bottom_route_line"] boolValue];
             
+            UIColor *routeColor = item[@"line_color"];
+            if (routeColor)
+            {
+                cell.topRouteLineView.backgroundColor = routeColor;
+                cell.bottomRouteLineView.backgroundColor = routeColor;
+            }
+            
             cell.timeLabel.text = item[@"time"] ? item[@"time"] : @"";
             
             [cell showSmallIcon:[item[@"small_icon"] boolValue]];
         }
         
+        return cell;
+    }
+    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportCollapsableCell"])
+    {
+        NSString* identifierCell = item[@"cell"];
+        OAPublicTransportCollapsableCell* cell = nil;
+        
+        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OAPublicTransportCollapsableCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            [cell.iconView setImage:[[UIImage imageNamed:[item[@"collapsed"] boolValue] ? @"ic_custom_arrow_down" : @"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            
+            cell.descView.text = item[@"descr"];
+            cell.textView.text = item[@"title"];
+            
+            UIColor *routeColor = item[@"line_color"];
+            if (routeColor)
+            {
+                cell.routeLineView.backgroundColor = routeColor;
+            }
+        }
+        
+        return cell;
+    }
+    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteShieldCell"])
+    {
+        NSString* identifierCell = item[@"cell"];
+        OAPublicTransportRouteShieldCell* cell = nil;
+        
+        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OAPublicTransportRouteShieldCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            [cell.iconView setImage:[[OATargetInfoViewController getIcon:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            cell.textView.text = item[@"title"];
+            
+            cell.routeShieldContainerView.tag = indexPath.row;
+            cell.delegate = self;
+            
+            UIColor *routeColor = item[@"line_color"];
+            if (routeColor)
+            {
+                [cell setShieldColor:routeColor];
+                cell.routeLineView.backgroundColor = routeColor;
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
+        return cell;
+    }
+    else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+    {
+        static NSString* const identifierCell = @"OADividerCell";
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            cell = (OADividerCell *)[nib objectAtIndex:0];
+        }
+        if (cell)
+        {
+            cell.backgroundColor = UIColor.whiteColor;
+            cell.dividerColor = UIColorFromRGB(color_divider_blur);
+            CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
+            CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
+            cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
+            cell.dividerHight = 0.5;
+        }
         return cell;
     }
     return nil;
@@ -294,7 +677,22 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.count;
+    NSInteger rowCount = 0;
+    for (NSInteger i = 0; i < _data.count; i++)
+    {
+        NSDictionary *item = _data[i];
+        if ([item[@"cell"] isEqualToString:@"OAPublicTransportCollapsableCell"])
+        {
+            rowCount++;
+            if (![item[@"collapsed"] boolValue])
+                rowCount += ((NSArray *) item[@"indexes"]).count;
+        }
+        else if (![item[@"collapsible"] boolValue])
+        {
+            rowCount++;
+        }
+    }
+    return rowCount;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -311,10 +709,12 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"] || [item[@"cell"] isEqualToString:@"OAPublicTransportPointCell"])
+    if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"] || [item[@"cell"] isEqualToString:@"OAPublicTransportPointCell"] || [item[@"cell"] isEqualToString:@"OAPublicTransportCollapsableCell"] || [item[@"cell"] isEqualToString:@"OAPublicTransportRouteShieldCell"])
         return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
         return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[_routeIndex] needsSafeArea:NO];
+    else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+        return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     return 44.0;
 }
 
@@ -329,7 +729,39 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"cell"] isEqualToString:@"OAPublicTransportCollapsableCell"])
+    {
+        NSMutableDictionary *mutableItem = (NSMutableDictionary *) item;
+        [tableView beginUpdates];
+        if ([mutableItem[@"collapsed"] boolValue])
+        {
+            [mutableItem setObject:@(NO) forKey:@"collapsed"];
+            [tableView insertRowsAtIndexPaths:item[@"indexes"] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        else
+        {
+            [mutableItem setObject:@(YES) forKey:@"collapsed"];
+            [tableView deleteRowsAtIndexPaths:item[@"indexes"] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [tableView endUpdates];
+        [self.delegate onContentHeightChanged];
+    }
+    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportPointCell"])
+    {
+        NSArray<CLLocation *> *locations = item[@"coords"];
+        [self.delegate showSegmentOnMap:locations];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - OATransportShieldDelegate
+
+- (void) onShileldPressed:(NSInteger)index
+{
+    NSDictionary *item = _data[index];
+    [self.delegate showSegmentOnMap:item[@"coords"]];
 }
 
 @end

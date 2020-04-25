@@ -1249,6 +1249,10 @@
 
 "total" = "Total";
 "walk" = "Walk";
+"board_at" = "Board at";
+"exit_at" = "Exit at";
+"by_type" = "By %@";
+"num_stops" = "stops";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
 "change_group" = "Change group";

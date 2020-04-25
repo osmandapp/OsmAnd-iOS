@@ -1682,7 +1682,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSRange lastWordRange = NSMakeRange(range.location + range.length, res.length - range.location - 1);
     [res addAttributes:@{NSLinkAttributeName: @"https://osmand.net/blog/guideline-pt",
                          NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
-                         NSFontAttributeName: [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]
+                         NSFontAttributeName: [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
     } range:lastWordRange];
     return [[NSAttributedString alloc] initWithAttributedString:res];
 }

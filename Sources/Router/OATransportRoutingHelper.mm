@@ -231,7 +231,7 @@
     }
     params.params = paramsRes;
     
-    auto cfg = unique_ptr<TransportRoutingConfiguration>(new TransportRoutingConfiguration(router, params.params));
+    auto cfg = make_shared<TransportRoutingConfiguration>(router, params.params);
     const auto planner = unique_ptr<TransportRoutePlanner>(new TransportRoutePlanner());
     auto ctx = unique_ptr<TransportRoutingContext>(new TransportRoutingContext(cfg));
     ctx->startX = get31TileNumberX(params.start.coordinate.longitude);

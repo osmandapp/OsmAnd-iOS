@@ -28,6 +28,7 @@
 #import "OATopTextView.h"
 #import "OAAlarmWidget.h"
 #import "OARulerWidget.h"
+#import "OADestinationsLineWidget.h"
 
 @interface OATextState : NSObject
 
@@ -65,6 +66,7 @@
     OALanesControl *_lanesControl;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
+    OADestinationsLineWidget *_destinationLineControl;
     
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
@@ -129,6 +131,12 @@
     });
 }
 
+- (void) updateDestinationLine {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_destinationLineControl updateLayer];
+    });
+}
+
 - (void) onMapRendererFramePrepared
 {
     NSTimeInterval currentTime = CACurrentMediaTime();
@@ -141,6 +149,7 @@
     }
     // Render the ruler more often
     [self updateRuler];
+    [self updateDestinationLine];
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
@@ -555,7 +564,10 @@
     
     _rulerControl = [ric createRulerControl];
     _rulerControl.delegate = self;
-
+    
+    _destinationLineControl = [ric createDestinationLineControl];
+    _destinationLineControl.delegate = self;
+    
     /*
     topToolbarView = new TopToolbarView(map);
     updateTopToolbar(false);

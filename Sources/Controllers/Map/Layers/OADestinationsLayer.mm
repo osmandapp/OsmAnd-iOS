@@ -18,6 +18,7 @@
 #import "OAStateChangedListener.h"
 #import "OATargetPoint.h"
 #import "OADestinationsHelper.h"
+#import "OADestinationsLineWidget.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -37,6 +38,7 @@
     OAAutoObserverProxy* _destinationHideObserver;
     
     OATargetPointsHelper *_targetPoints;
+    OADestinationsLineWidget *_destinationLayerView;
 }
 
 - (NSString *) layerId
@@ -69,6 +71,10 @@
     
     _targetPoints = [OATargetPointsHelper sharedInstance];
     [_targetPoints addListener:self];
+
+    _destinationLayerView = [OADestinationsLineWidget sharedInstance];
+    //_destinationLayerView.hidden = NO;
+    [self.mapView addSubview:_destinationLayerView];
 }
 
 - (void) deinitLayer
@@ -110,7 +116,10 @@
 
     for (OADestination *destination in self.app.data.destinations)
         if (!destination.routePoint && !destination.hidden)
+        {
             [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+            [_destinationLayerView drawLineToDestinationPin:destination];
+        }
 
 }
 
@@ -168,6 +177,7 @@
     OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+        [_destinationLayerView drawLineToDestinationPin:destination];
     });
 }
 
@@ -176,6 +186,7 @@
     OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self removeDestinationPin:destination.latitude longitude:destination.longitude];
+        [_destinationLayerView removeLineToDestinationPin:destination];
     });
 }
 
@@ -199,7 +210,10 @@
         }
         
         if (!exists)
+        {
             [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+            [_destinationLayerView drawLineToDestinationPin:destination];
+        }
     }
 }
 

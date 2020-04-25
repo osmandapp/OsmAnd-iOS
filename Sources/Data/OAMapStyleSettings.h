@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 @property (nonatomic) NSString *value;
 @property (nonatomic) NSString *defaultValue;
 @property (nonatomic) NSArray *possibleValues;
+@property (nonatomic) NSArray *possibleValuesUnsorted;
 
 - (NSString *)getValueTitle;
 

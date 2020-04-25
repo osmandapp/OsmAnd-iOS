@@ -1409,3 +1409,13 @@
 "app_mode_wagon" = "旅行車";
 "app_mode_utv" = "並排";
 "app_mode_osm" = "OSM";
+
+"map_settings_color_scheme" = "色調配置";
+"all_group_points" = "群組的全部標點";
+"res_zoom_levels" = "縮放等級";
+"map_settings_appearance" = "外觀";
+"wiki_sheet_title" = "如何開啟維基百科文章？";
+"open_wiki_online" = "線上開啟文章";
+"region_antarctica" = "南極洲";
+"shared_string_warning" = "警示";
+"map_settings_base_transp" = "底圖透明度";

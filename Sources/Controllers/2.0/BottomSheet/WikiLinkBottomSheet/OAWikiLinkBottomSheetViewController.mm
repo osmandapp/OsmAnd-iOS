@@ -17,7 +17,7 @@
 #import "OADestinationItemsListViewController.h"
 #import "OAWorldRegion.h"
 #import "OAWikiArticleHelper.h"
-#import "OAResourcesBaseViewController.h"
+#import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
 
 #include <OsmAndCore.h>
@@ -241,12 +241,12 @@
             OsmAndAppInstance app = [OsmAndApp instance];
             if ([app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:_resourceItem.resourceId.toNSString()]].count == 0)
             {
-                NSString *resourceName = [OAResourcesBaseViewController titleOfResource:_resourceItem.resource
-                                                                                       inRegion:_resourceItem.worldRegion
-                                                                                 withRegionName:YES
-                                                                               withResourceType:YES];
+                NSString *resourceName = [OAResourcesUIHelper titleOfResource:_resourceItem.resource
+                                                                     inRegion:_resourceItem.worldRegion
+                                                               withRegionName:YES
+                                                             withResourceType:YES];
                         
-                [OAResourcesBaseViewController startBackgroundDownloadOf:_resourceItem.resource resourceName:resourceName];
+                [OAResourcesUIHelper startBackgroundDownloadOf:_resourceItem.resource resourceName:resourceName];
             }
         }
         else

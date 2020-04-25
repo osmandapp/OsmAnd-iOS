@@ -306,7 +306,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
     // Type
     [tKeys addObject:OALocalizedString(@"res_type")];
-    [tValues addObject:[OAResourcesBaseViewController resourceTypeLocalized:localResource->type]];
+    [tValues addObject:[OAResourcesUIHelper resourceTypeLocalized:localResource->type]];
 
     // Size
     [tKeys addObject:OALocalizedString(@"res_size")];

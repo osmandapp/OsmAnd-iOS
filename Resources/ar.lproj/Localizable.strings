@@ -1649,3 +1649,12 @@
 "app_mode_bicycle" = "دراجة";
 "app_mode_car" = "سيارة";
 "app_mode_default" = "استعراض الخريطة";
+"enable_contour_lines" = "تمكين لعرض خطوط الكنتور على الخريطة";
+"map_settings_available_srtm_maps_descr" = "تحتاج إلى خرائط إضافية لعرض التضاريس على الخريطة";
+"map_settings_line_density_slowdown_warning" = "قد يؤدي ارتفاع كثافة الخط إلى تباطؤ عرض الخريطة";
+"map_settings_appearance" = "المظهر";
+"map_settings_contour_zoom_level_descr" = "حدد مستوى التكبير،سيتم عرض خطوط الكنتور";
+"map_settings_line_density" = "كثافة الخط";
+"map_settings_line_width" = "عرض الخط";
+"map_settings_color_scheme" = "لون الخطوط المحيطية";
+"map_settings_base_transp" = "شفافية الخريطة الأساسية";

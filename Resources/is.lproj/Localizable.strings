@@ -130,7 +130,7 @@
 "map_settings_online" = "Nettengd kort";
 "map_settings_transp" = "Gegnsæi";
 "map_settings_avail_lay" = "Tiltæk lög";
-"map_settings_hillshade" = "Hæðarskygging";
+"map_settings_hillshade" = "Hæðaskygging";
 // Intro
 "intro_skip" = "Sleppa";
 "intro_download" = "Sækja\nkort";
@@ -356,7 +356,7 @@
 "res_roads" = "Vegir";
 "res_srtm" = "Hæðarlínur";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Hæðarskygging";
+"res_hillshade" = "Hæðaskygging";
 "select_language" = "Veldu tungumál";
 "language_short" = "Tungumál";
 "open_url" = "Opna síðu í vafra";
@@ -1650,3 +1650,12 @@
 "download_wiki_data" = "Sækja Wikipedia-gögn fyrir %@";
 "wiki_sheet_title" = "Hvernig á að opna Wikipedia-greinar?";
 "all_group_points" = "Allir punktar hópsins";
+"enable_contour_lines" = "Virkja til að skoða hæðarlínur á kortinu";
+"map_settings_available_srtm_maps_descr" = "Viðbótarkort þarf til að skoða hæðaskyggingar á kortinu";
+"map_settings_line_density_slowdown_warning" = "Mikill þéttleiki lína getur hægt á birtingu korts";
+"map_settings_appearance" = "Útlit";
+"map_settings_contour_zoom_level_descr" = "Veldu aðdráttarstig frá og með hverju hæðarlínur verða birtar";
+"map_settings_line_density" = "Þéttleiki línu";
+"map_settings_line_width" = "Línubreidd";
+"map_settings_color_scheme" = "Litastef";
+"map_settings_base_transp" = "Gegnsæi grunnkorts";

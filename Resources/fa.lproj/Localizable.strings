@@ -1063,7 +1063,7 @@
 "rendering_value_pedestrian_name" = "پیاده";
 "rendering_attr_highway_class_track_grade4_name" = "سطح ۴";
 "rendering_value_brown_name" = "قهوه‌ای";
-"rendering_attr_showLez_description" = "محدوده‌های کم‌آلاینده (LEZ) را روی نقشه نشان بده. روی مسیریابی اثر نمی‌گذارد.";
+"rendering_attr_showLez_description" = "محدوده‌های کاهش آلودگی هوای شهر را روی نقشه نشان بده. روی مسیریابی اثر نمی‌گذارد.";
 "routing_attr_avoid_subway_description" = "از مترو و حمل‌ونقل ریلی سبک پرهیز می‌کند";
 "rendering_attr_showCycleRoutes_name" = "مسیرهای دوچرخه";
 "rendering_attr_noAdminboundaries_description" = "مرزهای مناطق را نشان نده (تقسیمات سیاسی سطح ۵–۹).";
@@ -1239,7 +1239,7 @@
 "rendering_attr_pisteRoutes_name" = "سراشیبی‌های اسکی";
 "rendering_attr_highway_class_steps_name" = "پلکان";
 "rendering_attr_surface_ice_name" = "یخ";
-"rendering_attr_showLez_name" = "محدوده‌های کم‌آلاینده";
+"rendering_attr_showLez_name" = "محدوده‌های کاهش";
 "routeInfo_roadClass_name" = "نوع جاده";
 "rendering_attr_piste_difficulty_novice_name" = "مبتدی";
 "rendering_value_defaultTranslucentCyan_name" = "پیش‌فرض (فیروزه‌ای شفاف)";
@@ -1338,3 +1338,14 @@
 "app_mode_osm" = "OSM";
 "app_mode_bicycle" = "دوچرخه‌سواری";
 "app_mode_skiing" = "اسکی";
+
+"region_antarctica" = "جنوبگان";
+"app_mode_campervan" = "ون کمپر";
+"res_zoom_levels" = "زوم نمایش";
+"all_group_points" = "همهٔ نقاط این گروه";
+"map_settings_base_transp" = "شفافیت نقشهٔ پایه";
+"shared_string_warning" = "هشدار";
+"open_wiki_online" = "بازکردن مقالهٔ آنلاین";
+"wiki_sheet_title" = "مقاله‌های ویکی‌پدیا چگونه باز شوند؟";
+"map_settings_color_scheme" = "رنگ‌بندی";
+"map_settings_appearance" = "ظاهر";

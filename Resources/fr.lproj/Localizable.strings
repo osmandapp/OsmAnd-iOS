@@ -302,7 +302,7 @@
 "fav_import_desc" = "Vous pouvez importer vos favoris en tant que points de passage au format GPX (format de données GPS usuel)\n\nPour partager le fichier favorites.gpx, vous pouvez l'ouvrir à partir de Dropbox, d'un courriel ou d'une autre source - Utilisez la fonction 'ouvrir'.";
 "gpx_waypoint" = "Point de passage";
 "gpx_import_already_exists" = "Le fichier de trajet spécifié existe déjà dans la liste. Choisissez une action.";
-"gpx_import_desc" = "Pour importer vos fichiers GPX (format d'enregistrement classique de données GPS) depuis Dropbox, un email ou toute autre source utilisez la fonction \"Copier vers OsmAnd Maps\"";
+"gpx_import_desc" = "Pour importer vos fichiers GPX (format d'enregistrement classique de données GPS) depuis Dropbox, un courriel ou toute autre source utilisez la fonction « Copier vers OsmAnd Maps »";
 "gpx_uphldownhl" = "Montées/Descentes";
 "gpx_start" = "Départ";
 "gpx_uphills_total" = "Total de montées";
@@ -683,7 +683,7 @@
 "coords_format" = "Format des coordonnées";
 "coords_format_descr" = "Format des coordonnées géographiques.";
 "save_global_track_interval" = "Intervalle d'enregistrement par défaut";
-"save_global_track_interval_descr" = "Sélectionnez l'intervalle d'enregistrement des traces (activé via le gadget d'enregistrement GPX depuis la carte)";
+"save_global_track_interval_descr" = "Sélectionnez l'intervalle d'enregistrement des trajets (activé via le gadget d'enregistrement GPX depuis la carte)";
 "rotate_map_to_bearing" = "Orientation de la carte";
 "rotate_map_to_bearing_descr" = "Sélectionnez la méthode d'orientation de la carte";
 "rotate_map_compass_opt" = "D'après la boussole";
@@ -793,7 +793,7 @@
 "osmand_live_weekly" = "Hebdomadaire";
 "osmand_live_upd_frequency" = "Fréquence de mise à jour";
 "osmand_live_wifi_only" = "Mettre à jour uniquement via WiFi";
-"osmand_live_donations_enter_email" = "Entrez votre adresse email";
+"osmand_live_donations_enter_email" = "Entrez votre adresse courriel";
 "res_world_region" = "Monde";
 "menu_help" = "Aide";
 // Help
@@ -816,8 +816,8 @@
 "daily_map_updates" = "Mise à jour des cartes : toutes les heures";
 "donation_to_osm" = "Don à la communauté OpenStreetMap";
 "unlock_all_features" = "Activez toutes les fonctionnalités d'OsmAnd";
-"shared_string_email_address" = "Adresse email";
-"osm_live_enter_email" = "Veuillez saisir une adresse email valide";
+"shared_string_email_address" = "Adresse courriel";
+"osm_live_enter_email" = "Veuillez saisir une adresse courriel valide";
 "shared_string_unexpected_error" = "Erreur inattendue";
 "osm_live_unlock_all" = "Débloquer toutes les options";
 "shared_string_io_error" = "Erreur d'entrée/sortie";
@@ -829,7 +829,7 @@
 "osmand_live_donation_header" = "Paramètres des dons";
 "osmand_live_donations" = "Dons";
 "osmand_live_donation_switch_title" = "Don à la communauté OpenStreetMap";
-"osmand_live_donations_email_descr" = "Veuillez indiquer votre adresse e-mail pour obtenir les rapports de dons";
+"osmand_live_donations_email_descr" = "Veuillez indiquer votre adresse courriel pour obtenir les rapports de dons";
 "osmand_live_public_name" = "Entrez votre nom public";
 "osmand_live_subscription_canceled" = "Vous avez annulé l'abonnement OsmAnd Live";
 "actions" = "Actions";
@@ -1550,3 +1550,9 @@
 "osmand_live_deleted_object" = "Objet supprimé";
 "available_map_styles" = "Styles de cartes disponibles";
 "select_map_style" = "Choisissez un style de carte";
+
+"res_zoom_levels" = "Niveaux de zoom";
+"all_group_points" = "Tous les points du groupe";
+"map_settings_base_transp" = "Transparence de la carte";
+"map_settings_color_scheme" = "Couleur du thème";
+"map_settings_appearance" = "Apparence";

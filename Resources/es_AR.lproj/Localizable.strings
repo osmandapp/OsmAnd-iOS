@@ -1654,3 +1654,12 @@
 "app_mode_bicycle" = "Bicicleta";
 "app_mode_car" = "Automóvil";
 "app_mode_default" = "Ver mapa";
+"enable_contour_lines" = "Activar para ver las curvas de nivel en el mapa";
+"map_settings_available_srtm_maps_descr" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
+"map_settings_line_density_slowdown_warning" = "La alta densidad de línea puede ralentizar la visualización del mapa";
+"map_settings_appearance" = "Aspecto";
+"map_settings_contour_zoom_level_descr" = "Elige el nivel de zoom, desde el cual se mostrarán las curvas de nivel";
+"map_settings_line_density" = "Densidad de líneas";
+"map_settings_line_width" = "Grosor de la línea";
+"map_settings_color_scheme" = "Esquema de color";
+"map_settings_base_transp" = "Transparencia del mapa base";

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OASegmentSliderTableViewCell" rowHeight="95" id="XBX-Uh-gh9" customClass="OASegmentSliderTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="420" height="95"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XBX-Uh-gh9" id="bdq-u8-ibc">
+                <rect key="frame" x="0.0" y="0.0" width="420" height="95"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sAt-3a-33r">
+                        <rect key="frame" x="14" y="52" width="392" height="31"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="Ys9-U6-ax7"/>
+                        </constraints>
+                        <connections>
+                            <action selector="sliderDidEndEditing:" destination="XBX-Uh-gh9" eventType="touchUpOutside" id="IZB-cd-AIv"/>
+                            <action selector="sliderDidEndEditing:" destination="XBX-Uh-gh9" eventType="touchUpInside" id="i4N-6a-8WM"/>
+                            <action selector="sliderValueChanged:" destination="XBX-Uh-gh9" eventType="valueChanged" id="oI5-fR-toA"/>
+                        </connections>
+                    </slider>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sEM-QO-aGw">
+                        <rect key="frame" x="16" y="13" width="186" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="bYL-Nh-UqV"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PdR-al-82O">
+                        <rect key="frame" x="218" y="13" width="186" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="Pfm-yX-3KX"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="sAt-3a-33r" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leading" constant="16" id="8MA-IG-3Rz"/>
+                    <constraint firstItem="PdR-al-82O" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" constant="13" id="BYi-Lp-KqD"/>
+                    <constraint firstItem="PdR-al-82O" firstAttribute="leading" secondItem="sEM-QO-aGw" secondAttribute="trailing" constant="16" id="Dhm-4r-08T"/>
+                    <constraint firstItem="sEM-QO-aGw" firstAttribute="width" secondItem="PdR-al-82O" secondAttribute="width" id="DyE-yL-zpj"/>
+                    <constraint firstItem="sEM-QO-aGw" firstAttribute="top" secondItem="bdq-u8-ibc" secondAttribute="top" constant="13" id="Mpp-Q0-SmX"/>
+                    <constraint firstItem="sEM-QO-aGw" firstAttribute="leading" secondItem="bdq-u8-ibc" secondAttribute="leading" constant="16" id="POa-HF-vgV"/>
+                    <constraint firstItem="sAt-3a-33r" firstAttribute="top" secondItem="sEM-QO-aGw" secondAttribute="bottom" constant="17" id="UDM-je-weR"/>
+                    <constraint firstAttribute="bottom" secondItem="sAt-3a-33r" secondAttribute="bottom" constant="13" id="bga-Xy-AwK"/>
+                    <constraint firstAttribute="trailing" secondItem="sAt-3a-33r" secondAttribute="trailing" constant="16" id="dcQ-d2-GJM"/>
+                    <constraint firstAttribute="trailing" secondItem="PdR-al-82O" secondAttribute="trailing" constant="16" id="dzQ-sv-a01"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="sliderView" destination="sAt-3a-33r" id="1J2-17-YdW"/>
+                <outlet property="titleLabel" destination="sEM-QO-aGw" id="QQD-a2-ysY"/>
+                <outlet property="valueLabel" destination="PdR-al-82O" id="bIJ-n4-l1I"/>
+            </connections>
+            <point key="canvasLocation" x="136.23188405797103" y="-129.57589285714286"/>
+        </tableViewCell>
+    </objects>
+</document>

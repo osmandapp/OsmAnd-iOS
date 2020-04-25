@@ -37,7 +37,7 @@
     UIImage *img = [super icon];
     if (!img)
     {
-        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@_%@", [OAUtilities drawablePostfix], self.tag, self.value]];
+        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.tag, self.value]]];
         if (img)
         {
             return [OAUtilities applyScaleFactorToImage:img];
@@ -60,14 +60,14 @@
 
 - (NSString *) iconName
 {
-    return [NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@_%@", [OAUtilities drawablePostfix], self.tag, self.value];
+    return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.tag, self.value]];
 }
 
 - (UIImage *) mapIcon
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@", [OAUtilities drawablePostfix], [self.name stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]];
+    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [self.name stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
     if (!img)
-        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@_%@", [OAUtilities drawablePostfix], self.tag, self.value]];
+        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@_%@", self.tag, self.value]]];
     
     return [OAUtilities applyScaleFactorToImage:img];
 }

@@ -481,16 +481,16 @@
 "data_will_be_lost" = "Alle gedownloade data zal verloren gaan";
 "res_cancel_inst_q" = "U gaat de %@ installatie annuleren.";
 "res_uninst_managed_q" = "U gaat %@ deïnstalleren. U kunt deze later reïnstalleren uit de catalogus.";
-"res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
+"res_uninst_unmanaged_q" = "U gaat %@ verwijderen. Deze kunt u niet uit onze catalogus downloaden, verzeker uzelf daarom dat u een backup heeft gemaakt.";
 "res_details" = "Details";
 "res_type" = "Type";
-"res_unknown" = "Unknown";
-"res_size" = "Size";
-"res_created_on" = "Created on";
-"res_update_all" = "Update all";
-"res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
-"res_updates_avail_q" = "update(s) are available.";
-"res_updates_exp" = "Please purchase continent(s) to update the maps";
+"res_unknown" = "Onbekend";
+"res_size" = "Formaat";
+"res_created_on" = "Gecreëerd op";
+"res_update_all" = "Update alle";
+"res_updates_no_space" = "Onvoldoende ruimte aanwezig om %d update(s) te installeren. %@ benodigd.";
+"res_updates_avail_q" = "update(s) zijn beschikbaar.";
+"res_updates_exp" = "Schaf continent(en) aan om de kaarten bij te werken";
 // Menu
 "menu_my_places" = "My Places";
 "menu_my_trips" = "My Trips";
@@ -1369,3 +1369,4 @@
 "month_short" = "Mnd";
 "weeks_short" = "Wkn";
 "week_short" = "Wk";
+"res_confirmation_delete" = "Weet u zeker dat u %@ wilt verwijderen?";

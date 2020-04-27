@@ -135,8 +135,6 @@ const CGFloat kMarkWidth = 2.0;
 
 - (void) generateFeedback
 {
-    NSLog(@"+++");
-
     if (!_feedbackGenerator)
     {
         // Instantiate a new generator.

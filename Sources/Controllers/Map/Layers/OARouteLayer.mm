@@ -308,11 +308,6 @@
         }
         [self drawRouteSegment:points addToExsisting:YES];
     }
-    else
-    {
-        
-    }
-    
 }
 
 - (void) showCurrentStatisticsLocation:(OATrackChartPoints *) trackPoints

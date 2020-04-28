@@ -17,5 +17,6 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *textHeightPrimary;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descHeightPrimary;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descHeightSecondary;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textTopConstraint;
 
 @end

@@ -10,14 +10,10 @@
 #import "OAUtilities.h"
 
 @implementation OADescrTitleIconCell
-{
-    NSLayoutConstraint *_topTitleConstraint;
-}
 
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    _topTitleConstraint = [NSLayoutConstraint constraintWithItem:_textView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:9];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -32,7 +28,7 @@
     _descHeightSecondary.active = self.descView.hidden;
     _textHeightPrimary.active = !self.descView.hidden;
     _textHeightSecondary.active = self.descView.hidden;
-    _topTitleConstraint.active = self.descView.hidden;
+    _textTopConstraint.active = self.descView.hidden;
     
     [super updateConstraints];
 }
@@ -47,7 +43,7 @@
         res = res || self.textHeightSecondary.active != !self.descView.hidden;
         res = res || self.descHeightPrimary.active != self.descView.hidden;
         res = res || self.descHeightSecondary.active != !self.descView.hidden;
-        res = res || _topTitleConstraint.active != self.descView.hidden;
+        res = res || self.textTopConstraint.active != self.descView.hidden;
     }
     return res;
 }

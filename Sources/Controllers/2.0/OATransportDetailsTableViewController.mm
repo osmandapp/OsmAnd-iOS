@@ -121,15 +121,11 @@
         [NSString stringWithFormat:OALocalizedString(@"map_coords"), end.getLatitude, end.getLongitude];
     }
     
-    NSString *destAddress = [[OAReverseGeocoder instance] lookupAddressAtLat:end.getLatitude lon:end.getLongitude];
-    if ([destAddress isEqualToString:title] || destAddress.length == 0)
-        destAddress = OALocalizedString(@"map_widget_distance");
-    
     [arr addObject:@{
         @"cell" : @"OAPublicTransportPointCell",
         @"img" : @"ic_custom_destination",
         @"title" : title,
-        @"descr" : destAddress,
+        @"descr" : OALocalizedString(@"map_widget_distance"),
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"time" : [_app getFormattedTimeHM:startTime.firstObject.doubleValue],
@@ -142,7 +138,7 @@
     }];
 }
 
-- (void)buildCollapsibleCells:(NSMutableArray *)arr color:(UIColor *)color segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment stopType:(OATransportStopType *)stopType stops:(const std::vector<std::shared_ptr<TransportStop>, std::allocator<std::shared_ptr<TransportStop> > > &)stops {
+- (void)buildCollapsibleCells:(NSMutableArray *)arr color:(UIColor *)color segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment stopType:(OATransportStopType *)stopType stops:(const std::vector<std::shared_ptr<TransportStop>, std::allocator<std::shared_ptr<TransportStop> > > &)stops section:(NSInteger)section {
     OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
     r.type = stopType;
     NSMutableDictionary *collapsableCell = [NSMutableDictionary new];
@@ -165,11 +161,10 @@
             @"bottom_route_line" : @(YES),
             @"small_icon" : @(YES),
             @"custom_icon" : @(YES),
-            @"header_cell" : @(row),
             @"line_color" : color,
             @"coords" : @[[[CLLocation alloc] initWithLatitude:stop->lat longitude:stop->lon]]
         }];
-        [indexPaths addObject:[NSIndexPath indexPathForRow:(row + i) inSection:0]];
+        [indexPaths addObject:[NSIndexPath indexPathForRow:(row + i) inSection:section]];
     }
     [collapsableCell setObject:indexPaths forKey:@"indexes"];
     
@@ -227,16 +222,11 @@
         @"coords" : locations,
     }];
     
-    [arr addObject:@{
-        @"cell" : @"OADividerCell",
-        @"custom_insets" : @(YES),
-    }];
-    
     if (stops.size() > 2)
     {
         [dictionary setObject:[NSArray arrayWithArray:arr] forKey:@(section++)];
         [arr removeAllObjects];
-        [self buildCollapsibleCells:arr color:color segment:segment stopType:stopType stops:stops];
+        [self buildCollapsibleCells:arr color:color segment:segment stopType:stopType stops:stops section:section];
         [dictionary setObject:[NSArray arrayWithArray:arr] forKey:@(section++)];
         [arr removeAllObjects];
     }
@@ -587,7 +577,7 @@
             [cell.iconView setImage:[[OATargetInfoViewController getIcon:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
             cell.textView.text = item[@"title"];
             
-            cell.routeShieldContainerView.tag = indexPath.row;
+            cell.routeShieldContainerView.tag = indexPath.section << 10 | indexPath.row;
             cell.delegate = self;
             
             UIColor *routeColor = item[@"line_color"];
@@ -706,8 +696,8 @@
 
 - (void) onShileldPressed:(NSInteger)index
 {
-//    NSDictionary *item = _data[index];
-//    [self.delegate showSegmentOnMap:item[@"coords"]];
+    NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:index & 0x3FF inSection:index >> 10]];
+    [self.delegate showSegmentOnMap:item[@"coords"]];
 }
 
 @end

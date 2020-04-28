@@ -3235,7 +3235,8 @@
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading
 {
     [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
-    [_mapLayers.routeMapLayer refreshRoute];
+    if (!OARoutingHelper.sharedInstance.isPublicTransportMode)
+        [_mapLayers.routeMapLayer refreshRoute];
 }
 
 #pragma mark - OARouteInformationListener

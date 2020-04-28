@@ -1106,6 +1106,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_routingHelper setAppMode:next];
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
     [_routingHelper recalculateRouteDueToSettingsChange];
+    if ([_routingHelper isRouteBeingCalculated] || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
+        [_tableView reloadData];
 }
 
 #pragma mark - OARouteInformationListener

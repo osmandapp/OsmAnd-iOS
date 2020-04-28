@@ -16,6 +16,7 @@
 #import "OANativeUtilities.h"
 #import "OARouteStatisticsHelper.h"
 #import "OATransportRoutingHelper.h"
+#import "OATransportStopType.h"
 #import "OAColors.h"
 
 #include <OsmAndCore.h>
@@ -27,6 +28,8 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <OsmAndCore/SkiaUtilities.h>
+#include <SkCGUtils.h>
 
 #include <transportRouteResultSegment.h>
 
@@ -38,12 +41,15 @@
     std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
     
     std::shared_ptr<OsmAnd::MapMarkersCollection> _currentGraphXAxisPositions;
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _transportRouteMarkers;
     
     std::shared_ptr<OsmAnd::MapMarkersCollection> _currentGraphPosition;
     std::shared_ptr<OsmAnd::MapMarker> _locationMarker;
     OsmAnd::MapMarker::OnSurfaceIconKey _locationIconKey;
     
     std::shared_ptr<SkBitmap> _xAxisLocationIcon;
+    std::shared_ptr<SkBitmap> _transportTransferIcon;
+    std::shared_ptr<SkBitmap> _transportShieldIcon;
 
     BOOL _initDone;
 }
@@ -61,8 +67,11 @@
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _currentGraphPosition = std::make_shared<OsmAnd::MapMarkersCollection>();
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     
     _xAxisLocationIcon = [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location"];
+    _transportTransferIcon = [OANativeUtilities skBitmapFromPngResource:@"map_public_transport_transfer"];
+    _transportShieldIcon = [OANativeUtilities skBitmapFromPngResource:@"map_public_transport_stop_shield"];
     
     OsmAnd::MapMarkerBuilder locationMarkerBuilder;
     locationMarkerBuilder.setIsAccuracyCircleSupported(false);
@@ -79,6 +88,7 @@
     [self.mapView addKeyedSymbolsProvider:_collection];
     [self.mapView addKeyedSymbolsProvider:_currentGraphPosition];
     [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
+    [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
 }
 
 - (void) resetLayer
@@ -86,6 +96,7 @@
     _collection->removeAllLines();
     _locationMarker->setIsHidden(true);
     _currentGraphXAxisPositions->removeAllMarkers();
+    _transportRouteMarkers->removeAllMarkers();
 }
 
 - (BOOL) updateLayer
@@ -94,9 +105,58 @@
     return YES;
 }
 
+- (void)drawRouteMarkers:(const std::shared_ptr<TransportRouteResultSegment> &)routeSegment {
+    OsmAnd::MapMarkerBuilder transportMarkerBuilder;
+    transportMarkerBuilder.setIsAccuracyCircleSupported(false);
+    transportMarkerBuilder.setBaseOrder(self.baseOrder - 15);
+    transportMarkerBuilder.setIsHidden(false);
+    transportMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+    transportMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
+    OsmAnd::LatLon startLatLon(routeSegment->getStart().lat, routeSegment->getStart().lon);
+    transportMarkerBuilder.setPinIcon(_transportTransferIcon);
+    
+    auto marker = transportMarkerBuilder.buildAndAddToCollection(_transportRouteMarkers);
+    marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(startLatLon));
+    
+    OATransportStopType *type = [OATransportStopType findType:[NSString stringWithUTF8String:routeSegment->route->type.c_str()]];
+    NSString *resId = type != nil ? type.resId : [OATransportStopType getResId:TST_BUS];
+    UIImage *origIcon = [UIImage imageNamed:[OAUtilities drawablePath:resId]];
+    std::shared_ptr<SkBitmap> stopBmp = std::make_shared<SkBitmap>();
+    bool res = false;
+    if (origIcon)
+    {
+        origIcon = [OAUtilities applyScaleFactorToImage:origIcon];
+        UIImage *tintedIcon = [OAUtilities tintImageWithColor:origIcon color:[UIColor blackColor]];
+        res = SkCreateBitmapFromCGImage(stopBmp.get(), tintedIcon.CGImage);
+    }
+    std::shared_ptr<SkBitmap> icon = nullptr;
+    if (res)
+    {
+        QList< std::shared_ptr<const SkBitmap>> composition;
+        composition << _transportShieldIcon;
+        composition << OsmAnd::SkiaUtilities::scaleBitmap(stopBmp, 0.5, 0.5);
+        icon = OsmAnd::SkiaUtilities::mergeBitmaps(composition);
+    }
+    
+    transportMarkerBuilder.setPinIcon(res ? icon : _transportShieldIcon);
+    for (int i = routeSegment->start + 1; i < routeSegment->end; i++)
+    {
+        const auto& stop = routeSegment->getStop(i);
+        OsmAnd::LatLon latLon(stop.lat, stop.lon);
+        const auto& marker = transportMarkerBuilder.buildAndAddToCollection(_transportRouteMarkers);
+        marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
+    }
+    transportMarkerBuilder.setPinIcon(_transportTransferIcon);
+    OsmAnd::LatLon endLatLon(routeSegment->getEnd().lat, routeSegment->getEnd().lon);
+    marker = transportMarkerBuilder.buildAndAddToCollection(_transportRouteMarkers);
+    marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(endLatLon));
+}
+
 - (void) drawTransportSegment:(SHARED_PTR<TransportRouteResultSegment>)routeSegment
 {
     [self.mapViewController runWithRenderSync:^{
+        [self drawRouteMarkers:routeSegment];
+            
         std::string str = routeSegment->route->color;
         OsmAnd::ColorARGB colorARGB;
         UIColor *color = [self.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:[NSString stringWithUTF8String:str.c_str()]];

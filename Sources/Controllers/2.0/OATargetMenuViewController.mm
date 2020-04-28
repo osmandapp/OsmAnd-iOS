@@ -73,7 +73,7 @@
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
 }
 
-+ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState
++ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
 {
     double lat = targetPoint.location.latitude;
     double lon = targetPoint.location.longitude;
@@ -96,7 +96,7 @@
             }
             
             if (item.favorite)
-                controller = [[OAFavoriteViewController alloc] initWithItem:item];
+                controller = [[OAFavoriteViewController alloc] initWithItem:item headerOnly:headerOnly];
             
             break;
         }
@@ -184,7 +184,7 @@
             if (activeTargetType == OATargetGPXEdit)
                 controller = [[OAGPXEditWptViewController alloc] initWithItem:targetPoint.targetObj];
             else
-                controller = [[OAGPXWptViewController alloc] initWithItem:targetPoint.targetObj];
+                controller = [[OAGPXWptViewController alloc] initWithItem:targetPoint.targetObj headerOnly:headerOnly];
             break;
         }
             

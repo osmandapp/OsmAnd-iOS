@@ -8,8 +8,6 @@
 
 #import "OARouteSettingsBaseViewController.h"
 #import "OANavigationSettingsViewController.h"
-#include <OsmAndCore.h>
-#include <OsmAndCore/Data/Road.h>
 
 @interface OARouteAvoidTransportSettingsViewController : OARouteSettingsBaseViewController<UITableViewDelegate, UITableViewDataSource>
 

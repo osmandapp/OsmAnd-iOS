@@ -24,6 +24,10 @@
 - (void) updateConstraints
 {
     self.descView.hidden = !self.descView.text || self.descView.text.length == 0;
+    _descHeightPrimary.active = !self.descView.hidden;
+    _descHeightSecondary.active = self.descView.hidden;
+    _textHeightPrimary.active = !self.descView.hidden;
+    _textHeightSecondary.active = self.descView.hidden;
     
     [super updateConstraints];
 }
@@ -32,6 +36,13 @@
 {
     BOOL res = [super needsUpdateConstraints];
     self.descView.hidden = !self.descView.text || self.descView.text.length == 0;
+    if (!res)
+    {
+        res = res || self.textHeightPrimary.active != self.descView.hidden;
+        res = res || self.textHeightSecondary.active != !self.descView.hidden;
+        res = res || self.descHeightPrimary.active != self.descView.hidden;
+        res = res || self.descHeightSecondary.active != !self.descView.hidden;
+    }
     return res;
 }
 

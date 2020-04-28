@@ -1779,7 +1779,13 @@
                 OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
                 
                 NSArray *params = styleSettings.getAllParameters;
-                for (OAMapStyleParameter *param in params) {
+                for (OAMapStyleParameter *param in params)
+                {
+                    if ([param.name isEqualToString:@"contourLines"] && ![[OAIAPHelper sharedInstance].srtm isActive])
+                    {
+                        newSettings[QString::fromNSString(param.name)] = QStringLiteral("disabled");
+                        continue;
+                    }
                     if (param.value.length > 0 && ![param.value isEqualToString:@"false"])
                         newSettings[QString::fromNSString(param.name)] = QString::fromNSString(param.value);
                 }

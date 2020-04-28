@@ -1654,3 +1654,7 @@
 "shared_string_warning" = "Предупреждение";
 "map_settings_base_transp" = "Прозрачность основной карты";
 "map_settings_color_scheme" = "Цветовая схема";
+"res_zoom_levels" = "Уровни масштаба";
+"map_settings_appearance" = "Вид";
+"all_group_points" = "Все точки группы";
+"shared_string_maximum" = "Максимум";

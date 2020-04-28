@@ -1559,3 +1559,16 @@
 "app_mode_pickup_truck" = "Pick-up";
 "app_mode_wagon" = "Familiare";
 "app_mode_utv" = "Lato per lato";
+
+"app_mode_ufo" = "UFO";
+"app_mode_osm" = "OSM";
+"wiki_sheet_title" = "Come aprire gli articoli di Wikipedia?";
+"map_settings_base_transp" = "Trasparenza mappa di base";
+"map_settings_color_scheme" = "Schema colori";
+"all_group_points" = "Tutti i punti del gruppo";
+"app_mode_default" = "Scorri la mappa";
+"app_mode_shuttle_bus" = "Bus navetta";
+"map_settings_appearance" = "Aspetto";
+"shared_string_warning" = "Attenzione";
+"open_wiki_online" = "Apri articolo online";
+"app_mode_personal_transporter" = "Trasportatore personale";

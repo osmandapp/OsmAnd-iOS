@@ -52,7 +52,7 @@ std::shared_ptr<SkBitmap> OACoreResourcesTransportRouteIconProvider::getIcon(
             if (res)
             {
                 OATransportStopType *type = [OATransportStopType findType:transportRoute->type.toNSString()];
-                UIImage *origIcon = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@", [OAUtilities drawablePostfix], [type.resName stringByAppendingString:@".png"]]];
+                UIImage *origIcon = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", type.resName]]];
                 if (origIcon)
                 {
                     origIcon = [OAUtilities applyScaleFactorToImage:origIcon];

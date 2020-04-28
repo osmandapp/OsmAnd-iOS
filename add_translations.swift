@@ -13,6 +13,7 @@ var commonValuesDict: [String:[String]] = [:]
 let languageDict = [
                     "es_AR" : "es-rAR",
                     "hsb" : "b+hsb",
+                    "kab" : "b+kab",
                     "pt_BR" : "pt-rBR",
                     "ro-RO" : "ro",
                     "zh-Hans" : "zh-rCN" ,

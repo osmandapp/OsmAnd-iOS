@@ -72,7 +72,7 @@
     {
         _parkingPlaceControl = [self createParkingPlaceInfoControl];
         
-        [mapInfoController registerSideWidget:_parkingPlaceControl imageId:@"ic_action_parking_dark" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:10];
+        [mapInfoController registerSideWidget:_parkingPlaceControl imageId:@"ic_custom_parking" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:10];
         [mapInfoController recreateControls];
     }
 }

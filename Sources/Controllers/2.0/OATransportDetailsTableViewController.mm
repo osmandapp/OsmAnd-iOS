@@ -35,12 +35,9 @@
 {
     OATransportRoutingHelper *_transportHelper;
     NSInteger _routeIndex;
-    NSArray<NSDictionary *> *_data;
+    NSDictionary *_data;
     
     OsmAndAppInstance _app;
-    
-    NSInteger _offset;
-    NSInteger _lastCollapsible;
 }
 
 - (instancetype)initWithRouteIndex:(NSInteger) routeIndex
@@ -109,16 +106,12 @@
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[],
-        @"offset" : @(_offset),
-        @"last_collapsable" : @(_lastCollapsible)
     }];
     [startTime setObject:@(startTime.firstObject.integerValue + time) atIndexedSubscript:0];
     
     [arr addObject:@{
         @"cell" : @"OADividerCell",
-        @"custom_insets" : @(YES),
-        @"offset" : @(_offset),
-        @"last_collapsable" : @(_lastCollapsible)
+        @"custom_insets" : @(YES)
     }];
     
     NSString *title = @"";
@@ -161,7 +154,6 @@
     [collapsableCell setObject:@(YES) forKey:@"collapsed"];
     [collapsableCell setObject:color forKey:@"line_color"];
     NSInteger row = arr.count;
-    _lastCollapsible = row;
     for (NSInteger i = 1; i < stops.size() - 1; i++)
     {
         const auto& stop = stops[i];
@@ -172,7 +164,6 @@
             @"top_route_line" : @(YES),
             @"bottom_route_line" : @(YES),
             @"small_icon" : @(YES),
-            @"collapsible" : @(YES),
             @"custom_icon" : @(YES),
             @"header_cell" : @(row),
             @"line_color" : color,
@@ -180,7 +171,6 @@
         }];
         [indexPaths addObject:[NSIndexPath indexPathForRow:(row + i) inSection:0]];
     }
-    _offset += subItems.count;
     [collapsableCell setObject:indexPaths forKey:@"indexes"];
     
     [arr addObject:collapsableCell];
@@ -201,7 +191,7 @@
     return locations;
 }
 
-- (void)buildTransportSegmentItems:(NSMutableArray *)arr routeRes:(const std::shared_ptr<TransportRouteResult> &)routeRes segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment startTime:(NSMutableArray<NSNumber *> *)startTime {
+- (void)buildTransportSegmentItems:(NSMutableArray *)arr sectionsDictionary:(NSMutableDictionary *)dictionary routeRes:(const std::shared_ptr<TransportRouteResult> &)routeRes segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment startTime:(NSMutableArray<NSNumber *> *)startTime section:(NSInteger &)section {
     const auto& route = segment->route;
     const auto stops = segment->getTravelStops();
     const auto startStop = stops[0];
@@ -222,8 +212,6 @@
         @"custom_icon" : @(YES),
         @"line_color" : color,
         @"coords" : @[[[CLLocation alloc] initWithLatitude:startStop->lat longitude:startStop->lon]],
-        @"offset" : @(_offset),
-        @"last_collapsable" : @(_lastCollapsible)
     }];
     // TODO: fix later for schedule
     [startTime setObject:@(startTime.firstObject.integerValue + segment->travelTime) atIndexedSubscript:0];
@@ -237,20 +225,20 @@
         @"title" : [NSString stringWithUTF8String:route->name.c_str()],
         @"line_color" : color,
         @"coords" : locations,
-        @"offset" : @(_offset),
-        @"last_collapsable" : @(_lastCollapsible)
     }];
     
     [arr addObject:@{
         @"cell" : @"OADividerCell",
         @"custom_insets" : @(YES),
-        @"offset" : @(_offset),
-        @"last_collapsable" : @(_lastCollapsible)
     }];
     
     if (stops.size() > 2)
     {
+        [dictionary setObject:[NSArray arrayWithArray:arr] forKey:@(section++)];
+        [arr removeAllObjects];
         [self buildCollapsibleCells:arr color:color segment:segment stopType:stopType stops:stops];
+        [dictionary setObject:[NSArray arrayWithArray:arr] forKey:@(section++)];
+        [arr removeAllObjects];
     }
     
     const auto endStop = stops[stops.size() - 1];
@@ -264,31 +252,25 @@
         @"bottom_route_line" : @(NO),
         @"custom_icon" : @(YES),
         @"line_color" : color,
-        @"coords" : @[[[CLLocation alloc] initWithLatitude:endStop->lat longitude:endStop->lon]],
-        @"offset" : @(_offset),
-        @"last_collapsable" : @(_lastCollapsible)
+        @"coords" : @[[[CLLocation alloc] initWithLatitude:endStop->lat longitude:endStop->lon]]
     }];
     
     [arr addObject:@{
         @"cell" : @"OADividerCell",
-        @"custom_insets" : @(YES),
-        @"offset" : @(_offset),
-        @"last_collapsable" : @(_lastCollapsible)
+        @"custom_insets" : @(YES)
     }];
 }
 
 - (void) generateData
 {
+    NSMutableDictionary *resData = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:@[@{@"cell" : @"OAPublicTransportShieldCell"},
                                                            @{@"cell" : @"OAPublicTransportRouteCell"},
                                                            @{
                                                                @"cell" : @"OADividerCell",
                                                                @"custom_insets" : @(NO)
                                                            }]];
-    
-    _offset = 0;
-    _lastCollapsible = 0;
-    
+    NSInteger section  = 0;
     const auto routeRes = _transportHelper.getRoutes[_routeIndex];
     OATargetPointsHelper *pointsHelper = OATargetPointsHelper.sharedInstance;
     OARTargetPoint *start = pointsHelper.getPointToStart;
@@ -307,7 +289,7 @@
         {
             [self addStartItems:arr route:routeRes segment:segment start:start startTime:startTime];
         }
-        [self buildTransportSegmentItems:arr routeRes:routeRes segment:segment startTime:startTime];
+        [self buildTransportSegmentItems:arr sectionsDictionary:resData routeRes:routeRes segment:segment startTime:startTime section:section];
         
         if (i < segments.size() - 1)
         {
@@ -327,17 +309,13 @@
                         @"title" : [NSString stringWithFormat:@"%@ ~%@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO]],
                         @"top_route_line" : @(NO),
                         @"bottom_route_line" : @(NO),
-                        @"coords" : seg != nil ? seg.getImmutableAllLocations : @[],
-                        @"offset" : @(_offset),
-                        @"last_collapsable" : @(_lastCollapsible)
+                        @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
                     }];
                     [startTime setObject:@(startTime.firstObject.integerValue + time) atIndexedSubscript:0];
                     
                     [arr addObject:@{
                         @"cell" : @"OADividerCell",
-                        @"custom_insets" : @(YES),
-                        @"offset" : @(_offset),
-                        @"last_collapsable" : @(_lastCollapsible)
+                        @"custom_insets" : @(YES)
                     }];
                 }
             }
@@ -348,7 +326,8 @@
             [self addLastItems:arr end:end routeRes:routeRes segment:segment startTime:startTime];
         }
     }
-    _data = [NSArray arrayWithArray:arr];
+    [resData setObject:arr forKey:@(section++)];
+    _data = [NSDictionary dictionaryWithDictionary:resData];
 }
 
 - (double) getWalkDistance:(SHARED_PTR<TransportRouteResultSegment>) segment next:(SHARED_PTR<TransportRouteResultSegment>)next dist:(double) dist
@@ -387,32 +366,7 @@
 
 - (NSDictionary *) getItem:(NSIndexPath *) indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
-    NSInteger offset = [item[@"offset"] integerValue];
-    NSInteger lastCollapsable = [item[@"last_collapsable"] integerValue];
-    if ([item[@"collapsible"] boolValue])
-    {
-        NSNumber *headerSection = item[@"header_cell"];
-        NSDictionary *headerCell = _data[headerSection.integerValue];
-        if (![headerCell[@"collapsed"] boolValue])
-        {
-            return item;
-        }
-        else
-        {
-            NSInteger toSkip = ((NSArray *)headerCell[@"indexes"]).count;
-            return _data[headerSection.integerValue + toSkip + (indexPath.row - headerSection.integerValue)];
-        }
-    }
-    else if (offset != 0 && lastCollapsable != 0)
-    {
-        NSDictionary *headerCell = _data[lastCollapsable];
-        if ([headerCell[@"collapsed"] boolValue])
-        {
-            return _data[indexPath.row + offset];
-        }
-    }
-    return item;
+    return _data[@(indexPath.section)][indexPath.row];
 }
 
 - (CGFloat) getMinimizedContentHeight
@@ -672,27 +626,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return _data.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger rowCount = 0;
-    for (NSInteger i = 0; i < _data.count; i++)
+    NSArray *sectionData = _data[@(section)];
+    NSDictionary *item = sectionData.firstObject;
+    
+    if ([item[@"cell"] isEqualToString:@"OAPublicTransportCollapsableCell"])
     {
-        NSDictionary *item = _data[i];
-        if ([item[@"cell"] isEqualToString:@"OAPublicTransportCollapsableCell"])
-        {
-            rowCount++;
-            if (![item[@"collapsed"] boolValue])
-                rowCount += ((NSArray *) item[@"indexes"]).count;
-        }
-        else if (![item[@"collapsible"] boolValue])
-        {
-            rowCount++;
-        }
+        return [item[@"collapsed"] boolValue] ? 1 : sectionData.count;
     }
-    return rowCount;
+    return sectionData.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -760,8 +706,8 @@
 
 - (void) onShileldPressed:(NSInteger)index
 {
-    NSDictionary *item = _data[index];
-    [self.delegate showSegmentOnMap:item[@"coords"]];
+//    NSDictionary *item = _data[index];
+//    [self.delegate showSegmentOnMap:item[@"coords"]];
 }
 
 @end

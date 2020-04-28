@@ -15,7 +15,7 @@
 @property (weak, nonatomic) IBOutlet UISlider *sliderView;
 
 @property (nonatomic) NSInteger numberOfMarks;
-- (NSInteger) getIndex;
+@property (nonatomic) NSInteger selectedMark;
 
 @end
 

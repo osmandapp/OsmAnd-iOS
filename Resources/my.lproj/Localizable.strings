@@ -861,3 +861,11 @@
 "rendering_attr_surface_asphalt_name" = "ကတ္တရာ";
 "rendering_attr_surface_grass_name" = "မြက်ပင်";
 "routing_attr_avoid_tram_name" = "လမ်းရထားများကိုရှောင်ပါ";
+
+"app_mode_horse" = "မြင်း";
+"app_mode_subway" = "မြေအောက်ရထား";
+"online_webpage_warning" = "စာမျက်နှာကိုအွန်လိုင်းသာရနိုင်သည်။ web browser ဖွင့်ရမလား\?";
+"app_mode_skiing" = "နှင်းလျှောစီး";
+"app_mode_helicopter" = "ရဟတ်ယာဉ်";
+"all_group_points" = "အုပ်စုထဲကအမှတ်အားလုံး";
+"app_mode_taxi" = "တက္ကစီ";

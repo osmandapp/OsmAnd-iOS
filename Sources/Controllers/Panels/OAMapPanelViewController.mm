@@ -962,7 +962,7 @@ typedef enum
 
 - (void) applyTargetPointController:(OATargetPoint *)targetPoint
 {
-    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:targetPoint activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState];
+    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:targetPoint activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:YES];
     if (controller)
     {
         targetPoint.ctrlAttrTypeStr = [controller getAttributedTypeStr];
@@ -1848,7 +1848,7 @@ typedef enum
     
     _mapStateSaved = saveMapState;
     
-    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState];
+    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:NO];
     BOOL prepared = NO;
     switch (_targetMenuView.targetPoint.type)
     {

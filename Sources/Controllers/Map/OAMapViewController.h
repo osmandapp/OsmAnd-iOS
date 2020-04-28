@@ -125,6 +125,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
 - (BOOL) addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName;
+- (NSArray<OAGpxWpt *> *) getLocationMarksOf:(NSString *)gpxFileName;
 
 - (BOOL) canZoomIn;
 - (void) animatedZoomIn;

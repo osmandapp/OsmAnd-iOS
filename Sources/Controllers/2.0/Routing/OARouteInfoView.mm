@@ -1102,12 +1102,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     OAApplicationMode *appMode = [OAAppSettings sharedManager].applicationMode;
     if ([_routingHelper isFollowingMode] && appMode == am)
         [OAAppSettings sharedManager].applicationMode = next;
-
+    
     [_routingHelper setAppMode:next];
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
-    [_routingHelper recalculateRouteDueToSettingsChange];
     if ([_routingHelper isRouteBeingCalculated] || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
         [_tableView reloadData];
+    [_routingHelper recalculateRouteDueToSettingsChange];
 }
 
 #pragma mark - OARouteInformationListener

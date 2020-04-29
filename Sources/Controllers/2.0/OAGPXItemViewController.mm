@@ -300,6 +300,7 @@
 {
     [_mapViewController keepTempGpxTrackVisible];
     [self closePointsController];
+    [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
     return YES;
 }
 

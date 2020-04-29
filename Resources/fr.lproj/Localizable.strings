@@ -1555,3 +1555,4 @@
 "map_settings_base_transp" = "Transparence de la carte";
 "map_settings_color_scheme" = "Couleur du thème";
 "map_settings_appearance" = "Apparence";
+"res_expire_warning" = "Le délai d'expiration doit être un nombre compris entre 0 et 10 000 000";

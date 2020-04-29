@@ -278,13 +278,13 @@
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
     NSInteger prevIndex = _currentRoute == 0 ? _numberOfRoutes - 1 : (_currentRoute - 1);
-    return _tableViews[prevIndex];
+    return _numberOfRoutes > 1 ? _tableViews[prevIndex] : nil;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
     NSInteger nextIndex = (_currentRoute + 1) % _numberOfRoutes;
-    return _tableViews[nextIndex];
+    return _numberOfRoutes > 1 ? _tableViews[nextIndex] : nil;
 }
 
 #pragma mark - UIPageViewControllerDelegate

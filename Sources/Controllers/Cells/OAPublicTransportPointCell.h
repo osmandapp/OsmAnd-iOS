@@ -26,5 +26,6 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconViewLeftConstraint;
 
 - (void) showSmallIcon:(BOOL)smallIcon;
+- (void) showOutiline:(BOOL)show;
 
 @end

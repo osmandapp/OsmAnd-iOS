@@ -8,6 +8,7 @@
 
 #import "OAPublicTransportPointCell.h"
 #import "OAUtilities.h"
+#import "OAColors.h"
 
 #define kIconSizeBig 30.0
 #define kIconSizeSmall 24.0
@@ -20,11 +21,21 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    _iconView.layer.cornerRadius = 3.;
+    _iconView.layer.borderWidth = 1.;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+}
+
+- (void) showOutiline:(BOOL)show
+{
+    if (show)
+        _iconView.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+    else
+        _iconView.layer.borderColor = UIColor.clearColor.CGColor;
 }
 
 - (void) showSmallIcon:(BOOL)smallIcon

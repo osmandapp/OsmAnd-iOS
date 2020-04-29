@@ -189,7 +189,7 @@
 - (void)buildTransportSegmentItems:(NSMutableArray *)arr sectionsDictionary:(NSMutableDictionary *)dictionary routeRes:(const std::shared_ptr<TransportRouteResult> &)routeRes segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment startTime:(NSMutableArray<NSNumber *> *)startTime section:(NSInteger &)section {
     const auto& route = segment->route;
     const auto stops = segment->getTravelStops();
-    const auto startStop = stops[0];
+    const auto& startStop = segment->getStart();
     OATransportStopType *stopType = [OATransportStopType findType:[NSString stringWithUTF8String:route->type.c_str()]];
     [startTime setObject:@(startTime.firstObject.integerValue + routeRes->getBoardingTime()) atIndexedSubscript:0];
     NSString *timeText = [_app getFormattedTimeHM:startTime.firstObject.doubleValue];
@@ -199,14 +199,14 @@
     [arr addObject:@{
         @"cell" : @"OAPublicTransportPointCell",
         @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
-        @"title" : [NSString stringWithUTF8String:startStop->name.c_str()],
+        @"title" : [NSString stringWithUTF8String:startStop.name.c_str()],
         @"descr" : OALocalizedString(@"board_at"),
         @"time" : timeText,
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(YES),
         @"custom_icon" : @(YES),
         @"line_color" : color,
-        @"coords" : @[[[CLLocation alloc] initWithLatitude:startStop->lat longitude:startStop->lon]],
+        @"coords" : @[[[CLLocation alloc] initWithLatitude:startStop.lat longitude:startStop.lon]],
     }];
     // TODO: fix later for schedule
     [startTime setObject:@(startTime.firstObject.integerValue + segment->travelTime) atIndexedSubscript:0];
@@ -231,18 +231,18 @@
         [arr removeAllObjects];
     }
     
-    const auto endStop = stops[stops.size() - 1];
+    const auto &endStop = segment->getEnd();
     [arr addObject:@{
         @"cell" : @"OAPublicTransportPointCell",
         @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
-        @"title" : [NSString stringWithUTF8String:endStop->name.c_str()],
+        @"title" : [NSString stringWithUTF8String:endStop.name.c_str()],
         @"descr" : OALocalizedString(@"exit_at"),
         @"time" : timeText,
         @"top_route_line" : @(YES),
         @"bottom_route_line" : @(NO),
         @"custom_icon" : @(YES),
         @"line_color" : color,
-        @"coords" : @[[[CLLocation alloc] initWithLatitude:endStop->lat longitude:endStop->lon]]
+        @"coords" : @[[[CLLocation alloc] initWithLatitude:endStop.lat longitude:endStop.lon]]
     }];
     
     [arr addObject:@{
@@ -493,18 +493,24 @@
         
         if (cell)
         {
+            BOOL smallIcon = [item[@"small_icon"] boolValue];
             NSString *imageName = item[@"img"];
             if (imageName)
             {
                 cell.iconView.hidden = NO;
                 if ([item[@"custom_icon"] boolValue])
                 {
-                    [cell.iconView setImage:[[OATargetInfoViewController getIcon:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-                    cell.iconView.tintColor = UIColorFromRGB(color_chart_orange);
+                    UIImage *img = [[OATargetInfoViewController getIcon:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    [cell.iconView setImage:img];
+                    cell.iconView.tintColor = smallIcon ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(color_chart_orange);
+                    [cell showOutiline:YES];
+                    cell.contentMode = smallIcon ? UIViewContentModeScaleAspectFit : UIViewContentModeCenter;
                 }
                 else
                 {
                     [cell.iconView setImage:[UIImage imageNamed:imageName]];
+                    [cell showOutiline:NO];
+                    cell.contentMode = UIViewContentModeScaleAspectFit;
                 }
             }
             else
@@ -526,7 +532,7 @@
             
             cell.timeLabel.text = item[@"time"] ? item[@"time"] : @"";
             
-            [cell showSmallIcon:[item[@"small_icon"] boolValue]];
+            [cell showSmallIcon:smallIcon];
         }
         
         return cell;

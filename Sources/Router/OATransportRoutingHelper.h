@@ -61,6 +61,7 @@
 - (NSInteger) getWalkingDistance:(vector<SHARED_PTR<TransportRouteResultSegment>>) segments;
 
 - (OABBox) getBBox;
+- (NSString *) getLastRouteCalcError;
 
 @end
 

@@ -17,6 +17,7 @@
 #import "OAWaypointHelper.h"
 #import "QuadRect.h"
 #import "OARouteProvider.h"
+#import "OARootViewController.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <transportRoutingObjects.h>
@@ -132,6 +133,7 @@
 @property (nonatomic) NSMutableArray<id<OARouteInformationListener>> *listeners;
 
 - (void) setNewRoute:(std::vector<SHARED_PTR<TransportRouteResult>>)res;
+- (void) showMessage:(NSString *)msg;
 
 @end
 
@@ -404,20 +406,17 @@
         }
         _helper.currentRunningJob = nil;
     }
-    if (res.size() > 0)
-    {
-        [_helper setNewRoute:res];
-    }
-    else if (error)
+
+    if (error)
     {
         _helper.lastRouteCalcError = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"error_calculating_route"), error];
         _helper.lastRouteCalcErrorShort = OALocalizedString(@"error_calculating_route");
-//        [_helper showMessage:_helper.lastRouteCalcError];
     }
     else
     {
         _helper.lastRouteCalcError = OALocalizedString(@"empty_route_calculated");
     }
+    [_helper setNewRoute:res];
 }
 
 #pragma mark - OARouteCalculationProgressCallback
@@ -588,6 +587,11 @@
 - (void) setCurrentRoute:(NSInteger)currentRoute
 {
     _currentRoute = currentRoute;
+}
+
+- (NSString *) getLastRouteCalcError
+{
+    return _lastRouteCalcError;
 }
 
 - (void) addListener:(id<OARouteInformationListener>)l
@@ -821,5 +825,7 @@
 {
     NSLog(@"Public Transport error: %@", msg);
 }
+
+
 
 @end

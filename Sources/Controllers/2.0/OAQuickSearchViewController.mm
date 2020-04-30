@@ -1496,7 +1496,20 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                         [self showSearchIcon];
                         if (![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0)
                         {
-                            [self addEmptyResult];
+                            OASearchPhrase *searchPhrase = [self.searchUICore getPhrase];
+                            if (![searchPhrase isNoSelectedType] && ![searchPhrase isLastWord:POI_TYPE] && ![[searchPhrase getLastSelectedWord].result.object isKindOfClass:[OAPOIBaseType class]])
+                            {
+                                OASearchWord *word = [searchPhrase getLastSelectedWord];
+                                if (word && [word getLocation])
+                                {
+                                    OASearchResult *searchResult = word.result;
+                                    [OAQuickSearchTableController showOnMap:searchResult searchType:self.searchType delegate:self];
+                                }
+                            }
+                            else
+                            {
+                                [self addEmptyResult];
+                            }
                         }
                         if ([self.searchUICore isSearchMoreAvailable:obj.requiredSearchPhrase])
                         {

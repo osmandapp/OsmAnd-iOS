@@ -28,6 +28,7 @@
     _descHeightSecondary.active = self.descView.hidden;
     _textHeightPrimary.active = !self.descView.hidden;
     _textHeightSecondary.active = self.descView.hidden;
+    _textTopConstraint.active = self.descView.hidden;
     
     [super updateConstraints];
 }
@@ -42,6 +43,7 @@
         res = res || self.textHeightSecondary.active != !self.descView.hidden;
         res = res || self.descHeightPrimary.active != self.descView.hidden;
         res = res || self.descHeightSecondary.active != !self.descView.hidden;
+        res = res || self.textTopConstraint.active != self.descView.hidden;
     }
     return res;
 }

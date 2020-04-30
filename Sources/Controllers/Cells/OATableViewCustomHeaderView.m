@@ -66,8 +66,8 @@
 {
     CGFloat leftMargin = OAUtilities.getLeftMargin;
     CGFloat w = self.bounds.size.width - 32. - leftMargin * 2;
-    CGFloat height = [self.class getTextHeight:_label.text width:w];
-    if (_label.text.length > 0)
+    CGFloat height = [self.class getTextHeight:_label.text ? _label.text : _label.attributedText.string width:w];
+    if (_label.text.length > 0 || _label.attributedText.length > 0)
     {
         _label.hidden = NO;
         _label.frame = CGRectMake(16.0 + leftMargin, 17.0, w, height);

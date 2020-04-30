@@ -34,6 +34,7 @@
 #import "OARouteInfoLegendCell.h"
 #import "OARouteStatisticsModeCell.h"
 #import "OAFilledButtonCell.h"
+#import "OATransportRoutingHelper.h"
 
 #import <Charts/Charts-Swift.h>
 
@@ -195,12 +196,20 @@
     routeBBox.bottom = DBL_MAX;
     routeBBox.left = DBL_MAX;
     routeBBox.right = DBL_MAX;
-    if ([_routingHelper isRouteCalculated] && !error)
+    if ([_routingHelper isRouteCalculated] && !error && !_routingHelper.isPublicTransportMode)
     {
         routeBBox = [_routingHelper getBBox];
         if ([_routingHelper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
         {
             [self centerMapOnBBox:routeBBox];
+        }
+    }
+    else if (_routingHelper.isPublicTransportMode)
+    {
+        OATransportRoutingHelper *transportHelper = OATransportRoutingHelper.sharedInstance;
+        if (!transportHelper.isRouteBeingCalculated && transportHelper.getRoutes.size() > 0 && transportHelper.currentRoute != -1)
+        {
+            [self centerMapOnBBox:transportHelper.getBBox];
         }
     }
 }

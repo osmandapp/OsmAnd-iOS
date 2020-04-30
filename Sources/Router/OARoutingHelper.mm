@@ -22,6 +22,7 @@
 #import "OAGPXUIHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
+#import "OATransportRoutingHelper.h"
 
 #import <Reachability.h>
 
@@ -43,6 +44,8 @@
 @property (nonatomic) long recalculateCountInInterval;
 @property (nonatomic) NSTimeInterval evalWaitInterval;
 @property (nonatomic) BOOL waitingNextJob;
+
+@property (nonatomic) OARouteCalculationResult *originalRoute;
 
 - (void) showMessage:(NSString *)msg;
 - (void) setNewRoute:(OARouteCalculationResult *)prevRoute res:(OARouteCalculationResult *)res start:(CLLocation *)start;
@@ -142,6 +145,15 @@
     {
         if ([res isCalculated])
         {
+            if (!_params.inSnapToRoadMode && !_params.inPublicTransportMode)
+            {
+                _helper.route = res;
+                [self updateOriginalRoute];
+            }
+            if (_params.resultListener)
+            {
+                [_params.resultListener onRouteCalculated:res segment:_params.walkingRouteSegment];
+            }
             _helper.route = res;
         }
         else
@@ -153,7 +165,8 @@
     }
     if ([res isCalculated])
     {
-        [_helper setNewRoute:prev res:res start:_params.start];
+        if (!_helper.isPublicTransportMode /*&& !params.inSnapToRoadMode */)
+            [_helper setNewRoute:prev res:res start:_params.start];
     }
     else if (onlineSourceWithoutInternet)
     {
@@ -178,6 +191,12 @@
     }
     //app.getNotificationHelper().refreshNotification(NAVIGATION); TODO notification
     _helper.lastTimeEvaluatedRoute = [[NSDate date] timeIntervalSince1970];
+}
+
+- (void) updateOriginalRoute
+{
+    if (!_helper.originalRoute)
+        _helper.originalRoute = _helper.route;
 }
 
 @end
@@ -207,6 +226,8 @@
     BOOL _voiceRouterStopped;
     
     NSMutableArray<id<OARouteCalculationProgressCallback>> *_progressRoutes;
+    
+    OATransportRoutingHelper *_transportRoutingHelper;
 }
 
 static BOOL _isDeviatedFromRoute = false;
@@ -227,6 +248,7 @@ static BOOL _isDeviatedFromRoute = false;
         _provider = [[OARouteProvider alloc] init];
         [self setAppMode:_settings.applicationMode];
         _progressRoutes = [NSMutableArray new];
+        _transportRoutingHelper = OATransportRoutingHelper.sharedInstance;
     }
     return self;
 }
@@ -250,6 +272,11 @@ static BOOL _isDeviatedFromRoute = false;
 - (OAApplicationMode *) getAppMode
 {
     return _mode;
+}
+
+- (OARouteProvider *) getRouteProvider
+{
+    return _provider;
 }
 
 - (BOOL) isFollowingMode
@@ -326,6 +353,7 @@ static BOOL _isDeviatedFromRoute = false;
     {
         if (![_listeners containsObject:l])
             [_listeners addObject:l];
+        [_transportRoutingHelper addListener:l];
     }
 }
 
@@ -566,7 +594,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (BOOL) identifyUTurnIsNeeded:(CLLocation *)currentLocation posTolerance:(float)posTolerance
 {
-    if (!_finalLocation || !currentLocation || ![_route isCalculated])
+    if (!_finalLocation || !currentLocation || ![_route isCalculated] || self.isPublicTransportMode)
         return false;
     
     BOOL isOffRoute = false;
@@ -606,7 +634,11 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (void) updateProgress:(OARouteCalculationParams *)params
 {
-    if (_progressRoutes.count > 0)
+    id<OARouteCalculationProgressCallback> progressRoute = nil;
+    if (params.calculationProgressCallback)
+        progressRoute = params.calculationProgressCallback;
+    
+    if (_progressRoutes.count > 0 || progressRoute)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
@@ -618,8 +650,15 @@ static BOOL _isDeviatedFromRoute = false;
                 if (all > 0)
                 {
                     int t = (int) MIN(p * p / (all * all) * 100.0, 99);
-                    for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                    if (progressRoute)
+                    {
                         [progressRoute updateProgress:t];
+                    }
+                    else
+                    {
+                        for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                            [progressRoute updateProgress:t];
+                    }
                 }
                 NSThread *t = _currentRunningJob;
                 if ([t isKindOfClass:[OARouteRecalculationThread class]] && ((OARouteRecalculationThread *) t).params != params)
@@ -646,8 +685,15 @@ static BOOL _isDeviatedFromRoute = false;
                     [_progressRoute requestPrivateAccessRouting];
                 }
                  */
-                for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                if (progressRoute)
+                {
                     [progressRoute finish];
+                }
+                else
+                {
+                    for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                        [progressRoute finish];
+                }
             }
         });
     }
@@ -859,7 +905,15 @@ static BOOL _isDeviatedFromRoute = false;
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation previousRoute:(OARouteCalculationResult *)previousRoute targetPointsChanged:(BOOL)targetPointsChanged
 {
     CLLocation *locationProjection = currentLocation;
-    if (!_finalLocation || !currentLocation)
+    if (self.isPublicTransportMode && currentLocation != nil && _finalLocation != nil &&
+        (targetPointsChanged || _transportRoutingHelper.startLocation == nil))
+    {
+        _lastFixedLocation = currentLocation;
+        _lastProjection = locationProjection;
+        _transportRoutingHelper.applicationMode = _mode;
+        [_transportRoutingHelper setFinalAndCurrentLocation:_finalLocation currentLocation:[[CLLocation alloc] initWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude]];
+    }
+    if (_finalLocation == nil || currentLocation == nil || self.isPublicTransportMode)
     {
         _isDeviatedFromRoute = false;
         return locationProjection;
@@ -1129,6 +1183,7 @@ static BOOL _isDeviatedFromRoute = false;
             _lastProjection = nil;
             [self setFollowingMode:NO];
         }
+        [_transportRoutingHelper clearCurrentRoute:newFinalLocation];
     }
 }
 
@@ -1207,13 +1262,89 @@ static BOOL _isDeviatedFromRoute = false;
 - (void) recalculateRouteDueToSettingsChange
 {
     [self clearCurrentRoute:_finalLocation newIntermediatePoints:_intermediatePoints];
-    [self recalculateRouteInBackground:_lastFixedLocation end:_finalLocation intermediates:_intermediatePoints gpxRoute:_currentGPXRoute previousRoute:_route paramsChanged:YES onlyStartPointChanged:NO];
+    if (self.isPublicTransportMode)
+    {
+        CLLocation *start = _lastFixedLocation;
+        CLLocation *finish = _finalLocation;
+        _transportRoutingHelper.applicationMode = _mode;
+        if (start != nil && finish != nil)
+        {
+            [_transportRoutingHelper setFinalAndCurrentLocation:finish currentLocation:[[CLLocation alloc] initWithLatitude:start.coordinate.latitude longitude:start.coordinate.longitude]];
+        }
+        else
+        {
+            [_transportRoutingHelper recalculateRouteDueToSettingsChange];
+        }
+    }
+    else
+    {
+        [self recalculateRouteInBackground:_lastFixedLocation end:_finalLocation intermediates:_intermediatePoints gpxRoute:_currentGPXRoute previousRoute:_route paramsChanged:YES onlyStartPointChanged:NO];
+    }
 }
 
 - (void) notifyIfRouteIsCalculated
 {
     if ([_route isCalculated])
         [_voiceRouter newRouteIsCalculated:true];
+}
+
+- (BOOL) isPublicTransportMode
+{
+    return [_mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
+}
+
+- (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress
+{
+    @synchronized (self) {
+        NSThread *prevRunningJob = _currentRunningJob;
+        _settings.lastRoutingApplicationMode = [self getAppMode];
+        OARouteRecalculationThread *newThread = [[OARouteRecalculationThread alloc] initWithName:@"Calculating route" params:params paramsChanged:paramsChanged helper:self];
+        _currentRunningJob = newThread;
+        [self startProgress:params];
+        if (updateProgress)
+            [self updateProgress:params];
+        if (prevRunningJob)
+        {
+            [newThread setWaitPrevJob:prevRunningJob];
+        }
+        [_currentRunningJob start];
+    }
+}
+// TODO: check correctness
+- (void) startProgress:(OARouteCalculationParams *) params
+{
+    if (params.calculationProgressCallback)
+    {
+        [params.calculationProgressCallback startProgress];
+    }
+    else if (_progressRoutes)
+    {
+        for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+        {
+            [progressRoute startProgress];
+        }
+    }
+}
+
+- (void) finishProgress:(OARouteCalculationParams *) params
+{
+    id<OARouteCalculationProgressCallback> progressRoute = params.calculationProgressCallback;
+    if (progressRoute)
+    {
+        [progressRoute finish];
+    }
+    else
+    {
+        for (id<OARouteCalculationProgressCallback> callback in _progressRoutes)
+            [callback finish];
+    }
+}
+
++ (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    params.leftSide = [OADrivingRegion isLeftHandDriving:settings.drivingRegion];
+    params.fast = [settings.fastRouteMode get:mode];
 }
 
 @end

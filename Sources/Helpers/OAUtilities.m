@@ -381,7 +381,7 @@
 
 + (NSString *) drawablePath:(NSString *)resId
 {
-    return [NSString stringWithFormat:@"%@/drawable-%@/%@", [resId hasPrefix:@"mx_"] ? @"mx-png-icons" : @"style-icons", [OAUtilities drawablePostfix], resId];
+    return [NSString stringWithFormat:@"%@/drawable-%@/%@", [resId hasPrefix:@"mx_"] ? @"poi-icons-png" : @"map-icons-png", [OAUtilities drawablePostfix], resId];
 }
 
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners

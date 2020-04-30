@@ -56,6 +56,7 @@
 #import "OARouteStatistics.h"
 
 #import "OARoutingHelper.h"
+#import "OATransportRoutingHelper.h"
 #import "OAPointDescription.h"
 #import "OARouteCalculationResult.h"
 #import "OATargetPointsHelper.h"
@@ -3286,7 +3287,8 @@
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading
 {
     [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
-    [_mapLayers.routeMapLayer refreshRoute];
+    if (!OARoutingHelper.sharedInstance.isPublicTransportMode)
+        [_mapLayers.routeMapLayer refreshRoute];
 }
 
 #pragma mark - OARouteInformationListener
@@ -3294,20 +3296,27 @@
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
     OARoutingHelper *helper = [OARoutingHelper sharedInstance];
-    NSString *error = [helper getLastRouteCalcError];
+    OATransportRoutingHelper *transportHelper = OATransportRoutingHelper.sharedInstance;
+    NSString *error = helper.isPublicTransportMode ? [transportHelper getLastRouteCalcError] : [helper getLastRouteCalcError];
     OABBox routeBBox;
     routeBBox.top = DBL_MAX;
     routeBBox.bottom = DBL_MAX;
     routeBBox.left = DBL_MAX;
     routeBBox.right = DBL_MAX;
-    if ([helper isRouteCalculated] && !error)
+    if ([helper isRouteCalculated] && !error && !helper.isPublicTransportMode)
     {
         routeBBox = [helper getBBox];
+    }
+    else if (helper.isPublicTransportMode && transportHelper.getRoutes.size() > 0)
+    {
+        routeBBox = [transportHelper getBBox];
     }
     else
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[[UIAlertView alloc] initWithTitle:@"Route calculation error" message:error delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+            [self presentViewController:alertController animated:YES completion:nil];
         });
     }
     

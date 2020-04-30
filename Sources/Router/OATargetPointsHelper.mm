@@ -206,7 +206,8 @@
 
 - (void) updateRouteAndRefresh:(BOOL)updateRoute
 {
-    if (updateRoute && ([_routingHelper isRouteBeingCalculated] || [_routingHelper isRouteCalculated] || [_routingHelper isFollowingMode] || [_routingHelper isRoutePlanningMode]))
+    if(updateRoute && ([_routingHelper isPublicTransportMode] || [_routingHelper isRouteBeingCalculated] ||
+            [_routingHelper isRouteCalculated] || [_routingHelper isFollowingMode] || [_routingHelper isRoutePlanningMode]))
     {
         [self updateRoutingHelper];
     }

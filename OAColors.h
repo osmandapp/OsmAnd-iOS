@@ -54,6 +54,8 @@
 #define color_secondary_text_blur 0x727272
 #define color_transport_route_line_argb 0xCC2f7af5
 
+#define color_nav_route_default_argb 0xCCaa0088
+
 #define color_live_frequency 0xFEC601
 #define color_active_light 0x237bff
 #define color_disabled_light 0xdadbdf

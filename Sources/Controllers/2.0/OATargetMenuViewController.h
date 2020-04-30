@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, ETopToolbarType)
     ETopToolbarTypeFixed = 0,
     ETopToolbarTypeMiddleFixed,
     ETopToolbarTypeFloating,
+    ETopToolbarTypeFloatingFixedButton
 };
 
 typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
@@ -80,6 +81,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (weak, nonatomic) IBOutlet UIButton *buttonOK;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *bottomToolBarView;
+@property (weak, nonatomic) IBOutlet UIView *additionalAccessoryView;
 
 @property (nonatomic) UINavigationController* navController;
 

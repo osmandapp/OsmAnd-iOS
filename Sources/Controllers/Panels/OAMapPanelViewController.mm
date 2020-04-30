@@ -48,6 +48,7 @@
 #import "OARouteSettingsViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OARoutePreferencesParameters.h"
+#import "OATransportRoutingHelper.h"
 
 #import <EventKit/EventKit.h>
 
@@ -120,7 +121,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OARouteInformationListener>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
@@ -213,6 +214,7 @@ typedef enum
 
     [_routingHelper addListener:self];
     [_routingHelper addProgressBar:self];
+    [OATransportRoutingHelper.sharedInstance addProgressBar:self];
     
     _toolbars = [NSMutableArray array];
     _topControlsVisible = YES;
@@ -1929,6 +1931,7 @@ typedef enum
         case OATargetRouteDetails:
         case OATargetRouteDetailsGraph:
         case OATargetChangePosition:
+        case OATargetTransportRouteDetails:
         {
             if (controller)
                 [self.targetMenuView doInit:NO];
@@ -2213,7 +2216,6 @@ typedef enum
     [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.targetMultiMenuView transitionToSize];
-        [self.routeInfoView layoutSubviews];
     } completion:nil];
 }
 
@@ -2583,6 +2585,44 @@ typedef enum
     
     [self enterContextMenuMode];
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+    }];
+}
+
+- (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+    [UIApplication.sharedApplication.keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    targetPoint.type = OATargetTransportRouteDetails;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = @"";
+    
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+    targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    _targetLatitude = latLon.latitude;
+    _targetLongitude = latLon.longitude;
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.toolbarNeeded = NO;
+    targetPoint.targetObj = @(routeIndex);
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        if (showFullScreeen)
+            [_targetMenuView requestFullScreenMode];
         _activeTargetActive = YES;
     }];
 }
@@ -3458,6 +3498,11 @@ typedef enum
 }
 
 - (void) requestPrivateAccessRouting
+{
+    
+}
+
+- (void) start
 {
     
 }

@@ -92,6 +92,8 @@
 #define rotateMapKey @"rotateMap"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
 
+#define routingProfileKey @"routingProfile"
+
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
 #define fastRouteModeKey @"fastRouteMode"
@@ -99,6 +101,7 @@
 #define followTheRouteKey @"followTheRoute"
 #define followTheGpxRouteKey @"followTheGpxRoute"
 #define arrivalDistanceFactorKey @"arrivalDistanceFactor"
+#define enableTimeConditionalRoutingKey @"enableTimeConditionalRouting"
 #define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
 #define disableOffrouteRecalcKey @"disableOffrouteRecalc"
 #define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
@@ -1246,9 +1249,18 @@
 
         _availableApplicationModes = [[NSUserDefaults standardUserDefaults] objectForKey:availableApplicationModesKey];
         if (!_availableApplicationModes)
-            self.availableApplicationModes = @"car,bicycle,pedestrian,";
+            self.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
 
         _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
+        
+        _routingProfile = [OAProfileString withKey:routingProfileKey defValue:@""];
+        [_routingProfile setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
+        [_routingProfile setModeDefaultValue:@"bicycle" mode:OAApplicationMode.BICYCLE];
+        [_routingProfile setModeDefaultValue:@"pedestrian" mode:OAApplicationMode.PEDESTRIAN];
+        [_routingProfile setModeDefaultValue:@"public_transport" mode:OAApplicationMode.PUBLIC_TRANSPORT];
+        [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
+        [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
+        [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
         
         _showDestinationArrow = [OAProfileBoolean withKey:showDestinationArrowKey defValue:NO];
         [_showDestinationArrow setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
@@ -1318,6 +1330,7 @@
         _followTheRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheRouteKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:followTheRouteKey] : NO;
         _followTheGpxRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheGpxRouteKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:followTheGpxRouteKey] : nil;
         _arrivalDistanceFactor = [OAProfileDouble withKey:arrivalDistanceFactorKey defValue:1.0];
+        _enableTimeConditionalRouting = [OAProfileBoolean withKey:enableTimeConditionalRoutingKey defValue:NO];
         _useIntermediatePointsNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:useIntermediatePointsNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useIntermediatePointsNavigationKey] : NO;
         _disableOffrouteRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableOffrouteRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableOffrouteRecalcKey] : NO;
         _disableWrongDirectionRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableWrongDirectionRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableWrongDirectionRecalcKey] : NO;

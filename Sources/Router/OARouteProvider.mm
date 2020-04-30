@@ -502,6 +502,10 @@
     NSLog(@"Use %d MB of %d", memoryLimit, memoryTotal);
     
     auto cf = config->build(profileName, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : -360, memoryLimit, paramsR);
+    if ([OAAppSettings.sharedManager.enableTimeConditionalRouting get:params.mode])
+    {
+        cf->routeCalculationTime = [[NSDate date] timeIntervalSince1970] * 1000;
+    }
     return cf;
 }
 
@@ -675,9 +679,9 @@
 
 - (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
 {
-    auto router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
+    auto router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
     if (!router && am.parent)
-        router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
+        router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
     
     return router;
 }
@@ -743,6 +747,7 @@
     BOOL complex = [params.mode isDerivedRoutingFrom:[OAApplicationMode CAR]] && !settings.disableComplexRouting && !precalculated;
     ctx->leftSideNavigation = params.leftSide;
     ctx->progress = params.calculationProgress;
+    ctx->setConditionalTime(cf->routeCalculationTime);
     if (params.previousToRecalculate && params.onlyStartPointChanged)
     {
         int currentRoute = params.previousToRecalculate.currentRoute;
@@ -763,6 +768,7 @@
         complexCtx->progress = params.calculationProgress;
         complexCtx->leftSideNavigation = params.leftSide;
         complexCtx->previouslyCalculatedRoute = ctx->previouslyCalculatedRoute;
+        complexCtx->setConditionalTime(cf->routeCalculationTime);
     }
     
     return [self calcOfflineRouteImpl:params router:router ctx:ctx complexCtx:complexCtx st:params.start en:params.end inters:params.intermediates precalculated:precalculated];

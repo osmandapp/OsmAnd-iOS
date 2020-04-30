@@ -31,6 +31,7 @@ struct RoutingParameter;
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 - (void) showAvoidRoadsScreen;
 - (void) showTripSettingsScreen;
+- (void) showAvoidTransportScreen;
 
 @end
 
@@ -96,10 +97,16 @@ struct RoutingParameter;
 @interface OAAvoidRoadsRoutingParameter : OALocalRoutingParameter
 @end
 
+@interface OAAvoidTransportTypesRoutingParameter : OALocalRoutingParameter
+@end
+
 @interface OAGpxLocalRoutingParameter : OALocalRoutingParameter
 @end
 
 @interface OASimulationRoutingParameter : OALocalRoutingParameter
+@end
+
+@interface OAConsiderLimitationsParameter : OALocalRoutingParameter
 @end
 
 @interface OAOtherSettingsRoutingParameter : OALocalRoutingParameter

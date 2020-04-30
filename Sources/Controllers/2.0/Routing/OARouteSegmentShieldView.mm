@@ -67,7 +67,7 @@ static UIFont *_shieldFont;
     }
     else
     {
-        UIColor *tintColor = [OAUtilities colorIsBright:_color] ? [UIColor.blackColor colorWithAlphaComponent:0.9] : UIColor.whiteColor;
+        UIColor *tintColor = [OAUtilities isColorBright:_color] ? [UIColor.blackColor colorWithAlphaComponent:0.9] : UIColor.whiteColor;
         _contentView.backgroundColor = _color;
         _shieldLabel.textColor = tintColor;
         _shieldImage.image = [[OATargetInfoViewController getIcon:_iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -91,7 +91,7 @@ static UIFont *_shieldFont;
         else
         {
             [UIView animateWithDuration:.2 animations:^{
-                UIColor *tintColor = [OAUtilities colorIsBright:_color] ? [UIColor.blackColor colorWithAlphaComponent:0.9] : UIColor.whiteColor;
+                UIColor *tintColor = [OAUtilities isColorBright:_color] ? [UIColor.blackColor colorWithAlphaComponent:0.9] : UIColor.whiteColor;
                 _shieldLabel.textColor = tintColor;
                 _shieldImage.tintColor = tintColor;
             }];

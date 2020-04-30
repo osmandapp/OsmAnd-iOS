@@ -19,7 +19,7 @@
 
 @required
 
-- (void) onRouteCalculated:(std::vector<SHARED_PTR<TransportRouteResult>>) route;
+- (void) onRouteCalculated:(std::vector<SHARED_PTR<TransportRouteResult>>&) route;
 
 @end
 

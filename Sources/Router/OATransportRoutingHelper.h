@@ -30,7 +30,7 @@
 @class OAApplicationMode;
 
 @interface OATransportRouteResultSegment : NSObject
-@property std::shared_ptr<TransportRouteResultSegment> segment;
+@property (nonatomic, assign) std::shared_ptr<TransportRouteResultSegment> segment;
 - (instancetype) initWithSegment:(std::shared_ptr<TransportRouteResultSegment>)seg;
 @end
 
@@ -38,7 +38,7 @@
 
 + (OATransportRoutingHelper *) sharedInstance;
 
-@property (nonatomic) NSDictionary<NSArray<OATransportRouteResultSegment *> *, OARouteCalculationResult *> *walkingRouteSegments;
+@property (nonatomic) NSMapTable<NSArray<OATransportRouteResultSegment *> *, OARouteCalculationResult *> *walkingRouteSegments;
 
 @property (nonatomic, readonly) CLLocation *startLocation;
 @property (nonatomic, readonly) CLLocation *endLocation;
@@ -57,8 +57,8 @@
 
 - (BOOL) isRouteBeingCalculated;
 - (OARouteCalculationResult *) getWalkingRouteSegment:(OATransportRouteResultSegment *)s1 s2:(OATransportRouteResultSegment *)s2;
-- (NSInteger) getWalkingTime:(vector<SHARED_PTR<TransportRouteResultSegment>>) segments;
-- (NSInteger) getWalkingDistance:(vector<SHARED_PTR<TransportRouteResultSegment>>) segments;
+- (NSInteger) getWalkingTime:(vector<SHARED_PTR<TransportRouteResultSegment>>&) segments;
+- (NSInteger) getWalkingDistance:(vector<SHARED_PTR<TransportRouteResultSegment>>&) segments;
 
 - (OABBox) getBBox;
 - (NSString *) getLastRouteCalcError;

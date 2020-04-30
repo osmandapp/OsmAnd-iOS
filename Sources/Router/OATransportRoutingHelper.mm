@@ -157,7 +157,7 @@
     
     dispatch_queue_t _queue;
     NSMutableArray<OAWalkingRouteSegment *> *_walkingSegmentsToCalculate;
-    NSMutableDictionary<NSArray<OATransportRouteResultSegment *> *, OARouteCalculationResult *> *_walkingRouteSegments;
+    NSMapTable<NSArray<OATransportRouteResultSegment *> *, OARouteCalculationResult *> *_walkingRouteSegments;
     
     double _currentDistanceFromBegin;
 }
@@ -176,7 +176,7 @@
         _params = params;
         _queue = dispatch_queue_create("array_queue", DISPATCH_QUEUE_CONCURRENT);
         _walkingSegmentsToCalculate = [NSMutableArray new];
-        _walkingRouteSegments = [NSMutableDictionary new];
+        _walkingRouteSegments = [NSMapTable strongToStrongObjectsMapTable];
 
         if (!params.calculationProgress)
         {
@@ -398,7 +398,7 @@
     {
         _helper.routes = res;
         
-        _helper.walkingRouteSegments = [NSDictionary dictionaryWithDictionary:_walkingRouteSegments];
+        _helper.walkingRouteSegments = _walkingRouteSegments;
         if (res.size() > 0)
         {
             if (_params.resultListener)
@@ -525,12 +525,12 @@
 {
     if (_walkingRouteSegments)
     {
-        return _walkingRouteSegments[@[s1, s2]];
+        return [_walkingRouteSegments objectForKey:@[s1, s2]];
     }
     return nil;
 }
 
-- (NSInteger) getWalkingTime:(vector<SHARED_PTR<TransportRouteResultSegment>>) segments
+- (NSInteger) getWalkingTime:(vector<SHARED_PTR<TransportRouteResultSegment>>&) segments
 {
     NSInteger res = 0;
     if (_walkingRouteSegments)
@@ -557,7 +557,7 @@
     return res;
 }
 
-- (NSInteger) getWalkingDistance:(vector<SHARED_PTR<TransportRouteResultSegment>>) segments
+- (NSInteger) getWalkingDistance:(vector<SHARED_PTR<TransportRouteResultSegment>>&) segments
 {
     NSInteger res = 0;
     if (_walkingRouteSegments)

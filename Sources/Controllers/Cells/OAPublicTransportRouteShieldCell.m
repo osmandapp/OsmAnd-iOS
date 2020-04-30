@@ -41,7 +41,7 @@
 {
     _color = color;
     _routeShieldContainerView.backgroundColor = _color;
-    UIColor *tintColor = [OAUtilities colorIsBright:_color] ? [UIColor.blackColor colorWithAlphaComponent:0.9] : UIColor.whiteColor;
+    UIColor *tintColor = [OAUtilities isColorBright:_color] ? [UIColor.blackColor colorWithAlphaComponent:0.9] : UIColor.whiteColor;
     _iconView.tintColor = tintColor;
     _textView.textColor = tintColor;
 }
@@ -81,7 +81,7 @@
 
 - (void)restoreShieldState {
     [UIView animateWithDuration:.2 animations:^{
-        UIColor *tintColor = [OAUtilities colorIsBright:_color] ? [UIColor.blackColor colorWithAlphaComponent:0.9] : UIColor.whiteColor;
+        UIColor *tintColor = [OAUtilities isColorBright:_color] ? [UIColor.blackColor colorWithAlphaComponent:0.9] : UIColor.whiteColor;
         _textView.textColor = tintColor;
         _iconView.tintColor = tintColor;
     }];

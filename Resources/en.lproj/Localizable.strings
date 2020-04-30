@@ -1264,7 +1264,7 @@
 "select_wpt_on_map" = "Select point on map to add to the trip";
 "gpx_rename_q" = "Rename trip";
 "gpx_enter_new_name" = "Please enter new name for the trip";
-"map_coords" = "Map: Lat %ld Lon %ld";
+"map_coords" = "Map: Lat %f Lon %f";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";

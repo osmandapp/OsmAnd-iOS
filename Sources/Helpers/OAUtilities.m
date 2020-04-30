@@ -1291,7 +1291,7 @@ static const double d180PI = 180.0 / M_PI_2;
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
 }
 
-+ (BOOL) colorIsBright:(UIColor *)color
++ (BOOL) isColorBright:(UIColor *)color
 {
     CGFloat luminance = 0;
 

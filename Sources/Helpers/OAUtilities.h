@@ -154,6 +154,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSString *) getLocalizedRouteInfoProperty:(NSString *)properyName;
 
-+ (BOOL) colorIsBright:(UIColor *)color;
++ (BOOL) isColorBright:(UIColor *)color;
 
 @end

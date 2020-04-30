@@ -637,7 +637,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
     NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
     NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
-    const auto& segments = res->segments;
+    auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();
     NSInteger walkTime = walkTimeReal > 0 ? walkTimeReal : walkTimePT;

@@ -677,7 +677,7 @@ public enum GPXDataSetAxisType: String {
                     lastXSameY = x;
                     continue;
                 }
-                if (hasSameY) {
+                if (hasSameY && lastEntry != nil) {
                     slopeValues.append(ChartDataEntry(x: lastXSameY, y: lastEntry!.y))
                 }
                 hasSameY = false
@@ -724,7 +724,7 @@ public enum GPXDataSetAxisType: String {
     private static func setupAxisDistance(axisBase: AxisBase, meters: Double) -> Double {
         let settings: OAAppSettings = OAAppSettings.sharedManager()
         let mc: EOAMetricsConstant = settings.metricSystem
-        var divX: Double
+        var divX: Double = 0
         
         let format1 = "%.0f"
         let format2 = "%.1f"
@@ -826,7 +826,7 @@ public enum GPXDataSetAxisType: String {
                             lastXSameY = nextX;
                             continue;
                         }
-                        if (hasSameY) {
+                        if (hasSameY && lastEntry != nil) {
                             values.append(ChartDataEntry(x: lastXSameY, y: lastEntry!.y))
                         }
                         hasSameY = false;

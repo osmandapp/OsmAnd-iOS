@@ -149,4 +149,14 @@
     return ![self isCurrentFilters] ? OALocalizedString(@"show_poi_over_map") : OALocalizedString(@"hide_poi_action");
 }
 
+- (NSString *)getTitle:(NSArray *)filters
+{
+    if (filters.count == 0)
+        return @"";
+    
+    return filters.count > 1
+    ? [NSString stringWithFormat:@"%@ +%ld", filters[0], filters.count - 1]
+    : filters[0];
+}
+
 @end

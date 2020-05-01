@@ -617,8 +617,6 @@
                 // Perform switch to follow-mode only in case location services have compass
                 if (_app.locationServices.compassPresent && _settings.settingAllow3DView)
                     newMode = OAMapModeFollow;
-                else if (_settings.settingAllow3DView)
-                    newMode = OAMapModePositionTrack;
                 break;
                 
             case OAMapModeFollow:

@@ -160,6 +160,13 @@
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self setMapLinkedToLocation:NO];
+                    if (!_settings.settingAllow3DView && _mapView.elevationAngle != kMapModePositionTrackingDefaultElevationAngle)
+                    {
+                        _isIn3dMode = NO;
+                        _lastElevationAngle = kMapModePositionTrackingDefaultElevationAngle;
+                        [_mapView setElevationAngle:kMapModePositionTrackingDefaultElevationAngle];
+                    }
+                    
                 });
                 break;
             }
@@ -608,8 +615,10 @@
                 
             case OAMapModePositionTrack:
                 // Perform switch to follow-mode only in case location services have compass
-                if (_app.locationServices.compassPresent)
+                if (_app.locationServices.compassPresent && _settings.settingAllow3DView)
                     newMode = OAMapModeFollow;
+                else if (_settings.settingAllow3DView)
+                    newMode = OAMapModePositionTrack;
                 break;
                 
             case OAMapModeFollow:

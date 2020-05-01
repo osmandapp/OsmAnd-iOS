@@ -199,6 +199,7 @@
             }
             NSNumber *doNotShowDiscountValue = @(settings.settingDoNotShowPromotions);
             NSNumber *doNotUseAnalyticsValue = @(settings.settingDoNotUseAnalytics);
+            NSNumber *allow3DValue = @(settings.settingAllow3DView);
             
             NSString* externalInputDeviceValue;
             if (settings.settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE)
@@ -251,6 +252,13 @@
                               @"value" : angularUnitsValue,
                               @"img" : @"menu_cell_pointer.png",
                               @"type" : kCellTypeSingleSelectionList },
+                          @{
+                              @"name" : @"allow_3d",
+                              @"title" : OALocalizedString(@"allow_3d"),
+                              @"description" : OALocalizedString(@"allow_3d_descr"),
+                              @"value" : allow3DValue,
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSwitch },
                           @{
                               @"name" : @"do_not_show_discount",
                               @"title" : OALocalizedString(@"do_not_show_discount"),
@@ -551,9 +559,25 @@
             OAAppSettings *settings = [OAAppSettings sharedManager];
             BOOL isChecked = ((UISwitch *) sender).on;
             if ([name isEqualToString:@"do_not_show_discount"])
+            {
                 [settings setSettingDoNotShowPromotions:isChecked];
+            }
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
+            {
                 [settings setSettingDoNotUseAnalytics:isChecked];
+            }
+            else if ([name isEqualToString:@"allow_3d"])
+            {
+                [settings setSettingAllow3DView:isChecked];
+                if (!isChecked)
+                {
+                    OsmAndAppInstance app = OsmAndApp.instance;
+                    if (app.mapMode == OAMapModeFollow)
+                        [app setMapMode:OAMapModePositionTrack];
+                    else
+                        [app.mapModeObservable notifyEvent];
+                }
+            }
         }
     }
 }

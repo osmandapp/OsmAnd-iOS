@@ -20,6 +20,7 @@
 #define settingGeoFormatKey @"settingGeoFormatKey"
 #define settingMapArrowsKey @"settingMapArrowsKey"
 #define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
+#define settingEnable3DViewKey @"settingEnable3DView"
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
 #define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
@@ -1184,6 +1185,8 @@
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;
         
         _settingShowAltInDriveMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapShowAltInDriveModeKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapShowAltInDriveModeKey] : NO;
+        
+        _settingAllow3DView = [[NSUserDefaults standardUserDefaults] objectForKey:settingEnable3DViewKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingEnable3DViewKey] : YES;
 
         _settingDoNotShowPromotions = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotShowPromotionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotShowPromotionsKey] : NO;
         _settingDoNotUseAnalytics = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotUseFirebaseKey] : NO;
@@ -1534,6 +1537,12 @@
 {
     _settingShowAltInDriveMode = settingShowAltInDriveMode;
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowAltInDriveMode forKey:settingMapShowAltInDriveModeKey];
+}
+
+- (void) setSettingAllow3DView:(BOOL)settingEnable3DView
+{
+    _settingAllow3DView = settingEnable3DView;
+    [[NSUserDefaults standardUserDefaults] setBool:_settingAllow3DView forKey:settingEnable3DViewKey];
 }
 
 - (void) setSettingDoNotShowPromotions:(BOOL)settingDoNotShowPromotions

@@ -1370,3 +1370,6 @@
 "weeks_short" = "Wkn";
 "week_short" = "Wk";
 "res_confirmation_delete" = "Weet u zeker dat u %@ wilt verwijderen?";
+"res_online_name_descr" = "Specificeer naan voor de online bron";
+"res_edit_map_source" = "Wijzig kaart bron";
+"res_confirmation_clear_cache" = "Weet u zeker dat u de cache voor %@ wilt verwijderen?";

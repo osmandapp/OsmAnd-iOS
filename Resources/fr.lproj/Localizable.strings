@@ -768,14 +768,14 @@
 "transport_stop" = "Arrêt";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
-"logging_interval_navigation_descr" = "Choisissez l'intervalle d'enregistrement de votre position durant la navigation";
+"logging_interval_navigation_descr" = "Choisissez l'intervalle d'enregistrement de votre voyage durant la navigation";
 "logging_min_distance" = "Distance minimale entre deux positions";
 "logging_min_distance_descr" = "Distance minimale avant l'enregistrement d'une nouvelle position";
 "logging_min_accuracy" = "Précision minimale d'enregistrement";
 "logging_min_accuracy_descr" = "Pas d'enregistrement de la position si la précision définie n'est pas atteinte";
 "logging_min_speed" = "Vitesse minimale d'enregistrement";
 "auto_split_gap" = "Séparation automatique des tracés après une pause";
-"auto_split_gap_descr" = "Débute une nouvelle étape après 6 minutes de pause, un nouveau tracé après 2 heures de pause ou un nouveau fichier après une pause plus longue";
+"auto_split_gap_descr" = "Débute une nouvelle étape après 6 minutes de pause, un nouveau voyage après 2 heures de pause ou un nouveau fichier après une pause plus longue";
 "speak_tunnels" = "Tunnels";
 "shared_setting_always_ask" = "Toujours demander";
 "osm_live_routing_descr" = "Utiliser les mises à jour d'OsmAnd Live pour la navigation";

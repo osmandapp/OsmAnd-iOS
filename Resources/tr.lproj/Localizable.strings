@@ -848,7 +848,7 @@
 "osm_edits_advanced" = "İleri";
 "add_gpx_waypoint" = "GPX yol noktası ekle";
 "osmand_live_daily" = "Günlük";
-"osm_live_routing" = "OsmAnd Canlı navigasyon";
+"osm_live_routing" = "OsmAnd Live navigasyon";
 "osm_editing_lost_changes_title" = "Kaydetmedençık?";
 "osm_note_created" = "Oluşturulmuş OSM Notu";
 "osmand_live_last_live_update" = "Son güncelleme: %@";

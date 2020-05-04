@@ -1417,7 +1417,7 @@
 "routing_attr_avoid_ferries_name" = "Evitar balsas";
 "rendering_attr_hideUnderground_name" = "Objetos subterrâneos";
 "rendering_attr_noAdminboundaries_description" = "Suprimir a visualização de limites regionais (níveis de administração 5 – 9).";
-"routing_attr_allow_motorway_description" = "Permitir vias de motociclos.";
+"routing_attr_allow_motorway_description" = "Permite autoestradas.";
 "rendering_attr_winter_road_name" = "Estrada do inverno";
 "rendering_attr_surface_stone_name" = "Pedra";
 "routing_attr_prefer_motorway_description" = "Prefere auto-estradas";
@@ -1483,7 +1483,7 @@
 "routing_attr_avoid_train_description" = "Evita comboios";
 "rendering_attr_piste_type_sleigh_name" = "Trenó";
 "rendering_attr_surface_pebblestone_name" = "Seixos";
-"routing_attr_allow_motorway_name" = "Permitir vias de motociclos";
+"routing_attr_allow_motorway_name" = "Utilizar autoestradas";
 "routing_attr_piste_type_downhill_name" = "Esqui alpino/downhill";
 "routing_attr_piste_type_sled_description" = "Pistas para trenó.";
 "rendering_attr_roadColors_description" = "Selecione um esquema de cores de estrada:";
@@ -1590,13 +1590,12 @@
 "app_mode_utv" = "Lado a Lado";
 "app_mode_osm" = "OSM";
 "rendering_attr_streetLightingNight_name" = "Mostrar apenas à noite";
-
 "all_group_points" = "Todos os pontos do grupo";
 "res_zoom_levels" = "Níveis de zoom";
 "region_antarctica" = "Antártida";
 "open_wiki_online" = "Abrir artigo on-line";
 "map_settings_color_scheme" = "Esquema de cores";
-"wiki_sheet_title" = "Como se abre artigos da Wikipédia\?";
+"wiki_sheet_title" = "Como se abre artigos da Wikipédia?";
 "map_settings_base_transp" = "Transparência do mapa base";
 "map_settings_appearance" = "Aparência";
 "shared_string_warning" = "Aviso";

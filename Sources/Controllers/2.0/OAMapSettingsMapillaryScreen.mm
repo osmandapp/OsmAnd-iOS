@@ -107,7 +107,6 @@ static const NSInteger panoImageFilterSection = 3;
 
 - (void) commonInit
 {
-    tblView.separatorColor = UIColorFromRGB(color_tint_gray);
     [self.tblView.tableFooterView removeFromSuperview];
     self.tblView.tableFooterView = nil;
     [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];

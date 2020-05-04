@@ -381,7 +381,7 @@
 
 + (NSString *) drawablePath:(NSString *)resId
 {
-    return [NSString stringWithFormat:@"%@/drawable-%@/%@", [resId hasPrefix:@"mx_"] ? @"mx-png-icons" : @"style-icons", [OAUtilities drawablePostfix], resId];
+    return [NSString stringWithFormat:@"%@/drawable-%@/%@", [resId hasPrefix:@"mx_"] ? @"poi-icons-png" : @"map-icons-png", [OAUtilities drawablePostfix], resId];
 }
 
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners
@@ -1289,6 +1289,28 @@ static const double d180PI = 180.0 / M_PI_2;
 + (BOOL) isIPad
 {
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+}
+
++ (BOOL) isColorBright:(UIColor *)color
+{
+    CGFloat luminance = 0;
+
+    CGColorSpaceRef colorSpace = CGColorGetColorSpace(color.CGColor);
+    CGColorSpaceModel colorSpaceModel = CGColorSpaceGetModel(colorSpace);
+
+    if(colorSpaceModel == kCGColorSpaceModelRGB)
+    {
+        CGFloat red = 0.0, green = 0.0, blue = 0.0, alpha = 0.0;
+        [color getRed:&red green:&green blue:&blue alpha:&alpha];
+
+        luminance = ((red * 0.299) + (green * 0.587) + (blue * 0.114));
+    }
+    else
+    {
+        [color getWhite:&luminance alpha:0];
+    }
+
+    return luminance >= .5f;
 }
 
 @end

@@ -223,6 +223,8 @@
 
 - (OAQuickAction *) getAction:(NSIndexPath *)indexPath
 {
+    if (_data.count == 1)
+        return _data.firstObject;
     return _data[6 * indexPath.section + indexPath.row];
 }
 
@@ -307,6 +309,9 @@
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
+    if (_data.count == 1)
+        return;
+    
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
     NSInteger destRow = destinationIndexPath.row;
     if (destRow == [tableView numberOfRowsInSection:destinationIndexPath.section] - 1)

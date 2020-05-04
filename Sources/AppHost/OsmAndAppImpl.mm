@@ -63,6 +63,7 @@
 #define MILS_IN_DEGREE 17.777778f
 
 #define VERSION_3_10 3.10
+#define VERSION_3_14 3.14
 
 #define kAppData @"app_data"
 
@@ -361,6 +362,10 @@
             _resourcesManager->installOsmAndOnlineTileSource();
             
             [self clearUnsupportedTilesCache];
+        }
+        if (prevVersion < VERSION_3_14)
+        {
+            OAAppSettings.sharedManager.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
@@ -686,6 +691,18 @@
 - (void)saveFavoritesToPermamentStorage
 {
     _favoritesCollection->saveTo(QString::fromNSString(_favoritesFilename));
+}
+
+- (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
+{
+    int hours, minutes, seconds;
+    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
+    
+    NSMutableString *time = [NSMutableString string];
+    [time appendFormat:@"%02d:", hours];
+    [time appendFormat:@"%02d", minutes];
+    
+    return time;
 }
 
 - (NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat

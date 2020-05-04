@@ -489,7 +489,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     headerView.opaque = NO;
     self.tableView.tableHeaderView = headerView;
     self.tableView.sectionFooterHeight = 0.01;
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 40)];
     self.tableView.tableFooterView = footerView;
     
     _backgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
@@ -504,7 +504,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [self updateBackgroundViewLayout:interfaceOrientation contentOffset:{0, 0}];
 
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = UIColorFromRGB(color_divider_light);
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     
     [self setupView];
     

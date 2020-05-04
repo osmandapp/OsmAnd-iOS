@@ -572,7 +572,6 @@
         case EOAQuickActionTypeNew:
         case EOAQuickActionTypeMarker:
         case EOAQuickActionTypeShowFavorite:
-        case EOAQuickActionTypeTogglePOI:
         case EOAQuickActionTypeParking:
         case EOAQuickActionTypeNavVoice:
         case EOAQuickActionTypeAddDestination:

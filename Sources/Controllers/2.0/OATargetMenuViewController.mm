@@ -37,6 +37,7 @@
 #import "OAOsmNotesOnlineTargetViewController.h"
 #import "OARouteDetailsGraphViewController.h"
 #import "OAChangePositionViewController.h"
+#import "OATrsansportRouteDetailsViewController.h"
 #import "OASizes.h"
 #import "OAPointDescription.h"
 #import "OAWorldRegion.h"
@@ -73,7 +74,7 @@
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
 }
 
-+ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState
++ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly
 {
     double lat = targetPoint.location.latitude;
     double lon = targetPoint.location.longitude;
@@ -96,7 +97,7 @@
             }
             
             if (item.favorite)
-                controller = [[OAFavoriteViewController alloc] initWithItem:item];
+                controller = [[OAFavoriteViewController alloc] initWithItem:item headerOnly:headerOnly];
             
             break;
         }
@@ -182,9 +183,9 @@
         case OATargetWpt:
         {
             if (activeTargetType == OATargetGPXEdit)
-                controller = [[OAGPXEditWptViewController alloc] initWithItem:targetPoint.targetObj];
+                controller = [[OAGPXEditWptViewController alloc] initWithItem:targetPoint.targetObj headerOnly:headerOnly];
             else
-                controller = [[OAGPXWptViewController alloc] initWithItem:targetPoint.targetObj];
+                controller = [[OAGPXWptViewController alloc] initWithItem:targetPoint.targetObj headerOnly:headerOnly];
             break;
         }
             
@@ -315,6 +316,11 @@
             controller = [[OAChangePositionViewController alloc] initWithTargetPoint:targetPoint.targetObj];
             break;
         }
+        case OATargetTransportRouteDetails:
+        {
+            controller = [[OATrsansportRouteDetailsViewController alloc] initWithRouteIndex:[targetPoint.targetObj integerValue]];
+            break;
+        }
             
         default:
         {
@@ -333,7 +339,8 @@
         targetPoint.type != OATargetRouteDetails &&
         targetPoint.type != OATargetRouteDetailsGraph &&
         targetPoint.type != OATargetImpassableRoadSelection &&
-        targetPoint.type != OATargetChangePosition)
+        targetPoint.type != OATargetChangePosition &&
+        targetPoint.type != OATargetTransportRouteDetails)
     {
         [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
                                        resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
@@ -504,8 +511,8 @@
 -(void) adjustBackButtonPosition
 {
     CGRect buttonFrame = self.buttonBack.frame;
-    buttonFrame.origin.x = 5.0 + [OAUtilities getLeftMargin];
-    buttonFrame.origin.y = [OAUtilities getStatusBarHeight];
+    buttonFrame.origin.x = 16.0 + [OAUtilities getLeftMargin];
+    buttonFrame.origin.y = [OAUtilities getStatusBarHeight] + 7.;
     self.buttonBack.frame = buttonFrame;
 }
 
@@ -773,6 +780,7 @@
         {
             case ETopToolbarTypeFloating:
             case ETopToolbarTypeMiddleFixed:
+            case ETopToolbarTypeFloatingFixedButton:
                 if (self.navBar.alpha != alpha)
                     self.navBar.alpha = alpha;
                 break;
@@ -795,6 +803,8 @@
         CGFloat backButtonAlpha = alpha;
         if (self.topToolbarType != ETopToolbarTypeFloating)
             backButtonAlpha = 0;
+        if (self.topToolbarType == ETopToolbarTypeFloatingFixedButton)
+            backButtonAlpha = 1;
         
         if (self.buttonBack.alpha != backButtonAlpha)
             self.buttonBack.alpha = backButtonAlpha;

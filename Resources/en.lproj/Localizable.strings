@@ -267,6 +267,8 @@
 "routing_settings_2" = "Navigation settings";
 "gpx_navigation" = "Follow trip";
 "impassable_road" = "Avoid roads";
+"avoid_transport_type" = "Avoid transport types";
+"consider_limitations_param" = "Consider temporary limitations";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
@@ -301,6 +303,7 @@
 "route_to" = "To";
 "route_via" = "Via";
 "route_from" = "From";
+"transfers" = "Transfers:";
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Error calculating route";
@@ -558,6 +561,7 @@
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
+"m_style_pulic_transport" = "Public transport";
 
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
@@ -1249,6 +1253,17 @@
 "menu_active_trips" = "Active";
 "menu_all_trips" = "All Trips";
 
+"public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
+"calc_pedestrian_route" = "Calculate pedestrian route";
+"public_transport_warning_title" = "Public transport navigation is currently in beta testing, expect errors and inaccuracies.";
+"public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
+
+"total" = "Total";
+"walk" = "Walk";
+"board_at" = "Board at";
+"exit_at" = "Exit at";
+"by_type" = "By %@";
+"num_stops" = "stops";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
 "change_group" = "Change group";
@@ -1260,6 +1275,7 @@
 "select_wpt_on_map" = "Select point on map to add to the trip";
 "gpx_rename_q" = "Rename trip";
 "gpx_enter_new_name" = "Please enter new name for the trip";
+"map_coords" = "Map: Lat %.5f Lon %.5f";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";

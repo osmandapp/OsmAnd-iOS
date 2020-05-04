@@ -68,6 +68,8 @@
 {
     NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *_dataGroups;
     BOOL _decelerating;
+    
+    BOOL _showResult;
 }
 
 - (instancetype) initWithTableView:(UITableView *)tableView
@@ -192,6 +194,11 @@
         [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:item pushed:NO showFullMenu:NO];
 }
 
+- (BOOL) isShowResult
+{
+    return _showResult;
+}
+
 - (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate
 {
     _mapCenterCoordinate = mapCenterCoordinate;
@@ -248,8 +255,9 @@
     [self.tableView reloadData];
 }
 
-+ (void) showOnMap:(OASearchResult *)searchResult searchType:(OAQuickSearchType)searchType delegate:(id<OAQuickSearchTableDelegate>)delegate
+- (void) showOnMap:(OASearchResult *)searchResult searchType:(OAQuickSearchType)searchType delegate:(id<OAQuickSearchTableDelegate>)delegate
 {
+    _showResult = NO;
     if (searchResult.location)
     {
         double latitude = DBL_MAX;
@@ -909,7 +917,7 @@
                     || sr.objectType == WPT
                     || sr.objectType == STREET_INTERSECTION)
                 {
-                    [self.class showOnMap:sr searchType:self.searchType delegate:self.delegate];
+                    [self showOnMap:sr searchType:self.searchType delegate:self.delegate];
                 }
                 else if (sr.objectType == PARTIAL_LOCATION)
                 {
@@ -917,6 +925,8 @@
                 }
                 else
                 {
+                    if (sr.objectType == CITY || sr.objectType == VILLAGE || sr.objectType == STREET)
+                        _showResult = YES;
                     [self.delegate didSelectResult:[item getSearchResult]];
                 }
             }

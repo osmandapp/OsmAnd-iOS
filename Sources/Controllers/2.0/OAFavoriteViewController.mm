@@ -29,7 +29,7 @@
     OsmAndAppInstance _app;
 }
 
-- (id) initWithItem:(OAFavoriteItem *)favorite
+- (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly
 {
     self = [super initWithItem:favorite];
     if (self)
@@ -40,10 +40,13 @@
         self.name = [self getItemName];
         self.desc = [self getItemDesc];
         
-        OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
-        [collapsableView setData:favorite];
-        collapsableView.collapsed = YES;
-        self.collapsableView = collapsableView;
+        if (!headerOnly)
+        {
+            OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
+            [collapsableView setData:favorite];
+            collapsableView.collapsed = YES;
+            self.collapsableView = collapsableView;
+        }
         
         NSString *groupName = self.favorite.favorite->getGroup().toNSString();
         self.groupTitle = groupName.length == 0 ? OALocalizedString(@"favorite") : groupName;
@@ -54,7 +57,7 @@
     return self;
 }
 
-- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation
+- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation headerOnly:(BOOL)headerOnly
 {
     self = [super initWithLocation:location andTitle:formattedLocation];
     if (self)
@@ -100,10 +103,13 @@
         self.favorite = fav;
         [_app saveFavoritesToPermamentStorage];
         
-        OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
-        [collapsableView setData:fav];
-        collapsableView.collapsed = YES;
-        self.collapsableView = collapsableView;
+        if (!headerOnly)
+        {
+            OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
+            [collapsableView setData:fav];
+            collapsableView.collapsed = YES;
+            self.collapsableView = collapsableView;
+        }
         
         NSString *groupStr = self.favorite.favorite->getGroup().toNSString();
         self.groupTitle = groupStr.length == 0 ? OALocalizedString(@"favorite") : groupStr;

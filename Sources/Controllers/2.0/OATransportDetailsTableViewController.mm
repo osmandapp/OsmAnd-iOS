@@ -54,20 +54,26 @@
 
 - (void)addStartItems:(NSMutableArray *)arr route:(const std::shared_ptr<TransportRouteResult> &)route segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment start:(OARTargetPoint *)start startTime:(NSMutableArray<NSNumber *> *)startTime {
     NSString *title = @"";
-    if (start != nil)
+    CLLocation *startLocation = nil;
+    if (start)
     {
-        title = start.getOnlyName.length > 0 ? start.getOnlyName :
-        [NSString stringWithFormat:OALocalizedString(@"map_coords"), start.getLatitude, start.getLongitude];
+        title = start.getOnlyName.length > 0 ? start.getOnlyName : [NSString stringWithFormat:OALocalizedString(@"map_coords"), start.getLatitude, start.getLongitude];
+        startLocation = start.point;
+    }
+    else
+    {
+        title = OALocalizedString(@"my_location");
+        startLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
     }
     
     [arr addObject:@{
         @"cell" : @"OAPublicTransportPointCell",
-        @"img" : start != nil ? @"ic_custom_start_point" : @"map_pedestrian_location",
+        @"img" : start ? @"ic_custom_start_point" : @"map_pedestrian_location",
         @"title" : title,
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"time" : [_app getFormattedTimeHM:startTime.firstObject.doubleValue],
-        @"coords" : @[start.point]
+        @"coords" : startLocation ? @[startLocation] : @[]
     }];
     
     double walkDist = [self getWalkDistance:nullptr next:segment dist:segment->walkDist];

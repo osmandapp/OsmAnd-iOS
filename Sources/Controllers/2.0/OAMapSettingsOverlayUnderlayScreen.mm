@@ -259,7 +259,6 @@ static NSInteger kButtonsSection;
     _data = [NSArray arrayWithArray:tableData];
     
     tblView.estimatedRowHeight = kEstimatedRowHeight;
-    [tblView setSeparatorColor: UIColorFromRGB(color_tint_gray)];
     tblView.rowHeight = UITableViewAutomaticDimension;
     _isEnabled = NO;
     if (_mapSettingType == EMapSettingOverlay)

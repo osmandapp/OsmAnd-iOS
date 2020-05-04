@@ -292,7 +292,7 @@
     _tableView.clipsToBounds = YES;
     
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    _tableView.separatorColor = UIColorFromRGB(color_divider_light);
+    _tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     
     [self setupView];
     

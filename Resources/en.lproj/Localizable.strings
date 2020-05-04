@@ -184,13 +184,10 @@
 "one" = "One";
 "two" = "Two";
 "distance_indication" = "Distance indication";
-"top_bar" = "Top bar";
-"widgets" = "Widgets";
 "arrows_on_map" = "Arrows on the map";
 "direction_lines" = "Direction lines";
 "active_markers" = "Active markers";
 "specify_number_of_dir_indicators" = "Specify number of direction indicators, it affects all settings below.";
-"distance_indication" = "Distance Indication";
 "choose_how_display_distance" = "Choose how to display the distance to active markers";
 "appearance_on_map" = "Appearance on the map";
 "arrows_direction_to_markers" = "Arrows show direction to active marker if it’s located outside the screen. Direction lines draw a line to active markers.";

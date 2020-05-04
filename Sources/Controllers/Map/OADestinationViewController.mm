@@ -171,6 +171,9 @@
 - (void) refreshCells
 {
     [self clean];
+    
+    if (![_settings.topBarDisplay get])
+        return;
 
     if ([OADestinationsHelper instance].sortedDestinations.count == 0)
         return;
@@ -209,7 +212,7 @@
         [cell updateDirections:location direction:direction];
     }
     
-    if (secondCellDestination)
+    if (secondCellDestination  && [_settings.topBarDisplay get] && [_settings.twoActiveMarker get])
     {
         OADestination *destination = secondCellDestination;
         
@@ -248,13 +251,23 @@
 
 - (void)clean
 {
-    NSInteger destinationsCount = [OADestinationsHelper instance].sortedDestinations.count;
+    NSInteger destinationsCount = [_settings.twoActiveMarker get] ? [OADestinationsHelper instance].sortedDestinations.count : 1;
     
     while (_destinationCells.count > destinationsCount)
     {
         OADestinationCell *cell = [_destinationCells lastObject];
         [cell.contentView removeFromSuperview];
         [_destinationCells removeLastObject];
+    }
+    
+    if ([_settings.widgetDisplay get] || ![_settings.distanceIndication get])
+    {
+        while (_destinationCells.count > 0)
+        {
+            OADestinationCell *cell = [_destinationCells lastObject];
+            [cell.contentView removeFromSuperview];
+            [_destinationCells removeLastObject];
+        }
     }
     
     if (destinationsCount == 0)
@@ -353,8 +366,8 @@
 - (void)updateFrame:(BOOL)animated
 {
     CGRect frame;
-    
-    NSInteger destinationsCount = MIN(2, [OADestinationsHelper instance].sortedDestinations.count);
+
+    NSInteger destinationsCount = [_settings.topBarDisplay get] ? MIN(2, [OADestinationsHelper instance].sortedDestinations.count) : 0;
     
     BOOL _navBarHidden = destinationsCount > 0;
     self.navBarView.hidden = _navBarHidden;
@@ -383,10 +396,16 @@
             _singleLineMode = NO;
             CGFloat h = 0.0;
 
-            if (destinationsCount > 0)
+            if (destinationsCount > 0 && [_settings.topBarDisplay get])
                 h = 50.0 + 35.0 * (destinationsCount - 1.0);
             else
                 h = navBarHeight;
+            
+            if ([_settings.widgetDisplay get])
+                h = navBarHeight;
+            
+            if ([_settings.topBarDisplay get] && [_settings.oneActiveMarker get])
+                h = 50.0;
 
             if (h < 0.0)
                 h = 0.0;
@@ -396,8 +415,9 @@
             if (_multiCell)
                 _multiCell.contentView.hidden = YES;
 
-            for (OADestinationCell *cell in _destinationCells)
-                cell.contentView.hidden = NO;
+            //if ([_settings.topBarDisplay get])
+                for (OADestinationCell *cell in _destinationCells)
+                    cell.contentView.hidden = NO;
         }
     }
     else

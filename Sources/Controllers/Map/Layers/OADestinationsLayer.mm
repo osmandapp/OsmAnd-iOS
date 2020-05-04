@@ -19,6 +19,9 @@
 #import "OATargetPoint.h"
 #import "OADestinationsHelper.h"
 #import "OADestinationsLineWidget.h"
+#import "OARootViewController.h"
+#import "OAMapInfoController.h"
+#import "OAMapHudViewController.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -38,7 +41,7 @@
     OAAutoObserverProxy* _destinationHideObserver;
     
     OATargetPointsHelper *_targetPoints;
-    OADestinationsLineWidget *_destinationLayerView;
+    OADestinationsLineWidget *_destinationLayerWidget;
 }
 
 - (NSString *) layerId
@@ -72,9 +75,13 @@
     _targetPoints = [OATargetPointsHelper sharedInstance];
     [_targetPoints addListener:self];
 
-    _destinationLayerView = [OADestinationsLineWidget sharedInstance];
-    //_destinationLayerView.hidden = NO;
-    [self.mapView addSubview:_destinationLayerView];
+    _destinationLayerWidget = [[OADestinationsLineWidget alloc] init];
+    [self.mapView addSubview:_destinationLayerWidget];
+}
+
+- (void) onMapFrameRendered
+{
+    [_destinationLayerWidget updateLayer];
 }
 
 - (void) deinitLayer
@@ -118,7 +125,7 @@
         if (!destination.routePoint && !destination.hidden)
         {
             [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
-            [_destinationLayerView drawLineToDestinationPin:destination];
+            [_destinationLayerWidget drawLineArrowWidget:destination];
         }
 
 }
@@ -177,7 +184,7 @@
     OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
-        [_destinationLayerView drawLineToDestinationPin:destination];
+        [_destinationLayerWidget drawLineArrowWidget:destination];
     });
 }
 
@@ -186,7 +193,7 @@
     OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self removeDestinationPin:destination.latitude longitude:destination.longitude];
-        [_destinationLayerView removeLineToDestinationPin:destination];
+        [_destinationLayerWidget removeLineToDestinationPin:destination];
     });
 }
 
@@ -212,7 +219,7 @@
         if (!exists)
         {
             [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
-            [_destinationLayerView drawLineToDestinationPin:destination];
+            [_destinationLayerWidget drawLineArrowWidget:destination];
         }
     }
 }

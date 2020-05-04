@@ -11,7 +11,7 @@
 #import <Foundation/Foundation.h>
 #import "OAWidgetState.h"
 
-@class OATextInfoWidget, OANextTurnInfoWidget, OALanesControl, OAAlarmWidget, OARulerWidget, OADestinationsLineWidget;
+@class OATextInfoWidget, OANextTurnInfoWidget, OALanesControl, OAAlarmWidget, OARulerWidget;
 
 @interface OATimeControlWidgetState : OAWidgetState
 
@@ -41,6 +41,6 @@
 - (OARulerWidget *) createRulerControl;
 - (OALanesControl *) createLanesControl;
 - (OAAlarmWidget *) createAlarmInfoControl;
-- (OADestinationsLineWidget *) createDestinationLineControl;
+- (OATextInfoWidget *) createMapMarkerControl;
 
 @end

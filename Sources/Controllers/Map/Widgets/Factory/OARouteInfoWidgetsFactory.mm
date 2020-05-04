@@ -24,6 +24,7 @@
 #import "OADestination.h"
 #import "OAAlarmWidget.h"
 #import "OARulerWidget.h"
+#import "OADistanceToMapMarkerControl.h"
 #import "OADestinationsLineWidget.h"
 
 #include <CommonCollections.h>
@@ -69,6 +70,45 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 }
 
 @end
+
+@interface OAMapMarkerLineControl : OADistanceToMapMarkerControl
+
+@end
+
+@implementation OAMapMarkerLineControl
+
+- (instancetype) init
+{
+    self = [super initWithIcons:@"widget_marker_day" nightIconId:@"widget_marker_night"];
+    if (self)
+    {
+        self.hidden = YES;
+    }
+    return self;
+}
+
+- (CLLocation *) getPointToNavigate
+{
+    OARTargetPoint *p = [[OATargetPointsHelper sharedInstance] getPointToNavigate];
+    return p ? p.point : nil;
+}
+
+- (CLLocationDistance) getDistance
+{
+    OARoutingHelper *routinHelper = [OARoutingHelper sharedInstance];
+    if ([routinHelper isRouteCalculated])
+        return [routinHelper getLeftDistance];
+    
+    return [super getDistance];
+}
+
+- (void) click
+{
+    [super click];
+}
+
+@end
+
 
 @interface OAIntermediateDistanceControl : OADistanceToPointInfoControl
 
@@ -701,9 +741,9 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     return [[OAAlarmWidget alloc] init];
 }
 
-- (OADestinationsLineWidget *) createDestinationLineControl
+- (OATextInfoWidget *) createMapMarkerControl
 {
-    return [OADestinationsLineWidget sharedInstance];
+    return [[OAMapMarkerLineControl alloc] init];
 }
 
 @end

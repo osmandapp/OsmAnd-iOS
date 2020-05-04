@@ -178,6 +178,17 @@
 
 #define contourLinesZoomKey @"contourLinesZoom"
 
+#define mapOneActiveMarkerKey @"mapOneActiveMarkerKey"
+#define mapTwoActiveMarkersKey @"mapTwoActiveMarkersKey"
+
+#define mapDistanceIndicationKey @"mapDistanceIndicationKey"
+#define mapTobBarIndicatorKey @"mapTobBarIndicatorKey"
+#define mapWidgetIndicatorKey @"mapWidgetIndicatorKey"
+#define mapLastPositionWidgetIndicatorKey @"mapLastPositionWidgetIndicatorKey"
+
+#define mapArrowsOnMapKey @"mapArrowsOnMapKey"
+#define mapDirectionLinesKey @"mapDirectionLinesKey"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -1423,6 +1434,16 @@
     
         _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
         
+        // Direction Appearance
+        _oneActiveMarker = [OAProfileBoolean withKey:mapOneActiveMarkerKey defValue:YES];
+        _twoActiveMarker = [OAProfileBoolean withKey:mapTwoActiveMarkersKey defValue:NO];
+        _distanceIndication = [OAProfileBoolean withKey:mapDistanceIndicationKey defValue:YES];
+        _topBarDisplay = [OAProfileBoolean withKey:mapTobBarIndicatorKey defValue:YES];
+        _widgetDisplay = [OAProfileBoolean withKey:mapWidgetIndicatorKey defValue:NO];
+        _lastPositionWidgetDisplay = [OAProfileBoolean withKey:mapLastPositionWidgetIndicatorKey defValue:NO];
+        _arrowsOnMap = [OAProfileBoolean withKey:mapArrowsOnMapKey defValue:YES];
+        _directionLines = [OAProfileBoolean withKey:mapDirectionLinesKey defValue:YES];
+
         [self fetchImpassableRoads];
     }
     return self;
@@ -2315,6 +2336,32 @@
 {
     _rulerMode = rulerMode;
     [[NSUserDefaults standardUserDefaults] setInteger:_rulerMode forKey:rulerModeKey];
+}
+
+// Direction Appearance Settings
+
+- (void) setOneActiveMarker:(BOOL)oneActiveMarker twoActiveMarkers:(BOOL)twoActiveMarkers
+{
+    [_oneActiveMarker set:oneActiveMarker];
+    [_twoActiveMarker set:twoActiveMarkers];
+}
+
+- (void) setDistanceIndicationView:(BOOL)topBarDisplay widgetDisplay:(BOOL)widgetDisplay
+{
+    [_topBarDisplay set:topBarDisplay];
+    [_widgetDisplay set:widgetDisplay];
+    [_lastPositionWidgetDisplay set:widgetDisplay];
+}
+
+- (void) setArrowsOnMap:(BOOL)arrowsOnMap
+{
+    [_arrowsOnMap set:arrowsOnMap];
+}
+
+- (void) setDirectionLines:(BOOL)directionLines
+{
+    [_directionLines set:directionLines];
+
 }
 
 @end

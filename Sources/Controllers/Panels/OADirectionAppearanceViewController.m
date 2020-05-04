@@ -7,10 +7,15 @@
 //
 
 #import "OADirectionAppearanceViewController.h"
+#import "OARootViewController.h"
+#import "OAAppSettings.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OATableViewCustomFooterView.h"
 #import "OASettingSwitchCell.h"
 #import "OASettingsCheckmarkCell.h"
+#import "OAMapWidgetRegInfo.h"
+#import "OAMapWidgetRegistry.h"
+#import "OAMapPanelViewController.h"
 
 #include "Localization.h"
 #include "OASizes.h"
@@ -18,6 +23,14 @@
 
 #define kHeaderId @"TableViewSectionHeader"
 #define kFooterId @"TableViewSectionFooter"
+#define kActiveMarkers @"activeMarkers"
+#define kOneActiveMarker @"oneActiveMarker"
+#define kTwoActiveMarkers @"twoActiveMarkers"
+#define kDistanceIndication @"distanceIndication"
+#define kTopBarDisplay @"topBarDisplay"
+#define kWidgetDisplay @"widgetDisplay"
+#define kArrowsOnMap @"arrows"
+#define kLinesOnMap @"lines"
 
 @interface OADirectionAppearanceViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -33,17 +46,21 @@
 @implementation OADirectionAppearanceViewController
 {
     NSDictionary *_data;
+    OAAppSettings *_settings;
+    OAMapWidgetRegistry *_mapWidgetRegistry;
+    OAMapPanelViewController *_mapPanel;
+    OsmAndAppInstance _app;
 }
 
 - (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"appearance");
-    
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    _settings = [OAAppSettings sharedManager];
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
 }
 
@@ -57,6 +74,7 @@
     [super viewWillAppear:animated];
     
     [self setupView];
+    [self.tableView reloadData];
 }
 
 - (UIView *) getTopView
@@ -69,7 +87,7 @@
     return _tableView;
 }
 
--(CGFloat) getNavBarHeight
+- (CGFloat) getNavBarHeight
 {
     return defaultNavBarHeight;
 }
@@ -85,19 +103,17 @@
     [self adjustViews];
     
     _data = [NSMutableDictionary dictionary];
+    _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
+    _mapPanel = [OARootViewController instance].mapPanel;
     
     NSMutableArray *activeMarkersArr = [NSMutableArray array];
     NSMutableArray *distanceIndicationArr = [NSMutableArray array];
     NSMutableArray *appearanceOnMapArr = [NSMutableArray array];
-    
-//    [activeMarkersArr addObject:@{
-//                        @"type" : @"OATableViewCustomHeaderView",
-//                        @"title" : OALocalizedString(@"active_markers"),
-//                        }];
-//
+
     [activeMarkersArr addObject:@{
                         @"type" : @"OASettingsCheckmarkCell",
-                        @"value" : @YES,
+                        @"section" : kActiveMarkers,
+                        @"key" : kOneActiveMarker,
                         @"title" : OALocalizedString(@"one"),
                         @"fg_img" : @"ic_custom_direction_topbar_one.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
@@ -107,36 +123,26 @@
     
     [activeMarkersArr addObject:@{
                         @"type" : @"OASettingsCheckmarkCell",
-                        @"value" : @NO,
+                        @"section" : kActiveMarkers,
+                        @"key" : kTwoActiveMarkers,
                         @"title" : OALocalizedString(@"two"),
                         @"fg_img" : @"ic_custom_direction_topbar_two.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
                         @"bg_img" : @"ic_custom_direction_device.png",
                         @"bg_color" : UIColorFromRGB(color_tint_gray)
                         }];
-    
-//    [activeMarkersArr addObject:@{
-//                        @"type" : @"OATableViewCustomFooterView",
-//                        @"title" : OALocalizedString(@"specify_number_of_dir_indicators"),
-//                        }];
-    
-    
-    
-//    [distanceIndicationArr addObject:@{
-//                        @"type" : @"OATableViewCustomHeaderView",
-//                        @"title" : OALocalizedString(@"active_markers"),
-//                        }];
-    
+
     [distanceIndicationArr addObject:@{
                         @"type" : @"OASettingSwitchCell",
+                        @"key" : kDistanceIndication,
                         @"title" : OALocalizedString(@"distance_indication"),
-                        @"value" : @YES,
                         }];
     
     [distanceIndicationArr addObject:@{
                         @"type" : @"OASettingsCheckmarkCell",
-                        @"value" : @YES,
-                        @"title" : OALocalizedString(@"top_bar"),
+                        @"section" : kDistanceIndication,
+                        @"key" : kTopBarDisplay,
+                        @"title" : OALocalizedString(@"shared_string_topbar"),
                         @"fg_img" : @"ic_custom_direction_topbar_one.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
                         @"bg_img" : @"ic_custom_direction_device.png",
@@ -145,44 +151,27 @@
     
     [distanceIndicationArr addObject:@{
                         @"type" : @"OASettingsCheckmarkCell",
-                        @"value" : @NO,
-                        @"title" : OALocalizedString(@"widgets"),
+                        @"section" : kDistanceIndication,
+                        @"key" : kWidgetDisplay,
+                        @"title" : OALocalizedString(@"shared_string_widgets"),
                         @"fg_img" : @"ic_custom_direction_widget_two.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
                         @"bg_img" : @"ic_custom_direction_device.png",
                         @"bg_color" : UIColorFromRGB(color_tint_gray)
                         }];
-    
-//    [distanceIndicationArr addObject:@{
-//                        @"type" : @"OATableViewCustomFooterView",
-//                        @"title" : OALocalizedString(@"specify_number_of_dir_indicators"),
-//                        }];
-    
-    
-    
-//    [appearanceOnMapArr addObject:@{
-//                        @"type" : @"OATableViewCustomHeaderView",
-//                        @"title" : OALocalizedString(@"active_markers"),
-//                        }];
-    
-    
+   
     [appearanceOnMapArr addObject:@{
                         @"type" : @"OASettingSwitchCell",
+                        @"key" : kArrowsOnMap,
                         @"title" : OALocalizedString(@"arrows_on_map"),
-                        @"value" : @YES,
                         }];
     
     [appearanceOnMapArr addObject:@{
                         @"type" : @"OASettingSwitchCell",
+                        @"key" : kLinesOnMap,
                         @"title" : OALocalizedString(@"direction_lines"),
-                        @"value" : @YES,
                         }];
-    
-//    [appearanceOnMapArr addObject:@{
-//                        @"type" : @"OATableViewCustomFooterView",
-//                        @"title" : OALocalizedString(@"specify_number_of_dir_indicators"),
-//                        }];
-    
+ 
     _data = @{ @"appearanceOnMap" : appearanceOnMapArr,
                @"distanceIndication" : distanceIndicationArr,
                @"activeMarkers" : activeMarkersArr
@@ -190,15 +179,11 @@
   
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    //[self.tableView setEditing:YES animated:YES];
-    //self.tableView.allowsMultipleSelectionDuringEditing = YES;
-    
-    
+
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
    
 }
-
 
  - (void) adjustViews
  {
@@ -236,6 +221,8 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (![_settings.distanceIndication get] && section == 1)
+        return 1;
     return [_data[_data.allKeys[section]] count];
 }
 
@@ -251,6 +238,11 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCheckmarkCell" owner:self options:nil];
             cell = (OASettingsCheckmarkCell *)[nib objectAtIndex:0];
+            
+            cell.separatorInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, CGFLOAT_MAX);
+            UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(50, cell.contentView.frame.size.height - 0.5, cell.contentView.frame.size.width, 1)];
+            separator.backgroundColor = UIColorFromRGB(color_tint_gray);
+            [cell.contentView addSubview:separator];
         }
         
         UIImage *fgImage = [[UIImage imageNamed:item[@"fg_img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -260,6 +252,16 @@
         cell.titleLabel.text = item[@"title"];
         
         cell.checkmarkImageView.hidden = ![item[@"value"] boolValue];
+        
+        if ([item[@"key"] isEqualToString:kOneActiveMarker])
+            cell.checkmarkImageView.hidden = ![_settings.oneActiveMarker get];
+        if ([item[@"key"] isEqualToString:kTwoActiveMarkers])
+            cell.checkmarkImageView.hidden = ![_settings.twoActiveMarker get];
+        if ([item[@"key"] isEqualToString:kTopBarDisplay])
+            cell.checkmarkImageView.hidden = ![_settings.topBarDisplay get];
+        if ([item[@"key"] isEqualToString:kWidgetDisplay])
+            cell.checkmarkImageView.hidden = ![_settings.widgetDisplay get];
+        
         [cell.checkmarkImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.checkmarkImageView.tintColor = UIColorFromRGB(color_primary_purple);
         
@@ -278,8 +280,23 @@
         
         cell.textView.text = item[@"title"];
         cell.descriptionView.hidden = YES;
-        cell.switchView.on = [item[@"value"] boolValue];
-        cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        if ([item[@"key"] isEqualToString:kDistanceIndication])
+        {
+            [cell.switchView setOn:[_settings.distanceIndication get]];
+            [cell.switchView addTarget:self action:@selector(showDistanceIndication:) forControlEvents:UIControlEventValueChanged];
+        }
+        if ([item[@"key"] isEqualToString:kArrowsOnMap])
+        {
+            [cell.switchView setOn:[_settings.arrowsOnMap get]];
+            [cell.switchView addTarget:self action:@selector(showArrowsOnMap:) forControlEvents:UIControlEventValueChanged];
+        }
+        if ([item[@"key"] isEqualToString:kLinesOnMap])
+        {
+            [cell.switchView setOn:[_settings.directionLines get]];
+            [cell.switchView addTarget:self action:@selector(showLinesOnMap:) forControlEvents:UIControlEventValueChanged];
+        }
         
         return cell;
     }
@@ -352,16 +369,95 @@
     }
 }
 
+- (void) setWidgetVisibility:(BOOL)visible collapsed:(BOOL)collapsed
+{
+    OAMapWidgetRegInfo *marker1st = [_mapWidgetRegistry widgetByKey:@"map_marker_1st"];
+    OAMapWidgetRegInfo *marker2nd = [_mapWidgetRegistry widgetByKey:@"map_marker_2nd"];
+    if (marker1st)
+        [_mapWidgetRegistry setVisibility:marker1st visible:visible collapsed:collapsed];
+    if (marker2nd && [_settings.twoActiveMarker get])
+        [_mapWidgetRegistry setVisibility:marker2nd visible:visible collapsed:collapsed];
+    else
+        [_mapWidgetRegistry setVisibility:marker2nd visible:NO collapsed:collapsed];
+    [[OARootViewController instance].mapPanel recreateControls];
+}
+
 #pragma mark - UITableViewDelegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
-//    
-//    if ([item[@"type"] isEqualToString:@"OASettingsCheckmarkCell"])
-//    {
-//        [_data.allKeys[indexPath.section][indexPath.row] setValue:@NO forKey:@"value"];
-//    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
+    
+    if ([item[@"section"] isEqualToString:@"activeMarkers"])
+    {
+        if (indexPath.row == 0)
+        {
+            [_settings.oneActiveMarker set:YES];
+            [_settings.twoActiveMarker set:NO];
+        }
+        else
+        {
+            [_settings.oneActiveMarker set:NO];
+            [_settings.twoActiveMarker set:YES];
+        }
+        if ([_settings.widgetDisplay get])
+            [self setWidgetVisibility:YES collapsed:NO];
+    }
+    if ([item[@"section"] isEqualToString:@"distanceIndication"])
+    {
+        if (indexPath.row == 1)
+        {
+            [_settings.topBarDisplay set:YES];
+            [_settings.widgetDisplay set:NO];
+            [self setWidgetVisibility:NO collapsed:NO];
+        }
+        else
+        {
+            [_settings.topBarDisplay set:NO];
+            [_settings.widgetDisplay set:YES];
+            [self setWidgetVisibility:YES collapsed:NO];
+        }
+    }
+    [self.tableView reloadData];
+}
+
+- (void) showDistanceIndication:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+    {
+        [_settings.distanceIndication set:switchView.isOn];
+        if (![_settings.distanceIndication get])
+        {
+            [_settings.lastPositionWidgetDisplay set:[_settings.widgetDisplay get]];
+            [_settings.topBarDisplay set:NO];
+            [_settings.widgetDisplay set:NO];
+        }
+        else
+        {
+            if ([_settings.lastPositionWidgetDisplay get])
+                [_settings.widgetDisplay set:YES];
+            else
+                [_settings.topBarDisplay set:YES];
+        }
+    }
+    [self.tableView reloadData];
+}
+
+- (void) showArrowsOnMap:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+        [_settings.arrowsOnMap set:switchView.isOn];
+}
+
+- (void) showLinesOnMap:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+        [_settings.directionLines set:switchView.isOn];
 }
 
 @end

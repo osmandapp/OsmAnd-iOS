@@ -21,6 +21,8 @@
 #import "OADestinationsHelper.h"
 #import "OAHistoryCardController.h"
 #import "OAHistoryHelper.h"
+#import "OAHistoryViewController.h"
+#import "OADirectionAppearanceViewController.h"
 
 #import "OsmAndApp.h"
 #import "OAGPXRouter.h"
@@ -30,6 +32,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
+#import "OAColors.h"
 
 @interface OADestinationCardsViewController () <MGSwipeTableCellDelegate, OADestinationCardBaseControllerDelegate, UIGestureRecognizerDelegate>
 
@@ -159,6 +162,18 @@
     tapRec.delegate = self;
     
     [self.tableView addGestureRecognizer:tapRec];
+    [self configureBottomToolbar];
+}
+
+- (void) configureBottomToolbar
+{
+    _bottomToolBar.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    _historyViewButton.title = OALocalizedString(@"history");
+    [_historyViewButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: UIColorFromRGB(color_primary_purple),  NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
+    
+    _appearanceViewButton.title = OALocalizedString(@"appearance");
+    [_appearanceViewButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: UIColorFromRGB(color_primary_purple),  NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
+    [_bottomToolBar bringSubviewToFront:_cardsView];
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -332,6 +347,17 @@
 - (void)tapOutsideCells
 {
     [[OARootViewController instance].mapPanel hideDestinationCardsView];
+}
+
+- (IBAction)onHistoryButtonClicked:(id)sender {
+    OAHistoryViewController *history = [[OAHistoryViewController alloc] init];
+    [[OARootViewController instance].navigationController pushViewController:history animated:YES];
+}
+
+
+- (IBAction)onAppearanceButtonClicked:(id)sender {
+    OADirectionAppearanceViewController *directionAppearance = [[OADirectionAppearanceViewController alloc] init];
+    [[OARootViewController instance].navigationController pushViewController:directionAppearance animated:YES];
 }
 
 #pragma mark - UITableViewDataSource

@@ -177,8 +177,6 @@ typedef enum
     
     NSMutableArray<OAToolbarViewController *> *_toolbars;
     BOOL _topControlsVisible;
-    
-    UIView *_bottomToolbarView;
 }
 
 - (instancetype) init
@@ -254,9 +252,7 @@ typedef enum
     self.targetMultiMenuView = [[OATargetMultiView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
 
     [self updateHUD:NO];
-    
-    [self addToolBar];
-    _bottomToolbarView.hidden = YES;
+ 
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -268,7 +264,7 @@ typedef enum
         _mapNeedsRestore = NO;
         [self restoreMapAfterReuse];
     }
-    
+    [_app.data.destinationsChangeObservable notifyEvent];
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
@@ -319,9 +315,11 @@ typedef enum
         _destinationViewController.delegate = self;
         _destinationViewController.destinationDelegate = self;
         
-        if ([OADestinationsHelper instance].sortedDestinations.count > 0)
+        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.topBarDisplay get])
             [self showToolbar:_destinationViewController];
     }
+    else if ([_settings.topBarDisplay get])
+        [self showToolbar:_destinationViewController];
     
     // Inflate new HUD controller
     if (!self.hudViewController)
@@ -3180,7 +3178,8 @@ typedef enum
 
 - (void)destinationsAdded
 {
-    [self showToolbar:_destinationViewController];
+    if ([_settings.topBarDisplay get])
+        [self showToolbar:_destinationViewController];
 }
 
 - (void) hideDestinations
@@ -3198,8 +3197,13 @@ typedef enum
 
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
         CGFloat h = DeviceScreenHeight - y;
+        CGFloat toolbarHeight = CGRectGetHeight(cardsController.bottomView.bounds);
+        CGFloat cardsTableHeight = h - toolbarHeight;
     
         cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
+        cardsController.cardsView.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h - toolbarHeight);
+        [cardsController.cardsView setHidden:YES];
+        [cardsController.bottomToolBarView setHidden:YES];
         
         [self.hudViewController addChildViewController:cardsController];
         
@@ -3209,56 +3213,19 @@ typedef enum
         
         [self.hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
         
-        _bottomToolbarView.hidden = NO; // needs to be changed
-        
         if (_destinationViewController)
             [self.destinationViewController updateCloseButton];
         
+        cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
+        
         [UIView animateWithDuration:.25 animations:^{
-            cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
+            cardsController.cardsView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, cardsTableHeight);
+            cardsController.bottomToolBarView.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, y);
             _shadeView.alpha = 1.0;
         }];
+        [cardsController.cardsView setHidden:NO];
+        [cardsController.bottomToolBarView setHidden:NO];
     }
-}
-
-- (void) addToolBar // ???
-{
-    CGFloat y = DeviceScreenHeight - customSearchToolBarHeight; // probably needs to be changed
-    _bottomToolbarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, y, DeviceScreenWidth, customSearchToolBarHeight)];
-    _bottomToolbarView.backgroundColor =UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [_bottomToolbarView sizeToFit];
-    
-    [self.view addSubview:_bottomToolbarView];
-    
-    UIToolbar *bottomToolbar = [[UIToolbar alloc] init];
-    bottomToolbar.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    
-    bottomToolbar.frame = CGRectMake(0.0, 0, DeviceScreenWidth, 44); // probably needs to be changed
-    
-    UIBarButtonItem *flexibleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
-    
-    UIBarButtonItem *historyItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"history") style:UIBarButtonItemStylePlain target:self action:@selector(openHistoryController)];
-    [historyItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: UIColorFromRGB(color_primary_purple),  NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
-    
-    UIBarButtonItem *appearanceItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"appearance") style:UIBarButtonItemStylePlain target:self action:@selector(openAppearanceViewController)];
-    [appearanceItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: UIColorFromRGB(color_primary_purple),  NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
-
-    NSArray *items = [NSArray arrayWithObjects:historyItem, flexibleItem, appearanceItem, nil];
-    [bottomToolbar setItems:items animated:NO];
-
-    [_bottomToolbarView addSubview: bottomToolbar];
-}
-
-- (void) openAppearanceViewController
-{
-    OADirectionAppearanceViewController* directionAppearance = [[UIStoryboard storyboardWithName:@"DestinationAppearance" bundle:nil] instantiateInitialViewController];
-    [[OARootViewController instance].navigationController pushViewController:directionAppearance animated:YES];
-}
-
-- (void) openHistoryController
-{
-    OAHistoryViewController *history = [[OAHistoryViewController alloc] init];
-    [[OARootViewController instance].navigationController pushViewController:history animated:YES];
 }
 
 - (void) hideDestinationCardsView
@@ -3271,15 +3238,17 @@ typedef enum
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     BOOL wasOnTop = _destinationViewController.showOnTop;
     _destinationViewController.showOnTop = NO;
-    _bottomToolbarView.hidden = YES; // needs to be changed
+    
     if (cardsController.view.superview)
     {
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
         CGFloat h = DeviceScreenHeight - y;
+        CGFloat toolbarHeight = CGRectGetHeight(cardsController.bottomView.bounds);
+        CGFloat cardsTableHeight = h - toolbarHeight;
     
         [cardsController doViewWillDisappear];
 
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0)
+        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || ![_settings.topBarDisplay get])
         {
             [self hideToolbar:_destinationViewController];
         }
@@ -3293,7 +3262,8 @@ typedef enum
         if (animated)
         {
             [UIView animateWithDuration:.25 animations:^{
-                cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
+                cardsController.cardsView.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, cardsTableHeight);
+                cardsController.bottomToolBarView.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
                 _shadeView.alpha = 0.0;
                 
             } completion:^(BOOL finished) {

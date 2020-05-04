@@ -508,4 +508,15 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (NSSet<NSString *> *) getPlugins;
 - (void) enablePlugin:(NSString *)pluginId enable:(BOOL)enable;
 
+// Direction Appearance
+
+@property (nonatomic) OAProfileBoolean *oneActiveMarker;
+@property (nonatomic) OAProfileBoolean *twoActiveMarker;
+@property (nonatomic) OAProfileBoolean *distanceIndication;
+@property (nonatomic) OAProfileBoolean *topBarDisplay;
+@property (nonatomic) OAProfileBoolean *widgetDisplay;
+@property (nonatomic) OAProfileBoolean *lastPositionWidgetDisplay;
+@property (nonatomic) OAProfileBoolean *arrowsOnMap;
+@property (nonatomic) OAProfileBoolean *directionLines;
+
 @end

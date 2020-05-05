@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAAppSettings.h"
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -22,6 +23,7 @@
     
     UIColor *_primaryColor;
     UIColor *_unitsColor;
+    OAAppSettings *_settings;
 }
 
 @synthesize destinations = _destinations;
@@ -43,6 +45,7 @@
     if (self)
     {
         self.destinations = destinations;
+        _settings = [OAAppSettings sharedManager];
     }
     return self;
 }
@@ -62,7 +65,7 @@
 
 - (NSInteger)destinationsCount
 {
-    return MIN(2, _destinations.count);
+    return [_settings.twoActiveMarker get] ? MIN(2, _destinations.count) : 1;
 }
 
 - (void)updateLayout:(CGRect)frame

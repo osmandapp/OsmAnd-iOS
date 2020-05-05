@@ -61,19 +61,18 @@
     
     [self commonInit];
     
-    
     return self;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    
+
     if (self)
         self.frame = frame;
-    
+
     [self commonInit];
-    
+
     return self;
 }
 
@@ -99,7 +98,6 @@
     
     self.markerNames = @[@"map_marker_direction_arrow_p2_color_pin_1", @"map_marker_direction_arrow_p2_color_pin_2", @"map_marker_direction_arrow_p2_color_pin_3", @"map_marker_direction_arrow_p2_color_pin_4", @"map_marker_direction_arrow_p2_color_pin_5"];
     
-    
     self.hidden = NO;
 }
 
@@ -118,8 +116,9 @@
 
 - (void) layoutSubviews
 {
-    // resize your layers based on the view's new bounds
-    _destinationLineSublayer.frame = self.bounds;
+    [super layoutSubviews];
+   
+    self.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
 }
 
 - (void) drawRect:(CGRect)rect

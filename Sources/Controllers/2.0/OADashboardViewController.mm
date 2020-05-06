@@ -504,7 +504,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [self updateBackgroundViewLayout:interfaceOrientation contentOffset:{0, 0}];
 
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = UIColorFromRGB(color_divider_light);
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     
     [self setupView];
     

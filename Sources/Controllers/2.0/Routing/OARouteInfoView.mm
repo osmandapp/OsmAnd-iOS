@@ -618,7 +618,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSString *name = [NSString stringWithUTF8String:segments[0]->getStart().name.c_str()];
     
     NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
@@ -636,7 +636,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
     NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();

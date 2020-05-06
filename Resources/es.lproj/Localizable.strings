@@ -1306,7 +1306,7 @@
 "rendering_value_medium_w_name" = "Medio";
 "rendering_value_yellow_name" = "Amarillo";
 "rendering_attr_showLez_name" = "Mostrar Zonas de Bajas Emisiones";
-"routing_attr_allow_private_description" = "Permite acceder aáreas privadas.";
+"routing_attr_allow_private_description" = "Permite acceder a áreas privadas.";
 "rendering_attr_highway_class_road_name" = "Carretera principal";
 "rendering_attr_currentTrackColor_name" = "Color del GPX";
 "rendering_attr_busRoutes_name" = "Rutas de autobús";
@@ -1581,7 +1581,6 @@
 "stats_select_graph_data" = "Seleccionar dato del gráfico";
 "gpx_analyze" = "Analizar";
 "shared_string_clear_cache" = "Limpiar caché";
-
 "app_mode_wagon" = "Vagón";
 "app_mode_ufo" = "OVNI";
 "app_mode_skiing" = "Esquí";

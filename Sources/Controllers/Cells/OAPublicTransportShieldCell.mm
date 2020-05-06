@@ -27,7 +27,7 @@
 #define kShieldMargin 16.0
 #define kShieldY 12.
 #define kViewSpacing 3.0
-#define kArrowY 20.0
+#define kArrowY 18.0
 #define kArrowWidth 20.0
 
 #define MIN_WALK_TIME 120

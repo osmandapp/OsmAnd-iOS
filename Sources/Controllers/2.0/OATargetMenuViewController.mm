@@ -183,7 +183,7 @@
         case OATargetWpt:
         {
             if (activeTargetType == OATargetGPXEdit)
-                controller = [[OAGPXEditWptViewController alloc] initWithItem:targetPoint.targetObj];
+                controller = [[OAGPXEditWptViewController alloc] initWithItem:targetPoint.targetObj headerOnly:headerOnly];
             else
                 controller = [[OAGPXWptViewController alloc] initWithItem:targetPoint.targetObj headerOnly:headerOnly];
             break;

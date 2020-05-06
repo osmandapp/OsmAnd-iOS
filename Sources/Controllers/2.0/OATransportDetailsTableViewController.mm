@@ -54,24 +54,27 @@
 
 - (void)addStartItems:(NSMutableArray *)arr route:(const std::shared_ptr<TransportRouteResult> &)route segment:(const std::shared_ptr<TransportRouteResultSegment> &)segment start:(OARTargetPoint *)start startTime:(NSMutableArray<NSNumber *> *)startTime {
     NSString *title = @"";
-    if (start != nil)
+    CLLocation *startLocation = nil;
+    if (start)
     {
         title = start.getOnlyName.length > 0 ? start.getOnlyName :
             [NSString stringWithFormat:OALocalizedString(@"map_coords"), start.getLatitude, start.getLongitude];
+        startLocation = start.point;
     }
     else
     {
         title = OALocalizedString(@"my_location");
+        startLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
     }
     
     [arr addObject:@{
         @"cell" : @"OAPublicTransportPointCell",
-        @"img" : start != nil ? @"ic_custom_start_point" : @"ic_action_location_color",
+        @"img" : start ? @"ic_custom_start_point" : @"ic_action_location_color",
         @"title" : title,
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"time" : [_app getFormattedTimeHM:startTime.firstObject.doubleValue],
-        @"coords" : start != nil ? @[start.point] : _app.locationServices.lastKnownLocation
+        @"coords" : startLocation ? @[startLocation] : @[]
     }];
     
     double walkDist = [self getWalkDistance:nullptr next:segment dist:segment->walkDist];
@@ -83,7 +86,7 @@
     [arr addObject:@{
         @"cell" : @"OAPublicTransportPointCell",
         @"img" : @"ic_profile_pedestrian",
-        @"title" : [NSString stringWithFormat:@"%@ ~%@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO]],
+        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO], [_app getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
@@ -381,7 +384,7 @@
     NSString *name = [NSString stringWithUTF8String:segments[0]->getStart().name.c_str()];
     
     NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
@@ -399,7 +402,7 @@
 {
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
     NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();
@@ -425,6 +428,15 @@
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@", walkDistanceStr] attributes:secondaryAttributes]];
 
     return attributedStr;
+}
+
+- (UIImage *) imageWithImage:(UIImage *)image convertToSize:(CGSize)size
+{
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *destImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return [destImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 #pragma mark - UITableViewDataSource
@@ -506,16 +518,17 @@
                 if ([item[@"custom_icon"] boolValue])
                 {
                     UIImage *img = [[OATargetInfoViewController getIcon:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    img = smallIcon ? [self imageWithImage:img convertToSize:CGSizeMake(16., 16.)] : img;
                     [cell.iconView setImage:img];
                     cell.iconView.tintColor = smallIcon ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(color_chart_orange);
                     [cell showOutiline:YES];
-                    cell.contentMode = smallIcon ? UIViewContentModeScaleAspectFit : UIViewContentModeCenter;
+                    cell.iconView.contentMode = UIViewContentModeCenter;
                 }
                 else
                 {
                     [cell.iconView setImage:[UIImage imageNamed:imageName]];
                     [cell showOutiline:NO];
-                    cell.contentMode = UIViewContentModeScaleAspectFit;
+                    cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
                 }
             }
             else
@@ -614,7 +627,7 @@
         if (cell)
         {
             cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColorFromRGB(color_divider_blur);
+            cell.dividerColor = UIColorFromRGB(color_tint_gray);
             CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
             cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;

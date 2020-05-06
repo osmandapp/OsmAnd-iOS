@@ -846,7 +846,7 @@
     BOOL isNight = settings.nightMode;
     BOOL transparent = [settings.transparentMapTheme get];
     UIColor *statusBarColor;
-    if (self.contextMenuMode)
+    if (self.contextMenuMode && !_toolbarViewController)
         statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];

@@ -157,11 +157,13 @@
     [self.mapViewController runWithRenderSync:^{
         [self drawRouteMarkers:routeSegment];
             
-        std::string str = routeSegment->route->color;
+        OATransportStopType *type = [OATransportStopType findType:[NSString stringWithUTF8String:routeSegment->route->type.c_str()]];
+        NSString *str = [NSString stringWithUTF8String:routeSegment->route->color.c_str()];
+        str = str.length == 0 ? type.renderAttr : str;
         OsmAnd::ColorARGB colorARGB;
-        UIColor *color = [self.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:[NSString stringWithUTF8String:str.c_str()]];
+        UIColor *color = [self.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
         CGFloat red, green, blue, alpha;
-        if (str.length() > 0 && color)
+        if (str.length > 0 && color)
         {
             [color getRed:&red green:&green blue:&blue alpha:&alpha];
         }

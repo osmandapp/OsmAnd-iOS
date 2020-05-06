@@ -618,7 +618,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSString *name = [NSString stringWithUTF8String:segments[0]->getStart().name.c_str()];
     
     NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
@@ -636,7 +636,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
     NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();
@@ -1680,28 +1680,27 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@", mainText, additionalText] attributes:attributes];
     
-    NSRange range = [[res string] rangeOfString:@" " options:NSBackwardsSearch];
-    NSRange lastWordRange = NSMakeRange(range.location + range.length, res.length - range.location - 1);
     [res addAttributes:@{NSLinkAttributeName: @"https://osmand.net/blog/guideline-pt",
                          NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
                          NSFontAttributeName: [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
-    } range:lastWordRange];
+    } range:NSMakeRange(mainText.length + 2, additionalText.length)];
     return [[NSAttributedString alloc] initWithAttributedString:res];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
     if (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated] && section == _data.count - 1)
     {
+        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
         NSAttributedString* res = [self getAttributedBetaWarning];
         vw.label.attributedText = res;
+        [vw setIcon:@"ic_action_bus_dark"];
+        return vw;
     }
     else
     {
-        vw.label.attributedText = nil;
+        return nil;
     }
-    return vw;
 }
 
 - (NSString *) getTitleForSection:(NSInteger) section

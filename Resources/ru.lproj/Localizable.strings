@@ -635,7 +635,7 @@
 "transport_stop" = "Стоп";
 "cancel_navigation" = "Остановить навигацию";
 "switch_start_finish" = "Обратить пункты старта и назначения";
-"shared_string_options" = "Функции";
+"shared_string_options" = "Опции";
 "new_destination_point_dialog" = "Вы уже установили пункт назначения";
 "replace_destination_point" = "Заменить пункт назначения";
 "shared_string_search" = "Поиск";

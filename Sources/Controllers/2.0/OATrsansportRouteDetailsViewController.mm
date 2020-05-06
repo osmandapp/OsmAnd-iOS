@@ -85,7 +85,7 @@
     _transportHelper = OATransportRoutingHelper.sharedInstance;
     _numberOfRoutes = _transportHelper.getRoutes.size();
     
-    _pageControlContainer.layer.cornerRadius = 6.;
+    _pageControlContainer.layer.cornerRadius = 7.;
     _pageControl.currentPage = _currentRoute;
     _pageControl.numberOfPages = _numberOfRoutes;
     CGRect pageControlFrame = _pageControl.frame;

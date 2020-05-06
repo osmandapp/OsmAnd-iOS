@@ -32,7 +32,7 @@
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="PVf-pQ-v5Q"/>
                             <constraint firstAttribute="height" priority="750" id="VIy-6P-eKm"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
                         <color key="textColor" red="0.64313725490196072" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>

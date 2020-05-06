@@ -57,17 +57,21 @@
     if (start != nil)
     {
         title = start.getOnlyName.length > 0 ? start.getOnlyName :
-        [NSString stringWithFormat:OALocalizedString(@"map_coords"), start.getLatitude, start.getLongitude];
+            [NSString stringWithFormat:OALocalizedString(@"map_coords"), start.getLatitude, start.getLongitude];
+    }
+    else
+    {
+        title = OALocalizedString(@"my_location");
     }
     
     [arr addObject:@{
         @"cell" : @"OAPublicTransportPointCell",
-        @"img" : start != nil ? @"ic_custom_start_point" : @"map_pedestrian_location",
+        @"img" : start != nil ? @"ic_custom_start_point" : @"ic_action_location_color",
         @"title" : title,
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"time" : [_app getFormattedTimeHM:startTime.firstObject.doubleValue],
-        @"coords" : @[start.point]
+        @"coords" : start != nil ? @[start.point] : _app.locationServices.lastKnownLocation
     }];
     
     double walkDist = [self getWalkDistance:nullptr next:segment dist:segment->walkDist];
@@ -193,8 +197,9 @@
     OATransportStopType *stopType = [OATransportStopType findType:[NSString stringWithUTF8String:route->type.c_str()]];
     [startTime setObject:@(startTime.firstObject.integerValue + routeRes->getBoardingTime()) atIndexedSubscript:0];
     NSString *timeText = [_app getFormattedTimeHM:startTime.firstObject.doubleValue];
-    string str = route->color;
-    UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:[NSString stringWithUTF8String:str.c_str()]];
+    NSString *str = [NSString stringWithUTF8String:route->color.c_str()];
+    str = str.length == 0 ? stopType.renderAttr : str;
+    UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
     
     [arr addObject:@{
         @"cell" : @"OAPublicTransportPointCell",

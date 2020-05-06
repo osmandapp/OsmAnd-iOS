@@ -430,15 +430,6 @@
     return attributedStr;
 }
 
-- (UIImage *) imageWithImage:(UIImage *)image convertToSize:(CGSize)size
-{
-    UIGraphicsBeginImageContext(size);
-    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    UIImage *destImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return [destImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-}
-
 #pragma mark - UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -518,7 +509,7 @@
                 if ([item[@"custom_icon"] boolValue])
                 {
                     UIImage *img = [[OATargetInfoViewController getIcon:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    img = smallIcon ? [self imageWithImage:img convertToSize:CGSizeMake(16., 16.)] : img;
+                    img = smallIcon ? [[OAUtilities resizeImage:img newSize:CGSizeMake(16., 16.)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : img;
                     [cell.iconView setImage:img];
                     cell.iconView.tintColor = smallIcon ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(color_chart_orange);
                     [cell showOutiline:YES];

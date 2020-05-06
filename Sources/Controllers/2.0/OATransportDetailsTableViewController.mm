@@ -109,7 +109,7 @@
     [arr addObject:@{
         @"cell" : @"OAPublicTransportPointCell",
         @"img" : @"ic_profile_pedestrian",
-        @"title" : [NSString stringWithFormat:@"%@ ~%@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO]],
+        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO], [_app getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[],
@@ -304,7 +304,7 @@
                     [arr addObject:@{
                         @"cell" : @"OAPublicTransportPointCell",
                         @"img" : @"ic_profile_pedestrian",
-                        @"title" : [NSString stringWithFormat:@"%@ ~%@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO]],
+                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [_app getFormattedTimeInterval:time shortFormat:NO], [_app getFormattedDistance:walkDist]],
                         @"top_route_line" : @(NO),
                         @"bottom_route_line" : @(NO),
                         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]

@@ -820,7 +820,7 @@
 "logging_min_speed_descr" = "Filtre: seçilen hızın altında log kaydetme yok";
 "auto_split_gap" = "Boşluktan sonra kayıtları otomatik bölme";
 "angular_units" = "Açısal ölçüm birimleri";
-"angular_units_descr" = "Azimut'un ölçüm birimini değiştirin.";
+"angular_units_descr" = "Azimut ölçüm birimlerini değiştirin.";
 "get_discount_title" = "%d %@  %%%d indirimli edinin.";
 "start_navigation" = "Navigasyonu başlat";
 "select_avoid_descr" = "Navigasyon sırasında kaçınmak istediğiniz yolları seçin. Haritadan bir yol seçebilir veya aşağıdaki listeden bir tür seçebilirsiniz.";
@@ -1671,3 +1671,5 @@
 "m_style_pulic_transport" = "Toplu taşıma";
 "exit_at" = "Burada çık";
 "public_transport_warning_title" = "Toplu taşıma navigasyonu şu anda beta testindedir, hatalar ve yanlışlıklar olabilir.";
+"allow_3d" = "2.5B görüntülemeye izin ver";
+"allow_3d_descr" = "Haritayı 2.5B görünümünde görüntülemek için bu seçeneği etkinleştirin";

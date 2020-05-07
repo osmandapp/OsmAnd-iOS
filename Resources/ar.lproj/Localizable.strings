@@ -1673,3 +1673,5 @@
 "transfers" = "النقل:";
 "consider_limitations_param" = "النظر في القيود المؤقتة";
 "avoid_transport_type" = "تجنب أنواع النقل";
+"allow_3d_descr" = "قم بتمكين هذا الخيار لتتمكن من عرض الخريطة في منظور 2.5D";
+"allow_3d" = "السماح بعرض 2.5D";

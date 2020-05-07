@@ -481,7 +481,7 @@ static UIViewController *parentController;
 
 - (IBAction) deletePressed:(id)sender
 {
-    NSArray *selectedRows = _selectedUnsortedItems; //[self.favoriteTableView indexPathsForSelectedRows];
+    NSArray *selectedRows = _selectedUnsortedItems;
     if ([selectedRows count] == 0) {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@""
                                    message:OALocalizedString(@"fav_select_remove")
@@ -1444,7 +1444,7 @@ static UIViewController *parentController;
             [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
             [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
         }
-        else if ((numberOfSelectedRowsInSection == numberOfRowsInSection) && isGroupHeaderSelected)
+        else if (numberOfSelectedRowsInSection == numberOfRowsInSection && isGroupHeaderSelected)
         {
             [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
             [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
@@ -1467,7 +1467,7 @@ static UIViewController *parentController;
                 numberOfSelectedRowsInSection++;
             [self addIndexPathToSelectedCellsArray:item];
         }
-        if ((numberOfSelectedRowsInSection == numberOfRowsInSection) && !isGroupHeaderSelected)
+        if (numberOfSelectedRowsInSection == numberOfRowsInSection && !isGroupHeaderSelected)
         {
             [self.favoriteTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
             [self addIndexPathToSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];

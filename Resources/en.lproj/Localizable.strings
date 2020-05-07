@@ -36,7 +36,9 @@
 "mapillary_image" = "Mapillary image";
 "shared_string_milliradians" = "Milliradians";
 "angular_units" = "Angular measurement units";
-"angular_units_descr" = "Change what azimuth is measured in.";
+"angular_units_descr" = "Change azimuth measurement units.";
+"allow_3d" = "Allow 2.5D view";
+"allow_3d_descr" = "Enable this option to be able to view the map in the 2.5D perspective";
 
 "access_intermediate_arrival_time" = "Intermediate arrival time";
 "map_widget_intermediate_time" = "Intermediate time";

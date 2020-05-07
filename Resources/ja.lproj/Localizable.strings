@@ -553,7 +553,7 @@
 // Purchases
 "prch_addons" = "Addons";
 "prch_nau_q1" = "マップ設定で\"航海\"スタイルをONにして、全世界の航路標識ベースマップをインストールしてください。";
-"prch_nau_q2_cell" = "Downloading requires %@ over cellular network.\n\n%@をダウンロードするには、携帯電話回線への接続が必要です。";
+"prch_nau_q2_cell" = "%@をダウンロードするには、携帯電話回線への接続が必要です。";
 "incur_high_charges" = "これにより、高額の料金が発生する場合があります。";
 "prch_nau_q2_wifi" = "%@をダウンロードするには、Wi-Fiネットワークへの接続が必要です。";
 "prch_nau_q3" = "マップ＆リソースにて後からでもインストールできます。";
@@ -614,10 +614,10 @@
 "res_update_no_space" = "更新するのに十分な空き容量がありません";
 "res_install_no_space" = "インストールするのに十分な空き容量がありません";
 "res_no_space_free" = "が必要です。充分な空き容量を確保してください。";
-"res_free_exp" = "You spent all free downloads. Please purchase continent to download / update the maps.\n\n無料ダウンロード枠がなくなりました。必要な大陸マップを購入し、その後マップをダウンロード/更新してください。";
+"res_free_exp" = "無料ダウンロード枠がなくなりました。必要な大陸マップを購入し、その後マップをダウンロード/更新してください。";
 "res_upd_avail_q" = "利用可能な更新";
 "res_inst_avail_cell_q" = "%@をインストールするには、携帯電話回線経由で%@をダウンロードする必要があります。";
-"res_inst_avail_wifi_q" = "Installation of %@ needs %@ to be downloaded over WiFi network.\n\n%@をインストールするには、Wi-Fiネットワークに接続し%@をダウンロードする必要があります。";
+"res_inst_avail_wifi_q" = "%@をインストールするには、Wi-Fiネットワークに接続し%@をダウンロードする必要があります。";
 "res_cancel_upd_q" = "%@の更新をキャンセルします。";
 "data_will_be_lost" = "ダウンロードしたデータはすべて失われます。";
 "res_cancel_inst_q" = "%@のインストールをキャンセルします。";
@@ -629,7 +629,7 @@
 "res_size" = "サイズ";
 "res_created_on" = "作成日";
 "res_update_all" = "すべて更新";
-"res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.\n\n%d個の更新をインストールするための十分な空き容量がありません。 %@必要です。空き容量を確保してください。";
+"res_updates_no_space" = "%d個の更新をインストールするための十分な空き容量がありません。 %@必要です。空き容量を確保してください。";
 "res_updates_avail_q" = "更新が利用可能です。";
 "res_updates_exp" = "大陸マップを購入し、マップを更新してください";
 // Menu

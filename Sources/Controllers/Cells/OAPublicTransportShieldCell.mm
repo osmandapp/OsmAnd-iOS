@@ -22,12 +22,13 @@
 #include <transportRouteResultSegment.h>
 #include <transportRoutingObjects.h>
 
-#define kRowHeight 54
+#define kRowHeight 44
 #define kShieldHeight 32
 #define kShieldMargin 16.0
-#define kShieldY 16.
+#define kShieldY 12.
 #define kViewSpacing 3.0
-#define kArrowY 25.0
+#define kArrowY 18.0
+#define kArrowWidth 20.0
 
 #define MIN_WALK_TIME 120
 
@@ -125,6 +126,7 @@ static UIFont *_shieldFont;
         NSString *title = [NSString stringWithUTF8String:r->getAdjustedRouteRef(false).c_str()];
         NSString *colorName = [NSString stringWithUTF8String:r->color.c_str()];
         OATransportStopType *stopType = [OATransportStopType findType:[NSString stringWithUTF8String:r->type.c_str()]];
+        colorName = colorName.length == 0 ? stopType.renderAttr : colorName;
         UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:colorName];
         if (!color)
             color = UIColorFromARGB(color_nav_route_default_argb);
@@ -324,7 +326,7 @@ static UIFont *_shieldFont;
     CGFloat margin = needsSafeArea ? OAUtilities.getLeftMargin : 0.;
     width = width - margin - kShieldMargin * 2;
     if (!_shieldFont)
-        _shieldFont = [UIFont systemFontOfSize:15];
+        _shieldFont = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
     
     CGFloat currWidth = 0.0;
     NSInteger rowsCount = 1;
@@ -332,18 +334,26 @@ static UIFont *_shieldFont;
     for (NSInteger i = 0; i < shields.count; i++)
     {
         NSString *shieldTitle = shields[i];
-        currWidth += [OARouteSegmentShieldView getViewWidth:shieldTitle];
-        
-        currWidth += 20.;
-        currWidth += kViewSpacing * 2;
+        CGFloat shieldWidth = [OARouteSegmentShieldView getViewWidth:shieldTitle];
+        currWidth += shieldWidth;
         
         if (currWidth >= width)
         {
             rowsCount++;
-            currWidth = 0.;
+            currWidth = shieldWidth;
+        }
+        
+        CGFloat arrowWidth = kArrowWidth + kViewSpacing * 2;
+        if (i != shields.count - 1)
+            currWidth += arrowWidth;
+        
+        if (currWidth >= width)
+        {
+            rowsCount++;
+            currWidth = arrowWidth;
         }
     }
-    return kRowHeight * rowsCount;
+    return kRowHeight * rowsCount + (rowsCount > 1 ? 6.0 : 0.0);
 }
 
 /*

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -11,10 +12,6 @@
         <scene sceneID="TNK-ML-Wew">
             <objects>
                 <viewController id="Pg1-zp-xNx" customClass="OAOsmEditsListViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="cRg-fI-zKf"/>
-                        <viewControllerLayoutGuide type="bottom" id="76j-wq-ch0"/>
-                    </layoutGuides>
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="HiK-Id-V8n">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -81,6 +78,7 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.92150187490000002" green="0.92147433759999997" blue="0.921489954" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="g46-oF-81a"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="OSM Edits" image="ic_tabbar_osm_edits.png" id="7TW-Hc-6pc"/>
                     <connections>
@@ -101,10 +99,6 @@
         <scene sceneID="Icp-hR-oHC">
             <objects>
                 <viewController id="o7u-wO-gzA" customClass="OAFavoriteListViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="X7U-Kj-zLc"/>
-                        <viewControllerLayoutGuide type="bottom" id="Nif-9r-9f1"/>
-                    </layoutGuides>
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="OPG-OS-sNg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -203,6 +197,7 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.92150187490000002" green="0.92147433759999997" blue="0.921489954" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="8BD-gz-Z3a"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="My Favorites" image="ic_tabbar_favorites.png" id="Hya-az-9dq"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
@@ -228,10 +223,6 @@
         <scene sceneID="F1F-kK-NRw">
             <objects>
                 <viewController id="rfa-sK-jEQ" customClass="OAGPXListViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ZRa-4Y-2sA"/>
-                        <viewControllerLayoutGuide type="bottom" id="9dJ-Yi-1Bd"/>
-                    </layoutGuides>
                     <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="PSJ-dc-387">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -306,6 +297,7 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.92150187490000002" green="0.92147433759999997" blue="0.921489954" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="JhS-I6-wi0"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Trips" image="ic_tabbar_trips.png" id="7Q3-ud-f60"/>
                     <connections>

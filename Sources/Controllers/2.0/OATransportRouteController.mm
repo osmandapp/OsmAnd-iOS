@@ -186,7 +186,7 @@ static OATransportRouteToolbarViewController *toolbarController;
 
 - (ETopToolbarType) topToolbarType
 {
-    return ETopToolbarTypeMiddleFixed;
+    return ETopToolbarTypeFixed;
 }
 
 - (int) getCurrentStop

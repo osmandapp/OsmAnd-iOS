@@ -1658,3 +1658,5 @@
 "map_settings_appearance" = "Вид";
 "all_group_points" = "Все точки группы";
 "shared_string_maximum" = "Максимум";
+"exit_at" = "Выход на";
+"public_transport_warning_title" = "Навигация на общественном транспорте в настоящее время проходит бета-тестирование, возможны ошибки и неточности.";

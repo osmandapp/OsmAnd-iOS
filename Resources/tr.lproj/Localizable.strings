@@ -1657,3 +1657,17 @@
 "map_settings_line_width" = "Çizgi genişliği";
 "map_settings_color_scheme" = "Renk düzeni";
 "map_settings_base_transp" = "Temel harita saydamlığı";
+"map_coords" = "Harita: Enlem %.5f Boylam %.5f";
+"num_stops" = "durak";
+"by_type" = "%@ göre";
+"walk" = "Yürüme";
+"total" = "Toplam";
+"public_transport_warning_descr_blog" = "OsmAnd'ın rotaları hakkında blogumuzda daha fazla bilgi edinin.";
+"calc_pedestrian_route" = "Yürüme rotasını hesapla";
+"public_transport_ped_route_title" = "Yürüme rotası yaklaşık %@, ve toplu taşıma araçlarına göre daha hızlı olabilir.";
+"transfers" = "Aktarmalar:";
+"avoid_transport_type" = "Kaçınılacak taşıma türleri";
+"consider_limitations_param" = "Geçici sınırlamaları göz önünde bulundur";
+"m_style_pulic_transport" = "Toplu taşıma";
+"exit_at" = "Burada çık";
+"public_transport_warning_title" = "Toplu taşıma navigasyonu şu anda beta testindedir, hatalar ve yanlışlıklar olabilir.";

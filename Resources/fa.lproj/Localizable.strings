@@ -1338,7 +1338,6 @@
 "app_mode_osm" = "OSM";
 "app_mode_bicycle" = "دوچرخه‌سواری";
 "app_mode_skiing" = "اسکی";
-
 "region_antarctica" = "جنوبگان";
 "app_mode_campervan" = "ون کمپر";
 "res_zoom_levels" = "زوم نمایش";
@@ -1349,3 +1348,5 @@
 "wiki_sheet_title" = "مقاله‌های ویکی‌پدیا چگونه باز شوند؟";
 "map_settings_color_scheme" = "رنگ‌بندی";
 "map_settings_appearance" = "ظاهر";
+"exit_at" = "ایستگاه پیاده‌شدن";
+"public_transport_warning_title" = "ناوبری حمل‌ونقل عمومی هم‌اکنون آزمایش بتا را سپری می‌کند و بعید نیست که خطاها و نقایصی داشته باشد.";

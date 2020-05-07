@@ -1548,10 +1548,11 @@
 "select_work_point" = "Zvoľte bod pracoviska";
 "select_home" = "Zvoľte bod domova";
 "select_route_intermediate" = "Zvoľte prechodný bod";
-
 "map_settings_appearance" = "Vzhľad";
 "wiki_sheet_title" = "Ako otvoriť články Wikipédie?";
 "open_wiki_online" = "Otvoriť článok online";
 "region_antarctica" = "Antarktída";
 "all_group_points" = "Všetky body skupiny";
 "map_settings_color_scheme" = "Farebná schéma";
+"exit_at" = "Vystúpte na";
+"public_transport_warning_title" = "Navigácia pomocou hromadnej dopravy je zatiaľ v testovaní, môžu sa vyskytnúť chyby a nepresnosti.";

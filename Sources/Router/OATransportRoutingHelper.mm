@@ -641,7 +641,7 @@
     params.type = OSMAND;
     params.calculationProgress = std::make_shared<RouteCalculationProgress>();
     
-    double rd = OsmAnd::Utilities::distance(OsmAnd::LatLon(start.coordinate.latitude, start.coordinate.longitude), OsmAnd::LatLon(end.coordinate.latitude, end.coordinate.longitude));
+    double rd = OsmAnd::Utilities::distance(OsmAnd::LatLon(start.coordinate.longitude, start.coordinate.latitude), OsmAnd::LatLon(end.coordinate.longitude, end.coordinate.latitude));
     params.calculationProgress->totalEstimatedDistance = rd * 1.5;
     
     [self startRouteCalculationThread:params];

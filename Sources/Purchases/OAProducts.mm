@@ -535,8 +535,11 @@
 - (void) setSkProduct:(SKProduct *)skProduct
 {
     self.productIdentifier = skProduct.productIdentifier;
-    self.localizedTitle = skProduct.localizedTitle;
-    self.localizedDescription = skProduct.localizedDescription;
+    NSString *postfix = [[_productIdentifier componentsSeparatedByString:@"."] lastObject];
+    NSString *locTitleId = [@"product_title_" stringByAppendingString:postfix];
+    NSString *locDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
+    self.localizedTitle = OALocalizedString(locTitleId);
+    self.localizedDescription = OALocalizedString(locDescriptionId);
     self.price = skProduct.price;
     self.priceLocale = skProduct.priceLocale;
     
@@ -560,7 +563,6 @@
     }
     self.discounts = [NSArray arrayWithArray:discounts];
 
-    NSString *postfix = [[_productIdentifier componentsSeparatedByString:@"."] lastObject];
     NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
     self.localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
     

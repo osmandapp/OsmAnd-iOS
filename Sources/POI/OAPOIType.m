@@ -37,7 +37,7 @@
     UIImage *img = [super icon];
     if (!img)
     {
-        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.tag, self.value]]];
+        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.getOsmTag, self.getOsmValue]]];
         if (img)
         {
             return [OAUtilities applyScaleFactorToImage:img];
@@ -60,15 +60,14 @@
 
 - (NSString *) iconName
 {
-    return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.tag, self.value]];
+    return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.getOsmTag, self.getOsmValue]];
 }
 
 - (UIImage *) mapIcon
 {
     UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [self.name stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
     if (!img)
-        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@_%@", self.tag, self.value]]];
-    
+        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@_%@", self.getOsmTag, self.getOsmValue]]];
     return [OAUtilities applyScaleFactorToImage:img];
 }
 
@@ -138,6 +137,8 @@
 {
     if(self.reference)
         return [_referenceType getOsmValue];
+    if (self.editValue)
+        return self.editValue;
     return _value;
 }
 
@@ -152,6 +153,8 @@
 {
     if(self.reference)
         return [_referenceType getOsmTag];
+    if (self.editTag)
+        return self.editTag;
     if(_tag && [_tag hasPrefix:@"osmand_amenity"])
         return @"amenity";
     return _tag;

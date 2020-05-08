@@ -1157,6 +1157,8 @@
 
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
+"product_title_antarctica" = "Antarctica";
+"product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_title_australia" = "Australia";
 "product_desc_australia" = "Unlimited map downloads for Australia";

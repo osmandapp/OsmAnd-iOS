@@ -649,7 +649,7 @@
 - (void) sortTransportStops:(CLLocationCoordinate2D)coord transportStops:(NSMutableArray<OATransportStop *> *)transportStops
 {
     for (OATransportStop *transportStop in transportStops)
-        transportStop.distance = OsmAnd::Utilities::distance(coord.latitude, coord.longitude, transportStop.location.latitude, transportStop.location.longitude);
+        transportStop.distance = OsmAnd::Utilities::distance(coord.longitude, coord.latitude, transportStop.location.longitude, transportStop.location.latitude);
 
     [transportStops sortUsingComparator:^NSComparisonResult(OATransportStop * _Nonnull s1, OATransportStop * _Nonnull s2) {
         return [OAUtilities compareInt:s1.distance y:s2.distance];

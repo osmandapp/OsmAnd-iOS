@@ -309,6 +309,8 @@
 "product_desc_track_recording" = "Активирует функциональность записи и сохранения ваших путешествий";
 "product_title_africa" = "Африка";
 "product_desc_africa" = "Скачивание карт Африки без ограничений";
+"product_title_antarctica" = "Антарктида";
+"product_desc_antarctica" = "Скачивание карт Антарктиды без ограничений";
 "product_title_australia" = "Австралия";
 "product_desc_australia" = "Скачивание карт Австралии без ограничений";
 "product_title_centralamerica" = "Центральная Америка";

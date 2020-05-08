@@ -13,6 +13,7 @@
 #import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
+#include <OsmAndCore/Data/Road.h>
 
 struct RouteDataObject;
 
@@ -45,7 +46,7 @@ struct RouteDataObject;
 - (BOOL) isTypeVisible:(int)waypointType;
 - (BOOL) isTypeEnabled:(int)type;
 
-- (OAAlarmInfo *) calculateMostImportantAlarm:(std::shared_ptr<RouteDataObject>)ro loc:(CLLocation *)loc mc:(EOAMetricsConstant)mc showCameras:(BOOL)showCameras;
+- (OAAlarmInfo *) calculateMostImportantAlarm:(const std::shared_ptr<const OsmAnd::Road>)ro loc:(CLLocation *)loc mc:(EOAMetricsConstant)mc showCameras:(BOOL)showCameras;
 
 - (void) announceVisibleLocations;
 

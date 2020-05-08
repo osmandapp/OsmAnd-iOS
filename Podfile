@@ -6,15 +6,14 @@ xcodeproj 'OsmAnd'
 workspace 'OsmAnd'
 
 def defaultPods
-    pod 'AFNetworking', '~> 2.5.1'
-    pod 'AFDownloadRequestOperation', '~> 2.0.1'
+    pod 'AFNetworking', '~> 2.7.0', :subspecs => ['Reachability', 'Serialization', 'Security', 'NSURLSession']
     pod 'JASidePanels', '~> 1.3.2'
     pod 'Reachability', '~> 3.1.1'
     pod 'UIAlertView-Blocks', '~> 1.0'
     pod 'UIActionSheet-Blocks', '~> 1.0.1'
     pod 'DACircularProgress', '~> 2.2.0'
     pod 'FFCircularProgressView', '~> 0.4'
-    pod 'QuickDialog', :subspecs => ["Core", "Extras"], :git => 'https://github.com/escoz/QuickDialog.git'
+    pod 'QuickDialog', :subspecs => ["Core"], :git => 'https://github.com/escoz/QuickDialog.git'
     pod 'FormatterKit', '~> 1.8.0'
     pod 'SWTableViewCell', '~> 0.3.7'
     pod 'RegexKitLite', '~> 4.0'

@@ -16,7 +16,7 @@
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
 #import "OAAppSettings.h"
-#import "OAResourcesBaseViewController.h"
+#import "OAResourcesUIHelper.h"
 #import "OAIAPHelper.h"
 
 NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotification";
@@ -117,7 +117,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                 {
                     if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".map.obf"])
                     {
-                        OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
+                        OAWorldRegion* match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
                         if (!match || ![match isInPurchasedArea])
                             [OAIAPHelper decreaseFreeMapsCount];
                     }

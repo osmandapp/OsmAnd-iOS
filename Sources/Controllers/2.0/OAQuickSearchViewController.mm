@@ -601,7 +601,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 if (word && [word getLocation])
                 {
                     OASearchResult *searchResult = word.result;
-                    [OAQuickSearchTableController showOnMap:searchResult searchType:self.searchType delegate:self];
+                    [_tableController showOnMap:searchResult searchType:self.searchType delegate:self];
                 }
             }
             break;
@@ -1433,6 +1433,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self runCoreSearch:text updateResult:updateResult searchMore:searchMore onSearchStarted:nil onPublish:^(OASearchResultCollection *res, BOOL append) {
         [self updateSearchResult:res append:append];
     } onSearchFinished:^BOOL(OASearchPhrase *phrase) {
+        OASearchWord *lastSelectedWord = [phrase getLastSelectedWord];
+        BOOL isEmptyResult = ![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0;
+        if (_tableController && [_tableController isShowResult] && isEmptyResult && lastSelectedWord) {
+            [_tableController showOnMap:lastSelectedWord.result searchType:self.searchType delegate:self];
+        }
         return YES;
     }];
 }

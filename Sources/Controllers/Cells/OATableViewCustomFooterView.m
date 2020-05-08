@@ -14,6 +14,9 @@
 @end
 
 @implementation OATableViewCustomFooterView
+{
+    UIImageView *_iconView;
+}
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -65,12 +68,17 @@
 - (void)layoutSubviews
 {
     CGFloat leftMargin = OAUtilities.getLeftMargin;
-    CGFloat w = self.bounds.size.width - 32. - leftMargin * 2;
-    CGFloat height = [self.class getTextHeight:_label.text width:w];
+    BOOL hasIcon = _iconView != nil && _iconView.superview != nil;
+    if (hasIcon)
+    {
+        _iconView.frame = CGRectMake(16.0 + leftMargin, 8.0, 30.0, 30.0);
+    }
+    CGFloat w = self.bounds.size.width - 32. - leftMargin * 2 - (hasIcon ? 30.0 : 0.0);
+    CGFloat height = _label.attributedText.length > 0 ? [OAUtilities calculateTextBounds:_label.attributedText width:w].height : [self.class getTextHeight:_label.text width:w];
     if (_label.text.length > 0)
     {
         _label.hidden = NO;
-        _label.frame = CGRectMake(16.0 + leftMargin, 8.0, w, height);
+        _label.frame = CGRectMake(16.0 + (hasIcon ? CGRectGetMaxX(_iconView.frame) : leftMargin), 8.0, w, height);
     }
     else
     {
@@ -79,10 +87,31 @@
     self.contentView.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
 }
 
+- (void) setIcon:(NSString *)imageName
+{
+    if (!imageName)
+    {
+        if (_iconView && _iconView.superview)
+            [_iconView removeFromSuperview];
+        
+        _iconView = nil;
+    }
+    else
+    {
+        UIImage *img = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _iconView = [[UIImageView alloc] initWithImage:img];
+        _iconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
+        [self.contentView addSubview:_iconView];
+    }
+    
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+}
+
 + (CGFloat) getHeight:(NSString *)text width:(CGFloat)width
 {
     if (text.length > 0)
-        return MAX(38.0, [self.class getTextHeight:text width:width - 32.0 - OAUtilities.getLeftMargin * 2] + 5.0);
+        return [self.class getTextHeight:text width:width - 32.0 - OAUtilities.getLeftMargin * 2] + 5.0;
     else
         return 0.01;
 }

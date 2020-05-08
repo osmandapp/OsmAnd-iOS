@@ -639,7 +639,7 @@
 "shared_string_select_on_map" = "Kijelölése a térképen";
 "shared_string_my_location" = "Saját pozícióm";
 // Shared Strings
-"shared_string_apply" = "Alkalmazás";
+"shared_string_apply" = "Alkalmaz";
 "shared_string_near" = "Közel";
 "shared_string_sound" = "Hang";
 "show_traffic_warnings" = "Forgalmi figyelmeztetések";
@@ -984,7 +984,6 @@
 "translucent_lightblue" = "Átlátszó világoskék";
 "tile_cache" = "Csempegyorsítótár";
 "hide_contour_lines" = "Szintvonalak elrejtése";
-
 "hide_notes" = "OSM-jegyzetek elrejtése";
 "show_notes" = "OSM-jegyzetek megjelenítése";
 "res_elliptic_mercator" = "Elliptikus Merkátor";
@@ -1277,3 +1276,35 @@
 "routing_attr_piste_type_sled_name" = "Szánkó";
 "rendering_attr_surface_paving_stones_name" = "Térkő";
 "rendering_value_red_name" = "Piros";
+
+"app_mode_helicopter" = "Helikopter";
+"app_mode_offroad" = "Terep";
+"app_mode_scooter" = "Roller";
+"map_settings_appearance" = "Megjelenés";
+"open_wiki_online" = "Szócikk megnyitása online";
+"region_antarctica" = "Antarktika";
+"app_mode_skiing" = "Síelés";
+"app_mode_shuttle_bus" = "Shuttle bus (ingajárat)";
+"app_mode_monowheel" = "Egykerekű";
+"app_mode_ufo" = "UFO (azonosítatlan repülő tárgy)";
+"online_webpage_warning" = "Az oldal csak onlineérhető el. Megnyitod böngészőben?";
+"map_settings_color_scheme" = "Színséma";
+"app_mode_osm" = "OSM";
+"app_mode_camper" = "Lakókocsi";
+"app_mode_personal_transporter" = "Personal transporter (pl. Segway)";
+"wiki_sheet_title" = "Hogyan nyiss meg Wikipédia szócikkeket?";
+"all_group_points" = "A csoportösszes pontja";
+"app_mode_wagon" = "Családi autó";
+"app_mode_utv" = "UTV (kis terepautó)";
+"shared_string_warning" = "Figyelmeztetés";
+"app_mode_bicycle" = "Kerékpározás";
+"res_zoom_levels" = "Nagyítási szintek";
+"app_mode_campervan" = "Lakóautó";
+"app_mode_default" = "Alapértelmezett";
+"app_mode_horse" = "Ló";
+"app_mode_pickup_truck" = "Kisteherautó";
+"app_mode_car" = "Vezetés";
+"app_mode_taxi" = "Taxi";
+"app_mode_pedestrian" = "Gyaloglás";
+"app_mode_subway" = "Metró";
+"map_settings_base_transp" = "Alaptérkép átlátszósága";

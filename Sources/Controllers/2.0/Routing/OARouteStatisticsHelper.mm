@@ -139,7 +139,7 @@ static NSArray<NSString *> *_boundariesClass;
         OARouteStatisticsComputer *statisticsComputer =
                 [[OARouteStatisticsComputer alloc] initWithPresentationEnvironment:defaultPresentationEnv];
         OARouteStatistics *routeStatistics = [statisticsComputer computeStatistic:routeSegmentWithInclines attribute:attributeName];
-        if (routeStatistics.partition.count != 0 && (routeStatistics.partition.count != 1 || !routeStatistics.partition[UNDEFINED_ATTR]))
+        if (routeStatistics.partition.count != 0 && (routeStatistics.partition.count != 1 || !routeStatistics.partition[kUndefinedAttr]))
             [result addObject:routeStatistics];
     }
     return result;
@@ -337,11 +337,11 @@ static NSArray<NSString *> *_boundariesClass;
     }
     NSArray<NSString *> *tmpKeys = partition.allKeys;
     NSArray<NSString *> *sortedKeys = [tmpKeys sortedArrayUsingComparator:^NSComparisonResult(NSString * _Nonnull obj1, NSString * _Nonnull obj2) {
-        if ([obj1.lowerCase isEqualToString:UNDEFINED_ATTR])
+        if ([obj1.lowerCase isEqualToString:kUndefinedAttr])
         {
             return NSOrderedDescending;
         }
-        if ([obj2.lowerCase isEqualToString:UNDEFINED_ATTR]) {
+        if ([obj2.lowerCase isEqualToString:kUndefinedAttr]) {
             return NSOrderedAscending;
         }
         NSInteger index1 = partition[obj1].slopeIndex;
@@ -445,7 +445,7 @@ static NSArray<NSString *> *_boundariesClass;
     NSDictionary<NSString *, NSNumber *> *renderingAttrs = [_mapViewController getRoadRenderingAttributes:attribute additionalSettings:settings];
     NSString *name = renderingAttrs.allKeys.firstObject;
     NSInteger color = renderingAttrs[name].integerValue;
-    if ([name isEqualToString:UNDEFINED_ATTR] && color == 0xFFFFFFFF)
+    if ([name isEqualToString:kUndefinedAttr] && color == 0xFFFFFFFF)
     {
         // Search in the default environment
         const auto& defaultPair = _defaultPresentationEnvironment->getRoadRenderingAttributes(QString::fromNSString(attribute), [OANativeUtilities dictionaryToQHash:settings]);

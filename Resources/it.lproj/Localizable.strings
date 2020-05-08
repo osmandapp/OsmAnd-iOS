@@ -419,7 +419,7 @@
 "apply_filters" = "Applica filtri";
 "filter_poi_hint" = "Filtra per nome";
 "city_type_suburb" = "Frazione";
-"city_type_hamlet" = "Borgata";
+"city_type_hamlet" = "Piccolo borgo";
 // Shared Strings
 "shared_string_select" = "Seleziona";
 "shared_string_from" = "da";
@@ -463,7 +463,7 @@
 "traffic_warning_calming" = "Moderatore del traffico";
 "traffic_warning_speed_camera" = "Autovelox";
 "traffic_warning" = "Avviso di traffico";
-"traffic_warning_railways" = "Passaggio a livello";
+"traffic_warning_railways" = "Attraversamento ferroviario";
 "traffic_warning_pedestrian" = "Attraversamento pedonale";
 "traffic_warning_hazard" = "Pericolo";
 "driving_region" = "Regione di guida";
@@ -513,8 +513,8 @@
 "shared_string_is_open_24_7" = "Aperto 24/7";
 "shared_string_is_open" = "Aperto adesso";
 "poi_filter_by_name" = "Ricerca per nome";
-"city_type_village" = "Villaggio";
-"city_type_town" = "Città";
+"city_type_village" = "Paese";
+"city_type_town" = "Cittadina";
 "city_type_district" = "Distretto";
 "city_type_neighbourhood" = "Quartiere";
 "postcode" = "Codice postale";
@@ -1542,3 +1542,33 @@
 "offline_raster_map" = "Mappa raster Offline";
 "offline_raster_maps" = "Mappe raster Offline";
 "res_edit_map_source" = "Modifica il sorgente della mappa";
+"app_mode_pedestrian" = "A piedi";
+"app_mode_bicycle" = "In bicicletta";
+"app_mode_car" = "Alla guida";
+"online_webpage_warning" = "Pagina disponibile solo online. Aprirla in un browser?";
+"app_mode_skiing" = "Sciare";
+"app_mode_helicopter" = "Elicottero";
+"app_mode_horse" = "Cavallo";
+"app_mode_subway" = "Metropolitana";
+"app_mode_taxi" = "Taxi";
+"app_mode_scooter" = "Scooter";
+"app_mode_monowheel" = "Monoruota";
+"app_mode_offroad" = "Fuori strada";
+"app_mode_campervan" = "Camper (RV)";
+"app_mode_camper" = "Camper";
+"app_mode_pickup_truck" = "Pick-up";
+"app_mode_wagon" = "Familiare";
+"app_mode_utv" = "Lato per lato";
+
+"app_mode_ufo" = "UFO";
+"app_mode_osm" = "OSM";
+"wiki_sheet_title" = "Come aprire gli articoli di Wikipedia?";
+"map_settings_base_transp" = "Trasparenza mappa di base";
+"map_settings_color_scheme" = "Schema colori";
+"all_group_points" = "Tutti i punti del gruppo";
+"app_mode_default" = "Scorri la mappa";
+"app_mode_shuttle_bus" = "Bus navetta";
+"map_settings_appearance" = "Aspetto";
+"shared_string_warning" = "Attenzione";
+"open_wiki_online" = "Apri articolo online";
+"app_mode_personal_transporter" = "Trasportatore personale";

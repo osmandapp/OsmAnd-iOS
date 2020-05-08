@@ -10,7 +10,6 @@
 
 @interface OAApplicationMode : NSObject
 
-@property (nonatomic, readonly) NSInteger modeId;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *stringKey;
 @property (nonatomic, readonly) NSString *variantKey;
@@ -43,12 +42,13 @@
 + (OAApplicationMode *) TRUCK;
 + (OAApplicationMode *) BUS;
 + (OAApplicationMode *) TRAIN;
++ (OAApplicationMode *) PUBLIC_TRANSPORT;
++ (OAApplicationMode *) SKI;
 
 + (NSArray<OAApplicationMode *> *) values;
 + (NSArray<OAApplicationMode *> *) allPossibleValues;
 + (NSArray<OAApplicationMode *> *) getModesDerivedFrom:(OAApplicationMode *)am;
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def;
-+ (OAApplicationMode *) getAppModeById:(NSInteger)modeId def:(OAApplicationMode *)def;
 
 - (BOOL) hasFastSpeed;
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode;
@@ -56,6 +56,9 @@
 + (NSSet<OAApplicationMode *> *) regWidgetVisibility:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am;
 - (BOOL) isWidgetCollapsible:(NSString *)key;
 - (BOOL) isWidgetVisible:(NSString *)key;
+
+- (NSString *) getRoutingProfile;
+- (void) setRoutingProfile:(NSString *) routingProfile;
 
 + (NSSet<OAApplicationMode *> *) regWidgetAvailability:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am;
 - (BOOL) isWidgetAvailable:(NSString *)key;

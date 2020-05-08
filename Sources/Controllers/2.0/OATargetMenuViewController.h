@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, ETopToolbarType)
     ETopToolbarTypeFixed = 0,
     ETopToolbarTypeMiddleFixed,
     ETopToolbarTypeFloating,
+    ETopToolbarTypeFloatingFixedButton
 };
 
 typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
@@ -80,6 +81,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (weak, nonatomic) IBOutlet UIButton *buttonOK;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *bottomToolBarView;
+@property (weak, nonatomic) IBOutlet UIView *additionalAccessoryView;
 
 @property (nonatomic) UINavigationController* navController;
 
@@ -104,7 +106,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 
-+ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState;
++ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState headerOnly:(BOOL)headerOnly;
 
 - (id) getTargetObj;
 
@@ -191,7 +193,6 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes;
 - (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes;
 
-- (void) requestMapDownloadInfo:(CLLocationCoordinate2D) coordinate;
 
 @end
 

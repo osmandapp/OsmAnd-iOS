@@ -314,6 +314,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) int settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (assign, nonatomic) BOOL metricSystemChangedManually;
+@property (assign, nonatomic) BOOL settingAllow3DView;
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
@@ -384,6 +385,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
 @property (nonatomic) OAProfileInteger *rotateMap;
 
+@property (nonatomic) OAProfileString *routingProfile;
+
 @property (nonatomic) OAProfileDouble *mapDensity;
 @property (nonatomic) OAProfileDouble *textSize;
 
@@ -397,6 +400,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL disableComplexRouting;
 @property (assign, nonatomic) BOOL followTheRoute;
 @property (nonatomic) NSString *followTheGpxRoute;
+@property (nonatomic) OAProfileBoolean *enableTimeConditionalRouting;
 @property (nonatomic) OAProfileDouble *arrivalDistanceFactor;
 @property (assign, nonatomic) BOOL useIntermediatePointsNavigation;
 @property (assign, nonatomic) BOOL disableOffrouteRecalc;

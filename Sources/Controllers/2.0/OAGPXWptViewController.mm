@@ -32,7 +32,7 @@
     NSString *_gpxFileName;
 }
 
-- (id) initWithItem:(OAGpxWptItem *)wpt
+- (id) initWithItem:(OAGpxWptItem *)wpt headerOnly:(BOOL)headerOnly
 {
     self = [super initWithItem:wpt];
     if (self)
@@ -40,10 +40,13 @@
         _app = [OsmAndApp instance];
         self.wpt = wpt;
         
-        OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
-        [collapsableView setData:wpt];
-        collapsableView.collapsed = YES;
-        self.collapsableView = collapsableView;
+        if (!headerOnly)
+        {
+            OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
+            [collapsableView setData:wpt];
+            collapsableView.collapsed = YES;
+            self.collapsableView = collapsableView;
+        }
         
         self.groupTitle = self.wpt.docPath == nil ? OALocalizedString(@"track_recording_name") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
         self.groupColor = self.wpt.color;
@@ -111,7 +114,7 @@
 
 - (BOOL)shouldEnterContextModeManually
 {
-    return self.newItem;
+    return YES;
 }
 
 - (void) applyLocalization

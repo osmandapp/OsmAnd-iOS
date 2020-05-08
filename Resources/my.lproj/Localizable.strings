@@ -774,7 +774,6 @@
 "in_app_purchase_desc_ex" = "၀ယ်သည်နှင့်တပြိုင်နက်၎င်းကိုသင်အမြဲတမ်းရရှိနိုင်လိမ့်မည်။";
 "clear_all_intermediates" = "ကြားရပ်နေရာအားလုံးကိုရှင်းလင်းပါ";
 "open_till" = "နောက်ဆုံးဖွင့်ချိန်";
-
 "res_world_region" = "ကမ္ဘာကြီး";
 "actions" = "လုပ်ဆောင်ချက်များ";
 "osm_edits_advanced" = "ဝါအမြင့်";
@@ -799,7 +798,7 @@
 "rendering_attr_piste_type_downhill_name" = "တောင်ဂုံးဆင်း";
 "rendering_attr_piste_difficulty_novice_name" = "ဝါနုသူ";
 "routing_attr_avoid_share_taxi_description" = "စုပေါင်းစီးတက္ကစီကိုရှောင်";
-"routeInfo_piste_type_name" = "နှင်းတောင်ပေါ်  ski စီးလမ်းအမြိုး";
+"routeInfo_piste_type_name" = "နှင်းတောင်ပေါ် ski စီးလမ်းအမြိုး";
 "rendering_attr_highway_class_track_grade5_name" = "အဆင့် ၅";
 "rendering_attr_surface_wood_name" = "သစ်သား";
 "rendering_attr_smoothness_bad_name" = "မကောင်း";
@@ -862,3 +861,11 @@
 "rendering_attr_surface_asphalt_name" = "ကတ္တရာ";
 "rendering_attr_surface_grass_name" = "မြက်ပင်";
 "routing_attr_avoid_tram_name" = "လမ်းရထားများကိုရှောင်ပါ";
+
+"app_mode_horse" = "မြင်း";
+"app_mode_subway" = "မြေအောက်ရထား";
+"online_webpage_warning" = "စာမျက်နှာကိုအွန်လိုင်းသာရနိုင်သည်။ web browser ဖွင့်ရမလား\?";
+"app_mode_skiing" = "နှင်းလျှောစီး";
+"app_mode_helicopter" = "ရဟတ်ယာဉ်";
+"all_group_points" = "အုပ်စုထဲကအမှတ်အားလုံး";
+"app_mode_taxi" = "တက္ကစီ";

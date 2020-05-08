@@ -274,14 +274,17 @@
                                         @"type": @"OASettingsCell"}];
         }
         
-        NSMutableDictionary *section1contourLines = [NSMutableDictionary dictionary];
-        [section1contourLines setObject:OALocalizedString(@"product_title_srtm") forKey:@"name"];
-        [section1contourLines setObject:@"" forKey:@"description"];
-        [section1contourLines setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
-        [section1contourLines setObject:@"OASettingSwitchCell" forKey:@"type"];
-        [section1contourLines setObject:@"contour_lines_layer" forKey:@"key"];
-        [categoriesList addObject:section1contourLines];
-        contourLinesRow = categoriesList.count - 1;
+        if ([[OAIAPHelper sharedInstance].srtm isActive])
+        {
+            NSMutableDictionary *section1contourLines = [NSMutableDictionary dictionary];
+            [section1contourLines setObject:OALocalizedString(@"product_title_srtm") forKey:@"name"];
+            [section1contourLines setObject:@"" forKey:@"description"];
+            [section1contourLines setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
+            [section1contourLines setObject:@"OASettingSwitchCell" forKey:@"type"];
+            [section1contourLines setObject:@"contour_lines_layer" forKey:@"key"];
+            [categoriesList addObject:section1contourLines];
+            contourLinesRow = categoriesList.count - 1;
+        }
         
         NSArray *arrStyles = @[@{@"groupName": OALocalizedString(@"map_settings_style"),
                                  @"cells": categoriesList,

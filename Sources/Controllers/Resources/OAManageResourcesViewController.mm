@@ -22,7 +22,6 @@
 #import "OALocalResourceInformationViewController.h"
 #import "OAOsmAndLiveViewController.h"
 #import "OAOutdatedResourcesViewController.h"
-#import "FFCircularProgressView+isSpinning.h"
 #import "OAWorldRegion.h"
 #import "OALog.h"
 #import "OAOcbfHelper.h"
@@ -864,10 +863,10 @@ static BOOL _lackOfResources;
             item_ = item;
             item.resourceId = resource_->id;
             item.resourceType = resource_->type;
-            item.title = [self.class titleOfResource:resource
-                                            inRegion:region
-                                      withRegionName:YES
-                                    withResourceType:NO];
+            item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                     inRegion:region
+                                               withRegionName:YES
+                                             withResourceType:NO];
             item.resource = resource_;
             item.downloadTask = [self getDownloadTaskFor:resource_->id.toNSString()];
             item.worldRegion = region;
@@ -885,10 +884,10 @@ static BOOL _lackOfResources;
             item_ = item;
             item.resourceId = resource_->id;
             item.resourceType = resource_->type;
-            item.title = [self.class titleOfResource:resource
-                                            inRegion:region
-                                      withRegionName:YES
-                                    withResourceType:NO];
+            item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                     inRegion:region
+                                               withRegionName:YES
+                                             withResourceType:NO];
             item.resource = resource_;
             item.downloadTask = [self getDownloadTaskFor:resource_->id.toNSString()];
             item.size = resource_->size;
@@ -904,10 +903,10 @@ static BOOL _lackOfResources;
         item_ = item;
         item.resourceId = resource_->id;
         item.resourceType = resource_->type;
-        item.title = [self.class titleOfResource:resource
-                                        inRegion:region
-                                  withRegionName:YES
-                                withResourceType:NO];
+        item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                 inRegion:region
+                                           withRegionName:YES
+                                         withResourceType:NO];
         item.resource = resource_;
         item.downloadTask = [self getDownloadTaskFor:resource_->id.toNSString()];
         item.size = resource_->size;
@@ -1009,18 +1008,18 @@ static BOOL _lackOfResources;
     [_outdatedResourceItems removeAllObjects];
     for (const auto& resource : _outdatedResources)
     {
-        OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
-                                                                      thatContainsResource:resource->id];
+        OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
+                                                          thatContainsResource:resource->id];
         if (!match)
             continue;
 
         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
         item.resourceId = resource->id;
         item.resourceType = resource->type;
-        item.title = [self.class titleOfResource:resource
-                                  inRegion:match
-                            withRegionName:YES
-                          withResourceType:NO];
+        item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                 inRegion:match
+                                           withRegionName:YES
+                                         withResourceType:NO];
         item.resource = resource;
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.worldRegion = match;
@@ -1048,8 +1047,8 @@ static BOOL _lackOfResources;
     {
         //NSLog(@"=== %@", resource->id.toNSString());
         
-        OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
-                                                                      thatContainsResource:resource->id];
+        OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
+                                                          thatContainsResource:resource->id];
         
         if (!match && (resource->type != OsmAndResourceType::MapRegion))
             continue;
@@ -1058,10 +1057,10 @@ static BOOL _lackOfResources;
         item.resourceId = resource->id;
         item.resourceType = resource->type;
         if (match)
-            item.title = [self.class titleOfResource:resource
-                                        inRegion:match
-                                  withRegionName:YES
-                                withResourceType:NO];
+            item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                     inRegion:match
+                                               withRegionName:YES
+                                             withResourceType:NO];
         else
             item.title = resource->id.toNSString();
             
@@ -1266,23 +1265,14 @@ static BOOL _lackOfResources;
     return nil;
 }
 
-- (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
-                withRegionName:(BOOL)includeRegionName
-{
-    return [self.class titleOfResource:resource
-                        inRegion:self.region
-                  withRegionName:includeRegionName
-                withResourceType:NO];
-}
-
 - (void) updateSearchResults
 {
     [self performSearchForSearchString:_lastSearchString
                         andSearchScope:_lastSearchScope];
 }
 
-- (void) performSearchForSearchString:(NSString*)searchString
-                      andSearchScope:(NSInteger)searchScope
+- (void) performSearchForSearchString:(NSString *)searchString
+                       andSearchScope:(NSInteger)searchScope
 {
     @synchronized(_dataLock)
     {
@@ -1363,10 +1353,10 @@ static BOOL _lackOfResources;
                         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
                         item.resourceId = resource->id;
                         item.resourceType = resource->type;
-                        item.title = [self.class titleOfResource:resource_
-                                                  inRegion:region
-                                            withRegionName:YES
-                                          withResourceType:NO];
+                        item.title = [OAResourcesUIHelper titleOfResource:resource_
+                                                                 inRegion:region
+                                                           withRegionName:YES
+                                                         withResourceType:NO];
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                         item.worldRegion = region;
@@ -1385,10 +1375,10 @@ static BOOL _lackOfResources;
                         LocalResourceItem* item = [[LocalResourceItem alloc] init];
                         item.resourceId = resource->id;
                         item.resourceType = resource->type;
-                        item.title = [self.class titleOfResource:resource_
-                                                  inRegion:region
-                                            withRegionName:YES
-                                          withResourceType:NO];
+                        item.title = [OAResourcesUIHelper titleOfResource:resource_
+                                                                 inRegion:region
+                                                           withRegionName:YES
+                                                         withResourceType:NO];
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                         item.worldRegion = region;
@@ -1406,10 +1396,10 @@ static BOOL _lackOfResources;
                     RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
                     item.resourceId = resource->id;
                     item.resourceType = resource->type;
-                    item.title = [self.class titleOfResource:resource_
-                                              inRegion:region
-                                        withRegionName:YES
-                                      withResourceType:NO];
+                    item.title = [OAResourcesUIHelper titleOfResource:resource_
+                                                             inRegion:region
+                                                       withRegionName:YES
+                                                     withResourceType:NO];
                     item.resource = resource;
                     item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                     item.worldRegion = region;
@@ -1723,7 +1713,7 @@ static BOOL _lackOfResources;
         }
         else if (item.downloadTask.state == OADownloadTaskStateFinished)
         {
-            progressView.iconPath = [self tickPath:progressView];
+            progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
             if (!progressView.isSpinning)
                 [progressView startSpinProgressBackgroundLayer];
             progressView.progress = 0.0f;
@@ -1738,32 +1728,6 @@ static BOOL _lackOfResources;
     }
 
 }
-
-- (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView
-{
-    CGFloat radius = MIN(progressView.frame.size.width, progressView.frame.size.height)/2;
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    CGFloat tickWidth = radius * .3;
-    [path moveToPoint:CGPointMake(0, 0)];
-    [path addLineToPoint:CGPointMake(0, tickWidth * 2)];
-    [path addLineToPoint:CGPointMake(tickWidth * 3, tickWidth * 2)];
-    [path addLineToPoint:CGPointMake(tickWidth * 3, tickWidth)];
-    [path addLineToPoint:CGPointMake(tickWidth, tickWidth)];
-    [path addLineToPoint:CGPointMake(tickWidth, 0)];
-    [path closePath];
-    
-    [path applyTransform:CGAffineTransformMakeRotation(-M_PI_4)];
-    [path applyTransform:CGAffineTransformMakeTranslation(radius * .46, 1.02 * radius)];
-    
-    return path;
-}
-
-/*
- -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 44.0;
-}
-*/
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1866,7 +1830,7 @@ static BOOL _lackOfResources;
                         {
                             if (str.length > 0)
                                 [str appendString:@", "];
-                            [str appendString:[OAResourcesBaseViewController resourceTypeLocalized:(OsmAndResourceType)[typeNum intValue]]];
+                            [str appendString:[OAResourcesUIHelper resourceTypeLocalized:(OsmAndResourceType)[typeNum intValue]]];
                         }
                         subtitle = str;
                     }
@@ -1919,7 +1883,7 @@ static BOOL _lackOfResources;
 
                 if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion)
                 {
-                    NSString *countryName = [self.class getCountryName:item];
+                    NSString *countryName = [OAResourcesUIHelper getCountryName:item];
                     if (countryName)
                         title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
                     else
@@ -1931,9 +1895,9 @@ static BOOL _lackOfResources;
                 }
                 
                 if (_sizePkg > 0)
-                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
                 else
-                    subtitle = [NSString stringWithFormat:@"%@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType]];
+                    subtitle = [NSString stringWithFormat:@"%@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType]];
             }
         }
         else if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
@@ -1982,19 +1946,19 @@ static BOOL _lackOfResources;
 
             if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion)
             {
-                NSString *countryName = [self.class getCountryName:item];
+                NSString *countryName = [OAResourcesUIHelper getCountryName:item];
                 if (countryName)
                     title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
                 else
                     title = item.title;
                 
                 if (_sizePkg > 0)
-                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
 
             }
             else if (self.region != _app.worldRegion)
             {
-                title = [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType];
+                title = [OAResourcesUIHelper resourceTypeLocalized:item.resourceType];
 
                 if (_sizePkg > 0)
                     subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
@@ -2004,7 +1968,7 @@ static BOOL _lackOfResources;
                 title = item.title;
                 
                 if (_sizePkg > 0)
-                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
             }
         }
         else if (indexPath.section == _localSqliteSection)
@@ -2198,7 +2162,7 @@ static BOOL _lackOfResources;
         }
         else if (item.downloadTask.state == OADownloadTaskStateFinished)
         {
-            progressView.iconPath = [self tickPath:progressView];
+            progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
             progressView.progress = 0.0f;
             if (!progressView.isSpinning)
                 [progressView startSpinProgressBackgroundLayer];

@@ -564,9 +564,64 @@
 {
     OAApplicationMode *am = [self getApplicationMode];
     OsmAndAppInstance app = [OsmAndApp instance];
-    auto rm = app.defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
+    auto rm = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
     if (!rm && am.parent)
-        rm = app.defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
+        rm = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
+    
+    auto& params = rm->getParametersList();
+    for (auto& r : params)
+    {
+        if (r.type == RoutingParameterType::BOOLEAN)
+        {
+            if (r.group.empty() && [[NSString stringWithUTF8String:r.id.c_str()] containsString:@"avoid"])
+            {
+                OALocalRoutingParameter *rp = [[OALocalRoutingParameter alloc] initWithAppMode:am];
+                rp.routingParameter = r;
+                if (rp.isSelected)
+                    return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+@end
+
+@implementation OAAvoidTransportTypesRoutingParameter
+
+- (NSString *) getText
+{
+    return OALocalizedString(@"avoid_transport_type");
+}
+
+- (UIImage *) getIcon
+{
+    return [UIImage imageNamed:@"ic_profile_bus"];
+}
+
+- (NSString *) getCellType
+{
+    return @"OAIconTitleValueCell";
+}
+
+- (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate showAvoidTransportScreen];
+}
+
+- (UIColor *)getTintColor
+{
+    return [self hasAnyAvoidEnabled] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+}
+
+- (BOOL) hasAnyAvoidEnabled
+{
+    OAApplicationMode *am = [self getApplicationMode];
+    OsmAndAppInstance app = [OsmAndApp instance];
+    auto rm = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
+    if (!rm && am.parent)
+        rm = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
     
     auto& params = rm->getParametersList();
     for (auto& r : params)
@@ -650,6 +705,58 @@
     [self.settings setSimulateRouting:isChecked];
     if (self.delegate)
         [self.delegate updateParameters];
+}
+
+- (BOOL) isChecked
+{
+    return [self isSelected];
+}
+
+- (void) setControlAction:(UIControl *)control
+{
+    [control addTarget:self action:@selector(switchValue:) forControlEvents:UIControlEventValueChanged];
+}
+
+- (void) switchValue:(id)sender
+{
+    [self setSelected:![self isSelected]];
+}
+
+- (UIColor *)getTintColor
+{
+    return self.isChecked ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+}
+
+@end
+
+@implementation OAConsiderLimitationsParameter
+
+- (NSString *) getText
+{
+    return OALocalizedString(@"consider_limitations_param");
+}
+
+- (UIImage *) getIcon
+{
+    return [UIImage imageNamed:@"ic_custom_alert"];
+}
+
+- (NSString *) getCellType
+{
+    return @"OASettingSwitchCell";
+}
+
+- (BOOL) isSelected
+{
+    return [self.settings.enableTimeConditionalRouting get:self.getApplicationMode];
+}
+
+- (void) setSelected:(BOOL)isChecked
+{
+    [self.settings.enableTimeConditionalRouting set:isChecked mode:self.getApplicationMode];
+    if (self.delegate)
+        [self.delegate updateParameters];
+    [self.routingHelper recalculateRouteDueToSettingsChange];
 }
 
 - (BOOL) isChecked

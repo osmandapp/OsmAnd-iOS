@@ -401,7 +401,7 @@
             return @"ic_custom_poi";
             
         case EOAQuickActionTypeParking:
-            return @"ic_action_parking_dark";
+            return @"ic_custom_parking";
             
             //        case TakeAudioNoteAction.TYPE:
             //            return new TakeAudioNoteAction();
@@ -572,7 +572,6 @@
         case EOAQuickActionTypeNew:
         case EOAQuickActionTypeMarker:
         case EOAQuickActionTypeShowFavorite:
-        case EOAQuickActionTypeTogglePOI:
         case EOAQuickActionTypeParking:
         case EOAQuickActionTypeNavVoice:
         case EOAQuickActionTypeAddDestination:

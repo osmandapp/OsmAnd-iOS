@@ -27,13 +27,14 @@
 
 @required
 // set visibility
+- (void) startProgress;
 - (void) updateProgress:(int)progress;
 - (void) requestPrivateAccessRouting;
 - (void) finish;
 
 @end
 
-@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis;
+@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis, OARouteCalculationParams, OARouteProvider;
 
 struct TurnType;
 struct RouteSegmentResult;
@@ -44,6 +45,8 @@ struct RouteSegmentResult;
 
 - (void) setAppMode:(OAApplicationMode *)mode;
 - (OAApplicationMode *) getAppMode;
+
+- (OARouteProvider *) getRouteProvider;
 
 - (BOOL) isFollowingMode;
 - (NSString *) getLastRouteCalcError;
@@ -89,7 +92,12 @@ struct RouteSegmentResult;
 - (void) recalculateRouteDueToSettingsChange;
 - (void) notifyIfRouteIsCalculated;
 - (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;
+- (BOOL) isPublicTransportMode;
+
+- (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards;
+
++ (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode;
 
 @end

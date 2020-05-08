@@ -181,7 +181,6 @@ static NSInteger kButtonsSection;
         }
     }
     
-    
     NSArray *arr = [_onlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_OnlineTileSource* obj1, Item_OnlineTileSource* obj2) {
         NSString *caption1 = obj1.onlineTileSource->name.toNSString();
         NSString *caption2 = obj2.onlineTileSource->name.toNSString();
@@ -212,7 +211,8 @@ static NSInteger kButtonsSection;
     NSMutableArray *sliderArr = [NSMutableArray new];
     [sliderArr addObject:@{
                         @"type" : kCellTypeTitleSlider,
-                        @"title" : OALocalizedString(@"map_settings_transp"),
+                        @"title" : _mapSettingType == EMapSettingOverlay ? OALocalizedString(@"map_settings_transp")
+                                                                        : OALocalizedString(@"map_settings_base_transp"),
                          }];
     [sliderArr addObject:@{
                         @"type" : kCellTypeSwitch,
@@ -340,6 +340,12 @@ static NSInteger kButtonsSection;
     return section == kAvailableLayersSection ? OALocalizedString(@"map_settings_avail_lay") : @"";
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     if ((_mapSettingType == EMapSettingOverlay && section == 3) || (_mapSettingType == EMapSettingUnderlay && section == 4))
@@ -348,6 +354,12 @@ static NSInteger kButtonsSection;
         return OALocalizedString(@"map_settings_hide_polygons_desc");
     else
         return @"";
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -402,6 +414,8 @@ static NSInteger kButtonsSection;
                 Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
                 caption = item.mapSource.name;
                 description = OALocalizedString(@"online_map");
+                cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map_online"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
             }
         }
         
@@ -411,6 +425,8 @@ static NSInteger kButtonsSection;
             Item_SqliteDbTileSource *sqlite = (Item_SqliteDbTileSource *)someItem;
             description = sqlite.isOnline ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map");
             size = [NSByteCountFormatter stringFromByteCount:sqlite.size countStyle:NSByteCountFormatterCountStyleFile];
+            cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
         }
         
         cell.titleLabel.text = caption;
@@ -481,6 +497,7 @@ static NSInteger kButtonsSection;
                 cell.sliderView.value = _app.data.overlayAlpha;
             else if (_mapSettingType == EMapSettingUnderlay)
                 cell.sliderView.value = _app.data.underlayAlpha;
+            cell.valueLabel.textColor = UIColorFromRGB(color_text_footer);
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
         }
         return cell;
@@ -503,13 +520,13 @@ static NSInteger kButtonsSection;
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             if (indexPath.section == kAvailableLayersSection)
-                [cell.button addTarget:self action:@selector(installMorePressed) forControlEvents:UIControlEventTouchDown];
+                [cell.button addTarget:self action:@selector(installMorePressed) forControlEvents:UIControlEventTouchUpInside];
             else
             {
                 if (indexPath.row == 0)
-                    [cell.button addTarget:self action:@selector(addPressed) forControlEvents:UIControlEventTouchDown];
+                    [cell.button addTarget:self action:@selector(addPressed) forControlEvents:UIControlEventTouchUpInside];
                 else if (indexPath.row == 1)
-                    [cell.button addTarget:self action:@selector(importPressed) forControlEvents:UIControlEventTouchDown];
+                    [cell.button addTarget:self action:@selector(importPressed) forControlEvents:UIControlEventTouchUpInside];
             }
         }
         return cell;
@@ -643,7 +660,12 @@ static NSInteger kButtonsSection;
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return section == kAvailableLayersSection ? 34.0 : 0.0;
+    if (section == 0)
+        return 0.0;
+    else if (section == kAvailableLayersSection)
+        return 56.0;
+    else
+        return 36.0;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -665,6 +687,7 @@ static NSInteger kButtonsSection;
 
 - (void) onTileSourceSaved:(LocalResourceItem *)item
 {
+    [self setupView];
     [tblView reloadData];
 }
 

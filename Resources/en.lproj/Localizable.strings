@@ -36,7 +36,9 @@
 "mapillary_image" = "Mapillary image";
 "shared_string_milliradians" = "Milliradians";
 "angular_units" = "Angular measurement units";
-"angular_units_descr" = "Change what azimuth is measured in.";
+"angular_units_descr" = "Change azimuth measurement units.";
+"allow_3d" = "Allow 2.5D view";
+"allow_3d_descr" = "Enable this option to be able to view the map in the 2.5D perspective";
 
 "access_intermediate_arrival_time" = "Intermediate arrival time";
 "map_widget_intermediate_time" = "Intermediate time";
@@ -256,6 +258,8 @@
 "routing_settings_2" = "Navigation settings";
 "gpx_navigation" = "Follow trip";
 "impassable_road" = "Avoid roads";
+"avoid_transport_type" = "Avoid transport types";
+"consider_limitations_param" = "Consider temporary limitations";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
@@ -290,6 +294,7 @@
 "route_to" = "To";
 "route_via" = "Via";
 "route_from" = "From";
+"transfers" = "Transfers:";
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Error calculating route";
@@ -547,6 +552,7 @@
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
+"m_style_pulic_transport" = "Public transport";
 
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
@@ -566,16 +572,17 @@
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online maps";
 "map_settings_transp" = "Transparency";
+"map_settings_base_transp" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "map_settings_mapillary" = "Mapillary";
 "map_settings_terrain" = "Terrain";
 "map_settings_layer_transparency" = "Layer transparency";
-"map_settings_slopes_legend" = "You can read more about Slopes in Wikipedia";
-"map_settings_slopes_description" = "Slope is colorized visualisation on terrain";
-"map_settings_hillshade_description" = "Hillshade map using dark shades to show slopes, peaks and lowlands";
-"map_settings_zoom_level_description" = "Set the minimum and maximum zoom levels at which the layer will be displayed";
-"map_settings_add_maps_hillshade" = "Additional maps are needed to view Hillshade on the map";
+"map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
+"map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
+"map_settings_hillshade_description" = "Hillshade maps visualize slopes, peaks and lowlands using different levels of gray";
+"map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
+"map_settings_add_maps_hillshade" = "Additional maps are needed to view Hillshades on the map";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view Slopes on the map";
 "map_settings_legend" = "Legend";
 
@@ -584,6 +591,13 @@
 "map_settings_hide_polygons" = "Hide polygons";
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
+"map_settings_color_scheme" = "Color scheme";
+"map_settings_line_width" = "Line width";
+"map_settings_line_density" = "Line density";
+"map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
+"map_settings_appearance" = "Appearance";
+"map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
+"map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
 
 // Intro
@@ -967,6 +981,8 @@
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";
 "show_contour_lines" = "Show contour lines";
+"enable_contour_lines" = "Enable to view contour lines on the map";
+"enable_hillshade" = "Enable to view terrain data";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -1241,6 +1257,17 @@
 "menu_active_trips" = "Active";
 "menu_all_trips" = "All Trips";
 
+"public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
+"calc_pedestrian_route" = "Calculate pedestrian route";
+"public_transport_warning_title" = "Public transport navigation is currently in beta testing, expect errors and inaccuracies.";
+"public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
+
+"total" = "Total";
+"walk" = "Walk";
+"board_at" = "Board at";
+"exit_at" = "Exit at";
+"by_type" = "By %@";
+"num_stops" = "stops";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
 "change_group" = "Change group";
@@ -1252,6 +1279,7 @@
 "select_wpt_on_map" = "Select point on map to add to the trip";
 "gpx_rename_q" = "Rename trip";
 "gpx_enter_new_name" = "Please enter new name for the trip";
+"map_coords" = "Map: Lat %.5f Lon %.5f";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";
@@ -1767,3 +1795,25 @@
 "routing_attr_allow_motorway_description" = "Allows motorways.";
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
+
+"app_mode_default" = "Browse map";
+"app_mode_car" = "Driving";
+"app_mode_bicycle" = "Cycling";
+"app_mode_pedestrian" = "Walking";
+"app_mode_taxi" = "Taxi";
+"app_mode_shuttle_bus" = "Shuttle bus";
+"app_mode_subway" = "Subway";
+"app_mode_horse" = "Horse";
+"app_mode_helicopter" = "Helicopter";
+"app_mode_skiing" = "Skiing";
+"app_mode_personal_transporter" = "Personal transporter";
+"app_mode_monowheel" = "Monowheel";
+"app_mode_scooter" = "Scooter";
+"app_mode_ufo" = "UFO";
+"app_mode_offroad" = "Offroad";
+"app_mode_camper" = "Camper";
+"app_mode_campervan" = "Campervan (RV)";
+"app_mode_wagon" = "Wagon";
+"app_mode_pickup_truck" = "Pickup truck";
+"app_mode_utv" = "Side by Side";
+"app_mode_osm" = "OSM";

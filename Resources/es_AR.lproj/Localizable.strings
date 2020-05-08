@@ -1022,7 +1022,7 @@
 "shared_string_distance" = "Distancia";
 "shared_string_milliradians" = "Mil angular";
 "angular_units" = "Unidades de medición angular";
-"angular_units_descr" = "Cambiar el acimut en el que se mide.";
+"angular_units_descr" = "Cambiar las unidades de medición del acimut.";
 "show_tunnels" = "Túneles";
 "map_settings_map_magnifier" = "Ampliar mapa";
 "map_settings_text_size" = "Tamaño del texto";
@@ -1678,3 +1678,5 @@
 "m_style_pulic_transport" = "Transporte público";
 "consider_limitations_param" = "Considerar limitaciones temporales";
 "avoid_transport_type" = "Evitar tipos de transporte";
+"allow_3d_descr" = "Activa esta opción para poder ver el mapa en la perspectiva 2.5D";
+"allow_3d" = "Permitir vista 2.5D";

@@ -354,7 +354,7 @@
 
     if (item.worldRegion && item.worldRegion.superregion)
     {
-        NSString *countryName = [self.class getCountryName:item];
+        NSString *countryName = [OAResourcesUIHelper getCountryName:item];
         if (countryName)
             title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
         else

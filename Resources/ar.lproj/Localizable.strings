@@ -1675,3 +1675,5 @@
 "avoid_transport_type" = "تجنب أنواع النقل";
 "allow_3d_descr" = "قم بتمكين هذا الخيار لتتمكن من عرض الخريطة في منظور 2.5D";
 "allow_3d" = "السماح بعرض 2.5D";
+"product_desc_antarctica" = "تنزيلات خريطة غير محدودة للقطب الجنوبي";
+"product_title_antarctica" = "القطب الجنوبي";

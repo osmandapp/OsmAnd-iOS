@@ -1673,3 +1673,5 @@
 "public_transport_warning_title" = "Toplu taşıma navigasyonu şu anda beta testindedir, hatalar ve yanlışlıklar olabilir.";
 "allow_3d" = "2.5B görüntülemeye izin ver";
 "allow_3d_descr" = "Haritayı 2.5B görünümünde görüntülemek için bu seçeneği etkinleştirin";
+"product_desc_antarctica" = "Antarktika için sınırsız harita indirme";
+"product_title_antarctica" = "Antarktika";

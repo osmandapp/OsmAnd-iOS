@@ -1680,3 +1680,5 @@
 "avoid_transport_type" = "Evitar tipos de transporte";
 "allow_3d_descr" = "Activa esta opción para poder ver el mapa en la perspectiva 2.5D";
 "allow_3d" = "Permitir vista 2.5D";
+"product_desc_antarctica" = "Descargas ilimitadas de mapas para la Antártida";
+"product_title_antarctica" = "Antártida";

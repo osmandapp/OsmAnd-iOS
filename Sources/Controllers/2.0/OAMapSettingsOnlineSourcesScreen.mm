@@ -134,6 +134,10 @@
             case EMapSettingsScreenUnderlay:
                 _app.data.underlayMapSource = mapSource;
                 break;
+            case EMapSettingsScreenMain:
+                _app.data.overlayMapSource = mapSource;
+                //[self.vwController.parentVC.];
+                break;
         }
     }
     [self.vwController.parentVC setupView];

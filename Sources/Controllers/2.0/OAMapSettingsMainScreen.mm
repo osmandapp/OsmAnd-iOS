@@ -24,6 +24,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
+#import "Reachability.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -558,9 +559,28 @@
     if (switchView)
     {
         if (switchView.isOn)
+        {
             _app.data.overlayMapSource = _app.data.lastOverlayMapSource;
+            if (!_app.data.overlayMapSource)
+                [self installMapLayer];
+        }
         else
             _app.data.overlayMapSource = nil;
+    }
+}
+
+- (void) installMapLayer
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources];
+        [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+    }
+    else
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_upload_no_internet") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+        [self.vwController presentViewController:alert animated:YES completion:nil];
     }
 }
 
@@ -574,6 +594,8 @@
         if (switchView.isOn)
         {
             _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
+            if (!_app.data.overlayMapSource)
+                [self installMapLayer];
         }
         else
         {

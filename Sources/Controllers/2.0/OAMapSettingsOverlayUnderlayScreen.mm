@@ -590,8 +590,8 @@ static NSInteger kButtonsSection;
                 if (!_app.data.underlayMapSource )
                     [self installMorePressed];
             }
-            if ((kButtonsSection == 3 && _app.data.overlayMapSource) ||
-                (kButtonsSection == 4 &&_app.data.underlayMapSource))
+            if ((_mapSettingType == EMapSettingOverlay && _app.data.overlayMapSource) ||
+                (_mapSettingType == EMapSettingUnderlay &&_app.data.underlayMapSource))
             {
                 [tblView beginUpdates];
                 [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];

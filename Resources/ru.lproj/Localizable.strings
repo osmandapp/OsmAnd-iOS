@@ -309,6 +309,8 @@
 "product_desc_track_recording" = "Активирует функциональность записи и сохранения ваших путешествий";
 "product_title_africa" = "Африка";
 "product_desc_africa" = "Скачивание карт Африки без ограничений";
+"product_title_antarctica" = "Антарктида";
+"product_desc_antarctica" = "Скачивание карт Антарктиды без ограничений";
 "product_title_australia" = "Австралия";
 "product_desc_australia" = "Скачивание карт Австралии без ограничений";
 "product_title_centralamerica" = "Центральная Америка";
@@ -635,7 +637,7 @@
 "transport_stop" = "Стоп";
 "cancel_navigation" = "Остановить навигацию";
 "switch_start_finish" = "Обратить пункты старта и назначения";
-"shared_string_options" = "Опции";
+"shared_string_options" = "Функции";
 "new_destination_point_dialog" = "Вы уже установили пункт назначения";
 "replace_destination_point" = "Заменить пункт назначения";
 "shared_string_search" = "Поиск";
@@ -1658,3 +1660,5 @@
 "map_settings_appearance" = "Вид";
 "all_group_points" = "Все точки группы";
 "shared_string_maximum" = "Максимум";
+"exit_at" = "Выход на";
+"public_transport_warning_title" = "Навигация на общественном транспорте в настоящее время проходит бета-тестирование, возможны ошибки и неточности.";

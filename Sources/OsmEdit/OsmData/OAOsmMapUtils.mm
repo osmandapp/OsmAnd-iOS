@@ -33,7 +33,7 @@
         double minDistance = DBL_MAX;
         for (OANode *n in nodes) {
             if (n) {
-                double d = OsmAnd::Utilities::distance([n getLatitude], [n getLongitude], ll.latitude, ll.longitude);
+                double d = OsmAnd::Utilities::distance([n getLongitude], [n getLatitude], ll.longitude, ll.latitude);
                 if(d < minDistance) {
                     flat = [n getLatitude];
                     flon = [n getLongitude];
@@ -173,17 +173,17 @@
 
 +(double)getDistance:(OANode *) e1 second:(OANode *)e2
 {
-    return OsmAnd::Utilities::distance([e1 getLatitude], [e1 getLongitude], [e2 getLatitude], [e2 getLongitude]);
+    return OsmAnd::Utilities::distance([e1 getLongitude], [e1 getLatitude], [e2 getLongitude], [e2 getLatitude]);
 }
 
 +(double)getDistance:(OANode *)e1 lat:(double)latitude lon:(double)longitude
 {
-    return OsmAnd::Utilities::distance([e1 getLatitude], [e1 getLongitude], latitude, longitude);
+    return OsmAnd::Utilities::distance([e1 getLongitude], [e1 getLatitude], longitude, latitude);
 }
 
 +(double) getDistance:(OANode *)e1 location:(CLLocationCoordinate2D)point
 {
-    return OsmAnd::Utilities::distance([e1 getLatitude], [e1 getLongitude], point.latitude, point.longitude);
+    return OsmAnd::Utilities::distance([e1 getLongitude], [e1 getLatitude], point.longitude, point.latitude);
 }
 
 @end

@@ -576,7 +576,7 @@
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
-    const auto& localResources = app.resourcesManager->getLocalResources();
+    const auto& localResources = app.resourcesManager->getSortedLocalResources();
     QuadRect *rect = [[QuadRect alloc] initWithLeft:leftX top:topY right:rightX bottom:bottomY];
     auto dataTypes = OsmAnd::ObfDataTypesMask();
     dataTypes.set(OsmAnd::ObfDataType::Map);

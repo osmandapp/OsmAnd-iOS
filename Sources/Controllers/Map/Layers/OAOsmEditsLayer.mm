@@ -196,7 +196,7 @@
             double pointLon = osmPoint.getLongitude;
             if ([OAUtilities isCoordEqual:pointLat srcLon:pointLon destLat:lat destLon:lon])
             {
-                if (OsmAnd::Utilities::distance(pointLat, pointLon, point.latitude, point.longitude) < 15) {
+                if (OsmAnd::Utilities::distance(pointLon, pointLat, point.longitude, point.latitude) < 15) {
                     OATargetPoint *targetPoint = [self getTargetPoint:osmPoint];
                     if (![found containsObject:targetPoint])
                         [found addObject:targetPoint];

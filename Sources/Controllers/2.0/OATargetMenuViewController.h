@@ -193,6 +193,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes;
 - (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes;
 
++ (void) renameVisibleTrack:(NSString *)oldName newName:(NSString *) newName;
 
 @end
 

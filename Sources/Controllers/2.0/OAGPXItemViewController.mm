@@ -1442,31 +1442,14 @@
             if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
                 [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
             
-            if (![_mapViewController updateMetadata:metadata oldPath:self.doc.fileName docPath:path])
-            {
-                self.doc.fileName = path;
-                self.doc.metadata = metadata;
+            BOOL saveManually = ![_mapViewController updateMetadata:metadata oldPath:self.doc.fileName docPath:path];
+            self.doc.fileName = path;
+            self.doc.metadata = metadata;
+            
+            if (saveManually)
                 [self.doc saveTo:path];
-            }
-            else
-            {
-                self.doc.fileName = path;
-                self.doc.metadata = metadata;
-            }
             
-            OAAppSettings *settings = OAAppSettings.sharedManager;
-            NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx];
-            for (NSString *gpx in settings.mapSettingVisibleGpx)
-            {
-                if ([gpx isEqualToString:oldFileName])
-                {
-                    [visibleGpx removeObject:gpx];
-                    [visibleGpx addObject:path.lastPathComponent];
-                    break;
-                }
-            }
-            
-            settings.mapSettingVisibleGpx = [NSArray arrayWithArray:visibleGpx];
+            [self.class renameVisibleTrack:oldFileName newName:path.lastPathComponent];
             
             self.titleView.text = newName;
             if (self.delegate)

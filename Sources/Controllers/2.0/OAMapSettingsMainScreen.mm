@@ -562,18 +562,18 @@
         {
             _app.data.overlayMapSource = _app.data.lastOverlayMapSource;
             if (!_app.data.overlayMapSource)
-                [self installMapLayer];
+                [self installMapLayerFor:@"overlay"];
         }
         else
             _app.data.overlayMapSource = nil;
     }
 }
 
-- (void) installMapLayer
+- (void) installMapLayerFor:(id)param
 {
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
     {
-        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources];
+        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources param:param];
         [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     }
     else
@@ -594,8 +594,8 @@
         if (switchView.isOn)
         {
             _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
-            if (!_app.data.overlayMapSource)
-                [self installMapLayer];
+            if (!_app.data.underlayMapSource)
+                [self installMapLayerFor:@"underlay"];
         }
         else
         {

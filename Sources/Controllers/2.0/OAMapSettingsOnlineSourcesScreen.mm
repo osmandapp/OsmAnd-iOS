@@ -22,12 +22,20 @@
 
 #define kMaxDoneWidth 70
 
+typedef enum
+{
+    EMapSettingOverlay = 0,
+    EMapSettingUnderlay,
+    
+} EMapSettingType;
+
 @implementation OAMapSettingsOnlineSourcesScreen
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     
     UIButton *_btnDone;
+    EMapSettingType _mapSettingType;
 
     QList<std::shared_ptr<const OsmAnd::OnlineTileSources::Source>> _onlineMapSources;
     QList<std::shared_ptr<const OsmAnd::OnlineTileSources::Source>> _selectedSources;
@@ -36,7 +44,7 @@
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 
-- (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
+- (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param
 {
     self = [super init];
     if (self)
@@ -54,6 +62,11 @@
         [vwController.okButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
         CGSize btnSize = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_done") width:kMaxDoneWidth font:vwController.okButton.titleLabel.font];
         [vwController.okButton setConstant:@"buttonWidth" constant:btnSize.width + 32.];
+        
+        if ([param isEqualToString:@"overlay"])
+            _mapSettingType = EMapSettingOverlay;
+        else
+            _mapSettingType = EMapSettingUnderlay;
         
         [self commonInit];
         [self initData];
@@ -135,8 +148,10 @@
                 _app.data.underlayMapSource = mapSource;
                 break;
             case EMapSettingsScreenMain:
-                _app.data.overlayMapSource = mapSource;
-                //[self.vwController.parentVC.];
+                if (_mapSettingType == EMapSettingOverlay)
+                    _app.data.overlayMapSource = mapSource;
+                else
+                    _app.data.underlayMapSource = mapSource;
                 break;
         }
     }

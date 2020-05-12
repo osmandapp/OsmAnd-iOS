@@ -23,7 +23,6 @@
 #import "OAGPXTrackColorCollection.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXRouter.h"
-#import "OASelectedGPXHelper.h"
 #import "OASizes.h"
 
 #import "OAMapRendererView.h"

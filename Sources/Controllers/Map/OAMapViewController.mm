@@ -2950,7 +2950,7 @@
     return found;
 }
 
-- (BOOL)updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath
+- (BOOL)updateMetadata:(OAGpxMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath
 {
     if (!metadata)
         return NO;
@@ -2959,7 +2959,7 @@
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         NSString *path = it.key().toNSString();
-        if ([path isEqualToString:docPath])
+        if ([path isEqualToString:oldPath])
         {
             auto docGeoInfo = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
             auto doc = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(docGeoInfo);
@@ -2975,6 +2975,9 @@
             
             [OAGPXDocument fillMetadata:m usingMetadata:metadata];
 
+            _selectedGpxHelper.activeGpx.remove(QString::fromNSString(oldPath));
+            _selectedGpxHelper.activeGpx[QString::fromNSString(docPath)] = doc;
+            
             doc->saveTo(QString::fromNSString(docPath));
             
             return YES;

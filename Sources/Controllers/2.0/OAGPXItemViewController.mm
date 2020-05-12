@@ -22,6 +22,7 @@
 #import "OAEditGPXColorViewController.h"
 #import "OAGPXTrackColorCollection.h"
 #import "OADefaultFavorite.h"
+#import "OASelectedGPXHelper.h"
 #import "OAGPXRouter.h"
 #import "OASizes.h"
 
@@ -1442,14 +1443,14 @@
             if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
                 [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
             
-            BOOL saveManually = ![_mapViewController updateMetadata:metadata oldPath:self.doc.fileName docPath:path];
+            BOOL saveFailed = ![_mapViewController updateMetadata:metadata oldPath:self.doc.fileName docPath:path];
             self.doc.fileName = path;
             self.doc.metadata = metadata;
             
-            if (saveManually)
+            if (saveFailed)
                 [self.doc saveTo:path];
             
-            [self.class renameVisibleTrack:oldFileName newName:path.lastPathComponent];
+            [OASelectedGPXHelper renameVisibleTrack:oldFileName newName:path.lastPathComponent];
             
             self.titleView.text = newName;
             if (self.delegate)

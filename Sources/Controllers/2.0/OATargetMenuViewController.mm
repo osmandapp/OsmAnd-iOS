@@ -974,21 +974,4 @@
 {
 }
 
-+ (void) renameVisibleTrack:(NSString *)oldName newName:(NSString *) newName
-{
-    OAAppSettings *settings = OAAppSettings.sharedManager;
-    NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx];
-    for (NSString *gpx in settings.mapSettingVisibleGpx)
-    {
-        if ([gpx isEqualToString:oldName])
-        {
-            [visibleGpx removeObject:gpx];
-            [visibleGpx addObject:newName];
-            break;
-        }
-    }
-    
-    settings.mapSettingVisibleGpx = [NSArray arrayWithArray:visibleGpx];
-}
-
 @end

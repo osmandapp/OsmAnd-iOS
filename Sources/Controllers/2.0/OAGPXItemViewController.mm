@@ -23,6 +23,7 @@
 #import "OAGPXTrackColorCollection.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXRouter.h"
+#import "OASelectedGPXHelper.h"
 #import "OASizes.h"
 
 #import "OAMapRendererView.h"
@@ -1396,6 +1397,7 @@
         NSString* newName = [alertView textFieldAtIndex:0].text;
         if (newName.length > 0)
         {
+            NSString *oldFileName = self.gpx.gpxFileName;
             self.gpx.gpxTitle = newName;
             self.gpx.gpxFileName = [self.gpx.gpxTitle stringByAppendingPathExtension:@"gpx"];
             [[OAGPXDatabase sharedDb] save];
@@ -1441,8 +1443,31 @@
             if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
                 [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
             
-            self.doc.fileName = path;
-            [_mapViewController updateMetadata:metadata docPath:path];
+            if (![_mapViewController updateMetadata:metadata oldPath:self.doc.fileName docPath:path])
+            {
+                self.doc.fileName = path;
+                self.doc.metadata = metadata;
+                [self.doc saveTo:path];
+            }
+            else
+            {
+                self.doc.fileName = path;
+                self.doc.metadata = metadata;
+            }
+            
+            OAAppSettings *settings = OAAppSettings.sharedManager;
+            NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx];
+            for (NSString *gpx in settings.mapSettingVisibleGpx)
+            {
+                if ([gpx isEqualToString:oldFileName])
+                {
+                    [visibleGpx removeObject:gpx];
+                    [visibleGpx addObject:path.lastPathComponent];
+                    break;
+                }
+            }
+            
+            settings.mapSettingVisibleGpx = [NSArray arrayWithArray:visibleGpx];
             
             self.titleView.text = newName;
             if (self.delegate)

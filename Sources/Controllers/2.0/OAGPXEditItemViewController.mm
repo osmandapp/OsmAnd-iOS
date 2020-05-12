@@ -595,7 +595,9 @@
             NSString* newName = [alertView textFieldAtIndex:0].text;
             if (newName.length > 0)
             {
+                NSString *oldFileName = self.gpx.gpxFileName;
                 self.gpx.gpxTitle = newName;
+                self.gpx.gpxFileName = [self.gpx.gpxTitle stringByAppendingPathExtension:@"gpx"];
                 [[OAGPXDatabase sharedDb] save];
                 
                 OAGpxMetadata *metadata;
@@ -635,7 +637,34 @@
                 metadata.name = newName;
                 
                 NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
-                [_mapViewController updateMetadata:metadata docPath:path];
+                if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
+                    [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
+                
+                if (![_mapViewController updateMetadata:metadata oldPath:self.doc.fileName docPath:path])
+                {
+                    self.doc.fileName = path;
+                    self.doc.metadata = metadata;
+                    [self.doc saveTo:path];
+                }
+                else
+                {
+                    self.doc.fileName = path;
+                    self.doc.metadata = metadata;
+                }
+                
+                OAAppSettings *settings = OAAppSettings.sharedManager;
+                NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx];
+                for (NSString *gpx in settings.mapSettingVisibleGpx)
+                {
+                    if ([gpx isEqualToString:oldFileName])
+                    {
+                        [visibleGpx removeObject:gpx];
+                        [visibleGpx addObject:path.lastPathComponent];
+                        break;
+                    }
+                }
+                
+                settings.mapSettingVisibleGpx = [NSArray arrayWithArray:visibleGpx];
                 
                 [_mapViewController hideTempGpxTrack];
                 

@@ -513,6 +513,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 // Direction Appearance
 
+//Should be enum like OAProfileAngularConstant
+
 @property (nonatomic) OAProfileBoolean *oneActiveMarker;
 @property (nonatomic) OAProfileBoolean *twoActiveMarker;
 @property (nonatomic) OAProfileBoolean *distanceIndication;

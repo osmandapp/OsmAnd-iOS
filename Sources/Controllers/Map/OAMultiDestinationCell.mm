@@ -65,7 +65,7 @@
 
 - (NSInteger)destinationsCount
 {
-    return [_settings.twoActiveMarker get] ? MIN(2, _destinations.count) : 1;
+    return MIN([_settings.twoActiveMarker get] ? 2 : 1, _destinations.count);
 }
 
 - (void)updateLayout:(CGRect)frame

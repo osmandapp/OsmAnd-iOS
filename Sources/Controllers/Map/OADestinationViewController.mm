@@ -415,9 +415,8 @@
             if (_multiCell)
                 _multiCell.contentView.hidden = YES;
 
-            //if ([_settings.topBarDisplay get])
-                for (OADestinationCell *cell in _destinationCells)
-                    cell.contentView.hidden = NO;
+            for (OADestinationCell *cell in _destinationCells)
+                cell.contentView.hidden = NO;
         }
     }
     else

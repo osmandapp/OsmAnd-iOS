@@ -254,7 +254,6 @@ typedef enum
     self.targetMultiMenuView = [[OATargetMultiView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
 
     [self updateHUD:NO];
- 
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -266,7 +265,6 @@ typedef enum
         _mapNeedsRestore = NO;
         [self restoreMapAfterReuse];
     }
-    [_app.data.destinationsChangeObservable notifyEvent];
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
@@ -3127,8 +3125,6 @@ typedef enum
         {
             cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
             cardsController.bottomToolBarView.frame = CGRectMake(0.0, -DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight);
-            
-            
             [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
                 cardsController.cardsView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, cardsTableHeight);
                 _shadeView.alpha = 1.0;

@@ -28,7 +28,6 @@
 #import "OATopTextView.h"
 #import "OAAlarmWidget.h"
 #import "OARulerWidget.h"
-#import "OADestinationsLineWidget.h"
 
 @interface OATextState : NSObject
 
@@ -66,7 +65,6 @@
     OALanesControl *_lanesControl;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
-    OADestinationsLineWidget *_destinationLineControl;
     
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;

@@ -59,12 +59,13 @@
         
         __weak OATextInfoWidget *selfWeak = self;
         selfWeak.onClickFunction = ^(id sender) {
-            [self click];
+            [self onWidgetClicked];
         };
     }
     return self;
 }
 
+//Move to constructor
 - (BOOL) updateInfo
 {
     static BOOL firstWidget = YES;
@@ -83,6 +84,7 @@
         [self updateVisibility:YES];
         _markerDestination = (destinations.count >= 1 ? destinations[0] : nil);
         
+        ///!!!!! Do not use c++ library if not really needed.
         const auto dist = OsmAnd::Utilities::distance(_markerDestination.longitude, _markerDestination.latitude,
                                                       currLoc.coordinate.longitude, currLoc.coordinate.latitude);
         
@@ -105,6 +107,8 @@
         {
             [self updateVisibility:YES];
             _markerDestination = (destinations.count >= 2 ? destinations[1] : nil);
+            
+            ///!!!!! Do not use c++ library if not really needed.
             const auto dist = OsmAnd::Utilities::distance(_markerDestination.longitude, _markerDestination.latitude,
                                                           currLoc.coordinate.longitude, currLoc.coordinate.latitude);
             
@@ -126,7 +130,7 @@
 {
     UIGraphicsBeginImageContextWithOptions(bgImage.size, NO, 0.0);
     
-    [bgImage drawInRect:CGRectMake( 0, 0, bgImage.size.width, bgImage.size.height)];
+    [bgImage drawInRect:CGRectMake( 0.0, 0.0, bgImage.size.width, bgImage.size.height)];
     [fgImage drawInRect:CGRectMake( 0.0, 0.0, fgImage.size.width, fgImage.size.height)];
     
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -144,7 +148,7 @@
     return YES;
 }
 
-- (void) click
+- (void) onWidgetClicked
 {
     if (_markerDestination.hidden)
         [[OADestinationsHelper instance] showOnMap:_markerDestination];
@@ -152,18 +156,6 @@
     [[OARootViewController instance].mapPanel hideDestinationCardsView];
     [[OARootViewController instance].mapPanel openTargetViewWithDestination:_markerDestination];
     
-}
-
-- (CLLocation *) getPointToNavigate
-{
-    return nil;
-}
-
-- (CLLocationDistance) getDistance
-{
-    CLLocationDistance d = 0;
-    
-    return d;
 }
 
 @end

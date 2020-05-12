@@ -71,7 +71,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
 @end
 
-@interface OAMapMarkerLineControl : OADistanceToMapMarkerControl
+@interface OAMapMarkerLineControl : OADistanceToMapMarkerControl // Remove
 
 @end
 

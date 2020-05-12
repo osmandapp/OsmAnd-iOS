@@ -251,8 +251,6 @@
         cell.iconImageView.image = [self drawImage:fgImage inImage:bgImage bgColor:item[@"bg_color"] fgColor:item[@"fg_color"]];
         cell.titleLabel.text = item[@"title"];
         
-        cell.checkmarkImageView.hidden = ![item[@"value"] boolValue];
-        
         if ([item[@"key"] isEqualToString:kOneActiveMarker])
             cell.checkmarkImageView.hidden = ![_settings.oneActiveMarker get];
         if ([item[@"key"] isEqualToString:kTwoActiveMarkers])
@@ -276,23 +274,22 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            cell.descriptionView.hidden = YES;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         
         cell.textView.text = item[@"title"];
-        cell.descriptionView.hidden = YES;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
         if ([item[@"key"] isEqualToString:kDistanceIndication])
         {
             [cell.switchView setOn:[_settings.distanceIndication get]];
             [cell.switchView addTarget:self action:@selector(showDistanceIndication:) forControlEvents:UIControlEventValueChanged];
         }
-        if ([item[@"key"] isEqualToString:kArrowsOnMap])
+        else if ([item[@"key"] isEqualToString:kArrowsOnMap])
         {
             [cell.switchView setOn:[_settings.arrowsOnMap get]];
             [cell.switchView addTarget:self action:@selector(showArrowsOnMap:) forControlEvents:UIControlEventValueChanged];
         }
-        if ([item[@"key"] isEqualToString:kLinesOnMap])
+        else if ([item[@"key"] isEqualToString:kLinesOnMap])
         {
             [cell.switchView setOn:[_settings.directionLines get]];
             [cell.switchView addTarget:self action:@selector(showLinesOnMap:) forControlEvents:UIControlEventValueChanged];
@@ -348,9 +345,7 @@
 {
     NSString *title = [self getTitleForFooterSection:section];
     OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
-
     vw.label.text = title;
-    
     return vw;
 }
 

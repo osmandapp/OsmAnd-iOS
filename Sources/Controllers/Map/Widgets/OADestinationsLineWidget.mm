@@ -196,8 +196,6 @@
             if (secondMarkerDestination && [_settings.twoActiveMarker get])
                 [self drawArrow:secondMarkerDestination inContext:ctx];
         }
-        
-        
     }
     UIGraphicsPopContext();
 }
@@ -210,6 +208,8 @@
     NSValue *markerPoint = [self getPointFromLat:marker.latitude lon:marker.longitude];
     const auto dist = OsmAnd::Utilities::distance(marker.longitude, marker.latitude,
                                                   currLoc.coordinate.longitude, currLoc.coordinate.latitude);
+    if (!markerPoint)
+        return;
     if (!pointOfCurrentLocation)
     {
         CGPoint touch = markerPoint.CGPointValue;
@@ -312,6 +312,9 @@
 {
     NSValue *markerPoint = [self getPointFromLat:marker.latitude lon:marker.longitude];
     
+    if (!markerPoint)
+        return;
+    
     for (NSInteger i = 0; i < self.colors.count; i++)
         if ([marker.color isEqual:self.colors[i]])
             _arrowColor = _markerNames[i];
@@ -331,7 +334,6 @@
         UIImage *arrowIcon = [self getArrowImage:[UIImage imageNamed:kArrowFrame]
                                          inImage:[UIImage imageNamed:_arrowColor]
                                       withShadow:[UIImage imageNamed:kArrowShadow]];
-        
         
         CGRect imageRect = CGRectMake(0, 0, arrowIcon.size.width, arrowIcon.size.height);
         CGContextTranslateCTM(ctx, screenCenter.x, screenCenter.y);

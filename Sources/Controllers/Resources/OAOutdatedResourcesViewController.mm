@@ -167,10 +167,10 @@
 
         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
         item.resourceId = resource->id;
-        item.title = [self.class titleOfResource:resource
-                                  inRegion:match
-                            withRegionName:YES
-                          withResourceType:NO];
+        item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                 inRegion:match
+                                           withRegionName:YES
+                                         withResourceType:NO];
         item.resource = resource;
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.worldRegion = match;
@@ -354,7 +354,7 @@
 
     if (item.worldRegion && item.worldRegion.superregion)
     {
-        NSString *countryName = [self.class getCountryName:item];
+        NSString *countryName = [OAResourcesUIHelper getCountryName:item];
         if (countryName)
             title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
         else

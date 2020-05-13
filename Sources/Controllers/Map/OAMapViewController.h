@@ -174,7 +174,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
-- (BOOL) updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath;
+- (BOOL) updateMetadata:(OAGpxMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;
 

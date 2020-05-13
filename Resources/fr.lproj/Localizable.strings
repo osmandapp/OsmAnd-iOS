@@ -1556,3 +1556,5 @@
 "map_settings_color_scheme" = "Couleur du thème";
 "map_settings_appearance" = "Apparence";
 "res_expire_warning" = "Le délai d'expiration doit être un nombre compris entre 0 et 10 000 000";
+"exit_at" = "Sortir à";
+"public_transport_warning_title" = "Les itinéraires en transports publics sont actuellement en phase de test. Des erreurs ou des imprécisions peuvent avoir lieu.";

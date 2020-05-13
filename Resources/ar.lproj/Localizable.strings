@@ -1648,7 +1648,7 @@
 "app_mode_pedestrian" = "مشي";
 "app_mode_bicycle" = "دراجة";
 "app_mode_car" = "سيارة";
-"app_mode_default" = "استعراض الخريطة";
+"app_mode_default" = "استعراض";
 "enable_contour_lines" = "تمكين لعرض خطوط الكنتور على الخريطة";
 "map_settings_available_srtm_maps_descr" = "تحتاج إلى خرائط إضافية لعرض التضاريس على الخريطة";
 "map_settings_line_density_slowdown_warning" = "قد يؤدي ارتفاع كثافة الخط إلى تباطؤ عرض الخريطة";

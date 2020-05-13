@@ -468,8 +468,8 @@
     defaults.underlayAlpha = 0.5;
     defaults.lastOverlayMapSource = NULL;
     defaults.lastUnderlayMapSource = NULL;
-    defaults.hillshade = EOATerrainTypeHillshade;
-    //defaults.lastHillshade = EOATerrainTypeHillshade;
+    defaults.hillshade = EOATerrainTypeDisabled;
+    defaults.lastHillshade = EOATerrainTypeDisabled;
     defaults.hillshadeAlpha = 0.45;
     // Imagine that last viewed location was center of the world
     Point31 centerOfWorld;

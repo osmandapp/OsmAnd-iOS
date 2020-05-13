@@ -5233,6 +5233,10 @@
 		DAC04717221BEA0600299EC2 /* OAOsmEditingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC04713221BEA0500299EC2 /* OAOsmEditingSettingsViewController.xib */; };
 		DAC04718221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */; };
 		DAC04719221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */; };
+		DAC1DB89246BE05600FF4A78 /* OAImageTextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC1DB88246BE05600FF4A78 /* OAImageTextViewCell.xib */; };
+		DAC1DB8A246BE05600FF4A78 /* OAImageTextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC1DB88246BE05600FF4A78 /* OAImageTextViewCell.xib */; };
+		DAC1DB8D246BE0BF00FF4A78 /* OAImageTextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC1DB8C246BE0BF00FF4A78 /* OAImageTextViewCell.m */; };
+		DAC1DB8E246BE0BF00FF4A78 /* OAImageTextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC1DB8C246BE0BF00FF4A78 /* OAImageTextViewCell.m */; };
 		DAC38BEC20F62CAF00D4E5E1 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */; };
 		DAC5885A2108992A008B7763 /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC5885921089929008B7763 /* de_tts.js */; };
 		DAC5885B2108992A008B7763 /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC5885921089929008B7763 /* de_tts.js */; };
@@ -9058,6 +9062,9 @@
 		DAC04713221BEA0500299EC2 /* OAOsmEditingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAOsmEditingSettingsViewController.xib; path = Sources/Controllers/2.0/OAOsmEditingSettingsViewController.xib; sourceTree = "<group>"; };
 		DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmEditingSettingsViewController.mm; path = Sources/Controllers/2.0/OAOsmEditingSettingsViewController.mm; sourceTree = "<group>"; };
 		DAC04715221BEA0600299EC2 /* OAOsmEditingSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmEditingSettingsViewController.h; path = Sources/Controllers/2.0/OAOsmEditingSettingsViewController.h; sourceTree = "<group>"; };
+		DAC1DB88246BE05600FF4A78 /* OAImageTextViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAImageTextViewCell.xib; path = Resources/Controllers/Cells/OAImageTextViewCell.xib; sourceTree = "<group>"; };
+		DAC1DB8B246BE0B500FF4A78 /* OAImageTextViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAImageTextViewCell.h; path = Controllers/Cells/OAImageTextViewCell.h; sourceTree = "<group>"; };
+		DAC1DB8C246BE0BF00FF4A78 /* OAImageTextViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAImageTextViewCell.m; path = Controllers/Cells/OAImageTextViewCell.m; sourceTree = "<group>"; };
 		DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		DAC5885921089929008B7763 /* de_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = de_tts.js; path = ../resources/voice/de/de_tts.js; sourceTree = "<group>"; };
 		DAC5885C21089938008B7763 /* en_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = en_tts.js; path = ../resources/voice/en/en_tts.js; sourceTree = "<group>"; };
@@ -9499,6 +9506,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DAC1DB88246BE05600FF4A78 /* OAImageTextViewCell.xib */,
 				7851F2FF241A987100F7F1ED /* OASegmentTableViewCell.xib */,
 				DA38B5E2245430370097D6EA /* OAPublicTransportRouteShieldCell.xib */,
 				DAAB0B4A2452FF3D002AA2F3 /* OAPublicTransportCollapsableCell.xib */,
@@ -9607,6 +9615,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DAC1DB8C246BE0BF00FF4A78 /* OAImageTextViewCell.m */,
+				DAC1DB8B246BE0B500FF4A78 /* OAImageTextViewCell.h */,
 				7851F2F8241A97FA00F7F1ED /* OASegmentTableViewCell.h */,
 				7851F2F9241A97FA00F7F1ED /* OASegmentTableViewCell.m */,
 				DA38B5E52454307D0097D6EA /* OAPublicTransportRouteShieldCell.h */,
@@ -14898,6 +14908,7 @@
 				DA68B3D8233B822100F5ACCC /* ic_profile_pedestrian@3x.png in Resources */,
 				DAF345B822F4482C009E2EB6 /* ic_custom_compound_action_remove.png in Resources */,
 				DA8DB8DC218DA7DD00EBF914 /* ic_ruler_center@2x.png in Resources */,
+				DAC1DB8A246BE05600FF4A78 /* OAImageTextViewCell.xib in Resources */,
 				DA1341D5243DC5A90039D214 /* map_action_horse@3x.png in Resources */,
 				DA134187243DC5A80039D214 /* ic_world_globe_dark.png in Resources */,
 				8476E2E91F6C1EEC00EC274F /* map_start_point@3x.png in Resources */,
@@ -17852,6 +17863,7 @@
 				847F8FDA1EE0818900CF5EA5 /* OAEmptySearchCell.xib in Resources */,
 				8464E3301FC1B86F00E83661 /* map_compass_bearing.png in Resources */,
 				DA1341A6243DC5A80039D214 /* ic_action_campervan@3x.png in Resources */,
+				DAC1DB89246BE05600FF4A78 /* OAImageTextViewCell.xib in Resources */,
 				DA03184022DF0E50008FC564 /* ic_custom_boat.png in Resources */,
 				DA68B3F0233B824D00F5ACCC /* ic_custom_destination@2x.png in Resources */,
 				DA1340EE243DC5A80039D214 /* ic_world_globe_dark@2x.png in Resources */,
@@ -19056,6 +19068,7 @@
 				847A1D1A1DF94E9B003C1246 /* OAOutdatedResourcesViewController.mm in Sources */,
 				847A1D1B1DF94E9B003C1246 /* OAIconTextDescCell.m in Sources */,
 				8AC405C720F9E08400F85CC9 /* OATransportStop.mm in Sources */,
+				DAC1DB8E246BE0BF00FF4A78 /* OAImageTextViewCell.m in Sources */,
 				8476E1F31F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
 				847A1D1C1DF94E9B003C1246 /* OAUserInteractionPassThroughView.m in Sources */,
 				847A1D1D1DF94E9B003C1246 /* OAHillshadeLayer.mm in Sources */,
@@ -19786,6 +19799,7 @@
 				847B2DB81F7A6BBE008C7AD9 /* OASettingsTitleTableViewCell.m in Sources */,
 				8457F8201ED88B1700500FF2 /* OAQuickSearchHeaderListItem.mm in Sources */,
 				844E07B31E3F942D00EFC525 /* OAAddress.mm in Sources */,
+				DAC1DB8D246BE0BF00FF4A78 /* OAImageTextViewCell.m in Sources */,
 				DA08F15B216776C8009584C1 /* OARulerWidget.mm in Sources */,
 				DAFC9CF02358799400E5ECAE /* OADescrTitleIconCell.m in Sources */,
 				DA38B5E72454307E0097D6EA /* OAPublicTransportRouteShieldCell.m in Sources */,

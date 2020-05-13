@@ -761,7 +761,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         }
         else
         {
-            if (item.resourceType == OsmAndResourceType::HillshadeRegion)
+            if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
             {
                 NSString *filename = [app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString() lastPathComponent];
                 if (app.data.hillshade == EOATerrainTypeHillshade)
@@ -779,7 +779,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             }
             else
             {
-                if (item.resourceType == OsmAndResourceType::HillshadeRegion)
+                if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
                     [app.data.hillshadeResourcesChangeObservable notifyEvent];
                 
                 if (block)

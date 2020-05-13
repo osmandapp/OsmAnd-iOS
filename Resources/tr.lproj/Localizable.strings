@@ -871,7 +871,7 @@
 "add_map_source" = "Harita kaynağı ekle";
 "osmand_live_update_now" = "Şimdi güncelle";
 "relief_smoothness_factor_descr" = "Tercih edilen arazi: düz ya da engebeli";
-"pause_resume_nav" = "Navigasyonu duraklat/sürdür";
+"pause_resume_nav" = "Navigasyonu duraklat/devam ettir";
 "red" = "Kırmızı";
 "show_something_on_map" = "%@ 'ı haritada göster";
 "fav_add_group" = "Grup ekle";
@@ -1675,3 +1675,4 @@
 "allow_3d_descr" = "Haritayı 2.5B görünümünde görüntülemek için bu seçeneği etkinleştirin";
 "product_desc_antarctica" = "Antarktika için sınırsız harita indirme";
 "product_title_antarctica" = "Antarktika";
+"board_at" = "Bin";

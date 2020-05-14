@@ -17,6 +17,7 @@
 #import "OADestinationsHelper.h"
 #import "OAMapViewController.h"
 #import "OAMapLayers.h"
+#import "OAColors.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -90,15 +91,16 @@
     _longSingleGestureRecognizer.delegate = self;
     [self addGestureRecognizer:_longSingleGestureRecognizer];
     
-    self.colors = @[UIColorFromRGB(0xff9207),
-                    UIColorFromRGB(0x00bcd4),
-                    UIColorFromRGB(0x7fbd4d),
-                    UIColorFromRGB(0xff444a),
-                    UIColorFromRGB(0xcddc39)];
+    self.colors = @[UIColorFromRGB(marker_pin_color_orange),
+                    UIColorFromRGB(marker_pin_color_blue),
+                    UIColorFromRGB(marker_pin_color_green),
+                    UIColorFromRGB(marker_pin_color_red),
+                    UIColorFromRGB(marker_pin_color_light_green)];
     
     self.markerNames = @[@"map_marker_direction_arrow_p2_color_pin_1", @"map_marker_direction_arrow_p2_color_pin_2", @"map_marker_direction_arrow_p2_color_pin_3", @"map_marker_direction_arrow_p2_color_pin_4", @"map_marker_direction_arrow_p2_color_pin_5"];
     
     self.hidden = NO;
+    [self initDestinationLayer];
 }
 
 #pragma mark - Layer
@@ -128,8 +130,8 @@
 
 - (BOOL) updateLayer
 {
-    [self clearLayers];
-    [self initDestinationLayer];
+    //[self clearLayers];
+    //[self initDestinationLayer];
     if (_destinationLineSublayer.superlayer != self.layer)
         [self.layer insertSublayer:_destinationLineSublayer above:self.layer];
     [_destinationLineSublayer setNeedsDisplay];
@@ -165,14 +167,13 @@
     NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
     OADestination *firstMarkerDestination = (destinations.count >= 1 ? destinations[0] : nil);
     OADestination *secondMarkerDestination = (destinations.count >= 2 ? destinations[1] : nil);
-    
     if (layer == _destinationLineSublayer)
     {
         if (_tapLocation)
         {
             if (firstMarkerDestination)
                 [self drawLine:firstMarkerDestination fromLocation:_tapLocation inContext:ctx];
-            if (secondMarkerDestination && [_settings.twoActiveMarker get])
+            if (secondMarkerDestination && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
                 [self drawLine:secondMarkerDestination fromLocation:_tapLocation inContext:ctx];
             return;
         }
@@ -184,7 +185,7 @@
             {
                 if (firstMarkerDestination)
                     [self drawLine:firstMarkerDestination fromLocation:currLoc inContext:ctx];
-                if (secondMarkerDestination && [_settings.twoActiveMarker get])
+                if (secondMarkerDestination && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
                     [self drawLine:secondMarkerDestination fromLocation:currLoc inContext:ctx];
             }
         }
@@ -193,7 +194,7 @@
         {
             if (firstMarkerDestination)
                 [self drawArrow:firstMarkerDestination inContext:ctx];
-            if (secondMarkerDestination && [_settings.twoActiveMarker get])
+            if (secondMarkerDestination && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
                 [self drawArrow:secondMarkerDestination inContext:ctx];
         }
     }
@@ -314,7 +315,6 @@
     
     if (!markerPoint)
         return;
-    
     for (NSInteger i = 0; i < self.colors.count; i++)
         if ([marker.color isEqual:self.colors[i]])
             _arrowColor = _markerNames[i];
@@ -334,7 +334,6 @@
         UIImage *arrowIcon = [self getArrowImage:[UIImage imageNamed:kArrowFrame]
                                          inImage:[UIImage imageNamed:_arrowColor]
                                       withShadow:[UIImage imageNamed:kArrowShadow]];
-        
         CGRect imageRect = CGRectMake(0, 0, arrowIcon.size.width, arrowIcon.size.height);
         CGContextTranslateCTM(ctx, screenCenter.x, screenCenter.y);
         CGContextRotateCTM(ctx, angle);
@@ -347,14 +346,11 @@
 - (UIImage *) getArrowImage:(UIImage*) fgImage inImage:(UIImage*) bgImage withShadow:(UIImage*)shadow
 {
     UIGraphicsBeginImageContextWithOptions(bgImage.size, NO, 0.0);
-    
     [shadow drawInRect:CGRectMake(0.0, 0.0, shadow.size.width, shadow.size.height)];
     [bgImage drawInRect:CGRectMake(0.0, 0.0, bgImage.size.width, bgImage.size.height)];
     [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
-    
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
     return newImage;
 }
 
@@ -375,7 +371,6 @@
 - (double) changeArrowAngle:(CLLocationCoordinate2D)current marker:(OADestination *)marker
 {
     CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:marker.latitude longitude:marker.longitude] sourceLocation:[[CLLocation alloc] initWithLatitude:current.latitude longitude:current.longitude]];
-    
     return (itemDirection - 90) * (M_PI / 180);
 }
 
@@ -392,11 +387,13 @@
 
 - (void) touchDetected:(UITapGestureRecognizer *)recognizer
 {
-    if (recognizer.state != UIGestureRecognizerStateEnded) {
+    if (recognizer.state != UIGestureRecognizerStateEnded)
+    {
         CLLocationCoordinate2D tapPoint = [self getPointCoord:[recognizer locationInView:self]];
         _tapLocation = [[CLLocation alloc] initWithLatitude:tapPoint.latitude longitude:tapPoint.longitude];
     }
-    else {
+    else
+    {
         _tapLocation = nil;
         [self updateLayer];
     }
@@ -428,8 +425,6 @@
 
 - (NSValue *) pointOnRect:(CGFloat)x y:(CGFloat)y minX:(CGFloat)minX minY:(CGFloat)minY maxX:(CGFloat)maxX maxY:(CGFloat)maxY startPoint:(CGPoint)start
 {
-    //assert minX <= maxX;
-    //assert minY <= maxY;
     if ((minX < x && x < maxX) && (minY < y && y < maxY))
         return nil;
     CGFloat startX = start.x;
@@ -442,26 +437,30 @@
             return [NSValue valueWithCGPoint:CGPointMake(minX, minXy)];
     }
     
-    if (x >= startX) { // check right side
+    if (x >= startX) // check right side
+    {
         CGFloat maxXy = m * (maxX - x) + y;
         if (minY <= maxXy && maxXy <= maxY)
             return [NSValue valueWithCGPoint:CGPointMake(maxX, maxXy)];
     }
     
-    if (y <= startY) { // check top side
+    if (y <= startY) // check top side
+    {
         CGFloat minYx = (minY - y) / m + x;
         if (minX <= minYx && minYx <= maxX)
             return [NSValue valueWithCGPoint:CGPointMake(minYx, minY)];
     }
     
-    if (y >= startY) { // check bottom side
+    if (y >= startY) // check bottom side
+    {
         CGFloat maxYx = (maxY - y) / m + x;
         if (minX <= maxYx && maxYx <= maxX)
             return [NSValue valueWithCGPoint:CGPointMake(maxYx, maxY)];
     }
     
     // edge case when finding midpoint intersection: m = 0/0 = NaN
-    if (x == startX && y == startY) return [NSValue valueWithCGPoint:CGPointMake(x, y)];
+    if (x == startX && y == startY)
+        return [NSValue valueWithCGPoint:CGPointMake(x, y)];
     
     return nil;
 }
@@ -470,7 +469,6 @@
 {
     double dx = start.x - end.x;
     double dy = start.y - end.y;
-    
     return dx ? atan(dy/dx) : (180 * M_PI) / 180;
 }
 

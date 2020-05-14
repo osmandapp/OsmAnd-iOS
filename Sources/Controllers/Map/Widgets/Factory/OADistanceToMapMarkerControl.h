@@ -7,14 +7,9 @@
 //
 
 #import "OATextInfoWidget.h"
-#import <CoreLocation/CoreLocation.h>
 
 @interface OADistanceToMapMarkerControl : OATextInfoWidget
 
-- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId;
-
-- (void) click;
-- (CLLocation *) getPointToNavigate;
-- (CLLocationDistance) getDistance;
+- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId firstMarker:(BOOL)firstMarker;
 
 @end

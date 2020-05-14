@@ -586,10 +586,10 @@
     OATextInfoWidget *bearing = [ric createBearingControl];
     [self registerSideWidget:bearing widgetState:[[OABearingWidgetState alloc] init] key:@"bearing" left:NO priorityOrder:17];
     
-    OATextInfoWidget *marker = [ric createMapMarkerControl];
+    OATextInfoWidget *marker = [ric createMapMarkerControl:YES];
     [self registerSideWidget:marker imageId:@"widget_marker_day" message:OALocalizedString(@"widget_marker") key:@"map_marker_1st" left:NO priorityOrder:18];
 
-    OATextInfoWidget *marker2nd = [ric createMapMarkerControl];
+    OATextInfoWidget *marker2nd = [ric createMapMarkerControl:NO];
     [self registerSideWidget:marker2nd imageId:@"widget_marker_day" message:OALocalizedString(@"widget_marker2") key:@"map_marker_2nd" left:NO priorityOrder:19];
     
     OATextInfoWidget *speed = [ric createSpeedControl];

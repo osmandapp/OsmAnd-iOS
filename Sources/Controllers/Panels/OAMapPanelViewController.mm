@@ -265,6 +265,7 @@ typedef enum
         _mapNeedsRestore = NO;
         [self restoreMapAfterReuse];
     }
+    [_app.data.destinationsChangeObservable notifyEvent];
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
@@ -290,7 +291,7 @@ typedef enum
     {
         OAToolbarViewController *topToolbar = [self getTopToolbar];
         if (topToolbar)
-            [topToolbar updateFrame:YES];
+            [_app.data.destinationsChangeObservable notifyEvent]; //[topToolbar updateFrame:YES];
         else
             [self updateToolbar];
     }
@@ -315,10 +316,10 @@ typedef enum
         _destinationViewController.delegate = self;
         _destinationViewController.destinationDelegate = self;
         
-        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.topBarDisplay get])
+        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
             [self showToolbar:_destinationViewController];
     }
-    else if ([_settings.topBarDisplay get])
+    else if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
         [self showToolbar:_destinationViewController];
     
     // Inflate new HUD controller
@@ -3223,7 +3224,7 @@ typedef enum
 
 - (void)destinationsAdded
 {
-    if ([_settings.topBarDisplay get])
+    if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
         [self showToolbar:_destinationViewController];
 }
 
@@ -3294,7 +3295,7 @@ typedef enum
     
         [cardsController doViewWillDisappear];
 
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || ![_settings.topBarDisplay get])
+        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndication get] == TOP_BAR_DISPLAY))
         {
             [self hideToolbar:_destinationViewController];
         }

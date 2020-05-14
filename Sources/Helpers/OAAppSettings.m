@@ -181,14 +181,10 @@
 
 #define contourLinesZoomKey @"contourLinesZoom"
 
-#define mapOneActiveMarkerKey @"mapOneActiveMarkerKey"
-#define mapTwoActiveMarkersKey @"mapTwoActiveMarkersKey"
-
+#define activeMarkerKey @"activeMarkerKey"
+#define mapDistanceIndicationVisabilityKey @"mapDistanceIndicationVisabilityKey"
 #define mapDistanceIndicationKey @"mapDistanceIndicationKey"
-#define mapTobBarIndicatorKey @"mapTobBarIndicatorKey"
-#define mapWidgetIndicatorKey @"mapWidgetIndicatorKey"
 #define mapLastPositionWidgetIndicatorKey @"mapLastPositionWidgetIndicatorKey"
-
 #define mapArrowsOnMapKey @"mapArrowsOnMapKey"
 #define mapDirectionLinesKey @"mapDirectionLinesKey"
 
@@ -1136,6 +1132,88 @@
 
 @end
 
+@implementation OAProfileActiveMarkerConstant
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOAActiveMarkerConstant) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant
+{
+    [super set:activeMarkerConstant];
+}
+
+- (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant mode:(OAApplicationMode *)mode
+{
+    [super set:activeMarkerConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOAActiveMarkerConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAActiveMarkerConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OAProfileDistanceIndicationConstant
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOADistanceIndicationConstant) get
+{
+    return [super get];
+}
+
+- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant
+{
+    [super set:distanceIndicationConstant];
+}
+
+- (EOADistanceIndicationConstant) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant mode:(OAApplicationMode *)mode
+{
+    [super set:distanceIndicationConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOADistanceIndicationConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOADistanceIndicationConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OAProfileBoolean *> *_customBooleanRoutingProps;
@@ -1448,12 +1526,10 @@
         _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
         
         // Direction Appearance
-        _oneActiveMarker = [OAProfileBoolean withKey:mapOneActiveMarkerKey defValue:YES];
-        _twoActiveMarker = [OAProfileBoolean withKey:mapTwoActiveMarkersKey defValue:NO];
-        _distanceIndication = [OAProfileBoolean withKey:mapDistanceIndicationKey defValue:YES];
-        _topBarDisplay = [OAProfileBoolean withKey:mapTobBarIndicatorKey defValue:YES];
-        _widgetDisplay = [OAProfileBoolean withKey:mapWidgetIndicatorKey defValue:NO];
-        _lastPositionWidgetDisplay = [OAProfileBoolean withKey:mapLastPositionWidgetIndicatorKey defValue:NO];
+        _activeMarkers = [OAProfileActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
+        _distanceIndicationVisability = [OAProfileBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
+        _distanceIndication = [OAProfileDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
+        _lastPositionWidgetDisplay = [OAProfileDistanceIndicationConstant withKey:mapLastPositionWidgetIndicatorKey defValue:TOP_BAR_DISPLAY];
         _arrowsOnMap = [OAProfileBoolean withKey:mapArrowsOnMapKey defValue:YES];
         _directionLines = [OAProfileBoolean withKey:mapDirectionLinesKey defValue:YES];
 
@@ -2352,29 +2428,29 @@
 }
 
 // Direction Appearance Settings
-
-- (void) setOneActiveMarker:(BOOL)oneActiveMarker twoActiveMarkers:(BOOL)twoActiveMarkers
-{
-    [_oneActiveMarker set:oneActiveMarker];
-    [_twoActiveMarker set:twoActiveMarkers];
-}
-
-- (void) setDistanceIndicationView:(BOOL)topBarDisplay widgetDisplay:(BOOL)widgetDisplay
-{
-    [_topBarDisplay set:topBarDisplay];
-    [_widgetDisplay set:widgetDisplay];
-    [_lastPositionWidgetDisplay set:widgetDisplay];
-}
-
-- (void) setArrowsOnMap:(BOOL)arrowsOnMap
-{
-    [_arrowsOnMap set:arrowsOnMap];
-}
-
-- (void) setDirectionLines:(BOOL)directionLines
-{
-    [_directionLines set:directionLines];
-
-}
+//
+//- (void) setOneActiveMarker:(BOOL)oneActiveMarker twoActiveMarkers:(BOOL)twoActiveMarkers
+//{
+//    [_oneActiveMarker set:oneActiveMarker];
+//    [_twoActiveMarker set:twoActiveMarkers];
+//}
+//
+//- (void) setDistanceIndicationView:(BOOL)topBarDisplay widgetDisplay:(BOOL)widgetDisplay
+//{
+//    [_topBarDisplay set:topBarDisplay];
+//    [_widgetDisplay set:widgetDisplay];
+//    [_lastPositionWidgetDisplay set:widgetDisplay];
+//}
+//
+//- (void) setArrowsOnMap:(BOOL)arrowsOnMap
+//{
+//    [_arrowsOnMap set:arrowsOnMap];
+//}
+//
+//- (void) setDirectionLines:(BOOL)directionLines
+//{
+//    [_directionLines set:directionLines];
+//
+//}
 
 @end

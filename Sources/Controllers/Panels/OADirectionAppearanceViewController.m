@@ -98,7 +98,6 @@
 
 - (void) setupView
 {
-    
     [self applySafeAreaMargins];
     [self adjustViews];
     
@@ -109,11 +108,15 @@
     NSMutableArray *activeMarkersArr = [NSMutableArray array];
     NSMutableArray *distanceIndicationArr = [NSMutableArray array];
     NSMutableArray *appearanceOnMapArr = [NSMutableArray array];
+    
+    EOAActiveMarkerConstant activeMarkers = [_settings.activeMarkers get];
+    EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
 
     [activeMarkersArr addObject:@{
                         @"type" : @"OASettingsCheckmarkCell",
                         @"section" : kActiveMarkers,
                         @"key" : kOneActiveMarker,
+                        @"value" : activeMarkers == ONE_ACTIVE_MARKER ? @YES : @NO,
                         @"title" : OALocalizedString(@"one"),
                         @"fg_img" : @"ic_custom_direction_topbar_one.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
@@ -125,6 +128,7 @@
                         @"type" : @"OASettingsCheckmarkCell",
                         @"section" : kActiveMarkers,
                         @"key" : kTwoActiveMarkers,
+                        @"value" : activeMarkers == TWO_ACTIVE_MARKERS ? @YES : @NO,
                         @"title" : OALocalizedString(@"two"),
                         @"fg_img" : @"ic_custom_direction_topbar_two.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
@@ -135,6 +139,7 @@
     [distanceIndicationArr addObject:@{
                         @"type" : @"OASettingSwitchCell",
                         @"key" : kDistanceIndication,
+                        @"value" : @([_settings.distanceIndicationVisability get]),
                         @"title" : OALocalizedString(@"distance_indication"),
                         }];
     
@@ -142,6 +147,7 @@
                         @"type" : @"OASettingsCheckmarkCell",
                         @"section" : kDistanceIndication,
                         @"key" : kTopBarDisplay,
+                        @"value" : distanceIndication == TOP_BAR_DISPLAY ? @YES : @NO,
                         @"title" : OALocalizedString(@"shared_string_topbar"),
                         @"fg_img" : @"ic_custom_direction_topbar_one.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
@@ -153,6 +159,7 @@
                         @"type" : @"OASettingsCheckmarkCell",
                         @"section" : kDistanceIndication,
                         @"key" : kWidgetDisplay,
+                        @"value" : distanceIndication == WIDGET_DISPLAY ? @YES : @NO,
                         @"title" : OALocalizedString(@"shared_string_widgets"),
                         @"fg_img" : @"ic_custom_direction_widget_two.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
@@ -163,12 +170,14 @@
     [appearanceOnMapArr addObject:@{
                         @"type" : @"OASettingSwitchCell",
                         @"key" : kArrowsOnMap,
+                        @"value" : @([_settings.arrowsOnMap get]),
                         @"title" : OALocalizedString(@"arrows_on_map"),
                         }];
     
     [appearanceOnMapArr addObject:@{
                         @"type" : @"OASettingSwitchCell",
                         @"key" : kLinesOnMap,
+                        @"value" : @([_settings.directionLines get]),
                         @"title" : OALocalizedString(@"direction_lines"),
                         }];
  
@@ -221,7 +230,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (![_settings.distanceIndication get] && section == 1)
+    if (![_settings.distanceIndicationVisability get] && section == 1)
         return 1;
     return [_data[_data.allKeys[section]] count];
 }
@@ -250,19 +259,7 @@
         
         cell.iconImageView.image = [self drawImage:fgImage inImage:bgImage bgColor:item[@"bg_color"] fgColor:item[@"fg_color"]];
         cell.titleLabel.text = item[@"title"];
-        
-        if ([item[@"key"] isEqualToString:kOneActiveMarker])
-            cell.checkmarkImageView.hidden = ![_settings.oneActiveMarker get];
-        if ([item[@"key"] isEqualToString:kTwoActiveMarkers])
-            cell.checkmarkImageView.hidden = ![_settings.twoActiveMarker get];
-        if ([item[@"key"] isEqualToString:kTopBarDisplay])
-            cell.checkmarkImageView.hidden = ![_settings.topBarDisplay get];
-        if ([item[@"key"] isEqualToString:kWidgetDisplay])
-            cell.checkmarkImageView.hidden = ![_settings.widgetDisplay get];
-        
-        [cell.checkmarkImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.checkmarkImageView.tintColor = UIColorFromRGB(color_primary_purple);
-        
+        cell.checkmarkImageView.hidden = ![item[@"value"] boolValue];
         return cell;
     }
     
@@ -281,7 +278,7 @@
         cell.textView.text = item[@"title"];
         if ([item[@"key"] isEqualToString:kDistanceIndication])
         {
-            [cell.switchView setOn:[_settings.distanceIndication get]];
+            [cell.switchView setOn:[_settings.distanceIndicationVisability get]];
             [cell.switchView addTarget:self action:@selector(showDistanceIndication:) forControlEvents:UIControlEventValueChanged];
         }
         else if ([item[@"key"] isEqualToString:kArrowsOnMap])
@@ -294,7 +291,6 @@
             [cell.switchView setOn:[_settings.directionLines get]];
             [cell.switchView addTarget:self action:@selector(showLinesOnMap:) forControlEvents:UIControlEventValueChanged];
         }
-        
         return cell;
     }
 }
@@ -370,7 +366,7 @@
     OAMapWidgetRegInfo *marker2nd = [_mapWidgetRegistry widgetByKey:@"map_marker_2nd"];
     if (marker1st)
         [_mapWidgetRegistry setVisibility:marker1st visible:visible collapsed:collapsed];
-    if (marker2nd && [_settings.twoActiveMarker get])
+    if (marker2nd && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
         [_mapWidgetRegistry setVisibility:marker2nd visible:visible collapsed:collapsed];
     else
         [_mapWidgetRegistry setVisibility:marker2nd visible:NO collapsed:collapsed];
@@ -382,39 +378,40 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
+
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
-    
+
     if ([item[@"section"] isEqualToString:@"activeMarkers"])
     {
         if (indexPath.row == 0)
         {
-            [_settings.oneActiveMarker set:YES];
-            [_settings.twoActiveMarker set:NO];
+            [_settings.activeMarkers set:ONE_ACTIVE_MARKER];
+            //[_settings.twoActiveMarker set:NO];
         }
         else
         {
-            [_settings.oneActiveMarker set:NO];
-            [_settings.twoActiveMarker set:YES];
+            [_settings.activeMarkers set:TWO_ACTIVE_MARKERS];
+            //[_settings.twoActiveMarker set:YES];
         }
-        if ([_settings.widgetDisplay get])
+        if ([_settings.distanceIndication get] == WIDGET_DISPLAY)
             [self setWidgetVisibility:YES collapsed:NO];
     }
     if ([item[@"section"] isEqualToString:@"distanceIndication"])
     {
         if (indexPath.row == 1)
         {
-            [_settings.topBarDisplay set:YES];
-            [_settings.widgetDisplay set:NO];
+            [_settings.distanceIndication set:TOP_BAR_DISPLAY];
+            //[_settings.widgetDisplay set:NO];
             [self setWidgetVisibility:NO collapsed:NO];
         }
         else
         {
-            [_settings.topBarDisplay set:NO];
-            [_settings.widgetDisplay set:YES];
+            [_settings.distanceIndication set:WIDGET_DISPLAY];
+            //[_settings.widgetDisplay set:YES];
             [self setWidgetVisibility:YES collapsed:NO];
         }
     }
+    [self setupView];
     [self.tableView reloadData];
 }
 
@@ -423,21 +420,20 @@
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
     {
-        [_settings.distanceIndication set:switchView.isOn];
-        if (![_settings.distanceIndication get])
+        [_settings.distanceIndicationVisability set:switchView.isOn];
+        if (![_settings.distanceIndicationVisability get])
         {
-            [_settings.lastPositionWidgetDisplay set:[_settings.widgetDisplay get]];
-            [_settings.topBarDisplay set:NO];
-            [_settings.widgetDisplay set:NO];
+            [_settings.lastPositionWidgetDisplay set:[_settings.distanceIndication get]];
         }
         else
         {
             if ([_settings.lastPositionWidgetDisplay get])
-                [_settings.widgetDisplay set:YES];
+                [_settings.distanceIndication set:WIDGET_DISPLAY];
             else
-                [_settings.topBarDisplay set:YES];
+                [_settings.distanceIndication set:TOP_BAR_DISPLAY];
         }
     }
+    [self setupView];
     [self.tableView reloadData];
 }
 

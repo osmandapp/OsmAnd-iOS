@@ -77,9 +77,9 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
 @implementation OAMapMarkerLineControl
 
-- (instancetype) init
+- (instancetype) initWithFirstMarker:(BOOL)firstMarker
 {
-    self = [super initWithIcons:@"widget_marker_day" nightIconId:@"widget_marker_night"];
+    self = [super initWithIcons:@"widget_marker_day" nightIconId:@"widget_marker_night" firstMarker:firstMarker];
     if (self)
     {
         self.hidden = YES;
@@ -87,25 +87,25 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     return self;
 }
 
-- (CLLocation *) getPointToNavigate
-{
-    OARTargetPoint *p = [[OATargetPointsHelper sharedInstance] getPointToNavigate];
-    return p ? p.point : nil;
-}
-
-- (CLLocationDistance) getDistance
-{
-    OARoutingHelper *routinHelper = [OARoutingHelper sharedInstance];
-    if ([routinHelper isRouteCalculated])
-        return [routinHelper getLeftDistance];
-    
-    return [super getDistance];
-}
-
-- (void) click
-{
-    [super click];
-}
+//- (CLLocation *) getPointToNavigate
+//{
+//    OARTargetPoint *p = [[OATargetPointsHelper sharedInstance] getPointToNavigate];
+//    return p ? p.point : nil;
+//}
+//
+//- (CLLocationDistance) getDistance
+//{
+//    OARoutingHelper *routinHelper = [OARoutingHelper sharedInstance];
+//    if ([routinHelper isRouteCalculated])
+//        return [routinHelper getLeftDistance];
+//
+//    return [super getDistance];
+//}
+//
+//- (void) click
+//{
+//    [super click];
+//}
 
 @end
 
@@ -741,9 +741,9 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     return [[OAAlarmWidget alloc] init];
 }
 
-- (OATextInfoWidget *) createMapMarkerControl
+- (OATextInfoWidget *) createMapMarkerControl:(BOOL)firstMarker
 {
-    return [[OAMapMarkerLineControl alloc] init];
+    return [[OAMapMarkerLineControl alloc] initWithFirstMarker:firstMarker];
 }
 
 @end

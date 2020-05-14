@@ -13,6 +13,7 @@
 #import "OAMapViewController.h"
 #import "OADestination.h"
 #import "OADestinationsHelper.h"
+#import "OAColors.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -28,6 +29,7 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    BOOL _firstWidget;
     
     NSString *_dayIcon;
     NSString *_nightIcon;
@@ -38,22 +40,22 @@
     OADestination *_markerDestination;
 }
 
-- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId
+- (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId firstMarker:(BOOL)firstMarker
 {
     self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        
         _dayIconId = dayIconId;
         _nightIconId = nightIconId;
+        _firstWidget = firstMarker;
         
-        self.colors = @[UIColorFromRGB(0xff9207),
-                        UIColorFromRGB(0x00bcd4),
-                        UIColorFromRGB(0x7fbd4d),
-                        UIColorFromRGB(0xff444a),
-                        UIColorFromRGB(0xcddc39)];
+        self.colors = @[UIColorFromRGB(marker_pin_color_orange),
+                        UIColorFromRGB(marker_pin_color_blue),
+                        UIColorFromRGB(marker_pin_color_green),
+                        UIColorFromRGB(marker_pin_color_red),
+                        UIColorFromRGB(marker_pin_color_light_green)];
         
         self.markerNames = @[@"widget_marker_triangle_pin_1", @"widget_marker_triangle_pin_2", @"widget_marker_triangle_pin_3", @"widget_marker_triangle_pin_4", @"widget_marker_triangle_pin_5"];
         
@@ -65,12 +67,9 @@
     return self;
 }
 
-//Move to constructor
 - (BOOL) updateInfo
 {
-    static BOOL firstWidget = YES;
-    
-    if ([OADestinationsHelper instance].sortedDestinations.count == 0 || ![_settings.distanceIndication get])
+    if ([OADestinationsHelper instance].sortedDestinations.count == 0 || ![_settings.distanceIndicationVisability get])
     {
         [self updateVisibility:NO];
         return NO;
@@ -79,50 +78,39 @@
     CLLocation *currLoc = [_app.locationServices lastKnownLocation];
     NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
     
-    if (firstWidget)
+    if (_firstWidget)
     {
         [self updateVisibility:YES];
         _markerDestination = (destinations.count >= 1 ? destinations[0] : nil);
-        
-        ///!!!!! Do not use c++ library if not really needed.
-        const auto dist = OsmAnd::Utilities::distance(_markerDestination.longitude, _markerDestination.latitude,
-                                                      currLoc.coordinate.longitude, currLoc.coordinate.latitude);
-        
+        _distance = [_markerDestination distanceStr:currLoc.coordinate.latitude longitude:currLoc.coordinate.longitude];
+       
         for (NSInteger i = 0; i < self.colors.count; i++)
             if ([_markerDestination.color isEqual:self.colors[i]])
                 _innerMarkerColor = _markerNames[i];
         
-        _distance = [_app getFormattedDistance:dist];
         [self setIcons:_dayIconId widgetNightIcon:_nightIconId];
         [self setText:_distance subtext:nil];
-        firstWidget = NO;
     }
     else
     {
-        if ([_settings.twoActiveMarker get] && destinations.count == 1)
+        if ([_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && destinations.count == 1)
         {
             [self updateVisibility:NO];
         }
-        if ([_settings.twoActiveMarker get] && destinations.count > 1)
+        if ([_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && destinations.count > 1)
         {
             [self updateVisibility:YES];
             _markerDestination = (destinations.count >= 2 ? destinations[1] : nil);
-            
-            ///!!!!! Do not use c++ library if not really needed.
-            const auto dist = OsmAnd::Utilities::distance(_markerDestination.longitude, _markerDestination.latitude,
-                                                          currLoc.coordinate.longitude, currLoc.coordinate.latitude);
+            _distance = [_markerDestination distanceStr:currLoc.coordinate.latitude longitude:currLoc.coordinate.longitude];
             
             for (NSInteger i = 0; i < self.colors.count; i++)
                 if ([_markerDestination.color isEqual:self.colors[i]])
                     _innerMarkerColor = _markerNames[i];
-            
-            _distance = [_app getFormattedDistance:dist];
+
             [self setIcons:_dayIconId widgetNightIcon:_nightIconId];
             [self setText:_distance subtext:nil];
         }
-        firstWidget = YES;
     }
-    
     return YES;
 }
 
@@ -130,12 +118,11 @@
 {
     UIGraphicsBeginImageContextWithOptions(bgImage.size, NO, 0.0);
     
-    [bgImage drawInRect:CGRectMake( 0.0, 0.0, bgImage.size.width, bgImage.size.height)];
-    [fgImage drawInRect:CGRectMake( 0.0, 0.0, fgImage.size.width, fgImage.size.height)];
+    [bgImage drawInRect:CGRectMake(0.0, 0.0, bgImage.size.width, bgImage.size.height)];
+    [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
     
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
     return newImage;
 }
 
@@ -155,7 +142,6 @@
     
     [[OARootViewController instance].mapPanel hideDestinationCardsView];
     [[OARootViewController instance].mapPanel openTargetViewWithDestination:_markerDestination];
-    
 }
 
 @end

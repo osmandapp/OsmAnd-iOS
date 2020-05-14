@@ -41,6 +41,6 @@
 - (OARulerWidget *) createRulerControl;
 - (OALanesControl *) createLanesControl;
 - (OAAlarmWidget *) createAlarmInfoControl;
-- (OATextInfoWidget *) createMapMarkerControl;
+- (OATextInfoWidget *) createMapMarkerControl:(BOOL)firstMarker;
 
 @end

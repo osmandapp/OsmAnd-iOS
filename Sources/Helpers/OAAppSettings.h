@@ -255,6 +255,40 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
+{
+    ONE_ACTIVE_MARKER = 0,
+    TWO_ACTIVE_MARKERS
+};
+
+typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
+{
+    TOP_BAR_DISPLAY = 0,
+    WIDGET_DISPLAY,
+};
+
+@interface OAProfileActiveMarkerConstant : OAProfileInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue;
+
+- (EOAActiveMarkerConstant) get;
+- (void) set:(EOAActiveMarkerConstant)angularConstant;
+- (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAActiveMarkerConstant)angularConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OAProfileDistanceIndicationConstant : OAProfileInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue;
+
+- (EOADistanceIndicationConstant) get;
+- (void) set:(EOADistanceIndicationConstant)angularConstant;
+- (EOADistanceIndicationConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOADistanceIndicationConstant)angularConstant mode:(OAApplicationMode *)mode;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 {
     RULER_MODE_DARK = 0,
@@ -513,15 +547,12 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 // Direction Appearance
 
-//Should be enum like OAProfileAngularConstant
-
-@property (nonatomic) OAProfileBoolean *oneActiveMarker;
-@property (nonatomic) OAProfileBoolean *twoActiveMarker;
-@property (nonatomic) OAProfileBoolean *distanceIndication;
-@property (nonatomic) OAProfileBoolean *topBarDisplay;
-@property (nonatomic) OAProfileBoolean *widgetDisplay;
-@property (nonatomic) OAProfileBoolean *lastPositionWidgetDisplay;
+@property (nonatomic) OAProfileActiveMarkerConstant* activeMarkers;
+@property (nonatomic) OAProfileBoolean *distanceIndicationVisability;
+@property (nonatomic) OAProfileDistanceIndicationConstant *distanceIndication;
+@property (nonatomic) OAProfileDistanceIndicationConstant *lastPositionWidgetDisplay;
 @property (nonatomic) OAProfileBoolean *arrowsOnMap;
 @property (nonatomic) OAProfileBoolean *directionLines;
 
 @end
+

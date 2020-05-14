@@ -21,6 +21,7 @@
 #import "OAHistoryHelper.h"
 #import "OAHistoryItem.h"
 #import "Localization.h"
+#import "OAColors.h"
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -68,13 +69,13 @@
     {        
         self.destinationCells = [NSMutableArray array];
         
-        self.parkingColor = UIColorFromRGB(0x4A69EC);
+        self.parkingColor = UIColorFromRGB(parking_pin_color_blue);
 
-        self.colors = @[UIColorFromRGB(0xff9207),
-                        UIColorFromRGB(0x00bcd4),
-                        UIColorFromRGB(0x7fbd4d),
-                        UIColorFromRGB(0xff444a),
-                        UIColorFromRGB(0xcddc39)];
+        self.colors = @[UIColorFromRGB(marker_pin_color_orange),
+                        UIColorFromRGB(marker_pin_color_blue),
+                        UIColorFromRGB(marker_pin_color_green),
+                        UIColorFromRGB(marker_pin_color_red),
+                        UIColorFromRGB(marker_pin_color_light_green)];
         
         self.markerNames = @[@"ic_destination_pin_1", @"ic_destination_pin_2", @"ic_destination_pin_3", @"ic_destination_pin_4", @"ic_destination_pin_5"];
         
@@ -172,7 +173,7 @@
 {
     [self clean];
     
-    if (![_settings.topBarDisplay get])
+    if ([_settings.distanceIndication get] == WIDGET_DISPLAY)
         return;
 
     if ([OADestinationsHelper instance].sortedDestinations.count == 0)
@@ -212,7 +213,7 @@
         [cell updateDirections:location direction:direction];
     }
     
-    if (secondCellDestination  && [_settings.topBarDisplay get] && [_settings.twoActiveMarker get])
+    if (secondCellDestination && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
     {
         OADestination *destination = secondCellDestination;
         
@@ -251,7 +252,7 @@
 
 - (void)clean
 {
-    NSInteger destinationsCount = [_settings.twoActiveMarker get] ? [OADestinationsHelper instance].sortedDestinations.count : 1;
+    NSInteger destinationsCount = [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS ? [OADestinationsHelper instance].sortedDestinations.count : 1;
     
     while (_destinationCells.count > destinationsCount)
     {
@@ -260,7 +261,7 @@
         [_destinationCells removeLastObject];
     }
     
-    if ([_settings.widgetDisplay get] || ![_settings.distanceIndication get])
+    if ([_settings.distanceIndication get] == WIDGET_DISPLAY || ![_settings.distanceIndicationVisability get])
     {
         while (_destinationCells.count > 0)
         {
@@ -367,7 +368,7 @@
 {
     CGRect frame;
 
-    NSInteger destinationsCount = [_settings.topBarDisplay get] ? MIN(2, [OADestinationsHelper instance].sortedDestinations.count) : 0;
+    NSInteger destinationsCount = [_settings.distanceIndication get] == TOP_BAR_DISPLAY ? MIN(2, [OADestinationsHelper instance].sortedDestinations.count) : 0;
     
     BOOL _navBarHidden = destinationsCount > 0;
     self.navBarView.hidden = _navBarHidden;
@@ -396,15 +397,15 @@
             _singleLineMode = NO;
             CGFloat h = 0.0;
 
-            if (destinationsCount > 0 && [_settings.topBarDisplay get])
+            if (destinationsCount > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
                 h = 50.0 + 35.0 * (destinationsCount - 1.0);
             else
                 h = navBarHeight;
             
-            if ([_settings.widgetDisplay get])
+            if ([_settings.distanceIndication get] == WIDGET_DISPLAY)
                 h = navBarHeight;
             
-            if ([_settings.topBarDisplay get] && [_settings.oneActiveMarker get])
+            if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == ONE_ACTIVE_MARKER)
                 h = 50.0;
 
             if (h < 0.0)

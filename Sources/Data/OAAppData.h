@@ -41,6 +41,8 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 @property (nonatomic) EOATerrainType hillshade;
 @property (nonatomic) EOATerrainType lastHillshade;
 @property (nonatomic) double hillshadeAlpha;
+@property (nonatomic) NSInteger hillshadeMinZoom;
+@property (nonatomic) NSInteger hillshadeMaxZoom;
 @property (readonly) OAObservable* hillshadeChangeObservable;
 @property (readonly) OAObservable* hillshadeResourcesChangeObservable;
 @property (readonly) OAObservable* hillshadeAlphaChangeObservable;

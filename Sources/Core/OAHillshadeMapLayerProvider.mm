@@ -10,8 +10,16 @@
 #import "OAHillshadeLayer.h"
 #import "OsmAndApp.h"
 
-OAHillshadeMapLayerProvider::OAHillshadeMapLayerProvider() 
+OAHillshadeMapLayerProvider::OAHillshadeMapLayerProvider()
+: minZoom(OsmAnd::ZoomLevel1),
+maxZoom(OsmAnd::ZoomLevel11)
 {
+}
+
+OAHillshadeMapLayerProvider::OAHillshadeMapLayerProvider(OsmAnd::ZoomLevel minZoom_, OsmAnd::ZoomLevel maxZoom_)
+{
+    minZoom = minZoom_;
+    maxZoom = maxZoom_;
 }
 
 OAHillshadeMapLayerProvider::~OAHillshadeMapLayerProvider()
@@ -71,12 +79,22 @@ bool OAHillshadeMapLayerProvider::supportsNaturalObtainDataAsync() const
 
 OsmAnd::ZoomLevel OAHillshadeMapLayerProvider::getMinZoom() const
 {
-    return OsmAnd::ZoomLevel0;
+    return OsmAnd::ZoomLevel1;
 }
 
 OsmAnd::ZoomLevel OAHillshadeMapLayerProvider::getMaxZoom() const
 {
     return OsmAnd::ZoomLevel11;
+}
+
+OsmAnd::ZoomLevel OAHillshadeMapLayerProvider::getMinVisibleZoom() const
+{
+    return minZoom;
+}
+
+OsmAnd::ZoomLevel OAHillshadeMapLayerProvider::getMaxVisibleZoom() const
+{
+    return maxZoom;
 }
 
 void OAHillshadeMapLayerProvider::performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap)

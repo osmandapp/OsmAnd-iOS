@@ -16,9 +16,13 @@ class OAHillshadeMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 
 private:
     virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
+    
+    OsmAnd::ZoomLevel minZoom;
+    OsmAnd::ZoomLevel maxZoom;
 protected:
 public:
     OAHillshadeMapLayerProvider();
+    OAHillshadeMapLayerProvider(OsmAnd::ZoomLevel minZoom_, OsmAnd::ZoomLevel maxZoom_);
     virtual ~OAHillshadeMapLayerProvider();
     
     virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
@@ -37,5 +41,8 @@ public:
 
     virtual OsmAnd::ZoomLevel getMinZoom() const;
     virtual OsmAnd::ZoomLevel getMaxZoom() const;
+    
+    virtual OsmAnd::ZoomLevel getMinVisibleZoom() const override;
+    virtual OsmAnd::ZoomLevel getMaxVisibleZoom() const override;
 
 };

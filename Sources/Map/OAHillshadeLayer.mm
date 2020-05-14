@@ -26,6 +26,8 @@ const static int ZOOM_BOUNDARY = 15;
     NSString *_databasePath;
     NSString *_tilesDir;
     
+    BOOL _isHillshade;
+    
     OAAutoObserverProxy* _hillshadeChangeObserver;
 }
 
@@ -55,6 +57,7 @@ const static int ZOOM_BOUNDARY = 15;
     if (self)
     {
         _sync = [[NSObject alloc] init];
+        _isHillshade = isHillshade;
         
         _hillshadeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onHillshadeResourcesChanged)
@@ -244,7 +247,7 @@ const static int ZOOM_BOUNDARY = 15;
                 NSString *fileName = [f lastPathComponent];
                 NSString *ext = [[f pathExtension] lowercaseString];
                 NSString *type = [[[f stringByDeletingPathExtension] pathExtension] lowercaseString];
-                if([ext isEqualToString:@"sqlitedb"] && ([type isEqualToString:@"hillshade"] || [type isEqualToString:@"hillshade"]))
+                if([ext isEqualToString:@"sqlitedb"] && (([type isEqualToString:@"hillshade"] && _isHillshade) || ([type isEqualToString:@"slope"] && !_isHillshade)))
                 {
                     OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:f];
                     [rs setObject:ts forKey:fileName];

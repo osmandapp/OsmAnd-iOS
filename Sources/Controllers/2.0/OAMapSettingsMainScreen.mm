@@ -582,9 +582,21 @@
 
 - (void) terrainChanged:(id)sender
 {
-    UISwitch *switchView = (UISwitch*)sender;
-    //if (switchView)
-        //[[OsmAndApp instance].data setHillshade:switchView.isOn];
+    if ([sender isKindOfClass:UISwitch.class])
+    {
+        UISwitch *switchView = (UISwitch *) sender;
+        if (switchView.isOn)
+        {
+            EOATerrainType lastType = _app.data.lastHillshade;
+            _app.data.hillshade = lastType != EOATerrainTypeDisabled ? lastType : EOATerrainTypeHillshade;
+        }
+        else
+        {
+            _app.data.lastHillshade = _app.data.hillshade;
+            _app.data.hillshade = EOATerrainTypeDisabled;
+        }
+    }
+    
 }
 
 - (void) showFavoriteChanged:(id)sender

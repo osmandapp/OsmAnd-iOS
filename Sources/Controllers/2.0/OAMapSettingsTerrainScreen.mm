@@ -26,6 +26,7 @@
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
+#import "OAAutoObserverProxy.h"
 
 #define kMinAllowedZoom 1
 #define kMaxAllowedZoom 22
@@ -59,12 +60,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSArray* _sectionHeaderFooterTitles;
     NSIndexPath *_pickerIndexPath;
     
-    int _minZoom;
-    int _maxZoom;
+    NSInteger _minZoom;
+    NSInteger _maxZoom;
     NSArray<NSString *> *_possibleZoomValues;
     
     NSObject *_dataLock;
     NSArray<RepositoryResourceItem *> *_mapItems;
+    
+    OAAutoObserverProxy* _downloadTaskProgressObserver;
+    OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
 
@@ -79,6 +84,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
         
+        // Set default values if not set already
+        if (_app.data.hillshadeMinZoom == 0 && _app.data.hillshadeMaxZoom == 0)
+        {
+            _app.data.hillshadeMinZoom = 1;
+            _app.data.hillshadeMaxZoom = 11;
+        }
+        
         settingsScreen = EMapSettingsScreenTerrain;
         
         vwController = viewController;
@@ -92,8 +104,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return self;
 }
 
+- (void) dealloc
+{
+    if (_downloadTaskProgressObserver)
+    {
+        [_downloadTaskProgressObserver detach];
+        _downloadTaskProgressObserver = nil;
+    }
+    if (_downloadTaskCompletedObserver)
+    {
+        [_downloadTaskCompletedObserver detach];
+        _downloadTaskCompletedObserver = nil;
+    }
+    if (_localResourcesChangedObserver)
+    {
+        [_localResourcesChangedObserver detach];
+        _localResourcesChangedObserver = nil;
+    }
+}
+
 - (void) generateData
 {
+    _minZoom = _app.data.hillshadeMinZoom;
+    _maxZoom = _app.data.hillshadeMaxZoom;
+    
     NSMutableArray *result = [NSMutableArray array];
     
     NSMutableArray *switchArr = [NSMutableArray array];
@@ -210,7 +244,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
     _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
     
-    [self updateAvailableMaps];
+    _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
+                                                               andObserve:_app.downloadsManager.progressCompletedObservable];
+    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                                andObserve:_app.downloadsManager.completedObservable];
+    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                                andObserve:_app.localResourcesChangedObservable];
+    if ([self isTerrainOn])
+        [self updateAvailableMaps];
 }
 
 - (void)initData {
@@ -238,6 +282,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 }
                 _mapItems = availableItems;
             }
+            
+            if (![self isTerrainOn])
+                return;
             
             BOOL hasDownloads = [_data.lastObject.firstObject[@"type"] isEqualToString:kCellTypeMap];
             if (_mapItems.count > 0 && !hasDownloads)
@@ -430,9 +477,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.lbTitle.text = item[@"title"];
         if ([item[@"key"] isEqualToString:@"minZoom"])
-            cell.lbTime.text = [NSString stringWithFormat:@"%d", _minZoom];
+            cell.lbTime.text = [NSString stringWithFormat:@"%ld", _minZoom];
         else if ([item[@"key"] isEqualToString:@"maxZoom"])
-            cell.lbTime.text = [NSString stringWithFormat:@"%d", _maxZoom];
+            cell.lbTime.text = [NSString stringWithFormat:@"%ld", _maxZoom];
         else
             cell.lbTime.text = @"";
         cell.lbTime.textColor = [UIColor blackColor];
@@ -466,8 +513,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dataArray = _possibleZoomValues;
-        int minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
-        int maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
+        NSInteger minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
+        NSInteger maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
         [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
@@ -642,7 +689,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [[UIImage imageNamed:(@"ic_custom_hillshade")] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.imageView.image = [[UIImage imageNamed:(_app.data.hillshade == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")]
+                                imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)
@@ -737,12 +785,45 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - OACustomPickerTableViewCellDelegate
 
+- (void)updatePickerCell:(NSInteger) value
+{
+    UITableViewCell *cell = [tblView cellForRowAtIndexPath:_pickerIndexPath];
+    if ([cell isKindOfClass:OACustomPickerTableViewCell.class])
+    {
+        OACustomPickerTableViewCell *cellRes = (OACustomPickerTableViewCell *) cell;
+        [cellRes.picker selectRow:_minZoom - 1 inComponent:0 animated:NO];
+    }
+}
+
 - (void)zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
 {
+    NSInteger value = [zoom integerValue];
     if (pickerTag == 1)
-        _minZoom = [zoom intValue];
+    {
+        if (value <= _maxZoom)
+        {
+            _minZoom = value;
+            _app.data.hillshadeMinZoom = _minZoom;
+        }
+        else
+        {
+            _minZoom = _maxZoom;
+            [self updatePickerCell:_maxZoom - 1];
+        }
+    }
     else if (pickerTag == 2)
-        _maxZoom = [zoom intValue];
+    {
+        if (value >= _minZoom)
+        {
+            _maxZoom = value;
+            _app.data.hillshadeMaxZoom = _maxZoom;
+        }
+        else
+        {
+            _maxZoom = _minZoom;
+            [self updatePickerCell:_minZoom - 1];
+        }
+    }
     [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
@@ -761,7 +842,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         if (switchView.isOn)
         {
-            [[OsmAndApp instance].data setHillshade:EOATerrainTypeHillshade];
+            EOATerrainType prevType = _app.data.lastHillshade;
+            [_app.data setHillshade:prevType != EOATerrainTypeDisabled ? prevType : EOATerrainTypeHillshade];
+            [self updateAvailableMaps];
         }
         else
         {
@@ -853,7 +936,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             ResourceItem *item = (ResourceItem *)_mapItems[i];
             if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:3]];
+                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:(tblView.numberOfSections - 1)]];
         }
     }
 }

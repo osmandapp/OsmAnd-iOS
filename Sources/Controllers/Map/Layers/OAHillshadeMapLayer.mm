@@ -16,8 +16,6 @@
 #include "OAHillshadeMapLayerProvider.h"
 #include <OsmAndCore/Utilities.h>
 
-#define kHillshadeOpacity 0.45f ///fix
-
 @implementation OAHillshadeMapLayer
 {
     std::shared_ptr<OsmAnd::IMapLayerProvider> _hillshadeMapProvider;
@@ -62,9 +60,9 @@
 
 - (BOOL) updateLayer
 {
-    if (self.app.data.hillshade && [[OAIAPHelper sharedInstance].srtm isActive])
+    if (self.app.data.hillshade != EOATerrainTypeDisabled && [[OAIAPHelper sharedInstance].srtm isActive])
     {
-        _hillshadeMapProvider = std::make_shared<OAHillshadeMapLayerProvider>();
+        _hillshadeMapProvider = std::make_shared<OAHillshadeMapLayerProvider>(OsmAnd::ZoomLevel(self.app.data.hillshadeMinZoom), OsmAnd::ZoomLevel(self.app.data.hillshadeMaxZoom));
         [self.mapView setProvider:_hillshadeMapProvider forLayer:self.layerIndex];
         
         OsmAnd::MapLayerConfiguration config;
@@ -100,6 +98,16 @@
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         }];
     });
+}
+
+- (OsmAnd::ZoomLevel) getMinZoom
+{
+    return _hillshadeMapProvider->getMinZoom();
+}
+
+- (OsmAnd::ZoomLevel) getMaxZoom
+{
+    return _hillshadeMapProvider->getMaxZoom();
 }
 
 @end

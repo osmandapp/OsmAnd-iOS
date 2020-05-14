@@ -504,7 +504,7 @@
             }
             if ([data[@"key"] isEqualToString:@"terrain_layer"])
             {
-                [cell.switchView setOn:[OsmAndApp instance].data.hillshade];
+                [cell.switchView setOn:_app.data.hillshade];
                 [cell.switchView addTarget:self action:@selector(terrainChanged:) forControlEvents:UIControlEventValueChanged];
             }
             cell.textView.text = data[@"name"];

@@ -25,12 +25,12 @@
     BOOL isOn = [data terrainType] != EOATerrainTypeDisabled;
     if (isOn)
     {
-        [data setTerrainType:data.lastTerrainType];
+        [data setLastTerrainType:data.terrainType];
+        [data setTerrainType:EOATerrainTypeDisabled];
     }
     else
     {
-        [data setLastTerrainType:data.terrainType];
-        [data setTerrainType:EOATerrainTypeDisabled];
+        [data setTerrainType:data.lastTerrainType];
     }
 }
 

@@ -602,9 +602,7 @@ static UIViewController *parentController;
         
         [app saveFavoritesToPermamentStorage];
     }
-    
-    [_selectedUnsortedItems removeAllObjects];
-    [self editButtonClicked:nil];
+    [self finishEditing];
     [self.favoriteTableView reloadData];
 }
 
@@ -648,9 +646,7 @@ static UIViewController *parentController;
         
         [app saveFavoritesToPermamentStorage];
     }
-    
-    [_selectedUnsortedItems removeAllObjects];
-    [self editButtonClicked:nil];
+    [self finishEditing];
     [self generateData];
 }
 
@@ -674,47 +670,53 @@ static UIViewController *parentController;
     return itemList;
 }
 
+- (void) startEditing
+{
+    [self.favoriteTableView setEditing:![self.favoriteTableView isEditing] animated:YES];
+    _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+           _editToolbarView.hidden = NO;
+           [UIView animateWithDuration:.3 animations:^{
+               [self.tabBarController.tabBar setHidden:YES];
+               [self applySafeAreaMargins];
+           }];
+
+           [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
+           [self.backButton setHidden:YES];
+           [self.directionButton setHidden:YES];
+           [self.favoriteTableView reloadData];
+}
+
+- (void) finishEditing
+{
+    _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+    [UIView animateWithDuration:.3 animations:^{
+        [self.tabBarController.tabBar setHidden:NO];
+        _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+    } completion:^(BOOL finished) {
+        _editToolbarView.hidden = YES;
+        [self applySafeAreaMargins];
+    }];
+
+    [self.editButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+    [self.backButton setHidden:NO];
+
+    if (self.directionButton.tag == 1)
+        [self.directionButton setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
+    else
+        [self.directionButton setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
+
+    [self.directionButton setHidden:NO];
+    [self.favoriteTableView setEditing:![self.favoriteTableView isEditing] animated:YES];
+    [_selectedUnsortedItems removeAllObjects];
+}
+
 - (IBAction)editButtonClicked:(id)sender
 {
     [self.favoriteTableView beginUpdates];
-    [self.favoriteTableView setEditing:![self.favoriteTableView isEditing] animated:YES];
-    
     if ([self.favoriteTableView isEditing])
-    {
-        _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-        _editToolbarView.hidden = NO;
-        [UIView animateWithDuration:.3 animations:^{
-            [self.tabBarController.tabBar setHidden:YES];
-            [self applySafeAreaMargins];
-        }];
-
-        [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
-        [self.backButton setHidden:YES];
-        [self.directionButton setHidden:YES];
-        [self.favoriteTableView reloadData];
-    }
+        [self finishEditing];
     else
-    {
-        _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-        [UIView animateWithDuration:.3 animations:^{
-            [self.tabBarController.tabBar setHidden:NO];
-            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-        } completion:^(BOOL finished) {
-            _editToolbarView.hidden = YES;
-            [self applySafeAreaMargins];
-        }];
-
-        [self.editButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
-        [self.backButton setHidden:NO];
-
-        if (self.directionButton.tag == 1)
-            [self.directionButton setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
-        else
-            [self.directionButton setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
-
-        [self.directionButton setHidden:NO];
-        
-    }
+        [self startEditing];
     [self.favoriteTableView endUpdates];
 }
 
@@ -758,9 +760,7 @@ static UIViewController *parentController;
     [_exportController presentOptionsMenuFromRect:_exportButton.frame
                                            inView:self.view
                                          animated:YES];
-    
-    [_selectedUnsortedItems removeAllObjects];
-    [self editButtonClicked:nil];
+    [self finishEditing];
     [self generateData];
 }
 
@@ -1131,9 +1131,7 @@ static UIViewController *parentController;
         app.favoritesCollection->removeFavoriteLocation(obj.favorite);
     }];
     [app saveFavoritesToPermamentStorage];
-    
-    [_selectedUnsortedItems removeAllObjects];
-    [self editButtonClicked:nil];
+    [self finishEditing];
     [self generateData];
 }
 
@@ -1174,15 +1172,13 @@ static UIViewController *parentController;
             if (groupData.isOpen)
             {
                 [self.favoriteTableView beginUpdates];
-            
                 [self.favoriteTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:selectedItem.row inSection:selectedItem.section]] withRowAnimation:UITableViewRowAnimationLeft];
                 [self.favoriteTableView endUpdates];
             }
             [app saveFavoritesToPermamentStorage];
         }
     }
-    [_selectedUnsortedItems removeAllObjects];
-    [self editButtonClicked:nil];
+    [self finishEditing];
 }
 
 - (void) removeFavoriteItems:(NSArray *)selectedRows

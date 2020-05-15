@@ -642,7 +642,7 @@
 
 - (BOOL) isPurchased
 {
-    return YES;
+    return self.purchaseState == PSTATE_PURCHASED || [self isAlreadyPurchased] || [self isLiveUpdatesPurchased];
 }
 
 - (BOOL) isActive

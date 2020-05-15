@@ -138,7 +138,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) generateData
 {
-    
     EOATerrainType type = _app.data.terrainType;
     switch (type) {
         case EOATerrainTypeHillshade:
@@ -226,8 +225,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     _data = [NSArray arrayWithArray:result];
 
-    
-    NSString *availableSectionFooter = _app.data.terrainType == EOATerrainTypeSlope ? OALocalizedString(@"map_settings_add_maps_slopes") : OALocalizedString(@"map_settings_add_maps_hillshade");
+    EOATerrainType terrainType = _app.data.terrainType;
+    NSString *availableSectionFooter =  @"";
+    if (terrainType == EOATerrainTypeHillshade)
+        availableSectionFooter = OALocalizedString(@"map_settings_add_maps_hillshade");
+    else if (terrainType == EOATerrainTypeSlope)
+        availableSectionFooter = OALocalizedString(@"map_settings_add_maps_slopes");
     NSMutableArray *sectionArr = [NSMutableArray new];
     [sectionArr addObject:@{}];
     [sectionArr addObject:@{}];
@@ -235,7 +238,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         @"header" : OALocalizedString(@"res_zoom_levels"),
         @"footer" : OALocalizedString(@"map_settings_zoom_level_description")
     }];
-    if (_app.data.terrainType == EOATerrainTypeSlope)
+    if (terrainType == EOATerrainTypeSlope)
     {
         [sectionArr addObject:@{
             @"header" : OALocalizedString(@"map_settings_legend"),
@@ -305,8 +308,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
     CLLocationCoordinate2D coord = loc.coordinate;
-    OsmAnd::ResourcesManager::ResourceType resType = _app.data.terrainType == EOATerrainTypeSlope ?
-        OsmAnd::ResourcesManager::ResourceType::SlopeRegion : OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
+    OsmAnd::ResourcesManager::ResourceType resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
+    if (_app.data.terrainType == EOATerrainTypeSlope)
+        resType = OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
+    else if (_app.data.terrainType == EOATerrainTypeHillshade)
+        resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
     [OAResourcesUIHelper requestMapDownloadInfo:coord resourceType:resType onComplete:^(NSArray<ResourceItem *>* res) {
         @synchronized(_dataLock)
         {

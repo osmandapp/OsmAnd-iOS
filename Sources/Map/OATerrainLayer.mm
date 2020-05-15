@@ -253,9 +253,8 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
                 NSString *fileName = [f lastPathComponent];
                 NSString *ext = [[f pathExtension] lowercaseString];
                 NSString *type = [[[f stringByDeletingPathExtension] pathExtension] lowercaseString];
-                BOOL isHillshade = _terrainType == EOATerrainLayerTypeHillshade;
-                BOOL isSlope = _terrainType == EOATerrainLayerTypeSlope;
-                if([ext isEqualToString:@"sqlitedb"] && (([type isEqualToString:@"hillshade"] && isHillshade) || ([type isEqualToString:@"slope"] && isSlope)))
+                if([ext isEqualToString:@"sqlitedb"] &&
+                   (([type isEqualToString:@"hillshade"] && _terrainType == EOATerrainLayerTypeHillshade) || ([type isEqualToString:@"slope"] && _terrainType == EOATerrainLayerTypeSlope)))
                 {
                     OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:f];
                     [rs setObject:ts forKey:fileName];

@@ -63,14 +63,29 @@
     EOATerrainType type = self.app.data.terrainType;
     if (type != EOATerrainTypeDisabled && [[OAIAPHelper sharedInstance].srtm isActive])
     {
-        BOOL isSlope = type == EOATerrainTypeSlope;
-        OsmAnd::ZoomLevel minZoom = OsmAnd::ZoomLevel(isSlope ? self.app.data.slopeMinZoom : self.app.data.hillshadeMinZoom);
-        OsmAnd::ZoomLevel maxZoom = OsmAnd::ZoomLevel(isSlope ? self.app.data.slopeMaxZoom : self.app.data.hillshadeMaxZoom);
+        OsmAnd::ZoomLevel minZoom = [self getMinZoom];
+        OsmAnd::ZoomLevel maxZoom = [self getMaxZoom];
+        if (type == EOATerrainTypeSlope)
+        {
+            minZoom = OsmAnd::ZoomLevel(self.app.data.slopeMinZoom);
+            maxZoom = OsmAnd::ZoomLevel(self.app.data.slopeMaxZoom);
+        }
+        else if (type == EOATerrainTypeHillshade)
+        {
+            minZoom = OsmAnd::ZoomLevel(self.app.data.hillshadeMinZoom);
+            maxZoom = OsmAnd::ZoomLevel(self.app.data.hillshadeMaxZoom);
+        }
         _terrainMapProvider = std::make_shared<OATerrainMapLayerProvider>(minZoom, maxZoom);
         [self.mapView setProvider:_terrainMapProvider forLayer:self.layerIndex];
         
         OsmAnd::MapLayerConfiguration config;
-        config.setOpacityFactor(isSlope ? self.app.data.slopeAlpha : self.app.data.hillshadeAlpha);
+        double layerAlpha = OAAppData.defaults.hillshadeAlpha;
+        if (type == EOATerrainTypeSlope)
+            layerAlpha = self.app.data.slopeAlpha;
+        else if (type == EOATerrainTypeHillshade)
+            layerAlpha = self.app.data.hillshadeAlpha;
+
+        config.setOpacityFactor(layerAlpha);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         return YES;
     }
@@ -99,8 +114,12 @@
         [self.mapViewController runWithRenderSync:^{
             OsmAnd::MapLayerConfiguration config;
             EOATerrainType type = self.app.data.terrainType;
-            BOOL isSlope = type == EOATerrainTypeSlope;
-            config.setOpacityFactor(isSlope ? self.app.data.slopeAlpha : self.app.data.hillshadeAlpha);
+            double layerAlpha = OAAppData.defaults.hillshadeAlpha;
+            if (type == EOATerrainTypeSlope)
+                layerAlpha = self.app.data.slopeAlpha;
+            else if (type == EOATerrainTypeHillshade)
+                layerAlpha = self.app.data.hillshadeAlpha;
+            config.setOpacityFactor(layerAlpha);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         }];
     });

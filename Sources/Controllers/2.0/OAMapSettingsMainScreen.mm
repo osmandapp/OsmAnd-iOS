@@ -504,7 +504,7 @@
             }
             if ([data[@"key"] isEqualToString:@"terrain_layer"])
             {
-                [cell.switchView setOn:_app.data.terrainType];
+                [cell.switchView setOn:_app.data.terrainType != EOATerrainTypeDisabled];
                 [cell.switchView addTarget:self action:@selector(terrainChanged:) forControlEvents:UIControlEventValueChanged];
             }
             cell.textView.text = data[@"name"];

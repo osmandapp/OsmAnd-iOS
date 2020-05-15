@@ -581,17 +581,17 @@ static NSInteger kButtonsSection;
             if (_mapSettingType == EMapSettingOverlay)
             {
                 _app.data.overlayMapSource = _app.data.lastOverlayMapSource;
-                if (!_app.data.overlayMapSource )
-                    [self installMorePressed];
+                if (!_app.data.overlayMapSource)
+                    [self installMorePressed]; // Why it added here?
             }
             else if (_mapSettingType == EMapSettingUnderlay)
             {
                 _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
-                if (!_app.data.underlayMapSource )
-                    [self installMorePressed];
+                if (!_app.data.underlayMapSource)
+                    [self installMorePressed]; // Why it added here?
             }
             if ((_mapSettingType == EMapSettingOverlay && _app.data.overlayMapSource) ||
-                (_mapSettingType == EMapSettingUnderlay &&_app.data.underlayMapSource))
+                (_mapSettingType == EMapSettingUnderlay && _app.data.underlayMapSource))
             {
                 [tblView beginUpdates];
                 [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];

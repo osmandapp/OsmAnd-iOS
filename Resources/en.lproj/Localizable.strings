@@ -976,7 +976,7 @@
 "show_terrain" = "Show Terrain";
 "hide_terrain" = "Hide Terrain";
 "toggle_contour_lines" = "Show/Hide contour lines";
-"toggle_hillshade" = "Show/Hide hillshade";
+"toggle_hillshade" = "Show/Hide terrain";
 "display_starting_at_zoom_level" = "Display starting at zoom level";
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";

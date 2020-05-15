@@ -22,7 +22,7 @@
 - (void)execute
 {
     OAAppData *data = [OsmAndApp instance].data;
-    BOOL isOn = [data terrainType];
+    BOOL isOn = [data terrainType] != EOATerrainTypeDisabled;
     if (isOn)
     {
         [data setTerrainType:data.lastTerrainType];

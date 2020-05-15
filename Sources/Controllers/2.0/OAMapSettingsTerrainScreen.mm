@@ -446,27 +446,39 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSInteger) getMinZoom
 {
-    return _app.data.terrainType == EOATerrainTypeHillshade ? _minZoomHillshade : _minZoomSlope;
+    EOATerrainType terrainType = _app.data.terrainType;
+    if (terrainType == EOATerrainTypeHillshade)
+        return _minZoomHillshade;
+    else if (terrainType == EOATerrainTypeSlope)
+        return _minZoomSlope;
+    return 0;
 }
 
 - (NSInteger) getMaxZoom
 {
-    return _app.data.terrainType == EOATerrainTypeHillshade ? _maxZoomHillshade : _maxZoomSlope;
+    EOATerrainType terrainType = _app.data.terrainType;
+    if (terrainType == EOATerrainTypeHillshade)
+        return _maxZoomHillshade;
+    else if (terrainType == EOATerrainTypeSlope)
+        return _maxZoomSlope;
+    return 0;
 }
 
 - (void) setMinZoom:(NSInteger)zoom
 {
-    if (_app.data.terrainType == EOATerrainTypeHillshade)
+    EOATerrainType terrainType = _app.data.terrainType;
+    if (terrainType == EOATerrainTypeHillshade)
         _minZoomHillshade = zoom;
-    else
+    else if (terrainType == EOATerrainTypeSlope)
         _minZoomSlope = zoom;
 }
 
 - (void) setMaxZoom:(NSInteger)zoom
 {
-    if (_app.data.terrainType == EOATerrainTypeHillshade)
+    EOATerrainType terrainType = _app.data.terrainType;
+    if (terrainType == EOATerrainTypeHillshade)
         _maxZoomHillshade = zoom;
-    else
+    else if (terrainType == EOATerrainTypeSlope)
         _maxZoomSlope = zoom;
 }
 

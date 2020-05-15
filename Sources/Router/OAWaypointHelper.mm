@@ -793,7 +793,7 @@
     [self setLocationPoints:locationPoints route:route];
 }
 
-- (OAAlarmInfo *) calculateMostImportantAlarm:(std::shared_ptr<RouteDataObject>)ro loc:(CLLocation *)loc mc:(EOAMetricsConstant)mc showCameras:(BOOL)showCameras
+- (OAAlarmInfo *) calculateMostImportantAlarm:(const std::shared_ptr<const OsmAnd::Road>)ro loc:(CLLocation *)loc mc:(EOAMetricsConstant)mc showCameras:(BOOL)showCameras
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     float mxspeed = ro->getMaximumSpeed(ro->bearingVsRouteDirection(loc.course));
@@ -804,15 +804,16 @@
         [[self getVoiceRouter] announceSpeedAlarm:speedAlarm.intValue speed:loc.speed];
         return speedAlarm;
     }
-    for (int i = 0; i < ro->getPointsLength(); i++)
+    for (int i = 0; i < ro->points31.size(); i++)
     {
-        auto& pointTypes = ro->pointTypes[i];
-        RoutingIndex *reg = ro->region;
+        auto& pointTypes = ro->pointsTypes.value(i);
+        const auto& section = ro->section;
         if (!pointTypes.empty())
         {
             for (int r = 0; r < pointTypes.size(); r++)
             {
-                RouteTypeRule& typeRule = reg->quickGetEncodingRule(pointTypes[r]);
+                const auto typeRuleRef = section->getAttributeMapping()->routingDecodeMap.getRef(pointTypes[r]);
+                RouteTypeRule typeRule(typeRuleRef->getTag().toStdString(), typeRuleRef->getValue().toStdString());
                 OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:0 coordinate:loc.coordinate];
                 
                 // For STOP first check if it has directional info

@@ -367,7 +367,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         _entityInfoId = enId;
         if (entity)
         {
-            if (!isWay && [entity isKindOfClass:OANode.class] && OsmAnd::Utilities::distance([entity getLatitude], [entity getLongitude], poi.latitude, poi.longitude) < 50)
+            if (!isWay && [entity isKindOfClass:OANode.class] && OsmAnd::Utilities::distance([entity getLongitude], [entity getLatitude], poi.longitude, poi.latitude) < 50)
             {
                 // check whether this is node (because id of node could be the same as relation)
                 if (isAmenity)
@@ -448,7 +448,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
                 }
             }
         }
-        else if (OsmAnd::Utilities::distance([entity getLatitude], [entity getLongitude], [downloadedEntity getLatitude], [downloadedEntity getLongitude]) < 10) {
+        else if (OsmAnd::Utilities::distance([entity getLongitude], [entity getLatitude], [downloadedEntity getLongitude], [downloadedEntity getLatitude]) < 10) {
             // avoid shifting due to round error
             [entity setLatitude:[downloadedEntity getLatitude]];
             [entity setLongitude:[downloadedEntity getLongitude]];

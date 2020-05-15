@@ -130,8 +130,8 @@
 
 - (BOOL) updateLayer
 {
-    //[self clearLayers];
-    //[self initDestinationLayer];
+//    [self clearLayers];
+//    [self initDestinationLayer];
     if (_destinationLineSublayer.superlayer != self.layer)
         [self.layer insertSublayer:_destinationLineSublayer above:self.layer];
     [_destinationLineSublayer setNeedsDisplay];

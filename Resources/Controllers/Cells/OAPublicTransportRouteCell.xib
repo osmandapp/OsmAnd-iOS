@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OAPublicTransportRouteCell" rowHeight="112" id="Hba-zN-lBR" customClass="OAPublicTransportRouteCell">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="112"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="108"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hba-zN-lBR" id="rr8-ao-F4M">
-                <rect key="frame" x="0.0" y="0.0" width="414" height="112"/>
+                <rect key="frame" x="0.0" y="0.0" width="414" height="108"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ziq-OG-ejE">
@@ -63,12 +63,12 @@
                 <constraints>
                     <constraint firstItem="xr6-lB-e1f" firstAttribute="top" secondItem="dif-FI-clZ" secondAttribute="bottom" constant="10" id="3OO-XX-4TI"/>
                     <constraint firstItem="xr6-lB-e1f" firstAttribute="leading" secondItem="8nb-3o-nXs" secondAttribute="trailing" constant="15" id="4Di-l6-91X"/>
-                    <constraint firstAttribute="bottom" secondItem="xr6-lB-e1f" secondAttribute="bottom" constant="16" id="8Ih-Tp-Xe1"/>
+                    <constraint firstAttribute="bottom" secondItem="xr6-lB-e1f" secondAttribute="bottom" constant="12" id="8Ih-Tp-Xe1"/>
                     <constraint firstAttribute="trailingMargin" secondItem="dif-FI-clZ" secondAttribute="trailing" id="BcT-A4-LRt"/>
                     <constraint firstItem="dif-FI-clZ" firstAttribute="top" secondItem="ziq-OG-ejE" secondAttribute="bottom" constant="8" id="DlG-pW-hJE"/>
                     <constraint firstItem="ziq-OG-ejE" firstAttribute="leading" secondItem="rr8-ao-F4M" secondAttribute="leadingMargin" id="GFG-a8-VEn"/>
                     <constraint firstItem="8nb-3o-nXs" firstAttribute="leading" secondItem="rr8-ao-F4M" secondAttribute="leadingMargin" id="H2X-0H-N79"/>
-                    <constraint firstAttribute="bottom" secondItem="8nb-3o-nXs" secondAttribute="bottom" constant="16" id="Mc2-w2-B42"/>
+                    <constraint firstAttribute="bottom" secondItem="8nb-3o-nXs" secondAttribute="bottom" constant="12" id="Mc2-w2-B42"/>
                     <constraint firstItem="dif-FI-clZ" firstAttribute="leading" secondItem="rr8-ao-F4M" secondAttribute="leadingMargin" id="P25-yV-OU6"/>
                     <constraint firstItem="8nb-3o-nXs" firstAttribute="width" secondItem="xr6-lB-e1f" secondAttribute="width" id="P5h-r5-Jrx"/>
                     <constraint firstAttribute="trailingMargin" secondItem="ziq-OG-ejE" secondAttribute="trailing" id="Rth-VT-wL4"/>

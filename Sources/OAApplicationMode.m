@@ -74,14 +74,14 @@ static OAApplicationMode *_SKI;
     _DEFAULT.arrivalDistance = 90;
     [self defLocation:_DEFAULT];
     _DEFAULT.mapIcon = @"map_world_globe_dark";
-    _DEFAULT.smallIconDark = @"ic_profile_browsemap";
+    _DEFAULT.smallIconDark = @"ic_world_globe_dark";
     [_values addObject:_DEFAULT];
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
     _CAR.minDistanceForTurn = 35;
     [self carLocation:_CAR];
     _CAR.mapIcon = @"map_action_car_dark";
-    _CAR.smallIconDark = @"ic_profile_car";
+    _CAR.smallIconDark = @"ic_action_car_dark";
     [_values addObject:_CAR];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
@@ -89,7 +89,7 @@ static OAApplicationMode *_SKI;
     _BICYCLE.arrivalDistance = 60;
     [self bicycleLocation:_BICYCLE];
     _BICYCLE.mapIcon = @"map_action_bicycle_dark";
-    _BICYCLE.smallIconDark = @"ic_profile_bicycle";
+    _BICYCLE.smallIconDark = @"ic_action_bicycle_dark";
     [_values addObject:_BICYCLE];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
@@ -97,7 +97,7 @@ static OAApplicationMode *_SKI;
     _PEDESTRIAN.arrivalDistance = 45;
     [self pedestrianLocation:_PEDESTRIAN];
     _PEDESTRIAN.mapIcon = @"map_action_pedestrian_dark";
-    _PEDESTRIAN.smallIconDark = @"ic_profile_pedestrian";
+    _PEDESTRIAN.smallIconDark = @"ic_action_pedestrian_dark";
     [_values addObject:_PEDESTRIAN];
     
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
@@ -105,7 +105,7 @@ static OAApplicationMode *_SKI;
     _PUBLIC_TRANSPORT.minDistanceForTurn = 35;
     [self carLocation:_PUBLIC_TRANSPORT];
     _PUBLIC_TRANSPORT.mapIcon = @"map_action_bus_dark";
-    _PUBLIC_TRANSPORT.smallIconDark = @"ic_profile_bus";
+    _PUBLIC_TRANSPORT.smallIconDark = @"ic_action_bus_dark";
     [_values addObject:_PUBLIC_TRANSPORT];
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];

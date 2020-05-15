@@ -1599,3 +1599,5 @@
 "map_settings_base_transp" = "Transparência do mapa base";
 "map_settings_appearance" = "Aparência";
 "shared_string_warning" = "Aviso";
+"exit_at" = "Sair em";
+"public_transport_warning_title" = "A navegação em transportes públicos está atualmente em testes beta, podem ocorrer erros e imprecisões.";

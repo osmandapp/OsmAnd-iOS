@@ -137,7 +137,7 @@
                                   const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
                                   if (transportStop->id != _transportStop.stop->id || empty)
                                   {
-                                      auto dist = OsmAnd::Utilities::distance(transportStop->location.latitude, transportStop->location.longitude, _transportStop.location.latitude, _transportStop.location.longitude);
+                                      auto dist = OsmAnd::Utilities::distance(transportStop->location.longitude, transportStop->location.latitude, _transportStop.location.longitude, _transportStop.location.latitude);
                                       [self addRoutes:routes dataInterface:dataInterface s:transportStop lang:prefLang transliterate:transliterate dist:dist];
                                   }
                               });

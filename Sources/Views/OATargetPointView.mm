@@ -32,6 +32,13 @@
 #import "OAMoreOptionsBottomSheetViewController.h"
 #import "OATransportStopRoute.h"
 #import "OATransportStopType.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapLayers.h"
+#import "OATransportStopsLayer.h"
+#import "OANativeUtilities.h"
+#import "OATransportRouteController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -152,6 +159,8 @@ static const NSInteger _buttonsCount = 4;
     
     BOOL _bottomBarVisible;
     CGFloat _bottomBarHeight;
+    
+    NSArray<OATransportStopRoute *> *_visibleTransportRoutes;
 }
 
 - (instancetype) init
@@ -999,6 +1008,8 @@ static const NSInteger _buttonsCount = 4;
     _hiding = YES;
     
     [self.menuViewDelegate targetSetBottomControlsVisible:YES menuHeight:0 animated:YES];
+    
+    _visibleTransportRoutes = nil;
 
     if (self.superview)
     {
@@ -1733,19 +1744,25 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController)
     {
         for (UIView *v in _transportView.subviews)
-            if ([v isKindOfClass:[UIImageView class]])
+            if ([v isKindOfClass:[UIButton class]])
                 [v removeFromSuperview];
 
         NSArray<OATransportStopRoute *> *localTransportStopRoutes = [self.customController getLocalTransportStopRoutes];
         NSArray<OATransportStopRoute *> *nearbyTransportStopRoutes = [self.customController getNearbyTransportStopRoutes];
+        _visibleTransportRoutes = [localTransportStopRoutes arrayByAddingObjectsFromArray:nearbyTransportStopRoutes];
+        NSInteger stopPlatesCount = 0;
         if (localTransportStopRoutes.count > 0)
         {
             NSInteger i = 0;
             for (OATransportStopRoute *route in localTransportStopRoutes)
             {
                 UIImage *stopPlateImage = [OATransportStopViewController createStopPlate:route.route->ref.toNSString() color:[route getColor:NO]];
-                UIImageView *stopPlateImageView = [[UIImageView alloc] initWithImage:stopPlateImage];
-                [_transportView insertSubview:stopPlateImageView atIndex:i++];
+                UIButton *stopPlateButton = [UIButton buttonWithType:UIButtonTypeSystem];
+                stopPlateButton.frame = CGRectMake(0., 0., stopPlateImage.size.width, stopPlateImage.size.height);
+                [stopPlateButton setBackgroundImage:stopPlateImage forState:UIControlStateNormal];
+                stopPlateButton.tag = stopPlatesCount++;
+                [stopPlateButton addTarget:self action:@selector(onTransportPlatePressed:) forControlEvents:UIControlEventTouchUpInside];
+                [_transportView insertSubview:stopPlateButton atIndex:i++];
             }
         }
         if (nearbyTransportStopRoutes.count > 0)
@@ -1757,8 +1774,12 @@ static const NSInteger _buttonsCount = 4;
             for (OATransportStopRoute *route in nearbyTransportStopRoutes)
             {
                 UIImage *stopPlateImage = [OATransportStopViewController createStopPlate:route.route->ref.toNSString() color:[route getColor:NO]];
-                UIImageView *stopPlateImageView = [[UIImageView alloc] initWithImage:stopPlateImage];
-                [_transportView addSubview:stopPlateImageView];
+                UIButton *stopPlateButton = [UIButton buttonWithType:UIButtonTypeSystem];
+                stopPlateButton.frame = CGRectMake(0., 0., stopPlateImage.size.width, stopPlateImage.size.height);
+                [stopPlateButton setBackgroundImage:stopPlateImage forState:UIControlStateNormal];
+                stopPlateButton.tag = stopPlatesCount++;
+                [stopPlateButton addTarget:self action:@selector(onTransportPlatePressed:) forControlEvents:UIControlEventTouchUpInside];
+                [_transportView addSubview:stopPlateButton];
             }
         }
         else
@@ -1771,6 +1792,32 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         _transportView.hidden = YES;
+    }
+}
+
+- (void) onTransportPlatePressed:(id)sender
+{
+    if ([sender isKindOfClass:UIButton.class])
+    {
+        UIButton *button = (UIButton *) sender;
+        if (button.tag < _visibleTransportRoutes.count)
+        {
+            OATransportStopRoute *r = _visibleTransportRoutes[button.tag];
+            
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            OAMapViewController *mapController = mapPanel.mapViewController;
+
+            OATargetPoint *targetPoint = [OATransportRouteController getTargetPoint:r];
+            CLLocationCoordinate2D latLon = targetPoint.location;
+                
+            Point31 point31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
+            [mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+            [mapController.mapLayers.transportStopsLayer showStopsOnMap:r];
+            
+            [mapPanel showContextMenuWithPoints:@[targetPoint]];
+
+            [OATransportRouteController showToolbar:r];
+        }
     }
 }
 

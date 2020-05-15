@@ -119,7 +119,7 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
     }];
 
     // check whether this is node (because id of node could be the same as relation)
-    if ([entity isKindOfClass:OANode.class] && OsmAnd::Utilities::distance([entity getLatitude], [entity getLongitude], poi.latitude, poi.longitude) < 50)
+    if ([entity isKindOfClass:OANode.class] && OsmAnd::Utilities::distance([entity getLongitude], [entity getLatitude], poi.longitude, poi.latitude) < 50)
         return entity;
     else if ([entity isKindOfClass:OAWay.class])
         return entity;

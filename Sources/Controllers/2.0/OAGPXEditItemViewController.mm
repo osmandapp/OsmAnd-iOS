@@ -17,6 +17,7 @@
 #import "OADefaultFavorite.h"
 #import "OAGPXEditWptListViewController.h"
 #import "OAEditColorViewController.h"
+#import "OASelectedGPXHelper.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -595,7 +596,9 @@
             NSString* newName = [alertView textFieldAtIndex:0].text;
             if (newName.length > 0)
             {
+                NSString *oldFileName = self.gpx.gpxFileName;
                 self.gpx.gpxTitle = newName;
+                self.gpx.gpxFileName = [self.gpx.gpxTitle stringByAppendingPathExtension:@"gpx"];
                 [[OAGPXDatabase sharedDb] save];
                 
                 OAGpxMetadata *metadata;
@@ -635,7 +638,17 @@
                 metadata.name = newName;
                 
                 NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
-                [_mapViewController updateMetadata:metadata docPath:path];
+                if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
+                    [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
+                
+                BOOL saveFailed = ![_mapViewController updateMetadata:metadata oldPath:self.doc.fileName docPath:path];
+                self.doc.fileName = path;
+                self.doc.metadata = metadata;
+                
+                if (saveFailed)
+                    [self.doc saveTo:path];
+                
+                [OASelectedGPXHelper renameVisibleTrack:oldFileName newName:path.lastPathComponent];
                 
                 [_mapViewController hideTempGpxTrack];
                 

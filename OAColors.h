@@ -117,6 +117,7 @@
 #define color_icon_inactive 0xA49DAF
 
 #define color_slider_gray 0xe4e4e6
+#define color_footer_icon_gray 0xC4C4C4
 
 #define profile_icon_color_blue_light_default 0x237BFF
 #define profile_icon_color_purple_light 0x732EEB

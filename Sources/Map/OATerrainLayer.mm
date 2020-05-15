@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
     
     EOATerrainLayerType _terrainType;
     
-    OAAutoObserverProxy* _hillshadeChangeObserver;
+    OAAutoObserverProxy* _terrainChangeObserver;
 }
 
 + (OATerrainLayer *)sharedInstanceHillshade
@@ -65,8 +65,8 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
         _sync = [[NSObject alloc] init];
         _terrainType = terrainType;
         
-        _hillshadeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onHillshadeResourcesChanged)
+        _terrainChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onTerrainResourcesChanged)
                                                               andObserve:[OsmAndApp instance].data.terrainResourcesChangeObservable];
 
         _indexedResources = [[QuadTree alloc] initWithQuadRect:[[QuadRect alloc] initWithLeft:0 top:0 right:1 << (ZOOM_BOUNDARY+1) bottom:1 << (ZOOM_BOUNDARY+1)] depth:8 ratio:0.55f];
@@ -74,9 +74,9 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
         _tilesDir = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources"];
         
         NSString *dir = [NSHomeDirectory() stringByAppendingString:@"/Library/HillshadeDatabase"];
-        if ([self isHillshade])
+        if (_terrainType == EOATerrainLayerTypeHillshade)
             _databasePath = [dir stringByAppendingString:@"/hillshade.cache"];
-        else
+        else if (_terrainType == EOATerrainLayerTypeSlope)
             _databasePath = [dir stringByAppendingString:@"/slope.cache"];
         BOOL isDir = YES;
         if (![[NSFileManager defaultManager] fileExistsAtPath:dir isDirectory:&isDir])
@@ -87,12 +87,7 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
     return self;
 }
 
-- (BOOL) isHillshade
-{
-    return _terrainType == EOATerrainLayerTypeHillshade;
-}
-
-- (void)onHillshadeResourcesChanged
+- (void)onTerrainResourcesChanged
 {
     [self indexHillshadeFiles];
     [[OsmAndApp instance].data.terrainChangeObservable notifyEvent];
@@ -258,8 +253,9 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
                 NSString *fileName = [f lastPathComponent];
                 NSString *ext = [[f pathExtension] lowercaseString];
                 NSString *type = [[[f stringByDeletingPathExtension] pathExtension] lowercaseString];
-                BOOL isHillshade = [self isHillshade];
-                if([ext isEqualToString:@"sqlitedb"] && (([type isEqualToString:@"hillshade"] && isHillshade) || ([type isEqualToString:@"slope"] && !isHillshade)))
+                BOOL isHillshade = _terrainType == EOATerrainLayerTypeHillshade;
+                BOOL isSlope = _terrainType == EOATerrainLayerTypeSlope;
+                if([ext isEqualToString:@"sqlitedb"] && (([type isEqualToString:@"hillshade"] && isHillshade) || ([type isEqualToString:@"slope"] && isSlope)))
                 {
                     OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:f];
                     [rs setObject:ts forKey:fileName];

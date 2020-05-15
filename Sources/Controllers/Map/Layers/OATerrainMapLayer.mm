@@ -25,7 +25,7 @@
 
 - (NSString *) layerId
 {
-    return kHillshadeMapLayerId;
+    return kTerrainMapLayerId;
 }
 
 - (void) initLayer

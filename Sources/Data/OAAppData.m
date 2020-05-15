@@ -305,7 +305,7 @@
     }
 }
 
-- (void) sethillshadeMinZoom:(NSInteger)hillshadeMinZoom
+- (void) setHillshadeMinZoom:(NSInteger)hillshadeMinZoom
 {
     @synchronized(_lock)
     {
@@ -324,7 +324,7 @@
     }
 }
 
-- (void) sethillshadeMaxZoom:(NSInteger)hillshadeMaxZoom
+- (void) setHillshadeMaxZoom:(NSInteger)hillshadeMaxZoom
 {
     @synchronized(_lock)
     {

@@ -73,7 +73,7 @@
     {
         _iconView.frame = CGRectMake(16.0 + leftMargin, 8.0, 30.0, 30.0);
     }
-    CGFloat w = self.bounds.size.width - 32. - leftMargin * 2 - (hasIcon ? 30.0 : 0.0);
+    CGFloat w = self.bounds.size.width - 32. - leftMargin * 2 - (hasIcon ? 30.0 : 0.0) - 16.;
     CGFloat height = _label.attributedText.length > 0 ? [OAUtilities calculateTextBounds:_label.attributedText width:w].height : [self.class getTextHeight:_label.text width:w];
     if (_label.text.length > 0)
     {

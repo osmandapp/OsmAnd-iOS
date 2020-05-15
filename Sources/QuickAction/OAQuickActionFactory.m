@@ -26,7 +26,7 @@
 #import "OAMapSourceAction.h"
 #import "OADayNightModeAction.h"
 #import "OAContourLinesAction.h"
-#import "OAHillshadeAction.h"
+#import "OATerrainAction.h"
 #import "OANavVoiceAction.h"
 #import "OANavAddDestinationAction.h"
 #import "OANavAddFirstIntermediateAction.h"
@@ -149,9 +149,9 @@
     OAQuickAction *contourLines = [[OAContourLinesAction alloc] init];
     if (![contourLines hasInstanceInList:active])
         [quickActions addObject:contourLines];
-    OAQuickAction *hillshade = [[OAHillshadeAction alloc] init];
-    if (![hillshade hasInstanceInList:active])
-        [quickActions addObject:hillshade];
+    OAQuickAction *terrain = [[OATerrainAction alloc] init];
+    if (![terrain hasInstanceInList:active])
+        [quickActions addObject:terrain];
     
     OAQuickAction *voice = [[OANavVoiceAction alloc] init];
     OAQuickAction *addDestionation = [[OANavAddDestinationAction alloc] init];
@@ -273,8 +273,8 @@
         case EOAQuickActionTypeToggleContourLines:
             return [[OAContourLinesAction alloc] init];
             
-        case EOAQuickActionTypeToggleHillshade:
-            return [[OAHillshadeAction alloc] init];
+        case EOAQuickActionTypeToggleTerrain:
+            return [[OATerrainAction alloc] init];
             
         case EOAQuickActionTypeToggleGPX:
             return [[OAShowHideGPXTracksAction alloc] init];
@@ -371,8 +371,8 @@
         case EOAQuickActionTypeToggleContourLines:
             return [[OAContourLinesAction alloc] initWithAction:quickAction];
             
-        case EOAQuickActionTypeToggleHillshade:
-            return [[OAHillshadeAction alloc] initWithAction:quickAction];
+        case EOAQuickActionTypeToggleTerrain:
+            return [[OATerrainAction alloc] initWithAction:quickAction];
             
             
         case EOAQuickActionTypeToggleGPX:
@@ -457,7 +457,7 @@
         case EOAQuickActionTypeToggleContourLines:
             return @"ic_custom_contour_lines";
         
-        case EOAQuickActionTypeToggleHillshade:
+        case EOAQuickActionTypeToggleTerrain:
             return @"ic_custom_hillshade";
             
         case EOAQuickActionTypeToggleGPX:
@@ -553,7 +553,7 @@
             return OALocalizedString(@"toggle_day_night");
         case EOAQuickActionTypeToggleContourLines:
             return OALocalizedString(@"toggle_contour_lines");
-        case EOAQuickActionTypeToggleHillshade:
+        case EOAQuickActionTypeToggleTerrain:
             return OALocalizedString(@"toggle_hillshade");
         case EOAQuickActionTypeToggleGPX:
             return OALocalizedString(@"show_hide_gpx");
@@ -584,7 +584,7 @@
         case EOAQuickActionTypeResumePauseNavigation:
         case EOAQuickActionTypeToggleDayNight:
         case EOAQuickActionTypeToggleContourLines:
-        case EOAQuickActionTypeToggleHillshade:
+        case EOAQuickActionTypeToggleTerrain:
         case EOAQuickActionTypeToggleGPX:
             return NO;
             

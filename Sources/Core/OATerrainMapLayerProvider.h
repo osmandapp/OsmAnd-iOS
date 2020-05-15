@@ -11,15 +11,19 @@
 
 #include <OsmAndCore/Map/ImageMapLayerProvider.h>
 
-class OAHillshadeMapLayerProvider : public OsmAnd::ImageMapLayerProvider
+class OATerrainMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 {
 
 private:
     virtual void performAdditionalChecks(std::shared_ptr<const SkBitmap> bitmap);
+    
+    OsmAnd::ZoomLevel minZoom;
+    OsmAnd::ZoomLevel maxZoom;
 protected:
 public:
-    OAHillshadeMapLayerProvider();
-    virtual ~OAHillshadeMapLayerProvider();
+    OATerrainMapLayerProvider();
+    OATerrainMapLayerProvider(OsmAnd::ZoomLevel minZoom_, OsmAnd::ZoomLevel maxZoom_);
+    virtual ~OATerrainMapLayerProvider();
     
     virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
     virtual void obtainImageAsync(
@@ -37,5 +41,8 @@ public:
 
     virtual OsmAnd::ZoomLevel getMinZoom() const;
     virtual OsmAnd::ZoomLevel getMaxZoom() const;
+    
+    virtual OsmAnd::ZoomLevel getMinVisibleZoom() const override;
+    virtual OsmAnd::ZoomLevel getMaxVisibleZoom() const override;
 
 };

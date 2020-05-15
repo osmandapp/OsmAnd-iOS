@@ -19,7 +19,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6QZ-eh-lvr">
                         <rect key="frame" x="60" y="30" width="181" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="height" priority="750" constant="42" id="FYc-EP-dMf"/>
+                            <constraint firstAttribute="height" priority="750" constant="26" id="FYc-EP-dMf"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="U1b-pH-HBx"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>

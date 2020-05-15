@@ -534,7 +534,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         NSString* cellTypeId = mapItem.downloadTask ? downloadingResourceCell : repositoryResourceCell;
         
         uint64_t _sizePkg = mapItem.sizePkg;
-        if ((mapItem.resourceType == OsmAndResourceType::SrtmMapRegion || mapItem.resourceType == OsmAndResourceType::HillshadeRegion)
+        if ((mapItem.resourceType == OsmAndResourceType::SrtmMapRegion || mapItem.resourceType == OsmAndResourceType::HillshadeRegion || mapItem.resourceType == OsmAndResourceType::SlopeRegion)
             && ![_iapHelper.srtm isActive])
         {
             mapItem.disabled = YES;
@@ -738,7 +738,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else if ([mapItem isKindOfClass:[RepositoryResourceItem class]])
         {
             RepositoryResourceItem* item = (RepositoryResourceItem*)mapItem;
-            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion) && ![_iapHelper.srtm isActive])
+            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion
+                 || item.resourceType == OsmAndResourceType::SlopeRegion) && ![_iapHelper.srtm isActive])
             {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
             }

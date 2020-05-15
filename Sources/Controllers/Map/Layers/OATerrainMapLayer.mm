@@ -18,9 +18,9 @@
 
 @implementation OATerrainMapLayer
 {
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _hillshadeMapProvider;
-    OAAutoObserverProxy* _hillshadeChangeObserver;
-    OAAutoObserverProxy* _hillshadeAlphaChangeObserver;
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _terrainMapProvider;
+    OAAutoObserverProxy* _terrainChangeObserver;
+    OAAutoObserverProxy* _terrainAlphaChangeObserver;
 }
 
 - (NSString *) layerId
@@ -30,31 +30,31 @@
 
 - (void) initLayer
 {
-    _hillshadeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+    _terrainChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onTerrainLayerChanged)
                                                           andObserve:self.app.data.terrainChangeObservable];
-    _hillshadeAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+    _terrainAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                               withHandler:@selector(onTerrainLayerAlphaChanged)
                                                                andObserve:self.app.data.terrainAlphaChangeObservable];
 }
 
 - (void) deinitLayer
 {
-    if (_hillshadeChangeObserver)
+    if (_terrainChangeObserver)
     {
-        [_hillshadeChangeObserver detach];
-        _hillshadeChangeObserver = nil;
+        [_terrainChangeObserver detach];
+        _terrainChangeObserver = nil;
     }
-    if (_hillshadeAlphaChangeObserver)
+    if (_terrainAlphaChangeObserver)
     {
-        [_hillshadeAlphaChangeObserver detach];
-        _hillshadeAlphaChangeObserver = nil;
+        [_terrainAlphaChangeObserver detach];
+        _terrainAlphaChangeObserver = nil;
     }
 }
 
 - (void) resetLayer
 {
-    _hillshadeMapProvider.reset();
+    _terrainMapProvider.reset();
     [self.mapView resetProviderFor:self.layerIndex];
 }
 
@@ -66,8 +66,8 @@
         BOOL isSlope = type == EOATerrainTypeSlope;
         OsmAnd::ZoomLevel minZoom = OsmAnd::ZoomLevel(isSlope ? self.app.data.slopeMinZoom : self.app.data.hillshadeMinZoom);
         OsmAnd::ZoomLevel maxZoom = OsmAnd::ZoomLevel(isSlope ? self.app.data.slopeMaxZoom : self.app.data.hillshadeMaxZoom);
-        _hillshadeMapProvider = std::make_shared<OATerrainMapLayerProvider>(minZoom, maxZoom);
-        [self.mapView setProvider:_hillshadeMapProvider forLayer:self.layerIndex];
+        _terrainMapProvider = std::make_shared<OATerrainMapLayerProvider>(minZoom, maxZoom);
+        [self.mapView setProvider:_terrainMapProvider forLayer:self.layerIndex];
         
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor(isSlope ? self.app.data.slopeAlpha : self.app.data.hillshadeAlpha);
@@ -88,7 +88,7 @@
         if (![self updateLayer])
         {
             [self.mapView resetProviderFor:self.layerIndex];
-            _hillshadeMapProvider.reset();
+            _terrainMapProvider.reset();
         }
     }];
 }
@@ -108,12 +108,12 @@
 
 - (OsmAnd::ZoomLevel) getMinZoom
 {
-    return _hillshadeMapProvider != nullptr ? _hillshadeMapProvider->getMinZoom() : OsmAnd::ZoomLevel1;
+    return _terrainMapProvider != nullptr ? _terrainMapProvider->getMinZoom() : OsmAnd::ZoomLevel1;
 }
 
 - (OsmAnd::ZoomLevel) getMaxZoom
 {
-    return _hillshadeMapProvider != nullptr ? _hillshadeMapProvider->getMaxZoom() : OsmAnd::ZoomLevel11;
+    return _terrainMapProvider != nullptr ? _terrainMapProvider->getMaxZoom() : OsmAnd::ZoomLevel11;
 }
 
 @end

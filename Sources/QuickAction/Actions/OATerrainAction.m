@@ -16,7 +16,7 @@
 
 - (instancetype) init
 {
-    return [super initWithType:EOAQuickActionTypeToggleHillshade];
+    return [super initWithType:EOAQuickActionTypeToggleTerrain];
 }
 
 - (void)execute

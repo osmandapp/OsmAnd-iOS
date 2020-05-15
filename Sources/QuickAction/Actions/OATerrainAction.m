@@ -6,12 +6,12 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAHillshadeAction.h"
+#import "OATerrainAction.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAAppData.h"
 
-@implementation OAHillshadeAction
+@implementation OATerrainAction
 
 
 - (instancetype) init
@@ -23,7 +23,15 @@
 {
     OAAppData *data = [OsmAndApp instance].data;
     BOOL isOn = [data terrainType];
-    [data setTerrainType:!isOn];
+    if (isOn)
+    {
+        [data setTerrainType:data.lastTerrainType];
+    }
+    else
+    {
+        [data setLastTerrainType:data.terrainType];
+        [data setTerrainType:EOATerrainTypeDisabled];
+    }
 }
 
 - (NSString *)getIconResName
@@ -38,12 +46,12 @@
 
 - (BOOL)isActionWithSlash
 {
-    return [[OsmAndApp instance].data terrainType];
+    return [[OsmAndApp instance].data terrainType] != EOATerrainTypeDisabled;
 }
 
 - (NSString *)getActionStateName
 {
-    return [[OsmAndApp instance].data terrainType] ? OALocalizedString(@"hide_hillshade") : OALocalizedString(@"show_hillshade");
+    return [[OsmAndApp instance].data terrainType] != EOATerrainTypeDisabled ? OALocalizedString(@"hide_terrain") : OALocalizedString(@"show_terrain");
 }
 
 @end

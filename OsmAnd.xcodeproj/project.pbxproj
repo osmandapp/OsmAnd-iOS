@@ -255,8 +255,8 @@
 		78D57B8C238D2FFD0068CF48 /* ic_custom_hillshade@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D57B87238D2FFC0068CF48 /* ic_custom_hillshade@2x.png */; };
 		78D57B8D238D2FFD0068CF48 /* ic_custom_hillshade@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D57B88238D2FFD0068CF48 /* ic_custom_hillshade@3x.png */; };
 		78D57B8E238D2FFD0068CF48 /* ic_custom_hillshade@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D57B88238D2FFD0068CF48 /* ic_custom_hillshade@3x.png */; };
-		78D57B93238D30550068CF48 /* OAHillshadeAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D57B8F238D30540068CF48 /* OAHillshadeAction.m */; };
-		78D57B94238D30550068CF48 /* OAHillshadeAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D57B8F238D30540068CF48 /* OAHillshadeAction.m */; };
+		78D57B93238D30550068CF48 /* OATerrainAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D57B8F238D30540068CF48 /* OATerrainAction.m */; };
+		78D57B94238D30550068CF48 /* OATerrainAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D57B8F238D30540068CF48 /* OATerrainAction.m */; };
 		78D57B95238D30550068CF48 /* OAContourLinesAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 78D57B90238D30540068CF48 /* OAContourLinesAction.mm */; };
 		78D57B96238D30550068CF48 /* OAContourLinesAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 78D57B90238D30540068CF48 /* OAContourLinesAction.mm */; };
 		78D57BA1238FFC790068CF48 /* bg_circle_button_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D57B9B238FFC760068CF48 /* bg_circle_button_day@3x.png */; };
@@ -5838,10 +5838,10 @@
 		78D57B86238D2FFC0068CF48 /* ic_custom_hillshade.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_hillshade.png; path = Resources/Icons/ic_custom_hillshade.png; sourceTree = "<group>"; };
 		78D57B87238D2FFC0068CF48 /* ic_custom_hillshade@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hillshade@2x.png"; path = "Resources/Icons/ic_custom_hillshade@2x.png"; sourceTree = "<group>"; };
 		78D57B88238D2FFD0068CF48 /* ic_custom_hillshade@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hillshade@3x.png"; path = "Resources/Icons/ic_custom_hillshade@3x.png"; sourceTree = "<group>"; };
-		78D57B8F238D30540068CF48 /* OAHillshadeAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHillshadeAction.m; sourceTree = "<group>"; };
+		78D57B8F238D30540068CF48 /* OATerrainAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATerrainAction.m; sourceTree = "<group>"; };
 		78D57B90238D30540068CF48 /* OAContourLinesAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAContourLinesAction.mm; sourceTree = "<group>"; };
 		78D57B91238D30540068CF48 /* OAContourLinesAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAContourLinesAction.h; sourceTree = "<group>"; };
-		78D57B92238D30550068CF48 /* OAHillshadeAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHillshadeAction.h; sourceTree = "<group>"; };
+		78D57B92238D30550068CF48 /* OATerrainAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATerrainAction.h; sourceTree = "<group>"; };
 		78D57B9B238FFC760068CF48 /* bg_circle_button_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_circle_button_day@3x.png"; path = "Resources/Icons/bg_circle_button_day@3x.png"; sourceTree = "<group>"; };
 		78D57B9C238FFC760068CF48 /* bg_circle_button_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_circle_button_day@2x.png"; path = "Resources/Icons/bg_circle_button_day@2x.png"; sourceTree = "<group>"; };
 		78D57B9D238FFC770068CF48 /* bg_circle_button_night.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bg_circle_button_night.png; path = Resources/Icons/bg_circle_button_night.png; sourceTree = "<group>"; };
@@ -13781,8 +13781,8 @@
 				DAB854BB23055895002566A6 /* OAParkingAction.mm */,
 				78D57B91238D30540068CF48 /* OAContourLinesAction.h */,
 				78D57B90238D30540068CF48 /* OAContourLinesAction.mm */,
-				78D57B92238D30550068CF48 /* OAHillshadeAction.h */,
-				78D57B8F238D30540068CF48 /* OAHillshadeAction.m */,
+				78D57B92238D30550068CF48 /* OATerrainAction.h */,
+				78D57B8F238D30540068CF48 /* OATerrainAction.m */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -19315,7 +19315,7 @@
 				847A1D661DF94E9B003C1246 /* OADateTimePickerTableViewCell.m in Sources */,
 				DA09D01022C3807500557FFF /* OAProgressBarCell.mm in Sources */,
 				8450D0B71F1B992300C821CC /* OARTargetPoint.mm in Sources */,
-				78D57B94238D30550068CF48 /* OAHillshadeAction.m in Sources */,
+				78D57B94238D30550068CF48 /* OATerrainAction.m in Sources */,
 				847A1D671DF94E9B003C1246 /* OADestinationCardBaseController.mm in Sources */,
 				8AE1C8AC21D60D1300434F07 /* OASubscribeEmailView.m in Sources */,
 				DA2B40B6241A7EE4008E5409 /* OAPublicTransportRouteCell.mm in Sources */,
@@ -19678,7 +19678,7 @@
 				78A5C1F123FBDF5F00312FC4 /* OACustomPickerTableViewCell.m in Sources */,
 				BBA3AF53197FC4BB0039D991 /* OALog.mm in Sources */,
 				DA99919423F6AED300784994 /* OATextViewResizingCell.mm in Sources */,
-				78D57B93238D30550068CF48 /* OAHillshadeAction.m in Sources */,
+				78D57B93238D30550068CF48 /* OATerrainAction.m in Sources */,
 				DA9A062B229974C9000A80F1 /* OANoImagesCell.mm in Sources */,
 				84216B621FEE4DF90001EDC5 /* OACommandBuilder.mm in Sources */,
 				DA71EAB0234624B200B9D7F3 /* OARouteSettingsBaseViewController.mm in Sources */,

@@ -26,7 +26,7 @@
 #import "OAMapSourceAction.h"
 #import "OADayNightModeAction.h"
 #import "OAContourLinesAction.h"
-#import "OAHillshadeAction.h"
+#import "OATerrainAction.h"
 #import "OANavVoiceAction.h"
 #import "OANavAddDestinationAction.h"
 #import "OANavAddFirstIntermediateAction.h"
@@ -149,7 +149,7 @@
     OAQuickAction *contourLines = [[OAContourLinesAction alloc] init];
     if (![contourLines hasInstanceInList:active])
         [quickActions addObject:contourLines];
-    OAQuickAction *hillshade = [[OAHillshadeAction alloc] init];
+    OAQuickAction *hillshade = [[OATerrainAction alloc] init];
     if (![hillshade hasInstanceInList:active])
         [quickActions addObject:hillshade];
     
@@ -274,7 +274,7 @@
             return [[OAContourLinesAction alloc] init];
             
         case EOAQuickActionTypeToggleHillshade:
-            return [[OAHillshadeAction alloc] init];
+            return [[OATerrainAction alloc] init];
             
         case EOAQuickActionTypeToggleGPX:
             return [[OAShowHideGPXTracksAction alloc] init];
@@ -372,7 +372,7 @@
             return [[OAContourLinesAction alloc] initWithAction:quickAction];
             
         case EOAQuickActionTypeToggleHillshade:
-            return [[OAHillshadeAction alloc] initWithAction:quickAction];
+            return [[OATerrainAction alloc] initWithAction:quickAction];
             
             
         case EOAQuickActionTypeToggleGPX:

@@ -38,14 +38,17 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 @property (readonly) OAObservable* overlayAlphaChangeObservable;
 @property (readonly) OAObservable* underlayAlphaChangeObservable;
 
-@property (nonatomic) EOATerrainType hillshade;
-@property (nonatomic) EOATerrainType lastHillshade;
+@property (nonatomic) EOATerrainType terrainType;
+@property (nonatomic) EOATerrainType lastTerrainType;
 @property (nonatomic) double hillshadeAlpha;
 @property (nonatomic) NSInteger hillshadeMinZoom;
 @property (nonatomic) NSInteger hillshadeMaxZoom;
-@property (readonly) OAObservable* hillshadeChangeObservable;
-@property (readonly) OAObservable* hillshadeResourcesChangeObservable;
-@property (readonly) OAObservable* hillshadeAlphaChangeObservable;
+@property (nonatomic) double slopeAlpha;
+@property (nonatomic) NSInteger slopeMinZoom;
+@property (nonatomic) NSInteger slopeMaxZoom;
+@property (readonly) OAObservable* terrainChangeObservable;
+@property (readonly) OAObservable* terrainResourcesChangeObservable;
+@property (readonly) OAObservable* terrainAlphaChangeObservable;
 
 @property (nonatomic) BOOL mapillary;
 @property (readonly) OAObservable* mapillaryChangeObservable;

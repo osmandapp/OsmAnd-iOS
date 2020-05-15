@@ -11,7 +11,7 @@
 
 #include <OsmAndCore/Map/ImageMapLayerProvider.h>
 
-class OAHillshadeMapLayerProvider : public OsmAnd::ImageMapLayerProvider
+class OATerrainMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 {
 
 private:
@@ -21,9 +21,9 @@ private:
     OsmAnd::ZoomLevel maxZoom;
 protected:
 public:
-    OAHillshadeMapLayerProvider();
-    OAHillshadeMapLayerProvider(OsmAnd::ZoomLevel minZoom_, OsmAnd::ZoomLevel maxZoom_);
-    virtual ~OAHillshadeMapLayerProvider();
+    OATerrainMapLayerProvider();
+    OATerrainMapLayerProvider(OsmAnd::ZoomLevel minZoom_, OsmAnd::ZoomLevel maxZoom_);
+    virtual ~OATerrainMapLayerProvider();
     
     virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
     virtual void obtainImageAsync(

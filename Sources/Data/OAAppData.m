@@ -48,9 +48,9 @@
     _overlayAlphaChangeObservable = [[OAObservable alloc] init];
     _underlayMapSourceChangeObservable = [[OAObservable alloc] init];
     _underlayAlphaChangeObservable = [[OAObservable alloc] init];
-    _hillshadeChangeObservable = [[OAObservable alloc] init];
-    _hillshadeResourcesChangeObservable = [[OAObservable alloc] init];
-    _hillshadeAlphaChangeObservable = [[OAObservable alloc] init];
+    _terrainChangeObservable = [[OAObservable alloc] init];
+    _terrainResourcesChangeObservable = [[OAObservable alloc] init];
+    _terrainAlphaChangeObservable = [[OAObservable alloc] init];
     _mapLayerChangeObservable = [[OAObservable alloc] init];
     _mapillaryChangeObservable = [[OAObservable alloc] init];
 
@@ -192,9 +192,9 @@
 @synthesize destinationsChangeObservable = _destinationsChangeObservable;
 @synthesize destinationAddObservable = _destinationAddObservable;
 @synthesize destinationRemoveObservable = _destinationRemoveObservable;
-@synthesize hillshadeChangeObservable = _hillshadeChangeObservable;
-@synthesize hillshadeResourcesChangeObservable = _hillshadeResourcesChangeObservable;
-@synthesize hillshadeAlphaChangeObservable = _hillshadeAlphaChangeObservable;
+@synthesize terrainChangeObservable = _terrainChangeObservable;
+@synthesize terrainResourcesChangeObservable = _terrainResourcesChangeObservable;
+@synthesize terrainAlphaChangeObservable = _terrainAlphaChangeObservable;
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 @synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
 
@@ -305,15 +305,12 @@
     }
 }
 
-- (void) setHillshadeMinZoom:(NSInteger)hillshadeMinZoom
+- (void) sethillshadeMinZoom:(NSInteger)hillshadeMinZoom
 {
     @synchronized(_lock)
     {
         _hillshadeMinZoom = hillshadeMinZoom;
-        if (_hillshade == EOATerrainTypeHillshade || _hillshade == EOATerrainTypeSlope)
-            [_hillshadeChangeObservable notifyEventWithKey:self andValue:@(YES)];
-        else
-            [_hillshadeChangeObservable notifyEventWithKey:self andValue:@(NO)];
+        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
     }
 }
 
@@ -327,55 +324,90 @@
     }
 }
 
-- (void) setHillshadeMaxZoom:(NSInteger)hillshadeMaxZoom
+- (void) sethillshadeMaxZoom:(NSInteger)hillshadeMaxZoom
 {
     @synchronized(_lock)
     {
         _hillshadeMaxZoom = hillshadeMaxZoom;
-        if (_hillshade == EOATerrainTypeHillshade || _hillshade == EOATerrainTypeSlope)
-            [_hillshadeChangeObservable notifyEventWithKey:self andValue:@(YES)];
-        else
-            [_hillshadeChangeObservable notifyEventWithKey:self andValue:@(NO)];
+        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
     }
 }
 
-@synthesize hillshade = _hillshade;
+@synthesize slopeMinZoom = _slopeMinZoom;
 
-- (EOATerrainType) hillshade
+- (NSInteger) slopeMinZoom
 {
     @synchronized(_lock)
     {
-        return _hillshade;
+        return _slopeMinZoom;
     }
 }
 
-- (void) setHillshade:(EOATerrainType)hillshade
+- (void) setSlopeMinZoom:(NSInteger)slopeMinZoom
 {
     @synchronized(_lock)
     {
-        _hillshade = hillshade;
+        _slopeMinZoom = slopeMinZoom;
+        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
+    }
+}
+
+@synthesize slopeMaxZoom = _slopeMaxZoom;
+
+- (NSInteger) slopeMaxZoom
+{
+    @synchronized(_lock)
+    {
+        return _slopeMaxZoom;
+    }
+}
+
+- (void) setSlopeMaxZoom:(NSInteger)slopeMaxZoom
+{
+    @synchronized(_lock)
+    {
+        _slopeMaxZoom = slopeMaxZoom;
+        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
+    }
+}
+
+@synthesize terrainType = _terrainType;
+
+- (EOATerrainType) terrainType
+{
+    @synchronized(_lock)
+    {
+        return _terrainType;
+    }
+}
+
+- (void) setTerrainType:(EOATerrainType)hillshade
+{
+    @synchronized(_lock)
+    {
+        _terrainType = hillshade;
         if (hillshade == EOATerrainTypeHillshade || hillshade == EOATerrainTypeSlope)
-            [_hillshadeChangeObservable notifyEventWithKey:self andValue:@(YES)];
+            [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
         else
-            [_hillshadeChangeObservable notifyEventWithKey:self andValue:@(NO)];
+            [_terrainChangeObservable notifyEventWithKey:self andValue:@(NO)];
     }
 }
 
-@synthesize lastHillshade = _lastHillshade;
+@synthesize lastTerrainType = _lastTerrainType;
 
-- (EOATerrainType) lastHillshade
+- (EOATerrainType) lastTerrainType
 {
     @synchronized(_lock)
     {
-        return _lastHillshade;
+        return _lastTerrainType;
     }
 }
 
-- (void) setLastHillshade:(EOATerrainType)lastHillshade
+- (void) setLastTerrainType:(EOATerrainType)lastTerrainType
 {
     @synchronized(_lock)
     {
-        _lastHillshade = lastHillshade;
+        _lastTerrainType = lastTerrainType;
     }
 }
 
@@ -386,7 +418,18 @@
     @synchronized(_lock)
     {
         _hillshadeAlpha = hillshadeAlpha;
-        [_hillshadeAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_hillshadeAlpha]];
+        [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_hillshadeAlpha]];
+    }
+}
+
+@synthesize slopeAlpha = _slopeAlpha;
+
+- (void) setSlopeAlpha:(double)slopeAlpha
+{
+    @synchronized(_lock)
+    {
+        _slopeAlpha = slopeAlpha;
+        [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_slopeAlpha]];
     }
 }
 
@@ -510,13 +553,17 @@
 
     defaults.overlayAlpha = 0.5;
     defaults.underlayAlpha = 0.5;
-    defaults.lastOverlayMapSource = NULL;
-    defaults.lastUnderlayMapSource = NULL;
-    defaults.hillshade = EOATerrainTypeDisabled;
-    defaults.lastHillshade = EOATerrainTypeHillshade;
+    defaults.lastOverlayMapSource = nil;
+    defaults.lastUnderlayMapSource = nil;
+    defaults.terrainType = EOATerrainTypeDisabled;
+    defaults.lastTerrainType = EOATerrainTypeHillshade;
     defaults.hillshadeAlpha = 0.45;
-    defaults.hillshadeMinZoom = 1;
-    defaults.hillshadeMaxZoom = 11;
+    defaults.slopeAlpha = 0.35;
+    defaults.hillshadeMinZoom = 3;
+    defaults.hillshadeMaxZoom = 16;
+    defaults.slopeMinZoom = 3;
+    defaults.slopeMaxZoom = 16;
+    
     // Imagine that last viewed location was center of the world
     Point31 centerOfWorld;
     centerOfWorld.x = centerOfWorld.y = INT32_MAX>>1;
@@ -549,9 +596,12 @@
 
 #define kHillshadeMinZoom @"hillshade_min_zoom"
 #define kHillshadeMaxZoom @"hillshade_max_zoom"
-#define kHillshade @"hillshade"
-#define kLastHillshade @"lastHillshade"
 #define kHillshadeAlpha @"hillshade_alpha"
+#define kSlopeMinZoom @"slope_min_zoom"
+#define kSlopeMaxZoom @"slope_max_zoom"
+#define kSlopeAlpha @"slope_alpha"
+#define kTerrainType @"terrain_type"
+#define kLastTerrainType @"last_terrain_type"
 #define kMapillary @"mapillary"
 
 #define kPointToStart @"pointToStart"
@@ -583,9 +633,12 @@
 
     [aCoder encodeObject:[NSNumber numberWithInteger:_hillshadeMinZoom] forKey:kHillshadeMinZoom];
     [aCoder encodeObject:[NSNumber numberWithInteger:_hillshadeMaxZoom] forKey:kHillshadeMaxZoom];
-    [aCoder encodeObject:[NSNumber numberWithInteger:_hillshade] forKey:kHillshade];
-    [aCoder encodeObject:[NSNumber numberWithInteger:_lastHillshade] forKey:kLastHillshade];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_slopeMinZoom] forKey:kSlopeMinZoom];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_slopeMaxZoom] forKey:kSlopeMaxZoom];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_terrainType] forKey:kTerrainType];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_lastTerrainType] forKey:kLastTerrainType];
     [aCoder encodeObject:[NSNumber numberWithDouble:_hillshadeAlpha] forKey:kHillshadeAlpha];
+    [aCoder encodeObject:[NSNumber numberWithDouble:_slopeAlpha] forKey:kSlopeAlpha];
     [aCoder encodeObject:[NSNumber numberWithBool:_mapillary] forKey:kMapillary];
     
     [aCoder encodeObject:_pointToStart forKey:kPointToStart];
@@ -619,9 +672,12 @@
 
         _hillshadeMinZoom = [[aDecoder decodeObjectForKey:kHillshadeMinZoom] integerValue];
         _hillshadeMaxZoom = [[aDecoder decodeObjectForKey:kHillshadeMaxZoom] integerValue];
-        _hillshade = [[aDecoder decodeObjectForKey:kHillshade] integerValue];
-        _lastHillshade = [[aDecoder decodeObjectForKey:kLastHillshade] integerValue];
+        _slopeMinZoom = [[aDecoder decodeObjectForKey:kSlopeMinZoom] integerValue];
+        _slopeMaxZoom = [[aDecoder decodeObjectForKey:kSlopeMaxZoom] integerValue];
+        _terrainType = [[aDecoder decodeObjectForKey:kTerrainType] integerValue];
+        _lastTerrainType = [[aDecoder decodeObjectForKey:kLastTerrainType] integerValue];
         _hillshadeAlpha = [[aDecoder decodeObjectForKey:kHillshadeAlpha] doubleValue];
+        _slopeAlpha = [[aDecoder decodeObjectForKey:kSlopeAlpha] doubleValue];
         _mapillary = [[aDecoder decodeObjectForKey:kMapillary] boolValue];
 
         _pointToStart = [aDecoder decodeObjectForKey:kPointToStart];

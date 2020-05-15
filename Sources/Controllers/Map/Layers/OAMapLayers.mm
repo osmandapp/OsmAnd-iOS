@@ -49,8 +49,8 @@
     _poiLayer = [[OAPOILayer alloc] initWithMapViewController:_mapViewController];
     [self addLayer:_poiLayer];
 
-    _hillshadeMapLayer = [[OAHillshadeMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:4];
-    [self addLayer:_hillshadeMapLayer];
+    _terrainMapLayer = [[OATerrainMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:4];
+    [self addLayer:_terrainMapLayer];
     
     _overlayMapLayer = [[OAOverlayMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:5];
     [self addLayer:_overlayMapLayer];

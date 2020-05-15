@@ -504,7 +504,7 @@
             }
             if ([data[@"key"] isEqualToString:@"terrain_layer"])
             {
-                [cell.switchView setOn:_app.data.hillshade];
+                [cell.switchView setOn:_app.data.terrainType];
                 [cell.switchView addTarget:self action:@selector(terrainChanged:) forControlEvents:UIControlEventValueChanged];
             }
             cell.textView.text = data[@"name"];
@@ -587,13 +587,13 @@
         UISwitch *switchView = (UISwitch *) sender;
         if (switchView.isOn)
         {
-            EOATerrainType lastType = _app.data.lastHillshade;
-            _app.data.hillshade = lastType != EOATerrainTypeDisabled ? lastType : EOATerrainTypeHillshade;
+            EOATerrainType lastType = _app.data.lastTerrainType;
+            _app.data.terrainType = lastType != EOATerrainTypeDisabled ? lastType : EOATerrainTypeHillshade;
         }
         else
         {
-            _app.data.lastHillshade = _app.data.hillshade;
-            _app.data.hillshade = EOATerrainTypeDisabled;
+            _app.data.lastTerrainType = _app.data.terrainType;
+            _app.data.terrainType = EOATerrainTypeDisabled;
         }
     }
     

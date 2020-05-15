@@ -21,7 +21,7 @@
 #import "OAUtilities.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
-#import "OAHillshadeLayer.h"
+#import "OATerrainLayer.h"
 #import "OASizes.h"
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"

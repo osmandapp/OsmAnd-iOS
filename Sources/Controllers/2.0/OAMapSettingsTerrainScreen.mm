@@ -23,6 +23,8 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAResourcesUIHelper.h"
+#import "OAMapLayers.h"
+#import "OATerrainMapLayer.h"
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
@@ -30,6 +32,8 @@
 
 #define kMinAllowedZoom 1
 #define kMaxAllowedZoom 22
+
+#define kMaxMissingDataZoomShift 5
 
 #define kCellTypeSwitch @"switchCell"
 #define kCellTypeValue @"valueCell"
@@ -60,8 +64,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSArray* _sectionHeaderFooterTitles;
     NSIndexPath *_pickerIndexPath;
     
-    NSInteger _minZoom;
-    NSInteger _maxZoom;
+    NSInteger _minZoomHillshade;
+    NSInteger _maxZoomHillshade;
+    NSInteger _minZoomSlope;
+    NSInteger _maxZoomSlope;
     NSArray<NSString *> *_possibleZoomValues;
     
     NSObject *_dataLock;
@@ -84,11 +90,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
         
+        OAAppData *defaults = [OAAppData defaults];
         // Set default values if not set already
         if (_app.data.hillshadeMinZoom == 0 && _app.data.hillshadeMaxZoom == 0)
         {
-            _app.data.hillshadeMinZoom = 1;
-            _app.data.hillshadeMaxZoom = 11;
+            _app.data.hillshadeMinZoom = defaults.hillshadeMinZoom;
+            _app.data.hillshadeMaxZoom = defaults.hillshadeMaxZoom;
+        }
+        
+        if (_app.data.slopeMinZoom == 0 && _app.data.slopeMaxZoom == 0)
+        {
+            _app.data.slopeMinZoom = defaults.slopeMinZoom;
+            _app.data.slopeMaxZoom = defaults.slopeMaxZoom;
         }
         
         settingsScreen = EMapSettingsScreenTerrain;
@@ -125,8 +138,24 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) generateData
 {
-    _minZoom = _app.data.hillshadeMinZoom;
-    _maxZoom = _app.data.hillshadeMaxZoom;
+    
+    EOATerrainType type = _app.data.terrainType;
+    switch (type) {
+        case EOATerrainTypeHillshade:
+        {
+            _minZoomHillshade = _app.data.hillshadeMinZoom;
+            _maxZoomHillshade = _app.data.hillshadeMaxZoom;
+            break;
+        }
+        case EOATerrainTypeSlope:
+        {
+            _minZoomSlope = _app.data.slopeMinZoom;
+            _maxZoomSlope = _app.data.slopeMaxZoom;
+            break;
+        }
+        default:
+            break;
+    }
     
     NSMutableArray *result = [NSMutableArray array];
     
@@ -168,7 +197,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }];
     
     NSMutableArray *slopeLegendArr = [NSMutableArray new];
-    if (_app.data.hillshade == EOATerrainTypeSlope)
+    if (_app.data.terrainType == EOATerrainTypeSlope)
     {
         [slopeLegendArr addObject:@{
             @"type" : kCellTypeImageTextView,
@@ -198,7 +227,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _data = [NSArray arrayWithArray:result];
 
     
-    NSString *availableSectionFooter = _app.data.hillshade == EOATerrainTypeSlope ? OALocalizedString(@"map_settings_add_maps_slopes") : OALocalizedString(@"map_settings_add_maps_hillshade");
+    NSString *availableSectionFooter = _app.data.terrainType == EOATerrainTypeSlope ? OALocalizedString(@"map_settings_add_maps_slopes") : OALocalizedString(@"map_settings_add_maps_hillshade");
     NSMutableArray *sectionArr = [NSMutableArray new];
     [sectionArr addObject:@{}];
     [sectionArr addObject:@{}];
@@ -206,7 +235,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         @"header" : OALocalizedString(@"res_zoom_levels"),
         @"footer" : OALocalizedString(@"map_settings_zoom_level_description")
     }];
-    if (_app.data.hillshade == EOATerrainTypeSlope)
+    if (_app.data.terrainType == EOATerrainTypeSlope)
     {
         [sectionArr addObject:@{
             @"header" : OALocalizedString(@"map_settings_legend"),
@@ -237,12 +266,24 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [result addObject: imageArr];
 }
 
+- (NSArray<NSString *> *) getPossibleZoomValues
+{
+    NSMutableArray *res = [NSMutableArray new];
+    OsmAnd::ZoomLevel maxZoom = OARootViewController.instance.mapPanel.mapViewController.mapLayers.terrainMapLayer.getMaxZoom;
+    int maxVisivleZoom = maxZoom + kMaxMissingDataZoomShift;
+    for (int i = 1; i <= maxVisivleZoom; i++)
+    {
+        [res addObject:[NSString stringWithFormat:@"%d", i]];
+    }
+    return res;
+}
+
 - (void) setupView
 {
     title = OALocalizedString(@"map_settings_terrain");
 
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
-    _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
+    _possibleZoomValues = [self getPossibleZoomValues];
     
     _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                               withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
@@ -264,7 +305,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     CLLocation *loc = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
     CLLocationCoordinate2D coord = loc.coordinate;
-    OsmAnd::ResourcesManager::ResourceType resType = _app.data.hillshade == EOATerrainTypeSlope ?
+    OsmAnd::ResourcesManager::ResourceType resType = _app.data.terrainType == EOATerrainTypeSlope ?
         OsmAnd::ResourcesManager::ResourceType::SlopeRegion : OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
     [OAResourcesUIHelper requestMapDownloadInfo:coord resourceType:resType onComplete:^(NSArray<ResourceItem *>* res) {
         @synchronized(_dataLock)
@@ -389,17 +430,43 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSString *) getSwitchSectionFooter
 {
-    if (_app.data.hillshade == EOATerrainTypeHillshade)
+    if (_app.data.terrainType == EOATerrainTypeHillshade)
         return OALocalizedString(@"map_settings_hillshade_description");
-    else if (_app.data.hillshade == EOATerrainTypeSlope)
+    else if (_app.data.terrainType == EOATerrainTypeSlope)
         return OALocalizedString(@"map_settings_slopes_description");
     else
         return @"";
 }
 
+- (NSInteger) getMinZoom
+{
+    return _app.data.terrainType == EOATerrainTypeHillshade ? _minZoomHillshade : _minZoomSlope;
+}
+
+- (NSInteger) getMaxZoom
+{
+    return _app.data.terrainType == EOATerrainTypeHillshade ? _maxZoomHillshade : _maxZoomSlope;
+}
+
+- (void) setMinZoom:(NSInteger)zoom
+{
+    if (_app.data.terrainType == EOATerrainTypeHillshade)
+        _minZoomHillshade = zoom;
+    else
+        _minZoomSlope = zoom;
+}
+
+- (void) setMaxZoom:(NSInteger)zoom
+{
+    if (_app.data.terrainType == EOATerrainTypeHillshade)
+        _maxZoomHillshade = zoom;
+    else
+        _maxZoomSlope = zoom;
+}
+
 - (BOOL) isTerrainOn
 {
-    return [OsmAndApp instance].data.hillshade != EOATerrainTypeDisabled;
+    return [OsmAndApp instance].data.terrainType != EOATerrainTypeDisabled;
 }
 
 #pragma mark - UITableViewDataSource
@@ -477,9 +544,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.lbTitle.text = item[@"title"];
         if ([item[@"key"] isEqualToString:@"minZoom"])
-            cell.lbTime.text = [NSString stringWithFormat:@"%ld", _minZoom];
+            cell.lbTime.text = [NSString stringWithFormat:@"%ld", [self getMinZoom]];
         else if ([item[@"key"] isEqualToString:@"maxZoom"])
-            cell.lbTime.text = [NSString stringWithFormat:@"%ld", _maxZoom];
+            cell.lbTime.text = [NSString stringWithFormat:@"%ld", [self getMaxZoom]];
         else
             cell.lbTime.text = @"";
         cell.lbTime.textColor = [UIColor blackColor];
@@ -513,8 +580,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dataArray = _possibleZoomValues;
-        NSInteger minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
-        NSInteger maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
+        NSInteger minZoom = [self getMinZoom] >= kMinAllowedZoom && [self getMinZoom] <= kMaxAllowedZoom ? [self getMinZoom] : 1;
+        NSInteger maxZoom = [self getMaxZoom] >= kMinAllowedZoom && [self getMaxZoom] <= kMaxAllowedZoom ? [self getMaxZoom] : 1;
         [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
@@ -536,9 +603,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = item[@"name"];
-            cell.sliderView.value = _app.data.hillshadeAlpha;
             if ([self isTerrainOn])
-                cell.sliderView.value = _app.data.hillshadeAlpha;
+                cell.sliderView.value = _app.data.terrainType == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
         }
         return cell;
@@ -558,7 +624,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl setTitle:item[@"title0"] forSegmentAtIndex:0];
             [cell.segmentControl setTitle:item[@"title1"] forSegmentAtIndex:1];
-            [cell.segmentControl setSelectedSegmentIndex:_app.data.hillshade == EOATerrainTypeHillshade ? 0 : 1];
+            [cell.segmentControl setSelectedSegmentIndex:_app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1];
         }
         return cell;
     }
@@ -689,7 +755,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [[UIImage imageNamed:(_app.data.hillshade == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")]
+        cell.imageView.image = [[UIImage imageNamed:(_app.data.terrainType == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")]
                                 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
@@ -791,37 +857,52 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([cell isKindOfClass:OACustomPickerTableViewCell.class])
     {
         OACustomPickerTableViewCell *cellRes = (OACustomPickerTableViewCell *) cell;
-        [cellRes.picker selectRow:_minZoom - 1 inComponent:0 animated:NO];
+        [cellRes.picker selectRow:[self getMinZoom] - 1 inComponent:0 animated:NO];
     }
 }
 
 - (void)zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
 {
     NSInteger value = [zoom integerValue];
+    EOATerrainType type = _app.data.terrainType;
     if (pickerTag == 1)
     {
-        if (value <= _maxZoom)
+        if (value <= [self getMaxZoom])
         {
-            _minZoom = value;
-            _app.data.hillshadeMinZoom = _minZoom;
+            [self setMinZoom:value];
+            if (type == EOATerrainTypeHillshade)
+            {
+                _app.data.hillshadeMinZoom = [self getMinZoom];
+            }
+            else if (type == EOATerrainTypeSlope)
+            {
+                _app.data.slopeMinZoom = [self getMinZoom];
+            }
         }
         else
         {
-            _minZoom = _maxZoom;
-            [self updatePickerCell:_maxZoom - 1];
+            [self setMinZoom:[self getMaxZoom]];
+            [self updatePickerCell:[self getMaxZoom] - 1];
         }
     }
     else if (pickerTag == 2)
     {
-        if (value >= _minZoom)
+        if (value >= [self getMinZoom])
         {
-            _maxZoom = value;
-            _app.data.hillshadeMaxZoom = _maxZoom;
+            [self setMaxZoom:value];
+            if (type == EOATerrainTypeHillshade)
+            {
+                _app.data.hillshadeMaxZoom = [self getMaxZoom];
+            }
+            else if (type == EOATerrainTypeSlope)
+            {
+                _app.data.slopeMaxZoom = [self getMaxZoom];
+            }
         }
         else
         {
-            _maxZoom = _minZoom;
-            [self updatePickerCell:_minZoom - 1];
+            [self setMaxZoom:[self getMinZoom]];
+            [self updatePickerCell:[self getMinZoom] - 1];
         }
     }
     [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
@@ -832,7 +913,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) sliderValueChanged:(id)sender
 {
     UISlider *slider = sender;
-    _app.data.hillshadeAlpha = slider.value;
+    EOATerrainType type = _app.data.terrainType;
+    if (type == EOATerrainTypeHillshade)
+    {
+        _app.data.hillshadeAlpha = slider.value;
+    }
+    else if (type == EOATerrainTypeSlope)
+    {
+        _app.data.slopeAlpha = slider.value;
+    }
 }
 
 - (void) mapSettingSwitchChanged:(id)sender
@@ -842,14 +931,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         if (switchView.isOn)
         {
-            EOATerrainType prevType = _app.data.lastHillshade;
-            [_app.data setHillshade:prevType != EOATerrainTypeDisabled ? prevType : EOATerrainTypeHillshade];
+            EOATerrainType prevType = _app.data.lastTerrainType;
+            [_app.data setTerrainType:prevType != EOATerrainTypeDisabled ? prevType : EOATerrainTypeHillshade];
             [self updateAvailableMaps];
         }
         else
         {
-            _app.data.lastHillshade = _app.data.hillshade;
-            [_app.data setHillshade:EOATerrainTypeDisabled];
+            _app.data.lastTerrainType = _app.data.terrainType;
+            [_app.data setTerrainType:EOATerrainTypeDisabled];
         }
         [tblView beginUpdates];
         if (switchView.isOn)
@@ -876,11 +965,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         if (segment.selectedSegmentIndex == 0)
         {
-            [_app.data setHillshade: EOATerrainTypeHillshade];
+            [_app.data setTerrainType: EOATerrainTypeHillshade];
         }
         else if (segment.selectedSegmentIndex == 1)
         {
-            [_app.data setHillshade: EOATerrainTypeSlope];
+            [_app.data setTerrainType: EOATerrainTypeSlope];
         }
         [self generateData];
         [tblView reloadData];

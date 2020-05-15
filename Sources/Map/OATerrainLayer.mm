@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OAHillshadeLayer.h"
+#import "OATerrainLayer.h"
 #import "QuadTree.h"
 #import "QuadRect.h"
 #import <sqlite3.h>
@@ -17,7 +17,13 @@
 
 const static int ZOOM_BOUNDARY = 15;
 
-@implementation OAHillshadeLayer
+typedef NS_ENUM(NSInteger, EOATerrainLayerType)
+{
+    EOATerrainLayerTypeHillshade,
+    EOATerrainLayerTypeSlope
+};
+
+@implementation OATerrainLayer
 {
     NSObject *_sync;
     
@@ -26,49 +32,49 @@ const static int ZOOM_BOUNDARY = 15;
     NSString *_databasePath;
     NSString *_tilesDir;
     
-    BOOL _isHillshade;
+    EOATerrainLayerType _terrainType;
     
     OAAutoObserverProxy* _hillshadeChangeObserver;
 }
 
-+ (OAHillshadeLayer *)sharedInstanceHillshade
++ (OATerrainLayer *)sharedInstanceHillshade
 {
     static dispatch_once_t once;
-    static OAHillshadeLayer * sharedInstance;
+    static OATerrainLayer * sharedInstance;
     dispatch_once(&once, ^{
-        sharedInstance = [[self alloc] init:YES];
+        sharedInstance = [[self alloc] init:EOATerrainLayerTypeHillshade];
     });
     return sharedInstance;
 }
 
-+ (OAHillshadeLayer *)sharedInstanceSlope
++ (OATerrainLayer *)sharedInstanceSlope
 {
     static dispatch_once_t once;
-    static OAHillshadeLayer * sharedInstance;
+    static OATerrainLayer * sharedInstance;
     dispatch_once(&once, ^{
-        sharedInstance = [[self alloc] init:NO];
+        sharedInstance = [[self alloc] init:EOATerrainLayerTypeSlope];
     });
     return sharedInstance;
 }
 
-- (instancetype)init:(BOOL)isHillshade
+- (instancetype)init:(EOATerrainLayerType) terrainType
 {
     self = [super init];
     if (self)
     {
         _sync = [[NSObject alloc] init];
-        _isHillshade = isHillshade;
+        _terrainType = terrainType;
         
         _hillshadeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onHillshadeResourcesChanged)
-                                                              andObserve:[OsmAndApp instance].data.hillshadeResourcesChangeObservable];
+                                                              andObserve:[OsmAndApp instance].data.terrainResourcesChangeObservable];
 
         _indexedResources = [[QuadTree alloc] initWithQuadRect:[[QuadRect alloc] initWithLeft:0 top:0 right:1 << (ZOOM_BOUNDARY+1) bottom:1 << (ZOOM_BOUNDARY+1)] depth:8 ratio:0.55f];
 
         _tilesDir = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources"];
         
         NSString *dir = [NSHomeDirectory() stringByAppendingString:@"/Library/HillshadeDatabase"];
-        if (isHillshade)
+        if ([self isHillshade])
             _databasePath = [dir stringByAppendingString:@"/hillshade.cache"];
         else
             _databasePath = [dir stringByAppendingString:@"/slope.cache"];
@@ -81,10 +87,15 @@ const static int ZOOM_BOUNDARY = 15;
     return self;
 }
 
+- (BOOL) isHillshade
+{
+    return _terrainType == EOATerrainLayerTypeHillshade;
+}
+
 - (void)onHillshadeResourcesChanged
 {
     [self indexHillshadeFiles];
-    [[OsmAndApp instance].data.hillshadeChangeObservable notifyEvent];
+    [[OsmAndApp instance].data.terrainChangeObservable notifyEvent];
 }
 
 - (void)indexHillshadeFiles
@@ -247,7 +258,8 @@ const static int ZOOM_BOUNDARY = 15;
                 NSString *fileName = [f lastPathComponent];
                 NSString *ext = [[f pathExtension] lowercaseString];
                 NSString *type = [[[f stringByDeletingPathExtension] pathExtension] lowercaseString];
-                if([ext isEqualToString:@"sqlitedb"] && (([type isEqualToString:@"hillshade"] && _isHillshade) || ([type isEqualToString:@"slope"] && !_isHillshade)))
+                BOOL isHillshade = [self isHillshade];
+                if([ext isEqualToString:@"sqlitedb"] && (([type isEqualToString:@"hillshade"] && isHillshade) || ([type isEqualToString:@"slope"] && !isHillshade)))
                 {
                     OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:f];
                     [rs setObject:ts forKey:fileName];

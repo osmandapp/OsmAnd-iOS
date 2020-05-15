@@ -1535,7 +1535,7 @@
 		847A1D0B1DF94E9B003C1246 /* OALocalResourceInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */; };
 		847A1D0C1DF94E9B003C1246 /* OAGPXEditWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84064DEA1B83237F00033C47 /* OAGPXEditWptListViewController.mm */; };
 		847A1D0D1DF94E9B003C1246 /* OANighttimeAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F7121989144400AB40D1 /* OANighttimeAppearance.m */; };
-		847A1D0E1DF94E9B003C1246 /* OAHillshadeMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */; };
+		847A1D0E1DF94E9B003C1246 /* OATerrainMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EB6BF91B68D5C8006D230F /* OATerrainMapLayerProvider.mm */; };
 		847A1D0F1DF94E9B003C1246 /* OAGPXRouteTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F3A8951B4D1C0200D16EBC /* OAGPXRouteTableViewCell.mm */; };
 		847A1D101DF94E9B003C1246 /* OAAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F708198913E000AB40D1 /* OAAppearance.m */; };
 		847A1D111DF94E9B003C1246 /* OAMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BBB97DE41908D1EC0067F4A0 /* OAMapSource.m */; };
@@ -1550,7 +1550,7 @@
 		847A1D1A1DF94E9B003C1246 /* OAOutdatedResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */; };
 		847A1D1B1DF94E9B003C1246 /* OAIconTextDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B371ABCABC600504DA7 /* OAIconTextDescCell.m */; };
 		847A1D1C1DF94E9B003C1246 /* OAUserInteractionPassThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335617C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m */; };
-		847A1D1D1DF94E9B003C1246 /* OAHillshadeLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.mm */; };
+		847A1D1D1DF94E9B003C1246 /* OATerrainLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB11B6A141B0016F6F4 /* OATerrainLayer.mm */; };
 		847A1D1E1DF94E9B003C1246 /* OAGPXEditWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84064DF31B83907600033C47 /* OAGPXEditWptViewController.mm */; };
 		847A1D1F1DF94E9B003C1246 /* OAIconTextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE661A0E5A7C00900A47 /* OAIconTextTableViewCell.m */; };
 		847A1D201DF94E9B003C1246 /* OAHUDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F70119890A4100AB40D1 /* OAHUDButton.m */; };
@@ -2549,7 +2549,7 @@
 		848A14D61B223A4C00A31AE7 /* bg_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14CF1B223A4C00A31AE7 /* bg_title@2x.png */; };
 		848A14D91B223A4C00A31AE7 /* bg_title@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14D01B223A4C00A31AE7 /* bg_title@3x.png */; };
 		848A3EAF1B6A14030016F6F4 /* OASQLiteTileSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EAC1B6A14030016F6F4 /* OASQLiteTileSource.mm */; };
-		848A3EB41B6A141B0016F6F4 /* OAHillshadeLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.mm */; };
+		848A3EB41B6A141B0016F6F4 /* OATerrainLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB11B6A141B0016F6F4 /* OATerrainLayer.mm */; };
 		848A3EB91B6A6C2F0016F6F4 /* OAHillshadeTileSource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB61B6A6C2F0016F6F4 /* OAHillshadeTileSource.mm */; };
 		848A3EC31B6A6F0B0016F6F4 /* QuadRect.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EC01B6A6F0B0016F6F4 /* QuadRect.m */; };
 		848A3EC81B6A6F180016F6F4 /* QuadTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EC51B6A6F180016F6F4 /* QuadTree.m */; };
@@ -2563,8 +2563,8 @@
 		848B28B81EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */; };
 		848B28BB1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */; };
 		848B28BC1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */; };
-		848B28C31EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C21EED8A3400F1A19D /* OAHillshadeMapLayer.mm */; };
-		848B28C41EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C21EED8A3400F1A19D /* OAHillshadeMapLayer.mm */; };
+		848B28C31EED8A3400F1A19D /* OATerrainMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C21EED8A3400F1A19D /* OATerrainMapLayer.mm */; };
+		848B28C41EED8A3400F1A19D /* OATerrainMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C21EED8A3400F1A19D /* OATerrainMapLayer.mm */; };
 		848B28C71EED905900F1A19D /* OASymbolMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C61EED905900F1A19D /* OASymbolMapLayer.mm */; };
 		848B28C81EED905900F1A19D /* OASymbolMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C61EED905900F1A19D /* OASymbolMapLayer.mm */; };
 		848B28CB1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28CA1EED906A00F1A19D /* OARasterMapLayer.mm */; };
@@ -3009,7 +3009,7 @@
 		84E4421F1AF8A07500F87542 /* track_save.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E441AE1AF8A07500F87542 /* track_save.png */; };
 		84E442221AF8A07500F87542 /* track_save@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E441AF1AF8A07500F87542 /* track_save@2x.png */; };
 		84E442251AF8A07500F87542 /* track_save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E441B01AF8A07500F87542 /* track_save@3x.png */; };
-		84EB6BFC1B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */; };
+		84EB6BFC1B68D5C8006D230F /* OATerrainMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EB6BF91B68D5C8006D230F /* OATerrainMapLayerProvider.mm */; };
 		84EC52A11F8BF26600AFC252 /* ic_action_speed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EC52831F8BF25D00AFC252 /* ic_action_speed@2x.png */; };
 		84EC52A21F8BF26600AFC252 /* ic_action_intermediate@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EC52841F8BF25E00AFC252 /* ic_action_intermediate@3x.png */; };
 		84EC52A31F8BF26600AFC252 /* ic_action_target.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EC52851F8BF25F00AFC252 /* ic_action_target.png */; };
@@ -7011,8 +7011,8 @@
 		848A14D01B223A4C00A31AE7 /* bg_title@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_title@3x.png"; path = "Resources/Icons/bg_title@3x.png"; sourceTree = "<group>"; };
 		848A3EAB1B6A14030016F6F4 /* OASQLiteTileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASQLiteTileSource.h; sourceTree = "<group>"; };
 		848A3EAC1B6A14030016F6F4 /* OASQLiteTileSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASQLiteTileSource.mm; sourceTree = "<group>"; };
-		848A3EB01B6A141B0016F6F4 /* OAHillshadeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHillshadeLayer.h; sourceTree = "<group>"; };
-		848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHillshadeLayer.mm; sourceTree = "<group>"; };
+		848A3EB01B6A141B0016F6F4 /* OATerrainLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATerrainLayer.h; sourceTree = "<group>"; };
+		848A3EB11B6A141B0016F6F4 /* OATerrainLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATerrainLayer.mm; sourceTree = "<group>"; };
 		848A3EB51B6A6C2F0016F6F4 /* OAHillshadeTileSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHillshadeTileSource.h; sourceTree = "<group>"; };
 		848A3EB61B6A6C2F0016F6F4 /* OAHillshadeTileSource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHillshadeTileSource.mm; sourceTree = "<group>"; };
 		848A3EBF1B6A6F0B0016F6F4 /* QuadRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuadRect.h; sourceTree = "<group>"; };
@@ -7031,8 +7031,8 @@
 		848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAContextMenuLayer.mm; sourceTree = "<group>"; };
 		848B28B91EED5FA400F1A19D /* OAMyPositionLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMyPositionLayer.h; sourceTree = "<group>"; };
 		848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMyPositionLayer.mm; sourceTree = "<group>"; };
-		848B28C11EED8A3400F1A19D /* OAHillshadeMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHillshadeMapLayer.h; sourceTree = "<group>"; };
-		848B28C21EED8A3400F1A19D /* OAHillshadeMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHillshadeMapLayer.mm; sourceTree = "<group>"; };
+		848B28C11EED8A3400F1A19D /* OATerrainMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATerrainMapLayer.h; sourceTree = "<group>"; };
+		848B28C21EED8A3400F1A19D /* OATerrainMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATerrainMapLayer.mm; sourceTree = "<group>"; };
 		848B28C51EED905900F1A19D /* OASymbolMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASymbolMapLayer.h; sourceTree = "<group>"; };
 		848B28C61EED905900F1A19D /* OASymbolMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASymbolMapLayer.mm; sourceTree = "<group>"; };
 		848B28C91EED906A00F1A19D /* OARasterMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARasterMapLayer.h; sourceTree = "<group>"; };
@@ -7502,8 +7502,8 @@
 		84E441AE1AF8A07500F87542 /* track_save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = track_save.png; path = Resources/Icons/track_save.png; sourceTree = "<group>"; };
 		84E441AF1AF8A07500F87542 /* track_save@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "track_save@2x.png"; path = "Resources/Icons/track_save@2x.png"; sourceTree = "<group>"; };
 		84E441B01AF8A07500F87542 /* track_save@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "track_save@3x.png"; path = "Resources/Icons/track_save@3x.png"; sourceTree = "<group>"; };
-		84EB6BF81B68D5C8006D230F /* OAHillshadeMapLayerProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHillshadeMapLayerProvider.h; path = Core/OAHillshadeMapLayerProvider.h; sourceTree = "<group>"; };
-		84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAHillshadeMapLayerProvider.mm; path = Core/OAHillshadeMapLayerProvider.mm; sourceTree = "<group>"; };
+		84EB6BF81B68D5C8006D230F /* OATerrainMapLayerProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATerrainMapLayerProvider.h; path = Core/OATerrainMapLayerProvider.h; sourceTree = "<group>"; };
+		84EB6BF91B68D5C8006D230F /* OATerrainMapLayerProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATerrainMapLayerProvider.mm; path = Core/OATerrainMapLayerProvider.mm; sourceTree = "<group>"; };
 		84EC52831F8BF25D00AFC252 /* ic_action_speed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_speed@2x.png"; sourceTree = "<group>"; };
 		84EC52841F8BF25E00AFC252 /* ic_action_intermediate@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_intermediate@3x.png"; sourceTree = "<group>"; };
 		84EC52851F8BF25F00AFC252 /* ic_action_target.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_action_target.png; sourceTree = "<group>"; };
@@ -11388,8 +11388,8 @@
 				848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */,
 				8438B81B1EEDC7E6007AEF77 /* OAPOILayer.h */,
 				8438B81C1EEDC7E6007AEF77 /* OAPOILayer.mm */,
-				848B28C11EED8A3400F1A19D /* OAHillshadeMapLayer.h */,
-				848B28C21EED8A3400F1A19D /* OAHillshadeMapLayer.mm */,
+				848B28C11EED8A3400F1A19D /* OATerrainMapLayer.h */,
+				848B28C21EED8A3400F1A19D /* OATerrainMapLayer.mm */,
 				848B28CD1EED9A4600F1A19D /* OAOverlayMapLayer.h */,
 				848B28CE1EED9A4600F1A19D /* OAOverlayMapLayer.mm */,
 				848B28D11EED9A6200F1A19D /* OAUnderlayMapLayer.h */,
@@ -11969,8 +11969,8 @@
 				DA03184622DF472A008FC564 /* MapImport */,
 				848A3EC91B6BABB70016F6F4 /* MapCreator */,
 				848A3EAA1B6A13F40016F6F4 /* TileSources */,
-				848A3EB01B6A141B0016F6F4 /* OAHillshadeLayer.h */,
-				848A3EB11B6A141B0016F6F4 /* OAHillshadeLayer.mm */,
+				848A3EB01B6A141B0016F6F4 /* OATerrainLayer.h */,
+				848A3EB11B6A141B0016F6F4 /* OATerrainLayer.mm */,
 				848A3EBF1B6A6F0B0016F6F4 /* QuadRect.h */,
 				848A3EC01B6A6F0B0016F6F4 /* QuadRect.m */,
 				848A3EC41B6A6F180016F6F4 /* QuadTree.h */,
@@ -12658,8 +12658,8 @@
 		8A78D93A229326E6007F2E6E /* Hillshade */ = {
 			isa = PBXGroup;
 			children = (
-				84EB6BF81B68D5C8006D230F /* OAHillshadeMapLayerProvider.h */,
-				84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */,
+				84EB6BF81B68D5C8006D230F /* OATerrainMapLayerProvider.h */,
+				84EB6BF91B68D5C8006D230F /* OATerrainMapLayerProvider.mm */,
 			);
 			name = Hillshade;
 			sourceTree = "<group>";
@@ -19054,7 +19054,7 @@
 				847A1D0D1DF94E9B003C1246 /* OANighttimeAppearance.m in Sources */,
 				DA18B0C123AA3447009A89CC /* OARouteStatistics.m in Sources */,
 				847F8FD61EE0813D00CF5EA5 /* OAEmptySearchCell.m in Sources */,
-				847A1D0E1DF94E9B003C1246 /* OAHillshadeMapLayerProvider.mm in Sources */,
+				847A1D0E1DF94E9B003C1246 /* OATerrainMapLayerProvider.mm in Sources */,
 				847A1D0F1DF94E9B003C1246 /* OAGPXRouteTableViewCell.mm in Sources */,
 				847A1D101DF94E9B003C1246 /* OAAppearance.m in Sources */,
 				8490B1CA2064F053007694A5 /* OAWaypointsRadiusScreen.mm in Sources */,
@@ -19107,7 +19107,7 @@
 				DAC1DB8E246BE0BF00FF4A78 /* OAImageTextViewCell.m in Sources */,
 				8476E1F31F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
 				847A1D1C1DF94E9B003C1246 /* OAUserInteractionPassThroughView.m in Sources */,
-				847A1D1D1DF94E9B003C1246 /* OAHillshadeLayer.mm in Sources */,
+				847A1D1D1DF94E9B003C1246 /* OATerrainLayer.mm in Sources */,
 				DA6A2B85233CEC42005D2F4A /* OATitleIconRoundCell.m in Sources */,
 				DA6B36222265F92200FBB46D /* OAFavoritesTabBarViewController.m in Sources */,
 				DAF3F551225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */,
@@ -19135,7 +19135,7 @@
 				847A1D241DF94E9B003C1246 /* OAWebClient.mm in Sources */,
 				847A1D251DF94E9B003C1246 /* OASliderCell.m in Sources */,
 				845AFB501E264E9300170026 /* OASearchSettings.mm in Sources */,
-				848B28C41EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */,
+				848B28C41EED8A3400F1A19D /* OATerrainMapLayer.mm in Sources */,
 				84E297541E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */,
 				DA8EB2FF21C8E8DE00A76BFB /* OAOsmAndLiveSelectionViewController.mm in Sources */,
 				847A1D261DF94E9B003C1246 /* OAHistoryItem.m in Sources */,
@@ -19543,7 +19543,7 @@
 				DA6D51E321F328AA00EC84E2 /* OAOsmEditsDBHelper.m in Sources */,
 				8485FA4A1FC95F88005991FE /* SunriseSunset.m in Sources */,
 				84FF0C4B1F3D89AF00AD1029 /* OARoutingTargetCell.m in Sources */,
-				848B28C31EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */,
+				848B28C31EED8A3400F1A19D /* OATerrainMapLayer.mm in Sources */,
 				3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
 				845E05AD1B53E68D00DFC2A7 /* OADirectionTableViewCell.m in Sources */,
 				DA33F35C232CE2F10006C0FB /* UIColor+RGB.swift in Sources */,
@@ -19642,7 +19642,7 @@
 				DA09D00822C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m in Sources */,
 				8A7A4C952109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
 				BB54F7151989144400AB40D1 /* OANighttimeAppearance.m in Sources */,
-				84EB6BFC1B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm in Sources */,
+				84EB6BFC1B68D5C8006D230F /* OATerrainMapLayerProvider.mm in Sources */,
 				84F3A8981B4D1C0200D16EBC /* OAGPXRouteTableViewCell.mm in Sources */,
 				DA03184922DF4758008FC564 /* OAFileImportHelper.mm in Sources */,
 				DA7235272164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */,
@@ -19727,7 +19727,7 @@
 				846F035A1E12550D00DB4772 /* OAIconButtonCell.m in Sources */,
 				DA1605B922FEF2F1001E02AD /* OAMapSourceBaseAction.mm in Sources */,
 				84E297531E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */,
-				848A3EB41B6A141B0016F6F4 /* OAHillshadeLayer.mm in Sources */,
+				848A3EB41B6A141B0016F6F4 /* OATerrainLayer.mm in Sources */,
 				DADBC629242A43ED008B7423 /* OAPublicTransportPointCell.m in Sources */,
 				DA71EAA92346232E00B9D7F3 /* OARouteAvoidSettingsViewController.mm in Sources */,
 				8456654F1FED41E8003149C9 /* OALocationPointWrapper.mm in Sources */,
@@ -20304,7 +20304,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.39;
+				CURRENT_PROJECT_VERSION = 3.40;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -20359,7 +20359,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.39;
+				CURRENT_PROJECT_VERSION = 3.40;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -23,7 +23,7 @@
 #import "OAOsmBugsLayer.h"
 #import "OAMapillaryLayer.h"
 
-#import "OAHillshadeMapLayer.h"
+#import "OATerrainMapLayer.h"
 #import "OAOverlayMapLayer.h"
 #import "OAUnderlayMapLayer.h"
 
@@ -45,7 +45,7 @@
 @property (nonatomic, readonly) OAMapillaryLayer *mapillaryLayer;
 
 // Raster map layers
-@property (nonatomic, readonly) OAHillshadeMapLayer *hillshadeMapLayer;
+@property (nonatomic, readonly) OATerrainMapLayer *terrainMapLayer;
 @property (nonatomic, readonly) OAOverlayMapLayer *overlayMapLayer;
 @property (nonatomic, readonly) OAUnderlayMapLayer *underlayMapLayer;
 @property (nonatomic, readonly) OAGPXLayer *gpxMapLayer;

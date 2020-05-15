@@ -18,7 +18,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAManageResourcesViewController.h"
-#import "OAHillshadeLayer.h"
+#import "OATerrainLayer.h"
 //#import "OASizes.h"
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
@@ -764,10 +764,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
             {
                 NSString *filename = [app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString() lastPathComponent];
-                if (app.data.hillshade == EOATerrainTypeHillshade)
-                    [[OAHillshadeLayer sharedInstanceHillshade] removeFromDB:filename];
-                else if (app.data.hillshade == EOATerrainTypeSlope)
-                    [[OAHillshadeLayer sharedInstanceSlope] removeFromDB:filename];
+                if (app.data.terrainType == EOATerrainTypeHillshade)
+                    [[OATerrainLayer sharedInstanceHillshade] removeFromDB:filename];
+                else if (app.data.terrainType == EOATerrainTypeSlope)
+                    [[OATerrainLayer sharedInstanceSlope] removeFromDB:filename];
             }
             
             const auto success = item.resourceId.isEmpty() || app.resourcesManager->uninstallResource(item.resourceId);
@@ -780,7 +780,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             else
             {
                 if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
-                    [app.data.hillshadeResourcesChangeObservable notifyEvent];
+                    [app.data.terrainResourcesChangeObservable notifyEvent];
                 
                 if (block)
                     block();

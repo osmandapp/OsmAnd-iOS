@@ -22,8 +22,8 @@
 - (void)execute
 {
     OAAppData *data = [OsmAndApp instance].data;
-    BOOL isOn = [data hillshade];
-    [data setHillshade:!isOn];
+    BOOL isOn = [data terrainType];
+    [data setTerrainType:!isOn];
 }
 
 - (NSString *)getIconResName
@@ -38,12 +38,12 @@
 
 - (BOOL)isActionWithSlash
 {
-    return [[OsmAndApp instance].data hillshade];
+    return [[OsmAndApp instance].data terrainType];
 }
 
 - (NSString *)getActionStateName
 {
-    return [[OsmAndApp instance].data hillshade] ? OALocalizedString(@"hide_hillshade") : OALocalizedString(@"show_hillshade");
+    return [[OsmAndApp instance].data terrainType] ? OALocalizedString(@"hide_hillshade") : OALocalizedString(@"show_hillshade");
 }
 
 @end

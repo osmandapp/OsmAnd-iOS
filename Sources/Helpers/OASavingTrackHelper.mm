@@ -563,7 +563,7 @@
 {
     CLLocation* location = _app.locationServices.lastKnownLocation;
 
-    dispatch_async(syncQueue, ^{
+    dispatch_sync(syncQueue, ^{
         
         if (location)
         {

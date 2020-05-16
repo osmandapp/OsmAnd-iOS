@@ -582,13 +582,13 @@ static NSInteger kButtonsSection;
             {
                 _app.data.overlayMapSource = _app.data.lastOverlayMapSource;
                 if (!_app.data.overlayMapSource)
-                    [self installMorePressed]; // Why it added here?
+                    [self installMorePressed];
             }
             else if (_mapSettingType == EMapSettingUnderlay)
             {
                 _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
                 if (!_app.data.underlayMapSource)
-                    [self installMorePressed]; // Why it added here?
+                    [self installMorePressed];
             }
             if ((_mapSettingType == EMapSettingOverlay && _app.data.overlayMapSource) ||
                 (_mapSettingType == EMapSettingUnderlay && _app.data.underlayMapSource))

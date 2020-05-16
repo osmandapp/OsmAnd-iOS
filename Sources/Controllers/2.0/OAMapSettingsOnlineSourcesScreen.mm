@@ -26,7 +26,7 @@ typedef enum
 {
     EMapSettingOverlay = 0,
     EMapSettingUnderlay,
-    
+    EMapSettingsSource
 } EMapSettingType;
 
 @implementation OAMapSettingsOnlineSourcesScreen
@@ -36,6 +36,7 @@ typedef enum
     
     UIButton *_btnDone;
     EMapSettingType _mapSettingType;
+    NSString *_param;
 
     QList<std::shared_ptr<const OsmAnd::OnlineTileSources::Source>> _onlineMapSources;
     QList<std::shared_ptr<const OsmAnd::OnlineTileSources::Source>> _selectedSources;
@@ -51,6 +52,7 @@ typedef enum
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
+        _param = param;
         
         title = OALocalizedString(@"map_settings_install_maps");
         settingsScreen = EMapSettingsScreenOnlineSources;
@@ -62,11 +64,6 @@ typedef enum
         [vwController.okButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
         CGSize btnSize = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_done") width:kMaxDoneWidth font:vwController.okButton.titleLabel.font];
         [vwController.okButton setConstant:@"buttonWidth" constant:btnSize.width + 32.];
-        
-        if ([param isEqualToString:@"overlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenOverlay)
-            _mapSettingType = EMapSettingOverlay;
-        else if ([param isEqualToString:@"underlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenUnderlay)
-            _mapSettingType = EMapSettingUnderlay;
         
         [self commonInit];
         [self initData];
@@ -105,6 +102,12 @@ typedef enum
                                                 return s1->priority < s2->priority;
                                             });
             dispatch_async(dispatch_get_main_queue(), ^(void) {
+                if ([_param isEqualToString:@"overlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenOverlay)
+                    _mapSettingType = EMapSettingOverlay;
+                else if ([_param isEqualToString:@"underlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenUnderlay)
+                    _mapSettingType = EMapSettingUnderlay;
+                else if (vwController.screenType == EMapSettingsScreenMapType)
+                    _mapSettingType = EMapSettingsSource;
                 tblView.allowsMultipleSelectionDuringEditing = YES;
                 [tblView setEditing:YES];
                 [tblView reloadData];
@@ -136,22 +139,16 @@ typedef enum
         OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:@"online_tiles"
                                                     andVariant:src->name.toNSString() name:src->name.toNSString()];
 
-        switch (self.vwController.parentVC.screenType) // Drop this switch and use _mapSettingType only
+        switch (_mapSettingType)
         {
-            case EMapSettingsScreenMapType:
-                _app.data.lastMapSource = mapSource;
-                break;
-            case EMapSettingsScreenOverlay:
+            case EMapSettingOverlay:
                 _app.data.overlayMapSource = mapSource;
                 break;
-            case EMapSettingsScreenUnderlay:
+            case EMapSettingUnderlay:
                 _app.data.underlayMapSource = mapSource;
                 break;
-            case EMapSettingsScreenMain:
-                if (_mapSettingType == EMapSettingOverlay)
-                    _app.data.overlayMapSource = mapSource;
-                else
-                    _app.data.underlayMapSource = mapSource;
+            case EMapSettingsSource:
+                _app.data.lastMapSource = mapSource;
                 break;
         }
     }

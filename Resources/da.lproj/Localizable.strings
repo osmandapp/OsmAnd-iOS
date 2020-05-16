@@ -1671,7 +1671,7 @@
 "public_transport_warning_descr_blog" = "Læs mere om ruterberegning på vores blog.";
 "public_transport_warning_title" = "Offentlig transportruter er nu i beta testfasen, så fejl og unøjagtigheder kan forekomme.";
 "calc_pedestrian_route" = "Beregn fodgængerruten";
-"public_transport_ped_route_title" = "Ruten til fods er ca %1$s og kan være hurtigere end offentlig transport";
+"public_transport_ped_route_title" = "Ruten til fods er ca %1$s og kan være hurtigere end offentlig transport.";
 "product_desc_antarctica" = "Ubegrænset hentning af kort til Antarktis";
 "product_title_antarctica" = "Antarktis";
 "map_settings_line_density_slowdown_warning" = "Høj linjetæthed kan bremse kortgengivelse";

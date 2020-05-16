@@ -1263,6 +1263,8 @@
 "calc_pedestrian_route" = "Calculate pedestrian route";
 "public_transport_warning_title" = "Public transport navigation is currently in beta testing, expect errors and inaccuracies.";
 "public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
+"public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
+"public_transport_empty_warning_descr" = "Try changing the settings.";
 
 "total" = "Total";
 "walk" = "Walk";

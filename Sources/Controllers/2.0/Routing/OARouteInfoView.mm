@@ -56,6 +56,7 @@
 #import "OAPublicTransportRouteCell.h"
 #import "OAPublicTransportShieldCell.h"
 #import "OATableViewCustomFooterView.h"
+#import "OARouteAvoidTransportSettingsViewController.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -77,7 +78,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     EOARouteInfoMenuStateFullScreen
 };
 
-@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback>
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, UITextViewDelegate>
 
 @end
 
@@ -117,6 +118,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     OAGPXTrackAnalysis *_trackAnalysis;
     OAGPXDocument *_gpx;
     BOOL _needChartUpdate;
+    
+    BOOL _hasEmptyTransportRoute;
 }
 
 - (instancetype) init
@@ -544,6 +547,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [section addObject:@{
         @"cell" : @"OARoutingSettingsCell"
     }];
+    
+    if (_hasEmptyTransportRoute)
+    {
+        [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
+        _data = [NSDictionary dictionaryWithDictionary:dictionary];
+        [self setupGoButton];
+        return;
+    }
+    
     if ((![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated]) || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
     {
         [section addObject:@{
@@ -1116,6 +1128,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if ([_routingHelper isFollowingMode] && appMode == am)
         [OAAppSettings sharedManager].applicationMode = next;
     
+    _hasEmptyTransportRoute = NO;
     [_routingHelper setAppMode:next];
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
     if ([_routingHelper isRouteBeingCalculated] || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
@@ -1133,6 +1146,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _trackAnalysis = nil;
         _gpx = nil;
         _progressBarView = nil;
+        _hasEmptyTransportRoute = _routingHelper.isPublicTransportMode && _transportHelper.getRoutes.size() == 0;
         [self updateMenu];
     });
 }
@@ -1223,6 +1237,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 cell.addressLabel.text = OALocalizedString(@"route_descr_select_destination");
             }
             [cell setDividerVisibility:YES];
+            cell.routingCellButton.hidden = _routingHelper.isPublicTransportMode;
             [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
             [self setupButtonLayout:cell.routingCellButton];
             [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -1653,9 +1668,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated] && section == _data.count - 1)
+    if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || _hasEmptyTransportRoute) && section == _data.count - 1)
     {
-        return [OAUtilities calculateTextBounds:[self getAttributedBetaWarning] width:tableView.bounds.size.width].height + 8.0;
+        return [OAUtilities calculateTextBounds:_hasEmptyTransportRoute ?
+                [self getAttributedEmptyRouteWarning] : [self getAttributedBetaWarning] width:tableView.bounds.size.width].height + 8.0;
     }
     return 0.001;
 }
@@ -1686,7 +1702,23 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     return vw;
 }
 
-- (NSAttributedString *)getAttributedBetaWarning
+- (NSAttributedString *) getAttributedEmptyRouteWarning
+{
+    NSString *mainText = OALocalizedString(@"public_transport_empty_warning_title");
+    NSString *additionalText = OALocalizedString(@"public_transport_empty_warning_descr");
+    NSString *settingName = OALocalizedString(@"avoid_transport_type");
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:15], NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
+    
+    NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@\n%@", mainText, additionalText, settingName] attributes:attributes];
+    
+    [res addAttributes:@{NSLinkAttributeName: @"osmand://open_transport_settings",
+                         NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
+                         NSFontAttributeName: [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
+    } range:NSMakeRange(mainText.length + additionalText.length + 3, settingName.length)];
+    return [[NSAttributedString alloc] initWithAttributedString:res];
+}
+
+- (NSAttributedString *) getAttributedBetaWarning
 {
     NSString *mainText = OALocalizedString(@"public_transport_warning_title");
     NSString *additionalText = OALocalizedString(@"public_transport_warning_descr_blog");
@@ -1703,12 +1735,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated] && section == _data.count - 1)
+    if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || _hasEmptyTransportRoute) && section == _data.count - 1)
     {
         OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
-        NSAttributedString* res = [self getAttributedBetaWarning];
+        NSAttributedString* res = _hasEmptyTransportRoute ? [self getAttributedEmptyRouteWarning] : [self getAttributedBetaWarning];
         vw.label.attributedText = res;
-        [vw setIcon:@"ic_action_bus_dark"];
+        vw.label.delegate = self;
+        [vw setIcon:_hasEmptyTransportRoute ? @"ic_custom_no_route" : @"ic_action_bus_dark"];
         return vw;
     }
     else
@@ -1903,6 +1936,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void)stateChanged:(id)change
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        _hasEmptyTransportRoute = NO;
         [self updateData];
         [self.tableView reloadData];
     });
@@ -1919,6 +1953,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_progressBarView)
         {
+            _hasEmptyTransportRoute = NO;
             [self updateData];
             [self.tableView reloadData];
         }
@@ -1937,6 +1972,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)startProgress {
     dispatch_async(dispatch_get_main_queue(), ^{
+        _hasEmptyTransportRoute = NO;
         if (!_progressBarView)
         {
             [self updateData];
@@ -1945,6 +1981,22 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (_progressBarView)
             [_progressBarView setProgress:0.];
     });
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
+{
+    if ([URL.absoluteString hasPrefix:@"osmand"])
+    {
+        if ([URL.absoluteString hasSuffix:@"open_transport_settings"])
+        {
+            OARouteAvoidTransportSettingsViewController *avoidTransportController = [[OARouteAvoidTransportSettingsViewController alloc] init];
+            [OARootViewController.instance.mapPanel presentViewController:avoidTransportController animated:YES completion:nil];
+            return NO;
+        }
+    }
+    return YES;
 }
 
 @end

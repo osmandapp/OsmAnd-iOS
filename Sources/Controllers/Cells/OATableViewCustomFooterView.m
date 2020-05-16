@@ -44,6 +44,7 @@
     [self.textLabel removeFromSuperview];
     [self.detailTextLabel removeFromSuperview];
     
+    _iconView = [[UIImageView alloc] init];
     
     _label = [[UITextView alloc] init];
     _label.backgroundColor = [UIColor clearColor];
@@ -94,14 +95,16 @@
         if (_iconView && _iconView.superview)
             [_iconView removeFromSuperview];
         
-        _iconView = nil;
+        _iconView.image = nil;
     }
     else
     {
         UIImage *img = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _iconView = [[UIImageView alloc] initWithImage:img];
+        _iconView.image = img;
+        [_iconView sizeToFit];
         _iconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
-        [self.contentView addSubview:_iconView];
+        if (!_iconView.superview)
+            [self.contentView addSubview:_iconView];
     }
     
     [self setNeedsLayout];

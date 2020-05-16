@@ -1038,7 +1038,12 @@
 "help_map_viewing" = "Map viewing";
 "help_search" = "Map search";
 "help_trip_planning" = "Planning a trip";
+"help_purchases" = "OsmAnd purchases";
+"help_osmand_live" = "Subscription - OsmAnd Live";
+"help_travel" = "Travel (Wikipedia & Wikivoyage)";
+"help_mapillary" = "OsmAnd + Mapillary";
 "help_legend" = "Map legend";
+"help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Other";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
 "help_tech_articles" = "Technical articles";

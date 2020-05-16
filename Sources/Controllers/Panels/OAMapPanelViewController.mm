@@ -265,7 +265,7 @@ typedef enum
         _mapNeedsRestore = NO;
         [self restoreMapAfterReuse];
     }
-    [_app.data.destinationsChangeObservable notifyEvent];
+    [_destinationViewController refreshView];
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
@@ -291,7 +291,7 @@ typedef enum
     {
         OAToolbarViewController *topToolbar = [self getTopToolbar];
         if (topToolbar)
-            [_app.data.destinationsChangeObservable notifyEvent]; //[topToolbar updateFrame:YES];
+            [topToolbar updateFrame:YES];
         else
             [self updateToolbar];
     }
@@ -316,7 +316,7 @@ typedef enum
         _destinationViewController.delegate = self;
         _destinationViewController.destinationDelegate = self;
         
-        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisability get])
             [self showToolbar:_destinationViewController];
     }
     else if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)

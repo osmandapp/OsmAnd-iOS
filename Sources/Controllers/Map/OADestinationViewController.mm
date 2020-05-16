@@ -169,6 +169,12 @@
     });
 }
 
+- (void) refreshView
+{
+    [self refreshCells];
+    [self updateFrame:YES];
+}
+
 - (void) refreshCells
 {
     [self clean];

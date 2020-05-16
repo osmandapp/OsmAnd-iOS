@@ -1711,10 +1711,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@\n%@", mainText, additionalText, settingName] attributes:attributes];
     
-    [res addAttributes:@{NSLinkAttributeName: @"osmand://open_transport_settings",
-                         NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
-                         NSFontAttributeName: [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
-    } range:NSMakeRange(mainText.length + additionalText.length + 3, settingName.length)];
+    NSRange settingRange = [res.string rangeOfString:settingName];
+    if (settingRange.location != NSNotFound)
+    {
+        [res addAttributes:@{NSLinkAttributeName: @"osmand://open_transport_settings",
+                             NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
+                             NSFontAttributeName: [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
+        } range:settingRange];
+    }
     return [[NSAttributedString alloc] initWithAttributedString:res];
 }
 

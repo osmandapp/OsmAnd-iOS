@@ -63,9 +63,9 @@ typedef enum
         CGSize btnSize = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_done") width:kMaxDoneWidth font:vwController.okButton.titleLabel.font];
         [vwController.okButton setConstant:@"buttonWidth" constant:btnSize.width + 32.];
         
-        if ([param isEqualToString:@"overlay"]) // ???
+        if ([param isEqualToString:@"overlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenOverlay)
             _mapSettingType = EMapSettingOverlay;
-        else
+        else if ([param isEqualToString:@"underlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenUnderlay)
             _mapSettingType = EMapSettingUnderlay;
         
         [self commonInit];
@@ -136,7 +136,7 @@ typedef enum
         OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:@"online_tiles"
                                                     andVariant:src->name.toNSString() name:src->name.toNSString()];
 
-        switch (self.vwController.parentVC.screenType) // ???
+        switch (self.vwController.parentVC.screenType) // Drop this switch and use _mapSettingType only
         {
             case EMapSettingsScreenMapType:
                 _app.data.lastMapSource = mapSource;

@@ -26,7 +26,8 @@ typedef enum
 {
     EMapSettingOverlay = 0,
     EMapSettingUnderlay,
-    EMapSettingsSource
+    EMapSettingsSource,
+    EMapSettingsUndefined
 } EMapSettingType;
 
 @implementation OAMapSettingsOnlineSourcesScreen
@@ -53,6 +54,7 @@ typedef enum
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _param = param;
+        _mapSettingType = EMapSettingsUndefined;
         
         title = OALocalizedString(@"map_settings_install_maps");
         settingsScreen = EMapSettingsScreenOnlineSources;
@@ -90,6 +92,12 @@ typedef enum
 
 - (void)setupView
 {
+    if ([_param isEqualToString:@"overlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenOverlay)
+        _mapSettingType = EMapSettingOverlay;
+    else if ([_param isEqualToString:@"underlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenUnderlay)
+        _mapSettingType = EMapSettingUnderlay;
+    else if (vwController.screenType == EMapSettingsScreenMapType)
+        _mapSettingType = EMapSettingsSource;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         const auto& onlineSourcesCollection = _app.resourcesManager->downloadOnlineTileSources();
         if (onlineSourcesCollection != nullptr)
@@ -102,12 +110,6 @@ typedef enum
                                                 return s1->priority < s2->priority;
                                             });
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                if ([_param isEqualToString:@"overlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenOverlay)
-                    _mapSettingType = EMapSettingOverlay;
-                else if ([_param isEqualToString:@"underlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenUnderlay)
-                    _mapSettingType = EMapSettingUnderlay;
-                else if (vwController.screenType == EMapSettingsScreenMapType)
-                    _mapSettingType = EMapSettingsSource;
                 tblView.allowsMultipleSelectionDuringEditing = YES;
                 [tblView setEditing:YES];
                 [tblView reloadData];
@@ -138,7 +140,6 @@ typedef enum
         const auto& src = _selectedSources[0];
         OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:@"online_tiles"
                                                     andVariant:src->name.toNSString() name:src->name.toNSString()];
-
         switch (_mapSettingType)
         {
             case EMapSettingOverlay:
@@ -149,6 +150,8 @@ typedef enum
                 break;
             case EMapSettingsSource:
                 _app.data.lastMapSource = mapSource;
+                break;
+            default:
                 break;
         }
     }

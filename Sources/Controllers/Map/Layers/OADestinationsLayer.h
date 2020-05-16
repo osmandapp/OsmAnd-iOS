@@ -18,5 +18,6 @@
 
 - (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;
 - (void)removeDestinationPin:(double)latitude longitude:(double)longitude;
+- (void) updadeDestinationLineWidget;
 
 @end

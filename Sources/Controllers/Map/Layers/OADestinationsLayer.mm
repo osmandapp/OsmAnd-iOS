@@ -79,9 +79,11 @@
     [self.mapView addSubview:_destinationLayerWidget];
 }
 
-- (void) onMapFrameRendered
+- (void) updadeDestinationLineWidget
 {
-    [_destinationLayerWidget updateLayer];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_destinationLayerWidget updateLayer];
+    });
 }
 
 - (void) deinitLayer

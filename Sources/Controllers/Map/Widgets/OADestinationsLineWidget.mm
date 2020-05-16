@@ -108,6 +108,7 @@
 - (void) initDestinationLayer
 {
     _destinationLineSublayer = [[CALayer alloc] init];
+    _destinationLineSublayer.drawsAsynchronously = YES;
     _destinationLineSublayer.frame = self.bounds;
     _destinationLineSublayer.bounds = self.bounds;
     _destinationLineSublayer.contentsCenter = self.layer.contentsCenter;
@@ -132,9 +133,12 @@
 {
 //    [self clearLayers];
 //    [self initDestinationLayer];
+    //[_destinationLineSublayer display];
     if (_destinationLineSublayer.superlayer != self.layer)
         [self.layer insertSublayer:_destinationLineSublayer above:self.layer];
     [_destinationLineSublayer setNeedsDisplay];
+    //[_destinationLineSublayer displayIfNeeded];
+    
     return YES;
 }
 

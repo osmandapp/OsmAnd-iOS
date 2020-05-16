@@ -165,7 +165,7 @@
             break;
         case EMapSettingsScreenOnlineSources:
             if (!self.screenObj)
-                self.screenObj = [[OAMapSettingsOnlineSourcesScreen alloc] initWithTable:self.tableView viewController:self];
+                self.screenObj = [[OAMapSettingsOnlineSourcesScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
             break;
         case EMapSettingsScreenTerrain:
             if (!self.screenObj)

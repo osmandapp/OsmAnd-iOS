@@ -122,7 +122,7 @@
 		0CF5859D2440745F0081238D /* ic_custom_direction_widget_two@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF585802440745E0081238D /* ic_custom_direction_widget_two@3x.png */; };
 		0CF5859E2440745F0081238D /* ic_custom_direction_widget_two@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF585802440745E0081238D /* ic_custom_direction_widget_two@3x.png */; };
 		152911B624542D8B008A6757 /* OADirectionAppearanceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 152911B524542D8B008A6757 /* OADirectionAppearanceViewController.xib */; };
-		152911B8245705BC008A6757 /* OAMapMarkerLineControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 152911B7245705BC008A6757 /* OAMapMarkerLineControl.xib */; };
+		152911B8245705BC008A6757 /* OADistanceToMapMarkerControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 152911B7245705BC008A6757 /* OADistanceToMapMarkerControl.xib */; };
 		152911BA24570A91008A6757 /* OADistanceToMapMarkerControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 152911B924570A91008A6757 /* OADistanceToMapMarkerControl.mm */; };
 		1535D8E9243DDA390061220F /* ic_custom_map_online@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E3243DDA370061220F /* ic_custom_map_online@3x.png */; };
 		1535D8EA243DDA390061220F /* ic_custom_map_online.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E4243DDA370061220F /* ic_custom_map_online.png */; };
@@ -5701,7 +5701,7 @@
 		0CF585802440745E0081238D /* ic_custom_direction_widget_two@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_widget_two@3x.png"; path = "Resources/Icons/ic_custom_direction_widget_two@3x.png"; sourceTree = SOURCE_ROOT; };
 		1282460E521223DA0F804AE7 /* Pods-OsmAnd Maps DEV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps DEV.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV.release.xcconfig"; sourceTree = "<group>"; };
 		152911B524542D8B008A6757 /* OADirectionAppearanceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADirectionAppearanceViewController.xib; sourceTree = "<group>"; };
-		152911B7245705BC008A6757 /* OAMapMarkerLineControl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAMapMarkerLineControl.xib; sourceTree = "<group>"; };
+		152911B7245705BC008A6757 /* OADistanceToMapMarkerControl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADistanceToMapMarkerControl.xib; sourceTree = "<group>"; };
 		152911B924570A91008A6757 /* OADistanceToMapMarkerControl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADistanceToMapMarkerControl.mm; sourceTree = "<group>"; };
 		152911BB24570A9D008A6757 /* OADistanceToMapMarkerControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADistanceToMapMarkerControl.h; sourceTree = "<group>"; };
 		1535D8E3243DDA370061220F /* ic_custom_map_online@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_online@3x.png"; path = "Resources/Icons/ic_custom_map_online@3x.png"; sourceTree = "<group>"; };
@@ -9472,7 +9472,7 @@
 				8476E1ED1F6BB66700EC274F /* OARoutingProgressView.xib */,
 				840B7D5E1F87699E00477A3C /* OATextInfoWidget.xib */,
 				847777591FAA3E2100CA8C1F /* OADistanceControl.xib */,
-				152911B7245705BC008A6757 /* OAMapMarkerLineControl.xib */,
+				152911B7245705BC008A6757 /* OADistanceToMapMarkerControl.xib */,
 				8477775C1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib */,
 				84CC87DB1FAB630E00B4941F /* OANextTurnInfoWidget.xib */,
 				848EF4471FB1A7D1000B7840 /* OALanesControl.xib */,
@@ -17817,7 +17817,7 @@
 				840C9FB81CF353C800F2F991 /* ic_coordinates_location@3x.png in Resources */,
 				DAF345A922F4482C009E2EB6 /* ic_custom_arrow_forward@2x.png in Resources */,
 				DA1341B8243DC5A90039D214 /* map_action_utv.png in Resources */,
-				152911B8245705BC008A6757 /* OAMapMarkerLineControl.xib in Resources */,
+				152911B8245705BC008A6757 /* OADistanceToMapMarkerControl.xib in Resources */,
 				847C0FA21FC5D6F4003891F3 /* bt_round_big_night@3x.png in Resources */,
 				847AF5941F8A3D4900FC7F90 /* widget_intermediate_day.png in Resources */,
 				8477773F1FAA260E00CA8C1F /* widget_battery_night.png in Resources */,

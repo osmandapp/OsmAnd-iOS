@@ -62,6 +62,10 @@
     [super viewDidLoad];
     _settings = [OAAppSettings sharedManager];
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
 }
 
 - (void) viewWillLayoutSubviews
@@ -185,13 +189,6 @@
                @"distanceIndication" : distanceIndicationArr,
                @"activeMarkers" : activeMarkersArr
             };
-  
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
-   
 }
 
  - (void) adjustViews
@@ -210,13 +207,12 @@
      UIGraphicsBeginImageContextWithOptions(bgImage.size, NO, 0.0);
      
      [bgColor setFill];
-     [bgImage drawInRect:CGRectMake( 0, 0, bgImage.size.width, bgImage.size.height)];
+     [bgImage drawInRect:CGRectMake(0.0, 0.0, bgImage.size.width, bgImage.size.height)];
      [fgColor setFill];
-     [fgImage drawInRect:CGRectMake( 0.0, 0.0, fgImage.size.width, fgImage.size.height)];
+     [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
      
      UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
      UIGraphicsEndImageContext();
-
      return newImage;
  }
 
@@ -247,22 +243,15 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCheckmarkCell" owner:self options:nil];
             cell = (OASettingsCheckmarkCell *)[nib objectAtIndex:0];
-            
-            cell.separatorInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, CGFLOAT_MAX);
-            UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(50, cell.contentView.frame.size.height - 0.5, cell.contentView.frame.size.width, 1)];
-            separator.backgroundColor = UIColorFromRGB(color_tint_gray);
-            [cell.contentView addSubview:separator];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 50.0, 0.0, 0.0);
         }
-        
         UIImage *fgImage = [[UIImage imageNamed:item[@"fg_img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         UIImage *bgImage = [[UIImage imageNamed:item[@"bg_img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        
         cell.iconImageView.image = [self drawImage:fgImage inImage:bgImage bgColor:item[@"bg_color"] fgColor:item[@"fg_color"]];
         cell.titleLabel.text = item[@"title"];
         cell.checkmarkImageView.hidden = ![item[@"value"] boolValue];
         return cell;
     }
-    
     else
     {
         static NSString* const identifierCell = @"OASettingSwitchCell";
@@ -274,7 +263,6 @@
             cell.descriptionView.hidden = YES;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        
         cell.textView.text = item[@"title"];
         if ([item[@"key"] isEqualToString:kDistanceIndication])
         {
@@ -305,13 +293,11 @@
 {
     NSString *title = [self getTitleForHeaderSection:section];
     OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
-    
     if (!title)
     {
         vw.label.text = title;
         return vw;
     }
-    
     vw.label.text = [title upperCase];
     return vw;
 }
@@ -384,30 +370,22 @@
     if ([item[@"section"] isEqualToString:@"activeMarkers"])
     {
         if (indexPath.row == 0)
-        {
             [_settings.activeMarkers set:ONE_ACTIVE_MARKER];
-            //[_settings.twoActiveMarker set:NO];
-        }
         else
-        {
             [_settings.activeMarkers set:TWO_ACTIVE_MARKERS];
-            //[_settings.twoActiveMarker set:YES];
-        }
         if ([_settings.distanceIndication get] == WIDGET_DISPLAY)
             [self setWidgetVisibility:YES collapsed:NO];
     }
-    if ([item[@"section"] isEqualToString:@"distanceIndication"])
+    else if ([item[@"section"] isEqualToString:@"distanceIndication"])
     {
         if (indexPath.row == 1)
         {
             [_settings.distanceIndication set:TOP_BAR_DISPLAY];
-            //[_settings.widgetDisplay set:NO];
             [self setWidgetVisibility:NO collapsed:NO];
         }
         else
         {
             [_settings.distanceIndication set:WIDGET_DISPLAY];
-            //[_settings.widgetDisplay set:YES];
             [self setWidgetVisibility:YES collapsed:NO];
         }
     }
@@ -422,16 +400,12 @@
     {
         [_settings.distanceIndicationVisability set:switchView.isOn];
         if (![_settings.distanceIndicationVisability get])
-        {
             [_settings.lastPositionWidgetDisplay set:[_settings.distanceIndication get]];
-        }
         else
-        {
             if ([_settings.lastPositionWidgetDisplay get])
                 [_settings.distanceIndication set:WIDGET_DISPLAY];
             else
                 [_settings.distanceIndication set:TOP_BAR_DISPLAY];
-        }
     }
     [self setupView];
     [self.tableView reloadData];

@@ -50,15 +50,12 @@
         _dayIconId = dayIconId;
         _nightIconId = nightIconId;
         _firstWidget = firstMarker;
-        
         self.colors = @[UIColorFromRGB(marker_pin_color_orange),
                         UIColorFromRGB(marker_pin_color_blue),
                         UIColorFromRGB(marker_pin_color_green),
                         UIColorFromRGB(marker_pin_color_red),
                         UIColorFromRGB(marker_pin_color_light_green)];
-        
         self.markerNames = @[@"widget_marker_triangle_pin_1", @"widget_marker_triangle_pin_2", @"widget_marker_triangle_pin_3", @"widget_marker_triangle_pin_4", @"widget_marker_triangle_pin_5"];
-        
         __weak OATextInfoWidget *selfWeak = self;
         selfWeak.onClickFunction = ^(id sender) {
             [self onWidgetClicked];
@@ -94,10 +91,8 @@
     else
     {
         if ([_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && destinations.count == 1)
-        {
             [self updateVisibility:NO];
-        }
-        if ([_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && destinations.count > 1)
+        else if ([_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && destinations.count > 1)
         {
             [self updateVisibility:YES];
             _markerDestination = (destinations.count >= 2 ? destinations[1] : nil);

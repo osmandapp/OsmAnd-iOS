@@ -3227,7 +3227,7 @@ typedef enum
 
 - (void)destinationsAdded
 {
-    if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+    if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisability get])
         [self showToolbar:_destinationViewController];
 }
 
@@ -3298,7 +3298,7 @@ typedef enum
     
         [cardsController doViewWillDisappear];
 
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndication get] == TOP_BAR_DISPLAY))
+        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisability get]) || ([_settings.distanceIndication get] == WIDGET_DISPLAY))
         {
             [self hideToolbar:_destinationViewController];
         }

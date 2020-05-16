@@ -192,7 +192,7 @@
     else
         secondCellDestination = (destinations.count >= 2 ? destinations[1] : nil);
     
-    if (firstCellDestination)
+    if (firstCellDestination && [_settings.distanceIndicationVisability get])
     {
         OADestination *destination = firstCellDestination;
 
@@ -213,7 +213,7 @@
         [cell updateDirections:location direction:direction];
     }
     
-    if (secondCellDestination && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
+    if (secondCellDestination && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && [_settings.distanceIndicationVisability get])
     {
         OADestination *destination = secondCellDestination;
         
@@ -253,14 +253,14 @@
 - (void)clean
 {
     NSInteger destinationsCount = [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS ? [OADestinationsHelper instance].sortedDestinations.count : 1;
-    
+
     while (_destinationCells.count > destinationsCount)
     {
         OADestinationCell *cell = [_destinationCells lastObject];
         [cell.contentView removeFromSuperview];
         [_destinationCells removeLastObject];
     }
-    
+
     if ([_settings.distanceIndication get] == WIDGET_DISPLAY || ![_settings.distanceIndicationVisability get])
     {
         while (_destinationCells.count > 0)
@@ -270,11 +270,11 @@
             [_destinationCells removeLastObject];
         }
     }
-    
+
     if (destinationsCount == 0)
     {
         [self stopLocationUpdate];
-        [self.view removeFromSuperview];
+        //[self.view removeFromSuperview]; // ??? is it necessary?
     }
 }
 
@@ -368,8 +368,7 @@
 {
     CGRect frame;
 
-    NSInteger destinationsCount = [_settings.distanceIndication get] == TOP_BAR_DISPLAY ? MIN(2, [OADestinationsHelper instance].sortedDestinations.count) : 0;
-    
+    NSInteger destinationsCount = _destinationCells.count;
     BOOL _navBarHidden = destinationsCount > 0;
     self.navBarView.hidden = _navBarHidden;
     CGFloat navBarHeight = !_navBarHidden ? self.navBarView.bounds.size.height : 0.0;
@@ -402,7 +401,7 @@
             else
                 h = navBarHeight;
             
-            if ([_settings.distanceIndication get] == WIDGET_DISPLAY)
+            if ([_settings.distanceIndication get] == WIDGET_DISPLAY || ![_settings.distanceIndicationVisability get])
                 h = navBarHeight;
             
             if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == ONE_ACTIVE_MARKER)
@@ -546,7 +545,7 @@
         [_multiCell.contentView removeFromSuperview];
         _multiCell = nil;
         
-        [self.view removeFromSuperview];
+        //[self.view removeFromSuperview]; // ???
         [self stopLocationUpdate];
     }
 }

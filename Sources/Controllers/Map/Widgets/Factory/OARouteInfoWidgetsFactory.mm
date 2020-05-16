@@ -71,45 +71,6 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
 @end
 
-@interface OAMapMarkerLineControl : OADistanceToMapMarkerControl // Remove
-
-@end
-
-@implementation OAMapMarkerLineControl
-
-- (instancetype) initWithFirstMarker:(BOOL)firstMarker
-{
-    self = [super initWithIcons:@"widget_marker_day" nightIconId:@"widget_marker_night" firstMarker:firstMarker];
-    if (self)
-    {
-        self.hidden = YES;
-    }
-    return self;
-}
-
-//- (CLLocation *) getPointToNavigate
-//{
-//    OARTargetPoint *p = [[OATargetPointsHelper sharedInstance] getPointToNavigate];
-//    return p ? p.point : nil;
-//}
-//
-//- (CLLocationDistance) getDistance
-//{
-//    OARoutingHelper *routinHelper = [OARoutingHelper sharedInstance];
-//    if ([routinHelper isRouteCalculated])
-//        return [routinHelper getLeftDistance];
-//
-//    return [super getDistance];
-//}
-//
-//- (void) click
-//{
-//    [super click];
-//}
-
-@end
-
-
 @interface OAIntermediateDistanceControl : OADistanceToPointInfoControl
 
 @end
@@ -743,7 +704,9 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
 - (OATextInfoWidget *) createMapMarkerControl:(BOOL)firstMarker
 {
-    return [[OAMapMarkerLineControl alloc] initWithFirstMarker:firstMarker];
+    OATextInfoWidget *widget = [[OADistanceToMapMarkerControl alloc] initWithIcons:@"widget_marker_day" nightIconId:@"widget_marker_night" firstMarker:firstMarker];
+    [widget updateVisibility:NO];
+    return widget;
 }
 
 @end

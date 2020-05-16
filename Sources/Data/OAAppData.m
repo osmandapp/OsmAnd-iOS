@@ -48,8 +48,9 @@
     _overlayAlphaChangeObservable = [[OAObservable alloc] init];
     _underlayMapSourceChangeObservable = [[OAObservable alloc] init];
     _underlayAlphaChangeObservable = [[OAObservable alloc] init];
-    _hillshadeChangeObservable = [[OAObservable alloc] init];
-    _hillshadeResourcesChangeObservable = [[OAObservable alloc] init];
+    _terrainChangeObservable = [[OAObservable alloc] init];
+    _terrainResourcesChangeObservable = [[OAObservable alloc] init];
+    _terrainAlphaChangeObservable = [[OAObservable alloc] init];
     _mapLayerChangeObservable = [[OAObservable alloc] init];
     _mapillaryChangeObservable = [[OAObservable alloc] init];
 
@@ -191,8 +192,9 @@
 @synthesize destinationsChangeObservable = _destinationsChangeObservable;
 @synthesize destinationAddObservable = _destinationAddObservable;
 @synthesize destinationRemoveObservable = _destinationRemoveObservable;
-@synthesize hillshadeChangeObservable = _hillshadeChangeObservable;
-@synthesize hillshadeResourcesChangeObservable = _hillshadeResourcesChangeObservable;
+@synthesize terrainChangeObservable = _terrainChangeObservable;
+@synthesize terrainResourcesChangeObservable = _terrainResourcesChangeObservable;
+@synthesize terrainAlphaChangeObservable = _terrainAlphaChangeObservable;
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 @synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
 
@@ -293,22 +295,141 @@
     }
 }
 
-@synthesize hillshade = _hillshade;
+@synthesize hillshadeMinZoom = _hillshadeMinZoom;
 
-- (BOOL) hillshade
+- (NSInteger) hillshadeMinZoom
 {
     @synchronized(_lock)
     {
-        return _hillshade;
+        return _hillshadeMinZoom;
     }
 }
 
-- (void) setHillshade:(BOOL)hillshade
+- (void) setHillshadeMinZoom:(NSInteger)hillshadeMinZoom
 {
     @synchronized(_lock)
     {
-        _hillshade = hillshade;
-        [_hillshadeChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithBool:_hillshade]];
+        _hillshadeMinZoom = hillshadeMinZoom;
+        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
+    }
+}
+
+@synthesize hillshadeMaxZoom = _hillshadeMaxZoom;
+
+- (NSInteger) hillshadeMaxZoom
+{
+    @synchronized(_lock)
+    {
+        return _hillshadeMaxZoom;
+    }
+}
+
+- (void) setHillshadeMaxZoom:(NSInteger)hillshadeMaxZoom
+{
+    @synchronized(_lock)
+    {
+        _hillshadeMaxZoom = hillshadeMaxZoom;
+        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
+    }
+}
+
+@synthesize slopeMinZoom = _slopeMinZoom;
+
+- (NSInteger) slopeMinZoom
+{
+    @synchronized(_lock)
+    {
+        return _slopeMinZoom;
+    }
+}
+
+- (void) setSlopeMinZoom:(NSInteger)slopeMinZoom
+{
+    @synchronized(_lock)
+    {
+        _slopeMinZoom = slopeMinZoom;
+        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
+    }
+}
+
+@synthesize slopeMaxZoom = _slopeMaxZoom;
+
+- (NSInteger) slopeMaxZoom
+{
+    @synchronized(_lock)
+    {
+        return _slopeMaxZoom;
+    }
+}
+
+- (void) setSlopeMaxZoom:(NSInteger)slopeMaxZoom
+{
+    @synchronized(_lock)
+    {
+        _slopeMaxZoom = slopeMaxZoom;
+        [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
+    }
+}
+
+@synthesize terrainType = _terrainType;
+
+- (EOATerrainType) terrainType
+{
+    @synchronized(_lock)
+    {
+        return _terrainType;
+    }
+}
+
+- (void) setTerrainType:(EOATerrainType)hillshade
+{
+    @synchronized(_lock)
+    {
+        _terrainType = hillshade;
+        if (hillshade == EOATerrainTypeHillshade || hillshade == EOATerrainTypeSlope)
+            [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
+        else
+            [_terrainChangeObservable notifyEventWithKey:self andValue:@(NO)];
+    }
+}
+
+@synthesize lastTerrainType = _lastTerrainType;
+
+- (EOATerrainType) lastTerrainType
+{
+    @synchronized(_lock)
+    {
+        return _lastTerrainType;
+    }
+}
+
+- (void) setLastTerrainType:(EOATerrainType)lastTerrainType
+{
+    @synchronized(_lock)
+    {
+        _lastTerrainType = lastTerrainType;
+    }
+}
+
+@synthesize hillshadeAlpha = _hillshadeAlpha;
+
+- (void) setHillshadeAlpha:(double)hillshadeAlpha
+{
+    @synchronized(_lock)
+    {
+        _hillshadeAlpha = hillshadeAlpha;
+        [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_hillshadeAlpha]];
+    }
+}
+
+@synthesize slopeAlpha = _slopeAlpha;
+
+- (void) setSlopeAlpha:(double)slopeAlpha
+{
+    @synchronized(_lock)
+    {
+        _slopeAlpha = slopeAlpha;
+        [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_slopeAlpha]];
     }
 }
 
@@ -432,8 +553,17 @@
 
     defaults.overlayAlpha = 0.5;
     defaults.underlayAlpha = 0.5;
-    defaults.lastOverlayMapSource = NULL;
-    defaults.lastUnderlayMapSource = NULL;
+    defaults.lastOverlayMapSource = nil;
+    defaults.lastUnderlayMapSource = nil;
+    defaults.terrainType = EOATerrainTypeDisabled;
+    defaults.lastTerrainType = EOATerrainTypeHillshade;
+    defaults.hillshadeAlpha = 0.45;
+    defaults.slopeAlpha = 0.35;
+    defaults.hillshadeMinZoom = 3;
+    defaults.hillshadeMaxZoom = 16;
+    defaults.slopeMinZoom = 3;
+    defaults.slopeMaxZoom = 16;
+    
     // Imagine that last viewed location was center of the world
     Point31 centerOfWorld;
     centerOfWorld.x = centerOfWorld.y = INT32_MAX>>1;
@@ -464,7 +594,14 @@
 #define kOverlayAlpha @"overlay_alpha"
 #define kUnderlayAlpha @"underlay_alpha"
 
-#define kHillshade @"hillshade"
+#define kHillshadeMinZoom @"hillshade_min_zoom"
+#define kHillshadeMaxZoom @"hillshade_max_zoom"
+#define kHillshadeAlpha @"hillshade_alpha"
+#define kSlopeMinZoom @"slope_min_zoom"
+#define kSlopeMaxZoom @"slope_max_zoom"
+#define kSlopeAlpha @"slope_alpha"
+#define kTerrainType @"terrain_type"
+#define kLastTerrainType @"last_terrain_type"
 #define kMapillary @"mapillary"
 
 #define kPointToStart @"pointToStart"
@@ -494,7 +631,14 @@
     [aCoder encodeObject:[NSNumber numberWithDouble:_overlayAlpha] forKey:kOverlayAlpha];
     [aCoder encodeObject:[NSNumber numberWithDouble:_underlayAlpha] forKey:kUnderlayAlpha];
 
-    [aCoder encodeObject:[NSNumber numberWithBool:_hillshade] forKey:kHillshade];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_hillshadeMinZoom] forKey:kHillshadeMinZoom];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_hillshadeMaxZoom] forKey:kHillshadeMaxZoom];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_slopeMinZoom] forKey:kSlopeMinZoom];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_slopeMaxZoom] forKey:kSlopeMaxZoom];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_terrainType] forKey:kTerrainType];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_lastTerrainType] forKey:kLastTerrainType];
+    [aCoder encodeObject:[NSNumber numberWithDouble:_hillshadeAlpha] forKey:kHillshadeAlpha];
+    [aCoder encodeObject:[NSNumber numberWithDouble:_slopeAlpha] forKey:kSlopeAlpha];
     [aCoder encodeObject:[NSNumber numberWithBool:_mapillary] forKey:kMapillary];
     
     [aCoder encodeObject:_pointToStart forKey:kPointToStart];
@@ -526,7 +670,14 @@
         _overlayAlpha = [[aDecoder decodeObjectForKey:kOverlayAlpha] doubleValue];
         _underlayAlpha = [[aDecoder decodeObjectForKey:kUnderlayAlpha] doubleValue];
 
-        _hillshade = [[aDecoder decodeObjectForKey:kHillshade] boolValue];
+        _hillshadeMinZoom = [[aDecoder decodeObjectForKey:kHillshadeMinZoom] integerValue];
+        _hillshadeMaxZoom = [[aDecoder decodeObjectForKey:kHillshadeMaxZoom] integerValue];
+        _slopeMinZoom = [[aDecoder decodeObjectForKey:kSlopeMinZoom] integerValue];
+        _slopeMaxZoom = [[aDecoder decodeObjectForKey:kSlopeMaxZoom] integerValue];
+        _terrainType = [[aDecoder decodeObjectForKey:kTerrainType] integerValue];
+        _lastTerrainType = [[aDecoder decodeObjectForKey:kLastTerrainType] integerValue];
+        _hillshadeAlpha = [[aDecoder decodeObjectForKey:kHillshadeAlpha] doubleValue];
+        _slopeAlpha = [[aDecoder decodeObjectForKey:kSlopeAlpha] doubleValue];
         _mapillary = [[aDecoder decodeObjectForKey:kMapillary] boolValue];
 
         _pointToStart = [aDecoder decodeObjectForKey:kPointToStart];

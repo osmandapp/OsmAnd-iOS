@@ -193,6 +193,5 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes;
 - (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes;
 
-
 @end
 

@@ -301,9 +301,13 @@
     
     if ([_iapHelper.srtm isActive])
     {
-        [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_hillshade"),
-                                    @"value": @"",
-                                    @"type": @"OASwitchCell"}];
+        NSMutableDictionary *terrain = [NSMutableDictionary dictionary];
+        [terrain setObject:OALocalizedString(@"map_settings_terrain") forKey:@"name"];
+        [terrain setObject:@"" forKey:@"description"];
+        [terrain setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
+        [terrain setObject:@"OASettingSwitchCell" forKey:@"type"];
+        [terrain setObject:@"terrain_layer" forKey:@"key"];
+        [arrOverlayUnderlay addObject: terrain];
     }
 
     NSMutableDictionary *overlay = [NSMutableDictionary dictionary];
@@ -459,12 +463,6 @@
                 [cell.switchView setOn:_settings.mapSettingShowOnlineNotes];
                 [cell.switchView addTarget:self action:@selector(showOnlineNotesChanged:) forControlEvents:UIControlEventValueChanged];
             }
-            else // hillshade
-            {
-                [cell.switchView setOn:[OsmAndApp instance].data.hillshade];
-                [cell.switchView addTarget:self action:@selector(hillshadeChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            
         }
         outCell = cell;
     }
@@ -505,6 +503,11 @@
                 [cell.switchView setOn:_app.data.underlayMapSource != nil];
                 [cell.switchView addTarget:self action:@selector(underlayChanged:) forControlEvents:UIControlEventValueChanged];
             }
+            if ([data[@"key"] isEqualToString:@"terrain_layer"])
+            {
+                [cell.switchView setOn:_app.data.terrainType != EOATerrainTypeDisabled];
+                [cell.switchView addTarget:self action:@selector(terrainChanged:) forControlEvents:UIControlEventValueChanged];
+            }
             cell.textView.text = data[@"name"];
             NSString *desc = data[@"description"];
             NSString *secondaryImg = data[@"secondaryImg"];
@@ -517,13 +520,6 @@
         outCell = cell;
     }
     return outCell;
-}
-
-- (void) hillshadeChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch*)sender;
-    if (switchView)
-        [[OsmAndApp instance].data setHillshade:switchView.isOn];
 }
 
 - (void) mapillaryChanged:(id)sender
@@ -604,6 +600,25 @@
             _app.data.underlayMapSource = nil;
         }
     }
+}
+
+- (void) terrainChanged:(id)sender
+{
+    if ([sender isKindOfClass:UISwitch.class])
+    {
+        UISwitch *switchView = (UISwitch *) sender;
+        if (switchView.isOn)
+        {
+            EOATerrainType lastType = _app.data.lastTerrainType;
+            _app.data.terrainType = lastType != EOATerrainTypeDisabled ? lastType : EOATerrainTypeHillshade;
+        }
+        else
+        {
+            _app.data.lastTerrainType = _app.data.terrainType;
+            _app.data.terrainType = EOATerrainTypeDisabled;
+        }
+    }
+    
 }
 
 - (void) showFavoriteChanged:(id)sender
@@ -708,13 +723,18 @@
         {
             NSInteger index = 0;
             if ([_iapHelper.srtm isActive])
+            {
+                if (indexPath.row == index)
+                {
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenTerrain];
+                    break;
+                }
                 index++;
-            
+            }
             if (indexPath.row == index)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
             else if (indexPath.row == index + 1)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
-            
             break;
         }
         case 4:

@@ -1674,11 +1674,11 @@
 "public_transport_warning_descr_blog" = "Erfahren Sie in unserem Blog mehr darüber, wie OsmAnd Routen berechnet.";
 "public_transport_warning_title" = "Die Navigation im öffentlichen Nahverkehr befindet sich derzeit im Beta-Test, rechnen Sie mit Fehlern und Ungenauigkeiten.";
 "calc_pedestrian_route" = "Fußgängerroute berechnen";
-"public_transport_ped_route_title" = "Die Route zu Fuß beträgt ca. %1$s und könnte schneller sein als mit öffentlichen Verkehrsmitteln";
+"public_transport_ped_route_title" = "Die Route zu Fuß beträgt ca. %1$s und könnte schneller sein als mit öffentlichen Verkehrsmitteln.";
 "product_desc_antarctica" = "Unbegrenzte Karten-Downloads für die Antarktis";
 "product_title_antarctica" = "Antarktis";
 "m_style_pulic_transport" = "Öffentliche Verkehrsmittel";
-"transfers" = "Umstiege";
+"transfers" = "Umstiege:";
 "consider_limitations_param" = "Vorübergehende Beschränkungen berücksichtigen";
 "avoid_transport_type" = "Transportarten vermeiden";
 "allow_3d_descr" = "Aktivieren Sie diese Option, um die Karte in der 2.5D-Perspektive betrachten zu können";

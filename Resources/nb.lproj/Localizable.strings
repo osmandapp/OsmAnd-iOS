@@ -1321,7 +1321,7 @@
 "rendering_attr_surface_mud_name" = "Gjørme";
 "rendering_attr_surface_pebblestone_name" = "Småstein";
 "rendering_attr_piste_difficulty_connection_name" = "Overgang";
-"rendering_attr_hidePOILabels_name" = "Interessepunktpåskrifter";
+"rendering_attr_hidePOILabels_name" = "Interessepunktetiketter";
 "routing_attr_piste_type_downhill_name" = "Alpint/utfor";
 "rendering_value_darkyellow_name" = "Mørkegul";
 "rendering_attr_piste_type_snow_park_name" = "Snøpark";

@@ -1656,7 +1656,7 @@
 "public_transport_warning_descr_blog" = "Dowiedz się więcej na naszym blogu, jak OsmAnd wyznacza trasy.";
 "public_transport_warning_title" = "Nawigacja transportem publicznym jest obecnie w fazie testów beta. Mogą pojawić się błędy i nieścisłości.";
 "calc_pedestrian_route" = "Oblicz trasę pieszą";
-"public_transport_ped_route_title" = "Długość trasa pieszej wynosi około %1$s i może być ona szybsza niż transportem publicznym";
+"public_transport_ped_route_title" = "Długość trasy pieszej wynosi około %1$s i może być ona szybsza niż transport publiczny.";
 "product_desc_antarctica" = "Nieograniczone pobieranie map dla Antarktydy";
 "product_title_antarctica" = "Antarktyda";
 "enable_contour_lines" = "Włącz, aby wyświetlić poziomice na mapie";
@@ -1671,3 +1671,10 @@
 "avoid_transport_type" = "Unikaj typu transportu";
 "allow_3d_descr" = "Włącz tę opcję, aby móc oglądać mapę w perspektywie 2,5D";
 "allow_3d" = "Zezwól na widok 2,5D";
+"download_wiki_data" = "Pobierz dane z Wikipedii dla %@";
+"import_raster_map_failed" = "Import mapy rastrowej nie powiódł się";
+"import_raster_map_success" = "Mapa rastrowa została zaimportowana. Otwórz Ustawienia mapy i aktywuj je za pomocą Nakładki/Podkładu";
+"online_raster_maps" = "Mapy rastrowe online";
+"offline_raster_maps" = "Mapy rastrowe offline";
+"offline_raster_map" = "Mapa rastrowa offline";
+"online_raster_map" = "Mapa rastrowa online";

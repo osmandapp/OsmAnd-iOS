@@ -18,6 +18,8 @@
 #import "OAStateChangedListener.h"
 #import "OATargetPoint.h"
 #import "OADestinationsHelper.h"
+#import "OAReverseGeocoder.h"
+#import "OAPointDescription.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -331,6 +333,9 @@
         [helper removeDestination:dest];
         destCopy.latitude = position.latitude;
         destCopy.longitude = position.longitude;
+        NSString *address = [[OAReverseGeocoder instance] lookupAddressAtLat:destCopy.latitude lon:destCopy.longitude];
+        address = address && address.length > 0 ? address : [OAPointDescription getLocationNamePlain:destCopy.latitude lon:destCopy.longitude];
+        destCopy.desc = address;
         [helper addDestination:destCopy];
     }
 }

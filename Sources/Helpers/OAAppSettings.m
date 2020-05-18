@@ -2436,30 +2436,4 @@
     [[NSUserDefaults standardUserDefaults] setInteger:_rulerMode forKey:rulerModeKey];
 }
 
-// Direction Appearance Settings
-//
-//- (void) setOneActiveMarker:(BOOL)oneActiveMarker twoActiveMarkers:(BOOL)twoActiveMarkers
-//{
-//    [_oneActiveMarker set:oneActiveMarker];
-//    [_twoActiveMarker set:twoActiveMarkers];
-//}
-//
-//- (void) setDistanceIndicationView:(BOOL)topBarDisplay widgetDisplay:(BOOL)widgetDisplay
-//{
-//    [_topBarDisplay set:topBarDisplay];
-//    [_widgetDisplay set:widgetDisplay];
-//    [_lastPositionWidgetDisplay set:widgetDisplay];
-//}
-//
-//- (void) setArrowsOnMap:(BOOL)arrowsOnMap
-//{
-//    [_arrowsOnMap set:arrowsOnMap];
-//}
-//
-//- (void) setDirectionLines:(BOOL)directionLines
-//{
-//    [_directionLines set:directionLines];
-//
-//}
-
 @end

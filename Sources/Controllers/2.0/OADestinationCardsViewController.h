@@ -19,7 +19,6 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *historyViewButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *appearanceViewButton;
 
-
 @property (nonatomic, readonly) BOOL isVisible;
 @property (nonatomic, readonly) BOOL isHiding;
 

@@ -131,14 +131,9 @@
 
 - (BOOL) updateLayer
 {
-//    [self clearLayers];
-//    [self initDestinationLayer];
-    //[_destinationLineSublayer display];
     if (_destinationLineSublayer.superlayer != self.layer)
         [self.layer insertSublayer:_destinationLineSublayer above:self.layer];
     [_destinationLineSublayer setNeedsDisplay];
-    //[_destinationLineSublayer displayIfNeeded];
-    
     return YES;
 }
 
@@ -435,7 +430,8 @@
     CGFloat startY = start.y;
     CGFloat m = (startY - y) / (startX - x);
     
-    if (x <= startX) { // check left side
+    if (x <= startX) // check left side
+    {
         CGFloat minXy = m * (minX - x) + y;
         if (minY <= minXy && minXy <= maxY)
             return [NSValue valueWithCGPoint:CGPointMake(minX, minXy)];
@@ -465,7 +461,6 @@
     // edge case when finding midpoint intersection: m = 0/0 = NaN
     if (x == startX && y == startY)
         return [NSValue valueWithCGPoint:CGPointMake(x, y)];
-    
     return nil;
 }
 

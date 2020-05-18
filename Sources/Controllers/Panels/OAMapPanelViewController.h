@@ -155,4 +155,6 @@
 - (void) startNavigation;
 - (void) stopNavigation;
 
+- (void) refreshToolbar;
+
 @end

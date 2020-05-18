@@ -10,5 +10,4 @@
 
 @interface OADirectionAppearanceViewController : OACompoundViewController
 
-
 @end

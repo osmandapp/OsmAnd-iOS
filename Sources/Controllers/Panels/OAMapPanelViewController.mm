@@ -356,6 +356,15 @@ typedef enum
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
 
+- (void) refreshToolbar
+{
+    [_destinationViewController refreshView];
+    if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndicationVisability get] && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+        [self showToolbar:_destinationViewController];
+    else
+        [self hideToolbar:_destinationViewController];
+}
+
 - (void) updateOverlayUnderlayView:(BOOL)show
 {
     [self.hudViewController updateOverlayUnderlayView:show];

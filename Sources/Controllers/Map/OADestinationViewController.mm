@@ -278,10 +278,7 @@
     }
 
     if (destinationsCount == 0)
-    {
         [self stopLocationUpdate];
-        //[self.view removeFromSuperview]; // ??? is it necessary?
-    }
 }
 
 -(void)obtainCurrentLocationDirection:(CLLocationCoordinate2D*)location direction:(CLLocationDirection*)direction
@@ -374,8 +371,7 @@
 {
     CGRect frame;
 
-    NSInteger destinationsCount = _destinationCells.count;
-    BOOL _navBarHidden = destinationsCount > 0;
+    BOOL _navBarHidden = _destinationCells.count > 0;
     self.navBarView.hidden = _navBarHidden;
     CGFloat navBarHeight = !_navBarHidden ? self.navBarView.bounds.size.height : 0.0;
     
@@ -387,7 +383,7 @@
         {
             _singleLineMode = YES;
             CGFloat h = 50.0;
-            if (destinationsCount == 0)
+            if (_destinationCells.count == 0)
                 h = navBarHeight;
             
             frame = CGRectMake(0.0, top, w, h);
@@ -402,16 +398,10 @@
             _singleLineMode = NO;
             CGFloat h = 0.0;
 
-            if (destinationsCount > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
-                h = 50.0 + 35.0 * (destinationsCount - 1.0);
+            if (_destinationCells.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                h = 50.0 + 35.0 * (_destinationCells.count - 1.0);
             else
                 h = navBarHeight;
-            
-            if ([_settings.distanceIndication get] == WIDGET_DISPLAY || ![_settings.distanceIndicationVisability get])
-                h = navBarHeight;
-            
-            if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == ONE_ACTIVE_MARKER)
-                h = 50.0;
 
             if (h < 0.0)
                 h = 0.0;
@@ -431,7 +421,7 @@
         {
             _singleLineMode = YES;
             CGFloat h = 50.0;
-            if (destinationsCount == 0)
+            if (_destinationCells.count == 0)
                 h = navBarHeight;
             
             frame = CGRectMake(0.0, top, w, h);
@@ -445,7 +435,7 @@
         {
             _singleLineMode = YES;
             CGFloat h = 50.0;
-            if (destinationsCount == 0)
+            if (_destinationCells.count == 0)
                 h = navBarHeight;
             
             frame = CGRectMake(0.0, top, w, h);
@@ -550,8 +540,6 @@
 
         [_multiCell.contentView removeFromSuperview];
         _multiCell = nil;
-        
-        //[self.view removeFromSuperview]; // ???
         [self stopLocationUpdate];
     }
 }

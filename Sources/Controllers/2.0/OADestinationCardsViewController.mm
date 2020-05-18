@@ -171,7 +171,7 @@
     _historyViewButton.title = OALocalizedString(@"history");
     [_historyViewButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: UIColorFromRGB(color_primary_purple),  NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     
-    _appearanceViewButton.title = OALocalizedString(@"appearance");
+    _appearanceViewButton.title = OALocalizedString(@"map_settings_appearance");
     [_appearanceViewButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: UIColorFromRGB(color_primary_purple),  NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     [_bottomToolBar bringSubviewToFront:_cardsView];
 }
@@ -353,7 +353,6 @@
     OAHistoryViewController *history = [[OAHistoryViewController alloc] init];
     [[OARootViewController instance].navigationController pushViewController:history animated:YES];
 }
-
 
 - (IBAction)onAppearanceButtonClicked:(id)sender {
     OADirectionAppearanceViewController *directionAppearance = [[OADirectionAppearanceViewController alloc] init];

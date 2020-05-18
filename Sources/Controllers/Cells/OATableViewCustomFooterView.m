@@ -44,6 +44,7 @@
     [self.textLabel removeFromSuperview];
     [self.detailTextLabel removeFromSuperview];
     
+    _iconView = [[UIImageView alloc] init];
     
     _label = [[UITextView alloc] init];
     _label.backgroundColor = [UIColor clearColor];
@@ -73,7 +74,7 @@
     {
         _iconView.frame = CGRectMake(16.0 + leftMargin, 8.0, 30.0, 30.0);
     }
-    CGFloat w = self.bounds.size.width - 32. - leftMargin * 2 - (hasIcon ? 30.0 : 0.0);
+    CGFloat w = self.bounds.size.width - 32. - leftMargin * 2 - (hasIcon ? 30.0 : 0.0) - 16.;
     CGFloat height = _label.attributedText.length > 0 ? [OAUtilities calculateTextBounds:_label.attributedText width:w].height : [self.class getTextHeight:_label.text width:w];
     if (_label.text.length > 0)
     {
@@ -94,14 +95,16 @@
         if (_iconView && _iconView.superview)
             [_iconView removeFromSuperview];
         
-        _iconView = nil;
+        _iconView.image = nil;
     }
     else
     {
         UIImage *img = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _iconView = [[UIImageView alloc] initWithImage:img];
+        _iconView.image = img;
+        [_iconView sizeToFit];
         _iconView.tintColor = UIColorFromRGB(color_footer_icon_gray);
-        [self.contentView addSubview:_iconView];
+        if (!_iconView.superview)
+            [self.contentView addSubview:_iconView];
     }
     
     [self setNeedsLayout];

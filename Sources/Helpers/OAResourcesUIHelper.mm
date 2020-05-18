@@ -18,7 +18,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAManageResourcesViewController.h"
-#import "OAHillshadeLayer.h"
+#import "OATerrainLayer.h"
 //#import "OASizes.h"
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
@@ -85,6 +85,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"res_roads");
         case OsmAnd::ResourcesManager::ResourceType::HillshadeRegion:
             return OALocalizedString(@"res_hillshade");
+        case OsmAnd::ResourcesManager::ResourceType::SlopeRegion:
+            return OALocalizedString(@"res_slope");
             
         default:
             return OALocalizedString(@"res_unknown");
@@ -133,6 +135,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::WikiMapRegion:
         case OsmAndResourceType::HillshadeRegion:
+        case OsmAndResourceType::SlopeRegion:
             
             if ([region.subregions count] > 0)
             {
@@ -758,10 +761,13 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         }
         else
         {
-            if (item.resourceType == OsmAndResourceType::HillshadeRegion)
+            if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
             {
                 NSString *filename = [app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString() lastPathComponent];
-                [[OAHillshadeLayer sharedInstance] removeFromDB:filename];
+                if (app.data.terrainType == EOATerrainTypeHillshade)
+                    [[OATerrainLayer sharedInstanceHillshade] removeFromDB:filename];
+                else if (app.data.terrainType == EOATerrainTypeSlope)
+                    [[OATerrainLayer sharedInstanceSlope] removeFromDB:filename];
             }
             
             const auto success = item.resourceId.isEmpty() || app.resourcesManager->uninstallResource(item.resourceId);
@@ -773,8 +779,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             }
             else
             {
-                if (item.resourceType == OsmAndResourceType::HillshadeRegion)
-                    [app.data.hillshadeResourcesChangeObservable notifyEvent];
+                if (item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
+                    [app.data.terrainResourcesChangeObservable notifyEvent];
                 
                 if (block)
                     block();

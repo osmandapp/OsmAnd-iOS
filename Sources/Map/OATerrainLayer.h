@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OAHillshadeLayer : NSObject
+@interface OATerrainLayer : NSObject
 
-+ (OAHillshadeLayer *)sharedInstance;
++ (OATerrainLayer *)sharedInstanceHillshade;
++ (OATerrainLayer *)sharedInstanceSlope;
 
 - (void)indexHillshadeFiles;
 

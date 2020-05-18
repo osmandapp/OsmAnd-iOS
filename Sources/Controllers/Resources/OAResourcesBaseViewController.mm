@@ -21,7 +21,7 @@
 #import "OAUtilities.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
-#import "OAHillshadeLayer.h"
+#import "OATerrainLayer.h"
 #import "OASizes.h"
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
@@ -355,7 +355,7 @@ static BOOL dataInvalidated = NO;
         {
             RepositoryResourceItem* item = (RepositoryResourceItem *)item_;
             
-            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion) && ![_iapHelper.srtm isActive])
+            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion) && ![_iapHelper.srtm isActive])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
             else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isActive])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];

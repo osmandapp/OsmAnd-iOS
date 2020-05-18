@@ -30,8 +30,10 @@
         {
             if ([[file pathExtension] caseInsensitiveCompare:@"sqlitedb"] == NSOrderedSame &&
                 ![file hasPrefix:@"Hillshade_"] &&
+                ![file hasPrefix:@"Slope_"] &&
                 ![file hasPrefix:@"Heightmap_"] &&
                 ![file hasSuffix:@"hillshade.sqlite"] &&
+                ![file hasSuffix:@"slope.sqlite"] &&
                 ![file hasSuffix:@"heightmap.sqlite"])
             {
                 [filesArray setObject:[path stringByAppendingPathComponent:file] forKey:file];

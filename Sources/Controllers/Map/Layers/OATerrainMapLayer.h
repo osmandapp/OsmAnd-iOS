@@ -8,6 +8,8 @@
 
 #import "OARasterMapLayer.h"
 
-@interface OAHillshadeMapLayer : OARasterMapLayer
+@interface OATerrainMapLayer : OARasterMapLayer
+
+- (OsmAnd::ZoomLevel) getMaxZoom;
 
 @end

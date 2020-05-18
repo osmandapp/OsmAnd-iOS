@@ -32,7 +32,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAMapSettingsContourLinesScreen.h"
-
+#import "OAMapSettingsTerrainScreen.h"
 #import <CoreLocation/CoreLocation.h>
 
 #include <QtMath>
@@ -165,9 +165,12 @@
             break;
         case EMapSettingsScreenOnlineSources:
             if (!self.screenObj)
-                self.screenObj = [[OAMapSettingsOnlineSourcesScreen alloc] initWithTable:self.tableView viewController:self];
+                self.screenObj = [[OAMapSettingsOnlineSourcesScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
             break;
-            
+        case EMapSettingsScreenTerrain:
+            if (!self.screenObj)
+                self.screenObj = [[OAMapSettingsTerrainScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
         default:
             break;
     }

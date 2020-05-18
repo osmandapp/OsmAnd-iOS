@@ -140,4 +140,12 @@
 
 #define profile_icon_color_inactive 0x727272
 
+#define marker_pin_color_orange 0xFF9207
+#define marker_pin_color_blue 0x00BCD4
+#define marker_pin_color_green 0x7FBD4D
+#define marker_pin_color_red 0xFF444A
+#define marker_pin_color_light_green 0xCDDC39
+
+#define parking_pin_color_blue 0x4A69EC
+
 #endif /* OAColors_h */

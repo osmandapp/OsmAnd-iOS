@@ -107,6 +107,9 @@
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 #include <OsmAndCore/ICU.h>
 
+#import "OASizes.h"
+#import "OADirectionAppearanceViewController.h"
+#import "OAHistoryViewController.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -262,7 +265,7 @@ typedef enum
         _mapNeedsRestore = NO;
         [self restoreMapAfterReuse];
     }
-    
+    [_destinationViewController refreshView];
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
@@ -313,9 +316,11 @@ typedef enum
         _destinationViewController.delegate = self;
         _destinationViewController.destinationDelegate = self;
         
-        if ([OADestinationsHelper instance].sortedDestinations.count > 0)
+        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisability get])
             [self showToolbar:_destinationViewController];
     }
+    else if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+        [self showToolbar:_destinationViewController];
     
     // Inflate new HUD controller
     if (!self.hudViewController)
@@ -349,6 +354,15 @@ typedef enum
     [self updateToolbar];
 
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void) refreshToolbar
+{
+    [_destinationViewController refreshView];
+    if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndicationVisability get] && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+        [self showToolbar:_destinationViewController];
+    else
+        [self hideToolbar:_destinationViewController];
 }
 
 - (void) updateOverlayUnderlayView:(BOOL)show
@@ -3116,10 +3130,17 @@ typedef enum
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
+        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat h = DeviceScreenHeight - y;
+        CGFloat toolbarHeight = CGRectGetHeight(cardsController.bottomView.bounds);
+        CGFloat cardsTableHeight = h - toolbarHeight;
         if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
         {
+            cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
+            cardsController.bottomToolBarView.frame = CGRectMake(0.0, -DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight);
             [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
-                cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.origin.y - _destinationViewController.view.frame.size.height);
+                cardsController.cardsView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, cardsTableHeight);
+                _shadeView.alpha = 1.0;
             }];
         }
     }
@@ -3215,7 +3236,8 @@ typedef enum
 
 - (void)destinationsAdded
 {
-    [self showToolbar:_destinationViewController];
+    if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisability get])
+        [self showToolbar:_destinationViewController];
 }
 
 - (void) hideDestinations
@@ -3233,8 +3255,14 @@ typedef enum
 
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
         CGFloat h = DeviceScreenHeight - y;
+        CGFloat toolbarHeight = CGRectGetHeight(cardsController.bottomView.bounds);
+        CGFloat cardsTableHeight = h - toolbarHeight;
     
-        cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
+        cardsController.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
+        cardsController.cardsView.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h - toolbarHeight);
+        cardsController.bottomToolBarView.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, cardsTableHeight);
+        [cardsController.cardsView setHidden:YES];
+        [cardsController.bottomToolBarView setHidden:YES];
         
         [self.hudViewController addChildViewController:cardsController];
         
@@ -3247,10 +3275,15 @@ typedef enum
         if (_destinationViewController)
             [self.destinationViewController updateCloseButton];
         
+        cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
+        
         [UIView animateWithDuration:.25 animations:^{
-            cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
+            cardsController.cardsView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, cardsTableHeight);
+            cardsController.bottomToolBarView.frame = CGRectMake(0.0, -DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight);
             _shadeView.alpha = 1.0;
         }];
+        [cardsController.cardsView setHidden:NO];
+        [cardsController.bottomToolBarView setHidden:NO];
     }
 }
 
@@ -3264,14 +3297,17 @@ typedef enum
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     BOOL wasOnTop = _destinationViewController.showOnTop;
     _destinationViewController.showOnTop = NO;
+    
     if (cardsController.view.superview)
     {
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
         CGFloat h = DeviceScreenHeight - y;
+        CGFloat toolbarHeight = CGRectGetHeight(cardsController.bottomView.bounds);
+        CGFloat cardsTableHeight = h - toolbarHeight;
     
         [cardsController doViewWillDisappear];
 
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0)
+        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisability get]) || ([_settings.distanceIndication get] == WIDGET_DISPLAY))
         {
             [self hideToolbar:_destinationViewController];
         }
@@ -3285,7 +3321,8 @@ typedef enum
         if (animated)
         {
             [UIView animateWithDuration:.25 animations:^{
-                cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
+                cardsController.cardsView.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, cardsTableHeight);
+                cardsController.bottomToolBarView.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
                 _shadeView.alpha = 0.0;
                 
             } completion:^(BOOL finished) {

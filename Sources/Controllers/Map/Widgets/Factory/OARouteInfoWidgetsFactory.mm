@@ -24,6 +24,8 @@
 #import "OADestination.h"
 #import "OAAlarmWidget.h"
 #import "OARulerWidget.h"
+#import "OADistanceToMapMarkerControl.h"
+#import "OADestinationsLineWidget.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -698,6 +700,13 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 - (OAAlarmWidget *) createAlarmInfoControl
 {
     return [[OAAlarmWidget alloc] init];
+}
+
+- (OATextInfoWidget *) createMapMarkerControl:(BOOL)firstMarker
+{
+    OATextInfoWidget *widget = [[OADistanceToMapMarkerControl alloc] initWithIcons:@"widget_marker_day" nightIconId:@"widget_marker_night" firstMarker:firstMarker];
+    [widget updateVisibility:NO];
+    return widget;
 }
 
 @end

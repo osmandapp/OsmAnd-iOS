@@ -38,5 +38,6 @@
 
 - (void)updateDestinationsUsingMapCenter;
 - (void)updateCloseButton;
+- (void) refreshView;
 
 @end

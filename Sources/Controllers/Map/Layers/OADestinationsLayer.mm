@@ -18,6 +18,10 @@
 #import "OAStateChangedListener.h"
 #import "OATargetPoint.h"
 #import "OADestinationsHelper.h"
+#import "OADestinationsLineWidget.h"
+#import "OARootViewController.h"
+#import "OAMapInfoController.h"
+#import "OAMapHudViewController.h"
 #import "OAReverseGeocoder.h"
 #import "OAPointDescription.h"
 
@@ -39,6 +43,7 @@
     OAAutoObserverProxy* _destinationHideObserver;
     
     OATargetPointsHelper *_targetPoints;
+    OADestinationsLineWidget *_destinationLayerWidget;
 }
 
 - (NSString *) layerId
@@ -71,6 +76,16 @@
     
     _targetPoints = [OATargetPointsHelper sharedInstance];
     [_targetPoints addListener:self];
+
+    _destinationLayerWidget = [[OADestinationsLineWidget alloc] init];
+    [self.mapView addSubview:_destinationLayerWidget];
+}
+
+- (void) updadeDestinationLineWidget
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_destinationLayerWidget updateLayer];
+    });
 }
 
 - (void) deinitLayer
@@ -112,7 +127,10 @@
 
     for (OADestination *destination in self.app.data.destinations)
         if (!destination.routePoint && !destination.hidden)
+        {
             [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+            [_destinationLayerWidget drawLineArrowWidget:destination];
+        }
 
 }
 
@@ -170,6 +188,7 @@
     OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+        [_destinationLayerWidget drawLineArrowWidget:destination];
     });
 }
 
@@ -178,6 +197,7 @@
     OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self removeDestinationPin:destination.latitude longitude:destination.longitude];
+        [_destinationLayerWidget removeLineToDestinationPin:destination];
     });
 }
 
@@ -201,7 +221,10 @@
         }
         
         if (!exists)
+        {
             [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+            [_destinationLayerWidget drawLineArrowWidget:destination];
+        }
     }
 }
 

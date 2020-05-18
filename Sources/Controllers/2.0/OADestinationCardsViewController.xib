@@ -1,39 +1,96 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OADestinationCardsViewController">
             <connections>
+                <outlet property="appearanceViewButton" destination="R4l-IG-8Sm" id="3ee-57-hBB"/>
+                <outlet property="bottomToolBar" destination="V1U-gf-wIJ" id="32C-Ir-d9v"/>
+                <outlet property="bottomToolBarView" destination="TrQ-cM-P0Q" id="FkD-FO-R2T"/>
+                <outlet property="bottomView" destination="8Ui-Gh-Jia" id="uK1-gr-ehw"/>
+                <outlet property="cardsView" destination="uw9-vf-xUp" id="qcI-XH-cof"/>
+                <outlet property="historyViewButton" destination="jBh-vE-Odo" id="fZ9-7f-hSs"/>
                 <outlet property="tableView" destination="AG5-Pz-Cqb" id="L3k-hr-JyU"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="AG5-Pz-Cqb">
-                    <rect key="frame" x="8" y="0.0" width="304" height="480"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="aXd-jh-kKC"/>
-                        <outlet property="delegate" destination="-1" id="Cjf-UV-EZ8"/>
-                    </connections>
-                </tableView>
+                <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TrQ-cM-P0Q" userLabel="bottomToolBarView">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ui-Gh-Jia" userLabel="bottomView">
+                            <rect key="frame" x="0.0" y="839" width="414" height="57"/>
+                            <subviews>
+                                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V1U-gf-wIJ">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="L8w-Zh-g58"/>
+                                    </constraints>
+                                    <items>
+                                        <barButtonItem title="History" id="jBh-vE-Odo">
+                                            <connections>
+                                                <action selector="onHistoryButtonClicked:" destination="-1" id="djx-he-hbq"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem style="plain" systemItem="flexibleSpace" id="PK1-Du-oYi"/>
+                                        <barButtonItem title="Appearance" id="R4l-IG-8Sm">
+                                            <connections>
+                                                <action selector="onAppearanceButtonClicked:" destination="-1" id="s4Y-jp-QKI"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </items>
+                                </toolbar>
+                            </subviews>
+                            <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="57" id="Gxt-AD-yg9"/>
+                                <constraint firstItem="V1U-gf-wIJ" firstAttribute="top" secondItem="8Ui-Gh-Jia" secondAttribute="top" id="Wic-O0-Lau"/>
+                                <constraint firstAttribute="trailing" secondItem="V1U-gf-wIJ" secondAttribute="trailing" id="b2A-rs-Gae"/>
+                                <constraint firstItem="V1U-gf-wIJ" firstAttribute="leading" secondItem="8Ui-Gh-Jia" secondAttribute="leading" id="uaz-dI-Tgc"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="8Ui-Gh-Jia" firstAttribute="leading" secondItem="TrQ-cM-P0Q" secondAttribute="leading" id="PTD-JQ-OCe"/>
+                        <constraint firstAttribute="trailing" secondItem="8Ui-Gh-Jia" secondAttribute="trailing" id="b6z-YK-nO7"/>
+                        <constraint firstAttribute="bottom" secondItem="8Ui-Gh-Jia" secondAttribute="bottom" id="y6j-Us-3cR"/>
+                    </constraints>
+                </view>
+                <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uw9-vf-xUp" userLabel="cardsView">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="AG5-Pz-Cqb">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <outlet property="dataSource" destination="-1" id="aXd-jh-kKC"/>
+                                <outlet property="delegate" destination="-1" id="Cjf-UV-EZ8"/>
+                            </connections>
+                        </tableView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="364" y="290"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="TrQ-cM-P0Q" secondAttribute="bottom" id="BqJ-9u-Mex"/>
+                <constraint firstItem="TrQ-cM-P0Q" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Hzc-7a-zab"/>
+                <constraint firstAttribute="trailing" secondItem="TrQ-cM-P0Q" secondAttribute="trailing" id="XED-Bg-chu"/>
+                <constraint firstItem="TrQ-cM-P0Q" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="XPN-8b-73K"/>
+            </constraints>
+            <point key="canvasLocation" x="527.536231884058" y="194.19642857142856"/>
         </view>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

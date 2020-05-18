@@ -182,6 +182,13 @@
 
 #define contourLinesZoomKey @"contourLinesZoom"
 
+#define activeMarkerKey @"activeMarkerKey"
+#define mapDistanceIndicationVisabilityKey @"mapDistanceIndicationVisabilityKey"
+#define mapDistanceIndicationKey @"mapDistanceIndicationKey"
+#define mapLastPositionWidgetIndicatorKey @"mapLastPositionWidgetIndicatorKey"
+#define mapArrowsOnMapKey @"mapArrowsOnMapKey"
+#define mapDirectionLinesKey @"mapDirectionLinesKey"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -1126,6 +1133,88 @@
 
 @end
 
+@implementation OAProfileActiveMarkerConstant
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOAActiveMarkerConstant) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant
+{
+    [super set:activeMarkerConstant];
+}
+
+- (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant mode:(OAApplicationMode *)mode
+{
+    [super set:activeMarkerConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOAActiveMarkerConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAActiveMarkerConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OAProfileDistanceIndicationConstant
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOADistanceIndicationConstant) get
+{
+    return [super get];
+}
+
+- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant
+{
+    [super set:distanceIndicationConstant];
+}
+
+- (EOADistanceIndicationConstant) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant mode:(OAApplicationMode *)mode
+{
+    [super set:distanceIndicationConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOADistanceIndicationConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOADistanceIndicationConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OAProfileBoolean *> *_customBooleanRoutingProps;
@@ -1439,6 +1528,14 @@
     
         _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
         
+        // Direction Appearance
+        _activeMarkers = [OAProfileActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
+        _distanceIndicationVisability = [OAProfileBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
+        _distanceIndication = [OAProfileDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
+        _lastPositionWidgetDisplay = [OAProfileDistanceIndicationConstant withKey:mapLastPositionWidgetIndicatorKey defValue:TOP_BAR_DISPLAY];
+        _arrowsOnMap = [OAProfileBoolean withKey:mapArrowsOnMapKey defValue:YES];
+        _directionLines = [OAProfileBoolean withKey:mapDirectionLinesKey defValue:YES];
+
         [self fetchImpassableRoads];
     }
     return self;

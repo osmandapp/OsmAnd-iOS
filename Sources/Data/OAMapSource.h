@@ -29,5 +29,6 @@
 
 @property(nonatomic) NSString* name;
 
++ (OAMapSource *) getOsmAndOnlineTilesMapSource;
 
 @end

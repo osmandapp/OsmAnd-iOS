@@ -540,7 +540,7 @@
 
 - (void) contourLinesChanged:(id)sender
 {
-    UISwitch *switchView = (UISwitch*)sender;
+    UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
         OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
@@ -551,14 +551,21 @@
 
 - (void) overlayChanged:(id)sender
 {
-    UISwitch *switchView = (UISwitch*)sender;
+    UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
         if (switchView.isOn)
         {
+            BOOL hasLastMapSource = _app.data.lastOverlayMapSource != nil;
+            if (!hasLastMapSource)
+                _app.data.lastOverlayMapSource = [OAMapSource getOsmAndOnlineTilesMapSource];
+            
             _app.data.overlayMapSource = _app.data.lastOverlayMapSource;
-            if (!_app.data.overlayMapSource)
-                [self installMapLayerFor:@"overlay"];
+            if (!hasLastMapSource)
+            {
+                OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
+                [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+            }
         }
         else
             _app.data.overlayMapSource = nil;
@@ -589,9 +596,18 @@
         OAMapStyleParameter *_hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
         if (switchView.isOn)
         {
+            BOOL hasLastMapSource = _app.data.lastUnderlayMapSource != nil;
+            if (!hasLastMapSource)
+                _app.data.lastUnderlayMapSource = [OAMapSource getOsmAndOnlineTilesMapSource];
+
+            _hidePolygonsParameter.value = @"true";
+            [_styleSettings save:_hidePolygonsParameter];
             _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
-            if (!_app.data.underlayMapSource)
-                [self installMapLayerFor:@"underlay"];
+            if (!hasLastMapSource)
+            {
+                OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
+                [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+            }
         }
         else
         {

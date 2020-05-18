@@ -88,6 +88,11 @@
     return [_resourceId hash] + [_variant hash];
 }
 
++ (OAMapSource *) getOsmAndOnlineTilesMapSource
+{
+    return [[OAMapSource alloc] initWithResource:@"online_tiles" andVariant:@"OsmAnd (online tiles)" name:@"OsmAnd (online tiles)"];
+}
+
 #pragma mark - NSCoding
 
 #define kResourceId @"resource"

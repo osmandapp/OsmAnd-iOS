@@ -1282,7 +1282,6 @@
 {
     [_framePreparedObservable notifyEvent];
     [_currentPositionHelper clearCacheNotInTiles:_mapView];
-    [_mapLayers.destinationsLayer updadeDestinationLineWidget];
 }
 
 @synthesize zoomObservable = _zoomObservable;

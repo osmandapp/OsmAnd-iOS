@@ -81,7 +81,7 @@
     [self.mapView addSubview:_destinationLayerWidget];
 }
 
-- (void) updadeDestinationLineWidget
+- (void) onMapFrameRendered
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_destinationLayerWidget updateLayer];

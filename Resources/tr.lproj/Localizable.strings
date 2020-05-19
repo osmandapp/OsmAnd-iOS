@@ -1696,3 +1696,14 @@
 "map_settings_slopes_legend" = "Wikipedia'da yamaçlar hakkında daha fazla bilgi edinebilirsiniz";
 "map_settings_layer_transparency" = "Katman şeffaflığı";
 "map_settings_terrain" = "Arazi";
+"appearance_on_map" = "Harita üzerinde görünüm";
+"arrows_on_map" = "Harita üzerinde oklar";
+"arrows_direction_to_markers" = "Oklar, eğer ekranın dışındaysa etkin işaretleyicinin yönünü gösterir. Yön çizgileri, etkin işaretleyicilere bir çizgi çizer.";
+"choose_how_display_distance" = "Etkin işaretleyicilere olan mesafenin nasıl görüntüleneceğini seçin";
+"specify_number_of_dir_indicators" = "Yön göstergelerinin sayısını belirtin, aşağıdaki tüm ayarları etkiler.";
+"active_markers" = "Etkin işaretleyiciler";
+"direction_lines" = "Yön çizgileri";
+"distance_indication" = "Uzaklık göstergesi";
+"two" = "İki";
+// Dirrection appearance
+"one" = "Bir";

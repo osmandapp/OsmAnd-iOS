@@ -3390,6 +3390,7 @@ typedef enum
     targetPoint.titleAddress = [self findRoadNameByLat:destination.latitude lon:destination.longitude];
     
     [_targetMenuView setTargetPoint:targetPoint];
+    [self enterContextMenuMode];
     
     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
         [self targetGoToPoint];

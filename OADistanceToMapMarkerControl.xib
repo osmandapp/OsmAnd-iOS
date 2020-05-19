@@ -46,8 +46,8 @@
             <viewLayoutGuide key="safeArea" id="ppC-TO-yfA"/>
             <connections>
                 <outlet property="imageView" destination="tY9-Df-rQn" id="M6i-rO-yFp"/>
-                <outlet property="textShadowView" destination="XtP-fb-U1n" id="0rk-SK-Gym"/>
-                <outlet property="textView" destination="XtP-fb-U1n" id="MWP-Ke-MoC"/>
+                <outlet property="textShadowView" destination="dwd-TU-KiI" id="pF8-hZ-tPT"/>
+                <outlet property="textView" destination="XtP-fb-U1n" id="LNq-eV-bsY"/>
             </connections>
             <point key="canvasLocation" x="-34.782608695652179" y="-8.0357142857142847"/>
         </view>

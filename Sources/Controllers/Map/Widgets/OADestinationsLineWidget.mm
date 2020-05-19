@@ -121,7 +121,7 @@
 {
     [super layoutSubviews];
    
-    _destinationLineSublayer.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
+    self.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
 }
 
 - (void) drawRect:(CGRect)rect

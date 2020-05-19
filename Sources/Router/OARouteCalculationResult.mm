@@ -527,7 +527,7 @@
     
     // speed m/s
     float speed = mode.defaultSpeed;
-    int minDistanceForTurn = mode.minDistanceForTurn;
+    NSInteger minDistanceForTurn = mode.getMinDistanceForTurn;
     NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray array];
     
     NSMutableArray<NSNumber *> *listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];

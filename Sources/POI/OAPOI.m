@@ -106,6 +106,30 @@
     return val && [val isEqualToString:OSM_DELETE_VALUE];
 }
 
+- (NSString *) getTagContent:(NSString *)tag lang:(NSString *)lang
+{
+    if (lang)
+    {
+        NSString *translateName = _values[[NSString stringWithFormat:@"%@:%@", tag, lang]];
+        if (translateName.length > 0)
+            return translateName;
+    }
+    NSString *plainName = _values[tag];
+    if (plainName.length > 0)
+        return plainName;
+    
+    NSString *enName = _values[[tag stringByAppendingString:@":en"]];
+    if (enName.length > 0)
+        return enName;
+    
+    NSString *tagPrefix = [tag stringByAppendingString:@":"];
+    for (NSString *nm in _values.allKeys)
+        if ([nm hasPrefix:tagPrefix])
+            return _values[nm];
+    
+    return nil;
+}
+
 - (BOOL) isEqual:(id)o
 {
     if (self == o)

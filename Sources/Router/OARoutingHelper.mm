@@ -26,9 +26,13 @@
 
 #import <Reachability.h>
 
+#define DEFAULT_GPS_TOLERANCE 12
 #define POSITION_TOLERANCE 60
 #define RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE 3
 #define RECALCULATE_THRESHOLD_CAUSING_FULL_RECALCULATE_INTERVAL 2 * 60
+
+static NSInteger GPS_TOLERANCE = DEFAULT_GPS_TOLERANCE;
+static double ARRIVAL_DISTANCE_FACTOR = 1;
 
 @interface OARoutingHelper()
 
@@ -266,6 +270,8 @@ static BOOL _isDeviatedFromRoute = false;
 - (void) setAppMode:(OAApplicationMode *)mode
 {
     _mode = mode;
+    ARRIVAL_DISTANCE_FACTOR = MAX([_settings.arrivalDistanceFactor get:mode], 0.1f);
+    GPS_TOLERANCE = (NSInteger) (DEFAULT_GPS_TOLERANCE * ARRIVAL_DISTANCE_FACTOR);
     [_voiceRouter updateAppMode];
 }
 
@@ -502,9 +508,16 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (float) getArrivalDistance
+- (double) getArrivalDistance
 {
-    return (double)_settings.applicationMode.arrivalDistance * [_settings.arrivalDistanceFactor get];
+    OAApplicationMode *m = _mode == nil ? _settings.applicationMode : _mode;
+    float defaultSpeed = MAX(0.3f, m.defaultSpeed);
+
+    /// Used to be: car - 90 m, bicycle - 50 m, pedestrian - 20 m
+    // return ((float)settings.getApplicationMode().getArrivalDistance()) * settings.ARRIVAL_DISTANCE_FACTOR.getModeValue(m);
+    // GPS_TOLERANCE - 12 m
+    // 5 seconds: car - 80 m @ 50 kmh, bicyle - 45 m @ 25 km/h, bicyle - 25 m @ 10 km/h, pedestrian - 18 m @ 4 km/h,
+    return GPS_TOLERANCE + defaultSpeed * 5 * ARRIVAL_DISTANCE_FACTOR;
 }
 
 - (void) showMessage:(NSString *)msg
@@ -775,9 +788,9 @@ static BOOL _isDeviatedFromRoute = false;
                 processed = true;
             }
         }
-        else if (newDist < dist || newDist < 10)
+        else if (newDist < dist || newDist < (GPS_TOLERANCE / 2))
         {
-            // newDist < 10 (avoid distance 0 till next turn)
+            // newDist < GPS_TOLERANCE (avoid distance 0 till next turn)
             if (dist > posTolerance)
             {
                 processed = true;
@@ -983,7 +996,7 @@ static BOOL _isDeviatedFromRoute = false;
                     [_voiceRouter interruptRouteCommands];
                     _voiceRouterStopped = true; // Prevents excessive execution of stop() code
                 }
-                if (distOrth > 350)
+                if (distOrth > _mode.getOffRouteDistance * ARRIVAL_DISTANCE_FACTOR && !_settings.disableOffrouteRecalc)
                 {
                     [_voiceRouter announceOffRoute:distOrth];
                 }
@@ -1345,6 +1358,16 @@ static BOOL _isDeviatedFromRoute = false;
     OAAppSettings *settings = OAAppSettings.sharedManager;
     params.leftSide = [OADrivingRegion isLeftHandDriving:settings.drivingRegion];
     params.fast = [settings.fastRouteMode get:mode];
+}
+
++ (NSInteger) getGpsTolerance
+{
+    return GPS_TOLERANCE;
+}
+
++ (double) getArrivalDistanceFactor
+{
+    return ARRIVAL_DISTANCE_FACTOR;
 }
 
 @end

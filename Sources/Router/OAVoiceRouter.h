@@ -5,6 +5,7 @@
 //  Created by Alexey Kulish on 15/07/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+// Android version: 713b86d
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -15,8 +16,8 @@
 
 @interface OAVoiceRouter : NSObject
 
-@property (nonatomic, readonly) float DEFAULT_SPEED;
-@property (nonatomic, readonly) float TURN_DEFAULT_SPEED;
+@property (nonatomic, readonly) double DEFAULT_SPEED;
+@property (nonatomic, readonly) double TURN_NOW_SPEED;
 
 @property (nonatomic, readonly) int PREPARE_LONG_DISTANCE;
 @property (nonatomic, readonly) int PREPARE_LONG_DISTANCE_END;
@@ -24,7 +25,7 @@
 @property (nonatomic, readonly) int PREPARE_DISTANCE_END;
 @property (nonatomic, readonly) int TURN_IN_DISTANCE;
 @property (nonatomic, readonly) int TURN_IN_DISTANCE_END;
-@property (nonatomic, readonly) int TURN_DISTANCE;
+@property (nonatomic, readonly) int TURN_NOW_DISTANCE;
 
 - (instancetype)initWithHelper:(OARoutingHelper *)router;
 

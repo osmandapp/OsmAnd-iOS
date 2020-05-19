@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchResult.java
-//  git revision 78e7bb4d3d7ae61759c68be3eea8cdc7d27d60a4
+//  git revision fa77b30a13fa9d5f7f91e5636ffe941d5bd8111f
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -60,5 +60,6 @@
 - (int) getFoundWordCount;
 - (double) getSearchDistance:(CLLocation *)location;
 - (double) getSearchDistance:(CLLocation *)location pd:(double)pd;
+- (double) unknownPhraseMatchWeight:(BOOL)isHouse;
 
 @end

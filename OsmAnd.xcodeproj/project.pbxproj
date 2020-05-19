@@ -130,6 +130,8 @@
 		1535D8EC243DDA390061220F /* ic_custom_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E6243DDA380061220F /* ic_custom_map.png */; };
 		1535D8ED243DDA390061220F /* ic_custom_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E7243DDA380061220F /* ic_custom_map@2x.png */; };
 		1535D8EE243DDA390061220F /* ic_custom_map_online@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E8243DDA390061220F /* ic_custom_map_online@2x.png */; };
+		15553A732472DB6700E118F0 /* OADownloadMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15553A722472DB6600E118F0 /* OADownloadMapViewController.xib */; };
+		15553A762472DC1300E118F0 /* OADownloadMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15553A752472DC1300E118F0 /* OADownloadMapViewController.m */; };
 		156E91BF24499CE300B181BA /* ic_custom_direction_device@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 156E91BC24499CE200B181BA /* ic_custom_direction_device@3x.png */; };
 		156E91C024499CE300B181BA /* ic_custom_direction_device.png in Resources */ = {isa = PBXBuildFile; fileRef = 156E91BD24499CE200B181BA /* ic_custom_direction_device.png */; };
 		156E91C124499CE300B181BA /* ic_custom_direction_device@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 156E91BE24499CE300B181BA /* ic_custom_direction_device@2x.png */; };
@@ -5752,6 +5754,9 @@
 		1535D8E6243DDA380061220F /* ic_custom_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_map.png; path = Resources/Icons/ic_custom_map.png; sourceTree = "<group>"; };
 		1535D8E7243DDA380061220F /* ic_custom_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map@2x.png"; path = "Resources/Icons/ic_custom_map@2x.png"; sourceTree = "<group>"; };
 		1535D8E8243DDA390061220F /* ic_custom_map_online@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_online@2x.png"; path = "Resources/Icons/ic_custom_map_online@2x.png"; sourceTree = "<group>"; };
+		15553A722472DB6600E118F0 /* OADownloadMapViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADownloadMapViewController.xib; sourceTree = "<group>"; };
+		15553A742472DBE600E118F0 /* OADownloadMapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadMapViewController.h; sourceTree = "<group>"; };
+		15553A752472DC1300E118F0 /* OADownloadMapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OADownloadMapViewController.m; path = Resources/OADownloadMapViewController.m; sourceTree = "<group>"; };
 		156E91BC24499CE200B181BA /* ic_custom_direction_device@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_device@3x.png"; path = "Resources/Icons/ic_custom_direction_device@3x.png"; sourceTree = "<group>"; };
 		156E91BD24499CE200B181BA /* ic_custom_direction_device.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_direction_device.png; path = Resources/Icons/ic_custom_direction_device.png; sourceTree = "<group>"; };
 		156E91BE24499CE300B181BA /* ic_custom_direction_device@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_device@2x.png"; path = "Resources/Icons/ic_custom_direction_device@2x.png"; sourceTree = "<group>"; };
@@ -9569,6 +9574,8 @@
 		3ACA4A931A0A0CAB00ECC792 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				15553A742472DBE600E118F0 /* OADownloadMapViewController.h */,
+				15553A752472DC1300E118F0 /* OADownloadMapViewController.m */,
 				DAF2736822ED8BD400B22A16 /* QuickAction */,
 				DA6B361B2265EF2500FBB46D /* MyPlaces */,
 				DA9C6243221D3FA00087E140 /* OsmEditing */,
@@ -13617,6 +13624,7 @@
 				BBACF10917C61D8500EBA761 /* OAMapHudViewController.xib */,
 				BB451F1018EB34A5005FBE09 /* Resources.storyboard */,
 				152911B524542D8B008A6757 /* OADirectionAppearanceViewController.xib */,
+				15553A722472DB6600E118F0 /* OADownloadMapViewController.xib */,
 				BB451EEA18E60F12005FBE09 /* DebugHUD.xib */,
 				8A7077261A84F0F9005E019B /* OptionsPanel.xib */,
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
@@ -18179,6 +18187,7 @@
 				DA13A0172345FA0100C1A1A8 /* ic_custom_descent@3x.png in Resources */,
 				843257971A9DAE4100A7964E /* ic_arrow_down@2x.png in Resources */,
 				847C0FC01FC5D6F4003891F3 /* zoom_out_button_night.png in Resources */,
+				15553A732472DB6700E118F0 /* OADownloadMapViewController.xib in Resources */,
 				0CF58550244072EC0081238D /* widget_marker_triangle_pin_1@3x.png in Resources */,
 				842432001AEFDD1900925821 /* ic_action_rec_stop@3x.png in Resources */,
 				DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */,
@@ -20052,6 +20061,7 @@
 				84DE41472000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm in Sources */,
 				8A755A8121CC0F8F00E42699 /* OAPurchaseDialogItemView.m in Sources */,
 				DADBC6222426495C008B7423 /* OAPublicTransportShieldCell.mm in Sources */,
+				15553A762472DC1300E118F0 /* OADownloadMapViewController.m in Sources */,
 				84E37045205920D300959B94 /* OAWaypointsViewController.mm in Sources */,
 				845AFB4B1E264E7B00170026 /* OASearchResult.mm in Sources */,
 				84F3A8841B4AE92C00D16EBC /* OAGpxRouteWptItem.mm in Sources */,

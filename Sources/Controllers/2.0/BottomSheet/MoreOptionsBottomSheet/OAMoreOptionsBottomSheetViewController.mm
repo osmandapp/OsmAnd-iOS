@@ -30,6 +30,7 @@
 #import "OAPOI.h"
 #import "OAMapLayers.h"
 #import "OAContextMenuLayer.h"
+#import "OADownloadMapViewController.h"
 
 @implementation OAMoreOptionsBottomSheetScreen
 {
@@ -92,6 +93,19 @@
                       @"key" : @"nearby_search",
                       @"img" : @"ic_custom_search",
                       @"type" : @"OAMenuSimpleCell" } ];
+    // Download/Update online map
+    if ([_app.data.lastMapSource.resourceId isEqualToString:@"online_tiles"])
+    {
+        [arr addObject:@{ @"title" : OALocalizedString(@"download_map"),
+                          @"key" : @"download_map",
+                          @"img" : @"ic_custom_download",
+                          @"type" : @"OAMenuSimpleCell" } ];
+
+        [arr addObject:@{ @"title" : OALocalizedString(@"update_map"),
+                          @"key" : @"update_map",
+                          @"img" : @"ic_update",
+                          @"type" : @"OAMenuSimpleCell" } ];
+    }
     // Change marker psition
     if ([OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer isObjectMovable:_targetPoint.targetObj])
     {
@@ -341,6 +355,16 @@
             OAOsmNotePoint *point = shouldEdit ? _targetPoint.targetObj : [self constructFromTargetPoint:_targetPoint];
             OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingAddon points:[NSArray arrayWithObject:point] type:TYPE_CREATE];
             [noteScreen show];
+        }
+        else if ([key isEqualToString:@"download_map"])
+        {
+            NSLog(@"Download map");
+            OADownloadMapViewController *downloadMapVC = [[OADownloadMapViewController alloc] init];
+            [mapPanel.navigationController pushViewController:downloadMapVC animated:YES];
+        }
+        else if ([key isEqualToString:@"update_map"])
+        {
+            NSLog(@"Upload map");
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

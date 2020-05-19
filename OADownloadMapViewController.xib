@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OADownloadMapViewController">
+            <connections>
+                <outlet property="backButton" destination="uzW-JR-JAy" id="oZF-C4-Tkb"/>
+                <outlet property="mapView" destination="qN1-E2-WHf" id="xqt-3z-FC3"/>
+                <outlet property="navBarView" destination="MiG-kc-i6V" id="Zcw-nq-Gzb"/>
+                <outlet property="tableView" destination="rnN-AE-pZ6" id="PeQ-df-KNL"/>
+                <outlet property="titleView" destination="eYU-CN-sQT" id="3S7-jr-Kmm"/>
+                <outlet property="view" destination="QOL-bQ-xbz" id="GcO-3E-PrS"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="QOL-bQ-xbz">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MiG-kc-i6V" userLabel="Navbar View">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uzW-JR-JAy" userLabel="Back Button">
+                            <rect key="frame" x="16" y="24" width="56" height="56"/>
+                            <color key="tintColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" image="ic_navbar_chevron.png"/>
+                            <connections>
+                                <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="iPj-zl-cW3"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download Map" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eYU-CN-sQT">
+                            <rect key="frame" x="147.5" y="56" width="119" height="21"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <color key="textColor" red="0.97254901960784312" green="0.97254901960784312" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="0.53333333329999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="88" id="2nS-Pq-f7o"/>
+                        <constraint firstAttribute="bottom" secondItem="uzW-JR-JAy" secondAttribute="bottom" constant="8" id="JZ6-q7-Lgo"/>
+                        <constraint firstAttribute="bottom" secondItem="eYU-CN-sQT" secondAttribute="bottom" constant="11" id="jhd-Bq-i88"/>
+                        <constraint firstItem="uzW-JR-JAy" firstAttribute="leading" secondItem="MiG-kc-i6V" secondAttribute="leading" constant="16" id="mez-NW-aok"/>
+                        <constraint firstItem="eYU-CN-sQT" firstAttribute="centerX" secondItem="MiG-kc-i6V" secondAttribute="centerX" id="ybd-2J-Bph"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qN1-E2-WHf" userLabel="Map View">
+                    <rect key="frame" x="0.0" y="88" width="414" height="170"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="170" id="kxx-5y-dvE"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rnN-AE-pZ6">
+                    <rect key="frame" x="0.0" y="258" width="414" height="604"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="rnN-AE-pZ6" firstAttribute="bottom" secondItem="NSz-q7-JES" secondAttribute="bottom" id="96m-o7-UVX"/>
+                <constraint firstItem="rnN-AE-pZ6" firstAttribute="leading" secondItem="NSz-q7-JES" secondAttribute="leading" id="M7r-Qm-ZMm"/>
+                <constraint firstItem="rnN-AE-pZ6" firstAttribute="top" secondItem="qN1-E2-WHf" secondAttribute="bottom" id="Wsd-8y-0sO"/>
+                <constraint firstItem="qN1-E2-WHf" firstAttribute="top" secondItem="MiG-kc-i6V" secondAttribute="bottom" id="en9-Y7-BDG"/>
+                <constraint firstItem="MiG-kc-i6V" firstAttribute="top" secondItem="QOL-bQ-xbz" secondAttribute="top" id="iMG-lM-hCM"/>
+                <constraint firstItem="MiG-kc-i6V" firstAttribute="leading" secondItem="NSz-q7-JES" secondAttribute="leading" id="kDX-bc-L5R"/>
+                <constraint firstItem="qN1-E2-WHf" firstAttribute="leading" secondItem="NSz-q7-JES" secondAttribute="leading" id="opX-mP-dYI"/>
+                <constraint firstItem="qN1-E2-WHf" firstAttribute="trailing" secondItem="NSz-q7-JES" secondAttribute="trailing" id="rMq-65-UfA"/>
+                <constraint firstItem="MiG-kc-i6V" firstAttribute="trailing" secondItem="NSz-q7-JES" secondAttribute="trailing" id="whp-cE-7z8"/>
+                <constraint firstItem="rnN-AE-pZ6" firstAttribute="trailing" secondItem="NSz-q7-JES" secondAttribute="trailing" id="zik-wY-eA3"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="NSz-q7-JES"/>
+            <point key="canvasLocation" x="-12" y="827"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_navbar_chevron.png" width="28" height="28"/>
+    </resources>
+</document>

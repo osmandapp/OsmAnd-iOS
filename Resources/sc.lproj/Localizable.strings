@@ -165,7 +165,7 @@
 "gpx_distance_points" = "Distàntzia (puntos)";
 "gpx_max_speed" = "Lestresa màssima";
 "gpx_speed" = "Lestresa";
-"prch_nau_q2_wifi" = "S'iscarrigamentu tenet bisòngiu de  %@ in sa retza WiFi.";
+"prch_nau_q2_wifi" = "S'iscarrigamentu tenet bisòngiu de %@ in sa retza WiFi.";
 "prch_nau_q3" = "As a lu pòdere installare prus a tardu dae Mapas & Resursas.";
 "proceed_q" = "Sighire?";
 "download" = "Iscàrriga";
@@ -1081,7 +1081,7 @@
 "mapil_select_user" = "Ischerta s'impreadore";
 // Rendering attributes
 "get_discount_title" = "Otene %d %@ a su %d%% de iscontu.";
-"get_free_trial_title" = "Incumintza sa proa de badas de  %d %@ tua.";
+"get_free_trial_title" = "Incumintza sa proa de badas de %d %@ tua.";
 "get_discount_short_descr" = "%@ pro %d %@, a pustis %@";
 "osm_succsessful_uploads" = "Resèssidos";
 "osm_failed_uploads" = "Fallidos";
@@ -1681,3 +1681,14 @@
 "allow_3d" = "Permiti sa vista 2.5D";
 "product_desc_antarctica" = "Iscarrigamentos de mapas illimitados pro s’Antàrticu";
 "product_title_antarctica" = "Antàrticu";
+"public_transport_empty_warning_descr" = "Proa a cambiare sas impostatziones.";
+"help_legend_descr" = "Sa ghia a sos sìmbulos de sa mapa";
+"help_mapillary" = "OsmAnd + Mapillary";
+"help_travel" = "Biàgiu (Wikipedia e Wikivoyage)";
+"help_osmand_live" = "Abbonamentos - OsmAnd Live";
+"help_purchases" = "Còmporas de OsmAnd";
+"hide_terrain" = "Cua su terrinu";
+"show_terrain" = "Ammustra su terrinu";
+"map_settings_legend" = "Legenda";
+"map_settings_layer_transparency" = "Transparèntzia de s'istratu";
+"map_settings_terrain" = "Terrinu";

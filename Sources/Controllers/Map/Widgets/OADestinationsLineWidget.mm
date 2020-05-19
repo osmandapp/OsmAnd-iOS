@@ -121,7 +121,7 @@
 {
     [super layoutSubviews];
    
-    self.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
+    _destinationLineSublayer.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
 }
 
 - (void) drawRect:(CGRect)rect
@@ -238,13 +238,23 @@
 
 - (void) drawLineBetweenPoints:(CGPoint)start end:(CGPoint)end distance:(NSString *)distance color:(UIColor *)lineColor inContext:(CGContextRef)ctx
 {
+    UIColor *color = lineColor;
     CGContextSaveGState(ctx);
     {
-        UIColor *color = lineColor;
+        CGContextSetLineWidth(ctx, 4.0);
+        CGContextSetLineCap(ctx, kCGLineCapRound);
+        CGContextBeginPath(ctx);
+        CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
+        CGFloat dashLengths[] = {10, 10, 10};
+        CGContextSetLineDash(ctx, 10.0, dashLengths , 3);
+        CGContextMoveToPoint(ctx, start.x, start.y);
+        CGContextAddLineToPoint(ctx, end.x, end.y);
+        CGContextStrokePath(ctx);
+
         [color set];
         CGContextSetLineWidth(ctx, 2.0);
-        CGFloat dashLengths[] = {10, 10};
-        CGContextSetLineDash(ctx, 30.0, dashLengths , 2);
+        CGContextSetLineCap(ctx, kCGLineCapRound);
+        CGContextSetLineDash(ctx, 10.0, dashLengths , 2);
         CGContextMoveToPoint(ctx, start.x, start.y);
         CGContextAddLineToPoint(ctx, end.x, end.y);
         CGContextStrokePath(ctx);
@@ -370,7 +380,8 @@
 - (double) changeArrowAngle:(CLLocationCoordinate2D)current marker:(OADestination *)marker
 {
     CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:marker.latitude longitude:marker.longitude] sourceLocation:[[CLLocation alloc] initWithLatitude:current.latitude longitude:current.longitude]];
-    return (itemDirection - 90) * (M_PI / 180);
+    CGFloat direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - _mapViewController.mapView.azimuth - 90) * (M_PI / 180);
+    return direction;
 }
 
 - (void) removeLineToDestinationPin:(OADestination *)destinationToRemove

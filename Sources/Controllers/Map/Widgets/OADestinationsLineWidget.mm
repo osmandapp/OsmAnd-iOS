@@ -122,6 +122,7 @@
     [super layoutSubviews];
    
     self.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
+    _destinationLineSublayer.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
 }
 
 - (void) drawRect:(CGRect)rect
@@ -239,14 +240,14 @@
 - (void) drawLineBetweenPoints:(CGPoint)start end:(CGPoint)end distance:(NSString *)distance color:(UIColor *)lineColor inContext:(CGContextRef)ctx
 {
     UIColor *color = lineColor;
+    CGFloat dashPattern[] = {10, 15};
     CGContextSaveGState(ctx);
     {
         CGContextSetLineWidth(ctx, 4.0);
         CGContextSetLineCap(ctx, kCGLineCapRound);
         CGContextBeginPath(ctx);
         CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
-        CGFloat dashLengths[] = {10, 10, 10};
-        CGContextSetLineDash(ctx, 10.0, dashLengths , 3);
+        CGContextSetLineDash(ctx, 10.0, dashPattern , 2);
         CGContextMoveToPoint(ctx, start.x, start.y);
         CGContextAddLineToPoint(ctx, end.x, end.y);
         CGContextStrokePath(ctx);
@@ -254,7 +255,7 @@
         [color set];
         CGContextSetLineWidth(ctx, 2.0);
         CGContextSetLineCap(ctx, kCGLineCapRound);
-        CGContextSetLineDash(ctx, 10.0, dashLengths , 2);
+        CGContextSetLineDash(ctx, 10.0, dashPattern , 2);
         CGContextMoveToPoint(ctx, start.x, start.y);
         CGContextAddLineToPoint(ctx, end.x, end.y);
         CGContextStrokePath(ctx);

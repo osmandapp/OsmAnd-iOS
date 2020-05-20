@@ -36,6 +36,8 @@
 
 @interface OADestinationCardsViewController () <MGSwipeTableCellDelegate, OADestinationCardBaseControllerDelegate, UIGestureRecognizerDelegate>
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolBarHeight;
+
 @end
 
 @implementation OADestinationCardsViewController
@@ -167,7 +169,9 @@
 
 - (void) configureBottomToolbar
 {
+    CGFloat bottomMargin = [OAUtilities getBottomMargin];
     _bottomToolBar.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    _toolBarHeight.constant += bottomMargin;
     _historyViewButton.title = OALocalizedString(@"history");
     [_historyViewButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: UIColorFromRGB(color_primary_purple),  NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     

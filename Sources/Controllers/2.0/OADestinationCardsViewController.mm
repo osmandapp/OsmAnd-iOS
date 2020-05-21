@@ -156,6 +156,7 @@
 {
     [super viewDidLoad];
     
+    self.tableView.frame = CGRectMake(8.0, 0.0, self.view.frame.size.width - 16, self.view.frame.size.height - 8);
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 10.0)];
     
     [self.tableView setEditing:YES animated:YES];

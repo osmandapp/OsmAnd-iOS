@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
+#import "OADestinationItem.h"
 
 #import <EventKit/EventKit.h>
 
@@ -67,6 +68,21 @@
         NSMutableArray *allDestinations = [NSMutableArray arrayWithArray:_sortedDestinations];
         [allDestinations removeObject:self.getParkingPoint];
         return [NSArray arrayWithArray:allDestinations];
+    }
+}
+
+- (void) reorderDestinations:(NSArray<OADestinationItem *> *)reorderedDestinations
+{
+    @synchronized(_syncObj)
+    {
+        NSMutableArray<OADestination *> *newDestinations = [NSMutableArray new];
+        for (OADestinationItem *item in reorderedDestinations)
+        {
+            [newDestinations addObject:item.destination];
+        }
+        _sortedDestinations = newDestinations;
+        [self refreshDestinationIndexes];
+        [_app.data.destinationsChangeObservable notifyEvent];
     }
 }
 

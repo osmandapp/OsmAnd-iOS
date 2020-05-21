@@ -51,6 +51,8 @@
 
 - (NSArray *)getSwipeButtons:(NSInteger)row;
 
+- (void)reorderObjects:(NSInteger)source dest:(NSInteger)dest;
+
 - (void)onAppear;
 - (void)onDisappear;
 

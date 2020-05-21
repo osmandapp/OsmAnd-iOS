@@ -376,7 +376,7 @@
     CGFloat navBarHeight = !_navBarHidden ? self.navBarView.bounds.size.height : 0.0;
     
     CGFloat top = [OAUtilities getStatusBarHeight];
-    CGFloat w = DeviceScreenWidth - OAUtilities.getLeftMargin * 2;
+    CGFloat w = DeviceScreenWidth;// - OAUtilities.getLeftMargin * 2;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -388,8 +388,10 @@
             
             frame = CGRectMake(0.0, top, w, h);
             
-            if (_multiCell)
+            if (_multiCell && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
                 _multiCell.contentView.hidden = NO;
+            else
+                _multiCell.contentView.hidden = YES;
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = YES;
         }
@@ -426,8 +428,10 @@
             
             frame = CGRectMake(0.0, top, w, h);
             
-            if (_multiCell)
+            if (_multiCell && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
                 _multiCell.contentView.hidden = NO;
+            else
+                _multiCell.contentView.hidden = YES;
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = YES;
         }
@@ -440,8 +444,10 @@
             
             frame = CGRectMake(0.0, top, w, h);
             
-            if (_multiCell)
+            if (_multiCell && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
                 _multiCell.contentView.hidden = NO;
+            else
+                _multiCell.contentView.hidden = YES;
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = YES;
         }

@@ -3130,6 +3130,8 @@ typedef enum
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
+        CGFloat bottomMargin = [OAUtilities getBottomMargin];
+        cardsController.toolBarHeight.constant = favoritesToolBarHeight + bottomMargin;
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
         CGFloat h = DeviceScreenHeight - y;
         CGFloat toolbarHeight = CGRectGetHeight(cardsController.bottomView.bounds);

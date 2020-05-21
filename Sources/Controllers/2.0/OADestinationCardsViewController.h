@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIToolbar *bottomToolBar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *historyViewButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *appearanceViewButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolBarHeight;
 
 @property (nonatomic, readonly) BOOL isVisible;
 @property (nonatomic, readonly) BOOL isHiding;

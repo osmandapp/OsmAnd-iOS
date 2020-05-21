@@ -16,6 +16,7 @@
                 <outlet property="cardsView" destination="uw9-vf-xUp" id="qcI-XH-cof"/>
                 <outlet property="historyViewButton" destination="jBh-vE-Odo" id="fZ9-7f-hSs"/>
                 <outlet property="tableView" destination="AG5-Pz-Cqb" id="L3k-hr-JyU"/>
+                <outlet property="toolBarHeight" destination="Gxt-AD-yg9" id="KwS-ut-9Ks"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -28,7 +29,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ui-Gh-Jia" userLabel="bottomView">
-                            <rect key="frame" x="0.0" y="839" width="414" height="57"/>
+                            <rect key="frame" x="0.0" y="848" width="414" height="48"/>
                             <subviews>
                                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V1U-gf-wIJ">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
@@ -52,7 +53,7 @@
                             </subviews>
                             <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="57" id="Gxt-AD-yg9"/>
+                                <constraint firstAttribute="height" constant="48" id="Gxt-AD-yg9"/>
                                 <constraint firstItem="V1U-gf-wIJ" firstAttribute="top" secondItem="8Ui-Gh-Jia" secondAttribute="top" id="Wic-O0-Lau"/>
                                 <constraint firstAttribute="trailing" secondItem="V1U-gf-wIJ" secondAttribute="trailing" id="b2A-rs-Gae"/>
                                 <constraint firstItem="V1U-gf-wIJ" firstAttribute="leading" secondItem="8Ui-Gh-Jia" secondAttribute="leading" id="uaz-dI-Tgc"/>

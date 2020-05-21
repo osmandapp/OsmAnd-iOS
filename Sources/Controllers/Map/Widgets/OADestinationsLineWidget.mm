@@ -138,6 +138,7 @@
     [super layoutSubviews];
    
     self.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
+    _destinationLineSublayer.frame = self.bounds;
 }
 
 - (void) drawRect:(CGRect)rect
@@ -258,6 +259,7 @@
 {
     [self updateAttributes];
     UIColor *color = lineColor;
+    CGFloat dashPattern[] = {10, 15};
     CGContextSaveGState(ctx);
     {
         BOOL hasAttributes = _lineAttrs != nil;
@@ -268,8 +270,7 @@
         CGContextSetLineCap(ctx, kCGLineCapRound);
         CGContextBeginPath(ctx);
         CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
-        CGFloat dashLengths[] = {10, 10, 10};
-        CGContextSetLineDash(ctx, 10.0, dashLengths , 3);
+        CGContextSetLineDash(ctx, 10.0, dashPattern , 2);
         CGContextMoveToPoint(ctx, start.x, start.y);
         CGContextAddLineToPoint(ctx, end.x, end.y);
         CGContextStrokePath(ctx);
@@ -277,7 +278,7 @@
         [color set];
         CGContextSetLineWidth(ctx, strokeWidth);
         CGContextSetLineCap(ctx, kCGLineCapRound);
-        CGContextSetLineDash(ctx, 10.0, dashLengths , 2);
+        CGContextSetLineDash(ctx, 10.0, dashPattern , 2);
         CGContextMoveToPoint(ctx, start.x, start.y);
         CGContextAddLineToPoint(ctx, end.x, end.y);
         CGContextStrokePath(ctx);

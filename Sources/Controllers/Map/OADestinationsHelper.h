@@ -11,6 +11,7 @@
 #define kMinDistanceFor2ndRowAutoSelection 100.0
 
 @class OADestination;
+@class OADestinationItem;
 
 @interface OADestinationsHelper : NSObject
 
@@ -20,6 +21,7 @@
 + (OADestinationsHelper *) instance;
 
 - (void) updateRoutePointsWithinDestinations:(NSArray *)routePoints rebuildPointsOrder:(BOOL)rebuildPointsOrder;
+- (void) reorderDestinations:(NSArray<OADestinationItem *> *)reorderedDestinations;
 
 - (void) addDestination:(OADestination *)destination;
 - (void) removeDestination:(OADestination *)destination;

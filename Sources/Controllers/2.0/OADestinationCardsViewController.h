@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIView *cardsView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (weak, nonatomic) IBOutlet UIView *bottomToolBarView;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
 @property (weak, nonatomic) IBOutlet UIToolbar *bottomToolBar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *historyViewButton;

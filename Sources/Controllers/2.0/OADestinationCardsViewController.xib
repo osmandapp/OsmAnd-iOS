@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,11 +11,12 @@
             <connections>
                 <outlet property="appearanceViewButton" destination="R4l-IG-8Sm" id="3ee-57-hBB"/>
                 <outlet property="bottomToolBar" destination="V1U-gf-wIJ" id="32C-Ir-d9v"/>
+                <outlet property="bottomToolBarView" destination="TrQ-cM-P0Q" id="FkD-FO-R2T"/>
                 <outlet property="bottomView" destination="8Ui-Gh-Jia" id="uK1-gr-ehw"/>
                 <outlet property="cardsView" destination="uw9-vf-xUp" id="qcI-XH-cof"/>
                 <outlet property="historyViewButton" destination="jBh-vE-Odo" id="fZ9-7f-hSs"/>
                 <outlet property="tableView" destination="AG5-Pz-Cqb" id="L3k-hr-JyU"/>
-                <outlet property="toolBarHeight" destination="Dr0-6c-hjW" id="Xq7-Nj-mJb"/>
+                <outlet property="toolBarHeight" destination="Gxt-AD-yg9" id="KwS-ut-9Ks"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -25,11 +25,55 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uw9-vf-xUp" userLabel="cardsView">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="814"/>
+                <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TrQ-cM-P0Q" userLabel="bottomToolBarView">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                     <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="AG5-Pz-Cqb">
-                            <rect key="frame" x="8" y="0.0" width="398" height="806"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ui-Gh-Jia" userLabel="bottomView">
+                            <rect key="frame" x="0.0" y="848" width="414" height="48"/>
+                            <subviews>
+                                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V1U-gf-wIJ">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="L8w-Zh-g58"/>
+                                    </constraints>
+                                    <items>
+                                        <barButtonItem title="History" id="jBh-vE-Odo">
+                                            <connections>
+                                                <action selector="onHistoryButtonClicked:" destination="-1" id="djx-he-hbq"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem style="plain" systemItem="flexibleSpace" id="PK1-Du-oYi"/>
+                                        <barButtonItem title="Appearance" id="R4l-IG-8Sm">
+                                            <connections>
+                                                <action selector="onAppearanceButtonClicked:" destination="-1" id="s4Y-jp-QKI"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </items>
+                                </toolbar>
+                            </subviews>
+                            <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="48" id="Gxt-AD-yg9"/>
+                                <constraint firstItem="V1U-gf-wIJ" firstAttribute="top" secondItem="8Ui-Gh-Jia" secondAttribute="top" id="Wic-O0-Lau"/>
+                                <constraint firstAttribute="trailing" secondItem="V1U-gf-wIJ" secondAttribute="trailing" id="b2A-rs-Gae"/>
+                                <constraint firstItem="V1U-gf-wIJ" firstAttribute="leading" secondItem="8Ui-Gh-Jia" secondAttribute="leading" id="uaz-dI-Tgc"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="8Ui-Gh-Jia" firstAttribute="leading" secondItem="TrQ-cM-P0Q" secondAttribute="leading" id="PTD-JQ-OCe"/>
+                        <constraint firstAttribute="trailing" secondItem="8Ui-Gh-Jia" secondAttribute="trailing" id="b6z-YK-nO7"/>
+                        <constraint firstAttribute="bottom" secondItem="8Ui-Gh-Jia" secondAttribute="bottom" id="y6j-Us-3cR"/>
+                    </constraints>
+                </view>
+                <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uw9-vf-xUp" userLabel="cardsView">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="AG5-Pz-Cqb">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>
                                 <outlet property="dataSource" destination="-1" id="aXd-jh-kKC"/>
@@ -38,56 +82,15 @@
                         </tableView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstItem="AG5-Pz-Cqb" firstAttribute="top" secondItem="uw9-vf-xUp" secondAttribute="top" id="AGD-94-iby"/>
-                        <constraint firstAttribute="trailing" secondItem="AG5-Pz-Cqb" secondAttribute="trailing" constant="8" id="PeZ-Lk-mp5"/>
-                        <constraint firstAttribute="bottom" secondItem="AG5-Pz-Cqb" secondAttribute="bottom" constant="8" id="Waq-dq-zew"/>
-                        <constraint firstItem="AG5-Pz-Cqb" firstAttribute="leading" secondItem="uw9-vf-xUp" secondAttribute="leading" constant="8" id="lbK-07-cKE"/>
-                    </constraints>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ui-Gh-Jia" userLabel="bottomView">
-                    <rect key="frame" x="0.0" y="814" width="414" height="48"/>
-                    <subviews>
-                        <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V1U-gf-wIJ">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="44" id="QPT-W6-WAN"/>
-                            </constraints>
-                            <items>
-                                <barButtonItem title="History" id="jBh-vE-Odo">
-                                    <connections>
-                                        <action selector="onHistoryButtonClicked:" destination="-1" id="djx-he-hbq"/>
-                                    </connections>
-                                </barButtonItem>
-                                <barButtonItem style="plain" systemItem="flexibleSpace" id="PK1-Du-oYi"/>
-                                <barButtonItem title="Appearance" id="R4l-IG-8Sm">
-                                    <connections>
-                                        <action selector="onAppearanceButtonClicked:" destination="-1" id="s4Y-jp-QKI"/>
-                                    </connections>
-                                </barButtonItem>
-                            </items>
-                        </toolbar>
-                    </subviews>
-                    <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstItem="V1U-gf-wIJ" firstAttribute="top" secondItem="8Ui-Gh-Jia" secondAttribute="top" id="7XE-ZS-iVx"/>
-                        <constraint firstAttribute="height" constant="48" id="Dr0-6c-hjW"/>
-                        <constraint firstAttribute="trailing" secondItem="V1U-gf-wIJ" secondAttribute="trailing" id="hdh-0c-M35"/>
-                        <constraint firstItem="V1U-gf-wIJ" firstAttribute="leading" secondItem="8Ui-Gh-Jia" secondAttribute="leading" id="yb8-Kq-s1W"/>
-                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="8Ui-Gh-Jia" firstAttribute="trailing" secondItem="XQJ-gZ-Jft" secondAttribute="trailing" id="DeF-xH-PPI"/>
-                <constraint firstItem="8Ui-Gh-Jia" firstAttribute="leading" secondItem="XQJ-gZ-Jft" secondAttribute="leading" id="KeL-Li-Wuu"/>
-                <constraint firstItem="uw9-vf-xUp" firstAttribute="leading" secondItem="XQJ-gZ-Jft" secondAttribute="leading" id="Kff-bK-K9j"/>
-                <constraint firstItem="uw9-vf-xUp" firstAttribute="trailing" secondItem="XQJ-gZ-Jft" secondAttribute="trailing" id="NI2-sz-sCG"/>
-                <constraint firstItem="8Ui-Gh-Jia" firstAttribute="top" secondItem="uw9-vf-xUp" secondAttribute="bottom" id="k0g-XI-3jG"/>
-                <constraint firstItem="8Ui-Gh-Jia" firstAttribute="bottom" secondItem="XQJ-gZ-Jft" secondAttribute="bottom" id="mlS-Kh-yaI"/>
-                <constraint firstItem="uw9-vf-xUp" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="rfn-7y-qLW"/>
+                <constraint firstAttribute="bottom" secondItem="TrQ-cM-P0Q" secondAttribute="bottom" id="BqJ-9u-Mex"/>
+                <constraint firstItem="TrQ-cM-P0Q" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Hzc-7a-zab"/>
+                <constraint firstAttribute="trailing" secondItem="TrQ-cM-P0Q" secondAttribute="trailing" id="XED-Bg-chu"/>
+                <constraint firstItem="TrQ-cM-P0Q" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="XPN-8b-73K"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="XQJ-gZ-Jft"/>
             <point key="canvasLocation" x="527.536231884058" y="194.19642857142856"/>
         </view>
     </objects>

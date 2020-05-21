@@ -3130,16 +3130,16 @@ typedef enum
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
-        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
-        CGFloat h = DeviceScreenHeight - y;
         CGFloat bottomMargin = [OAUtilities getBottomMargin];
         cardsController.toolBarHeight.constant = favoritesToolBarHeight + bottomMargin;
-        CGFloat toolbarHeight = cardsController.toolBarHeight.constant;
+        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat h = DeviceScreenHeight - y;
+        CGFloat toolbarHeight = CGRectGetHeight(cardsController.bottomView.bounds);
         CGFloat cardsTableHeight = h - toolbarHeight;
         if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
         {
             cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
-            cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, toolbarHeight);
+            cardsController.bottomToolBarView.frame = CGRectMake(0.0, -DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight);
             [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
                 cardsController.cardsView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, cardsTableHeight);
                 _shadeView.alpha = 1.0;
@@ -3257,14 +3257,14 @@ typedef enum
 
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
         CGFloat h = DeviceScreenHeight - y;
-        CGFloat toolbarHeight = cardsController.toolBarHeight.constant;
+        CGFloat toolbarHeight = CGRectGetHeight(cardsController.bottomView.bounds);
         CGFloat cardsTableHeight = h - toolbarHeight;
     
         cardsController.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
         cardsController.cardsView.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h - toolbarHeight);
-        cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, cardsController.bottomView.bounds.size.height);
+        cardsController.bottomToolBarView.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, cardsTableHeight);
         [cardsController.cardsView setHidden:YES];
-        [cardsController.bottomView setHidden:YES];
+        [cardsController.bottomToolBarView setHidden:YES];
         
         [self.hudViewController addChildViewController:cardsController];
         
@@ -3281,11 +3281,11 @@ typedef enum
         
         [UIView animateWithDuration:.25 animations:^{
             cardsController.cardsView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, cardsTableHeight);
-            cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight - toolbarHeight, DeviceScreenWidth, toolbarHeight);
+            cardsController.bottomToolBarView.frame = CGRectMake(0.0, -DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight);
             _shadeView.alpha = 1.0;
         }];
         [cardsController.cardsView setHidden:NO];
-        [cardsController.bottomView setHidden:NO];
+        [cardsController.bottomToolBarView setHidden:NO];
     }
 }
 
@@ -3304,7 +3304,8 @@ typedef enum
     {
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
         CGFloat h = DeviceScreenHeight - y;
-        CGFloat cardsTableHeight = h - cardsController.toolBarHeight.constant;
+        CGFloat toolbarHeight = CGRectGetHeight(cardsController.bottomView.bounds);
+        CGFloat cardsTableHeight = h - toolbarHeight;
     
         [cardsController doViewWillDisappear];
 
@@ -3323,7 +3324,7 @@ typedef enum
         {
             [UIView animateWithDuration:.25 animations:^{
                 cardsController.cardsView.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, cardsTableHeight);
-                cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight, DeviceScreenWidth, cardsController.toolBarHeight.constant);
+                cardsController.bottomToolBarView.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
                 _shadeView.alpha = 0.0;
                 
             } completion:^(BOOL finished) {

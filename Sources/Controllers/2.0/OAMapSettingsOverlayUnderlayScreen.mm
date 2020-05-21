@@ -260,11 +260,14 @@ static NSInteger kButtonsSection;
     
     tblView.estimatedRowHeight = kEstimatedRowHeight;
     tblView.rowHeight = UITableViewAutomaticDimension;
-    _isEnabled = NO;
+
     if (_mapSettingType == EMapSettingOverlay)
         _isEnabled = _app.data.overlayMapSource != nil;
     else if (_mapSettingType == EMapSettingUnderlay)
         _isEnabled = _app.data.underlayMapSource != nil;
+    else
+        _isEnabled = NO;
+
     kButtonsSection = _mapSettingType == EMapSettingOverlay ? 3 : 4;
 }
 
@@ -581,25 +584,16 @@ static NSInteger kButtonsSection;
             if (_mapSettingType == EMapSettingOverlay)
             {
                 _app.data.overlayMapSource = _app.data.lastOverlayMapSource;
-                if (!_app.data.overlayMapSource)
-                    [self installMorePressed];
             }
             else if (_mapSettingType == EMapSettingUnderlay)
             {
+                [self hidePolygons:YES];
                 _app.data.underlayMapSource = _app.data.lastUnderlayMapSource;
-                if (!_app.data.underlayMapSource)
-                    [self installMorePressed];
             }
-            if ((_mapSettingType == EMapSettingOverlay && _app.data.overlayMapSource) ||
-                (_mapSettingType == EMapSettingUnderlay && _app.data.underlayMapSource))
-            {
-                [tblView beginUpdates];
-                [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
-                [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-                [tblView endUpdates];
-            }
-            else
-                [switchView setOn: NO];
+            [tblView beginUpdates];
+            [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
+            [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tblView endUpdates];
         }
         else
         {

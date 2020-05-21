@@ -100,4 +100,7 @@ struct RouteSegmentResult;
 
 + (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode;
 
++ (NSInteger) getGpsTolerance;
++ (double) getArrivalDistanceFactor;
+
 @end

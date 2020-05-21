@@ -56,9 +56,10 @@
                         UIColorFromRGB(marker_pin_color_red),
                         UIColorFromRGB(marker_pin_color_light_green)];
         self.markerNames = @[@"widget_marker_triangle_pin_1", @"widget_marker_triangle_pin_2", @"widget_marker_triangle_pin_3", @"widget_marker_triangle_pin_4", @"widget_marker_triangle_pin_5"];
-        __weak OATextInfoWidget *selfWeak = self;
-        selfWeak.onClickFunction = ^(id sender) {
-            [self onWidgetClicked];
+        [self setText:nil subtext:nil];
+        __weak OADistanceToMapMarkerControl *selfWeak = self;
+        self.onClickFunction = ^(id sender) {
+            [selfWeak onWidgetClicked];
         };
     }
     return self;

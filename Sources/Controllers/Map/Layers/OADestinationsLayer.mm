@@ -81,7 +81,7 @@
     [self.mapView addSubview:_destinationLayerWidget];
 }
 
-- (void) updadeDestinationLineWidget
+- (void) onMapFrameRendered
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_destinationLayerWidget updateLayer];
@@ -360,6 +360,7 @@
         address = address && address.length > 0 ? address : [OAPointDescription getLocationNamePlain:destCopy.latitude lon:destCopy.longitude];
         destCopy.desc = address;
         [helper addDestination:destCopy];
+        [_destinationLayerWidget moveMarker:-1];
     }
 }
 
@@ -384,6 +385,7 @@
             if (pos == marker->getPosition())
             {
                 marker->setIsHidden(hidden);
+                [_destinationLayerWidget moveMarker:item.index];
             }
         }
     }

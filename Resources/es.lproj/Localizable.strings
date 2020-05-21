@@ -1611,3 +1611,5 @@
 "wiki_sheet_title" = "¿Cómo abrir artículos de Wikipedia?";
 "app_mode_helicopter" = "Helicóptero";
 "app_mode_pickup_truck" = "Camioneta";
+"exit_at" = "Bajarse en";
+"public_transport_warning_title" = "La navegación en transporte público se encuentra actualmente en fase de pruebas beta, se esperan errores e imprecisiones.";

@@ -42,15 +42,16 @@
     OAAppSettings *_settings;
     OAMapViewController *_mapViewController;
     OAMapPanelViewController *_mapPanel;
-    
-    UILongPressGestureRecognizer *_longSingleGestureRecognizer;
 
     NSMutableArray<OADestination *> *_destinationsArray;
     CALayer *_destinationLineSublayer;
     NSString *_arrowColor;
     
     OADestinationLineDelegate *_destinationLineDelegate;
-    CLLocation *_tapLocation;
+    NSInteger _indexToMove;
+    BOOL _isMoving;
+    
+    NSDictionary<NSString *, NSNumber *> *_lineAttrs;
 }
 
 - (instancetype) init
@@ -85,11 +86,7 @@
     _destinationsArray = [[NSMutableArray alloc] init];
     _mapPanel = [OARootViewController instance].mapPanel;
     
-    _longSingleGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                 action:@selector(touchDetected:)];
-    _longSingleGestureRecognizer.numberOfTouchesRequired = 1;
-    _longSingleGestureRecognizer.delegate = self;
-    [self addGestureRecognizer:_longSingleGestureRecognizer];
+    [self updateAttributes];
     
     self.colors = @[UIColorFromRGB(marker_pin_color_orange),
                     UIColorFromRGB(marker_pin_color_blue),
@@ -101,6 +98,25 @@
     
     self.hidden = NO;
     [self initDestinationLayer];
+}
+
+- (void) moveMarker:(NSInteger)index
+{
+    if (_isMoving)
+    {
+        _isMoving = NO;
+        _indexToMove = -1;
+    }
+    else
+    {
+        _isMoving = YES;
+        _indexToMove = index;
+    }
+}
+
+- (void) updateAttributes
+{
+    _lineAttrs = [_mapViewController getLineRenderingAttributes:@"measureDistanceLine"];
 }
 
 #pragma mark - Layer
@@ -122,6 +138,7 @@
     [super layoutSubviews];
    
     self.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
+    _destinationLineSublayer.frame = self.bounds;
 }
 
 - (void) drawRect:(CGRect)rect
@@ -168,15 +185,6 @@
     OADestination *secondMarkerDestination = (destinations.count >= 2 ? destinations[1] : nil);
     if (layer == _destinationLineSublayer)
     {
-        if (_tapLocation)
-        {
-            if (firstMarkerDestination)
-                [self drawLine:firstMarkerDestination fromLocation:_tapLocation inContext:ctx];
-            if (secondMarkerDestination && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
-                [self drawLine:secondMarkerDestination fromLocation:_tapLocation inContext:ctx];
-            return;
-        }
-        
         if ([_settings.directionLines get])
         {
             CLLocation *currLoc = [_app.locationServices lastKnownLocation];
@@ -205,8 +213,19 @@
 - (void) drawLine:(OADestination *)marker fromLocation:(CLLocation *)currLoc inContext:(CGContextRef)ctx
 {
     NSValue *pointOfCurrentLocation = [self getPointFromLat:currLoc.coordinate.latitude lon:currLoc.coordinate.longitude];
-    NSValue *markerPoint = [self getPointFromLat:marker.latitude lon:marker.longitude];
-    const auto dist = OsmAnd::Utilities::distance(marker.longitude, marker.latitude,
+    NSValue *markerPoint = nil;
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
+    if (_isMoving && _indexToMove == marker.index)
+    {
+        const auto point = OsmAnd::Utilities::convert31ToLatLon(_mapViewController.mapView.target31);
+        coord = CLLocationCoordinate2DMake(point.latitude, point.longitude);
+        markerPoint = [self getPointFromLat:coord.latitude lon:coord.longitude];
+    }
+    else
+    {
+        markerPoint = [self getPointFromLat:marker.latitude lon:marker.longitude];
+    }
+    const auto dist = OsmAnd::Utilities::distance(coord.longitude, coord.latitude,
                                                   currLoc.coordinate.longitude, currLoc.coordinate.latitude);
     if (!markerPoint)
         return;
@@ -238,13 +257,28 @@
 
 - (void) drawLineBetweenPoints:(CGPoint)start end:(CGPoint)end distance:(NSString *)distance color:(UIColor *)lineColor inContext:(CGContextRef)ctx
 {
+    [self updateAttributes];
+    UIColor *color = lineColor;
+    CGFloat dashPattern[] = {10, 15};
     CGContextSaveGState(ctx);
     {
-        UIColor *color = lineColor;
+        BOOL hasAttributes = _lineAttrs != nil;
+        double scaleFactor = [_settings.mapDensity get:_settings.applicationMode];
+        float strokeWidth = hasAttributes && _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 2.0;
+        strokeWidth = scaleFactor < 1.0 ? 1.0 : strokeWidth / [[UIScreen mainScreen] scale] / scaleFactor;
+        CGContextSetLineWidth(ctx, strokeWidth * 2);
+        CGContextSetLineCap(ctx, kCGLineCapRound);
+        CGContextBeginPath(ctx);
+        CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
+        CGContextSetLineDash(ctx, 10.0, dashPattern , 2);
+        CGContextMoveToPoint(ctx, start.x, start.y);
+        CGContextAddLineToPoint(ctx, end.x, end.y);
+        CGContextStrokePath(ctx);
+
         [color set];
-        CGContextSetLineWidth(ctx, 2.0);
-        CGFloat dashLengths[] = {10, 10};
-        CGContextSetLineDash(ctx, 30.0, dashLengths , 2);
+        CGContextSetLineWidth(ctx, strokeWidth);
+        CGContextSetLineCap(ctx, kCGLineCapRound);
+        CGContextSetLineDash(ctx, 10.0, dashPattern , 2);
         CGContextMoveToPoint(ctx, start.x, start.y);
         CGContextAddLineToPoint(ctx, end.x, end.y);
         CGContextStrokePath(ctx);
@@ -255,24 +289,31 @@
 - (void) drawDistance:(CGContextRef)ctx distance:(NSString *)distance angle:(double)angle start:(CGPoint)start end:(CGPoint)end
 {
     NSValue *middle = nil;
-    if (CGRectContainsPoint(self.frame, end))
+    CGFloat maxX = CGRectGetMaxX(self.frame);
+    CGFloat minX = CGRectGetMinX(self.frame);
+    CGFloat maxY = CGRectGetMaxY(self.frame);
+    CGFloat minY = CGRectGetMinY(self.frame);
+    
+    NSValue *screeenIntersectionPoint = [self pointOnRect:end.x y:end.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:start];
+    if (screeenIntersectionPoint)
     {
-        middle = [NSValue valueWithCGPoint:CGPointMake((start.x + end.x) / 2, (start.y + end.y) / 2)];
+        CGPoint intersection = screeenIntersectionPoint.CGPointValue;
+        middle = [NSValue valueWithCGPoint:CGPointMake((start.x + intersection.x) / 2, (start.y + intersection.y) / 2)];
     }
     else
     {
-        CGFloat maxX = CGRectGetMaxX(self.frame);
-        CGFloat minX = CGRectGetMinX(self.frame);
-        CGFloat maxY = CGRectGetMaxY(self.frame);
-        CGFloat minY = CGRectGetMinY(self.frame);
-        
-        NSValue *screeenIntersectionPoint = [self pointOnRect:end.x y:end.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:start];
+        screeenIntersectionPoint = [self pointOnRect:start.x y:start.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:start];
         if (screeenIntersectionPoint)
         {
             CGPoint intersection = screeenIntersectionPoint.CGPointValue;
-            middle = [NSValue valueWithCGPoint:CGPointMake((start.x + intersection.x) / 2, (start.y + intersection.y) / 2)];
+            middle = [NSValue valueWithCGPoint:CGPointMake((end.x + intersection.x) / 2, (end.y + intersection.y) / 2)];
+        }
+        else
+        {
+            middle = [NSValue valueWithCGPoint:CGPointMake((end.x + start.x) / 2, (end.y + start.y) / 2)];
         }
     }
+    
     if (middle)
     {
         UIFont *font = [UIFont systemFontOfSize:11.0 weight:UIFontWeightBold];
@@ -370,7 +411,8 @@
 - (double) changeArrowAngle:(CLLocationCoordinate2D)current marker:(OADestination *)marker
 {
     CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:marker.latitude longitude:marker.longitude] sourceLocation:[[CLLocation alloc] initWithLatitude:current.latitude longitude:current.longitude]];
-    return (itemDirection - 90) * (M_PI / 180);
+    CGFloat direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - _mapViewController.mapView.azimuth - 90) * (M_PI / 180);
+    return direction;
 }
 
 - (void) removeLineToDestinationPin:(OADestination *)destinationToRemove
@@ -384,19 +426,6 @@
     [_destinationLineSublayer setNeedsDisplay];
 }
 
-- (void) touchDetected:(UITapGestureRecognizer *)recognizer
-{
-    if (recognizer.state != UIGestureRecognizerStateEnded)
-    {
-        CLLocationCoordinate2D tapPoint = [self getPointCoord:[recognizer locationInView:self]];
-        _tapLocation = [[CLLocation alloc] initWithLatitude:tapPoint.latitude longitude:tapPoint.longitude];
-    }
-    else
-    {
-        _tapLocation = nil;
-        [self updateLayer];
-    }
-}
 - (CLLocationCoordinate2D) getPointCoord:(CGPoint)point
 {
     point.x *= _mapViewController.mapView.contentScaleFactor;

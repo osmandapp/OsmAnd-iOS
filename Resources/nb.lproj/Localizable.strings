@@ -1397,7 +1397,7 @@
 "rendering_value_translucent_pink_name" = "Gjennomskinnelig rosa";
 "rendering_attr_roadStyle_description" = "Veistil";
 "routing_attr_piste_type_nordic_description" = "Løyper for langrenn.";
-"routing_attr_max_num_changes_description" = "Angiøvre grense for endringer";
+"routing_attr_max_num_changes_description" = "Angi øvre grense for endringer";
 "rendering_attr_busRoutes_name" = "Bussruter";
 "routing_attr_allow_expert_name" = "Tillat ekspertruter";
 "rendering_attr_coloredBuildings_name" = "Fargekod bygninger etter type";

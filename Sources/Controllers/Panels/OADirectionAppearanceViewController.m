@@ -153,7 +153,7 @@
                         @"key" : kTopBarDisplay,
                         @"value" : distanceIndication == TOP_BAR_DISPLAY ? @YES : @NO,
                         @"title" : OALocalizedString(@"shared_string_topbar"),
-                        @"fg_img" : @"ic_custom_direction_topbar_one.png",
+                        @"fg_img" : activeMarkers == ONE_ACTIVE_MARKER ? @"ic_custom_direction_topbar_one.png" : @"ic_custom_direction_topbar_two.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
                         @"bg_img" : @"ic_custom_direction_device.png",
                         @"bg_color" : UIColorFromRGB(color_chart_orange)
@@ -165,7 +165,7 @@
                         @"key" : kWidgetDisplay,
                         @"value" : distanceIndication == WIDGET_DISPLAY ? @YES : @NO,
                         @"title" : OALocalizedString(@"shared_string_widgets"),
-                        @"fg_img" : @"ic_custom_direction_widget_two.png",
+                        @"fg_img" : activeMarkers == ONE_ACTIVE_MARKER ? @"ic_custom_direction_widget_one.png" : @"ic_custom_direction_widget_two.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
                         @"bg_img" : @"ic_custom_direction_device.png",
                         @"bg_color" : UIColorFromRGB(color_tint_gray)

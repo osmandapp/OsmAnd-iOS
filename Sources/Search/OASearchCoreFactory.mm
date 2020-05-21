@@ -1048,7 +1048,13 @@
                 res.localeName = _currentAmenity->subType.toNSString();
         }
         if ([phrase isUnknownSearchWordPresent] && !([ns matches:res.localeName] || [ns matchesMap:res.otherNames]))
-            return false;
+        {
+            NSString *ref = [*poi getTagContent:OSM_REF_TAG lang:nil];
+            if (!ref || ![ns matches:ref])
+                return NO;
+            else
+                res.localeName = [res.localeName stringByAppendingFormat:@" %@", ref];
+        }
         
         res.preferredZoom = 17;
         res.resourceId = selected;

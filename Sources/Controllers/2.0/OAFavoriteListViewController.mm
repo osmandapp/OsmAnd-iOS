@@ -442,13 +442,13 @@ static UIViewController *parentController;
 
 }
 
--(void)setupView {
-    
+-(void)setupView
+{
+    self.favoriteTableView.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
     [self.favoriteTableView setDataSource:self];
     [self.favoriteTableView setDelegate:self];
     self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.favoriteTableView reloadData];
-    
 }
 
 - (void)didReceiveMemoryWarning {

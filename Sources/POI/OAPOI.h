@@ -10,6 +10,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAPOIType.h"
 
+#define OSM_REF_TAG @"ref"
+
 @interface OAPOIRoutePoint : NSObject
 
 @property (nonatomic) double deviateDistance;
@@ -47,5 +49,6 @@
 - (NSString *)iconName;
 
 - (BOOL) isClosed;
+- (NSString *) getTagContent:(NSString *)tag lang:(NSString *)lang;
 
 @end

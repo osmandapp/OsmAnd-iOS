@@ -17,8 +17,6 @@
 @property (nonatomic, readonly) OAApplicationMode *parent;
 
 @property (nonatomic, readonly) float defaultSpeed;
-@property (nonatomic, readonly) int minDistanceForTurn;
-@property (nonatomic, readonly) int arrivalDistance;
 
 @property (nonatomic, readonly) NSString *mapIcon;
 @property (nonatomic, readonly) NSString *smallIconDark;
@@ -56,6 +54,10 @@
 + (NSSet<OAApplicationMode *> *) regWidgetVisibility:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am;
 - (BOOL) isWidgetCollapsible:(NSString *)key;
 - (BOOL) isWidgetVisible:(NSString *)key;
+
+- (NSInteger) getOffRouteDistance;
+- (NSInteger) getMinDistanceForTurn;
+- (NSInteger) getDefaultSpeed;
 
 - (NSString *) getRoutingProfile;
 - (void) setRoutingProfile:(NSString *) routingProfile;

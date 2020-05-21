@@ -26,18 +26,19 @@
 
 - (double) unknownPhraseMatchWeight
 {
+    return [self unknownPhraseMatchWeight:NO];
+}
+
+- (double) unknownPhraseMatchWeight:(BOOL)isHouse
+{
     double res = 0;
-    BOOL isHouse = _objectType == HOUSE;
+    isHouse = isHouse || _objectType == HOUSE;
     if (_unknownPhraseMatches)
-        res = [OAObjectType getTypeWeight:_objectType];
+        res = isHouse ? [OAObjectType getTypeWeight:HOUSE] : [OAObjectType getTypeWeight:_objectType];
     
-    if (res == 0 && _parentSearchResult && _parentSearchResult.unknownPhraseMatches)
-    {
-        if (isHouse && _parentSearchResult.objectType == STREET)
-            res = [OAObjectType getTypeWeight:HOUSE];
-        else
-            res = [OAObjectType getTypeWeight:_parentSearchResult.objectType];
-    }
+    if (res == 0 && _parentSearchResult)
+        return [_parentSearchResult unknownPhraseMatchWeight:isHouse];
+    
     return res;
 }
 

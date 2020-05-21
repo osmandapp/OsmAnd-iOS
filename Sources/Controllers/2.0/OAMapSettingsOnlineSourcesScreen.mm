@@ -24,11 +24,11 @@
 
 typedef enum
 {
-    EMapSettingOverlay = 0,
-    EMapSettingUnderlay,
-    EMapSettingsSource,
-    EMapSettingsUndefined
-} EMapSettingType;
+    EOAMapSettingsUndefined = -1,
+    EOAMapSettingOverlay = 0,
+    EOAMapSettingUnderlay,
+    EOAMapSettingsMapType
+} EOAMapSettingType;
 
 @implementation OAMapSettingsOnlineSourcesScreen
 {
@@ -36,7 +36,6 @@ typedef enum
     OAAppSettings *_settings;
     
     UIButton *_btnDone;
-    EMapSettingType _mapSettingType;
     NSString *_param;
 
     QList<std::shared_ptr<const OsmAnd::OnlineTileSources::Source>> _onlineMapSources;
@@ -54,7 +53,6 @@ typedef enum
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _param = param;
-        _mapSettingType = EMapSettingsUndefined;
         
         title = OALocalizedString(@"map_settings_install_maps");
         settingsScreen = EMapSettingsScreenOnlineSources;
@@ -73,31 +71,37 @@ typedef enum
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     [self deinit];
 }
 
-- (void)commonInit
+- (void) commonInit
 {
 }
 
-- (void)deinit
+- (void) deinit
 {
 }
 
--(void) initData
+- (void) initData
 {
 }
 
-- (void)setupView
+- (EOAMapSettingType) mapSettingType
 {
-    if ([_param isEqualToString:@"overlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenOverlay)
-        _mapSettingType = EMapSettingOverlay;
-    else if ([_param isEqualToString:@"underlay"] || self.vwController.parentVC.screenType == EMapSettingsScreenUnderlay)
-        _mapSettingType = EMapSettingUnderlay;
-    else if (vwController.screenType == EMapSettingsScreenMapType)
-        _mapSettingType = EMapSettingsSource;
+    if ([_param isEqualToString:@"overlay"] || vwController.parentVC.screenType == EMapSettingsScreenOverlay)
+        return EOAMapSettingOverlay;
+    else if ([_param isEqualToString:@"underlay"] || vwController.parentVC.screenType == EMapSettingsScreenUnderlay)
+        return EOAMapSettingUnderlay;
+    else if (vwController.parentVC.screenType == EMapSettingsScreenMapType)
+        return EOAMapSettingsMapType;
+    else
+        return EOAMapSettingsUndefined;
+}
+
+- (void) setupView
+{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         const auto& onlineSourcesCollection = _app.resourcesManager->downloadOnlineTileSources();
         if (onlineSourcesCollection != nullptr)
@@ -140,15 +144,15 @@ typedef enum
         const auto& src = _selectedSources[0];
         OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:@"online_tiles"
                                                     andVariant:src->name.toNSString() name:src->name.toNSString()];
-        switch (_mapSettingType)
+        switch ([self mapSettingType])
         {
-            case EMapSettingOverlay:
+            case EOAMapSettingOverlay:
                 _app.data.overlayMapSource = mapSource;
                 break;
-            case EMapSettingUnderlay:
+            case EOAMapSettingUnderlay:
                 _app.data.underlayMapSource = mapSource;
                 break;
-            case EMapSettingsSource:
+            case EOAMapSettingsMapType:
                 _app.data.lastMapSource = mapSource;
                 break;
             default:
@@ -158,6 +162,7 @@ typedef enum
     [self.vwController.parentVC setupView];
     [self.vwController.parentVC.tableView reloadData];
     [self.vwController hide:NO animated:YES];
+    return NO;
 }
 
 
@@ -212,7 +217,7 @@ typedef enum
     return 0.01;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     const auto& item = _onlineMapSources[(int) indexPath.row];
     return [OABottomSheetActionCell getHeight:item->name.toNSString() value:nil cellWidth:tableView.bounds.size.width];

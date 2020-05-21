@@ -58,22 +58,23 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
         {
             BOOL topVisible1 = [OAObjectType isTopVisible:o1.objectType];
             BOOL topVisible2 = [OAObjectType isTopVisible:o2.objectType];
-            if ((!topVisible1 && !topVisible2) || (topVisible1 && topVisible2))
+            if (topVisible1 != topVisible2)
             {
-                int o1WordCount = [o1 getFoundWordCount];
-                int o2WordCount = [o2 getFoundWordCount];
-                if (o1.unknownPhraseMatchWeight != o2.unknownPhraseMatchWeight)
-                    return [OAUtilities compareDouble:o2.unknownPhraseMatchWeight y:o1.unknownPhraseMatchWeight];
-                else if (o1WordCount != o2WordCount)
-                    return [OAUtilities compareInt:o2WordCount y:o1WordCount];
+                // -1 - means 1st is less than 2nd
+                return topVisible1 ? NSOrderedAscending : NSOrderedDescending;
             }
+            if (o1.unknownPhraseMatchWeight != o2.unknownPhraseMatchWeight)
+                return [OAUtilities compareDouble:o2.unknownPhraseMatchWeight y:o1.unknownPhraseMatchWeight];
+
+            if (o1.getFoundWordCount != o2.getFoundWordCount)
+                return [OAUtilities compareInt:o2.getFoundWordCount y:o1.getFoundWordCount];
+
             if (!weakSelf.sortByName)
             {
                 double s1 = [o1 getSearchDistance:weakSelf.loc];
                 double s2 = [o2 getSearchDistance:weakSelf.loc];
-                NSComparisonResult cmp = [OAUtilities compareDouble:s1 y:s2];
-                if (cmp != 0)
-                    return cmp;
+                if (s1 != s2)
+                    return [OAUtilities compareDouble:s1 y:s2];
             }
             QString o1name = QString::fromNSString(o1.localeName);
             QString o2name = QString::fromNSString(o2.localeName);
@@ -82,39 +83,38 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             if (st1 != st2)
                 return [OAUtilities compareInt:st1 y:st2];
             
-            if (o1.parentSearchResult && o2.parentSearchResult)
-            {
-                if (o1.parentSearchResult == o2.parentSearchResult)
-                {
-                    NSComparisonResult cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(o1name, o2name);
-                    if (cmp != 0)
-                        return cmp;
-                }
-                double s1 = [o1 getSearchDistance:weakSelf.loc pd:1];
-                double s2 = [o2 getSearchDistance:weakSelf.loc pd:1];
-                return [OAUtilities compareDouble:s1 y:s2];
-            }
-            NSComparisonResult cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(o1name, o2name);
-            if (cmp != 0)
-                return cmp;
+            double s1 = [o1 getSearchDistance:weakSelf.loc pd:1];
+            double s2 = [o2 getSearchDistance:weakSelf.loc pd:1];
+            double ps1 = !o1.parentSearchResult ? 0 : [o1.parentSearchResult getSearchDistance:weakSelf.loc];
+            double ps2 = !o2.parentSearchResult ? 0 : [o2.parentSearchResult getSearchDistance:weakSelf.loc];
+            if (ps1 != ps2)
+                return [OAUtilities compareDouble:ps1 y:ps2];
             
-            if (o1.objectType == POI && o2.objectType == POI)
+            NSComparisonResult cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(o1name, o2name);
+            if (cmp != NSOrderedSame)
+                return cmp;
+            if (s1 != s2)
+                return [OAUtilities compareDouble:s1 y:s2];
+            
+            BOOL am1 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o1.amenity) != nullptr;
+            BOOL am2 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o2.amenity) != nullptr;
+            if (am1 != am2)
             {
-                // here 2 points are amenity
+                return am1 ? NSOrderedDescending : NSOrderedAscending;
+            }
+            else if (am1 && am2)
+            {
                 const auto& a1 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o1.amenity);
                 const auto& a2 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o2.amenity);
                 cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->type, a2->type);
-                if(cmp != 0)
+                if (cmp != NSOrderedSame)
                     return cmp;
                 
                 cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->subType, a2->subType);
-                if (cmp != 0)
+                if (cmp != NSOrderedSame)
                     return cmp;
             }
-            
-            double s1 = [o1 getSearchDistance:weakSelf.loc pd:1];
-            double s2 = [o2 getSearchDistance:weakSelf.loc pd:1];
-            return [OAUtilities compareDouble:s1 y:s2];
+            return NSOrderedSame;
         };
     }
     return self;

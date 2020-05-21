@@ -22,4 +22,6 @@
 - (void) removeLineToDestinationPin:(OADestination *)destination;
 - (BOOL) updateLayer;
 
+- (void) moveMarker:(NSInteger)index;
+
 @end

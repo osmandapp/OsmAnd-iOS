@@ -442,7 +442,7 @@
             if (_destinationCells.count == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, top, w, h);
+            frame = CGRectMake(0.0, top, w, h);
             
             if (_multiCell && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
                 _multiCell.contentView.hidden = NO;

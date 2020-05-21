@@ -36,8 +36,6 @@
 
 @interface OADestinationCardsViewController () <MGSwipeTableCellDelegate, OADestinationCardBaseControllerDelegate, UIGestureRecognizerDelegate>
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolBarHeight;
-
 @end
 
 @implementation OADestinationCardsViewController
@@ -159,6 +157,8 @@
     [super viewDidLoad];
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 10.0)];
+    
+    [self.tableView setEditing:YES animated:YES];
     
     UITapGestureRecognizer *tapRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOutsideCells)];
     tapRec.delegate = self;
@@ -395,6 +395,40 @@
     return cell;
 }
 
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL) tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [[self getCardController:indexPath.section] isKindOfClass:OADirectionsCardController.class];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section == 0;
+}
+
+- (NSIndexPath *) tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    if (sourceIndexPath.section != proposedDestinationIndexPath.section)
+        return sourceIndexPath;
+    else
+        return proposedDestinationIndexPath;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    [[self getCardController:sourceIndexPath.section] reorderObjects:sourceIndexPath.row dest:destinationIndexPath.row];
+    [self.tableView reloadData];
+}
+
 
 #pragma mark -
 #pragma mark Deferred image loading (UIScrollViewDelegate)
@@ -471,7 +505,7 @@
 -(void) swipeTableCell:(MGSwipeTableCell*) cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    if (gestureIsActive || state != MGSwipeStateNone)
+    if ((gestureIsActive || state != MGSwipeStateNone) && state != MGSwipeStateSwippingLeftToRight)
     {
         indexPathForSwipingCell = indexPath;
         cell.showsReorderControl = NO;

@@ -9485,6 +9485,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		15553A7924769DB400E118F0 /* Panels */ = {
+			isa = PBXGroup;
+			children = (
+				152911B524542D8B008A6757 /* OADirectionAppearanceViewController.xib */,
+			);
+			name = Panels;
+			sourceTree = "<group>";
+		};
 		3A02BFB01A31F2D30019377F /* Favorite */ = {
 			isa = PBXGroup;
 			children = (
@@ -9587,6 +9595,7 @@
 				84387B191ABAFFE800504DA7 /* Search */,
 				3A02BFB11A31F2DD0019377F /* GPX */,
 				3A02BFB01A31F2D30019377F /* Favorite */,
+				15553A7924769DB400E118F0 /* Panels */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -13616,7 +13625,6 @@
 				844499451AAA14E900ACA20D /* OADestinationViewController.xib */,
 				BBACF10917C61D8500EBA761 /* OAMapHudViewController.xib */,
 				BB451F1018EB34A5005FBE09 /* Resources.storyboard */,
-				152911B524542D8B008A6757 /* OADirectionAppearanceViewController.xib */,
 				BB451EEA18E60F12005FBE09 /* DebugHUD.xib */,
 				8A7077261A84F0F9005E019B /* OptionsPanel.xib */,
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,

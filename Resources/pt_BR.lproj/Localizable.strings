@@ -1090,7 +1090,7 @@
 "key_hint_zoom_in" = "Mais zoom";
 "key_hint_select" = "Selecionar";
 "key_hint_goback" = "Voltar";
-"osm_tag_too_long_message" = "O comprimento máximo do valor para o etiqueta %@  é de 255 caracteres.\nPor favor, faça mais curto para continuar.";
+"osm_tag_too_long_message" = "O comprimento máximo do valor para o etiqueta %@ é de 255 caracteres.\nPor favor, faça mais curto para continuar.";
 "save_poi_without_poi_type_message" = "Você realmente quer salvar o POI sem especificar o tipo?";
 "save_poi_too_many_uppercase" = "O nome contém muitas letras maiúsculas. Continuar?";
 "osm_edit_uploading" = "Carregando...";
@@ -1701,3 +1701,14 @@
 "map_settings_slopes_legend" = "Você pode ler mais sobre as pistas na Wikipédia";
 "map_settings_layer_transparency" = "Transparência de camada";
 "map_settings_terrain" = "Terreno";
+"arrows_direction_to_markers" = "As setas mostram a direção do marcador ativo se ele estiver localizado fora da tela. Linhas de direção desenham uma linha para marcadores ativos.";
+"appearance_on_map" = "Aparência no mapa";
+"choose_how_display_distance" = "Escolha como exibir a distância dos marcadores ativos";
+"specify_number_of_dir_indicators" = "Especifique o número de indicadores de direção, isso afeta todas as configurações abaixo.";
+"active_markers" = "Ativar marcadores";
+"direction_lines" = "Linhas de direção";
+"arrows_on_map" = "Setas no mapa";
+"distance_indication" = "Indicação de distância";
+"two" = "Dois";
+// Dirrection appearance
+"one" = "Um";

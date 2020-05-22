@@ -389,7 +389,12 @@
             frame = CGRectMake(0.0, top, w, h);
             
             if (_multiCell)
-                _multiCell.contentView.hidden = NO;
+            {
+                if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                    _multiCell.contentView.hidden = NO;
+                else
+                    _multiCell.contentView.hidden = YES;
+            }
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = YES;
         }
@@ -427,7 +432,12 @@
             frame = CGRectMake(0.0, top, w, h);
             
             if (_multiCell)
-                _multiCell.contentView.hidden = NO;
+            {
+                if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                    _multiCell.contentView.hidden = NO;
+                else
+                    _multiCell.contentView.hidden = YES;
+            }
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = YES;
         }
@@ -441,7 +451,12 @@
             frame = CGRectMake(0.0, top, w, h);
             
             if (_multiCell)
-                _multiCell.contentView.hidden = NO;
+            {
+                if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                    _multiCell.contentView.hidden = NO;
+                else
+                    _multiCell.contentView.hidden = YES;
+            }
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = YES;
         }

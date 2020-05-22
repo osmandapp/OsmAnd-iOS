@@ -125,7 +125,7 @@
                         @"fg_img" : @"ic_custom_direction_topbar_one.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
                         @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : UIColorFromRGB(color_chart_orange)
+                        @"bg_color" : activeMarkers == ONE_ACTIVE_MARKER ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray)
                         }];
     
     [activeMarkersArr addObject:@{
@@ -137,7 +137,7 @@
                         @"fg_img" : @"ic_custom_direction_topbar_two.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
                         @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : UIColorFromRGB(color_tint_gray)
+                        @"bg_color" : activeMarkers == TWO_ACTIVE_MARKERS ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray)
                         }];
 
     [distanceIndicationArr addObject:@{
@@ -156,7 +156,8 @@
                         @"fg_img" : activeMarkers == ONE_ACTIVE_MARKER ? @"ic_custom_direction_topbar_one.png" : @"ic_custom_direction_topbar_two.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
                         @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : UIColorFromRGB(color_chart_orange)
+                        @"bg_color" : distanceIndication == TOP_BAR_DISPLAY ? UIColorFromRGB(color_chart_orange) :
+                            UIColorFromRGB(color_tint_gray)
                         }];
     
     [distanceIndicationArr addObject:@{
@@ -168,7 +169,8 @@
                         @"fg_img" : activeMarkers == ONE_ACTIVE_MARKER ? @"ic_custom_direction_widget_one.png" : @"ic_custom_direction_widget_two.png",
                         @"fg_color" : UIColorFromRGB(color_primary_purple),
                         @"bg_img" : @"ic_custom_direction_device.png",
-                        @"bg_color" : UIColorFromRGB(color_tint_gray)
+                        @"bg_color" : distanceIndication == WIDGET_DISPLAY ? UIColorFromRGB(color_chart_orange) :
+                        UIColorFromRGB(color_tint_gray)
                         }];
    
     [appearanceOnMapArr addObject:@{

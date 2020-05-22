@@ -353,13 +353,12 @@
         OADestination *dest = (OADestination *)object;
         OADestination *destCopy = [dest copy];
         OADestinationsHelper *helper = [OADestinationsHelper instance];
-        [helper removeDestination:dest];
         destCopy.latitude = position.latitude;
         destCopy.longitude = position.longitude;
         NSString *address = [[OAReverseGeocoder instance] lookupAddressAtLat:destCopy.latitude lon:destCopy.longitude];
         address = address && address.length > 0 ? address : [OAPointDescription getLocationNamePlain:destCopy.latitude lon:destCopy.longitude];
         destCopy.desc = address;
-        [helper addDestination:destCopy];
+        [helper replaceDestination:dest withDestination:destCopy];
         [_destinationLayerWidget moveMarker:-1];
     }
 }

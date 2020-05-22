@@ -294,24 +294,27 @@
     CGFloat maxY = CGRectGetMaxY(self.frame);
     CGFloat minY = CGRectGetMinY(self.frame);
     
-    NSValue *screeenIntersectionPoint = [self pointOnRect:end.x y:end.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:start];
-    if (screeenIntersectionPoint)
+    NSValue *screeenIntersectionPointEnd = [self pointOnRect:end.x y:end.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:start];
+    NSValue *screeenIntersectionPointStart = [self pointOnRect:start.x y:start.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:end];
+    if (screeenIntersectionPointEnd && !screeenIntersectionPointStart)
     {
-        CGPoint intersection = screeenIntersectionPoint.CGPointValue;
+        CGPoint intersection = screeenIntersectionPointEnd.CGPointValue;
         middle = [NSValue valueWithCGPoint:CGPointMake((start.x + intersection.x) / 2, (start.y + intersection.y) / 2)];
+    }
+    else if (screeenIntersectionPointStart && !screeenIntersectionPointEnd)
+    {
+        CGPoint intersection = screeenIntersectionPointStart.CGPointValue;
+        middle = [NSValue valueWithCGPoint:CGPointMake((end.x + intersection.x) / 2, (end.y + intersection.y) / 2)];
+    }
+    else if (screeenIntersectionPointStart && screeenIntersectionPointEnd)
+    {
+        CGPoint intersectionStart = screeenIntersectionPointStart.CGPointValue;
+        CGPoint intersectionEnd = screeenIntersectionPointEnd.CGPointValue;
+        middle = [NSValue valueWithCGPoint:CGPointMake((intersectionStart.x + intersectionEnd.x) / 2, (intersectionStart.y + intersectionEnd.y) / 2)];
     }
     else
     {
-        screeenIntersectionPoint = [self pointOnRect:start.x y:start.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:start];
-        if (screeenIntersectionPoint)
-        {
-            CGPoint intersection = screeenIntersectionPoint.CGPointValue;
-            middle = [NSValue valueWithCGPoint:CGPointMake((end.x + intersection.x) / 2, (end.y + intersection.y) / 2)];
-        }
-        else
-        {
-            middle = [NSValue valueWithCGPoint:CGPointMake((end.x + start.x) / 2, (end.y + start.y) / 2)];
-        }
+        middle = [NSValue valueWithCGPoint:CGPointMake((end.x + start.x) / 2, (end.y + start.y) / 2)];
     }
     
     if (middle)

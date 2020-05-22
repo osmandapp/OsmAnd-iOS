@@ -342,6 +342,26 @@
     [_app.data.destinationsChangeObservable notifyEvent];
 }
 
+- (void) replaceDestination:(OADestination *)destination withDestination:(OADestination *)newDestination
+{
+    @synchronized(_syncObj)
+    {
+        if (destination == _dynamic2ndRowDestination)
+            _dynamic2ndRowDestination = newDestination;
+        
+        [_app.data.destinations removeObject:destination];
+        [_app.data.destinations addObject:newDestination];
+        
+        [_sortedDestinations replaceObjectAtIndex:destination.index withObject:newDestination];
+        
+        [self refreshDestinationIndexes];
+    }
+    
+    [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
+    [_app.data.destinationAddObservable notifyEventWithKey:newDestination];
+    [_app.data.destinationsChangeObservable notifyEvent];
+}
+
 - (void) removeDestination:(OADestination *)destination
 {
     @synchronized(_syncObj)

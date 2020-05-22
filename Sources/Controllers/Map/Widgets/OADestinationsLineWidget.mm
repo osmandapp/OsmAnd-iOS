@@ -306,7 +306,7 @@
         CGPoint intersection = screeenIntersectionPointStart.CGPointValue;
         middle = [NSValue valueWithCGPoint:CGPointMake((end.x + intersection.x) / 2, (end.y + intersection.y) / 2)];
     }
-    else if (screeenIntersectionPointStart && screeenIntersectionPointEnd)
+    else if (screeenIntersectionPointStart && screeenIntersectionPointEnd && !((start.x < 0 && end.x < 0) || (start.x > 0 && end.x > 0)))
     {
         CGPoint intersectionStart = screeenIntersectionPointStart.CGPointValue;
         CGPoint intersectionEnd = screeenIntersectionPointEnd.CGPointValue;

@@ -3140,12 +3140,12 @@ typedef enum
         if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
         {
             cardsController.view.frame = CGRectMake(0.0, y, w, h);
-            cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, w, toolbarHeight);
+            cardsController.bottomView.frame = CGRectMake(0.0, -DeviceScreenHeight, w, DeviceScreenHeight);
             [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
                 cardsController.cardsView.frame = CGRectMake(0.0, 0.0, w, cardsTableHeight);
                 _shadeView.alpha = 1.0;
+                [cardsController.tableView reloadData];
             }];
-            [cardsController.tableView reloadData];
         }
     }
 }
@@ -3265,7 +3265,7 @@ typedef enum
     
         cardsController.view.frame = CGRectMake(0.0, 0.0, w, DeviceScreenHeight);
         cardsController.cardsView.frame = CGRectMake(0.0, y - h, w, h - toolbarHeight);
-        cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight + 1, w, toolbarHeight);
+        cardsController.bottomView.frame = CGRectMake(0.0, y - h, w, cardsTableHeight);
         [cardsController.cardsView setHidden:YES];
         [cardsController.bottomView setHidden:YES];
         
@@ -3284,7 +3284,7 @@ typedef enum
         
         [UIView animateWithDuration:.25 animations:^{
             cardsController.cardsView.frame = CGRectMake(0.0, 0.0, w, cardsTableHeight);
-            cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight - toolbarHeight, w, toolbarHeight);
+            cardsController.bottomView.frame = CGRectMake(0.0, -DeviceScreenHeight, w, DeviceScreenHeight);
             _shadeView.alpha = 1.0;
         }];
         [cardsController.cardsView setHidden:NO];

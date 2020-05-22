@@ -1442,7 +1442,7 @@
 "rendering_attr_horseRoutes_name" = "At yolları";
 "routing_attr_avoid_toll_description" = "Ücretli yollardan kaçınır";
 "routing_attr_piste_type_sled_description" = "Kızak kullanımı için yokuşlar.";
-"rendering_attr_hideWoodScrubs_name" = "Ahşap ve scrubs";
+"rendering_attr_hideWoodScrubs_name" = "Ağaç ve çalılıklar";
 "rendering_attr_shareTaxiRoutes_name" = "Taksi yolları paylaşmak";
 "routing_attr_avoid_ice_roads_fords_description" = "Buzlu yollardan ve nehir geçişlerinden kaçınır.";
 "rendering_attr_hidePOILabels_name" = "POI etiketleri";

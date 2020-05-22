@@ -377,7 +377,7 @@ typedef enum
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    if (_dashboard || !_mapillaryController.view.hidden)
+    if (_dashboard || !_mapillaryController.view.hidden || (_destinationViewController && _destinationViewController.view.superview))
         return UIStatusBarStyleLightContent;
     else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
                                         _targetMenuView.targetPoint.type == OATargetRouteDetails ||
@@ -3144,8 +3144,8 @@ typedef enum
             [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
                 cardsController.cardsView.frame = CGRectMake(0.0, 0.0, w, cardsTableHeight);
                 _shadeView.alpha = 1.0;
-                [cardsController.tableView reloadData];
             }];
+            [cardsController.tableView reloadData];
         }
     }
 }

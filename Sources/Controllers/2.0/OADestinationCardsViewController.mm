@@ -382,6 +382,7 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [cell layoutIfNeeded];
     if (indexPath.row == [[self getCardController:indexPath.section] rowsCount] - 1)
         [OAUtilities roundCornersOnView:cell onTopLeft:NO topRight:NO bottomLeft:YES bottomRight:YES radius:4.0];
     else

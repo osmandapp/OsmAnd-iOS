@@ -1683,3 +1683,17 @@
 "avoid_transport_type" = "Transportarten vermeiden";
 "allow_3d_descr" = "Aktivieren Sie diese Option, um die Karte in der 2.5D-Perspektive betrachten zu können";
 "allow_3d" = "2.5D-Ansicht zulassen";
+"map_settings_zoom_level_description" = "Legen Sie die minimale und maximale Zoomstufe für die Anzeige der Ebene fest";
+"map_settings_layer_transparency" = "Transparenz der Ebene";
+"map_settings_terrain" = "Gelände";
+"arrows_direction_to_markers" = "Pfeile zeigen die Richtung zur aktiven Markierung an, wenn sie sich außerhalb des Bildschirms befindet. Richtungslinien zeichnen eine Linie zu aktiven Markierungen.";
+"appearance_on_map" = "Darstellung auf der Karte";
+"choose_how_display_distance" = "Wählen Sie, wie die Entfernung zu aktiven Markierungen angezeigt werden soll";
+"specify_number_of_dir_indicators" = "Geben Sie die Anzahl der Fahrtrichtungsanzeiger an, sie wirkt sich auf alle Einstellungen unten aus.";
+"active_markers" = "Aktive Kartenmarkierungen";
+"direction_lines" = "Richtungslinien";
+"arrows_on_map" = "Pfeile auf der Karte";
+"distance_indication" = "Entfernungsangabe";
+"two" = "Zwei";
+// Dirrection appearance
+"one" = "Eins";

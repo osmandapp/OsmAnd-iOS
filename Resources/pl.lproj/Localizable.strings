@@ -614,7 +614,7 @@
 "voice_provider_descr" = "Wybierz wskazówki głosowe do nawigacji";
 "choose_audio_stream" = "Wyjście dźwięku nawigacji głosowej";
 "choose_audio_stream_descr" = "Wybierz głośnik, aby odtwarzać wskazówki głosowe";
-"interrupt_music_descr" = "W pełni wstrzymaj muzykę podczas podpowiedzi głosowych (nie tylko zmniejsz jej głośność)";
+"interrupt_music_descr" = "W pełni zatrzymaj muzykę podczas podpowiedzi głosowych (nie tylko zmniejsz jej głośność)";
 "select_route_start_on_map" = "Wybierz początkowy punkt trasy";
 "select_route_finish_on_map" = "Wybierz końcowy punkt trasy";
 "directions_other" = "Inne kierunki";
@@ -1159,7 +1159,7 @@
 "add_destination" = "Dodaj cel trasy";
 "add_first_inermediate" = "Dodaj pierwszy pośredni cel trasy";
 "toggle_auto_zoom" = "Włącz/Wyłącz auto-przybliżenie";
-"pause_resume_nav" = "Wstrzymaj/wznów nawigację";
+"pause_resume_nav" = "Zatrzymaj/wznów nawigację";
 "toggle_nav" = "Rozpocznij/zakończ nawigację";
 "toggle_day_night" = "Zmień tryb dzienny/nocny";
 "show_hide_gpx" = "Wyświetl/Ukryj ślady";
@@ -1203,7 +1203,7 @@
 "quick_action_first_intermediate_descr" = "Naciśnięcie tego przycisku czynności powoduje dodanie pierwszego pośredniego celu podróży na środku mapy.";
 "quick_action_replace_dest_descr" = "Naciśnięcie tego przycisku czynności powoduje ustawienie celu podróży na środku mapy, odrzucając poprzednio ustawiony cel (jeśli istnieje).";
 "quick_action_autozoom_descr" = "Naciśnięcie tego przyciskuczynności włącza/wyłącza tryb auto-przybliżania mapy zgodnie z aktualną prędkością.";
-"quick_action_start_stop_nav_descr" = "Naciśnij ten przycisk, aby rozpocząć lub zakończyć nawigowanie.";
+"quick_action_start_stop_nav_descr" = "Naciśnij ten przycisk, aby rozpocząć lub zakończyć nawigację.";
 "quick_action_pause_nav_descr" = "Naciśnij ten przycisk, aby wstrzymać lub wznowić nawigowanie.";
 "quick_action_toggle_notes_descr" = "Naciśnij ten przycisk, aby wyświetlić lub ukryć notatki OSM online.";
 "quick_action_toggle_edits_descr" = "Naciśnij ten przycisku, aby wyświetlić lub ukryć edycje OSM offline.";
@@ -1211,7 +1211,7 @@
 "get_discount_first_few_parts" = "%@ przez pierwsze %@";
 "osmand_live_deleted_object" = "Usunięty obiekt";
 "osm_editing_loading_poi" = "Ładowanie informacji o UM";
-"start_navigation" = "Rozpocznij nawigowanie";
+"start_navigation" = "Rozpocznij nawigację";
 "fav_show" = "Wyświetl ulubione";
 "fav_hide" = "Ukryj ulubione";
 "hide_poi_action" = "Ukryj UM";

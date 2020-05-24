@@ -377,7 +377,7 @@ typedef enum
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    if (_dashboard || !_mapillaryController.view.hidden)
+    if (_dashboard || !_mapillaryController.view.hidden || (_destinationViewController && _destinationViewController.view.superview))
         return UIStatusBarStyleLightContent;
     else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
                                         _targetMenuView.targetPoint.type == OATargetRouteDetails ||
@@ -3274,7 +3274,6 @@ typedef enum
         cardsController.view.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, 0.0, w, DeviceScreenHeight);
         cardsController.cardsView.frame = CGRectMake(0.0, y - h, w, h - toolbarHeight);
         cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, toolbarHeight);
-        
         [cardsController.cardsView setHidden:YES];
         [cardsController.bottomView setHidden:YES];
         

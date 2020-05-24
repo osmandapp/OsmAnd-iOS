@@ -15,9 +15,9 @@
                 <outlet property="bottomView" destination="8Ui-Gh-Jia" id="uK1-gr-ehw"/>
                 <outlet property="cardsView" destination="uw9-vf-xUp" id="qcI-XH-cof"/>
                 <outlet property="historyViewButton" destination="xSb-5h-AqO" id="yQU-W2-7Po"/>
-                <outlet property="leftTableViewPadding" destination="Sik-0a-fdf" id="C6P-tg-OSP"/>
+                <outlet property="leftTableViewPadding" destination="94e-id-szz" id="dya-ar-P2g"/>
                 <outlet property="leftToolbarPadding" destination="8l3-pJ-etf" id="xGr-8w-NBa"/>
-                <outlet property="rightTableViewPadding" destination="cGj-2O-o0l" id="YSM-86-DPX"/>
+                <outlet property="rightTableViewPadding" destination="cy8-dq-kNk" id="0cy-KX-grf"/>
                 <outlet property="rightToolbarPadding" destination="B8J-xM-BMw" id="3Tg-gh-HuC"/>
                 <outlet property="tableView" destination="AG5-Pz-Cqb" id="L3k-hr-JyU"/>
                 <outlet property="toolBarHeight" destination="qZw-g1-Jgm" id="Dh6-Co-iHL"/>
@@ -43,10 +43,10 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="AG5-Pz-Cqb" secondAttribute="bottom" constant="8" id="4TZ-Nn-Kbg"/>
-                        <constraint firstItem="AG5-Pz-Cqb" firstAttribute="top" secondItem="uw9-vf-xUp" secondAttribute="top" id="Jyu-mg-7ds"/>
-                        <constraint firstItem="AG5-Pz-Cqb" firstAttribute="leading" secondItem="uw9-vf-xUp" secondAttribute="leading" constant="8" id="Sik-0a-fdf"/>
-                        <constraint firstAttribute="trailing" secondItem="AG5-Pz-Cqb" secondAttribute="trailing" constant="8" id="cGj-2O-o0l"/>
+                        <constraint firstAttribute="bottom" secondItem="AG5-Pz-Cqb" secondAttribute="bottom" constant="8" id="8qy-YZ-UQ1"/>
+                        <constraint firstItem="AG5-Pz-Cqb" firstAttribute="leading" secondItem="uw9-vf-xUp" secondAttribute="leading" constant="8" id="94e-id-szz"/>
+                        <constraint firstItem="AG5-Pz-Cqb" firstAttribute="top" secondItem="uw9-vf-xUp" secondAttribute="top" id="ZsZ-I2-rmw"/>
+                        <constraint firstAttribute="trailing" secondItem="AG5-Pz-Cqb" secondAttribute="trailing" constant="8" id="cy8-dq-kNk"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ui-Gh-Jia" userLabel="bottomView">
@@ -97,11 +97,5 @@
             <viewLayoutGuide key="safeArea" id="fmX-7r-Czv"/>
             <point key="canvasLocation" x="527.536231884058" y="194.19642857142856"/>
         </view>
-        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="J1j-vH-Eq3">
-            <rect key="frame" x="0.0" y="0.0" width="46" height="30"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <state key="normal" title="Button"/>
-            <point key="canvasLocation" x="296" y="454"/>
-        </button>
     </objects>
 </document>

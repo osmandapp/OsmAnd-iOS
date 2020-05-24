@@ -21,4 +21,9 @@
 + (CLLocationDirection) adjustBearing:(CLLocationDirection)bearing;
 + (BOOL) rightSide:(double)lat lon:(double)lon aLat:(double)aLat aLon:(double)aLon bLat:(double)bLat bLon:(double)bLon;
 
++ (NSValue *) calculateIntersection:(CGFloat)inx iny:(CGFloat)iny outx:(CGFloat)outx outy:(CGFloat)outy leftX:(CGFloat)leftX rightX:(CGFloat)rightX bottomY:(CGFloat)bottomY topY:(CGFloat)topY;
++ (NSArray<NSValue *> *) calculateLineInRect:(CGRect)rect start:(CGPoint)start end:(CGPoint)end;
+
++ (double) getAngleBetween:(CGPoint)start end:(CGPoint)end;
+
 @end

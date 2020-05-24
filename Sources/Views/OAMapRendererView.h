@@ -110,6 +110,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point;
 
 - (OsmAnd::AreaI)getVisibleBBox31;
+- (BOOL)isPositionVisible:(OsmAnd::PointI)pos;
 
 - (void)dumpResourcesInfo;
 

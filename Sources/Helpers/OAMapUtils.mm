@@ -88,4 +88,219 @@
     return b;
 }
 
++ (NSValue *) pointOnRect:(CGFloat)x y:(CGFloat)y minX:(CGFloat)minX minY:(CGFloat)minY maxX:(CGFloat)maxX maxY:(CGFloat)maxY startPoint:(CGPoint)start
+{
+    //assert minX <= maxX;
+    //assert minY <= maxY;
+    if ((minX < x && x < maxX) && (minY < y && y < maxY))
+        return nil;
+    
+    CGFloat startX = start.x;
+    CGFloat startY = start.y;
+    CGFloat m = (startY - y) / (startX - x);
+    
+    if (x <= startX) { // check left side
+        CGFloat minXy = m * (minX - x) + y;
+        if (minY <= minXy && minXy <= maxY)
+            return [NSValue valueWithCGPoint:CGPointMake(minX, minXy)];
+    }
+    
+    if (x >= startX) { // check right side
+        CGFloat maxXy = m * (maxX - x) + y;
+        if (minY <= maxXy && maxXy <= maxY)
+            return [NSValue valueWithCGPoint:CGPointMake(maxX, maxXy)];
+    }
+    
+    if (y <= startY) { // check top side
+        CGFloat minYx = (minY - y) / m + x;
+        if (minX <= minYx && minYx <= maxX)
+            return [NSValue valueWithCGPoint:CGPointMake(minYx, minY)];
+    }
+    
+    if (y >= startY) { // check bottom side
+        CGFloat maxYx = (maxY - y) / m + x;
+        if (minX <= maxYx && maxYx <= maxX)
+            return [NSValue valueWithCGPoint:CGPointMake(maxYx, maxY)];
+    }
+    
+    // edge case when finding midpoint intersection: m = 0/0 = NaN
+    if (x == startX && y == startY)
+        return [NSValue valueWithCGPoint:CGPointMake(x, y)];
+    
+    return nil;
+}
+
+/**
+ * outx, outy are the coordinates out of the box
+ * inx, iny are the coordinates from the box (NOT IMPORTANT in/out, just one should be in second out)
+ * @return nil if there is no instersection or CGPoint
+ */
++ (NSValue *) calculateIntersection:(CGFloat)inx iny:(CGFloat)iny outx:(CGFloat)outx outy:(CGFloat)outy leftX:(CGFloat)leftX rightX:(CGFloat)rightX bottomY:(CGFloat)bottomY topY:(CGFloat)topY
+{
+    CGFloat by = -1;
+    CGFloat bx = -1;
+    // firstly try to search if the line goes in
+    if (outy < topY && iny >= topY)
+    {
+        CGFloat tx = outx + ((inx - outx) * (topY - outy)) / (iny - outy);
+        if (leftX <= tx && tx <= rightX)
+        {
+            bx = tx;
+            by = topY;
+            return [NSValue valueWithCGPoint:CGPointMake(bx, by)];
+        }
+    }
+    if (outy > bottomY && iny <= bottomY)
+    {
+        CGFloat tx = outx + ((inx - outx) * (outy - bottomY)) / (outy - iny);
+        if (leftX <= tx && tx <= rightX)
+        {
+            bx = tx;
+            by = bottomY;
+            return [NSValue valueWithCGPoint:CGPointMake(bx, by)];
+        }
+    }
+    if (outx < leftX && inx >= leftX)
+    {
+        CGFloat ty = outy + ((iny - outy) * (leftX - outx)) / (inx - outx);
+        if (ty >= topY && ty <= bottomY)
+        {
+            by = ty;
+            bx = leftX;
+            return [NSValue valueWithCGPoint:CGPointMake(bx, by)];
+        }
+    }
+    if (outx > rightX && inx <= rightX)
+    {
+        CGFloat ty = outy + ((iny - outy) * (outx - rightX)) / (outx - inx);
+        if (ty >= topY && ty <= bottomY)
+        {
+            by = ty;
+            bx = rightX;
+            return [NSValue valueWithCGPoint:CGPointMake(bx, by)];
+        }
+    }
+
+    // try to search if point goes out
+    if (outy > topY && iny <= topY)
+    {
+        CGFloat tx = outx + ((inx - outx) * (topY - outy)) / (iny - outy);
+        if (leftX <= tx && tx <= rightX)
+        {
+            bx = tx;
+            by = topY;
+            return [NSValue valueWithCGPoint:CGPointMake(bx, by)];
+        }
+    }
+    if (outy < bottomY && iny >= bottomY)
+    {
+        CGFloat tx = outx + ((inx - outx) * (outy - bottomY)) / (outy - iny);
+        if (leftX <= tx && tx <= rightX)
+        {
+            bx = tx;
+            by = bottomY;
+            return [NSValue valueWithCGPoint:CGPointMake(bx, by)];
+        }
+    }
+    if (outx > leftX && inx <= leftX)
+    {
+        CGFloat ty = outy + ((iny - outy) * (leftX - outx)) / (inx - outx);
+        if (ty >= topY && ty <= bottomY)
+        {
+            by = ty;
+            bx = leftX;
+            return [NSValue valueWithCGPoint:CGPointMake(bx, by)];
+        }
+    }
+    if (outx < rightX && inx >= rightX)
+    {
+        CGFloat ty = outy + ((iny - outy) * (outx - rightX)) / (outx - inx);
+        if (ty >= topY && ty <= bottomY)
+        {
+            by = ty;
+            bx = rightX;
+            return [NSValue valueWithCGPoint:CGPointMake(bx, by)];
+        }
+    }
+    if (outx == rightX || outx == leftX)
+    {
+        if (outy >= topY && outy <= bottomY)
+        {
+            bx = outx;
+            by = outy;
+            return [NSValue valueWithCGPoint:CGPointMake(bx, by)];
+        }
+    }
+    if (outy == topY || outy == bottomY)
+    {
+        if (leftX <= outx && outx <= rightX)
+        {
+            bx = outx;
+            by = outy;
+            return [NSValue valueWithCGPoint:CGPointMake(bx, by)];
+        }
+    }
+    return nil;
+}
+
++ (NSArray<NSValue *> *) calculateLineInRect:(CGRect)rect start:(CGPoint)start end:(CGPoint)end
+{
+    NSMutableArray<NSValue *> *coordinates = [NSMutableArray array];
+    CGFloat x = end.x;
+    CGFloat y = end.y;
+    CGFloat px = start.x;
+    CGFloat py = start.y;
+    BOOL startInside = CGRectContainsPoint(rect, start);
+    BOOL endInside = CGRectContainsPoint(rect, end);
+    CGFloat leftX = CGRectGetMinX(rect);
+    CGFloat rightX = CGRectGetMaxX(rect);
+    CGFloat bottomY = CGRectGetMaxY(rect);
+    CGFloat topY = CGRectGetMinY(rect);
+    if (startInside)
+    {
+        if (!endInside)
+        {
+            NSValue *is = [self.class calculateIntersection:x iny:y outx:px outy:py leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
+            if (!is)
+            {
+                // it is an error (!)
+                is = [NSValue valueWithCGPoint:CGPointMake(px, py)];
+            }
+            [coordinates addObject:[NSValue valueWithCGPoint:CGPointMake(px, py)]];
+            [coordinates addObject:is];
+        }
+        else
+        {
+            [coordinates addObject:[NSValue valueWithCGPoint:CGPointMake(px, py)]];
+            [coordinates addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
+        }
+    }
+    else
+    {
+        NSValue *is = [self.class calculateIntersection:x iny:y outx:px outy:py leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
+        if (endInside)
+        {
+            // assert is != -1;
+            [coordinates addObject:is];
+            [coordinates addObject:[NSValue valueWithCGPoint:CGPointMake(x, y)]];
+        }
+        else if (is)
+        {
+            int bx = is.CGPointValue.x;
+            int by = is.CGPointValue.y;
+            [coordinates addObject:is];
+            is = [self.class calculateIntersection:x iny:y outx:bx outy:by leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
+            [coordinates addObject:is];
+        }
+    }
+    return coordinates;
+}
+
++ (double) getAngleBetween:(CGPoint)start end:(CGPoint)end
+{
+    double dx = start.x - end.x;
+    double dy = start.y - end.y;
+    return dx ? atan(dy/dx) : (dy < 0 ? M_PI_2 : -M_PI_2);
+}
+
 @end

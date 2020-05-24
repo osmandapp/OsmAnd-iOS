@@ -401,6 +401,11 @@
     return _renderer->getVisibleBBox31();
 }
 
+- (BOOL)isPositionVisible:(OsmAnd::PointI)pos
+{
+    return _renderer->isPositionVisible(pos);
+}
+
 - (void)dumpResourcesInfo
 {
     _renderer->dumpResourcesInfo();

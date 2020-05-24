@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OALocationServices.h"
 #import "OAUtilities.h"
+#import "OAMapUtils.h"
 #import "OATextInfoWidget.h"
 #import "OARootViewController.h"
 #import "OAMapRendererView.h"
@@ -77,7 +78,6 @@
 - (instancetype) init
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:@"OARulerWidget" owner:nil options:nil];
-    
     for (UIView *v in bundle)
     {
         if ([v isKindOfClass:[OARulerWidget class]])
@@ -86,19 +86,17 @@
             break;
         }
     }
-    
     if (self)
-        self.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
-    
-    [self commonInit];
-    
+    {
+        self.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
+        [self commonInit];
+    }
     return self;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    
     for (UIView *v in bundle)
     {
         if ([v isKindOfClass:[OARulerWidget class]])
@@ -107,12 +105,11 @@
             break;
         }
     }
-    
     if (self)
+    {
         self.frame = frame;
-    
-    [self commonInit];
-    
+        [self commonInit];
+    }
     return self;
 }
 
@@ -454,13 +451,12 @@
                     CGFloat minX = CGRectGetMinX(self.frame);
                     CGFloat maxY = CGRectGetMaxY(self.frame);
                     CGFloat minY = CGRectGetMinY(self.frame);
-                    
-                    pointOfCurrentLocation = [self pointOnRect:endX y:endY minX:minX minY:minY maxX:maxX maxY:maxY startPoint:touch];
+                    pointOfCurrentLocation = [OAMapUtils pointOnRect:endX y:endY minX:minX minY:minY maxX:maxX maxY:maxY startPoint:touch];
                 }
                 if (pointOfCurrentLocation && touchPoint)
                 {
                     CGPoint touchCGPoint = touchPoint.CGPointValue;
-                    double angle = [self getLineAngle:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
+                    double angle = [OAMapUtils getAngleBetween:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
                     NSString *distance = [_app getFormattedDistance:dist];
                     _rulerDistance = distance;
                     [self drawLineBetweenPoints:touchCGPoint end:pointOfCurrentLocation.CGPointValue context:ctx distance:distance];
@@ -476,7 +472,7 @@
             NSValue *first = [self getTouchPointFromLat:_tapPointOne.latitude lon:_tapPointOne.longitude];
             NSValue *second = [self getTouchPointFromLat:_tapPointTwo.latitude lon:_tapPointTwo.longitude];
             if (first && second) {
-                double angle = [self getLineAngle:first.CGPointValue end:second.CGPointValue];
+                double angle = [OAMapUtils getAngleBetween:first.CGPointValue end:second.CGPointValue];
                 const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude,
                                                               _tapPointTwo.longitude, _tapPointTwo.latitude);
                 NSString *distance = [_app getFormattedDistance:dist];
@@ -512,11 +508,10 @@
         CGFloat minX = CGRectGetMinX(self.frame);
         CGFloat maxY = CGRectGetMaxY(self.frame);
         CGFloat minY = CGRectGetMinY(self.frame);
-        
-        NSValue *screeenIntersectionPoint = [self pointOnRect:end.x y:end.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:start];
-        if (screeenIntersectionPoint)
+        NSValue *screenIntersectionPoint = [OAMapUtils pointOnRect:end.x y:end.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:start];
+        if (screenIntersectionPoint)
         {
-            CGPoint intersection = screeenIntersectionPoint.CGPointValue;
+            CGPoint intersection = screenIntersectionPoint.CGPointValue;
             middle = [NSValue valueWithCGPoint:CGPointMake((start.x + intersection.x) / 2, (start.y + intersection.y) / 2)];
         }
     }
@@ -576,14 +571,6 @@
     CGContextRestoreGState(ctx);
 }
 
-- (double) getLineAngle:(CGPoint)start end:(CGPoint)end
-{
-    double dx = start.x - end.x;
-    double dy = start.y - end.y;
-    
-    return dx ? atan(dy/dx) : (180 * M_PI) / 180;
-}
-
 - (NSValue *) getTouchPointFromLat:(CGFloat) lat lon:(CGFloat) lon
 {
     const OsmAnd::LatLon latLon(lat, lon);
@@ -594,46 +581,6 @@
     {
         return [NSValue valueWithCGPoint:point];
     }
-    return nil;
-}
-
-- (NSValue *) pointOnRect:(CGFloat)x y:(CGFloat)y minX:(CGFloat)minX minY:(CGFloat)minY maxX:(CGFloat)maxX maxY:(CGFloat)maxY startPoint:(CGPoint)start
-{
-    //assert minX <= maxX;
-    //assert minY <= maxY;
-    if ((minX < x && x < maxX) && (minY < y && y < maxY))
-        return nil;
-    CGFloat startX = start.x;
-    CGFloat startY = start.y;
-    CGFloat m = (startY - y) / (startX - x);
-    
-    if (x <= startX) { // check left side
-        CGFloat minXy = m * (minX - x) + y;
-        if (minY <= minXy && minXy <= maxY)
-            return [NSValue valueWithCGPoint:CGPointMake(minX, minXy)];
-    }
-    
-    if (x >= startX) { // check right side
-        CGFloat maxXy = m * (maxX - x) + y;
-        if (minY <= maxXy && maxXy <= maxY)
-            return [NSValue valueWithCGPoint:CGPointMake(maxX, maxXy)];
-    }
-    
-    if (y <= startY) { // check top side
-        CGFloat minYx = (minY - y) / m + x;
-        if (minX <= minYx && minYx <= maxX)
-            return [NSValue valueWithCGPoint:CGPointMake(minYx, minY)];
-    }
-    
-    if (y >= startY) { // check bottom side
-        CGFloat maxYx = (maxY - y) / m + x;
-        if (minX <= maxYx && maxYx <= maxX)
-            return [NSValue valueWithCGPoint:CGPointMake(maxYx, maxY)];
-    }
-    
-    // edge case when finding midpoint intersection: m = 0/0 = NaN
-    if (x == startX && y == startY) return [NSValue valueWithCGPoint:CGPointMake(x, y)];
-    
     return nil;
 }
 

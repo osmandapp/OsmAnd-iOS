@@ -279,16 +279,11 @@
             strokeWidth = scaleFactor < 1.0 ? 1.0 : strokeWidth / [[UIScreen mainScreen] scale] / scaleFactor;
             float shadowRadius = hasAttributes && [_rulerCircleAttrs valueForKey:@"shadowRadius"] ? [_rulerCircleAttrs valueForKey:@"shadowRadius"].floatValue / scaleFactor : 3.0;
             
-            float strokeWidthText = (hasAttributes && [_rulerCircleAttrs valueForKey:@"strokeWidth_3"]) ?
-            -[_rulerCircleAttrs valueForKey:@"strokeWidth_3"].floatValue / scaleFactor : -6.0;
+            float strokeWidthText = ((hasAttributes && [_rulerCircleAttrs valueForKey:@"strokeWidth_3"]) ? [_rulerCircleAttrs valueForKey:@"strokeWidth_3"].floatValue / scaleFactor : 6.0) * 3.0;
             NSNumber *textColorAttr = hasAttributes ? (_cachedRulerMode == RULER_MODE_DARK ? [_rulerCircleAttrs valueForKey:@"color_2"] : [_rulerCircleAltAttrs valueForKey:@"color_2"]) :
             nil;
             UIColor *textColor =  textColorAttr ? UIColorFromARGB(textColorAttr.intValue) : [UIColor blackColor];
-            
-            UIFont *font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold];
-            NSDictionary<NSAttributedStringKey, id> *attrs = @{NSFontAttributeName: font, NSStrokeColorAttributeName : textShadowColor,
-                                                               NSForegroundColorAttributeName : textColor,
-                                                               NSStrokeWidthAttributeName : @(strokeWidthText)};
+            UIFont *font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightRegular];
 
             CGContextSaveGState(ctx);
 
@@ -399,13 +394,17 @@
                 }
                 
                 NSString *dist = [_app getFormattedDistance:_mapScale * i];
-                CGSize titleSize = [dist sizeWithAttributes:attrs];
+                NSAttributedString *distString = [OAUtilities createAttributedString:dist font:font color:textColor strokeColor:nil strokeWidth:0];
+                NSAttributedString *distShadowString = [OAUtilities createAttributedString:dist font:font color:textColor strokeColor:textShadowColor strokeWidth:strokeWidthText];
+
+                CGSize titleSize = [distString size];
                 if (!CGPointEqualToPoint(textAnchor1, CGPointZero))
                 {
                     CGRect titleRect1 = CGRectMake(textAnchor1.x - titlePadding, textAnchor1.y - titlePadding, titleSize.width + titlePadding * 2.0, titleSize.height + titlePadding * 2.0);
                     if (CGRectIsNull(prevTitleRect1) || !CGRectIntersectsRect(prevTitleRect1, titleRect1))
                     {
-                        [dist drawAtPoint:CGPointMake(textAnchor1.x - titleSize.width / 2, textAnchor1.y - titleSize.height / 2) withAttributes:attrs];
+                        [distShadowString drawAtPoint:CGPointMake(textAnchor1.x - titleSize.width / 2, textAnchor1.y - titleSize.height / 2)];
+                        [distString drawAtPoint:CGPointMake(textAnchor1.x - titleSize.width / 2, textAnchor1.y - titleSize.height / 2)];
                         prevTitleRect1 = titleRect1;
                     }
                 }
@@ -415,7 +414,8 @@
                     BOOL intersectsWithFirstTitle = !CGRectIsNull(prevTitleRect1) && CGRectIntersectsRect(prevTitleRect1, titleRect2);
                     if ((CGRectIsNull(prevTitleRect2) || !CGRectIntersectsRect(prevTitleRect2, titleRect2)) && !intersectsWithFirstTitle)
                     {
-                        [dist drawAtPoint:CGPointMake(textAnchor2.x - titleSize.width / 2, textAnchor2.y - titleSize.height / 2) withAttributes:attrs];
+                        [distShadowString drawAtPoint:CGPointMake(textAnchor2.x - titleSize.width / 2, textAnchor2.y - titleSize.height / 2)];
+                        [distString drawAtPoint:CGPointMake(textAnchor2.x - titleSize.width / 2, textAnchor2.y - titleSize.height / 2)];
                         prevTitleRect2 = titleRect2;
                     }
                 }
@@ -434,58 +434,52 @@
         if (_oneFingerDist && !_twoFingersDist)
         {
             CLLocation *currLoc = [_app.locationServices lastKnownLocation];
-            if (currLoc) {
-                NSValue *pointOfCurrentLocation = [self getTouchPointFromLat:currLoc.coordinate.latitude lon:currLoc.coordinate.longitude];
-                NSValue *touchPoint = [self getTouchPointFromLat:_tapPointOne.latitude lon:_tapPointOne.longitude];
-                const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude,
-                                                              currLoc.coordinate.longitude, currLoc.coordinate.latitude);
-                if (!pointOfCurrentLocation)
+            if (currLoc)
+            {
+                const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude, currLoc.coordinate.longitude, currLoc.coordinate.latitude);
+                NSArray<NSValue *> *linePoints = [_mapViewController.mapView getVisibleLineFromLat:currLoc.coordinate.latitude fromLon:currLoc.coordinate.longitude toLat:_tapPointOne.latitude toLon:_tapPointOne.longitude];
+                if (linePoints.count == 2)
                 {
-                    CGPoint touch = touchPoint.CGPointValue;
-                    CGFloat angle = 360 - [[OsmAndApp instance].locationServices radiusFromBearingToLocation:
-                                           [[CLLocation alloc] initWithLatitude:_tapPointOne.latitude longitude:_tapPointOne.longitude]];
-                    CGFloat angleToLocation = qDegreesToRadians(angle);
-                    double endX = (sinf(angleToLocation) * dist) + touch.x;
-                    double endY = (cosf(angleToLocation) * dist) + touch.y;
-                    CGFloat maxX = CGRectGetMaxX(self.frame);
-                    CGFloat minX = CGRectGetMinX(self.frame);
-                    CGFloat maxY = CGRectGetMaxY(self.frame);
-                    CGFloat minY = CGRectGetMinY(self.frame);
-                    pointOfCurrentLocation = [OAMapUtils pointOnRect:endX y:endY minX:minX minY:minY maxX:maxX maxY:maxY startPoint:touch];
-                }
-                if (pointOfCurrentLocation && touchPoint)
-                {
-                    CGPoint touchCGPoint = touchPoint.CGPointValue;
-                    double angle = [OAMapUtils getAngleBetween:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
+                    CGPoint a = linePoints[0].CGPointValue;
+                    CGPoint b = linePoints[1].CGPointValue;
+                    double angle = [OAMapUtils getAngleBetween:a end:b];
                     NSString *distance = [_app getFormattedDistance:dist];
                     _rulerDistance = distance;
-                    [self drawLineBetweenPoints:touchCGPoint end:pointOfCurrentLocation.CGPointValue context:ctx distance:distance];
-                    [self drawDistance:ctx distance:distance angle:angle start:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
-                    UIImage *iconToUse = _settings.nightMode ? _centerIconNight : _centerIconDay;
-                    CGRect pointRect = CGRectMake(touchCGPoint.x - iconToUse.size.width / 2, touchCGPoint.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
-                    [iconToUse drawInRect:pointRect];
+                    [self drawLineBetweenPoints:a end:b context:ctx distance:distance];
+                    [self drawDistance:ctx distance:distance angle:angle start:a end:b];
+                    if ([_mapViewController isLocationVisible:_tapPointOne.latitude longitude:_tapPointOne.longitude])
+                    {
+                        UIImage *iconToUse = _settings.nightMode ? _centerIconNight : _centerIconDay;
+                        CGRect pointRect = CGRectMake(b.x - iconToUse.size.width / 2, b.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
+                        [iconToUse drawInRect:pointRect];
+                    }
                 }
             }
         }
         if (_twoFingersDist && !_oneFingerDist)
         {
-            NSValue *first = [self getTouchPointFromLat:_tapPointOne.latitude lon:_tapPointOne.longitude];
-            NSValue *second = [self getTouchPointFromLat:_tapPointTwo.latitude lon:_tapPointTwo.longitude];
-            if (first && second) {
-                double angle = [OAMapUtils getAngleBetween:first.CGPointValue end:second.CGPointValue];
-                const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude,
-                                                              _tapPointTwo.longitude, _tapPointTwo.latitude);
+            NSArray<NSValue *> *linePoints = [_mapViewController.mapView getVisibleLineFromLat:_tapPointOne.latitude fromLon:_tapPointOne.longitude toLat:_tapPointTwo.latitude toLon:_tapPointTwo.longitude];
+            if (linePoints.count == 2)
+            {
+                CGPoint a = linePoints[0].CGPointValue;
+                CGPoint b = linePoints[1].CGPointValue;
+                double angle = [OAMapUtils getAngleBetween:a end:b];
+                const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude, _tapPointTwo.longitude, _tapPointTwo.latitude);
                 NSString *distance = [_app getFormattedDistance:dist];
                 _rulerDistance = distance;
-                [self drawLineBetweenPoints:first.CGPointValue end:second.CGPointValue context:ctx distance:distance];
-                [self drawDistance:ctx distance:distance angle:angle start:first.CGPointValue end:second.CGPointValue];
+                [self drawLineBetweenPoints:a end:b context:ctx distance:distance];
+                [self drawDistance:ctx distance:distance angle:angle start:a end:b];
                 UIImage *iconToUse = _settings.nightMode ? _centerIconNight : _centerIconDay;
-                CGRect pointOneRect = CGRectMake(first.CGPointValue.x - iconToUse.size.width / 2,
-                                                 first.CGPointValue.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
-                CGRect pointTwoRect = CGRectMake(second.CGPointValue.x - iconToUse.size.width / 2,
-                                                 second.CGPointValue.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
-                [iconToUse drawInRect:pointOneRect];
-                [iconToUse drawInRect:pointTwoRect];
+                if ([_mapViewController isLocationVisible:_tapPointOne.latitude longitude:_tapPointOne.longitude])
+                {
+                    CGRect pointOneRect = CGRectMake(a.x - iconToUse.size.width / 2, a.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
+                    [iconToUse drawInRect:pointOneRect];
+                }
+                if ([_mapViewController isLocationVisible:_tapPointTwo.latitude longitude:_tapPointTwo.longitude])
+                {
+                    CGRect pointTwoRect = CGRectMake(b.x - iconToUse.size.width / 2, b.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
+                    [iconToUse drawInRect:pointTwoRect];
+                }
             }
         }
         OAMapWidgetRegInfo *rulerWidget = [[OARootViewController instance].mapPanel.mapWidgetRegistry widgetByKey:@"radius_ruler"];
@@ -497,61 +491,44 @@
 
 - (void) drawDistance:(CGContextRef)ctx distance:(NSString *)distance angle:(double)angle start:(CGPoint)start end:(CGPoint)end
 {
-    NSValue *middle = nil;
-    if (CGRectContainsPoint(self.frame, end))
+    CGPoint middlePoint = CGPointMake((start.x + end.x) / 2, (start.y + end.y) / 2);
+    UIFont *font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium];
+    
+    BOOL useDefaults = !_rulerLineFontAttrs || [_rulerLineFontAttrs count] == 0;
+    NSNumber *strokeColorAttr = useDefaults ? nil : [_rulerLineFontAttrs objectForKey:@"color_2"];
+    UIColor *strokeColor = strokeColorAttr ? UIColorFromARGB(strokeColorAttr.intValue) : [UIColor whiteColor];
+    NSNumber *colorAttr = useDefaults ? nil : [_rulerLineFontAttrs objectForKey:@"color"];
+    UIColor *color = colorAttr ? UIColorFromARGB(colorAttr.intValue) : [UIColor blackColor];
+    NSNumber *strokeWidthAttr = useDefaults ? nil : [_rulerLineFontAttrs valueForKey:@"strokeWidth_2"];
+    float strokeWidth = (strokeWidthAttr ? strokeWidthAttr.floatValue / [[UIScreen mainScreen] scale] : 4.0) * 4.0;
+    
+    NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+
+    NSAttributedString *string = [OAUtilities createAttributedString:distance font:font color:color strokeColor:nil strokeWidth:0];
+    NSAttributedString *shadowString = [OAUtilities createAttributedString:distance font:font color:color strokeColor:strokeColor strokeWidth:strokeWidth];
+
+    CGSize titleSize = [string size];
+    CGRect rect = CGRectMake(middlePoint.x - (titleSize.width / 2), middlePoint.y - (titleSize.height / 2), titleSize.width, titleSize.height);
+    
+    CGFloat xMid = CGRectGetMidX(rect);
+    CGFloat yMid = CGRectGetMidY(rect);
+    CGContextSaveGState(ctx);
     {
-        middle = [NSValue valueWithCGPoint:CGPointMake((start.x + end.x) / 2, (start.y + end.y) / 2)];
+        CGContextTranslateCTM(ctx, xMid, yMid);
+        CGContextRotateCTM(ctx, angle);
+        
+        CGRect newRect = rect;
+        newRect.origin.x = -newRect.size.width / 2;
+        newRect.origin.y = -newRect.size.height / 2 + LABEL_OFFSET;
+        
+        [shadowString drawWithRect:newRect options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+        [string drawWithRect:newRect options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+        CGContextStrokePath(ctx);
     }
-    else
-    {
-        CGFloat maxX = CGRectGetMaxX(self.frame);
-        CGFloat minX = CGRectGetMinX(self.frame);
-        CGFloat maxY = CGRectGetMaxY(self.frame);
-        CGFloat minY = CGRectGetMinY(self.frame);
-        NSValue *screenIntersectionPoint = [OAMapUtils pointOnRect:end.x y:end.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:start];
-        if (screenIntersectionPoint)
-        {
-            CGPoint intersection = screenIntersectionPoint.CGPointValue;
-            middle = [NSValue valueWithCGPoint:CGPointMake((start.x + intersection.x) / 2, (start.y + intersection.y) / 2)];
-        }
-    }
-    if (middle)
-    {
-        UIFont *font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
-        
-        BOOL useDefaults = !_rulerLineFontAttrs || [_rulerLineFontAttrs count] == 0;
-        NSNumber *strokeColorAttr = useDefaults ? nil : [_rulerLineFontAttrs objectForKey:@"color_2"];
-        UIColor *strokeColor = strokeColorAttr ? UIColorFromARGB(strokeColorAttr.intValue) : [UIColor whiteColor];
-        
-        NSNumber *colorAttr = useDefaults ? nil : [_rulerLineFontAttrs objectForKey:@"color"];
-        UIColor *color = colorAttr ? UIColorFromARGB(colorAttr.intValue) : [UIColor blackColor];
-        
-        NSNumber *strokeWidthAttr = useDefaults ? nil : [_rulerLineFontAttrs valueForKey:@"strokeWidth_2"];
-        float strokeWidth = strokeWidthAttr ? -strokeWidthAttr.floatValue / [[UIScreen mainScreen] scale] : -2.0;
-        
-        NSDictionary<NSAttributedStringKey, id> *attrs = @{NSFontAttributeName: font, NSStrokeColorAttributeName : strokeColor,
-                                                           NSForegroundColorAttributeName : color,
-                                                           NSStrokeWidthAttributeName : @(strokeWidth)};
-        CGSize titleSize = [distance sizeWithAttributes:attrs];
-        CGPoint middlePoint = middle.CGPointValue;
-        CGRect rect = CGRectMake(middlePoint.x - (titleSize.width / 2), middlePoint.y - (titleSize.height / 2), titleSize.width, titleSize.height);
-        
-        CGFloat xMid = CGRectGetMidX(rect);
-        CGFloat yMid = CGRectGetMidY(rect);
-        CGContextSaveGState(ctx);
-        {
-            CGContextTranslateCTM(ctx, xMid, yMid);
-            CGContextRotateCTM(ctx, angle);
-            
-            CGRect newRect = rect;
-            newRect.origin.x = -newRect.size.width / 2;
-            newRect.origin.y = -newRect.size.height / 2 + LABEL_OFFSET;
-            
-            [distance drawWithRect:newRect options:NSStringDrawingUsesLineFragmentOrigin attributes:attrs context:nil];
-            CGContextStrokePath(ctx);
-        }
-        CGContextRestoreGState(ctx);
-    }
+    CGContextRestoreGState(ctx);
 }
 
 - (void) drawLineBetweenPoints:(CGPoint) start end:(CGPoint) end context:(CGContextRef) ctx distance:(NSString *) distance
@@ -569,19 +546,6 @@
         CGContextStrokePath(ctx);
     }
     CGContextRestoreGState(ctx);
-}
-
-- (NSValue *) getTouchPointFromLat:(CGFloat) lat lon:(CGFloat) lon
-{
-    const OsmAnd::LatLon latLon(lat, lon);
-    OsmAnd::PointI currentPositionI = OsmAnd::Utilities::convertLatLonTo31(latLon);
-    
-    CGPoint point;
-    if ([_mapViewController.mapView convert:&currentPositionI toScreen:&point checkOffScreen:YES])
-    {
-        return [NSValue valueWithCGPoint:point];
-    }
-    return nil;
 }
 
 - (void) touchDetected:(UITapGestureRecognizer *)recognizer

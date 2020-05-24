@@ -7,6 +7,7 @@
 //
 
 #import "OAMapRendererView.h"
+#import "OAMapUtils.h"
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -16,6 +17,7 @@
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore.h>
+#include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/IAtlasMapRenderer.h>
 #include <OsmAndCore/Map/AtlasMapRendererConfiguration.h>
@@ -404,6 +406,37 @@
 - (BOOL)isPositionVisible:(OsmAnd::PointI)pos
 {
     return _renderer->isPositionVisible(pos);
+}
+
+- (NSArray<NSValue *> *) getVisibleLineFromLat:(double)fromLat fromLon:(double)fromLon toLat:(double)toLat toLon:(double)toLon;
+{
+    // first calculate visible line in 31 within VisibleBBox
+    const OsmAnd::LatLon fromLatLon(fromLat, fromLon);
+    const auto fromI = OsmAnd::Utilities::convertLatLonTo31(fromLatLon);
+    const OsmAnd::LatLon toLatLon(toLat, toLon);
+    const auto toI = OsmAnd::Utilities::convertLatLonTo31(toLatLon);
+    const auto areaI = [self getVisibleBBox31];
+
+    CGRect rect31 = CGRectMake(areaI.left(), areaI.top(), areaI.width(), areaI.height());
+    CGPoint start31 = CGPointMake(fromI.x, fromI.y);
+    CGPoint end31 = CGPointMake(toI.x, toI.y);
+    NSArray<NSValue *> *line31 = [OAMapUtils calculateLineInRect:rect31 start:start31 end:end31];
+    if (line31.count == 2)
+    {
+        // then convert line points to screen coords and trim by screen bounds
+        CGPoint a = line31[0].CGPointValue;
+        CGPoint b = line31[1].CGPointValue;
+        auto pointAI = OsmAnd::PointI(a.x, a.y);
+        auto pointBI = OsmAnd::PointI(b.x, b.y);
+        CGPoint screenPointA;
+        CGPoint screenPointB;
+        if ([self convert:&pointAI toScreen:&screenPointA checkOffScreen:YES] &&
+            [self convert:&pointBI toScreen:&screenPointB checkOffScreen:YES])
+        {
+            return [OAMapUtils calculateLineInRect:self.bounds start:screenPointA end:screenPointB];
+        }
+    }
+    return nil;
 }
 
 - (void)dumpResourcesInfo

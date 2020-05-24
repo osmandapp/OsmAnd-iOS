@@ -212,7 +212,7 @@
     {
         finishCoord = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
     }
-    NSArray<NSValue *> *linePoints = [self getVisibleLineFromCoord:startCoord toCoord:finishCoord];
+    NSArray<NSValue *> *linePoints = [_mapViewController.mapView getVisibleLineFromLat:startCoord.latitude fromLon:startCoord.longitude toLat:finishCoord.latitude toLon:finishCoord.longitude];
     if (linePoints.count == 2)
     {
         CGPoint a = linePoints[0].CGPointValue;
@@ -263,24 +263,10 @@
     UIFont *font = [UIFont systemFontOfSize:11.0 weight:UIFontWeightBold];
     UIColor *color = [UIColor blackColor];
     UIColor *shadowColor = [UIColor whiteColor];
-    
-    NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    attributes[NSParagraphStyleAttributeName] = paragraphStyle;
 
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:distance attributes:attributes];
-    NSMutableAttributedString *shadowString = [[NSMutableAttributedString alloc] initWithString:distance attributes:attributes];
-    NSRange valueRange = NSMakeRange(0, distance.length);
-    if (valueRange.length > 0)
-    {
-        [string addAttribute:NSFontAttributeName value:font range:valueRange];
-        [string addAttribute:NSForegroundColorAttributeName value:color range:valueRange];
-        [shadowString addAttribute:NSFontAttributeName value:font range:valueRange];
-        [shadowString addAttribute:NSForegroundColorAttributeName value:color range:valueRange];
-        [shadowString addAttribute:NSStrokeColorAttributeName value:shadowColor range:valueRange];
-        [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -kShadowRadius] range:valueRange];
-    }
+    NSAttributedString *string = [OAUtilities createAttributedString:distance font:font color:color strokeColor:nil strokeWidth:0];
+    NSAttributedString *shadowString = [OAUtilities createAttributedString:distance font:font color:color strokeColor:shadowColor strokeWidth:kShadowRadius];
+
     CGSize titleSize = [string size];
     CGRect rect = CGRectMake(middlePoint.x - (titleSize.width / 2), middlePoint.y - (titleSize.height / 2), titleSize.width, titleSize.height);
     CGFloat xMid = CGRectGetMidX(rect);
@@ -311,8 +297,7 @@
     {
         CGPoint screenCenter = [self changeCenter];
         CLLocationCoordinate2D screenCenterCoord = [self getPointCoord:[self changeCenter]];
-        CLLocationCoordinate2D markerCoord = CLLocationCoordinate2DMake(marker.latitude, marker.longitude);
-        NSArray<NSValue *> *linePoints = [self getVisibleLineFromCoord:screenCenterCoord toCoord:markerCoord];
+        NSArray<NSValue *> *linePoints = [_mapViewController.mapView getVisibleLineFromLat:screenCenterCoord.latitude fromLon:screenCenterCoord.longitude toLat:marker.latitude toLon:marker.longitude];
         if (linePoints.count == 2)
         {
             CGPoint a = linePoints[0].CGPointValue;
@@ -379,37 +364,6 @@
     double lon = OsmAnd::Utilities::get31LongitudeX(location.x);
     double lat = OsmAnd::Utilities::get31LatitudeY(location.y);
     return CLLocationCoordinate2DMake(lat, lon);
-}
-
-- (NSArray<NSValue *> *) getVisibleLineFromCoord:(CLLocationCoordinate2D)fromCoord toCoord:(CLLocationCoordinate2D)toCoord
-{
-    // first calculate visible line in 31 within VisibleBBox
-    const OsmAnd::LatLon fromLatLon(fromCoord.latitude, fromCoord.longitude);
-    const auto fromI = OsmAnd::Utilities::convertLatLonTo31(fromLatLon);
-    const OsmAnd::LatLon toLatLon(toCoord.latitude, toCoord.longitude);
-    const auto toI = OsmAnd::Utilities::convertLatLonTo31(toLatLon);
-    const auto areaI = [_mapViewController.mapView getVisibleBBox31];
-
-    CGRect rect31 = CGRectMake(areaI.left(), areaI.top(), areaI.width(), areaI.height());
-    CGPoint start31 = CGPointMake(fromI.x, fromI.y);
-    CGPoint end31 = CGPointMake(toI.x, toI.y);
-    NSArray<NSValue *> *line31 = [OAMapUtils calculateLineInRect:rect31 start:start31 end:end31];
-    if (line31.count == 2)
-    {
-        // then convert line points to screen coords and trim by screen bounds
-        CGPoint a = line31[0].CGPointValue;
-        CGPoint b = line31[1].CGPointValue;
-        auto pointAI = OsmAnd::PointI(a.x, a.y);
-        auto pointBI = OsmAnd::PointI(b.x, b.y);
-        CGPoint screenPointA;
-        CGPoint screenPointB;
-        if ([_mapViewController.mapView convert:&pointAI toScreen:&screenPointA checkOffScreen:YES] &&
-            [_mapViewController.mapView convert:&pointBI toScreen:&screenPointB checkOffScreen:YES])
-        {
-            return [OAMapUtils calculateLineInRect:self.bounds start:screenPointA end:screenPointB];
-        }
-    }
-    return nil;
 }
 
 @end

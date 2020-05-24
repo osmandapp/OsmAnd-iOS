@@ -148,6 +148,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (float) calculateMapRuler;
 
 - (BOOL) isMyLocationVisible;
+- (BOOL) isLocationVisible:(double)latitude longitude:(double)longitude;
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
 - (CGFloat) screensToFly:(Point31)position31;
 

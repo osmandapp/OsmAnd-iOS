@@ -88,48 +88,6 @@
     return b;
 }
 
-+ (NSValue *) pointOnRect:(CGFloat)x y:(CGFloat)y minX:(CGFloat)minX minY:(CGFloat)minY maxX:(CGFloat)maxX maxY:(CGFloat)maxY startPoint:(CGPoint)start
-{
-    //assert minX <= maxX;
-    //assert minY <= maxY;
-    if ((minX < x && x < maxX) && (minY < y && y < maxY))
-        return nil;
-    
-    CGFloat startX = start.x;
-    CGFloat startY = start.y;
-    CGFloat m = (startY - y) / (startX - x);
-    
-    if (x <= startX) { // check left side
-        CGFloat minXy = m * (minX - x) + y;
-        if (minY <= minXy && minXy <= maxY)
-            return [NSValue valueWithCGPoint:CGPointMake(minX, minXy)];
-    }
-    
-    if (x >= startX) { // check right side
-        CGFloat maxXy = m * (maxX - x) + y;
-        if (minY <= maxXy && maxXy <= maxY)
-            return [NSValue valueWithCGPoint:CGPointMake(maxX, maxXy)];
-    }
-    
-    if (y <= startY) { // check top side
-        CGFloat minYx = (minY - y) / m + x;
-        if (minX <= minYx && minYx <= maxX)
-            return [NSValue valueWithCGPoint:CGPointMake(minYx, minY)];
-    }
-    
-    if (y >= startY) { // check bottom side
-        CGFloat maxYx = (maxY - y) / m + x;
-        if (minX <= maxYx && maxYx <= maxX)
-            return [NSValue valueWithCGPoint:CGPointMake(maxYx, maxY)];
-    }
-    
-    // edge case when finding midpoint intersection: m = 0/0 = NaN
-    if (x == startX && y == startY)
-        return [NSValue valueWithCGPoint:CGPointMake(x, y)];
-    
-    return nil;
-}
-
 /**
  * outx, outy are the coordinates out of the box
  * inx, iny are the coordinates from the box (NOT IMPORTANT in/out, just one should be in second out)

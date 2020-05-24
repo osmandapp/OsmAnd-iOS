@@ -36,10 +36,9 @@
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
-
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
-
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeftPadding;
 
 @end
 
@@ -61,6 +60,7 @@
 {
     [super viewDidLoad];
     _settings = [OAAppSettings sharedManager];
+    //self.backButtonLeftPadding.constant += OAUtilities.getLeftMargin;
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -71,6 +71,7 @@
 - (void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+    //self.backButtonLeftPadding.constant = 8 + OAUtilities.getLeftMargin;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -102,9 +103,6 @@
 
 - (void) setupView
 {
-    [self applySafeAreaMargins];
-    [self adjustViews];
-    
     _data = [NSMutableDictionary dictionary];
     _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
     _mapPanel = [OARootViewController instance].mapPanel;

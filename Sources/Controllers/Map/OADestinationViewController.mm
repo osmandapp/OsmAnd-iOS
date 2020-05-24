@@ -376,7 +376,7 @@
     CGFloat navBarHeight = !_navBarHidden ? self.navBarView.bounds.size.height : 0.0;
     
     CGFloat top = [OAUtilities getStatusBarHeight];
-    CGFloat w = DeviceScreenWidth - OAUtilities.getLeftMargin * 2;
+    CGFloat w = DeviceScreenWidth;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -448,7 +448,7 @@
             if (_destinationCells.count == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0, top, w, h);
+            frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, top, w, h);
             
             if (_multiCell)
             {

@@ -10,11 +10,15 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OADestinationCardsViewController">
             <connections>
-                <outlet property="appearanceViewButton" destination="R4l-IG-8Sm" id="3ee-57-hBB"/>
-                <outlet property="bottomToolBar" destination="V1U-gf-wIJ" id="32C-Ir-d9v"/>
+                <outlet property="appearanceViewButton" destination="j6z-mi-whP" id="6he-bO-fL7"/>
+                <outlet property="bottomToolBar" destination="dOK-AW-T39" id="8gh-gK-Yjd"/>
                 <outlet property="bottomView" destination="8Ui-Gh-Jia" id="uK1-gr-ehw"/>
                 <outlet property="cardsView" destination="uw9-vf-xUp" id="qcI-XH-cof"/>
-                <outlet property="historyViewButton" destination="jBh-vE-Odo" id="fZ9-7f-hSs"/>
+                <outlet property="historyViewButton" destination="xSb-5h-AqO" id="yQU-W2-7Po"/>
+                <outlet property="leftTableViewPadding" destination="Sik-0a-fdf" id="C6P-tg-OSP"/>
+                <outlet property="leftToolbarPadding" destination="8l3-pJ-etf" id="xGr-8w-NBa"/>
+                <outlet property="rightTableViewPadding" destination="cGj-2O-o0l" id="YSM-86-DPX"/>
+                <outlet property="rightToolbarPadding" destination="B8J-xM-BMw" id="3Tg-gh-HuC"/>
                 <outlet property="tableView" destination="AG5-Pz-Cqb" id="L3k-hr-JyU"/>
                 <outlet property="toolBarHeight" destination="qZw-g1-Jgm" id="Dh6-Co-iHL"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -48,32 +52,35 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Ui-Gh-Jia" userLabel="bottomView">
                     <rect key="frame" x="0.0" y="814" width="414" height="48"/>
                     <subviews>
-                        <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V1U-gf-wIJ">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                        <toolbar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dOK-AW-T39">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="44" id="2fd-jc-CAC"/>
+                                <constraint firstAttribute="height" constant="48" id="CxW-GW-OXS"/>
                             </constraints>
                             <items>
-                                <barButtonItem title="History" id="jBh-vE-Odo">
+                                <barButtonItem title="History" id="xSb-5h-AqO">
+                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                     <connections>
-                                        <action selector="onHistoryButtonClicked:" destination="-1" id="djx-he-hbq"/>
+                                        <action selector="onHistoryButtonClicked:" destination="-1" id="kAz-Eu-Ixf"/>
                                     </connections>
                                 </barButtonItem>
-                                <barButtonItem style="plain" systemItem="flexibleSpace" id="PK1-Du-oYi"/>
-                                <barButtonItem title="Appearance" id="R4l-IG-8Sm">
+                                <barButtonItem style="plain" systemItem="flexibleSpace" id="V4C-QS-XkI"/>
+                                <barButtonItem title="Appearance" id="j6z-mi-whP">
+                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                     <connections>
-                                        <action selector="onAppearanceButtonClicked:" destination="-1" id="s4Y-jp-QKI"/>
+                                        <action selector="onAppearanceButtonClicked:" destination="-1" id="rjO-3S-Xe3"/>
                                     </connections>
                                 </barButtonItem>
                             </items>
                         </toolbar>
                     </subviews>
-                    <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.97254901960784312" green="0.97254901960784312" blue="0.97254901960784312" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="V1U-gf-wIJ" secondAttribute="trailing" id="Jtg-GJ-9Qt"/>
-                        <constraint firstItem="V1U-gf-wIJ" firstAttribute="leading" secondItem="8Ui-Gh-Jia" secondAttribute="leading" id="aXr-pk-Or2"/>
+                        <constraint firstItem="dOK-AW-T39" firstAttribute="leading" secondItem="8Ui-Gh-Jia" secondAttribute="leading" id="8l3-pJ-etf"/>
+                        <constraint firstAttribute="trailing" secondItem="dOK-AW-T39" secondAttribute="trailing" id="B8J-xM-BMw"/>
+                        <constraint firstItem="dOK-AW-T39" firstAttribute="top" secondItem="8Ui-Gh-Jia" secondAttribute="top" id="nWz-I5-tlR"/>
                         <constraint firstAttribute="height" constant="48" id="qZw-g1-Jgm"/>
-                        <constraint firstItem="V1U-gf-wIJ" firstAttribute="top" secondItem="8Ui-Gh-Jia" secondAttribute="top" id="uyb-GN-Uah"/>
                     </constraints>
                 </view>
             </subviews>
@@ -90,5 +97,11 @@
             <viewLayoutGuide key="safeArea" id="fmX-7r-Czv"/>
             <point key="canvasLocation" x="527.536231884058" y="194.19642857142856"/>
         </view>
+        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="J1j-vH-Eq3">
+            <rect key="frame" x="0.0" y="0.0" width="46" height="30"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <state key="normal" title="Button"/>
+            <point key="canvasLocation" x="296" y="454"/>
+        </button>
     </objects>
 </document>

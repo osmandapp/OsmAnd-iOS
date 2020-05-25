@@ -3132,7 +3132,7 @@ typedef enum
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
         
         CGFloat bottomMargin = [OAUtilities getBottomMargin];
-        cardsController.toolBarHeight.constant = favoritesToolBarHeight + bottomMargin;
+        cardsController.toolBarHeight.constant = 48 + bottomMargin;
         cardsController.leftTableViewPadding.constant = 8 + OAUtilities.getLeftMargin;
         cardsController.rightTableViewPadding.constant = 8 + OAUtilities.getLeftMargin;
         cardsController.leftToolbarPadding.constant = OAUtilities.getLeftMargin;

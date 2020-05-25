@@ -88,7 +88,7 @@
                        UIColorFromRGB(marker_pin_color_light_green) : @"map_marker_direction_arrow_p2_color_pin_5" };
     
     self.hidden = NO;
-    self.backgroundColor = UIColor.clearColor;
+    self.opaque = NO;
     [self initDestinationLayer];
 }
 

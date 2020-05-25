@@ -50,17 +50,6 @@
     NSDictionary<UIColor *, NSString *> *_markerColors;
 }
 
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        self.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
-        [self commonInit];
-    }
-    return self;
-}
-
 - (instancetype) initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -89,6 +78,7 @@
     
     self.hidden = NO;
     self.opaque = NO;
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self initDestinationLayer];
 }
 
@@ -117,7 +107,6 @@
 {
     _destinationLineSublayer = [[CALayer alloc] init];
     _destinationLineSublayer.frame = self.bounds;
-    _destinationLineSublayer.bounds = self.bounds;
     _destinationLineSublayer.contentsCenter = self.layer.contentsCenter;
     _destinationLineSublayer.contentsScale = [[UIScreen mainScreen] scale];
     _destinationLineDelegate = [[OADestinationLineDelegate alloc] initWithDestinationLine:self];
@@ -127,8 +116,6 @@
 - (void) layoutSubviews
 {
     [super layoutSubviews];
-   
-    self.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
     _destinationLineSublayer.frame = self.bounds;
 }
 
@@ -165,9 +152,9 @@
 
 - (void) drawDestinationLineLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
-    UIGraphicsPushContext(ctx);
     if ([OADestinationsHelper instance].sortedDestinations.count > 0)
     {
+        UIGraphicsPushContext(ctx);
         NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
         OADestination *firstMarkerDestination = (destinations.count >= 1 ? destinations[0] : nil);
         OADestination *secondMarkerDestination = (destinations.count >= 2 ? destinations[1] : nil);
@@ -193,8 +180,8 @@
                     [self drawArrow:secondMarkerDestination inContext:ctx];
             }
         }
+        UIGraphicsPopContext();
     }
-    UIGraphicsPopContext();
 }
 
 #pragma mark - Lines

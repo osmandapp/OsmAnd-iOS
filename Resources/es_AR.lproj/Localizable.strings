@@ -1335,7 +1335,7 @@
 "routing_attr_piste_type_nordic_description" = "Senderos para esquí nórdico o de travesía.";
 "rendering_attr_noPolygons_name" = "Polígonos";
 "rendering_attr_highway_class_service_name" = "Vía de servicio";
-"rendering_attr_highway_class_state_road_name" = "Carretera/ruta estatal";
+"rendering_attr_highway_class_state_road_name" = "Carretera o ruta estatal";
 "routing_attr_driving_style_speed_name" = "Rutas más cortas";
 "routing_attr_no_new_routing_name" = "Sin reglas de navegación v1.9";
 "routing_attr_allow_private_description" = "Permite acceder a áreas privadas.";
@@ -1429,7 +1429,7 @@
 "routing_attr_prefer_motorway_name" = "Preferir autopistas";
 "rendering_value_thin_name" = "Fino";
 "rendering_value_translucent_red_name" = "Rojo translúcido";
-"routing_attr_piste_type_downhill_name" = "Esquí alpino/de descenso";
+"routing_attr_piste_type_downhill_name" = "Esquí alpino o de descenso";
 "routing_attr_difficulty_preference_description" = "Preferir rutas de esta dificultad, aunque el trazado sobre pistas más duras o más fáciles sigue siendo posible si son más cortas.";
 "rendering_attr_streetLighting_name" = "Alumbrado público";
 "routing_attr_avoid_subway_description" = "Evitar subterráneos y trenes ligeros";
@@ -1464,7 +1464,7 @@
 "routing_attr_width_description" = "Especifica el límite de anchura permitida del vehículo en rutas.";
 "rendering_attr_piste_difficulty_extreme_name" = "Extremo";
 "rendering_value_default_name" = "Predefinido";
-"rendering_attr_highway_class_cycleway_name" = "Ciclovía/Bicisenda";
+"rendering_attr_highway_class_cycleway_name" = "Ciclovía o bicisenda";
 "rendering_attr_piste_type_sleigh_name" = "Trineo";
 "rendering_attr_surface_cobblestone_name" = "Empedrado (adoquín)";
 "routeInfo_winter_ice_road_name" = "Caminos de invierno y de hielo";
@@ -1496,7 +1496,7 @@
 "rendering_value_lightblue_name" = "Azul claro";
 "rendering_attr_smoothness_horrible_name" = "Horrible";
 "routing_attr_prefer_unpaved_name" = "Preferir caminos sin pavimentar";
-"routing_attr_avoid_ferry_name" = "Sin ferris/transbordadores";
+"routing_attr_avoid_ferry_name" = "Sin ferris o transbordadores";
 "rendering_attr_smoothness_excellent_name" = "Excelente";
 "rendering_value_translucent_blue_name" = "Azul translúcido";
 "rendering_attr_piste_difficulty_easy_name" = "Fácil";
@@ -1520,12 +1520,12 @@
 "rendering_value_darkyellow_name" = "Amarillo oscuro";
 "rendering_value_medium_name" = "Mediano";
 "rendering_attr_highway_class_path_name" = "Sendero";
-"routing_attr_avoid_ferries_name" = "Sin ferris/transbordadores";
+"routing_attr_avoid_ferries_name" = "Sin ferris o transbordadores";
 "rendering_attr_whiteWaterSports_name" = "Deportes acuáticos";
-"rendering_attr_surface_paving_stones_name" = "Pavimento intertrabado / Adoquín prefabricado";
+"rendering_attr_surface_paving_stones_name" = "Pavimento intertrabado o adoquín prefabricado";
 "routing_attr_avoid_stairs_name" = "Sin escaleras";
 "routing_attr_avoid_unpaved_description" = "Evitar caminos sin pavimentar";
-"routing_attr_piste_type_nordic_name" = "Esquí de travesía/nórdico";
+"routing_attr_piste_type_nordic_name" = "Esquí de travesía o nórdico";
 "rendering_attr_smoothness_good_name" = "Bueno";
 "routing_attr_avoid_ferry_description" = "Evitar ferris o transbordadores";
 "rendering_attr_piste_difficulty_intermediate_name" = "Intermedio";
@@ -1551,7 +1551,7 @@
 "routing_attr_allow_skating_only_name" = "Permitir sólo rutas de patinaje";
 "rendering_attr_OSMMapperAssistant_name" = "Asistente al mapeador OSM";
 "routing_attr_height_obstacles_description" = "Incluye como factor, la elevación del terreno (según datos de SRTM, ASTER y EU-DEM).";
-"rendering_attr_highway_class_footway_name" = "Vereda/Acera";
+"rendering_attr_highway_class_footway_name" = "Vereda o acera";
 "rendering_attr_hideProposed_name" = "Objetos propuestos";
 "routing_attr_avoid_stairs_description" = "Evitar escaleras";
 "routing_attr_piste_type_sled_name" = "Trineo";
@@ -1702,3 +1702,14 @@
 "map_settings_slopes_legend" = "Puedes leer más sobre las pendientes en Wikipedia";
 "map_settings_layer_transparency" = "Capa de transparencia";
 "map_settings_terrain" = "Terreno";
+"arrows_direction_to_markers" = "Las flechas muestran la dirección del marcador activo si se encuentra fuera de la pantalla. Las líneas de dirección dibujan una línea hacia los marcadores activos.";
+"appearance_on_map" = "Aspecto en el mapa";
+"choose_how_display_distance" = "Elegir como será mostrada la distancia a los indicadores activos";
+"specify_number_of_dir_indicators" = "Define el número de los indicadores de dirección, esto afecta a los siguiente ajustes.";
+"active_markers" = "Marcadores activos";
+"direction_lines" = "Líneas de dirección";
+"arrows_on_map" = "Flechas en el mapa";
+"distance_indication" = "Indicación de distancia";
+"two" = "Dos";
+// Dirrection appearance
+"one" = "Uno";

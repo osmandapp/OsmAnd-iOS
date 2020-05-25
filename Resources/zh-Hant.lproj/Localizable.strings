@@ -1420,3 +1420,4 @@
 "map_settings_base_transp" = "底圖透明度";
 "exit_at" = "離開於";
 "public_transport_warning_title" = "大眾運輸導航目前正在測試階段，可能會有錯誤與不準確的地方。";
+"active_markers" = "活躍標記";

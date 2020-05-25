@@ -3147,7 +3147,6 @@ typedef enum
         if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
         {
             cardsController.view.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);
-            cardsController.bottomView.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, DeviceScreenHeight + 1.0, w, toolbarHeight);
             [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
                 cardsController.cardsView.frame = CGRectMake(0.0, 0.0, w, cardsTableHeight);
                 _shadeView.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);

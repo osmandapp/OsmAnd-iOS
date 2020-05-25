@@ -12,9 +12,12 @@
 
 @property (weak, nonatomic) IBOutlet UIView *cardsView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftTableViewPadding;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightTableViewPadding;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
 @property (weak, nonatomic) IBOutlet UIToolbar *bottomToolBar;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftToolbarPadding;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightToolbarPadding;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *historyViewButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *appearanceViewButton;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolBarHeight;

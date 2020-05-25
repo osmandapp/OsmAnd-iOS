@@ -36,10 +36,8 @@
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
-
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
-
 
 @end
 
@@ -102,9 +100,6 @@
 
 - (void) setupView
 {
-    [self applySafeAreaMargins];
-    [self adjustViews];
-    
     _data = [NSMutableDictionary dictionary];
     _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
     _mapPanel = [OARootViewController instance].mapPanel;

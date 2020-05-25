@@ -88,6 +88,7 @@
                        UIColorFromRGB(marker_pin_color_light_green) : @"map_marker_direction_arrow_p2_color_pin_5" };
     
     self.hidden = NO;
+    self.backgroundColor = UIColor.clearColor;
     [self initDestinationLayer];
 }
 
@@ -115,7 +116,6 @@
 - (void) initDestinationLayer
 {
     _destinationLineSublayer = [[CALayer alloc] init];
-    _destinationLineSublayer.drawsAsynchronously = YES;
     _destinationLineSublayer.frame = self.bounds;
     _destinationLineSublayer.bounds = self.bounds;
     _destinationLineSublayer.contentsCenter = self.layer.contentsCenter;

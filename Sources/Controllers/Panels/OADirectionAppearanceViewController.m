@@ -94,7 +94,8 @@
     return defaultNavBarHeight;
 }
 
-- (IBAction)backButtonPressed:(id)sender {
+- (IBAction)backButtonPressed:(id)sender
+{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -261,6 +262,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.textView.text = item[@"title"];
+        [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         if ([item[@"key"] isEqualToString:kDistanceIndication])
         {
             [cell.switchView setOn:[_settings.distanceIndicationVisability get]];
@@ -387,7 +389,10 @@
         }
     }
     [self setupView];
-    [self.tableView reloadData];
+    if ([_settings.distanceIndicationVisability get])
+        [tableView reloadRowsAtIndexPaths:[[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0], [NSIndexPath indexPathForRow:1 inSection:1], [NSIndexPath indexPathForRow:2 inSection:1], nil] withRowAnimation:UITableViewRowAnimationFade];
+    else
+        [tableView reloadRowsAtIndexPaths:[[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0], nil] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void) showDistanceIndication:(id)sender
@@ -405,7 +410,7 @@
                 [_settings.distanceIndication set:TOP_BAR_DISPLAY];
     }
     [self setupView];
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) showArrowsOnMap:(id)sender

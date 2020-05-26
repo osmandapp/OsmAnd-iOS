@@ -58,8 +58,8 @@
                     </subviews>
                     <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstItem="woc-tC-Fe9" firstAttribute="centerX" secondItem="Ax2-ic-KHD" secondAttribute="centerX" id="0aH-HD-qIp"/>
                         <constraint firstItem="6I0-jI-8Jr" firstAttribute="top" secondItem="Ax2-ic-KHD" secondAttribute="top" id="8Sb-lv-Lcs"/>
-                        <constraint firstItem="woc-tC-Fe9" firstAttribute="centerX" secondItem="Ax2-ic-KHD" secondAttribute="centerX" id="E3b-FB-coc"/>
                         <constraint firstAttribute="height" constant="44" id="Lqi-bX-89n"/>
                         <constraint firstItem="woc-tC-Fe9" firstAttribute="centerY" secondItem="Ax2-ic-KHD" secondAttribute="centerY" id="QVw-zZ-r5m"/>
                         <constraint firstItem="6I0-jI-8Jr" firstAttribute="leading" secondItem="Ax2-ic-KHD" secondAttribute="leading" constant="10" id="RIp-i0-ABj"/>

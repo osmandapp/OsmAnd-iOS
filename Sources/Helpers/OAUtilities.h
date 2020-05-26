@@ -155,5 +155,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) getLocalizedRouteInfoProperty:(NSString *)properyName;
 
 + (BOOL) isColorBright:(UIColor *)color;
++ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth;
 
 @end

@@ -1580,7 +1580,6 @@
 		847A1D1D1DF94E9B003C1246 /* OATerrainLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3EB11B6A141B0016F6F4 /* OATerrainLayer.mm */; };
 		847A1D1E1DF94E9B003C1246 /* OAGPXEditWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84064DF31B83907600033C47 /* OAGPXEditWptViewController.mm */; };
 		847A1D1F1DF94E9B003C1246 /* OAIconTextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE661A0E5A7C00900A47 /* OAIconTextTableViewCell.m */; };
-		847A1D201DF94E9B003C1246 /* OAHUDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F70119890A4100AB40D1 /* OAHUDButton.m */; };
 		847A1D211DF94E9B003C1246 /* OACoreResourcesAmenityIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */; };
 		847A1D221DF94E9B003C1246 /* OADestinationCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84D81EF31AA37075001098FD /* OADestinationCell.mm */; };
 		847A1D231DF94E9B003C1246 /* OAMapSettingsParameterScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2441A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm */; };
@@ -1589,7 +1588,6 @@
 		847A1D261DF94E9B003C1246 /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417663E1B722396002A08CB /* OAHistoryItem.m */; };
 		847A1D271DF94E9B003C1246 /* OAPhrasesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C41E7D1ABAC38D0089EABB /* OAPhrasesParser.m */; };
 		847A1D291DF94E9B003C1246 /* OAHistoryCardController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766431B72942A002A08CB /* OAHistoryCardController.mm */; };
-		847A1D2A1DF94E9B003C1246 /* OAHUDRegularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */; };
 		847A1D2B1DF94E9B003C1246 /* UITableViewCell+getTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */; };
 		847A1D2C1DF94E9B003C1246 /* OAMapMarkersCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84A8CEA61B94B91300B0BDCB /* OAMapMarkersCollection.mm */; };
 		847A1D2D1DF94E9B003C1246 /* OATextLineViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D173C1B1C916A00A656F4 /* OATextLineViewCell.m */; };
@@ -3590,11 +3588,9 @@
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
 		BB27270119CB38D7007C5613 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FC19CB38D7007C5613 /* fonts */; };
 		BB27270419CB38D7007C5613 /* stubs in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FD19CB38D7007C5613 /* stubs */; };
-		BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F70119890A4100AB40D1 /* OAHUDButton.m */; };
 		BB54F70B198913E000AB40D1 /* OAAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F708198913E000AB40D1 /* OAAppearance.m */; };
 		BB54F7101989143000AB40D1 /* OADaytimeAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F70D1989143000AB40D1 /* OADaytimeAppearance.m */; };
 		BB54F7151989144400AB40D1 /* OANighttimeAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F7121989144400AB40D1 /* OANighttimeAppearance.m */; };
-		BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */; };
 		BBA3AF35197FC4BB0039D991 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D29C190D186F00D90F0A /* main.m */; };
 		BBA3AF37197FC4BB0039D991 /* OATableViewCellWithClickableAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C03E1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m */; };
 		BBA3AF38197FC4BB0039D991 /* OAMapViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EA818E19376005FBE09 /* OAMapViewState.m */; };
@@ -8090,8 +8086,6 @@
 		BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_update_icon@2x.png"; sourceTree = "<group>"; };
 		BB4C7474192111730018E1EE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		BB4C74771921175D0018E1EE /* OAMenuViewControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMenuViewControllerProtocol.h; path = Controllers/OAMenuViewControllerProtocol.h; sourceTree = "<group>"; };
-		BB54F70019890A4100AB40D1 /* OAHUDButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHUDButton.h; path = Views/OAHUDButton.h; sourceTree = "<group>"; };
-		BB54F70119890A4100AB40D1 /* OAHUDButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAHUDButton.m; path = Views/OAHUDButton.m; sourceTree = "<group>"; };
 		BB54F706198913AE00AB40D1 /* OAAppearanceProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAAppearanceProtocol.h; path = Appearance/OAAppearanceProtocol.h; sourceTree = "<group>"; };
 		BB54F707198913E000AB40D1 /* OAAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAAppearance.h; path = Appearance/OAAppearance.h; sourceTree = "<group>"; };
 		BB54F708198913E000AB40D1 /* OAAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAAppearance.m; path = Appearance/OAAppearance.m; sourceTree = "<group>"; };
@@ -8099,8 +8093,6 @@
 		BB54F70D1989143000AB40D1 /* OADaytimeAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADaytimeAppearance.m; path = Appearance/OADaytimeAppearance.m; sourceTree = "<group>"; };
 		BB54F7111989144400AB40D1 /* OANighttimeAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OANighttimeAppearance.h; path = Appearance/OANighttimeAppearance.h; sourceTree = "<group>"; };
 		BB54F7121989144400AB40D1 /* OANighttimeAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OANighttimeAppearance.m; path = Appearance/OANighttimeAppearance.m; sourceTree = "<group>"; };
-		BB54F71619893B8200AB40D1 /* OAHUDRegularButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHUDRegularButton.h; path = Views/OAHUDRegularButton.h; sourceTree = "<group>"; };
-		BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAHUDRegularButton.m; path = Views/OAHUDRegularButton.m; sourceTree = "<group>"; };
 		BB63335517C4E3DE00903AB1 /* OAUserInteractionPassThroughView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAUserInteractionPassThroughView.h; path = Views/OAUserInteractionPassThroughView.h; sourceTree = "<group>"; };
 		BB63335617C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = OAUserInteractionPassThroughView.m; path = Views/OAUserInteractionPassThroughView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		BB63335917C5388A00903AB1 /* UIViewController+OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+OARootViewController.h"; path = "Controllers/UIViewController+OARootViewController.h"; sourceTree = "<group>"; };
@@ -13126,10 +13118,6 @@
 				BB32C0421925FB43007999A0 /* OATableViewCell.m */,
 				BBAD5BA81927D7F90043590F /* UITableViewCell+getTableView.h */,
 				BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */,
-				BB54F70019890A4100AB40D1 /* OAHUDButton.h */,
-				BB54F70119890A4100AB40D1 /* OAHUDButton.m */,
-				BB54F71619893B8200AB40D1 /* OAHUDRegularButton.h */,
-				BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */,
 				3ACE8D3E19F43004003F1D42 /* OAMapRulerView.h */,
 				3ACE8D3F19F43004003F1D42 /* OAMapRulerView.m */,
 				8441CB681B1370B50033AC95 /* OAMultiselectableHeaderView.h */,
@@ -19290,7 +19278,6 @@
 				847A1D1F1DF94E9B003C1246 /* OAIconTextTableViewCell.m in Sources */,
 				DA540DB1229E8F1C0069201E /* OAInstallMapillaryBottomSheetViewController.mm in Sources */,
 				84DE41562000C9BB00F022F9 /* OARouteTargetSelectionViewController.m in Sources */,
-				847A1D201DF94E9B003C1246 /* OAHUDButton.m in Sources */,
 				846D1F131F38EF79007472A6 /* OAWaypointHelper.mm in Sources */,
 				844E07A71E3E30B100EFC525 /* OAQuickSearchMoreListItem.mm in Sources */,
 				84AB9D9120738455009DA206 /* OABottomSheetViewController.mm in Sources */,
@@ -19318,7 +19305,6 @@
 				845AFB5C1E264EE800170026 /* OASearchUICore.mm in Sources */,
 				DA22679F240E55C900FFEA91 /* OAWikiLinkBottomSheetViewController.mm in Sources */,
 				847A1D291DF94E9B003C1246 /* OAHistoryCardController.mm in Sources */,
-				847A1D2A1DF94E9B003C1246 /* OAHUDRegularButton.m in Sources */,
 				DA9D549722D48410003AD7F9 /* OAOsmLiveCardView.m in Sources */,
 				DA73D289223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */,
 				847A1D2B1DF94E9B003C1246 /* UITableViewCell+getTableView.m in Sources */,
@@ -19910,7 +19896,6 @@
 				DAEB14CC2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
 				DA09D00F22C3807500557FFF /* OAProgressBarCell.mm in Sources */,
 				3AFEEE691A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
-				BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */,
 				DA2FA6F023029C47006DB2E5 /* OAMapSourceAction.mm in Sources */,
 				DA6D51E721F33B2800EC84E2 /* OAOsmPoint.m in Sources */,
 				84BFA3171B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */,
@@ -19941,7 +19926,6 @@
 				84A05F211F1297D000296B7F /* OARoutingHelper.mm in Sources */,
 				841766461B72942A002A08CB /* OAHistoryCardController.mm in Sources */,
 				DA835FEB23436F1A003374B5 /* OADestinationItemsListViewController.mm in Sources */,
-				BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				8490B1A4205FEF74007694A5 /* OARadiusCell.m in Sources */,
 				841511901FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */,
 				DAB3E54A23BB466C00EAE6A5 /* OARouteStatisticsModeCell.m in Sources */,
@@ -20483,7 +20467,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.41;
+				CURRENT_PROJECT_VERSION = 3.44;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -20538,7 +20522,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.41;
+				CURRENT_PROJECT_VERSION = 3.44;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

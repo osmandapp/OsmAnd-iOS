@@ -15,8 +15,6 @@
 
 @property (nonatomic, weak) id<OAWidgetListener> delegate;
 
-- (instancetype) init;
-- (instancetype) initWithFrame:(CGRect)frame;
 - (void) drawDestinationLineLayer:(CALayer *)layer inContext:(CGContextRef)ctx;
 - (void) drawLineArrowWidget:(OADestination *)destination;
 - (void) removeLineToDestinationPin:(OADestination *)destination;

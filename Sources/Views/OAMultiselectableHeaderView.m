@@ -19,16 +19,6 @@ static UIFont *_btnFont;
     BOOL _editing;
 }
 
-- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithReuseIdentifier:reuseIdentifier];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];

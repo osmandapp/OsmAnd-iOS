@@ -1313,4 +1313,25 @@ static const double d180PI = 180.0 / M_PI_2;
     return luminance >= .5f;
 }
 
++ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth
+{
+    NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
+    NSRange valueRange = NSMakeRange(0, text.length);
+    if (valueRange.length > 0)
+    {
+        [string addAttribute:NSFontAttributeName value:font range:valueRange];
+        [string addAttribute:NSForegroundColorAttributeName value:color range:valueRange];
+        if (strokeColor)
+            [string addAttribute:NSStrokeColorAttributeName value:strokeColor range:valueRange];
+        if (strokeWidth > 0)
+            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -strokeWidth] range:valueRange];
+    }
+    return string;
+}
+
 @end

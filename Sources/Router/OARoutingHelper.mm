@@ -912,6 +912,46 @@ static BOOL _isDeviatedFromRoute = false;
         }
         
     }
+    
+    // 4. update angle point
+    if (_route.routeVisibleAngle > 0)
+    {
+        // proceed to the next point with min acceptable bearing
+        double ANGLE_TO_DECLINE = _route.routeVisibleAngle;
+        int nextPoint = _route.currentRoute;
+        for (; nextPoint < routeNodes.count - 1; nextPoint++) {
+            float bearingTo = [currentLocation bearingTo:routeNodes[nextPoint]];
+            float bearingTo2 = [routeNodes[nextPoint] bearingTo:routeNodes[nextPoint + 1]];
+            if (abs([OAMapUtils degreesDiff:bearingTo2 bearingTo:bearingTo]) <= ANGLE_TO_DECLINE)
+                break;
+        }
+
+        if(nextPoint > 0) {
+            CLLocation *next = routeNodes[nextPoint];
+            CLLocation *prev = routeNodes[nextPoint - 1];
+            float bearing = [prev bearingTo:next];
+            double bearingTo = abs(OAMapUtils degreesDiff(bearing, currentLocation.bearingTo(next)));
+            double bearingPrev = abs(OAMapUtils degreesDiff(bearing, currentLocation.bearingTo(prev)));
+            while (true) {
+                Location mp = MapUtils.calculateMidPoint(prev, next);
+                if(mp.distanceTo(next) <= 100) {
+                    break;
+                }
+                double bearingMid = Math.abs(MapUtils.degreesDiff(bearing, currentLocation.bearingTo(mp)));
+                if(bearingPrev < ANGLE_TO_DECLINE) {
+                    next = mp;
+                    bearingTo = bearingMid;
+                } else if(bearingTo < ANGLE_TO_DECLINE){
+                    prev = mp;
+                    bearingPrev = bearingMid;
+                } else {
+                    break;
+                }
+            }
+            route.updateNextVisiblePoint(nextPoint, next);
+        }
+
+    }
     return false;
 }
 

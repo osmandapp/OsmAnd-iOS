@@ -15,9 +15,10 @@
 typedef NS_ENUM(NSInteger, EOARouteService)
 {
     OSMAND = 0,
-    YOURS,
+    /*YOURS,
     OSRM,
-    BROUTER,
+    BROUTER,*/
+    DIRECT_TO,
     STRAIGHT
 };
 

@@ -249,7 +249,6 @@
         CGPoint touchCGPoint = markerPoint.CGPointValue;
         double angle = [self getLineAngle:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
         NSString *distance = [_app getFormattedDistance:dist];
-        
         [self drawLineBetweenPoints:pointOfCurrentLocation.CGPointValue end:markerPoint.CGPointValue distance:distance color:marker.color inContext:ctx];
         [self drawDistance:ctx distance:distance angle:angle start:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
     }

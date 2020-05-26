@@ -17,6 +17,7 @@
 #import "QuadRect.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAMapUtils.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
@@ -25,6 +26,7 @@
 
 #define OSMAND_ROUTER @"OsmAndRouter"
 #define MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT 60
+#define MIN_STRAIGHT_DIST 50000
 
 @interface OARouteProvider()
 
@@ -56,14 +58,16 @@
     {
         case OSMAND:
             return @"OsmAnd (offline)";
-        case YOURS:
-            return @"YOURS";
-        case OSRM:
-            return @"OSRM (only car)";
-        case BROUTER:
-            return @"BRouter (offline)";
+//        case YOURS:
+//            return @"YOURS";
+//        case OSRM:
+//            return @"OSRM (only car)";
+//        case BROUTER:
+//            return @"BRouter (offline)";
         case STRAIGHT:
             return @"Straight line";
+        case DIRECT_TO:
+            return @"Direct to point";
         default:
             return @"";
     }
@@ -71,14 +75,14 @@
 
 + (BOOL) isOnline:(EOARouteService)service
 {
-    return service != OSMAND && service != BROUTER;
+    return NO;/*service != OSMAND && service != BROUTER*/;
 }
 
 + (BOOL) isAvailable:(EOARouteService)service
 {
-    if (service == BROUTER) {
-        return NO; //ctx.getBRouterService() != null;
-    }
+//    if (service == BROUTER) {
+//        return NO; //ctx.getBRouterService() != null;
+//    }
     return YES;
 }
 
@@ -87,14 +91,16 @@
     NSMutableArray<OARouteService *> *res = [NSMutableArray array];
     if ([OARouteService isAvailable:OSMAND])
         [res addObject:[OARouteService withService:OSMAND]];
-    if ([OARouteService isAvailable:YOURS])
-        [res addObject:[OARouteService withService:YOURS]];
-    if ([OARouteService isAvailable:OSRM])
-        [res addObject:[OARouteService withService:OSRM]];
-    if ([OARouteService isAvailable:BROUTER])
-        [res addObject:[OARouteService withService:BROUTER]];
+//    if ([OARouteService isAvailable:YOURS])
+//        [res addObject:[OARouteService withService:YOURS]];
+//    if ([OARouteService isAvailable:OSRM])
+//        [res addObject:[OARouteService withService:OSRM]];
+//    if ([OARouteService isAvailable:BROUTER])
+//        [res addObject:[OARouteService withService:BROUTER]];
     if ([OARouteService isAvailable:STRAIGHT])
         [res addObject:[OARouteService withService:STRAIGHT]];
+    if ([OARouteService isAvailable:DIRECT_TO])
+    [res addObject:[OARouteService withService:DIRECT_TO]];
     return [NSArray arrayWithArray:res];
 }
 
@@ -926,6 +932,46 @@
     }
 }
 
+- (OARouteCalculationResult *) findStraightRoute:(OARouteCalculationParams *)routeParams
+{
+    NSMutableArray<CLLocation *> *points = [NSMutableArray new];
+    NSMutableArray<CLLocation *> *segments = [NSMutableArray new];
+    [points addObject:[routeParams.start copy]];
+    if(routeParams.intermediates) {
+        for (CLLocation *l in routeParams.intermediates)
+        {
+            [points addObject:[l copy]];
+        }
+    }
+    [points addObject:[routeParams.end copy]];
+    CLLocation *lastAdded = nil;
+    float speed = routeParams.mode.defaultSpeed;
+    NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray new];
+    while(points.count > 0)
+    {
+        CLLocation *pl = points.firstObject;
+        if (lastAdded == nil || [lastAdded distanceFromLocation:pl] < MIN_STRAIGHT_DIST)
+        {
+            lastAdded = points.firstObject;
+            [points removeObjectAtIndex:0];
+            if(lastAdded)
+            {
+                OARouteDirectionInfo *previousInfo = [[OARouteDirectionInfo alloc] initWithAverageSpeed:speed turnType:TurnType::ptrStraight()];
+                previousInfo.routePointOffset = (int) segments.count;
+                [previousInfo setDescriptionRoute:OALocalizedString(@"route_head")];
+                [computeDirections addObject:previousInfo];
+            }
+            [segments addObject:lastAdded];
+        }
+        else
+        {
+            CLLocation *mp = [OAMapUtils calculateMidPoint:lastAdded s2:pl];
+            [points setObject:mp atIndexedSubscript:0];
+        }
+    }
+    return [[OARouteCalculationResult alloc] initWithLocations:segments directions:computeDirections params:routeParams waypoints:nil addMissingTurns:NO];
+}
+
 - (OARouteCalculationResult *) calculateGpxRoute:(OARouteCalculationParams *)routeParams
 {
     // get the closest point to start and to end
@@ -1024,21 +1070,21 @@
             {
                 res = [self findVectorMapsRoute:params calcGPXRoute:calcGPXRoute];
             }
-            else if (params.type == BROUTER)
+//            else if (params.type == BROUTER)
+//            {
+//                //res = findBROUTERRoute(params);
+//            }
+//            else if (params.type == YOURS)
+//            {
+//                //res = findYOURSRoute(params);
+//            }
+//            else if (params.type == OSRM)
+//            {
+//                //res = findOSRMRoute(params);
+//            }
+            else if (params.type == STRAIGHT || params.type == DIRECT_TO)
             {
-                //res = findBROUTERRoute(params);
-            }
-            else if (params.type == YOURS)
-            {
-                //res = findYOURSRoute(params);
-            }
-            else if (params.type == OSRM)
-            {
-                //res = findOSRMRoute(params);
-            }
-            else if (params.type == STRAIGHT)
-            {
-                //res = findStraightRoute(params);
+                res = [self findStraightRoute:params];
             }
             else
             {

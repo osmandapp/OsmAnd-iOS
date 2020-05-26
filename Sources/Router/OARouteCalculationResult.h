@@ -39,6 +39,9 @@
 @property (nonatomic, readonly) float routingTime;
 @property (nonatomic, readonly) int currentRoute;
 
+@property (nonatomic, readonly) double routeRecalcDistance;
+@property (nonatomic, readonly) double routeVisibleAngle;
+
 - (instancetype) initWithErrorMessage:(NSString *)errorMessage;
 
 - (instancetype) initWithLocations:(NSArray<CLLocation *> *)list directions:(NSArray<OARouteDirectionInfo *> *)directions params:(OARouteCalculationParams *)params waypoints:(NSArray<id<OALocationPoint>> *)waypoints addMissingTurns:(BOOL)addMissingTurns;

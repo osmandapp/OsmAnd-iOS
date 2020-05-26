@@ -16,6 +16,7 @@
 #import "OARoutingHelper.h"
 #import "OAUtilities.h"
 #import "QuadRect.h"
+#import "OARouteProvider.h"
 
 #define distanceClosestToIntermediate 400.0
 #define distanceThresholdToIntroduceFirstAndLastPoints 50
@@ -42,6 +43,10 @@
     int _nextIntermediate;
     int _currentWaypointGPX;
     int _lastWaypointGPX;
+    int _currentStraightAngleRoute;
+    
+    EOARouteService _routeProvider;
+    CLLocation *_currentStraightAnglePoint;
 }
 
 
@@ -58,6 +63,9 @@
         _nextIntermediate = 0;
         _currentWaypointGPX = 0;
         _lastWaypointGPX = 0;
+        _routeRecalcDistance = 0;
+        _routeVisibleAngle = 0;
+        _currentStraightAngleRoute = -1;
     }
     return self;
 }
@@ -1195,6 +1203,12 @@
         [self.class calculateIntermediateIndexes:_locations intermediates:params.intermediates localDirections:localDirections intermediatePoints:_intermediatePoints];
         _directions = localDirections;
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
+        _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];
+        
+        // TODO: add additional routing params
+        _routeRecalcDistance = /*params.ctx.getSettings().ROUTE_RECALCULATION_DISTANCE.getModeValue(params.mode)*/ 0;
+        _routeVisibleAngle = /*_routeProvider == STRAIGHT ?
+                        getSettings().ROUTE_STRAIGHT_ANGLE.getModeValue(params.mode) : */0;
     }
     return self;
 }
@@ -1226,6 +1240,12 @@
         _directions = computeDirections;
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
         _alarmInfo = alarms;
+        _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];
+        
+        // TODO: add additional routing params
+        _routeRecalcDistance = /*params.ctx.getSettings().ROUTE_RECALCULATION_DISTANCE.getModeValue(params.mode)*/ 0;
+        _routeVisibleAngle = /*_routeProvider == STRAIGHT ?
+                        getSettings().ROUTE_STRAIGHT_ANGLE.getModeValue(params.mode) : */0;
     }
     return self;
 }

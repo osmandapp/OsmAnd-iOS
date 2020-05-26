@@ -21,4 +21,6 @@
 + (CLLocationDirection) adjustBearing:(CLLocationDirection)bearing;
 + (BOOL) rightSide:(double)lat lon:(double)lon aLat:(double)aLat aLon:(double)aLon bLat:(double)bLat bLon:(double)bLon;
 
++ (CLLocation *) calculateMidPoint:(CLLocation *) s1 s2:(CLLocation *) s2;
+
 @end

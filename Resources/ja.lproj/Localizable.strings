@@ -142,7 +142,7 @@
 "shared_string_widgets" = "ウィジェット";
 "map_widget_right" = "右パネル";
 "map_widget_left" = "左パネル";
-"layer_map_appearance" = "UI設定";
+"layer_map_appearance" = "画面構成";
 "map_markers" = "マップマーカー";
 "confirm_usage_speed_cameras" = "多くの国(ドイツ、フランス、イタリア、その他)ではスピードカメラ警告の使用が法律で許可されていません。あなたが法律に違反した場合OsmAndは一切の責任を負いません。この機能を使用する事ができる国の場合のみ、[はい]をタップしてください。";
 "show_traffic_warnings" = "交通指示警告";

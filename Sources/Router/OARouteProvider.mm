@@ -966,7 +966,7 @@
         else
         {
             CLLocation *mp = [OAMapUtils calculateMidPoint:lastAdded s2:pl];
-            [points setObject:mp atIndexedSubscript:0];
+            [points insertObject:mp atIndex:0];
         }
     }
     return [[OARouteCalculationResult alloc] initWithLocations:segments directions:computeDirections params:routeParams waypoints:nil addMissingTurns:NO];

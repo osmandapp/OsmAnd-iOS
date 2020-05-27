@@ -3270,21 +3270,16 @@
 
 - (BOOL) isMyLocationVisible
 {
+    CLLocation *myLocation = _app.locationServices.lastKnownLocation;
+    return myLocation ? [self isLocationVisible:myLocation.coordinate.latitude longitude:myLocation.coordinate.longitude] : YES;
+}
+
+- (BOOL) isLocationVisible:(double)latitude longitude:(double)longitude
+{
     OAMapRendererView* renderView = (OAMapRendererView*)self.view;
-    CLLocation* myLocation = _app.locationServices.lastKnownLocation;
-    if (myLocation)
-    {
-        OsmAnd::PointI myLocation31(OsmAnd::Utilities::get31TileNumberX(myLocation.coordinate.longitude),
-                                    OsmAnd::Utilities::get31TileNumberY(myLocation.coordinate.latitude));
-        
-        OsmAnd::AreaI visibleArea = [renderView getVisibleBBox31];
-        
-        return (visibleArea.topLeft.x < myLocation31.x && visibleArea.topLeft.y < myLocation31.y && visibleArea.bottomRight.x > myLocation31.x && visibleArea.bottomRight.y > myLocation31.y);
-    }
-    else
-    {
-        return YES;
-    }
+    OsmAnd::PointI location31(OsmAnd::Utilities::get31TileNumberX(longitude), OsmAnd::Utilities::get31TileNumberY(latitude));
+    OsmAnd::AreaI visibleArea = [renderView getVisibleBBox31];
+    return (visibleArea.topLeft.x < location31.x && visibleArea.topLeft.y < location31.y && visibleArea.bottomRight.x > location31.x && visibleArea.bottomRight.y > location31.y);
 }
 
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading

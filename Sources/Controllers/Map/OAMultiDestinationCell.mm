@@ -71,14 +71,14 @@
 - (void)updateLayout:(CGRect)frame
 {
     CGFloat h = frame.size.height;
-    CGFloat dirViewWidth = frame.size.width - 40.0;
+    CGFloat dirViewWidth = frame.size.width - 40.0 - (OAUtilities.getLeftMargin * 2);
         
     CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
     
     _contentView.frame = newFrame;
-    _directionsView.frame = CGRectMake(0.0, 0.0, dirViewWidth, h);
+    _directionsView.frame = CGRectMake(0.0 + OAUtilities.getLeftMargin, 0.0, dirViewWidth, h);
     
-    _btnClose.frame = CGRectMake(_directionsView.frame.size.width, 0.0, 40.0, h);
+    _btnClose.frame = CGRectMake(_directionsView.frame.size.width + OAUtilities.getLeftMargin, 0.0, 40.0, h);
     
     switch ([self destinationsCount])
     {

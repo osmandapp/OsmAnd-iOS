@@ -16,7 +16,6 @@
 #import "OARoutingHelper.h"
 #import "OAUtilities.h"
 #import "QuadRect.h"
-#import "OARouteProvider.h"
 
 #define distanceClosestToIntermediate 400.0
 #define distanceThresholdToIntroduceFirstAndLastPoints 50
@@ -44,9 +43,6 @@
     int _currentWaypointGPX;
     int _lastWaypointGPX;
     int _currentStraightAngleRoute;
-    
-    EOARouteService _routeProvider;
-    CLLocation *_currentStraightAnglePoint;
 }
 
 
@@ -376,6 +372,20 @@
             dist += [fromLoc distanceFromLocation:l];
         
         return dist;
+    }
+    return 0;
+}
+
+- (void) updateNextVisiblePoint:(int) nextPoint location:(CLLocation *) mp
+{
+    _currentStraightAnglePoint = mp;
+    _currentStraightAngleRoute = nextPoint;
+}
+
+- (int) getDistanceFromPoint:(int) locationIndex
+{
+    if(_listDistance && locationIndex < _listDistance.count) {
+        return [_listDistance[locationIndex] intValue];
     }
     return 0;
 }

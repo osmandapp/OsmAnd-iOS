@@ -48,6 +48,7 @@
     NSIndexPath *indexPathForSwipingCell;
     
     OAAutoObserverProxy *_historyPointAddObserver;
+    UIView *_navBarBackgroundView;
 }
 
 + (OADestinationCardsViewController *)sharedInstance
@@ -164,20 +165,30 @@
     tapRec.delegate = self;
     
     [self.tableView addGestureRecognizer:tapRec];
+    _leftTableViewPadding.constant += OAUtilities.getLeftMargin;
+    _rightTableViewPadding.constant += OAUtilities.getLeftMargin;
     [self configureBottomToolbar];
 }
 
 - (void) configureBottomToolbar
 {
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        self.bottomView.backgroundColor = UIColor.clearColor;
+        
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+        blurEffectView.frame = self.view.frame;
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _navBarBackgroundView = blurEffectView;
+        [self.bottomView insertSubview:_navBarBackgroundView atIndex:0];
+        self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    }
+    [self.bottomToolBar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    [self.bottomToolBar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    _bottomToolBar.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     _toolBarHeight.constant += bottomMargin;
     _historyViewButton.title = OALocalizedString(@"history");
-    [_historyViewButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: UIColorFromRGB(color_primary_purple),  NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
-    
     _appearanceViewButton.title = OALocalizedString(@"map_settings_appearance");
-    [_appearanceViewButton setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: UIColorFromRGB(color_primary_purple),  NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
-    [_bottomToolBar bringSubviewToFront:_cardsView];
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration

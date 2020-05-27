@@ -1272,11 +1272,11 @@
 "tile_data" = "Datos de sos tasseddos";
 "online_map" = "Mapa in lìnia";
 "calculating_progress" = "Carculende…";
-"quick_action_hillshade_descr" = "Incarchende custu butone as a ammustrare o cuare su livellu de sas umbraduras de sos rilievos in sa mapa.";
+"quick_action_hillshade_descr" = "Incarchende custu butone as a ammustrare o cuare su livellu de su terrinu in sa mapa.";
 "show_hillshade" = "Ammustra sas umbraduras";
 "hide_hillshade" = "Cua sas umbraduras";
 "toggle_contour_lines" = "Ammustra/Cua sas curvas de livellu";
-"toggle_hillshade" = "Ammustra/Cua sas umbraduras de sos rilievos";
+"toggle_hillshade" = "Ammustra/Cua su terrinu";
 "display_starting_at_zoom_level" = "Ammustra incumintzende dae su livellu de ismanniamentu";
 "quick_action_contour_lines_descr" = "Incarchende custu butone as a ammustrare o cuare sas curvas de livellu in sa mapa.";
 "hide_contour_lines" = "Cua sas curvas de livellu";
@@ -1693,3 +1693,22 @@
 "map_settings_layer_transparency" = "Transparèntzia de s'istratu";
 "map_settings_terrain" = "Terrinu";
 "active_markers" = "Marcadores ativos";
+"public_transport_empty_warning_title" = "A dolu mannu OsmAnd no est resèssida a agatare un'àndala pro sas impostatziones tuas.";
+"res_slope" = "Caladòrgia";
+"enable_hillshade" = "Abìlita·lu pro bìdere sos datos de su terrinu";
+"map_settings_add_maps_slopes" = "Tenes bisòngiu de mapas additzionales pro bìdere sas pendèntzias in sa mapa";
+"map_settings_add_maps_hillshade" = "Tenes bisòngiu de mapas additzionales pro bìdere sas umbraduras de sos rilievos in sa mapa";
+"map_settings_zoom_level_description" = "Imposta su livellu de ismanniamentu mìnimu e màssimu pro ammustrare s'istratu";
+"map_settings_hillshade_description" = "Sas mapas de sas umbraduras de sos rilievos ammustrant sas pendèntzias, sos cùcuros e sos pranos impreende livellos diferentes de murru";
+"map_settings_slopes_description" = "Sas mapas de sas pistas impreant colores diferentes pro ammustrare su terrinu";
+"map_settings_slopes_legend" = "Podes lèghere àteras informatziones in subra de sas pistas in Wikipedia";
+"arrows_direction_to_markers" = "Sas fritzas ammustrant sa diretzione cara a su marcadore ativu si est positzionadu in foras de s'ischermu. Sas lìnias de diretzione disinnant una lìnia cara a sos marcadores ativos.";
+"appearance_on_map" = "Aparèntzia in sa mapa";
+"choose_how_display_distance" = "Issèbera comente ammustrare sa distàntzia dae sos marcadores ativos";
+"specify_number_of_dir_indicators" = "Dillinda su nùmeru de indicadores de diretzione, at a influire in totu sas impostatziones in suta.";
+"direction_lines" = "Lìnias de diretzione";
+"arrows_on_map" = "Fritzas in sa mapa";
+"distance_indication" = "Indicatzione de distàntzia";
+"two" = "Duos";
+// Dirrection appearance
+"one" = "Unu";

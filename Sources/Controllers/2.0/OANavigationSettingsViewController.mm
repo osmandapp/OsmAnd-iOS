@@ -18,6 +18,7 @@
 #import "OARoutingHelper.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OrderedDictionary.h"
+#import "OARouteProvider.h"
 #include <generalRouter.h>
 
 #define kCellTypeSwitch @"switch"
@@ -196,6 +197,17 @@ static NSDictionary *screenVoiceProviders;
             auto router = [self getRouter:_am];
             if (router)
             {
+                if (_am != OAApplicationMode.PUBLIC_TRANSPORT)
+                {
+                    [dataArr addObject:
+                    @{
+                      @"name" : @"route_provider",
+                      @"title" : OALocalizedString(@"nav_type_title"),
+                      @"description" : OALocalizedString(@"avoid_in_routing_descr"),
+                      @"img" : @"menu_cell_pointer.png",
+                      @"type" : kCellTypeMultiSelectionList }
+                    ];
+                }
                 auto& parameters = router->getParameters();
                 if (parameters.find("short_way") != parameters.end())
                 {
@@ -554,6 +566,38 @@ static NSDictionary *screenVoiceProviders;
             firstRow[@"header"] = OALocalizedString(@"routing_preferences_descr");
             dataArr[0] = [NSDictionary dictionaryWithDictionary:firstRow];
 
+            break;
+        }
+        case kNavigationSettingsScreenNavigationType:
+        {
+            _titleView.text = OALocalizedString(@"nav_type_title");
+            OAAppSettings *settings = OAAppSettings.sharedManager;
+            [dataArr addObject:
+            @{
+              @"name" : @"nav_type_osmand",
+              @"title" : OALocalizedString(@"nav_type_osmand"),
+              @"val" : @(OSMAND),
+              @"img" : [settings.routerService get:_am] == OSMAND ? @"menu_cell_selected.png" : @"",
+              @"type" : kCellTypeCheck }
+            ];
+            
+            [dataArr addObject:
+            @{
+              @"name" : @"nav_type_direct_to",
+              @"title" : OALocalizedString(@"nav_type_direct_to"),
+              @"val" : @(DIRECT_TO),
+              @"img" : [settings.routerService get:_am] == DIRECT_TO ? @"menu_cell_selected.png" : @"",
+              @"type" : kCellTypeCheck }
+            ];
+            
+            [dataArr addObject:
+            @{
+              @"name" : @"nav_type_straight_line",
+              @"title" : OALocalizedString(@"nav_type_straight_line"),
+              @"val" : @(STRAIGHT),
+              @"img" : [settings.routerService get:_am] == STRAIGHT ? @"menu_cell_selected.png" : @"",
+              @"type" : kCellTypeCheck }
+            ];
             break;
         }
         case kNavigationSettingsScreenAvoidRouting:
@@ -1315,6 +1359,9 @@ static NSDictionary *screenVoiceProviders;
         case kNavigationSettingsScreenGeneral:
             [self selectGeneral:item];
             break;
+        case kNavigationSettingsScreenNavigationType:
+            [self selectNavigationType:item];
+            break;
         case kNavigationSettingsScreenReliefFactor:
             [self selectReliefFactor:item];
             break;
@@ -1359,7 +1406,11 @@ static NSDictionary *screenVoiceProviders;
     NSString *name = item[@"name"];
     NSObject *setting = item[@"setting"];
     OANavigationSettingsViewController* settingsViewController = nil;
-    if ([@"avoid_routing" isEqualToString:name])
+    if ([@"route_provider" isEqualToString:name])
+    {
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenNavigationType applicationMode:_am];
+    }
+    else if ([@"avoid_routing" isEqualToString:name])
     {
         settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAvoidRouting applicationMode:_am];
     }
@@ -1431,6 +1482,13 @@ static NSDictionary *screenVoiceProviders;
     else
         [self presentViewController:settingsViewController animated:YES completion:nil];
     
+}
+
+- (void) selectNavigationType:(NSDictionary *)item
+{
+    int routeType = [item[@"val"] intValue];
+    [OAAppSettings.sharedManager.routerService set:routeType mode:_am];
+    [self backButtonClicked:nil];
 }
 
 - (void) selectReliefFactor:(NSDictionary *)item

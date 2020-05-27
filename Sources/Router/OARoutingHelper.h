@@ -78,6 +78,7 @@ struct RouteSegmentResult;
 - (NSArray<OARouteDirectionInfo *> *) getRouteDirections;
 - (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i;
 - (CLLocation *) getLastProjection;
+- (CLLocation *) getLastFixedLocation;
 - (OAGPXRouteParamsBuilder *) getCurrentGPXRoute;
 - (void) setGpxParams:(OAGPXRouteParamsBuilder *)params;
 - (CLLocation *) getFinalLocation;

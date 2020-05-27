@@ -25,6 +25,7 @@
 #import "OATransportRoutingHelper.h"
 
 #import <Reachability.h>
+#import <OsmAndCore/Utilities.h>
 
 #define DEFAULT_GPS_TOLERANCE 12
 #define POSITION_TOLERANCE 60
@@ -912,6 +913,53 @@ static BOOL _isDeviatedFromRoute = false;
         }
         
     }
+    
+    // 4. update angle point
+    if (_route.routeVisibleAngle > 0)
+    {
+        // proceed to the next point with min acceptable bearing
+        double ANGLE_TO_DECLINE = _route.routeVisibleAngle;
+        int nextPoint = _route.currentRoute;
+        for (; nextPoint < routeNodes.count - 1; nextPoint++)
+        {
+            float bearingTo = [currentLocation bearingTo:routeNodes[nextPoint]];
+            float bearingTo2 = [routeNodes[nextPoint] bearingTo:routeNodes[nextPoint + 1]];
+            if (abs(OsmAnd::Utilities::degreesDiff(bearingTo2, bearingTo)) <= ANGLE_TO_DECLINE)
+                break;
+        }
+
+        if(nextPoint > 0)
+        {
+            CLLocation *next = routeNodes[nextPoint];
+            CLLocation *prev = routeNodes[nextPoint - 1];
+            float bearing = [prev bearingTo:next];
+            double bearingTo = abs(OsmAnd::Utilities::degreesDiff(bearing, [currentLocation bearingTo:next]));
+            double bearingPrev = abs(OsmAnd::Utilities::degreesDiff(bearing, [currentLocation bearingTo:prev]));
+            while (YES) {
+                CLLocation *mp = [OAMapUtils calculateMidPoint:prev s2:next];
+                if([mp distanceFromLocation:next] <= 100) {
+                    break;
+                }
+                double bearingMid = abs(OsmAnd::Utilities::degreesDiff(bearing, [currentLocation bearingTo:mp]));
+                if (bearingPrev < ANGLE_TO_DECLINE)
+                {
+                    next = mp;
+                    bearingTo = bearingMid;
+                }
+                else if(bearingTo < ANGLE_TO_DECLINE)
+                {
+                    prev = mp;
+                    bearingPrev = bearingMid;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            [_route updateNextVisiblePoint:nextPoint location:next];
+        }
+
+    }
     return false;
 }
 
@@ -1255,6 +1303,11 @@ static BOOL _isDeviatedFromRoute = false;
 - (CLLocation *) getLastProjection
 {
     return _lastProjection;
+}
+
+- (CLLocation *) getLastFixedLocation
+{
+    return _lastFixedLocation;
 }
 
 - (OAGPXRouteParamsBuilder *) getCurrentGPXRoute

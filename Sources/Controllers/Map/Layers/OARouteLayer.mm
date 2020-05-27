@@ -18,7 +18,6 @@
 #import "OATransportRoutingHelper.h"
 #import "OATransportStopType.h"
 #import "OAColors.h"
-#import "OARouteProvider.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

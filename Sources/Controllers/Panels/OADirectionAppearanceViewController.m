@@ -79,6 +79,14 @@
     [self.tableView reloadData];
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [_mapPanel recreateControls];
+    [_mapPanel refreshMap:YES];
+}
+
 - (UIView *) getTopView
 {
     return _navBarView;
@@ -355,10 +363,15 @@
         [_mapWidgetRegistry setVisibility:marker2nd visible:visible collapsed:collapsed];
     else
         [_mapWidgetRegistry setVisibility:marker2nd visible:NO collapsed:collapsed];
-    [[OARootViewController instance].mapPanel recreateControls];
 }
 
 #pragma mark - UITableViewDelegate
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
+}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

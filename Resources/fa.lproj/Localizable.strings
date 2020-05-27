@@ -24,7 +24,7 @@
 "coords_format_descr" = "قالب نمایش مختصات جغرافیایی را مشخص کنید.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
-"save_global_track_interval" = "بازهٔ زمانی ثبت سراسری";
+"save_global_track_interval" = "بازهٔ زمانی ثبت (سراسری)";
 "save_global_track_interval_descr" = "بازهٔ زمانی برای ضبط رد را انتخاب کنید (که از طریق ابزار ضبط جی‌پی‌ایکس روی نقشه فعال می‌شود).";
 "rotate_map_to_bearing" = "جهت نقشه";
 "rotate_map_to_bearing_descr" = "نحوهٔ چرخش نقشه را انتخاب کنید.";
@@ -108,7 +108,7 @@
 "show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps), speed camera warnings, and lane information";
 "speak_title" = "اعلام‌کردن…";
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
-"keep_informing" = "تکرار دستورات ناوبری";
+"keep_informing" = "تکرار فرمان‌های ناوبری";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "اعلام رسیدن";
 "arrival_distance_descr" = "چه‌زمانی پیام رسیدن به مقصد اعلام شود؟";
@@ -697,14 +697,14 @@
 "categories" = "Categories";
 "items_selected" = "%d selected";
 "custom_search" = "جست‌وجوی سفارشی";
-"poi_filter_custom_filter" = "فیلتر سفارشی";
+"poi_filter_custom_filter" = "پالایهٔ سفارشی";
 "poi_filter_closest_poi" = "نزدیک‌ترین مکان‌ها";
 "shared_string_is_open_24_7" = "۲۴/۷ باز است";
 "shared_string_is_open" = "باز است";
 "poi_filter_by_name" = "جست‌وجو بر اساس نام";
 "subcategories" = "زیردسته‌ها";
 "select_all" = "Select all";
-"create_custom_poi" = "ایجاد پالایهٔ سفارشی";
+"create_custom_poi" = "ساخت پالایهٔ سفارشی";
 "selected_categories" = "دسته‌های انتخاب‌شده";
 "new_filter_desc" = "لطفاً برای فیلتر جدید نامی وارد کنید. این نام به دسته‌ها اضافه می‌شود.";
 "shared_string_filters" = "پالایه‌ها";

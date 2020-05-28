@@ -359,8 +359,10 @@
         else if ([key isEqualToString:@"download_map"])
         {
             NSLog(@"Download map");
-            OADownloadMapViewController *downloadMapVC = [[OADownloadMapViewController alloc] init];
-            [mapPanel.navigationController pushViewController:downloadMapVC animated:YES];
+            [self doPush];
+            [[OARootViewController instance].mapPanel openTargetViewWithDownloadMapSource:YES];
+//            OADownloadMapViewController *downloadMapVC = [[OADownloadMapViewController alloc] init];
+//            [mapPanel.navigationController pushViewController:downloadMapVC animated:YES];
         }
         else if ([key isEqualToString:@"update_map"])
         {
@@ -379,6 +381,19 @@
     [point setAuthor:@""];
     [point setAction:CREATE];
     return point;
+}
+
+- (void)doPush
+{
+    //parentController = self.parentViewController;
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.4;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionPush; // kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+    transition.subtype = kCATransitionFromRight; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+    [[OARootViewController instance].navigationController.view.layer addAnimation:transition forKey:nil];
+    [[OARootViewController instance].navigationController popToRootViewControllerAnimated:NO];
 }
 
 @synthesize vwController;

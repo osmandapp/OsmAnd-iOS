@@ -120,6 +120,7 @@
 - (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
 - (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen;
+- (void) openTargetViewWithDownloadMapSource:(BOOL)pushed;
 
 - (BOOL) hasGpxActiveTargetType;
 - (void) displayGpxOnMap:(OAGPX *)item;

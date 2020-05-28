@@ -46,6 +46,7 @@
 #import "Reachability.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
+#import "OADownloadMapViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -321,6 +322,11 @@
             controller = [[OATrsansportRouteDetailsViewController alloc] initWithRouteIndex:[targetPoint.targetObj integerValue]];
             break;
         }
+        case OATargetDownloadMapSource:
+        {
+            controller = [[OADownloadMapViewController alloc] init];
+            break;
+        }
             
         default:
         {
@@ -340,7 +346,8 @@
         targetPoint.type != OATargetRouteDetailsGraph &&
         targetPoint.type != OATargetImpassableRoadSelection &&
         targetPoint.type != OATargetChangePosition &&
-        targetPoint.type != OATargetTransportRouteDetails)
+        targetPoint.type != OATargetTransportRouteDetails &&
+        targetPoint.type != OATargetDownloadMapSource)
     {
         [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
                                        resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion

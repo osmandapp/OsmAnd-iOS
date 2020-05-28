@@ -6,8 +6,8 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OATargetMenuViewController.h"
 
-@interface OADownloadMapViewController : OACompoundViewController
+@interface OADownloadMapViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
 
 @end

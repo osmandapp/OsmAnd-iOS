@@ -12,6 +12,13 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
+#define MIN_LATITUDE -85.0511
+#define MAX_LATITUDE 85.0511
+#define LATITUDE_TURN 180.0
+#define MIN_LONGITUDE -180.0
+#define MAX_LONGITUDE 180.0
+#define LONGITUDE_TURN 360.0
+
 @implementation OAMapUtils
 
 + (NSArray<OAPOI *> *) sortPOI:(NSArray<OAPOI *> *)array lat:(double)lat lon:(double)lon
@@ -88,6 +95,55 @@
     return b;
 }
 
++ (CLLocation *) calculateMidPoint:(CLLocation *) s1 s2:(CLLocation *) s2
+{
+    double lat1 = s1.coordinate.latitude / 180 * M_PI;
+    double lon1 = s1.coordinate.longitude / 180 * M_PI;
+    double lat2 = s2.coordinate.latitude / 180 * M_PI;
+    double lon2 = s2.coordinate.longitude  / 180 * M_PI;
+    double Bx = cos(lat2) * cos(lon2 - lon1);
+    double By = cos(lat2) * sin(lon2 - lon1);
+    double latMid = atan2(sin(lat1) + sin(lat2),
+            sqrt((cos(lat1) + Bx) * (cos(lat1) + Bx) + By * By));
+    double lonMid = lon1 + atan2(By, cos(lat1) + Bx);
+    return [[CLLocation alloc] initWithLatitude:[self checkLatitude:(latMid * 180 / M_PI)] longitude:[self checkLongitude:(lonMid * 180 / M_PI)]];
+}
+
++ (double) checkLatitude:(double) latitude
+{
+    if (latitude >= MIN_LATITUDE && latitude <= MAX_LATITUDE) {
+        return latitude;
+    }
+    while (latitude < -90 || latitude > 90) {
+        if (latitude < 0) {
+            latitude += LATITUDE_TURN;
+        } else {
+            latitude -= LATITUDE_TURN;
+        }
+    }
+    if (latitude < MIN_LATITUDE) {
+        return MIN_LATITUDE;
+    } else if (latitude > MAX_LATITUDE) {
+        return MAX_LATITUDE;
+    }
+    return latitude;
+}
+
++ (double) checkLongitude:(double) longitude
+{
+    if (longitude >= MIN_LONGITUDE && longitude <= MAX_LONGITUDE) {
+        return longitude;
+    }
+    while (longitude <= MIN_LONGITUDE || longitude > MAX_LONGITUDE) {
+        if (longitude < 0) {
+            longitude += LONGITUDE_TURN;
+        } else {
+            longitude -= LONGITUDE_TURN;
+        }
+    }
+    return longitude;
+}
+    
 /**
  * outx, outy are the coordinates out of the box
  * inx, iny are the coordinates from the box (NOT IMPORTANT in/out, just one should be in second out)

@@ -727,7 +727,10 @@
         [self.view insertSubview:self.statusBarView aboveSubview:_toolbarViewController.view];
         
         if (self.widgetsView && self.widgetsView.superview)
-            [self.view insertSubview:self.widgetsView belowSubview:_toolbarViewController.view];
+        {
+            UIView *shadeView = _mapPanelViewController.shadeView;
+            [self.view insertSubview:self.widgetsView belowSubview:shadeView && shadeView.superview ? shadeView : _toolbarViewController.view];
+        }
     }
 }
 

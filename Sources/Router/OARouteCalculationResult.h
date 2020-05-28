@@ -12,6 +12,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAMapStyleSettings.h"
 #import "OALocationPoint.h"
+#import "OARouteProvider.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -38,6 +39,11 @@
 @property (nonatomic, readonly) NSString *errorMessage;
 @property (nonatomic, readonly) float routingTime;
 @property (nonatomic, readonly) int currentRoute;
+
+@property (nonatomic, readonly) double routeRecalcDistance;
+@property (nonatomic, readonly) double routeVisibleAngle;
+@property (nonatomic, readonly) CLLocation *currentStraightAnglePoint;
+@property (nonatomic, readonly) EOARouteService routeProvider;
 
 - (instancetype) initWithErrorMessage:(NSString *)errorMessage;
 
@@ -74,5 +80,7 @@
 - (int) getIntermediatePointsToPass;
 - (int) getLeftTime:(CLLocation *)fromLoc;
 - (int) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc;
+- (void) updateNextVisiblePoint:(int) nextPoint location:(CLLocation *) mp;
+- (int) getDistanceFromPoint:(int) locationIndex;
 
 @end

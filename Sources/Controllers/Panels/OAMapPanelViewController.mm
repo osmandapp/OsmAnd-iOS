@@ -173,9 +173,7 @@ typedef enum
     UIStatusBarStyle _customStatusBarStyle;
     
     BOOL _mapStateSaved;
-    
-    UIView *_shadeView;
-    
+        
     NSMutableArray<OAToolbarViewController *> *_toolbars;
     BOOL _topControlsVisible;
 }
@@ -3212,10 +3210,18 @@ typedef enum
 
 - (void) refreshMap
 {
+    [self refreshMap:NO];
+}
+
+- (void) refreshMap:(BOOL)redrawMap
+{
     if (self.hudViewController)
         [self.hudViewController updateInfo];
     
     [self updateToolbar];
+    
+    if (redrawMap)
+        [_mapViewController.mapView invalidateFrame];
 }
 
 #pragma mark - OAParkingDelegate

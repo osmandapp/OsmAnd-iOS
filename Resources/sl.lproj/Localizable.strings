@@ -1261,3 +1261,4 @@
 "app_mode_offroad" = "Terenska vožnja (po brezpotju)";
 "map_settings_base_transp" = "Prozornost osnovnega zemljevida";
 "app_mode_shuttle_bus" = "Prevoz z minibusom";
+"allow_3d" = "Dovoljen 2.5D pogled";

@@ -80,6 +80,7 @@ struct CLLocationCoordinate2D;
 - (BOOL) isGpuWorkerPaused;
 - (BOOL) suspendGpuWorker;
 - (BOOL) resumeGpuWorker;
+- (void) invalidateFrame;
 
 @property (nonatomic) CGFloat displayDensityFactor;
 @property (nonatomic) OsmAnd::PointI target31;

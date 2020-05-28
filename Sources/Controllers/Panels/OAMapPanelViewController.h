@@ -30,6 +30,7 @@
 @property (nonatomic, strong, readonly) OAMapHudViewController* hudViewController;
 @property (nonatomic, readonly) OAMapActions *mapActions;
 @property (nonatomic, readonly) OAMapWidgetRegistry *mapWidgetRegistry;
+@property (nonatomic, readonly) UIView *shadeView;
 
 @property (nonatomic, readonly) BOOL activeTargetActive;
 @property (nonatomic, readonly) OATargetPointType activeTargetType;
@@ -143,6 +144,7 @@
 
 - (void) recreateControls;
 - (void) refreshMap;
+- (void) refreshMap:(BOOL)redrawMap;
 - (void) updateColors;
 
 - (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr;

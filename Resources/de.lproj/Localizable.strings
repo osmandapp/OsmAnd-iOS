@@ -1236,7 +1236,7 @@
 "hide_edits" = "Lokale Bearbeitungen ausblenden";
 "quick_action_edit_list" = "Aktionsliste bearbeiten";
 "shared_string_time_of_day" = "Tageszeit";
-"gpx_slope" = "Steigung";
+"gpx_slope" = "Hangneigung";
 "simulate_navigation" = "Navigation simulieren";
 "select_avoid_descr" = "Wählen Sie während der Navigation die Straßen aus, die Sie meiden möchten. Sie können entweder eine Straße auf der Karte auswählen oder einen Typ aus der untenstehenden Liste auswählen.";
 "route_params" = "Routenparameter";
@@ -1699,7 +1699,7 @@
 "one" = "Eins";
 "public_transport_empty_warning_descr" = "Versuchen Sie, die Einstellungen zu ändern.";
 "public_transport_empty_warning_title" = "Leider konnte OsmAnd keine für Ihre Einstellungen geeignete Route finden.";
-"res_slope" = "Steigung";
+"res_slope" = "Hangneigung";
 "help_legend_descr" = "Die Anleitung zu den Symbolen der Karte";
 "help_mapillary" = "OsmAnd + Mapillary";
 "help_travel" = "Reisen (Wikipedia & Wikivoyage)";
@@ -1709,8 +1709,8 @@
 "hide_terrain" = "Gelände ausblenden";
 "show_terrain" = "Gelände anzeigen";
 "map_settings_legend" = "Legende";
-"map_settings_add_maps_slopes" = "Zusätzliche Karten sind erforderlich, um Pisten auf der Karte anzuzeigen";
+"map_settings_add_maps_slopes" = "Zusätzliche Karten sind erforderlich, um Hangneigungen auf der Karte anzuzeigen";
 "map_settings_add_maps_hillshade" = "Zusätzliche Karten sind erforderlich, um die Hügelschatten auf der Karte anzuzeigen";
-"map_settings_hillshade_description" = "Schummerungskarten visualisieren Hänge, Gipfel und Tiefland mit verschiedenen Graustufen";
-"map_settings_slopes_description" = "Pistenkarten verwenden unterschiedliche Farben, um das Gelände zu visualisieren";
-"map_settings_slopes_legend" = "Sie können mehr über die Pisten auf Wikipedia lesen";
+"map_settings_hillshade_description" = "Schummerungskarten visualisieren Hangneigungen, Gipfel und Tiefland mit verschiedenen Graustufen";
+"map_settings_slopes_description" = "Hangneigungskarten verwenden unterschiedliche Farben, um das Gelände zu visualisieren";
+"map_settings_slopes_legend" = "Sie können mehr über Hangneigungen auf Wikipedia lesen";

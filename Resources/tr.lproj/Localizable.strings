@@ -53,7 +53,7 @@
 "fav_select" = "Sık Kullanılanlar seçiniz";
 // POI
 "poi_insrease_radius" = "Arama yarıçapı arttır";
-"poi_max_radius_reached" = "Maksimum arama yarıçapı ulaşıldı";
+"poi_max_radius_reached" = "Azami arama yarıçapına ulaşıldı";
 "poi_search_near_center" = "Arama haritanın merkezine yakın yapılır";
 "poi_hide" = "Gizle";
 // My Places
@@ -121,7 +121,7 @@
 "map_settings_over" = "Üst katman";
 "map_settings_under" = "Altına koymak";
 "map_settings_none" = "Hiçbiri";
-"map_settings_offline" = "Çevrim dışı haritalar için stiller";
+"map_settings_offline" = "Çevrim dışı haritalar için tarzlar";
 "map_settings_online" = "Online haritalar";
 "map_settings_transp" = "Şeffaflık";
 "map_settings_avail_lay" = "Kullanılabilir katmanlar";
@@ -130,15 +130,15 @@
 "intro_download" = "indir\nHarita";
 "intro_next" = "İleri";
 "intro_welcome" = "Hoşgeldiniz\nOsmAnd";
-"intro_promo" = "Global çevrim dışı haritalar";
-"intro_placeholder" = "Bölgenizin adını girin";
+"intro_promo" = "Küresel çevrim dışı haritalar";
+"intro_placeholder" = "bölgenizin adını girin";
 // Settings
 "sett_settings" = "Ayarlar";
 "sett_units" = "Birimler";
 "sett_lang" = "Harita Dili";
 "sett_km" = "Kilometre";
 "sett_ml" = "Mil";
-"sett_zoom" = "Zoom düğmesi";
+"sett_zoom" = "Yakınlaştırma düğmesi";
 "sett_show" = "Göster";
 "sett_notshow" = "Gösterme";
 "sett_loc_fmt" = "Konum biçimi";
@@ -149,8 +149,8 @@
 "purchases" = "Satın alma";
 // Purchases
 "prch_addons" = "Eklentileri";
-"prch_nau_q1" = "Lütfen harita ayarları \"Deniz\" tarzında açmak ve dünya seamarks basemap yükleyin.";
-"prch_nau_q2_cell" = "İndirme %@ hücresel şebeke üzerinden gerektirir.";
+"prch_nau_q1" = "Lütfen Harita Ayarlarında \"Deniz\" tarzını açın ve dünya deniz işaretleri temel haritasını yükleyin.";
+"prch_nau_q2_cell" = "İndirme hücresel şebeke üzerinden %@ gerektirmektedir.";
 "incur_high_charges" = "Bu yüksek ücrete tabi olabilir.";
 "sett_deg_min" = "Dereceler ve dakikalar";
 "sett_arr" = "Harita okları";
@@ -181,7 +181,7 @@
 "res_updates_avail" = "Kullanılabilir güncellemeler";
 "res_maps_inst" = "harita(lar)";
 "res_deleting" = "Siliniyor…";
-"res_wsea_map" = "Dünya seamarks basemap";
+"res_wsea_map" = "Dünya deniz işaretleri temel haritası";
 "res_wmap" = "Dünya genel bakış haritası";
 "res_dmap" = "Ayrıntılı genel bakış haritası";
 "res_map_of_region" = "Bölge haritası";
@@ -241,7 +241,7 @@
 "units_min" = "min";
 "units_sec" = "sn";
 // Map
-"map_inst_det_map_q" = "Seçtiğiniz konumları hakkında daha fazla bilgi almak için detaylı harita genel yükleyin.";
+"map_inst_det_map_q" = "Konumlarınız hakkında daha fazla bilgi almak için ayrıntılı genel bakış haritasını yükleyin.";
 "map_remind" = "Daha sonra anımsat";
 "map_no_address" = "Adres henüz bilinmemektedir";
 // Import
@@ -253,10 +253,10 @@
 "import_gpx" = "GPX Seyahati";
 "go_to_map" = "Haritasına git";
 // Alerts
-"alert_inet_needed" = "Bu eylemi gerçekleştirmek için gereken Internet bağlantısı. Lütfen Internet bağlantınızı kontrol edin.";
+"alert_inet_needed" = "Bu eylemi gerçekleştirmek için internet bağlantısı gereklidir. Lütfen internet bağlantınızı gözden geçirin.";
 // Context menu
-"ctx_mnu_edit_fav" = "Favori Düzenle";
-"ctx_mnu_add_fav" = "Sık kullanılan Ekle";
+"ctx_mnu_edit_fav" = "Sık kullanılanı düzenle";
+"ctx_mnu_add_fav" = "Sık kullanılan ekle";
 "ctx_mnu_share" = "Paylaş";
 "ctx_mnu_direction" = "Yön";
 // Location Services
@@ -294,7 +294,7 @@
 "cannot_access_calendar" = "Takvim erişemiyor";
 "reminder_not_set_text" = "Takvimin erişimi izin verilmez çünkü hatırlatma set değildi";
 //inapps
-"product_title_nautical" = "Deniz harita";
+"product_title_nautical" = "Deniz haritası";
 "product_desc_nautical" = "Tüm dünya deniz haritası";
 "product_title_parking" = "Park pozisyonu";
 "product_desc_parking" = "İzin kolayca ezberlemek ne zaman araba park edilmişti ve zamanla sınırlı otopark Eğer ne kadar kalan süre";
@@ -389,16 +389,16 @@
 "sorting" = "Sıralama";
 "plugins" = "Eklentileri";
 "open_map_settings" = "Harita ayarlarını aç";
-"plugin_popup_ski_title" = "Kayak harita stil üzerinde açmak";
-"plugin_popup_wiki_title" = "Vikipedi İndir";
-"plugin_popup_wiki_desc" = "Vikipedi eklentisi kullanmaya başlamak için, öncelikle bir bölgenin Vikipedi veri indirme lütfen";
+"plugin_popup_ski_title" = "Kayak haritası tarzını aç";
+"plugin_popup_wiki_title" = "Wikipedia'yı indir";
+"plugin_popup_wiki_desc" = "Wikipedia eklentisini kullanmaya başlamak için lütfen önce bir bölgenin Wikipedia verilerini indirin";
 "plugin_popup_wiki_ask" = "Wikipedia verilerini indirmek için <b>Wikipedia</b> eklentisini etkinleştirmeniz gerekmektedir";
 "plugin_popup_srtm_title" = "Eş yükselti eğrilerini indir";
 "plugin_popup_srtm_desc" = "Eş yükselti eğrileri özelliğini kullanmaya başlamak için lütfen önce bir bölgenin eş yükselti eğrilerini indirin";
 "plugin_popup_srtm_ask" = "Eş yükselti eğrilerini indirmek için eklentiyi etkinleştirmeniz gerekmektedir: <b>Eş yükselti eğrileri</b>";
-"plugin_popup_nautical_title" = "Denizcilik haritalar indirin";
-"plugin_popup_trip_planning_ask" = "Etkinleştirmek eklentisi için seyahat planlıyorsanız başlatmak için: <b>seyahat planlama</b>";
-"go_to_downloads" = "Yüklemeleri için bakın";
+"plugin_popup_nautical_title" = "Deniz haritalarını indirin";
+"plugin_popup_trip_planning_ask" = "Seyahat planlamaya başlamak için eklentiyi etkinleştirmeniz gerekmektedir: <b>Seyahat planlama</b>";
+"go_to_downloads" = "İndirmelere git";
 "turn_on_plugin" = "Eklenti açın";
 "all_world_popup_desc" = "Devlet adları, Kenarlıklar ve diğer bilgileri görmek için dünya temel harita indir";
 "restore" = "Geri yükleme";
@@ -424,14 +424,14 @@
 "map_settings_hillshade" = "Tepe gölgesi";
 "sett_lang_trans" = "başka alfabeyle yaz";
 "sett_lang_show_trans" = "İsimleri başka alfabeyle yaz";
-"product_desc_ext_nautical" = "OsmAnd deniz çizelgeleri OsmAnd haritalar ve navigasyon uygulama için bir eklentidir. Okyanuslar, denizler, kıyı bölgeleri ve nehirler, bir ayrıntılı grafiksel gösterimidir. Çizelgeleri yelken yolları, seyir fenerleri, tehlikeli alanlarda, nerede bu izin verilen veya izin verilmiyor yelken veya dock, vb için alanları gibi çeşitli bilgiler içerebilir\n\nKullanım talimatları: haritalar detaylı harita durum ne olursa olsun görmek için deniz basemap indirmek için önerilir. Deniz listeleri için harita düğmesine dokunun ve deniz için harita türünü ayarlayın.\n\nNot: Tüm profesyonel denizciler gemilerine resmi deniz listeleri var yükümlüdür.\n\nOsmAnd deniz çizelgeleri OpenSeaMap proje verileri temel alır. OpenSeaMap grafikleri şu anda resmi deniz çizelgeleri ile rekabet edemez, onlar eğlence denizciler tarafından yönlendirme veya rota planlama için kullanılabilir.";
-"product_desc_ext_parking" = "OsmAnd eklenti Otopark park konumunu hatırlatıyor. OsmAnd haritalar ve navigasyon uygulama için bir eklentidir.\nBir süre bağımsız hatırlatma (sadece bir işaretleyici harita üzerinde) ya da zaman sınırlı bir alarmlı saat süre sonu (Ayrıca harita üzerinde bir işareti içerir) üzerine seçin. Eklentisi kullanmak için eklentiler menüsünden etkinleştirin.";
+"product_desc_ext_nautical" = "OsmAnd Deniz Grafikleri, OsmAnd Haritalar & Navigasyon uygulaması için bir eklentidir. Okyanusların, denizlerin, kıyı alanlarının ve nehirlerin ayrıntılı bir grafiksel gösterimidir. Çizelgeler, yelken rotaları, navigasyon ışıkları, tehlikeli alanlar, yelken açılmasına veya yanaşmasına izin verilen ya da izin verilmeyen alanlar vb. gibi çeşitli bilgiler içerebilir.\n\nKullanım Talimatları: Ayrıntılı haritanın olmasına bakılmaksızın haritaları görmek için deniz temel haritasının indirilmesi önemle tavsiye edilir. Deniz çizelgelerini açmak için harita düğmesine dokunun ve harita türünü Deniz olarak ayarlayın.\n\nNot: Tüm profesyonel denizciler gemilerinde resmi deniz çizelgeleri bulundurmak zorundadırlar.\n\nOsmAnd Deniz çizelgeleri, OpenSeaMap projesi verilerini temel almaktadır. Şu anda OpenSeaMap çizelgeleri resmi deniz çizelgeleri ile rekabet edemese de, eğlence amaçlı yelkenciler tarafından yönlendirme veya rota planlama için kullanılabilir.";
+"product_desc_ext_parking" = "OsmAnd Park Etme Eklentisi size park konumunuzu hatırlatır. OsmAnd Haritalar & Navigasyon uygulaması için bir eklentidir.\nZamandan bağımsız bir hatırlatıcı (sadece harita üzerinde bir işaretleyici) veya zaman aşımına uğradığında alarmlı zaman sınırlı bir hatırlatıcı seçin (harita üzerinde bir işaretleyici de içerir). Eklentiyi kullanmak için Eklentiler menüsünden etkinleştirin.";
 "product_desc_ext_skimap" = "OsmAnd Kayak haritalar kış sporları yerlerde gezinmek için tasarlanmış OsmAnd haritalar ve navigasyon uygulama için bir eklentidir. Kayak pistes, teleferik işaretleri ve hatta renkli çizgiler her parçanın karmaşıklık gösteren hakkında bilgi verir. Kendileri gibi çevre altyapı kayak pistlerine hakkında bilgi almak.\n\nKullanım talimatları: OsmAnd uygulama eklentisini etkinleştirmek, harita düğmesine dokunun ve Kayak haritalar harita türünü ayarlayın.";
 "product_desc_ext_track_recording" = "Seyahatleriniz kaydedebilir ve onları OsmAnd gezi kullanarak el ile kayıt eklenti kaydedin. Mekan gpx dosyası olarak verin, paylaşmak veya bile OpenStreetMap projeye katkıda bulunmak için kullanın. Koşucular, yürüyüşçüler ve onların gezileri kayıt ilgilenen herkes için kullanışlı bir araç.";
-"product_desc_ext_srtm" = "Bu eklenti, OsmAnd çevrim dışı haritalarında görüntülenebilen eş yükselti eğrileri ve tepe gölgelemesi sağlamaktadır. Eş yükselti eğrileri, alandaki yükseklikler hakkında bilgi sağlarken, tepe gölgeleri bunları görselleştirmektedir. Bu eklentiyi kullanarak dağ zirvelerinin adlarını ve arazinin belirli özelliklerini görün.\n\nGlobal veriler (70° kuzey ve 70° güney arasındaki) SRTM (Shuttle Radar Topography Mission) ve ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), NASA'nın Dünya Gözlem Sisteminin amiral uydusu olan Terra üzerindeki bir görüntüleme aracı, tarafından yapılan ölçümlere dayanmaktadır. ASTER NASA, Japonya Ekonomi, Ticaret ve Sanayi Bakanlığı (METI) , ve Japon Uzay Sistemleri (J-spacesystems) arasında ortak bir efordur.";
+"product_desc_ext_srtm" = "Bu eklenti, OsmAnd çevrim dışı haritalarında görüntülenebilen eş yükselti eğrileri ve tepe gölgelemesi sağlamaktadır. Eş yükselti eğrileri, alandaki yükseklikler hakkında bilgi sağlarken, tepe gölgeleri bunları görselleştirmektedir. Bu eklentiyi kullanarak dağ zirvelerinin adlarını ve arazinin belirli özelliklerini görün.\n\nKüresel veriler (70° kuzey ve 70° güney arasındaki) SRTM (Shuttle Radar Topography Mission) ve ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), NASA'nın Dünya Gözlem Sisteminin amiral uydusu olan Terra üzerindeki bir görüntüleme aracı, tarafından yapılan ölçümlere dayanmaktadır. ASTER NASA, Japonya Ekonomi, Ticaret ve Sanayi Bakanlığı (METI) , ve Japon Uzay Sistemleri (J-spacesystems) arasında ortak bir çalışmadır.";
 "res_hillshade" = "Tepe gölgesi";
-"plugin_popup_ski_desc" = "<b>Kayak harita</b> stil üzerinde açmak için lütfen <b>Harita ayarları</b> ' na gidin > <b>türü göster</b>";
-"plugin_popup_nautical_desc" = "İlk deniz haritaları indirin.\n<b>Harita ayarları</b> ' na gidin > <b>türü eşleştirmek</b> ve <b>deniz</b> tarzı açmak";
+"plugin_popup_ski_desc" = "<b>Kayak haritası</b> tarzını açmak için lütfen <b>Harita Ayarları</b> > <b> Harita türü</b>'ne gidin";
+"plugin_popup_nautical_desc" = "Lütfen önce Deniz haritalarını indirin.\nArdından <b>Harita Ayarları</b> > <b> Harita türü</b>'ne gidin ve <b>Deniz</b> tarzını açın";
 "device_memory" = "Aygıt belleği";
 "free_memory" = "Ücretsiz %@";
 "edit_filter_delete_dialog_title" = "Seçilen süzgeç silinsin mi?";
@@ -579,9 +579,9 @@
 "snap_to_road_descr" = "Navigasyon sırasında konumu yola tutturt";
 "show_warnings_title" = "Uyarıları göster…";
 "speak_title" = "Bildir…";
-"keep_informing" = "Navigasyon yönergelerini tekrarla";
-"arrival_distance" = "Varış bildirisi";
-"arrival_distance_descr" = "Varış bildirimini ne yakınlıkta istiyorsun?";
+"keep_informing" = "Navigasyon talimatlarını tekrarla";
+"arrival_distance" = "Varış duyurusu";
+"arrival_distance_descr" = "Varış duyurusunu ne yakınlıkta istiyorsunuz?";
 "speed_limit_exceed" = "Hız sınırı oynama payı";
 "speed_limit_exceed_message" = "Üzerine çıktığınızda sesli uyarı alacağınız hız sınırı payı seçin.";
 "wake_on_voice" = "Ekranı aç";
@@ -624,7 +624,7 @@
 "route_tsll" = "Sola hafifçe dönün ve ilerleyin";
 "route_tu" = "U dönüşü yapın ve ilerleyin";
 "traffic_warning_speed_limit" = "Hız sınırı";
-"traffic_warning_border_control" = "Sınır kontrolü";
+"traffic_warning_border_control" = "Sınır denetimi";
 "traffic_warning_payment" = "Gişe";
 "traffic_warning_stop" = "Dur işareti";
 "traffic_warning_speed_camera" = "Hız kamerası";
@@ -812,12 +812,12 @@
 "route_stops_before" = "%d durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında loglama aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında gezi kaydı için kayıt aralığını seçin";
-"logging_min_distance" = "Minimum kayıt mesafesi";
-"logging_min_distance_descr" = "Filtre: yeni bir nokta kaydetmek için minimum mesafe";
-"logging_min_accuracy" = "Minimum kayıt doğruluğu";
-"logging_min_accuracy_descr" = "Filtre: bu doğruluğa ulaşılmadıkça log kaydı olmaz";
-"logging_min_speed" = "Minimum log kaydı hızı";
-"logging_min_speed_descr" = "Filtre: seçilen hızın altında log kaydetme yok";
+"logging_min_distance" = "Asgari kayıt mesafesi";
+"logging_min_distance_descr" = "Filtre: yeni bir nokta kaydetmek için asgari mesafe";
+"logging_min_accuracy" = "Asgari kayıt doğruluğu";
+"logging_min_accuracy_descr" = "Filtre: bu doğruluğa ulaşılmadıkça kaydetme yok";
+"logging_min_speed" = "Asgari kayıt hızı";
+"logging_min_speed_descr" = "Filtre: seçili hızın altında kaydetme yok";
 "auto_split_gap" = "Boşluktan sonra kayıtları otomatik bölme";
 "angular_units" = "Açısal ölçüm birimleri";
 "angular_units_descr" = "Azimut ölçüm birimlerini değiştirin.";
@@ -849,7 +849,7 @@
 "add_gpx_waypoint" = "GPX yol noktası ekle";
 "osmand_live_daily" = "Günlük";
 "osm_live_routing" = "OsmAnd Live navigasyon";
-"osm_editing_lost_changes_title" = "Kaydetmedençık?";
+"osm_editing_lost_changes_title" = "Kaydetmeden çık?";
 "osm_note_created" = "Oluşturulmuş OSM Notu";
 "osmand_live_last_live_update" = "Son güncelleme: %@";
 "key_hint_select" = "Seç";
@@ -880,7 +880,7 @@
 "select_all" = "Hepsini seç";
 "shared_string_street" = "Sokak";
 "help_faq_descr" = "Sık Sorulan Sorular";
-"product_title_sea_depth_contours" = "Denizel derinlik konturları";
+"product_title_sea_depth_contours" = "Deniz derinlik eğrileri";
 "osm_note_comment" = "Yorum";
 "shared_string_save_as" = "Farklı kaydet";
 "toggle_voice" = "Ses açık/kapalı";
@@ -914,7 +914,7 @@
 "get_discount_second_part" = "sonra %@";
 "dark_yellow" = "Koyu sarı";
 "translucent_green" = "Yarı saydam yeşil";
-"osm_editing_lost_changes_descr" = "Herhangi kaydedilmemiş değişiklikler kaybolur. Devam?";
+"osm_editing_lost_changes_descr" = "Kaydedilmemiş değişiklikler kaybolacak. Devam edilsin mi?";
 "region_nautical" = "Deniz haritaları";
 "create_items" = "Öge oluştur";
 "home_pt" = "Ev";
@@ -940,7 +940,7 @@
 "toggle_nav" = "Navigasyonu başlat/durdur";
 "poi_clear" = "Temizle";
 "osm_editing_contact_info" = "İletişim Bilgileri";
-"change_map_style" = "Harita stilini değiştir";
+"change_map_style" = "Harita tarzını değiştir";
 "res_world_region" = "Dünya";
 "map_settings_map_magnifier" = "Harita büyüteci";
 "quick_action_no_underlay" = "Altlık yok";
@@ -966,7 +966,7 @@
 "pink" = "Pembe";
 "quick_actions_show_dialog" = "Geçici bir iletişim kutusu göster";
 "product_title_wikivoyage" = "Seyahat Rehberleri";
-"map_styles" = "Harita stilleri";
+"map_styles" = "Harita tarzları";
 "poi_type" = "POI Türü";
 "modify_poi_short" = "POI düzenle";
 "osm_website" = "Web sitesi";
@@ -978,7 +978,7 @@
 "osm_live_payment_month_cost_descr" = "%@ / aylık";
 "quick_action_tags" = "Etiketler";
 "offline_vector_maps" = "Çevrim dışı vektör haritaları";
-"sett_ext_input" = "Harici giriş cihazları";
+"sett_ext_input" = "Harici giriş aygıtları";
 "osm_note_action_field_descr" = "Bu mesaj yorum alanına dahil edilmiştir.";
 "osm_note_upload_anonymously" = "Anonim olarak yükle";
 "blue" = "Mavi";
@@ -1123,13 +1123,13 @@
 "modify_poi" = "POI bilgilerini değiştir";
 "product_title_osm_editing" = "OpenStreetMap Düzenleme";
 "product_desc_osm_editing" = "Doğrudan OsmAnd'den OpenStreetMap'te değişiklikler yapın";
-"product_desc_ext_osm_editing" = "OSM Düzenleme eklentisi, POI nesneleri oluşturma veya değiştirme, OSM Notlarını açma veya yorum yapma ve kaydedilen GPX dosyaları ile katkıda bulunma gibi OSM'ye katkıda bulunmak için kullanılabilir. OSM, topluluk tarafından yönlendirilen global bir kamu malı haritalama projesidir. Daha fazla bilgi için lütfen https://osm.org adresine bakın. Uygulamada OSM kimlik bilgilerinizi belirtirseniz, doğrudan OsmAnd'dan katkıda bulunabilir.";
+"product_desc_ext_osm_editing" = "OSM Düzenleme eklentisi, POI nesneleri oluşturma veya değiştirme, OSM Notlarını açma veya yorum yapma ve kaydedilen GPX dosyaları ile katkıda bulunma gibi OSM'ye katkıda bulunmak için kullanılabilir. OSM, topluluk tarafından yönlendirilen küresel bir kamu malı haritalama projesidir. Daha fazla bilgi için lütfen https://osm.org adresine bakın. Uygulamada OSM kimlik bilgilerinizi belirtirseniz, doğrudan OsmAnd'dan katkıda bulunabilirsiniz.";
 "poi_category_and_type" = "Kategori ve POI Türü";
 "poi_select_category" = "Kategori seç";
 "poi_select_type" = "Tür seç";
 "osm_upload_failed_title" = "Karşıya yükleme başarısız oldu";
-"osm_upload_failed_descr" = "Lütfen giriş bilgilerinizi ve internet bağlantınızı kontrol edin ve tekrar deneyin.";
-"osm_upload_no_internet" = "Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.";
+"osm_upload_failed_descr" = "Lütfen giriş bilgilerinizi ve internet bağlantınızı gözden geçirin ve tekrar deneyin.";
+"osm_upload_no_internet" = "Lütfen internet bağlantınızı gözden geçirin ve tekrar deneyin.";
 "osm_delete_confirmation_descr" = "Bu POI'yi silmek istediğinizden emin misiniz?";
 "amenity" = "Tesis";
 "osm_tag" = "Etiket";
@@ -1171,10 +1171,10 @@
 "osm_succsessful_uploads" = "Başarılı";
 "osm_failed_uploads" = "Başarısız";
 "osm_upload_complete" = "Karşıya yükleme tamamlandı";
-"sett_ext_input_desc" = "Harici kontroller için genel klavye veya WunderLINQ gibi bir cihaz seçin.";
+"sett_ext_input_desc" = "Harici denetimler için genel klavye veya WunderLINQ gibi bir aygıt seçin.";
 "key_hint_zoom_in" = "Yakınlaştır";
 "key_hint_goback" = "Geri Git";
-"osm_tag_too_long_message" = "%@ etiketi için maksimum değer uzunluğu 255 karakterdir.\nLütfen devam etmek için daha kısa yapın.";
+"osm_tag_too_long_message" = "%@ etiketi için azami değer uzunluğu 255 karakterdir.\nLütfen devam etmek için daha kısa yapın.";
 "save_poi_without_poi_type_message" = "Türü olmadan POI'yi kaydetmek istiyor musunuz?";
 "osm_edit_uploading" = "Karşıya yükleniyor...";
 "key_hint_zoom_out" = "Uzaklaştır";
@@ -1200,7 +1200,7 @@
 "routing_import_please_restart" = "Yeni routing.xml dosyasını kullanmak için lütfen uygulamayı yeniden başlatın.";
 "download_pending" = "İndirme bekleniyor";
 "quick_action_list_descr" = "Bu eylem düğmesine dokunmak, aşağıdaki listeyi sayfalar halinde gösterir";
-"add_map_style" = "Harita stili ekle";
+"add_map_style" = "Harita tarzı ekle";
 "toggle_fav" = "Sık kullanılanları göster/gizle";
 "add_osm_note" = "OSM notu ekle";
 "toggle_online_notes" = "OSM notlarını aç/kapat";
@@ -1214,7 +1214,7 @@
 "quick_action_screen_header" = "Ekran %ld";
 "group_properties" = "Grup özellikleri";
 "add_group" = "Grup ekle";
-"select_map_style" = "Harita stilini seç";
+"select_map_style" = "Harita tarzını seç";
 "select_map_source" = "Harita kaynağını seç";
 "select_overlay" = "Üst katman haritası seç";
 "select_underlay" = "Alt katman haritasını seç";
@@ -1288,7 +1288,7 @@
 // World Regions
 "region_antarctica" = "Antarktika";
 "stats_select_graph_data" = "Grafik verilerini seç";
-"available_map_styles" = "Kullanılabilir harita stilleri";
+"available_map_styles" = "Kullanılabilir harita tarzları";
 "available_map_sources" = "Kullanılabilir harita kaynakları";
 "shared_string_clear_cache" = "Önbelleği temizle";
 "res_confirmation_delete" = "%@'ı silmek istediğinizden emin misiniz?";
@@ -1298,7 +1298,7 @@
 "displayed_route_save" = "OsmAnd Trips'e kaydet";
 "trip_name" = "Seyahat adı";
 "trip_hint" = "Seyahat adını girin";
-"shared_string_maximum" = "Maksimum";
+"shared_string_maximum" = "Azami";
 "res_online_name_descr" = "Çevrim içi kaynak için isim sağlayın";
 "res_online_url_descr" = "Çevrim içi kaynak için URL girin veya kopyalayıp yapıştırın";
 "res_url" = "URL";
@@ -1307,11 +1307,11 @@
 "res_mercator" = "Mercator Projeksiyonu";
 "res_elliptic_mercator" = "Eliptik mercator";
 "res_pseudo_mercator" = "Pseudo-Mercator projeksiyon";
-"res_zoom_levels_desc" = "Bu parametreler, harita türü veya üst/alt katman olarak kullanıldığında harita görüntüsünü etkileyecektir.\n\nHarita türü: harita seçilen yakınlaştırmalarla sınırlı olacaktır.\n\nÜst / Alt katman: Döşemelerin görüneceği zoom seviyeleri. Ölçeği arttırma veya azaltma, ayarlanan değerlerin üstünde veya altında meydana gelecektir.";
+"res_zoom_levels_desc" = "Bu parametreler, harita türü veya üst/alt katman olarak kullanıldığında harita görüntüsünü etkileyecektir.\n\nHarita türü: Harita seçilen yakınlaştırmalarla sınırlı olacaktır.\n\nÜst / Alt katman: Döşemelerin görüneceği yakınlaştırma seviyeleri. Ölçeği arttırma veya azaltma, ayarlanan değerlerin üstünde veya altında meydana gelecektir.";
 "res_expire_time_desc" = "Dakika cinsinden geçerliliğin sona erme süresi. Önbelleğe alınan döşemeler belirtilen süreden sonra yeniden yüklenecektir. Bu kaynak için döşemeleri yeniden yüklemeniz gerekmiyorsa bu alanı boş bırakın.\nBir gün 1440 dakikadır.\nBir hafta 10 080 dakikadır.\n30 gün 43 200 dakikadır.";
 "res_name_warning" = "Dosya adı boş olamaz";
 "res_url_warning" = "URL boş olamaz";
-"res_zoom_warning" = "Minimum yakınlaştırma değeri, Maksimum yakınlaştırma değerine eşit veya ondan daha büyük olamaz";
+"res_zoom_warning" = "En düşük yakınlaştırma değeri, en yüksek yakınlaştırma değerine eşit veya ondan daha büyük olamaz";
 "res_expire_warning" = "Geçerliliğin sona erme süresi 0 ile 10000000 arasında bir sayı olmalıdır";
 "rendering_attr_roadColors_description" = "Bir yol rengi şeması seçin:";
 "rendering_attr_showMtbRoutes_name" = "Dağ bisikleti parkurlarını göster";
@@ -1357,7 +1357,7 @@
 "rendering_attr_contourDensity_description" = "Eş yükselti eğrisi yoğunluğu";
 "routeInfo_winter_ice_road_name" = "Kış ve buz yolları";
 "routing_attr_difficulty_preference_name" = "Tercih edilen zorluk";
-"routing_attr_freeride_policy_description" = "'Serbest' ve 'pist dışı sürüşler', resmi olmayan yollar ve geçitlerdir. Tipik olarak düzenlenmemiş, bakımı yapılmamış ve akşamları kontrol edilmemiştir. Riski göze alarak girin.";
+"routing_attr_freeride_policy_description" = "'Serbest' ve 'pist dışı sürüşler', resmi olmayan yollar ve geçitlerdir. Tipik olarak düzenlenmemiş, bakımı yapılmamış ve akşamları denetlenmemiştir. Riski göze alarak girin.";
 "rendering_value_thin_name" = "İnce";
 "routing_attr_allow_private_description" = "Özel-arazi alanlarına erişime izin ver.";
 "routing_attr_no_new_routing_name" = "Hiçbir v1.9 yönlendirme kuralları";
@@ -1404,14 +1404,14 @@
 "routing_attr_relief_smoothness_factor_hills_name" = "Tepelikli";
 "routing_attr_weight_name" = "Ağırlık sınırı";
 "rendering_attr_piste_type_sled_name" = "Kızak";
-"rendering_value_highContrastRoads_name" = "Yüksek kontrastlı yolları";
+"rendering_value_highContrastRoads_name" = "Yüksek zıtlığa sahip yollar";
 "routing_attr_avoid_unpaved_name" = "Asfaltsız yollardan kaçın";
 "rendering_attr_piste_difficulty_intermediate_name" = "Orta";
 "routing_attr_driving_style_balance_name" = "Dengeli";
 "rendering_attr_hideAccess_name" = "Erişim kısıtlamaları";
 "rendering_attr_alpineHiking_description" = "SAC ölçeğine göre yolları görselleştir.";
 "routing_attr_piste_type_downhill_name" = "Alp/yokuş aşağı kayak";
-"routing_attr_allow_skating_only_description" = "Klasik yollar olmadan serbest stil ya da sadece paten için düzenlenmiş rotalar.";
+"routing_attr_allow_skating_only_description" = "Klasik yollar olmadan serbest tarz veya sadece paten için düzenlenmiş rotalar.";
 "rendering_attr_showAccess_name" = "Geçiş hakkındaki kısıtlamaları ve geçiş ücretlerini göster";
 "routing_attr_allow_private_name" = "Özel-arazi erişimine izin ver";
 "rendering_value_thick_name" = "Kalın";
@@ -1487,7 +1487,7 @@
 "rendering_value_blue_name" = "Mavi";
 "rendering_attr_transportStops_name" = "Ulaşım durakları";
 "rendering_attr_highway_class_steps_name" = "Basamak";
-"rendering_attr_depthContours_name" = "Denizel derinlik konturları";
+"rendering_attr_depthContours_name" = "Deniz derinlik eğrileri";
 "rendering_attr_buildings15zoom_name" = "Binalar üzerinde yakınlaştırma 15";
 "rendering_attr_subwayMode_name" = "Metro güzergah";
 "rendering_attr_OSMMapperAssistant_name" = "OSM Eşleştiricisi Yardımcısı";
@@ -1545,14 +1545,14 @@
 "routing_attr_piste_type_nordic_name" = "Kros/İskandinav kayak";
 "rendering_attr_surface_stone_name" = "Taş";
 "rendering_attr_contourLines_name" = "Eş yükselti eğrilerini göster";
-"routing_attr_allow_classic_only_description" = "Paten yolları olmadan sadece klasik stil için düzenlenmiş rotalar. Buna daha gevşek bir palete sahip daha küçük bir kar arabasıyla düzenlenen rotalar ve kayakçılar tarafından elle yapılan pistler dahildir.";
+"routing_attr_allow_classic_only_description" = "Paten yolları olmadan sadece klasik tarz için düzenlenmiş rotalar. Buna daha gevşek bir palete sahip daha küçük bir kar arabasıyla düzenlenen rotalar ve kayakçılar tarafından elle yapılan pistler dahildir.";
 "rendering_attr_tramRoutes_name" = "Tramvay yolları";
 "routing_attr_width_description" = "Rotalarda izin verilen araç genişlik sınırını belirtin.";
 "rendering_attr_noPolygons_description" = "Tüm arazi alan özelliklerini harita üzerinde şeffaf hale getirin.";
 "routing_attr_allow_expert_description" = "Tehlikeli engeller ve çevreye sahip son derece zor rotalar.";
-"rendering_attr_hmRendered_description" = "Haritanın gösterilen detay miktarını artırın.";
+"rendering_attr_hmRendered_description" = "Gösterilen harita ayrıntısı miktarını artırın.";
 "rendering_attr_surface_cobblestone_name" = "Parke taşı";
-"rendering_attr_hmRendered_name" = "Haritayı daha detaylı göster";
+"rendering_attr_hmRendered_name" = "Haritayı daha ayrıntılı göster";
 "rendering_attr_showSurfaces_name" = "Yol yüzeyi göster";
 "routeInfo_tracktype_name" = "Yüzey sertliği";
 "routing_attr_width_name" = "Genişlik sınırı";
@@ -1652,7 +1652,7 @@
 "map_settings_available_srtm_maps_descr" = "Harita üzerinde tepe gölgesi görüntülemek için ek haritalara ihtiyaç vardır";
 "map_settings_line_density_slowdown_warning" = "Yüksek çizgi yoğunluğu harita görselleştirmeyi yavaşlatabilir";
 "map_settings_appearance" = "Görünüm";
-"map_settings_contour_zoom_level_descr" = "Eş yükselti eğrilerinin görüntüleneceği zoom seviyesini seçin";
+"map_settings_contour_zoom_level_descr" = "Eş yükselti eğrilerinin görüntüleneceği yakınlaştırma seviyesini seçin";
 "map_settings_line_density" = "Çizgi yoğunluğu";
 "map_settings_line_width" = "Çizgi genişliği";
 "map_settings_color_scheme" = "Renk düzeni";

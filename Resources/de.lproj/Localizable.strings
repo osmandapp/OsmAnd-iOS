@@ -1711,6 +1711,6 @@
 "map_settings_legend" = "Legende";
 "map_settings_add_maps_slopes" = "Zusätzliche Karten sind erforderlich, um Hangneigungen auf der Karte anzuzeigen";
 "map_settings_add_maps_hillshade" = "Zusätzliche Karten sind erforderlich, um die Hügelschatten auf der Karte anzuzeigen";
-"map_settings_hillshade_description" = "Schummerungskarten visualisieren Hangneigungen, Gipfel und Tiefland mit verschiedenen Graustufen";
+"map_settings_hillshade_description" = "Schummerungskarten stellen Hangneigungen, Gipfel und Flachland in verschiedenen Graustufen dar";
 "map_settings_slopes_description" = "Hangneigungskarten verwenden unterschiedliche Farben, um das Gelände zu visualisieren";
 "map_settings_slopes_legend" = "Sie können mehr über Hangneigungen auf Wikipedia lesen";

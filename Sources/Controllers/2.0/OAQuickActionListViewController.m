@@ -11,7 +11,6 @@
 #import "OAAddQuickActionViewController.h"
 #import "Localization.h"
 #import "OAQuickActionRegistry.h"
-#import "OAQuickActionFactory.h"
 #import "OAQuickAction.h"
 #import "MGSwipeButton.h"
 #import "OATitleDescrDraggableCell.h"

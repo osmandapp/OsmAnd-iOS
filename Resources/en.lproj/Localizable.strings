@@ -999,6 +999,7 @@
 "show_contour_lines" = "Show contour lines";
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
+"quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

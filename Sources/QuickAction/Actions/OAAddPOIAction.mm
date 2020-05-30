@@ -21,6 +21,7 @@
 #import "OAPOIType.h"
 #import "OAOsmEditingViewController.h"
 #import "OAOsmEditsDBHelper.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -28,11 +29,13 @@
 #define KEY_DIALOG @"dialog"
 #define KEY_CATEGORY @"key_category"
 
+static OAQuickActionType *ACTION_TYPE;
+
 @implementation OAAddPOIAction
 
-- (instancetype) init
+- (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeAddPOI];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void) execute
@@ -157,6 +160,14 @@
     [params setObject:jsonString forKey:KEY_TAG];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return tagValues.count > 0;
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!ACTION_TYPE)
+        ACTION_TYPE = [[OAQuickActionType alloc] initWithIdentifier:13 stringId:@"osmpoi.add" class:self.class name:OALocalizedString(@"add_poi") category:CREATE_CATEGORY iconName:@"ic_action_create_poi" secondaryIconName:nil];
+       
+    return ACTION_TYPE;
 }
 
 @end

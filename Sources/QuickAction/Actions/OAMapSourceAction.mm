@@ -13,15 +13,18 @@
 #import "Localization.h"
 #import "OAAppData.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OAQuickActionType.h"
 
 #define LAYER_OSM_VECTOR @"type_default"
 #define KEY_SOURCE @"source"
+
+static OAQuickActionType *TYPE;
 
 @implementation OAMapSourceAction
 
 - (instancetype) init
 {
-    self = [super initWithType:EOAQuickActionTypeMapSource];
+    self = [super initWithActionType:self.class.TYPE];
     if (self)
     {
         [super commonInit];
@@ -174,6 +177,14 @@
     [params setObject:sources forKey:KEY_SOURCE];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return sources.count > 0;
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:17 stringId:@"mapsource.change" class:self.class name:OALocalizedString(@"change_map_source") category:CONFIGURE_MAP iconName:@"ic_custom_show_on_map" secondaryIconName:nil];
+       
+    return TYPE;
 }
 
 @end

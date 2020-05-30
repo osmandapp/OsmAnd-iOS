@@ -10,6 +10,9 @@
 #import "OAAppSettings.h"
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
+#import "OAQuickActionType.h"
+
+static OAQuickActionType *TYPE;
 
 @implementation OAContourLinesAction
 {
@@ -21,11 +24,13 @@
 
 - (instancetype) init
 {
-    _settings = [OAAppSettings sharedManager];
-    styleSettings = [OAMapStyleSettings sharedInstance];
-    parameter = [styleSettings getParameter:@"contourLines"];
-    
-    return [super initWithType:EOAQuickActionTypeToggleContourLines];
+    self = [super initWithActionType:self.class.TYPE];
+    if (self) {
+        _settings = [OAAppSettings sharedManager];
+        styleSettings = [OAMapStyleSettings sharedInstance];
+        parameter = [styleSettings getParameter:@"contourLines"];
+    }
+    return self;
 }
 
 - (BOOL) isContourLinesOn
@@ -57,6 +62,14 @@
 - (NSString *)getActionStateName
 {
     return [self isContourLinesOn] ? OALocalizedString(@"hide_contour_lines") : OALocalizedString(@"show_contour_lines");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:29 stringId:@"contourlines.showhide" class:self.class name:OALocalizedString(@"toggle_contour_lines") category:CONFIGURE_MAP iconName:@"ic_custom_contour_lines" secondaryIconName:nil editable:NO];
+       
+    return TYPE;
 }
 
 @end

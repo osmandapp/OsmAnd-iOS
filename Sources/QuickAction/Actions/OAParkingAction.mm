@@ -14,14 +14,17 @@
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OATargetPoint.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/Utilities.h>
+
+static OAQuickActionType *TYPE;
 
 @implementation OAParkingAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeParking];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -47,6 +50,14 @@
 - (NSString *)getActionText
 {
     return OALocalizedString(@"quick_action_parking_descr");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:7 stringId:@"parking.add" class:self.class name:OALocalizedString(@"add_parking_place") category:CREATE_CATEGORY iconName:@"ic_custom_parking" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
+       
+    return TYPE;
 }
 
 @end

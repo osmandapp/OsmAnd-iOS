@@ -20,6 +20,7 @@
 #import "OADefaultFavorite.h"
 #import "OrderedDictionary.h"
 #import "Localization.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -29,11 +30,13 @@
 #define KEY_CATEGORY_NAME @"category_name"
 #define KEY_CATEGORY_COLOR @"category_color"
 
+static OAQuickActionType *TYPE;
+
 @implementation OAFavoriteAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeFavorite];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -202,6 +205,14 @@
     }
     self.params = [NSDictionary dictionaryWithDictionary:params];
     return YES;
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:3 stringId:@"fav.add" class:self.class name:OALocalizedString(@"ctx_mnu_add_fav") category:CREATE_CATEGORY iconName:@"ic_custom_favorites" secondaryIconName:@"ic_custom_compound_action_add"];
+       
+    return TYPE;
 }
 
 @end

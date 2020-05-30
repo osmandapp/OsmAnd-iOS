@@ -533,14 +533,10 @@
         task.silentInstall = YES;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSByteCountFormatter *f = [[NSByteCountFormatter alloc] init];
-        f.includesUnit = NO;
-        f.countStyle = NSByteCountFormatterCountStyleFile;
-        
         if (_localMapIndexItem && [_localMapIndexItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
             NSMutableString *progressStr = [NSMutableString string];
-            [progressStr appendString:[f stringFromByteCount:(_localMapIndexItem.size * [value floatValue])]];
+            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:(_localMapIndexItem.size * [value floatValue]) countStyle:NSByteCountFormatterCountStyleFile]];
             [progressStr appendString:@" "];
             [progressStr appendString:OALocalizedString(@"shared_string_of")];
             [progressStr appendString:@" "];

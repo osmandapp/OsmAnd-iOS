@@ -859,9 +859,9 @@
 "free_version_message" = "Вы можете скачать или обновить карты %d";
 "get_osmand_live" = "Приобретите OsmAnd Live чтобы разблокировать всю функциональность:";
 "osm_live_subscription" = "Подписка OsmAnd Live";
-"wikivoyage_offline" = "Автономный Викигид";
+"wikivoyage_offline" = "Локальный Викигид";
 "unlimited_downloads" = "Неограниченные загрузки";
-"wikipedia_offline" = "Автономная Википедия";
+"wikipedia_offline" = "Локальная Википедия";
 "contour_lines_hillshade_maps" = "Карты горизонталей и карты с отмывкой рельефа";
 "monthly_map_updates" = "Обновления карт: ежемесячные";
 "daily_map_updates" = "Обновления карт: ежечасные";

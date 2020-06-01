@@ -52,7 +52,7 @@
 "animate_routing_route_not_calculated" = "Calcular a ruta primeiro";
 "settings_preset" = "Perfil predeterminado";
 "settings_preset_descr" = "A vista do mapa e as opcións da navegación son lembradas segundo cada perfil de usuario. Velaquí escolle o teu perfil predeterminado.";
-"unit_of_length" = "Unidades da lonxitude";
+"unit_of_length" = "Unidades de lonxitude";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Formato das coordenadas";
 "coords_format_descr" = "Formato das coordenadas xeográficas.";
@@ -291,7 +291,7 @@
 "search_poi_category_hint" = "Escriba para procurar todo";
 // Shared Strings
 "shared_string_apply" = "Aplicar";
-"shared_string_select" = "Seleccionar";
+"shared_string_select" = "Escoller";
 "shared_string_back" = "Voltar";
 "shared_string_ok" = "Feito";
 "shared_string_cancel" = "Desbotar";
@@ -1354,3 +1354,14 @@
 "open_wiki_online" = "Abrir artigo en liña";
 "app_mode_helicopter" = "Helicóptero";
 "app_mode_pedestrian" = "Peón";
+"get_discount_first_part" = "%@ para o primeiro %@";
+"get_discount_short_descr" = "%@ para %d %@, despois %@";
+"get_free_trial_title" = "Comezar proba de balde de %d %@.";
+"get_discount_title" = "Obtén %d %@ cun %d%% de desconto.";
+"years_short" = "anos";
+"year_short" = "ano";
+"months_short" = "meses";
+"month_short" = "mes";
+"weeks_short" = "sem";
+"week_short" = "sem";
+"day_short" = "d";

@@ -294,7 +294,7 @@
 "prch_items_failed" = "element(s) no s'han restaurat. Intenteu-ho altre cop.";
 // Resources
 "res_mapsres" = "Mapes i recursos";
-"res_banner_free_maps_title" = "Teniu %d mapes gratuïts !";
+"res_banner_free_maps_title" = "Teniu %d mapes gratuïts!";
 "res_banner_free_maps_desc" = "Podeu baixar %d mapes gratuïts, sense actualitzacions";
 "res_banner_no_free_maps_desc" = "Compreu mapes regionals o mundials";
 "res_search_world" = "Cerca a tot el món";
@@ -927,8 +927,8 @@
 "shared_string_upload" = "Pujada";
 "poi_type" = "Tipus de PDI";
 // OSM Editing actions
-"opening_changeset" = "S'estan obrint les modificacions…";
-"closing_changeset" = "S'estan tancant les modificacions…";
+"opening_changeset" = "Obrint el registre de canvis…";
+"closing_changeset" = "Tancant el registre de canvis…";
 "commiting_node" = "S'està enviant el node…";
 "loading_poi_obj" = "S'està carregant el PDI…";
 "osm_note" = "Nota d'OSM";
@@ -1691,3 +1691,27 @@
 "one" = "Un";
 "allow_3d_descr" = "Habiliteu aquesta opció per poder veure el mapa en la perspectiva 2,5D";
 "allow_3d" = "Permet la visualització 2,5D";
+"map_coords" = "Mapa: Lat %.5f Lon %.5f";
+"num_stops" = "parades";
+"by_type" = "Per %@";
+"exit_at" = "Sortida a";
+"board_at" = "Pugeu a";
+"walk" = "Caminada";
+"total" = "Total";
+"public_transport_empty_warning_descr" = "Proveu a canviar els paràmetres.";
+"public_transport_empty_warning_title" = "Per desgràcia, OsmAnd no ha pogut determinar una ruta segons les vostres preferències.";
+"public_transport_warning_descr_blog" = "Llegiu més sobre com OsmAnd calcula les rutes al nostre bloc.";
+"public_transport_warning_title" = "La navegació en transports públics ara està en proves beta, vigileu errors o defectes.";
+"calc_pedestrian_route" = "Calcula la ruta per vianants";
+"public_transport_ped_route_title" = "La ruta a peu triga aproximadament %1$s i es pot escurçar utilitzant transport públic";
+"res_slope" = "Pista";
+"product_desc_antarctica" = "Baixada il·limitada del mapa de l'Antàrtida";
+"product_title_antarctica" = "Antàrtida";
+"help_legend_descr" = "La guia dels símbols del mapa";
+"help_mapillary" = "OsmAnd + Mapillary";
+"help_travel" = "Viatge (Viquipèdia i Viquiviatges)";
+"nav_type_direct_to" = "La més curta";
+"nav_type_straight_line" = "Línia recta";
+"nav_type_osmand" = "OsmAnd (determinació de ruta sense connexió)";
+"nav_type_descr" = "Seleccioneu com calcular la ruta en aquest perfil";
+"nav_type_title" = "Tipus de navegació";

@@ -1708,3 +1708,9 @@
 "two" = "اثنان";
 // Dirrection appearance
 "one" = "واحد";
+"quick_action_dir_from_descr" = "اضغط على هذا الإجراء للتنقل من نقطة وسط الشاشة الحالية.";
+"nav_type_direct_to" = "مباشر إلى نقطة";
+"nav_type_straight_line" = "خط مستقيم";
+"nav_type_osmand" = "أوسماند (التوجيه دون اتصال)";
+"nav_type_descr" = "تحديد كيفية حساب مسار لهذا الملف الشخصي";
+"nav_type_title" = "نوع الملاحة";

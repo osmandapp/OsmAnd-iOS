@@ -747,7 +747,7 @@
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_wifi_only" = "Обновление только по Wi-Fi";
 "map_settings_mapillary" = "Mapillary";
-"shared_string_enabled" = "Включён";
+"shared_string_enabled" = "Включено";
 "osm_failed_uploads" = "Ошибка";
 "shared_string_close" = "Закрыть";
 "track_save_descr" = "Сохранить текущий трек как файл GPX.";

@@ -1713,3 +1713,8 @@
 "two" = "Dos";
 // Dirrection appearance
 "one" = "Uno";
+"nav_type_direct_to" = "Directo al punto";
+"nav_type_straight_line" = "Línea recta";
+"nav_type_osmand" = "OsmAnd (navegación sin conexión)";
+"nav_type_descr" = "Elige cómo calcular una ruta para este perfil";
+"nav_type_title" = "Tipo de navegación";

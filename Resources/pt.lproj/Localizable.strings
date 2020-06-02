@@ -470,7 +470,7 @@
 "shared_string_never" = "Nunca";
 "shared_setting_always_ask" = "Sempre perguntar";
 "general_settings_2" = "Configurações gerais";
-"auto_zoom_none" = "Sem zoom automático";
+"auto_zoom_none" = "Sem ampliação automático";
 "auto_zoom_close" = "Aproximar";
 "auto_zoom_far" = "Visão intermédia";
 "auto_zoom_farthest" = "Mais abrangente";
@@ -483,7 +483,7 @@
 "avoid_in_routing_title" = "Evitar…";
 "prefer_in_routing_title" = "Preferir-…";
 "choose_auto_follow_route" = "Auto-centrar visualização do mapa";
-"auto_zoom_map" = "Zoom automático do mapa";
+"auto_zoom_map" = "Ampliação automática do mapa";
 "snap_to_road" = "Ajustar à estrada";
 "speak_title" = "Anunciar…";
 "keep_informing" = "Repetir as instruções de navegação";
@@ -1529,7 +1529,7 @@
 "rendering_value_highContrastRoads_name" = "Vias em alto contraste";
 "rendering_value_low_name" = "Baixo";
 "rendering_attr_publicTransportMode_name" = "Rotas de autocarros e tróleibus";
-"rendering_attr_buildings15zoom_name" = "Edifícios em zoom 15";
+"rendering_attr_buildings15zoom_name" = "Edifícios em ampliação 15";
 "rendering_attr_surface_gravel_name" = "Cascalho";
 "rendering_attr_hideText_name" = "Texto";
 "rendering_value_yellow_name" = "Amarelo";

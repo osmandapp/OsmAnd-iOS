@@ -1707,3 +1707,8 @@
 "two" = "İki";
 // Dirrection appearance
 "one" = "Bir";
+"nav_type_direct_to" = "Doğrudan noktaya";
+"nav_type_straight_line" = "Düz çizgi";
+"nav_type_osmand" = "OsmAnd (çevrim dışı yönlendirme)";
+"nav_type_descr" = "Bu profil için rotanın nasıl hesaplanacağını seçin";
+"nav_type_title" = "Navigasyon türü";

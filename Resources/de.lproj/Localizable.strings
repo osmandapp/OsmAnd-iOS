@@ -1714,3 +1714,8 @@
 "map_settings_hillshade_description" = "Schummerungskarten stellen Hangneigungen, Gipfel und Flachland in verschiedenen Graustufen dar";
 "map_settings_slopes_description" = "Hangneigungskarten verwenden unterschiedliche Farben, um das Gelände zu visualisieren";
 "map_settings_slopes_legend" = "Sie können mehr über Hangneigungen auf Wikipedia lesen";
+"nav_type_direct_to" = "Auf direktem Weg";
+"nav_type_straight_line" = "Direkte Verbindungslinie";
+"nav_type_osmand" = "OsmAnd (Offline-Routenführung)";
+"nav_type_descr" = "Wählen Sie aus, wie eine Route für dieses Profil berechnet werden soll";
+"nav_type_title" = "Navigationsart";

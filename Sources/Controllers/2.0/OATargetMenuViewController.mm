@@ -335,7 +335,6 @@
         targetPoint.type != OATargetHomeSelection &&
         targetPoint.type != OATargetGPXEdit &&
         targetPoint.type != OATargetGPXRoute &&
-//        targetPoint.type != OATargetGPX &&
         targetPoint.type != OATargetRouteDetails &&
         targetPoint.type != OATargetRouteDetailsGraph &&
         targetPoint.type != OATargetImpassableRoadSelection &&

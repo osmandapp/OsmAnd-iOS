@@ -353,7 +353,7 @@
 
 - (CGFloat) contentHeight
 {
-    return self.isLandscape || OAUtilities.isIPad ? DeviceScreenHeight - self.delegate.getHeaderViewHeight - self.getNavBarHeight - OAUtilities.getStatusBarHeight : DeviceScreenHeight - self.getNavBarHeight - OAUtilities.getStatusBarHeight;
+    return self.isLandscape || OAUtilities.isIPad ? DeviceScreenHeight - self.delegate.getHeaderViewHeight - self.getNavBarHeight - OAUtilities.getStatusBarHeight : DeviceScreenHeight - self.getNavBarHeight - self.delegate.getHeaderViewHeight + OAUtilities.getBottomMargin;
 }
 
 - (void) applyLocalization

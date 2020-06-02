@@ -335,7 +335,7 @@
         targetPoint.type != OATargetHomeSelection &&
         targetPoint.type != OATargetGPXEdit &&
         targetPoint.type != OATargetGPXRoute &&
-        targetPoint.type != OATargetGPX &&
+//        targetPoint.type != OATargetGPX &&
         targetPoint.type != OATargetRouteDetails &&
         targetPoint.type != OATargetRouteDetailsGraph &&
         targetPoint.type != OATargetImpassableRoadSelection &&
@@ -545,6 +545,28 @@
                 [self.delegate setDownloadProgress:[value floatValue] text:progressStr];
         }
     });
+}
+
+- (void) onDownloadCancelled
+{
+    if (_localMapIndexItem)
+    {
+        [OAResourcesUIHelper offerCancelDownloadOf:_localMapIndexItem onTaskStop:^(id<OADownloadTask>  _Nonnull task) {
+            if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:_localMapIndexItem.resourceId.toNSString()])
+            {
+                [self.delegate hideProgressBar];
+                _localMapIndexItem = nil;
+                
+                [OAResourcesUIHelper requestMapDownloadInfo:self.location
+                                               resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
+                                                 onComplete:^(NSArray<ResourceItem *>* res) {
+                    RepositoryResourceItem *item = (RepositoryResourceItem *)res[0];
+                    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && item)
+                        self.localMapIndexItem = item;
+                }];
+            }
+        }];
+    }
 }
 
 - (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
@@ -928,6 +950,7 @@
         [OAResourcesUIHelper offerDownloadAndInstallOf:_localMapIndexItem onTaskCreated:^(id<OADownloadTask> task) {
             if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)])
                 [self.delegate showProgressBar];
+            _localMapIndexItem.downloadTask = task;
         } onTaskResumed:nil];
     }
 }

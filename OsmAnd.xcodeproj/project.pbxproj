@@ -5286,6 +5286,8 @@
 		DAC04717221BEA0600299EC2 /* OAOsmEditingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC04713221BEA0500299EC2 /* OAOsmEditingSettingsViewController.xib */; };
 		DAC04718221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */; };
 		DAC04719221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */; };
+		DAC0B311248681CD00F662F5 /* OALocationParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC0B310248681CD00F662F5 /* OALocationParser.mm */; };
+		DAC0B312248681CD00F662F5 /* OALocationParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC0B310248681CD00F662F5 /* OALocationParser.mm */; };
 		DAC1DB89246BE05600FF4A78 /* OAImageTextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC1DB88246BE05600FF4A78 /* OAImageTextViewCell.xib */; };
 		DAC1DB8A246BE05600FF4A78 /* OAImageTextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC1DB88246BE05600FF4A78 /* OAImageTextViewCell.xib */; };
 		DAC1DB8D246BE0BF00FF4A78 /* OAImageTextViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAC1DB8C246BE0BF00FF4A78 /* OAImageTextViewCell.m */; };
@@ -9156,6 +9158,8 @@
 		DAC04713221BEA0500299EC2 /* OAOsmEditingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAOsmEditingSettingsViewController.xib; path = Sources/Controllers/2.0/OAOsmEditingSettingsViewController.xib; sourceTree = "<group>"; };
 		DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmEditingSettingsViewController.mm; path = Sources/Controllers/2.0/OAOsmEditingSettingsViewController.mm; sourceTree = "<group>"; };
 		DAC04715221BEA0600299EC2 /* OAOsmEditingSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmEditingSettingsViewController.h; path = Sources/Controllers/2.0/OAOsmEditingSettingsViewController.h; sourceTree = "<group>"; };
+		DAC0B30F248681CD00F662F5 /* OALocationParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OALocationParser.h; path = Helpers/OALocationParser.h; sourceTree = "<group>"; };
+		DAC0B310248681CD00F662F5 /* OALocationParser.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OALocationParser.mm; path = Helpers/OALocationParser.mm; sourceTree = "<group>"; };
 		DAC1DB88246BE05600FF4A78 /* OAImageTextViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAImageTextViewCell.xib; path = Resources/Controllers/Cells/OAImageTextViewCell.xib; sourceTree = "<group>"; };
 		DAC1DB8B246BE0B500FF4A78 /* OAImageTextViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAImageTextViewCell.h; path = Controllers/Cells/OAImageTextViewCell.h; sourceTree = "<group>"; };
 		DAC1DB8C246BE0BF00FF4A78 /* OAImageTextViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAImageTextViewCell.m; path = Controllers/Cells/OAImageTextViewCell.m; sourceTree = "<group>"; };
@@ -13525,6 +13529,8 @@
 				DAA738E323E2E0B600FAB0DE /* OASaveGpxToTripsActivity.m */,
 				DA2267A7240E697A00FFEA91 /* OAWikiArticleHelper.h */,
 				DA2267A8240E697A00FFEA91 /* OAWikiArticleHelper.mm */,
+				DAC0B30F248681CD00F662F5 /* OALocationParser.h */,
+				DAC0B310248681CD00F662F5 /* OALocationParser.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -19100,6 +19106,7 @@
 				847A1CDB1DF94E9B003C1246 /* OAMultiDestinationCell.mm in Sources */,
 				845AFB581E264ED200170026 /* OASearchCoreFactory.mm in Sources */,
 				847A1CDC1DF94E9B003C1246 /* MGSwipeTableCell.m in Sources */,
+				DAC0B312248681CD00F662F5 /* OALocationParser.mm in Sources */,
 				847A1CDD1DF94E9B003C1246 /* OAIconTextExTableViewCell.m in Sources */,
 				84C12C841FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */,
 				7851F2FC241A97FA00F7F1ED /* OASegmentTableViewCell.m in Sources */,
@@ -19754,6 +19761,7 @@
 				8476E1711F61C76D00EC274F /* OANavigationSettingsViewController.mm in Sources */,
 				84FF0C521F3D89C100AD1029 /* OARoutingInfoCell.mm in Sources */,
 				844F32AB1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m in Sources */,
+				DAC0B311248681CD00F662F5 /* OALocationParser.mm in Sources */,
 				845AFB571E264ED200170026 /* OASearchCoreFactory.mm in Sources */,
 				844E07BF1E3F97FB00EFC525 /* OACity.mm in Sources */,
 				DAD1DF9E22FAB598009C3D90 /* OAFavoriteAction.mm in Sources */,

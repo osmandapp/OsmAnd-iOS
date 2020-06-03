@@ -539,14 +539,14 @@
         {
             case HEADER:
             {
-                CGSize size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
+                CGSize size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 59.0 font:[UIFont systemFontOfSize:14.0]];
                 return 24.0 + size.height;
             }
             case BUTTON:
             {
                 OAQuickSearchButtonListItem *btnItem = (OAQuickSearchButtonListItem *) item;
                 NSString *text = [btnItem getAttributedName] ? [btnItem getAttributedName].string : [btnItem getName];
-                CGSize size = [OAUtilities calculateTextBounds:text width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Medium" size:14.0]];
+                CGSize size = [OAUtilities calculateTextBounds:text width:tableView.bounds.size.width - 59.0 font:[UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold]];
                 return 30.0 + size.height;
             }
             case EMPTY_SEARCH:

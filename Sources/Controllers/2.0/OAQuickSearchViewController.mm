@@ -1719,6 +1719,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) addEmptyResult
 {
     OAQuickSearchEmptyResultListItem *item = [[OAQuickSearchEmptyResultListItem alloc] init];
+    int minimalSearchRadius = [self.searchUICore getMinimalSearchRadius:self.searchUICore.getPhrase];
+    if ([self.searchUICore isSearchMoreAvailable:self.searchUICore.getPhrase] && minimalSearchRadius != INT_MAX)
+    {
+        double rd = [OsmAndApp.instance calculateRoundedDist:minimalSearchRadius];
+        item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"), [OsmAndApp.instance getFormattedDistance:rd]];
+    }
     
     if (!_paused && !_cancelPrev)
     {

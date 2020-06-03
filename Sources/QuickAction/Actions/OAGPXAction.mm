@@ -20,6 +20,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -28,11 +29,13 @@
 #define KEY_CATEGORY_NAME @"category_name"
 #define KEY_CATEGORY_COLOR @"category_color"
 
+static OAQuickActionType *TYPE;
+
 @implementation OAGPXAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeGPX];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -206,6 +209,14 @@
     }
     self.params = [NSDictionary dictionaryWithDictionary:params];
     return YES;
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:6 stringId:@"gpx.add" class:self.class name:OALocalizedString(@"add_gpx_waypoint") category:CREATE_CATEGORY iconName:@"ic_custom_favorites" secondaryIconName:@"ic_custom_compound_action_add"];
+       
+    return TYPE;
 }
 
 @end

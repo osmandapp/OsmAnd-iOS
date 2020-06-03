@@ -10,11 +10,6 @@
 
 @implementation OASwitchableAction
 
--(instancetype) initWithType:(NSInteger)type
-{
-    return [super initWithType:type];
-}
-
 - (instancetype)initWithAction:(OAQuickAction *)action
 {
     return [super initWithAction:action];

@@ -10,12 +10,15 @@
 #import "OAAppSettings.h"
 #import "OASelectedGPXHelper.h"
 #import "OsmAndApp.h"
+#import "OAQuickActionType.h"
+
+static OAQuickActionType *TYPE;
 
 @implementation OAShowHideGPXTracksAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeToggleGPX];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -42,6 +45,14 @@
 - (NSString *)getActionStateName
 {
     return [self isActionWithSlash] ? OALocalizedString(@"hide_gpx") : OALocalizedString(@"show_gpx");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:28 stringId:@"gpx.showhide" class:self.class name:OALocalizedString(@"add_first_inermediate") category:CONFIGURE_MAP iconName:@"ic_custom_trip" secondaryIconName:nil editable:NO];
+       
+    return TYPE;
 }
 
 @end

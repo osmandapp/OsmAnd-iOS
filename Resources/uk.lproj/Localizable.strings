@@ -1708,3 +1708,8 @@
 // Dirrection appearance
 "one" = "Один";
 "active_markers" = "Наявні позназчки";
+"nav_type_direct_to" = "Пряма точка";
+"nav_type_straight_line" = "Пряма лінія";
+"nav_type_osmand" = "OsmAnd (автономний режим)";
+"nav_type_descr" = "Виберіть спосіб обчислення маршруту для цього профілю";
+"nav_type_title" = "Тип навігації";

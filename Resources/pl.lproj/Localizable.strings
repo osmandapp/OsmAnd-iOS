@@ -1281,8 +1281,8 @@
 // Route info
 "gpx_avg_altitude" = "Średnia wysokość";
 "gpx_alt_range" = "Zakres wysokości";
-"gpx_ascent" = "Wzniesienia";
-"gpx_descent" = "Zjazdy";
+"gpx_ascent" = "W górę";
+"gpx_descent" = "W dół";
 "stats_select_graph_data" = "Wybierz dane wykresu";
 "region_nautical" = "Mapy morskie";
 "res_url" = "Adres URL";

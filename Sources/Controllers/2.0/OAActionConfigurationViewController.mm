@@ -9,7 +9,6 @@
 #import "OAActionConfigurationViewController.h"
 #import "Localization.h"
 #import "OAQuickActionRegistry.h"
-#import "OAQuickActionFactory.h"
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
 #import "OATextInputCell.h"
@@ -896,7 +895,7 @@
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"quick_action_name_str")].firstObject];
     NSString *nameKey = OALocalizedString(@"quick_action_name_str");
     NSString *oldTitle = [_action getTitle:oldTitles];
-    NSString *defaultName = [OAQuickActionFactory getActionName:_action.type];
+    NSString *defaultName = [_action getDefaultName];
     if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
     {
         NSString *newTitle = [_action getTitle:titles];
@@ -1035,7 +1034,7 @@
 {
     NSString *nameKey = OALocalizedString(@"quick_action_name_str");
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[nameKey].firstObject];
-    NSString *defaultName = [OAQuickActionFactory getActionName:_action.type];
+    NSString *defaultName = [_action getDefaultName];
     
     if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
     {
@@ -1109,7 +1108,7 @@
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"quick_action_name_str")].firstObject];
     NSString *nameKey = OALocalizedString(@"quick_action_name_str");
     NSString *oldTitle = [_action getTitle:_action.getParams[_action.getListKey]];
-    NSString *defaultName = [OAQuickActionFactory getActionName:_action.type];
+    NSString *defaultName = [_action getDefaultName];
     
     if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
     {

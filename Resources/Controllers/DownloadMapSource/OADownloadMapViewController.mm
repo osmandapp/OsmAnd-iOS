@@ -120,7 +120,7 @@
     [self.downloadButton setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
 }
 
--(NSAttributedString *) getAttributedTypeStr
+- (NSAttributedString *) getAttributedTypeStr
 {
     return nil;
 }
@@ -228,16 +228,16 @@
         [self.delegate btnCancelPressed];
 }
 
-- (IBAction)cancelButtonPressed:(id)sender {
+- (IBAction) cancelButtonPressed:(id)sender {
     if (self.delegate)
         [self.delegate btnCancelPressed];
 }
 
-- (IBAction)downloadButtonPressed:(id)sender {
+- (IBAction) downloadButtonPressed:(id)sender {
     NSLog(@"Download button pressed");
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
@@ -251,7 +251,7 @@
     } completion:nil];
 }
 
-- (void)updateToolBar
+- (void) updateToolBar
 {
     _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
     CGRect frame = self.bottomToolBarView.frame;
@@ -288,7 +288,6 @@
         _downloadButton.frame = rightBtnFrame;
     }
 }
-
 
 #pragma mark - TableView
 
@@ -490,7 +489,6 @@
 
 - (void) hideExistingPicker
 {
-    
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row inSection:_pickerIndexPath.section]]
                           withRowAnimation:UITableViewRowAnimationFade];
     _pickerIndexPath = nil;

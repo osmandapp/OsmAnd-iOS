@@ -8,12 +8,15 @@
 
 #import "OAShowHideLocalOSMChanges.h"
 #import "OAAppSettings.h"
+#import "OAQuickActionType.h"
+
+static OAQuickActionType *TYPE;
 
 @implementation OAShowHideLocalOSMChanges
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeToggleLocalEditsLayer];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -35,6 +38,14 @@
 - (NSString *)getActionStateName
 {
     return [self isActionWithSlash] ? OALocalizedString(@"hide_edits") : OALocalizedString(@"show_edits");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:31 stringId:@"osmedit.showhide" class:self.class name:OALocalizedString(@"toggle_local_edits") category:CONFIGURE_MAP iconName:@"ic_custom_osm_edits" secondaryIconName:nil editable:NO];
+       
+    return TYPE;
 }
 
 @end

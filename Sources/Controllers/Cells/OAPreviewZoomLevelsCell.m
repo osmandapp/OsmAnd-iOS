@@ -10,9 +10,8 @@
 
 @implementation OAPreviewZoomLevelsCell
 
-//self.colorView.layer.cornerRadius = self.colorView.frame.size.height/2;
-
-- (void)awakeFromNib {
+- (void) awakeFromNib
+{
     [super awakeFromNib];
     
     [self configureZoomPreviewView:self.minZoomPropertyView];
@@ -33,12 +32,13 @@
     }
     else
     {
-        view.layer.cornerRadius = 10.0; //view.layer.frame.size.height / 2;
+        view.layer.cornerRadius = 10.0;
         view.backgroundColor = UIColor.lightGrayColor;
     }
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
 }
 

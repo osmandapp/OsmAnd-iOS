@@ -341,7 +341,6 @@
         targetPoint.type != OATargetHomeSelection &&
         targetPoint.type != OATargetGPXEdit &&
         targetPoint.type != OATargetGPXRoute &&
-        targetPoint.type != OATargetGPX &&
         targetPoint.type != OATargetRouteDetails &&
         targetPoint.type != OATargetRouteDetailsGraph &&
         targetPoint.type != OATargetImpassableRoadSelection &&
@@ -540,14 +539,10 @@
         task.silentInstall = YES;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSByteCountFormatter *f = [[NSByteCountFormatter alloc] init];
-        f.includesUnit = NO;
-        f.countStyle = NSByteCountFormatterCountStyleFile;
-        
         if (_localMapIndexItem && [_localMapIndexItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
             NSMutableString *progressStr = [NSMutableString string];
-            [progressStr appendString:[f stringFromByteCount:(_localMapIndexItem.size * [value floatValue])]];
+            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:(_localMapIndexItem.size * [value floatValue]) countStyle:NSByteCountFormatterCountStyleFile]];
             [progressStr appendString:@" "];
             [progressStr appendString:OALocalizedString(@"shared_string_of")];
             [progressStr appendString:@" "];
@@ -556,6 +551,28 @@
                 [self.delegate setDownloadProgress:[value floatValue] text:progressStr];
         }
     });
+}
+
+- (void) onDownloadCancelled
+{
+    if (_localMapIndexItem)
+    {
+        [OAResourcesUIHelper offerCancelDownloadOf:_localMapIndexItem onTaskStop:^(id<OADownloadTask>  _Nonnull task) {
+            if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:_localMapIndexItem.resourceId.toNSString()])
+            {
+                [self.delegate hideProgressBar];
+                _localMapIndexItem = nil;
+                
+                [OAResourcesUIHelper requestMapDownloadInfo:self.location
+                                               resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
+                                                 onComplete:^(NSArray<ResourceItem *>* res) {
+                    RepositoryResourceItem *item = (RepositoryResourceItem *)res[0];
+                    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && item)
+                        self.localMapIndexItem = item;
+                }];
+            }
+        }];
+    }
 }
 
 - (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
@@ -939,6 +956,7 @@
         [OAResourcesUIHelper offerDownloadAndInstallOf:_localMapIndexItem onTaskCreated:^(id<OADownloadTask> task) {
             if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)])
                 [self.delegate showProgressBar];
+            _localMapIndexItem.downloadTask = task;
         } onTaskResumed:nil];
     }
 }

@@ -8,12 +8,15 @@
 
 #import "OAShowHideFavoritesAction.h"
 #import "OAAppSettings.h"
+#import "OAQuickActionType.h"
+
+static OAQuickActionType *TYPE;
 
 @implementation OAShowHideFavoritesAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeShowFavorite];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -30,6 +33,14 @@
 - (NSString *)getActionStateName
 {
     return [self isActionWithSlash] ? OALocalizedString(@"fav_hide") : OALocalizedString(@"fav_show");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:4 stringId:@"favorites.showhide" class:self.class name:OALocalizedString(@"toggle_fav") category:CONFIGURE_MAP iconName:@"ic_custom_favorites" secondaryIconName:nil editable:NO];
+       
+    return TYPE;
 }
 
 @end

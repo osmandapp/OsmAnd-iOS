@@ -13,9 +13,12 @@
 #import "Localization.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAMapStyleSettings.h"
+#import "OAQuickActionType.h"
 
 #define KEY_UNDERLAYS @"underlays"
 #define KEY_NO_UNDERLAY @"no_underlay"
+
+static OAQuickActionType *TYPE;
 
 @implementation OAMapUnderlayAction
 {
@@ -25,7 +28,7 @@
 
 - (instancetype) init
 {
-    self = [super initWithType:EOAQuickActionTypeMapUnderlay];
+    self = [super initWithActionType:self.class.TYPE];
     if (self)
     {
         _styleSettings = [OAMapStyleSettings sharedInstance];
@@ -189,6 +192,14 @@
     [params setObject:sources forKey:KEY_UNDERLAYS];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return sources.count > 0;
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:16 stringId:@"mapunderlay.change" class:self.class name:OALocalizedString(@"change_map_underlay") category:CONFIGURE_MAP iconName:@"ic_custom_underlay_map" secondaryIconName:nil];
+       
+    return TYPE;
 }
 
 @end

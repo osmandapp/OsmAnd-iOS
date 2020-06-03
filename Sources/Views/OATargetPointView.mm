@@ -107,6 +107,7 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *downloadProgressBar;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 @property (weak, nonatomic) IBOutlet UILabel *downloadProgressLabel;
+@property (weak, nonatomic) IBOutlet UIButton *downloadCancelButton;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
@@ -1331,11 +1332,12 @@ static const NSInteger _buttonsCount = 4;
             else
                 _controlButtonDownload.frame = CGRectMake(width - itemsX - w, downloadY, w, 32.0);
         }
-        if (!_downloadProgressBar.hidden && !_downloadProgressLabel.hidden)
+        if (!_downloadProgressBar.hidden && !_downloadProgressLabel.hidden && !_downloadCancelButton.hidden)
         {
             CGFloat viewWidth = width - 32.0 - OAUtilities.getLeftMargin;
             _downloadProgressLabel.frame = CGRectMake(itemsX, downloadY, viewWidth, 17.0);
-            _downloadProgressBar.frame = CGRectMake(itemsX, CGRectGetMaxY(_downloadProgressLabel.frame) + 5.0, viewWidth, 5.0);
+            _downloadCancelButton.frame = CGRectMake(viewWidth - 15.0, CGRectGetMaxY(_downloadProgressLabel.frame) - 10.0, 30.0, 30.0);
+            _downloadProgressBar.frame = CGRectMake(itemsX, CGRectGetMaxY(_downloadProgressLabel.frame) + 5.0, viewWidth - _downloadCancelButton.frame.size.width - 16.0, 5.0);
         }
     }
     CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
@@ -2152,6 +2154,11 @@ static const NSInteger _buttonsCount = 4;
     }
 }
 
+- (IBAction)buttonCancelDownloadPressed:(id)sender
+{
+    [self.customController onDownloadCancelled];
+}
+
 - (void) onMenuStateChanged
 {
     if (_showFull || _showFullScreen)
@@ -2400,6 +2407,8 @@ static const NSInteger _buttonsCount = 4;
         _downloadProgressBar.hidden = NO;
     if (_downloadProgressLabel.hidden)
         _downloadProgressLabel.hidden = NO;
+    if (_downloadCancelButton.hidden)
+        _downloadCancelButton.hidden = NO;
     
     [_downloadProgressBar setProgress:0.];
     _downloadProgressLabel.text = OALocalizedString(@"download_pending");
@@ -2419,6 +2428,8 @@ static const NSInteger _buttonsCount = 4;
         _downloadProgressBar.hidden = YES;
     if (!_downloadProgressLabel.hidden)
         _downloadProgressLabel.hidden = YES;
+    if (!_downloadCancelButton.hidden)
+        _downloadCancelButton.hidden = YES;
     
     [self doLayoutSubviews:YES];
 }

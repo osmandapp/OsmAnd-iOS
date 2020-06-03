@@ -23,6 +23,7 @@
 #import "OARoutingHelper.h"
 #import "OAMapViewController.h"
 #import "OANativeUtilities.h"
+#import "OAParkingAction.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -171,6 +172,11 @@
 - (BOOL) distChanged:(CLLocationDistance)oldDist dist:(CLLocationDistance)dist
 {
     return oldDist == 0 || ABS(oldDist - dist) > 30;
+}
+
+- (NSArray *)getQuickActionTypes
+{
+    return @[OAParkingAction.TYPE];
 }
 
 @end

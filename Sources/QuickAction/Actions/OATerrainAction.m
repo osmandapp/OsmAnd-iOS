@@ -10,13 +10,15 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAAppData.h"
+#import "OAQuickActionType.h"
+
+static OAQuickActionType *TYPE;
 
 @implementation OATerrainAction
 
-
-- (instancetype) init
+- (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeToggleTerrain];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -52,6 +54,14 @@
 - (NSString *)getActionStateName
 {
     return [[OsmAndApp instance].data terrainType] != EOATerrainTypeDisabled ? OALocalizedString(@"hide_terrain") : OALocalizedString(@"show_terrain");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:30 stringId:@"terrain.showhide" class:self.class name:OALocalizedString(@"toggle_hillshade") category:CONFIGURE_MAP iconName:@"ic_custom_hillshade" secondaryIconName:nil editable:NO];
+       
+    return TYPE;
 }
 
 @end

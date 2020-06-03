@@ -36,7 +36,7 @@
     QList<std::shared_ptr<const OsmAnd::OnlineTileSources::Source>> _onlineMapSources;
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
     [super applyLocalization];
     self.titleView.text = OALocalizedString(@"select_online_source");
@@ -116,7 +116,8 @@
     });
 }
 
-- (IBAction) onCancelButtonClicked:(id)sender {
+- (IBAction) onCancelButtonClicked:(id)sender
+{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -144,11 +145,13 @@
     return vw;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return _onlineMapSources.count();
 }
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
     const auto& item = _onlineMapSources[(int) indexPath.row];
     NSString* caption = item->name.toNSString();
     

@@ -178,6 +178,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) leftControlButtonPressed;
 - (void) rightControlButtonPressed;
 - (void) downloadControlButtonPressed;
+- (void) onDownloadCancelled;
 
 - (void) onMenuSwipedOff;
 - (void) onMenuDismissed;

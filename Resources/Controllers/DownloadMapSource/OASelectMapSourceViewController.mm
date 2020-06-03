@@ -28,14 +28,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-
-
 @end
 
 @implementation OASelectMapSourceViewController
 {
     OsmAndAppInstance _app;
-    
     QList<std::shared_ptr<const OsmAnd::OnlineTileSources::Source>> _onlineMapSources;
 }
 
@@ -119,7 +116,7 @@
     });
 }
 
-- (IBAction)onCancelButtonClicked:(id)sender {
+- (IBAction) onCancelButtonClicked:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -147,12 +144,11 @@
     return vw;
 }
 
-
-- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _onlineMapSources.count();
 }
 
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     const auto& item = _onlineMapSources[(int) indexPath.row];
     NSString* caption = item->name.toNSString();
     
@@ -164,7 +160,6 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
         cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
     }
-    
     if (cell)
     {
         UIImage *img = nil;
@@ -174,17 +169,25 @@
         cell.descView.hidden = YES;
         cell.iconView.image = img;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        
+        if ([_app.data.lastMapSource.name isEqual:caption])
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_checmark_default.png"]];
+        else
+            cell.accessoryView = nil;
     }
     return cell;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    
+    const auto& item = _onlineMapSources[(int) indexPath.row];
+    OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:@"online_tiles"
+                                                        andVariant:item->name.toNSString() name:item->name.toNSString()];
+    _app.data.lastMapSource = mapSource;
+    [tableView reloadData];
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 @end
 

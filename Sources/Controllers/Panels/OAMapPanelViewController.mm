@@ -2916,31 +2916,20 @@ typedef enum
 
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-//
-//    NSString *caption = @"Download map";
-//
-//    UIImage *icon = [UIImage imageNamed:@"icon_info"];
-//
+
     targetPoint.type = OATargetDownloadMapSource;
-//
-//    _targetMenuView.isAddressFound = YES;
-//    _formattedTargetName = caption;
-//
+
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
     targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
     _targetLatitude = latLon.latitude;
     _targetLongitude = latLon.longitude;
-//
-    targetPoint.title = _formattedTargetName;
-//  targetPoint.icon = icon;
+
     targetPoint.toolbarNeeded = YES;
-//
+    
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;
-//
     _targetMenuView.activeTargetType = _activeTargetType;
-//  [_targetMenuView setTargetPoint:targetPoint];
-//
+    [_targetMenuView setTargetPoint:targetPoint];
     [self showTargetPointMenu:YES showFullMenu:YES onComplete:^{
         [self enterContextMenuMode];
         _activeTargetActive = YES;

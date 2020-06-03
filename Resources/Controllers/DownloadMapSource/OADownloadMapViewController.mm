@@ -32,14 +32,11 @@
 #define kMaxAllowedZoom 22
 #define kZoomSection 1
 
-@interface OADownloadMapViewController() <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate, OAMapRendererDelegate>
+@interface OADownloadMapViewController() <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
-
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *downloadButton;
 
 @end
 
@@ -48,38 +45,42 @@
     OsmAndAppInstance _app;
     NSDictionary *_data;
     
-    OAMapRendererView *_map;
     NSInteger _minZoom;
     NSInteger _maxZoom;
-    
     NSArray<NSDictionary *> *_zoomArray;
     NSArray<NSString *> *_possibleZoomValues;
     NSIndexPath *_pickerIndexPath;
-    
-    
-    OAMapViewController *_mapViewController;
-    UIView *_headerView;
     CALayer *_horizontalLine;
 }
 
--(CGFloat) getNavBarHeight
+- (UIView *) getMiddleView
 {
-    return gpxItemNavBarHeight;
+    return self.contentView;
 }
 
-- (BOOL)supportMapInteraction
+- (CGFloat) getNavBarHeight
+{
+    return defaultNavBarHeight;
+}
+
+- (BOOL) supportMapInteraction
 {
     return YES;
 }
 
-- (BOOL)supportFullScreen
+- (BOOL) supportFullScreen
+{
+    return NO;
+}
+
+- (BOOL) hasTopToolbar
 {
     return YES;
 }
 
--(BOOL) hasTopToolbar
+- (UIView *) getBottomView
 {
-    return YES;
+    return self.bottomToolBarView;
 }
 
 - (BOOL) shouldShowToolbar
@@ -89,18 +90,44 @@
 
 - (BOOL) disableScroll
 {
-    return NO;
+    return YES;
 }
 
-- (CGFloat) contentHeight
+- (BOOL) hasBottomToolbar
 {
-    return self.isLandscape || OAUtilities.isIPad ? DeviceScreenHeight - self.delegate.getHeaderViewHeight - self.getNavBarHeight - OAUtilities.getStatusBarHeight : DeviceScreenHeight - self.getNavBarHeight - OAUtilities.getStatusBarHeight;
+    return YES;
 }
 
+- (ETopToolbarType) topToolbarType
+{
+    return ETopToolbarTypeFixed;
+}
+
+- (BOOL) isLandscape
+{
+    return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;;
+}
+
+- (CGFloat)contentHeight
+{
+    return _tableView.contentSize.height;
+}
 
 - (void) applyLocalization
 {
     [self setTitle:OALocalizedString(@"download_map")];
+    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self.downloadButton setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+}
+
+-(NSAttributedString *) getAttributedTypeStr
+{
+    return nil;
+}
+
+- (NSString *) getTypeStr
+{
+    return nil;
 }
 
 - (instancetype) init
@@ -110,98 +137,35 @@
     if (self)
     {
         _app = [OsmAndApp instance];
-        self.view.backgroundColor = UIColor.yellowColor;
-        NSLog(@"init");
     }
     return self;
 }
 
 - (void) viewDidLoad
 {
-//    [super viewDidLoad];
-//    //_app = [OsmAndApp instance];
-//    self.view.backgroundColor = UIColor.yellowColor;
-//    self.tableView.dataSource = self;
-//    self.tableView.delegate = self;
-//    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-//    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
-//
-//    // to delete/change
-//    _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
-//    _minZoom = 8;
-//    _maxZoom = 16;
-    
     [super viewDidLoad];
-    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    
-    
-    self.titleView.text = @"DOWNLOAD MAP";
-    
-    _headerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _tableView.frame.size.width, 100.0)];
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:_headerView.bounds];
-    headerLabel.textAlignment = NSTextAlignmentCenter;
-    headerLabel.font = [UIFont systemFontOfSize:19.0];
-    headerLabel.text = OALocalizedString(@"no_statistics");
-    headerLabel.textColor = [UIColor lightGrayColor];
-    headerLabel.numberOfLines = 3;
-    [_headerView addSubview:headerLabel];
-    [_tableView setTableHeaderView:_headerView];
-    
-    
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    _tableView.estimatedRowHeight = kEstimatedRowHeight;
 
-    //[self updateEditingMode:NO animated:NO];
-
-    //[self.segmentView setSelectedSegmentIndex:_segmentType];
-    //[self applySegmentType];
-    //[self resetSortModeIfNeeded];
-    //[self addBadge];
-
-    
-    //self.editToolbarView.hidden = YES;
+    [self setupView];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    //self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    //self.editToolbarView.layer addSublayer:_horizontalLine];
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
-}
-
-- (void) viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
+    self.bottomToolBarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    [self.bottomToolBarView.layer addSublayer:_horizontalLine];
+    [self updateToolBar];
     
-    [self setupView];
-    [self.tableView reloadData];
-}
+    _cancelButton.layer.cornerRadius = 9.0;
+    _downloadButton.layer.cornerRadius = 9.0;
 
-//- (UIView *) getTopView
-//{
-//    return _navBarView;
-//}
-//
-//- (UIView *) getMiddleView
-//{
-//    return _tableView;
-//}
-//
-//- (void) adjustViews
-//{
-//    CGRect buttonFrame = _backButton.frame;
-//    CGRect titleFrame = _titleView.frame;
-//    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-//    buttonFrame.origin.y = statusBarHeight;
-//    titleFrame.origin.y = statusBarHeight;
-//    _backButton.frame = buttonFrame;
-//    _titleView.frame = titleFrame;
-//}
+    // to delete/change
+    _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
+    _minZoom = 8;
+    _maxZoom = 16;
+}
 
 - (void) setupView
 {
@@ -212,10 +176,7 @@
     NSMutableArray *generalInfoArr = [NSMutableArray array];
     
     NSString *mapSourceName;
-    if ([_app.data.lastMapSource.name isEqualToString:@"sqlitedb"])
-        mapSourceName = [[_app.data.lastMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-    else
-        mapSourceName = _app.data.lastMapSource.name;
+    mapSourceName = _app.data.lastMapSource.name;
     
     [mapTypeArr addObject:@{
         @"type" : @"OASettingsTableViewCell",
@@ -261,10 +222,73 @@
     };
 }
 
-- (IBAction)backButtonPressed:(id)sender
+- (void) cancelPressed
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.delegate)
+        [self.delegate btnCancelPressed];
 }
+
+- (IBAction)cancelButtonPressed:(id)sender {
+    if (self.delegate)
+        [self.delegate btnCancelPressed];
+}
+
+- (IBAction)downloadButtonPressed:(id)sender {
+    NSLog(@"Download button pressed");
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        _tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, [self getToolBarHeight], 0.0);
+        if (self.delegate)
+           [self.delegate requestFullMode];
+        if (self.delegate && self.isLandscape)
+            [self.delegate contentChanged];
+        
+        [self updateToolBar];
+    } completion:nil];
+}
+
+- (void)updateToolBar
+{
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
+    CGRect frame = self.bottomToolBarView.frame;
+    frame.size.height = twoButtonsBottmomSheetHeight + [OAUtilities getBottomMargin];
+    frame.origin.y = [self contentHeight] - frame.size.height;
+    self.bottomToolBarView.frame = frame;
+}
+
+- (void) setupToolBarButtonsWithWidth:(CGFloat)width
+{
+    CGFloat w = width - 32.0 - OAUtilities.getLeftMargin;
+    CGRect leftBtnFrame = _cancelButton.frame;
+    CGRect rightBtnFrame = _downloadButton.frame;
+
+    if (_downloadButton.isDirectionRTL)
+    {
+        rightBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
+        rightBtnFrame.size.width = w / 2 - 8;
+        
+        leftBtnFrame.origin.x = CGRectGetMaxX(rightBtnFrame) + 16.;
+        leftBtnFrame.size.width = rightBtnFrame.size.width;
+
+        _cancelButton.frame = leftBtnFrame;
+        _downloadButton.frame = rightBtnFrame;
+    }
+    else
+    {
+        leftBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
+        leftBtnFrame.size.width = w / 2 - 8;
+        _cancelButton.frame = leftBtnFrame;
+
+        rightBtnFrame.origin.x = CGRectGetMaxX(leftBtnFrame) + 16.;
+        rightBtnFrame.size.width = leftBtnFrame.size.width;
+        _downloadButton.frame = rightBtnFrame;
+    }
+}
+
 
 #pragma mark - TableView
 
@@ -273,7 +297,7 @@
     return [_data[@"tableData"] count];
 }
 
-- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == kZoomSection)
     {
@@ -284,7 +308,7 @@
     return [_data[@"tableData"][section] count];
 }
 
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item =  [self getItem:indexPath];
  
@@ -419,7 +443,7 @@
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([indexPath isEqual:_pickerIndexPath])
         return 162.0;
@@ -452,7 +476,7 @@
     if (indexPath.section == 0)
     {
         OASelectMapSourceViewController *mapSource = [[OASelectMapSourceViewController alloc] init];
-        [self presentViewController:mapSource animated:YES completion:nil];
+        [OARootViewController.instance.mapPanel presentViewController:mapSource animated:YES completion:nil];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
@@ -487,15 +511,13 @@
         newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row - 1 inSection:kZoomSection];
     else
         newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row  inSection:kZoomSection];
-    
     return newIndexPath;
 }
 
 - (void) showNewPickerAtIndex:(NSIndexPath *)indexPath
 {
     NSArray *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:kZoomSection]];
-    [self.tableView insertRowsAtIndexPaths:indexPaths
-                          withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -524,7 +546,7 @@
     return _data[@"tableData"][indexPath.section][indexPath.row];
 }
 
-- (void)zoomChanged:(NSString *)zoom tag: (NSInteger)pickerTag
+- (void) zoomChanged:(NSString *)zoom tag: (NSInteger)pickerTag
 {
     if (pickerTag == 2)
         _minZoom = [zoom intValue];
@@ -533,11 +555,5 @@
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section], [NSIndexPath indexPathForRow:0 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }
-
-
-- (void)frameRendered {
-    return;
-}
-
 
 @end

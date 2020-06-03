@@ -444,6 +444,7 @@
 "download_map" = "Download map";
 "update_map" = "Update map";
 "download_pending" = "Download pending";
+"move_map_to_select_area" = "Move map to select needed area.";
 "number_of_tiles" = "Number of tiles";
 "download_size" = "Download size";
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";

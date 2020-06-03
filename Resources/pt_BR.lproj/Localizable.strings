@@ -1712,3 +1712,9 @@
 "two" = "Dois";
 // Dirrection appearance
 "one" = "Um";
+"quick_action_dir_from_descr" = "Toque nesta ação para navegar a partir do ponto central da tela atual.";
+"nav_type_direct_to" = "Direto ao ponto";
+"nav_type_straight_line" = "Em linha reta";
+"nav_type_osmand" = "OsmAnd (roteamento offline)";
+"nav_type_descr" = "Selecionar como calcular uma rota para este perfil";
+"nav_type_title" = "Tipo de navegação";

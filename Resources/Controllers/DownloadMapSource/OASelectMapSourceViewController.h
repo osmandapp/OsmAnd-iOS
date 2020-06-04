@@ -9,7 +9,17 @@
 #import "OACompoundViewController.h"
 #import "UIKit/UIKit.h"
 
+@protocol OAMapSourceSelectionDelegate <NSObject>
+
+@required
+
+- (void) onNewSourceSelected;
+
+@end
+
 @interface OASelectMapSourceViewController : OACompoundViewController
+
+@property (nonatomic) id<OAMapSourceSelectionDelegate> delegate;
 
 @end
 

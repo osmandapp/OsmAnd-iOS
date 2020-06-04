@@ -32,7 +32,7 @@
 #define kMaxAllowedZoom 22
 #define kZoomSection 1
 
-@interface OADownloadMapViewController() <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
+@interface OADownloadMapViewController() <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate, OAMapSourceSelectionDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
@@ -475,6 +475,7 @@
     if (indexPath.section == 0)
     {
         OASelectMapSourceViewController *mapSource = [[OASelectMapSourceViewController alloc] init];
+        mapSource.delegate = self;
         [OARootViewController.instance.mapPanel presentViewController:mapSource animated:YES completion:nil];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -552,6 +553,13 @@
         _maxZoom = [zoom intValue];
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section], [NSIndexPath indexPathForRow:0 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+#pragma mark - OAMapSourceSelectionDelegate
+
+- (void) onNewSourceSelected
+{
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 @end

@@ -1410,7 +1410,8 @@ static const NSInteger _buttonsCount = 4;
         if (_targetPoint.type == OATargetDownloadMapSource)
         {
             [self removeMapFrameLayer];
-            self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight + (!landscape ? 44.0 : 0.0), width, contentViewHeight);
+            CGFloat bottomToolBarHeight = self.customController.hasBottomToolbar ? self.customController.bottomToolBarView.frame.size.height : 0.;
+            self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight + (!landscape ? 44.0 : 0.0), width, landscape ? contentViewHeight - bottomToolBarHeight - _toolbarHeight : (_fullHeight - bottomToolBarHeight - _toolbarHeight));
             CGRect mapFrame;
             if (landscape)
             {
@@ -1532,7 +1533,7 @@ static const NSInteger _buttonsCount = 4;
 - (void) addMapFrameLayer:(CGRect)frame
 {
     UIBezierPath *backgroundViewPath = [UIBezierPath bezierPathWithRect: frame];
-    UIBezierPath *mapBorderPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(frame.origin.x + 8, frame.origin.y + 8, frame.size.width - 16 - OAUtilities.getLeftMargin, frame.size.height - 26) cornerRadius: 4];
+    UIBezierPath *mapBorderPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(frame.origin.x + 8, frame.origin.y + 8, frame.size.width - 16 - OAUtilities.getLeftMargin, frame.size.height - 26 - ([self isLandscape] ? OAUtilities.getBottomMargin : 0.0)) cornerRadius: 4];
     
     [backgroundViewPath appendPath:mapBorderPath];
     [backgroundViewPath setUsesEvenOddFillRule:YES];
@@ -1553,7 +1554,7 @@ static const NSInteger _buttonsCount = 4;
     [self.layer addSublayer:frameLayer];
     
     CATextLayer *captionLayer = [CATextLayer layer];
-    captionLayer.frame = CGRectMake(frame.origin.x, frame.origin.y + frame.size.height - 17, frame.size.width, 17);
+    captionLayer.frame = CGRectMake(frame.origin.x, frame.origin.y + frame.size.height - 17 - ([self isLandscape] ? OAUtilities.getBottomMargin : 0.0), frame.size.width, 17);
     captionLayer.fontSize = 13;
     [captionLayer setContentsScale:[[UIScreen mainScreen] scale]];
     captionLayer.foregroundColor = [UIColor whiteColor].CGColor;

@@ -21,11 +21,7 @@
 #import "OATimeTableViewCell.h"
 #import "OAPreviewZoomLevelsCell.h"
 #import "OACustomPickerTableViewCell.h"
-#import "OATableViewCustomHeaderView.h"
-#import "OATableViewCustomFooterView.h"
 
-#define kHeaderId @"TableViewSectionHeader"
-#define kFooterId @"TableViewSectionFooter"
 #define kCellTypeZoom @"time_cell"
 #define kCellTypePicker @"picker"
 #define kMinAllowedZoom 1
@@ -110,7 +106,7 @@
 
 - (CGFloat)contentHeight
 {
-    return _tableView.contentSize.height;
+    return DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
 }
 
 - (void) applyLocalization
@@ -148,9 +144,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
-    
+
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.bottomToolBarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
@@ -194,11 +188,13 @@
         @"title" : OALocalizedString(@"rec_interval_minimum"),
         @"value" : [NSString stringWithFormat:@"%ld", _minZoom],
         @"type"  : kCellTypeZoom,
+        @"clickable" : @YES
     }];
     [zoomLevelArr addObject:@{
         @"title" : OALocalizedString(@"shared_string_maximum"),
         @"value" : [NSString stringWithFormat:@"%ld", _maxZoom],
         @"type" : kCellTypeZoom,
+        @"clickable" : @YES
     }];
     [zoomLevelArr addObject:@{
         @"type" : kCellTypePicker,
@@ -208,12 +204,14 @@
         @"type" : kCellTypeZoom,
         @"title" : OALocalizedString(@"number_of_tiles"),
         @"value" : @"120 700", // change
+        @"clickable" : @NO
     }];
     
     [generalInfoArr addObject:@{
         @"type" : kCellTypeZoom,
         @"title" : OALocalizedString(@"download_size"),
         @"value" : @"~ 1448 MB", // change
+        @"clickable" : @NO
     }];
     [tableData addObject:mapTypeArr];
     [tableData addObject:zoomLevelArr];
@@ -336,11 +334,12 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPreviewZoomLevelsCell" owner:self options:nil];
             cell = (OAPreviewZoomLevelsCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
             cell.descriptionLabel.text = item[@"value"];
-            cell.minLevelZoomView.backgroundColor = UIColor.grayColor;
+            cell.minLevelZoomView.backgroundColor = UIColor.grayColor; // to delete
             cell.minZoomPropertyLabel.text = [NSString stringWithFormat:@"%ld",_minZoom];
             
             cell.maxLevelZoomView.backgroundColor = UIColor.grayColor;
@@ -357,13 +356,11 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.lbTitle.text = item[@"title"];
         cell.lbTime.text = item[@"value"];
-        
-        cell.lbTime.textColor = [UIColor blackColor];
-        
+        cell.lbTime.textColor = [item[@"clickable"] boolValue] ? [UIColor blackColor] : [UIColor grayColor];
         return cell;
     }
     else if ([item[@"type"] isEqualToString:kCellTypePicker])
@@ -390,57 +387,26 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-    {
         return 0.01;
-    }
     else if (section == 1)
-    {
-        NSString *title = OALocalizedString(@"res_zoom_levels");
-        return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width];
-    }
+        return 38;
     else
-    {
         return 8.0;
-    }
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 1)
-    {
-        NSString *title = OALocalizedString(@"res_zoom_levels");
-        OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
-        if (!title)
-        {
-            vw.label.text = title;
-            return vw;
-        }
-        vw.label.text = [title upperCase];
-        return vw;
-    }
-    return nil;
+    return section == 1 ? OALocalizedString(@"res_zoom_levels") : @"";
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 1)
-    {
-        NSString *title = @"The detalization level increases the downloading size of map."; // change
-        return [OATableViewCustomFooterView getHeight:title width:tableView.bounds.size.width];
-    }
-    return 0.01;
+    return section == 1 ? UITableViewAutomaticDimension : 1.0;
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (section == 1)
-    {
-        NSString *title = @"The detalization level increases the downloading size of map."; // change
-        OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
-        vw.label.text = title;
-        return vw;
-    }
-    return nil;
+    return section == 1 ? @"The detalization level increases the downloading size of map." : @""; // change
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

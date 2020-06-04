@@ -10,7 +10,6 @@
 #import "OAMapSource.h"
 #import "OsmAndApp.h"
 #import "OABottomSheetActionCell.h"
-#import "OATableViewCustomHeaderView.h"
 
 #include "Localization.h"
 #include "OASizes.h"
@@ -18,8 +17,6 @@
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
-
-#define kHeaderId @"TableViewSectionHeader"
 
 @interface OASelectMapSourceViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -51,7 +48,6 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
     self.tableView.contentInset = UIEdgeInsetsMake(10., 0., 0., 0.);
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [self setupView];
 }
 
@@ -126,23 +122,15 @@
     return 1;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSString *title = OALocalizedString(@"online_sources");
-    return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width];
+    return OALocalizedString(@"online_sources");
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *title = OALocalizedString(@"online_sources");
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
-    if (!title)
-    {
-        vw.label.text = title;
-        return vw;
-    }
-    vw.label.text = [title upperCase];
-    return vw;
+    const auto& item = _onlineMapSources[(int) indexPath.row];
+    return [OABottomSheetActionCell getHeight:item->name.toNSString() value:nil cellWidth:tableView.bounds.size.width];
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -162,6 +150,7 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
         cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 61.0, 0.0, 0.0);
     }
     if (cell)
     {
@@ -171,8 +160,6 @@
         cell.textView.text = caption;
         cell.descView.hidden = YES;
         cell.iconView.image = img;
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        
         if ([_app.data.lastMapSource.name isEqual:caption])
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_checmark_default.png"]];
         else

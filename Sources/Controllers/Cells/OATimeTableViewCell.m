@@ -27,16 +27,6 @@
     // Configure the view for the selected state
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    CGFloat textX = self.leftImageView.hidden ? 16.0 : leftTextMargin;
-    CGFloat w = self.bounds.size.width - textX;
-    
-    self.lbTime.frame = CGRectMake(w - self.lbTime.frame.size.width, 0.0, self.lbTime.frame.size.width, self.bounds.size.height);
-    self.lbTitle.frame = CGRectMake(textX, 0.0, CGRectGetMinX(self.lbTime.frame) - 16.0, self.bounds.size.height);
-}
-
 - (void)showLeftImageView:(BOOL)show
 {
     _leftImageView.hidden = !show;

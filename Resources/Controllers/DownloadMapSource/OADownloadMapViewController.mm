@@ -145,7 +145,6 @@
 {
     [super viewDidLoad];
 
-    [self setupView];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
@@ -165,6 +164,8 @@
     _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
     _minZoom = 8;
     _maxZoom = 16;
+    
+    [self setupView];
 }
 
 - (void) setupView
@@ -191,12 +192,12 @@
     
     [zoomLevelArr addObject:@{
         @"title" : OALocalizedString(@"rec_interval_minimum"),
-        @"value" : [NSString stringWithFormat:@"%ld", _minZoom], // change?
+        @"value" : [NSString stringWithFormat:@"%ld", _minZoom],
         @"type"  : kCellTypeZoom,
     }];
     [zoomLevelArr addObject:@{
         @"title" : OALocalizedString(@"shared_string_maximum"),
-        @"value" : [NSString stringWithFormat:@"%ld", _maxZoom], // change?
+        @"value" : [NSString stringWithFormat:@"%ld", _maxZoom],
         @"type" : kCellTypeZoom,
     }];
     [zoomLevelArr addObject:@{
@@ -378,7 +379,7 @@
         cell.dataArray = _possibleZoomValues;
         NSInteger minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
         NSInteger maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
-        [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
+        [cell.picker selectRow:indexPath.row == 2 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
         return cell;
@@ -424,7 +425,7 @@
 {
     if (section == 1)
     {
-        NSString *title = @"The detalization level increases the downloading size of map"; // change
+        NSString *title = @"The detalization level increases the downloading size of map."; // change
         return [OATableViewCustomFooterView getHeight:title width:tableView.bounds.size.width];
     }
     return 0.01;
@@ -434,7 +435,7 @@
 {
     if (section == 1)
     {
-        NSString *title = @"The detalization level increases the downloading size of map"; // change
+        NSString *title = @"The detalization level increases the downloading size of map."; // change
         OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
         vw.label.text = title;
         return vw;
@@ -452,7 +453,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item =  [self getItem:indexPath];
-    if (indexPath.section == kZoomSection && [item[@"type"] isEqualToString:kCellTypeZoom])
+    if (indexPath.section == kZoomSection && ([item[@"type"] isEqualToString:kCellTypeZoom] || [item[@"type"] isEqualToString:kCellTypePicker]))
     {
         [self.tableView beginUpdates];
 

@@ -10,6 +10,8 @@
 #import "OAMapSource.h"
 #import "OsmAndApp.h"
 #import "OABottomSheetActionCell.h"
+#import "OAMapCreatorHelper.h"
+#import "OASQLiteTileSource.h"
 
 #include "Localization.h"
 #include "OASizes.h"
@@ -17,6 +19,36 @@
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
+
+#define _(name) OASelectMapSourceViewController__##name
+#define commonInit _(commonInit)
+#define deinit _(deinit)
+
+#define Item _(Item)
+@interface Item : NSObject
+@property OAMapSource* mapSource;
+@property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
+@property NSString *path;
+@end
+@implementation Item
+@end
+
+#define Item_OnlineTileSource _(Item_OnlineTileSource)
+@interface Item_OnlineTileSource : Item
+@property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
+@end
+@implementation Item_OnlineTileSource
+@end
+
+#define Item_SqliteDbTileSource _(Item_SqliteDbTileSource)
+@interface Item_SqliteDbTileSource : Item
+@property uint64_t size;
+@property BOOL isOnline;
+@end
+@implementation Item_SqliteDbTileSource
+@end
+
+typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @interface OASelectMapSourceViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -30,7 +62,7 @@
 @implementation OASelectMapSourceViewController
 {
     OsmAndAppInstance _app;
-    QList<std::shared_ptr<const OsmAnd::OnlineTileSources::Source>> _onlineMapSources;
+    NSArray *_onlineMapSources;
 }
 
 - (void) applyLocalization
@@ -89,27 +121,63 @@
 
 - (void) setupView
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        const auto& onlineSourcesCollection = _app.resourcesManager->downloadOnlineTileSources();
-        if (onlineSourcesCollection != nullptr)
+    // Collect all needed resources
+    NSMutableArray *onlineMapSources = [NSMutableArray new];
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
+    const auto localResources = _app.resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
+        if (localResource->type == OsmAndResourceType::OnlineTileSources)
+            onlineTileSourcesResources.push_back(localResource);
+    
+    // Process online tile sources resources
+    for(const auto& resource : onlineTileSourcesResources)
+    {
+        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
+        NSString* resourceId = resource->id.toNSString();
+        
+        for(const auto& onlineTileSource : onlineTileSources->getCollection())
         {
-            _onlineMapSources = _app.resourcesManager->downloadOnlineTileSources()->getCollection().values();
-            std::sort(_onlineMapSources, [](
-                                            const std::shared_ptr<const OsmAnd::OnlineTileSources::Source> s1,
-                                            const std::shared_ptr<const OsmAnd::OnlineTileSources::Source> s2)
-                                            {
-                                                return s1->priority < s2->priority;
-                                            });
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                self.tableView.allowsMultipleSelectionDuringEditing = NO;
-                [self.tableView reloadData];
-            });
+            Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
+            
+            NSString *caption = onlineTileSource->name.toNSString();
+            
+            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
+                                                        andVariant:onlineTileSource->name.toNSString() name:caption];
+            item.resource = resource;
+            item.onlineTileSource = onlineTileSource;
+            item.path = [_app.cachePath stringByAppendingPathComponent:caption];
+            [onlineMapSources addObject:item];
         }
-        else
+    }
+    
+    [onlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_OnlineTileSource* obj1, Item_OnlineTileSource* obj2) {
+        NSString *caption1 = obj1.onlineTileSource->name.toNSString();
+        NSString *caption2 = obj2.onlineTileSource->name.toNSString();
+        return [caption2 compare:caption1];
+    }];
+
+    
+    NSMutableArray *sqlitedbArr = [NSMutableArray array];
+    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
+    {
+        NSString *path = [OAMapCreatorHelper sharedInstance].files[fileName];
+        if ([OASQLiteTileSource isOnlineTileSource:path])
         {
-            NSLog(@"Failed to download online tile resources list.");
+            Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
+            item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
+            item.path = path;
+            item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
+            item.isOnline = YES;
+            [sqlitedbArr addObject:item];
         }
-    });
+    }
+    
+    [sqlitedbArr sortUsingComparator:^NSComparisonResult(Item_SqliteDbTileSource *obj1, Item_SqliteDbTileSource *obj2) {
+        return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
+    }];
+    
+    [onlineMapSources addObjectsFromArray:sqlitedbArr];
+    _onlineMapSources = [NSArray arrayWithArray:onlineMapSources];
 }
 
 - (IBAction) onCancelButtonClicked:(id)sender
@@ -122,27 +190,33 @@
     return 1;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 54;
+}
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     return OALocalizedString(@"online_sources");
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    const auto& item = _onlineMapSources[(int) indexPath.row];
-    return [OABottomSheetActionCell getHeight:item->name.toNSString() value:nil cellWidth:tableView.bounds.size.width];
-}
-
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _onlineMapSources.count();
+    return _onlineMapSources.count;
 }
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    const auto& item = _onlineMapSources[(int) indexPath.row];
-    NSString* caption = item->name.toNSString();
-    
+    NSString* caption = nil;
+    Item *item = _onlineMapSources[indexPath.row];
+    if ([item isKindOfClass:Item_SqliteDbTileSource.class])
+    {
+        caption = [[item.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    }
+    else if ([item isKindOfClass:Item_OnlineTileSource.class])
+    {
+        caption = item.mapSource.name;
+    }
     static NSString* const identifierCell = @"OABottomSheetActionCell";
     OABottomSheetActionCell* cell = nil;
     cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -160,7 +234,8 @@
         cell.textView.text = caption;
         cell.descView.hidden = YES;
         cell.iconView.image = img;
-        if ([_app.data.lastMapSource.name isEqual:caption])
+        
+        if ([_app.data.lastMapSource isEqual:item.mapSource])
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_checmark_default.png"]];
         else
             cell.accessoryView = nil;
@@ -170,11 +245,10 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    const auto& item = _onlineMapSources[(int) indexPath.row];
-    OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:@"online_tiles"
-                                                        andVariant:item->name.toNSString() name:item->name.toNSString()];
-    _app.data.lastMapSource = mapSource;
-    [tableView reloadData];
+    Item* item = [_onlineMapSources objectAtIndex:indexPath.row];
+    _app.data.lastMapSource = item.mapSource;
+    if (self.delegate)
+        [self.delegate onNewSourceSelected];
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     [self dismissViewControllerAnimated:YES completion:nil];
 }

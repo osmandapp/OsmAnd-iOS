@@ -1410,7 +1410,8 @@ static const NSInteger _buttonsCount = 4;
         if (_targetPoint.type == OATargetDownloadMapSource)
         {
             [self removeMapFrameLayer];
-            self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight + (!landscape ? 44.0 : 0.0), width, contentViewHeight);
+            CGFloat bottomToolBarHeight = self.customController.hasBottomToolbar ? self.customController.bottomToolBarView.frame.size.height : 0.;
+            self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight + (!landscape ? 44.0 : 0.0), width, landscape ? contentViewHeight - bottomToolBarHeight - _toolbarHeight : (_fullHeight - bottomToolBarHeight - _toolbarHeight));
             CGRect mapFrame;
             if (landscape)
             {

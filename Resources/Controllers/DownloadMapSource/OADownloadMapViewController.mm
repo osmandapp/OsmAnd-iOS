@@ -110,7 +110,7 @@
 
 - (CGFloat)contentHeight
 {
-    return _tableView.contentSize.height;
+    return DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
 }
 
 - (void) applyLocalization

@@ -104,7 +104,7 @@
     return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;;
 }
 
-- (CGFloat)contentHeight
+- (CGFloat) contentHeight
 {
     return DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
 }
@@ -143,7 +143,6 @@
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
@@ -165,7 +164,6 @@
 - (void) setupView
 {
     NSMutableArray *tableData = [NSMutableArray array];
-    
     NSMutableArray *mapTypeArr = [NSMutableArray array];
     NSMutableArray *zoomLevelArr = [NSMutableArray array];
     NSMutableArray *generalInfoArr = [NSMutableArray array];
@@ -434,7 +432,6 @@
             [self showNewPickerAtIndex:newPickerIndexPath];
             _pickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
         }
-
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];

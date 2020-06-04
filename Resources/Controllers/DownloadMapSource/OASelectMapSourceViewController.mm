@@ -149,14 +149,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [onlineMapSources addObject:item];
         }
     }
-    
     [onlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_OnlineTileSource* obj1, Item_OnlineTileSource* obj2) {
         NSString *caption1 = obj1.onlineTileSource->name.toNSString();
         NSString *caption2 = obj2.onlineTileSource->name.toNSString();
         return [caption2 compare:caption1];
     }];
-
-    
     NSMutableArray *sqlitedbArr = [NSMutableArray array];
     for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
@@ -171,11 +168,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [sqlitedbArr addObject:item];
         }
     }
-    
     [sqlitedbArr sortUsingComparator:^NSComparisonResult(Item_SqliteDbTileSource *obj1, Item_SqliteDbTileSource *obj2) {
         return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
     }];
-    
     [onlineMapSources addObjectsFromArray:sqlitedbArr];
     _onlineMapSources = [NSArray arrayWithArray:onlineMapSources];
 }
@@ -195,7 +190,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return 54;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     return OALocalizedString(@"online_sources");
 }
@@ -224,17 +219,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
         cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
+        cell.descView.hidden = YES;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 61.0, 0.0, 0.0);
     }
     if (cell)
     {
         UIImage *img = nil;
         img = [UIImage imageNamed:@"ic_custom_map_online"];
-        
         cell.textView.text = caption;
-        cell.descView.hidden = YES;
         cell.iconView.image = img;
-        
         if ([_app.data.lastMapSource isEqual:item.mapSource])
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_checmark_default.png"]];
         else

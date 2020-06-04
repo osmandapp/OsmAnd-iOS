@@ -559,6 +559,7 @@
 
 - (void) onNewSourceSelected
 {
+    [self setupView];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 

@@ -243,7 +243,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     Item* item = [_onlineMapSources objectAtIndex:indexPath.row];
     _app.data.lastMapSource = item.mapSource;
-    // TODO: pass new source
     if (self.delegate)
         [self.delegate onNewSourceSelected];
     [tableView deselectRowAtIndexPath:indexPath animated:NO];

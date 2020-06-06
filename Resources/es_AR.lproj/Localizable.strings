@@ -1718,3 +1718,4 @@
 "nav_type_osmand" = "OsmAnd (navegación sin conexión)";
 "nav_type_descr" = "Elige cómo calcular una ruta para este perfil";
 "nav_type_title" = "Tipo de navegación";
+"quick_action_dir_from_descr" = "Pulsa esta acción para navegar desde el punto central de la pantalla actual.";

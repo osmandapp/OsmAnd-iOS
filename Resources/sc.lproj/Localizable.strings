@@ -1712,3 +1712,9 @@
 "two" = "Duos";
 // Dirrection appearance
 "one" = "Unu";
+"quick_action_dir_from_descr" = "Toca custa atzione pro navigare dae su puntu tzentrale de s'ischermu.";
+"nav_type_direct_to" = "Deretu a su puntu";
+"nav_type_straight_line" = "Lìnia dereta";
+"nav_type_osmand" = "OsmAnd (càrculu de s'àndala non in lìnia)";
+"nav_type_descr" = "Issèbera comente carculare un'àndala pro custu profilu";
+"nav_type_title" = "Casta de navigatzione";

@@ -559,7 +559,7 @@
 "map_widget_left" = "Левая панель";
 "layer_map_appearance" = "Настройки экрана";
 "select_gpx" = "Выберите GPX…";
-"confirm_usage_speed_cameras" = "Во многих странах (Германия, Франция, Италия и другие) использование предупреждения о камерах контроля скорости не допускается законом. Османд не несет никакой ответственности, если Вы нарушите закон. Пожалуйста, нажмите \" Да \" только если вы имеете право использовать эту функцию.";
+"confirm_usage_speed_cameras" = "Во многих странах (Германия, Франция, Италия и другие) использование предупреждения о камерах контроля скорости не допускается законом. OsmAnd не несет никакой ответственности, если Вы нарушите закон. Пожалуйста, нажмите \" Да \" только если вы имеете право использовать эту функцию.";
 "app_mode_bus" = "Автобус";
 "app_mode_train" = "Поезд";
 "shared_string_sound" = "Звук";
@@ -642,7 +642,7 @@
 "replace_destination_point" = "Заменить пункт назначения";
 "shared_string_search" = "Поиск";
 "shared_string_in_name" = "в %@";
-"nothing_found" = "Ничего не найдено :(";
+"nothing_found" = "Ничего не найдено: %@";
 "sort_by_name" = "Сортировать по имени";
 "shared_string_turn" = "Поворот";
 "directions_other" = "Другие направления";
@@ -691,7 +691,7 @@
 "osm_poi_delete_title" = "Удалить POI";
 "osm_alert_message" = "Сообщение";
 "osm_alert_button_ok" = "Создать заметку";
-"osm_upload_failed_title" = "Ошибка загрузки";
+"osm_upload_failed_title" = "Ошибка отправки";
 "osm_editing_lost_changes_title" = "Выйти без сохранения?";
 "osm_value" = "Значение";
 "osm_note_comment" = "Комментарий";
@@ -957,7 +957,7 @@
 "osmand_live_donations_enter_email" = "Введите адрес электронной почты";
 "osmand_live_support_reg_title" = "Поддерживаемый регион";
 "res_world_region" = "Мир";
-"shared_string_upload" = "Загрузить";
+"shared_string_upload" = "Отправить";
 "osm_name" = "Имя пользователя OpenStreetMap";
 "osm_pass" = "Пароль OpenStreetMap";
 "osm_confirm_delete" = "Удалить POI?";
@@ -972,8 +972,8 @@
 "shared_string_reset" = "Сбросить";
 "shared_string_filter" = "Фильтр";
 "mapil_usernames" = "Имена пользователей";
-"osm_upload_complete" = "Загрузка завершена";
-"osm_edit_uploading" = "Загрузка…";
+"osm_upload_complete" = "Отправка завершена";
+"osm_edit_uploading" = "Отправка…";
 "shared_string_read_more" = "Подробнее";
 "coordinates_example" = "Пример";
 "product_desc_russia_short" = "Карты регионов России";
@@ -1138,7 +1138,7 @@
 "osm_target_modified" = "Отредактированная OSM POI";
 "osm_target_deleted" = "Удаленная OSM POI";
 "osm_target_created" = "Создана OSM POI";
-"osm_confirm_upload" = "Загрузить правки?";
+"osm_confirm_upload" = "Отправить правки?";
 "osm_close_changeset" = "Закрыть набор изменений";
 "modify_edit_short" = "Редактировать изменения OSM";
 "open_osm_note" = "Открыть заметку OSM";
@@ -1151,10 +1151,10 @@
 "osm_delete_confirmation_descr" = "Вы уверенны, что хотите удалить этот POI?";
 "osm_note_created" = "Заметка OSM создана";
 "osm_note_create" = "Создать Заметку OSM";
-"osm_note_upload" = "Загрузить Заметку OSM";
-"osm_note_upload_info" = "Вы можете загрузить заметку анонимно или используя вашу учетную запись OpenStreetMap.";
-"osm_note_upload_immediately" = "Загрузить немедленно";
-"osm_note_upload_anonymously" = "Загрузить анонимно";
+"osm_note_upload" = "Отправить OSM заметку";
+"osm_note_upload_info" = "Вы можете отправить заметку анонимно или используя вашу учетную запись OpenStreetMap.";
+"osm_note_upload_immediately" = "Отправить немедленно";
+"osm_note_upload_anonymously" = "Отправить анонимно";
 "osm_note_empty_message" = "Пожалуйста, укажите сообщение для этой заметки.";
 "osm_note_close" = "Закрыть Заметку OSM";
 "osm_note_comment_title" = "Комментировать Заметку OSM";
@@ -1739,3 +1739,5 @@
 "choose_how_display_distance" = "Выберите способ отображения расстояния до активных маркеров";
 "specify_number_of_dir_indicators" = "Укажите количество указателей направления, это влияет на все настройки далее.";
 "direction_lines" = "Линии направления";
+"board_at" = "Посадка на";
+"quick_action_dir_from_descr" = "Коснитесь действия, чтобы перейти от текущей центральной точки экрана.";

@@ -437,7 +437,7 @@
 "free_memory" = "Livre %@";
 "map_orientation_change_in_accordance_with_speed" = "Limite para orientação do mapa";
 "map_orientation_change_in_accordance_with_speed_descr" = "Selecione a baixo em qual velocidade a orientação do mapa alterna de 'Para a direção do movimento' para 'Para compasso'";
-"nothing_found" = "Nada encontrado :(";
+"nothing_found" = "Nada encontrado : %@";
 "nothing_found_descr" = "Modificar o texto da pesquisa ou aumentar o raio de busca";
 "select_street" = "Selecionar rua";
 "select_city" = "Selecionar cidade";

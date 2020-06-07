@@ -9,7 +9,7 @@
 "intermediate_items_sort_by_distance" = "Ordenar porta a porta";
 "switch_start_finish" = "Inverter o punto de partida e o destino";
 "clear_all_intermediates" = "Limpar tódolos puntos intermedios";
-"shared_string_options" = "Options";
+"shared_string_options" = "Opcións";
 "new_destination_point_dialog" = "You have already set a destination";
 "replace_destination_point" = "Substituír o destino";
 "shared_string_current" = "Actual";
@@ -39,7 +39,7 @@
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Estrada";
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
-"shared_string_go" = "Go";
+"shared_string_go" = "Ir";
 "shared_string_info" = "Info";
 "simulate_routing" = "Simulate your position";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
@@ -93,7 +93,7 @@
 "map_widget_distance" = "Destination";
 "monitoring_control_start" = "GPX";
 "map_widget_altitude" = "Altitude";
-"map_widget_battery" = "Battery level";
+"map_widget_battery" = "Nivel da batería";
 "map_widget_plain_time" = "Tempo actual";
 "map_widget_max_speed" = "Límite da velocidade";
 "max_speed_none" = "none";
@@ -128,7 +128,7 @@
 "general_settings_2" = "Axustes xerais";
 "general_settings_descr" = "Configure display and common settings for the application";
 "routing_settings_descr" = "Specify options for navigation";
-"auto_zoom_none" = "No auto zoom";
+"auto_zoom_none" = "Sen achegamento de xeito automático";
 "auto_zoom_close" = "Cara o primeiro plano";
 "auto_zoom_far" = "Cara a media distancia";
 "auto_zoom_farthest" = "Cara a longa distancia";
@@ -195,7 +195,7 @@
 "interrupt_music" = "Deter a música";
 "shared_string_do_not_use" = "Do not use";
 "voice_provider" = "Indicacións por voz";
-"shared_string_sound" = "Sound";
+"shared_string_sound" = "Son";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
 "sort_by_distance" = "Ordenar pola distancia";
@@ -210,7 +210,7 @@
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Seleccionar no mapa";
-"shared_string_my_location" = "My Position";
+"shared_string_my_location" = "A miña posición";
 "route_descr_select_destination" = "Escoller destino";
 "route_to" = "To:";
 "route_via" = "Vía:";
@@ -242,9 +242,9 @@
 "looking_up_address" = "Estase a procurar o enderezo";
 "no_address_found" = "Non se especificou ningún enderezo";
 "traffic_warning_speed_limit" = "Límite da velocidade";
-"traffic_warning_border_control" = "Border control";
+"traffic_warning_border_control" = "Control fronteirizo";
 "traffic_warning_payment" = "Portaxe ou peaxe";
-"traffic_warning_stop" = "Stop sign";
+"traffic_warning_stop" = "Sinal de stop";
 "traffic_warning_calming" = "Lomba";
 "traffic_warning_speed_camera" = "Radar de velocidade";
 "traffic_warning" = "Aviso do tráfico";
@@ -253,9 +253,9 @@
 "traffic_warning_hazard" = "Perigo";
 "traffic_warning_tunnel" = "Tunnel";
 "driving_region" = "Rexión na que conducir";
-"driving_region_japan" = "Japan";
+"driving_region_japan" = "Xapón";
 "driving_region_us" = "Estados Unidos";
-"driving_region_canada" = "Canada";
+"driving_region_canada" = "Canadá";
 "driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
 "driving_region_uk" = "UK, India & similar";
 "driving_region_australia" = "Australia";
@@ -287,7 +287,7 @@
 "type_postcode" = "Insire o código postal";
 "coords_search" = "Procura de coordenadas";
 "nearest_cities" = "Cidades máis pretas";
-"type_address" = "Type address";
+"type_address" = "Insire o enderezo";
 "search_poi_category_hint" = "Escriba para procurar todo";
 // Shared Strings
 "shared_string_apply" = "Aplicar";
@@ -295,15 +295,15 @@
 "shared_string_back" = "Voltar";
 "shared_string_ok" = "Feito";
 "shared_string_cancel" = "Desbotar";
-"shared_string_close" = "Close";
-"shared_string_no" = "No";
+"shared_string_close" = "Pechar";
+"shared_string_no" = "Non";
 "shared_string_yes" = "Si";
 "shared_string_save" = "Gardar";
 "shared_string_done" = "Done";
 "shared_string_update" = "Actualizar";
-"shared_string_install" = "Install";
+"shared_string_install" = "Instalar";
 "shared_string_uninstall" = "Uninstall";
-"shared_string_delete" = "Delete";
+"shared_string_delete" = "Eliminar";
 "shared_string_remove" = "Eliminar";
 "shared_string_dismiss" = "Rexeitar";
 "shared_string_add" = "Engadir";
@@ -614,7 +614,7 @@
 "rendering_category_hide" = "Agochar";
 "rendering_category_routes" = "Rotas";
 "rendering_category_details" = "Details";
-"rendering_category_transport" = "Transport";
+"rendering_category_transport" = "Transporte";
 "rendering_category_others" = "Outros atributos do mapa";
 // Rendering attributes
 "units_minutes_short" = "min";
@@ -779,7 +779,7 @@
 "custom_search" = "Procura personalizada";
 "poi_filter_custom_filter" = "Filtro personalizado";
 "poi_filter_closest_poi" = "PDI máis pretos";
-"shared_string_is_open_24_7" = "Open 24/7";
+"shared_string_is_open_24_7" = "Aberto 24h";
 "shared_string_is_open" = "Aberto agora";
 "poi_filter_by_name" = "Procurar polo nome";
 "subcategories" = "Subcategorías";
@@ -787,20 +787,20 @@
 "create_custom_poi" = "Crear un filtro personalizado";
 "selected_categories" = "Categorías escollidas";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
-"shared_string_filters" = "Filters";
+"shared_string_filters" = "Filtros";
 "edit_filter" = "Editar as categorías";
 "shared_string_save_as" = "Save As";
-"delete_filter" = "Delete filter";
+"delete_filter" = "Eliminar o filtro";
 "save_filter" = "Gardar o filtro";
 "edit_filter_delete_dialog_title" = "Elimina-lo filtro elixido?";
 "apply_filters" = "Aplicar os filtros";
-"filter_poi_hint" = "Filter by name";
+"filter_poi_hint" = "Filtrar polo nome";
 "city_type_suburb" = "Barrio";
 "city_type_hamlet" = "Aldea";
 "city_type_village" = "Vila";
 "city_type_town" = "Town";
 "city_type_city" = "City";
-"city_type_district" = "District";
+"city_type_district" = "Distrito";
 "city_type_neighbourhood" = "Barrio";
 "postcode" = "Código postal";
 "show_something_on_map" = "Show %@ on the map";
@@ -808,7 +808,7 @@
 "shared_string_street" = "Street";
 "shared_string_building" = "Building";
 "shared_string_street_intersection" = "Street intersection";
-"shared_string_address" = "Address";
+"shared_string_address" = "Enderezo";
 "do_not_show_discount" = "Do not show promotions";
 "do_not_send_anonymous_data" = "Do not send anonymous data";
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
@@ -1102,13 +1102,13 @@
 "rendering_attr_piste_type_downhill_name" = "Descendemento";
 "routing_attr_max_num_changes_name" = "Número de transbordos";
 "rendering_attr_smoothness_impassable_name" = "Intransitábel";
-"routing_attr_allow_private_description" = "Permitir accesoás zonas privadas.";
+"routing_attr_allow_private_description" = "Permitir acceso ás zonas privadas.";
 "rendering_attr_showLez_name" = "Amosar zonas de baixas emisións";
 "rendering_attr_buildings15zoom_name" = "Edificios no achegamento 15";
 "rendering_value_high_name" = "Alta";
 "routing_attr_height_obstacles_name" = "Empregar datos de elevación";
 "rendering_attr_transportStops_name" = "Paradas do transporte";
-"rendering_attr_noAdminboundaries_description" = "Agochar fronteiras rexionais (niveis administrativos do 5ó 9).";
+"rendering_attr_noAdminboundaries_description" = "Agochar fronteiras rexionais (niveis administrativos do 5 ó 9).";
 "rendering_value_americanRoadAtlas_name" = "Atlas de estradas norteamericanas";
 "routing_attr_height_name" = "Límite da altitude";
 "routing_attr_short_way_description" = "Empregar o camiño con aforro no combustíbel (normalmente máis curto).";
@@ -1365,3 +1365,6 @@
 "weeks_short" = "sem";
 "week_short" = "sem";
 "day_short" = "d";
+"active_markers" = "Marcaxes activas";
+"exit_at" = "Saír en";
+"public_transport_warning_title" = "A navegación en transporte público atópase agora en fase de proba beta, poden xerarse erros e imprecisións.";

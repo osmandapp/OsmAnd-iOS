@@ -1066,7 +1066,7 @@
 "rendering_attr_roadColors_name" = "Esquema de cores de estrada";
 "rendering_attr_highway_class_street_name" = "Rúa";
 "rendering_attr_subwayMode_name" = "Liñas do metro";
-"routing_attr_avoid_unpaved_name" = "Non hai estradas sen pavimentar";
+"routing_attr_avoid_unpaved_name" = "Sen estradas non pavimentadas";
 "routing_attr_avoid_share_taxi_description" = "Evitar taxis compartidos";
 "rendering_attr_surface_grass_name" = "Céspede";
 "rendering_value_bold_name" = "Gordo";

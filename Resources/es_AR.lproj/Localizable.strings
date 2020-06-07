@@ -507,7 +507,7 @@
 "nearest_cities" = "Ciudades cercanas";
 "type_address" = "Escribe la dirección";
 "search_poi_category_hint" = "Escribe para buscar";
-"nothing_found" = "¡Nada por aquí! :-(";
+"nothing_found" = "¡Nada por aquí!: %@";
 "nothing_found_descr" = "Modifica la consulta de búsqueda o aumenta el radio de búsqueda";
 "driving_region" = "Región de conducción";
 "driving_region_japan" = "Japón";

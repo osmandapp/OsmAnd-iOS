@@ -12,6 +12,8 @@
 #import "OsmAndApp.h"
 #import "OASelectMapSourceViewController.h"
 #import "OAMapRendererView.h"
+#import "OAMapCreatorHelper.h"
+#import "OASQLiteTileSource.h"
 
 #include "Localization.h"
 #include "OASizes.h"
@@ -22,11 +24,44 @@
 #import "OAPreviewZoomLevelsCell.h"
 #import "OACustomPickerTableViewCell.h"
 
+#include <OsmAndCore/Map/IOnlineTileSources.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
+
 #define kCellTypeZoom @"time_cell"
 #define kCellTypePicker @"picker"
 #define kMinAllowedZoom 1
 #define kMaxAllowedZoom 22
 #define kZoomSection 1
+
+#define _(name) OADownloadMapViewController__##name
+#define commonInit _(commonInit)
+#define deinit _(deinit)
+
+#define Item _(Item)
+@interface Item : NSObject
+@property OAMapSource* mapSource;
+@property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
+@property NSString *path;
+@end
+@implementation Item
+@end
+
+#define Item_OnlineTileSource _(Item_OnlineTileSource)
+@interface Item_OnlineTileSource : Item
+@property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
+@end
+@implementation Item_OnlineTileSource
+@end
+
+#define Item_SqliteDbTileSource _(Item_SqliteDbTileSource)
+@interface Item_SqliteDbTileSource : Item
+@property uint64_t size;
+@property BOOL isOnline;
+@end
+@implementation Item_SqliteDbTileSource
+@end
+
+typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @interface OADownloadMapViewController() <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate, OAMapSourceSelectionDelegate>
 
@@ -46,6 +81,8 @@
     NSArray<NSString *> *_possibleZoomValues;
     NSIndexPath *_pickerIndexPath;
     CALayer *_horizontalLine;
+    
+    NSDictionary<OAMapSource *, Item *> *_onlineMapSources;
 }
 
 - (UIView *) getMiddleView
@@ -154,10 +191,100 @@
 
     // to delete/change
     _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
-    _minZoom = 8;
-    _maxZoom = 16;
+    
+    [self fetchOnlineSources];
+    
+    _minZoom = [self getItemMinZoom];
+    _maxZoom = [self getItemMaxZoom];
     
     [self setupView];
+}
+
+- (void) fetchOnlineSources
+{
+    NSMutableDictionary<OAMapSource *, Item *> *onlineMapSources = [NSMutableDictionary new];
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
+    const auto localResources = _app.resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
+        if (localResource->type == OsmAndResourceType::OnlineTileSources)
+            onlineTileSourcesResources.push_back(localResource);
+
+    for (const auto& resource : onlineTileSourcesResources)
+    {
+        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
+        NSString* resourceId = resource->id.toNSString();
+        
+        for(const auto& onlineTileSource : onlineTileSources->getCollection())
+        {
+            Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
+            
+            NSString *caption = onlineTileSource->name.toNSString();
+            
+            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
+                                                        andVariant:onlineTileSource->name.toNSString() name:caption];
+            item.resource = resource;
+            item.onlineTileSource = onlineTileSource;
+            item.path = [_app.cachePath stringByAppendingPathComponent:caption];
+            [onlineMapSources setObject:item forKey:item.mapSource];
+        }
+    }
+    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
+    {
+        NSString *path = [OAMapCreatorHelper sharedInstance].files[fileName];
+        if ([OASQLiteTileSource isOnlineTileSource:path])
+        {
+            Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
+            item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
+            item.path = path;
+            item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
+            item.isOnline = YES;
+            [onlineMapSources setObject:item forKey:item.mapSource];
+        }
+    }
+    _onlineMapSources = [NSDictionary dictionaryWithDictionary:onlineMapSources];
+}
+
+- (Item *) getCurrentItem
+{
+    return _onlineMapSources[_app.data.lastMapSource];
+}
+
+- (NSInteger) getItemMinZoom
+{
+    Item *item = [self getCurrentItem];
+    if (item)
+    {
+        if ([item isKindOfClass:Item_OnlineTileSource.class])
+        {
+            Item_OnlineTileSource *onlineSource = (Item_OnlineTileSource *) item;
+            return onlineSource.onlineTileSource->minZoom;
+        }
+        else if ([item isKindOfClass:Item_SqliteDbTileSource.class])
+        {
+            OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
+            return ts.minimumZoomSupported;
+        }
+    }
+    return 1;
+}
+
+- (NSInteger) getItemMaxZoom
+{
+    Item *item = [self getCurrentItem];
+    if (item)
+    {
+        if ([item isKindOfClass:Item_OnlineTileSource.class])
+        {
+            Item_OnlineTileSource *onlineSource = (Item_OnlineTileSource *) item;
+            return onlineSource.onlineTileSource->maxZoom;
+        }
+        else if ([item isKindOfClass:Item_SqliteDbTileSource.class])
+        {
+            OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
+            return ts.maximumZoomSupported;
+        }
+    }
+    return 1;
 }
 
 - (void) setupView

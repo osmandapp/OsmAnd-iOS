@@ -450,6 +450,7 @@
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";
 "online_sources" = "Online sources";
+"size_of_downloaded_data" = "The big difference between zoom levels can increase the size of the downloaded data.";
 
 // HUD
 "hud_heading" = "Heading";

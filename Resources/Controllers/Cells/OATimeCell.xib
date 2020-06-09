@@ -16,8 +16,9 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NG4-8F-tUd">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NG4-8F-tUd">
                         <rect key="frame" x="15" y="11" width="42" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
@@ -28,23 +29,14 @@
                         <color key="textColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2Bv-PX-R6F">
+                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Bv-PX-R6F">
                         <rect key="frame" x="16" y="7" width="30" height="30"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="30" id="KEb-fR-HY1"/>
-                            <constraint firstAttribute="height" constant="30" id="p4X-8B-85T"/>
-                        </constraints>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottomMargin" secondItem="NG4-8F-tUd" secondAttribute="bottom" constant="1" id="6cw-MZ-qqe"/>
-                    <constraint firstAttribute="bottom" secondItem="2Bv-PX-R6F" secondAttribute="bottom" constant="7" id="HWK-TX-hGY"/>
-                    <constraint firstItem="2Bv-PX-R6F" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="Kso-PV-bmP"/>
                     <constraint firstItem="y4y-dh-rNB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="Ntz-yN-tgK"/>
-                    <constraint firstItem="NG4-8F-tUd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="P8C-PS-SLf"/>
                     <constraint firstAttribute="bottomMargin" secondItem="y4y-dh-rNB" secondAttribute="bottom" constant="1" id="acO-wu-QLj"/>
-                    <constraint firstItem="2Bv-PX-R6F" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="cHx-J5-IjN"/>
-                    <constraint firstItem="NG4-8F-tUd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="edI-st-YB9"/>
                     <constraint firstItem="y4y-dh-rNB" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="nQe-2i-978"/>
                 </constraints>
             </tableViewCellContentView>

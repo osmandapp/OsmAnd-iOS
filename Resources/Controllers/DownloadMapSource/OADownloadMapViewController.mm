@@ -43,7 +43,6 @@
     
     NSInteger _minZoom;
     NSInteger _maxZoom;
-    NSArray<NSDictionary *> *_zoomArray;
     NSArray<NSString *> *_possibleZoomValues;
     NSIndexPath *_pickerIndexPath;
     CALayer *_horizontalLine;
@@ -404,7 +403,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == 1 ? @"The detalization level increases the downloading size of map." : @""; // change
+    return section == 1 ? OALocalizedString(@"size_of_downloaded_data") : @"";
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -417,7 +416,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item =  [self getItem:indexPath];
-    if (indexPath.section == kZoomSection && ([item[@"type"] isEqualToString:kCellTypeZoom] || [item[@"type"] isEqualToString:kCellTypePicker]))
+    if (indexPath.section == kZoomSection && [item[@"type"] isEqualToString:kCellTypeZoom])
     {
         [self.tableView beginUpdates];
 
@@ -473,7 +472,7 @@
     if (([self pickerIsShown]) && (_pickerIndexPath.row < selectedIndexPath.row))
         newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row - 1 inSection:kZoomSection];
     else
-        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row  inSection:kZoomSection];
+        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row inSection:kZoomSection];
     return newIndexPath;
 }
 
@@ -486,7 +485,7 @@
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[@"tableData"][indexPath.section][indexPath.row];
-    if (indexPath.section == kZoomSection && [item[@"type"] isEqualToString:kCellTypeZoom])
+    if (indexPath.section == kZoomSection && ![item[@"type"] isEqualToString:@"OAPreviewZoomLevelsCell"])
     {
         NSArray *ar = _data[@"tableData"][indexPath.section];
         if ([self pickerIsShown])
@@ -509,12 +508,43 @@
     return _data[@"tableData"][indexPath.section][indexPath.row];
 }
 
-- (void) zoomChanged:(NSString *)zoom tag: (NSInteger)pickerTag
+- (void) updatePickerCell:(NSInteger)value
 {
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_pickerIndexPath];
+    if ([cell isKindOfClass:OACustomPickerTableViewCell.class])
+    {
+        OACustomPickerTableViewCell *cellRes = (OACustomPickerTableViewCell *) cell;
+        [cellRes.picker selectRow:value inComponent:0 animated:NO];
+    }
+}
+
+- (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
+{
+    NSInteger value = [zoom integerValue];
     if (pickerTag == 2)
-        _minZoom = [zoom intValue];
+    {
+        if (value < _maxZoom)
+        {
+            _minZoom = value;
+        }
+        else
+        {
+            _minZoom = _maxZoom - 1;
+            [self updatePickerCell:_minZoom - 1];
+        }
+    }
     else if (pickerTag == 3)
-        _maxZoom = [zoom intValue];
+    {
+        if (value > _minZoom)
+        {
+            _maxZoom = value;
+        }
+        else
+        {
+            _maxZoom = _minZoom + 1;
+            [self updatePickerCell:_maxZoom - 1];
+        }
+    }
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section], [NSIndexPath indexPathForRow:0 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }

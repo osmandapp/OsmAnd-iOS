@@ -83,7 +83,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSIndexPath *_pickerIndexPath;
     CALayer *_horizontalLine;
     
-    NSArray *_onlineMapSources;
+    NSDictionary<OAMapSource *, Item *> *_onlineMapSources;
 }
 
 - (UIView *) getMiddleView
@@ -192,16 +192,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     // to delete/change
     _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
-    _minZoom = 8;
-    _maxZoom = 16;
     
     [self fetchOnlineSources];
+    
+    _minZoom = [self getItemMinZoom];
+    _maxZoom = [self getItemMaxZoom];
+    
     [self setupView];
 }
 
 - (void) fetchOnlineSources
 {
-    NSMutableArray *onlineMapSources = [NSMutableArray new];
+    NSMutableDictionary<OAMapSource *, Item *> *onlineMapSources = [NSMutableDictionary new];
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
     const auto localResources = _app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)
@@ -224,10 +226,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             item.resource = resource;
             item.onlineTileSource = onlineTileSource;
             item.path = [_app.cachePath stringByAppendingPathComponent:caption];
-            [onlineMapSources addObject:item];
+            [onlineMapSources setObject:item forKey:item.mapSource];
         }
     }
-    NSMutableArray *sqlitedbArr = [NSMutableArray array];
     for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
         NSString *path = [OAMapCreatorHelper sharedInstance].files[fileName];
@@ -238,11 +239,53 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             item.path = path;
             item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
             item.isOnline = YES;
-            [sqlitedbArr addObject:item];
+            [onlineMapSources setObject:item forKey:item.mapSource];
         }
     }
-    [onlineMapSources addObjectsFromArray:sqlitedbArr];
-    _onlineMapSources = [NSArray arrayWithArray:onlineMapSources];
+    _onlineMapSources = [NSDictionary dictionaryWithDictionary:onlineMapSources];
+}
+
+- (Item *) getCurrentItem
+{
+    return _onlineMapSources[_app.data.lastMapSource];
+}
+
+- (NSInteger) getItemMinZoom
+{
+    Item *item = [self getCurrentItem];
+    if (item)
+    {
+        if ([item isKindOfClass:Item_OnlineTileSource.class])
+        {
+            Item_OnlineTileSource *onlineSource = (Item_OnlineTileSource *) item;
+            return onlineSource.onlineTileSource->minZoom;
+        }
+        else if ([item isKindOfClass:Item_SqliteDbTileSource.class])
+        {
+            OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
+            return ts.minimumZoomSupported;
+        }
+    }
+    return 1;
+}
+
+- (NSInteger) getItemMaxZoom
+{
+    Item *item = [self getCurrentItem];
+    if (item)
+    {
+        if ([item isKindOfClass:Item_OnlineTileSource.class])
+        {
+            Item_OnlineTileSource *onlineSource = (Item_OnlineTileSource *) item;
+            return onlineSource.onlineTileSource->maxZoom;
+        }
+        else if ([item isKindOfClass:Item_SqliteDbTileSource.class])
+        {
+            OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
+            return ts.maximumZoomSupported;
+        }
+    }
+    return 1;
 }
 
 - (void) setupView

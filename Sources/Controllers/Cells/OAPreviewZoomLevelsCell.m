@@ -23,7 +23,7 @@
     if (!UIAccessibilityIsReduceTransparencyEnabled())
     {
         view.backgroundColor = UIColor.clearColor;
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
         blurEffectView.layer.cornerRadius = 10.0;
         blurEffectView.layer.masksToBounds = YES;
         blurEffectView.frame = view.bounds;

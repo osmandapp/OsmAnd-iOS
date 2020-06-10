@@ -27,6 +27,7 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
+#include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
 
 #define kCellTypeZoom @"time_cell"
 #define kCellTypePicker @"picker"
@@ -77,6 +78,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OsmAndAppInstance _app;
     NSDictionary *_data;
     
+    NSInteger _currentZoom;
     NSInteger _minZoom;
     NSInteger _maxZoom;
     NSArray<NSString *> *_possibleZoomValues;
@@ -191,8 +193,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _downloadButton.layer.cornerRadius = 9.0;
 
     [self fetchOnlineSources];
+  
+    _possibleZoomValues = [self getPossibleZoomValues];
     
-    _minZoom = [self getItemMinZoom];
+    OAMapRendererView* renderView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    _currentZoom = renderView.zoom;
+    _minZoom = [self getDefaultItemMinZoom];
     _maxZoom = [self getItemMaxZoom];
     
     [self setupView];
@@ -247,6 +253,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return _onlineMapSources[_app.data.lastMapSource];
 }
 
+- (NSInteger) getDefaultItemMinZoom
+{
+    if (_currentZoom > [self getItemMaxZoom])
+        return [self getItemMaxZoom];
+    else if (_currentZoom < [self getItemMinZoom])
+        return [self getItemMinZoom];
+    else
+        return _currentZoom;
+}
+
 - (NSInteger) getItemMinZoom
 {
     Item *item = [self getCurrentItem];
@@ -260,7 +276,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else if ([item isKindOfClass:Item_SqliteDbTileSource.class])
         {
             OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
-            return ts.minimumZoomSupported > 0 ? ts.minimumZoomSupported : 1;
+            return ts.minimumZoomSupported;
         }
     }
     return 1;
@@ -288,14 +304,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (NSMutableArray<NSString *> *) getPossibleZoomValues
 {
     NSMutableArray<NSString *> *zoomArray = [[NSMutableArray alloc] init];
-    for (NSInteger i = _minZoom; i <= _maxZoom; i++)
+    for (NSInteger i = [self getItemMinZoom]; i <= [self getItemMaxZoom]; i++)
         [zoomArray addObject:[NSString stringWithFormat: @"%ld", i]];
     return zoomArray;
 }
 
 - (void) setupView
 {
-    _possibleZoomValues = [self getPossibleZoomValues];
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *mapTypeArr = [NSMutableArray array];
     NSMutableArray *zoomLevelArr = [NSMutableArray array];
@@ -419,32 +434,33 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (UIImage *) getZoomTile:(int)zoom
+- (UIImage *) getZoomTile:(NSInteger)zoom
 {
     Item *item = [self getCurrentItem];
     OAMapRendererView * mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     const auto point = OsmAnd::Utilities::convert31ToLatLon(mapView.target31);
     const auto tileId = OsmAnd::TileId::fromXY(OsmAnd::Utilities::getTileNumberX(zoom, point.longitude), OsmAnd::Utilities::getTileNumberY(zoom, point.latitude));
-    
+    NSString *url = [[NSString alloc] init];
     if (item)
     {
+        OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
         if ([item isKindOfClass:Item_OnlineTileSource.class])
         {
             Item_OnlineTileSource *onlineSource = (Item_OnlineTileSource *) item;
-            return nil;
+            NSString *urlToLoad = onlineSource.onlineTileSource->urlToLoad.toNSString();
+            QList<QString> randomsArray = ts.randomsArray;
+            url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, OsmAnd::ZoomLevel(zoom)).toNSString();
         }
         else if ([item isKindOfClass:Item_SqliteDbTileSource.class])
         {
-            OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
-
-            NSString *url = [ts getUrlToLoad:tileId.x y:tileId.y zoom:zoom];
-            if (url)
-            {
-                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
-                if (data)
-                    return [UIImage imageWithData:data];
-            }
+            url = [ts getUrlToLoad:tileId.x y:tileId.y zoom:(int)zoom];
         }
+    }
+    if (url)
+    {
+        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+        if (data)
+            return [UIImage imageWithData:data];
     }
     return nil;
 }
@@ -500,8 +516,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (cell)
         {
             cell.descriptionLabel.text = item[@"value"];
-            [cell.minZoomImageView setImage:[self getZoomTile:(int)_minZoom]];
-            [cell.maxZoomImageView setImage:[self getZoomTile:(int)_maxZoom]];
+            [cell.minZoomImageView setImage:[self getZoomTile:_minZoom]];
+            [cell.maxZoomImageView setImage:[self getZoomTile:_maxZoom]];
             cell.minZoomPropertyLabel.text = [NSString stringWithFormat:@"%ld",_minZoom];
             cell.maxZoomPropertyLabel.text = [NSString stringWithFormat:@"%ld",_maxZoom];
         }
@@ -686,25 +702,25 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSInteger value = [zoom integerValue];
     if (pickerTag == 2)
     {
-        if (value < _maxZoom)
+        if (value <= _maxZoom)
         {
             _minZoom = value;
         }
         else
         {
-            _minZoom = _maxZoom - 1;
+            _minZoom = _maxZoom;
             [self updatePickerCell:_minZoom - 1];
         }
     }
     else if (pickerTag == 3)
     {
-        if (value > _minZoom)
+        if (value >= _minZoom)
         {
             _maxZoom = value;
         }
         else
         {
-            _maxZoom = _minZoom + 1;
+            _maxZoom = _minZoom;
             [self updatePickerCell:_maxZoom - 1];
         }
     }
@@ -716,6 +732,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) onNewSourceSelected
 {
+    _minZoom = [self getDefaultItemMinZoom];
+    _maxZoom = [self getItemMaxZoom];
+    _possibleZoomValues = [self getPossibleZoomValues];
     [self setupView];
     [self.tableView reloadData];
 }

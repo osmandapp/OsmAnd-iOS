@@ -35,20 +35,20 @@
 
 - (void) onItemClicked:(id)senderItem;
 
-- (void) offerDownloadAndInstallOf:(RepositoryResourceItem *)item;
-- (void) offerDownloadAndUpdateOf:(OutdatedResourceItem *)item;
+- (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item;
+- (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item;
 
-- (void) startDownloadOfItem:(RepositoryResourceItem*)item;
+- (void) startDownloadOfItem:(OARepositoryResourceItem*)item;
 - (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name;
 
-- (void) offerCancelDownloadOf:(ResourceItem *)item;
+- (void) offerCancelDownloadOf:(OAResourceItem *)item;
 
-- (void) offerDeleteResourceOf:(LocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
-- (void) offerDeleteResourceOf:(LocalResourceItem *)item;
+- (void) offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
+- (void) offerDeleteResourceOf:(OALocalResourceItem *)item;
 
-- (void) offerClearCacheOf:(LocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
+- (void) offerClearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
 
-- (void) showDetailsOf:(LocalResourceItem *)item;
+- (void) showDetailsOf:(OALocalResourceItem *)item;
 
 - (UITableView *) getTableView;
 

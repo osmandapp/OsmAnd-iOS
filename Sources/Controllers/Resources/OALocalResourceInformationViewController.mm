@@ -124,13 +124,13 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
        
    [self.baseController offerClearCacheOf:self.localItem executeAfterSuccess:^{
        dispatch_async(dispatch_get_main_queue(), ^{
-           if ([_localItem isKindOfClass:[OnlineTilesResourceItem class]])
+           if ([_localItem isKindOfClass:[OAOnlineTilesResourceItem class]])
            {
-               [self calculateSizeAndUpdate:(OnlineTilesResourceItem *)_localItem];
+               [self calculateSizeAndUpdate:(OAOnlineTilesResourceItem *)_localItem];
            }
-           if ([_localItem isKindOfClass:[SqliteDbResourceItem class]])
+           if ([_localItem isKindOfClass:[OASqliteDbResourceItem class]])
            {
-               [self updateLocalSqliteDbItem:(SqliteDbResourceItem *)_localItem];
+               [self updateLocalSqliteDbItem:(OASqliteDbResourceItem *)_localItem];
            }
        });
    }];
@@ -143,7 +143,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [self.navigationController pushViewController:editViewController animated:YES];
 }
 
-- (void)initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item;
+- (void)initWithLocalSqliteDbItem:(OASqliteDbResourceItem *)item;
 {
     self.localItem = item;
     BOOL isOnlineSql = [OASQLiteTileSource isOnlineTileSource:item.path];
@@ -189,7 +189,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     tableButtons = tButtons;
 }
 
-- (void)updateLocalSqliteDbItem:(SqliteDbResourceItem *)item
+- (void)updateLocalSqliteDbItem:(OASqliteDbResourceItem *)item
 {
     [item updateSize];
     
@@ -225,7 +225,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
-- (void)initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item
+- (void)initWithLocalOnlineSourceItem:(OAOnlineTilesResourceItem *)item
 {
     self.localItem = item;
     
@@ -252,7 +252,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [self calculateSizeAndUpdate:item];
 }
 
-- (void) calculateSizeAndUpdate:(OnlineTilesResourceItem *)item
+- (void) calculateSizeAndUpdate:(OAOnlineTilesResourceItem *)item
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSString *size = [NSByteCountFormatter stringFromByteCount:[OAUtilities folderSize:item.path] countStyle:NSByteCountFormatterCountStyleFile];
@@ -450,17 +450,17 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 #pragma mark - OATilesEditingViewControllerDelegate
 
-- (void) onTileSourceSaved:(LocalResourceItem *)item
+- (void) onTileSourceSaved:(OALocalResourceItem *)item
 {
-    if ([item isKindOfClass:SqliteDbResourceItem.class])
+    if ([item isKindOfClass:OASqliteDbResourceItem.class])
     {
-        SqliteDbResourceItem *sqlite = (SqliteDbResourceItem *)item;
+        OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *)item;
         self.regionTitle = sqlite.fileName;
         [self initWithLocalSqliteDbItem:sqlite];
     }
-    else if ([item isKindOfClass:OnlineTilesResourceItem.class])
+    else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
     {
-        OnlineTilesResourceItem *tileSource = (OnlineTilesResourceItem *)item;
+        OAOnlineTilesResourceItem *tileSource = (OAOnlineTilesResourceItem *)item;
         self.regionTitle = tileSource.title;
         [self initWithLocalOnlineSourceItem:tileSource];
     }

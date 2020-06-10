@@ -27,17 +27,22 @@
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
 
+#include <OsmAndCore/Map/IMapStylesCollection.h>
+#include <OsmAndCore/Map/UnresolvedMapStyle.h>
+#include <OsmAndCore/Map/IOnlineTileSources.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
+
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
-@implementation ResourceItem
+@implementation OAResourceItem
 
 - (BOOL) isEqual:(id)object
 {
-    if (self.resourceId == nullptr || ((ResourceItem *)object).resourceId == nullptr)
+    if (self.resourceId == nullptr || ((OAResourceItem *)object).resourceId == nullptr)
         return NO;
     
-    return self.resourceId.compare(((ResourceItem *)object).resourceId) == 0;
+    return self.resourceId.compare(((OAResourceItem *)object).resourceId) == 0;
 }
 
 - (void) updateSize
@@ -47,16 +52,16 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 @end
 
-@implementation RepositoryResourceItem
+@implementation OARepositoryResourceItem
 @end
 
-@implementation LocalResourceItem
+@implementation OALocalResourceItem
 @end
 
-@implementation OutdatedResourceItem
+@implementation OAOutdatedResourceItem
 @end
 
-@implementation SqliteDbResourceItem
+@implementation OASqliteDbResourceItem
 
 - (void) updateSize
 {
@@ -65,7 +70,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 @end
 
-@implementation OnlineTilesResourceItem
+@implementation OAOnlineTilesResourceItem
+@end
+
+@implementation OAMapStyleResourceItem
 @end
 
 @implementation OAResourcesUIHelper
@@ -166,15 +174,15 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return nameStr;
 }
 
-+ (BOOL) isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem *)item_
++ (BOOL) isSpaceEnoughToDownloadAndUnpackOf:(OAResourceItem *)item_
 {
-    if ([item_ isKindOfClass:[RepositoryResourceItem class]])
+    if ([item_ isKindOfClass:[OARepositoryResourceItem class]])
     {
-        RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
+        OARepositoryResourceItem* item = (OARepositoryResourceItem*)item_;
 
         return [self.class isSpaceEnoughToDownloadAndUnpackResource:item.resource];
     }
-    else if ([item_ isKindOfClass:[LocalResourceItem class]])
+    else if ([item_ isKindOfClass:[OALocalResourceItem class]])
     {
         OsmAndAppInstance _app = [OsmAndApp instance];
         const auto resource = _app.resourcesManager->getResourceInRepository(item_.resourceId);
@@ -192,12 +200,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return (_app.freeSpaceAvailableOnDevice >= spaceNeeded);
 }
 
-+ (BOOL) verifySpaceAvailableToDownloadAndUnpackOf:(ResourceItem*)item_
++ (BOOL) verifySpaceAvailableToDownloadAndUnpackOf:(OAResourceItem*)item_
                                           asUpdate:(BOOL)isUpdate
 {
-    if ([item_ isKindOfClass:[RepositoryResourceItem class]])
+    if ([item_ isKindOfClass:[OARepositoryResourceItem class]])
     {
-        RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
+        OARepositoryResourceItem* item = (OARepositoryResourceItem*)item_;
 
         return [self.class verifySpaceAvailableDownloadAndUnpackResource:item.resource
                                                   withResourceName:[self.class titleOfResource:item.resource
@@ -206,9 +214,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                                                                                        withResourceType:YES]
                                                           asUpdate:isUpdate];
     }
-    else if ([item_ isKindOfClass:[LocalResourceItem class]])
+    else if ([item_ isKindOfClass:[OALocalResourceItem class]])
     {
-        LocalResourceItem* item = (LocalResourceItem*)item_;
+        OALocalResourceItem* item = (OALocalResourceItem*)item_;
 
         OsmAndAppInstance _app = [OsmAndApp instance];
         const auto resource = _app.resourcesManager->getResourceInRepository(item.resourceId);
@@ -339,9 +347,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return nil;
 }
 
-+ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<ResourceItem *>*))onComplete
++ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete
 {
-    NSMutableArray<ResourceItem *>* res;
+    NSMutableArray<OAResourceItem *>* res;
     res = [NSMutableArray new];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray *sortedSelectedRegions;
@@ -376,7 +384,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                         {
                             if (app.resourcesManager->isResourceInstalled(resource->id))
                             {
-                                LocalResourceItem *item = [[LocalResourceItem alloc] init];
+                                OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
                                 item.resourceId = resource->id;
                                 item.resourceType = resource->type;
                                 item.title = [self.class titleOfResource:resource
@@ -391,7 +399,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                             }
                             else
                             {
-                                RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+                                OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
                                 item.resourceId = resource->id;
                                 item.resourceType = resource->type;
                                 item.title = [self.class titleOfResource:resource
@@ -419,7 +427,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     });
 }
 
-+ (NSString *) getCountryName:(ResourceItem *)item
++ (NSString *) getCountryName:(OAResourceItem *)item
 {
     NSString *countryName;
     
@@ -471,7 +479,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (void) offerDownloadAndInstallOf:(RepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
++ (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
         return;
@@ -518,7 +526,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void) offerDownloadAndUpdateOf:(OutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
++ (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     if (![self.class checkIfUpdateEnabled:item.worldRegion])
         return;
@@ -575,7 +583,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void) startDownloadOfItem:(RepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
++ (void) startDownloadOfItem:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     // Create download tasks
     NSString* ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -638,20 +646,20 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (void) offerCancelDownloadOf:(ResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop
++ (void) offerCancelDownloadOf:(OAResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop
 {
     BOOL isUpdate = NO;
     std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
-    if ([item_ isKindOfClass:[LocalResourceItem class]])
+    if ([item_ isKindOfClass:[OALocalResourceItem class]])
     {
-        LocalResourceItem* item = (LocalResourceItem*)item_;
+        OALocalResourceItem* item = (OALocalResourceItem*)item_;
 
         resource = item.resource;
-        isUpdate = [item isKindOfClass:[OutdatedResourceItem class]];
+        isUpdate = [item isKindOfClass:[OAOutdatedResourceItem class]];
     }
-    else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
+    else if ([item_ isKindOfClass:[OARepositoryResourceItem class]])
     {
-        RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
+        OARepositoryResourceItem* item = (OARepositoryResourceItem*)item_;
 
         resource = item.resource;
     }
@@ -692,12 +700,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void) offerCancelDownloadOf:(ResourceItem *)item_
++ (void) offerCancelDownloadOf:(OAResourceItem *)item_
 {
     [self.class offerCancelDownloadOf:item_ onTaskStop:nil];
 }
 
-+ (void) cancelDownloadOf:(ResourceItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop
++ (void) cancelDownloadOf:(OAResourceItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop
 {
     if (onTaskStop)
         onTaskStop(item.downloadTask);
@@ -705,13 +713,13 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [item.downloadTask stop];
 }
 
-+ (void) offerDeleteResourceOf:(LocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
++ (void) offerDeleteResourceOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
 {
     NSString *title;
-    if ([item isKindOfClass:[SqliteDbResourceItem class]])
-        title = ((SqliteDbResourceItem *)item).title;
-    else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
-        title = ((OnlineTilesResourceItem *)item).title;
+    if ([item isKindOfClass:[OASqliteDbResourceItem class]])
+        title = ((OASqliteDbResourceItem *)item).title;
+    else if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
+        title = ((OAOnlineTilesResourceItem *)item).title;
     else
         title = [self.class titleOfResource:item.resource
                                    inRegion:item.worldRegion
@@ -731,25 +739,25 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [viewController presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void) offerDeleteResourceOf:(LocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD
++ (void) offerDeleteResourceOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD
 {
     [self offerDeleteResourceOf:item viewController:viewController progressHUD:progressHUD executeAfterSuccess:nil];
 }
 
-+ (void) deleteResourceOf:(LocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
++ (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
 {
     dispatch_block_t proc = ^{
         OsmAndAppInstance app = [OsmAndApp instance];
-        if ([item isKindOfClass:[SqliteDbResourceItem class]])
+        if ([item isKindOfClass:[OASqliteDbResourceItem class]])
         {
-            SqliteDbResourceItem *sqliteItem = (SqliteDbResourceItem *)item;
+            OASqliteDbResourceItem *sqliteItem = (OASqliteDbResourceItem *)item;
             [[OAMapCreatorHelper sharedInstance] removeFile:sqliteItem.fileName];
             if (block)
                 block();
         }
-        else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
+        else if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
         {
-            OnlineTilesResourceItem *tilesItem = (OnlineTilesResourceItem *)item;
+            OAOnlineTilesResourceItem *tilesItem = (OAOnlineTilesResourceItem *)item;
             [[NSFileManager defaultManager] removeItemAtPath:tilesItem.path error:nil];
             app.resourcesManager->uninstallTilesResource(QString::fromNSString(item.title));
             if ([tilesItem.title isEqualToString:@"OsmAnd (online tiles)"])
@@ -801,20 +809,20 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (void) deleteResourceOf:(LocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD
++ (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD
 {
     [self.class deleteResourceOf:item progressHUD:progressHUD executeAfterSuccess:nil];
 }
 
-+ (void) offerClearCacheOf:(LocalResourceItem *)item viewController:(UIViewController *)viewController executeAfterSuccess:(dispatch_block_t)block
++ (void) offerClearCacheOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController executeAfterSuccess:(dispatch_block_t)block
 {
     NSString* message;
     NSString *title;
     
-    if ([item isKindOfClass:[SqliteDbResourceItem class]])
-        title = ((SqliteDbResourceItem *)item).title;
-    else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
-        title = ((OnlineTilesResourceItem *)item).title;
+    if ([item isKindOfClass:[OASqliteDbResourceItem class]])
+        title = ((OASqliteDbResourceItem *)item).title;
+    else if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
+        title = ((OAOnlineTilesResourceItem *)item).title;
     
     message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_clear_cache"), title];
 
@@ -829,20 +837,20 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [viewController presentViewController:alert animated: YES completion: nil];
 }
 
-+ (void) clearCacheOf:(LocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
++ (void) clearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
 {
-     if ([item isKindOfClass:[SqliteDbResourceItem class]])
+     if ([item isKindOfClass:[OASqliteDbResourceItem class]])
      {
-         SqliteDbResourceItem *sqliteItem = (SqliteDbResourceItem *)item;
+         OASqliteDbResourceItem *sqliteItem = (OASqliteDbResourceItem *)item;
          OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:sqliteItem.path];
          if ([ts supportsTileDownload])
          {
              [ts deleteCache:block];
          }
      }
-     if ([item isKindOfClass:[OnlineTilesResourceItem class]])
+     if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
      {
-         OnlineTilesResourceItem *sqliteItem = (OnlineTilesResourceItem *)item;
+         OAOnlineTilesResourceItem *sqliteItem = (OAOnlineTilesResourceItem *)item;
          NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sqliteItem.path error:NULL];
          for (NSString *elem in dirs)
          {
@@ -873,6 +881,88 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [path applyTransform:CGAffineTransformMakeTranslation(radius * .46, 1.02 * radius)];
     
     return path;
+}
+
++ (NSArray<OAResourceItem *> *) getSortedRasterMapSources:(BOOL)includeOffline
+{
+    // Collect all needed resources
+    NSMutableArray<OAResourceItem *> *mapSources = [NSMutableArray new];
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
+    OsmAndAppInstance app = OsmAndApp.instance;
+    
+    const auto localResources = app.resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
+    {
+        if (localResource->type == OsmAndResourceType::MapStyle)
+            mapStylesResources.push_back(localResource);
+        else if (localResource->type == OsmAndResourceType::OnlineTileSources)
+            onlineTileSourcesResources.push_back(localResource);
+    }
+    
+    // Process online tile sources resources
+    for(const auto& resource : onlineTileSourcesResources)
+    {
+        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
+        NSString* resourceId = resource->id.toNSString();
+        
+        for(const auto& onlineTileSource : onlineTileSources->getCollection())
+        {
+            OAOnlineTilesResourceItem* item = [[OAOnlineTilesResourceItem alloc] init];
+            
+            NSString *caption = onlineTileSource->name.toNSString();
+            
+            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
+                                                        andVariant:onlineTileSource->name.toNSString() name:caption];
+            item.res = resource;
+            item.onlineTileSource = onlineTileSource;
+            
+            [mapSources addObject:item];
+        }
+    }
+    
+    
+    [mapSources sortUsingComparator:^NSComparisonResult(OAOnlineTilesResourceItem* obj1, OAOnlineTilesResourceItem* obj2) {
+        NSString *caption1 = obj1.onlineTileSource->name.toNSString();
+        NSString *caption2 = obj2.onlineTileSource->name.toNSString();
+        return [caption2 compare:caption1];
+    }];
+    
+    NSMutableArray<OAResourceItem *> *sqlitedbArr = [NSMutableArray array];
+    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
+    {
+        NSString *path = [OAMapCreatorHelper sharedInstance].files[fileName];
+        BOOL isOnline = [OASQLiteTileSource isOnlineTileSource:path];
+        if (includeOffline || isOnline)
+        {
+            OASqliteDbResourceItem* item = [[OASqliteDbResourceItem alloc] init];
+            item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
+            item.path = path;
+            item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
+            item.isOnline = isOnline;
+
+            [sqlitedbArr addObject:item];
+        }
+    }
+
+    [sqlitedbArr sortUsingComparator:^NSComparisonResult(OASqliteDbResourceItem *obj1, OASqliteDbResourceItem *obj2) {
+        return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
+    }];
+    
+    [mapSources addObjectsFromArray:sqlitedbArr];
+
+    return [NSArray arrayWithArray:mapSources];
+}
+
++ (NSDictionary<OAMapSource *, OAResourceItem *> *) getOnlineRasterMapSourcesBySource
+{
+    NSArray<OAResourceItem *> *items = [self getSortedRasterMapSources:NO];
+    NSMutableDictionary<OAMapSource *, OAResourceItem *> *res = [NSMutableDictionary new];
+    for (OAResourceItem *i in items)
+    {
+        [res setObject:i forKey:i.mapSource];
+    }
+    return [NSDictionary dictionaryWithDictionary:res];
 }
 
 @end

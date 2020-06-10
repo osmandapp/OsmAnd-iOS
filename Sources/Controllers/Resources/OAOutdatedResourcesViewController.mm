@@ -165,7 +165,7 @@
         if (!match)
             continue;
 
-        OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+        OAOutdatedResourceItem* item = [[OAOutdatedResourceItem alloc] init];
         item.resourceId = resource->id;
         item.title = [OAResourcesUIHelper titleOfResource:resource
                                                  inRegion:match
@@ -192,7 +192,7 @@
 {
     uint64_t totalDownloadSize = 0;
     uint64_t totalSpaceNeeded = 0;
-    for (OutdatedResourceItem* item in items)
+    for (OAOutdatedResourceItem* item in items)
     {
         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
 
@@ -243,7 +243,7 @@
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"res_update_all")
                                                              action:^{
-                                                                 for (OutdatedResourceItem* item in items)
+                                                                 for (OAOutdatedResourceItem* item in items)
                                                                  {
                                                                      const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
                                                                      
@@ -265,7 +265,7 @@
     BOOL needPurchaseAny = NO;
     @synchronized(_dataLock)
     {
-        for (OutdatedResourceItem* item in _resourcesItems)
+        for (OAOutdatedResourceItem* item in _resourcesItems)
         {
             BOOL needPurchase = (item.worldRegion.regionId != nil && ![item.worldRegion isInPurchasedArea]);
             if (!needPurchaseAny && needPurchase)
@@ -313,7 +313,7 @@
 {
     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
     
-    ResourceItem* item = (ResourceItem*)[_resourcesItems objectAtIndex:indexPath.row];
+    OAResourceItem* item = (OAResourceItem*)[_resourcesItems objectAtIndex:indexPath.row];
     if (item.downloadTask == nil)
         return;
     
@@ -346,10 +346,10 @@
     NSString* cellTypeId = nil;
     NSString* title = nil;
 
-    ResourceItem* item = (ResourceItem*)[_resourcesItems objectAtIndex:indexPath.row];
+    OAResourceItem* item = (OAResourceItem*)[_resourcesItems objectAtIndex:indexPath.row];
     if (item.downloadTask != nil)
         cellTypeId = downloadingResourceCell;
-    else if ([item isKindOfClass:[OutdatedResourceItem class]])
+    else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
         cellTypeId = outdatedResourceCell;
 
     if (item.worldRegion && item.worldRegion.superregion)
@@ -473,7 +473,7 @@
         for (int i = 0; i < _resourcesItems.count; i++) {
             if ([_resourcesItems[i] isKindOfClass:[OAWorldRegion class]])
                 continue;
-            ResourceItem *item = _resourcesItems[i];
+            OAResourceItem *item = _resourcesItems[i];
             if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
                 [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
                 break;

@@ -61,7 +61,7 @@
 
 @interface OATargetMenuViewController ()
 
-@property (nonatomic) RepositoryResourceItem *localMapIndexItem;
+@property (nonatomic) OARepositoryResourceItem *localMapIndexItem;
 
 @end
 
@@ -350,19 +350,19 @@
     {
         [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
                                        resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
-                                         onComplete:^(NSArray<ResourceItem *>* res) {
+                                         onComplete:^(NSArray<OAResourceItem *>* res) {
             if (res.count > 0)
             {
-                for (ResourceItem * item in res)
+                for (OAResourceItem * item in res)
                 {
-                    if ([item isKindOfClass:LocalResourceItem.class])
+                    if ([item isKindOfClass:OALocalResourceItem.class])
                     {
                         controller.localMapIndexItem = nil;
                         [controller createMapDownloadControls];
                         return ;
                     }
                 }
-                RepositoryResourceItem *item = (RepositoryResourceItem *)res[0];
+                OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
                 BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (controller.delegate && [controller.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
@@ -565,8 +565,8 @@
                 
                 [OAResourcesUIHelper requestMapDownloadInfo:self.location
                                                resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
-                                                 onComplete:^(NSArray<ResourceItem *>* res) {
-                    RepositoryResourceItem *item = (RepositoryResourceItem *)res[0];
+                                                 onComplete:^(NSArray<OAResourceItem *>* res) {
+                    OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
                     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && item)
                         self.localMapIndexItem = item;
                 }];

@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, EOASourceFormat)
 
 @protocol OATilesEditingViewControllerDelegate <NSObject>
 
-- (void) onTileSourceSaved:(LocalResourceItem *)item;
+- (void) onTileSourceSaved:(OALocalResourceItem *)item;
 
 @end
 
@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, EOASourceFormat)
 
 @property (nonatomic) id<OATilesEditingViewControllerDelegate> delegate;
 
-- (instancetype) initWithLocalItem:(LocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController;
+- (instancetype) initWithLocalItem:(OALocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController;
 - (instancetype) initWithUrlParameters:(NSDictionary<NSString *, NSString *> *)params;
 - (instancetype) initWithEmptyItem;
 

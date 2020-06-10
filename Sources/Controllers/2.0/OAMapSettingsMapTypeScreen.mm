@@ -13,6 +13,7 @@
 #import "OAMapCreatorHelper.h"
 #include "Localization.h"
 #import "Reachability.h"
+#import "OAResourcesUIHelper.h"
 
 #include <QSet>
 
@@ -23,39 +24,6 @@
 
 #import "OAIAPHelper.h"
 
-#define _(name) OAMapSourcesViewController__##name
-#define commonInit _(commonInit)
-#define deinit _(deinit)
-
-#define Item _(Item)
-@interface Item : NSObject
-@property OAMapSource* mapSource;
-@property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
-@end
-@implementation Item
-@end
-
-#define Item_MapStyle _(Item_MapStyle)
-@interface Item_MapStyle : Item
-@property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
-@property int sortIndex;
-@end
-@implementation Item_MapStyle
-@end
-
-#define Item_OnlineTileSource _(Item_OnlineTileSource)
-@interface Item_OnlineTileSource : Item
-@property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
-@end
-@implementation Item_OnlineTileSource
-@end
-
-#define Item_SqliteDbTileSource _(Item_SqliteDbTileSource)
-@interface Item_SqliteDbTileSource : Item
-@end
-@implementation Item_SqliteDbTileSource
-@end
-
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 
@@ -65,7 +33,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OAAppSettings *_settings;
 
     NSMutableArray* _offlineMapSources;
-    NSMutableArray* _onlineMapSources;
+    NSArray* _onlineMapSources;
     NSDictionary *stylesTitlesOffline;
 }
 
@@ -124,65 +92,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) setupView
 {
     [_offlineMapSources removeAllObjects];
-    [_onlineMapSources removeAllObjects];
+    _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:YES];
     
-    // Collect all needed resources
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
-    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
     
     const auto localResources = _app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)
     {
         if (localResource->type == OsmAndResourceType::MapStyle)
             mapStylesResources.push_back(localResource);
-        else if (localResource->type == OsmAndResourceType::OnlineTileSources)
-            onlineTileSourcesResources.push_back(localResource);
     }
-    
-    // Process online tile sources resources
-    for(const auto& resource : onlineTileSourcesResources)
-    {
-        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
-        NSString* resourceId = resource->id.toNSString();
-        
-        for(const auto& onlineTileSource : onlineTileSources->getCollection())
-        {
-            Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
-            
-            NSString *caption = onlineTileSource->name.toNSString();
-            
-            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                        andVariant:onlineTileSource->name.toNSString() name:caption];
-            item.resource = resource;
-            item.onlineTileSource = onlineTileSource;
-            
-            [_onlineMapSources addObject:item];
-        }
-    }
-    
-    
-    NSArray *arr = [_onlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_OnlineTileSource* obj1, Item_OnlineTileSource* obj2) {
-        NSString *caption1 = obj1.onlineTileSource->name.toNSString();
-        NSString *caption2 = obj2.onlineTileSource->name.toNSString();
-        return [caption2 compare:caption1];
-    }];
-    
-    [_onlineMapSources setArray:arr];
-    
-    NSMutableArray *sqlitedbArr = [NSMutableArray array];
-    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
-    {
-        Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
-
-        [sqlitedbArr addObject:item];
-    }
-
-    [sqlitedbArr sortUsingComparator:^NSComparisonResult(Item_SqliteDbTileSource *obj1, Item_SqliteDbTileSource *obj2) {
-        return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
-    }];
-
-    [_onlineMapSources addObjectsFromArray:sqlitedbArr];
     
     OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
     
@@ -193,7 +112,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         
         NSString* resourceId = resource->id.toNSString();
         
-        Item_MapStyle* item = [[Item_MapStyle alloc] init];
+        OAMapStyleResourceItem* item = [[OAMapStyleResourceItem alloc] init];
         item.mapSource = [_app.data lastMapSourceByResourceId:resourceId];
         if (item.mapSource == nil)
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:mode.variantKey];
@@ -210,7 +129,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             caption = newCaption;
         
         item.mapSource.name = caption;
-        
+        item.resourceType = OsmAndResourceType::MapStyle;
         item.resource = resource;
         item.mapStyle = mapStyle;
 
@@ -218,7 +137,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [_offlineMapSources addObject:item];
     }
 
-    arr = [_offlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_MapStyle* obj1, Item_MapStyle* obj2) {
+    NSArray *arr = [_offlineMapSources sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleResourceItem* obj1, OAMapStyleResourceItem* obj2) {
         if (obj1.sortIndex < obj2.sortIndex)
             return NSOrderedAscending;
         if (obj1.sortIndex > obj2.sortIndex)
@@ -289,19 +208,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
     NSString* caption = nil;
     NSString* description = nil;
-    Item* someItem;
+    OAResourceItem* someItem;
     
     if (indexPath.row < collection.count)
     {
         someItem = [collection objectAtIndex:indexPath.row];
-        if ([someItem isKindOfClass:Item_SqliteDbTileSource.class])
+        if ([someItem isKindOfClass:OASqliteDbResourceItem.class])
         {
             caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
             description = nil;
         }
-        else if (someItem.resource->type == OsmAndResourceType::MapStyle)
+        else if (someItem.resourceType == OsmAndResourceType::MapStyle)
         {
-            Item_MapStyle* item = (Item_MapStyle*)someItem;
+            OAMapStyleResourceItem* item = (OAMapStyleResourceItem*)someItem;
             
             caption = item.mapSource.name;
             description = nil;
@@ -309,9 +228,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             description = item.mapSource.variant;
 #endif // defined(OSMAND_IOS_DEV)
         }
-        else if (someItem.resource->type == OsmAndResourceType::OnlineTileSources)
+        else if ([someItem isKindOfClass:OAOnlineTilesResourceItem.class])
         {
-            Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
+            OAOnlineTilesResourceItem* item = (OAOnlineTilesResourceItem*)someItem;
             
             caption = item.mapSource.name;
             description = nil;
@@ -363,7 +282,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
         if (indexPath.row < collection.count)
         {
-            Item* item = [collection objectAtIndex:indexPath.row];
+            OAResourceItem* item = [collection objectAtIndex:indexPath.row];
             _app.data.lastMapSource = item.mapSource;
             if (indexPath.section == kOfflineSourcesSection)
                 [_app.data setPrevOfflineSource:item.mapSource];

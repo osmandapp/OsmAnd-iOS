@@ -54,7 +54,7 @@
     OASQLiteTileSource *_sqliteSource;
     OsmAndAppInstance _app;
     OAResourcesBaseViewController *_baseController;
-    SqliteDbResourceItem *_sqliteDbItem;
+    OASqliteDbResourceItem *_sqliteDbItem;
     
     NSString *_itemName;
     NSString *_itemURL;
@@ -105,14 +105,14 @@
     _expireTimeMinutes = _expireTimeMillis == -1 ? @"" : [NSString stringWithFormat:@"%ld", (_expireTimeMillis / 1000 / 60)];
 }
 
--(instancetype) initWithLocalItem:(LocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController
+-(instancetype) initWithLocalItem:(OALocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController
 {
     self = [super init];
     if (self) {
         _app = [OsmAndApp instance];
         _baseController = baseController;
         
-        if ([item isKindOfClass:OnlineTilesResourceItem.class])
+        if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
         {
             const auto& resource = _app.resourcesManager->getResource(QStringLiteral("online_tiles"));
             if (resource != nullptr)
@@ -130,9 +130,9 @@
                 
             [self setupParametersFromTileSource];
         }
-        else if ([item isKindOfClass:SqliteDbResourceItem.class])
+        else if ([item isKindOfClass:OASqliteDbResourceItem.class])
         {
-            _sqliteDbItem = (SqliteDbResourceItem *) item;
+            _sqliteDbItem = (OASqliteDbResourceItem *) item;
             _sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:_sqliteDbItem.path];
             [self setupParametersFromSqlite];
         }
@@ -385,7 +385,7 @@
         OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
         _app.resourcesManager->installTilesResource(item);
         
-        OnlineTilesResourceItem *res = [[OnlineTilesResourceItem alloc] init];
+        OAOnlineTilesResourceItem *res = [[OAOnlineTilesResourceItem alloc] init];
         res.path = [_app.cachePath stringByAppendingPathComponent:_itemName];
         res.title = _itemName;
         
@@ -401,7 +401,7 @@
         if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
         {
             [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
-            SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+            OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
             item.path = [[[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
             item.fileName = _itemName;
             item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
@@ -424,7 +424,7 @@
     _app.resourcesManager->installTilesResource(item);
     [_app.localResourcesChangedObservable notifyEvent];
     
-    OnlineTilesResourceItem *res = [[OnlineTilesResourceItem alloc] init];
+    OAOnlineTilesResourceItem *res = [[OAOnlineTilesResourceItem alloc] init];
     res.path = [_app.cachePath stringByAppendingPathComponent:_itemName];
     res.title = _itemName;
     
@@ -521,7 +521,7 @@
         OASQLiteTileSource *newSource = [[OASQLiteTileSource alloc] initWithFilePath:path];
         [newSource updateInfo:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile];
         
-        SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+        OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
         item.path = path;
         item.fileName = _itemName;
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil] fileSize];

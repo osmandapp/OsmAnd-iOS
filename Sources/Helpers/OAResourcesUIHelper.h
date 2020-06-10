@@ -15,11 +15,8 @@
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/IncrementalChangesManager.h>
 
-#define public(name) OAResourcesUIHelper__##name
-
-#define ResourceItem public(ResourceItem)
-
-@interface ResourceItem : NSObject
+@interface OAResourceItem : NSObject
+@property OAMapSource* mapSource;
 @property NSString* title;
 @property QString resourceId;
 @property OsmAnd::ResourcesManager::ResourceType resourceType;
@@ -33,29 +30,33 @@
 
 @end
 
-#define RepositoryResourceItem public(RepositoryResourceItem)
-@interface RepositoryResourceItem : ResourceItem
+@interface OARepositoryResourceItem : OAResourceItem
 @property std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> resource;
 @end
 
-#define LocalResourceItem public(LocalResourceItem)
-@interface LocalResourceItem : ResourceItem
+@interface OALocalResourceItem : OAResourceItem
 @property std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> resource;
 @end
 
-#define OutdatedResourceItem public(OutdatedResourceItem)
-@interface OutdatedResourceItem : LocalResourceItem
+@interface OAOutdatedResourceItem : OALocalResourceItem
 @end
 
-#define SqliteDbResourceItem public(SqliteDbResourceItem)
-@interface SqliteDbResourceItem : LocalResourceItem
+@interface OASqliteDbResourceItem : OALocalResourceItem
 @property NSString* path;
 @property NSString* fileName;
+@property BOOL isOnline;
 @end
 
-#define OnlineTilesResourceItem public(OnlineTilesResourceItem)
-@interface OnlineTilesResourceItem : LocalResourceItem
+@interface OAOnlineTilesResourceItem : OALocalResourceItem
 @property NSString* path;
+@property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
+@property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> res;
+@end
+
+@interface OAMapStyleResourceItem : OAResourceItem
+@property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
+@property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
+@property int sortIndex;
 @end
 
 typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
@@ -71,9 +72,9 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
                 withRegionName:(BOOL)includeRegionName
               withResourceType:(BOOL)includeResourceType;
 
-+ (BOOL) isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem*)item;
++ (BOOL) isSpaceEnoughToDownloadAndUnpackOf:(OAResourceItem*)item;
 + (BOOL) isSpaceEnoughToDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
-+ (BOOL) verifySpaceAvailableToDownloadAndUnpackOf:(ResourceItem*)item
++ (BOOL) verifySpaceAvailableToDownloadAndUnpackOf:(OAResourceItem*)item
                                           asUpdate:(BOOL)isUpdate;
 + (BOOL) verifySpaceAvailableDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
                                       withResourceName:(NSString*)resourceName
@@ -86,30 +87,33 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 + (void) startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate>&)resource;
 + (void) startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name;
 
-+ (void) offerDownloadAndInstallOf:(RepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
-+ (void) offerDownloadAndUpdateOf:(OutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
++ (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
++ (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
-+ (void) startDownloadOfItem:(RepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
++ (void) startDownloadOfItem:(OARepositoryResourceItem *)item onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 + (void) startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
 
-+ (void) offerCancelDownloadOf:(ResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop;
-+ (void) offerCancelDownloadOf:(ResourceItem *)item_;
-+ (void) cancelDownloadOf:(ResourceItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop;
++ (void) offerCancelDownloadOf:(OAResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop;
++ (void) offerCancelDownloadOf:(OAResourceItem *)item_;
++ (void) cancelDownloadOf:(OAResourceItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop;
 
-+ (void) offerDeleteResourceOf:(LocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
-+ (void) offerDeleteResourceOf:(LocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD;
-+ (void) deleteResourceOf:(LocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
-+ (void) deleteResourceOf:(LocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD;
++ (void) offerDeleteResourceOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
++ (void) offerDeleteResourceOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController progressHUD:(MBProgressHUD *)progressHUD;
++ (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
++ (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD;
 
-+ (void) offerClearCacheOf:(LocalResourceItem *)item viewController:(UIViewController *)viewController executeAfterSuccess:(dispatch_block_t)block;
-+ (void) clearCacheOf:(LocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
++ (void) offerClearCacheOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController executeAfterSuccess:(dispatch_block_t)block;
++ (void) clearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
 
 + (OAWorldRegion *) findRegionOrAnySubregionOf:(OAWorldRegion*)region
                           thatContainsResource:(const QString&)resourceId;
-+ (NSString *) getCountryName:(ResourceItem *)item;
++ (NSString *) getCountryName:(OAResourceItem *)item;
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region;
-+ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<ResourceItem *>*))onComplete;
++ (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete;
 
 + (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView;
+
++ (NSArray<OAResourceItem *> *) getSortedRasterMapSources:(BOOL)includeOffline;
++ (NSDictionary<OAMapSource *, OAResourceItem *> *) getOnlineRasterMapSourcesBySource;
 
 @end

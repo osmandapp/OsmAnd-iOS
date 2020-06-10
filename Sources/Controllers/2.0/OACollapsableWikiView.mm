@@ -43,7 +43,7 @@
     double _longitude;
     
     OAWorldRegion *_worldRegion;
-    RepositoryResourceItem *_resourceItem;
+    OARepositoryResourceItem *_resourceItem;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame

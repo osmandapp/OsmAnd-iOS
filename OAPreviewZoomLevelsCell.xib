@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Preview of selected zoom levels." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jVK-Gc-ggm">
-                        <rect key="frame" x="20" y="151" width="198" height="16"/>
+                        <rect key="frame" x="16" y="151" width="198" height="16"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -25,6 +25,9 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OjK-yU-bby" userLabel="min zoom level">
                         <rect key="frame" x="16" y="15" width="128" height="128"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qLU-Is-jkh">
+                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9mB-mK-TgF" userLabel="min zoom level property view">
                                 <rect key="frame" x="3" y="100" width="25" height="25"/>
                                 <subviews>
@@ -47,12 +50,19 @@
                             <constraint firstAttribute="bottom" secondItem="9mB-mK-TgF" secondAttribute="bottom" constant="3" id="1sV-ps-c5f"/>
                             <constraint firstItem="9mB-mK-TgF" firstAttribute="leading" secondItem="OjK-yU-bby" secondAttribute="leading" constant="3" id="Gk1-rO-WgU"/>
                             <constraint firstAttribute="height" constant="128" id="IM6-Y1-kj7"/>
+                            <constraint firstItem="qLU-Is-jkh" firstAttribute="top" secondItem="OjK-yU-bby" secondAttribute="top" id="UYj-Po-p03"/>
+                            <constraint firstAttribute="trailing" secondItem="qLU-Is-jkh" secondAttribute="trailing" id="b8c-rI-p8G"/>
                             <constraint firstAttribute="width" constant="128" id="dTN-iL-LNF"/>
+                            <constraint firstAttribute="bottom" secondItem="qLU-Is-jkh" secondAttribute="bottom" id="lc1-u8-gfV"/>
+                            <constraint firstItem="qLU-Is-jkh" firstAttribute="leading" secondItem="OjK-yU-bby" secondAttribute="leading" id="zGw-WG-TYM"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dP1-fN-qsi" userLabel="max zoom level">
                         <rect key="frame" x="160" y="15" width="128" height="128"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xuB-Z9-KTl">
+                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                            </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F2i-2l-lpB" userLabel="max zoom level property view">
                                 <rect key="frame" x="3" y="100" width="25" height="25"/>
                                 <subviews>
@@ -73,29 +83,34 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="F2i-2l-lpB" firstAttribute="leading" secondItem="dP1-fN-qsi" secondAttribute="leading" constant="3" id="1eM-KE-51N"/>
+                            <constraint firstItem="xuB-Z9-KTl" firstAttribute="leading" secondItem="dP1-fN-qsi" secondAttribute="leading" id="DIt-zc-Z91"/>
+                            <constraint firstItem="xuB-Z9-KTl" firstAttribute="top" secondItem="dP1-fN-qsi" secondAttribute="top" id="QtP-wt-bbF"/>
                             <constraint firstAttribute="width" constant="128" id="UM8-Ya-pjO"/>
+                            <constraint firstAttribute="trailing" secondItem="xuB-Z9-KTl" secondAttribute="trailing" id="WTm-oi-BMD"/>
                             <constraint firstAttribute="bottom" secondItem="F2i-2l-lpB" secondAttribute="bottom" constant="3" id="nI1-Sf-4tw"/>
                             <constraint firstAttribute="height" constant="128" id="o3V-rH-Vg7"/>
+                            <constraint firstAttribute="bottom" secondItem="xuB-Z9-KTl" secondAttribute="bottom" id="olS-U1-wlg"/>
                         </constraints>
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="jVK-Gc-ggm" firstAttribute="top" secondItem="dP1-fN-qsi" secondAttribute="bottom" constant="8" id="2CK-sn-Fon"/>
-                    <constraint firstItem="jVK-Gc-ggm" firstAttribute="bottom" secondItem="HN4-fY-yf3" secondAttribute="bottomMargin" id="Gpg-mR-qY4"/>
+                    <constraint firstItem="jVK-Gc-ggm" firstAttribute="leading" secondItem="HN4-fY-yf3" secondAttribute="leading" constant="16" id="V88-3a-JWe"/>
+                    <constraint firstItem="jVK-Gc-ggm" firstAttribute="top" secondItem="OjK-yU-bby" secondAttribute="bottom" constant="8" id="XNh-v5-hJC"/>
                     <constraint firstItem="OjK-yU-bby" firstAttribute="leading" secondItem="HN4-fY-yf3" secondAttribute="leading" constant="16" id="dDb-nZ-4qb"/>
                     <constraint firstItem="dP1-fN-qsi" firstAttribute="top" secondItem="HN4-fY-yf3" secondAttribute="top" constant="15" id="eVK-sn-MAI"/>
-                    <constraint firstItem="jVK-Gc-ggm" firstAttribute="top" secondItem="OjK-yU-bby" secondAttribute="bottom" constant="8" id="g66-Sv-6SW"/>
                     <constraint firstItem="OjK-yU-bby" firstAttribute="top" secondItem="HN4-fY-yf3" secondAttribute="top" constant="15" id="oEA-Tz-RMh"/>
-                    <constraint firstItem="jVK-Gc-ggm" firstAttribute="leading" secondItem="HN4-fY-yf3" secondAttribute="leadingMargin" id="oi7-rd-G0b"/>
+                    <constraint firstAttribute="bottom" secondItem="jVK-Gc-ggm" secondAttribute="bottom" constant="11" id="uyn-3q-RBv"/>
                     <constraint firstItem="dP1-fN-qsi" firstAttribute="leading" secondItem="OjK-yU-bby" secondAttribute="trailing" constant="16" id="yo2-ZB-Gne"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="descriptionLabel" destination="jVK-Gc-ggm" id="VxA-QQ-qea"/>
                 <outlet property="maxLevelZoomView" destination="dP1-fN-qsi" id="YP4-Yk-dhL"/>
+                <outlet property="maxZoomImageView" destination="xuB-Z9-KTl" id="sed-Og-ZWv"/>
                 <outlet property="maxZoomPropertyLabel" destination="eEX-5c-br5" id="QAX-qy-5G0"/>
                 <outlet property="maxZoomPropertyView" destination="F2i-2l-lpB" id="Ooa-si-GFr"/>
                 <outlet property="minLevelZoomView" destination="OjK-yU-bby" id="Rgx-22-D2X"/>
+                <outlet property="minZoomImageView" destination="qLU-Is-jkh" id="V4v-l8-hFU"/>
                 <outlet property="minZoomPropertyLabel" destination="44y-Mi-GJg" id="c8F-mc-o4O"/>
                 <outlet property="minZoomPropertyView" destination="9mB-mK-TgF" id="Fwc-bo-mo2"/>
             </connections>

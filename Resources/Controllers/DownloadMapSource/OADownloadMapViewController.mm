@@ -24,6 +24,7 @@
 #import "OAPreviewZoomLevelsCell.h"
 #import "OACustomPickerTableViewCell.h"
 
+#include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
@@ -189,9 +190,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _cancelButton.layer.cornerRadius = 9.0;
     _downloadButton.layer.cornerRadius = 9.0;
 
-    // to delete/change
-    _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
-    
     [self fetchOnlineSources];
     
     _minZoom = [self getItemMinZoom];
@@ -262,7 +260,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else if ([item isKindOfClass:Item_SqliteDbTileSource.class])
         {
             OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
-            return ts.minimumZoomSupported;
+            return ts.minimumZoomSupported > 0 ? ts.minimumZoomSupported : 1;
         }
     }
     return 1;
@@ -287,8 +285,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return 1;
 }
 
+- (NSMutableArray<NSString *> *) getPossibleZoomValues
+{
+    NSMutableArray<NSString *> *zoomArray = [[NSMutableArray alloc] init];
+    for (NSInteger i = _minZoom; i <= _maxZoom; i++)
+        [zoomArray addObject:[NSString stringWithFormat: @"%ld", i]];
+    return zoomArray;
+}
+
 - (void) setupView
 {
+    _possibleZoomValues = [self getPossibleZoomValues];
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *mapTypeArr = [NSMutableArray array];
     NSMutableArray *zoomLevelArr = [NSMutableArray array];
@@ -412,6 +419,36 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
+- (UIImage *) getZoomTile:(int)zoom
+{
+    Item *item = [self getCurrentItem];
+    OAMapRendererView * mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    const auto point = OsmAnd::Utilities::convert31ToLatLon(mapView.target31);
+    const auto tileId = OsmAnd::TileId::fromXY(OsmAnd::Utilities::getTileNumberX(zoom, point.longitude), OsmAnd::Utilities::getTileNumberY(zoom, point.latitude));
+    
+    if (item)
+    {
+        if ([item isKindOfClass:Item_OnlineTileSource.class])
+        {
+            Item_OnlineTileSource *onlineSource = (Item_OnlineTileSource *) item;
+            return nil;
+        }
+        else if ([item isKindOfClass:Item_SqliteDbTileSource.class])
+        {
+            OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
+
+            NSString *url = [ts getUrlToLoad:tileId.x y:tileId.y zoom:zoom];
+            if (url)
+            {
+                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+                if (data)
+                    return [UIImage imageWithData:data];
+            }
+        }
+    }
+    return nil;
+}
+
 #pragma mark - TableView
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -463,10 +500,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (cell)
         {
             cell.descriptionLabel.text = item[@"value"];
-            cell.minLevelZoomView.backgroundColor = UIColor.grayColor; // to delete
+            [cell.minZoomImageView setImage:[self getZoomTile:(int)_minZoom]];
+            [cell.maxZoomImageView setImage:[self getZoomTile:(int)_maxZoom]];
             cell.minZoomPropertyLabel.text = [NSString stringWithFormat:@"%ld",_minZoom];
-            
-            cell.maxLevelZoomView.backgroundColor = UIColor.grayColor;
             cell.maxZoomPropertyLabel.text = [NSString stringWithFormat:@"%ld",_maxZoom];
         }
         return cell;
@@ -681,7 +717,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) onNewSourceSelected
 {
     [self setupView];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadData];
 }
 
 @end

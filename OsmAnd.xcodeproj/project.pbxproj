@@ -135,6 +135,9 @@
 		155B7143247FE2C100A1587D /* ic_custom_update@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 155B7140247FE2BE00A1587D /* ic_custom_update@3x.png */; };
 		155B7144247FE2C100A1587D /* ic_custom_update.png in Resources */ = {isa = PBXBuildFile; fileRef = 155B7141247FE2BE00A1587D /* ic_custom_update.png */; };
 		155B7145247FE2C100A1587D /* ic_custom_update@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 155B7142247FE2BF00A1587D /* ic_custom_update@2x.png */; };
+		155B8047249217F7003ADA42 /* img_placeholder_online_source.png in Resources */ = {isa = PBXBuildFile; fileRef = 155B8044249217F4003ADA42 /* img_placeholder_online_source.png */; };
+		155B8048249217F7003ADA42 /* img_placeholder_online_source@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 155B8045249217F5003ADA42 /* img_placeholder_online_source@2x.png */; };
+		155B8049249217F7003ADA42 /* img_placeholder_online_source@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 155B8046249217F6003ADA42 /* img_placeholder_online_source@3x.png */; };
 		156E91BF24499CE300B181BA /* ic_custom_direction_device@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 156E91BC24499CE200B181BA /* ic_custom_direction_device@3x.png */; };
 		156E91C024499CE300B181BA /* ic_custom_direction_device.png in Resources */ = {isa = PBXBuildFile; fileRef = 156E91BD24499CE200B181BA /* ic_custom_direction_device.png */; };
 		156E91C124499CE300B181BA /* ic_custom_direction_device@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 156E91BE24499CE300B181BA /* ic_custom_direction_device@2x.png */; };
@@ -5767,6 +5770,9 @@
 		155B7140247FE2BE00A1587D /* ic_custom_update@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_update@3x.png"; path = "Resources/Icons/ic_custom_update@3x.png"; sourceTree = "<group>"; };
 		155B7141247FE2BE00A1587D /* ic_custom_update.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_update.png; path = Resources/Icons/ic_custom_update.png; sourceTree = "<group>"; };
 		155B7142247FE2BF00A1587D /* ic_custom_update@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_update@2x.png"; path = "Resources/Icons/ic_custom_update@2x.png"; sourceTree = "<group>"; };
+		155B8044249217F4003ADA42 /* img_placeholder_online_source.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_placeholder_online_source.png; path = Resources/Icons/img_placeholder_online_source.png; sourceTree = "<group>"; };
+		155B8045249217F5003ADA42 /* img_placeholder_online_source@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_placeholder_online_source@2x.png"; path = "Resources/Icons/img_placeholder_online_source@2x.png"; sourceTree = "<group>"; };
+		155B8046249217F6003ADA42 /* img_placeholder_online_source@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_placeholder_online_source@3x.png"; path = "Resources/Icons/img_placeholder_online_source@3x.png"; sourceTree = "<group>"; };
 		156E91BC24499CE200B181BA /* ic_custom_direction_device@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_device@3x.png"; path = "Resources/Icons/ic_custom_direction_device@3x.png"; sourceTree = "<group>"; };
 		156E91BD24499CE200B181BA /* ic_custom_direction_device.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_direction_device.png; path = Resources/Icons/ic_custom_direction_device.png; sourceTree = "<group>"; };
 		156E91BE24499CE300B181BA /* ic_custom_direction_device@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_device@2x.png"; path = "Resources/Icons/ic_custom_direction_device@2x.png"; sourceTree = "<group>"; };
@@ -10223,6 +10229,9 @@
 				DA45DA48230EE0560083DFA2 /* img_mapstyle_offroad.png */,
 				DA45DA39230EE0510083DFA2 /* img_mapstyle_offroad@2x.png */,
 				DA45DA49230EE0560083DFA2 /* img_mapstyle_offroad@3x.png */,
+				155B8044249217F4003ADA42 /* img_placeholder_online_source.png */,
+				155B8045249217F5003ADA42 /* img_placeholder_online_source@2x.png */,
+				155B8046249217F6003ADA42 /* img_placeholder_online_source@3x.png */,
 				DA45DA3B230EE0520083DFA2 /* img_mapstyle_skimap.png */,
 				DA45DA3A230EE0520083DFA2 /* img_mapstyle_skimap@2x.png */,
 				DA45DA4B230EE0570083DFA2 /* img_mapstyle_skimap@3x.png */,
@@ -17896,6 +17905,7 @@
 				DA1340FA243DC5A80039D214 /* map_action_bus_dark@2x.png in Resources */,
 				DA1341D4243DC5A90039D214 /* map_action_horse@3x.png in Resources */,
 				DA0462E522F5A21400166CFF /* OAQuickActionCell.xib in Resources */,
+				155B8048249217F7003ADA42 /* img_placeholder_online_source@2x.png in Resources */,
 				DA98A035210A039500BB32D0 /* hu_tts.js in Resources */,
 				844E07E01E4231C200EFC525 /* ic_action_street_name@3x.png in Resources */,
 				DAA738EB23E2FE1A00FAB0DE /* ic_share_folder_trips.png in Resources */,
@@ -17915,6 +17925,7 @@
 				840C9FB61CF353C500F2F991 /* ic_coordinates_location@2x.png in Resources */,
 				845E06081B5956E800DFC2A7 /* ic_arrow_open@3x.png in Resources */,
 				842432601AEFDD1900925821 /* widget_monitoring_rec_small_day@2x.png in Resources */,
+				155B8049249217F7003ADA42 /* img_placeholder_online_source@3x.png in Resources */,
 				844499931AAA1FFA00ACA20D /* bt_bought_addon@2x.png in Resources */,
 				84E2DB4C1AB720FA001A7FEC /* HUD_compass@3x.png in Resources */,
 				0CF5855E244072EC0081238D /* widget_marker_triangle_pin_3@2x.png in Resources */,
@@ -18298,6 +18309,7 @@
 				843257B81A9DAEE400A7964E /* ic_update@2x.png in Resources */,
 				DABF8193228BDE9300651A91 /* map_mapillary_location.png in Resources */,
 				DAB854C123057EE9002566A6 /* ic_custom_favorites.png in Resources */,
+				155B8047249217F7003ADA42 /* img_placeholder_online_source.png in Resources */,
 				8477775A1FAA3E2100CA8C1F /* OADistanceControl.xib in Resources */,
 				841222751B39CC5200F80F9E /* my_location_marker_heading_icon2@3x.png in Resources */,
 				84F3A98A1B501C5800D16EBC /* ic_destination_arrow.png in Resources */,

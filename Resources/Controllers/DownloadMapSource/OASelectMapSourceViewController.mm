@@ -126,13 +126,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     NSString* caption = nil;
     OAResourceItem *item = _onlineMapSources[indexPath.row];
+    OAMapSource *itemMapSource = nil;
     if ([item isKindOfClass:OASqliteDbResourceItem.class])
     {
-        caption = [[item.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        itemMapSource = ((OASqliteDbResourceItem *) item).mapSource;
+        caption = [[itemMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     }
     else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
     {
-        caption = item.mapSource.name;
+        itemMapSource = ((OAOnlineTilesResourceItem *) item).mapSource;
+        caption = itemMapSource.name;
     }
     static NSString* const identifierCell = @"OABottomSheetActionCell";
     OABottomSheetActionCell* cell = nil;
@@ -150,7 +153,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         img = [UIImage imageNamed:@"ic_custom_map_online"];
         cell.textView.text = caption;
         cell.iconView.image = img;
-        if ([_app.data.lastMapSource isEqual:item.mapSource])
+        if ([_app.data.lastMapSource isEqual:itemMapSource])
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_checmark_default.png"]];
         else
             cell.accessoryView = nil;
@@ -161,7 +164,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAResourceItem* item = [_onlineMapSources objectAtIndex:indexPath.row];
-    _app.data.lastMapSource = item.mapSource;
+    OAMapSource *itemMapSource = nil;
+    if ([item isKindOfClass:OASqliteDbResourceItem.class])
+        itemMapSource = ((OASqliteDbResourceItem *) item).mapSource;
+    else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
+        itemMapSource = ((OAOnlineTilesResourceItem *) item).mapSource;
+    
+    _app.data.lastMapSource = itemMapSource;
     if (self.delegate)
         [self.delegate onNewSourceSelected];
     [tableView deselectRowAtIndexPath:indexPath animated:NO];

@@ -16,7 +16,6 @@
 #include <OsmAndCore/IncrementalChangesManager.h>
 
 @interface OAResourceItem : NSObject
-@property OAMapSource* mapSource;
 @property NSString* title;
 @property QString resourceId;
 @property OsmAnd::ResourcesManager::ResourceType resourceType;
@@ -41,19 +40,23 @@
 @interface OAOutdatedResourceItem : OALocalResourceItem
 @end
 
-@interface OASqliteDbResourceItem : OALocalResourceItem
+@interface OAMapSourceResourceItem : OALocalResourceItem
+@property OAMapSource* mapSource;
+@end
+
+@interface OASqliteDbResourceItem : OAMapSourceResourceItem
 @property NSString* path;
 @property NSString* fileName;
 @property BOOL isOnline;
 @end
 
-@interface OAOnlineTilesResourceItem : OALocalResourceItem
+@interface OAOnlineTilesResourceItem : OAMapSourceResourceItem
 @property NSString* path;
 @property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
 @property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> res;
 @end
 
-@interface OAMapStyleResourceItem : OAResourceItem
+@interface OAMapStyleResourceItem : OAMapSourceResourceItem
 @property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
 @property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
 @property int sortIndex;

@@ -328,12 +328,14 @@ static NSInteger kButtonsSection;
         OAResourceItem* someItem = nil;
         
         someItem = item[@"source"];
+        OAMapSource *itemMapSource = nil;
         
         if ([someItem isKindOfClass:[OAOnlineTilesResourceItem class]])
         {
             OAOnlineTilesResourceItem *onlineSource = (OAOnlineTilesResourceItem *) someItem;
             if (onlineSource.res->type == OsmAndResourceType::OnlineTileSources)
             {
+                itemMapSource = onlineSource.mapSource;
                 caption = onlineSource.mapSource.name;
                 description = OALocalizedString(@"online_map");
                 cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map_online"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -343,8 +345,9 @@ static NSInteger kButtonsSection;
         
         else if ([someItem isKindOfClass:[OASqliteDbResourceItem class]])
         {
-            caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
             OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *)someItem;
+            itemMapSource = sqlite.mapSource;
+            caption = [[sqlite.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
             description = sqlite.isOnline ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map");
             size = [NSByteCountFormatter stringFromByteCount:sqlite.size countStyle:NSByteCountFormatterCountStyleFile];
             cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -363,7 +366,7 @@ static NSInteger kButtonsSection;
         else if (_mapSettingType == EMapSettingUnderlay)
             mapSource = _app.data.underlayMapSource;
 
-        if ([mapSource isEqual:someItem.mapSource])
+        if ([mapSource isEqual:itemMapSource])
             [cell.checkButton setImage:[UIImage imageNamed:@"menu_cell_selected.png"] forState:UIControlStateNormal];
         else
             [cell.checkButton setImage:nil forState:UIControlStateNormal];
@@ -560,16 +563,28 @@ static NSInteger kButtonsSection;
 - (void) switchLayer:(NSInteger)number
 {
     OAResourceItem* item = [_onlineMapSources objectAtIndex:number];
+    OAMapSource *itemMapSource = nil;
+    
+    if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
+    {
+        OAOnlineTilesResourceItem *onlineSource = (OAOnlineTilesResourceItem *) item;
+        itemMapSource = onlineSource.mapSource;
+    }
+    else if ([item isKindOfClass:[OASqliteDbResourceItem class]])
+    {
+        OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *)item;
+        itemMapSource = sqlite.mapSource;
+    }
     if (_mapSettingType == EMapSettingOverlay)
     {
-        _app.data.overlayMapSource = item.mapSource;
-        _app.data.lastOverlayMapSource = item.mapSource;
+        _app.data.overlayMapSource = itemMapSource;
+        _app.data.lastOverlayMapSource = itemMapSource;
     }
     else if (_mapSettingType == EMapSettingUnderlay)
     {
         [self hidePolygons:YES];
-        _app.data.underlayMapSource = item.mapSource;
-        _app.data.lastUnderlayMapSource = item.mapSource;
+        _app.data.underlayMapSource = itemMapSource;
+        _app.data.lastUnderlayMapSource = itemMapSource;
     }
     [tblView reloadData];
 }

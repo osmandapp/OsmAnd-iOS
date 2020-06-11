@@ -1546,7 +1546,7 @@
 "app_mode_bicycle" = "In bicicletta";
 "app_mode_car" = "Alla guida";
 "online_webpage_warning" = "Pagina disponibile solo online. Aprirla in un browser?";
-"app_mode_skiing" = "Sciare";
+"app_mode_skiing" = "Sci";
 "app_mode_helicopter" = "Elicottero";
 "app_mode_horse" = "Cavallo";
 "app_mode_subway" = "Metropolitana";
@@ -1559,7 +1559,6 @@
 "app_mode_pickup_truck" = "Pick-up";
 "app_mode_wagon" = "Familiare";
 "app_mode_utv" = "Lato per lato";
-
 "app_mode_ufo" = "UFO";
 "app_mode_osm" = "OSM";
 "wiki_sheet_title" = "Come aprire gli articoli di Wikipedia?";
@@ -1572,3 +1571,5 @@
 "shared_string_warning" = "Attenzione";
 "open_wiki_online" = "Apri articolo online";
 "app_mode_personal_transporter" = "Trasportatore personale";
+"active_markers" = "Marcatori attivi";
+"public_transport_warning_title" = "La navigazione sui mezzi pubblici è al momento in fase di test, potrebbero esserci errori o imprecisioni.";

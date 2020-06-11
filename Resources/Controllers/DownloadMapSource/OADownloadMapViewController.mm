@@ -43,6 +43,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *downloadButton;
+@property (nonatomic) UIImage *minZoomTileImage;
+@property (nonatomic, readonly) NSString *minZoomTileUrl;
+@property (nonatomic) UIImage *maxZoomTileImage;
+@property (nonatomic, readonly) NSString *maxZoomTileUrl;
 
 @end
 
@@ -57,6 +61,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSArray<NSString *> *_possibleZoomValues;
     NSIndexPath *_pickerIndexPath;
     CALayer *_horizontalLine;
+    BOOL _downloading;
+    BOOL _downloaded;
     
     NSDictionary<OAMapSource *, OAResourceItem *> *_onlineMapSources;
 }
@@ -169,10 +175,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     OAMapRendererView* renderView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _currentZoom = renderView.zoom;
+    [self setZoomValues];
+    [self setupView];
+}
+
+- (void) setZoomValues
+{
     _minZoom = [self getDefaultItemMinZoom];
     _maxZoom = [self getItemMaxZoom];
     _possibleZoomValues = [self getPossibleZoomValues];
-    [self setupView];
+    _minZoomTileUrl = [self getZoomTileUrl:_minZoom];
+    _maxZoomTileUrl = [self getZoomTileUrl:_maxZoom];
+    [self downloadZoomedTiles];
+    [self downloadZoomedTiles];
 }
 
 - (OAResourceItem *) getCurrentItem
@@ -363,7 +378,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (UIImage *) getZoomTile:(NSInteger)zoom
+- (void) downloadZoomedTiles
+{
+    if (!_minZoomTileUrl || !_maxZoomTileUrl)
+        return;
+    NSData *minZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_minZoomTileUrl]];
+    NSData *maxZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_maxZoomTileUrl]];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        if (minZoomData && maxZoomData)
+        {
+            _minZoomTileImage = [[UIImage alloc] initWithData:minZoomData];
+            _maxZoomTileImage = [[UIImage alloc] initWithData:maxZoomData];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+        });
+    });
+}
+
+- (NSString *) getZoomTileUrl:(NSInteger)zoom
 {
     OAResourceItem *item = [self getCurrentItem];
     OAMapRendererView * mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
@@ -386,13 +420,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             url = [ts getUrlToLoad:tileId.x y:tileId.y zoom:(int)zoom];
         }
     }
-    if (url)
-    {
-        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
-        if (data)
-            return [UIImage imageWithData:data];
-    }
-    return nil;
+    return url;
 }
 
 #pragma mark - TableView
@@ -445,11 +473,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.descriptionLabel.text = item[@"value"];
-            [cell.minZoomImageView setImage:[self getZoomTile:_minZoom]];
-            [cell.maxZoomImageView setImage:[self getZoomTile:_maxZoom]];
+            cell.minZoomImageView.image = _minZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _minZoomTileImage;
+            cell.maxZoomImageView.image = _maxZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _maxZoomTileImage;
             cell.minZoomPropertyLabel.text = [NSString stringWithFormat:@"%ld",_minZoom];
             cell.maxZoomPropertyLabel.text = [NSString stringWithFormat:@"%ld",_maxZoom];
+            cell.descriptionLabel.text = item[@"value"];
         }
         return cell;
     }
@@ -641,6 +669,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             _minZoom = _maxZoom;
             [self updatePickerCell:_minZoom - 1];
         }
+        _minZoomTileUrl = [self getZoomTileUrl:_minZoom];
+        [self downloadZoomedTiles];
     }
     else if (pickerTag == 3)
     {
@@ -653,6 +683,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             _maxZoom = _minZoom;
             [self updatePickerCell:_maxZoom - 1];
         }
+        _maxZoomTileUrl = [self getZoomTileUrl:_maxZoom];
+        [self downloadZoomedTiles];
     }
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section], [NSIndexPath indexPathForRow:0 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
@@ -662,9 +694,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) onNewSourceSelected
 {
-    _minZoom = [self getDefaultItemMinZoom];
-    _maxZoom = [self getItemMaxZoom];
-    _possibleZoomValues = [self getPossibleZoomValues];
+    [self setZoomValues];
     [self setupView];
     [self.tableView reloadData];
 }

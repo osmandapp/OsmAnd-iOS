@@ -489,7 +489,7 @@
 "wiki_buy_description" = "Pro lègere artìculos intreos - còmpora su plugin Wikipedia e iscàrriga sos datos de %@";
 "wiki_download_description" = "Pro lègere artìculos intreos - iscàrriga sos datos Wikipedia de %@";
 "map_an_region" = "custa regione";
-"nothing_found" = "Nudda de agatadu :(";
+"nothing_found" = "Nudda de agatadu: %@";
 "nothing_found_descr" = "Muda sos critèrios de chirca o a ismànnia su raju de chirca";
 "select_street" = "Ischerta sos caminos";
 "shared_string_in_name" = "in %@";
@@ -1712,3 +1712,9 @@
 "two" = "Duos";
 // Dirrection appearance
 "one" = "Unu";
+"quick_action_dir_from_descr" = "Toca custa atzione pro navigare dae su puntu tzentrale de s'ischermu.";
+"nav_type_direct_to" = "Deretu a su puntu";
+"nav_type_straight_line" = "Lìnia dereta";
+"nav_type_osmand" = "OsmAnd (càrculu de s'àndala non in lìnia)";
+"nav_type_descr" = "Issèbera comente carculare un'àndala pro custu profilu";
+"nav_type_title" = "Casta de navigatzione";

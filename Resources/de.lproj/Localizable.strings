@@ -480,7 +480,7 @@
 "filter_poi_hint" = "Nach Namen filtern";
 "city_type_district" = "Bezirk";
 "nothing_found_descr" = "Bitte Suchkriterien ändern oder Suchradius vergrößern";
-"nothing_found" = "Kein Suchergebnis :(";
+"nothing_found" = "Nichts gefunden: %@";
 "select_street" = "Straße wählen";
 "type_address" = "Adresse eingeben";
 "type_city_town" = "Ort oder Stadt eingeben";
@@ -1719,3 +1719,4 @@
 "nav_type_osmand" = "OsmAnd (Offline-Routenführung)";
 "nav_type_descr" = "Wählen Sie aus, wie eine Route für dieses Profil berechnet werden soll";
 "nav_type_title" = "Navigationsart";
+"quick_action_dir_from_descr" = "Tippen Sie auf diese Aktion, um vom aktuellen Bildschirmmittelpunkt aus zu navigieren.";

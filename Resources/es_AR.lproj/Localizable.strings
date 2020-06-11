@@ -507,7 +507,7 @@
 "nearest_cities" = "Ciudades cercanas";
 "type_address" = "Escribe la dirección";
 "search_poi_category_hint" = "Escribe para buscar";
-"nothing_found" = "¡Nada por aquí! :-(";
+"nothing_found" = "¡Nada por aquí!: %@";
 "nothing_found_descr" = "Modifica la consulta de búsqueda o aumenta el radio de búsqueda";
 "driving_region" = "Región de conducción";
 "driving_region_japan" = "Japón";
@@ -1718,3 +1718,4 @@
 "nav_type_osmand" = "OsmAnd (navegación sin conexión)";
 "nav_type_descr" = "Elige cómo calcular una ruta para este perfil";
 "nav_type_title" = "Tipo de navegación";
+"quick_action_dir_from_descr" = "Pulsa esta acción para navegar desde el punto central de la pantalla actual.";

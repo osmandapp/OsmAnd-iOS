@@ -876,7 +876,7 @@
 "osm_poi_delete_title" = "حذف POI";
 "translucent_lightgreen" = "سبز روشن شفاف";
 "translucent_yellow" = "زرد شفاف";
-"poi_opening_hours" = "ساعات کاری";
+"poi_opening_hours" = "ساعت باز شد";
 "gpx_alt_range" = "دامنهٔ ارتفاع";
 "poi_clear" = "پاک‌کردن";
 "nearby_search" = "جست‌وجوی این اطراف";
@@ -1351,3 +1351,5 @@
 "exit_at" = "ایستگاه پیاده‌شدن";
 "public_transport_warning_title" = "ناوبری حمل‌ونقل عمومی هم‌اکنون آزمایش بتا را سپری می‌کند و بعید نیست که خطاها و نقایصی داشته باشد.";
 "active_markers" = "نشانه‌های فعال";
+"rendering_attr_piste_type_connection_name" = "اتصال";
+"rendering_attr_piste_difficulty_connection_name" = "اتصال";

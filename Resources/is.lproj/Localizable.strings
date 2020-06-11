@@ -491,7 +491,7 @@
 "do_not_show_discount" = "Ekki birta kynningarefni";
 "do_not_send_anonymous_data" = "Ekki senda nafnlaus gögn";
 "map_an_region" = "þetta svæði";
-"nothing_found" = "Ekkert fannst :(";
+"nothing_found" = "Ekkert fannst: %@";
 "select_street" = "Veldu götu";
 "type_address" = "Settu inn heimilisfang";
 "type_city_town" = "Settu inn borg eða bæjarfélag";

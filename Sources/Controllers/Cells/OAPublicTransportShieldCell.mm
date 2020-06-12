@@ -188,11 +188,11 @@ static UIFont *_shieldFont;
 
 - (NSMutableArray<CLLocation *> *)generateLocationsFor:(const std::shared_ptr<TransportRouteResultSegment> &)segment {
     NSMutableArray<CLLocation *> *locations = [NSMutableArray new];
-    vector<Way> geometry;
+    vector<std::shared_ptr<Way>> geometry;
     segment->getGeometry(geometry);
     for (const auto& w : geometry)
     {
-        for (const auto& n : w.nodes)
+        for (const auto& n : w->nodes)
         {
             [locations addObject:[[CLLocation alloc] initWithLatitude:n.lat longitude:n.lon]];
         }

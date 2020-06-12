@@ -730,11 +730,11 @@
         
         for (const auto& seg : segments)
         {
-            vector<Way> list;
+            vector<std::shared_ptr<Way>> list;
             seg->getGeometry(list);
             for (const auto& way : list)
             {
-                for (const auto& node : way.nodes)
+                for (const auto& node : way->nodes)
                 {
                     if (left == DBL_MAX)
                     {

@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAQuickActionType.h"
+#import "OAMapOpacitySliderToggler.h"
 
 #define KEY_OVERLAYS @"overlays"
 #define KEY_NO_OVERLAY @"no_overlay"
@@ -21,11 +22,16 @@ static OAQuickActionType *TYPE;
 
 @implementation OAMapOverlayAction
 
+{
+    OAMapOpacitySliderToggler *_opacitySliderToggler;
+}
+
 - (instancetype) init
 {
     self = [super initWithActionType:self.class.TYPE];
     if (self)
     {
+        _opacitySliderToggler = [OAMapOpacitySliderToggler sharedInstance];
         [super commonInit];
     }
     return self;
@@ -65,6 +71,8 @@ static OAQuickActionType *TYPE;
             nextSource = sources[index + 1];
         
         [self executeWithParams:nextSource];
+        
+        [_opacitySliderToggler showOpacitySlider];
     }
 }
 

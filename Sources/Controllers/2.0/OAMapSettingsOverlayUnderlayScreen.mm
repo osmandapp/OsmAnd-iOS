@@ -25,6 +25,7 @@
 #import "OAOnlineTilesEditingViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAAutoObserverProxy.h"
+#import "OAMapOpacitySliderToggler.h"
 
 #include <QSet>
 
@@ -97,6 +98,7 @@ static NSInteger kButtonsSection;
     OAMapStyleSettings *_styleSettings;
     OAMapStyleParameter *_hidePolygonsParameter;
     OAAutoObserverProxy *_sqlitedbResourcesChangedObserver;
+    OAMapOpacitySliderToggler *_opacitySliderToggler;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -109,6 +111,7 @@ static NSInteger kButtonsSection;
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
+        _opacitySliderToggler = [OAMapOpacitySliderToggler sharedInstance];
         
         if ([param isEqualToString:@"overlay"]) {
             _mapSettingType = EMapSettingOverlay;
@@ -469,7 +472,16 @@ static NSInteger kButtonsSection;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             if (indexPath.section == kMapVisibilitySection)
             {
-                [cell.switchView setOn: [[OARootViewController instance].mapPanel isOverlayUnderlayViewVisible]];
+                
+                if ([item[@"title"] isEqualToString:OALocalizedString(@"map_settings_show_slider_map")])
+                {
+                    [cell.switchView setOn: [_opacitySliderToggler isOpacitySliderEnabled]];
+                }
+                else
+                {
+                    [cell.switchView setOn: [[OARootViewController instance].mapPanel isOverlayUnderlayViewVisible]];
+                }
+                
                 [cell.switchView addTarget:self action:@selector(onShowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else
@@ -594,6 +606,8 @@ static NSInteger kButtonsSection;
             [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
             [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
             [tblView endUpdates];
+            
+            [_opacitySliderToggler showOpacitySlider];
         }
         else
         {
@@ -625,7 +639,10 @@ static NSInteger kButtonsSection;
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
+    {
+        [_opacitySliderToggler setIsOpacitySliderEnabled: switchView.isOn];
         [[OARootViewController instance].mapPanel updateOverlayUnderlayView:switchView.isOn];
+    }
 }
 
 - (void) hidePolygons:(BOOL)hide

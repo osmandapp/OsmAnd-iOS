@@ -14,6 +14,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAQuickActionType.h"
+#import "OAMapOpacitySliderToggler.h"
 
 #define KEY_UNDERLAYS @"underlays"
 #define KEY_NO_UNDERLAY @"no_underlay"
@@ -24,6 +25,7 @@ static OAQuickActionType *TYPE;
 {
     OAMapStyleSettings *_styleSettings;
     OAMapStyleParameter *_hidePolygonsParameter;
+    OAMapOpacitySliderToggler *_opacitySliderToggler;
 }
 
 - (instancetype) init
@@ -33,7 +35,7 @@ static OAQuickActionType *TYPE;
     {
         _styleSettings = [OAMapStyleSettings sharedInstance];
         _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
-
+        _opacitySliderToggler = [OAMapOpacitySliderToggler sharedInstance];
         [super commonInit];
     }
     return self;
@@ -73,6 +75,8 @@ static OAQuickActionType *TYPE;
             nextSource = sources[index + 1];
         
         [self executeWithParams:nextSource];
+        
+        [_opacitySliderToggler showOpacitySlider];
     }
 }
 

@@ -31,6 +31,7 @@
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
 #define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
+#define mapSettingShowOpacitySliderKey @"mapSettingShowOpacitySliderKey"
 #define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
 
 #define billingUserIdKey @"billingUserIdKey"
@@ -1226,6 +1227,7 @@
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
 @synthesize mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, settingPrefMapLanguage=_settingPrefMapLanguage;
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
+@synthesize mapSettingShowOpacitySlider=_mapSettingShowOpacitySlider;
 
 + (OAAppSettings*) sharedManager
 {
@@ -1306,6 +1308,7 @@
         _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
         _mapSettingShowOfflineEdits = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOfflineEditsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOfflineEditsKey] : YES;
         _mapSettingShowOnlineNotes = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOnlineNotesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOnlineNotesKey] : NO;
+        _mapSettingShowOpacitySlider = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOpacitySliderKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOpacitySliderKey] : NO;
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
@@ -1836,6 +1839,12 @@
                                            Visibility:NO];
         }
     }
+}
+
+- (void) setMapSettingShowOpacitySlider:(BOOL)mapSettingShowOpacitySlider
+{
+    _mapSettingShowOpacitySlider = mapSettingShowOpacitySlider;
+    [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowOpacitySlider forKey:mapSettingShowOpacitySliderKey];
 }
 
 - (void) setMapSettingTrackRecording:(BOOL)mapSettingTrackRecording

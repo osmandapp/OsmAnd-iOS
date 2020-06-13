@@ -175,12 +175,12 @@
         colorARGB = OsmAnd::ColorARGB(255 * alpha, 255 * red, 255 * green, 255 * blue);
         
         int baseOrder = self.baseOrder;
-        vector<Way> list;
+        vector<std::shared_ptr<Way>> list;
         routeSegment->getGeometry(list);
         for (const auto& way : list)
         {
             QVector<OsmAnd::PointI> points;
-            for (const auto& node : way.nodes)
+            for (const auto& node : way->nodes)
             {
                 points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(node.lat, node.lon)));
             }
@@ -188,7 +188,7 @@
             {
                 OsmAnd::VectorLineBuilder builder;
                 builder.setBaseOrder(baseOrder--)
-                .setIsHidden(way.nodes.size() == 0)
+                .setIsHidden(way->nodes.size() == 0)
                 .setLineId(1)
                 .setLineWidth(30)
                 .setPoints(points)

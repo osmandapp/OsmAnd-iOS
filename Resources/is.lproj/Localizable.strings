@@ -1714,3 +1714,4 @@
 "map_settings_layer_transparency" = "Gegnsæi lags";
 "map_settings_slopes_description" = "Til að sýna brekkur eru notaðir mismunandi litir við framsetningu yfirborðsins";
 "distance_indication" = "Fjarlægðarvísir";
+"quick_action_dir_from_descr" = "Ýttu á þessa aðgerð til að fara frá punktinum sem núna er á miðjum skjánum.";

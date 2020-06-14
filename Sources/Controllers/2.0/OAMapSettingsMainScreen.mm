@@ -25,7 +25,6 @@
 #import "OAPOIUIFilter.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "Reachability.h"
-#import "OAMapOpacitySliderToggler.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -45,7 +44,6 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAIAPHelper *_iapHelper;
-    OAMapOpacitySliderToggler *_opacitySliderToggler;
     
     OAMapStyleSettings *styleSettings;
     NSArray *_filteredTopLevelParams;
@@ -72,7 +70,6 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
-        _opacitySliderToggler = [OAMapOpacitySliderToggler sharedInstance];
         
         title = OALocalizedString(@"map_settings_map");
 
@@ -569,8 +566,6 @@
                 OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
                 [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
             }
-            
-            [_opacitySliderToggler showOpacitySlider];
         }
         else
             _app.data.overlayMapSource = nil;
@@ -613,8 +608,6 @@
                 OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
                 [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
             }
-            
-            [_opacitySliderToggler showOpacitySlider];
         }
         else
         {

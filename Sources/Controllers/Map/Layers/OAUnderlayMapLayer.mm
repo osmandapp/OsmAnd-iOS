@@ -11,6 +11,8 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
+#import "OAAppSettings.h"
+#import "OARootViewController.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -104,6 +106,7 @@
             }
         }
         
+        [self showOpacitySliderIfItEnabled];
         [self hideProgressHUD];
 
         return YES;
@@ -141,6 +144,14 @@
                 _rasterUnderlayMapProvider.reset();
             }
         }];
+    });
+}
+
+- (void)showOpacitySliderIfItEnabled
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL isSliderEnabled = [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider;
+        [[OARootViewController instance].mapPanel updateOverlayUnderlayView:isSliderEnabled];
     });
 }
 

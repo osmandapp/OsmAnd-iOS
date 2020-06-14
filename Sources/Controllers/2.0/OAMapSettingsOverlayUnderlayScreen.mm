@@ -25,7 +25,6 @@
 #import "OAOnlineTilesEditingViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAAutoObserverProxy.h"
-#import "OAMapOpacitySliderToggler.h"
 
 #include <QSet>
 
@@ -98,7 +97,6 @@ static NSInteger kButtonsSection;
     OAMapStyleSettings *_styleSettings;
     OAMapStyleParameter *_hidePolygonsParameter;
     OAAutoObserverProxy *_sqlitedbResourcesChangedObserver;
-    OAMapOpacitySliderToggler *_opacitySliderToggler;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -111,7 +109,6 @@ static NSInteger kButtonsSection;
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        _opacitySliderToggler = [OAMapOpacitySliderToggler sharedInstance];
         
         if ([param isEqualToString:@"overlay"]) {
             _mapSettingType = EMapSettingOverlay;
@@ -475,7 +472,7 @@ static NSInteger kButtonsSection;
                 
                 if ([item[@"title"] isEqualToString:OALocalizedString(@"map_settings_show_slider_map")])
                 {
-                    [cell.switchView setOn: [_opacitySliderToggler isOpacitySliderEnabled]];
+                    [cell.switchView setOn: [self isOpacitySliderEnabled]];
                 }
                 else
                 {
@@ -606,8 +603,6 @@ static NSInteger kButtonsSection;
             [tblView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
             [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
             [tblView endUpdates];
-            
-            [_opacitySliderToggler showOpacitySlider];
         }
         else
         {
@@ -640,8 +635,7 @@ static NSInteger kButtonsSection;
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
     {
-        [_opacitySliderToggler setIsOpacitySliderEnabled: switchView.isOn];
-        [[OARootViewController instance].mapPanel updateOverlayUnderlayView:switchView.isOn];
+        [self setIsOpacitySliderEnabled:switchView.isOn];
     }
 }
 
@@ -671,6 +665,33 @@ static NSInteger kButtonsSection;
     }
     [tblView reloadData];
 }
+
+
+- (BOOL) isOpacitySliderEnabled
+{
+    if (_mapSettingType == EMapSettingOverlay)
+    {
+        return [_settings mapSettingShowOverlayOpacitySlider];
+    }
+    else if (_mapSettingType == EMapSettingUnderlay)
+    {
+        return [_settings mapSettingShowUnderlayOpacitySlider];
+    }
+}
+
+- (void) setIsOpacitySliderEnabled: (BOOL)isEnabled
+{
+    if (_mapSettingType == EMapSettingOverlay)
+    {
+        [_settings setMapSettingShowOverlayOpacitySlider:isEnabled];
+    }
+    else if (_mapSettingType == EMapSettingUnderlay)
+    {
+        [_settings setMapSettingShowUnderlayOpacitySlider:isEnabled];
+    }
+    
+}
+
 
 #pragma mark - UITableViewDelegate
 

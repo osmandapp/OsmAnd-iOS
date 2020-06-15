@@ -91,14 +91,8 @@ static OAQuickActionType *TYPE;
     else
     {
         app.data.overlayMapSource = nil;
-        [self hideOpacitySlider];
     }
     // indicate change with toast?
-}
-
--(void) hideOpacitySlider
-{
-    [[OARootViewController instance].mapPanel updateOverlayUnderlayView:YES];
 }
 
 - (NSString *)getTranslatedItemName:(NSString *)item

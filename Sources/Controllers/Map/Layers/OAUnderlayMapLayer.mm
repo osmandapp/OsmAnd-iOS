@@ -69,6 +69,8 @@
 
 - (BOOL) updateLayer
 {
+    [self updateOpacitySliderVisibility];
+    
     if (self.app.data.underlayMapSource)
     {
         [self showProgressHUD];
@@ -106,7 +108,6 @@
             }
         }
         
-        [self showOpacitySliderIfItEnabled];
         [self hideProgressHUD];
 
         return YES;
@@ -147,7 +148,7 @@
     });
 }
 
-- (void)showOpacitySliderIfItEnabled
+- (void)updateOpacitySliderVisibility
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         BOOL isSliderEnabled = [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider;

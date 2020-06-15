@@ -469,15 +469,8 @@ static NSInteger kButtonsSection;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             if (indexPath.section == kMapVisibilitySection)
             {
-                
-                if ([item[@"title"] isEqualToString:OALocalizedString(@"map_settings_show_slider_map")])
-                {
-                    [cell.switchView setOn: [self isOpacitySliderEnabled]];
-                }
-                else
-                {
-                    [cell.switchView setOn: [[OARootViewController instance].mapPanel isOverlayUnderlayViewVisible]];
-                }
+                    
+                [cell.switchView setOn: [self isOpacitySliderVisible]];
                 
                 [cell.switchView addTarget:self action:@selector(onShowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             }
@@ -635,7 +628,7 @@ static NSInteger kButtonsSection;
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
     {
-        [self setIsOpacitySliderEnabled:switchView.isOn];
+        [self setOpacitySliderVisibility:switchView.isOn];
     }
 }
 
@@ -667,7 +660,7 @@ static NSInteger kButtonsSection;
 }
 
 
-- (BOOL) isOpacitySliderEnabled
+- (BOOL) isOpacitySliderVisible
 {
     if (_mapSettingType == EMapSettingOverlay)
     {
@@ -679,15 +672,15 @@ static NSInteger kButtonsSection;
     }
 }
 
-- (void) setIsOpacitySliderEnabled: (BOOL)isEnabled
+- (void) setOpacitySliderVisibility: (BOOL)show
 {
     if (_mapSettingType == EMapSettingOverlay)
     {
-        [_settings setMapSettingShowOverlayOpacitySlider:isEnabled];
+        _settings.mapSettingShowOverlayOpacitySlider = show;
     }
     else if (_mapSettingType == EMapSettingUnderlay)
     {
-        [_settings setMapSettingShowUnderlayOpacitySlider:isEnabled];
+        _settings.mapSettingShowUnderlayOpacitySlider = show;
     }
     
 }

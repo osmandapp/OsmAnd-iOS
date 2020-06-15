@@ -100,14 +100,8 @@ static OAQuickActionType *TYPE;
     {
         [self hidePolygons:NO];
         app.data.underlayMapSource = nil;
-        [self hideOpacitySlider];
     }
     // indicate change with toast?
-}
-
--(void) hideOpacitySlider
-{
-    [[OARootViewController instance].mapPanel updateOverlayUnderlayView:YES];
 }
 
 - (void) hidePolygons:(BOOL)hide

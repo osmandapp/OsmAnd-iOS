@@ -13,7 +13,6 @@
 #import "Localization.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAQuickActionType.h"
-#import "OARootViewController.h"
 
 #define KEY_OVERLAYS @"overlays"
 #define KEY_NO_OVERLAY @"no_overlay"

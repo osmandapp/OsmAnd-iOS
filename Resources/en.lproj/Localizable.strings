@@ -1822,9 +1822,7 @@
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
 
-<<<<<<< HEAD
 "settings_item_read_error" = "Could not read %@.";
-=======
 "app_mode_default" = "Browse map";
 "app_mode_car" = "Driving";
 "app_mode_bicycle" = "Cycling";
@@ -1846,4 +1844,3 @@
 "app_mode_pickup_truck" = "Pickup truck";
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
->>>>>>> 84f6a91b1b62f225f76d3fba08e51abacda952d5

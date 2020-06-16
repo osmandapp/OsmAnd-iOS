@@ -205,7 +205,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     static NSString* const mapSourceItemCell = @"mapSourceItemCell";
     
     // Get content for cell and it's type id
-    NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
+    NSArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
     NSString* caption = nil;
     NSString* description = nil;
     OAResourceItem* someItem;
@@ -215,7 +215,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         someItem = [collection objectAtIndex:indexPath.row];
         if ([someItem isKindOfClass:OASqliteDbResourceItem.class])
         {
-            caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *) someItem;
+            caption = [[sqlite.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
             description = nil;
         }
         else if (someItem.resourceType == OsmAndResourceType::MapStyle)
@@ -252,8 +253,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     // Fill cell content
     cell.textLabel.text = caption;
     cell.detailTextLabel.text = description;
+    
+    OAMapSourceResourceItem *itm = nil;
+    if (someItem && [someItem isKindOfClass:OAMapSourceResourceItem.class])
+        itm = (OAMapSourceResourceItem *) someItem;
 
-    if (someItem && [_app.data.lastMapSource isEqual:someItem.mapSource]) {
+    if (itm && [_app.data.lastMapSource isEqual:itm.mapSource]) {
         cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
     } else {
         cell.accessoryView = nil;
@@ -279,13 +284,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
+        NSArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
         if (indexPath.row < collection.count)
         {
             OAResourceItem* item = [collection objectAtIndex:indexPath.row];
-            _app.data.lastMapSource = item.mapSource;
+            OAMapSourceResourceItem *source = nil;
+            if ([item isKindOfClass:OAMapSourceResourceItem.class])
+                source = (OAMapSourceResourceItem *) item;
+            _app.data.lastMapSource = source.mapSource;
             if (indexPath.section == kOfflineSourcesSection)
-                [_app.data setPrevOfflineSource:item.mapSource];
+                [_app.data setPrevOfflineSource:source.mapSource];
             
             [tableView reloadData];
         }

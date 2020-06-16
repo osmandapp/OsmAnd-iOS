@@ -61,6 +61,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 @implementation OAOutdatedResourceItem
 @end
 
+@implementation OAMapSourceResourceItem
+@end
+
 @implementation OASqliteDbResourceItem
 
 - (void) updateSize
@@ -960,7 +963,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     NSMutableDictionary<OAMapSource *, OAResourceItem *> *res = [NSMutableDictionary new];
     for (OAResourceItem *i in items)
     {
-        [res setObject:i forKey:i.mapSource];
+        if ([i isKindOfClass:OAMapSourceResourceItem.class])
+            [res setObject:i forKey:((OAMapSourceResourceItem *)i).mapSource];
     }
     return [NSDictionary dictionaryWithDictionary:res];
 }

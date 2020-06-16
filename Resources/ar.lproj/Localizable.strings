@@ -261,7 +261,7 @@
 "min_mile" = "د/م";
 "min_km" = "د/كم";
 "m_s" = "م/ث";
-"nothing_found" = "لايمكن العثور على :(";
+"nothing_found" = "لايمكن العثور على : %@";
 "nothing_found_descr" = "قم بتعديل استعلام البحث أو قم بزيادة نصف قطر البحث";
 "select_street" = "اختر شارع";
 "shared_string_in_name" = "في %@";

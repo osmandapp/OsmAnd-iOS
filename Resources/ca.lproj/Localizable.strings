@@ -284,7 +284,7 @@
 "track_save_short_q" = "El trajecte és molt curt, segur que el voleu desar?";
 "add_as" = "Afegeix com a";
 "make_call" = "Truca";
-"track_rec_addon_q" = "Activeu el complement «Gravació del trajecte»  per enregistrar i desar els vostres trajectes";
+"track_rec_addon_q" = "Activeu el complement «Gravació del trajecte» per enregistrar i desar els vostres trajectes";
 "sett_notshow" = "Amaga";
 // Purchases
 "prch_addons" = "Complements";
@@ -306,7 +306,7 @@
 "res_dmap" = "Mapa detallat";
 "prch_nau_q2_cell" = "La baixada requereix %@ per transmissió de dades.";
 "prch_nau_q2_wifi" = "La baixada requereix %@ per la xarxa WiFi.";
-"res_inst_avail_cell_q" = "La instal·lació de %@ implica baixar %@  de dades de la xarxa.";
+"res_inst_avail_cell_q" = "La instal·lació de %@ implica baixar %@ de dades de la xarxa.";
 "res_inst_avail_wifi_q" = "La instal·lació de %@ implica baixar %@ de dades per la xarxa WiFi.";
 "res_cancel_upd_q" = "Esteu a punt d'aturar l'actualització %@.";
 "res_cancel_inst_q" = "Esteu a punt d'aturar la instal·lació %@.";
@@ -398,7 +398,7 @@
 "all_world_popup_desc" = "Baixa el mapa base del món per veure els noms dels estats, les fronteres i altres informacions";
 "restore" = "Recupera";
 "restore_all_purchases" = "Recupera totes les compres";
-"product_desc_ext_nautical" = "Cartes nàutiques OsmAnd és un connector per l'aplicació de mapes i navegació OsmAnd. Es tracta d'una representació  gràfica detallada d'oceans, mars, zones litorals i rius. Els gràfics poden incloure informació vària com rutes i llums de navegació, zones perilloses, àrees on es permet o no navegar, atracar, etc.\n\nInstruccions d'ús: es recomana fortament la baixada del mapa base nàutic per veure un mapa encara que pugui mancar el mapa més detallat. Per activa els gràfics nàutics premeu el botó de mapes i fixeu el tipus de mapa com nàutic.\n\nNota: Tots els navegants profesionals tenen la obligació de tenir cartes nàutiques oficials als seus vaixells.\n\nLes cartes nàutiques d'OsmAnd es fonamenten en les dades del projecte OpenSeaMap. Mentre les cartes de l'OpenSeaMap encara no siguin completes respecte les cartes nàutiques oficials només es poden utilitzar per navegants afeccionats per orientar-se i planificar rutes.";
+"product_desc_ext_nautical" = "Cartes nàutiques OsmAnd és un connector per l'aplicació de mapes i navegació OsmAnd. Es tracta d'una representació gràfica detallada d'oceans, mars, zones litorals i rius. Els gràfics poden incloure informació vària com rutes i llums de navegació, zones perilloses, àrees on es permet o no navegar, atracar, etc.\n\nInstruccions d'ús: es recomana fortament la baixada del mapa base nàutic per veure un mapa encara que pugui mancar el mapa més detallat. Per activa els gràfics nàutics premeu el botó de mapes i fixeu el tipus de mapa com nàutic.\n\nNota: Tots els navegants profesionals tenen la obligació de tenir cartes nàutiques oficials als seus vaixells.\n\nLes cartes nàutiques d'OsmAnd es fonamenten en les dades del projecte OpenSeaMap. Mentre les cartes de l'OpenSeaMap encara no siguin completes respecte les cartes nàutiques oficials només es poden utilitzar per navegants afeccionats per orientar-se i planificar rutes.";
 "product_desc_ext_parking" = "El connector Aparcament d'OsmAnd us recorda la posició del vostre aparcament. Es tracta d'un connector de l'aplicació de mapes i navegació OsmAnd.\nSeleccioneu un recordatori fix (un marcador en el mapa) o lligat a una limitació del temps amb una alarma basada en la fi del termini (també inclou el marcador en el mapa). Per utilitzar aquest connector l'heu d'activar al menú Connectors.";
 "product_title_trip_planning" = "Planificació de viatges";
 "plugin_popup_ski_title" = "Activa l'estil de mapes Esquí";
@@ -443,7 +443,7 @@
 "shared_string_of" = "de";
 "first_usage_greeting" = "Obteniu indicacions i descobriu llocs nous sense connexió a Internet";
 "get_started" = "Comença";
-"first_usage_wizard_desc" = "Permeteu a OsmAnd determinar la vostra localització i suggerir-vos els  mapes a baixar d'aquesta zona.";
+"first_usage_wizard_desc" = "Permeteu a OsmAnd determinar la vostra localització i suggerir-vos els mapes a baixar d'aquesta zona.";
 "location_not_found" = "No s'ha determinat la localització";
 "search_my_location" = "Cerca la meva localització";
 "no_inet_connection" = "Sense connexió a Internet";
@@ -972,7 +972,7 @@
 "modify_poi" = "Modifica la informació del PDI";
 "product_title_osm_editing" = "Edició d'OpenStreetMap";
 "product_desc_osm_editing" = "Feu canvis a l'OpenStreetMap directament des de OsmAnd";
-"product_desc_ext_osm_editing" = "El connector d'edició de OSM es pot utilitzar per fer contribucions a OSM, creant o modificant objectes PDI, creant o comentant notes OSM i aportant fitxers GPX enregistrats. OSM és un  projecte de la comunitat global per disposar de cartografia de domini públic. Per a més informació, consulteu a https://osm.org. Les contribucions es poden fer directament des de OsmAnd, si heu especificat les vostres credencials OSM a l'aplicació.";
+"product_desc_ext_osm_editing" = "El connector d'edició de OSM es pot utilitzar per fer contribucions a OSM, creant o modificant objectes PDI, creant o comentant notes OSM i aportant fitxers GPX enregistrats. OSM és un projecte de la comunitat global per disposar de cartografia de domini públic. Per a més informació, consulteu a https://osm.org. Les contribucions es poden fer directament des de OsmAnd, si heu especificat les vostres credencials OSM a l'aplicació.";
 "shared_string_password" = "Contrasenya";
 "shared_string_category" = "Categoria";
 "poi_category_and_type" = "Categoria i tipus del PDI";
@@ -1067,7 +1067,7 @@
 "years_2_4" = "Anys";
 "years_5" = "Anys";
 "price_free" = "Gratuït";
-"get_discount_title" = "Aconseguiu  %d %@ amb un  %d%% de descompte.";
+"get_discount_title" = "Aconseguiu %d %@ amb un %d%% de descompte.";
 "get_free_trial_title" = "Comenceu la vostra prova gratuïta de %d %@.";
 "osm_succsessful_uploads" = "Correcte";
 "osm_failed_uploads" = "Ha fallat";
@@ -1166,7 +1166,7 @@
 "show_hide_gpx" = "Mostra/amaga trajectes";
 "search_results" = "Resultats de la cerca";
 "quick_action_name_str" = "Nom de l'acció";
-"quick_action_name_alert" = "El nom de l'acció directa ha canviat a  %@ per evitar duplicitats.";
+"quick_action_name_alert" = "El nom de l'acció directa ha canviat a %@ per evitar duplicitats.";
 "quick_action_screen_header" = "Pantalla %ld";
 "quick_action_list_descr" = "Prement aquest botó d'acció pagineu per la llista que segueix";
 "fav_add_group" = "Afegeix un grup";
@@ -1445,7 +1445,7 @@
 "routing_attr_avoid_shuttle_train_description" = "Evita l'ús de trens llançadora";
 "routing_attr_prefer_unpaved_description" = "Prefereix carreteres sense asfaltar.";
 "routing_attr_avoid_bus_name" = "Sense autobús";
-"routing_attr_allow_classic_only_description" = "Rutes preparades per a estil clàssic sense pistes de skateboarding. Això inclou rutes preparades amb una moto de neu més petita amb amb pistes fetes manualment pels esquiadors.";
+"routing_attr_allow_classic_only_description" = "Rutes preparades per a estil clàssic sense pistes de skateboarding. Això inclou rutes preparades amb una moto de neu més petita amb pistes fetes manualment pels esquiadors.";
 "rendering_attr_surface_compacted_name" = "Compactat";
 "routing_attr_height_name" = "Límit d'alçada";
 "routing_attr_piste_type_downhill_name" = "Esquí alpí/descens";
@@ -1593,7 +1593,7 @@
 "rendering_attr_hmRendered_name" = "Mostra més detalls al mapa";
 "rendering_attr_alpineHiking_name" = "Escala senderista SAC (Club Alpí Suís)";
 "routeInfo_steepness_name" = "Inclinació";
-"routing_attr_avoid_unpaved_description" = "Evita les vies sense pavimentar.";
+"routing_attr_avoid_unpaved_description" = "Evita les vies sense pavimentar";
 "rendering_attr_coloredBuildings_name" = "Edificis amb colors codificats per tipus";
 "rendering_value_dark_brown_name" = "Marró fosc";
 "routing_attr_avoid_subway_name" = "Sense metro";
@@ -1703,7 +1703,7 @@
 "public_transport_warning_descr_blog" = "Llegiu més sobre com OsmAnd calcula les rutes al nostre bloc.";
 "public_transport_warning_title" = "La navegació en transports públics ara està en proves beta, vigileu errors o defectes.";
 "calc_pedestrian_route" = "Calcula la ruta per vianants";
-"public_transport_ped_route_title" = "La ruta a peu triga aproximadament %1$s i es pot escurçar utilitzant transport públic";
+"public_transport_ped_route_title" = "La ruta a peu triga aproximadament %1$s i es pot escurçar utilitzant transport públic.";
 "res_slope" = "Pista";
 "product_desc_antarctica" = "Baixada il·limitada del mapa de l'Antàrtida";
 "product_title_antarctica" = "Antàrtida";
@@ -1715,3 +1715,4 @@
 "nav_type_osmand" = "OsmAnd (determinació de ruta sense connexió)";
 "nav_type_descr" = "Seleccioneu com calcular la ruta en aquest perfil";
 "nav_type_title" = "Tipus de navegació";
+"quick_action_dir_from_descr" = "Premeu aquesta opció per iniciar la navegació des del punt central de la pantalla actual.";

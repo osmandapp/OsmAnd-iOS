@@ -674,11 +674,11 @@ static const NSInteger _buttonsCount = 4;
             [self.customController.buttonBack removeFromSuperview];
         if (self.customController.additionalAccessoryView)
             [self.customController.additionalAccessoryView removeFromSuperview];
+        [self.customController removeMapFrameLayer:self];
         [self.customController.contentView removeFromSuperview];
         self.customController.delegate = nil;
         _customController = nil;
         [self.navController setNeedsStatusBarAppearanceUpdate];
-        [self removeMapFrameLayer];
     }
 }
 
@@ -778,6 +778,7 @@ static const NSInteger _buttonsCount = 4;
         _backViewRoute.hidden = ![self.customController hasInfoView];
         _buttonShowInfo.hidden = ![self.customController hasInfoButton];
         _buttonRoute.hidden = ![self.customController hasRouteButton];
+        [self.customController removeMapFrameLayer:self];
     }
     else
     {
@@ -789,7 +790,6 @@ static const NSInteger _buttonsCount = 4;
     [self updateDirectionButton];
     [self updateTransportView];
     [self updateDescriptionLabel];
-    [self removeMapFrameLayer];
 }
 
 - (BOOL) newItem
@@ -1362,7 +1362,7 @@ static const NSInteger _buttonsCount = 4;
     _headerOffset = 0;
     
     _fullHeight = DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
-    _fullOffset = _targetPoint.type == OATargetImpassableRoadSelection ? DeviceScreenHeight / 3 : _headerY - (DeviceScreenHeight - _fullHeight);
+    _fullOffset = _targetPoint.type == OATargetImpassableRoadSelection ? DeviceScreenHeight / 3 : ([self.customController mapHeightKoef] > 0 ? DeviceScreenHeight * [self.customController mapHeightKoef] : _headerY - (DeviceScreenHeight - _fullHeight));
     
     _fullScreenHeight = _headerHeight + contentViewHeight;
     _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
@@ -1408,27 +1408,9 @@ static const NSInteger _buttonsCount = 4;
     
     if (self.customController.contentView)
     {
-        if (_targetPoint.type == OATargetDownloadMapSource)
-        {
-            CGFloat bottomToolBarHeight = self.customController.hasBottomToolbar ? self.customController.bottomToolBarView.frame.size.height : 0.;
-            CGFloat height = landscape ? DeviceScreenHeight - bottomToolBarHeight - 44 : (_fullHeight - bottomToolBarHeight - _toolbarHeight);
-            self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight + (!landscape ? 44.0 : 0.0), width, height);
-            CGRect mapFrame;
-            if (landscape)
-            {
-                mapFrame = CGRectMake(width, 0, DeviceScreenWidth - width, DeviceScreenHeight);
-            }
-            else
-            {
-                CGFloat frameHeight = _headerY - _fullHeight - OAUtilities.getStatusBarHeight;
-                mapFrame = CGRectMake(0, _headerY - frameHeight + 44, width, frameHeight);
-            }
-            [self addMapFrameLayer:mapFrame];
-        }
-        else
-        {
-            self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight, width, contentViewHeight);
-        }
+        self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight, width, contentViewHeight);
+        if ([self.customController isMapFrameNeeded])
+            [self.customController addMapFrameLayer:[self getMapFrame:width] view:self];
     }
     
     if (!_buttonLeft.hidden)
@@ -1531,49 +1513,19 @@ static const NSInteger _buttonsCount = 4;
     return newOffset;
 }
 
-- (void) addMapFrameLayer:(CGRect)frame
+- (CGRect) getMapFrame:(CGFloat)width
 {
-    UIBezierPath *backgroundViewPath = [UIBezierPath bezierPathWithRect: frame];
-    CGFloat bottomSafeArea = ([self isLandscape] ? OAUtilities.getBottomMargin : 0.0);
-    CGFloat statusBarHeight = ([self isLandscape] ? OAUtilities.getStatusBarHeight : 0.0);
-    UIBezierPath *mapBorderPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(frame.origin.x + 8, frame.origin.y + 8 + statusBarHeight, frame.size.width - 16 - OAUtilities.getLeftMargin, frame.size.height - 26 - bottomSafeArea - statusBarHeight) cornerRadius: 4];
-    
-    [backgroundViewPath appendPath:mapBorderPath];
-    [backgroundViewPath setUsesEvenOddFillRule:YES];
-    CAShapeLayer *backgroundLayer = [CAShapeLayer layer];
-    backgroundLayer.path = backgroundViewPath.CGPath;
-    backgroundLayer.fillRule = kCAFillRuleEvenOdd;
-    backgroundLayer.fillColor = [UIColor blackColor].CGColor;
-    backgroundLayer.opacity = 0.5;
-    backgroundLayer.name = @"backgroundLayer";
-    [self.layer addSublayer:backgroundLayer];
-    
-    CAShapeLayer *frameLayer = [CAShapeLayer layer];
-    frameLayer.path = mapBorderPath.CGPath;
-    frameLayer.fillColor = nil;
-    frameLayer.strokeColor = [UIColorFromRGB(color_chart_orange) CGColor];
-    frameLayer.lineWidth = 2.0;
-    frameLayer.name = @"frameLayer";
-    [self.layer addSublayer:frameLayer];
-    
-    CATextLayer *captionLayer = [CATextLayer layer];
-    captionLayer.frame = CGRectMake(frame.origin.x, frame.origin.y + frame.size.height - 17 - bottomSafeArea, frame.size.width, 17);
-    captionLayer.fontSize = 13;
-    [captionLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    captionLayer.foregroundColor = [UIColor whiteColor].CGColor;
-    captionLayer.alignmentMode = kCAAlignmentCenter;
-    captionLayer.string = OALocalizedString(@"move_map_to_select_area");
-    captionLayer.name = @"captionLayer";
-    [self.layer addSublayer:captionLayer];
-}
-
-- (void) removeMapFrameLayer
-{
-    [[self.layer.sublayers copy] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        CALayer * subLayer = obj;
-        if([subLayer.name isEqual: @"backgroundLayer"] || [subLayer.name isEqual: @"frameLayer"] || [subLayer.name isEqual: @"captionLayer"])
-            [subLayer removeFromSuperlayer];
-    }];
+    CGRect mapFrame;
+    if ([self isLandscape])
+    {
+        mapFrame = CGRectMake(width, 0, DeviceScreenWidth - width, DeviceScreenHeight);
+    }
+    else
+    {
+        CGFloat frameHeight = DeviceScreenHeight - _fullOffset - _customController.getToolBarHeight - OAUtilities.getStatusBarHeight + 6;
+        mapFrame = CGRectMake(0, _headerY - frameHeight, width, frameHeight);
+    }
+    return mapFrame;
 }
 
 - (CGFloat) calculateTopY
@@ -2176,18 +2128,13 @@ static const NSInteger _buttonsCount = 4;
     if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
     {
         [self.menuViewDelegate targetViewEnableMapInteraction];
-        [self.menuViewDelegate targetSetBottomControlsVisible:[self isBottomsControlVisible] menuHeight:([self isLandscape] ? 0 : height) animated:animated];
+        [self.menuViewDelegate targetSetBottomControlsVisible:[self.customController isBottomsControlVisible] menuHeight:([self isLandscape] ? 0 : height) animated:animated];
     }
     else
     {
         [self.menuViewDelegate targetViewDisableMapInteraction];
         [self.menuViewDelegate targetSetBottomControlsVisible:NO menuHeight:0 animated:animated];
     }
-}
-
-- (BOOL) isBottomsControlVisible
-{
-    return _targetPoint.type != OATargetDownloadMapSource;
 }
 
 - (UIStatusBarStyle) getStatusBarStyle:(BOOL)contextMenuMode defaultStyle:(UIStatusBarStyle)defaultStyle

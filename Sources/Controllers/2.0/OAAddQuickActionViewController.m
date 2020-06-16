@@ -10,11 +10,11 @@
 #import "OAActionConfigurationViewController.h"
 #import "Localization.h"
 #import "OAQuickActionRegistry.h"
-#import "OAQuickActionFactory.h"
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
 #import "OAIconTitleButtonCell.h"
 #import "OASizes.h"
+#import "OAQuickActionType.h"
 
 @interface OAAddQuickActionViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -27,9 +27,9 @@
 
 @implementation OAAddQuickActionViewController
 {
-    OrderedDictionary<NSString *, NSArray<OAQuickAction *> *> *_actions;
+    OrderedDictionary<NSString *, NSArray<OAQuickActionType *> *> *_actions;
     
-    NSMutableArray<OAQuickAction *> *_filteredData;
+    NSMutableArray<OAQuickActionType *> *_filteredData;
     BOOL _isFiltered;
     BOOL _searchIsActive;
     
@@ -77,19 +77,18 @@
 
 -(void) commonInit
 {
-    NSArray<OAQuickAction *> *active = [OAQuickActionRegistry sharedInstance].getQuickActions;
-    NSArray<OAQuickAction *> *all = [OAQuickActionFactory produceTypeActionsListWithHeaders:active];
-    NSMutableArray<OAQuickAction *> *actionsInSection = nil;
-    MutableOrderedDictionary<NSString *, NSArray<OAQuickAction *> *> *mapping = [[MutableOrderedDictionary alloc] init];
+    NSArray<OAQuickActionType *> *all = [[OAQuickActionRegistry sharedInstance] produceTypeActionsListWithHeaders];
+    NSMutableArray<OAQuickActionType *> *actionsInSection = nil;
+    MutableOrderedDictionary<NSString *, NSArray<OAQuickActionType *> *> *mapping = [[MutableOrderedDictionary alloc] init];
     NSString *currSectionName = @"";
-    for (OAQuickAction *action in all)
+    for (OAQuickActionType *action in all)
     {
-        if (action.type == 0)
+        if (action.identifier == 0)
         {
             if (actionsInSection && actionsInSection.count > 0)
                 [mapping setObject:[NSArray arrayWithArray:actionsInSection] forKey:currSectionName];
             
-            currSectionName = action.getName;
+            currSectionName = action.name;
             actionsInSection = [NSMutableArray new];
         }
         else if (actionsInSection)
@@ -209,7 +208,7 @@
         [_searchField becomeFirstResponder];
 }
 
--(OAQuickAction *)getItem:(NSIndexPath *)indexPath
+-(OAQuickActionType *)getItem:(NSIndexPath *)indexPath
 {
     if (_isFiltered)
         return _filteredData[indexPath.row];
@@ -230,8 +229,8 @@
 
 - (void) openQuickActionSetupFor:(NSIndexPath *)indexPath
 {
-    OAQuickAction *item = [self getItem:indexPath];
-    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:YES];
+    OAQuickActionType *item = [self getItem:indexPath];
+    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:[item createNew] isNew:YES];
     [self.navigationController pushViewController:actionScreen animated:YES];
 }
 
@@ -247,7 +246,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAQuickAction *action = [self getItem:indexPath];
+    OAQuickActionType *action = [self getItem:indexPath];
     if (action)
     {
         static NSString* const identifierCell = @"OAIconTitleButtonCell";
@@ -261,19 +260,20 @@
         if (cell)
         {
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.titleView.text = action.getName;
-            cell.iconView.image = [UIImage imageNamed:action.getIconResName];
+            cell.titleView.text = action.name;
+            cell.iconView.image = [UIImage imageNamed:action.iconName];
             if (cell.iconView.subviews.count > 0)
                 [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             
             if (action.hasSecondaryIcon)
             {
+                OAQuickAction *act = [action createNew];
                 CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
                 UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
                 [background setTintColor:UIColor.whiteColor];
                 [cell.iconView addSubview:background];
-                UIImage *img = [UIImage imageNamed:action.getSecondaryIconName];
+                UIImage *img = [UIImage imageNamed:act.getSecondaryIconName];
                 UIImageView *view = [[UIImageView alloc] initWithImage:img];
                 view.frame = frame;
                 [cell.iconView addSubview:view];
@@ -315,8 +315,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAQuickAction *action = [self getItem:indexPath];
-    return [OAIconTitleButtonCell getHeight:action.getName cellWidth:tableView.bounds.size.width];
+    OAQuickActionType *action = [self getItem:indexPath];
+    return [OAIconTitleButtonCell getHeight:action.name cellWidth:tableView.bounds.size.width];
 }
 
 -(void)textViewDidChange:(UITextView *)textView
@@ -331,11 +331,11 @@
         _filteredData = [NSMutableArray new];
         for (NSArray *actionGroup in _actions.allValues)
         {
-            for (OAQuickAction *action in actionGroup)
+            for (OAQuickActionType *actionType in actionGroup)
             {
-                NSRange nameRange = [action.getName rangeOfString:textView.text options:NSCaseInsensitiveSearch];
+                NSRange nameRange = [actionType.name rangeOfString:textView.text options:NSCaseInsensitiveSearch];
                 if (nameRange.location != NSNotFound)
-                    [_filteredData addObject:action];
+                    [_filteredData addObject:actionType];
             }
         }
     }

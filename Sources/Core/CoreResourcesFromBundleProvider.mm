@@ -199,7 +199,7 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
 
         resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
         resourceType = resourceFileName.mid(lastDotIndex + 1).toNSString();
-        resourceDir = @"style-icons";
+        resourceDir = @"map-shaders-png";
         if (displayDensityFactor >= 3.0f)
             resourceDir = [resourceDir stringByAppendingString:@"/drawable-xxhdpi"];
         else if (displayDensityFactor >= 2.0f)
@@ -217,7 +217,7 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
 
         resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
         resourceType = resourceFileName.mid(lastDotIndex + 1).toNSString();
-        resourceDir = @"style-icons";
+        resourceDir = @"map-shaders-png";
         if (displayDensityFactor >= 3.0f)
             resourceDir = [resourceDir stringByAppendingString:@"/drawable-xxhdpi"];
         else if (displayDensityFactor >= 2.0f)
@@ -235,7 +235,7 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
 
         resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
         resourceType = resourceFileName.mid(lastDotIndex + 1).toNSString();
-        resourceDir = @"style-icons";
+        resourceDir = @"map-icons-png";
         if (displayDensityFactor >= 3.0f)
             resourceDir = [resourceDir stringByAppendingString:@"/drawable-xxhdpi"];
         else if (displayDensityFactor >= 2.0f)

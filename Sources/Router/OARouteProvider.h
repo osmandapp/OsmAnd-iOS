@@ -15,9 +15,10 @@
 typedef NS_ENUM(NSInteger, EOARouteService)
 {
     OSMAND = 0,
-    YOURS,
+    /*YOURS,
     OSRM,
-    BROUTER,
+    BROUTER,*/
+    DIRECT_TO,
     STRAIGHT
 };
 
@@ -74,5 +75,7 @@ typedef NS_ENUM(NSInteger, EOARouteService)
 
 - (OARouteCalculationResult *) calculateRouteImpl:(OARouteCalculationParams *)params;
 - (OARouteCalculationResult *) recalculatePartOfflineRoute:(OARouteCalculationResult *)res params:(OARouteCalculationParams *)params;
+
+- (void) checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY;
 
 @end

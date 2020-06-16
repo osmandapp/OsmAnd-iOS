@@ -555,7 +555,7 @@
     
     _rulerControl = [ric createRulerControl];
     _rulerControl.delegate = self;
-
+  
     /*
     topToolbarView = new TopToolbarView(map);
     updateTopToolbar(false);
@@ -585,12 +585,11 @@
     [self registerSideWidget:time widgetState:[[OATimeControlWidgetState alloc] init] key:@"time" left:NO priorityOrder:16];
     OATextInfoWidget *bearing = [ric createBearingControl];
     [self registerSideWidget:bearing widgetState:[[OABearingWidgetState alloc] init] key:@"bearing" left:NO priorityOrder:17];
-    /*
-    TextInfoWidget marker = mwf.createMapMarkerControl(map, true);
-    registerSideWidget(marker, R.drawable.ic_action_flag_dark, R.string.map_marker_1st, "map_marker_1st", false, 18);
-    TextInfoWidget marker2nd = mwf.createMapMarkerControl(map, false);
-    registerSideWidget(marker2nd, R.drawable.ic_action_flag_dark, R.string.map_marker_2nd, "map_marker_2nd", false, 19);
-    */
+    
+    OATextInfoWidget *marker = [ric createMapMarkerControl:YES];
+    [self registerSideWidget:marker imageId:@"widget_marker_day" message:OALocalizedString(@"widget_marker") key:@"map_marker_1st" left:NO priorityOrder:18];
+    OATextInfoWidget *marker2nd = [ric createMapMarkerControl:NO];
+    [self registerSideWidget:marker2nd imageId:@"widget_marker_day" message:OALocalizedString(@"widget_marker2") key:@"map_marker_2nd" left:NO priorityOrder:19];
     
     OATextInfoWidget *speed = [ric createSpeedControl];
     [self registerSideWidget:speed imageId:@"ic_action_speed" message:OALocalizedString(@"gpx_speed") key:@"speed" left:false priorityOrder:20];

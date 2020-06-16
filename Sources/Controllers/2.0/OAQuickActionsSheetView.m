@@ -17,6 +17,7 @@
 #import "OAQuickActionRegistry.h"
 #import "OAAutoObserverProxy.h"
 #import "OAActionConfigurationViewController.h"
+#import "OAQuickActionType.h"
 
 #define kButtonContainerHeight 60.0
 #define kMargin 16.0
@@ -239,7 +240,6 @@
     else
     {
         OAQuickAction *action = [[OAQuickAction alloc] init];
-        [action setType:EOAQuickActionTypeStub];
         [result addObject:action];
     }
 }
@@ -533,7 +533,7 @@
     if (cell && [cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickAction *action = [self getAction:indexPath];
-        if (!action || action.type == EOAQuickActionTypeStub)
+        if (!action || action.actionType.identifier == 0)
         {
             cell.hidden = YES;
             return cell;

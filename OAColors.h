@@ -54,6 +54,8 @@
 #define color_secondary_text_blur 0x727272
 #define color_transport_route_line_argb 0xCC2f7af5
 
+#define color_nav_route_default_argb 0xCCaa0088
+
 #define color_live_frequency 0xFEC601
 #define color_active_light 0x237bff
 #define color_disabled_light 0xdadbdf
@@ -81,6 +83,7 @@
 #define color_tint_gray 0xCBC7D1
 
 #define color_primary_purple 0x5714CC
+#define color_primary_purple_50 0x805714CC
 #define color_bottom_sheet_secondary 0xD8D5DD
 #define color_bottom_sheet_secondary_night 0x3F3D43
 
@@ -112,5 +115,37 @@
 #define color_route_button_inactive 0xE0DDE3
 
 #define color_icon_inactive 0xA49DAF
+
+#define color_slider_gray 0xe4e4e6
+#define color_footer_icon_gray 0xC4C4C4
+
+#define profile_icon_color_blue_light_default 0x237BFF
+#define profile_icon_color_purple_light 0x732EEB
+#define profile_icon_color_green_light 0x0EBE92
+#define profile_icon_color_blue_light 0x007EB3
+#define profile_icon_color_red_light 0xFF2200
+#define profile_icon_color_yellow_light 0xF0B400
+#define profile_icon_color_magenta_light 0xCC0063
+
+#define profile_icon_color_blue_dark_default 0x237BFF
+#define profile_icon_color_purple_dark 0x732EEB
+#define profile_icon_color_green_dark 0x0EBE92
+#define profile_icon_color_blue_dark 0x007EB3
+#define profile_icon_color_red_dark 0xFF2200
+#define profile_icon_color_yellow_dark 0xF0B400
+#define profile_icon_color_magenta_dark 0xCC0063
+
+#define profile_icon_color_outdated_light 0x727272
+#define profile_icon_color_outdated_dark 0x727272
+
+#define profile_icon_color_inactive 0x727272
+
+#define marker_pin_color_orange 0xFF9207
+#define marker_pin_color_blue 0x00BCD4
+#define marker_pin_color_green 0x7FBD4D
+#define marker_pin_color_red 0xFF444A
+#define marker_pin_color_light_green 0xCDDC39
+
+#define parking_pin_color_blue 0x4A69EC
 
 #endif /* OAColors_h */

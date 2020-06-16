@@ -42,6 +42,7 @@
     int _nextIntermediate;
     int _currentWaypointGPX;
     int _lastWaypointGPX;
+    int _currentStraightAngleRoute;
 }
 
 
@@ -58,6 +59,9 @@
         _nextIntermediate = 0;
         _currentWaypointGPX = 0;
         _lastWaypointGPX = 0;
+        _routeRecalcDistance = 0;
+        _routeVisibleAngle = 0;
+        _currentStraightAngleRoute = -1;
     }
     return self;
 }
@@ -372,6 +376,20 @@
     return 0;
 }
 
+- (void) updateNextVisiblePoint:(int) nextPoint location:(CLLocation *) mp
+{
+    _currentStraightAnglePoint = mp;
+    _currentStraightAngleRoute = nextPoint;
+}
+
+- (int) getDistanceFromPoint:(int) locationIndex
+{
+    if(_listDistance && locationIndex < _listDistance.count) {
+        return [_listDistance[locationIndex] intValue];
+    }
+    return 0;
+}
+
 - (int) getDistanceToNextIntermediate:(CLLocation *)fromLoc
 {
     if (_listDistance && _currentRoute < _listDistance.count)
@@ -527,7 +545,7 @@
     
     // speed m/s
     float speed = mode.defaultSpeed;
-    int minDistanceForTurn = mode.minDistanceForTurn;
+    NSInteger minDistanceForTurn = mode.getMinDistanceForTurn;
     NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray array];
     
     NSMutableArray<NSNumber *> *listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
@@ -1195,6 +1213,12 @@
         [self.class calculateIntermediateIndexes:_locations intermediates:params.intermediates localDirections:localDirections intermediatePoints:_intermediatePoints];
         _directions = localDirections;
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
+        _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];
+        
+        // TODO: add additional routing params
+        _routeRecalcDistance = /*params.ctx.getSettings().ROUTE_RECALCULATION_DISTANCE.getModeValue(params.mode)*/ 0;
+        _routeVisibleAngle = /*_routeProvider == STRAIGHT ?
+                        getSettings().ROUTE_STRAIGHT_ANGLE.getModeValue(params.mode) : */0;
     }
     return self;
 }
@@ -1226,6 +1250,12 @@
         _directions = computeDirections;
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
         _alarmInfo = alarms;
+        _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];
+        
+        // TODO: add additional routing params
+        _routeRecalcDistance = /*params.ctx.getSettings().ROUTE_RECALCULATION_DISTANCE.getModeValue(params.mode)*/ 0;
+        _routeVisibleAngle = /*_routeProvider == STRAIGHT ?
+                        getSettings().ROUTE_STRAIGHT_ANGLE.getModeValue(params.mode) : */0;
     }
     return self;
 }

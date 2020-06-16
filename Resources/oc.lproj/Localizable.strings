@@ -1327,3 +1327,13 @@
 "rendering_attr_surface_grass_name" = "Èrba";
 "routing_attr_max_num_changes_name" = "Nombre de cambiaments";
 "rendering_attr_highway_class_steps_name" = "Escaliers";
+"app_mode_scooter" = "Escotèr";
+"app_mode_helicopter" = "Elicoptèr";
+"app_mode_subway" = "Mètro";
+"app_mode_skiing" = "Esquí";
+"app_mode_horse" = "Cavau";
+"app_mode_taxi" = "Taxi";
+"app_mode_personal_transporter" = "Transpòrt personau";
+"app_mode_ufo" = "UFO";
+"app_mode_shuttle_bus" = "Bus naveta";
+"app_mode_monowheel" = "Monocicleta";

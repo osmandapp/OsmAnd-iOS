@@ -77,7 +77,7 @@
 }
 -(void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"res_edit_map_source");
+    _titleView.text = _isNewItem ? OALocalizedString(@"map_settings_add_online_source") : OALocalizedString(@"res_edit_map_source");
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -500,7 +500,7 @@
             }
         }
         _baseController.dataInvalidated = YES;
-        [self.navigationController popViewControllerAnimated:NO];
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

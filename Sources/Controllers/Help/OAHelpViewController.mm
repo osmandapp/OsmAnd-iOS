@@ -104,6 +104,15 @@ static const NSInteger groupCount = 5;
        @"html" : @"faq"
        }];
     
+    [dataArr addObject:
+    @{
+      @"name" : @"help_legend",
+      @"title" : OALocalizedString(@"help_legend"),
+      @"description" : OALocalizedString(@"help_legend_descr"),
+      @"type" : kLinkInternalType,
+      @"html" : @"map-legend"
+      }];
+    
     _firstStepsData = [NSArray arrayWithArray:dataArr];
     [dataArr removeAllObjects];
     
@@ -133,12 +142,68 @@ static const NSInteger groupCount = 5;
        }];
     
     [dataArr addObject:
-     @{
-       @"name" : @"help_legend",
-       @"title" : OALocalizedString(@"help_legend"),
-       @"type" : kLinkInternalType,
-       @"html" : @"map-legend"
-       }];
+    @{
+      @"name" : @"help_purchases",
+      @"title" : OALocalizedString(@"help_purchases"),
+      @"type" : kLinkInternalType,
+      @"html" : @"osmand_purchases"
+      }];
+    
+    [dataArr addObject:
+    @{
+      @"name" : @"help_osmand_live",
+      @"title" : OALocalizedString(@"help_osmand_live"),
+      @"type" : kLinkInternalType,
+      @"html" : @"subscription"
+      }];
+    
+    [dataArr addObject:
+    @{
+      @"name" : @"help_favorites",
+      @"title" : OALocalizedString(@"favorites"),
+      @"type" : kLinkInternalType,
+      @"html" : @"favourites"
+      }];
+    
+    [dataArr addObject:
+    @{
+      @"name" : @"help_markers",
+      @"title" : OALocalizedString(@"map_markers"),
+      @"type" : kLinkInternalType,
+      @"html" : @"map-markers"
+      }];
+    
+    [dataArr addObject:
+    @{
+      @"name" : @"help_travel",
+      @"title" : OALocalizedString(@"help_travel"),
+      @"type" : kLinkInternalType,
+      @"html" : @"travel"
+      }];
+    
+    [dataArr addObject:
+    @{
+      @"name" : @"help_ruler",
+      @"title" : OALocalizedString(@"map_widget_radius_ruler"),
+      @"type" : kLinkInternalType,
+      @"html" : @"ruler"
+      }];
+    
+    [dataArr addObject:
+    @{
+      @"name" : @"help_quick_action",
+      @"title" : OALocalizedString(@"quick_action_name"),
+      @"type" : kLinkInternalType,
+      @"html" : @"quick-action"
+      }];
+    
+    [dataArr addObject:
+    @{
+      @"name" : @"help_mapillary",
+      @"title" : OALocalizedString(@"help_mapillary"),
+      @"type" : kLinkInternalType,
+      @"html" : @"mapillary"
+      }];
     
     _featuresData = [NSArray arrayWithArray:dataArr];
     [dataArr removeAllObjects];
@@ -181,6 +246,14 @@ static const NSInteger groupCount = 5;
        @"type" : kLinkInternalType,
        @"html" : @"nautical-charts"
        }];
+    
+    [dataArr addObject:
+    @{
+      @"name" : @"osm_editing",
+      @"title" : OALocalizedString(@"product_title_osm_editing"),
+      @"type" : kLinkInternalType,
+      @"html" : @"osm-editing-plugin"
+      }];
     
     [dataArr addObject:
      @{

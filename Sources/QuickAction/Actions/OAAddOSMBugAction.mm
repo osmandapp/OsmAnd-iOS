@@ -12,17 +12,20 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/Utilities.h>
 
 #define KEY_MESSAGE @"message"
 #define KEY_DIALOG @"dialog"
 
+static OAQuickActionType *TYPE;
+
 @implementation OAAddOSMBugAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeAddNote];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -81,6 +84,14 @@
     }
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return params[KEY_MESSAGE] && params;
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:12 stringId:@"osmbug.add" class:self.class name:OALocalizedString(@"add_osm_note") category:CREATE_CATEGORY iconName:@"ic_action_osm_note" secondaryIconName:@"ic_custom_compound_action_add"];
+       
+    return TYPE;
 }
 
 @end

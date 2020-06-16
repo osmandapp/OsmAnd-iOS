@@ -53,4 +53,19 @@
     return ETopToolbarTypeFloating;
 }
 
+- (BOOL) supportMapInteraction
+{
+    return YES;
+}
+
+- (BOOL) supportsForceClose
+{
+    return YES;
+}
+
+- (BOOL) shouldEnterContextModeManually
+{
+    return YES;
+}
+
 @end

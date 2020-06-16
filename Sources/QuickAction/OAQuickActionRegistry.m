@@ -7,7 +7,6 @@
 //
 
 #import "OAQuickActionRegistry.h"
-#import "OAQuickActionFactory.h"
 #import "OAAppSettings.h"
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
@@ -15,16 +14,57 @@
 #import "OAQuickAction.h"
 #import "OAIAPHelper.h"
 #import "OAMapStyleAction.h"
+#import "OAQuickActionType.h"
+#import "OANewAction.h"
+#import "OAFavoriteAction.h"
+#import "OAGPXAction.h"
+#import "OAMarkerAction.h"
+#import "OAShowHideFavoritesAction.h"
+#import "OAShowHidePoiAction.h"
+#import "OAShowHideOSMBugAction.h"
+#import "OAShowHideGPXTracksAction.h"
+#import "OAShowHideLocalOSMChanges.h"
+#import "OADayNightModeAction.h"
+#import "OANavVoiceAction.h"
+//#import "OAShowHideTransportLinesAction.h"
+#import "OANavDirectionsFromAction.h"
+#import "OANavAddDestinationAction.h"
+#import "OANavAddFirstIntermediateAction.h"
+#import "OANavReplaceDestinationAction.h"
+#import "OANavAutoZoomMapAction.h"
+#import "OANavStartStopAction.h"
+#import "OANavResumePauseAction.h"
+//#import "OASwitchProfileAction.h"
+
+#define kType @"type"
+#define kName @"name"
+#define kParams @"params"
+#define kId @"id"
+#define kActionType @"actionType"
+
+
+static OAQuickActionType *TYPE_ADD_ITEMS;
+static OAQuickActionType *TYPE_CONFIGURE_MAP;
+static OAQuickActionType *TYPE_NAVIGATION;
 
 @implementation OAQuickActionRegistry
 {
-    OAQuickActionFactory *_factory;
     OAAppSettings *_settings;
     
-    NSArray<OAQuickAction *> *_quickActions;
+    NSMutableArray<OAQuickAction *> *_quickActions;
+    NSArray<OAQuickActionType *> *_quickActionTypes;
+    NSDictionary<NSNumber *, OAQuickActionType *> *_quickActionTypesInt;
+    NSDictionary<NSString *, OAQuickActionType *> *_quickActionTypesStr;
 }
 
-+ (OAQuickActionRegistry *) sharedInstance
++ (void)initialize
+{
+    TYPE_ADD_ITEMS = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"create_items") category:CREATE_CATEGORY iconName:nil];
+    TYPE_CONFIGURE_MAP = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"configure_map") category:CONFIGURE_MAP iconName:nil];
+    TYPE_NAVIGATION = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"routing_settings") category:NAVIGATION iconName:nil];
+}
+
++ (OAQuickActionRegistry *)sharedInstance
 {
     static OAQuickActionRegistry *_sharedInstance = nil;
     static dispatch_once_t onceToken;
@@ -34,114 +74,107 @@
     return _sharedInstance;
 }
 
-- (instancetype) init
++ (OAQuickActionType *) TYPE_ADD_ITEMS
+{
+    return TYPE_ADD_ITEMS;
+}
+
++ (OAQuickActionType *) TYPE_CONFIGURE_MAP
+{
+    return TYPE_CONFIGURE_MAP;
+}
+
++ (OAQuickActionType *) TYPE_NAVIGATION
+{
+    return TYPE_NAVIGATION;
+}
+
+- (instancetype)init
 {
     self = [super init];
     if (self) {
-        _factory = [[OAQuickActionFactory alloc] init];
+        _quickActionTypes = [NSArray new];
+        _quickActionTypesInt = [NSDictionary new];
+        _quickActionTypesStr = [NSDictionary new];
+        _quickActions = [NSMutableArray new];
         _settings = [OAAppSettings sharedManager];
-        
-        _quickActions = [_factory parseActiveActionsList:_settings.quickActionsList];
         _quickActionListChangedObservable = [[OAObservable alloc] init];
+        
+        [self updateActionTypes];
     }
     return self;
 }
 
-//public void setUpdatesListener(QuickActionUpdatesListener updatesListener) {
-//    this.updatesListener = updatesListener;
-//}
-//
-//public void notifyUpdates() {
-//    if (updatesListener != null) updatesListener.onActionsUpdated();
-//}
+- (void) updateActionTypes
+{
+    NSMutableArray<OAQuickActionType *> *quickActionTypes = [NSMutableArray new];
+    [quickActionTypes addObject:OANewAction.TYPE];
+    [quickActionTypes addObject:OAFavoriteAction.TYPE];
+    [quickActionTypes addObject:OAGPXAction.TYPE];
+    [quickActionTypes addObject:OAMarkerAction.TYPE];
+    // configure map
+    [quickActionTypes addObject:OAShowHideFavoritesAction.TYPE];
+    [quickActionTypes addObject:OAShowHideGPXTracksAction.TYPE];
+    [quickActionTypes addObject:OAShowHidePoiAction.TYPE];
+    [quickActionTypes addObject:OAMapStyleAction.TYPE];
+    [quickActionTypes addObject:OADayNightModeAction.TYPE];
+    //        [quickActionTypes addObject:OAShowHideTransportLinesAction.TYPE];
+    // navigation
+    [quickActionTypes addObject:OANavVoiceAction.TYPE];
+    [quickActionTypes addObject:OANavDirectionsFromAction.TYPE];
+    [quickActionTypes addObject:OANavAddDestinationAction.TYPE];
+    [quickActionTypes addObject:OANavAddFirstIntermediateAction.TYPE];
+    [quickActionTypes addObject:OANavReplaceDestinationAction.TYPE];
+    [quickActionTypes addObject:OANavAutoZoomMapAction.TYPE];
+    [quickActionTypes addObject:OANavStartStopAction.TYPE];
+    [quickActionTypes addObject:OANavResumePauseAction.TYPE];
+    //        [quickActionTypes addObject:OASwitchProfileAction.TYPE];
+    [OAPlugin registerQuickActionTypesPlugins:quickActionTypes];
+    
+    NSMutableDictionary<NSNumber *, OAQuickActionType *> *quickActionTypesInt = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, OAQuickActionType *> *quickActionTypesStr = [NSMutableDictionary new];
+    for (OAQuickActionType *qt in quickActionTypes)
+    {
+        [quickActionTypesInt setObject:qt forKey:@(qt.identifier)];
+        [quickActionTypesStr setObject:qt forKey:qt.stringId];
+    }
+    _quickActionTypes = [NSArray arrayWithArray:quickActionTypes];
+    _quickActionTypesInt = [NSDictionary dictionaryWithDictionary:quickActionTypesInt];
+    _quickActionTypesStr = [NSDictionary dictionaryWithDictionary:quickActionTypesStr];
+    // reparse to get new quick actions
+    _quickActions = [self parseActiveActionsList:_settings.quickActionsList];
+}
 
-- (NSArray<OAQuickAction *> *) getQuickActions
+-(NSArray<OAQuickAction *> *) getQuickActions
 {
     return [NSArray arrayWithArray:_quickActions];
 }
 
-- (NSArray<OAQuickAction *> *) getFilteredQuickActions
+-(void) addQuickAction:(OAQuickAction *) action
 {
-    NSArray<OAQuickAction *> *actions = [self getQuickActions];
-    NSMutableArray<OAQuickAction *> *filteredActions = [NSMutableArray new];
-    
-    for (OAQuickAction *action in actions)
-    {
-        BOOL skip = NO;
-//        if (OsmandPlugin.getEnabledPlugin(AudioVideoNotesPlugin.class) == null) {
-//
-//            if (action.type == TakeAudioNoteAction.TYPE || action.type == TakePhotoNoteAction.TYPE
-//                || action.type == TakeVideoNoteAction.TYPE) {
-//                skip = true;
-//            }
-//        }
-        
-        if (![OAPlugin getEnabledPlugin:OAParkingPositionPlugin.class])
-            skip = action.type == EOAQuickActionTypeParking;
-        
-        if (![[OAIAPHelper sharedInstance].nautical isActive])
-        {
-            if (action.type == EOAQuickActionTypeMapStyle)
-            {
-                if (((OAMapStyleAction *)[OAQuickActionFactory produceAction:action]).getFilteredStyles.count == 0)
-                    skip = YES;
-            }
-        }
-//        if (OsmandPlugin.getEnabledPlugin(OsmandRasterMapsPlugin.class) == null) {
-//            if (action.type == MapSourceAction.TYPE) {
-//                skip = true;
-//            }
-//        }
-        if (![OAPlugin getEnabledPlugin:OAOsmEditingPlugin.class])
-            skip = action.type == EOAQuickActionTypeAddPOI || action.type == EOAQuickActionTypeAddNote;
-        
-        if (!skip)
-            [filteredActions addObject:action];
-    }
-    
-    return filteredActions;
+    [_quickActions addObject:action];
+    [_settings setQuickActionsList:[self quickActionListToString:_quickActions]];
 }
 
-- (void) addQuickAction:(OAQuickAction *)action
-{
-    _quickActions = [_quickActions arrayByAddingObject:action];
-    [_settings setQuickActionsList:[_factory quickActionListToString:_quickActions]];
-}
-
-//TODO implement!!!
-//
-//-(void) deleteQuickAction:(OAQuickAction *) action
-//{
-//    NSInteger index = [_quickActions indexOfObject:action];
-//    if (index != NSNotFound)
-//    {
-//        NSMutableArray<OAQuickAction *> *mutableActions = [NSMutableArray arrayWithArray:_quickActions];
-//        [mutableActions removeObjectAtIndex:index];
-//        _quickActions = [NSArray arrayWithArray:mutableActions];
-//    }
-//    [_settings setQuickActionsList:_factory quickActionListToString:_quickActions];
-//}
-
-
-- (void) updateQuickAction:(OAQuickAction *)action
+-(void) updateQuickAction:(OAQuickAction *) action
 {
     NSInteger index = [_quickActions indexOfObject:action];
     if (index != NSNotFound)
     {
         NSMutableArray<OAQuickAction *> *mutableActions = [NSMutableArray arrayWithArray:_quickActions];
         [mutableActions setObject:action atIndexedSubscript:index];
-        _quickActions = [NSArray arrayWithArray:mutableActions];
+        _quickActions = [NSMutableArray arrayWithArray:mutableActions];
     }
-    [_settings setQuickActionsList:[_factory quickActionListToString:_quickActions]];
+    [_settings setQuickActionsList:[self quickActionListToString:_quickActions]];
 }
 
 -(void) updateQuickActions:(NSArray<OAQuickAction *> *) quickActions
 {
-    _quickActions = [NSArray arrayWithArray:quickActions];
-    [_settings setQuickActionsList:[_factory quickActionListToString:_quickActions]];
+    _quickActions = [NSMutableArray arrayWithArray:quickActions];
+    [_settings setQuickActionsList:[self quickActionListToString:_quickActions]];
 }
 
-- (OAQuickAction *) getQuickAction:(long)identifier
+-(OAQuickAction *) getQuickAction:(long) identifier
 {
     for (OAQuickAction *action in _quickActions)
     {
@@ -151,7 +184,7 @@
     return nil;
 }
 
-- (BOOL) isNameUnique:(OAQuickAction *)action
+-(BOOL) isNameUnique:(OAQuickAction *) action
 {
     for (OAQuickAction *a in _quickActions)
     {
@@ -164,7 +197,7 @@
     return YES;
 }
 
-- (OAQuickAction *) generateUniqueName:(OAQuickAction *)action
+-(OAQuickAction *) generateUniqueName:(OAQuickAction *) action
 {
     NSInteger number = 0;
     NSString *name = action.getName;
@@ -177,26 +210,122 @@
     }
 }
 
-- (OAQuickAction *) newActionByStringType:(NSString *)actionType
+- (NSArray<OAQuickActionType *> *) produceTypeActionsListWithHeaders
 {
-//    TODO refactor quick actions!
-//
-//    QuickActionType quickActionType = quickActionTypesStr.get(actionType);
-//    if (quickActionType != null) {
-//        return quickActionType.createNew();
-//    }
+    NSMutableArray<OAQuickActionType *> *result = [NSMutableArray new];
+    [self filterQuickActions:TYPE_ADD_ITEMS result:result];
+    [self filterQuickActions:TYPE_CONFIGURE_MAP result:result];
+    [self filterQuickActions:TYPE_NAVIGATION result:result];
+    return result;
+}
+
+- (void) filterQuickActions:(OAQuickActionType *)filter result:(NSMutableArray<OAQuickActionType *> *) result
+{
+    [result addObject:filter];
+    NSMutableSet<NSNumber *> *set = [NSMutableSet new];
+    for (OAQuickAction *qa in _quickActions)
+    {
+        [set addObject:@(qa.actionType.identifier)];
+    }
+    for (OAQuickActionType *t in _quickActionTypes)
+    {
+        if (t.category == filter.category)
+        {
+            if (!t.actionEditable)
+            {
+                BOOL instanceInList = [set containsObject:@(t.identifier)];
+                if (!instanceInList)
+                {
+                    [result addObject:t];
+                }
+            }
+            else
+            {
+                [result addObject:t];
+            }
+        }
+    }
+}
+
+- (OAQuickAction *) newActionByStringType:(NSString *) actionType
+{
+    OAQuickActionType *quickActionType = _quickActionTypesStr[actionType];
+    if (quickActionType)
+    {
+        return [quickActionType createNew];
+    }
     return nil;
 }
 
-- (OAQuickAction *) newActionByType:(int)type
+- (OAQuickAction *) newActionByType:(NSInteger) type
 {
-//    TODO refactor quick actions!
-//
-//    QuickActionType quickActionType = quickActionTypesInt.get(type);
-//    if (quickActionType != null) {
-//        return quickActionType.createNew();
-//    }
+    OAQuickActionType *quickActionType = _quickActionTypesInt[@(type)];
+    if (quickActionType != nil)
+        return [quickActionType createNew];
+    
     return nil;
 }
+
++ (OAQuickAction *) produceAction:(OAQuickAction *) quickAction
+{
+    return [quickAction.actionType createNew:quickAction];
+}
+
+#pragma mark - Json serialization
+
+-(NSMutableArray <OAQuickAction *> *) parseActiveActionsList:(NSString *)json
+{
+    NSMutableArray<OAQuickAction *> *actions = [NSMutableArray new];
+    if (json)
+    {
+        NSArray *arr = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+        for (NSDictionary *data in arr)
+        {
+            OAQuickActionType *found = nil;
+            if (data[kActionType])
+            {
+                NSString *actionType = data[kActionType];
+                found = _quickActionTypesStr[actionType];
+            }
+            else if (data[kType])
+            {
+                NSInteger type = [data[kType] integerValue];
+                found = _quickActionTypesInt[@(type)];
+            }
+            if (found != nil)
+            {
+                OAQuickAction *qa = [found createNew];
+                if (data[kName])
+                    qa.name = data[kName];
+                if (data[kId])
+                    qa.identifier = [data[kId] longValue];
+                
+                if (data[kParams])
+                    qa.params = data[kParams];
+                
+                [actions addObject:qa];
+            }
+        }
+    }
+    return actions;
+}
+
+-(NSString *) quickActionListToString:(NSArray<OAQuickAction *> *) quickActions
+{
+    NSMutableArray *arr = [NSMutableArray new];
+    for (OAQuickAction *action in quickActions)
+    {
+        [arr addObject:@{
+                         kType : @(action.getType),
+                         kName : action.getName,
+                         kParams : action.getParams,
+                         kId : @(action.getId),
+                         kActionType : action.actionType.stringId
+                         }];
+    }
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:arr options:NSJSONWritingPrettyPrinted error:nil];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+}
+
 
 @end

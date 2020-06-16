@@ -11,14 +11,17 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAReverseGeocoder.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/Utilities.h>
+
+static OAQuickActionType *TYPE;
 
 @implementation OAMarkerAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeMarker];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -32,6 +35,14 @@
 - (NSString *)getActionText
 {
     return OALocalizedString(@"quick_action_marker_descr");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:2 stringId:@"marker.add" class:self.class name:OALocalizedString(@"add_map_marker") category:CREATE_CATEGORY iconName:@"ic_custom_favorites" secondaryIconName:@"ic_custom_compound_action_add"];
+       
+    return TYPE;
 }
 
 @end

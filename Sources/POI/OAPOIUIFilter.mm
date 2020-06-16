@@ -795,7 +795,7 @@
 
 + (UIImage *) getUserIcon
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_user_defined", [OAUtilities drawablePostfix]]];
+    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:@"mx_user_defined"]];
     return [OAUtilities applyScaleFactorToImage:img];
 }
 

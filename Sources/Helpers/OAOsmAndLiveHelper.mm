@@ -7,7 +7,7 @@
 //
 
 #import "OAOsmAndLiveHelper.h"
-#import "OAResourcesBaseViewController.h"
+#import "OAResourcesUIHelper.h"
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #include "Localization.h"
@@ -21,13 +21,6 @@
 #define kLiveUpdateFrequencyHour 3600
 #define kLiveUpdateFrequencyDay 86400
 #define kLiveUpdateFrequencyWeek 604800
-
-//private static final String UPDATE_TIMES_POSTFIX = "_update_times";
-//private static final String TIME_OF_DAY_TO_UPDATE_POSTFIX = "_time_of_day_to_update";
-//private static final String DOWNLOAD_VIA_WIFI_POSTFIX = "_download_via_wifi";
-//private static final String LIVE_UPDATES_ON_POSTFIX = "_live_updates_on";
-//private static final String LAST_UPDATE_ATTEMPT_ON_POSTFIX = "_last_update_attempt";
-//public static final String LOCAL_INDEX_INFO = "local_index_info";
 
 @implementation OAOsmAndLiveHelper
 
@@ -154,7 +147,7 @@
                 getUpdatesByMonth(regionName);
                 for (const auto& res : lst->getItemsForUpdate())
                 {
-                    [OAResourcesBaseViewController startBackgroundDownloadOf:res];
+                    [OAResourcesUIHelper startBackgroundDownloadOf:res];
                 }
                 [OAOsmAndLiveHelper setPreferenceLastUpdateForLocalIndex:regionNameStr value:
                     [[NSDate date] timeIntervalSince1970]];

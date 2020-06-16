@@ -28,7 +28,7 @@
 #import "OASavingTrackHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAGPXRouter.h"
-#import "OAHillshadeLayer.h"
+#import "OATerrainLayer.h"
 #import "OAMapCreatorHelper.h"
 #import "OAOcbfHelper.h"
 #import "OAQuickSearchHelper.h"
@@ -63,6 +63,7 @@
 #define MILS_IN_DEGREE 17.777778f
 
 #define VERSION_3_10 3.10
+#define VERSION_3_14 3.14
 
 #define kAppData @"app_data"
 
@@ -362,6 +363,17 @@
             
             [self clearUnsupportedTilesCache];
         }
+        if (prevVersion < VERSION_3_14)
+        {
+            OAAppSettings.sharedManager.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
+            OAAppData *defaults = OAAppData.defaults;
+            _data.slopeAlpha = defaults.slopeAlpha;
+            _data.hillshadeAlpha = defaults.hillshadeAlpha;
+            _data.slopeMinZoom = defaults.slopeMinZoom;
+            _data.slopeMaxZoom = defaults.slopeMaxZoom;
+            _data.hillshadeMinZoom = defaults.hillshadeMinZoom;
+            _data.hillshadeMaxZoom = defaults.hillshadeMaxZoom;
+        }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
     
@@ -481,7 +493,8 @@
     [OAGPXRouter sharedInstance];
     
     [OAMapCreatorHelper sharedInstance];
-    [OAHillshadeLayer sharedInstance];
+    [OATerrainLayer sharedInstanceHillshade];
+    [OATerrainLayer sharedInstanceSlope];
     
     [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     [OAPlugin initPlugins];
@@ -686,6 +699,18 @@
 - (void)saveFavoritesToPermamentStorage
 {
     _favoritesCollection->saveTo(QString::fromNSString(_favoritesFilename));
+}
+
+- (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
+{
+    int hours, minutes, seconds;
+    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
+    
+    NSMutableString *time = [NSMutableString string];
+    [time appendFormat:@"%02d:", hours];
+    [time appendFormat:@"%02d", minutes];
+    
+    return time;
 }
 
 - (NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat

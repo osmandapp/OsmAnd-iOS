@@ -14,6 +14,8 @@
 #import "OAMapHudViewController.h"
 #import "OAIAPHelper.h"
 #import "OAAutoObserverProxy.h"
+#import "OAQuickActionType.h"
+#import "OAQuickActionRegistry.h"
 
 #import "OAMonitoringPlugin.h"
 #import "OAParkingPositionPlugin.h"
@@ -172,6 +174,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return nil;
 }
 
+- (NSArray<OAQuickActionType *> *) getQuickActionTypes
+{
+    return @[];
+}
+
 /*
  * Return true in case if plugin should fill the map context menu with buildContextMenuRows method.
  */
@@ -243,6 +250,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
             }
         }
     }
+    [OAQuickActionRegistry.sharedInstance updateActionTypes];
 }
 
 /*
@@ -288,6 +296,7 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
         [plugin setActive:NO];
     }
     [[OAAppSettings sharedManager] enablePlugin:[plugin.class getId] enable:enable];
+    [OAQuickActionRegistry.sharedInstance updateActionTypes];
     [plugin updateLayers];
     return true;
 }
@@ -571,6 +580,14 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
     for (OAPlugin *p in [self.class getEnabledPlugins])
     {
         [p updateLocation:location];
+    }
+}
+
++ (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types
+{
+    for (OAPlugin *p in [self.class getEnabledPlugins])
+    {
+        [types addObjectsFromArray:p.getQuickActionTypes];
     }
 }
 

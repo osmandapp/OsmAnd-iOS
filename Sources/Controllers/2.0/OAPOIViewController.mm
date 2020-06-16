@@ -461,7 +461,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                               const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
-                              auto dist = OsmAnd::Utilities::distance(transportStop->location.latitude, transportStop->location.longitude, self.poi.latitude, self.poi.longitude);
+                              auto dist = OsmAnd::Utilities::distance(transportStop->location.longitude, transportStop->location.latitude, self.poi.longitude, self.poi.latitude);
                               [self addRoutes:routes dataInterface:dataInterface s:transportStop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
                           });
     

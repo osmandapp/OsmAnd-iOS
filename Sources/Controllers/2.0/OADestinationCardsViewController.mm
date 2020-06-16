@@ -21,6 +21,8 @@
 #import "OADestinationsHelper.h"
 #import "OAHistoryCardController.h"
 #import "OAHistoryHelper.h"
+#import "OAHistoryViewController.h"
+#import "OADirectionAppearanceViewController.h"
 
 #import "OsmAndApp.h"
 #import "OAGPXRouter.h"
@@ -30,6 +32,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
+#import "OAColors.h"
 
 @interface OADestinationCardsViewController () <MGSwipeTableCellDelegate, OADestinationCardBaseControllerDelegate, UIGestureRecognizerDelegate>
 
@@ -45,6 +48,7 @@
     NSIndexPath *indexPathForSwipingCell;
     
     OAAutoObserverProxy *_historyPointAddObserver;
+    UIView *_navBarBackgroundView;
 }
 
 + (OADestinationCardsViewController *)sharedInstance
@@ -155,10 +159,36 @@
     
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 10.0)];
     
+    [self.tableView setEditing:YES animated:YES];
+    
     UITapGestureRecognizer *tapRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOutsideCells)];
     tapRec.delegate = self;
     
     [self.tableView addGestureRecognizer:tapRec];
+    _leftTableViewPadding.constant += OAUtilities.getLeftMargin;
+    _rightTableViewPadding.constant += OAUtilities.getLeftMargin;
+    [self configureBottomToolbar];
+}
+
+- (void) configureBottomToolbar
+{
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        self.bottomView.backgroundColor = UIColor.clearColor;
+        
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+        blurEffectView.frame = self.view.frame;
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _navBarBackgroundView = blurEffectView;
+        [self.bottomView insertSubview:_navBarBackgroundView atIndex:0];
+        self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    }
+    [self.bottomToolBar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    [self.bottomToolBar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
+    CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    _toolBarHeight.constant += bottomMargin;
+    _historyViewButton.title = OALocalizedString(@"history");
+    _appearanceViewButton.title = OALocalizedString(@"map_settings_appearance");
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -334,6 +364,16 @@
     [[OARootViewController instance].mapPanel hideDestinationCardsView];
 }
 
+- (IBAction)onHistoryButtonClicked:(id)sender {
+    OAHistoryViewController *history = [[OAHistoryViewController alloc] init];
+    [[OARootViewController instance].navigationController pushViewController:history animated:YES];
+}
+
+- (IBAction)onAppearanceButtonClicked:(id)sender {
+    OADirectionAppearanceViewController *directionAppearance = [[OADirectionAppearanceViewController alloc] init];
+    [[OARootViewController instance].navigationController pushViewController:directionAppearance animated:YES];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -364,6 +404,40 @@
     MGSwipeTableCell *cell = (MGSwipeTableCell *)[[self getCardController:indexPath.section] cellForRow:indexPath.row];
     cell.delegate = self;
     return cell;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL) tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [[self getCardController:indexPath.section] isKindOfClass:OADirectionsCardController.class];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section == 0;
+}
+
+- (NSIndexPath *) tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    if (sourceIndexPath.section != proposedDestinationIndexPath.section)
+        return sourceIndexPath;
+    else
+        return proposedDestinationIndexPath;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    [[self getCardController:sourceIndexPath.section] reorderObjects:sourceIndexPath.row dest:destinationIndexPath.row];
+    [self.tableView reloadData];
 }
 
 
@@ -442,7 +516,7 @@
 -(void) swipeTableCell:(MGSwipeTableCell*) cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    if (gestureIsActive || state != MGSwipeStateNone)
+    if ((gestureIsActive || state != MGSwipeStateNone) && state != MGSwipeStateSwippingLeftToRight)
     {
         indexPathForSwipingCell = indexPath;
         cell.showsReorderControl = NO;

@@ -8,12 +8,15 @@
 
 #import "OADayNightModeAction.h"
 #import "OAAppSettings.h"
+#import "OAQuickActionType.h"
+
+static OAQuickActionType *TYPE;
 
 @implementation OADayNightModeAction
 
-- (instancetype) init
+- (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeToggleDayNight];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -40,6 +43,14 @@
 - (NSString *)getActionStateName
 {
     return [OAAppSettings sharedManager].nightMode ? OALocalizedString(@"day_mode") : OALocalizedString(@"night_mode");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:27 stringId:@"daynight.switch" class:self.class name:OALocalizedString(@"day_mode") category:CONFIGURE_MAP iconName:@"ic_custom_sun" secondaryIconName:nil editable:NO];
+       
+    return TYPE;
 }
 
 @end

@@ -26,6 +26,7 @@
 #import "OARoutingHelper.h"
 #import "OAApplicationMode.h"
 #import "Localization.h"
+#import "OAQuickAction.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -1205,7 +1206,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             {
                 for (OAQuickAction *duplicateItem in self.duplicateItems)
                     for (OAQuickAction *savedAction in self.existingItems)
-                        if ([duplicateItem.name isEqualToString:savedAction.name])
+                        if ([duplicateItem.getName isEqualToString:savedAction.name])
                             [newActions removeObject:savedAction];
             }
             else
@@ -1251,7 +1252,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if (actionType)
             quickAction = [_actionsRegistry newActionByStringType:actionType];
         else if (type)
-            quickAction = [_actionsRegistry newActionByType:type.intValue];
+            quickAction = [_actionsRegistry newActionByType:type.integerValue];
         
         if (quickAction)
         {

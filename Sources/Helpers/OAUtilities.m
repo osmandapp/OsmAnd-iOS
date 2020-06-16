@@ -379,6 +379,11 @@
     }
 }
 
++ (NSString *) drawablePath:(NSString *)resId
+{
+    return [NSString stringWithFormat:@"%@/drawable-%@/%@", [resId hasPrefix:@"mx_"] ? @"poi-icons-png" : @"map-icons-png", [OAUtilities drawablePostfix], resId];
+}
+
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners
 {
     [self.class setMaskTo:view byRoundingCorners:corners radius:10.];
@@ -639,6 +644,44 @@
     }
 }
 
++ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top
+{
+    @autoreleasepool
+    {
+        CGSize size = bottom.size;
+        if (size.width < center.size.width || size.height < center.size.height)
+            size = center.size;
+        if (size.width < top.size.width || size.height < top.size.height)
+            size = top.size;
+
+        UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+        
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [color setFill];
+        
+        CGContextTranslateCTM(context, 0, size.height);
+        CGContextScaleCTM(context, 1.0, -1.0);
+        
+        CGContextSetBlendMode(context, kCGBlendModeNormal);
+        CGRect rect = CGRectMake(size.width / 2.0 - bottom.size.width / 2.0, size.height / 2.0 - bottom.size.height / 2.0, bottom.size.width, bottom.size.height);
+        CGContextDrawImage(context, rect, bottom.CGImage);
+
+        rect = CGRectMake(size.width / 2.0 - center.size.width / 2.0, size.height / 2.0 - center.size.height / 2.0, center.size.width, center.size.height);
+        CGContextDrawImage(context, rect, center.CGImage);
+        CGContextClipToMask(context, rect, center.CGImage);
+        CGContextAddRect(context, rect);
+        CGContextDrawPath(context, kCGPathFill);
+        
+        rect = CGRectMake(size.width / 2.0 - top.size.width / 2.0, size.height / 2.0 - top.size.height / 2.0, top.size.width, top.size.height);
+        CGContextDrawImage(context, rect, top.CGImage);
+
+        UIImage *res = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        return res;
+    }
+}
+
 + (NSString *) colorToString:(UIColor *)color
 {
     CGFloat r,g,b,a;
@@ -867,7 +910,7 @@
 
 + (UIImage *) getMxIcon:(NSString *)name
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], name]];
+    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", name]]];
     if (img)
         return [OAUtilities applyScaleFactorToImage:img];
     else
@@ -1246,6 +1289,49 @@ static const double d180PI = 180.0 / M_PI_2;
 + (BOOL) isIPad
 {
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+}
+
++ (BOOL) isColorBright:(UIColor *)color
+{
+    CGFloat luminance = 0;
+
+    CGColorSpaceRef colorSpace = CGColorGetColorSpace(color.CGColor);
+    CGColorSpaceModel colorSpaceModel = CGColorSpaceGetModel(colorSpace);
+
+    if(colorSpaceModel == kCGColorSpaceModelRGB)
+    {
+        CGFloat red = 0.0, green = 0.0, blue = 0.0, alpha = 0.0;
+        [color getRed:&red green:&green blue:&blue alpha:&alpha];
+
+        luminance = ((red * 0.299) + (green * 0.587) + (blue * 0.114));
+    }
+    else
+    {
+        [color getWhite:&luminance alpha:0];
+    }
+
+    return luminance >= .5f;
+}
+
++ (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth
+{
+    NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
+    NSRange valueRange = NSMakeRange(0, text.length);
+    if (valueRange.length > 0)
+    {
+        [string addAttribute:NSFontAttributeName value:font range:valueRange];
+        [string addAttribute:NSForegroundColorAttributeName value:color range:valueRange];
+        if (strokeColor)
+            [string addAttribute:NSStrokeColorAttributeName value:strokeColor range:valueRange];
+        if (strokeWidth > 0)
+            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -strokeWidth] range:valueRange];
+    }
+    return string;
 }
 
 @end

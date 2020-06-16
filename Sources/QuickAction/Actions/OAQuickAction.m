@@ -7,46 +7,25 @@
 //
 
 #import "OAQuickAction.h"
-#import "OAQuickActionFactory.h"
+#import "OAQuickActionType.h"
+#import "OAQuickActionRegistry.h"
 #import "OrderedDictionary.h"
 
+static NSInteger SEQ = 0;
+
 @implementation OAQuickAction
-{
-    NSString *_iconResName;
-    NSString *_secondaryIconName;
-    BOOL _isActionEditable;
-}
 
 - (instancetype) init
 {
-    self = [super init];
-    if (self) {
-        _identifier = [[NSDate date] timeIntervalSince1970] * 1000;
-    }
-    return self;
+    return [self initWithActionType:OAQuickActionRegistry.TYPE_ADD_ITEMS];
 }
 
--(instancetype) initWithType:(NSInteger)type name:(NSString *)name
+-(instancetype) initWithActionType:(OAQuickActionType *)type
 {
     self = [super init];
     if (self) {
-        _identifier = [[NSDate date] timeIntervalSince1970] * 1000;
-        _name = name;
-        _type = type;
-    }
-    return self;
-}
-
-- (instancetype) initWithType:(NSInteger)type
-{
-    self = [super init];
-    if (self) {
-        _identifier = [[NSDate date] timeIntervalSince1970] * 1000;
-        _type = type;
-        _name = [OAQuickActionFactory getActionName:_type];
-        _iconResName = [OAQuickActionFactory getActionIcon:_type];
-        _secondaryIconName = [OAQuickActionFactory getSecondaryIcon:_type];
-        _isActionEditable = [OAQuickActionFactory isActionEditable:_type];
+        _identifier = [[NSDate date] timeIntervalSince1970] * 1000 + (SEQ++);
+        _actionType = type;
     }
     return self;
 }
@@ -56,25 +35,21 @@
     self = [super init];
     if (self) {
         _identifier = action.identifier;
-        _name = action.getName;
-        _type = action.type;
+        _name = action.getRawName;
+        _actionType = action.actionType;
         _params = action.getParams;
-        _name = [OAQuickActionFactory getActionName:_type];
-        _iconResName = [OAQuickActionFactory getActionIcon:_type];
-        _secondaryIconName = [OAQuickActionFactory getSecondaryIcon:_type];
-        _isActionEditable = [OAQuickActionFactory isActionEditable:_type];
     }
     return self;
 }
 
 -(NSString *) getIconResName
 {
-    return _iconResName;
+    return _actionType ? _actionType.iconName : nil;
 }
 
 - (NSString *)getSecondaryIconName
 {
-    return _secondaryIconName;
+    return _actionType ? _actionType.secondaryIconName : nil;
 }
 
 - (BOOL)hasSecondaryIcon
@@ -87,19 +62,32 @@
     return _identifier;
 }
 
--(EOAQuickActionType) getType
+-(NSInteger) getType
 {
-    return _type;
+    return _actionType ? _actionType.identifier : 0;
 }
 
 -(BOOL) isActionEditable
 {
-    return _isActionEditable;
+    return _actionType != nil && _actionType.actionEditable;
 }
 
--(NSString *) getName
+-(NSString *) getRawName
 {
-    return _name == nil ? @"" : _name;
+    return _name;
+}
+
+-(NSString *) getDefaultName
+{
+    return _actionType ? _actionType.name : @"";
+}
+
+- (NSString *) getName
+{
+    if (_name.length == 0)
+        return [self getDefaultName];
+    else
+        return _name;
 }
 
 -(NSDictionary *) getParams
@@ -165,7 +153,7 @@
 {
     for (OAQuickAction *action in active)
     {
-        if (action.type == _type)
+        if (action.getType == self.getType)
             return YES;
     }
 
@@ -192,7 +180,7 @@
     if ([object isKindOfClass:self.class])
     {
         OAQuickAction *action = (OAQuickAction *) object;
-        if (_type != action.type)
+        if (self.getType != action.getType)
             return NO;
         if (_identifier != action.identifier)
             return NO;
@@ -206,11 +194,15 @@
 
 - (NSUInteger)hash
 {
-    NSInteger result = _type;
+    NSInteger result = self.getType;
     result = 31 * result + (NSInteger) (_identifier ^ (_identifier >> 32));
-    result = 31 * result + [_iconResName hash];
     result = 31 * result + (_name != nil ? [_name hash] : 0);
     return result;
+}
+
++ (OAQuickActionType *) TYPE
+{
+    return nil;
 }
 
 @end

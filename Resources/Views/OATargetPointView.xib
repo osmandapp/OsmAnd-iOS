@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -132,7 +132,7 @@
                                     </connections>
                                 </button>
                                 <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="wu2-kv-d3e">
-                                    <rect key="frame" x="16" y="34" width="288" height="2"/>
+                                    <rect key="frame" x="16" y="34" width="254" height="2"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </progressView>
                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="13 of 34 mb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SWi-rH-lbh">
@@ -142,6 +142,14 @@
                                     <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zl6-eq-Uwa">
+                                    <rect key="frame" x="283" y="15" width="30" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" image="ic_close.png"/>
+                                    <connections>
+                                        <action selector="buttonCancelDownloadPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="UnP-1V-lyV"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
@@ -312,6 +320,7 @@
                 <outlet property="controlButtonsView" destination="QKF-tt-A3Z" id="4fO-RM-8zE"/>
                 <outlet property="coordinateLabel" destination="YCG-gf-JuU" id="0WA-8b-Q2o"/>
                 <outlet property="descriptionLabel" destination="0vP-Vz-W7S" id="Rnx-FP-Fre"/>
+                <outlet property="downloadCancelButton" destination="zl6-eq-Uwa" id="8Ii-Q4-1cY"/>
                 <outlet property="downloadProgressBar" destination="wu2-kv-d3e" id="9j4-pN-R5j"/>
                 <outlet property="downloadProgressLabel" destination="SWi-rH-lbh" id="6na-w1-kKR"/>
                 <outlet property="imageView" destination="50C-PP-spm" id="8bc-8f-hxn"/>
@@ -360,6 +369,7 @@
     </objects>
     <resources>
         <image name="HUD_compass_bg.png" width="41" height="41"/>
+        <image name="ic_close.png" width="10" height="10"/>
         <image name="ic_mode_pedestrian.png" width="18" height="18"/>
         <image name="ic_route_modebg.png" width="44" height="44"/>
         <image name="left_menu_icon_navigation.png" width="30" height="30"/>

@@ -9,7 +9,6 @@
 #import "OAActionConfigurationViewController.h"
 #import "Localization.h"
 #import "OAQuickActionRegistry.h"
-#import "OAQuickActionFactory.h"
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
 #import "OATextInputCell.h"
@@ -845,10 +844,28 @@
         NSDictionary *item = [self getItem:indexPath];
         NSString *key = _data.allKeys.lastObject;
         NSMutableArray *arr = [NSMutableArray arrayWithArray:_data[key]];
+        NSMutableArray *titles = [NSMutableArray new];
+        NSMutableArray *oldtitles = [NSMutableArray new];
+        for (NSInteger i = 0; i < arr.count - 1; i++)
+        {
+            NSDictionary *row = arr[i];
+            NSString *title = row[@"title"];
+            if (title)
+            {
+                if (![row isEqualToDictionary:item])
+                {
+                    [titles addObject:title];
+                }
+                [oldtitles addObject:title];
+            }
+        }
         [arr removeObject:item];
+        NSString *oldTitle = [_action getTitle:oldtitles];
+        [self renameAction:titles oldTitle:oldTitle];
         [_data setObject:arr forKey:key];
         [_tableView beginUpdates];
         [_tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
         [_tableView endUpdates];
     }
 }
@@ -878,7 +895,7 @@
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"quick_action_name_str")].firstObject];
     NSString *nameKey = OALocalizedString(@"quick_action_name_str");
     NSString *oldTitle = [_action getTitle:oldTitles];
-    NSString *defaultName = [OAQuickActionFactory getActionName:_action.type];
+    NSString *defaultName = [_action getDefaultName];
     if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
     {
         NSString *newTitle = [_action getTitle:titles];
@@ -1013,12 +1030,28 @@
 
 #pragma mark - OAAddCategoryDelegate
 
+- (void)renameAction:(NSMutableArray *)titles oldTitle:(NSString *)oldTitle
+{
+    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
+    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[nameKey].firstObject];
+    NSString *defaultName = [_action getDefaultName];
+    
+    if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
+    {
+        NSString *newTitle = [_action getTitle:titles];
+        [actionName setObject:newTitle forKey:@"title"];
+        [_data setObject:@[[NSDictionary dictionaryWithDictionary:actionName]] forKey:nameKey];
+        [_action setName:newTitle];
+    }
+}
+
 - (void) onCategoriesSelected:(NSArray *)items
 {
     NSString *key = _data.allKeys.lastObject;
     NSArray *rows = _data[key];
     NSDictionary *button = rows.lastObject;
     NSMutableArray *newItems = [NSMutableArray new];
+    NSMutableArray *titles = [NSMutableArray new];
     for (id item in items)
     {
         if ([item isKindOfClass:OAPOIUIFilter.class])
@@ -1031,6 +1064,7 @@
                                   @"type" : @"OABottomSheetActionCell",
                                   @"img" : iconId
                                   }];
+            [titles addObject:filter.getName];
         }
         else if ([item isKindOfClass:OAPOIBaseType.class])
         {
@@ -1041,11 +1075,13 @@
                                   @"type" : @"OABottomSheetActionCell",
                                   @"img" : filter.name
                                   }];
+            [titles addObject:filter.nameLocalized];
         }
         
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
+    [self renameAction:titles oldTitle:[_action getTitle:_action.getParams[_action.getListKey]]];
     [_tableView reloadData];
 }
 
@@ -1072,7 +1108,7 @@
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"quick_action_name_str")].firstObject];
     NSString *nameKey = OALocalizedString(@"quick_action_name_str");
     NSString *oldTitle = [_action getTitle:_action.getParams[_action.getListKey]];
-    NSString *defaultName = [OAQuickActionFactory getActionName:_action.type];
+    NSString *defaultName = [_action getDefaultName];
     
     if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
     {
@@ -1105,18 +1141,7 @@
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
-    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[nameKey].firstObject];
-    NSString *oldTitle = [_action getTitle:_action.getParams[_action.getListKey]];
-    NSString *defaultName = [OAQuickActionFactory getActionName:_action.type];
-    
-    if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
-    {
-        NSString *newTitle = [_action getTitle:titles];
-        [actionName setObject:newTitle forKey:@"title"];
-        [_data setObject:@[[NSDictionary dictionaryWithDictionary:actionName]] forKey:nameKey];
-        [_action setName:newTitle];
-    }
+    [self renameAction:titles oldTitle:[_action getTitle:_action.getParams[_action.getListKey]]];
     [_tableView reloadData];
 }
 

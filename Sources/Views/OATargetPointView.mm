@@ -32,6 +32,13 @@
 #import "OAMoreOptionsBottomSheetViewController.h"
 #import "OATransportStopRoute.h"
 #import "OATransportStopType.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapLayers.h"
+#import "OATransportStopsLayer.h"
+#import "OANativeUtilities.h"
+#import "OATransportRouteController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -100,6 +107,7 @@
 @property (weak, nonatomic) IBOutlet UIProgressView *downloadProgressBar;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 @property (weak, nonatomic) IBOutlet UILabel *downloadProgressLabel;
+@property (weak, nonatomic) IBOutlet UIButton *downloadCancelButton;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
@@ -152,6 +160,8 @@ static const NSInteger _buttonsCount = 4;
     
     BOOL _bottomBarVisible;
     CGFloat _bottomBarHeight;
+    
+    NSArray<OATransportStopRoute *> *_visibleTransportRoutes;
 }
 
 - (instancetype) init
@@ -452,13 +462,13 @@ static const NSInteger _buttonsCount = 4;
     
     [self.menuViewDelegate targetSetTopControlsVisible:showTopControls];
     
-    if (self.customController.topToolbarType == ETopToolbarTypeFloating || self.customController.topToolbarType == ETopToolbarTypeMiddleFixed)
+    if (self.customController.topToolbarType == ETopToolbarTypeFloating || self.customController.topToolbarType == ETopToolbarTypeMiddleFixed || self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton)
     {
         self.customController.navBar.alpha = [self getTopToolbarAlpha];
         self.customController.navBar.frame = topToolbarFrame;
-        if (self.customController.topToolbarType == ETopToolbarTypeFloating && self.customController.buttonBack)
+        if ((self.customController.topToolbarType == ETopToolbarTypeFloating || self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton) && self.customController.buttonBack)
         {
-            self.customController.buttonBack.alpha = [self getMiddleToolbarAlpha];
+            self.customController.buttonBack.alpha = self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton ? 1.0 : [self getMiddleToolbarAlpha];
             self.customController.buttonBack.hidden = NO;
             [self.parentView insertSubview:self.customController.buttonBack belowSubview:self.customController.navBar];
         }
@@ -662,6 +672,8 @@ static const NSInteger _buttonsCount = 4;
             [self.customController.bottomToolBarView removeFromSuperview];
         if (self.customController.buttonBack)
             [self.customController.buttonBack removeFromSuperview];
+        if (self.customController.additionalAccessoryView)
+            [self.customController.additionalAccessoryView removeFromSuperview];
         [self.customController.contentView removeFromSuperview];
         self.customController.delegate = nil;
         _customController = nil;
@@ -704,7 +716,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails);
     
     self.buttonsView.hidden = _hideButtons;
     
@@ -898,6 +910,10 @@ static const NSInteger _buttonsCount = 4;
     {
         [self showBottomToolbar:YES];
     }
+    if (self.customController && self.customController.additionalAccessoryView)
+    {
+        [self.parentView addSubview:self.customController.additionalAccessoryView];
+    }
     
     if (self.customController)
     {
@@ -993,6 +1009,8 @@ static const NSInteger _buttonsCount = 4;
     _hiding = YES;
     
     [self.menuViewDelegate targetSetBottomControlsVisible:YES menuHeight:0 animated:YES];
+    
+    _visibleTransportRoutes = nil;
 
     if (self.superview)
     {
@@ -1202,7 +1220,7 @@ static const NSInteger _buttonsCount = 4;
         _coordinateLabel.textAlignment = NSTextAlignmentRight;
     
     CGFloat topViewHeight = 0.0;
-    CGFloat topY = _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition ? 0.0 : _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
+    CGFloat topY = (_targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) ? 0.0 : _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
     BOOL hasDescription = !_descriptionLabel.hidden;
     BOOL hasTransport = !_transportView.hidden;
     if (hasTransport)
@@ -1270,7 +1288,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (!hasDescription && !hasTransport)
     {
-        topViewHeight = topY + (_targetPoint.type == OATargetChangePosition ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin ? OAUtilities.getBottomMargin : 0);
+        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin ? OAUtilities.getBottomMargin : 0);
     }
     else
     {
@@ -1313,11 +1331,12 @@ static const NSInteger _buttonsCount = 4;
             else
                 _controlButtonDownload.frame = CGRectMake(width - itemsX - w, downloadY, w, 32.0);
         }
-        if (!_downloadProgressBar.hidden && !_downloadProgressLabel.hidden)
+        if (!_downloadProgressBar.hidden && !_downloadProgressLabel.hidden && !_downloadCancelButton.hidden)
         {
             CGFloat viewWidth = width - 32.0 - OAUtilities.getLeftMargin;
             _downloadProgressLabel.frame = CGRectMake(itemsX, downloadY, viewWidth, 17.0);
-            _downloadProgressBar.frame = CGRectMake(itemsX, CGRectGetMaxY(_downloadProgressLabel.frame) + 5.0, viewWidth, 5.0);
+            _downloadCancelButton.frame = CGRectMake(viewWidth - 15.0, CGRectGetMaxY(_downloadProgressLabel.frame) - 10.0, 30.0, 30.0);
+            _downloadProgressBar.frame = CGRectMake(itemsX, CGRectGetMaxY(_downloadProgressLabel.frame) + 5.0, viewWidth - _downloadCancelButton.frame.size.width - 16.0, 5.0);
         }
     }
     CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
@@ -1727,19 +1746,25 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController)
     {
         for (UIView *v in _transportView.subviews)
-            if ([v isKindOfClass:[UIImageView class]])
+            if ([v isKindOfClass:[UIButton class]])
                 [v removeFromSuperview];
 
         NSArray<OATransportStopRoute *> *localTransportStopRoutes = [self.customController getLocalTransportStopRoutes];
         NSArray<OATransportStopRoute *> *nearbyTransportStopRoutes = [self.customController getNearbyTransportStopRoutes];
+        _visibleTransportRoutes = [localTransportStopRoutes arrayByAddingObjectsFromArray:nearbyTransportStopRoutes];
+        NSInteger stopPlatesCount = 0;
         if (localTransportStopRoutes.count > 0)
         {
             NSInteger i = 0;
             for (OATransportStopRoute *route in localTransportStopRoutes)
             {
                 UIImage *stopPlateImage = [OATransportStopViewController createStopPlate:route.route->ref.toNSString() color:[route getColor:NO]];
-                UIImageView *stopPlateImageView = [[UIImageView alloc] initWithImage:stopPlateImage];
-                [_transportView insertSubview:stopPlateImageView atIndex:i++];
+                UIButton *stopPlateButton = [UIButton buttonWithType:UIButtonTypeSystem];
+                stopPlateButton.frame = CGRectMake(0., 0., stopPlateImage.size.width, stopPlateImage.size.height);
+                [stopPlateButton setBackgroundImage:stopPlateImage forState:UIControlStateNormal];
+                stopPlateButton.tag = stopPlatesCount++;
+                [stopPlateButton addTarget:self action:@selector(onTransportPlatePressed:) forControlEvents:UIControlEventTouchUpInside];
+                [_transportView insertSubview:stopPlateButton atIndex:i++];
             }
         }
         if (nearbyTransportStopRoutes.count > 0)
@@ -1751,8 +1776,12 @@ static const NSInteger _buttonsCount = 4;
             for (OATransportStopRoute *route in nearbyTransportStopRoutes)
             {
                 UIImage *stopPlateImage = [OATransportStopViewController createStopPlate:route.route->ref.toNSString() color:[route getColor:NO]];
-                UIImageView *stopPlateImageView = [[UIImageView alloc] initWithImage:stopPlateImage];
-                [_transportView addSubview:stopPlateImageView];
+                UIButton *stopPlateButton = [UIButton buttonWithType:UIButtonTypeSystem];
+                stopPlateButton.frame = CGRectMake(0., 0., stopPlateImage.size.width, stopPlateImage.size.height);
+                [stopPlateButton setBackgroundImage:stopPlateImage forState:UIControlStateNormal];
+                stopPlateButton.tag = stopPlatesCount++;
+                [stopPlateButton addTarget:self action:@selector(onTransportPlatePressed:) forControlEvents:UIControlEventTouchUpInside];
+                [_transportView addSubview:stopPlateButton];
             }
         }
         else
@@ -1765,6 +1794,32 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         _transportView.hidden = YES;
+    }
+}
+
+- (void) onTransportPlatePressed:(id)sender
+{
+    if ([sender isKindOfClass:UIButton.class])
+    {
+        UIButton *button = (UIButton *) sender;
+        if (button.tag < _visibleTransportRoutes.count)
+        {
+            OATransportStopRoute *r = _visibleTransportRoutes[button.tag];
+            
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            OAMapViewController *mapController = mapPanel.mapViewController;
+
+            OATargetPoint *targetPoint = [OATransportRouteController getTargetPoint:r];
+            CLLocationCoordinate2D latLon = targetPoint.location;
+                
+            Point31 point31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
+            [mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+            [mapController.mapLayers.transportStopsLayer showStopsOnMap:r];
+            
+            [mapPanel showContextMenuWithPoints:@[targetPoint]];
+
+            [OATransportRouteController showToolbar:r];
+        }
     }
 }
 
@@ -2034,6 +2089,11 @@ static const NSInteger _buttonsCount = 4;
     }
 }
 
+- (IBAction)buttonCancelDownloadPressed:(id)sender
+{
+    [self.customController onDownloadCancelled];
+}
+
 - (void) onMenuStateChanged
 {
     if (_showFull || _showFullScreen)
@@ -2134,7 +2194,7 @@ static const NSInteger _buttonsCount = 4;
     {
         CGFloat a = _headerY - [OAUtilities getStatusBarHeight];
         CGFloat b = _headerY - self.customController.navBar.frame.size.height;
-        CGFloat c = self.contentOffset.y;
+        CGFloat c = self.contentOffset.y + self.customController.navBar.frame.size.height;
         alpha = (c - b) / (a - b);
         if (alpha < 0)
             alpha = 0.0;
@@ -2277,6 +2337,8 @@ static const NSInteger _buttonsCount = 4;
         _downloadProgressBar.hidden = NO;
     if (_downloadProgressLabel.hidden)
         _downloadProgressLabel.hidden = NO;
+    if (_downloadCancelButton.hidden)
+        _downloadCancelButton.hidden = NO;
     
     [_downloadProgressBar setProgress:0.];
     _downloadProgressLabel.text = OALocalizedString(@"download_pending");
@@ -2296,6 +2358,8 @@ static const NSInteger _buttonsCount = 4;
         _downloadProgressBar.hidden = YES;
     if (!_downloadProgressLabel.hidden)
         _downloadProgressLabel.hidden = YES;
+    if (!_downloadCancelButton.hidden)
+        _downloadCancelButton.hidden = YES;
     
     [self doLayoutSubviews:YES];
 }
@@ -2526,7 +2590,7 @@ static const NSInteger _buttonsCount = 4;
         else
         {
             newOffset = [self requestHeaderOnlyMode:NO];
-            if (targetContentOffset->y > 0 && !_customController.hasBottomToolbar)
+            if (targetContentOffset->y + _customController.additionalContentOffset > 0 && !_customController.hasBottomToolbar)
                 [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
             else if (_customController.hasBottomToolbar && ![self isLandscape])
                 [self setTargetContentOffset:newOffset withVelocity:CGPointZero targetContentOffset:targetContentOffset];
@@ -2548,19 +2612,23 @@ static const NSInteger _buttonsCount = 4;
 
     if (self.menuViewDelegate)
     {
+        BOOL landscape = [self isLandscape];
         [self.menuViewDelegate targetStatusBarChanged];
         if (self.customController && self.customController.needsMapRuler)
         {
-            BOOL landscape = [self isLandscape];
             CGFloat rulerHeight = 25.0;
             [self.menuViewDelegate targetSetMapRulerPosition:landscape ? kDefaultMapRulerMarginBottom : -[self getVisibleHeight] + OAUtilities.getBottomMargin - rulerHeight left:landscape ? _containerView.frame.size.width - OAUtilities.getLeftMargin + 16.0 : 16.0];
+        }
+        if (self.customController && self.customController.additionalAccessoryView)
+        {
+            CGRect viewFrame = self.customController.additionalAccessoryView.frame;
+            viewFrame.origin = CGPointMake(landscape ? self.frame.size.width + 16. : 16., DeviceScreenHeight - ((landscape ? 25.0 : [self getVisibleHeight]) + OAUtilities.getBottomMargin));
+            self.customController.additionalAccessoryView.frame = viewFrame;
         }
     }
 
     if (!_zoomView.superview)
         [self updateZoomViewFrameAnimated:YES];
-    
-    
 }
 
 - (BOOL) isScrollAllowed

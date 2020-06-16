@@ -33,14 +33,13 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
 
 - (UIImage *)icon
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.name]];
-    
+    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", self.name]]];
     return [OAUtilities applyScaleFactorToImage:img];
 }
 
 - (NSString *)iconName
 {
-    return [NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.name];
+    return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", self.name]];
 }
 
 -(BOOL)isEqual:(id)object

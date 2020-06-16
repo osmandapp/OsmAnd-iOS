@@ -31,6 +31,7 @@
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
 #import "OAWikiArticleHelper.h"
+#import "OAColors.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -116,7 +117,7 @@
     UIImage *img = nil;
     if ([fileName hasPrefix:@"mx_"])
     {
-        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/%@", [OAUtilities drawablePostfix], fileName]];
+        img = [UIImage imageNamed:[OAUtilities drawablePath:fileName]];
         if (img)
         {
             img = [OAUtilities applyScaleFactorToImage:img];
@@ -276,7 +277,7 @@
         [self processNearestWiki];
         if (_nearestWiki.count > 0)
         {
-            UIImage *icon = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_wiki_place", [OAUtilities drawablePostfix]]];
+            UIImage *icon = [UIImage imageNamed:[OAUtilities drawablePath:@"mx_wiki_place"]];
             OARowInfo *wikiRowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:[NSString stringWithFormat:@"%@ (%d)", OALocalizedString(@"wiki_around"), (int)_nearestWiki.count] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             wikiRowInfo.collapsable = YES;
             wikiRowInfo.collapsed = YES;
@@ -362,7 +363,7 @@
 {
     [super viewDidLoad];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = UIColorFromRGB(0xf2f2f2);
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = UIColorFromRGB(0xffffff);
     self.tableView.backgroundView = view;

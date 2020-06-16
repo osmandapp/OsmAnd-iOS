@@ -60,6 +60,14 @@
                         <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Ar-ps-65P">
+                        <rect key="frame" x="274" y="15" width="30" height="30"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="FDh-gR-0hb"/>
+                            <constraint firstAttribute="width" constant="30" id="b87-x3-mFa"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="MGQ-pX-lZN" secondAttribute="bottom" constant="10" id="7df-Xd-oYi"/>
@@ -70,15 +78,18 @@
                     <constraint firstItem="BKq-gT-gvI" firstAttribute="leading" secondItem="MGQ-pX-lZN" secondAttribute="trailing" constant="8" id="T6k-Ol-kw4"/>
                     <constraint firstItem="a0J-Ir-ySP" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="TRO-rq-cHd"/>
                     <constraint firstAttribute="trailing" secondItem="9K4-Ua-bhk" secondAttribute="trailing" constant="16" id="Tiv-Ch-DdH"/>
+                    <constraint firstAttribute="trailing" secondItem="5Ar-ps-65P" secondAttribute="trailing" constant="16" id="TtS-NO-eJC"/>
                     <constraint firstItem="9K4-Ua-bhk" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="ZHO-dd-LcB"/>
                     <constraint firstItem="MGQ-pX-lZN" firstAttribute="top" secondItem="a0J-Ir-ySP" secondAttribute="bottom" constant="-13" id="aKW-5w-7VS"/>
                     <constraint firstItem="BKq-gT-gvI" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="h69-gd-irP"/>
+                    <constraint firstItem="5Ar-ps-65P" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="hkh-pH-WvS"/>
                     <constraint firstItem="9K4-Ua-bhk" firstAttribute="leading" secondItem="BKq-gT-gvI" secondAttribute="trailing" constant="16" id="sjZ-kF-8ND"/>
                     <constraint firstItem="oTX-bJ-IGV" firstAttribute="leading" secondItem="a0J-Ir-ySP" secondAttribute="trailing" constant="16" id="xNa-Ut-8AB"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
+                <outlet property="additionalView" destination="5Ar-ps-65P" id="DA3-w1-bnN"/>
                 <outlet property="checkButton" destination="9K4-Ua-bhk" id="LLP-rB-L2F"/>
                 <outlet property="descLabel" destination="MGQ-pX-lZN" id="dAr-lc-94c"/>
                 <outlet property="dividerIcon" destination="BKq-gT-gvI" id="f3a-rf-EIj"/>

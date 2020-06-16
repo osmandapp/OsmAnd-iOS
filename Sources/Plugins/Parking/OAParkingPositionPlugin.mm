@@ -23,6 +23,7 @@
 #import "OARoutingHelper.h"
 #import "OAMapViewController.h"
 #import "OANativeUtilities.h"
+#import "OAParkingAction.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -72,7 +73,7 @@
     {
         _parkingPlaceControl = [self createParkingPlaceInfoControl];
         
-        [mapInfoController registerSideWidget:_parkingPlaceControl imageId:@"ic_action_parking_dark" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:10];
+        [mapInfoController registerSideWidget:_parkingPlaceControl imageId:@"ic_custom_parking" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:10];
         [mapInfoController recreateControls];
     }
 }
@@ -171,6 +172,11 @@
 - (BOOL) distChanged:(CLLocationDistance)oldDist dist:(CLLocationDistance)dist
 {
     return oldDist == 0 || ABS(oldDist - dist) > 30;
+}
+
+- (NSArray *)getQuickActionTypes
+{
+    return @[OAParkingAction.TYPE];
 }
 
 @end

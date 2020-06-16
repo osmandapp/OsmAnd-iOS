@@ -40,15 +40,16 @@
 {
     return 0;
 }
+
 - (UITableViewCell *)cellForRow:(NSInteger)row
 {
     return nil;
 }
+
 - (void)didSelectRow:(NSInteger)row
 {
     
 }
-
 
 - (id)getItem:(NSInteger)row
 {
@@ -56,6 +57,11 @@
 }
 
 - (void)updateCell:(UITableViewCell *)cell item:(id)item row:(NSInteger)row
+{
+    
+}
+
+- (void) reorderObjects:(NSInteger) source dest:(NSInteger)dest
 {
     
 }

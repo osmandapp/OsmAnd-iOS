@@ -999,4 +999,29 @@
 {
 }
 
+- (BOOL) isBottomsControlVisible
+{
+    return YES; // override
+}
+
+- (BOOL) isMapFrameNeeded
+{
+    return NO;
+}
+
+- (void) addMapFrameLayer:(CGRect)frame view:(UIView *)view
+{
+    // override
+}
+
+- (void) removeMapFrameLayer:(UIView *)view
+{
+    // override
+}
+
+- (CGFloat) mapHeightKoef
+{
+    return 0; // override
+}
+
 @end

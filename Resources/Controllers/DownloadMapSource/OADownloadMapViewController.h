@@ -10,4 +10,6 @@
 
 @interface OADownloadMapViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
 
+- (void) updateDownloadInfo;
+
 @end

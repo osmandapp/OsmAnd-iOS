@@ -10,6 +10,6 @@
 
 @interface OADownloadMapProgressViewController : OACompoundViewController
 
-- (instancetype) initWithGeneralData:(NSInteger)numberOfTiles size:(CGFloat)downloadSize minZoom:(NSInteger)minZoom maxZoom:(NSInteger)maxZoom;
+- (instancetype) initWithMinZoom:(NSInteger)minZoom maxZoom:(NSInteger)maxZoom;
 
 @end

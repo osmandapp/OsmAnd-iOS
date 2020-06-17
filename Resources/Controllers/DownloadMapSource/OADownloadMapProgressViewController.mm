@@ -34,7 +34,7 @@
 @implementation OADownloadMapProgressViewController
 {
     OAMapRendererView *_mapView;
-    
+    QVector<OsmAnd::TileId> _tileIds;
     NSArray *_data;
     NSInteger _numberOfTiles;
     CGFloat _downloadSize;
@@ -44,6 +44,7 @@
     CGFloat _downloadedNumberOfTiles;
     CGFloat _downloadedOfTotalSize;
     BOOL _downloaded;
+    BOOL _cancelled;
 }
 
 - (void) applyLocalization
@@ -52,13 +53,13 @@
     [self.cancelButton setTitle: OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
-- (instancetype) initWithGeneralData:(NSInteger)numberOfTiles size:(CGFloat)downloadSize minZoom:(NSInteger)minZoom maxZoom:(NSInteger)maxZoom 
+- (instancetype) initWithMinZoom:(NSInteger)minZoom maxZoom:(NSInteger)maxZoom 
 {
     self = [super init];
-    _numberOfTiles = numberOfTiles;
-    _downloadSize = downloadSize;
-    _minZoom = minZoom;
-    _maxZoom = maxZoom;
+    if (self) {
+        _minZoom = minZoom;
+        _maxZoom = maxZoom;
+    }
     return self;
 }
 
@@ -77,8 +78,10 @@
     _bottomToolBarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [_bottomToolBarView.layer addSublayer:_horizontalLine];
     _cancelButton.layer.cornerRadius = 9.0;
+    _numberOfTiles = _tileIds.count();
+    _downloadSize = _numberOfTiles * 12000;
     [self setupView];
-    [self getTileIds];
+    [self startDownload];
 }
 
 - (void) setupView
@@ -116,35 +119,42 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void) startDownload
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        _tileIds = [self getTileIds];
+    });
+}
+
 #pragma mark - Downloading process
 
-- (void) getTileIds
+- (QVector<OsmAnd::TileId>) getTileIds
 {
     OsmAnd::AreaI bbox = [_mapView getVisibleBBox31];
     
     QVector<OsmAnd::TileId> tileIds;
-    int x1 = OsmAnd::Utilities::getTileNumberX(_minZoom, OsmAnd::Utilities::get31LongitudeX(bbox.left()));
-    int x2 = OsmAnd::Utilities::getTileNumberX(_minZoom, OsmAnd::Utilities::get31LongitudeX(bbox.right()));
-    int y1 = OsmAnd::Utilities::getTileNumberY(_minZoom, OsmAnd::Utilities::get31LatitudeY(bbox.top()));
-    int y2 = OsmAnd::Utilities::getTileNumberY(_minZoom, OsmAnd::Utilities::get31LatitudeY(bbox.bottom()));
-    for (int x = x1; x <= x2; x++)
+    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(bbox.topLeft);
+    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(bbox.bottomRight);
+    for (NSInteger zoom = _minZoom; zoom <= _maxZoom; zoom++)
     {
-        for (int y = y1; y <= y2; y++)
+        int x1 = OsmAnd::Utilities::getTileNumberX(zoom, topLeft.longitude);
+        int x2 = OsmAnd::Utilities::getTileNumberX(zoom, bottomRight.longitude);
+        int y1 = OsmAnd::Utilities::getTileNumberY(zoom, topLeft.latitude);
+        int y2 = OsmAnd::Utilities::getTileNumberY(zoom, bottomRight.latitude);
+        for (int x = x1; x <= x2; x++)
         {
-            const auto tileId = OsmAnd::TileId::fromXY(x, y);
-            for (int i = 1; i < _maxZoom - _minZoom; i++)
+            for (int y = y1; y <= y2; y++)
             {
-                QVector<OsmAnd::TileId> tmpTileIds = OsmAnd::Utilities::getTileIdsUnderscaledByZoomShift(tileId, (unsigned int)i);
-                for (const auto& tile : tmpTileIds)
-                    tileIds.push_back(tile);
+                const auto tileId = OsmAnd::TileId::fromXY(x, y);
+                tileIds.push_back(tileId);
             }
         }
     }
-    NSLog(@"tileIds count -> %i", tileIds.count());
+    return tileIds;
 }
 
 
-#pragma mark - TableView
+#pragma mark - UITableViewDelegate
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.row];

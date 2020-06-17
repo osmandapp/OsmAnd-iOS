@@ -66,10 +66,8 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _downloaded = NO;
     _horizontalLine = [CALayer layer];
@@ -87,17 +85,14 @@
 - (void) setupView
 {
     NSMutableArray *tableData = [NSMutableArray array];
-    
     [tableData addObject:@{
         @"type" : @"OADownloadProgressBarCell",
     }];
-    
     [tableData addObject:@{
         @"type" : kGeneralInfoCell,
         @"title" : OALocalizedString(@"number_of_tiles"),
         @"value" : [NSString stringWithFormat:@"/ %@", [NSString stringWithFormat:@"%ld", _numberOfTiles]],
     }];
-    
     [tableData addObject:@{
         @"type" : kGeneralInfoCell,
         @"title" : OALocalizedString(@"download_size"),
@@ -131,7 +126,6 @@
 - (QVector<OsmAnd::TileId>) getTileIds
 {
     OsmAnd::AreaI bbox = [_mapView getVisibleBBox31];
-    
     QVector<OsmAnd::TileId> tileIds;
     const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(bbox.topLeft);
     const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(bbox.bottomRight);

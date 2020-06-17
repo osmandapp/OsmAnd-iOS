@@ -12,5 +12,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *progressStatusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *progressValueLabel;
 
-
 @end

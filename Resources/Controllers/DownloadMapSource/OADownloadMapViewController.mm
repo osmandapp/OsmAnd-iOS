@@ -63,7 +63,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     OsmAndAppInstance _app;
     OAMapRendererView *_mapView;
-    NSDictionary *_data;
+    NSArray *_data;
     
     NSInteger _currentZoom;
     NSInteger _minZoom;
@@ -315,9 +315,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [tableData addObject:mapTypeArr];
     [tableData addObject:zoomLevelArr];
     [tableData addObject:generalInfoArr];
-    _data = @{
-        @"tableData" : tableData,
-    };
+    _data = [NSArray arrayWithArray:tableData];
 }
 
 - (void) cancelPressed
@@ -456,14 +454,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [_data[@"tableData"] count];
+    return [_data count];
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == kZoomSection)
         return [self pickerIsShown] ? 4 : 3;
-    return [_data[@"tableData"][section] count];
+    return [_data[section] count];
 }
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
@@ -652,16 +650,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[@"tableData"][indexPath.section][indexPath.row];
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
     if (indexPath.section == kZoomSection && ![item[@"type"] isEqualToString:@"OAPreviewZoomLevelsCell"])
     {
-        NSArray *ar = _data[@"tableData"][indexPath.section];
+        NSArray *ar = _data[indexPath.section];
         if ([self pickerIsShown] && [indexPath isEqual:_pickerIndexPath])
             return ar[3];
         else
             return indexPath.row == kMinZoomRow ? ar[1] : ar[2];
     }
-    return _data[@"tableData"][indexPath.section][indexPath.row];
+    return _data[indexPath.section][indexPath.row];
 }
 
 - (void) updatePickerCell:(NSInteger)value

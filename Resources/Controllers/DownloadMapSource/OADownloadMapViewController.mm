@@ -332,7 +332,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 }
 
 - (IBAction) downloadButtonPressed:(id)sender {
-    OADownloadMapProgressViewController *downloadMapProgressVC = [[OADownloadMapProgressViewController alloc] initWithMinZoom:_minZoom maxZoom:_maxZoom];
+    OADownloadMapProgressViewController *downloadMapProgressVC = [[OADownloadMapProgressViewController alloc] initWithResource:[self getCurrentItem] minZoom:_minZoom maxZoom:_maxZoom];
     [[OARootViewController instance].navigationController pushViewController:downloadMapProgressVC animated:YES];
 }
 
@@ -435,17 +435,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString *url = [[NSString alloc] init];
     if (item)
     {
-        OASqliteDbResourceItem *sqliteSource = (OASqliteDbResourceItem *) item;
-        OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:sqliteSource.path];
         if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
         {
             OAOnlineTilesResourceItem *onlineSource = (OAOnlineTilesResourceItem *) item;
             NSString *urlToLoad = onlineSource.onlineTileSource->urlToLoad.toNSString();
-            QList<QString> randomsArray = ts.randomsArray;
+            QList<QString> randomsArray;
             url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, OsmAnd::ZoomLevel(zoom)).toNSString();
         }
         else if ([item isKindOfClass:OASqliteDbResourceItem.class])
         {
+            OASqliteDbResourceItem *sqliteSource = (OASqliteDbResourceItem *) item;
+            OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:sqliteSource.path];
             url = [ts getUrlToLoad:tileId.x y:tileId.y zoom:(int)zoom];
         }
     }

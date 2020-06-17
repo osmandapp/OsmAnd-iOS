@@ -178,21 +178,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.bottomToolBarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.bottomToolBarView.layer addSublayer:_horizontalLine];
     [self updateToolBar];
-    
     _cancelButton.layer.cornerRadius = 9.0;
     _downloadButton.layer.cornerRadius = 9.0;
-    
     _onlineMapSources = [OAResourcesUIHelper getOnlineRasterMapSourcesBySource];
-    
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _currentZoom = _mapView.zoom;
     [self setZoomValues];
@@ -280,21 +275,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSMutableArray *mapTypeArr = [NSMutableArray array];
     NSMutableArray *zoomLevelArr = [NSMutableArray array];
     NSMutableArray *generalInfoArr = [NSMutableArray array];
-    
     NSString *mapSourceName;
     mapSourceName = _app.data.lastMapSource.name;
-    
     [mapTypeArr addObject:@{
         @"type" : kCellTypeMapType,
         @"title" : OALocalizedString(@"map_settings_type"),
         @"value" : mapSourceName,
     }];
-    
     [zoomLevelArr addObject:@{
         @"type" : kCellTypePreviewCell,
         @"value" : OALocalizedString(@"preview_of_selected_zoom_levels"),
     }];
-    
     [zoomLevelArr addObject:@{
         @"title" : OALocalizedString(@"rec_interval_minimum"),
         @"value" : [NSString stringWithFormat:@"%ld", _minZoom],
@@ -310,14 +301,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [zoomLevelArr addObject:@{
         @"type" : kCellTypePicker,
     }];
-    
     [generalInfoArr addObject:@{
         @"type" : kCellTypeZoom,
         @"title" : OALocalizedString(@"number_of_tiles"),
         @"value" : [NSString stringWithFormat:@"%ld", _numberOfTiles],
         @"clickable" : @NO
     }];
-    
     [generalInfoArr addObject:@{
         @"type" : kCellTypeZoom,
         @"title" : OALocalizedString(@"download_size"),
@@ -397,7 +386,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     CGFloat w = width - 32.0 - OAUtilities.getLeftMargin;
     CGRect leftBtnFrame = _cancelButton.frame;
     CGRect rightBtnFrame = _downloadButton.frame;
-
     if (_downloadButton.isDirectionRTL)
     {
         rightBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;

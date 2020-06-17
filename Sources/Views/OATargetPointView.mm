@@ -1343,6 +1343,7 @@ static const NSInteger _buttonsCount = 4;
     }
     CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
     _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : [OAUtilities getStatusBarHeight]) : DeviceScreenHeight - containerViewHeight, width, containerViewHeight);
+    CGFloat bottomToolBarHeight = self.customController.hasBottomToolbar ? self.customController.bottomToolBarView.frame.size.height : 0.0;
     
     if (self.customController && [self.customController hasContent])
     {
@@ -1408,7 +1409,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (self.customController.contentView)
     {
-        self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight, width, contentViewHeight);
+        self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight, width, !landscape && [self.customController disableScroll] ? _fullOffset - bottomToolBarHeight : contentViewHeight - bottomToolBarHeight);
         if ([self.customController isMapFrameNeeded])
             [self.customController addMapFrameLayer:[self getMapFrame:width] view:self];
     }
@@ -1522,7 +1523,7 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        CGFloat frameHeight = DeviceScreenHeight - _fullOffset - _customController.getToolBarHeight - OAUtilities.getStatusBarHeight + 6;
+        CGFloat frameHeight = _headerY - _fullOffset - self.customController.navBar.bounds.size.height;
         mapFrame = CGRectMake(0, _headerY - frameHeight, width, frameHeight);
     }
     return mapFrame;

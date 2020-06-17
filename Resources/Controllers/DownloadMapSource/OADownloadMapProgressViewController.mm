@@ -65,10 +65,8 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _downloaded = NO;
     _horizontalLine = [CALayer layer];
@@ -84,17 +82,14 @@
 - (void) setupView
 {
     NSMutableArray *tableData = [NSMutableArray array];
-    
     [tableData addObject:@{
         @"type" : @"OADownloadProgressBarCell",
     }];
-    
     [tableData addObject:@{
         @"type" : kGeneralInfoCell,
         @"title" : OALocalizedString(@"number_of_tiles"),
         @"value" : [NSString stringWithFormat:@"/ %@", [NSString stringWithFormat:@"%ld", _numberOfTiles]],
     }];
-    
     [tableData addObject:@{
         @"type" : kGeneralInfoCell,
         @"title" : OALocalizedString(@"download_size"),
@@ -121,7 +116,6 @@
 - (void) getTileIds
 {
     OsmAnd::AreaI bbox = [_mapView getVisibleBBox31];
-    
     QVector<OsmAnd::TileId> tileIds;
     int x1 = OsmAnd::Utilities::getTileNumberX(_minZoom, OsmAnd::Utilities::get31LongitudeX(bbox.left()));
     int x2 = OsmAnd::Utilities::getTileNumberX(_minZoom, OsmAnd::Utilities::get31LongitudeX(bbox.right()));
@@ -140,9 +134,7 @@
             }
         }
     }
-    NSLog(@"tileIds count -> %i", tileIds.count());
 }
-
 
 #pragma mark - TableView
 

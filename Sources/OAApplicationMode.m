@@ -52,11 +52,6 @@ static OAApplicationMode *_PUBLIC_TRANSPORT;
 static OAApplicationMode *_PEDESTRIAN;
 static OAApplicationMode *_AIRCRAFT;
 static OAApplicationMode *_BOAT;
-static OAApplicationMode *_HIKING;
-static OAApplicationMode *_MOTORCYCLE;
-static OAApplicationMode *_TRUCK;
-static OAApplicationMode *_BUS;
-static OAApplicationMode *_TRAIN;
 static OAApplicationMode *_SKI;
 
 + (void) initialize
@@ -73,24 +68,28 @@ static OAApplicationMode *_SKI;
     [_values addObject:_DEFAULT];
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
+    _CAR.descr = OALocalizedString(@"base_profile_descr_car");
     [self carLocation:_CAR];
     _CAR.mapIcon = @"map_action_car_dark";
     _CAR.smallIconDark = @"ic_action_car_dark";
     [_values addObject:_CAR];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
+    _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
     [self bicycleLocation:_BICYCLE];
     _BICYCLE.mapIcon = @"map_action_bicycle_dark";
     _BICYCLE.smallIconDark = @"ic_action_bicycle_dark";
     [_values addObject:_BICYCLE];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
+    _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
     [self pedestrianLocation:_PEDESTRIAN];
     _PEDESTRIAN.mapIcon = @"map_action_pedestrian_dark";
     _PEDESTRIAN.smallIconDark = @"ic_action_pedestrian_dark";
     [_values addObject:_PEDESTRIAN];
     
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
+    _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
     _PUBLIC_TRANSPORT.defaultSpeed = 15.3f;
     [self carLocation:_PUBLIC_TRANSPORT];
     _PUBLIC_TRANSPORT.mapIcon = @"map_action_bus_dark";
@@ -98,6 +97,7 @@ static OAApplicationMode *_SKI;
     [_values addObject:_PUBLIC_TRANSPORT];
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
+    _AIRCRAFT.descr = OALocalizedString(@"base_profile_descr_aircraft");
     _AIRCRAFT.defaultSpeed = 40.0f;
     [self carLocation:_AIRCRAFT];
     _AIRCRAFT.mapIcon = @"map_action_aircraft";
@@ -105,59 +105,21 @@ static OAApplicationMode *_SKI;
     [_values addObject:_AIRCRAFT];
     
     _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
+    _BOAT.descr = OALocalizedString(@"base_profile_descr_boat");
     _BOAT.defaultSpeed = 5.5f;
     [self carLocation:_BOAT];
     _BOAT.mapIcon = @"map_action_sail_boat_dark";
     _BOAT.smallIconDark = @"ic_action_sail_boat_dark";
     [_values addObject:_BOAT];
-
-    _HIKING = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_hiking") stringKey:@"hiking"];
-    _HIKING.defaultSpeed = 1.5f;
-    [self pedestrianLocation:_HIKING];
-    _HIKING.mapIcon = @"map_action_trekking_dark";
-    _HIKING.smallIconDark = @"ic_action_trekking_dark";
-    _HIKING.parent = _PEDESTRIAN;
-    [_values addObject:_HIKING];
     
-    _MOTORCYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_motorcycle") stringKey:@"motorcycle"];
-    _MOTORCYCLE.defaultSpeed = 15.3f;
-    [self carLocation:_MOTORCYCLE];
-    _MOTORCYCLE.mapIcon = @"map_action_motorcycle_dark";
-    _MOTORCYCLE.smallIconDark = @"ic_action_motorcycle_dark";
-    _MOTORCYCLE.parent = _CAR;
-    [_values addObject:_MOTORCYCLE];
-    
-    _TRUCK = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_truck") stringKey:@"truck"];
-    _TRUCK.defaultSpeed = 15.3f;
-    [self carLocation:_TRUCK];
-    _TRUCK.mapIcon = @"map_action_truck_dark";
-    _TRUCK.smallIconDark = @"ic_action_truck_dark";
-    _TRUCK.parent = _CAR;
-    [_values addObject:_TRUCK];
-    
-    _BUS = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_bus") stringKey:@"bus"];
-    _BUS.defaultSpeed = 15.3f;
-    [self carLocation:_BUS];
-    _BUS.mapIcon = @"map_action_bus_dark";
-    _BUS.smallIconDark = @"ic_profile_bus";
-    _BUS.parent = _CAR;
-    [_values addObject:_BUS];
-    
-    _TRAIN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_train") stringKey:@"train"];
-    _TRAIN.defaultSpeed = 25.0f;
-    [self carLocation:_TRAIN];
-    _TRAIN.mapIcon = @"map_action_train";
-    _TRAIN.smallIconDark = @"ic_action_train";
-    _TRAIN.parent = _CAR;
-    [_values addObject:_TRAIN];
-    
-    _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_train") stringKey:@"train"];
+    _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_skiing") stringKey:@"ski"];
+    _SKI.descr = OALocalizedString(@"app_mode_skiing");
     [self carLocation:_SKI];
     _SKI.mapIcon = @"map_action_skiing";
     _SKI.smallIconDark = @"ic_action_train";
-    [_values addObject:_TRAIN];
+    [_values addObject:_SKI];
     
-    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _BUS, _TRAIN];
+    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI];
     
     NSArray<OAApplicationMode *> *all = nil;
     NSArray<OAApplicationMode *> *none = @[];
@@ -228,31 +190,6 @@ static OAApplicationMode *_SKI;
 + (OAApplicationMode *) BOAT;
 {
     return _BOAT;
-}
-
-+ (OAApplicationMode *) HIKING;
-{
-    return _HIKING;
-}
-
-+ (OAApplicationMode *) MOTORCYCLE;
-{
-    return _MOTORCYCLE;
-}
-
-+ (OAApplicationMode *) TRUCK;
-{
-    return _TRUCK;
-}
-
-+ (OAApplicationMode *) BUS;
-{
-    return _BUS;
-}
-
-+ (OAApplicationMode *) TRAIN;
-{
-    return _TRAIN;
 }
 
 + (OAApplicationMode *) PUBLIC_TRANSPORT

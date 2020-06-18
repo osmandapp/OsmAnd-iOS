@@ -14,6 +14,8 @@
 @property (nonatomic, readonly) NSString *stringKey;
 @property (nonatomic, readonly) NSString *variantKey;
 
+@property (nonatomic) NSString *descr;
+
 @property (nonatomic, readonly) OAApplicationMode *parent;
 
 @property (nonatomic, readonly) float defaultSpeed;
@@ -35,11 +37,6 @@
 + (OAApplicationMode *) PEDESTRIAN;
 + (OAApplicationMode *) AIRCRAFT;
 + (OAApplicationMode *) BOAT;
-+ (OAApplicationMode *) HIKING;
-+ (OAApplicationMode *) MOTORCYCLE;
-+ (OAApplicationMode *) TRUCK;
-+ (OAApplicationMode *) BUS;
-+ (OAApplicationMode *) TRAIN;
 + (OAApplicationMode *) PUBLIC_TRANSPORT;
 + (OAApplicationMode *) SKI;
 

@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
-#import "OABottomSheetActionCell.h"
+#import "OAMultiIconTextDescCell.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAProfileAppearanceViewController.h"
 
@@ -52,7 +52,7 @@
 
 - (void) generateData
 {
-    _profileList = [[NSMutableArray alloc] initWithArray:OAApplicationMode.values];
+    _profileList = [[NSMutableArray alloc] initWithArray:OAApplicationMode.allPossibleValues];
     [_profileList removeObjectAtIndex:0];
 }
 
@@ -66,7 +66,9 @@
     [super viewDidLoad];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    self.tableView.tableHeaderView = _tableHeaderView;
+    _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.estimatedRowHeight = 60.;
+    _tableView.tableHeaderView = _tableHeaderView;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [self setupTableHeaderViewWithText:OALocalizedString(@"create_profile")];
     [self setupView];
@@ -156,19 +158,14 @@
     return _heightForHeader + kSidePadding + kTopPadding;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 60.0;
-}
-
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    static NSString* const identifierCell = @"OABottomSheetActionCell";
-    OABottomSheetActionCell* cell;
-    cell = (OABottomSheetActionCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+    static NSString* const identifierCell = @"OAMultiIconTextDescCell";
+    OAMultiIconTextDescCell* cell;
+    cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetActionCell" owner:self options:nil];
-        cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
+        cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
@@ -177,8 +174,10 @@
     if (imgName)
         img = [UIImage imageNamed:imgName];
     cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    cell.iconView.tintColor = UIColorFromRGB(0x732EEB);
+    cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_purple_dark);
     cell.textView.text = _profileList[indexPath.row].name;
+    cell.descView.text = _profileList[indexPath.row].descr;
+    [cell setOverflowVisibility:YES];
 
     return cell;
 }

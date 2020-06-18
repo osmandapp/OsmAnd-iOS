@@ -96,7 +96,8 @@
     NSString *imgName = _profile.mapIcon;
     if (imgName)
         img = [UIImage imageNamed:imgName];
-    _profileIconImageView.image = img;
+    _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _profileIconImageView.tintColor = UIColorFromRGB(0x732EEB);
     _profileIconView.layer.cornerRadius = _profileIconView.frame.size.height/2;
 }
 

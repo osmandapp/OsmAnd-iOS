@@ -11,7 +11,6 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
-#import "OAAppSettings.h"
 #import "OARootViewController.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
@@ -151,8 +150,7 @@
 - (void)updateOpacitySliderVisibility
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        BOOL isSliderEnabled = [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider;
-        [[OARootViewController instance].mapPanel updateOverlayUnderlayView:isSliderEnabled];
+        [[OARootViewController instance].mapPanel updateOverlayUnderlayView];
     });
 }
 

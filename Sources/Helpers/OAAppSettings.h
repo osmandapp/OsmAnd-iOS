@@ -358,6 +358,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL mapSettingShowOnlineNotes;
 @property (assign, nonatomic) BOOL mapSettingShowOverlayOpacitySlider;
 @property (assign, nonatomic) BOOL mapSettingShowUnderlayOpacitySlider;
+@property (assign, nonatomic) BOOL isOverlayLayerVisible;
+@property (assign, nonatomic) BOOL isUnderlayLayerVisible;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
 
 @property (nonatomic) NSString *billingUserId;

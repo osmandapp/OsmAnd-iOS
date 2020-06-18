@@ -554,6 +554,8 @@
     UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
+        _settings.isOverlayLayerVisible = switchView.isOn;
+        
         if (switchView.isOn)
         {
             BOOL hasLastMapSource = _app.data.lastOverlayMapSource != nil;
@@ -594,6 +596,8 @@
     {
         OAMapStyleSettings *_styleSettings = [OAMapStyleSettings sharedInstance];
         OAMapStyleParameter *_hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+        _settings.isUnderlayLayerVisible = switchView.isOn;
+        
         if (switchView.isOn)
         {
             BOOL hasLastMapSource = _app.data.lastUnderlayMapSource != nil;

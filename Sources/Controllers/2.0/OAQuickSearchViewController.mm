@@ -601,7 +601,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 if (word && [word getLocation])
                 {
                     OASearchResult *searchResult = word.result;
-                    [OAQuickSearchTableController showOnMap:searchResult searchType:self.searchType delegate:self];
+                    [_tableController showOnMap:searchResult searchType:self.searchType delegate:self];
                 }
             }
             break;
@@ -1433,6 +1433,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self runCoreSearch:text updateResult:updateResult searchMore:searchMore onSearchStarted:nil onPublish:^(OASearchResultCollection *res, BOOL append) {
         [self updateSearchResult:res append:append];
     } onSearchFinished:^BOOL(OASearchPhrase *phrase) {
+        OASearchWord *lastSelectedWord = [phrase getLastSelectedWord];
+        BOOL isEmptyResult = ![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0;
+        if (_tableController && [_tableController isShowResult] && isEmptyResult && lastSelectedWord) {
+            [_tableController showOnMap:lastSelectedWord.result searchType:self.searchType delegate:self];
+        }
         return YES;
     }];
 }
@@ -1714,6 +1719,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) addEmptyResult
 {
     OAQuickSearchEmptyResultListItem *item = [[OAQuickSearchEmptyResultListItem alloc] init];
+    int minimalSearchRadius = [self.searchUICore getMinimalSearchRadius:self.searchUICore.getPhrase];
+    if ([self.searchUICore isSearchMoreAvailable:self.searchUICore.getPhrase] && minimalSearchRadius != INT_MAX)
+    {
+        double rd = [OsmAndApp.instance calculateRoundedDist:minimalSearchRadius];
+        item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"), [OsmAndApp.instance getFormattedDistance:rd]];
+    }
     
     if (!_paused && !_cancelPrev)
     {

@@ -39,6 +39,10 @@
 #import "OAEditPOIData.h"
 #import "OAOsmNotePoint.h"
 #import "OAOsmNoteBottomSheetViewController.h"
+#import "OAAddPOIAction.h"
+#import "OAAddOSMBugAction.h"
+#import "OAShowHideLocalOSMChanges.h"
+#import "OAShowHideOSMBugAction.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -171,6 +175,11 @@
         category = OALocalizedString(@"osm_note");
     
     return category;
+}
+
+- (NSArray *)getQuickActionTypes
+{
+    return @[OAAddPOIAction.TYPE, OAAddOSMBugAction.TYPE, OAShowHideOSMBugAction.TYPE, OAShowHideLocalOSMChanges.TYPE];
 }
 
 @end

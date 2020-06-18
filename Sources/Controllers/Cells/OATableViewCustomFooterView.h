@@ -12,6 +12,8 @@
 
 @property (nonatomic, readonly) UITextView *label;
 
+- (void) setIcon:(NSString *)imageName;
+
 + (CGFloat) getHeight:(NSString *)text width:(CGFloat)width;
 
 @end

@@ -20,6 +20,7 @@
 #import "OATargetInfoCollapsableViewCell.h"
 #import "OACollapsableView.h"
 #import <UIAlertView+Blocks.h>
+#import "OAColors.h"
 
 #import "OAColorViewCell.h"
 #import "OAGroupViewCell.h"
@@ -313,7 +314,7 @@
     self.tableView.dataSource = self;    
     
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-    self.tableView.separatorColor = UIColorFromRGB(0xf2f2f2);
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = UIColorFromRGB(0xffffff);
     self.tableView.backgroundView = view;

@@ -11,12 +11,15 @@
 #import "OARoutingHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAQuickActionType.h"
+
+static OAQuickActionType *TYPE;
 
 @implementation OANavResumePauseAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeResumePauseNavigation];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -61,6 +64,14 @@
         return OALocalizedString(@"resume_nav");
     
     return OALocalizedString(@"pause_nav");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:26 stringId:@"nav.resumepause" class:self.class name:OALocalizedString(@"pause_resume_nav") category:NAVIGATION iconName:@"ic_custom_navigation_arrow" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
+       
+    return TYPE;
 }
 
 @end

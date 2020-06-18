@@ -59,16 +59,17 @@
     
     if (_firstRow)
     {
-        _primaryFont = [UIFont fontWithName:@"AvenirNext-Bold" size:18];
-        _unitsFont = [UIFont fontWithName:@"AvenirNext-Medium" size:15];
-        _descFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
+        _primaryFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
+        _unitsFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium];
+        _descFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
         _descColor = UIColorFromRGB(0x8ea2b9);
     }
     else
     {
-        _primaryFont = [UIFont fontWithName:@"AvenirNext-Bold" size:15];
-        _unitsFont = [UIFont fontWithName:@"AvenirNext-Medium" size:13];
-        _descFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
+        _primaryFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightBold];
+        _unitsFont = [UIFont systemFontOfSize:13.0 weight:UIFontWeightMedium];
+        _descFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        
         _descColor = UIColorFromRGB(0x6C95B1);
     }
     
@@ -210,7 +211,7 @@
     if (!self.infoLabel)
     {
         self.infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0)];
-        _infoLabel.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
+        _infoLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
         _infoLabel.textAlignment = NSTextAlignmentRight;
         _infoLabel.textColor = UIColorFromRGB(0x8ea2b9);
         _infoLabel.minimumScaleFactor = 0.7;

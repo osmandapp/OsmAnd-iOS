@@ -20,6 +20,7 @@
 #define settingGeoFormatKey @"settingGeoFormatKey"
 #define settingMapArrowsKey @"settingMapArrowsKey"
 #define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
+#define settingEnable3DViewKey @"settingEnable3DView"
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
 #define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
@@ -92,6 +93,8 @@
 #define rotateMapKey @"rotateMap"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
 
+#define routingProfileKey @"routingProfile"
+
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
 #define fastRouteModeKey @"fastRouteMode"
@@ -99,6 +102,7 @@
 #define followTheRouteKey @"followTheRoute"
 #define followTheGpxRouteKey @"followTheGpxRoute"
 #define arrivalDistanceFactorKey @"arrivalDistanceFactor"
+#define enableTimeConditionalRoutingKey @"enableTimeConditionalRouting"
 #define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
 #define disableOffrouteRecalcKey @"disableOffrouteRecalc"
 #define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
@@ -177,6 +181,13 @@
 #define quickActionPortraitYKey @"quickActionPortraitY"
 
 #define contourLinesZoomKey @"contourLinesZoom"
+
+#define activeMarkerKey @"activeMarkerKey"
+#define mapDistanceIndicationVisabilityKey @"mapDistanceIndicationVisabilityKey"
+#define mapDistanceIndicationKey @"mapDistanceIndicationKey"
+#define mapLastPositionWidgetIndicatorKey @"mapLastPositionWidgetIndicatorKey"
+#define mapArrowsOnMapKey @"mapArrowsOnMapKey"
+#define mapDirectionLinesKey @"mapDirectionLinesKey"
 
 @interface OAMetricsConstant()
 
@@ -1122,6 +1133,88 @@
 
 @end
 
+@implementation OAProfileActiveMarkerConstant
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOAActiveMarkerConstant) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant
+{
+    [super set:activeMarkerConstant];
+}
+
+- (EOAActiveMarkerConstant) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAActiveMarkerConstant)activeMarkerConstant mode:(OAApplicationMode *)mode
+{
+    [super set:activeMarkerConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOAActiveMarkerConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAActiveMarkerConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OAProfileDistanceIndicationConstant
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOADistanceIndicationConstant) get
+{
+    return [super get];
+}
+
+- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant
+{
+    [super set:distanceIndicationConstant];
+}
+
+- (EOADistanceIndicationConstant) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOADistanceIndicationConstant)distanceIndicationConstant mode:(OAApplicationMode *)mode
+{
+    [super set:distanceIndicationConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOADistanceIndicationConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOADistanceIndicationConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OAProfileBoolean *> *_customBooleanRoutingProps;
@@ -1181,6 +1274,8 @@
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;
         
         _settingShowAltInDriveMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapShowAltInDriveModeKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapShowAltInDriveModeKey] : NO;
+        
+        _settingAllow3DView = [[NSUserDefaults standardUserDefaults] objectForKey:settingEnable3DViewKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingEnable3DViewKey] : YES;
 
         _settingDoNotShowPromotions = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotShowPromotionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotShowPromotionsKey] : NO;
         _settingDoNotUseAnalytics = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotUseFirebaseKey] : NO;
@@ -1246,9 +1341,18 @@
 
         _availableApplicationModes = [[NSUserDefaults standardUserDefaults] objectForKey:availableApplicationModesKey];
         if (!_availableApplicationModes)
-            self.availableApplicationModes = @"car,bicycle,pedestrian,";
+            self.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
 
         _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
+        
+        _routingProfile = [OAProfileString withKey:routingProfileKey defValue:@""];
+        [_routingProfile setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
+        [_routingProfile setModeDefaultValue:@"bicycle" mode:OAApplicationMode.BICYCLE];
+        [_routingProfile setModeDefaultValue:@"pedestrian" mode:OAApplicationMode.PEDESTRIAN];
+        [_routingProfile setModeDefaultValue:@"public_transport" mode:OAApplicationMode.PUBLIC_TRANSPORT];
+        [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
+        [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
+        [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
         
         _showDestinationArrow = [OAProfileBoolean withKey:showDestinationArrowKey defValue:NO];
         [_showDestinationArrow setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
@@ -1318,6 +1422,7 @@
         _followTheRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheRouteKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:followTheRouteKey] : NO;
         _followTheGpxRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheGpxRouteKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:followTheGpxRouteKey] : nil;
         _arrivalDistanceFactor = [OAProfileDouble withKey:arrivalDistanceFactorKey defValue:1.0];
+        _enableTimeConditionalRouting = [OAProfileBoolean withKey:enableTimeConditionalRoutingKey defValue:NO];
         _useIntermediatePointsNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:useIntermediatePointsNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useIntermediatePointsNavigationKey] : NO;
         _disableOffrouteRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableOffrouteRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableOffrouteRecalcKey] : NO;
         _disableWrongDirectionRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableWrongDirectionRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableWrongDirectionRecalcKey] : NO;
@@ -1423,6 +1528,14 @@
     
         _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
         
+        // Direction Appearance
+        _activeMarkers = [OAProfileActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
+        _distanceIndicationVisability = [OAProfileBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
+        _distanceIndication = [OAProfileDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
+        _lastPositionWidgetDisplay = [OAProfileDistanceIndicationConstant withKey:mapLastPositionWidgetIndicatorKey defValue:TOP_BAR_DISPLAY];
+        _arrowsOnMap = [OAProfileBoolean withKey:mapArrowsOnMapKey defValue:YES];
+        _directionLines = [OAProfileBoolean withKey:mapDirectionLinesKey defValue:YES];
+
         [self fetchImpassableRoads];
     }
     return self;
@@ -1521,6 +1634,12 @@
 {
     _settingShowAltInDriveMode = settingShowAltInDriveMode;
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowAltInDriveMode forKey:settingMapShowAltInDriveModeKey];
+}
+
+- (void) setSettingAllow3DView:(BOOL)settingEnable3DView
+{
+    _settingAllow3DView = settingEnable3DView;
+    [[NSUserDefaults standardUserDefaults] setBool:_settingAllow3DView forKey:settingEnable3DViewKey];
 }
 
 - (void) setSettingDoNotShowPromotions:(BOOL)settingDoNotShowPromotions

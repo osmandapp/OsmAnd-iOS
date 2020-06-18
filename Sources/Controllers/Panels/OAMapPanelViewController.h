@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 #import "OAMapViewController.h"
-#import "OACommonTypes.h"
 #import "OATargetPointView.h"
 #import "OAGPXRouteViewController.h"
 
@@ -31,6 +30,7 @@
 @property (nonatomic, strong, readonly) OAMapHudViewController* hudViewController;
 @property (nonatomic, readonly) OAMapActions *mapActions;
 @property (nonatomic, readonly) OAMapWidgetRegistry *mapWidgetRegistry;
+@property (nonatomic, readonly) UIView *shadeView;
 
 @property (nonatomic, readonly) BOOL activeTargetActive;
 @property (nonatomic, readonly) OATargetPointType activeTargetType;
@@ -120,6 +120,7 @@
 - (void) openTargetViewWithRouteDetails:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
 - (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
+- (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen;
 
 - (BOOL) hasGpxActiveTargetType;
 - (void) displayGpxOnMap:(OAGPX *)item;
@@ -142,6 +143,7 @@
 
 - (void) recreateControls;
 - (void) refreshMap;
+- (void) refreshMap:(BOOL)redrawMap;
 - (void) updateColors;
 
 - (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr;
@@ -154,5 +156,7 @@
 - (BOOL) switchToRoutePlanningLayout;
 - (void) startNavigation;
 - (void) stopNavigation;
+
+- (void) refreshToolbar;
 
 @end

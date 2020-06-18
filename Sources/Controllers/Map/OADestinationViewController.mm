@@ -21,6 +21,7 @@
 #import "OAHistoryHelper.h"
 #import "OAHistoryItem.h"
 #import "Localization.h"
+#import "OAColors.h"
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -68,13 +69,13 @@
     {        
         self.destinationCells = [NSMutableArray array];
         
-        self.parkingColor = UIColorFromRGB(0x4A69EC);
+        self.parkingColor = UIColorFromRGB(parking_pin_color_blue);
 
-        self.colors = @[UIColorFromRGB(0xff9207),
-                        UIColorFromRGB(0x00bcd4),
-                        UIColorFromRGB(0x7fbd4d),
-                        UIColorFromRGB(0xff444a),
-                        UIColorFromRGB(0xcddc39)];
+        self.colors = @[UIColorFromRGB(marker_pin_color_orange),
+                        UIColorFromRGB(marker_pin_color_blue),
+                        UIColorFromRGB(marker_pin_color_green),
+                        UIColorFromRGB(marker_pin_color_red),
+                        UIColorFromRGB(marker_pin_color_light_green)];
         
         self.markerNames = @[@"ic_destination_pin_1", @"ic_destination_pin_2", @"ic_destination_pin_3", @"ic_destination_pin_4", @"ic_destination_pin_5"];
         
@@ -168,9 +169,18 @@
     });
 }
 
+- (void) refreshView
+{
+    [self refreshCells];
+    [self updateFrame:YES];
+}
+
 - (void) refreshCells
 {
     [self clean];
+    
+    if ([_settings.distanceIndication get] == WIDGET_DISPLAY)
+        return;
 
     if ([OADestinationsHelper instance].sortedDestinations.count == 0)
         return;
@@ -188,7 +198,7 @@
     else
         secondCellDestination = (destinations.count >= 2 ? destinations[1] : nil);
     
-    if (firstCellDestination)
+    if (firstCellDestination && [_settings.distanceIndicationVisability get])
     {
         OADestination *destination = firstCellDestination;
 
@@ -209,7 +219,7 @@
         [cell updateDirections:location direction:direction];
     }
     
-    if (secondCellDestination)
+    if (secondCellDestination && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && [_settings.distanceIndicationVisability get])
     {
         OADestination *destination = secondCellDestination;
         
@@ -248,20 +258,27 @@
 
 - (void)clean
 {
-    NSInteger destinationsCount = [OADestinationsHelper instance].sortedDestinations.count;
-    
+    NSInteger destinationsCount = [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS ? [OADestinationsHelper instance].sortedDestinations.count : 1;
+
     while (_destinationCells.count > destinationsCount)
     {
         OADestinationCell *cell = [_destinationCells lastObject];
         [cell.contentView removeFromSuperview];
         [_destinationCells removeLastObject];
     }
-    
-    if (destinationsCount == 0)
+
+    if ([_settings.distanceIndication get] == WIDGET_DISPLAY || ![_settings.distanceIndicationVisability get])
     {
-        [self stopLocationUpdate];
-        [self.view removeFromSuperview];
+        while (_destinationCells.count > 0)
+        {
+            OADestinationCell *cell = [_destinationCells lastObject];
+            [cell.contentView removeFromSuperview];
+            [_destinationCells removeLastObject];
+        }
     }
+
+    if (destinationsCount == 0)
+        [self stopLocationUpdate];
 }
 
 -(void)obtainCurrentLocationDirection:(CLLocationCoordinate2D*)location direction:(CLLocationDirection*)direction
@@ -353,28 +370,31 @@
 - (void)updateFrame:(BOOL)animated
 {
     CGRect frame;
-    
-    NSInteger destinationsCount = MIN(2, [OADestinationsHelper instance].sortedDestinations.count);
-    
-    BOOL _navBarHidden = destinationsCount > 0;
+
+    BOOL _navBarHidden = _destinationCells.count > 0;
     self.navBarView.hidden = _navBarHidden;
     CGFloat navBarHeight = !_navBarHidden ? self.navBarView.bounds.size.height : 0.0;
     
     CGFloat top = [OAUtilities getStatusBarHeight];
-    CGFloat w = DeviceScreenWidth - OAUtilities.getLeftMargin * 2;
+    CGFloat w = DeviceScreenWidth;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             _singleLineMode = YES;
             CGFloat h = 50.0;
-            if (destinationsCount == 0)
+            if (_destinationCells.count == 0)
                 h = navBarHeight;
             
             frame = CGRectMake(0.0, top, w, h);
             
             if (_multiCell)
-                _multiCell.contentView.hidden = NO;
+            {
+                if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                    _multiCell.contentView.hidden = NO;
+                else
+                    _multiCell.contentView.hidden = YES;
+            }
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = YES;
         }
@@ -383,8 +403,8 @@
             _singleLineMode = NO;
             CGFloat h = 0.0;
 
-            if (destinationsCount > 0)
-                h = 50.0 + 35.0 * (destinationsCount - 1.0);
+            if (_destinationCells.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                h = 50.0 + 35.0 * (_destinationCells.count - 1.0);
             else
                 h = navBarHeight;
 
@@ -406,13 +426,18 @@
         {
             _singleLineMode = YES;
             CGFloat h = 50.0;
-            if (destinationsCount == 0)
+            if (_destinationCells.count == 0)
                 h = navBarHeight;
             
             frame = CGRectMake(0.0, top, w, h);
             
             if (_multiCell)
-                _multiCell.contentView.hidden = NO;
+            {
+                if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                    _multiCell.contentView.hidden = NO;
+                else
+                    _multiCell.contentView.hidden = YES;
+            }
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = YES;
         }
@@ -420,13 +445,18 @@
         {
             _singleLineMode = YES;
             CGFloat h = 50.0;
-            if (destinationsCount == 0)
+            if (_destinationCells.count == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0, top, w, h);
+            frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, top, w, h);
             
             if (_multiCell)
-                _multiCell.contentView.hidden = NO;
+            {
+                if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+                    _multiCell.contentView.hidden = NO;
+                else
+                    _multiCell.contentView.hidden = YES;
+            }
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = YES;
         }
@@ -525,8 +555,6 @@
 
         [_multiCell.contentView removeFromSuperview];
         _multiCell = nil;
-        
-        [self.view removeFromSuperview];
         [self stopLocationUpdate];
     }
 }

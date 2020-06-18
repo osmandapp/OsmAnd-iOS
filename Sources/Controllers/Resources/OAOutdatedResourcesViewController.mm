@@ -160,17 +160,17 @@
     [_resourcesItems removeAllObjects];
     for (const auto& resource : _outdatedResources)
     {
-        OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:self.region
-                                                                    thatContainsResource:resource->id];
+        OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
+                                                          thatContainsResource:resource->id];
         if (!match)
             continue;
 
         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
         item.resourceId = resource->id;
-        item.title = [self.class titleOfResource:resource
-                                  inRegion:match
-                            withRegionName:YES
-                          withResourceType:NO];
+        item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                 inRegion:match
+                                           withRegionName:YES
+                                         withResourceType:NO];
         item.resource = resource;
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.worldRegion = match;
@@ -247,7 +247,7 @@
                                                                  {
                                                                      const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
                                                                      
-                                                                     NSString* resourceName = [OAResourcesBaseViewController titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES withResourceType:YES];
+                                                                     NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES withResourceType:YES];
 
                                                                      [self startDownloadOf:resourceInRepository resourceName:resourceName];
                                                                  }
@@ -354,7 +354,7 @@
 
     if (item.worldRegion && item.worldRegion.superregion)
     {
-        NSString *countryName = [self.class getCountryName:item];
+        NSString *countryName = [OAResourcesUIHelper getCountryName:item];
         if (countryName)
             title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
         else
@@ -403,9 +403,9 @@
     if (cell.detailTextLabel != nil)
     {
         if (item.sizePkg > 0)
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
         else
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [OAResourcesUIHelper resourceTypeLocalized:item.resourceType]];
     }
     
     //[NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType]

@@ -8,12 +8,15 @@
 
 #import "OANavAutoZoomMapAction.h"
 #import "OAAppSettings.h"
+#import "OAQuickActionType.h"
+
+static OAQuickActionType *TYPE;
 
 @implementation OANavAutoZoomMapAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeAutoZoomMap];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -35,6 +38,14 @@
 - (NSString *)getActionStateName
 {
     return [self isActionWithSlash] ? OALocalizedString(@"auto_zoom_off") : OALocalizedString(@"auto_zoom_on");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:23 stringId:@"nav.autozoom" class:self.class name:OALocalizedString(@"toggle_auto_zoom") category:NAVIGATION iconName:@"ic_navbar_search" secondaryIconName:nil editable:NO];
+       
+    return TYPE;
 }
 
 @end

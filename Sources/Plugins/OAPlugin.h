@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAMapPanelViewController, OAMapInfoController, OAMapViewController;
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType;
 
 @interface OAPlugin : NSObject
 
@@ -32,6 +32,7 @@
 - (BOOL) isVisible;
 - (void) disable;
 - (NSString *) getHelpFileName;
+- (NSArray<OAQuickActionType *> *) getQuickActionTypes;
 
 + (void) initPlugins;
 + (BOOL) enablePlugin:(OAPlugin *)plugin enable:(BOOL)enable;
@@ -47,6 +48,7 @@
 + (BOOL) onDestinationReached;
 + (void) createLayers;
 + (void) updateLocationPlugins:(CLLocation *)location;
++ (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types;
 
 - (void) updateLayers;
 - (void) registerLayers;

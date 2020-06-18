@@ -19,7 +19,7 @@
 #define kOsmBugsLayerId @"osm_bugs"
 #define kMapillaryVectorLayerId @"mapillary_vector"
 
-#define kHillshadeMapLayerId @"hillshade_map"
+#define kTerrainMapLayerId @"terrain_map"
 #define kOverlayMapLayerId @"overlay_map"
 #define kUnderlayMapLayerId @"underlay_map"
 #define kGpxLayerId @"gpx_map"

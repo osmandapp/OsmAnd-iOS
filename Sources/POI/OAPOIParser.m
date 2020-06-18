@@ -196,7 +196,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     
     ref.baseLangType = poiAdditional.baseLangType;
     ref.lang = poiAdditional.lang;
-    [ref setAdditional:(!lastType ? lastType : (!lastFilter ? lastFilter : lastCategory))];
+    [ref setAdditional:(lastType ? lastType : (lastFilter ? lastFilter : lastCategory))];
     ref.top = poiAdditional.top;
     ref.isText = poiAdditional.isText;
     ref.order = poiAdditional.order;

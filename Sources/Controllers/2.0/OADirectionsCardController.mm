@@ -61,7 +61,9 @@
 {
     [_items removeAllObjects];
     
-    for (OADestination *destination in _app.data.destinations)
+    NSArray<OADestination *> *destinations = [NSArray arrayWithArray:OADestinationsHelper.instance.sortedDestinations];
+    
+    for (OADestination *destination in destinations)
     {
         if (!destination.routePoint)
         {
@@ -74,22 +76,17 @@
     CLLocation* newLocation = _app.locationServices.lastKnownLocation;
     if (!newLocation)
         return;
+}
 
-    [_items sortUsingComparator:^NSComparisonResult(OADestinationItem *obj1, OADestinationItem *obj2) {
-        
-        const auto distance1 = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                          newLocation.coordinate.latitude,
-                                                          obj1.destination.longitude, obj1.destination.latitude);
-        const auto distance2 = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                           newLocation.coordinate.latitude,
-                                                           obj2.destination.longitude, obj2.destination.latitude);
-        if (distance2 > distance1)
-            return NSOrderedAscending;
-        else if (distance2 < distance1)
-            return NSOrderedDescending;
-        else
-            return NSOrderedSame;
-    }];
+- (void) reorderObjects:(NSInteger)source dest:(NSInteger)dest
+{
+    OADestinationItem *src = _items[source];
+    OADestinationItem *dst = _items[dest];
+    dst.destination.index = source;
+    src.destination.index = dest;
+    [_items replaceObjectAtIndex:source withObject:dst];
+    [_items replaceObjectAtIndex:dest withObject:src];
+    [OADestinationsHelper.instance reorderDestinations:_items];
 }
 
 - (NSInteger)rowsCount

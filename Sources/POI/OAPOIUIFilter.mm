@@ -151,6 +151,22 @@
     return self;
 }
 
+- (instancetype)initWithFilter:(OAPOIUIFilter *)filter name:(NSString *)nm filterId:(NSString *)fId
+{
+    self = [self init];
+    if (self)
+    {
+        isStandardFilter = NO;
+        filterId = fId;
+        name = nm;
+        acceptedTypes = filter.acceptedTypes;
+        poiAdditionals = filter.poiAdditionals;
+        _filterByName = filter.filterByName;
+        _savedFilterByName = filter.savedFilterByName;
+    }
+    return self;
+}
+
 + (NSComparator) getComparator
 {
     static dispatch_once_t once;
@@ -779,7 +795,7 @@
 
 + (UIImage *) getUserIcon
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_user_defined", [OAUtilities drawablePostfix]]];
+    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:@"mx_user_defined"]];
     return [OAUtilities applyScaleFactorToImage:img];
 }
 

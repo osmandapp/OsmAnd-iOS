@@ -47,6 +47,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (instancetype) initWithBasePoiType:(OAPOIBaseType *)type idSuffix:(NSString *)idSuffix;
 - (instancetype) initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
 - (instancetype) initWithFiltersToMerge:(NSSet<OAPOIUIFilter *> *)filtersToMerge;
+- (instancetype) initWithFilter:(OAPOIUIFilter *)filter name:(NSString *)nm filterId:(NSString *)fId;
 
 - (BOOL) isAutomaticallyIncreaseSearch;
 - (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat lon:(double)lon topLatitude:(double)topLatitude bottomLatitude:(double)bottomLatitude leftLongitude:(double)leftLongitude rightLongitude:(double)rightLongitude zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher;

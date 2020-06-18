@@ -125,6 +125,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
 - (BOOL) addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName;
+- (NSArray<OAGpxWpt *> *) getLocationMarksOf:(NSString *)gpxFileName;
 
 - (BOOL) canZoomIn;
 - (void) animatedZoomIn;
@@ -147,6 +148,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (float) calculateMapRuler;
 
 - (BOOL) isMyLocationVisible;
+- (BOOL) isLocationVisible:(double)latitude longitude:(double)longitude;
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
 - (CGFloat) screensToFly:(Point31)position31;
 
@@ -173,7 +175,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
-- (BOOL) updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath;
+- (BOOL) updateMetadata:(OAGpxMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;
 

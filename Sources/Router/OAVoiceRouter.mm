@@ -87,7 +87,7 @@ std::string preferredLanguage;
         
         // Default speed to have comfortable announcements (Speed in m/s)
         _DEFAULT_SPEED = 12;
-        _TURN_DEFAULT_SPEED = 5;
+        _TURN_NOW_SPEED = 5;
         
         _PREPARE_LONG_DISTANCE = 0;
         _PREPARE_LONG_DISTANCE_END = 0;
@@ -95,7 +95,7 @@ std::string preferredLanguage;
         _PREPARE_DISTANCE_END = 0;
         _TURN_IN_DISTANCE = 0;
         _TURN_IN_DISTANCE_END = 0;
-        _TURN_DISTANCE = 0;
+        _TURN_NOW_DISTANCE = 0;
     }
     return self;
 }
@@ -142,57 +142,53 @@ std::string preferredLanguage;
     // Turn prompt starts either at distance, or additionally (TURN_IN and TURN only) if actual-lead-time(currentSpeed) < maximum-lead-time(defined by default speed)
     if ([[_router getAppMode] isDerivedRoutingFrom:[OAApplicationMode CAR]])
     {
-        _PREPARE_LONG_DISTANCE = 3500;             // [105 sec @ 120 km/h]
-        // Issue 1411: Do not play prompts for PREPARE_LONG_DISTANCE, not needed.
-        _PREPARE_LONG_DISTANCE_END = 3000 + 1000;  // [ 90 sec @ 120 km/h]
-        _PREPARE_DISTANCE = 1500;                  // [125 sec]
-        _PREPARE_DISTANCE_END = 1200;            // [100 sec]
-        _TURN_IN_DISTANCE = 300;              //   23 sec
-        _TURN_IN_DISTANCE_END = 210;               //   16 sec
-        _TURN_DISTANCE = 50;                       //    7 sec
-        _TURN_DEFAULT_SPEED = 7.f;                  //   25 km/h
-        _DEFAULT_SPEED = 13;                       //   48 km/h
-    }
-    else if ([[_router getAppMode] isDerivedRoutingFrom:[OAApplicationMode BICYCLE]])
-    {
-        _PREPARE_LONG_DISTANCE = 500;              // [100 sec]
-        // Do not play:
-        _PREPARE_LONG_DISTANCE_END = 300 + 1000;   // [ 60 sec]
-        _PREPARE_DISTANCE = 200;                   // [ 40 sec]
-        _PREPARE_DISTANCE_END = 120;               // [ 24 sec]
-        _TURN_IN_DISTANCE = 80;                    //   16 sec
-        _TURN_IN_DISTANCE_END = 60;                //   12 sec
-        _TURN_DISTANCE = 30;                       //    6 sec. Check if this works with GPS accuracy!
-        _TURN_DEFAULT_SPEED = _DEFAULT_SPEED = 5;   //   18 km/h
-    }
-    else if ([[_router getAppMode] isDerivedRoutingFrom:[OAApplicationMode PEDESTRIAN]])
-    {
-        // prepare_long_distance warning not needed for pedestrian, but for goAhead prompt
-        _PREPARE_LONG_DISTANCE = 500;
-        // Do not play:
-        _PREPARE_LONG_DISTANCE_END = 300 + 300;
-        // Prepare distance is not needed for pedestrian
-        _PREPARE_DISTANCE = 200;                    // [100 sec]
-        // Do not play:
-        _PREPARE_DISTANCE_END = 150 + 100;          // [ 75 sec]
-        _TURN_IN_DISTANCE = 50;                     //   25 sec
-        _TURN_IN_DISTANCE_END = 30;                 //   15 sec
-        _TURN_DISTANCE = 15;                        //   7,5sec. Check if this works with GPS accuracy!
-        _TURN_DEFAULT_SPEED = _DEFAULT_SPEED = 2.f;   //   7,2 km/h
+        _DEFAULT_SPEED = 14;                       //   ~50 km/h
     }
     else
     {
-        _DEFAULT_SPEED = [_router getAppMode].defaultSpeed;
-        _TURN_DEFAULT_SPEED = _DEFAULT_SPEED / 2;
-        _PREPARE_LONG_DISTANCE = (int) (_DEFAULT_SPEED * 270);
-        // Do not play:
-        _PREPARE_LONG_DISTANCE_END = (int) (_DEFAULT_SPEED * 230) * 2;
-        _PREPARE_DISTANCE = (int) (_DEFAULT_SPEED * 115);
-        _PREPARE_DISTANCE_END = (int) (_DEFAULT_SPEED * 92);
-        _TURN_IN_DISTANCE = (int) (_DEFAULT_SPEED * 23);
-        _TURN_IN_DISTANCE_END = (int) (_DEFAULT_SPEED * 16);
-        _TURN_DISTANCE = (int) (_DEFAULT_SPEED * 7);
+        // minimal is 1 meter for turn now
+        _DEFAULT_SPEED = MAX([_router getAppMode].defaultSpeed, 0.3);
     }
+    // Do not play [issue 1411]: prepare_long_distance warning not needed, used only for goAhead prompt
+    // 300 sec: 4 200 - 3 500 m - car [ 115 - 95 sec @ 120 km/h]
+    _PREPARE_LONG_DISTANCE = (int) (_DEFAULT_SPEED * 300);
+    _PREPARE_LONG_DISTANCE_END = (int) (_DEFAULT_SPEED * 250) ;
+    
+    if (_DEFAULT_SPEED < 30) {
+        //        if (PREPARE_LONG_DISTANCE_END - PREPARE_DISTANCE < 4000) {
+        // Play only for high speed vehicle with speed > 110 km/h
+        _PREPARE_DISTANCE_END = _PREPARE_DISTANCE * 2;
+    }
+    
+    // *#8749: Here the change for bicycle: 40-30 sec, 200-150 m -> 115-90 sec, 320-250m [ need to be tested ]
+    // 115 sec: 1 500 m - car [45 sec @ 120 km/h], 320 m - bicycle [45 sec @ 25 km/h], 230 m - pedestrian
+    _PREPARE_DISTANCE = (int) (_DEFAULT_SPEED * 115);
+    // 90  sec: 1 200 m - car, 250 m - bicycle [36 sec @ 25 km/h],
+    _PREPARE_DISTANCE_END = (int) (_DEFAULT_SPEED * 90);
+    
+    // 22 sec: 310 m - car, 60 m - bicycle, 50m - pedestrian
+    _TURN_IN_DISTANCE = (int) (_DEFAULT_SPEED  * 22);
+    // 15 sec: 210 m - car, 40 m - bicycle, 30 m - pedestrian
+    _TURN_IN_DISTANCE_END = (int) (_DEFAULT_SPEED * 15);
+    
+    // same as speed < 150/(90-22) m/s = 2.2 m/s = 8 km/h
+    if (_PREPARE_DISTANCE_END - _TURN_IN_DISTANCE < 150) {
+        // Do not play: for pedestrian and slow transport
+        _PREPARE_DISTANCE_END = _PREPARE_DISTANCE * 2;
+    }
+    
+    // Turn now: 3.5 sec normal speed, 7 second for halfspeed (default)
+    // float TURN_NOW_TIME = 7;
+    
+    // ** #8749 to keep 1m / 1 sec precision (GPS_TOLERANCE - 12 m)
+    // 1 kmh - 1 m, 4 kmh - 4 m (pedestrian), 10 kmh - 10 m (bicycle), 50 kmh - 50 m (car)
+    // TURN_NOW_DISTANCE = (int) (DEFAULT_SPEED * 3.6); // 3.6 sec
+    // 50 kmh - 48 m (car), 10 kmh - 20 m, 4 kmh - 15 m, 1 kmh - 12 m
+    _TURN_NOW_DISTANCE = (int) (OARoutingHelper.getGpsTolerance + _DEFAULT_SPEED * 2.5 * OARoutingHelper.getArrivalDistanceFactor); // 3.6 sec
+    // 1 kmh - 1 sec, 4 kmh - 2 sec (pedestrian), 10 kmh - 3 sec (*bicycle), 50 kmh - 7 sec (car)
+    double _TURN_NOW_TIME = MIN(sqrt(_DEFAULT_SPEED * 3.6), 8);
+    
+    _TURN_NOW_SPEED = _TURN_NOW_DISTANCE / _TURN_NOW_TIME;
 }
 
 - (void) arrivedIntermediatePoint:(NSString *)name
@@ -257,7 +253,7 @@ std::string preferredLanguage;
     if (currentStatus == STATUS_UNKNOWN) {
         // Play "Continue for ..." if (1) after route calculation no other prompt is due, or (2) after a turn if next turn is more than PREPARE_LONG_DISTANCE away
         if ((playGoAheadDist == -1) || (dist > _PREPARE_LONG_DISTANCE)) {
-            playGoAheadDist = dist - 3 * _TURN_DISTANCE;
+            playGoAheadDist = dist - 3 * _TURN_NOW_DISTANCE;
         }
     }
 
@@ -265,7 +261,7 @@ std::string preferredLanguage;
     // Note: getNextRouteDirectionInfoAfter(nextInfo, x, y).distanceTo is distance from nextInfo, not from current position!
 
     // STATUS_TURN = "Turn (now)"
-    if ((repeat || [self statusNotPassed:STATUS_TURN]) && [self isDistanceLess:speed dist:dist etalon:_TURN_DISTANCE defSpeed:_TURN_DEFAULT_SPEED]) {
+    if ((repeat || [self statusNotPassed:STATUS_TURN]) && [self isDistanceLess:speed dist:dist etalon:_TURN_NOW_DISTANCE defSpeed:_TURN_NOW_SPEED]) {
         if ([nextNextInfo distanceTo] < _TURN_IN_DISTANCE_END && nextNextInfo != nil) {
             [self playMakeTurn:currentSegment routeDirectionInfo:next nextDirectionInfo:nextNextInfo];
         } else {
@@ -292,7 +288,7 @@ std::string preferredLanguage;
         // STATUS_TURN_IN = "Turn in ..."
     } else if ((repeat || [self statusNotPassed:STATUS_TURN_IN]) && [self isDistanceLess:speed dist:dist etalon:_TURN_IN_DISTANCE defSpeed:0]) {
         if (repeat || dist >= _TURN_IN_DISTANCE_END) {
-            if (([self isDistanceLess:speed dist:nextNextInfo.distanceTo etalon:_TURN_DISTANCE defSpeed:0] || nextNextInfo.distanceTo < _TURN_IN_DISTANCE_END) &&
+            if (([self isDistanceLess:speed dist:nextNextInfo.distanceTo etalon:_TURN_NOW_DISTANCE defSpeed:0] || nextNextInfo.distanceTo < _TURN_IN_DISTANCE_END) &&
                 nextNextInfo != nil) {
                 [self playMakeTurnIn:currentSegment info:next dist:(dist - (int) _btScoDelayDistance) nextInfo:nextNextInfo.directionInfo];
             } else {
@@ -700,7 +696,7 @@ std::string preferredLanguage;
     if (loc && loc.speed >= 0)
         speed = loc.speed;
     
-    if ([self isDistanceLess:speed dist:dist etalon:_TURN_DISTANCE defSpeed:0])
+    if ([self isDistanceLess:speed dist:dist etalon:_TURN_NOW_DISTANCE defSpeed:0])
         return 0;
     else if (dist <= _PREPARE_DISTANCE)
         return 1;

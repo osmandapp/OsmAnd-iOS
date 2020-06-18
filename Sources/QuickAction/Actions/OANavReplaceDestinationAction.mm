@@ -15,14 +15,17 @@
 #import "OAPointDescription.h"
 #import "OAMapActions.h"
 #import "OsmAndApp.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/Utilities.h>
+
+static OAQuickActionType *TYPE;
 
 @implementation OANavReplaceDestinationAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeReplaceDestination];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -40,6 +43,14 @@
 - (NSString *)getActionText
 {
     return OALocalizedString(@"quick_action_replace_dest_descr");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:21 stringId:@"nav.destination.replace" class:self.class name:OALocalizedString(@"replace_destination") category:NAVIGATION iconName:@"ic_action_target" secondaryIconName:@"ic_custom_compound_action_replace" editable:NO];
+       
+    return TYPE;
 }
 
 @end

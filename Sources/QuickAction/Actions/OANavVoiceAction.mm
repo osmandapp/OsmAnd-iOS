@@ -10,12 +10,15 @@
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
+#import "OAQuickActionType.h"
+
+static OAQuickActionType *TYPE;
 
 @implementation OANavVoiceAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeNavVoice];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -40,6 +43,14 @@
 - (NSString *)getActionStateName
 {
     return [self isActionWithSlash] ? OALocalizedString(@"mute_voice") : OALocalizedString(@"unmute_voice");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:11 stringId:@"nav.voice" class:self.class name:OALocalizedString(@"toggle_voice") category:NAVIGATION iconName:@"ic_custom_sound" secondaryIconName:nil editable:NO];
+       
+    return TYPE;
 }
 
 @end

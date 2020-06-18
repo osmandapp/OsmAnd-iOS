@@ -22,6 +22,7 @@
 #import "OAEditGPXColorViewController.h"
 #import "OAGPXTrackColorCollection.h"
 #import "OADefaultFavorite.h"
+#import "OASelectedGPXHelper.h"
 #import "OAGPXRouter.h"
 #import "OASizes.h"
 
@@ -300,6 +301,7 @@
 {
     [_mapViewController keepTempGpxTrackVisible];
     [self closePointsController];
+    [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
     return YES;
 }
 
@@ -351,7 +353,7 @@
 
 - (CGFloat) contentHeight
 {
-    return self.isLandscape || OAUtilities.isIPad ? DeviceScreenHeight - self.delegate.getHeaderViewHeight - self.getNavBarHeight - OAUtilities.getStatusBarHeight : DeviceScreenHeight - self.getNavBarHeight - OAUtilities.getStatusBarHeight;
+    return self.isLandscape || OAUtilities.isIPad ? DeviceScreenHeight - self.delegate.getHeaderViewHeight - self.getNavBarHeight - OAUtilities.getStatusBarHeight : DeviceScreenHeight - self.getNavBarHeight - self.delegate.getHeaderViewHeight + OAUtilities.getBottomMargin;
 }
 
 - (void) applyLocalization
@@ -1395,6 +1397,7 @@
         NSString* newName = [alertView textFieldAtIndex:0].text;
         if (newName.length > 0)
         {
+            NSString *oldFileName = self.gpx.gpxFileName;
             self.gpx.gpxTitle = newName;
             self.gpx.gpxFileName = [self.gpx.gpxTitle stringByAppendingPathExtension:@"gpx"];
             [[OAGPXDatabase sharedDb] save];
@@ -1440,8 +1443,14 @@
             if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
                 [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
             
+            BOOL saveFailed = ![_mapViewController updateMetadata:metadata oldPath:self.doc.fileName docPath:path];
             self.doc.fileName = path;
-            [_mapViewController updateMetadata:metadata docPath:path];
+            self.doc.metadata = metadata;
+            
+            if (saveFailed)
+                [self.doc saveTo:path];
+            
+            [OASelectedGPXHelper renameVisibleTrack:oldFileName newName:path.lastPathComponent];
             
             self.titleView.text = newName;
             if (self.delegate)

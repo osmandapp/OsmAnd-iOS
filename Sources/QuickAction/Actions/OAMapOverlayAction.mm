@@ -12,15 +12,18 @@
 #import "OAMapSource.h"
 #import "Localization.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OAQuickActionType.h"
 
 #define KEY_OVERLAYS @"overlays"
 #define KEY_NO_OVERLAY @"no_overlay"
+
+static OAQuickActionType *TYPE;
 
 @implementation OAMapOverlayAction
 
 - (instancetype) init
 {
-    self = [super initWithType:EOAQuickActionTypeMapOverlay];
+    self = [super initWithActionType:self.class.TYPE];
     if (self)
     {
         [super commonInit];
@@ -169,6 +172,14 @@
     [params setObject:sources forKey:KEY_OVERLAYS];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return sources.count > 0;
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:15 stringId:@"mapoverlay.change" class:self.class name:OALocalizedString(@"change_map_overlay") category:CONFIGURE_MAP iconName:@"ic_custom_overlay_map" secondaryIconName:nil];
+       
+    return TYPE;
 }
 
 @end

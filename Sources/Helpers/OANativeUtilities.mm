@@ -43,10 +43,9 @@
 
 + (std::shared_ptr<SkBitmap>) skBitmapFromMmPngResource:(NSString *)resourceName
 {
-    resourceName = [NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@", [OAUtilities drawablePostfix], resourceName];
+    resourceName = [OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", resourceName]];
     
-    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
-                                                              ofType:@"png"];
+    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"png"];
     if (resourcePath == nil)
         return nullptr;
 

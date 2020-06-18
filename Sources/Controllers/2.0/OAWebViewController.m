@@ -9,7 +9,7 @@
 #import "OAWebViewController.h"
 #import "Localization.h"
 
-@interface OAWebViewController ()
+@interface OAWebViewController () <WKNavigationDelegate>
 
 @end
 
@@ -64,6 +64,7 @@
                                                       encoding:NSUTF8StringEncoding
                                                          error:NULL];
         [_webView loadHTMLString:content baseURL:[NSURL URLWithString:@"https://osmand.net/"]];
+        _webView.navigationDelegate = self;
     }
     else
     {
@@ -77,8 +78,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - WKNavigationDelegate
 
-
-
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+{
+    NSString *jsString = [[NSString alloc] initWithFormat:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '%lu%%'",(unsigned long) 250];
+    [webView evaluateJavaScript:jsString completionHandler:nil];
+}
 
 @end

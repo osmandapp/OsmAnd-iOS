@@ -48,6 +48,7 @@
 #import "OARouteSettingsViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OARoutePreferencesParameters.h"
+#import "OATransportRoutingHelper.h"
 
 #import <EventKit/EventKit.h>
 
@@ -106,6 +107,9 @@
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 #include <OsmAndCore/ICU.h>
 
+#import "OASizes.h"
+#import "OADirectionAppearanceViewController.h"
+#import "OAHistoryViewController.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -120,7 +124,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OARouteInformationListener>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
@@ -169,9 +173,7 @@ typedef enum
     UIStatusBarStyle _customStatusBarStyle;
     
     BOOL _mapStateSaved;
-    
-    UIView *_shadeView;
-    
+        
     NSMutableArray<OAToolbarViewController *> *_toolbars;
     BOOL _topControlsVisible;
 }
@@ -213,6 +215,7 @@ typedef enum
 
     [_routingHelper addListener:self];
     [_routingHelper addProgressBar:self];
+    [OATransportRoutingHelper.sharedInstance addProgressBar:self];
     
     _toolbars = [NSMutableArray array];
     _topControlsVisible = YES;
@@ -260,7 +263,7 @@ typedef enum
         _mapNeedsRestore = NO;
         [self restoreMapAfterReuse];
     }
-    
+    [_destinationViewController refreshView];
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
@@ -311,9 +314,11 @@ typedef enum
         _destinationViewController.delegate = self;
         _destinationViewController.destinationDelegate = self;
         
-        if ([OADestinationsHelper instance].sortedDestinations.count > 0)
+        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisability get])
             [self showToolbar:_destinationViewController];
     }
+    else if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+        [self showToolbar:_destinationViewController];
     
     // Inflate new HUD controller
     if (!self.hudViewController)
@@ -349,6 +354,15 @@ typedef enum
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
 
+- (void) refreshToolbar
+{
+    [_destinationViewController refreshView];
+    if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndicationVisability get] && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+        [self showToolbar:_destinationViewController];
+    else
+        [self hideToolbar:_destinationViewController];
+}
+
 - (void) updateOverlayUnderlayView:(BOOL)show
 {
     [self.hudViewController updateOverlayUnderlayView:show];
@@ -361,9 +375,12 @@ typedef enum
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    if (_dashboard || !_mapillaryController.view.hidden)
+    if (_dashboard || !_mapillaryController.view.hidden || (_destinationViewController && _destinationViewController.view.superview))
         return UIStatusBarStyleLightContent;
-    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection || _targetMenuView.targetPoint.type == OATargetRouteDetails || _targetMenuView.targetPoint.type == OATargetRouteDetailsGraph))
+    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
+                                        _targetMenuView.targetPoint.type == OATargetRouteDetails ||
+                                        _targetMenuView.targetPoint.type == OATargetRouteDetailsGraph ||
+                                        _targetMenuView.targetPoint.type == OATargetTransportRouteDetails))
         return UIStatusBarStyleDefault;
     
     if (_customStatusBarStyleNeeded)
@@ -960,7 +977,7 @@ typedef enum
 
 - (void) applyTargetPointController:(OATargetPoint *)targetPoint
 {
-    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:targetPoint activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState];
+    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:targetPoint activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:YES];
     if (controller)
     {
         targetPoint.ctrlAttrTypeStr = [controller getAttributedTypeStr];
@@ -1452,7 +1469,7 @@ typedef enum
         _shadeView = nil;
     }
     
-    _shadeView = [[UIView alloc] initWithFrame:self.view.frame];
+    _shadeView = [[UIView alloc] initWithFrame:CGRectMake(0.0 - OAUtilities.getLeftMargin, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
     _shadeView.backgroundColor = UIColorFromRGBA(0x00000060);
     _shadeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _shadeView.alpha = 0.0;
@@ -1518,7 +1535,7 @@ typedef enum
     if ([_mapViewController hasFavoriteAt:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)])
         return;
     
-    OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title];
+    OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title headerOnly:NO];
     
     UIColor* color = [UIColor colorWithRed:favoriteViewController.favorite.favorite->getColor().r/255.0 green:favoriteViewController.favorite.favorite->getColor().g/255.0 blue:favoriteViewController.favorite.favorite->getColor().b/255.0 alpha:1.0];
     OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
@@ -1846,7 +1863,7 @@ typedef enum
     
     _mapStateSaved = saveMapState;
     
-    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState];
+    OATargetMenuViewController *controller = [OATargetMenuViewController createMenuController:_targetMenuView.targetPoint activeTargetType:_activeTargetType activeViewControllerState:_activeViewControllerState headerOnly:NO];
     BOOL prepared = NO;
     switch (_targetMenuView.targetPoint.type)
     {
@@ -1929,6 +1946,7 @@ typedef enum
         case OATargetRouteDetails:
         case OATargetRouteDetailsGraph:
         case OATargetChangePosition:
+        case OATargetTransportRouteDetails:
         {
             if (controller)
                 [self.targetMenuView doInit:NO];
@@ -2213,7 +2231,6 @@ typedef enum
     [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.targetMultiMenuView transitionToSize];
-        [self.routeInfoView layoutSubviews];
     } completion:nil];
 }
 
@@ -2583,6 +2600,44 @@ typedef enum
     
     [self enterContextMenuMode];
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+    }];
+}
+
+- (void) openTargetViewWithTransportRouteDetails:(NSInteger)routeIndex showFullScreen:(BOOL)showFullScreeen
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+    [UIApplication.sharedApplication.keyWindow.rootViewController dismissViewControllerAnimated:YES completion:nil];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    targetPoint.type = OATargetTransportRouteDetails;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = @"";
+    
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+    targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    _targetLatitude = latLon.latitude;
+    _targetLongitude = latLon.longitude;
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.toolbarNeeded = NO;
+    targetPoint.targetObj = @(routeIndex);
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        if (showFullScreeen)
+            [_targetMenuView requestFullScreenMode];
         _activeTargetActive = YES;
     }];
 }
@@ -3073,10 +3128,28 @@ typedef enum
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
+        
+        CGFloat bottomMargin = [OAUtilities getBottomMargin];
+        cardsController.toolBarHeight.constant = 48 + bottomMargin;
+        cardsController.leftTableViewPadding.constant = 8 + OAUtilities.getLeftMargin;
+        cardsController.rightTableViewPadding.constant = 8 + OAUtilities.getLeftMargin;
+        cardsController.leftToolbarPadding.constant = OAUtilities.getLeftMargin;
+        cardsController.rightToolbarPadding.constant = OAUtilities.getLeftMargin;
+        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat h = DeviceScreenHeight - y;
+        CGFloat w = DeviceScreenWidth;
+        
+        CGFloat toolbarHeight = cardsController.toolBarHeight.constant;
+        CGFloat cardsTableHeight = h - toolbarHeight;
+        
         if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
         {
+            cardsController.view.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);
             [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
-                cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.origin.y - _destinationViewController.view.frame.size.height);
+                cardsController.cardsView.frame = CGRectMake(0.0, 0.0, w, cardsTableHeight);
+                _shadeView.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);
+                _shadeView.alpha = 1.0;
+                [cardsController.tableView reloadData];
             }];
         }
     }
@@ -3095,10 +3168,18 @@ typedef enum
 
 - (void) refreshMap
 {
+    [self refreshMap:NO];
+}
+
+- (void) refreshMap:(BOOL)redrawMap
+{
     if (self.hudViewController)
         [self.hudViewController updateInfo];
     
     [self updateToolbar];
+    
+    if (redrawMap)
+        [_mapViewController.mapView invalidateFrame];
 }
 
 #pragma mark - OAParkingDelegate
@@ -3172,7 +3253,8 @@ typedef enum
 
 - (void)destinationsAdded
 {
-    [self showToolbar:_destinationViewController];
+    if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisability get])
+        [self showToolbar:_destinationViewController];
 }
 
 - (void) hideDestinations
@@ -3190,8 +3272,15 @@ typedef enum
 
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
         CGFloat h = DeviceScreenHeight - y;
+        CGFloat w = DeviceScreenWidth;
+        CGFloat toolbarHeight = cardsController.toolBarHeight.constant;
+        CGFloat cardsTableHeight = h - toolbarHeight;
     
-        cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
+        cardsController.view.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, 0.0, w, DeviceScreenHeight);
+        cardsController.cardsView.frame = CGRectMake(0.0, y - h, w, h - toolbarHeight);
+        cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, toolbarHeight);
+        [cardsController.cardsView setHidden:YES];
+        [cardsController.bottomView setHidden:YES];
         
         [self.hudViewController addChildViewController:cardsController];
         
@@ -3204,10 +3293,15 @@ typedef enum
         if (_destinationViewController)
             [self.destinationViewController updateCloseButton];
         
+        cardsController.view.frame = CGRectMake(0.0 - OAUtilities.getLeftMargin, y, w, h);
+        
         [UIView animateWithDuration:.25 animations:^{
-            cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
+            cardsController.cardsView.frame = CGRectMake(0.0, 0.0, w, cardsTableHeight);
+            cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight - toolbarHeight, DeviceScreenWidth, toolbarHeight);
             _shadeView.alpha = 1.0;
         }];
+        [cardsController.cardsView setHidden:NO];
+        [cardsController.bottomView setHidden:NO];
     }
 }
 
@@ -3221,14 +3315,17 @@ typedef enum
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     BOOL wasOnTop = _destinationViewController.showOnTop;
     _destinationViewController.showOnTop = NO;
+    
     if (cardsController.view.superview)
     {
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
         CGFloat h = DeviceScreenHeight - y;
+        CGFloat w = DeviceScreenWidth;
+        CGFloat cardsTableHeight = h - cardsController.toolBarHeight.constant;
     
         [cardsController doViewWillDisappear];
 
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0)
+        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisability get]) || ([_settings.distanceIndication get] == WIDGET_DISPLAY))
         {
             [self hideToolbar:_destinationViewController];
         }
@@ -3242,7 +3339,8 @@ typedef enum
         if (animated)
         {
             [UIView animateWithDuration:.25 animations:^{
-                cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
+                cardsController.cardsView.frame = CGRectMake(0.0, y - h, w, cardsTableHeight);
+                cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight, w, cardsController.toolBarHeight.constant);
                 _shadeView.alpha = 0.0;
                 
             } completion:^(BOOL finished) {
@@ -3310,6 +3408,7 @@ typedef enum
     targetPoint.titleAddress = [self findRoadNameByLat:destination.latitude lon:destination.longitude];
     
     [_targetMenuView setTargetPoint:targetPoint];
+    [self enterContextMenuMode];
     
     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
         [self targetGoToPoint];
@@ -3458,6 +3557,11 @@ typedef enum
 }
 
 - (void) requestPrivateAccessRouting
+{
+    
+}
+
+- (void) start
 {
     
 }

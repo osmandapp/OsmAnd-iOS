@@ -1380,3 +1380,13 @@
 "rendering_attr_moreDetailed_name" = "Wjace detailow";
 "routing_attr_avoid_stairs_description" = "Schody wobeńć";
 "routing_attr_driving_style_name" = "Stil jědźenja";
+"app_mode_pedestrian" = "Běhanje";
+"all_group_points" = "Wšě dypki tuteje skupiny";
+"app_mode_bicycle" = "Kolesowanje";
+"online_webpage_warning" = "Strona steji jenož online k dispoziciji. Chceš ju w browseru wočinić?";
+"app_mode_default" = "Kartu wobhladać";
+"app_mode_car" = "Jězdźenje";
+"map_settings_base_transp" = "Transparenca zakładneje karty";
+"map_settings_appearance" = "Napohlad";
+"shared_string_warning" = "Warnowanje";
+"map_settings_color_scheme" = "Barbnyšema";

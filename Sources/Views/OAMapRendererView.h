@@ -50,6 +50,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 
 @end
 
+struct CLLocationCoordinate2D;
+
 @interface OAMapRendererView : UIView <OAMapRendererViewProtocol>
 
 - (std::shared_ptr<OsmAnd::IMapLayerProvider>)providerFor:(unsigned int)layer;
@@ -78,6 +80,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (BOOL) isGpuWorkerPaused;
 - (BOOL) suspendGpuWorker;
 - (BOOL) resumeGpuWorker;
+- (void) invalidateFrame;
 
 @property (nonatomic) CGFloat displayDensityFactor;
 @property (nonatomic) OsmAnd::PointI target31;
@@ -110,6 +113,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point;
 
 - (OsmAnd::AreaI)getVisibleBBox31;
+- (NSArray<NSValue *> *) getVisibleLineFromLat:(double)fromLat fromLon:(double)fromLon toLat:(double)toLat toLon:(double)toLon;
+- (BOOL)isPositionVisible:(OsmAnd::PointI)pos;
 
 - (void)dumpResourcesInfo;
 

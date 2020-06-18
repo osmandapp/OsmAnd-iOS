@@ -26,7 +26,8 @@ typedef NS_ENUM(NSInteger, EMapSettingsScreen)
     EMapSettingsScreenLanguage,
     EMapSettingsScreenPreferredLanguage,
     EMapSettingsScreenMapillaryFilter,
-    EMapSettingsScreenContourLines
+    EMapSettingsScreenContourLines,
+    EMapSettingsScreenTerrain
 };
 
 @protocol OAMapSettingsScreen <NSObject, OADashboardScreen, UITableViewDataSource, UITableViewDelegate>

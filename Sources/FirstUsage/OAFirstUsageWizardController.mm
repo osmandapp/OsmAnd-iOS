@@ -9,7 +9,7 @@
 #import "OAFirstUsageWizardController.h"
 #import "OAManageResourcesViewController.h"
 #import "OsmAndApp.h"
-#import "OAResourcesBaseViewController.h"
+#import "OAResourcesUIHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAOcbfHelper.h"
 #import "OAWorldRegion.h"
@@ -434,7 +434,6 @@ typedef enum
                         try
                         {
                             NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-
                             if (map)
                             {
                                 double latitude = [[map objectForKey:@"latitude"] doubleValue];
@@ -449,6 +448,12 @@ typedef enum
                                         _location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
                                         [self startSearchMapWizard];
                                     }
+                                });
+                            }
+                            else
+                            {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [self startNoLocationWizard];
                                 });
                             }
                         }
@@ -638,10 +643,10 @@ typedef enum
                         RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
                         item.resourceId = resource->id;
                         item.resourceType = resource->type;
-                        item.title = [OAResourcesBaseViewController titleOfResource:resource
-                                                        inRegion:selectedRegion
-                                                  withRegionName:YES
-                                                withResourceType:NO];
+                        item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                                 inRegion:selectedRegion
+                                                           withRegionName:YES
+                                                         withResourceType:NO];
                         item.resource = resource;
                         item.downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
                         item.size = resource->size;
@@ -658,10 +663,10 @@ typedef enum
         RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
         item.resourceId = resource->id;
         item.resourceType = resource->type;
-        item.title = [OAResourcesBaseViewController titleOfResource:resource
-                                        inRegion:_app.worldRegion
-                                  withRegionName:YES
-                                withResourceType:NO];
+        item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                 inRegion:_app.worldRegion
+                                           withRegionName:YES
+                                         withResourceType:NO];
         item.resource = resource;
         item.downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
         item.size = resource->size;
@@ -698,11 +703,11 @@ typedef enum
     }
     else
     {
-        NSString *resourceName = [OAResourcesBaseViewController titleOfResource:_localMapIndexItem.resource
-                                                   inRegion:_localMapIndexItem.worldRegion
-                                             withRegionName:YES
-                                           withResourceType:YES];
-        [OAResourcesBaseViewController showNotEnoughSpaceAlertFor:resourceName withSize:spaceEnoughForLocal asUpdate:NO];
+        NSString *resourceName = [OAResourcesUIHelper titleOfResource:_localMapIndexItem.resource
+                                                             inRegion:_localMapIndexItem.worldRegion
+                                                       withRegionName:YES
+                                                     withResourceType:YES];
+        [OAResourcesUIHelper showNotEnoughSpaceAlertFor:resourceName withSize:spaceEnoughForLocal asUpdate:NO];
     }
 }
 
@@ -806,12 +811,12 @@ typedef enum
 
 - (void) startDownload:(RepositoryResourceItem *)item
 {
-    NSString *resourceName = [OAResourcesBaseViewController titleOfResource:item.resource
-                                                                   inRegion:item.worldRegion
-                                                             withRegionName:YES
-                                                           withResourceType:YES];
+    NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource
+                                                         inRegion:item.worldRegion
+                                                   withRegionName:YES
+                                                 withResourceType:YES];
     
-    [OAResourcesBaseViewController startBackgroundDownloadOf:item.resource resourceName:resourceName];
+    [OAResourcesUIHelper startBackgroundDownloadOf:item.resource resourceName:resourceName];
 }
 
 - (void) findLocation:(BOOL)searchLocationByIp

@@ -182,13 +182,17 @@
             [categories setObject:categoryLocText forKey:param.category];
         }
         
-        NSMutableSet *values = [NSMutableSet set];
+        NSMutableArray<NSString *> *values = [NSMutableArray array];
         [values addObject:@""];
         for (const auto& val : p->getPossibleValues())
-            [values addObject:resolvedMapStyle->getStringById(val.asSimple.asUInt).toNSString()];
+        {
+            NSString *valStr = resolvedMapStyle->getStringById(val.asSimple.asUInt).toNSString();
+            if (![values containsObject:valStr])
+                [values addObject:valStr];
+        }
         
         NSMutableArray *valArr = [NSMutableArray array];
-        for (NSString *v in [values allObjects])
+        for (NSString *v in values)
         {
             OAMapStyleParameterValue *val = [[OAMapStyleParameterValue alloc] init];
             val.name = v;
@@ -207,6 +211,7 @@
             [valArr addObject:val];
         }
         
+        param.possibleValuesUnsorted = [NSArray arrayWithArray:valArr];
         param.possibleValues = [valArr sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameterValue *obj1, OAMapStyleParameterValue *obj2) {
             if (obj1.name.length == 0 && obj2.name.length > 0)
                 return NSOrderedAscending;

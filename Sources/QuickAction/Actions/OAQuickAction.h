@@ -13,50 +13,50 @@
 #define kSectionNoName @"no_name"
 
 @class OrderedDictionary;
+@class OAQuickActionType;
 
-typedef NS_ENUM(NSInteger, EOAQuickActionType)
-{
-    EOAQuickActionTypeStub = 0,
-    EOAQuickActionTypeNew,
-    EOAQuickActionTypeMarker,
-    EOAQuickActionTypeFavorite,
-    EOAQuickActionTypeShowFavorite,
-    EOAQuickActionTypeTogglePOI,
-    EOAQuickActionTypeGPX,
-    EOAQuickActionTypeParking,
-    EOAQuickActionTypeTakeAudioNote,
-    EOAQuickActionTypeTakeVideoNote,
-    EOAQuickActionTypeTakePhoto,
-    EOAQuickActionTypeNavVoice,
-    EOAQuickActionTypeAddNote,
-    EOAQuickActionTypeAddPOI,
-    EOAQuickActionTypeMapStyle,
-    EOAQuickActionTypeMapOverlay,
-    EOAQuickActionTypeMapUnderlay,
-    EOAQuickActionTypeMapSource,
-    EOAQuickActionTypeAddDestination,
-    EOAQuickActionTypeReplaceDestination,
-    EOAQuickActionTypeAddFirstIntermediate,
-    EOAQuickActionTypeAutoZoomMap,
-    EOAQuickActionTypeToggleOsmNotes,
-    EOAQuickActionTypeToggleLocalEditsLayer,
-    EOAQuickActionTypeToggleNavigation,
-    EOAQuickActionTypeResumePauseNavigation,
-    EOAQuickActionTypeToggleDayNight,
-    EOAQuickActionTypeToggleGPX,
-    EOAQuickActionTypeToggleContourLines,
-    EOAQuickActionTypeToggleHillshade
-};
+//typedef NS_ENUM(NSInteger, EOAQuickActionType)
+//{
+//    EOAQuickActionTypeStub = 0,
+//    EOAQuickActionTypeNew,
+//    EOAQuickActionTypeMarker,
+//    EOAQuickActionTypeFavorite,
+//    EOAQuickActionTypeShowFavorite,
+//    EOAQuickActionTypeTogglePOI,
+//    EOAQuickActionTypeGPX,
+//    EOAQuickActionTypeParking,
+//    EOAQuickActionTypeTakeAudioNote,
+//    EOAQuickActionTypeTakeVideoNote,
+//    EOAQuickActionTypeTakePhoto,
+//    EOAQuickActionTypeNavVoice,
+//    EOAQuickActionTypeAddNote,
+//    EOAQuickActionTypeAddPOI,
+//    EOAQuickActionTypeMapStyle,
+//    EOAQuickActionTypeMapOverlay,
+//    EOAQuickActionTypeMapUnderlay,
+//    EOAQuickActionTypeMapSource,
+//    EOAQuickActionTypeAddDestination,
+//    EOAQuickActionTypeReplaceDestination,
+//    EOAQuickActionTypeAddFirstIntermediate,
+//    EOAQuickActionTypeAutoZoomMap,
+//    EOAQuickActionTypeToggleOsmNotes,
+//    EOAQuickActionTypeToggleLocalEditsLayer,
+//    EOAQuickActionTypeToggleNavigation,
+//    EOAQuickActionTypeResumePauseNavigation,
+//    EOAQuickActionTypeToggleDayNight,
+//    EOAQuickActionTypeToggleGPX,
+//    EOAQuickActionTypeToggleContourLines,
+//    EOAQuickActionTypeToggleTerrain
+//};
 
 @interface OAQuickAction : NSObject
 
-@property (nonatomic) EOAQuickActionType type;
+@property (nonatomic, readonly) OAQuickActionType *actionType;
 @property (nonatomic) long identifier;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic) NSDictionary<NSString *, NSString *> *params;
 
-- (instancetype) initWithType:(NSInteger)type name:(NSString *)name;
-- (instancetype) initWithType:(NSInteger)type;
+- (instancetype) initWithActionType:(OAQuickActionType *)type;
 - (instancetype) initWithAction:(OAQuickAction *)action;
 
 -(NSString *) getIconResName;
@@ -64,9 +64,11 @@ typedef NS_ENUM(NSInteger, EOAQuickActionType)
 -(BOOL) hasSecondaryIcon;
 
 -(long) getId;
--(EOAQuickActionType)getType;
+-(NSInteger) getType;
 -(BOOL) isActionEditable;
 -(BOOL) isActionEnabled;
+-(NSString *) getRawName;
+-(NSString *) getDefaultName;
 -(NSString *) getName;
 
 -(NSDictionary *) getParams;
@@ -87,5 +89,7 @@ typedef NS_ENUM(NSInteger, EOAQuickActionType)
 -(BOOL) hasInstanceInList:(NSArray<OAQuickAction *> *)active;
 -(NSString *)getTitle:(NSArray *)filters;
 -(NSString *) getListKey;
+
++ (OAQuickActionType *) TYPE;
 
 @end

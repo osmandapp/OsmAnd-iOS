@@ -11,9 +11,21 @@
 #import "OARouteCalculationResult.h"
 #import "OAMapStyleSettings.h"
 #import "OARouteProvider.h"
+#import "OARoutingHelper.h"
 
 #include <OsmAndCore.h>
 #include <routeCalculationProgress.h>
+
+@class OARouteCalculationResult;
+@class OAWalkingRouteSegment;
+
+@protocol OARouteCalculationResultListener <NSObject>
+
+@required
+
+- (void) onRouteCalculated:(OARouteCalculationResult *) route segment:(OAWalkingRouteSegment *)segment;
+
+@end
 
 @interface OARouteCalculationParams : NSObject
 
@@ -28,6 +40,14 @@
 @property (nonatomic) BOOL onlyStartPointChanged;
 @property (nonatomic) BOOL fast;
 @property (nonatomic) BOOL leftSide;
+@property (nonatomic) BOOL inSnapToRoadMode;
+@property (nonatomic) BOOL inPublicTransportMode;
+@property (nonatomic) BOOL startTransportStop;
+@property (nonatomic) BOOL targetTransportStop;
 @property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
+@property (nonatomic) id<OARouteCalculationProgressCallback> calculationProgressCallback;
+@property (nonatomic) id<OARouteCalculationResultListener> resultListener;
+
+@property (nonatomic) OAWalkingRouteSegment *walkingRouteSegment;
 
 @end

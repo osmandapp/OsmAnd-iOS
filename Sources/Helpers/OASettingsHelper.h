@@ -5,182 +5,207 @@
 //  Created by Anna Bibyk on 25.03.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/plus/SettingHelper.java
+//  git revision 92fb9b7efc66f373b1714e9e489bdf3b815a67f1
 
 #import <Foundation/Foundation.h>
-#import "OsmAndApp.h"
-#import "OsmAndAppProtocol.h"
-#import "OsmAndAppCppProtocol.h"
-#import "OASettingsImport.h"
-#import "OASettingsExport.h"
-#import "OASettingsCollect.h"
-#import "OACheckDuplicates.h"
-#import "OAQuickAction.h"
-#import "OAQuickActionRegistry.h"
-#import "OAPOIUIFilter.h"
-#import "OASQLiteTileSource.h"
 #import "OAResourcesBaseViewController.h"
-#import "OAMapCreatorHelper.h"
-#import "OAAvoidSpecificRoads.h"
-#import "OAAppSettings.h"
-#import "OADebugSettings.h"
 
-#include <OsmAndCore/ArchiveReader.h>
-#include <OsmAndCore/ResourcesManager.h>
-#include <OsmAndCore/Map/OnlineTileSources.h>
+NS_ASSUME_NONNULL_BEGIN
 
-@class OAImportAsyncTask;
-@class OAExportAsyncTask;
+@class OAImportAsyncTask, OAExportAsyncTask, OASettingsImport, OASettingsExport, OASettingsCollect, OACheckDuplicates;
+@class OASettingsItem;
+@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo;
+
+FOUNDATION_EXTERN NSString *const kSettingsHelperErrorDomain;
+
+FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeNoTypeField;
+FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeIllegalType;
+FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeUnknownFileSubtype;
+FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeEmptyJson;
 
 typedef enum : NSUInteger {
-    EOAGlobal = 0,
-    EOAProfile,
-    EOAPlugin,
-    EOAData,
-    EOAFile,
-    EOAQuickAction,
-    EOAPoiUIFilters,
-    EOAMapSources,
-    EOAAvoidRoads
+    EOASettingsItemTypeUnknown = 10000,
+    EOASettingsItemTypeGlobal = 0,
+    EOASettingsItemTypeProfile,
+    EOASettingsItemTypePlugin,
+    EOASettingsItemTypeData,
+    EOASettingsItemTypeFile,
+    EOASettingsItemTypeResources,
+    EOASettingsItemTypeQuickActions,
+    EOASettingsItemTypePoiUIFilters,
+    EOASettingsItemTypeMapSources,
+    EOASettingsItemTypeAvoidRoads
 } EOASettingsItemType;
 
 typedef enum : NSUInteger {
-    EOACollect = 0,
-    EOACheckDuplicates,
-    EOAImport
+    EOAImportTypeCollect = 0,
+    EOAImportTypeCheckDuplicates,
+    EOAImportTypeImport
 } EOAImportType;
+
+@interface OASettingsItemType : NSObject
+
++ (NSString * _Nullable) typeName:(EOASettingsItemType)type;
++ (EOASettingsItemType) parseType:(NSString *)typeName;
+
+@end
 
 @interface OASettingsHelper : NSObject
 
-@property(nonatomic, retain) OAImportAsyncTask* importTask;
-@property(nonatomic, retain) NSMutableDictionary<NSString*, OAExportAsyncTask*>* exportTask;
+@property (nonatomic) OAImportAsyncTask* importTask;
+@property (nonatomic) NSMutableDictionary<NSString*, OAExportAsyncTask*>* exportTask;
 
-+ (OASettingsHelper*)sharedInstance;
++ (OASettingsHelper *) sharedInstance;
 
-- (void) finishImport:(OASettingsImport *)listener success:(BOOL)success items:(NSMutableArray*)items;
-- (void) collectSettings:(NSString*)settingsFile latestChanges:(NSString*)latestChanges version:(NSInteger)version listener:(OASettingsCollect*)listener;
-- (void) checkDuplicates:(NSString *)settingsFile items:(NSMutableArray <OASettingsItem*> *)items selectedItems:(NSMutableArray <OASettingsItem*> *)selectedItems listener:(OACheckDuplicates*)listener;
-- (void) importSettings:(NSString *)settingsFile items:(NSMutableArray <OASettingsItem*> *)items latestChanges:(NSString*)latestChanges version:(NSInteger)version listener:(OASettingsImport*)listener;
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport*)listener items:(NSMutableArray <OASettingsItem*> *)items;
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport*)listener;
+- (void) finishImport:(OASettingsImport * _Nullable)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items;
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version listener:(OASettingsCollect * _Nullable)listener;
+- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems listener:(OACheckDuplicates * _Nullable)listener;
+- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version listener:(OASettingsImport * _Nullable)listener;
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport * _Nullable)listener items:(NSArray<OASettingsItem *> *)items;
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport * _Nullable)listener;
 
 @end
 
 #pragma mark - OASettingsItem
 
+@class OASettingsItemReader, OASettingsItemWriter;
+
 @interface OASettingsItem : NSObject
 
-@property (nonatomic, assign) EOASettingsItemType type;
+@property (nonatomic, readonly) EOASettingsItemType type;
+@property (nonatomic, readonly) NSString *pluginId;
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *fileName;
+@property (nonatomic, readonly) NSString *defaultFileName;
+@property (nonatomic, readonly) NSString *defaultFileExtension;
+
+@property (nonatomic, readonly) NSArray<NSString *> *warnings;
 @property (nonatomic, assign) BOOL shouldReplace;
 
-- (instancetype) initWithType:(EOASettingsItemType)type;
-- (instancetype) initWithType:(EOASettingsItemType)type json:(NSDictionary*)json;
-- (NSString *) getFileName;
+- (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error;
+
 - (BOOL) shouldReadOnCollecting;
-- (NSString *) getName;
 - (BOOL) exists;
 - (void) apply;
-- (EOASettingsItemType) parseItemType:(NSDictionary*)json;
-- (void) readFromJSON:(NSDictionary*)json;
-- (void) writeToJSON:(NSDictionary*)json;
-- (NSString *)toJSON;
+- (BOOL) applyFileName:(NSString *)fileName;
++ (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
+
+- (OASettingsItemReader *) getReader;
+- (OASettingsItemWriter *) getWriter;
 
 @end
 
 #pragma mark - OASettingsItemReader
 
-@interface OASettingsItemReader<ObjectType : OASettingsItem *> : NSObject
+@interface OASettingsItemReader<__covariant ObjectType : OASettingsItem *> : NSObject
+
+@property (nonatomic, readonly) ObjectType item;
 
 - (instancetype) initWithItem:(ObjectType)item;
-- (void) readFromStream:(NSInputStream*)inputStream;
+- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error;
 
 @end
 
 #pragma mark - OASettingsItemWriter
 
-@interface OASettingsItemWriter<ObjectType : OASettingsItem *> : NSObject
+@interface OASettingsItemWriter<__covariant ObjectType : OASettingsItem *> : NSObject
+
+@property (nonatomic, readonly) ObjectType item;
 
 - (instancetype) initWithItem:(ObjectType)item;
-- (BOOL) writeToStream:(NSOutputStream*)outputStream;
+- (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error;
 
 @end
 
-#pragma mark - OAStreamSettingsItemReader
+#pragma mark - OASettingsItemJsonReader
 
-@interface OAStreamSettingsItemReader : OASettingsItemReader<OASettingsItem *>
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
+@interface OASettingsItemJsonReader : OASettingsItemReader<OASettingsItem *>
 
 @end
 
-#pragma mark - OAStreamSettingsItemWriter
+#pragma mark - OASettingsItemJsonWriter
 
-@interface OAStreamSettingsItemWriter : OASettingsItemWriter<OASettingsItem *>
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
-
-@end
-
-#pragma mark - OAStreamSettingsItem
-
-@interface OAStreamSettingsItem : OASettingsItem
-
-@property (nonatomic, retain, readonly) NSString* name;
-
-- (instancetype) initWithType:(EOASettingsItemType)type name:(NSString*)name;
-- (instancetype) initWithType:(EOASettingsItemType)type json:(NSDictionary*)json;
-- (instancetype) initWithType:(EOASettingsItemType)type inputStream:(NSInputStream*)inputStream name:(NSString*)name;
-- (NSString *) getPublicName;
-- (void) readFromJSON:(NSDictionary *)json;
-- (OASettingsItemWriter*) getWriter;
-
-
-@end
-
-#pragma mark - OADataSettingsItemReader
-
-@interface OADataSettingsItemReader: OAStreamSettingsItemReader
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
+@interface OASettingsItemJsonWriter : OASettingsItemWriter<OASettingsItem *>
 
 @end
 
 #pragma mark - OADataSettingsItem
 
-@interface OADataSettingsItem : OAStreamSettingsItem
+@interface OADataSettingsItem : OASettingsItem
 
-@property (nonatomic, retain) NSData *data;
+@property (nonatomic) NSData *data;
 
 - (instancetype) initWithName:(NSString *)name;
-- (instancetype) initWithJson:(NSDictionary *)json;
 - (instancetype) initWithData:(NSData *)data name:(NSString *)name;
-- (NSString *) getFileName;
-- (OASettingsItemReader *) getReader;
-- (OASettingsItemWriter *) getWriter;
+
+@end
+
+#pragma mark - OADataSettingsItemReader
+
+@interface OADataSettingsItemReader : OASettingsItemReader<OADataSettingsItem *>
+
+@end
+
+#pragma mark - OADataSettingsItemWriter
+
+@interface OADataSettingsItemWriter : OASettingsItemWriter<OADataSettingsItem *>
+
+@end
+
+#pragma mark - OAFileSettingsItemFileSubtype
+
+typedef enum : NSUInteger {
+    EOASettingsItemFileSubtypeUnknown = 0,
+    EOASettingsItemFileSubtypeOther,
+    EOASettingsItemFileSubtypeRoutingConfig,
+    EOASettingsItemFileSubtypeRenderingStyle,
+    EOASettingsItemFileSubtypeObfMap,
+    EOASettingsItemFileSubtypeTilesMap,
+    EOASettingsItemFileSubtypeGpx,
+    EOASettingsItemFileSubtypeVoice,
+    EOASettingsItemFileSubtypeTravel,
+    EOASettingsItemFileSubtypesCount
+} EOASettingsItemFileSubtype;
+
+@interface OAFileSettingsItemFileSubtype : NSObject
+
++ (NSString *) getSubtypeName:(EOASettingsItemFileSubtype)subtype;
++ (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype;
++ (EOASettingsItemFileSubtype) getSubtypeByName:(NSString *)name;
++ (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName;
+
+@end
+    
+#pragma mark - OAFileSettingsItem
+
+@interface OAFileSettingsItem : OASettingsItem
+
+@property (nonatomic, readonly) NSString *filePath;
+@property (nonatomic, readonly) EOASettingsItemFileSubtype subtype;
+
+- (instancetype _Nullable) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error;
+- (BOOL) exists;
+- (NSString *) renameFile:(NSString *)file;
+- (NSString *) getPluginPath;
+
+@end
+
+#pragma mark - ResourcesSettingsItem
+
+@interface OAResourcesSettingsItem : OAFileSettingsItem
 
 @end
 
 #pragma mark - OAFileSettingsItemReader
 
-@interface OAFileSettingsItemReader: OAStreamSettingsItemReader
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
+@interface OAFileSettingsItemReader : OASettingsItemReader<OAFileSettingsItem *>
 
 @end
 
+#pragma mark - OAFileSettingsItemWriter
 
-#pragma mark - OAFileSettingsItem
-
-@interface OAFileSettingsItem : OAStreamSettingsItem
-
-@property (nonatomic, retain) NSString *filePath;
-
-- (instancetype) initWithFile:(NSString *)filePath;
-- (instancetype) initWithJSON:(NSDictionary*)json;
-- (NSString *) getFileName;
-- (BOOL) exists;
-- (NSString *) renameFile:(NSString*)file;
-- (OASettingsItemReader *) getReader;
-- (OASettingsItemWriter *) getWriter;
+@interface OAFileSettingsItemWriter : OASettingsItemWriter<OAFileSettingsItem *>
 
 @end
 
@@ -188,82 +213,28 @@ typedef enum : NSUInteger {
 
 @interface OACollectionSettingsItem<ObjectType> : OASettingsItem
 
-@property(nonatomic, retain, readonly) NSMutableArray<ObjectType> *items;
-@property(nonatomic, retain, readonly) NSMutableArray<ObjectType> *duplicateItems;
-@property(nonatomic, retain) NSArray<ObjectType> *existingItems;
+@property (nonatomic, readonly) NSArray<ObjectType> *items;
+@property (nonatomic, readonly) NSArray<ObjectType> *appliedItems;
+@property (nonatomic, readonly) NSArray<ObjectType> *duplicateItems;
+@property (nonatomic, readonly) NSArray<ObjectType> *existingItems;
 
-- (instancetype) initWithType:(EOASettingsItemType)type items:(NSMutableArray<id>*) items;
-- (instancetype) initWithType:(EOASettingsItemType)type json:(NSDictionary *)json;
-- (NSMutableArray<id> *) excludeDuplicateItems;
-
-@end
-
-#pragma mark - OAQuickActionSettingsItem
-
-@interface OAQuickActionSettingsItem : OACollectionSettingsItem<OAQuickAction *>
-
-- (instancetype) initWithItems:(NSMutableArray<id> *)items;
-- (instancetype) initWithJSON:(NSDictionary *)json;
-- (BOOL) isDuplicate:(OAQuickAction *)item;
-- (OAQuickAction *) renameItem:(OAQuickAction *)item;
-- (void) apply;
-- (BOOL) shouldReadOnCollecting;
-- (NSString *) getName;
-- (NSString *) getPublicName;
-- (NSString *) getFileName;
-- (OASettingsItemReader *) getReader;
-- (OASettingsItemWriter *) getWriter;
+- (instancetype) initWithItems:(NSArray<ObjectType> *)items;
+- (NSArray<ObjectType> *) processDuplicateItems;
+- (NSArray<ObjectType> *) getNewItems;
+- (BOOL) isDuplicate:(ObjectType)item;
+- (ObjectType) renameItem:(ObjectType)item;
 
 @end
 
-#pragma mark - OAMapSourcesSettingsItemReader
+#pragma mark - OAQuickActionsSettingsItem
 
-@interface OAQuickActionSettingsItemReader : OAStreamSettingsItemReader
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
+@interface OAQuickActionsSettingsItem : OACollectionSettingsItem<OAQuickAction *>
 
 @end
-
-#pragma mark - OAMapSourcesSettingsItemWriter
-
-@interface OAQuickActionSettingsItemWriter : OAStreamSettingsItemWriter
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
-
-@end
-
 
 #pragma mark - OAPoiUiFilterSettingsItem
 
 @interface OAPoiUiFilterSettingsItem : OACollectionSettingsItem<OAPOIUIFilter *>
-
-- (instancetype) initWithItem:(NSMutableArray<id>*)items;
-- (instancetype) initWithJSON:(NSDictionary*)json;
-- (void) apply;
-- (BOOL) isDuplicate:(OAPOIUIFilter*)item;
-- (OAPOIUIFilter *) renameItem:(OAPOIUIFilter *)item;
-- (NSString *)getName;
-- (NSString *)getPublicName;
-- (BOOL) shouldReadOnCollecting;
-- (NSString *) getFileName;
-- (OASettingsItemReader *) getReader;
-- (OASettingsItemWriter *) getWriter;
-
-@end
-
-#pragma mark - OAPoiUiFilterSettingsItemReader
-
-@interface OAPoiUiFilterSettingsItemReader : OAStreamSettingsItemReader
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
-
-@end
-
-#pragma mark - OAPoiUiFilterSettingsItemWriter
-
-@interface OAPoiUiFilterSettingsItemWriter : OAStreamSettingsItemWriter
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
 
 @end
 
@@ -271,65 +242,12 @@ typedef enum : NSUInteger {
 
 @interface OAMapSourcesSettingsItem : OACollectionSettingsItem<LocalResourceItem *>
 
-- (instancetype) initWithItems:(NSMutableArray<id>*)items;
-- (instancetype) initWithJSON:(NSDictionary *)json;
-- (void) apply;
-- (NSString *)getName;
-- (NSString *)getPublicName;
-- (BOOL) shouldReadOnCollecting;
-- (NSString *)getFileName;
-- (OASettingsItemReader *) getReader;
-- (OASettingsItemWriter *) getWriter;
-
-@end
-
-#pragma mark - OAMapSourcesSettingsItemReader
-
-@interface OAMapSourcesSettingsItemReader : OAStreamSettingsItemReader
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
-
-@end
-
-#pragma mark - OAMapSourcesSettingsItemWriter
-
-@interface OAMapSourcesSettingsItemWriter : OAStreamSettingsItemWriter
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
-
 @end
 
 #pragma mark - OAAvoidRoadsSettingsItem
 
-@interface OAAvoidRoadsSettingsItem : OACollectionSettingsItem<OAAvoidSpecificRoads *>
-
-- (instancetype) initWithItems:(NSMutableArray<id>*)items;
-- (instancetype) initWithJSON:(NSDictionary*)json;
-- (NSString *) getName;
-- (NSString *) getPublicName;
-- (NSString *) getFileName;
-- (void) apply;
-- (BOOL) isDuplicate:()item;
-- (BOOL) shouldReadOnCollecting;
-//- () renameItem:()item;
-- (OASettingsItemReader *) getReader;
-- (OASettingsItemWriter *) getWriter;
+@interface OAAvoidRoadsSettingsItem : OACollectionSettingsItem<OAAvoidRoadInfo *>
 
 @end
 
-#pragma mark - OAAvoidRoadsSettingsItemReader
-
-@interface OAAvoidRoadsSettingsItemReader : OAStreamSettingsItemReader
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
-
-@end
-
-#pragma mark - OAAvoidRoadsSettingsItemWriter
-
-@interface OAAvoidRoadsSettingsItemWriter : OAStreamSettingsItemWriter
-
-- (instancetype)initWithItem:(OASettingsItem *)item;
-
-@end
-
+NS_ASSUME_NONNULL_END

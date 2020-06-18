@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
+#import "OADestinationItem.h"
 
 #import <EventKit/EventKit.h>
 
@@ -67,6 +68,21 @@
         NSMutableArray *allDestinations = [NSMutableArray arrayWithArray:_sortedDestinations];
         [allDestinations removeObject:self.getParkingPoint];
         return [NSArray arrayWithArray:allDestinations];
+    }
+}
+
+- (void) reorderDestinations:(NSArray<OADestinationItem *> *)reorderedDestinations
+{
+    @synchronized(_syncObj)
+    {
+        NSMutableArray<OADestination *> *newDestinations = [NSMutableArray new];
+        for (OADestinationItem *item in reorderedDestinations)
+        {
+            [newDestinations addObject:item.destination];
+        }
+        _sortedDestinations = newDestinations;
+        [self refreshDestinationIndexes];
+        [_app.data.destinationsChangeObservable notifyEvent];
     }
 }
 
@@ -323,6 +339,26 @@
     }
     
     [_app.data.destinationAddObservable notifyEventWithKey:destination];
+    [_app.data.destinationsChangeObservable notifyEvent];
+}
+
+- (void) replaceDestination:(OADestination *)destination withDestination:(OADestination *)newDestination
+{
+    @synchronized(_syncObj)
+    {
+        if (destination == _dynamic2ndRowDestination)
+            _dynamic2ndRowDestination = newDestination;
+        
+        [_app.data.destinations removeObject:destination];
+        [_app.data.destinations addObject:newDestination];
+        
+        [_sortedDestinations replaceObjectAtIndex:destination.index withObject:newDestination];
+        
+        [self refreshDestinationIndexes];
+    }
+    
+    [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
+    [_app.data.destinationAddObservable notifyEventWithKey:newDestination];
     [_app.data.destinationsChangeObservable notifyEvent];
 }
 

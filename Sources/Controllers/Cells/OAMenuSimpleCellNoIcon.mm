@@ -52,7 +52,7 @@ static UIFont *_descFont;
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
     
-    CGFloat textX = 11.0;
+    CGFloat textX = 16.0;
     CGFloat textWidth = w - titleTextWidthDelta;
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
     
@@ -71,7 +71,7 @@ static UIFont *_descFont;
 + (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_titleFont)
-        _titleFont = [UIFont systemFontOfSize:16.0];
+        _titleFont = [UIFont systemFontOfSize:17.0];
     
     return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical;
 }
@@ -79,7 +79,7 @@ static UIFont *_descFont;
 + (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_descFont)
-        _descFont = [UIFont systemFontOfSize:12.0];
+        _descFont = [UIFont systemFontOfSize:13.0];
     
     return [OAUtilities calculateTextBounds:text width:width font:_descFont].height + textMarginVertical;
 }

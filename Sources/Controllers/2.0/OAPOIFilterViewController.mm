@@ -23,6 +23,7 @@
 #import "OAIconButtonCell.h"
 #import "OAIconTextFieldCell.h"
 #import "OASizes.h"
+#import "OAColors.h"
 
 typedef enum
 {
@@ -190,6 +191,8 @@ typedef enum
     _textFieldHeaderView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _textFieldHeaderView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_textFieldHeaderView addSubview:_textFieldCell];
+    
+    _tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     
     UIView *topSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _textFieldHeaderView.bounds.size.width, 0.5)];
     topSeparatorView.backgroundColor = _tableView.separatorColor;

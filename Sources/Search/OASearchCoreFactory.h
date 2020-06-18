@@ -19,6 +19,7 @@ static const int SEARCH_REGION_OBJECT_PRIORITY = 1000;
 
 // context less
 static const int SEARCH_LOCATION_PRIORITY = 0;
+static const int SEARCH_MAX_PRIORITY = INT_MAX;
 static const int SEARCH_AMENITY_TYPE_PRIORITY = 100;
 static const int SEARCH_AMENITY_TYPE_API_PRIORITY = 100;
 

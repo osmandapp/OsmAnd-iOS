@@ -15,12 +15,15 @@
 #import "OAApplicationMode.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAMapStyleTitles.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 #include <OsmAndCore/ResourcesManager.h>
 
 #define KEY_STYLES @"styles"
+
+static OAQuickActionType *TYPE;
 
 @implementation OAMapStyleAction
 {
@@ -29,7 +32,7 @@
 
 - (instancetype) init
 {
-    self = [super initWithType:EOAQuickActionTypeMapStyle];
+    self = [super initWithActionType:self.class.TYPE];
     if (self)
     {
         [self commonInit];
@@ -231,6 +234,14 @@
 - (NSString *)getActionText
 {
     return OALocalizedString(@"quick_action_list_descr");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:14 stringId:@"mapstyle.change" class:self.class name:OALocalizedString(@"change_map_style") category:CONFIGURE_MAP iconName:@"ic_custom_map_style" secondaryIconName:nil];
+       
+    return TYPE;
 }
 
 @end

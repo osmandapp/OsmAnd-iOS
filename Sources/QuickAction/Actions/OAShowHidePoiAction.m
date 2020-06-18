@@ -14,14 +14,17 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OsmAndApp.h"
+#import "OAQuickActionType.h"
 
 #define KEY_FILTERS @"filters"
+
+static OAQuickActionType *TYPE;
 
 @implementation OAShowHidePoiAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeTogglePOI];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -147,6 +150,24 @@
 - (NSString *)getActionStateName
 {
     return ![self isCurrentFilters] ? OALocalizedString(@"show_poi_over_map") : OALocalizedString(@"hide_poi_action");
+}
+
+- (NSString *)getTitle:(NSArray *)filters
+{
+    if (filters.count == 0)
+        return @"";
+    
+    return filters.count > 1
+    ? [NSString stringWithFormat:@"%@ +%ld", filters[0], filters.count - 1]
+    : filters[0];
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:5 stringId:@"poi.showhide" class:self.class name:OALocalizedString(@"toggle_poi") category:CONFIGURE_MAP iconName:@"ic_custom_poi" secondaryIconName:nil];
+       
+    return TYPE;
 }
 
 @end

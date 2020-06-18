@@ -14,6 +14,7 @@
 
 @interface OAApplicationMode ()
 
+@property (nonatomic) NSInteger modeId;
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *stringKey;
 @property (nonatomic) NSString *variantKey;
@@ -21,8 +22,6 @@
 @property (nonatomic) OAApplicationMode *parent;
 
 @property (nonatomic) float defaultSpeed;
-@property (nonatomic) int minDistanceForTurn;
-@property (nonatomic) int arrivalDistance;
 
 @property (nonatomic) NSString *mapIcon;
 @property (nonatomic) NSString *smallIconDark;
@@ -49,6 +48,7 @@ static OAAutoObserverProxy* _listener;
 static OAApplicationMode *_DEFAULT;
 static OAApplicationMode *_CAR;
 static OAApplicationMode *_BICYCLE;
+static OAApplicationMode *_PUBLIC_TRANSPORT;
 static OAApplicationMode *_PEDESTRIAN;
 static OAApplicationMode *_AIRCRAFT;
 static OAApplicationMode *_BOAT;
@@ -57,6 +57,7 @@ static OAApplicationMode *_MOTORCYCLE;
 static OAApplicationMode *_TRUCK;
 static OAApplicationMode *_BUS;
 static OAApplicationMode *_TRAIN;
+static OAApplicationMode *_SKI;
 
 + (void) initialize
 {
@@ -66,52 +67,52 @@ static OAApplicationMode *_TRAIN;
     _cachedFilteredValues = [NSMutableArray array];
     
     _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_overview") stringKey:@"default"];
-    _DEFAULT.minDistanceForTurn = 5;
-    _DEFAULT.arrivalDistance = 90;
     [self defLocation:_DEFAULT];
     _DEFAULT.mapIcon = @"map_world_globe_dark";
-    _DEFAULT.smallIconDark = @"ic_profile_browsemap";
+    _DEFAULT.smallIconDark = @"ic_world_globe_dark";
     [_values addObject:_DEFAULT];
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
-    _CAR.minDistanceForTurn = 35;
     [self carLocation:_CAR];
     _CAR.mapIcon = @"map_action_car_dark";
-    _CAR.smallIconDark = @"ic_profile_car";
+    _CAR.smallIconDark = @"ic_action_car_dark";
     [_values addObject:_CAR];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
-    _BICYCLE.minDistanceForTurn = 15;
-    _BICYCLE.arrivalDistance = 60;
     [self bicycleLocation:_BICYCLE];
     _BICYCLE.mapIcon = @"map_action_bicycle_dark";
-    _BICYCLE.smallIconDark = @"ic_profile_bicycle";
+    _BICYCLE.smallIconDark = @"ic_action_bicycle_dark";
     [_values addObject:_BICYCLE];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
-    _PEDESTRIAN.minDistanceForTurn = 5;
-    _PEDESTRIAN.arrivalDistance = 45;
     [self pedestrianLocation:_PEDESTRIAN];
     _PEDESTRIAN.mapIcon = @"map_action_pedestrian_dark";
-    _PEDESTRIAN.smallIconDark = @"ic_profile_pedestrian";
+    _PEDESTRIAN.smallIconDark = @"ic_action_pedestrian_dark";
     [_values addObject:_PEDESTRIAN];
     
+    _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
+    _PUBLIC_TRANSPORT.defaultSpeed = 15.3f;
+    [self carLocation:_PUBLIC_TRANSPORT];
+    _PUBLIC_TRANSPORT.mapIcon = @"map_action_bus_dark";
+    _PUBLIC_TRANSPORT.smallIconDark = @"ic_action_bus_dark";
+    [_values addObject:_PUBLIC_TRANSPORT];
+    
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
-    _AIRCRAFT.minDistanceForTurn = 100;
+    _AIRCRAFT.defaultSpeed = 40.0f;
     [self carLocation:_AIRCRAFT];
     _AIRCRAFT.mapIcon = @"map_action_aircraft";
     _AIRCRAFT.smallIconDark = @"ic_action_aircraft";
     [_values addObject:_AIRCRAFT];
     
     _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
-    _BOAT.minDistanceForTurn = 20;
+    _BOAT.defaultSpeed = 5.5f;
     [self carLocation:_BOAT];
     _BOAT.mapIcon = @"map_action_sail_boat_dark";
     _BOAT.smallIconDark = @"ic_action_sail_boat_dark";
     [_values addObject:_BOAT];
 
     _HIKING = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_hiking") stringKey:@"hiking"];
-    _HIKING.minDistanceForTurn = 5;
+    _HIKING.defaultSpeed = 1.5f;
     [self pedestrianLocation:_HIKING];
     _HIKING.mapIcon = @"map_action_trekking_dark";
     _HIKING.smallIconDark = @"ic_action_trekking_dark";
@@ -119,7 +120,7 @@ static OAApplicationMode *_TRAIN;
     [_values addObject:_HIKING];
     
     _MOTORCYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_motorcycle") stringKey:@"motorcycle"];
-    _MOTORCYCLE.minDistanceForTurn = 40;
+    _MOTORCYCLE.defaultSpeed = 15.3f;
     [self carLocation:_MOTORCYCLE];
     _MOTORCYCLE.mapIcon = @"map_action_motorcycle_dark";
     _MOTORCYCLE.smallIconDark = @"ic_action_motorcycle_dark";
@@ -127,7 +128,7 @@ static OAApplicationMode *_TRAIN;
     [_values addObject:_MOTORCYCLE];
     
     _TRUCK = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_truck") stringKey:@"truck"];
-    _TRUCK.minDistanceForTurn = 40;
+    _TRUCK.defaultSpeed = 15.3f;
     [self carLocation:_TRUCK];
     _TRUCK.mapIcon = @"map_action_truck_dark";
     _TRUCK.smallIconDark = @"ic_action_truck_dark";
@@ -135,7 +136,7 @@ static OAApplicationMode *_TRAIN;
     [_values addObject:_TRUCK];
     
     _BUS = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_bus") stringKey:@"bus"];
-    _BUS.minDistanceForTurn = 40;
+    _BUS.defaultSpeed = 15.3f;
     [self carLocation:_BUS];
     _BUS.mapIcon = @"map_action_bus_dark";
     _BUS.smallIconDark = @"ic_profile_bus";
@@ -143,26 +144,31 @@ static OAApplicationMode *_TRAIN;
     [_values addObject:_BUS];
     
     _TRAIN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_train") stringKey:@"train"];
-    _TRAIN.minDistanceForTurn = 40;
+    _TRAIN.defaultSpeed = 25.0f;
     [self carLocation:_TRAIN];
     _TRAIN.mapIcon = @"map_action_train";
     _TRAIN.smallIconDark = @"ic_action_train";
     _TRAIN.parent = _CAR;
     [_values addObject:_TRAIN];
     
-    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _BOAT, _AIRCRAFT, _BUS, _TRAIN];
-    NSArray<OAApplicationMode *> *exceptPedestrianAndDefault = @[_CAR, _BICYCLE, _BOAT, _AIRCRAFT, _BUS, _TRAIN];
-    NSArray<OAApplicationMode *> *exceptAirBoatDefault = @[_CAR, _BICYCLE, _PEDESTRIAN];
-    NSArray<OAApplicationMode *> *pedestrian = @[_PEDESTRIAN];
-    NSArray<OAApplicationMode *> *pedestrianBicycle = @[_PEDESTRIAN, _BICYCLE];
+    _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_train") stringKey:@"train"];
+    [self carLocation:_SKI];
+    _SKI.mapIcon = @"map_action_skiing";
+    _SKI.smallIconDark = @"ic_action_train";
+    [_values addObject:_TRAIN];
+    
+    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _BUS, _TRAIN];
     
     NSArray<OAApplicationMode *> *all = nil;
     NSArray<OAApplicationMode *> *none = @[];
     
+    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI];
+    NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _AIRCRAFT];
+    
     // left
-    [self regWidgetVisibility:@"next_turn" am:exceptPedestrianAndDefault];;
-    [self regWidgetVisibility:@"next_turn_small" am:pedestrian];
-    [self regWidgetVisibility:@"next_next_turn" am:exceptPedestrianAndDefault];
+    [self regWidgetVisibility:@"next_turn" am:navigationSet1];;
+    [self regWidgetVisibility:@"next_turn_small" am:navigationSet2];
+    [self regWidgetVisibility:@"next_next_turn" am:navigationSet1];
     [self regWidgetAvailability:@"next_turn" am:exceptDefault];
     [self regWidgetAvailability:@"next_turn_small" am:exceptDefault];
     [self regWidgetAvailability:@"next_next_turn" am:exceptDefault];
@@ -172,9 +178,9 @@ static OAApplicationMode *_TRAIN;
     [self regWidgetVisibility:@"distance" am:all];
     [self regWidgetVisibility:@"time" am:all];
     [self regWidgetVisibility:@"intermediate_time" am:all];
-    [self regWidgetVisibility:@"speed" am:exceptPedestrianAndDefault];
+    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT]];
     [self regWidgetVisibility:@"max_speed" am:@[_CAR]];
-    [self regWidgetVisibility:@"altitude" am:pedestrianBicycle];
+    [self regWidgetVisibility:@"altitude" am:@[_PEDESTRIAN, _BICYCLE]];
     [self regWidgetVisibility:@"gps_info" am:none];
     
     [self regWidgetAvailability:@"intermediate_distance" am:all];
@@ -188,7 +194,7 @@ static OAApplicationMode *_TRAIN;
     [self regWidgetVisibility:@"config" am:none];
     [self regWidgetVisibility:@"layers" am:none];
     [self regWidgetVisibility:@"compass" am:none];
-    [self regWidgetVisibility:@"street_name" am:exceptAirBoatDefault];
+    [self regWidgetVisibility:@"street_name" am:@[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT]];
     [self regWidgetVisibility:@"back_to_location" am:all];
     [self regWidgetVisibility:@"monitoring_services" am:none];
     [self regWidgetVisibility:@"bgService" am:none];
@@ -249,6 +255,16 @@ static OAApplicationMode *_TRAIN;
     return _TRAIN;
 }
 
++ (OAApplicationMode *) PUBLIC_TRANSPORT
+{
+    return _PUBLIC_TRANSPORT;
+}
+
++ (OAApplicationMode *) SKI
+{
+    return _SKI;
+}
+
 + (void) carLocation:(OAApplicationMode *)applicationMode
 {
     applicationMode.bearingIconDay = @"map_car_bearing";
@@ -307,8 +323,6 @@ static OAApplicationMode *_TRAIN;
         _variantKey = [NSString stringWithFormat:@"type_%@", stringKey];
         
         _defaultSpeed = 10.0f;
-        _minDistanceForTurn = 50;
-        _arrivalDistance = 90;
     }
     return self;
 }
@@ -360,6 +374,28 @@ static OAApplicationMode *_TRAIN;
     return _defaultSpeed > 10;
 }
 
+- (NSInteger) getOffRouteDistance
+{
+    // used to be: 50/14 - 350 m, 10/2.7 - 50 m, 4/1.11 - 20 m
+    double speed = MAX(_defaultSpeed, 0.3f);
+    // become: 50 kmh - 280 m, 10 kmh - 55 m, 4 kmh - 22 m
+    return (NSInteger) (speed * 20);
+}
+
+- (NSInteger) getMinDistanceForTurn
+{
+    // used to be: 50 kmh - 35 m, 10 kmh - 15 m, 4 kmh - 5 m, 10 kmh - 20 m, 400 kmh - 100 m,
+    float speed = MAX([self getDefaultSpeed], 0.3f);
+    // 2 sec + 7 m: 50 kmh - 35 m, 10 kmh - 12 m, 4 kmh - 9 m, 400 kmh - 230 m
+    return (int) (7 + speed * 2);
+}
+
+- (NSInteger) getDefaultSpeed
+{
+    // TODO: Change this method after syncing the settings with Android
+    return _defaultSpeed;
+}
+
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def
 {
     for (OAApplicationMode *p in _values)
@@ -372,6 +408,17 @@ static OAApplicationMode *_TRAIN;
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode
 {
     return self == mode || _parent == mode;
+}
+
+- (NSString *) getRoutingProfile
+{
+    return [OAAppSettings.sharedManager.routingProfile get:self];
+}
+
+- (void) setRoutingProfile:(NSString *) routingProfile
+{
+    if (routingProfile.length > 0)
+        [OAAppSettings.sharedManager.routingProfile set:routingProfile mode:self];
 }
 
 // returns modifiable ! Set<ApplicationMode> to exclude non-wanted derived

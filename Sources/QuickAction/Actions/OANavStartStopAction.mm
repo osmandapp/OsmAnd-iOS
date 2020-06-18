@@ -10,14 +10,17 @@
 #import "OARoutingHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAQuickActionType.h"
 
 #define KEY_DIALOG @"dialog"
+
+static OAQuickActionType *TYPE;
 
 @implementation OANavStartStopAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeToggleNavigation];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -56,6 +59,14 @@
         return OALocalizedString(@"cancel_navigation");
     }
     return OALocalizedString(@"start_navigation");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:25 stringId:@"nav.startstop" class:self.class name:OALocalizedString(@"toggle_nav") category:NAVIGATION iconName:@"ic_custom_navigation_arrow" secondaryIconName:nil editable:NO];
+       
+    return TYPE;
 }
 
 @end

@@ -48,4 +48,6 @@
 
 #define kEstimatedRowHeight 48.0
 
+#define kUndefinedAttr @"undefined"
+
 #endif

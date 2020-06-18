@@ -15,14 +15,17 @@
 #import "OAPointDescription.h"
 #import "OAMapActions.h"
 #import "OsmAndApp.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/Utilities.h>
+
+static OAQuickActionType *TYPE;
 
 @implementation OANavAddFirstIntermediateAction
 
 - (instancetype)init
 {
-    return [super initWithType:EOAQuickActionTypeAddFirstIntermediate];
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -40,6 +43,14 @@
 - (NSString *)getActionText
 {
     return OALocalizedString(@"quick_action_first_intermediate_descr");
+}
+
++ (OAQuickActionType *) TYPE
+{
+    if (!TYPE)
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:22 stringId:@"nav.intermediate.add" class:self.class name:OALocalizedString(@"add_first_inermediate") category:NAVIGATION iconName:@"ic_action_intermediate" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
+       
+    return TYPE;
 }
 
 @end

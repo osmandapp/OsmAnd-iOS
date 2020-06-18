@@ -126,43 +126,46 @@
     }];
 }
 
+- (UIImage *) getIntermediateUIImage:(int)index
+{
+    UIImage *flagImage = [UIImage imageNamed:@"map_intermediate_point"];
+    if (flagImage)
+    {
+        UIGraphicsBeginImageContextWithOptions(flagImage.size, NO, [UIScreen mainScreen].scale);
+        
+        [flagImage drawAtPoint:{0, 0}];
+        
+        NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.alignment = NSTextAlignmentCenter;
+        attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+        attributes[NSForegroundColorAttributeName] = UIColor.blackColor;
+        UIFont *font = [UIFont systemFontOfSize:18.0];
+        attributes[NSFontAttributeName] = font;
+        
+        CGFloat w2 = flagImage.size.width / 2.0;
+        CGFloat h2 = flagImage.size.height / 2.0;
+        CGFloat textH = font.lineHeight;
+        CGFloat textY = (h2 - textH) / 2.0 + 1.0;
+        CGRect textRect = CGRectMake(w2, textY, w2 - 6.0, textH);
+        [[NSString stringWithFormat:@"%d", index] drawInRect:textRect withAttributes:attributes];
+        
+        flagImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    return flagImage;
+}
+
 - (std::shared_ptr<SkBitmap>) getIntermediateImage:(OARTargetPoint *)point
 {
     @autoreleasepool
     {
-        UIImage *flagImage = [UIImage imageNamed:@"map_intermediate_point"];
-        if (flagImage)
+        UIImage *image = [self getIntermediateUIImage:point.index + 1];
+        if (image)
         {
-            int index = point.index + 1;
-            
-            UIGraphicsBeginImageContextWithOptions(flagImage.size, NO, [UIScreen mainScreen].scale);
-            
-            [flagImage drawAtPoint:{0, 0}];
-            
-            NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
-            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-            paragraphStyle.alignment = NSTextAlignmentCenter;
-            attributes[NSParagraphStyleAttributeName] = paragraphStyle;
-            attributes[NSForegroundColorAttributeName] = UIColor.blackColor;
-            UIFont *font = [UIFont systemFontOfSize:18.0];
-            attributes[NSFontAttributeName] = font;
-            
-            CGFloat w2 = flagImage.size.width / 2.0;
-            CGFloat h2 = flagImage.size.height / 2.0;
-            CGFloat textH = font.lineHeight;
-            CGFloat textY = (h2 - textH) / 2.0 + 1.0;
-            CGRect textRect = CGRectMake(w2, textY, w2 - 6.0, textH);
-            [[NSString stringWithFormat:@"%d", index] drawInRect:textRect withAttributes:attributes];
-            
-            UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            
-            if (image)
-            {
-                auto skImage = std::make_shared<SkBitmap>();
-                bool res = SkCreateBitmapFromCGImage(skImage.get(), image.CGImage);
-                return res ? skImage : nullptr;
-            }
+            auto skImage = std::make_shared<SkBitmap>();
+            bool res = SkCreateBitmapFromCGImage(skImage.get(), image.CGImage);
+            return res ? skImage : nullptr;
         }
         return nullptr;
     }
@@ -306,7 +309,7 @@
         if (point.start)
             return [UIImage imageNamed:@"map_start_point"];
         else if (point.intermediate)
-            return [UIImage imageNamed:@"map_intermediate_point"];
+            return [self getIntermediateUIImage:point.index + 1];
         else
             return [UIImage imageNamed:@"map_target_point"];
     }

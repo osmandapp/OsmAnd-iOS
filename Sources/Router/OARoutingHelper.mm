@@ -22,12 +22,18 @@
 #import "OAGPXUIHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
+#import "OATransportRoutingHelper.h"
 
 #import <Reachability.h>
+#import <OsmAndCore/Utilities.h>
 
+#define DEFAULT_GPS_TOLERANCE 12
 #define POSITION_TOLERANCE 60
 #define RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE 3
 #define RECALCULATE_THRESHOLD_CAUSING_FULL_RECALCULATE_INTERVAL 2 * 60
+
+static NSInteger GPS_TOLERANCE = DEFAULT_GPS_TOLERANCE;
+static double ARRIVAL_DISTANCE_FACTOR = 1;
 
 @interface OARoutingHelper()
 
@@ -43,6 +49,8 @@
 @property (nonatomic) long recalculateCountInInterval;
 @property (nonatomic) NSTimeInterval evalWaitInterval;
 @property (nonatomic) BOOL waitingNextJob;
+
+@property (nonatomic) OARouteCalculationResult *originalRoute;
 
 - (void) showMessage:(NSString *)msg;
 - (void) setNewRoute:(OARouteCalculationResult *)prevRoute res:(OARouteCalculationResult *)res start:(CLLocation *)start;
@@ -142,6 +150,15 @@
     {
         if ([res isCalculated])
         {
+            if (!_params.inSnapToRoadMode && !_params.inPublicTransportMode)
+            {
+                _helper.route = res;
+                [self updateOriginalRoute];
+            }
+            if (_params.resultListener)
+            {
+                [_params.resultListener onRouteCalculated:res segment:_params.walkingRouteSegment];
+            }
             _helper.route = res;
         }
         else
@@ -153,7 +170,8 @@
     }
     if ([res isCalculated])
     {
-        [_helper setNewRoute:prev res:res start:_params.start];
+        if (!_helper.isPublicTransportMode /*&& !params.inSnapToRoadMode */)
+            [_helper setNewRoute:prev res:res start:_params.start];
     }
     else if (onlineSourceWithoutInternet)
     {
@@ -178,6 +196,12 @@
     }
     //app.getNotificationHelper().refreshNotification(NAVIGATION); TODO notification
     _helper.lastTimeEvaluatedRoute = [[NSDate date] timeIntervalSince1970];
+}
+
+- (void) updateOriginalRoute
+{
+    if (!_helper.originalRoute)
+        _helper.originalRoute = _helper.route;
 }
 
 @end
@@ -207,6 +231,8 @@
     BOOL _voiceRouterStopped;
     
     NSMutableArray<id<OARouteCalculationProgressCallback>> *_progressRoutes;
+    
+    OATransportRoutingHelper *_transportRoutingHelper;
 }
 
 static BOOL _isDeviatedFromRoute = false;
@@ -227,6 +253,7 @@ static BOOL _isDeviatedFromRoute = false;
         _provider = [[OARouteProvider alloc] init];
         [self setAppMode:_settings.applicationMode];
         _progressRoutes = [NSMutableArray new];
+        _transportRoutingHelper = OATransportRoutingHelper.sharedInstance;
     }
     return self;
 }
@@ -244,12 +271,19 @@ static BOOL _isDeviatedFromRoute = false;
 - (void) setAppMode:(OAApplicationMode *)mode
 {
     _mode = mode;
+    ARRIVAL_DISTANCE_FACTOR = MAX([_settings.arrivalDistanceFactor get:mode], 0.1f);
+    GPS_TOLERANCE = (NSInteger) (DEFAULT_GPS_TOLERANCE * ARRIVAL_DISTANCE_FACTOR);
     [_voiceRouter updateAppMode];
 }
 
 - (OAApplicationMode *) getAppMode
 {
     return _mode;
+}
+
+- (OARouteProvider *) getRouteProvider
+{
+    return _provider;
 }
 
 - (BOOL) isFollowingMode
@@ -326,6 +360,7 @@ static BOOL _isDeviatedFromRoute = false;
     {
         if (![_listeners containsObject:l])
             [_listeners addObject:l];
+        [_transportRoutingHelper addListener:l];
     }
 }
 
@@ -474,9 +509,16 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (float) getArrivalDistance
+- (double) getArrivalDistance
 {
-    return (double)_settings.applicationMode.arrivalDistance * [_settings.arrivalDistanceFactor get];
+    OAApplicationMode *m = _mode == nil ? _settings.applicationMode : _mode;
+    float defaultSpeed = MAX(0.3f, m.defaultSpeed);
+
+    /// Used to be: car - 90 m, bicycle - 50 m, pedestrian - 20 m
+    // return ((float)settings.getApplicationMode().getArrivalDistance()) * settings.ARRIVAL_DISTANCE_FACTOR.getModeValue(m);
+    // GPS_TOLERANCE - 12 m
+    // 5 seconds: car - 80 m @ 50 kmh, bicyle - 45 m @ 25 km/h, bicyle - 25 m @ 10 km/h, pedestrian - 18 m @ 4 km/h,
+    return GPS_TOLERANCE + defaultSpeed * 5 * ARRIVAL_DISTANCE_FACTOR;
 }
 
 - (void) showMessage:(NSString *)msg
@@ -566,7 +608,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (BOOL) identifyUTurnIsNeeded:(CLLocation *)currentLocation posTolerance:(float)posTolerance
 {
-    if (!_finalLocation || !currentLocation || ![_route isCalculated])
+    if (!_finalLocation || !currentLocation || ![_route isCalculated] || self.isPublicTransportMode)
         return false;
     
     BOOL isOffRoute = false;
@@ -606,7 +648,11 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (void) updateProgress:(OARouteCalculationParams *)params
 {
-    if (_progressRoutes.count > 0)
+    id<OARouteCalculationProgressCallback> progressRoute = nil;
+    if (params.calculationProgressCallback)
+        progressRoute = params.calculationProgressCallback;
+    
+    if (_progressRoutes.count > 0 || progressRoute)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
@@ -618,8 +664,15 @@ static BOOL _isDeviatedFromRoute = false;
                 if (all > 0)
                 {
                     int t = (int) MIN(p * p / (all * all) * 100.0, 99);
-                    for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                    if (progressRoute)
+                    {
                         [progressRoute updateProgress:t];
+                    }
+                    else
+                    {
+                        for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                            [progressRoute updateProgress:t];
+                    }
                 }
                 NSThread *t = _currentRunningJob;
                 if ([t isKindOfClass:[OARouteRecalculationThread class]] && ((OARouteRecalculationThread *) t).params != params)
@@ -646,8 +699,15 @@ static BOOL _isDeviatedFromRoute = false;
                     [_progressRoute requestPrivateAccessRouting];
                 }
                  */
-                for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                if (progressRoute)
+                {
                     [progressRoute finish];
+                }
+                else
+                {
+                    for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                        [progressRoute finish];
+                }
             }
         });
     }
@@ -729,9 +789,9 @@ static BOOL _isDeviatedFromRoute = false;
                 processed = true;
             }
         }
-        else if (newDist < dist || newDist < 10)
+        else if (newDist < dist || newDist < (GPS_TOLERANCE / 2))
         {
-            // newDist < 10 (avoid distance 0 till next turn)
+            // newDist < GPS_TOLERANCE (avoid distance 0 till next turn)
             if (dist > posTolerance)
             {
                 processed = true;
@@ -853,13 +913,68 @@ static BOOL _isDeviatedFromRoute = false;
         }
         
     }
+    
+    // 4. update angle point
+    if (_route.routeVisibleAngle > 0)
+    {
+        // proceed to the next point with min acceptable bearing
+        double ANGLE_TO_DECLINE = _route.routeVisibleAngle;
+        int nextPoint = _route.currentRoute;
+        for (; nextPoint < routeNodes.count - 1; nextPoint++)
+        {
+            float bearingTo = [currentLocation bearingTo:routeNodes[nextPoint]];
+            float bearingTo2 = [routeNodes[nextPoint] bearingTo:routeNodes[nextPoint + 1]];
+            if (abs(OsmAnd::Utilities::degreesDiff(bearingTo2, bearingTo)) <= ANGLE_TO_DECLINE)
+                break;
+        }
+
+        if(nextPoint > 0)
+        {
+            CLLocation *next = routeNodes[nextPoint];
+            CLLocation *prev = routeNodes[nextPoint - 1];
+            float bearing = [prev bearingTo:next];
+            double bearingTo = abs(OsmAnd::Utilities::degreesDiff(bearing, [currentLocation bearingTo:next]));
+            double bearingPrev = abs(OsmAnd::Utilities::degreesDiff(bearing, [currentLocation bearingTo:prev]));
+            while (YES) {
+                CLLocation *mp = [OAMapUtils calculateMidPoint:prev s2:next];
+                if([mp distanceFromLocation:next] <= 100) {
+                    break;
+                }
+                double bearingMid = abs(OsmAnd::Utilities::degreesDiff(bearing, [currentLocation bearingTo:mp]));
+                if (bearingPrev < ANGLE_TO_DECLINE)
+                {
+                    next = mp;
+                    bearingTo = bearingMid;
+                }
+                else if(bearingTo < ANGLE_TO_DECLINE)
+                {
+                    prev = mp;
+                    bearingPrev = bearingMid;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            [_route updateNextVisiblePoint:nextPoint location:next];
+        }
+
+    }
     return false;
 }
 
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation previousRoute:(OARouteCalculationResult *)previousRoute targetPointsChanged:(BOOL)targetPointsChanged
 {
     CLLocation *locationProjection = currentLocation;
-    if (!_finalLocation || !currentLocation)
+    if (self.isPublicTransportMode && currentLocation != nil && _finalLocation != nil &&
+        (targetPointsChanged || _transportRoutingHelper.startLocation == nil))
+    {
+        _lastFixedLocation = currentLocation;
+        _lastProjection = locationProjection;
+        _transportRoutingHelper.applicationMode = _mode;
+        [_transportRoutingHelper setFinalAndCurrentLocation:_finalLocation currentLocation:[[CLLocation alloc] initWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude]];
+    }
+    if (_finalLocation == nil || currentLocation == nil || self.isPublicTransportMode)
     {
         _isDeviatedFromRoute = false;
         return locationProjection;
@@ -929,7 +1044,7 @@ static BOOL _isDeviatedFromRoute = false;
                     [_voiceRouter interruptRouteCommands];
                     _voiceRouterStopped = true; // Prevents excessive execution of stop() code
                 }
-                if (distOrth > 350)
+                if (distOrth > _mode.getOffRouteDistance * ARRIVAL_DISTANCE_FACTOR && !_settings.disableOffrouteRecalc)
                 {
                     [_voiceRouter announceOffRoute:distOrth];
                 }
@@ -1129,6 +1244,7 @@ static BOOL _isDeviatedFromRoute = false;
             _lastProjection = nil;
             [self setFollowingMode:NO];
         }
+        [_transportRoutingHelper clearCurrentRoute:newFinalLocation];
     }
 }
 
@@ -1189,6 +1305,11 @@ static BOOL _isDeviatedFromRoute = false;
     return _lastProjection;
 }
 
+- (CLLocation *) getLastFixedLocation
+{
+    return _lastFixedLocation;
+}
+
 - (OAGPXRouteParamsBuilder *) getCurrentGPXRoute
 {
     return _currentGPXRoute;
@@ -1207,13 +1328,99 @@ static BOOL _isDeviatedFromRoute = false;
 - (void) recalculateRouteDueToSettingsChange
 {
     [self clearCurrentRoute:_finalLocation newIntermediatePoints:_intermediatePoints];
-    [self recalculateRouteInBackground:_lastFixedLocation end:_finalLocation intermediates:_intermediatePoints gpxRoute:_currentGPXRoute previousRoute:_route paramsChanged:YES onlyStartPointChanged:NO];
+    if (self.isPublicTransportMode)
+    {
+        CLLocation *start = _lastFixedLocation;
+        CLLocation *finish = _finalLocation;
+        _transportRoutingHelper.applicationMode = _mode;
+        if (start != nil && finish != nil)
+        {
+            [_transportRoutingHelper setFinalAndCurrentLocation:finish currentLocation:[[CLLocation alloc] initWithLatitude:start.coordinate.latitude longitude:start.coordinate.longitude]];
+        }
+        else
+        {
+            [_transportRoutingHelper recalculateRouteDueToSettingsChange];
+        }
+    }
+    else
+    {
+        [self recalculateRouteInBackground:_lastFixedLocation end:_finalLocation intermediates:_intermediatePoints gpxRoute:_currentGPXRoute previousRoute:_route paramsChanged:YES onlyStartPointChanged:NO];
+    }
 }
 
 - (void) notifyIfRouteIsCalculated
 {
     if ([_route isCalculated])
         [_voiceRouter newRouteIsCalculated:true];
+}
+
+- (BOOL) isPublicTransportMode
+{
+    return [_mode isDerivedRoutingFrom:OAApplicationMode.PUBLIC_TRANSPORT];
+}
+
+- (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress
+{
+    @synchronized (self) {
+        NSThread *prevRunningJob = _currentRunningJob;
+        _settings.lastRoutingApplicationMode = [self getAppMode];
+        OARouteRecalculationThread *newThread = [[OARouteRecalculationThread alloc] initWithName:@"Calculating route" params:params paramsChanged:paramsChanged helper:self];
+        _currentRunningJob = newThread;
+        [self startProgress:params];
+        if (updateProgress)
+            [self updateProgress:params];
+        if (prevRunningJob)
+        {
+            [newThread setWaitPrevJob:prevRunningJob];
+        }
+        [_currentRunningJob start];
+    }
+}
+// TODO: check correctness
+- (void) startProgress:(OARouteCalculationParams *) params
+{
+    if (params.calculationProgressCallback)
+    {
+        [params.calculationProgressCallback startProgress];
+    }
+    else if (_progressRoutes)
+    {
+        for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+        {
+            [progressRoute startProgress];
+        }
+    }
+}
+
+- (void) finishProgress:(OARouteCalculationParams *) params
+{
+    id<OARouteCalculationProgressCallback> progressRoute = params.calculationProgressCallback;
+    if (progressRoute)
+    {
+        [progressRoute finish];
+    }
+    else
+    {
+        for (id<OARouteCalculationProgressCallback> callback in _progressRoutes)
+            [callback finish];
+    }
+}
+
++ (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    params.leftSide = [OADrivingRegion isLeftHandDriving:settings.drivingRegion];
+    params.fast = [settings.fastRouteMode get:mode];
+}
+
++ (NSInteger) getGpsTolerance
+{
+    return GPS_TOLERANCE;
+}
+
++ (double) getArrivalDistanceFactor
+{
+    return ARRIVAL_DISTANCE_FACTOR;
 }
 
 @end

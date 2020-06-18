@@ -16,6 +16,10 @@
 #import "OATextInfoWidget.h"
 #import "OAWaypointHelper.h"
 #import "OAAlarmInfo.h"
+#import "OACurrentPositionHelper.h"
+
+#include <CommonCollections.h>
+#include <binaryRead.h>
 
 @interface OAAlarmWidget ()
 
@@ -33,6 +37,7 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAWaypointHelper *_wh;
+    OACurrentPositionHelper *_currentPositionHelper;
     
     NSString *_imgId;
     NSString *_textString;
@@ -42,7 +47,6 @@
 - (instancetype) init
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    
     for (UIView *v in bundle)
     {
         if ([v isKindOfClass:[OAAlarmWidget class]])
@@ -63,7 +67,6 @@
 - (instancetype) initWithFrame:(CGRect)frame
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    
     for (UIView *v in bundle)
     {
         if ([v isKindOfClass:[OAAlarmWidget class]])
@@ -89,7 +92,8 @@
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _locationProvider = _app.locationServices;
     _wh = [OAWaypointHelper sharedInstance];
-
+    _currentPositionHelper = [OACurrentPositionHelper instance];
+    
     self.hidden = YES;
 }
 
@@ -109,15 +113,12 @@
         }
         else
         {
-            /* TODO implement getLastKnownRouteSegment
-            RouteDataObject ro = locationProvider.getLastKnownRouteSegment();
-            Location loc = locationProvider.getLastKnownLocation();
-            if(ro != null && loc != null) {
-                alarm = wh.calculateMostImportantAlarm(ro, loc, settings.METRIC_SYSTEM.get(), cams);
-            } else {
-                alarm = null;
+            CLLocation *loc = _app.locationServices.lastKnownLocation;
+            const auto ro = [_currentPositionHelper getLastKnownRouteSegment:loc];
+            if (loc && ro)
+            {
+                alarm = [_wh calculateMostImportantAlarm:ro loc:loc mc:_settings.metricSystem showCameras:cams];
             }
-             */
         }
         if (alarm)
         {

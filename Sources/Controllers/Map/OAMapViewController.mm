@@ -56,6 +56,7 @@
 #import "OARouteStatistics.h"
 
 #import "OARoutingHelper.h"
+#import "OATransportRoutingHelper.h"
 #import "OAPointDescription.h"
 #import "OARouteCalculationResult.h"
 #import "OATargetPointsHelper.h"
@@ -112,9 +113,6 @@
 #import "OANativeUtilities.h"
 #import "OALog.h"
 #include "Localization.h"
-
-#define kGpxLayerIndex 9
-#define kGpxRecLayerIndex 12
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
@@ -1128,8 +1126,8 @@
 
 - (void) elevationGestureDetected:(UIPanGestureRecognizer *)recognizer
 {
-    // Ignore gesture if we have no view
-    if (!self.mapViewLoaded)
+    // Ignore gesture if we have no view or if 3D view is disabled
+    if (!self.mapViewLoaded || !OAAppSettings.sharedManager.settingAllow3DView)
         return;
 
     if (recognizer.state == UIGestureRecognizerStateBegan)
@@ -1781,7 +1779,13 @@
                 OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
                 
                 NSArray *params = styleSettings.getAllParameters;
-                for (OAMapStyleParameter *param in params) {
+                for (OAMapStyleParameter *param in params)
+                {
+                    if ([param.name isEqualToString:@"contourLines"] && ![[OAIAPHelper sharedInstance].srtm isActive])
+                    {
+                        newSettings[QString::fromNSString(param.name)] = QStringLiteral("disabled");
+                        continue;
+                    }
                     if (param.value.length > 0 && ![param.value isEqualToString:@"false"])
                         newSettings[QString::fromNSString(param.name)] = QString::fromNSString(param.value);
                 }
@@ -2420,12 +2424,13 @@
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
 
     BOOL found = NO;
-    NSMutableSet *groups = [NSMutableSet set];
+    NSMutableSet *groupSet = [NSMutableSet set];
+    QSet<QString> groups;
     
     for (OAGpxWpt *wptItem in helper.currentTrack.locationMarks)
     {
         if (wptItem.type.length > 0)
-            [groups addObject:wptItem.type];
+            [groupSet addObject:wptItem.type];
         
         if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
         {
@@ -2438,12 +2443,12 @@
 
     if (found)
     {
-        self.foundWptGroups = [groups allObjects];
+        self.foundWptGroups = [groupSet allObjects];
         return YES;
     }
     else
     {
-        [groups removeAllObjects];
+        [groupSet removeAllObjects];
     }
     
     if (currentTrackOnly)
@@ -2457,7 +2462,7 @@
         for (auto& loc : doc->locationMarks)
         {
             if (!loc->type.isEmpty())
-                [groups addObject:loc->type.toNSString()];
+                groups.insert(loc->type);
 
             if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
             {
@@ -2476,12 +2481,16 @@
         
         if (found)
         {
-            self.foundWptGroups = [groups allObjects];
+            NSMutableArray *groupList = [NSMutableArray array];
+            for (const auto& s : groups)
+                [groupList addObject:s.toNSString()];
+
+            self.foundWptGroups = groupList;
             return YES;
         }
         else
         {
-            [groups removeAllObjects];
+            groups.clear();
         }
         
         i++;
@@ -2494,7 +2503,7 @@
         for (auto& loc : doc->locationMarks)
         {
             if (!loc->type.isEmpty())
-                [groups addObject:loc->type.toNSString()];
+                groups.insert(loc->type);
             
             if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
             {
@@ -2513,8 +2522,16 @@
         
         if (found)
         {
-            self.foundWptGroups = [groups allObjects];
+            NSMutableArray *groupList = [NSMutableArray array];
+            for (const auto& s : groups)
+                [groupList addObject:s.toNSString()];
+
+            self.foundWptGroups = groupList;
             return YES;
+        }
+        else
+        {
+            groups.clear();
         }
     }
 
@@ -2523,7 +2540,7 @@
         for (OAGpxRoutePoint *point in _gpxRouter.routeDoc.locationMarks)
         {
             if (point.type.length > 0)
-                [groups addObject:point.type];
+                [groupSet addObject:point.type];
 
             if ([OAUtilities isCoordEqual:point.position.latitude srcLon:point.position.longitude destLat:location.latitude destLon:location.longitude])
             {
@@ -2536,7 +2553,7 @@
         
         if (found)
         {
-            self.foundWptGroups = [groups allObjects];
+            self.foundWptGroups = [groupSet allObjects];
             return YES;
         }
     }
@@ -2811,6 +2828,45 @@
     return YES;
 }
 
+- (NSArray<OAGpxWpt *> *) getLocationMarksOf:(NSString *)gpxFileName
+{
+    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+    if (!gpxFileName)
+    {
+        return helper.currentTrack.locationMarks;
+    }
+    else
+    {
+        auto activeGpx = _selectedGpxHelper.activeGpx;
+        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
+        {
+            NSString *path = it.key().toNSString();
+            if ([path isEqualToString:gpxFileName])
+            {
+                auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
+                auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
+                OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(gpx)];
+                return gpxDoc.locationMarks;
+            }
+        }
+        if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
+        {
+            auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
+            auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
+            OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(gpx)];
+            return gpxDoc.locationMarks;
+        }
+        if ([_gpxDocFileRoute isEqualToString:[gpxFileName lastPathComponent]])
+        {
+            auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsRoute.first());
+            auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
+            OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(gpx)];
+            return gpxDoc.locationMarks;
+        }
+    }
+    return nil;
+}
+
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
     if (items.count == 0)
@@ -2894,7 +2950,7 @@
     return found;
 }
 
-- (BOOL)updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath
+- (BOOL)updateMetadata:(OAGpxMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath
 {
     if (!metadata)
         return NO;
@@ -2903,7 +2959,7 @@
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         NSString *path = it.key().toNSString();
-        if ([path isEqualToString:docPath])
+        if ([path isEqualToString:oldPath])
         {
             auto docGeoInfo = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
             auto doc = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(docGeoInfo);
@@ -2919,6 +2975,9 @@
             
             [OAGPXDocument fillMetadata:m usingMetadata:metadata];
 
+            _selectedGpxHelper.activeGpx.remove(QString::fromNSString(oldPath));
+            _selectedGpxHelper.activeGpx[QString::fromNSString(docPath)] = doc;
+            
             doc->saveTo(QString::fromNSString(docPath));
             
             return YES;
@@ -3119,7 +3178,7 @@
     }
     else
     {
-        return @{UNDEFINED_ATTR : @(0xFFFFFFFF)};
+        return @{kUndefinedAttr : @(0xFFFFFFFF)};
     }
 }
 
@@ -3211,27 +3270,23 @@
 
 - (BOOL) isMyLocationVisible
 {
+    CLLocation *myLocation = _app.locationServices.lastKnownLocation;
+    return myLocation ? [self isLocationVisible:myLocation.coordinate.latitude longitude:myLocation.coordinate.longitude] : YES;
+}
+
+- (BOOL) isLocationVisible:(double)latitude longitude:(double)longitude
+{
     OAMapRendererView* renderView = (OAMapRendererView*)self.view;
-    CLLocation* myLocation = _app.locationServices.lastKnownLocation;
-    if (myLocation)
-    {
-        OsmAnd::PointI myLocation31(OsmAnd::Utilities::get31TileNumberX(myLocation.coordinate.longitude),
-                                    OsmAnd::Utilities::get31TileNumberY(myLocation.coordinate.latitude));
-        
-        OsmAnd::AreaI visibleArea = [renderView getVisibleBBox31];
-        
-        return (visibleArea.topLeft.x < myLocation31.x && visibleArea.topLeft.y < myLocation31.y && visibleArea.bottomRight.x > myLocation31.x && visibleArea.bottomRight.y > myLocation31.y);
-    }
-    else
-    {
-        return YES;
-    }
+    OsmAnd::PointI location31(OsmAnd::Utilities::get31TileNumberX(longitude), OsmAnd::Utilities::get31TileNumberY(latitude));
+    OsmAnd::AreaI visibleArea = [renderView getVisibleBBox31];
+    return (visibleArea.topLeft.x < location31.x && visibleArea.topLeft.y < location31.y && visibleArea.bottomRight.x > location31.x && visibleArea.bottomRight.y > location31.y);
 }
 
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading
 {
     [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
-    [_mapLayers.routeMapLayer refreshRoute];
+    if (!OARoutingHelper.sharedInstance.isPublicTransportMode)
+        [_mapLayers.routeMapLayer refreshRoute];
 }
 
 #pragma mark - OARouteInformationListener
@@ -3239,21 +3294,31 @@
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
     OARoutingHelper *helper = [OARoutingHelper sharedInstance];
-    NSString *error = [helper getLastRouteCalcError];
+    OATransportRoutingHelper *transportHelper = OATransportRoutingHelper.sharedInstance;
+    NSString *error = helper.isPublicTransportMode ? [transportHelper getLastRouteCalcError] : [helper getLastRouteCalcError];
     OABBox routeBBox;
     routeBBox.top = DBL_MAX;
     routeBBox.bottom = DBL_MAX;
     routeBBox.left = DBL_MAX;
     routeBBox.right = DBL_MAX;
-    if ([helper isRouteCalculated] && !error)
+    if ([helper isRouteCalculated] && !error && !helper.isPublicTransportMode)
     {
         routeBBox = [helper getBBox];
     }
+    else if (helper.isPublicTransportMode && transportHelper.getRoutes.size() > 0)
+    {
+        routeBBox = [transportHelper getBBox];
+    }
     else
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[[UIAlertView alloc] initWithTitle:@"Route calculation error" message:error delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-        });
+        if (!helper.isPublicTransportMode)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:error preferredStyle:UIAlertControllerStyleAlert];
+                [alertController addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+                [self presentViewController:alertController animated:YES completion:nil];
+            });
+        }
     }
     
     @synchronized(_rendererSync)

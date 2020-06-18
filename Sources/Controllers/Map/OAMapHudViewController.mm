@@ -614,6 +614,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateColors];
         [_quickActionController updateViewVisibility];
+        [_mapPanelViewController refreshToolbar];
     });
 }
 
@@ -726,7 +727,10 @@
         [self.view insertSubview:self.statusBarView aboveSubview:_toolbarViewController.view];
         
         if (self.widgetsView && self.widgetsView.superview)
-            [self.view insertSubview:self.widgetsView belowSubview:_toolbarViewController.view];
+        {
+            UIView *shadeView = _mapPanelViewController.shadeView;
+            [self.view insertSubview:self.widgetsView belowSubview:shadeView && shadeView.superview ? shadeView : _toolbarViewController.view];
+        }
     }
 }
 
@@ -846,7 +850,7 @@
     BOOL isNight = settings.nightMode;
     BOOL transparent = [settings.transparentMapTheme get];
     UIColor *statusBarColor;
-    if (self.contextMenuMode)
+    if (self.contextMenuMode && !_toolbarViewController)
         statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];

@@ -65,11 +65,11 @@
 "confirm_usage_speed_cameras" = "در بسیاری از کشورها (آلمان، فرانسه، ایتالیا و...) بنا بر قانون، استفاده از هشداردهندهٔ دوربین‌های ترافیکی مجاز نیست. OsmAnd هیچ‌گونه مسئولیتی در قبال نقض قانون از سوی شما ندارد. لطفاً تنها در صورتی که مجاز به استفاده از این ویژگی هستید بله را انتخاب کنید.";
 "show_traffic_warnings" = "هشدارهای ترافیکی";
 "show_pedestrian_warnings" = "گذرگاه‌های پیاده";
-"show_cameras" = "دوربین‌های کنترل سرعت";
+"show_cameras" = "دوربین‌های سرعت";
 "show_lanes" = "خطوط عبوری";
 "speak_street_names" = "نام خیابان‌ها (موتور صوتی)";
 "speak_speed_limit" = "سرعت مجاز";
-"speak_cameras" = "دوربین‌های کنترل سرعت";
+"speak_cameras" = "دوربین‌های سرعت";
 "speak_traffic_warnings" = "هشدارهای ترافیکی";
 "announce_gpx_waypoints" = "نقاط بین‌راهی GPX";
 "speak_favorites" = "نقاط برگزیدهٔ اطراف";
@@ -134,7 +134,7 @@
 "app_mode_boat" = "قایق";
 "app_mode_aircraft" = "هواپیما";
 "gpx_option_calculate_first_last_segment" = "برای قطعهٔ ابتدایی و انتهایی مسیر، مسیریابی کن";
-"gpx_option_from_start_point" = "گذر از همهٔ رد";
+"gpx_option_from_start_point" = "گذر از سرتاسر رد";
 "gpx_option_reverse_route" = "برعکس‌کردن جهت GPX";
 "use_points_as_intermediates" = "محاسبهٔ مسیر بین نقاط";
 "calculate_osmand_route_without_internet" = "محاسبهٔ مسیر بدون استفاده از اینترنت";
@@ -197,7 +197,7 @@
 "traffic_warning_payment" = "عوارضی";
 "traffic_warning_stop" = "علامت ایست";
 "traffic_warning_calming" = "سرعتگیر";
-"traffic_warning_speed_camera" = "دوربین کنترل سرعت";
+"traffic_warning_speed_camera" = "دوربین سرعت";
 "traffic_warning" = "هشدار ترافیکی";
 "traffic_warning_railways" = "تقاطع جاده با راه‌آهن";
 "traffic_warning_pedestrian" = "گذرگاه پیاده";
@@ -250,7 +250,7 @@
 "shared_string_done" = "Done";
 "shared_string_update" = "به‌روزرسانی";
 "shared_string_install" = "نصب";
-"shared_string_uninstall" = "Uninstall";
+"shared_string_uninstall" = "حذف نصب";
 "shared_string_delete" = "حذف";
 "shared_string_remove" = "حذف";
 "shared_string_dismiss" = "بی‌خیال";

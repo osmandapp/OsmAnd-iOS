@@ -74,17 +74,27 @@
                                 <constraint firstAttribute="width" constant="40" id="Zbh-AZ-fuW"/>
                             </constraints>
                         </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VcS-Fc-pad">
+                            <rect key="frame" x="0.0" y="135" width="414" height="1"/>
+                            <color key="backgroundColor" red="0.76862745098039209" green="0.76862745098039209" blue="0.76862745098039209" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="Gcm-5q-fYm"/>
+                            </constraints>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstItem="VcS-Fc-pad" firstAttribute="leading" secondItem="jz1-Tz-5hg" secondAttribute="leading" id="8Su-o5-qTH"/>
                         <constraint firstAttribute="bottom" secondItem="hpb-XG-Ggn" secondAttribute="bottom" constant="53" id="ObB-q5-rEg"/>
                         <constraint firstItem="Sxc-je-zsT" firstAttribute="centerY" secondItem="jz1-Tz-5hg" secondAttribute="centerY" id="VKh-DK-bBg"/>
-                        <constraint firstAttribute="trailing" secondItem="hpb-XG-Ggn" secondAttribute="trailing" constant="16" id="XVG-XI-tXq"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="hpb-XG-Ggn" secondAttribute="trailing" constant="8" id="XVG-XI-tXq"/>
                         <constraint firstItem="HQy-Dw-fgn" firstAttribute="centerX" secondItem="jz1-Tz-5hg" secondAttribute="centerX" id="YUd-kW-DBK"/>
                         <constraint firstAttribute="height" constant="136" id="bx0-n6-dhX"/>
                         <constraint firstAttribute="bottom" secondItem="iTI-rR-y60" secondAttribute="bottom" constant="54" id="hoT-HD-dN2"/>
-                        <constraint firstItem="iTI-rR-y60" firstAttribute="leading" secondItem="jz1-Tz-5hg" secondAttribute="leading" constant="16" id="j5R-tA-VQ9"/>
+                        <constraint firstItem="iTI-rR-y60" firstAttribute="leading" secondItem="jz1-Tz-5hg" secondAttribute="leadingMargin" constant="8" id="j5R-tA-VQ9"/>
+                        <constraint firstAttribute="trailing" secondItem="VcS-Fc-pad" secondAttribute="trailing" id="kGL-d3-Vk9"/>
                         <constraint firstItem="Sxc-je-zsT" firstAttribute="centerX" secondItem="jz1-Tz-5hg" secondAttribute="centerX" id="pwJ-cp-SyH"/>
+                        <constraint firstAttribute="bottom" secondItem="VcS-Fc-pad" secondAttribute="bottom" id="r4s-oM-MYH"/>
                         <constraint firstAttribute="bottom" secondItem="HQy-Dw-fgn" secondAttribute="bottom" constant="11" id="xGm-oz-bSf"/>
                     </constraints>
                 </view>
@@ -96,12 +106,12 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="mHZ-Yn-ibe" secondAttribute="bottom" id="0k4-ML-TmJ"/>
-                <constraint firstItem="jz1-Tz-5hg" firstAttribute="leading" secondItem="fdS-FX-c7v" secondAttribute="leading" id="Pxh-bc-tyc"/>
-                <constraint firstItem="mHZ-Yn-ibe" firstAttribute="leading" secondItem="fdS-FX-c7v" secondAttribute="leading" id="Uv2-Q5-nF9"/>
+                <constraint firstItem="jz1-Tz-5hg" firstAttribute="leading" secondItem="aGf-14-Bz7" secondAttribute="leading" id="Pxh-bc-tyc"/>
+                <constraint firstItem="mHZ-Yn-ibe" firstAttribute="leading" secondItem="aGf-14-Bz7" secondAttribute="leading" id="Uv2-Q5-nF9"/>
                 <constraint firstItem="mHZ-Yn-ibe" firstAttribute="top" secondItem="jz1-Tz-5hg" secondAttribute="bottom" id="Ysh-Yg-exH"/>
                 <constraint firstItem="jz1-Tz-5hg" firstAttribute="top" secondItem="aGf-14-Bz7" secondAttribute="top" id="b3r-Pu-0Fy"/>
-                <constraint firstItem="jz1-Tz-5hg" firstAttribute="trailing" secondItem="fdS-FX-c7v" secondAttribute="trailing" id="cip-k0-rwN"/>
-                <constraint firstItem="mHZ-Yn-ibe" firstAttribute="trailing" secondItem="fdS-FX-c7v" secondAttribute="trailing" id="fzZ-1d-lhw"/>
+                <constraint firstItem="jz1-Tz-5hg" firstAttribute="trailing" secondItem="aGf-14-Bz7" secondAttribute="trailing" id="cip-k0-rwN"/>
+                <constraint firstItem="mHZ-Yn-ibe" firstAttribute="trailing" secondItem="aGf-14-Bz7" secondAttribute="trailing" id="fzZ-1d-lhw"/>
                 <constraint firstItem="mHZ-Yn-ibe" firstAttribute="top" secondItem="jz1-Tz-5hg" secondAttribute="bottom" id="n0G-Jj-CuR"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fdS-FX-c7v"/>

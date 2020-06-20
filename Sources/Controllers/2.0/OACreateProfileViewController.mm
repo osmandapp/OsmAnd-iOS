@@ -170,7 +170,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     UIImage *img = nil;
-    NSString *imgName = _profileList[indexPath.row].mapIcon;
+    NSString *imgName = _profileList[indexPath.row].smallIconDark;
     if (imgName)
         img = [UIImage imageNamed:imgName];
     cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

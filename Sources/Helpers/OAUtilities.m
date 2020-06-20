@@ -657,7 +657,6 @@
         UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
         
         CGContextRef context = UIGraphicsGetCurrentContext();
-        [color setFill];
         
         CGContextTranslateCTM(context, 0, size.height);
         CGContextScaleCTM(context, 1.0, -1.0);
@@ -666,11 +665,10 @@
         CGRect rect = CGRectMake(size.width / 2.0 - bottom.size.width / 2.0, size.height / 2.0 - bottom.size.height / 2.0, bottom.size.width, bottom.size.height);
         CGContextDrawImage(context, rect, bottom.CGImage);
 
+        center = [self imageWithTintColor:color image:center];
+        
         rect = CGRectMake(size.width / 2.0 - center.size.width / 2.0, size.height / 2.0 - center.size.height / 2.0, center.size.width, center.size.height);
         CGContextDrawImage(context, rect, center.CGImage);
-        CGContextClipToMask(context, rect, center.CGImage);
-        CGContextAddRect(context, rect);
-        CGContextDrawPath(context, kCGPathFill);
         
         rect = CGRectMake(size.width / 2.0 - top.size.width / 2.0, size.height / 2.0 - top.size.height / 2.0, top.size.width, top.size.height);
         CGContextDrawImage(context, rect, top.CGImage);
@@ -680,6 +678,23 @@
         
         return res;
     }
+}
+
++ (UIImage *) imageWithTintColor:(UIColor *)color image:(UIImage *)image
+{
+    UIGraphicsBeginImageContextWithOptions(image.size, NO, image.scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [color setFill];
+    CGContextTranslateCTM(context, 0, image.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextClipToMask(context, CGRectMake(0, 0, image.size.width, image.size.height), [image CGImage]);
+    CGContextFillRect(context, CGRectMake(0, 0, image.size.width, image.size.height));
+
+    UIImage *coloredImg = UIGraphicsGetImageFromCurrentImageContext();
+
+    UIGraphicsEndImageContext();
+    
+    return coloredImg;
 }
 
 + (NSString *) colorToString:(UIColor *)color

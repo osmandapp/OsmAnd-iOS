@@ -9,6 +9,7 @@
 //  git revision e5a489637a08d21827a1edd2cf6581339b5f748a
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class OAPointDescription;
 

@@ -11,6 +11,9 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OADayNightHelper.h"
+#import "OAColors.h"
+#import "OANavigationIcon.h"
+#import "OALocationIcon.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -83,6 +86,7 @@
 #define applicationModeKey @"applicationMode"
 #define defaultApplicationModeKey @"defaultApplicationMode"
 #define availableApplicationModesKey @"availableApplicationModes"
+#define customAppModesKey @"customAppModes"
 
 #define mapInfoControlsKey @"mapInfoControls"
 #define showDestinationArrowKey @"showDestinationArrow"
@@ -93,7 +97,20 @@
 #define rotateMapKey @"rotateMap"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
 
+// App profiles
 #define routingProfileKey @"routingProfile"
+#define profileIconNameKey @"profileIconName"
+#define profileIconColorKey @"profileIconColor"
+#define userProfileNameKey @"userProfileName"
+#define parentAppModeKey @"parentAppMode"
+#define routeServiceKey @"routeService"
+#define navigationIconKey @"navigationIcon"
+#define locationIconKey @"locationIcon"
+#define appModeOrderKey @"appModeOrder"
+#define defaultSpeedKey @"defaultSpeed"
+#define minSpeedKey @"minSpeed"
+#define maxSpeedKey @"maxSpeed"
+#define routeStraightAngleKey @"routeStraightAngle"
 
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
@@ -686,6 +703,12 @@
         self.defaultValues = [NSMapTable strongToStrongObjectsMapTable];
     }
     [self.defaultValues setObject:defValue forKey:mode];
+}
+
+- (void) resetModeToDefault:(OAApplicationMode *)mode
+{
+    NSObject *defValue = [self getProfileDefaultValue:mode];
+    [self setValue:defValue mode:mode];
 }
 
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode
@@ -1342,6 +1365,8 @@
         _availableApplicationModes = [[NSUserDefaults standardUserDefaults] objectForKey:availableApplicationModesKey];
         if (!_availableApplicationModes)
             self.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
+        
+        _customAppModes = [NSUserDefaults.standardUserDefaults objectForKey:customAppModesKey] ? [NSUserDefaults.standardUserDefaults stringForKey:customAppModesKey] : @"";
 
         _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
         
@@ -1353,6 +1378,47 @@
         [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
         [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
+        
+        _profileIconName = [OAProfileString withKey:profileIconNameKey defValue:@"ic_world_globe_dark"];
+        [_profileIconName setModeDefaultValue:@"ic_world_globe_dark" mode:OAApplicationMode.DEFAULT];
+        [_profileIconName setModeDefaultValue:@"ic_action_car_dark" mode:OAApplicationMode.CAR];
+        [_profileIconName setModeDefaultValue:@"ic_action_bicycle_dark" mode:OAApplicationMode.BICYCLE];
+        [_profileIconName setModeDefaultValue:@"ic_action_pedestrian_dark" mode:OAApplicationMode.PEDESTRIAN];
+        [_profileIconName setModeDefaultValue:@"ic_action_bus_dark" mode:OAApplicationMode.PUBLIC_TRANSPORT];
+        [_profileIconName setModeDefaultValue:@"ic_action_sail_boat_dark" mode:OAApplicationMode.BOAT];
+        [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
+        [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
+        
+        _profileIconColor = [OAProfileInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
+        _userProfileName = [OAProfileString withKey:userProfileNameKey defValue:@""];
+        _parentAppMode = [OAProfileString withKey:parentAppModeKey defValue:nil];
+        
+        _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
+        [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.AIRCRAFT];
+        
+        _navigationIcon = [OAProfileInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
+        [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
+        
+        _locationIcon = [OAProfileInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
+        
+        _appModeOrder = [OAProfileInteger withKey:appModeOrderKey defValue:0];
+        
+        _defaultSpeed = [OAProfileDouble withKey:defaultSpeedKey defValue:10.];
+        [_defaultSpeed setModeDefaultValue:@1.5 mode:OAApplicationMode.DEFAULT];
+        [_defaultSpeed setModeDefaultValue:@12.5 mode:OAApplicationMode.CAR];
+        [_defaultSpeed setModeDefaultValue:@2.77 mode:OAApplicationMode.BICYCLE];
+        [_defaultSpeed setModeDefaultValue:@1.11 mode:OAApplicationMode.PEDESTRIAN];
+        [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.BOAT];
+        [_defaultSpeed setModeDefaultValue:@40.0 mode:OAApplicationMode.AIRCRAFT];
+        [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.SKI];
+
+        _minSpeed = [OAProfileDouble withKey:minSpeedKey defValue:0.];
+        _maxSpeed = [OAProfileDouble withKey:maxSpeedKey defValue:0.];
+        _routeStraightAngle = [OAProfileDouble withKey:routeStraightAngleKey defValue:30.];
         
         _showDestinationArrow = [OAProfileBoolean withKey:showDestinationArrowKey defValue:NO];
         [_showDestinationArrow setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
@@ -1426,7 +1492,6 @@
         _useIntermediatePointsNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:useIntermediatePointsNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useIntermediatePointsNavigationKey] : NO;
         _disableOffrouteRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableOffrouteRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableOffrouteRecalcKey] : NO;
         _disableWrongDirectionRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableWrongDirectionRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableWrongDirectionRecalcKey] : NO;
-        _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
         
         _autoFollowRoute = [OAProfileInteger withKey:autoFollowRouteKey defValue:0];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];
@@ -2434,6 +2499,13 @@
 {
     _rulerMode = rulerMode;
     [[NSUserDefaults standardUserDefaults] setInteger:_rulerMode forKey:rulerModeKey];
+}
+
+- (NSSet<NSString *> *) getCustomAppModesKeys
+{
+    NSString *appModeKeys = self.customAppModes;
+    NSArray<NSString *> *keysArr = [appModeKeys componentsSeparatedByString:@","];
+    return [NSSet setWithArray:keysArr];
 }
 
 @end

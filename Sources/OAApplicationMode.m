@@ -21,18 +21,16 @@
 
 @property (nonatomic) OAApplicationMode *parent;
 
-@property (nonatomic) float defaultSpeed;
-
-@property (nonatomic) NSString *mapIcon;
+//@property (nonatomic) NSString *mapIcon;
 @property (nonatomic) NSString *smallIconDark;
-@property (nonatomic) NSString *bearingIconDay;
-@property (nonatomic) NSString *bearingIconNight;
-@property (nonatomic) NSString *headingIconDay;
-@property (nonatomic) NSString *headingIconNight;
-@property (nonatomic) NSString *locationIconDay;
-@property (nonatomic) NSString *locationIconNight;
-@property (nonatomic) NSString *locationIconDayLost;
-@property (nonatomic) NSString *locationIconNightLost;
+//@property (nonatomic) NSString *bearingIconDay;
+//@property (nonatomic) NSString *bearingIconNight;
+//@property (nonatomic) NSString *headingIconDay;
+//@property (nonatomic) NSString *headingIconNight;
+//@property (nonatomic) NSString *locationIconDay;
+//@property (nonatomic) NSString *locationIconNight;
+//@property (nonatomic) NSString *locationIconDayLost;
+//@property (nonatomic) NSString *locationIconNightLost;
 
 @end
 
@@ -62,61 +60,42 @@ static OAApplicationMode *_SKI;
     _cachedFilteredValues = [NSMutableArray array];
     
     _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_overview") stringKey:@"default"];
-    [self defLocation:_DEFAULT];
-    _DEFAULT.mapIcon = @"map_world_globe_dark";
     _DEFAULT.smallIconDark = @"ic_world_globe_dark";
     [_values addObject:_DEFAULT];
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
     _CAR.descr = OALocalizedString(@"base_profile_descr_car");
-    [self carLocation:_CAR];
-    _CAR.mapIcon = @"map_action_car_dark";
     _CAR.smallIconDark = @"ic_action_car_dark";
     [_values addObject:_CAR];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
     _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
-    [self bicycleLocation:_BICYCLE];
-    _BICYCLE.mapIcon = @"map_action_bicycle_dark";
     _BICYCLE.smallIconDark = @"ic_action_bicycle_dark";
     [_values addObject:_BICYCLE];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
     _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
-    [self pedestrianLocation:_PEDESTRIAN];
-    _PEDESTRIAN.mapIcon = @"map_action_pedestrian_dark";
     _PEDESTRIAN.smallIconDark = @"ic_action_pedestrian_dark";
     [_values addObject:_PEDESTRIAN];
     
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
     _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
-    _PUBLIC_TRANSPORT.defaultSpeed = 15.3f;
-    [self carLocation:_PUBLIC_TRANSPORT];
-    _PUBLIC_TRANSPORT.mapIcon = @"map_action_bus_dark";
     _PUBLIC_TRANSPORT.smallIconDark = @"ic_action_bus_dark";
     [_values addObject:_PUBLIC_TRANSPORT];
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
     _AIRCRAFT.descr = OALocalizedString(@"base_profile_descr_aircraft");
-    _AIRCRAFT.defaultSpeed = 40.0f;
-    [self carLocation:_AIRCRAFT];
-    _AIRCRAFT.mapIcon = @"map_action_aircraft";
     _AIRCRAFT.smallIconDark = @"ic_action_aircraft";
     [_values addObject:_AIRCRAFT];
     
     _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
     _BOAT.descr = OALocalizedString(@"base_profile_descr_boat");
-    _BOAT.defaultSpeed = 5.5f;
-    [self carLocation:_BOAT];
-    _BOAT.mapIcon = @"map_action_sail_boat_dark";
     _BOAT.smallIconDark = @"ic_action_sail_boat_dark";
     [_values addObject:_BOAT];
     
     _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_skiing") stringKey:@"ski"];
     _SKI.descr = OALocalizedString(@"app_mode_skiing");
-    [self carLocation:_SKI];
-    _SKI.mapIcon = @"map_action_skiing";
-    _SKI.smallIconDark = @"ic_action_train";
+    _SKI.smallIconDark = @"ic_action_skiing";
     [_values addObject:_SKI];
     
     NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI];
@@ -202,52 +181,60 @@ static OAApplicationMode *_SKI;
     return _SKI;
 }
 
-+ (void) carLocation:(OAApplicationMode *)applicationMode
-{
-    applicationMode.bearingIconDay = @"map_car_bearing";
-    applicationMode.bearingIconNight = @"map_car_bearing_night";
-    applicationMode.headingIconDay = @"map_car_location_view_angle";
-    applicationMode.headingIconNight = @"map_car_location_view_angle_night";
-    applicationMode.locationIconDay = @"map_car_location";
-    applicationMode.locationIconNight = @"map_car_location_night";
-    applicationMode.locationIconDayLost = @"map_car_location_lost";
-    applicationMode.locationIconNightLost = @"map_car_location_lost_night";
-}
+//+ (void) carLocation:(OAApplicationMode *)applicationMode
+//{
+//    applicationMode.bearingIconDay = @"map_car_bearing";
+//    applicationMode.bearingIconNight = @"map_car_bearing_night";
+//    applicationMode.headingIconDay = @"map_car_location_view_angle";
+//    applicationMode.headingIconNight = @"map_car_location_view_angle_night";
+//    applicationMode.locationIconDay = @"map_car_location";
+//    applicationMode.locationIconNight = @"map_car_location_night";
+//    applicationMode.locationIconDayLost = @"map_car_location_lost";
+//    applicationMode.locationIconNightLost = @"map_car_location_lost_night";
+//}
+//
+//+ (void) bicycleLocation:(OAApplicationMode *)applicationMode
+//{
+//    applicationMode.bearingIconDay = @"map_bicycle_bearing";
+//    applicationMode.bearingIconNight = @"map_bicycle_bearing_night";
+//    applicationMode.headingIconDay = @"map_bicycle_location_view_angle";
+//    applicationMode.headingIconNight = @"map_bicycle_location_view_angle_night";
+//    applicationMode.locationIconDay = @"map_bicycle_location";
+//    applicationMode.locationIconNight = @"map_bicycle_location_night";
+//    applicationMode.locationIconDayLost = @"map_bicycle_location_lost";
+//    applicationMode.locationIconNightLost = @"map_bicycle_location_lost_night";
+//}
+//
+//+ (void) pedestrianLocation:(OAApplicationMode *)applicationMode
+//{
+//    applicationMode.bearingIconDay = @"map_pedestrian_bearing";
+//    applicationMode.bearingIconNight = @"map_pedestrian_bearing_night";
+//    applicationMode.headingIconDay = @"map_pedestrian_location_view_angle";
+//    applicationMode.headingIconNight = @"map_pedestrian_location_view_angle_night";
+//    applicationMode.locationIconDay = @"map_pedestrian_location";
+//    applicationMode.locationIconNight = @"map_pedestrian_location_night";
+//    applicationMode.locationIconDayLost = @"map_pedestrian_location_lost";
+//    applicationMode.locationIconNightLost = @"map_pedestrian_location_lost_night";
+//}
+//
+//+ (void) defLocation:(OAApplicationMode *)applicationMode
+//{
+//    applicationMode.bearingIconDay = @"map_pedestrian_bearing";
+//    applicationMode.bearingIconNight = @"map_pedestrian_bearing_night";
+//    applicationMode.headingIconDay = @"map_default_location_view_angle";
+//    applicationMode.headingIconNight = @"map_default_location_view_angle_night";
+//    applicationMode.locationIconDay = @"map_pedestrian_location";
+//    applicationMode.locationIconNight = @"map_pedestrian_location_night";
+//    applicationMode.locationIconDayLost = @"map_pedestrian_location_lost";
+//    applicationMode.locationIconNightLost = @"map_pedestrian_location_lost_night";
+//}
 
-+ (void) bicycleLocation:(OAApplicationMode *)applicationMode
++ (OAApplicationMode *) buildApplicationModeByKey:(NSString *)key
 {
-    applicationMode.bearingIconDay = @"map_bicycle_bearing";
-    applicationMode.bearingIconNight = @"map_bicycle_bearing_night";
-    applicationMode.headingIconDay = @"map_bicycle_location_view_angle";
-    applicationMode.headingIconNight = @"map_bicycle_location_view_angle_night";
-    applicationMode.locationIconDay = @"map_bicycle_location";
-    applicationMode.locationIconNight = @"map_bicycle_location_night";
-    applicationMode.locationIconDayLost = @"map_bicycle_location_lost";
-    applicationMode.locationIconNightLost = @"map_bicycle_location_lost_night";
-}
-
-+ (void) pedestrianLocation:(OAApplicationMode *)applicationMode
-{
-    applicationMode.bearingIconDay = @"map_pedestrian_bearing";
-    applicationMode.bearingIconNight = @"map_pedestrian_bearing_night";
-    applicationMode.headingIconDay = @"map_pedestrian_location_view_angle";
-    applicationMode.headingIconNight = @"map_pedestrian_location_view_angle_night";
-    applicationMode.locationIconDay = @"map_pedestrian_location";
-    applicationMode.locationIconNight = @"map_pedestrian_location_night";
-    applicationMode.locationIconDayLost = @"map_pedestrian_location_lost";
-    applicationMode.locationIconNightLost = @"map_pedestrian_location_lost_night";
-}
-
-+ (void) defLocation:(OAApplicationMode *)applicationMode
-{
-    applicationMode.bearingIconDay = @"map_pedestrian_bearing";
-    applicationMode.bearingIconNight = @"map_pedestrian_bearing_night";
-    applicationMode.headingIconDay = @"map_default_location_view_angle";
-    applicationMode.headingIconNight = @"map_default_location_view_angle_night";
-    applicationMode.locationIconDay = @"map_pedestrian_location";
-    applicationMode.locationIconNight = @"map_pedestrian_location_night";
-    applicationMode.locationIconDayLost = @"map_pedestrian_location_lost";
-    applicationMode.locationIconNightLost = @"map_pedestrian_location_lost_night";
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    OAApplicationMode *m = [[OAApplicationMode alloc] initWithName:@"" stringKey:key];
+    m.name = [settings.userProfileName get:m];
+    return m;
 }
 
 - (instancetype)initWithName:(NSString *)name stringKey:(NSString *)stringKey
@@ -258,8 +245,6 @@ static OAApplicationMode *_SKI;
         _name = name;
         _stringKey = stringKey;
         _variantKey = [NSString stringWithFormat:@"type_%@", stringKey];
-        
-        _defaultSpeed = 10.0f;
     }
     return self;
 }
@@ -308,13 +293,13 @@ static OAApplicationMode *_SKI;
 
 - (BOOL) hasFastSpeed
 {
-    return _defaultSpeed > 10;
+    return [self getDefaultSpeed] > 10;
 }
 
 - (NSInteger) getOffRouteDistance
 {
     // used to be: 50/14 - 350 m, 10/2.7 - 50 m, 4/1.11 - 20 m
-    double speed = MAX(_defaultSpeed, 0.3f);
+    double speed = MAX([self getDefaultSpeed], 0.3f);
     // become: 50 kmh - 280 m, 10 kmh - 55 m, 4 kmh - 22 m
     return (NSInteger) (speed * 20);
 }
@@ -327,10 +312,298 @@ static OAApplicationMode *_SKI;
     return (int) (7 + speed * 2);
 }
 
-- (NSInteger) getDefaultSpeed
+- (BOOL) isCustomProfile
 {
-    // TODO: Change this method after syncing the settings with Android
-    return _defaultSpeed;
+    return _parent != nil;
+}
+
+- (OAApplicationMode *) getParent
+{
+    return _parent ? _parent : [OAApplicationMode buildApplicationModeByKey:[OAAppSettings.sharedManager.parentAppMode get:self]];
+}
+
+- (void) setParent:(OAApplicationMode *)parent
+{
+    if ([self isCustomProfile])
+    {
+        _parent = parent;
+        [OAAppSettings.sharedManager.parentAppMode set:parent.stringKey mode:self];
+    }
+}
+
+- (NSString *) getIconName
+{
+    return [OAAppSettings.sharedManager.profileIconName get:self];
+}
+
+- (void) setIconName:(NSString *)iconName
+{
+    return [OAAppSettings.sharedManager.profileIconName set:iconName mode:self];
+}
+
+- (void) updateAppModeIcon
+{
+    NSString *iconName = [OAAppSettings.sharedManager.profileIconName get:self];
+    UIImage *icon = [UIImage imageNamed:iconName];
+    if (icon)
+        self.smallIconDark = iconName;
+}
+
+- (double) getDefaultSpeed
+{
+    return [OAAppSettings.sharedManager.defaultSpeed get:self];
+}
+
+- (void) setDefaultSpeed:(double) defaultSpeed
+{
+    [OAAppSettings.sharedManager.defaultSpeed set:defaultSpeed mode:self];
+}
+
+- (void) resetDefaultSpeed
+{
+    [OAAppSettings.sharedManager.defaultSpeed resetModeToDefault:self];
+}
+
+- (double) getMinSpeed
+{
+    return [OAAppSettings.sharedManager.minSpeed get:self];
+}
+
+- (void) setMinSpeed:(double) minSpeed
+{
+    [OAAppSettings.sharedManager.minSpeed set:minSpeed mode:self];
+}
+
+- (double) getMaxSpeed
+{
+    return [OAAppSettings.sharedManager.maxSpeed get:self];
+}
+
+- (void) setMaxSpeed:(double) maxSpeed
+{
+    [OAAppSettings.sharedManager.maxSpeed set:maxSpeed mode:self];
+}
+
+- (double) getStrAngle
+{
+    return [OAAppSettings.sharedManager.routeStraightAngle get:self];
+}
+
+- (void) setStrAngle:(double) straightAngle
+{
+    [OAAppSettings.sharedManager.routeStraightAngle set:straightAngle mode:self];
+}
+
+- (NSString *) getUserProfileName
+{
+    return [OAAppSettings.sharedManager.userProfileName get:self];
+}
+
+- (void) setUserProfileName:(NSString *)userProfileName
+{
+    if (userProfileName.length > 0)
+        [OAAppSettings.sharedManager.userProfileName set:userProfileName mode:self];
+}
+
+- (NSString *) getRoutingProfile
+{
+    return [OAAppSettings.sharedManager.routingProfile get:self];
+}
+
+- (void) setRoutingProfile:(NSString *) routingProfile
+{
+    if (routingProfile.length > 0)
+        [OAAppSettings.sharedManager.routingProfile set:routingProfile mode:self];
+}
+
+- (EOARouteService) getRouterService
+{
+    return [OAAppSettings.sharedManager.routerService get:self];
+}
+
+- (void) setRouterService:(EOARouteService) routerService
+{
+    [OAAppSettings.sharedManager.routerService set:(int) routerService mode:self];
+}
+
+- (EOANavigationIcon) getNavigationIcon
+{
+    return [OAAppSettings.sharedManager.navigationIcon get:self];
+}
+
+- (void) setNavigationIcon:(EOANavigationIcon) navIcon
+{
+    [OAAppSettings.sharedManager.navigationIcon set:(int)navIcon mode:self];
+}
+
+- (EOALocationIcon) getLocationIcon
+{
+    return [OAAppSettings.sharedManager.locationIcon get:self];
+}
+
+- (void) setLocationIcon:(EOALocationIcon) locIcon
+{
+    [OAAppSettings.sharedManager.locationIcon set:(int)locIcon mode:self];
+}
+
+- (int) getIconColor
+{
+    return [OAAppSettings.sharedManager.profileIconColor get:self];
+}
+
+- (void) setIconColor:(int)iconColor
+{
+    [OAAppSettings.sharedManager.profileIconColor set:iconColor mode:self];
+}
+
+- (int) getOrder
+{
+    return [OAAppSettings.sharedManager.appModeOrder get:self];
+}
+
+- (void) setOrder:(int)order
+{
+    [OAAppSettings.sharedManager.appModeOrder set:order mode:self];
+}
+
++ (void) onApplicationStart
+{
+    [self initCustomModes];
+    [self initModesParams];
+//    [self initRegVisibility];
+    [self reorderAppModes];
+}
+
++ (void) initModesParams
+{
+//    if (iconNameListener == null) {
+//        iconNameListener = new StateChangedListener<String>() {
+//            @Override
+//            public void stateChanged(String change) {
+//                for (ApplicationMode mode : allPossibleValues()) {
+//                    mode.updateAppModeIcon();
+//                }
+//            }
+//        };
+//        app.getSettings().ICON_RES_NAME.addListener(iconNameListener);
+//    }
+    for (OAApplicationMode *mode in self.allPossibleValues)
+    {
+        [mode updateAppModeIcon];
+    }
+}
+
++ (void) initCustomModes
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    for (NSString *appModeKey in [settings getCustomAppModesKeys])
+    {
+        OAApplicationMode *m = [OAApplicationMode buildApplicationModeByKey:appModeKey];
+        [_values addObject:m];
+    }
+}
+
++ (NSComparisonResult) compareModes:(OAApplicationMode *)obj1 obj2:(OAApplicationMode *) obj2
+{
+    return (obj1.getOrder < obj2.getOrder) ? NSOrderedAscending : ((obj1.getOrder == obj2.getOrder) ? NSOrderedSame : NSOrderedDescending);
+}
+
++ (void) reorderAppModes
+{
+    [_values sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
+        return [self compareModes:obj1 obj2:obj2];
+    }];
+    [_cachedFilteredValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
+        return [self compareModes:obj1 obj2:obj2];
+    }];
+//    Collections.sort(defaultValues, comparator);
+    [self updateAppModesOrder];
+}
+
++ (void) updateAppModesOrder
+{
+    for (int i = 0; i < _values.count; i++)
+    {
+        [_values[i] setOrder:i];
+    }
+}
+
++ (void) saveCustomAppModesToSettings
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    NSMutableString *res = [[NSMutableString alloc] init];
+    
+    NSArray<NSString *> * modeKeys = settings.getCustomAppModesKeys.allObjects;
+    [modeKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [res appendString:obj];
+        if (idx != modeKeys.count - 1)
+            [res appendString:@","];
+    }];
+    
+    
+    if (![res isEqualToString:settings.customAppModes])
+        settings.customAppModes = res;
+}
+
++ (void) saveProfile:(OAApplicationMode *)appMode
+{
+    if (![_values containsObject:appMode])
+        [_values addObject:appMode];
+//    if (mode != null) {
+//        mode.setParentAppMode(builder.applicationMode.parentAppMode);
+//        mode.setIconResName(builder.iconResName);
+//        mode.setUserProfileName(builder.userProfileName);
+//        mode.setRoutingProfile(builder.routingProfile);
+//        mode.setRouteService(builder.routeService);
+//        mode.setIconColor(builder.iconColor);
+//        mode.setLocationIcon(builder.locationIcon);
+//        mode.setNavigationIcon(builder.navigationIcon);
+//        mode.setOrder(builder.order);
+//    } else {
+//        mode = builder.customReg();
+//        initRegVisibility();
+//    }
+    [self reorderAppModes];
+    [self saveCustomAppModesToSettings];
+}
+
++ (void) deleteCustomModes:(NSArray<OAApplicationMode *> *) modes
+{
+    [_values removeObjectsInArray:modes];
+    
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    if ([modes containsObject:settings.applicationMode])
+        [settings setApplicationMode:_DEFAULT];
+    [_cachedFilteredValues removeObjectsInArray:modes];
+    [self saveCustomAppModesToSettings];
+}
+
+- (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected
+{
+    NSMutableSet<OAApplicationMode *> *selectedModes = [NSMutableSet setWithArray:_values];
+    NSMutableString *str = [[NSMutableString alloc] initWithFormat:@"%@,", _DEFAULT.stringKey];
+    if ([OAApplicationMode.allPossibleValues containsObject:mode])
+    {
+        OAAppSettings *settings = OAAppSettings.sharedManager;
+        if (isSelected)
+        {
+            [selectedModes addObject:mode];
+        }
+        else
+        {
+            [selectedModes removeObject:mode];
+            if (settings.applicationMode == mode)
+            {
+                [settings setApplicationMode:_DEFAULT];
+            }
+        }
+        for (OAApplicationMode *m in selectedModes)
+        {
+            [str appendString:m.stringKey];
+            [str appendString:@","];
+        }
+        [settings setAvailableApplicationModes:str];
+    }
 }
 
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def
@@ -345,17 +618,6 @@ static OAApplicationMode *_SKI;
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode
 {
     return self == mode || _parent == mode;
-}
-
-- (NSString *) getRoutingProfile
-{
-    return [OAAppSettings.sharedManager.routingProfile get:self];
-}
-
-- (void) setRoutingProfile:(NSString *) routingProfile
-{
-    if (routingProfile.length > 0)
-        [OAAppSettings.sharedManager.routingProfile set:routingProfile mode:self];
 }
 
 // returns modifiable ! Set<ApplicationMode> to exclude non-wanted derived

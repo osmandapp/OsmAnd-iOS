@@ -93,7 +93,7 @@
 - (void) setupNavBar
 {
     UIImage *img = nil;
-    NSString *imgName = _profile.mapIcon;
+    NSString *imgName = _profile.smallIconDark;
     if (imgName)
         img = [UIImage imageNamed:imgName];
     _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

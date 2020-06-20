@@ -163,6 +163,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (nonatomic, readonly) NSString *key;
 
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
+- (void) resetModeToDefault:(OAApplicationMode *)mode;
 - (void) resetToDefault;
 
 @end
@@ -419,7 +420,24 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
 @property (nonatomic) OAProfileInteger *rotateMap;
 
+// Application mode related settings
+@property (nonatomic) OAProfileString *profileIconName;
+@property (nonatomic) OAProfileInteger *profileIconColor;
+@property (nonatomic) OAProfileString *userProfileName;
+@property (nonatomic) OAProfileString *parentAppMode;
+@property (nonatomic) OAProfileInteger *navigationIcon;
+@property (nonatomic) OAProfileInteger *locationIcon;
+@property (nonatomic) OAProfileInteger *appModeOrder;
+
+@property (nonatomic) OAProfileDouble *defaultSpeed;
+@property (nonatomic) OAProfileDouble *minSpeed;
+@property (nonatomic) OAProfileDouble *maxSpeed;
+@property (nonatomic) OAProfileDouble *routeStraightAngle;
+@property (nonatomic) OAProfileInteger *routerService;
+
 @property (nonatomic) OAProfileString *routingProfile;
+
+@property (nonatomic) NSString *customAppModes;
 
 @property (nonatomic) OAProfileDouble *mapDensity;
 @property (nonatomic) OAProfileDouble *textSize;
@@ -439,7 +457,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL useIntermediatePointsNavigation;
 @property (assign, nonatomic) BOOL disableOffrouteRecalc;
 @property (assign, nonatomic) BOOL disableWrongDirectionRecalc;
-@property (nonatomic) OAProfileInteger *routerService;
 @property (assign, nonatomic) BOOL gpxRouteCalcOsmandParts;
 @property (assign, nonatomic) BOOL gpxCalculateRtept;
 @property (assign, nonatomic) BOOL gpxRouteCalc;
@@ -545,6 +562,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (NSSet<NSString *> *) getEnabledPlugins;
 - (NSSet<NSString *> *) getPlugins;
 - (void) enablePlugin:(NSString *)pluginId enable:(BOOL)enable;
+
+- (NSSet<NSString *> *) getCustomAppModesKeys;
 
 // Direction Appearance
 

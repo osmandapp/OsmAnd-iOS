@@ -76,7 +76,7 @@
 "map_settings_offline" = "Stile für Offline Karten";
 "map_settings_online" = "Online Karten";
 "map_settings_transp" = "Transparenz";
-"intro_download" = "Karte herunterladen";
+"intro_download" = "Karte\nherunterladen";
 "intro_next" = "Nächster";
 "intro_welcome" = "Willkommen bei\nOsmAnd";
 "intro_promo" = "Globale Offline Karten";
@@ -204,7 +204,7 @@
 "res_map_of_region" = "Karte der Umgebung";
 "res_update_no_space" = "Für das Update ist zuwenig Speicher vorhanden";
 "res_no_space_free" = "ist notwendig. Bitte etwas Speicher freimachen.";
-"res_free_exp" = "Du hast alle freie Downloads verbraucht. Bitte  kaufe einen Kontinent zum herunteladen / aktualiseren der Karten.";
+"res_free_exp" = "Du hast alle freie Downloads verbraucht. Bitte kaufe einen Kontinent zum herunteladen/aktualiseren der Karten.";
 "res_cancel_upd_q" = "Du bist dabei, die Aktualisierung von %@ abzubrechen.";
 "res_cancel_inst_q" = "Du bist dabei die Installation %@ abzubrechen.";
 "res_uninst_managed_q" = "Du bist dabei %@ zu deinstallieren. Du kannst es später wieder im Katalog installieren.";
@@ -334,7 +334,7 @@
 "enter_description" = "Beschreibung eingeben";
 "description" = "Beschreibung";
 "enter_fav_name" = "Favoritenname eingeben";
-"res_installing" = "Installation…";
+"res_installing" = "Installation …";
 "res_roads" = "Straßen";
 "res_srtm" = "Höhenlinien";
 "res_wiki" = "Wikipedia";
@@ -432,7 +432,7 @@
 "prch_srtm_info" = "Höhenlinien-Addon aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "plugin_popup_srtm_desc" = "Um die Höhenlinien zu nutzen zu können, bitte die entsprechenden Höhendaten herunterladen";
 "plugin_popup_srtm_ask" = "Um Höhendaten herunterladen zu können, bitte das <b>Höhenlinien Plugin</b> aktivieren";
-"plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b>  > <b>Kartendarstellung</b> die Darstellung <b>Nautical</b> aktiviere";
+"plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b> > <b>Kartendarstellung</b> die Darstellung <b>Nautical</b> aktiviere";
 "plugin_popup_trip_planning_ask" = "Um eine Strecke planen zu können, bitte das <b>Streckenplaner-Plugin</b> aktivieren";
 "product_desc_ext_trip_planning" = "Das Entfernungsmesser & Routen-Planer Plugin ermöglicht es dir deine Routen auf der Karte zu planen, zu speichern, die gerade Strecke zwischen Punkten zu messen, uvm. Erstellt eine vorläufige Routenplanung anstatt einer genauen Route.";
 "product_desc_ext_srtm" = "Dieser Plugin stellt Höhenlinien und Relief Daten bereit welche auf den OsmAnd Offline Karten dargestellt werden können. Die Höhenlinien stellen die Höhen der Gebiete dar, die Relief Daten vitalisieren diese. Namen von Gipfeln und Bergen sowie spezielle Informationen vom Gelände werde durch diesen Plugin angezeigt.\n\nDie globalen Daten (zwischen 70 Grad Nord und 70 Grad Süd) basieren auf den Messungen von SRTM (Shuttle Radar Topography Mission) und ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), einem bildgebenden Instrument an Board von Terra, dem Flaggschiff der NASA Erdbeobachtungssateliten. ASTER ist eine Zusammenarbeit zwischen der NASA, japans Ministerium für Wirtschaft, Handel und Industrie (METI) und Japan Space Systems (J-spacesystems).";
@@ -451,7 +451,7 @@
 "no_inet_connection_desc_map" = "Erforderlich, um Karten herunterzuladen.";
 "try_again" = "Erneut versuchen";
 "search_location" = "Standort wird gesucht …";
-"search_map" = "Karte wird gesucht…";
+"search_map" = "Karte wird gesucht …";
 "search_another_country" = "Eine andere Region auswählen";
 "skip_map_downloading" = "Herunterladen der Karten überspringen";
 "skip_map_downloading_desc" = "Sie haben keine Offline Karten installiert. Sie können jetzt eine Karte auswählen oder später Karten über “Menü - Kartenverwaltung“ herunterladen";
@@ -650,9 +650,9 @@
 "arrival_distance_factor_at_last" = "Auf den letzten Metern";
 "fast_route_mode" = "Schnellste Route";
 "fast_route_mode_descr" = "Zur Berechnung der schnellsten Route aktivieren oder für eine kraftstoffsparende Route deaktivieren";
-"avoid_in_routing_title" = "Vermeiden von…";
+"avoid_in_routing_title" = "Vermeiden von …";
 "avoid_in_routing_descr" = "Mautstraßen, unbefestigte Straßen, Fähren vermeiden";
-"prefer_in_routing_title" = "Bevorzugen von…";
+"prefer_in_routing_title" = "Bevorzugen von …";
 "prefer_in_routing_descr" = "Autobahnen bevorzugen";
 "relief_smoothness_factor_descr" = "Bevorzugte Geländeform: flach oder bergig";
 "choose_auto_follow_route" = "Kartenansicht automatisch zentrieren";
@@ -661,9 +661,9 @@
 "auto_zoom_map_descr" = "Kartenvergrößerung automatisch der Geschwindigkeit anpassen (während Kartennachführung)";
 "snap_to_road" = "Auf Straße einrasten";
 "snap_to_road_descr" = "Standort während der Navigation auf Straßen einrasten";
-"show_warnings_title" = "Warnungen anzeigen…";
+"show_warnings_title" = "Warnungen anzeigen …";
 "show_warnings_descr" = "Verkehrswarnungen (Tempolimits, Stoppzeichen, Rüttelschwellen, Tunnel), stationäre Radarkontrollen und Fahrspuranzeige konfigurieren";
-"speak_title" = "Ansagen…";
+"speak_title" = "Ansagen …";
 "speak_descr" = "Ansagen zu Straßennamen, Verkehrswarnungen (Stoppzeichen, Rüttelschwellen), stationäre Radarkontrollen, Tempolimits konfigurieren";
 "keep_informing" = "Navigationsanweisungen wiederholen";
 "keep_informing_descr" = "Navigationsanweisungen in regelmäßigen Abständen wiederholen";
@@ -929,10 +929,10 @@
 "shared_string_upload" = "Hochladen";
 "poi_type" = "POI-Typ";
 // OSM Editing actions
-"opening_changeset" = "Änderungssatz öffnen…";
-"closing_changeset" = "Änderungssatz schließen…";
-"commiting_node" = "Übertrage Knoten…";
-"loading_poi_obj" = "Lade POI…";
+"opening_changeset" = "Änderungssatz öffnen …";
+"closing_changeset" = "Änderungssatz schließen …";
+"commiting_node" = "Übertrage Knoten …";
+"loading_poi_obj" = "Lade POI …";
 "osm_note" = "OSM Notiz";
 "osm_created" = "Erstellt";
 "osm_deleted" = "Gelöscht";

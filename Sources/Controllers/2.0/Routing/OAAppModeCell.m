@@ -85,7 +85,7 @@
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
         btn.frame = CGRectMake(x, 0, w, h);
         btn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        [btn setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
+        [btn setImage:mode.getIcon forState:UIControlStateNormal];
         btn.tintColor = _selectedMode == mode ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
         btn.tag = i;
         [btn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];

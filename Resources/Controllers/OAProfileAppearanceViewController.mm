@@ -10,6 +10,8 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
+#import "OANavigationIcon.h"
+#import "OALocationIcon.h"
 
 #import "OATextInputCell.h"
 #import "OAColorsTableViewCell.h"
@@ -30,7 +32,7 @@
 @implementation OAProfileAppearanceViewController
 {
     OAApplicationMode *_profile;
-    NSDictionary *_data;
+    NSArray<NSArray *> *_data;
     CALayer *_horizontalLine;
     
     NSArray *_colors;
@@ -74,7 +76,6 @@
 {
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
     _titleLabel.text = OALocalizedString(@"new_profile");
-    //[_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal]];
 }
 
 - (void) viewDidLoad
@@ -87,12 +88,6 @@
     [self setupView];
 }
 
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -101,12 +96,9 @@
 
 - (void) setupNavBar
 {
-    UIImage *img = nil;
-    NSString *imgName = _profile.smallIconDark;
-    if (imgName)
-        img = [UIImage imageNamed:imgName];
+    UIImage *img = _profile.getIcon;
     _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _profileIconImageView.tintColor = UIColorFromRGB(0x732EEB);
+    _profileIconImageView.tintColor = UIColorFromRGB(_profile.getIconColor);
     _profileIconView.layer.cornerRadius = _profileIconView.frame.size.height/2;
     
     _horizontalLine = [CALayer layer];
@@ -152,21 +144,21 @@
     [tableData addObject:profileNameArr];
     [tableData addObject:profileAppearanceArr];
     [tableData addObject:profileMapAppearanceArr];
-    _data = @{
-        @"tableData" : tableData,
-    };
+    _data = [NSArray arrayWithArray:tableData];
 }
 
 - (void) generateData
 {
-    _colors = @[@(profile_icon_color_purple_light),
-                @(profile_icon_color_green_light),
-                @(profile_icon_color_blue_light),
-                @(profile_icon_color_red_light),
-                @(profile_icon_color_yellow_light),
-                @(profile_icon_color_magenta_light),
-                @(profile_icon_color_blue_light_default)];
-    _colorNames = @[@"purple", @"green", @"blue", @"red", @"yellow", @"magenta", @"light blue"];
+    _colors = @[
+        @(profile_icon_color_blue_light_default),
+        @(profile_icon_color_purple_light),
+        @(profile_icon_color_green_light),
+        @(profile_icon_color_blue_light),
+        @(profile_icon_color_red_light),
+        @(profile_icon_color_yellow_light),
+        @(profile_icon_color_magenta_light),
+    ];
+    _colorNames = @[@"light blue", @"purple", @"green", @"blue", @"red", @"yellow", @"magenta"];
     _currentColor = 0;
     
     _icons = @[@"ic_action_car_dark",
@@ -237,11 +229,11 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [_data[@"tableData"] count];
+    return _data.count;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_data[@"tableData"][section] count];
+    return _data[section].count;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -268,7 +260,7 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath { 
-    NSDictionary *item = _data[@"tableData"][indexPath.section][indexPath.row];
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = [[NSString alloc] initWithString:item[@"type"]];
     if ([cellType isEqualToString:kCellTypeInput])
     {

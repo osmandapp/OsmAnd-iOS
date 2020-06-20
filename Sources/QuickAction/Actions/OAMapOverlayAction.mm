@@ -85,13 +85,10 @@ static OAQuickActionType *TYPE;
                 break;
             }
         }
-        
-        [OAAppSettings sharedManager].isOverlayLayerVisible = YES;
         app.data.overlayMapSource = newMapSource;
     }
     else
     {
-        [OAAppSettings sharedManager].isOverlayLayerVisible = NO;
         app.data.overlayMapSource = nil;
     }
     // indicate change with toast?

@@ -1230,8 +1230,6 @@
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
 @synthesize mapSettingShowOverlayOpacitySlider=_mapSettingShowOverlayOpacitySlider;
 @synthesize mapSettingShowUnderlayOpacitySlider=_mapSettingShowUnderlayOpacitySlider;
-@synthesize isOverlayLayerVisible=_isOverlayLayerVisible;
-@synthesize isUnderlayLayerVisible=_isUnderlayLayerVisible;
 
 + (OAAppSettings*) sharedManager
 {

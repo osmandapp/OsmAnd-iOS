@@ -470,7 +470,6 @@ static NSInteger kButtonsSection;
             if (indexPath.section == kMapVisibilitySection)
             {
                 [cell.switchView setOn: [self isOpacitySliderVisible]];
-                
                 [cell.switchView addTarget:self action:@selector(onShowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else
@@ -579,9 +578,7 @@ static NSInteger kButtonsSection;
     UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
-        [self sendVisibilitySettings: switchView.isOn];
         _isEnabled = switchView.isOn;
-        
         if (switchView.isOn)
         {
             if (_mapSettingType == EMapSettingOverlay)
@@ -659,19 +656,6 @@ static NSInteger kButtonsSection;
         _app.data.lastUnderlayMapSource = item.mapSource;
     }
     [tblView reloadData];
-}
-
-
-- (void) sendVisibilitySettings:(BOOL)show
-{
-    if (_mapSettingType == EMapSettingOverlay)
-    {
-        _settings.isOverlayLayerVisible = show;
-    }
-    else if (_mapSettingType == EMapSettingUnderlay)
-    {
-        _settings.isUnderlayLayerVisible = show;
-    }
 }
 
 - (BOOL) isOpacitySliderVisible

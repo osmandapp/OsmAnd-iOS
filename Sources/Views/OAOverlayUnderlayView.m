@@ -158,14 +158,14 @@
 
 - (void)applyViewLayout
 {
-    BOOL shouldOverlaySliderBeVisible = [OAAppSettings sharedManager].isOverlayLayerVisible && [OAAppSettings sharedManager].mapSettingShowOverlayOpacitySlider;
-    BOOL shouldUnderlaySliderBeVisible = [OAAppSettings sharedManager].isUnderlayLayerVisible && [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider;
+    BOOL shouldOverlaySliderBeVisible = _app.data.overlayMapSource && [OAAppSettings sharedManager].mapSettingShowOverlayOpacitySlider;
+    BOOL shouldUnderlaySliderBeVisible = _app.data.underlayMapSource && [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider;
     
-    if (_app.data.overlayMapSource && _app.data.underlayMapSource && shouldOverlaySliderBeVisible && shouldUnderlaySliderBeVisible)
+    if (shouldOverlaySliderBeVisible && shouldUnderlaySliderBeVisible)
         _viewLayout = OAViewLayoutOverlayUnderlay;
-    else if (_app.data.underlayMapSource && shouldUnderlaySliderBeVisible)
+    else if (shouldUnderlaySliderBeVisible)
         _viewLayout = OAViewLayoutUnderlayOnly;
-    else if (_app.data.overlayMapSource && shouldOverlaySliderBeVisible)
+    else if (shouldOverlaySliderBeVisible)
         _viewLayout = OAViewLayoutOverlayOnly;
     else
         _viewLayout = OAViewLayoutNone;

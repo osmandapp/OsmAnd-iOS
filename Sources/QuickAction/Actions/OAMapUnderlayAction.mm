@@ -94,13 +94,11 @@ static OAQuickActionType *TYPE;
             }
         }
         [self hidePolygons:YES];
-        [OAAppSettings sharedManager].isUnderlayLayerVisible = YES;
         app.data.underlayMapSource = newMapSource;
     }
     else
     {
         [self hidePolygons:NO];
-        [OAAppSettings sharedManager].isUnderlayLayerVisible = NO;
         app.data.underlayMapSource = nil;
     }
     // indicate change with toast?

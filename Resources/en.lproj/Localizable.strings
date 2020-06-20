@@ -671,6 +671,11 @@
 "create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "new_profile" = "New profile";
 "enter_profile_name" = "Enter profile name";
+"select_color" = "Select color";
+"select_icon" = "Select icon";
+"position_icon_at_rest" = "Position icon at rest";
+"position_icon_while_moving" = "Position icon while moving";
+"will_be_show_while_moving" = "It will be show while moving";
 
 // Purchases
 "prch_addons" = "Addons";

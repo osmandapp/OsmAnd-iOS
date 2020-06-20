@@ -147,7 +147,7 @@ std::string preferredLanguage;
     else
     {
         // minimal is 1 meter for turn now
-        _DEFAULT_SPEED = MAX([_router getAppMode].defaultSpeed, 0.3);
+        _DEFAULT_SPEED = MAX([[_router getAppMode] getDefaultSpeed], 0.3);
     }
     // Do not play [issue 1411]: prepare_long_distance warning not needed, used only for goAhead prompt
     // 300 sec: 4 200 - 3 500 m - car [ 115 - 95 sec @ 120 km/h]

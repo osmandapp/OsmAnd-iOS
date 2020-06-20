@@ -119,6 +119,15 @@
     return img;
 }
 
++ (std::shared_ptr<SkBitmap>) skBitmapFromCGImage:(CGImageRef)image
+{
+    SkBitmap *res = new SkBitmap();
+    BOOL ok = SkCreateBitmapFromCGImage(res, image);
+    if (ok)
+        return std::shared_ptr<SkBitmap>(res);
+    return nullptr;
+}
+
 + (QHash<QString, QString>) dictionaryToQHash:(NSDictionary<NSString *, NSString*> *)dictionary
 {
     QHash<QString, QString> res;

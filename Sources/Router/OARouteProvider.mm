@@ -945,7 +945,7 @@
     }
     [points addObject:[routeParams.end copy]];
     CLLocation *lastAdded = nil;
-    float speed = routeParams.mode.defaultSpeed;
+    float speed = [routeParams.mode getDefaultSpeed];
     NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray new];
     while(points.count > 0)
     {

@@ -24,29 +24,6 @@ static UIFont *_valueTextFont;
     [super awakeFromNib];
 }
 
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-    
-    CGFloat w = self.bounds.size.width;
-    CGFloat h = self.bounds.size.height;
-    
-    CGFloat textX = 62.0;
-    CGFloat textWidth = w - titleTextWidthDelta;
-    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];;
-    
-    if (self.descView.hidden || self.descView.text.length == 0)
-    {
-        self.textView.frame = CGRectMake(textX, 0.0, textWidth, MAX(defaultCellHeight, titleHeight));
-    }
-    else
-    {
-        CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.descView.text];
-        self.textView.frame = CGRectMake(textX, 3.0, textWidth, MAX(minTextHeight, titleHeight));
-        self.descView.frame = CGRectMake(textX, h - descHeight - 5.0, textWidth, descHeight);
-    }
-}
-
 + (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth
 {
     return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title value:value] + 8.0);

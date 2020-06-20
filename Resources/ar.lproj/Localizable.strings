@@ -1140,7 +1140,7 @@
 "map_styles" = "أنماط الخريطة";
 "add_action" = "إضافة إجراء";
 "create_items" = "إنشاء عناصر";
-"configure_map" = "تكوين الخريطة";
+"configure_map" = "إعداد الخريطة";
 "add_map_marker" = "إضافة العلامة";
 "add_gpx_waypoint" = "إضافة الإحداثية GPX";
 "toggle_fav" = "إظهار/إخفاء المفضلة";
@@ -1366,7 +1366,7 @@
 "routeInfo_winter_ice_road_name" = "طرق الشتاء والجليد";
 "rendering_value_white_name" = "أبيض";
 "rendering_value_high_name" = "عالي";
-"rendering_attr_horseRoutes_name" = "إظهار مسارات الخيول";
+"rendering_attr_horseRoutes_name" = "مسارات الخيول";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "مسطح";
 "routing_attr_piste_type_downhill_description" = "التزلج على جبال الألب أو الانحدار.";
 "rendering_value_translucent_purple_name" = "بنفسجي فاتح";
@@ -1424,7 +1424,7 @@
 "rendering_value_bicycle_name" = "دراجة";
 "rendering_attr_piste_difficulty_freeride_name" = "الدراجات الجبلية";
 "rendering_attr_hideText_name" = "النص";
-"rendering_attr_showMtbRoutes_name" = "إظهار مسارات الدراجات الجبلية";
+"rendering_attr_showMtbRoutes_name" = "إظهار مسارات الدراجة الجبلية";
 "routing_attr_avoid_ferries_name" = "تجنب العبارات";
 "routing_attr_avoid_train_name" = "بدون قطارات";
 "rendering_attr_hidePOILabels_name" = "تسميات POI";
@@ -1448,7 +1448,7 @@
 "rendering_value_disabled_name" = "معطل";
 "rendering_attr_surface_mud_name" = "وحل";
 "routing_attr_allow_advanced_name" = "السماح للطرق المتقدمة";
-"rendering_attr_whiteWaterSports_name" = "إظهار مسارات قوارب التجديف";
+"rendering_attr_whiteWaterSports_name" = "رياضات الماء المزبد";
 "rendering_attr_highway_class_track_grade5_name" = "الصف 5";
 "rendering_attr_surface_grass_name" = "عشب";
 "rendering_attr_currentTrackColor_description" = "لون جي بي إكس";
@@ -1519,7 +1519,7 @@
 "rendering_attr_surface_sett_name" = "ضبط";
 "routing_attr_allow_intermediate_name" = "السماح بالمسارات المتوسطة";
 "rendering_attr_smoothness_impassable_name" = "غير سالك";
-"rendering_attr_alpineHiking_name" = "إظهار مسارات تسلق جبال الألب";
+"rendering_attr_alpineHiking_name" = "مقياس التنزه في جبال الألب (SAC)";
 "routing_attr_driving_style_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
 "rendering_attr_surface_fine_gravel_name" = "حصى دقيق";
 "rendering_attr_contourColorScheme_description" = "لون الخطوط المحيطية";
@@ -1536,7 +1536,7 @@
 "rendering_attr_depthContours_description" = "إظهار نقاط ومعالم العمق.";
 "routeInfo_piste_difficulty_name" = "صعوبة الطريق";
 "rendering_value_medium_name" = "متوسط";
-"rendering_attr_hikingRoutesOSMC_name" = "كيفية اظهار رموز طبقة التسلق (الهايكنق)";
+"rendering_attr_hikingRoutesOSMC_name" = "تراكب رمز التسلق";
 "routing_attr_piste_type_nordic_name" = "التزلج عبر البلاد / الشمال";
 "rendering_value_darkyellow_name" = "أصفر غامق";
 "rendering_attr_smoothness_very_horrible_name" = "رهيب جداً";
@@ -1579,7 +1579,7 @@
 "rendering_value_translucent_red_name" = "أحمر فاتح";
 "rendering_attr_surface_asphalt_name" = "إسفلت";
 "rendering_value_purple_name" = "بنفسجي";
-"rendering_attr_showCycleRoutes_name" = "إظهار مسارات الدراجات الهوائية";
+"rendering_attr_showCycleRoutes_name" = "إظهار مسارات الدراجات";
 "rendering_attr_surface_grass_paver_name" = "مرصف العشب";
 "routing_attr_allow_intermediate_description" = "طرق أكثر صعوبة مع أقسام أكثر حدة. بعض العقبات التي ينبغي تجنبها.";
 "rendering_attr_coloredBuildings_name" = "تلوين المباني حسب النوع";

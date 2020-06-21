@@ -352,14 +352,15 @@
         {
             _overlayUnderlayView = [[OAOverlayUnderlayView alloc] init];
         }
-        
-        if (_overlayUnderlayView.viewLayout != OAViewLayoutNone && !_overlayUnderlayView.superview)
+        else
         {
-            [self.view addSubview:_overlayUnderlayView];
-        }
-        else {
             [_overlayUnderlayView updateView];
             [self.view setNeedsLayout];
+        }
+        
+        if (!_overlayUnderlayView.superview)
+        {
+            [self.view addSubview:_overlayUnderlayView];
         }
     }
     else

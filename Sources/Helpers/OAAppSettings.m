@@ -31,6 +31,7 @@
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
 #define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
+#define mapSettingShowPublicTransportKey @"mapSettingShowPublicTransportKey"
 #define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
 
 #define billingUserIdKey @"billingUserIdKey"
@@ -1225,6 +1226,7 @@
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, settingAppMode=_settingAppMode;
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
 @synthesize mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, settingPrefMapLanguage=_settingPrefMapLanguage;
+@synthesize mapSettingShowPublicTransport=_mapSettingShowPublicTransport;
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
 
 + (OAAppSettings*) sharedManager
@@ -1306,6 +1308,7 @@
         _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
         _mapSettingShowOfflineEdits = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOfflineEditsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOfflineEditsKey] : YES;
         _mapSettingShowOnlineNotes = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOnlineNotesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOnlineNotesKey] : NO;
+        _mapSettingShowPublicTransport = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowPublicTransportKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowPublicTransportKey] : NO;
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
@@ -1836,6 +1839,12 @@
                                            Visibility:NO];
         }
     }
+}
+
+- (void) setMapSettingShowPublicTransport:(BOOL)mapSettingShowPublicTransport
+{
+    _mapSettingShowPublicTransport = mapSettingShowPublicTransport;
+    [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowPublicTransport forKey:mapSettingShowPublicTransportKey];
 }
 
 - (void) setMapSettingTrackRecording:(BOOL)mapSettingTrackRecording

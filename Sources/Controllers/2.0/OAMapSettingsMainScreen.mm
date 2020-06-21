@@ -264,10 +264,24 @@
         {
             NSString *t = [styleSettings getCategoryTitle:cName];
             if (![[t lowercaseString] isEqualToString:@"ui_hidden"])
-                [categoriesList addObject:@{@"name": t,
-                                            @"value": @"",
-                                            @"type": @"OASettingsCell"}];
+            {
+                if ([[t lowercaseString] isEqualToString:@"transport"])
+                {
+                    [categoriesList addObject:@{@"name": t,
+                                                @"value": @"",
+                                                @"key": @"transport_layer",
+                                                @"type": @"OASettingSwitchCell",
+                                                @"secondaryImg": @"ic_action_additional_option"}];
+                }
+                else
+                {
+                    [categoriesList addObject:@{@"name": t,
+                                                @"value": @"",
+                                                @"type": @"OASettingsCell"}];
+                }
+            }
         }
+        
         for (OAMapStyleParameter *p in _filteredTopLevelParams)
         {
             [categoriesList addObject:@{@"name": p.title,
@@ -508,6 +522,11 @@
                 [cell.switchView setOn:_app.data.terrainType != EOATerrainTypeDisabled];
                 [cell.switchView addTarget:self action:@selector(terrainChanged:) forControlEvents:UIControlEventValueChanged];
             }
+            if ([data[@"key"] isEqualToString:@"transport_layer"])
+            {
+                [cell.switchView setOn:_settings.mapSettingShowPublicTransport];
+                [cell.switchView addTarget:self action:@selector(transportChanged:) forControlEvents:UIControlEventValueChanged];
+            }
             cell.textView.text = data[@"name"];
             NSString *desc = data[@"description"];
             NSString *secondaryImg = data[@"secondaryImg"];
@@ -656,6 +675,16 @@
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
         [_settings setMapSettingShowOnlineNotes:switchView.isOn];
+}
+
+- (void) transportChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+    {
+        [_settings setMapSettingShowPublicTransport:switchView.isOn];
+        [[_app mapSettingsChangeObservable] notifyEvent];
+    }
 }
 
 #pragma mark - UITableViewDelegate

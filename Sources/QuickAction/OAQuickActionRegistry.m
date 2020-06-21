@@ -26,7 +26,7 @@
 #import "OAShowHideLocalOSMChanges.h"
 #import "OADayNightModeAction.h"
 #import "OANavVoiceAction.h"
-//#import "OAShowHideTransportLinesAction.h"
+#import "OAShowHideTransportLinesAction.h"
 #import "OANavDirectionsFromAction.h"
 #import "OANavAddDestinationAction.h"
 #import "OANavAddFirstIntermediateAction.h"
@@ -118,7 +118,7 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OAShowHidePoiAction.TYPE];
     [quickActionTypes addObject:OAMapStyleAction.TYPE];
     [quickActionTypes addObject:OADayNightModeAction.TYPE];
-    //        [quickActionTypes addObject:OAShowHideTransportLinesAction.TYPE];
+    [quickActionTypes addObject:OAShowHideTransportLinesAction.TYPE];
     // navigation
     [quickActionTypes addObject:OANavVoiceAction.TYPE];
     [quickActionTypes addObject:OANavDirectionsFromAction.TYPE];

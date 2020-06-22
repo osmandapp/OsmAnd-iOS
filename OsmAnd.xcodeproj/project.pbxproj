@@ -159,6 +159,9 @@
 		157540A32452F45A00327879 /* OADirectionAppearanceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157540A22452F45A00327879 /* OADirectionAppearanceViewController.m */; };
 		157F3CB824A0D7F6000A66F0 /* OAProfileNavigationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CB724A0D7F6000A66F0 /* OAProfileNavigationSettingsViewController.xib */; };
 		157F3CBA24A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157F3CB924A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m */; };
+		157F3CBF24A0F04C000A66F0 /* ic_custom_navigation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBC24A0F04B000A66F0 /* ic_custom_navigation@2x.png */; };
+		157F3CC024A0F04C000A66F0 /* ic_custom_navigation.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBD24A0F04B000A66F0 /* ic_custom_navigation.png */; };
+		157F3CC124A0F04C000A66F0 /* ic_custom_navigation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */; };
 		1586E11F242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E120242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */; };
@@ -5814,6 +5817,9 @@
 		157F3CB724A0D7F6000A66F0 /* OAProfileNavigationSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAProfileNavigationSettingsViewController.xib; path = Resources/Controllers/OAProfileNavigationSettingsViewController.xib; sourceTree = "<group>"; };
 		157F3CB924A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAProfileNavigationSettingsViewController.m; path = Resources/Controllers/OAProfileNavigationSettingsViewController.m; sourceTree = "<group>"; };
 		157F3CBB24A0D827000A66F0 /* OAProfileNavigationSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAProfileNavigationSettingsViewController.h; path = Resources/Controllers/OAProfileNavigationSettingsViewController.h; sourceTree = "<group>"; };
+		157F3CBC24A0F04B000A66F0 /* ic_custom_navigation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_navigation@2x.png"; path = "Resources/Icons/ic_custom_navigation@2x.png"; sourceTree = "<group>"; };
+		157F3CBD24A0F04B000A66F0 /* ic_custom_navigation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_navigation.png; path = Resources/Icons/ic_custom_navigation.png; sourceTree = "<group>"; };
+		157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_navigation@3x.png"; path = "Resources/Icons/ic_custom_navigation@3x.png"; sourceTree = "<group>"; };
 		1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointHeaderCell.xib; path = Resources/Controllers/Cells/OAPointHeaderCell.xib; sourceTree = "<group>"; };
 		1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointHeaderTableViewCell.m; path = Controllers/Cells/OAPointHeaderTableViewCell.m; sourceTree = "<group>"; };
 		1586E122242209F300DA5625 /* OAPointHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointHeaderTableViewCell.h; path = Controllers/Cells/OAPointHeaderTableViewCell.h; sourceTree = "<group>"; };
@@ -10016,6 +10022,9 @@
 				DA8EE7EE246D446300069A6D /* ic_custom_no_route@3x.png */,
 				DA959031246586E5004C9F54 /* img_legend_slope@3x.png */,
 				DA5F6A0B245844A100C7DF71 /* map_public_transport_stop_shield.png */,
+				157F3CBD24A0F04B000A66F0 /* ic_custom_navigation.png */,
+				157F3CBC24A0F04B000A66F0 /* ic_custom_navigation@2x.png */,
+				157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */,
 				DA5F6A072458449F00C7DF71 /* map_public_transport_stop_shield@2x.png */,
 				DA5F6A0C245844A100C7DF71 /* map_public_transport_stop_shield@3x.png */,
 				DA5F6A08245844A000C7DF71 /* map_public_transport_transfer.png */,
@@ -16592,6 +16601,7 @@
 				DA23424623477F33003911B8 /* ic_custom_alert_color.png in Resources */,
 				DAF3455922F4482B009E2EB6 /* ic_custom_osm_note_resolved.png in Resources */,
 				84B6E07E2073CF55002CA15B /* ic_action_route_first_intermediate@2x.png in Resources */,
+				157F3CC024A0F04C000A66F0 /* ic_custom_navigation.png in Resources */,
 				8476E2EA1F6C1EEC00EC274F /* map_target_point.png in Resources */,
 				847AF5971F8A3D4900FC7F90 /* widget_battery_charging_day@2x.png in Resources */,
 				DA1340E6243DC5A80039D214 /* ic_action_monowheel.png in Resources */,
@@ -17139,6 +17149,7 @@
 				78496C5B24126B4C006EA39E /* OAColorsCollectionViewCell.xib in Resources */,
 				847041131B07850900594C72 /* ic_small_time@3x.png in Resources */,
 				DA98A02C2109E8A500BB32D0 /* pt_tts.js in Resources */,
+				157F3CC124A0F04C000A66F0 /* ic_custom_navigation@3x.png in Resources */,
 				DA5F21F6229551A300B0D7B6 /* ic_custom_show.png in Resources */,
 				DA13410A243DC5A80039D214 /* map_action_camper@3x.png in Resources */,
 				84B4FD801A92167C00A147BA /* OAGPXDetailCell.xib in Resources */,
@@ -17989,6 +18000,7 @@
 				845E06CA1B5FF17400DFC2A7 /* ic_tabbar_purchases_normal@2x.png in Resources */,
 				8AFC2C1924334A4E0095BA9F /* map_navigation_nautical_center@3x.png in Resources */,
 				84185AAA1AAA11B600F70328 /* ic_favorite_1.png in Resources */,
+				157F3CBF24A0F04C000A66F0 /* ic_custom_navigation@2x.png in Resources */,
 				84185ADA1AAA11B600F70328 /* ic_favorite_6@2x.png in Resources */,
 				8A7672192281A4EF0098DE84 /* list_warnings_tunnel.png in Resources */,
 				8476E1E01F6AA01000EC274F /* ic_action_volume_up.png in Resources */,

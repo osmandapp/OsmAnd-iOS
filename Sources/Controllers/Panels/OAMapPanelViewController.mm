@@ -363,9 +363,9 @@ typedef enum
         [self hideToolbar:_destinationViewController];
 }
 
-- (void) updateOverlayUnderlayView:(BOOL)show
+- (void) updateOverlayUnderlayView
 {
-    [self.hudViewController updateOverlayUnderlayView:show];
+    [self.hudViewController updateOverlayUnderlayView];
 }
 
 - (BOOL) isOverlayUnderlayViewVisible
@@ -666,7 +666,7 @@ typedef enum
     if (_dashboard)
     {
         if ([_dashboard isKindOfClass:[OAMapSettingsViewController class]])
-            [self updateOverlayUnderlayView:[self.hudViewController isOverlayUnderlayViewVisible]];
+            [self updateOverlayUnderlayView];
         
         OADashboardViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
         if (lastMapSettingsCtrl)

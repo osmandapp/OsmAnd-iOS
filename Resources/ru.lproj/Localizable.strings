@@ -936,7 +936,7 @@
 "arrival_distance" = "Объявление прибытия";
 "default_speed_system_descr" = "Выберите единицы измерения скорости";
 "map_widget_intermediate_distance" = "Промежуточный пункт";
-"always_center_position_on_map" = "Отображать положение в центре экрана";
+"always_center_position_on_map" = "Показывать положение в центре экрана";
 "map_widget_next_turn_small" = "Следующий поворот (небольшой)";
 "do_not_send_anonymous_data_desc" = "Мы не собираем данные о местоположении. Только статистику об использовании приложения и по загрузке карт.";
 "route_simulation" = "Симуляция маршрута";
@@ -1352,7 +1352,7 @@
 "rendering_attr_highway_class_footway_name" = "Пешеходная";
 "rendering_attr_surface_paving_stones_name" = "Брусчатка";
 "rendering_attr_alpineHiking_description" = "Визуализация пути по шкале SAC.";
-"rendering_attr_showLez_description" = "Отображать на карте зоны с низким уровнем выбросов. Не влияет на навигацию.";
+"rendering_attr_showLez_description" = "Показывать на карте зоны с низким уровнем выбросов. Не влияет на навигацию.";
 "rendering_value_high_name" = "Высокая";
 "routing_attr_allow_classic_only_description" = "Маршруты, подготовленные только для классического стиля без конькобежных трасс. Сюда входят маршруты, подготовленные небольшим снегоходом с более свободной лыжнёй и трассами, подготовленные вручную лыжниками.";
 "rendering_attr_OSMMapperAssistant_name" = "Помощник картографа OSM";
@@ -1374,7 +1374,7 @@
 "routing_attr_driving_style_safety_name" = "Предпочитать переулки";
 "rendering_attr_subwayMode_name" = "Маршруты метро";
 "routing_attr_avoid_train_description" = "Избегать поезда";
-"rendering_attr_showRoadMaps_description" = "Выберите когда отображать только дорожные карты:";
+"rendering_attr_showRoadMaps_description" = "Выберите, когда показывать только дорожные карты:";
 "routing_attr_avoid_toll_description" = "Избегать платные дороги";
 "rendering_attr_roadColors_name" = "Цветовая схема дорог";
 "rendering_attr_hideUnderground_name" = "Подземные объекты";
@@ -1477,7 +1477,7 @@
 "rendering_attr_publicTransportMode_name" = "Маршруты автобусов, троллейбусов и маршрутных такси";
 "rendering_attr_surface_wood_name" = "Дерево";
 "routing_attr_short_way_name" = "Топливно-эффективный способ";
-"rendering_attr_contourLines_description" = "Отображать, начиная с уровня масштабирования (требуются данные контурных линий):";
+"rendering_attr_contourLines_description" = "Показывать, начиная с уровня масштабирования (требуются данные контурных линий):";
 "rendering_attr_smoothness_good_name" = "Хорошая";
 "rendering_attr_buildings15zoom_name" = "Здания на масштабе 15";
 "routing_attr_freeride_policy_name" = "Офпист";
@@ -1560,7 +1560,7 @@
 "rendering_value_translucent_blue_name" = "Полупрозрачный синий";
 "routing_attr_difficulty_preference_description" = "Предпочитать маршруты заданной сложности, хотя прокладка маршрута по более сложным или лёгким трассам всё же возможна, если они короче.";
 "rendering_attr_surface_pebblestone_name" = "Галька";
-"rendering_attr_noPolygons_description" = "Отображать только контуры, без заливки.";
+"rendering_attr_noPolygons_description" = "Показывать только контуры, без заливки.";
 "routing_attr_avoid_tram_name" = "Без трамваев";
 "rendering_attr_surface_stone_name" = "Камень";
 "rendering_attr_showAccess_name" = "Ограничения доступа и платный проезд";
@@ -1579,7 +1579,7 @@
 "routing_attr_max_num_changes_description" = "Выбор верхней границы изменений";
 "rendering_attr_smoothness_bad_name" = "Плохая";
 "rendering_attr_hideWaterPolygons_description" = "Воду";
-"rendering_attr_hmRendered_description" = "Отображать больше деталей на карте.";
+"rendering_attr_hmRendered_description" = "Показывать больше деталей на карте.";
 "rendering_attr_surface_dirt_name" = "Грязь";
 "routing_attr_piste_type_downhill_name" = "Альпийские/горные лыжи";
 "routing_attr_height_name" = "Максимальная высота";

@@ -33,6 +33,7 @@
 
 #import "OACreateProfileViewController.h"
 #import "OARearrangeProfilesViewController.h"
+#import "OAProfileNavigationSettingsViewController.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -120,6 +121,11 @@
                                                                      @"title" : OALocalizedString(@"edit_profile_list"),
                                                                      @"description" : @"",
                                                                      @"img" : @"ic_custom_edit.png",
+                                                                     @"type" : kCellTypeCheck },
+                                                                    @{
+                                                                     @"name" : @"navigation_settings",
+                                                                     @"title" : OALocalizedString(@"routing_settings_2"),
+                                                                     @"description" : @"",
                                                                      @"type" : kCellTypeCheck }, nil];
             BOOL shouldAddHeader = YES;
             if ([[OAIAPHelper sharedInstance].trackRecording isActive])
@@ -854,6 +860,11 @@
     {
         OARearrangeProfilesViewController* rearrangeProfilesViewController = [[OARearrangeProfilesViewController alloc] init];
         [self.navigationController pushViewController:rearrangeProfilesViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"navigation_settings"])
+    {
+        OAProfileNavigationSettingsViewController* navigationSettingsViewController = [[OAProfileNavigationSettingsViewController alloc] init];
+        [self.navigationController pushViewController:navigationSettingsViewController animated:YES];
     }
 }
 

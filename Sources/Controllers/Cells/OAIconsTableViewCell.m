@@ -15,20 +15,24 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     [self.collectionView registerNib:[UINib nibWithNibName:@"OAIconsCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAIconsCollectionViewCell"];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
-    self.collectionViewHeight.constant = self.collectionView.collectionViewLayout.collectionViewContentSize.height;
+    self.collectionViewHeight.constant = self.collectionView.contentSize.height;
     return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+}
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
 }
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -65,7 +69,7 @@
 
 - (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(44.0, 44.0);
+    return CGSizeMake(40.0, 40.0);
 }
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

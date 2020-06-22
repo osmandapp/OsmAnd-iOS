@@ -22,17 +22,6 @@
 
 @property (nonatomic, readonly) OAApplicationMode *parent;
 
-//@property (nonatomic, readonly) NSString *mapIcon;
-@property (nonatomic, readonly) NSString *smallIconDark;
-//@property (nonatomic, readonly) NSString *bearingIconDay;
-//@property (nonatomic, readonly) NSString *bearingIconNight;
-//@property (nonatomic, readonly) NSString *headingIconDay;
-//@property (nonatomic, readonly) NSString *headingIconNight;
-//@property (nonatomic, readonly) NSString *locationIconDay;
-//@property (nonatomic, readonly) NSString *locationIconNight;
-//@property (nonatomic, readonly) NSString *locationIconDayLost;
-//@property (nonatomic, readonly) NSString *locationIconNightLost;
-
 + (OAApplicationMode *) DEFAULT;
 + (OAApplicationMode *) CAR;
 + (OAApplicationMode *) BICYCLE;
@@ -59,6 +48,7 @@
 - (double) getDefaultSpeed;
 
 - (void) setParent:(OAApplicationMode *)parent;
+- (UIImage *) getIcon;
 - (NSString *) getIconName;
 - (void) setIconName:(NSString *)iconName;
 - (void) setDefaultSpeed:(double) defaultSpeed;

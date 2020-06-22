@@ -20,7 +20,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *collectionViewHeight;
 
-@property (nonatomic) NSArray *dataArray;
+@property (nonatomic) NSArray<UIImage *> *dataArray;
 @property (nonatomic) NSInteger currentColor;
 
 @property (nonatomic, weak) id<OASeveralViewsTableViewCellDelegate> delegate;

@@ -41,13 +41,9 @@
     static NSString* const identifierCell = @"OAViewsCollectionViewCell";
     OAViewsCollectionViewCell* cell = nil;
     cell = (OAViewsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
-    UIImage *img = nil;
-    NSString *imgName = _dataArray[indexPath.row];
-    if (imgName)
-        img = [UIImage imageNamed:imgName];
-    cell.iconImageView.image = img;// [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    cell.iconImageView.tintColor = UIColorFromRGB(_currentColor);
-    
+    UIImage *img = _dataArray[indexPath.row];
+    cell.iconImageView.image = img;
+    cell.iconImageView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     if (indexPath.row == 0)
     {
         cell.backView.layer.borderWidth = 2;

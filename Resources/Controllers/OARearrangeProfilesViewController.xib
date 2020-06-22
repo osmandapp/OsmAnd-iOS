@@ -25,9 +25,6 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XVH-l5-NCB">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
                     <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="88" id="Egq-1e-OV8"/>
-                    </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rearrange profiles" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YtT-lq-f6M">
                     <rect key="frame" x="133.5" y="44" width="147.5" height="44"/>
@@ -71,20 +68,20 @@
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
-                <constraint firstItem="YtT-lq-f6M" firstAttribute="centerX" secondItem="XVH-l5-NCB" secondAttribute="centerX" id="4OD-Fg-Y3j"/>
                 <constraint firstItem="YtT-lq-f6M" firstAttribute="bottom" secondItem="XVH-l5-NCB" secondAttribute="bottom" id="Lqs-5Y-9Nn"/>
-                <constraint firstItem="E4Z-bp-fqt" firstAttribute="top" secondItem="XVH-l5-NCB" secondAttribute="bottom" priority="750" constant="44" id="MFU-rk-3bV"/>
                 <constraint firstItem="HXL-75-Og6" firstAttribute="top" secondItem="JsU-Ub-US4" secondAttribute="bottom" id="MHv-qo-0os"/>
                 <constraint firstAttribute="bottom" secondItem="HXL-75-Og6" secondAttribute="bottom" id="QFl-bQ-luZ"/>
                 <constraint firstItem="E4Z-bp-fqt" firstAttribute="trailing" secondItem="JsU-Ub-US4" secondAttribute="trailing" constant="16" id="SNr-l7-9e3"/>
-                <constraint firstItem="HXL-75-Og6" firstAttribute="trailing" secondItem="E4Z-bp-fqt" secondAttribute="trailing" id="c1u-JI-1JY"/>
-                <constraint firstItem="XVH-l5-NCB" firstAttribute="leading" secondItem="E4Z-bp-fqt" secondAttribute="leading" id="ccM-EN-DY8"/>
+                <constraint firstItem="HXL-75-Og6" firstAttribute="trailing" secondItem="xbS-MP-hMT" secondAttribute="trailing" id="c1u-JI-1JY"/>
+                <constraint firstItem="XVH-l5-NCB" firstAttribute="leading" secondItem="xbS-MP-hMT" secondAttribute="leading" id="ccM-EN-DY8"/>
                 <constraint firstItem="XVH-l5-NCB" firstAttribute="top" secondItem="xbS-MP-hMT" secondAttribute="top" id="eLV-G9-IhU"/>
-                <constraint firstItem="HXL-75-Og6" firstAttribute="top" secondItem="XVH-l5-NCB" secondAttribute="bottom" id="gMS-2G-mVb"/>
-                <constraint firstItem="HXL-75-Og6" firstAttribute="leading" secondItem="E4Z-bp-fqt" secondAttribute="leading" id="kNe-bL-fEt"/>
+                <constraint firstItem="XVH-l5-NCB" firstAttribute="bottom" secondItem="E4Z-bp-fqt" secondAttribute="top" priority="750" constant="44" id="gMS-2G-mVb"/>
+                <constraint firstItem="HXL-75-Og6" firstAttribute="leading" secondItem="xbS-MP-hMT" secondAttribute="leading" id="kNe-bL-fEt"/>
+                <constraint firstItem="XVH-l5-NCB" firstAttribute="centerX" secondItem="YtT-lq-f6M" secondAttribute="centerX" id="kZc-nV-jrd"/>
                 <constraint firstItem="HXL-75-Og6" firstAttribute="top" secondItem="LjL-j1-LUi" secondAttribute="bottom" id="mmA-TV-XrL"/>
                 <constraint firstItem="LjL-j1-LUi" firstAttribute="leading" secondItem="E4Z-bp-fqt" secondAttribute="leading" constant="16" id="nTX-ru-aSo"/>
-                <constraint firstItem="XVH-l5-NCB" firstAttribute="trailing" secondItem="E4Z-bp-fqt" secondAttribute="trailing" id="xRA-Pi-RGk"/>
+                <constraint firstItem="HXL-75-Og6" firstAttribute="top" secondItem="XVH-l5-NCB" secondAttribute="bottom" id="r4H-PZ-cTk"/>
+                <constraint firstItem="XVH-l5-NCB" firstAttribute="trailing" secondItem="xbS-MP-hMT" secondAttribute="trailing" id="xRA-Pi-RGk"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="E4Z-bp-fqt"/>
             <point key="canvasLocation" x="57" y="775"/>

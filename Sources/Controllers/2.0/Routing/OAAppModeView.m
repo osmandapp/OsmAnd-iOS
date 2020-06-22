@@ -73,7 +73,7 @@
         x += 12.;
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
         btn.frame = CGRectMake(x, 0, w, h);
-        [btn setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
+        [btn setImage:mode.getIcon forState:UIControlStateNormal];
         btn.contentMode = UIViewContentModeCenter;
         btn.tintColor = _selectedMode == mode ? UIColorFromRGB(color_chart_orange) : [UIColor darkGrayColor];
         btn.backgroundColor = _selectedMode == mode ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;

@@ -169,12 +169,10 @@
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    UIImage *img = nil;
-    NSString *imgName = _profileList[indexPath.row].smallIconDark;
-    if (imgName)
-        img = [UIImage imageNamed:imgName];
+    OAApplicationMode *am = _profileList[indexPath.row];
+    UIImage *img = am.getIcon;
     cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_purple_dark);
+    cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
     cell.textView.text = _profileList[indexPath.row].name;
     cell.descView.text = _profileList[indexPath.row].descr;
     [cell setOverflowVisibility:YES];
@@ -188,7 +186,6 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"Click click");
     OAProfileAppearanceViewController* profileAppearanceViewController = [[OAProfileAppearanceViewController alloc] initWithProfile:_profileList[indexPath.row]];
     [self.navigationController pushViewController:profileAppearanceViewController animated:YES];
 }

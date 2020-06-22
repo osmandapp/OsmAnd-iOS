@@ -60,7 +60,6 @@
     [super viewDidLoad];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
     [_tableView setEditing:YES animated:YES];
     _tableView.estimatedRowHeight = 48.;
     _tableView.tableHeaderView = _tableHeaderView;
@@ -146,6 +145,15 @@
     _tableView.tableHeaderView = _tableHeaderView;
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr")];
+        [_tableView reloadData];
+    } completion:nil];
+}
+
 - (IBAction) cancelButtonClicked:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -177,7 +185,7 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointHeaderCell" owner:self options:nil];
         cell = (OAPointHeaderTableViewCell *)[nib objectAtIndex:0];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);
     }
     if (cell)
     {

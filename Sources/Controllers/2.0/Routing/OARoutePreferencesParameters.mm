@@ -790,7 +790,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:self.getApplicationMode.smallIconDark];
+    return self.getApplicationMode.getIcon;
 }
 
 - (NSString *) getCellType

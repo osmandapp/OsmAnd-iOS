@@ -217,6 +217,11 @@
 "route_params" = "Route parameters";
 "fast_route_mode" = "Fastest route";
 "nav_type_title" = "Navigation type";
+"voice_anounces" = "Voice anounces";
+"screen_alerts" = "Screen alerts";
+"vehicle_parameters" = "Vehicle parameters";
+"map_behavior" = "Map behavior";
+"change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "nav_type_straight_line" = "Straight line";

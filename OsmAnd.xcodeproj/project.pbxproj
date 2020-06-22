@@ -157,6 +157,8 @@
 		1575409D2452F2D300327879 /* OASettingsCheckmarkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1575409C2452F2D200327879 /* OASettingsCheckmarkCell.xib */; };
 		157540A02452F3D900327879 /* OASettingsCheckmarkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1575409F2452F3D900327879 /* OASettingsCheckmarkCell.m */; };
 		157540A32452F45A00327879 /* OADirectionAppearanceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157540A22452F45A00327879 /* OADirectionAppearanceViewController.m */; };
+		157F3CB824A0D7F6000A66F0 /* OAProfileNavigationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CB724A0D7F6000A66F0 /* OAProfileNavigationSettingsViewController.xib */; };
+		157F3CBA24A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157F3CB924A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m */; };
 		1586E11F242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E120242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */; };
@@ -5809,6 +5811,9 @@
 		1575409F2452F3D900327879 /* OASettingsCheckmarkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASettingsCheckmarkCell.m; path = Controllers/Cells/OASettingsCheckmarkCell.m; sourceTree = "<group>"; };
 		157540A12452F45900327879 /* OADirectionAppearanceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADirectionAppearanceViewController.h; path = Controllers/Panels/OADirectionAppearanceViewController.h; sourceTree = "<group>"; };
 		157540A22452F45A00327879 /* OADirectionAppearanceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADirectionAppearanceViewController.m; path = Controllers/Panels/OADirectionAppearanceViewController.m; sourceTree = "<group>"; };
+		157F3CB724A0D7F6000A66F0 /* OAProfileNavigationSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAProfileNavigationSettingsViewController.xib; path = Resources/Controllers/OAProfileNavigationSettingsViewController.xib; sourceTree = "<group>"; };
+		157F3CB924A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAProfileNavigationSettingsViewController.m; path = Resources/Controllers/OAProfileNavigationSettingsViewController.m; sourceTree = "<group>"; };
+		157F3CBB24A0D827000A66F0 /* OAProfileNavigationSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAProfileNavigationSettingsViewController.h; path = Resources/Controllers/OAProfileNavigationSettingsViewController.h; sourceTree = "<group>"; };
 		1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointHeaderCell.xib; path = Resources/Controllers/Cells/OAPointHeaderCell.xib; sourceTree = "<group>"; };
 		1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointHeaderTableViewCell.m; path = Controllers/Cells/OAPointHeaderTableViewCell.m; sourceTree = "<group>"; };
 		1586E122242209F300DA5625 /* OAPointHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointHeaderTableViewCell.h; path = Controllers/Cells/OAPointHeaderTableViewCell.h; sourceTree = "<group>"; };
@@ -12559,7 +12564,10 @@
 		84F989251B510147009C443C /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				157F3CB724A0D7F6000A66F0 /* OAProfileNavigationSettingsViewController.xib */,
 				15BECC79249E038400B36DC0 /* OARearrangeProfilesViewController.xib */,
+				157F3CB924A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m */,
+				157F3CBB24A0D827000A66F0 /* OAProfileNavigationSettingsViewController.h */,
 				15BECC7B249E047D00B36DC0 /* OARearrangeProfilesViewController.m */,
 				15BECC7D249E049700B36DC0 /* OARearrangeProfilesViewController.h */,
 				DAC04715221BEA0600299EC2 /* OAOsmEditingSettingsViewController.h */,
@@ -18153,6 +18161,7 @@
 				84669646207CD7DF00BA971B /* ic_action_sort_door_to_door@3x.png in Resources */,
 				847777291FAA260E00CA8C1F /* widget_monitoring_rec_small_night@2x.png in Resources */,
 				0CF585892440745F0081238D /* ic_custom_direction_topbar_one@3x.png in Resources */,
+				157F3CB824A0D7F6000A66F0 /* OAProfileNavigationSettingsViewController.xib in Resources */,
 				84EC52B01F8BF26600AFC252 /* ic_action_intermediate@2x.png in Resources */,
 				845E07251B60E72300DFC2A7 /* ic_checkmark_small_enable@2x.png in Resources */,
 				DAF3458122F4482C009E2EB6 /* ic_custom_compound_action_background.png in Resources */,
@@ -19971,6 +19980,7 @@
 				84BEEE511DFF021000750848 /* OATargetMultiView.mm in Sources */,
 				15BECC76249BED8800B36DC0 /* OAViewsCollectionViewCell.m in Sources */,
 				847A20AC1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */,
+				157F3CBA24A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m in Sources */,
 				BBA3B0021986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				84686AD31E0AA68800DA09BC /* OAPOIFiltersHelper.mm in Sources */,
 				848B28B71EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */,

@@ -40,15 +40,6 @@
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Lh9-0M-Fy3">
-                    <rect key="frame" x="315" y="44" width="44" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="tintColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <state key="normal" image="ic_action_plus.png"/>
-                    <connections>
-                        <action selector="createProfile:" destination="-1" eventType="touchUpInside" id="guZ-6c-wDC"/>
-                    </connections>
-                </button>
                 <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hgq-Ly-zUQ">
                     <rect key="frame" x="8" y="44" width="44" height="44"/>
                     <constraints>
@@ -69,11 +60,9 @@
                 <constraint firstItem="Qav-vV-6gv" firstAttribute="top" secondItem="qia-hR-c4Q" secondAttribute="bottom" id="9L4-yr-dx2"/>
                 <constraint firstItem="qia-hR-c4Q" firstAttribute="bottom" secondItem="Oti-gl-zsH" secondAttribute="top" priority="750" constant="44" id="Aue-mu-pic"/>
                 <constraint firstItem="qia-hR-c4Q" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="MCX-Po-Gim"/>
-                <constraint firstItem="Qav-vV-6gv" firstAttribute="top" secondItem="Lh9-0M-Fy3" secondAttribute="bottom" id="NMn-hd-x70"/>
                 <constraint firstItem="gsA-qj-Zwo" firstAttribute="bottom" secondItem="qia-hR-c4Q" secondAttribute="bottom" id="QTA-uk-YPQ"/>
                 <constraint firstItem="Qav-vV-6gv" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Rw7-0Z-cmv"/>
                 <constraint firstItem="qia-hR-c4Q" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="SEu-VP-ttE"/>
-                <constraint firstItem="Lh9-0M-Fy3" firstAttribute="leading" secondItem="gsA-qj-Zwo" secondAttribute="trailing" constant="8" id="a7K-jY-vW9"/>
                 <constraint firstItem="gsA-qj-Zwo" firstAttribute="centerX" secondItem="qia-hR-c4Q" secondAttribute="centerX" id="kzQ-7a-PqS"/>
                 <constraint firstItem="Hgq-Ly-zUQ" firstAttribute="leading" secondItem="Oti-gl-zsH" secondAttribute="leading" constant="8" id="mNP-oh-Ixx"/>
                 <constraint firstItem="qia-hR-c4Q" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="mnA-On-cFA"/>
@@ -84,7 +73,6 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_action_plus.png" width="20" height="20"/>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
     </resources>
 </document>

@@ -32,6 +32,8 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 @property OAMapSource* lastUnderlayMapSource;
 @property (nonatomic) double overlayAlpha;
 @property (nonatomic) double underlayAlpha;
+- (BOOL) shouldOverlaySliderBeVisible;
+- (BOOL) shouldUnderlaySliderBeVisible;
 
 @property (readonly) OAObservable* overlayMapSourceChangeObservable;
 @property (readonly) OAObservable* underlayMapSourceChangeObservable;

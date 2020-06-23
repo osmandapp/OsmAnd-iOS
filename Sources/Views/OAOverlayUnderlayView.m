@@ -158,14 +158,11 @@
 
 - (void)applyViewLayout
 {
-    BOOL shouldOverlaySliderBeVisible = _app.data.overlayMapSource && [OAAppSettings sharedManager].mapSettingShowOverlayOpacitySlider;
-    BOOL shouldUnderlaySliderBeVisible = _app.data.underlayMapSource && [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider;
-    
-    if (shouldOverlaySliderBeVisible && shouldUnderlaySliderBeVisible)
+    if (_app.data.shouldOverlaySliderBeVisible && _app.data.shouldUnderlaySliderBeVisible)
         _viewLayout = OAViewLayoutOverlayUnderlay;
-    else if (shouldUnderlaySliderBeVisible)
+    else if (_app.data.shouldUnderlaySliderBeVisible)
         _viewLayout = OAViewLayoutUnderlayOnly;
-    else if (shouldOverlaySliderBeVisible)
+    else if (_app.data.shouldOverlaySliderBeVisible)
         _viewLayout = OAViewLayoutOverlayOnly;
     else
         _viewLayout = OAViewLayoutNone;
@@ -181,6 +178,11 @@
 
 - (IBAction)btnExitPressed:(id)sender
 {
+    if (_app.data.shouldOverlaySliderBeVisible)
+        [OAAppSettings sharedManager].mapSettingShowOverlayOpacitySlider = NO;
+    if (_app.data.shouldUnderlaySliderBeVisible)
+        [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider = NO;
+    
     [self removeFromSuperview];
 }
 

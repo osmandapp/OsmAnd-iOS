@@ -178,6 +178,9 @@
 		157F3CE524A1FC85000A66F0 /* ic_checkmark_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CE224A1FC85000A66F0 /* ic_checkmark_default@2x.png */; };
 		157F3CE724A1FE3B000A66F0 /* OADeleteButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CE624A1FE3B000A66F0 /* OADeleteButtonTableViewCell.xib */; };
 		157F3CE924A1FE6D000A66F0 /* OADeleteButtonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 157F3CE824A1FE6D000A66F0 /* OADeleteButtonTableViewCell.m */; };
+		157F3CEE24A23A94000A66F0 /* ic_custom_undo_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CEB24A23A91000A66F0 /* ic_custom_undo_button.png */; };
+		157F3CEF24A23A94000A66F0 /* ic_custom_undo_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */; };
+		157F3CF024A23A94000A66F0 /* ic_custom_undo_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CED24A23A94000A66F0 /* ic_custom_undo_button@3x.png */; };
 		1586E11F242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E120242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */; };
@@ -5854,6 +5857,9 @@
 		157F3CE624A1FE3B000A66F0 /* OADeleteButtonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OADeleteButtonTableViewCell.xib; path = Resources/Controllers/Cells/OADeleteButtonTableViewCell.xib; sourceTree = "<group>"; };
 		157F3CE824A1FE6D000A66F0 /* OADeleteButtonTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OADeleteButtonTableViewCell.m; path = Controllers/Cells/OADeleteButtonTableViewCell.m; sourceTree = "<group>"; };
 		157F3CEA24A1FE82000A66F0 /* OADeleteButtonTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OADeleteButtonTableViewCell.h; path = Controllers/Cells/OADeleteButtonTableViewCell.h; sourceTree = "<group>"; };
+		157F3CEB24A23A91000A66F0 /* ic_custom_undo_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_undo_button.png; path = Resources/Icons/ic_custom_undo_button.png; sourceTree = "<group>"; };
+		157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo_button@2x.png"; path = "Resources/Icons/ic_custom_undo_button@2x.png"; sourceTree = "<group>"; };
+		157F3CED24A23A94000A66F0 /* ic_custom_undo_button@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo_button@3x.png"; path = "Resources/Icons/ic_custom_undo_button@3x.png"; sourceTree = "<group>"; };
 		1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointHeaderCell.xib; path = Resources/Controllers/Cells/OAPointHeaderCell.xib; sourceTree = "<group>"; };
 		1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointHeaderTableViewCell.m; path = Controllers/Cells/OAPointHeaderTableViewCell.m; sourceTree = "<group>"; };
 		1586E122242209F300DA5625 /* OAPointHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointHeaderTableViewCell.h; path = Controllers/Cells/OAPointHeaderTableViewCell.h; sourceTree = "<group>"; };
@@ -10074,6 +10080,9 @@
 				157F3CBD24A0F04B000A66F0 /* ic_custom_navigation.png */,
 				157F3CBC24A0F04B000A66F0 /* ic_custom_navigation@2x.png */,
 				157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */,
+				157F3CEB24A23A91000A66F0 /* ic_custom_undo_button.png */,
+				157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */,
+				157F3CED24A23A94000A66F0 /* ic_custom_undo_button@3x.png */,
 				DA5F6A072458449F00C7DF71 /* map_public_transport_stop_shield@2x.png */,
 				DA5F6A0C245844A100C7DF71 /* map_public_transport_stop_shield@3x.png */,
 				DA5F6A08245844A000C7DF71 /* map_public_transport_transfer.png */,
@@ -17595,6 +17604,7 @@
 				DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */,
 				DA9C6237221C46590087E140 /* ic_custom_trip@2x.png in Resources */,
 				84B4FD9C1A92321400A147BA /* OAGPXPointCell.xib in Resources */,
+				157F3CF024A23A94000A66F0 /* ic_custom_undo_button@3x.png in Resources */,
 				DAA88903241BC1450057722C /* OARouteSegmentShieldView.xib in Resources */,
 				8476E2B01F6C1EEC00EC274F /* map_default_location@2x.png in Resources */,
 				DA92FFBC233DFBF5001A14B7 /* OACollectionViewCell.xib in Resources */,
@@ -18359,6 +18369,7 @@
 				BBA3AFD0197FC4BB0039D991 /* OAMapHudViewController.xib in Resources */,
 				845E06911B5FF17400DFC2A7 /* ic_plugin_contourlines.png in Resources */,
 				DAFCB01823AA1B0F00CFBA58 /* OARouteInfoCell.xib in Resources */,
+				157F3CEE24A23A94000A66F0 /* ic_custom_undo_button.png in Resources */,
 				8476E1D51F6AA01000EC274F /* ic_action_settings@2x.png in Resources */,
 				DAFCB01223A90BC500CFBA58 /* OARouteDetailsViewController.xib in Resources */,
 				0CF58560244072EC0081238D /* widget_marker_triangle_pin_1@2x.png in Resources */,
@@ -18748,6 +18759,7 @@
 				DA13A0352345FA0100C1A1A8 /* ic_custom_allow_private_access@3x.png in Resources */,
 				DA1340FC243DC5A80039D214 /* map_action_skiing@2x.png in Resources */,
 				841222661B39CC5200F80F9E /* my_location_marker_car.png in Resources */,
+				157F3CEF24A23A94000A66F0 /* ic_custom_undo_button@2x.png in Resources */,
 				8476E2D81F6C1EEC00EC274F /* map_pedestrian_location_view_angle.png in Resources */,
 				8476E2E81F6C1EEC00EC274F /* map_start_point@3x.png in Resources */,
 				8477773A1FAA260E00CA8C1F /* widget_monitoring_rec_big_night.png in Resources */,

@@ -34,6 +34,8 @@
 #import "OANavAutoZoomMapAction.h"
 #import "OANavStartStopAction.h"
 #import "OANavResumePauseAction.h"
+#import "OAMapOverlayAction.h"
+#import "OAMapUnderlayAction.h"
 //#import "OASwitchProfileAction.h"
 
 #define kType @"type"
@@ -118,6 +120,8 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OAShowHidePoiAction.TYPE];
     [quickActionTypes addObject:OAMapStyleAction.TYPE];
     [quickActionTypes addObject:OADayNightModeAction.TYPE];
+    [quickActionTypes addObject:OAMapOverlayAction.TYPE];
+    [quickActionTypes addObject:OAMapUnderlayAction.TYPE];
     //        [quickActionTypes addObject:OAShowHideTransportLinesAction.TYPE];
     // navigation
     [quickActionTypes addObject:OANavVoiceAction.TYPE];

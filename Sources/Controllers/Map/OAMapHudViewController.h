@@ -65,7 +65,7 @@
 - (void) updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated;
 
 - (BOOL) isOverlayUnderlayViewVisible;
-- (void) updateOverlayUnderlayView:(BOOL)show;
+- (void) updateOverlayUnderlayView;
 
 - (void) showTopControls;
 - (void) hideTopControls;

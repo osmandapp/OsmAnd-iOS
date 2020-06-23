@@ -11,6 +11,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
+#import "OARootViewController.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -67,6 +68,8 @@
 
 - (BOOL) updateLayer
 {
+    [self updateOpacitySliderVisibility];
+    
     if (self.app.data.underlayMapSource)
     {
         [self showProgressHUD];
@@ -141,6 +144,13 @@
                 _rasterUnderlayMapProvider.reset();
             }
         }];
+    });
+}
+
+- (void)updateOpacitySliderVisibility
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[OARootViewController instance].mapPanel updateOverlayUnderlayView];
     });
 }
 

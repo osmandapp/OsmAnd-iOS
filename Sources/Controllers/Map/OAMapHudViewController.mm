@@ -341,31 +341,35 @@
     return _overlayUnderlayView && _overlayUnderlayView.superview != nil;
 }
 
-- (void) updateOverlayUnderlayView:(BOOL)show
+- (void) updateOverlayUnderlayView
 {
-    if (!show)
-    {
-        if (_overlayUnderlayView && _overlayUnderlayView.superview)
-            [_overlayUnderlayView removeFromSuperview];
-        
-        return;
-    }
+    BOOL shouldOverlaySliderBeVisible = _app.data.overlayMapSource && [OAAppSettings sharedManager].mapSettingShowOverlayOpacitySlider;
+    BOOL shouldUnderlaySliderBeVisible = _app.data.underlayMapSource && [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider;
     
-    if (!_overlayUnderlayView)
+    if (shouldOverlaySliderBeVisible || shouldUnderlaySliderBeVisible)
     {
-        _overlayUnderlayView = [[OAOverlayUnderlayView alloc] init];
+        if (!_overlayUnderlayView)
+        {
+            _overlayUnderlayView = [[OAOverlayUnderlayView alloc] init];
+        }
+        else
+        {
+            [_overlayUnderlayView updateView];
+            [self.view setNeedsLayout];
+        }
+        
+        if (!_overlayUnderlayView.superview)
+        {
+            [self.view addSubview:_overlayUnderlayView];
+        }
     }
     else
     {
-        [_overlayUnderlayView updateView];
-        [self.view setNeedsLayout];
+        if (_overlayUnderlayView && _overlayUnderlayView.superview)
+        {
+            [_overlayUnderlayView removeFromSuperview];
+        }
     }
- 
-    if (_overlayUnderlayView.viewLayout != OAViewLayoutNone && !_overlayUnderlayView.superview)
-        [self.view addSubview:_overlayUnderlayView];
-    else if (_overlayUnderlayView.viewLayout == OAViewLayoutNone && _overlayUnderlayView.superview)
-        [_overlayUnderlayView removeFromSuperview];
-
 }
 
 - (IBAction) onMapModeButtonClicked:(id)sender

@@ -162,6 +162,8 @@
 		157F3CBF24A0F04C000A66F0 /* ic_custom_navigation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBC24A0F04B000A66F0 /* ic_custom_navigation@2x.png */; };
 		157F3CC024A0F04C000A66F0 /* ic_custom_navigation.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBD24A0F04B000A66F0 /* ic_custom_navigation.png */; };
 		157F3CC124A0F04C000A66F0 /* ic_custom_navigation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */; };
+		157F3CC324A0F2F2000A66F0 /* OANavigationTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CC224A0F2F2000A66F0 /* OANavigationTypeViewController.xib */; };
+		157F3CC524A0F323000A66F0 /* OANavigationTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157F3CC424A0F323000A66F0 /* OANavigationTypeViewController.m */; };
 		1586E11F242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E120242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */; };
@@ -5820,6 +5822,9 @@
 		157F3CBC24A0F04B000A66F0 /* ic_custom_navigation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_navigation@2x.png"; path = "Resources/Icons/ic_custom_navigation@2x.png"; sourceTree = "<group>"; };
 		157F3CBD24A0F04B000A66F0 /* ic_custom_navigation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_navigation.png; path = Resources/Icons/ic_custom_navigation.png; sourceTree = "<group>"; };
 		157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_navigation@3x.png"; path = "Resources/Icons/ic_custom_navigation@3x.png"; sourceTree = "<group>"; };
+		157F3CC224A0F2F2000A66F0 /* OANavigationTypeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OANavigationTypeViewController.xib; path = Resources/Controllers/OANavigationTypeViewController.xib; sourceTree = "<group>"; };
+		157F3CC424A0F323000A66F0 /* OANavigationTypeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OANavigationTypeViewController.m; path = Resources/Controllers/OANavigationTypeViewController.m; sourceTree = "<group>"; };
+		157F3CC624A0F332000A66F0 /* OANavigationTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OANavigationTypeViewController.h; path = Resources/Controllers/OANavigationTypeViewController.h; sourceTree = "<group>"; };
 		1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointHeaderCell.xib; path = Resources/Controllers/Cells/OAPointHeaderCell.xib; sourceTree = "<group>"; };
 		1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointHeaderTableViewCell.m; path = Controllers/Cells/OAPointHeaderTableViewCell.m; sourceTree = "<group>"; };
 		1586E122242209F300DA5625 /* OAPointHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointHeaderTableViewCell.h; path = Controllers/Cells/OAPointHeaderTableViewCell.h; sourceTree = "<group>"; };
@@ -12573,6 +12578,9 @@
 		84F989251B510147009C443C /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				157F3CC224A0F2F2000A66F0 /* OANavigationTypeViewController.xib */,
+				157F3CC424A0F323000A66F0 /* OANavigationTypeViewController.m */,
+				157F3CC624A0F332000A66F0 /* OANavigationTypeViewController.h */,
 				157F3CB724A0D7F6000A66F0 /* OAProfileNavigationSettingsViewController.xib */,
 				15BECC79249E038400B36DC0 /* OARearrangeProfilesViewController.xib */,
 				157F3CB924A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m */,
@@ -18021,6 +18029,7 @@
 				DA68B3CE233B821A00F5ACCC /* ic_profile_car@2x.png in Resources */,
 				845E061A1B5956E800DFC2A7 /* ic_destination_pin_4@3x.png in Resources */,
 				84C41DEC1AB8600D0089EABB /* ic_destination_pin_1@2x.png in Resources */,
+				157F3CC324A0F2F2000A66F0 /* OANavigationTypeViewController.xib in Resources */,
 				8A755A7D21CBF92400E42699 /* ic_live_wikivoyage@3x.png in Resources */,
 				8466964E207CD7E000BA971B /* ic_action_sort_door_to_door.png in Resources */,
 				0CF585912440745F0081238D /* ic_custom_direction_topbar_two@3x.png in Resources */,
@@ -20215,6 +20224,7 @@
 				84BEEE4D1DFEF7A700750848 /* OATargetPointViewCell.mm in Sources */,
 				DA45D9DF230E64340083DFA2 /* OAActionAddCategoryViewController.mm in Sources */,
 				3AC09BCD1A2783ED002698FE /* OAWebViewController.m in Sources */,
+				157F3CC524A0F323000A66F0 /* OANavigationTypeViewController.m in Sources */,
 				8490B1AF20600231007694A5 /* OARadiusCellEx.m in Sources */,
 				156E91E7244F709100B181BA /* OADestinationLineDelegate.m in Sources */,
 				8AFD2D9F210E1D2E007AA07D /* OATransportRouteToolbarViewController.mm in Sources */,

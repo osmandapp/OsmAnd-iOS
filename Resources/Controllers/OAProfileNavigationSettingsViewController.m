@@ -10,6 +10,7 @@
 #import "OAIconTitleValueCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OANavigationTypeViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -45,7 +46,6 @@
 -(void) applyLocalization
 {
     _titleLabel.text = OALocalizedString(@"routing_settings_2");
-    //[_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad
@@ -53,9 +53,12 @@
     [super viewDidLoad];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-//    _tableView.rowHeight = UITableViewAutomaticDimension;
-//    _tableView.estimatedRowHeight = 60.;
     [self setupView];
+}
+
+- (UIStatusBarStyle) preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
 - (void) didReceiveMemoryWarning
@@ -102,6 +105,10 @@
     [tableData addObject:navigationArr];
     [tableData addObject:otherArr];
     _data = [NSArray arrayWithArray:tableData];
+}
+
+- (IBAction)backButtonPressed:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - TableView
@@ -170,6 +177,16 @@
         return cell;
     }
     return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0)
+    {
+        OANavigationTypeViewController* navigationTypeViewController = [[OANavigationTypeViewController alloc] init];
+        [self.navigationController pushViewController:navigationTypeViewController animated:YES];
+    }
+    [_tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

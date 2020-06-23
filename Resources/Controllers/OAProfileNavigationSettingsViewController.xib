@@ -45,7 +45,7 @@
                     <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3bV-dF-RC8">
-                    <rect key="frame" x="8" y="52" width="28" height="28"/>
+                    <rect key="frame" x="10" y="52" width="28" height="28"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="28" id="HwV-1V-VLE"/>
                         <constraint firstAttribute="width" constant="28" id="KUt-q7-anD"/>
@@ -54,6 +54,9 @@
                     <state key="normal" image="ic_navbar_chevron.png">
                         <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
+                    <connections>
+                        <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="a04-Le-CXd"/>
+                    </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Driving" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iCR-tw-0Oz">
                     <rect key="frame" x="185.5" y="70" width="43" height="16"/>
@@ -70,7 +73,7 @@
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
-                <constraint firstItem="3bV-dF-RC8" firstAttribute="leading" secondItem="Wub-c9-ijL" secondAttribute="leading" constant="8" id="4NZ-di-1Pl"/>
+                <constraint firstItem="3bV-dF-RC8" firstAttribute="leading" secondItem="Wub-c9-ijL" secondAttribute="leading" constant="10" id="4NZ-di-1Pl"/>
                 <constraint firstItem="Zbn-6q-pLe" firstAttribute="trailing" secondItem="Y9q-1F-t4I" secondAttribute="trailing" id="72P-Rf-4sq"/>
                 <constraint firstItem="io8-yi-lxZ" firstAttribute="top" secondItem="Y9q-1F-t4I" secondAttribute="top" id="8rF-3q-QON"/>
                 <constraint firstItem="iCR-tw-0Oz" firstAttribute="top" secondItem="5Fb-iQ-XT3" secondAttribute="bottom" id="ED7-j4-i4c"/>

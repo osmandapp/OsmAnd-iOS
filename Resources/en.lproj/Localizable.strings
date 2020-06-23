@@ -259,6 +259,11 @@
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
 "osm_live_routing" = "OsmAnd Live navigation";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
+"select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
+"osmand_routing" = "Osmand routing";
+"desert_xml" = "Desert.xml";
+"routing_custom_xml" = "Routing-Custom.xml";
+"import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it on routing folder in iTunes.";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
@@ -517,6 +522,7 @@
 "gpx_export_select_track" = "Please select trip for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "import_from_docs" = "Import from documents";
+"import_from_files" = "Import from files";
 "gpx_no_tracks" = "There are no trips";
 
 "gpx_remove" = "Remove trip?";
@@ -1870,3 +1876,4 @@
 "app_mode_pickup_truck" = "Pickup truck";
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
+"desert" = "Desert";

@@ -45,6 +45,8 @@
     cell = (OAIconBackgroundCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
     UIImage *img = _dataArray[indexPath.row];
     cell.iconImageView.image = img;
+    if (_locationType == EOALocationTypeMoving)
+        cell.iconImageView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     if (indexPath.row == _selectedIndex)
     {
         cell.backView.layer.borderWidth = 2;

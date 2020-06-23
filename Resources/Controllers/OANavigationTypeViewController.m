@@ -235,7 +235,7 @@
         {
             [cell.buttonView setTitle:item[@"title"] forState:UIControlStateNormal];
             cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         return cell;
     }

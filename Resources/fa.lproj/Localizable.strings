@@ -1101,7 +1101,7 @@
 "routing_attr_avoid_shuttle_train_name" = "قطار خطی";
 "rendering_attr_surface_dirt_name" = "خاک";
 "rendering_attr_surfaceIntegrity_name" = "یکپارچگی سطح جاده‌ها";
-"rendering_attr_contourLines_description" = "از این زوم نمایان شود (نیازمند داده‌های منحنی میزان):";
+"rendering_attr_contourLines_description" = "از این زوم نمایان شود (نیازمند دادهٔ منحنی میزان):";
 "rendering_attr_tramRoutes_name" = "مسیرهای تراموا";
 "routing_attr_height_obstacles_description" = "فاکتور ارتفاع‌دهی عارضه‌ها (با استفاده از داده‌های SRTM،‏ ASTER و EU-DEM).";
 "routing_attr_avoid_borders_description" = "از گذر از مرزهای ملی پرهیز می‌کند";
@@ -1195,7 +1195,7 @@
 "rendering_attr_piste_type_snow_park_name" = "پارک برفی";
 "rendering_attr_showMtbRoutes_name" = "مسیرهای دوچرخه‌سواری کوهستان";
 "routing_attr_avoid_unpaved_name" = "مسیر روسازی‌نشده (خاکی)";
-"routing_attr_height_obstacles_name" = "استفاده از داده‌های ارتفاعی";
+"routing_attr_height_obstacles_name" = "استفاده از دادهٔ ارتفاعی";
 "routeInfo_steepness_name" = "شیب";
 "rendering_attr_surface_wood_name" = "چوب";
 "routing_attr_max_num_changes_name" = "تعداد تغییرات";

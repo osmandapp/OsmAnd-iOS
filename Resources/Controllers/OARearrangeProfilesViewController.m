@@ -8,6 +8,7 @@
 
 #import "OARearrangeProfilesViewController.h"
 #import "OAPointHeaderTableViewCell.h"
+#import "OASettingsCheckmarkCell.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -60,7 +61,6 @@
     [super viewDidLoad];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    [_tableView setEditing:YES animated:YES];
     _tableView.estimatedRowHeight = 48.;
     _tableView.tableHeaderView = _tableHeaderView;
     [self setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr")];
@@ -176,22 +176,24 @@
     
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
-    static NSString* const identifierCell = @"OAPointHeaderCell";
-    OAPointHeaderTableViewCell* cell = nil;
+    static NSString* const identifierCell = @"OASettingsCheckmarkCell";
+    OASettingsCheckmarkCell* cell = nil;
     
     cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointHeaderCell" owner:self options:nil];
-        cell = (OAPointHeaderTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCheckmarkCell" owner:self options:nil];
+        cell = (OASettingsCheckmarkCell *)[nib objectAtIndex:0];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);
     }
     if (cell)
     {
-        cell.groupTitle.text = item[@"title"];
-        cell.folderIcon.image = [UIImage imageNamed:item[@"icon"]];
-        cell.openCloseGroupButton.hidden = YES;
+        cell.titleLabel.text = item[@"title"];
+        cell.checkmarkImageView.image = [UIImage imageNamed:@"ic_custom_delete"];
+        cell.checkmarkImageView.hidden = NO;
+        cell.iconImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.iconImageView.tintColor = UIColorFromRGB(color_chart_orange);
     }
     return cell;
 }

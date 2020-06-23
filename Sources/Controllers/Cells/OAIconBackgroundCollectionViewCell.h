@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAViewsCollectionViewCell : UICollectionViewCell
+@interface OAIconBackgroundCollectionViewCell : UICollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UIView *backView;
 @property (weak, nonatomic) IBOutlet UIImageView *iconImageView;

@@ -6,11 +6,11 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OASeveralViewsTableViewCell.h"
-#import "OAViewsCollectionViewCell.h"
+#import "OALocationIconsTableViewCell.h"
+#import "OAIconBackgroundCollectionViewCell.h"
 #import "OAColors.h"
 
-@implementation OASeveralViewsTableViewCell
+@implementation OALocationIconsTableViewCell
 
 - (void)awakeFromNib
 {
@@ -18,10 +18,12 @@
     
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"OAViewsCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAViewsCollectionViewCell"];
+    [self.collectionView registerNib:[UINib nibWithNibName:@"OAIconBackgroundCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OAIconBackgroundCollectionViewCell"];
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
+    self.contentView.frame = self.bounds;
+    [self.contentView layoutIfNeeded];
     self.collectionViewHeight.constant = self.collectionView.collectionViewLayout.collectionViewContentSize.height;
     return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
@@ -38,13 +40,12 @@
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OAViewsCollectionViewCell";
-    OAViewsCollectionViewCell* cell = nil;
-    cell = (OAViewsCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
+    static NSString* const identifierCell = @"OAIconBackgroundCollectionViewCell";
+    OAIconBackgroundCollectionViewCell* cell = nil;
+    cell = (OAIconBackgroundCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifierCell forIndexPath:indexPath];
     UIImage *img = _dataArray[indexPath.row];
     cell.iconImageView.image = img;
-    cell.iconImageView.transform = CGAffineTransformMakeRotation(-M_PI_2);
-    if (indexPath.row == 0)
+    if (indexPath.row == _selectedIndex)
     {
         cell.backView.layer.borderWidth = 2;
         cell.backView.layer.borderColor = UIColorFromRGB(_currentColor).CGColor;
@@ -60,13 +61,14 @@
 
 - (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(164.0, 104.0);
+    return CGSizeMake(self.collectionView.frame.size.width / 2 - 16.0, 108.0);
 }
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    _selectedIndex = indexPath.row;
     if (self.delegate)
-        [self.delegate mapIconChanged:indexPath.row];
+        [self.delegate mapIconChanged:indexPath.row type:_locationType];
 }
 
 @end

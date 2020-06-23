@@ -25,6 +25,9 @@
 }
 
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
+    // First layout the collectionView
+    self.contentView.frame = self.bounds;
+    [self.contentView layoutIfNeeded];
     self.collectionViewHeight.constant = self.collectionView.collectionViewLayout.collectionViewContentSize.height;
     return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }

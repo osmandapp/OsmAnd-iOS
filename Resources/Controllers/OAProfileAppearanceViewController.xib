@@ -15,7 +15,7 @@
                 <outlet property="profileIconImageView" destination="lJc-jQ-AR9" id="j4w-b9-S73"/>
                 <outlet property="profileIconView" destination="Sxc-je-zsT" id="Mjb-QA-9ym"/>
                 <outlet property="saveButton" destination="hpb-XG-Ggn" id="vGo-Vr-UvG"/>
-                <outlet property="tableView" destination="mHZ-Yn-ibe" id="7Yl-ww-SWc"/>
+                <outlet property="tableView" destination="NxV-j7-K2q" id="F6i-3d-33c"/>
                 <outlet property="titleLabel" destination="HQy-Dw-fgn" id="8ow-g7-2wO"/>
                 <outlet property="view" destination="aGf-14-Bz7" id="jjh-h1-Qk3"/>
             </connections>
@@ -98,21 +98,21 @@
                         <constraint firstAttribute="bottom" secondItem="HQy-Dw-fgn" secondAttribute="bottom" constant="11" id="xGm-oz-bSf"/>
                     </constraints>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="mHZ-Yn-ibe">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="NxV-j7-K2q" customClass="OATableView">
                     <rect key="frame" x="0.0" y="136" width="414" height="760"/>
                     <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
+                    <viewLayoutGuide key="safeArea" id="0I3-dE-M3s"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="mHZ-Yn-ibe" secondAttribute="bottom" id="0k4-ML-TmJ"/>
+                <constraint firstItem="NxV-j7-K2q" firstAttribute="leading" secondItem="aGf-14-Bz7" secondAttribute="leading" id="7b8-Ze-agv"/>
+                <constraint firstAttribute="bottom" secondItem="NxV-j7-K2q" secondAttribute="bottom" id="CHp-BO-DmH"/>
+                <constraint firstItem="NxV-j7-K2q" firstAttribute="trailing" secondItem="aGf-14-Bz7" secondAttribute="trailing" id="IAn-4J-qLa"/>
                 <constraint firstItem="jz1-Tz-5hg" firstAttribute="leading" secondItem="aGf-14-Bz7" secondAttribute="leading" id="Pxh-bc-tyc"/>
-                <constraint firstItem="mHZ-Yn-ibe" firstAttribute="leading" secondItem="aGf-14-Bz7" secondAttribute="leading" id="Uv2-Q5-nF9"/>
-                <constraint firstItem="mHZ-Yn-ibe" firstAttribute="top" secondItem="jz1-Tz-5hg" secondAttribute="bottom" id="Ysh-Yg-exH"/>
                 <constraint firstItem="jz1-Tz-5hg" firstAttribute="top" secondItem="aGf-14-Bz7" secondAttribute="top" id="b3r-Pu-0Fy"/>
                 <constraint firstItem="jz1-Tz-5hg" firstAttribute="trailing" secondItem="aGf-14-Bz7" secondAttribute="trailing" id="cip-k0-rwN"/>
-                <constraint firstItem="mHZ-Yn-ibe" firstAttribute="trailing" secondItem="aGf-14-Bz7" secondAttribute="trailing" id="fzZ-1d-lhw"/>
-                <constraint firstItem="mHZ-Yn-ibe" firstAttribute="top" secondItem="jz1-Tz-5hg" secondAttribute="bottom" id="n0G-Jj-CuR"/>
+                <constraint firstItem="NxV-j7-K2q" firstAttribute="top" secondItem="jz1-Tz-5hg" secondAttribute="bottom" id="ug7-ik-7zI"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fdS-FX-c7v"/>
             <point key="canvasLocation" x="186.95652173913044" y="859.82142857142856"/>

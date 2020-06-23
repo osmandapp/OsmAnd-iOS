@@ -16,7 +16,7 @@
 #import "OATextInputCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OAIconsTableViewCell.h"
-#import "OASeveralViewsTableViewCell.h"
+#import "OALocationIconsTableViewCell.h"
 
 #define kCellTypeInput @"OATextInputCell"
 #define kCellTypeColorCollection @"colorCollectionCell"
@@ -25,7 +25,7 @@
 #define kIconsAtRestRow 0
 #define kIconsWhileMovingRow 1
 
-@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OAColorsTableViewCellDelegate,  OAIconsTableViewCellDelegate, OASeveralViewsTableViewCellDelegate>
+@interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OAColorsTableViewCellDelegate,  OAIconsTableViewCellDelegate, OALocationIconsTableViewCellDelegate>
 
 @end
 
@@ -65,8 +65,6 @@
 - (void) commonInit
 {
     [self generateData];
-    
-    
 }
 
 -(void) applyLocalization
@@ -80,14 +78,7 @@
     [super viewDidLoad];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
     [self setupNavBar];
-    [self setupView];
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
     [self setupView];
 }
 
@@ -153,42 +144,35 @@
     _colorNames = @[@"lightblue", @"purple", @"green", @"blue", @"red", @"yellow", @"col_magenta"];
     _currentColor = 0;
     
-    _icons = @[@"ic_action_car_dark",
-               @"ic_action_aircraft",
-               @"ic_action_bicycle_dark",
+    _icons = @[@"ic_world_globe_dark",
+               @"ic_action_car_dark",
+               @"ic_action_taxi",
+               @"ic_action_truck_dark",
+               @"ic_action_shuttle_bus",
                @"ic_action_bus_dark",
+               @"ic_action_subway",
+               @"ic_action_motorcycle_dark",
+               @"ic_action_bicycle_dark",
+               @"ic_action_horse",
+               @"ic_action_pedestrian_dark",
+               @"ic_action_trekking_dark",
+               @"ic_action_ski_touring",
+               @"ic_action_skiing",
+               @"ic_action_monowheel",
+               @"ic_action_personal_transporter",
+               @"ic_action_scooter",
+               @"ic_action_sail_boat_dark",
+               @"ic_action_aircraft",
                @"ic_action_camper",
                @"ic_action_campervan",
                @"ic_action_helicopter",
-               @"ic_action_horse",
-               @"ic_action_monowheel",
-               @"ic_action_motorcycle_dark",
                @"ic_action_offroad",
-               @"ic_action_openstreetmap_logo",
-               @"ic_action_pedestrian_dark",
-               @"ic_action_personal_transporter",
                @"ic_action_pickup_truck",
-               @"ic_action_sail_boat_dark",
-               @"ic_action_scooter",
-               @"ic_action_skiing",
                @"ic_action_snowmobile",
-               @"ic_action_subway",
-               @"ic_action_taxi",
-               @"ic_action_trekking_dark",
-               @"ic_action_truck_dark",
                @"ic_action_ufo",
                @"ic_action_utv",
                @"ic_action_wagon",
-               @"ic_action_taxi",
-               @"ic_action_trekking_dark",
-               @"ic_action_truck_dark",
-               @"ic_action_openstreetmap_logo",
-               @"ic_action_snowmobile",
-               @"ic_action_subway",
-               @"ic_action_taxi",
-               @"ic_action_trekking_dark",
-               @"ic_action_camper",
-               @"ic_action_offroad"];
+               @"ic_action_openstreetmap_logo"];
     _currentIcon = 0;
     
     _currentIconAtRest = LOCATION_ICON_DEFAULT;
@@ -262,15 +246,6 @@
     return UITableViewAutomaticDimension;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 1 && indexPath.row == 1)
-    {
-        return 432.;
-    }
-    return 44.;
-}
-
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath { 
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = [[NSString alloc] initWithString:item[@"type"]];
@@ -336,23 +311,26 @@
     }
     else if ([cellType isEqualToString:kCellTypePositionIconCollection])
     {
-        static NSString* const identifierCell = @"OASeveralViewsTableViewCell";
-        OASeveralViewsTableViewCell *cell = nil;
-        cell = (OASeveralViewsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = @"OALocationIconsTableViewCell";
+        OALocationIconsTableViewCell *cell = nil;
+        cell = (OALocationIconsTableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASeveralViewsTableViewCell" owner:self options:nil];
-            cell = (OASeveralViewsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALocationIconsTableViewCell" owner:self options:nil];
+            cell = (OALocationIconsTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
         }
         if (cell)
         {
-            cell.dataArray = indexPath.row == kIconsAtRestRow ? [self getIconsAtRest] : [self getNavIcons];
+            BOOL isAtRestRow = indexPath.row == kIconsAtRestRow;
+            cell.locationType = isAtRestRow ? EOALocationTypeRest : EOALocationTypeMoving;
+            cell.dataArray = isAtRestRow ? [self getIconsAtRest] : [self getNavIcons];
+            cell.selectedIndex = isAtRestRow ? _currentIconAtRest : _currentIconWhileMoving;
             cell.titleLabel.text = item[@"title"];
             cell.currentColor = [_colors[_currentColor] intValue];
-            [cell.collectionView reloadData];
             cell.delegate = self;
+            [cell.collectionView reloadData];
             [cell layoutIfNeeded];
         }
         return cell;
@@ -374,7 +352,7 @@
     
     [self setupView];
     _profileIconImageView.tintColor = UIColorFromRGB([_colors[_currentColor] intValue]);
-    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _tableView.numberOfSections - 1)] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - OAIconsTableViewCellDelegate
@@ -393,9 +371,14 @@
 
 #pragma mark - OASeveralViewsTableViewCellDelegate
 
-- (void)mapIconChanged:(NSInteger)tag
+- (void)mapIconChanged:(NSInteger)newValue type:(EOALocationType)locType
 {
+    if (locType == EOALocationTypeRest)
+        _currentIconAtRest = (EOALocationIcon) newValue;
+    else if (locType == EOALocationTypeMoving)
+        _currentIconWhileMoving = (EOANavigationIcon) newValue;
     
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:locType == EOALocationTypeRest ? 0 : 1 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

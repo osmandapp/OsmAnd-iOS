@@ -214,7 +214,7 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.arrowIconView.image = [[UIImage imageNamed:@"ic_checmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.arrowIconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.arrowIconView.hidden = ![item[@"selected"] boolValue];
             cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

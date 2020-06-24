@@ -14,6 +14,12 @@
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
 #import "OsmAndApp.h"
+#import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OAPublicTransportOptionsBottomSheet.h"
+
+#define KEY_STYLES @"styles"
+#define KEY_DIALOG @"dialog"
+#define KEY_MESSAGE @"message"
 
 static OAQuickActionType *TYPE;
 
@@ -36,7 +42,8 @@ static OAQuickActionType *TYPE;
 {
     if (!_settings.mapSettingShowPublicTransport && [self isAllParametersHidden])
     {
-        [self showTransportSettingsMenu];
+        OAPublicTransportOptionsBottomSheetViewController *bottomSheet = [[OAPublicTransportOptionsBottomSheetViewController alloc] init];
+        [bottomSheet show];
     }
     
     [_settings setMapSettingShowPublicTransport:!_settings.mapSettingShowPublicTransport];
@@ -56,11 +63,10 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:4 stringId:@"favorites.showhide" class:self.class name:OALocalizedString(@"toggle_public_transport") category:CONFIGURE_MAP iconName:@"ic_profile_bus" secondaryIconName:nil editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:4 stringId:@"favorites.showhide" class:self.class name:OALocalizedString(@"toggle_public_transport") category:CONFIGURE_MAP iconName:@"ic_custom_transport_bus" secondaryIconName:nil];
        
     return TYPE;
 }
-
 
 - (BOOL) isAllParametersHidden
 {
@@ -71,10 +77,20 @@ static OAQuickActionType *TYPE;
     return !isBusRoutesVisible && !isSubwayRoutesVisible && !isTramTrainRoutesVisible && !isTransportStopsVisible;
 }
 
-- (void) showTransportSettingsMenu
+- (OrderedDictionary *)getUIModel
 {
-    OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:@"transport"];
-    [mapSettingsViewController show:[OARootViewController instance].mapPanel parentViewController:nil animated:YES];
+    
+    MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
+    [data setObject:@[@{
+                          @"type" : @"OASwitchTableViewCell",
+                          @"key" : KEY_DIALOG,
+                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          },
+                      @{
+                          @"footer" : OALocalizedString(@"quick_action_dialog_descr")
+                          }] forKey:OALocalizedString(@"quick_action_dialog")];
+    return data;
 }
 
 @end

@@ -264,6 +264,10 @@
 "desert_xml" = "Desert.xml";
 "routing_custom_xml" = "Routing-Custom.xml";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it on routing folder in iTunes.";
+"recalculate_route" = "Recalculate route in case of deviation";
+"avoid_routes_and_road" = "Avoid certain routes and road types";
+"route_recalculation_descr" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
+"select_distance_for_recalculation" = "Select the distance after which the route will be recalculated.";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";

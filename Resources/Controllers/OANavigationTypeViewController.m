@@ -47,6 +47,7 @@
 -(void) applyLocalization
 {
     _titleLabel.text = OALocalizedString(@"nav_type_title");
+    _subtitleLable.text = OALocalizedString(@"app_mode_car");
 }
 
 - (void) viewDidLoad

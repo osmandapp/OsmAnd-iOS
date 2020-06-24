@@ -11,6 +11,7 @@
 #import "OAIconTextTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OANavigationTypeViewController.h"
+#import "OARouteParametersViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -46,6 +47,7 @@
 -(void) applyLocalization
 {
     _titleLabel.text = OALocalizedString(@"routing_settings_2");
+    _subTitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
 - (void) viewDidLoad
@@ -184,6 +186,11 @@
     {
         OANavigationTypeViewController* navigationTypeViewController = [[OANavigationTypeViewController alloc] init];
         [self.navigationController pushViewController:navigationTypeViewController animated:YES];
+    }
+    if (indexPath.row == 1)
+    {
+        OARouteParametersViewController* routeParametersViewController = [[OARouteParametersViewController alloc] init];
+        [self.navigationController pushViewController:routeParametersViewController animated:YES];
     }
     [_tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

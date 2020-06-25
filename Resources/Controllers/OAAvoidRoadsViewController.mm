@@ -1,5 +1,5 @@
 //
-//  OAAvoidRoadsViewController.m
+//  OAAvoidRoadsViewController.mm
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 24.06.2020.
@@ -8,11 +8,14 @@
 
 #import "OAAvoidRoadsViewController.h"
 #import "OASwitchTableViewCell.h"
+#import "OAAppSettings.h"
+#import "OsmAndApp.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
 #define kSidePadding 16
+#define kCellTypeSwitch @"OASwitchCell"
 
 @interface OAAvoidRoadsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -26,7 +29,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
     if (self) {
         [self commonInit];
     }
@@ -45,71 +48,69 @@
 
 -(void) applyLocalization
 {
-    _titleLabel.text = OALocalizedString(@"impassable_road");
-    _subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.titleLabel.text = OALocalizedString(@"impassable_road");
+    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_routes_and_road")];
     [self setupView];
 }
 
-- (UIStatusBarStyle) preferredStatusBarStyle
-{
-    return UIStatusBarStyleDefault;
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void) setupView
 {
+    NSMutableArray *dataArr = [NSMutableArray array];
     NSMutableArray *tableData = [NSMutableArray array];
-    NSMutableArray *parametersArr = [NSMutableArray array];
-    [parametersArr addObject:@{
-        @"type" : @"OASwitchCell",
-        @"title" : OALocalizedString(@"routing_attr_avoid_toll_name"),
-        @"isOn" : @NO,
-    }];
-    [parametersArr addObject:@{
-        @"type" : @"OASwitchCell",
-        @"title" : OALocalizedString(@"routing_attr_avoid_unpaved_name"),
-        @"isOn" : @NO,
-    }];
-    [parametersArr addObject:@{
-        @"type" : @"OASwitchCell",
-        @"title" : OALocalizedString(@"routing_attr_avoid_ferries_name"),
-        @"isOn" : @NO,
-    }];
-    [parametersArr addObject:@{
-        @"type" : @"OASwitchCell",
-        @"title" : OALocalizedString(@"routing_attr_avoid_shuttle_train_name"),
-        @"isOn" : @NO,
-    }];
-    [parametersArr addObject:@{
-        @"type" : @"OASwitchCell",
-        @"title" : OALocalizedString(@"routing_attr_avoid_motorway_name"),
-        @"isOn" : @NO,
-    }];
-    [parametersArr addObject:@{
-        @"type" : @"OASwitchCell",
-        @"title" : OALocalizedString(@"routing_attr_avoid_borders_name"),
-        @"isOn" : @NO,
-    }];
-    [parametersArr addObject:@{
-        @"type" : @"OASwitchCell",
-        @"title" : OALocalizedString(@"routing_attr_avoid_ice_roads_fords_name"),
-        @"isOn" : @NO,
-    }];
-    [tableData addObject:parametersArr];
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    auto router = [self getRouter:[OAApplicationMode CAR]]; // taken from OANavigationSettingsViewController
+    if (router)
+    {
+        auto& parameters = router->getParametersList();
+        for (auto& p : parameters)
+        {
+            NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
+            if ([param hasPrefix:@"avoid_"])
+            {
+                NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
+                NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
+                OAProfileBoolean *value = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
+
+                [dataArr addObject:
+                 @{
+                   @"name" : param,
+                   @"title" : title,
+                   @"value" : value,
+                   @"type" : kCellTypeSwitch }
+                 ];
+            }
+        }
+    }
+    [tableData addObject:dataArr]; // bad
     _data = [NSArray arrayWithArray:tableData];
+}
+
+- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    auto router = app.defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
+    if (!router && am.parent)
+        router = app.defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
+    
+    return router;
+}
+
+- (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName
+{
+    NSString *key = [NSString stringWithFormat:@"routing_attr_%@_name", propertyName];
+    NSString *res = OALocalizedString(key);
+    if ([res isEqualToString:key])
+        res = defaultName;
+    
+    return res;
 }
 
 - (void) setupTableHeaderViewWithText:(NSString *)text
@@ -131,7 +132,7 @@
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _tableHeaderView.backgroundColor = UIColor.clearColor;
     [_tableHeaderView addSubview:label];
-    _tableView.tableHeaderView = _tableHeaderView;
+    self.tableView.tableHeaderView = _tableHeaderView;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -139,12 +140,8 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_routes_and_road")];
-        [_tableView reloadData];
+        [self.tableView reloadData];
     } completion:nil];
-}
-
-- (IBAction)backButtonPressed:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - TableView
@@ -152,9 +149,9 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OASwitchCell"])
+    if ([cellType isEqualToString:kCellTypeSwitch])
     {
-        static NSString* const identifierCell = @"OASwitchCell";
+        static NSString* const identifierCell = kCellTypeSwitch;
         OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
@@ -196,29 +193,12 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [_tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void) applyParameter:(id)sender
 {
    
 }
-
-- (CGFloat) heightForLabel:(NSString *)text
-{
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGFloat textWidth = _tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, textWidth, CGFLOAT_MAX)];
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.font = labelFont;
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.lineSpacing = 6.0;
-    style.alignment = NSTextAlignmentCenter;
-    label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
-    [label sizeToFit];
-    return label.frame.size.height;
-}
-
 
 @end

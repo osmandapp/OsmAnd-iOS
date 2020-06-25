@@ -6,15 +6,28 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OAAppSettingsViewController.h"
 
-@interface OAProfileNavigationSettingsViewController : OACompoundViewController
+typedef enum
+{
+    kProfileNavigationSettingsScreenGeneral = 0,
+    kProfileNavigationSettingsScreenNavigationType,
+    kProfileNavigationSettingsScreenRouteParameter,
+    kProfileNavigationSettingsScreenVoicePrompts,
+    kProfileNavigationSettingsScreenScreenAlerts,
+    kProfileNavigationSettingsScreenVehicleParameters,
+    kProfileNavigationSettingsScreenMapBehavior
+} kProfileNavigationSettingsScreen;
 
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@interface OAProfileNavigationSettingsViewController : OAAppSettingsViewController
+
+//@property (weak, nonatomic) IBOutlet UIView *navBarView;
+//@property (weak, nonatomic) IBOutlet UIButton *backButton;
+//@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+//@property (weak, nonatomic) IBOutlet UILabel *subtitleLabel;
+//@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, readonly) kProfileNavigationSettingsScreen settingsType;
 
 
 @end

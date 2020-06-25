@@ -1,5 +1,5 @@
 //
-//  OARouteParametersViewController.h
+//  OAVoicePromptsViewController.h
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 24.06.2020.
@@ -8,6 +8,6 @@
 
 #import "OAAppSettingsViewController.h"
 
-@interface OARouteParametersViewController : OAAppSettingsViewController
+@interface OAVoicePromptsViewController : OAAppSettingsViewController
 
 @end

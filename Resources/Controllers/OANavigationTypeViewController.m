@@ -27,7 +27,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
     if (self) {
         [self commonInit];
     }
@@ -46,28 +46,17 @@
 
 -(void) applyLocalization
 {
-    _titleLabel.text = OALocalizedString(@"nav_type_title");
-    _subtitleLable.text = OALocalizedString(@"app_mode_car");
+    self.titleLabel.text = OALocalizedString(@"nav_type_title");
+    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
     [self setupView];
-}
-
-- (UIStatusBarStyle) preferredStatusBarStyle
-{
-    return UIStatusBarStyleDefault;
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void) setupView
@@ -172,7 +161,7 @@
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _tableHeaderView.backgroundColor = UIColor.clearColor;
     [_tableHeaderView addSubview:label];
-    _tableView.tableHeaderView = _tableHeaderView;
+    self.tableView.tableHeaderView = _tableHeaderView;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -180,12 +169,8 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
-        [_tableView reloadData];
+        [self.tableView reloadData];
     } completion:nil];
-}
-
-- (IBAction) backButtonPressed:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - TableView
@@ -263,22 +248,6 @@
         return OALocalizedString(@"import_routing_file_descr");
     else
         return @"";
-}
-
-- (CGFloat) heightForLabel:(NSString *)text
-{
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGFloat textWidth = _tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, textWidth, CGFLOAT_MAX)];
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.font = labelFont;
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.lineSpacing = 6.0;
-    style.alignment = NSTextAlignmentCenter;
-    label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
-    [label sizeToFit];
-    return label.frame.size.height;
 }
 
 @end

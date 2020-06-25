@@ -8,14 +8,14 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAProfileNavigationSettingsViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAAppSettingsViewController">
             <connections>
-                <outlet property="backButton" destination="3bV-dF-RC8" id="CFd-u5-iuU"/>
-                <outlet property="navBarView" destination="io8-yi-lxZ" id="gZA-EH-Y0V"/>
-                <outlet property="subTitleLabel" destination="iCR-tw-0Oz" id="XaH-pZ-xZ1"/>
-                <outlet property="tableView" destination="Zbn-6q-pLe" id="nYR-j9-ds3"/>
-                <outlet property="titleLabel" destination="5Fb-iQ-XT3" id="1gw-Vl-k6x"/>
-                <outlet property="view" destination="Y9q-1F-t4I" id="2ah-gl-fhb"/>
+                <outlet property="backButton" destination="3bV-dF-RC8" id="vtL-Mf-15O"/>
+                <outlet property="navbarView" destination="io8-yi-lxZ" id="Yy1-TJ-xXA"/>
+                <outlet property="subtitleLabel" destination="iCR-tw-0Oz" id="IeF-J0-iai"/>
+                <outlet property="tableView" destination="Zbn-6q-pLe" id="dwQ-KE-2IP"/>
+                <outlet property="titleLabel" destination="5Fb-iQ-XT3" id="yj7-rU-zlo"/>
+                <outlet property="view" destination="Y9q-1F-t4I" id="auY-xs-T4E"/>
             </connections>
         </placeholder>
         <view contentMode="scaleToFill" id="Y9q-1F-t4I">
@@ -55,7 +55,7 @@
                         <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                     <connections>
-                        <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="a04-Le-CXd"/>
+                        <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="ZlZ-kH-7np"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Driving" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iCR-tw-0Oz">

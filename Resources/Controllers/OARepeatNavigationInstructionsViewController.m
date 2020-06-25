@@ -1,12 +1,12 @@
 //
-//  OARecalculateRouteViewController.m
+//  OARepeatNavigationInstructionsViewController.m
 //  OsmAnd Maps
 //
-//  Created by Anna Bibyk on 24.06.2020.
+//  Created by Anna Bibyk on 25.06.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OARecalculateRouteViewController.h"
+#import "OARepeatNavigationInstructionsViewController.h"
 #import "OASwitchTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
@@ -19,16 +19,16 @@
 #define kCellTypeDistance @"time_cell"
 #define kCellTypePicker @"pickerCell"
 
-@interface OARecalculateRouteViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
+@interface OARepeatNavigationInstructionsViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
 
 @end
 
-@implementation OARecalculateRouteViewController
+@implementation OARepeatNavigationInstructionsViewController
 {
     NSArray<NSArray *> *_data;
     NSIndexPath *_pickerIndexPath;
-    NSArray<NSString *> *_possibleDistanceValues;
-    NSString *_distanceValue;
+    NSArray<NSString *> *_possibleTimeValues;
+    NSString *_timeValue;
 }
 
 - (instancetype) init
@@ -47,13 +47,13 @@
 
 - (void) generateData
 {
-    _distanceValue = @"200 m"; // needs to be changed
-    _possibleDistanceValues = @[@"30 m", @"50 m", @"100 m", @"200 m", @"500 m", @"1 km", @"1.5 km"]; // needs to be changed
+    _timeValue = @"7 min"; // needs to be changed
+    _possibleTimeValues = @[@"4 min", @"5 min", @"6 min", @"7 min", @"8 min", @"8 min", @"10 min"]; // needs to be changed
 }
 
 -(void) applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"recalculate_route");
+    self.titleLabel.text = OALocalizedString(@"keep_informing");
     self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
@@ -72,13 +72,13 @@
     NSMutableArray *distanceArr = [NSMutableArray array];
     [statusArr addObject:@{
         @"type" : @"OASwitchCell",
-        @"title" : OALocalizedString(@"shared_string_enabled"),
+        @"title" : OALocalizedString(@"only_manually"),
         @"isOn" : @NO,
     }];
     [distanceArr addObject:@{
         @"type" : kCellTypeDistance,
         @"title" : OALocalizedString(@"shared_string_distance"),
-        @"value" : _distanceValue,
+        @"value" : _timeValue,
     }];
     [distanceArr addObject:@{
         @"type" : kCellTypePicker,
@@ -140,8 +140,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
-        cell.dataArray = _possibleDistanceValues;
-        NSInteger valueRow = [_possibleDistanceValues indexOfObject:_distanceValue];
+        cell.dataArray = _possibleTimeValues;
+        NSInteger valueRow = [_possibleTimeValues indexOfObject:_timeValue];
         [cell.picker selectRow:valueRow inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
@@ -211,7 +211,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? OALocalizedString(@"route_recalculation_descr") : OALocalizedString(@"select_distance_for_recalculation");
+    return section == 0 ? OALocalizedString(@"instructions_repeat") : @"";
 }
 
 # pragma mark - Switch
@@ -252,7 +252,7 @@
 }
 
 - (void)zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag {
-    _distanceValue = zoom;
+    _timeValue = zoom;
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }

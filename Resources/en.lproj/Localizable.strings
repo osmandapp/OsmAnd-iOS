@@ -217,7 +217,7 @@
 "route_params" = "Route parameters";
 "fast_route_mode" = "Fastest route";
 "nav_type_title" = "Navigation type";
-"voice_anounces" = "Voice anounces";
+"voice_prompts" = "Voice prompts";
 "screen_alerts" = "Screen alerts";
 "vehicle_parameters" = "Vehicle parameters";
 "map_behavior" = "Map behavior";
@@ -268,6 +268,10 @@
 "avoid_routes_and_road" = "Avoid certain routes and road types";
 "route_recalculation_descr" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
 "select_distance_for_recalculation" = "Select the distance after which the route will be recalculated.";
+"arrival_announcement_frequency" = "How soon do you want the arrival announcement?";
+"speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
+"only_manually" = "Only manually";
+"instructions_repeat" = "Tap \"Next turn\" widget for instructions repeat";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
@@ -364,7 +368,7 @@
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
 "traffic_warning_tunnel" = "Tunnel ahead";
-
+"announce" = "Announce";
 
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";

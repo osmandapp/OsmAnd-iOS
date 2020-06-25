@@ -28,7 +28,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
     if (self) {
         [self commonInit];
     }
@@ -47,15 +47,15 @@
 
 -(void) applyLocalization
 {
-    _titleLabel.text = OALocalizedString(@"route_params");
-    _subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.titleLabel.text = OALocalizedString(@"route_params");
+    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     [self setupView];
 }
 
@@ -106,10 +106,6 @@
     [tableData addObject:otherArr];
     [tableData addObject:parametersArr];
     _data = [NSArray arrayWithArray:tableData];
-}
-
-- (IBAction)backButtonPressed:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - TableView
@@ -223,17 +219,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    OAAppSettingsViewController* settingsViewController = nil;
     if (indexPath.row == 0)
     {
-        OARecalculateRouteViewController* recalculateRouteViewController = [[OARecalculateRouteViewController alloc] init];
-        [self.navigationController pushViewController:recalculateRouteViewController animated:YES];
+        settingsViewController = [[OARecalculateRouteViewController alloc] init];
     }
     else if (indexPath.row == 1)
     {
-        OAAvoidRoadsViewController* avoidRoadsViewController = [[OAAvoidRoadsViewController alloc] init];
-        [self.navigationController pushViewController:avoidRoadsViewController animated:YES];
+        settingsViewController = [[OAAvoidRoadsViewController alloc] init];
     }
-    [_tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.navigationController pushViewController:settingsViewController animated:YES];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)applyParameter:(id)sender

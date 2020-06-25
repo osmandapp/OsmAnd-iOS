@@ -12,9 +12,14 @@
 #import "OASettingsTitleTableViewCell.h"
 #import "OANavigationTypeViewController.h"
 #import "OARouteParametersViewController.h"
+#import "OAVoicePromptsViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
+
+#define kCellTypeIconTitleValue @"OAIconTitleValueCell"
+#define kCellTypeIconText @"OAIconTextCell"
+#define kCellTypeTitle @"OASettingsTitleCell"
 
 @interface OAProfileNavigationSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -27,7 +32,7 @@
 
 - (instancetype) init
 {
-    self = [super init];
+    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
     if (self) {
         [self commonInit];
     }
@@ -46,27 +51,16 @@
 
 -(void) applyLocalization
 {
-    _titleLabel.text = OALocalizedString(@"routing_settings_2");
-    _subTitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.titleLabel.text = OALocalizedString(@"routing_settings_2");
+    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     [self setupView];
-}
-
-- (UIStatusBarStyle) preferredStatusBarStyle
-{
-    return UIStatusBarStyleDefault;
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void) setupView
@@ -75,33 +69,33 @@
     NSMutableArray *navigationArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [navigationArr addObject:@{
-        @"type" : @"OAIconTitleValueCell",
+        @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"nav_type_title"),
         @"value" : OALocalizedString(@"m_style_car"),
         @"icon" : @"ic_custom_navigation",
     }];
     [navigationArr addObject:@{
-        @"type" : @"OAIconTextCell",
+        @"type" : kCellTypeIconText,
         @"title" : OALocalizedString(@"route_params"),
         @"icon" : @"ic_custom_route",
     }];
     [navigationArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"voice_anounces"),
+        @"type" : kCellTypeIconText,
+        @"title" : OALocalizedString(@"voice_prompts"),
         @"icon" : @"ic_custom_sound",
     }];
     [navigationArr addObject:@{
-        @"type" : @"OAIconTextCell",
+        @"type" : kCellTypeIconText,
         @"title" : OALocalizedString(@"screen_alerts"),
         @"icon" : @"ic_custom_alert",
     }];
     [navigationArr addObject:@{
-        @"type" : @"OAIconTextCell",
+        @"type" : kCellTypeIconText,
         @"title" : OALocalizedString(@"vehicle_parameters"),
         @"icon" : @"ic_profile_car", // has to change according to current profile icon
     }];
     [otherArr addObject:@{
-        @"type" : @"OASettingsTitleCell",
+        @"type" : kCellTypeTitle,
         @"title" : OALocalizedString(@"map_behavior"),
     }];
     [tableData addObject:navigationArr];
@@ -109,18 +103,14 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (IBAction)backButtonPressed:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 #pragma mark - TableView
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OAIconTitleValueCell"])
+    if ([cellType isEqualToString:kCellTypeIconTitleValue])
     {
-        static NSString* const identifierCell = @"OAIconTitleValueCell";
+        static NSString* const identifierCell = kCellTypeIconTitleValue;
         OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
@@ -139,9 +129,9 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:@"OAIconTextCell"])
+    else if ([cellType isEqualToString:kCellTypeIconText])
     {
-        static NSString* const identifierCell = @"OAIconTextCell";
+        static NSString* const identifierCell = kCellTypeIconText;
         OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
@@ -159,9 +149,9 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:@"OASettingsTitleCell"])
+    else if ([cellType isEqualToString:kCellTypeTitle])
     {
-        static NSString* const identifierCell = @"OASettingsTitleCell";
+        static NSString* const identifierCell = kCellTypeTitle;
         OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
@@ -182,17 +172,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    OAAppSettingsViewController* settingsViewController = nil;
     if (indexPath.row == 0)
-    {
-        OANavigationTypeViewController* navigationTypeViewController = [[OANavigationTypeViewController alloc] init];
-        [self.navigationController pushViewController:navigationTypeViewController animated:YES];
-    }
+        settingsViewController = [[OANavigationTypeViewController alloc] init];
     if (indexPath.row == 1)
-    {
-        OARouteParametersViewController* routeParametersViewController = [[OARouteParametersViewController alloc] init];
-        [self.navigationController pushViewController:routeParametersViewController animated:YES];
-    }
-    [_tableView deselectRowAtIndexPath:indexPath animated:YES];
+        settingsViewController = [[OARouteParametersViewController alloc] init];
+    if (indexPath.row == 2)
+        settingsViewController = [[OAVoicePromptsViewController alloc] init];
+    [self.navigationController pushViewController:settingsViewController animated:YES];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

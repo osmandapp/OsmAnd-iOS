@@ -8,6 +8,7 @@
 
 #import "OARearrangeProfilesViewController.h"
 #import "OADeleteButtonTableViewCell.h"
+#import "OAApplicationMode.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -21,9 +22,9 @@
 
 @implementation OARearrangeProfilesViewController
 {
-    NSArray<NSArray *> *_data;
-    NSMutableArray *_allApplicationProfiles;
-    NSMutableArray *_deletedProfiles;
+    NSMutableArray<OAApplicationMode *> *_appProfiles;
+    NSMutableArray<OAApplicationMode *> *_deletedProfiles;
+    
     UIView *_tableHeaderView;
 }
 
@@ -48,41 +49,10 @@
 
 - (void) generateData
 {
-    _allApplicationProfiles = [[NSMutableArray alloc] init];
+    _appProfiles = [[NSMutableArray alloc] init];
     _deletedProfiles = [[NSMutableArray alloc] init];
     
-    [_allApplicationProfiles addObject:@{
-        @"title" : OALocalizedString(@"Profile 1"),
-        @"icon" : @"ic_profile_browsemap",
-    }];
-    [_allApplicationProfiles addObject:@{
-        @"title" : OALocalizedString(@"Profile 2"),
-        @"icon" : @"ic_profile_car",
-    }];
-    [_allApplicationProfiles addObject:@{
-        @"title" : OALocalizedString(@"Profile 3"),
-        @"icon" : @"ic_profile_bicycle",
-    }];
-    [_allApplicationProfiles addObject:@{
-        @"title" : OALocalizedString(@"Profile 4"),
-        @"icon" : @"ic_action_bus_dark",
-    }];
-    [_allApplicationProfiles addObject:@{
-        @"title" : OALocalizedString(@"Profile 5"),
-        @"icon" : @"ic_profile_pedestrian",
-    }];
-    [_allApplicationProfiles addObject:@{
-        @"title" : OALocalizedString(@"Profile 6"),
-        @"icon" : @"ic_action_horse",
-    }];
-    [_allApplicationProfiles addObject:@{
-        @"title" : OALocalizedString(@"Profile 7"),
-        @"icon" : @"ic_action_pickup_truck",
-    }];
-    [_deletedProfiles addObject:@{
-        @"title" : OALocalizedString(@"Profile 8"),
-        @"icon" : @"ic_action_aircraft",
-    }];
+    _appProfiles = [NSMutableArray arrayWithArray:OAApplicationMode.allPossibleValues];
 }
 
 -(void) applyLocalization
@@ -100,30 +70,12 @@
     [_tableView setEditing:YES];
     _tableView.estimatedRowHeight = 48.;
     _tableView.tableHeaderView = _tableHeaderView;
+}
+
+- (void) viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
     [self setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr")];
-    [self setupView];
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self setupView];
-}
-
-- (void) setupView
-{
-    NSMutableArray *tableData = [NSMutableArray array];
-
-    [tableData addObject:_allApplicationProfiles];
-    [tableData addObject:_deletedProfiles];
-    
-    _data = [NSArray arrayWithArray:tableData];
 }
 
 - (void) setupTableHeaderViewWithText:(NSString *)text
@@ -157,6 +109,12 @@
     } completion:nil];
 }
 
+- (OAApplicationMode *) getItem:(NSIndexPath *)indexPath
+{
+    BOOL isAllModes = indexPath.section == kAllApplicationProfilesSection;
+    return isAllModes ? _appProfiles[indexPath.row] : _deletedProfiles[indexPath.row];
+}
+
 - (IBAction) cancelButtonClicked:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -166,18 +124,23 @@
 
 #pragma mark - TableView
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
+- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (section == kAllApplicationProfilesSection)
+        return _appProfiles.count;
+    else
+        return _deletedProfiles.count;
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _data.count;
+    return 2;
 }
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
+- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+    BOOL isAllProfiles = indexPath.section == kAllApplicationProfilesSection;
+    OAApplicationMode *mode = isAllProfiles ? _appProfiles[indexPath.row] : _deletedProfiles[indexPath.row];
     
     static NSString* const identifierCell = @"OADeleteButtonTableViewCell";
     OADeleteButtonTableViewCell* cell = nil;
@@ -191,13 +154,19 @@
     }
     if (cell)
     {
-        cell.titleLabel.text = item[@"title"];
-        [cell.deleteButton setSelected:NO];
-        [cell.deleteButton setImage:[UIImage imageNamed: indexPath.section == kAllApplicationProfilesSection ? @"ic_custom_delete_disable" : @"ic_custom_undo_button"] forState:UIControlStateNormal];
-        cell.iconImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.iconImageView.tintColor = UIColorFromRGB(color_chart_orange);
+        cell.titleLabel.text = mode.name;
+        NSString *imageName = @"";
+        if (isAllProfiles)
+            imageName = mode.isCustomProfile ? @"ic_custom_delete" : @"ic_custom_delete_disable";
+        else
+            imageName = @"ic_custom_undo_button";
+        
+        cell.iconImageView.image = [mode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.iconImageView.tintColor = UIColorFromRGB(mode.getIconColor);
+        [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+        [cell.deleteButton setUserInteractionEnabled:mode.isCustomProfile];
         cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
-        [cell.deleteButton addTarget:self action:@selector(deleteButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.deleteButton addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return cell;
 }
@@ -216,19 +185,28 @@
     return NO;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    if (proposedDestinationIndexPath.section != kAllApplicationProfilesSection)
+        return sourceIndexPath;
+    return proposedDestinationIndexPath;
+}
+
 - (BOOL) tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return YES;
+    return indexPath.section == kAllApplicationProfilesSection;
 }
 
 - (void) tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    NSDictionary *item = _data[sourceIndexPath.section][sourceIndexPath.row];
-    if (sourceIndexPath.section == kAllApplicationProfilesSection)
-    {
-        [_allApplicationProfiles removeObjectAtIndex:sourceIndexPath.row];
-        [_allApplicationProfiles insertObject:item atIndex:destinationIndexPath.row];
-    }
+    OAApplicationMode *item = [self getItem:sourceIndexPath];
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [_tableView reloadData];
+    }];
+    [_appProfiles removeObjectAtIndex:sourceIndexPath.row];
+    [_appProfiles insertObject:item atIndex:destinationIndexPath.row];
+    [CATransaction commit];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -241,39 +219,58 @@
     return section == kAllApplicationProfilesSection ? @"" : OALocalizedString(@"after_tapping_done");
 }
 
-- (void) deleteButtonAction:(id)sender
+- (void) actionButtonPressed:(UIButton *)sender
 {
-    UIButton *button = (UIButton *)sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
     if (indexPath.section == kAllApplicationProfilesSection)
     {
-        [_allApplicationProfiles removeObject:item];
-        [_deletedProfiles addObject:item];
+        [self deleteMode:indexPath];
     }
     else
     {
-        [_allApplicationProfiles addObject:item];
-        [_deletedProfiles removeObject:item];
+        [self restoreMode:indexPath];
     }
-    [self setupView];
-    [self.tableView reloadData];
+}
+
+- (void) deleteMode:(NSIndexPath *)indexPath
+{
+    OAApplicationMode *am = _appProfiles[indexPath.row];
+    [_appProfiles removeObject:am];
+    [_deletedProfiles addObject:am];
+    NSIndexPath *targetPath = [NSIndexPath indexPathForRow:_deletedProfiles.count - 1 inSection:1];
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [_tableView reloadData];
+    }];
+    [_tableView beginUpdates];
+    [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
+    [_tableView endUpdates];
+    [CATransaction commit];
+}
+
+- (void) restoreMode:(NSIndexPath *)indexPath
+{
+    OAApplicationMode *am = _deletedProfiles[indexPath.row];
+    int order = am.getOrder;
+    order = order > _appProfiles.count ? (int) _appProfiles.count : order;
+    NSIndexPath *targetPath = [NSIndexPath indexPathForRow:order inSection:kAllApplicationProfilesSection];
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [_tableView reloadData];
+    }];
+    [_deletedProfiles removeObjectAtIndex:indexPath.row];
+    [_appProfiles insertObject:am atIndex:order];
+    [_tableView beginUpdates];
+    [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
+    [_tableView endUpdates];
+    [CATransaction commit];
 }
 
 - (CGFloat) heightForLabel:(NSString *)text
 {
     UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGFloat textWidth = _tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, textWidth, CGFLOAT_MAX)];
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.font = labelFont;
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.lineSpacing = 6.0;
-    style.alignment = NSTextAlignmentCenter;
-    label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
-    [label sizeToFit];
-    return label.frame.size.height;
+    CGFloat textWidth = self.view.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
+    return [OAUtilities calculateTextBounds:text width:textWidth font:labelFont].height;
 }
 
 @end

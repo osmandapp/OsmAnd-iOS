@@ -680,6 +680,7 @@
 
 "create_profile" = "Create profile";
 "create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
+"custom_profile" = "Custom profile";
 "new_profile" = "New profile";
 "edit_profile_list" = "Edit profile list";
 "enter_profile_name" = "Enter profile name";
@@ -695,9 +696,10 @@
 "base_profile_descr_boat" = "Ship, rowing, sailing";
 "base_profile_descr_aircraft" = "Airplane, gliding";
 "rearrange_profiles" = "Rearrange profiles";
-"rearrange_profile_descr" = "OsmAnd default profiles cannot be deleted, but disabled (on the previous screen), or be sorted to the bottom.";
+"rearrange_profile_descr" = "Default OsmAnd profiles cannot be deleted, but you can disable them on the previous screen or drag them to the bottom of the list.";
 "all_application_profiles" = "All application profiles";
 "after_tapping_done" = "After you tap Done, deleted profiles will be lost completely.";
+"empty_profile_name_warning" = "Profile name cannot be empty.";
 
 // Purchases
 "prch_addons" = "Addons";

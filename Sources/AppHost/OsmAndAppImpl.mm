@@ -499,6 +499,8 @@
     [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     [OAPlugin initPlugins];
     
+    [OAApplicationMode onApplicationStart];
+    
     [[Reachability reachabilityForInternetConnection] startNotifier];
     [self askReview];
     

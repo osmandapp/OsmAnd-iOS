@@ -955,6 +955,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
     visible = YES;
+    [_appModeView setupModeButtons];
     [_tableView setContentOffset:CGPointZero];
     _currentState = EOARouteInfoMenuStateFullScreen;
     [_tableView setScrollEnabled:YES];

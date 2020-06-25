@@ -32,6 +32,7 @@
 #define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
 #define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
 #define mapSettingShowPublicTransportKey @"mapSettingShowPublicTransportKey"
+#define transportLayersVisibleKey @"transportLayersVisible"
 #define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
 
 #define billingUserIdKey @"billingUserIdKey"
@@ -931,6 +932,92 @@
 
 @end
 
+@interface OAProfileStringList ()
+
+@property (nonatomic) NSMutableArray *defValue;
+
+@end
+
+@implementation OAProfileStringList
+
++ (instancetype) withKey:(NSString *)key defValue:(NSMutableArray *)defValue
+{
+    OAProfileString *obj = [[OAProfileStringList alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
+}
+
+- (NSMutableArray *) get
+{
+    return [self get:self.appMode];
+}
+
+- (void) set:(NSMutableArray *)arr
+{
+    [self set:arr mode:self.appMode];
+}
+
+- (NSMutableArray *) get:(OAApplicationMode *)mode
+{
+    NSObject *value = [self getValue:mode];
+    if (value)
+    {
+        return (NSMutableArray *)value;
+    }
+    else
+        return self.defValue;
+}
+
+- (void) set:(NSMutableArray *)arr mode:(OAApplicationMode *)mode
+{
+    [self setValue:arr mode:mode];
+}
+
+- (void) add:(NSString *)string
+{
+    NSMutableArray *newArray = [NSMutableArray arrayWithArray:[self get]];
+    [newArray addObject:string];
+    [self set:newArray];
+}
+
+- (void) addUnic:(NSString *)string
+{
+    if (![self contain:string])
+        [self add:string];
+}
+
+- (void) remove:(NSString *)string
+{
+    if ([self contain:string])
+    {
+        NSMutableArray *newArray = [NSMutableArray arrayWithArray:[self get]];
+        [newArray removeObject:string];
+        [self set:newArray];
+    }
+}
+
+- (BOOL) contain:(NSString *)string
+{
+    return [[self get] indexOfObject:string] != NSNotFound;
+}
+
+- (void) resetToDefault
+{
+    NSMutableArray *defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (NSMutableArray *)pDefault;
+
+    [self set:defaultValue];
+}
+
+@end
+
 @interface OAProfileAutoZoomMap ()
 
 @property (nonatomic) EOAAutoZoomMap defValue;
@@ -1309,6 +1396,7 @@
         _mapSettingShowOfflineEdits = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOfflineEditsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOfflineEditsKey] : YES;
         _mapSettingShowOnlineNotes = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOnlineNotesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOnlineNotesKey] : NO;
         _mapSettingShowPublicTransport = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowPublicTransportKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowPublicTransportKey] : NO;
+        _transportLayersVisible = [OAProfileStringList withKey:transportLayersVisibleKey defValue:[NSMutableArray new]];
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;

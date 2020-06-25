@@ -211,6 +211,21 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @end
 
+@interface OAProfileStringList : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(NSMutableArray *)defValue;
+
+- (NSMutableArray *) get;
+- (NSMutableArray *) get:(OAApplicationMode *)mode;
+- (void) set:(NSMutableArray *)arr;
+- (void) set:(NSMutableArray *)arr mode:(OAApplicationMode *)mode;
+- (void) add:(NSString *)string;
+- (void) addUnic:(NSString *)string;
+- (void) remove:(NSString *)string;
+- (BOOL) contain:(NSString *)string;
+
+@end
+
 @interface OAProfileAutoZoomMap : OAProfileInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue;
@@ -357,6 +372,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL mapSettingShowOfflineEdits;
 @property (assign, nonatomic) BOOL mapSettingShowOnlineNotes;
 @property (assign, nonatomic) BOOL mapSettingShowPublicTransport;
+@property (nonatomic) OAProfileStringList *transportLayersVisible;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
 
 @property (nonatomic) NSString *billingUserId;

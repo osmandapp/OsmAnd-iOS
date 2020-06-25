@@ -72,12 +72,7 @@
 
 - (BOOL) updateLayer
 {
-    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
-    OAMapStyleParameter *param = [styleSettings getParameter:@"transportStops"];
-    _showStopsOnMap = [param.value boolValue];
-    BOOL isLayerOn = [OAAppSettings sharedManager].mapSettingShowPublicTransport;
-    
-    if (_showStopsOnMap && isLayerOn)
+    if ([self shouldBeVisible])
     {
         [self doShowStopsOnMap];
     }
@@ -88,6 +83,13 @@
     }
     
     return YES;
+}
+
+- (BOOL) shouldBeVisible
+{
+    BOOL isTransportLayersToggledOn = [OAAppSettings sharedManager].mapSettingShowPublicTransport;
+    BOOL isStopsLayersVisible = [[OAAppSettings sharedManager].transportLayersVisible contain:@"transportStops"];
+    return isTransportLayersToggledOn && isStopsLayersVisible;
 }
 
 - (void) showStopsOnMap:(OATransportStopRoute *)stopRoute

@@ -11,6 +11,7 @@
 #import "OABottomSheetHeaderIconCell.h"
 #import "OASettingSwitchCell.h"
 #import "OAMapStyleSettings.h"
+#import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -23,12 +24,11 @@
 @implementation OAPublicTransportOptionsBottomSheetScreen
 {
     OsmAndAppInstance _app;
+    OAAppSettings* _settings;
     OAMapStyleSettings* _styleSettings;
     OAPublicTransportOptionsBottomSheetViewController *vwController;
     NSArray* _data;
 }
-
-
 
 @synthesize tableData, tblView;
 
@@ -45,6 +45,7 @@
 - (void) initOnConstruct:(UITableView *)tableView viewController:(OAPublicTransportOptionsBottomSheetViewController *)viewController
 {
     _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
     _styleSettings = [OAMapStyleSettings sharedInstance];
     
     vwController = viewController;
@@ -88,18 +89,21 @@
             @"name" : param.name,
             @"title" : param.title,
             @"img" : imageName,
-            @"value" : param.value
             }];
     }
  
     _data = [NSArray arrayWithArray:arr];
 }
 
-
 -(void) doneButtonPressed
 {
-    //TODO: What should this button do?
     [vwController dismiss];
+}
+
+- (BOOL) cancelButtonPressed
+{
+    [_settings.transportLayersVisible resetToDefault];
+    return YES;
 }
 
 - (void) initData
@@ -125,6 +129,7 @@
         return 44.0;
     }
 }
+
 
 #pragma mark - UITableViewDataSource
 
@@ -176,7 +181,7 @@
             [self updateSettingSwitchCell:cell data:item];
             
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            cell.switchView.on = ((NSNumber *)item[@"value"]).boolValue;
+            cell.switchView.on = [_settings.transportLayersVisible contain:item[@"name"]];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
         }
@@ -187,7 +192,6 @@
         return nil;
     }
 }
-
 
 - (void) updateSettingSwitchCell:(OASettingSwitchCell *)cell data:(NSDictionary *)data
 {
@@ -207,7 +211,6 @@
         [cell setNeedsUpdateConstraints];
 }
 
-
 - (void) onSwitchClick:(id)sender
 {
     UISwitch *sw = (UISwitch *)sender;
@@ -215,15 +218,11 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:position inSection:0];
     NSDictionary * item = [self getItem:indexPath];
     
-    OAMapStyleParameter* param = [_styleSettings getParameter:item[@"name"]];
-    param.value = sw.on ? @"true" : @"false";
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_styleSettings save:param];
-    });
+    if (sw.on)
+        [_settings.transportLayersVisible addUnic:item[@"name"]];
+    else
+        [_settings.transportLayersVisible remove:item[@"name"]];
 }
-
-
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
@@ -234,6 +233,7 @@
 {
     return [self heightForRow:indexPath tableView:tableView];
 }
+
 
 #pragma mark - UITableViewDelegate
 

@@ -17,9 +17,8 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAPublicTransportOptionsBottomSheet.h"
 
-#define KEY_STYLES @"styles"
 #define KEY_DIALOG @"dialog"
-#define KEY_MESSAGE @"message"
+
 
 static OAQuickActionType *TYPE;
 
@@ -40,15 +39,57 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    if (!_settings.mapSettingShowPublicTransport && [self isAllParametersHidden])
-    {
-        OAPublicTransportOptionsBottomSheetViewController *bottomSheet = [[OAPublicTransportOptionsBottomSheetViewController alloc] init];
-        [bottomSheet show];
-    }
+    if ([self isTurningOnWithAllTransportLayersHidden])
+        [self showDashboardMenu];
+
+    if (_settings.mapSettingShowPublicTransport)
+        [self hideAllTransportLayers];
+    else
+        [self showEnabledTransportLayers];
     
     [_settings setMapSettingShowPublicTransport:!_settings.mapSettingShowPublicTransport];
-    [[_app mapSettingsChangeObservable] notifyEvent];
 }
+
+- (BOOL) isTurningOnWithAllTransportLayersHidden
+{
+    return !_settings.mapSettingShowPublicTransport && ![_settings.transportLayersVisible get];
+}
+
+- (void)showDashboardMenu
+{
+    OAPublicTransportOptionsBottomSheetViewController *bottomSheet = [[OAPublicTransportOptionsBottomSheetViewController alloc] init];
+    [bottomSheet show];
+}
+
+- (void)showEnabledTransportLayers
+{
+    NSMutableArray* storedVisibleParamNames = [_settings.transportLayersVisible get];
+    for (NSString *visibleParamName in storedVisibleParamNames)
+    {
+        OAMapStyleParameter *renderParam = [_styleSettings getParameter:visibleParamName];
+        renderParam.value = @"true";
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_styleSettings saveParameters];
+        [[_app mapSettingsChangeObservable] notifyEvent];
+    });
+}
+
+- (void)hideAllTransportLayers
+{
+    NSArray* renderParams = [_styleSettings getParameters:@"transport"];
+    for (OAMapStyleParameter *renderParam in renderParams)
+    {
+        renderParam.value = @"false";
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_styleSettings saveParameters];
+        [[_app mapSettingsChangeObservable] notifyEvent];
+    });
+}
+
 
 - (BOOL)isActionWithSlash
 {
@@ -66,15 +107,6 @@ static OAQuickActionType *TYPE;
         TYPE = [[OAQuickActionType alloc] initWithIdentifier:4 stringId:@"favorites.showhide" class:self.class name:OALocalizedString(@"toggle_public_transport") category:CONFIGURE_MAP iconName:@"ic_custom_transport_bus" secondaryIconName:nil];
        
     return TYPE;
-}
-
-- (BOOL) isAllParametersHidden
-{
-    BOOL isBusRoutesVisible = [[_styleSettings getParameter:@"publicTransportMode"].value boolValue];
-    BOOL isSubwayRoutesVisible = [[_styleSettings getParameter:@"subwayMode"].value boolValue];
-    BOOL isTramTrainRoutesVisible = [[_styleSettings getParameter:@"tramTrainRoutes"].value boolValue];
-    BOOL isTransportStopsVisible = [[_styleSettings getParameter:@"transportStops"].value boolValue];
-    return !isBusRoutesVisible && !isSubwayRoutesVisible && !isTramTrainRoutesVisible && !isTransportStopsVisible;
 }
 
 - (OrderedDictionary *)getUIModel

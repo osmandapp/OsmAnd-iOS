@@ -83,6 +83,8 @@
 
 - (BOOL) isCustomProfile;
 
++ (void) reorderAppModes;
++ (void) deleteCustomModes:(NSArray<OAApplicationMode *> *) modes;
 + (NSSet<OAApplicationMode *> *) regWidgetAvailability:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am;
 - (BOOL) isWidgetAvailable:(NSString *)key;
 

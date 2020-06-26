@@ -16,14 +16,37 @@
 #define kSidePadding 16
 #define kAllApplicationProfilesSection 0
 
+@interface OAEditProfileItem : NSObject
+
+@property (nonatomic) int order;
+@property (nonatomic) OAApplicationMode *appMode;
+
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
+
+@end
+
+@implementation OAEditProfileItem
+
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+{
+    self = [super init];
+    if (self) {
+        _appMode = appMode;
+        _order = appMode.getOrder;
+    }
+    return self;
+}
+
+@end
+
 @interface OARearrangeProfilesViewController() <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
 @implementation OARearrangeProfilesViewController
 {
-    NSMutableArray<OAApplicationMode *> *_appProfiles;
-    NSMutableArray<OAApplicationMode *> *_deletedProfiles;
+    NSMutableArray<OAEditProfileItem *> *_appProfiles;
+    NSMutableArray<OAEditProfileItem *> *_deletedProfiles;
     
     UIView *_tableHeaderView;
 }
@@ -52,7 +75,10 @@
     _appProfiles = [[NSMutableArray alloc] init];
     _deletedProfiles = [[NSMutableArray alloc] init];
     
-    _appProfiles = [NSMutableArray arrayWithArray:OAApplicationMode.allPossibleValues];
+    for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
+    {
+        [_appProfiles addObject:[[OAEditProfileItem alloc] initWithAppMode:am]];
+    }
 }
 
 -(void) applyLocalization
@@ -109,17 +135,37 @@
     } completion:nil];
 }
 
-- (OAApplicationMode *) getItem:(NSIndexPath *)indexPath
+- (OAEditProfileItem *) getItem:(NSIndexPath *)indexPath
 {
     BOOL isAllModes = indexPath.section == kAllApplicationProfilesSection;
     return isAllModes ? _appProfiles[indexPath.row] : _deletedProfiles[indexPath.row];
 }
 
-- (IBAction) cancelButtonClicked:(id)sender {
+- (IBAction) cancelButtonClicked:(id)sender
+{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction) doneButtonClicked:(id)sender {
+- (IBAction) doneButtonClicked:(id)sender
+{
+    NSMutableArray<OAApplicationMode *> *deletedModes = [NSMutableArray new];
+    for (OAEditProfileItem *item in _deletedProfiles)
+        [deletedModes addObject:item.appMode];
+
+    [OAApplicationMode deleteCustomModes:deletedModes];
+    
+    NSMutableDictionary<NSString *, OAEditProfileItem *> *itemMapping = [NSMutableDictionary new];
+    for (OAEditProfileItem *item in _appProfiles)
+         [itemMapping setObject:item forKey:item.appMode.stringKey];
+    
+    for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
+    {
+        OAEditProfileItem *editItem = itemMapping[am.stringKey];
+        if (editItem)
+            [am setOrder:editItem.order];
+    }
+    [OAApplicationMode reorderAppModes];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - TableView
@@ -140,7 +186,7 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     BOOL isAllProfiles = indexPath.section == kAllApplicationProfilesSection;
-    OAApplicationMode *mode = isAllProfiles ? _appProfiles[indexPath.row] : _deletedProfiles[indexPath.row];
+    OAApplicationMode *mode = isAllProfiles ? _appProfiles[indexPath.row].appMode : _deletedProfiles[indexPath.row].appMode;
     
     static NSString* const identifierCell = @"OADeleteButtonTableViewCell";
     OADeleteButtonTableViewCell* cell = nil;
@@ -197,15 +243,25 @@
     return indexPath.section == kAllApplicationProfilesSection;
 }
 
+- (void)updateProfileIndexes
+{
+    for (int i = 0; i < _appProfiles.count; i++)
+    {
+        _appProfiles[i].order = i;
+    }
+}
+
 - (void) tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    OAApplicationMode *item = [self getItem:sourceIndexPath];
+    OAEditProfileItem *item = [self getItem:sourceIndexPath];
+    // Deferr the data update until the animation is complete
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         [_tableView reloadData];
     }];
     [_appProfiles removeObjectAtIndex:sourceIndexPath.row];
     [_appProfiles insertObject:item atIndex:destinationIndexPath.row];
+    [self updateProfileIndexes];
     [CATransaction commit];
 }
 
@@ -234,9 +290,10 @@
 
 - (void) deleteMode:(NSIndexPath *)indexPath
 {
-    OAApplicationMode *am = _appProfiles[indexPath.row];
+    OAEditProfileItem *am = _appProfiles[indexPath.row];
     [_appProfiles removeObject:am];
     [_deletedProfiles addObject:am];
+    [self updateProfileIndexes];
     NSIndexPath *targetPath = [NSIndexPath indexPathForRow:_deletedProfiles.count - 1 inSection:1];
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
@@ -250,8 +307,8 @@
 
 - (void) restoreMode:(NSIndexPath *)indexPath
 {
-    OAApplicationMode *am = _deletedProfiles[indexPath.row];
-    int order = am.getOrder;
+    OAEditProfileItem *am = _deletedProfiles[indexPath.row];
+    int order = am.order;
     order = order > _appProfiles.count ? (int) _appProfiles.count : order;
     NSIndexPath *targetPath = [NSIndexPath indexPathForRow:order inSection:kAllApplicationProfilesSection];
     [CATransaction begin];

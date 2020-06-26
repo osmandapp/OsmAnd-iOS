@@ -15,7 +15,7 @@
 
 @property (nonatomic) id<OANavigationSettingsDelegate> delegate;
 
-+ (NSString *) getText:(const std::shared_ptr<const OsmAnd::Road>)road;
-+ (NSString *) getDescr:(const std::shared_ptr<const OsmAnd::Road>)road;
++ (NSString *) getText:(const std::shared_ptr<RouteDataObject>)road;
++ (NSString *) getDescr:(const std::shared_ptr<RouteDataObject>)road;
 
 @end

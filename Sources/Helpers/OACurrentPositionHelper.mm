@@ -11,16 +11,22 @@
 #import "OAAppSettings.h"
 #import "OAMapUtils.h"
 #import "OAMapRendererView.h"
+#import "OARoutingHelper.h"
+#import "OARouteProvider.h"
+#import "OARouteCalculationParams.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/CachingRoadLocator.h>
 
-#define kMaxRoadDistanceInMeters 15.0
+#include <routePlannerFrontEnd.h>
+#include <routingConfiguration.h>
+#include <routingContext.h>
+#include <binaryRoutePlanner.h>
+#include <routeSegment.h>
 
 @implementation OARoadResultMatcher
 
-- (BOOL) publish:(const std::shared_ptr<const OsmAnd::Road>&)object
+- (BOOL) publish:(const std::shared_ptr<RouteDataObject>)object
 {
     if (_publishFunction)
         return _publishFunction(object);
@@ -51,11 +57,14 @@
 @implementation OACurrentPositionHelper
 {
     OsmAndAppInstance _app;
+    OARoutingHelper *_routingHelper;
+    OARouteProvider *_provider;
     OAAppSettings *_settings;
     
     CLLocation *_lastQueriedLocation;
-    std::shared_ptr<const OsmAnd::Road> _road;
-    std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
+    OAApplicationMode *_am;
+    std::shared_ptr<RoutingContext> _ctx;
+    std::shared_ptr<RouteDataObject> _road;
     NSObject *_roadLocatorSync;
     NSTimeInterval _lastUpdateTime;
 }
@@ -77,9 +86,10 @@
     if (self)
     {
         _app = [OsmAndApp instance];
+        _routingHelper = [OARoutingHelper sharedInstance];
+        _provider = [OARoutingHelper sharedInstance].getRouteProvider;
         _settings = [OAAppSettings sharedManager];
         
-        _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
         _roadLocatorSync = [[NSObject alloc] init];
         _road.reset();
         
@@ -97,17 +107,39 @@
     return self;
 }
 
-+ (double) getOrthogonalDistance:(std::shared_ptr<const OsmAnd::Road>) r loc:(CLLocation *)loc
+- (void) initCtx:(OAApplicationMode *)appMode
+{
+    _am = appMode;
+    _ctx = nullptr;
+
+    OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
+    params.mode = appMode;
+    
+    auto config = _app.defaultRoutingConfig;
+    auto generalRouter = [_provider getRouter:params.mode];
+    if (generalRouter)
+    {
+        auto cf = [_provider initOsmAndRoutingConfig:config params:params generalRouter:generalRouter];
+        if (cf)
+        {
+            auto router = std::make_shared<RoutePlannerFrontEnd>();
+            _ctx = router->buildRoutingContext(cf, RouteCalculationMode::NORMAL);
+            _ctx->geocoding = true;
+        }
+    }
+}
+
++ (double) getOrthogonalDistance:(std::shared_ptr<RouteDataObject>) r loc:(CLLocation *)loc
 {
     double d = 1000.0;
-    if (r->points31.count() > 0)
+    if (r->pointsX.size() > 0)
     {
-        double pLt = OsmAnd::Utilities::get31LatitudeY(r->points31[0].y);
-        double pLn = OsmAnd::Utilities::get31LongitudeX(r->points31[0].x);
-        for (int i = 1; i < r->points31.count(); i++)
+        double pLt = OsmAnd::Utilities::get31LatitudeY(r->pointsY[0]);
+        double pLn = OsmAnd::Utilities::get31LongitudeX(r->pointsX[0]);
+        for (int i = 1; i < r->pointsX.size(); i++)
         {
-            double lt = OsmAnd::Utilities::get31LatitudeY(r->points31[i].y);
-            double ln = OsmAnd::Utilities::get31LongitudeX(r->points31[i].x);
+            double lt = OsmAnd::Utilities::get31LatitudeY(r->pointsY[i]);
+            double ln = OsmAnd::Utilities::get31LongitudeX(r->pointsX[i]);
             double od = [OAMapUtils getOrthogonalDistance:loc fromLocation:[[CLLocation alloc] initWithLatitude:pLt longitude:pLn] toLocation:[[CLLocation alloc] initWithLatitude:lt longitude:ln]];
             if (od < d)
                 d = od;
@@ -119,10 +151,17 @@
     return d;
 }
 
-- (std::shared_ptr<const OsmAnd::Road>) getLastKnownRouteSegment:(CLLocation *)loc
+- (void) checkInitialized:(CLLocation *)loc
+{
+    auto loc31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude));
+    auto rect31 = OsmAnd::Utilities::boundingBox31FromAreaInMeters(15.0, loc31);
+    [_provider checkInitialized:15 leftX:rect31.left() rightX:rect31.right() bottomY:rect31.bottom() topY:rect31.top()];
+}
+
+- (std::shared_ptr<RouteDataObject>) getLastKnownRouteSegment:(CLLocation *)loc
 {
     CLLocation *last = _lastQueriedLocation;
-    std::shared_ptr<const OsmAnd::Road> r;
+    std::shared_ptr<RouteDataObject> r;
     @synchronized(_roadLocatorSync)
     {
         r = _road;
@@ -159,9 +198,17 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @synchronized(_roadLocatorSync)
         {
-            _road = _roadLocator->findNearestRoad(position31,
-                                                  kMaxRoadDistanceInMeters,
-                                                  OsmAnd::RoutingDataLevel::Detailed);
+            OAApplicationMode *appMode = _settings.applicationMode;
+            if (!_ctx || _am != appMode)
+            {
+                [self initCtx:appMode];
+            }
+            if (_ctx)
+            {
+                [self checkInitialized:loc];
+                auto segment = findRouteSegment(position31.x, position31.y, _ctx.get());
+                _road = segment ? segment->road : nullptr;
+            }
         }
     });
 }
@@ -171,25 +218,6 @@
     @synchronized(_roadLocatorSync)
     {
         _road.reset();
-        _roadLocator->clearCache();
-    }
-}
-
-- (void) clearCacheNotInTiles:(OAMapRendererView *)mapRendererView
-{
-    NSTimeInterval currentTime = CACurrentMediaTime();
-    if (currentTime - _lastUpdateTime > 1)
-    {
-        _lastUpdateTime = currentTime;
-
-        const auto& tiles = mapRendererView.visibleTiles;
-        
-        QSet<OsmAnd::TileId> result;
-        result.reserve(tiles.size());
-        for (int i = 0; i < tiles.size(); ++i)
-            result.insert(tiles.at(i));
-        
-        _roadLocator->clearCacheNotInTiles(result, mapRendererView.zoomLevel, true);
     }
 }
 
@@ -201,12 +229,19 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @synchronized(_roadLocatorSync)
         {
-            const auto road = _roadLocator->findNearestRoad(position31,
-                                                            kMaxRoadDistanceInMeters,
-                                                            OsmAnd::RoutingDataLevel::Detailed);
-            
-            if (matcher && ![matcher isCancelled])
-                [matcher publish:road];
+            OAApplicationMode *appMode = _routingHelper.getAppMode;
+            if (!_ctx || _am != appMode)
+            {
+                [self initCtx:appMode];
+            }
+            if (_ctx)
+            {
+                [self checkInitialized:loc];
+                auto segment = findRouteSegment(position31.x, position31.y, _ctx.get());
+                auto road = segment ? segment->road : nullptr;
+                if (matcher && ![matcher isCancelled])
+                    [matcher publish:road];
+            }
         }
     });
 }

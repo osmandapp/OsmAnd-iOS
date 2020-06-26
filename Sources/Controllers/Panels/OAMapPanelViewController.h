@@ -88,7 +88,7 @@
 - (BOOL) isTopControlsVisible;
 - (void) setTopControlsVisible:(BOOL)visible;
 - (void) setTopControlsVisible:(BOOL)visible customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle;
-- (void) updateOverlayUnderlayView:(BOOL)show;
+- (void) updateOverlayUnderlayView;
 - (BOOL) isOverlayUnderlayViewVisible;
 
 - (OATargetPoint *) getCurrentTargetPoint;

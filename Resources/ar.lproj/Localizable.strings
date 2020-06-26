@@ -451,7 +451,7 @@
 "prch_failed" = "الشراء \"%@\" فشل";
 "prch_items_failed" = "لم تتم استعادة العنصر (العناصر). حاول مرة أخرى.";
 // Resources
-"res_mapsres" = "مصادر الخريطة";
+"res_mapsres" = "إدارة الخرائط";
 "res_installed" = "المثبتة";
 "res_banner_free_maps_title" = "لديك %d خرائط مجانية!";
 "res_banner_free_maps_desc" = "يمكنك تنزيل %d خرائط مجانية ، دون تحديثات";
@@ -1029,7 +1029,7 @@
 "osm_note_reopen" = "أعد فتح";
 "osm_edits_offline_layer" = "تعديلات / ملاحظات OSM (غير متصل)";
 "osm_notes_online_layer" = "ملاحظات OSM (غير متصل)";
-"my_places" = "أماكني";
+"my_places" = "المعالم المفضلة";
 "osm_edits_basic" = "أساسي";
 "osm_edits_advanced" = "متقدم";
 "osm_edits_all" = "جميع التعديلات";
@@ -1140,7 +1140,7 @@
 "map_styles" = "أنماط الخريطة";
 "add_action" = "إضافة إجراء";
 "create_items" = "إنشاء عناصر";
-"configure_map" = "ضبط الخريطة";
+"configure_map" = "إعداد الخريطة";
 "add_map_marker" = "إضافة العلامة";
 "add_gpx_waypoint" = "إضافة الإحداثية GPX";
 "toggle_fav" = "إظهار/إخفاء المفضلة";
@@ -1366,7 +1366,7 @@
 "routeInfo_winter_ice_road_name" = "طرق الشتاء والجليد";
 "rendering_value_white_name" = "أبيض";
 "rendering_value_high_name" = "عالي";
-"rendering_attr_horseRoutes_name" = "طرق خاصة للخيول";
+"rendering_attr_horseRoutes_name" = "مسارات الخيول";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "مسطح";
 "routing_attr_piste_type_downhill_description" = "التزلج على جبال الألب أو الانحدار.";
 "rendering_value_translucent_purple_name" = "بنفسجي فاتح";
@@ -1448,7 +1448,7 @@
 "rendering_value_disabled_name" = "معطل";
 "rendering_attr_surface_mud_name" = "وحل";
 "routing_attr_allow_advanced_name" = "السماح للطرق المتقدمة";
-"rendering_attr_whiteWaterSports_name" = "رياضات المياه البيضاء";
+"rendering_attr_whiteWaterSports_name" = "رياضات الماء المزبد";
 "rendering_attr_highway_class_track_grade5_name" = "الصف 5";
 "rendering_attr_surface_grass_name" = "عشب";
 "rendering_attr_currentTrackColor_description" = "لون جي بي إكس";
@@ -1519,7 +1519,7 @@
 "rendering_attr_surface_sett_name" = "ضبط";
 "routing_attr_allow_intermediate_name" = "السماح بالمسارات المتوسطة";
 "rendering_attr_smoothness_impassable_name" = "غير سالك";
-"rendering_attr_alpineHiking_name" = "نادي جبال الألب السويسرية";
+"rendering_attr_alpineHiking_name" = "مقياس التنزه في جبال الألب (SAC)";
 "routing_attr_driving_style_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
 "rendering_attr_surface_fine_gravel_name" = "حصى دقيق";
 "rendering_attr_contourColorScheme_description" = "لون الخطوط المحيطية";
@@ -1536,7 +1536,7 @@
 "rendering_attr_depthContours_description" = "إظهار نقاط ومعالم العمق.";
 "routeInfo_piste_difficulty_name" = "صعوبة الطريق";
 "rendering_value_medium_name" = "متوسط";
-"rendering_attr_hikingRoutesOSMC_name" = "غطاء رمز التنزه";
+"rendering_attr_hikingRoutesOSMC_name" = "طبقة رمز التسلق";
 "routing_attr_piste_type_nordic_name" = "التزلج عبر البلاد / الشمال";
 "rendering_value_darkyellow_name" = "أصفر غامق";
 "rendering_attr_smoothness_very_horrible_name" = "رهيب جداً";
@@ -1579,7 +1579,7 @@
 "rendering_value_translucent_red_name" = "أحمر فاتح";
 "rendering_attr_surface_asphalt_name" = "إسفلت";
 "rendering_value_purple_name" = "بنفسجي";
-"rendering_attr_showCycleRoutes_name" = "عرض الطرق الدائرية";
+"rendering_attr_showCycleRoutes_name" = "إظهار مسارات الدراجات";
 "rendering_attr_surface_grass_paver_name" = "مرصف العشب";
 "routing_attr_allow_intermediate_description" = "طرق أكثر صعوبة مع أقسام أكثر حدة. بعض العقبات التي ينبغي تجنبها.";
 "rendering_attr_coloredBuildings_name" = "تلوين المباني حسب النوع";
@@ -1588,7 +1588,7 @@
 "rendering_attr_highway_class_footway_name" = "طريق للمشاة";
 "rendering_attr_surface_ground_name" = "الأرض";
 "rendering_attr_contourDensity_description" = "كثافة الخط المحيطي";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "إظهار دوائر مسارات شبكة النقاط";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "إظهار شبكة مسارات الدارجات الهوائية";
 "rendering_attr_showLez_name" = "إظهار مناطق الانبعاثات المنخفضة";
 "routing_attr_avoid_borders_name" = "تخطي الحدود";
 "rendering_value__name" = "الافتراضي";

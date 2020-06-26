@@ -9,6 +9,7 @@
 #import "OAOverlayUnderlayView.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
 
 @implementation OAOverlayUnderlayView
 {
@@ -157,11 +158,14 @@
 
 - (void)applyViewLayout
 {
-    if (_app.data.overlayMapSource && _app.data.underlayMapSource)
+    BOOL shouldOverlaySliderBeVisible = _app.data.overlayMapSource && [OAAppSettings sharedManager].mapSettingShowOverlayOpacitySlider;
+    BOOL shouldUnderlaySliderBeVisible = _app.data.underlayMapSource && [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider;
+    
+    if (shouldOverlaySliderBeVisible && shouldUnderlaySliderBeVisible)
         _viewLayout = OAViewLayoutOverlayUnderlay;
-    else if (_app.data.underlayMapSource)
+    else if (shouldUnderlaySliderBeVisible)
         _viewLayout = OAViewLayoutUnderlayOnly;
-    else if (_app.data.overlayMapSource)
+    else if (shouldOverlaySliderBeVisible)
         _viewLayout = OAViewLayoutOverlayOnly;
     else
         _viewLayout = OAViewLayoutNone;

@@ -11,7 +11,6 @@
 #import "OAAppSettings.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
-#import "OARouteProvider.h"
 
 @interface OAApplicationMode ()
 

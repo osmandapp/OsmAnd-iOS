@@ -87,9 +87,7 @@
 
 - (BOOL) shouldBeVisible
 {
-    BOOL isTransportLayersToggledOn = [OAAppSettings sharedManager].mapSettingShowPublicTransport;
-    BOOL isStopsLayersVisible = [[OAAppSettings sharedManager].transportLayersVisible contain:@"transportStops"];
-    return isTransportLayersToggledOn && isStopsLayersVisible;
+    return [[[OAMapStyleSettings sharedInstance] getParameter:@"transportStops"].value boolValue];
 }
 
 - (void) showStopsOnMap:(OATransportStopRoute *)stopRoute

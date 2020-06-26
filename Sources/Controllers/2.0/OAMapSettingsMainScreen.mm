@@ -682,10 +682,45 @@
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
     {
+        
+        if (_settings.mapSettingShowPublicTransport)
+            [self hideAllTransportLayers];
+        else
+            [self showEnabledTransportLayers];
+        
         [_settings setMapSettingShowPublicTransport:switchView.isOn];
-        [[_app mapSettingsChangeObservable] notifyEvent];
     }
 }
+
+- (void)showEnabledTransportLayers
+{
+    NSMutableArray* storedVisibleParamNames = [_settings.transportLayersVisible get];
+    for (NSString *visibleParamName in storedVisibleParamNames)
+    {
+        OAMapStyleParameter *renderParam = [[OAMapStyleSettings sharedInstance] getParameter:visibleParamName];
+        renderParam.value = @"true";
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[OAMapStyleSettings sharedInstance] saveParameters];
+        [[_app mapSettingsChangeObservable] notifyEvent];
+    });
+}
+
+- (void)hideAllTransportLayers
+{
+    NSArray* renderParams = [[OAMapStyleSettings sharedInstance] getParameters:@"transport"];
+    for (OAMapStyleParameter *renderParam in renderParams)
+    {
+        renderParam.value = @"false";
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[OAMapStyleSettings sharedInstance] saveParameters];
+        [[_app mapSettingsChangeObservable] notifyEvent];
+    });
+}
+
 
 #pragma mark - UITableViewDelegate
 

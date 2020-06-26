@@ -147,10 +147,14 @@
         if (cell)
         {
             [cell.textView setText:p.title];
-            [cell.switchView setOn:[p.value isEqualToString:@"true"]];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             cell.switchView.tag = indexPath.row;
+            
+            if ([categoryName isEqual:@"transport"])
+                [cell.switchView setOn:[self getVisibilityForStyleParameter:p.name]];
+            else
+                [cell.switchView setOn:[p.value isEqualToString:@"true"]];
         }
         
         return cell;
@@ -189,17 +193,44 @@
 
 - (void) mapSettingSwitchChanged:(id)sender
 {
-     UISwitch *switchView = (UISwitch*)sender;
-     if (switchView) {
-         OAMapStyleParameter *p = parameters[switchView.tag];
-         if (p) {
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 p.value = switchView.isOn ? @"true" : @"false";
-                 [styleSettings save:p];
-             });
-         }
-     }
+    UISwitch *switchView = (UISwitch*)sender;
+    if (!switchView)
+        return;
+    
+    OAMapStyleParameter *p = parameters[switchView.tag];
+    if (!p)
+        return;
+    
+    if ([categoryName isEqual:@"transport"])
+        [self updateWithProfileSettingsStyleParameter:p visibiliry:switchView.isOn];
+    else
+        [self updateDirectlyStyleParameter:p visibiliry:switchView.isOn];
 }
 
+
+- (void) updateDirectlyStyleParameter:(OAMapStyleParameter *)parameter visibiliry:(BOOL)isVisible
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        parameter.value = isVisible ? @"true" : @"false";
+        [styleSettings save:parameter];
+        [[_app mapSettingsChangeObservable] notifyEvent];
+    });
+}
+
+- (void) updateWithProfileSettingsStyleParameter:(OAMapStyleParameter *)parameter visibiliry:(BOOL)isVisible
+{
+    if (isVisible)
+        [_settings.transportLayersVisible addUnic:parameter.name];
+    else
+        [_settings.transportLayersVisible remove:parameter.name];
+    
+    if (_settings.mapSettingShowPublicTransport)
+        [self updateDirectlyStyleParameter:parameter visibiliry:isVisible];
+}
+
+- (BOOL) getVisibilityForStyleParameter:(NSString*)parameterName
+{
+    return [_settings.transportLayersVisible contain:parameterName];
+}
 
 @end

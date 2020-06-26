@@ -39,20 +39,25 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    if ([self isTurningOnWithAllTransportLayersHidden])
+    if ([self isAllTransportLayersHidden])
+    {
         [self showDashboardMenu];
+        [_settings setMapSettingShowPublicTransport:YES];
+        return;
+    }
 
     if (_settings.mapSettingShowPublicTransport)
         [self hideAllTransportLayers];
     else
         [self showEnabledTransportLayers];
-    
+
     [_settings setMapSettingShowPublicTransport:!_settings.mapSettingShowPublicTransport];
 }
 
-- (BOOL) isTurningOnWithAllTransportLayersHidden
+
+- (BOOL) isAllTransportLayersHidden
 {
-    return !_settings.mapSettingShowPublicTransport && ![_settings.transportLayersVisible get];
+    return [_settings.transportLayersVisible get].count == 0;
 }
 
 - (void)showDashboardMenu
@@ -93,7 +98,7 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return _settings.mapSettingShowPublicTransport;
+    return _settings.mapSettingShowPublicTransport && [_settings.transportLayersVisible get].count != 0;
 }
 
 - (NSString *)getActionStateName

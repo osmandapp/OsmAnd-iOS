@@ -67,9 +67,9 @@
         }];
     
     
-    NSArray* params = [_styleSettings getParameters:@"transport"];
+    NSArray* allTransportStyleParams = [_styleSettings getParameters:@"transport"];
     
-    for (OAMapStyleParameter *param in params)
+    for (OAMapStyleParameter *param in allTransportStyleParams)
     {
         if (!param)
             continue;
@@ -93,21 +93,31 @@
     }
  
     _data = [NSArray arrayWithArray:arr];
-}
-
--(void) doneButtonPressed
-{
-    [vwController dismiss];
+    
+    [vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
 }
 
 - (BOOL) cancelButtonPressed
 {
-    [_settings.transportLayersVisible resetToDefault];
     return YES;
 }
 
 - (void) initData
 {
+}
+
+
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _data.count;
 }
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
@@ -130,17 +140,14 @@
     }
 }
 
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 1;
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
-    return _data.count;
+    return _data[indexPath.row];
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -211,27 +218,39 @@
         [cell setNeedsUpdateConstraints];
 }
 
+
 - (void) onSwitchClick:(id)sender
 {
     UISwitch *sw = (UISwitch *)sender;
     int position = (int)sw.tag;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:position inSection:0];
-    NSDictionary * item = [self getItem:indexPath];
+    NSString *name = [self getItem:indexPath][@"name"];
     
-    if (sw.on)
-        [_settings.transportLayersVisible addUnic:item[@"name"]];
+    [self setVisibility:sw.on forStyleParameter:name];
+}
+
+- (BOOL) getVisibilityForStyleParameter:(NSString*)parameterName
+{
+    return [_settings.transportLayersVisible contain:parameterName];
+}
+
+- (void) setVisibility:(BOOL)isVisible forStyleParameter:(NSString*)parameterName
+{
+    if (isVisible)
+        [_settings.transportLayersVisible addUnic:parameterName];
     else
-        [_settings.transportLayersVisible remove:item[@"name"]];
-}
-
-- (NSDictionary *) getItem:(NSIndexPath *)indexPath
-{
-    return _data[indexPath.row];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
+        [_settings.transportLayersVisible remove:parameterName];
+    
+    
+    if (_settings.mapSettingShowPublicTransport)
+    {
+        OAMapStyleParameter *renderParam = [_styleSettings getParameter:parameterName];
+        renderParam.value = isVisible ? @"true" : @"false";
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_styleSettings save:renderParam];
+            [[_app mapSettingsChangeObservable] notifyEvent];
+        });
+    }
 }
 
 
@@ -281,11 +300,10 @@
     
     [super setupView];
 }
-- (void)applyLocalization
-{
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"edit_action") forState:UIControlStateNormal];
-}
+//- (void)applyLocalization
+//{
+//    [self.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
+//}
 
 @end
 

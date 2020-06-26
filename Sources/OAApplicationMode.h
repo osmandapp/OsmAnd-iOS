@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OARouteProvider.h"
 #import "OANavigationIcon.h"
 #import "OALocationIcon.h"
 
@@ -68,8 +67,8 @@
 - (NSString *) getUserProfileName;
 - (void) setUserProfileName:(NSString *)userProfileName;
 - (void) setRoutingProfile:(NSString *) routingProfile;
-- (EOARouteService) getRouterService;
-- (void) setRouterService:(EOARouteService) routerService;
+- (NSInteger) getRouterService;
+- (void) setRouterService:(NSInteger) routerService;
 - (EOANavigationIcon) getNavigationIcon;
 - (void) setNavigationIcon:(EOANavigationIcon) navIcon;
 - (EOALocationIcon) getLocationIcon;

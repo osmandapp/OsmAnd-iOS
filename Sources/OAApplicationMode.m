@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
+#import "OARouteProvider.h"
 
 @interface OAApplicationMode ()
 
@@ -344,12 +345,12 @@ static OAApplicationMode *_SKI;
         [OAAppSettings.sharedManager.routingProfile set:routingProfile mode:self];
 }
 
-- (EOARouteService) getRouterService
+- (NSInteger) getRouterService
 {
     return [OAAppSettings.sharedManager.routerService get:self];
 }
 
-- (void) setRouterService:(EOARouteService) routerService
+- (void) setRouterService:(NSInteger) routerService
 {
     [OAAppSettings.sharedManager.routerService set:(int) routerService mode:self];
 }

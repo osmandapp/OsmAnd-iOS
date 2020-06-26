@@ -39,6 +39,7 @@
 #import "OAButtonCell.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <binaryRead.h>
 
 @interface OARouteAvoidSettingsViewController ()
 
@@ -127,33 +128,38 @@
         [self.delegate onSettingChanged];
 }
 
-+ (NSString *) getText:(const std::shared_ptr<const OsmAnd::Road>)road
++ (NSString *) getText:(const std::shared_ptr<RouteDataObject>)road
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     NSString *lang = [settings settingPrefMapLanguage];
     if (!lang)
         lang = [OAUtilities currentLang];
     
-    auto locale = QString::fromNSString(lang);
-    BOOL transliterate = settings.settingMapLanguageTranslit;
-    
-    QString qStreetName = road->getName(locale, transliterate);
-    QString qRefName = road->getRef(locale, transliterate);
-    QString qDestinationName = road->getDestinationName(locale, transliterate, true);
+    string locale = lang.UTF8String;
+    bool transliterate = settings.settingMapLanguageTranslit;
+    bool direction = true;
+    CLLocation *lastKnownLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+    if (lastKnownLocation)
+        direction = road->bearingVsRouteDirection(lastKnownLocation.course);
 
-    NSString *streetName = qStreetName.isNull() ? nil : qStreetName.toNSString();
-    NSString *refName = qRefName.isNull() ? nil : qRefName.toNSString();
-    NSString *destinationName = qDestinationName.isNull() ? nil : qDestinationName.toNSString();
+    string rStreetName = road->getName(locale, transliterate);
+    string rRefName = road->getRef(locale, transliterate, direction);
+    string rDestinationName = road->getDestinationName(locale, transliterate, true);
+    
+    NSString *streetName = [NSString stringWithUTF8String:rStreetName.c_str()];
+    NSString *refName = [NSString stringWithUTF8String:rRefName.c_str()];
+    NSString *destinationName = [NSString stringWithUTF8String:rDestinationName.c_str()];
+    
     NSString *towards = OALocalizedString(@"towards");
 
     NSString *name = [OARoutingHelper formatStreetName:streetName ref:refName destination:destinationName towards:towards];
     return !name || name.length == 0 ? OALocalizedString(@"shared_string_road") : name;
 }
 
-+ (NSString *) getDescr:(const std::shared_ptr<const OsmAnd::Road>)road
++ (NSString *) getDescr:(const std::shared_ptr<RouteDataObject>)road
 {
     CLLocation *mapLocation = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-    const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(road->points31[0]);
+    const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(road->pointsX[0], road->pointsY[0]));
     float dist = [mapLocation distanceFromLocation:[[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude]];
     return [[OsmAndApp instance] getFormattedDistance:dist];
 }

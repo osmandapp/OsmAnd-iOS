@@ -26,7 +26,7 @@
 #import "OAWaypointUIHelper.h"
 #import "OAPointDescription.h"
 #import "OALocationPointWrapper.h"
-
+#include <binaryRead.h>
 @interface OATopTextView ()
 
 @property (weak, nonatomic) IBOutlet UIView *turnView;
@@ -460,22 +460,22 @@
     else if ([_trackingUtilities isMapLinkedToLocation] && [_settings.showStreetName get])
     {
         CLLocation *lastKnownLocation = _locationProvider.lastKnownLocation;
-        std::shared_ptr<const OsmAnd::Road> road = nullptr;
+        std::shared_ptr<RouteDataObject> road = nullptr;
         if (lastKnownLocation)
         {
             road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
             if (road)
             {
-                QString lang = QString::fromNSString([_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage] : @"");
+                string lang = [_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage].UTF8String : "";
                 bool transliterate = [_settings settingMapLanguageTranslit];
 
-                QString qStreetName = road->getName(lang, transliterate);
-                QString qRefName = road->getRef(lang, transliterate);
-                QString qDestinationName = road->getDestinationName(lang, transliterate, true);
+                string rStreetName = road->getName(lang, transliterate);
+                string rRefName = road->getRef(lang, transliterate, road->bearingVsRouteDirection(lastKnownLocation.course));
+                string rDestinationName = road->getDestinationName(lang, transliterate, true);
                 
-                NSString *streetName = qStreetName.isNull() ? nil : qStreetName.toNSString();
-                NSString *refName = qRefName.isNull() ? nil : qRefName.toNSString();
-                NSString *destinationName = qDestinationName.isNull() ? nil : qDestinationName.toNSString();
+                NSString *streetName = [NSString stringWithUTF8String:rStreetName.c_str()];
+                NSString *refName = [NSString stringWithUTF8String:rRefName.c_str()];
+                NSString *destinationName = [NSString stringWithUTF8String:rDestinationName.c_str()];
 
                 text = [OARoutingHelper formatStreetName:streetName ref:refName destination:destinationName towards:@"»"];
             }

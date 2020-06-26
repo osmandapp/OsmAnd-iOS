@@ -13,6 +13,7 @@
 #import "OADownloadInfoTableViewCell.h"
 #import "OAResourcesUIHelper.h"
 #import "OASQLiteTileSource.h"
+#import "OAMapTileDownloader.h"
 
 #include "Localization.h"
 #include "OASizes.h"
@@ -23,7 +24,7 @@
 #define kDownloadProgressCell @"OADownloadProgressBarCell"
 #define kGeneralInfoCell @"time_cell"
 
-@interface OADownloadMapProgressViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface OADownloadMapProgressViewController() <UITableViewDelegate, UITableViewDataSource, OATileDownloadDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UIButton *navBarCancelButton;
@@ -161,95 +162,64 @@
         downloadPath = [OsmAndApp.instance.cachePath stringByAppendingPathComponent:onlineSource->name.toNSString()];
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        __block NSInteger requests = 0;
-        NSInteger reqLimit = 50;
-        NSFileManager *fileManager = NSFileManager.defaultManager;
-        for (const auto zoomLevel : _tileIds.keys())
+    OAMapTileDownloader *downloader = OAMapTileDownloader.sharedInstance;
+    downloader.delegate = self;
+    
+    
+    for (const auto zoomLevel : _tileIds.keys())
+    {
+        for (const auto& tileId : _tileIds.value(zoomLevel))
         {
-            for (const auto& tileId : _tileIds.value(zoomLevel))
+            if (_cancelled)
+                break;
+            
+            if (isSqlite && sqliteSource)
             {
-                if (_cancelled)
-                    break;
-                
-                if (isSqlite && sqliteSource)
+                if ([sqliteSource getBytes:tileId.x y:tileId.y zoom:zoomLevel])
                 {
-                    if ([sqliteSource getBytes:tileId.x y:tileId.y zoom:zoomLevel])
+                    [self skipCurrentTile];
+                }
+                else
+                {
+                    NSString *url = [sqliteSource getUrlToLoad:tileId.x y:tileId.y zoom:zoomLevel];
+                    if (url)
                     {
-                        [self skipCurrentTile];
+                        [downloader downloadTile:[NSURL URLWithString:url] x:tileId.x y:tileId.y zoom:(int) zoomLevel tileSource:sqliteSource];
+                        if (_cancelled)
+                            break;
                     }
                     else
                     {
-                        NSString *url = [sqliteSource getUrlToLoad:tileId.x y:tileId.y zoom:zoomLevel];
-                        if (url)
-                        {
-                            requests++;
-                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
-                                if (data)
-                                {
-                                    [sqliteSource insertImage:tileId.x y:tileId.y zoom:zoomLevel data:data];
-                                }
-                                requests--;
-                                _downloadedNumberOfTiles++;
-                                [self updateProgress];
-                            });
-                            if (_cancelled)
-                                break;
-                        }
-                        else
-                        {
-                            [self skipCurrentTile];
-                        }
+                        [self skipCurrentTile];
                     }
                 }
-                else if (!isSqlite && onlineSource != nullptr && downloadPath)
+            }
+            else if (!isSqlite && onlineSource != nullptr && downloadPath)
+            {
+                NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @(zoomLevel).stringValue, @(tileId.x).stringValue, @(tileId.y).stringValue];
+                if ([NSFileManager.defaultManager fileExistsAtPath:tilePath])
                 {
-                    NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @(zoomLevel).stringValue, @(tileId.x).stringValue, @(tileId.y).stringValue];
-                    if ([fileManager fileExistsAtPath:tilePath])
+                    [self skipCurrentTile];
+                }
+                else
+                {
+                    NSString *urlToLoad = onlineSource->urlToLoad.toNSString();
+                    QList<QString> randomsArray;
+                    NSString *url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, zoomLevel).toNSString();
+                    if (url)
                     {
-                        [self skipCurrentTile];
+                        [downloader downloadTile:[NSURL URLWithString:url] toPath:tilePath];
+                        if (_cancelled)
+                            break;
                     }
                     else
                     {
-                        NSString *urlToLoad = onlineSource->urlToLoad.toNSString();
-                        QList<QString> randomsArray;
-                        NSString *url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, zoomLevel).toNSString();
-                        if (url)
-                        {
-                            requests++;
-                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
-                                if (data)
-                                {
-                                    NSString *dir = [tilePath stringByDeletingLastPathComponent];
-                                    if (![fileManager fileExistsAtPath:dir isDirectory:nil])
-                                        [fileManager createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
-                                    [data writeToFile:tilePath atomically:YES];
-                                }
-                                requests--;
-                                _downloadedNumberOfTiles++;
-                                [self updateProgress];
-                            });
-                            if (_cancelled)
-                                break;
-                        }
-                        else
-                        {
-                            [self skipCurrentTile];
-                        }
-                    }
-                }
-                if (requests >= reqLimit)
-                {
-                    while (requests != 0)
-                    {
-                        [NSThread sleepForTimeInterval:0.5];
+                        [self skipCurrentTile];
                     }
                 }
             }
         }
-    });
+    }
 }
 
 - (void) updateProgress
@@ -376,6 +346,14 @@
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
+}
+
+#pragma mark - OATileDownloadDelegate
+
+- (void) onTileDownloaded
+{
+    _downloadedNumberOfTiles++;
+    [self updateProgress];
 }
 
 @end

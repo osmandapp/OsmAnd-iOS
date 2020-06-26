@@ -11,6 +11,7 @@
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OAPublicTransportStyleSettingsHelper.h"
 
 @implementation OAMapSettingsCategoryScreen
 {
@@ -18,6 +19,7 @@
     OAAppSettings *_settings;
 
     OAMapStyleSettings *styleSettings;
+    OAPublicTransportStyleSettingsHelper* _transportSettings;
     NSArray *parameters;
     NSArray* data;
 }
@@ -33,6 +35,7 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
+        _transportSettings = [OAPublicTransportStyleSettingsHelper sharedInstance];
         
         categoryName = param;
 
@@ -152,7 +155,7 @@
             cell.switchView.tag = indexPath.row;
             
             if ([categoryName isEqual:@"transport"])
-                [cell.switchView setOn:[self getVisibilityForStyleParameter:p.name]];
+                [cell.switchView setOn:[_transportSettings getVisibilityForStyleParameter:p.name]];
             else
                 [cell.switchView setOn:[p.value isEqualToString:@"true"]];
         }
@@ -202,35 +205,17 @@
         return;
     
     if ([categoryName isEqual:@"transport"])
-        [self updateWithProfileSettingsStyleParameter:p visibiliry:switchView.isOn];
+    {
+        [_transportSettings setVisibility:switchView.isOn forStyleParameter:p.name];
+    }
     else
-        [self updateDirectlyStyleParameter:p visibiliry:switchView.isOn];
-}
-
-
-- (void) updateDirectlyStyleParameter:(OAMapStyleParameter *)parameter visibiliry:(BOOL)isVisible
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        parameter.value = isVisible ? @"true" : @"false";
-        [styleSettings save:parameter];
-        [[_app mapSettingsChangeObservable] notifyEvent];
-    });
-}
-
-- (void) updateWithProfileSettingsStyleParameter:(OAMapStyleParameter *)parameter visibiliry:(BOOL)isVisible
-{
-    if (isVisible)
-        [_settings.transportLayersVisible addUnic:parameter.name];
-    else
-        [_settings.transportLayersVisible remove:parameter.name];
-    
-    if (_settings.mapSettingShowPublicTransport)
-        [self updateDirectlyStyleParameter:parameter visibiliry:isVisible];
-}
-
-- (BOOL) getVisibilityForStyleParameter:(NSString*)parameterName
-{
-    return [_settings.transportLayersVisible contain:parameterName];
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            p.value = switchView.isOn ? @"true" : @"false";
+            [styleSettings save:p];
+            //[[_app mapSettingsChangeObservable] notifyEvent];
+        });
+    }
 }
 
 @end

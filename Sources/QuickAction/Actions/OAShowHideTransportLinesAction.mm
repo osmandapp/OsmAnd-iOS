@@ -8,56 +8,36 @@
 
 #import <Foundation/Foundation.h>
 #import "OAShowHideTransportLinesAction.h"
-#import "OAQuickActionType.h"
-#import "OAMapSettingsViewController.h"
-#import "OAMapStyleSettings.h"
-#import "OAAppSettings.h"
-#import "OARootViewController.h"
-#import "OsmAndApp.h"
-#import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAPublicTransportOptionsBottomSheet.h"
+#import "OAPublicTransportStyleSettingsHelper.h"
+#import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OAQuickActionType.h"
 
 #define KEY_DIALOG @"dialog"
-
 
 static OAQuickActionType *TYPE;
 
 @implementation OAShowHideTransportLinesAction
 {
-    OsmAndAppInstance _app;
-    OAAppSettings* _settings;
-    OAMapStyleSettings* _styleSettings;
+    OAPublicTransportStyleSettingsHelper* _transportSettings;
 }
 
 - (instancetype)init
 {
-    _app = [OsmAndApp instance];
-    _settings = [OAAppSettings sharedManager];
-    _styleSettings = [OAMapStyleSettings sharedInstance];
+    _transportSettings = [OAPublicTransportStyleSettingsHelper sharedInstance];
     return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
 {
-    if ([self isAllTransportLayersHidden])
+    if ([_transportSettings isAllTransportStylesHidden])
     {
         [self showDashboardMenu];
-        [_settings setMapSettingShowPublicTransport:YES];
+        [_transportSettings setVisibilityForTransportLayer:YES];
         return;
     }
 
-    if (_settings.mapSettingShowPublicTransport)
-        [self hideAllTransportLayers];
-    else
-        [self showEnabledTransportLayers];
-
-    [_settings setMapSettingShowPublicTransport:!_settings.mapSettingShowPublicTransport];
-}
-
-
-- (BOOL) isAllTransportLayersHidden
-{
-    return [_settings.transportLayersVisible get].count == 0;
+    [_transportSettings toggleVisibilityForTransportLayer];
 }
 
 - (void)showDashboardMenu
@@ -66,39 +46,9 @@ static OAQuickActionType *TYPE;
     [bottomSheet show];
 }
 
-- (void)showEnabledTransportLayers
-{
-    NSMutableArray* storedVisibleParamNames = [_settings.transportLayersVisible get];
-    for (NSString *visibleParamName in storedVisibleParamNames)
-    {
-        OAMapStyleParameter *renderParam = [_styleSettings getParameter:visibleParamName];
-        renderParam.value = @"true";
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_styleSettings saveParameters];
-        [[_app mapSettingsChangeObservable] notifyEvent];
-    });
-}
-
-- (void)hideAllTransportLayers
-{
-    NSArray* renderParams = [_styleSettings getParameters:@"transport"];
-    for (OAMapStyleParameter *renderParam in renderParams)
-    {
-        renderParam.value = @"false";
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_styleSettings saveParameters];
-        [[_app mapSettingsChangeObservable] notifyEvent];
-    });
-}
-
-
 - (BOOL)isActionWithSlash
 {
-    return _settings.mapSettingShowPublicTransport && [_settings.transportLayersVisible get].count != 0;
+    return [_transportSettings getVisibilityForTransportLayer] && ![_transportSettings isAllTransportStylesHidden];
 }
 
 - (NSString *)getActionStateName

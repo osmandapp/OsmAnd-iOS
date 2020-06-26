@@ -15,7 +15,6 @@
 #import "OATransportStop.h"
 #import "OAMapStyleSettings.h"
 #import "OATransportStopRoute.h"
-#import "OAAppSettings.h"
 
 #include "OACoreResourcesTransportRouteIconProvider.h"
 
@@ -72,7 +71,11 @@
 
 - (BOOL) updateLayer
 {
-    if ([self shouldBeVisible])
+    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+    OAMapStyleParameter *param = [styleSettings getParameter:@"transportStops"];
+    _showStopsOnMap = [param.value boolValue];
+
+    if (_showStopsOnMap)
     {
         [self doShowStopsOnMap];
     }
@@ -83,11 +86,6 @@
     }
     
     return YES;
-}
-
-- (BOOL) shouldBeVisible
-{
-    return [[[OAMapStyleSettings sharedInstance] getParameter:@"transportStops"].value boolValue];
 }
 
 - (void) showStopsOnMap:(OATransportStopRoute *)stopRoute

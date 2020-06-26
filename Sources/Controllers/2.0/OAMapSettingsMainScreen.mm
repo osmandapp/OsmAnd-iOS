@@ -25,6 +25,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "Reachability.h"
+#import "OAPublicTransportStyleSettingsHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -46,6 +47,7 @@
     OAIAPHelper *_iapHelper;
     
     OAMapStyleSettings *styleSettings;
+    OAPublicTransportStyleSettingsHelper* _transportSettings;
     NSArray *_filteredTopLevelParams;
     
     OAAppModeCell *appModeCell;
@@ -70,6 +72,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
+        _transportSettings = [OAPublicTransportStyleSettingsHelper sharedInstance];
         
         title = OALocalizedString(@"map_settings_map");
 
@@ -524,7 +527,7 @@
             }
             if ([data[@"key"] isEqualToString:@"transport_layer"])
             {
-                [cell.switchView setOn:_settings.mapSettingShowPublicTransport];
+                [cell.switchView setOn: [_transportSettings getVisibilityForTransportLayer]];
                 [cell.switchView addTarget:self action:@selector(transportChanged:) forControlEvents:UIControlEventValueChanged];
             }
             cell.textView.text = data[@"name"];
@@ -681,44 +684,7 @@
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-    {
-        
-        if (_settings.mapSettingShowPublicTransport)
-            [self hideAllTransportLayers];
-        else
-            [self showEnabledTransportLayers];
-        
-        [_settings setMapSettingShowPublicTransport:switchView.isOn];
-    }
-}
-
-- (void)showEnabledTransportLayers
-{
-    NSMutableArray* storedVisibleParamNames = [_settings.transportLayersVisible get];
-    for (NSString *visibleParamName in storedVisibleParamNames)
-    {
-        OAMapStyleParameter *renderParam = [[OAMapStyleSettings sharedInstance] getParameter:visibleParamName];
-        renderParam.value = @"true";
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[OAMapStyleSettings sharedInstance] saveParameters];
-        [[_app mapSettingsChangeObservable] notifyEvent];
-    });
-}
-
-- (void)hideAllTransportLayers
-{
-    NSArray* renderParams = [[OAMapStyleSettings sharedInstance] getParameters:@"transport"];
-    for (OAMapStyleParameter *renderParam in renderParams)
-    {
-        renderParam.value = @"false";
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[OAMapStyleSettings sharedInstance] saveParameters];
-        [[_app mapSettingsChangeObservable] notifyEvent];
-    });
+        [_transportSettings setVisibilityForTransportLayer:switchView.isOn];
 }
 
 

@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "OAPublicTransportOptionsBottomSheet.h"
+#import "OAPublicTransportStyleSettingsHelper.h"
 #import "OABottomSheetHeaderIconCell.h"
 #import "OASettingSwitchCell.h"
 #import "OAMapStyleSettings.h"
-#import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -23,9 +23,7 @@
 
 @implementation OAPublicTransportOptionsBottomSheetScreen
 {
-    OsmAndAppInstance _app;
-    OAAppSettings* _settings;
-    OAMapStyleSettings* _styleSettings;
+    OAPublicTransportStyleSettingsHelper* _transportSettings;
     OAPublicTransportOptionsBottomSheetViewController *vwController;
     NSArray* _data;
 }
@@ -44,10 +42,7 @@
 
 - (void) initOnConstruct:(UITableView *)tableView viewController:(OAPublicTransportOptionsBottomSheetViewController *)viewController
 {
-    _app = [OsmAndApp instance];
-    _settings = [OAAppSettings sharedManager];
-    _styleSettings = [OAMapStyleSettings sharedInstance];
-    
+    _transportSettings = [OAPublicTransportStyleSettingsHelper sharedInstance];
     vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -67,22 +62,14 @@
         }];
     
     
-    NSArray* allTransportStyleParams = [_styleSettings getParameters:@"transport"];
+    NSArray* params = [_transportSettings getAllTransportStyleParameters];
     
-    for (OAMapStyleParameter *param in allTransportStyleParams)
+    for (OAMapStyleParameter *param in params)
     {
         if (!param)
             continue;
         
-        NSString* imageName = @"";
-        if ([param.name isEqualToString:@"tramTrainRoutes"])
-            imageName = @"ic_custom_transport_tram";
-        else if ([param.name isEqualToString:@"subwayMode"])
-            imageName = @"ic_custom_transport_subway";
-        else if ([param.name isEqualToString:@"transportStops"])
-            imageName = @"ic_custom_transport_stop";
-        else if ([param.name isEqualToString:@"publicTransportMode"])
-            imageName = @"ic_custom_transport_stop";
+        NSString* imageName = [_transportSettings getIconNameForStyle:param.name];
         
         [arr addObject:@{
             @"type" : @"OASettingSwitchCell",
@@ -105,7 +92,6 @@
 - (void) initData
 {
 }
-
 
 
 #pragma mark - UITableViewDataSource
@@ -188,9 +174,9 @@
             [self updateSettingSwitchCell:cell data:item];
             
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            cell.switchView.on = [_settings.transportLayersVisible contain:item[@"name"]];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
+            cell.switchView.on = [_transportSettings getVisibilityForStyleParameter:item[@"name"]];
         }
         return cell;
     }
@@ -226,31 +212,7 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:position inSection:0];
     NSString *name = [self getItem:indexPath][@"name"];
     
-    [self setVisibility:sw.on forStyleParameter:name];
-}
-
-- (BOOL) getVisibilityForStyleParameter:(NSString*)parameterName
-{
-    return [_settings.transportLayersVisible contain:parameterName];
-}
-
-- (void) setVisibility:(BOOL)isVisible forStyleParameter:(NSString*)parameterName
-{
-    if (isVisible)
-        [_settings.transportLayersVisible addUnic:parameterName];
-    else
-        [_settings.transportLayersVisible remove:parameterName];
-    
-    
-    if (_settings.mapSettingShowPublicTransport)
-    {
-        OAMapStyleParameter *renderParam = [_styleSettings getParameter:parameterName];
-        renderParam.value = isVisible ? @"true" : @"false";
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_styleSettings save:renderParam];
-            [[_app mapSettingsChangeObservable] notifyEvent];
-        });
-    }
+    [_transportSettings setVisibility:sw.on forStyleParameter:name];
 }
 
 
@@ -286,7 +248,6 @@
 
 
 
-
 @interface OAPublicTransportOptionsBottomSheetViewController ()
 
 @end
@@ -300,10 +261,6 @@
     
     [super setupView];
 }
-//- (void)applyLocalization
-//{
-//    [self.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
-//}
 
 @end
 

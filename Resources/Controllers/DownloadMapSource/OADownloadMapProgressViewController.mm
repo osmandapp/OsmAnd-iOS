@@ -20,6 +20,7 @@
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
 
 #define kDownloadProgressCell @"OADownloadProgressBarCell"
 #define kGeneralInfoCell @"time_cell"
@@ -48,7 +49,6 @@
     CALayer *_horizontalLine;
     NSInteger _downloadedNumberOfTiles;
     BOOL _downloaded;
-    BOOL _cancelled;
 }
 
 - (void) applyLocalization
@@ -128,7 +128,7 @@
 
 - (void) cancelDownload
 {
-    _cancelled = YES;
+    [OAMapTileDownloader.sharedInstance cancellAllRequests];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -170,9 +170,6 @@
     {
         for (const auto& tileId : _tileIds.value(zoomLevel))
         {
-            if (_cancelled)
-                break;
-            
             if (isSqlite && sqliteSource)
             {
                 if ([sqliteSource getBytes:tileId.x y:tileId.y zoom:zoomLevel])
@@ -184,9 +181,14 @@
                     NSString *url = [sqliteSource getUrlToLoad:tileId.x y:tileId.y zoom:zoomLevel];
                     if (url)
                     {
-                        [downloader downloadTile:[NSURL URLWithString:url] x:tileId.x y:tileId.y zoom:(int) zoomLevel tileSource:sqliteSource];
-                        if (_cancelled)
-                            break;
+                        OATileDownloadRequest *req = [[OATileDownloadRequest alloc] init];
+                        req.type = EOATileRequestTypeSqlite;
+                        req.url = [NSURL URLWithString:url];
+                        req.x = tileId.x;
+                        req.y = tileId.y;
+                        req.zoom = (int) zoomLevel;
+                        req.tileSource = sqliteSource;
+                        [downloader enqueTileDownload:req];
                     }
                     else
                     {
@@ -204,13 +206,16 @@
                 else
                 {
                     NSString *urlToLoad = onlineSource->urlToLoad.toNSString();
-                    QList<QString> randomsArray;
+                    QList<QString> randomsArray = OsmAnd::OnlineTileSources::parseRandoms(onlineSource->randoms);
                     NSString *url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, zoomLevel).toNSString();
                     if (url)
                     {
-                        [downloader downloadTile:[NSURL URLWithString:url] toPath:tilePath];
-                        if (_cancelled)
-                            break;
+                        OATileDownloadRequest *req = [[OATileDownloadRequest alloc] init];
+                        req.type = EOATileRequestTypeFile;
+                        req.url = [NSURL URLWithString:url];
+                        req.destPath = tilePath;
+                        
+                        [downloader enqueTileDownload:req];
                     }
                     else
                     {

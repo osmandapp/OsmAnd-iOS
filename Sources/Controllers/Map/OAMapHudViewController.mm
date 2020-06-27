@@ -343,7 +343,10 @@
 
 - (void) updateOverlayUnderlayView
 {
-    if (_app.data.shouldOverlaySliderBeVisible || _app.data.shouldUnderlaySliderBeVisible)
+    BOOL shouldOverlaySliderBeVisible = _app.data.overlayMapSource && [OAAppSettings sharedManager].mapSettingShowOverlayOpacitySlider;
+    BOOL shouldUnderlaySliderBeVisible = _app.data.underlayMapSource && [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider;
+    
+    if (shouldOverlaySliderBeVisible || shouldUnderlaySliderBeVisible)
     {
         if (!_overlayUnderlayView)
         {

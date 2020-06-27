@@ -295,16 +295,6 @@
     }
 }
 
-- (BOOL) shouldOverlaySliderBeVisible
-{
-    return _overlayMapSource && [OAAppSettings sharedManager].mapSettingShowOverlayOpacitySlider;
-}
-
-- (BOOL) shouldUnderlaySliderBeVisible
-{
-    return _underlayMapSource && [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider;
-}
-
 @synthesize hillshadeMinZoom = _hillshadeMinZoom;
 
 - (NSInteger) hillshadeMinZoom

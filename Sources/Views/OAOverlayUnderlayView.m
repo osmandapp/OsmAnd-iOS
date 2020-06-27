@@ -181,6 +181,8 @@
 
 - (IBAction)btnExitPressed:(id)sender
 {
+    [OAAppSettings sharedManager].mapSettingShowOverlayOpacitySlider = NO;
+    [OAAppSettings sharedManager].mapSettingShowUnderlayOpacitySlider = NO;
     [self removeFromSuperview];
 }
 

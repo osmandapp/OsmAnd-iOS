@@ -285,7 +285,7 @@
 "shared_string_done" = "Done";
 "shared_string_update" = "Update";
 "shared_string_install" = "Installeer";
-"shared_string_uninstall" = "Uninstall";
+"shared_string_uninstall" = "Verwijder";
 "shared_string_delete" = "Verwijder";
 "shared_string_remove" = "Verwijder";
 "shared_string_dismiss" = "Sluiten";

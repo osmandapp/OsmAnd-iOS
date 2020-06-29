@@ -11,6 +11,7 @@
 #import "OALog.h"
 #import "Localization.h"
 #import "OAMapCreatorHelper.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -59,6 +60,9 @@
 @end
 
 @implementation OAMapStyleSettings
+{
+    OAAppSettings* _settings;
+}
 
 + (OAMapStyleSettings*) sharedInstance
 {
@@ -85,6 +89,7 @@
     if (self)
     {
         _syncObj = [[NSObject alloc] init];
+        _settings = [OAAppSettings sharedManager];
         [self buildParameters];
         [self loadParameters];
     }
@@ -97,6 +102,7 @@
     if (self)
     {
         _syncObj = [[NSObject alloc] init];
+        _settings = [OAAppSettings sharedManager];
         self.mapStyleName = mapStyleName;
         self.mapPresetName = mapPresetName;
         [self buildParameters:mapStyleName];
@@ -282,15 +288,50 @@
 -(void) loadParameters
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
+
     for (OAMapStyleParameter *p in self.parameters) {
         NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
+    
         if ([defaults objectForKey:name]) {
-            p.value = [defaults valueForKey:name];
+            
+            if ([self isPublicTransportLayerParameter:p])
+            {
+                p.value = [self getVisibilityForTransportParameter:p];
+            }
+            else
+            {
+                p.value = [defaults valueForKey:name];
+            }
+            
         } else {
             p.value = @"";
         }
+        
     }
+}
+
+
+- (BOOL) isPublicTransportLayerParameter:(OAMapStyleParameter *)p
+{
+    if ([p.name isEqualToString:@"tramTrainRoutes"] ||
+        [p.name isEqualToString:@"subwayMode"] ||
+        [p.name isEqualToString:@"transportStops"] ||
+        [p.name isEqualToString:@"publicTransportMode"])
+    {
+        return YES;
+    }
+    return NO;
+}
+
+- (NSString *) getVisibilityForTransportParameter:(OAMapStyleParameter *)p
+{
+    BOOL isTransportLayerVisible = _settings.mapSettingShowPublicTransport;
+    BOOL isParameterVisible = [_settings.transportLayersVisible contain:p.name];
+    if (isTransportLayerVisible && isParameterVisible)
+    {
+        return @"true";
+    }
+    return @"false";
 }
 
 -(void) saveParameters

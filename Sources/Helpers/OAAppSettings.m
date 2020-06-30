@@ -2526,4 +2526,10 @@
     return [NSSet setWithArray:keysArr];
 }
 
+- (void)setCustomAppModes:(NSString *)customAppModes
+{
+    _customAppModes = customAppModes;
+    [[NSUserDefaults standardUserDefaults] setObject:_customAppModes forKey:customAppModesKey];
+}
+
 @end

@@ -174,7 +174,7 @@
     cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
     cell.textView.text = _profileList[indexPath.row].name;
-    cell.descView.text = _profileList[indexPath.row].descr;
+    cell.descView.text = _profileList[indexPath.row].getProfileDescription;
     [cell setOverflowVisibility:YES];
 
     return cell;

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OARouteProvider.h"
 #import "OANavigationIcon.h"
 #import "OALocationIcon.h"
 
@@ -36,6 +35,12 @@
 + (NSArray<OAApplicationMode *> *) getModesDerivedFrom:(OAApplicationMode *)am;
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def;
 
++ (void) onApplicationStart;
++ (void) saveProfile:(OAApplicationMode *)appMode;
++ (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected;
+
+- (instancetype)initWithName:(NSString *)name stringKey:(NSString *)stringKey;
+
 - (BOOL) hasFastSpeed;
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode;
 
@@ -62,8 +67,8 @@
 - (NSString *) getUserProfileName;
 - (void) setUserProfileName:(NSString *)userProfileName;
 - (void) setRoutingProfile:(NSString *) routingProfile;
-- (EOARouteService) getRouterService;
-- (void) setRouterService:(EOARouteService) routerService;
+- (NSInteger) getRouterService;
+- (void) setRouterService:(NSInteger) routerService;
 - (EOANavigationIcon) getNavigationIcon;
 - (void) setNavigationIcon:(EOANavigationIcon) navIcon;
 - (EOALocationIcon) getLocationIcon;
@@ -73,8 +78,12 @@
 - (int) getOrder;
 - (void) setOrder:(int)order;
 - (NSString *) getRoutingProfile;
-- (void) setRoutingProfile:(NSString *) routingProfile;
+- (NSString *) getProfileDescription;
 
+- (BOOL) isCustomProfile;
+
++ (void) reorderAppModes;
++ (void) deleteCustomModes:(NSArray<OAApplicationMode *> *) modes;
 + (NSSet<OAApplicationMode *> *) regWidgetAvailability:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am;
 - (BOOL) isWidgetAvailable:(NSString *)key;
 

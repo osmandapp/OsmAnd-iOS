@@ -16,6 +16,7 @@
 #import "Localization.h"
 #import "OALocationIcon.h"
 #import "OANavigationIcon.h"
+#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -263,19 +264,14 @@ typedef enum {
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
     CLLocation *_lastLocation;
     CLLocationDirection _lastHeading;
+    
+    OAAutoObserverProxy* _appModeChangeObserver;
 
     BOOL _initDone;
 }
 
-- (NSString *) layerId
+- (void) generateMarkersCollection
 {
-    return kMyPositionLayerId;
-}
-
-- (void) initLayer
-{
-    _mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
-    
     // Create location and course markers
     int baseOrder = self.baseOrder;
     
@@ -349,11 +345,32 @@ typedef enum {
         
         [_modeMarkers setObject:c forKey:mode];
     }
+}
+
+- (NSString *) layerId
+{
+    return kMyPositionLayerId;
+}
+
+- (void) initLayer
+{
+    _mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
+    
+    _appModeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onAvailableAppModesChanged)
+                                                        andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
+    
+    [self generateMarkersCollection];
     
     _initDone = YES;
     
     // Add "My location" and "My course" markers
     [self updateMyLocationCourseProvider];
+}
+
+- (void) onAvailableAppModesChanged
+{
+    [self generateMarkersCollection];
 }
 
 - (void) updateMyLocationCourseProvider

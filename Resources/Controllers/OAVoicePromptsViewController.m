@@ -199,7 +199,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.iconView.image = [UIImage imageNamed:item[@"icon"]];
+            cell.leftImageView.image = [UIImage imageNamed:item[@"icon"]];
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }

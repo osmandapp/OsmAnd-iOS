@@ -29,8 +29,12 @@
     OAApplicationMode *_applicationMode;
     NSString *_vehicleParameter;
     NSIndexPath *_pickerIndexPath;
-    NSArray<NSString *> *_possibleSpeedValues;
-    NSString *_speedValue;
+    NSArray<NSNumber *> *_possibleSpeedValues;
+    NSArray<NSString *> *_possibleSpeedValuesString;
+    NSNumber *_minSpeedValue;
+    NSNumber *_defaultSpeedValue;
+    NSNumber *_maxSpeedValue;
+    NSInteger _selectedSection;
 }
 
 - (instancetype)initWithApplicationMode:(OAApplicationMode *)ap
@@ -59,8 +63,14 @@
 
 - (void) generateData
 {
-    _speedValue = @"20 km/h"; // needs to be changed
-    _possibleSpeedValues = @[@"5 km/h", @"10 km/h", @"15 km/h", @"20 km/h", @"25 km/h", @"30 km/h", @"35 km/h"]; // needs to be changed
+    _possibleSpeedValues = @[ @5, @10, @15, @20, @25, @30, @35, @40, @45, @50, @55, @60, @120, @130, @140, @150 ];
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSNumber *val in _possibleSpeedValues)
+        [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"units_kmh")]];
+    _possibleSpeedValuesString = [NSArray arrayWithArray:array];
+    _minSpeedValue = [NSNumber numberWithInteger:20]; // needs to be changed
+    _defaultSpeedValue = [NSNumber numberWithInteger:45]; // needs to be changed
+    _maxSpeedValue = [NSNumber numberWithInteger:130]; // needs to be changed
 }
 
 - (void) viewDidLoad
@@ -81,7 +91,7 @@
     [minSpeedArr addObject:@{
         @"type" : kCellTypeSpeed,
         @"title" : OALocalizedString(@"min_speed"),
-        @"value" : _speedValue,
+        @"value" : _minSpeedValue,
     }];
     [minSpeedArr addObject:@{
         @"type" : kCellTypePicker,
@@ -89,7 +99,7 @@
     [defaultSpeedArr addObject:@{
         @"type" : kCellTypeSpeed,
         @"title" : OALocalizedString(@"default_speed"),
-        @"value" : _speedValue,
+        @"value" : _defaultSpeedValue,
     }];
     [defaultSpeedArr addObject:@{
         @"type" : kCellTypePicker,
@@ -97,7 +107,7 @@
     [maxSpeedArr addObject:@{
         @"type" : kCellTypeSpeed,
         @"title" : OALocalizedString(@"max_speed"),
-        @"value" : _speedValue,
+        @"value" : _maxSpeedValue,
     }];
     [maxSpeedArr addObject:@{
         @"type" : kCellTypePicker,
@@ -127,7 +137,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.lbTitle.text = item[@"title"];
-        cell.lbTime.text = item[@"value"];
+        cell.lbTime.text = [NSString stringWithFormat:@"%@ %@", item[@"value"], OALocalizedString(@"units_kmh")];
         cell.lbTime.textColor = UIColorFromRGB(color_text_footer);
 
         return cell;
@@ -142,10 +152,16 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
-        cell.dataArray = _possibleSpeedValues;
-        NSInteger valueRow = [_possibleSpeedValues indexOfObject:_speedValue];
-        [cell.picker selectRow:valueRow inComponent:0 animated:NO];
-        cell.picker.tag = indexPath.row;
+        cell.dataArray = _possibleSpeedValuesString;
+        NSInteger rowValue = 0;
+        if (indexPath.section == kMinSpeedSection)
+            rowValue = [_possibleSpeedValues indexOfObject:_minSpeedValue];
+        else if (indexPath.section == kDefaultSpeedSection)
+            rowValue = [_possibleSpeedValues indexOfObject:_defaultSpeedValue];
+        else if (indexPath.section == kMaxSpeedSection)
+            rowValue = [_possibleSpeedValues indexOfObject:_maxSpeedValue];
+        [cell.picker selectRow:rowValue inComponent:0 animated:NO];
+        cell.picker.tag = indexPath.section;
         cell.delegate = self;
         return cell;
     }
@@ -171,7 +187,7 @@
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == kMinSpeedSection)
+    if (section == _selectedSection)
     {
         if ([self pickerIsShown])
             return 2;
@@ -199,12 +215,13 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    _selectedSection = indexPath.section;
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:kCellTypeSpeed])
     {
         [self.tableView beginUpdates];
 
-        if ([self pickerIsShown] && (_pickerIndexPath.row - 1 == indexPath.row))
+        if ([self pickerIsShown] && (_pickerIndexPath.section == indexPath.section))
             [self hideExistingPicker];
         else
         {
@@ -215,7 +232,6 @@
             [self showNewPickerAtIndex:newPickerIndexPath];
             _pickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
         }
-
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
@@ -243,20 +259,65 @@
     [self.tableView endUpdates];
 }
 
+- (void) updatePickerCell:(NSNumber *)value
+{
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_pickerIndexPath];
+    if ([cell isKindOfClass:OACustomPickerTableViewCell.class])
+    {
+        OACustomPickerTableViewCell *cellRes = (OACustomPickerTableViewCell *) cell;
+        [cellRes.picker selectRow:[_possibleSpeedValues indexOfObject:value] inComponent:0 animated:NO];
+    }
+}
+
 - (NSIndexPath *) calculateIndexPathForNewPicker:(NSIndexPath *)selectedIndexPath
 {
-   return [NSIndexPath indexPathForRow:selectedIndexPath.row inSection:kMinSpeedSection];
+   return [NSIndexPath indexPathForRow:selectedIndexPath.row inSection:_selectedSection];
 }
 
 - (void) showNewPickerAtIndex:(NSIndexPath *)indexPath
 {
-    NSArray *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:kMinSpeedSection]];
+    NSArray *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:_selectedSection]];
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
 {
-    _speedValue = zoom;
+    NSInteger value = [zoom intValue];
+    if (pickerTag == kMinSpeedSection)
+    {
+        if (value <= _defaultSpeedValue.intValue)
+            _minSpeedValue = [NSNumber numberWithInteger:value];
+        else
+        {
+            _minSpeedValue = _defaultSpeedValue;
+            [self updatePickerCell:_defaultSpeedValue];
+        }
+    }
+    else if (pickerTag == kDefaultSpeedSection)
+    {
+        if (value <= _maxSpeedValue.intValue && value >= _minSpeedValue.intValue)
+            _defaultSpeedValue = [NSNumber numberWithInteger:value];
+        else if (value > _maxSpeedValue.intValue)
+        {
+            _defaultSpeedValue = _maxSpeedValue;
+            [self updatePickerCell:_maxSpeedValue];
+        }
+        else if (value < _minSpeedValue.intValue)
+        {
+            _defaultSpeedValue = _minSpeedValue;
+            [self updatePickerCell:_minSpeedValue];
+        }
+    }
+    else if (pickerTag == kMaxSpeedSection)
+    {
+        if (value >= _minSpeedValue.intValue)
+            _maxSpeedValue = [NSNumber numberWithInteger:value];
+        else
+        {
+            _maxSpeedValue = _defaultSpeedValue;
+            [self updatePickerCell:_defaultSpeedValue];
+        }
+    }
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }

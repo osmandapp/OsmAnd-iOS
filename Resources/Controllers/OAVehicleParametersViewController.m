@@ -1,12 +1,12 @@
 //
-//  OAProfileNavigationSettingsViewController.m
+//  OAVehicleParametersViewController.m
 //  OsmAnd Maps
 //
-//  Created by Anna Bibyk on 22.06.2020.
+//  Created by Anna Bibyk on 27.06.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAProfileNavigationSettingsViewController.h"
+#import "OAVehicleParametersViewController.h"
 #import "OAIconTitleValueCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
@@ -14,21 +14,21 @@
 #import "OARouteParametersViewController.h"
 #import "OAVoicePromptsViewController.h"
 #import "OAScreenAlertsViewController.h"
-#import "OAVehicleParametersViewController.h"
-#import "OAMapBehaviorViewController.h"
+#import "OASettingsModalPresentationViewController.h"
+#import "OAVehicleParametersSettingsViewController.h"
+#import "OADefaultSpeedViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
 #define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeIconText @"OAIconTextCell"
-#define kCellTypeTitle @"OASettingsTitleCell"
 
-@interface OAProfileNavigationSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAVehicleParametersViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OAProfileNavigationSettingsViewController
+@implementation OAVehicleParametersViewController
 {
     NSArray<NSArray *> *_data;
 }
@@ -52,9 +52,9 @@
 {
 }
 
-- (void) applyLocalization
+-(void) applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"routing_settings_2");
+    self.titleLabel.text = OALocalizedString(@"vehicle_parameters");
     self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
@@ -69,46 +69,46 @@
 - (void) setupView
 {
     NSMutableArray *tableData = [NSMutableArray array];
-    NSMutableArray *navigationArr = [NSMutableArray array];
-    NSMutableArray *otherArr = [NSMutableArray array];
-    [navigationArr addObject:@{
+    NSMutableArray *parametersArr = [NSMutableArray array];
+    NSMutableArray *defaultSpeedArr = [NSMutableArray array];
+    [parametersArr addObject:@{
         @"type" : kCellTypeIconTitleValue,
-        @"title" : OALocalizedString(@"nav_type_title"),
-        @"value" : OALocalizedString(@"m_style_car"),
-        @"icon" : @"ic_custom_navigation",
-        @"key" : @"navigationType",
+        @"title" : OALocalizedString(@"routing_attr_weight_name"),
+        @"value" : @"3 t", // needs to be changed
+        @"icon" : @"ic_custom_weight_limit",
+        @"key" : @"weightLimit",
     }];
-    [navigationArr addObject:@{
+    [parametersArr addObject:@{
+        @"type" : kCellTypeIconTitleValue,
+        @"title" : OALocalizedString(@"routing_attr_height_name"),
+        @"value" : @"None", // needs to be changed
+        @"icon" : @"ic_custom_height_limit",
+        @"key" : @"heightLimit",
+    }];
+    [parametersArr addObject:@{
+        @"type" : kCellTypeIconTitleValue,
+        @"title" : OALocalizedString(@"routing_attr_width_name"),
+        @"value" : @"3 m", // needs to be changed
+        @"icon" : @"ic_custom_width_limit",
+        @"key" : @"widthLimit",
+    }];
+    [parametersArr addObject:@{
+        @"type" : kCellTypeIconTitleValue,
+        @"title" : OALocalizedString(@"routing_attr_length_name"),
+        @"value" : @"10 m", // needs to be changed
+        @"icon" : @"ic_custom_length_limit",
+        @"key" : @"lenghtLimit",
+    }];
+    
+    [defaultSpeedArr addObject:@{
         @"type" : kCellTypeIconText,
-        @"title" : OALocalizedString(@"route_params"),
-        @"icon" : @"ic_custom_route",
-        @"key" : @"routeParams",
+        @"title" : OALocalizedString(@"default_speed"),
+        @"icon" : @"ic_action_speed",
+        @"key" : @"defaultSpeed",
+        
     }];
-    [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
-        @"title" : OALocalizedString(@"voice_prompts"),
-        @"icon" : @"ic_custom_sound",
-        @"key" : @"voicePrompts",
-    }];
-    [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
-        @"title" : OALocalizedString(@"screen_alerts"),
-        @"icon" : @"ic_custom_alert",
-        @"key" : @"screenAlerts",
-    }];
-    [navigationArr addObject:@{
-        @"type" : kCellTypeIconText,
-        @"title" : OALocalizedString(@"vehicle_parameters"),
-        @"icon" : @"ic_profile_car", // has to change according to current profile icon
-        @"key" : @"vehicleParams",
-    }];
-    [otherArr addObject:@{
-        @"type" : kCellTypeTitle,
-        @"title" : OALocalizedString(@"map_behavior"),
-        @"key" : @"mapBehavior",
-    }];
-    [tableData addObject:navigationArr];
-    [tableData addObject:otherArr];
+    [tableData addObject:parametersArr];
+    [tableData addObject:defaultSpeedArr];
     _data = [NSArray arrayWithArray:tableData];
 }
 
@@ -133,8 +133,7 @@
             cell.descriptionView.text = item[@"value"];
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftImageView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.leftImageView.image = [UIImage imageNamed:item[@"icon"]];
         }
         return cell;
     }
@@ -158,24 +157,6 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
-    {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-        }
-        return cell;
-    }
     return nil;
 }
 
@@ -183,20 +164,18 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
-    OAAppSettingsViewController* settingsViewController = nil;
-    if ([itemKey isEqualToString:@"navigationType"])
-        settingsViewController = [[OANavigationTypeViewController alloc] init];
-    else if ([itemKey isEqualToString:@"routeParams"])
-        settingsViewController = [[OARouteParametersViewController alloc] init];
-    else if ([itemKey isEqualToString:@"voicePrompts"])
-        settingsViewController = [[OAVoicePromptsViewController alloc] init];
-    else if ([itemKey isEqualToString:@"screenAlerts"])
-        settingsViewController = [[OAScreenAlertsViewController alloc] init];
-    else if ([itemKey isEqualToString:@"vehicleParams"])
-        settingsViewController = [[OAVehicleParametersViewController alloc] init];
-    else if ([itemKey isEqualToString:@"mapBehavior"])
-        settingsViewController = [[OAMapBehaviorViewController alloc] init];
-    [self.navigationController pushViewController:settingsViewController animated:YES];
+    OASettingsModalPresentationViewController* settingsViewController = nil;
+    if ([itemKey isEqualToString:@"weightLimit"])
+        settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:[OAApplicationMode CAR] vehicleParameter:item[@"title"]];
+    else if ([itemKey isEqualToString:@"heightLimit"])
+        settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:[OAApplicationMode CAR] vehicleParameter:item[@"title"]];
+    else if ([itemKey isEqualToString:@"widthLimit"])
+        settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:[OAApplicationMode CAR] vehicleParameter:item[@"title"]];
+    else if ([itemKey isEqualToString:@"lenghtLimit"])
+        settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:[OAApplicationMode CAR] vehicleParameter:item[@"title"]];
+    else if ([itemKey isEqualToString:@"defaultSpeed"])
+        settingsViewController = [[OADefaultSpeedViewController alloc] initWithApplicationMode:[OAApplicationMode CAR]];
+    [self presentViewController:settingsViewController animated:YES completion:nil];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -211,12 +190,12 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == 0 ? OALocalizedString(@"routing_settings") : OALocalizedString(@"help_other_header");
+    return section == 0 ? @"" : OALocalizedString(@"announce");
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? @"" : OALocalizedString(@"change_map_behavior");
+    return section == 0 ? OALocalizedString(@"touting_specified_vehicle_parameters_descr") : OALocalizedString(@"default_speed_descr");
 }
 
 @end

@@ -28,8 +28,9 @@
 
 - (instancetype) init
 {
-    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
-    if (self) {
+    self = [super init];
+    if (self)
+    {
         [self commonInit];
     }
     return self;
@@ -71,9 +72,9 @@
     return res;
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"impassable_road");
+    self.titleLabel.text = OALocalizedString(@"language");
     self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
@@ -87,7 +88,6 @@
 
 - (void) setupView
 {
-    
 }
 
 #pragma mark - TableView
@@ -109,14 +109,14 @@
             cell.textView.text = item[@"title"];
             cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.hidden = item[@"isSelected"];
+            cell.iconView.hidden = ![item[@"isSelected"] boolValue];
         }
         return cell;
     }
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 17.0;
 }

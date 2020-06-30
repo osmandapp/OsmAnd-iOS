@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 - (CGFloat) heightForLabel:(NSString *)text;
+- (void) setupTableHeaderViewWithText:(NSString *)text;
 
 @end

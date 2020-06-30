@@ -1,28 +1,29 @@
 //
-//  OAAppSettingsViewController.m
+//  OASettingsModalPresentationViewController.m
 //  OsmAnd Maps
 //
-//  Created by Anna Bibyk on 25.06.2020.
+//  Created by Anna Bibyk on 27.06.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAAppSettingsViewController.h"
+#import "OASettingsModalPresentationViewController.h"
+#import "Localization.h"
 #import "OAColors.h"
 
 #define kSidePadding 16
 
-@interface OAAppSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OASettingsModalPresentationViewController()
 
 @end
 
-@implementation OAAppSettingsViewController
+@implementation OASettingsModalPresentationViewController
 {
     UIView *_tableHeaderView;
 }
 
 - (instancetype) init
 {
-    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
+    self = [super initWithNibName:@"OASettingsModalPresentationViewController" bundle:nil];
     if (self)
     {
         [self commonInit];
@@ -30,18 +31,22 @@
     return self;
 }
 
+- (void) commonInit
+{
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
 }
 
-- (void) commonInit
+- (IBAction)cancelButtonPressed:(id)sender
 {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (UIStatusBarStyle) preferredStatusBarStyle
+- (IBAction)doneButtonPressed:(id)sender
 {
-    return UIStatusBarStyleDefault;
 }
 
 - (void) setupTableHeaderViewWithText:(NSString *)text
@@ -66,16 +71,18 @@
     self.tableView.tableHeaderView = _tableHeaderView;
 }
 
-- (IBAction) backButtonPressed:(id)sender
+- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    return @"";
+}
+
+- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return 1;
 }
 

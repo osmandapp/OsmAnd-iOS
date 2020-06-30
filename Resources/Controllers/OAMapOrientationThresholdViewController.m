@@ -1,27 +1,26 @@
 //
-//  OAArrivalAnnouncementViewController.m
+//  OAMapOrientationThresholdViewController.m
 //  OsmAnd Maps
 //
-//  Created by Anna Bibyk on 25.06.2020.
+//  Created by Anna Bibyk on 29.06.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAArrivalAnnouncementViewController.h"
+#import "OAMapOrientationThresholdViewController.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OAAppSettings.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kSidePadding 16
-
-@interface OAArrivalAnnouncementViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAMapOrientationThresholdViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OAArrivalAnnouncementViewController
+@implementation OAMapOrientationThresholdViewController
 {
     NSArray<NSArray *> *_data;
-    NSArray<NSNumber *> *_arrivalNames;
+    NSArray<NSNumber *> *_values;
 }
 
 - (instancetype) init
@@ -41,17 +40,14 @@
 
 - (void) generateData
 {
-    _arrivalNames =  @[ OALocalizedString(@"arrival_distance_factor_early"),
-        OALocalizedString(@"arrival_distance_factor_normally"),
-        OALocalizedString(@"arrival_distance_factor_late"),
-        OALocalizedString(@"arrival_distance_factor_at_last") ];
+    _values = @[ @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
     NSMutableArray *dataArr = [NSMutableArray array];
-    for (int i = 0; i < _arrivalNames.count; i++)
+    for (int i = 0; i < _values.count; i++)
     {
         [dataArr addObject:
          @{
-           @"name" : _arrivalNames[i],
-           @"title" : _arrivalNames[i],
+           @"name" : _values[i],
+           @"title" : [NSString stringWithFormat:@"%d %@", _values[i].intValue, OALocalizedString(@"units_kmh")],
            @"isSelected" : @NO,
            @"type" : @"OASettingsTitleCell"
          }];
@@ -59,9 +55,9 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"arrival_distance");
+    self.titleLabel.text = OALocalizedString(@"map_orientation_change_in_accordance_with_speed");
     self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
@@ -70,21 +66,11 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_announcement_frequency")];
     [self setupView];
 }
 
 - (void) setupView
 {
-}
-
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_announcement_frequency")];
-        [self.tableView reloadData];
-    } completion:nil];
 }
 
 #pragma mark - TableView
@@ -133,3 +119,4 @@
 }
 
 @end
+

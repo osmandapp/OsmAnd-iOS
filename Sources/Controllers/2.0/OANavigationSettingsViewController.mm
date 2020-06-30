@@ -145,7 +145,7 @@ static NSDictionary *screenVoiceProviders;
     return self;
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"routing_settings");
 }

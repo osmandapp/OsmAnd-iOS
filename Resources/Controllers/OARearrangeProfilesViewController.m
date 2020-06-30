@@ -85,7 +85,7 @@
     }];
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
     _titleLabel.text = OALocalizedString(@"rearrange_profiles");
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];

@@ -1,27 +1,26 @@
 //
-//  OAArrivalAnnouncementViewController.m
+//  OAAutoCenterMapViewController.m
 //  OsmAnd Maps
 //
-//  Created by Anna Bibyk on 25.06.2020.
+//  Created by Anna Bibyk on 29.06.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAArrivalAnnouncementViewController.h"
+#import "OAAutoCenterMapViewController.h"
 #import "OASettingsTitleTableViewCell.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kSidePadding 16
-
-@interface OAArrivalAnnouncementViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAAutoCenterMapViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OAArrivalAnnouncementViewController
+@implementation OAAutoCenterMapViewController
 {
     NSArray<NSArray *> *_data;
-    NSArray<NSNumber *> *_arrivalNames;
+    NSArray<NSNumber *> *_screenPowerSaveValues;
+    NSArray<NSString *> *_screenPowerSaveNames;
 }
 
 - (instancetype) init
@@ -41,27 +40,21 @@
 
 - (void) generateData
 {
-    _arrivalNames =  @[ OALocalizedString(@"arrival_distance_factor_early"),
-        OALocalizedString(@"arrival_distance_factor_normally"),
-        OALocalizedString(@"arrival_distance_factor_late"),
-        OALocalizedString(@"arrival_distance_factor_at_last") ];
-    NSMutableArray *dataArr = [NSMutableArray array];
-    for (int i = 0; i < _arrivalNames.count; i++)
+    _screenPowerSaveValues = @[ @0, @5, @10, @15, @20, @30, @45, @60 ];
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSNumber *val in _screenPowerSaveValues)
     {
-        [dataArr addObject:
-         @{
-           @"name" : _arrivalNames[i],
-           @"title" : _arrivalNames[i],
-           @"isSelected" : @NO,
-           @"type" : @"OASettingsTitleCell"
-         }];
+        if (val.intValue == 0)
+            [array addObject:OALocalizedString(@"shared_string_never")];
+        else
+            [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"int_seconds")]];
     }
-    _data = [NSArray arrayWithObject:dataArr];
+    _screenPowerSaveNames = [NSArray arrayWithArray:array];
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"arrival_distance");
+    self.titleLabel.text = OALocalizedString(@"choose_auto_follow_route");
     self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
@@ -70,21 +63,22 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_announcement_frequency")];
     [self setupView];
 }
 
 - (void) setupView
 {
-}
-
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_announcement_frequency")];
-        [self.tableView reloadData];
-    } completion:nil];
+    NSMutableArray *dataArr = [NSMutableArray array];
+    for (int i = 0; i < _screenPowerSaveValues.count; i++)
+    {
+        [dataArr addObject: @{
+           @"type" : @"OASettingsTitleCell",
+           @"name" : _screenPowerSaveValues[i],
+           @"title" : _screenPowerSaveNames[i],
+           @"isSelected" : @NO }
+         ];
+    }
+    _data = [NSArray arrayWithObject:dataArr];
 }
 
 #pragma mark - TableView

@@ -33,8 +33,9 @@
 
 - (instancetype) init
 {
-    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
-    if (self) {
+    self = [super init];
+    if (self)
+    {
         [self commonInit];
     }
     return self;
@@ -113,7 +114,7 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeDistance])
+    else if ([cellType isEqualToString:kCellTypeDistance])
     {
         static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
@@ -130,7 +131,7 @@
 
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypePicker])
+    else if ([cellType isEqualToString:kCellTypePicker])
     {
         static NSString* const identifierCell = @"OACustomPickerTableViewCell";
         OACustomPickerTableViewCell* cell;
@@ -150,7 +151,7 @@
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 17.0;
 }
@@ -165,7 +166,7 @@
     return 1;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([indexPath isEqual:_pickerIndexPath])
         return 162.0;
@@ -203,11 +204,11 @@
     }
 }
 
-//- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
-//}
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    return cell.selectionStyle == UITableViewCellSelectionStyleNone && indexPath != [NSIndexPath indexPathForRow:0 inSection:1] ? nil : indexPath;
+}
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {

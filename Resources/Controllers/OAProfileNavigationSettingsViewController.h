@@ -8,26 +8,6 @@
 
 #import "OAAppSettingsViewController.h"
 
-typedef enum
-{
-    kProfileNavigationSettingsScreenGeneral = 0,
-    kProfileNavigationSettingsScreenNavigationType,
-    kProfileNavigationSettingsScreenRouteParameter,
-    kProfileNavigationSettingsScreenVoicePrompts,
-    kProfileNavigationSettingsScreenScreenAlerts,
-    kProfileNavigationSettingsScreenVehicleParameters,
-    kProfileNavigationSettingsScreenMapBehavior
-} kProfileNavigationSettingsScreen;
-
-
 @interface OAProfileNavigationSettingsViewController : OAAppSettingsViewController
-
-//@property (weak, nonatomic) IBOutlet UIView *navBarView;
-//@property (weak, nonatomic) IBOutlet UIButton *backButton;
-//@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-//@property (weak, nonatomic) IBOutlet UILabel *subtitleLabel;
-//@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, readonly) kProfileNavigationSettingsScreen settingsType;
-
 
 @end

@@ -27,8 +27,9 @@
 
 - (instancetype) init
 {
-    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
-    if (self) {
+    self = [super init];
+    if (self)
+    {
         [self commonInit];
     }
     return self;
@@ -67,33 +68,11 @@
 
 -(void) applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"impassable_road");
+    self.titleLabel.text = OALocalizedString(@"speed_limit_exceed");
     self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
-- (void) setupTableHeaderViewWithText:(NSString *)text
-{
-    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    CGFloat textHeight = [self heightForLabel:text];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, kSidePadding, textWidth, textHeight)];
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setLineSpacing:6];
-    label.attributedText = [[NSAttributedString alloc] initWithString:text
-                                                        attributes:@{NSParagraphStyleAttributeName : style,
-                                                        NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
-                                                        NSFontAttributeName : [UIFont systemFontOfSize:15.0],
-                                                        NSBackgroundColorAttributeName : UIColor.clearColor}];
-    label.textAlignment = NSTextAlignmentJustified;
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    self.tableView.tableHeaderView = _tableHeaderView;
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
@@ -104,7 +83,6 @@
 
 - (void) setupView
 {
-    
 }
 
 #pragma mark - TableView
@@ -126,14 +104,14 @@
             cell.textView.text = item[@"title"];
             cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.hidden = item[@"isSelected"];
+            cell.iconView.hidden = ![item[@"isSelected"] boolValue];
         }
         return cell;
     }
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 17.0;
 }

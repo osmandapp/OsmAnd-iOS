@@ -56,7 +56,7 @@
     [_profileList removeObjectAtIndex:0];
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
     [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }

@@ -22,13 +22,13 @@
 @implementation OANavigationTypeViewController
 {
     NSArray<NSArray *> *_data;
-    UIView *_tableHeaderView;
 }
 
 - (instancetype) init
 {
-    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
-    if (self) {
+    self = [super init];
+    if (self)
+    {
         [self commonInit];
     }
     return self;
@@ -41,7 +41,6 @@
 
 - (void) generateData
 {
-    
 }
 
 -(void) applyLocalization
@@ -134,7 +133,6 @@
         @"title" : OALocalizedString(@"import_from_files"),
         @"icon" : @"ic_custom_import",
     }];
-    
     [tableData addObject:osmandRoutingArr];
     [tableData addObject:desertArr];
     [tableData addObject:customRoutingArr];
@@ -142,29 +140,7 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (void) setupTableHeaderViewWithText:(NSString *)text
-{
-    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    CGFloat textHeight = [self heightForLabel:text];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, kSidePadding, textWidth, textHeight)];
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setLineSpacing:6];
-    label.attributedText = [[NSAttributedString alloc] initWithString:text
-                                                        attributes:@{NSParagraphStyleAttributeName : style,
-                                                        NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
-                                                        NSFontAttributeName : [UIFont systemFontOfSize:15.0],
-                                                        NSBackgroundColorAttributeName : UIColor.clearColor}];
-    label.textAlignment = NSTextAlignmentJustified;
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    self.tableView.tableHeaderView = _tableHeaderView;
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
@@ -228,7 +204,12 @@
     return nil;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
         return OALocalizedString(@"osmand_routing");
@@ -242,7 +223,7 @@
         return @"";
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     if (section == 3)
         return OALocalizedString(@"import_routing_file_descr");

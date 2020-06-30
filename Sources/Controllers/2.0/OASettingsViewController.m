@@ -60,7 +60,7 @@
     return self;
 }
 
--(void)applyLocalization
+- (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"sett_settings");
 }

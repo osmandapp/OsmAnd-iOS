@@ -1,41 +1,44 @@
 //
-//  OARecalculateRouteViewController.m
+//  OADefaultSpeedViewController.m
 //  OsmAnd Maps
 //
-//  Created by Anna Bibyk on 24.06.2020.
+//  Created by Anna Bibyk on 30.06.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OARecalculateRouteViewController.h"
-#import "OASwitchTableViewCell.h"
+#import "OADefaultSpeedViewController.h"
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kSidePadding 16
-#define kDistanceSection 1
-#define kCellTypeDistance @"time_cell"
+#define kCellTypeSpeed @"time_cell"
 #define kCellTypePicker @"pickerCell"
+#define kMinSpeedSection 0
+#define kDefaultSpeedSection 1
+#define kMaxSpeedSection 2
 
-@interface OARecalculateRouteViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
+@interface OADefaultSpeedViewController() <OACustomPickerTableViewCellDelegate>
 
 @end
 
-@implementation OARecalculateRouteViewController
+@implementation OADefaultSpeedViewController
 {
     NSArray<NSArray *> *_data;
+    OAApplicationMode *_applicationMode;
+    NSString *_vehicleParameter;
     NSIndexPath *_pickerIndexPath;
-    NSArray<NSString *> *_possibleDistanceValues;
-    NSString *_distanceValue;
+    NSArray<NSString *> *_possibleSpeedValues;
+    NSString *_speedValue;
 }
 
-- (instancetype) init
+- (instancetype)initWithApplicationMode:(OAApplicationMode *)ap
 {
     self = [super init];
     if (self)
     {
+        _applicationMode = ap;
         [self commonInit];
     }
     return self;
@@ -46,16 +49,18 @@
     [self generateData];
 }
 
-- (void) generateData
+- (void) applyLocalization
 {
-    _distanceValue = @"200 m"; // needs to be changed
-    _possibleDistanceValues = @[@"30 m", @"50 m", @"100 m", @"200 m", @"500 m", @"1 km", @"1.5 km"]; // needs to be changed
+    self.titleLabel.text = OALocalizedString(@"default_speed");
+    self.subtitleLabel.text = _applicationMode.name;
+    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
--(void) applyLocalization
+- (void) generateData
 {
-    self.titleLabel.text = OALocalizedString(@"recalculate_route");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    _speedValue = @"20 km/h"; // needs to be changed
+    _possibleSpeedValues = @[@"5 km/h", @"10 km/h", @"15 km/h", @"20 km/h", @"25 km/h", @"30 km/h", @"35 km/h"]; // needs to be changed
 }
 
 - (void) viewDidLoad
@@ -63,58 +68,54 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self setupTableHeaderViewWithText:@"Change me"]; // needs to be changed
     [self setupView];
 }
 
 - (void) setupView
 {
     NSMutableArray *tableData = [NSMutableArray array];
-    NSMutableArray *statusArr = [NSMutableArray array];
-    NSMutableArray *distanceArr = [NSMutableArray array];
-    [statusArr addObject:@{
-        @"type" : @"OASwitchCell",
-        @"title" : OALocalizedString(@"shared_string_enabled"),
-        @"isOn" : @NO,
+    NSMutableArray *minSpeedArr = [NSMutableArray array];
+    NSMutableArray *defaultSpeedArr = [NSMutableArray array];
+    NSMutableArray *maxSpeedArr = [NSMutableArray array];
+    [minSpeedArr addObject:@{
+        @"type" : kCellTypeSpeed,
+        @"title" : OALocalizedString(@"min_speed"),
+        @"value" : _speedValue,
     }];
-    [distanceArr addObject:@{
-        @"type" : kCellTypeDistance,
-        @"title" : OALocalizedString(@"shared_string_distance"),
-        @"value" : _distanceValue,
-    }];
-    [distanceArr addObject:@{
+    [minSpeedArr addObject:@{
         @"type" : kCellTypePicker,
     }];
-    [tableData addObject:statusArr];
-    [tableData addObject:distanceArr];
+    [defaultSpeedArr addObject:@{
+        @"type" : kCellTypeSpeed,
+        @"title" : OALocalizedString(@"default_speed"),
+        @"value" : _speedValue,
+    }];
+    [defaultSpeedArr addObject:@{
+        @"type" : kCellTypePicker,
+    }];
+    [maxSpeedArr addObject:@{
+        @"type" : kCellTypeSpeed,
+        @"title" : OALocalizedString(@"max_speed"),
+        @"value" : _speedValue,
+    }];
+    [maxSpeedArr addObject:@{
+        @"type" : kCellTypePicker,
+    }];
+    [tableData addObject:minSpeedArr];
+    [tableData addObject:defaultSpeedArr];
+    [tableData addObject:maxSpeedArr];
     _data = [NSArray arrayWithArray:tableData];
 }
 
-#pragma mark - TableView
+- (IBAction)doneButtonPressed:(id)sender {
+}
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OASwitchCell"])
-    {
-        static NSString* const identifierCell = @"OASwitchCell";
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-            cell.switchView.on = [item[@"isOn"] boolValue];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:kCellTypeDistance])
+    if ([cellType isEqualToString:kCellTypeSpeed])
     {
         static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
@@ -141,8 +142,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
-        cell.dataArray = _possibleDistanceValues;
-        NSInteger valueRow = [_possibleDistanceValues indexOfObject:_distanceValue];
+        cell.dataArray = _possibleSpeedValues;
+        NSInteger valueRow = [_possibleSpeedValues indexOfObject:_speedValue];
         [cell.picker selectRow:valueRow inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
@@ -151,14 +152,26 @@
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    return 17.0;
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self setupTableHeaderViewWithText:@"Change me"]; // needs to be changed
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
+#pragma mark - TableView
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    // needs to be changed
+    return @"Change me";
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == kDistanceSection)
+    if (section == kMinSpeedSection)
     {
         if ([self pickerIsShown])
             return 2;
@@ -167,23 +180,27 @@
     return 1;
 }
 
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 3;
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([indexPath isEqual:_pickerIndexPath])
         return 162.0;
-    
     return UITableViewAutomaticDimension;
 }
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return _data.count;
+    return 17.;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:kCellTypeDistance])
+    if ([item[@"type"] isEqualToString:kCellTypeSpeed])
     {
         [self.tableView beginUpdates];
 
@@ -205,23 +222,6 @@
     }
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone && indexPath != [NSIndexPath indexPathForRow:0 inSection:1] ? nil : indexPath;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return section == 0 ? OALocalizedString(@"route_recalculation_descr") : OALocalizedString(@"select_distance_for_recalculation");
-}
-
-#pragma mark - Switch
-
-- (void) applyParameter:(id)sender
-{
-}
-
 #pragma mark - Picker
 
 - (BOOL) pickerIsShown
@@ -229,8 +229,7 @@
     return _pickerIndexPath != nil;
 }
 
-- (void) hideExistingPicker
-{
+- (void) hideExistingPicker {
     
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
     _pickerIndexPath = nil;
@@ -246,18 +245,18 @@
 
 - (NSIndexPath *) calculateIndexPathForNewPicker:(NSIndexPath *)selectedIndexPath
 {
-   return [NSIndexPath indexPathForRow:selectedIndexPath.row inSection:kDistanceSection];
+   return [NSIndexPath indexPathForRow:selectedIndexPath.row inSection:kMinSpeedSection];
 }
 
 - (void) showNewPickerAtIndex:(NSIndexPath *)indexPath
 {
-    NSArray *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:kDistanceSection]];
+    NSArray *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:kMinSpeedSection]];
     [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
 {
-    _distanceValue = zoom;
+    _speedValue = zoom;
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }

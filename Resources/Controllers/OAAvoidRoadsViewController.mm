@@ -29,8 +29,9 @@
 
 - (instancetype) init
 {
-    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
-    if (self) {
+    self = [super init];
+    if (self)
+    {
         [self commonInit];
     }
     return self;
@@ -43,10 +44,9 @@
 
 - (void) generateData
 {
-    
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"impassable_road");
     self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
@@ -64,7 +64,6 @@
 - (void) setupView
 {
     NSMutableArray *dataArr = [NSMutableArray array];
-    NSMutableArray *tableData = [NSMutableArray array];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     auto router = [self getRouter:[OAApplicationMode CAR]]; // taken from OANavigationSettingsViewController
     if (router)
@@ -89,8 +88,7 @@
             }
         }
     }
-    [tableData addObject:dataArr]; // bad
-    _data = [NSArray arrayWithArray:tableData];
+    _data = [NSArray arrayWithObject:dataArr];
 }
 
 - (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
@@ -109,30 +107,7 @@
     NSString *res = OALocalizedString(key);
     if ([res isEqualToString:key])
         res = defaultName;
-    
     return res;
-}
-
-- (void) setupTableHeaderViewWithText:(NSString *)text
-{
-    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    CGFloat textHeight = [self heightForLabel:text];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 8.0, textWidth, textHeight)];
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setLineSpacing:6];
-    label.attributedText = [[NSAttributedString alloc] initWithString:text
-                                                        attributes:@{NSParagraphStyleAttributeName : style,
-                                                        NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
-                                                        NSFontAttributeName : [UIFont systemFontOfSize:15.0],
-                                                        NSBackgroundColorAttributeName : UIColor.clearColor}];
-    label.textAlignment = NSTextAlignmentJustified;
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    self.tableView.tableHeaderView = _tableHeaderView;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -171,7 +146,7 @@
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 17.0;
 }
@@ -196,9 +171,10 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark - Switch
+
 - (void) applyParameter:(id)sender
 {
-   
 }
 
 @end

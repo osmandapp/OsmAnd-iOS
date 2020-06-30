@@ -31,8 +31,9 @@
 
 - (instancetype) init
 {
-    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
-    if (self) {
+    self = [super init];
+    if (self)
+    {
         [self commonInit];
     }
     return self;
@@ -45,7 +46,6 @@
 
 - (void) generateData
 {
-    
 }
 
 -(void) applyLocalization
@@ -82,6 +82,7 @@
         @"value" : @"Croatian", // needs to be changed
         @"icon" : @"ic_custom_map_languge",
         @"isOn" : @NO,
+        @"key" : @"language",
     }];
     
     [secondSection addObject:@{
@@ -109,6 +110,7 @@
         @"type" : @"OASettingsCell",
         @"title" : OALocalizedString(@"speed_limit_exceed"),
         @"value" : @"0 km/h", // needs to be changed
+        @"key" : @"speedLimitTolerance",
     }];
     
     [fourthSection addObject:@{
@@ -141,11 +143,13 @@
         @"type" : @"OASettingsCell",
         @"title" : OALocalizedString(@"keep_informing"),
         @"value" : @"7 min", // needs to be changed
+        @"key" : @"repeatInstructions",
     }];
     [fifthSection addObject:@{
         @"type" : @"OASettingsCell",
         @"title" : OALocalizedString(@"arrival_distance"),
         @"value" : @"Early", // needs to be changed
+        @"key" : @"arrivalAnnouncement",
     }];
     [tableData addObject:firstSection];
     [tableData addObject:secondSection];
@@ -190,7 +194,6 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -229,7 +232,6 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -253,40 +255,43 @@
     return _data.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     return section == 1 ? OALocalizedString(@"announce") : @"";
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return section == 0 ? OALocalizedString(@"speak_descr") : @"";
 }
 
-//- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
-//}
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
+}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *itemKey = item[@"key"];
     OAAppSettingsViewController* settingsViewController = nil;
-    if (indexPath.section == 0 && indexPath.row == 1)
+    if ([itemKey isEqualToString:@"language"])
         settingsViewController = [[OANavigationLanguageViewController alloc] init];
-    if (indexPath.section == 2 && indexPath.row == 1)
+    else if ([itemKey isEqualToString:@"speedLimitTolerance"])
         settingsViewController = [[OASpeedLimitToleranceViewController alloc] init];
-    if (indexPath.section == 4 && indexPath.row == 0)
+    else if ([itemKey isEqualToString:@"repeatInstructions"])
         settingsViewController = [[OARepeatNavigationInstructionsViewController alloc] init];
-    if (indexPath.section == 4 && indexPath.row == 1)
+    else if ([itemKey isEqualToString:@"arrivalAnnouncement"])
         settingsViewController = [[OAArrivalAnnouncementViewController alloc] init];
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark - Switch
+
 - (void) applyParameter:(id)sender
 {
-   
 }
 
 @end

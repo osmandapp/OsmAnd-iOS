@@ -9,13 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-#include <OsmAndCore/Data/Road.h>
+#include <binaryRead.h>
 
 @class OAMapRendererView;
 
 @interface OARoadResultMatcher : NSObject
 
-typedef BOOL(^OARoadResultMatcherPublish)(const std::shared_ptr<const OsmAnd::Road> road);
+typedef BOOL(^OARoadResultMatcherPublish)(const std::shared_ptr<RouteDataObject> road);
 @property (nonatomic) OARoadResultMatcherPublish publishFunction;
 
 typedef BOOL(^OARoadResultMatcherIsCancelled)();
@@ -25,7 +25,7 @@ typedef BOOL(^OARoadResultMatcherIsCancelled)();
  * @param name
  * @return true if result should be added to final list
  */
-- (BOOL) publish:(const std::shared_ptr<const OsmAnd::Road>&)object;
+- (BOOL) publish:(const std::shared_ptr<RouteDataObject>)object;
 
 /**
  * @returns true to stop processing
@@ -40,10 +40,8 @@ typedef BOOL(^OARoadResultMatcherIsCancelled)();
 
 + (OACurrentPositionHelper *)instance;
 
-+ (double) getOrthogonalDistance:(std::shared_ptr<const OsmAnd::Road>) r loc:(CLLocation *)loc;
-- (std::shared_ptr<const OsmAnd::Road>) getLastKnownRouteSegment:(CLLocation *)loc;
++ (double) getOrthogonalDistance:(std::shared_ptr<RouteDataObject>) r loc:(CLLocation *)loc;
+- (std::shared_ptr<RouteDataObject>) getLastKnownRouteSegment:(CLLocation *)loc;
 - (void) getRouteSegment:(CLLocation *)loc matcher:(OARoadResultMatcher *)matcher;
-
-- (void) clearCacheNotInTiles:(OAMapRendererView *)mapRendererView;
 
 @end

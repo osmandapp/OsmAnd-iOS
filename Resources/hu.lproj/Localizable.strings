@@ -1299,7 +1299,7 @@
 "app_mode_bicycle" = "Kerékpározás";
 "res_zoom_levels" = "Nagyítási szintek";
 "app_mode_campervan" = "Lakóautó";
-"app_mode_default" = "Alapértelmezett";
+"app_mode_default" = "Térképböngészés";
 "app_mode_horse" = "Ló";
 "app_mode_pickup_truck" = "Kisteherautó";
 "app_mode_car" = "Vezetés";

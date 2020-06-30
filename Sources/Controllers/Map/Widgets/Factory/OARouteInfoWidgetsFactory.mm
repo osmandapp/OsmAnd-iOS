@@ -457,7 +457,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
         if ((!_routingHelper || ![_routingHelper isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_routingHelper getCurrentGPXRoute]) && [trackingUtilities isMapLinkedToLocation])
         {
             CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
-            std::shared_ptr<const OsmAnd::Road> road = nullptr;
+            std::shared_ptr<RouteDataObject> road = nullptr;
             if (lastKnownLocation)
             {
                 road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];

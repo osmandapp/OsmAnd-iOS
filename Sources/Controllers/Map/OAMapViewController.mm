@@ -1281,7 +1281,6 @@
 - (void) onMapRendererFramePrepared
 {
     [_framePreparedObservable notifyEvent];
-    [_currentPositionHelper clearCacheNotInTiles:_mapView];
 }
 
 @synthesize zoomObservable = _zoomObservable;

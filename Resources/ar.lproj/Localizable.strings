@@ -1536,7 +1536,7 @@
 "rendering_attr_depthContours_description" = "إظهار نقاط ومعالم العمق.";
 "routeInfo_piste_difficulty_name" = "صعوبة الطريق";
 "rendering_value_medium_name" = "متوسط";
-"rendering_attr_hikingRoutesOSMC_name" = "تراكب رمز التسلق";
+"rendering_attr_hikingRoutesOSMC_name" = "كيفية اظهار رموز طبقة التسلق (الهايكنق)";
 "routing_attr_piste_type_nordic_name" = "التزلج عبر البلاد / الشمال";
 "rendering_value_darkyellow_name" = "أصفر غامق";
 "rendering_attr_smoothness_very_horrible_name" = "رهيب جداً";

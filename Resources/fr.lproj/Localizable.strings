@@ -1307,7 +1307,7 @@
 "rendering_attr_surface_fine_gravel_name" = "Gravier fin";
 "rendering_attr_hmRendered_name" = "Afficher plus de détail";
 "rendering_value_medium_name" = "Moyen";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "Afficher les pistes cyclables";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "Afficher le réseau de nœuds de pistes cyclables";
 "rendering_attr_highway_class_track_name" = "Piste";
 "routing_attr_avoid_ferries_description" = "Éviter les traversées en ferries";
 "routing_attr_weight_description" = "Indiquez le poids du véhicule à respecter sur les routes.";
@@ -1355,7 +1355,7 @@
 "routing_attr_allow_motorway_description" = "Autoriser les trajets sur autoroute.";
 "routing_attr_prefer_unpaved_name" = "Privilégier les routes non revêtues";
 "routing_attr_piste_type_downhill_description" = "Pistes de ski et accès aux remontées mécaniques.";
-"rendering_value_walkingRoutesOSMCNodes_name" = "Réseaux";
+"rendering_value_walkingRoutesOSMCNodes_name" = "Nœuds de transport";
 "rendering_attr_subwayMode_name" = "Lignes de métro";
 "rendering_attr_hikingRoutesOSMC_description" = "Afficher les chemins de randonnée d'après les traces OSMC.";
 "routing_attr_width_name" = "Limite de largeur";

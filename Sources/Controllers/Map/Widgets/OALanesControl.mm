@@ -14,6 +14,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OALocationServices.h"
 #import "OARouteCalculationResult.h"
+#import "OACurrentPositionHelper.h"
 #import "OARouteInfoView.h"
 #import "OARouteDirectionInfo.h"
 #import "OAUtilities.h"
@@ -43,6 +44,7 @@
 {
     OAMapViewTrackingUtilities *_trackingUtilities;
     OALocationServices *_locationProvider;
+    OACurrentPositionHelper *_currentPositionHelper;
     OARoutingHelper *_rh;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
@@ -107,7 +109,8 @@
     _app = [OsmAndApp instance];
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _locationProvider = _app.locationServices;
-    
+    _currentPositionHelper = [OACurrentPositionHelper instance];
+
     self.hidden = YES;
 
     CGFloat radius = 3.0;
@@ -186,21 +189,17 @@
     // TurnType primary = null;
     if ((![_rh isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_rh getCurrentGPXRoute]) && [_trackingUtilities isMapLinkedToLocation] && [_settings.showLanes get])
     {
-        OARouteCalculationResult *route = [_rh getRoute];
-        if (route)
+        CLLocation *lp = _locationProvider.lastKnownLocation;
+        std::shared_ptr<RouteDataObject> ro = nullptr;
+        if (lp)
         {
-            auto sr = [route getCurrentSegmentResult];
-            if (sr)
+            ro = [_currentPositionHelper getLastKnownRouteSegment:lp];
+            if (ro)
             {
-                auto ro = sr->object;
-                CLLocation *lp = _locationProvider.lastKnownLocation;
-                if (ro)
-                {
-                    float degree = !lp || (lp.course < 0 ? 0 : lp.course);
-                    loclanes = parseTurnLanes(ro, degree / 180 * M_PI);
-                    if (loclanes.empty())
-                        loclanes = parseLanes(ro, degree / 180 * M_PI);
-                }
+                float degree = !lp || (lp.course < 0 ? 0 : lp.course);
+                loclanes = parseTurnLanes(ro, degree / 180 * M_PI);
+                if (loclanes.empty())
+                    loclanes = parseLanes(ro, degree / 180 * M_PI);
             }
         }
     }

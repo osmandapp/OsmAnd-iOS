@@ -1088,7 +1088,7 @@
 "routing_attr_width_name" = "محدودیت عرض";
 "rendering_value_disabled_name" = "غیرفعال";
 "rendering_attr_hideProposed_name" = "طرح‌های آینده (Proposed)";
-"routing_attr_height_description" = "ارتفاع مجاز خودرو در راه‌ها چقدر است.";
+"routing_attr_height_description" = "ارتفاع مجاز خودرو در مسیرها را مشخص کنید.";
 "rendering_attr_whiteWaterSports_name" = "ورزش‌‌های آب‌های خروشان";
 "routing_attr_avoid_bus_name" = "اتوبوس";
 "routeInfo_smoothness_name" = "همواری";
@@ -1206,7 +1206,7 @@
 "rendering_attr_appMode_name" = "حالت رندرگیری";
 "routing_attr_avoid_share_taxi_name" = "تاکسی اشتراکی";
 "rendering_attr_piste_type_nordic_name" = "نوردیک";
-"routing_attr_weight_description" = "وزن مجاز خودرو در راه‌ها را مشخص کنید.";
+"routing_attr_weight_description" = "وزن مجاز خودرو در مسیرها را مشخص کنید.";
 "rendering_attr_piste_difficulty_expert_name" = "حرفه‌ای";
 "routing_attr_allow_expert_name" = "مسیرهای حرفه‌ای مجاز باشد";
 "rendering_attr_streetLightingNight_name" = "فقط هنگام شب نشان بده";

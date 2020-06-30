@@ -12797,9 +12797,10 @@
 			isa = PBXGroup;
 			children = (
 				151558D424A4A0830081BB8E /* Navigation Settings */,
+				157F3CC224A0F2F2000A66F0 /* OANavigationTypeViewController.xib */,
+				157F3CC424A0F323000A66F0 /* OANavigationTypeViewController.m */,
+				157F3CC624A0F332000A66F0 /* OANavigationTypeViewController.h */,
 				15BECC79249E038400B36DC0 /* OARearrangeProfilesViewController.xib */,
-				157F3CB924A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m */,
-				157F3CBB24A0D827000A66F0 /* OAProfileNavigationSettingsViewController.h */,
 				15BECC7B249E047D00B36DC0 /* OARearrangeProfilesViewController.m */,
 				15BECC7D249E049700B36DC0 /* OARearrangeProfilesViewController.h */,
 				DAC04715221BEA0600299EC2 /* OAOsmEditingSettingsViewController.h */,
@@ -20256,7 +20257,6 @@
 				84BEEE511DFF021000750848 /* OATargetMultiView.mm in Sources */,
 				15BECC76249BED8800B36DC0 /* OAIconBackgroundCollectionViewCell.m in Sources */,
 				847A20AC1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */,
-				157F3CBA24A0D817000A66F0 /* OAProfileNavigationSettingsViewController.m in Sources */,
 				BBA3B0021986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				84686AD31E0AA68800DA09BC /* OAPOIFiltersHelper.mm in Sources */,
 				848B28B71EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */,
@@ -20884,7 +20884,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.44;
+				CURRENT_PROJECT_VERSION = 3.45;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -20901,7 +20901,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 3.14;
+				MARKETING_VERSION = 3.15;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -20939,7 +20939,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.44;
+				CURRENT_PROJECT_VERSION = 3.45;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -20956,7 +20956,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 3.14;
+				MARKETING_VERSION = 3.15;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",

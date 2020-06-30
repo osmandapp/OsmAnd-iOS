@@ -49,7 +49,7 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     
-    QList<std::shared_ptr<const OsmAnd::Road>> _impassableRoads;
+    QList<std::shared_ptr<RouteDataObject>> _impassableRoads;
     NSMutableArray<id<OAStateChangedListener>> *_listeners;
 }
 
@@ -77,7 +77,7 @@
     return self;
 }
 
-- (const QList<std::shared_ptr<const OsmAnd::Road>>) getImpassableRoads
+- (const QList<std::shared_ptr<RouteDataObject>>) getImpassableRoads
 {
     return _impassableRoads;
 }
@@ -86,18 +86,18 @@
 {
     NSSet<CLLocation *> *impassableRoads = _settings.impassableRoads;
     for (CLLocation *impassableRoad in impassableRoads)
-        [self addImpassableRoad:impassableRoad showDialog:NO skipWritingSettings:YES];
+        [self addImpassableRoad:impassableRoad skipWritingSettings:YES];
 }
 
-- (void) addImpassableRoad:(CLLocation *)loc showDialog:(BOOL)showDialog skipWritingSettings:(BOOL)skipWritingSettings
+- (void) addImpassableRoad:(CLLocation *)loc skipWritingSettings:(BOOL)skipWritingSettings
 {
     OACurrentPositionHelper *positionHelper = [OACurrentPositionHelper instance];
-    OARoadResultMatcher *matcher = [[OARoadResultMatcher alloc] initWithPublishFunc:^BOOL(const std::shared_ptr<const OsmAnd::Road> road)
+    OARoadResultMatcher *matcher = [[OARoadResultMatcher alloc] initWithPublishFunc:^BOOL(const std::shared_ptr<RouteDataObject> road)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (road)
             {
-                [self addImpassableRoadInternal:road loc:loc showDialog:showDialog];
+                [self addImpassableRoadInternal:road loc:loc];
                 if (!skipWritingSettings)
                     [_settings addImpassableRoad:loc];
             }
@@ -116,7 +116,7 @@
     [positionHelper getRouteSegment:loc matcher:matcher];
 }
 
-- (CLLocation *) getLocation:(OsmAnd::ObfObjectId)roadId
+- (CLLocation *) getLocation:(int64_t)roadId
 {
     CLLocation *location = nil;
     const auto& roadLocations = _app.defaultRoutingConfig->getImpassableRoadLocations();
@@ -130,7 +130,7 @@
     return location;
 }
 
-- (void) addImpassableRoadInternal:(const std::shared_ptr<const OsmAnd::Road>)road loc:(CLLocation *)loc showDialog:(BOOL)showDialog
+- (void) addImpassableRoadInternal:(const std::shared_ptr<RouteDataObject>)road loc:(CLLocation *)loc
 {
     const OsmAnd::PointI position31(OsmAnd::Utilities::get31TileNumberX(loc.coordinate.longitude),
                                     OsmAnd::Utilities::get31TileNumberY(loc.coordinate.latitude));
@@ -150,22 +150,11 @@
     OARoutingHelper *rh = [OARoutingHelper sharedInstance];
     if ([rh isRouteCalculated] || [rh isRouteBeingCalculated])
         [rh recalculateRouteDueToSettingsChange];
-    
-    if (showDialog)
-        [self showDialog];
-    
+        
     [self updateListeners];
-
-    /*
-    MapContextMenu menu = activity.getContextMenu();
-    if (menu.isActive() && menu.getLatLon().equals(loc)) {
-        menu.close();
-    }
-    activity.refreshMap();
-     */
 }
 
-- (void) removeImpassableRoad:(const std::shared_ptr<const OsmAnd::Road>)road
+- (void) removeImpassableRoad:(const std::shared_ptr<RouteDataObject>)road
 {
     CLLocation *location = [self getLocation:road->id];
     if (location)
@@ -181,7 +170,7 @@
     [self updateListeners];
 }
 
-- (void) removeImpassableRoadInternal:(const std::shared_ptr<const OsmAnd::Road>)road
+- (void) removeImpassableRoadInternal:(const std::shared_ptr<RouteDataObject>)road
 {
     for (int i = 0; i < _impassableRoads.size(); i++)
     {
@@ -194,7 +183,7 @@
     }
 }
 
-- (std::shared_ptr<const OsmAnd::Road>) getRoadById:(unsigned long long)id
+- (std::shared_ptr<RouteDataObject>) getRoadById:(unsigned long long)id
 {
     const auto& roads = _impassableRoads;
     for (const auto& r : roads)
@@ -203,38 +192,6 @@
             return r;
     }
     return nullptr;
-}
-
-- (void) showDialog
-{
-    /*
-    AlertDialog.Builder bld = new AlertDialog.Builder(mapActivity);
-    bld.setTitle(R.string.impassable_road);
-    if (getImpassableRoads().size() == 0) {
-        bld.setMessage(R.string.avoid_roads_msg);
-    } else {
-        final ArrayAdapter<?> listAdapter = createAdapter(mapActivity);
-        bld.setAdapter(listAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                RouteDataObject obj = getImpassableRoads().get(which);
-                double lat = MapUtils.get31LatitudeY(obj.getPoint31YTile(0));
-                double lon = MapUtils.get31LongitudeX(obj.getPoint31XTile(0));
-                showOnMap(mapActivity, lat, lon, getText(obj), dialog);
-            }
-            
-        });
-    }
-    
-    bld.setPositiveButton(R.string.shared_string_select_on_map, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            selectFromMap(mapActivity);
-        }
-    });
-    bld.setNegativeButton(R.string.shared_string_close, null);
-    bld.show();
-     */
 }
 
 - (void) addListener:(id<OAStateChangedListener>)l

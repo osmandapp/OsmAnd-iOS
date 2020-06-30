@@ -47,6 +47,8 @@
     cell.iconImageView.image = img;
     if (_locationType == EOALocationTypeMoving)
         cell.iconImageView.transform = CGAffineTransformMakeRotation(-M_PI_2);
+    else
+        cell.iconImageView.transform = CGAffineTransformIdentity;
     if (indexPath.row == _selectedIndex)
     {
         cell.backView.layer.borderWidth = 2;

@@ -1150,7 +1150,7 @@ typedef enum
         {
             [_mapViewController hideContextPinMarker];
             
-            [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] showDialog:NO skipWritingSettings:NO];
+            [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] skipWritingSettings:NO];
             
             [self.targetMenuView requestFullMode];
             

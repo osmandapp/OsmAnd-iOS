@@ -18,4 +18,6 @@
 @property (nonatomic) OAApplicationMode *selectedMode;
 @property (nonatomic) BOOL showDefault;
 
+- (void) setupModeButtons;
+
 @end

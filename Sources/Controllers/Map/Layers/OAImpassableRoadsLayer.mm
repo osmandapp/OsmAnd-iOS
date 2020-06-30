@@ -24,6 +24,8 @@
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
+#include <binaryRead.h>
+
 @interface OAImpassableRoadsLayer () <OAStateChangedListener>
 
 @end
@@ -121,7 +123,7 @@
 
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj
 {
-    if (const auto road = reinterpret_cast<const OsmAnd::Road *>(obj))
+    if (auto road = reinterpret_cast<RouteDataObject *>(const_cast<void *>(obj)))
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
@@ -130,9 +132,9 @@
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.location = location.coordinate;
         
-        QString lang = QString::fromNSString([settings settingPrefMapLanguage] ? [settings settingPrefMapLanguage] : @"");
+        string lang = [settings settingPrefMapLanguage] ? [settings settingPrefMapLanguage].UTF8String : "";
         bool transliterate = [settings settingMapLanguageTranslit];
-        targetPoint.title = road->getName(lang, transliterate).toNSString();
+        targetPoint.title = [NSString stringWithUTF8String:road->getName(lang, transliterate).c_str()];
         if (targetPoint.title.length == 0)
             targetPoint.title = [OAPointDescription getLocationName:location.coordinate.latitude lon:location.coordinate.longitude sh:YES];
 
@@ -191,7 +193,7 @@
         NSNumber *item = (NSNumber *)object;
         const auto& road = [_avoidRoads getRoadById:item.unsignedLongLongValue];
         [_avoidRoads removeImpassableRoad:road];
-        [_avoidRoads addImpassableRoad:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] showDialog:NO skipWritingSettings:NO];
+        [_avoidRoads addImpassableRoad:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] skipWritingSettings:NO];
     }
 }
 

@@ -27,7 +27,7 @@
 "search_radius_proximity" = "A menos dos";
 "poi" = "POI";
 "day_off_label" = "pechado";
-"open_from" = "Aberto a partires das";
+"open_from" = "Aberto dende as";
 "open_till" = "Aberto até as";
 "will_close_at" = "Will close at";
 "will_open_at" = "Will open at";

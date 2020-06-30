@@ -167,6 +167,7 @@ static OAApplicationMode *_SKI;
     OAAppSettings *settings = OAAppSettings.sharedManager;
     OAApplicationMode *m = [[OAApplicationMode alloc] initWithName:@"" stringKey:key];
     m.name = [settings.userProfileName get:m];
+    m.parent = [self valueOfStringKey:[settings.parentAppMode get:m] def:nil];
     return m;
 }
 
@@ -202,7 +203,7 @@ static OAApplicationMode *_SKI;
     return [NSArray arrayWithArray:_cachedFilteredValues];
 }
 
-- (void) onAvailableAppModesChanged
++ (void) onAvailableAppModesChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         _cachedFilteredValues = [NSMutableArray array];
@@ -257,11 +258,8 @@ static OAApplicationMode *_SKI;
 
 - (void) setParent:(OAApplicationMode *)parent
 {
-    if ([self isCustomProfile])
-    {
-        _parent = parent;
-        [OAAppSettings.sharedManager.parentAppMode set:parent.stringKey mode:self];
-    }
+    _parent = parent;
+    [OAAppSettings.sharedManager.parentAppMode set:parent.stringKey mode:self];
 }
 
 - (UIImage *) getIcon
@@ -346,12 +344,12 @@ static OAApplicationMode *_SKI;
         [OAAppSettings.sharedManager.routingProfile set:routingProfile mode:self];
 }
 
-- (EOARouteService) getRouterService
+- (NSInteger) getRouterService
 {
     return [OAAppSettings.sharedManager.routerService get:self];
 }
 
-- (void) setRouterService:(EOARouteService) routerService
+- (void) setRouterService:(NSInteger) routerService
 {
     [OAAppSettings.sharedManager.routerService set:(int) routerService mode:self];
 }
@@ -396,6 +394,11 @@ static OAApplicationMode *_SKI;
     [OAAppSettings.sharedManager.appModeOrder set:order mode:self];
 }
 
+- (NSString *) getProfileDescription
+{
+    return _descr && _descr.length > 0 ? _descr : OALocalizedString(@"custom_profile");
+}
+
 + (void) onApplicationStart
 {
     [self initCustomModes];
@@ -407,6 +410,9 @@ static OAApplicationMode *_SKI;
 + (void) initCustomModes
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
+    if (settings.customAppModes.length == 0)
+        return;
+    
     for (NSString *appModeKey in [settings getCustomAppModesKeys])
     {
         OAApplicationMode *m = [OAApplicationMode buildApplicationModeByKey:appModeKey];
@@ -427,7 +433,7 @@ static OAApplicationMode *_SKI;
     [_cachedFilteredValues sortUsingComparator:^NSComparisonResult(OAApplicationMode *obj1, OAApplicationMode *obj2) {
         return [self compareModes:obj1 obj2:obj2];
     }];
-//    Collections.sort(defaultValues, comparator);
+
     [self updateAppModesOrder];
 }
 
@@ -444,36 +450,49 @@ static OAApplicationMode *_SKI;
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSMutableString *res = [[NSMutableString alloc] init];
     
-    NSArray<NSString *> * modeKeys = settings.getCustomAppModesKeys.allObjects;
-    [modeKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [res appendString:obj];
-        if (idx != modeKeys.count - 1)
+    NSArray<OAApplicationMode *> * modes = [self getCustomAppModes];
+    [modes enumerateObjectsUsingBlock:^(OAApplicationMode * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [res appendString:obj.stringKey];
+        if (idx != modes.count - 1)
             [res appendString:@","];
     }];
-    
     
     if (![res isEqualToString:settings.customAppModes])
         settings.customAppModes = res;
 }
 
++ (NSArray<OAApplicationMode *> *) getCustomAppModes
+{
+    NSMutableArray<OAApplicationMode *> *customModes = [NSMutableArray new];
+    for (OAApplicationMode *mode in _values)
+    {
+        if (mode.isCustomProfile)
+            [customModes addObject:mode];
+        
+    }
+    return customModes;
+}
+
 + (void) saveProfile:(OAApplicationMode *)appMode
 {
-    if (![_values containsObject:appMode])
+    OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:appMode.stringKey def:nil];
+    if (mode != nil)
+    {
+        [mode setParent:appMode.parent];
+        [mode setUserProfileName:appMode.getUserProfileName];
+        [mode setIconName:appMode.getIconName];
+        [mode setRoutingProfile:appMode.getRoutingProfile];
+        [mode setRouterService:appMode.getRouterService];
+        [mode setIconColor:appMode.getIconColor];
+        [mode setLocationIcon:appMode.getLocationIcon];
+        [mode setNavigationIcon:appMode.getNavigationIcon];
+        [mode setOrder:appMode.getOrder];
+    }
+    else if (![_values containsObject:appMode])
+    {
         [_values addObject:appMode];
-//    if (mode != null) {
-//        mode.setParentAppMode(builder.applicationMode.parentAppMode);
-//        mode.setIconResName(builder.iconResName);
-//        mode.setUserProfileName(builder.userProfileName);
-//        mode.setRoutingProfile(builder.routingProfile);
-//        mode.setRouteService(builder.routeService);
-//        mode.setIconColor(builder.iconColor);
-//        mode.setLocationIcon(builder.locationIcon);
-//        mode.setNavigationIcon(builder.navigationIcon);
-//        mode.setOrder(builder.order);
-//    } else {
-//        mode = builder.customReg();
-//        initRegVisibility();
-//    }
+    }
+    
     [self reorderAppModes];
     [self saveCustomAppModesToSettings];
 }
@@ -489,9 +508,9 @@ static OAApplicationMode *_SKI;
     [self saveCustomAppModesToSettings];
 }
 
-- (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected
++ (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected
 {
-    NSMutableSet<OAApplicationMode *> *selectedModes = [NSMutableSet setWithArray:_values];
+    NSMutableSet<OAApplicationMode *> *selectedModes = [NSMutableSet setWithArray:self.values];
     NSMutableString *str = [[NSMutableString alloc] initWithFormat:@"%@,", _DEFAULT.stringKey];
     if ([OAApplicationMode.allPossibleValues containsObject:mode])
     {

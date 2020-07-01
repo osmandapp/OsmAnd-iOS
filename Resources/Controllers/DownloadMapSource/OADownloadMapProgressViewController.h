@@ -12,6 +12,6 @@
 
 @interface OADownloadMapProgressViewController : OACompoundViewController
 
-- (instancetype) initWithResource:(OAResourceItem *)item minZoom:(NSInteger)minZoom maxZoom:(NSInteger)maxZoom;
+- (instancetype) initWithResource:(OAResourceItem *)item minZoom:(int)minZoom maxZoom:(int)maxZoom numberOfTiles:(NSInteger)numOfTiles;
 
 @end

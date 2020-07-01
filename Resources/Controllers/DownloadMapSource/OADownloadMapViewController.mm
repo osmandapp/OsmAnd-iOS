@@ -65,9 +65,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OAMapRendererView *_mapView;
     NSArray *_data;
     
-    NSInteger _currentZoom;
-    NSInteger _minZoom;
-    NSInteger _maxZoom;
+    int _currentZoom;
+    int _minZoom;
+    int _maxZoom;
     NSInteger _numberOfTiles;
     CGFloat _downloadSize;
     NSArray<NSString *> *_possibleZoomValues;
@@ -330,7 +330,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 }
 
 - (IBAction) downloadButtonPressed:(id)sender {
-    OADownloadMapProgressViewController *downloadMapProgressVC = [[OADownloadMapProgressViewController alloc] initWithResource:[self getCurrentItem] minZoom:_minZoom maxZoom:_maxZoom];
+    OADownloadMapProgressViewController *downloadMapProgressVC = [[OADownloadMapProgressViewController alloc] initWithResource:[self getCurrentItem] minZoom:_minZoom maxZoom:_maxZoom numberOfTiles:_numberOfTiles];
     [[OARootViewController instance].navigationController pushViewController:downloadMapProgressVC animated:YES];
 }
 

@@ -7,20 +7,17 @@
 //
 
 #import "OADownloadMapProgressViewController.h"
-#import "OARootViewController.h"
-#import "OAMapRendererView.h"
 #import "OADownloadProgressBarCell.h"
 #import "OADownloadInfoTableViewCell.h"
 #import "OAResourcesUIHelper.h"
 #import "OASQLiteTileSource.h"
 #import "OAMapTileDownloader.h"
+#import "OARootViewController.h"
 
 #include "Localization.h"
 #include "OASizes.h"
 
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
-#include <OsmAndCore/Map/OnlineTileSources.h>
+
 
 #define kDownloadProgressCell @"OADownloadProgressBarCell"
 #define kGeneralInfoCell @"time_cell"
@@ -39,13 +36,12 @@
 @implementation OADownloadMapProgressViewController
 {
     OAResourceItem *_item;
-    OAMapRendererView *_mapView;
-    QHash<OsmAnd::ZoomLevel, QVector<OsmAnd::TileId>> _tileIds;
+    OAMapTileDownloader *_tileDownloader;
     NSArray *_data;
     NSInteger _numberOfTiles;
     CGFloat _downloadSize;
-    NSInteger _minZoom;
-    NSInteger _maxZoom;
+    int _minZoom;
+    int _maxZoom;
     CALayer *_horizontalLine;
     NSInteger _downloadedNumberOfTiles;
     BOOL _downloaded;
@@ -57,13 +53,14 @@
     [self.cancelButton setTitle: OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
-- (instancetype) initWithResource:(OAResourceItem *)item minZoom:(NSInteger)minZoom maxZoom:(NSInteger)maxZoom
+- (instancetype) initWithResource:(OAResourceItem *)item minZoom:(int)minZoom maxZoom:(int)maxZoom numberOfTiles:(NSInteger)numOfTiles
 {
     self = [super init];
     if (self) {
         _item = item;
         _minZoom = minZoom;
         _maxZoom = maxZoom;
+        _numberOfTiles = numOfTiles;
     }
     return self;
 }
@@ -73,7 +70,8 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    _tileDownloader = [[OAMapTileDownloader alloc] initWithItem:_item minZoom:_minZoom maxZoom:_maxZoom];
+    _tileDownloader.delegate = self;
     _downloaded = NO;
     _horizontalLine = [CALayer layer];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, 0.5);
@@ -81,8 +79,6 @@
     _bottomToolBarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [_bottomToolBarView.layer addSublayer:_horizontalLine];
     _cancelButton.layer.cornerRadius = 9.0;
-    _numberOfTiles = 0;
-    _tileIds = [self getTileIds:_numberOfTiles];
     _downloadSize = _numberOfTiles * 12000;
     [self setupView];
     [self startDownload];
@@ -128,103 +124,13 @@
 
 - (void) cancelDownload
 {
-    [OAMapTileDownloader.sharedInstance cancellAllRequests];
+    [_tileDownloader cancellAllRequests];
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)skipCurrentTile {
-    _downloadedNumberOfTiles++;
-    [self updateProgress];
 }
 
 - (void) startDownload
 {
-    if (!_item)
-        return;
-    
-    if (![_item isKindOfClass:OASqliteDbResourceItem.class] && ![_item isKindOfClass:OAOnlineTilesResourceItem.class])
-        return;
-    
-    BOOL isSqlite = [_item isKindOfClass:OASqliteDbResourceItem.class];
-    OASQLiteTileSource *sqliteSource = nil;
-    std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineSource = nullptr;
-    
-    NSString *downloadPath = nil;
-    if (isSqlite)
-    {
-        OASqliteDbResourceItem *sqliteItem = (OASqliteDbResourceItem *) _item;
-        sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:sqliteItem.path];
-    }
-    else
-    {
-        OAOnlineTilesResourceItem *onlineItem = (OAOnlineTilesResourceItem *) _item;
-        onlineSource = onlineItem.onlineTileSource;
-        downloadPath = [OsmAndApp.instance.cachePath stringByAppendingPathComponent:onlineSource->name.toNSString()];
-    }
-    
-    OAMapTileDownloader *downloader = OAMapTileDownloader.sharedInstance;
-    downloader.delegate = self;
-    
-    
-    for (const auto zoomLevel : _tileIds.keys())
-    {
-        for (const auto& tileId : _tileIds.value(zoomLevel))
-        {
-            if (isSqlite && sqliteSource)
-            {
-                if ([sqliteSource getBytes:tileId.x y:tileId.y zoom:zoomLevel])
-                {
-                    [self skipCurrentTile];
-                }
-                else
-                {
-                    NSString *url = [sqliteSource getUrlToLoad:tileId.x y:tileId.y zoom:zoomLevel];
-                    if (url)
-                    {
-                        OATileDownloadRequest *req = [[OATileDownloadRequest alloc] init];
-                        req.type = EOATileRequestTypeSqlite;
-                        req.url = [NSURL URLWithString:url];
-                        req.x = tileId.x;
-                        req.y = tileId.y;
-                        req.zoom = (int) zoomLevel;
-                        req.tileSource = sqliteSource;
-                        [downloader enqueTileDownload:req];
-                    }
-                    else
-                    {
-                        [self skipCurrentTile];
-                    }
-                }
-            }
-            else if (!isSqlite && onlineSource != nullptr && downloadPath)
-            {
-                NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @(zoomLevel).stringValue, @(tileId.x).stringValue, @(tileId.y).stringValue];
-                if ([NSFileManager.defaultManager fileExistsAtPath:tilePath])
-                {
-                    [self skipCurrentTile];
-                }
-                else
-                {
-                    NSString *urlToLoad = onlineSource->urlToLoad.toNSString();
-                    QList<QString> randomsArray = OsmAnd::OnlineTileSources::parseRandoms(onlineSource->randoms);
-                    NSString *url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, zoomLevel).toNSString();
-                    if (url)
-                    {
-                        OATileDownloadRequest *req = [[OATileDownloadRequest alloc] init];
-                        req.type = EOATileRequestTypeFile;
-                        req.url = [NSURL URLWithString:url];
-                        req.destPath = tilePath;
-                        
-                        [downloader enqueTileDownload:req];
-                    }
-                    else
-                    {
-                        [self skipCurrentTile];
-                    }
-                }
-            }
-        }
-    }
+    [_tileDownloader startDownload];
 }
 
 - (void) updateProgress
@@ -242,36 +148,6 @@
     _downloaded = YES;
     [self.cancelButton setTitle: OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
     [_tableView reloadData];
-}
-
-#pragma mark - Downloading process
-
-- (QHash<OsmAnd::ZoomLevel, QVector<OsmAnd::TileId>>) getTileIds:(NSInteger &)tileCount
-{
-    OsmAnd::AreaI bbox = [_mapView getVisibleBBox31];
-    QHash<OsmAnd::ZoomLevel, QVector<OsmAnd::TileId>> tileIds;
-    QVector<OsmAnd::TileId> currentZoomIds;
-    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(bbox.topLeft);
-    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(bbox.bottomRight);
-    for (NSInteger zoom = _minZoom; zoom <= _maxZoom; zoom++)
-    {
-        int x1 = OsmAnd::Utilities::getTileNumberX(zoom, topLeft.longitude);
-        int x2 = OsmAnd::Utilities::getTileNumberX(zoom, bottomRight.longitude);
-        int y1 = OsmAnd::Utilities::getTileNumberY(zoom, topLeft.latitude);
-        int y2 = OsmAnd::Utilities::getTileNumberY(zoom, bottomRight.latitude);
-        for (int x = x1; x <= x2; x++)
-        {
-            for (int y = y1; y <= y2; y++)
-            {
-                const auto tileId = OsmAnd::TileId::fromXY(x, y);
-                currentZoomIds.push_back(tileId);
-                tileCount++;
-            }
-        }
-        tileIds.insert(OsmAnd::ZoomLevel(zoom), currentZoomIds);
-        currentZoomIds.clear();
-    }
-    return tileIds;
 }
 
 
@@ -355,10 +231,11 @@
 
 #pragma mark - OATileDownloadDelegate
 
-- (void) onTileDownloaded
+- (void) onTileDownloaded:(BOOL)updateUI
 {
     _downloadedNumberOfTiles++;
-    [self updateProgress];
+    if (updateUI || _downloadedNumberOfTiles == _numberOfTiles)
+        [self updateProgress];
 }
 
 @end

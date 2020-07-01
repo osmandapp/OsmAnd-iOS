@@ -452,6 +452,7 @@
 "online_sources" = "Online sources";
 "size_of_downloaded_data" = "The big difference between zoom levels can increase the size of the downloaded data.";
 "use_of_downloaded_map" = "You can now use this map offline as main map source or as overlay/underlay layer";
+"map_update_warning" = "Do you want to reload tile data from the Internet?";
 
 // HUD
 "hud_heading" = "Heading";

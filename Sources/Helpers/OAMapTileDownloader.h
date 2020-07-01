@@ -10,29 +10,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OASQLiteTileSource;
+@class OAResourceItem;
 
 typedef NS_ENUM (NSInteger, EOATileRequestType)
 {
-    EOATileRequestTypeFile = 0,
+    EOATileRequestTypeUndefined = 0,
+    EOATileRequestTypeFile,
     EOATileRequestTypeSqlite
 };
 
-@interface OATileDownloadRequest : NSObject
-
-@property (nonatomic) EOATileRequestType type;
-@property (nonatomic) NSURL *url;
-@property (nonatomic) NSString *destPath;
-@property (nonatomic) int x;
-@property (nonatomic) int y;
-@property (nonatomic) int zoom;
-@property (nonatomic) OASQLiteTileSource *tileSource;
-
-@end
-
 @protocol OATileDownloadDelegate <NSObject>
 
-- (void) onTileDownloaded;
+- (void) onTileDownloaded:(BOOL)updateUI;
 
 @end
 
@@ -40,9 +29,9 @@ typedef NS_ENUM (NSInteger, EOATileRequestType)
 
 @property (nonatomic, weak) id<OATileDownloadDelegate> delegate;
 
-+ (OAMapTileDownloader *) sharedInstance;
+- (instancetype) initWithItem:(OAResourceItem *)item minZoom:(int)minZoom maxZoom:(int)maxZoom;
 
-- (void) enqueTileDownload:(OATileDownloadRequest *) request;
+- (void) startDownload;
 - (void) cancellAllRequests;
 
 @end

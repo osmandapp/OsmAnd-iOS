@@ -18,6 +18,8 @@
 #import "OAIAPHelper.h"
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
+#import "OAMapRendererView.h"
+#import "OASQLiteTileSource.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAPlugin.h"
 #import "OAEntity.h"
@@ -31,6 +33,9 @@
 #import "OAMapLayers.h"
 #import "OAContextMenuLayer.h"
 #import "OADownloadMapViewController.h"
+#import "OAResourcesUIHelper.h"
+
+#include <OsmAndCore/Utilities.h>
 
 @implementation OAMoreOptionsBottomSheetScreen
 {
@@ -288,6 +293,63 @@
         return nil;
 }
 
+- (void) refreshOnlineMapSource
+{
+    NSDictionary<OAMapSource *, OAResourceItem *> *onlineSources = [OAResourcesUIHelper getOnlineRasterMapSourcesBySource];
+    OAResourceItem *resource = onlineSources[_app.data.lastMapSource];
+    
+    if (!resource)
+        return;
+    
+    float zoom = OARootViewController.instance.mapPanel.mapViewController.getMapZoom;
+    const auto visibleArea = OARootViewController.instance.mapPanel.mapViewController.mapView.getVisibleBBox31;
+    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(visibleArea.topLeft);
+    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(visibleArea.bottomRight);
+    
+    BOOL isOnlineTileSource = [resource isKindOfClass:OAOnlineTilesResourceItem.class];
+    BOOL isSqliteTileSource = [resource isKindOfClass:OASqliteDbResourceItem.class];
+    
+    NSString *downloadPath = [OsmAndApp.instance.cachePath stringByAppendingPathComponent:_app.data.lastMapSource.name];
+    
+    OASQLiteTileSource *tileSource = nil;
+    if (isSqliteTileSource)
+    {
+        OASqliteDbResourceItem *item = (OASqliteDbResourceItem *) resource;
+        tileSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
+    }
+    
+    int x1 = OsmAnd::Utilities::getTileNumberX(zoom, topLeft.longitude);
+    int x2 = OsmAnd::Utilities::getTileNumberX(zoom, bottomRight.longitude);
+    int y1 = OsmAnd::Utilities::getTileNumberY(zoom, topLeft.latitude);
+    int y2 = OsmAnd::Utilities::getTileNumberY(zoom, bottomRight.latitude);
+    OsmAnd::AreaI area;
+    area.topLeft = OsmAnd::PointI(x1, y1);
+    area.bottomRight = OsmAnd::PointI(x2, y2);
+    
+    int left = (int) floor(area.left());
+    int top = (int) floor(area.top());
+    int width = (int) (ceil(area.right()) - left);
+    int height = (int) (ceil(area.bottom()) - top);
+    for (int i = 0; i < width; i++)
+    {
+        for (int j = 0; j < height; j++)
+        {
+            if (isOnlineTileSource)
+            {
+                OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *) resource;
+                const auto onlineSource = item.onlineTileSource;
+                NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @((int) zoom).stringValue, @(i + left).stringValue, @(j + top).stringValue];
+                [NSFileManager.defaultManager removeItemAtPath:tilePath error:nil];
+            }
+            else if (isSqliteTileSource && tileSource)
+            {
+                [tileSource deleteImage:(i + left) y:(j + top) zoom:(int)zoom];
+            }
+        }
+    }
+    [_app.mapSettingsChangeObservable notifyEvent];
+}
+
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
@@ -363,10 +425,11 @@
         else if ([key isEqualToString:@"update_map"])
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"map_update_warning") preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-            }]];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self refreshOnlineMapSource];
+            }]];
+            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

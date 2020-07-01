@@ -66,9 +66,7 @@
 {
     NSArray* allTransportStyleParams = [self getAllTransportStyleParameters];
     for (OAMapStyleParameter *styleParam in allTransportStyleParams)
-    {
         styleParam.value = @"false";
-    }
     
     [self saveAllStyleParameters];
 }
@@ -94,13 +92,13 @@
 
 - (BOOL) getVisibilityForStyleParameter:(NSString*)parameterName
 {
-    return [_settings.transportLayersVisible contain:parameterName];
+    return [_settings.transportLayersVisible contains:parameterName];
 }
 
 - (void) setVisibility:(BOOL)isVisible forStyleParameter:(NSString*)parameterName
 {
     if (isVisible)
-        [_settings.transportLayersVisible addUnic:parameterName];
+        [_settings.transportLayersVisible addUnique:parameterName];
     else
         [_settings.transportLayersVisible remove:parameterName];
     
@@ -123,7 +121,6 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_styleSettings saveParameters];
-        [[_app mapSettingsChangeObservable] notifyEvent];
     });
 }
 

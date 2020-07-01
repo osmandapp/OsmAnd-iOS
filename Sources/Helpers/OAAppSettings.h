@@ -213,16 +213,16 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @interface OAProfileStringList : OAProfileSetting
 
-+ (instancetype) withKey:(NSString *)key defValue:(NSMutableArray *)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
 
-- (NSMutableArray *) get;
-- (NSMutableArray *) get:(OAApplicationMode *)mode;
-- (void) set:(NSMutableArray *)arr;
-- (void) set:(NSMutableArray *)arr mode:(OAApplicationMode *)mode;
+- (NSArray<NSString *> *) get;
+- (NSArray<NSString *> *) get:(OAApplicationMode *)mode;
+- (void) set:(NSArray<NSString *> *)arr;
+- (void) set:(NSArray<NSString *> *)arr mode:(OAApplicationMode *)mode;
 - (void) add:(NSString *)string;
-- (void) addUnic:(NSString *)string;
+- (void) addUnique:(NSString *)string;
 - (void) remove:(NSString *)string;
-- (BOOL) contain:(NSString *)string;
+- (BOOL) contains:(NSString *)string;
 
 @end
 

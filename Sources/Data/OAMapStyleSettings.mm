@@ -326,7 +326,7 @@
 - (NSString *) getVisibilityForTransportParameter:(OAMapStyleParameter *)p
 {
     BOOL isTransportLayerVisible = _settings.mapSettingShowPublicTransport;
-    BOOL isParameterVisible = [_settings.transportLayersVisible contain:p.name];
+    BOOL isParameterVisible = [_settings.transportLayersVisible contains:p.name];
     if (isTransportLayerVisible && isParameterVisible)
     {
         return @"true";
@@ -343,6 +343,7 @@
         [defaults setValue:p.value forKey:name];
     }
     [defaults synchronize];
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 -(void) save:(OAMapStyleParameter *)parameter

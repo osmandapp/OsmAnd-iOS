@@ -197,24 +197,23 @@
 - (void) mapSettingSwitchChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
-    if (!switchView)
-        return;
-    
-    OAMapStyleParameter *p = parameters[switchView.tag];
-    if (!p)
-        return;
-    
-    if ([categoryName isEqual:@"transport"])
+    if (switchView)
     {
-        [_transportSettings setVisibility:switchView.isOn forStyleParameter:p.name];
-    }
-    else
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            p.value = switchView.isOn ? @"true" : @"false";
-            [styleSettings save:p];
-            //[[_app mapSettingsChangeObservable] notifyEvent];
-        });
+        OAMapStyleParameter *p = parameters[switchView.tag];
+        if (!p)
+            return;
+        
+        if ([categoryName isEqual:@"transport"])
+        {
+            [_transportSettings setVisibility:switchView.isOn forStyleParameter:p.name];
+        }
+        else
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                p.value = switchView.isOn ? @"true" : @"false";
+                [styleSettings save:p];
+            });
+        }
     }
 }
 

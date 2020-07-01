@@ -59,25 +59,9 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:4 stringId:@"favorites.showhide" class:self.class name:OALocalizedString(@"toggle_public_transport") category:CONFIGURE_MAP iconName:@"ic_custom_transport_bus" secondaryIconName:nil];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:4 stringId:@"public_transport.showhide" class:self.class name:OALocalizedString(@"toggle_public_transport") category:CONFIGURE_MAP iconName:@"ic_custom_transport_bus" secondaryIconName:nil editable:NO];
        
     return TYPE;
-}
-
-- (OrderedDictionary *)getUIModel
-{
-    
-    MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
-    [data setObject:@[@{
-                          @"type" : @"OASwitchTableViewCell",
-                          @"key" : KEY_DIALOG,
-                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
-                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
-                          },
-                      @{
-                          @"footer" : OALocalizedString(@"quick_action_dialog_descr")
-                          }] forKey:OALocalizedString(@"quick_action_dialog")];
-    return data;
 }
 
 @end

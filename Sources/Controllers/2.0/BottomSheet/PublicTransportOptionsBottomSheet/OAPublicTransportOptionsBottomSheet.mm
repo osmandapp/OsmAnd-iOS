@@ -115,10 +115,7 @@
     }
     else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        return [OASettingSwitchCell getHeight:[item objectForKey:@"title"]
-                                         desc:[item objectForKey:@"description"]
-                              hasSecondaryImg:NO
-                                    cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else
     {
@@ -175,8 +172,8 @@
             
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
             cell.switchView.on = [_transportSettings getVisibilityForStyleParameter:item[@"name"]];
+            [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }

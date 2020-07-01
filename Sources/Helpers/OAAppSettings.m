@@ -934,13 +934,13 @@
 
 @interface OAProfileStringList ()
 
-@property (nonatomic) NSMutableArray *defValue;
+@property (nonatomic) NSArray<NSString *> *defValue;
 
 @end
 
 @implementation OAProfileStringList
 
-+ (instancetype) withKey:(NSString *)key defValue:(NSMutableArray *)defValue
++ (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue
 {
     OAProfileString *obj = [[OAProfileStringList alloc] init];
     if (obj)
@@ -952,66 +952,57 @@
     return obj;
 }
 
-- (NSMutableArray *) get
+- (NSArray<NSString *> *) get
 {
     return [self get:self.appMode];
 }
 
-- (void) set:(NSMutableArray *)arr
+- (void) set:(NSArray<NSString *> *)arr
 {
     [self set:arr mode:self.appMode];
 }
 
-- (NSMutableArray *) get:(OAApplicationMode *)mode
+- (NSArray<NSString *> *) get:(OAApplicationMode *)mode
 {
     NSObject *value = [self getValue:mode];
-    if (value)
-    {
-        return (NSMutableArray *)value;
-    }
-    else
-        return self.defValue;
+    return value ? (NSArray<NSString *> *)value : self.defValue;
 }
 
-- (void) set:(NSMutableArray *)arr mode:(OAApplicationMode *)mode
+- (void) set:(NSArray<NSString *> *)arr mode:(OAApplicationMode *)mode
 {
     [self setValue:arr mode:mode];
 }
 
 - (void) add:(NSString *)string
 {
-    NSMutableArray *newArray = [NSMutableArray arrayWithArray:[self get]];
-    [newArray addObject:string];
-    [self set:newArray];
+    [self set:[[self get] arrayByAddingObject:string]];
 }
 
-- (void) addUnic:(NSString *)string
+- (void) addUnique:(NSString *)string
 {
-    if (![self contain:string])
+    if (![self contains:string])
         [self add:string];
 }
 
 - (void) remove:(NSString *)string
 {
-    if ([self contain:string])
+    if ([self contains:string])
     {
-        NSMutableArray *newArray = [NSMutableArray arrayWithArray:[self get]];
-        [newArray removeObject:string];
-        [self set:newArray];
+        [[self get] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", string]];
     }
 }
 
-- (BOOL) contain:(NSString *)string
+- (BOOL) contains:(NSString *)string
 {
     return [[self get] indexOfObject:string] != NSNotFound;
 }
 
 - (void) resetToDefault
 {
-    NSMutableArray *defaultValue = self.defValue;
+    NSArray<NSString *> *defaultValue = self.defValue;
     NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
     if (pDefault)
-        defaultValue = (NSMutableArray *)pDefault;
+        defaultValue = (NSArray<NSString *> *)pDefault;
 
     [self set:defaultValue];
 }
@@ -1396,7 +1387,7 @@
         _mapSettingShowOfflineEdits = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOfflineEditsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOfflineEditsKey] : YES;
         _mapSettingShowOnlineNotes = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOnlineNotesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOnlineNotesKey] : NO;
         _mapSettingShowPublicTransport = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowPublicTransportKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowPublicTransportKey] : NO;
-        _transportLayersVisible = [OAProfileStringList withKey:transportLayersVisibleKey defValue:[NSMutableArray new]];
+        _transportLayersVisible = [OAProfileStringList withKey:transportLayersVisibleKey defValue:@[]];
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;

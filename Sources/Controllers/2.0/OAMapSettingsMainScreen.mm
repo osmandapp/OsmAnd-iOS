@@ -684,7 +684,15 @@
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
+    {
         [_transportSettings setVisibilityForTransportLayer:switchView.isOn];
+            
+        if (switchView.isOn && [_transportSettings isAllTransportStylesHidden])
+        {
+            OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:@"transport"];
+            [transportSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+        }
+    }
 }
 
 

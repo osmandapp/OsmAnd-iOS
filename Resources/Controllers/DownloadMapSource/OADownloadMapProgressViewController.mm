@@ -7,20 +7,20 @@
 //
 
 #import "OADownloadMapProgressViewController.h"
-#import "OARootViewController.h"
-#import "OAMapRendererView.h"
 #import "OADownloadProgressBarCell.h"
 #import "OADownloadInfoTableViewCell.h"
+#import "OAResourcesUIHelper.h"
+#import "OASQLiteTileSource.h"
+#import "OAMapTileDownloader.h"
+#import "OARootViewController.h"
 
 #include "Localization.h"
 #include "OASizes.h"
 
-#include <OsmAndCore/Utilities.h>
-
 #define kDownloadProgressCell @"OADownloadProgressBarCell"
 #define kGeneralInfoCell @"time_cell"
 
-@interface OADownloadMapProgressViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface OADownloadMapProgressViewController() <UITableViewDelegate, UITableViewDataSource, OATileDownloadDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UIButton *navBarCancelButton;
@@ -33,16 +33,15 @@
 
 @implementation OADownloadMapProgressViewController
 {
-    OAMapRendererView *_mapView;
-    
+    OAResourceItem *_item;
+    OAMapTileDownloader *_tileDownloader;
     NSArray *_data;
     NSInteger _numberOfTiles;
     CGFloat _downloadSize;
-    NSInteger _minZoom;
-    NSInteger _maxZoom;
+    int _minZoom;
+    int _maxZoom;
     CALayer *_horizontalLine;
-    CGFloat _downloadedNumberOfTiles;
-    CGFloat _downloadedOfTotalSize;
+    NSInteger _downloadedNumberOfTiles;
     BOOL _downloaded;
 }
 
@@ -52,13 +51,15 @@
     [self.cancelButton setTitle: OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
-- (instancetype) initWithGeneralData:(NSInteger)numberOfTiles size:(CGFloat)downloadSize minZoom:(NSInteger)minZoom maxZoom:(NSInteger)maxZoom 
+- (instancetype) initWithResource:(OAResourceItem *)item minZoom:(int)minZoom maxZoom:(int)maxZoom numberOfTiles:(NSInteger)numOfTiles
 {
     self = [super init];
-    _numberOfTiles = numberOfTiles;
-    _downloadSize = downloadSize;
-    _minZoom = minZoom;
-    _maxZoom = maxZoom;
+    if (self) {
+        _item = item;
+        _minZoom = minZoom;
+        _maxZoom = maxZoom;
+        _numberOfTiles = numOfTiles;
+    }
     return self;
 }
 
@@ -67,7 +68,8 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    _tileDownloader = [[OAMapTileDownloader alloc] initWithItem:_item minZoom:_minZoom maxZoom:_maxZoom];
+    _tileDownloader.delegate = self;
     _downloaded = NO;
     _horizontalLine = [CALayer layer];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, 0.5);
@@ -75,8 +77,9 @@
     _bottomToolBarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [_bottomToolBarView.layer addSublayer:_horizontalLine];
     _cancelButton.layer.cornerRadius = 9.0;
+    _downloadSize = _numberOfTiles * 12000;
     [self setupView];
-    [self getTileIds];
+    [self startDownload];
 }
 
 - (void) setupView
@@ -89,11 +92,13 @@
         @"type" : kGeneralInfoCell,
         @"title" : OALocalizedString(@"number_of_tiles"),
         @"value" : [NSString stringWithFormat:@"/ %@", [NSString stringWithFormat:@"%ld", _numberOfTiles]],
+        @"key" : @"num_of_tiles"
     }];
     [tableData addObject:@{
         @"type" : kGeneralInfoCell,
         @"title" : OALocalizedString(@"download_size"),
         @"value" : [NSString stringWithFormat:@"/ ~ %@", [NSByteCountFormatter stringFromByteCount:_downloadSize countStyle:NSByteCountFormatterCountStyleFile]],
+        @"key" : @"download_size"
     }];
     _data = [NSArray arrayWithArray:tableData];
 }
@@ -104,39 +109,47 @@
 }
 
 - (IBAction) cancelButtonPressed:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_downloaded)
+        [OARootViewController.instance.mapPanel targetHide];
+    [self cancelDownload];
 }
 
 - (IBAction) navBarCancelButtonPressed:(id)sender {
+    if (_downloaded)
+        [OARootViewController.instance.mapPanel targetHide];
+    [self cancelDownload];
+}
+
+- (void) cancelDownload
+{
+    [_tileDownloader cancellAllRequests];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - Downloading process
-
-- (void) getTileIds
+- (void) startDownload
 {
-    OsmAnd::AreaI bbox = [_mapView getVisibleBBox31];
-    QVector<OsmAnd::TileId> tileIds;
-    int x1 = OsmAnd::Utilities::getTileNumberX(_minZoom, OsmAnd::Utilities::get31LongitudeX(bbox.left()));
-    int x2 = OsmAnd::Utilities::getTileNumberX(_minZoom, OsmAnd::Utilities::get31LongitudeX(bbox.right()));
-    int y1 = OsmAnd::Utilities::getTileNumberY(_minZoom, OsmAnd::Utilities::get31LatitudeY(bbox.top()));
-    int y2 = OsmAnd::Utilities::getTileNumberY(_minZoom, OsmAnd::Utilities::get31LatitudeY(bbox.bottom()));
-    for (int x = x1; x <= x2; x++)
-    {
-        for (int y = y1; y <= y2; y++)
-        {
-            const auto tileId = OsmAnd::TileId::fromXY(x, y);
-            for (int i = 1; i < _maxZoom - _minZoom; i++)
-            {
-                QVector<OsmAnd::TileId> tmpTileIds = OsmAnd::Utilities::getTileIdsUnderscaledByZoomShift(tileId, (unsigned int)i);
-                for (const auto& tile : tmpTileIds)
-                    tileIds.push_back(tile);
-            }
-        }
-    }
+    [_tileDownloader startDownload];
 }
 
-#pragma mark - TableView
+- (void) updateProgress
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
+        if (_downloadedNumberOfTiles == _numberOfTiles)
+            [self onDownloadFinished];
+    });
+}
+
+- (void) onDownloadFinished
+{
+    [OsmAndApp.instance.mapSettingsChangeObservable notifyEvent];
+    _downloaded = YES;
+    [self.cancelButton setTitle: OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
+    [_tableView reloadData];
+}
+
+
+#pragma mark - UITableViewDelegate
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.row];
@@ -155,7 +168,8 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.progressStatusLabel.text = OALocalizedString(@"downloading");
-        cell.progressValueLabel.text = @"0%";
+        cell.progressValueLabel.text = [NSString stringWithFormat:@"%ld%%", (NSInteger) (((double)_downloadedNumberOfTiles / (double)_numberOfTiles * 100.))];
+        [cell.progressBarView setProgress:(double)_downloadedNumberOfTiles / (double)_numberOfTiles];
         
         return cell;
     }
@@ -170,8 +184,17 @@
             cell = (OADownloadInfoTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
+        NSString *progressText = @"";
+        if ([item[@"key"] isEqualToString:@"num_of_tiles"])
+        {
+            progressText = [NSString stringWithFormat:@"%ld", _downloadedNumberOfTiles];
+        }
+        else if ([item[@"key"] isEqualToString:@"download_size"])
+        {
+            progressText = [NSByteCountFormatter stringFromByteCount:_downloadedNumberOfTiles * 12000 countStyle:NSByteCountFormatterCountStyleFile];
+        }
         cell.titleLabel.text = item[@"title"];
-        cell.doneLabel.text = @"0";
+        cell.doneLabel.text = progressText;
         cell.totalLabel.text = item[@"value"];
         return cell;
     }
@@ -198,10 +221,19 @@
     return _downloaded ? OALocalizedString(@"use_of_downloaded_map") : @"";
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
+}
+
+#pragma mark - OATileDownloadDelegate
+
+- (void) onTileDownloaded:(BOOL)updateUI
+{
+    _downloadedNumberOfTiles++;
+    if (updateUI || _downloadedNumberOfTiles == _numberOfTiles)
+        [self updateProgress];
 }
 
 @end

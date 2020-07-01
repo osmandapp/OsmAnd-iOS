@@ -8,8 +8,10 @@
 
 #import "OACompoundViewController.h"
 
+@class OAResourceItem;
+
 @interface OADownloadMapProgressViewController : OACompoundViewController
 
-- (instancetype) initWithGeneralData:(NSInteger)numberOfTiles size:(CGFloat)downloadSize minZoom:(NSInteger)minZoom maxZoom:(NSInteger)maxZoom;
+- (instancetype) initWithResource:(OAResourceItem *)item minZoom:(int)minZoom maxZoom:(int)maxZoom numberOfTiles:(NSInteger)numOfTiles;
 
 @end

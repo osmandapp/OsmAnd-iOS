@@ -4947,6 +4947,8 @@
 		DA8EE8152470147700069A6D /* mapillary.html in Resources */ = {isa = PBXBuildFile; fileRef = DA8EE8132470147700069A6D /* mapillary.html */; };
 		DA8EE8172470154500069A6D /* osm-editing-plugin.html in Resources */ = {isa = PBXBuildFile; fileRef = DA8EE8162470154400069A6D /* osm-editing-plugin.html */; };
 		DA8EE8182470154500069A6D /* osm-editing-plugin.html in Resources */ = {isa = PBXBuildFile; fileRef = DA8EE8162470154400069A6D /* osm-editing-plugin.html */; };
+		DA92555924A60A6E00871AAF /* OAMapTileDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA92555824A60A6E00871AAF /* OAMapTileDownloader.mm */; };
+		DA92555A24A60A6E00871AAF /* OAMapTileDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA92555824A60A6E00871AAF /* OAMapTileDownloader.mm */; };
 		DA92BC0E22E06AF800238C86 /* kml2gpx.xslt in Resources */ = {isa = PBXBuildFile; fileRef = DA92BC0D22E06AF700238C86 /* kml2gpx.xslt */; };
 		DA92BC0F22E06AF800238C86 /* kml2gpx.xslt in Resources */ = {isa = PBXBuildFile; fileRef = DA92BC0D22E06AF700238C86 /* kml2gpx.xslt */; };
 		DA92FFBC233DFBF5001A14B7 /* OACollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA92FFBB233DFBF5001A14B7 /* OACollectionViewCell.xib */; };
@@ -8966,6 +8968,8 @@
 		DA8EE8102470142B00069A6D /* quick-action.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "quick-action.html"; path = "../help/website/feature_articles/quick-action.html"; sourceTree = "<group>"; };
 		DA8EE8132470147700069A6D /* mapillary.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = mapillary.html; path = ../help/website/feature_articles/mapillary.html; sourceTree = "<group>"; };
 		DA8EE8162470154400069A6D /* osm-editing-plugin.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "osm-editing-plugin.html"; path = "../help/website/feature_articles/osm-editing-plugin.html"; sourceTree = "<group>"; };
+		DA92555724A60A6D00871AAF /* OAMapTileDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapTileDownloader.h; path = Helpers/OAMapTileDownloader.h; sourceTree = "<group>"; };
+		DA92555824A60A6E00871AAF /* OAMapTileDownloader.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapTileDownloader.mm; path = Helpers/OAMapTileDownloader.mm; sourceTree = "<group>"; };
 		DA92BC0D22E06AF700238C86 /* kml2gpx.xslt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = kml2gpx.xslt; path = Helpers/kml2gpx.xslt; sourceTree = "<group>"; };
 		DA92FFBB233DFBF5001A14B7 /* OACollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OACollectionViewCell.xib; path = Resources/Controllers/Cells/OACollectionViewCell.xib; sourceTree = "<group>"; };
 		DA92FFBE233DFC47001A14B7 /* OACollectionViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACollectionViewCell.mm; path = Controllers/Cells/OACollectionViewCell.mm; sourceTree = "<group>"; };
@@ -13604,6 +13608,8 @@
 				DA2267A8240E697A00FFEA91 /* OAWikiArticleHelper.mm */,
 				DAC0B30F248681CD00F662F5 /* OALocationParser.h */,
 				DAC0B310248681CD00F662F5 /* OALocationParser.mm */,
+				DA92555724A60A6D00871AAF /* OAMapTileDownloader.h */,
+				DA92555824A60A6E00871AAF /* OAMapTileDownloader.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -19422,6 +19428,7 @@
 				847A1D341DF94E9B003C1246 /* UIViewController+OARootViewController.m in Sources */,
 				DA71EAB1234624B200B9D7F3 /* OARouteSettingsBaseViewController.mm in Sources */,
 				DA83601023449720003374B5 /* OARoutingSettingsCell.mm in Sources */,
+				DA92555A24A60A6E00871AAF /* OAMapTileDownloader.mm in Sources */,
 				847A1D351DF94E9B003C1246 /* OAMapStylesCell.m in Sources */,
 				847A1D361DF94E9B003C1246 /* OATextViewTableViewCell.m in Sources */,
 				DA2FA7052302F707006DB2E5 /* OANavAutoZoomMapAction.m in Sources */,
@@ -19624,6 +19631,7 @@
 				84B4FDA11A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
 				84D81EFB1AA370E9001098FD /* OADestination.mm in Sources */,
 				DAB2A55921F1FDCD00D9F01A /* OAOsmBugsLayer.mm in Sources */,
+				DA92555924A60A6E00871AAF /* OAMapTileDownloader.mm in Sources */,
 				DAA864252304403D000E1900 /* OAShowHideLocalOSMChanges.m in Sources */,
 				845AFB531E264EA400170026 /* OASearchWord.mm in Sources */,
 				84F9893D1B511290009C443C /* OADestinationCardHeaderView.m in Sources */,

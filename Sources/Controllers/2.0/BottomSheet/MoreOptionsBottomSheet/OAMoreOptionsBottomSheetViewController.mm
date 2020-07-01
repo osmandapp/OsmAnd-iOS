@@ -362,7 +362,11 @@
         }
         else if ([key isEqualToString:@"update_map"])
         {
-            NSLog(@"Upload map");
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"map_update_warning") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

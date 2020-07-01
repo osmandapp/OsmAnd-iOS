@@ -25,8 +25,10 @@
     NSString *_vehicleParameter;
     NSString *_propertyImageName;
     NSString *_measurementUnit;
-    NSArray<NSString *> *_measurementRangeArr;
+    NSArray<NSNumber *> *_measurementRangeValuesArr;
+    NSArray<NSString *> *_measurementRangeStringArr;
     NSString *_description;
+    NSNumber *_selectedWeight;
 }
 
 - (instancetype)initWithApplicationMode:(OAApplicationMode *)ap vehicleParameter:(NSString *)vp
@@ -60,35 +62,68 @@
     {
         _propertyImageName = @"img_help_weight_limit_day";
         _measurementUnit = OALocalizedString(@"tones");
-        _measurementRangeArr = @[@"None", @"1.5 t", @"3 t", @"3.5 t", @"7.5 t", @"10 t", @"12 t"]; // has to be changed
+        _selectedWeight = [NSNumber numberWithFloat:0];
+        _measurementRangeValuesArr = @[ @0, @1.5, @3, @3.5, @7.5, @10, @12 ]; // has to be changed
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSNumber *val in _measurementRangeValuesArr)
+            if (val.intValue == 0)
+                [array addObject:OALocalizedString(@"sett_no_ext_input")];
+            else
+                [array addObject:[NSString stringWithFormat:@"%@ %@", val, @"t"]];
+        _measurementRangeStringArr = [NSArray arrayWithArray:array];
         _description = OALocalizedString(@"vehicle_height_descr"); // has to be changed
     }
     else if ([_vehicleParameter isEqualToString:OALocalizedString(@"routing_attr_height_name")])
     {
         _propertyImageName = @"img_help_height_limit_day";
         _measurementUnit = OALocalizedString(@"meters");
-        _measurementRangeArr = @[];
+        _selectedWeight = [NSNumber numberWithFloat:0];
+        _measurementRangeValuesArr = @[ @0, @1.5, @3, @3.5, @7.5, @10, @12 ]; // has to be changed
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSNumber *val in _measurementRangeValuesArr)
+            if (val.intValue == 0)
+                [array addObject:OALocalizedString(@"sett_no_ext_input")];
+            else
+                [array addObject:[NSString stringWithFormat:@"%@ %@", val, @"m"]];
+        _measurementRangeStringArr = [NSArray arrayWithArray:array];
         _description = OALocalizedString(@"vehicle_height_descr"); // has to be changed
     }
     else if ([_vehicleParameter isEqualToString:OALocalizedString(@"routing_attr_width_name")])
     {
         _propertyImageName = @"img_help_width_limit_day";
         _measurementUnit = OALocalizedString(@"meters");
-        _measurementRangeArr = @[];
+        _selectedWeight = [NSNumber numberWithFloat:0];
+        _measurementRangeValuesArr = @[ @0, @1.5, @3, @3.5, @7.5, @10, @12 ]; // has to be changed
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSNumber *val in _measurementRangeValuesArr)
+            if (val.intValue == 0)
+                [array addObject:OALocalizedString(@"sett_no_ext_input")];
+            else
+                [array addObject:[NSString stringWithFormat:@"%@ %@", val, @"m"]];
+        _measurementRangeStringArr = [NSArray arrayWithArray:array];
         _description = OALocalizedString(@"vehicle_height_descr"); // has to be changed
     }
     else if ([_vehicleParameter isEqualToString:OALocalizedString(@"routing_attr_length_name")])
     {
         _propertyImageName = @"";
         _measurementUnit = OALocalizedString(@"meters");
-        _measurementRangeArr = @[];
+        _selectedWeight = [NSNumber numberWithFloat:0];
+        _measurementRangeValuesArr = @[ @0, @1.5, @3, @3.5, @7.5, @10, @12 ]; // has to be changed
+        NSMutableArray *array = [NSMutableArray array];
+        for (NSNumber *val in _measurementRangeValuesArr)
+            if (val.intValue == 0)
+                [array addObject:OALocalizedString(@"sett_no_ext_input")];
+            else
+                [array addObject:[NSString stringWithFormat:@"%@ %@", val, @"m"]];
+        _measurementRangeStringArr = [NSArray arrayWithArray:array];
         _description = OALocalizedString(@"vehicle_height_descr"); // has to be changed
     }
     else
     {
         _propertyImageName = @"";
         _measurementUnit = @"";
-        _measurementRangeArr = @[];
+        _selectedWeight = [NSNumber numberWithFloat:0];
+        _measurementRangeValuesArr = @[];
         _description = @"";
     }
 }
@@ -113,6 +148,7 @@
     [parametersArr addObject:@{
         @"type" : @"OAInputCellWithTitle",
         @"title" : _measurementUnit,
+        @"value" : _selectedWeight,
         @"icon" : @"list_warnings_traffic_calming",
         @"isOn" : @YES,
     }];
@@ -163,6 +199,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
+            cell.inputField.text = [NSString stringWithFormat:@"%@", item[@"value"]];
         }
         return cell;
     }
@@ -174,12 +211,13 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAHorizontalCollectionViewCell *)[nib objectAtIndex:0];
-            cell.dataArray = _measurementRangeArr;
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
+            cell.dataArray = _measurementRangeStringArr;
+            cell.selectedIndex = [self getIndexOfValue];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
         }
@@ -204,9 +242,16 @@
 
 #pragma mark - OAHorizontalCollectionViewCellDelegate
 
-- (void) iconChanged:(NSInteger)newValue
+- (void) valueChanged:(NSInteger)newValueIndex
 {
-    
+    _selectedWeight = _measurementRangeValuesArr[newValueIndex];
+    [self setupView];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (NSInteger) getIndexOfValue
+{
+    return [_measurementRangeValuesArr indexOfObject:_selectedWeight];
 }
 
 @end

@@ -10,7 +10,7 @@
 
 @protocol OAHorizontalCollectionViewCellDelegate <NSObject>
 
-- (void)iconChanged:(NSInteger)tag;
+- (void)valueChanged:(NSInteger)tag;
 
 @end
 
@@ -18,6 +18,7 @@
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic) NSArray *dataArray;
+@property (nonatomic) NSInteger selectedIndex;
 
 @property (nonatomic, weak) id<OAHorizontalCollectionViewCellDelegate> delegate;
 

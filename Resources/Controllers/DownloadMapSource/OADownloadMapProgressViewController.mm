@@ -154,7 +154,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        cell.progressStatusLabel.text = @"Downloading";
+        cell.progressStatusLabel.text = OALocalizedString(@"downloading");
         cell.progressValueLabel.text = @"0%";
         
         return cell;

@@ -1,5 +1,5 @@
 "shared_string_cancel" = "Скасувати";
-"shared_string_edit" = "Правити";
+"shared_string_edit" = "Редагувати";
 "shared_string_ok" = "Гаразд";
 "shared_string_yes" = "Так";
 "shared_string_no" = "Ні";
@@ -22,7 +22,7 @@
 "shared_string_done" = "Готово";
 "shared_string_update" = "Оновити";
 "shared_string_install" = "Встановити";
-"shared_string_uninstall" = "Вилучити";
+"shared_string_uninstall" = "Видалити";
 "shared_string_remove" = "Вилучити";
 "shared_string_buy" = "Придбати";
 "shared_string_buy_for" = "для";
@@ -1337,7 +1337,7 @@
 "rendering_attr_piste_type_skitour_name" = "Лижні мандри";
 "rendering_attr_roadStyle_description" = "Стиль доріг";
 "rendering_attr_showRoadMaps_name" = "Тільки дорожні мапи";
-"routing_attr_avoid_subway_name" = "Без метро";
+"routing_attr_avoid_subway_name" = "Уник. метро";
 "rendering_attr_surface_salt_name" = "Сіль";
 "rendering_attr_surface_grass_paver_name" = "Газонна решітка";
 "rendering_attr_appMode_description" = "Оптимізувати мапу";
@@ -1372,15 +1372,15 @@
 "routing_attr_no_new_routing_name" = "Не використовувати маршрутизацію версії 1.9";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Показати мережеві маршрути циклу вузлів";
 "routing_attr_avoid_ferry_name" = "Уникати поромних переправ";
-"routing_attr_avoid_stairs_name" = "Без сходів";
+"routing_attr_avoid_stairs_name" = "Уник. сходів";
 "rendering_attr_busRoutes_name" = "Маршрути автобусів";
-"routing_attr_avoid_train_name" = "Без потягів";
+"routing_attr_avoid_train_name" = "Уник. потягів";
 "rendering_value_brown_name" = "Коричневий";
 "routing_attr_driving_style_speed_name" = "Коротші маршрути";
 "rendering_attr_noAdminboundaries_description" = "Приховати регіональні кордони (рівні 5–9).";
-"routing_attr_avoid_unpaved_name" = "Лише неасфальтовані дороги";
+"routing_attr_avoid_unpaved_name" = "Уник. ґрунтових доріг";
 "routeInfo_road_types_name" = "Види доріг";
-"routing_attr_avoid_sett_name" = "Без мостових та бруківки";
+"routing_attr_avoid_sett_name" = "Уник. мостових та бруківки";
 "rendering_attr_currentTrackWidth_description" = "Товщина GPX";
 "routing_attr_allow_advanced_description" = "Складні маршрути з небезпечними перешкодами і крутими ділянками.";
 "rendering_attr_piste_difficulty_novice_name" = "Новачок";
@@ -1404,7 +1404,7 @@
 "rendering_value_translucent_blue_name" = "Напівпрозорий синій";
 "rendering_attr_hideNonVehicleHighways_name" = "Дороги не призначені для автівок";
 "routing_attr_short_way_description" = "Розраховувати паливо-ощадний маршрут (зазвичай найкоротший).";
-"routing_attr_avoid_borders_name" = "Без перетину кордону";
+"routing_attr_avoid_borders_name" = "Уник. перетину кордону";
 "routing_attr_piste_type_nordic_description" = "Траси для скандинавської ходьби або бігу на лижах.";
 "rendering_attr_surface_sand_name" = "Пісок";
 "rendering_attr_surface_fine_gravel_name" = "Багатошаровий гравій";
@@ -1419,7 +1419,7 @@
 "rendering_attr_contourLines_name" = "Показувати горизонталі";
 "rendering_attr_hideProposed_name" = "Заплановані обʼєкти";
 "rendering_attr_smoothness_very_horrible_name" = "Дуже жахлива";
-"routing_attr_avoid_ferries_name" = "Без поромних переправ";
+"routing_attr_avoid_ferries_name" = "Уник. поромних переправ";
 "rendering_attr_piste_difficulty_intermediate_name" = "Посередньо";
 "rendering_value_germanRoadAtlas_name" = "Атлас доріг Німеччини";
 "routing_attr_allow_skating_only_description" = "Маршрути, створені лише для вільного стилю або ковзанів, без класичних трас.";
@@ -1438,7 +1438,7 @@
 "rendering_attr_smoothness_intermediate_name" = "Посередньо";
 "rendering_attr_smoothness_very_bad_name" = "Дуже погана";
 "rendering_attr_smoothness_excellent_name" = "Чудова";
-"routing_attr_avoid_motorway_name" = "Без автомагістралей";
+"routing_attr_avoid_motorway_name" = "Уник. автомагістралей";
 "routing_attr_driving_style_prefer_unpaved_description" = "Надати перевагу незаасфальтованим над асфальтованими дорогами для прокладки.";
 "rendering_value_translucent_purple_name" = "Напівпрозорий пурпурний";
 "rendering_attr_ice_road_name" = "Льодова дорога";
@@ -1464,7 +1464,7 @@
 "rendering_value_translucent_red_name" = "Напівпрозорий червоний";
 "routing_attr_avoid_share_taxi_description" = "Уникати маршрутних таксі";
 "rendering_value_translucent_lightgreen_name" = "Напівпрозорий світло зелений";
-"routing_attr_avoid_shuttle_train_name" = "Без приміських поїздів";
+"routing_attr_avoid_shuttle_train_name" = "Уник. приміських поїздів";
 "rendering_value_translucent_yellow_name" = "Напівпрозорий жовтий";
 "routing_attr_relief_smoothness_factor_name" = "Вибрати пересіченість місцевості";
 "rendering_attr_surface_gravel_name" = "Гравій";
@@ -1485,7 +1485,7 @@
 "routing_attr_allow_intermediate_description" = "Більш складні маршрути з крутішими ділянками. Як правило, деякі перешкоди, яких слід уникати.";
 "rendering_attr_trolleybusRoutes_name" = "Маршрути тролейбусів";
 "rendering_value_green_name" = "Зелений";
-"rendering_attr_surface_paving_stones_name" = "Тротуарна плитка";
+"rendering_attr_surface_paving_stones_name" = "Бруківка";
 "rendering_attr_smoothness_impassable_name" = "Непрохідна";
 "rendering_attr_subwayMode_name" = "Маршрути метро";
 "rendering_attr_tracktype_grade5_name" = "М'яке";
@@ -1526,7 +1526,7 @@
 "routing_attr_allow_classic_only_description" = "Маршрути, створені тільки для класичної їзди, без роликових треків. Сюди входять маршрути, доглянуті малим снігоходом з більш твердим треком, та траси, зроблені лижниками вручну.";
 "routing_attr_driving_style_safety_name" = "Надавати перевагу провулкам";
 "routing_attr_max_num_changes_description" = "Вкажіть верхню межу змін";
-"routing_attr_avoid_toll_name" = "Без платних доріг";
+"routing_attr_avoid_toll_name" = "Уник. платних доріг";
 "routing_attr_allow_skating_only_name" = "Дозволити лише маршрути для катання на ковзанах";
 "routing_attr_allow_motorway_name" = "Використовувати автомагістралі";
 "rendering_value_darkyellow_name" = "Темно-жовтий";

@@ -391,7 +391,7 @@ static NSInteger kButtonsSection;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             if (indexPath.section == kMapVisibilitySection)
             {
-                [cell.switchView setOn: [[OARootViewController instance].mapPanel isOverlayUnderlayViewVisible]];
+                [cell.switchView setOn: [self isOpacitySliderVisible]];
                 [cell.switchView addTarget:self action:@selector(onShowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else
@@ -547,7 +547,10 @@ static NSInteger kButtonsSection;
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-        [[OARootViewController instance].mapPanel updateOverlayUnderlayView:switchView.isOn];
+    {
+        [self setOpacitySliderVisibility:switchView.isOn];
+        [[OARootViewController instance].mapPanel updateOverlayUnderlayView];
+    }
 }
 
 - (void) hidePolygons:(BOOL)hide
@@ -588,6 +591,31 @@ static NSInteger kButtonsSection;
     }
     [tblView reloadData];
 }
+
+- (BOOL) isOpacitySliderVisible
+{
+    if (_mapSettingType == EMapSettingOverlay)
+    {
+        return [_settings mapSettingShowOverlayOpacitySlider];
+    }
+    else if (_mapSettingType == EMapSettingUnderlay)
+    {
+        return [_settings mapSettingShowUnderlayOpacitySlider];
+    }
+}
+
+- (void) setOpacitySliderVisibility: (BOOL)show
+{
+    if (_mapSettingType == EMapSettingOverlay)
+    {
+        _settings.mapSettingShowOverlayOpacitySlider = show;
+    }
+    else if (_mapSettingType == EMapSettingUnderlay)
+    {
+        _settings.mapSettingShowUnderlayOpacitySlider = show;
+    }
+}
+
 
 #pragma mark - UITableViewDelegate
 

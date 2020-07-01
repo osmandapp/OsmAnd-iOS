@@ -27,7 +27,7 @@
 "search_radius_proximity" = "A menos dos";
 "poi" = "POI";
 "day_off_label" = "pechado";
-"open_from" = "Aberto a partires das";
+"open_from" = "Aberto dende as";
 "open_till" = "Aberto até as";
 "will_close_at" = "Will close at";
 "will_open_at" = "Will open at";
@@ -302,7 +302,7 @@
 "shared_string_done" = "Done";
 "shared_string_update" = "Actualizar";
 "shared_string_install" = "Instalar";
-"shared_string_uninstall" = "Uninstall";
+"shared_string_uninstall" = "Desinstalar";
 "shared_string_delete" = "Eliminar";
 "shared_string_remove" = "Eliminar";
 "shared_string_dismiss" = "Rexeitar";
@@ -1161,7 +1161,7 @@
 "rendering_attr_surface_paved_name" = "Pavimentado";
 "rendering_attr_showSurfaces_name" = "Amosar superficie das estradas";
 "routeInfo_tracktype_name" = "Firmeza da superficie";
-"rendering_attr_roadStyle_name" = "Estilo da estradas";
+"rendering_attr_roadStyle_name" = "Estilo das estradas";
 "rendering_attr_contourDensity_name" = "Densidade da curva do nivel";
 "rendering_value_blue_name" = "Azul";
 "routing_attr_width_description" = "Especifica o límite permitido de largura do vehículo nas rutas.";

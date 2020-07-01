@@ -122,6 +122,8 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OAMapUnderlayAction.TYPE];
     [quickActionTypes addObject:OAMapStyleAction.TYPE];
     [quickActionTypes addObject:OADayNightModeAction.TYPE];
+    [quickActionTypes addObject:OAMapOverlayAction.TYPE];
+    [quickActionTypes addObject:OAMapUnderlayAction.TYPE];
     //        [quickActionTypes addObject:OAShowHideTransportLinesAction.TYPE];
     // navigation
     [quickActionTypes addObject:OANavVoiceAction.TYPE];

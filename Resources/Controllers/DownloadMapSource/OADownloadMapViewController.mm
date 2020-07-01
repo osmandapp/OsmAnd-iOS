@@ -41,9 +41,16 @@
 #define kMapTypeSection 0
 #define kZoomSection 1
 #define kZoomTilesRow 0
+
 #define kMinZoomRow 1
-#define kMaxZoomRow 2
+#define kMinZoomPickerRow 2
+#define kMaxZoomRow 3
+#define kMaxZoomPickerRow 4
+
 #define kZoomPickerRow 3
+#define kDownloadInfoSection 2
+#define kNumberOfTilesRow 0
+#define kDownloadSizeRow 1
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -71,8 +78,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSInteger _numberOfTiles;
     CGFloat _downloadSize;
     NSArray<NSString *> *_possibleZoomValues;
-    NSIndexPath *_pickerIndexPath;
+    //NSIndexPath *_pickerIndexPath;
     CALayer *_horizontalLine;
+    BOOL _minZoomPickerIsShown;
+    BOOL _maxZoomPickerIsShown;
     
     NSDictionary<OAMapSource *, OAResourceItem *> *_onlineMapSources;
 }
@@ -190,6 +199,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _onlineMapSources = [OAResourcesUIHelper getOnlineRasterMapSourcesBySource];
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _currentZoom = _mapView.zoom;
+    _minZoomPickerIsShown = NO;
+    _maxZoomPickerIsShown = NO;
     [self setZoomValues];
     [self getDownloadInfo];
     [self setupView];
@@ -293,6 +304,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         @"clickable" : @YES
     }];
     [zoomLevelArr addObject:@{
+        @"type" : kCellTypePicker,
+        @"isVisible" : @(_minZoomPickerIsShown),
+    }];
+    [zoomLevelArr addObject:@{
         @"title" : OALocalizedString(@"shared_string_maximum"),
         @"value" : [NSString stringWithFormat:@"%ld", _maxZoom],
         @"type" : kCellTypeZoom,
@@ -300,6 +315,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }];
     [zoomLevelArr addObject:@{
         @"type" : kCellTypePicker,
+        @"isVisible" : @(_maxZoomPickerIsShown),
     }];
     [generalInfoArr addObject:@{
         @"type" : kCellTypeZoom,
@@ -355,7 +371,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) updateDownloadInfo
 {
     [self getDownloadInfo];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2], [NSIndexPath indexPathForRow:1 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kNumberOfTilesRow inSection:kDownloadInfoSection], [NSIndexPath indexPathForRow:kDownloadSizeRow inSection:kDownloadInfoSection]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -367,7 +383,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
            [self.delegate requestFullMode];
         if (self.delegate && self.isLandscape)
             [self.delegate contentChanged];
-        
         [self updateToolBar];
     } completion:nil];
 }
@@ -461,8 +476,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == kZoomSection)
-        return [self pickerIsShown] ? 4 : 3;
     return [_data[@"tableData"][section] count];
 }
 
@@ -535,9 +548,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         cell.dataArray = _possibleZoomValues;
         NSInteger minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
         NSInteger maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
-        [cell.picker selectRow:indexPath.row == kMaxZoomRow ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
+        [cell.picker selectRow:indexPath.row == kMinZoomPickerRow ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
+        cell.hidden = ![item[@"isVisible"] boolValue];
         return cell;
     }
     return nil;
@@ -570,8 +584,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([indexPath isEqual:_pickerIndexPath])
-        return 162.0;
+    if (indexPath.section == kZoomSection && (indexPath.row == kMinZoomPickerRow || indexPath.row == kMaxZoomPickerRow))
+    {
+        if ((indexPath.row == kMinZoomPickerRow && _minZoomPickerIsShown) || (indexPath.row == kMaxZoomPickerRow && _maxZoomPickerIsShown))
+            return 162.0;
+        else
+            return 0.01;
+    }
     return UITableViewAutomaticDimension;
 }
 
@@ -583,25 +602,25 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item =  [self getItem:indexPath];
-    if (indexPath.section == kZoomSection && [item[@"type"] isEqualToString:kCellTypeZoom])
+    if (indexPath.section == kZoomSection)
     {
+        NSInteger pickerRow = indexPath.row == kMinZoomRow ? kMinZoomPickerRow : kMaxZoomPickerRow;
         [self.tableView beginUpdates];
-
-        if ([self pickerIsShown] && (_pickerIndexPath.row - 1 == indexPath.row))
-            [self hideExistingPicker];
+        if (indexPath.row == kMinZoomRow)
+        {
+            if (_maxZoomPickerIsShown)
+                _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
+            _minZoomPickerIsShown = !_minZoomPickerIsShown;
+        }
         else
         {
-            NSIndexPath *newPickerIndexPath = [self calculateIndexPathForNewPicker:indexPath];
-            if ([self pickerIsShown])
-                [self hideExistingPicker];
-
-            [self showNewPickerAtIndex:newPickerIndexPath];
-            _pickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
+            if (_minZoomPickerIsShown)
+                _minZoomPickerIsShown = !_minZoomPickerIsShown;
+            _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
         }
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self setupView];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:pickerRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
         [self.tableView endUpdates];
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
     if (indexPath.section == kMapTypeSection)
     {
@@ -612,61 +631,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
-#pragma mark - Picker
-
-- (BOOL) pickerIsShown
-{
-    return _pickerIndexPath != nil;
-}
-
-- (void) hideExistingPicker
-{
-    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row inSection:_pickerIndexPath.section]]
-                          withRowAnimation:UITableViewRowAnimationFade];
-    _pickerIndexPath = nil;
-}
-
-- (void) hidePicker
-{
-    [self.tableView beginUpdates];
-    if ([self pickerIsShown])
-        [self hideExistingPicker];
-    [self.tableView endUpdates];
-}
-
-- (NSIndexPath *) calculateIndexPathForNewPicker:(NSIndexPath *)selectedIndexPath
-{
-    NSIndexPath *newIndexPath;
-    if (([self pickerIsShown]) && (_pickerIndexPath.row < selectedIndexPath.row))
-        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row - 1 inSection:kZoomSection];
-    else
-        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row inSection:kZoomSection];
-    return newIndexPath;
-}
-
-- (void) showNewPickerAtIndex:(NSIndexPath *)indexPath
-{
-    NSArray *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:kZoomSection]];
-    [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-}
-
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[@"tableData"][indexPath.section][indexPath.row];
-    if (indexPath.section == kZoomSection && ![item[@"type"] isEqualToString:@"OAPreviewZoomLevelsCell"])
-    {
-        NSArray *ar = _data[@"tableData"][indexPath.section];
-        if ([self pickerIsShown] && [indexPath isEqual:_pickerIndexPath])
-            return ar[3];
-        else
-            return indexPath.row == kMinZoomRow ? ar[1] : ar[2];
-    }
     return _data[@"tableData"][indexPath.section][indexPath.row];
 }
 
-- (void) updatePickerCell:(NSInteger)value
+#pragma mark - Picker
+
+- (void) updatePickerCell:(NSInteger)value zoomRow:(NSInteger)zoomPickerRow
 {
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_pickerIndexPath];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:zoomPickerRow inSection:kZoomSection]];
     if ([cell isKindOfClass:OACustomPickerTableViewCell.class])
     {
         OACustomPickerTableViewCell *cellRes = (OACustomPickerTableViewCell *) cell;
@@ -677,7 +651,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
 {
     NSInteger value = [zoom integerValue];
-    if (pickerTag == 2)
+    NSInteger zoomRow = 0;
+    if (pickerTag == kMinZoomPickerRow)
     {
         if (value <= _maxZoom)
         {
@@ -686,12 +661,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else
         {
             _minZoom = _maxZoom;
-            [self updatePickerCell:_minZoom - 1];
+            [self updatePickerCell:_minZoom - 1 zoomRow:kMinZoomPickerRow];
         }
         _minZoomTileUrl = [self getZoomTileUrl:_minZoom];
+        zoomRow = kMinZoomRow;
         [self downloadZoomedTiles];
     }
-    else if (pickerTag == 3)
+    else if (pickerTag == kMaxZoomPickerRow)
     {
         if (value >= _minZoom)
         {
@@ -700,14 +676,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else
         {
             _maxZoom = _minZoom;
-            [self updatePickerCell:_maxZoom - 1];
+            [self updatePickerCell:_maxZoom - 1 zoomRow:kMaxZoomPickerRow];
         }
         _maxZoomTileUrl = [self getZoomTileUrl:_maxZoom];
+        zoomRow = kMaxZoomRow;
         [self downloadZoomedTiles];
     }
     [self getDownloadInfo];
     [self setupView];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section], [NSIndexPath indexPathForRow:kZoomTilesRow inSection:_pickerIndexPath.section], [NSIndexPath indexPathForRow:0 inSection:2], [NSIndexPath indexPathForRow:1 inSection:2]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:zoomRow inSection:kZoomSection],
+                                             [NSIndexPath indexPathForRow:kNumberOfTilesRow inSection:kDownloadInfoSection],
+                                             [NSIndexPath indexPathForRow:kDownloadSizeRow inSection:kDownloadInfoSection]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark - Map Frame

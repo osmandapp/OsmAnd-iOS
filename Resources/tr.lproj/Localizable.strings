@@ -9,7 +9,7 @@
 "shared_string_done" = "Bitti";
 "shared_string_update" = "Güncelle";
 "shared_string_install" = "Yükle";
-"shared_string_uninstall" = "Kaldırma";
+"shared_string_uninstall" = "Kaldır";
 "shared_string_delete" = "Sil";
 "shared_string_remove" = "Kaldır";
 "shared_string_dismiss" = "Vazgeç";
@@ -542,7 +542,7 @@
 "map_widget_left" = "Sol panel";
 "layer_map_appearance" = "Ekran yapılandırma";
 "select_gpx" = "GPX Seçiniz …";
-"confirm_usage_speed_cameras" = "Çoğu ülkelerde (Almanya, Fransa, İtalya ve diğerleri) hız kamerası uyarılarının kullanımı yasaktır. OsmAnd yasaları çiğnemeniz durumunda sorumluluk kabul etmez. Eğer bu özellik sizin için uygunsa evet'e tıklayın.";
+"confirm_usage_speed_cameras" = "Birçok ülkede (Almanya, Fransa, İtalya ve diğerleri) hız kamerası uyarılarının kullanımına yasalarca izin verilmemektedir. Yasaları ihlal ederseniz OsmAnd herhangi bir sorumluluk kabul etmez. Lütfen sadece bu özelliği kullanmaya uygunsanız evet seçeneğine dokunun.";
 "show_traffic_warnings" = "Trafik uyarıları";
 "show_pedestrian_warnings" = "Yaya geçitleri";
 "show_cameras" = "Hız kameraları";

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "OAPublicTransportOptionsBottomSheet.h"
-#import "OAPublicTransportStyleSettingsHelper.h"
 #import "OABottomSheetHeaderIconCell.h"
 #import "OASettingSwitchCell.h"
 #import "OAMapStyleSettings.h"
@@ -23,7 +22,7 @@
 
 @implementation OAPublicTransportOptionsBottomSheetScreen
 {
-    OAPublicTransportStyleSettingsHelper* _transportSettings;
+    OAMapStyleSettings* _styleSettings;
     OAPublicTransportOptionsBottomSheetViewController *vwController;
     NSArray* _data;
 }
@@ -42,7 +41,7 @@
 
 - (void) initOnConstruct:(UITableView *)tableView viewController:(OAPublicTransportOptionsBottomSheetViewController *)viewController
 {
-    _transportSettings = [OAPublicTransportStyleSettingsHelper sharedInstance];
+    _styleSettings = [OAMapStyleSettings sharedInstance];
     vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -62,14 +61,14 @@
         }];
     
     
-    NSArray* params = [_transportSettings getAllTransportStyleParameters];
+    NSArray* params = [_styleSettings getParameters:@"transport"];
     
     for (OAMapStyleParameter *param in params)
     {
         if (!param)
             continue;
         
-        NSString* imageName = [_transportSettings getIconNameForStyle:param.name];
+        NSString* imageName = [self getIconNameForStyleName:param.name];
         
         [arr addObject:@{
             @"type" : @"OASettingSwitchCell",
@@ -82,6 +81,21 @@
     _data = [NSArray arrayWithArray:arr];
     
     [vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
+}
+
+- (NSString *) getIconNameForStyleName:(NSString *)name
+{
+    NSString* imageName = @"";
+    if ([name isEqualToString:@"tramTrainRoutes"])
+        imageName = @"ic_custom_transport_tram";
+    else if ([name isEqualToString:@"subwayMode"])
+        imageName = @"ic_custom_transport_subway";
+    else if ([name isEqualToString:@"transportStops"])
+        imageName = @"ic_custom_transport_stop";
+    else if ([name isEqualToString:@"publicTransportMode"])
+        imageName = @"ic_custom_transport_stop";
+    
+    return imageName;
 }
 
 - (BOOL) cancelButtonPressed
@@ -172,7 +186,7 @@
             
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            cell.switchView.on = [_transportSettings getVisibilityForStyleParameter:item[@"name"]];
+            cell.switchView.on = [_styleSettings getVisibilityForParameterName:item[@"name"]];
             [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
@@ -209,7 +223,7 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:position inSection:0];
     NSString *name = [self getItem:indexPath][@"name"];
     
-    [_transportSettings setVisibility:sw.on forStyleParameter:name];
+    [_styleSettings setVisibility:sw.on forParameterName:name];
 }
 
 

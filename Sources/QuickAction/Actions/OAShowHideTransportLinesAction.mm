@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OAShowHideTransportLinesAction.h"
 #import "OAPublicTransportOptionsBottomSheet.h"
-#import "OAPublicTransportStyleSettingsHelper.h"
+#import "OAMapStyleSettings.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAQuickActionType.h"
 
@@ -19,25 +19,25 @@ static OAQuickActionType *TYPE;
 
 @implementation OAShowHideTransportLinesAction
 {
-    OAPublicTransportStyleSettingsHelper* _transportSettings;
+    OAMapStyleSettings* _styleSettings;
 }
 
 - (instancetype)init
 {
-    _transportSettings = [OAPublicTransportStyleSettingsHelper sharedInstance];
+    _styleSettings = [OAMapStyleSettings sharedInstance];
     return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
 {
-    if ([_transportSettings isAllTransportStylesHidden])
+    if ([_styleSettings isAllParametersHiddenForCategoryName:@"transport"])
     {
         [self showDashboardMenu];
-        [_transportSettings setVisibilityForTransportLayer:YES];
+        [_styleSettings setVisibility:YES forCategoryName:@"transport"];
         return;
     }
-
-    [_transportSettings toggleVisibilityForTransportLayer];
+    
+    [_styleSettings setVisibility:![_styleSettings getVisibilityForCategoryName:@"transport"] forCategoryName:@"transport"];
 }
 
 - (void)showDashboardMenu
@@ -48,7 +48,7 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return [_transportSettings getVisibilityForTransportLayer] && ![_transportSettings isAllTransportStylesHidden];
+    return [_styleSettings getVisibilityForCategoryName:@"transport"] && ![_styleSettings isAllParametersHiddenForCategoryName:@"transport"];
 }
 
 - (NSString *)getActionStateName

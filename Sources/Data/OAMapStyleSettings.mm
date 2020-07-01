@@ -11,7 +11,6 @@
 #import "OALog.h"
 #import "Localization.h"
 #import "OAMapCreatorHelper.h"
-#import "OAAppSettings.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -61,7 +60,7 @@
 
 @implementation OAMapStyleSettings
 {
-    OAAppSettings* _settings;
+    NSUserDefaults *_defaults;
 }
 
 + (OAMapStyleSettings*) sharedInstance
@@ -89,7 +88,7 @@
     if (self)
     {
         _syncObj = [[NSObject alloc] init];
-        _settings = [OAAppSettings sharedManager];
+        _defaults = [NSUserDefaults standardUserDefaults];
         [self buildParameters];
         [self loadParameters];
     }
@@ -102,7 +101,7 @@
     if (self)
     {
         _syncObj = [[NSObject alloc] init];
-        _settings = [OAAppSettings sharedManager];
+        _defaults = [NSUserDefaults standardUserDefaults];
         self.mapStyleName = mapStyleName;
         self.mapPresetName = mapPresetName;
         [self buildParameters:mapStyleName];
@@ -287,51 +286,74 @@
 
 -(void) loadParameters
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
     for (OAMapStyleParameter *p in self.parameters) {
-        NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
-    
-        if ([defaults objectForKey:name]) {
-            
-            if ([self isPublicTransportLayerParameter:p])
-            {
-                p.value = [self getVisibilityForTransportParameter:p];
-            }
-            else
-            {
-                p.value = [defaults valueForKey:name];
-            }
-            
+        NSString *storedStateParameterName = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
+        NSString *categoryVisibilityParameterName = [NSString stringWithFormat:@"%@_%@_%@_enabled", p.mapStyleName, p.mapPresetName, p.name];
+        
+        if ([_defaults objectForKey:storedStateParameterName] && [_defaults boolForKey:categoryVisibilityParameterName]) {
+            p.value = [_defaults valueForKey:storedStateParameterName];
         } else {
             p.value = @"";
         }
+    }
+}
+
+-(BOOL) getVisibilityForCategoryName:(NSString *)categoryName
+{
+    OAMapStyleParameter *anyCategoryParameter = [self getParameters:categoryName][0];
+    NSString *categoryVisibilityParameterName = [NSString stringWithFormat:@"%@_%@_%@_enabled", anyCategoryParameter.mapStyleName, anyCategoryParameter.mapPresetName, anyCategoryParameter.name];
+    return [_defaults boolForKey:categoryVisibilityParameterName];
+}
+
+-(void) setVisibility:(BOOL)isVisible forCategoryName:(NSString *)categoryName
+{
+    for (OAMapStyleParameter *p in [self getParameters:categoryName]) {
+        NSString *categoryVisibilityParameterName = [NSString stringWithFormat:@"%@_%@_%@_enabled", p.mapStyleName, p.mapPresetName, p.name];
+        [_defaults setBool:isVisible forKey:categoryVisibilityParameterName];
         
+        if (isVisible)
+        {
+            NSString *storedStateParameterName = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
+            p.value = [_defaults objectForKey:storedStateParameterName];
+        }
+        else
+        {
+            p.value = @"";
+        }
     }
+    
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
-
-- (BOOL) isPublicTransportLayerParameter:(OAMapStyleParameter *)p
+- (BOOL) isAllParametersHiddenForCategoryName:(NSString *)categoryName
 {
-    if ([p.name isEqualToString:@"tramTrainRoutes"] ||
-        [p.name isEqualToString:@"subwayMode"] ||
-        [p.name isEqualToString:@"transportStops"] ||
-        [p.name isEqualToString:@"publicTransportMode"])
+    for (OAMapStyleParameter *p in [self getParameters:categoryName])
     {
-        return YES;
+        if ([self getVisibilityForParameterName:p.name])
+            return false;
     }
-    return NO;
+    return true;
 }
 
-- (NSString *) getVisibilityForTransportParameter:(OAMapStyleParameter *)p
+-(BOOL) getVisibilityForParameterName:(NSString *)parameterName
 {
-    BOOL isTransportLayerVisible = _settings.mapSettingShowPublicTransport;
-    BOOL isParameterVisible = [_settings.transportLayersVisible contains:p.name];
-    if (isTransportLayerVisible && isParameterVisible)
+    OAMapStyleParameter *parameter = [self getParameter:parameterName];
+    NSString *storedStateParameterName = [NSString stringWithFormat:@"%@_%@_%@", parameter.mapStyleName, parameter.mapPresetName, parameter.name];
+    return [[_defaults objectForKey:storedStateParameterName] isEqualToString:@"true"];
+}
+
+-(void) setVisibility:(BOOL)isVisible forParameterName:(NSString *)parameterName
+{
+    OAMapStyleParameter *parameter = [self getParameter:parameterName];
+    NSString *storedStateParameterName = [NSString stringWithFormat:@"%@_%@_%@", parameter.mapStyleName, parameter.mapPresetName, parameter.name];
+    NSString *value = isVisible ? @"true" : @"false";
+    [_defaults setObject:value  forKey:storedStateParameterName];
+    
+    if ([self getVisibilityForCategoryName:parameter.category])
     {
-        return @"true";
+        parameter.value = value;
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
-    return @"false";
 }
 
 -(void) saveParameters

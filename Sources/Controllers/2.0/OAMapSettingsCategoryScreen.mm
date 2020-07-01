@@ -11,7 +11,6 @@
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OAPublicTransportStyleSettingsHelper.h"
 
 @implementation OAMapSettingsCategoryScreen
 {
@@ -19,7 +18,6 @@
     OAAppSettings *_settings;
 
     OAMapStyleSettings *styleSettings;
-    OAPublicTransportStyleSettingsHelper* _transportSettings;
     NSArray *parameters;
     NSArray* data;
 }
@@ -35,8 +33,8 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        _transportSettings = [OAPublicTransportStyleSettingsHelper sharedInstance];
-        
+        styleSettings = [OAMapStyleSettings sharedInstance];
+
         categoryName = param;
 
         settingsScreen = EMapSettingsScreenCategory;
@@ -69,7 +67,7 @@
 
 - (void) setupView
 {
-    styleSettings = [OAMapStyleSettings sharedInstance];
+    
     if ([categoryName isEqual: @"details"])
     {
         NSMutableArray *withoutContoursLines;
@@ -155,7 +153,7 @@
             cell.switchView.tag = indexPath.row;
             
             if ([categoryName isEqual:@"transport"])
-                [cell.switchView setOn:[_transportSettings getVisibilityForStyleParameter:p.name]];
+                [cell.switchView setOn:[styleSettings getVisibilityForParameterName:p.name]];
             else
                 [cell.switchView setOn:[p.value isEqualToString:@"true"]];
         }
@@ -205,7 +203,7 @@
         
         if ([categoryName isEqual:@"transport"])
         {
-            [_transportSettings setVisibility:switchView.isOn forStyleParameter:p.name];
+            [styleSettings setVisibility:switchView.isOn forParameterName:p.name];
         }
         else
         {

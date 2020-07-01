@@ -25,7 +25,6 @@
 #import "OAPOIUIFilter.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "Reachability.h"
-#import "OAPublicTransportStyleSettingsHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -47,7 +46,6 @@
     OAIAPHelper *_iapHelper;
     
     OAMapStyleSettings *styleSettings;
-    OAPublicTransportStyleSettingsHelper* _transportSettings;
     NSArray *_filteredTopLevelParams;
     
     OAAppModeCell *appModeCell;
@@ -72,7 +70,6 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
-        _transportSettings = [OAPublicTransportStyleSettingsHelper sharedInstance];
         
         title = OALocalizedString(@"map_settings_map");
 
@@ -527,7 +524,7 @@
             }
             if ([data[@"key"] isEqualToString:@"transport_layer"])
             {
-                [cell.switchView setOn: [_transportSettings getVisibilityForTransportLayer]];
+                [cell.switchView setOn: [styleSettings getVisibilityForCategoryName:@"transport"]];
                 [cell.switchView addTarget:self action:@selector(transportChanged:) forControlEvents:UIControlEventValueChanged];
             }
             cell.textView.text = data[@"name"];
@@ -685,9 +682,9 @@
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
     {
-        [_transportSettings setVisibilityForTransportLayer:switchView.isOn];
+        [styleSettings setVisibility:switchView.isOn forCategoryName:@"transport"];
             
-        if (switchView.isOn && [_transportSettings isAllTransportStylesHidden])
+        if (switchView.isOn && [styleSettings isAllParametersHiddenForCategoryName:@"transport"])
         {
             OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:@"transport"];
             [transportSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];

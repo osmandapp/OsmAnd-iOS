@@ -58,6 +58,13 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 -(NSString *) getCategoryTitle:(NSString *)categoryName;
 -(NSArray *) getParameters:(NSString *)category;
 
+-(BOOL) getVisibilityForCategoryName:(NSString *)categoryName;
+-(void) setVisibility:(BOOL)isVisible forCategoryName:(NSString *)name;
+- (BOOL) isAllParametersHiddenForCategoryName:(NSString *)name;
+
+-(BOOL) getVisibilityForParameterName:(NSString *)parameterName;
+-(void) setVisibility:(BOOL)isVisible forParameterName:(NSString *)parameterName;
+
 -(void) saveParameters;
 -(void) save:(OAMapStyleParameter *)parameter;
 

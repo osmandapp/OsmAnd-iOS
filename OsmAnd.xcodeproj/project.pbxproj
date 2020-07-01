@@ -184,8 +184,6 @@
 		33BE666724A35D9100245A78 /* ic_custom_transport_tram@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33BE664F24A35D9000245A78 /* ic_custom_transport_tram@2x.png */; };
 		33BE666B24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33BE666A24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm */; };
 		33BE666C24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33BE666A24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm */; };
-		33BE667124A63A4600245A78 /* OAPublicTransportStyleSettingsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33BE666E24A63A2400245A78 /* OAPublicTransportStyleSettingsHelper.mm */; };
-		33BE667224A63A4600245A78 /* OAPublicTransportStyleSettingsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33BE666E24A63A2400245A78 /* OAPublicTransportStyleSettingsHelper.mm */; };
 		3A02BFB71A31F2FA0019377F /* OAGPXListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A02BFB31A31F2FA0019377F /* OAGPXListViewController.mm */; };
 		3A02BFBF1A31FA820019377F /* icon_gpx_fill@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A02BFBB1A31FA820019377F /* icon_gpx_fill@2x.png */; };
 		3A02BFC21A31FA820019377F /* icon_star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A02BFBC1A31FA820019377F /* icon_star@2x.png */; };
@@ -5826,8 +5824,6 @@
 		33BE664F24A35D9000245A78 /* ic_custom_transport_tram@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_transport_tram@2x.png"; sourceTree = "<group>"; };
 		33BE666924A36EB200245A78 /* OAPublicTransportOptionsBottomSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPublicTransportOptionsBottomSheet.h; sourceTree = "<group>"; };
 		33BE666A24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPublicTransportOptionsBottomSheet.mm; sourceTree = "<group>"; };
-		33BE666D24A63A0600245A78 /* OAPublicTransportStyleSettingsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAPublicTransportStyleSettingsHelper.h; path = Helpers/OAPublicTransportStyleSettingsHelper.h; sourceTree = "<group>"; };
-		33BE666E24A63A2400245A78 /* OAPublicTransportStyleSettingsHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPublicTransportStyleSettingsHelper.mm; sourceTree = "<group>"; };
 		3A02BFB21A31F2FA0019377F /* OAGPXListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXListViewController.h; path = Sources/Controllers/2.0/OAGPXListViewController.h; sourceTree = "<group>"; };
 		3A02BFB31A31F2FA0019377F /* OAGPXListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXListViewController.mm; path = Sources/Controllers/2.0/OAGPXListViewController.mm; sourceTree = "<group>"; };
 		3A02BFBB1A31FA820019377F /* icon_gpx_fill@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon_gpx_fill@2x.png"; path = "Resources/Icons/icon_gpx_fill@2x.png"; sourceTree = "<group>"; };
@@ -13601,8 +13597,6 @@
 				DA2267A8240E697A00FFEA91 /* OAWikiArticleHelper.mm */,
 				DAC0B30F248681CD00F662F5 /* OALocationParser.h */,
 				DAC0B310248681CD00F662F5 /* OALocationParser.mm */,
-				33BE666D24A63A0600245A78 /* OAPublicTransportStyleSettingsHelper.h */,
-				33BE666E24A63A2400245A78 /* OAPublicTransportStyleSettingsHelper.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -19488,7 +19482,6 @@
 				8490B1C62061479F007694A5 /* OAWaypointCell.m in Sources */,
 				8A3F030821C7D65A0043797E /* OAPurchaseDialogCardRow.m in Sources */,
 				84E12BFB1F025C2000F141AD /* OARouteProvider.mm in Sources */,
-				33BE667124A63A4600245A78 /* OAPublicTransportStyleSettingsHelper.mm in Sources */,
 				844E07AB1E3E3D6B00EFC525 /* OAQuickSearchTableController.mm in Sources */,
 				847A1D441DF94E9B003C1246 /* OASearchMoreCell.m in Sources */,
 				846D67B61F169D2B00D73D9C /* OAApplicationMode.m in Sources */,
@@ -19803,7 +19796,6 @@
 				DA1605B122FEB971001E02AD /* OASwitchableAction.m in Sources */,
 				BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,
 				BBA3AF43197FC4BB0039D991 /* OsmAndApp.mm in Sources */,
-				33BE667224A63A4600245A78 /* OAPublicTransportStyleSettingsHelper.mm in Sources */,
 				84F3A93C1B4EC3C900D16EBC /* MGSwipeButton.m in Sources */,
 				8417A6841B25C29300EA1D17 /* OAEditGroupViewController.m in Sources */,
 				DA6D51E321F328AA00EC84E2 /* OAOsmEditsDBHelper.m in Sources */,

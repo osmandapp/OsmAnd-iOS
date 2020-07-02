@@ -76,7 +76,7 @@
 "map_settings_offline" = "Stile für Offline Karten";
 "map_settings_online" = "Online Karten";
 "map_settings_transp" = "Transparenz";
-"intro_download" = "Karte herunterladen";
+"intro_download" = "Karte\nherunterladen";
 "intro_next" = "Nächster";
 "intro_welcome" = "Willkommen bei\nOsmAnd";
 "intro_promo" = "Globale Offline Karten";
@@ -204,7 +204,7 @@
 "res_map_of_region" = "Karte der Umgebung";
 "res_update_no_space" = "Für das Update ist zuwenig Speicher vorhanden";
 "res_no_space_free" = "ist notwendig. Bitte etwas Speicher freimachen.";
-"res_free_exp" = "Du hast alle freie Downloads verbraucht. Bitte  kaufe einen Kontinent zum herunteladen / aktualiseren der Karten.";
+"res_free_exp" = "Du hast alle freie Downloads verbraucht. Bitte kaufe einen Kontinent zum herunteladen/aktualiseren der Karten.";
 "res_cancel_upd_q" = "Du bist dabei, die Aktualisierung von %@ abzubrechen.";
 "res_cancel_inst_q" = "Du bist dabei die Installation %@ abzubrechen.";
 "res_uninst_managed_q" = "Du bist dabei %@ zu deinstallieren. Du kannst es später wieder im Katalog installieren.";
@@ -334,11 +334,11 @@
 "enter_description" = "Beschreibung eingeben";
 "description" = "Beschreibung";
 "enter_fav_name" = "Favoritenname eingeben";
-"res_installing" = "Installation…";
+"res_installing" = "Installation …";
 "res_roads" = "Straßen";
 "res_srtm" = "Höhenlinien";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Schummerung";
+"res_hillshade" = "Relief";
 "select_language" = "Sprache auswählen";
 "language_short" = "Sprache";
 "open_url" = "Seite im Browser öffnen";
@@ -397,7 +397,7 @@
 "product_title_wiki" = "Wikipedia";
 "offline_maps" = "Offline-Karten";
 "download_map" = "Karte herunterladen";
-"map_settings_hillshade" = "Schummerung";
+"map_settings_hillshade" = "Relief";
 "sett_lang_trans" = "umschreiben";
 "sett_lang_show_trans" = "Namen transliteriren";
 "edit_waypoint_short" = "Wegpunkt bearbeiten";
@@ -432,10 +432,10 @@
 "prch_srtm_info" = "Höhenlinien-Addon aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "plugin_popup_srtm_desc" = "Um die Höhenlinien zu nutzen zu können, bitte die entsprechenden Höhendaten herunterladen";
 "plugin_popup_srtm_ask" = "Um Höhendaten herunterladen zu können, bitte das <b>Höhenlinien Plugin</b> aktivieren";
-"plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b>  > <b>Kartendarstellung</b> die Darstellung <b>Nautical</b> aktiviere";
+"plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b> > <b>Kartendarstellung</b> die Darstellung <b>Nautical</b> aktiviere";
 "plugin_popup_trip_planning_ask" = "Um eine Strecke planen zu können, bitte das <b>Streckenplaner-Plugin</b> aktivieren";
 "product_desc_ext_trip_planning" = "Das Entfernungsmesser & Routen-Planer Plugin ermöglicht es dir deine Routen auf der Karte zu planen, zu speichern, die gerade Strecke zwischen Punkten zu messen, uvm. Erstellt eine vorläufige Routenplanung anstatt einer genauen Route.";
-"product_desc_ext_srtm" = "Dieser Plugin stellt Höhenlinien und Relief Daten bereit welche auf den OsmAnd Offline Karten dargestellt werden können. Die Höhenlinien stellen die Höhen der Gebiete dar, die Relief Daten vitalisieren diese. Namen von Gipfeln und Bergen sowie spezielle Informationen vom Gelände werde durch diesen Plugin angezeigt.\n\nDie globalen Daten (zwischen 70 Grad Nord und 70 Grad Süd) basieren auf den Messungen von SRTM (Shuttle Radar Topography Mission) und ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), einem bildgebenden Instrument an Board von Terra, dem Flaggschiff der NASA Erdbeobachtungssateliten. ASTER ist eine Zusammenarbeit zwischen der NASA, japans Ministerium für Wirtschaft, Handel und Industrie (METI) und Japan Space Systems (J-spacesystems).";
+"product_desc_ext_srtm" = "Dieses Plugin stellt Höhenlinien und Reliefdaten bereit, welche auf den OsmAnd Offline Karten dargestellt werden können. Die Höhenlinien stellen die Höhen der Gebiete dar, die Reliefdaten visualisieren diese. Namen von Gipfeln und Bergen sowie spezielle Informationen vom Gelände werde durch dieses Plugin angezeigt.\n\nDie globalen Daten (zwischen 70 Grad Nord und 70 Grad Süd) basieren auf den Messungen von SRTM (Shuttle Radar Topography Mission) und ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), einem bildgebenden Instrument an Board von Terra, dem Flaggschiff der NASA Erdbeobachtungssateliten. ASTER ist eine Zusammenarbeit zwischen der NASA, Japans Ministerium für Wirtschaft, Handel und Industrie (METI) und Japan Space Systems (J-spacesystems).";
 "device_memory" = "Gerätespeicher";
 "free_memory" = "Frei %@";
 "gpx_waypoint" = "Wegpunkt";
@@ -451,7 +451,7 @@
 "no_inet_connection_desc_map" = "Erforderlich, um Karten herunterzuladen.";
 "try_again" = "Erneut versuchen";
 "search_location" = "Standort wird gesucht …";
-"search_map" = "Karte wird gesucht…";
+"search_map" = "Karte wird gesucht …";
 "search_another_country" = "Eine andere Region auswählen";
 "skip_map_downloading" = "Herunterladen der Karten überspringen";
 "skip_map_downloading_desc" = "Sie haben keine Offline Karten installiert. Sie können jetzt eine Karte auswählen oder später Karten über “Menü - Kartenverwaltung“ herunterladen";
@@ -650,9 +650,9 @@
 "arrival_distance_factor_at_last" = "Auf den letzten Metern";
 "fast_route_mode" = "Schnellste Route";
 "fast_route_mode_descr" = "Zur Berechnung der schnellsten Route aktivieren oder für eine kraftstoffsparende Route deaktivieren";
-"avoid_in_routing_title" = "Vermeiden von…";
+"avoid_in_routing_title" = "Vermeiden von …";
 "avoid_in_routing_descr" = "Mautstraßen, unbefestigte Straßen, Fähren vermeiden";
-"prefer_in_routing_title" = "Bevorzugen von…";
+"prefer_in_routing_title" = "Bevorzugen von …";
 "prefer_in_routing_descr" = "Autobahnen bevorzugen";
 "relief_smoothness_factor_descr" = "Bevorzugte Geländeform: flach oder bergig";
 "choose_auto_follow_route" = "Kartenansicht automatisch zentrieren";
@@ -661,9 +661,9 @@
 "auto_zoom_map_descr" = "Kartenvergrößerung automatisch der Geschwindigkeit anpassen (während Kartennachführung)";
 "snap_to_road" = "Auf Straße einrasten";
 "snap_to_road_descr" = "Standort während der Navigation auf Straßen einrasten";
-"show_warnings_title" = "Warnungen anzeigen…";
+"show_warnings_title" = "Warnungen anzeigen …";
 "show_warnings_descr" = "Verkehrswarnungen (Tempolimits, Stoppzeichen, Rüttelschwellen, Tunnel), stationäre Radarkontrollen und Fahrspuranzeige konfigurieren";
-"speak_title" = "Ansagen…";
+"speak_title" = "Ansagen …";
 "speak_descr" = "Ansagen zu Straßennamen, Verkehrswarnungen (Stoppzeichen, Rüttelschwellen), stationäre Radarkontrollen, Tempolimits konfigurieren";
 "keep_informing" = "Navigationsanweisungen wiederholen";
 "keep_informing_descr" = "Navigationsanweisungen in regelmäßigen Abständen wiederholen";
@@ -876,7 +876,7 @@
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unbegrenzte Downloads";
 "wikipedia_offline" = "Wikipedia offline";
-"contour_lines_hillshade_maps" = "Karten mit Höhenlinien und Schummerung";
+"contour_lines_hillshade_maps" = "Karten mit Höhenlinien und Relief";
 "monthly_map_updates" = "Kartenaktualisierungen: jeden Monat";
 "daily_map_updates" = "Kartenaktualisierung: jede Stunde";
 "index_item_depth_contours_osmand_ext" = "Nautische Tiefenlinien";
@@ -929,10 +929,10 @@
 "shared_string_upload" = "Hochladen";
 "poi_type" = "POI-Typ";
 // OSM Editing actions
-"opening_changeset" = "Änderungssatz öffnen…";
-"closing_changeset" = "Änderungssatz schließen…";
-"commiting_node" = "Übertrage Knoten…";
-"loading_poi_obj" = "Lade POI…";
+"opening_changeset" = "Änderungssatz öffnen …";
+"closing_changeset" = "Änderungssatz schließen …";
+"commiting_node" = "Übertrage Knoten …";
+"loading_poi_obj" = "Lade POI …";
 "osm_note" = "OSM Notiz";
 "osm_created" = "Erstellt";
 "osm_deleted" = "Gelöscht";
@@ -1272,7 +1272,7 @@
 "sett_deg360" = "360 Grad";
 "online_map" = "Online-Karte";
 "map_settings_install_maps" = "Wählen Sie die zu installierenden oder zu aktualisierenden Karten";
-"quick_action_hillshade_descr" = "Durch Tippen auf diese Aktionsschaltfläche wird die Schummerung ein- oder ausgeblendet.";
+"quick_action_hillshade_descr" = "Durch Tippen auf diese Aktionsschaltfläche wird das Relief ein- oder ausgeblendet.";
 "show_hillshade" = "Schummerung anzeigen";
 "hide_hillshade" = "Schummerung ausblenden";
 "toggle_contour_lines" = "Ein-/Ausblenden von Höhenlinien";
@@ -1656,7 +1656,7 @@
 "app_mode_car" = "Auto";
 "app_mode_default" = "Karte ansehen";
 "enable_contour_lines" = "Aktivieren Sie diese Option, um Konturlinien auf der Karte anzuzeigen";
-"map_settings_available_srtm_maps_descr" = "Für die Darstellung der Schummerung werden zusätzliche Karten benötigt";
+"map_settings_available_srtm_maps_descr" = "Für die Darstellung des Reliefs werden zusätzliche Karten benötigt";
 "map_settings_line_density_slowdown_warning" = "Hohe Liniendichte kann die Kartendarstellung verlangsamen";
 "map_settings_appearance" = "Aussehen";
 "map_settings_contour_zoom_level_descr" = "Zoomstufe wählen, ab der die Konturlinien angezeigt werden sollen";
@@ -1710,8 +1710,8 @@
 "show_terrain" = "Gelände anzeigen";
 "map_settings_legend" = "Legende";
 "map_settings_add_maps_slopes" = "Zusätzliche Karten sind erforderlich, um Hangneigungen auf der Karte anzuzeigen";
-"map_settings_add_maps_hillshade" = "Zusätzliche Karten sind erforderlich, um die Hügelschatten auf der Karte anzuzeigen";
-"map_settings_hillshade_description" = "Schummerungskarten stellen Hangneigungen, Gipfel und Flachland in verschiedenen Graustufen dar";
+"map_settings_add_maps_hillshade" = "Zusätzliche Karten sind erforderlich, um das Relief auf der Karte anzuzeigen";
+"map_settings_hillshade_description" = "Reliefkarten stellen Hangneigungen, Gipfel und Flachland in verschiedenen Graustufen dar";
 "map_settings_slopes_description" = "Hangneigungskarten verwenden unterschiedliche Farben, um das Gelände zu visualisieren";
 "map_settings_slopes_legend" = "Sie können mehr über Hangneigungen auf Wikipedia lesen";
 "nav_type_direct_to" = "Auf direktem Weg";

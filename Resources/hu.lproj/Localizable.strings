@@ -9,7 +9,7 @@
 "shared_string_done" = "Kész";
 "shared_string_update" = "Frissítés";
 "shared_string_install" = "Telepítés";
-"shared_string_uninstall" = "Eltávolítás";
+"shared_string_uninstall" = "Eltávolít";
 "shared_string_delete" = "Törlés";
 "shared_string_add" = "Hozzáadás";
 "shared_string_buy" = "Vásárlás";
@@ -1276,7 +1276,6 @@
 "routing_attr_piste_type_sled_name" = "Szánkó";
 "rendering_attr_surface_paving_stones_name" = "Térkő";
 "rendering_value_red_name" = "Piros";
-
 "app_mode_helicopter" = "Helikopter";
 "app_mode_offroad" = "Terep";
 "app_mode_scooter" = "Roller";
@@ -1300,7 +1299,7 @@
 "app_mode_bicycle" = "Kerékpározás";
 "res_zoom_levels" = "Nagyítási szintek";
 "app_mode_campervan" = "Lakóautó";
-"app_mode_default" = "Alapértelmezett";
+"app_mode_default" = "Térképböngészés";
 "app_mode_horse" = "Ló";
 "app_mode_pickup_truck" = "Kisteherautó";
 "app_mode_car" = "Vezetés";

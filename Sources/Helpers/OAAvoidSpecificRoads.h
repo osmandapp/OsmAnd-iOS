@@ -17,15 +17,17 @@
 
 @protocol OAStateChangedListener;
 
+struct RouteDataObject;
+
 @interface OAAvoidSpecificRoads : NSObject
 
 + (OAAvoidSpecificRoads *) instance;
 
-- (const QList<std::shared_ptr<const OsmAnd::Road>>) getImpassableRoads;
-- (CLLocation *) getLocation:(OsmAnd::ObfObjectId)roadId;
-- (void) addImpassableRoad:(CLLocation *)loc showDialog:(BOOL)showDialog skipWritingSettings:(BOOL)skipWritingSettings;
-- (void) removeImpassableRoad:(const std::shared_ptr<const OsmAnd::Road>)road;
-- (std::shared_ptr<const OsmAnd::Road>) getRoadById:(unsigned long long)id;
+- (const QList<std::shared_ptr<RouteDataObject>>) getImpassableRoads;
+- (CLLocation *) getLocation:(int64_t)roadId;
+- (void) addImpassableRoad:(CLLocation *)loc skipWritingSettings:(BOOL)skipWritingSettings;
+- (void) removeImpassableRoad:(const std::shared_ptr<RouteDataObject>)road;
+- (std::shared_ptr<RouteDataObject>) getRoadById:(unsigned long long)id;
 
 - (void) addListener:(id<OAStateChangedListener>)l;
 - (void) removeListener:(id<OAStateChangedListener>)l;

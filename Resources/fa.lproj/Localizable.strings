@@ -65,11 +65,11 @@
 "confirm_usage_speed_cameras" = "در بسیاری از کشورها (آلمان، فرانسه، ایتالیا و...) بنا بر قانون، استفاده از هشداردهندهٔ دوربین‌های ترافیکی مجاز نیست. OsmAnd هیچ‌گونه مسئولیتی در قبال نقض قانون از سوی شما ندارد. لطفاً تنها در صورتی که مجاز به استفاده از این ویژگی هستید بله را انتخاب کنید.";
 "show_traffic_warnings" = "هشدارهای ترافیکی";
 "show_pedestrian_warnings" = "گذرگاه‌های پیاده";
-"show_cameras" = "دوربین‌های کنترل سرعت";
+"show_cameras" = "دوربین‌های سرعت";
 "show_lanes" = "خطوط عبوری";
 "speak_street_names" = "نام خیابان‌ها (موتور صوتی)";
 "speak_speed_limit" = "سرعت مجاز";
-"speak_cameras" = "دوربین‌های کنترل سرعت";
+"speak_cameras" = "دوربین‌های سرعت";
 "speak_traffic_warnings" = "هشدارهای ترافیکی";
 "announce_gpx_waypoints" = "نقاط بین‌راهی GPX";
 "speak_favorites" = "نقاط برگزیدهٔ اطراف";
@@ -134,7 +134,7 @@
 "app_mode_boat" = "قایق";
 "app_mode_aircraft" = "هواپیما";
 "gpx_option_calculate_first_last_segment" = "برای قطعهٔ ابتدایی و انتهایی مسیر، مسیریابی کن";
-"gpx_option_from_start_point" = "گذر از همهٔ رد";
+"gpx_option_from_start_point" = "گذر از سرتاسر رد";
 "gpx_option_reverse_route" = "برعکس‌کردن جهت GPX";
 "use_points_as_intermediates" = "محاسبهٔ مسیر بین نقاط";
 "calculate_osmand_route_without_internet" = "محاسبهٔ مسیر بدون استفاده از اینترنت";
@@ -197,7 +197,7 @@
 "traffic_warning_payment" = "عوارضی";
 "traffic_warning_stop" = "علامت ایست";
 "traffic_warning_calming" = "سرعتگیر";
-"traffic_warning_speed_camera" = "دوربین کنترل سرعت";
+"traffic_warning_speed_camera" = "دوربین سرعت";
 "traffic_warning" = "هشدار ترافیکی";
 "traffic_warning_railways" = "تقاطع جاده با راه‌آهن";
 "traffic_warning_pedestrian" = "گذرگاه پیاده";
@@ -250,7 +250,7 @@
 "shared_string_done" = "Done";
 "shared_string_update" = "به‌روزرسانی";
 "shared_string_install" = "نصب";
-"shared_string_uninstall" = "Uninstall";
+"shared_string_uninstall" = "حذف نصب";
 "shared_string_delete" = "حذف";
 "shared_string_remove" = "حذف";
 "shared_string_dismiss" = "بی‌خیال";
@@ -1088,7 +1088,7 @@
 "routing_attr_width_name" = "محدودیت عرض";
 "rendering_value_disabled_name" = "غیرفعال";
 "rendering_attr_hideProposed_name" = "طرح‌های آینده (Proposed)";
-"routing_attr_height_description" = "ارتفاع مجاز خودرو در راه‌ها چقدر است.";
+"routing_attr_height_description" = "ارتفاع مجاز خودرو در مسیرها را مشخص کنید.";
 "rendering_attr_whiteWaterSports_name" = "ورزش‌‌های آب‌های خروشان";
 "routing_attr_avoid_bus_name" = "اتوبوس";
 "routeInfo_smoothness_name" = "همواری";
@@ -1101,7 +1101,7 @@
 "routing_attr_avoid_shuttle_train_name" = "قطار خطی";
 "rendering_attr_surface_dirt_name" = "خاک";
 "rendering_attr_surfaceIntegrity_name" = "یکپارچگی سطح جاده‌ها";
-"rendering_attr_contourLines_description" = "از این زوم نمایان شود (نیازمند داده‌های منحنی میزان):";
+"rendering_attr_contourLines_description" = "از این زوم نمایان شود (نیازمند دادهٔ منحنی میزان):";
 "rendering_attr_tramRoutes_name" = "مسیرهای تراموا";
 "routing_attr_height_obstacles_description" = "فاکتور ارتفاع‌دهی عارضه‌ها (با استفاده از داده‌های SRTM،‏ ASTER و EU-DEM).";
 "routing_attr_avoid_borders_description" = "از گذر از مرزهای ملی پرهیز می‌کند";
@@ -1195,7 +1195,7 @@
 "rendering_attr_piste_type_snow_park_name" = "پارک برفی";
 "rendering_attr_showMtbRoutes_name" = "مسیرهای دوچرخه‌سواری کوهستان";
 "routing_attr_avoid_unpaved_name" = "مسیر روسازی‌نشده (خاکی)";
-"routing_attr_height_obstacles_name" = "استفاده از داده‌های ارتفاعی";
+"routing_attr_height_obstacles_name" = "استفاده از دادهٔ ارتفاعی";
 "routeInfo_steepness_name" = "شیب";
 "rendering_attr_surface_wood_name" = "چوب";
 "routing_attr_max_num_changes_name" = "تعداد تغییرات";
@@ -1206,7 +1206,7 @@
 "rendering_attr_appMode_name" = "حالت رندرگیری";
 "routing_attr_avoid_share_taxi_name" = "تاکسی اشتراکی";
 "rendering_attr_piste_type_nordic_name" = "نوردیک";
-"routing_attr_weight_description" = "وزن مجاز خودرو در راه‌ها را مشخص کنید.";
+"routing_attr_weight_description" = "وزن مجاز خودرو در مسیرها را مشخص کنید.";
 "rendering_attr_piste_difficulty_expert_name" = "حرفه‌ای";
 "routing_attr_allow_expert_name" = "مسیرهای حرفه‌ای مجاز باشد";
 "rendering_attr_streetLightingNight_name" = "فقط هنگام شب نشان بده";

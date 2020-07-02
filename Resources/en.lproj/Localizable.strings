@@ -230,6 +230,9 @@
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "nav_type_straight_line" = "Straight line";
 "nav_type_direct_to" = "Direct-to-point";
+"nav_type_brouter" = "BRouter";
+"nav_type_ski" = "Ski";
+"nav_type_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";

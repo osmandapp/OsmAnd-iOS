@@ -10,4 +10,6 @@
 
 @interface OAProfileNavigationSettingsViewController : OABaseSettingsViewController
 
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
+
 @end

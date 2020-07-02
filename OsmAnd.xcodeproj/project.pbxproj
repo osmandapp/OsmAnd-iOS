@@ -4325,8 +4325,8 @@
 		DA25589A24ADE40F0081D155 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25584F24ADE40E0081D155 /* OATripRecordingSettingsViewController.mm */; };
 		DA25589B24ADE40F0081D155 /* OASettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA25585024ADE40E0081D155 /* OASettingsViewController.xib */; };
 		DA25589C24ADE40F0081D155 /* OASettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA25585024ADE40E0081D155 /* OASettingsViewController.xib */; };
-		DA25589F24ADE40F0081D155 /* OAProfileNavigationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25585624ADE40F0081D155 /* OAProfileNavigationSettingsViewController.m */; };
-		DA2558A024ADE40F0081D155 /* OAProfileNavigationSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25585624ADE40F0081D155 /* OAProfileNavigationSettingsViewController.m */; };
+		DA25589F24ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25585624ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm */; };
+		DA2558A024ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25585624ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm */; };
 		DA2558A124ADE40F0081D155 /* OANavigationTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25585924ADE40F0081D155 /* OANavigationTypeViewController.m */; };
 		DA2558A224ADE40F0081D155 /* OANavigationTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25585924ADE40F0081D155 /* OANavigationTypeViewController.m */; };
 		DA2558A324ADE40F0081D155 /* OARouteParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25585B24ADE40F0081D155 /* OARouteParametersViewController.m */; };
@@ -4586,6 +4586,8 @@
 		DA503D9D23239443006F34E7 /* OATableViewCustomHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA503D9B23239442006F34E7 /* OATableViewCustomHeaderView.m */; };
 		DA518838217F5642007FCC47 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA518834217F5641007FCC47 /* ic_ruler_center@3x.png */; };
 		DA518839217F5642007FCC47 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA518834217F5641007FCC47 /* ic_ruler_center@3x.png */; };
+		DA52CDCE24ADFAA900CC309D /* OAProfileDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA52CDCD24ADFAA900CC309D /* OAProfileDataObject.m */; };
+		DA52CDCF24ADFAA900CC309D /* OAProfileDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA52CDCD24ADFAA900CC309D /* OAProfileDataObject.m */; };
 		DA540D8A229E63270069201E /* ic_custom_photo.png in Resources */ = {isa = PBXBuildFile; fileRef = DA540D84229E63250069201E /* ic_custom_photo.png */; };
 		DA540D8B229E63270069201E /* ic_custom_photo.png in Resources */ = {isa = PBXBuildFile; fileRef = DA540D84229E63250069201E /* ic_custom_photo.png */; };
 		DA540D8C229E63270069201E /* ic_custom_plus.png in Resources */ = {isa = PBXBuildFile; fileRef = DA540D85229E63260069201E /* ic_custom_plus.png */; };
@@ -8723,7 +8725,7 @@
 		DA25585324ADE40E0081D155 /* OAVehicleParametersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVehicleParametersViewController.h; sourceTree = "<group>"; };
 		DA25585424ADE40E0081D155 /* OAMapBehaviorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapBehaviorViewController.h; sourceTree = "<group>"; };
 		DA25585524ADE40F0081D155 /* OAAvoidRoadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAvoidRoadsViewController.h; sourceTree = "<group>"; };
-		DA25585624ADE40F0081D155 /* OAProfileNavigationSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileNavigationSettingsViewController.m; sourceTree = "<group>"; };
+		DA25585624ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAProfileNavigationSettingsViewController.mm; sourceTree = "<group>"; };
 		DA25585724ADE40F0081D155 /* OAScreenAlertsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAScreenAlertsViewController.h; sourceTree = "<group>"; };
 		DA25585824ADE40F0081D155 /* OANavigationLanguageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavigationLanguageViewController.h; sourceTree = "<group>"; };
 		DA25585924ADE40F0081D155 /* OANavigationTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavigationTypeViewController.m; sourceTree = "<group>"; };
@@ -8921,6 +8923,8 @@
 		DA503D9923239441006F34E7 /* OATableViewCustomHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATableViewCustomHeaderView.h; path = Controllers/Cells/OATableViewCustomHeaderView.h; sourceTree = "<group>"; };
 		DA503D9B23239442006F34E7 /* OATableViewCustomHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCustomHeaderView.m; path = Controllers/Cells/OATableViewCustomHeaderView.m; sourceTree = "<group>"; };
 		DA518834217F5641007FCC47 /* ic_ruler_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@3x.png"; path = "Resources/Icons/ic_ruler_center@3x.png"; sourceTree = "<group>"; };
+		DA52CDCC24ADFAA900CC309D /* OAProfileDataObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAProfileDataObject.h; sourceTree = "<group>"; };
+		DA52CDCD24ADFAA900CC309D /* OAProfileDataObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAProfileDataObject.m; sourceTree = "<group>"; };
 		DA540D84229E63250069201E /* ic_custom_photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_photo.png; path = Resources/Icons/ic_custom_photo.png; sourceTree = "<group>"; };
 		DA540D85229E63260069201E /* ic_custom_plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_plus.png; path = Resources/Icons/ic_custom_plus.png; sourceTree = "<group>"; };
 		DA540D86229E63260069201E /* ic_custom_plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_plus@2x.png"; path = "Resources/Icons/ic_custom_plus@2x.png"; sourceTree = "<group>"; };
@@ -14219,6 +14223,8 @@
 				DA25588324ADE40F0081D155 /* OATripRecordingSettingsViewController.h */,
 				DA25584F24ADE40E0081D155 /* OATripRecordingSettingsViewController.mm */,
 				DA25587D24ADE40F0081D155 /* OATripRecordingSettingsViewController.xib */,
+				DA52CDCC24ADFAA900CC309D /* OAProfileDataObject.h */,
+				DA52CDCD24ADFAA900CC309D /* OAProfileDataObject.m */,
 			);
 			name = Settings;
 			path = Sources/Controllers/2.0/Settings;
@@ -14259,7 +14265,7 @@
 				DA25586E24ADE40F0081D155 /* OANavigationTypeViewController.h */,
 				DA25585924ADE40F0081D155 /* OANavigationTypeViewController.m */,
 				DA25586824ADE40F0081D155 /* OAProfileNavigationSettingsViewController.h */,
-				DA25585624ADE40F0081D155 /* OAProfileNavigationSettingsViewController.m */,
+				DA25585624ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm */,
 				DA25587724ADE40F0081D155 /* OARecalculateRouteViewController.h */,
 				DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.m */,
 				DA25586C24ADE40F0081D155 /* OARepeatNavigationInstructionsViewController.h */,
@@ -19432,6 +19438,7 @@
 			files = (
 				847A20A01DF95238003C1246 /* OADebugSettings.h in Sources */,
 				8431769B1FF0E33E0044F90B /* OAVoiceCommandPending.mm in Sources */,
+				DA52CDCF24ADFAA900CC309D /* OAProfileDataObject.m in Sources */,
 				DAA8640E23040150000E1900 /* OANavStartStopAction.mm in Sources */,
 				DA453494221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */,
 				DADBC62A242A43ED008B7423 /* OAPublicTransportPointCell.m in Sources */,
@@ -20058,7 +20065,7 @@
 				DA2FA6F92302E409006DB2E5 /* OAMarkerAction.mm in Sources */,
 				847A1D731DF94E9B003C1246 /* OAOverlayUnderlayView.m in Sources */,
 				847A1D741DF94E9B003C1246 /* OATargetPoint.m in Sources */,
-				DA2558A024ADE40F0081D155 /* OAProfileNavigationSettingsViewController.m in Sources */,
+				DA2558A024ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm in Sources */,
 				DA1605BA22FEF2F1001E02AD /* OAMapSourceBaseAction.mm in Sources */,
 				84FB989D1FC6A6810005A39F /* OASimulationProvider.mm in Sources */,
 			);
@@ -20146,7 +20153,7 @@
 				DA94C73F224B663B006C1116 /* OATextInputFloatingCellWithIcon.mm in Sources */,
 				848A3EC81B6A6F180016F6F4 /* QuadTree.m in Sources */,
 				8490B1C92064F053007694A5 /* OAWaypointsRadiusScreen.mm in Sources */,
-				DA25589F24ADE40F0081D155 /* OAProfileNavigationSettingsViewController.m in Sources */,
+				DA25589F24ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm in Sources */,
 				157F3CE924A1FE6D000A66F0 /* OADeleteButtonTableViewCell.m in Sources */,
 				84EE2DF01AFD2D58007C9A94 /* OABannerView.m in Sources */,
 				BBA3B01319878ADD0039D991 /* OADownloadsManager.m in Sources */,
@@ -20346,6 +20353,7 @@
 				DABB8E4C2308165A00DBD77F /* OAQuickActionListViewController.m in Sources */,
 				84BFC2341A98DD1500D807B4 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				BBA3B02A19880DEC0039D991 /* OANavigationController.m in Sources */,
+				DA52CDCE24ADFAA900CC309D /* OAProfileDataObject.m in Sources */,
 				DA06EB2220F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */,
 				8AE4E33121BFED24000CBE16 /* OAProducts.mm in Sources */,
 				844E079C1E3C82F400EFC525 /* OAQuickSearchViewController.mm in Sources */,

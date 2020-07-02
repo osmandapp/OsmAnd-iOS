@@ -16,6 +16,9 @@
 #import "OAScreenAlertsViewController.h"
 #import "OAVehicleParametersViewController.h"
 #import "OAMapBehaviorViewController.h"
+#import "OAApplicationMode.h"
+#import "OAAppSettings.h"
+#import "OAProfileDataObject.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -31,13 +34,20 @@
 @implementation OAProfileNavigationSettingsViewController
 {
     NSArray<NSArray *> *_data;
+    OAApplicationMode *_appMode;
+    
+    OAAppSettings *_settings;
+    
+    NSDictionary<NSString *, OARoutingProfileDataObject *> *_routingProfileDataObjects;
 }
 
-- (instancetype) init
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
     self = [super init];
     if (self)
     {
+        _appMode = appMode;
+        _settings = OAAppSettings.sharedManager;
         [self commonInit];
     }
     return self;
@@ -50,31 +60,13 @@
 
 - (void) generateData
 {
-}
-
-- (void) applyLocalization
-{
-    self.titleLabel.text = OALocalizedString(@"routing_settings_2");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
-}
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
-}
-
-- (void) setupView
-{
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *navigationArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [navigationArr addObject:@{
         @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"nav_type_title"),
-        @"value" : OALocalizedString(@"m_style_car"),
+        @"value" : [_settings.routingProfile get:_appMode],
         @"icon" : @"ic_custom_navigation",
         @"key" : @"navigationType",
     }];
@@ -110,6 +102,24 @@
     [tableData addObject:navigationArr];
     [tableData addObject:otherArr];
     _data = [NSArray arrayWithArray:tableData];
+}
+
+- (void) applyLocalization
+{
+    self.titleLabel.text = OALocalizedString(@"routing_settings_2");
+    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+}
+
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self setupView];
+}
+
+- (void) setupView
+{
 }
 
 #pragma mark - TableView

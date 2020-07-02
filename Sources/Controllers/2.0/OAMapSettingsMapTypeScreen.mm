@@ -13,6 +13,7 @@
 #import "OAMapCreatorHelper.h"
 #include "Localization.h"
 #import "Reachability.h"
+#import "OASQLiteTileSource.h"
 
 #include <QSet>
 
@@ -169,12 +170,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     [_onlineMapSources setArray:arr];
     
+    OASQLiteTileSource *sqlitedbHelper = [[OASQLiteTileSource alloc] init];
     NSMutableArray *sqlitedbArr = [NSMutableArray array];
     for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
-
+        NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
+        NSString *optionalLabel = [sqlitedbHelper fetchLabelFor:filePath];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:optionalLabel name:@"sqlitedb"];
         [sqlitedbArr addObject:item];
     }
 
@@ -296,7 +299,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         someItem = [collection objectAtIndex:indexPath.row];
         if ([someItem isKindOfClass:Item_SqliteDbTileSource.class])
         {
-            caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            if (someItem.mapSource.variant.length > 0)
+                caption = someItem.mapSource.variant;
+            else
+                caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            
             description = nil;
         }
         else if (someItem.resource->type == OsmAndResourceType::MapStyle)

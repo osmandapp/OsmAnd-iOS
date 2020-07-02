@@ -6,8 +6,8 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAAppSettingsViewController.h"
+#import "OABaseSettingsViewController.h"
 
-@interface OARecalculateRouteViewController : OAAppSettingsViewController
+@interface OARecalculateRouteViewController : OABaseSettingsViewController
 
 @end

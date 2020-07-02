@@ -1,13 +1,15 @@
 //
-//  OAScreenAlertsViewController.m
+//  OARouteParametersViewController.m
 //  OsmAnd Maps
 //
-//  Created by Anna Bibyk on 25.06.2020.
+//  Created by Anna Bibyk on 24.06.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAScreenAlertsViewController.h"
+#import "OARouteParametersViewController.h"
 #import "OADeviceScreenTableViewCell.h"
+#import "OAIconTitleValueCell.h"
+#import "OAIconTextTableViewCell.h"
 #import "OASettingSwitchCell.h"
 #import "OAAvoidRoadsViewController.h"
 #import "OARecalculateRouteViewController.h"
@@ -15,11 +17,11 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAScreenAlertsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OARouteParametersViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OAScreenAlertsViewController
+@implementation OARouteParametersViewController
 {
     NSArray<NSArray *> *_data;
 }
@@ -45,7 +47,7 @@
 
 -(void) applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"screen_alerts");
+    self.titleLabel.text = OALocalizedString(@"route_params");
     self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
@@ -64,37 +66,32 @@
     NSMutableArray *otherArr = [NSMutableArray array];
     [otherArr addObject:@{
         @"type" : @"OADeviceScreenTableViewCell",
-        @"foregroundImage" : @"img_settings_sreen_route_alerts@3x.png",
+        @"foregroundImage" : @"img_settings_sreen_route_parameters@3x.png",
         @"backgroundImage" : @"img_settings_device_bottom_light@3x.png",
     }];
-    [otherArr addObject:@{
-        @"type" : @"OASettingSwitchCell",
-        @"title" : OALocalizedString(@"screen_alerts"),
+    [parametersArr addObject:@{
+        @"type" : @"OAIconTitleValueCell",
+        @"title" : OALocalizedString(@"recalculate_route"),
+        @"value" : @"120 m", // has to be changed
+        @"icon" : @"ic_custom_minimal_distance",
+        @"key" : @"recalculateRoute",
+    }];
+    [parametersArr addObject:@{
+        @"type" : @"OAIconTextCell",
+        @"title" : OALocalizedString(@"impassable_road"),
         @"icon" : @"ic_custom_alert",
-        @"isOn" : @YES,
+        @"key" : @"avoidRoads",
     }];
     [parametersArr addObject:@{
         @"type" : @"OASettingSwitchCell",
-        @"title" : OALocalizedString(@"show_traffic_warnings"),
-        @"icon" : @"list_warnings_traffic_calming",
-        @"isOn" : @YES,
-    }];
-    [parametersArr addObject:@{
-        @"type" : @"OASettingSwitchCell",
-        @"title" : OALocalizedString(@"show_pedestrian_warnings"),
-        @"icon" : @"list_warnings_pedestrian",
-        @"isOn" : @YES,
-    }];
-    [parametersArr addObject:@{
-        @"type" : @"OASettingSwitchCell",
-        @"title" : OALocalizedString(@"show_cameras"),
-        @"icon" : @"list_warnings_speed_camera",
+        @"title" : OALocalizedString(@"routing_attr_short_way_name"),
+        @"icon" : @"ic_custom_fuel",
         @"isOn" : @NO,
     }];
     [parametersArr addObject:@{
         @"type" : @"OASettingSwitchCell",
-        @"title" : OALocalizedString(@"show_tunnels"),
-        @"icon" : @"list_warnings_tunnel",
+        @"title" : OALocalizedString(@"routing_attr_allow_private_name"),
+        @"icon" : @"ic_custom_forbid_private_access",
         @"isOn" : @NO,
     }];
     [tableData addObject:otherArr];
@@ -124,6 +121,47 @@
         }
         return cell;
     }
+    else if ([cellType isEqualToString:@"OAIconTitleValueCell"])
+    {
+        static NSString* const identifierCell = @"OAIconTitleValueCell";
+        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+        }
+        if (cell)
+        {
+            cell.textView.text = item[@"title"];
+            cell.descriptionView.text = item[@"value"];
+            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftImageView.tintColor = UIColorFromRGB(color_chart_orange);
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:@"OAIconTextCell"])
+    {
+        static NSString* const identifierCell = @"OAIconTextCell";
+        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+        }
+        if (cell)
+        {
+            cell.textView.text = item[@"title"];
+            cell.arrowIconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.arrowIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.tintColor = UIColorFromRGB(color_chart_orange);
+        }
+        return cell;
+    }
     else if ([cellType isEqualToString:@"OASettingSwitchCell"])
     {
         static NSString* const identifierCell = @"OASettingSwitchCell";
@@ -139,7 +177,8 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.imgView.image = [UIImage imageNamed:item[@"icon"]];
+            cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.tintColor = UIColorFromRGB(color_icon_inactive);
             cell.switchView.on = [item[@"isOn"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
@@ -171,24 +210,21 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAAppSettingsViewController* settingsViewController = nil;
-    if (indexPath.row == 0)
-    {
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *itemKey = item[@"key"];
+    OABaseSettingsViewController* settingsViewController = nil;
+    if ([itemKey isEqualToString:@"recalculateRoute"])
         settingsViewController = [[OARecalculateRouteViewController alloc] init];
-    }
-    else if (indexPath.row == 1)
-    {
+    else if ([itemKey isEqualToString:@"avoidRoads"])
         settingsViewController = [[OAAvoidRoadsViewController alloc] init];
-    }
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - Switch
+# pragma mark - Switch
 
 - (void) applyParameter:(id)sender
 {
 }
 
 @end
-

@@ -170,7 +170,7 @@
 {
     NSDictionary *item = _data[indexPath.section];
     NSString *itemKey = item[@"key"];
-    OAAppSettingsViewController* settingsViewController = nil;
+    OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"autoCenter"])
         settingsViewController = [[OAAutoCenterMapViewController alloc] init];
     else if ([itemKey isEqualToString:@"autoZoom"])

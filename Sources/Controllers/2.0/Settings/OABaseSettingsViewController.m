@@ -1,28 +1,28 @@
 //
-//  OAAppSettingsViewController.m
+//  OABaseSettingsViewController.m
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 25.06.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAAppSettingsViewController.h"
+#import "OABaseSettingsViewController.h"
 #import "OAColors.h"
 
 #define kSidePadding 16
 
-@interface OAAppSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OABaseSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OAAppSettingsViewController
+@implementation OABaseSettingsViewController
 {
     UIView *_tableHeaderView;
 }
 
 - (instancetype) init
 {
-    self = [super initWithNibName:@"OAAppSettingsViewController" bundle:nil];
+    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
     if (self)
     {
         [self commonInit];

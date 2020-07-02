@@ -68,7 +68,6 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
-        _styleSettings = [OAMapStyleSettings sharedInstance];
 
         title = OALocalizedString(@"map_settings_map");
 
@@ -136,6 +135,8 @@
 
 - (void) setupView
 {
+    _styleSettings = [OAMapStyleSettings sharedInstance];
+
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
     [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
 

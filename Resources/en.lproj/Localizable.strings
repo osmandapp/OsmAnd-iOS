@@ -692,6 +692,7 @@
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
+"downloading" = "Downloading";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

@@ -17,8 +17,6 @@
 #include "Localization.h"
 #include "OASizes.h"
 
-
-
 #define kDownloadProgressCell @"OADownloadProgressBarCell"
 #define kGeneralInfoCell @"time_cell"
 
@@ -169,7 +167,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        cell.progressStatusLabel.text = @"Downloading";
+        cell.progressStatusLabel.text = OALocalizedString(@"downloading");
         cell.progressValueLabel.text = [NSString stringWithFormat:@"%ld%%", (NSInteger) (((double)_downloadedNumberOfTiles / (double)_numberOfTiles * 100.))];
         [cell.progressBarView setProgress:(double)_downloadedNumberOfTiles / (double)_numberOfTiles];
         
@@ -223,7 +221,7 @@
     return _downloaded ? OALocalizedString(@"use_of_downloaded_map") : @"";
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;

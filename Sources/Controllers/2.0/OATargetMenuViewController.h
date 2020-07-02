@@ -195,7 +195,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes;
 - (BOOL) isBottomsControlVisible;
 - (BOOL) isMapFrameNeeded;
-- (void) addMapFrameLayer:(CGRect)frame view:(UIView *)view;
+- (void) addMapFrameLayer:(CGRect)mapFrame view:(UIView *)view;
 - (void) removeMapFrameLayer:(UIView *)view;
 - (CGFloat) mapHeightKoef;
 

@@ -168,6 +168,9 @@
 		156E91E7244F709100B181BA /* OADestinationLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 156E91E6244F709100B181BA /* OADestinationLineDelegate.m */; };
 		156E91E82450446900B181BA /* OADestinationLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 156E91E6244F709100B181BA /* OADestinationLineDelegate.m */; };
 		156E91E92450446900B181BA /* OADestinationsLineWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 156E91E1244ED6BE00B181BA /* OADestinationsLineWidget.mm */; };
+		1571CE0B24ACD6FF00083F92 /* OAGeneralSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1571CE0A24ACD6FF00083F92 /* OAGeneralSettingsViewController.m */; };
+		1571CE0E24ADB35C00083F92 /* OAMapOrientationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1571CE0D24ADB35C00083F92 /* OAMapOrientationViewController.m */; };
+		1571CE1224ADCCAF00083F92 /* OADrivingRegionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1571CE1124ADCCAF00083F92 /* OADrivingRegionViewController.m */; };
 		1575409D2452F2D300327879 /* OASettingsCheckmarkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1575409C2452F2D200327879 /* OASettingsCheckmarkCell.xib */; };
 		157540A02452F3D900327879 /* OASettingsCheckmarkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1575409F2452F3D900327879 /* OASettingsCheckmarkCell.m */; };
 		157540A32452F45A00327879 /* OADirectionAppearanceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157540A22452F45A00327879 /* OADirectionAppearanceViewController.m */; };
@@ -5910,6 +5913,12 @@
 		156E91E3244ED6D500B181BA /* OADestinationsLineWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADestinationsLineWidget.h; sourceTree = "<group>"; };
 		156E91E6244F709100B181BA /* OADestinationLineDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OADestinationLineDelegate.m; sourceTree = "<group>"; };
 		156E91EA2450609F00B181BA /* OADestinationLineDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADestinationLineDelegate.h; sourceTree = "<group>"; };
+		1571CE0A24ACD6FF00083F92 /* OAGeneralSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAGeneralSettingsViewController.m; path = Resources/Controllers/OAGeneralSettingsViewController.m; sourceTree = "<group>"; };
+		1571CE0C24ACD71700083F92 /* OAGeneralSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAGeneralSettingsViewController.h; path = Resources/Controllers/OAGeneralSettingsViewController.h; sourceTree = "<group>"; };
+		1571CE0D24ADB35C00083F92 /* OAMapOrientationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAMapOrientationViewController.m; path = Resources/Controllers/OAMapOrientationViewController.m; sourceTree = "<group>"; };
+		1571CE0F24ADB38500083F92 /* OAMapOrientationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapOrientationViewController.h; path = Resources/Controllers/OAMapOrientationViewController.h; sourceTree = "<group>"; };
+		1571CE1124ADCCAF00083F92 /* OADrivingRegionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OADrivingRegionViewController.m; path = Resources/Controllers/OADrivingRegionViewController.m; sourceTree = "<group>"; };
+		1571CE1324ADCCCD00083F92 /* OADrivingRegionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OADrivingRegionViewController.h; path = Resources/Controllers/OADrivingRegionViewController.h; sourceTree = "<group>"; };
 		1575409C2452F2D200327879 /* OASettingsCheckmarkCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OASettingsCheckmarkCell.xib; path = Resources/Controllers/Cells/OASettingsCheckmarkCell.xib; sourceTree = "<group>"; };
 		1575409E2452F3D900327879 /* OASettingsCheckmarkCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASettingsCheckmarkCell.h; path = Controllers/Cells/OASettingsCheckmarkCell.h; sourceTree = "<group>"; };
 		1575409F2452F3D900327879 /* OASettingsCheckmarkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASettingsCheckmarkCell.m; path = Controllers/Cells/OASettingsCheckmarkCell.m; sourceTree = "<group>"; };
@@ -9784,6 +9793,19 @@
 			name = Panels;
 			sourceTree = "<group>";
 		};
+		1571CE0924ACD68400083F92 /* General Settings */ = {
+			isa = PBXGroup;
+			children = (
+				1571CE1124ADCCAF00083F92 /* OADrivingRegionViewController.m */,
+				1571CE1324ADCCCD00083F92 /* OADrivingRegionViewController.h */,
+				1571CE0D24ADB35C00083F92 /* OAMapOrientationViewController.m */,
+				1571CE0F24ADB38500083F92 /* OAMapOrientationViewController.h */,
+				1571CE0A24ACD6FF00083F92 /* OAGeneralSettingsViewController.m */,
+				1571CE0C24ACD71700083F92 /* OAGeneralSettingsViewController.h */,
+			);
+			name = "General Settings";
+			sourceTree = "<group>";
+		};
 		3A02BFB01A31F2D30019377F /* Favorite */ = {
 			isa = PBXGroup;
 			children = (
@@ -12859,6 +12881,7 @@
 		84F989251B510147009C443C /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				1571CE0924ACD68400083F92 /* General Settings */,
 				151558D424A4A0830081BB8E /* Navigation Settings */,
 				157F3CC424A0F323000A66F0 /* OANavigationTypeViewController.m */,
 				157F3CC624A0F332000A66F0 /* OANavigationTypeViewController.h */,
@@ -20057,6 +20080,7 @@
 				8AC405C620F9E08400F85CC9 /* OATransportStop.mm in Sources */,
 				84FB98A01FC6E1F30005A39F /* OALocationSimulation.mm in Sources */,
 				8A78D938229326BE007F2E6E /* OAMapillaryImage.mm in Sources */,
+				1571CE1224ADCCAF00083F92 /* OADrivingRegionViewController.m in Sources */,
 				DA94C73F224B663B006C1116 /* OATextInputFloatingCellWithIcon.mm in Sources */,
 				848A3EC81B6A6F180016F6F4 /* QuadTree.m in Sources */,
 				8490B1C92064F053007694A5 /* OAWaypointsRadiusScreen.mm in Sources */,
@@ -20226,6 +20250,7 @@
 				15C428E024A7723B00B21005 /* OAHorizontalCollectionViewCell.m in Sources */,
 				84D0C89F1F1AA31600B0856B /* OATargetPointsHelper.mm in Sources */,
 				DA261E3D22F9A67300D0D441 /* OAAddOSMBugAction.mm in Sources */,
+				1571CE0B24ACD6FF00083F92 /* OAGeneralSettingsViewController.m in Sources */,
 				3AFEEE801A0E64DC00900A47 /* OAFavoriteItem.mm in Sources */,
 				8424326D1AF22B9700925821 /* OAGPXMutableDocument.mm in Sources */,
 				3A91739B1A09277E000B22C5 /* OAOptionsPanelBlackViewController.m in Sources */,
@@ -20325,6 +20350,7 @@
 				78A5C206240807B900312FC4 /* OAOnlineTilesSettingsViewController.mm in Sources */,
 				DAF7027C23B64C1A00E065F9 /* OARouteInfoLegendCell.m in Sources */,
 				DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */,
+				1571CE0E24ADB35C00083F92 /* OAMapOrientationViewController.m in Sources */,
 				DAF6A8E323508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */,
 				1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */,
 				84E3704D2059254900959B94 /* OAWaypointsMainScreen.mm in Sources */,

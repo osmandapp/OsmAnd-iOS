@@ -34,6 +34,7 @@
 #import "OACreateProfileViewController.h"
 #import "OARearrangeProfilesViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
+#import "OAGeneralSettingsViewController.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -124,7 +125,7 @@
                                                                      @"type" : kCellTypeCheck },
                                                                      @{
                                                                      @"name" : @"navigation_settings",
-                                                                     @"title" : OALocalizedString(@"routing_settings_2"),
+                                                                     @"title" : OALocalizedString(@"general_settings_2"),
                                                                      @"description" : @"",
                                                                      @"type" : kCellTypeCheck },nil];
             
@@ -839,7 +840,7 @@
     }
     else if ([name isEqualToString:@"routing_settings"])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral];
+        OAProfileNavigationSettingsViewController* settingsViewController = [[OAProfileNavigationSettingsViewController alloc] init];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([name isEqualToString:@"track_recording"])
@@ -864,7 +865,7 @@
     }
     else if ([name isEqualToString:@"navigation_settings"])
     {
-        OAProfileNavigationSettingsViewController* navigationSettingsViewController = [[OAProfileNavigationSettingsViewController alloc] init];
+        OAGeneralSettingsViewController* navigationSettingsViewController = [[OAGeneralSettingsViewController alloc] init];
         [self.navigationController pushViewController:navigationSettingsViewController animated:YES];
     }
 }

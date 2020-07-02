@@ -639,6 +639,13 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
+"settings_app_theme" = "Application theme";
+"app_theme_light" = "Light";
+"do_not_rotate" = "Do not rotate";
+"allow_3D_view" = "2.5D view";
+"units_of_speed" = "Units of speed";
+"angular_measurment_units" = "Angular measurment units";
+"units_and_formats" = "Units & formats";
 
 // Intro
 "intro_skip" = "Skip";

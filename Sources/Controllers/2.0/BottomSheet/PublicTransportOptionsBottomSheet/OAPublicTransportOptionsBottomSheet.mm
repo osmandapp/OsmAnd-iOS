@@ -74,6 +74,7 @@
             @"type" : @"OASettingSwitchCell",
             @"name" : param.name,
             @"title" : param.title,
+            @"value" : param.value,
             @"img" : imageName,
             }];
     }
@@ -186,7 +187,7 @@
             
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            cell.switchView.on = [_styleSettings getVisibilityForParameterName:item[@"name"]];
+            cell.switchView.on = [item[@"value"] isEqualToString:@"true"];
             [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
@@ -222,8 +223,14 @@
     int position = (int)sw.tag;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:position inSection:0];
     NSString *name = [self getItem:indexPath][@"name"];
-    
-    [_styleSettings setVisibility:sw.on forParameterName:name];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OAMapStyleParameter *p = [_styleSettings getParameter:name];
+        if (p)
+        {
+            p.value = sw.on ? @"true" : @"false";
+            [_styleSettings save:p];
+        }
+    });
 }
 
 

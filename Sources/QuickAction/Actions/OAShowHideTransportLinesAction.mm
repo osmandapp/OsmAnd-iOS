@@ -30,25 +30,20 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    if ([_styleSettings isAllParametersHiddenForCategoryName:@"transport"])
-    {
+    BOOL wasCategoryEnabled = [_styleSettings isCategoryEnabled:@"transport"];
+    [_styleSettings setCategoryEnabled:!wasCategoryEnabled categoryName:@"transport"];
+    if (!wasCategoryEnabled && ![_styleSettings isCategoryEnabled:@"transport"])
         [self showDashboardMenu];
-        [_styleSettings setVisibility:YES forCategoryName:@"transport"];
-        return;
-    }
-    
-    [_styleSettings setVisibility:![_styleSettings getVisibilityForCategoryName:@"transport"] forCategoryName:@"transport"];
 }
 
 - (void)showDashboardMenu
 {
-    OAPublicTransportOptionsBottomSheetViewController *bottomSheet = [[OAPublicTransportOptionsBottomSheetViewController alloc] init];
-    [bottomSheet show];
+    [[[OAPublicTransportOptionsBottomSheetViewController alloc] init] show];
 }
 
 - (BOOL)isActionWithSlash
 {
-    return [_styleSettings getVisibilityForCategoryName:@"transport"] && ![_styleSettings isAllParametersHiddenForCategoryName:@"transport"];
+    return [_styleSettings isCategoryEnabled:@"transport"];
 }
 
 - (NSString *)getActionStateName

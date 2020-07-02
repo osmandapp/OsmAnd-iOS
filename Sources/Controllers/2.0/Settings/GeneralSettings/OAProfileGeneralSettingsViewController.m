@@ -1,19 +1,19 @@
 //
-//  OAGeneralSettingsViewController.m
+//  OAProfileGeneralSettingsViewController.m
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 01.07.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAGeneralSettingsViewController.h"
+#import "OAProfileGeneralSettingsViewController.h"
 #import "OAAppSettings.h"
+#import "OsmAndApp.h"
 #import "OAIconTitleValueCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingSwitchCell.h"
 
 #import "OAMapOrientationViewController.h"
-#import "OADrivingRegionViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -22,13 +22,14 @@
 #define kCellTypeIconTextSwitch @"OASettingSwitchCell"
 #define kCellTypeTitle @"OASettingsCell"
 
-@interface OAGeneralSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAProfileGeneralSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OAGeneralSettingsViewController
+@implementation OAProfileGeneralSettingsViewController
 {
     NSArray<NSArray *> *_data;
+    OAAppSettings *_settings;
 }
 
 - (instancetype) init
@@ -61,6 +62,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    _settings = [OAAppSettings sharedManager];
     [self setupView];
 }
 
@@ -73,22 +75,68 @@
 
 - (void) setupView
 {
-    OAAppSettings* settings = [OAAppSettings sharedManager];
     NSString *rotateMapValue;
-    if ([settings.rotateMap get] == ROTATE_MAP_BEARING)
+    if ([_settings.rotateMap get] == ROTATE_MAP_BEARING)
         rotateMapValue = OALocalizedString(@"rotate_map_bearing_opt");
-    else if ([settings.rotateMap get] == ROTATE_MAP_COMPASS)
+    else if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
         rotateMapValue = OALocalizedString(@"rotate_map_compass_opt");
     else
-        rotateMapValue = OALocalizedString(@"rotate_map_none_opt");
+        rotateMapValue = OALocalizedString(@"do_not_rotate");
     NSString *drivingRegionValue;
-    if (settings.drivingRegionAutomatic)
+    if (_settings.drivingRegionAutomatic)
         drivingRegionValue = OALocalizedString(@"driving_region_automatic");
     else
-        drivingRegionValue = [OADrivingRegion getName:settings.drivingRegion];
-    NSString* metricSystemValue = settings.metricSystem == KILOMETERS_AND_METERS ? OALocalizedString(@"sett_km") : OALocalizedString(@"sett_ml");
+        drivingRegionValue = [OADrivingRegion getName:_settings.drivingRegion];
+    
+    NSString* metricSystemValue;
+    switch (_settings.metricSystem) {
+        case KILOMETERS_AND_METERS:
+            metricSystemValue = OALocalizedString(@"si_km_m");
+            break;
+        case MILES_AND_FEET:
+            metricSystemValue = OALocalizedString(@"si_mi_feet");
+            break;
+        case MILES_AND_YARDS:
+            metricSystemValue = OALocalizedString(@"si_mi_yard");
+            break;
+        case MILES_AND_METERS:
+            metricSystemValue = OALocalizedString(@"si_mi_meters");
+            break;
+        case NAUTICAL_MILES:
+            metricSystemValue = OALocalizedString(@"si_nm");
+            break;
+        default:
+            metricSystemValue = OALocalizedString(@"si_km_m");
+            break;
+    }
+    
+    NSString* speedSystemValue;
+    switch (_settings.speedSystem.get) {
+        case KILOMETERS_PER_HOUR:
+            speedSystemValue = OALocalizedString(@"si_kmh");
+            break;
+        case MILES_PER_HOUR:
+            speedSystemValue = OALocalizedString(@"si_mph");
+            break;
+        case METERS_PER_SECOND:
+            speedSystemValue = OALocalizedString(@"si_m_s");
+            break;
+        case MINUTES_PER_MILE:
+            speedSystemValue = OALocalizedString(@"si_min_m");
+            break;
+        case MINUTES_PER_KILOMETER:
+            speedSystemValue = OALocalizedString(@"si_min_km");
+            break;
+        case NAUTICALMILES_PER_HOUR:
+            speedSystemValue = OALocalizedString(@"si_nm_h");
+            break;
+        default:
+            speedSystemValue = OALocalizedString(@"si_kmh");
+            break;
+    }
+    
     NSString* geoFormatValue;
-    switch (settings.settingGeoFormat) {
+    switch (_settings.settingGeoFormat) {
         case MAP_GEO_FORMAT_DEGREES:
             geoFormatValue = OALocalizedString(@"navigate_point_format_D");
             break;
@@ -108,8 +156,9 @@
             geoFormatValue = OALocalizedString(@"navigate_point_format_D");
             break;
     }
+    
     NSString* angularUnitsValue = @"";
-    switch ([settings.angularUnits get])
+    switch ([_settings.angularUnits get])
     {
         case DEGREES360:
         {
@@ -129,14 +178,17 @@
         default:
             break;
     }
-    NSNumber *allow3DValue = @(settings.settingAllow3DView);
+    
+    NSNumber *allow3DValue = @(_settings.settingAllow3DView);
+    
     NSString* externalInputDeviceValue;
-    if (settings.settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE)
+    if (_settings.settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE)
         externalInputDeviceValue = OALocalizedString(@"sett_generic_ext_input");
-    else if (settings.settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE)
+    else if (_settings.settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE)
         externalInputDeviceValue = OALocalizedString(@"sett_wunderlinq_ext_input");
     else
         externalInputDeviceValue = OALocalizedString(@"sett_no_ext_input");
+    
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *appearanceArr = [NSMutableArray array];
     NSMutableArray *unitsAndFormatsArr = [NSMutableArray array];
@@ -179,7 +231,7 @@
     [unitsAndFormatsArr addObject:@{
         @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"units_of_speed"),
-        @"value" : OALocalizedString(@"units_kmh"), // ???
+        @"value" : speedSystemValue,
         @"icon" : @"ic_action_speed",
         @"key" : @"speedUnits",
     }];
@@ -194,7 +246,7 @@
         @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"angular_measurment_units"),
         @"value" : angularUnitsValue,
-        @"icon" : @"",
+        @"icon" : @"ic_custom_angular_unit",
         @"key" : @"angulerMeasurmentUnits",
     }];
     [otherArr addObject:@{
@@ -251,7 +303,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.imgView.tintColor = UIColorFromRGB(color_icon_inactive);
             cell.switchView.on = [item[@"isOn"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
@@ -295,19 +347,19 @@
     if ([itemKey isEqualToString:@"app_theme"])
         settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"map_orientation"])
-        settingsViewController = [[OAMapOrientationViewController alloc] init];
+        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsMapOrientation];
     else if ([itemKey isEqualToString:@"drivingRegion"])
-        settingsViewController = [[OADrivingRegionViewController alloc] init];
+        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsDrivingRegion];
     else if ([itemKey isEqualToString:@"lengthUnits"])
-        settingsViewController = [[OABaseSettingsViewController alloc] init];
+        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfLenght];
     else if ([itemKey isEqualToString:@"speedUnits"])
-        settingsViewController = [[OABaseSettingsViewController alloc] init];
+        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfSpeed];
     else if ([itemKey isEqualToString:@"coordsFormat"])
         settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
-        settingsViewController = [[OABaseSettingsViewController alloc] init];
+        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsAngularMeasurmentUnits];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
-        settingsViewController = [[OABaseSettingsViewController alloc] init];
+        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsExternalInputDevices];
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -340,6 +392,37 @@
 
 - (void) applyParameter:(id)sender
 {
+    if ([sender isKindOfClass:[UISwitch class]])
+    {
+        UISwitch *sw = (UISwitch *) sender;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+        NSDictionary *item = _data[indexPath.section][indexPath.row];
+        NSString *name = item[@"name"];
+        if (name)
+        {
+            BOOL isChecked = ((UISwitch *) sender).on;
+            if ([name isEqualToString:@"do_not_show_discount"])
+            {
+                [_settings setSettingDoNotShowPromotions:isChecked];
+            }
+            else if ([name isEqualToString:@"do_not_send_anonymous_data"])
+            {
+                [_settings setSettingDoNotUseAnalytics:isChecked];
+            }
+            else if ([name isEqualToString:@"allow_3d"])
+            {
+                [_settings setSettingAllow3DView:isChecked];
+                if (!isChecked)
+                {
+                    OsmAndAppInstance app = OsmAndApp.instance;
+                    if (app.mapMode == OAMapModeFollow)
+                        [app setMapMode:OAMapModePositionTrack];
+                    else
+                        [app.mapModeObservable notifyEvent];
+                }
+            }
+        }
+    }
 }
 
 @end

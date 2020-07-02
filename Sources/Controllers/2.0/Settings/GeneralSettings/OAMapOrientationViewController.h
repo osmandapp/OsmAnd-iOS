@@ -7,7 +7,10 @@
 //
 
 #import "OABaseSettingsViewController.h"
+#import "OAProfileGeneralSettingsViewController.h"
 
 @interface OAMapOrientationViewController : OABaseSettingsViewController
+
+- (instancetype) initWithType:(kProfileGeneralSettingsParameter)settingsType;
 
 @end

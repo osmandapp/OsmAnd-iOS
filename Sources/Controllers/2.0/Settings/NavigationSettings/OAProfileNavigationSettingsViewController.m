@@ -183,7 +183,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
-    OAAppSettingsViewController* settingsViewController = nil;
+    OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"navigationType"])
         settingsViewController = [[OANavigationTypeViewController alloc] init];
     else if ([itemKey isEqualToString:@"routeParams"])

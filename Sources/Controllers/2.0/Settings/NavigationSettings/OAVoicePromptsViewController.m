@@ -275,7 +275,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
-    OAAppSettingsViewController* settingsViewController = nil;
+    OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"language"])
         settingsViewController = [[OANavigationLanguageViewController alloc] init];
     else if ([itemKey isEqualToString:@"speedLimitTolerance"])

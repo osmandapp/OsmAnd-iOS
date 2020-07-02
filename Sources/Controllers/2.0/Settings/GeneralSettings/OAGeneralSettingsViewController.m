@@ -290,25 +290,25 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
-    OAAppSettingsViewController* settingsViewController = nil;
+    OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"app_theme"])
-        settingsViewController = [[OAAppSettingsViewController alloc] init];
+        settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"map_orientation"])
         settingsViewController = [[OAMapOrientationViewController alloc] init];
     else if ([itemKey isEqualToString:@"3dView"])
-        settingsViewController = [[OAAppSettingsViewController alloc] init];
+        settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"drivingRegion"])
-        settingsViewController = [[OAAppSettingsViewController alloc] init];
+        settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"lengthUnits"])
-        settingsViewController = [[OAAppSettingsViewController alloc] init];
+        settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"speedUnits"])
-        settingsViewController = [[OAAppSettingsViewController alloc] init];
+        settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"coordsFormat"])
-        settingsViewController = [[OAAppSettingsViewController alloc] init];
+        settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
-        settingsViewController = [[OAAppSettingsViewController alloc] init];
+        settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
-        settingsViewController = [[OAAppSettingsViewController alloc] init];
+        settingsViewController = [[OABaseSettingsViewController alloc] init];
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

@@ -5,8 +5,8 @@
 //  Created by Anna Bibyk on 25.06.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
-#import "OAAppSettingsViewController.h"
+#import "OABaseSettingsViewController.h"
 
-@interface OAScreenAlertsViewController : OAAppSettingsViewController
+@interface OAScreenAlertsViewController : OABaseSettingsViewController
 
 @end

@@ -1,5 +1,5 @@
 //
-//  OAAppSettingsViewController.h
+//  OABaseSettingsViewController.h
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 25.06.2020.
@@ -7,7 +7,7 @@
 //
 #import "OACompoundViewController.h"
 
-@interface OAAppSettingsViewController : OACompoundViewController
+@interface OABaseSettingsViewController : OACompoundViewController
 
 @property (weak, nonatomic) IBOutlet UIView *navbarView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;

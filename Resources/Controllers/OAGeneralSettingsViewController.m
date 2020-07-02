@@ -13,6 +13,7 @@
 #import "OASettingSwitchCell.h"
 
 #import "OAMapOrientationViewController.h"
+#import "OADrivingRegionViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -193,7 +194,7 @@
         @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"angular_measurment_units"),
         @"value" : angularUnitsValue,
-        //@"icon" : @"",
+        @"icon" : @"",
         @"key" : @"angulerMeasurmentUnits",
     }];
     [otherArr addObject:@{
@@ -295,10 +296,8 @@
         settingsViewController = [[OAAppSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"map_orientation"])
         settingsViewController = [[OAMapOrientationViewController alloc] init];
-    else if ([itemKey isEqualToString:@"3dView"])
-        settingsViewController = [[OAAppSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"drivingRegion"])
-        settingsViewController = [[OAAppSettingsViewController alloc] init];
+        settingsViewController = [[OADrivingRegionViewController alloc] init];
     else if ([itemKey isEqualToString:@"lengthUnits"])
         settingsViewController = [[OAAppSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"speedUnits"])

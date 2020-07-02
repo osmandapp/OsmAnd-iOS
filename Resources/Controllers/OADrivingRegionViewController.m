@@ -72,7 +72,7 @@
     [dataArr addObject:@{
         @"name" : @"AUTOMATIC",
         @"title" : OALocalizedString(@"driving_region_automatic"),
-        @"description" : @"",
+        @"description" : OALocalizedString(@"device_settings"),
         @"value" : @"",
         @"img" : @(automatic),
         @"type" : kCellTypeCheck,
@@ -137,7 +137,6 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
         }
         if (cell)
         {

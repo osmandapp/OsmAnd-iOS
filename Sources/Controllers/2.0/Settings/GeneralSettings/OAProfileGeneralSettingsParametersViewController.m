@@ -1,12 +1,12 @@
 //
-//  OAMapOrientationViewController.m
+//  OAProfileGeneralSettingsParametersViewController.m
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 02.07.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAMapOrientationViewController.h"
+#import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OAAppSettings.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAAppSettings.h"
@@ -22,11 +22,11 @@
 #define kCellTypeTitleDescriptionCheck @"OATitleDescriptionCheckmarkCell"
 #define kCellTypeTitleCheck @"OASettingsTitleCell"
 
-@interface OAMapOrientationViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAProfileGeneralSettingsParametersViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OAMapOrientationViewController
+@implementation OAProfileGeneralSettingsParametersViewController
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
@@ -421,6 +421,7 @@
     [self setupView];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self backButtonClicked:self];
 }
 
 - (void) selectMapOrientation:(NSString *)name

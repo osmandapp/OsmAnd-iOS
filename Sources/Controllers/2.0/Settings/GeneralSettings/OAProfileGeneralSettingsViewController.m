@@ -13,7 +13,7 @@
 #import "OASettingsTableViewCell.h"
 #import "OASettingSwitchCell.h"
 
-#import "OAMapOrientationViewController.h"
+#import "OAProfileGeneralSettingsParametersViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -347,19 +347,19 @@
     if ([itemKey isEqualToString:@"app_theme"])
         settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"map_orientation"])
-        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsMapOrientation];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsMapOrientation];
     else if ([itemKey isEqualToString:@"drivingRegion"])
-        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsDrivingRegion];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsDrivingRegion];
     else if ([itemKey isEqualToString:@"lengthUnits"])
-        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfLenght];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfLenght];
     else if ([itemKey isEqualToString:@"speedUnits"])
-        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfSpeed];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfSpeed];
     else if ([itemKey isEqualToString:@"coordsFormat"])
         settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
-        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsAngularMeasurmentUnits];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsAngularMeasurmentUnits];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
-        settingsViewController = [[OAMapOrientationViewController alloc] initWithType:kProfileGeneralSettingsExternalInputDevices];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsExternalInputDevices];
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

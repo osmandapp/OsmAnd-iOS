@@ -4326,8 +4326,8 @@
 		DA23E1EE23361A2B0056F4A8 /* OAAppModeView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA23E1EA23361A2B0056F4A8 /* OAAppModeView.m */; };
 		DA25588724ADE40F0081D155 /* OAProfileGeneralSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25584124ADE40E0081D155 /* OAProfileGeneralSettingsViewController.m */; };
 		DA25588824ADE40F0081D155 /* OAProfileGeneralSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25584124ADE40E0081D155 /* OAProfileGeneralSettingsViewController.m */; };
-		DA25588924ADE40F0081D155 /* OAMapOrientationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25584324ADE40E0081D155 /* OAMapOrientationViewController.m */; };
-		DA25588A24ADE40F0081D155 /* OAMapOrientationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25584324ADE40E0081D155 /* OAMapOrientationViewController.m */; };
+		DA25588924ADE40F0081D155 /* OAProfileGeneralSettingsParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25584324ADE40E0081D155 /* OAProfileGeneralSettingsParametersViewController.m */; };
+		DA25588A24ADE40F0081D155 /* OAProfileGeneralSettingsParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25584324ADE40E0081D155 /* OAProfileGeneralSettingsParametersViewController.m */; };
 		DA25588B24ADE40F0081D155 /* OARearrangeProfilesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA25584424ADE40E0081D155 /* OARearrangeProfilesViewController.xib */; };
 		DA25588C24ADE40F0081D155 /* OARearrangeProfilesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA25584424ADE40E0081D155 /* OARearrangeProfilesViewController.xib */; };
 		DA25588D24ADE40F0081D155 /* OASettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25584524ADE40E0081D155 /* OASettingsViewController.m */; };
@@ -8748,9 +8748,9 @@
 		DA23E1E923361A2A0056F4A8 /* OAAppModeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeView.xib; sourceTree = "<group>"; };
 		DA23E1EA23361A2B0056F4A8 /* OAAppModeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAppModeView.m; sourceTree = "<group>"; };
 		DA25583E24ADE40E0081D155 /* OAProfileGeneralSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileGeneralSettingsViewController.h; sourceTree = "<group>"; };
-		DA25583F24ADE40E0081D155 /* OAMapOrientationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapOrientationViewController.h; sourceTree = "<group>"; };
+		DA25583F24ADE40E0081D155 /* OAProfileGeneralSettingsParametersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileGeneralSettingsParametersViewController.h; sourceTree = "<group>"; };
 		DA25584124ADE40E0081D155 /* OAProfileGeneralSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileGeneralSettingsViewController.m; sourceTree = "<group>"; };
-		DA25584324ADE40E0081D155 /* OAMapOrientationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapOrientationViewController.m; sourceTree = "<group>"; };
+		DA25584324ADE40E0081D155 /* OAProfileGeneralSettingsParametersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileGeneralSettingsParametersViewController.m; sourceTree = "<group>"; };
 		DA25584424ADE40E0081D155 /* OARearrangeProfilesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARearrangeProfilesViewController.xib; sourceTree = "<group>"; };
 		DA25584524ADE40E0081D155 /* OASettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASettingsViewController.m; sourceTree = "<group>"; };
 		DA25584624ADE40E0081D155 /* OANavigationSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OANavigationSettingsViewController.mm; sourceTree = "<group>"; };
@@ -14296,8 +14296,8 @@
 			children = (
 				DA25583E24ADE40E0081D155 /* OAProfileGeneralSettingsViewController.h */,
 				DA25584124ADE40E0081D155 /* OAProfileGeneralSettingsViewController.m */,
-				DA25583F24ADE40E0081D155 /* OAMapOrientationViewController.h */,
-				DA25584324ADE40E0081D155 /* OAMapOrientationViewController.m */,
+				DA25583F24ADE40E0081D155 /* OAProfileGeneralSettingsParametersViewController.h */,
+				DA25584324ADE40E0081D155 /* OAProfileGeneralSettingsParametersViewController.m */,
 			);
 			path = GeneralSettings;
 			sourceTree = "<group>";
@@ -19824,7 +19824,7 @@
 				DA99919523F6AED300784994 /* OATextViewResizingCell.mm in Sources */,
 				DA5AA2D82351C8D500DF0B7B /* OAHomeWorkCell.mm in Sources */,
 				DA9730C1248289F700724329 /* OANavDirectionsFromAction.mm in Sources */,
-				DA25588A24ADE40F0081D155 /* OAMapOrientationViewController.m in Sources */,
+				DA25588A24ADE40F0081D155 /* OAProfileGeneralSettingsParametersViewController.m in Sources */,
 				DA5793D122A0040200750C8F /* OAFirstMapillaryBottomSheetViewController.mm in Sources */,
 				DAB854BD23055895002566A6 /* OAParkingAction.mm in Sources */,
 				DA446E6623A3AB2600178651 /* OARouteStatisticsHelper.mm in Sources */,
@@ -20347,7 +20347,7 @@
 				8485FA4A1FC95F88005991FE /* SunriseSunset.m in Sources */,
 				DA2558C324ADE40F0081D155 /* OAVoicePromptsViewController.m in Sources */,
 				84FF0C4B1F3D89AF00AD1029 /* OARoutingTargetCell.m in Sources */,
-				DA25588924ADE40F0081D155 /* OAMapOrientationViewController.m in Sources */,
+				DA25588924ADE40F0081D155 /* OAProfileGeneralSettingsParametersViewController.m in Sources */,
 				848B28C31EED8A3400F1A19D /* OATerrainMapLayer.mm in Sources */,
 				3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
 				845E05AD1B53E68D00DFC2A7 /* OADirectionTableViewCell.m in Sources */,

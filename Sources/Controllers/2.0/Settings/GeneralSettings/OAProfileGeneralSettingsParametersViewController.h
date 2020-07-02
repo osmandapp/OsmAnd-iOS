@@ -1,5 +1,5 @@
 //
-//  OAMapOrientationViewController.h
+//  OAProfileGeneralSettingsParametersViewController.h
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 02.07.2020.
@@ -9,7 +9,7 @@
 #import "OABaseSettingsViewController.h"
 #import "OAProfileGeneralSettingsViewController.h"
 
-@interface OAMapOrientationViewController : OABaseSettingsViewController
+@interface OAProfileGeneralSettingsParametersViewController : OABaseSettingsViewController
 
 - (instancetype) initWithType:(kProfileGeneralSettingsParameter)settingsType;
 

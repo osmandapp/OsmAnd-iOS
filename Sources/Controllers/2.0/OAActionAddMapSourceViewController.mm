@@ -17,6 +17,7 @@
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OAMapCreatorHelper.h"
+#import "OASQLiteTileSource.h"
 
 
 #include <OsmAndCore/ResourcesManager.h>
@@ -138,11 +139,14 @@
         return [caption2 compare:caption1];
     }];
     
+    OASQLiteTileSource *sqlitedbHelper = [[OASQLiteTileSource alloc] init];
     NSMutableArray *sqlitedbArr = [NSMutableArray array];
     for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
+        NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
+        NSString *optionalLabel = [sqlitedbHelper fetchLabelFor:filePath];
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""]];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:optionalLabel name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""]];
         [sqlitedbArr addObject:item];
     }
     
@@ -262,7 +266,7 @@
         UIImage *img = nil;
         img = [UIImage imageNamed:@"ic_custom_map_style"];
         
-        cell.textView.text = item.mapSource.name;
+        cell.textView.text = (item.mapSource.variant.length > 0) ? item.mapSource.variant : item.mapSource.name;
         cell.descView.hidden = YES;
         cell.iconView.image = img;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);

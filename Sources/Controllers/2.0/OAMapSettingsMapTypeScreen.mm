@@ -174,9 +174,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSMutableArray *sqlitedbArr = [NSMutableArray array];
     for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
-        Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
         NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
         NSString *optionalLabel = [sqlitedbHelper fetchLabelFor:filePath];
+        Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
         item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:optionalLabel name:@"sqlitedb"];
         [sqlitedbArr addObject:item];
     }

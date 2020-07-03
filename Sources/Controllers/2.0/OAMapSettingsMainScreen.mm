@@ -198,9 +198,16 @@
     
     NSString *mapSourceName;
     if ([_app.data.lastMapSource.name isEqualToString:@"sqlitedb"])
-        mapSourceName = [[_app.data.lastMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    {
+        if (_app.data.lastMapSource.variant.length > 0)
+            mapSourceName = _app.data.lastMapSource.variant;
+        else
+            mapSourceName = [[_app.data.lastMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    }
     else
+    {
         mapSourceName = _app.data.lastMapSource.name;
+    }
     
     NSArray *arrTop = @[@{@"groupName": OALocalizedString(@"map_settings_show"),
                           @"cells": section0

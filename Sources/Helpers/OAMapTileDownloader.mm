@@ -235,7 +235,7 @@
     }
 }
 
-- (void) downloadTile:(NSURL *) url toPath:(NSString *) path
+- (void) downloadTile:(NSURL *)url toPath:(NSString *)path
 {
     _activeDownloads++;
     NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -260,7 +260,7 @@
     [task resume];
 }
 
-- (void) downloadTile:(NSURL *) url x:(int)x y:(int)y zoom:(int)zoom tileSource:(OASQLiteTileSource *) tileSource
+- (void) downloadTile:(NSURL *)url x:(int)x y:(int)y zoom:(int)zoom tileSource:(OASQLiteTileSource *)tileSource
 {
     _activeDownloads++;
     NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {

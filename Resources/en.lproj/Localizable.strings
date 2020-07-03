@@ -1034,6 +1034,10 @@
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
+"public_transport_menu" = "Transport";
+"toggle_public_transport" = "Show/hide public transport";
+"public_transport_show" = "Show public transport";
+"public_transport_hide" = "Hide public transport";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

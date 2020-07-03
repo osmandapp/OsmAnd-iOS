@@ -25,9 +25,7 @@
     
     for (OAMapStyleParameterValue *val in self.possibleValues)
         if ([val.name isEqualToString:self.value])
-        {
             return val.title;
-        }
 
     res = self.value;
     
@@ -46,8 +44,8 @@
 
 @property (nonatomic) NSString *mapStyleName;
 @property (nonatomic) NSString *mapPresetName;
-@property (nonatomic) NSArray *parameters;
-@property (nonatomic) NSDictionary *categories;
+@property (nonatomic) NSArray<OAMapStyleParameter *> *parameters;
+@property (nonatomic) NSDictionary<NSString *, NSString *> *categories;
 
 @end
 
@@ -143,10 +141,10 @@
     const auto& resolvedMapStyle = [OsmAndApp instance].resourcesManager->mapStylesCollection->getResolvedStyleByName(QString::fromNSString(styleName));
     const auto& parameters = resolvedMapStyle->getParameters();
     
-    NSMutableDictionary *categories = [NSMutableDictionary dictionary];
-    NSMutableArray *params = [NSMutableArray array];
+    NSMutableDictionary<NSString *, NSString *> *categories = [NSMutableDictionary dictionary];
+    NSMutableArray<OAMapStyleParameter *> *params = [NSMutableArray array];
 
-    for(const auto& p : OsmAnd::constOf(parameters))
+    for (const auto& p : OsmAnd::constOf(parameters))
     {
         NSString *name = resolvedMapStyle->getStringById(p->getNameId()).toNSString();
         
@@ -191,7 +189,7 @@
                 [values addObject:valStr];
         }
         
-        NSMutableArray *valArr = [NSMutableArray array];
+        NSMutableArray<OAMapStyleParameterValue *> *valArr = [NSMutableArray array];
         for (NSString *v in values)
         {
             OAMapStyleParameterValue *val = [[OAMapStyleParameterValue alloc] init];
@@ -240,21 +238,21 @@
     self.categories = categories;
 }
 
--(NSArray *) getAllParameters
+-(NSArray<OAMapStyleParameter *> *) getAllParameters
 {
     return self.parameters;
 }
 
 -(OAMapStyleParameter *) getParameter:(NSString *)name
 {
-    for (OAMapStyleParameter *p in self.parameters) {
+    for (OAMapStyleParameter *p in self.parameters)
         if ([p.name isEqualToString:name])
             return p;
-    }
+    
     return nil;
 }
 
--(NSArray *) getAllCategories
+-(NSArray<NSString *> *) getAllCategories
 {
     return [[self.categories allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
         return [[obj1 lowercaseString] compare:[obj2 lowercaseString]];
@@ -266,14 +264,13 @@
     return [self.categories valueForKey:categoryName];
 }
 
--(NSArray *) getParameters:(NSString *)category
+-(NSArray<OAMapStyleParameter *> *) getParameters:(NSString *)category
 {
     NSMutableArray *res = [NSMutableArray array];
-    for (OAMapStyleParameter *p in self.parameters) {
-        if ([p.category isEqualToString:category]) {
+    for (OAMapStyleParameter *p in self.parameters)
+        if ([p.category isEqualToString:category])
             [res addObject:p];
-        }
-    }
+
     return [res sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameter *obj1, OAMapStyleParameter *obj2) {
         return [[obj1.title lowercaseString] compare:[obj2.title lowercaseString]];
     }];
@@ -281,25 +278,63 @@
 
 -(void) loadParameters
 {
+    [self loadParameters:self.parameters];
+}
+
+-(void) loadParameters:(NSArray<OAMapStyleParameter *> *)parameters
+{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    for (OAMapStyleParameter *p in self.parameters) {
-        NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
-        if ([defaults objectForKey:name]) {
-            p.value = [defaults valueForKey:name];
-        } else {
-            p.value = @"";
-        }
+    for (OAMapStyleParameter *p in parameters)
+    {
+        NSString *parameterSettingName = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
+        p.storedValue = [defaults objectForKey:parameterSettingName] ? [defaults valueForKey:parameterSettingName] : @"";
+        p.value = [self isCategoryDisabled:p.category] ? @"" : p.storedValue;
     }
+}
+
+-(BOOL) isCategoryEnabled:(NSString *)categoryName
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *categoryEnabledSettingName = [NSString stringWithFormat:@"%@_%@_%@_enabled", self.mapStyleName, self.mapPresetName, categoryName];
+    BOOL enabled = [defaults objectForKey:categoryEnabledSettingName] && [defaults boolForKey:categoryEnabledSettingName];
+    return enabled && ![self isAllParametersDisabledForCategory:categoryName];
+}
+
+-(BOOL) isCategoryDisabled:(NSString *)categoryName
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *categoryEnabledSettingName = [NSString stringWithFormat:@"%@_%@_%@_enabled", self.mapStyleName, self.mapPresetName, categoryName];
+    return [defaults objectForKey:categoryEnabledSettingName] && ![defaults boolForKey:categoryEnabledSettingName];
+}
+
+-(void) setCategoryEnabled:(BOOL)enabled categoryName:(NSString *)categoryName
+{
+    BOOL wasAllParametersDisabledForCategory = [self isAllParametersDisabledForCategory:categoryName];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *categoryEnabledSettingName = [NSString stringWithFormat:@"%@_%@_%@_enabled", self.mapStyleName, self.mapPresetName, categoryName];
+    [defaults setBool:enabled forKey:categoryEnabledSettingName];
+    [self loadParameters:[self getParameters:categoryName]];
+    if (![self isAllParametersDisabledForCategory:categoryName] || (!enabled && !wasAllParametersDisabledForCategory))
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+}
+
+- (BOOL) isAllParametersDisabledForCategory:(NSString *)categoryName
+{
+    for (OAMapStyleParameter *p in [self getParameters:categoryName])
+        if (p.value.length > 0 && ![p.value isEqualToString:@"false"])
+            return NO;
+
+    return YES;
 }
 
 -(void) saveParameters
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    for (OAMapStyleParameter *p in self.parameters) {
+    for (OAMapStyleParameter *p in self.parameters)
+    {
         NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
         [defaults setValue:p.value forKey:name];
+        p.storedValue = p.value;
     }
     [defaults synchronize];
 }
@@ -308,7 +343,9 @@
 {
     NSString *name = [NSString stringWithFormat:@"%@_%@_%@", parameter.mapStyleName, parameter.mapPresetName, parameter.name];
     [[NSUserDefaults standardUserDefaults] setValue:parameter.value forKey:name];
-    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    parameter.storedValue = parameter.value;
+    if (![self isCategoryDisabled:parameter.category])
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 @end

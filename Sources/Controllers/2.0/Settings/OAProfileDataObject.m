@@ -9,7 +9,7 @@
 #import "OAProfileDataObject.h"
 #import "Localization.h"
 
-static NSArray<NSString *> *_rpValues;
+static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
 
 @implementation OAProfileDataObject
 
@@ -32,12 +32,12 @@ static NSArray<NSString *> *_rpValues;
 
 + (void)initialize
 {
-    NSMutableArray<NSString *> *rps = [NSMutableArray new];
+    NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *rps = [NSMutableDictionary new];
     for (NSInteger i = EOARouringProfilesResourceDirectTo; i < EOARouringProfilesResourceGeocoding; i++)
     {
-        [rps addObject:[self getProfileKey:i]];
+        [rps setObject:[[OARoutingProfileDataObject alloc] initWithResource:i] forKey:[self getProfileKey:i]];
     }
-    _rpValues = [NSArray arrayWithArray:rps];
+    _rpValues = [NSDictionary dictionaryWithDictionary:rps];
 }
 
 - (instancetype)initWithStringKey:(NSString *)stringKey name:(NSString *)name descr:(NSString *)descr iconName:(NSString *)iconName isSelected:(BOOL)isSelected fileName:(NSString *)fileName
@@ -45,6 +45,17 @@ static NSArray<NSString *> *_rpValues;
     self = [super initWithStringKey:stringKey name:name descr:descr iconName:iconName isSelected:isSelected];
     if (self) {
         _fileName = fileName;
+    }
+    return self;
+}
+
+- (instancetype) initWithResource:(EOARouringProfilesResource)res
+{
+    self = [super init];
+    if (self) {
+        self.stringKey = [OARoutingProfileDataObject getProfileKey:res];
+        self.name = [OARoutingProfileDataObject getLocalizedName:res];
+        self.iconName = [OARoutingProfileDataObject getIconName:res];
     }
     return self;
 }
@@ -133,9 +144,14 @@ static NSArray<NSString *> *_rpValues;
     };
 }
 
++ (OARoutingProfileDataObject *) getRoutingProfileDataByName:(NSString *)key
+{
+    return _rpValues[key];
+}
+
 + (BOOL)isRpValue:(NSString *)value
 {
-    return [_rpValues containsObject:value];
+    return [_rpValues objectForKey:value] != nil;
 }
 
 @end

@@ -269,8 +269,7 @@
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_routing" = "Osmand routing";
-"desert_xml" = "Desert.xml";
-"routing_custom_xml" = "Routing-Custom.xml";
+"special_routing" = "Special routing";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it on routing folder in iTunes.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "avoid_routes_and_road" = "Avoid certain routes and road types";

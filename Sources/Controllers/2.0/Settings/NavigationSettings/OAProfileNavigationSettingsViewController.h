@@ -8,6 +8,8 @@
 
 #import "OABaseSettingsViewController.h"
 
+@class OAApplicationMode;
+
 @interface OAProfileNavigationSettingsViewController : OABaseSettingsViewController
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;

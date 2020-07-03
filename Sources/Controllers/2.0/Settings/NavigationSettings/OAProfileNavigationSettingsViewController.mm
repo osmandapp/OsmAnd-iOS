@@ -19,6 +19,7 @@
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OAProfileDataObject.h"
+#import "OsmAndApp.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -37,6 +38,7 @@
     OAApplicationMode *_appMode;
     
     OAAppSettings *_settings;
+    OsmAndAppInstance _app;
     
     NSDictionary<NSString *, OARoutingProfileDataObject *> *_routingProfileDataObjects;
 }
@@ -48,26 +50,26 @@
     {
         _appMode = appMode;
         _settings = OAAppSettings.sharedManager;
-        [self commonInit];
+        _app = [OsmAndApp instance];
+        [self generateData];
     }
     return self;
 }
 
-- (void) commonInit
-{
-    [self generateData];
-}
-
 - (void) generateData
 {
+    _routingProfileDataObjects = [self getRoutingProfiles];
+    
+    OARoutingProfileDataObject *routingData = _routingProfileDataObjects[[_settings.routingProfile get:_appMode]];
+    
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *navigationArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [navigationArr addObject:@{
         @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"nav_type_title"),
-        @"value" : [_settings.routingProfile get:_appMode],
-        @"icon" : @"ic_custom_navigation",
+        @"value" : routingData ? routingData.name : @"",
+        @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
         @"key" : @"navigationType",
     }];
     [navigationArr addObject:@{
@@ -115,12 +117,84 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self setupView];
 }
 
-- (void) setupView
+
+- (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles
 {
+    NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *profilesObjects = [NSMutableDictionary new];
+    OARoutingProfileDataObject *straightLine = [[OARoutingProfileDataObject alloc] initWithResource:EOARouringProfilesResourceStraightLine];
+    straightLine.descr = OALocalizedString(@"special_routing");
+    [profilesObjects setObject:straightLine forKey:[OARoutingProfileDataObject getProfileKey:EOARouringProfilesResourceStraightLine]];
+    
+    OARoutingProfileDataObject *directTo = [[OARoutingProfileDataObject alloc] initWithResource:EOARouringProfilesResourceDirectTo];
+    directTo.descr = OALocalizedString(@"special_routing");
+    [profilesObjects setObject:directTo forKey:[OARoutingProfileDataObject getProfileKey:EOARouringProfilesResourceDirectTo]];
+    
+//    if (context.getBRouterService() != null) {
+//        profilesObjects.put(RoutingProfilesResources.BROUTER_MODE.name(), new RoutingProfileDataObject(
+//                RoutingProfilesResources.BROUTER_MODE.name(),
+//                context.getString(RoutingProfilesResources.BROUTER_MODE.getStringRes()),
+//                context.getString(R.string.third_party_routing_type),
+//                RoutingProfilesResources.BROUTER_MODE.getIconRes(),
+//                false, null));
+//    }
+
+//    List<String> disabledRouterNames = OsmandPlugin.getDisabledRouterNames();
+//    for (RoutingConfiguration.Builder builder : context.getAllRoutingConfigs()) {
+//        collectRoutingProfilesFromConfig(context, builder, profilesObjects, disabledRouterNames);
+//    }
+    [self collectRoutingProfilesFromConfig:_app.defaultRoutingConfig profileObjects:profilesObjects disabledRouterNames:@[]];
+    return profilesObjects;
 }
+
+- (void) collectRoutingProfilesFromConfig:(std::shared_ptr<RoutingConfigurationBuilder>) builder
+                           profileObjects:(NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *) profilesObjects disabledRouterNames:(NSArray<NSString *> *) disabledRouterNames
+{
+    for (auto it = builder->routers.begin(); it != builder->routers.end(); ++it)
+    {
+        NSString *routerKey = [NSString stringWithCString:it->first.c_str() encoding:NSUTF8StringEncoding];
+        const auto router = it->second;
+        if (router != nullptr && ![routerKey isEqualToString:@"geocoding"] && ![disabledRouterNames containsObject:routerKey])
+        {
+            NSString *iconName = @"ic_custom_navigation";
+            NSString *name = [NSString stringWithCString:router->profileName.c_str() encoding:NSUTF8StringEncoding];
+            NSString *descr = OALocalizedString(@"osmand_routing");
+            NSString *fileName = [NSString stringWithCString:router->fileName.c_str() encoding:NSUTF8StringEncoding];
+            if (fileName.length > 0)
+            {
+                descr = fileName;
+                OARoutingProfileDataObject *data = [[OARoutingProfileDataObject alloc] initWithStringKey:routerKey name:name descr:descr iconName:iconName isSelected:NO fileName:fileName];
+                [profilesObjects setObject:data forKey:routerKey];
+            }
+            else if ([OARoutingProfileDataObject isRpValue:name.upperCase])
+            {
+                OARoutingProfileDataObject *data = [OARoutingProfileDataObject getRoutingProfileDataByName:name.upperCase];
+                data.descr = descr;
+                [profilesObjects setObject:data forKey:routerKey];
+            }
+        }
+    }
+}
+
+//public static List<ProfileDataObject> getBaseProfiles(OsmandApplication app) {
+//    return getBaseProfiles(app, false);
+//}
+//
+//public static List<ProfileDataObject> getBaseProfiles(OsmandApplication app, boolean includeBrowseMap) {
+//    List<ProfileDataObject> profiles = new ArrayList<>();
+//    for (ApplicationMode mode : ApplicationMode.allPossibleValues()) {
+//        if (mode != ApplicationMode.DEFAULT || includeBrowseMap) {
+//            String description = mode.getDescription();
+//            if (Algorithms.isEmpty(description)) {
+//                description = getAppModeDescription(app, mode);
+//            }
+//            profiles.add(new ProfileDataObject(mode.toHumanString(), description,
+//                    mode.getStringKey(), mode.getIconRes(), false, mode.getIconColorInfo()));
+//        }
+//    }
+//    return profiles;
+//}
 
 #pragma mark - TableView
 

@@ -38,12 +38,16 @@ typedef NS_ENUM(NSInteger, EOARouringProfilesResource)
 
 @interface OARoutingProfileDataObject : OAProfileDataObject
 
-@property (nonatomic, readonly) NSString *fileName;
+@property (nonatomic) NSString *fileName;
 
 - (instancetype) initWithStringKey:(NSString *)stringKey name:(NSString *)name descr:(NSString *)descr iconName:(NSString *)iconName isSelected:(BOOL)isSelected fileName:(NSString *) fileName;
 
+- (instancetype) initWithResource:(EOARouringProfilesResource)res;
+
 + (NSString *) getLocalizedName:(EOARouringProfilesResource)res;
 + (NSString *) getIconName:(EOARouringProfilesResource)res;
++ (NSString *) getProfileKey:(EOARouringProfilesResource)type;
++ (OARoutingProfileDataObject *) getRoutingProfileDataByName:(NSString *)key;
 
 + (BOOL) isRpValue:(NSString *)value;
 

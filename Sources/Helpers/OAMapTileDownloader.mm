@@ -253,8 +253,8 @@
                                  error:&err];
             if (_delegate)
                 [_delegate onTileDownloaded:YES];
+             _activeDownloads--;
             [self startDownloadIfPossible];
-            _activeDownloads--;
         }
     }];
     [task resume];
@@ -271,8 +271,8 @@
             [NSFileManager.defaultManager removeItemAtURL:url error:nil];
             if (_delegate)
                 [_delegate onTileDownloaded:YES];
-            [self startDownloadIfPossible];
             _activeDownloads--;
+            [self startDownloadIfPossible];
         }
     }];
     [task resume];

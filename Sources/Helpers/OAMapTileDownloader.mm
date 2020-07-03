@@ -145,6 +145,12 @@
     return res;
 }
 
+- (void) skipDownload
+{
+    if (_delegate)
+        [_delegate onTileDownloaded:NO];
+}
+
 - (void) startDownload
 {
     if (_type == EOATileRequestTypeUndefined)
@@ -169,6 +175,8 @@
             {
                 tileId = [self getNextTileId];
                 urlToLoad = [self getUrlToLoad:tileId];
+                if (!urlToLoad)
+                    [self skipDownload];
             }
             else
             {
@@ -188,17 +196,11 @@
     {
         if ([_sqliteSource getBytes:tileId.x y:tileId.y zoom:_currZoom])
         {
-            if (_delegate)
-                [_delegate onTileDownloaded:NO];
             return nil;
         }
         else
         {
-            NSString *url = [_sqliteSource getUrlToLoad:tileId.x y:tileId.y zoom:_currZoom];
-            if (_delegate && !url)
-                [_delegate onTileDownloaded:NO];
-            return url;
-            
+            return [_sqliteSource getUrlToLoad:tileId.x y:tileId.y zoom:_currZoom];
         }
     }
     else if (!isSqlite && _onlineSource != nullptr && _downloadPath)
@@ -206,8 +208,6 @@
         NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", _downloadPath, @(_currZoom).stringValue, @(tileId.x).stringValue, @(tileId.y).stringValue];
         if ([NSFileManager.defaultManager fileExistsAtPath:tilePath])
         {
-            if (_delegate)
-                [_delegate onTileDownloaded:NO];
             return nil;
         }
         else
@@ -215,9 +215,6 @@
             NSString *urlToLoad = _onlineSource->urlToLoad.toNSString();
             QList<QString> randomsArray = OsmAnd::OnlineTileSources::parseRandoms(_onlineSource->randoms);
             NSString *url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, OsmAnd::ZoomLevel(_currZoom)).toNSString();
-            
-            if (_delegate && !url)
-                [_delegate onTileDownloaded:NO];
             return url;
         }
     }

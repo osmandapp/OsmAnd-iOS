@@ -34,7 +34,7 @@
 #import "OACreateProfileViewController.h"
 #import "OARearrangeProfilesViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
-#import "OAGeneralSettingsViewController.h"
+#import "OAProfileGeneralSettingsViewController.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -122,11 +122,6 @@
                                                                      @"title" : OALocalizedString(@"edit_profile_list"),
                                                                      @"description" : @"",
                                                                      @"img" : @"ic_custom_edit.png",
-                                                                     @"type" : kCellTypeCheck },
-                                                                     @{
-                                                                     @"name" : @"navigation_settings",
-                                                                     @"title" : OALocalizedString(@"general_settings_2"),
-                                                                     @"description" : @"",
                                                                      @"type" : kCellTypeCheck },nil];
             
             BOOL shouldAddHeader = YES;
@@ -835,7 +830,7 @@
 {
     if ([name isEqualToString:@"general_settings"])
     {
-        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeneral];
+        OAProfileGeneralSettingsViewController* settingsViewController = [[OAProfileGeneralSettingsViewController alloc] init];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([name isEqualToString:@"routing_settings"])
@@ -863,11 +858,6 @@
     {
         OARearrangeProfilesViewController* rearrangeProfilesViewController = [[OARearrangeProfilesViewController alloc] init];
         [self.navigationController pushViewController:rearrangeProfilesViewController animated:YES];
-    }
-    else if ([name isEqualToString:@"navigation_settings"])
-    {
-        OAGeneralSettingsViewController* navigationSettingsViewController = [[OAGeneralSettingsViewController alloc] init];
-        [self.navigationController pushViewController:navigationSettingsViewController animated:YES];
     }
 }
 

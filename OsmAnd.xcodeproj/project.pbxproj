@@ -160,8 +160,6 @@
 		157F3CBF24A0F04C000A66F0 /* ic_custom_navigation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBC24A0F04B000A66F0 /* ic_custom_navigation@2x.png */; };
 		157F3CC024A0F04C000A66F0 /* ic_custom_navigation.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBD24A0F04B000A66F0 /* ic_custom_navigation.png */; };
 		157F3CC124A0F04C000A66F0 /* ic_custom_navigation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */; };
-		157F3CC324A0F2F2000A66F0 /* OANavigationTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CC224A0F2F2000A66F0 /* OANavigationTypeViewController.xib */; };
-		157F3CC524A0F323000A66F0 /* OANavigationTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157F3CC424A0F323000A66F0 /* OANavigationTypeViewController.m */; };
 		157F3CD124A1F36D000A66F0 /* ic_custom_import.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CCE24A1F36B000A66F0 /* ic_custom_import.png */; };
 		157F3CD224A1F36D000A66F0 /* ic_custom_import@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CCF24A1F36C000A66F0 /* ic_custom_import@3x.png */; };
 		157F3CD324A1F36D000A66F0 /* ic_custom_import@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CD024A1F36D000A66F0 /* ic_custom_import@2x.png */; };
@@ -5862,9 +5860,6 @@
 		157F3CBC24A0F04B000A66F0 /* ic_custom_navigation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_navigation@2x.png"; path = "Resources/Icons/ic_custom_navigation@2x.png"; sourceTree = "<group>"; };
 		157F3CBD24A0F04B000A66F0 /* ic_custom_navigation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_navigation.png; path = Resources/Icons/ic_custom_navigation.png; sourceTree = "<group>"; };
 		157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_navigation@3x.png"; path = "Resources/Icons/ic_custom_navigation@3x.png"; sourceTree = "<group>"; };
-		157F3CC224A0F2F2000A66F0 /* OANavigationTypeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OANavigationTypeViewController.xib; path = Resources/Controllers/OANavigationTypeViewController.xib; sourceTree = "<group>"; };
-		157F3CC424A0F323000A66F0 /* OANavigationTypeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OANavigationTypeViewController.m; path = Resources/Controllers/OANavigationTypeViewController.m; sourceTree = "<group>"; };
-		157F3CC624A0F332000A66F0 /* OANavigationTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OANavigationTypeViewController.h; path = Resources/Controllers/OANavigationTypeViewController.h; sourceTree = "<group>"; };
 		157F3CCE24A1F36B000A66F0 /* ic_custom_import.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_import.png; path = Resources/Icons/ic_custom_import.png; sourceTree = "<group>"; };
 		157F3CCF24A1F36C000A66F0 /* ic_custom_import@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_import@3x.png"; path = "Resources/Icons/ic_custom_import@3x.png"; sourceTree = "<group>"; };
 		157F3CD024A1F36D000A66F0 /* ic_custom_import@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_import@2x.png"; path = "Resources/Icons/ic_custom_import@2x.png"; sourceTree = "<group>"; };
@@ -12692,9 +12687,6 @@
 		84F989251B510147009C443C /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				157F3CC224A0F2F2000A66F0 /* OANavigationTypeViewController.xib */,
-				157F3CC424A0F323000A66F0 /* OANavigationTypeViewController.m */,
-				157F3CC624A0F332000A66F0 /* OANavigationTypeViewController.h */,
 				15BECC79249E038400B36DC0 /* OARearrangeProfilesViewController.xib */,
 				15BECC7B249E047D00B36DC0 /* OARearrangeProfilesViewController.m */,
 				15BECC7D249E049700B36DC0 /* OARearrangeProfilesViewController.h */,
@@ -18172,7 +18164,6 @@
 				DA68B3CE233B821A00F5ACCC /* ic_profile_car@2x.png in Resources */,
 				845E061A1B5956E800DFC2A7 /* ic_destination_pin_4@3x.png in Resources */,
 				84C41DEC1AB8600D0089EABB /* ic_destination_pin_1@2x.png in Resources */,
-				157F3CC324A0F2F2000A66F0 /* OANavigationTypeViewController.xib in Resources */,
 				8A755A7D21CBF92400E42699 /* ic_live_wikivoyage@3x.png in Resources */,
 				8466964E207CD7E000BA971B /* ic_action_sort_door_to_door.png in Resources */,
 				0CF585912440745F0081238D /* ic_custom_direction_topbar_two@3x.png in Resources */,
@@ -20380,7 +20371,6 @@
 				84BEEE4D1DFEF7A700750848 /* OATargetPointViewCell.mm in Sources */,
 				DA45D9DF230E64340083DFA2 /* OAActionAddCategoryViewController.mm in Sources */,
 				3AC09BCD1A2783ED002698FE /* OAWebViewController.m in Sources */,
-				157F3CC524A0F323000A66F0 /* OANavigationTypeViewController.m in Sources */,
 				8490B1AF20600231007694A5 /* OARadiusCellEx.m in Sources */,
 				156E91E7244F709100B181BA /* OADestinationLineDelegate.m in Sources */,
 				8AFD2D9F210E1D2E007AA07D /* OATransportRouteToolbarViewController.mm in Sources */,

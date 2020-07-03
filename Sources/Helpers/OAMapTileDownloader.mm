@@ -151,8 +151,7 @@
         return;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        while ([self hasNextTileId] && !_cancelled)
-        {
+        for (NSInteger i = 0; i < kMaxRequests; i++) {
             [self startDownloadIfPossible];
         }
     });
@@ -160,11 +159,29 @@
 
 - (void) startDownloadIfPossible
 {
-    if (_activeDownloads < kMaxRequests)
-        [self startDownload:[self getNextTileId]];
+    if (_activeDownloads < kMaxRequests && [self hasNextTileId] && !_cancelled)
+    {
+        OsmAnd::TileId tileId;
+        NSString *urlToLoad;
+        do
+        {
+            if ([self hasNextTileId])
+            {
+                tileId = [self getNextTileId];
+                urlToLoad = [self getUrlToLoad:tileId];
+            }
+            else
+            {
+                break;
+            }
+        } while (!urlToLoad && !_cancelled);
+        
+        if (!_cancelled && urlToLoad)
+            [self startDownload:urlToLoad tileId:tileId];
+    }
 }
 
-- (void) startDownload:(OsmAnd::TileId)tileId
+- (NSString *) getUrlToLoad:(OsmAnd::TileId)tileId
 {
     BOOL isSqlite = _type == EOATileRequestTypeSqlite;
     if (isSqlite && _sqliteSource)
@@ -173,19 +190,15 @@
         {
             if (_delegate)
                 [_delegate onTileDownloaded:NO];
+            return nil;
         }
         else
         {
             NSString *url = [_sqliteSource getUrlToLoad:tileId.x y:tileId.y zoom:_currZoom];
-            if (url)
-            {
-                [self downloadTile:[NSURL URLWithString:url] x:tileId.x y:tileId.y zoom:_currZoom tileSource:_sqliteSource];
-            }
-            else
-            {
-                if (_delegate)
-                    [_delegate onTileDownloaded:NO];
-            }
+            if (_delegate && !url)
+                [_delegate onTileDownloaded:NO];
+            return url;
+            
         }
     }
     else if (!isSqlite && _onlineSource != nullptr && _downloadPath)
@@ -195,22 +208,33 @@
         {
             if (_delegate)
                 [_delegate onTileDownloaded:NO];
+            return nil;
         }
         else
         {
             NSString *urlToLoad = _onlineSource->urlToLoad.toNSString();
             QList<QString> randomsArray = OsmAnd::OnlineTileSources::parseRandoms(_onlineSource->randoms);
             NSString *url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, OsmAnd::ZoomLevel(_currZoom)).toNSString();
-            if (url)
-            {
-                [self downloadTile:[NSURL URLWithString:url] toPath:tilePath];
-            }
-            else
-            {
-                if (_delegate)
-                    [_delegate onTileDownloaded:NO];
-            }
+            
+            if (_delegate && !url)
+                [_delegate onTileDownloaded:NO];
+            return url;
         }
+    }
+    return nil;
+}
+
+- (void) startDownload:(NSString *)url tileId:(OsmAnd::TileId)tileId
+{
+    BOOL isSqlite = _type == EOATileRequestTypeSqlite;
+    if (isSqlite && _sqliteSource)
+    {
+        [self downloadTile:[NSURL URLWithString:url] x:tileId.x y:tileId.y zoom:_currZoom tileSource:_sqliteSource];
+    }
+    else if (!isSqlite && _onlineSource != nullptr && _downloadPath)
+    {
+        NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", _downloadPath, @(_currZoom).stringValue, @(tileId.x).stringValue, @(tileId.y).stringValue];
+        [self downloadTile:[NSURL URLWithString:url] toPath:tilePath];
     }
 }
 
@@ -232,6 +256,7 @@
                                  error:&err];
             if (_delegate)
                 [_delegate onTileDownloaded:YES];
+            [self startDownloadIfPossible];
             _activeDownloads--;
         }
     }];
@@ -249,6 +274,7 @@
             [NSFileManager.defaultManager removeItemAtURL:url error:nil];
             if (_delegate)
                 [_delegate onTileDownloaded:YES];
+            [self startDownloadIfPossible];
             _activeDownloads--;
         }
     }];

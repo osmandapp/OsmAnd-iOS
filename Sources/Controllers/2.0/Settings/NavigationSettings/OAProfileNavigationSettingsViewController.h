@@ -9,8 +9,11 @@
 #import "OABaseSettingsViewController.h"
 
 @class OAApplicationMode;
+@class OARoutingProfileDataObject;
 
 @interface OAProfileNavigationSettingsViewController : OABaseSettingsViewController
+
++ (NSArray<OARoutingProfileDataObject *> *) getSortedRoutingProfiles;
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
 

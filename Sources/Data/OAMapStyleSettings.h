@@ -37,28 +37,32 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 @property (nonatomic) NSString *category;
 @property (nonatomic) OAMapStyleValueDataType dataType;
 @property (nonatomic) NSString *value;
+@property (nonatomic) NSString *storedValue;
 @property (nonatomic) NSString *defaultValue;
-@property (nonatomic) NSArray *possibleValues;
-@property (nonatomic) NSArray *possibleValuesUnsorted;
+@property (nonatomic) NSArray<OAMapStyleParameterValue *> *possibleValues;
+@property (nonatomic) NSArray<OAMapStyleParameterValue *> *possibleValuesUnsorted;
 
-- (NSString *)getValueTitle;
+- (NSString *) getValueTitle;
 
 @end
 
 @interface OAMapStyleSettings : NSObject
 
--(instancetype)initWithStyleName:(NSString *)mapStyleName mapPresetName:(NSString *)mapPresetName;
+- (instancetype) initWithStyleName:(NSString *)mapStyleName mapPresetName:(NSString *)mapPresetName;
 
-+ (OAMapStyleSettings *)sharedInstance;
++ (OAMapStyleSettings *) sharedInstance;
 
--(NSArray *) getAllParameters;
--(OAMapStyleParameter *) getParameter:(NSString *)name;
+- (NSArray<OAMapStyleParameter *> *) getAllParameters;
+- (OAMapStyleParameter *) getParameter:(NSString *)name;
 
--(NSArray *) getAllCategories;
--(NSString *) getCategoryTitle:(NSString *)categoryName;
--(NSArray *) getParameters:(NSString *)category;
+- (NSArray<NSString *> *) getAllCategories;
+- (NSString *) getCategoryTitle:(NSString *)categoryName;
+- (NSArray<OAMapStyleParameter *> *) getParameters:(NSString *)category;
 
--(void) saveParameters;
--(void) save:(OAMapStyleParameter *)parameter;
+- (BOOL) isCategoryEnabled:(NSString *)categoryName;
+- (void) setCategoryEnabled:(BOOL)isVisible categoryName:(NSString *)categoryName;
+
+- (void) saveParameters;
+- (void) save:(OAMapStyleParameter *)parameter;
 
 @end

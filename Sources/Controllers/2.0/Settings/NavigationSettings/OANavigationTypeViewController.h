@@ -10,4 +10,6 @@
 
 @interface OANavigationTypeViewController : OABaseSettingsViewController
 
+- (instancetype) initWithSelectedKey:(NSString *)selectedKey;
+
 @end

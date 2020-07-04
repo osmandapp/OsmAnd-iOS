@@ -24,6 +24,8 @@
 #import "Localization.h"
 #import "OAColors.h"
 
+#define kOsmAndNavigation @"osmand_navigation"
+
 #define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeIconText @"OAIconTextCell"
 #define kCellTypeTitle @"OASettingsTitleCell"
@@ -58,7 +60,7 @@
 
 - (void) generateData
 {
-    _routingProfileDataObjects = [self getRoutingProfiles];
+    _routingProfileDataObjects = [self.class getRoutingProfiles];
     
     OARoutingProfileDataObject *routingData = _routingProfileDataObjects[[_settings.routingProfile get:_appMode]];
     
@@ -120,7 +122,7 @@
 }
 
 
-- (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles
++ (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles
 {
     NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *profilesObjects = [NSMutableDictionary new];
     OARoutingProfileDataObject *straightLine = [[OARoutingProfileDataObject alloc] initWithResource:EOARouringProfilesResourceStraightLine];
@@ -144,11 +146,11 @@
 //    for (RoutingConfiguration.Builder builder : context.getAllRoutingConfigs()) {
 //        collectRoutingProfilesFromConfig(context, builder, profilesObjects, disabledRouterNames);
 //    }
-    [self collectRoutingProfilesFromConfig:_app.defaultRoutingConfig profileObjects:profilesObjects disabledRouterNames:@[]];
+    [self collectRoutingProfilesFromConfig:OsmAndApp.instance.defaultRoutingConfig profileObjects:profilesObjects disabledRouterNames:@[]];
     return profilesObjects;
 }
 
-- (void) collectRoutingProfilesFromConfig:(std::shared_ptr<RoutingConfigurationBuilder>) builder
++ (void) collectRoutingProfilesFromConfig:(std::shared_ptr<RoutingConfigurationBuilder>) builder
                            profileObjects:(NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *) profilesObjects disabledRouterNames:(NSArray<NSString *> *) disabledRouterNames
 {
     for (auto it = builder->routers.begin(); it != builder->routers.end(); ++it)
@@ -171,6 +173,7 @@
             {
                 OARoutingProfileDataObject *data = [OARoutingProfileDataObject getRoutingProfileDataByName:name.upperCase];
                 data.descr = descr;
+                data.stringKey = name;
                 [profilesObjects setObject:data forKey:routerKey];
             }
         }
@@ -195,6 +198,45 @@
 //    }
 //    return profiles;
 //}
++ (NSArray<OARoutingProfileDataObject *> *) getSortedRoutingProfiles
+{
+    NSMutableArray<OARoutingProfileDataObject *> *result = [NSMutableArray new];
+    NSDictionary<NSString *, NSArray<OARoutingProfileDataObject *> *> *routingProfilesByFileNames = [self getRoutingProfilesByFileNames];
+    NSArray<NSString *> *fileNames = routingProfilesByFileNames.allKeys;
+    NSArray<NSString *> *sortedNames = [fileNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 isEqualToString:kOsmAndNavigation] ? NSOrderedAscending : [obj2 isEqualToString:kOsmAndNavigation] ? NSOrderedDescending : [obj1 compare:obj2];
+    }];
+    
+    for (NSString *fileName in sortedNames)
+    {
+        NSArray<OARoutingProfileDataObject *> *routingProfilesFromFile = routingProfilesByFileNames[fileName];
+        if (routingProfilesFromFile)
+        {
+            NSArray<OARoutingProfileDataObject *> *sortedElements = [routingProfilesFromFile sortedArrayUsingComparator:^NSComparisonResult(OARoutingProfileDataObject *obj1, OARoutingProfileDataObject *obj2) {
+                return [obj1 compare:obj2];
+            }];
+            [result addObjectsFromArray:sortedElements];
+        }
+    }
+    return result;
+}
+
++ (NSDictionary<NSString *, NSArray<OARoutingProfileDataObject *> *> *) getRoutingProfilesByFileNames
+{
+    NSMutableDictionary<NSString *, NSMutableArray<OARoutingProfileDataObject *> *> *res = [[NSMutableDictionary alloc] init];
+    for (OARoutingProfileDataObject *profile in [self getRoutingProfiles].allValues)
+    {
+        NSString *fileName = profile.fileName != nil && profile.fileName.length > 0 ? profile.fileName : kOsmAndNavigation;
+        if (res[fileName]) {
+            [res[fileName] addObject:profile];
+        }
+        else
+        {
+            [res setObject:[NSMutableArray arrayWithObject:profile] forKey:fileName];
+        }
+    }
+    return res;
+}
 
 #pragma mark - TableView
 
@@ -269,7 +311,7 @@
     NSString *itemKey = item[@"key"];
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"navigationType"])
-        settingsViewController = [[OANavigationTypeViewController alloc] init];
+        settingsViewController = [[OANavigationTypeViewController alloc] initWithSelectedKey:_appMode.getRoutingProfile];
     else if ([itemKey isEqualToString:@"routeParams"])
         settingsViewController = [[OARouteParametersViewController alloc] init];
     else if ([itemKey isEqualToString:@"voicePrompts"])

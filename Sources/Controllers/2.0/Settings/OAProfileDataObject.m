@@ -26,6 +26,11 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
     return self;
 }
 
+- (NSComparisonResult)compare:(OAProfileDataObject *)other
+{
+    return [_name compare:other.name];
+}
+
 @end
 
 @implementation OARoutingProfileDataObject

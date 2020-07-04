@@ -34,6 +34,8 @@ typedef NS_ENUM(NSInteger, EOARouringProfilesResource)
 
 - (instancetype) initWithStringKey:(NSString *)stringKey name:(NSString *)name descr:(NSString *)descr iconName:(NSString *)iconName isSelected:(BOOL)isSelected;
 
+- (NSComparisonResult)compare:(OAProfileDataObject *)other;
+
 @end
 
 @interface OARoutingProfileDataObject : OAProfileDataObject

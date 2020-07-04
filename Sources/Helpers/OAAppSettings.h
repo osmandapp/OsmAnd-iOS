@@ -212,6 +212,21 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @end
 
+@interface OAProfileStringList : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
+
+- (NSArray<NSString *> *) get;
+- (NSArray<NSString *> *) get:(OAApplicationMode *)mode;
+- (void) set:(NSArray<NSString *> *)arr;
+- (void) set:(NSArray<NSString *> *)arr mode:(OAApplicationMode *)mode;
+- (void) add:(NSString *)string;
+- (void) addUnique:(NSString *)string;
+- (void) remove:(NSString *)string;
+- (BOOL) contains:(NSString *)string;
+
+@end
+
 @interface OAProfileAutoZoomMap : OAProfileInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue;

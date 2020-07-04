@@ -422,8 +422,7 @@
     
     UIImage *img = nil;
     NSString *imgName = _icons[_currentIcon];
-    if (imgName)
-        img = [UIImage imageNamed:imgName];
+    img = [UIImage imageNamed:imgName];
     _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }

@@ -12,8 +12,8 @@
 #import "OAIconTitleValueCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingSwitchCell.h"
-
 #import "OAProfileGeneralSettingsParametersViewController.h"
+#import "OACoordinatesFormatViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -195,7 +195,7 @@
     NSMutableArray *otherArr = [NSMutableArray array];
     [appearanceArr addObject:@{
         @"type" : kCellTypeIconTitleValue,
-        @"title" : OALocalizedString(@"settings_app_theme"), // ???
+        @"title" : OALocalizedString(@"settings_app_theme"),
         @"value" : OALocalizedString(@"app_theme_light"),
         @"icon" : @"ic_custom_contrast",
         @"key" : @"app_theme",
@@ -208,6 +208,7 @@
         @"key" : @"map_orientation",
     }];
     [appearanceArr addObject:@{
+        @"name" : @"allow_3d",
         @"type" : kCellTypeIconTextSwitch,
         @"title" : OALocalizedString(@"allow_3D_view"),
         @"isOn" : allow3DValue,
@@ -218,7 +219,7 @@
         @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"driving_region"),
         @"value" : drivingRegionValue,
-        @"icon" : @"ic_profile_car", // has to change accordign to chosen profile
+        @"icon" : @"ic_profile_car",
         @"key" : @"drivingRegion",
     }];
     [unitsAndFormatsArr addObject:@{
@@ -251,7 +252,7 @@
     }];
     [otherArr addObject:@{
         @"type" : kCellTypeTitle,
-        @"title" : OALocalizedString(@"sett_ext_input"), // device / devices ???
+        @"title" : OALocalizedString(@"sett_ext_input"),
         @"value" : externalInputDeviceValue,
         @"key" : @"externalImputDevice",
     }];
@@ -355,7 +356,7 @@
     else if ([itemKey isEqualToString:@"speedUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfSpeed];
     else if ([itemKey isEqualToString:@"coordsFormat"])
-        settingsViewController = [[OABaseSettingsViewController alloc] init];
+        settingsViewController = [[OACoordinatesFormatViewController alloc] init];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsAngularMeasurmentUnits];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
@@ -381,11 +382,6 @@
         return OALocalizedString(@"units_and_formats");
     else
         return OALocalizedString(@"help_other_header");
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return @"";
 }
 
 #pragma mark - Switch

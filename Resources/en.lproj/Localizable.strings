@@ -681,7 +681,7 @@
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 
 "coordinates_example" = "Example";
-"utm_description" = "OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO format.";
+"utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 
 "sett_lang_local" = "Local";

@@ -479,18 +479,6 @@
 
 - (void) selectSpeedSystem:(NSString *)name
 {
-//    if ([name isEqualToString:@"KILOMETERS_PER_HOUR"])
-//        [_settings setSpeedSystem:KILOMETERS_PER_HOUR];
-//    else if ([name isEqualToString:@"MILES_PER_HOUR"])
-//        [_settings setSpeedSystem:MILES_PER_HOUR];
-//    else if ([name isEqualToString:@"METERS_PER_SECOND"])
-//        [_settings setSpeedSystem:METERS_PER_SECOND];
-//    else if ([name isEqualToString:@"MINUTES_PER_MILE"])
-//        [_settings setSpeedSystem:MINUTES_PER_MILE];
-//    else if ([name isEqualToString:@"MINUTES_PER_KILOMETER"])
-//        [_settings setSpeedSystem:MINUTES_PER_KILOMETER];
-//    else if ([name isEqualToString:@"NAUTICALMILES_PER_HOUR"])
-//        [_settings setSpeedSystem:NAUTICALMILES_PER_HOUR];
 }
 
 - (void) selectSettingAngularUnits:(NSString *)name

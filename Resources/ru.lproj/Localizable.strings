@@ -636,7 +636,7 @@
 "transport_nearby_routes" = "В пределах";
 "transport_stop" = "Стоп";
 "cancel_navigation" = "Остановить навигацию";
-"switch_start_finish" = "Обратить пункты старта и назначения";
+"switch_start_finish" = "Обратить пункты отправления и назначения";
 "shared_string_options" = "Функции";
 "new_destination_point_dialog" = "Вы уже установили пункт назначения";
 "replace_destination_point" = "Заменить пункт назначения";
@@ -836,7 +836,7 @@
 "poi" = "POI";
 "show_poi_over_map" = "Отображать POI";
 "keep_and_add_destination_point" = "Добавить следующим пунктом назначения";
-"add_as_first_destination_point" = "Добавить как первый промежуточный пункт назначения";
+"add_as_first_destination_point" = "Добавить как первый промежуточный пункт";
 "add_as_last_destination_point" = "Добавить промежуточный пункт в конец";
 "intermediate_items_sort_by_distance" = "Сортировать от двери до двери";
 "route_stops_before" = "%d остановок до выбранной";

@@ -17,6 +17,7 @@
 #import "OALocationIcon.h"
 #import "OANavigationIcon.h"
 #import "OAAutoObserverProxy.h"
+#import "OAColors.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -327,18 +328,17 @@ typedef enum {
         locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(false);
 
         // Lost (day)
-        // TODO: check lost location
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
         c.locationMainIconKeyLostDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyLostDay,
-                                                           [OANativeUtilities skBitmapFromCGImage:[navIcon iconWithColor:UIColor.grayColor].CGImage]);
+                                                           [OANativeUtilities skBitmapFromCGImage:[navIcon iconWithColor:UIColorFromRGB(location_icon_color_lost)].CGImage]);
         c.locationMarkerLostDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         // Lost (night)
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
         c.locationMainIconKeyLostNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyLostNight,
-                                                           [OANativeUtilities skBitmapFromCGImage:[navIcon iconWithColor:UIColor.grayColor].CGImage]);
+                                                           [OANativeUtilities skBitmapFromCGImage:[navIcon iconWithColor:UIColorFromRGB(location_icon_color_lost)].CGImage]);
         c.locationMarkerLostNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
     
         [self updateMode:c];
@@ -368,9 +368,17 @@ typedef enum {
     [self updateMyLocationCourseProvider];
 }
 
+- (void) deinitLayer
+{
+    [_appModeChangeObserver detach];
+    _appModeChangeObserver = nil;
+}
+
 - (void) onAvailableAppModesChanged
 {
-    [self generateMarkersCollection];
+    [self.mapViewController runWithRenderSync:^{
+        [self generateMarkersCollection];
+    }];
 }
 
 - (void) updateMyLocationCourseProvider

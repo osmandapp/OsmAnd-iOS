@@ -79,6 +79,7 @@
     [super viewDidLoad];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
     [self setupNavBar];
     [self setupView];
 
@@ -216,7 +217,7 @@
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.navigationController popViewControllerAnimated:YES];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
@@ -421,8 +422,7 @@
     
     UIImage *img = nil;
     NSString *imgName = _icons[_currentIcon];
-    if (imgName)
-        img = [UIImage imageNamed:imgName];
+    img = [UIImage imageNamed:imgName];
     _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }

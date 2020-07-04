@@ -229,6 +229,8 @@
 		15B4E4B024AB401C00119365 /* ic_custom_length_limit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B4E4AD24AB401A00119365 /* ic_custom_length_limit@2x.png */; };
 		15B4E4B124AB401C00119365 /* ic_custom_length_limit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B4E4AE24AB401B00119365 /* ic_custom_length_limit@3x.png */; };
 		15B4E4B224AB401C00119365 /* ic_custom_length_limit.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B4E4AF24AB401B00119365 /* ic_custom_length_limit.png */; };
+		15BECC5C249A558600B36DC0 /* OAProfileAppearanceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15BECC5B249A558600B36DC0 /* OAProfileAppearanceViewController.xib */; };
+		15BECC5E249A55E400B36DC0 /* OAProfileAppearanceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15BECC5D249A55E300B36DC0 /* OAProfileAppearanceViewController.mm */; };
 		15BECC63249B88F700B36DC0 /* OAIconsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15BECC62249B88F700B36DC0 /* OAIconsTableViewCell.xib */; };
 		15BECC65249B895700B36DC0 /* OAIconsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BECC64249B895700B36DC0 /* OAIconsTableViewCell.m */; };
 		15BECC68249B8B2800B36DC0 /* OAIconsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15BECC67249B8B2800B36DC0 /* OAIconsCollectionViewCell.xib */; };
@@ -13071,6 +13073,34 @@
 				84F3A9391B4EC3C900D16EBC /* MGSwipeTableCell.m */,
 			);
 			path = MGSwipeTableCell;
+			sourceTree = "<group>";
+		};
+		84F989251B510147009C443C /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				15BECC79249E038400B36DC0 /* OARearrangeProfilesViewController.xib */,
+				15BECC7B249E047D00B36DC0 /* OARearrangeProfilesViewController.m */,
+				15BECC7D249E049700B36DC0 /* OARearrangeProfilesViewController.h */,
+				DAC04715221BEA0600299EC2 /* OAOsmEditingSettingsViewController.h */,
+				DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */,
+				DAC04713221BEA0500299EC2 /* OAOsmEditingSettingsViewController.xib */,
+				3ACA4AA01A0B881300ECC792 /* OASettingsViewController.h */,
+				3ACA4AA11A0B881300ECC792 /* OASettingsViewController.m */,
+				3ACA4AA21A0B881300ECC792 /* OASettingsViewController.xib */,
+				8476E16E1F61C76D00EC274F /* OANavigationSettingsViewController.h */,
+				8476E16F1F61C76D00EC274F /* OANavigationSettingsViewController.mm */,
+				8476E1701F61C76D00EC274F /* OANavigationSettingsViewController.xib */,
+				DAC0470C221BE81B00299EC2 /* OATripRecordingSettingsViewController.h */,
+				DAC0470D221BE81C00299EC2 /* OATripRecordingSettingsViewController.mm */,
+				DAC0470E221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib */,
+				DAE4D4CA2498CD7500D1BF91 /* OACreateProfileViewController.h */,
+				DAE4D4CC2498CD7500D1BF91 /* OACreateProfileViewController.mm */,
+				DAE4D4CB2498CD7500D1BF91 /* OACreateProfileViewController.xib */,
+				15BECC5F249A55EE00B36DC0 /* OAProfileAppearanceViewController.h */,
+				15BECC5D249A55E300B36DC0 /* OAProfileAppearanceViewController.mm */,
+				15BECC5B249A558600B36DC0 /* OAProfileAppearanceViewController.xib */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 		84F989261B51014D009C443C /* MapSettings */ = {

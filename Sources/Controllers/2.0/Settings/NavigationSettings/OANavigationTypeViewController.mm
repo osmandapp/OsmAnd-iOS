@@ -9,6 +9,8 @@
 #import "OANavigationTypeViewController.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAButtonIconTableViewCell.h"
+#import "OAProfileDataObject.h"
+#import "OAProfileNavigationSettingsViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -21,26 +23,19 @@
 
 @implementation OANavigationTypeViewController
 {
+    NSString *_currentSelectedKey;
+    NSArray<OARoutingProfileDataObject *> *_sortedRoutingProfiles;
+    NSArray<NSString *> *_fileNames;
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) init
+- (instancetype) initWithSelectedKey:(NSString *)selectedKey
 {
     self = [super init];
-    if (self)
-    {
-        [self commonInit];
+    if (self) {
+        _currentSelectedKey = selectedKey;
     }
     return self;
-}
-
-- (void) commonInit
-{
-    [self generateData];
-}
-
-- (void) generateData
-{
 }
 
 -(void) applyLocalization
@@ -60,83 +55,39 @@
 
 - (void) setupView
 {
-    NSMutableArray *tableData = [NSMutableArray array];
-    NSMutableArray *osmandRoutingArr = [NSMutableArray array];
-    NSMutableArray *desertArr = [NSMutableArray array];
-    NSMutableArray *customRoutingArr = [NSMutableArray array];
-    NSMutableArray *actionsArr = [NSMutableArray array];
-    [osmandRoutingArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"m_style_bicycle"),
-        @"selected" : @NO,
-        @"icon" : @"ic_profile_bicycle",
-    }];
-    [osmandRoutingArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"app_mode_boat"),
-        @"selected" : @NO,
-        @"icon" : @"ic_action_sail_boat_dark",
-    }];
-    [osmandRoutingArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"m_style_car"),
-        @"selected" : @YES,
-        @"icon" : @"ic_profile_car",
-    }];
-    [osmandRoutingArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"m_style_pulic_transport"),
-        @"selected" : @NO,
-        @"icon" : @"ic_action_bus_dark",
-    }];
-    [osmandRoutingArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"rendering_value_pedestrian_name"),
-        @"selected" : @NO,
-        @"icon" : @"ic_profile_pedestrian",
-    }];
-    [osmandRoutingArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"app_mode_skiing"),
-        @"selected" : @NO,
-        @"icon" : @"ic_action_skiing",
-    }];
-    [osmandRoutingArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"nav_type_straight_line"),
-        @"selected" : @NO,
-        @"icon" : @"ic_custom_straight_line",
-    }];
-    
-    [desertArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"desert"),
-        @"selected" : @NO,
-        @"icon" : @"ic_custom_navigation",
-    }];
-    
-    [customRoutingArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"m_style_car"),
-        @"selected" : @NO,
-        @"icon" : @"ic_custom_navigation",
-    }];
-    [customRoutingArr addObject:@{
-        @"type" : @"OAIconTextCell",
-        @"title" : OALocalizedString(@"app_mode_boat"),
-        @"selected" : @NO,
-        @"icon" : @"ic_custom_navigation",
-    }];
-    
-    [actionsArr addObject:@{
-        @"type" : @"OAButtonIconTableViewCell",
-        @"title" : OALocalizedString(@"import_from_files"),
-        @"icon" : @"ic_custom_import",
-    }];
-    [tableData addObject:osmandRoutingArr];
-    [tableData addObject:desertArr];
-    [tableData addObject:customRoutingArr];
-    [tableData addObject:actionsArr];
+    _sortedRoutingProfiles = [OAProfileNavigationSettingsViewController getSortedRoutingProfiles];
+    NSMutableArray *tableData = [NSMutableArray new];
+    NSString *lastFileName = _sortedRoutingProfiles.firstObject.fileName;
+    NSMutableArray *sectionData = [NSMutableArray new];
+    NSMutableArray *fileNames = [NSMutableArray new];
+    for (NSInteger i = 0; i < _sortedRoutingProfiles.count; i++)
+    {
+        OARoutingProfileDataObject *profile = _sortedRoutingProfiles[i];
+        if ((lastFileName == nil && profile.fileName == nil) || [lastFileName isEqualToString:profile.fileName])
+        {
+            [sectionData addObject:@{
+                @"type" : @"OAIconTextCell",
+                @"title" : profile.name,
+                @"profile_ind" : @(i),
+                @"icon" : profile.iconName,
+            }];
+        }
+        else
+        {
+            [tableData addObject:[NSArray arrayWithArray:sectionData]];
+            [sectionData removeAllObjects];
+            lastFileName = profile.fileName;
+            [fileNames addObject:lastFileName];
+            [sectionData addObject:@{
+                @"type" : @"OAIconTextCell",
+                @"title" : profile.name,
+                @"profile_ind" : @(i),
+                @"icon" : profile.iconName,
+            }];
+        }
+    }
+    [tableData addObject:[NSArray arrayWithArray:sectionData]];
+    _fileNames = [NSArray arrayWithArray:fileNames];
     _data = [NSArray arrayWithArray:tableData];
 }
 
@@ -178,7 +129,7 @@
             cell.textView.text = item[@"title"];
             cell.arrowIconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.arrowIconView.hidden = ![item[@"selected"] boolValue];
+            cell.arrowIconView.hidden = ![_sortedRoutingProfiles[[item[@"profile_ind"] integerValue]].stringKey isEqualToString:_currentSelectedKey];
             cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
         }
@@ -213,19 +164,13 @@
 {
     if (section == 0)
         return OALocalizedString(@"osmand_routing");
-    else if (section == 1)
-        return OALocalizedString(@"desert_xml");
-    else if (section == 2)
-        return OALocalizedString(@"routing_custom_xml");
-    else if (section == 3)
-        return OALocalizedString(@"actions");
     else
-        return @"";
+        return _fileNames[section - 1].lastPathComponent;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (section == 3)
+    if (section == tableView.numberOfSections - 1)
         return OALocalizedString(@"import_routing_file_descr");
     else
         return @"";

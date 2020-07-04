@@ -955,6 +955,83 @@
 
 @end
 
+@interface OAProfileStringList ()
+
+@property (nonatomic) NSArray<NSString *> *defValue;
+
+@end
+
+@implementation OAProfileStringList
+
++ (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue
+{
+    OAProfileString *obj = [[OAProfileStringList alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
+}
+
+- (NSArray<NSString *> *) get
+{
+    return [self get:self.appMode];
+}
+
+- (void) set:(NSArray<NSString *> *)arr
+{
+    [self set:arr mode:self.appMode];
+}
+
+- (NSArray<NSString *> *) get:(OAApplicationMode *)mode
+{
+    NSObject *value = [self getValue:mode];
+    return value ? (NSArray<NSString *> *)value : self.defValue;
+}
+
+- (void) set:(NSArray<NSString *> *)arr mode:(OAApplicationMode *)mode
+{
+    [self setValue:arr mode:mode];
+}
+
+- (void) add:(NSString *)string
+{
+    [self set:[[self get] arrayByAddingObject:string]];
+}
+
+- (void) addUnique:(NSString *)string
+{
+    if (![self contains:string])
+        [self add:string];
+}
+
+- (void) remove:(NSString *)string
+{
+    if ([self contains:string])
+    {
+        [[self get] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", string]];
+    }
+}
+
+- (BOOL) contains:(NSString *)string
+{
+    return [[self get] indexOfObject:string] != NSNotFound;
+}
+
+- (void) resetToDefault
+{
+    NSArray<NSString *> *defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (NSArray<NSString *> *)pDefault;
+
+    [self set:defaultValue];
+}
+
+@end
+
 @interface OAProfileAutoZoomMap ()
 
 @property (nonatomic) EOAAutoZoomMap defValue;

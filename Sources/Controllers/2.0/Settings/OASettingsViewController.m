@@ -835,7 +835,8 @@
     }
     else if ([name isEqualToString:@"routing_settings"])
     {
-        OAProfileNavigationSettingsViewController* settingsViewController = [[OAProfileNavigationSettingsViewController alloc] init];
+        // TODO: pass selected mode after refactoring
+        OAProfileNavigationSettingsViewController* settingsViewController = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:OAApplicationMode.CAR];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([name isEqualToString:@"track_recording"])

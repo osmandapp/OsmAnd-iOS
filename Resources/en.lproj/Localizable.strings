@@ -230,6 +230,9 @@
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "nav_type_straight_line" = "Straight line";
 "nav_type_direct_to" = "Direct-to-point";
+"nav_type_brouter" = "BRouter";
+"nav_type_ski" = "Ski";
+"nav_type_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
@@ -265,9 +268,8 @@
 "osm_live_routing" = "OsmAnd Live navigation";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
-"osmand_routing" = "Osmand routing";
-"desert_xml" = "Desert.xml";
-"routing_custom_xml" = "Routing-Custom.xml";
+"osmand_routing" = "OsmAnd routing";
+"special_routing" = "Special routing";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it on routing folder in iTunes.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "avoid_routes_and_road" = "Avoid certain routes and road types";
@@ -1055,6 +1057,10 @@
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
+"public_transport_menu" = "Transport";
+"toggle_public_transport" = "Show/hide public transport";
+"public_transport_show" = "Show public transport";
+"public_transport_hide" = "Hide public transport";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

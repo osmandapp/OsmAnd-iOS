@@ -23,6 +23,10 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
+#define kVariant 0
+#define kName 1
+#define kOptionalLabel 2
+
 #define kBottomSheetActionCell @"OABottomSheetActionCell"
 
 @interface OAQuickActionSelectionBottomSheetScreen ()
@@ -97,8 +101,9 @@
         {
             [arr addObject:@{
                              @"type" : kBottomSheetActionCell,
-                             @"title" : namePair.lastObject,
-                             @"value" : namePair.firstObject,
+                             @"title" : namePair[kName],
+                             @"optionalLabel" : namePair[kOptionalLabel],
+                             @"value" : namePair[kVariant],
                              @"img" : @"ic_custom_map_style"
                              }];
         }
@@ -181,8 +186,9 @@
             NSString *imgName = item[@"img"];
             if (imgName)
                 img = [UIImage imageNamed:imgName];
-            
-            cell.textView.text = item[@"title"];
+                                             
+            NSString *optionalLabel = item[@"optionalLabel"];
+            cell.textView.text = (optionalLabel.length > 0) ? optionalLabel : item[@"title"];
             NSString *desc = item[@"descr"];
             cell.descView.text = desc;
             cell.descView.hidden = desc.length == 0;
@@ -294,7 +300,7 @@
             OAMapSource *newMapSource = nil;
             for (OAMapSource *mapSource in _action.getOnlineMapSources)
             {
-                if ([mapSource.variant isEqualToString:item[@"value"]])
+                if ([mapSource.variant isEqualToString:item[@"value"]] && [mapSource.name isEqualToString:item[@"title"]])
                 {
                     newMapSource = mapSource;
                     break;

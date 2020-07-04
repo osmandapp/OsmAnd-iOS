@@ -177,7 +177,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
         NSString *optionalLabel = [sqlitedbHelper fetchLabelFor:filePath];
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:optionalLabel name:@"sqlitedb"];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb" optionalLabel:optionalLabel];
         [sqlitedbArr addObject:item];
     }
 
@@ -299,8 +299,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         someItem = [collection objectAtIndex:indexPath.row];
         if ([someItem isKindOfClass:Item_SqliteDbTileSource.class])
         {
-            if (someItem.mapSource.variant.length > 0)
-                caption = someItem.mapSource.variant;
+            if (someItem.mapSource.optionalLabel.length > 0)
+                caption = someItem.mapSource.optionalLabel;
             else
                 caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
             

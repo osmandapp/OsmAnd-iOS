@@ -60,6 +60,9 @@
 
 #define kFooterId @"TableViewSectionFooter"
 #define kHeaderId @"TableViewSectionHeader"
+#define kVariant 0
+#define kName 1
+#define kOptionalLabel 2
 
 @interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -673,7 +676,9 @@
         
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
+            NSString *optionalLabel = item[@"optionalLabel"];
+            NSString *label = (optionalLabel.length > 0) ? optionalLabel : item[@"title"];
+            [cell.textView setText:label];
             cell.descView.hidden = YES;
             [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
             if (cell.iconView.subviews.count > 0)
@@ -1133,11 +1138,14 @@
     {
         [newItems addObject:@{
                               @"type" : @"OATitleDescrDraggableCell",
-                              @"title" : item.lastObject,
-                              @"value" : item.firstObject,
+                              @"title" : item[kName],
+                              @"optionalLabel" : item[kOptionalLabel],
+                              @"value" : item[kVariant],
                               @"img" : @"ic_custom_map_style"
                               }];
-        [titles addObject:item.lastObject];
+        
+        NSString *optionalLabel = item[kOptionalLabel];
+        [titles addObject: (optionalLabel.length > 0) ? optionalLabel : item[kName]];
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];

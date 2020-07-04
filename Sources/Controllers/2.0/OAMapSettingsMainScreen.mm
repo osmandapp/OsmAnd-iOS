@@ -199,8 +199,8 @@
     NSString *mapSourceName;
     if ([_app.data.lastMapSource.name isEqualToString:@"sqlitedb"])
     {
-        if (_app.data.lastMapSource.variant.length > 0)
-            mapSourceName = _app.data.lastMapSource.variant;
+        if (_app.data.lastMapSource.optionalLabel.length > 0)
+            mapSourceName = _app.data.lastMapSource.optionalLabel;
         else
             mapSourceName = [[_app.data.lastMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     }

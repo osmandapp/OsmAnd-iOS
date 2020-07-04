@@ -10,6 +10,7 @@
 #import "OAMapSource.h"
 #import "OsmAndApp.h"
 #import "OAMapCreatorHelper.h"
+#import "OASQLiteTileSource.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
@@ -43,10 +44,13 @@
         }
     }
     
+    OASQLiteTileSource *sqlitedbHelper = [[OASQLiteTileSource alloc] init];
     NSMutableArray *sqlitedbArr = [NSMutableArray array];
     for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
-        [sqlitedbArr addObject:[[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""]]];
+        NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
+        NSString *optionalLabel = [sqlitedbHelper fetchLabelFor:filePath];
+        [sqlitedbArr addObject:[[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""] optionalLabel:optionalLabel]];
     }
     
     [sqlitedbArr sortUsingComparator:^NSComparisonResult(OAMapSource *obj1, OAMapSource *obj2) {

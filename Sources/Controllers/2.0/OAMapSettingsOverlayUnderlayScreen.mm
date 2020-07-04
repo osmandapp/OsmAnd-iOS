@@ -197,7 +197,7 @@ static NSInteger kButtonsSection;
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
         item.path = [OAMapCreatorHelper sharedInstance].files[fileName];
         NSString *optionalLabel = [sqlitedbHelper fetchLabelFor:item.path];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:optionalLabel name:@"sqlitedb"];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb" optionalLabel:optionalLabel];
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
         item.isOnline = [OASQLiteTileSource isOnlineTileSource:item.path];
         [sqlitedbArr addObject:item];
@@ -426,8 +426,8 @@ static NSInteger kButtonsSection;
         
         else if ([someItem isKindOfClass:[Item_SqliteDbTileSource class]])
         {
-            if (someItem.mapSource.variant.length > 0)
-                caption = someItem.mapSource.variant;
+            if (someItem.mapSource.optionalLabel.length > 0)
+                caption = someItem.mapSource.optionalLabel;
             else
                 caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
   

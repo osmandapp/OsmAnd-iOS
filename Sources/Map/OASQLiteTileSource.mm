@@ -773,7 +773,7 @@
         if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
         {
             sqlite3_stmt *statement;
-            const char *query_stmt = [@"SELECT name from android_metadata" UTF8String];
+            const char *query_stmt = [@"SELECT label from android_metadata" UTF8String];
             
             if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
             {

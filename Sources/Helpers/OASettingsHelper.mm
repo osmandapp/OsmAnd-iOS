@@ -1855,7 +1855,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             }
             else
             {
-                [_settings addImpassableRoad:[self renameItem:duplicate]];
+                OAAvoidRoadInfo *info = [self renameItem:duplicate];
+                // TODO: Store OAAvoidRoadInfo in settings
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:info.location.latitude longitude:info.location.longitude];
+                [_settings addImpassableRoad:location];
             }
         }
         for (OAAvoidRoadInfo *avoidRoad in self.appliedItems)

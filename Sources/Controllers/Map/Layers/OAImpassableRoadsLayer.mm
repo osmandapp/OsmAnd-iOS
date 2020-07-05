@@ -125,24 +125,14 @@
 {
     if (auto road = reinterpret_cast<RouteDataObject *>(const_cast<void *>(obj)))
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
         OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
         CLLocation *location = [avoidRoads getLocation:road->id];
-
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.location = location.coordinate;
-        
-        string lang = [settings settingPrefMapLanguage] ? [settings settingPrefMapLanguage].UTF8String : "";
-        bool transliterate = [settings settingMapLanguageTranslit];
-        targetPoint.title = [NSString stringWithUTF8String:road->getName(lang, transliterate).c_str()];
-        if (targetPoint.title.length == 0)
-            targetPoint.title = [OAPointDescription getLocationName:location.coordinate.latitude lon:location.coordinate.longitude sh:YES];
-
+        targetPoint.title = [avoidRoads getName:road loc:location];
         targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
-        
         targetPoint.type = OATargetImpassableRoad;
         targetPoint.targetObj = @((unsigned long long)road->id);
-        
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }

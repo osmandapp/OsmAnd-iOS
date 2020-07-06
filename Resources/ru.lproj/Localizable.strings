@@ -389,7 +389,7 @@
 "total_time" = "Общее время";
 "moving_time" = "Время в движении";
 "gpx_speed" = "Скорость";
-"shared_string_dismiss" = "Отменить";
+"shared_string_dismiss" = "Отклонить";
 "shared_string_modify" = "Изменить";
 "shared_string_later" = "Позже";
 "offline_maps" = "Офлайн карты";

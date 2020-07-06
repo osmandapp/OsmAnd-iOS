@@ -1820,7 +1820,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     
     _specificRoads = [OAAvoidSpecificRoads instance];
     _settings = [OAAppSettings sharedManager];
-    self.existingItems = [_specificRoads getImpassableRoadsInfo];
+    self.existingItems = [[_specificRoads getImpassableRoads] mutableCopy];
 }
 
 - (EOASettingsItemType) type
@@ -1848,28 +1848,20 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         {
             if ([self shouldReplace])
             {
-                CLLocation *location = [[CLLocation alloc] initWithLatitude:duplicate.location.latitude longitude:duplicate.location.longitude];
-                // TODO: Store OAAvoidRoadInfo in settings
-                [_settings removeImpassableRoad:location];
-                [_settings addImpassableRoad:location];
+                if ([_settings removeImpassableRoad:duplicate.location])
+                    [_settings addImpassableRoad:duplicate];
             }
             else
             {
-                OAAvoidRoadInfo *info = [self renameItem:duplicate];
-                // TODO: Store OAAvoidRoadInfo in settings
-                CLLocation *location = [[CLLocation alloc] initWithLatitude:info.location.latitude longitude:info.location.longitude];
-                [_settings addImpassableRoad:location];
+                OAAvoidRoadInfo *roadInfo = [self renameItem:duplicate];
+                [_settings addImpassableRoad:roadInfo];
             }
         }
-        for (OAAvoidRoadInfo *avoidRoad in self.appliedItems)
-        {
-            // TODO: Store OAAvoidRoadInfo in settings
-            CLLocation *location = [[CLLocation alloc] initWithLatitude:avoidRoad.location.latitude longitude:avoidRoad.location.longitude];
-            [_settings addImpassableRoad:location];
-        }
-        // TODO: Implement reloading
-//        specificRoads.loadImpassableRoads();
-//        specificRoads.initRouteObjects(true);
+        for (OAAvoidRoadInfo *roadInfo in self.appliedItems)
+            [_settings addImpassableRoad:roadInfo];
+
+        [_specificRoads loadImpassableRoads];
+        [_specificRoads initRouteObjects:YES];
     }
 }
 
@@ -1915,7 +1907,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         NSString *appModeKey = object[@"appModeKey"];
         OAAvoidRoadInfo *roadInfo = [[OAAvoidRoadInfo alloc] init];
         roadInfo.roadId = 0;
-        roadInfo.location = CLLocationCoordinate2DMake(latitude, longitude);
+        roadInfo.location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
         roadInfo.name = name;
         if ([OAApplicationMode valueOfStringKey:appModeKey def:nil])
             roadInfo.appModeKey = appModeKey;
@@ -1934,8 +1926,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         for (OAAvoidRoadInfo *avoidRoad in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            jsonObject[@"latitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.latitude];
-            jsonObject[@"longitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.longitude];
+            jsonObject[@"latitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.coordinate.latitude];
+            jsonObject[@"longitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.coordinate.longitude];
             jsonObject[@"name"] = avoidRoad.name;
             jsonObject[@"appModeKey"] = avoidRoad.appModeKey;
             [jsonArray addObject:jsonObject];

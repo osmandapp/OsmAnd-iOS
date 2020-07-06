@@ -40,6 +40,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OATTSCommandPlayerImpl.h"
 #import "OAOsmAndLiveHelper.h"
+#import "OAAvoidSpecificRoads.h"
 
 #include <algorithm>
 
@@ -324,6 +325,9 @@
                                                              {
                                                                  [_localResourcesChangedObservable notifyEventWithKey:self];
                                                                  [OAResourcesBaseViewController setDataInvalidated];
+                                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                                     [[OAAvoidSpecificRoads instance] initRouteObjects:YES];
+                                                                 });
                                                              });
     
     _resourcesManager->repositoryUpdateObservable.attach((__bridge const void*)self,
@@ -439,7 +443,8 @@
     [OAManageResourcesViewController prepareData];
 
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
-
+    [[OAAvoidSpecificRoads instance] initRouteObjects:NO];
+    
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];

@@ -16,41 +16,21 @@
 #import "OAUtilities.h"
 #import "Localization.h"
 #import "OAPointDescription.h"
+#import "OAApplicationMode.h"
 
+#include <OsmAndCore/QtExtensions.h>
+#include <QList>
+
+#include <OsmAndCore.h>
+#include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/Utilities.h>
-
-@implementation OAAvoidRoadInfo
-
-- (NSUInteger) hash
-{
-    NSInteger result = self.roadId;
-    result = 31 * result + (self.location.latitude * 10000.0);
-    result = 31 * result + (self.location.longitude * 10000.0);
-    result = 31 * result + [self.name hash];
-    result = 31 * result + [self.appModeKey hash];
-    return result;
-}
-
-- (BOOL) isEqual:(id)object
-{
-    if (self == object)
-        return YES;
-    
-    if (![object isKindOfClass:[OAAvoidRoadInfo class]])
-          return NO;
-    
-    OAAvoidRoadInfo *other = object;
-    return [OAUtilities isCoordEqual:self.location.latitude srcLon:self.location.longitude destLat:other.location.latitude destLon:other.location.longitude] && (self.name == other.name || [self.name isEqualToString:other.name]);
-}
-
-@end
 
 @implementation OAAvoidSpecificRoads
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     
-    QList<std::shared_ptr<RouteDataObject>> _impassableRoads;
+    NSArray<OAAvoidRoadInfo *> *_impassableRoads;
     NSMutableArray<id<OAStateChangedListener>> *_listeners;
 }
 
@@ -73,51 +53,60 @@
         _settings = [OAAppSettings sharedManager];
         _listeners = [NSMutableArray array];
 
-        [self initPreservedData];
+        [self loadImpassableRoads];
     }
     return self;
 }
 
-- (const QList<std::shared_ptr<RouteDataObject>>) getImpassableRoads
+- (void) loadImpassableRoads
+{
+    _impassableRoads = _settings.impassableRoads;
+}
+
+- (NSArray<OAAvoidRoadInfo *> *) getImpassableRoads
 {
     return _impassableRoads;
 }
 
-- (NSArray<OAAvoidRoadInfo *> *) getImpassableRoadsInfo
+- (void) initRouteObjects:(BOOL)force
 {
-    NSMutableArray<OAAvoidRoadInfo *> *res = [NSMutableArray array];
-    const auto& roads = _impassableRoads;
-    for (const auto& r : roads)
+    for (OAAvoidRoadInfo *roadInfo in _impassableRoads)
     {
-        OAAvoidRoadInfo *info = [[OAAvoidRoadInfo alloc] init];
-        info.roadId = r->id;
-        CLLocation *location = [self getLocation:r->id];
-        info.location = location.coordinate;
-        info.name = [self getName:r.get() loc:location];
-        info.appModeKey = nil;
-        [res addObject:info];
+        if (roadInfo.roadId != 0)
+        {
+            if (force)
+            {
+                _app.defaultRoutingConfig->removeImpassableRoad(roadInfo.roadId);
+            }
+            else
+            {
+                const OsmAnd::PointI position31(OsmAnd::Utilities::get31TileNumberX(roadInfo.location.coordinate.longitude),
+                                                OsmAnd::Utilities::get31TileNumberY(roadInfo.location.coordinate.latitude));
+                _app.defaultRoutingConfig->addImpassableRoad(roadInfo.roadId, position31.x, position31.y);
+            }
+        }
+        if (force || roadInfo.roadId == 0)
+        {
+            [self addImpassableRoad:roadInfo.location skipWritingSettings:YES appModeKey:roadInfo.appModeKey];
+        }
     }
-    return res;
 }
 
-- (void) initPreservedData
+- (void) addImpassableRoad:(CLLocation *)loc skipWritingSettings:(BOOL)skipWritingSettings appModeKey:(NSString *)appModeKey
 {
-    NSSet<CLLocation *> *impassableRoads = _settings.impassableRoads;
-    for (CLLocation *impassableRoad in impassableRoads)
-        [self addImpassableRoad:impassableRoad skipWritingSettings:YES];
-}
-
-- (void) addImpassableRoad:(CLLocation *)loc skipWritingSettings:(BOOL)skipWritingSettings
-{
+    OAApplicationMode *defaultAppMode = [[OARoutingHelper sharedInstance] getAppMode];
+    if (defaultAppMode == OAApplicationMode.DEFAULT)
+        defaultAppMode = OAApplicationMode.CAR;
+    OAApplicationMode *appMode = appModeKey ? [OAApplicationMode valueOfStringKey:appModeKey def:defaultAppMode] : defaultAppMode;
+    
     OACurrentPositionHelper *positionHelper = [OACurrentPositionHelper instance];
     OARoadResultMatcher *matcher = [[OARoadResultMatcher alloc] initWithPublishFunc:^BOOL(const std::shared_ptr<RouteDataObject> road)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (road)
             {
-                [self addImpassableRoadInternal:road loc:loc];
-                if (!skipWritingSettings)
-                    [_settings addImpassableRoad:loc];
+                OAAvoidRoadInfo *roadInfo = [self getAvoidRoadInfoForDataObject:road loc:loc appModeKey:appMode.stringKey];
+                [self addImpassableRoadInternal:roadInfo];
             }
             else
             {
@@ -131,7 +120,34 @@
         return NO;
     }];
     
-    [positionHelper getRouteSegment:loc matcher:matcher];
+    if (!skipWritingSettings)
+    {
+        OAAvoidRoadInfo *roadInfo = [self getAvoidRoadInfoForDataObject:nullptr loc:loc appModeKey:appMode.stringKey];
+        [_settings addImpassableRoad:roadInfo];
+    }
+    [positionHelper getRouteSegment:loc appMode:appMode matcher:matcher];
+}
+
+- (OAAvoidRoadInfo *) getAvoidRoadInfoForDataObject:(const std::shared_ptr<RouteDataObject>)object loc:(CLLocation *)loc appModeKey:(NSString *)appModeKey
+{
+    OAAvoidRoadInfo *avoidRoadInfo = [self getAvoidRoadInfoByLocation:loc];
+    if (!avoidRoadInfo)
+        avoidRoadInfo = [[OAAvoidRoadInfo alloc] init];
+    
+    avoidRoadInfo.roadId = object ? object->id : 0;
+    avoidRoadInfo.location = loc;
+    avoidRoadInfo.appModeKey = appModeKey;
+    avoidRoadInfo.name = [self getName:object];
+    return avoidRoadInfo;
+}
+
+- (OAAvoidRoadInfo *) getAvoidRoadInfoByLocation:(CLLocation *)loc
+{
+    for (OAAvoidRoadInfo *roadInfo in _impassableRoads)
+        if ([OAUtilities isCoordEqual:roadInfo.location.coordinate.latitude srcLon:roadInfo.location.coordinate.longitude destLat:loc.coordinate.latitude destLon:loc.coordinate.longitude])
+            return roadInfo;
+
+    return nil;
 }
 
 - (CLLocation *) getLocation:(int64_t)roadId
@@ -148,34 +164,46 @@
     return location;
 }
 
-- (NSString *) getName:(RouteDataObject *)road loc:(CLLocation *)loc
+- (NSString *) getName:(const std::shared_ptr<RouteDataObject>)road
 {
-    string lang = [_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage].UTF8String : "";
-    bool transliterate = [_settings settingMapLanguageTranslit];
-    NSString *name = [NSString stringWithUTF8String:road->getName(lang, transliterate).c_str()];
-    if (name.length == 0)
-        name = [OAPointDescription getLocationName:loc.coordinate.latitude lon:loc.coordinate.longitude sh:YES];
-    
-    return name;
+    NSString *name = nil;
+    if (road)
+    {
+        string locale = [_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage].UTF8String : "";
+        bool transliterate = [_settings settingMapLanguageTranslit];
+        
+        string rStreetName = road->getName(locale, transliterate);
+        string rRefName = road->getRef(locale, transliterate, true);
+        string rDestinationName = road->getDestinationName(locale, transliterate, true);
+        
+        NSString *streetName = [NSString stringWithUTF8String:rStreetName.c_str()];
+        NSString *refName = [NSString stringWithUTF8String:rRefName.c_str()];
+        NSString *destinationName = [NSString stringWithUTF8String:rDestinationName.c_str()];
+        
+        NSString *towards = OALocalizedString(@"towards");
+        
+        name = [OARoutingHelper formatStreetName:streetName ref:refName destination:destinationName towards:towards];
+    }
+    return !name || name.length == 0 ? OALocalizedString(@"shared_string_road") : name;
 }
 
-- (void) addImpassableRoadInternal:(const std::shared_ptr<RouteDataObject>)road loc:(CLLocation *)loc
+- (void) addImpassableRoadInternal:(OAAvoidRoadInfo *)roadInfo
 {
-    const OsmAnd::PointI position31(OsmAnd::Utilities::get31TileNumberX(loc.coordinate.longitude),
-                                    OsmAnd::Utilities::get31TileNumberY(loc.coordinate.latitude));
+    const OsmAnd::PointI position31(OsmAnd::Utilities::get31TileNumberX(roadInfo.location.coordinate.longitude),
+                                    OsmAnd::Utilities::get31TileNumberY(roadInfo.location.coordinate.latitude));
     
-    if (!_app.defaultRoutingConfig->addImpassableRoad(road->id, position31.x, position31.y))
+    if (!_app.defaultRoutingConfig->addImpassableRoad(roadInfo.roadId, position31.x, position31.y))
     {
-        CLLocation *location = [self getLocation:road->id];
-        if (location)
-        {
-            [_settings removeImpassableRoad:[self getLocation:road->id]];
-        }
+        CLLocation *loc = [self getLocation:roadInfo.roadId];
+        if (loc)
+            [_settings removeImpassableRoad:loc];
     }
     else
     {
-        _impassableRoads.push_back(road);
+        [_settings updateImpassableRoad:roadInfo];
+        [self updateImpassableRoad:roadInfo];
     }
+
     OARoutingHelper *rh = [OARoutingHelper sharedInstance];
     if ([rh isRouteCalculated] || [rh isRouteBeingCalculated])
         [rh recalculateRouteDueToSettingsChange];
@@ -183,14 +211,34 @@
     [self updateListeners];
 }
 
-- (void) removeImpassableRoad:(const std::shared_ptr<RouteDataObject>)road
+- (void) updateImpassableRoad:(OAAvoidRoadInfo *)roadInfo
 {
-    CLLocation *location = [self getLocation:road->id];
-    if (location)
-        [_settings removeImpassableRoad:[self getLocation:road->id]];
+    BOOL updated = NO;
+    NSMutableArray<OAAvoidRoadInfo *> *arr = [NSMutableArray arrayWithArray:_impassableRoads];
+    for (OAAvoidRoadInfo *r in arr)
+    {
+        if ([OAUtilities isCoordEqual:roadInfo.location.coordinate.latitude srcLon:roadInfo.location.coordinate.longitude destLat:r.location.coordinate.latitude destLon:r.location.coordinate.longitude])
+        {
+            r.roadId = roadInfo.roadId;
+            r.name = roadInfo.name;
+            r.appModeKey = roadInfo.appModeKey;
+            updated = YES;
+        }
+    }
+    if (!updated)
+        [arr addObject:roadInfo];
+    
+    _impassableRoads = [NSArray arrayWithArray:arr];
+}
 
-    [self removeImpassableRoadInternal:road];
-    _app.defaultRoutingConfig->removeImpassableRoad(road->id);
+- (void) removeImpassableRoad:(OAAvoidRoadInfo *)roadInfo
+{
+    CLLocation *location = [self getLocation:roadInfo.roadId];
+    if (location)
+        [_settings removeImpassableRoad:location];
+
+    [self removeImpassableRoadInternal:roadInfo];
+    _app.defaultRoutingConfig->removeImpassableRoad(roadInfo.roadId);
 
     OARoutingHelper *rh = [OARoutingHelper sharedInstance];
     if ([rh isRouteCalculated] || [rh isRouteBeingCalculated])
@@ -199,28 +247,18 @@
     [self updateListeners];
 }
 
-- (void) removeImpassableRoadInternal:(const std::shared_ptr<RouteDataObject>)road
+- (void) removeImpassableRoadInternal:(OAAvoidRoadInfo *)roadInfo
 {
-    for (int i = 0; i < _impassableRoads.size(); i++)
-    {
-        const auto& r = _impassableRoads[i];
-        if (r->id == road->id)
-        {
-            _impassableRoads.removeAt(i);
-            return;
-        }
-    }
+    _impassableRoads = [_impassableRoads filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(roadId != %llu)", roadInfo.roadId]];
 }
 
-- (std::shared_ptr<RouteDataObject>) getRoadById:(unsigned long long)id
+- (OAAvoidRoadInfo *) getRoadInfoById:(unsigned long long)id
 {
-    const auto& roads = _impassableRoads;
-    for (const auto& r : roads)
-    {
-        if (r->id == id)
-            return r;
-    }
-    return nullptr;
+    for (OAAvoidRoadInfo *roadInfo in _impassableRoads)
+        if (roadInfo.roadId == id)
+            return roadInfo;
+    
+    return nil;
 }
 
 - (void) addListener:(id<OAStateChangedListener>)l

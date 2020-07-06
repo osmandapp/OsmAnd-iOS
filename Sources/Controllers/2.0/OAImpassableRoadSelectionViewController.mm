@@ -35,15 +35,14 @@
 - (void) generateData
 {
     NSMutableArray *roadList = [NSMutableArray array];
-    const auto& roads = [_avoidRoads getImpassableRoads];
-    if (!roads.empty())
+    NSArray<OAAvoidRoadInfo *> *roads = [_avoidRoads getImpassableRoads];
+    if (roads.count > 0)
     {
-        
-        for (const auto& r : roads)
+        for (OAAvoidRoadInfo *r in roads)
         {
-            [roadList addObject:@{ @"title"  : [OARouteAvoidSettingsViewController getText:r],
+            [roadList addObject:@{ @"title"  : r.name ? r.name : OALocalizedString(@"shared_string_road"),
                                    @"key"    : @"road",
-                                   @"roadId" : @((unsigned long long)r->id),
+                                   @"roadId" : @((unsigned long long)r.roadId),
                                    @"descr"  : [OARouteAvoidSettingsViewController getDescr:r],
                                    @"header" : @"",
                                    @"type"   : @"OAIconTextButtonCell"} ];
@@ -248,15 +247,9 @@
 
 - (IBAction)clearAllPressed:(id)sender
 {
-    const auto& roads = [_avoidRoads getImpassableRoads];
-    if (!roads.empty())
-    {
-        
-        for (const auto& r : roads)
-        {
-            [_avoidRoads removeImpassableRoad:r];
-        }
-    }
+    for (OAAvoidRoadInfo *r in [_avoidRoads getImpassableRoads])
+        [_avoidRoads removeImpassableRoad:r];
+    
     [self refreshContent];
     [self.delegate requestHeaderOnlyMode];
     [self.delegate contentHeightChanged:_tableView.contentSize.height];
@@ -340,10 +333,10 @@
         NSNumber *roadId = data[@"roadId"];
         if (roadId)
         {
-            const auto& road = [_avoidRoads getRoadById:roadId.unsignedLongLongValue];
-            if (road)
+            OAAvoidRoadInfo *roadInfo = [_avoidRoads getRoadInfoById:roadId.unsignedLongLongValue];
+            if (roadInfo)
             {
-                [_avoidRoads removeImpassableRoad:road];
+                [_avoidRoads removeImpassableRoad:roadInfo];
                 [self refreshContent];
                 [self.delegate contentHeightChanged:_tableView.contentSize.height];
             }
@@ -357,10 +350,10 @@
     NSNumber *roadId = data[@"roadId"];
     if (roadId)
     {
-        const auto& road = [_avoidRoads getRoadById:roadId.unsignedLongLongValue];
-        if (road)
+        OAAvoidRoadInfo *roadInfo = [_avoidRoads getRoadInfoById:roadId.unsignedLongLongValue];
+        if (roadInfo)
         {
-            CLLocation *location = [_avoidRoads getLocation:road->id];
+            CLLocation *location = [_avoidRoads getLocation:roadInfo.roadId];
             Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude))];
             OAMapViewController* mapViewController = [[OARootViewController instance].mapPanel mapViewController];
             [mapViewController goToPosition:pos31 andZoom:16 animated:NO];

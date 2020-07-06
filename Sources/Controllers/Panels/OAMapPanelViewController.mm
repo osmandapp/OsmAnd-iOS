@@ -1150,7 +1150,7 @@ typedef enum
         {
             [_mapViewController hideContextPinMarker];
             
-            [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] skipWritingSettings:NO];
+            [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] skipWritingSettings:NO appModeKey:nil];
             
             [self.targetMenuView requestFullMode];
             
@@ -1584,15 +1584,11 @@ typedef enum
     else if (self.targetMenuView.targetPoint.type == OATargetImpassableRoad)
     {
         OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
-        NSNumber *roadId = self.targetMenuView.targetPoint.targetObj;
-        if (roadId)
+        OAAvoidRoadInfo *roadInfo = self.targetMenuView.targetPoint.targetObj;
+        if (roadInfo)
         {
-            const auto& road = [avoidRoads getRoadById:roadId.unsignedLongLongValue];
-            if (road)
-            {
-                [avoidRoads removeImpassableRoad:road];
-                [_mapViewController hideContextPinMarker];
-            }
+            [avoidRoads removeImpassableRoad:roadInfo];
+            [_mapViewController hideContextPinMarker];
         }
     }
     else
@@ -2531,12 +2527,12 @@ typedef enum
     [self closeRouteInfo];
 
     OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
-    const auto& roads = [avoidRoads getImpassableRoads];
-    for (const auto& r : roads)
+    NSArray<OAAvoidRoadInfo *> *roads = [avoidRoads getImpassableRoads];
+    for (OAAvoidRoadInfo *r in roads)
     {
-        if (r->id == roadId)
+        if (r.roadId == roadId)
         {
-            CLLocation *location = [avoidRoads getLocation:r->id];
+            CLLocation *location = [avoidRoads getLocation:r.roadId];
             if (location)
             {
                 double lat = location.coordinate.latitude;
@@ -2544,7 +2540,7 @@ typedef enum
                 
                 [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
                 
-                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPointCpp:r.get()];
+                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPoint:r];
                 if (targetPoint)
                 {
                     targetPoint.toolbarNeeded = pushed;

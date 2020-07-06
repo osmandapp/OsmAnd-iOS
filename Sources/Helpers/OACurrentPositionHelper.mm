@@ -221,7 +221,7 @@
     }
 }
 
-- (void) getRouteSegment:(CLLocation *)loc matcher:(OARoadResultMatcher *)matcher
+- (void) getRouteSegment:(CLLocation *)loc appMode:(OAApplicationMode *)appMode matcher:(OARoadResultMatcher *)matcher
 {
     const OsmAnd::PointI position31(OsmAnd::Utilities::get31TileNumberX(loc.coordinate.longitude),
                                     OsmAnd::Utilities::get31TileNumberY(loc.coordinate.latitude));
@@ -229,8 +229,8 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @synchronized(_roadLocatorSync)
         {
-            OAApplicationMode *appMode = _routingHelper.getAppMode;
-            if (!_ctx || _am != appMode)
+            OAApplicationMode *am = appMode ? appMode : _routingHelper.getAppMode;
+            if (!_ctx || _am != am)
             {
                 [self initCtx:appMode];
             }

@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "OANavigationIcon.h"
 #import "OALocationIcon.h"
+#import "OAAvoidRoadInfo.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -2530,67 +2531,82 @@
 
 - (void) fetchImpassableRoads
 {
-    NSMutableArray *res = [NSMutableArray array];
-    NSArray *arr = [[NSUserDefaults standardUserDefaults] objectForKey:impassableRoadsKey];
-    if (arr)
+    id avoidRoadsInfoObjects = [[NSUserDefaults standardUserDefaults] objectForKey:impassableRoadsKey];
+    NSMutableArray<OAAvoidRoadInfo *> *res = [NSMutableArray array];
+    if (avoidRoadsInfoObjects)
     {
-        for (NSDictionary *coord in arr)
+        NSArray<NSDictionary<NSString *, NSString *> *> *avoidRoadsInfoArray = avoidRoadsInfoObjects;
+        for (NSDictionary<NSString *, NSString *> *avoidRoadInfoDict in avoidRoadsInfoArray)
         {
-            double lat = ((NSNumber *)coord[@"lat"]).doubleValue;
-            double lon = ((NSNumber *)coord[@"lon"]).doubleValue;
-            CLLocation *loc = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-            [res addObject:loc];
+            OAAvoidRoadInfo *info = [[OAAvoidRoadInfo alloc] initWithDict:avoidRoadInfoDict];
+            [res addObject:info];
         }
     }
-    _impassableRoads = [NSSet setWithArray:res];
+    _impassableRoads = res;
 }
 
 - (void) clearImpassableRoads
 {
-    _impassableRoads = [NSSet set];
+    _impassableRoads = @[];
     [[NSUserDefaults standardUserDefaults] setObject:@[] forKey:impassableRoadsKey];
 }
 
-- (void) setImpassableRoads:(NSSet<CLLocation *> *)impassableRoads
+- (void) setImpassableRoads:(NSArray<OAAvoidRoadInfo *> *)impassableRoads
 {
     _impassableRoads = impassableRoads;
-    NSMutableArray *res = [NSMutableArray array];
-    for (CLLocation *loc in impassableRoads)
+    NSMutableArray<NSDictionary<NSString *, NSString *> *> *avoidRoadsInfoArray = [NSMutableArray array];
+    for (OAAvoidRoadInfo *info in impassableRoads)
+        [avoidRoadsInfoArray addObject:[info toDict]];
+
+    [[NSUserDefaults standardUserDefaults] setObject:avoidRoadsInfoArray forKey:impassableRoadsKey];
+}
+
+- (void) addImpassableRoad:(OAAvoidRoadInfo *)roadInfo;
+{
+    if (![_impassableRoads containsObject:roadInfo])
     {
-        NSNumber *lat = [NSNumber numberWithDouble:loc.coordinate.latitude];
-        NSNumber *lon = [NSNumber numberWithDouble:loc.coordinate.longitude];
-        NSDictionary *coord = @{ @"lat":lat, @"lon":lon };
-        [res addObject:coord];
+        NSArray<OAAvoidRoadInfo *> *arr = [_impassableRoads arrayByAddingObject:roadInfo];
+        [self setImpassableRoads:arr];
     }
-    [[NSUserDefaults standardUserDefaults] setObject:res forKey:impassableRoadsKey];
 }
 
-- (void) addImpassableRoad:(CLLocation *)location;
+- (void) updateImpassableRoad:(OAAvoidRoadInfo *)roadInfo
 {
-    NSMutableSet<CLLocation*> *set = [NSMutableSet setWithSet:_impassableRoads];
-    [set addObject:location];
-    
-    if (![set isEqualToSet:_impassableRoads])
-        [self setImpassableRoads:set];
-}
-
-- (void) removeImpassableRoad:(CLLocation *)location
-{
-    NSMutableSet<CLLocation *> *set = [NSMutableSet setWithSet:_impassableRoads];
-    for (CLLocation *l in set)
+    NSMutableArray<OAAvoidRoadInfo *> *arr = [NSMutableArray arrayWithArray:_impassableRoads];
+    for (OAAvoidRoadInfo *r in arr)
     {
-        if ([OAUtilities doublesEqualUpToDigits:5 source:l.coordinate.latitude destination:location.coordinate.latitude] && [OAUtilities doublesEqualUpToDigits:5 source:l.coordinate.longitude destination:location.coordinate.longitude])
+        if ([OAUtilities isCoordEqual:roadInfo.location.coordinate.latitude srcLon:roadInfo.location.coordinate.longitude destLat:r.location.coordinate.latitude destLon:r.location.coordinate.longitude])
         {
-            [set removeObject:l];
+            r.roadId = roadInfo.roadId;
+            r.name = roadInfo.name;
+            r.appModeKey = roadInfo.appModeKey;
+            break;
+        }
+    }
+    [self setImpassableRoads:arr];
+}
+
+- (BOOL) removeImpassableRoad:(CLLocation *)location
+{
+    BOOL res = NO;
+    NSMutableArray<OAAvoidRoadInfo *> *arr = [NSMutableArray arrayWithArray:_impassableRoads];
+    for (OAAvoidRoadInfo *r in arr)
+    {
+        if ([OAUtilities isCoordEqual:location.coordinate.latitude srcLon:location.coordinate.longitude destLat:r.location.coordinate.latitude destLon:r.location.coordinate.longitude])
+        {
+            res = YES;
+            [arr removeObject:r];
             break;
         }
     }
     
-    if (![set isEqualToSet:_impassableRoads])
-        [self setImpassableRoads:set];
+    if (![arr isEqualToArray:_impassableRoads])
+        [self setImpassableRoads:arr];
+    
+    return res;
 }
 
-- (void) setRulerMode:(int)rulerMode
+- (void) setRulerMode:(EOARulerWidgetMode)rulerMode
 {
     _rulerMode = rulerMode;
     [[NSUserDefaults standardUserDefaults] setInteger:_rulerMode forKey:rulerModeKey];

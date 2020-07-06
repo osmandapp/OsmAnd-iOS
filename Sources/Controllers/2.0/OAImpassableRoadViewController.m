@@ -8,6 +8,7 @@
 
 #import "OAImpassableRoadViewController.h"
 #import "Localization.h"
+#import "OAAvoidRoadInfo.h"
 
 @interface OAImpassableRoadViewController ()
 
@@ -15,12 +16,12 @@
 
 @implementation OAImpassableRoadViewController
 
-- (instancetype) initWithRoadId:(unsigned long long)roadId
+- (instancetype) initWithRoadInfo:(OAAvoidRoadInfo *)roadInfo
 {
     self = [super init];
     if (self)
     {
-        _roadId = roadId;
+        _roadInfo = roadInfo;
     }
     return self;
 }

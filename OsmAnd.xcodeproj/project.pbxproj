@@ -3521,6 +3521,8 @@
 		8AF3C81F20F656F3006C86AA /* OATransportStopType.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3C81D20F656F3006C86AA /* OATransportStopType.m */; };
 		8AF3C82220F65BD0006C86AA /* OATransportStopRoute.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3C82120F65BD0006C86AA /* OATransportStopRoute.mm */; };
 		8AF3C82320F65BD0006C86AA /* OATransportStopRoute.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3C82120F65BD0006C86AA /* OATransportStopRoute.mm */; };
+		8AF61CF424B21EEC00D23B84 /* OAAvoidRoadInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF61CF324B21EEC00D23B84 /* OAAvoidRoadInfo.m */; };
+		8AF61CF524B21EEC00D23B84 /* OAAvoidRoadInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF61CF324B21EEC00D23B84 /* OAAvoidRoadInfo.m */; };
 		8AFC2BBF24334A4E0095BA9F /* map_location_car_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2B8924334A4D0095BA9F /* map_location_car_center@3x.png */; };
 		8AFC2BC024334A4E0095BA9F /* map_location_car_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2B8924334A4D0095BA9F /* map_location_car_center@3x.png */; };
 		8AFC2BC124334A4E0095BA9F /* map_navigation_nautical_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AFC2B8A24334A4D0095BA9F /* map_navigation_nautical_bottom@3x.png */; };
@@ -8068,6 +8070,8 @@
 		8AF3C81D20F656F3006C86AA /* OATransportStopType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATransportStopType.m; sourceTree = "<group>"; };
 		8AF3C82020F65BD0006C86AA /* OATransportStopRoute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopRoute.h; sourceTree = "<group>"; };
 		8AF3C82120F65BD0006C86AA /* OATransportStopRoute.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATransportStopRoute.mm; sourceTree = "<group>"; };
+		8AF61CF224B21EEC00D23B84 /* OAAvoidRoadInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAAvoidRoadInfo.h; path = Helpers/OAAvoidRoadInfo.h; sourceTree = "<group>"; };
+		8AF61CF324B21EEC00D23B84 /* OAAvoidRoadInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAAvoidRoadInfo.m; path = Helpers/OAAvoidRoadInfo.m; sourceTree = "<group>"; };
 		8AFC2B8924334A4D0095BA9F /* map_location_car_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_car_center@3x.png"; sourceTree = "<group>"; };
 		8AFC2B8A24334A4D0095BA9F /* map_navigation_nautical_bottom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_navigation_nautical_bottom@3x.png"; sourceTree = "<group>"; };
 		8AFC2B8B24334A4D0095BA9F /* map_location_bicycle_top@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_location_bicycle_top@3x.png"; sourceTree = "<group>"; };
@@ -13737,6 +13741,8 @@
 				DA2267A8240E697A00FFEA91 /* OAWikiArticleHelper.mm */,
 				DAC0B30F248681CD00F662F5 /* OALocationParser.h */,
 				DAC0B310248681CD00F662F5 /* OALocationParser.mm */,
+				8AF61CF224B21EEC00D23B84 /* OAAvoidRoadInfo.h */,
+				8AF61CF324B21EEC00D23B84 /* OAAvoidRoadInfo.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -19752,6 +19758,7 @@
 				84ACE1B41DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */,
 				DACCEBCB2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm in Sources */,
 				DAC0279F22A25AC500D1689E /* OAIconTitleValueCell.m in Sources */,
+				8AF61CF524B21EEC00D23B84 /* OAAvoidRoadInfo.m in Sources */,
 				847A1D6F1DF94E9B003C1246 /* OASQLiteTileSource.mm in Sources */,
 				847A1D701DF94E9B003C1246 /* OATargetHistoryItemViewController.m in Sources */,
 				845B0C001F0A2FAC00D38964 /* OAPointDescription.mm in Sources */,
@@ -19976,6 +19983,7 @@
 				7851F2FB241A97FA00F7F1ED /* OASegmentTableViewCell.m in Sources */,
 				8A3F02F821C790FB0043797E /* OAChoosePlanViewController.mm in Sources */,
 				BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */,
+				8AF61CF424B21EEC00D23B84 /* OAAvoidRoadInfo.m in Sources */,
 				845AFB431E261E3B00170026 /* OASearchCoreAPI.mm in Sources */,
 				3AFEEE601A0E516900900A47 /* OAPointTableViewCell.m in Sources */,
 				844E07AA1E3E3D6B00EFC525 /* OAQuickSearchTableController.mm in Sources */,

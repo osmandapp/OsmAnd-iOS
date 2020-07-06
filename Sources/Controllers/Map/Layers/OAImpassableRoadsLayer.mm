@@ -68,10 +68,10 @@
 
 - (void) setupPoints
 {
-    const auto& roads = [_avoidRoads getImpassableRoads];
-    for (const auto& road : roads)
+    NSArray<OAAvoidRoadInfo *> *roads = [_avoidRoads getImpassableRoads];
+    for (OAAvoidRoadInfo *roadInfo : roads)
     {
-        CLLocation *location = [_avoidRoads getLocation:road->id];
+        CLLocation *location = [_avoidRoads getLocation:roadInfo.roadId];
         if (location)
         {
             const OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
@@ -118,28 +118,26 @@
 
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
+    if ([obj isKindOfClass:[OAAvoidRoadInfo class]])
+    {
+        OAAvoidRoadInfo *roadInfo = (OAAvoidRoadInfo *)obj;
+        OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
+        CLLocation *location = [avoidRoads getLocation:roadInfo.roadId];
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.location = location.coordinate;
+        targetPoint.title = roadInfo.name;
+        targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
+        targetPoint.type = OATargetImpassableRoad;
+        targetPoint.targetObj = roadInfo;
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
+        return targetPoint;
+    }
     return nil;
 }
 
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj
 {
-    if (auto road = reinterpret_cast<RouteDataObject *>(const_cast<void *>(obj)))
-    {
-        OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
-        CLLocation *location = [avoidRoads getLocation:road->id];
-        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-        targetPoint.location = location.coordinate;
-        targetPoint.title = [avoidRoads getName:road loc:location];
-        targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
-        targetPoint.type = OATargetImpassableRoad;
-        targetPoint.targetObj = @((unsigned long long)road->id);
-        targetPoint.sortIndex = (NSInteger)targetPoint.type;
-        return targetPoint;
-    }
-    else
-    {
-        return nil;
-    }
+    return nil;
 }
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
@@ -153,13 +151,13 @@
                 double lat = OsmAnd::Utilities::get31LatitudeY(r->getPosition().y);
                 double lon = OsmAnd::Utilities::get31LongitudeX(r->getPosition().x);
                 OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
-                const auto& roads = [avoidRoads getImpassableRoads];
-                for (const auto& road : roads)
+                NSArray<OAAvoidRoadInfo *> *roads = [avoidRoads getImpassableRoads];
+                for (OAAvoidRoadInfo *roadInfo in roads)
                 {
-                    CLLocation *location = [avoidRoads getLocation:road->id];
+                    CLLocation *location = [avoidRoads getLocation:roadInfo.roadId];
                     if (location && [OAUtilities isCoordEqual:location.coordinate.latitude srcLon:location.coordinate.longitude destLat:lat destLon:lon])
                     {
-                        OATargetPoint *targetPoint = [self getTargetPointCpp:road.get()];
+                        OATargetPoint *targetPoint = [self getTargetPoint:roadInfo];
                         if (![found containsObject:targetPoint])
                             [found addObject:targetPoint];
                     }
@@ -173,17 +171,16 @@
 
 - (BOOL)isObjectMovable:(id)object
 {
-    return [object isKindOfClass:NSNumber.class];
+    return [object isKindOfClass:OAAvoidRoadInfo.class];
 }
 
 - (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (object && [self isObjectMovable:object])
     {
-        NSNumber *item = (NSNumber *)object;
-        const auto& road = [_avoidRoads getRoadById:item.unsignedLongLongValue];
-        [_avoidRoads removeImpassableRoad:road];
-        [_avoidRoads addImpassableRoad:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] skipWritingSettings:NO];
+        OAAvoidRoadInfo *roadInfo = (OAAvoidRoadInfo *)object;
+        [_avoidRoads removeImpassableRoad:roadInfo];
+        [_avoidRoads addImpassableRoad:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] skipWritingSettings:NO appModeKey:nil];
     }
 }
 
@@ -191,7 +188,8 @@
 {
     if (object && [self isObjectMovable:object])
     {
-        CLLocation *location = [_avoidRoads getLocation:OsmAnd::ObfObjectId::fromRawId(((NSNumber *) object).unsignedLongLongValue)];
+        OAAvoidRoadInfo *roadInfo = (OAAvoidRoadInfo *)object;
+        CLLocation *location = [_avoidRoads getLocation:OsmAnd::ObfObjectId::fromRawId(roadInfo.roadId)];
         const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
         for (const auto& marker : _markersCollection->getMarkers())
         {

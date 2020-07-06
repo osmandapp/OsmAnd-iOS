@@ -41,6 +41,8 @@
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>
 
+#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
+
 @interface OARouteAvoidSettingsViewController ()
 
 @end
@@ -164,31 +166,10 @@
     return [[OsmAndApp instance] getFormattedDistance:dist];
 }
 
-- (void) setupTableHeaderViewWithText:(NSString *)text
-{
-    CGFloat width = self.view.bounds.size.width;
-    CGFloat textWidth = width - 32.0 - OAUtilities.getLeftMargin * 2;
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGSize labelSize = [OAUtilities calculateTextBounds:text width:textWidth font:labelFont];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, width, labelSize.height + 30.0)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height)];
-    label.text = text;
-    label.font = labelFont;
-    label.textColor = UIColor.blackColor;
-    label.backgroundColor = UIColor.clearColor;
-    label.textAlignment = NSTextAlignmentLeft;
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    self.tableView.tableHeaderView = _tableHeaderView;
-}
-
 - (void) setupView
 {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr")];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
     [self.tableView reloadData];
 }
 

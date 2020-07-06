@@ -9,11 +9,13 @@
 #import "OANavigationTypeViewController.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAButtonIconTableViewCell.h"
+#import "OAUtilities.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
 #define kSidePadding 16
+#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OANavigationTypeViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -22,7 +24,6 @@
 @implementation OANavigationTypeViewController
 {
     NSArray<NSArray *> *_data;
-    UIView *_tableHeaderView;
 }
 
 - (instancetype) init
@@ -54,7 +55,7 @@
     [super viewDidLoad];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
     [self setupView];
 }
 
@@ -152,33 +153,11 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (void) setupTableHeaderViewWithText:(NSString *)text
-{
-    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    CGFloat textHeight = [self heightForLabel:text];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, kSidePadding, textWidth, textHeight)];
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setLineSpacing:6];
-    label.attributedText = [[NSAttributedString alloc] initWithString:text
-                                                        attributes:@{NSParagraphStyleAttributeName : style,
-                                                        NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
-                                                        NSFontAttributeName : [UIFont systemFontOfSize:15.0],
-                                                        NSBackgroundColorAttributeName : UIColor.clearColor}];
-    label.textAlignment = NSTextAlignmentJustified;
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    _tableView.tableHeaderView = _tableHeaderView;
-}
-
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
+        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
         [_tableView reloadData];
     } completion:nil];
 }
@@ -262,22 +241,6 @@
         return OALocalizedString(@"import_routing_file_descr");
     else
         return @"";
-}
-
-- (CGFloat) heightForLabel:(NSString *)text
-{
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGFloat textWidth = _tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, textWidth, CGFLOAT_MAX)];
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.font = labelFont;
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.lineSpacing = 6.0;
-    style.alignment = NSTextAlignmentCenter;
-    label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
-    [label sizeToFit];
-    return label.frame.size.height;
 }
 
 @end

@@ -44,12 +44,11 @@
         }
     }
     
-    OASQLiteTileSource *sqlitedbHelper = [[OASQLiteTileSource alloc] init];
     NSMutableArray *sqlitedbArr = [NSMutableArray array];
     for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
         NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
-        NSString *optionalLabel = [sqlitedbHelper fetchLabelFor:filePath];
+        NSString *optionalLabel = [OASQLiteTileSource fetchLabelFor:filePath];
         [sqlitedbArr addObject:[[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""] optionalLabel:optionalLabel]];
     }
     

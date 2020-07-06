@@ -51,6 +51,7 @@
 @interface SqliteDbResourceItem : LocalResourceItem
 @property NSString* path;
 @property NSString* fileName;
+@property NSString* optionalLabel;
 @end
 
 #define OnlineTilesResourceItem public(OnlineTilesResourceItem)

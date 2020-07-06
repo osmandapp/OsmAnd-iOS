@@ -139,12 +139,11 @@
         return [caption2 compare:caption1];
     }];
     
-    OASQLiteTileSource *sqlitedbHelper = [[OASQLiteTileSource alloc] init];
     NSMutableArray *sqlitedbArr = [NSMutableArray array];
     for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
         NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
-        NSString *optionalLabel = [sqlitedbHelper fetchLabelFor:filePath];
+        NSString *optionalLabel = [OASQLiteTileSource fetchLabelFor:filePath];
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
         item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""] optionalLabel:optionalLabel];
         [sqlitedbArr addObject:item];

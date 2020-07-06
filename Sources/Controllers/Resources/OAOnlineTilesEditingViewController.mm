@@ -95,7 +95,8 @@
 
 - (void)setupParametersFromSqlite
 {
-    _itemName = _sqliteSource.name;
+    NSString *optionalLabel = [OASQLiteTileSource fetchLabelFor:_sqliteDbItem.path];
+    _itemName = (optionalLabel.length > 0) ? optionalLabel : _sqliteSource.name;
     _itemURL = _sqliteSource.urlTemplate;
     _minZoom = _sqliteSource.minimumZoomSupported;
     _maxZoom = _sqliteSource.maximumZoomSupported;

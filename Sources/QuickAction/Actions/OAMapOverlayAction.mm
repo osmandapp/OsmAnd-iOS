@@ -56,7 +56,6 @@ static OAQuickActionType *TYPE;
         for (NSInteger idx = 0; idx < sources.count; idx++)
         {
             NSArray *source = sources[idx];
-            NSLog(@"!!!! %@ - %@ - %d", source[1], currentSource, [source[1] isEqualToString:currentSource]);
             
             if ([source[1] isEqualToString:currentSource] || ([source[0] isEqualToString:currentSource] && noOverlay))
             {

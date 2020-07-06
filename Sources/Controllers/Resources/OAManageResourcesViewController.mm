@@ -976,6 +976,7 @@ static BOOL _lackOfResources;
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
         if ([OASQLiteTileSource isOnlineTileSource:filePath])
         {
+            item.optionalLabel = [OASQLiteTileSource fetchLabelFor:filePath];
             [_localOnlineTileSources addObject:item];
         }
         else
@@ -1985,6 +1986,14 @@ static BOOL _lackOfResources;
             cellTypeId = localResourceCell;
             
             title = item.title;
+
+            if ([item isKindOfClass:SqliteDbResourceItem.class])
+            {
+                SqliteDbResourceItem *sqlitedbItem = (SqliteDbResourceItem *)item;
+                if (sqlitedbItem.optionalLabel.length > 0)
+                    title = sqlitedbItem.optionalLabel;
+            }
+             
             if ([item isKindOfClass:SqliteDbResourceItem.class])
                 subtitle = [NSString stringWithFormat:@"%@ • %@", OALocalizedString(@"online_map"), [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
             else
@@ -2458,7 +2467,10 @@ static BOOL _lackOfResources;
             else if (self.region.name)
                 resourceInfoViewController.regionTitle = self.region.name;
             else
-                resourceInfoViewController.regionTitle = item.title;
+            {
+                SqliteDbResourceItem *sqlitedbItem = (SqliteDbResourceItem *)item;
+                resourceInfoViewController.regionTitle = (sqlitedbItem.optionalLabel.length > 0) ? sqlitedbItem.optionalLabel : sqlitedbItem.title;
+            }
             
             if ([item isKindOfClass:[SqliteDbResourceItem class]])
             {
@@ -2564,7 +2576,10 @@ static BOOL _lackOfResources;
             else if (self.region.name)
                 resourceInfoViewController.regionTitle = self.region.name;
             else
-                resourceInfoViewController.regionTitle = item.title;
+            {
+                SqliteDbResourceItem *sqlitedbItem = (SqliteDbResourceItem *)item;
+                resourceInfoViewController.regionTitle = (sqlitedbItem.optionalLabel.length > 0) ? sqlitedbItem.optionalLabel : sqlitedbItem.title;
+            }
             
             if ([item isKindOfClass:[SqliteDbResourceItem class]])
             {

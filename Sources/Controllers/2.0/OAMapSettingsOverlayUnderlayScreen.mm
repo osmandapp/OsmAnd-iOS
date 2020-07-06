@@ -190,13 +190,12 @@ static NSInteger kButtonsSection;
     [_onlineMapSources setArray:arr];
 
     
-    OASQLiteTileSource *sqlitedbHelper = [[OASQLiteTileSource alloc] init];
     NSMutableArray *sqlitedbArr = [NSMutableArray array];
     for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
         item.path = [OAMapCreatorHelper sharedInstance].files[fileName];
-        NSString *optionalLabel = [sqlitedbHelper fetchLabelFor:item.path];
+        NSString *optionalLabel = [OASQLiteTileSource fetchLabelFor:item.path];
         item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb" optionalLabel:optionalLabel];
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
         item.isOnline = [OASQLiteTileSource isOnlineTileSource:item.path];

@@ -763,31 +763,28 @@
     return res;
 }
 
-- (NSString *) fetchLabelFor:(NSString *)filePath
++ (NSString *) fetchLabelFor:(NSString *)filePath
 {
-    _label = @"";
-    _filePath = [filePath copy];
-    _dbQueue = dispatch_queue_create("sqliteTileSourceDbQueue", DISPATCH_QUEUE_SERIAL);
+    NSString *optionalLabel = @"";
+    sqlite3 *db;
     
-    dispatch_sync(_dbQueue, ^{
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
+    if (sqlite3_open([filePath UTF8String], &db) == SQLITE_OK)
+    {
+        sqlite3_stmt *statement;
+        const char *query_stmt = [@"SELECT label from android_metadata" UTF8String];
+        
+        if (sqlite3_prepare_v2(db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
         {
-            sqlite3_stmt *statement;
-            const char *query_stmt = [@"SELECT label from android_metadata" UTF8String];
-            
-            if (sqlite3_prepare_v2(_db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+            while (sqlite3_step(statement) == SQLITE_ROW)
             {
-                while (sqlite3_step(statement) == SQLITE_ROW)
-                {
-                    char *field = (char *) sqlite3_column_text(statement, 0);
-                    _label = [[NSString alloc]initWithUTF8String:field];;
-                }
-                sqlite3_finalize(statement);
+                char *field = (char *) sqlite3_column_text(statement, 0);
+                optionalLabel = [[NSString alloc]initWithUTF8String:field];;
             }
-            sqlite3_close(_db);
+            sqlite3_finalize(statement);
         }
-    });
-    return _label;
+        sqlite3_close(db);
+    }
+    return optionalLabel;
 }
 
 @end

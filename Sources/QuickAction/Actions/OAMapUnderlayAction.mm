@@ -18,6 +18,10 @@
 #define KEY_UNDERLAYS @"underlays"
 #define KEY_NO_UNDERLAY @"no_underlay"
 
+#define kVariant 0
+#define kName 1
+#define kOptionalLabel 2
+
 static OAQuickActionType *TYPE;
 
 @implementation OAMapUnderlayAction
@@ -60,7 +64,7 @@ static OAQuickActionType *TYPE;
         for (NSInteger idx = 0; idx < sources.count; idx++)
         {
             NSArray *source = sources[idx];
-            if ([source[source.count - 1] isEqualToString:currentSource] || ([source.firstObject isEqualToString:currentSource] && noUnderlay))
+            if ([source[1] isEqualToString:currentSource] || ([source[0] isEqualToString:currentSource] && noUnderlay))
             {
                 index = idx;
                 break;
@@ -79,8 +83,8 @@ static OAQuickActionType *TYPE;
 - (void) executeWithParams:(NSArray<NSString *> *)params
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    NSString *variant = params.firstObject;
-    NSString *name = params.count > 1 ? params[params.count - 1] : @"";
+    NSString *variant = params[kVariant];
+    NSString *name = params.count > 1 ? params[kName] : @"";
     BOOL hasUnderlay = ![variant isEqualToString:KEY_NO_UNDERLAY];
     if (hasUnderlay)
     {
@@ -161,8 +165,9 @@ static OAQuickActionType *TYPE;
     {
         [arr addObject:@{
                          @"type" : @"OATitleDescrDraggableCell",
-                         @"title" : source.lastObject,
-                         @"value" : source.firstObject,
+                         @"title" : source[kName],
+                         @"optionalLabel" : source[kOptionalLabel],
+                         @"value" : source[kVariant],
                          @"img" : @"ic_custom_map_style"
                          }];
     }
@@ -186,7 +191,7 @@ static OAQuickActionType *TYPE;
             if ([item[@"key"] isEqualToString:KEY_DIALOG])
                 [params setValue:item[@"value"] forKey:KEY_DIALOG];
             else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
-                [sources addObject:@[item[@"value"], item[@"title"]]];
+                [sources addObject:@[item[@"value"], item[@"title"], item[@"optionalLabel"]]];
         }
     }
     [params setObject:sources forKey:KEY_UNDERLAYS];

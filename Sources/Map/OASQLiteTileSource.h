@@ -27,6 +27,7 @@
 
 + (BOOL) createNewTileSourceDbAtPath:(NSString *)path parameters:(NSDictionary *)parameters;
 + (BOOL) isOnlineTileSource:(NSString *)filePath;
++ (NSString *) fetchLabelFor:(NSString *)filePath;
 
 - (instancetype)initWithFilePath:(NSString *)filePath;
 
@@ -55,7 +56,5 @@
 - (void) setTileSize:(int)tileSize;
 - (BOOL) supportsTileDownload;
 - (void) updateInfo:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile;
-
-- (NSString *) fetchLabelFor:(NSString *)filePath;
 
 @end

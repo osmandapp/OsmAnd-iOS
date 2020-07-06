@@ -709,7 +709,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     NSString *title;
     if ([item isKindOfClass:[SqliteDbResourceItem class]])
-        title = ((SqliteDbResourceItem *)item).title;
+    {
+        SqliteDbResourceItem *sqlitedbItem = (SqliteDbResourceItem *)item;
+        title = (sqlitedbItem.optionalLabel.length > 0) ? sqlitedbItem.optionalLabel : sqlitedbItem.title;
+    }
     else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
         title = ((OnlineTilesResourceItem *)item).title;
     else
@@ -812,7 +815,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     NSString *title;
     
     if ([item isKindOfClass:[SqliteDbResourceItem class]])
-        title = ((SqliteDbResourceItem *)item).title;
+    {
+        SqliteDbResourceItem *sqlitedbItem = (SqliteDbResourceItem *)item;
+        title = (sqlitedbItem.optionalLabel.length > 0) ? sqlitedbItem.optionalLabel : sqlitedbItem.title;
+    }
     else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
         title = ((OnlineTilesResourceItem *)item).title;
     

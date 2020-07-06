@@ -71,6 +71,9 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (IBAction)profileButtonPressed:(id)sender {
+}
+
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     return nil;
 }

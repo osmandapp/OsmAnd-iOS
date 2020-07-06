@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="backButton" destination="3bV-dF-RC8" id="vtL-Mf-15O"/>
                 <outlet property="navbarView" destination="io8-yi-lxZ" id="Yy1-TJ-xXA"/>
+                <outlet property="profileButton" destination="RAq-Lo-a7A" id="5qL-jJ-ouR"/>
                 <outlet property="subtitleLabel" destination="iCR-tw-0Oz" id="IeF-J0-iai"/>
                 <outlet property="tableView" destination="Zbn-6q-pLe" id="dwQ-KE-2IP"/>
                 <outlet property="titleLabel" destination="5Fb-iQ-XT3" id="yj7-rU-zlo"/>
@@ -32,12 +33,25 @@
                                 <constraint firstAttribute="height" constant="1" id="2N7-eB-Clj"/>
                             </constraints>
                         </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RAq-Lo-a7A">
+                            <rect key="frame" x="368" y="52" width="30" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="I0I-Dl-uac"/>
+                                <constraint firstAttribute="width" constant="30" id="oZZ-Pw-S3s"/>
+                            </constraints>
+                            <state key="normal" image="ic_profile_car.png"/>
+                            <connections>
+                                <action selector="profileButtonPressed:" destination="-1" eventType="touchUpInside" id="8kT-8X-3el"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstItem="MRs-qb-nr0" firstAttribute="top" secondItem="RAq-Lo-a7A" secondAttribute="bottom" constant="5" id="6Pn-nI-gxO"/>
                         <constraint firstItem="MRs-qb-nr0" firstAttribute="leading" secondItem="io8-yi-lxZ" secondAttribute="leading" id="LpJ-tu-dIR"/>
                         <constraint firstAttribute="trailing" secondItem="MRs-qb-nr0" secondAttribute="trailing" id="Ni4-C0-8Yy"/>
                         <constraint firstAttribute="bottom" secondItem="MRs-qb-nr0" secondAttribute="bottom" id="jOK-HZ-Gk2"/>
+                        <constraint firstAttribute="trailing" secondItem="RAq-Lo-a7A" secondAttribute="trailing" constant="16" id="u5g-A8-jY6"/>
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Zbn-6q-pLe">
@@ -96,5 +110,6 @@
     </objects>
     <resources>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
+        <image name="ic_profile_car.png" width="30" height="30"/>
     </resources>
 </document>

@@ -657,7 +657,6 @@
         UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
         
         CGContextRef context = UIGraphicsGetCurrentContext();
-        [color setFill];
         
         CGContextTranslateCTM(context, 0, size.height);
         CGContextScaleCTM(context, 1.0, -1.0);
@@ -666,11 +665,10 @@
         CGRect rect = CGRectMake(size.width / 2.0 - bottom.size.width / 2.0, size.height / 2.0 - bottom.size.height / 2.0, bottom.size.width, bottom.size.height);
         CGContextDrawImage(context, rect, bottom.CGImage);
 
+        center = [self imageWithTintColor:color image:center];
+        
         rect = CGRectMake(size.width / 2.0 - center.size.width / 2.0, size.height / 2.0 - center.size.height / 2.0, center.size.width, center.size.height);
         CGContextDrawImage(context, rect, center.CGImage);
-        CGContextClipToMask(context, rect, center.CGImage);
-        CGContextAddRect(context, rect);
-        CGContextDrawPath(context, kCGPathFill);
         
         rect = CGRectMake(size.width / 2.0 - top.size.width / 2.0, size.height / 2.0 - top.size.height / 2.0, top.size.width, top.size.height);
         CGContextDrawImage(context, rect, top.CGImage);
@@ -680,6 +678,23 @@
         
         return res;
     }
+}
+
++ (UIImage *) imageWithTintColor:(UIColor *)color image:(UIImage *)image
+{
+    UIGraphicsBeginImageContextWithOptions(image.size, NO, image.scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [color setFill];
+    CGContextTranslateCTM(context, 0, image.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextClipToMask(context, CGRectMake(0, 0, image.size.width, image.size.height), [image CGImage]);
+    CGContextFillRect(context, CGRectMake(0, 0, image.size.width, image.size.height));
+
+    UIImage *coloredImg = UIGraphicsGetImageFromCurrentImageContext();
+
+    UIGraphicsEndImageContext();
+    
+    return coloredImg;
 }
 
 + (NSString *) colorToString:(UIColor *)color
@@ -1332,6 +1347,33 @@ static const double d180PI = 180.0 / M_PI_2;
             [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -strokeWidth] range:valueRange];
     }
     return string;
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle
+{
+    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 16.0, textWidth, CGFLOAT_MAX)];
+    if (!isTitle)
+    {
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        [style setLineSpacing:lineSpacing];
+        [style setAlignment:NSTextAlignmentJustified];
+        label.attributedText = [[NSAttributedString alloc] initWithString:text
+                                attributes:@{NSParagraphStyleAttributeName : style}];
+    }
+    label.text = text;
+    label.font = font;
+    label.textColor = textColor;
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [label sizeToFit];
+    CGRect frame = label.frame;
+    frame.size.height = label.frame.size.height + (isTitle ? 0.0 : 30.0);
+    label.frame = frame;
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height)];
+    [tableHeaderView addSubview:label];
+    return tableHeaderView;
 }
 
 @end

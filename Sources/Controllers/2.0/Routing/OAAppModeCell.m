@@ -83,10 +83,12 @@
             continue;
         
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        btn.frame = CGRectMake(x, 0, w, h);
+        btn.frame = CGRectMake(x, 4.0, w, h - 8.0);
         btn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        [btn setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
-        btn.tintColor = _selectedMode == mode ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
+        [btn setImage:mode.getIcon forState:UIControlStateNormal];
+        btn.tintColor = UIColorFromRGB(mode.getIconColor);
+        btn.backgroundColor = _selectedMode == mode ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
+        btn.layer.cornerRadius = 4.;
         btn.tag = i;
         [btn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         if ([btn isDirectionRTL])
@@ -101,7 +103,11 @@
 - (void) updateSelection
 {
     for (UIButton *btn in _modeButtons)
-        btn.tintColor = [self getAppModeIndex:_selectedMode] == btn.tag ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
+    {
+        NSInteger modeIndex = [self getAppModeIndex:_selectedMode];
+        btn.tintColor = UIColorFromRGB(OAApplicationMode.values[btn.tag].getIconColor);
+        btn.backgroundColor = modeIndex == btn.tag ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
+    }
 }
 
 - (void) onButtonClick:(id)sender

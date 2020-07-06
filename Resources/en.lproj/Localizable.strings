@@ -217,6 +217,11 @@
 "route_params" = "Route parameters";
 "fast_route_mode" = "Fastest route";
 "nav_type_title" = "Navigation type";
+"voice_anounces" = "Voice anounces";
+"screen_alerts" = "Screen alerts";
+"vehicle_parameters" = "Vehicle parameters";
+"map_behavior" = "Map behavior";
+"change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "nav_type_straight_line" = "Straight line";
@@ -254,6 +259,9 @@
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
 "osm_live_routing" = "OsmAnd Live navigation";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
+"select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
+"osmand_routing" = "Osmand routing";
+"import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it on routing folder in iTunes.";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
@@ -400,6 +408,7 @@
 "shared_string_back" = "Back";
 "shared_string_ok" = "OK";
 "shared_string_cancel" = "Cancel";
+"shared_string_exit" = "Exit";
 "shared_string_close" = "Close";
 "shared_string_no" = "No";
 "shared_string_yes" = "Yes";
@@ -512,6 +521,7 @@
 "gpx_export_select_track" = "Please select trip for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "import_from_docs" = "Import from documents";
+"import_from_files" = "Import from files";
 "gpx_no_tracks" = "There are no trips";
 
 "gpx_remove" = "Remove trip?";
@@ -666,6 +676,29 @@
 "avoid_by_type" = "Avoid by type";
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
+
+"create_profile" = "Create profile";
+"create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
+"custom_profile" = "Custom profile";
+"new_profile" = "New profile";
+"edit_profile_list" = "Edit profile list";
+"enter_profile_name" = "Enter profile name";
+"select_color" = "Select color";
+"select_icon" = "Select icon";
+"position_icon_at_rest" = "Position icon at rest";
+"position_icon_while_moving" = "Position icon while moving";
+"will_be_show_while_moving" = "It will be show while moving";
+"base_profile_descr_car" = "Car, truck, motorcycle";
+"base_profile_descr_bicycle" = "Mountain bike, moped, horse";
+"base_profile_descr_pedestrian" = "Walking, hiking, running";
+"base_profile_descr_public_transport" = "Public transport types";
+"base_profile_descr_boat" = "Ship, rowing, sailing";
+"base_profile_descr_aircraft" = "Airplane, gliding";
+"rearrange_profiles" = "Rearrange profiles";
+"rearrange_profile_descr" = "Default OsmAnd profiles cannot be deleted, but you can disable them on the previous screen or drag them to the bottom of the list.";
+"all_application_profiles" = "All application profiles";
+"after_tapping_done" = "After you tap Done, deleted profiles will be lost completely.";
+"empty_profile_name_warning" = "Profile name cannot be empty.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1826,6 +1859,7 @@
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
 
+"settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";
 "app_mode_car" = "Driving";
 "app_mode_bicycle" = "Cycling";
@@ -1847,3 +1881,4 @@
 "app_mode_pickup_truck" = "Pickup truck";
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
+"desert" = "Desert";

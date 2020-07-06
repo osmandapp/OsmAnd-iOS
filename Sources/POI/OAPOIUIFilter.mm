@@ -151,6 +151,22 @@
     return self;
 }
 
+- (instancetype)initWithFilter:(OAPOIUIFilter *)filter name:(NSString *)nm filterId:(NSString *)fId
+{
+    self = [self init];
+    if (self)
+    {
+        isStandardFilter = NO;
+        filterId = fId;
+        name = nm;
+        acceptedTypes = filter.acceptedTypes;
+        poiAdditionals = filter.poiAdditionals;
+        _filterByName = filter.filterByName;
+        _savedFilterByName = filter.savedFilterByName;
+    }
+    return self;
+}
+
 + (NSComparator) getComparator
 {
     static dispatch_once_t once;

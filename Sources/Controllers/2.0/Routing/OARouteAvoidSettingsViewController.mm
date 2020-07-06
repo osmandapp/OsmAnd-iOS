@@ -41,6 +41,8 @@
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>
 
+#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
+
 @interface OARouteAvoidSettingsViewController ()
 
 @end
@@ -89,15 +91,15 @@
     NSMutableArray *sectionData = [NSMutableArray new];
     NSInteger section = 0;
     
-    const auto& roads = [_avoidRoads getImpassableRoads];
-    if (!roads.empty())
+    NSArray<OAAvoidRoadInfo *> *roads = [_avoidRoads getImpassableRoads];
+    if (roads.count > 0)
     {
         NSMutableArray *roadList = [NSMutableArray array];
-        for (const auto& r : roads)
+        for (OAAvoidRoadInfo *r in roads)
         {
-            [roadList addObject:@{ @"title"  : [self.class getText:r],
+            [roadList addObject:@{ @"title"  : r.name ? r.name : OALocalizedString(@"shared_string_road"),
                                    @"key"    : @"road",
-                                   @"roadId" : @((unsigned long long)r->id),
+                                   @"roadId" : @((unsigned long long)r.roadId),
                                    @"descr"  : [self.class getDescr:r],
                                    @"header" : @"",
                                    @"type"   : @"OAIconTextButtonCell"} ];
@@ -128,67 +130,17 @@
         [self.delegate onSettingChanged];
 }
 
-+ (NSString *) getText:(const std::shared_ptr<RouteDataObject>)road
-{
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *lang = [settings settingPrefMapLanguage];
-    if (!lang)
-        lang = [OAUtilities currentLang];
-    
-    string locale = lang.UTF8String;
-    bool transliterate = settings.settingMapLanguageTranslit;
-    bool direction = true;
-    CLLocation *lastKnownLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-    if (lastKnownLocation)
-        direction = road->bearingVsRouteDirection(lastKnownLocation.course);
-
-    string rStreetName = road->getName(locale, transliterate);
-    string rRefName = road->getRef(locale, transliterate, direction);
-    string rDestinationName = road->getDestinationName(locale, transliterate, true);
-    
-    NSString *streetName = [NSString stringWithUTF8String:rStreetName.c_str()];
-    NSString *refName = [NSString stringWithUTF8String:rRefName.c_str()];
-    NSString *destinationName = [NSString stringWithUTF8String:rDestinationName.c_str()];
-    
-    NSString *towards = OALocalizedString(@"towards");
-
-    NSString *name = [OARoutingHelper formatStreetName:streetName ref:refName destination:destinationName towards:towards];
-    return !name || name.length == 0 ? OALocalizedString(@"shared_string_road") : name;
-}
-
-+ (NSString *) getDescr:(const std::shared_ptr<RouteDataObject>)road
++ (NSString *) getDescr:(OAAvoidRoadInfo *)roadInfo
 {
     CLLocation *mapLocation = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-    const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(road->pointsX[0], road->pointsY[0]));
-    float dist = [mapLocation distanceFromLocation:[[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude]];
+    float dist = [mapLocation distanceFromLocation:roadInfo.location];
     return [[OsmAndApp instance] getFormattedDistance:dist];
-}
-
-- (void) setupTableHeaderViewWithText:(NSString *)text
-{
-    CGFloat width = self.view.bounds.size.width;
-    CGFloat textWidth = width - 32.0 - OAUtilities.getLeftMargin * 2;
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGSize labelSize = [OAUtilities calculateTextBounds:text width:textWidth font:labelFont];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, width, labelSize.height + 30.0)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height)];
-    label.text = text;
-    label.font = labelFont;
-    label.textColor = UIColor.blackColor;
-    label.backgroundColor = UIColor.clearColor;
-    label.textAlignment = NSTextAlignmentLeft;
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    self.tableView.tableHeaderView = _tableHeaderView;
 }
 
 - (void) setupView
 {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr")];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
     [self.tableView reloadData];
 }
 
@@ -441,10 +393,10 @@
         NSNumber *roadId = data[@"roadId"];
         if (roadId)
         {
-            const auto& road = [_avoidRoads getRoadById:roadId.unsignedLongLongValue];
-            if (road)
+            OAAvoidRoadInfo *roadInfo = [_avoidRoads getRoadInfoById:roadId.unsignedLongLongValue];
+            if (roadInfo)
             {
-                [_avoidRoads removeImpassableRoad:road];
+                [_avoidRoads removeImpassableRoad:roadInfo];
                 
                 [self generateData];
                 [self.tableView reloadData];

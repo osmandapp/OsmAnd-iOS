@@ -73,9 +73,9 @@
         x += 12.;
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
         btn.frame = CGRectMake(x, 0, w, h);
-        [btn setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
+        [btn setImage:mode.getIcon forState:UIControlStateNormal];
         btn.contentMode = UIViewContentModeCenter;
-        btn.tintColor = _selectedMode == mode ? UIColorFromRGB(color_chart_orange) : [UIColor darkGrayColor];
+        btn.tintColor = UIColorFromRGB(mode.getIconColor);
         btn.backgroundColor = _selectedMode == mode ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
         btn.layer.cornerRadius = 4.;
         btn.tag = i;
@@ -92,7 +92,7 @@
     for (UIButton *btn in _modeButtons)
     {
         NSInteger modeIndex = [self getAppModeIndex:_selectedMode];
-        btn.tintColor = modeIndex == btn.tag ? UIColorFromRGB(color_chart_orange) : [UIColor darkGrayColor];
+        btn.tintColor = UIColorFromRGB(OAApplicationMode.values[btn.tag].getIconColor);
         btn.backgroundColor = modeIndex == btn.tag ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
     }
 }

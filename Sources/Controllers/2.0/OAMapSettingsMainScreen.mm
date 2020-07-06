@@ -45,10 +45,10 @@
     OAAppSettings *_settings;
     OAIAPHelper *_iapHelper;
     
-    OAMapStyleSettings *styleSettings;
+    OAMapStyleSettings *_styleSettings;
     NSArray *_filteredTopLevelParams;
     
-    OAAppModeCell *appModeCell;
+    OAAppModeCell *_appModeCell;
     
     BOOL mapStyleCellPresent;
     NSInteger favSection;
@@ -58,9 +58,7 @@
     NSInteger contourLinesRow;
 }
 
-
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
-
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
@@ -70,7 +68,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
-        
+
         title = OALocalizedString(@"map_settings_map");
 
         settingsScreen = EMapSettingsScreenMain;
@@ -124,7 +122,7 @@
 - (NSArray *) getAllCategories
 {
     NSMutableArray *res = [NSMutableArray array];
-    NSMutableArray *categories = [NSMutableArray arrayWithArray:[styleSettings getAllCategories]];
+    NSMutableArray *categories = [NSMutableArray arrayWithArray:[_styleSettings getAllCategories]];
     for (NSString *cName in categories)
     {
         if (![[cName lowercaseString] isEqualToString:@"ui_hidden"])
@@ -137,6 +135,8 @@
 
 - (void) setupView
 {
+    _styleSettings = [OAMapStyleSettings sharedInstance];
+
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
     [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
 
@@ -214,14 +214,15 @@
                           }
                         ];
     
-    if (isOnlineMapSource) {
+    if (isOnlineMapSource)
+    {
         tableData = arrTop;
         mapStyleCellPresent = NO;
         favSection = 0;
         favRow = 0;
-        
-    } else {
-        
+    }
+    else
+    {
         NSMutableArray *arr = [NSMutableArray arrayWithArray:arrTop];
 
         NSDictionary *mapStyles = @{@"groupName": @"",
@@ -232,11 +233,9 @@
         mapStyleCellPresent = YES;
         favSection = 1;
         favRow = 0;
-        
-        styleSettings = [OAMapStyleSettings sharedInstance];
-        
+                
         NSArray *categories = [self getAllCategories];
-        _filteredTopLevelParams = [[styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
+        _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
         NSMutableArray *categoriesList = [NSMutableArray array];
         NSString *modeStr;
         if (_settings.settingAppMode == APPEARANCE_MODE_DAY)
@@ -262,12 +261,26 @@
         
         for (NSString *cName in categories)
         {
-            NSString *t = [styleSettings getCategoryTitle:cName];
+            NSString *t = [_styleSettings getCategoryTitle:cName];
             if (![[t lowercaseString] isEqualToString:@"ui_hidden"])
-                [categoriesList addObject:@{@"name": t,
-                                            @"value": @"",
-                                            @"type": @"OASettingsCell"}];
+            {
+                if ([[t lowercaseString] isEqualToString:@"transport"])
+                {
+                    [categoriesList addObject:@{@"name": t,
+                                                @"value": @"",
+                                                @"key": @"transport_layer",
+                                                @"type": @"OASettingSwitchCell",
+                                                @"secondaryImg": @"ic_action_additional_option"}];
+                }
+                else
+                {
+                    [categoriesList addObject:@{@"name": t,
+                                                @"value": @"",
+                                                @"type": @"OASettingsCell"}];
+                }
+            }
         }
+        
         for (OAMapStyleParameter *p in _filteredTopLevelParams)
         {
             [categoriesList addObject:@{@"name": p.title,
@@ -407,16 +420,16 @@
     UITableViewCell* outCell = nil;
     if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
     {
-        if (!appModeCell)
+        if (!_appModeCell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAAppModeCell" owner:self options:nil];
-            appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
-            appModeCell.showDefault = YES;
-            appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;
-            appModeCell.delegate = self;
+            _appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
+            _appModeCell.showDefault = YES;
+            _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;
+            _appModeCell.delegate = self;
         }
         
-        outCell = appModeCell;
+        outCell = _appModeCell;
         
     } else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"]) {
         
@@ -487,7 +500,7 @@
             if ([data[@"key"] isEqualToString:@"contour_lines_layer"])
             {
                 BOOL contourLinesOn = true;
-                OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
+                OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
                 if ([parameter.value  isEqual: @"disabled"])
                     contourLinesOn = false;
                 [cell.switchView setOn: contourLinesOn];
@@ -507,6 +520,11 @@
             {
                 [cell.switchView setOn:_app.data.terrainType != EOATerrainTypeDisabled];
                 [cell.switchView addTarget:self action:@selector(terrainChanged:) forControlEvents:UIControlEventValueChanged];
+            }
+            if ([data[@"key"] isEqualToString:@"transport_layer"])
+            {
+                [cell.switchView setOn: [_styleSettings isCategoryEnabled:@"transport"]];
+                [cell.switchView addTarget:self action:@selector(transportChanged:) forControlEvents:UIControlEventValueChanged];
             }
             cell.textView.text = data[@"name"];
             NSString *desc = data[@"description"];
@@ -543,9 +561,9 @@
     UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
-        OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
+        OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
         parameter.value = switchView.isOn ? [_settings.contourLinesZoom get] : @"disabled";
-        [styleSettings save:parameter];
+        [_styleSettings save:parameter];
     }
 }
 
@@ -657,6 +675,21 @@
     if (switchView)
         [_settings setMapSettingShowOnlineNotes:switchView.isOn];
 }
+
+- (void) transportChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+    {
+        [_styleSettings setCategoryEnabled:switchView.isOn categoryName:@"transport"];
+        if (switchView.isOn && ![_styleSettings isCategoryEnabled:@"transport"])
+        {
+            OAMapSettingsViewController *transportSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:@"transport"];
+            [transportSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+        }
+    }
+}
+
 
 #pragma mark - UITableViewDelegate
 

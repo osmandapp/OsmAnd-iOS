@@ -33,10 +33,12 @@ struct RouteDataObject;
 + (OAAvoidSpecificRoads *) instance;
 
 - (const QList<std::shared_ptr<RouteDataObject>>) getImpassableRoads;
+- (NSArray<OAAvoidRoadInfo *> *) getImpassableRoadsInfo;
 - (CLLocation *) getLocation:(int64_t)roadId;
 - (void) addImpassableRoad:(CLLocation *)loc skipWritingSettings:(BOOL)skipWritingSettings;
 - (void) removeImpassableRoad:(const std::shared_ptr<RouteDataObject>)road;
 - (std::shared_ptr<RouteDataObject>) getRoadById:(unsigned long long)id;
+- (NSString *) getName:(RouteDataObject *)road loc:(CLLocation *)loc;
 
 - (void) addListener:(id<OAStateChangedListener>)l;
 - (void) removeListener:(id<OAStateChangedListener>)l;

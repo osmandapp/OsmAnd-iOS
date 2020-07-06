@@ -70,6 +70,7 @@
 -(NSString *) getRawName;
 -(NSString *) getDefaultName;
 -(NSString *) getName;
+-(BOOL) hasCustomName;
 
 -(NSDictionary *) getParams;
 -(void) setName:(NSString *) name;

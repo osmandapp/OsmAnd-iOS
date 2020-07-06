@@ -27,6 +27,7 @@
 #import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAQuickAction.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -168,7 +169,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @interface OASettingsItem()
 
 @property (nonatomic) NSString *pluginId;
-@property (nonatomic) NSString *fileName;
 @property (nonatomic) NSString *defaultName;
 @property (nonatomic) NSString *defaultFileExtension;
 @property (nonatomic) NSMutableArray<NSString *> *warnings;
@@ -813,6 +813,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     _docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     _libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+    _subtype = EOASettingsItemFileSubtypeUnknown;
 }
 
 - (instancetype) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error
@@ -1276,9 +1277,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         for (OAQuickAction *action in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            // TODO!!!
-            //jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
-            //jsonObject[@"actionType"] = [[action getActionType] getStringId];
+            jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
+            jsonObject[@"actionType"] = action.actionType.stringId;
             jsonObject[@"params"] = [action getParams];
             [jsonArray addObject:jsonObject];
         }
@@ -1809,6 +1809,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @implementation OAAvoidRoadsSettingsItem
 {
     OAAvoidSpecificRoads *_specificRoads;
+    OAAppSettings *_settings;
 }
 
 @dynamic items, appliedItems, existingItems;
@@ -1818,7 +1819,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [super initialization];
     
     _specificRoads = [OAAvoidSpecificRoads instance];
-    //self.existingItems = [_specificRoads getImpassableRoads];
+    _settings = [OAAppSettings sharedManager];
+    self.existingItems = [_specificRoads getImpassableRoadsInfo];
 }
 
 - (EOASettingsItemType) type
@@ -1831,6 +1833,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return @"avoid_roads";
 }
 
+- (BOOL) isDuplicate:(OAAvoidRoadInfo *)item
+{
+    return [self.existingItems containsObject:item];
+}
+
 - (void) apply
 {
     NSArray<OAAvoidRoadInfo *> *newItems = [self getNewItems];
@@ -1841,20 +1848,26 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         {
             if ([self shouldReplace])
             {
-//                LatLon latLon = new LatLon(duplicate.latitude, duplicate.longitude);
-//                if (settings.removeImpassableRoad(latLon)) {
-//                    settings.addImpassableRoad(duplicate);
-//                }
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:duplicate.location.latitude longitude:duplicate.location.longitude];
+                // TODO: Store OAAvoidRoadInfo in settings
+                [_settings removeImpassableRoad:location];
+                [_settings addImpassableRoad:location];
             }
             else
             {
-//                settings.addImpassableRoad(renameItem(duplicate));
+                OAAvoidRoadInfo *info = [self renameItem:duplicate];
+                // TODO: Store OAAvoidRoadInfo in settings
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:info.location.latitude longitude:info.location.longitude];
+                [_settings addImpassableRoad:location];
             }
         }
         for (OAAvoidRoadInfo *avoidRoad in self.appliedItems)
         {
-//            settings.addImpassableRoad(avoidRoad);
+            // TODO: Store OAAvoidRoadInfo in settings
+            CLLocation *location = [[CLLocation alloc] initWithLatitude:avoidRoad.location.latitude longitude:avoidRoad.location.longitude];
+            [_settings addImpassableRoad:location];
         }
+        // TODO: Implement reloading
 //        specificRoads.loadImpassableRoads();
 //        specificRoads.initRouteObjects(true);
     }

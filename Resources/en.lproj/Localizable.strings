@@ -261,8 +261,6 @@
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_routing" = "Osmand routing";
-"desert_xml" = "Desert.xml";
-"routing_custom_xml" = "Routing-Custom.xml";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it on routing folder in iTunes.";
 
 "guidance_preferences_descr" = "Navigation preferences";
@@ -410,6 +408,7 @@
 "shared_string_back" = "Back";
 "shared_string_ok" = "OK";
 "shared_string_cancel" = "Cancel";
+"shared_string_exit" = "Exit";
 "shared_string_close" = "Close";
 "shared_string_no" = "No";
 "shared_string_yes" = "Yes";
@@ -1034,6 +1033,10 @@
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
+"public_transport_menu" = "Transport";
+"toggle_public_transport" = "Show/hide public transport";
+"public_transport_show" = "Show public transport";
+"public_transport_hide" = "Hide public transport";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

@@ -15,6 +15,7 @@
 #import "PXAlertView.h"
 #import "OAUtilities.h"
 #import "Localization.h"
+#import "OAPointDescription.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -82,6 +83,23 @@
     return _impassableRoads;
 }
 
+- (NSArray<OAAvoidRoadInfo *> *) getImpassableRoadsInfo
+{
+    NSMutableArray<OAAvoidRoadInfo *> *res = [NSMutableArray array];
+    const auto& roads = _impassableRoads;
+    for (const auto& r : roads)
+    {
+        OAAvoidRoadInfo *info = [[OAAvoidRoadInfo alloc] init];
+        info.roadId = r->id;
+        CLLocation *location = [self getLocation:r->id];
+        info.location = location.coordinate;
+        info.name = [self getName:r.get() loc:location];
+        info.appModeKey = nil;
+        [res addObject:info];
+    }
+    return res;
+}
+
 - (void) initPreservedData
 {
     NSSet<CLLocation *> *impassableRoads = _settings.impassableRoads;
@@ -128,6 +146,17 @@
         location = [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
     }
     return location;
+}
+
+- (NSString *) getName:(RouteDataObject *)road loc:(CLLocation *)loc
+{
+    string lang = [_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage].UTF8String : "";
+    bool transliterate = [_settings settingMapLanguageTranslit];
+    NSString *name = [NSString stringWithUTF8String:road->getName(lang, transliterate).c_str()];
+    if (name.length == 0)
+        name = [OAPointDescription getLocationName:loc.coordinate.latitude lon:loc.coordinate.longitude sh:YES];
+    
+    return name;
 }
 
 - (void) addImpassableRoadInternal:(const std::shared_ptr<RouteDataObject>)road loc:(CLLocation *)loc

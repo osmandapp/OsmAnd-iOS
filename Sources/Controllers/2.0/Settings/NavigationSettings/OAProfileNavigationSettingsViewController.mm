@@ -37,7 +37,6 @@
 @implementation OAProfileNavigationSettingsViewController
 {
     NSArray<NSArray *> *_data;
-    OAApplicationMode *_appMode;
     
     OAAppSettings *_settings;
     OsmAndAppInstance _app;
@@ -47,10 +46,9 @@
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
-    self = [super init];
+    self = [super initWithAppMode:appMode];
     if (self)
     {
-        _appMode = appMode;
         _settings = OAAppSettings.sharedManager;
         _app = [OsmAndApp instance];
         [self generateData];
@@ -62,7 +60,7 @@
 {
     _routingProfileDataObjects = [self.class getRoutingProfiles];
     
-    OARoutingProfileDataObject *routingData = _routingProfileDataObjects[[_settings.routingProfile get:_appMode]];
+    OARoutingProfileDataObject *routingData = _routingProfileDataObjects[[_settings.routingProfile get:self.appMode]];
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *navigationArr = [NSMutableArray array];
@@ -311,17 +309,19 @@
     NSString *itemKey = item[@"key"];
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"navigationType"])
-        settingsViewController = [[OANavigationTypeViewController alloc] initWithSelectedKey:_appMode.getRoutingProfile];
+        settingsViewController = [[OANavigationTypeViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"routeParams"])
-        settingsViewController = [[OARouteParametersViewController alloc] init];
+        settingsViewController = [[OARouteParametersViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"voicePrompts"])
-        settingsViewController = [[OAVoicePromptsViewController alloc] init];
+        settingsViewController = [[OAVoicePromptsViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"screenAlerts"])
-        settingsViewController = [[OAScreenAlertsViewController alloc] init];
+        settingsViewController = [[OAScreenAlertsViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"vehicleParams"])
-        settingsViewController = [[OAVehicleParametersViewController alloc] init];
+        settingsViewController = [[OAVehicleParametersViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"mapBehavior"])
-        settingsViewController = [[OAMapBehaviorViewController alloc] init];
+        settingsViewController = [[OAMapBehaviorViewController alloc] initWithAppMode:self.appMode];
+    
+    settingsViewController.delegate = self;
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -343,6 +343,14 @@
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return section == 0 ? @"" : OALocalizedString(@"change_map_behavior");
+}
+
+#pragma mark - OASettingsDataDelegate
+
+- (void)onSettingsChanged
+{
+    [self generateData];
+    [super onSettingsChanged];
 }
 
 @end

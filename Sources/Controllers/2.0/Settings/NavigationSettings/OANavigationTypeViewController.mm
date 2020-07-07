@@ -8,9 +8,10 @@
 
 #import "OANavigationTypeViewController.h"
 #import "OAIconTextTableViewCell.h"
-#import "OAButtonIconTableViewCell.h"
 #import "OAProfileDataObject.h"
 #import "OAProfileNavigationSettingsViewController.h"
+#import "OAApplicationMode.h"
+#import "OAAppSettings.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -29,11 +30,11 @@
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) initWithSelectedKey:(NSString *)selectedKey
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
-    self = [super init];
+    self = [super initWithAppMode:appMode];
     if (self) {
-        _currentSelectedKey = selectedKey;
+        _currentSelectedKey = appMode.getRoutingProfile;
     }
     return self;
 }
@@ -135,28 +136,20 @@
         }
         return cell;
     }
-    if ([cellType isEqualToString:@"OAButtonIconTableViewCell"])
-    {
-        static NSString* const identifierCell = @"OAButtonIconTableViewCell";
-        OAButtonIconTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OAButtonIconTableViewCell *)[nib objectAtIndex:0];
-        }
-        if (cell)
-        {
-            [cell.buttonView setTitle:item[@"title"] forState:UIControlStateNormal];
-            cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-        }
-        return cell;
-    }
     return nil;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    OARoutingProfileDataObject *profileData = _sortedRoutingProfiles[[item[@"profile_ind"] integerValue]];
+    if (profileData)
+    {
+        [OAAppSettings.sharedManager.routingProfile set:profileData.stringKey mode:self.appMode];
+        if (self.delegate)
+            [self.delegate onSettingsChanged];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

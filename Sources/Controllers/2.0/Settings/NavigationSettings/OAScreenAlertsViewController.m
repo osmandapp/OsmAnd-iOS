@@ -9,7 +9,7 @@
 #import "OAScreenAlertsViewController.h"
 #import "OADeviceScreenTableViewCell.h"
 #import "OASettingSwitchCell.h"
-#import "OAAvoidRoadsViewController.h"
+#import "OAAvoidPreferParametersViewController.h"
 #import "OARecalculateRouteViewController.h"
 
 #import "Localization.h"
@@ -178,7 +178,7 @@
     }
     else if (indexPath.row == 1)
     {
-        settingsViewController = [[OAAvoidRoadsViewController alloc] init];
+        settingsViewController = [[OAAvoidPreferParametersViewController alloc] init];
     }
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

@@ -15,6 +15,4 @@
 
 + (NSArray<OARoutingProfileDataObject *> *) getSortedRoutingProfiles;
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
-
 @end

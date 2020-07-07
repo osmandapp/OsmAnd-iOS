@@ -8,8 +8,10 @@
 
 #import "OABaseSettingsViewController.h"
 
+@class OAApplicationMode;
+
 @interface OANavigationTypeViewController : OABaseSettingsViewController
 
-- (instancetype) initWithSelectedKey:(NSString *)selectedKey;
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
 
 @end

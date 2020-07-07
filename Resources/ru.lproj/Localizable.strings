@@ -739,7 +739,7 @@
 "show_traffic_warnings" = "Ограничения скорости";
 "show_lanes" = "Полосы движения";
 "configure_map" = "Настройки карты";
-"int_seconds" = "секунды";
+"int_seconds" = "сек.";
 "settings_preset" = "Профиль по умолчанию";
 "shared_string_info" = "Информация";
 "day_off_label" = "вых.";
@@ -837,7 +837,7 @@
 "show_poi_over_map" = "Отображать POI";
 "keep_and_add_destination_point" = "Добавить следующим пунктом назначения";
 "add_as_first_destination_point" = "Добавить как первый промежуточный пункт";
-"add_as_last_destination_point" = "Добавить промежуточный пункт в конец";
+"add_as_last_destination_point" = "Добавить последним промежуточным пунктом";
 "intermediate_items_sort_by_distance" = "Сортировать от двери до двери";
 "route_stops_before" = "%d остановок до выбранной";
 "osm_live_plan_pricing" = "Планы и цены";
@@ -1241,12 +1241,12 @@
 "gpx_option_calculate_first_last_segment" = "Рассчитать маршрут OsmAnd для первого и последнего сегмента маршрута";
 "gpx_option_from_start_point" = "Пройти весь путь";
 "gpx_option_reverse_route" = "Обратное направление GPX";
-"choose_auto_follow_route" = "Вид карты автоцентра";
+"choose_auto_follow_route" = "Центрировать карту автоматически";
 "auto_zoom_map" = "Автомасштаб";
 "snap_to_road" = "Привязка к дороге";
 "choose_audio_stream" = "Голосовые инструкции";
 "settings_preset_descr" = "Вид карты и настройки навигации сохраняются для каждого отдельного профиля. Установите ваш профиль по умолчанию.";
-"auto_follow_location_enabled" = "Автоцентр просмотра карты во время использования.";
+"auto_follow_location_enabled" = "Центрировать карту при использовании.";
 "commiting_node" = "Сохранение объекта…";
 "select_avoid_descr" = "Выберите дороги, которые хотите избегать во время навигации. Вы можете выбрать дорогу на карте или выбрать тип из списка ниже.";
 "left_side_navigation" = "Левостороннее движение";
@@ -1477,7 +1477,7 @@
 "rendering_attr_publicTransportMode_name" = "Маршруты автобусов, троллейбусов и маршрутных такси";
 "rendering_attr_surface_wood_name" = "Дерево";
 "routing_attr_short_way_name" = "Топливно-эффективный способ";
-"rendering_attr_contourLines_description" = "Показывать, начиная с уровня масштабирования (требуются данные контурных линий):";
+"rendering_attr_contourLines_description" = "Показывать начиная с уровня масштабирования (требуются данные контурных линий):";
 "rendering_attr_smoothness_good_name" = "Хорошая";
 "rendering_attr_buildings15zoom_name" = "Здания на масштабе 15";
 "routing_attr_freeride_policy_name" = "Офпист";

@@ -841,60 +841,65 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [viewController presentViewController:alert animated: YES completion: nil];
 }
 
-+ (void) clearTilesFor:(OsmAnd::AreaI)visibleArea zoom:(float)zoom resource:(OAResourceItem *)resource
++ (void) clearTilesOf:(OAResourceItem *)resource visibleArea:(OsmAnd::AreaI)visibleArea zoom:(float)zoom onComplete:(void (^)(void))onComplete
 {
-    if (!resource)
-        return;
-    
-    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(visibleArea.topLeft);
-    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(visibleArea.bottomRight);
-    
-    BOOL isOnlineTileSource = [resource isKindOfClass:OAOnlineTilesResourceItem.class];
-    BOOL isSqliteTileSource = [resource isKindOfClass:OASqliteDbResourceItem.class];
-    
-    NSString *downloadPath = nil;
-    
-    OASQLiteTileSource *tileSource = nil;
-    if (isSqliteTileSource)
-    {
-        OASqliteDbResourceItem *item = (OASqliteDbResourceItem *) resource;
-        tileSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
-    }
-    else if (isOnlineTileSource)
-    {
-        OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *) resource;
-        downloadPath = item.path;
-    }
-    
-    int x1 = OsmAnd::Utilities::getTileNumberX(zoom, topLeft.longitude);
-    int x2 = OsmAnd::Utilities::getTileNumberX(zoom, bottomRight.longitude);
-    int y1 = OsmAnd::Utilities::getTileNumberY(zoom, topLeft.latitude);
-    int y2 = OsmAnd::Utilities::getTileNumberY(zoom, bottomRight.latitude);
-    OsmAnd::AreaI area;
-    area.topLeft = OsmAnd::PointI(x1, y1);
-    area.bottomRight = OsmAnd::PointI(x2, y2);
-    
-    int left = (int) floor(area.left());
-    int top = (int) floor(area.top());
-    int width = (int) (ceil(area.right()) - left);
-    int height = (int) (ceil(area.bottom()) - top);
-    for (int i = 0; i < width; i++)
-    {
-        for (int j = 0; j < height; j++)
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (!resource)
+            return;
+        
+        const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(visibleArea.topLeft);
+        const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(visibleArea.bottomRight);
+        
+        BOOL isOnlineTileSource = [resource isKindOfClass:OAOnlineTilesResourceItem.class];
+        BOOL isSqliteTileSource = [resource isKindOfClass:OASqliteDbResourceItem.class];
+        
+        NSString *downloadPath = nil;
+        
+        OASQLiteTileSource *sqliteTileSource = nil;
+        if (isSqliteTileSource)
         {
-            if (isOnlineTileSource)
+            OASqliteDbResourceItem *item = (OASqliteDbResourceItem *) resource;
+            sqliteTileSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
+        }
+        else if (isOnlineTileSource)
+        {
+            OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *) resource;
+            downloadPath = item.path;
+        }
+        
+        int x1 = OsmAnd::Utilities::getTileNumberX(zoom, topLeft.longitude);
+        int x2 = OsmAnd::Utilities::getTileNumberX(zoom, bottomRight.longitude);
+        int y1 = OsmAnd::Utilities::getTileNumberY(zoom, topLeft.latitude);
+        int y2 = OsmAnd::Utilities::getTileNumberY(zoom, bottomRight.latitude);
+        OsmAnd::AreaI area;
+        area.topLeft = OsmAnd::PointI(x1, y1);
+        area.bottomRight = OsmAnd::PointI(x2, y2);
+        
+        int left = (int) floor(area.left());
+        int top = (int) floor(area.top());
+        int width = (int) (ceil(area.right()) - left);
+        int height = (int) (ceil(area.bottom()) - top);
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
             {
-                OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *) resource;
-                const auto onlineSource = item.onlineTileSource;
-                NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @((int) zoom).stringValue, @(i + left).stringValue, @(j + top).stringValue];
-                [NSFileManager.defaultManager removeItemAtPath:tilePath error:nil];
-            }
-            else if (isSqliteTileSource && tileSource)
-            {
-                [tileSource deleteImage:(i + left) y:(j + top) zoom:(int)zoom];
+                if (isOnlineTileSource)
+                {
+                    OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *) resource;
+                    const auto onlineSource = item.onlineTileSource;
+                    NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @((int) zoom).stringValue, @(i + left).stringValue, @(j + top).stringValue];
+                    [NSFileManager.defaultManager removeItemAtPath:tilePath error:nil];
+                }
+                else if (isSqliteTileSource && sqliteTileSource)
+                {
+                    [sqliteTileSource deleteImage:(i + left) y:(j + top) zoom:(int)zoom];
+                }
             }
         }
-    }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            onComplete();
+        });
+    });
 }
 
 + (void) clearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block

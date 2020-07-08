@@ -11,6 +11,7 @@
 #import "OAPublicTransportOptionsBottomSheet.h"
 #import "OAMapStyleSettings.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OABottomSheetTwoButtonsViewController.h"
 #import "OAQuickActionType.h"
 
 #define KEY_DIALOG @"dialog"
@@ -49,6 +50,11 @@ static OAQuickActionType *TYPE;
 - (NSString *)getActionStateName
 {
     return [self isActionWithSlash] ? OALocalizedString(@"public_transport_hide") : OALocalizedString(@"public_transport_show");
+}
+
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_transport_descr");
 }
 
 + (OAQuickActionType *) TYPE

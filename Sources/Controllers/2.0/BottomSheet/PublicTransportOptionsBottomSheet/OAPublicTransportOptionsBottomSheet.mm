@@ -280,5 +280,11 @@
     [super setupView];
 }
 
+- (void)additionalSetup
+{
+    [super additionalSetup];
+    [super hideDoneButton];
+}
+
 @end
 

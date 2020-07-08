@@ -377,7 +377,7 @@
                 OAResourceItem *resource = onlineSources[_app.data.lastMapSource];
                 if (!resource)
                     return;
-                [OAResourcesUIHelper clearTilesOf:resource visibleArea:visibleArea zoom:zoom onComplete:^{
+                [OAResourcesUIHelper clearTilesOf:resource area:visibleArea zoom:zoom onComplete:^{
                     [_app.mapSettingsChangeObservable notifyEvent];
                 }];
             }]];

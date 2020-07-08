@@ -24,9 +24,9 @@
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) init
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
-    self = [super init];
+    self = [super initWithAppMode:appMode];
     if (self)
     {
     }
@@ -155,23 +155,7 @@
 
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OABaseSettingsViewController* settingsViewController = nil;
-    if (indexPath.row == 0)
-    {
-        settingsViewController = [[OARecalculateRouteViewController alloc] init];
-    }
-    else if (indexPath.row == 1)
-    {
-        settingsViewController = [[OAAvoidPreferParametersViewController alloc] init];
-    }
-    [self.navigationController pushViewController:settingsViewController animated:YES];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    return nil;
 }
 
 #pragma mark - Switch

@@ -20,6 +20,7 @@
 #import "OAAppSettings.h"
 #import "OAProfileDataObject.h"
 #import "OsmAndApp.h"
+#import "PXAlertView.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -42,6 +43,7 @@
     OsmAndAppInstance _app;
     
     NSDictionary<NSString *, OARoutingProfileDataObject *> *_routingProfileDataObjects;
+    BOOL _showAppModeDialog; // to delete
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -52,8 +54,51 @@
         _settings = OAAppSettings.sharedManager;
         _app = [OsmAndApp instance];
         [self generateData];
+        _showAppModeDialog = NO;
     }
     return self;
+}
+
+- (void) showAppModeDialog
+{
+    NSMutableArray *titles = [NSMutableArray array];
+    NSMutableArray *images = [NSMutableArray array];
+    NSMutableArray *modes = [NSMutableArray array];
+    
+    NSArray<OAApplicationMode *> *values = [OAApplicationMode values];
+    for (OAApplicationMode *v in values)
+    {
+        if (v == [OAApplicationMode DEFAULT])
+            continue;
+        
+        [titles addObject:v.name];
+        [images addObject:v.getIconName];
+        [modes addObject:v];
+    }
+    
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"map_settings_mode")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_cancel")
+                        otherTitles:titles
+                          otherDesc:nil
+                        otherImages:images
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+        if (!cancelled)
+        {
+            self.appMode = modes[buttonIndex];
+            [self generateData];
+        }
+    }];
+}
+
+- (IBAction)profileButtonPressed:(id)sender {
+    [self showAppModeDialog];
+}
+
+- (void) updateNavBar
+{
+    [self.profileButton setImage:self.appMode.getIcon forState:UIControlStateNormal];
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) generateData
@@ -93,7 +138,7 @@
     [navigationArr addObject:@{
         @"type" : kCellTypeIconText,
         @"title" : OALocalizedString(@"vehicle_parameters"),
-        @"icon" : @"ic_profile_car", // has to change according to current profile icon
+        @"icon" : self.appMode.getIconName,
         @"key" : @"vehicleParams",
     }];
     [otherArr addObject:@{
@@ -104,6 +149,8 @@
     [tableData addObject:navigationArr];
     [tableData addObject:otherArr];
     _data = [NSArray arrayWithArray:tableData];
+    [self updateNavBar];
+    [self.tableView reloadData];
 }
 
 - (void) applyLocalization
@@ -117,8 +164,8 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.profileButton.hidden = NO;
 }
-
 
 + (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles
 {
@@ -320,7 +367,6 @@
         settingsViewController = [[OAVehicleParametersViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"mapBehavior"])
         settingsViewController = [[OAMapBehaviorViewController alloc] initWithAppMode:self.appMode];
-    
     settingsViewController.delegate = self;
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

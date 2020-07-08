@@ -25,9 +25,9 @@
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) init
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
-    self = [super init];
+    self = [super initWithAppMode:appMode];
     if (self)
     {
     }
@@ -162,11 +162,11 @@
     NSString *itemKey = item[@"key"];
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"autoCenter"])
-        settingsViewController = [[OAAutoCenterMapViewController alloc] init];
+        settingsViewController = [[OAAutoCenterMapViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"autoZoom"])
-        settingsViewController = [[OAAutoZoomMapViewController alloc] init];
+        settingsViewController = [[OAAutoZoomMapViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"mapOrientation"])
-        settingsViewController = [[OAMapOrientationThresholdViewController alloc] init];
+        settingsViewController = [[OAMapOrientationThresholdViewController alloc] initWithAppMode:self.appMode];
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

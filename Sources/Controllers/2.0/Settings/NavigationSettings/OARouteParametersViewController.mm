@@ -27,9 +27,9 @@
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) init
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
-    self = [super init];
+    self = [super initWithAppMode:appMode];
     if (self)
     {
     }
@@ -217,7 +217,7 @@
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"recalculateRoute"])
     {
-        settingsViewController = [[OARecalculateRouteViewController alloc] init];
+        settingsViewController = [[OARecalculateRouteViewController alloc] initWithAppMode:self.appMode];
     }
     else if ([itemKey isEqualToString:@"avoidRoads"])
     {

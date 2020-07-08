@@ -29,9 +29,9 @@
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) init
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
-    self = [super init];
+    self = [super initWithAppMode:appMode];
     if (self)
     {
     }
@@ -267,13 +267,13 @@
     NSString *itemKey = item[@"key"];
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"language"])
-        settingsViewController = [[OANavigationLanguageViewController alloc] init];
+        settingsViewController = [[OANavigationLanguageViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"speedLimitTolerance"])
-        settingsViewController = [[OASpeedLimitToleranceViewController alloc] init];
+        settingsViewController = [[OASpeedLimitToleranceViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"repeatInstructions"])
-        settingsViewController = [[OARepeatNavigationInstructionsViewController alloc] init];
+        settingsViewController = [[OARepeatNavigationInstructionsViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"arrivalAnnouncement"])
-        settingsViewController = [[OAArrivalAnnouncementViewController alloc] init];
+        settingsViewController = [[OAArrivalAnnouncementViewController alloc] initWithAppMode:self.appMode];
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

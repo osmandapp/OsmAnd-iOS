@@ -25,11 +25,12 @@
     UIView *_tableHeaderView;
 }
 
-- (instancetype) init
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
-    self = [super init];
+    self = [super initWithAppMode:appMode];
     if (self)
     {
+        [self generateData];
     }
     return self;
 }
@@ -41,11 +42,6 @@
     self.tableView.dataSource = self;
     [self setupTableHeaderViewWithText:OALocalizedString(@"speed_limit_tolerance_descr")];
     [self setupView];
-}
-
-- (void) commonInit
-{
-    [self generateData];
 }
 
 - (void) generateData

@@ -42,7 +42,7 @@
 -(void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"nav_type_title");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

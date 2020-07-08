@@ -31,18 +31,14 @@
     NSString *_distanceValue;
 }
 
-- (instancetype) init
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
-    self = [super init];
+    self = [super initWithAppMode:appMode];
     if (self)
     {
+        [self generateData];
     }
     return self;
-}
-
-- (void) commonInit
-{
-    [self generateData];
 }
 
 - (void) generateData

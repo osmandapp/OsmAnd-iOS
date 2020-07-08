@@ -289,12 +289,12 @@
     {
         if (OAUtilities.isLandscape)
         {
-            CGFloat x1 =  (_driveModeButton.hidden ? _optionsMenuButton.frame.origin.x + _optionsMenuButton.frame.size.width + 8.0 : _driveModeButton.frame.origin.x + _driveModeButton.frame.size.width + 8.0);
-            CGFloat x2 = _mapModeButton.frame.origin.x - 8.0;
-            
-            CGFloat w = x2 - x1;
+            CGFloat w = (self.view.frame.size.width < 570) ? 200 : 300;
             CGFloat h = [_overlayUnderlayView getHeight:w];
-            _overlayUnderlayView.frame = CGRectMake(x1, CGRectGetMinY(_driveModeButton.frame), w, h);
+            
+            CGFloat x = self.view.frame.size.width / 2. - w / 2.;
+            CGFloat y = ([_overlayUnderlayView isTwoSlidersVisible]) ? CGRectGetMaxY(_driveModeButton.frame) - h : CGRectGetMinY(_driveModeButton.frame);
+            _overlayUnderlayView.frame = CGRectMake(x, y, w, h);
         }
         else
         {

@@ -473,7 +473,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    NSString *cellType = [[NSString alloc] initWithString:item[@"type"]];
+    NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:kCellTypeMapType])
     {
         static NSString* const identifierCell = @"OASettingsTableViewCell";
@@ -678,12 +678,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - Map Frame
 
-- (void) addMapFrameLayer:(CGRect)frame view:(UIView *)view
+- (void) addMapFrameLayer:(CGRect)mapFrame view:(UIView *)view
 {
-    UIBezierPath *backgroundViewPath = [UIBezierPath bezierPathWithRect: frame];
+    UIBezierPath *backgroundViewPath = [UIBezierPath bezierPathWithRect: mapFrame];
     CGFloat bottomSafeArea = ([self isLandscape] ? OAUtilities.getBottomMargin : 0.0);
     CGFloat statusBarHeight = ([self isLandscape] ? OAUtilities.getStatusBarHeight : 0.0);
-    UIBezierPath *mapBorderPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(frame.origin.x + 8, frame.origin.y + 8 + statusBarHeight, frame.size.width - 16 - OAUtilities.getLeftMargin, frame.size.height - 26 - bottomSafeArea - statusBarHeight) cornerRadius: 4];
+    UIBezierPath *mapBorderPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(mapFrame.origin.x + 8, mapFrame.origin.y + 8 + statusBarHeight, mapFrame.size.width - 16 - OAUtilities.getLeftMargin, mapFrame.size.height - 26 - bottomSafeArea - statusBarHeight) cornerRadius: 4];
     
     [backgroundViewPath appendPath:mapBorderPath];
     [backgroundViewPath setUsesEvenOddFillRule:YES];
@@ -704,7 +704,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [view.layer addSublayer:frameLayer];
     
     CATextLayer *captionLayer = [CATextLayer layer];
-    captionLayer.frame = CGRectMake(frame.origin.x, frame.origin.y + frame.size.height - 17 - bottomSafeArea, frame.size.width, 17);
+    captionLayer.frame = CGRectMake(mapFrame.origin.x, mapFrame.origin.y + mapFrame.size.height - 17 - bottomSafeArea, mapFrame.size.width, 17);
     captionLayer.fontSize = 13;
     [captionLayer setContentsScale:[[UIScreen mainScreen] scale]];
     captionLayer.foregroundColor = [UIColor whiteColor].CGColor;

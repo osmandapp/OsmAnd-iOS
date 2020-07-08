@@ -1009,7 +1009,7 @@
     return NO;
 }
 
-- (void) addMapFrameLayer:(CGRect)frame view:(UIView *)view
+- (void) addMapFrameLayer:(CGRect)mapFrame view:(UIView *)view
 {
     // override
 }

@@ -865,9 +865,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         {
             OASqliteDbResourceItem *item = (OASqliteDbResourceItem *) resource;
             OASQLiteTileSource *sqliteTileSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
-            if (!sqliteTileSource)
-                return;
-            
             [sqliteTileSource deleteImages:area zoom:(int)zoom];
         }
         else if ([resource isKindOfClass:OAOnlineTilesResourceItem.class])

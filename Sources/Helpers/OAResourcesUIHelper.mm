@@ -844,8 +844,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 + (void) clearTilesOf:(OAResourceItem *)resource visibleArea:(OsmAnd::AreaI)visibleArea zoom:(float)zoom onComplete:(void (^)(void))onComplete
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (!resource)
-            return;
         
         const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(visibleArea.topLeft);
         const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(visibleArea.bottomRight);
@@ -870,13 +868,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             if (!sqliteTileSource)
                 return;
             
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    [sqliteTileSource deleteImage:(i + left) y:(j + top) zoom:(int)zoom];
-                }
-            }
+            [sqliteTileSource deleteImages:area zoom:(int)zoom];
         }
         else if ([resource isKindOfClass:OAOnlineTilesResourceItem.class])
         {
@@ -890,8 +882,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             {
                 for (int j = 0; j < height; j++)
                 {
-                    OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *) resource;
-                    const auto onlineSource = item.onlineTileSource;
                     NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @((int) zoom).stringValue, @(i + left).stringValue, @(j + top).stringValue];
                     [NSFileManager.defaultManager removeItemAtPath:tilePath error:nil];
                 }

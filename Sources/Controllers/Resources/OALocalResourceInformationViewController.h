@@ -29,12 +29,12 @@
 @property (nonatomic, assign) BOOL openFromSplash;
 
 @property (weak, nonatomic) OAResourcesBaseViewController *baseController;
-@property (nonatomic) LocalResourceItem* localItem;
+@property (nonatomic) OALocalResourceItem* localItem;
 
 - (void)initWithLocalResourceId:(NSString*)resourceId;
 - (void)initWithLocalResourceId:(NSString*)resourceId
                               forRegion:(OAWorldRegion*)region;
-- (void)initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item;
-- (void)initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item;
+- (void)initWithLocalSqliteDbItem:(OASqliteDbResourceItem *)item;
+- (void)initWithLocalOnlineSourceItem:(OAOnlineTilesResourceItem *)item;
 
 @end

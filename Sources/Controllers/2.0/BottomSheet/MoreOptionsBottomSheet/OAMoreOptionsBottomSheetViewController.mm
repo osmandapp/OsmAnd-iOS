@@ -18,6 +18,8 @@
 #import "OAIAPHelper.h"
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
+#import "OAMapRendererView.h"
+#import "OASQLiteTileSource.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAPlugin.h"
 #import "OAEntity.h"
@@ -30,6 +32,10 @@
 #import "OAPOI.h"
 #import "OAMapLayers.h"
 #import "OAContextMenuLayer.h"
+#import "OADownloadMapViewController.h"
+#import "OAResourcesUIHelper.h"
+
+#include <OsmAndCore/Utilities.h>
 
 @implementation OAMoreOptionsBottomSheetScreen
 {
@@ -92,6 +98,19 @@
                       @"key" : @"nearby_search",
                       @"img" : @"ic_custom_search",
                       @"type" : @"OAMenuSimpleCell" } ];
+    // Download/Update online map
+    if ([_app.data.lastMapSource.resourceId isEqualToString:@"online_tiles"] || [_app.data.lastMapSource.name isEqualToString:@"sqlitedb"])
+    {
+        [arr addObject:@{ @"title" : OALocalizedString(@"download_map"),
+                          @"key" : @"download_map",
+                          @"img" : @"ic_custom_download",
+                          @"type" : @"OAMenuSimpleCell" } ];
+
+        [arr addObject:@{ @"title" : OALocalizedString(@"update_map"),
+                          @"key" : @"update_map",
+                          @"img" : @"ic_custom_update",
+                          @"type" : @"OAMenuSimpleCell" } ];
+    }
     // Change marker psition
     if ([OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer isObjectMovable:_targetPoint.targetObj])
     {
@@ -341,6 +360,28 @@
             OAOsmNotePoint *point = shouldEdit ? _targetPoint.targetObj : [self constructFromTargetPoint:_targetPoint];
             OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingAddon points:[NSArray arrayWithObject:point] type:TYPE_CREATE];
             [noteScreen show];
+        }
+        else if ([key isEqualToString:@"download_map"])
+        {
+            [[OARootViewController instance].mapPanel openTargetViewWithDownloadMapSource:YES];
+        }
+        else if ([key isEqualToString:@"update_map"])
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"map_update_warning") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                OAMapViewController *mapVC = mapPanel.mapViewController;
+                float zoom = mapVC.getMapZoom;
+                const auto visibleArea = mapVC.mapView.getVisibleBBox31;
+                NSDictionary<OAMapSource *, OAResourceItem *> *onlineSources = [OAResourcesUIHelper getOnlineRasterMapSourcesBySource];
+                OAResourceItem *resource = onlineSources[_app.data.lastMapSource];
+                if (!resource)
+                    return;
+                [OAResourcesUIHelper clearTilesOf:resource area:visibleArea zoom:zoom onComplete:^{
+                    [_app.mapSettingsChangeObservable notifyEvent];
+                }];
+            }]];
+            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

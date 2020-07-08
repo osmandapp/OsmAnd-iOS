@@ -71,7 +71,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSArray<NSString *> *_possibleZoomValues;
     
     NSObject *_dataLock;
-    NSArray<RepositoryResourceItem *> *_mapItems;
+    NSArray<OARepositoryResourceItem *> *_mapItems;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
@@ -207,7 +207,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 
     NSMutableArray *availableMapsArr = [NSMutableArray array];
-    for (RepositoryResourceItem* item in _mapItems)
+    for (OARepositoryResourceItem* item in _mapItems)
     {
         [availableMapsArr addObject:@{
             @"type" : kCellTypeMap,
@@ -313,17 +313,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         resType = OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
     else if (_app.data.terrainType == EOATerrainTypeHillshade)
         resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
-    [OAResourcesUIHelper requestMapDownloadInfo:coord resourceType:resType onComplete:^(NSArray<ResourceItem *>* res) {
+    [OAResourcesUIHelper requestMapDownloadInfo:coord resourceType:resType onComplete:^(NSArray<OAResourceItem *>* res) {
         @synchronized(_dataLock)
         {
-            NSMutableArray<RepositoryResourceItem *> *availableItems = [NSMutableArray array];
+            NSMutableArray<OARepositoryResourceItem *> *availableItems = [NSMutableArray array];
             if (res.count > 0)
             {
-                for (ResourceItem * item in res)
+                for (OAResourceItem * item in res)
                 {
-                    if ([item isKindOfClass:RepositoryResourceItem.class])
+                    if ([item isKindOfClass:OARepositoryResourceItem.class])
                     {
-                        RepositoryResourceItem *resource = (RepositoryResourceItem*)item;
+                        OARepositoryResourceItem *resource = (OARepositoryResourceItem*)item;
                         [availableItems addObject:resource];
                     }
                 }
@@ -707,7 +707,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         static NSString* const repositoryResourceCell = @"repositoryResourceCell";
         static NSString* const downloadingResourceCell = @"downloadingResourceCell";
-        ResourceItem *mapItem = _mapItems[indexPath.row];
+        OAResourceItem *mapItem = _mapItems[indexPath.row];
         NSString* cellTypeId = mapItem.downloadTask ? downloadingResourceCell : repositoryResourceCell;
         
         uint64_t _sizePkg = mapItem.sizePkg;
@@ -826,14 +826,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        ResourceItem *mapItem = _mapItems[indexPath.row];
+        OAResourceItem *mapItem = _mapItems[indexPath.row];
         if (mapItem.downloadTask != nil)
         {
             [OAResourcesUIHelper offerCancelDownloadOf:mapItem];
         }
-        else if ([mapItem isKindOfClass:[RepositoryResourceItem class]])
+        else if ([mapItem isKindOfClass:[OARepositoryResourceItem class]])
         {
-            RepositoryResourceItem* item = (RepositoryResourceItem*)mapItem;
+            OARepositoryResourceItem* item = (OARepositoryResourceItem*)mapItem;
             if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion
                  || item.resourceType == OsmAndResourceType::SlopeRegion) && ![_iapHelper.srtm isActive])
             {
@@ -1005,7 +1005,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateDownloadingCell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath
 {
-    ResourceItem *mapItem = _mapItems[indexPath.row];
+    OAResourceItem *mapItem = _mapItems[indexPath.row];
     if (mapItem.downloadTask)
     {
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
@@ -1041,7 +1041,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         for (int i = 0; i < _mapItems.count; i++)
         {
-            ResourceItem *item = (ResourceItem *)_mapItems[i];
+            OAResourceItem *item = (OAResourceItem *)_mapItems[i];
             if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
                 [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:(tblView.numberOfSections - 1)]];
         }

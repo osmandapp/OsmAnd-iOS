@@ -17,37 +17,12 @@
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OAMapCreatorHelper.h"
+#import "OAResourcesUIHelper.h"
 
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
-
-#define _(name) OAActionAddMapSourceViewController__##name
-#define commonInit _(commonInit)
-#define deinit _(deinit)
-
-#define Item _(Item)
-@interface Item : NSObject
-@property OAMapSource* mapSource;
-@property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
-@end
-@implementation Item
-@end
-
-#define Item_OnlineTileSource _(Item_OnlineTileSource)
-@interface Item_OnlineTileSource : Item
-@property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
-@end
-@implementation Item_OnlineTileSource
-@end
-
-#define Item_SqliteDbTileSource _(Item_SqliteDbTileSource)
-@interface Item_SqliteDbTileSource : Item
-@end
-@implementation Item_SqliteDbTileSource
-@end
-
 
 @interface OAActionAddMapSourceViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -101,60 +76,12 @@
 
 -(void) commonInit
 {
-    NSMutableArray *onlineMapSources = [NSMutableArray new];
-    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
+    _data = [OAResourcesUIHelper getSortedRasterMapSources:YES];
     
-    const auto localResources = _app.resourcesManager->getLocalResources();
-    for(const auto& localResource : localResources)
-    {
-        if (localResource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources)
-            onlineTileSourcesResources.push_back(localResource);
-    }
-    
-    for(const auto& resource : onlineTileSourcesResources)
-    {
-        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
-        NSString* resourceId = resource->id.toNSString();
-        
-        for(const auto& onlineTileSource : onlineTileSources->getCollection())
-        {
-            Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
-            
-            NSString *caption = onlineTileSource->name.toNSString();
-            
-            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                        andVariant:onlineTileSource->name.toNSString() name:caption];
-            item.resource = resource;
-            item.onlineTileSource = onlineTileSource;
-            
-            [onlineMapSources addObject:item];
-        }
-    }
-    
-    
-    NSArray *arr = [onlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_OnlineTileSource* obj1, Item_OnlineTileSource* obj2) {
-        NSString *caption1 = obj1.onlineTileSource->name.toNSString();
-        NSString *caption2 = obj2.onlineTileSource->name.toNSString();
-        return [caption2 compare:caption1];
-    }];
-    
-    NSMutableArray *sqlitedbArr = [NSMutableArray array];
-    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
-    {
-        Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""]];
-        [sqlitedbArr addObject:item];
-    }
-    
-    [sqlitedbArr sortUsingComparator:^NSComparisonResult(Item_SqliteDbTileSource *obj1, Item_SqliteDbTileSource *obj2) {
-        return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
-    }];
-    arr = [arr arrayByAddingObjectsFromArray:sqlitedbArr];
-    
-    Item_OnlineTileSource* itemNone = [[Item_OnlineTileSource alloc] init];
+    OAOnlineTilesResourceItem* itemNone = [[OAOnlineTilesResourceItem alloc] init];
     itemNone.mapSource = [[OAMapSource alloc] initWithResource:nil andVariant:[self getNoSourceItemId] name:[self getNoSourceName]];
     
-    _data = [arr arrayByAddingObject:itemNone];
+    _data = [_data arrayByAddingObject:itemNone];
 }
 
 
@@ -227,7 +154,7 @@
     NSMutableArray *arr = [NSMutableArray new];
     for (NSIndexPath *path in selectedItems)
     {
-        Item_OnlineTileSource* source = [self getItem:path];
+        OAOnlineTilesResourceItem* source = [self getItem:path];
         [arr addObject:@[source.mapSource.variant ,source.mapSource.name]];
     }
     
@@ -236,7 +163,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(Item_OnlineTileSource *)getItem:(NSIndexPath *)indexPath
+-(OAOnlineTilesResourceItem *)getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.row];
 }
@@ -246,7 +173,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Item_OnlineTileSource* item = [self getItem:indexPath];
+    OAOnlineTilesResourceItem* item = [self getItem:indexPath];
     static NSString* const identifierCell = @"OABottomSheetActionCell";
     OABottomSheetActionCell* cell = nil;
     
@@ -292,7 +219,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Item_OnlineTileSource *item = [self getItem:indexPath];
+    OAOnlineTilesResourceItem *item = [self getItem:indexPath];
     return [OABottomSheetActionCell getHeight:item.mapSource.name value:nil cellWidth:tableView.bounds.size.width];
 }
 

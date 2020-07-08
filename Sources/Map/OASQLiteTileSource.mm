@@ -482,6 +482,26 @@
     });
 }
 
+- (void) deleteImages:(OsmAnd::AreaI)area zoom:(int)zoom
+{
+    dispatch_async(_dbQueue, ^{
+        
+        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
+        {
+            NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM tiles WHERE (x >= %d AND x <= %d) AND (y >= %d AND y <= %d) AND z = %d", area.topLeft.x, area.bottomRight.x, area.topLeft.y, area.bottomRight.y, [self getFileZoom:zoom]];
+            const char *update_stmt = [updateSQL UTF8String];
+            
+            sqlite3_stmt *statement;
+            sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_exec(_db, "VACUUM", NULL, NULL, NULL);
+            sqlite3_close(_db);
+        }
+    });
+}
+
 - (void) insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath
 {
     NSData *data = [NSData dataWithContentsOfFile:filePath];

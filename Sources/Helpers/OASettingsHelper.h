@@ -240,7 +240,7 @@ typedef enum : NSInteger {
 
 #pragma mark - OAMapSourcesSettingsItem
 
-@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<LocalResourceItem *>
+@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<OALocalResourceItem *>
 
 @end
 

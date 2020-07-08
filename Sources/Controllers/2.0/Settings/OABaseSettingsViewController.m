@@ -33,6 +33,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    _profileButton.hidden = YES;
 }
 
 - (void) commonInit

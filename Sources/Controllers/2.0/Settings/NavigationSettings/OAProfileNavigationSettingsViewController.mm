@@ -111,7 +111,7 @@
 - (void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"routing_settings_2");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = _appMode.name;
 }
 
 - (void) viewDidLoad

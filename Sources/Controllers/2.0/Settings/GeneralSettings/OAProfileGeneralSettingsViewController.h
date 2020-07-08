@@ -21,6 +21,4 @@ typedef enum
 
 @interface OAProfileGeneralSettingsViewController : OABaseSettingsViewController
 
-@property (nonatomic, readonly) kProfileGeneralSettingsParameter settingsType;
-
 @end

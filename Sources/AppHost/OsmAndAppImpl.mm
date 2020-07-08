@@ -752,7 +752,7 @@
 - (NSString *) getFormattedAlarmInfoDistance:(float)meters
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    BOOL kmAndMeters = settings.metricSystem == KILOMETERS_AND_METERS;
+    BOOL kmAndMeters = [settings.metricSystem get:settings.applicationMode] == KILOMETERS_AND_METERS;
     float mainUnitInMeters = kmAndMeters ? METERS_IN_KILOMETER : METERS_IN_ONE_MILE;
     return [NSString stringWithFormat:@"%.1f %@", meters / mainUnitInMeters, kmAndMeters ? _unitsKm : _unitsMi];
 }
@@ -791,7 +791,7 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSString* mainUnitStr = _unitsKm;
     float mainUnitInMeters;
-    if (settings.metricSystem == KILOMETERS_AND_METERS) {
+    if ([settings.metricSystem get:settings.applicationMode] == KILOMETERS_AND_METERS) {
         mainUnitInMeters = METERS_IN_KILOMETER;
     } else {
         mainUnitStr = _unitsMi;
@@ -815,12 +815,12 @@
         return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
         
     } else {
-        if (settings.metricSystem == KILOMETERS_AND_METERS) {
+        if ([settings.metricSystem get:settings.applicationMode] == KILOMETERS_AND_METERS) {
             return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), _unitsm];
-        } else if (settings.metricSystem == MILES_AND_FEET) {
+        } else if ([settings.metricSystem get:settings.applicationMode] == MILES_AND_FEET) {
             int foots = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
             return [NSString stringWithFormat:@"%d %@", foots, _unitsFt];
-        } else if (settings.metricSystem == MILES_AND_YARDS) {
+        } else if ([settings.metricSystem get:settings.applicationMode] == MILES_AND_YARDS) {
             int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
             return [NSString stringWithFormat:@"%d %@", yards, _unitsYd];
         }
@@ -831,7 +831,7 @@
 - (NSString *) getFormattedAlt:(double) alt
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    if (settings.metricSystem == KILOMETERS_AND_METERS) {
+    if ([settings.metricSystem get:settings.applicationMode] == KILOMETERS_AND_METERS) {
         return [NSString stringWithFormat:@"%d %@", ((int) (alt + 0.5)), _unitsm];
     } else {
         return [NSString stringWithFormat:@"%d %@", ((int) (alt * FOOTS_IN_ONE_METER + 0.5)), _unitsFt];
@@ -847,7 +847,7 @@
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     float kmh = metersperseconds * 3.6f;
-    if (settings.metricSystem == KILOMETERS_AND_METERS) {
+    if ([settings.metricSystem get:settings.applicationMode] == KILOMETERS_AND_METERS) {
         if (kmh >= 10 || drive) {
             // case of car
             return [NSString stringWithFormat:@"%d %@", ((int) round(kmh)), _unitsKmh];
@@ -869,7 +869,7 @@
 - (double) calculateRoundedDist:(double)baseMetersDist
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    EOAMetricsConstant mc = settings.metricSystem;
+    EOAMetricsConstant mc = [settings.metricSystem get:settings.applicationMode];
     double mainUnitInMeter = 1;
     double metersInSecondUnit = METERS_IN_KILOMETER;
     if (mc == MILES_AND_FEET)
@@ -1054,7 +1054,7 @@
     }
     
     if (drg)
-        [OAAppSettings sharedManager].drivingRegion = drg.region;
+        [[OAAppSettings sharedManager].drivingRegion set:drg.region mode:[OAAppSettings sharedManager].applicationMode];
 }
 
 @end

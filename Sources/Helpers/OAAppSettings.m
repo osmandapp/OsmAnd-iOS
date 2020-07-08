@@ -1116,7 +1116,7 @@
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
 {
-    EOAMetricsConstant mc = [OAAppSettings sharedManager].metricSystem;
+    EOAMetricsConstant mc = [[OAAppSettings sharedManager].metricSystem get:mode];
     if ([mode isDerivedRoutingFrom:[OAApplicationMode PEDESTRIAN]])
     {
         if (mc == KILOMETERS_AND_METERS)
@@ -1317,6 +1317,90 @@
 
 @end
 
+@implementation OAProfileDrivingRegionConstant
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOADrivingRegion) get
+{
+    return [super get];
+}
+
+- (void) set:(EOADrivingRegion)drivingRegionConstant
+{
+    [super set:drivingRegionConstant];
+}
+
+- (EOADrivingRegion) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOADrivingRegion)drivingRegionConstant mode:(OAApplicationMode *)mode
+{
+    [super set:drivingRegionConstant mode:mode];
+    if (![[OAAppSettings sharedManager].metricSystemChangedManually get:mode])
+        [[OAAppSettings sharedManager].metricSystem set:[OADrivingRegion getDefMetrics:drivingRegionConstant] mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOADrivingRegion defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOADrivingRegion)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+@end
+
+@implementation OAMetricSystemConstant
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOAMetricsConstant) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAMetricsConstant)metricSystemConstant
+{
+    [super set:metricSystemConstant];
+}
+
+- (EOAMetricsConstant) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAMetricsConstant)metricSystemConstant mode:(OAApplicationMode *)mode
+{
+    [super set:metricSystemConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOAMetricsConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAMetricsConstant)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OAProfileBoolean *> *_customBooleanRoutingProps;
@@ -1367,24 +1451,13 @@
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
         _settingAppMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingAppModeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingAppModeKey] : 0;
 
-        _metricSystemChangedManually = [[NSUserDefaults standardUserDefaults] objectForKey:metricSystemChangedManuallyKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:metricSystemChangedManuallyKey] : NO;
-
-        _drivingRegionAutomatic = [[NSUserDefaults standardUserDefaults] objectForKey:drivingRegionAutomaticKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:drivingRegionAutomaticKey] : YES;
-        _drivingRegion = [[NSUserDefaults standardUserDefaults] objectForKey:drivingRegionKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:drivingRegionKey] : [OADrivingRegion getDefaultRegion];
-        _metricSystem = [[NSUserDefaults standardUserDefaults] objectForKey:metricSystemKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:metricSystemKey] : [OADrivingRegion getDefMetrics:_drivingRegion];
-        
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
-        _settingGeoFormat = [[NSUserDefaults standardUserDefaults] objectForKey:settingGeoFormatKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingGeoFormatKey] : MAP_GEO_FORMAT_DEGREES;
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;
         
         _settingShowAltInDriveMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapShowAltInDriveModeKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapShowAltInDriveModeKey] : NO;
         
-        _settingAllow3DView = [[NSUserDefaults standardUserDefaults] objectForKey:settingEnable3DViewKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingEnable3DViewKey] : YES;
-
         _settingDoNotShowPromotions = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotShowPromotionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotShowPromotionsKey] : NO;
         _settingDoNotUseAnalytics = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotUseFirebaseKey] : NO;
-        
-        _settingExternalInputDevice = [[NSUserDefaults standardUserDefaults] objectForKey:settingExternalInputDeviceKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingExternalInputDeviceKey] : NO_EXTERNAL_DEVICE;
         
         _liveUpdatesPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchasedKey] : NO;
         _settingOsmAndLiveEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:settingOsmAndLiveEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingOsmAndLiveEnabledKey] : NO;
@@ -1596,6 +1669,14 @@
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode BICYCLE]];
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
 
+        _settingAllow3DView = [OAProfileBoolean withKey:settingEnable3DViewKey defValue:YES];
+        _drivingRegionAutomatic = [OAProfileBoolean withKey:drivingRegionAutomaticKey defValue:YES];
+        _drivingRegion = [OAProfileDrivingRegionConstant withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
+        _metricSystem = [OAMetricSystemConstant withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
+        _metricSystemChangedManually = [OAProfileBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
+        _settingGeoFormat = [OAProfileInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
+        _settingExternalInputDevice =[OAProfileInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
+        
         _speedSystem = [OAProfileSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _angularUnits = [OAProfileAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceed = [OAProfileDouble withKey:speedLimitExceedKey defValue:5.f];
@@ -1727,49 +1808,16 @@
     [_dayNightHelper forceUpdate];
 }
 
-- (void) setMetricSystem:(EOAMetricsConstant)metricSystem
-{
-    _metricSystem = metricSystem;
-    [[NSUserDefaults standardUserDefaults] setInteger:_metricSystem forKey:metricSystemKey];
-}
-
 - (void) setFirstMapIsDownloaded:(BOOL)firstMapIsDownloaded
 {
     _firstMapIsDownloaded = firstMapIsDownloaded;
     [[NSUserDefaults standardUserDefaults] setBool:_firstMapIsDownloaded forKey:firstMapIsDownloadedKey];
 }
 
-- (void) setMetricSystemChangedManually:(BOOL)metricSystemChangedManually
-{
-    _metricSystemChangedManually = metricSystemChangedManually;
-    [[NSUserDefaults standardUserDefaults] setBool:_metricSystemChangedManually forKey:metricSystemChangedManuallyKey];
-}
-
-- (void) setDrivingRegionAutomatic:(BOOL)drivingRegionAutomatic
-{
-    _drivingRegionAutomatic = drivingRegionAutomatic;
-    [[NSUserDefaults standardUserDefaults] setInteger:_drivingRegionAutomatic forKey:drivingRegionAutomaticKey];
-}
-
-- (void) setDrivingRegion:(EOADrivingRegion)drivingRegion
-{
-    _drivingRegion = drivingRegion;
-    [[NSUserDefaults standardUserDefaults] setInteger:_drivingRegion forKey:drivingRegionKey];
-    
-    if (!_metricSystemChangedManually)
-        self.metricSystem = [OADrivingRegion getDefMetrics:drivingRegion];
-}
-
 - (void) setSettingShowZoomButton:(BOOL)settingShowZoomButton
 {
     _settingShowZoomButton = settingShowZoomButton;
     [[NSUserDefaults standardUserDefaults] setInteger:_settingShowZoomButton forKey:settingZoomButtonKey];
-}
-
-- (void) setSettingGeoFormat:(int)settingGeoFormat
-{
-    _settingGeoFormat = settingGeoFormat;
-    [[NSUserDefaults standardUserDefaults] setInteger:_settingGeoFormat forKey:settingGeoFormatKey];
 }
 
 - (void) setSettingMapArrows:(int)settingMapArrows
@@ -1784,12 +1832,6 @@
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowAltInDriveMode forKey:settingMapShowAltInDriveModeKey];
 }
 
-- (void) setSettingAllow3DView:(BOOL)settingEnable3DView
-{
-    _settingAllow3DView = settingEnable3DView;
-    [[NSUserDefaults standardUserDefaults] setBool:_settingAllow3DView forKey:settingEnable3DViewKey];
-}
-
 - (void) setSettingDoNotShowPromotions:(BOOL)settingDoNotShowPromotions
 {
     _settingDoNotShowPromotions = settingDoNotShowPromotions;
@@ -1800,12 +1842,6 @@
 {
     _settingDoNotUseAnalytics = settingDoNotUseAnalytics;
     [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotUseAnalytics forKey:settingDoNotUseFirebaseKey];
-}
-
-- (void) setSettingExternalInputDevice:(int)settingExternalInputDevice
-{
-    _settingExternalInputDevice = settingExternalInputDevice;
-    [[NSUserDefaults standardUserDefaults] setInteger:_settingExternalInputDevice forKey:settingExternalInputDeviceKey];
 }
 
 - (void) setLiveUpdatesPurchased:(BOOL)liveUpdatesPurchased

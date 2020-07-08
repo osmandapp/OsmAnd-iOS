@@ -717,7 +717,7 @@
 
 + (NSString *) appendSpeed:(float)value
 {
-    BOOL kilometers = [OAAppSettings sharedManager].metricSystem == KILOMETERS_AND_METERS;
+    BOOL kilometers = [[OAAppSettings sharedManager].metricSystem get:[OAAppSettings sharedManager].applicationMode] == KILOMETERS_AND_METERS;
     value = kilometers ? value : round(value / 0.3048f);
     NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"units_kmh") : OALocalizedString(@"units_mph")];
     return value == 0.f ? OALocalizedString(@"not_selected") : value == 0.000001f ? @">0" : [NSString stringWithFormat:distUnitsFormat, value];

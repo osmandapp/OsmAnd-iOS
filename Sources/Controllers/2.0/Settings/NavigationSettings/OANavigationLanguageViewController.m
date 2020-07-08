@@ -31,7 +31,6 @@
     self = [super init];
     if (self)
     {
-        [self commonInit];
     }
     return self;
 }

@@ -11,16 +11,8 @@
 typedef enum
 {
     kSettingsScreenMain = 0,
-    kSettingsScreenGeneral,
     kSettingsScreenNavigation,
     kSettingsScreenAppMode,
-    kSettingsScreenRotateMap,
-    kSettingsScreenDrivingRegion,
-    kSettingsScreenMetricSystem,
-    kSettingsScreenGeoCoords,
-    kSettingsScreenAngularUnits,
-    kSettingsScreenExternalInput,
-
 } kSettingsScreen;
 
 @interface OASettingsViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>

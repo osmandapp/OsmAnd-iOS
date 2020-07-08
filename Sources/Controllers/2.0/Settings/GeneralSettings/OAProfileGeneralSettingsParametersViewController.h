@@ -8,9 +8,10 @@
 
 #import "OABaseSettingsViewController.h"
 #import "OAProfileGeneralSettingsViewController.h"
+#import "OAApplicationMode.h"
 
 @interface OAProfileGeneralSettingsParametersViewController : OABaseSettingsViewController
 
-- (instancetype) initWithType:(kProfileGeneralSettingsParameter)settingsType;
+- (instancetype) initWithType:(kProfileGeneralSettingsParameter)settingsType applicationMode:(OAApplicationMode *)applicationMode;
 
 @end

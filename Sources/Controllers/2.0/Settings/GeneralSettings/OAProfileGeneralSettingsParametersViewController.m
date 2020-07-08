@@ -28,6 +28,7 @@
 
 @implementation OAProfileGeneralSettingsParametersViewController
 {
+    OAApplicationMode *_appMode;
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
     kProfileGeneralSettingsParameter _settingsType;
@@ -44,12 +45,13 @@
     return self;
 }
 
-- (instancetype) initWithType:(kProfileGeneralSettingsParameter)settingsType
+- (instancetype) initWithType:(kProfileGeneralSettingsParameter)settingsType applicationMode:(OAApplicationMode *)applicationMode
 {
     self = [super init];
     if (self)
     {
         _settingsType = settingsType;
+        _appMode = applicationMode;
         [self commonInit];
     }
     return self;
@@ -89,7 +91,7 @@
 - (void) applyLocalization
 {
     self.titleLabel.text = _title;
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = _appMode.name;
 }
 
 - (void) viewDidLoad
@@ -104,12 +106,15 @@
 - (void) setupView
 {
     NSMutableArray *dataArr = [NSMutableArray array];
-    int rotateMap = [_settings.rotateMap get];
-    BOOL automatic = _settings.drivingRegionAutomatic;
-    int drivingRegion = _settings.drivingRegion;
+    NSInteger rotateMap = [_settings.rotateMap get:_appMode];
+    BOOL automatic = [_settings.drivingRegionAutomatic get:_appMode];
+    NSInteger drivingRegion = [_settings.drivingRegion get:_appMode];
+    NSInteger metricSystem = [_settings.metricSystem get:_appMode];
+    NSInteger speedSystem = [_settings.speedSystem get:_appMode];
+    NSInteger externamlInputDevices = [_settings.settingExternalInputDevice get:_appMode];
     if (automatic)
         drivingRegion = -1;
-    EOAAngularConstant angularUnits = [_settings.angularUnits get];
+    EOAAngularConstant angularUnits = [_settings.angularUnits get:_appMode];
     
     switch (_settingsType) {
         case kProfileGeneralSettingsMapOrientation:
@@ -196,31 +201,31 @@
             [dataArr addObject:@{
                 @"name" : @"KILOMETERS_AND_METERS",
                 @"title" : OALocalizedString(@"si_km_m"),
-                @"selected" : @(_settings.metricSystem == KILOMETERS_AND_METERS),
+                @"selected" : @(metricSystem == KILOMETERS_AND_METERS),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_AND_FEET",
                 @"title" : OALocalizedString(@"si_mi_feet"),
-                @"selected" : @(_settings.metricSystem == MILES_AND_FEET),
+                @"selected" : @(metricSystem == MILES_AND_FEET),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_AND_YARDS",
                 @"title" : OALocalizedString(@"si_mi_yard"),
-                @"selected" : @(_settings.metricSystem == MILES_AND_YARDS),
+                @"selected" : @(metricSystem == MILES_AND_YARDS),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_AND_METERS",
                 @"title" : OALocalizedString(@"si_mi_meters"),
-                @"selected" : @(_settings.metricSystem == MILES_AND_METERS),
+                @"selected" : @(metricSystem == MILES_AND_METERS),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"NAUTICAL_MILES",
                 @"title" : OALocalizedString(@"si_nm"),
-                @"selected" : @(_settings.metricSystem == NAUTICAL_MILES),
+                @"selected" : @(metricSystem == NAUTICAL_MILES),
                 @"type" : kCellTypeTitleCheck,
             }];
             break;
@@ -229,37 +234,37 @@
             [dataArr addObject:@{
                 @"name" : @"KILOMETERS_PER_HOUR",
                 @"title" : OALocalizedString(@"si_kmh"),
-                @"selected" : @(_settings.speedSystem.get == KILOMETERS_PER_HOUR),
+                @"selected" : @(speedSystem == KILOMETERS_PER_HOUR),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_PER_HOUR",
                 @"title" : OALocalizedString(@"si_mph"),
-                @"selected" : @(_settings.speedSystem.get == MILES_PER_HOUR),
+                @"selected" : @(speedSystem == MILES_PER_HOUR),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"METERS_PER_SECOND",
                 @"title" : OALocalizedString(@"si_m_s"),
-                @"selected" : @(_settings.speedSystem.get == METERS_PER_SECOND),
+                @"selected" : @(speedSystem == METERS_PER_SECOND),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"MINUTES_PER_MILE",
                 @"title" : OALocalizedString(@"si_min_m"),
-                @"selected" : @(_settings.speedSystem.get == MINUTES_PER_MILE),
+                @"selected" : @(speedSystem == MINUTES_PER_MILE),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"MINUTES_PER_KILOMETER",
                 @"title" : OALocalizedString(@"si_min_km"),
-                @"selected" : @(_settings.speedSystem.get == MINUTES_PER_KILOMETER),
+                @"selected" : @(speedSystem == MINUTES_PER_KILOMETER),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"NAUTICALMILES_PER_HOUR",
                 @"title" : OALocalizedString(@"si_nm_h"),
-                @"selected" : @(_settings.speedSystem.get == NAUTICALMILES_PER_HOUR),
+                @"selected" : @(speedSystem == NAUTICALMILES_PER_HOUR),
                 @"type" : kCellTypeTitleCheck,
             }];
             break;
@@ -289,19 +294,19 @@
             [dataArr addObject:@{
                 @"name" : @"sett_no_ext_input",
                 @"title" : OALocalizedString(@"sett_no_ext_input"),
-                @"selected" : @(_settings.settingExternalInputDevice == NO_EXTERNAL_DEVICE),
+                @"selected" : @(externamlInputDevices == NO_EXTERNAL_DEVICE),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"sett_generic_ext_input",
                 @"title" : OALocalizedString(@"sett_generic_ext_input"),
-                @"selected" : @(_settings.settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE),
+                @"selected" : @(externamlInputDevices == GENERIC_EXTERNAL_DEVICE),
                 @"type" : kCellTypeTitleCheck,
             }];
             [dataArr addObject:@{
                 @"name" : @"sett_wunderlinq_ext_input",
                 @"title" : OALocalizedString(@"sett_wunderlinq_ext_input"),
-                @"selected" : @(_settings.settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE),
+                @"selected" : @(externamlInputDevices == WUNDERLINQ_EXTERNAL_DEVICE),
                 @"type" : kCellTypeTitleCheck,
             }];
             break;
@@ -427,11 +432,11 @@
 - (void) selectMapOrientation:(NSString *)name
 {
     if ([name isEqualToString:@"bearing"])
-        [_settings.rotateMap set:ROTATE_MAP_BEARING];
+        [_settings.rotateMap set:ROTATE_MAP_BEARING mode:_appMode];
     else if ([name isEqualToString:@"compass"])
-        [_settings.rotateMap set:ROTATE_MAP_COMPASS];
+        [_settings.rotateMap set:ROTATE_MAP_COMPASS mode:_appMode];
     else
-        [_settings.rotateMap set:ROTATE_MAP_NONE];
+        [_settings.rotateMap set:ROTATE_MAP_NONE mode:_appMode];
 }
 
 - (void) selectDrivingRegion:(NSString *)name
@@ -439,7 +444,7 @@
     OAMapViewTrackingUtilities *mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
     if ([name isEqualToString:@"AUTOMATIC"])
     {
-        _settings.drivingRegionAutomatic = YES;
+        [_settings.drivingRegionAutomatic set:YES mode:_appMode];
         [mapViewTrackingUtilities resetDrivingRegionUpdate];
     }
     else
@@ -457,50 +462,60 @@
             drivingRegion = DR_AUSTRALIA;
         else
             drivingRegion = DR_EUROPE_ASIA;
-        _settings.drivingRegionAutomatic = NO;;
-        _settings.drivingRegion = drivingRegion;
+        [_settings.drivingRegionAutomatic set:NO mode:_appMode];
+        [_settings.drivingRegion set:drivingRegion mode:_appMode];
     }
 }
 
 - (void) selectMetricSystem:(NSString *)name
 {
     if ([name isEqualToString:@"KILOMETERS_AND_METERS"])
-        [_settings setMetricSystem:KILOMETERS_AND_METERS];
+        [_settings.metricSystem set:KILOMETERS_AND_METERS mode:_appMode];
     else if ([name isEqualToString:@"MILES_AND_FEET"])
-        [_settings setMetricSystem:MILES_AND_FEET];
+        [_settings.metricSystem set:MILES_AND_FEET mode:_appMode];
     else if ([name isEqualToString:@"MILES_AND_YARDS"])
-        [_settings setMetricSystem:MILES_AND_YARDS];
+        [_settings.metricSystem set:MILES_AND_YARDS mode:_appMode];
     else if ([name isEqualToString:@"MILES_AND_METERS"])
-        [_settings setMetricSystem:MILES_AND_METERS];
+        [_settings.metricSystem set:MILES_AND_METERS mode:_appMode];
     else if ([name isEqualToString:@"NAUTICAL_MILES"])
-        [_settings setMetricSystem:NAUTICAL_MILES];
-    _settings.metricSystemChangedManually = YES;
+        [_settings.metricSystem set:NAUTICAL_MILES mode:_appMode];
+    [_settings.metricSystemChangedManually set:YES mode:_appMode];
 }
 
 - (void) selectSpeedSystem:(NSString *)name
 {
+    if ([name isEqualToString:@"KILOMETERS_PER_HOUR"])
+        [_settings.speedSystem set:(KILOMETERS_PER_HOUR) mode:_appMode];
+    else if ([name isEqualToString:@"MILES_PER_HOUR"])
+        [_settings.speedSystem set:(MILES_PER_HOUR) mode:_appMode];
+    else if ([name isEqualToString:@"METERS_PER_SECOND"])
+        [_settings.speedSystem set:(METERS_PER_SECOND) mode:_appMode];
+    else if ([name isEqualToString:@"MINUTES_PER_MILE"])
+        [_settings.speedSystem set:(MINUTES_PER_MILE) mode:_appMode];
+    else if ([name isEqualToString:@"MINUTES_PER_KILOMETER"])
+        [_settings.speedSystem set:(MINUTES_PER_KILOMETER) mode:_appMode];
+    else if ([name isEqualToString:@"NAUTICALMILES_PER_HOUR"])
+        [_settings.speedSystem set:(NAUTICALMILES_PER_HOUR) mode:_appMode];
 }
 
 - (void) selectSettingAngularUnits:(NSString *)name
 {
     if ([name isEqualToString:@"degrees_180"])
-        [_settings.angularUnits set:DEGREES];
+        [_settings.angularUnits set:DEGREES mode:_appMode];
     else if ([name isEqualToString:@"degrees_360"])
-        [_settings.angularUnits set:DEGREES360];
+        [_settings.angularUnits set:DEGREES360 mode:_appMode];
     else if ([name isEqualToString:@"milliradians"])
-        [_settings.angularUnits set:MILLIRADS];
-    else
-        [_settings.angularUnits set:DEGREES];
+        [_settings.angularUnits set:MILLIRADS mode:_appMode];
 }
 
 - (void) selectSettingExternalInput:(NSString *)name
 {
     if ([name isEqualToString:@"sett_no_ext_input"])
-        [_settings setSettingExternalInputDevice:NO_EXTERNAL_DEVICE];
+        [_settings.settingExternalInputDevice set:NO_EXTERNAL_DEVICE mode:_appMode];
     else if ([name isEqualToString:@"sett_generic_ext_input"])
-        [_settings setSettingExternalInputDevice:GENERIC_EXTERNAL_DEVICE];
+        [_settings.settingExternalInputDevice set:GENERIC_EXTERNAL_DEVICE mode:_appMode];
     else if ([name isEqualToString:@"sett_wunderlinq_ext_input"])
-        [_settings setSettingExternalInputDevice:WUNDERLINQ_EXTERNAL_DEVICE];
+        [_settings.settingExternalInputDevice set:WUNDERLINQ_EXTERNAL_DEVICE mode:_appMode];
 }
 
 @end

@@ -43,7 +43,6 @@
     if (self)
     {
         _applicationMode = ap;
-        [self commonInit];
     }
     return self;
 }

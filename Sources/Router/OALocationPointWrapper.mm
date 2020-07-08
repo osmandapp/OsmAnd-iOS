@@ -84,7 +84,7 @@
     }
     else if (_type == LPW_ALARMS)
     {
-        EOADrivingRegion drivingRegion = [OAAppSettings sharedManager].drivingRegion;
+        EOADrivingRegion drivingRegion = [[OAAppSettings sharedManager].drivingRegion get:[OAAppSettings sharedManager].applicationMode];
         BOOL americanSigns = [OADrivingRegion isAmericanSigns:drivingRegion];
         OAAlarmInfo *alarm = (OAAlarmInfo *) _point;
         EOAAlarmInfoType type = alarm.type;

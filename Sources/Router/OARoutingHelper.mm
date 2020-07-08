@@ -741,7 +741,7 @@ static BOOL _isDeviatedFromRoute = false;
         {
             _recalculateCountInInterval = 0;
         }
-        params.leftSide = [OADrivingRegion isLeftHandDriving:_settings.drivingRegion];
+        params.leftSide = [OADrivingRegion isLeftHandDriving:[_settings.drivingRegion get:_settings.applicationMode]];
         params.fast = [_settings.fastRouteMode get:_mode];
         params.type = (EOARouteService)[_settings.routerService get:_mode];
         params.mode = _mode;
@@ -1409,7 +1409,7 @@ static BOOL _isDeviatedFromRoute = false;
 + (void) applyApplicationSettings:(OARouteCalculationParams *) params  appMode:(OAApplicationMode *) mode
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    params.leftSide = [OADrivingRegion isLeftHandDriving:settings.drivingRegion];
+    params.leftSide = [OADrivingRegion isLeftHandDriving:[settings.drivingRegion get:settings.applicationMode]];
     params.fast = [settings.fastRouteMode get:mode];
 }
 

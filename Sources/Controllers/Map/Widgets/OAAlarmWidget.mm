@@ -109,7 +109,7 @@
         OAAlarmInfo *alarm;
         if([_rh isFollowingMode] && ![OARoutingHelper isDeviatedFromRoute] && ![_rh getCurrentGPXRoute])
         {
-            alarm = [_wh getMostImportantAlarm:_settings.metricSystem showCameras:cams];
+            alarm = [_wh getMostImportantAlarm:[_settings.metricSystem get:_settings.applicationMode] showCameras:cams];
         }
         else
         {
@@ -117,12 +117,12 @@
             const auto ro = [_currentPositionHelper getLastKnownRouteSegment:loc];
             if (loc && ro)
             {
-                alarm = [_wh calculateMostImportantAlarm:ro loc:loc mc:_settings.metricSystem showCameras:cams];
+                alarm = [_wh calculateMostImportantAlarm:ro loc:loc mc:[_settings.metricSystem get:_settings.applicationMode] showCameras:cams];
             }
         }
         if (alarm)
         {
-            BOOL americanSigns = [OADrivingRegion isAmericanSigns:_settings.drivingRegion];
+            BOOL americanSigns = [OADrivingRegion isAmericanSigns:[_settings.drivingRegion get:_settings.applicationMode]];
 
             NSString  *locImgId = @"warnings_limit";
             NSString *text = @"";

@@ -138,7 +138,7 @@
 + (NSString *) getLocationName:(double)lat lon:(double)lon sh:(BOOL)sh
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSInteger f = [self.class coordinatesFormatToFormatterMode:settings.settingGeoFormat];
+    NSInteger f = [self.class coordinatesFormatToFormatterMode:[settings.settingGeoFormat get:settings.applicationMode]];
     if (f == FORMAT_UTM)
     {
         return [OALocationConvert getUTMCoordinateString:lat lon:lon];
@@ -162,7 +162,7 @@
 + (NSString *) getLocationNamePlain:(double)lat lon:(double)lon
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSInteger f = [self.class coordinatesFormatToFormatterMode:settings.settingGeoFormat];
+    NSInteger f = [self.class coordinatesFormatToFormatterMode:[settings.settingGeoFormat get:settings.applicationMode]];
     if (f == FORMAT_UTM)
     {
         return [OALocationConvert getUTMCoordinateString:lat lon:lon];

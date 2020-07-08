@@ -38,7 +38,6 @@
     {
         _applicationMode = ap;
         _vehicleParameter = vp;
-        [self commonInit];
     }
     return self;
 }

@@ -450,7 +450,7 @@ static NSDictionary *screenVoiceProviders;
             if ([_am isDerivedRoutingFrom:[OAApplicationMode CAR]])
             {
                 value = nil;
-                if (settings.metricSystem == KILOMETERS_AND_METERS)
+                if ([settings.metricSystem get] == KILOMETERS_AND_METERS)
                 {
                     value = [NSString stringWithFormat:@"%d %@", (int)[settings.speedLimitExceed get:_am], OALocalizedString(@"units_kmh")];
                 }
@@ -473,7 +473,7 @@ static NSDictionary *screenVoiceProviders;
             }
             
             value = nil;
-            if (settings.metricSystem == KILOMETERS_AND_METERS)
+            if ([settings.metricSystem get] == KILOMETERS_AND_METERS)
             {
                 value = [NSString stringWithFormat:@"%d %@", (int)[settings.switchMapDirectionToCompass get:_am], OALocalizedString(@"units_kmh")];
             }
@@ -933,7 +933,7 @@ static NSDictionary *screenVoiceProviders;
                 index = [speedLimitsKm indexOfObject:@([settings.switchMapDirectionToCompass get:_am])];
             }
             
-            if (settings.metricSystem == KILOMETERS_AND_METERS)
+            if ([settings.metricSystem get] == KILOMETERS_AND_METERS)
             {
                 for (int i = 0; i < speedLimitsKm.count; i++)
                 {

@@ -7,7 +7,10 @@
 //
 
 #import "OABaseSettingsViewController.h"
+#import "OAAppSettings.h"
 
 @interface OACoordinatesFormatViewController : OABaseSettingsViewController
+
+- (instancetype) initWithMode:(OAApplicationMode *)applicationMode;
 
 @end

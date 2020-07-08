@@ -14,6 +14,7 @@
 #import "OASettingSwitchCell.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OACoordinatesFormatViewController.h"
+#import "PXAlertView.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -28,8 +29,10 @@
 
 @implementation OAProfileGeneralSettingsViewController
 {
+    OAApplicationMode *_appMode;
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
+    BOOL _showAppModeDialog;
 }
 
 - (instancetype) init
@@ -37,24 +40,27 @@
     self = [super init];
     if (self)
     {
-        [self commonInit];
+        _appMode = [OAApplicationMode CAR];
+        _showAppModeDialog = YES;
     }
     return self;
 }
 
-- (void) commonInit
+- (id) initWithSettingsMode:(OAApplicationMode *)applicationMode
 {
-    [self generateData];
-}
-
-- (void) generateData
-{
+    self = [super init];
+    if (self)
+    {
+        _appMode = applicationMode;
+        _showAppModeDialog = NO;
+    }
+    return self;
 }
 
 - (void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"general_settings_2");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = _appMode.name;
 }
 
 - (void) viewDidLoad
@@ -63,6 +69,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     _settings = [OAAppSettings sharedManager];
+    self.profileButton.hidden = NO;
     [self setupView];
 }
 
@@ -70,26 +77,70 @@
 {
     [super viewWillAppear:animated];
     [self setupView];
+    if (_showAppModeDialog)
+    {
+        _showAppModeDialog = NO;
+        [self showAppModeDialog];
+    }
     [self.tableView reloadData];
+}
+
+- (void) showAppModeDialog
+{
+    NSMutableArray *titles = [NSMutableArray array];
+    NSMutableArray *images = [NSMutableArray array];
+    NSMutableArray *modes = [NSMutableArray array];
+    
+    NSArray<OAApplicationMode *> *values = [OAApplicationMode values];
+    for (OAApplicationMode *v in values)
+    {
+        if (v == [OAApplicationMode DEFAULT])
+            continue;
+        
+        [titles addObject:v.name];
+        [images addObject:v.getIconName];
+        [modes addObject:v];
+    }
+    
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"map_settings_mode")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_cancel")
+                        otherTitles:titles
+                          otherDesc:nil
+                        otherImages:images
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+        if (!cancelled)
+        {
+            _appMode = modes[buttonIndex];
+            [self setupView];
+        }
+    }];
+}
+
+- (IBAction)profileButtonPressed:(id)sender {
+    [self showAppModeDialog];
 }
 
 - (void) setupView
 {
     NSString *rotateMapValue;
-    if ([_settings.rotateMap get] == ROTATE_MAP_BEARING)
+    if ([_settings.rotateMap get:_appMode] == ROTATE_MAP_BEARING)
         rotateMapValue = OALocalizedString(@"rotate_map_bearing_opt");
-    else if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
+    else if ([_settings.rotateMap get:_appMode] == ROTATE_MAP_COMPASS)
         rotateMapValue = OALocalizedString(@"rotate_map_compass_opt");
     else
         rotateMapValue = OALocalizedString(@"do_not_rotate");
+    
+    NSNumber *allow3DValue = @([_settings.settingAllow3DView get:_appMode]);
+    
     NSString *drivingRegionValue;
-    if (_settings.drivingRegionAutomatic)
+    if ([_settings.drivingRegionAutomatic get:_appMode])
         drivingRegionValue = OALocalizedString(@"driving_region_automatic");
     else
-        drivingRegionValue = [OADrivingRegion getName:_settings.drivingRegion];
+        drivingRegionValue = [OADrivingRegion getName:[_settings.drivingRegion get:_appMode]];
     
     NSString* metricSystemValue;
-    switch (_settings.metricSystem) {
+    switch ([_settings.metricSystem get:_appMode]) {
         case KILOMETERS_AND_METERS:
             metricSystemValue = OALocalizedString(@"si_km_m");
             break;
@@ -111,7 +162,7 @@
     }
     
     NSString* speedSystemValue;
-    switch (_settings.speedSystem.get) {
+    switch ([_settings.speedSystem get:_appMode]) {
         case KILOMETERS_PER_HOUR:
             speedSystemValue = OALocalizedString(@"si_kmh");
             break;
@@ -136,7 +187,7 @@
     }
     
     NSString* geoFormatValue;
-    switch (_settings.settingGeoFormat) {
+    switch ([_settings.settingGeoFormat get:_appMode]) {
         case MAP_GEO_FORMAT_DEGREES:
             geoFormatValue = OALocalizedString(@"navigate_point_format_D");
             break;
@@ -158,7 +209,7 @@
     }
     
     NSString* angularUnitsValue = @"";
-    switch ([_settings.angularUnits get])
+    switch ([_settings.angularUnits get:_appMode])
     {
         case DEGREES360:
         {
@@ -179,12 +230,10 @@
             break;
     }
     
-    NSNumber *allow3DValue = @(_settings.settingAllow3DView);
-    
     NSString* externalInputDeviceValue;
-    if (_settings.settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE)
+    if ([_settings.settingExternalInputDevice get:_appMode] == GENERIC_EXTERNAL_DEVICE)
         externalInputDeviceValue = OALocalizedString(@"sett_generic_ext_input");
-    else if (_settings.settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE)
+    else if ([_settings.settingExternalInputDevice get:_appMode] == WUNDERLINQ_EXTERNAL_DEVICE)
         externalInputDeviceValue = OALocalizedString(@"sett_wunderlinq_ext_input");
     else
         externalInputDeviceValue = OALocalizedString(@"sett_no_ext_input");
@@ -193,13 +242,13 @@
     NSMutableArray *appearanceArr = [NSMutableArray array];
     NSMutableArray *unitsAndFormatsArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
-    [appearanceArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
-        @"title" : OALocalizedString(@"settings_app_theme"),
-        @"value" : OALocalizedString(@"app_theme_light"),
-        @"icon" : @"ic_custom_contrast",
-        @"key" : @"app_theme",
-    }];
+//    [appearanceArr addObject:@{
+//        @"type" : kCellTypeIconTitleValue,
+//        @"title" : OALocalizedString(@"settings_app_theme"),
+//        @"value" : OALocalizedString(@"app_theme_light"),
+//        @"icon" : @"ic_custom_contrast",
+//        @"key" : @"app_theme",
+//    }];
     [appearanceArr addObject:@{
         @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"rotate_map_to_bearing"),
@@ -260,6 +309,14 @@
     [tableData addObject:unitsAndFormatsArr];
     [tableData addObject:otherArr];
     _data = [NSArray arrayWithArray:tableData];
+    [self updateNavBar];
+    [self.tableView reloadData];
+}
+
+- (void) updateNavBar
+{
+    [self.profileButton setImage:_appMode.getIcon forState:UIControlStateNormal];
+    self.subtitleLabel.text = _appMode.name;
 }
 
 #pragma mark - TableView
@@ -348,19 +405,19 @@
     if ([itemKey isEqualToString:@"app_theme"])
         settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"map_orientation"])
-        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsMapOrientation];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsMapOrientation applicationMode:_appMode];
     else if ([itemKey isEqualToString:@"drivingRegion"])
-        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsDrivingRegion];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsDrivingRegion applicationMode:_appMode];
     else if ([itemKey isEqualToString:@"lengthUnits"])
-        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfLenght];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfLenght applicationMode:_appMode];
     else if ([itemKey isEqualToString:@"speedUnits"])
-        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfSpeed];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsUnitsOfSpeed applicationMode:_appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
-        settingsViewController = [[OACoordinatesFormatViewController alloc] init];
+        settingsViewController = [[OACoordinatesFormatViewController alloc] initWithMode:_appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
-        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsAngularMeasurmentUnits];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsAngularMeasurmentUnits applicationMode:_appMode];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
-        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsExternalInputDevices];
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:kProfileGeneralSettingsExternalInputDevices applicationMode:_appMode];
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -397,17 +454,9 @@
         if (name)
         {
             BOOL isChecked = ((UISwitch *) sender).on;
-            if ([name isEqualToString:@"do_not_show_discount"])
+            if ([name isEqualToString:@"allow_3d"])
             {
-                [_settings setSettingDoNotShowPromotions:isChecked];
-            }
-            else if ([name isEqualToString:@"do_not_send_anonymous_data"])
-            {
-                [_settings setSettingDoNotUseAnalytics:isChecked];
-            }
-            else if ([name isEqualToString:@"allow_3d"])
-            {
-                [_settings setSettingAllow3DView:isChecked];
+                [_settings.settingAllow3DView set:isChecked mode:_appMode];
                 if (!isChecked)
                 {
                     OsmAndAppInstance app = OsmAndApp.instance;

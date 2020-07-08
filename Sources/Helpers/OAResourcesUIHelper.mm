@@ -841,12 +841,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [viewController presentViewController:alert animated: YES completion: nil];
 }
 
-+ (void) clearTilesFor:(OsmAnd::AreaI)visibleArea zoom:(float)zoom
++ (void) clearTilesFor:(OsmAnd::AreaI)visibleArea zoom:(float)zoom resource:(OAResourceItem *)resource
 {
-    OsmAndAppInstance app = OsmAndApp.instance;
-    NSDictionary<OAMapSource *, OAResourceItem *> *onlineSources = [self getOnlineRasterMapSourcesBySource];
-    OAResourceItem *resource = onlineSources[app.data.lastMapSource];
-    
     if (!resource)
         return;
     
@@ -864,7 +860,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         OASqliteDbResourceItem *item = (OASqliteDbResourceItem *) resource;
         tileSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
     }
-    else if ([resource isKindOfClass:OAOnlineTilesResourceItem.class])
+    else if (isOnlineTileSource)
     {
         OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *) resource;
         downloadPath = item.path;

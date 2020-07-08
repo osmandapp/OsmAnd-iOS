@@ -8,10 +8,12 @@
 
 #import "OATargetInfoViewController.h"
 
+@class OAAvoidRoadInfo;
+
 @interface OAImpassableRoadViewController : OATargetInfoViewController
 
-@property (nonatomic, readonly) unsigned long long roadId;
+@property (nonatomic, readonly) OAAvoidRoadInfo *roadInfo;
 
-- (instancetype) initWithRoadId:(unsigned long long)roadId;
+- (instancetype) initWithRoadInfo:(OAAvoidRoadInfo *)roadInfo;
 
 @end

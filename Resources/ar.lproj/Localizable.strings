@@ -1714,3 +1714,7 @@
 "nav_type_osmand" = "أوسماند (التوجيه دون اتصال)";
 "nav_type_descr" = "تحديد كيفية حساب مسار لهذا الملف الشخصي";
 "nav_type_title" = "نوع الملاحة";
+"public_transport_hide" = "إخفاء وسائل النقل العام";
+"public_transport_show" = "إظهار وسائل النقل العام";
+"toggle_public_transport" = "إظهار/إخفاء وسائل النقل العام";
+"public_transport_menu" = "نقل";

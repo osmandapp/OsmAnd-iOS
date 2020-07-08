@@ -60,6 +60,7 @@
 
 #define kFooterId @"TableViewSectionFooter"
 #define kHeaderId @"TableViewSectionHeader"
+#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -120,27 +121,7 @@
     [self.backBtn setTintColor:UIColor.whiteColor];
     
     if (_action.getActionText)
-        [self setupTableHeaderViewWithText:_action.getActionText];
-}
-
-- (void) setupTableHeaderViewWithText:(NSString *)text
-{
-    CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGSize labelSize = [OAUtilities calculateTextBounds:text width:textWidth font:labelFont];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height)];
-    label.text = text;
-    label.font = labelFont;
-    label.textColor = UIColor.blackColor;
-    label.backgroundColor = UIColor.clearColor;
-    label.textAlignment = NSTextAlignmentLeft;
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    _tableView.tableHeaderView = _tableHeaderView;
+        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_action.getActionText font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated

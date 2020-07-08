@@ -373,7 +373,9 @@
                 OAMapViewController *mapVC = mapPanel.mapViewController;
                 float zoom = mapVC.getMapZoom;
                 const auto visibleArea = mapVC.mapView.getVisibleBBox31;
-                [OAResourcesUIHelper clearTilesFor:visibleArea zoom:zoom];
+                NSDictionary<OAMapSource *, OAResourceItem *> *onlineSources = [OAResourcesUIHelper getOnlineRasterMapSourcesBySource];
+                OAResourceItem *resource = onlineSources[_app.data.lastMapSource];
+                [OAResourcesUIHelper clearTilesFor:visibleArea zoom:zoom resource:resource];
                 [_app.mapSettingsChangeObservable notifyEvent];
             }]];
             [OARootViewController.instance presentViewController:alert animated:YES completion:nil];

@@ -11,6 +11,10 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OADayNightHelper.h"
+#import "OAColors.h"
+#import "OANavigationIcon.h"
+#import "OALocationIcon.h"
+#import "OAAvoidRoadInfo.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -85,6 +89,7 @@
 #define applicationModeKey @"applicationMode"
 #define defaultApplicationModeKey @"defaultApplicationMode"
 #define availableApplicationModesKey @"availableApplicationModes"
+#define customAppModesKey @"customAppModes"
 
 #define mapInfoControlsKey @"mapInfoControls"
 #define showDestinationArrowKey @"showDestinationArrow"
@@ -95,7 +100,20 @@
 #define rotateMapKey @"rotateMap"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
 
+// App profiles
 #define routingProfileKey @"routingProfile"
+#define profileIconNameKey @"profileIconName"
+#define profileIconColorKey @"profileIconColor"
+#define userProfileNameKey @"userProfileName"
+#define parentAppModeKey @"parentAppMode"
+#define routeServiceKey @"routeService"
+#define navigationIconKey @"navigationIcon"
+#define locationIconKey @"locationIcon"
+#define appModeOrderKey @"appModeOrder"
+#define defaultSpeedKey @"defaultSpeed"
+#define minSpeedKey @"minSpeed"
+#define maxSpeedKey @"maxSpeed"
+#define routeStraightAngleKey @"routeStraightAngle"
 
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
@@ -688,6 +706,12 @@
         self.defaultValues = [NSMapTable strongToStrongObjectsMapTable];
     }
     [self.defaultValues setObject:defValue forKey:mode];
+}
+
+- (void) resetModeToDefault:(OAApplicationMode *)mode
+{
+    NSObject *defValue = [self getProfileDefaultValue:mode];
+    [self setValue:defValue mode:mode];
 }
 
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode
@@ -1425,6 +1449,8 @@
         _availableApplicationModes = [[NSUserDefaults standardUserDefaults] objectForKey:availableApplicationModesKey];
         if (!_availableApplicationModes)
             self.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
+        
+        _customAppModes = [NSUserDefaults.standardUserDefaults objectForKey:customAppModesKey] ? [NSUserDefaults.standardUserDefaults stringForKey:customAppModesKey] : @"";
 
         _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
         
@@ -1436,6 +1462,47 @@
         [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
         [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
+        
+        _profileIconName = [OAProfileString withKey:profileIconNameKey defValue:@"ic_world_globe_dark"];
+        [_profileIconName setModeDefaultValue:@"ic_world_globe_dark" mode:OAApplicationMode.DEFAULT];
+        [_profileIconName setModeDefaultValue:@"ic_action_car_dark" mode:OAApplicationMode.CAR];
+        [_profileIconName setModeDefaultValue:@"ic_action_bicycle_dark" mode:OAApplicationMode.BICYCLE];
+        [_profileIconName setModeDefaultValue:@"ic_action_pedestrian_dark" mode:OAApplicationMode.PEDESTRIAN];
+        [_profileIconName setModeDefaultValue:@"ic_action_bus_dark" mode:OAApplicationMode.PUBLIC_TRANSPORT];
+        [_profileIconName setModeDefaultValue:@"ic_action_sail_boat_dark" mode:OAApplicationMode.BOAT];
+        [_profileIconName setModeDefaultValue:@"ic_action_aircraft" mode:OAApplicationMode.AIRCRAFT];
+        [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
+        
+        _profileIconColor = [OAProfileInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
+        _userProfileName = [OAProfileString withKey:userProfileNameKey defValue:@""];
+        _parentAppMode = [OAProfileString withKey:parentAppModeKey defValue:nil];
+        
+        _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
+        [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.AIRCRAFT];
+        
+        _navigationIcon = [OAProfileInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
+        [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
+        
+        _locationIcon = [OAProfileInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
+        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
+        
+        _appModeOrder = [OAProfileInteger withKey:appModeOrderKey defValue:0];
+        
+        _defaultSpeed = [OAProfileDouble withKey:defaultSpeedKey defValue:10.];
+        [_defaultSpeed setModeDefaultValue:@1.5 mode:OAApplicationMode.DEFAULT];
+        [_defaultSpeed setModeDefaultValue:@12.5 mode:OAApplicationMode.CAR];
+        [_defaultSpeed setModeDefaultValue:@2.77 mode:OAApplicationMode.BICYCLE];
+        [_defaultSpeed setModeDefaultValue:@1.11 mode:OAApplicationMode.PEDESTRIAN];
+        [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.BOAT];
+        [_defaultSpeed setModeDefaultValue:@40.0 mode:OAApplicationMode.AIRCRAFT];
+        [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.SKI];
+
+        _minSpeed = [OAProfileDouble withKey:minSpeedKey defValue:0.];
+        _maxSpeed = [OAProfileDouble withKey:maxSpeedKey defValue:0.];
+        _routeStraightAngle = [OAProfileDouble withKey:routeStraightAngleKey defValue:30.];
         
         _showDestinationArrow = [OAProfileBoolean withKey:showDestinationArrowKey defValue:NO];
         [_showDestinationArrow setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
@@ -1509,7 +1576,6 @@
         _useIntermediatePointsNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:useIntermediatePointsNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useIntermediatePointsNavigationKey] : NO;
         _disableOffrouteRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableOffrouteRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableOffrouteRecalcKey] : NO;
         _disableWrongDirectionRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableWrongDirectionRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableWrongDirectionRecalcKey] : NO;
-        _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
         
         _autoFollowRoute = [OAProfileInteger withKey:autoFollowRouteKey defValue:0];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];
@@ -2465,70 +2531,98 @@
 
 - (void) fetchImpassableRoads
 {
-    NSMutableArray *res = [NSMutableArray array];
-    NSArray *arr = [[NSUserDefaults standardUserDefaults] objectForKey:impassableRoadsKey];
-    if (arr)
+    id avoidRoadsInfoObjects = [[NSUserDefaults standardUserDefaults] objectForKey:impassableRoadsKey];
+    NSMutableArray<OAAvoidRoadInfo *> *res = [NSMutableArray array];
+    if (avoidRoadsInfoObjects)
     {
-        for (NSDictionary *coord in arr)
+        NSArray<NSDictionary<NSString *, NSString *> *> *avoidRoadsInfoArray = avoidRoadsInfoObjects;
+        for (NSDictionary<NSString *, NSString *> *avoidRoadInfoDict in avoidRoadsInfoArray)
         {
-            double lat = ((NSNumber *)coord[@"lat"]).doubleValue;
-            double lon = ((NSNumber *)coord[@"lon"]).doubleValue;
-            CLLocation *loc = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-            [res addObject:loc];
+            OAAvoidRoadInfo *info = [[OAAvoidRoadInfo alloc] initWithDict:avoidRoadInfoDict];
+            [res addObject:info];
         }
     }
-    _impassableRoads = [NSSet setWithArray:res];
+    _impassableRoads = res;
 }
 
 - (void) clearImpassableRoads
 {
-    _impassableRoads = [NSSet set];
+    _impassableRoads = @[];
     [[NSUserDefaults standardUserDefaults] setObject:@[] forKey:impassableRoadsKey];
 }
 
-- (void) setImpassableRoads:(NSSet<CLLocation *> *)impassableRoads
+- (void) setImpassableRoads:(NSArray<OAAvoidRoadInfo *> *)impassableRoads
 {
     _impassableRoads = impassableRoads;
-    NSMutableArray *res = [NSMutableArray array];
-    for (CLLocation *loc in impassableRoads)
+    NSMutableArray<NSDictionary<NSString *, NSString *> *> *avoidRoadsInfoArray = [NSMutableArray array];
+    for (OAAvoidRoadInfo *info in impassableRoads)
+        [avoidRoadsInfoArray addObject:[info toDict]];
+
+    [[NSUserDefaults standardUserDefaults] setObject:avoidRoadsInfoArray forKey:impassableRoadsKey];
+}
+
+- (void) addImpassableRoad:(OAAvoidRoadInfo *)roadInfo;
+{
+    if (![_impassableRoads containsObject:roadInfo])
     {
-        NSNumber *lat = [NSNumber numberWithDouble:loc.coordinate.latitude];
-        NSNumber *lon = [NSNumber numberWithDouble:loc.coordinate.longitude];
-        NSDictionary *coord = @{ @"lat":lat, @"lon":lon };
-        [res addObject:coord];
+        NSArray<OAAvoidRoadInfo *> *arr = [_impassableRoads arrayByAddingObject:roadInfo];
+        [self setImpassableRoads:arr];
     }
-    [[NSUserDefaults standardUserDefaults] setObject:res forKey:impassableRoadsKey];
 }
 
-- (void) addImpassableRoad:(CLLocation *)location;
+- (void) updateImpassableRoad:(OAAvoidRoadInfo *)roadInfo
 {
-    NSMutableSet<CLLocation*> *set = [NSMutableSet setWithSet:_impassableRoads];
-    [set addObject:location];
-    
-    if (![set isEqualToSet:_impassableRoads])
-        [self setImpassableRoads:set];
-}
-
-- (void) removeImpassableRoad:(CLLocation *)location
-{
-    NSMutableSet<CLLocation *> *set = [NSMutableSet setWithSet:_impassableRoads];
-    for (CLLocation *l in set)
+    NSMutableArray<OAAvoidRoadInfo *> *arr = [NSMutableArray arrayWithArray:_impassableRoads];
+    for (OAAvoidRoadInfo *r in arr)
     {
-        if ([OAUtilities doublesEqualUpToDigits:5 source:l.coordinate.latitude destination:location.coordinate.latitude] && [OAUtilities doublesEqualUpToDigits:5 source:l.coordinate.longitude destination:location.coordinate.longitude])
+        if ([OAUtilities isCoordEqual:roadInfo.location.coordinate.latitude srcLon:roadInfo.location.coordinate.longitude destLat:r.location.coordinate.latitude destLon:r.location.coordinate.longitude])
         {
-            [set removeObject:l];
+            r.roadId = roadInfo.roadId;
+            r.name = roadInfo.name;
+            r.appModeKey = roadInfo.appModeKey;
+            break;
+        }
+    }
+    [self setImpassableRoads:arr];
+}
+
+- (BOOL) removeImpassableRoad:(CLLocation *)location
+{
+    BOOL res = NO;
+    NSMutableArray<OAAvoidRoadInfo *> *arr = [NSMutableArray arrayWithArray:_impassableRoads];
+    for (OAAvoidRoadInfo *r in arr)
+    {
+        if ([OAUtilities isCoordEqual:location.coordinate.latitude srcLon:location.coordinate.longitude destLat:r.location.coordinate.latitude destLon:r.location.coordinate.longitude])
+        {
+            res = YES;
+            [arr removeObject:r];
             break;
         }
     }
     
-    if (![set isEqualToSet:_impassableRoads])
-        [self setImpassableRoads:set];
+    if (![arr isEqualToArray:_impassableRoads])
+        [self setImpassableRoads:arr];
+    
+    return res;
 }
 
-- (void) setRulerMode:(int)rulerMode
+- (void) setRulerMode:(EOARulerWidgetMode)rulerMode
 {
     _rulerMode = rulerMode;
     [[NSUserDefaults standardUserDefaults] setInteger:_rulerMode forKey:rulerModeKey];
+}
+
+- (NSSet<NSString *> *) getCustomAppModesKeys
+{
+    NSString *appModeKeys = self.customAppModes;
+    NSArray<NSString *> *keysArr = [appModeKeys componentsSeparatedByString:@","];
+    return [NSSet setWithArray:keysArr];
+}
+
+- (void)setCustomAppModes:(NSString *)customAppModes
+{
+    _customAppModes = customAppModes;
+    [[NSUserDefaults standardUserDefaults] setObject:_customAppModes forKey:customAppModesKey];
 }
 
 @end

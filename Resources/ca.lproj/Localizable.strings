@@ -1716,3 +1716,7 @@
 "nav_type_descr" = "Seleccioneu com calcular la ruta en aquest perfil";
 "nav_type_title" = "Tipus de navegació";
 "quick_action_dir_from_descr" = "Premeu aquesta opció per iniciar la navegació des del punt central de la pantalla actual.";
+"public_transport_hide" = "Amaga el transport públic";
+"public_transport_show" = "Mostra el transport públic";
+"toggle_public_transport" = "Mostra/amaga el transport públic";
+"public_transport_menu" = "Transport";

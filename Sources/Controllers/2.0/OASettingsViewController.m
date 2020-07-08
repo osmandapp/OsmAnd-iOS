@@ -31,6 +31,9 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAColors.h"
 
+#import "OACreateProfileViewController.h"
+#import "OARearrangeProfilesViewController.h"
+
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
 #define kCellTypeMultiSelectionList @"multi_selection_list"
@@ -105,7 +108,20 @@
                                                                      @"title" : OALocalizedString(@"routing_settings_2"),
                                                                      @"description" : OALocalizedString(@"routing_settings_descr"),
                                                                      @"img" : @"menu_cell_pointer.png",
+                                                                     @"type" : kCellTypeCheck },
+                                                                    @{
+                                                                     @"name" : @"new_profile",
+                                                                     @"title" : OALocalizedString(@"new_profile"),
+                                                                     @"description" : @"",
+                                                                     @"img" : @"ic_custom_add.png",
+                                                                     @"type" : kCellTypeCheck },
+                                                                    @{
+                                                                     @"name" : @"edit_profile_list",
+                                                                     @"title" : OALocalizedString(@"edit_profile_list"),
+                                                                     @"description" : @"",
+                                                                     @"img" : @"ic_custom_edit.png",
                                                                      @"type" : kCellTypeCheck }, nil];
+            
             BOOL shouldAddHeader = YES;
             if ([[OAIAPHelper sharedInstance].trackRecording isActive])
             {
@@ -829,6 +845,16 @@
     {
         OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
         [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"new_profile"])
+    {
+        OACreateProfileViewController* createProfileViewController = [[OACreateProfileViewController alloc] init];
+        [self.navigationController pushViewController:createProfileViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"edit_profile_list"])
+    {
+        OARearrangeProfilesViewController* rearrangeProfilesViewController = [[OARearrangeProfilesViewController alloc] init];
+        [self.navigationController pushViewController:rearrangeProfilesViewController animated:YES];
     }
 }
 

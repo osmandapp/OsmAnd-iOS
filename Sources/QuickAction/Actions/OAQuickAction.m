@@ -90,6 +90,11 @@ static NSInteger SEQ = 0;
         return _name;
 }
 
+- (BOOL) hasCustomName
+{
+    return ![[self getName] isEqualToString:[self getDefaultName]];
+}
+
 -(NSDictionary *) getParams
 {
     if (!_params)

@@ -12,6 +12,7 @@
 #include <binaryRead.h>
 
 @class OAMapRendererView;
+@class OAApplicationMode;
 
 @interface OARoadResultMatcher : NSObject
 
@@ -42,6 +43,6 @@ typedef BOOL(^OARoadResultMatcherIsCancelled)();
 
 + (double) getOrthogonalDistance:(std::shared_ptr<RouteDataObject>) r loc:(CLLocation *)loc;
 - (std::shared_ptr<RouteDataObject>) getLastKnownRouteSegment:(CLLocation *)loc;
-- (void) getRouteSegment:(CLLocation *)loc matcher:(OARoadResultMatcher *)matcher;
+- (void) getRouteSegment:(CLLocation *)loc appMode:(OAApplicationMode *)appMode matcher:(OARoadResultMatcher *)matcher;
 
 @end

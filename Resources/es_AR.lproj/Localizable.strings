@@ -1719,3 +1719,7 @@
 "nav_type_descr" = "Elige cómo calcular una ruta para este perfil";
 "nav_type_title" = "Tipo de navegación";
 "quick_action_dir_from_descr" = "Pulsa esta acción para navegar desde el punto central de la pantalla actual.";
+"public_transport_hide" = "Ocultar transporte público";
+"public_transport_show" = "Mostrar transporte público";
+"toggle_public_transport" = "Mostrar u ocultar transporte público";
+"public_transport_menu" = "Transporte";

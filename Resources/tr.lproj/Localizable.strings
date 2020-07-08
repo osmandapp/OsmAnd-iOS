@@ -286,7 +286,7 @@
 "rendering_category_hide" = "Gizle";
 "rendering_category_routes" = "Güzergah";
 "rendering_category_details" = "Ayrıntılar";
-"rendering_category_transport" = "Taşıma";
+"rendering_category_transport" = "Ulaşım";
 "rendering_category_others" = "Diğer harita özellikleri";
 // Rendering attributes
 "units_minutes_short" = "min";
@@ -1713,3 +1713,7 @@
 "nav_type_descr" = "Bu profil için rotanın nasıl hesaplanacağını seçin";
 "nav_type_title" = "Navigasyon türü";
 "quick_action_dir_from_descr" = "Geçerli ekran merkez noktasından gezinmek için bu eyleme dokunun.";
+"public_transport_hide" = "Toplu taşıma araçlarını gizle";
+"public_transport_show" = "Toplu taşıma araçlarını göster";
+"toggle_public_transport" = "Toplu taşıma araçlarını göster/gizle";
+"public_transport_menu" = "Ulaşım";

@@ -23,6 +23,8 @@
 #define kReceiptValidationMinPeriod 60.0 * 60.0 * 24.0 * 1.0 // 1 day
 #define kReceiptValidationMaxPeriod 60.0 * 60.0 * 24.0 * 30.0 // 30 days
 
+@class OAAvoidRoadInfo;
+
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
     KILOMETERS_AND_METERS = 0,
@@ -163,6 +165,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (nonatomic, readonly) NSString *key;
 
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
+- (void) resetModeToDefault:(OAApplicationMode *)mode;
 - (void) resetToDefault;
 
 @end
@@ -436,7 +439,24 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
 @property (nonatomic) OAProfileInteger *rotateMap;
 
+// Application mode related settings
+@property (nonatomic) OAProfileString *profileIconName;
+@property (nonatomic) OAProfileInteger *profileIconColor;
+@property (nonatomic) OAProfileString *userProfileName;
+@property (nonatomic) OAProfileString *parentAppMode;
+@property (nonatomic) OAProfileInteger *navigationIcon;
+@property (nonatomic) OAProfileInteger *locationIcon;
+@property (nonatomic) OAProfileInteger *appModeOrder;
+
+@property (nonatomic) OAProfileDouble *defaultSpeed;
+@property (nonatomic) OAProfileDouble *minSpeed;
+@property (nonatomic) OAProfileDouble *maxSpeed;
+@property (nonatomic) OAProfileDouble *routeStraightAngle;
+@property (nonatomic) OAProfileInteger *routerService;
+
 @property (nonatomic) OAProfileString *routingProfile;
+
+@property (nonatomic) NSString *customAppModes;
 
 @property (nonatomic) OAProfileDouble *mapDensity;
 @property (nonatomic) OAProfileDouble *textSize;
@@ -456,7 +476,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL useIntermediatePointsNavigation;
 @property (assign, nonatomic) BOOL disableOffrouteRecalc;
 @property (assign, nonatomic) BOOL disableWrongDirectionRecalc;
-@property (nonatomic) OAProfileInteger *routerService;
 @property (assign, nonatomic) BOOL gpxRouteCalcOsmandParts;
 @property (assign, nonatomic) BOOL gpxCalculateRtept;
 @property (assign, nonatomic) BOOL gpxRouteCalc;
@@ -482,6 +501,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *showArrivalTime;
 @property (nonatomic) OAProfileBoolean *showIntermediateArrivalTime;
 @property (assign, nonatomic) BOOL showRelativeBearing;
+@property (nonatomic) NSArray<OAAvoidRoadInfo *> *impassableRoads;
 
 @property (nonatomic) OAProfileBoolean *speakStreetNames;
 @property (nonatomic) OAProfileBoolean *speakTrafficWarnings;
@@ -539,10 +559,9 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
 
-@property (nonatomic, readonly) NSSet<CLLocation *> *impassableRoads;
-
-- (void) addImpassableRoad:(CLLocation *)location;
-- (void) removeImpassableRoad:(CLLocation *)location;
+- (void) addImpassableRoad:(OAAvoidRoadInfo *)roadInfo;
+- (void) updateImpassableRoad:(OAAvoidRoadInfo *)roadInfo;
+- (BOOL) removeImpassableRoad:(CLLocation *)location;
 - (void) clearImpassableRoads;
 
 - (void) showGpx:(NSArray<NSString *> *)fileNames;
@@ -562,6 +581,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (NSSet<NSString *> *) getEnabledPlugins;
 - (NSSet<NSString *> *) getPlugins;
 - (void) enablePlugin:(NSString *)pluginId enable:(BOOL)enable;
+
+- (NSSet<NSString *> *) getCustomAppModesKeys;
 
 // Direction Appearance
 

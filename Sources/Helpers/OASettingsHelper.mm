@@ -28,6 +28,8 @@
 #import "Localization.h"
 #import "OAQuickAction.h"
 #import "OAQuickActionType.h"
+#import "OAColors.h"
+#import "OAPlugin.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -250,8 +252,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSString *typeStr = json[@"type"];
     if (!typeStr)
     {
-        if (error)
-            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeNoTypeField userInfo:nil];
+        *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeNoTypeField userInfo:nil];
         return EOASettingsItemTypeUnknown;
     }
     if ([typeStr isEqualToString:@"QUICK_ACTION"])
@@ -392,7 +393,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (instancetype) initWithItem:(id)item
 {
-    _item = item;
+    self = [super init];
+    if (self) {
+        _item = item;
+    }
     return self;
 }
 
@@ -550,6 +554,284 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return NO;
     }
     return YES;
+}
+
+@end
+
+#pragma mark - OAProfileSettingsItem
+
+@implementation OAProfileSettingsItem
+{
+    NSDictionary *_additionalPrefs;
+    
+    OAApplicationModeBean *_modeBean;
+}
+
+@dynamic type, name, fileName;
+
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
+{
+    self = [super init];
+    if (self) {
+        _appMode = appMode;
+    }
+    return self;
+}
+
+- (EOASettingsItemType) type
+{
+    return EOASettingsItemTypeProfile;
+}
+
+- (NSString *) name
+{
+    return _appMode.stringKey;
+}
+
+- (NSString *) publicName
+{
+    if (_appMode.isCustomProfile)
+        return _appMode.getUserProfileName;
+    return _appMode.name;
+}
+
+- (NSString *)defaultFileName
+{
+    return [NSString stringWithFormat:@"profile_%@%@", self.name, self.defaultFileExtension];
+}
+
+- (BOOL)exists
+{
+    return [OAApplicationMode valueOfStringKey:_appMode.name def:nil] != nil;
+}
+
+- (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    [super readFromJson:json error:error];
+    NSDictionary *appModeJson = json[@"appMode"];
+    _modeBean = [OAApplicationModeBean fromJson:appModeJson];
+    
+    OAApplicationMode *am = [OAApplicationMode fromModeBean:_modeBean];
+    if (![am isCustomProfile])
+        am = [OAApplicationMode valueOfStringKey:am.stringKey def:am];
+    _appMode = am;
+}
+
+- (void)readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    _additionalPrefs = json[@"prefs"];
+}
+
+- (void) renameProfile
+{
+    NSArray<OAApplicationMode *> *values = OAApplicationMode.allPossibleValues;
+    if (_modeBean.userProfileName.length == 0)
+    {
+        OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:_modeBean.stringKey def:nil];
+        if (appMode != nil)
+        {
+            _modeBean.userProfileName = _appMode.name;
+        }
+    }
+    int number = 0;
+    while (true) {
+        number++;
+        NSString *key = [NSString stringWithFormat:@"%@_%d", _modeBean.stringKey, number];
+        NSString *name = [NSString stringWithFormat:@"%@ %d", _modeBean.userProfileName, number];
+        if ([OAApplicationMode valueOfStringKey:key def:nil] == nil && [self isNameUnique:values name:name])
+        {
+            _modeBean.userProfileName = name;
+            _modeBean.stringKey = key;
+            break;
+        }
+    }
+}
+
+- (void)apply
+{
+    if (!_appMode.isCustomProfile && !self.shouldReplace)
+    {
+        OAApplicationMode *parent = [OAApplicationMode valueOfStringKey:_modeBean.stringKey def:nil];
+        [self renameProfile];
+        OAApplicationMode *am = [OAApplicationMode fromModeBean:_modeBean];
+       
+//        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
+//        appMode = ApplicationMode.saveProfile(builder, app);
+        [OAApplicationMode saveProfile:am];
+    }
+    else if (!self.shouldReplace && [self exists])
+    {
+        [self renameProfile];
+        _appMode = [OAApplicationMode fromModeBean:_modeBean];
+        [OAApplicationMode saveProfile:_appMode];
+    }
+    else
+    {
+        _appMode = [OAApplicationMode fromModeBean:_modeBean];
+        [OAApplicationMode saveProfile:_appMode];
+    }
+    [OAApplicationMode changeProfileAvailability:_appMode isSelected:YES];
+}
+
+- (BOOL) isNameUnique:(NSArray<OAApplicationMode *> *)values name:(NSString *) name
+{
+    for (OAApplicationMode *mode in values)
+    {
+        if ([mode.getUserProfileName isEqualToString:name])
+            return NO;
+    }
+    return YES;
+}
+
+//public void applyAdditionalPrefs() {
+//    if (additionalPrefsJson != null) {
+//        updatePluginResPrefs();
+//
+//        SettingsItemReader reader = getReader();
+//        if (reader instanceof OsmandSettingsItemReader) {
+//            ((OsmandSettingsItemReader) reader).readPreferencesFromJson(additionalPrefsJson);
+//        }
+//    }
+//}
+//
+//private void updatePluginResPrefs() {
+//    String pluginId = getPluginId();
+//    if (Algorithms.isEmpty(pluginId)) {
+//        return;
+//    }
+//    OsmandPlugin plugin = OsmandPlugin.getPlugin(pluginId);
+//    if (plugin instanceof CustomOsmandPlugin) {
+//        CustomOsmandPlugin customPlugin = (CustomOsmandPlugin) plugin;
+//        String resDirPath = IndexConstants.PLUGINS_DIR + pluginId + "/" + customPlugin.getResourceDirName();
+//
+//        for (Iterator<String> it = additionalPrefsJson.keys(); it.hasNext(); ) {
+//            try {
+//                String prefId = it.next();
+//                Object value = additionalPrefsJson.get(prefId);
+//                if (value instanceof JSONObject) {
+//                    JSONObject jsonObject = (JSONObject) value;
+//                    for (Iterator<String> iterator = jsonObject.keys(); iterator.hasNext(); ) {
+//                        String key = iterator.next();
+//                        Object val = jsonObject.get(key);
+//                        if (val instanceof String) {
+//                            val = checkPluginResPath((String) val, resDirPath);
+//                        }
+//                        jsonObject.put(key, val);
+//                    }
+//                } else if (value instanceof String) {
+//                    value = checkPluginResPath((String) value, resDirPath);
+//                    additionalPrefsJson.put(prefId, value);
+//                }
+//            } catch (JSONException e) {
+//                LOG.error(e);
+//            }
+//        }
+//    }
+//}
+//
+//private String checkPluginResPath(String path, String resDirPath) {
+//    if (path.startsWith("@")) {
+//        return resDirPath + "/" + path.substring(1);
+//    }
+//    return path;
+//}
+
+- (void)writeToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    [super writeToJson:json error:error];
+    [json addObject:@{@"appMode" : [_appMode toJson]}];
+}
+
+- (OASettingsItemReader *)getReader
+{
+    return [[OASettingsItemReader alloc] initWithItem:self];
+}
+
+- (OASettingsItemWriter *)getWriter
+{
+    return [[OASettingsItemWriter alloc] initWithItem:self];
+}
+
+@end
+
+#pragma mark - OAGlobalSettingsItem
+
+@implementation OAGlobalSettingsItem
+
+@dynamic type, name, fileName;
+
+- (EOASettingsItemType) type
+{
+    return EOASettingsItemTypeGlobal;
+}
+
+- (NSString *) name
+{
+    return @"general_settings";
+}
+
+- (NSString *) publicName
+{
+    return OALocalizedString(@"general_settings_2");
+}
+
+- (BOOL)exists
+{
+    return YES;
+}
+
+- (OASettingsItemReader *)getReader
+{
+    return [[OASettingsItemReader alloc] initWithItem:self];
+}
+
+- (OASettingsItemWriter *)getWriter
+{
+    return [[OASettingsItemWriter alloc] initWithItem:self];
+}
+
+@end
+
+#pragma mark - OAPluginSettingsItem
+
+@implementation PluginSettingsItem
+{
+    OAPlugin *_plugin;
+    NSArray<OASettingsItem *> *_pluginDependentItems;
+}
+
+@dynamic type, name, fileName;
+
+- (EOASettingsItemType) type
+{
+    return EOASettingsItemTypePlugin;
+}
+
+- (NSString *) name
+{
+    return [_plugin.class getId];
+}
+
+- (NSString *) publicName
+{
+    return _plugin.getName;
+}
+
+- (BOOL)exists
+{
+    return [OAPlugin getPlugin:_plugin.class] != nil;
+}
+
+apply
+
+- (OASettingsItemReader *)getReader
+{
+    return [[OASettingsItemReader alloc] initWithItem:self];
+}
+
+- (OASettingsItemWriter *)getWriter
+{
+    return [[OASettingsItemWriter alloc] initWithItem:self];
 }
 
 @end

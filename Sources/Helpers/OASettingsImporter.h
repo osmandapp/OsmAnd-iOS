@@ -17,8 +17,6 @@
 
 @interface OASettingsImporter : NSObject
 
-- (instancetype) initWithApp;
-
 @end
 
 #pragma mark - OASettingsItemsFactory

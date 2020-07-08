@@ -11,6 +11,23 @@
 #import "OANavigationIcon.h"
 #import "OALocationIcon.h"
 
+@interface OAApplicationModeBean : NSObject
+
+@property (nonatomic) NSString *stringKey;
+@property (nonatomic) NSString *userProfileName;
+@property (nonatomic) NSString *parent;
+@property (nonatomic) NSString *iconName;
+@property (nonatomic) int iconColor;
+@property (nonatomic) NSString *routingProfile;
+@property (nonatomic) NSInteger routeService;
+@property (nonatomic) EOALocationIcon locIcon;
+@property (nonatomic) EOANavigationIcon navIcon;
+@property (nonatomic) int order;
+
++ (OAApplicationModeBean *) fromJson:(NSDictionary *)jsonData;
+
+@end
+
 @interface OAApplicationMode : NSObject
 
 @property (nonatomic, readonly) NSString *name;
@@ -20,6 +37,8 @@
 @property (nonatomic) NSString *descr;
 
 @property (nonatomic, readonly) OAApplicationMode *parent;
+
++ (OAApplicationMode *) fromModeBean:(OAApplicationModeBean *)modeBean;
 
 + (OAApplicationMode *) DEFAULT;
 + (OAApplicationMode *) CAR;
@@ -40,6 +59,8 @@
 + (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected;
 
 - (instancetype)initWithName:(NSString *)name stringKey:(NSString *)stringKey;
+
+- (NSDictionary *) toJson;
 
 - (BOOL) hasFastSpeed;
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode;

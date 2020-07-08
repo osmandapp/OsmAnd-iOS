@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
+#import "OAColors.h"
 
 @interface OAApplicationMode ()
 
@@ -171,6 +172,21 @@ static OAApplicationMode *_SKI;
     return m;
 }
 
++ (OAApplicationMode *) fromModeBean:(OAApplicationModeBean *)modeBean
+{
+    OAApplicationMode *am = [[OAApplicationMode alloc] initWithName:@"" stringKey:modeBean.stringKey];
+    [am setParent:[OAApplicationMode valueOfStringKey:modeBean.parent def:nil]];
+    [am setUserProfileName:modeBean.userProfileName];
+    [am setIconName:modeBean.iconName];
+    [am setIconColor:modeBean.iconColor];
+    [am setRoutingProfile:modeBean.routingProfile];
+    [am setRouterService:modeBean.routeService];
+    [am setLocationIcon:modeBean.locIcon];
+    [am setNavigationIcon:modeBean.navIcon];
+    [am setOrder:modeBean.order];
+    return am;
+}
+
 - (instancetype)initWithName:(NSString *)name stringKey:(NSString *)stringKey
 {
     self = [super init];
@@ -223,6 +239,23 @@ static OAApplicationMode *_SKI;
             [list addObject:a];
 
     return list;
+}
+
+- (NSDictionary *) toJson
+{
+    // TODO: encode colors, icons etc. into string correlations as in Android
+    return @{
+        @"stringKey" : self.stringKey,
+        @"userProfileName" : self.getUserProfileName,
+        @"iconColor" : @(self.getIconColor),
+        @"iconName" : self.getIconName,
+        @"parent" : self.parent ? self.parent.stringKey : @"",
+        @"routeService" : @(self.getRouterService),
+        @"routingProfile" : self.getRoutingProfile,
+        @"locIcon" : @(self.getLocationIcon),
+        @"navIcon" : @(self.getNavigationIcon),
+        @"order" : @(self.getOrder)
+    };
 }
 
 - (BOOL) hasFastSpeed
@@ -607,6 +640,89 @@ static OAApplicationMode *_SKI;
         return true;
     
     return [set containsObject:self];
+}
+
+@implementation OAApplicationModeBean
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self) {
+        _iconName = @"map_world_globe_dark";
+        _iconColor = profile_icon_color_blue_light_default;
+        _routeService = 0;
+        _order = -1;
+    }
+    return self;
+}
+
++ (OAApplicationModeBean *) fromJson:(NSDictionary *)jsonData
+{
+    OAApplicationModeBean *res = [[OAApplicationModeBean alloc] init];
+    res.userProfileName = jsonData[@"userProfileName"];
+    res.iconColor = [self parseColor:jsonData[@"iconColor"]];
+    res.iconName = jsonData[@"iconName"];
+    res.locIcon = [self parseLocationIcon:jsonData[@"locIcon"]];
+    res.navIcon = [self parseNavIcon:jsonData[@"navIcon"]];
+    res.order = [jsonData[@"order"] intValue];
+    res.routeService = [jsonData[@"routeService"] integerValue];
+    res.routingProfile = jsonData[@"routingProfile"];
+    res.parent = jsonData[@"parent"];
+    res.stringKey = jsonData[@"stringKey"];
+    return res;
+}
+
++ (EOANavigationIcon) parseNavIcon:(NSString *)locIcon
+{
+    if ([locIcon isEqualToString:@"DEFAULT"])
+        return NAVIGATION_ICON_DEFAULT;
+    else if ([locIcon isEqualToString:@"NAUTICAL"])
+        return NAVIGATION_ICON_NAUTICAL;
+    else if ([locIcon isEqualToString:@"CAR"])
+        return NAVIGATION_ICON_CAR;
+    return NAVIGATION_ICON_DEFAULT;
+}
+
++ (EOALocationIcon) parseLocationIcon:(NSString *)locIcon
+{
+    if ([locIcon isEqualToString:@"DEFAULT"])
+        return LOCATION_ICON_DEFAULT;
+    else if ([locIcon isEqualToString:@"CAR"])
+        return LOCATION_ICON_CAR;
+    else if ([locIcon isEqualToString:@"BICYCLE"])
+        return LOCATION_ICON_BICYCLE;
+    return LOCATION_ICON_DEFAULT;
+}
+
++ (NSInteger) parseRouterService:(NSString *)routerService
+{
+    // Brouter not currently supported
+    if ([routerService isEqualToString:@"OSMAND"])
+        return 0;
+    else if ([routerService isEqualToString:@"DIRECT_TO"])
+        return 1;
+    else if ([routerService isEqualToString:@"STRAIGHT"])
+        return 2;
+    return 0; // OSMAND
+}
+
++ (int) parseColor:(NSString *)color
+{
+    if ([color isEqualToString:@"DEFAULT"])
+        return profile_icon_color_blue_light_default;
+    else if ([color isEqualToString:@"PURPLE"])
+        return profile_icon_color_purple_light;
+    else if ([color isEqualToString:@"GREEN"])
+        return profile_icon_color_green_light;
+    else if ([color isEqualToString:@"BLUE"])
+        return profile_icon_color_blue_light;
+    else if ([color isEqualToString:@"RED"])
+        return profile_icon_color_red_light;
+    else if ([color isEqualToString:@"DARK_YELLOW"])
+        return profile_icon_color_yellow_light;
+    else if ([color isEqualToString:@"MAGENTA"])
+        return profile_icon_color_magenta_light;
+    return profile_icon_color_blue_light_default;
 }
 
 @end

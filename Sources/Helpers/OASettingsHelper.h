@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAImportAsyncTask, OAExportAsyncTask, OASettingsImport, OASettingsExport, OASettingsCollect, OACheckDuplicates;
 @class OASettingsItem;
-@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo;
+@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode;
 
 FOUNDATION_EXTERN NSString *const kSettingsHelperErrorDomain;
 
@@ -76,11 +76,12 @@ typedef enum : NSUInteger {
 @property (nonatomic, readonly) EOASettingsItemType type;
 @property (nonatomic, readonly) NSString *pluginId;
 @property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *publicName;
 @property (nonatomic) NSString *fileName;
 @property (nonatomic, readonly) NSString *defaultFileName;
 @property (nonatomic, readonly) NSString *defaultFileExtension;
 
-@property (nonatomic, readonly) NSArray<NSString *> *warnings;
+@property (nonatomic, readonly) NSMutableArray<NSString *> *warnings;
 @property (nonatomic, assign) BOOL shouldReplace;
 
 - (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error;
@@ -127,6 +128,28 @@ typedef enum : NSUInteger {
 #pragma mark - OASettingsItemJsonWriter
 
 @interface OASettingsItemJsonWriter : OASettingsItemWriter<OASettingsItem *>
+
+@end
+
+#pragma mark - OAGlobalSettingsItem
+
+@interface OAGlobalSettingsItem : OASettingsItem
+
+@end
+
+#pragma mark - OAProfileSettingsItem
+
+@interface OAProfileSettingsItem : OASettingsItem
+
+@property (nonatomic, readonly) OAApplicationMode *appMode;
+
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
+
+@end
+
+#pragma mark - OAPluginSettingsItem
+
+@interface OAPluginSettingsItem : OASettingsItem
 
 @end
 

@@ -10,9 +10,14 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
+#import "Localization.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
+
+#define kTmpProfileFolder @"tmpProfileData"
+
+#define kVersion 1
 
 
 #pragma mark - OASettingsImporter
@@ -20,18 +25,24 @@
 @implementation OASettingsImporter
 {
     OsmAndAppInstance _app;
+    
+    NSString *_tmpFilesDir;
 }
 
-- (instancetype) initWithApp
+- (instancetype) init
 {
     self = [super init];
-    _app = [OsmAndApp instance];
+    if (self) {
+        _app = [OsmAndApp instance];
+        _tmpFilesDir = NSTemporaryDirectory();
+        _tmpFilesDir = [_tmpFilesDir stringByAppendingPathComponent:kTmpProfileFolder];
+    }
     return self;
 }
 
 - (NSMutableArray<OASettingsItem *> *) collectItems:(NSString *)file
 {
-    return [self processItems:file items:NULL];
+    return [self processItems:file items:nil];
 }
 
 - (void) importItems:(NSString *)file items:(NSMutableArray<OASettingsItem *> *)items
@@ -41,16 +52,17 @@
 
 - (NSMutableArray<OASettingsItem *> *) processItems:(NSString *)file items:(NSMutableArray<OASettingsItem *> *)items
 {
-    BOOL collecting = items;
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    BOOL collecting = items == nil;
     if (collecting)
-        items = [[NSMutableArray alloc] init];
-    else
-        if ([items count] == 0)
-            NSLog(@"No items");
-    
-    NSInputStream *ois = [NSInputStream alloc];
-    OsmAnd::ArchiveReader archive(QString::fromNSString(file));
+        items = [self getItemsFromJson:file];
+    else if ([items count] == 0)
+    {
+        NSLog(@"No items");
+        return nil;
+    }
 
+    OsmAnd::ArchiveReader archive(QString::fromNSString(file));
     bool ok = false;
     const auto archiveItems = archive.getItems(&ok, false);
     if (!ok)
@@ -59,65 +71,94 @@
         return items;
     }
 
-    OsmAnd::ArchiveReader::Item itemsJsonItem;
     for (const auto& archiveItem : constOf(archiveItems))
     {
-        if (!archiveItem.isValid() || (archiveItem.name != QStringLiteral("items.json")))
+        if (!archiveItem.isValid())
             continue;
-
-        itemsJsonItem = archiveItem;
-        break;
-    }
-    if (!itemsJsonItem.isValid())
-    {
-        NSLog(@"items.json not found");
-        return items;
-    }
-    if (collecting)
-    {
-        QString tmpFileName = QString::fromNSString(NSTemporaryDirectory()) + QStringLiteral("/items.json");
-        if (!archive.extractItemToFile(itemsJsonItem.name, tmpFileName))
+        
+        QString filename = [self checkEntryName:archiveItem.name];
+        OASettingsItem *item = nil;
+        for (OASettingsItem *settingsItem in items)
         {
-            NSLog(@"Error reading items.json");
-            return items;
-        }
-        tmpFileName.toNSString();
-        NSError *error = nil;
-        NSString *itemsJson = [NSString stringWithContentsOfFile:tmpFileName.toNSString() encoding:NSUTF8StringEncoding error:&error];
-        if (error)
-        {
-            NSLog(@"Error reading items.json");
-            return items;
-        }
-        OASettingsItemsFactory *itemsFactory = [[OASettingsItemsFactory alloc] initWithJSON:itemsJson];
-        [items addObjectsFromArray:[itemsFactory getItems]];
-        ois = [ois initWithFileAtPath:tmpFileName.toNSString()];
-    }
-    
-    for (const auto& archiveItem : constOf(archiveItems))
-    {
-        QString fileName = archiveItem.name;
-        OASettingsItem* item;
-        for (OASettingsItem* settingsItem in items)
-        {
-            if (settingsItem && [settingsItem.fileName isEqualToString:fileName.toNSString()])
+            if ([settingsItem applyFileName:filename.toNSString()])
             {
                 item = settingsItem;
                 break;
             }
         }
-        if ((item != NULL && collecting && [item shouldReadOnCollecting]) ||
-            (item != NULL && !collecting && ![item shouldReadOnCollecting]))
+        
+        if (item && ((collecting && item.shouldReadOnCollecting) || (!collecting && !item.shouldReadOnCollecting)))
         {
-            //[[item getReader] readFromStream:ois];
+            OASettingsItemReader *reader = item.getReader;
+            NSError *err = nil;
+            if (reader)
+            {
+                NSString *tmpFileName = [_tmpFilesDir stringByAppendingPathComponent:archiveItem.name.toNSString()];
+                if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString(tmpFileName)))
+                {
+                    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
+                    NSLog(@"Error processing items");
+                    continue;
+                }
+                [reader readFromFile:tmpFileName error:&err];
+            }
+            
+            if (err)
+                [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), item.name]];
         }
-        else
+    }
+    
+    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
+    
+    return items;
+}
+
+- (NSMutableArray<OASettingsItem *> *) getItemsFromJson:(NSString *)file
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    NSMutableArray<OASettingsItem *> *items = [NSMutableArray new];
+    OsmAnd::ArchiveReader archive(QString::fromNSString(file));
+    
+    bool ok = false;
+    const auto archiveItems = archive.getItems(&ok, false);
+    if (!ok)
+    {
+        NSLog(@"Error reading zip file");
+        return items;
+    }
+
+    for (const auto& archiveItem : constOf(archiveItems))
+    {
+        if (!archiveItem.isValid())
+            continue;
+        
+        if (archiveItem.name.compare(QStringLiteral("items.json")) == 0)
         {
-            NSLog(@"Error reading item data");
-            return items;
+            NSString *tmpFileName = [_tmpFilesDir stringByAppendingPathComponent:@"items.json"];
+            if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString(tmpFileName)))
+            {
+                [fileManager removeItemAtPath:_tmpFilesDir error:nil];
+                NSLog(@"Error reading items.json");
+                return items;
+            }
+            NSString *itemsJson = [NSString stringWithContentsOfFile:tmpFileName encoding:NSUTF8StringEncoding error:nil];
+            OASettingsItemsFactory *factory = [[OASettingsItemsFactory alloc] initWithJSON:itemsJson];
+            [items addObjectsFromArray:factory.getItems];
+            [fileManager removeItemAtPath:_tmpFilesDir error:nil];
+            break;
         }
     }
     return items;
+}
+
+- (QString) checkEntryName:(QString)entryName
+{
+    QString fileExt = QStringLiteral(".osf").append("/");
+    int index = entryName.indexOf(fileExt);
+    if (index != -1)
+        entryName = entryName.mid(index + fileExt.length());
+    
+    return entryName;
 }
 
 @end
@@ -138,22 +179,40 @@
 
 - (instancetype) initWithJSON:(NSString*)jsonStr
 {
-    _app = [OsmAndApp instance];
+    self = [super init];
+    if (self) {
+        _app = [OsmAndApp instance];
+        [self collectItems:jsonStr];
+    }
+    return self;
+}
+
+- (void) collectItems:(NSString *)jsonStr
+{
     NSError *jsonError;
     NSData* jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&jsonError];
-    NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
-    for (NSData* item in itemsJson)
+    if (jsonError)
     {
-        NSDictionary *itemJson = [NSJSONSerialization JSONObjectWithData:item options:kNilOptions error:&jsonError];
+        NSLog(@"Error reading json");
+        return;
+    }
+    
+    NSInteger version = json[@"version"] ? [json[@"version"] integerValue] : 1;
+    if (version > kVersion)
+    {
+        NSLog(@"Error: unsupported version");
+        return;
+    }
+    
+    NSArray* itemsJson = json[@"items"];
+    NSMutableDictionary *pluginItems = [NSMutableDictionary new];
+    
+    for (NSDictionary* item in itemsJson)
+    {
         OASettingsItem *settingsItem = [[OASettingsItem alloc] init];
-        @try {
-            settingsItem = [self createItem:json];
-            if (settingsItem != NULL)
-                [self.items addObject:settingsItem];
-        } @catch (NSException *exception) {
-            NSLog(@"Error creating item from json: %@ %@", itemJson, exception);
-        }
+        settingsItem = [self createItem:json];
+        [self.items addObject:settingsItem];
     }
     if ([self.items count] == 0)
         NSLog(@"No items");
@@ -186,13 +245,13 @@
     switch (type)
     {
         case EOASettingsItemTypeGlobal:
-            //item = ;
+            item = [[OAGlobalSettingsItem alloc] init];
             break;
         case EOASettingsItemTypeProfile:
-            //item = ;
+            item = [[OAProfileSettingsItem alloc] initWithJSON:json];
             break;
         case EOASettingsItemTypePlugin:
-            //item = ;
+            item = [[OAPluginSettingsItem alloc] initWithJSON:json error:&error];
             break;
         case EOASettingsItemTypeData:
             item = [[OADataSettingsItem alloc] initWithJson:json error:&error];

@@ -8,8 +8,7 @@
 //  revision 878491110c391829cc1f42eace8dc582cb35e08e
 
 #import <Foundation/Foundation.h>
-
-@class OAPOIUIFilter;
+#import "OAPOIUIFilter.h"
 
 @interface OAPOIFiltersHelper : NSObject
 

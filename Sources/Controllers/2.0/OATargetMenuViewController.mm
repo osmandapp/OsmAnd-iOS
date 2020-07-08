@@ -278,8 +278,8 @@
         }
         case OATargetImpassableRoad:
         {
-            NSNumber *roadId = targetPoint.targetObj;
-            controller = [[OAImpassableRoadViewController alloc] initWithRoadId:roadId.unsignedLongLongValue];
+            OAAvoidRoadInfo *roadInfo = targetPoint.targetObj;
+            controller = [[OAImpassableRoadViewController alloc] initWithRoadInfo:roadInfo];
             break;
         }
             

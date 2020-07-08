@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,22 +16,38 @@
                 <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_checmark_default.png" translatesAutoresizingMaskIntoConstraints="NO" id="MtN-sG-bto">
-                        <rect key="frame" x="14" y="7" width="30" height="30"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_checmark_default.png" translatesAutoresizingMaskIntoConstraints="NO" id="MtN-sG-bto">
+                        <rect key="frame" x="16" y="7" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="UFV-kO-4yl"/>
+                            <constraint firstAttribute="width" constant="30" id="n1m-gR-L6x"/>
+                        </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UkP-Ph-Y9c">
-                        <rect key="frame" x="104" y="0.0" width="310" height="44"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UkP-Ph-Y9c">
+                        <rect key="frame" x="108" y="0.0" width="42" height="44"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eqV-1l-p8u">
-                        <rect key="frame" x="52" y="7" width="30" height="30"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eqV-1l-p8u">
+                        <rect key="frame" x="62" y="7" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="YGc-40-CcA"/>
+                            <constraint firstAttribute="width" constant="30" id="coz-UQ-q6j"/>
+                        </constraints>
                     </imageView>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="eqV-1l-p8u" firstAttribute="top" secondItem="s6l-ln-XeN" secondAttribute="top" constant="7" id="7nx-gL-xAX"/>
+                    <constraint firstItem="UkP-Ph-Y9c" firstAttribute="top" secondItem="s6l-ln-XeN" secondAttribute="top" id="G6v-z8-nX7"/>
+                    <constraint firstItem="MtN-sG-bto" firstAttribute="top" secondItem="s6l-ln-XeN" secondAttribute="top" constant="7" id="GBv-Ic-KKR"/>
+                    <constraint firstItem="UkP-Ph-Y9c" firstAttribute="leading" secondItem="eqV-1l-p8u" secondAttribute="trailing" constant="16" id="QCr-ZV-NZ1"/>
+                    <constraint firstAttribute="bottom" secondItem="UkP-Ph-Y9c" secondAttribute="bottom" id="SoH-UJ-Q5O"/>
+                    <constraint firstAttribute="bottom" secondItem="MtN-sG-bto" secondAttribute="bottom" constant="7" id="Sxs-K7-1IW"/>
+                    <constraint firstAttribute="bottom" secondItem="eqV-1l-p8u" secondAttribute="bottom" constant="7" id="VPE-GG-QE2"/>
+                    <constraint firstItem="MtN-sG-bto" firstAttribute="leading" secondItem="s6l-ln-XeN" secondAttribute="leading" constant="16" id="aHS-fz-2mB"/>
+                    <constraint firstItem="eqV-1l-p8u" firstAttribute="leading" secondItem="MtN-sG-bto" secondAttribute="trailing" constant="16" id="tJO-AX-tmj"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="checkmarkImageView" destination="MtN-sG-bto" id="Xf2-lR-fuG"/>

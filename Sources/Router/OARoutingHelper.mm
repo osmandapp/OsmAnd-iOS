@@ -512,7 +512,7 @@ static BOOL _isDeviatedFromRoute = false;
 - (double) getArrivalDistance
 {
     OAApplicationMode *m = _mode == nil ? _settings.applicationMode : _mode;
-    float defaultSpeed = MAX(0.3f, m.defaultSpeed);
+    float defaultSpeed = MAX(0.3f, [m getDefaultSpeed]);
 
     /// Used to be: car - 90 m, bicycle - 50 m, pedestrian - 20 m
     // return ((float)settings.getApplicationMode().getArrivalDistance()) * settings.ARRIVAL_DISTANCE_FACTOR.getModeValue(m);

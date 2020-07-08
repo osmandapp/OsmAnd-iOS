@@ -113,7 +113,7 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 + (NSString *) getCountryName:(OAResourceItem *)item;
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region;
 + (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete;
-+ (void) clearTilesFor:(OsmAnd::AreaI)visibleArea zoom:(float)zoom;
++ (void) clearTilesFor:(OsmAnd::AreaI)visibleArea zoom:(float)zoom resource:(OAResourceItem *)resource;
 
 + (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView;
 

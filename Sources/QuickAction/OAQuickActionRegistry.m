@@ -253,6 +253,16 @@ static OAQuickActionType *TYPE_NAVIGATION;
     }
 }
 
+- (OAQuickAction *) newActionByStringType:(NSString *) actionType
+{
+    OAQuickActionType *quickActionType = _quickActionTypesStr[actionType];
+    if (quickActionType)
+    {
+        return [quickActionType createNew];
+    }
+    return nil;
+}
+
 - (OAQuickAction *) newActionByType:(NSInteger) type
 {
     OAQuickActionType *quickActionType = _quickActionTypesInt[@(type)];

@@ -557,7 +557,7 @@
 
 - (UIColor *)getTintColor
 {
-    return ![OAAvoidSpecificRoads instance].getImpassableRoads.empty() || [self hasAnyAvoidEnabled] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+    return [OAAvoidSpecificRoads instance].getImpassableRoads.count > 0 || [self hasAnyAvoidEnabled] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
 }
 
 - (BOOL) hasAnyAvoidEnabled
@@ -790,7 +790,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:self.getApplicationMode.smallIconDark];
+    return self.getApplicationMode.getIcon;
 }
 
 - (NSString *) getCellType

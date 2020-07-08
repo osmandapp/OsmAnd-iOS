@@ -1054,7 +1054,7 @@ static NSDictionary *screenVoiceProviders;
             continue;
         
         [titles addObject:v.name];
-        [images addObject:v.smallIconDark];
+        [images addObject:v.getIconName];
         [modes addObject:v];
     }
     
@@ -1077,7 +1077,7 @@ static NSDictionary *screenVoiceProviders;
 {
     if (_settingsType == kNavigationSettingsScreenGeneral)
     {
-        [_appModeButton setImage:[UIImage imageNamed:_am.smallIconDark] forState:UIControlStateNormal];
+        [_appModeButton setImage:_am.getIcon forState:UIControlStateNormal];
         _appModeButton.hidden = NO;
     }
     else

@@ -35,6 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSArray<OAQuickActionType *> *) produceTypeActionsListWithHeaders;
 -(void) updateActionTypes;
 
+- (OAQuickAction *) newActionByStringType:(NSString *) actionType;
+- (OAQuickAction *) newActionByType:(NSInteger) type;
+
 -(BOOL) isNameUnique:(OAQuickAction *) action;
 
 -(OAQuickAction *) generateUniqueName:(OAQuickAction *) action;

@@ -30,7 +30,7 @@
     BOOL _invertedY;
 }
 
-- (instancetype)initWithFilePath:(NSString *)filePath
+- (instancetype) initWithFilePath:(NSString *)filePath
 {
     self = [super init];
     if (self)
@@ -50,28 +50,28 @@
     return self;
 }
 
-- (int)bitDensity
+- (int) bitDensity
 {
     return 16;
 }
 
-- (int)maximumZoomSupported
+- (int) maximumZoomSupported
 {
     return _maxZoom;
 }
 
-- (int)minimumZoomSupported
+- (int) minimumZoomSupported
 {
     return _minZoom;
 }
 
 
--(NSUInteger)hash
+- (NSUInteger) hash
 {
     return 31 + [_name hash];
 }
 
--(BOOL)isEqual:(id)object
+- (BOOL) isEqual:(id)object
 {
     if (self == object)
         return YES;
@@ -84,7 +84,7 @@
     return [self.name isEqualToString:obj.name];
 }
 
-+ (NSString *)getValueOf:(int)fieldIndex statement:(sqlite3_stmt *)statement
++ (NSString *) getValueOf:(int)fieldIndex statement:(sqlite3_stmt *)statement
 {
     if (sqlite3_column_text(statement, fieldIndex) != nil)
         return [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, fieldIndex)];
@@ -92,7 +92,7 @@
         return nil;
 }
 
-- (void)initDatabase
+- (void) initDatabase
 {
     _dbQueue = dispatch_queue_create("sqliteTileSourceDbQueue", DISPATCH_QUEUE_SERIAL);
     
@@ -182,7 +182,7 @@
                     else
                     {
                         _isEllipsoid = NO;
-                        [self addInfoColumnInt:@"ellipsoid" value:0];
+                        [self addInfoColumn:@"ellipsoid" value:@"0"];
                     }
                     NSNumber *invertedY = [mapper objectForKey:@"inverted_y"];
                     if(invertedY)
@@ -224,51 +224,33 @@
     });
 }
 
-- (void)addInfoColumn:(NSString *)columnName value:(NSString *)value
+- (void) addInfoColumn:(NSString *)columnName value:(NSString *)value
 {
     dispatch_async(_dbQueue, ^{
-    
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
-        {
-            const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE info ADD COLUMN %@ TEXT", columnName] UTF8String];
-            sqlite3_exec(_db, sql_stmt, NULL, NULL, NULL);
-            
-            sqlite3_stmt *statement;
-            sql_stmt = [[NSString stringWithFormat:@"UPDATE info SET %@ = ?", columnName] UTF8String];
-            sqlite3_prepare_v2(_db, sql_stmt, -1, &statement, NULL);
-            
-            sqlite3_bind_text(statement, 1, [value UTF8String], -1, 0);
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
-            
-            sqlite3_close(_db);
-        }
+        [self.class addInfoColumn:columnName value:value filePath:_filePath db:_db];
     });
 }
 
-- (void)addInfoColumnInt:(NSString *)columnName value:(int)value
++ (void) addInfoColumn:(NSString *)columnName value:(NSString *)value filePath:(NSString *)filePath db:(sqlite3 *)db
 {
-    dispatch_async(_dbQueue, ^{
-    
-        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
-        {
-            const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE info ADD COLUMN %@ INTEGER", columnName] UTF8String];
-            sqlite3_exec(_db, sql_stmt, NULL, NULL, NULL);
-            
-            sqlite3_stmt *statement;
-            sql_stmt = [[NSString stringWithFormat:@"UPDATE info SET %@ = ?", columnName] UTF8String];
-            sqlite3_prepare_v2(_db, sql_stmt, -1, &statement, NULL);
-            
-            sqlite3_bind_int(statement, 1, value);
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
-            
-            sqlite3_close(_db);
-        }
-    });
+    if (sqlite3_open([filePath UTF8String], &db) == SQLITE_OK)
+    {
+        const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE info ADD COLUMN %@ TEXT", columnName] UTF8String];
+        sqlite3_exec(db, sql_stmt, NULL, NULL, NULL);
+        
+        sqlite3_stmt *statement;
+        sql_stmt = [[NSString stringWithFormat:@"UPDATE info SET %@ = ?", columnName] UTF8String];
+        sqlite3_prepare_v2(db, sql_stmt, -1, &statement, NULL);
+        
+        sqlite3_bind_text(statement, 1, [value UTF8String], -1, 0);
+        sqlite3_step(statement);
+        sqlite3_finalize(statement);
+        
+        sqlite3_close(db);
+    }
 }
 
-- (BOOL)hasTimeColumn
+- (BOOL) hasTimeColumn
 {
     BOOL res = NO;
     
@@ -306,11 +288,9 @@
     return res;
 }
 
-- (BOOL)exists:(int)x y:(int)y zoom:(int)zoom
+- (BOOL) exists:(int)x y:(int)y zoom:(int)zoom
 {
     BOOL __block res = NO;
-    //long long time = [[NSDate date] timeIntervalSince1970] * 1000.0;
-    
     int z = [self getFileZoom:zoom];
     
     dispatch_sync(_dbQueue, ^{
@@ -333,14 +313,11 @@
             sqlite3_close(_db);
         }
     });
-    
-    //if (!res)
-    //    NSLog(@"Checking tile existance x = %d y = %d z = %d for %lld ms", x, y, zoom, (long long)([[NSDate date] timeIntervalSince1970] * 1000.0 - time));
-    
+        
     return res;
 }
 
-- (BOOL)isLocked
+- (BOOL) isLocked
 {
     BOOL __block res;
     
@@ -360,11 +337,9 @@
     return res;
 }
 
-- (NSData* )getBytes:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder
+- (NSData *) getBytes:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber **)timeHolder
 {
-    NSData* __block res;
-    //long long ts = [[NSDate date] timeIntervalSince1970] * 1000.0;
-
+    NSData * __block res;
     dispatch_sync(_dbQueue, ^{
         
         if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
@@ -398,18 +373,15 @@
         }
     });
     
-    //if (!res)
-    //    NSLog(@"Load tile %d %d %d for %lld ms", x, y, zoom, (long long)([[NSDate date] timeIntervalSince1970] * 1000.0 - ts));
-
     return res;
 }
 
-- (NSData *)getBytes:(int)x y:(int)y zoom:(int)zoom
+- (NSData *) getBytes:(int)x y:(int)y zoom:(int)zoom
 {
     return [self getBytes:x y:y zoom:zoom timeHolder:nil];
 }
 
-- (UIImage *)getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder
+- (UIImage *) getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder
 {
     NSData *data = [self getBytes:x y:y zoom:zoom timeHolder:timeHolder];
     if (data)
@@ -475,7 +447,7 @@
     return [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
 }
 
-- (void)deleteImage:(int)x y:(int)y zoom:(int)zoom
+- (void) deleteImage:(int)x y:(int)y zoom:(int)zoom
 {
     dispatch_async(_dbQueue, ^{
         
@@ -495,7 +467,7 @@
     });
 }
 
-- (void)deleteCache:(dispatch_block_t)block
+- (void) deleteCache:(dispatch_block_t)block
 {
     dispatch_async(_dbQueue, ^{
 
@@ -510,13 +482,13 @@
     });
 }
 
-- (void)insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath
+- (void) insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath
 {
     NSData *data = [NSData dataWithContentsOfFile:filePath];
     [self insertImage:x y:y zoom:zoom data:data];
 }
 
-- (void)insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data
+- (void) insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data
 {
     dispatch_async(_dbQueue, ^{
         
@@ -556,7 +528,7 @@
         if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
         {
             BOOL isOnlineSqlite = [self supportsTileDownload];
-            NSString *query = isOnlineSqlite ? @"UPDATE info SET timeSupported = ?, timecolumn = ?, expireminutes = ?, url = ?, ellipsoid = ?, minzoom = ?, maxzoom = ?" : @"UPDATE info SET ellipsoid = ?, minzoom = ?, maxzoom = ?";
+            NSString *query = isOnlineSqlite ? @"UPDATE info SET timecolumn = ?, expireminutes = ?, url = ?, ellipsoid = ?, minzoom = ?, maxzoom = ?" : @"UPDATE info SET ellipsoid = ?, minzoom = ?, maxzoom = ?";
             
             const char *update_stmt = [query UTF8String];
             sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
@@ -575,12 +547,11 @@
             if (isOnlineSqlite)
             {
                 sqlite3_bind_text(statement, 1, [timeSupported UTF8String], -1, 0);
-                sqlite3_bind_text(statement, 2, [timeSupported UTF8String], -1, 0);
-                sqlite3_bind_text(statement, 3, [timeInMinutes UTF8String], -1, 0);
-                sqlite3_bind_text(statement, 4, [url UTF8String], -1, 0);
-                sqlite3_bind_int(statement, 5, isEllipticYTile ? 1 : 0);
-                sqlite3_bind_text(statement, 6, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
-                sqlite3_bind_text(statement, 7, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 2, [timeInMinutes UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 3, [url UTF8String], -1, 0);
+                sqlite3_bind_int(statement, 4, isEllipticYTile ? 1 : 0);
+                sqlite3_bind_text(statement, 5, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 6, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
             }
             else
             {
@@ -604,12 +575,12 @@
     [self addInfoColumn:@"tilesize" value:[NSString stringWithFormat:@"%d", _tileSize]];
 }
 
-- (int)getFileZoom:(int)zoom
+- (int) getFileZoom:(int)zoom
 {
     return _inversiveZoom ? 17 - zoom : zoom;
 }
 
-- (BOOL)isEllipticYTile
+- (BOOL) isEllipticYTile
 {
     return _isEllipsoid;
 }
@@ -619,7 +590,12 @@
     return _invertedY;
 }
 
-- (long)getExpirationTimeMinutes
+- (BOOL) isInversiveZoom
+{
+    return _inversiveZoom;
+}
+
+- (long) getExpirationTimeMinutes
 {
     if(_expirationTimeMillis  < 0) {
         return -1;
@@ -627,9 +603,14 @@
     return _expirationTimeMillis / (60  * 1000);
 }
 
-- (long)getExpirationTimeMillis
+- (long) getExpirationTimeMillis
 {
     return _expirationTimeMillis;
+}
+
+- (BOOL) isTimeSupported
+{
+    return _timeSupported;
 }
 
 - (BOOL) expired:(NSNumber *)time
@@ -676,7 +657,7 @@
     sqlite3_stmt *statement;
     if (sqlite3_open([path UTF8String], &tmpDatabase) == SQLITE_OK)
     {
-        const char *sqlInfoStatement = "CREATE TABLE info (minzoom TEXT, maxzoom TEXT, url TEXT, ellipsoid INTEGER, rule TEXT, timeSupported TEXT, expireminutes TEXT, timecolumn TEXT, referer TEXT, tilenumbering TEXT)";
+        const char *sqlInfoStatement = "CREATE TABLE info (minzoom TEXT, maxzoom TEXT, url TEXT, ellipsoid INTEGER, rule TEXT, expireminutes TEXT, timecolumn TEXT, referer TEXT, tilenumbering TEXT)";
         const char *sqlTilesStatement = "CREATE TABLE tiles (x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, s INTEGER, image BLOB, time INTEGER, PRIMARY KEY (x, y, z))";
         const char *sqlSIndexStatement = "CREATE INDEX index_tiles_on_s ON tiles (s)";
         const char *sqlXIndexStatement = "CREATE INDEX index_tiles_on_x ON tiles (x)";
@@ -690,16 +671,8 @@
         sqlite3_exec(tmpDatabase, sqlXIndexStatement, NULL, NULL, &error);
         sqlite3_exec(tmpDatabase, sqlYIndexStatement, NULL, NULL, &error);
         sqlite3_exec(tmpDatabase, sqlZIndexStatement, NULL, NULL, &error);
-        
-        BOOL hasRandoms = parameters[@"randoms"] != nil;
-        if (hasRandoms)
-        {
-            const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE info ADD COLUMN randoms TEXT"] UTF8String];
-            sqlite3_exec(tmpDatabase, sql_stmt, NULL, NULL, NULL);
-        }
-        
-        NSString *query = hasRandoms ? @"INSERT OR REPLACE INTO info(minzoom, maxzoom, url, ellipsoid, rule, timeSupported, expireminutes, timecolumn, referer, tilenumbering, randoms) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" : @"INSERT OR REPLACE INTO info(minzoom, maxzoom, url, ellipsoid, rule, timeSupported, expireminutes, timecolumn, referer, tilenumbering) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+                
+        NSString *query = @"INSERT OR REPLACE INTO info(minzoom, maxzoom, url, ellipsoid, rule, expireminutes, timecolumn, referer, tilenumbering) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         const char *update_stmt = [query UTF8String];
         sqlite3_prepare_v2(tmpDatabase, update_stmt, -1, &statement, NULL);
         
@@ -714,18 +687,22 @@
         sqlite3_bind_text(statement, 3, [parameters[@"url"] UTF8String], -1, 0);
         sqlite3_bind_int(statement, 4, [parameters[@"ellipsoid"] intValue]);
         sqlite3_bind_text(statement, 5, [parameters[@"rule"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 6, [parameters[@"timeSupported"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 7, [parameters[@"expireminutes"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 8, [parameters[@"timecolumn"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 9, [parameters[@"referer"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 10, [parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : @"BigPlanet" UTF8String], -1, 0);
-        
-        if (hasRandoms)
-            sqlite3_bind_text(statement, 11, [parameters[@"randoms"] UTF8String], -1, 0);
-        
+        sqlite3_bind_text(statement, 6, [parameters[@"expireminutes"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 7, [parameters[@"timecolumn"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 8, [parameters[@"referer"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 9, [parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : @"BigPlanet" UTF8String], -1, 0);
+                
         sqlite3_step(statement);
         sqlite3_finalize(statement);
         
+        NSString *randoms = parameters[@"randoms"];
+        if (randoms)
+            [self.class addInfoColumn:@"randoms" value:randoms filePath:path db:tmpDatabase];
+
+        NSNumber *invertedY = parameters[@"inverted_y"];
+        if (invertedY)
+            [self.class addInfoColumn:@"inverted_y" value:invertedY.stringValue filePath:path db:tmpDatabase];
+
         sqlite3_close(tmpDatabase);
         return error == NULL;
     }

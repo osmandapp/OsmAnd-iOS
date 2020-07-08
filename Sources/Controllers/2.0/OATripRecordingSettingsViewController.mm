@@ -321,7 +321,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             continue;
         
         [titles addObject:v.name];
-        [images addObject:v.smallIconDark];
+        [images addObject:v.getIconName];
         [modes addObject:v];
     }
     
@@ -344,7 +344,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 {
     if (_settingsType == kTripRecordingSettingsScreenGeneral)
     {
-        [_appModeButton setImage:[UIImage imageNamed:_am.smallIconDark] forState:UIControlStateNormal];
+        [_appModeButton setImage:_am.getIcon forState:UIControlStateNormal];
         _appModeButton.hidden = NO;
     }
     else

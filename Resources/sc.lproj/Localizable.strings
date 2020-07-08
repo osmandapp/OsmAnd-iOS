@@ -10,7 +10,7 @@
 "rendering_category_hide" = "Cua";
 "rendering_category_routes" = "Àndalas";
 "rendering_category_details" = "Minujas";
-"rendering_category_transport" = "Trasportu pùblicu";
+"rendering_category_transport" = "Trasportos pùblicos";
 "rendering_category_others" = "Àteros atributos de sa mapa";
 // Rendering attributes
 "favorite" = "Preferidu";
@@ -1700,8 +1700,8 @@
 "map_settings_add_maps_hillshade" = "Tenes bisòngiu de mapas additzionales pro bìdere sas umbraduras de sos rilievos in sa mapa";
 "map_settings_zoom_level_description" = "Imposta su livellu de ismanniamentu mìnimu e màssimu pro ammustrare s'istratu";
 "map_settings_hillshade_description" = "Sas mapas de sas umbraduras de sos rilievos ammustrant sas pendèntzias, sos cùcuros e sos pranos impreende livellos diferentes de murru";
-"map_settings_slopes_description" = "Sas mapas de sas pistas impreant colores diferentes pro ammustrare su terrinu";
-"map_settings_slopes_legend" = "Podes lèghere àteras informatziones in subra de sas pistas in Wikipedia";
+"map_settings_slopes_description" = "Sas mapas de sas pendèntzias impreant colores diferentes pro ammustrare su terrinu";
+"map_settings_slopes_legend" = "Podes lèghere àteras informatziones in subra de sas pendèntzias in Wikipedia";
 "arrows_direction_to_markers" = "Sas fritzas ammustrant sa diretzione cara a su marcadore ativu si est positzionadu in foras de s'ischermu. Sas lìnias de diretzione disinnant una lìnia cara a sos marcadores ativos.";
 "appearance_on_map" = "Aparèntzia in sa mapa";
 "choose_how_display_distance" = "Issèbera comente ammustrare sa distàntzia dae sos marcadores ativos";
@@ -1718,3 +1718,7 @@
 "nav_type_osmand" = "OsmAnd (càrculu de s'àndala non in lìnia)";
 "nav_type_descr" = "Issèbera comente carculare un'àndala pro custu profilu";
 "nav_type_title" = "Casta de navigatzione";
+"public_transport_hide" = "Cua sos trasportos pùblicos";
+"public_transport_show" = "Ammustra sos trasportos pùblicos";
+"toggle_public_transport" = "Ammustra/cua sos trasportos pùblicos";
+"public_transport_menu" = "Trasportos pùblicos";

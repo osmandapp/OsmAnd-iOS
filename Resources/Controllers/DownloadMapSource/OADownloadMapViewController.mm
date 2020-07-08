@@ -73,8 +73,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     CGFloat _downloadSize;
     NSArray<NSString *> *_possibleZoomValues;
     CALayer *_horizontalLine;
-    NSString *_minZoomTileUrl;
-    NSString *_maxZoomTileUrl;
     BOOL _minZoomPickerIsShown;
     BOOL _maxZoomPickerIsShown;
     
@@ -206,8 +204,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _minZoom = (int)[self getDefaultItemMinZoom];
     _maxZoom = (int)[self getItemMaxZoom];
     _possibleZoomValues = [self getPossibleZoomValues];
-    _minZoomTileUrl = [self getZoomTileUrl:_minZoom];
-    _maxZoomTileUrl = [self getZoomTileUrl:_maxZoom];
     [self downloadZoomedTiles];
 }
 
@@ -419,11 +415,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) downloadZoomedTiles
 {
-    if (!_minZoomTileUrl || !_maxZoomTileUrl)
+    NSString *minZoomTileUrl = [self getZoomTileUrl:_minZoom];;
+    NSString *maxZoomTileUrl = [self getZoomTileUrl:_maxZoom];
+    if (!minZoomTileUrl || !maxZoomTileUrl)
         return;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        NSData *minZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_minZoomTileUrl]];
-        NSData *maxZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_maxZoomTileUrl]];
+        NSData *minZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:minZoomTileUrl]];
+        NSData *maxZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:maxZoomTileUrl]];
         if (minZoomData && maxZoomData)
         {
             _minZoomTileImage = [[UIImage alloc] initWithData:minZoomData];
@@ -654,7 +652,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             _minZoom = _maxZoom;
             [self updatePickerCell:_minZoom - 1 zoomRow:kMinZoomPickerRow];
         }
-        _minZoomTileUrl = [self getZoomTileUrl:_minZoom];
         zoomRow = kMinZoomRow;
         [self downloadZoomedTiles];
     }
@@ -669,7 +666,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             _maxZoom = _minZoom;
             [self updatePickerCell:_maxZoom - 1 zoomRow:kMaxZoomPickerRow];
         }
-        _maxZoomTileUrl = [self getZoomTileUrl:_maxZoom];
         zoomRow = kMaxZoomRow;
         [self downloadZoomedTiles];
     }

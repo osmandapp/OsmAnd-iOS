@@ -28,38 +28,21 @@
 
 @implementation OAProfileGeneralSettingsParametersViewController
 {
-    OAApplicationMode *_appMode;
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
     kProfileGeneralSettingsParameter _settingsType;
     NSString *_title;
 }
 
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
 - (instancetype) initWithType:(kProfileGeneralSettingsParameter)settingsType applicationMode:(OAApplicationMode *)applicationMode
 {
-    self = [super init];
+    self = [super initWithAppMode:applicationMode];
     if (self)
     {
         _settingsType = settingsType;
-        _appMode = applicationMode;
-        [self commonInit];
+        [self generateData];
     }
     return self;
-}
-
-- (void) commonInit
-{
-    [self generateData];
 }
 
 - (void) generateData
@@ -91,7 +74,7 @@
 - (void) applyLocalization
 {
     self.titleLabel.text = _title;
-    self.subtitleLabel.text = _appMode.name;
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -106,15 +89,15 @@
 - (void) setupView
 {
     NSMutableArray *dataArr = [NSMutableArray array];
-    NSInteger rotateMap = [_settings.rotateMap get:_appMode];
-    BOOL automatic = [_settings.drivingRegionAutomatic get:_appMode];
-    NSInteger drivingRegion = [_settings.drivingRegion get:_appMode];
-    NSInteger metricSystem = [_settings.metricSystem get:_appMode];
-    NSInteger speedSystem = [_settings.speedSystem get:_appMode];
-    NSInteger externamlInputDevices = [_settings.settingExternalInputDevice get:_appMode];
+    NSInteger rotateMap = [_settings.rotateMap get:self.appMode];
+    BOOL automatic = [_settings.drivingRegionAutomatic get:self.appMode];
+    NSInteger drivingRegion = [_settings.drivingRegion get:self.appMode];
+    NSInteger metricSystem = [_settings.metricSystem get:self.appMode];
+    NSInteger speedSystem = [_settings.speedSystem get:self.appMode];
+    NSInteger externamlInputDevices = [_settings.settingExternalInputDevice get:self.appMode];
     if (automatic)
         drivingRegion = -1;
-    EOAAngularConstant angularUnits = [_settings.angularUnits get:_appMode];
+    EOAAngularConstant angularUnits = [_settings.angularUnits get:self.appMode];
     
     switch (_settingsType) {
         case kProfileGeneralSettingsMapOrientation:
@@ -432,11 +415,11 @@
 - (void) selectMapOrientation:(NSString *)name
 {
     if ([name isEqualToString:@"bearing"])
-        [_settings.rotateMap set:ROTATE_MAP_BEARING mode:_appMode];
+        [_settings.rotateMap set:ROTATE_MAP_BEARING mode:self.appMode];
     else if ([name isEqualToString:@"compass"])
-        [_settings.rotateMap set:ROTATE_MAP_COMPASS mode:_appMode];
+        [_settings.rotateMap set:ROTATE_MAP_COMPASS mode:self.appMode];
     else
-        [_settings.rotateMap set:ROTATE_MAP_NONE mode:_appMode];
+        [_settings.rotateMap set:ROTATE_MAP_NONE mode:self.appMode];
 }
 
 - (void) selectDrivingRegion:(NSString *)name
@@ -444,7 +427,7 @@
     OAMapViewTrackingUtilities *mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
     if ([name isEqualToString:@"AUTOMATIC"])
     {
-        [_settings.drivingRegionAutomatic set:YES mode:_appMode];
+        [_settings.drivingRegionAutomatic set:YES mode:self.appMode];
         [mapViewTrackingUtilities resetDrivingRegionUpdate];
     }
     else
@@ -462,60 +445,60 @@
             drivingRegion = DR_AUSTRALIA;
         else
             drivingRegion = DR_EUROPE_ASIA;
-        [_settings.drivingRegionAutomatic set:NO mode:_appMode];
-        [_settings.drivingRegion set:drivingRegion mode:_appMode];
+        [_settings.drivingRegionAutomatic set:NO mode:self.appMode];
+        [_settings.drivingRegion set:drivingRegion mode:self.appMode];
     }
 }
 
 - (void) selectMetricSystem:(NSString *)name
 {
     if ([name isEqualToString:@"KILOMETERS_AND_METERS"])
-        [_settings.metricSystem set:KILOMETERS_AND_METERS mode:_appMode];
+        [_settings.metricSystem set:KILOMETERS_AND_METERS mode:self.appMode];
     else if ([name isEqualToString:@"MILES_AND_FEET"])
-        [_settings.metricSystem set:MILES_AND_FEET mode:_appMode];
+        [_settings.metricSystem set:MILES_AND_FEET mode:self.appMode];
     else if ([name isEqualToString:@"MILES_AND_YARDS"])
-        [_settings.metricSystem set:MILES_AND_YARDS mode:_appMode];
+        [_settings.metricSystem set:MILES_AND_YARDS mode:self.appMode];
     else if ([name isEqualToString:@"MILES_AND_METERS"])
-        [_settings.metricSystem set:MILES_AND_METERS mode:_appMode];
+        [_settings.metricSystem set:MILES_AND_METERS mode:self.appMode];
     else if ([name isEqualToString:@"NAUTICAL_MILES"])
-        [_settings.metricSystem set:NAUTICAL_MILES mode:_appMode];
-    [_settings.metricSystemChangedManually set:YES mode:_appMode];
+        [_settings.metricSystem set:NAUTICAL_MILES mode:self.appMode];
+    [_settings.metricSystemChangedManually set:YES mode:self.appMode];
 }
 
 - (void) selectSpeedSystem:(NSString *)name
 {
     if ([name isEqualToString:@"KILOMETERS_PER_HOUR"])
-        [_settings.speedSystem set:(KILOMETERS_PER_HOUR) mode:_appMode];
+        [_settings.speedSystem set:(KILOMETERS_PER_HOUR) mode:self.appMode];
     else if ([name isEqualToString:@"MILES_PER_HOUR"])
-        [_settings.speedSystem set:(MILES_PER_HOUR) mode:_appMode];
+        [_settings.speedSystem set:(MILES_PER_HOUR) mode:self.appMode];
     else if ([name isEqualToString:@"METERS_PER_SECOND"])
-        [_settings.speedSystem set:(METERS_PER_SECOND) mode:_appMode];
+        [_settings.speedSystem set:(METERS_PER_SECOND) mode:self.appMode];
     else if ([name isEqualToString:@"MINUTES_PER_MILE"])
-        [_settings.speedSystem set:(MINUTES_PER_MILE) mode:_appMode];
+        [_settings.speedSystem set:(MINUTES_PER_MILE) mode:self.appMode];
     else if ([name isEqualToString:@"MINUTES_PER_KILOMETER"])
-        [_settings.speedSystem set:(MINUTES_PER_KILOMETER) mode:_appMode];
+        [_settings.speedSystem set:(MINUTES_PER_KILOMETER) mode:self.appMode];
     else if ([name isEqualToString:@"NAUTICALMILES_PER_HOUR"])
-        [_settings.speedSystem set:(NAUTICALMILES_PER_HOUR) mode:_appMode];
+        [_settings.speedSystem set:(NAUTICALMILES_PER_HOUR) mode:self.appMode];
 }
 
 - (void) selectSettingAngularUnits:(NSString *)name
 {
     if ([name isEqualToString:@"degrees_180"])
-        [_settings.angularUnits set:DEGREES mode:_appMode];
+        [_settings.angularUnits set:DEGREES mode:self.appMode];
     else if ([name isEqualToString:@"degrees_360"])
-        [_settings.angularUnits set:DEGREES360 mode:_appMode];
+        [_settings.angularUnits set:DEGREES360 mode:self.appMode];
     else if ([name isEqualToString:@"milliradians"])
-        [_settings.angularUnits set:MILLIRADS mode:_appMode];
+        [_settings.angularUnits set:MILLIRADS mode:self.appMode];
 }
 
 - (void) selectSettingExternalInput:(NSString *)name
 {
     if ([name isEqualToString:@"sett_no_ext_input"])
-        [_settings.settingExternalInputDevice set:NO_EXTERNAL_DEVICE mode:_appMode];
+        [_settings.settingExternalInputDevice set:NO_EXTERNAL_DEVICE mode:self.appMode];
     else if ([name isEqualToString:@"sett_generic_ext_input"])
-        [_settings.settingExternalInputDevice set:GENERIC_EXTERNAL_DEVICE mode:_appMode];
+        [_settings.settingExternalInputDevice set:GENERIC_EXTERNAL_DEVICE mode:self.appMode];
     else if ([name isEqualToString:@"sett_wunderlinq_ext_input"])
-        [_settings.settingExternalInputDevice set:WUNDERLINQ_EXTERNAL_DEVICE mode:_appMode];
+        [_settings.settingExternalInputDevice set:WUNDERLINQ_EXTERNAL_DEVICE mode:self.appMode];
 }
 
 @end

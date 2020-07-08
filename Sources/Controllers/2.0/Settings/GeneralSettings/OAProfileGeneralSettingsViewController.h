@@ -21,4 +21,6 @@ typedef enum
 
 @interface OAProfileGeneralSettingsViewController : OABaseSettingsViewController
 
+- (id) initWithSettingsMode:(OAApplicationMode *)applicationMode;
+
 @end

@@ -20,12 +20,11 @@
     UIView *_tableHeaderView;
 }
 
-- (instancetype) init
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
     self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    if (self)
-    {
-        [self commonInit];
+    if (self) {
+        _appMode = appMode;
     }
     return self;
 }
@@ -97,6 +96,13 @@
     label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
     [label sizeToFit];
     return label.frame.size.height;
+}
+
+#pragma mark - OASettingsDataDelegate
+
+- (void) onSettingsChanged
+{
+    [_tableView reloadData];
 }
 
 @end

@@ -557,12 +557,11 @@
 
 - (UIColor *)getTintColor
 {
-    return ![OAAvoidSpecificRoads instance].getImpassableRoads.empty() || [self hasAnyAvoidEnabled] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+    return ![OAAvoidSpecificRoads instance].getImpassableRoads.empty() || [self.class hasAnyAvoidEnabled:self.getApplicationMode] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
 }
 
-- (BOOL) hasAnyAvoidEnabled
++ (BOOL) hasAnyAvoidEnabled:(OAApplicationMode *)am
 {
-    OAApplicationMode *am = [self getApplicationMode];
     OsmAndAppInstance app = [OsmAndApp instance];
     auto rm = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
     if (!rm && am.parent)

@@ -87,7 +87,7 @@
     [self setupView];
     [self.tableView reloadData];
     if (self.delegate)
-        [self.delegate onSettingChanged];
+        [self.delegate onSettingsChanged];
 }
 
 - (void) setupView
@@ -214,7 +214,7 @@
     [param rowSelectAction:tableView indexPath:indexPath];
     
     if (self.delegate)
-        [self.delegate onSettingChanged];
+        [self.delegate onSettingsChanged];
 }
 
 @end

@@ -7,7 +7,15 @@
 //
 #import "OACompoundViewController.h"
 
-@interface OABaseSettingsViewController : OACompoundViewController
+@class OAApplicationMode;
+
+@protocol OASettingsDataDelegate <NSObject>
+
+- (void) onSettingsChanged;
+
+@end
+
+@interface OABaseSettingsViewController : OACompoundViewController <OASettingsDataDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navbarView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -15,6 +23,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *subtitleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *profileButton;
+
+@property (weak, nonatomic) id<OASettingsDataDelegate> delegate;
+@property (nonatomic) OAApplicationMode *appMode;
+
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
 
 - (CGFloat) heightForLabel:(NSString *)text;
 - (void) setupTableHeaderViewWithText:(NSString *)text;

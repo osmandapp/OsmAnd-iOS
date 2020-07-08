@@ -125,7 +125,7 @@
     [self setupView];
     [self.tableView reloadData];
     if (self.delegate)
-        [self.delegate onSettingChanged];
+        [self.delegate onSettingsChanged];
 }
 
 + (NSString *) getText:(const std::shared_ptr<RouteDataObject>)road
@@ -419,7 +419,7 @@
         }
     }
     if (self.delegate)
-        [self.delegate onSettingChanged];
+        [self.delegate onSettingsChanged];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

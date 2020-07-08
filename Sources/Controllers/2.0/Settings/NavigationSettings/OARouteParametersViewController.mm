@@ -11,8 +11,9 @@
 #import "OAIconTitleValueCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OASettingSwitchCell.h"
-#import "OAAvoidRoadsViewController.h"
+#import "OAAvoidPreferParametersViewController.h"
 #import "OARecalculateRouteViewController.h"
+#import "OARoutePreferencesParameters.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -70,8 +71,16 @@
         @"type" : @"OAIconTextCell",
         @"title" : OALocalizedString(@"impassable_road"),
         @"icon" : @"ic_custom_alert",
-        @"key" : @"avoidRoads",
+        @"key" : @"avoidRoads"
     }];
+    if ([OAAvoidPreferParametersViewController hasPreferParameters:self.appMode])
+    {
+        [parametersArr addObject:@{
+            @"type" : @"OAIconTextCell",
+            @"title" : OALocalizedString(@"prefer_in_routing_title"),
+            @"key" : @"preferRoads"
+        }];
+    }
     [parametersArr addObject:@{
         @"type" : @"OASettingSwitchCell",
         @"title" : OALocalizedString(@"routing_attr_short_way_name"),
@@ -148,7 +157,10 @@
             cell.arrowIconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.arrowIconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_chart_orange);
+            if ([item[@"key"] isEqualToString:@"avoidRoads"])
+            {
+                cell.iconView.tintColor = [OAAvoidRoadsRoutingParameter hasAnyAvoidEnabled:self.appMode] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_footer_icon_gray);
+            }
         }
         return cell;
     }
@@ -204,9 +216,18 @@
     NSString *itemKey = item[@"key"];
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"recalculateRoute"])
+    {
         settingsViewController = [[OARecalculateRouteViewController alloc] init];
+    }
     else if ([itemKey isEqualToString:@"avoidRoads"])
-        settingsViewController = [[OAAvoidRoadsViewController alloc] init];
+    {
+        settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:YES];
+        settingsViewController.delegate = self;
+    }
+    else if ([itemKey isEqualToString:@"preferRoads"])
+    {
+        settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
+    }
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

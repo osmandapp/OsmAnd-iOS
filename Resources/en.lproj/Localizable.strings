@@ -270,7 +270,7 @@
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_routing" = "OsmAnd routing";
 "special_routing" = "Special routing";
-"import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it on routing folder in iTunes.";
+"import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it into the OsmAnd folder in iTunes.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "avoid_routes_and_road" = "Avoid certain routes and road types";
 "route_recalculation_descr" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
@@ -425,6 +425,7 @@
 "shared_string_back" = "Back";
 "shared_string_ok" = "OK";
 "shared_string_cancel" = "Cancel";
+"shared_string_exit" = "Exit";
 "shared_string_close" = "Close";
 "shared_string_no" = "No";
 "shared_string_yes" = "Yes";

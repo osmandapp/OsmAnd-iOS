@@ -139,6 +139,7 @@
 #define profile_icon_color_outdated_dark 0x727272
 
 #define profile_icon_color_inactive 0x727272
+#define location_icon_color_lost 0x999999
 
 #define marker_pin_color_orange 0xFF9207
 #define marker_pin_color_blue 0x00BCD4

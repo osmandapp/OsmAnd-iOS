@@ -27,39 +27,17 @@
 
 @implementation OACoordinatesFormatViewController
 {
-    OAApplicationMode *_appMode;
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
 }
 
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
 - (instancetype) initWithMode:(OAApplicationMode *)applicationMode
 {
-    self = [super init];
+    self = [super initWithAppMode:applicationMode];
     if (self)
     {
-        _appMode = applicationMode;
-        [self commonInit];
     }
     return self;
-}
-
-- (void) commonInit
-{
-    [self generateData];
-}
-
-- (void) generateData
-{
 }
 
 - (void) applyLocalization
@@ -90,28 +68,28 @@
         @{
         @"name" : @"navigate_point_format_D",
         @"title" : OALocalizedString(@"navigate_point_format_D"),
-        @"selected" : @([_settings.settingGeoFormat get:_appMode] == MAP_GEO_FORMAT_DEGREES),
+        @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_DEGREES),
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_DEGREES]],
         @"type" : kCellTypeTitleCheck,
     },
     @{
         @"name" : @"navigate_point_format_DM",
         @"title" : OALocalizedString(@"navigate_point_format_DM"),
-        @"selected" : @([_settings.settingGeoFormat get:_appMode] == MAP_GEO_FORMAT_MINUTES),
+        @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_MINUTES),
         @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_MINUTES]],
         @"type" : kCellTypeTitleCheck,
     },
     @{
        @"name" : @"navigate_point_format_DMS",
        @"title" : OALocalizedString(@"navigate_point_format_DMS"),
-       @"selected" : @([_settings.settingGeoFormat get:_appMode] == MAP_GEO_FORMAT_SECONDS),
+       @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_FORMAT_SECONDS),
        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_SECONDS]],
        @"type" : kCellTypeTitleCheck,
     },
     @{
         @"name" : @"utm_format",
         @"title" : OALocalizedString(@"UTM"),
-        @"selected" : @([_settings.settingGeoFormat get:_appMode] == MAP_GEO_UTM_FORMAT),
+        @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_UTM_FORMAT),
         @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"coordinates_example"), [OALocationConvert getUTMCoordinateString:lat lon:lon], OALocalizedString(@"utm_description"), OALocalizedString(@"shared_string_read_more")],
         @"url" : @"https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system",
         @"type" : kCellTypeTitleCheck,
@@ -119,7 +97,7 @@
     @{
        @"name" : @"olc_format",
        @"title" : OALocalizedString(@"navigate_point_format_OLC"),
-       @"selected" : @([_settings.settingGeoFormat get:_appMode] == MAP_GEO_OLC_FORMAT),
+       @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_OLC_FORMAT),
        @"description" : [NSString stringWithFormat:@"%@: %@. %@\n", OALocalizedString(@"coordinates_example"), [OALocationConvert getLocationOlcName:lat lon:lon], OALocalizedString(@"shared_string_read_more")],
        @"url" : @"https://en.wikipedia.org/wiki/Open_Location_Code",
        @"icon" : @"ic_custom_direction_compass",
@@ -219,15 +197,15 @@
 - (void) selectSettingGeoCode:(NSString *)name
 {
     if ([name isEqualToString:@"navigate_point_format_D"])
-        [_settings.settingGeoFormat set:MAP_GEO_FORMAT_DEGREES mode:_appMode];
+        [_settings.settingGeoFormat set:MAP_GEO_FORMAT_DEGREES mode:self.appMode];
     else if ([name isEqualToString:@"navigate_point_format_DM"])
-        [_settings.settingGeoFormat set:MAP_GEO_FORMAT_MINUTES mode:_appMode];
+        [_settings.settingGeoFormat set:MAP_GEO_FORMAT_MINUTES mode:self.appMode];
     else if ([name isEqualToString:@"navigate_point_format_DMS"])
-        [_settings.settingGeoFormat set:MAP_GEO_FORMAT_SECONDS mode:_appMode];
+        [_settings.settingGeoFormat set:MAP_GEO_FORMAT_SECONDS mode:self.appMode];
     else if ([name isEqualToString:@"utm_format"])
-        [_settings.settingGeoFormat set:MAP_GEO_UTM_FORMAT mode:_appMode];
+        [_settings.settingGeoFormat set:MAP_GEO_UTM_FORMAT mode:self.appMode];
     else if ([name isEqualToString:@"olc_format"])
-        [_settings.settingGeoFormat set:MAP_GEO_OLC_FORMAT mode:_appMode];
+        [_settings.settingGeoFormat set:MAP_GEO_OLC_FORMAT mode:self.appMode];
 }
 
 @end

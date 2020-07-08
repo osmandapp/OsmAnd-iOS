@@ -95,6 +95,9 @@ struct RoutingParameter;
 @end
 
 @interface OAAvoidRoadsRoutingParameter : OALocalRoutingParameter
+
++ (BOOL) hasAnyAvoidEnabled:(OAApplicationMode *)am;
+
 @end
 
 @interface OAAvoidTransportTypesRoutingParameter : OALocalRoutingParameter

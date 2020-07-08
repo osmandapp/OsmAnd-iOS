@@ -439,7 +439,7 @@
 {
     if ([name isEqualToString:@"general_settings"])
     {
-        OAProfileGeneralSettingsViewController* settingsViewController = [[OAProfileGeneralSettingsViewController alloc] init];
+        OAProfileGeneralSettingsViewController* settingsViewController = [[OAProfileGeneralSettingsViewController alloc] initWithAppMode:OAApplicationMode.CAR];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([name isEqualToString:@"routing_settings"])

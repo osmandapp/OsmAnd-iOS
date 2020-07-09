@@ -976,7 +976,7 @@ static BOOL _lackOfResources;
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
         if ([OASQLiteTileSource isOnlineTileSource:filePath])
         {
-            item.title = [OASQLiteTileSource getLabelFor:filePath];
+            item.title = [OASQLiteTileSource getNameFor:filePath];
             [_localOnlineTileSources addObject:item];
         }
         else
@@ -1986,7 +1986,6 @@ static BOOL _lackOfResources;
             cellTypeId = localResourceCell;
             
             title = item.title;
-             
             if ([item isKindOfClass:SqliteDbResourceItem.class])
                 subtitle = [NSString stringWithFormat:@"%@ • %@", OALocalizedString(@"online_map"), [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
             else

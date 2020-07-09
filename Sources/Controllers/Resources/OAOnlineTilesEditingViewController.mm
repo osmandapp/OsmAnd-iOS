@@ -95,7 +95,7 @@
 
 - (void)setupParametersFromSqlite
 {
-    _itemName = [OASQLiteTileSource getLabelFor:_sqliteDbItem.path];
+    _itemName = [OASQLiteTileSource getNameFor:_sqliteDbItem.path];
     _itemURL = _sqliteSource.urlTemplate;
     _minZoom = _sqliteSource.minimumZoomSupported;
     _maxZoom = _sqliteSource.maximumZoomSupported;

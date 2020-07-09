@@ -761,9 +761,9 @@
     return res;
 }
 
-+ (NSString *) getLabelFor:(NSString *)filePath
++ (NSString *) getNameFor:(NSString *)filePath
 {
-    NSString *optionalLabel = @"";
+    NSString *optionalName = @"";
     sqlite3 *db;
     
     if (sqlite3_open([filePath UTF8String], &db) == SQLITE_OK)
@@ -776,15 +776,15 @@
             while (sqlite3_step(statement) == SQLITE_ROW)
             {
                 char *field = (char *) sqlite3_column_text(statement, 0);
-                optionalLabel = [[NSString alloc]initWithUTF8String:field];;
+                optionalName = [[NSString alloc]initWithUTF8String:field];;
             }
             sqlite3_finalize(statement);
         }
         sqlite3_close(db);
     }
     
-    if (optionalLabel.length > 0)
-        return optionalLabel;
+    if (optionalName.length > 0)
+        return optionalName;
     else
         return [[[filePath lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 }

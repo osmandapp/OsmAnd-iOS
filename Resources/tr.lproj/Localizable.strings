@@ -1751,3 +1751,14 @@
 "map_behavior" = "Harita davranışı";
 "vehicle_parameters" = "Araç parametreleri";
 "screen_alerts" = "Ekran uyarıları";
+"move_map_to_select_area" = "Gerekli alanı seçmek için haritayı hareket ettir.";
+"downloading" = "İndiriliyor";
+"map_update_warning" = "Döşeme verilerini internetten yeniden yüklemek istiyor musunuz?";
+"use_of_downloaded_map" = "Artık bu haritayı çevrim dışı olarak ana harita kaynağı veya üst/alt katman olarak kullanabilirsiniz";
+"size_of_downloaded_data" = "Yakınlaştırma seviyeleri arasındaki büyük fark, indirilen verilerin boyutunu artırabilir.";
+"online_sources" = "Çevrim içi kaynaklar";
+"select_online_source" = "Kaynak seç";
+"preview_of_selected_zoom_levels" = "Seçilen yakınlaştırma seviyelerinin ön izlemesi";
+"download_size" = "İndirme boyutu";
+"number_of_tiles" = "Döşeme sayısı";
+"update_map" = "Haritayı güncelle";

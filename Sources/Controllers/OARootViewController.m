@@ -483,6 +483,10 @@ typedef enum : NSUInteger {
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
         [self presentViewController:alert animated:YES completion:nil];
     }
+    else if ([ext caseInsensitiveCompare:@"osf"] == NSOrderedSame)
+    {
+        
+    }
     
     return YES;
 }

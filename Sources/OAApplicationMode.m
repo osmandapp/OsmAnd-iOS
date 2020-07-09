@@ -642,6 +642,8 @@ static OAApplicationMode *_SKI;
     return [set containsObject:self];
 }
 
+@end
+
 @implementation OAApplicationModeBean
 
 - (instancetype) init

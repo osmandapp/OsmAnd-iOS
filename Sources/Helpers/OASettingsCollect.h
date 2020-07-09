@@ -11,7 +11,7 @@
 
 @protocol OASettingsCollectDelegate <NSObject>
 
-- (void) onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSMutableArray<OASettingsItem *>*)items;
+- (void) onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *>*)items;
 
 @end
 

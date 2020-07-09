@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAImportAsyncTask, OAExportAsyncTask, OASettingsImport, OASettingsExport, OASettingsCollect, OACheckDuplicates;
 @class OASettingsItem;
-@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode;
+@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode, OAApplicationModeBean;
 
 FOUNDATION_EXTERN NSString *const kSettingsHelperErrorDomain;
 
@@ -142,6 +142,7 @@ typedef enum : NSUInteger {
 @interface OAProfileSettingsItem : OASettingsItem
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
+@property (nonatomic, readonly) OAApplicationModeBean *modeBean;
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
 

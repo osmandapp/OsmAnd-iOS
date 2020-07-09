@@ -402,6 +402,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    return NO;
 }
 
 @end
@@ -563,8 +564,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @implementation OAProfileSettingsItem
 {
     NSDictionary *_additionalPrefs;
-    
-    OAApplicationModeBean *_modeBean;
 }
 
 @dynamic type, name, fileName;
@@ -794,7 +793,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 #pragma mark - OAPluginSettingsItem
 
-@implementation PluginSettingsItem
+@implementation OAPluginSettingsItem
 {
     OAPlugin *_plugin;
     NSArray<OASettingsItem *> *_pluginDependentItems;
@@ -822,16 +821,53 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return [OAPlugin getPlugin:_plugin.class] != nil;
 }
 
-apply
-
-- (OASettingsItemReader *)getReader
+- (void)apply
 {
-    return [[OASettingsItemReader alloc] initWithItem:self];
+    if (self.shouldReplace || ![self exists])
+    {
+        // TODO: implement custom plugins
+//        for (OASettingsItem *item : _pluginDependentItems)
+//        {
+//            if ([item isKindOfClass:OAFileSettingsItem.class])
+//            {
+//                OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
+//                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
+//                {
+//                    [_plugin addRenderer:fileItem.name];
+//                }
+//                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
+//                {
+//                    [plugin addRouter:fileItem.name];
+//                }
+//                else if (fileItem.subtype == EOASettingsItemFileSubtypeOther)
+//                {
+//                    [plugin setResourceDirName:item.fileName];
+//                }
+//            }
+//            else if ([item isKindOfClass:OASuggestedDownloadsItem.class])
+//            {
+//                [plugin updateSuggestedDownloads:((OASuggestedDownloadsItem *) item).items];
+//            }
+//            else if ([item isKindOfClass:OADownloadsItem.class])
+//            {
+//                [plugin updateDownloadItems:((OADownloadsItem *) item).items];
+//            }
+//        }
+//        [OAPlugin addCusomPlugin:_plugin];
+    }
 }
 
-- (OASettingsItemWriter *)getWriter
+- (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
-    return [[OASettingsItemWriter alloc] initWithItem:self];
+    [super readFromJson:json error:error];
+//    _plugin = [[OAPlugin alloc] initWithJson:json];
+//    new CustomOsmandPlugin(app, json);
+}
+
+- (void) writeToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    [super writeToJson:json error:error];
+//    _plugin.writeAdditionalDataToJson(json);
 }
 
 @end
@@ -1005,6 +1041,7 @@ apply
         if ([subtypeName isEqualToString:name])
             return (EOASettingsItemFileSubtype)i;
     }
+    return EOASettingsItemFileSubtypeUnknown;
 }
 
 + (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName
@@ -1406,7 +1443,7 @@ apply
     return EOASettingsItemTypeUnknown;
 }
 
-- (NSArray<id> *) processDuplicateItems
+- (NSArray*) processDuplicateItems
 {
     if (_items.count > 0)
     {

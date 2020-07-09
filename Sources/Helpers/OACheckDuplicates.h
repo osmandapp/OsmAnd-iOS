@@ -10,7 +10,7 @@
 
 @protocol OACheckDuplicatesDelegate <NSObject>
 
-- (void) onDuplicatesChecked:(NSMutableArray<OASettingsItem *>*)duplicates items:(NSMutableArray<OASettingsItem *>*)items;
+- (void) onDuplicatesChecked:(NSMutableArray<OASettingsItem *>*)duplicates items:(NSArray<OASettingsItem *>*)items;
 
 @end
 

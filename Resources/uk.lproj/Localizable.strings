@@ -1715,3 +1715,15 @@
 "nav_type_title" = "Тип навігації";
 "quick_action_dir_from_descr" = "Торкніться цієї дії, щоб перейти від поточної точки екрана.";
 "board_at" = "Приземлення на";
+"base_profile_descr_boat" = "Корабель, веслування, вітрильний спорт";
+"base_profile_descr_public_transport" = "Види громадського транспорту";
+"base_profile_descr_pedestrian" = "Прогулянки, походи, біг";
+"base_profile_descr_bicycle" = "MTB (велосипед), мопед, кінь";
+"base_profile_descr_car" = "Автомобіль, вантажівка, мотоцикл";
+"new_profile" = "Новий профіль";
+"shared_string_exit" = "Вихід";
+"vehicle_parameters" = "Параметри транспортного засобу";
+"screen_alerts" = "Екранні сповіщення";
+"select_color" = "Виберіть колір";
+"base_profile_descr_aircraft" = "Літак, планер";
+"select_nav_profile_dialog_message" = "'Тип навігації' визначає спосіб обчислення маршрутів.";

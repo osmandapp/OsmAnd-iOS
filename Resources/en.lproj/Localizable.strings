@@ -451,7 +451,17 @@
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
+"update_map" = "Update map";
 "download_pending" = "Download pending";
+"move_map_to_select_area" = "Move map to select needed area.";
+"number_of_tiles" = "Number of tiles";
+"download_size" = "Download size";
+"preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
+"select_online_source" = "Select source";
+"online_sources" = "Online sources";
+"size_of_downloaded_data" = "The big difference between zoom levels can increase the size of the downloaded data.";
+"use_of_downloaded_map" = "You can now use this map offline as main map source or as overlay/underlay layer";
+"map_update_warning" = "Do you want to reload tile data from the Internet?";
 
 // HUD
 "hud_heading" = "Heading";
@@ -716,6 +726,7 @@
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
+"downloading" = "Downloading";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

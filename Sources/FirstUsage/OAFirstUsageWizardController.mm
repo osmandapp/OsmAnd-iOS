@@ -103,9 +103,9 @@ typedef enum
     OAAutoObserverProxy* _repositoryUpdatedObserver;
 
     //WorldRegion localDownloadRegion;
-    RepositoryResourceItem *_localMapIndexItem;
-    RepositoryResourceItem *_baseMapIndexItem;
-    NSMutableArray<RepositoryResourceItem *> *_indexItems;
+    OARepositoryResourceItem *_localMapIndexItem;
+    OARepositoryResourceItem *_baseMapIndexItem;
+    NSMutableArray<OARepositoryResourceItem *> *_indexItems;
     BOOL _firstMapDownloadCancelled;
     BOOL _secondMapDownloadCancelled;
     
@@ -342,7 +342,7 @@ typedef enum
         }
         case MAP_FOUND:
         {
-            RepositoryResourceItem *indexItem = _localMapIndexItem ? _localMapIndexItem : _baseMapIndexItem;
+            OARepositoryResourceItem *indexItem = _localMapIndexItem ? _localMapIndexItem : _baseMapIndexItem;
             if (indexItem)
             {
                 _lbDownloadMapName.text = indexItem.title;
@@ -362,7 +362,7 @@ typedef enum
             
             if (_indexItems.count > 0)
             {
-                RepositoryResourceItem *item = _indexItems[0];
+                OARepositoryResourceItem *item = _indexItems[0];
                 _lbMapName1.text = item.title;
                 _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
                 if (_firstMapDownloadCancelled)
@@ -384,7 +384,7 @@ typedef enum
             }
             if (_indexItems.count > 1)
             {
-                RepositoryResourceItem *item = _indexItems[1];
+                OARepositoryResourceItem *item = _indexItems[1];
                 _lbMapName2.text = item.title;
                 _lbMapSize2.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
                 if (_secondMapDownloadCancelled)
@@ -532,7 +532,7 @@ typedef enum
     BOOL downloadStarted = NO;
     if (itemIndex == 0 && _indexItems.count > 0)
     {
-        RepositoryResourceItem *item = _indexItems[0];
+        OARepositoryResourceItem *item = _indexItems[0];
         if ([_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && !_firstMapDownloadCancelled)
         {
             [self startDownload:item];
@@ -541,7 +541,7 @@ typedef enum
     }
     else if (itemIndex == 1 && _indexItems.count > 1)
     {
-        RepositoryResourceItem *item = _indexItems[1];
+        OARepositoryResourceItem *item = _indexItems[1];
         if ([_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && !_secondMapDownloadCancelled)
         {
             [self startDownload:item];
@@ -640,7 +640,7 @@ typedef enum
                     const auto resource = rm->getResourceInRepository(QString::fromNSString(resourceId));
                     if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
                     {
-                        RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+                        OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
                         item.resourceId = resource->id;
                         item.resourceType = resource->type;
                         item.title = [OAResourcesUIHelper titleOfResource:resource
@@ -660,7 +660,7 @@ typedef enum
         }
         
         const auto resource = _app.resourcesManager->getResourceInRepository(kWorldBasemapKey);
-        RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+        OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
         item.resourceId = resource->id;
         item.resourceType = resource->type;
         item.title = [OAResourcesUIHelper titleOfResource:resource
@@ -722,7 +722,7 @@ typedef enum
 {
     if (_indexItems.count > 0)
     {
-        RepositoryResourceItem *item = _indexItems[0];
+        OARepositoryResourceItem *item = _indexItems[0];
         if (item && [_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && _firstMapDownloadCancelled)
         {
             _progress1.hidden = NO;
@@ -740,7 +740,7 @@ typedef enum
 {
     if (_indexItems.count > 0)
     {
-        RepositoryResourceItem *item = _indexItems[0];
+        OARepositoryResourceItem *item = _indexItems[0];
         id<OADownloadTask> task = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]] firstObject];
         if (task)
             [task stop];
@@ -760,7 +760,7 @@ typedef enum
 {
     if (_indexItems.count > 1)
     {
-        RepositoryResourceItem *item = _indexItems[1];
+        OARepositoryResourceItem *item = _indexItems[1];
         if (item && [_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && _secondMapDownloadCancelled)
         {
             _progress2.hidden = NO;
@@ -778,7 +778,7 @@ typedef enum
 {
     if (_indexItems.count > 1)
     {
-        RepositoryResourceItem *item = _indexItems[1];
+        OARepositoryResourceItem *item = _indexItems[1];
         id<OADownloadTask> task = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]] firstObject];
         if (task)
             [task stop];
@@ -809,7 +809,7 @@ typedef enum
     }
 }
 
-- (void) startDownload:(RepositoryResourceItem *)item
+- (void) startDownload:(OARepositoryResourceItem *)item
 {
     NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource
                                                          inRegion:item.worldRegion

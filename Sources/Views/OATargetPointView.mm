@@ -674,6 +674,7 @@ static const NSInteger _buttonsCount = 4;
             [self.customController.buttonBack removeFromSuperview];
         if (self.customController.additionalAccessoryView)
             [self.customController.additionalAccessoryView removeFromSuperview];
+        [self.customController removeMapFrameLayer:self];
         [self.customController.contentView removeFromSuperview];
         self.customController.delegate = nil;
         _customController = nil;
@@ -716,7 +717,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource);
     
     self.buttonsView.hidden = _hideButtons;
     
@@ -777,6 +778,7 @@ static const NSInteger _buttonsCount = 4;
         _backViewRoute.hidden = ![self.customController hasInfoView];
         _buttonShowInfo.hidden = ![self.customController hasInfoButton];
         _buttonRoute.hidden = ![self.customController hasRouteButton];
+        [self.customController removeMapFrameLayer:self];
     }
     else
     {
@@ -1220,7 +1222,7 @@ static const NSInteger _buttonsCount = 4;
         _coordinateLabel.textAlignment = NSTextAlignmentRight;
     
     CGFloat topViewHeight = 0.0;
-    CGFloat topY = (_targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) ? 0.0 : _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
+    CGFloat topY = (_targetPoint.type == OATargetRouteDetailsGraph || _targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails || _targetPoint.type == OATargetDownloadMapSource) ? 0.0 : _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
     BOOL hasDescription = !_descriptionLabel.hidden;
     BOOL hasTransport = !_transportView.hidden;
     if (hasTransport)
@@ -1288,7 +1290,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (!hasDescription && !hasTransport)
     {
-        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin ? OAUtilities.getBottomMargin : 0);
+        topViewHeight = topY + ((_targetPoint.type == OATargetChangePosition || _targetPoint.type == OATargetTransportRouteDetails) || _targetPoint.type == OATargetDownloadMapSource ? 0.0 : 10.0) - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin ? OAUtilities.getBottomMargin : 0);
     }
     else
     {
@@ -1341,6 +1343,7 @@ static const NSInteger _buttonsCount = 4;
     }
     CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
     _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : [OAUtilities getStatusBarHeight]) : DeviceScreenHeight - containerViewHeight, width, containerViewHeight);
+    CGFloat bottomToolBarHeight = self.customController.hasBottomToolbar ? self.customController.bottomToolBarView.frame.size.height : 0.0;
     
     if (self.customController && [self.customController hasContent])
     {
@@ -1360,7 +1363,7 @@ static const NSInteger _buttonsCount = 4;
     _headerOffset = 0;
     
     _fullHeight = DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
-    _fullOffset = _targetPoint.type == OATargetImpassableRoadSelection ? DeviceScreenHeight / 3 : _headerY - (DeviceScreenHeight - _fullHeight);
+    _fullOffset = _targetPoint.type == OATargetImpassableRoadSelection ? DeviceScreenHeight / 3 : ([self.customController mapHeightKoef] > 0 ? DeviceScreenHeight * [self.customController mapHeightKoef] : _headerY - (DeviceScreenHeight - _fullHeight));
     
     _fullScreenHeight = _headerHeight + contentViewHeight;
     _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
@@ -1405,7 +1408,11 @@ static const NSInteger _buttonsCount = 4;
     }
     
     if (self.customController.contentView)
-        self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight, width, contentViewHeight);
+    {
+        self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight, width, !landscape && [self.customController disableScroll] ? _fullOffset - bottomToolBarHeight : contentViewHeight - bottomToolBarHeight);
+        if ([self.customController isMapFrameNeeded])
+            [self.customController addMapFrameLayer:[self getMapFrame:width] view:self];
+    }
     
     if (!_buttonLeft.hidden)
         _buttonShadow.frame = CGRectMake(5.0, 0.0, width - 50.0 - (_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0), 73.0);
@@ -1505,6 +1512,21 @@ static const NSInteger _buttonsCount = 4;
     }
     
     return newOffset;
+}
+
+- (CGRect) getMapFrame:(CGFloat)width
+{
+    CGRect mapFrame;
+    if ([self isLandscape])
+    {
+        mapFrame = CGRectMake(width, 0, DeviceScreenWidth - width, DeviceScreenHeight);
+    }
+    else
+    {
+        CGFloat frameHeight = _headerY - _fullOffset - self.customController.navBar.bounds.size.height;
+        mapFrame = CGRectMake(0, _headerY - frameHeight, width, frameHeight);
+    }
+    return mapFrame;
 }
 
 - (CGFloat) calculateTopY
@@ -2107,7 +2129,7 @@ static const NSInteger _buttonsCount = 4;
     if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
     {
         [self.menuViewDelegate targetViewEnableMapInteraction];
-        [self.menuViewDelegate targetSetBottomControlsVisible:YES menuHeight:([self isLandscape] ? 0 : height) animated:animated];
+        [self.menuViewDelegate targetSetBottomControlsVisible:[self.customController isBottomsControlVisible] menuHeight:([self isLandscape] ? 0 : height) animated:animated];
     }
     else
     {

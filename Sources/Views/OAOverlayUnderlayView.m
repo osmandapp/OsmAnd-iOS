@@ -68,6 +68,11 @@
         return 44.0;
 }
 
+-(BOOL)isTwoSlidersVisible
+{
+    return _viewLayout == OAViewLayoutOverlayUnderlay;
+}
+
 - (void)doLayoutSubviews
 {
     CGRect f = self.frame;

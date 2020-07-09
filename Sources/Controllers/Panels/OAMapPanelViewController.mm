@@ -1962,6 +1962,11 @@ typedef enum
         {
             break;
         }
+        case OATargetDownloadMapSource:
+        {
+            [self.targetMenuView doInit:showFullMenu showFullScreen:NO];
+            break;
+        }
         default:
         {
             [self.targetMenuView prepare];
@@ -2899,6 +2904,32 @@ typedef enum
 - (void) openTargetViewWithDestination:(OADestination *)destination
 {
     [self destinationViewMoveTo:destination];
+}
+
+- (void) openTargetViewWithDownloadMapSource:(BOOL)pushed
+{
+    [_mapViewController hideContextPinMarker];
+
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+
+    targetPoint.type = OATargetDownloadMapSource;
+
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+    targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    _targetLatitude = latLon.latitude;
+    _targetLongitude = latLon.longitude;
+
+    targetPoint.toolbarNeeded = YES;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    [_targetMenuView setTargetPoint:targetPoint];
+    [self showTargetPointMenu:YES showFullMenu:YES onComplete:^{
+        [self enterContextMenuMode];
+        _activeTargetActive = YES;
+    }];
 }
 
 - (void) displayGpxOnMap:(OAGPX *)item

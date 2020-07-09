@@ -27,5 +27,6 @@ typedef enum : NSUInteger {
 
 - (void)updateView;
 - (CGFloat)getHeight:(CGFloat)width;
+-(BOOL)isTwoSlidersVisible;
 
 @end

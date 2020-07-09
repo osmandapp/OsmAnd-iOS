@@ -177,7 +177,7 @@ static const NSInteger sectionCount = 2;
 - (void)buildTableDataAndRefresh {
     NSMutableArray *liveEnabled = [NSMutableArray array];
     NSMutableArray *liveDisabled = [NSMutableArray array];
-    for (LocalResourceItem *item : _localIndexes)
+    for (OALocalResourceItem *item : _localIndexes)
     {
         if (item.resourceType != OsmAnd::ResourcesManager::ResourceType::MapRegion
             || item.resourceId.compare(QString(kWorldSeamarksKey)) == 0
@@ -348,7 +348,7 @@ static const NSInteger sectionCount = 2;
         if (!match || (resource->type != OsmAnd::ResourcesManager::ResourceType::MapRegion))
             continue;
         
-        LocalResourceItem *item = [[LocalResourceItem alloc] init];
+        OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
         item.resourceId = resource->id;
         item.resourceType = resource->type;
         if (match)
@@ -379,7 +379,7 @@ static const NSInteger sectionCount = 2;
         }
         else
         {
-            ResourceItem *item = obj1;
+            OAResourceItem *item = obj1;
             str1 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
         }
         
@@ -389,7 +389,7 @@ static const NSInteger sectionCount = 2;
         }
         else
         {
-            ResourceItem *item = obj2;
+            OAResourceItem *item = obj2;
             str2 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
         }
         

@@ -14,7 +14,7 @@
 @interface OAWikiArticleHelper : NSObject
 
 + (OAWorldRegion *) findWikiRegion:(OAWorldRegion *)mapRegion;
-+ (RepositoryResourceItem *) findResourceItem:(OAWorldRegion *)worldRegion;
++ (OARepositoryResourceItem *) findResourceItem:(OAWorldRegion *)worldRegion;
 
 + (void) showWikiArticle:(CLLocationCoordinate2D)location url:(NSString *)url;
 

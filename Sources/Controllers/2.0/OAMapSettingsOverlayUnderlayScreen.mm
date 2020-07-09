@@ -25,6 +25,7 @@
 #import "OAOnlineTilesEditingViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAAutoObserverProxy.h"
+#import "OAResourcesUIHelper.h"
 
 #include <QSet>
 
@@ -38,34 +39,6 @@
 #define kCellTypeButton @"button_cell"
 #define kCellTypeIconSwitch @"icon_switch_cell"
 #define kCellTypeMap @"icon_text_desc_button_cell"
-
-#define _(name) OAMapSourcesOverlayUnderlayScreen__##name
-#define commonInit _(commonInit)
-#define deinit _(deinit)
-
-#define Item _(Item)
-@interface Item : NSObject
-@property OAMapSource* mapSource;
-@property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
-@property NSString *path;
-@end
-@implementation Item
-@end
-
-#define Item_OnlineTileSource _(Item_OnlineTileSource)
-@interface Item_OnlineTileSource : Item
-@property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
-@end
-@implementation Item_OnlineTileSource
-@end
-
-#define Item_SqliteDbTileSource _(Item_SqliteDbTileSource)
-@interface Item_SqliteDbTileSource : Item
-@property uint64_t size;
-@property BOOL isOnline;
-@end
-@implementation Item_SqliteDbTileSource
-@end
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -89,7 +62,7 @@ static NSInteger kButtonsSection;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
 
-    NSMutableArray* _onlineMapSources;
+    NSArray* _onlineMapSources;
     EMapSettingType _mapSettingType;
     NSArray *_data;
     BOOL _isEnabled;
@@ -151,61 +124,7 @@ static NSInteger kButtonsSection;
 
 - (void)setupView
 {
-    [_onlineMapSources removeAllObjects];
-    
-    // Collect all needed resources
-    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
-    const auto localResources = _app.resourcesManager->getLocalResources();
-    for(const auto& localResource : localResources)
-        if (localResource->type == OsmAndResourceType::OnlineTileSources)
-            onlineTileSourcesResources.push_back(localResource);
-    
-    // Process online tile sources resources
-    for(const auto& resource : onlineTileSourcesResources)
-    {
-        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
-        NSString* resourceId = resource->id.toNSString();
-        
-        for(const auto& onlineTileSource : onlineTileSources->getCollection())
-        {
-            Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
-            
-            NSString *caption = onlineTileSource->name.toNSString();
-            
-            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                        andVariant:onlineTileSource->name.toNSString() name:caption];
-            item.resource = resource;
-            item.onlineTileSource = onlineTileSource;
-            item.path = [_app.cachePath stringByAppendingPathComponent:caption];
-            [_onlineMapSources addObject:item];
-        }
-    }
-    
-    NSArray *arr = [_onlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_OnlineTileSource* obj1, Item_OnlineTileSource* obj2) {
-        NSString *caption1 = obj1.onlineTileSource->name.toNSString();
-        NSString *caption2 = obj2.onlineTileSource->name.toNSString();
-        return [caption2 compare:caption1];
-    }];
-    
-    [_onlineMapSources setArray:arr];
-
-    
-    NSMutableArray *sqlitedbArr = [NSMutableArray array];
-    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
-    {
-        Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
-        item.path = [OAMapCreatorHelper sharedInstance].files[fileName];
-        item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
-        item.isOnline = [OASQLiteTileSource isOnlineTileSource:item.path];
-        [sqlitedbArr addObject:item];
-    }
-    
-    [sqlitedbArr sortUsingComparator:^NSComparisonResult(Item_SqliteDbTileSource *obj1, Item_SqliteDbTileSource *obj2) {
-        return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
-    }];
-    
-    [_onlineMapSources addObjectsFromArray:sqlitedbArr];
+    _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:YES];
     
     
     NSMutableArray *sliderArr = [NSMutableArray new];
@@ -220,7 +139,7 @@ static NSInteger kButtonsSection;
                          }];
     
     NSMutableArray *availableLayersArr = [NSMutableArray new];
-    for (Item* source in _onlineMapSources)
+    for (OAResourceItem* source in _onlineMapSources)
     {
         [availableLayersArr addObject:@{
                         @"type" : kCellTypeMap,
@@ -406,26 +325,29 @@ static NSInteger kButtonsSection;
         NSString *caption = nil;
         NSString *description = nil;
         NSString *size = nil;
-        Item* someItem = nil;
+        OAResourceItem* someItem = nil;
         
         someItem = item[@"source"];
+        OAMapSource *itemMapSource = nil;
         
-        if ([someItem isKindOfClass:[Item_OnlineTileSource class]])
+        if ([someItem isKindOfClass:[OAOnlineTilesResourceItem class]])
         {
-            if (someItem.resource->type == OsmAndResourceType::OnlineTileSources)
+            OAOnlineTilesResourceItem *onlineSource = (OAOnlineTilesResourceItem *) someItem;
+            if (onlineSource.res->type == OsmAndResourceType::OnlineTileSources)
             {
-                Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
-                caption = item.mapSource.name;
+                itemMapSource = onlineSource.mapSource;
+                caption = onlineSource.mapSource.name;
                 description = OALocalizedString(@"online_map");
                 cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map_online"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.leftIconView.tintColor = UIColorFromRGB(color_chart_orange);
             }
         }
         
-        else if ([someItem isKindOfClass:[Item_SqliteDbTileSource class]])
+        else if ([someItem isKindOfClass:[OASqliteDbResourceItem class]])
         {
-            caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-            Item_SqliteDbTileSource *sqlite = (Item_SqliteDbTileSource *)someItem;
+            OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *)someItem;
+            itemMapSource = sqlite.mapSource;
+            caption = [[sqlite.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
             description = sqlite.isOnline ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map");
             size = [NSByteCountFormatter stringFromByteCount:sqlite.size countStyle:NSByteCountFormatterCountStyleFile];
             cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -444,7 +366,7 @@ static NSInteger kButtonsSection;
         else if (_mapSettingType == EMapSettingUnderlay)
             mapSource = _app.data.underlayMapSource;
 
-        if ([mapSource isEqual:someItem.mapSource])
+        if ([mapSource isEqual:itemMapSource])
             [cell.checkButton setImage:[UIImage imageNamed:@"menu_cell_selected.png"] forState:UIControlStateNormal];
         else
             [cell.checkButton setImage:nil forState:UIControlStateNormal];
@@ -643,17 +565,29 @@ static NSInteger kButtonsSection;
 
 - (void) switchLayer:(NSInteger)number
 {
-    Item* item = [_onlineMapSources objectAtIndex:number];
+    OAResourceItem* item = [_onlineMapSources objectAtIndex:number];
+    OAMapSource *itemMapSource = nil;
+    
+    if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
+    {
+        OAOnlineTilesResourceItem *onlineSource = (OAOnlineTilesResourceItem *) item;
+        itemMapSource = onlineSource.mapSource;
+    }
+    else if ([item isKindOfClass:[OASqliteDbResourceItem class]])
+    {
+        OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *)item;
+        itemMapSource = sqlite.mapSource;
+    }
     if (_mapSettingType == EMapSettingOverlay)
     {
-        _app.data.overlayMapSource = item.mapSource;
-        _app.data.lastOverlayMapSource = item.mapSource;
+        _app.data.overlayMapSource = itemMapSource;
+        _app.data.lastOverlayMapSource = itemMapSource;
     }
     else if (_mapSettingType == EMapSettingUnderlay)
     {
         [self hidePolygons:YES];
-        _app.data.underlayMapSource = item.mapSource;
-        _app.data.lastUnderlayMapSource = item.mapSource;
+        _app.data.underlayMapSource = itemMapSource;
+        _app.data.lastUnderlayMapSource = itemMapSource;
     }
     [tblView reloadData];
 }
@@ -717,7 +651,7 @@ static NSInteger kButtonsSection;
 
 #pragma mark - OATilesEditingViewControllerDelegate
 
-- (void) onTileSourceSaved:(LocalResourceItem *)item
+- (void) onTileSourceSaved:(OALocalResourceItem *)item
 {
     [self setupView];
     [tblView reloadData];

@@ -1696,9 +1696,9 @@ apply
 
 @interface OAMapSourcesSettingsItem()
 
-@property (nonatomic) NSMutableArray<LocalResourceItem *> *items;
-@property (nonatomic) NSMutableArray<LocalResourceItem *> *appliedItems;
-@property (nonatomic) NSMutableArray<LocalResourceItem *> *existingItems;
+@property (nonatomic) NSMutableArray<OALocalResourceItem *> *items;
+@property (nonatomic) NSMutableArray<OALocalResourceItem *> *appliedItems;
+@property (nonatomic) NSMutableArray<OALocalResourceItem *> *existingItems;
 
 @end
 
@@ -1719,7 +1719,7 @@ apply
     OsmAndAppInstance app = [OsmAndApp instance];
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
     {
-        SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+        OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
         item.title = [[filePath.lastPathComponent stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         item.fileName = filePath.lastPathComponent;
         item.path = filePath;
@@ -1732,7 +1732,7 @@ apply
         const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
         for(const auto& onlineTileSource : onlineTileSources->getCollection())
         {
-            OnlineTilesResourceItem* item = [[OnlineTilesResourceItem alloc] init];
+            OAOnlineTilesResourceItem* item = [[OAOnlineTilesResourceItem alloc] init];
             item.title = onlineTileSource->name.toNSString();
             item.path = [app.cachePath stringByAppendingPathComponent:item.title];
             [self.existingItems addObject:item];
@@ -1740,18 +1740,18 @@ apply
     }
 }
 
-- (instancetype) initWithItems:(NSArray<LocalResourceItem *> *)items
+- (instancetype) initWithItems:(NSArray<OALocalResourceItem *> *)items
 {
     self = [super initWithItems:items];
     if (self)
     {
         if (self.items.count > 0)
         {
-            for (LocalResourceItem *localItem in self.items)
+            for (OALocalResourceItem *localItem in self.items)
             {
-                if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+                if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
                 {
-                    SqliteDbResourceItem *item = (SqliteDbResourceItem *)localItem;
+                    OASqliteDbResourceItem *item = (OASqliteDbResourceItem *)localItem;
                     OASQLiteTileSource *sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
                     NSMutableDictionary *params = [NSMutableDictionary dictionary];
                     params[@"minzoom"] = [NSString stringWithFormat:@"%d", sqliteSource.minimumZoomSupported];
@@ -1771,9 +1771,9 @@ apply
 
                     _newSqliteData[item.title] = params;
                 }
-                else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+                else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
                 {
-                    OnlineTilesResourceItem *item = (OnlineTilesResourceItem *)localItem;
+                    OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
                     std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> tileSource;
                     const auto& resource = [OsmAndApp instance].resourcesManager->getResource(QStringLiteral("online_tiles"));
                     if (resource)
@@ -1804,7 +1804,7 @@ apply
 
 - (void) apply
 {
-    NSArray<LocalResourceItem *> *newItems = [self getNewItems];
+    NSArray<OALocalResourceItem *> *newItems = [self getNewItems];
     if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
@@ -1812,20 +1812,20 @@ apply
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
         if ([self shouldReplace])
         {
-            for (LocalResourceItem *localItem in self.duplicateItems)
+            for (OALocalResourceItem *localItem in self.duplicateItems)
             {
-                if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+                if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
                 {
-                    SqliteDbResourceItem *item = (SqliteDbResourceItem *)localItem;
+                    OASqliteDbResourceItem *item = (OASqliteDbResourceItem *)localItem;
                     if (item.path && [fileManager fileExistsAtPath:item.path])
                     {
                         [[OAMapCreatorHelper sharedInstance] removeFile:item.path];
                         [self.appliedItems addObject:localItem];
                     }
                 }
-                else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+                else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
                 {
-                    OnlineTilesResourceItem *item = (OnlineTilesResourceItem *)localItem;
+                    OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
                     if (item.path)
                     {
                         [[NSFileManager defaultManager] removeItemAtPath:item.path error:nil];
@@ -1837,12 +1837,12 @@ apply
         }
         else
         {
-            for (LocalResourceItem *localItem in self.duplicateItems)
+            for (OALocalResourceItem *localItem in self.duplicateItems)
                 [self.appliedItems addObject:[self renameItem:localItem]];
         }
-        for (LocalResourceItem *localItem in self.appliedItems)
+        for (OALocalResourceItem *localItem in self.appliedItems)
         {
-            if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+            if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
             {
                 NSMutableDictionary *params = _newSqliteData[localItem.title];
                 if (params)
@@ -1852,7 +1852,7 @@ apply
                         [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
                 }
             }
-            else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+            else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
             {
                 const auto source = _newSources.value(QString::fromNSString(localItem.title));
                 if (source)
@@ -1865,16 +1865,16 @@ apply
     }
 }
 
-- (LocalResourceItem *) renameItem:(LocalResourceItem *)localItem
+- (OALocalResourceItem *) renameItem:(OALocalResourceItem *)localItem
 {
     int number = 0;
     while (true)
     {
         number++;
-        if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+        if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
         {
-            SqliteDbResourceItem *oldItem = (SqliteDbResourceItem *)localItem;
-            SqliteDbResourceItem *renamedItem = [[SqliteDbResourceItem alloc] init];
+            OASqliteDbResourceItem *oldItem = (OASqliteDbResourceItem *)localItem;
+            OASqliteDbResourceItem *renamedItem = [[OASqliteDbResourceItem alloc] init];
             renamedItem.fileName = [NSString stringWithFormat:@"%@_%d", oldItem.fileName, number];
             if (![self isDuplicate:renamedItem])
             {
@@ -1886,10 +1886,10 @@ apply
                 return renamedItem;
             }
         }
-        else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+        else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
         {
-            OnlineTilesResourceItem *oldItem = (OnlineTilesResourceItem *)localItem;
-            OnlineTilesResourceItem *renamedItem = [[OnlineTilesResourceItem alloc] init];
+            OAOnlineTilesResourceItem *oldItem = (OAOnlineTilesResourceItem *)localItem;
+            OAOnlineTilesResourceItem *renamedItem = [[OAOnlineTilesResourceItem alloc] init];
             renamedItem.title = [NSString stringWithFormat:@"%@_%d", oldItem.title, number];
             if (![self isDuplicate:renamedItem])
             {
@@ -1902,9 +1902,9 @@ apply
     }
 }
 
-- (BOOL) isDuplicate:(LocalResourceItem *)item
+- (BOOL) isDuplicate:(OALocalResourceItem *)item
 {
-    for (LocalResourceItem *existingItem in self.existingItems)
+    for (OALocalResourceItem *existingItem in self.existingItems)
         if ([existingItem.title isEqualToString:item.title])
             return YES;
 
@@ -1975,7 +1975,7 @@ apply
             OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
             app.resourcesManager->installTilesResource(result);
 
-            OnlineTilesResourceItem *item = [[OnlineTilesResourceItem alloc] init];
+            OAOnlineTilesResourceItem *item = [[OAOnlineTilesResourceItem alloc] init];
             item.path = [app.cachePath stringByAppendingPathComponent:name];
             item.title = name;
             _newSources[QString::fromNSString(name)] = result;
@@ -2004,7 +2004,7 @@ apply
             if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
             {
                 [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
-                SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+                OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
                 item.title = [[name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                 item.fileName = name;
                 item.path = [[[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"sqlitedb"];
@@ -2022,12 +2022,12 @@ apply
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
     {
-        for (LocalResourceItem *localItem in self.items)
+        for (OALocalResourceItem *localItem in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+            if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
             {
-                SqliteDbResourceItem *item = (SqliteDbResourceItem *)localItem;
+                OASqliteDbResourceItem *item = (OASqliteDbResourceItem *)localItem;
                 NSDictionary *params = _newSqliteData[item.title];
                 jsonObject[@"sql"] = @(YES);
                 jsonObject[@"name"] = item.title;
@@ -2047,9 +2047,9 @@ apply
                 jsonObject[@"bitDensity"] = params[@"bitDensity"];
                 jsonObject[@"rule"] = params[@"rule"];
             }
-            else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+            else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
             {
-                OnlineTilesResourceItem *item = (OnlineTilesResourceItem *)localItem;
+                OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
                 const auto& source = _newSources[QString::fromNSString(item.title)];
                 if (source)
                 {

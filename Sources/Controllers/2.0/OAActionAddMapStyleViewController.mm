@@ -17,31 +17,11 @@
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OAMapStyleTitles.h"
+#import "OAResourcesUIHelper.h"
 
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
-
-#define _(name) OAActionAddMapStyleViewController__##name
-#define commonInit _(commonInit)
-#define deinit _(deinit)
-
-#define Item _(Item)
-@interface Item : NSObject
-@property OAMapSource* mapSource;
-@property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
-@end
-@implementation Item
-@end
-
-#define Item_MapStyle _(Item_MapStyle)
-@interface Item_MapStyle : Item
-@property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
-@property int sortIndex;
-@end
-@implementation Item_MapStyle
-@end
-
 
 @interface OAActionAddMapStyleViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -107,7 +87,7 @@
         
         NSString* resourceId = resource->id.toNSString();
         
-        Item_MapStyle* item = [[Item_MapStyle alloc] init];
+        OAMapStyleResourceItem* item = [[OAMapStyleResourceItem alloc] init];
         item.mapSource = [[OsmAndApp instance].data lastMapSourceByResourceId:resourceId];
         if (item.mapSource == nil)
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:mode.variantKey];
@@ -132,7 +112,7 @@
         
         [offlineMapSources addObject:item];
     }
-    NSArray *res = [offlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_MapStyle* obj1, Item_MapStyle* obj2) {
+    NSArray *res = [offlineMapSources sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleResourceItem* obj1, OAMapStyleResourceItem* obj2) {
         if (obj1.sortIndex < obj2.sortIndex)
             return NSOrderedAscending;
         if (obj1.sortIndex > obj2.sortIndex)
@@ -171,7 +151,7 @@
     NSMutableArray *arr = [NSMutableArray new];
     for (NSIndexPath *path in selectedItems)
     {
-        Item_MapStyle* style = [self getItem:path];
+        OAMapStyleResourceItem* style = [self getItem:path];
         NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [style.mapSource.resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]];
         [arr addObject:@{@"name" : style.mapSource.name, @"img" : imgName ? imgName : @"ic_custom_show_on_map"}];
     }
@@ -181,7 +161,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(Item_MapStyle *)getItem:(NSIndexPath *)indexPath
+-(OAMapStyleResourceItem *)getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.row];
 }
@@ -191,7 +171,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Item_MapStyle* item = [self getItem:indexPath];
+    OAMapStyleResourceItem* item = [self getItem:indexPath];
     static NSString* const identifierCell = @"OABottomSheetActionCell";
     OABottomSheetActionCell* cell = nil;
     
@@ -239,7 +219,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Item_MapStyle *item = [self getItem:indexPath];
+    OAMapStyleResourceItem *item = [self getItem:indexPath];
     return [OABottomSheetActionCell getHeight:item.mapSource.name value:nil cellWidth:tableView.bounds.size.width];
 }
 

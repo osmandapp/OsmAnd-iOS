@@ -34,7 +34,7 @@
     return nil;
 }
 
-+ (RepositoryResourceItem *) findResourceItem:(OAWorldRegion *)worldRegion
++ (OARepositoryResourceItem *) findResourceItem:(OAWorldRegion *)worldRegion
 {
     if (worldRegion)
     {
@@ -47,7 +47,7 @@
                 const auto resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
                 if (resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion)
                 {
-                    RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+                    OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
                     item.resourceId = resource->id;
                     item.resourceType = resource->type;
                     item.title = [OAResourcesUIHelper titleOfResource:resource
@@ -73,7 +73,7 @@
     OAWorldRegion *worldRegion = [app.worldRegion findAtLat:location.latitude lon:location.longitude];
     worldRegion = [self findWikiRegion:worldRegion];
     NSString *articleName = [[url lastPathComponent] stringByRemovingPercentEncoding];
-    RepositoryResourceItem *item = [self findResourceItem:worldRegion];
+    OARepositoryResourceItem *item = [self findResourceItem:worldRegion];
     
     if (item && app.resourcesManager->isResourceInstalled(item.resourceId))
     {

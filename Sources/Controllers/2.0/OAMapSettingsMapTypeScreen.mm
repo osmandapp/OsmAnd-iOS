@@ -176,7 +176,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
         NSString *name = [OASQLiteTileSource getNameFor:filePath];
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:name];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:name type:@"sqlitedb"];
         [sqlitedbArr addObject:item];
     }
 

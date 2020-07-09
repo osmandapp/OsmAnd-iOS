@@ -29,6 +29,7 @@
         _resourceId = [resourceId copy];
         _variant = nil;
         _name = @"OsmAnd";
+        _type = @"";
 
     }
     return self;
@@ -43,6 +44,7 @@
         _resourceId = [resourceId copy];
         _variant = [variant copy];
         _name = @"OsmAnd";
+        _type = @"";
 
     }
     return self;
@@ -58,6 +60,24 @@
         _resourceId = [resourceId copy];
         _variant = [variant copy];
         _name = [name copy];
+        _type = @"";
+        
+    }
+    return self;
+}
+
+- (instancetype)initWithResource:(NSString*)resourceId
+                      andVariant:(NSString*)variant
+                            name:(NSString*)name
+                            type:(NSString*)type
+{
+    self = [super init];
+    if (self) {
+        [self commonInit];
+        _resourceId = [resourceId copy];
+        _variant = [variant copy];
+        _name = [name copy];
+        _type = [type copy];
         
     }
     return self;
@@ -70,6 +90,7 @@
 @synthesize resourceId = _resourceId;
 @synthesize variant = _variant;
 @synthesize name = _name;
+@synthesize type = _type;
 
 - (BOOL)isEqual:(id)object
 {
@@ -98,12 +119,14 @@
 #define kResourceId @"resource"
 #define kVariantId @"variant"
 #define kNameId @"name"
+#define kTypeId @"type"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_resourceId forKey:kResourceId];
     [aCoder encodeObject:_variant forKey:kVariantId];
     [aCoder encodeObject:_name forKey:kNameId];
+    [aCoder encodeObject:_type forKey:kTypeId];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -114,6 +137,8 @@
         _resourceId = [aDecoder decodeObjectForKey:kResourceId];
         _variant = [aDecoder decodeObjectForKey:kVariantId];
         _name = [aDecoder decodeObjectForKey:kNameId];
+        _type = [aDecoder decodeObjectForKey:kNameId];
+
 
         if (_variant == (id)[NSNull null])
             _variant = nil;
@@ -129,7 +154,8 @@
 {
     OAMapSource* clone = [[OAMapSource allocWithZone:zone] initWithResource:_resourceId
                                                                  andVariant:_variant
-                                                                       name:_name];
+                                                                       name:_name
+                                                                       type:_type];
 
     return clone;
 }

@@ -196,7 +196,7 @@ static NSInteger kButtonsSection;
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
         item.path = [OAMapCreatorHelper sharedInstance].files[fileName];
         NSString *name = [OASQLiteTileSource getNameFor:item.path];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:name];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:name type:@"sqlitedb"];
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
         item.isOnline = [OASQLiteTileSource isOnlineTileSource:item.path];
         [sqlitedbArr addObject:item];

@@ -763,7 +763,7 @@
     return res;
 }
 
-+ (NSString *) fetchLabelFor:(NSString *)filePath
++ (NSString *) getLabelFor:(NSString *)filePath
 {
     NSString *optionalLabel = @"";
     sqlite3 *db;
@@ -784,7 +784,8 @@
         }
         sqlite3_close(db);
     }
-    return optionalLabel;
+    
+    return (optionalLabel.length > 0) ? optionalLabel : [filePath lastPathComponent];
 }
 
 @end

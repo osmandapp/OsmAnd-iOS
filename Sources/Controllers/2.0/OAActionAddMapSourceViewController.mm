@@ -143,9 +143,9 @@
     for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
         NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
-        NSString *optionalLabel = [OASQLiteTileSource fetchLabelFor:filePath];
+        NSString *label = [OASQLiteTileSource getLabelFor:filePath];
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""] optionalLabel:optionalLabel];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""] optionalLabel:label];
         [sqlitedbArr addObject:item];
     }
     

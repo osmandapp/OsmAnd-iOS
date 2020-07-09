@@ -27,7 +27,7 @@
 
 + (BOOL) createNewTileSourceDbAtPath:(NSString *)path parameters:(NSDictionary *)parameters;
 + (BOOL) isOnlineTileSource:(NSString *)filePath;
-+ (NSString *) fetchLabelFor:(NSString *)filePath;
++ (NSString *) getLabelFor:(NSString *)filePath;
 
 - (instancetype)initWithFilePath:(NSString *)filePath;
 

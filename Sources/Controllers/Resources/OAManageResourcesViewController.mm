@@ -976,7 +976,7 @@ static BOOL _lackOfResources;
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
         if ([OASQLiteTileSource isOnlineTileSource:filePath])
         {
-            item.optionalLabel = [OASQLiteTileSource fetchLabelFor:filePath];
+            item.optionalLabel = [OASQLiteTileSource getLabelFor:filePath];
             [_localOnlineTileSources addObject:item];
         }
         else

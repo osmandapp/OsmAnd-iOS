@@ -1598,3 +1598,15 @@
 "consider_limitations_param" = "Prendre en compte les restrictions temporaires";
 "allow_3d_descr" = "Activez cette option pour voir la carte en perspective 2.5D";
 "active_markers" = "Marques actives";
+"shared_string_exit" = "Quitter";
+"base_profile_descr_aircraft" = "Avion, parapente";
+"base_profile_descr_boat" = "Bateau, aviron, voile";
+"base_profile_descr_public_transport" = "Types de transports publics";
+"base_profile_descr_pedestrian" = "Marche, randonnée, course à pied";
+"base_profile_descr_bicycle" = "VTT, vélomoteur, cheval";
+"base_profile_descr_car" = "Voiture, camion, moto";
+"new_profile" = "Nouveau profil";
+"screen_alerts" = "Alertes visuelles";
+"vehicle_parameters" = "Caractéristiques du véhicule";
+"select_nav_profile_dialog_message" = "Le type de navigation détermine les règles de calcul des itinéraires.";
+"select_color" = "Sélectionnez la couleur";

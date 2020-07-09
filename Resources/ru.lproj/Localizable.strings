@@ -1775,3 +1775,10 @@
 "vehicle_parameters" = "Параметры автомобиля";
 "screen_alerts" = "Экранные оповещения";
 "voice_anounces" = "Голосовые анонсы";
+"downloading" = "Скачивание";
+"online_sources" = "Источники онлайн карт";
+"select_online_source" = "Выбор источника";
+"preview_of_selected_zoom_levels" = "Предпросмотр выбранных уровней масштабирования";
+"download_size" = "Размер загрузки";
+"move_map_to_select_area" = "Переместите карту, чтобы выбрать нужную область.";
+"update_map" = "Обновить карту";

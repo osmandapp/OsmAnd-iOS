@@ -49,7 +49,7 @@
     {
         NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
         NSString *label = [OASQLiteTileSource getLabelFor:filePath];
-        [sqlitedbArr addObject:[[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""] optionalLabel:label]];
+        [sqlitedbArr addObject:[[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:label]];
     }
     
     [sqlitedbArr sortUsingComparator:^NSComparisonResult(OAMapSource *obj1, OAMapSource *obj2) {

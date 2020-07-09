@@ -29,7 +29,6 @@
         _resourceId = [resourceId copy];
         _variant = nil;
         _name = @"OsmAnd";
-        _optionalLabel = @"";
 
     }
     return self;
@@ -44,7 +43,6 @@
         _resourceId = [resourceId copy];
         _variant = [variant copy];
         _name = @"OsmAnd";
-        _optionalLabel = @"";
 
     }
     return self;
@@ -60,24 +58,6 @@
         _resourceId = [resourceId copy];
         _variant = [variant copy];
         _name = [name copy];
-        _optionalLabel = @"";
-        
-    }
-    return self;
-}
-
-- (instancetype)initWithResource:(NSString*)resourceId
-                      andVariant:(NSString*)variant
-                            name:(NSString*)name
-                   optionalLabel:(NSString*)optionalLabel
-{
-    self = [super init];
-    if (self) {
-        [self commonInit];
-        _resourceId = [resourceId copy];
-        _variant = [variant copy];
-        _name = [name copy];
-        _optionalLabel = [optionalLabel copy];
         
     }
     return self;
@@ -90,7 +70,6 @@
 @synthesize resourceId = _resourceId;
 @synthesize variant = _variant;
 @synthesize name = _name;
-@synthesize optionalLabel = _optionalLabel;
 
 - (BOOL)isEqual:(id)object
 {
@@ -101,7 +80,7 @@
 
     OAMapSource* other = (OAMapSource*)object;
     return [_resourceId isEqualToString:other.resourceId]
-           && ([_variant isEqualToString:other.variant] || (_variant == other.variant) || (_optionalLabel == other.optionalLabel)) ;
+           && ([_variant isEqualToString:other.variant] || (_variant == other.variant)) ;
 }
 
 -(NSUInteger)hash
@@ -119,14 +98,12 @@
 #define kResourceId @"resource"
 #define kVariantId @"variant"
 #define kNameId @"name"
-#define kOptionalLabelId @"optionalLabel"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_resourceId forKey:kResourceId];
     [aCoder encodeObject:_variant forKey:kVariantId];
     [aCoder encodeObject:_name forKey:kNameId];
-    [aCoder encodeObject:_optionalLabel forKey:kOptionalLabelId];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -137,7 +114,6 @@
         _resourceId = [aDecoder decodeObjectForKey:kResourceId];
         _variant = [aDecoder decodeObjectForKey:kVariantId];
         _name = [aDecoder decodeObjectForKey:kNameId];
-        _optionalLabel = [aDecoder decodeObjectForKey:kOptionalLabelId];
 
         if (_variant == (id)[NSNull null])
             _variant = nil;
@@ -153,8 +129,7 @@
 {
     OAMapSource* clone = [[OAMapSource allocWithZone:zone] initWithResource:_resourceId
                                                                  andVariant:_variant
-                                                                       name:_name
-                                                              optionalLabel:_optionalLabel];
+                                                                       name:_name];
 
     return clone;
 }

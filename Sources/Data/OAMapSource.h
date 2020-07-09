@@ -20,11 +20,6 @@
                       andVariant:(NSString*)variant
                             name:(NSString*)name;
 
-- (instancetype)initWithResource:(NSString*)resourceId
-                      andVariant:(NSString*)variant
-                            name:(NSString*)name
-                   optionalLabel:(NSString*)optionalLabel;
-
 // "OnlineTileSources" or "MapStyle" resource
 @property(nonatomic, readonly) NSString* resourceId;
 
@@ -33,9 +28,6 @@
 @property(nonatomic, readonly) NSString* variant;
 
 @property(nonatomic) NSString* name;
-
-// For sqliteb online maps
-@property(nonatomic) NSString* optionalLabel;
 
 + (OAMapSource *) getOsmAndOnlineTilesMapSource;
 

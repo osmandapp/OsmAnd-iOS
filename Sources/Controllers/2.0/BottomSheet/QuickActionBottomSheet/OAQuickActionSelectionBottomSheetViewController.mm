@@ -23,10 +23,6 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-#define kVariant 0
-#define kName 1
-#define kOptionalLabel 2
-
 #define kBottomSheetActionCell @"OABottomSheetActionCell"
 
 @interface OAQuickActionSelectionBottomSheetScreen ()
@@ -101,9 +97,8 @@
         {
             [arr addObject:@{
                              @"type" : kBottomSheetActionCell,
-                             @"title" : namePair[kName],
-                             @"optionalLabel" : namePair[kOptionalLabel],
-                             @"value" : namePair[kVariant],
+                             @"title" : namePair.lastObject,
+                             @"value" : namePair.firstObject,
                              @"img" : @"ic_custom_map_style"
                              }];
         }
@@ -186,9 +181,8 @@
             NSString *imgName = item[@"img"];
             if (imgName)
                 img = [UIImage imageNamed:imgName];
-                                             
-            NSString *optionalLabel = item[@"optionalLabel"];
-            cell.textView.text = (optionalLabel.length > 0) ? optionalLabel : item[@"title"];
+            
+            cell.textView.text = item[@"title"];
             NSString *desc = item[@"descr"];
             cell.descView.text = desc;
             cell.descView.hidden = desc.length == 0;

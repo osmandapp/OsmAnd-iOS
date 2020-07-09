@@ -785,7 +785,10 @@
         sqlite3_close(db);
     }
     
-    return (optionalLabel.length > 0) ? optionalLabel : [filePath lastPathComponent];
+    if (optionalLabel.length > 0)
+        return optionalLabel;
+    else
+        return [[[filePath lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 }
 
 @end

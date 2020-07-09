@@ -196,26 +196,13 @@
         [section0 addObject:section0tracks];
     }
     
-    NSString *mapSourceName;
-    if ([_app.data.lastMapSource.name isEqualToString:@"sqlitedb"])
-    {
-        if (_app.data.lastMapSource.optionalLabel.length > 0)
-            mapSourceName = _app.data.lastMapSource.optionalLabel;
-        else
-            mapSourceName = [[_app.data.lastMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-    }
-    else
-    {
-        mapSourceName = _app.data.lastMapSource.name;
-    }
-    
     NSArray *arrTop = @[@{@"groupName": OALocalizedString(@"map_settings_show"),
                           @"cells": section0
                           },
                         @{@"groupName": OALocalizedString(@"map_settings_type"),
                           @"cells": @[
                                   @{@"name": OALocalizedString(@"map_settings_type"),
-                                    @"value": mapSourceName,
+                                    @"value": _app.data.lastMapSource.name,
                                     @"type": @"OASettingsCell"}
                                   ],
                           }

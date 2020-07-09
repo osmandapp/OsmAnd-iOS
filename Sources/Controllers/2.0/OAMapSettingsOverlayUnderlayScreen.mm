@@ -196,7 +196,7 @@ static NSInteger kButtonsSection;
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
         item.path = [OAMapCreatorHelper sharedInstance].files[fileName];
         NSString *label = [OASQLiteTileSource getLabelFor:item.path];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb" optionalLabel:label];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:label];
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
         item.isOnline = [OASQLiteTileSource isOnlineTileSource:item.path];
         [sqlitedbArr addObject:item];
@@ -425,11 +425,7 @@ static NSInteger kButtonsSection;
         
         else if ([someItem isKindOfClass:[Item_SqliteDbTileSource class]])
         {
-            if (someItem.mapSource.optionalLabel.length > 0)
-                caption = someItem.mapSource.optionalLabel;
-            else
-                caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-  
+            caption = someItem.mapSource.name;
             Item_SqliteDbTileSource *sqlite = (Item_SqliteDbTileSource *)someItem;
             description = sqlite.isOnline ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map");
             size = [NSByteCountFormatter stringFromByteCount:sqlite.size countStyle:NSByteCountFormatterCountStyleFile];

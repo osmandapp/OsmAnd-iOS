@@ -145,7 +145,7 @@
         NSString *filePath = [OAMapCreatorHelper sharedInstance].files[fileName];
         NSString *label = [OASQLiteTileSource getLabelFor:filePath];
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""] optionalLabel:label];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:label];
         [sqlitedbArr addObject:item];
     }
     
@@ -231,7 +231,7 @@
     for (NSIndexPath *path in selectedItems)
     {
         Item_OnlineTileSource* source = [self getItem:path];
-        [arr addObject:@[source.mapSource.variant ,source.mapSource.name ,source.mapSource.optionalLabel]];
+        [arr addObject:@[source.mapSource.variant, source.mapSource.name]];
     }
     
     if (self.delegate)
@@ -265,11 +265,12 @@
         UIImage *img = nil;
         img = [UIImage imageNamed:@"ic_custom_map_style"];
         
-        cell.textView.text = (item.mapSource.optionalLabel.length > 0) ? item.mapSource.optionalLabel : item.mapSource.name;
+        cell.textView.text = item.mapSource.name;
+        //cell.textView.text = (item.mapSource.optionalLabel.length > 0) ? item.mapSource.optionalLabel : item.mapSource.name;
         cell.descView.hidden = YES;
         cell.iconView.image = img;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        if ([_initialValues containsObject:item.mapSource.name] || [_initialValues containsObject:item.mapSource.optionalLabel])
+        if ([_initialValues containsObject:item.mapSource.name])
         {
             [_tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
             [_initialValues removeObject:item.mapSource.name];

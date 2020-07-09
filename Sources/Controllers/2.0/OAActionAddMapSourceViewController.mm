@@ -266,7 +266,6 @@
         img = [UIImage imageNamed:@"ic_custom_map_style"];
         
         cell.textView.text = item.mapSource.name;
-        //cell.textView.text = (item.mapSource.optionalLabel.length > 0) ? item.mapSource.optionalLabel : item.mapSource.name;
         cell.descView.hidden = YES;
         cell.iconView.image = img;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);

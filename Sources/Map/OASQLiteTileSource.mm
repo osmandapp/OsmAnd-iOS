@@ -20,7 +20,6 @@
     sqlite3 *_db;
     
     NSString *_filePath;
-    NSString *_label;
     int _minZoom;
     int _maxZoom;
     BOOL _inversiveZoom;
@@ -45,7 +44,6 @@
         _expirationTimeMillis = -1; // never
         _tileFormat = @".png";
         _tileSize = 256;
-        _label = @"";
         
         [self initDatabase];
     }

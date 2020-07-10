@@ -1756,3 +1756,14 @@
 "vehicle_parameters" = "Parâmetros do veículo";
 "screen_alerts" = "Alertas de tela";
 "voice_anounces" = "Anúncios de voz";
+"downloading" = "Baixando";
+"map_update_warning" = "Deseja recarregar dados de bloco da Internet?";
+"use_of_downloaded_map" = "Agora você pode usar este mapa offline como fonte principal do mapa ou como camada de sobreposição/subjacência";
+"size_of_downloaded_data" = "A grande diferença entre os níveis de zoom pode aumentar o tamanho dos dados baixados.";
+"online_sources" = "Fontes online";
+"select_online_source" = "Selecionar a fonte";
+"preview_of_selected_zoom_levels" = "Visualização dos níveis de zoom selecionados";
+"download_size" = "Tamanho do download";
+"number_of_tiles" = "Número de mosaicos";
+"move_map_to_select_area" = "Mova o mapa para selecionar a área necessária.";
+"update_map" = "Atualizar mapa";

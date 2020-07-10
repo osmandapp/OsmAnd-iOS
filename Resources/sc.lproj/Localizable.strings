@@ -1756,3 +1756,14 @@
 "select_nav_profile_dialog_message" = "Sa 'Casta de navigatzione' influentzat su càrculu de sas àndalas.";
 "vehicle_parameters" = "Paràmetros de su veìculu";
 "screen_alerts" = "Avisos in s'ischermu";
+"downloading" = "Iscarrighende";
+"map_update_warning" = "Cheres torrare a carrigare sos datos de sos tasseddos dae ìnternet?";
+"use_of_downloaded_map" = "Como podes impreare custa mapa non in lìnia comente mitza printzipale de sa mapa o comente istratu superiore/inferiore";
+"size_of_downloaded_data" = "Sa diferèntzia manna intre sos livellos de ismanniamentu podet ismanniare sa mannària de sos datos iscarrigados.";
+"online_sources" = "Mitzas in lìnia";
+"select_online_source" = "Ischerta una mitza";
+"preview_of_selected_zoom_levels" = "Anteprima de sos livellos de ismanniamentu ischertados";
+"download_size" = "Mannària de s'iscarrigamentu";
+"number_of_tiles" = "Nùmeru de tasseddos";
+"move_map_to_select_area" = "Move sa mapa pro ischertare s'àrea chi serbit.";
+"update_map" = "Agiorna sa mapa";

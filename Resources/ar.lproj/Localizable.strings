@@ -1750,3 +1750,16 @@
 "screen_alerts" = "تنبيهات الشاشة";
 "voice_anounces" = "إعلام صوتي";
 "select_color" = "اختر اللون";
+"downloading" = "جاري التنزيل";
+"map_update_warning" = "هل تريد تحديث بيانات الطبقات من الإنترنت ؟";
+"use_of_downloaded_map" = "يمكنك الآن استخدام هذه الخريطة في وضع عدم الاتصال كمصدر رئيسي للخريطة أو كطبقة علوية/ سفلية";
+"size_of_downloaded_data" = "الفرق الواضح بين مستويات التكبير / التصغير ربما بسبب حجم البيانات التي تم تنزيلها.";
+"online_sources" = "مصادر عبر الإنترنت";
+"select_online_source" = "حدد المصدر";
+"preview_of_selected_zoom_levels" = "معاينة مستويات التكبير";
+"download_size" = "حجم التحميل";
+"number_of_tiles" = "عدد الطبقات";
+"move_map_to_select_area" = "نقل الخريطة لتحديد المساحة المطلوبة.";
+"update_map" = "تحديث الخريطة";
+"change_map_behavior" = "تغيير إيماء الخريطة أثناء التنقل";
+"map_behavior" = "إيماء الخريطة";

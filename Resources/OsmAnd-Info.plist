@@ -68,7 +68,7 @@
 			<key>CFBundleTypeIconFiles</key>
 			<array/>
 			<key>CFBundleTypeName</key>
-			<string>OsmAnd settings file</string>
+			<string>OsmAnd Settings Format</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -223,7 +223,7 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.archive</string>
+				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OsmAnd settings format</string>
@@ -237,7 +237,9 @@
 					<string>OSF</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/zip</string>
+				<array>
+					<string>application/octet-stream</string>
+				</array>
 			</dict>
 		</dict>
 		<dict>
@@ -289,10 +291,10 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.zip-archive</string>
+				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>OsmAnd settings format</string>
+			<string>OsmAnd Settings Format</string>
 			<key>UTTypeIdentifier</key>
 			<string>net.osmand.osf</string>
 			<key>UTTypeTagSpecification</key>
@@ -304,9 +306,7 @@
 				</array>
 				<key>public.mime-type</key>
 				<array>
-					<string>application/zip</string>
-					<string>application/x-zip</string>
-            		<string>application/x-zip-compressed</string>
+					<string>application/octet-stream</string>
 				</array>
 			</dict>
 		</dict>

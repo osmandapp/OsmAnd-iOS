@@ -9,13 +9,21 @@
 //  git revision 92fb9b7efc66f373b1714e9e489bdf3b815a67f1
 
 #import <Foundation/Foundation.h>
-#import "OAResourcesBaseViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAImportAsyncTask, OAExportAsyncTask, OASettingsImport, OASettingsExport, OASettingsCollect, OACheckDuplicates;
+@class OAImportAsyncTask, OAExportAsyncTask, OACheckDuplicates, OALocalResourceItem;
 @class OASettingsItem;
 @class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode, OAApplicationModeBean;
+
+@protocol OASettingsImportExportDelegate <NSObject>
+
+- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items;
+- (void) onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items;
+- (void) onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed;
+- (void) onDuplicatesChecked:(NSArray<OASettingsItem *>*)duplicates items:(NSArray<OASettingsItem *>*)items;
+
+@end
 
 FOUNDATION_EXTERN NSString *const kSettingsHelperErrorDomain;
 
@@ -54,16 +62,15 @@ typedef enum : NSUInteger {
 @interface OASettingsHelper : NSObject
 
 @property (nonatomic) OAImportAsyncTask* importTask;
-@property (nonatomic) NSMutableDictionary<NSString*, OAExportAsyncTask*>* exportTask;
+@property (nonatomic) NSMutableDictionary<NSString*, OAExportAsyncTask*>* exportTasks;
 
 + (OASettingsHelper *) sharedInstance;
 
-- (void) finishImport:(OASettingsImport * _Nullable)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items;
-- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version listener:(OASettingsCollect * _Nullable)listener;
-- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems listener:(OACheckDuplicates * _Nullable)listener;
-- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version listener:(OASettingsImport * _Nullable)listener;
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport * _Nullable)listener items:(NSArray<OASettingsItem *> *)items;
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport * _Nullable)listener;
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version;
+- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems;
+- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version;
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles;
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName exportItemFiles:(BOOL)exportItemFiles;
 
 @end
 

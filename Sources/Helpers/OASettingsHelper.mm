@@ -7,12 +7,10 @@
 //
 
 #import "OASettingsHelper.h"
-#import "OASettingsCollect.h"
-#import "OACheckDuplicates.h"
-#import "OASettingsImport.h"
-#import "OASettingsExport.h"
 #import "OASettingsImporter.h"
 #import "OASettingsExporter.h"
+#import "OAResourcesUIHelper.h"
+#import "OARootViewController.h"
 
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
@@ -98,17 +96,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @end
 
-@interface OASettingsHelper()
-
-@property (weak, nonatomic) id<OASettingsCollectDelegate> settingsCollectDelegate;
-@property (weak, nonatomic) id<OACheckDuplicatesDelegate> checkDuplicatesDelegate;
-@property (weak, nonatomic) id<OASettingsImportDelegate> settingsImportDelegate;
-@property (weak, nonatomic) id<OASettingsExportDelegate> settingsExportDelegate;
+@interface OASettingsHelper() <OASettingsImportExportDelegate>
 
 @end
 
 @implementation OASettingsHelper
-
 
 + (OASettingsHelper *) sharedInstance
 {
@@ -120,47 +112,94 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return _sharedInstance;
 }
 
-- (void) finishImport:(OASettingsImport * _Nullable)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
-    _importTask = nil;
-    if (listener)
-        [_settingsImportDelegate onSettingsImportFinished:success items:items];
-}
-
-- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version listener:(OASettingsCollect * _Nullable)listener
-{
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version collectListener:listener] executeParameters];
-    });
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
+    task.delegate = self;
+    [task execute];
 }
  
-- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems listener:(OACheckDuplicates * _Nullable)listener
+- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[[OAImportAsyncTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems duplicatesListener:listener] executeParameters];
-    });
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems];
+    task.delegate = self;
+    [task execute];
 }
 
-- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version listener:(OASettingsImport * _Nullable)listener
+- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version importListener:listener] executeParameters];
-    });
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
+    task.delegate = self;
+    [task execute];
 }
 
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport * _Nullable)listener items:(NSArray<OASettingsItem *> *)items
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles
 {
-    NSString *file = [NSString stringWithString:fileName];
-    OAExportAsyncTask *exportAsyncTask = [[OAExportAsyncTask alloc] initWithFile:file listener:listener items:items];
-    [exportAsyncTask setValue:exportAsyncTask forKey:file];
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [exportAsyncTask execute];
-    });
+    NSString *file = [fileDir stringByAppendingPathComponent:fileName];
+    file = [file stringByAppendingPathExtension:@".osf"];
+    OAExportAsyncTask *exportAsyncTask = [[OAExportAsyncTask alloc] initWithFile:file items:items exportItemFiles:exportItemFiles];
+    exportAsyncTask.settingsExportDelegate = self;
+    [_exportTasks setObject:exportAsyncTask forKey:file];
+    [exportAsyncTask execute];
 }
 
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport * _Nullable)listener
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName settingsItem:(OASettingsItem *)item exportItemFiles:(BOOL)exportItemFiles
 {
-    //exportSettings(fileDir, fileName, listener, new ArrayList<>(Arrays.asList(items)));
+    [self exportSettings:fileDir fileName:fileName items:@[item] exportItemFiles:exportItemFiles];
+}
+
+#pragma mark - OASettingsImportExportDelegate
+
+- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(OALocalizedString(@"profile_import_success")) preferredStyle:UIAlertControllerStyleAlert];
+    [NSFileManager.defaultManager removeItemAtPath:_importTask.getFile error:nil];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    _importTask = nil;
+}
+
+- (void) onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items
+{
+    if (succeed)
+    {
+        NSMutableArray<OASettingsItem *> *pluginIndependentItems = [NSMutableArray new];
+        NSMutableArray<OAPluginSettingsItem *> *pluginSettingsItems = [NSMutableArray new];
+        for (OASettingsItem *item in items)
+        {
+            if ([item isKindOfClass:OAPluginSettingsItem.class])
+                [pluginSettingsItems addObject:((OAPluginSettingsItem *) item)];
+            else if (item.pluginId.length == 0)
+                [pluginIndependentItems addObject:item];
+        }
+//        for (OAPluginSettingsItem *pluginItem in pluginSettingsItems)
+//        {
+//            handlePluginImport(pluginItem, file);
+//        }
+        if (pluginIndependentItems.count > 0)
+        {
+            // TODO: add ui dialogs as in Android
+//            FragmentManager fragmentManager = activity.getSupportFragmentManager();
+//            ImportSettingsFragment.showInstance(fragmentManager, pluginIndependentItems, file);
+            [self importSettings:_importTask.getFile items:_importTask.getItems latestChanges:@"" version:1];
+        }
+    }
+    else if (empty)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), items.firstObject.name] preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+        [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+- (void) onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed
+{
+    
+}
+
+- (void) onDuplicatesChecked:(NSArray<OASettingsItem *>*)duplicates items:(NSArray<OASettingsItem *>*)items
+{
+    
 }
 
 @end
@@ -234,7 +273,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (BOOL) applyFileName:(NSString *)fileName
 {
-    return [fileName hasSuffix:self.fileName];
+    return self.fileName ? [fileName hasSuffix:self.fileName] : NO;
 }
 
 - (BOOL) exists
@@ -630,6 +669,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if (appMode != nil)
         {
             _modeBean.userProfileName = _appMode.name;
+            _modeBean.parent = _appMode.stringKey;
         }
     }
     int number = 0;
@@ -650,7 +690,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     if (!_appMode.isCustomProfile && !self.shouldReplace)
     {
-        OAApplicationMode *parent = [OAApplicationMode valueOfStringKey:_modeBean.stringKey def:nil];
         [self renameProfile];
         OAApplicationMode *am = [OAApplicationMode fromModeBean:_modeBean];
        

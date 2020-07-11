@@ -710,6 +710,7 @@
 "after_tapping_done" = "After you tap Done, deleted profiles will be lost completely.";
 "empty_profile_name_warning" = "Profile name cannot be empty.";
 "err_profile_import" = "Error reading item data: %@";
+"profile_import_success" = "Application profile was imported successfully";
 
 // Purchases
 "prch_addons" = "Addons";

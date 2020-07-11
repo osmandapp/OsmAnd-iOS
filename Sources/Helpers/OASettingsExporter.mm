@@ -8,35 +8,45 @@
 
 #import "OASettingsExporter.h"
 #import "OASettingsHelper.h"
-#import "OASettingsExport.h"
 #import "OAAppSettings.h"
+#import "OrderedDictionary.h"
+#import "OsmAndApp.h"
+
+#define kVersion 1
 
 static const NSInteger _buffer = 1024;
 
 #pragma mark - OASettingsExporter
 
-@interface OASettingsExporter()
-
-@property (nonatomic) NSMutableDictionary *items;
-@property (nonatomic) NSMutableDictionary *additionalParams;
-
-@end
-
 @implementation OASettingsExporter
- 
-- (instancetype) init
+{
+
+    MutableOrderedDictionary *_items;
+    MutableOrderedDictionary *_additionalParams;
+    BOOL _exportItemsFiles;
+    
+    OsmAndAppInstance _app;
+}
+
+- (instancetype) initWithExportParam:(BOOL)exportItemsFiles
 {
     self = [super init];
-    _items = [NSMutableDictionary dictionary];
-    _additionalParams = [NSMutableDictionary dictionary];
+    if (self)
+    {
+        _items = [MutableOrderedDictionary new];
+        _additionalParams = [MutableOrderedDictionary new];
+        _exportItemsFiles = exportItemsFiles;
+        
+        _app = OsmAndApp.instance;
+    }
     return self;
 }
- 
+
 - (void) addSettingsItem:(OASettingsItem *)item
 {
     if (_items[item.name])
         NSLog(@"Already has such item: %@", item.name);
-    _items[item.name] = item;
+    [_items setObject:item forKey:item.name];
 }
  
 - (void) addAdditionalParam:(NSString *)key value:(NSString *)value
@@ -46,16 +56,58 @@ static const NSInteger _buffer = 1024;
  
 - (void) exportSettings:(NSString *)file error:(NSError * _Nullable *)error
 {
-    NSMutableDictionary *json = [NSMutableDictionary dictionary];
-    json[@"osmand_settings_version"] = [NSString stringWithFormat:@"%ld", OAAppSettings.version];
-    for (NSString *key in _additionalParams)
-        json[key] = _additionalParams[key];
-    NSMutableArray *itemsJson = [NSMutableArray array];
-    for (OASettingsItem *item in _items.allValues)
-        [itemsJson addObject:item];
-    json[@"items"] = itemsJson;
+    // TODO: check this functionality while testing export!
+    NSMutableArray<NSString *> *paths = [NSMutableArray new];
+    NSDictionary *json = [self createItemsJson];
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"items.json"];
+    [paths addObject:path];
+    [fileManager removeItemAtPath:path error:nil];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json
+                                                       options:NSJSONWritingPrettyPrinted
+                                                         error:error];
+    if (!error)
+        [jsonData writeToFile:path atomically:YES];
+    if(_exportItemsFiles)
+    {
+        [self writeItemsFiles:paths];
+    }
+    // TODO: write archive writer!
     
-    // not completed
+    for (NSString *path in paths)
+         [fileManager removeItemAtPath:path error:nil];
+}
+
+- (void) writeItemsFiles:(NSMutableArray<NSString *> *)paths
+{
+    for (OASettingsItem *item : _items)
+    {
+        OASettingsItemWriter *writer = [item getWriter];
+        if (writer != nil)
+        {
+            NSString *fileName = item.fileName;
+            if (fileName.length > 0)
+                fileName = item.defaultFileName;
+            
+            NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
+            NSError *error = nil;
+            [writer writeToFile:path error:&error];
+            if (!error)
+                [paths addObject:path];
+        }
+    }
+}
+
+- (NSDictionary *) createItemsJson
+{
+    MutableOrderedDictionary *json = [MutableOrderedDictionary new];
+    [json setObject:@(kVersion) forKey:@"version"];
+    [_additionalParams enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        [json setObject:obj forKey:key];
+    }];
+    [json setObject:_items.allValues forKey:@"items"];
+    
+    return json;
 }
 
 @end
@@ -65,7 +117,6 @@ static const NSInteger _buffer = 1024;
 @interface OAExportAsyncTask()
 
 @property (nonatomic) NSString *filePath;
-@property (weak, nonatomic) id<OASettingsExportDelegate> settingsExportDelegate;
 
 @end
 
@@ -73,18 +124,16 @@ static const NSInteger _buffer = 1024;
 {
     OASettingsHelper *_settingsHelper;
     OASettingsExporter *_exporter;
-    OASettingsExport *_exportListener;
 }
  
-- (instancetype) initWithFile:(NSString *)settingsFile listener:(OASettingsExport * _Nullable)listener items:(NSArray<OASettingsItem *> *)items
+- (instancetype) initWithFile:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles
 {
     self = [super init];
     if (self)
     {
         _settingsHelper = [OASettingsHelper sharedInstance];
         _filePath = settingsFile;
-        _exportListener = listener;
-        _exporter = [[OASettingsExporter alloc] init];
+        _exporter = [[OASettingsExporter alloc] initWithExportParam:exportItemFiles];
         for (OASettingsItem *item in items)
             [_exporter addSettingsItem:item];
     }
@@ -115,8 +164,8 @@ static const NSInteger _buffer = 1024;
 
 - (void) onPostExecute:(BOOL)success
 {
-    [_settingsHelper.exportTask removeObjectForKey:_filePath];
-    if (_exportListener)
+    [_settingsHelper.exportTasks removeObjectForKey:_filePath];
+    if (_settingsExportDelegate)
         [_settingsExportDelegate onSettingsExportFinished:_filePath succeed:success];
     
 }

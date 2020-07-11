@@ -25,7 +25,6 @@
 @implementation OASettingsImporter
 {
     OsmAndAppInstance _app;
-    
     NSString *_tmpFilesDir;
 }
 
@@ -76,7 +75,7 @@
         if (!archiveItem.isValid())
             continue;
         
-        QString filename = [self checkEntryName:archiveItem.name];
+        QString filename = archiveItem.name;
         OASettingsItem *item = nil;
         for (OASettingsItem *settingsItem in items)
         {
@@ -151,29 +150,24 @@
     return items;
 }
 
-- (QString) checkEntryName:(QString)entryName
-{
-    QString fileExt = QStringLiteral(".osf").append("/");
-    int index = entryName.indexOf(fileExt);
-    if (index != -1)
-        entryName = entryName.mid(index + fileExt.length());
-    
-    return entryName;
-}
+//- (QString) checkEntryName:(QString)entryName
+//{
+//    QString fileExt = QStringLiteral(".osf").append("/");
+//    int index = entryName.indexOf(fileExt);
+//    if (index != -1)
+//        entryName = entryName.mid(index + fileExt.length());
+//
+//    return entryName;
+//}
 
 @end
 
 
 #pragma mark - OASettingsItemsFactory
 
-@interface OASettingsItemsFactory()
-
-@property(nonatomic, retain) NSMutableArray<OASettingsItem *> * items;
-
-@end
-
 @implementation OASettingsItemsFactory
 {
+    NSMutableArray<OASettingsItem *> *_items;
     OsmAndAppInstance _app;
 }
 
@@ -182,6 +176,7 @@
     self = [super init];
     if (self) {
         _app = [OsmAndApp instance];
+        _items = [NSMutableArray new];
         [self collectItems:jsonStr];
     }
     return self;
@@ -210,9 +205,8 @@
     
     for (NSDictionary* item in itemsJson)
     {
-        OASettingsItem *settingsItem = [[OASettingsItem alloc] init];
-        settingsItem = [self createItem:item];
-        [self.items addObject:settingsItem];
+        OASettingsItem *settingsItem = [self createItem:item];
+        [_items addObject:settingsItem];
         // TODO: implement custom plugins
 //        NSString *pluginId = item.pluginId;
 //        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
@@ -227,7 +221,7 @@
 //            }
 //        }
     }
-    if ([self.items count] == 0)
+    if ([_items count] == 0)
     {
         NSLog(@"No items");
         return;
@@ -246,12 +240,12 @@
 
 - (NSArray<OASettingsItem *> *) getItems
 {
-    return self.items;
+    return _items;
 }
 
 - (OASettingsItem *) getItemByFileName:(NSString*)fileName
 {
-    for (OASettingsItem * item in self.items)
+    for (OASettingsItem * item in _items)
     {
         if ([item.fileName isEqualToString:fileName])
             return item;
@@ -320,9 +314,6 @@
 @property (nonatomic) NSArray<OASettingsItem *> *items;
 @property (nonatomic) NSArray<OASettingsItem *> *selectedItems;
 @property (nonatomic) NSArray<OASettingsItem *> *duplicates;
-@property (weak, nonatomic) id<OASettingsCollectDelegate> settingsCollectDelegate;
-@property (weak, nonatomic) id<OACheckDuplicatesDelegate> checkDuplicatesDelegate;
-@property (weak, nonatomic) id<OASettingsImportDelegate> settingsImportDelegate;
 
 @end
 
@@ -331,19 +322,15 @@
     BOOL _importDone;
     OASettingsHelper *_settingsHelper;
     OASettingsImporter *_importer;
-    OASettingsCollect *_collectListener;
-    OACheckDuplicates *_duplicatesListener;
-    OASettingsImport *_importListener;
 }
 
-- (instancetype) initWithFile:(NSString *)filePath latestChanges:(NSString *)latestChanges version:(NSInteger)version collectListener:(OASettingsCollect *)collectListener
+- (instancetype) initWithFile:(NSString *)filePath latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
     self = [super init];
     if (self)
     {
         _settingsHelper = [OASettingsHelper sharedInstance];
         _filePath = filePath;
-        _collectListener = collectListener;
         _latestChanges = latestChanges;
         _version = version;
         _importer = [[OASettingsImporter alloc] init];
@@ -352,14 +339,13 @@
     return self;
 }
 
-- (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version importListener:(OASettingsImport *)importListener
+- (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
     self = [super init];
     if (self)
     {
         _settingsHelper = [OASettingsHelper sharedInstance];
         _filePath = filePath;
-        _importListener = importListener;
         _items = items;
         _latestChanges = latestChanges;
         _version = version;
@@ -369,7 +355,7 @@
     return self;
 }
 
-- (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems duplicatesListener:(OACheckDuplicates *)duplicatesListener
+- (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems
  {
      self = [super init];
      if (self)
@@ -377,7 +363,6 @@
          _settingsHelper = [OASettingsHelper sharedInstance];
          _filePath = filePath;
          _items = items;
-         _duplicatesListener = duplicatesListener;
          _selectedItems = selectedItems;
          _importer = [[OASettingsImporter alloc] init];
          _importType = EOAImportTypeCheckDuplicates;
@@ -385,7 +370,7 @@
      return self;
  }
 
-- (void) executeParameters
+- (void) execute
 {
     [self onPreExecute];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -399,10 +384,9 @@
 - (void) onPreExecute
 {
     OAImportAsyncTask* importTask = _settingsHelper.importTask;
-    if (importTask != NULL && ![importTask isImportDone])
-    {
-        [_settingsHelper finishImport:_importListener success:false items:_items];
-    }
+    if (importTask != nil && ![importTask isImportDone] && self.delegate)
+        [self.delegate onSettingsImportFinished:NO items:_items];
+    
     _settingsHelper.importTask = self;
 }
  
@@ -434,25 +418,23 @@
     switch (_importType) {
         case EOAImportTypeCollect:
             _importDone = YES;
-            if (_settingsCollectDelegate)
-                [_settingsCollectDelegate onSettingsCollectFinished:YES empty:NO items:_items];
+            if (_delegate)
+                [_delegate onSettingsCollectFinished:YES empty:NO items:_items];
             break;
         case EOAImportTypeCheckDuplicates:
             _importDone = YES;
-            if (_duplicatesListener != NULL) {
-                if (_checkDuplicatesDelegate)
-                    [_checkDuplicatesDelegate onDuplicatesChecked:_duplicates items:_selectedItems];
-            }
+            if (_delegate)
+                [_delegate onDuplicatesChecked:_duplicates items:_selectedItems];
             break;
         case EOAImportTypeImport:
-            if (items != NULL && [items count] > 0)
+            if (items != nil && items.count > 0)
             {
                 for (OASettingsItem *item in items)
                     [item apply];
                 
-                dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                 [[[OAImportItemsAsyncTask alloc] initWithFile:_filePath listener:_importListener items:_items] executeParameters];
-                });
+                OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
+                task.delegate = _delegate;
+                [task execute];
             }
             break;
     }
@@ -466,16 +448,6 @@
 - (NSString *) getFile
 {
     return _filePath;
-}
-
-- (void) setImportListener:(OASettingsImport*)importListener
-{
-    _importListener = importListener;
-}
- 
-- (void) setDuplicatesListener:(OACheckDuplicates*)duplicatesListener
-{
-    _duplicatesListener = duplicatesListener;
 }
 
 - (EOAImportType) getImportType
@@ -530,7 +502,6 @@
 
 @property (nonatomic) NSString *file;
 @property (nonatomic) NSArray<OASettingsItem *> *items;
-@property (weak, nonatomic) id<OASettingsImportDelegate> settingsImportDelegate;
 
 @end
 
@@ -538,23 +509,21 @@
 {
     OASettingsHelper *_settingsHelper;
     OASettingsImporter *_importer;
-    OASettingsImport *_importListener;
 }
 
-- (instancetype) initWithFile:(NSString *)file listener:(OASettingsImport *)listener items:(NSArray<OASettingsItem *> *)items
+- (instancetype) initWithFile:(NSString *)file items:(NSArray<OASettingsItem *> *)items
 {
     self = [super init];
     if (self) {
         _importer = [[OASettingsImporter alloc] init];
         _settingsHelper = [OASettingsHelper sharedInstance];
         _file = file;
-        _importListener = listener;
         _items = items;
     }
     return self;
 }
 
-- (void) executeParameters
+- (void) execute
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self doInBackground];
@@ -566,18 +535,15 @@
 
 - (BOOL) doInBackground
 {
-    @try {
-        [_importer importItems:_file items:_items];
-        return YES;
-    } @catch (NSException *exception) {
-        NSLog(@"Failed to import items from: %@", exception);
-    }
-    return NO;
+    [_importer importItems:_file items:_items];
+    return YES;
+    
 }
  
 - (void) onPostExecute:(BOOL)success
 {
-    [_settingsHelper finishImport:_importListener success:success items:_items];
+    if (_delegate)
+        [_delegate onSettingsImportFinished:success items:_items];
 }
 
 @end

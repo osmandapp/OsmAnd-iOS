@@ -28,6 +28,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAGPXListViewController.h"
 #import "OAFileImportHelper.h"
+#import "OASettingsHelper.h"
 
 #import "Localization.h"
 #import "OAGPXDatabase.h"
@@ -485,7 +486,9 @@ typedef enum : NSUInteger {
     }
     else if ([ext caseInsensitiveCompare:@"osf"] == NSOrderedSame)
     {
-        
+        OASettingsHelper *helper = OASettingsHelper.sharedInstance;
+        // TODO: check version and changes
+        [helper collectSettings:url.path latestChanges:@"" version:1];
     }
     
     return YES;

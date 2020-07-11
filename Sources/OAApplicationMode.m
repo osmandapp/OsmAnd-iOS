@@ -174,7 +174,7 @@ static OAApplicationMode *_SKI;
 
 + (OAApplicationMode *) fromModeBean:(OAApplicationModeBean *)modeBean
 {
-    OAApplicationMode *am = [[OAApplicationMode alloc] initWithName:@"" stringKey:modeBean.stringKey];
+    OAApplicationMode *am = [[OAApplicationMode alloc] initWithName:modeBean.userProfileName stringKey:modeBean.stringKey];
     [am setParent:[OAApplicationMode valueOfStringKey:modeBean.parent def:nil]];
     [am setUserProfileName:modeBean.userProfileName];
     [am setIconName:modeBean.iconName];

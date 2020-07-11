@@ -1034,7 +1034,7 @@
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
 "public_transport_menu" = "Transport";
-"quick_action_transport_descr" = "Button showing or hiding public transport on the map.";
+"quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
 "public_transport_hide" = "Hide public transport";

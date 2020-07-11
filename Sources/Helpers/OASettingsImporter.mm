@@ -430,7 +430,13 @@
             if (items != nil && items.count > 0)
             {
                 for (OASettingsItem *item in items)
-                    [item apply];
+                {
+                    if ([item isKindOfClass:OAProfileSettingsItem.class])
+                    {
+                        // TODO: remove this check while implementing other types of import (e.g. Quick action)
+                        [item apply];
+                    }
+                }
                 
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;

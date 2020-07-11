@@ -1047,7 +1047,7 @@ static NSDictionary *screenVoiceProviders;
     NSMutableArray *images = [NSMutableArray array];
     NSMutableArray *modes = [NSMutableArray array];
     
-    NSArray<OAApplicationMode *> *values = [OAApplicationMode values];
+    NSArray<OAApplicationMode *> *values = [OAApplicationMode allPossibleValues];
     for (OAApplicationMode *v in values)
     {
         if (v == [OAApplicationMode DEFAULT])

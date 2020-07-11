@@ -19,6 +19,7 @@
 #import "OASwitchableAction.h"
 #import "OABottomSheetActionCell.h"
 #import "OAMapSource.h"
+#import "OAMapStyleAction.h"
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
@@ -67,38 +68,38 @@
 {
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
-    NSArray *names = _action.getParams[_action.getListKey];
-    NSMutableDictionary *mapping = [NSMutableDictionary new];
+    NSArray *params = _action.loadListFromParams;
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderCell",
                      @"title" : _action.getDescrTitle,
                      @"description" : @""
                      }];
-    if (_action.getOfflineMapSources && vwController.type == EOAMapSourceTypeStyle)
+    if (vwController.type == EOAMapSourceTypeStyle)
     {
-        for (OAMapSource *mapSource in _action.getOfflineMapSources)
+        if ([_action isKindOfClass:OAMapStyleAction.class])
         {
-            if ([names containsObject:mapSource.name])
-                [mapping setObject:mapSource forKey:mapSource.name];
-        }
-        for (NSString *name in names)
-        {
-            OAMapSource *source = mapping[name];
-            [arr addObject:@{
-                             @"type" : kBottomSheetActionCell,
-                             @"title" : name,
-                             @"img" : [NSString stringWithFormat:@"img_mapstyle_%@", [source.resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]]
-                             }];
+            OAMapStyleAction *mapStyleAction = (OAMapStyleAction *) _action;
+            for (NSString *param in params)
+            {
+                OAMapSource *source = mapStyleAction.offlineMapSources[param];
+                [arr addObject:@{
+                    @"type" : kBottomSheetActionCell,
+                    @"title" : param,
+                    @"source" : source,
+                    @"img" : [NSString stringWithFormat:@"img_mapstyle_%@", [source.resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]]
+                }];
+            }
         }
     }
     else
     {
-        for (NSArray *namePair in names)
+        for (NSArray *pair in params)
         {
             [arr addObject:@{
                              @"type" : kBottomSheetActionCell,
-                             @"title" : namePair.lastObject,
-                             @"value" : namePair.firstObject,
+                             @"title" : pair.lastObject,
+                             @"value" : pair.firstObject,
+                             @"param" : pair,
                              @"img" : @"ic_custom_map_style"
                              }];
         }
@@ -271,86 +272,14 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (_action.getOfflineMapSources && vwController.type == EOAMapSourceTypeStyle)
+    if (vwController.type == EOAMapSourceTypeStyle)
     {
-        NSString *name = item[@"title"];
-        OAMapSource *newMapSource = nil;
-        for (OAMapSource *mapSource in _action.getOfflineMapSources)
-        {
-            if ([mapSource.name isEqualToString:name])
-            {
-                newMapSource = mapSource;
-                break;
-            }
-        }
-        if (newMapSource)
-            _app.data.lastMapSource = newMapSource;
+        OAMapSource *newMapSource = item[@"source"];
+        _app.data.lastMapSource = newMapSource;
     }
     else
     {
-        BOOL clearSource = [item[@"value"] isEqualToString:@"no_overlay"] || [item[@"value"] isEqualToString:@"no_underlay"] || [item[@"value"] isEqualToString:@"type_default"];
-        if (!clearSource)
-        {
-            OAMapSource *newMapSource = nil;
-            for (OAMapSource *mapSource in _action.getOnlineMapSources)
-            {
-                if ([mapSource.variant isEqualToString:item[@"value"]])
-                {
-                    newMapSource = mapSource;
-                    break;
-                }
-            }
-            switch (vwController.type) {
-                case EOAMapSourceTypeSource:
-                {
-                    _app.data.lastMapSource = newMapSource;
-                    break;
-                }
-                case EOAMapSourceTypeOverlay:
-                {
-                    _app.data.overlayMapSource = newMapSource;
-                    break;
-                }
-                case EOAMapSourceTypeUnderlay:
-                {
-                    _app.data.underlayMapSource = newMapSource;
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            switch (vwController.type) {
-                case EOAMapSourceTypeSource:
-                {
-                    OAMapSource *newMapSource = nil;
-                    for (OAMapSource *mapSource in _action.getOnlineMapSources)
-                    {
-                        if ([mapSource.variant isEqualToString:item[@"value"]])
-                        {
-                            newMapSource = mapSource;
-                            break;
-                        }
-                    }
-                    _app.data.lastMapSource = newMapSource;
-                    break;
-                }
-                case EOAMapSourceTypeOverlay:
-                {
-                    _app.data.overlayMapSource = nil;
-                    break;
-                }
-                case EOAMapSourceTypeUnderlay:
-                {
-                    _app.data.underlayMapSource = nil;
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
+        [_action executeWithParams:item[@"param"]];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     [self.vwController dismiss];

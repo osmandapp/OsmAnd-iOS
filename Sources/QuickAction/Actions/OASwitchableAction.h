@@ -24,8 +24,7 @@
 -(NSString *) getDescrHint;
 -(NSString *) getDescrTitle;
 
--(NSArray *)getOfflineMapSources;
--(NSArray *)getOnlineMapSources;
+-(NSArray *) loadListFromParams;
 
 //protected abstract View.OnClickListener getOnAddBtnClickListener(MapActivity activity, final Adapter adapter);
 

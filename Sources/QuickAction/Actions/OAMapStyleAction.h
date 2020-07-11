@@ -6,11 +6,15 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAMapSourceBaseAction.h"
+#import "OASwitchableAction.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAMapStyleAction : OAMapSourceBaseAction
+@class OAMapSource;
+
+@interface OAMapStyleAction : OASwitchableAction
+
+@property (nonatomic, readonly) NSDictionary<NSString *, OAMapSource *> *offlineMapSources;
 
 - (NSArray<NSString *> *) getFilteredStyles;
 

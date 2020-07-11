@@ -94,7 +94,7 @@
     else if ([name isEqualToString:@"transportStops"])
         imageName = @"ic_custom_transport_stop";
     else if ([name isEqualToString:@"publicTransportMode"])
-        imageName = @"ic_custom_transport_stop";
+        imageName = @"ic_custom_transport_bus";
     
     return imageName;
 }
@@ -204,13 +204,15 @@
     NSString *imgName = data[@"img"];
     NSString *secondaryImgName = data[@"secondaryImg"];
     if (imgName)
-        img = [OAUtilities tintImageWithColor:[UIImage imageNamed:imgName] color:UIColorFromRGB(color_primary_purple)];
+        img = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
     cell.textView.text = data[@"title"];
     NSString *desc = data[@"description"];
     cell.descriptionView.text = desc;
     cell.descriptionView.hidden = desc.length == 0;
     cell.imgView.image = img;
+    cell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
+    
     [cell setSecondaryImage:secondaryImgName.length > 0 ? [UIImage imageNamed:data[@"secondaryImg"]] : nil];
     if ([cell needsUpdateConstraints])
         [cell setNeedsUpdateConstraints];
@@ -278,6 +280,12 @@
         self.screenObj = [[OAPublicTransportOptionsBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:nil];
     
     [super setupView];
+}
+
+- (void)additionalSetup
+{
+    [super additionalSetup];
+    [super hideDoneButton];
 }
 
 @end

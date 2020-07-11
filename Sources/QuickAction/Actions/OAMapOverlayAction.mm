@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAQuickActionType.h"
+#import "OAResourcesUIHelper.h"
 
 #define KEY_OVERLAYS @"overlays"
 #define KEY_NO_OVERLAY @"no_overlay"
@@ -20,13 +21,16 @@
 static OAQuickActionType *TYPE;
 
 @implementation OAMapOverlayAction
+{
+    NSArray<OAResourceItem *> *_onlineMapSources;
+}
 
 - (instancetype) init
 {
     self = [super initWithActionType:self.class.TYPE];
     if (self)
     {
-        [super commonInit];
+        _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
     }
     return self;
 }
@@ -77,11 +81,11 @@ static OAQuickActionType *TYPE;
     if (hasOverlay)
     {
         OAMapSource *newMapSource = nil;
-        for (OAMapSource *mapSource in self.onlineMapSources)
+        for (OAMapSourceResourceItem *resource in _onlineMapSources)
         {
-            if ([mapSource.variant isEqualToString:variant] && [mapSource.name isEqualToString:name])
+            if ([resource.mapSource.variant isEqualToString:variant] && [resource.mapSource.name isEqualToString:name])
             {
-                newMapSource = mapSource;
+                newMapSource = resource.mapSource;
                 break;
             }
         }
@@ -181,5 +185,12 @@ static OAQuickActionType *TYPE;
        
     return TYPE;
 }
+
+- (NSArray *)loadListFromParams
+{
+    return [self getParams][self.getListKey];
+}
+
+
 
 @end

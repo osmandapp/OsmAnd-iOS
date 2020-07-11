@@ -24,11 +24,6 @@
     return nil;
 }
 
-- (NSString *)getTitle:(NSArray *)filters
-{
-    return nil;
-}
-
 - (NSString *)getItemName:(id)item
 {
     return nil;
@@ -54,14 +49,19 @@
     return nil;
 }
 
-- (NSArray *)getOfflineMapSources
+- (NSArray *)loadListFromParams
 {
     return nil;
 }
 
--(NSArray *)getOnlineMapSources
+- (NSString *)getTitle:(NSArray *)filters
 {
-    return nil;
+    if (filters.count == 0)
+        return @"";
+    
+    return filters.count > 1
+    ? [NSString stringWithFormat:@"%@ +%ld", filters[0], filters.count - 1]
+    : filters[0];
 }
 
 @end

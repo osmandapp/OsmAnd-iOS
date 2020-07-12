@@ -1768,3 +1768,4 @@
 "vehicle_parameters" = "Parámetros del vehículo";
 "screen_alerts" = "Alertas en pantalla";
 "voice_anounces" = "Avisos por voz";
+"quick_action_transport_descr" = "Botón que muestra u oculta el transporte público en el mapa.";

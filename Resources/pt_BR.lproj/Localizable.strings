@@ -1767,3 +1767,4 @@
 "number_of_tiles" = "Número de mosaicos";
 "move_map_to_select_area" = "Mova o mapa para selecionar a área necessária.";
 "update_map" = "Atualizar mapa";
+"quick_action_transport_descr" = "Toque nesta ação para mostrar ou ocultar rotas / paradas de transporte público no mapa.";

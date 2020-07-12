@@ -1762,3 +1762,4 @@
 "download_size" = "İndirme boyutu";
 "number_of_tiles" = "Döşeme sayısı";
 "update_map" = "Haritayı güncelle";
+"quick_action_transport_descr" = "Haritada toplu taşıma güzergahlarını / duraklarını göstermek veya gizlemek için bu eyleme dokunun.";

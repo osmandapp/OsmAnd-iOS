@@ -1749,3 +1749,6 @@
 "rearrange_profiles" = "Profile neu anordnen";
 "empty_profile_name_warning" = "Profilname darf nicht leer sein.";
 "desert" = "Wüste";
+"change_map_behavior" = "Ändere das Kartenverhalten während der Navigation";
+"map_behavior" = "Kartenverhalten";
+"voice_anounces" = "Sprachansagen";

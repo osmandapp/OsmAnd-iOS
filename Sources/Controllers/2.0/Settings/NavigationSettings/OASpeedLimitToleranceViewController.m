@@ -8,11 +8,14 @@
 
 #import "OASpeedLimitToleranceViewController.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
 #define kSidePadding 16
+#define kCellTypeTitle @"OASettingsTitleCell"
 
 @interface OASpeedLimitToleranceViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -20,8 +23,8 @@
 
 @implementation OASpeedLimitToleranceViewController
 {
+    OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
-    NSArray<NSNumber *> *_speedLimitsKm;
     UIView *_tableHeaderView;
 }
 
@@ -30,6 +33,7 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
         [self generateData];
     }
     return self;
@@ -41,22 +45,39 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self setupTableHeaderViewWithText:OALocalizedString(@"speed_limit_tolerance_descr")];
-    [self setupView];
 }
 
 - (void) generateData
 {
-    _speedLimitsKm = @[ @-10.f, @-7.f, @-5.f, @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
     NSMutableArray *dataArr = [NSMutableArray array];
-    for (int i = 0; i < _speedLimitsKm.count; i++)
+    NSArray<NSNumber *> *speedLimitsKm = @[ @-10.f, @-7.f, @-5.f, @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
+    NSArray<NSNumber *> *speedLimitsMiles = @[ @-7.f, @-5.f, @-3.f, @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
+    NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceed get:self.appMode])];
+    if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
     {
-        [dataArr addObject:
-         @{
-           @"name" : _speedLimitsKm[i],
-           @"title" : [NSString stringWithFormat:@"%d %@", _speedLimitsKm[i].intValue, OALocalizedString(@"units_kmh")],
-           @"isSelected" : @NO,
-           @"type" : @"OASettingsTitleCell"
-         }];
+        for (int i = 0; i < speedLimitsKm.count; i++)
+        {
+            [dataArr addObject:
+             @{
+               @"name" : speedLimitsKm[i],
+               @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsKm[i].intValue, OALocalizedString(@"units_kmh")],
+               @"isSelected" : @(index == i),
+               @"type" : kCellTypeTitle
+             }];
+        }
+    }
+    else
+    {
+        for (int i = 0; i < speedLimitsKm.count; i++)
+        {
+            [dataArr addObject:
+             @{
+               @"name" : speedLimitsKm[i],
+               @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsMiles[i].intValue, OALocalizedString(@"units_mph")],
+               @"isSelected" : @(index == i),
+               @"type" : kCellTypeTitle
+             }];
+        }
     }
     _data = [NSArray arrayWithObject:dataArr];
 }
@@ -64,7 +85,7 @@
 -(void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"speed_limit_exceed");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -74,10 +95,6 @@
         [self setupTableHeaderViewWithText:OALocalizedString(@"speed_limit_tolerance_descr")];
         [self.tableView reloadData];
     } completion:nil];
-}
-
-- (void) setupView
-{
 }
 
 #pragma mark - TableView
@@ -122,7 +139,14 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self selectSpeedLimitExceed:_data[indexPath.section][indexPath.row]];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) selectSpeedLimitExceed:(NSDictionary *)item
+{
+    [_settings.speedLimitExceed set:((NSNumber *)item[@"name"]).doubleValue mode:self.appMode];
+    [self backButtonClicked:nil];
 }
 
 @end

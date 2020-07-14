@@ -10,14 +10,14 @@
 
 typedef enum
 {
-    kProfileGeneralSettingsMapOrientation = 0,
-    kProfileGeneralSettingsDrivingRegion,
-    kProfileGeneralSettingsUnitsOfLenght,
-    kProfileGeneralSettingsUnitsOfSpeed,
-    kProfileGeneralSettingsAngularMeasurmentUnits,
-    kProfileGeneralSettingsExternalInputDevices,
-    kProfileGeneralSettingsScreenCoordsFormat,
-} kProfileGeneralSettingsParameter;
+    EOAProfileGeneralSettingsMapOrientation = 0,
+    EOAProfileGeneralSettingsDrivingRegion,
+    EOAProfileGeneralSettingsUnitsOfLenght,
+    EOAProfileGeneralSettingsUnitsOfSpeed,
+    EOAProfileGeneralSettingsAngularMeasurmentUnits,
+    EOAProfileGeneralSettingsExternalInputDevices,
+    EOAProfileGeneralSettingsScreenCoordsFormat,
+} EOAProfileGeneralSettingsParameter;
 
 @interface OAProfileGeneralSettingsViewController : OABaseSettingsViewController
 

@@ -271,7 +271,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @end
 
-@interface OAProfileDrivingRegionConstant : OAProfileInteger
+@interface OAProfileDrivingRegion : OAProfileInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
 
@@ -282,14 +282,14 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @end
 
-@interface OAMetricSystemConstant : OAProfileInteger
+@interface OAMetricSystem : OAProfileInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
 
 - (EOAMetricsConstant) get;
-- (void) set:(EOAMetricsConstant)metricSystemConstant;
+- (void) set:(EOAMetricsConstant)metricsConstant;
 - (EOAMetricsConstant) get:(OAApplicationMode *)mode;
-- (void) set:(EOAMetricsConstant)metricSystemConstant mode:(OAApplicationMode *)mode;
+- (void) set:(EOAMetricsConstant)metricsConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -379,9 +379,9 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (readonly, nonatomic) BOOL nightMode;
-@property (nonatomic) OAMetricSystemConstant *metricSystem;
+@property (nonatomic) OAMetricSystem *metricSystem;
 @property (nonatomic) OAProfileBoolean *drivingRegionAutomatic;
-@property (nonatomic) OAProfileDrivingRegionConstant *drivingRegion;
+@property (nonatomic) OAProfileDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (nonatomic) OAProfileInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
@@ -499,8 +499,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL gpxRouteCalcOsmandParts;
 @property (assign, nonatomic) BOOL gpxCalculateRtept;
 @property (assign, nonatomic) BOOL gpxRouteCalc;
-@property (assign, nonatomic) BOOL voiceMute;
-@property (nonatomic) NSString *voiceProvider;
+@property (nonatomic) OAProfileBoolean *voiceMute;
+@property (nonatomic) OAProfileString *voiceProvider;
 @property (nonatomic) OAProfileBoolean *interruptMusic;
 @property (nonatomic) OAProfileBoolean *snapToRoad;
 @property (nonatomic) OAProfileInteger *autoFollowRoute;
@@ -513,6 +513,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileDouble *switchMapDirectionToCompass;
 @property (nonatomic) OAProfileInteger *wakeOnVoiceInt;
 
+@property (nonatomic) OAProfileBoolean *showScreenAlerts;
 @property (nonatomic) OAProfileBoolean *showTrafficWarnings;
 @property (nonatomic) OAProfileBoolean *showPedestrian;
 @property (nonatomic) OAProfileBoolean *showCameras;
@@ -532,7 +533,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *announceNearbyPoi;
 
 @property (assign, nonatomic) BOOL showGpxWpt;
-@property (assign, nonatomic) BOOL announceWpt;
+@property (nonatomic) OAProfileBoolean *announceWpt;
 @property (nonatomic) OAProfileBoolean *showNearbyFavorites;
 @property (nonatomic) OAProfileBoolean *showNearbyPoi;
 

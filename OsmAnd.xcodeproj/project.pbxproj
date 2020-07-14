@@ -4399,8 +4399,8 @@
 		DA2558C024ADE40F0081D155 /* OASettingsModalPresentationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA25587424ADE40F0081D155 /* OASettingsModalPresentationViewController.xib */; };
 		DA2558C124ADE40F0081D155 /* OAAvoidPreferParametersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25587624ADE40F0081D155 /* OAAvoidPreferParametersViewController.mm */; };
 		DA2558C224ADE40F0081D155 /* OAAvoidPreferParametersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25587624ADE40F0081D155 /* OAAvoidPreferParametersViewController.mm */; };
-		DA2558C324ADE40F0081D155 /* OAVoicePromptsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25587824ADE40F0081D155 /* OAVoicePromptsViewController.m */; };
-		DA2558C424ADE40F0081D155 /* OAVoicePromptsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25587824ADE40F0081D155 /* OAVoicePromptsViewController.m */; };
+		DA2558C324ADE40F0081D155 /* OAVoicePromptsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25587824ADE40F0081D155 /* OAVoicePromptsViewController.mm */; };
+		DA2558C424ADE40F0081D155 /* OAVoicePromptsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25587824ADE40F0081D155 /* OAVoicePromptsViewController.mm */; };
 		DA2558C524ADE40F0081D155 /* OASpeedLimitToleranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25587924ADE40F0081D155 /* OASpeedLimitToleranceViewController.m */; };
 		DA2558C624ADE40F0081D155 /* OASpeedLimitToleranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25587924ADE40F0081D155 /* OASpeedLimitToleranceViewController.m */; };
 		DA2558C724ADE40F0081D155 /* OACreateProfileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25587B24ADE40F0081D155 /* OACreateProfileViewController.mm */; };
@@ -8887,7 +8887,7 @@
 		DA25587524ADE40F0081D155 /* OAMapOrientationThresholdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapOrientationThresholdViewController.h; sourceTree = "<group>"; };
 		DA25587624ADE40F0081D155 /* OAAvoidPreferParametersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAvoidPreferParametersViewController.mm; sourceTree = "<group>"; };
 		DA25587724ADE40F0081D155 /* OARecalculateRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARecalculateRouteViewController.h; sourceTree = "<group>"; };
-		DA25587824ADE40F0081D155 /* OAVoicePromptsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAVoicePromptsViewController.m; sourceTree = "<group>"; };
+		DA25587824ADE40F0081D155 /* OAVoicePromptsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAVoicePromptsViewController.mm; sourceTree = "<group>"; };
 		DA25587924ADE40F0081D155 /* OASpeedLimitToleranceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASpeedLimitToleranceViewController.m; sourceTree = "<group>"; };
 		DA25587A24ADE40F0081D155 /* OADefaultSpeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADefaultSpeedViewController.h; sourceTree = "<group>"; };
 		DA25587B24ADE40F0081D155 /* OACreateProfileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACreateProfileViewController.mm; sourceTree = "<group>"; };
@@ -14509,7 +14509,7 @@
 				DA25586A24ADE40F0081D155 /* OAVehicleParametersViewController.m */,
 				DA25587124ADE40F0081D155 /* OAVoiceAnouncesViewController.h */,
 				DA25586324ADE40F0081D155 /* OAVoicePromptsViewController.h */,
-				DA25587824ADE40F0081D155 /* OAVoicePromptsViewController.m */,
+				DA25587824ADE40F0081D155 /* OAVoicePromptsViewController.mm */,
 			);
 			path = NavigationSettings;
 			sourceTree = "<group>";
@@ -20152,7 +20152,7 @@
 				DA8EB2FF21C8E8DE00A76BFB /* OAOsmAndLiveSelectionViewController.mm in Sources */,
 				847A1D261DF94E9B003C1246 /* OAHistoryItem.m in Sources */,
 				847A1D271DF94E9B003C1246 /* OAPhrasesParser.m in Sources */,
-				DA2558C424ADE40F0081D155 /* OAVoicePromptsViewController.m in Sources */,
+				DA2558C424ADE40F0081D155 /* OAVoicePromptsViewController.mm in Sources */,
 				8A13FEDD20EFA2EE0029B2EE /* OAMyLocationViewController.mm in Sources */,
 				8A09960E2430D130007192AD /* OAProfileIconColor.m in Sources */,
 				845AFB5C1E264EE800170026 /* OASearchUICore.mm in Sources */,
@@ -20578,7 +20578,7 @@
 				8417A6841B25C29300EA1D17 /* OAEditGroupViewController.m in Sources */,
 				DA6D51E321F328AA00EC84E2 /* OAOsmEditsDBHelper.m in Sources */,
 				8485FA4A1FC95F88005991FE /* SunriseSunset.m in Sources */,
-				DA2558C324ADE40F0081D155 /* OAVoicePromptsViewController.m in Sources */,
+				DA2558C324ADE40F0081D155 /* OAVoicePromptsViewController.mm in Sources */,
 				84FF0C4B1F3D89AF00AD1029 /* OARoutingTargetCell.m in Sources */,
 				DA25588924ADE40F0081D155 /* OAProfileGeneralSettingsParametersViewController.m in Sources */,
 				848B28C31EED8A3400F1A19D /* OATerrainMapLayer.mm in Sources */,

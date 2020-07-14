@@ -51,7 +51,7 @@
 
 @implementation OASettingsViewController
 
-- (id) initWithSettingsType:(kSettingsScreen)settingsType
+- (id) initWithSettingsType:(EOASettingsScreen)settingsType
 {
     self = [super init];
     if (self)
@@ -97,7 +97,7 @@
     OAApplicationMode *appMode = settings.applicationMode;
     switch (self.settingsType)
     {
-        case kSettingsScreenMain:
+        case EOASettingsScreenMain:
         {
             NSMutableArray *arr = [NSMutableArray arrayWithObjects:@{
                                                                      @"name" : @"general_settings",
@@ -156,7 +156,7 @@
             self.data = [NSArray arrayWithArray:arr];
             break;
         }
-        case kSettingsScreenAppMode:
+        case EOASettingsScreenAppMode:
         {
             _titleView.text = OALocalizedString(@"settings_preset");
             NSMutableArray *arr = [NSMutableArray array];
@@ -233,7 +233,7 @@
 
 - (BOOL) sectionsOnly
 {
-    return _settingsType == kSettingsScreenMain;
+    return _settingsType == EOASettingsScreenMain;
 }
 
 #pragma mark - UITableViewDataSource
@@ -423,10 +423,10 @@
     {
         switch (self.settingsType)
         {
-            case kSettingsScreenMain:
+            case EOASettingsScreenMain:
                 [self selectSettingMain:name];
                 break;
-            case kSettingsScreenAppMode:
+            case EOASettingsScreenAppMode:
                 [self selectAppMode:name];
                 break;
             default:
@@ -474,7 +474,7 @@
 {
     if ([name isEqualToString:@"settings_preset"])
     {
-        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenAppMode];
+        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:EOASettingsScreenAppMode];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([name isEqualToString:@"do_not_show_discount"])

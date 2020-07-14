@@ -10,6 +10,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
+#import "OAApplicationMode.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -50,7 +51,7 @@
 -(void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"recalculate_route");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

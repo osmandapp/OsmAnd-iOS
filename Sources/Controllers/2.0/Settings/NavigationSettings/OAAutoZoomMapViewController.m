@@ -9,9 +9,12 @@
 #import "OAAutoZoomMapViewController.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 
 #import "Localization.h"
 #import "OAColors.h"
+
+#define kCellTypeSettingsTitle @"OASettingsTitleCell"
 
 @interface OAAutoZoomMapViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -19,6 +22,7 @@
 
 @implementation OAAutoZoomMapViewController
 {
+    OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
     NSArray<NSNumber *> *_zoomValues;
 }
@@ -28,6 +32,7 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
         [self generateData];
     }
     return self;
@@ -35,18 +40,24 @@
 
 - (void) generateData
 {
-    _zoomValues =  @[ OALocalizedString(@"auto_zoom_none"),
-        OALocalizedString(@"auto_zoom_farthest"),
-        OALocalizedString(@"auto_zoom_far"),
-        OALocalizedString(@"auto_zoom_close") ];
     NSMutableArray *dataArr = [NSMutableArray array];
-    for (int i = 0; i < _zoomValues.count; i++)
+    [dataArr addObject:
+     @{
+       @"title" : OALocalizedString(@"auto_zoom_none"),
+       @"isSelected" : @(![_settings.autoZoomMap get:self.appMode]),
+       @"type" : kCellTypeSettingsTitle
+     }];
+
+    EOAAutoZoomMap autoZoomMap = [_settings.autoZoomMapScale get:self.appMode];
+    NSArray<OAAutoZoomMap *> *values = [OAAutoZoomMap values];
+    for (OAAutoZoomMap *v in values)
     {
         [dataArr addObject:
          @{
-           @"type" : @"OASettingsTitleCell",
-           @"title" : _zoomValues[i],
-           @"isSelected" : @NO,
+           @"name" : @(v.autoZoomMap),
+           @"title" : v.name,
+           @"isSelected" : @([_settings.autoZoomMap get:self.appMode] && v.autoZoomMap == autoZoomMap),
+           @"type" : kCellTypeSettingsTitle
          }];
     }
     _data = [NSArray arrayWithObject:dataArr];
@@ -55,7 +66,7 @@
 - (void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"auto_zoom_map");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -63,11 +74,6 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self setupView];
-}
-
-- (void) setupView
-{
 }
 
 #pragma mark - TableView
@@ -112,7 +118,22 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self selectAutoZoomMap:_data[indexPath.section][indexPath.row]];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) selectAutoZoomMap:(NSDictionary *)item
+{
+    if (!item[@"name"])
+    {
+        [_settings.autoZoomMap set:NO mode:self.appMode];
+    }
+    else
+    {
+        [_settings.autoZoomMap set:YES mode:self.appMode];
+        [_settings.autoZoomMapScale set:(EOAAutoZoomMap)((NSNumber *)item[@"name"]).intValue mode:self.appMode];
+    }
+    [self backButtonClicked:nil];
 }
 
 @end

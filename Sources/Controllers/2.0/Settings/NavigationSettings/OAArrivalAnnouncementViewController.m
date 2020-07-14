@@ -8,11 +8,14 @@
 
 #import "OAArrivalAnnouncementViewController.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
 #define kSidePadding 16
+#define kCellTypeTitle @"OASettingsTitleCell"
 
 @interface OAArrivalAnnouncementViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -20,8 +23,8 @@
 
 @implementation OAArrivalAnnouncementViewController
 {
+    OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
-    NSArray<NSNumber *> *_arrivalNames;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -29,6 +32,7 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
         [self generateData];
     }
     return self;
@@ -36,19 +40,21 @@
 
 - (void) generateData
 {
-    _arrivalNames =  @[ OALocalizedString(@"arrival_distance_factor_early"),
+    NSMutableArray *dataArr = [NSMutableArray array];
+    NSArray<NSNumber *> *arrivalNames =  @[ OALocalizedString(@"arrival_distance_factor_early"),
         OALocalizedString(@"arrival_distance_factor_normally"),
         OALocalizedString(@"arrival_distance_factor_late"),
         OALocalizedString(@"arrival_distance_factor_at_last") ];
-    NSMutableArray *dataArr = [NSMutableArray array];
-    for (int i = 0; i < _arrivalNames.count; i++)
+    NSArray<NSNumber *> *arrivalValues = @[ @1.5f, @1.f, @0.5f, @0.25f ];
+    double selectedValue = [_settings.arrivalDistanceFactor get:self.appMode];
+    for (int i = 0; i < arrivalNames.count; i++)
     {
         [dataArr addObject:
          @{
-           @"name" : _arrivalNames[i],
-           @"title" : _arrivalNames[i],
-           @"isSelected" : @NO,
-           @"type" : @"OASettingsTitleCell"
+           @"name" : arrivalValues[i],
+           @"title" : arrivalNames[i],
+           @"isSelected" : @(arrivalValues[i].doubleValue == selectedValue),
+           @"type" : kCellTypeTitle
          }];
     }
     _data = [NSArray arrayWithObject:dataArr];
@@ -57,7 +63,7 @@
 -(void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"arrival_distance");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -66,11 +72,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_announcement_frequency")];
-    [self setupView];
-}
-
-- (void) setupView
-{
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -87,20 +88,20 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"OASettingsTitleCell"])
+    if ([cellType isEqualToString:kCellTypeTitle])
     {
-        static NSString* const identifierCell = @"OASettingsTitleCell";
+        static NSString* const identifierCell = kCellTypeTitle;
         OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+            cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.hidden = ![item[@"isSelected"] boolValue];
         }
         return cell;
@@ -124,7 +125,14 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self selectArrivalDistanceFactor:_data[indexPath.section][indexPath.row]];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) selectArrivalDistanceFactor:(NSDictionary *)item
+{
+    [_settings.arrivalDistanceFactor set:((NSNumber *)item[@"name"]).doubleValue mode:self.appMode];
+    [self backButtonClicked:nil];
 }
 
 @end

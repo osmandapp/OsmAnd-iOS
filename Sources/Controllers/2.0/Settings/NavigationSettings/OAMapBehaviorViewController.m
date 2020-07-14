@@ -12,6 +12,8 @@
 #import "OAAutoCenterMapViewController.h"
 #import "OAAutoZoomMapViewController.h"
 #import "OAMapOrientationThresholdViewController.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -22,6 +24,7 @@
 
 @implementation OAMapBehaviorViewController
 {
+    OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
 }
 
@@ -30,6 +33,7 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
     }
     return self;
 }
@@ -37,7 +41,7 @@
 -(void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"map_behavior");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -48,29 +52,61 @@
     [self setupView];
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setupView];
+    [self.tableView reloadData];
+}
+
 - (void) setupView
 {
+    NSString *autoCenterValue = nil;
+    NSUInteger autoCenter = [_settings.autoFollowRoute get:self.appMode];
+    if (autoCenter == 0)
+        autoCenterValue = OALocalizedString(@"shared_string_never");
+    else
+        autoCenterValue = [NSString stringWithFormat:@"%lu %@", (unsigned long)autoCenter, OALocalizedString(@"int_seconds")];
+    
+    NSString *autoZoomValue = nil;
+    if (![_settings.autoZoomMap get:self.appMode])
+    {
+        autoZoomValue = OALocalizedString(@"auto_zoom_none");
+    }
+    else
+    {
+        EOAAutoZoomMap autoZoomMap = [_settings.autoZoomMapScale get:self.appMode];
+        autoZoomValue = [OAAutoZoomMap getName:autoZoomMap];
+    }
+    NSString *mapOrientationValue = nil;
+    NSInteger mapOrientation = [_settings.switchMapDirectionToCompass get:self.appMode];
+    if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
+        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"units_kmh")];
+    else
+        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"units_mph")];
+
     NSMutableArray *dataArr = [NSMutableArray arrayWithObjects:@{
                                     @"type" : @"OASettingsCell",
                                     @"title" : OALocalizedString(@"choose_auto_follow_route"),
-                                    @"value" : @"25 sec", // has to be changed
+                                    @"value" : autoCenterValue,
                                     @"key" : @"autoCenter"},
                                 @{
                                     @"type" : @"OASettingsCell",
                                     @"title" : OALocalizedString(@"auto_zoom_map"),
-                                    @"value" : OALocalizedString(@"auto_zoom_none"), // has to be changed
+                                    @"value" : autoZoomValue,
                                     @"key" : @"autoZoom",
                                },
                                @{
                                     @"type" : @"OASettingsCell",
                                     @"title" : OALocalizedString(@"map_orientation_change_in_accordance_with_speed"),
-                                    @"value" : @"0 km/h", // has to be changed
+                                    @"value" : mapOrientationValue,
                                     @"key" : @"mapOrientation",
                                },
                                @{
                                     @"type" : @"OASettingSwitchCell",
                                     @"title" : OALocalizedString(@"snap_to_road"),
-                                    @"isOn" : @NO }, nil];
+                                    @"value" : _settings.snapToRoad
+                               }, nil];
     _data = [NSArray arrayWithArray:dataArr];
 }
 
@@ -88,13 +124,13 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         return cell;
     }
@@ -113,7 +149,17 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.switchView.on = [item[@"isOn"] boolValue];
+            id v = item[@"value"];
+            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            if ([v isKindOfClass:[OAProfileBoolean class]])
+            {
+                OAProfileBoolean *value = v;
+                cell.switchView.on = [value get:self.appMode];
+            }
+            else
+            {
+                cell.switchView.on = [v boolValue];
+            }
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -175,6 +221,19 @@
 
 - (void) applyParameter:(id)sender
 {
+    UISwitch *sw = (UISwitch *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+    NSDictionary *item = _data[indexPath.section];
+
+    BOOL isChecked = ((UISwitch *) sender).on;
+    id v = item[@"value"];
+    if ([v isKindOfClass:[OAProfileBoolean class]])
+    {
+        OAProfileBoolean *value = v;
+        [value set:isChecked mode:self.appMode];
+    }
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
 }
 
 @end

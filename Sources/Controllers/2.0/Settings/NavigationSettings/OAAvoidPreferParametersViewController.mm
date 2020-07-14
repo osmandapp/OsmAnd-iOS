@@ -41,8 +41,11 @@
 
 - (void) applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"impassable_road");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    if (_isAvoid)
+        self.titleLabel.text = OALocalizedString(@"impassable_road");
+    else
+        self.titleLabel.text = OALocalizedString(@"prefer_in_routing_title");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -127,6 +130,14 @@
         [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_routes_and_road")];
         [self.tableView reloadData];
     } completion:nil];
+}
+
+- (IBAction) backButtonPressed:(id)sender
+{
+    if (_isAvoid)
+        [self.navigationController popViewControllerAnimated:YES];
+    else
+        [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - TableView

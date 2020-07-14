@@ -465,7 +465,6 @@
 "shared_string_clear_cache" = "Clear cache";
 "shared_string_maximum" = "Maximum";
 "shared_string_warning" = "Warning";
-"shared_string_exit" = "Exit";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";

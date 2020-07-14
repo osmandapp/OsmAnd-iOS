@@ -24,15 +24,15 @@ static OAQuickActionType *TYPE;
 - (void)execute
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    BOOL voice = settings.voiceMute;
+    BOOL voice = [settings.voiceMute get];
     
-    [settings setVoiceMute:!voice];
+    [settings.voiceMute set:!voice];
     [[OARoutingHelper sharedInstance].getVoiceRouter setMute:!voice];
 }
 
 - (BOOL)isActionWithSlash
 {
-    return ![OAAppSettings sharedManager].voiceMute;
+    return ![[OAAppSettings sharedManager].voiceMute get];
 }
 
 - (NSString *)getActionText

@@ -9,9 +9,12 @@
 #import "OAMapOrientationThresholdViewController.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 
 #import "Localization.h"
 #import "OAColors.h"
+
+#define kCellTypeCheck @"OASettingsTitleCell"
 
 @interface OAMapOrientationThresholdViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -19,6 +22,7 @@
 
 @implementation OAMapOrientationThresholdViewController
 {
+    OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
     NSArray<NSNumber *> *_values;
 }
@@ -28,6 +32,7 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
         [self generateData];
     }
     return self;
@@ -35,17 +40,36 @@
 
 - (void) generateData
 {
-    _values = @[ @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
     NSMutableArray *dataArr = [NSMutableArray array];
-    for (int i = 0; i < _values.count; i++)
+    NSArray<NSNumber *> *speedLimitsKm = @[ @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
+    NSArray<NSNumber *> *speedLimitsMiles = @[ @-7.f, @-5.f, @-3.f, @0.f, @3.f, @5.f];
+    if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
     {
-        [dataArr addObject:
-         @{
-           @"name" : _values[i],
-           @"title" : [NSString stringWithFormat:@"%d %@", _values[i].intValue, OALocalizedString(@"units_kmh")],
-           @"isSelected" : @NO,
-           @"type" : @"OASettingsTitleCell"
-         }];
+        NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.switchMapDirectionToCompass get:self.appMode])];
+        for (int i = 0; i < speedLimitsKm.count; i++)
+        {
+            [dataArr addObject:
+             @{
+               @"name" : speedLimitsKm[i],
+               @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsKm[i].intValue, OALocalizedString(@"units_kmh")],
+               @"isSelected" : @(index == i),
+               @"type" : kCellTypeCheck }
+             ];
+        }
+    }
+    else
+    {
+        NSUInteger index = [speedLimitsMiles indexOfObject:@([_settings.switchMapDirectionToCompass get:self.appMode])];
+        for (int i = 0; i < speedLimitsKm.count; i++)
+        {
+            [dataArr addObject:
+             @{
+               @"name" : speedLimitsMiles[i],
+               @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsMiles[i].intValue, OALocalizedString(@"units_mph")],
+               @"isSelected" : @(index == i),
+               @"type" : kCellTypeCheck }
+             ];
+        }
     }
     _data = [NSArray arrayWithObject:dataArr];
 }
@@ -53,7 +77,7 @@
 - (void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"map_orientation_change_in_accordance_with_speed");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -61,11 +85,6 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self setupView];
-}
-
-- (void) setupView
-{
 }
 
 #pragma mark - TableView
@@ -110,7 +129,14 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self selectSwitchMapDirectionToCompass:_data[indexPath.section][indexPath.row]];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) selectSwitchMapDirectionToCompass:(NSDictionary *)item
+{
+    [_settings.switchMapDirectionToCompass set:((NSNumber *)item[@"name"]).doubleValue mode:self.appMode];
+    [self backButtonClicked:nil];
 }
 
 @end

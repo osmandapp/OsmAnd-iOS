@@ -36,6 +36,7 @@
     self = [super initWithAppMode:applicationMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
     }
     return self;
 }
@@ -52,7 +53,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
-    _settings = [OAAppSettings sharedManager];
     [self setupView];
 }
 

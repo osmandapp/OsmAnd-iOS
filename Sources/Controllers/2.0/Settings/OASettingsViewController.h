@@ -10,19 +10,19 @@
 
 typedef enum
 {
-    kSettingsScreenMain = 0,
-    kSettingsScreenNavigation,
-    kSettingsScreenAppMode,
-} kSettingsScreen;
+    EOASettingsScreenMain = 0,
+    EOASettingsScreenNavigation,
+    EOASettingsScreenAppMode,
+} EOASettingsScreen;
 
 @interface OASettingsViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
 
-- (id) initWithSettingsType:(kSettingsScreen)settingsType;
+- (id) initWithSettingsType:(EOASettingsScreen)settingsType;
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *settingsTableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (nonatomic, readonly) kSettingsScreen settingsType;
+@property (nonatomic, readonly) EOASettingsScreen settingsType;
 
 @end

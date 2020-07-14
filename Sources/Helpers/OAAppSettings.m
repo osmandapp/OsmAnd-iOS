@@ -162,6 +162,7 @@
 #define voiceMuteKey @"voiceMute"
 #define voiceProviderKey @"voiceProvider"
 #define interruptMusicKey @"interruptMusic"
+#define showScreenAlertsKey @"showScreenAlerts"
 
 #define gpxRouteCalcOsmandPartsKey @"gpxRouteCalcOsmandParts"
 #define gpxCalculateRteptKey @"gpxCalculateRtept"
@@ -1116,7 +1117,7 @@
 
 - (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
 {
-    EOAMetricsConstant mc = [[OAAppSettings sharedManager].metricSystem get:mode];
+    EOAMetricsConstant mc = [[OAAppSettings sharedManager].metricSystem get];
     if ([mode isDerivedRoutingFrom:[OAApplicationMode PEDESTRIAN]])
     {
         if (mc == KILOMETERS_AND_METERS)
@@ -1317,7 +1318,7 @@
 
 @end
 
-@implementation OAProfileDrivingRegionConstant
+@implementation OAProfileDrivingRegion
 
 @dynamic defValue;
 
@@ -1360,7 +1361,7 @@
 
 @end
 
-@implementation OAMetricSystemConstant
+@implementation OAMetricSystem
 
 @dynamic defValue;
 
@@ -1374,9 +1375,9 @@
     return [super get];
 }
 
-- (void) set:(EOAMetricsConstant)metricSystemConstant
+- (void) set:(EOAMetricsConstant)metricsConstant
 {
-    [super set:metricSystemConstant];
+    [super set:metricsConstant];
 }
 
 - (EOAMetricsConstant) get:(OAApplicationMode *)mode
@@ -1384,9 +1385,9 @@
     return [super get:mode];
 }
 
-- (void) set:(EOAMetricsConstant)metricSystemConstant mode:(OAApplicationMode *)mode
+- (void) set:(EOAMetricsConstant)metricsConstant mode:(OAApplicationMode *)mode
 {
-    [super set:metricSystemConstant mode:mode];
+    [super set:metricsConstant mode:mode];
 }
 
 - (void) resetToDefault
@@ -1671,8 +1672,8 @@
 
         _settingAllow3DView = [OAProfileBoolean withKey:settingEnable3DViewKey defValue:YES];
         _drivingRegionAutomatic = [OAProfileBoolean withKey:drivingRegionAutomaticKey defValue:YES];
-        _drivingRegion = [OAProfileDrivingRegionConstant withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
-        _metricSystem = [OAMetricSystemConstant withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
+        _drivingRegion = [OAProfileDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
+        _metricSystem = [OAMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
         _metricSystemChangedManually = [OAProfileBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
         _settingGeoFormat = [OAProfileInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice =[OAProfileInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
@@ -1709,9 +1710,12 @@
         _speakCameras = [OAProfileBoolean withKey:speakCamerasKey defValue:NO];
         _announceNearbyFavorites = [OAProfileBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         _announceNearbyPoi = [OAProfileBoolean withKey:announceNearbyPoiKey defValue:NO];
+        _voiceMute = [OAProfileBoolean withKey:voiceMuteKey defValue:NO];
+        _voiceProvider = [OAProfileString withKey:voiceProviderKey defValue:@""];
+        _announceWpt = [OAProfileBoolean withKey:announceWptKey defValue:YES];
+        _showScreenAlerts = [OAProfileBoolean withKey:showScreenAlertsKey defValue:NO];
 
         _showGpxWpt = [[NSUserDefaults standardUserDefaults] objectForKey:showGpxWptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showGpxWptKey] : YES;
-        _announceWpt = [[NSUserDefaults standardUserDefaults] objectForKey:announceWptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:announceWptKey] : YES;
 
         _simulateRouting = [[NSUserDefaults standardUserDefaults] objectForKey:simulateRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:simulateRoutingKey] : NO;
 
@@ -1724,8 +1728,6 @@
         _gpxCalculateRtept = [[NSUserDefaults standardUserDefaults] objectForKey:gpxCalculateRteptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxCalculateRteptKey] : YES;
         _gpxRouteCalc = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcKey] : NO;
 
-        _voiceMute = [[NSUserDefaults standardUserDefaults] objectForKey:voiceMuteKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:voiceMuteKey] : NO;
-        _voiceProvider = [[NSUserDefaults standardUserDefaults] objectForKey:voiceProviderKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:voiceProviderKey] : nil;
         _interruptMusic = [OAProfileBoolean withKey:interruptMusicKey defValue:NO];
         _snapToRoad = [OAProfileBoolean withKey:snapToRoadKey defValue:NO];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
@@ -2415,12 +2417,6 @@
     [[NSUserDefaults standardUserDefaults] setBool:_showGpxWpt forKey:showGpxWptKey];
 }
 
-- (void) setAnnounceWpt:(BOOL)announceWpt
-{
-    _announceWpt = announceWpt;
-    [[NSUserDefaults standardUserDefaults] setBool:_announceWpt forKey:announceWptKey];
-}
-
 - (void) setSimulateRouting:(BOOL)simulateRouting
 {
     _simulateRouting = simulateRouting;
@@ -2444,18 +2440,6 @@
 {
     _gpxRouteCalc = gpxRouteCalc;
     [[NSUserDefaults standardUserDefaults] setBool:_gpxRouteCalc forKey:gpxRouteCalcKey];
-}
-
-- (void) setVoiceMute:(BOOL)voiceMute
-{
-    _voiceMute = voiceMute;
-    [[NSUserDefaults standardUserDefaults] setBool:_voiceMute forKey:voiceMuteKey];
-}
-
-- (void) setVoiceProvider:(NSString *)voiceProvider
-{
-    _voiceProvider = voiceProvider;
-    [[NSUserDefaults standardUserDefaults] setObject:_voiceProvider forKey:voiceProviderKey];
 }
 
 - (void) setOsmUserName:(NSString *)osmUserName

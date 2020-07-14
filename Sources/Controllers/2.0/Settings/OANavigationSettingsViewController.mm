@@ -844,7 +844,7 @@ static NSDictionary *screenVoiceProviders;
              @{
                @"name" : @"announce_wpt",
                @"title" : OALocalizedString(@"announce_gpx_waypoints"),
-               @"value" : @(settings.announceWpt),
+               @"value" : @([settings.announceWpt get]),
                @"type" : kCellTypeSwitch }
              ];
             [dataArr addObject:
@@ -980,7 +980,7 @@ static NSDictionary *screenVoiceProviders;
         case kNavigationSettingsScreenVoiceGudanceLanguage:
         {
             _titleView.text = OALocalizedString(@"voice_provider");
-            NSString *selectedValue = settings.voiceProvider;
+            NSString *selectedValue = [settings.voiceProvider get];
             for (NSString *key in screenVoiceProviders.allKeys)
             {
                 [dataArr addObject:
@@ -1192,7 +1192,7 @@ static NSDictionary *screenVoiceProviders;
         }
         else if ([name isEqualToString:@"announce_wpt"])
         {
-            settings.announceWpt = isChecked;
+            [settings.announceWpt set:isChecked];
         }
         else if ([name isEqualToString:@"osm_live_routing"])
         {

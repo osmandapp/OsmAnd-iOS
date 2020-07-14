@@ -1127,7 +1127,7 @@
 - (void) elevationGestureDetected:(UIPanGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view or if 3D view is disabled
-    if (!self.mapViewLoaded || ![OAAppSettings.sharedManager.settingAllow3DView get:[OAAppSettings sharedManager].applicationMode])
+    if (!self.mapViewLoaded || ![OAAppSettings.sharedManager.settingAllow3DView get])
         return;
 
     if (recognizer.state == UIGestureRecognizerStateBegan)

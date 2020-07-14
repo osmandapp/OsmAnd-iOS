@@ -289,7 +289,7 @@
     
     if ([self needCoords])
     {
-        NSInteger f = [OAPointDescription coordinatesFormatToFormatterMode:[[OAAppSettings sharedManager].settingGeoFormat get:[OAAppSettings sharedManager].applicationMode]];
+        NSInteger f = [OAPointDescription coordinatesFormatToFormatterMode:[[OAAppSettings sharedManager].settingGeoFormat get]];
         NSDictionary<NSNumber *, NSString*> *values = [OAPointDescription getLocationData:self.location.latitude lon:self.location.longitude];
         OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:values[@(f)] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
         coordinatesRow.collapsed = YES;

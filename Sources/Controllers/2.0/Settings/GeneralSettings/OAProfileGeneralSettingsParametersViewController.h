@@ -12,6 +12,6 @@
 
 @interface OAProfileGeneralSettingsParametersViewController : OABaseSettingsViewController
 
-- (instancetype) initWithType:(kProfileGeneralSettingsParameter)settingsType applicationMode:(OAApplicationMode *)applicationMode;
+- (instancetype) initWithType:(EOAProfileGeneralSettingsParameter)settingsType applicationMode:(OAApplicationMode *)applicationMode;
 
 @end

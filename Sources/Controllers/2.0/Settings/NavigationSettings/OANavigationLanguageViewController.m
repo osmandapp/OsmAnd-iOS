@@ -8,9 +8,12 @@
 
 #import "OANavigationLanguageViewController.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OAVoicePromptsViewController.h"
 #import "OAAppSettings.h"
-#import "OAFileNameTranslationHelper.h"
-#import "OrderedDictionary.h"
+
+#import "OsmAndApp.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -21,9 +24,8 @@
 
 @implementation OANavigationLanguageViewController
 {
+    OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
-    NSArray<NSString *> *_languagesArray;
-    NSDictionary *_screenVoiceProviders;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -31,6 +33,7 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
         [self generateData];
     }
     return self;
@@ -38,39 +41,26 @@
 
 - (void) generateData
 {
-    _screenVoiceProviders = [self getSortedVoiceProviders];
+    NSDictionary *_screenVoiceProviders = [OAUtilities getSortedVoiceProviders];
     NSMutableArray *dataArr = [NSMutableArray array];
+    NSString *selectedValue = [_settings.voiceProvider get:self.appMode];
     for (NSString *key in _screenVoiceProviders.allKeys)
     {
         [dataArr addObject: @{
            @"name" : _screenVoiceProviders[key],
            @"title" : key,
            @"type" : @"OASettingsTitleCell",
-           @"isSelected" : @NO,
+           @"isSelected" : @([_screenVoiceProviders[key] isEqualToString:selectedValue]),
          }];
     }
     _data = [NSArray arrayWithObject:dataArr];
 }
 
-- (NSDictionary *) getSortedVoiceProviders // have taken from OANavigationSettingsViewController
-{
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSArray *screenVoiceProviderNames = [OAFileNameTranslationHelper getVoiceNames:settings.ttsAvailableVoices];
-    OrderedDictionary *mapping = [OrderedDictionary dictionaryWithObjects:settings.ttsAvailableVoices forKeys:screenVoiceProviderNames];
-    
-    NSArray *sortedKeys = [mapping.allKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-    MutableOrderedDictionary *res = [[MutableOrderedDictionary alloc] init];
-    for (NSString *key in sortedKeys)
-    {
-        [res setObject:[mapping objectForKey:key] forKey:key];
-    }
-    return res;
-}
 
 - (void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"language");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -127,7 +117,15 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self slectVoiceLanguage:_data[indexPath.section][indexPath.row]];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) slectVoiceLanguage:(NSDictionary *)item
+{
+    [_settings.voiceProvider set:item[@"name"] mode:self.appMode];
+    [[OsmAndApp instance] initVoiceCommandPlayer:self.appMode warningNoneProvider:NO showDialog:YES force:NO];
+    [self backButtonClicked:nil];
 }
 
 @end

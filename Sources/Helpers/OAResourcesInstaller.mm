@@ -243,7 +243,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     
     settings.firstMapIsDownloaded = YES;
     
-    if (![settings.drivingRegionAutomatic get:settings.applicationMode])
+    if (![settings.drivingRegionAutomatic get])
         [_app setupDrivingRegion:reg];
     
     /*

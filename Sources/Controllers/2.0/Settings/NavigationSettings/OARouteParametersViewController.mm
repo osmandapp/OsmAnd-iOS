@@ -14,6 +14,9 @@
 #import "OAAvoidPreferParametersViewController.h"
 #import "OARecalculateRouteViewController.h"
 #import "OARoutePreferencesParameters.h"
+#import "OAApplicationMode.h"
+#import "OAAppSettings.h"
+#import "OARouteSettingsBaseViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -25,6 +28,7 @@
 @implementation OARouteParametersViewController
 {
     NSArray<NSArray *> *_data;
+    OAAppSettings *_settings;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -32,6 +36,7 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
     }
     return self;
 }
@@ -39,7 +44,7 @@
 -(void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"route_params");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -73,14 +78,6 @@
         @"icon" : @"ic_custom_alert",
         @"key" : @"avoidRoads"
     }];
-    if ([OAAvoidPreferParametersViewController hasPreferParameters:self.appMode])
-    {
-        [parametersArr addObject:@{
-            @"type" : @"OAIconTextCell",
-            @"title" : OALocalizedString(@"prefer_in_routing_title"),
-            @"key" : @"preferRoads"
-        }];
-    }
     [parametersArr addObject:@{
         @"type" : @"OASettingSwitchCell",
         @"title" : OALocalizedString(@"routing_attr_short_way_name"),
@@ -93,6 +90,15 @@
         @"icon" : @"ic_custom_forbid_private_access",
         @"isOn" : @NO,
     }];
+    if ([OAAvoidPreferParametersViewController hasPreferParameters:self.appMode])
+    {
+        [parametersArr addObject:@{
+            @"type" : @"OAIconTextCell",
+            @"title" : OALocalizedString(@"prefer_in_routing_title"),
+            @"icon" : @"ic_custom_alert",
+            @"key" : @"preferRoads"
+        }];
+    }
     [tableData addObject:otherArr];
     [tableData addObject:parametersArr];
     _data = [NSArray arrayWithArray:tableData];
@@ -129,15 +135,15 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.leftImageView.tintColor = UIColorFromRGB(color_chart_orange);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftImageView.tintColor = UIColorFromRGB(color_chart_orange);
         }
         return cell;
     }
@@ -161,6 +167,10 @@
             {
                 cell.iconView.tintColor = [OAAvoidRoadsRoutingParameter hasAnyAvoidEnabled:self.appMode] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_footer_icon_gray);
             }
+            else
+            {
+                cell.iconView.tintColor = UIColorFromRGB(color_chart_orange); // needs to be switching between gray and orange
+            }
         }
         return cell;
     }
@@ -180,7 +190,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.imgView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.on = [item[@"isOn"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
@@ -214,6 +224,13 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
+    if ([itemKey isEqualToString:@"preferRoads"])
+    {
+        OABaseSettingsViewController *preferViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
+        [self presentViewController:preferViewController animated:YES completion:nil];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        return;
+    }
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"recalculateRoute"])
     {
@@ -223,10 +240,6 @@
     {
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:YES];
         settingsViewController.delegate = self;
-    }
-    else if ([itemKey isEqualToString:@"preferRoads"])
-    {
-        settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
     }
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

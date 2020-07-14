@@ -8,9 +8,13 @@
 
 #import "OAAutoCenterMapViewController.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 
 #import "Localization.h"
 #import "OAColors.h"
+
+#define kCellTypeCheck @"OASettingsTitleCell"
 
 @interface OAAutoCenterMapViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -18,9 +22,8 @@
 
 @implementation OAAutoCenterMapViewController
 {
+    OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
-    NSArray<NSNumber *> *_screenPowerSaveValues;
-    NSArray<NSString *> *_screenPowerSaveNames;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -28,29 +31,15 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
-        [self generateData];
+        _settings = [OAAppSettings sharedManager];
     }
     return self;
-}
-
-- (void) generateData
-{
-    _screenPowerSaveValues = @[ @0, @5, @10, @15, @20, @30, @45, @60 ];
-    NSMutableArray *array = [NSMutableArray array];
-    for (NSNumber *val in _screenPowerSaveValues)
-    {
-        if (val.intValue == 0)
-            [array addObject:OALocalizedString(@"shared_string_never")];
-        else
-            [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"int_seconds")]];
-    }
-    _screenPowerSaveNames = [NSArray arrayWithArray:array];
 }
 
 - (void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"choose_auto_follow_route");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -64,14 +53,27 @@
 - (void) setupView
 {
     NSMutableArray *dataArr = [NSMutableArray array];
-    for (int i = 0; i < _screenPowerSaveValues.count; i++)
+    NSArray<NSNumber *> *autoFollowRouteValues = @[ @0, @5, @10, @15, @20, @25, @30, @45, @60, @90 ];
+    NSArray<NSString *> *autoFollowRouteEntries;
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSNumber *val in autoFollowRouteValues)
     {
-        [dataArr addObject: @{
-           @"type" : @"OASettingsTitleCell",
-           @"name" : _screenPowerSaveValues[i],
-           @"title" : _screenPowerSaveNames[i],
-           @"isSelected" : @NO }
-         ];
+        if (val.intValue == 0)
+            [array addObject:OALocalizedString(@"shared_string_never")];
+        else
+            [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"int_seconds")]];
+    }
+    autoFollowRouteEntries = [NSArray arrayWithArray:array];
+    int selectedValue = [_settings.autoFollowRoute get:self.appMode];
+    for (int i = 0; i < autoFollowRouteValues.count; i++)
+    {
+        [dataArr addObject:
+         @{
+           @"name" : autoFollowRouteValues[i],
+           @"title" : autoFollowRouteEntries[i],
+           @"isSelected" : @(autoFollowRouteValues[i].intValue == selectedValue),
+           @"type" : kCellTypeCheck
+         }];
     }
     _data = [NSArray arrayWithObject:dataArr];
 }
@@ -89,12 +91,12 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+            cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.hidden = ![item[@"isSelected"] boolValue];
         }
         return cell;
@@ -118,7 +120,14 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self selectAutoFollowRoute:_data[indexPath.section][indexPath.row]];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) selectAutoFollowRoute:(NSDictionary *)item
+{
+    [_settings.autoFollowRoute set:((NSNumber *)item[@"name"]).intValue mode:self.appMode];
+    [self backButtonClicked:nil];
 }
 
 @end

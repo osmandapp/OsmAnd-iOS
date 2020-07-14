@@ -296,7 +296,7 @@
 {
     [OAAnalyticsHelper logEvent:@"settings_open"];
 
-    OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenMain];
+    OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:EOASettingsScreenMain];
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 

@@ -417,7 +417,7 @@
 
 - (void) setSelected:(BOOL)isChecked
 {
-    self.settings.voiceMute = isChecked;
+    [self.settings.voiceMute set:isChecked];
     [_voiceRouter setMute:isChecked];
     if (self.delegate)
         [self.delegate updateParameters];
@@ -442,7 +442,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:self.settings.voiceMute ? @"ic_custom_sound_off" : @"ic_custom_sound"];
+    return [UIImage imageNamed:[self.settings.voiceMute get] ? @"ic_custom_sound_off" : @"ic_custom_sound"];
 }
 
 - (NSString *) getCellType

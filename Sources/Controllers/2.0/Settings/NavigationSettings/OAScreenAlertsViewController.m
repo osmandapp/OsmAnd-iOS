@@ -11,6 +11,8 @@
 #import "OASettingSwitchCell.h"
 #import "OAAvoidPreferParametersViewController.h"
 #import "OARecalculateRouteViewController.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -21,7 +23,9 @@
 
 @implementation OAScreenAlertsViewController
 {
+    OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
+    BOOL _showAlerts;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -29,6 +33,8 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
+        _showAlerts = [_settings.showScreenAlerts get:self.appMode];
     }
     return self;
 }
@@ -36,7 +42,7 @@
 -(void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"screen_alerts");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -52,6 +58,7 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
+    
     [otherArr addObject:@{
         @"type" : @"OADeviceScreenTableViewCell",
         @"foregroundImage" : @"img_settings_sreen_route_alerts@3x.png",
@@ -61,31 +68,32 @@
         @"type" : @"OASettingSwitchCell",
         @"title" : OALocalizedString(@"screen_alerts"),
         @"icon" : @"ic_custom_alert",
-        @"isOn" : @YES,
+        @"value" : _settings.showScreenAlerts,
+        @"key" : @"screenAlerts",
     }];
     [parametersArr addObject:@{
         @"type" : @"OASettingSwitchCell",
         @"title" : OALocalizedString(@"show_traffic_warnings"),
         @"icon" : @"list_warnings_traffic_calming",
-        @"isOn" : @YES,
+        @"value" : _settings.showTrafficWarnings,
     }];
     [parametersArr addObject:@{
         @"type" : @"OASettingSwitchCell",
         @"title" : OALocalizedString(@"show_pedestrian_warnings"),
         @"icon" : @"list_warnings_pedestrian",
-        @"isOn" : @YES,
+        @"value" : _settings.showPedestrian,
     }];
     [parametersArr addObject:@{
         @"type" : @"OASettingSwitchCell",
         @"title" : OALocalizedString(@"show_cameras"),
         @"icon" : @"list_warnings_speed_camera",
-        @"isOn" : @NO,
+        @"value" : _settings.showCameras,
     }];
     [parametersArr addObject:@{
         @"type" : @"OASettingSwitchCell",
         @"title" : OALocalizedString(@"show_tunnels"),
         @"icon" : @"list_warnings_tunnel",
-        @"isOn" : @NO,
+        @"value" : _settings.showTunnels,
     }];
     [tableData addObject:otherArr];
     [tableData addObject:parametersArr];
@@ -129,8 +137,26 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.imgView.image = [UIImage imageNamed:item[@"icon"]];
-            cell.switchView.on = [item[@"isOn"] boolValue];
+            if ([item[@"key"] isEqualToString:@"screenAlerts"])
+            {
+                cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.tintColor = _showAlerts ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_icon_inactive);
+            }
+            else
+            {
+                cell.imgView.image = [UIImage imageNamed:item[@"icon"]];
+            }
+            id v = item[@"value"];
+            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            if ([v isKindOfClass:[OAProfileBoolean class]])
+            {
+                OAProfileBoolean *value = v;
+                cell.switchView.on = [value get:self.appMode];
+            }
+            else
+            {
+                cell.switchView.on = [v boolValue];
+            }
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -145,7 +171,7 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _data.count;
+    return _showAlerts ? _data.count : 1;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -160,8 +186,43 @@
 
 #pragma mark - Switch
 
+- (void) updateTableView
+{
+    if (_showAlerts)
+    {
+        [self.tableView beginUpdates];
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
+    }
+    else
+    {
+        [self.tableView beginUpdates];
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
+    }
+}
+
 - (void) applyParameter:(id)sender
 {
+    UISwitch *sw = (UISwitch *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    BOOL isChecked = ((UISwitch *) sender).on;
+    id v = item[@"value"];
+    if ([v isKindOfClass:[OAProfileBoolean class]])
+    {
+        OAProfileBoolean *value = v;
+        [value set:isChecked mode:self.appMode];
+        if ([[v key] isEqualToString:@"showScreenAlerts"])
+        {
+            _showAlerts = isChecked;
+            [self updateTableView];
+        }
+    }
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
 }
 
 @end

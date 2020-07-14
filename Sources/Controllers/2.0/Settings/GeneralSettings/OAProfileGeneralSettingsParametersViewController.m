@@ -30,15 +30,16 @@
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
-    kProfileGeneralSettingsParameter _settingsType;
+    EOAProfileGeneralSettingsParameter _settingsType;
     NSString *_title;
 }
 
-- (instancetype) initWithType:(kProfileGeneralSettingsParameter)settingsType applicationMode:(OAApplicationMode *)applicationMode
+- (instancetype) initWithType:(EOAProfileGeneralSettingsParameter)settingsType applicationMode:(OAApplicationMode *)applicationMode
 {
     self = [super initWithAppMode:applicationMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
         _settingsType = settingsType;
         [self generateData];
     }
@@ -48,22 +49,22 @@
 - (void) generateData
 {
     switch (_settingsType) {
-        case kProfileGeneralSettingsMapOrientation:
+        case EOAProfileGeneralSettingsMapOrientation:
             _title = OALocalizedString(@"rotate_map_to_bearing");
             break;
-        case kProfileGeneralSettingsDrivingRegion:
+        case EOAProfileGeneralSettingsDrivingRegion:
             _title = OALocalizedString(@"driving_region");
             break;
-        case kProfileGeneralSettingsUnitsOfLenght:
+        case EOAProfileGeneralSettingsUnitsOfLenght:
             _title = OALocalizedString(@"unit_of_length");
             break;
-        case kProfileGeneralSettingsUnitsOfSpeed:
+        case EOAProfileGeneralSettingsUnitsOfSpeed:
             _title = OALocalizedString(@"units_of_speed");
             break;
-        case kProfileGeneralSettingsAngularMeasurmentUnits:
+        case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             _title = OALocalizedString(@"angular_measurment_units");
             break;
-        case kProfileGeneralSettingsExternalInputDevices:
+        case EOAProfileGeneralSettingsExternalInputDevices:
             _title = OALocalizedString(@"sett_ext_input");
             break;
         default:
@@ -82,7 +83,6 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    _settings = [OAAppSettings sharedManager];
     [self setupView];
 }
 
@@ -100,7 +100,7 @@
     EOAAngularConstant angularUnits = [_settings.angularUnits get:self.appMode];
     
     switch (_settingsType) {
-        case kProfileGeneralSettingsMapOrientation:
+        case EOAProfileGeneralSettingsMapOrientation:
             [dataArr addObject:@{
                 @"name" : @"none",
                 @"title" : OALocalizedString(@"rotate_map_none_opt"),
@@ -124,7 +124,7 @@
             }];
             break;
             
-        case kProfileGeneralSettingsDrivingRegion:
+        case EOAProfileGeneralSettingsDrivingRegion:
             self.tableView.rowHeight = 60.;
             [dataArr addObject:@{
                 @"name" : @"AUTOMATIC",
@@ -180,7 +180,7 @@
             }];
             break;
             
-        case kProfileGeneralSettingsUnitsOfLenght:
+        case EOAProfileGeneralSettingsUnitsOfLenght:
             [dataArr addObject:@{
                 @"name" : @"KILOMETERS_AND_METERS",
                 @"title" : OALocalizedString(@"si_km_m"),
@@ -213,7 +213,7 @@
             }];
             break;
             
-        case kProfileGeneralSettingsUnitsOfSpeed:
+        case EOAProfileGeneralSettingsUnitsOfSpeed:
             [dataArr addObject:@{
                 @"name" : @"KILOMETERS_PER_HOUR",
                 @"title" : OALocalizedString(@"si_kmh"),
@@ -252,7 +252,7 @@
             }];
             break;
             
-        case kProfileGeneralSettingsAngularMeasurmentUnits:
+        case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             [dataArr addObject:@{
                 @"name" : @"degrees_180",
                 @"title" : OALocalizedString(@"sett_deg180"),
@@ -273,7 +273,7 @@
             }];
             break;
             
-        case kProfileGeneralSettingsExternalInputDevices:
+        case EOAProfileGeneralSettingsExternalInputDevices:
             [dataArr addObject:@{
                 @"name" : @"sett_no_ext_input",
                 @"title" : OALocalizedString(@"sett_no_ext_input"),
@@ -314,12 +314,12 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+            cell.arrowIconView.image = [[UIImage imageNamed:@"ic_checkmark_default"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.arrowIconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.arrowIconView.hidden = ![item[@"selected"] boolValue];
             cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_icon_inactive);
@@ -334,13 +334,13 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OATitleDescriptionCheckmarkCell *)[nib objectAtIndex:0];
+            cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"description"];
-            cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.hidden = ![item[@"selected"] boolValue];
         }
         return cell;
@@ -353,12 +353,12 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+            cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.image = [[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.hidden = ![item[@"selected"] boolValue];
         }
         return cell;
@@ -385,22 +385,22 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *name = item[@"name"];
     switch (_settingsType) {
-        case kProfileGeneralSettingsMapOrientation:
+        case EOAProfileGeneralSettingsMapOrientation:
             [self selectMapOrientation:name];
             break;
-        case kProfileGeneralSettingsDrivingRegion:
+        case EOAProfileGeneralSettingsDrivingRegion:
             [self selectDrivingRegion:name];
             break;
-        case kProfileGeneralSettingsUnitsOfLenght:
+        case EOAProfileGeneralSettingsUnitsOfLenght:
             [self selectMetricSystem:name];
             break;
-        case kProfileGeneralSettingsUnitsOfSpeed:
+        case EOAProfileGeneralSettingsUnitsOfSpeed:
             [self selectSpeedSystem:name];
             break;
-        case kProfileGeneralSettingsAngularMeasurmentUnits:
+        case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             [self selectSettingAngularUnits:name];
             break;
-        case kProfileGeneralSettingsExternalInputDevices:
+        case EOAProfileGeneralSettingsExternalInputDevices:
             [self selectSettingExternalInput:name];
             break;
         default:

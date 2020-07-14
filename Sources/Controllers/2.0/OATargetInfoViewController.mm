@@ -362,6 +362,8 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 50.0;
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     UIView *view = [[UIView alloc] init];
@@ -555,7 +557,10 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OARowInfo *info = _rows[indexPath.row];
-    return info.height;
+    if (!info.collapsable && !info.isHtml )
+        return UITableViewAutomaticDimension;
+    else
+        return info.height;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath

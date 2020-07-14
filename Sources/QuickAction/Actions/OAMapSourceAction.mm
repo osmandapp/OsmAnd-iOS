@@ -14,6 +14,7 @@
 #import "OAAppData.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAQuickActionType.h"
+#import "OAResourcesUIHelper.h"
 
 #define LAYER_OSM_VECTOR @"type_default"
 #define KEY_SOURCE @"source"
@@ -21,13 +22,16 @@
 static OAQuickActionType *TYPE;
 
 @implementation OAMapSourceAction
+{
+    NSArray<OAResourceItem *> *_onlineMapSources;
+}
 
 - (instancetype) init
 {
     self = [super initWithActionType:self.class.TYPE];
     if (self)
     {
-        [super commonInit];
+        _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
     }
     return self;
 }
@@ -85,11 +89,11 @@ static OAQuickActionType *TYPE;
     else
     {
         OAMapSource *newMapSource = nil;
-        for (OAMapSource *mapSource in self.onlineMapSources)
+        for (OAMapSourceResourceItem *resource in _onlineMapSources)
         {
-            if ([mapSource.variant isEqualToString:variant] && [mapSource.name isEqualToString:name])
+            if ([resource.mapSource.variant isEqualToString:variant] && [resource.mapSource.name isEqualToString:name])
             {
-                newMapSource = mapSource;
+                newMapSource = resource.mapSource;
                 break;
             }
         }
@@ -185,6 +189,11 @@ static OAQuickActionType *TYPE;
         TYPE = [[OAQuickActionType alloc] initWithIdentifier:17 stringId:@"mapsource.change" class:self.class name:OALocalizedString(@"change_map_source") category:CONFIGURE_MAP iconName:@"ic_custom_show_on_map" secondaryIconName:nil];
        
     return TYPE;
+}
+
+- (NSArray *)loadListFromParams
+{
+    return self.getParams[self.getListKey];
 }
 
 @end

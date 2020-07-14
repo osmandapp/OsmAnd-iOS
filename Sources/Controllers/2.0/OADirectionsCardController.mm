@@ -299,18 +299,21 @@
 
 - (void)onDestinationRemove:(id)observable withKey:(id)key
 {
-    OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+        OADestination *destination = key;
+        __block OADestinationItem *toDelete = nil;
         [_items enumerateObjectsUsingBlock:^(OADestinationItem *item, NSUInteger idx, BOOL *stop)
         {
             if ([item.destination isEqual:destination])
             {
                 _activeIndexPath = [NSIndexPath indexPathForRow:idx inSection:self.section];
-                [self doRemoveDirection:item];
+                toDelete = item;
                 *stop = YES;
             }
         }];
+        
+        if (toDelete)
+            [self doRemoveDirection:toDelete];
     });
 }
 

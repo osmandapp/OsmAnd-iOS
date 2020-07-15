@@ -79,9 +79,10 @@ std::shared_ptr<SkBitmap> OACoreResourcesAmenityIconProvider::getIcon(
                                                                              displayDensityFactor);
             if (iconBackground)
             {
+                const float innerImageScaleFactor = symbolsScaleFactor * 1.35f;
                 QList< std::shared_ptr<const SkBitmap>> icons;
                 icons << OsmAnd::SkiaUtilities::scaleBitmap(iconBackground, symbolsScaleFactor, symbolsScaleFactor);
-                icons << OsmAnd::SkiaUtilities::scaleBitmap(icon, symbolsScaleFactor, symbolsScaleFactor);
+                icons << OsmAnd::SkiaUtilities::scaleBitmap(icon, innerImageScaleFactor, innerImageScaleFactor);
                 return OsmAnd::SkiaUtilities::mergeBitmaps(icons);
             }
             else

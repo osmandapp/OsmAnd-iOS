@@ -94,7 +94,6 @@
     auto router = app.defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
     if (!router && am.parent)
         router = app.defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
-    
     return router;
 }
 
@@ -214,9 +213,10 @@
             OAProfileBoolean *value = v;
             [value set:isChecked mode:self.appMode];
         }
-        
         if (self.delegate)
+        {
             [self.delegate onSettingsChanged];
+        }
     }
 }
 

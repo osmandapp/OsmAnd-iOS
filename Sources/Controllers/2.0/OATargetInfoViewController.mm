@@ -362,8 +362,6 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 50.0;
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     UIView *view = [[UIView alloc] init];
@@ -557,10 +555,10 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OARowInfo *info = _rows[indexPath.row];
-    if (!info.collapsable && !info.isHtml )
-        return UITableViewAutomaticDimension;
+    if (!info.collapsable && !info.isHtml)
+        return [self calculateMultyLinesHeightForLabel:info];
     else
-        return info.height;
+       return info.height;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -616,6 +614,26 @@
         OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO readOnly:YES];
         [self.navController pushViewController:_editDescController animated:YES];
     }
+}
+
+- (CGFloat) calculateMultyLinesHeightForLabel:(OARowInfo *)info
+{
+    UILabel * label = [[UILabel alloc] init];
+    label.numberOfLines = 0;
+    label.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
+    
+    if (info.isUrl)
+        label.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium];
+    else
+        label.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+    
+    CGFloat cellWidth = self.tableView.frame.size.width;
+    CGFloat labelWidth = cellWidth - 16 - 20 - 24 - 10;
+    CGSize maximumLabelSize = CGSizeMake(labelWidth, 9999);
+    CGSize expectedLabelSize = [label sizeThatFits:maximumLabelSize];
+    
+    CGFloat oneLineHeight = 24.0;
+    return info.height + expectedLabelSize.height - oneLineHeight;
 }
 
 #pragma mark - OACollapsableCardViewDelegate

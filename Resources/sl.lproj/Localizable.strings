@@ -916,7 +916,7 @@
 "pink" = "Rožnata";
 "yellow" = "Rumena";
 "offline_vector_maps" = "Vektorski zemljevidi za delo brez povezave";
-"poi_opening_hours" = "Delovničas";
+"poi_opening_hours" = "Odpiralni časi";
 "add_map_marker" = "Dodaj označbo na zemljevidu";
 "shared_string_filter" = "Filter";
 "sett_ext_input" = "Zunanja vhodna naprava";
@@ -1262,3 +1262,11 @@
 "map_settings_base_transp" = "Prozornost osnovnega zemljevida";
 "app_mode_shuttle_bus" = "Prevoz z minibusom";
 "allow_3d" = "Dovoljen 2.5D pogled";
+"base_profile_descr_public_transport" = "Za uporabo javnega prevoza";
+"new_profile" = "Nov profil";
+"screen_alerts" = "Zaslonska opozorila";
+"vehicle_parameters" = "Parametri vozila";
+"select_color" = "Izbor barve";
+"rendering_attr_piste_difficulty_connection_name" = "Povezovalna";
+"rendering_attr_piste_difficulty_easy_name" = "Enostavna";
+"rendering_attr_piste_difficulty_novice_name" = "Začetniška";

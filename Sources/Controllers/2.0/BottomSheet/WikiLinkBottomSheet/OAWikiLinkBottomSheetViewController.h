@@ -16,9 +16,9 @@
 
 @interface OAWikiLinkBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
-- (instancetype) initWithUrl:(NSString *)url localItem:(RepositoryResourceItem *)localItem;
+- (instancetype) initWithUrl:(NSString *)url localItem:(OARepositoryResourceItem *)localItem;
 
-@property (nonatomic, readonly) RepositoryResourceItem *localItem;
+@property (nonatomic, readonly) OARepositoryResourceItem *localItem;
 
 @end
 

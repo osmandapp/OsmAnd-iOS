@@ -156,6 +156,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (BOOL) isColorBright:(UIColor *)color;
 + (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth;
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle;
 
 + (NSDictionary *) getSortedVoiceProviders;
 

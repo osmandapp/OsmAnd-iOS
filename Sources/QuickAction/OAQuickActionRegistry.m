@@ -118,6 +118,8 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OAShowHideFavoritesAction.TYPE];
     [quickActionTypes addObject:OAShowHideGPXTracksAction.TYPE];
     [quickActionTypes addObject:OAShowHidePoiAction.TYPE];
+    [quickActionTypes addObject:OAMapOverlayAction.TYPE];
+    [quickActionTypes addObject:OAMapUnderlayAction.TYPE];
     [quickActionTypes addObject:OAMapStyleAction.TYPE];
     [quickActionTypes addObject:OADayNightModeAction.TYPE];
     [quickActionTypes addObject:OAShowHideTransportLinesAction.TYPE];

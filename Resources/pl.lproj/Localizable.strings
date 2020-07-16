@@ -1678,3 +1678,15 @@
 "offline_raster_maps" = "Mapy rastrowe offline";
 "offline_raster_map" = "Mapa rastrowa offline";
 "online_raster_map" = "Mapa rastrowa online";
+"select_color" = "Wybór koloru";
+"shared_string_exit" = "Zakończ";
+"base_profile_descr_aircraft" = "Samolot, szybownictwo";
+"base_profile_descr_boat" = "Statek, wioślarstwo, żeglarstwo";
+"base_profile_descr_public_transport" = "Rodzaje transportu publicznego";
+"base_profile_descr_pedestrian" = "Spacer, wędrówka piesza, bieganie";
+"base_profile_descr_bicycle" = "Rower górski, motorower, koń";
+"base_profile_descr_car" = "Samochód, ciężarówka, motocykl";
+"new_profile" = "Nowy profil";
+"screen_alerts" = "Ostrzeżenia ekranowe";
+"vehicle_parameters" = "Parametry pojazdu";
+"select_nav_profile_dialog_message" = "„Typ nawigacji” określa sposób obliczania tras.";

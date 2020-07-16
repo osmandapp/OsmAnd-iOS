@@ -807,12 +807,12 @@ static BOOL _lackOfResources;
     
     BOOL nauticalRegion = region == self.region && [region.regionId isEqualToString:_nauticalRegionId];
     
-    NSMutableArray<ResourceItem *> *regionMapArray = [NSMutableArray array];
-    NSMutableArray<ResourceItem *> *allResourcesArray = [NSMutableArray array];
+    NSMutableArray<OAResourceItem *> *regionMapArray = [NSMutableArray array];
+    NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
     
     for (const auto& resource_ : regionResources.allResources)
     {
-        ResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
+        OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
         if (item_)
         {
             if (nauticalRegion)
@@ -824,8 +824,8 @@ static BOOL _lackOfResources;
         }
     }
     
-    for (ResourceItem *regItem in regionMapArray)
-        for (ResourceItem *resItem in _allResourceItems)
+    for (OAResourceItem *regItem in regionMapArray)
+        for (OAResourceItem *resItem in _allResourceItems)
             if (resItem.resourceId == regItem.resourceId)
             {
                 [_allResourceItems removeObject:regItem];
@@ -837,7 +837,7 @@ static BOOL _lackOfResources;
     if (nauticalRegion)
     {
         [_allResourceItems addObjectsFromArray:allResourcesArray];
-        ResourceItem *worldSeamarksItem = [self collectWorldSeamarksItem];
+        OAResourceItem *worldSeamarksItem = [self collectWorldSeamarksItem];
         if (worldSeamarksItem)
             [_allResourceItems addObject:worldSeamarksItem];
     }
@@ -851,15 +851,15 @@ static BOOL _lackOfResources;
     }
 }
 
-- (ResourceItem *) collectSubregionItem:(OAWorldRegion *) region regionResources:(const RegionResources &)regionResources resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource
+- (OAResourceItem *) collectSubregionItem:(OAWorldRegion *) region regionResources:(const RegionResources &)regionResources resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource
 {
-    ResourceItem *item_ = nil;
+    OAResourceItem *item_ = nil;
     
     if (const auto resource_ = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource))
     {
         if (regionResources.outdatedResources.contains(resource_->id))
         {
-            OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+            OAOutdatedResourceItem* item = [[OAOutdatedResourceItem alloc] init];
             item_ = item;
             item.resourceId = resource_->id;
             item.resourceType = resource_->type;
@@ -880,7 +880,7 @@ static BOOL _lackOfResources;
         }
         else
         {
-            LocalResourceItem* item = [[LocalResourceItem alloc] init];
+            OALocalResourceItem* item = [[OALocalResourceItem alloc] init];
             item_ = item;
             item.resourceId = resource_->id;
             item.resourceType = resource_->type;
@@ -899,7 +899,7 @@ static BOOL _lackOfResources;
     }
     else if (const auto resource_ = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource))
     {
-        RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+        OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
         item_ = item;
         item.resourceId = resource_->id;
         item.resourceType = resource_->type;
@@ -935,7 +935,7 @@ static BOOL _lackOfResources;
     return item_;
 }
 
-- (ResourceItem *) collectWorldSeamarksItem
+- (OAResourceItem *) collectWorldSeamarksItem
 {
     const auto citRegionResources = _resourcesByRegions.constFind(_app.worldRegion);
     if (citRegionResources == _resourcesByRegions.cend())
@@ -946,7 +946,7 @@ static BOOL _lackOfResources;
     {
         if (resource_->id == QStringLiteral(kWorldSeamarksKey) || resource_->id == QStringLiteral(kWorldSeamarksOldKey))
         {
-            ResourceItem *item_ = [self collectSubregionItem:_app.worldRegion regionResources:regionResources resource:resource_];
+            OAResourceItem *item_ = [self collectSubregionItem:_app.worldRegion regionResources:regionResources resource:resource_];
             if (item_)
                 item_.worldRegion = [_app.worldRegion getSubregion:_nauticalRegionId];
             
@@ -969,7 +969,7 @@ static BOOL _lackOfResources;
     [_localOnlineTileSources removeAllObjects];
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
     {
-        SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+        OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
         item.title = [[filePath.lastPathComponent stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         item.fileName = filePath.lastPathComponent;
         item.path = filePath;
@@ -984,7 +984,7 @@ static BOOL _lackOfResources;
         }
     }
     
-    [_localSqliteItems sortUsingComparator:^NSComparisonResult(SqliteDbResourceItem *obj1, SqliteDbResourceItem *obj2) {
+    [_localSqliteItems sortUsingComparator:^NSComparisonResult(OASqliteDbResourceItem *obj1, OASqliteDbResourceItem *obj2) {
         return [obj1.title caseInsensitiveCompare:obj2.title];
     }];
     
@@ -995,7 +995,7 @@ static BOOL _lackOfResources;
         const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
         for(const auto& onlineTileSource : onlineTileSources->getCollection())
         {
-            OnlineTilesResourceItem* item = [[OnlineTilesResourceItem alloc] init];
+            OAOnlineTilesResourceItem* item = [[OAOnlineTilesResourceItem alloc] init];
             
             item.title = onlineTileSource->name.toNSString();
             item.path = [_app.cachePath stringByAppendingPathComponent:item.title];
@@ -1013,7 +1013,7 @@ static BOOL _lackOfResources;
         if (!match)
             continue;
 
-        OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+        OAOutdatedResourceItem* item = [[OAOutdatedResourceItem alloc] init];
         item.resourceId = resource->id;
         item.resourceType = resource->type;
         item.title = [OAResourcesUIHelper titleOfResource:resource
@@ -1053,7 +1053,7 @@ static BOOL _lackOfResources;
         if (!match && (resource->type != OsmAndResourceType::MapRegion))
             continue;
         
-        LocalResourceItem* item = [[LocalResourceItem alloc] init];
+        OALocalResourceItem* item = [[OALocalResourceItem alloc] init];
         item.resourceId = resource->id;
         item.resourceType = resource->type;
         if (match)
@@ -1088,7 +1088,7 @@ static BOOL _lackOfResources;
     [_localResourceItems sortUsingComparator:self.resourceItemsComparator];
     [_localRegionMapItems sortUsingComparator:self.resourceItemsComparator];
     
-    for (ResourceItem *item in _regionMapItems)
+    for (OAResourceItem *item in _regionMapItems)
         if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey))
         {
             [_regionMapItems removeObject:item];
@@ -1096,7 +1096,7 @@ static BOOL _lackOfResources;
         }
     
     NSMutableSet* regionsSet = [NSMutableSet set];
-    for (OutdatedResourceItem* item in _outdatedResourceItems)
+    for (OAOutdatedResourceItem* item in _outdatedResourceItems)
         if (item.worldRegion.regionId)
             [regionsSet addObject:item.worldRegion];
     _regionsWithOutdatedResources = [[regionsSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
@@ -1195,7 +1195,7 @@ static BOOL _lackOfResources;
             for (int i = 0; i < _searchResults.count; i++) {
                 if ([_searchResults[i] isKindOfClass:[OAWorldRegion class]])
                     continue;
-                ResourceItem *item = _searchResults[i];
+                OAResourceItem *item = _searchResults[i];
                 if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
                     [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
                     return;
@@ -1208,7 +1208,7 @@ static BOOL _lackOfResources;
         for (int i = 0; i < resourceItems.count; i++) {
             if ([resourceItems[i] isKindOfClass:[OAWorldRegion class]])
                 continue;
-            ResourceItem *item = resourceItems[i];
+            OAResourceItem *item = resourceItems[i];
             if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
                 [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_resourcesSection]];
                 break;
@@ -1217,7 +1217,7 @@ static BOOL _lackOfResources;
         
         NSMutableArray *regionMapItems = [self getRegionMapItems];
         for (int i = 0; i < regionMapItems.count; i++) {
-            ResourceItem *item = regionMapItems[i];
+            OAResourceItem *item = regionMapItems[i];
             if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
                 [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_regionMapSection]];
         }
@@ -1350,7 +1350,7 @@ static BOOL _lackOfResources;
                 {
                     if (regionResources.outdatedResources.contains(resource->id))
                     {
-                        OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+                        OAOutdatedResourceItem* item = [[OAOutdatedResourceItem alloc] init];
                         item.resourceId = resource->id;
                         item.resourceType = resource->type;
                         item.title = [OAResourcesUIHelper titleOfResource:resource_
@@ -1372,7 +1372,7 @@ static BOOL _lackOfResources;
                     }
                     else
                     {
-                        LocalResourceItem* item = [[LocalResourceItem alloc] init];
+                        OALocalResourceItem* item = [[OALocalResourceItem alloc] init];
                         item.resourceId = resource->id;
                         item.resourceType = resource->type;
                         item.title = [OAResourcesUIHelper titleOfResource:resource_
@@ -1393,7 +1393,7 @@ static BOOL _lackOfResources;
                 }
                 else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
                 {
-                    RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+                    OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
                     item.resourceId = resource->id;
                     item.resourceType = resource->type;
                     item.title = [OAResourcesUIHelper titleOfResource:resource_
@@ -1456,7 +1456,7 @@ static BOOL _lackOfResources;
     return self.tableView;
 }
 
-- (void) showDetailsOf:(LocalResourceItem*)item
+- (void) showDetailsOf:(OALocalResourceItem*)item
 {
     [self performSegueWithIdentifier:kOpenDetailsSegue sender:item];
 }
@@ -1667,7 +1667,7 @@ static BOOL _lackOfResources;
         
         if (![item_ isKindOfClass:[OAWorldRegion class]])
         {
-            ResourceItem* item = (ResourceItem*)item_;
+            OAResourceItem* item = (OAResourceItem*)item_;
             
             if (item.downloadTask != nil)
                 cellTypeId = downloadingResourceCell;
@@ -1682,7 +1682,7 @@ static BOOL _lackOfResources;
             
             if (![item_ isKindOfClass:[OAWorldRegion class]])
             {
-                ResourceItem* item = (ResourceItem*)item_;
+                OAResourceItem* item = (OAResourceItem*)item_;
                 
                 if (item.downloadTask != nil)
                     cellTypeId = downloadingResourceCell;
@@ -1691,7 +1691,7 @@ static BOOL _lackOfResources;
         else if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
         {
             item_ = [[self getRegionMapItems] objectAtIndex:indexPath.row];
-            ResourceItem* item = (ResourceItem*)item_;
+            OAResourceItem* item = (OAResourceItem*)item_;
             
             if (item.downloadTask != nil)
                 cellTypeId = downloadingResourceCell;
@@ -1700,7 +1700,7 @@ static BOOL _lackOfResources;
     
     if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
-        ResourceItem* item = (ResourceItem*)item_;
+        OAResourceItem* item = (OAResourceItem*)item_;
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
         
         float progressCompleted = item.downloadTask.progressCompleted;
@@ -1759,17 +1759,17 @@ static BOOL _lackOfResources;
             if (item.superregion != nil)
                 subtitle = item.superregion.name;
         }
-        else if ([item_ isKindOfClass:[ResourceItem class]])
+        else if ([item_ isKindOfClass:[OAResourceItem class]])
         {
-            ResourceItem* item = (ResourceItem*)item_;
+            OAResourceItem* item = (OAResourceItem*)item_;
 
             if (item.downloadTask != nil)
                 cellTypeId = downloadingResourceCell;
-            else if ([item isKindOfClass:[OutdatedResourceItem class]])
+            else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
                 cellTypeId = outdatedResourceCell;
-            else if ([item isKindOfClass:[LocalResourceItem class]])
+            else if ([item isKindOfClass:[OALocalResourceItem class]])
                 cellTypeId = localResourceCell;
-            else if ([item isKindOfClass:[RepositoryResourceItem class]])
+            else if ([item isKindOfClass:[OARepositoryResourceItem class]])
                 cellTypeId = repositoryResourceCell;
 
             title = item.title;
@@ -1842,26 +1842,26 @@ static BOOL _lackOfResources;
             }
             else
             {
-                ResourceItem* item = (ResourceItem*)item_;
+                OAResourceItem* item = (OAResourceItem*)item_;
                 uint64_t _sizePkg = item.sizePkg;
                 
                 if (item.downloadTask != nil)
                     cellTypeId = downloadingResourceCell;
-                else if ([item isKindOfClass:[OutdatedResourceItem class]])
+                else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
                     cellTypeId = outdatedResourceCell;
-                else if ([item isKindOfClass:[LocalResourceItem class]])
+                else if ([item isKindOfClass:[OALocalResourceItem class]])
                 {
                     cellTypeId = localResourceCell;
                     _sizePkg = item.size;
                 }
-                else if ([item isKindOfClass:[RepositoryResourceItem class]]) {
+                else if ([item isKindOfClass:[OARepositoryResourceItem class]]) {
                     cellTypeId = repositoryResourceCell;
                 }
                 
                 BOOL mapDownloaded = NO;
-                for (ResourceItem* it in [self getRegionMapItems])
+                for (OAResourceItem* it in [self getRegionMapItems])
                 {
-                    if (it.resourceType == OsmAndResourceType::MapRegion && ([it isKindOfClass:[LocalResourceItem class]] || [it isKindOfClass:[OutdatedResourceItem class]]))
+                    if (it.resourceType == OsmAndResourceType::MapRegion && ([it isKindOfClass:[OALocalResourceItem class]] || [it isKindOfClass:[OAOutdatedResourceItem class]]))
                     {
                         mapDownloaded = YES;
                         break;
@@ -1904,25 +1904,25 @@ static BOOL _lackOfResources;
         {
             item_ = [[self getRegionMapItems] objectAtIndex:indexPath.row];
 
-            ResourceItem* item = (ResourceItem*)item_;
+            OAResourceItem* item = (OAResourceItem*)item_;
             uint64_t _sizePkg = item.sizePkg;
             
             if (item.downloadTask != nil)
                 cellTypeId = downloadingResourceCell;
-            else if ([item isKindOfClass:[OutdatedResourceItem class]])
+            else if ([item isKindOfClass:[OAOutdatedResourceItem class]])
                 cellTypeId = outdatedResourceCell;
-            else if ([item isKindOfClass:[LocalResourceItem class]])
+            else if ([item isKindOfClass:[OALocalResourceItem class]])
             {
                 cellTypeId = localResourceCell;
                 _sizePkg = item.size;
             }
-            else if ([item isKindOfClass:[RepositoryResourceItem class]])
+            else if ([item isKindOfClass:[OARepositoryResourceItem class]])
                 cellTypeId = repositoryResourceCell;
             
             BOOL mapDownloaded = NO;
-            for (ResourceItem* it in [self getRegionMapItems])
+            for (OAResourceItem* it in [self getRegionMapItems])
             {
-                if (it.resourceType == OsmAndResourceType::MapRegion && ([it isKindOfClass:[LocalResourceItem class]] || [it isKindOfClass:[OutdatedResourceItem class]]))
+                if (it.resourceType == OsmAndResourceType::MapRegion && ([it isKindOfClass:[OALocalResourceItem class]] || [it isKindOfClass:[OAOutdatedResourceItem class]]))
                 {
                     mapDownloaded = YES;
                     break;
@@ -1973,7 +1973,7 @@ static BOOL _lackOfResources;
         }
         else if (indexPath.section == _localSqliteSection)
         {
-            SqliteDbResourceItem *item = [_localSqliteItems objectAtIndex:indexPath.row];
+            OASqliteDbResourceItem *item = [_localSqliteItems objectAtIndex:indexPath.row];
             cellTypeId = localResourceCell;
             
             title = item.title;
@@ -1981,11 +1981,11 @@ static BOOL _lackOfResources;
         }
         else if (indexPath.section == _localOnlineTileSourcesSection)
         {
-            LocalResourceItem *item = [_localOnlineTileSources objectAtIndex:indexPath.row];
+            OALocalResourceItem *item = [_localOnlineTileSources objectAtIndex:indexPath.row];
             cellTypeId = localResourceCell;
             
             title = item.title;
-            if ([item isKindOfClass:SqliteDbResourceItem.class])
+            if ([item isKindOfClass:OASqliteDbResourceItem.class])
                 subtitle = [NSString stringWithFormat:@"%@ • %@", OALocalizedString(@"online_map"), [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
             else
                 subtitle = OALocalizedString(@"online_map");
@@ -2149,7 +2149,7 @@ static BOOL _lackOfResources;
     }
     else if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
-        ResourceItem* item = (ResourceItem*)item_;
+        OAResourceItem* item = (OAResourceItem*)item_;
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
         
         float progressCompleted = item.downloadTask.progressCompleted;
@@ -2238,14 +2238,14 @@ static BOOL _lackOfResources;
 
     if (item)
     {
-        if ([item isKindOfClass:[OutdatedResourceItem class]])
+        if ([item isKindOfClass:[OAOutdatedResourceItem class]])
         {
-            if (((OutdatedResourceItem *)item).downloadTask != nil)
+            if (((OAOutdatedResourceItem *)item).downloadTask != nil)
                 [self onItemClicked:item];
             else
                 [self showDetailsOf:item];
         }
-        else if (![item isKindOfClass:[LocalResourceItem class]])
+        else if (![item isKindOfClass:[OALocalResourceItem class]])
         {
             [self onItemClicked:item];
         }
@@ -2265,7 +2265,7 @@ static BOOL _lackOfResources;
     if (item == nil)
         return NO;
 
-    if (![item isKindOfClass:[LocalResourceItem class]])
+    if (![item isKindOfClass:[OALocalResourceItem class]])
         return NO;
 
     return YES;
@@ -2282,7 +2282,7 @@ static BOOL _lackOfResources;
     if (item == nil)
         return UITableViewCellEditingStyleNone;
 
-    if (![item isKindOfClass:[LocalResourceItem class]])
+    if (![item isKindOfClass:[OALocalResourceItem class]])
         return UITableViewCellEditingStyleNone;
 
     return UITableViewCellEditingStyleDelete;
@@ -2299,7 +2299,7 @@ static BOOL _lackOfResources;
     if (item == nil)
         return;
 
-    if ([item isKindOfClass:[LocalResourceItem class]]) {
+    if ([item isKindOfClass:[OALocalResourceItem class]]) {
         [self offerDeleteResourceOf:item];
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
@@ -2444,13 +2444,13 @@ static BOOL _lackOfResources;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:kOpenDetailsSegue] && [sender isKindOfClass:[LocalResourceItem class]])
+    if ([segue.identifier isEqualToString:kOpenDetailsSegue] && [sender isKindOfClass:[OALocalResourceItem class]])
     {
         OALocalResourceInformationViewController* resourceInfoViewController = [segue destinationViewController];
         resourceInfoViewController.openFromSplash = _openFromSplash;
         resourceInfoViewController.baseController = self;
         
-        LocalResourceItem* item = sender;
+        OALocalResourceItem* item = sender;
         if (item)
         {
             if (item.worldRegion)
@@ -2460,14 +2460,14 @@ static BOOL _lackOfResources;
             else
                 resourceInfoViewController.regionTitle = item.title;
             
-            if ([item isKindOfClass:[SqliteDbResourceItem class]])
+            if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {
-                [resourceInfoViewController initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item];
+                [resourceInfoViewController initWithLocalSqliteDbItem:(OASqliteDbResourceItem *)item];
                 return;
             }
-            else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
+            else if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
             {
-                [resourceInfoViewController initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *) item];
+                [resourceInfoViewController initWithLocalOnlineSourceItem:(OAOnlineTilesResourceItem *) item];
                 return;
             }
             else
@@ -2540,7 +2540,7 @@ static BOOL _lackOfResources;
         resourceInfoViewController.openFromSplash = _openFromSplash;
         resourceInfoViewController.baseController = self;
         
-        LocalResourceItem* item = nil;
+        OALocalResourceItem* item = nil;
         if ([self isFiltering])
         {
             item = [_searchResults objectAtIndex:cellPath.row];
@@ -2566,14 +2566,14 @@ static BOOL _lackOfResources;
             else
                 resourceInfoViewController.regionTitle = item.title;
             
-            if ([item isKindOfClass:[SqliteDbResourceItem class]])
+            if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {
-                [resourceInfoViewController initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item];
+                [resourceInfoViewController initWithLocalSqliteDbItem:(OASqliteDbResourceItem *)item];
                 return;
             }
-            else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
+            else if ([item isKindOfClass:[OAOnlineTilesResourceItem class]])
             {
-                [resourceInfoViewController initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *) item];
+                [resourceInfoViewController initWithLocalOnlineSourceItem:(OAOnlineTilesResourceItem *) item];
                 return;
             }
             else

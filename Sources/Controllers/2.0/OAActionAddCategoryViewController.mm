@@ -18,6 +18,8 @@
 #import "OAPOIUIFilter.h"
 #import "OAPOIBaseType.h"
 
+#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
+
 @interface OAActionAddCategoryViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -92,21 +94,7 @@
     }
     _data = [NSArray arrayWithArray:rows];
     
-    CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_category_descr") width:textWidth font:labelFont];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height)];
-    label.text = OALocalizedString(@"quick_action_add_category_descr");
-    label.font = labelFont;
-    label.textColor = UIColor.blackColor;
-    label.backgroundColor = UIColor.clearColor;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_category_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
 }
 
 -(void) setupSearchView

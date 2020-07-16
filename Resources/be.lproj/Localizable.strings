@@ -748,7 +748,7 @@
 "contour_lines_hillshade_maps" = "Контурныя лініі і зацяненне рэльефу";
 "index_item_depth_contours_osmand_ext" = "Контуры марскіх глыбінь";
 "donation_to_osm" = "Ахвяраванне OpenStreetMap-супольнасці";
-"in_app_purchase" = "Пакупка ў дадатку";
+"in_app_purchase" = "Пакупка ў праграме";
 "in_app_purchase_desc" = "Разавы плацёж";
 "in_app_purchase_desc_ex" = "Аднойчы набыты, будзе заўсёды даступны для вас.";
 "unlock_all_features" = "Разблакаваць усе функцыі OsmAnd";
@@ -1327,3 +1327,16 @@
 "get_discount_first_few_parts" = "%@ за першыя %@";
 "exit_at" = "Выхад на";
 "public_transport_warning_title" = "Навігацыя ў грамадскім транспарце на дадзены момант тэставая, таму могуць узнікаць памылкі.";
+"active_markers" = "Актыўныя адзнакі";
+"base_profile_descr_aircraft" = "Самалёт, палёты";
+"base_profile_descr_boat" = "Карабель, веславанне, парусны спорт";
+"base_profile_descr_public_transport" = "Тыпы грамадскага транспарту";
+"base_profile_descr_pedestrian" = "Шпацыры, паходы, бег";
+"base_profile_descr_bicycle" = "Горны ровар, мапед, конь";
+"base_profile_descr_car" = "Аўтамабіль, грузавік, матацыкл";
+"new_profile" = "Новы профіль";
+"screen_alerts" = "Экранныя апавяшчэнні";
+"vehicle_parameters" = "Параметры аўтамабіля";
+"select_nav_profile_dialog_message" = "Тып навігацыі ўплывае на разлік маршруту.";
+"select_color" = "Абярыце колер";
+"shared_string_exit" = "Выйсці";

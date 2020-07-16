@@ -351,7 +351,7 @@
 "shared_string_clear_all" = "Slett alle";
 "shared_string_update" = "Oppdater";
 "shared_string_install" = "Installer";
-"shared_string_uninstall" = "Uninstall";
+"shared_string_uninstall" = "Avinstaller";
 "shared_string_delete" = "slett";
 "shared_string_upload" = "Last opp";
 "shared_string_remove" = "Fjern";

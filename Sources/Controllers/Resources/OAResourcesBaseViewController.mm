@@ -88,7 +88,7 @@ static BOOL dataInvalidated = NO;
             }
             else
             {
-                ResourceItem *item = obj1;
+                OAResourceItem *item = obj1;
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
                     str1 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
                 else
@@ -101,7 +101,7 @@ static BOOL dataInvalidated = NO;
             }
             else
             {
-                ResourceItem *item = obj2;
+                OAResourceItem *item = obj2;
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
                     str2 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
                 else
@@ -263,7 +263,7 @@ static BOOL dataInvalidated = NO;
 {
 }
 
-- (void) offerDownloadAndInstallOf:(RepositoryResourceItem *)item
+- (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
@@ -272,7 +272,7 @@ static BOOL dataInvalidated = NO;
     }];
 }
 
-- (void) offerDownloadAndUpdateOf:(OutdatedResourceItem *)item
+- (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
 {
     [OAResourcesUIHelper offerDownloadAndUpdateOf:item onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
@@ -281,7 +281,7 @@ static BOOL dataInvalidated = NO;
     }];
 }
 
-- (void) startDownloadOfItem:(RepositoryResourceItem *)item
+- (void) startDownloadOfItem:(OARepositoryResourceItem *)item
 {
     [OAResourcesUIHelper startDownloadOfItem:item onTaskCreated:^(id<OADownloadTask>  _Nonnull task) {
         [self updateContent];
@@ -299,7 +299,7 @@ static BOOL dataInvalidated = NO;
     }];
 }
 
-- (void) offerCancelDownloadOf:(ResourceItem *)item_
+- (void) offerCancelDownloadOf:(OAResourceItem *)item_
 {
     [OAResourcesUIHelper offerCancelDownloadOf:item_ onTaskStop:^(id<OADownloadTask>  _Nonnull task) {
         if ([[item_.resourceId.toNSString() stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
@@ -307,22 +307,22 @@ static BOOL dataInvalidated = NO;
     }];
 }
 
-- (void) offerDeleteResourceOf:(LocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
+- (void) offerDeleteResourceOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
 {
     [OAResourcesUIHelper offerDeleteResourceOf:item viewController:self progressHUD:_deleteResourceProgressHUD executeAfterSuccess:block];
 }
 
-- (void) offerDeleteResourceOf:(LocalResourceItem *)item
+- (void) offerDeleteResourceOf:(OALocalResourceItem *)item
 {
     [self offerDeleteResourceOf:item executeAfterSuccess:nil];
 }
 
-- (void) offerClearCacheOf:(LocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
+- (void) offerClearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block
 {
     [OAResourcesUIHelper offerClearCacheOf:item viewController:self executeAfterSuccess:block];
 }
 
-- (void) showDetailsOf:(LocalResourceItem*)item
+- (void) showDetailsOf:(OALocalResourceItem*)item
 {
 }
 
@@ -333,27 +333,27 @@ static BOOL dataInvalidated = NO;
 
 - (void) onItemClicked:(id)senderItem
 {
-    if ([senderItem isKindOfClass:[ResourceItem class]])
+    if ([senderItem isKindOfClass:[OAResourceItem class]])
     {
-        ResourceItem* item_ = (ResourceItem *)senderItem;
+        OAResourceItem* item_ = (OAResourceItem *)senderItem;
 
         if (item_.downloadTask != nil)
         {
             [OAResourcesUIHelper offerCancelDownloadOf:item_];
         }
-        else if ([item_ isKindOfClass:[OutdatedResourceItem class]])
+        else if ([item_ isKindOfClass:[OAOutdatedResourceItem class]])
         {
-            OutdatedResourceItem* item = (OutdatedResourceItem *)item_;
+            OAOutdatedResourceItem* item = (OAOutdatedResourceItem *)item_;
             [self offerDownloadAndUpdateOf:item];
         }
-        else if ([item_ isKindOfClass:[LocalResourceItem class]])
+        else if ([item_ isKindOfClass:[OALocalResourceItem class]])
         {
-            LocalResourceItem* item = (LocalResourceItem *)item_;
+            OALocalResourceItem* item = (OALocalResourceItem *)item_;
             [self showDetailsOf:item];
         }
-        else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
+        else if ([item_ isKindOfClass:[OARepositoryResourceItem class]])
         {
-            RepositoryResourceItem* item = (RepositoryResourceItem *)item_;
+            OARepositoryResourceItem* item = (OARepositoryResourceItem *)item_;
             
             if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion) && ![_iapHelper.srtm isActive])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];

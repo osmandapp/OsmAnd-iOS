@@ -1557,3 +1557,15 @@
 "exit_at" = "Vystúpte na";
 "public_transport_warning_title" = "Navigácia pomocou hromadnej dopravy je zatiaľ v testovaní, môžu sa vyskytnúť chyby a nepresnosti.";
 "active_markers" = "Aktívne značky";
+"base_profile_descr_aircraft" = "Lietadlo, plachtenie";
+"base_profile_descr_boat" = "Loď, veslovanie, plachetnica";
+"base_profile_descr_public_transport" = "Všetky typy hromadnej dopravy";
+"base_profile_descr_pedestrian" = "Chôdza, turistika, beh";
+"base_profile_descr_bicycle" = "Horský bicykel, moped, kôň";
+"base_profile_descr_car" = "Auto, nákladné auto, motocykel";
+"select_color" = "Zvoľte farbu";
+"new_profile" = "Nový profil";
+"shared_string_exit" = "Ukončiť";
+"select_nav_profile_dialog_message" = "'Typ navigácie' ovplyvňuje pravidlá pre výpočet trasy.";
+"vehicle_parameters" = "Parametre vozidla";
+"screen_alerts" = "Varovania na obrazovke";

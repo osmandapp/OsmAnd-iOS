@@ -26,9 +26,6 @@
 static OAQuickActionType *TYPE;
 
 @implementation OAMapStyleAction
-{
-    NSDictionary<NSString *, OAMapSource *> *_offlineMapSources;
-}
 
 - (instancetype) init
 {
@@ -59,7 +56,6 @@ static OAQuickActionType *TYPE;
         const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
         
         NSString* resourceId = resource->id.toNSString();
-        
         
         OAMapSource *mapSource = [app.data lastMapSourceByResourceId:resourceId];
         if (mapSource == nil)
@@ -226,11 +222,6 @@ static OAQuickActionType *TYPE;
     return sources.count > 0;
 }
 
-- (NSArray *)getOfflineMapSources
-{
-    return _offlineMapSources.allValues;
-}
-
 - (NSString *)getActionText
 {
     return OALocalizedString(@"quick_action_list_descr");
@@ -242,6 +233,11 @@ static OAQuickActionType *TYPE;
         TYPE = [[OAQuickActionType alloc] initWithIdentifier:14 stringId:@"mapstyle.change" class:self.class name:OALocalizedString(@"change_map_style") category:CONFIGURE_MAP iconName:@"ic_custom_map_style" secondaryIconName:nil];
        
     return TYPE;
+}
+
+- (NSArray *)loadListFromParams
+{
+    return [self getParams][self.getListKey];
 }
 
 @end

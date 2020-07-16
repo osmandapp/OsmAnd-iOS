@@ -46,6 +46,7 @@
 #import "Reachability.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
+#import "OADownloadMapViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -60,7 +61,7 @@
 
 @interface OATargetMenuViewController ()
 
-@property (nonatomic) RepositoryResourceItem *localMapIndexItem;
+@property (nonatomic) OARepositoryResourceItem *localMapIndexItem;
 
 @end
 
@@ -277,8 +278,8 @@
         }
         case OATargetImpassableRoad:
         {
-            NSNumber *roadId = targetPoint.targetObj;
-            controller = [[OAImpassableRoadViewController alloc] initWithRoadId:roadId.unsignedLongLongValue];
+            OAAvoidRoadInfo *roadInfo = targetPoint.targetObj;
+            controller = [[OAImpassableRoadViewController alloc] initWithRoadInfo:roadInfo];
             break;
         }
             
@@ -321,6 +322,11 @@
             controller = [[OATrsansportRouteDetailsViewController alloc] initWithRouteIndex:[targetPoint.targetObj integerValue]];
             break;
         }
+        case OATargetDownloadMapSource:
+        {
+            controller = [[OADownloadMapViewController alloc] init];
+            break;
+        }
             
         default:
         {
@@ -339,23 +345,24 @@
         targetPoint.type != OATargetRouteDetailsGraph &&
         targetPoint.type != OATargetImpassableRoadSelection &&
         targetPoint.type != OATargetChangePosition &&
-        targetPoint.type != OATargetTransportRouteDetails)
+        targetPoint.type != OATargetTransportRouteDetails &&
+        targetPoint.type != OATargetDownloadMapSource)
     {
         [OAResourcesUIHelper requestMapDownloadInfo:targetPoint.location
                                        resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
-                                         onComplete:^(NSArray<ResourceItem *>* res) {
+                                         onComplete:^(NSArray<OAResourceItem *>* res) {
             if (res.count > 0)
             {
-                for (ResourceItem * item in res)
+                for (OAResourceItem * item in res)
                 {
-                    if ([item isKindOfClass:LocalResourceItem.class])
+                    if ([item isKindOfClass:OALocalResourceItem.class])
                     {
                         controller.localMapIndexItem = nil;
                         [controller createMapDownloadControls];
                         return ;
                     }
                 }
-                RepositoryResourceItem *item = (RepositoryResourceItem *)res[0];
+                OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
                 BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", item.resourceId.toNSString()]];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (controller.delegate && [controller.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
@@ -558,8 +565,8 @@
                 
                 [OAResourcesUIHelper requestMapDownloadInfo:self.location
                                                resourceType:OsmAnd::ResourcesManager::ResourceType::MapRegion
-                                                 onComplete:^(NSArray<ResourceItem *>* res) {
-                    RepositoryResourceItem *item = (RepositoryResourceItem *)res[0];
+                                                 onComplete:^(NSArray<OAResourceItem *>* res) {
+                    OARepositoryResourceItem *item = (OARepositoryResourceItem *)res[0];
                     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && item)
                         self.localMapIndexItem = item;
                 }];
@@ -990,6 +997,31 @@
 
 - (void)refreshContent
 {
+}
+
+- (BOOL) isBottomsControlVisible
+{
+    return YES; // override
+}
+
+- (BOOL) isMapFrameNeeded
+{
+    return NO;
+}
+
+- (void) addMapFrameLayer:(CGRect)mapFrame view:(UIView *)view
+{
+    // override
+}
+
+- (void) removeMapFrameLayer:(UIView *)view
+{
+    // override
+}
+
+- (CGFloat) mapHeightKoef
+{
+    return 0; // override
 }
 
 @end

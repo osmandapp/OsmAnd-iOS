@@ -27,6 +27,7 @@
 #import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAQuickAction.h"
+#import "OAQuickActionType.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -168,7 +169,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @interface OASettingsItem()
 
 @property (nonatomic) NSString *pluginId;
-@property (nonatomic) NSString *fileName;
 @property (nonatomic) NSString *defaultName;
 @property (nonatomic) NSString *defaultFileExtension;
 @property (nonatomic) NSMutableArray<NSString *> *warnings;
@@ -813,6 +813,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     _docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     _libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+    _subtype = EOASettingsItemFileSubtypeUnknown;
 }
 
 - (instancetype) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error
@@ -1276,9 +1277,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         for (OAQuickAction *action in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            // TODO!!!
-            //jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
-            //jsonObject[@"actionType"] = [[action getActionType] getStringId];
+            jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
+            jsonObject[@"actionType"] = action.actionType.stringId;
             jsonObject[@"params"] = [action getParams];
             [jsonArray addObject:jsonObject];
         }
@@ -1414,9 +1414,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @interface OAMapSourcesSettingsItem()
 
-@property (nonatomic) NSMutableArray<LocalResourceItem *> *items;
-@property (nonatomic) NSMutableArray<LocalResourceItem *> *appliedItems;
-@property (nonatomic) NSMutableArray<LocalResourceItem *> *existingItems;
+@property (nonatomic) NSMutableArray<OALocalResourceItem *> *items;
+@property (nonatomic) NSMutableArray<OALocalResourceItem *> *appliedItems;
+@property (nonatomic) NSMutableArray<OALocalResourceItem *> *existingItems;
 
 @end
 
@@ -1437,7 +1437,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     OsmAndAppInstance app = [OsmAndApp instance];
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
     {
-        SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+        OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
         item.title = [[filePath.lastPathComponent stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         item.fileName = filePath.lastPathComponent;
         item.path = filePath;
@@ -1450,7 +1450,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
         for(const auto& onlineTileSource : onlineTileSources->getCollection())
         {
-            OnlineTilesResourceItem* item = [[OnlineTilesResourceItem alloc] init];
+            OAOnlineTilesResourceItem* item = [[OAOnlineTilesResourceItem alloc] init];
             item.title = onlineTileSource->name.toNSString();
             item.path = [app.cachePath stringByAppendingPathComponent:item.title];
             [self.existingItems addObject:item];
@@ -1458,18 +1458,18 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
 }
 
-- (instancetype) initWithItems:(NSArray<LocalResourceItem *> *)items
+- (instancetype) initWithItems:(NSArray<OALocalResourceItem *> *)items
 {
     self = [super initWithItems:items];
     if (self)
     {
         if (self.items.count > 0)
         {
-            for (LocalResourceItem *localItem in self.items)
+            for (OALocalResourceItem *localItem in self.items)
             {
-                if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+                if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
                 {
-                    SqliteDbResourceItem *item = (SqliteDbResourceItem *)localItem;
+                    OASqliteDbResourceItem *item = (OASqliteDbResourceItem *)localItem;
                     OASQLiteTileSource *sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
                     NSMutableDictionary *params = [NSMutableDictionary dictionary];
                     params[@"minzoom"] = [NSString stringWithFormat:@"%d", sqliteSource.minimumZoomSupported];
@@ -1489,9 +1489,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
                     _newSqliteData[item.title] = params;
                 }
-                else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+                else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
                 {
-                    OnlineTilesResourceItem *item = (OnlineTilesResourceItem *)localItem;
+                    OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
                     std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> tileSource;
                     const auto& resource = [OsmAndApp instance].resourcesManager->getResource(QStringLiteral("online_tiles"));
                     if (resource)
@@ -1522,7 +1522,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) apply
 {
-    NSArray<LocalResourceItem *> *newItems = [self getNewItems];
+    NSArray<OALocalResourceItem *> *newItems = [self getNewItems];
     if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
@@ -1530,20 +1530,20 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
         if ([self shouldReplace])
         {
-            for (LocalResourceItem *localItem in self.duplicateItems)
+            for (OALocalResourceItem *localItem in self.duplicateItems)
             {
-                if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+                if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
                 {
-                    SqliteDbResourceItem *item = (SqliteDbResourceItem *)localItem;
+                    OASqliteDbResourceItem *item = (OASqliteDbResourceItem *)localItem;
                     if (item.path && [fileManager fileExistsAtPath:item.path])
                     {
                         [[OAMapCreatorHelper sharedInstance] removeFile:item.path];
                         [self.appliedItems addObject:localItem];
                     }
                 }
-                else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+                else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
                 {
-                    OnlineTilesResourceItem *item = (OnlineTilesResourceItem *)localItem;
+                    OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
                     if (item.path)
                     {
                         [[NSFileManager defaultManager] removeItemAtPath:item.path error:nil];
@@ -1555,12 +1555,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         else
         {
-            for (LocalResourceItem *localItem in self.duplicateItems)
+            for (OALocalResourceItem *localItem in self.duplicateItems)
                 [self.appliedItems addObject:[self renameItem:localItem]];
         }
-        for (LocalResourceItem *localItem in self.appliedItems)
+        for (OALocalResourceItem *localItem in self.appliedItems)
         {
-            if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+            if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
             {
                 NSMutableDictionary *params = _newSqliteData[localItem.title];
                 if (params)
@@ -1570,7 +1570,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                         [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
                 }
             }
-            else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+            else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
             {
                 const auto source = _newSources.value(QString::fromNSString(localItem.title));
                 if (source)
@@ -1583,16 +1583,16 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
 }
 
-- (LocalResourceItem *) renameItem:(LocalResourceItem *)localItem
+- (OALocalResourceItem *) renameItem:(OALocalResourceItem *)localItem
 {
     int number = 0;
     while (true)
     {
         number++;
-        if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+        if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
         {
-            SqliteDbResourceItem *oldItem = (SqliteDbResourceItem *)localItem;
-            SqliteDbResourceItem *renamedItem = [[SqliteDbResourceItem alloc] init];
+            OASqliteDbResourceItem *oldItem = (OASqliteDbResourceItem *)localItem;
+            OASqliteDbResourceItem *renamedItem = [[OASqliteDbResourceItem alloc] init];
             renamedItem.fileName = [NSString stringWithFormat:@"%@_%d", oldItem.fileName, number];
             if (![self isDuplicate:renamedItem])
             {
@@ -1604,10 +1604,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 return renamedItem;
             }
         }
-        else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+        else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
         {
-            OnlineTilesResourceItem *oldItem = (OnlineTilesResourceItem *)localItem;
-            OnlineTilesResourceItem *renamedItem = [[OnlineTilesResourceItem alloc] init];
+            OAOnlineTilesResourceItem *oldItem = (OAOnlineTilesResourceItem *)localItem;
+            OAOnlineTilesResourceItem *renamedItem = [[OAOnlineTilesResourceItem alloc] init];
             renamedItem.title = [NSString stringWithFormat:@"%@_%d", oldItem.title, number];
             if (![self isDuplicate:renamedItem])
             {
@@ -1620,9 +1620,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
 }
 
-- (BOOL) isDuplicate:(LocalResourceItem *)item
+- (BOOL) isDuplicate:(OALocalResourceItem *)item
 {
-    for (LocalResourceItem *existingItem in self.existingItems)
+    for (OALocalResourceItem *existingItem in self.existingItems)
         if ([existingItem.title isEqualToString:item.title])
             return YES;
 
@@ -1693,7 +1693,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
             app.resourcesManager->installTilesResource(result);
 
-            OnlineTilesResourceItem *item = [[OnlineTilesResourceItem alloc] init];
+            OAOnlineTilesResourceItem *item = [[OAOnlineTilesResourceItem alloc] init];
             item.path = [app.cachePath stringByAppendingPathComponent:name];
             item.title = name;
             _newSources[QString::fromNSString(name)] = result;
@@ -1722,7 +1722,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
             {
                 [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
-                SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+                OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
                 item.title = [[name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                 item.fileName = name;
                 item.path = [[[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"sqlitedb"];
@@ -1740,12 +1740,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
     {
-        for (LocalResourceItem *localItem in self.items)
+        for (OALocalResourceItem *localItem in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            if ([localItem isKindOfClass:SqliteDbResourceItem.class])
+            if ([localItem isKindOfClass:OASqliteDbResourceItem.class])
             {
-                SqliteDbResourceItem *item = (SqliteDbResourceItem *)localItem;
+                OASqliteDbResourceItem *item = (OASqliteDbResourceItem *)localItem;
                 NSDictionary *params = _newSqliteData[item.title];
                 jsonObject[@"sql"] = @(YES);
                 jsonObject[@"name"] = item.title;
@@ -1765,9 +1765,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 jsonObject[@"bitDensity"] = params[@"bitDensity"];
                 jsonObject[@"rule"] = params[@"rule"];
             }
-            else if ([localItem isKindOfClass:OnlineTilesResourceItem.class])
+            else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
             {
-                OnlineTilesResourceItem *item = (OnlineTilesResourceItem *)localItem;
+                OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
                 const auto& source = _newSources[QString::fromNSString(item.title)];
                 if (source)
                 {
@@ -1809,6 +1809,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @implementation OAAvoidRoadsSettingsItem
 {
     OAAvoidSpecificRoads *_specificRoads;
+    OAAppSettings *_settings;
 }
 
 @dynamic items, appliedItems, existingItems;
@@ -1818,7 +1819,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [super initialization];
     
     _specificRoads = [OAAvoidSpecificRoads instance];
-    //self.existingItems = [_specificRoads getImpassableRoads];
+    _settings = [OAAppSettings sharedManager];
+    self.existingItems = [[_specificRoads getImpassableRoads] mutableCopy];
 }
 
 - (EOASettingsItemType) type
@@ -1831,6 +1833,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return @"avoid_roads";
 }
 
+- (BOOL) isDuplicate:(OAAvoidRoadInfo *)item
+{
+    return [self.existingItems containsObject:item];
+}
+
 - (void) apply
 {
     NSArray<OAAvoidRoadInfo *> *newItems = [self getNewItems];
@@ -1841,22 +1848,20 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         {
             if ([self shouldReplace])
             {
-//                LatLon latLon = new LatLon(duplicate.latitude, duplicate.longitude);
-//                if (settings.removeImpassableRoad(latLon)) {
-//                    settings.addImpassableRoad(duplicate);
-//                }
+                if ([_settings removeImpassableRoad:duplicate.location])
+                    [_settings addImpassableRoad:duplicate];
             }
             else
             {
-//                settings.addImpassableRoad(renameItem(duplicate));
+                OAAvoidRoadInfo *roadInfo = [self renameItem:duplicate];
+                [_settings addImpassableRoad:roadInfo];
             }
         }
-        for (OAAvoidRoadInfo *avoidRoad in self.appliedItems)
-        {
-//            settings.addImpassableRoad(avoidRoad);
-        }
-//        specificRoads.loadImpassableRoads();
-//        specificRoads.initRouteObjects(true);
+        for (OAAvoidRoadInfo *roadInfo in self.appliedItems)
+            [_settings addImpassableRoad:roadInfo];
+
+        [_specificRoads loadImpassableRoads];
+        [_specificRoads initRouteObjects:YES];
     }
 }
 
@@ -1902,7 +1907,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         NSString *appModeKey = object[@"appModeKey"];
         OAAvoidRoadInfo *roadInfo = [[OAAvoidRoadInfo alloc] init];
         roadInfo.roadId = 0;
-        roadInfo.location = CLLocationCoordinate2DMake(latitude, longitude);
+        roadInfo.location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
         roadInfo.name = name;
         if ([OAApplicationMode valueOfStringKey:appModeKey def:nil])
             roadInfo.appModeKey = appModeKey;
@@ -1921,8 +1926,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         for (OAAvoidRoadInfo *avoidRoad in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            jsonObject[@"latitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.latitude];
-            jsonObject[@"longitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.longitude];
+            jsonObject[@"latitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.coordinate.latitude];
+            jsonObject[@"longitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.coordinate.longitude];
             jsonObject[@"name"] = avoidRoad.name;
             jsonObject[@"appModeKey"] = avoidRoad.appModeKey;
             [jsonArray addObject:jsonObject];

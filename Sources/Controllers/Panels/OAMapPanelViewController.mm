@@ -1150,7 +1150,7 @@ typedef enum
         {
             [_mapViewController hideContextPinMarker];
             
-            [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] skipWritingSettings:NO];
+            [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] skipWritingSettings:NO appModeKey:nil];
             
             [self.targetMenuView requestFullMode];
             
@@ -1584,15 +1584,11 @@ typedef enum
     else if (self.targetMenuView.targetPoint.type == OATargetImpassableRoad)
     {
         OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
-        NSNumber *roadId = self.targetMenuView.targetPoint.targetObj;
-        if (roadId)
+        OAAvoidRoadInfo *roadInfo = self.targetMenuView.targetPoint.targetObj;
+        if (roadInfo)
         {
-            const auto& road = [avoidRoads getRoadById:roadId.unsignedLongLongValue];
-            if (road)
-            {
-                [avoidRoads removeImpassableRoad:road];
-                [_mapViewController hideContextPinMarker];
-            }
+            [avoidRoads removeImpassableRoad:roadInfo];
+            [_mapViewController hideContextPinMarker];
         }
     }
     else
@@ -1964,6 +1960,11 @@ typedef enum
         }
         case OATargetMapillaryImage:
         {
+            break;
+        }
+        case OATargetDownloadMapSource:
+        {
+            [self.targetMenuView doInit:showFullMenu showFullScreen:NO];
             break;
         }
         default:
@@ -2531,12 +2532,12 @@ typedef enum
     [self closeRouteInfo];
 
     OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
-    const auto& roads = [avoidRoads getImpassableRoads];
-    for (const auto& r : roads)
+    NSArray<OAAvoidRoadInfo *> *roads = [avoidRoads getImpassableRoads];
+    for (OAAvoidRoadInfo *r in roads)
     {
-        if (r->id == roadId)
+        if (r.roadId == roadId)
         {
-            CLLocation *location = [avoidRoads getLocation:r->id];
+            CLLocation *location = [avoidRoads getLocation:r.roadId];
             if (location)
             {
                 double lat = location.coordinate.latitude;
@@ -2544,7 +2545,7 @@ typedef enum
                 
                 [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
                 
-                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPointCpp:r.get()];
+                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPoint:r];
                 if (targetPoint)
                 {
                     targetPoint.toolbarNeeded = pushed;
@@ -2903,6 +2904,32 @@ typedef enum
 - (void) openTargetViewWithDestination:(OADestination *)destination
 {
     [self destinationViewMoveTo:destination];
+}
+
+- (void) openTargetViewWithDownloadMapSource:(BOOL)pushed
+{
+    [_mapViewController hideContextPinMarker];
+
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+
+    targetPoint.type = OATargetDownloadMapSource;
+
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+    targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    _targetLatitude = latLon.latitude;
+    _targetLongitude = latLon.longitude;
+
+    targetPoint.toolbarNeeded = YES;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    [_targetMenuView setTargetPoint:targetPoint];
+    [self showTargetPointMenu:YES showFullMenu:YES onComplete:^{
+        [self enterContextMenuMode];
+        _activeTargetActive = YES;
+    }];
 }
 
 - (void) displayGpxOnMap:(OAGPX *)item

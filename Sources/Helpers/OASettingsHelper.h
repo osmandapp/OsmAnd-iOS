@@ -24,8 +24,8 @@ FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeIllegalType;
 FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeUnknownFileSubtype;
 FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeEmptyJson;
 
-typedef enum : NSUInteger {
-    EOASettingsItemTypeUnknown = 10000,
+typedef enum : NSInteger {
+    EOASettingsItemTypeUnknown = -1,
     EOASettingsItemTypeGlobal = 0,
     EOASettingsItemTypeProfile,
     EOASettingsItemTypePlugin,
@@ -76,7 +76,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, readonly) EOASettingsItemType type;
 @property (nonatomic, readonly) NSString *pluginId;
 @property (nonatomic, readonly) NSString *name;
-@property (nonatomic, readonly) NSString *fileName;
+@property (nonatomic) NSString *fileName;
 @property (nonatomic, readonly) NSString *defaultFileName;
 @property (nonatomic, readonly) NSString *defaultFileExtension;
 
@@ -155,9 +155,9 @@ typedef enum : NSUInteger {
 
 #pragma mark - OAFileSettingsItemFileSubtype
 
-typedef enum : NSUInteger {
-    EOASettingsItemFileSubtypeUnknown = 0,
-    EOASettingsItemFileSubtypeOther,
+typedef enum : NSInteger {
+    EOASettingsItemFileSubtypeUnknown = -1,
+    EOASettingsItemFileSubtypeOther = 0,
     EOASettingsItemFileSubtypeRoutingConfig,
     EOASettingsItemFileSubtypeRenderingStyle,
     EOASettingsItemFileSubtypeObfMap,
@@ -240,7 +240,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - OAMapSourcesSettingsItem
 
-@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<LocalResourceItem *>
+@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<OALocalResourceItem *>
 
 @end
 

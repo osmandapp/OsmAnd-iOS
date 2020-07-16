@@ -1366,4 +1366,31 @@ static const double d180PI = 180.0 / M_PI_2;
     return res;
 }
 
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle
+{
+    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 16.0, textWidth, CGFLOAT_MAX)];
+    if (!isTitle)
+    {
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        [style setLineSpacing:lineSpacing];
+        [style setAlignment:NSTextAlignmentJustified];
+        label.attributedText = [[NSAttributedString alloc] initWithString:text
+                                attributes:@{NSParagraphStyleAttributeName : style}];
+    }
+    label.text = text;
+    label.font = font;
+    label.textColor = textColor;
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [label sizeToFit];
+    CGRect frame = label.frame;
+    frame.size.height = label.frame.size.height + (isTitle ? 0.0 : 30.0);
+    label.frame = frame;
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height)];
+    [tableHeaderView addSubview:label];
+    return tableHeaderView;
+}
+
 @end

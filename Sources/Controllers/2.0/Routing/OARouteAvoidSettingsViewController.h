@@ -7,15 +7,14 @@
 //
 
 #import "OARouteSettingsBaseViewController.h"
-#import "OABaseSettingsViewController.h"
-#include <OsmAndCore.h>
-#include <OsmAndCore/Data/Road.h>
+#import "OANavigationSettingsViewController.h"
+
+@class OAAvoidRoadInfo;
 
 @interface OARouteAvoidSettingsViewController : OARouteSettingsBaseViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic) id<OASettingsDataDelegate> delegate;
 
-+ (NSString *) getText:(const std::shared_ptr<RouteDataObject>)road;
-+ (NSString *) getDescr:(const std::shared_ptr<RouteDataObject>)road;
++ (NSString *) getDescr:(OAAvoidRoadInfo *)roadInfo;
 
 @end

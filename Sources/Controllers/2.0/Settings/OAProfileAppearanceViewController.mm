@@ -170,6 +170,8 @@
                @"ic_action_bus_dark",
                @"ic_action_subway",
                @"ic_action_motorcycle_dark",
+               @"ic_action_enduro_motorcycle",
+               @"ic_action_motor_scooter",
                @"ic_action_bicycle_dark",
                @"ic_action_horse",
                @"ic_action_pedestrian_dark",
@@ -179,6 +181,9 @@
                @"ic_action_monowheel",
                @"ic_action_personal_transporter",
                @"ic_action_scooter",
+               @"ic_action_inline_skates",
+               @"ic_action_wheelchair",
+               @"ic_action_wheelchair_forward",
                @"ic_action_sail_boat_dark",
                @"ic_action_aircraft",
                @"ic_action_camper",
@@ -190,6 +195,7 @@
                @"ic_action_ufo",
                @"ic_action_utv",
                @"ic_action_wagon",
+               @"ic_action_go_cart",
                @"ic_action_openstreetmap_logo"];
     
     _currentIconAtRest = LOCATION_ICON_DEFAULT;

@@ -14,6 +14,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAQuickActionType.h"
+#import "OAResourcesUIHelper.h"
 
 #define KEY_UNDERLAYS @"underlays"
 #define KEY_NO_UNDERLAY @"no_underlay"
@@ -24,6 +25,7 @@ static OAQuickActionType *TYPE;
 {
     OAMapStyleSettings *_styleSettings;
     OAMapStyleParameter *_hidePolygonsParameter;
+    NSArray<OAResourceItem *> *_onlineMapSources;
 }
 
 - (instancetype) init
@@ -34,7 +36,7 @@ static OAQuickActionType *TYPE;
         _styleSettings = [OAMapStyleSettings sharedInstance];
         _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
 
-        [super commonInit];
+        _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
     }
     return self;
 }
@@ -85,11 +87,11 @@ static OAQuickActionType *TYPE;
     if (hasUnderlay)
     {
         OAMapSource *newMapSource = nil;
-        for (OAMapSource *mapSource in self.onlineMapSources)
+        for (OAMapSourceResourceItem *resource in _onlineMapSources)
         {
-            if ([mapSource.variant isEqualToString:variant] && [mapSource.name isEqualToString:name])
+            if ([resource.mapSource.variant isEqualToString:variant] && [resource.mapSource.name isEqualToString:name])
             {
-                newMapSource = mapSource;
+                newMapSource = resource.mapSource;
                 break;
             }
         }
@@ -200,6 +202,11 @@ static OAQuickActionType *TYPE;
         TYPE = [[OAQuickActionType alloc] initWithIdentifier:16 stringId:@"mapunderlay.change" class:self.class name:OALocalizedString(@"change_map_underlay") category:CONFIGURE_MAP iconName:@"ic_custom_underlay_map" secondaryIconName:nil];
        
     return TYPE;
+}
+
+- (NSArray *)loadListFromParams
+{
+    return self.getParams[self.getListKey];
 }
 
 @end

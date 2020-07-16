@@ -13,12 +13,14 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAProfileAppearanceViewController.h"
+#import "OAUtilities.h"
 
 #include <generalRouter.h>
 
 #define kHeaderId @"TableViewSectionHeader"
 #define kSidePadding 16
 #define kTopPadding 6
+#define kHeaderViewFont [UIFont systemFontOfSize:34.0 weight:UIFontWeightBold]
 
 @interface OACreateProfileViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -27,7 +29,6 @@
 @implementation OACreateProfileViewController
 {
     NSMutableArray<OAApplicationMode *> * _profileList;
-    UIView *_tableHeaderView;
     CGFloat _heightForHeader;
 }
 
@@ -68,9 +69,8 @@
     _tableView.dataSource = self;
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
-    _tableView.tableHeaderView = _tableHeaderView;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    [self setupTableHeaderViewWithText:OALocalizedString(@"create_profile")];
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_profile") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:YES];
     [self setupView];
 }
 
@@ -90,26 +90,6 @@
 {
 }
 
-- (void) setupTableHeaderViewWithText:(NSString *)text
-{
-    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    UIFont *labelFont = [UIFont systemFontOfSize:34.0 weight:UIFontWeightBold];
-    CGSize labelSize = [OAUtilities calculateTextBounds:text width:textWidth font:labelFont];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height)];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 0.0, textWidth, labelSize.height)];
-    label.text = text;
-    label.font = labelFont;
-    label.textColor = UIColor.blackColor;
-    label.backgroundColor = UIColor.clearColor;
-    label.textAlignment = NSTextAlignmentLeft;
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    _tableView.tableHeaderView = _tableHeaderView;
-}
-
 - (void) backButtonClicked:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -124,12 +104,7 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-        UIFont *labelFont = [UIFont systemFontOfSize:34.0 weight:UIFontWeightBold];
-        CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"create_profile") width:textWidth font:labelFont];
-        _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height);
-        _tableHeaderView.subviews.firstObject.frame = CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 0.0, textWidth, labelSize.height);
-        _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, DeviceScreenWidth, _tableView.frame.size.height);
+        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_profile") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
         [_tableView reloadData];
     } completion:nil];
 }

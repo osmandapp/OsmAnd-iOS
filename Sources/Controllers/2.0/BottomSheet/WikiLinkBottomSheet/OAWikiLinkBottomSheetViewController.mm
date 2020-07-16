@@ -42,7 +42,7 @@
     NSString *_regionName;
     
     OAWorldRegion *_worldRegion;
-    RepositoryResourceItem *_resourceItem;
+    OARepositoryResourceItem *_resourceItem;
 }
 
 @synthesize tableData, tblView;
@@ -273,7 +273,7 @@
 
 @implementation OAWikiLinkBottomSheetViewController
 
-- (instancetype) initWithUrl:(NSString *)url localItem:(RepositoryResourceItem *)localItem
+- (instancetype) initWithUrl:(NSString *)url localItem:(OARepositoryResourceItem *)localItem
 {
     self = [super initWithParam:url];
     if (self)

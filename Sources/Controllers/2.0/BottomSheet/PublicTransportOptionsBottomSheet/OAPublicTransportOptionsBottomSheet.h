@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABottomSheetViewController.h"
+#import "OABottomSheetTwoButtonsViewController.h"
 
 @class OAPublicTransportOptionsBottomSheetViewController;
 
@@ -17,5 +17,5 @@
 @end
 
 
-@interface OAPublicTransportOptionsBottomSheetViewController : OABottomSheetViewController
+@interface OAPublicTransportOptionsBottomSheetViewController : OABottomSheetTwoButtonsViewController
 @end

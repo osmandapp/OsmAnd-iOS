@@ -1752,3 +1752,17 @@
 "change_map_behavior" = "Ändere das Kartenverhalten während der Navigation";
 "map_behavior" = "Kartenverhalten";
 "voice_anounces" = "Sprachansagen";
+"osmand_routing" = "Osmand Routenberechnung";
+"settings_item_read_error" = "Konnte nicht von '%1$s' lesen.";
+"quick_action_transport_descr" = "Schaltfläche zum Ein- oder Ausblenden der öffentlichen Verkehrsmittel auf der Karte.";
+"after_tapping_done" = "Nachdem Sie auf Fertig tippen, gehen gelöschte Profile vollständig verloren.";
+"all_application_profiles" = "Alle Anwendungsprofile";
+"rearrange_profile_descr" = "Standard OsmAnd-Profile können nicht gelöscht werden, aber Sie können sie auf dem vorherigen Bildschirm deaktivieren oder sie an das Ende der Liste ziehen.";
+"import_from_files" = "Importieren aus Dateien";
+"map_update_warning" = "Wollen Sie Kacheldaten aus dem Internet nachladen?";
+"use_of_downloaded_map" = "Sie können diese Karte nun offline als Hauptkartenquelle oder als Über-/Unterlagerungsebene verwenden";
+"size_of_downloaded_data" = "Der große Unterschied zwischen den Zoomstufen kann die Größe der heruntergeladenen Daten erhöhen.";
+"preview_of_selected_zoom_levels" = "Vorschau der ausgewählten Zoomstufen";
+"number_of_tiles" = "Anzahl der Kacheln";
+"move_map_to_select_area" = "Bewegen Sie die Karte, um den gewünschten Bereich auszuwählen.";
+"import_routing_file_descr" = "Sie können die Routingdatei aus jeder beliebigen Cloud-Storage-Anwendung importieren oder sie in den Routingordner in iTunes legen.";

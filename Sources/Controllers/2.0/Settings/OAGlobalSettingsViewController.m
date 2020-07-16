@@ -25,8 +25,8 @@
 
 @implementation OAGlobalSettingsViewController
 {
-    NSArray<NSDictionary *> *_data;
     OAAppSettings *_settings;
+    NSArray<NSDictionary *> *_data;
     NSArray<OAApplicationMode *> * _profileList;
 }
 
@@ -84,8 +84,6 @@
     {
         case EOAGlobalSettingsMain:
         {
-            NSNumber *doNotShowDiscountValue = @(_settings.settingDoNotShowPromotions);
-            NSNumber *doNotUseAnalyticsValue = @(_settings.settingDoNotUseAnalytics);
             NSMutableArray *arr = [NSMutableArray arrayWithObjects:@{
                 @"name" : @"settings_preset",
                 @"title" : OALocalizedString(@"settings_preset"),
@@ -97,14 +95,14 @@
                 @"name" : @"do_not_show_discount",
                 @"title" : OALocalizedString(@"do_not_show_discount"),
                 @"description" : OALocalizedString(@"do_not_show_discount_desc"),
-                @"value" : doNotShowDiscountValue,
+                @"value" : @(_settings.settingDoNotShowPromotions),
                 @"img" : @"menu_cell_pointer.png",
                 @"type" : kCellTypeSwitch },
                 @{
                 @"name" : @"do_not_send_anonymous_data",
                 @"title" : OALocalizedString(@"send_anonymous_data"),
                 @"description" : OALocalizedString(@"send_anonymous_data_desc"),
-                @"value" : doNotUseAnalyticsValue,
+                @"value" : @(_settings.settingUseAnalytics),
                 @"img" : @"menu_cell_pointer.png",
                 @"type" : kCellTypeSwitch, }, nil
             ];
@@ -114,13 +112,11 @@
         case EOADefaultProfile:
         {
             NSMutableArray *arr = [NSMutableArray array];
-            NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];
-            for (OAApplicationMode *mode in availableModes)
+            for (OAApplicationMode *mode in _profileList)
             {
                 [arr addObject: @{
-                    @"name" : mode.stringKey,
-                    @"title" : mode.name,
-                    @"value" : @"",
+                    @"name" : mode.name,
+                    @"descr" : mode.stringKey,
                     @"isSelected" : @(appMode == mode),
                     @"type" : kCellTypeCheck }];
             }
@@ -130,7 +126,6 @@
         default:
             break;
     }
-    
 }
 
 - (IBAction) backButtonPressed:(id)sender
@@ -178,6 +173,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -198,6 +194,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
+            [cell.overflowButton setImage:[[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+            cell.overflowButton.tintColor = UIColorFromRGB(color_primary_purple);
         }
         OAApplicationMode *am = _profileList[indexPath.row];
         UIImage *img = am.getIcon;
@@ -206,8 +204,6 @@
         cell.textView.text = _profileList[indexPath.row].name;
         cell.descView.text = _profileList[indexPath.row].getProfileDescription;
         [cell setOverflowVisibility:![item[@"isSelected"] boolValue]];
-        [cell.overflowButton setImage:[[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        cell.overflowButton.tintColor = UIColorFromRGB(color_primary_purple);
         return cell;
     }
     return nil;
@@ -274,8 +270,21 @@
     }
     else
     {
-        return nil;
+        return @"";
     }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
+        headerView.textLabel.textColor = UIColorFromRGB(color_text_footer);
+    }
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return section == 0 ? 18.0 : 4.0;
 }
 
 #pragma mark - Switch
@@ -294,7 +303,7 @@
             if ([name isEqualToString:@"do_not_show_discount"])
                 [_settings setSettingDoNotShowPromotions:isChecked];
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
-                [_settings setSettingDoNotUseAnalytics:isChecked];
+                [_settings setSettingUseAnalytics:isChecked];
         }
     }
 }

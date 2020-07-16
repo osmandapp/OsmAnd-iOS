@@ -25,7 +25,7 @@
 #define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
 #define settingEnable3DViewKey @"settingEnable3DView"
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
-#define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
+#define settingUseFirebaseKey @"settingUseFirebaseKey"
 #define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
 #define liveUpdatesPurchasedKey @"liveUpdatesPurchasedKey"
@@ -1458,7 +1458,7 @@
         _settingShowAltInDriveMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapShowAltInDriveModeKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapShowAltInDriveModeKey] : NO;
         
         _settingDoNotShowPromotions = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotShowPromotionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotShowPromotionsKey] : NO;
-        _settingDoNotUseAnalytics = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotUseFirebaseKey] : NO;
+        _settingUseAnalytics = [[NSUserDefaults standardUserDefaults] objectForKey:settingUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingUseFirebaseKey] : YES;
         
         _liveUpdatesPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchasedKey] : NO;
         _settingOsmAndLiveEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:settingOsmAndLiveEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingOsmAndLiveEnabledKey] : NO;
@@ -1840,10 +1840,10 @@
     [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotShowPromotions forKey:settingDoNotShowPromotionsKey];
 }
 
-- (void) setSettingDoNotUseAnalytics:(BOOL)settingDoNotUseAnalytics
+- (void) setSettingUseAnalytics:(BOOL)settingUseAnalytics
 {
-    _settingDoNotUseAnalytics = settingDoNotUseAnalytics;
-    [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotUseAnalytics forKey:settingDoNotUseFirebaseKey];
+    _settingUseAnalytics = settingUseAnalytics;
+    [[NSUserDefaults standardUserDefaults] setBool:_settingUseAnalytics forKey:settingUseFirebaseKey];
 }
 
 - (void) setLiveUpdatesPurchased:(BOOL)liveUpdatesPurchased

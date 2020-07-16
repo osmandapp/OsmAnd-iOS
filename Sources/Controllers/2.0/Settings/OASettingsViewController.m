@@ -35,6 +35,7 @@
 #import "OARearrangeProfilesViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OAProfileGeneralSettingsViewController.h"
+#import "OAGlobalSettingsViewController.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -100,6 +101,12 @@
         case EOASettingsScreenMain:
         {
             NSMutableArray *arr = [NSMutableArray arrayWithObjects:@{
+                                                                     @"name" : @"global_settings",
+                                                                     @"title" : OALocalizedString(@"global_settings"),
+                                                                     @"description" : OALocalizedString(@"global_settings_descr"),
+                                                                     @"img" : @"menu_cell_pointer.png",
+                                                                     @"type" : kCellTypeCheck },
+                                                                    @{
                                                                      @"name" : @"general_settings",
                                                                      @"title" : OALocalizedString(@"general_settings_2"),
                                                                      @"description" : OALocalizedString(@"general_settings_descr"),
@@ -437,7 +444,12 @@
 
 - (void) selectSettingMain:(NSString *)name
 {
-    if ([name isEqualToString:@"general_settings"])
+    if ([name isEqualToString:@"global_settings"])
+    {
+        OAGlobalSettingsViewController* globalSettingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOAGlobalSettingsMain];
+        [self.navigationController pushViewController:globalSettingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"general_settings"])
     {
         OAProfileGeneralSettingsViewController* settingsViewController = [[OAProfileGeneralSettingsViewController alloc] initWithAppMode:OAApplicationMode.CAR];
         [self.navigationController pushViewController:settingsViewController animated:YES];

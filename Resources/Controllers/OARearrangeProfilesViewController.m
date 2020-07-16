@@ -251,6 +251,14 @@
     return section == kAllApplicationProfilesSection ? @"" : OALocalizedString(@"after_tapping_done");
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
+        headerView.textLabel.textColor  = UIColorFromRGB(color_text_footer);
+    }
+}
+
 - (void) actionButtonPressed:(UIButton *)sender
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];

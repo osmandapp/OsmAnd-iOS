@@ -1357,7 +1357,6 @@ static const double d180PI = 180.0 / M_PI_2;
     {
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         [style setLineSpacing:lineSpacing];
-        [style setAlignment:NSTextAlignmentJustified];
         label.attributedText = [[NSAttributedString alloc] initWithString:text
                                 attributes:@{NSParagraphStyleAttributeName : style}];
     }

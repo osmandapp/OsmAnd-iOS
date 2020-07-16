@@ -214,9 +214,7 @@
             [value set:isChecked mode:self.appMode];
         }
         if (self.delegate)
-        {
             [self.delegate onSettingsChanged];
-        }
     }
 }
 

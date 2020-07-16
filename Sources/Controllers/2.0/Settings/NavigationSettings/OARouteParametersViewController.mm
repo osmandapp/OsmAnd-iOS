@@ -34,7 +34,12 @@
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
-    NSInteger iconColor;
+    NSInteger _iconColor;
+    vector<RoutingParameter> _otherParameters;
+    vector<RoutingParameter> _avoidParameters;
+    vector<RoutingParameter> _preferParameters;
+    vector<RoutingParameter> _reliefFactorParameters;
+    vector<RoutingParameter> _drivingStyleParameters;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -58,15 +63,8 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    iconColor = self.appMode.getIconColor;
+    _iconColor = self.appMode.getIconColor;
     [self setupView];
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self setupView];
-    [self.tableView reloadData];
 }
 
 - (void) setupView
@@ -74,7 +72,7 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
-    OAAppSettings* settings = [OAAppSettings sharedManager];
+    OAAppSettings *settings = [OAAppSettings sharedManager];
     [otherArr addObject:@{
         @"type" : kCellTypeScreenImage,
         @"foregroundImage" : @"img_settings_sreen_route_parameters@3x.png",
@@ -89,39 +87,35 @@
     }];
     
     auto router = [self.class getRouter:self.appMode];
+    [self clearParameters];
     if (router)
     {
-        auto& parameters = router->getParametersList();
-        vector <RoutingParameter> otherParameters;
-        vector <RoutingParameter> avoidParameters;
-        vector <RoutingParameter> preferParameters;
-        vector <RoutingParameter> reliefFactorParameters;
-        vector <RoutingParameter> drivingStyleParameters;
-        for (auto& p : parameters)
+        const auto& parameters = router->getParametersList();
+        for (const auto& p : parameters)
         {
             NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
             if ([param hasPrefix:@"avoid_"])
-                avoidParameters.push_back(p);
+                _avoidParameters.push_back(p);
             else if ([param hasPrefix:@"prefer_"])
-                preferParameters.push_back(p);
+                _preferParameters.push_back(p);
             else if ("relief_smoothness_factor" == p.group)
-                reliefFactorParameters.push_back(p);
+                _reliefFactorParameters.push_back(p);
             else if ("driving_style" == p.group)
-                drivingStyleParameters.push_back(p);
+                _drivingStyleParameters.push_back(p);
             else
-                otherParameters.push_back(p);
+                _otherParameters.push_back(p);
         }
-        if (avoidParameters.size() > 0)
+        if (_avoidParameters.size() > 0)
         {
             [parametersArr addObject:@{
                 @"type" : kCellTypeIconTitle,
                 @"title" : OALocalizedString(@"impassable_road"),
                 @"icon" : @"ic_custom_alert",
-                @"value" : @([self checkIfAnyParameterIsSelected:avoidParameters]),
+                @"value" : @([self checkIfAnyParameterIsSelected:_avoidParameters]),
                 @"key" : @"avoidRoads"
             }];
         }
-        for (auto& p : otherParameters)
+        for (const auto& p : _otherParameters)
         {
             NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
             NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
@@ -138,13 +132,13 @@
                  ];
             }
         }
-        if (preferParameters.size() > 0)
+        if (_preferParameters.size() > 0)
         {
             [parametersArr addObject:@{
                 @"type" : kCellTypeIconTitle,
                 @"title" : OALocalizedString(@"prefer_in_routing_title"),
                 @"icon" : @"ic_custom_alert",
-                @"value" : @([self checkIfAnyParameterIsSelected:preferParameters]),
+                @"value" : @([self checkIfAnyParameterIsSelected:_preferParameters]),
                 @"key" : @"preferRoads"
             }];
         }
@@ -174,7 +168,7 @@
  
 - (BOOL) checkIfAnyParameterIsSelected:(vector <RoutingParameter>)routingParameters
 {
-    for (auto& p : routingParameters)
+    for (const auto& p : routingParameters)
     {
         OALocalRoutingParameter *rp = [[OALocalRoutingParameter alloc] initWithAppMode:self.appMode];
         rp.routingParameter = p;
@@ -184,7 +178,7 @@
     return NO;
 }
 
-- (NSString *)getParameterIcon:(NSString *)parameterName isSelected:(BOOL)isSelected
+- (NSString *) getParameterIcon:(NSString *)parameterName isSelected:(BOOL)isSelected
 {
     if ([parameterName isEqualToString:@"short_way"])
         return @"ic_custom_fuel";
@@ -195,6 +189,15 @@
     else if ([parameterName isEqualToString:@"height_obstacles"])
         return @"ic_custom_ascent";
     return @"";
+}
+
+- (void) clearParameters
+{
+    _otherParameters.clear();
+    _avoidParameters.clear();
+    _preferParameters.clear();
+    _reliefFactorParameters.clear();
+    _drivingStyleParameters.clear();
 }
 
 #pragma mark - TableView
@@ -234,7 +237,7 @@
         if (cell)
         {
             cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftImageView.tintColor = UIColorFromRGB(iconColor);
+            cell.leftImageView.tintColor = UIColorFromRGB(_iconColor);
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
         }
@@ -256,7 +259,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = [item[@"value"] boolValue] ? UIColorFromRGB(iconColor) : UIColorFromRGB(color_icon_inactive);
+            cell.iconView.tintColor = [item[@"value"] boolValue] ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
         }
         return cell;
     }
@@ -276,13 +279,13 @@
         {
             cell.textView.text = item[@"title"];
             cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.tintColor = cell.switchView.on ? UIColorFromRGB(iconColor) : UIColorFromRGB(color_icon_inactive);
             id v = item[@"value"];
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OAProfileBoolean class]])
             {
                 OAProfileBoolean *value = v;
                 cell.switchView.on = [value get:self.appMode];
+                cell.imgView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
             }
             else
             {
@@ -342,7 +345,7 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-# pragma mark - Switch
+#pragma mark - Switch
 
 - (void) applyParameter:(id)sender
 {
@@ -352,24 +355,21 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         BOOL isChecked = ((UISwitch *) sender).on;
-        auto router = [self.class getRouter:self.appMode];
-        if (router)
+        for (const auto& routingParameter : _otherParameters)
         {
-            auto& parameters = router->getParametersList();
-            for (auto& routingParameter : parameters)
+            NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
+            if ([param isEqualToString:item[@"name"]])
             {
-                NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
-                if ([param isEqualToString:item[@"name"]])
-                {
-                    OAProfileBoolean *property = [[OAAppSettings sharedManager] getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:routingParameter.id.c_str()] defaultValue:routingParameter.defaultBoolean];
-                    [property set:isChecked mode:self.appMode];
-                }
+                OAProfileBoolean *property = [[OAAppSettings sharedManager] getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:routingParameter.id.c_str()] defaultValue:routingParameter.defaultBoolean];
+                [property set:isChecked mode:self.appMode];
             }
         }
         [self setupView];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
+
+#pragma mark - OASettingsDataDelegate
 
 - (void) onSettingsChanged;
 {

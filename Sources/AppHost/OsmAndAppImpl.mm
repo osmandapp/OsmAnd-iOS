@@ -348,6 +348,11 @@
         }
     }
     
+    for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
+    {
+        [self applyExcludedFromBackup:filePath];
+    }
+    
     float currentVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"] floatValue];
     float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
     if (_firstLaunch)

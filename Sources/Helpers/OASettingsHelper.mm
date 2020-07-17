@@ -219,6 +219,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) writeToJson:(id)json error:(NSError * _Nullable *)error;
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error;
 - (void) writeItemsToJson:(id)json error:(NSError * _Nullable *)error;
+- (void) readPreferenceFromJson:(NSString *)key value:(id)value;
 
 @end
 
@@ -345,6 +346,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 }
 
 - (void) writeItemsToJson:(id)json error:(NSError * _Nullable *)error
+{
+    // override
+}
+
+- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
     // override
 }
@@ -501,16 +507,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         
         return NO;
     }
-    
-    NSError *readItemsError;
-    [self.item readItemsFromJson:json error:&readItemsError];
-    if (readItemsError)
+    NSDictionary *settings = (NSDictionary *) json;
+    for (NSString *key in settings.allValues)
     {
-        if (error)
-            *error = readItemsError;
-        
-        return NO;
+        [self.item readPreferenceFromJson:key value:settings[key]];
     }
+    
     return YES;
 }
 
@@ -603,6 +605,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @implementation OAProfileSettingsItem
 {
     NSDictionary *_additionalPrefs;
+    
+    NSSet<NSString *> *_appModeBeanPrefsIds;
 }
 
 @dynamic type, name, fileName;
@@ -658,6 +662,18 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void)readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     _additionalPrefs = json[@"prefs"];
+}
+
+- (void) readPreferenceFromJson:(NSString *)key value:(id)value
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    if (!_appModeBeanPrefsIds)
+        _appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
+    
+    if (![_appModeBeanPrefsIds containsObject:key])
+    {
+        // TODO: readPrefs
+    }
 }
 
 - (void) renameProfile
@@ -782,7 +798,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (OASettingsItemReader *)getReader
 {
-    return [[OASettingsItemReader alloc] initWithItem:self];
+    return [[OASettingsItemJsonReader alloc] initWithItem:self];
 }
 
 - (OASettingsItemWriter *)getWriter

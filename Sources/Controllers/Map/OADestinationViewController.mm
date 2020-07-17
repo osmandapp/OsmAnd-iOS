@@ -198,7 +198,7 @@
     else
         secondCellDestination = (destinations.count >= 2 ? destinations[1] : nil);
     
-    if (firstCellDestination && [_settings.distanceIndicationVisability get])
+    if (firstCellDestination && [_settings.distanceIndicationVisibility get])
     {
         OADestination *destination = firstCellDestination;
 
@@ -219,7 +219,7 @@
         [cell updateDirections:location direction:direction];
     }
     
-    if (secondCellDestination && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && [_settings.distanceIndicationVisability get])
+    if (secondCellDestination && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS && [_settings.distanceIndicationVisibility get])
     {
         OADestination *destination = secondCellDestination;
         
@@ -267,7 +267,7 @@
         [_destinationCells removeLastObject];
     }
 
-    if ([_settings.distanceIndication get] == WIDGET_DISPLAY || ![_settings.distanceIndicationVisability get])
+    if ([_settings.distanceIndication get] == WIDGET_DISPLAY || ![_settings.distanceIndicationVisibility get])
     {
         while (_destinationCells.count > 0)
         {

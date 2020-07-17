@@ -52,6 +52,10 @@
 - (NSArray<OASettingsItem *> *) processItems:(NSString *)file items:(NSArray<OASettingsItem *> *)items
 {
     NSFileManager *fileManager = NSFileManager.defaultManager;
+    // Clear temp profile data
+    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
+    [fileManager createDirectoryAtPath:_tmpFilesDir withIntermediateDirectories:YES attributes:nil error:nil];
+    
     BOOL collecting = items == nil;
     if (collecting)
         items = [self getItemsFromJson:file];
@@ -149,16 +153,6 @@
     }
     return items;
 }
-
-//- (QString) checkEntryName:(QString)entryName
-//{
-//    QString fileExt = QStringLiteral(".osf").append("/");
-//    int index = entryName.indexOf(fileExt);
-//    if (index != -1)
-//        entryName = entryName.mid(index + fileExt.length());
-//
-//    return entryName;
-//}
 
 @end
 

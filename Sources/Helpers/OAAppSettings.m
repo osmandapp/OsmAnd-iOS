@@ -96,11 +96,11 @@
 #define transparentMapThemeKey @"transparentMapTheme"
 #define showStreetNameKey @"showStreetName"
 #define centerPositionOnMapKey @"centerPositionOnMap"
-#define mapMarkersModeKey @"mapMarkersMode"
 #define rotateMapKey @"rotateMap"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
 
 // App profiles
+#define appModeBeanPrefsIdsKey @"appModeBeanPrefsIds"
 #define routingProfileKey @"routingProfile"
 #define profileIconNameKey @"profileIconName"
 #define profileIconColorKey @"profileIconColor"
@@ -205,7 +205,6 @@
 #define activeMarkerKey @"activeMarkerKey"
 #define mapDistanceIndicationVisabilityKey @"mapDistanceIndicationVisabilityKey"
 #define mapDistanceIndicationKey @"mapDistanceIndicationKey"
-#define mapLastPositionWidgetIndicatorKey @"mapLastPositionWidgetIndicatorKey"
 #define mapArrowsOnMapKey @"mapArrowsOnMapKey"
 #define mapDirectionLinesKey @"mapDirectionLinesKey"
 
@@ -596,50 +595,6 @@
 
 @end
 
-@interface OAMapMarkersMode ()
-
-@property (nonatomic) EOAMapMarkersMode mode;
-@property (nonatomic) NSString *name;
-
-@end
-
-@implementation OAMapMarkersMode
-
-+ (instancetype) withMode:(EOAMapMarkersMode)mode
-{
-    OAMapMarkersMode *obj = [[OAMapMarkersMode alloc] init];
-    if (obj)
-    {
-        obj.mode = mode;
-        obj.name = [self.class getName:mode];
-    }
-    return obj;
-}
-
-+ (NSArray<OAAutoZoomMap *> *) possibleValues
-{
-    return @[ [OAMapMarkersMode withMode:MAP_MARKERS_MODE_TOOLBAR],
-              [OAMapMarkersMode withMode:MAP_MARKERS_MODE_WIDGETS],
-              [OAMapMarkersMode withMode:MAP_MARKERS_MODE_NONE] ];
-}
-
-+ (NSString *) getName:(EOAMapMarkersMode)mode
-{
-    switch (mode)
-    {
-        case MAP_MARKERS_MODE_TOOLBAR:
-            return OALocalizedString(@"shared_string_topbar");
-        case MAP_MARKERS_MODE_WIDGETS:
-            return OALocalizedString(@"shared_string_widgets");
-        case MAP_MARKERS_MODE_NONE:
-            return OALocalizedString(@"map_settings_none");
-        default:
-            return nil;
-    }
-}
-
-@end
-
 @interface OAProfileSetting ()
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
@@ -730,6 +685,10 @@
 {
 }
 
+- (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+}
+
 @end
 
 @interface OAProfileBoolean ()
@@ -784,6 +743,11 @@
         defaultValue = ((NSNumber *)pDefault).boolValue;
     
     [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:[strValue isEqualToString:@"true"] mode:mode];
 }
 
 @end
@@ -842,6 +806,11 @@
     [self set:defaultValue];
 }
 
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:strValue.intValue mode:mode];
+}
+
 @end
 
 @interface OAProfileString ()
@@ -896,6 +865,11 @@
         defaultValue = (NSString *)pDefault;
     
     [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:strValue mode:mode];
 }
 
 @end
@@ -954,6 +928,11 @@
     [self set:defaultValue];
 }
 
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:strValue.doubleValue mode:mode];
+}
+
 @end
 
 @interface OAProfileStringList ()
@@ -966,7 +945,7 @@
 
 + (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue
 {
-    OAProfileString *obj = [[OAProfileStringList alloc] init];
+    OAProfileStringList *obj = [[OAProfileStringList alloc] init];
     if (obj)
     {
         obj.key = key;
@@ -1078,6 +1057,16 @@
     [self set:defaultValue];
 }
 
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"FARTHEST"])
+        return [self set:AUTO_ZOOM_MAP_FARTHEST mode:mode];
+    else if ([strValue isEqualToString:@"FAR"])
+        return [self set:AUTO_ZOOM_MAP_FAR mode:mode];
+    else if ([strValue isEqualToString:@"CLOSE"])
+        return [self set:AUTO_ZOOM_MAP_CLOSE mode:mode];
+}
+
 @end
 
 @interface OAProfileSpeedConstant ()
@@ -1146,6 +1135,22 @@
     [self set:defaultValue];
 }
 
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"KILOMETERS_PER_HOUR"])
+        return [self set:KILOMETERS_PER_HOUR mode:mode];
+    else if ([strValue isEqualToString:@"MILES_PER_HOUR"])
+        return [self set:MILES_PER_HOUR mode:mode];
+    else if ([strValue isEqualToString:@"METERS_PER_SECOND"])
+        return [self set:METERS_PER_SECOND mode:mode];
+    else if ([strValue isEqualToString:@"MINUTES_PER_MILE"])
+        return [self set:MINUTES_PER_MILE mode:mode];
+    else if ([strValue isEqualToString:@"MINUTES_PER_KILOMETER"])
+        return [self set:MINUTES_PER_KILOMETER mode:mode];
+    else if ([strValue isEqualToString:@"NAUTICALMILES_PER_HOUR"])
+        return [self set:NAUTICALMILES_PER_HOUR mode:mode];
+}
+
 @end
 
 @implementation OAProfileAngularConstant
@@ -1187,51 +1192,14 @@
     [self set:defaultValue];
 }
 
-@end
-
-@interface OAProfileMapMarkersMode ()
-
-@property (nonatomic) EOAMapMarkersMode defValue;
-
-@end
-
-@implementation OAProfileMapMarkersMode
-
-@dynamic defValue;
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAMapMarkersMode)defValue
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    return [super withKey:key defValue:defValue];
-}
-
-- (EOAMapMarkersMode) get
-{
-    return [super get];
-}
-
-- (void) set:(EOAMapMarkersMode)mapMarkersMode
-{
-    [super set:mapMarkersMode];
-}
-
-- (EOAMapMarkersMode) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAMapMarkersMode)mapMarkersMode mode:(OAApplicationMode *)mode
-{
-    [super set:mapMarkersMode mode:mode];
-}
-
-- (void) resetToDefault
-{
-    EOAMapMarkersMode defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAMapMarkersMode)((NSNumber *)pDefault).intValue;
-    
-    [self set:defaultValue];
+    if ([strValue isEqualToString:@"DEGREES"])
+        return [self set:DEGREES mode:mode];
+    else if ([strValue isEqualToString:@"DEGREES360"])
+        return [self set:DEGREES360 mode:mode];
+    else if ([strValue isEqualToString:@"MILLIRADS"])
+        return [self set:MILLIRADS mode:mode];
 }
 
 @end
@@ -1275,6 +1243,19 @@
     [self set:defaultValue];
 }
 
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    switch (strValue.intValue) {
+        case 1:
+            [self set:ONE_ACTIVE_MARKER mode:mode];
+            break;
+        case 2:
+            [self set:TWO_ACTIVE_MARKERS mode:mode];
+        default:
+            break;
+    }
+}
+
 @end
 
 @implementation OAProfileDistanceIndicationConstant
@@ -1316,12 +1297,23 @@
     [self set:defaultValue];
 }
 
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"TOOLBAR"])
+        return [self set:TOP_BAR_DISPLAY mode:mode];
+    else if ([strValue isEqualToString:@"WIDGETS"])
+        return [self set:WIDGET_DISPLAY mode:mode];
+    else if ([strValue isEqualToString:@"NONE"])
+        return [self set:NONE_DISPLAY mode:mode];
+}
+
 @end
 
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OAProfileBoolean *> *_customBooleanRoutingProps;
     NSMapTable<NSString *, OAProfileString *> *_customRoutingProps;
+    NSMapTable<NSString *, OAProfileSetting *> *_registeredPreferences;
     OADayNightHelper *_dayNightHelper;
 }
 
@@ -1349,6 +1341,7 @@
     {
         _dayNightHelper = [OADayNightHelper instance];
         _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
+        _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
         
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
@@ -1442,6 +1435,19 @@
             _lastSearchedPoint = [[CLLocation alloc] initWithLatitude:lastSearchedPointLat longitude:lastSearchedPointLon];
         }
         
+        _appModeBeanPrefsIds = [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] :
+        @[
+            @"app_mode_icon_color",
+            @"user_profile_name",
+            @"parent_app_mode",
+            @"routing_profile",
+            @"route_service",
+            @"navigation_icon",
+            @"location_icon",
+            @"app_mode_order",
+            @"app_mode_icon_res_name"
+        ];
+        
         _applicationMode = [OAApplicationMode valueOfStringKey:[[NSUserDefaults standardUserDefaults] objectForKey:applicationModeKey] def:[OAApplicationMode DEFAULT]];
 
         _defaultApplicationMode = [OAApplicationMode valueOfStringKey:[[NSUserDefaults standardUserDefaults] objectForKey:defaultApplicationModeKey] def:[OAApplicationMode DEFAULT]];
@@ -1520,59 +1526,66 @@
         
         _showArrivalTime = [OAProfileBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OAProfileBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
-        _showRelativeBearing = [[NSUserDefaults standardUserDefaults] objectForKey:showRelativeBearingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showRelativeBearingKey] : YES;
+        _showRelativeBearing = [OAProfileBoolean withKey:showRelativeBearingKey defValue:YES];
+        
+        [_registeredPreferences setObject:_showArrivalTime forKey:@"show_arrival_time"];
+        [_registeredPreferences setObject:_showIntermediateArrivalTime forKey:@"show_intermediate_arrival_time"];
+        [_registeredPreferences setObject:_showRelativeBearing forKey:@"show_relative_bearing"];
 
         _centerPositionOnMap = [OAProfileBoolean withKey:centerPositionOnMapKey defValue:NO];
-
-        _mapMarkersMode = [OAProfileMapMarkersMode withKey:mapMarkersModeKey defValue:MAP_MARKERS_MODE_TOOLBAR];
-        [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode DEFAULT]];
-        [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode CAR]];
-        [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode BICYCLE]];
-        [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_centerPositionOnMap forKey:@"center_position_on_map"];
 
         _rotateMap = [OAProfileInteger withKey:rotateMapKey defValue:ROTATE_MAP_NONE];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode CAR]];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode BICYCLE]];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_COMPASS) mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_rotateMap forKey:@"rotate_map"];
         
         _mapDensity = [OAProfileDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR) mode:[OAApplicationMode CAR]];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode BICYCLE]];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_mapDensity forKey:@"map_density_n"];
         
         _textSize = [OAProfileDouble withKey:textSizeKey defValue:MAGNIFIER_DEFAULT_VALUE];
         [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode CAR]];
         [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode BICYCLE]];
         [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_textSize forKey:@"text_scale"];
 
         _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;
 
         // trip recording settings
         _saveTrackToGPX = [OAProfileBoolean withKey:saveTrackToGPXKey defValue:NO];
-        [_autoZoomMap setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
-        [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
-        [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_saveTrackToGPX forKey:@"save_track_to_gpx"];
         
         _mapSettingSaveTrackInterval = [OAProfileInteger withKey:mapSettingSaveTrackIntervalKey defValue:SAVE_TRACK_INTERVAL_DEFAULT];
         [_mapSettingSaveTrackInterval setModeDefaultValue:@3 mode:[OAApplicationMode CAR]];
         [_mapSettingSaveTrackInterval setModeDefaultValue:@5 mode:[OAApplicationMode BICYCLE]];
         [_mapSettingSaveTrackInterval setModeDefaultValue:@10 mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_mapSettingSaveTrackInterval forKey:@"save_track_interval"];
         
-        _saveTrackMinDistance = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinDistanceKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinDistanceKey]).floatValue : REC_FILTER_DEFAULT;
-        _saveTrackPrecision = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackPrecisionKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackPrecisionKey]).floatValue : REC_FILTER_DEFAULT;
-        _saveTrackMinSpeed = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinSpeedKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinSpeedKey]).floatValue : REC_FILTER_DEFAULT;
+        _saveTrackMinDistance = [OAProfileDouble withKey:saveTrackMinDistanceKey defValue:REC_FILTER_DEFAULT];
+        _saveTrackPrecision = [OAProfileDouble withKey:saveTrackPrecisionKey defValue:REC_FILTER_DEFAULT];
+        _saveTrackMinSpeed = [OAProfileDouble withKey:saveTrackMinSpeedKey defValue:REC_FILTER_DEFAULT];
+        _autoSplitRecording = [OAProfileBoolean withKey:autoSplitRecordingKey defValue:NO];
         
-        _autoSplitRecording = [[NSUserDefaults standardUserDefaults] objectForKey:autoSplitRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:autoSplitRecordingKey] : NO;
-        
+        [_registeredPreferences setObject:_saveTrackMinDistance forKey:@"save_track_min_distance"];
+        [_registeredPreferences setObject:_saveTrackPrecision forKey:@"save_track_precision"];
+        [_registeredPreferences setObject:_saveTrackMinSpeed forKey:@"save_track_min_speed"];
+        [_registeredPreferences setObject:_autoSplitRecording forKey:@"auto_split_recording"];
         
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
         _fastRouteMode = [OAProfileBoolean withKey:fastRouteModeKey defValue:YES];
+        [_registeredPreferences setObject:_fastRouteMode forKey:@"fast_route_mode"];
         _disableComplexRouting = [[NSUserDefaults standardUserDefaults] objectForKey:disableComplexRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableComplexRoutingKey] : NO;
         _followTheRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheRouteKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:followTheRouteKey] : NO;
         _followTheGpxRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheGpxRouteKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:followTheGpxRouteKey] : nil;
         _arrivalDistanceFactor = [OAProfileDouble withKey:arrivalDistanceFactorKey defValue:1.0];
+        [_registeredPreferences setObject:_arrivalDistanceFactor forKey:@"arrival_distance_factor"];
         _enableTimeConditionalRouting = [OAProfileBoolean withKey:enableTimeConditionalRoutingKey defValue:NO];
+        [_registeredPreferences setObject:_enableTimeConditionalRouting forKey:@"enable_time_conditional_routing"];
         _useIntermediatePointsNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:useIntermediatePointsNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useIntermediatePointsNavigationKey] : NO;
         _disableOffrouteRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableOffrouteRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableOffrouteRecalcKey] : NO;
         _disableWrongDirectionRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableWrongDirectionRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableWrongDirectionRecalcKey] : NO;
@@ -1581,26 +1594,35 @@
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode BICYCLE]];
         [_autoFollowRoute setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_autoFollowRoute forKey:@"auto_follow_route"];
         
         _autoZoomMap = [OAProfileBoolean withKey:autoZoomMapKey defValue:NO];
         [_autoZoomMap setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_autoZoomMap forKey:@"auto_zoom_map_on_off"];
 
         _autoZoomMapScale = [OAProfileAutoZoomMap withKey:autoZoomMapScaleKey defValue:AUTO_ZOOM_MAP_FAR];
         [_autoZoomMapScale setModeDefaultValue:@(AUTO_ZOOM_MAP_FAR) mode:[OAApplicationMode CAR]];
         [_autoZoomMapScale setModeDefaultValue:@(AUTO_ZOOM_MAP_CLOSE) mode:[OAApplicationMode BICYCLE]];
         [_autoZoomMapScale setModeDefaultValue:@(AUTO_ZOOM_MAP_CLOSE) mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_autoZoomMapScale forKey:@"auto_zoom_map_scale"];
 
         _keepInforming = [OAProfileInteger withKey:keepInformingKey defValue:0];
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode CAR]];
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode BICYCLE]];
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_keepInforming forKey:@"keep_informing"];
 
         _speedSystem = [OAProfileSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _angularUnits = [OAProfileAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceed = [OAProfileDouble withKey:speedLimitExceedKey defValue:5.f];
         _switchMapDirectionToCompass = [OAProfileDouble withKey:switchMapDirectionToCompassKey defValue:0.f];
+        
+        [_registeredPreferences setObject:_switchMapDirectionToCompass forKey:@"speed_for_map_to_direction_of_movement"];
+        [_registeredPreferences setObject:_speedLimitExceed forKey:@"speed_limit_exceed"];
+        [_registeredPreferences setObject:_angularUnits forKey:@"angular_measurement"];
+        [_registeredPreferences setObject:_speedSystem forKey:@"default_speed_system"];
 
         _wakeOnVoiceInt = [OAProfileInteger withKey:wakeOnVoiceIntKey defValue:0];
         [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode CAR]];
@@ -1609,17 +1631,21 @@
 
         _showTrafficWarnings = [OAProfileBoolean withKey:showTrafficWarningsKey defValue:NO];
         [_showTrafficWarnings setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+        [_registeredPreferences setObject:_showTrafficWarnings forKey:@"show_traffic_warnings"];
         
         _showPedestrian = [OAProfileBoolean withKey:showPedestrianKey defValue:NO];
         [_showPedestrian setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+        [_registeredPreferences setObject:_showPedestrian forKey:@"show_pedestrian"];
 
         _showCameras = [OAProfileBoolean withKey:showCamerasKey defValue:NO];
         _showTunnels = [OAProfileBoolean withKey:showTunnelsKey defValue:NO];
         [_showTunnels setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+        [_registeredPreferences setObject:_showTunnels forKey:@"show_tunnels"];
 
         _showLanes = [OAProfileBoolean withKey:showLanesKey defValue:NO];
         [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
+        [_registeredPreferences setObject:_showLanes forKey:@"show_lanes"];
         
         _speakStreetNames = [OAProfileBoolean withKey:speakStreetNamesKey defValue:YES];
         _speakTrafficWarnings = [OAProfileBoolean withKey:speakTrafficWarningsKey defValue:YES];
@@ -1629,6 +1655,15 @@
         _speakCameras = [OAProfileBoolean withKey:speakCamerasKey defValue:NO];
         _announceNearbyFavorites = [OAProfileBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         _announceNearbyPoi = [OAProfileBoolean withKey:announceNearbyPoiKey defValue:NO];
+        
+        [_registeredPreferences setObject:_speakStreetNames forKey:@"speak_street_names"];
+        [_registeredPreferences setObject:_speakTrafficWarnings forKey:@"speak_traffic_warnings"];
+        [_registeredPreferences setObject:_speakPedestrian forKey:@"speak_pedestrian"];
+        [_registeredPreferences setObject:_speakSpeedLimit forKey:@"speak_speed_limit"];
+        [_registeredPreferences setObject:_speakCameras forKey:@"speak_cameras"];
+        [_registeredPreferences setObject:_speakTunnels forKey:@"speak_tunnels"];
+        [_registeredPreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
+        [_registeredPreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 
         _showGpxWpt = [[NSUserDefaults standardUserDefaults] objectForKey:showGpxWptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showGpxWptKey] : YES;
         _announceWpt = [[NSUserDefaults standardUserDefaults] objectForKey:announceWptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:announceWptKey] : YES;
@@ -1639,6 +1674,8 @@
 
         _showNearbyFavorites = [OAProfileBoolean withKey:showNearbyFavoritesKey defValue:NO];
         _showNearbyPoi = [OAProfileBoolean withKey:showNearbyPoiKey defValue:NO];
+        [_registeredPreferences setObject:_showNearbyPoi forKey:@"show_nearby_poi"];
+        [_registeredPreferences setObject:_showNearbyFavorites forKey:@"show_nearby_favorites"];
         
         _gpxRouteCalcOsmandParts = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcOsmandPartsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcOsmandPartsKey] : YES;
         _gpxCalculateRtept = [[NSUserDefaults standardUserDefaults] objectForKey:gpxCalculateRteptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxCalculateRteptKey] : YES;
@@ -1647,9 +1684,11 @@
         _voiceMute = [[NSUserDefaults standardUserDefaults] objectForKey:voiceMuteKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:voiceMuteKey] : NO;
         _voiceProvider = [[NSUserDefaults standardUserDefaults] objectForKey:voiceProviderKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:voiceProviderKey] : nil;
         _interruptMusic = [OAProfileBoolean withKey:interruptMusicKey defValue:NO];
+        [_registeredPreferences setObject:_interruptMusic forKey:@"interrupt_music"];
         _snapToRoad = [OAProfileBoolean withKey:snapToRoadKey defValue:NO];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
+        [_registeredPreferences setObject:_snapToRoad forKey:@"snap_to_road"];
         
         _rulerMode = [[NSUserDefaults standardUserDefaults] objectForKey:rulerModeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:rulerModeKey] : RULER_MODE_DARK;
         
@@ -1667,23 +1706,32 @@
         _mapillaryFilterEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterEndDateKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:mapillaryFilterEndDateKey] : 0;
         _mapillaryFilterPano = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterPanoKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapillaryFilterPanoKey] : NO;
         
+        // TODO: add quick action state to registeredPrefs when implemented in Android #9470
         _quickActionIsOn = [OAProfileBoolean withKey:quickActionIsOnKey defValue:NO];
         _quickActionsList = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionsListKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:quickActionsListKey] : nil;
         
-        _quickActionPortraitX = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionPortraitXKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionPortraitXKey] : 0;
-        _quickActionPortraitY = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionPortraitYKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionPortraitYKey] : 0;
-        _quickActionLandscapeX = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionLandscapeXKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionLandscapeXKey] : 0;
-        _quickActionLandscapeY = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionLandscapeYKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionLandscapeYKey] : 0;
+        _quickActionPortraitX = [OAProfileDouble withKey:quickActionPortraitXKey defValue:0];
+        _quickActionPortraitY = [OAProfileDouble withKey:quickActionPortraitYKey defValue:0];
+        _quickActionLandscapeX = [OAProfileDouble withKey:quickActionLandscapeXKey defValue:0];
+        _quickActionLandscapeY = [OAProfileDouble withKey:quickActionLandscapeYKey defValue:0];
+        [_registeredPreferences setObject:_quickActionPortraitX forKey:@"quick_fab_margin_x_portrait_margin"];
+        [_registeredPreferences setObject:_quickActionPortraitY forKey:@"quick_fab_margin_y_portrait_margin"];
+        [_registeredPreferences setObject:_quickActionLandscapeX forKey:@"quick_fab_margin_x_landscape_margin"];
+        [_registeredPreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
     
         _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
         
         // Direction Appearance
         _activeMarkers = [OAProfileActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
-        _distanceIndicationVisability = [OAProfileBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
+        [_registeredPreferences setObject:_activeMarkers forKey:@"displayed_markers_widgets_count"];
+        _distanceIndicationVisibility = [OAProfileBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
+        [_registeredPreferences setObject:_distanceIndicationVisibility forKey:@"markers_distance_indication_enabled"];
         _distanceIndication = [OAProfileDistanceIndicationConstant withKey:mapDistanceIndicationKey defValue:TOP_BAR_DISPLAY];
-        _lastPositionWidgetDisplay = [OAProfileDistanceIndicationConstant withKey:mapLastPositionWidgetIndicatorKey defValue:TOP_BAR_DISPLAY];
+        [_registeredPreferences setObject:_distanceIndication forKey:@"map_markers_mode"];
         _arrowsOnMap = [OAProfileBoolean withKey:mapArrowsOnMapKey defValue:YES];
+        [_registeredPreferences setObject:_arrowsOnMap forKey:@"show_arrows_to_first_markers"];
         _directionLines = [OAProfileBoolean withKey:mapDirectionLinesKey defValue:YES];
+        [_registeredPreferences setObject:_directionLines forKey:@"show_lines_to_first_markers"];
 
         [self fetchImpassableRoads];
     }
@@ -2497,18 +2545,14 @@
 
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y
 {
-    _quickActionPortraitX = x;
-    _quickActionPortraitY = y;
-    [[NSUserDefaults standardUserDefaults] setFloat:x forKey:quickActionPortraitXKey];
-    [[NSUserDefaults standardUserDefaults] setFloat:y forKey:quickActionPortraitYKey];
+    [_quickActionPortraitX set:x];
+    [_quickActionPortraitY set:y];
 }
 
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y
 {
-    _quickActionLandscapeX = x;
-    _quickActionLandscapeY = y;
-    [[NSUserDefaults standardUserDefaults] setFloat:x forKey:quickActionLandscapeXKey];
-    [[NSUserDefaults standardUserDefaults] setFloat:y forKey:quickActionLandscapeYKey];
+    [_quickActionLandscapeX set:x];
+    [_quickActionLandscapeY set:y];
 }
 
 - (NSString *) getDefaultVoiceProvider

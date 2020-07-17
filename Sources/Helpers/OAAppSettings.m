@@ -92,7 +92,6 @@
 #define customAppModesKey @"customAppModes"
 
 #define mapInfoControlsKey @"mapInfoControls"
-#define showDestinationArrowKey @"showDestinationArrow"
 #define transparentMapThemeKey @"transparentMapTheme"
 #define showStreetNameKey @"showStreetName"
 #define centerPositionOnMapKey @"centerPositionOnMap"
@@ -1401,11 +1400,16 @@
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
 
         // Map Settings
-        _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
-        _mapSettingShowOfflineEdits = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOfflineEditsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOfflineEditsKey] : YES;
-        _mapSettingShowOnlineNotes = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOnlineNotesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOnlineNotesKey] : NO;
-        _mapSettingShowOverlayOpacitySlider = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOverlayOpacitySliderKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOverlayOpacitySliderKey] : NO;
-        _mapSettingShowUnderlayOpacitySlider = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowUnderlayOpacitySliderKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowUnderlayOpacitySliderKey] : NO;
+        _mapSettingShowFavorites = [OAProfileBoolean withKey:mapSettingShowFavoritesKey defValue:NO];
+        _mapSettingShowOfflineEdits = [OAProfileBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
+        _mapSettingShowOnlineNotes = [OAProfileBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
+        _mapSettingShowOverlayOpacitySlider = [OAProfileBoolean withKey:mapSettingShowOverlayOpacitySliderKey defValue:NO];
+        _mapSettingShowUnderlayOpacitySlider = [OAProfileBoolean withKey:mapSettingShowUnderlayOpacitySliderKey defValue:NO];
+        
+        [_registeredPreferences setObject:_mapSettingShowFavorites forKey:@"show_favorites"];
+        [_registeredPreferences setObject:_mapSettingShowOfflineEdits forKey:@"show_osm_edits"];
+        [_registeredPreferences setObject:_mapSettingShowOnlineNotes forKey:@"show_osm_bugs"];
+    
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
@@ -1505,24 +1509,28 @@
         [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.BOAT];
         [_defaultSpeed setModeDefaultValue:@40.0 mode:OAApplicationMode.AIRCRAFT];
         [_defaultSpeed setModeDefaultValue:@1.38 mode:OAApplicationMode.SKI];
+        [_registeredPreferences setObject:_defaultSpeed forKey:@"default_speed"];
 
         _minSpeed = [OAProfileDouble withKey:minSpeedKey defValue:0.];
         _maxSpeed = [OAProfileDouble withKey:maxSpeedKey defValue:0.];
         _routeStraightAngle = [OAProfileDouble withKey:routeStraightAngleKey defValue:30.];
         
-        _showDestinationArrow = [OAProfileBoolean withKey:showDestinationArrowKey defValue:NO];
-        [_showDestinationArrow setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_minSpeed forKey:@"min_speed"];
+        [_registeredPreferences setObject:_maxSpeed forKey:@"max_speed"];
+        [_registeredPreferences setObject:_routeStraightAngle forKey:@"routing_straight_angle"];
 
         _transparentMapTheme = [OAProfileBoolean withKey:transparentMapThemeKey defValue:YES];
         [_transparentMapTheme setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];
         [_transparentMapTheme setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_transparentMapTheme setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_transparentMapTheme forKey:@"transparent_map_theme"];
 
         _showStreetName = [OAProfileBoolean withKey:showStreetNameKey defValue:NO];
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode DEFAULT]];
         [_showStreetName setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_showStreetName forKey:@"show_street_name"];
         
         _showArrivalTime = [OAProfileBoolean withKey:showArrivalTimeKey defValue:YES];
         _showIntermediateArrivalTime = [OAProfileBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
@@ -1681,7 +1689,9 @@
         _gpxCalculateRtept = [[NSUserDefaults standardUserDefaults] objectForKey:gpxCalculateRteptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxCalculateRteptKey] : YES;
         _gpxRouteCalc = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcKey] : NO;
 
-        _voiceMute = [[NSUserDefaults standardUserDefaults] objectForKey:voiceMuteKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:voiceMuteKey] : NO;
+        _voiceMute = [OAProfileBoolean withKey:voiceMuteKey defValue:NO];
+        [_registeredPreferences setObject:_voiceMute forKey:@"voice_mute"];
+        
         _voiceProvider = [[NSUserDefaults standardUserDefaults] objectForKey:voiceProviderKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:voiceProviderKey] : nil;
         _interruptMusic = [OAProfileBoolean withKey:interruptMusicKey defValue:NO];
         [_registeredPreferences setObject:_interruptMusic forKey:@"interrupt_music"];
@@ -1721,7 +1731,7 @@
     
         _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
         
-        // Direction Appearance
+        // riirection Appearance
         _activeMarkers = [OAProfileActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
         [_registeredPreferences setObject:_activeMarkers forKey:@"displayed_markers_widgets_count"];
         _distanceIndicationVisibility = [OAProfileBoolean withKey:mapDistanceIndicationVisabilityKey defValue:YES];
@@ -1736,6 +1746,11 @@
         [self fetchImpassableRoads];
     }
     return self;
+}
+
+- (OAProfileSetting *) getSettingById:(NSString *)stringId
+{
+    return [_registeredPreferences objectForKey:stringId];
 }
 
 // Common Settings
@@ -2111,12 +2126,6 @@
         [self setPlugins:set];
 }
 
-- (void) setShowRelativeBearing:(BOOL)showRelativeBearing
-{
-    _showRelativeBearing = showRelativeBearing;
-    [[NSUserDefaults standardUserDefaults] setBool:_showRelativeBearing forKey:showRelativeBearingKey];    
-}
-
 - (void) setMapSettingShowRecordingTrack:(BOOL)mapSettingShowRecordingTrack
 {
     _mapSettingShowRecordingTrack = mapSettingShowRecordingTrack;
@@ -2169,24 +2178,6 @@
 {
     _lastSearchedCity = lastSearchedCity;
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedLongLong:lastSearchedCity] forKey:lastSearchedCityKey];
-}
-
-- (void) setTrackMinDistance:(float)saveTrackMinDistance
-{
-    _saveTrackMinDistance = saveTrackMinDistance;
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:_saveTrackMinDistance] forKey:saveTrackMinDistanceKey];
-}
-
-- (void) setTrackPrecision:(float)trackPrecision
-{
-    _saveTrackPrecision = trackPrecision;
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:_saveTrackPrecision] forKey:saveTrackPrecisionKey];
-}
-
-- (void) setTrackMinSpeed:(float)trackMinSpeeed
-{
-    _saveTrackMinSpeed = trackMinSpeeed;
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:_saveTrackMinSpeed] forKey:saveTrackMinSpeedKey];
 }
 
 - (void)  setLastSearchedCityName:(NSString *)lastSearchedCityName
@@ -2457,12 +2448,6 @@
 {
     _gpxRouteCalc = gpxRouteCalc;
     [[NSUserDefaults standardUserDefaults] setBool:_gpxRouteCalc forKey:gpxRouteCalcKey];
-}
-
-- (void) setVoiceMute:(BOOL)voiceMute
-{
-    _voiceMute = voiceMute;
-    [[NSUserDefaults standardUserDefaults] setBool:_voiceMute forKey:voiceMuteKey];
 }
 
 - (void) setVoiceProvider:(NSString *)voiceProvider

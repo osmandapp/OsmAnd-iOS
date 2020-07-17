@@ -508,7 +508,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return NO;
     }
     NSDictionary *settings = (NSDictionary *) json;
-    for (NSString *key in settings.allValues)
+    for (NSString *key in settings)
     {
         [self.item readPreferenceFromJson:key value:settings[key]];
     }
@@ -672,7 +672,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     
     if (![_appModeBeanPrefsIds containsObject:key])
     {
-        // TODO: readPrefs
+        OAProfileSetting *setting = [settings getSettingById:key];
+        if (setting)
+            [setting setValueFromString:value appMode:_appMode];
     }
 }
 

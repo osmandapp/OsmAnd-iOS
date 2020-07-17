@@ -329,8 +329,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic, readonly) NSArray *rtlLanguages;
 
 
-@property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
-@property (readonly, nonatomic) BOOL nightMode;
+@property (nonatomic) OAProfileInteger *settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (readonly, nonatomic) OAProfileBoolean *nightMode;
 @property (assign, nonatomic) EOAMetricsConstant metricSystem;
 @property (assign, nonatomic) BOOL drivingRegionAutomatic;
 @property (assign, nonatomic) EOADrivingRegion drivingRegion;
@@ -343,11 +343,11 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
 
-@property (assign, nonatomic) BOOL mapSettingShowFavorites;
-@property (assign, nonatomic) BOOL mapSettingShowOfflineEdits;
-@property (assign, nonatomic) BOOL mapSettingShowOnlineNotes;
-@property (assign, nonatomic) BOOL mapSettingShowOverlayOpacitySlider;
-@property (assign, nonatomic) BOOL mapSettingShowUnderlayOpacitySlider;
+@property (nonatomic) OAProfileBoolean *mapSettingShowFavorites;
+@property (nonatomic) OAProfileBoolean *mapSettingShowOfflineEdits;
+@property (nonatomic) OAProfileBoolean *mapSettingShowOnlineNotes;
+@property (nonatomic) OAProfileBoolean *mapSettingShowOverlayOpacitySlider;
+@property (nonatomic) OAProfileBoolean *mapSettingShowUnderlayOpacitySlider;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
 
 @property (nonatomic) NSString *billingUserId;
@@ -452,7 +452,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL gpxRouteCalcOsmandParts;
 @property (assign, nonatomic) BOOL gpxCalculateRtept;
 @property (assign, nonatomic) BOOL gpxRouteCalc;
-@property (assign, nonatomic) BOOL voiceMute;
+@property (nonatomic) OAProfileBoolean *voiceMute;
 @property (nonatomic) NSString *voiceProvider;
 @property (nonatomic) OAProfileBoolean *interruptMusic;
 @property (nonatomic) OAProfileBoolean *snapToRoad;
@@ -490,7 +490,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *showNearbyFavorites;
 @property (nonatomic) OAProfileBoolean *showNearbyPoi;
 
-@property (nonatomic) OAProfileBoolean *showDestinationArrow;
 @property (nonatomic) OAProfileBoolean *transparentMapTheme;
 @property (nonatomic) OAProfileBoolean *showStreetName;
 @property (nonatomic) OAProfileBoolean *centerPositionOnMap;
@@ -527,6 +526,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 // Contour Lines
 @property (nonatomic) OAProfileString *contourLinesZoom;
+
+- (OAProfileSetting *) getSettingById:(NSString *)stringId;
 
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;

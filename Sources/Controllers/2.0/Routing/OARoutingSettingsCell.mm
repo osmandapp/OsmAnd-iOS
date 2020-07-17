@@ -98,7 +98,7 @@
 - (IBAction)soundButtonPressed:(id)sender
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setVoiceMute:!settings.voiceMute];
+    [settings.voiceMute set:![settings.voiceMute get]];
     [[OARoutingHelper sharedInstance].getVoiceRouter setMute:settings.voiceMute];
     [self refreshSoundButton];
 }

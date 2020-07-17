@@ -417,7 +417,7 @@
 
 - (void) setSelected:(BOOL)isChecked
 {
-    self.settings.voiceMute = isChecked;
+    [self.settings.voiceMute set:isChecked mode:self.getApplicationMode];
     [_voiceRouter setMute:isChecked];
     if (self.delegate)
         [self.delegate updateParameters];

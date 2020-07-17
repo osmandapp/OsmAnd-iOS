@@ -585,17 +585,17 @@
                 {
                     record = true;
                 }
-                float minDistance = settings.saveTrackMinDistance;
+                float minDistance = [settings.saveTrackMinDistance get];
                 if(minDistance > 0 && &lastPoint != nil && OsmAnd::Utilities::distance(lastPoint.longitude, lastPoint.latitude,
                                                                                        location.coordinate.longitude, location.coordinate.latitude) <
                                                                                        minDistance) {
                     record = false;
                 }
-                float precision = settings.saveTrackPrecision;
+                float precision = [settings.saveTrackPrecision get];
                 if(precision > 0 && (!location.horizontalAccuracy || location.horizontalAccuracy > precision)) {
                     record = false;
                 }
-                float minSpeed = settings.saveTrackMinSpeed;
+                float minSpeed = [settings.saveTrackMinSpeed get];
                 if(minSpeed > 0 && (!location.speed || (location.speed * 0.001 < minSpeed))) {
                     record = false;
                 }

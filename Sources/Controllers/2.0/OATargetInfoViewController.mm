@@ -74,6 +74,11 @@
     return _height;
 }
 
+- (UIFont *) getFont
+{
+    return [UIFont systemFontOfSize:17.0 weight:_isUrl ? UIFontWeightMedium : UIFontWeightRegular];
+}
+
 @end
 
 @interface OATargetInfoViewController() <OACollapsableCardViewDelegate>
@@ -322,10 +327,10 @@
         else
         {
             NSString *text = row.textPrefix.length == 0 ? row.text : [NSString stringWithFormat:@"%@: %@", row.textPrefix, row.text];
-            CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[UIFont systemFontOfSize:15.0]];
-            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[UIFont systemFontOfSize:15.0]];
+            CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[row getFont]];
+            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[row getFont]];
             
-            rowHeight = MAX(bounds.height, 27.0) + 12.0 + 11.0;
+            rowHeight = MAX(bounds.height, 28.0) + 11.0 + 11.0;
             row.height = rowHeight;
             row.moreText = fullBounds.height > bounds.height;
         }
@@ -504,11 +509,7 @@
             
             cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
             cell.textView.textColor = info.textColor;
-            if (info.isUrl)
-                cell.textView.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium];
-            else
-                cell.textView.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
-            
+            cell.textView.font = [info getFont];
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
 
             return cell;

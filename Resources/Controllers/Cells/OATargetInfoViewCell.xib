@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -27,9 +27,9 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oHV-ey-kgk">
                         <rect key="frame" x="60" y="11" width="250" height="28"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="28" id="UXb-At-Nu5"/>
+                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="150" id="iPU-Lt-pnp"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -37,8 +37,10 @@
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="oHV-ey-kgk" secondAttribute="trailing" constant="10" id="5Oh-oi-xyP"/>
                     <constraint firstItem="oVD-Us-vNC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="9aj-F8-nVI"/>
+                    <constraint firstItem="oHV-ey-kgk" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="Lcf-K9-11T"/>
                     <constraint firstItem="oHV-ey-kgk" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="WyY-s3-MmF"/>
                     <constraint firstItem="oHV-ey-kgk" firstAttribute="leading" secondItem="oVD-Us-vNC" secondAttribute="trailing" constant="24" id="war-az-ewn"/>
+                    <constraint firstAttribute="bottom" secondItem="oHV-ey-kgk" secondAttribute="bottom" constant="11" id="yTv-pR-TYl"/>
                     <constraint firstItem="oVD-Us-vNC" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="ze5-Ft-fdP"/>
                 </constraints>
             </tableViewCellContentView>

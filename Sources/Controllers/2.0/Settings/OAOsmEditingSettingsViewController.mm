@@ -50,7 +50,7 @@ static const NSInteger credentialsSectionIndex = 0;
 static const NSInteger offlineSectionIndex = 1;
 static const NSInteger sectionCount = 2;
 
--(void) applyLocalization
+- (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"product_title_osm_editing");
 }

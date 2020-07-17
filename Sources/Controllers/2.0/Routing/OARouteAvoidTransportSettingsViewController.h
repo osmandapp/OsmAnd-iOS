@@ -7,10 +7,10 @@
 //
 
 #import "OARouteSettingsBaseViewController.h"
-#import "OANavigationSettingsViewController.h"
+#import "OABaseSettingsViewController.h"
 
 @interface OARouteAvoidTransportSettingsViewController : OARouteSettingsBaseViewController<UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic) id<OANavigationSettingsDelegate> delegate;
+@property (nonatomic) id<OASettingsDataDelegate> delegate;
 
 @end

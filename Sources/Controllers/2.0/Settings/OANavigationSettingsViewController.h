@@ -7,6 +7,7 @@
 //
 
 #import "OACompoundViewController.h"
+#import "OABaseSettingsViewController.h"
 
 typedef enum
 {
@@ -30,13 +31,6 @@ typedef enum
     
 } kNavigationSettingsScreen;
 
-@protocol OANavigationSettingsDelegate <NSObject>
-
-@required
-- (void) onSettingChanged;
-
-@end
-
 @class OAApplicationMode;
 
 @interface OANavigationSettingsViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
@@ -48,7 +42,7 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *appModeButton;
 
-@property (nonatomic) id<OANavigationSettingsDelegate> delegate;
+@property (nonatomic) id<OASettingsDataDelegate> delegate;
 
 + (NSDictionary *) getSortedVoiceProviders;
 

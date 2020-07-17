@@ -216,7 +216,7 @@
 {
     NSInteger res = 0;
     for (OADestination *destination in _app.data.destinations)
-        if (!destination.routePoint)
+        if (!destination.routePoint && !destination.hidden)
             res++;
 
     return res;

@@ -12,6 +12,8 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OASizes.h"
+#import "OrderedDictionary.h"
+#import "OAFileNameTranslationHelper.h"
 #import <UIKit/UIDevice.h>
 
 @implementation UIBezierPath (util)
@@ -717,7 +719,7 @@
 
 + (NSString *) appendSpeed:(float)value
 {
-    BOOL kilometers = [OAAppSettings sharedManager].metricSystem == KILOMETERS_AND_METERS;
+    BOOL kilometers = [[OAAppSettings sharedManager].metricSystem get] == KILOMETERS_AND_METERS;
     value = kilometers ? value : round(value / 0.3048f);
     NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"units_kmh") : OALocalizedString(@"units_mph")];
     return value == 0.f ? OALocalizedString(@"not_selected") : value == 0.000001f ? @">0" : [NSString stringWithFormat:distUnitsFormat, value];
@@ -1347,6 +1349,21 @@ static const double d180PI = 180.0 / M_PI_2;
             [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -strokeWidth] range:valueRange];
     }
     return string;
+}
+
++ (NSDictionary *) getSortedVoiceProviders
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSArray *screenVoiceProviderNames = [OAFileNameTranslationHelper getVoiceNames:settings.ttsAvailableVoices];
+    OrderedDictionary *mapping = [OrderedDictionary dictionaryWithObjects:settings.ttsAvailableVoices forKeys:screenVoiceProviderNames];
+    
+    NSArray *sortedKeys = [mapping.allKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    MutableOrderedDictionary *res = [[MutableOrderedDictionary alloc] init];
+    for (NSString *key in sortedKeys)
+    {
+        [res setObject:[mapping objectForKey:key] forKey:key];
+    }
+    return res;
 }
 
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle

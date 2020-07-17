@@ -249,24 +249,6 @@
     
     OADestinationItem* item = [self getItem:row];
 
-    MGSwipeButton *show = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"waypoint_map_enable"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
-                                 {
-                                     NSIndexPath * indexPath = [NSIndexPath indexPathForRow:row inSection:self.section];
-                                     _activeIndexPath = [indexPath copy];
-                                     [self showOnMap:item.destination];
-                                     
-                                     return YES;
-                                 }];
-    
-    MGSwipeButton *hide = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"waypoint_map_disable"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
-                           {
-                               NSIndexPath * indexPath = [NSIndexPath indexPathForRow:row inSection:self.section];
-                               _activeIndexPath = [indexPath copy];
-                               [self hideOnMap:item.destination];
-                               
-                               return YES;
-                           }];
-
     MGSwipeButton *deactivate = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_removepoint"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
                                  {
                                      if (self.delegate)
@@ -278,23 +260,7 @@
                                      
                                      return YES;
                                  }];
-    
-    if (item.destination.hidden)
-        return @[deactivate, show];
-    else
-        return @[deactivate, hide];
-}
-
-- (void)showOnMap:(OADestination *)destination
-{
-    [[OADestinationsHelper instance] showOnMap:destination];
-    [[OARootViewController instance].mapPanel hideDestinationCardsView];
-}
-
-- (void)hideOnMap:(OADestination *)destination
-{
-    [[OADestinationsHelper instance] hideOnMap:destination];
-    [[OARootViewController instance].mapPanel hideDestinationCardsView];
+    return @[deactivate];
 }
 
 - (void)onDestinationRemove:(id)observable withKey:(id)key

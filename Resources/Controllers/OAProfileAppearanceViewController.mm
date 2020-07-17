@@ -321,7 +321,7 @@
             cell = (OATextInputCell *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
         }
-        cell.inputField.placeholder = item[@"title"];
+        cell.inputField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:item[@"title"] attributes:@{NSForegroundColorAttributeName:UIColorFromRGB(color_text_footer)}];
         cell.inputField.text = _profileName;
         cell.inputField.delegate = self;
         return cell;
@@ -344,6 +344,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
+            cell.valueLabel.tintColor = UIColorFromRGB(color_text_footer);
             cell.currentColor = _currentColor;
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -407,6 +408,14 @@
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
+        headerView.textLabel.textColor  = UIColorFromRGB(color_text_footer);
+    }
 }
 
 #pragma mark - OAColorsTableViewCellDelegate

@@ -27,7 +27,7 @@
 
 @implementation OACoordinatesFormatViewController
 {
-    NSArray<NSArray *> *_data;
+    NSArray<NSDictionary *> *_data;
     OAAppSettings *_settings;
 }
 

@@ -25,7 +25,7 @@
 @implementation OAMapBehaviorViewController
 {
     OAAppSettings *_settings;
-    NSArray<NSArray *> *_data;
+    NSArray<NSDictionary *> *_data;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode

@@ -208,7 +208,7 @@
     self = [super init];
     if (self) {
         _file = document;
-        _leftSide = [OADrivingRegion isLeftHandDriving:[OAAppSettings sharedManager].drivingRegion];
+        _leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
     }
     return self;
 }

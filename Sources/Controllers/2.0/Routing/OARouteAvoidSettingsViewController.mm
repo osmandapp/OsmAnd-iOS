@@ -127,7 +127,7 @@
     [self setupView];
     [self.tableView reloadData];
     if (self.delegate)
-        [self.delegate onSettingChanged];
+        [self.delegate onSettingsChanged];
 }
 
 + (NSString *) getDescr:(OAAvoidRoadInfo *)roadInfo
@@ -371,7 +371,7 @@
         }
     }
     if (self.delegate)
-        [self.delegate onSettingChanged];
+        [self.delegate onSettingsChanged];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

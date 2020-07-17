@@ -283,7 +283,7 @@
             [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
         }
         if (self.delegate)
-            [self.delegate onSettingChanged];
+            [self.delegate onSettingsChanged];
     }
 }
 

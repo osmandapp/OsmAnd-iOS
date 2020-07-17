@@ -67,6 +67,8 @@
 #define kFooterId @"TableViewSectionFooter"
 
 #define MAX_PEDESTRIAN_ROUTE_DURATION (30 * 60)
+#define kSoundButtonRow 2
+#define kSoundButtonSection 0
 
 static int directionInfo = -1;
 static BOOL visible = false;
@@ -1134,6 +1136,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
     if ([_routingHelper isRouteBeingCalculated] || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
         [_tableView reloadData];
+    else
+        [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kSoundButtonRow inSection:kSoundButtonSection]] withRowAnimation:UITableViewRowAnimationNone];
     [self setupGoButton];
     [_routingHelper recalculateRouteDueToSettingsChange];
 }

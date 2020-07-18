@@ -64,7 +64,7 @@
     for (NSInteger i = 0; i < _sortedRoutingProfiles.count; i++)
     {
         OARoutingProfileDataObject *profile = _sortedRoutingProfiles[i];
-        if ((lastFileName == nil && (profile.fileName == nil || [profile.fileName containsString:@"OsmAnd Maps.app"])) || [lastFileName isEqualToString:profile.fileName])
+        if ((lastFileName == nil && profile.fileName == nil) || [lastFileName isEqualToString:profile.fileName])
         {
             [sectionData addObject:@{
                 @"type" : @"OAIconTextCell",

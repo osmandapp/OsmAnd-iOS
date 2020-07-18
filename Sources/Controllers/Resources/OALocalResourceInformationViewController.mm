@@ -455,7 +455,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     if ([item isKindOfClass:OASqliteDbResourceItem.class])
     {
         OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *)item;
-        self.regionTitle = sqlite.fileName;
+        self.regionTitle = sqlite.title;
         [self initWithLocalSqliteDbItem:sqlite];
     }
     else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])

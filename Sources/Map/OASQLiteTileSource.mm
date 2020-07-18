@@ -95,7 +95,6 @@
 - (void) initDatabase
 {
     _dbQueue = dispatch_queue_create("sqliteTileSourceDbQueue", DISPATCH_QUEUE_SERIAL);
-    
     dispatch_sync(_dbQueue, ^{
         
         if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
@@ -117,8 +116,17 @@
                         [mapper setObject:[NSNumber numberWithInteger:i] forKey:columnName];
                     }
                     
+                    NSNumber *titleId = [mapper objectForKey:@"title"];
+                    if (titleId)
+                        _title = [self.class getValueOf:[titleId intValue] statement:statement];
+                    else
+                        [self addInfoColumn:@"title" value:[_name stringByReplacingOccurrencesOfString:@"_" withString:@" "]];
+
+                    if (_title.length == 0)
+                        _title = [_name stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    
                     NSNumber *ruleId = [mapper objectForKey:@"rule"];
-                    if(ruleId)
+                    if (ruleId)
                         _rule = [self.class getValueOf:[ruleId intValue] statement:statement];
                     
                     NSNumber *refererId = [mapper objectForKey:@"referer"];
@@ -527,7 +535,7 @@
             sqlite3_bind_int(statement, 3, [self getFileZoom:zoom]);
             sqlite3_bind_int(statement, 4, 0);
 
-            sqlite3_bind_blob(statement, 5, [data bytes], data.length, SQLITE_TRANSIENT);
+            sqlite3_bind_blob(statement, 5, [data bytes], (int) data.length, SQLITE_TRANSIENT);
             if (_timeSupported)
                 sqlite3_bind_int64(statement, 6, (int64_t)([[NSDate date] timeIntervalSince1970] * 1000.0));
             
@@ -539,7 +547,7 @@
     });
 }
 
-- (void) updateInfo:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile
+- (void) updateInfo:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile title:(NSString *)title
 {
     dispatch_async(_dbQueue, ^{
         
@@ -548,7 +556,7 @@
         if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
         {
             BOOL isOnlineSqlite = [self supportsTileDownload];
-            NSString *query = isOnlineSqlite ? @"UPDATE info SET timecolumn = ?, expireminutes = ?, url = ?, ellipsoid = ?, minzoom = ?, maxzoom = ?" : @"UPDATE info SET ellipsoid = ?, minzoom = ?, maxzoom = ?";
+            NSString *query = isOnlineSqlite ? @"UPDATE info SET timecolumn = ?, expireminutes = ?, url = ?, title = ?, ellipsoid = ?, minzoom = ?, maxzoom = ?" : @"UPDATE info SET ellipsoid = ?, minzoom = ?, maxzoom = ?";
             
             const char *update_stmt = [query UTF8String];
             sqlite3_prepare_v2(_db, update_stmt, -1, &statement, NULL);
@@ -569,9 +577,10 @@
                 sqlite3_bind_text(statement, 1, [timeSupported UTF8String], -1, 0);
                 sqlite3_bind_text(statement, 2, [timeInMinutes UTF8String], -1, 0);
                 sqlite3_bind_text(statement, 3, [url UTF8String], -1, 0);
-                sqlite3_bind_int(statement, 4, isEllipticYTile ? 1 : 0);
-                sqlite3_bind_text(statement, 5, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
-                sqlite3_bind_text(statement, 6, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 4, [title UTF8String], -1, 0);
+                sqlite3_bind_int(statement, 5, isEllipticYTile ? 1 : 0);
+                sqlite3_bind_text(statement, 6, [[NSString stringWithFormat:@"%d", minZ] UTF8String], -1, 0);
+                sqlite3_bind_text(statement, 7, [[NSString stringWithFormat:@"%d", maxZ] UTF8String], -1, 0);
             }
             else
             {
@@ -677,7 +686,7 @@
     sqlite3_stmt *statement;
     if (sqlite3_open([path UTF8String], &tmpDatabase) == SQLITE_OK)
     {
-        const char *sqlInfoStatement = "CREATE TABLE info (minzoom TEXT, maxzoom TEXT, url TEXT, ellipsoid INTEGER, rule TEXT, expireminutes TEXT, timecolumn TEXT, referer TEXT, tilenumbering TEXT)";
+        const char *sqlInfoStatement = "CREATE TABLE info (minzoom TEXT, maxzoom TEXT, url TEXT, ellipsoid INTEGER, rule TEXT, expireminutes TEXT, timecolumn TEXT, referer TEXT, tilenumbering TEXT, title TEXT)";
         const char *sqlTilesStatement = "CREATE TABLE tiles (x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL, s INTEGER, image BLOB, time INTEGER, PRIMARY KEY (x, y, z))";
         const char *sqlSIndexStatement = "CREATE INDEX index_tiles_on_s ON tiles (s)";
         const char *sqlXIndexStatement = "CREATE INDEX index_tiles_on_x ON tiles (x)";
@@ -692,7 +701,7 @@
         sqlite3_exec(tmpDatabase, sqlYIndexStatement, NULL, NULL, &error);
         sqlite3_exec(tmpDatabase, sqlZIndexStatement, NULL, NULL, &error);
                 
-        NSString *query = @"INSERT OR REPLACE INTO info(minzoom, maxzoom, url, ellipsoid, rule, expireminutes, timecolumn, referer, tilenumbering) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        NSString *query = @"INSERT OR REPLACE INTO info(minzoom, maxzoom, url, title, ellipsoid, rule, expireminutes, timecolumn, referer, tilenumbering) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         const char *update_stmt = [query UTF8String];
         sqlite3_prepare_v2(tmpDatabase, update_stmt, -1, &statement, NULL);
         
@@ -705,12 +714,13 @@
         sqlite3_bind_text(statement, 1, [[NSString stringWithFormat:@"%d", minZoom] UTF8String], -1, 0);
         sqlite3_bind_text(statement, 2, [[NSString stringWithFormat:@"%d", maxZoom] UTF8String], -1, 0);
         sqlite3_bind_text(statement, 3, [parameters[@"url"] UTF8String], -1, 0);
-        sqlite3_bind_int(statement, 4, [parameters[@"ellipsoid"] intValue]);
-        sqlite3_bind_text(statement, 5, [parameters[@"rule"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 6, [parameters[@"expireminutes"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 7, [parameters[@"timecolumn"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 8, [parameters[@"referer"] UTF8String], -1, 0);
-        sqlite3_bind_text(statement, 9, [parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : @"BigPlanet" UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 4, [parameters[@"title"] UTF8String], -1, 0);
+        sqlite3_bind_int(statement, 5, [parameters[@"ellipsoid"] intValue]);
+        sqlite3_bind_text(statement, 6, [parameters[@"rule"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 7, [parameters[@"expireminutes"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 8, [parameters[@"timecolumn"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 9, [parameters[@"referer"] UTF8String], -1, 0);
+        sqlite3_bind_text(statement, 10, [parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : @"BigPlanet" UTF8String], -1, 0);
                 
         sqlite3_step(statement);
         sqlite3_finalize(statement);
@@ -737,7 +747,6 @@
     {
         NSString *querySQL = @"SELECT url FROM info LIMIT 1";
         sqlite3_stmt *statement;
-        
         const char *query_stmt = [querySQL UTF8String];
         if (sqlite3_prepare_v2(db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
         {
@@ -756,6 +765,33 @@
         sqlite3_close(db);
     }
     return res;
+}
+
++ (NSString *) getTitleOf:(NSString *)filePath
+{
+    NSString *title = nil;
+    sqlite3 *db;
+    if (sqlite3_open([filePath UTF8String], &db) == SQLITE_OK)
+    {
+        NSString *querySQL = @"SELECT title FROM info LIMIT 1";
+        sqlite3_stmt *statement;
+        const char *query_stmt = [querySQL UTF8String];
+        if (sqlite3_prepare_v2(db, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+        {
+            while (sqlite3_step(statement) == SQLITE_ROW)
+            {
+                int columnCount = sqlite3_column_count(statement);
+                if (columnCount == 1)
+                {
+                    title = [self.class getValueOf:0 statement:statement];
+                    break;
+                }
+            }
+            sqlite3_finalize(statement);
+        }
+        sqlite3_close(db);
+    }
+    return title.length > 0 ? title : [[[filePath lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];;
 }
 
 @end

@@ -121,6 +121,10 @@
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
 "driving_region_automatic" = "Automatic";
+"routing_attr_length_name" = "Length limit";
+"default_speed" = "Default speed";
+"min_speed" = "Min. speed";
+"max_speed" = "Max. speed";
 
 // Trip recording settings
 "save_global_track_interval" = "General logging interval";
@@ -217,7 +221,7 @@
 "route_params" = "Route parameters";
 "fast_route_mode" = "Fastest route";
 "nav_type_title" = "Navigation type";
-"voice_anounces" = "Voice anounces";
+"voice_prompts" = "Voice prompts";
 "screen_alerts" = "Screen alerts";
 "vehicle_parameters" = "Vehicle parameters";
 "map_behavior" = "Map behavior";
@@ -226,6 +230,9 @@
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "nav_type_straight_line" = "Straight line";
 "nav_type_direct_to" = "Direct-to-point";
+"nav_type_brouter" = "BRouter";
+"nav_type_ski" = "Ski";
+"nav_type_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
@@ -234,6 +241,7 @@
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
 "choose_auto_follow_route" = "Auto-center map view";
 "choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
+"choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Auto zoom map";
 "auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
 "snap_to_road" = "Snap to road";
@@ -260,8 +268,17 @@
 "osm_live_routing" = "OsmAnd Live navigation";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
-"osmand_routing" = "Osmand routing";
-"import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it on routing folder in iTunes.";
+"osmand_routing" = "OsmAnd routing";
+"special_routing" = "Special routing";
+"import_routing_file_descr" = "You can import routing file from any cloud storage app or by putting it into the OsmAnd folder in iTunes.";
+"recalculate_route" = "Recalculate route in case of deviation";
+"avoid_routes_and_road" = "Avoid certain routes and road types";
+"route_recalculation_descr" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
+"select_distance_for_recalculation" = "Select the distance after which the route will be recalculated.";
+"arrival_announcement_frequency" = "How soon do you want the arrival announcement?";
+"speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
+"only_manually" = "Only manually";
+"instructions_repeat" = "Tap \"Next turn\" widget for instructions repeat";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
@@ -358,7 +375,7 @@
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
 "traffic_warning_tunnel" = "Tunnel ahead";
-
+"announce" = "Announce";
 
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";
@@ -386,8 +403,8 @@
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
-
-
+"tones" = "tones";
+"meters" = "meters";
 
 "nothing_found" = "Nothing found: %@";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
@@ -635,6 +652,14 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
+"settings_app_theme" = "Application theme";
+"app_theme_light" = "Light";
+"do_not_rotate" = "Do not rotate";
+"allow_3D_view" = "2.5D view";
+"units_of_speed" = "Units of speed";
+"angular_measurment_units" = "Angular measurment units";
+"units_and_formats" = "Units & formats";
+"device_settings" = "Device settings";
 
 // Intro
 "intro_skip" = "Skip";
@@ -666,7 +691,7 @@
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 
 "coordinates_example" = "Example";
-"utm_description" = "OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO format.";
+"utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 
 "sett_lang_local" = "Local";
@@ -1374,6 +1399,7 @@
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
+"default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
 
 "plugins" = "Plugins";
 "open_map_settings" = "Open Map Settings";
@@ -1587,6 +1613,7 @@
 "rendering_value_high_name" = "High";
 "routing_attr_difficulty_preference_description" = "Prefer routes of this difficulty, although routing over harder or easier pistes is still possible if shorter.";
 "routing_attr_height_description" = "Specify vehicle height to be permitted on routes.";
+"touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
 "routing_attr_height_obstacles_name" = "Use elevation data";
 "routing_attr_avoid_toll_name" = "No toll roads";
 "rendering_attr_appMode_description" = "Optimize map for";
@@ -1872,6 +1899,7 @@
 "routing_attr_allow_motorway_description" = "Allows motorways.";
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
+"vehicle_height_descr" = "Provide your vehicle height, some routes restrictions may apply for high vehicles.";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";

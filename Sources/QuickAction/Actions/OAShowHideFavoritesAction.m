@@ -22,7 +22,7 @@ static OAQuickActionType *TYPE;
 - (void)execute
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setMapSettingShowFavorites:!settings.mapSettingShowFavorites];
+    [settings setShowFavorites:![settings.mapSettingShowFavorites get]];
 }
 
 - (BOOL)isActionWithSlash

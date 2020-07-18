@@ -22,7 +22,7 @@ static OAQuickActionType *TYPE;
 - (void)execute
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setMapSettingShowOfflineEdits:!settings.mapSettingShowOfflineEdits];
+    [settings setShowOfflineEdits:![settings.mapSettingShowOfflineEdits get]];
 }
 
 - (BOOL)isActionWithSlash

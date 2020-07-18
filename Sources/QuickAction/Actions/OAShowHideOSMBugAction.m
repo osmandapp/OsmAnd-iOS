@@ -22,7 +22,7 @@ static OAQuickActionType *TYPE;
 - (void)execute
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setMapSettingShowOnlineNotes:!settings.mapSettingShowOnlineNotes];
+    [settings setShowOnlineNotes:![settings.mapSettingShowOnlineNotes get]];
 }
 
 - (BOOL)isActionWithSlash

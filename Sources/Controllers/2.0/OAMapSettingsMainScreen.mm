@@ -238,11 +238,11 @@
         _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
         NSMutableArray *categoriesList = [NSMutableArray array];
         NSString *modeStr;
-        if (_settings.settingAppMode == APPEARANCE_MODE_DAY)
+        if ([_settings.settingAppMode get] == APPEARANCE_MODE_DAY)
             modeStr = OALocalizedString(@"map_settings_day");
-        else if (_settings.settingAppMode == APPEARANCE_MODE_NIGHT)
+        else if ([_settings.settingAppMode get] == APPEARANCE_MODE_NIGHT)
             modeStr = OALocalizedString(@"map_settings_night");
-        else if (_settings.settingAppMode == APPEARANCE_MODE_AUTO)
+        else if ([_settings.settingAppMode get] == APPEARANCE_MODE_AUTO)
             modeStr = OALocalizedString(@"daynight_mode_auto");
         else
             modeStr = OALocalizedString(@"-");
@@ -659,21 +659,21 @@
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-        [_settings setMapSettingShowFavorites:switchView.isOn];
+        [_settings setShowFavorites:switchView.isOn];
 }
 
 - (void) showOfflineEditsChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-        [_settings setMapSettingShowOfflineEdits:switchView.isOn];
+        [_settings setShowOfflineEdits:switchView.isOn];
 }
 
 - (void) showOnlineNotesChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-        [_settings setMapSettingShowOnlineNotes:switchView.isOn];
+        [_settings setShowOnlineNotes:switchView.isOn];
 }
 
 - (void) transportChanged:(id)sender

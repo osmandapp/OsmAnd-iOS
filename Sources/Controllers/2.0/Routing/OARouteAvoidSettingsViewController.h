@@ -13,7 +13,7 @@
 
 @interface OARouteAvoidSettingsViewController : OARouteSettingsBaseViewController<UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic) id<OANavigationSettingsDelegate> delegate;
+@property (nonatomic) id<OASettingsDataDelegate> delegate;
 
 + (NSString *) getDescr:(OAAvoidRoadInfo *)roadInfo;
 

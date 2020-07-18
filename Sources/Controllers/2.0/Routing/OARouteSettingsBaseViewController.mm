@@ -28,6 +28,7 @@
 #import "OASettingsTableViewCell.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
+#import "OABaseSettingsViewController.h"
 #import "OANavigationSettingsViewController.h"
 #import "OARootViewController.h"
 #import "OASelectedGPXHelper.h"
@@ -40,7 +41,7 @@
 
 #include <generalRouter.h>
 
-@interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OANavigationSettingsDelegate>
+@interface OARouteSettingsBaseViewController () <OARoutePreferencesParametersDelegate, OASettingsDataDelegate>
 
 @end
 
@@ -376,7 +377,7 @@
 
 #pragma mark - OANavigationSettingsDelegate
 
-- (void) onSettingChanged
+- (void) onSettingsChanged
 {
     [self.tableView reloadData];
 }

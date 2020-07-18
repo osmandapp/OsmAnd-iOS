@@ -504,7 +504,7 @@ public enum GPXDataSetAxisType: String {
     }
     
     private static func createGPXElevationDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType, useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
-        let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem
+        let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
         let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS)
         let convEle: Double = useFeet ? 3.28084 : 1.0
         var divX: Double
@@ -575,7 +575,7 @@ public enum GPXDataSetAxisType: String {
         if (axisType == GPXDataSetAxisType.TIME || axisType == GPXDataSetAxisType.TIMEOFDAY) {
             return nil;
         }
-        let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem
+        let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
         let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS)
         let convEle: Double = useFeet ? 3.28084 : 1.0
         let totalDistance: Float = analysis.totalDistance;
@@ -723,7 +723,7 @@ public enum GPXDataSetAxisType: String {
     
     private static func setupAxisDistance(axisBase: AxisBase, meters: Double) -> Double {
         let settings: OAAppSettings = OAAppSettings.sharedManager()
-        let mc: EOAMetricsConstant = settings.metricSystem
+        let mc: EOAMetricsConstant = settings.metricSystem.get()
         var divX: Double = 0
         
         let format1 = "%.0f"

@@ -608,11 +608,11 @@ static NSInteger kButtonsSection;
 {
     if (_mapSettingType == EMapSettingOverlay)
     {
-        _settings.mapSettingShowOverlayOpacitySlider = show;
+        [_settings.mapSettingShowOverlayOpacitySlider set:show];
     }
     else if (_mapSettingType == EMapSettingUnderlay)
     {
-        _settings.mapSettingShowUnderlayOpacitySlider = show;
+        [_settings.mapSettingShowUnderlayOpacitySlider set:show];
     }
 }
 

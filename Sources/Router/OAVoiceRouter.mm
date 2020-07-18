@@ -76,7 +76,7 @@ std::string preferredLanguage;
         _router = router;
         _settings = [OAAppSettings sharedManager];
         
-        mute = _settings.voiceMute;
+        mute = [_settings.voiceMute get];
         
         NSString *prefLang =  _settings.settingPrefMapLanguage == nil ? OALocalizedString(@"local_names") : _settings.settingPrefMapLanguage;
         preferredLanguage = std::string([prefLang UTF8String]);

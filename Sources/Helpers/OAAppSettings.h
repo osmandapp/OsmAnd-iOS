@@ -244,6 +244,28 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
+@interface OAProfileDrivingRegion : OAProfileInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
+
+- (EOADrivingRegion) get;
+- (void) set:(EOADrivingRegion)drivingRegionConstant;
+- (EOADrivingRegion) get:(OAApplicationMode *)mode;
+- (void) set:(EOADrivingRegion)drivingRegionConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OAMetricSystem : OAProfileInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
+
+- (EOAMetricsConstant) get;
+- (void) set:(EOAMetricsConstant)metricsConstant;
+- (EOAMetricsConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAMetricsConstant)metricsConstant mode:(OAApplicationMode *)mode;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOAActiveMarkerConstant)
 {
     ONE_ACTIVE_MARKER = 0,
@@ -330,15 +352,15 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 
 @property (nonatomic) OAProfileInteger *settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
-@property (readonly, nonatomic) OAProfileBoolean *nightMode;
-@property (assign, nonatomic) EOAMetricsConstant metricSystem;
-@property (assign, nonatomic) BOOL drivingRegionAutomatic;
-@property (assign, nonatomic) EOADrivingRegion drivingRegion;
+@property (readonly, nonatomic) BOOL nightMode;
+@property (nonatomic) OAMetricSystem *metricSystem;
+@property (nonatomic) OAProfileBoolean *drivingRegionAutomatic;
+@property (nonatomic) OAProfileDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
-@property (assign, nonatomic) int settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
+@property (nonatomic) OAProfileInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
-@property (assign, nonatomic) BOOL metricSystemChangedManually;
-@property (assign, nonatomic) BOOL settingAllow3DView;
+@property (nonatomic) OAProfileBoolean *metricSystemChangedManually;
+@property (nonatomic) OAProfileBoolean *settingAllow3DView;
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
@@ -397,7 +419,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (assign, nonatomic) BOOL settingDoNotShowPromotions;
 @property (assign, nonatomic) BOOL settingDoNotUseAnalytics;
-@property (assign, nonatomic) int settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
+@property (nonatomic) OAProfileInteger *settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
 
 @property (assign, nonatomic) BOOL liveUpdatesPurchased;
 @property (assign, nonatomic) BOOL settingOsmAndLiveEnabled;
@@ -453,7 +475,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL gpxCalculateRtept;
 @property (assign, nonatomic) BOOL gpxRouteCalc;
 @property (nonatomic) OAProfileBoolean *voiceMute;
-@property (nonatomic) NSString *voiceProvider;
+@property (nonatomic) OAProfileString *voiceProvider;
 @property (nonatomic) OAProfileBoolean *interruptMusic;
 @property (nonatomic) OAProfileBoolean *snapToRoad;
 @property (nonatomic) OAProfileInteger *autoFollowRoute;
@@ -466,6 +488,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileDouble *switchMapDirectionToCompass;
 @property (nonatomic) OAProfileInteger *wakeOnVoiceInt;
 
+@property (nonatomic) OAProfileBoolean *showScreenAlerts;
 @property (nonatomic) OAProfileBoolean *showTrafficWarnings;
 @property (nonatomic) OAProfileBoolean *showPedestrian;
 @property (nonatomic) OAProfileBoolean *showCameras;
@@ -486,7 +509,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *announceNearbyPoi;
 
 @property (assign, nonatomic) BOOL showGpxWpt;
-@property (assign, nonatomic) BOOL announceWpt;
+@property (nonatomic) OAProfileBoolean *announceWpt;
 @property (nonatomic) OAProfileBoolean *showNearbyFavorites;
 @property (nonatomic) OAProfileBoolean *showNearbyPoi;
 
@@ -531,6 +554,11 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
+
+- (void) setShowOnlineNotes:(BOOL)mapSettingShowOnlineNotes;
+- (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits;
+- (void) setAppMode:(int)settingAppMode;
+- (void) setShowFavorites:(BOOL)mapSettingShowFavorites;
 
 - (void) addImpassableRoad:(OAAvoidRoadInfo *)roadInfo;
 - (void) updateImpassableRoad:(OAAvoidRoadInfo *)roadInfo;

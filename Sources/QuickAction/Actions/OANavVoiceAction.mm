@@ -32,7 +32,7 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return ![OAAppSettings sharedManager].voiceMute;
+    return ![[OAAppSettings sharedManager].voiceMute get];
 }
 
 - (NSString *)getActionText

@@ -101,6 +101,7 @@
     }
     
     [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    [self applyExcludedFromBackup:path];
     
     if (error)
     {
@@ -129,6 +130,7 @@
     [dictionary removeObjectForKey:fileName];
     [dictionary setValue:newPath forKey:newName];
     _files = [NSDictionary dictionaryWithDictionary:dictionary];
+    [self applyExcludedFromBackup:newPath];
 
     [_sqlitedbResourcesChangedObservable notifyEvent];
 }
@@ -164,6 +166,13 @@
     }
     
     return res;
+}
+
+- (void) applyExcludedFromBackup:(NSString *)localPath
+{
+    NSURL *url = [NSURL fileURLWithPath:localPath];
+    BOOL res = [url setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
+    OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), localPath);
 }
 
 @end

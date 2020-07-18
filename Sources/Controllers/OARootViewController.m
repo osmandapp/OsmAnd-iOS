@@ -797,7 +797,7 @@ typedef enum : NSUInteger {
 
 - (void) zoomOut
 {
-    if ([OAAppSettings sharedManager].settingExternalInputDevice != NO_EXTERNAL_DEVICE)
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
     {
         [self.mapPanel.mapViewController animatedZoomOut];
         [self.mapPanel.mapViewController calculateMapRuler];
@@ -806,13 +806,13 @@ typedef enum : NSUInteger {
 
 - (void) zoomIn
 {
-    if ([OAAppSettings sharedManager].settingExternalInputDevice != NO_EXTERNAL_DEVICE)
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
         [self.mapPanel.mapViewController animatedZoomIn];
 }
 
 - (void) goBack
 {
-    if ([OAAppSettings sharedManager].settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE)
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
     {
         //Launch WunderLINQ
         NSString *wunderlinqAppURL = @"wunderlinq://datagrid";

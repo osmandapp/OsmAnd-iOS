@@ -989,7 +989,7 @@
 "rendering_attr_highway_class_track_grade5_name" = "Ocena 5";
 "routing_attr_height_obstacles_description" = "Faktor podatkov spreminjanja višine terena (po podatkih SRTM, ASTER in EU-DEM).";
 "rendering_value_thin_name" = "Tanko";
-"routing_attr_avoid_unpaved_name" = "Izogni se neasfaltiranim cestam";
+"routing_attr_avoid_unpaved_name" = "Brez neasfaltiranih cest";
 "rendering_attr_busRoutes_name" = "Proge avtobusov";
 "rendering_attr_surface_ice_name" = "Led";
 "rendering_attr_hideWoodScrubs_name" = "Gozdne površine";
@@ -1021,7 +1021,7 @@
 "rendering_attr_contourColorScheme_name" = "Barvna shema izohips";
 "rendering_value_red_name" = "Rdeča";
 "rendering_attr_surface_salt_name" = "Sol";
-"routing_attr_avoid_stairs_name" = "Izogni se stopnicam";
+"routing_attr_avoid_stairs_name" = "Brez stopnic";
 "rendering_value_yellow_name" = "Rumena";
 "rendering_attr_hikingRoutesOSMC_name" = "Prekrivna plast s simboli za pohodništvo";
 "routing_attr_allow_skating_only_description" = "Poti, namenjene prostemu slogu smučanja brez običajnega utrjevanja sledi.";
@@ -1131,7 +1131,7 @@
 "rendering_value_walkingRoutesOSMCNodes_name" = "Omrežja vozlišč";
 "rendering_value_orange_name" = "Oranžno";
 "rendering_attr_showLez_name" = "Pokaži področja z omejitvijo izpustov";
-"routing_attr_avoid_toll_name" = "Izogni se cestninam";
+"routing_attr_avoid_toll_name" = "Brez cestnin";
 "routeInfo_surface_name" = "Površina";
 "routing_attr_avoid_toll_description" = "Izogne se cestam s plačljivo cestnino";
 "routing_attr_avoid_train_name" = "Izogni se vlaku";
@@ -1140,7 +1140,7 @@
 "rendering_attr_roadStyle_description" = "Slog izrisa cest";
 "rendering_attr_highway_class_track_grade4_name" = "Ocena 4";
 "rendering_attr_alpineHiking_name" = "Lestvica alpskega pohodništva (SAC)";
-"routing_attr_prefer_motorway_description" = "Prednostno bodo izbrane hitre ceste in avtoceste.";
+"routing_attr_prefer_motorway_description" = "Prednostno bodo izbrane hitre ceste in avtoceste";
 "routing_attr_no_new_routing_description" = "Ne omogoči uporabe pravil usmerjanja, ki so bile uvedene z različico v1.9.";
 "routing_attr_driving_style_safety_name" = "Vodi po stranpoteh";
 "routing_attr_avoid_train_description" = "Načrtovanje poti brez potovanja z vlakom";
@@ -1200,8 +1200,8 @@
 "rendering_attr_hmRendered_name" = "Pokaži podrobnejši izris";
 "routing_attr_piste_type_downhill_description" = "Pobočja, namenjena alpskemu smučanju in dostop do žičnic.";
 "rendering_attr_alpineHiking_description" = "Izriši poti po lestvici SAC.";
-"routing_attr_avoid_ferries_name" = "Izogni se trajektom";
-"routing_attr_avoid_borders_name" = "Izogni se mejnim prehodom";
+"routing_attr_avoid_ferries_name" = "Brez trajektov";
+"routing_attr_avoid_borders_name" = "Brez mejnih prehodov";
 "routing_attr_piste_type_sled_name" = "Sani";
 "rendering_attr_highway_class_bridleway_name" = "Jahalna steza";
 "routing_attr_avoid_borders_description" = "Izogni se mednarodnim mejnim prehodom";
@@ -1221,7 +1221,7 @@
 "routing_attr_allow_classic_only_description" = "Poti, namenjene za klasični slog brez pripravljenih poti. Vključujejo poti, utrjene z manjšimi snežnimi sanmi z ožjo širino in sledmi, ki jih ustvarijo smučarji.";
 "rendering_attr_surface_stone_name" = "Kamenje";
 "rendering_attr_horseRoutes_name" = "Konjske poti";
-"routing_attr_avoid_motorway_name" = "Izogni se avtocestam";
+"routing_attr_avoid_motorway_name" = "Brez avtocest";
 "rendering_attr_showSurfaces_name" = "Pokaži površino cest";
 "rendering_attr_highway_class_service_name" = "Storitev";
 "routing_attr_allow_motorway_name" = "Vodenje po avtocestah";

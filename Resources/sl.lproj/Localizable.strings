@@ -1124,7 +1124,7 @@
 "rendering_attr_subwayMode_name" = "Proge podzemne železnice";
 "routing_attr_avoid_ice_roads_fords_name" = "Izogni se zaledenelim cestam in plitvinam";
 "rendering_value_car_name" = "Vožnja z avtomobilom";
-"routing_attr_weight_name" = "Omejitev teže vozila";
+"routing_attr_weight_name" = "Omejitev teže";
 "rendering_attr_showCycleRoutes_name" = "Kolesarske poti";
 "rendering_attr_currentTrackWidth_name" = "Širina poti GPX";
 "routing_attr_allow_expert_name" = "Dovoli nevarne poti";
@@ -1270,3 +1270,4 @@
 "rendering_attr_piste_difficulty_connection_name" = "Povezovalna";
 "rendering_attr_piste_difficulty_easy_name" = "Enostavna";
 "rendering_attr_piste_difficulty_novice_name" = "Začetniška";
+"routing_attr_width_name" = "Omejitev širine";

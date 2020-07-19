@@ -1601,3 +1601,5 @@
 "shared_string_warning" = "Aviso";
 "exit_at" = "Sair em";
 "public_transport_warning_title" = "A navegação em transportes públicos está atualmente em testes beta, podem ocorrer erros e imprecisões.";
+"shared_string_exit" = "Sair";
+"units_and_formats" = "Unidades e formatos";

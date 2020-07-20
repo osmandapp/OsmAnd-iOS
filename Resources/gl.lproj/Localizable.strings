@@ -1368,3 +1368,4 @@
 "active_markers" = "Marcaxes activas";
 "exit_at" = "Saír en";
 "public_transport_warning_title" = "A navegación en transporte público atópase agora en fase de proba beta, poden xerarse erros e imprecisións.";
+"routing_attr_length_name" = "Límite de lonxitude";

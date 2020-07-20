@@ -1998,16 +1998,28 @@ static const NSInteger _buttonsCount = 4;
 {
     // http://osmand.net/go.html?lat=12.6313&lon=-7.9955&z=8&title=New+York The location was shared with you by OsmAnd
     
-    UIImage *image = [self.mapView getGLScreenshot];
+    UIActivityViewController *activityViewController;
+    
+    if (_previousTargetType == OATargetFavorite) {
+        NSString *title = [self prepareForSharing: _targetPoint.title];
+        NSString *group = [self prepareForSharing: _customController.getTypeStr];
+        NSString *description = [self prepareForSharing: ((OAEditTargetViewController *)self.customController).getItemDesc];
+        NSString *sharingText = [NSString stringWithFormat:@"%@%@%@http://osmand.net/go.html?lat=%.5f&lon=%.5f&z=%d\nThe location was shared with you by OsmAnd", title, group, description, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
+        
+        activityViewController =
+        [[UIActivityViewController alloc] initWithActivityItems:@[sharingText]
+                                          applicationActivities:nil];
+    }
+    else {
+        UIImage *image = [self.mapView getGLScreenshot];
+        NSString *string = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
+        
+        activityViewController =
+        [[UIActivityViewController alloc] initWithActivityItems:@[image, string]
+                                          applicationActivities:nil];
+    }
     
     //NSString *title = [_targetPoint.title stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
-    
-    NSString *string = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
-    
-    UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[image, string]
-                                      applicationActivities:nil];
-    
     activityViewController.popoverPresentationController.sourceView = self;
     activityViewController.popoverPresentationController.sourceRect = _backView2.frame;
     
@@ -2016,6 +2028,11 @@ static const NSInteger _buttonsCount = 4;
                                    completion:^{ }];
 
     [self.menuViewDelegate targetPointShare];
+}
+
+- (NSString *)prepareForSharing:(NSString *)text
+{
+    return (text.length > 0) ? [NSString stringWithFormat:@"%@\n", text] : @"";
 }
 
 - (IBAction) buttonDirectionClicked:(id)sender

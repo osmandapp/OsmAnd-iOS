@@ -24,7 +24,7 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wuS-G8-4AF">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="0.94905966519999996" green="0.94891542200000001" blue="0.9529423118" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="38" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="SeR-ar-f6w">
                     <rect key="frame" x="0.0" y="44" width="320" height="524"/>

@@ -54,7 +54,18 @@
 
 - (void) generateData
 {
-    _profileList = [[NSMutableArray alloc] initWithArray:OAApplicationMode.allPossibleValues];
+    NSArray *allProfileList = [[NSMutableArray alloc] initWithArray:OAApplicationMode.allPossibleValues];
+    NSMutableArray *customProfileList = [NSMutableArray array];
+    NSMutableArray *defaultProfileList = [NSMutableArray array];
+    for (OAApplicationMode *profile in allProfileList)
+        if (profile.parent != nil)
+            [customProfileList addObject:profile];
+        else
+            [defaultProfileList addObject:profile];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    NSArray *sortedArray = [customProfileList sortedArrayUsingDescriptors:@[sort]];
+    [defaultProfileList addObjectsFromArray:sortedArray];
+    _profileList = [NSMutableArray arrayWithArray:defaultProfileList];
     [_profileList removeObjectAtIndex:0];
 }
 
@@ -74,6 +85,14 @@
     _tableView.rowHeight = 60.;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_profile") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:YES];
+//    if (!UIAccessibilityIsReduceTransparencyEnabled())
+//    {
+//        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+//        blurEffectView.frame = self.navBarView.frame;
+//        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        [self.navBarView insertSubview:blurEffectView atIndex:0];
+//        self.navBarView.backgroundColor = UIColor.clearColor;
+//    }
     [self setupView];
 }
 
@@ -192,22 +211,11 @@
     if (alpha > 0.2)
     {
         _titleLabel.hidden = NO;
-        if (!UIAccessibilityIsReduceTransparencyEnabled())
-        {
-            UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-            blurEffectView.frame = _navBarView.frame;
-            blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [_navBarView insertSubview:blurEffectView atIndex:0];
-            _navBarView.backgroundColor = UIColor.clearColor;
-        }
     }
     else if (alpha <= 0.2)
     {
         _titleLabel.hidden = YES;
-        _navBarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
     }
-    
-    
 }
 
 @end

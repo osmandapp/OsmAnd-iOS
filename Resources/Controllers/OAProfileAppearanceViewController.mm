@@ -12,6 +12,7 @@
 #import "OAApplicationMode.h"
 #import "OANavigationIcon.h"
 #import "OALocationIcon.h"
+#import "OASettingsViewController.h"
 
 #import "OATextInputCell.h"
 #import "OAColorsTableViewCell.h"
@@ -33,6 +34,7 @@
 {
     OAApplicationMode *_parent;
     NSArray<NSArray *> *_data;
+    NSArray<OAApplicationMode *> *_profileList;
     
     NSString *_profileName;
     NSArray<NSNumber *> *_colors;
@@ -80,6 +82,7 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
+    _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     [self setupNavBar];
     [self setupView];
 
@@ -106,6 +109,46 @@
     _profileIconView.layer.cornerRadius = _profileIconView.frame.size.height/2;
 }
 
+- (NSString *) getProposedProfileName:(NSString *)profileName
+{
+    NSRange lastSpace = [profileName rangeOfString:@" " options:NSBackwardsSearch];
+    NSString *baseString;
+    NSString *numberString;
+    NSInteger number = 0;
+    if (lastSpace.length == 0)
+    {
+        number = [profileName intValue];
+        if (number == 0)
+            baseString = profileName;
+        else
+            baseString = @"";
+    }
+    else
+    {
+        baseString = [profileName substringToIndex: lastSpace.location];
+        numberString = [profileName substringFromIndex: lastSpace.location];
+        number = [numberString intValue];
+        if (number == 0)
+            baseString = profileName;
+    }
+    NSString *newProfile;
+    for (NSInteger value = number + 1; ; value++)
+    {
+        newProfile = [NSString stringWithFormat:@"%@ %ld", baseString, value];
+        if ([self isNameAvailable: newProfile])
+            break;
+    }
+    return newProfile;
+}
+
+- (BOOL) isNameAvailable:(NSString *)profileName
+{
+    for (OAApplicationMode *profile in _profileList)
+        if ([profile.name isEqual:profileName])
+            return NO;
+    return YES;
+}
+
 - (void) setupView
 {
     NSMutableArray *tableData = [NSMutableArray array];
@@ -116,7 +159,7 @@
     NSString* profileColor = OALocalizedString(_colorNames[_currentColor]);
     [profileNameArr addObject:@{
         @"type" : kCellTypeInput,
-        @"title" : OALocalizedString(@"enter_profile_name"),
+        @"title" : _profileName,
     }];
     [profileAppearanceArr addObject:@{
         @"type" : kCellTypeColorCollection,
@@ -148,7 +191,8 @@
 
 - (void) generateData
 {
-    _profileName = @"";
+    _profileList = [[NSMutableArray alloc] initWithArray:OAApplicationMode.allPossibleValues];
+    _profileName = [self getProposedProfileName:_parent.name];
     
     _colors = @[
         @(profile_icon_color_blue_light_default),
@@ -231,17 +275,27 @@
 
 - (IBAction) saveButtonClicked:(id)sender
 {
+    _profileName = [_profileName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if (_profileName.length == 0)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"empty_profile_name_warning") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }
+    else if (![self isNameAvailable:_profileName])
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"not_available_profile_name") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
     else
     {
         [self saveNewProfile];
-        [self.navigationController popViewControllerAnimated:YES];
-        [self.navigationController popViewControllerAnimated:YES];
+        for (UIViewController *vc in [self.navigationController viewControllers])
+        {
+            if ([vc isKindOfClass:OASettingsViewController.class])
+                [self.navigationController popToViewController:vc animated:YES];
+        }
     }
 }
 
@@ -321,8 +375,7 @@
             cell = (OATextInputCell *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
         }
-        cell.inputField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:item[@"title"] attributes:@{NSForegroundColorAttributeName:UIColorFromRGB(color_text_footer)}];
-        cell.inputField.text = _profileName;
+        cell.inputField.text = item[@"title"];
         cell.inputField.delegate = self;
         return cell;
     }

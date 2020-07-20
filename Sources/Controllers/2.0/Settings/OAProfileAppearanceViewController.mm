@@ -70,7 +70,7 @@
     [self generateData];
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
     _titleLabel.text = OALocalizedString(@"new_profile");

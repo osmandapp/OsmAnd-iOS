@@ -642,7 +642,7 @@
     if (route && ![route isEmpty])
     {
         BOOL showWaypoints = settings.showGpxWpt; // global
-        BOOL announceWaypoints = settings.announceWpt; // global
+        BOOL announceWaypoints = [settings.announceWpt get:_appMode]; // global
         
         if (route.appMode)
             _appMode = route.appMode;
@@ -724,7 +724,7 @@
     else if (type == LPW_WAYPOINTS)
     {
         settings.showGpxWpt = enable;
-        settings.announceWpt = enable;
+        [settings.announceWpt set:enable mode:_appMode];
     }
     [self recalculatePoints:_route type:type locationPoints:_locationPoints];
 }

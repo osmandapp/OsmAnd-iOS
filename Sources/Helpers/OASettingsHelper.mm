@@ -1475,6 +1475,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     params[@"minzoom"] = [NSString stringWithFormat:@"%d", sqliteSource.minimumZoomSupported];
                     params[@"maxzoom"] = [NSString stringWithFormat:@"%d", sqliteSource.maximumZoomSupported];
                     params[@"url"] = sqliteSource.urlTemplate;
+                    params[@"title"] = sqliteSource.title;
                     params[@"ellipsoid"] = sqliteSource.isEllipticYTile ? @(1) : @(0);
                     params[@"inverted_y"] = sqliteSource.isInvertedYTile ? @(1) : @(0);
                     params[@"expireminutes"] = sqliteSource.getExpirationTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", sqliteSource.getExpirationTimeMillis / 60000] : @"";
@@ -1655,6 +1656,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         BOOL sql = [object[@"sql"] boolValue];
         NSString *name = object[@"name"];
+        NSString *title = object[@"title"];
+        if (title.length == 0)
+            title = name;
+
         int minZoom = [object[@"minZoom"] intValue];
         int maxZoom = [object[@"maxZoom"] intValue];
         NSString *url = object[@"url"];
@@ -1670,7 +1675,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         int bitDensity = [object[@"bitDensity"] intValue];
         int avgSize = [object[@"avgSize"] intValue];
         NSString *rule = object[@"rule"];
-
+        
         if (!sql)
         {
             const auto result = std::make_shared<OsmAnd::IOnlineTileSources::Source>(QString::fromNSString(name));
@@ -1706,6 +1711,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             params[@"minzoom"] = [NSString stringWithFormat:@"%d", minZoom];
             params[@"maxzoom"] = [NSString stringWithFormat:@"%d", maxZoom];
             params[@"url"] = url;
+            params[@"title"] = title;
             params[@"ellipsoid"] = ellipsoid ? @(1) : @(0);
             params[@"inverted_y"] = invertedY ? @(1) : @(0);
             params[@"expireminutes"] = expire != -1 ? [NSString stringWithFormat:@"%ld", expire / 60000] : @"";

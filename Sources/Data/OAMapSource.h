@@ -11,23 +11,27 @@
 
 @interface OAMapSource : NSObject <NSCopying>
 
-- (instancetype)initWithResource:(NSString*)resourceId;
+- (instancetype) initWithResource:(NSString *)resourceId;
 
-- (instancetype)initWithResource:(NSString*)resourceId
-                      andVariant:(NSString*)variant;
+- (instancetype) initWithResource:(NSString *)resourceId
+                       andVariant:(NSString *)variant;
 
-- (instancetype)initWithResource:(NSString*)resourceId
-                      andVariant:(NSString*)variant
-                            name:(NSString*)name;
+- (instancetype) initWithResource:(NSString *)resourceId
+                       andVariant:(NSString *)variant
+                             name:(NSString *)name;
+
+- (instancetype) initWithResource:(NSString *)resourceId
+                       andVariant:(NSString *)variant
+                             name:(NSString *)name
+                             type:(NSString *)type;
 
 // "OnlineTileSources" or "MapStyle" resource
-@property(nonatomic, readonly) NSString* resourceId;
-
+@property (nonatomic, readonly) NSString *resourceId;
 // For "OnlineTileSources": name of source
 // For "MapStyle": name of preset or nil
-@property(nonatomic, readonly) NSString* variant;
-
-@property(nonatomic) NSString* name;
+@property (nonatomic, readonly) NSString *variant;
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *type;
 
 + (OAMapSource *) getOsmAndOnlineTilesMapSource;
 

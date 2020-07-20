@@ -208,7 +208,7 @@
     self = [super init];
     if (self) {
         _file = document;
-        _leftSide = [OADrivingRegion isLeftHandDriving:[OAAppSettings sharedManager].drivingRegion];
+        _leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
     }
     return self;
 }
@@ -674,7 +674,11 @@
         }
         else
         {
-            return [[OARouteCalculationResult alloc] initWithSegmentResults:result start:params.start end:params.end intermediates:params.intermediates leftSide:params.leftSide routingTime:ctx->routingTime waypoints:!params.gpxRoute ? nil : params.gpxRoute.wpt mode:params.mode];
+            float routingTime = 0;
+            if (ctx->progress)
+                routingTime = ctx->progress->routingCalculatedTime;
+            
+            return [[OARouteCalculationResult alloc] initWithSegmentResults:result start:params.start end:params.end intermediates:params.intermediates leftSide:params.leftSide routingTime:routingTime waypoints:!params.gpxRoute ? nil : params.gpxRoute.wpt mode:params.mode];
         }
     }
     catch (NSException *e)

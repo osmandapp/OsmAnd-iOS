@@ -95,7 +95,7 @@
 
 - (void)setupParametersFromSqlite
 {
-    _itemName = _sqliteSource.name;
+    _itemName = _sqliteSource.title;
     _itemURL = _sqliteSource.urlTemplate;
     _minZoom = _sqliteSource.minimumZoomSupported;
     _maxZoom = _sqliteSource.maximumZoomSupported;
@@ -105,7 +105,7 @@
     _expireTimeMinutes = _expireTimeMillis == -1 ? @"" : [NSString stringWithFormat:@"%ld", (_expireTimeMillis / 1000 / 60)];
 }
 
--(instancetype) initWithLocalItem:(OALocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController
+- (instancetype) initWithLocalItem:(OALocalResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController
 {
     self = [super init];
     if (self) {
@@ -342,6 +342,7 @@
     params[@"minzoom"] = [NSString stringWithFormat:@"%d", _minZoom];
     params[@"maxzoom"] = [NSString stringWithFormat:@"%d", _maxZoom];
     params[@"url"] = _itemURL;
+    params[@"title"] = _itemName;
     params[@"ellipsoid"] = _isEllipticYTile ? @(1) : @(0);
     params[@"timeSupported"] = _expireTimeMillis != -1 ? @"yes" : @"no";
     params[@"expireminutes"] = _expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", _expireTimeMillis / 60000] : @"";
@@ -395,15 +396,15 @@
     else if (_sourceFormat == EOASourceFormatSQLite)
     {
         NSMutableDictionary *params = [self generateSqlParams];
-        
-        NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
-        
+        NSString *fileName = [_itemName sanitizeFileName];
+        NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:@"sqlitedb"];
         if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
         {
             [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
             OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
-            item.path = [[[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
-            item.fileName = _itemName;
+            item.path = [[[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:@"sqlitedb"];
+            item.title = _itemName;
+            item.fileName = fileName;
             item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
             
             if (self.delegate)
@@ -506,9 +507,9 @@
 
 - (void) updateSqliteSource
 {
-    if ([_itemName isEqualToString:_sqliteSource.name])
+    if ([_itemName isEqualToString:_sqliteSource.title])
     {
-        [_sqliteSource updateInfo:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile];
+        [_sqliteSource updateInfo:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile title:_itemName];
         
         if (self.delegate && _sqliteDbItem)
             [self.delegate onTileSourceSaved:_sqliteDbItem];
@@ -516,14 +517,16 @@
     else
     {
         OAMapCreatorHelper *helper = [OAMapCreatorHelper sharedInstance];
-        NSString *path = [[helper.filesDir stringByAppendingPathComponent:_itemName] stringByAppendingPathExtension:@"sqlitedb"];
+        NSString *fileName = [_itemName sanitizeFileName];
+        NSString *path = [[helper.filesDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:@"sqlitedb"];
         [helper renameFile:[_sqliteSource.name stringByAppendingPathExtension:@"sqlitedb"] toName:path.lastPathComponent];
         OASQLiteTileSource *newSource = [[OASQLiteTileSource alloc] initWithFilePath:path];
-        [newSource updateInfo:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile];
+        [newSource updateInfo:_expireTimeMillis url:_itemURL minZoom:_minZoom maxZoom:_maxZoom isEllipticYTile:_isEllipticYTile title:_itemName];
         
         OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
         item.path = path;
-        item.fileName = _itemName;
+        item.title = _itemName;
+        item.fileName = fileName;
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil] fileSize];
         
         if (self.delegate)
@@ -604,7 +607,7 @@
     {
         if ([_sqliteSource supportsTileDownload])
         {
-            return (![_itemName isEqualToString:_sqliteSource.name] ||
+            return (![_itemName isEqualToString:_sqliteSource.title] ||
                     ![_itemURL isEqualToString:_sqliteSource.urlTemplate] ||
                     _minZoom != _sqliteSource.minimumZoomSupported ||
                     _maxZoom != _sqliteSource.maximumZoomSupported ||

@@ -130,7 +130,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([item isKindOfClass:OASqliteDbResourceItem.class])
     {
         itemMapSource = ((OASqliteDbResourceItem *) item).mapSource;
-        caption = [[itemMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        caption = itemMapSource.name;
     }
     else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
     {

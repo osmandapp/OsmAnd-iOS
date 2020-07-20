@@ -17,6 +17,7 @@
 @interface OASQLiteTileSource : NSObject
 
 @property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *title;
 @property (nonatomic, readonly) NSString *tileFormat;
 @property (nonatomic, readonly) int tileSize;
 @property (nonatomic, readonly) NSString *referer;
@@ -27,6 +28,7 @@
 
 + (BOOL) createNewTileSourceDbAtPath:(NSString *)path parameters:(NSDictionary *)parameters;
 + (BOOL) isOnlineTileSource:(NSString *)filePath;
++ (NSString *) getTitleOf:(NSString *)filePath;
 
 - (instancetype) initWithFilePath:(NSString *)filePath;
 
@@ -56,7 +58,7 @@
 - (BOOL) expired:(NSNumber *)time;
 - (int) getTileSize;
 - (BOOL) supportsTileDownload;
-- (void) updateInfo:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile;
+- (void) updateInfo:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile title:(NSString *)title;
 
 - (void) setTileSize:(int)tileSize;
 

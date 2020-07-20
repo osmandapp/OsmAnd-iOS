@@ -1433,3 +1433,5 @@
 "vehicle_parameters" = "車輛參數";
 "select_nav_profile_dialog_message" = "「導航類型」會控制路徑的計算方式。";
 "select_color" = "選取顏色";
+"units_and_formats" = "單位與格式";
+"routing_attr_length_name" = "長度限制";

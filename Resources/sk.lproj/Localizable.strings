@@ -1101,7 +1101,7 @@
 "navigate_point_format_DMS" = "DDD MM SS.SS";
 "navigate_point_format_OLC" = "Otvorený kód pre polohu (OLC)";
 "coordinates_example" = "Príklad";
-"utm_description" = "OsmAnd používa štandardný formát UTM, ktorý je podobný ale nie rovnaký ako NATO formát UTM.";
+"utm_description" = "Upozorňujeme, že OsmAnd používa štandardný formát UTM, ktorý je podobný ale nie rovnaký ako UTM NATO.";
 "coordinates_copy_descr" = "Stlačte pre skopírovanie súradníc do schránky.";
 "months_3" = "Tri mesiace";
 "osm_live_cancel_subscription" = "Zrušiť predplatné";
@@ -1569,3 +1569,5 @@
 "select_nav_profile_dialog_message" = "'Typ navigácie' ovplyvňuje pravidlá pre výpočet trasy.";
 "vehicle_parameters" = "Parametre vozidla";
 "screen_alerts" = "Varovania na obrazovke";
+"units_and_formats" = "Jednotky & formáty";
+"routing_attr_length_name" = "Limit dĺžky";

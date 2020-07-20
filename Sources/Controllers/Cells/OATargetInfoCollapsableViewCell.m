@@ -79,6 +79,8 @@
 
 - (void) layoutSubviews
 {
+    [super layoutSubviews];
+    
     CGRect textFrame = self.textView.frame;
     CGRect leftImageFrame = self.iconView.frame;
     CGRect rightImageFrame = self.rightIconView.frame;

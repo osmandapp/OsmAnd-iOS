@@ -19,10 +19,8 @@
 #import "OAMapCreatorHelper.h"
 #import "OAManageResourcesViewController.h"
 #import "OATerrainLayer.h"
-//#import "OASizes.h"
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
-//#import "OATargetMenuViewController.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -990,8 +988,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         BOOL isOnline = [OASQLiteTileSource isOnlineTileSource:path];
         if (includeOffline || isOnline)
         {
+            NSString *title = [OASQLiteTileSource getTitleOf:path];
             OASqliteDbResourceItem* item = [[OASqliteDbResourceItem alloc] init];
-            item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
+            item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:title type:@"sqlitedb"];
             item.path = path;
             item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
             item.isOnline = isOnline;

@@ -1190,7 +1190,7 @@
 "product_desc_asia_short" = "Mapas da região da Ásia";
 "obf_import_title" = "Importar ficheiro de mapa offline";
 "obf_import_already_exists" = "Um ficheiro com este mesmo nome já existe. Por favor escolha uma ação.";
-"obf_import_success" = "Arquivo foi importado com sucesso";
+"obf_import_success" = "Ficheiro foi importado com sucesso";
 "obf_import_failed" = "Falha ao importar o ficheiro";
 "res_import_success" = "%@ foi importado com sucesso";
 "res_import_unsupported" = "Tipo incorreto de ficheiro. Apenas ficheiros routing.xml e *.render.xml são suportados.";
@@ -1353,7 +1353,7 @@
 "rendering_attr_hikingRoutesOSMC_description" = "Renderizar caminhos de acordo com traços OSMC.";
 "rendering_attr_highway_class_bridleway_name" = "Caminho para cavaleiros";
 "rendering_value_translucent_purple_name" = "Roxo translúcido";
-"routing_attr_avoid_shuttle_train_description" = "Evitar usar transporte de comboio";
+"routing_attr_avoid_shuttle_train_description" = "Evita a utilização de comboios de vaivém";
 "rendering_attr_tracktype_grade3_name" = "Maioritariamente sólido";
 "routing_attr_allow_private_description" = "Permitir acesso a áreas privadas.";
 "routing_attr_allow_skating_only_name" = "Permitir apenas rotas de patinação";
@@ -1383,7 +1383,7 @@
 "routing_attr_allow_private_name" = "Permitir acesso privado";
 "rendering_attr_hideNonVehicleHighways_name" = "Estradas não trafegáveis";
 "rendering_attr_piste_difficulty_undefined_name" = "Indefinido";
-"rendering_attr_showMtbRoutes_name" = "Mostrar rotas MTB";
+"rendering_attr_showMtbRoutes_name" = "Mostrar trilhas de mountain bike";
 "rendering_attr_tracktype_grade4_name" = "Maioritariamente macio";
 "rendering_value_red_name" = "Vermelho";
 "rendering_attr_highway_class_track_grade2_name" = "Grau 2";
@@ -1467,7 +1467,7 @@
 "rendering_attr_contourWidth_name" = "Largura das curvas de nível";
 "rendering_value_white_name" = "Branco";
 "routing_attr_piste_type_nordic_description" = "Trilhas para esqui nórdico ou cross-country.";
-"routing_attr_avoid_shuttle_train_name" = "Evitar transporte de comboio";
+"routing_attr_avoid_shuttle_train_name" = "Sem comboio de vaivém";
 "rendering_attr_showLez_name" = "Mostrar zonas de baixa emissão";
 "routing_attr_difficulty_preference_description" = "Preferir rotas desta dificuldade, embora o roteamento sobre pistas mais difíceis ou mais fáceis ainda seja possível se for mais curto.";
 "rendering_value_browse_map_name" = "Explorar o mapa ";
@@ -1601,3 +1601,5 @@
 "shared_string_warning" = "Aviso";
 "exit_at" = "Sair em";
 "public_transport_warning_title" = "A navegação em transportes públicos está atualmente em testes beta, podem ocorrer erros e imprecisões.";
+"shared_string_exit" = "Sair";
+"units_and_formats" = "Unidades e formatos";

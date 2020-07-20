@@ -145,7 +145,7 @@ static NSDictionary *screenVoiceProviders;
     return self;
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"routing_settings");
 }
@@ -450,7 +450,7 @@ static NSDictionary *screenVoiceProviders;
             if ([_am isDerivedRoutingFrom:[OAApplicationMode CAR]])
             {
                 value = nil;
-                if (settings.metricSystem == KILOMETERS_AND_METERS)
+                if ([settings.metricSystem get] == KILOMETERS_AND_METERS)
                 {
                     value = [NSString stringWithFormat:@"%d %@", (int)[settings.speedLimitExceed get:_am], OALocalizedString(@"units_kmh")];
                 }
@@ -473,7 +473,7 @@ static NSDictionary *screenVoiceProviders;
             }
             
             value = nil;
-            if (settings.metricSystem == KILOMETERS_AND_METERS)
+            if ([settings.metricSystem get] == KILOMETERS_AND_METERS)
             {
                 value = [NSString stringWithFormat:@"%d %@", (int)[settings.switchMapDirectionToCompass get:_am], OALocalizedString(@"units_kmh")];
             }
@@ -844,7 +844,7 @@ static NSDictionary *screenVoiceProviders;
              @{
                @"name" : @"announce_wpt",
                @"title" : OALocalizedString(@"announce_gpx_waypoints"),
-               @"value" : @(settings.announceWpt),
+               @"value" : @([settings.announceWpt get]),
                @"type" : kCellTypeSwitch }
              ];
             [dataArr addObject:
@@ -933,7 +933,7 @@ static NSDictionary *screenVoiceProviders;
                 index = [speedLimitsKm indexOfObject:@([settings.switchMapDirectionToCompass get:_am])];
             }
             
-            if (settings.metricSystem == KILOMETERS_AND_METERS)
+            if ([settings.metricSystem get] == KILOMETERS_AND_METERS)
             {
                 for (int i = 0; i < speedLimitsKm.count; i++)
                 {
@@ -980,7 +980,7 @@ static NSDictionary *screenVoiceProviders;
         case kNavigationSettingsScreenVoiceGudanceLanguage:
         {
             _titleView.text = OALocalizedString(@"voice_provider");
-            NSString *selectedValue = settings.voiceProvider;
+            NSString *selectedValue = [settings.voiceProvider get];
             for (NSString *key in screenVoiceProviders.allKeys)
             {
                 [dataArr addObject:
@@ -1192,14 +1192,14 @@ static NSDictionary *screenVoiceProviders;
         }
         else if ([name isEqualToString:@"announce_wpt"])
         {
-            settings.announceWpt = isChecked;
+            [settings.announceWpt set:isChecked];
         }
         else if ([name isEqualToString:@"osm_live_routing"])
         {
             [settings setUseOsmLiveForRouting:isChecked];
         }
         if (self.delegate)
-            [self.delegate onSettingChanged];
+            [self.delegate onSettingsChanged];
     }
 }
 

@@ -95,7 +95,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
     return self;
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"product_title_track_recording");
 }

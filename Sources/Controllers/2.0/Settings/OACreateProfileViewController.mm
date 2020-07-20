@@ -14,6 +14,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OAProfileAppearanceViewController.h"
 #import "OAUtilities.h"
+#import "OASizes.h"
 
 #include <generalRouter.h>
 
@@ -31,6 +32,7 @@
 {
     NSMutableArray<OAApplicationMode *> * _profileList;
     CGFloat _heightForHeader;
+    UIView *_navBarBackgroundView;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -83,17 +85,31 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
     _tableView.rowHeight = 60.;
+    _tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_profile") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:YES];
-//    if (!UIAccessibilityIsReduceTransparencyEnabled())
-//    {
-//        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-//        blurEffectView.frame = self.navBarView.frame;
-//        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//        [self.navBarView insertSubview:blurEffectView atIndex:0];
-//        self.navBarView.backgroundColor = UIColor.clearColor;
-//    }
-    [self setupView];
+    _navBarBackgroundView = [self createNavBarBackgroundView];
+    _navBarBackgroundView.frame = _navBarView.bounds;
+    [_navBarView insertSubview:_navBarBackgroundView atIndex:0];
+}
+
+- (UIView *) createNavBarBackgroundView
+{
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        blurEffectView.alpha = 0;
+        return blurEffectView;
+    }
+    else
+    {
+        UIView *res = [[UIView alloc] init];
+        res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        res.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        res.alpha = 0;
+        return res;
+    }
 }
 
 - (void) didReceiveMemoryWarning
@@ -102,17 +118,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self setupView];
-}
-
-- (void) setupView
-{
-}
-
-- (void) backButtonClicked:(id)sender
+- (IBAction) backButtonClicked:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -208,13 +214,17 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGFloat alpha = _tableView.contentOffset.y < 0 ? 0 : (_tableView.contentOffset.y / (_tableView.contentSize.height - _tableView.frame.size.height));
-    if (alpha > 0.2)
+    if (alpha > 0)
     {
         _titleLabel.hidden = NO;
+        _navBarView.backgroundColor = UIColor.clearColor;
+        _navBarBackgroundView.alpha = 1;
     }
-    else if (alpha <= 0.2)
+    else
     {
         _titleLabel.hidden = YES;
+        _navBarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        _navBarBackgroundView.alpha = 0;
     }
 }
 

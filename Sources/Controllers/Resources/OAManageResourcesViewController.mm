@@ -970,20 +970,15 @@ static BOOL _lackOfResources;
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
     {
         OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
-        item.title = [[filePath.lastPathComponent stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        item.title = [OASQLiteTileSource getTitleOf:filePath];
         item.fileName = filePath.lastPathComponent;
         item.path = filePath;
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
         if ([OASQLiteTileSource isOnlineTileSource:filePath])
-        {
             [_localOnlineTileSources addObject:item];
-        }
         else
-        {
             [_localSqliteItems addObject:item];
-        }
     }
-    
     [_localSqliteItems sortUsingComparator:^NSComparisonResult(OASqliteDbResourceItem *obj1, OASqliteDbResourceItem *obj2) {
         return [obj1.title caseInsensitiveCompare:obj2.title];
     }];

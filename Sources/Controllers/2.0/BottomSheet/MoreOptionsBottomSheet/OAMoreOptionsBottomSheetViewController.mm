@@ -99,7 +99,7 @@
                       @"img" : @"ic_custom_search",
                       @"type" : @"OAMenuSimpleCell" } ];
     // Download/Update online map
-    if ([_app.data.lastMapSource.resourceId isEqualToString:@"online_tiles"] || [_app.data.lastMapSource.name isEqualToString:@"sqlitedb"])
+    if ([_app.data.lastMapSource.resourceId isEqualToString:@"online_tiles"] || [_app.data.lastMapSource.type isEqualToString:@"sqlitedb"])
     {
         [arr addObject:@{ @"title" : OALocalizedString(@"download_map"),
                           @"key" : @"download_map",

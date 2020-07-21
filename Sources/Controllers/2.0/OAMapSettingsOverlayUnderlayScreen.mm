@@ -126,7 +126,6 @@ static NSInteger kButtonsSection;
 {
     _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:YES];
     
-    
     NSMutableArray *sliderArr = [NSMutableArray new];
     [sliderArr addObject:@{
                         @"type" : kCellTypeTitleSlider,
@@ -201,7 +200,6 @@ static NSInteger kButtonsSection;
 -(void) initData
 {
 }
-
 
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
@@ -347,7 +345,7 @@ static NSInteger kButtonsSection;
         {
             OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *)someItem;
             itemMapSource = sqlite.mapSource;
-            caption = [[sqlite.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            caption = sqlite.mapSource.name;
             description = sqlite.isOnline ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map");
             size = [NSByteCountFormatter stringFromByteCount:sqlite.size countStyle:NSByteCountFormatterCountStyleFile];
             cell.leftIconView.image = [[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

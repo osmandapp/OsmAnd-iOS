@@ -208,6 +208,7 @@
             NSString *name = [NSString stringWithCString:router->profileName.c_str() encoding:NSUTF8StringEncoding];
             NSString *descr = OALocalizedString(@"osmand_routing");
             NSString *fileName = [NSString stringWithCString:router->fileName.c_str() encoding:NSUTF8StringEncoding];
+            fileName = [fileName containsString:@"OsmAnd Maps.app"] ? @"" : fileName;
             if (fileName.length > 0)
             {
                 descr = fileName;

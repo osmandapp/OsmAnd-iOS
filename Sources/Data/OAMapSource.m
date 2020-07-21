@@ -9,19 +9,22 @@
 #import "OAMapSource.h"
 
 @implementation OAMapSource
-{
-}
 
-- (instancetype)init
+@synthesize resourceId = _resourceId;
+@synthesize variant = _variant;
+@synthesize name = _name;
+@synthesize type = _type;
+
+- (instancetype) init
 {
     self = [super init];
-    if (self) {
+    if (self)
         [self commonInit];
-    }
+   
     return self;
 }
 
-- (instancetype)initWithResource:(NSString*)resourceId
+- (instancetype) initWithResource:(NSString *)resourceId
 {
     self = [super init];
     if (self) {
@@ -29,49 +32,65 @@
         _resourceId = [resourceId copy];
         _variant = nil;
         _name = @"OsmAnd";
+        _type = nil;
 
     }
     return self;
 }
 
-- (instancetype)initWithResource:(NSString*)resourceId
-                      andVariant:(NSString*)variant
+- (instancetype) initWithResource:(NSString *)resourceId
+                       andVariant:(NSString *)variant
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
         _resourceId = [resourceId copy];
         _variant = [variant copy];
         _name = @"OsmAnd";
-
+        _type = nil;
     }
     return self;
 }
 
-- (instancetype)initWithResource:(NSString*)resourceId
-                      andVariant:(NSString*)variant
-                            name:(NSString*)name
+- (instancetype) initWithResource:(NSString *)resourceId
+                       andVariant:(NSString *)variant
+                             name:(NSString *)name
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
         _resourceId = [resourceId copy];
         _variant = [variant copy];
         _name = [name copy];
-        
+        _type = nil;
     }
     return self;
 }
 
-- (void)commonInit
+- (instancetype) initWithResource:(NSString *)resourceId
+                       andVariant:(NSString *)variant
+                             name:(NSString *)name
+                             type:(NSString *)type
+{
+    self = [super init];
+    if (self)
+    {
+        [self commonInit];
+        _resourceId = [resourceId copy];
+        _variant = [variant copy];
+        _name = [name copy];
+        _type = [type copy];
+    }
+    return self;
+}
+
+- (void) commonInit
 {
 }
 
-@synthesize resourceId = _resourceId;
-@synthesize variant = _variant;
-@synthesize name = _name;
-
-- (BOOL)isEqual:(id)object
+- (BOOL) isEqual:(id)object
 {
     if (self == object)
         return YES;
@@ -83,7 +102,7 @@
            && ([_variant isEqualToString:other.variant] || (_variant == other.variant)) ;
 }
 
--(NSUInteger)hash
+- (NSUInteger) hash
 {
     return [_resourceId hash] + [_variant hash];
 }
@@ -98,42 +117,52 @@
 #define kResourceId @"resource"
 #define kVariantId @"variant"
 #define kNameId @"name"
+#define kTypeId @"type"
 
-- (void)encodeWithCoder:(NSCoder *)aCoder
+- (void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_resourceId forKey:kResourceId];
     [aCoder encodeObject:_variant forKey:kVariantId];
     [aCoder encodeObject:_name forKey:kNameId];
+    [aCoder encodeObject:_type forKey:kTypeId];
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
+- (instancetype) initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
         _resourceId = [aDecoder decodeObjectForKey:kResourceId];
         _variant = [aDecoder decodeObjectForKey:kVariantId];
         _name = [aDecoder decodeObjectForKey:kNameId];
+        _type = [aDecoder decodeObjectForKey:kTypeId];
 
         if (_variant == (id)[NSNull null])
             _variant = nil;
         if (_name == nil)
             _name = @"OsmAnd";
+        if (_type == (id)[NSNull null])
+            _type = nil;
+        
+        if ([_name isEqualToString:@"sqlitedb"])
+        {
+            _name = [[_resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            _type = @"sqlitedb";
+        }
     }
     return self;
 }
 
 #pragma mark NSCopying
 
-- (id)copyWithZone:(NSZone *)zone
+- (id) copyWithZone:(NSZone *)zone
 {
-    OAMapSource* clone = [[OAMapSource allocWithZone:zone] initWithResource:_resourceId
+    OAMapSource *clone = [[OAMapSource allocWithZone:zone] initWithResource:_resourceId
                                                                  andVariant:_variant
-                                                                       name:_name];
-
+                                                                       name:_name
+                                                                       type:_type];
     return clone;
 }
-
-#pragma mark -
 
 @end

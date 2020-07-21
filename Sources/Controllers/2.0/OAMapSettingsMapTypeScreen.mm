@@ -216,7 +216,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if ([someItem isKindOfClass:OASqliteDbResourceItem.class])
         {
             OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *) someItem;
-            caption = [[sqlite.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            caption = sqlite.mapSource.name;
             description = nil;
         }
         else if (someItem.resourceType == OsmAndResourceType::MapStyle)
@@ -232,7 +232,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else if ([someItem isKindOfClass:OAOnlineTilesResourceItem.class])
         {
             OAOnlineTilesResourceItem* item = (OAOnlineTilesResourceItem*)someItem;
-            
             caption = item.mapSource.name;
             description = nil;
 #if defined(OSMAND_IOS_DEV)
@@ -258,11 +257,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (someItem && [someItem isKindOfClass:OAMapSourceResourceItem.class])
         itm = (OAMapSourceResourceItem *) someItem;
 
-    if (itm && [_app.data.lastMapSource isEqual:itm.mapSource]) {
+    if (itm && [_app.data.lastMapSource isEqual:itm.mapSource])
         cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
-    } else {
+    else
         cell.accessoryView = nil;
-    }
     
     return cell;
 }

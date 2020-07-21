@@ -236,6 +236,11 @@
          kCFStringEncodingUTF8));
 }
 
+- (NSString *) sanitizeFileName
+{
+    return [[[self componentsSeparatedByCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]] componentsJoinedByString:@"_"];
+}
+
 @end
 
 @implementation UIView (utils)

@@ -1,5 +1,5 @@
 //
-//  OAVehicleParametersSettingsViewController.m
+//  OAVehicleParametersSettingsViewController.mm
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 30.06.2020.
@@ -22,7 +22,7 @@
 {
     NSArray<NSArray *> *_data;
     OAApplicationMode *_applicationMode;
-    NSString *_vehicleParameter;
+    NSDictionary *_vehicleParameter;
     NSString *_propertyImageName;
     NSString *_measurementUnit;
     NSArray<NSNumber *> *_measurementRangeValuesArr;
@@ -31,13 +31,14 @@
     NSNumber *_selectedWeight;
 }
 
-- (instancetype)initWithApplicationMode:(OAApplicationMode *)ap vehicleParameter:(NSString *)vp
+- (instancetype)initWithApplicationMode:(OAApplicationMode *)ap vehicleParameter:(NSDictionary *)vp
 {
     self = [super init];
     if (self)
     {
         _applicationMode = ap;
         _vehicleParameter = vp;
+        [self commonInit];
     }
     return self;
 }
@@ -49,73 +50,69 @@
 
 - (void) applyLocalization
 {
-    self.titleLabel.text = _vehicleParameter;
+    self.titleLabel.text = _vehicleParameter[@"title"];
     self.subtitleLabel.text = _applicationMode.name;
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
+- (BOOL) isBoat
+{
+    if ([_applicationMode.name isEqual: @"Boat"] || [_applicationMode.parent.name isEqual: @"Boat"])
+        return YES;
+    return NO;
+}
+
 - (void) generateData
 {
-    if ([_vehicleParameter isEqualToString:OALocalizedString(@"routing_attr_weight_name")])
+    NSString *parameter = _vehicleParameter[@"name"];
+    if ([parameter isEqualToString:@"weight"])
     {
         _propertyImageName = @"img_help_weight_limit_day";
         _measurementUnit = OALocalizedString(@"tones");
         _selectedWeight = [NSNumber numberWithFloat:0];
-        _measurementRangeValuesArr = @[ @0, @1.5, @3, @3.5, @7.5, @10, @12 ]; // has to be changed
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSNumber *val in _measurementRangeValuesArr)
-            if (val.intValue == 0)
-                [array addObject:OALocalizedString(@"sett_no_ext_input")];
-            else
-                [array addObject:[NSString stringWithFormat:@"%@ %@", val, @"t"]];
+        _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
+        NSMutableArray *array = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
+        if ([array[0] isEqualToString:@"-"])
+            [array replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
         _measurementRangeStringArr = [NSArray arrayWithArray:array];
-        _description = OALocalizedString(@"vehicle_height_descr"); // has to be changed
+        _description = OALocalizedString(@"routing_attr_weight_description");
     }
-    else if ([_vehicleParameter isEqualToString:OALocalizedString(@"routing_attr_height_name")])
+    else if ([parameter isEqualToString:@"height"])
     {
-        _propertyImageName = @"img_help_height_limit_day";
+        _propertyImageName = [self isBoat] ? @"img_help_vessel_height_day" :  @"img_help_height_limit_day";
         _measurementUnit = OALocalizedString(@"meters");
         _selectedWeight = [NSNumber numberWithFloat:0];
-        _measurementRangeValuesArr = @[ @0, @1.5, @3, @3.5, @7.5, @10, @12 ]; // has to be changed
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSNumber *val in _measurementRangeValuesArr)
-            if (val.intValue == 0)
-                [array addObject:OALocalizedString(@"sett_no_ext_input")];
-            else
-                [array addObject:[NSString stringWithFormat:@"%@ %@", val, @"m"]];
+        _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
+        NSMutableArray *array = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
+        if ([array[0] isEqualToString:@"-"])
+            [array replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
         _measurementRangeStringArr = [NSArray arrayWithArray:array];
-        _description = OALocalizedString(@"vehicle_height_descr"); // has to be changed
+        _description = [_applicationMode.name isEqual: @"Car"] ? OALocalizedString(@"routing_attr_height_description") : OALocalizedString(@"vessel_height_limit_description");
     }
-    else if ([_vehicleParameter isEqualToString:OALocalizedString(@"routing_attr_width_name")])
+    else if ([parameter isEqualToString:@"width"])
     {
-        _propertyImageName = @"img_help_width_limit_day";
+        _propertyImageName = [self isBoat] ? @"img_help_vessel_width_day" : @"img_help_width_limit_day";
         _measurementUnit = OALocalizedString(@"meters");
         _selectedWeight = [NSNumber numberWithFloat:0];
-        _measurementRangeValuesArr = @[ @0, @1.5, @3, @3.5, @7.5, @10, @12 ]; // has to be changed
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSNumber *val in _measurementRangeValuesArr)
-            if (val.intValue == 0)
-                [array addObject:OALocalizedString(@"sett_no_ext_input")];
-            else
-                [array addObject:[NSString stringWithFormat:@"%@ %@", val, @"m"]];
+        _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
+        NSMutableArray *array = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
+        if ([array[0] isEqualToString:@"-"])
+            [array replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
         _measurementRangeStringArr = [NSArray arrayWithArray:array];
-        _description = OALocalizedString(@"vehicle_height_descr"); // has to be changed
+        _description = [_applicationMode.name isEqual: @"Car"] ? OALocalizedString(@"routing_attr_width_description") : OALocalizedString(@"vessel_width_limit_description");
     }
-    else if ([_vehicleParameter isEqualToString:OALocalizedString(@"routing_attr_length_name")])
+    else if ([parameter isEqualToString:@"length"])
     {
-        _propertyImageName = @"";
+        _propertyImageName = @"img_help_length_limit_day";
         _measurementUnit = OALocalizedString(@"meters");
         _selectedWeight = [NSNumber numberWithFloat:0];
-        _measurementRangeValuesArr = @[ @0, @1.5, @3, @3.5, @7.5, @10, @12 ]; // has to be changed
-        NSMutableArray *array = [NSMutableArray array];
-        for (NSNumber *val in _measurementRangeValuesArr)
-            if (val.intValue == 0)
-                [array addObject:OALocalizedString(@"sett_no_ext_input")];
-            else
-                [array addObject:[NSString stringWithFormat:@"%@ %@", val, @"m"]];
+        _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
+        NSMutableArray *array = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
+        if ([array[0] isEqualToString:@"-"])
+            [array replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
         _measurementRangeStringArr = [NSArray arrayWithArray:array];
-        _description = OALocalizedString(@"vehicle_height_descr"); // has to be changed
+        _description = OALocalizedString(@"routing_attr_length_description");
     }
     else
     {

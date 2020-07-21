@@ -1898,6 +1898,12 @@
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
 "vehicle_height_descr" = "Provide your vehicle height, some routes restrictions may apply for high vehicles.";
+"routing_attr_weight_description" = "Specify permitted vehicle weight limit on routes.";
+"routing_attr_width_description" = "Specify permitted vehicle width limit on routes.";
+"routing_attr_height_description" = "Specify vehicle height to be permitted on routes.";
+"routing_attr_length_description" = "Specify vehicle length to be permitted on routes.";
+"vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, we will use its height in the open state.";
+"vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";

@@ -68,7 +68,7 @@
 			<key>CFBundleTypeIconFiles</key>
 			<array/>
 			<key>CFBundleTypeName</key>
-			<string>OsmAnd Settings Format</string>
+			<string>OsmAnd Settings File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
@@ -226,7 +226,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>OsmAnd settings format</string>
+			<string>OsmAnd settings File</string>
 			<key>UTTypeIdentifier</key>
 			<string>net.osmand.osf</string>
 			<key>UTTypeTagSpecification</key>
@@ -294,7 +294,7 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>OsmAnd Settings Format</string>
+			<string>OsmAnd Settings File</string>
 			<key>UTTypeIdentifier</key>
 			<string>net.osmand.osf</string>
 			<key>UTTypeTagSpecification</key>

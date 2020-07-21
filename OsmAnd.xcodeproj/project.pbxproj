@@ -232,6 +232,8 @@
 		1571CE4024AE190100083F92 /* OATitleDescriptionCheckmarkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1571CE3F24AE190100083F92 /* OATitleDescriptionCheckmarkCell.xib */; };
 		1571CE4224AE191E00083F92 /* OATitleDescriptionCheckmarkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1571CE4124AE191E00083F92 /* OATitleDescriptionCheckmarkCell.m */; };
 		1571CE4524AE2A2600083F92 /* OACoordinatesFormatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1571CE4424AE2A2600083F92 /* OACoordinatesFormatViewController.m */; };
+		15720BEE24BF36B400BFC84F /* OAGlobalSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15720BED24BF36B400BFC84F /* OAGlobalSettingsViewController.m */; };
+		15720BF124BF3B0F00BFC84F /* OAGlobalSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15720BF024BF3B0F00BFC84F /* OAGlobalSettingsViewController.xib */; };
 		1575409D2452F2D300327879 /* OASettingsCheckmarkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1575409C2452F2D200327879 /* OASettingsCheckmarkCell.xib */; };
 		157540A02452F3D900327879 /* OASettingsCheckmarkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1575409F2452F3D900327879 /* OASettingsCheckmarkCell.m */; };
 		157540A32452F45A00327879 /* OADirectionAppearanceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157540A22452F45A00327879 /* OADirectionAppearanceViewController.m */; };
@@ -6132,6 +6134,9 @@
 		1571CE4324AE192E00083F92 /* OATitleDescriptionCheckmarkCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATitleDescriptionCheckmarkCell.h; path = Controllers/Cells/OATitleDescriptionCheckmarkCell.h; sourceTree = "<group>"; };
 		1571CE4424AE2A2600083F92 /* OACoordinatesFormatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OACoordinatesFormatViewController.m; path = Sources/Controllers/2.0/OACoordinatesFormatViewController.m; sourceTree = SOURCE_ROOT; };
 		1571CE4624AE2A6000083F92 /* OACoordinatesFormatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OACoordinatesFormatViewController.h; path = Sources/Controllers/2.0/OACoordinatesFormatViewController.h; sourceTree = SOURCE_ROOT; };
+		15720BED24BF36B400BFC84F /* OAGlobalSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGlobalSettingsViewController.m; sourceTree = "<group>"; };
+		15720BEF24BF36C800BFC84F /* OAGlobalSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGlobalSettingsViewController.h; sourceTree = "<group>"; };
+		15720BF024BF3B0F00BFC84F /* OAGlobalSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGlobalSettingsViewController.xib; sourceTree = "<group>"; };
 		1575409C2452F2D200327879 /* OASettingsCheckmarkCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OASettingsCheckmarkCell.xib; path = Resources/Controllers/Cells/OASettingsCheckmarkCell.xib; sourceTree = "<group>"; };
 		1575409E2452F3D900327879 /* OASettingsCheckmarkCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASettingsCheckmarkCell.h; path = Controllers/Cells/OASettingsCheckmarkCell.h; sourceTree = "<group>"; };
 		1575409F2452F3D900327879 /* OASettingsCheckmarkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASettingsCheckmarkCell.m; path = Controllers/Cells/OASettingsCheckmarkCell.m; sourceTree = "<group>"; };
@@ -14580,9 +14585,12 @@
 		DA25583C24ADE40E0081D155 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				15720BF024BF3B0F00BFC84F /* OAGlobalSettingsViewController.xib */,
 				DA25583D24ADE40E0081D155 /* GeneralSettings */,
 				DA25585224ADE40E0081D155 /* NavigationSettings */,
 				DA2558D524ADE4F20081D155 /* OABaseSettingsViewController.h */,
+				15720BED24BF36B400BFC84F /* OAGlobalSettingsViewController.m */,
+				15720BEF24BF36C800BFC84F /* OAGlobalSettingsViewController.h */,
 				DA2558D324ADE4F20081D155 /* OABaseSettingsViewController.m */,
 				DA2558D424ADE4F20081D155 /* OABaseSettingsViewController.xib */,
 				DA25587C24ADE40F0081D155 /* OACreateProfileViewController.h */,
@@ -19687,6 +19695,7 @@
 				8477774E1FAA260E00CA8C1F /* widget_speed_night.png in Resources */,
 				0CEF2C2824B717CD00BAAC4B /* ic_action_enduro_motorcycle@2x.png in Resources */,
 				84F3A96C1B4F9D0400D16EBC /* OAGPXRouteGroupsViewController.xib in Resources */,
+				15720BF124BF3B0F00BFC84F /* OAGlobalSettingsViewController.xib in Resources */,
 				841C47491AF91B800039B3BF /* destination_parking_place.png in Resources */,
 				845E05C51B55129100DFC2A7 /* ic_destination_pin_2_small@2x.png in Resources */,
 				843E5CC91AB341E000BE14BE /* icon_direction@3x.png in Resources */,
@@ -21157,6 +21166,7 @@
 				DAF06701238FE94A00210E60 /* OAMapSettingsOnlineSourcesScreen.mm in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				8417664C1B7355DD002A08CB /* OAHistoryViewController.mm in Sources */,
+				15720BEE24BF36B400BFC84F /* OAGlobalSettingsViewController.m in Sources */,
 				84B4FD561A90F74800A147BA /* OAGPXDocumentPrimitives.mm in Sources */,
 				DA5AA2D72351C8D500DF0B7B /* OAHomeWorkCell.mm in Sources */,
 				8485FA461FC95B21005991FE /* OADayNightHelper.m in Sources */,

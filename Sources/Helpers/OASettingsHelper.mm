@@ -11,6 +11,7 @@
 #import "OASettingsExporter.h"
 #import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
+#import "OAMapStyleSettings.h"
 
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
@@ -664,7 +665,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     _additionalPrefs = json[@"prefs"];
 }
 
-- (void) readPreferenceFromJson:(NSString *)key value:(id)value
+- (void)readPreferenceFromJson:(NSString *)key value:(id)value
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     if (!_appModeBeanPrefsIds)
@@ -672,9 +673,23 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     
     if (![_appModeBeanPrefsIds containsObject:key])
     {
-        OAProfileSetting *setting = [settings getSettingById:key];
-        if (setting)
-            [setting setValueFromString:value appMode:_appMode];
+        if ([key hasPrefix:@"nrenderer_"])
+        {
+            NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
+            OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+            OAMapStyleParameter *param = [styleSettings getParameter:paramName];
+            if (param)
+            {
+                param.value = value;
+                [styleSettings save:param];
+            }
+        }
+        else
+        {
+            OAProfileSetting *setting = [settings getSettingById:key];
+            if (setting)
+                [setting setValueFromString:value appMode:_appMode];
+        }
     }
 }
 

@@ -220,7 +220,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) writeToJson:(id)json error:(NSError * _Nullable *)error;
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error;
 - (void) writeItemsToJson:(id)json error:(NSError * _Nullable *)error;
-- (void) readPreferenceFromJson:(NSString *)key value:(id)value;
+- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value;
 
 @end
 
@@ -665,7 +665,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     _additionalPrefs = json[@"prefs"];
 }
 
-- (void)readPreferenceFromJson:(NSString *)key value:(id)value
+- (void)readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     if (!_appModeBeanPrefsIds)

@@ -418,7 +418,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) CLLocation *lastSearchedPoint;
 
 @property (assign, nonatomic) BOOL settingDoNotShowPromotions;
-@property (assign, nonatomic) BOOL settingDoNotUseAnalytics;
+@property (assign, nonatomic) BOOL settingUseAnalytics;
 @property (nonatomic) OAProfileInteger *settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
 
 @property (assign, nonatomic) BOOL liveUpdatesPurchased;

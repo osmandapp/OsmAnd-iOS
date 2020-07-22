@@ -255,7 +255,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
-@interface OAMetricSystem : OAProfileInteger
+@interface OAProfileMetricSystem : OAProfileInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
 
@@ -353,7 +353,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (nonatomic) OAProfileInteger *settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (readonly, nonatomic) BOOL nightMode;
-@property (nonatomic) OAMetricSystem *metricSystem;
+@property (nonatomic) OAProfileMetricSystem *metricSystem;
 @property (nonatomic) OAProfileBoolean *drivingRegionAutomatic;
 @property (nonatomic) OAProfileDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;

@@ -13,6 +13,7 @@
 #import "OAMapSource.h"
 #import "OAMapLayersConfiguration.h"
 #import "OARTargetPoint.h"
+#import "OAAppSettings.h"
 
 typedef NS_ENUM(NSInteger, EOATerrainType)
 {

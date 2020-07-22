@@ -1340,6 +1340,22 @@
         [[OAAppSettings sharedManager].metricSystem set:[OADrivingRegion getDefMetrics:drivingRegionConstant] mode:mode];
 }
 
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"EUROPE_ASIA"])
+        return [self set:DR_EUROPE_ASIA mode:mode];
+    else if ([strValue isEqualToString:@"US"])
+        return [self set:DR_US mode:mode];
+    else if ([strValue isEqualToString:@"CANADA"])
+        return [self set:DR_CANADA mode:mode];
+    else if ([strValue isEqualToString:@"UK_AND_OTHERS"])
+        return [self set:DR_UK_AND_OTHERS mode:mode];
+    else if ([strValue isEqualToString:@"JAPAN"])
+        return [self set:DR_JAPAN mode:mode];
+    else if ([strValue isEqualToString:@"AUSTRALIA"])
+        return [self set:DR_AUSTRALIA mode:mode];
+}
+
 - (void) resetToDefault
 {
     EOADrivingRegion defaultValue = self.defValue;
@@ -1352,7 +1368,7 @@
 
 @end
 
-@implementation OAMetricSystem
+@implementation OAProfileMetricSystem
 
 @dynamic defValue;
 
@@ -1379,6 +1395,20 @@
 - (void) set:(EOAMetricsConstant)metricsConstant mode:(OAApplicationMode *)mode
 {
     [super set:metricsConstant mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"KILOMETERS_AND_METERS"])
+        return [self set:KILOMETERS_AND_METERS mode:mode];
+    else if ([strValue isEqualToString:@"MILES_AND_FEET"])
+        return [self set:MILES_AND_FEET mode:mode];
+    else if ([strValue isEqualToString:@"MILES_AND_METERS"])
+        return [self set:MILES_AND_METERS mode:mode];
+    else if ([strValue isEqualToString:@"MILES_AND_YARDS"])
+        return [self set:MILES_AND_YARDS mode:mode];
+    else if ([strValue isEqualToString:@"NAUTICAL_MILES"])
+        return [self set:NAUTICAL_MILES mode:mode];
 }
 
 - (void) resetToDefault
@@ -1699,10 +1729,16 @@
         _settingAllow3DView = [OAProfileBoolean withKey:settingEnable3DViewKey defValue:YES];
         _drivingRegionAutomatic = [OAProfileBoolean withKey:drivingRegionAutomaticKey defValue:YES];
         _drivingRegion = [OAProfileDrivingRegion withKey:drivingRegionKey defValue:[OADrivingRegion getDefaultRegion]];
-        _metricSystem = [OAMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
+        _metricSystem = [OAProfileMetricSystem withKey:metricSystemKey defValue:KILOMETERS_AND_METERS];
         _metricSystemChangedManually = [OAProfileBoolean withKey:metricSystemChangedManuallyKey defValue:NO];
         _settingGeoFormat = [OAProfileInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
-        _settingExternalInputDevice =[OAProfileInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
+        _settingExternalInputDevice = [OAProfileInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
+        
+        [_registeredPreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
+        [_registeredPreferences setObject:_drivingRegion forKey:@"default_driving_region"];
+        [_registeredPreferences setObject:_metricSystem forKey:@"default_metric_system"];
+        [_registeredPreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
+        [_registeredPreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
         
         _speedSystem = [OAProfileSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _angularUnits = [OAProfileAngularConstant withKey:angularUnitsKey defValue:DEGREES];
@@ -1799,10 +1835,11 @@
         _mapillaryFilterStartDate = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterStartDateKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:mapillaryFilterStartDateKey] : 0;
         _mapillaryFilterEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterEndDateKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:mapillaryFilterEndDateKey] : 0;
         _mapillaryFilterPano = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterPanoKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapillaryFilterPanoKey] : NO;
-        
-        // TODO: add quick action state to registeredPrefs when implemented in Android #9470
+
         _quickActionIsOn = [OAProfileBoolean withKey:quickActionIsOnKey defValue:NO];
         _quickActionsList = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionsListKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:quickActionsListKey] : nil;
+        
+        [_registeredPreferences setObject:_quickActionIsOn forKey:@"quick_action_state"];
         
         _quickActionPortraitX = [OAProfileDouble withKey:quickActionPortraitXKey defValue:0];
         _quickActionPortraitY = [OAProfileDouble withKey:quickActionPortraitYKey defValue:0];

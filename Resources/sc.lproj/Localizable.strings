@@ -1800,3 +1800,9 @@
 "voice_prompts" = "Indicatziones vocales";
 "default_speed" = "Letresa predefinida";
 "routing_attr_length_name" = "Lìmite de longària";
+"send_anonymous_data" = "Imbia datos anònimos";
+"base_profile_descr" = "Profilu de base";
+"global_settings_descr" = "S'àplicat a totu s'aplicatzione.";
+"global_settings" = "Impostatziones globales";
+"send_anonymous_data_desc" = "Imbia sas istatìsticas de iscarrigamentu de sas mapas a OsmAnd. Non collimus datos de positzione, o informatziones personales.";
+"default_profile_descr" = "Ischerta unu profilu chi at a èssere impreadu in s'allughidura de s'aplicatzione.";

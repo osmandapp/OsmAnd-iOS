@@ -734,7 +734,7 @@
 "all_application_profiles" = "All application profiles";
 "after_tapping_done" = "After you tap Done, deleted profiles will be lost completely.";
 "empty_profile_name_warning" = "Profile name cannot be empty.";
-"not_available_profile_name" = "There is already profile with that name.";
+"not_available_profile_name" = "Profile with this name already exists.";
 
 // Purchases
 "prch_addons" = "Addons";

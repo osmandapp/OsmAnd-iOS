@@ -60,7 +60,7 @@
     NSMutableArray *customProfileList = [NSMutableArray array];
     NSMutableArray *defaultProfileList = [NSMutableArray array];
     for (OAApplicationMode *profile in allProfileList)
-        if (profile.parent != nil)
+        if (profile.isCustomProfile)
             [customProfileList addObject:profile];
         else
             [defaultProfileList addObject:profile];
@@ -84,7 +84,6 @@
     _tableView.dataSource = self;
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
-    _tableView.rowHeight = 60.;
     _tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_profile") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:YES];
@@ -110,12 +109,6 @@
         res.alpha = 0;
         return res;
     }
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction) backButtonClicked:(id)sender

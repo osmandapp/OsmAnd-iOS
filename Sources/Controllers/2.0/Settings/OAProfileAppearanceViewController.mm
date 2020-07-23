@@ -34,7 +34,6 @@
 {
     OAApplicationMode *_parent;
     NSArray<NSArray *> *_data;
-    NSArray<OAApplicationMode *> *_profileList;
     
     NSString *_profileName;
     NSArray<NSNumber *> *_colors;
@@ -131,19 +130,19 @@
         if (number == 0)
             baseString = profileName;
     }
-    NSString *newProfile;
+    NSString *proposedProfileName;
     for (NSInteger value = number + 1; ; value++)
     {
-        newProfile = [NSString stringWithFormat:@"%@ %ld", baseString, value];
-        if ([self isNameAvailable: newProfile])
+        proposedProfileName = [NSString stringWithFormat:@"%@ %ld", baseString, value];
+        if ([self isNameAvailable: proposedProfileName])
             break;
     }
-    return newProfile;
+    return proposedProfileName;
 }
 
 - (BOOL) isNameAvailable:(NSString *)profileName
 {
-    for (OAApplicationMode *profile in _profileList)
+    for (OAApplicationMode *profile in OAApplicationMode.allPossibleValues)
         if ([profile.name isEqual:profileName])
             return NO;
     return YES;
@@ -191,7 +190,6 @@
 
 - (void) generateData
 {
-    _profileList = [[NSMutableArray alloc] initWithArray:OAApplicationMode.allPossibleValues];
     _profileName = [self getProposedProfileName:_parent.name];
     
     _colors = @[

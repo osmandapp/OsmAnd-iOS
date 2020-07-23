@@ -1043,7 +1043,7 @@
 "rendering_attr_hmRendered_description" = "Aumentar a cantidade de detalles que se amosan no mapa.";
 "rendering_attr_depthContours_description" = "Amosar curvas e puntos do afundimento.";
 "rendering_attr_highway_class_track_grade2_name" = "Grao 2";
-"rendering_attr_streetLighting_name" = "Alumeado da rúa";
+"rendering_attr_streetLighting_name" = "Alumeamento público";
 "rendering_attr_hideWoodScrubs_name" = "Bosque e matogueiras";
 "rendering_value_disabled_name" = "Desactivado";
 "rendering_attr_smoothness_good_name" = "Boa";
@@ -1368,3 +1368,4 @@
 "active_markers" = "Marcaxes activas";
 "exit_at" = "Saír en";
 "public_transport_warning_title" = "A navegación en transporte público atópase agora en fase de proba beta, poden xerarse erros e imprecisións.";
+"routing_attr_length_name" = "Límite de lonxitude";

@@ -60,7 +60,6 @@
 
 - (NSString *) getFormattedTimeHM:(NSTimeInterval)timeInterval;
 - (NSString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
-- (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive mode:(OAApplicationMode *)mode;
 - (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive;
 - (NSString *) getFormattedSpeed:(float) metersperseconds;
 - (NSString *) getFormattedAlt:(double) alt;

@@ -4429,8 +4429,8 @@
 		DA2558A624ADE40F0081D155 /* OARepeatNavigationInstructionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25585C24ADE40F0081D155 /* OARepeatNavigationInstructionsViewController.m */; };
 		DA2558A724ADE40F0081D155 /* OAAutoCenterMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25585F24ADE40F0081D155 /* OAAutoCenterMapViewController.m */; };
 		DA2558A824ADE40F0081D155 /* OAAutoCenterMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25585F24ADE40F0081D155 /* OAAutoCenterMapViewController.m */; };
-		DA2558A924ADE40F0081D155 /* OADefaultSpeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.m */; };
-		DA2558AA24ADE40F0081D155 /* OADefaultSpeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.m */; };
+		DA2558A924ADE40F0081D155 /* OADefaultSpeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.mm */; };
+		DA2558AA24ADE40F0081D155 /* OADefaultSpeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.mm */; };
 		DA2558AB24ADE40F0081D155 /* OARecalculateRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.m */; };
 		DA2558AC24ADE40F0081D155 /* OARecalculateRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.m */; };
 		DA2558AD24ADE40F0081D155 /* OAMapOrientationThresholdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25586524ADE40F0081D155 /* OAMapOrientationThresholdViewController.m */; };
@@ -8967,7 +8967,7 @@
 		DA25585E24ADE40F0081D155 /* OAAutoZoomMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAutoZoomMapViewController.h; sourceTree = "<group>"; };
 		DA25585F24ADE40F0081D155 /* OAAutoCenterMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAutoCenterMapViewController.m; sourceTree = "<group>"; };
 		DA25586024ADE40F0081D155 /* OAVehicleParametersSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVehicleParametersSettingsViewController.h; sourceTree = "<group>"; };
-		DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADefaultSpeedViewController.m; sourceTree = "<group>"; };
+		DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADefaultSpeedViewController.mm; sourceTree = "<group>"; };
 		DA25586224ADE40F0081D155 /* OASpeedLimitToleranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASpeedLimitToleranceViewController.h; sourceTree = "<group>"; };
 		DA25586324ADE40F0081D155 /* OAVoicePromptsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVoicePromptsViewController.h; sourceTree = "<group>"; };
 		DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARecalculateRouteViewController.m; sourceTree = "<group>"; };
@@ -14641,7 +14641,7 @@
 				DA25585524ADE40F0081D155 /* OAAvoidPreferParametersViewController.h */,
 				DA25587624ADE40F0081D155 /* OAAvoidPreferParametersViewController.mm */,
 				DA25587A24ADE40F0081D155 /* OADefaultSpeedViewController.h */,
-				DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.m */,
+				DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.mm */,
 				DA25585424ADE40E0081D155 /* OAMapBehaviorViewController.h */,
 				DA25586924ADE40F0081D155 /* OAMapBehaviorViewController.m */,
 				DA25587524ADE40F0081D155 /* OAMapOrientationThresholdViewController.h */,
@@ -20492,7 +20492,7 @@
 				847A1D551DF94E9B003C1246 /* OADestinationViewController.mm in Sources */,
 				DA2558A824ADE40F0081D155 /* OAAutoCenterMapViewController.m in Sources */,
 				DA68629122CCB25F00C32E32 /* OATableViewCustomFooterView.m in Sources */,
-				DA2558AA24ADE40F0081D155 /* OADefaultSpeedViewController.m in Sources */,
+				DA2558AA24ADE40F0081D155 /* OADefaultSpeedViewController.mm in Sources */,
 				DA5AA2DC2351C97300DF0B7B /* OAHomeWorkCollectionViewCell.mm in Sources */,
 				DAE47428231E66CC00E5292D /* GpxUIHelper.swift in Sources */,
 				DA9C6248221D41380087E140 /* OAOsmEditingViewController.mm in Sources */,
@@ -20686,7 +20686,7 @@
 				848300C01CFCAA680018B27B /* OAPOIMyLocationType.m in Sources */,
 				DA975EBA21EA061C00BE195A /* OAEditGPXColorViewController.m in Sources */,
 				DA6F0A9022C0FCBD00E4FA16 /* OAPasswordInputFieldCell.mm in Sources */,
-				DA2558A924ADE40F0081D155 /* OADefaultSpeedViewController.m in Sources */,
+				DA2558A924ADE40F0081D155 /* OADefaultSpeedViewController.mm in Sources */,
 				848D175B1B1C97C100A656F4 /* OAGroupViewCell.m in Sources */,
 				DA68629022CCB25F00C32E32 /* OATableViewCustomFooterView.m in Sources */,
 				844089A31E28F15D00215AA3 /* OAAtomicInteger.m in Sources */,

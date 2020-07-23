@@ -1,5 +1,5 @@
 //
-//  OADefaultSpeedViewController.m
+//  OADefaultSpeedViewController.mm
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 30.06.2020.
@@ -13,11 +13,12 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAndApp.h"
+#import "OsmAndAppImpl.h"
 
 #define kCellTypeSpeed @"time_cell"
 #define kCellTypePicker @"pickerCell"
 #define kMinSpeedSection 0
-#define kDefaultSpeedSection 1
+#define kDefaultSpeedSection ([_speedParameters[@"defaultSpeedOnly"] boolValue] ? 0 : 1)
 #define kMaxSpeedSection 2
 
 @interface OADefaultSpeedViewController() <OACustomPickerTableViewCellDelegate>
@@ -29,11 +30,11 @@
     NSArray<NSArray *> *_data;
     OAApplicationMode *_applicationMode;
     OAAppSettings *_settings;
+    
     NSDictionary *_speedParameters;
-    NSString *_vehicleParameter;
     NSIndexPath *_pickerIndexPath;
-    NSArray<NSNumber *> *_possibleSpeedValues;
     NSArray<NSString *> *_possibleSpeedValuesString;
+    CGFloat _ratio;
     NSString *_minSpeedValue;
     NSString *_defaultSpeedValue;
     NSString *_maxSpeedValue;
@@ -68,30 +69,60 @@
 
 - (void) generateData
 {
-    NSString *minValueOfRange = [[OsmAndApp instance] getFormattedSpeed:[_speedParameters[@"minSpeed"] floatValue] drive:NO mode:_applicationMode];
-    NSString *maxValueOfRange = [[OsmAndApp instance] getFormattedSpeed:[_speedParameters[@"maxSpeed"] floatValue] drive:NO mode:_applicationMode];
-    
-    _minSpeedValue = [[OsmAndApp instance] getFormattedSpeed:[_settings.minSpeed get:_applicationMode] drive:NO mode:_applicationMode];
-    _defaultSpeedValue = [[OsmAndApp instance] getFormattedSpeed:[_settings.defaultSpeed get:_applicationMode] drive:NO mode:_applicationMode];
-    _maxSpeedValue = [[OsmAndApp instance] getFormattedSpeed:[_settings.maxSpeed get:_applicationMode] drive:NO mode:_applicationMode];
-    
-    if ([_minSpeedValue intValue] == 0)
+    NSString *units = [OASpeedConstant toShortString:[_settings.speedSystem get:_applicationMode]];
+    switch ([_settings.speedSystem get:_applicationMode])
     {
-        _minSpeedValue = minValueOfRange;
+        case MILES_PER_HOUR:
+            _ratio = 3600. / METERS_IN_ONE_MILE;
+            break;
+        case KILOMETERS_PER_HOUR:
+            _ratio = 3600. / METERS_IN_KILOMETER;
+            break;
+        case MINUTES_PER_KILOMETER:
+            _ratio = 3600. / METERS_IN_KILOMETER;
+            units = OALocalizedString(@"units_kmh");
+            break;
+        case NAUTICALMILES_PER_HOUR:
+            _ratio = 3600. / METERS_IN_ONE_NAUTICALMILE;
+            break;
+        case MINUTES_PER_MILE:
+            _ratio = 3600. / METERS_IN_ONE_MILE;
+            units = OALocalizedString(@"units_mph");
+            break;
+        case METERS_PER_SECOND:
+            _ratio = 1;
+            break;
     }
-    if ([_maxSpeedValue intValue] == 0)
+    CGFloat settingsMinSpeed = [_settings.minSpeed get:_applicationMode];
+    CGFloat settingsMaxSpeed = [_settings.maxSpeed get:_applicationMode];
+    
+    NSInteger defaultValue = round([_settings.defaultSpeed get:_applicationMode] * _ratio);
+    NSInteger maxValue = round((settingsMaxSpeed > 0 ? settingsMaxSpeed : [_speedParameters[@"maxSpeed"] floatValue]) * _ratio);
+    NSInteger minValue = round((settingsMinSpeed > 0 ? settingsMinSpeed : [_speedParameters[@"minSpeed"] floatValue]) * _ratio);
+    NSInteger min;
+    NSInteger max;
+    
+    if ([_speedParameters[@"defaultSpeedOnly"] boolValue])
     {
-        _maxSpeedValue = maxValueOfRange;
+        minValue = round(1 * _ratio);
+        maxValue = round(300 * _ratio);
+        min = minValue;
+        max = maxValue;
+    }
+    else
+    {
+        min = round([_speedParameters[@"minSpeed"] floatValue] * _ratio / 2);
+        max = round([_speedParameters[@"maxSpeed"] floatValue] * _ratio * 1.5);
     }
     
-    NSMutableArray *array = [NSMutableArray array];
-    for (NSInteger value = [minValueOfRange intValue]; value <= [maxValueOfRange intValue]; value++)
-        [array addObject:[NSNumber numberWithInteger:value]];
-    _possibleSpeedValues = [NSArray arrayWithArray:array];
+    NSMutableArray *possibleSpeedValues = [NSMutableArray array];
+    for (NSInteger value = min; value <= max; value++)
+        [possibleSpeedValues addObject:[NSString stringWithFormat:@"%ld %@", (long)value, units]];
+    _possibleSpeedValuesString = [NSArray arrayWithArray:possibleSpeedValues];
     
-    _possibleSpeedValuesString = [NSArray arrayWithArray: [OAUtilities arrayOfSpeedValues:_possibleSpeedValues]];
-
-//    _maxSpeedValue = [NSNumber numberWithDouble:[_settings.maxSpeed get:_applicationMode]];
+    _minSpeedValue = [NSString stringWithFormat:@"%ld %@", minValue, units];
+    _maxSpeedValue = [NSString stringWithFormat:@"%ld %@", maxValue, units];
+    _defaultSpeedValue = [NSString stringWithFormat:@"%ld %@", defaultValue, units];
 }
 
 - (void) viewDidLoad
@@ -133,17 +164,25 @@
     [maxSpeedArr addObject:@{
         @"type" : kCellTypePicker,
     }];
-    [tableData addObject:minSpeedArr];
-    [tableData addObject:defaultSpeedArr];
-    [tableData addObject:maxSpeedArr];
+    if (![_speedParameters[@"defaultSpeedOnly"] boolValue])
+    {
+        [tableData addObject:minSpeedArr];
+        [tableData addObject:defaultSpeedArr];
+        [tableData addObject:maxSpeedArr];
+    }
+    else
+        [tableData addObject:defaultSpeedArr];
     _data = [NSArray arrayWithArray:tableData];
 }
 
 - (IBAction)doneButtonPressed:(id)sender
 {
-    [_settings.minSpeed set:([_minSpeedValue doubleValue] / 3.6f) mode:_applicationMode];
-    [_settings.defaultSpeed set:[_defaultSpeedValue doubleValue] mode:_applicationMode];
-    [_settings.maxSpeed set:[_maxSpeedValue doubleValue] mode:_applicationMode];
+    [_settings.defaultSpeed set:([_defaultSpeedValue floatValue] / _ratio) mode:_applicationMode];
+    if (![_speedParameters[@"defaultSpeedOnly"] boolValue])
+    {
+        [_settings.minSpeed set:([_minSpeedValue floatValue] / _ratio) mode:_applicationMode];
+        [_settings.maxSpeed set:([_maxSpeedValue floatValue] / _ratio) mode:_applicationMode];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -180,10 +219,10 @@
         }
         cell.dataArray = _possibleSpeedValuesString;
         NSInteger rowValue = 0;
-        if (indexPath.section == kMinSpeedSection)
-            rowValue = [_possibleSpeedValuesString indexOfObject:_minSpeedValue];
-        else if (indexPath.section == kDefaultSpeedSection)
+        if (indexPath.section == kDefaultSpeedSection)
             rowValue = [_possibleSpeedValuesString indexOfObject:_defaultSpeedValue];
+        else if (indexPath.section == kMinSpeedSection)
+            rowValue = [_possibleSpeedValuesString indexOfObject:_minSpeedValue];
         else if (indexPath.section == kMaxSpeedSection)
             rowValue = [_possibleSpeedValuesString indexOfObject:_maxSpeedValue];
         [cell.picker selectRow:rowValue inComponent:0 animated:NO];
@@ -218,7 +257,7 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return [_speedParameters[@"defaultSpeedOnly"] boolValue] ? 1 : 3;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -228,7 +267,7 @@
     return UITableViewAutomaticDimension;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 17.;
 }
@@ -265,8 +304,8 @@
     return _pickerIndexPath != nil;
 }
 
-- (void) hideExistingPicker {
-    
+- (void) hideExistingPicker
+{
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
     _pickerIndexPath = nil;
 }
@@ -303,17 +342,7 @@
 - (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
 {
     NSInteger value = [zoom intValue];
-    if (pickerTag == kMinSpeedSection)
-    {
-        if (value <= _defaultSpeedValue.intValue)
-            _minSpeedValue = zoom;
-        else
-        {
-            _minSpeedValue = _defaultSpeedValue;
-            [self updatePickerCell:_defaultSpeedValue];
-        }
-    }
-    else if (pickerTag == kDefaultSpeedSection)
+    if (pickerTag == kDefaultSpeedSection)
     {
         if (value <= _maxSpeedValue.intValue && value >= _minSpeedValue.intValue)
             _defaultSpeedValue = zoom;
@@ -326,6 +355,16 @@
         {
             _defaultSpeedValue = _minSpeedValue;
             [self updatePickerCell:_minSpeedValue];
+        }
+    }
+    else if (pickerTag == kMinSpeedSection)
+    {
+        if (value <= _defaultSpeedValue.intValue)
+            _minSpeedValue = zoom;
+        else
+        {
+            _minSpeedValue = _defaultSpeedValue;
+            [self updatePickerCell:_defaultSpeedValue];
         }
     }
     else if (pickerTag == kMaxSpeedSection)

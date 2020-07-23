@@ -69,7 +69,7 @@
     NSMutableArray *defaultSpeedArr = [NSMutableArray array];
     auto router = [self.class getRouter:self.appMode];
     _otherParameters.clear();
-    if (router && self.appMode != OAApplicationMode.PUBLIC_TRANSPORT)
+    if (router && self.appMode != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode != OAApplicationMode.SKI && self.appMode.parent != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode.parent != OAApplicationMode.SKI)
     {
         auto& parameters = router->getParametersList();
         for (const auto& p : parameters)
@@ -78,7 +78,7 @@
             if (![param hasPrefix:@"avoid_"] && ![param hasPrefix:@"prefer_"] &&![param isEqualToString:@"short_way"] && "driving_style" != p.group)
                 _otherParameters.push_back(p);
         }
-        for (auto& p : _otherParameters)
+        for (const auto& p : _otherParameters)
         {
             NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
             NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
@@ -121,6 +121,8 @@
                     ];
             }
         }
+    }
+    if (self.appMode != OAApplicationMode.AIRCRAFT && self.appMode.parent != OAApplicationMode.AIRCRAFT)
         [defaultSpeedArr addObject:@{
             @"type" : kCellTypeIconText,
             @"title" : OALocalizedString(@"default_speed"),
@@ -130,7 +132,14 @@
             @"icon" : @"ic_action_speed",
             @"name" : @"defaultSpeed",
         }];
-    }
+    else
+        [defaultSpeedArr addObject:@{
+            @"type" : kCellTypeIconText,
+            @"title" : OALocalizedString(@"default_speed"),
+            @"defaultSpeedOnly" : @YES,
+            @"icon" : @"ic_action_speed",
+            @"name" : @"defaultSpeed",
+        }];
     if (parametersArr.count > 0)
         [tableData addObject:parametersArr];
     if (defaultSpeedArr.count > 0)

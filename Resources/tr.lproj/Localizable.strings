@@ -1795,3 +1795,9 @@
 "select_distance_for_recalculation" = "Güzergahın yeniden hesaplanacağı mesafeyi seçin.";
 "route_recalculation_descr" = "Güzergahtan geçerli konuma olan mesafe seçilen değerden fazla ise güzergah yeniden hesaplanacaktır.";
 "avoid_routes_and_road" = "Belirli güzergahlardan ve yol türlerinden kaçının";
+"send_anonymous_data" = "Anonim veri gönder";
+"base_profile_descr" = "Temel profil";
+"global_settings_descr" = "Tüm uygulamayı etkiler.";
+"global_settings" = "Genel ayarlar";
+"send_anonymous_data_desc" = "OsmAnd harita indirme istatistiklerini gönder, konum verileri veya herhangi bir kişisel bilgi toplamıyoruz.";
+"default_profile_descr" = "Uygulama başlatılırken kullanılacak bir profil seçin.";

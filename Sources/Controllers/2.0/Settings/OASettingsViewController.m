@@ -35,8 +35,8 @@
 #import "OARearrangeProfilesViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OAProfileGeneralSettingsViewController.h"
+#import "OAGlobalSettingsViewController.h"
 
-#define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
 #define kCellTypeMultiSelectionList @"multi_selection_list"
 #define kCellTypeCheck @"check"
@@ -100,6 +100,12 @@
         case EOASettingsScreenMain:
         {
             NSMutableArray *arr = [NSMutableArray arrayWithObjects:@{
+                                                                     @"name" : @"global_settings",
+                                                                     @"title" : OALocalizedString(@"global_settings"),
+                                                                     @"description" : OALocalizedString(@"global_settings_descr"),
+                                                                     @"img" : @"menu_cell_pointer.png",
+                                                                     @"type" : kCellTypeCheck },
+                                                                    @{
                                                                      @"name" : @"general_settings",
                                                                      @"title" : OALocalizedString(@"general_settings_2"),
                                                                      @"description" : OALocalizedString(@"general_settings_descr"),
@@ -195,42 +201,6 @@
         return _data[indexPath.row];
 }
 
-- (void) applyParameter:(id)sender
-{
-    if ([sender isKindOfClass:[UISwitch class]])
-    {
-        UISwitch *sw = (UISwitch *) sender;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
-        NSDictionary *item = [self getItem:indexPath];
-        NSString *name = item[@"name"];
-        if (name)
-        {
-            OAAppSettings *settings = [OAAppSettings sharedManager];
-            BOOL isChecked = ((UISwitch *) sender).on;
-            if ([name isEqualToString:@"do_not_show_discount"])
-            {
-                [settings setSettingDoNotShowPromotions:isChecked];
-            }
-            else if ([name isEqualToString:@"do_not_send_anonymous_data"])
-            {
-                [settings setSettingDoNotUseAnalytics:isChecked];
-            }
-            else if ([name isEqualToString:@"allow_3d"])
-            {
-                [settings.settingAllow3DView set:isChecked];
-                if (!isChecked)
-                {
-                    OsmAndAppInstance app = OsmAndApp.instance;
-                    if (app.mapMode == OAMapModeFollow)
-                        [app setMapMode:OAMapModePositionTrack];
-                    else
-                        [app.mapModeObservable notifyEvent];
-                }
-            }
-        }
-    }
-}
-
 - (BOOL) sectionsOnly
 {
     return _settingsType == EOASettingsScreenMain;
@@ -259,31 +229,7 @@
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:kCellTypeSwitch])
-    {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
-        OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
-        }
-        
-        if (cell)
-        {
-            [cell.textView setText: item[@"title"]];
-            id value = item[@"value"];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            cell.switchView.on = [value boolValue];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
-    }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeSettings])
+    if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeSettings])
     {
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
@@ -437,7 +383,12 @@
 
 - (void) selectSettingMain:(NSString *)name
 {
-    if ([name isEqualToString:@"general_settings"])
+    if ([name isEqualToString:@"global_settings"])
+    {
+        OAGlobalSettingsViewController* globalSettingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOAGlobalSettingsMain];
+        [self.navigationController pushViewController:globalSettingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"general_settings"])
     {
         OAProfileGeneralSettingsViewController* settingsViewController = [[OAProfileGeneralSettingsViewController alloc] initWithAppMode:OAApplicationMode.CAR];
         [self.navigationController pushViewController:settingsViewController animated:YES];

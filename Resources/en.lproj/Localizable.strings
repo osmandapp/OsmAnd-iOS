@@ -106,13 +106,14 @@
 "animate_routing_route_not_calculated" = "Please calculate the route first";
 
 "settings_preset" = "Default profile";
+"default_profile_descr" = "Select a profile that will be used the application launch.";
 "settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";
 "unit_of_length" = "Units of length";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Coordinate format";
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
-"do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
+"send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to_bearing" = "Map orientation";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "To compass";
@@ -660,6 +661,8 @@
 "angular_measurment_units" = "Angular measurment units";
 "units_and_formats" = "Units & formats";
 "device_settings" = "Device settings";
+"global_settings" = "Global settings";
+"global_settings_descr" = "Affect the entire application.";
 
 // Intro
 "intro_skip" = "Skip";
@@ -735,6 +738,7 @@
 "after_tapping_done" = "After you tap Done, deleted profiles will be lost completely.";
 "empty_profile_name_warning" = "Profile name cannot be empty.";
 "not_available_profile_name" = "Profile with this name already exists.";
+"base_profile_descr" = "Base profile";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1532,7 +1536,7 @@
 "shared_string_address" = "Address";
 
 "do_not_show_discount" = "Do not show promotions";
-"do_not_send_anonymous_data" = "Do not send anonymous data";
+"send_anonymous_data" = "Send anonymous data";
 
 "sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
 "sett_ext_input" = "External input devices";

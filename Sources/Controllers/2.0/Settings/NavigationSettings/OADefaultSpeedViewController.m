@@ -43,6 +43,7 @@
     if (self)
     {
         _applicationMode = ap;
+        [self commonInit];
     }
     return self;
 }
@@ -77,7 +78,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self setupTableHeaderViewWithText:@"Change me"]; // needs to be changed
+    [self setupTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
     [self setupView];
 }
 
@@ -171,18 +172,12 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:@"Change me"]; // needs to be changed
+        [self setupTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
         [self.tableView reloadData];
     } completion:nil];
 }
 
 #pragma mark - TableView
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    // needs to be changed
-    return @"Change me";
-}
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

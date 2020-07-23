@@ -27,7 +27,7 @@
 #define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeIconText @"OAIconTextCell"
 
-@interface OAVehicleParametersViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAVehicleParametersViewController () <UITableViewDelegate, UITableViewDataSource, OAVehicleParametersSettingDelegate>
 
 @end
 
@@ -68,7 +68,8 @@
     NSMutableArray *parametersArr = [NSMutableArray array];
     NSMutableArray *defaultSpeedArr = [NSMutableArray array];
     auto router = [self.class getRouter:self.appMode];
-    if (router)
+    _otherParameters.clear();
+    if (router && self.appMode != OAApplicationMode.PUBLIC_TRANSPORT)
     {
         auto& parameters = router->getParametersList();
         for (const auto& p : parameters)
@@ -81,53 +82,58 @@
         {
             NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
             NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
-            //NSArray *possibleValues = p.possibleValues;
-            //NSString *description = [self getRoutingStringPropertyDescription:paramId defaultName:[NSString stringWithUTF8String:p.description.c_str()]];
-
             if (!(p.type == RoutingParameterType::BOOLEAN))
             {
-                OAProfileString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                OAProfileString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue: @"0"];
                 NSString *value = [stringParam get:self.appMode];
                 NSMutableArray *possibleValues = [NSMutableArray array];
                 NSMutableArray *possibleValuesDescr = [NSMutableArray array];
-                double d = value ? floorf(value.doubleValue * 100 + 0.5) / 100 : DBL_MAX;
                 int index = -1;
-                
                 for (int i = 0; i < p.possibleValues.size(); i++)
                 {
-                    double vl = floorf(p.possibleValues[i] * 100 + 0.5) / 100;
-                    [possibleValues addObject:[NSString stringWithFormat:@"%f", vl]];
+                    NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
+                    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+                    [formatter setMaximumFractionDigits:1];
+                    [formatter setMinimumFractionDigits:0];
+                    
+                    [possibleValues addObject:[formatter numberFromString:[NSString stringWithFormat:@"%.1f", p.possibleValues[i]]]];
                     [possibleValuesDescr addObject:[NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()]];
-                    if (vl == d)
-                    {
+                    if ([value isEqualToString:[possibleValues[i] stringValue]])
                         index = i;
-                        //break;
-                    }
                 }
-                if (index != -1)
+                if (index == 0)
+                    value = OALocalizedString(@"sett_no_ext_input");
+                else if (index != -1)
                     value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
+                else
+                    value = [NSString stringWithFormat:@"%@%@", value, [paramId isEqualToString:@"weight"] ? @"t" : @"m"];
                 [parametersArr addObject:
                     @{
                     @"name" : paramId,
                     @"title" : title,
                     @"value" : value,
+                    @"selectedItem" : [NSNumber numberWithInt:index],
                     @"icon" : [self getParameterIcon:paramId],
                     @"possibleValues" : possibleValues,
                     @"possibleValuesDescr" : possibleValuesDescr,
+                    @"setting" : stringParam,
                     @"type" : kCellTypeIconTitleValue }
                     ];
             }
         }
     }
-    [defaultSpeedArr addObject:@{
-        @"type" : kCellTypeIconText,
-        @"title" : OALocalizedString(@"default_speed"),
-        @"icon" : @"ic_action_speed",
-        @"name" : @"defaultSpeed",
-        
-    }];
-    [tableData addObject:parametersArr];
-    [tableData addObject:defaultSpeedArr];
+    if (self.appMode != OAApplicationMode.PUBLIC_TRANSPORT)
+        [defaultSpeedArr addObject:@{
+            @"type" : kCellTypeIconText,
+            @"title" : OALocalizedString(@"default_speed"),
+            @"icon" : @"ic_action_speed",
+            @"name" : @"defaultSpeed",
+            
+        }];
+    if (parametersArr.count > 0)
+        [tableData addObject:parametersArr];
+    if (defaultSpeedArr.count > 0)
+        [tableData addObject:defaultSpeedArr];
     _data = [NSArray arrayWithArray:tableData];
 }
 
@@ -226,6 +232,7 @@
         settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:self.appMode vehicleParameter:item];
     else if ([itemName isEqualToString:@"defaultSpeed"])
         settingsViewController = [[OADefaultSpeedViewController alloc] initWithApplicationMode:self.appMode];
+    settingsViewController.delegate = self;
     [self presentViewController:settingsViewController animated:YES completion:nil];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -247,6 +254,14 @@
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return section == 0 ? OALocalizedString(@"touting_specified_vehicle_parameters_descr") : OALocalizedString(@"default_speed_descr");
+}
+
+#pragma mark - OAVehicleParametersSettingDelegate
+
+- (void) onSettingsChanged
+{
+    [self setupView];
+    [self.tableView reloadData];
 }
 
 @end

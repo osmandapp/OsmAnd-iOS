@@ -26,13 +26,8 @@
     self = [super initWithNibName:@"OASettingsModalPresentationViewController" bundle:nil];
     if (self)
     {
-        [self commonInit];
     }
     return self;
-}
-
-- (void) commonInit
-{
 }
 
 - (void) viewDidLoad
@@ -100,6 +95,11 @@
     label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
     [label sizeToFit];
     return label.frame.size.height;
+}
+
+- (void) onSettingsChanged
+{
+    [_tableView reloadData];
 }
 
 @end

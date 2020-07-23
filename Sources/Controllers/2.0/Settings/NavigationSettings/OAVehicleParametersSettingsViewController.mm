@@ -7,14 +7,22 @@
 //
 
 #import "OAVehicleParametersSettingsViewController.h"
-
 #import "OAInputCellWithTitle.h"
 #import "OAOnlyImageViewCell.h"
 #import "OAHorizontalCollectionViewCell.h"
+#import "OAAppSettings.h"
 
 #import "Localization.h"
+#import "OAColors.h"
+#import "OASizes.h"
+#import "OAUtilities.h"
 
-@interface OAVehicleParametersSettingsViewController() <OAHorizontalCollectionViewCellDelegate>
+#define kHeaderId @"TableViewSectionHeader"
+#define kSidePadding 16
+#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
+#define kDescriptionStringSection 1
+
+@interface OAVehicleParametersSettingsViewController() <OAHorizontalCollectionViewCellDelegate, UITextFieldDelegate>
 
 @end
 
@@ -23,19 +31,20 @@
     NSArray<NSArray *> *_data;
     OAApplicationMode *_applicationMode;
     NSDictionary *_vehicleParameter;
-    NSString *_propertyImageName;
-    NSString *_measurementUnit;
-    NSArray<NSNumber *> *_measurementRangeValuesArr;
+    OAAppSettings *_settings;
+    
     NSArray<NSString *> *_measurementRangeStringArr;
-    NSString *_description;
-    NSNumber *_selectedWeight;
+    NSArray<NSNumber *> *_measurementRangeValuesArr;
+    NSString *_measurementValue;
+    NSNumber *_selectedParameter;
 }
 
-- (instancetype)initWithApplicationMode:(OAApplicationMode *)ap vehicleParameter:(NSDictionary *)vp
+- (instancetype) initWithApplicationMode:(OAApplicationMode *)ap vehicleParameter:(NSDictionary *)vp
 {
     self = [super init];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
         _applicationMode = ap;
         _vehicleParameter = vp;
         [self commonInit];
@@ -58,70 +67,24 @@
 
 - (BOOL) isBoat
 {
-    if ([_applicationMode.name isEqual: @"Boat"] || [_applicationMode.parent.name isEqual: @"Boat"])
+    if ([_applicationMode.name isEqual: OALocalizedString(@"app_mode_boat")] || [_applicationMode.parent.name isEqual: OALocalizedString(@"app_mode_boat")])
         return YES;
     return NO;
 }
 
 - (void) generateData
 {
-    NSString *parameter = _vehicleParameter[@"name"];
-    if ([parameter isEqualToString:@"weight"])
-    {
-        _propertyImageName = @"img_help_weight_limit_day";
-        _measurementUnit = OALocalizedString(@"tones");
-        _selectedWeight = [NSNumber numberWithFloat:0];
-        _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
-        NSMutableArray *array = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
-        if ([array[0] isEqualToString:@"-"])
-            [array replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
-        _measurementRangeStringArr = [NSArray arrayWithArray:array];
-        _description = OALocalizedString(@"routing_attr_weight_description");
-    }
-    else if ([parameter isEqualToString:@"height"])
-    {
-        _propertyImageName = [self isBoat] ? @"img_help_vessel_height_day" :  @"img_help_height_limit_day";
-        _measurementUnit = OALocalizedString(@"meters");
-        _selectedWeight = [NSNumber numberWithFloat:0];
-        _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
-        NSMutableArray *array = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
-        if ([array[0] isEqualToString:@"-"])
-            [array replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
-        _measurementRangeStringArr = [NSArray arrayWithArray:array];
-        _description = [_applicationMode.name isEqual: @"Car"] ? OALocalizedString(@"routing_attr_height_description") : OALocalizedString(@"vessel_height_limit_description");
-    }
-    else if ([parameter isEqualToString:@"width"])
-    {
-        _propertyImageName = [self isBoat] ? @"img_help_vessel_width_day" : @"img_help_width_limit_day";
-        _measurementUnit = OALocalizedString(@"meters");
-        _selectedWeight = [NSNumber numberWithFloat:0];
-        _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
-        NSMutableArray *array = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
-        if ([array[0] isEqualToString:@"-"])
-            [array replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
-        _measurementRangeStringArr = [NSArray arrayWithArray:array];
-        _description = [_applicationMode.name isEqual: @"Car"] ? OALocalizedString(@"routing_attr_width_description") : OALocalizedString(@"vessel_width_limit_description");
-    }
-    else if ([parameter isEqualToString:@"length"])
-    {
-        _propertyImageName = @"img_help_length_limit_day";
-        _measurementUnit = OALocalizedString(@"meters");
-        _selectedWeight = [NSNumber numberWithFloat:0];
-        _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
-        NSMutableArray *array = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
-        if ([array[0] isEqualToString:@"-"])
-            [array replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
-        _measurementRangeStringArr = [NSArray arrayWithArray:array];
-        _description = OALocalizedString(@"routing_attr_length_description");
-    }
+    _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
+    if ([arr[0] isEqualToString:@"-"])
+        [arr replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
+    _measurementRangeStringArr = [NSArray arrayWithArray:arr];
+    _selectedParameter = _vehicleParameter[@"selectedItem"];
+    NSString *valueString = [_vehicleParameter[@"value"] stringValue];
+    if ([_selectedParameter intValue] != -1)
+        _measurementValue = [_measurementRangeValuesArr[[_selectedParameter intValue]] stringValue];
     else
-    {
-        _propertyImageName = @"";
-        _measurementUnit = @"";
-        _selectedWeight = [NSNumber numberWithFloat:0];
-        _measurementRangeValuesArr = @[];
-        _description = @"";
-    }
+        _measurementValue = [valueString substringToIndex:valueString.length - (valueString.length > 0)];
 }
 
 - (void) viewDidLoad
@@ -132,34 +95,89 @@
     [self setupView];
 }
 
+- (NSString *) getParameterImage:(NSString *)parameter
+{
+    if ([parameter isEqualToString:@"weight"])
+        return @"img_help_weight_limit_day";
+    else if ([parameter isEqualToString:@"height"])
+        return [self isBoat] ? @"img_help_vessel_height_day" :  @"img_help_height_limit_day";
+    else if ([parameter isEqualToString:@"width"])
+        return  [self isBoat] ? @"img_help_vessel_width_day" : @"img_help_width_limit_day";
+    else if ([parameter isEqualToString:@"length"])
+        return @"img_help_length_limit_day";
+    return @"";
+}
+
+- (NSString *) getMeasurementUnit:(NSString *)parameter
+{
+    if ([parameter isEqualToString:@"weight"])
+        return OALocalizedString(@"tones");
+    else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
+        return OALocalizedString(@"meters");;
+    return @"";
+}
+
+- (NSString *) getParameterDescription:(NSString *)parameter
+{
+    if ([parameter isEqualToString:@"weight"])
+        return OALocalizedString(@"weight_limit_description");
+    else if ([parameter isEqualToString:@"height"])
+        return [self isBoat] ? OALocalizedString(@"vessel_height_limit_description") : OALocalizedString(@"height_limit_description");
+    else if ([parameter isEqualToString:@"width"])
+        return  [self isBoat] ? OALocalizedString(@"vessel_width_limit_description") : OALocalizedString(@"width_limit_description");
+    else if ([parameter isEqualToString:@"length"])
+        return OALocalizedString(@"lenght_limit_description");
+    return @"";
+}
+
 - (void) setupView
 {
+    NSString *parameter = _vehicleParameter[@"name"];
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     [otherArr addObject:@{
         @"type" : @"OAOnlyImageViewCell",
-        @"icon" : _propertyImageName,
+        @"icon" : [self getParameterImage:parameter],
     }];
     [parametersArr addObject:@{
         @"type" : @"OAInputCellWithTitle",
-        @"title" : _measurementUnit,
-        @"value" : _selectedWeight,
-        @"icon" : @"list_warnings_traffic_calming",
-        @"isOn" : @YES,
+        @"title" : [self getMeasurementUnit:parameter],
+        @"value" : [_measurementValue isEqualToString:OALocalizedString(@"sett_no_ext_input")] ? @"0" : _measurementValue,
     }];
     [parametersArr addObject:@{
         @"type" : @"OAHorizontalCollectionViewCell",
-        @"title" : OALocalizedString(@"show_pedestrian_warnings"),
-        @"icon" : @"list_warnings_pedestrian",
-        @"isOn" : @YES,
+        @"selectedValue" : _selectedParameter,
+        @"values" : _measurementRangeStringArr,
     }];
     [tableData addObject:otherArr];
     [tableData addObject:parametersArr];
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (IBAction)doneButtonPressed:(id)sender {
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
+- (IBAction) doneButtonPressed:(id)sender {
+    if ([_measurementValue hasPrefix:@"."] || [_measurementValue hasSuffix:@"."] || (![_measurementValue hasPrefix:@"0."]))
+    {
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
+        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        formatter.minimumIntegerDigits = 1;
+        formatter.minimumFractionDigits = 0;
+        formatter.maximumFractionDigits = 3;
+        _measurementValue = [[formatter numberFromString:_measurementValue] stringValue];
+    }
+    OAProfileString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
+    [property set:_measurementValue mode:_applicationMode];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
 }
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
@@ -182,7 +200,7 @@
         }
         return cell;
     }
-    else if([cellType isEqualToString:@"OAInputCellWithTitle"])
+    else if ([cellType isEqualToString:@"OAInputCellWithTitle"])
     {
         static NSString* const identifierCell = @"OAInputCellWithTitle";
         OAInputCellWithTitle* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -191,15 +209,19 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAInputCellWithTitle *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+            cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
+            cell.inputField.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.inputField.delegate = self;
         }
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.inputField.text = [NSString stringWithFormat:@"%@", item[@"value"]];
+            cell.inputField.text = item[@"value"];
         }
         return cell;
     }
-    else if([cellType isEqualToString:@"OAHorizontalCollectionViewCell"])
+    else if ([cellType isEqualToString:@"OAHorizontalCollectionViewCell"])
     {
         static NSString* const identifierCell = @"OAHorizontalCollectionViewCell";
         OAHorizontalCollectionViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -212,8 +234,8 @@
         }
         if (cell)
         {
-            cell.dataArray = _measurementRangeStringArr;
-            cell.selectedIndex = [self getIndexOfValue];
+            cell.dataArray = item[@"values"];
+            cell.selectedIndex = [item[@"selectedValue"] intValue];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
         }
@@ -222,9 +244,39 @@
     return nil;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return section == 0 ? _description : @"";
+    if (section == kDescriptionStringSection)
+    {
+        NSString *parameter = _vehicleParameter[@"name"];
+        NSString *descriptionString = [self getParameterDescription:parameter];
+        CGFloat heightForHeader = [self heightForLabel:descriptionString];
+        UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, tableView.bounds.size.width - OAUtilities.getLeftMargin * 2, heightForHeader)];
+        CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
+        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 0.0, textWidth, heightForHeader)];
+        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+        description.font = labelFont;
+        [description setTextColor: UIColorFromRGB(color_text_footer)];
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        [style setLineSpacing:6];
+        description.attributedText = [[NSAttributedString alloc] initWithString:descriptionString attributes:@{NSParagraphStyleAttributeName : style}];
+        description.numberOfLines = 0;
+        [vw addSubview:description];
+        return vw;
+    }
+    return nil;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == kDescriptionStringSection)
+    {
+        NSString *parameter = _vehicleParameter[@"name"];
+        NSString *descriptionString = [self getParameterDescription:parameter];
+        CGFloat heightForHeader = [self heightForLabel:descriptionString];
+        return heightForHeader + kSidePadding;
+    }
+    return 0.01;
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -236,18 +288,84 @@
     return 2;
 }
 
+- (CGFloat) heightForLabel:(NSString *)text
+{
+    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+    CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, textWidth, CGFLOAT_MAX)];
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.font = labelFont;
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.lineSpacing = 6.0;
+    style.alignment = NSTextAlignmentCenter;
+    label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
+    [label sizeToFit];
+    return label.frame.size.height;
+}
+
 #pragma mark - OAHorizontalCollectionViewCellDelegate
 
 - (void) valueChanged:(NSInteger)newValueIndex
 {
-    _selectedWeight = _measurementRangeValuesArr[newValueIndex];
+    _selectedParameter = [NSNumber numberWithInteger:newValueIndex];
+    _measurementValue = [NSString stringWithFormat:@"%@", _measurementRangeValuesArr[newValueIndex]];
     [self setupView];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1], [NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (NSInteger) getIndexOfValue
+#pragma mark - UITextFieldDelegate
+
+- (BOOL) textFieldShouldReturn:(UITextField *)sender
 {
-    return [_measurementRangeValuesArr indexOfObject:_selectedWeight];
+    [sender resignFirstResponder];
+    return YES;
+}
+
+- (void) textViewDidChange:(UITextField *)textField
+{
+    _measurementValue = textField.text;
+    _selectedParameter = [NSNumber numberWithInteger:-1];
+    for (NSInteger i = 0; i < [_measurementRangeValuesArr count]; i++)
+    {
+        if ([[_measurementRangeValuesArr[i] stringValue] isEqualToString:_measurementValue])
+        {
+            _selectedParameter = [NSNumber numberWithInteger:i];
+            break;
+        }
+    }
+    if (_measurementValue.length == 0 || [_measurementValue isEqualToString:@"."])
+    {
+        _selectedParameter = [NSNumber numberWithInteger:0];
+        _measurementValue = @"0";
+    }
+    [self setupView];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (BOOL) textFieldShouldClear:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return NO;
+}
+
+- (void) textFieldDidBeginEditing:(UITextField *)textField
+{
+    if ([textField.text isEqualToString:@"0"])
+        textField.text = @"";
+}
+
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.text.length > 4 && ![string isEqualToString:@""])
+        return NO;
+    if ([string isEqualToString:@"."])
+    {
+        if ([[textField.text componentsSeparatedByString:@"."] count] > 1)
+            return NO;
+        return YES;
+    }
+    return YES;
 }
 
 @end

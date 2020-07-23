@@ -1901,13 +1901,13 @@
 "routing_attr_allow_motorway_description" = "Allows motorways.";
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
-"vehicle_height_descr" = "Provide your vehicle height, some routes restrictions may apply for high vehicles.";
-"routing_attr_weight_description" = "Specify permitted vehicle weight limit on routes.";
-"routing_attr_width_description" = "Specify permitted vehicle width limit on routes.";
-"routing_attr_height_description" = "Specify vehicle height to be permitted on routes.";
-"routing_attr_length_description" = "Specify vehicle length to be permitted on routes.";
+"weight_limit_description" = "Provide your vehicle weight, some route restrictions may apply for heavy vehicles.";
+"height_limit_description" = "Provide your vehicle height, some route restrictions may apply for high vehicles.";
+"lenght_limit_description" = "Provide your vehicle length, some routes restrictions may be applied for long vehicles.";
+"width_limit_description" = "Provide your vehicle width some route restrictions may apply for wide vehicles.";
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, we will use its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
+"default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";

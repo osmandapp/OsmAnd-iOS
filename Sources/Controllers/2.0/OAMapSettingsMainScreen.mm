@@ -387,6 +387,8 @@
 - (void) appModeChanged:(OAApplicationMode *)mode
 {
     _settings.applicationMode = mode;
+    
+    [self setupView];
 }
 
 #pragma mark - UITableViewDataSource
@@ -457,17 +459,17 @@
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             
             if (indexPath.section == favSection && indexPath.row == favRow) {
-                [cell.switchView setOn:_settings.mapSettingShowFavorites];
+                [cell.switchView setOn:[_settings.mapSettingShowFavorites get]];
                 [cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else if ([data[@"key"] isEqualToString:@"osm_edits_offline_layer"])
             {
-                [cell.switchView setOn:_settings.mapSettingShowOfflineEdits];
+                [cell.switchView setOn:[_settings.mapSettingShowOfflineEdits get]];
                 [cell.switchView addTarget:self action:@selector(showOfflineEditsChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else if ([data[@"key"] isEqualToString:@"osm_notes_online_layer"])
             {
-                [cell.switchView setOn:_settings.mapSettingShowOnlineNotes];
+                [cell.switchView setOn:[_settings.mapSettingShowOnlineNotes get]];
                 [cell.switchView addTarget:self action:@selector(showOnlineNotesChanged:) forControlEvents:UIControlEventValueChanged];
             }
         }

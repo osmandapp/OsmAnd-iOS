@@ -27,7 +27,7 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return [OAAppSettings sharedManager].mapSettingShowOfflineEdits;
+    return [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
 }
 
 - (NSString *)getActionText

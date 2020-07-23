@@ -27,7 +27,7 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return [OAAppSettings sharedManager].mapSettingShowOnlineNotes;
+    return [[OAAppSettings sharedManager].mapSettingShowOnlineNotes get];
 }
 
 - (NSString *)getActionText

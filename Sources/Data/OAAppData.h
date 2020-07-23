@@ -15,14 +15,16 @@
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
 
-typedef NS_ENUM(NSInteger, EOATerrainType)
-{
-    EOATerrainTypeDisabled = 0,
-    EOATerrainTypeHillshade,
-    EOATerrainTypeSlope
-};
-
 @interface OAAppData : NSObject <NSCoding>
+
+@property OAProfileMapSource* lastMapSourceProfile;
+
+@property OAProfileMapSource* overlayMapSourceProfile;
+@property OAProfileMapSource* lastOverlayMapSourceProfile;
+@property OAProfileMapSource* underlayMapSourceProfile;
+@property OAProfileMapSource* lastUnderlayMapSourceProfile;
+@property (nonatomic) OAProfileDouble *overlayAlphaProfile;
+@property (nonatomic) OAProfileDouble *underlayAlphaProfile;
 
 @property OAMapSource* lastMapSource;
 @property OAMapSource* prevOfflineSource;
@@ -39,6 +41,18 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 @property (readonly) OAObservable* overlayAlphaChangeObservable;
 @property (readonly) OAObservable* underlayAlphaChangeObservable;
 
+@property (readonly) OAProfileMapLayersConfiguartion* mapLayersConfigurationProfile;
+@property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
+
+@property (nonatomic) OAProfileTerrain* terrainTypeProfile;
+@property (nonatomic) OAProfileTerrain* lastTerrainTypeProfile;
+@property (nonatomic) OAProfileDouble* hillshadeAlphaProfile;
+@property (nonatomic) OAProfileInteger* hillshadeMinZoomProfile;
+@property (nonatomic) OAProfileInteger* hillshadeMaxZoomProfile;
+@property (nonatomic) OAProfileDouble* slopeAlphaProfile;
+@property (nonatomic) OAProfileInteger* slopeMinZoomProfile;
+@property (nonatomic) OAProfileInteger* slopeMaxZoomProfile;
+
 @property (nonatomic) EOATerrainType terrainType;
 @property (nonatomic) EOATerrainType lastTerrainType;
 @property (nonatomic) double hillshadeAlpha;
@@ -47,10 +61,12 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 @property (nonatomic) double slopeAlpha;
 @property (nonatomic) NSInteger slopeMinZoom;
 @property (nonatomic) NSInteger slopeMaxZoom;
+
 @property (readonly) OAObservable* terrainChangeObservable;
 @property (readonly) OAObservable* terrainResourcesChangeObservable;
 @property (readonly) OAObservable* terrainAlphaChangeObservable;
 
+@property (nonatomic) OAProfileBoolean* mapillaryProfile;
 @property (nonatomic) BOOL mapillary;
 @property (readonly) OAObservable* mapillaryChangeObservable;
 
@@ -60,8 +76,6 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 - (OAMapSource *) lastMapSourceByResourceId:(NSString *)resourceId;
 
 @property (readonly) OAMapViewState* mapLastViewedState;
-
-@property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 
 @property (nonatomic) NSMutableArray *destinations;
 @property (readonly) OAObservable* destinationsChangeObservable;
@@ -96,6 +110,7 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 - (BOOL) restorePointToStart;
 
 + (OAAppData*) defaults;
++ (OAMapSource *) defaultMapSource;
 
 - (void) setLastMapSourceVariant:(NSString *)variant;
 

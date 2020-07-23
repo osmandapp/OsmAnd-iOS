@@ -594,11 +594,11 @@ static NSInteger kButtonsSection;
 {
     if (_mapSettingType == EMapSettingOverlay)
     {
-        return [_settings mapSettingShowOverlayOpacitySlider];
+        return [[_settings mapSettingShowOverlayOpacitySlider] get];
     }
     else if (_mapSettingType == EMapSettingUnderlay)
     {
-        return [_settings mapSettingShowUnderlayOpacitySlider];
+        return [[_settings mapSettingShowUnderlayOpacitySlider] get];
     }
 }
 

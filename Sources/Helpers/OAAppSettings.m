@@ -1012,6 +1012,167 @@
 
 @end
 
+@interface OAProfileMapSource ()
+
+@property (nonatomic) OAMapSource *defValue;
+
+@end
+
+@implementation OAProfileMapSource
+
++ (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue
+{
+    OAProfileMapSource *obj = [[OAProfileMapSource alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
+}
+
+- (OAMapSource *) get
+{
+    return [self get:self.appMode];
+}
+
+- (void) set:(OAMapSource *)mapSource
+{
+    [self set:mapSource mode:self.appMode];
+}
+
+- (OAMapSource *) get:(OAApplicationMode *)mode
+{
+    NSObject *val = [self getValue:mode];
+    return val ? [OAMapSource fromDictionary:(NSDictionary *)val] : self.defValue;
+}
+
+- (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode
+{
+    [self setValue:[mapSource toDictionary] mode:mode];
+}
+
+- (void) resetToDefault
+{
+    OAMapSource *defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (OAMapSource *) pDefault;
+    
+    [self set:defaultValue];
+}
+
+@end
+
+@interface OAProfileMapLayersConfiguartion ()
+
+@property (nonatomic) OAMapLayersConfiguration *defValue;
+
+@end
+
+@implementation OAProfileMapLayersConfiguartion
+
++ (instancetype) withKey:(NSString *)key defValue:(OAMapLayersConfiguration *)defValue
+{
+    OAProfileMapLayersConfiguartion *obj = [[OAProfileMapLayersConfiguartion alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
+}
+
+- (OAMapLayersConfiguration *) get
+{
+    return [self get:self.appMode];
+}
+
+- (void) set:(OAMapLayersConfiguration *)layersConfig
+{
+    [self set:layersConfig mode:self.appMode];
+}
+
+- (OAMapLayersConfiguration *) get:(OAApplicationMode *)mode
+{
+    NSObject *val = [self getValue:mode];
+    return val ? [[OAMapLayersConfiguration alloc] initWithHiddenLayers:(NSMutableSet *)val] : self.defValue;
+}
+
+- (void) set:(OAMapLayersConfiguration *)layersConfig mode:(OAApplicationMode *)mode
+{
+    [self setValue:layersConfig.hiddenLayers mode:mode];
+}
+
+- (void) resetToDefault
+{
+    OAMapLayersConfiguration *defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (OAMapLayersConfiguration *) pDefault;
+    
+    [self set:defaultValue];
+}
+
+@end
+
+@interface OAProfileTerrain ()
+
+@property (nonatomic) EOATerrainType defValue;
+
+@end
+
+@implementation OAProfileTerrain
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue
+{
+    return [super withKey:key defValue:(int)defValue];
+}
+
+- (EOATerrainType) get
+{
+    return [super get];
+}
+
+- (void) set:(EOATerrainType)terrainType
+{
+    [super set:(int)terrainType];
+}
+
+- (EOATerrainType) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode
+{
+    [super set:(int)terrainType mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOATerrainType defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOATerrainType)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"HILLSHADE"])
+        return [self set:EOATerrainTypeHillshade mode:mode];
+    else if ([strValue isEqualToString:@"SLOPE"])
+        return [self set:EOATerrainTypeSlope mode:mode];
+}
+
+@end
+
 @interface OAProfileAutoZoomMap ()
 
 @property (nonatomic) EOAAutoZoomMap defValue;
@@ -1504,7 +1665,7 @@
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
 
         // Map Settings
-        _mapSettingShowFavorites = [OAProfileBoolean withKey:mapSettingShowFavoritesKey defValue:NO];
+        _mapSettingShowFavorites = [OAProfileBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
         _mapSettingShowOfflineEdits = [OAProfileBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
         _mapSettingShowOnlineNotes = [OAProfileBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
         _mapSettingShowOverlayOpacitySlider = [OAProfileBoolean withKey:mapSettingShowOverlayOpacitySliderKey defValue:NO];
@@ -1869,6 +2030,11 @@
     return self;
 }
 
+- (void) registerPreference:(OAProfileSetting *)pref forKey:(NSString *)key
+{
+    [_registeredPreferences setObject:pref forKey:key];
+}
+
 - (OAProfileSetting *) getSettingById:(NSString *)stringId
 {
     return [_registeredPreferences objectForKey:stringId];
@@ -2058,7 +2224,7 @@
     [_mapSettingShowFavorites set:mapSettingShowFavorites];
 
     OsmAndAppInstance app = [OsmAndApp instance];
-    if (_mapSettingShowFavorites)
+    if ([_mapSettingShowFavorites get])
     {
         if (![app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
         {
@@ -2081,7 +2247,7 @@
     [_mapSettingShowOfflineEdits set:mapSettingShowOfflineEdits];
     
     OsmAndAppInstance app = [OsmAndApp instance];
-    if (_mapSettingShowOfflineEdits)
+    if ([_mapSettingShowOfflineEdits get])
     {
         if (![app.data.mapLayersConfiguration isLayerVisible:kOsmEditsLayerId])
         {
@@ -2104,7 +2270,7 @@
     [_mapSettingShowOnlineNotes set:mapSettingShowOnlineNotes];
     
     OsmAndAppInstance app = [OsmAndApp instance];
-    if (_mapSettingShowOnlineNotes)
+    if ([_mapSettingShowOnlineNotes get])
     {
         if (![app.data.mapLayersConfiguration isLayerVisible:kOsmBugsLayerId])
         {

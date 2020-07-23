@@ -23,7 +23,7 @@
 #define kReceiptValidationMinPeriod 60.0 * 60.0 * 24.0 * 1.0 // 1 day
 #define kReceiptValidationMaxPeriod 60.0 * 60.0 * 24.0 * 30.0 // 30 days
 
-@class OAAvoidRoadInfo;
+@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration;
 
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
@@ -208,6 +208,46 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 - (void) addUnique:(NSString *)string;
 - (void) remove:(NSString *)string;
 - (BOOL) contains:(NSString *)string;
+
+@end
+
+@interface OAProfileMapSource : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue;
+
+- (OAMapSource *) get;
+- (OAMapSource *) get:(OAApplicationMode *)mode;
+- (void) set:(OAMapSource *)mapSource;
+- (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OAProfileMapLayersConfiguartion : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(OAMapLayersConfiguration *)defValue;
+
+- (OAMapLayersConfiguration *) get;
+- (OAMapLayersConfiguration *) get:(OAApplicationMode *)mode;
+- (void) set:(OAMapLayersConfiguration *)layersConfig;
+- (void) set:(OAMapLayersConfiguration *)layersConfig mode:(OAApplicationMode *)mode;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOATerrainType)
+{
+    EOATerrainTypeDisabled = 0,
+    EOATerrainTypeHillshade,
+    EOATerrainTypeSlope
+};
+
+@interface OAProfileTerrain : OAProfileInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue;
+
+- (EOATerrainType) get;
+- (void) set:(EOATerrainType)autoZoomMap;
+- (EOATerrainType) get:(OAApplicationMode *)mode;
+- (void) set:(EOATerrainType)autoZoomMap mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -585,6 +625,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 - (NSSet<NSString *> *) getCustomAppModesKeys;
 
+- (void) registerPreference:(OAProfileSetting *)pref forKey:(NSString *)key;
+
 // Direction Appearance
 
 @property (nonatomic) OAProfileActiveMarkerConstant* activeMarkers;
@@ -594,4 +636,3 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *directionLines;
 
 @end
-

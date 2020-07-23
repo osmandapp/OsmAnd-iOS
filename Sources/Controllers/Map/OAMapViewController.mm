@@ -1854,7 +1854,7 @@
                 if (!onlineMapTileProvider)
                 {
                     // Missing resource, shift to default
-                    _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+                    _app.data.lastMapSource = [OAAppData defaultMapSource];
                     return;
                 }
                 onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
@@ -1869,7 +1869,7 @@
                 if (!sqliteTileSourceMapProvider)
                 {
                     // Missing resource, shift to default
-                    _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+                    _app.data.lastMapSource = [OAAppData defaultMapSource];
                     return;
                 }
 
@@ -1877,7 +1877,7 @@
                 [_mapView setProvider:_rasterMapProvider forLayer:0];
             }
             
-            lastMapSource = [OAAppData defaults].lastMapSource;
+            lastMapSource = [OAAppData defaultMapSource];
             const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
             const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
             const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
@@ -1939,7 +1939,7 @@
         else
         {
             // Missing resource, shift to default
-            _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+            _app.data.lastMapSource = [OAAppData defaultMapSource];
             return;
         }
 

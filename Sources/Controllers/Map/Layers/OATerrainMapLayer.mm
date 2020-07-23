@@ -79,7 +79,7 @@
         [self.mapView setProvider:_terrainMapProvider forLayer:self.layerIndex];
         
         OsmAnd::MapLayerConfiguration config;
-        double layerAlpha = OAAppData.defaults.hillshadeAlpha;
+        double layerAlpha = self.app.data.hillshadeAlpha;
         if (type == EOATerrainTypeSlope)
             layerAlpha = self.app.data.slopeAlpha;
         else if (type == EOATerrainTypeHillshade)
@@ -114,7 +114,7 @@
         [self.mapViewController runWithRenderSync:^{
             OsmAnd::MapLayerConfiguration config;
             EOATerrainType type = self.app.data.terrainType;
-            double layerAlpha = OAAppData.defaults.hillshadeAlpha;
+            double layerAlpha = self.app.data.hillshadeAlpha;
             if (type == EOATerrainTypeSlope)
                 layerAlpha = self.app.data.slopeAlpha;
             else if (type == EOATerrainTypeHillshade)

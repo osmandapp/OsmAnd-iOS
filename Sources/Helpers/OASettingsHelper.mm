@@ -681,14 +681,29 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             if (param)
             {
                 param.value = value;
-                [styleSettings save:param];
+                [styleSettings save:param refreshMap:NO];
             }
         }
         else
         {
             OAProfileSetting *setting = [settings getSettingById:key];
             if (setting)
+            {
                 [setting setValueFromString:value appMode:_appMode];
+            }
+            else if ([key isEqualToString:@"terrain_layer"])
+            {
+                OsmAndAppInstance app = OsmAndApp.instance;
+                if ([value isEqualToString:@"true"])
+                {
+                    app.data.terrainType = app.data.lastTerrainType;
+                }
+                else
+                {
+                    app.data.lastTerrainType = app.data.terrainType;
+                    app.data.lastTerrainType = EOATerrainTypeDisabled;
+                }
+            }
         }
     }
 }

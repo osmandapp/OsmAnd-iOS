@@ -1800,3 +1800,9 @@
 "min_speed" = "Velocidade mínima";
 "default_speed" = "Velocidade padrão";
 "routing_attr_length_name" = "Limite de comprimento";
+"send_anonymous_data" = "Enviar dados anônimos";
+"base_profile_descr" = "Perfil base";
+"global_settings_descr" = "Afeta o aplicativo inteiro.";
+"global_settings" = "Configurações globais";
+"send_anonymous_data_desc" = "Enviar para o mapa do OsmAnd e estatísticas de download de mapas, não estamos coletando dados de localização ou informações pessoais.";
+"default_profile_descr" = "Selecione um perfil que será usado na inicialização do aplicativo.";

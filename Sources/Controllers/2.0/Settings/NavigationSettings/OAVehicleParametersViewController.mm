@@ -121,15 +121,16 @@
                     ];
             }
         }
-    }
-    if (self.appMode != OAApplicationMode.PUBLIC_TRANSPORT)
         [defaultSpeedArr addObject:@{
             @"type" : kCellTypeIconText,
             @"title" : OALocalizedString(@"default_speed"),
+            @"minSpeed" : [NSNumber numberWithDouble:router->getMinSpeed()],
+            @"defaultSpeed" : [NSNumber numberWithDouble:router->getDefaultSpeed()],
+            @"maxSpeed" : [NSNumber numberWithDouble:router->getMaxSpeed()],
             @"icon" : @"ic_action_speed",
             @"name" : @"defaultSpeed",
-            
         }];
+    }
     if (parametersArr.count > 0)
         [tableData addObject:parametersArr];
     if (defaultSpeedArr.count > 0)
@@ -231,7 +232,7 @@
     else if ([itemName isEqualToString:@"length"])
         settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:self.appMode vehicleParameter:item];
     else if ([itemName isEqualToString:@"defaultSpeed"])
-        settingsViewController = [[OADefaultSpeedViewController alloc] initWithApplicationMode:self.appMode];
+        settingsViewController = [[OADefaultSpeedViewController alloc] initWithApplicationMode:self.appMode speedParameters:item];
     settingsViewController.delegate = self;
     [self presentViewController:settingsViewController animated:YES completion:nil];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

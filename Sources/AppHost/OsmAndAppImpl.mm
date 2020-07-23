@@ -856,8 +856,14 @@
 - (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
+    return [self getFormattedSpeed:metersperseconds drive:drive mode:settings.applicationMode];
+}
+
+- (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive mode:(OAApplicationMode *)mode
+{
+    OAAppSettings* settings = [OAAppSettings sharedManager];
     float kmh = metersperseconds * 3.6f;
-    if ([settings.metricSystem get] == KILOMETERS_AND_METERS) {
+    if ([settings.metricSystem get:mode] == KILOMETERS_AND_METERS) {
         if (kmh >= 10 || drive) {
             // case of car
             return [NSString stringWithFormat:@"%d %@", ((int) round(kmh)), _unitsKmh];
@@ -875,6 +881,7 @@
         }
     }
 }
+
 
 - (double) calculateRoundedDist:(double)baseMetersDist
 {

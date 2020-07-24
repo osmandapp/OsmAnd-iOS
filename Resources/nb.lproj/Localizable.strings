@@ -1339,7 +1339,7 @@
 "rendering_value_medium_name" = "Middels";
 "rendering_attr_smoothness_intermediate_name" = "Middels";
 "routing_attr_avoid_ferry_description" = "Unngår ferger";
-"routing_attr_driving_style_prefer_unpaved_name" = "Foretrekk veier uten dekke";
+"routing_attr_driving_style_prefer_unpaved_name" = "Foretrekk veier uten fast dekke";
 "rendering_value_translucent_green_name" = "Gjennomskinnelig grønn";
 "rendering_attr_showRoadMaps_description" = "Velg når det skal vises rene veikart:";
 "routing_attr_weight_name" = "Vektgrense";
@@ -1439,7 +1439,7 @@
 "routeInfo_tracktype_name" = "Flatefasthet";
 "rendering_attr_hikingRoutesOSMC_name" = "Fottursymbol-overlegg";
 "rendering_attr_hideBuildings_name" = "Bygninger";
-"routing_attr_driving_style_prefer_unpaved_description" = "Foretrekk veier uten dekke.";
+"routing_attr_driving_style_prefer_unpaved_description" = "Foretrekk veier uten fast dekke framfor med fast dekke for ruting.";
 "rendering_attr_tracktype_grade3_name" = "For det meste fast";
 "rendering_value_dark_brown_name" = "Mørkebrun";
 "rendering_attr_surface_ground_name" = "Jord";
@@ -1463,7 +1463,7 @@
 "rendering_attr_hideText_name" = "Tekst";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Farge etter rutenettverk";
 "rendering_attr_hideWaterPolygons_name" = "Skjul vann";
-"routing_attr_allow_intermediate_name" = "Tillat mellomliggende ruter";
+"routing_attr_allow_intermediate_name" = "Tillat mellomnivåruter";
 "rendering_attr_contourLines_description" = "Vis fra zoom-nivå (krever kotedata):";
 "rendering_attr_whiteWaterSports_name" = "Elvesport";
 "rendering_attr_contourLines_name" = "Vis koter";

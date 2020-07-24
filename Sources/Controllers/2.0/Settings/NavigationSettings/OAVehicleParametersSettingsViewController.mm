@@ -67,7 +67,7 @@
 
 - (BOOL) isBoat
 {
-    if ([_applicationMode.name isEqual: OALocalizedString(@"app_mode_boat")] || [_applicationMode.parent.name isEqual: OALocalizedString(@"app_mode_boat")])
+    if (_applicationMode == OAApplicationMode.BOAT || _applicationMode.parent == OAApplicationMode.BOAT)
         return YES;
     return NO;
 }
@@ -163,7 +163,8 @@
     } completion:nil];
 }
 
-- (IBAction) doneButtonPressed:(id)sender {
+- (IBAction) doneButtonPressed:(id)sender
+{
     if ([_measurementValue hasPrefix:@"."] || [_measurementValue hasSuffix:@"."] || (![_measurementValue hasPrefix:@"0."]))
     {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];

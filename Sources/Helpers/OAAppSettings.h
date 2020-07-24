@@ -617,10 +617,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (NSString *) getFormattedTrackInterval:(int)value;
 - (NSString *) getDefaultVoiceProvider;
 
-- (void) setTrackMinDistance:(float)saveTrackMinDistance;
-- (void) setTrackPrecision:(float)trackPrecision;
-- (void) setTrackMinSpeed:(float)trackMinSpeeed;
-
 - (NSSet<NSString *> *) getEnabledPlugins;
 - (NSSet<NSString *> *) getPlugins;
 - (void) enablePlugin:(NSString *)pluginId enable:(BOOL)enable;

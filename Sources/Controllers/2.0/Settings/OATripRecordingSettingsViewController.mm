@@ -583,19 +583,19 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
 - (void) selectMinDistance:(NSInteger)index
 {
-    [_settings setTrackMinDistance:minTrackDistanceValues[index].floatValue];
+    [_settings.saveTrackMinDistance set:minTrackDistanceValues[index].doubleValue mode:_am];
     [self backButtonClicked:nil];
 }
 
 - (void) selectMinSpeed:(NSInteger)index
 {
-    [_settings setTrackMinSpeed:minTrackSpeedValues[index].floatValue];
+    [_settings.saveTrackMinSpeed set:minTrackSpeedValues[index].doubleValue mode:_am];
     [self backButtonClicked:nil];
 }
 
 - (void) selectAccuracy:(NSInteger)index
 {
-    [_settings setTrackPrecision:trackPrecisionValues[index].floatValue];
+    [_settings.saveTrackPrecision set:trackPrecisionValues[index].doubleValue mode:_am];
     [self backButtonClicked:nil];
 }
 

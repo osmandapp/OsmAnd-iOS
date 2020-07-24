@@ -487,7 +487,6 @@ typedef enum : NSUInteger {
     else if ([ext caseInsensitiveCompare:@"osf"] == NSOrderedSame)
     {
         OASettingsHelper *helper = OASettingsHelper.sharedInstance;
-        // TODO: check version and changes
         [helper collectSettings:url.path latestChanges:@"" version:1];
     }
     

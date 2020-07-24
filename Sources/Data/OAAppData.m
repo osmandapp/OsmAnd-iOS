@@ -114,6 +114,7 @@
     _slopeMinZoomProfile = [OAProfileInteger withKey:kSlopeMinZoomKey defValue:3];
     _slopeMaxZoomProfile = [OAProfileInteger withKey:kSlopeMaxZoomKey defValue:16];
     _mapillaryProfile = [OAProfileBoolean withKey:kMapillaryKey defValue:NO];
+    _mapLayersConfigurationProfile = [OAProfileMapLayersConfiguartion withKey:kMapLayersConfigurationKey defValue:[[OAMapLayersConfiguration alloc] init]];
 
 }
 
@@ -146,8 +147,6 @@
         _lastMapSources = [[NSMutableDictionary alloc] init];
     if (_mapLastViewedState == nil)
         _mapLastViewedState = [[OAMapViewState alloc] init];
-    if (_mapLayersConfigurationProfile == nil)
-        _mapLayersConfigurationProfile = [OAProfileMapLayersConfiguartion withKey:kMapLayersConfigurationKey defValue:[[OAMapLayersConfiguration alloc] init]];
     if (_destinations == nil)
         _destinations = [NSMutableArray array];
     if (_intermediates == nil)

@@ -30,7 +30,7 @@
 
 @implementation OACreateProfileViewController
 {
-    NSMutableArray<OAApplicationMode *> * _profileList;
+    NSArray<OAApplicationMode *> * _profileList;
     CGFloat _heightForHeader;
     UIView *_navBarBackgroundView;
 }
@@ -56,10 +56,9 @@
 
 - (void) generateData
 {
-    NSArray *allProfileList = [[NSMutableArray alloc] initWithArray:OAApplicationMode.allPossibleValues];
     NSMutableArray *customProfileList = [NSMutableArray array];
     NSMutableArray *defaultProfileList = [NSMutableArray array];
-    for (OAApplicationMode *profile in allProfileList)
+    for (OAApplicationMode *profile in OAApplicationMode.allPossibleValues)
         if (profile.isCustomProfile)
             [customProfileList addObject:profile];
         else
@@ -67,8 +66,8 @@
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
     NSArray *sortedArray = [customProfileList sortedArrayUsingDescriptors:@[sort]];
     [defaultProfileList addObjectsFromArray:sortedArray];
-    _profileList = [NSMutableArray arrayWithArray:defaultProfileList];
-    [_profileList removeObjectAtIndex:0];
+    [defaultProfileList removeObjectAtIndex:0];
+    _profileList = [NSArray arrayWithArray:defaultProfileList];
 }
 
 - (void) applyLocalization

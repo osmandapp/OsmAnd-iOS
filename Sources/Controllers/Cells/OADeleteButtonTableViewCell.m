@@ -11,7 +11,7 @@
 
 @implementation OADeleteButtonTableViewCell
 {
-    UIImage *myReorderImage;
+    UIImage *_reorderImage;
 }
 
 - (void)awakeFromNib {
@@ -27,20 +27,24 @@
     [super setEditing:editing animated:YES];
     if (editing)
         for (UIView* view in self.subviews)
+        {
             if ([NSStringFromClass([view class]) rangeOfString: @"Reorder"].location != NSNotFound)
+            {
                 for (UIView * subview in view.subviews)
                     if ([subview isKindOfClass: [UIImageView class]])
                     {
                         UIImageView *imageView = (UIImageView *)subview;
-                        if (myReorderImage == nil)
+                        if (_reorderImage == nil)
                         {
                             UIImage *myImage = imageView.image;
-                            myReorderImage = [myImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                            _reorderImage = [myImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                             
                         }
-                        imageView.image = myReorderImage;
+                        imageView.image = _reorderImage;
                         imageView.tintColor = UIColorFromRGB(color_icon_inactive);
                     }
+            }
+        }
 }
 
 

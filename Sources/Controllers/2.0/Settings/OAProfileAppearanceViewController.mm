@@ -116,16 +116,12 @@
     NSInteger number = 0;
     if (lastSpace.length == 0)
     {
-        number = [profileName intValue];
-        if (number == 0)
-            baseString = profileName;
-        else
-            baseString = @"";
+        baseString = profileName;
     }
     else
     {
-        baseString = [profileName substringToIndex: lastSpace.location];
-        numberString = [profileName substringFromIndex: lastSpace.location];
+        baseString = [profileName substringToIndex:lastSpace.location];
+        numberString = [profileName substringFromIndex:lastSpace.location];
         number = [numberString intValue];
         if (number == 0)
             baseString = profileName;
@@ -134,19 +130,13 @@
     for (NSInteger value = number + 1; ; value++)
     {
         proposedProfileName = [NSString stringWithFormat:@"%@ %ld", baseString, value];
-        if ([self isNameAvailable: proposedProfileName])
+        if ([OAApplicationMode isProfileNameAvailable:proposedProfileName])
             break;
     }
     return proposedProfileName;
 }
 
-- (BOOL) isNameAvailable:(NSString *)profileName
-{
-    for (OAApplicationMode *profile in OAApplicationMode.allPossibleValues)
-        if ([profile.name isEqual:profileName])
-            return NO;
-    return YES;
-}
+
 
 - (void) setupView
 {
@@ -280,7 +270,7 @@
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }
-    else if (![self isNameAvailable:_profileName])
+    else if (![OAApplicationMode isProfileNameAvailable:_profileName])
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"not_available_profile_name") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];

@@ -114,6 +114,8 @@
 #define maxSpeedKey @"maxSpeed"
 #define routeStraightAngleKey @"routeStraightAngle"
 
+#define rendererKey @"renderer"
+
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
 #define fastRouteModeKey @"fastRouteMode"
@@ -1825,6 +1827,9 @@
         [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode BICYCLE]];
         [_textSize setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode PEDESTRIAN]];
         [_registeredPreferences setObject:_textSize forKey:@"text_scale"];
+        
+        _renderer = [OAProfileString withKey:rendererKey defValue:@"OsmAnd"];
+        [_registeredPreferences setObject:_renderer forKey:rendererKey];
 
         _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;
 

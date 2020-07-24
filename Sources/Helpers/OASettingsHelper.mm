@@ -29,6 +29,7 @@
 #import "OAQuickActionType.h"
 #import "OAColors.h"
 #import "OAPlugin.h"
+#import "OAMapStyleTitles.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -221,6 +222,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error;
 - (void) writeItemsToJson:(id)json error:(NSError * _Nullable *)error;
 - (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value;
+- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs;
 
 @end
 
@@ -352,6 +354,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 }
 
 - (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
+{
+    // override
+}
+
+- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
 {
     // override
 }
@@ -508,11 +515,19 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         
         return NO;
     }
-    NSDictionary *settings = (NSDictionary *) json;
-    for (NSString *key in settings)
-    {
-        [self.item readPreferenceFromJson:key value:settings[key]];
-    }
+    NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
+    NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
+    
+    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([key hasPrefix:@"nrenderer_"])
+            [rendererSettings setObject:obj forKey:key];
+        else
+            [self.item readPreferenceFromJson:key value:obj];
+    }];
+    
+    [self.item applyRendererPreferences:rendererSettings];
+    
+    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
     
     return YES;
 }
@@ -665,6 +680,43 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     _additionalPrefs = json[@"prefs"];
 }
 
+- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
+{
+    NSString *renderer = [OAAppSettings.sharedManager.renderer get:_appMode];
+    NSString *resName = [self getRendererByName:renderer];
+    NSString *ext = @".render.xml";
+    renderer = OAMapStyleTitles.getMapStyleTitles[resName];
+    BOOL isTouringView = [resName hasPrefix:@"Touring"];
+    if (!renderer && isTouringView)
+        renderer = OAMapStyleTitles.getMapStyleTitles[@"Touring-view_(more-contrast-and-details).render"];
+    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:_appMode.variantKey];
+    OAAppData *data = OsmAndApp.instance.data;
+    // if the last map source was offline set it to the selected source
+    if ([[data.lastMapSourceProfile get:_appMode].resourceId hasSuffix:ext])
+        [data.lastMapSourceProfile set:[[OAMapSource alloc] initWithResource:[(isTouringView ? resName.lowerCase : resName) stringByAppendingString:ext] andVariant:_appMode.variantKey name:renderer] mode:_appMode];
+    [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
+        OAMapStyleParameter *param = [styleSettings getParameter:paramName];
+        if (param)
+        {
+            param.value = obj;
+            [styleSettings save:param refreshMap:NO];
+        }
+    }];
+}
+
+- (NSString *) getRendererByName:(NSString *)rendererName
+{
+    if ([rendererName isEqualToString:@"OsmAnd"])
+        return @"default";
+    else if ([rendererName isEqualToString:@"Touring view (contrast and details)"])
+        return @"Touring-view_(more-contrast-and-details)";
+    else if (![rendererName isEqualToString:@"LightRS"] && ![rendererName isEqualToString:@"UniRS"])
+        return [rendererName lowerCase];
+    
+    return rendererName;
+}
+
 - (void)readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
@@ -673,36 +725,22 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     
     if (![_appModeBeanPrefsIds containsObject:key])
     {
-        if ([key hasPrefix:@"nrenderer_"])
+        OAProfileSetting *setting = [settings getSettingById:key];
+        if (setting)
         {
-            NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
-            OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
-            OAMapStyleParameter *param = [styleSettings getParameter:paramName];
-            if (param)
-            {
-                param.value = value;
-                [styleSettings save:param refreshMap:NO];
-            }
+            [setting setValueFromString:value appMode:_appMode];
         }
-        else
+        else if ([key isEqualToString:@"terrain_layer"])
         {
-            OAProfileSetting *setting = [settings getSettingById:key];
-            if (setting)
+            OsmAndAppInstance app = OsmAndApp.instance;
+            if ([value isEqualToString:@"true"])
             {
-                [setting setValueFromString:value appMode:_appMode];
+                app.data.terrainType = app.data.lastTerrainType;
             }
-            else if ([key isEqualToString:@"terrain_layer"])
+            else
             {
-                OsmAndAppInstance app = OsmAndApp.instance;
-                if ([value isEqualToString:@"true"])
-                {
-                    app.data.terrainType = app.data.lastTerrainType;
-                }
-                else
-                {
-                    app.data.lastTerrainType = app.data.terrainType;
-                    app.data.lastTerrainType = EOATerrainTypeDisabled;
-                }
+                app.data.lastTerrainType = app.data.terrainType;
+                app.data.lastTerrainType = EOATerrainTypeDisabled;
             }
         }
     }

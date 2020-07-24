@@ -500,6 +500,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) NSSet<NSString *> *plugins;
 @property (assign, nonatomic) BOOL firstMapIsDownloaded;
 
+@property (nonatomic) OAProfileString *renderer;
+
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;
 @property (nonatomic) OAProfileBoolean *fastRouteMode;

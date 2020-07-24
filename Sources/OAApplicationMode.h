@@ -38,6 +38,7 @@
 + (void) onApplicationStart;
 + (void) saveProfile:(OAApplicationMode *)appMode;
 + (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected;
++ (BOOL) isProfileNameAvailable:(NSString *)profileName;
 
 - (instancetype)initWithName:(NSString *)name stringKey:(NSString *)stringKey;
 

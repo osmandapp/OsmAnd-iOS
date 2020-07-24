@@ -10,10 +10,11 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OAIconTextButtonCell.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAProfileAppearanceViewController.h"
 #import "OAUtilities.h"
+#import "OASizes.h"
 
 #include <generalRouter.h>
 
@@ -21,15 +22,17 @@
 #define kSidePadding 16
 #define kTopPadding 6
 #define kHeaderViewFont [UIFont systemFontOfSize:34.0 weight:UIFontWeightBold]
+#define kCellTypeIconTitleSubtitle @"OAIconTextButtonCell"
 
-@interface OACreateProfileViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OACreateProfileViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
 
 @end
 
 @implementation OACreateProfileViewController
 {
-    NSMutableArray<OAApplicationMode *> * _profileList;
+    NSArray<OAApplicationMode *> * _profileList;
     CGFloat _heightForHeader;
+    UIView *_navBarBackgroundView;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -53,13 +56,24 @@
 
 - (void) generateData
 {
-    _profileList = [[NSMutableArray alloc] initWithArray:OAApplicationMode.allPossibleValues];
-    [_profileList removeObjectAtIndex:0];
+    NSMutableArray *customProfileList = [NSMutableArray array];
+    NSMutableArray *defaultProfileList = [NSMutableArray array];
+    for (OAApplicationMode *profile in OAApplicationMode.allPossibleValues)
+        if (profile.isCustomProfile)
+            [customProfileList addObject:profile];
+        else
+            [defaultProfileList addObject:profile];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
+    NSArray *sortedArray = [customProfileList sortedArrayUsingDescriptors:@[sort]];
+    [defaultProfileList addObjectsFromArray:sortedArray];
+    [defaultProfileList removeObjectAtIndex:0];
+    _profileList = [NSArray arrayWithArray:defaultProfileList];
 }
 
 - (void) applyLocalization
 {
     [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    _titleLabel.text = OALocalizedString(@"create_profile");
 }
 
 - (void) viewDidLoad
@@ -69,28 +83,34 @@
     _tableView.dataSource = self;
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
+    _tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_profile") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:YES];
-    [self setupView];
+    _navBarBackgroundView = [self createNavBarBackgroundView];
+    _navBarBackgroundView.frame = _navBarView.bounds;
+    [_navBarView insertSubview:_navBarBackgroundView atIndex:0];
 }
 
-- (void) didReceiveMemoryWarning
+- (UIView *) createNavBarBackgroundView
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        blurEffectView.alpha = 0;
+        return blurEffectView;
+    }
+    else
+    {
+        UIView *res = [[UIView alloc] init];
+        res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        res.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        res.alpha = 0;
+        return res;
+    }
 }
 
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self setupView];
-}
-
-- (void) setupView
-{
-}
-
-- (void) backButtonClicked:(id)sender
+- (IBAction) backButtonClicked:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -104,7 +124,7 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_profile") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_profile") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:YES];
         [_tableView reloadData];
     } completion:nil];
 }
@@ -134,15 +154,16 @@
 }
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    static NSString* const identifierCell = @"OAMultiIconTextDescCell";
-    OAMultiIconTextDescCell* cell;
-    cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+    static NSString* const identifierCell = kCellTypeIconTitleSubtitle;
+    OAIconTextButtonCell* cell;
+    cell = (OAIconTextButtonCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
-        cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeIconTitleSubtitle owner:self options:nil];
+        cell = (OAIconTextButtonCell *)[nib objectAtIndex:0];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.buttonView.hidden = YES;
+        cell.detailsIconView.hidden = YES;
     }
     OAApplicationMode *am = _profileList[indexPath.row];
     UIImage *img = am.getIcon;
@@ -150,8 +171,6 @@
     cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
     cell.textView.text = _profileList[indexPath.row].name;
     cell.descView.text = _profileList[indexPath.row].getProfileDescription;
-    [cell setOverflowVisibility:YES];
-
     return cell;
 }
 
@@ -162,6 +181,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAProfileAppearanceViewController* profileAppearanceViewController = [[OAProfileAppearanceViewController alloc] initWithProfile:_profileList[indexPath.row]];
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     [self.navigationController pushViewController:profileAppearanceViewController animated:YES];
 }
 
@@ -179,6 +199,25 @@
     label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
     [label sizeToFit];
     return label.frame.size.height;
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat alpha = _tableView.contentOffset.y < 0 ? 0 : (_tableView.contentOffset.y / (_tableView.contentSize.height - _tableView.frame.size.height));
+    if (alpha > 0)
+    {
+        _titleLabel.hidden = NO;
+        _navBarView.backgroundColor = UIColor.clearColor;
+        _navBarBackgroundView.alpha = 1;
+    }
+    else
+    {
+        _titleLabel.hidden = YES;
+        _navBarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        _navBarBackgroundView.alpha = 0;
+    }
 }
 
 @end

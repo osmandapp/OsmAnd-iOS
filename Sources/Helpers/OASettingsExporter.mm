@@ -66,6 +66,7 @@ static const NSInteger _buffer = 1024;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:error];
+    NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
     if (!error)
         [jsonData writeToFile:path atomically:YES];
     if(_exportItemsFiles)
@@ -80,7 +81,7 @@ static const NSInteger _buffer = 1024;
 
 - (void) writeItemsFiles:(NSMutableArray<NSString *> *)paths
 {
-    for (OASettingsItem *item : _items)
+    for (OASettingsItem *item in _items.allValues)
     {
         OASettingsItemWriter *writer = [item getWriter];
         if (writer != nil)
@@ -105,7 +106,10 @@ static const NSInteger _buffer = 1024;
     [_additionalParams enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         [json setObject:obj forKey:key];
     }];
-    [json setObject:_items.allValues forKey:@"items"];
+    NSMutableArray *items = [NSMutableArray new];
+    for (OASettingsItem *item in _items.allValues)
+         [items addObject:[item generateItemJson]];
+    [json setObject:items forKey:@"items"];
     
     return json;
 }

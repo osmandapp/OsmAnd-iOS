@@ -8,7 +8,6 @@
 
 #import "OARouteProvider.h"
 #import "OAGPXDocument.h"
-#import "OAAppSettings.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OARouteDirectionInfo.h"
 #import "OsmAndApp.h"

@@ -30,6 +30,7 @@
 #import "OAColors.h"
 #import "OAPlugin.h"
 #import "OAMapStyleTitles.h"
+#import "OrderedDictionary.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -138,7 +139,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles
 {
     NSString *file = [fileDir stringByAppendingPathComponent:fileName];
-    file = [file stringByAppendingPathExtension:@".osf"];
+    file = [file stringByAppendingPathExtension:@"osf"];
     OAExportAsyncTask *exportAsyncTask = [[OAExportAsyncTask alloc] initWithFile:file items:items exportItemFiles:exportItemFiles];
     exportAsyncTask.settingsExportDelegate = self;
     [_exportTasks setObject:exportAsyncTask forKey:file];
@@ -218,9 +219,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) initialization;
 - (void) readFromJson:(id)json error:(NSError * _Nullable *)error;
-- (void) writeToJson:(id)json error:(NSError * _Nullable *)error;
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error;
-- (void) writeItemsToJson:(id)json error:(NSError * _Nullable *)error;
+- (void) writeItemsToJson:(MutableOrderedDictionary *)json;
 - (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value;
 - (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs;
 
@@ -290,6 +290,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     // non implemented
 }
 
+- (NSDictionary *) getSettingsJson
+{
+    // override
+    return @{};
+}
+
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error
 {
     NSString *typeStr = json[@"type"];
@@ -324,23 +330,22 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         *error = readError;
 }
 
-- (void) writeToJson:(id)json error:(NSError * _Nullable *)error
+- (NSDictionary *) generateItemJson
 {
-    json[@"type"] = [OASettingsItemType typeName:self.type];
+    MutableOrderedDictionary *itemJson = [MutableOrderedDictionary new];
+    itemJson[@"type"] = [OASettingsItemType typeName:self.type];
     if (self.pluginId.length > 0)
-        json[@"pluginId"] = self.pluginId;
+        itemJson[@"pluginId"] = self.pluginId;
     
-    if ([self getWriter]) {
+    if ([self getWriter])
+    {
         if (!self.fileName || self.fileName.length == 0)
             self.fileName = self.defaultFileName;
         
-        json[@"file"] = self.fileName;
+        itemJson[@"file"] = self.fileName;
     }
-
-    NSError *writeError;
-    [self writeItemsToJson:json error:&writeError];
-    if (error && writeError)
-        *error = writeError;
+    [self writeItemsToJson:itemJson];
+    return itemJson;
 }
 
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error
@@ -348,7 +353,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     // override
 }
 
-- (void) writeItemsToJson:(id)json error:(NSError * _Nullable *)error
+- (void) writeItemsToJson:(MutableOrderedDictionary *)json
 {
     // override
 }
@@ -363,27 +368,27 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     // override
 }
 
-- (nullable NSString *) toJson:(NSError * _Nullable *)error
-{
-    id JsonDic = [[NSDictionary alloc] init];
-    NSError *writeError;
-    [self writeToJson:JsonDic error:&writeError];
-    if (writeError)
-    {
-        if (error)
-            *error = writeError;
-        return nil;
-    }
-    NSError *jsonError;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:JsonDic options:NSJSONWritingPrettyPrinted error:&jsonError];
-    if (jsonError)
-    {
-        if (error)
-            *error = jsonError;
-        return nil;
-    }
-    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-}
+//- (nullable NSString *) toJson:(NSError * _Nullable *)error
+//{
+//    id JsonDic = [[NSDictionary alloc] init];
+//    NSError *writeError;
+//    [self writeToJson:JsonDic error:&writeError];
+//    if (writeError)
+//    {
+//        if (error)
+//            *error = writeError;
+//        return nil;
+//    }
+//    NSError *jsonError;
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:JsonDic options:NSJSONWritingPrettyPrinted error:&jsonError];
+//    if (jsonError)
+//    {
+//        if (error)
+//            *error = jsonError;
+//        return nil;
+//    }
+//    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//}
 
 - (OASettingsItemReader *) getJsonReader
 {
@@ -540,19 +545,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    NSMutableDictionary *json = [NSMutableDictionary dictionary];
-    NSError *writeItemsError;
-    [self.item writeItemsToJson:json error:&writeItemsError];
-    if (writeItemsError)
-    {
-        if (error)
-            *error = writeItemsError;
-        return NO;
-    }
+    NSDictionary *json = [self.item getSettingsJson];
     if (json.count > 0)
     {
         NSError *writeJsonError;
         NSData *data = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&writeJsonError];
+        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         if (writeJsonError)
         {
             if (error)
@@ -717,6 +715,16 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return rendererName;
 }
 
+- (NSString *) getRendererStringValue:(NSString *)renderer
+{
+    if ([renderer hasPrefix:@"Touring"])
+        return @"Touring view (contrast and details)";
+    else if (OAMapStyleTitles.getMapStyleTitles[renderer])
+        return OAMapStyleTitles.getMapStyleTitles[renderer];
+    else
+        return renderer;
+}
+
 - (void)readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
@@ -860,10 +868,37 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //    return path;
 //}
 
-- (void)writeToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (NSDictionary *) generateItemJson
 {
-    [super writeToJson:json error:error];
-    [json addObject:@{@"appMode" : [_appMode toJson]}];
+    MutableOrderedDictionary *json = [MutableOrderedDictionary dictionaryWithDictionary:[super generateItemJson]];
+    [json setObject:[_appMode toJson] forKey:@"appMode"];
+    return json;
+}
+
+- (NSDictionary *) getSettingsJson
+{
+    MutableOrderedDictionary *res = [MutableOrderedDictionary new];
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    for (NSString *key in settings.getRegisteredSettings)
+    {
+        OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:key];
+        if (setting)
+            [res setObject:[setting toStringValue:self.appMode] forKey:key];
+    }
+    
+    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+    NSString *renderer = nil;
+    for (OAMapStyleParameter *param in [styleSettings getAllParameters])
+    {
+        if (!renderer)
+            renderer = param.mapStyleName;
+        [res setObject:param.value forKey:[@"nrenderer_" stringByAppendingString:param.name]];
+    }
+    if (renderer)
+    {
+        [res setObject:[self getRendererStringValue:renderer] forKey:@"renderer"];
+    }
+    return res;
 }
 
 - (OASettingsItemReader *)getReader
@@ -873,7 +908,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (OASettingsItemWriter *)getWriter
 {
-    return [[OASettingsItemWriter alloc] initWithItem:self];
+    return [[OASettingsItemJsonWriter alloc] initWithItem:self];
 }
 
 @end
@@ -989,9 +1024,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //    new CustomOsmandPlugin(app, json);
 }
 
-- (void) writeToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (NSDictionary *) generateItemJson
 {
-    [super writeToJson:json error:error];
+    // TODO: Finish later
+    return [super generateItemJson];
 //    _plugin.writeAdditionalDataToJson(json);
 }
 
@@ -1401,18 +1437,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
 }
 
-- (void) writeToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (NSDictionary *) generateItemJson
 {
-    NSError *writeError;
-    [super writeToJson:json error:&writeError];
-    if (writeError)
-    {
-        if (error)
-            *error = writeError;
-        return;
-    }
+    MutableOrderedDictionary *res = [MutableOrderedDictionary dictionaryWithDictionary:[super generateItemJson]];
     if (self.subtype != EOASettingsItemFileSubtypeUnknown)
-        json[@"subtype"] = [OAFileSettingsItemFileSubtype getSubtypeName:self.subtype];
+        res[@"subtype"] = [OAFileSettingsItemFileSubtype getSubtypeName:self.subtype];
+    return res;
 }
 
 - (OASettingsItemReader *) getReader
@@ -1480,16 +1510,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
 }
 
-- (void) writeToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (NSDictionary *) generateItemJson
 {
-    NSError *writeError;
-    [super writeToJson:json error:&writeError];
-    if (writeError)
-    {
-        if (error)
-            *error = writeError;
-        return;
-    }
+    MutableOrderedDictionary *res = [MutableOrderedDictionary dictionaryWithDictionary:[super generateItemJson]];
     NSString *fileName = self.fileName;
     if (fileName.length > 0)
     {
@@ -1497,8 +1520,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         {
             fileName = [fileName substringToIndex:fileName.length - 1];
         }
-        json[@"file"] = fileName;
+        res[@"file"] = fileName;
     }
+    return res;
 }
 
 - (BOOL) applyFileName:(NSString *)fileName
@@ -1713,7 +1737,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
 }
 
-- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (void) writeItemsToJson:(MutableOrderedDictionary *)json
 {
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)

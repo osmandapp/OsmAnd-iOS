@@ -739,6 +739,7 @@
 "empty_profile_name_warning" = "Profile name cannot be empty.";
 "err_profile_import" = "Error reading item data: %@";
 "profile_import_success" = "Application profile was imported successfully";
+"not_available_profile_name" = "Profile with this name already exists.";
 "base_profile_descr" = "Base profile";
 
 // Purchases

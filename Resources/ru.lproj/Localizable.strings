@@ -1742,7 +1742,7 @@
 "board_at" = "Посадка на";
 "quick_action_dir_from_descr" = "Коснитесь действия, чтобы перейти от текущей центральной точки экрана.";
 "after_tapping_done" = "После нажатия кнопки \"Готово\" удаленные профили будут полностью потеряны.";
-"osmand_routing" = "Маршрутизация OsmAnd";
+"osmand_routing" = "Навигация OsmAnd";
 "desert" = "Пустыня";
 "settings_item_read_error" = "Невозможно прочитать из «%1$s».";
 "public_transport_hide" = "Скрыть общественный транспорт";
@@ -1803,3 +1803,7 @@
 "min_speed" = "Мин. скорость";
 "default_speed" = "Скорость по умолчанию";
 "routing_attr_length_name" = "Предельная длина";
+"do_not_rotate" = "Не вращать";
+"select_distance_for_recalculation" = "Выберите расстояние, после которого маршрут будет пересчитан.";
+"avoid_routes_and_road" = "Избегать определённые маршруты и типы дорог";
+"special_routing" = "Специальная навигация";

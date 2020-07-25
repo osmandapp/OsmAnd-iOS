@@ -531,6 +531,14 @@ static OAApplicationMode *_SKI;
     [self saveCustomAppModesToSettings];
 }
 
++ (BOOL) isProfileNameAvailable:(NSString *)profileName
+{
+    for (OAApplicationMode *profile in _values)
+        if ([profile.name isEqual:profileName])
+            return NO;
+    return YES;
+}
+
 + (void) deleteCustomModes:(NSArray<OAApplicationMode *> *) modes
 {
     [_values removeObjectsInArray:modes];

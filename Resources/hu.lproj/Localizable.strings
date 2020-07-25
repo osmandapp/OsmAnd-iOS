@@ -1310,3 +1310,16 @@
 "active_markers" = "Aktív jelölők";
 "exit_at" = "Szálljon le itt:";
 "public_transport_warning_title" = "A tömegközlekedési útvonaltervezés jelenleg bétatesztelési fázisban van, hibák és pontatlanságok előfordulhatnak.";
+"base_profile_descr_aircraft" = "Repülés, siklórepülés";
+"base_profile_descr_boat" = "Hajózás, evezés, vitorlázás";
+"base_profile_descr_public_transport" = "Tömegközlekedés-típusok";
+"base_profile_descr_pedestrian" = "Gyaloglás, túrázás, futás";
+"base_profile_descr_bicycle" = "Mountain bike, kismotor, ló";
+"base_profile_descr_car" = "Személyautó, teherautó, motorkerékpár";
+"new_profile" = "Új profil";
+"screen_alerts" = "Képernyő riasztások";
+"vehicle_parameters" = "Jármű paraméterek";
+"units_and_formats" = "Mértékegységek & formátumok";
+"select_nav_profile_dialog_message" = "A navigációtípus határozza meg az útvonalszámítás módját.";
+"select_color" = "Szín kijelölése";
+"routing_attr_length_name" = "Hosszkorlátozás";

@@ -14,8 +14,6 @@
 
 #define kVersion 1
 
-static const NSInteger _buffer = 1024;
-
 #pragma mark - OASettingsExporter
 
 @implementation OASettingsExporter
@@ -56,7 +54,6 @@ static const NSInteger _buffer = 1024;
  
 - (void) exportSettings:(NSString *)file error:(NSError * _Nullable *)error
 {
-    // TODO: check this functionality while testing export!
     NSMutableArray<NSString *> *paths = [NSMutableArray new];
     NSDictionary *json = [self createItemsJson];
     NSFileManager *fileManager = NSFileManager.defaultManager;
@@ -66,7 +63,6 @@ static const NSInteger _buffer = 1024;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:error];
-    NSLog(@"%@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
     if (!error)
         [jsonData writeToFile:path atomically:YES];
     if(_exportItemsFiles)

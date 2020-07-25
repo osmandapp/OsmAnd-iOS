@@ -550,7 +550,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         NSError *writeJsonError;
         NSData *data = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&writeJsonError];
-        NSLog(@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         if (writeJsonError)
         {
             if (error)

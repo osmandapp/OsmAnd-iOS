@@ -1573,3 +1573,5 @@
 "app_mode_personal_transporter" = "Trasportatore personale";
 "active_markers" = "Marcatori attivi";
 "public_transport_warning_title" = "La navigazione sui mezzi pubblici è al momento in fase di test, potrebbero esserci errori o imprecisioni.";
+"routing_attr_length_name" = "Lunghezza massima";
+"exit_at" = "Esci a";

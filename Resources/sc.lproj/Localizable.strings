@@ -1806,3 +1806,4 @@
 "global_settings" = "Impostatziones globales";
 "send_anonymous_data_desc" = "Imbia sas istatìsticas de iscarrigamentu de sas mapas a OsmAnd. Non collimus datos de positzione, o informatziones personales.";
 "default_profile_descr" = "Ischerta unu profilu chi at a èssere impreadu in s'allughidura de s'aplicatzione.";
+"not_available_profile_name" = "Esistit giai unu profilu cun custu nùmene.";

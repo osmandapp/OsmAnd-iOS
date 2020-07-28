@@ -1287,7 +1287,6 @@
 "res_confirmation_delete" = "Kas oled kindel, et soovid kustutada %@?";
 "res_confirmation_clear_cache" = "Kas oled kindel, et soovid tühjendada %@ puhvri?";
 "res_del_cache_not_supported" = "Võrguühenduseta SQLite kaartide puhvri kustutamine ei ole toetatud";
-
 "res_elliptic_mercator" = "Elliptiline merkator";
 "res_url" = "URL";
 "routing_attr_avoid_shuttle_train_name" = "Kiirrongita";
@@ -1595,7 +1594,7 @@
 "map_settings_color_scheme" = "Värviskeem";
 "app_mode_horse" = "Hobune";
 "map_settings_base_transp" = "Aluskaardi läbipaistvus";
-"online_webpage_warning" = "Lehekülg saadaval ainult veebis. Avada veebilehitsejas\?";
+"online_webpage_warning" = "Lehekülg saadaval ainult veebis. Avada veebilehitsejas?";
 "app_mode_subway" = "Metroo";
 "shared_string_warning" = "Hoiatus";
 "app_mode_personal_transporter" = "Isiklik vedaja";
@@ -1603,7 +1602,12 @@
 "app_mode_offroad" = "Maastikutee";
 "app_mode_pedestrian" = "Kõndimine";
 "app_mode_camper" = "Laagriauto";
-"wiki_sheet_title" = "Kuidas Vikipeedia artikleid avada\?";
+"wiki_sheet_title" = "Kuidas Vikipeedia artikleid avada?";
 "app_mode_scooter" = "Tõukeratas";
 "app_mode_default" = "Sirvi kaarti";
 "app_mode_car" = "Autosõit";
+"shared_string_exit" = "Välju";
+"global_settings_descr" = "Mõjutavad kogu rakendust.";
+"global_settings" = "Globaalsed sätted";
+"device_settings" = "Seadme sätted";
+"units_and_formats" = "Ühikud ja formaadid";

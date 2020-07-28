@@ -149,7 +149,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return ![self isCurrentFilters] ? OALocalizedString(@"show_poi_over_map") : OALocalizedString(@"hide_poi_action");
+    return [NSString stringWithFormat:@"%@ %@", ![self isCurrentFilters] ? OALocalizedString(@"sett_show") : OALocalizedString(@"rendering_category_hide"), self.getName];
 }
 
 - (NSString *)getTitle:(NSArray *)filters

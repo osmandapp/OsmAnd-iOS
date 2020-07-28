@@ -42,10 +42,14 @@
         
         if (!headerOnly)
         {
-            OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
-            [collapsableView setData:favorite];
-            collapsableView.collapsed = YES;
-            self.collapsableView = collapsableView;
+            OACollapsableWaypointsView *collapsableGroupView = [[OACollapsableWaypointsView alloc] init];
+            [collapsableGroupView setData:favorite];
+            collapsableGroupView.collapsed = YES;
+            self.collapsableGroupView = collapsableGroupView;
+            
+            OACollapsableCoordinatesView *collapsableCoordinatesView = [[OACollapsableCoordinatesView alloc] init];
+            collapsableCoordinatesView.collapsed = YES;
+            self.collapsableCoordinatesView = collapsableCoordinatesView;
         }
         
         NSString *groupName = self.favorite.favorite->getGroup().toNSString();
@@ -53,7 +57,7 @@
         self.groupColor = [self.favorite getColor];
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
-}
+    }
     return self;
 }
 
@@ -105,10 +109,14 @@
         
         if (!headerOnly)
         {
-            OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
-            [collapsableView setData:fav];
-            collapsableView.collapsed = YES;
-            self.collapsableView = collapsableView;
+            OACollapsableWaypointsView *collapsableGroupView = [[OACollapsableWaypointsView alloc] init];
+            [collapsableGroupView setData:fav];
+            collapsableGroupView.collapsed = YES;
+            self.collapsableGroupView = collapsableGroupView;
+            
+            OACollapsableCoordinatesView *collapsableCoordinatesView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+            collapsableCoordinatesView.collapsed = YES;
+            self.collapsableCoordinatesView = collapsableCoordinatesView;
         }
         
         NSString *groupStr = self.favorite.favorite->getGroup().toNSString();
@@ -154,6 +162,8 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     [settings setMapSettingShowFavorites:YES];
     self.titleGradient.frame = self.navBar.frame;
+    
+    [self.collapsableCoordinatesView setupWithLat:self.location.latitude lon:self.location.longitude];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

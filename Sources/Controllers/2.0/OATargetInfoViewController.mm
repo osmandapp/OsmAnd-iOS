@@ -11,6 +11,7 @@
 #import "OAUtilities.h"
 #import "OATargetInfoViewCell.h"
 #import "OATargetInfoCollapsableViewCell.h"
+#import "OATargetInfoCollapsableCoordinatesViewCell.h"
 #import "OAWebViewCell.h"
 #import "OAEditDescriptionViewController.h"
 #import "Localization.h"
@@ -40,7 +41,7 @@
 
 @implementation OARowInfo
 
-- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
+- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl isCoordinates:(BOOL)isCoordinates
 {
     self = [super init];
     if (self)
@@ -57,6 +58,9 @@
         _typeName = typeName;
         _isPhoneNumber = isPhoneNumber;
         _isUrl = isUrl;
+        _isCoordinates = isCoordinates;
+        _lat = 0.0;
+        _lon = 0.0;
     }
     return self;
 }
@@ -144,7 +148,7 @@
         NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
         if (localTransportRoutes.count > 0)
         {
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO isCoordinates:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = NO;
             rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
@@ -155,7 +159,7 @@
         {
             OsmAndAppInstance app = [OsmAndApp instance];
             NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [app getFormattedDistance:kShowStopsRadiusMeters]];
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO isCoordinates:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = NO;
             rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
@@ -222,7 +226,7 @@
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
         return;
     
-    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO isCoordinates:NO];
 
     OACollapsableCardsView *cardView = [[OACollapsableCardsView alloc] init];
     cardView.delegate = self;
@@ -283,7 +287,7 @@
         if (_nearestWiki.count > 0)
         {
             UIImage *icon = [UIImage imageNamed:[OAUtilities drawablePath:@"mx_wiki_place"]];
-            OARowInfo *wikiRowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:[NSString stringWithFormat:@"%@ (%d)", OALocalizedString(@"wiki_around"), (int)_nearestWiki.count] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *wikiRowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:[NSString stringWithFormat:@"%@ (%d)", OALocalizedString(@"wiki_around"), (int)_nearestWiki.count] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO isCoordinates:NO];
             wikiRowInfo.collapsable = YES;
             wikiRowInfo.collapsed = YES;
             wikiRowInfo.collapsableView = [[OACollapsableWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
@@ -294,13 +298,14 @@
     
     if ([self needCoords])
     {
-        NSInteger f = [OAPointDescription coordinatesFormatToFormatterMode:[[OAAppSettings sharedManager].settingGeoFormat get]];
-        NSDictionary<NSNumber *, NSString*> *values = [OAPointDescription getLocationData:self.location.latitude lon:self.location.longitude];
-        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:values[@(f)] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO isCoordinates:YES];
         coordinatesRow.collapsed = YES;
-        coordinatesRow.collapsable = values.count > 1;
-        coordinatesRow.collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-        [((OACollapsableCoordinatesView *)coordinatesRow.collapsableView) setData:values];
+        coordinatesRow.collapsable = YES;
+        coordinatesRow.lat = self.location.latitude;
+        coordinatesRow.lon = self.location.longitude;
+        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+        [collapsableView setupWithLat:self.location.latitude lon:self.location.longitude];
+        coordinatesRow.collapsableView = collapsableView;
         [_rows addObject:coordinatesRow];
     }
     
@@ -465,7 +470,24 @@
     
     if (!info.isHtml)
     {
-        if (info.collapsable)
+        if (info.isCoordinates)
+        {
+            OATargetInfoCollapsableCoordinatesViewCell *cell;
+            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];
+            
+            if (cell == nil || ![cell isKindOfClass:[OATargetInfoCollapsableCoordinatesViewCell class]])
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoCollapsableCoordinatesViewCell" owner:self options:nil];
+                cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
+            }
+            [cell setupCellWithLat:info.lat lon:info.lon];
+            
+            cell.collapsableView = info.collapsableView;
+            [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
+            
+            return cell;
+        }
+        else if (info.collapsable)
         {
             OATargetInfoCollapsableViewCell* cell;
             cell = (OATargetInfoCollapsableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];

@@ -7,6 +7,7 @@
 //
 
 #import "OATargetMenuViewController.h"
+#import "OACollapsableCoordinatesView.h"
 #import <CoreLocation/CoreLocation.h>
 
 @class OACollapsableView;
@@ -17,7 +18,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
 @property (assign, nonatomic) BOOL newItem;
-@property (nonatomic) OACollapsableView *collapsableView;
+@property (nonatomic) OACollapsableView *collapsableGroupView;
+@property (nonatomic) OACollapsableCoordinatesView *collapsableCoordinatesView;
 
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, assign) NSInteger savedColorIndex;

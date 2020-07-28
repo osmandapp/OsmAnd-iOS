@@ -36,12 +36,16 @@
 @property (nonatomic) int order;
 @property (nonatomic) NSString *typeName;
 
+@property (nonatomic) BOOL isCoordinates;
+@property (nonatomic) double lat;
+@property (nonatomic) double lon;
+
 @property (nonatomic) int height;
 @property (nonatomic) BOOL moreText;
 
 @property (weak, nonatomic) id<OARowInfoDelegate> delegate;
 
-- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
+- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl isCoordinates:(BOOL)isCoordinates;
 
 - (int) getRawHeight;
 - (UIFont *) getFont;

@@ -18,7 +18,9 @@
 #import "OAUtilities.h"
 #import "OAIconTextTableViewCell.h"
 #import "OATargetInfoCollapsableViewCell.h"
+#import "OATargetInfoCollapsableCoordinatesViewCell.h"
 #import "OACollapsableView.h"
+#import "OACollapsableCoordinatesView.h"
 #import <UIAlertView+Blocks.h>
 #import "OAColors.h"
 
@@ -259,7 +261,7 @@
 
 - (CGFloat) contentHeight
 {
-    return ([self.tableView numberOfRowsInSection:0] - 1) * 44.0 + _descHeight + dy + (_collapsableView.collapsed ? 0 : _collapsableView.frame.size.height);
+    return ([self.tableView numberOfRowsInSection:0] - 1) * 44.0 + _descHeight + dy + (_collapsableGroupView.collapsed ? 0 : _collapsableGroupView.frame.size.height) + (_collapsableCoordinatesView.collapsed ? 0 : _collapsableCoordinatesView.frame.size.height);
 }
 
 - (IBAction) deletePressed:(id)sender
@@ -571,19 +573,18 @@
     
     if (indexPath.row == [tableView numberOfRowsInSection:0] - 1)
     {
-        OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColorFromRGB(0xffffff);
-            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-            cell.iconView.hidden = YES;
-            cell.arrowIconView.hidden = YES;
-        }
-        cell.textView.text = self.formattedCoords;
+        OATargetInfoCollapsableCoordinatesViewCell* cell;
+        cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];
         
+        if (cell == nil || ![cell isKindOfClass:[OATargetInfoCollapsableCoordinatesViewCell class]])
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoCollapsableCoordinatesViewCell" owner:self options:nil];
+            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
+        }
+        
+        [cell setupCellWithLat:self.location.latitude lon:self.location.longitude];
+        cell.collapsableView = self.collapsableCoordinatesView;
+        [cell setCollapsed:self.collapsableCoordinatesView.collapsed rawHeight:64.];
         return cell;
     }
 
@@ -710,8 +711,8 @@
             cell.descrLabel.hidden = NO;
             cell.descrLabel.text = OALocalizedString(@"all_group_points");
 
-            cell.collapsableView = self.collapsableView;
-            [cell setCollapsed:self.collapsableView.collapsed rawHeight:64.];
+            cell.collapsableView = self.collapsableGroupView;
+            [cell setCollapsed:self.collapsableGroupView.collapsed rawHeight:64.];
             
             return cell;
         }
@@ -744,10 +745,12 @@
     if (!self.editing)
         index++;
     
-    if (index == 4) // points
-        return 64. + (self.collapsableView.collapsed ? 0. : self.collapsableView.frame.size.height);
-    else if (index == 3) // description
+    if (index == 3)     // description
         return _descHeight;
+    else if (index == 4) // points
+        return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
+    else if (index == 5) // coords
+        return 64. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height);
     else
         return 44.0;
 }
@@ -788,8 +791,8 @@
             UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
             if ([cell isKindOfClass:OATargetInfoCollapsableViewCell.class])
             {
-                self.collapsableView.collapsed = !self.collapsableView.collapsed;
-                [self.collapsableView adjustHeightForWidth:tableView.frame.size.width];
+                self.collapsableGroupView.collapsed = !self.collapsableGroupView.collapsed;
+                [self.collapsableGroupView adjustHeightForWidth:tableView.frame.size.width];
                 if (self.delegate)
                     [self.delegate contentHeightChanged:0];
                 [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -798,6 +801,15 @@
         }
         case 5: // coords
         {
+            UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
+            if ([cell isKindOfClass:OATargetInfoCollapsableCoordinatesViewCell.class])
+            {
+                self.collapsableCoordinatesView.collapsed = !self.collapsableCoordinatesView.collapsed;
+                [self.collapsableCoordinatesView adjustHeightForWidth:tableView.frame.size.width];
+                if (self.delegate)
+                    [self.delegate contentHeightChanged:0];
+                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
             break;
         }
             

@@ -45,7 +45,7 @@
             OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
             [collapsableView setData:wpt];
             collapsableView.collapsed = YES;
-            self.collapsableView = collapsableView;
+            self.collapsableGroupView = collapsableView;
         }
         
         self.groupTitle = self.wpt.docPath == nil ? OALocalizedString(@"track_recording_name") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];

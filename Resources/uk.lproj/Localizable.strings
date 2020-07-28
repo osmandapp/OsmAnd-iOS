@@ -1011,7 +1011,7 @@
 "short_location_on_map" = "Широта %@ Довгота %@";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "coordinates_example" = "Приклад";
-"utm_description" = "OsmAnd використовує стандартний формат UTM, схожий, але не ідентичний формату UTM NATO.";
+"utm_description" = "Зауважте, OsmAnd використовує стандартний формат UTM, схожий, але не ідентичний до UTM NATO.";
 "coordinates_copy_descr" = "Торкніться, щоб скопіювати координати до буфера обміну.";
 "months_3" = "Три місяці";
 "get_discount_first_part" = "%@ за перший %@";
@@ -1232,16 +1232,16 @@
 "change_map_overlay" = "Змінити мапу накладення";
 "change_map_underlay" = "Змінити мапу підкладення";
 "quick_action_name_str" = "Назва дії";
-"quick_action_name_alert" = "Назва швидкої дії була змінена на %@, щоби уникнути дублювання.";
+"quick_action_name_alert" = "Назву швидкої дії змінено на %@, щоб уникнути дублювання.";
 "quick_action_screen_header" = "Екран %ld";
 "select_overlay" = "Виберіть мапу накладення";
 "select_underlay" = "Виберіть мапу підкладення";
 "confirm_bulk_delete" = "Ви дійсно бажаєте видалити %ld елементів?";
 "quick_action_add_actions_descr" = "Додати дії для швидкого доступу до них на мапі.";
 "quick_actions_show_dialog" = "Показати проміжне діалогове вікно";
-"quick_action_dialog_descr" = "Увімкніть, щоби показати діалогове вікно перед застосуванням дії";
+"quick_action_dialog_descr" = "Увімкніть, щоб показати діалогове вікно перед застосуванням дії";
 "quick_action_template_name" = "Назва шаблона";
-"quick_action_name_footer" = "Залиште порожнім, щоби використати адресу або назву місця.";
+"quick_action_name_footer" = "Залиште порожнім, щоб використати адресу або назву місця.";
 "quick_action_select_group" = "Виберіть групу для збереження обраного.";
 "quick_action_add_poi_category" = "Додати категорію";
 "quick_action_add_category_descr" = "Ви можете вибрати кілька категорій POI.";
@@ -1675,7 +1675,7 @@
 "public_transport_ped_route_title" = "Піший маршрут займе приблизно %1$s і він може виявитися швидшим за громадський транспорт.";
 "product_desc_antarctica" = "Необмежене завантаження мап Антарктиди";
 "product_title_antarctica" = "Антарктида";
-"allow_3d_descr" = "Увімкніть цей параметр, щоби мати можливість переглядати мапу у 2.5D перспективі";
+"allow_3d_descr" = "Увімкніть цей параметр, щоб мати можливість переглядати мапу у 2.5D перспективі";
 "allow_3d" = "Дозволити перегляд у режимі 2.5D";
 "map_settings_terrain" = "Рельєф";
 "public_transport_empty_warning_descr" = "Спробуйте змінити параметри.";
@@ -1758,7 +1758,7 @@
 "number_of_tiles" = "Кількість тайлів";
 "move_map_to_select_area" = "Перемістіть мапу, щоб вибрати потрібну область.";
 "update_map" = "Оновити мапу";
-"import_routing_file_descr" = "Ви можете імпортувати файл маршрутизації з будь-якого застосунку хмарного зберігання або помістивши його в каталог маршрутизації в iTunes.";
+"import_routing_file_descr" = "Ви можете перенести файл маршрутизації з будь-якого застосунку хмарного сховища або помістивши його до теки маршрутизації OsmAnd в iTunes.";
 "osmand_routing" = "Маршрутизація OsmAnd";
 "change_map_behavior" = "Зміна поведінки мапи під час навігації";
 "map_behavior" = "Поведінка мапи";
@@ -1779,3 +1779,5 @@
 "default_speed" = "Типова швидкість";
 "send_anonymous_data_desc" = "Надсилати до OsmAnd статистику про завантаження мап, ми не збираємо дані про місцезнаходження або будь-яку іншу особисту інформацію.";
 "default_profile_descr" = "Оберіть профіль, який використовуватиметься під час запуску.";
+"units_and_formats" = "Одиниці виміру й формати";
+"routing_attr_length_name" = "Обмеження довжини";

@@ -262,14 +262,6 @@
         return 1;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_settingsType == EOAGlobalSettingsMain && indexPath.section == 0)
-        return 60.0;    //Default profile
-    else
-        return 48.0;
-}
-
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     if (_settingsType == EOAGlobalSettingsMain)

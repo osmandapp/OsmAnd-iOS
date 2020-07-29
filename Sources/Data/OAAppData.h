@@ -15,6 +15,8 @@
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
 
+@class MutableOrderedDictionary;
+
 @interface OAAppData : NSObject <NSCoding>
 
 @property OAMapSource* lastMapSource;
@@ -104,5 +106,6 @@
 - (void) setLastTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode;
 
 - (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode;
+- (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode;
 
 @end

@@ -889,6 +889,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [res setObject:[setting toStringValue:self.appMode] forKey:key];
     }
     
+    [OsmAndApp.instance.data addPreferenceValuesToDictionary:res mode:self.appMode];
     OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
     NSString *renderer = nil;
     for (OAMapStyleParameter *param in [styleSettings getAllParameters])

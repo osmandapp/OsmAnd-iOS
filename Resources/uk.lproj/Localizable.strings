@@ -615,7 +615,7 @@
 "prefer_in_routing_title" = "Надавати перевагу…";
 "prefer_in_routing_descr" = "Надавати перевагу автомагістралям";
 "relief_smoothness_factor_descr" = "Переважний рельєф: рівнинний або гористий";
-"choose_auto_follow_route" = "Самоосереднення мапи";
+"choose_auto_follow_route" = "Автоцентрування мапи";
 "choose_auto_follow_route_descr" = "Час, через який мапа повернеться до поточної позиції";
 "auto_zoom_map" = "Самозменшення/збільшення";
 "auto_zoom_map_descr" = "Автоматично зменшувати/збільшувати мапу згідно Вашої швидкості (якщо мапа синхронізується з чинним положенням)";
@@ -1628,7 +1628,7 @@
 "wiki_sheet_title" = "Як відкрити статті Вікіпедії?";
 "download_wiki_data" = "Завантажити дані Вікіпедії для %@";
 "open_wiki_online" = "Відкрити статтю в мережі";
-"online_webpage_warning" = "Сторінка доступна лише в мережі. Відкрити в браузері?";
+"online_webpage_warning" = "Сторінка доступна лише в мережі. Відкрити у браузері?";
 "app_mode_osm" = "OSM";
 "app_mode_utv" = "Поруч";
 "app_mode_pickup_truck" = "Пікап";

@@ -1628,7 +1628,7 @@
 "wiki_sheet_title" = "Як відкрити статті Вікіпедії?";
 "download_wiki_data" = "Завантажити дані Вікіпедії для %@";
 "open_wiki_online" = "Відкрити статтю в мережі";
-"online_webpage_warning" = "Сторінка доступна лише в мережі. Відкрити у веббраузері?";
+"online_webpage_warning" = "Сторінка доступна лише в мережі. Відкрити в браузері?";
 "app_mode_osm" = "OSM";
 "app_mode_utv" = "Поруч";
 "app_mode_pickup_truck" = "Пікап";

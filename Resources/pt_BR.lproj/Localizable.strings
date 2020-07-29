@@ -1807,3 +1807,5 @@
 "send_anonymous_data_desc" = "Enviar para o mapa do OsmAnd e estatísticas de download de mapas, não estamos coletando dados de localização ou informações pessoais.";
 "default_profile_descr" = "Selecione um perfil que será usado na inicialização do aplicativo.";
 "not_available_profile_name" = "O perfil com este nome já existe.";
+"profile_import_success" = "O perfil do aplicativo foi importado com sucesso";
+"err_profile_import" = "Erro ao ler dados do item: %@";

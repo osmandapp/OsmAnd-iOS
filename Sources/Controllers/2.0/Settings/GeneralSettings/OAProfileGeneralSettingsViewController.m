@@ -57,6 +57,7 @@
     self.tableView.dataSource = self;
     _settings = [OAAppSettings sharedManager];
     self.profileButton.hidden = NO;
+    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
     [self setupView];
 }
 

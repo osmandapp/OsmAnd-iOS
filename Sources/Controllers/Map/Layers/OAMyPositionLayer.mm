@@ -377,8 +377,20 @@ typedef enum {
 - (void) onAvailableAppModesChanged
 {
     [self.mapViewController runWithRenderSync:^{
+        [self invalidateMarkersCollection];
         [self generateMarkersCollection];
+        [self updateMyLocationCourseProvider];
     }];
+}
+
+- (void) invalidateMarkersCollection
+{
+    for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
+    {
+        OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
+        [c hideMarkers];
+        [self.mapView removeKeyedSymbolsProvider:c.markerCollection];
+    }
 }
 
 - (void) updateMyLocationCourseProvider

@@ -42,6 +42,24 @@
     OAAutoObserverProxy *_applicationModeChangedObserver;
     
     NSMutableArray<OARTargetPoint *> *_intermediates;
+    
+    OAProfileMapSource *_lastMapSourceProfile;
+    OAProfileMapSource *_overlayMapSourceProfile;
+    OAProfileMapSource *_lastOverlayMapSourceProfile;
+    OAProfileMapSource *_underlayMapSourceProfile;
+    OAProfileMapSource  *_lastUnderlayMapSourceProfile;
+    OAProfileDouble *_overlayAlphaProfile;
+    OAProfileDouble *_underlayAlphaProfile;
+    OAProfileMapLayersConfiguartion *_mapLayersConfigurationProfile;
+    OAProfileTerrain *_terrainTypeProfile;
+    OAProfileTerrain *_lastTerrainTypeProfile;
+    OAProfileDouble *_hillshadeAlphaProfile;
+    OAProfileInteger *_hillshadeMinZoomProfile;
+    OAProfileInteger *_hillshadeMaxZoomProfile;
+    OAProfileDouble *_slopeAlphaProfile;
+    OAProfileInteger *_slopeMinZoomProfile;
+    OAProfileInteger *_slopeMaxZoomProfile;
+    OAProfileBoolean *_mapillaryProfile;
 }
 
 @synthesize applicationModeChangedObservable = _applicationModeChangedObservable;
@@ -53,22 +71,49 @@
     {
         [self commonInit];
         [self safeInit];
-        [self registerSettings];
     }
     return self;
 }
 
-- (void) registerSettings
+- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode
 {
-    OAAppSettings *settings = OAAppSettings.sharedManager;
-    [settings registerPreference:_lastTerrainTypeProfile forKey:@"terrain_mode"];
-    [settings registerPreference:_hillshadeMinZoomProfile forKey:@"hillshade_min_zoom"];
-    [settings registerPreference:_hillshadeMaxZoomProfile forKey:@"hillshade_max_zoom"];
-    [settings registerPreference:_hillshadeAlphaProfile forKey:@"hillshade_transparency"];
-    [settings registerPreference:_slopeAlphaProfile forKey:@"slope_transparency"];
-    [settings registerPreference:_slopeMinZoomProfile forKey:@"slope_min_zoom"];
-    [settings registerPreference:_slopeMaxZoomProfile forKey:@"slope_max_zoom"];
-    [settings registerPreference:_mapillaryProfile forKey:@"show_mapillary"];
+    @synchronized (_lock)
+    {
+        if ([key isEqualToString:@"terrain_mode"])
+        {
+            [_lastTerrainTypeProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"hillshade_min_zoom"])
+        {
+            [_hillshadeMinZoomProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"hillshade_max_zoom"])
+        {
+            [_hillshadeMaxZoomProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"hillshade_transparency"])
+        {
+            double alpha = [value doubleValue] / 100;
+            [_hillshadeAlphaProfile set:alpha mode:mode];
+        }
+        else if ([key isEqualToString:@"slope_transparency"])
+        {
+            double alpha = [value doubleValue] / 100;
+            [_slopeAlphaProfile set:alpha mode:mode];
+        }
+        else if ([key isEqualToString:@"slope_min_zoom"])
+        {
+            [_slopeMinZoomProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"slope_max_zoom"])
+        {
+            [_slopeMaxZoomProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"show_mapillary"])
+        {
+            [_mapillaryProfile setValueFromString:value appMode:mode];
+        }
+    }
 }
 
 - (void) commonInit
@@ -171,6 +216,32 @@
     @synchronized(_lock)
     {
         return [_lastMapSourceProfile get];
+    }
+}
+
+- (OAMapSource *) getLastMapSource:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_lastMapSourceProfile get:mode];
+    }
+}
+
+- (void) setLastMapSource:(OAMapSource *)lastMapSource mode:(OAApplicationMode *)mode
+{
+    @synchronized(_lock)
+    {
+        if (![lastMapSource isEqual:[_lastMapSourceProfile get:mode]])
+        {
+            OAMapSource *savedSource = [_lastMapSourceProfile get:mode];
+            // Store previous, if such exists
+            if (savedSource != nil)
+            {
+                [_lastMapSources setObject:savedSource.variant != nil ? savedSource.variant : [NSNull null]
+                                    forKey:savedSource.resourceId];
+            }
+            [_lastMapSourceProfile set:[lastMapSource copy] mode:mode];
+        }
     }
 }
 
@@ -430,6 +501,38 @@
             [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
         else
             [_terrainChangeObservable notifyEventWithKey:self andValue:@(NO)];
+    }
+}
+
+- (EOATerrainType) getTerrainType:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_terrainTypeProfile get:mode];
+    }
+}
+
+- (void) setTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        [_terrainTypeProfile set:terrainType mode:mode];
+    }
+}
+
+- (EOATerrainType) getLastTerrainType:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_lastTerrainTypeProfile get:mode];
+    }
+}
+
+- (void) setLastTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        [_lastTerrainTypeProfile set:terrainType mode:mode];
     }
 }
 

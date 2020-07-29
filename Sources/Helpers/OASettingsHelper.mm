@@ -689,8 +689,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:_appMode.variantKey];
     OAAppData *data = OsmAndApp.instance.data;
     // if the last map source was offline set it to the selected source
-    if ([[data.lastMapSourceProfile get:_appMode].resourceId hasSuffix:ext])
-        [data.lastMapSourceProfile set:[[OAMapSource alloc] initWithResource:[(isTouringView ? resName.lowerCase : resName) stringByAppendingString:ext] andVariant:_appMode.variantKey name:renderer] mode:_appMode];
+    if ([[data getLastMapSource:_appMode].resourceId hasSuffix:ext])
+        [data setLastMapSource:[[OAMapSource alloc] initWithResource:[(isTouringView ? resName.lowerCase : resName) stringByAppendingString:ext] andVariant:_appMode.variantKey name:renderer] mode:_appMode];
     [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
         OAMapStyleParameter *param = [styleSettings getParameter:paramName];
@@ -732,6 +732,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     
     if (![_appModeBeanPrefsIds containsObject:key])
     {
+        OsmAndAppInstance app = OsmAndApp.instance;
         OAProfileSetting *setting = [settings getSettingById:key];
         if (setting)
         {
@@ -739,16 +740,19 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         else if ([key isEqualToString:@"terrain_layer"])
         {
-            OsmAndAppInstance app = OsmAndApp.instance;
             if ([value isEqualToString:@"true"])
             {
-                app.data.terrainType = app.data.lastTerrainType;
+                [app.data setTerrainType:[app.data getLastTerrainType:_appMode] mode:_appMode];
             }
             else
             {
-                app.data.lastTerrainType = app.data.terrainType;
-                app.data.lastTerrainType = EOATerrainTypeDisabled;
+                [app.data setLastTerrainType:[app.data getTerrainType:_appMode] mode:_appMode];
+                [app.data setLastTerrainType:EOATerrainTypeDisabled mode:_appMode];
             }
+        }
+        else
+        {
+            [app.data setSettingValue:value forKey:key mode:_appMode];
         }
     }
 }

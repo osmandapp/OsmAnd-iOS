@@ -17,15 +17,6 @@
 
 @interface OAAppData : NSObject <NSCoding>
 
-@property OAProfileMapSource* lastMapSourceProfile;
-
-@property OAProfileMapSource* overlayMapSourceProfile;
-@property OAProfileMapSource* lastOverlayMapSourceProfile;
-@property OAProfileMapSource* underlayMapSourceProfile;
-@property OAProfileMapSource* lastUnderlayMapSourceProfile;
-@property (nonatomic) OAProfileDouble *overlayAlphaProfile;
-@property (nonatomic) OAProfileDouble *underlayAlphaProfile;
-
 @property OAMapSource* lastMapSource;
 @property OAMapSource* prevOfflineSource;
 
@@ -41,17 +32,7 @@
 @property (readonly) OAObservable* overlayAlphaChangeObservable;
 @property (readonly) OAObservable* underlayAlphaChangeObservable;
 
-@property (readonly) OAProfileMapLayersConfiguartion* mapLayersConfigurationProfile;
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
-
-@property (nonatomic) OAProfileTerrain* terrainTypeProfile;
-@property (nonatomic) OAProfileTerrain* lastTerrainTypeProfile;
-@property (nonatomic) OAProfileDouble* hillshadeAlphaProfile;
-@property (nonatomic) OAProfileInteger* hillshadeMinZoomProfile;
-@property (nonatomic) OAProfileInteger* hillshadeMaxZoomProfile;
-@property (nonatomic) OAProfileDouble* slopeAlphaProfile;
-@property (nonatomic) OAProfileInteger* slopeMinZoomProfile;
-@property (nonatomic) OAProfileInteger* slopeMaxZoomProfile;
 
 @property (nonatomic) EOATerrainType terrainType;
 @property (nonatomic) EOATerrainType lastTerrainType;
@@ -66,7 +47,6 @@
 @property (readonly) OAObservable* terrainResourcesChangeObservable;
 @property (readonly) OAObservable* terrainAlphaChangeObservable;
 
-@property (nonatomic) OAProfileBoolean* mapillaryProfile;
 @property (nonatomic) BOOL mapillary;
 @property (readonly) OAObservable* mapillaryChangeObservable;
 
@@ -113,5 +93,16 @@
 + (OAMapSource *) defaultMapSource;
 
 - (void) setLastMapSourceVariant:(NSString *)variant;
+
+- (OAMapSource *) getLastMapSource:(OAApplicationMode *)mode;
+- (void) setLastMapSource:(OAMapSource *)lastMapSource mode:(OAApplicationMode *)mode;
+
+- (EOATerrainType) getTerrainType:(OAApplicationMode *)mode;
+- (void) setTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode;
+
+- (EOATerrainType) getLastTerrainType:(OAApplicationMode *)mode;
+- (void) setLastTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode;
+
+- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode;
 
 @end

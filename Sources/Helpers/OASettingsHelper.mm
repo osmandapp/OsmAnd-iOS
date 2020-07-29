@@ -368,28 +368,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     // override
 }
 
-//- (nullable NSString *) toJson:(NSError * _Nullable *)error
-//{
-//    id JsonDic = [[NSDictionary alloc] init];
-//    NSError *writeError;
-//    [self writeToJson:JsonDic error:&writeError];
-//    if (writeError)
-//    {
-//        if (error)
-//            *error = writeError;
-//        return nil;
-//    }
-//    NSError *jsonError;
-//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:JsonDic options:NSJSONWritingPrettyPrinted error:&jsonError];
-//    if (jsonError)
-//    {
-//        if (error)
-//            *error = jsonError;
-//        return nil;
-//    }
-//    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-//}
-
 - (OASettingsItemReader *) getJsonReader
 {
     return [[OASettingsItemJsonReader alloc] initWithItem:self];

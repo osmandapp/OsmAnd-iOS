@@ -149,7 +149,7 @@
     }];
     [otherArr addObject:@{
         @"type" : kCellTypeTitle,
-        @"title" : @"Export profile",
+        @"title" : OALocalizedString(@"export_profile"),
         @"key" : @"exportProfile",
     }];
     [tableData addObject:navigationArr];

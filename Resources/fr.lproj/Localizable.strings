@@ -32,7 +32,7 @@
 "shared_string_update" = "Mettre à jour";
 "shared_string_install" = "Installer";
 "shared_string_uninstall" = "Désinstaller";
-"shared_string_done" = "Effectué";
+"shared_string_done" = "Terminé";
 "shared_string_remove" = "Supprimer";
 "shared_string_buy" = "Acheter";
 "shared_string_buy_for" = "pour";

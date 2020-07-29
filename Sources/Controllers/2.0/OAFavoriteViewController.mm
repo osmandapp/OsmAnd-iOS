@@ -152,7 +152,7 @@
     [super viewDidLoad];
     
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    [settings setMapSettingShowFavorites:YES];
+    [settings setShowFavorites:YES];
     self.titleGradient.frame = self.navBar.frame;
 }
 

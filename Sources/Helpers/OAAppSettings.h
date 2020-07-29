@@ -23,7 +23,7 @@
 #define kReceiptValidationMinPeriod 60.0 * 60.0 * 24.0 * 1.0 // 1 day
 #define kReceiptValidationMaxPeriod 60.0 * 60.0 * 24.0 * 30.0 // 30 days
 
-@class OAAvoidRoadInfo;
+@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration;
 
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
@@ -141,25 +141,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
-typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
-{
-    MAP_MARKERS_MODE_TOOLBAR = 0,
-    MAP_MARKERS_MODE_WIDGETS,
-    MAP_MARKERS_MODE_NONE
-};
-
-@interface OAMapMarkersMode : NSObject
-
-@property (nonatomic, readonly) EOAMapMarkersMode mode;
-@property (nonatomic, readonly) NSString *name;
-
-+ (instancetype) withMode:(EOAMapMarkersMode)mode;
-+ (NSArray<OAAutoZoomMap *> *) possibleValues;
-
-+ (NSString *) getName:(EOAMapMarkersMode)mode;
-
-@end
-
 @interface OAProfileSetting : NSObject
 
 @property (nonatomic, readonly) NSString *key;
@@ -167,6 +148,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
 - (void) resetModeToDefault:(OAApplicationMode *)mode;
 - (void) resetToDefault;
+- (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
 
 @end
 
@@ -229,6 +211,46 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @end
 
+@interface OAProfileMapSource : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(OAMapSource *)defValue;
+
+- (OAMapSource *) get;
+- (OAMapSource *) get:(OAApplicationMode *)mode;
+- (void) set:(OAMapSource *)mapSource;
+- (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OAProfileMapLayersConfiguartion : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(OAMapLayersConfiguration *)defValue;
+
+- (OAMapLayersConfiguration *) get;
+- (OAMapLayersConfiguration *) get:(OAApplicationMode *)mode;
+- (void) set:(OAMapLayersConfiguration *)layersConfig;
+- (void) set:(OAMapLayersConfiguration *)layersConfig mode:(OAApplicationMode *)mode;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOATerrainType)
+{
+    EOATerrainTypeDisabled = 0,
+    EOATerrainTypeHillshade,
+    EOATerrainTypeSlope
+};
+
+@interface OAProfileTerrain : OAProfileInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue;
+
+- (EOATerrainType) get;
+- (void) set:(EOATerrainType)autoZoomMap;
+- (EOATerrainType) get:(OAApplicationMode *)mode;
+- (void) set:(EOATerrainType)autoZoomMap mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OAProfileAutoZoomMap : OAProfileInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue;
@@ -262,17 +284,6 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @end
 
-@interface OAProfileMapMarkersMode : OAProfileInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAMapMarkersMode)defValue;
-
-- (EOAMapMarkersMode) get;
-- (void) set:(EOAMapMarkersMode)mapMarkersMode;
-- (EOAMapMarkersMode) get:(OAApplicationMode *)mode;
-- (void) set:(EOAMapMarkersMode)mapMarkersMode mode:(OAApplicationMode *)mode;
-
-@end
-
 @interface OAProfileDrivingRegion : OAProfileInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue;
@@ -284,7 +295,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @end
 
-@interface OAMetricSystem : OAProfileInteger
+@interface OAProfileMetricSystem : OAProfileInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue;
 
@@ -305,6 +316,7 @@ typedef NS_ENUM(NSInteger, EOADistanceIndicationConstant)
 {
     TOP_BAR_DISPLAY = 0,
     WIDGET_DISPLAY,
+    NONE_DISPLAY
 };
 
 @interface OAProfileActiveMarkerConstant : OAProfileInteger
@@ -379,9 +391,9 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic, readonly) NSArray *rtlLanguages;
 
 
-@property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (nonatomic) OAProfileInteger *settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (readonly, nonatomic) BOOL nightMode;
-@property (nonatomic) OAMetricSystem *metricSystem;
+@property (nonatomic) OAProfileMetricSystem *metricSystem;
 @property (nonatomic) OAProfileBoolean *drivingRegionAutomatic;
 @property (nonatomic) OAProfileDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
@@ -393,11 +405,11 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
 
-@property (assign, nonatomic) BOOL mapSettingShowFavorites;
-@property (assign, nonatomic) BOOL mapSettingShowOfflineEdits;
-@property (assign, nonatomic) BOOL mapSettingShowOnlineNotes;
-@property (assign, nonatomic) BOOL mapSettingShowOverlayOpacitySlider;
-@property (assign, nonatomic) BOOL mapSettingShowUnderlayOpacitySlider;
+@property (nonatomic) OAProfileBoolean *mapSettingShowFavorites;
+@property (nonatomic) OAProfileBoolean *mapSettingShowOfflineEdits;
+@property (nonatomic) OAProfileBoolean *mapSettingShowOnlineNotes;
+@property (nonatomic) OAProfileBoolean *mapSettingShowOverlayOpacitySlider;
+@property (nonatomic) OAProfileBoolean *mapSettingShowUnderlayOpacitySlider;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
 
 @property (nonatomic) NSString *billingUserId;
@@ -419,10 +431,10 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 // Track recording settings
 @property (nonatomic) OAProfileBoolean *saveTrackToGPX;
 @property (nonatomic) OAProfileInteger *mapSettingSaveTrackInterval;
-@property (assign, nonatomic) float saveTrackMinDistance;
-@property (assign, nonatomic) float saveTrackPrecision;
-@property (assign, nonatomic) float saveTrackMinSpeed;
-@property (assign, nonatomic) BOOL autoSplitRecording;
+@property (nonatomic) OAProfileDouble *saveTrackMinDistance;
+@property (nonatomic) OAProfileDouble *saveTrackPrecision;
+@property (nonatomic) OAProfileDouble *saveTrackMinSpeed;
+@property (nonatomic) OAProfileBoolean *autoSplitRecording;
 
 
 @property (assign, nonatomic) BOOL mapSettingTrackRecording;
@@ -455,6 +467,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
 - (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
 
+@property (nonatomic) NSArray<NSString *> *appModeBeanPrefsIds;
 @property (nonatomic) OAApplicationMode* applicationMode;
 @property (nonatomic) NSString* availableApplicationModes;
 @property (nonatomic) OAApplicationMode* defaultApplicationMode;
@@ -486,6 +499,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileString *mapInfoControls;
 @property (nonatomic) NSSet<NSString *> *plugins;
 @property (assign, nonatomic) BOOL firstMapIsDownloaded;
+
+@property (nonatomic) OAProfileString *renderer;
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;
@@ -523,7 +538,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *showLanes;
 @property (nonatomic) OAProfileBoolean *showArrivalTime;
 @property (nonatomic) OAProfileBoolean *showIntermediateArrivalTime;
-@property (assign, nonatomic) BOOL showRelativeBearing;
+@property (nonatomic) OAProfileBoolean *showRelativeBearing;
 @property (nonatomic) NSArray<OAAvoidRoadInfo *> *impassableRoads;
 
 @property (nonatomic) OAProfileBoolean *speakStreetNames;
@@ -540,11 +555,9 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *showNearbyFavorites;
 @property (nonatomic) OAProfileBoolean *showNearbyPoi;
 
-@property (nonatomic) OAProfileBoolean *showDestinationArrow;
 @property (nonatomic) OAProfileBoolean *transparentMapTheme;
 @property (nonatomic) OAProfileBoolean *showStreetName;
 @property (nonatomic) OAProfileBoolean *centerPositionOnMap;
-@property (nonatomic) OAProfileMapMarkersMode *mapMarkersMode;
 
 @property (assign, nonatomic) BOOL simulateRouting;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
@@ -571,16 +584,23 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *quickActionIsOn;
 @property (nonatomic) NSString *quickActionsList;
 
-@property (nonatomic, readonly) float quickActionLandscapeX;
-@property (nonatomic, readonly) float quickActionLandscapeY;
-@property (nonatomic, readonly) float quickActionPortraitX;
-@property (nonatomic, readonly) float quickActionPortraitY;
+@property (nonatomic, readonly) OAProfileDouble *quickActionLandscapeX;
+@property (nonatomic, readonly) OAProfileDouble *quickActionLandscapeY;
+@property (nonatomic, readonly) OAProfileDouble *quickActionPortraitX;
+@property (nonatomic, readonly) OAProfileDouble *quickActionPortraitY;
 
 // Contour Lines
 @property (nonatomic) OAProfileString *contourLinesZoom;
 
+- (OAProfileSetting *) getSettingById:(NSString *)stringId;
+
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
+
+- (void) setShowOnlineNotes:(BOOL)mapSettingShowOnlineNotes;
+- (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits;
+- (void) setAppMode:(int)settingAppMode;
+- (void) setShowFavorites:(BOOL)mapSettingShowFavorites;
 
 - (void) addImpassableRoad:(OAAvoidRoadInfo *)roadInfo;
 - (void) updateImpassableRoad:(OAAvoidRoadInfo *)roadInfo;
@@ -597,24 +617,20 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (NSString *) getFormattedTrackInterval:(int)value;
 - (NSString *) getDefaultVoiceProvider;
 
-- (void) setTrackMinDistance:(float)saveTrackMinDistance;
-- (void) setTrackPrecision:(float)trackPrecision;
-- (void) setTrackMinSpeed:(float)trackMinSpeeed;
-
 - (NSSet<NSString *> *) getEnabledPlugins;
 - (NSSet<NSString *> *) getPlugins;
 - (void) enablePlugin:(NSString *)pluginId enable:(BOOL)enable;
 
 - (NSSet<NSString *> *) getCustomAppModesKeys;
 
+- (void) registerPreference:(OAProfileSetting *)pref forKey:(NSString *)key;
+
 // Direction Appearance
 
 @property (nonatomic) OAProfileActiveMarkerConstant* activeMarkers;
-@property (nonatomic) OAProfileBoolean *distanceIndicationVisability;
+@property (nonatomic) OAProfileBoolean *distanceIndicationVisibility;
 @property (nonatomic) OAProfileDistanceIndicationConstant *distanceIndication;
-@property (nonatomic) OAProfileDistanceIndicationConstant *lastPositionWidgetDisplay;
 @property (nonatomic) OAProfileBoolean *arrowsOnMap;
 @property (nonatomic) OAProfileBoolean *directionLines;
 
 @end
-

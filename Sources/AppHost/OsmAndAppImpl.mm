@@ -367,7 +367,7 @@
             // Reset map sources
             _data.overlayMapSource = nil;
             _data.underlayMapSource = nil;
-            _data.lastMapSource = [OAAppData defaults].lastMapSource;
+            _data.lastMapSource = [OAAppData defaultMapSource];
             _resourcesManager->installOsmAndOnlineTileSource();
             
             [self clearUnsupportedTilesCache];
@@ -375,13 +375,6 @@
         if (prevVersion < VERSION_3_14)
         {
             OAAppSettings.sharedManager.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
-            OAAppData *defaults = OAAppData.defaults;
-            _data.slopeAlpha = defaults.slopeAlpha;
-            _data.hillshadeAlpha = defaults.hillshadeAlpha;
-            _data.slopeMinZoom = defaults.slopeMinZoom;
-            _data.slopeMaxZoom = defaults.slopeMaxZoom;
-            _data.hillshadeMinZoom = defaults.hillshadeMinZoom;
-            _data.hillshadeMaxZoom = defaults.hillshadeMaxZoom;
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }

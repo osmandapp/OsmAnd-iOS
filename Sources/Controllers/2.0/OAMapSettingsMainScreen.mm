@@ -232,11 +232,11 @@
         _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
         NSMutableArray *categoriesList = [NSMutableArray array];
         NSString *modeStr;
-        if (_settings.settingAppMode == APPEARANCE_MODE_DAY)
+        if ([_settings.settingAppMode get] == APPEARANCE_MODE_DAY)
             modeStr = OALocalizedString(@"map_settings_day");
-        else if (_settings.settingAppMode == APPEARANCE_MODE_NIGHT)
+        else if ([_settings.settingAppMode get] == APPEARANCE_MODE_NIGHT)
             modeStr = OALocalizedString(@"map_settings_night");
-        else if (_settings.settingAppMode == APPEARANCE_MODE_AUTO)
+        else if ([_settings.settingAppMode get] == APPEARANCE_MODE_AUTO)
             modeStr = OALocalizedString(@"daynight_mode_auto");
         else
             modeStr = OALocalizedString(@"-");
@@ -387,6 +387,8 @@
 - (void) appModeChanged:(OAApplicationMode *)mode
 {
     _settings.applicationMode = mode;
+    
+    [self setupView];
 }
 
 #pragma mark - UITableViewDataSource
@@ -457,17 +459,17 @@
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             
             if (indexPath.section == favSection && indexPath.row == favRow) {
-                [cell.switchView setOn:_settings.mapSettingShowFavorites];
+                [cell.switchView setOn:[_settings.mapSettingShowFavorites get]];
                 [cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else if ([data[@"key"] isEqualToString:@"osm_edits_offline_layer"])
             {
-                [cell.switchView setOn:_settings.mapSettingShowOfflineEdits];
+                [cell.switchView setOn:[_settings.mapSettingShowOfflineEdits get]];
                 [cell.switchView addTarget:self action:@selector(showOfflineEditsChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else if ([data[@"key"] isEqualToString:@"osm_notes_online_layer"])
             {
-                [cell.switchView setOn:_settings.mapSettingShowOnlineNotes];
+                [cell.switchView setOn:[_settings.mapSettingShowOnlineNotes get]];
                 [cell.switchView addTarget:self action:@selector(showOnlineNotesChanged:) forControlEvents:UIControlEventValueChanged];
             }
         }
@@ -653,21 +655,21 @@
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-        [_settings setMapSettingShowFavorites:switchView.isOn];
+        [_settings setShowFavorites:switchView.isOn];
 }
 
 - (void) showOfflineEditsChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-        [_settings setMapSettingShowOfflineEdits:switchView.isOn];
+        [_settings setShowOfflineEdits:switchView.isOn];
 }
 
 - (void) showOnlineNotesChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-        [_settings setMapSettingShowOnlineNotes:switchView.isOn];
+        [_settings setShowOnlineNotes:switchView.isOn];
 }
 
 - (void) transportChanged:(id)sender

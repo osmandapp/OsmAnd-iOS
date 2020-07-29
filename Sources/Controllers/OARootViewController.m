@@ -28,6 +28,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAGPXListViewController.h"
 #import "OAFileImportHelper.h"
+#import "OASettingsHelper.h"
 
 #import "Localization.h"
 #import "OAGPXDatabase.h"
@@ -482,6 +483,11 @@ typedef enum : NSUInteger {
         }
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
         [self presentViewController:alert animated:YES completion:nil];
+    }
+    else if ([ext caseInsensitiveCompare:@"osf"] == NSOrderedSame)
+    {
+        OASettingsHelper *helper = OASettingsHelper.sharedInstance;
+        [helper collectSettings:url.path latestChanges:@"" version:1];
     }
     
     return YES;

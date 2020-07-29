@@ -81,7 +81,7 @@ static OAQuickActionType *TYPE;
         OAMapSource *mapSource = app.data.prevOfflineSource;
         if (!mapSource)
         {
-            mapSource = [OAAppData defaults].lastMapSource;
+            mapSource = [OAAppData defaultMapSource];
             [app.data setPrevOfflineSource:mapSource];
         }
         app.data.lastMapSource = mapSource;

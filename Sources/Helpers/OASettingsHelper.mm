@@ -7,12 +7,11 @@
 //
 
 #import "OASettingsHelper.h"
-#import "OASettingsCollect.h"
-#import "OACheckDuplicates.h"
-#import "OASettingsImport.h"
-#import "OASettingsExport.h"
 #import "OASettingsImporter.h"
 #import "OASettingsExporter.h"
+#import "OAResourcesUIHelper.h"
+#import "OARootViewController.h"
+#import "OAMapStyleSettings.h"
 
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
@@ -28,6 +27,9 @@
 #import "Localization.h"
 #import "OAQuickAction.h"
 #import "OAQuickActionType.h"
+#import "OAColors.h"
+#import "OAPlugin.h"
+#import "OAMapStyleTitles.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -96,17 +98,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @end
 
-@interface OASettingsHelper()
-
-@property (weak, nonatomic) id<OASettingsCollectDelegate> settingsCollectDelegate;
-@property (weak, nonatomic) id<OACheckDuplicatesDelegate> checkDuplicatesDelegate;
-@property (weak, nonatomic) id<OASettingsImportDelegate> settingsImportDelegate;
-@property (weak, nonatomic) id<OASettingsExportDelegate> settingsExportDelegate;
+@interface OASettingsHelper() <OASettingsImportExportDelegate>
 
 @end
 
 @implementation OASettingsHelper
-
 
 + (OASettingsHelper *) sharedInstance
 {
@@ -118,47 +114,94 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return _sharedInstance;
 }
 
-- (void) finishImport:(OASettingsImport * _Nullable)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
-    _importTask = nil;
-    if (listener)
-        [_settingsImportDelegate onSettingsImportFinished:success items:items];
-}
-
-- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version listener:(OASettingsCollect * _Nullable)listener
-{
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version collectListener:listener] executeParameters];
-    });
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
+    task.delegate = self;
+    [task execute];
 }
  
-- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems listener:(OACheckDuplicates * _Nullable)listener
+- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[[OAImportAsyncTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems duplicatesListener:listener] executeParameters];
-    });
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems];
+    task.delegate = self;
+    [task execute];
 }
 
-- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version listener:(OASettingsImport * _Nullable)listener
+- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version importListener:listener] executeParameters];
-    });
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
+    task.delegate = self;
+    [task execute];
 }
 
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport * _Nullable)listener items:(NSArray<OASettingsItem *> *)items
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles
 {
-    NSString *file = [NSString stringWithString:fileName];
-    OAExportAsyncTask *exportAsyncTask = [[OAExportAsyncTask alloc] initWithFile:file listener:listener items:items];
-    [exportAsyncTask setValue:exportAsyncTask forKey:file];
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [exportAsyncTask execute];
-    });
+    NSString *file = [fileDir stringByAppendingPathComponent:fileName];
+    file = [file stringByAppendingPathExtension:@".osf"];
+    OAExportAsyncTask *exportAsyncTask = [[OAExportAsyncTask alloc] initWithFile:file items:items exportItemFiles:exportItemFiles];
+    exportAsyncTask.settingsExportDelegate = self;
+    [_exportTasks setObject:exportAsyncTask forKey:file];
+    [exportAsyncTask execute];
 }
 
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName listener:(OASettingsExport * _Nullable)listener
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName settingsItem:(OASettingsItem *)item exportItemFiles:(BOOL)exportItemFiles
 {
-    //exportSettings(fileDir, fileName, listener, new ArrayList<>(Arrays.asList(items)));
+    [self exportSettings:fileDir fileName:fileName items:@[item] exportItemFiles:exportItemFiles];
+}
+
+#pragma mark - OASettingsImportExportDelegate
+
+- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(OALocalizedString(@"profile_import_success")) preferredStyle:UIAlertControllerStyleAlert];
+    [NSFileManager.defaultManager removeItemAtPath:_importTask.getFile error:nil];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    _importTask = nil;
+}
+
+- (void) onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items
+{
+    if (succeed)
+    {
+        NSMutableArray<OASettingsItem *> *pluginIndependentItems = [NSMutableArray new];
+        NSMutableArray<OAPluginSettingsItem *> *pluginSettingsItems = [NSMutableArray new];
+        for (OASettingsItem *item in items)
+        {
+            if ([item isKindOfClass:OAPluginSettingsItem.class])
+                [pluginSettingsItems addObject:((OAPluginSettingsItem *) item)];
+            else if (item.pluginId.length == 0)
+                [pluginIndependentItems addObject:item];
+        }
+//        for (OAPluginSettingsItem *pluginItem in pluginSettingsItems)
+//        {
+//            handlePluginImport(pluginItem, file);
+//        }
+        if (pluginIndependentItems.count > 0)
+        {
+            // TODO: add ui dialogs as in Android
+//            FragmentManager fragmentManager = activity.getSupportFragmentManager();
+//            ImportSettingsFragment.showInstance(fragmentManager, pluginIndependentItems, file);
+            [self importSettings:_importTask.getFile items:_importTask.getItems latestChanges:@"" version:1];
+        }
+    }
+    else if (empty)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), items.firstObject.name] preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+        [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+- (void) onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed
+{
+    
+}
+
+- (void) onDuplicatesChecked:(NSArray<OASettingsItem *>*)duplicates items:(NSArray<OASettingsItem *>*)items
+{
+    
 }
 
 @end
@@ -178,6 +221,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) writeToJson:(id)json error:(NSError * _Nullable *)error;
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error;
 - (void) writeItemsToJson:(id)json error:(NSError * _Nullable *)error;
+- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value;
+- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs;
 
 @end
 
@@ -232,7 +277,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (BOOL) applyFileName:(NSString *)fileName
 {
-    return [fileName hasSuffix:self.fileName];
+    return self.fileName ? [fileName hasSuffix:self.fileName] : NO;
 }
 
 - (BOOL) exists
@@ -250,8 +295,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSString *typeStr = json[@"type"];
     if (!typeStr)
     {
-        if (error)
-            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeNoTypeField userInfo:nil];
+        *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeNoTypeField userInfo:nil];
         return EOASettingsItemTypeUnknown;
     }
     if ([typeStr isEqualToString:@"QUICK_ACTION"])
@@ -305,6 +349,16 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 }
 
 - (void) writeItemsToJson:(id)json error:(NSError * _Nullable *)error
+{
+    // override
+}
+
+- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
+{
+    // override
+}
+
+- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
 {
     // override
 }
@@ -392,12 +446,16 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (instancetype) initWithItem:(id)item
 {
-    _item = item;
+    self = [super init];
+    if (self) {
+        _item = item;
+    }
     return self;
 }
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    return NO;
 }
 
 @end
@@ -457,16 +515,20 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         
         return NO;
     }
+    NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
+    NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     
-    NSError *readItemsError;
-    [self.item readItemsFromJson:json error:&readItemsError];
-    if (readItemsError)
-    {
-        if (error)
-            *error = readItemsError;
-        
-        return NO;
-    }
+    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([key hasPrefix:@"nrenderer_"])
+            [rendererSettings setObject:obj forKey:key];
+        else
+            [self.item readPreferenceFromJson:key value:obj];
+    }];
+    
+    [self.item applyRendererPreferences:rendererSettings];
+    
+    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
+    
     return YES;
 }
 
@@ -550,6 +612,391 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return NO;
     }
     return YES;
+}
+
+@end
+
+#pragma mark - OAProfileSettingsItem
+
+@implementation OAProfileSettingsItem
+{
+    NSDictionary *_additionalPrefs;
+    
+    NSSet<NSString *> *_appModeBeanPrefsIds;
+}
+
+@dynamic type, name, fileName;
+
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
+{
+    self = [super init];
+    if (self) {
+        _appMode = appMode;
+    }
+    return self;
+}
+
+- (EOASettingsItemType) type
+{
+    return EOASettingsItemTypeProfile;
+}
+
+- (NSString *) name
+{
+    return _appMode.stringKey;
+}
+
+- (NSString *) publicName
+{
+    if (_appMode.isCustomProfile)
+        return _appMode.getUserProfileName;
+    return _appMode.name;
+}
+
+- (NSString *)defaultFileName
+{
+    return [NSString stringWithFormat:@"profile_%@%@", self.name, self.defaultFileExtension];
+}
+
+- (BOOL)exists
+{
+    return [OAApplicationMode valueOfStringKey:_appMode.name def:nil] != nil;
+}
+
+- (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    [super readFromJson:json error:error];
+    NSDictionary *appModeJson = json[@"appMode"];
+    _modeBean = [OAApplicationModeBean fromJson:appModeJson];
+    
+    OAApplicationMode *am = [OAApplicationMode fromModeBean:_modeBean];
+    if (![am isCustomProfile])
+        am = [OAApplicationMode valueOfStringKey:am.stringKey def:am];
+    _appMode = am;
+}
+
+- (void)readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    _additionalPrefs = json[@"prefs"];
+}
+
+- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
+{
+    NSString *renderer = [OAAppSettings.sharedManager.renderer get:_appMode];
+    NSString *resName = [self getRendererByName:renderer];
+    NSString *ext = @".render.xml";
+    renderer = OAMapStyleTitles.getMapStyleTitles[resName];
+    BOOL isTouringView = [resName hasPrefix:@"Touring"];
+    if (!renderer && isTouringView)
+        renderer = OAMapStyleTitles.getMapStyleTitles[@"Touring-view_(more-contrast-and-details).render"];
+    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:_appMode.variantKey];
+    OAAppData *data = OsmAndApp.instance.data;
+    // if the last map source was offline set it to the selected source
+    if ([[data getLastMapSource:_appMode].resourceId hasSuffix:ext])
+        [data setLastMapSource:[[OAMapSource alloc] initWithResource:[(isTouringView ? resName.lowerCase : resName) stringByAppendingString:ext] andVariant:_appMode.variantKey name:renderer] mode:_appMode];
+    [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
+        OAMapStyleParameter *param = [styleSettings getParameter:paramName];
+        if (param)
+        {
+            param.value = obj;
+            [styleSettings save:param refreshMap:NO];
+        }
+    }];
+}
+
+- (NSString *) getRendererByName:(NSString *)rendererName
+{
+    if ([rendererName isEqualToString:@"OsmAnd"])
+        return @"default";
+    else if ([rendererName isEqualToString:@"Touring view (contrast and details)"])
+        return @"Touring-view_(more-contrast-and-details)";
+    else if (![rendererName isEqualToString:@"LightRS"] && ![rendererName isEqualToString:@"UniRS"])
+        return [rendererName lowerCase];
+    
+    return rendererName;
+}
+
+- (void)readPreferenceFromJson:(NSString *)key value:(NSString *)value
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    if (!_appModeBeanPrefsIds)
+        _appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
+    
+    if (![_appModeBeanPrefsIds containsObject:key])
+    {
+        OsmAndAppInstance app = OsmAndApp.instance;
+        OAProfileSetting *setting = [settings getSettingById:key];
+        if (setting)
+        {
+            [setting setValueFromString:value appMode:_appMode];
+        }
+        else if ([key isEqualToString:@"terrain_layer"])
+        {
+            if ([value isEqualToString:@"true"])
+            {
+                [app.data setTerrainType:[app.data getLastTerrainType:_appMode] mode:_appMode];
+            }
+            else
+            {
+                [app.data setLastTerrainType:[app.data getTerrainType:_appMode] mode:_appMode];
+                [app.data setLastTerrainType:EOATerrainTypeDisabled mode:_appMode];
+            }
+        }
+        else
+        {
+            [app.data setSettingValue:value forKey:key mode:_appMode];
+        }
+    }
+}
+
+- (void) renameProfile
+{
+    NSArray<OAApplicationMode *> *values = OAApplicationMode.allPossibleValues;
+    if (_modeBean.userProfileName.length == 0)
+    {
+        OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:_modeBean.stringKey def:nil];
+        if (appMode != nil)
+        {
+            _modeBean.userProfileName = _appMode.name;
+            _modeBean.parent = _appMode.stringKey;
+        }
+    }
+    int number = 0;
+    while (true) {
+        number++;
+        NSString *key = [NSString stringWithFormat:@"%@_%d", _modeBean.stringKey, number];
+        NSString *name = [NSString stringWithFormat:@"%@ %d", _modeBean.userProfileName, number];
+        if ([OAApplicationMode valueOfStringKey:key def:nil] == nil && [self isNameUnique:values name:name])
+        {
+            _modeBean.userProfileName = name;
+            _modeBean.stringKey = key;
+            break;
+        }
+    }
+}
+
+- (void)apply
+{
+    if (!_appMode.isCustomProfile && !self.shouldReplace)
+    {
+        [self renameProfile];
+        OAApplicationMode *am = [OAApplicationMode fromModeBean:_modeBean];
+       
+//        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
+//        appMode = ApplicationMode.saveProfile(builder, app);
+        [OAApplicationMode saveProfile:am];
+    }
+    else if (!self.shouldReplace && [self exists])
+    {
+        [self renameProfile];
+        _appMode = [OAApplicationMode fromModeBean:_modeBean];
+        [OAApplicationMode saveProfile:_appMode];
+    }
+    else
+    {
+        _appMode = [OAApplicationMode fromModeBean:_modeBean];
+        [OAApplicationMode saveProfile:_appMode];
+    }
+    [OAApplicationMode changeProfileAvailability:_appMode isSelected:YES];
+}
+
+- (BOOL) isNameUnique:(NSArray<OAApplicationMode *> *)values name:(NSString *) name
+{
+    for (OAApplicationMode *mode in values)
+    {
+        if ([mode.getUserProfileName isEqualToString:name])
+            return NO;
+    }
+    return YES;
+}
+
+//public void applyAdditionalPrefs() {
+//    if (additionalPrefsJson != null) {
+//        updatePluginResPrefs();
+//
+//        SettingsItemReader reader = getReader();
+//        if (reader instanceof OsmandSettingsItemReader) {
+//            ((OsmandSettingsItemReader) reader).readPreferencesFromJson(additionalPrefsJson);
+//        }
+//    }
+//}
+//
+//private void updatePluginResPrefs() {
+//    String pluginId = getPluginId();
+//    if (Algorithms.isEmpty(pluginId)) {
+//        return;
+//    }
+//    OsmandPlugin plugin = OsmandPlugin.getPlugin(pluginId);
+//    if (plugin instanceof CustomOsmandPlugin) {
+//        CustomOsmandPlugin customPlugin = (CustomOsmandPlugin) plugin;
+//        String resDirPath = IndexConstants.PLUGINS_DIR + pluginId + "/" + customPlugin.getResourceDirName();
+//
+//        for (Iterator<String> it = additionalPrefsJson.keys(); it.hasNext(); ) {
+//            try {
+//                String prefId = it.next();
+//                Object value = additionalPrefsJson.get(prefId);
+//                if (value instanceof JSONObject) {
+//                    JSONObject jsonObject = (JSONObject) value;
+//                    for (Iterator<String> iterator = jsonObject.keys(); iterator.hasNext(); ) {
+//                        String key = iterator.next();
+//                        Object val = jsonObject.get(key);
+//                        if (val instanceof String) {
+//                            val = checkPluginResPath((String) val, resDirPath);
+//                        }
+//                        jsonObject.put(key, val);
+//                    }
+//                } else if (value instanceof String) {
+//                    value = checkPluginResPath((String) value, resDirPath);
+//                    additionalPrefsJson.put(prefId, value);
+//                }
+//            } catch (JSONException e) {
+//                LOG.error(e);
+//            }
+//        }
+//    }
+//}
+//
+//private String checkPluginResPath(String path, String resDirPath) {
+//    if (path.startsWith("@")) {
+//        return resDirPath + "/" + path.substring(1);
+//    }
+//    return path;
+//}
+
+- (void)writeToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    [super writeToJson:json error:error];
+    [json addObject:@{@"appMode" : [_appMode toJson]}];
+}
+
+- (OASettingsItemReader *)getReader
+{
+    return [[OASettingsItemJsonReader alloc] initWithItem:self];
+}
+
+- (OASettingsItemWriter *)getWriter
+{
+    return [[OASettingsItemWriter alloc] initWithItem:self];
+}
+
+@end
+
+#pragma mark - OAGlobalSettingsItem
+
+@implementation OAGlobalSettingsItem
+
+@dynamic type, name, fileName;
+
+- (EOASettingsItemType) type
+{
+    return EOASettingsItemTypeGlobal;
+}
+
+- (NSString *) name
+{
+    return @"general_settings";
+}
+
+- (NSString *) publicName
+{
+    return OALocalizedString(@"general_settings_2");
+}
+
+- (BOOL)exists
+{
+    return YES;
+}
+
+- (OASettingsItemReader *)getReader
+{
+    return [[OASettingsItemReader alloc] initWithItem:self];
+}
+
+- (OASettingsItemWriter *)getWriter
+{
+    return [[OASettingsItemWriter alloc] initWithItem:self];
+}
+
+@end
+
+#pragma mark - OAPluginSettingsItem
+
+@implementation OAPluginSettingsItem
+{
+    OAPlugin *_plugin;
+    NSArray<OASettingsItem *> *_pluginDependentItems;
+}
+
+@dynamic type, name, fileName;
+
+- (EOASettingsItemType) type
+{
+    return EOASettingsItemTypePlugin;
+}
+
+- (NSString *) name
+{
+    return [_plugin.class getId];
+}
+
+- (NSString *) publicName
+{
+    return _plugin.getName;
+}
+
+- (BOOL)exists
+{
+    return [OAPlugin getPlugin:_plugin.class] != nil;
+}
+
+- (void)apply
+{
+    if (self.shouldReplace || ![self exists])
+    {
+        // TODO: implement custom plugins
+//        for (OASettingsItem *item : _pluginDependentItems)
+//        {
+//            if ([item isKindOfClass:OAFileSettingsItem.class])
+//            {
+//                OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
+//                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
+//                {
+//                    [_plugin addRenderer:fileItem.name];
+//                }
+//                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
+//                {
+//                    [plugin addRouter:fileItem.name];
+//                }
+//                else if (fileItem.subtype == EOASettingsItemFileSubtypeOther)
+//                {
+//                    [plugin setResourceDirName:item.fileName];
+//                }
+//            }
+//            else if ([item isKindOfClass:OASuggestedDownloadsItem.class])
+//            {
+//                [plugin updateSuggestedDownloads:((OASuggestedDownloadsItem *) item).items];
+//            }
+//            else if ([item isKindOfClass:OADownloadsItem.class])
+//            {
+//                [plugin updateDownloadItems:((OADownloadsItem *) item).items];
+//            }
+//        }
+//        [OAPlugin addCusomPlugin:_plugin];
+    }
+}
+
+- (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    [super readFromJson:json error:error];
+//    _plugin = [[OAPlugin alloc] initWithJson:json];
+//    new CustomOsmandPlugin(app, json);
+}
+
+- (void) writeToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    [super writeToJson:json error:error];
+//    _plugin.writeAdditionalDataToJson(json);
 }
 
 @end
@@ -723,6 +1170,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if ([subtypeName isEqualToString:name])
             return (EOASettingsItemFileSubtype)i;
     }
+    return EOASettingsItemFileSubtypeUnknown;
 }
 
 + (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName
@@ -1124,7 +1572,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return EOASettingsItemTypeUnknown;
 }
 
-- (NSArray<id> *) processDuplicateItems
+- (NSArray*) processDuplicateItems
 {
     if (_items.count > 0)
     {

@@ -13,8 +13,6 @@
 
 @implementation OADayNightHelper
 {
-    OsmAndAppInstance _app;
-
     NSTimeInterval _lastTime;
     BOOL _lastNightMode;
     BOOL _firstCall;
@@ -26,7 +24,6 @@
     self = [super init];
     if (self)
     {
-        _app = [OsmAndApp instance];
         _firstCall = YES;
         _recalcInterval = 1.0;
     }
@@ -57,7 +54,7 @@
 - (BOOL) isNightMode
 {
     BOOL nightMode = _lastNightMode;
-    int dayNightMode = [OAAppSettings sharedManager].settingAppMode;
+    int dayNightMode = [[OAAppSettings sharedManager].settingAppMode get];
     if (dayNightMode == APPEARANCE_MODE_DAY)
     {
         nightMode = NO;
@@ -103,7 +100,7 @@
 
 - (SunriseSunset *) getSunriseSunset
 {
-    CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
+    CLLocation *lastKnownLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
     if (!lastKnownLocation)
         return nil;
     

@@ -1797,3 +1797,4 @@
 "min_speed" = "Min. Geschwindigkeit";
 "default_speed" = "Std. Geschwindigkeit";
 "routing_attr_length_name" = "Längenbegrenzung";
+"default_profile_descr" = "Wählen Sie ein Profil, das beim Start der Anwendung verwendet wird.";

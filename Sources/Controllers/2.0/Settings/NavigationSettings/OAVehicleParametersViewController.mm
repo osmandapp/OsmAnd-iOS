@@ -59,6 +59,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
     [self setupView];
 }
 
@@ -108,38 +109,42 @@
                 else
                     value = [NSString stringWithFormat:@"%@%@", value, [paramId isEqualToString:@"weight"] ? @"t" : @"m"];
                 [parametersArr addObject:
-                    @{
-                    @"name" : paramId,
-                    @"title" : title,
-                    @"value" : value,
-                    @"selectedItem" : [NSNumber numberWithInt:index],
-                    @"icon" : [self getParameterIcon:paramId],
-                    @"possibleValues" : possibleValues,
-                    @"possibleValuesDescr" : possibleValuesDescr,
-                    @"setting" : stringParam,
-                    @"type" : kCellTypeIconTitleValue }
-                    ];
+                 @{
+                     @"name" : paramId,
+                     @"title" : title,
+                     @"value" : value,
+                     @"selectedItem" : [NSNumber numberWithInt:index],
+                     @"icon" : [self getParameterIcon:paramId],
+                     @"possibleValues" : possibleValues,
+                     @"possibleValuesDescr" : possibleValuesDescr,
+                     @"setting" : stringParam,
+                     @"type" : kCellTypeIconTitleValue }
+                 ];
             }
         }
     }
-    if (self.appMode != OAApplicationMode.AIRCRAFT && self.appMode.parent != OAApplicationMode.AIRCRAFT)
-        [defaultSpeedArr addObject:@{
-            @"type" : kCellTypeIconText,
-            @"title" : OALocalizedString(@"default_speed"),
-            @"minSpeed" : [NSNumber numberWithDouble:router->getMinSpeed()],
-            @"defaultSpeed" : [NSNumber numberWithDouble:router->getDefaultSpeed()],
-            @"maxSpeed" : [NSNumber numberWithDouble:router->getMaxSpeed()],
-            @"icon" : @"ic_action_speed",
-            @"name" : @"defaultSpeed",
-        }];
-    else
-        [defaultSpeedArr addObject:@{
-            @"type" : kCellTypeIconText,
-            @"title" : OALocalizedString(@"default_speed"),
-            @"defaultSpeedOnly" : @YES,
-            @"icon" : @"ic_action_speed",
-            @"name" : @"defaultSpeed",
-        }];
+    // TODO: add default speed functionality when it's ready
+//    if (self.appMode != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode.parent != OAApplicationMode.PUBLIC_TRANSPORT)
+//    {
+//        if (self.appMode != OAApplicationMode.AIRCRAFT && self.appMode.parent != OAApplicationMode.AIRCRAFT)
+//            [defaultSpeedArr addObject:@{
+//                @"type" : kCellTypeIconText,
+//                @"title" : OALocalizedString(@"default_speed"),
+//                @"minSpeed" : [NSNumber numberWithDouble:router->getMinSpeed()],
+//                @"defaultSpeed" : [NSNumber numberWithDouble:router->getDefaultSpeed()],
+//                @"maxSpeed" : [NSNumber numberWithDouble:router->getMaxSpeed()],
+//                @"icon" : @"ic_action_speed",
+//                @"name" : @"defaultSpeed",
+//            }];
+//        else
+//            [defaultSpeedArr addObject:@{
+//                @"type" : kCellTypeIconText,
+//                @"title" : OALocalizedString(@"default_speed"),
+//                @"defaultSpeedOnly" : @YES,
+//                @"icon" : @"ic_action_speed",
+//                @"name" : @"defaultSpeed",
+//            }];
+//    }
     if (parametersArr.count > 0)
         [tableData addObject:parametersArr];
     if (defaultSpeedArr.count > 0)
@@ -150,9 +155,9 @@
 + (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    auto router = app.defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
+    auto router = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
     if (!router && am.parent)
-        router = app.defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
+        router = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
     return router;
 }
 
@@ -232,16 +237,11 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemName = item[@"name"];
     OASettingsModalPresentationViewController* settingsViewController = nil;
-    if ([itemName isEqualToString:@"weight"])
-        settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:self.appMode vehicleParameter:item];
-    else if ([itemName isEqualToString:@"height"])
-        settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:self.appMode vehicleParameter:item];
-    else if ([itemName isEqualToString:@"width"])
-        settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:self.appMode vehicleParameter:item];
-    else if ([itemName isEqualToString:@"length"])
-        settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:self.appMode vehicleParameter:item];
-    else if ([itemName isEqualToString:@"defaultSpeed"])
+    if ([itemName isEqualToString:@"defaultSpeed"])
         settingsViewController = [[OADefaultSpeedViewController alloc] initWithApplicationMode:self.appMode speedParameters:item];
+    else
+        settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:self.appMode vehicleParameter:item];
+    
     settingsViewController.delegate = self;
     [self presentViewController:settingsViewController animated:YES completion:nil];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -258,7 +258,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == 0 ? @"" : OALocalizedString(@"announce");
+    return section == 0 ? @"" : OALocalizedString(@"help_other_header");
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section

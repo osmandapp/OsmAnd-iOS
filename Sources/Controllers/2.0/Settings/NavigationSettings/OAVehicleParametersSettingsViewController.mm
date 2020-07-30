@@ -39,13 +39,13 @@
     NSNumber *_selectedParameter;
 }
 
-- (instancetype) initWithApplicationMode:(OAApplicationMode *)ap vehicleParameter:(NSDictionary *)vp
+- (instancetype) initWithApplicationMode:(OAApplicationMode *)am vehicleParameter:(NSDictionary *)vp
 {
     self = [super init];
     if (self)
     {
         _settings = [OAAppSettings sharedManager];
-        _applicationMode = ap;
+        _applicationMode = am;
         _vehicleParameter = vp;
         [self commonInit];
     }
@@ -67,9 +67,7 @@
 
 - (BOOL) isBoat
 {
-    if (_applicationMode == OAApplicationMode.BOAT || _applicationMode.parent == OAApplicationMode.BOAT)
-        return YES;
-    return NO;
+    return _applicationMode == OAApplicationMode.BOAT || _applicationMode.parent == OAApplicationMode.BOAT;
 }
 
 - (void) generateData
@@ -92,6 +90,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
     [self setupView];
 }
 
@@ -100,7 +99,7 @@
     if ([parameter isEqualToString:@"weight"])
         return @"img_help_weight_limit_day";
     else if ([parameter isEqualToString:@"height"])
-        return [self isBoat] ? @"img_help_vessel_height_day" :  @"img_help_height_limit_day";
+        return [self isBoat] ? @"img_help_vessel_height_day" : @"img_help_height_limit_day";
     else if ([parameter isEqualToString:@"width"])
         return  [self isBoat] ? @"img_help_vessel_width_day" : @"img_help_width_limit_day";
     else if ([parameter isEqualToString:@"length"])
@@ -113,7 +112,7 @@
     if ([parameter isEqualToString:@"weight"])
         return OALocalizedString(@"tones");
     else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
-        return OALocalizedString(@"meters");;
+        return OALocalizedString(@"meters");
     return @"";
 }
 

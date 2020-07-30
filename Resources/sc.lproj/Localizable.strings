@@ -1807,3 +1807,5 @@
 "send_anonymous_data_desc" = "Imbia sas istatìsticas de iscarrigamentu de sas mapas a OsmAnd. Non collimus datos de positzione, o informatziones personales.";
 "default_profile_descr" = "Ischerta unu profilu chi at a èssere impreadu in s'allughidura de s'aplicatzione.";
 "not_available_profile_name" = "Esistit giai unu profilu cun custu nùmene.";
+"profile_import_success" = "Su profilu de s'aplicatzione est istadu importadu chene problemas";
+"err_profile_import" = "Errore leghende sos datos de s'elementu: %@";

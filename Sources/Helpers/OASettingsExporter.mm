@@ -147,14 +147,18 @@
 - (NSDictionary *) createItemsJson
 {
     MutableOrderedDictionary *json = [MutableOrderedDictionary new];
-    [json setObject:@(kVersion) forKey:@"version"];
+    json[@"version"] = @(kVersion);
     [_additionalParams enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        [json setObject:obj forKey:key];
+        json[key] = obj;
     }];
     NSMutableArray *items = [NSMutableArray new];
     for (OASettingsItem *item in _items.allValues)
-         [items addObject:[item generateItemJson]];
-    [json setObject:items forKey:@"items"];
+    {
+        MutableOrderedDictionary *json = [MutableOrderedDictionary new];
+        [item writeToJson:json];
+        [items addObject:json];
+    }
+    json[@"items"] = items;
     
     return json;
 }

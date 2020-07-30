@@ -121,14 +121,14 @@
 {
     @synchronized (_lock)
     {
-        [prefs setObject:[_lastTerrainTypeProfile toStringValue:mode] forKey:@"terrain_mode"];
-        [prefs setObject:[_hillshadeMinZoomProfile toStringValue:mode] forKey:@"hillshade_min_zoom"];
-        [prefs setObject:[_hillshadeMaxZoomProfile toStringValue:mode] forKey:@"hillshade_max_zoom"];
-        [prefs setObject:[NSString stringWithFormat:@"%d", (int) ([_hillshadeAlphaProfile get:mode] * 100)] forKey:@"hillshade_transparency"];
-        [prefs setObject:[NSString stringWithFormat:@"%d", (int) ([_slopeAlphaProfile get:mode] * 100)] forKey:@"slope_transparency"];
-        [prefs setObject:[_slopeMinZoomProfile toStringValue:mode] forKey:@"slope_min_zoom"];
-        [prefs setObject:[_slopeMaxZoomProfile toStringValue:mode] forKey:@"slope_max_zoom"];
-        [prefs setObject:[_mapillaryProfile toStringValue:mode] forKey:@"show_mapillary"];
+        prefs[@"terrain_mode"] = [_lastTerrainTypeProfile toStringValue:mode];
+        prefs[@"hillshade_min_zoom"] = [_hillshadeMinZoomProfile toStringValue:mode];
+        prefs[@"hillshade_max_zoom"] = [_hillshadeMaxZoomProfile toStringValue:mode];
+        prefs[@"hillshade_transparency"] = [NSString stringWithFormat:@"%d", (int) ([_hillshadeAlphaProfile get:mode] * 100)];
+        prefs[@"slope_transparency"] = [NSString stringWithFormat:@"%d", (int) ([_slopeAlphaProfile get:mode] * 100)];
+        prefs[@"slope_min_zoom"] = [_slopeMinZoomProfile toStringValue:mode];
+        prefs[@"slope_max_zoom"] = [_slopeMaxZoomProfile toStringValue:mode];
+        prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
     }
 }
 

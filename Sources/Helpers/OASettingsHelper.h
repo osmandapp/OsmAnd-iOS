@@ -103,7 +103,7 @@ typedef enum : NSUInteger {
 - (OASettingsItemReader *) getReader;
 - (OASettingsItemWriter *) getWriter;
 
-- (NSDictionary *) generateItemJson;
+- (void) writeToJson:(id)json;
 
 @end
 

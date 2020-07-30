@@ -143,9 +143,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
             NSString *recIntervalValue = [settings getFormattedTrackInterval:settings.mapSettingSaveTrackIntervalGlobal];
             NSString *navIntervalValue = [settings getFormattedTrackInterval:[settings.mapSettingSaveTrackInterval get:_am]];
             
-            NSString *minDistValue = [OAUtilities appendMeters:settings.saveTrackMinDistance];
-            NSString *minPrecision = [OAUtilities appendMeters:settings.saveTrackPrecision];
-            NSString *minSpeed = [OAUtilities appendSpeed:settings.saveTrackMinSpeed];
+            NSString *minDistValue = [OAUtilities appendMeters:[settings.saveTrackMinDistance get:_am]];
+            NSString *minPrecision = [OAUtilities appendMeters:[settings.saveTrackPrecision get:_am]];
+            NSString *minSpeed = [OAUtilities appendSpeed:[settings.saveTrackMinSpeed get:_am]];
             if (_settings.mapSettingSaveTrackIntervalApproved) {
                 [dataArr addObject:
                  @{
@@ -221,7 +221,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                @"name" : @"auto_split_gap",
                @"title" : OALocalizedString(@"auto_split_gap"),
                @"description" : OALocalizedString(@"auto_split_gap_descr"),
-               @"value" : @(_settings.autoSplitRecording),
+               @"value" : @([_settings.autoSplitRecording get:_am]),
                @"img" : @"menu_cell_pointer.png",
                @"type" : kCellTypeSwitch }];
             
@@ -265,7 +265,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 [dataArr addObject: @{
                                       @"title" : trackPrecisionNames[i],
                                       @"value" : @"",
-                                      @"img" : (settings.saveTrackPrecision == trackPrecisionValues[i].floatValue)
+                                      @"img" : ([settings.saveTrackPrecision get:_am] == trackPrecisionValues[i].floatValue)
                                       ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
@@ -276,7 +276,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 [dataArr addObject: @{
                                       @"title" : minTrackSpeedNames[i],
                                       @"value" : @"",
-                                      @"img" : (settings.saveTrackMinSpeed == minTrackSpeedValues[i].floatValue)
+                                      @"img" : ([settings.saveTrackMinSpeed get:_am] == minTrackSpeedValues[i].floatValue)
                                       ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
@@ -287,7 +287,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 [dataArr addObject: @{
                                       @"title" : minTrackDistanceNames[i],
                                       @"value" : @"",
-                                      @"img" : (settings.saveTrackMinDistance == minTrackDistanceValues[i].floatValue)
+                                      @"img" : ([settings.saveTrackMinDistance get:_am] == minTrackDistanceValues[i].floatValue)
                                       ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
@@ -379,7 +379,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         else if ([name isEqualToString:@"auto_split_gap"])
         {
-            _settings.autoSplitRecording = isChecked;
+            [_settings.autoSplitRecording set:isChecked mode:_am];
         }
     }
 }
@@ -583,19 +583,19 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
 - (void) selectMinDistance:(NSInteger)index
 {
-    [_settings setTrackMinDistance:minTrackDistanceValues[index].floatValue];
+    [_settings.saveTrackMinDistance set:minTrackDistanceValues[index].doubleValue mode:_am];
     [self backButtonClicked:nil];
 }
 
 - (void) selectMinSpeed:(NSInteger)index
 {
-    [_settings setTrackMinSpeed:minTrackSpeedValues[index].floatValue];
+    [_settings.saveTrackMinSpeed set:minTrackSpeedValues[index].doubleValue mode:_am];
     [self backButtonClicked:nil];
 }
 
 - (void) selectAccuracy:(NSInteger)index
 {
-    [_settings setTrackPrecision:trackPrecisionValues[index].floatValue];
+    [_settings.saveTrackPrecision set:trackPrecisionValues[index].doubleValue mode:_am];
     [self backButtonClicked:nil];
 }
 

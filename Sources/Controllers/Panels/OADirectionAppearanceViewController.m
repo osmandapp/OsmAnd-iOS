@@ -147,7 +147,7 @@
     [distanceIndicationArr addObject:@{
                         @"type" : @"OASettingSwitchCell",
                         @"key" : kDistanceIndication,
-                        @"value" : @([_settings.distanceIndicationVisability get]),
+                        @"value" : @([_settings.distanceIndicationVisibility get]),
                         @"title" : OALocalizedString(@"distance_indication"),
                         }];
     
@@ -232,7 +232,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (![_settings.distanceIndicationVisability get] && section == 1)
+    if (![_settings.distanceIndicationVisibility get] && section == 1)
         return 1;
     return [_data[_data.allKeys[section]] count];
 }
@@ -273,7 +273,7 @@
         [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         if ([item[@"key"] isEqualToString:kDistanceIndication])
         {
-            [cell.switchView setOn:[_settings.distanceIndicationVisability get]];
+            [cell.switchView setOn:[_settings.distanceIndicationVisibility get]];
             [cell.switchView addTarget:self action:@selector(showDistanceIndication:) forControlEvents:UIControlEventValueChanged];
         }
         else if ([item[@"key"] isEqualToString:kArrowsOnMap])
@@ -402,7 +402,7 @@
         }
     }
     [self setupView];
-    if ([_settings.distanceIndicationVisability get])
+    if ([_settings.distanceIndicationVisibility get])
         [tableView reloadRowsAtIndexPaths:[[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0], [NSIndexPath indexPathForRow:1 inSection:1], [NSIndexPath indexPathForRow:2 inSection:1], nil] withRowAnimation:UITableViewRowAnimationFade];
     else
         [tableView reloadRowsAtIndexPaths:[[NSMutableArray alloc] initWithObjects:[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0], nil] withRowAnimation:UITableViewRowAnimationFade];
@@ -412,16 +412,7 @@
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-    {
-        [_settings.distanceIndicationVisability set:switchView.isOn];
-        if (![_settings.distanceIndicationVisability get])
-            [_settings.lastPositionWidgetDisplay set:[_settings.distanceIndication get]];
-        else
-            if ([_settings.lastPositionWidgetDisplay get])
-                [_settings.distanceIndication set:WIDGET_DISPLAY];
-            else
-                [_settings.distanceIndication set:TOP_BAR_DISPLAY];
-    }
+        [_settings.distanceIndicationVisibility set:switchView.isOn];
     [self setupView];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }

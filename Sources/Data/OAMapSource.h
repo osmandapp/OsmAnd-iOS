@@ -25,6 +25,7 @@
                              name:(NSString *)name
                              type:(NSString *)type;
 
++ (OAMapSource *) fromDictionary:(NSDictionary<NSString *, NSString *> *) dictionary;
 // "OnlineTileSources" or "MapStyle" resource
 @property (nonatomic, readonly) NSString *resourceId;
 // For "OnlineTileSources": name of source
@@ -32,6 +33,8 @@
 @property (nonatomic, readonly) NSString *variant;
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *type;
+
+- (NSDictionary<NSString *, NSString *> *) toDictionary;
 
 + (OAMapSource *) getOsmAndOnlineTilesMapSource;
 

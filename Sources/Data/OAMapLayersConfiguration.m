@@ -11,7 +11,6 @@
 @implementation OAMapLayersConfiguration
 {
     NSObject* _lock;
-    NSMutableSet* _hiddenLayers;
 }
 
 - (instancetype)init
@@ -20,6 +19,16 @@
     if (self) {
         [self commonInit];
         _hiddenLayers = [NSMutableSet set];
+    }
+    return self;
+}
+
+- (instancetype) initWithHiddenLayers:(NSMutableSet *)hiddenLayers
+{
+    self = [super init];
+    if (self)
+    {
+        _hiddenLayers = hiddenLayers;
     }
     return self;
 }

@@ -15,6 +15,7 @@
 #import "OsmAndApp.h"
 #import "OARouteStatistics.h"
 #import "OANativeUtilities.h"
+#import "OAApplicationMode.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -88,7 +89,7 @@ static NSArray<NSString *> *_boundariesClass;
 + (std::shared_ptr<OsmAnd::MapPresentationEnvironment>) getDefaultPresentationEnvironment
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    auto defSourceResource = app.resourcesManager->getResource(QString::fromNSString([OAAppData defaults].lastMapSource.resourceId));
+    auto defSourceResource = app.resourcesManager->getResource(QString::fromNSString([OAAppData defaultMapSource].resourceId));
     const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(defSourceResource->metadata)->mapStyle;
     
     const auto& resolvedMapStyle = app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
@@ -113,7 +114,7 @@ static NSArray<NSString *> *_boundariesClass;
     
     if (!mapSourceResource)
     {
-        resourceId = QString::fromNSString([OAAppData defaults].lastMapSource.resourceId);
+        resourceId = QString::fromNSString([OAAppData defaultMapSource].resourceId);
         mapSourceResource = app.resourcesManager->getResource(resourceId);
     }
 
@@ -124,7 +125,7 @@ static NSArray<NSString *> *_boundariesClass;
     
     if (attributeNames.count == 0)
     {
-        resourceId = QString::fromNSString([OAAppData defaults].lastMapSource.resourceId);
+        resourceId = QString::fromNSString([OAAppData defaultMapSource].resourceId);
         mapSourceResource = app.resourcesManager->getResource(resourceId);
         [self getAttributeNames:attributeNames mapSourceResource:mapSourceResource];
     }

@@ -16,7 +16,7 @@
 "OsmAnd Maps" = "Mapas OsmAnd";
 // Shared Strings
 "shared_string_back" = "Voltar";
-"shared_string_done" = "Concluído";
+"shared_string_done" = "Pronto";
 "shared_string_update" = "Atualizar";
 "shared_string_install" = "Instalar";
 "shared_string_uninstall" = "Desinstalar";
@@ -1353,7 +1353,7 @@
 "rendering_attr_hikingRoutesOSMC_description" = "Renderizar caminhos de acordo com traços OSMC.";
 "rendering_attr_highway_class_bridleway_name" = "Caminho para cavaleiros";
 "rendering_value_translucent_purple_name" = "Roxo translúcido";
-"routing_attr_avoid_shuttle_train_description" = "Evita a utilização de comboios de vaivém";
+"routing_attr_avoid_shuttle_train_description" = "Evitar usar transporte de comboio";
 "rendering_attr_tracktype_grade3_name" = "Maioritariamente sólido";
 "routing_attr_allow_private_description" = "Permitir acesso a áreas privadas.";
 "routing_attr_allow_skating_only_name" = "Permitir apenas rotas de patinação";
@@ -1453,8 +1453,8 @@
 "rendering_value_translucent_yellow_name" = "Amarelo translúcido";
 "rendering_value_translucent_red_name" = "Vermelho translúcido";
 "rendering_attr_ice_road_name" = "Estrada de gelo";
-"routing_attr_freeride_policy_description" = "Freerides e fora da pista são rotas e passagens não oficiais. Tipicamente sem serem preparados, sem maquiagem pelos funcionários e não verificados à noite. Entrar por conta e risco próprios.";
-"routing_attr_avoid_unpaved_description" = "Evita estradas não pavimentadas.";
+"routing_attr_freeride_policy_description" = "'Freerides' e 'fora da pista' são rotas e passagens não oficiais. Tipicamente sem serem preparados, sem manutenção e não verificados à noite. Entre por conta e risco próprios.";
+"routing_attr_avoid_unpaved_description" = "Evita estradas não pavimentadas";
 "routing_attr_avoid_ferries_description" = "Evita balsas";
 "routing_attr_allow_expert_name" = "Permitir rotas para especialistas";
 "rendering_attr_contourWidth_description" = "Largura das curvas de nível";
@@ -1467,10 +1467,10 @@
 "rendering_attr_contourWidth_name" = "Largura das curvas de nível";
 "rendering_value_white_name" = "Branco";
 "routing_attr_piste_type_nordic_description" = "Trilhas para esqui nórdico ou cross-country.";
-"routing_attr_avoid_shuttle_train_name" = "Sem comboio de vaivém";
+"routing_attr_avoid_shuttle_train_name" = "Sem transporte de comboio";
 "rendering_attr_showLez_name" = "Mostrar zonas de baixa emissão";
 "routing_attr_difficulty_preference_description" = "Preferir rotas desta dificuldade, embora o roteamento sobre pistas mais difíceis ou mais fáceis ainda seja possível se for mais curto.";
-"rendering_value_browse_map_name" = "Explorar o mapa ";
+"rendering_value_browse_map_name" = "Explorar o mapa";
 "rendering_value_light_brown_name" = "Castanho claro";
 "rendering_attr_surface_ice_name" = "Gelo";
 "rendering_attr_smoothness_very_bad_name" = "Muito ruim";
@@ -1505,7 +1505,7 @@
 "rendering_attr_lessDetailed_name" = "Menos detalhes";
 "rendering_attr_tracktype_grade2_name" = "Sólido (não pavimentado)";
 "routing_attr_height_obstacles_description" = "Utilizar elevação de terreno (dos dados do SRTM, ASTER e EU-DEM).";
-"routing_attr_avoid_sett_description" = "Evitar paralelepípedo";
+"routing_attr_avoid_sett_description" = "Evita paralelepípedo e pavimentos";
 "routing_attr_weight_name" = "Peso máximo";
 "rendering_value_car_name" = "Carro";
 "routing_attr_freeride_policy_name" = "Fora de pista";
@@ -1536,7 +1536,7 @@
 "rendering_attr_showSurfaceGrade_name" = "Mostrar a qualidade da via";
 "rendering_attr_moreDetailed_name" = "Mais detalhes";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
-"routing_attr_avoid_sett_name" = "Evitar paralelepípedo";
+"routing_attr_avoid_sett_name" = "Sem paralelepípedos ou pavimentos";
 "rendering_attr_hideWaterPolygons_name" = "Ocultar água";
 "rendering_value_black_name" = "Preto";
 "rendering_attr_contourDensity_name" = "Densidade de curvas de nível";
@@ -1603,3 +1603,16 @@
 "public_transport_warning_title" = "A navegação em transportes públicos está atualmente em testes beta, podem ocorrer erros e imprecisões.";
 "shared_string_exit" = "Sair";
 "units_and_formats" = "Unidades e formatos";
+"active_markers" = "Marcadores ativos";
+"base_profile_descr_aircraft" = "Avião, asa-delta";
+"base_profile_descr_boat" = "Navio, remar, navegar";
+"base_profile_descr_public_transport" = "Categorias de transportes públicos";
+"base_profile_descr_pedestrian" = "Andar, caminhar, correr";
+"base_profile_descr_bicycle" = "Mountain bike, ciclomotor, cavalo";
+"base_profile_descr_car" = "Carro, camião, motocicleta";
+"new_profile" = "Novo perfil";
+"screen_alerts" = "Alertas de ecrã";
+"vehicle_parameters" = "Parâmetros do veículo";
+"select_nav_profile_dialog_message" = "O 'Tipo de navegação' controla como as rotas são calculadas.";
+"select_color" = "Selecione a cor";
+"routing_attr_length_name" = "Limite de comprimento";

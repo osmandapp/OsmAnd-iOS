@@ -715,6 +715,7 @@
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
 
+"export_profile" = "Export profile";
 "create_profile" = "Create profile";
 "create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "custom_profile" = "Custom profile";
@@ -737,6 +738,9 @@
 "all_application_profiles" = "All application profiles";
 "after_tapping_done" = "After you tap Done, deleted profiles will be lost completely.";
 "empty_profile_name_warning" = "Profile name cannot be empty.";
+"err_profile_import" = "Error reading item data: %@";
+"profile_import_success" = "Application profile was imported successfully";
+"not_available_profile_name" = "Profile with this name already exists.";
 "base_profile_descr" = "Base profile";
 
 // Purchases

@@ -1796,3 +1796,10 @@
 "default_speed" = "السرعة الافتراضية";
 "units_and_formats" = "الوحدات والأشكال";
 "routing_attr_length_name" = "حد الطول";
+"send_anonymous_data" = "إرسال بيانات مجهولة المصدر";
+"base_profile_descr" = "ملف التعريف الأساسي";
+"global_settings_descr" = "تؤثر على التطبيق بأكمله.";
+"global_settings" = "الاعدادات العامة";
+"send_anonymous_data_desc" = "أرسل إلى أوسماند إحصائيات تنزيل الخريطة ، نحن لا نجمع بيانات الموقع ، أو أي معلومات شخصية.";
+"default_profile_descr" = "حدد ملف تعريف سيتم استخدامه عند تشغيل التطبيق.";
+"not_available_profile_name" = "يوجد ملف بهذا الاسم.";

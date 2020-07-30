@@ -90,20 +90,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
         
-        OAAppData *defaults = [OAAppData defaults];
-        // Set default values if not set already
-        if (_app.data.hillshadeMinZoom == 0 && _app.data.hillshadeMaxZoom == 0)
-        {
-            _app.data.hillshadeMinZoom = defaults.hillshadeMinZoom;
-            _app.data.hillshadeMaxZoom = defaults.hillshadeMaxZoom;
-        }
-        
-        if (_app.data.slopeMinZoom == 0 && _app.data.slopeMaxZoom == 0)
-        {
-            _app.data.slopeMinZoom = defaults.slopeMinZoom;
-            _app.data.slopeMaxZoom = defaults.slopeMaxZoom;
-        }
-        
         settingsScreen = EMapSettingsScreenTerrain;
         
         vwController = viewController;

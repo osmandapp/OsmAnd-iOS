@@ -116,7 +116,7 @@
     if (!mapSourceResource && !mapCreatorFilePath)
     {
         // Missing resource, shift to default
-        _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+        _app.data.lastMapSource = [OAAppData defaultMapSource];
         resourceId = QString::fromNSString(_app.data.lastMapSource.resourceId);
         mapSourceResource = _app.resourcesManager->getResource(resourceId);
     }
@@ -341,10 +341,15 @@
 
 -(void) save:(OAMapStyleParameter *)parameter
 {
+    [self save:parameter refreshMap:YES];
+}
+
+-(void) save:(OAMapStyleParameter *)parameter refreshMap:(BOOL)refreshMap
+{
     NSString *name = [NSString stringWithFormat:@"%@_%@_%@", parameter.mapStyleName, parameter.mapPresetName, parameter.name];
     [[NSUserDefaults standardUserDefaults] setValue:parameter.value forKey:name];
     parameter.storedValue = parameter.value;
-    if (![self isCategoryDisabled:parameter.category])
+    if (![self isCategoryDisabled:parameter.category] && refreshMap)
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 

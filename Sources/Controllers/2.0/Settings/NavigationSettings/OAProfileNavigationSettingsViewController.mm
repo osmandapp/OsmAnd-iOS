@@ -21,6 +21,7 @@
 #import "OAProfileDataObject.h"
 #import "OsmAndApp.h"
 #import "PXAlertView.h"
+#import "OASettingsHelper.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -145,6 +146,11 @@
         @"type" : kCellTypeTitle,
         @"title" : OALocalizedString(@"map_behavior"),
         @"key" : @"mapBehavior",
+    }];
+    [otherArr addObject:@{
+        @"type" : kCellTypeTitle,
+        @"title" : OALocalizedString(@"export_profile"),
+        @"key" : @"exportProfile",
     }];
     [tableData addObject:navigationArr];
     [tableData addObject:otherArr];
@@ -368,6 +374,11 @@
         settingsViewController = [[OAVehicleParametersViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"mapBehavior"])
         settingsViewController = [[OAMapBehaviorViewController alloc] initWithAppMode:self.appMode];
+    else if ([itemKey isEqualToString:@"exportProfile"])
+    {
+        OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
+        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:self.appMode.name settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:self.appMode] exportItemFiles:YES];
+    }
     settingsViewController.delegate = self;
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

@@ -715,6 +715,7 @@
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
 
+"export_profile" = "Export profile";
 "create_profile" = "Create profile";
 "create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "custom_profile" = "Custom profile";

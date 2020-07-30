@@ -25,6 +25,16 @@
 
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration;
 
+typedef NS_ENUM(NSInteger, EOARouteService)
+{
+    OSMAND = 0,
+    /*YOURS,
+    OSRM,
+    BROUTER,*/
+    DIRECT_TO,
+    STRAIGHT
+};
+
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
     KILOMETERS_AND_METERS = 0,
@@ -149,6 +159,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 - (void) resetModeToDefault:(OAApplicationMode *)mode;
 - (void) resetToDefault;
 - (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
+- (NSString *) toStringValue:(OAApplicationMode *)mode;
 
 @end
 
@@ -624,6 +635,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (NSSet<NSString *> *) getCustomAppModesKeys;
 
 - (void) registerPreference:(OAProfileSetting *)pref forKey:(NSString *)key;
+- (NSMapTable<NSString *, OAProfileSetting *> *) getRegisteredSettings;
 
 // Direction Appearance
 

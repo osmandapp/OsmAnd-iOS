@@ -11,10 +11,13 @@
 #import "OAAppSettings.h"
 #import "OrderedDictionary.h"
 #import "OsmAndApp.h"
+#import "OARootViewController.h"
+
+#include <OsmAndCore/ArchiveWriter.h>
 
 #define kVersion 1
 
-static const NSInteger _buffer = 1024;
+#define kTmpProfileFolder @"tmpProfileData"
 
 #pragma mark - OASettingsExporter
 
@@ -26,6 +29,8 @@ static const NSInteger _buffer = 1024;
     BOOL _exportItemsFiles;
     
     OsmAndAppInstance _app;
+    
+     NSString *_tmpFilesDir;
 }
 
 - (instancetype) initWithExportParam:(BOOL)exportItemsFiles
@@ -38,6 +43,8 @@ static const NSInteger _buffer = 1024;
         _exportItemsFiles = exportItemsFiles;
         
         _app = OsmAndApp.instance;
+
+        _tmpFilesDir = [NSTemporaryDirectory() stringByAppendingPathComponent:kTmpProfileFolder];
     }
     return self;
 }
@@ -56,31 +63,69 @@ static const NSInteger _buffer = 1024;
  
 - (void) exportSettings:(NSString *)file error:(NSError * _Nullable *)error
 {
-    // TODO: check this functionality while testing export!
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    // Clear temp profile data
+    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
+    [fileManager createDirectoryAtPath:_tmpFilesDir withIntermediateDirectories:YES attributes:nil error:nil];
+    
     NSMutableArray<NSString *> *paths = [NSMutableArray new];
     NSDictionary *json = [self createItemsJson];
-    NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"items.json"];
+    NSString *path = [_tmpFilesDir stringByAppendingPathComponent:@"items.json"];
     [paths addObject:path];
     [fileManager removeItemAtPath:path error:nil];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:error];
-    if (!error)
+    if (!*error)
         [jsonData writeToFile:path atomically:YES];
     if(_exportItemsFiles)
     {
         [self writeItemsFiles:paths];
     }
-    // TODO: write archive writer!
+    OsmAnd::ArchiveWriter archiveWriter;
+    const auto stringList = [self stringArrayToQList:paths];
+    BOOL ok = YES;
+    QString filePath = QString::fromNSString(file);
+    archiveWriter.createArchive(&ok, filePath, stringList);
+    if (!ok)
+    {
+        NSLog(@"Archive creation failed: %@", file);
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OARootViewController *rootVC = [OARootViewController instance];
+            
+            UIActivityViewController *activityViewController =
+            [[UIActivityViewController alloc] initWithActivityItems:@[[NSURL fileURLWithPath:file]]
+                                              applicationActivities:nil];
+            
+            activityViewController.popoverPresentationController.sourceView = rootVC.view;
+            activityViewController.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(rootVC.view.bounds), CGRectGetMidY(rootVC.view.bounds), 0., 0.);
+            activityViewController.popoverPresentationController.permittedArrowDirections = 0;
+            
+            [rootVC presentViewController:activityViewController
+                                 animated:YES
+                               completion:nil];
+        });
+    }
     
-    for (NSString *path in paths)
-         [fileManager removeItemAtPath:path error:nil];
+    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
+}
+
+- (QList<QString>) stringArrayToQList:(NSArray<NSString *> *)array
+{
+    QList<QString> res;
+    for (NSString *str in array)
+    {
+        res.append(QString::fromNSString(str));
+    }
+    return res;
 }
 
 - (void) writeItemsFiles:(NSMutableArray<NSString *> *)paths
 {
-    for (OASettingsItem *item : _items)
+    for (OASettingsItem *item in _items.allValues)
     {
         OASettingsItemWriter *writer = [item getWriter];
         if (writer != nil)
@@ -89,7 +134,8 @@ static const NSInteger _buffer = 1024;
             if (fileName.length > 0)
                 fileName = item.defaultFileName;
             
-            NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
+            NSString *path = [_tmpFilesDir stringByAppendingPathComponent:fileName];
+            [NSFileManager.defaultManager removeItemAtPath:path error:nil];
             NSError *error = nil;
             [writer writeToFile:path error:&error];
             if (!error)
@@ -101,11 +147,18 @@ static const NSInteger _buffer = 1024;
 - (NSDictionary *) createItemsJson
 {
     MutableOrderedDictionary *json = [MutableOrderedDictionary new];
-    [json setObject:@(kVersion) forKey:@"version"];
+    json[@"version"] = @(kVersion);
     [_additionalParams enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        [json setObject:obj forKey:key];
+        json[key] = obj;
     }];
-    [json setObject:_items.allValues forKey:@"items"];
+    NSMutableArray *items = [NSMutableArray new];
+    for (OASettingsItem *item in _items.allValues)
+    {
+        MutableOrderedDictionary *json = [MutableOrderedDictionary new];
+        [item writeToJson:json];
+        [items addObject:json];
+    }
+    json[@"items"] = items;
     
     return json;
 }

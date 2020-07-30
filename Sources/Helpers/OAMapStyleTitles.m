@@ -19,7 +19,7 @@ static NSDictionary<NSString *, NSString *> *stylesTitlesOffline;
         stylesTitlesOffline = @{
                                 @"default" : @"OsmAnd",
                                 @"nautical" : @"Nautical",
-                                @"Ski-map" : @"Ski map",
+                                @"Ski-map" : @"Winter and ski",
                                 @"UniRS" : @"UniRS",
                                 @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
                                 @"LightRS" : @"LightRS",

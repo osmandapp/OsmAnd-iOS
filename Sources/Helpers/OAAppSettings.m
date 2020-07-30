@@ -691,6 +691,11 @@
 {
 }
 
+- (NSString *) toStringValue:(OAApplicationMode *)mode
+{
+    return @"";
+}
+
 @end
 
 @interface OAProfileBoolean ()
@@ -750,6 +755,11 @@
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
     [self set:[strValue isEqualToString:@"true"] mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self get:mode] ? @"true" : @"false";
 }
 
 @end
@@ -813,6 +823,11 @@
     [self set:strValue.intValue mode:mode];
 }
 
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [NSString stringWithFormat:@"%d", [self get:mode]];
+}
+
 @end
 
 @interface OAProfileString ()
@@ -874,6 +889,11 @@
     [self set:strValue mode:mode];
 }
 
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [self get:mode];
+}
+
 @end
 
 @interface OAProfileDouble ()
@@ -933,6 +953,11 @@
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
     [self set:strValue.doubleValue mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    return [NSString stringWithFormat:@"%.1f", [self get:mode]];
 }
 
 @end
@@ -1173,6 +1198,19 @@
         return [self set:EOATerrainTypeSlope mode:mode];
 }
 
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOATerrainTypeHillshade:
+            return @"HILLSHADE";
+        case EOATerrainTypeSlope:
+            return @"SLOPE";
+        default:
+            return @"HILLSHADE";
+    }
+}
+
 @end
 
 @interface OAProfileAutoZoomMap ()
@@ -1228,6 +1266,21 @@
         return [self set:AUTO_ZOOM_MAP_FAR mode:mode];
     else if ([strValue isEqualToString:@"CLOSE"])
         return [self set:AUTO_ZOOM_MAP_CLOSE mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case AUTO_ZOOM_MAP_FARTHEST:
+            return @"FARTHEST";
+        case AUTO_ZOOM_MAP_FAR:
+            return @"FAR";
+        case AUTO_ZOOM_MAP_CLOSE:
+            return @"CLOSE";
+        default:
+            @"FARTHEST";
+    }
 }
 
 @end
@@ -1314,6 +1367,27 @@
         return [self set:NAUTICALMILES_PER_HOUR mode:mode];
 }
 
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case KILOMETERS_PER_HOUR:
+            return @"KILOMETERS_PER_HOUR";
+        case MILES_PER_HOUR:
+            return @"MILES_PER_HOUR";
+        case METERS_PER_SECOND:
+            return @"METERS_PER_SECOND";
+        case MINUTES_PER_MILE:
+            return @"MINUTES_PER_MILE";
+        case MINUTES_PER_KILOMETER:
+            return @"MINUTES_PER_KILOMETER";
+        case NAUTICALMILES_PER_HOUR:
+            return @"NAUTICALMILES_PER_HOUR";
+        default:
+            return @"KILOMETERS_PER_HOUR";
+    }
+}
+
 @end
 
 @implementation OAProfileAngularConstant
@@ -1363,6 +1437,21 @@
         return [self set:DEGREES360 mode:mode];
     else if ([strValue isEqualToString:@"MILLIRADS"])
         return [self set:MILLIRADS mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case DEGREES:
+            return @"DEGREES";
+        case DEGREES360:
+            return @"DEGREES360";
+        case MILLIRADS:
+            return @"MILLIRADS";
+        default:
+            return @"DEGREES";
+    }
 }
 
 @end
@@ -1419,6 +1508,19 @@
     }
 }
 
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case ONE_ACTIVE_MARKER:
+            return @"1";
+        case TWO_ACTIVE_MARKERS:
+            return @"2";
+        default:
+            return @"1";
+    }
+}
+
 @end
 
 @implementation OAProfileDistanceIndicationConstant
@@ -1470,6 +1572,21 @@
         return [self set:NONE_DISPLAY mode:mode];
 }
 
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case TOP_BAR_DISPLAY:
+            return @"TOOLBAR";
+        case WIDGET_DISPLAY:
+            return @"WIDGETS";
+        case NONE_DISPLAY:
+            return @"NONE";
+        default:
+            return @"TOOLBAR";
+    }
+}
+
 @end
 
 @implementation OAProfileDrivingRegion
@@ -1517,6 +1634,27 @@
         return [self set:DR_JAPAN mode:mode];
     else if ([strValue isEqualToString:@"AUSTRALIA"])
         return [self set:DR_AUSTRALIA mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case DR_EUROPE_ASIA:
+            return @"EUROPE_ASIA";
+        case DR_US:
+            return @"US";
+        case DR_CANADA:
+            return @"CANADA";
+        case DR_UK_AND_OTHERS:
+            return @"UK_AND_OTHERS";
+        case DR_JAPAN:
+            return @"JAPAN";
+        case DR_AUSTRALIA:
+            return @"AUSTRALIA";
+        default:
+            return @"EUROPE_ASIA";
+    }
 }
 
 - (void) resetToDefault
@@ -1572,6 +1710,25 @@
         return [self set:MILES_AND_YARDS mode:mode];
     else if ([strValue isEqualToString:@"NAUTICAL_MILES"])
         return [self set:NAUTICAL_MILES mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case KILOMETERS_AND_METERS:
+            return @"KILOMETERS_AND_METERS";
+        case MILES_AND_FEET:
+            return @"MILES_AND_FEET";
+        case MILES_AND_METERS:
+            return @"MILES_AND_METERS";
+        case MILES_AND_YARDS:
+            return @"MILES_AND_YARDS";
+        case NAUTICAL_MILES:
+            return @"NAUTICAL_MILES";
+        default:
+            return @"KILOMETERS_AND_METERS";
+    }
 }
 
 - (void) resetToDefault
@@ -2038,6 +2195,11 @@
 - (void) registerPreference:(OAProfileSetting *)pref forKey:(NSString *)key
 {
     [_registeredPreferences setObject:pref forKey:key];
+}
+
+- (NSMapTable<NSString *, OAProfileSetting *> *) getRegisteredSettings
+{
+    return _registeredPreferences;
 }
 
 - (OAProfileSetting *) getSettingById:(NSString *)stringId

@@ -70,7 +70,7 @@ typedef enum : NSUInteger {
 - (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems;
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version;
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles;
-- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName exportItemFiles:(BOOL)exportItemFiles;
+- (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName settingsItem:(OASettingsItem *)item exportItemFiles:(BOOL)exportItemFiles;
 
 @end
 
@@ -98,9 +98,12 @@ typedef enum : NSUInteger {
 - (void) apply;
 - (BOOL) applyFileName:(NSString *)fileName;
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
+- (NSDictionary *) getSettingsJson;
 
 - (OASettingsItemReader *) getReader;
 - (OASettingsItemWriter *) getWriter;
+
+- (void) writeToJson:(id)json;
 
 @end
 

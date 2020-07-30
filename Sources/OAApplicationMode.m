@@ -244,17 +244,16 @@ static OAApplicationMode *_SKI;
 
 - (NSDictionary *) toJson
 {
-    // TODO: encode colors, icons etc. into string correlations as in Android
     return @{
         @"stringKey" : self.stringKey,
         @"userProfileName" : self.getUserProfileName,
-        @"iconColor" : @(self.getIconColor),
+        @"iconColor" : self.getIconColorName,
         @"iconName" : self.getIconName,
         @"parent" : self.parent ? self.parent.stringKey : @"",
-        @"routeService" : @(self.getRouterService),
+        @"routeService" : self.getRouterServiceName,
         @"routingProfile" : self.getRoutingProfile,
-        @"locIcon" : @(self.getLocationIcon),
-        @"navIcon" : @(self.getNavigationIcon),
+        @"locIcon" : self.getLocationIconName,
+        @"navIcon" : self.getNavigationIconName,
         @"order" : @(self.getOrder)
     };
 }
@@ -378,6 +377,21 @@ static OAApplicationMode *_SKI;
         [OAAppSettings.sharedManager.routingProfile set:routingProfile mode:self];
 }
 
+- (NSString *) getRouterServiceName
+{
+    switch (self.getRouterService)
+    {
+        case OSMAND:
+            return @"OSMAND";
+        case DIRECT_TO:
+            return @"DIRECT_TO";
+        case STRAIGHT:
+            return @"STRAIGHT";
+        default:
+            return @"OSMAND";
+    }
+}
+
 - (NSInteger) getRouterService
 {
     return [OAAppSettings.sharedManager.routerService get:self];
@@ -386,6 +400,21 @@ static OAApplicationMode *_SKI;
 - (void) setRouterService:(NSInteger) routerService
 {
     [OAAppSettings.sharedManager.routerService set:(int) routerService mode:self];
+}
+
+- (NSString *) getNavigationIconName
+{
+    switch (self.getNavigationIcon)
+    {
+        case NAVIGATION_ICON_DEFAULT:
+            return @"DEFAULT";
+        case NAVIGATION_ICON_NAUTICAL:
+            return @"NAUTICAL";
+        case NAVIGATION_ICON_CAR:
+            return @"CAR";
+        default:
+            return @"DEFAULT";
+    }
 }
 
 - (EOANavigationIcon) getNavigationIcon
@@ -398,6 +427,21 @@ static OAApplicationMode *_SKI;
     [OAAppSettings.sharedManager.navigationIcon set:(int)navIcon mode:self];
 }
 
+- (NSString *) getLocationIconName
+{
+    switch (self.getLocationIcon)
+    {
+        case LOCATION_ICON_DEFAULT:
+            return @"DEFAULT";
+        case LOCATION_ICON_CAR:
+            return @"CAR";
+        case LOCATION_ICON_BICYCLE:
+            return @"BICYCLE";
+        default:
+            return @"DEFAULT";
+    }
+}
+
 - (EOALocationIcon) getLocationIcon
 {
     return [OAAppSettings.sharedManager.locationIcon get:self];
@@ -406,6 +450,29 @@ static OAApplicationMode *_SKI;
 - (void) setLocationIcon:(EOALocationIcon) locIcon
 {
     [OAAppSettings.sharedManager.locationIcon set:(int)locIcon mode:self];
+}
+
+- (NSString *) getIconColorName
+{
+    switch (self.getIconColor)
+    {
+        case profile_icon_color_blue_light_default:
+            return @"DEFAULT";
+        case profile_icon_color_purple_light:
+            return @"PURPLE";
+        case profile_icon_color_green_light:
+            return @"GREEN";
+        case profile_icon_color_blue_light:
+            return @"BLUE";
+        case profile_icon_color_red_light:
+            return @"RED";
+        case profile_icon_color_yellow_light:
+            return @"DARK_YELLOW";
+        case profile_icon_color_magenta_light:
+            return @"MAGENTA";
+        default:
+            return @"DEFAULT";
+    }
 }
 
 - (int) getIconColor

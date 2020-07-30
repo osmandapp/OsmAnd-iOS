@@ -60,6 +60,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @end
 
+@interface OADownloadMapViewController () <OAPreviewZoomLevelsCellDelegate>
+@end
+
 @implementation OADownloadMapViewController
 {
     OsmAndAppInstance _app;
@@ -378,7 +381,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateToolBar
 {
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
     CGRect frame = self.bottomToolBarView.frame;
     frame.size.height = twoButtonsBottmomSheetHeight + [OAUtilities getBottomMargin];
     frame.origin.y = [self contentHeight] - frame.size.height;
@@ -387,6 +389,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
 {
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, width, 0.5);
+    
     CGFloat w = width - 32.0 - OAUtilities.getLeftMargin;
     CGRect leftBtnFrame = _cancelButton.frame;
     CGRect rightBtnFrame = _downloadButton.frame;
@@ -502,8 +506,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.minZoomImageView.image = _minZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _minZoomTileImage;
-            cell.maxZoomImageView.image = _maxZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _maxZoomTileImage;
+            cell.delegate = self;
+            [cell.minLevelZoomButton setImage:(_minZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _minZoomTileImage) forState:UIControlStateNormal];
+            [cell.maxLevelZoomButton setImage:(_maxZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _maxZoomTileImage) forState:UIControlStateNormal];
             cell.minZoomPropertyLabel.text = [NSString stringWithFormat:@"%d",_minZoom];
             cell.maxZoomPropertyLabel.text = [NSString stringWithFormat:@"%d",_maxZoom];
             cell.descriptionLabel.text = item[@"value"];
@@ -594,22 +599,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (indexPath.section == kZoomSection)
     {
         NSInteger pickerRow = indexPath.row == kMinZoomRow ? kMinZoomPickerRow : kMaxZoomPickerRow;
-        [self.tableView beginUpdates];
         if (indexPath.row == kMinZoomRow)
-        {
-            if (_maxZoomPickerIsShown)
-                _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
-            _minZoomPickerIsShown = !_minZoomPickerIsShown;
-        }
+            [self toggleMinZoomPickerRow];
         else
-        {
-            if (_minZoomPickerIsShown)
-                _minZoomPickerIsShown = !_minZoomPickerIsShown;
-            _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
-        }
-        [self setupView];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:pickerRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
+            [self toggleMaxZoomPickerRow];
     }
     if (indexPath.section == kMapTypeSection)
     {
@@ -737,6 +730,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self calculateDownloadInfo];
     [self setupView];
     [self.tableView reloadData];
+}
+
+#pragma mark - OAPreviewZoomLevelsCellDelegate
+
+- (void) toggleMinZoomPickerRow
+{
+    [self.tableView beginUpdates];
+    if (_maxZoomPickerIsShown)
+        _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
+    _minZoomPickerIsShown = !_minZoomPickerIsShown;
+    [self setupView];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kMinZoomPickerRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
+}
+
+- (void) toggleMaxZoomPickerRow
+{
+    [self.tableView beginUpdates];
+    if (_minZoomPickerIsShown)
+        _minZoomPickerIsShown = !_minZoomPickerIsShown;
+    _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
+    [self setupView];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kMaxZoomPickerRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 @end

@@ -106,6 +106,7 @@
 - (void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, 0.5);
 }
 
 - (IBAction) cancelButtonPressed:(id)sender {

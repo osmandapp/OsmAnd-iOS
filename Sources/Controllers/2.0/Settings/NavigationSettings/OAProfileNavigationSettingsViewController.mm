@@ -171,6 +171,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.profileButton.hidden = NO;
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
 }
 
 + (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles
@@ -401,6 +402,12 @@
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return section == 0 ? @"" : OALocalizedString(@"change_map_behavior");
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 #pragma mark - OASettingsDataDelegate

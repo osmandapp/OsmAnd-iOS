@@ -106,7 +106,14 @@
 - (void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, 0.5);
+}
+
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
+    } completion:nil];
 }
 
 - (IBAction) cancelButtonPressed:(id)sender {

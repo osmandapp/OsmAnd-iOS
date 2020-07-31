@@ -185,7 +185,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, [self getToolBarHeight], 0.0);
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.bottomToolBarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
@@ -201,6 +200,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self setZoomValues];
     [self calculateDownloadInfo];
     [self setupView];
+    self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, self.bottomToolBarView.bounds.size.height, 0.0);
 }
 
 - (void) setZoomValues
@@ -371,7 +371,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, [self getToolBarHeight], 0.0);
+        self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, self.bottomToolBarView.bounds.size.height, 0.0);
         if (self.delegate)
            [self.delegate requestFullMode];
         if (self.delegate && self.isLandscape)

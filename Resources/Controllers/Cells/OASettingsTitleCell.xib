@@ -24,11 +24,11 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Maps &amp; Resources" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I7t-8H-dnZ">
-                        <rect key="frame" x="16" y="0.0" width="263" height="48"/>
+                        <rect key="frame" x="16" y="0.0" width="251" height="48"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="MC9-N7-fX5"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -48,7 +48,7 @@
                     <constraint firstAttribute="trailing" secondItem="UfP-C8-jWd" secondAttribute="trailing" constant="16" id="Fxg-kW-DDh"/>
                     <constraint firstAttribute="bottom" secondItem="qRC-7u-P9O" secondAttribute="bottom" id="V9q-z5-2hf"/>
                     <constraint firstItem="qRC-7u-P9O" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="gdT-F5-pFf"/>
-                    <constraint firstItem="UfP-C8-jWd" firstAttribute="leading" secondItem="I7t-8H-dnZ" secondAttribute="trailing" constant="4" id="kPs-mQ-mUw"/>
+                    <constraint firstItem="UfP-C8-jWd" firstAttribute="leading" secondItem="I7t-8H-dnZ" secondAttribute="trailing" constant="16" id="kPs-mQ-mUw"/>
                     <constraint firstItem="UfP-C8-jWd" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="uU2-XH-nif"/>
                     <constraint firstItem="I7t-8H-dnZ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="yKD-KW-tIA"/>
                 </constraints>

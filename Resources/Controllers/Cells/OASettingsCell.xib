@@ -46,12 +46,11 @@
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="oCO-hD-EJk" secondAttribute="bottom" constant="4" id="0bB-Sn-bCo"/>
                     <constraint firstAttribute="bottom" secondItem="sBM-Kj-IT8" secondAttribute="bottom" constant="4" id="85K-N4-CTQ"/>
-                    <constraint firstItem="9jr-sR-1Hx" firstAttribute="top" secondItem="NX6-3V-6tN" secondAttribute="top" constant="13.5" id="RRf-45-1kT"/>
                     <constraint firstItem="M8Q-wu-T8P" firstAttribute="top" secondItem="NX6-3V-6tN" secondAttribute="top" id="TSe-BX-tXw"/>
                     <constraint firstItem="oCO-hD-EJk" firstAttribute="top" secondItem="NX6-3V-6tN" secondAttribute="top" constant="4" id="XYF-5h-J6w"/>
                     <constraint firstItem="sBM-Kj-IT8" firstAttribute="top" secondItem="NX6-3V-6tN" secondAttribute="top" constant="4" id="YrY-yK-WmY"/>
                     <constraint firstAttribute="bottom" secondItem="M8Q-wu-T8P" secondAttribute="bottom" id="aQ2-az-Xy3"/>
-                    <constraint firstAttribute="bottom" secondItem="9jr-sR-1Hx" secondAttribute="bottom" constant="13.5" id="bxN-CM-EeW"/>
+                    <constraint firstItem="9jr-sR-1Hx" firstAttribute="centerY" secondItem="NX6-3V-6tN" secondAttribute="centerY" id="bfu-Kl-BMm"/>
                     <constraint firstAttribute="trailing" secondItem="9jr-sR-1Hx" secondAttribute="trailing" constant="16" id="esq-mX-d3P"/>
                     <constraint firstItem="M8Q-wu-T8P" firstAttribute="leading" secondItem="NX6-3V-6tN" secondAttribute="leading" id="jz6-7E-VTo"/>
                     <constraint firstItem="sBM-Kj-IT8" firstAttribute="leading" secondItem="NX6-3V-6tN" secondAttribute="leading" constant="16" id="o7D-ga-cLk"/>

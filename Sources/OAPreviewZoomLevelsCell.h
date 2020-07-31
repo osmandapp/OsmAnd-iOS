@@ -30,7 +30,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *maxZoomPropertyLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 
-- (IBAction)minLevelZoomButtonTap:(id)sender;
-- (IBAction)maxLevelZoomButtonTap:(id)sender;
-
 @end

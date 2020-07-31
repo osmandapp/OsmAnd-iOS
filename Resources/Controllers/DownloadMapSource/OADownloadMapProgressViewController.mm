@@ -103,11 +103,6 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (void) viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-}
-
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];

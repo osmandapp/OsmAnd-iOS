@@ -599,11 +599,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     if (indexPath.section == kZoomSection)
     {
-        NSInteger pickerRow = indexPath.row == kMinZoomRow ? kMinZoomPickerRow : kMaxZoomPickerRow;
         if (indexPath.row == kMinZoomRow)
-            [self toggleMinZoomPickerRow];
+            [self toggleZoomPickerForRow:kMinZoomPickerRow];
         else
-            [self toggleMaxZoomPickerRow];
+            [self toggleZoomPickerForRow:kMaxZoomPickerRow];
     }
     if (indexPath.section == kMapTypeSection)
     {
@@ -612,6 +611,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [OARootViewController.instance.mapPanel presentViewController:mapSource animated:YES completion:nil];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
+- (void) toggleZoomPickerForRow:(NSInteger)rowIndex
+{
+    if (rowIndex == kMinZoomPickerRow)
+    {
+        if (_maxZoomPickerIsShown)
+            _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
+        _minZoomPickerIsShown = !_minZoomPickerIsShown;
+    }
+    else if (rowIndex == kMaxZoomPickerRow)
+    {
+        if (_minZoomPickerIsShown)
+            _minZoomPickerIsShown = !_minZoomPickerIsShown;
+        _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
+    }
+    else
+    {
+        return;
+    }
+    [self.tableView beginUpdates];
+    [self setupView];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:rowIndex inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -737,24 +760,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) toggleMinZoomPickerRow
 {
-    [self.tableView beginUpdates];
-    if (_maxZoomPickerIsShown)
-        _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
-    _minZoomPickerIsShown = !_minZoomPickerIsShown;
-    [self setupView];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kMinZoomPickerRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];
+    [self toggleZoomPickerForRow:kMinZoomPickerRow];
 }
 
 - (void) toggleMaxZoomPickerRow
 {
-    [self.tableView beginUpdates];
-    if (_minZoomPickerIsShown)
-        _minZoomPickerIsShown = !_minZoomPickerIsShown;
-    _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
-    [self setupView];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kMaxZoomPickerRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];
+    [self toggleZoomPickerForRow:kMaxZoomPickerRow];
 }
 
 @end

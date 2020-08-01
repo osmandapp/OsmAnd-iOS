@@ -9,6 +9,8 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OAColors.h"
 
+static CGFloat _yOffset;
+
 @interface OATableViewCustomHeaderView ()
 
 @end
@@ -23,6 +25,11 @@
         [self setupView];
     }
     return self;
+}
+
+- (void) setYOffset:(CGFloat)yOffset
+{
+    _yOffset = yOffset;
 }
 
 + (UIFont *) font
@@ -40,7 +47,7 @@
     self.userInteractionEnabled = YES;
     [self.textLabel removeFromSuperview];
     [self.detailTextLabel removeFromSuperview];
-    
+    _yOffset = 17.;
     
     _label = [[UITextView alloc] init];
     _label.backgroundColor = [UIColor clearColor];
@@ -70,7 +77,7 @@
     if (_label.text.length > 0 || _label.attributedText.length > 0)
     {
         _label.hidden = NO;
-        _label.frame = CGRectMake(16.0 + leftMargin, 17.0, w, height);
+        _label.frame = CGRectMake(16.0 + leftMargin, _yOffset, w, height);
     }
     else
     {
@@ -90,7 +97,7 @@
 + (CGFloat) getTextHeight:(NSString *)text width:(CGFloat)width
 {
     if (text.length > 0)
-        return [OAUtilities calculateTextBounds:text width:width font:self.class.font].height + 17.0;
+        return [OAUtilities calculateTextBounds:text width:width font:self.class.font].height + _yOffset;
     else
         return 0.01;
 }

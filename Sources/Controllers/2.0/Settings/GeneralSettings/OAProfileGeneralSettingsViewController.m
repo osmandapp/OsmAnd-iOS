@@ -14,7 +14,6 @@
 #import "OASettingSwitchCell.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OACoordinatesFormatViewController.h"
-#import "PXAlertView.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -31,17 +30,6 @@
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
-    BOOL _showAppModeDialog;
-}
-
-- (id) initWithSettingsMode:(OAApplicationMode *)applicationMode
-{
-    self = [super initWithAppMode:applicationMode];
-    if (self)
-    {
-        _showAppModeDialog = NO;
-    }
-    return self;
 }
 
 - (void) applyLocalization
@@ -56,7 +44,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     _settings = [OAAppSettings sharedManager];
-    self.profileButton.hidden = NO;
     [self.tableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
     [self setupView];
 }
@@ -65,48 +52,7 @@
 {
     [super viewWillAppear:animated];
     [self setupView];
-    if (_showAppModeDialog)
-    {
-        _showAppModeDialog = NO;
-        [self showAppModeDialog];
-    }
     [self.tableView reloadData];
-}
-
-- (void) showAppModeDialog
-{
-    NSMutableArray *titles = [NSMutableArray array];
-    NSMutableArray *images = [NSMutableArray array];
-    NSMutableArray *modes = [NSMutableArray array];
-    
-    NSArray<OAApplicationMode *> *values = [OAApplicationMode values];
-    for (OAApplicationMode *v in values)
-    {
-        if (v == [OAApplicationMode DEFAULT])
-            continue;
-        
-        [titles addObject:v.name];
-        [images addObject:v.getIconName];
-        [modes addObject:v];
-    }
-    
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"map_settings_mode")
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_cancel")
-                        otherTitles:titles
-                          otherDesc:nil
-                        otherImages:images
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-        if (!cancelled)
-        {
-            self.appMode = modes[buttonIndex];
-            [self setupView];
-        }
-    }];
-}
-
-- (IBAction)profileButtonPressed:(id)sender {
-    [self showAppModeDialog];
 }
 
 - (void) setupView
@@ -303,7 +249,6 @@
 
 - (void) updateNavBar
 {
-    [self.profileButton setImage:self.appMode.getIcon forState:UIControlStateNormal];
     self.subtitleLabel.text = self.appMode.name;
 }
 

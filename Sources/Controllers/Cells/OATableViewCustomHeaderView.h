@@ -12,6 +12,8 @@
 
 @property (nonatomic, readonly) UITextView *label;
 
+- (void) setYOffset:(CGFloat)yOffset;
+
 + (CGFloat) getHeight:(NSString *)text width:(CGFloat)width;
 
 @end

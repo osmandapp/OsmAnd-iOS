@@ -103,9 +103,12 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (void) viewWillLayoutSubviews
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [super viewWillLayoutSubviews];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
+    } completion:nil];
 }
 
 - (IBAction) cancelButtonPressed:(id)sender {

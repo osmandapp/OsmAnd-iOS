@@ -10,9 +10,4 @@
 
 @interface OACreateProfileViewController : OABaseBigTitleSettingsViewController
 
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-
 @end

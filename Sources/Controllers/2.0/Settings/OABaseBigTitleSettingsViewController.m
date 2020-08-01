@@ -12,14 +12,20 @@
 #import "OAColors.h"
 
 #define kHeaderViewFont [UIFont systemFontOfSize:34.0 weight:UIFontWeightBold]
+#define kSidePadding 16
 
-@interface OABaseBigTitleSettingsViewController ()
+@interface OABaseBigTitleSettingsViewController () <UIScrollViewDelegate>
 
 @end
 
 @implementation OABaseBigTitleSettingsViewController
 {
     UIView *_navBarBackgroundView;
+}
+
+- (instancetype)init
+{
+    return [super initWithNibName:@"OABaseBigTitleSettingsViewController" bundle:nil];
 }
 
 - (void)viewDidLoad
@@ -77,6 +83,47 @@
                                                                    lineSpacing:0.0 isTitle:YES];
         [_tableView reloadData];
     } completion:nil];
+}
+
+- (CGFloat) heightForLabel:(NSString *)text
+{
+    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+    CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
+    return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
+}
+
+- (IBAction)backImageButtonPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction) backButtonClicked:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    
+    CGFloat alpha = (_tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((_tableView.contentOffset.y + defaultNavBarHeight) / (fabs(_tableView.contentSize.height - _tableView.frame.size.height)));
+    if (alpha > 0)
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            _titleLabel.hidden = NO;
+            _navBarView.backgroundColor = UIColor.clearColor;
+            _navBarBackgroundView.alpha = 1;
+        }];
+    }
+    else
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            _titleLabel.hidden = YES;
+            _navBarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+            _navBarBackgroundView.alpha = 0;
+        }];
+    }
 }
 
 @end

@@ -4481,8 +4481,6 @@
 		DA2558CC24ADE40F0081D155 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25587F24ADE40F0081D155 /* OAOsmEditingSettingsViewController.mm */; };
 		DA2558CD24ADE40F0081D155 /* OAProfileAppearanceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25588124ADE40F0081D155 /* OAProfileAppearanceViewController.mm */; };
 		DA2558CE24ADE40F0081D155 /* OAProfileAppearanceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25588124ADE40F0081D155 /* OAProfileAppearanceViewController.mm */; };
-		DA2558CF24ADE40F0081D155 /* OACreateProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA25588224ADE40F0081D155 /* OACreateProfileViewController.xib */; };
-		DA2558D024ADE40F0081D155 /* OACreateProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA25588224ADE40F0081D155 /* OACreateProfileViewController.xib */; };
 		DA2558D624ADE4F20081D155 /* OABaseSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2558D324ADE4F20081D155 /* OABaseSettingsViewController.m */; };
 		DA2558D724ADE4F20081D155 /* OABaseSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2558D324ADE4F20081D155 /* OABaseSettingsViewController.m */; };
 		DA2558D824ADE4F20081D155 /* OABaseSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2558D424ADE4F20081D155 /* OABaseSettingsViewController.xib */; };
@@ -5240,6 +5238,8 @@
 		DA8EEF8524D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8EEF8224D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.m */; };
 		DA8EEF8624D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA8EEF8324D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.xib */; };
 		DA8EEF8724D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA8EEF8324D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.xib */; };
+		DA8EEF8A24D562C400E3CA75 /* OAConfigureProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8EEF8924D562C400E3CA75 /* OAConfigureProfileViewController.m */; };
+		DA8EEF8B24D562C400E3CA75 /* OAConfigureProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA8EEF8924D562C400E3CA75 /* OAConfigureProfileViewController.m */; };
 		DA92555924A60A6E00871AAF /* OAMapTileDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA92555824A60A6E00871AAF /* OAMapTileDownloader.mm */; };
 		DA92555A24A60A6E00871AAF /* OAMapTileDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA92555824A60A6E00871AAF /* OAMapTileDownloader.mm */; };
 		DA92BC0E22E06AF800238C86 /* kml2gpx.xslt in Resources */ = {isa = PBXBuildFile; fileRef = DA92BC0D22E06AF700238C86 /* kml2gpx.xslt */; };
@@ -9030,7 +9030,6 @@
 		DA25587F24ADE40F0081D155 /* OAOsmEditingSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmEditingSettingsViewController.mm; sourceTree = "<group>"; };
 		DA25588024ADE40F0081D155 /* OAProfileAppearanceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileAppearanceViewController.h; sourceTree = "<group>"; };
 		DA25588124ADE40F0081D155 /* OAProfileAppearanceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAProfileAppearanceViewController.mm; sourceTree = "<group>"; };
-		DA25588224ADE40F0081D155 /* OACreateProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OACreateProfileViewController.xib; sourceTree = "<group>"; };
 		DA25588324ADE40F0081D155 /* OATripRecordingSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATripRecordingSettingsViewController.h; sourceTree = "<group>"; };
 		DA2558D324ADE4F20081D155 /* OABaseSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OABaseSettingsViewController.m; path = Sources/Controllers/2.0/Settings/OABaseSettingsViewController.m; sourceTree = SOURCE_ROOT; };
 		DA2558D424ADE4F20081D155 /* OABaseSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OABaseSettingsViewController.xib; path = Sources/Controllers/2.0/Settings/OABaseSettingsViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -9509,6 +9508,8 @@
 		DA8EEF8124D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseBigTitleSettingsViewController.h; sourceTree = "<group>"; };
 		DA8EEF8224D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseBigTitleSettingsViewController.m; sourceTree = "<group>"; };
 		DA8EEF8324D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseBigTitleSettingsViewController.xib; sourceTree = "<group>"; };
+		DA8EEF8824D562C400E3CA75 /* OAConfigureProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAConfigureProfileViewController.h; sourceTree = "<group>"; };
+		DA8EEF8924D562C400E3CA75 /* OAConfigureProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAConfigureProfileViewController.m; sourceTree = "<group>"; };
 		DA92555724A60A6D00871AAF /* OAMapTileDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapTileDownloader.h; path = Helpers/OAMapTileDownloader.h; sourceTree = "<group>"; };
 		DA92555824A60A6E00871AAF /* OAMapTileDownloader.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapTileDownloader.mm; path = Helpers/OAMapTileDownloader.mm; sourceTree = "<group>"; };
 		DA92BC0D22E06AF700238C86 /* kml2gpx.xslt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = kml2gpx.xslt; path = Helpers/kml2gpx.xslt; sourceTree = "<group>"; };
@@ -14634,7 +14635,6 @@
 				DA2558D424ADE4F20081D155 /* OABaseSettingsViewController.xib */,
 				DA25587C24ADE40F0081D155 /* OACreateProfileViewController.h */,
 				DA25587B24ADE40F0081D155 /* OACreateProfileViewController.mm */,
-				DA25588224ADE40F0081D155 /* OACreateProfileViewController.xib */,
 				DA25584E24ADE40E0081D155 /* OANavigationSettingsViewController.h */,
 				DA25584624ADE40E0081D155 /* OANavigationSettingsViewController.mm */,
 				DA25584D24ADE40E0081D155 /* OANavigationSettingsViewController.xib */,
@@ -14661,6 +14661,8 @@
 				DA8EEF8124D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.h */,
 				DA8EEF8224D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.m */,
 				DA8EEF8324D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.xib */,
+				DA8EEF8824D562C400E3CA75 /* OAConfigureProfileViewController.h */,
+				DA8EEF8924D562C400E3CA75 /* OAConfigureProfileViewController.m */,
 			);
 			name = Settings;
 			path = Sources/Controllers/2.0/Settings;
@@ -16113,7 +16115,6 @@
 				DAB854CD23058218002566A6 /* ic_custom_poi.png in Resources */,
 				DA2DC41C23B2116300F40D1D /* ic_custom_arrow_down@3x.png in Resources */,
 				DA13414F243DC5A80039D214 /* ic_action_helicopter@3x.png in Resources */,
-				DA2558D024ADE40F0081D155 /* OACreateProfileViewController.xib in Resources */,
 				DA71B7B4214B9F2800FE8B7E /* technical-articles.html in Resources */,
 				DA134199243DC5A80039D214 /* map_action_utv@3x.png in Resources */,
 				DA52CE1624AE087F00CC309D /* ic_custom_contrast@3x.png in Resources */,
@@ -19071,7 +19072,6 @@
 				84E442131AF8A07500F87542 /* track_new_segement@3x.png in Resources */,
 				DA134118243DC5A80039D214 /* map_action_helicopter@2x.png in Resources */,
 				843257821A9DADE300A7964E /* ic_gpx_distance@3x.png in Resources */,
-				DA2558CF24ADE40F0081D155 /* OACreateProfileViewController.xib in Resources */,
 				DAF3458522F4482C009E2EB6 /* ic_custom_map_style.png in Resources */,
 				8476E2C61F6C1EEC00EC274F /* map_pedestrian_location_lost.png in Resources */,
 				DA1341AA243DC5A80039D214 /* map_action_offroad@2x.png in Resources */,
@@ -20434,6 +20434,7 @@
 				8A13FEDD20EFA2EE0029B2EE /* OAMyLocationViewController.mm in Sources */,
 				8A09960E2430D130007192AD /* OAProfileIconColor.m in Sources */,
 				845AFB5C1E264EE800170026 /* OASearchUICore.mm in Sources */,
+				DA8EEF8B24D562C400E3CA75 /* OAConfigureProfileViewController.m in Sources */,
 				DA22679F240E55C900FFEA91 /* OAWikiLinkBottomSheetViewController.mm in Sources */,
 				847A1D291DF94E9B003C1246 /* OAHistoryCardController.mm in Sources */,
 				DA9D549722D48410003AD7F9 /* OAOsmLiveCardView.m in Sources */,
@@ -20766,6 +20767,7 @@
 				3ACE8D4219F4F53E003F1D42 /* OAMapRulerView.m in Sources */,
 				84E441841AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
 				84E12BFE1F04EDE000F141AD /* OARouteDirectionInfo.mm in Sources */,
+				DA8EEF8A24D562C400E3CA75 /* OAConfigureProfileViewController.m in Sources */,
 				845E05DB1B58F59300DFC2A7 /* OAGPXRouteCardHeaderView.mm in Sources */,
 				841A111C1DEC18A9009558D3 /* OAFirstUsageWizardController.mm in Sources */,
 				84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */,

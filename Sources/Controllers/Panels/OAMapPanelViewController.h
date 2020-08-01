@@ -19,7 +19,7 @@
 @class OAHistoryItem, OAAddress, OARTargetPoint;
 @class OAToolbarViewController;
 @class OAMapActions, OAMapWidgetRegistry;
-@class OAMapHudViewController;
+@class OAMapHudViewController, OAApplicationMode;
 @class OAGPXDocument, OAGPXTrackAnalysis;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
@@ -72,6 +72,7 @@
 - (void) closeDashboardWithDuration:(CGFloat)duration;
 
 - (void) mapSettingsButtonClick:(id)sender;
+- (void) mapSettingsButtonClick:(id)sender mode:(OAApplicationMode *)targetMode;
 - (void) searchButtonClick:(id)sender;
 - (void) showRouteInfo;
 - (void) closeRouteInfo;
@@ -79,6 +80,7 @@
 - (void) showWaypoints;
 - (void) showRoutePreferences;
 - (void) showConfigureScreen;
+- (void) showConfigureScreen:(OAApplicationMode *)targetMode;
 - (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 
 - (void) addWaypoint;

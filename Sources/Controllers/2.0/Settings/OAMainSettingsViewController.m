@@ -24,6 +24,7 @@
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAGlobalSettingsViewController.h"
+#import "OAConfigureProfileViewController.h"
 
 #define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeCheck @"OAMultiIconTextDescCell"
@@ -37,6 +38,17 @@
     OAAppSettings *_settings;
     
     OAAutoObserverProxy* _appModeChangeObserver;
+    
+    OAApplicationMode *_targetAppMode;
+}
+
+- (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode
+{
+    self = [super init];
+    if (self) {
+        _targetAppMode = mode;
+    }
+    return self;
 }
 
 - (void) applyLocalization
@@ -55,6 +67,13 @@
                                                         andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
     
     _settings = OAAppSettings.sharedManager;
+    
+    if (_targetAppMode)
+    {
+        OAConfigureProfileViewController *profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:_targetAppMode];
+        [self.navigationController pushViewController:profileConf animated:YES];
+        _targetAppMode = nil;
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -297,8 +316,9 @@
     }
     else if ([name isEqualToString:@"profile_val"] || [name isEqualToString:@"current_profile"])
     {
-        // TODO: open the next screen
         OAApplicationMode *mode = item[@"app_mode"];
+        OAConfigureProfileViewController *profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:mode];
+        [self.navigationController pushViewController:profileConf animated:YES];
     }
     else if ([name isEqualToString:@"add_profile"])
     {
@@ -321,16 +341,7 @@
 //        OAProfileNavigationSettingsViewController* settingsViewController = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:OAApplicationMode.CAR];
 //        [self.navigationController pushViewController:settingsViewController animated:YES];
 //    }
-//    else if ([name isEqualToString:@"track_recording"])
-//    {
-//        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral];
-//        [self.navigationController pushViewController:settingsViewController animated:YES];
-//    }
-//    else if ([name isEqualToString:@"osm_editing"])
-//    {
-//        OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
-//        [self.navigationController pushViewController:settingsViewController animated:YES];
-//    }
+//
 //
 }
 

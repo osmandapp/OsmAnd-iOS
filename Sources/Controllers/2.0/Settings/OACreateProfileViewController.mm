@@ -23,7 +23,7 @@
 #define kTopPadding 6
 #define kCellTypeIconTitleSubtitle @"OAIconTextButtonCell"
 
-@interface OACreateProfileViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
+@interface OACreateProfileViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
@@ -82,11 +82,6 @@
     return OALocalizedString(@"create_profile");
 }
 
-- (IBAction) backButtonClicked:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
@@ -112,7 +107,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    [self heightForLabel:OALocalizedString(@"create_profile_descr")];
+    _heightForHeader = [self heightForLabel:OALocalizedString(@"create_profile_descr")];
     return _heightForHeader + kSidePadding + kTopPadding;
 }
 
@@ -146,32 +141,6 @@
     OAProfileAppearanceViewController* profileAppearanceViewController = [[OAProfileAppearanceViewController alloc] initWithProfile:_profileList[indexPath.row]];
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     [self.navigationController pushViewController:profileAppearanceViewController animated:YES];
-}
-
-- (CGFloat) heightForLabel:(NSString *)text
-{
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGFloat textWidth = _tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
-}
-
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    CGFloat alpha = _tableView.contentOffset.y < 0 ? 0 : (_tableView.contentOffset.y / (_tableView.contentSize.height - _tableView.frame.size.height));
-    if (alpha > 0)
-    {
-        _titleLabel.hidden = NO;
-        _navBarView.backgroundColor = UIColor.clearColor;
-        _navBarBackgroundView.alpha = 1;
-    }
-    else
-    {
-        _titleLabel.hidden = YES;
-        _navBarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
-        _navBarBackgroundView.alpha = 0;
-    }
 }
 
 @end

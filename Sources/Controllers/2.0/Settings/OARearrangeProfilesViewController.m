@@ -307,11 +307,4 @@
     [CATransaction commit];
 }
 
-- (CGFloat) heightForLabel:(NSString *)text
-{
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGFloat textWidth = self.view.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    return [OAUtilities calculateTextBounds:text width:textWidth font:labelFont].height;
-}
-
 @end

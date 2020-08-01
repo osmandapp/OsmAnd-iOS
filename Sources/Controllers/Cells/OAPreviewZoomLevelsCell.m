@@ -42,4 +42,16 @@
     [super setSelected:selected animated:animated];
 }
 
+- (IBAction)minLevelZoomButtonTap:(id)sender
+{
+    if (self.delegate)
+        [self.delegate toggleMinZoomPickerRow];
+}
+
+- (IBAction)maxLevelZoomButtonTap:(id)sender
+{
+    if (self.delegate)
+    [self.delegate toggleMaxZoomPickerRow];
+}
+
 @end

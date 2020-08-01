@@ -67,6 +67,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.view.backgroundColor = UIColor.yellowColor;
+    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
     [self setupView];
 }
 
@@ -284,7 +285,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return section == 0 ? 18.0 : 4.0;
+    return section == 0 ? 18.0 : 16.0;
 }
 
 #pragma mark - Switch

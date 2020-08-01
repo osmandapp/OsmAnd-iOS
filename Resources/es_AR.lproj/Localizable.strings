@@ -1119,9 +1119,9 @@
 "product_desc_asia_short" = "Mapas regionales de Asia";
 "obf_import_title" = "Importar archivo de mapa sin conexión";
 "obf_import_already_exists" = "El archivo con este nombre ya existe. Elige una acción.";
-"obf_import_success" = "El archivo se ha importado correctamente";
+"obf_import_success" = "Archivo importado correctamente";
 "obf_import_failed" = "Error al importar archivo";
-"res_import_success" = "%@ fue importado con éxito";
+"res_import_success" = "%@ importado correctamente";
 "res_import_unsupported" = "Tipo de archivo incorrecto. Sólo se admiten los archivos «routing.xml» y «*.render.xml».";
 "routing_import_please_restart" = "Para usar el nuevo archivo «routing.xml», reinicia la aplicación.";
 "download_pending" = "Descarga pendiente";
@@ -1808,3 +1808,5 @@
 "default_speed" = "Velocidad predefinida";
 "routing_attr_length_name" = "Límite de longitud";
 "send_anonymous_data_desc" = "Enviar a OsmAnd las estadísticas de descarga de mapas, no se recopilan datos personales, ni de ubicación.";
+"profile_import_success" = "Perfil de aplicación importado correctamente";
+"err_profile_import" = "Error al leer los datos del elemento: %@";

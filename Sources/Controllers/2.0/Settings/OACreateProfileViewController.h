@@ -6,9 +6,9 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseBigTitleSettingsViewController.h"
 
-@interface OACreateProfileViewController : OACompoundViewController
+@interface OACreateProfileViewController : OABaseBigTitleSettingsViewController
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

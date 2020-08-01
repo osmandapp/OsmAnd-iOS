@@ -21,7 +21,6 @@
 #define kHeaderId @"TableViewSectionHeader"
 #define kSidePadding 16
 #define kTopPadding 6
-#define kHeaderViewFont [UIFont systemFontOfSize:34.0 weight:UIFontWeightBold]
 #define kCellTypeIconTitleSubtitle @"OAIconTextButtonCell"
 
 @interface OACreateProfileViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate>
@@ -32,12 +31,6 @@
 {
     NSArray<OAApplicationMode *> * _profileList;
     CGFloat _heightForHeader;
-    UIView *_navBarBackgroundView;
-}
-
-- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    return [super initWithNibName:@"OACreateProfileViewController" bundle:nil];
 }
 
 - (instancetype) init
@@ -72,42 +65,21 @@
 
 - (void) applyLocalization
 {
-    [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    _titleLabel.text = OALocalizedString(@"create_profile");
+    [super applyLocalization];
+    self.titleLabel.text = OALocalizedString(@"create_profile");
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.rowHeight = UITableViewAutomaticDimension;
-    _tableView.estimatedRowHeight = 60.;
-    _tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_profile") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:YES];
-    _navBarBackgroundView = [self createNavBarBackgroundView];
-    _navBarBackgroundView.frame = _navBarView.bounds;
-    [_navBarView insertSubview:_navBarBackgroundView atIndex:0];
 }
 
-- (UIView *) createNavBarBackgroundView
+- (NSString *) getTableHeaderTitle
 {
-    if (!UIAccessibilityIsReduceTransparencyEnabled())
-    {
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        blurEffectView.alpha = 0;
-        return blurEffectView;
-    }
-    else
-    {
-        UIView *res = [[UIView alloc] init];
-        res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
-        res.alpha = 0;
-        return res;
-    }
+    return OALocalizedString(@"create_profile");
 }
 
 - (IBAction) backButtonClicked:(id)sender
@@ -120,21 +92,12 @@
     return UIStatusBarStyleDefault;
 }
 
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_profile") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:YES];
-        [_tableView reloadData];
-    } completion:nil];
-}
-
 #pragma mark - Table View
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, tableView.bounds.size.width - OAUtilities.getLeftMargin * 2, _heightForHeader)];
-    CGFloat textWidth = _tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
+    CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 6.0, textWidth, _heightForHeader)];
     UIFont *labelFont = [UIFont systemFontOfSize:15.0];
     description.font = labelFont;
@@ -149,7 +112,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    _heightForHeader = [self heightForLabel:OALocalizedString(@"create_profile_descr")];
+    [self heightForLabel:OALocalizedString(@"create_profile_descr")];
     return _heightForHeader + kSidePadding + kTopPadding;
 }
 

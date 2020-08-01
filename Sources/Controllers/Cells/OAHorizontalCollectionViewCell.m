@@ -9,8 +9,9 @@
 #import "OAHorizontalCollectionViewCell.h"
 #import "OALabelCollectionViewCell.h"
 #import "OAColors.h"
+#import "OAUtilities.h"
 
-#define kSidePadding 15
+#define kSidePadding 16
 
 @implementation OAHorizontalCollectionViewCell
 
@@ -52,14 +53,19 @@
         cell.titleLabel.textColor = UIColorFromRGB(color_icon_color_night);
         cell.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightBold];
     }
-    
+    else
+    {
+        cell.backView.backgroundColor = UIColorFromRGB(color_route_button_inactive);
+        cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+        cell.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+    }
     return cell;
 }
 
 - (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     CGSize labelSize = [(NSString*)[_dataArray objectAtIndex:indexPath.row] sizeWithAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold]}];
     CGFloat w = labelSize.width + kSidePadding * 2;
-    CGSize itemSize = CGSizeMake(w, 44);
+    CGSize itemSize = CGSizeMake(w, 58);
     return itemSize;
 }
 
@@ -68,6 +74,7 @@
     _selectedIndex = indexPath.row;
     if (self.delegate)
         [self.delegate valueChanged:indexPath.row];
+    [self.collectionView reloadData];
 }
 
 @end

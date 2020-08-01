@@ -1398,4 +1398,14 @@ static const double d180PI = 180.0 / M_PI_2;
     return tableHeaderView;
 }
 
++ (CGFloat) heightForHeaderViewText:(NSString *)text width:(CGFloat)width font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing
+{
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.lineSpacing = lineSpacing;
+    style.alignment = NSTextAlignmentCenter;
+    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : font}];
+    
+    return [self calculateTextBounds:attributedText width:width].height;
+}
+
 @end

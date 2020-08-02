@@ -11,6 +11,7 @@
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAApplicationMode.h"
+#import "OANavigationSettingsFooter.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -149,7 +150,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 17.0;
+    return section == 0 ? 34.0 : 17.0;
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -210,6 +211,22 @@
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return section == 0 ? OALocalizedString(@"route_recalculation_descr") : OALocalizedString(@"select_distance_for_recalculation");
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    static NSString* const identifierCell = @"OANavigationSettingsFooter";
+    OANavigationSettingsFooter* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        cell = (OANavigationSettingsFooter *)[nib objectAtIndex:0];
+    }
+    if (cell)
+    {
+        cell.textView.text = [self tableView:tableView titleForFooterInSection:section];
+    }
+    return cell;
 }
 
 #pragma mark - Switch

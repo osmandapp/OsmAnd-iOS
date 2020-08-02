@@ -14,6 +14,7 @@
 #import "OAMapOrientationThresholdViewController.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
+#import "OANavigationSettingsFooter.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -179,7 +180,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return section == 0 ? 18.0 : 9.0;
+    return section == 0 ? 34.0 : 9.0;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -194,6 +195,22 @@
         return OALocalizedString(@"snap_to_road_descr");
     else
         return @"";
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    static NSString* const identifierCell = @"OANavigationSettingsFooter";
+    OANavigationSettingsFooter* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        cell = (OANavigationSettingsFooter *)[nib objectAtIndex:0];
+    }
+    if (cell)
+    {
+        cell.textView.text = [self tableView:tableView titleForFooterInSection:section];
+    }
+    return cell;
 }
 
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath

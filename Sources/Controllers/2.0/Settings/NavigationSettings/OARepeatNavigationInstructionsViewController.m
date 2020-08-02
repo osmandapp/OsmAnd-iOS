@@ -10,6 +10,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
+#import "OANavigationSettingsFooter.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -208,6 +209,22 @@
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return section == 0 ? OALocalizedString(@"instructions_repeat") : @"";
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    static NSString* const identifierCell = @"OANavigationSettingsFooter";
+    OANavigationSettingsFooter* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        cell = (OANavigationSettingsFooter *)[nib objectAtIndex:0];
+    }
+    if (cell)
+    {
+        cell.textView.text = [self tableView:tableView titleForFooterInSection:section];
+    }
+    return cell;
 }
 
 # pragma mark - Switch

@@ -22,6 +22,8 @@
 #import "OsmAndApp.h"
 #import "PXAlertView.h"
 #import "OASettingsHelper.h"
+#import "OANavigationSettingsHeader.h"
+#import "OANavigationSettingsFooter.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -404,10 +406,42 @@
     return section == 0 ? @"" : OALocalizedString(@"change_map_behavior");
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+    CGFloat emptyHeaderHeight = section == 0 ? 34 : 17;
+    return [[self tableView:tableView titleForHeaderInSection:section]  isEqual: @""] ? emptyHeaderHeight : UITableViewAutomaticDimension;
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    static NSString* const identifierCell = @"OANavigationSettingsHeader";
+    OANavigationSettingsHeader* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        cell = (OANavigationSettingsHeader *)[nib objectAtIndex:0];
+    }
+    if (cell)
+    {
+        cell.textView.text = [[self tableView:tableView titleForHeaderInSection:section] uppercaseString];
+    }
+    return cell;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    static NSString* const identifierCell = @"OANavigationSettingsFooter";
+    OANavigationSettingsFooter* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        cell = (OANavigationSettingsFooter *)[nib objectAtIndex:0];
+    }
+    if (cell)
+    {
+        cell.textView.text = [self tableView:tableView titleForFooterInSection:section];
+    }
+    return cell;
 }
 
 #pragma mark - OASettingsDataDelegate

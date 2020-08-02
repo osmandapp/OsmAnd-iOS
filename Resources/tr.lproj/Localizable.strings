@@ -1804,3 +1804,11 @@
 "not_available_profile_name" = "Bu ada sahip profil zaten var.";
 "profile_import_success" = "Uygulama profili başarıyla içe aktarıldı";
 "err_profile_import" = "Öge verileri okunurken hata oluştu: %@";
+"width_limit_description" = "Aracınızın genişliğini belirtin, geniş araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
+"default_speed_dialog_msg" = "Bilinmeyen yol türleri için varış zamanını tahmin eder ve tüm yollar için hızı sınırlar (güzergahı etkileyebilir)";
+"vessel_width_limit_description" = "Dar köprülerden kaçınmak için gemi genişliğini ayarlayın.";
+"vessel_height_limit_description" = "Alçak köprülerden kaçınmak için gemi yüksekliğini ayarlayın. Köprü hareket edebiliyorsa, açık durumdaki yüksekliğini kullanacağımızı unutmayın.";
+"weight_limit_description" = "Aracınızın ağırlığını belirtin, ağır araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
+"lenght_limit_description" = "Aracınızın uzunluğunu belirtin, uzun araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
+"height_limit_description" = "Aracınızın yüksekliğini belirtin, yüksek araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
+"export_profile" = "Profili dışa aktar";

@@ -1810,3 +1810,11 @@
 "send_anonymous_data_desc" = "Enviar a OsmAnd las estadísticas de descarga de mapas, no se recopilan datos personales, ni de ubicación.";
 "profile_import_success" = "Perfil de aplicación importado correctamente";
 "err_profile_import" = "Error al leer los datos del elemento: %@";
+"width_limit_description" = "Proporciona el ancho del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos anchos.";
+"default_speed_dialog_msg" = "Estima el tiempo de llegada para los tipos de caminos desconocidos, y limita la velocidad para todos los caminos (puede afectar a la ruta)";
+"vessel_width_limit_description" = "Define el ancho de la embarcación para evitar puentes estrechos.";
+"vessel_height_limit_description" = "Define la altura de la embarcación para evitar puentes bajos. Tener en cuenta que si el puente es móvil, usaremos su altura en estado abierto.";
+"weight_limit_description" = "Proporciona el peso del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos pesados.";
+"lenght_limit_description" = "Proporciona la longitud del vehículo, se pueden aplicar algunas restricciones de rutas para vehículos largos.";
+"height_limit_description" = "Proporciona la altura del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos altos.";
+"export_profile" = "Exportar perfil";

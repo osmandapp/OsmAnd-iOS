@@ -363,7 +363,11 @@ static OAApplicationMode *_SKI;
 - (void) setUserProfileName:(NSString *)userProfileName
 {
     if (userProfileName.length > 0)
+    {
         [OAAppSettings.sharedManager.userProfileName set:userProfileName mode:self];
+        _name = userProfileName;
+    }
+    
 }
 
 - (NSString *) getRoutingProfile

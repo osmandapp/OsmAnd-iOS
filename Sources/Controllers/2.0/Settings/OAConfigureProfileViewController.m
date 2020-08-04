@@ -20,6 +20,7 @@
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAProfileAppearanceViewController.h"
 
 #define kSidePadding 16.
 
@@ -56,7 +57,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     self = [super init];
     if (self) {
         _appMode = mode;
-        [self generateData];
+//        [self generateData];
     }
     return self;
 }
@@ -121,9 +122,22 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     _data = data;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setupTableHeaderView];
+    [self generateData];
+    [self.tableView reloadData];
+}
+
 - (void) applyLocalization
 {
     self.titleLabel.text = _appMode.name;
+}
+
+- (UIView *)setupTableHeaderView
+{
+    return self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold] titntColor:UIColorFromRGB(_appMode.getIconColor) icon:_appMode.getIconName];
 }
 
 - (void)viewDidLoad
@@ -188,6 +202,14 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     {
         [self openDashboardScreen:type];
     }
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self setupTableHeaderView];
+        [self.tableView reloadData];
+    } completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -315,7 +337,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
     else if ([key isEqualToString:@"profile_appearance"])
     {
-        
+        OAProfileAppearanceViewController *profileAppearance = [[OAProfileAppearanceViewController alloc] initWithProfile:_appMode];
+        [self.navigationController pushViewController:profileAppearance animated:YES];
     }
 //    else if ([key isEqualToString:@"ui_customization"])
 //    {

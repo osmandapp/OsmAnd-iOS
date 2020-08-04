@@ -23,7 +23,7 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YtK-gC-49g">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="YtK-gC-49g">
                     <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
@@ -59,7 +59,7 @@
                         <constraint firstAttribute="height" constant="30" id="H6J-Wy-j1e"/>
                         <constraint firstAttribute="width" constant="30" id="KlE-kS-D4d"/>
                     </constraints>
-                    <color key="tintColor" red="0.64313725490196072" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" image="ic_navbar_chevron.png"/>
                     <connections>
                         <action selector="backImageButtonPressed:" destination="-1" eventType="touchUpInside" id="7rf-5U-gr2"/>

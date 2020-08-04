@@ -126,13 +126,11 @@
                                @"selected" : @([_settings.transparentMapTheme get]),
                                
                                @"type" : @"OASettingSwitchCell"} ];
-
-    [controlsList addObject:@{ @"title" : OALocalizedString(@"always_center_position_on_map"),
-                               @"key" : @"always_center_position_on_map",
-                               @"selected" : @([_settings.centerPositionOnMap get]),
-                            
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
+                               @"key" : @"show_lanes",
+                               @"selected" : @([_settings.showLanes get]),
+    
                                @"type" : @"OASettingSwitchCell"} ];
-        
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
     
@@ -195,13 +193,13 @@
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
             [[OARootViewController instance].mapPanel recreateControls];
         }
-        else if ([key isEqualToString:@"always_center_position_on_map"])
-        {
-            [_settings.centerPositionOnMap set:visible];
-        }
         else if ([key isEqualToString:@"map_widget_transparent"])
         {
             [_settings.transparentMapTheme set:visible];
+        }
+        else if ([key isEqualToString:@"show_lanes"])
+        {
+            [_settings.showLanes set:visible];
         }
         [self setupViewInternal];
     }

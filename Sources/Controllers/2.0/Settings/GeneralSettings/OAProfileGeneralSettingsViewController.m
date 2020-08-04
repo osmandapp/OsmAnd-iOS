@@ -120,6 +120,7 @@
         rotateMapValue = OALocalizedString(@"do_not_rotate");
     
     NSNumber *allow3DValue = @([_settings.settingAllow3DView get:self.appMode]);
+    NSNumber *positionInCenter = @([_settings.centerPositionOnMap get:self.appMode]);
     
     NSString *drivingRegionValue;
     if ([_settings.drivingRegionAutomatic get:self.appMode])
@@ -251,6 +252,15 @@
         @"isOn" : allow3DValue,
         @"icon" : @"ic_action_compass",
         @"key" : @"3dView",
+    }];
+    [appearanceArr addObject:@{
+        @"name" : @"center_position",
+        @"type" : kCellTypeIconTextSwitch,
+        @"title" : OALocalizedString(@"always_center_position_on_map"),
+        @"key" : @"always_center_position_on_map",
+        @"isOn" : positionInCenter,
+        @"icon" : @"ic_action_compass",
+        @"key" : @"center_position",
     }];
     [unitsAndFormatsArr addObject:@{
         @"type" : kCellTypeIconTitleValue,
@@ -453,6 +463,10 @@
                     else
                         [app.mapModeObservable notifyEvent];
                 }
+            }
+            else if ([name isEqualToString:@"center_position"])
+            {
+                [_settings.centerPositionOnMap set:isChecked mode:self.appMode];
             }
         }
     }

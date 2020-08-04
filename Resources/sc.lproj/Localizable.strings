@@ -1809,3 +1809,11 @@
 "not_available_profile_name" = "Esistit giai unu profilu cun custu nùmene.";
 "profile_import_success" = "Su profilu de s'aplicatzione est istadu importadu chene problemas";
 "err_profile_import" = "Errore leghende sos datos de s'elementu: %@";
+"width_limit_description" = "Inserta sa largària de su veìculu tuo, ca unas cantas restritziones si diat pòdere aplicare pro veìculos largos ebbia.";
+"height_limit_description" = "Inserta s'artària de su veìculu tuo, ca unas cantas restritziones si diat pòdere aplicare pro veìculos artos ebbia.";
+"default_speed_dialog_msg" = "Faghet unu càrculu de s'ora de arribu pro castas disconnotas de caminu, e limitat sa lestresa pro totu sos caminos (diat pòdere mudare s'àndala)";
+"vessel_width_limit_description" = "Imposta sa largària de sa barca pro evitare pontes astrintos.";
+"vessel_height_limit_description" = "Imposta s'artària de sa barca pro evitare sos pontes bassos. Ammenta·ti chi, si su ponte est mòbile, amus a impreare s'artària sua de cando est abertu.";
+"lenght_limit_description" = "Inserta sa longària de su veìculu tuo. Bi diant pòdere èssere unas cantas restritziones de sas àndalas pro sos veìculos longos.";
+"weight_limit_description" = "Inserta su pesu de su veìculu tuo, ca unas cantas restritziones si diat pòdere aplicare pro veìculos pesantes ebbia.";
+"export_profile" = "Esporta su profilu";

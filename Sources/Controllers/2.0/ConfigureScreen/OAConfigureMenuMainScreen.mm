@@ -126,7 +126,11 @@
                                @"selected" : @([_settings.transparentMapTheme get]),
                                
                                @"type" : @"OASettingSwitchCell"} ];
-        
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
+                               @"key" : @"show_lanes",
+                               @"selected" : @([_settings.showLanes get]),
+    
+                               @"type" : @"OASettingSwitchCell"} ];
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
     
@@ -192,6 +196,10 @@
         else if ([key isEqualToString:@"map_widget_transparent"])
         {
             [_settings.transparentMapTheme set:visible];
+        }
+        else if ([key isEqualToString:@"show_lanes"])
+        {
+            [_settings.showLanes set:visible];
         }
         [self setupViewInternal];
     }

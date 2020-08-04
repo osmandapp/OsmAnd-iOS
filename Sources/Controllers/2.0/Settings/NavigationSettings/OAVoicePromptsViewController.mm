@@ -18,8 +18,6 @@
 #import "OAArrivalAnnouncementViewController.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
-#import "OANavigationSettingsHeader.h"
-#import "OANavigationSettingsFooter.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -345,43 +343,6 @@
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return section == 0 ? OALocalizedString(@"speak_descr") : @"";
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    CGFloat emptyHeaderHeight = section == 0 ? 34 : 17;
-    return [[self tableView:tableView titleForHeaderInSection:section]  isEqual: @""] ? emptyHeaderHeight : UITableViewAutomaticDimension;
-}
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    static NSString* const identifierCell = @"OANavigationSettingsHeader";
-    OANavigationSettingsHeader* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-        cell = (OANavigationSettingsHeader *)[nib objectAtIndex:0];
-    }
-    if (cell)
-    {
-        cell.textView.text = [[self tableView:tableView titleForHeaderInSection:section] uppercaseString];
-    }
-    return cell;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    static NSString* const identifierCell = @"OANavigationSettingsFooter";
-    OANavigationSettingsFooter* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-        cell = (OANavigationSettingsFooter *)[nib objectAtIndex:0];
-    }
-    if (cell)
-    {
-        cell.textView.text = [self tableView:tableView titleForFooterInSection:section];
-    }
-    return cell;
 }
 
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath

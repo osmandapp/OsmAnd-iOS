@@ -9,7 +9,6 @@
 #import "OADefaultSpeedViewController.h"
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
-#import "OANavigationSettingsFooter.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -121,17 +120,6 @@
 - (IBAction)doneButtonPressed:(id)sender {
 }
 
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:@"Change me"]; // needs to be changed
-        [self.tableView reloadData];
-    } completion:nil];
-}
-
-#pragma mark - TableView
-
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
@@ -177,6 +165,23 @@
         return cell;
     }
     return nil;
+}
+
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self setupTableHeaderViewWithText:@"Change me"]; // needs to be changed
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
+#pragma mark - TableView
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    // needs to be changed
+    return @"Change me";
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -230,28 +235,6 @@
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    // needs to be changed
-    return @"Change me";
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    static NSString* const identifierCell = @"OANavigationSettingsFooter";
-    OANavigationSettingsFooter* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-        cell = (OANavigationSettingsFooter *)[nib objectAtIndex:0];
-    }
-    if (cell)
-    {
-        cell.textView.text = [self tableView:tableView titleForFooterInSection:section];
-    }
-    return cell;
 }
 
 #pragma mark - Picker

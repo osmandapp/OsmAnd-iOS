@@ -259,7 +259,7 @@
         @"title" : OALocalizedString(@"always_center_position_on_map"),
         @"key" : @"always_center_position_on_map",
         @"isOn" : positionInCenter,
-        @"icon" : @"ic_action_compass",
+        @"icon" : [positionInCenter boolValue] ? @"ic_custom_display_position_center.png" : @"ic_custom_display_position_bottom.png",
         @"key" : @"center_position",
     }];
     [unitsAndFormatsArr addObject:@{
@@ -308,7 +308,7 @@
     [tableData addObject:otherArr];
     _data = [NSArray arrayWithArray:tableData];
     [self updateNavBar];
-    [self.tableView reloadData];
+    //[self.tableView reloadData];
 }
 
 - (void) updateNavBar
@@ -333,7 +333,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.leftImageView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.leftImageView.tintColor = UIColorFromRGB(color_chart_orange);
         }
         if (cell)
         {
@@ -361,6 +361,7 @@
             cell.textView.text = item[@"title"];
             cell.switchView.on = [item[@"isOn"] boolValue];
             cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -468,6 +469,8 @@
             {
                 [_settings.centerPositionOnMap set:isChecked mode:self.appMode];
             }
+            [self setupView];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
 }

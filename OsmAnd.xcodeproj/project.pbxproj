@@ -289,6 +289,9 @@
 		15BDDE7824D954EC00079C83 /* ic_custom_display_position_center@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BDDE7224D954EB00079C83 /* ic_custom_display_position_center@2x.png */; };
 		15BDDE7924D954EC00079C83 /* ic_custom_display_position_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BDDE7324D954EC00079C83 /* ic_custom_display_position_bottom@3x.png */; };
 		15BDDE7D24D9562800079C83 /* ic_custom_display_position_bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BDDE7C24D9562800079C83 /* ic_custom_display_position_bottom.png */; };
+		15BDDE8124D95F8E00079C83 /* ic_custom_2_5d_view@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BDDE7E24D95F8C00079C83 /* ic_custom_2_5d_view@3x.png */; };
+		15BDDE8224D95F8E00079C83 /* ic_custom_2_5d_view@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BDDE7F24D95F8D00079C83 /* ic_custom_2_5d_view@2x.png */; };
+		15BDDE8324D95F8E00079C83 /* ic_custom_2_5d_view.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BDDE8024D95F8D00079C83 /* ic_custom_2_5d_view.png */; };
 		15BECC63249B88F700B36DC0 /* OAIconsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15BECC62249B88F700B36DC0 /* OAIconsTableViewCell.xib */; };
 		15BECC65249B895700B36DC0 /* OAIconsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BECC64249B895700B36DC0 /* OAIconsTableViewCell.m */; };
 		15BECC68249B8B2800B36DC0 /* OAIconsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15BECC67249B8B2800B36DC0 /* OAIconsCollectionViewCell.xib */; };
@@ -6193,6 +6196,9 @@
 		15BDDE7224D954EB00079C83 /* ic_custom_display_position_center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_display_position_center@2x.png"; path = "Resources/Icons/ic_custom_display_position_center@2x.png"; sourceTree = "<group>"; };
 		15BDDE7324D954EC00079C83 /* ic_custom_display_position_bottom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_display_position_bottom@3x.png"; path = "Resources/Icons/ic_custom_display_position_bottom@3x.png"; sourceTree = "<group>"; };
 		15BDDE7C24D9562800079C83 /* ic_custom_display_position_bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_display_position_bottom.png; path = Resources/Icons/ic_custom_display_position_bottom.png; sourceTree = "<group>"; };
+		15BDDE7E24D95F8C00079C83 /* ic_custom_2_5d_view@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_2_5d_view@3x.png"; path = "Resources/Icons/ic_custom_2_5d_view@3x.png"; sourceTree = "<group>"; };
+		15BDDE7F24D95F8D00079C83 /* ic_custom_2_5d_view@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_2_5d_view@2x.png"; path = "Resources/Icons/ic_custom_2_5d_view@2x.png"; sourceTree = "<group>"; };
+		15BDDE8024D95F8D00079C83 /* ic_custom_2_5d_view.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_2_5d_view.png; path = Resources/Icons/ic_custom_2_5d_view.png; sourceTree = "<group>"; };
 		15BECC62249B88F700B36DC0 /* OAIconsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAIconsTableViewCell.xib; path = Resources/Controllers/Cells/OAIconsTableViewCell.xib; sourceTree = "<group>"; };
 		15BECC64249B895700B36DC0 /* OAIconsTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAIconsTableViewCell.m; path = Controllers/Cells/OAIconsTableViewCell.m; sourceTree = "<group>"; };
 		15BECC66249B897100B36DC0 /* OAIconsTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAIconsTableViewCell.h; path = Controllers/Cells/OAIconsTableViewCell.h; sourceTree = "<group>"; };
@@ -10557,6 +10563,9 @@
 				1571CE3B24ADEF1800083F92 /* ic_custom_angular_unit.png */,
 				1571CE3A24ADEF1800083F92 /* ic_custom_angular_unit@2x.png */,
 				1571CE3924ADEF1700083F92 /* ic_custom_angular_unit@3x.png */,
+				15BDDE8024D95F8D00079C83 /* ic_custom_2_5d_view.png */,
+				15BDDE7F24D95F8D00079C83 /* ic_custom_2_5d_view@2x.png */,
+				15BDDE7E24D95F8C00079C83 /* ic_custom_2_5d_view@3x.png */,
 				15BDDE7C24D9562800079C83 /* ic_custom_display_position_bottom.png */,
 				15BDDE6F24D954EB00079C83 /* ic_custom_display_position_bottom@2x.png */,
 				15BDDE7324D954EC00079C83 /* ic_custom_display_position_bottom@3x.png */,
@@ -19167,6 +19176,7 @@
 				0CBDD095245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_3@2x.png in Resources */,
 				84A81A001CFACC80000C9E8C /* OAWikiMenuViewController.xib in Resources */,
 				8A7A4C9D210A036E00EC1B06 /* map_transport_stop_bg@3x.png in Resources */,
+				15BDDE8324D95F8E00079C83 /* ic_custom_2_5d_view.png in Resources */,
 				DA13410E243DC5A80039D214 /* ic_action_skiing@2x.png in Resources */,
 				DA134152243DC5A80039D214 /* ic_action_aircraft.png in Resources */,
 				8AFC2BF324334A4E0095BA9F /* map_location_bicycle_bottom@2x.png in Resources */,
@@ -19706,6 +19716,7 @@
 				84EC52BC1F8BF26600AFC252 /* ic_configure_screen_dark@3x.png in Resources */,
 				845E05C21B55129100DFC2A7 /* ic_destination_pin_2_small.png in Resources */,
 				84C41DE31AB8600D0089EABB /* free_map_mode_button@2x.png in Resources */,
+				15BDDE8224D95F8E00079C83 /* ic_custom_2_5d_view@2x.png in Resources */,
 				157F3CD824A1F43C000A66F0 /* ic_custom_straight_line@3x.png in Resources */,
 				DA8660852268A2870041F57D /* ic_custom_show_on_map@2x.png in Resources */,
 				8476E1DE1F6AA01000EC274F /* ic_action_truck_dark@2x.png in Resources */,
@@ -19762,6 +19773,7 @@
 				8412224E1B39CC5200F80F9E /* map_car_bearing@2x.png in Resources */,
 				DA1994AF224CDAF200B25BB0 /* ic_custom_add@2x.png in Resources */,
 				843394C71FF54A19006205A5 /* list_warnings_traffic_calming_us@3x.png in Resources */,
+				15BDDE8124D95F8E00079C83 /* ic_custom_2_5d_view@3x.png in Resources */,
 				8A1CF1DD227ED4A70083A04E /* warnings_tunnel.png in Resources */,
 				8A6CBCB421CE25F0004033C7 /* img_logo_38dp_osmand@3x.png in Resources */,
 				84CCE80E1B7509A90059A82A /* ic_dialog_map@2x.png in Resources */,

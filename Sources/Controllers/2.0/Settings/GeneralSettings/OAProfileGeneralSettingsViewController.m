@@ -101,6 +101,7 @@
         {
             self.appMode = modes[buttonIndex];
             [self setupView];
+            [self.tableView reloadData];
         }
     }];
 }
@@ -250,7 +251,7 @@
         @"type" : kCellTypeIconTextSwitch,
         @"title" : OALocalizedString(@"allow_3D_view"),
         @"isOn" : allow3DValue,
-        @"icon" : @"ic_action_compass",
+        @"icon" : @"ic_custom_2_5d_view",
         @"key" : @"3dView",
     }];
     [appearanceArr addObject:@{
@@ -308,7 +309,6 @@
     [tableData addObject:otherArr];
     _data = [NSArray arrayWithArray:tableData];
     [self updateNavBar];
-    //[self.tableView reloadData];
 }
 
 - (void) updateNavBar

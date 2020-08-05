@@ -57,6 +57,7 @@
     self.tableView.dataSource = self;
     _settings = [OAAppSettings sharedManager];
     self.profileButton.hidden = NO;
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
     [self setupView];
 }
 
@@ -70,6 +71,14 @@
         [self showAppModeDialog];
     }
     [self.tableView reloadData];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
+        [self.tableView reloadData];
+    } completion:nil];
 }
 
 - (void) showAppModeDialog

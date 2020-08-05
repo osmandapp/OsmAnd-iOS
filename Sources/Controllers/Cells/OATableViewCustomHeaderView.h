@@ -15,6 +15,7 @@
 - (void) setYOffset:(CGFloat)yOffset;
 
 + (CGFloat) getHeight:(NSString *)text width:(CGFloat)width;
++ (CGFloat) getHeight:(NSString *)text width:(CGFloat)width yOffset:(CGFloat)yOffset font:(UIFont *)font;
 
 @end
 

@@ -530,6 +530,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         cell.lbTitle.text = item[@"title"];
         cell.lbTime.text = item[@"value"];
         cell.lbTime.textColor = [item[@"clickable"] boolValue] ? [UIColor blackColor] : [UIColor grayColor];
+        if (indexPath.row == kMaxZoomRow && !_maxZoomPickerIsShown)
+            cell.separatorInset = UIEdgeInsetsZero;
+        else
+            cell.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
         return cell;
     }
     else if ([cellType isEqualToString:kCellTypePicker])
@@ -633,7 +637,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     [self.tableView beginUpdates];
     [self setupView];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:rowIndex inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:rowIndex inSection:kZoomSection],
+                                            [NSIndexPath indexPathForRow:kMaxZoomRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView endUpdates];
 }
 

@@ -66,9 +66,16 @@
 
 - (void) generateData
 {
+    NSString *selectedProfileName = [_settings.routingProfile get];
     _routingProfileDataObjects = [self.class getRoutingProfiles];
-    
-    OARoutingProfileDataObject *routingData = _routingProfileDataObjects[[_settings.routingProfile get]];
+    NSArray *profiles = [_routingProfileDataObjects allValues];
+    OARoutingProfileDataObject *routingData;
+
+    for (OARoutingProfileDataObject *profile in profiles)
+    {
+        if([profile.stringKey isEqual:selectedProfileName])
+            routingData = profile;
+    }
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *navigationArr = [NSMutableArray array];
@@ -132,6 +139,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
 }
 
 + (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles

@@ -12,6 +12,7 @@
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OASwitchTableViewCell.h"
+#import "OATitleRightIconCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
@@ -27,6 +28,7 @@
 #define kHeaderId @"TableViewSectionHeader"
 #define kSwitchCell @"OASettingSwitchCell"
 #define kIconTitleDescrCell @"OAIconTextDescCell"
+#define kTitleRightIconCell @"OATitleRightIconCell"
 
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeNone = 0,
@@ -119,6 +121,33 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //        }
     ]];
     
+    [data addObject:@[
+        @{
+            @"type" : kTitleRightIconCell,
+            @"title" : OALocalizedString(@"export_profile"),
+            @"img" : @"ic_custom_export",
+            @"key" : @"export_profile"
+        },
+        @{
+            @"type" : kTitleRightIconCell,
+            @"title" : OALocalizedString(@"copy_profile"),
+            @"img" : @"ic_custom_copy",
+            @"key" : @"copy_profile"
+        },
+        @{
+            @"type" : kTitleRightIconCell,
+            @"title" : OALocalizedString(@"reset_to_default"),
+            @"img" : @"ic_custom_reset",
+            @"key" : @"reset_to_default"
+        },
+        @{
+            @"type" : kTitleRightIconCell,
+            @"title" : OALocalizedString(@"delete_profile"),
+            @"img" : @"ic_custom_remove_outlined",
+            @"key" : @"delete_profile"
+        }
+    ]];
+    
     _data = data;
 }
 
@@ -148,8 +177,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
                                                        withHandler:@selector(onAvailableAppModesChanged)
                                                         andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
     
-    _sectionHeaderTitles = @[OALocalizedString(@"configure_profile"), OALocalizedString(@"profile_settings"), OALocalizedString(@"plugins"), OALocalizedString(@"actions")];
-    _sectionFooterTitles = @[@"", OALocalizedString(@"profile_sett_descr"), OALocalizedString(@"plugin_settings_descr"), OALocalizedString(@"export_profile_descr")];
+    _sectionHeaderTitles = @[OALocalizedString(@"configure_profile"),
+                             OALocalizedString(@"profile_settings"),
+                             //OALocalizedString(@"plugins"),
+                             OALocalizedString(@"actions")];
+    _sectionFooterTitles = @[@"", OALocalizedString(@"profile_sett_descr"),
+                             //OALocalizedString(@"plugin_settings_descr"),
+                             OALocalizedString(@"export_profile_descr")];
     
     self.backButton.hidden = YES;
     self.backImageButton.hidden = NO;
@@ -319,6 +353,27 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:kTitleRightIconCell])
+    {
+        OATitleRightIconCell* cell;
+        cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:@"OATitleRightIconCell"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleRightIconCell" owner:self options:nil];
+            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
+            [cell.iconView setTintColor:UIColorFromRGB(color_primary_purple)];
+            [cell.titleView setTextColor:UIColorFromRGB(color_primary_purple)];
+            [cell.titleView setFont:[UIFont systemFontOfSize:17.0f weight:UIFontWeightMedium]];
+        }
+        if (cell)
+        {
+            [cell.titleView setText:item[@"title"]];
+            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
+        }
+        return cell;
+    }
     return nil;
 }
 
@@ -365,6 +420,22 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //        OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
 //        [self.navigationController pushViewController:settingsViewController animated:YES];
 //    }
+    else if ([key isEqualToString:@"export_profile"])
+    {
+        
+    }
+    else if ([key isEqualToString:@"copy_profile"])
+    {
+        
+    }
+    else if ([key isEqualToString:@"reset_to_default"])
+    {
+        
+    }
+    else if ([key isEqualToString:@"delete_profile"])
+    {
+        
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

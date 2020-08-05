@@ -66,8 +66,6 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.view.backgroundColor = UIColor.yellowColor;
-    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
     [self setupView];
 }
 

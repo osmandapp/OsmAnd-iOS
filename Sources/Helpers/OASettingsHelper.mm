@@ -633,7 +633,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (BOOL)exists
 {
-    return [OAApplicationMode valueOfStringKey:_appMode.name def:nil] != nil;
+    return [OAApplicationMode valueOfStringKey:_appMode.toHumanString def:nil] != nil;
 }
 
 - (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
@@ -741,7 +741,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:_modeBean.stringKey def:nil];
         if (appMode != nil)
         {
-            _modeBean.userProfileName = _appMode.name;
+            _modeBean.userProfileName = _appMode.toHumanString;
             _modeBean.parent = _appMode.stringKey;
         }
     }

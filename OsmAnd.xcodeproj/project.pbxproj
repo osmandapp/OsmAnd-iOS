@@ -4466,8 +4466,6 @@
 		DA2558C624ADE40F0081D155 /* OASpeedLimitToleranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25587924ADE40F0081D155 /* OASpeedLimitToleranceViewController.m */; };
 		DA2558C724ADE40F0081D155 /* OACreateProfileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25587B24ADE40F0081D155 /* OACreateProfileViewController.mm */; };
 		DA2558C824ADE40F0081D155 /* OACreateProfileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25587B24ADE40F0081D155 /* OACreateProfileViewController.mm */; };
-		DA2558C924ADE40F0081D155 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA25587D24ADE40F0081D155 /* OATripRecordingSettingsViewController.xib */; };
-		DA2558CA24ADE40F0081D155 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA25587D24ADE40F0081D155 /* OATripRecordingSettingsViewController.xib */; };
 		DA2558CB24ADE40F0081D155 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25587F24ADE40F0081D155 /* OAOsmEditingSettingsViewController.mm */; };
 		DA2558CC24ADE40F0081D155 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25587F24ADE40F0081D155 /* OAOsmEditingSettingsViewController.mm */; };
 		DA2558CD24ADE40F0081D155 /* OAProfileAppearanceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25588124ADE40F0081D155 /* OAProfileAppearanceViewController.mm */; };
@@ -9007,7 +9005,6 @@
 		DA25587A24ADE40F0081D155 /* OADefaultSpeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADefaultSpeedViewController.h; sourceTree = "<group>"; };
 		DA25587B24ADE40F0081D155 /* OACreateProfileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACreateProfileViewController.mm; sourceTree = "<group>"; };
 		DA25587C24ADE40F0081D155 /* OACreateProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACreateProfileViewController.h; sourceTree = "<group>"; };
-		DA25587D24ADE40F0081D155 /* OATripRecordingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATripRecordingSettingsViewController.xib; sourceTree = "<group>"; };
 		DA25587E24ADE40F0081D155 /* OARearrangeProfilesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARearrangeProfilesViewController.h; sourceTree = "<group>"; };
 		DA25587F24ADE40F0081D155 /* OAOsmEditingSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmEditingSettingsViewController.mm; sourceTree = "<group>"; };
 		DA25588024ADE40F0081D155 /* OAProfileAppearanceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileAppearanceViewController.h; sourceTree = "<group>"; };
@@ -14625,7 +14622,6 @@
 				DA25585024ADE40E0081D155 /* OASettingsViewController.xib */,
 				DA25588324ADE40F0081D155 /* OATripRecordingSettingsViewController.h */,
 				DA25584F24ADE40E0081D155 /* OATripRecordingSettingsViewController.mm */,
-				DA25587D24ADE40F0081D155 /* OATripRecordingSettingsViewController.xib */,
 				DA0F8CC124D413EF00929B90 /* OAMainSettingsViewController.h */,
 				DA0F8CC224D413FF00929B90 /* OAMainSettingsViewController.m */,
 				DA0F8CC324D413FF00929B90 /* OAMainSettingsViewController.xib */,
@@ -16810,7 +16806,6 @@
 				847A1FB91DF94E9B003C1246 /* OAGPXRouteWaypointCell.xib in Resources */,
 				8476E2C51F6C1EEC00EC274F /* map_pedestrian_location_lost_night@3x.png in Resources */,
 				847A1FBA1DF94E9B003C1246 /* zoom_in_button.png in Resources */,
-				DA2558CA24ADE40F0081D155 /* OATripRecordingSettingsViewController.xib in Resources */,
 				780AB021242B2CB9001DF5EF /* OAButtonIconTableViewCell.xib in Resources */,
 				847A1FBB1DF94E9B003C1246 /* OAWikiMenuViewController.xib in Resources */,
 				8A7D64EA21CCE2BB00118F88 /* OAPurchaseCardView.xib in Resources */,
@@ -17732,7 +17727,6 @@
 				DAB625B72125A94900E6AF2E /* sk_tts.js in Resources */,
 				DA45DA6A230EE05A0083DFA2 /* img_mapstyle_default.png in Resources */,
 				DAC5885A2108992A008B7763 /* de_tts.js in Resources */,
-				DA2558C924ADE40F0081D155 /* OATripRecordingSettingsViewController.xib in Resources */,
 				84CC524E1AA5A539000063CF /* nautical.render.xml in Resources */,
 				DA1341CE243DC5A90039D214 /* map_action_car_dark.png in Resources */,
 				84EC52A61F8BF26600AFC252 /* ic_action_battery.png in Resources */,

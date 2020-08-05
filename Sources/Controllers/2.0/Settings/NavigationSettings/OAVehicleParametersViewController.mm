@@ -50,8 +50,8 @@
 
 -(void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"vehicle_parameters");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

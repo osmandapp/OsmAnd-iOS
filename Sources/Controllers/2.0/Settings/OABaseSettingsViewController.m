@@ -8,6 +8,7 @@
 
 #import "OABaseSettingsViewController.h"
 #import "OAColors.h"
+#import "OAApplicationMode.h"
 
 #define kSidePadding 16
 
@@ -32,6 +33,11 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+}
+
+- (void)applyLocalization
+{
+    self.subtitleLabel.text = _appMode.toHumanString;
 }
 
 - (void) commonInit

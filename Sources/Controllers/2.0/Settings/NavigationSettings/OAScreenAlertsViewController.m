@@ -41,8 +41,8 @@
 
 -(void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"screen_alerts");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

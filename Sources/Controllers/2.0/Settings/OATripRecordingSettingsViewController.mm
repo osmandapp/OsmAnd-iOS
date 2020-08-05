@@ -7,6 +7,7 @@
 //
 
 #import "OATripRecordingSettingsViewController.h"
+#import "OAIconTextDescSwitchCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
@@ -21,6 +22,7 @@
 #import "OASavingTrackHelper.h"
 #include <generalRouter.h>
 
+#define kCellTypeProfileSwitch @"OAIconTextDescSwitchCell"
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
 #define kCellTypeMultiSelectionList @"multi_selection_list"
@@ -34,13 +36,10 @@
 
 @implementation OATripRecordingSettingsViewController
 {
-    OAApplicationMode *_am;
     NSArray *_data;
     
     OAAppSettings *_settings;
     OASavingTrackHelper *_recHelper;
-   
-    BOOL _showAppModeDialog;
 }
 
 static NSArray<NSNumber *> *minTrackDistanceValues;
@@ -67,28 +66,12 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
 }
 
-- (id) initWithSettingsType:(kTripRecordingSettingsScreen)settingsType
-{
-    self = [super init];
-    if (self)
-    {
-        _settingsType = settingsType;
-        _am = [OAApplicationMode CAR];
-        _showAppModeDialog = YES;
-        _settings = [OAAppSettings sharedManager];
-        _recHelper = [OASavingTrackHelper sharedInstance];
-    }
-    return self;
-}
-
 - (id) initWithSettingsType:(kTripRecordingSettingsScreen)settingsType applicationMode:(OAApplicationMode *)applicationMode
 {
-    self = [super init];
+    self = [super initWithAppMode:applicationMode];
     if (self)
     {
         _settingsType = settingsType;
-        _am = applicationMode;
-        _showAppModeDialog = NO;
         _settings = [OAAppSettings sharedManager];
         _recHelper = [OASavingTrackHelper sharedInstance];
     }
@@ -97,7 +80,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"product_title_track_recording");
+    [super applyLocalization];
+    self.titleLabel.text = OALocalizedString(@"product_title_track_recording");
 }
 
 - (void) viewDidLoad
@@ -118,16 +102,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
 - (void) viewWillAppear:(BOOL)animated
 {
     [self setupView];
-    if (_showAppModeDialog)
-    {
-        _showAppModeDialog = NO;
-        [self showAppModeDialog];
-    }
-}
-
--(UIView *) getTopView
-{
-    return _navBarView;
 }
 
 - (void) setupView
@@ -141,11 +115,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
         case kTripRecordingSettingsScreenGeneral:
         {
             NSString *recIntervalValue = [settings getFormattedTrackInterval:settings.mapSettingSaveTrackIntervalGlobal];
-            NSString *navIntervalValue = [settings getFormattedTrackInterval:[settings.mapSettingSaveTrackInterval get:_am]];
+            NSString *navIntervalValue = [settings getFormattedTrackInterval:[settings.mapSettingSaveTrackInterval get:self.appMode]];
             
-            NSString *minDistValue = [OAUtilities appendMeters:[settings.saveTrackMinDistance get:_am]];
-            NSString *minPrecision = [OAUtilities appendMeters:[settings.saveTrackPrecision get:_am]];
-            NSString *minSpeed = [OAUtilities appendSpeed:[settings.saveTrackMinSpeed get:_am]];
+            NSString *minDistValue = [OAUtilities appendMeters:[settings.saveTrackMinDistance get:self.appMode]];
+            NSString *minPrecision = [OAUtilities appendMeters:[settings.saveTrackPrecision get:self.appMode]];
+            NSString *minSpeed = [OAUtilities appendSpeed:[settings.saveTrackMinSpeed get:self.appMode]];
             if (_settings.mapSettingSaveTrackIntervalApproved) {
                 [dataArr addObject:
                  @{
@@ -221,7 +195,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                @"name" : @"auto_split_gap",
                @"title" : OALocalizedString(@"auto_split_gap"),
                @"description" : OALocalizedString(@"auto_split_gap_descr"),
-               @"value" : @([_settings.autoSplitRecording get:_am]),
+               @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                @"img" : @"menu_cell_pointer.png",
                @"type" : kCellTypeSwitch }];
             
@@ -229,7 +203,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         case kTripRecordingSettingsScreenRecInterval:
         {
-            _titleView.text = OALocalizedString(@"rec_interval");
+            self.titleLabel.text = OALocalizedString(@"rec_interval");
             for (NSNumber *num in settings.trackIntervalArray)
             {
                 [dataArr addObject: @{
@@ -247,47 +221,47 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         case kTripRecordingSettingsScreenNavRecInterval:
         {
-            _titleView.text = OALocalizedString(@"rec_interval");
+            self.titleLabel.text = OALocalizedString(@"rec_interval");
             for (NSNumber *num in settings.trackIntervalArray)
             {
                 [dataArr addObject: @{
                                       @"title" : [settings getFormattedTrackInterval:[num intValue]],
                                       @"value" : @"",
-                                      @"img" : ([settings.mapSettingSaveTrackInterval get:_am] == [num intValue])
+                                      @"img" : ([settings.mapSettingSaveTrackInterval get:self.appMode] == [num intValue])
                                       ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         }
         case kTripRecordingSettingsScreenAccuracy:
-            _titleView.text = OALocalizedString(@"logging_min_accuracy");
+            self.titleLabel.text = OALocalizedString(@"logging_min_accuracy");
             for (int i = 0; i < trackPrecisionValues.count; i++)
             {
                 [dataArr addObject: @{
                                       @"title" : trackPrecisionNames[i],
                                       @"value" : @"",
-                                      @"img" : ([settings.saveTrackPrecision get:_am] == trackPrecisionValues[i].floatValue)
+                                      @"img" : ([settings.saveTrackPrecision get:self.appMode] == trackPrecisionValues[i].floatValue)
                                       ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         case kTripRecordingSettingsScreenMinSpeed:
-            _titleView.text = OALocalizedString(@"logging_min_speed");
+            self.titleLabel.text = OALocalizedString(@"logging_min_speed");
             for (int i = 0; i < minTrackSpeedValues.count; i++)
             {
                 [dataArr addObject: @{
                                       @"title" : minTrackSpeedNames[i],
                                       @"value" : @"",
-                                      @"img" : ([settings.saveTrackMinSpeed get:_am] == minTrackSpeedValues[i].floatValue)
+                                      @"img" : ([settings.saveTrackMinSpeed get:self.appMode] == minTrackSpeedValues[i].floatValue)
                                       ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
         case kTripRecordingSettingsScreenMinDistance:
-            _titleView.text = OALocalizedString(@"logging_min_distance");
+            self.titleLabel.text = OALocalizedString(@"logging_min_distance");
             for (int i = 0; i < minTrackDistanceValues.count; i++)
             {
                 [dataArr addObject: @{
                                       @"title" : minTrackDistanceNames[i],
                                       @"value" : @"",
-                                      @"img" : ([settings.saveTrackMinDistance get:_am] == minTrackDistanceValues[i].floatValue)
+                                      @"img" : ([settings.saveTrackMinDistance get:self.appMode] == minTrackDistanceValues[i].floatValue)
                                       ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
             }
             break;
@@ -298,9 +272,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     _data = [NSArray arrayWithArray:dataArr];
     
     [self.tableView reloadData];
-    
-    [self updateAppModeButton];
-    
 }
 
 - (IBAction) appModeButtonClicked:(id)sender
@@ -334,23 +305,10 @@ static NSArray<NSString *> *minTrackSpeedNames;
                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
                              if (!cancelled)
                              {
-                                 _am = modes[buttonIndex];
+                                 self.appMode = modes[buttonIndex];
                                  [self setupView];
                              }
                          }];
-}
-
-- (void) updateAppModeButton
-{
-    if (_settingsType == kTripRecordingSettingsScreenGeneral)
-    {
-        [_appModeButton setImage:_am.getIcon forState:UIControlStateNormal];
-        _appModeButton.hidden = NO;
-    }
-    else
-    {
-        _appModeButton.hidden = YES;
-    }
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -375,11 +333,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
         if ([v isKindOfClass:[OAProfileBoolean class]])
         {
             OAProfileBoolean *value = v;
-            [value set:isChecked mode:_am];
+            [value set:isChecked mode:self.appMode];
         }
         else if ([name isEqualToString:@"auto_split_gap"])
         {
-            [_settings.autoSplitRecording set:isChecked mode:_am];
+            [_settings.autoSplitRecording set:isChecked mode:self.appMode];
         }
     }
 }
@@ -428,7 +386,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             {
                 OAProfileBoolean *value = v;
                 [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-                cell.switchView.on = [value get:_am];
+                cell.switchView.on = [value get:self.appMode];
             }
             else
             {
@@ -577,25 +535,25 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
 - (void) selectNavRecInterval:(NSInteger)index
 {
-    [_settings.mapSettingSaveTrackInterval set:[_settings.trackIntervalArray[index] intValue] mode:_am];
+    [_settings.mapSettingSaveTrackInterval set:[_settings.trackIntervalArray[index] intValue] mode:self.appMode];
     [self backButtonClicked:nil];
 }
 
 - (void) selectMinDistance:(NSInteger)index
 {
-    [_settings.saveTrackMinDistance set:minTrackDistanceValues[index].doubleValue mode:_am];
+    [_settings.saveTrackMinDistance set:minTrackDistanceValues[index].doubleValue mode:self.appMode];
     [self backButtonClicked:nil];
 }
 
 - (void) selectMinSpeed:(NSInteger)index
 {
-    [_settings.saveTrackMinSpeed set:minTrackSpeedValues[index].doubleValue mode:_am];
+    [_settings.saveTrackMinSpeed set:minTrackSpeedValues[index].doubleValue mode:self.appMode];
     [self backButtonClicked:nil];
 }
 
 - (void) selectAccuracy:(NSInteger)index
 {
-    [_settings.saveTrackPrecision set:trackPrecisionValues[index].doubleValue mode:_am];
+    [_settings.saveTrackPrecision set:trackPrecisionValues[index].doubleValue mode:self.appMode];
     [self backButtonClicked:nil];
 }
 
@@ -604,12 +562,12 @@ static NSArray<NSString *> *minTrackSpeedNames;
     NSString *name = item[@"name"];
     if ([@"rec_interval" isEqualToString:name])
     {
-        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenRecInterval applicationMode:_am];
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenRecInterval applicationMode:self.appMode];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"logging_interval_navigation" isEqualToString:name])
     {
-        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenNavRecInterval applicationMode:_am];
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenNavRecInterval applicationMode:self.appMode];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"save_track" isEqualToString:name])
@@ -637,17 +595,17 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     else if ([@"logging_min_accuracy" isEqualToString:name])
     {
-        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenAccuracy applicationMode:_am];
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenAccuracy applicationMode:self.appMode];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"logging_min_distance" isEqualToString:name])
     {
-        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenMinDistance applicationMode:_am];
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenMinDistance applicationMode:self.appMode];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"logging_min_speed" isEqualToString:name])
     {
-        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenMinSpeed applicationMode:_am];
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenMinSpeed applicationMode:self.appMode];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
 }

@@ -41,11 +41,11 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     if (_isAvoid)
         self.titleLabel.text = OALocalizedString(@"impassable_road");
     else
         self.titleLabel.text = OALocalizedString(@"prefer_in_routing_title");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

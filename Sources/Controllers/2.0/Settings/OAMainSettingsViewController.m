@@ -226,7 +226,7 @@
         UIImage *img = am.getIcon;
         cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
-        cell.textView.text = am.name;
+        cell.textView.text = am.toHumanString;
         cell.descView.text = [self getProfileDescription:am];
         cell.contentView.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
         return cell;
@@ -245,7 +245,7 @@
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.leftIconView.tintColor = UIColorFromRGB(am.getIconColor);
-        cell.titleLabel.text = am.name;
+        cell.titleLabel.text = am.toHumanString;
         cell.descLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
         [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];

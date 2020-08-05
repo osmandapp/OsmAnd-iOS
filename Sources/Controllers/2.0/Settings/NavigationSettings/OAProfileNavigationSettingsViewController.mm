@@ -139,7 +139,6 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-//    self.profileButton.hidden = NO;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
 }
 

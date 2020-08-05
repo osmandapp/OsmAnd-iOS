@@ -1681,8 +1681,8 @@
 "transfers" = "Umstiege:";
 "consider_limitations_param" = "Vorübergehende Beschränkungen berücksichtigen";
 "avoid_transport_type" = "Transportarten vermeiden";
-"allow_3d_descr" = "Aktivieren Sie diese Option, um die Karte in der 2.5D-Perspektive betrachten zu können";
-"allow_3d" = "2.5D-Ansicht zulassen";
+"allow_3d_descr" = "Aktivieren Sie diese Option, um die Karte in der zweieinhalbdimensional-Perspektive betrachten zu können";
+"allow_3d" = "2½D-Ansicht zulassen";
 "map_settings_zoom_level_description" = "Legen Sie die minimale und maximale Zoomstufe für die Anzeige der Ebene fest";
 "map_settings_layer_transparency" = "Transparenz der Ebene";
 "map_settings_terrain" = "Gelände";

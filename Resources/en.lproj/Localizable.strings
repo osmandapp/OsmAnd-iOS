@@ -742,6 +742,11 @@
 "profile_import_success" = "Application profile was imported successfully";
 "not_available_profile_name" = "Profile with this name already exists.";
 "base_profile_descr" = "Base profile";
+"osmand_profile" = "OsmAnd profile";
+"selected_profile" = "Selected profile";
+"app_profiles" = "App profiles";
+"global_settings_descr" = "Affects the entire app";
+"export_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 
 // Purchases
 "prch_addons" = "Addons";

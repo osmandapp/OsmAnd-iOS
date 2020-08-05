@@ -8,7 +8,7 @@
 
 #import "OAOptionsPanelBlackViewController.h"
 #import "OAMapSettingsViewController.h"
-#import "OASettingsViewController.h"
+#import "OAMainSettingsViewController.h"
 #import "OAFavoriteListViewController.h"
 #import "OAGPXListViewController.h"
 #import "Localization.h"
@@ -296,7 +296,7 @@
 {
     [OAAnalyticsHelper logEvent:@"settings_open"];
 
-    OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:EOASettingsScreenMain];
+    OAMainSettingsViewController* settingsViewController = [[OAMainSettingsViewController alloc] init];
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 

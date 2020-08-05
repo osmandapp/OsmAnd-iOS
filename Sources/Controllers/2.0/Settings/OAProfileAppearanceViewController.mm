@@ -12,7 +12,7 @@
 #import "OAApplicationMode.h"
 #import "OANavigationIcon.h"
 #import "OALocationIcon.h"
-#import "OASettingsViewController.h"
+#import "OAMainSettingsViewController.h"
 
 #import "OATextInputCell.h"
 #import "OAColorsTableViewCell.h"
@@ -281,7 +281,7 @@
         [self saveNewProfile];
         for (UIViewController *vc in [self.navigationController viewControllers])
         {
-            if ([vc isKindOfClass:OASettingsViewController.class])
+            if ([vc isKindOfClass:OAMainSettingsViewController.class])
                 [self.navigationController popToViewController:vc animated:YES];
         }
     }

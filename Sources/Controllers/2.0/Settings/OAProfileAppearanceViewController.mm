@@ -53,7 +53,7 @@
     } else {
         OAApplicationProfileObject *that = (OAApplicationProfileObject *) other;
 
-        if ([_iconName isEqualToString:that.iconName])
+        if (![_iconName isEqualToString:that.iconName])
             return NO;
         if (_stringKey != nil ? ![_stringKey isEqualToString:that.stringKey] : that.stringKey != nil)
             return NO;

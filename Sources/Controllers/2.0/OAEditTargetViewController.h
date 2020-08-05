@@ -8,6 +8,7 @@
 
 #import "OATargetMenuViewController.h"
 #import "OACollapsableCoordinatesView.h"
+#import "OAFavoriteItem.h"
 #import <CoreLocation/CoreLocation.h>
 
 @class OACollapsableView;
@@ -18,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
 @property (assign, nonatomic) BOOL newItem;
+@property (nonatomic) OAFavoriteItem *favorite;
 @property (nonatomic) OACollapsableView *collapsableGroupView;
 @property (nonatomic) OACollapsableCoordinatesView *collapsableCoordinatesView;
 
@@ -30,7 +32,9 @@
 @property (nonatomic, copy) UIColor *groupColor;
 
 - (id) initWithItem:(id)item;
+- (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly;
 - (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation;
+- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation headerOnly:(BOOL)headerOnly;
 
 - (void) deleteItem;
 

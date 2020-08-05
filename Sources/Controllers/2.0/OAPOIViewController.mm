@@ -195,7 +195,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
         && ![self.poi.type isKindOfClass:[OAPOIMyLocationType class]])
     {
         UIImage *icon = [self.poi.type icon];
-        [rows addObject:[[OARowInfo alloc] initWithKey:self.poi.type.name icon:icon textPrefix:nil text:[self getTypeStr] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO isCoordinates:NO]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:self.poi.type.name icon:icon textPrefix:nil text:[self getTypeStr] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
     [self.poi.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
@@ -350,11 +350,11 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
         {
             if (isDescription)
             {
-                [descriptions addObject:[[OARowInfo alloc] initWithKey:key icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:textPrefix text:value textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO isCoordinates:NO]];
+                [descriptions addObject:[[OARowInfo alloc] initWithKey:key icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:textPrefix text:value textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
             }
             else
             {
-                OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [OATargetInfoViewController getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder typeName:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl isCoordinates:NO];
+                OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [OATargetInfoViewController getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder typeName:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl];
                 rowInfo.collapsable = collapsable;
                 rowInfo.collapsed = collapsed;
                 rowInfo.collapsableView = collapsableView;
@@ -374,7 +374,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
             long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
             BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
             NSString *link = isWay ? @"https://www.openstreetmap.org/way/" : @"https://www.openstreetmap.org/node/";
-            [rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_osm_edits.png"] textPrefix:nil text:[NSString stringWithFormat:@"%@%llu", link, entityId] textColor:UIColorFromRGB(kHyperlinkColor) isText:YES needLinks:NO order:10000 typeName:nil isPhoneNumber:NO isUrl:YES isCoordinates:NO]];
+            [rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_osm_edits.png"] textPrefix:nil text:[NSString stringWithFormat:@"%@%llu", link, entityId] textColor:UIColorFromRGB(kHyperlinkColor) isText:YES needLinks:NO order:10000 typeName:nil isPhoneNumber:NO isUrl:YES]];
         }
     }
     

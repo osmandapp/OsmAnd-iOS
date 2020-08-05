@@ -60,6 +60,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @end
 
+@interface OADownloadMapViewController () <OAPreviewZoomLevelsCellDelegate>
+@end
+
 @implementation OADownloadMapViewController
 {
     OsmAndAppInstance _app;
@@ -197,6 +200,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self setZoomValues];
     [self calculateDownloadInfo];
     [self setupView];
+    self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, self.bottomToolBarView.bounds.size.height, 0.0);
 }
 
 - (void) setZoomValues
@@ -367,7 +371,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, [self getToolBarHeight], 0.0);
+        self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, self.bottomToolBarView.bounds.size.height, 0.0);
         if (self.delegate)
            [self.delegate requestFullMode];
         if (self.delegate && self.isLandscape)
@@ -378,7 +382,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateToolBar
 {
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
     CGRect frame = self.bottomToolBarView.frame;
     frame.size.height = twoButtonsBottmomSheetHeight + [OAUtilities getBottomMargin];
     frame.origin.y = [self contentHeight] - frame.size.height;
@@ -387,6 +390,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
 {
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, width, 0.5);
+    
     CGFloat w = width - 32.0 - OAUtilities.getLeftMargin;
     CGRect leftBtnFrame = _cancelButton.frame;
     CGRect rightBtnFrame = _downloadButton.frame;
@@ -502,8 +507,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.minZoomImageView.image = _minZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _minZoomTileImage;
-            cell.maxZoomImageView.image = _maxZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _maxZoomTileImage;
+            cell.delegate = self;
+            [cell.minLevelZoomButton setImage:(_minZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _minZoomTileImage) forState:UIControlStateNormal];
+            [cell.maxLevelZoomButton setImage:(_maxZoomTileImage == nil ? [UIImage imageNamed:@"img_placeholder_online_source"] : _maxZoomTileImage) forState:UIControlStateNormal];
             cell.minZoomPropertyLabel.text = [NSString stringWithFormat:@"%d",_minZoom];
             cell.maxZoomPropertyLabel.text = [NSString stringWithFormat:@"%d",_maxZoom];
             cell.descriptionLabel.text = item[@"value"];
@@ -593,23 +599,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     if (indexPath.section == kZoomSection)
     {
-        NSInteger pickerRow = indexPath.row == kMinZoomRow ? kMinZoomPickerRow : kMaxZoomPickerRow;
-        [self.tableView beginUpdates];
         if (indexPath.row == kMinZoomRow)
-        {
-            if (_maxZoomPickerIsShown)
-                _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
-            _minZoomPickerIsShown = !_minZoomPickerIsShown;
-        }
+            [self toggleZoomPickerForRow:kMinZoomPickerRow];
         else
-        {
-            if (_minZoomPickerIsShown)
-                _minZoomPickerIsShown = !_minZoomPickerIsShown;
-            _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
-        }
-        [self setupView];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:pickerRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView endUpdates];
+            [self toggleZoomPickerForRow:kMaxZoomPickerRow];
     }
     if (indexPath.section == kMapTypeSection)
     {
@@ -618,6 +611,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [OARootViewController.instance.mapPanel presentViewController:mapSource animated:YES completion:nil];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
+- (void) toggleZoomPickerForRow:(NSInteger)rowIndex
+{
+    if (rowIndex == kMinZoomPickerRow)
+    {
+        if (_maxZoomPickerIsShown)
+            _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
+        _minZoomPickerIsShown = !_minZoomPickerIsShown;
+    }
+    else if (rowIndex == kMaxZoomPickerRow)
+    {
+        if (_minZoomPickerIsShown)
+            _minZoomPickerIsShown = !_minZoomPickerIsShown;
+        _maxZoomPickerIsShown = !_maxZoomPickerIsShown;
+    }
+    else
+    {
+        return;
+    }
+    [self.tableView beginUpdates];
+    [self setupView];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:rowIndex inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -737,6 +754,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self calculateDownloadInfo];
     [self setupView];
     [self.tableView reloadData];
+}
+
+#pragma mark - OAPreviewZoomLevelsCellDelegate
+
+- (void) toggleMinZoomPickerRow
+{
+    [self toggleZoomPickerForRow:kMinZoomPickerRow];
+}
+
+- (void) toggleMaxZoomPickerRow
+{
+    [self toggleZoomPickerForRow:kMaxZoomPickerRow];
 }
 
 @end

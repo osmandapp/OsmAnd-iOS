@@ -20,7 +20,6 @@
 #import "OAAppSettings.h"
 #import "OAProfileDataObject.h"
 #import "OsmAndApp.h"
-#import "PXAlertView.h"
 #import "OASettingsHelper.h"
 
 #import "Localization.h"
@@ -60,45 +59,8 @@
     return self;
 }
 
-- (void) showAppModeDialog
-{
-    NSMutableArray *titles = [NSMutableArray array];
-    NSMutableArray *images = [NSMutableArray array];
-    NSMutableArray *modes = [NSMutableArray array];
-    
-    NSArray<OAApplicationMode *> *values = [OAApplicationMode values];
-    for (OAApplicationMode *v in values)
-    {
-        if (v == [OAApplicationMode DEFAULT])
-            continue;
-        
-        [titles addObject:v.name];
-        [images addObject:v.getIconName];
-        [modes addObject:v];
-    }
-    
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"map_settings_mode")
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_cancel")
-                        otherTitles:titles
-                          otherDesc:nil
-                        otherImages:images
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-        if (!cancelled)
-        {
-            self.appMode = modes[buttonIndex];
-            [self generateData];
-        }
-    }];
-}
-
-- (IBAction)profileButtonPressed:(id)sender {
-    [self showAppModeDialog];
-}
-
 - (void) updateNavBar
 {
-    [self.profileButton setImage:self.appMode.getIcon forState:UIControlStateNormal];
     self.subtitleLabel.text = self.appMode.name;
 }
 
@@ -177,7 +139,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.profileButton.hidden = NO;
+//    self.profileButton.hidden = NO;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
 }
 

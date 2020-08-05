@@ -10,6 +10,6 @@
 
 @interface OAVehicleParametersSettingsViewController : OASettingsModalPresentationViewController
 
-- (instancetype)initWithApplicationMode:(OAApplicationMode *)ap vehicleParameter:(NSString *)vp;
+- (instancetype)initWithApplicationMode:(OAApplicationMode *)am vehicleParameter:(NSDictionary *)vp;
 
 @end

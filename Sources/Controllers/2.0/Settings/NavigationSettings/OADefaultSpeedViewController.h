@@ -6,11 +6,10 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-
 #import "OASettingsModalPresentationViewController.h"
 
 @interface OADefaultSpeedViewController : OASettingsModalPresentationViewController
 
-- (instancetype)initWithApplicationMode:(OAApplicationMode *)ap;
+- (instancetype)initWithApplicationMode:(OAApplicationMode *)ap speedParameters:(NSDictionary *)speedParameters;
 
 @end

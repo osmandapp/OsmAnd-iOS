@@ -22,7 +22,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *subtitleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *profileButton;
 
 @property (weak, nonatomic) id<OASettingsDataDelegate> delegate;
 @property (nonatomic) OAApplicationMode *appMode;

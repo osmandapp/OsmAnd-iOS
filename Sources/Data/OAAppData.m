@@ -191,13 +191,12 @@
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_mapLayerChangeObservable notifyEvent];
         [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
         [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@YES];
         if (self.terrainType != EOATerrainTypeDisabled)
             [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:self.terrainType == EOATerrainTypeHillshade ? @(self.hillshadeAlpha) : @(self.slopeAlpha)];
-        
+        [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:self.lastMapSource];
         [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.variantKey];
     });
 }

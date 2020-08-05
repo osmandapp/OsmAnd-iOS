@@ -32,7 +32,6 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    _profileButton.hidden = YES;
 }
 
 - (void) commonInit
@@ -86,16 +85,7 @@
 {
     UIFont *labelFont = [UIFont systemFontOfSize:15.0];
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, textWidth, CGFLOAT_MAX)];
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.font = labelFont;
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.lineSpacing = 6.0;
-    style.alignment = NSTextAlignmentCenter;
-    label.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
-    [label sizeToFit];
-    return label.frame.size.height;
+    return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
 }
 
 #pragma mark - OASettingsDataDelegate

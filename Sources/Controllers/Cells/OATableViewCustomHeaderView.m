@@ -9,13 +9,14 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OAColors.h"
 
-static CGFloat _yOffset;
-
 @interface OATableViewCustomHeaderView ()
 
 @end
 
 @implementation OATableViewCustomHeaderView
+{
+    CGFloat _yOffset;
+}
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -73,7 +74,7 @@ static CGFloat _yOffset;
 {
     CGFloat leftMargin = OAUtilities.getLeftMargin;
     CGFloat w = self.bounds.size.width - 32. - leftMargin * 2;
-    CGFloat height = [self.class getTextHeight:_label.text ? _label.text : _label.attributedText.string width:w];
+    CGFloat height = [self.class getTextHeight:_label.text ? _label.text : _label.attributedText.string width:w] + _yOffset;
     if (_label.text.length > 0 || _label.attributedText.length > 0)
     {
         _label.hidden = NO;
@@ -97,7 +98,7 @@ static CGFloat _yOffset;
 + (CGFloat) getTextHeight:(NSString *)text width:(CGFloat)width
 {
     if (text.length > 0)
-        return [OAUtilities calculateTextBounds:text width:width font:self.class.font].height + _yOffset;
+        return [OAUtilities calculateTextBounds:text width:width font:self.class.font].height;
     else
         return 0.01;
 }

@@ -229,11 +229,12 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
     vw.label.text = nil;
     vw.label.attributedText = nil;
-    [vw setYOffset:6.];
+    
     NSString *title = _sectionHeaderTitles[section];
     
     if (section == 0)
     {
+        [vw setYOffset:6.];
         UIFont *labelFont = [UIFont systemFontOfSize:15.0];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         [style setLineSpacing:6];
@@ -241,6 +242,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
     else
     {
+        [vw setYOffset:17.];
         vw.label.text = [title upperCase];
     }
     [vw sizeToFit];
@@ -249,7 +251,16 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self heightForLabel:_sectionHeaderTitles[section]] + kSidePadding + (section == 0 ? 6.0 : 0.0);
+    CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
+    if (section == 0)
+        return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth yOffset:6. font:[UIFont systemFontOfSize:15.0]] + 10.;
+    
+    return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return section == 0 ? 0.01 : [OAUtilities calculateTextBounds:_sectionFooterTitles[section] width:DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2 font:[UIFont systemFontOfSize:13.]].height + 16.;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section

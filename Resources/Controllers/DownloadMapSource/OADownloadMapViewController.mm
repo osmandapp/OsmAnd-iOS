@@ -21,7 +21,6 @@
 #include "OAColors.h"
 #include "OASizes.h"
 
-#import "OAMenuSimpleCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OAPreviewZoomLevelsCell.h"

@@ -1610,3 +1610,17 @@
 "vehicle_parameters" = "Caractéristiques du véhicule";
 "select_nav_profile_dialog_message" = "Le type de navigation détermine les règles de calcul des itinéraires.";
 "select_color" = "Sélectionnez la couleur";
+"no_active_route" = "Pas de route active";
+"change_map_behavior" = "Modifier le comportement de la carte pendant la navigation";
+"map_behavior" = "Comportement de la carte";
+"nav_type_title" = "Type de navigation";
+"appearance_on_map" = "Apparence sur la carte";
+"arrows_on_map" = "Flèches sur la carte";
+"two" = "Deux";
+"max_speed" = "Vitesse max.";
+"min_speed" = "Vitesse min.";
+"default_speed" = "Vitesse par défaut";
+"routing_attr_length_name" = "Limite de longueur";
+"send_anonymous_data_desc" = "Envoyez à OsmAnd des statistiques de téléchargement de cartes, nous ne collectons pas de données de localisation, ni aucune information personnelle.";
+"default_profile_descr" = "Sélectionnez un profil qui sera utilisé pour le lancement de l'application.";
+"allow_3d" = "Autoriser la vue 2,5D";

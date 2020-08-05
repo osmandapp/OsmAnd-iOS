@@ -72,7 +72,7 @@
 - (void) applyLocalization
 {
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
-    _titleLabel.text = OALocalizedString(@"new_profile");
+    _titleLabel.text = [self getProposedProfileName:_parent.name];
 }
 
 - (void) viewDidLoad

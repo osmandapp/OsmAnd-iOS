@@ -56,17 +56,15 @@
 
 - (void) generateData
 {
-    NSMutableArray *customProfileList = [NSMutableArray array];
-    NSMutableArray *defaultProfileList = [NSMutableArray array];
-    for (OAApplicationMode *profile in OAApplicationMode.allPossibleValues)
-        if (profile.isCustomProfile)
-            [customProfileList addObject:profile];
-        else
-            [defaultProfileList addObject:profile];
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    NSArray *sortedArray = [customProfileList sortedArrayUsingDescriptors:@[sort]];
-    [defaultProfileList addObjectsFromArray:sortedArray];
-    [defaultProfileList removeObjectAtIndex:0];
+    NSMutableArray *defaultProfileList = [NSMutableArray arrayWithArray:OAApplicationMode.allPossibleValues];
+    for (OAApplicationMode *profile in defaultProfileList)
+    {
+        if ([profile.name isEqualToString:@"Overview"])
+        {
+            [defaultProfileList removeObject:profile];
+            break;
+        }
+    }
     _profileList = [NSArray arrayWithArray:defaultProfileList];
 }
 

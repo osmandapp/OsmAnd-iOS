@@ -93,7 +93,6 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setEditing:YES];
-    _tableView.estimatedRowHeight = 48.;
 }
 
 - (void) viewDidLayoutSubviews

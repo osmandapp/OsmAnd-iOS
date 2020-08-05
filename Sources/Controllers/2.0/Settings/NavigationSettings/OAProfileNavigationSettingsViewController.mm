@@ -68,7 +68,7 @@
 {
     NSString *selectedProfileName = [_settings.routingProfile get];
     _routingProfileDataObjects = [self.class getRoutingProfiles];
-    NSArray *profiles= [_routingProfileDataObjects allValues];
+    NSArray *profiles = [_routingProfileDataObjects allValues];
     OARoutingProfileDataObject *routingData;
 
     for (OARoutingProfileDataObject *profile in profiles)

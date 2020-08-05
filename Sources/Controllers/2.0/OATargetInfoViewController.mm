@@ -465,6 +465,7 @@
     static NSString* const reusableIdentifierText = @"OATargetInfoViewCell";
     static NSString* const reusableIdentifierCollapsable = @"OATargetInfoCollapsableViewCell";
     static NSString* const reusableIdentifierWeb = @"OAWebViewCell";
+    static NSString* const reusableIdentifierCollapsableСoordinates = @"OATargetInfoCollapsableCoordinatesViewCell";
     
     OARowInfo *info = _rows[indexPath.row];
     
@@ -473,11 +474,11 @@
         if (info.isCoordinates)
         {
             OATargetInfoCollapsableCoordinatesViewCell *cell;
-            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];
+            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsableСoordinates];
             
-            if (cell == nil || ![cell isKindOfClass:[OATargetInfoCollapsableCoordinatesViewCell class]])
+            if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoCollapsableCoordinatesViewCell" owner:self options:nil];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierCollapsableСoordinates owner:self options:nil];
                 cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
             }
             [cell setupCellWithLat:info.lat lon:info.lon];

@@ -564,6 +564,7 @@
     static NSString* const reusableIdentifierTextViewCell = @"OATextViewTableViewCell";
     static NSString* const reusableIdentifierTextMultiViewCell = @"OATextMultiViewCell";
     static NSString* const reusableIdentifierCollapsable = @"OATargetInfoCollapsableViewCell";
+    static NSString* const reusableIdentifierCollapsableСoordinates = @"OATargetInfoCollapsableCoordinatesViewCell";
     
     NSInteger index = indexPath.row;
     if (!self.editing)
@@ -574,11 +575,11 @@
     if (indexPath.row == [tableView numberOfRowsInSection:0] - 1)
     {
         OATargetInfoCollapsableCoordinatesViewCell* cell;
-        cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];
+        cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsableСoordinates];
         
-        if (cell == nil || ![cell isKindOfClass:[OATargetInfoCollapsableCoordinatesViewCell class]])
+        if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoCollapsableCoordinatesViewCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierCollapsableСoordinates owner:self options:nil];
             cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
         }
         

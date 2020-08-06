@@ -420,7 +420,7 @@
 "hist_remove_q" = "Geçmişi öğelerini kaldırmak istiyor musunuz?";
 "gpx_edit_mode" = "Düzenleme modu";
 "fav_import_desc" = "Sık kullanılanlarınızı GPX dosyasında ara noktalar olarak içe aktarabilirsiniz (yaygın GPS veri biçimi)\n\nfavourites.gpx dosyasını paylaşmak için Dropbox, e-posta veya başka bir kaynaktan dosyayı açabilirsiniz - Şurada aç işlevini kullanın.";
-"gpx_import_desc" = "GPX dosyalarınızı (yaygın GPS veri biçimi) Dropbox, E-posta veya başka bir kaynaktan içe aktarmak için \"OsmAnd Haritalarına Kopyala\" seçeneğini kullanın";
+"gpx_import_desc" = "GPX dosyalarınızı (yaygın GPS veri biçimi) Dropbox, E-posta veya başka bir kaynaktan içe aktarmak için \"OsmAnd Haritalara Kopyala\" seçeneğini kullanın";
 "map_settings_hillshade" = "Tepe gölgesi";
 "sett_lang_trans" = "başka alfabeyle yaz";
 "sett_lang_show_trans" = "İsimleri başka alfabeyle yaz";
@@ -557,7 +557,7 @@
 "int_seconds" = "saniyeler";
 "shared_string_never" = "Hiçbir zaman";
 "general_settings_2" = "Genel ayarlar";
-"general_settings_descr" = "App için görüntü ve genel seçenekleri ayarla";
+"general_settings_descr" = "Uygulama teması, birimler, bölge";
 "auto_zoom_none" = "Kendiliğinden görüntü-yakınlaştırma olmasın";
 "auto_zoom_close" = "Yakınlatırılmış görüntüye";
 "auto_zoom_far" = "Orta seviye görüntüye";
@@ -974,7 +974,7 @@
 "translucent_blue" = "Yarı saydam açık mavi";
 "map_underlays" = "Harita alt katmanları";
 "change_map_overlay" = "Harita üst katmanını değiştir";
-"routing_settings_descr" = "Navigasyon seçeneklerini belirtin";
+"routing_settings_descr" = "Navigasyonu yapılandır";
 "osm_live_payment_month_cost_descr" = "%@ / aylık";
 "quick_action_tags" = "Etiketler";
 "offline_vector_maps" = "Çevrim dışı vektör haritaları";
@@ -1812,3 +1812,17 @@
 "lenght_limit_description" = "Aracınızın uzunluğunu belirtin, uzun araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
 "height_limit_description" = "Aracınızın yüksekliğini belirtin, yüksek araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
 "export_profile" = "Profili dışa aktar";
+"profile_settings" = "Profil ayarları";
+"configure_map_descr" = "Harita görünümü";
+"export_profile_descr" = "Bir profili içe aktarmak için herhangi bir uygulamada gerekli dosyaya (*.osf) dokunun ve \"OsmAnd Haritalara Kopyala\" seçeneğini seçin";
+"profile_sett_descr" = "Seçili uygulama profilini etkiler";
+"app_profiles" = "Uygulama profilleri";
+"selected_profile" = "Seçilen profil";
+"osmand_profile" = "OsmAnd profili";
+"ui_customization_descr" = "Çekmece ögeleri, içerik menüsü";
+"ui_customization" = "Kullanıcı arayüzü özelleştirme";
+"profile_appearance_descr" = "Simge, renk ve ad";
+"profile_appearance" = "Profil görünümü";
+"configure_profile" = "Profili yapılandır";
+"plugin_settings_descr" = "Seçilen profil için eklenti ayarları.";
+"configure_screen_descr" = "Profil için ekran seçeneklerini seçin";

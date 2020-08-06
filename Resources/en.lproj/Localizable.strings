@@ -142,7 +142,6 @@
 "auto_split_gap" = "Auto-split recordings after gap";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new trip after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
-"trip_rec_actions_menu_path" = "Menu — My places — Trips.";
 "plugin_settings_reset" = "Reset plugin settings to default";
 
 "map_widget_magnetic_bearing" = "Magnetic bearing";
@@ -871,6 +870,7 @@
 "res_online_source_cache_alert" = "Applying these changes will clear the cached data for this tile source";
 
 // Menu
+"menu" = "Menu";
 "menu_my_places" = "My Places";
 "menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";

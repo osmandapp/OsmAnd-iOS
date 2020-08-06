@@ -7,6 +7,7 @@
 //
 
 #import "OATripRecordingSettingsViewController.h"
+#import "OAGPXListViewController.h"
 #import "OAIconTextDescSwitchCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
@@ -196,7 +197,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"img" : @"menu_cell_pointer.png",
                  @"type" : kCellTypeSwitch }]];
             
-            NSString *menuPath = OALocalizedString(@"trip_rec_actions_menu_path");
+            NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
             NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
             [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]} range:[actionsDescr rangeOfString:menuPath]];
@@ -211,20 +212,22 @@ static NSArray<NSString *> *minTrackSpeedNames;
                     @"type" : kCellTypeAction,
                     @"title" : OALocalizedString(@"tracks"),
                     @"img" : @"ic_custom_folder",
-                    @"key" : @"open_trips"
+                    @"name" : @"open_trips"
                 },
                 @{
                     @"type" : kCellTypeAction,
                     @"title" : OALocalizedString(@"plugin_settings_reset"),
-                    @"img" : @"ic_custom_folder",
-                    @"key" : @"open_trips"
+                    @"img" : @"ic_custom_reset",
+                    @"name" : @"reset_plugin"
                 },
-                @{
-                    @"type" : kCellTypeAction,
-                    @"title" : OALocalizedString(@"tracks"),
-                    @"img" : @"ic_custom_folder",
-                    @"key" : @"open_trips"
-                }]];
+                // TODO: add copy from profile
+//                @{
+//                    @"type" : kCellTypeAction,
+//                    @"title" : OALocalizedString(@"tracks"),
+//                    @"img" : @"ic_custom_folder",
+//                    @"key" : @"open_trips"
+//                }
+            ]];
             
             break;
         }
@@ -674,6 +677,31 @@ static NSArray<NSString *> *minTrackSpeedNames;
     {
         OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenMinSpeed applicationMode:self.appMode];
         [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"open_trips" isEqualToString:name])
+    {
+        UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+        [myPlacesViewController setSelectedIndex:1];
+        
+        OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+        if (gpxController == nil)
+            return;
+        
+        [gpxController setShouldPopToParent:YES];
+        
+        [self.navigationController pushViewController:myPlacesViewController animated:YES];
+    }
+    else if ([@"reset_plugin" isEqualToString:name])
+    {
+        [_settings.mapSettingSaveTrackIntervalApproved resetModeToDefault:self.appMode];
+        [_settings.mapSettingSaveTrackIntervalGlobal resetModeToDefault:self.appMode];
+        [_settings.mapSettingSaveTrackInterval resetModeToDefault:self.appMode];
+        [_settings.saveTrackMinSpeed resetModeToDefault:self.appMode];
+        [_settings.saveTrackMinDistance resetModeToDefault:self.appMode];
+        [_settings.saveTrackPrecision resetModeToDefault:self.appMode];
+        [_settings.saveTrackToGPX resetModeToDefault:self.appMode];
+        [_settings.autoSplitRecording resetModeToDefault:self.appMode];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.numberOfSections)] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 

@@ -18,6 +18,7 @@
 #import "OAPlugin.h"
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAOsmEditingSettingsViewController.h"
 
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
@@ -132,6 +133,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"title" : tripRec.getName,
             @"img" : @"ic_custom_trip",
             @"key" : @"trip_rec"
+        }];
+    }
+    
+    OAPlugin *osmEdit = [OAPlugin getEnabledPlugin:OAOsmEditingPlugin.class];
+    if (osmEdit)
+    {
+        [plugins addObject:@{
+            @"type" : kIconTitleDescrCell,
+            @"title" : osmEdit.getName,
+            @"img" : @"ic_custom_osm_edits",
+            @"key" : @"osm_edits"
         }];
     }
     
@@ -382,11 +394,11 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
-//    else if ([name isEqualToString:@"osm_editing"])
-//    {
-//        OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
-//        [self.navigationController pushViewController:settingsViewController animated:YES];
-//    }
+    else if ([key isEqualToString:@"osm_edits"])
+    {
+        OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -4524,6 +4524,8 @@
 		DA2DC42123B2244400F40D1D /* OARouteInfoLegendItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2DC42023B2244400F40D1D /* OARouteInfoLegendItemView.m */; };
 		DA2DC42223B2244400F40D1D /* OARouteInfoLegendItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2DC42023B2244400F40D1D /* OARouteInfoLegendItemView.m */; };
 		DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
+		DA2EBE1C24DC26D900967160 /* OAOsmAccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2EBE1B24DC26D900967160 /* OAOsmAccountSettingsViewController.m */; };
+		DA2EBE1D24DC26D900967160 /* OAOsmAccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2EBE1B24DC26D900967160 /* OAOsmAccountSettingsViewController.m */; };
 		DA2F09112217FF75006C7F05 /* ic_action_add_osm_note@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09082217FF72006C7F05 /* ic_action_add_osm_note@3x.png */; };
 		DA2F09122217FF75006C7F05 /* ic_action_add_osm_note@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09082217FF72006C7F05 /* ic_action_add_osm_note@3x.png */; };
 		DA2F09132217FF75006C7F05 /* ic_plugin_osm_edit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09092217FF72006C7F05 /* ic_plugin_osm_edit@2x.png */; };
@@ -9087,6 +9089,8 @@
 		DA2DC42023B2244400F40D1D /* OARouteInfoLegendItemView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OARouteInfoLegendItemView.m; path = Views/OARouteInfoLegendItemView.m; sourceTree = "<group>"; };
 		DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractCommandPlayer.mm; sourceTree = "<group>"; };
 		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCommandPlayer.h; sourceTree = "<group>"; };
+		DA2EBE1A24DC26D900967160 /* OAOsmAccountSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmAccountSettingsViewController.h; sourceTree = "<group>"; };
+		DA2EBE1B24DC26D900967160 /* OAOsmAccountSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmAccountSettingsViewController.m; sourceTree = "<group>"; };
 		DA2F09082217FF72006C7F05 /* ic_action_add_osm_note@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_add_osm_note@3x.png"; path = "Resources/Icons/ic_action_add_osm_note@3x.png"; sourceTree = "<group>"; };
 		DA2F09092217FF72006C7F05 /* ic_plugin_osm_edit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_plugin_osm_edit@2x.png"; path = "Resources/Icons/ic_plugin_osm_edit@2x.png"; sourceTree = "<group>"; };
 		DA2F090A2217FF73006C7F05 /* ic_action_create_poi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_create_poi@2x.png"; path = "Resources/Icons/ic_action_create_poi@2x.png"; sourceTree = "<group>"; };
@@ -14707,6 +14711,8 @@
 				DA8EEF8324D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.xib */,
 				DA8EEF8824D562C400E3CA75 /* OAConfigureProfileViewController.h */,
 				DA8EEF8924D562C400E3CA75 /* OAConfigureProfileViewController.m */,
+				DA2EBE1A24DC26D900967160 /* OAOsmAccountSettingsViewController.h */,
+				DA2EBE1B24DC26D900967160 /* OAOsmAccountSettingsViewController.m */,
 			);
 			name = Settings;
 			path = Sources/Controllers/2.0/Settings;
@@ -20227,6 +20233,7 @@
 				847A1CC91DF94E9B003C1246 /* OAQStringPickerElement.m in Sources */,
 				847A1CCA1DF94E9B003C1246 /* OAGPXRouteViewController.mm in Sources */,
 				8476E1651F5B089400EC274F /* OAFileNameTranslationHelper.m in Sources */,
+				DA2EBE1D24DC26D900967160 /* OAOsmAccountSettingsViewController.m in Sources */,
 				847A1CCB1DF94E9B003C1246 /* OAEditColorViewController.m in Sources */,
 				DAD49D8B229D597A0050751B /* OAAbstractCard.m in Sources */,
 				844E07AF1E3E3F2B00EFC525 /* OAQuickSearchButtonListItem.mm in Sources */,
@@ -21009,6 +21016,7 @@
 				844E07C71E40CE9100EFC525 /* OADistanceDirection.mm in Sources */,
 				8A0996092430C2A4007192AD /* OANavigationIcon.m in Sources */,
 				DA73D288223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */,
+				DA2EBE1C24DC26D900967160 /* OAOsmAccountSettingsViewController.m in Sources */,
 				78D57B95238D30550068CF48 /* OAContourLinesAction.mm in Sources */,
 				BBA3AF4C197FC4BB0039D991 /* OATableViewCell.m in Sources */,
 				DA25588724ADE40F0081D155 /* OAProfileGeneralSettingsViewController.m in Sources */,

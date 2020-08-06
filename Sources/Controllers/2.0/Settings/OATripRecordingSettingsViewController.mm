@@ -479,7 +479,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         return cell;
     }
-    if ([type isEqualToString:kCellTypeTitle])
+    else if ([type isEqualToString:kCellTypeTitle])
     {
         static NSString* const identifierCell = kCellTypeTitle;
         OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];

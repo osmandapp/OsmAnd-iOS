@@ -45,6 +45,8 @@
     self.tableView.dataSource = self;
     _settings = [OAAppSettings sharedManager];
     [self.tableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 48.;
     [self setupView];
 }
 

@@ -434,7 +434,7 @@ typedef enum : NSUInteger {
         
         return YES;
     }
-    else if ([ext caseInsensitiveCompare:@"gpx"] == NSOrderedSame)
+    else if ([ext caseInsensitiveCompare:@"gpx"] == NSOrderedSame || ([ext caseInsensitiveCompare:@"xml"] == NSOrderedSame && [self isGpx:url]))
     {
         if ([fileName isEqual:@"favorites.gpx"] || [fileName isEqual:@"favourites.gpx"])
         {
@@ -491,6 +491,21 @@ typedef enum : NSUInteger {
     }
     
     return YES;
+}
+
+- (BOOL) isGpx:(NSURL *)url
+{
+    NSFileHandle *file = [NSFileHandle fileHandleForReadingAtPath: url.path];
+    if (file == nil)
+    {
+        NSLog(@"Failed to open file: %@", url.path);
+        return NO;
+    }
+    NSData *databuffer = [file readDataOfLength: 100];
+    [file closeFile];
+    
+    NSString *fileIntro = [[NSString alloc] initWithData:databuffer encoding:4];
+    return [fileIntro containsString:@"<gpx "];
 }
 
 - (void) showNoInternetAlert

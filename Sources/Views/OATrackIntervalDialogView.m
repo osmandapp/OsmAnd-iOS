@@ -46,7 +46,7 @@
 -(void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    int interval = _settings.mapSettingSaveTrackIntervalGlobal;
+    int interval = [_settings.mapSettingSaveTrackIntervalGlobal get];
     int index = 0;
     for (int i = 0; i < _settings.trackIntervalArray.count; i++)
         if ([_settings.trackIntervalArray[i] intValue] == interval)

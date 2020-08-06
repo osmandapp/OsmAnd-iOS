@@ -409,9 +409,9 @@
                                          
                                          if (!cancelled)
                                          {
-                                             _settings.mapSettingSaveTrackIntervalGlobal = [_settings.trackIntervalArray[[view getInterval]] intValue];
+                                             [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[[view getInterval]] intValue]];
                                              if (view.swRemember.isOn)
-                                                 _settings.mapSettingSaveTrackIntervalApproved = YES;
+                                                 [_settings.mapSettingSaveTrackIntervalApproved set:YES];
                                              
                                              _settings.mapSettingTrackRecording = YES;
                                          }

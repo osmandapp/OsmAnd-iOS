@@ -146,6 +146,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [super viewWillAppear:animated];
     [self setupTableHeaderView];
     [self generateData];
+    [self applyLocalization];
     [self.tableView reloadData];
 }
 

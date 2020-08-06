@@ -449,8 +449,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 
 @property (assign, nonatomic) BOOL mapSettingTrackRecording;
-@property (assign, nonatomic) int mapSettingSaveTrackIntervalGlobal;
-@property (assign, nonatomic) BOOL mapSettingSaveTrackIntervalApproved;
+@property (nonatomic) OAProfileInteger *mapSettingSaveTrackIntervalGlobal;
+@property (nonatomic) OAProfileBoolean *mapSettingSaveTrackIntervalApproved;
 
 @property (assign, nonatomic) BOOL mapSettingShowRecordingTrack;
 

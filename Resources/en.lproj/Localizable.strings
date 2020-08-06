@@ -132,14 +132,18 @@
 "save_global_track_interval_descr" = "Choose logging interval for the general trip recording (enabled via the GPX logging widget on the map).";
 "logging_interval_navigation" = "Logging interval during navigation";
 "logging_interval_navigation_descr" = "Choose logging interval for trip recording during navigation";
-"logging_min_distance" = "Minimum logging distance";
+"logging_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
-"logging_min_accuracy" = "Minimum logging accuracy";
+"logging_accuracy" = "Logging accuracy";
+"logging_min_accuracy" = "Minimum accuracy";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
-"logging_min_speed" = "Minimum logging speed";
+"logging_min_speed" = "Minimum speed";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
 "auto_split_gap" = "Auto-split recordings after gap";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new trip after 2 h gap, or new file after a longer gap";
+"trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
+"trip_rec_actions_menu_path" = "Menu — My places — Trips.";
+"plugin_settings_reset" = "Reset plugin settings to default";
 
 "map_widget_magnetic_bearing" = "Magnetic bearing";
 "map_widget_bearing" = "Relative bearing";
@@ -592,8 +596,8 @@
 "poi_list" = "POI list";
 
 
-"track_during_nav" = "Auto-record trip during navigation";
-"track_during_nav_descr" = "A trip is automatically saved during navigation";
+"track_during_nav" = "Auto-record trip";
+"track_during_nav_descr" = "Turn on to automatically save a trip during navigation";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
@@ -753,7 +757,6 @@
 "osmand_profile" = "OsmAnd profile";
 "selected_profile" = "Selected profile";
 "app_profiles" = "App profiles";
-"global_settings_descr" = "Affects the entire app";
 "profile_sett_descr" = "Affect selected application profile";
 "export_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 

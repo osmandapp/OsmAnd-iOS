@@ -1172,9 +1172,9 @@ static UIViewController *parentController;
                                      
                                      if (!cancelled)
                                      {
-                                         settings.mapSettingSaveTrackIntervalGlobal = [settings.trackIntervalArray[[view getInterval]] intValue];
+                                         [settings.mapSettingSaveTrackIntervalGlobal set:[settings.trackIntervalArray[[view getInterval]] intValue]];
                                          if (view.swRemember.isOn)
-                                             settings.mapSettingSaveTrackIntervalApproved = YES;
+                                             [settings.mapSettingSaveTrackIntervalApproved set:YES];
 
                                          settings.mapSettingTrackRecording = YES;
                                          dispatch_async(dispatch_get_main_queue(), ^{

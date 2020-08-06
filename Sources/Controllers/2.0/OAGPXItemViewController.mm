@@ -952,7 +952,7 @@
     }
     else{
         NSLog(@"Copying file error: %@ %@", xmlFileUrl.path, error);
-        return gpxFileURL;
+        return xmlFileUrl;
     }
 }
 

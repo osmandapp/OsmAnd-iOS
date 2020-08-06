@@ -925,6 +925,13 @@
     }
     
     NSURL* gpxUrl = [NSURL fileURLWithPath:_exportFilePath];
+    
+    if ([_exportFileName hasSuffix:@".xml"])
+    {
+        gpxUrl = [self renameXmlToGpx:gpxUrl];
+        _exportFileName = [_exportFileName stringByReplacingOccurrencesOfString:@".xml" withString:@".gpx"];
+    }
+    
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
     _exportController.UTI = @"net.osmand.gpx";
     _exportController.delegate = self;
@@ -932,6 +939,21 @@
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.navController.view
                                          animated:YES];
+}
+
+- (NSURL*) renameXmlToGpx:(NSURL *)xmlFileUrl
+{
+    NSString* gpxFileName = [[[xmlFileUrl.lastPathComponent stringByDeletingPathExtension] stringByAppendingFormat:@".gpx"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSURL* gpxFileURL = [NSURL URLWithString:gpxFileName relativeToURL:[xmlFileUrl URLByDeletingLastPathComponent]];
+
+    NSError *error;
+    if ([[NSFileManager defaultManager] copyItemAtURL:xmlFileUrl toURL:gpxFileURL error:&error]){
+        return gpxFileURL;
+    }
+    else{
+        NSLog(@"Copying file error: %@ %@", xmlFileUrl.path, error);
+        return gpxFileURL;
+    }
 }
 
 - (void)renameTrip

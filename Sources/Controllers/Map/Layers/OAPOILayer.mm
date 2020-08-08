@@ -84,8 +84,10 @@
     NSSet<OAPOIUIFilter *> *filters = [_filtersHelper getSelectedPoiFilters];
     if (filters.count > 0)
     {
-        OAPOIUIFilter *f = [_filtersHelper combineSelectedFilters:filters];
-        [self showPoiOnMap:f keyword:f.filterId];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OAPOIUIFilter *f = [_filtersHelper combineSelectedFilters:filters];
+            [self showPoiOnMap:f keyword:f.filterId];
+        });
     }
 }
 

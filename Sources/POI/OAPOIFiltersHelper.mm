@@ -694,7 +694,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (void) loadSelectedPoiFilters
 {
-    NSArray<NSString *> *filters = [OAAppSettings sharedManager].selectedPoiFilters;
+    NSArray<NSString *> *filters = [[[OAAppSettings sharedManager].selectedPoiFilters get] componentsSeparatedByString:@","];
     for (NSString *f in filters)
     {
         OAPOIUIFilter *filter = [self getFilterById:f];
@@ -705,12 +705,16 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (void) saveSelectedPoiFilters
 {
-    NSMutableArray<NSString *> *filters = [NSMutableArray array];
-    for (OAPOIUIFilter *f in _selectedPoiFilters)
+    NSMutableString *filtersStr = [NSMutableString new];
+    NSArray<OAPOIUIFilter *> *filters = _selectedPoiFilters.allObjects;
+    for (NSInteger i = 0; i < filters.count; i++)
     {
-        [filters addObject:f.filterId];
+        OAPOIUIFilter *f = filters[i];
+        [filtersStr appendString:f.filterId];
+        if (i != filters.count - 1)
+            [filtersStr appendString:@","];
     }
-    [[OAAppSettings sharedManager] setSelectedPoiFilters:filters];
+    [[OAAppSettings sharedManager].selectedPoiFilters set:filtersStr];
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "OARootViewController.h"
 #import "OAMapStyleSettings.h"
 
+#import "OARouteProvider.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
@@ -223,6 +224,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) writeItemsToJson:(id)json;
 - (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value;
 - (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs;
+- (void) applyRoutingPreferences:(NSDictionary<NSString *, NSString *> *)prefs;
 
 @end
 
@@ -366,6 +368,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     // override
 }
 
+- (void) applyRoutingPreferences:(NSDictionary<NSString *, NSString *> *)prefs
+{
+    // override
+}
+
 - (OASettingsItemReader *) getJsonReader
 {
     return [[OASettingsItemJsonReader alloc] initWithItem:self];
@@ -498,15 +505,19 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
     
     [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([key hasPrefix:@"nrenderer_"])
+        if ([key hasPrefix:@"nrenderer_"] || [key isEqualToString:@"displayed_transport_settings"])
             [rendererSettings setObject:obj forKey:key];
+        else if ([key hasPrefix:@"prouting_"])
+            [routingSettings setObject:obj forKey:key];
         else
             [self.item readPreferenceFromJson:key value:obj];
     }];
     
     [self.item applyRendererPreferences:rendererSettings];
+    [self.item applyRoutingPreferences:routingSettings];
     
     [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
     
@@ -668,12 +679,40 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if ([[data getLastMapSource:_appMode].resourceId hasSuffix:ext])
         [data setLastMapSource:[[OAMapSource alloc] initWithResource:[(isTouringView ? resName.lowerCase : resName) stringByAppendingString:ext] andVariant:_appMode.variantKey name:renderer] mode:_appMode];
     [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        if ([key isEqualToString:@"displayed_transport_settings"])
+        {
+            [styleSettings setCategoryEnabled:obj.length > 0 categoryName:@"transport"];
+            return;
+        }
+        
         NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
         OAMapStyleParameter *param = [styleSettings getParameter:paramName];
         if (param)
         {
             param.value = obj;
             [styleSettings save:param refreshMap:NO];
+        }
+    }];
+}
+
+- (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs
+{
+    const auto router = [OARouteProvider getRouter:self.appMode];
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    const auto& params = router->getParameters();
+    [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
+        const auto& param = params.find(std::string([paramName UTF8String]));
+        if (param != params.end())
+        {
+            if (param->second.type == RoutingParameterType::BOOLEAN)
+            {
+                [[settings getCustomRoutingBooleanProperty:paramName defaultValue:param->second.defaultBoolean] set:[obj isEqualToString:@"true"] mode:self.appMode];
+            }
+            else
+            {
+                [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"] set:obj mode:self.appMode];
+            }
         }
     }];
 }
@@ -866,12 +905,47 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     
     [OsmAndApp.instance.data addPreferenceValuesToDictionary:res mode:self.appMode];
     OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+    NSMutableString *enabledTransport = [NSMutableString new];
+    if ([styleSettings isCategoryEnabled:@"transport"])
+    {
+        NSArray<OAMapStyleParameter *> *transportParams = [styleSettings getParameters:@"transport"];
+        for (OAMapStyleParameter *p in transportParams)
+        {
+            if ([p.value isEqualToString:@"true"])
+            {
+                [enabledTransport appendString:[@"nrenderer_" stringByAppendingString:p.name]];
+                [enabledTransport appendString:@","];
+            }
+        }
+    }
+    res[@"displayed_transport_settings"] = enabledTransport;
+    
     NSString *renderer = nil;
     for (OAMapStyleParameter *param in [styleSettings getAllParameters])
     {
         if (!renderer)
             renderer = param.mapStyleName;
         res[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
+    }
+    
+    const auto router = [OARouteProvider getRouter:self.appMode];
+    if (router)
+    {
+        const auto& parameters = router->getParametersList();
+        for (const auto& p : parameters)
+        {
+            if (p.type == RoutingParameterType::BOOLEAN)
+            {
+                OAProfileBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
+                res[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [boolSetting toStringValue:self.appMode];
+            }
+            else
+            {
+                OAProfileString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                res[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [stringSetting get:self.appMode];
+                
+            }
+        }
     }
     if (renderer)
     {

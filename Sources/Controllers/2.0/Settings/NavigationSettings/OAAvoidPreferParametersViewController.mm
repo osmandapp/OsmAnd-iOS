@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAApplicationMode.h"
+#import "OARouteProvider.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -88,18 +89,9 @@
     _data = [NSArray arrayWithArray:dataArr];
 }
 
-+ (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    auto router = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
-    if (!router && am.parent)
-        router = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
-    return router;
-}
-
 + (BOOL) hasPreferParameters:(OAApplicationMode *)appMode
 {
-    auto router = [self getRouter:appMode];
+    auto router = [OARouteProvider getRouter:appMode];
     if (router)
     {
         auto& parameters = router->getParametersList();

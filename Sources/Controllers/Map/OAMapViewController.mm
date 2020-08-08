@@ -187,6 +187,7 @@
     OAAutoObserverProxy* _framePreparedObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
+    OAAutoObserverProxy* _applicaionModeObserver;
 
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
@@ -290,6 +291,10 @@
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onTrackRecordingChanged:withKey:)
                                                          andObserve:_app.trackRecordingObservable];
+    
+    _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onApplicationModeChanged:)
+                                                         andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
 
     _stateObservable = [[OAObservable alloc] init];
     _settingsObservable = [[OAObservable alloc] init];
@@ -1635,6 +1640,23 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self showRouteGpxTrack];
+    });
+}
+
+- (void) onApplicationModeChanged:(id)sender
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+        [helper hidePoiFilters];
+        [helper loadSelectedPoiFilters];
+        
+        [self hidePoi];
+        NSSet<OAPOIUIFilter *> *filters = [helper getSelectedPoiFilters];
+        if (filters.count > 0)
+        {
+            OAPOIUIFilter *f = [helper combineSelectedFilters:filters];
+            [self showPoiOnMap:f keyword:f.filterId];
+        }
     });
 }
 

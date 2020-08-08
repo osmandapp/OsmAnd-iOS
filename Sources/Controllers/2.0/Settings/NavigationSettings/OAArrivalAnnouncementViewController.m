@@ -62,8 +62,8 @@
 
 -(void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"arrival_distance");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

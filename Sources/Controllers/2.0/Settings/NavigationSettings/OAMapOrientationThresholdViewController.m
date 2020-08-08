@@ -76,8 +76,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"map_orientation_change_in_accordance_with_speed");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

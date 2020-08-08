@@ -57,6 +57,8 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     NSArray *_pendingNotes;
     
     OAMultiselectableHeaderView *_headerView;
+    
+    BOOL _popToParent;
 }
 
 - (void)viewDidLoad {
@@ -72,6 +74,11 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
     _tableView.rowHeight = UITableViewAutomaticDimension;
+}
+
+- (void) setShouldPopToParent:(BOOL)shouldPop
+{
+    _popToParent = shouldPop;
 }
 
 -(UIView *) getTopView
@@ -279,7 +286,10 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 }
 
 - (IBAction)backButtonPressed:(id)sender {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+   if (_popToParent)
+        [super backButtonClicked:sender];
+    else
+        [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (IBAction)deleteButtonPressed:(id)sender {

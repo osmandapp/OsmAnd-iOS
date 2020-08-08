@@ -6,7 +6,7 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseSettingsViewController.h"
 
 typedef enum
 {
@@ -21,16 +21,10 @@ typedef enum
 
 @class OAApplicationMode;
 
-@interface OATripRecordingSettingsViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
+@interface OATripRecordingSettingsViewController : OABaseSettingsViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, readonly) kTripRecordingSettingsScreen settingsType;
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *appModeButton;
 
-- (id) initWithSettingsType:(kTripRecordingSettingsScreen)settingsType;
 - (id) initWithSettingsType:(kTripRecordingSettingsScreen)settingsType applicationMode:(OAApplicationMode *)applicationMode;
 
 @end

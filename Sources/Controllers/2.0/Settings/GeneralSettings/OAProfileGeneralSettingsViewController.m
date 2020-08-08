@@ -34,8 +34,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"general_settings_2");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -45,6 +45,8 @@
     self.tableView.dataSource = self;
     _settings = [OAAppSettings sharedManager];
     [self.tableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 48.;
     [self setupView];
 }
 
@@ -258,7 +260,7 @@
 
 - (void) updateNavBar
 {
-    self.subtitleLabel.text = self.appMode.name;
+    self.subtitleLabel.text = self.appMode.toHumanString;
 }
 
 #pragma mark - TableView

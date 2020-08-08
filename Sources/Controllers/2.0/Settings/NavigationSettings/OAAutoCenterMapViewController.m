@@ -38,8 +38,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"choose_auto_follow_route");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

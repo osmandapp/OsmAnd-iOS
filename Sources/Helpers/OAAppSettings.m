@@ -1898,10 +1898,16 @@
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
-        _mapSettingSaveTrackIntervalGlobal = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalGlobalKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingSaveTrackIntervalGlobalKey] : SAVE_TRACK_INTERVAL_DEFAULT;
+        
+        _mapSettingSaveTrackIntervalGlobal = [OAProfileInteger withKey:mapSettingSaveTrackIntervalGlobalKey defValue:SAVE_TRACK_INTERVAL_DEFAULT];
+        [_registeredPreferences setObject:_mapSettingSaveTrackIntervalGlobal forKey:@"save_global_track_interval"];
 
+        // TODO: redesign alert as in android to show/hide recorded trip on map
         _mapSettingShowRecordingTrack = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowRecordingTrackKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowRecordingTrackKey] : NO;
-        _mapSettingSaveTrackIntervalApproved = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalApprovedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingSaveTrackIntervalApprovedKey] : NO;
+        
+        _mapSettingSaveTrackIntervalApproved = [OAProfileBoolean withKey:mapSettingSaveTrackIntervalApprovedKey defValue:NO];
+        [_registeredPreferences setObject:_mapSettingSaveTrackIntervalApproved forKey:@"save_global_track_remember"];
+        
         _mapSettingActiveRouteFileName = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteFileNameKey];
         _mapSettingActiveRouteVariantType = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteVariantTypeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingActiveRouteVariantTypeKey] : 0;
 
@@ -2528,12 +2534,6 @@
     [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
 }
 
-- (void) setMapSettingSaveTrackIntervalGlobal:(int)mapSettingSaveTrackIntervalGlobal
-{
-    _mapSettingSaveTrackIntervalGlobal = mapSettingSaveTrackIntervalGlobal;
-    [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingSaveTrackIntervalGlobal forKey:mapSettingSaveTrackIntervalGlobalKey];
-}
-
 - (void) setMapSettingVisibleGpx:(NSArray *)mapSettingVisibleGpx
 {
     _mapSettingVisibleGpx = mapSettingVisibleGpx;
@@ -2583,12 +2583,6 @@
 {
     _mapSettingShowRecordingTrack = mapSettingShowRecordingTrack;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowRecordingTrack forKey:mapSettingShowRecordingTrackKey];
-}
-
-- (void) setMapSettingSaveTrackIntervalApproved:(BOOL)mapSettingSaveTrackIntervalApproved
-{
-    _mapSettingSaveTrackIntervalApproved = mapSettingSaveTrackIntervalApproved;
-    [[NSUserDefaults standardUserDefaults] setBool:_mapSettingSaveTrackIntervalApproved forKey:mapSettingSaveTrackIntervalApprovedKey];
 }
 
 - (void) setMapSettingActiveRouteFileName:(NSString *)mapSettingActiveRouteFileName

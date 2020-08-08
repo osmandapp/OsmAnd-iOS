@@ -15,12 +15,17 @@
 #import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
+#import "OAPlugin.h"
+#import "OAMonitoringPlugin.h"
+#import "OAOsmEditingPlugin.h"
+#import "OAOsmEditingSettingsViewController.h"
 
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAProfileAppearanceViewController.h"
+#import "OATripRecordingSettingsViewController.h"
 
 #define kSidePadding 16.
 
@@ -119,6 +124,32 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //        }
     ]];
     
+    NSMutableArray *plugins = [NSMutableArray new];
+    OAPlugin *tripRec = [OAPlugin getEnabledPlugin:OAMonitoringPlugin.class];
+    if (tripRec)
+    {
+        [plugins addObject:@{
+            @"type" : kIconTitleDescrCell,
+            @"title" : tripRec.getName,
+            @"img" : @"ic_custom_trip",
+            @"key" : @"trip_rec"
+        }];
+    }
+    
+    OAPlugin *osmEdit = [OAPlugin getEnabledPlugin:OAOsmEditingPlugin.class];
+    if (osmEdit)
+    {
+        [plugins addObject:@{
+            @"type" : kIconTitleDescrCell,
+            @"title" : osmEdit.getName,
+            @"img" : @"ic_custom_osm_edits",
+            @"key" : @"osm_edits"
+        }];
+    }
+    
+    if (plugins.count > 0)
+        [data addObject:plugins];
+    
     _data = data;
 }
 
@@ -127,12 +158,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [super viewWillAppear:animated];
     [self setupTableHeaderView];
     [self generateData];
+    [self applyLocalization];
     [self.tableView reloadData];
 }
 
 - (void) applyLocalization
 {
-    self.titleLabel.text = _appMode.name;
+    self.titleLabel.text = _appMode.toHumanString;
 }
 
 - (UIView *)setupTableHeaderView
@@ -182,7 +214,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (NSString *)getTableHeaderTitle
 {
-    return _appMode.name;
+    return _appMode.toHumanString;
 }
 
 - (void) onModeSwitchPressed:(UISwitch *)sender
@@ -312,6 +344,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         {
             [cell.textView setText:item[@"title"]];
             [cell.descView setText:item[@"descr"]];
+            cell.descView.hidden = !cell.descView.text || cell.descView.text.length == 0;
+                
             [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
             
             if ([cell needsUpdateConstraints])
@@ -355,16 +389,16 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //    {
 //
 //    }
-//  else if ([name isEqualToString:@"track_recording"])
-//    {
-//        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral];
-//        [self.navigationController pushViewController:settingsViewController animated:YES];
-//    }
-//    else if ([name isEqualToString:@"osm_editing"])
-//    {
-//        OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
-//        [self.navigationController pushViewController:settingsViewController animated:YES];
-//    }
+    else if ([key isEqualToString:@"trip_rec"])
+    {
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([key isEqualToString:@"osm_edits"])
+    {
+        OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

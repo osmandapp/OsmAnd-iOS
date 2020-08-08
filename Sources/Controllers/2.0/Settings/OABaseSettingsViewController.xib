@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -49,21 +49,10 @@
                                 <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="ZlZ-kH-7np"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RAq-Lo-a7A">
-                            <rect key="frame" x="368" y="54" width="30" height="30"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Driving" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iCR-tw-0Oz">
+                            <rect key="frame" x="54" y="70" width="306" height="16"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="30" id="I0I-Dl-uac"/>
-                                <constraint firstAttribute="width" constant="30" id="oZZ-Pw-S3s"/>
-                            </constraints>
-                            <state key="normal" image="ic_profile_car.png"/>
-                            <connections>
-                                <action selector="profileButtonPressed:" destination="-1" eventType="touchUpInside" id="8kT-8X-3el"/>
-                            </connections>
-                        </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Driving" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iCR-tw-0Oz">
-                            <rect key="frame" x="185.5" y="70" width="43" height="16"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="16" id="TSe-fP-XMM"/>
+                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="TSe-fP-XMM"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -74,10 +63,10 @@
                     <constraints>
                         <constraint firstItem="iCR-tw-0Oz" firstAttribute="centerX" secondItem="io8-yi-lxZ" secondAttribute="centerX" id="0OE-Jg-wnj"/>
                         <constraint firstItem="iCR-tw-0Oz" firstAttribute="top" secondItem="5Fb-iQ-XT3" secondAttribute="bottom" id="AuM-kM-HB5"/>
+                        <constraint firstItem="iCR-tw-0Oz" firstAttribute="leading" secondItem="3bV-dF-RC8" secondAttribute="trailing" constant="16" id="SEr-7C-Zht"/>
+                        <constraint firstAttribute="trailing" secondItem="iCR-tw-0Oz" secondAttribute="trailing" constant="54" id="TWg-Ce-3Fr"/>
                         <constraint firstAttribute="bottom" secondItem="iCR-tw-0Oz" secondAttribute="bottom" constant="2" id="aQZ-WY-CrK"/>
                         <constraint firstItem="3bV-dF-RC8" firstAttribute="bottom" secondItem="io8-yi-lxZ" secondAttribute="bottom" constant="-7" id="aRw-Tu-i2W"/>
-                        <constraint firstAttribute="trailing" secondItem="RAq-Lo-a7A" secondAttribute="trailing" constant="16" id="u5g-A8-jY6"/>
-                        <constraint firstAttribute="bottom" secondItem="RAq-Lo-a7A" secondAttribute="bottom" constant="4" id="vkP-Ki-v2X"/>
                         <constraint firstItem="5Fb-iQ-XT3" firstAttribute="centerX" secondItem="io8-yi-lxZ" secondAttribute="centerX" id="xm6-rM-e87"/>
                     </constraints>
                 </view>
@@ -116,6 +105,5 @@
     </objects>
     <resources>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
-        <image name="ic_profile_car.png" width="30" height="30"/>
     </resources>
 </document>

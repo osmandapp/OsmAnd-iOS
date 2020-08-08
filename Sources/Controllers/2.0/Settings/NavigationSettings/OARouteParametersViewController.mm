@@ -55,8 +55,8 @@
 
 -(void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"route_params");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

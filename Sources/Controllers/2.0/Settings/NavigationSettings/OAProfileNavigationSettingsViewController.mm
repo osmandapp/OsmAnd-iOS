@@ -61,7 +61,7 @@
 
 - (void) updateNavBar
 {
-    self.subtitleLabel.text = self.appMode.name;
+    self.subtitleLabel.text = self.appMode.toHumanString;
 }
 
 - (void) generateData
@@ -130,8 +130,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"routing_settings_2");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -346,7 +346,7 @@
     else if ([itemKey isEqualToString:@"exportProfile"])
     {
         OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
-        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:self.appMode.name settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:self.appMode] exportItemFiles:YES];
+        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:self.appMode.toHumanString settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:self.appMode] exportItemFiles:YES];
     }
     settingsViewController.delegate = self;
     [self.navigationController pushViewController:settingsViewController animated:YES];

@@ -59,8 +59,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = _vehicleParameter[@"title"];
-    self.subtitleLabel.text = _applicationMode.name;
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }

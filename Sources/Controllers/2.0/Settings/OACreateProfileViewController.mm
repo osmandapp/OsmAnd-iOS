@@ -127,7 +127,7 @@
     UIImage *img = am.getIcon;
     cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
-    cell.textView.text = _profileList[indexPath.row].name;
+    cell.textView.text = _profileList[indexPath.row].toHumanString;
     cell.descView.text = _profileList[indexPath.row].getProfileDescription;
     return cell;
 }

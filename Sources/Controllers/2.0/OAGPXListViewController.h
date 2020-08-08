@@ -31,6 +31,8 @@
 -(void)processUrl:(NSURL*)url;
 -(void)processUrl:(NSURL*)url openGpxView:(BOOL)openGpxView;
 
+- (void) setShouldPopToParent:(BOOL)shouldPop;
+
 + (BOOL)popToParent;
 
 @end

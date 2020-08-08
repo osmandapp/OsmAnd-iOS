@@ -558,7 +558,7 @@
 "traffic_warning_border_control" = "Alfândega";
 "traffic_warning_payment" = "Pedágio";
 "traffic_warning_stop" = "Placa de pare";
-"traffic_warning_calming" = "Moderador de tráfego";
+"traffic_warning_calming" = "Moderação de trafego";
 "traffic_warning_speed_camera" = "Radar";
 "traffic_warning" = "Aviso de tráfego";
 "traffic_warning_railways" = "Cruzamento de ferrovia";

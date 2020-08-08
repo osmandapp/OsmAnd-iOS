@@ -488,7 +488,7 @@
 "speak_speed_limit" = "Limite de velocidade";
 "speak_cameras" = "Radares";
 "speak_traffic_warnings" = "Moderadores de tráfego";
-"announce_gpx_waypoints" = "Pontos de passagem GPX";
+"announce_gpx_waypoints" = "Rastrear pontos de trilha";
 "speak_favorites" = "Favoritos próximos";
 "speak_poi" = "POIs próximos";
 "speak_pedestrian" = "Faixas de pedestre";

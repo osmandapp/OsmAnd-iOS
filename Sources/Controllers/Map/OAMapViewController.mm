@@ -187,7 +187,6 @@
     OAAutoObserverProxy* _framePreparedObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
-    OAAutoObserverProxy* _applicaionModeObserver;
 
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
@@ -291,10 +290,6 @@
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onTrackRecordingChanged:withKey:)
                                                          andObserve:_app.trackRecordingObservable];
-    
-    _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(onApplicationModeChanged:)
-                                                         andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
 
     _stateObservable = [[OAObservable alloc] init];
     _settingsObservable = [[OAObservable alloc] init];
@@ -501,11 +496,6 @@
     
     [[OAMapViewTrackingUtilities instance] setMapViewController:self];
     [[OAMapViewTrackingUtilities instance] updateSettings];
-    
-    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-    if ([helper isShowingAnyPoi]) {
-        [self showPoiOnMap:[helper combineSelectedFilters:[helper getSelectedPoiFilters]] keyword:(NSString *)@""];
-    }
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -1643,23 +1633,6 @@
     });
 }
 
-- (void) onApplicationModeChanged:(id)sender
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-        [helper hidePoiFilters];
-        [helper loadSelectedPoiFilters];
-        
-        [self hidePoi];
-        NSSet<OAPOIUIFilter *> *filters = [helper getSelectedPoiFilters];
-        if (filters.count > 0)
-        {
-            OAPOIUIFilter *f = [helper combineSelectedFilters:filters];
-            [self showPoiOnMap:f keyword:f.filterId];
-        }
-    });
-}
-
 - (void) refreshMap
 {
     if (_app.locationServices.status == OALocationServicesStatusActive)
@@ -1987,19 +1960,9 @@
     }
 }
 
-- (void) showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword
+- (void) updatePoiLayer
 {
-    [_mapLayers.poiLayer showPoiOnMap:category type:type filter:filter keyword:keyword];
-}
-
-- (void) showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword
-{
-    [_mapLayers.poiLayer showPoiOnMap:uiFilter keyword:keyword];
-}
-
-- (void) hidePoi
-{
-    [_mapLayers.poiLayer hidePoi];
+    [_mapLayers.poiLayer updateLayer];
 }
 
 - (void) onLayersConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value

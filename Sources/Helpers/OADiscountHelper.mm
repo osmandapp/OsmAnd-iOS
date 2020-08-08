@@ -456,7 +456,6 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                 OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
                 OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
                 [helper clearSelectedPoiFilters];
-                [mapVC hidePoi];
                 NSMutableSet<OAPOIUIFilter *> *selectedFilters = [NSMutableSet new];
                 for (NSObject *object in objects)
                 {
@@ -483,8 +482,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                         [selectedFilters addObject:uiFilter];
                     }
                 }
-                OAPOIUIFilter *combinedFilter = [helper combineSelectedFilters:selectedFilters];
-                [mapVC showPoiOnMap:combinedFilter keyword:combinedFilter.filterId];
+                [mapVC updatePoiLayer];
             }
         }
         else if ([_url hasPrefix:@"show-choose-plan:"])

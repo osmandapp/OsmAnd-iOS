@@ -80,15 +80,15 @@
         }];
         _showPoiOnMap = NO;
     }
-    
-    NSSet<OAPOIUIFilter *> *filters = [_filtersHelper getSelectedPoiFilters];
-    if (filters.count > 0)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSSet<OAPOIUIFilter *> *filters = [_filtersHelper getSelectedPoiFilters];
+        if (filters.count > 0)
+        {
             OAPOIUIFilter *f = [_filtersHelper combineSelectedFilters:filters];
             [self showPoiOnMap:f keyword:f.filterId];
-        });
-    }
+        }
+    });
+    
 }
 
 - (BOOL) updateLayer

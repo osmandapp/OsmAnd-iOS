@@ -401,8 +401,10 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (void) onApplicationModeChanged
 {
-    [self hidePoiFilters];
-    [self loadSelectedPoiFilters];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hidePoiFilters];
+        [self loadSelectedPoiFilters];
+    });
 }
 
 - (OAPOIUIFilter *) getSearchByNamePOIFilter

@@ -25,9 +25,6 @@
 #import "OAPOIUIFilter.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "Reachability.h"
-#import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

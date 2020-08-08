@@ -169,9 +169,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void) showRecGpxTrack:(BOOL)refreshData;
 - (void) hideRecGpxTrack;
 
-- (void) showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword;
-- (void) showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword;
-- (void) hidePoi;
+- (void) updatePoiLayer;
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;

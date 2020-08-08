@@ -1157,7 +1157,14 @@
 
 + (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue
 {
-    return [super withKey:key defValue:(int)defValue];
+    OAProfileTerrain *obj = [[OAProfileTerrain alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
 }
 
 - (EOATerrainType) get
@@ -1225,7 +1232,14 @@
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue
 {
-    return [super withKey:key defValue:defValue];
+    OAProfileAutoZoomMap *obj = [[OAProfileAutoZoomMap alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
 }
 
 - (EOAAutoZoomMap) get
@@ -1297,7 +1311,14 @@
 
 + (instancetype) withKey:(NSString *)key defValue:(EOASpeedConstant)defValue
 {
-    return [super withKey:key defValue:defValue];
+    OAProfileSpeedConstant *obj = [[OAProfileSpeedConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
 }
 
 - (EOASpeedConstant) get
@@ -1396,7 +1417,14 @@
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue
 {
-    return [super withKey:key defValue:defValue];
+    OAProfileAngularConstant *obj = [[OAProfileAngularConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
 }
 
 - (EOAAngularConstant) get
@@ -1462,7 +1490,14 @@
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAActiveMarkerConstant)defValue
 {
-    return [super withKey:key defValue:defValue];
+    OAProfileActiveMarkerConstant *obj = [[OAProfileActiveMarkerConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
 }
 
 - (EOAActiveMarkerConstant) get
@@ -1529,7 +1564,14 @@
 
 + (instancetype) withKey:(NSString *)key defValue:(EOADistanceIndicationConstant)defValue
 {
-    return [super withKey:key defValue:defValue];
+    OAProfileDistanceIndicationConstant *obj = [[OAProfileDistanceIndicationConstant alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
 }
 
 - (EOADistanceIndicationConstant) get
@@ -1595,7 +1637,14 @@
 
 + (instancetype) withKey:(NSString *)key defValue:(EOADrivingRegion)defValue
 {
-    return [super withKey:key defValue:defValue];
+    OAProfileDrivingRegion *obj = [[OAProfileDrivingRegion alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
 }
 
 - (EOADrivingRegion) get
@@ -1669,13 +1718,25 @@
 
 @end
 
+@interface OAProfileMetricSystem ()
+
+@property (nonatomic) EOAMetricsConstant defValue;
+
+@end
+
 @implementation OAProfileMetricSystem
 
 @dynamic defValue;
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAMetricsConstant)defValue
 {
-    return [super withKey:key defValue:defValue];
+    OAProfileMetricSystem *obj = [[OAProfileMetricSystem alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
 }
 
 - (EOAMetricsConstant) get
@@ -1844,7 +1905,8 @@
         _mapSettingActiveRouteFileName = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteFileNameKey];
         _mapSettingActiveRouteVariantType = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteVariantTypeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingActiveRouteVariantTypeKey] : 0;
 
-        _selectedPoiFilters = [[NSUserDefaults standardUserDefaults] objectForKey:selectedPoiFiltersKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:selectedPoiFiltersKey] : @[];
+        _selectedPoiFilters = [OAProfileString withKey:selectedPoiFiltersKey defValue:@""];
+        [_registeredPreferences setObject:_selectedPoiFilters forKey:@"selected_poi_filter_for_map"];
 
         _plugins = [[NSUserDefaults standardUserDefaults] objectForKey:pluginsKey] ? [NSSet setWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:pluginsKey]] : [NSSet set];
 
@@ -2117,6 +2179,10 @@
         _voiceProvider = [OAProfileString withKey:voiceProviderKey defValue:@""];
         _announceWpt = [OAProfileBoolean withKey:announceWptKey defValue:YES];
         _showScreenAlerts = [OAProfileBoolean withKey:showScreenAlertsKey defValue:NO];
+        
+        [_registeredPreferences setObject:_voiceProvider forKey:@"voice_provider"];
+        [_registeredPreferences setObject:_announceWpt forKey:@"announce_wpt"];
+        [_registeredPreferences setObject:_showScreenAlerts forKey:@"show_routing_alarms"];
 
         _showGpxWpt = [[NSUserDefaults standardUserDefaults] objectForKey:showGpxWptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showGpxWptKey] : YES;
 
@@ -2472,12 +2538,6 @@
 {
     _mapSettingVisibleGpx = mapSettingVisibleGpx;
     [[NSUserDefaults standardUserDefaults] setObject:_mapSettingVisibleGpx forKey:mapSettingVisibleGpxKey];
-}
-
-- (void) setSelectedPoiFilters:(NSArray<NSString *> *)selectedPoiFilters
-{
-    _selectedPoiFilters = selectedPoiFilters;
-    [[NSUserDefaults standardUserDefaults] setObject:_selectedPoiFilters forKey:selectedPoiFiltersKey];
 }
 
 - (void) setPlugins:(NSSet<NSString *> *)plugins

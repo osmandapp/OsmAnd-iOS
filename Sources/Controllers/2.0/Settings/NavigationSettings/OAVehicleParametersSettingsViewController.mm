@@ -80,7 +80,10 @@
     _selectedParameter = _vehicleParameter[@"selectedItem"];
     NSString *valueString = [_vehicleParameter[@"value"] stringValue];
     if ([_selectedParameter intValue] != -1)
-        _measurementValue = [_measurementRangeValuesArr[[_selectedParameter intValue]] stringValue];
+    {
+        double vl = floorf(_measurementRangeValuesArr[_selectedParameter.intValue].doubleValue * 100 + 0.5) / 100;
+        _measurementValue = [NSString stringWithFormat:@"%.1f", vl];
+    }
     else
         _measurementValue = [valueString substringToIndex:valueString.length - (valueString.length > 0)];
 }
@@ -173,6 +176,8 @@
         formatter.maximumFractionDigits = 3;
         _measurementValue = [[formatter numberFromString:_measurementValue] stringValue];
     }
+    if (_selectedParameter.intValue != -1)
+        _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].doubleValue];
     OAProfileString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
     [property set:_measurementValue mode:_applicationMode];
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -290,10 +295,23 @@
 
 #pragma mark - OAHorizontalCollectionViewCellDelegate
 
+- (NSString *) formattedSelectedValueStr:(NSInteger)index
+{
+    double vl = floorf(_measurementRangeValuesArr[index].doubleValue * 10 + 0.5) / 10;
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    formatter.minimumIntegerDigits = 1;
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = 1;
+    formatter.decimalSeparator = @".";
+    return [formatter stringFromNumber:@(vl)];
+}
+
 - (void) valueChanged:(NSInteger)newValueIndex
 {
     _selectedParameter = [NSNumber numberWithInteger:newValueIndex];
-    _measurementValue = [NSString stringWithFormat:@"%@", _measurementRangeValuesArr[newValueIndex]];
+    _measurementValue = [self formattedSelectedValueStr:newValueIndex];
+    
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -312,7 +330,7 @@
     _selectedParameter = [NSNumber numberWithInteger:-1];
     for (NSInteger i = 0; i < [_measurementRangeValuesArr count]; i++)
     {
-        if ([[_measurementRangeValuesArr[i] stringValue] isEqualToString:_measurementValue])
+        if ([[self formattedSelectedValueStr:i] isEqualToString:_measurementValue])
         {
             _selectedParameter = [NSNumber numberWithInteger:i];
             break;

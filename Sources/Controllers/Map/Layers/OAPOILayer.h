@@ -13,8 +13,4 @@
 
 @interface OAPOILayer : OASymbolMapLayer<OAContextMenuProvider>
 
-- (void) showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword;
-- (void) showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword;
-- (void) hidePoi;
-
 @end

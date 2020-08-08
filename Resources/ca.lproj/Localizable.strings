@@ -633,7 +633,7 @@
 "speak_speed_limit" = "Límit de velocitat";
 "speak_cameras" = "Radars";
 "speak_traffic_warnings" = "Notificacions de trànsit";
-"announce_gpx_waypoints" = "Fites GPX";
+"announce_gpx_waypoints" = "Fites de la traça";
 "speak_favorites" = "Preferits propers";
 "speak_poi" = "PDI propers";
 "speak_pedestrian" = "Passos de zebra";
@@ -1813,3 +1813,15 @@
 "configure_screen_descr" = "Seleccioneu les opcions de pantalla per al perfil";
 "selected_profile" = "Perfil seleccionat";
 "custom_profile" = "Perfil personalitzat";
+"desert" = "Desert";
+"base_profile_descr" = "Perfil base";
+"profile_import_success" = "S'ha importat correctament el perfil de l'aplicació";
+"empty_profile_name_warning" = "El nom del perfil no pot estar buit.";
+"all_application_profiles" = "Tots els perfils d'aplicació";
+"rearrange_profiles" = "Reorganitza els perfils";
+"base_profile_descr_public_transport" = "Tipus de transport públic";
+"base_profile_descr_bicycle" = "Bicicleta de muntanya, ciclomotor, cavall";
+"will_be_show_while_moving" = "Serà visible en moviment";
+"ui_customization" = "Personalització de la IU";
+"profile_appearance" = "Aparença del perfil";
+"plugin_settings_descr" = "Configuració del connector per al perfil seleccionat.";

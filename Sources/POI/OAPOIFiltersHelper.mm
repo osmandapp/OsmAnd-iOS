@@ -17,6 +17,8 @@
 #import <sqlite3.h>
 #import "OALog.h"
 #import "OAAppSettings.h"
+#import "OAAutoObserverProxy.h"
+#import "OsmAndApp.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -366,6 +368,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     
     OAPOIFilterDbHelper *_helper;
     OAPOIHelper *_poiHelper;
+    
+    OAAutoObserverProxy *_applicationModeObserver;
 }
 
 + (OAPOIFiltersHelper *)sharedInstance
@@ -387,8 +391,18 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         _selectedPoiFilters = [NSMutableSet set];
         _helper = [[OAPOIFilterDbHelper alloc] init];
         _poiHelper = [OAPOIHelper sharedInstance];
+        
+        _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onApplicationModeChanged)
+                                                              andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
     }
     return self;
+}
+
+- (void) onApplicationModeChanged
+{
+    [self hidePoiFilters];
+    [self loadSelectedPoiFilters];
 }
 
 - (OAPOIUIFilter *) getSearchByNamePOIFilter

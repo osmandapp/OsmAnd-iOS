@@ -28,7 +28,6 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
-#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -60,8 +59,6 @@
     NSInteger tripsRow;
     NSInteger mapillaryRow;
     NSInteger contourLinesRow;
-    
-    OAAutoObserverProxy *_mapSourceUpdatedObserver;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -81,18 +78,9 @@
         
         vwController = viewController;
         tblView = tableView;
-        _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapSourceUpdated) andObserve:OARootViewController.instance.mapPanel.mapViewController.mapSourceUpdatedObservable];
-        
         [self initData];
     }
     return self;
-}
-
-- (void) onMapSourceUpdated
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self setupView];
-    });
 }
 
 - (void) initData

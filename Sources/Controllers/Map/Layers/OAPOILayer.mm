@@ -72,9 +72,6 @@
 
 - (void) updateVisiblePoiFilter
 {
-    [_filtersHelper hidePoiFilters];
-    [_filtersHelper loadSelectedPoiFilters];
-    
     if (_showPoiOnMap && _amenitySymbolsProvider)
     {
         [self.mapViewController runWithRenderSync:^{

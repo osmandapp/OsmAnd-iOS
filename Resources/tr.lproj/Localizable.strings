@@ -661,7 +661,7 @@
 "calculate_osmand_route_without_internet" = "İnternet olmadan OsmAnd rota bölümünü hesaplayın";
 "navigation_over_track" = "Seyahat boyunca navigasyona başla?";
 "use_displayed_track_for_navigation" = "Navigasyon için görüntülenen seyahati kullanmak ister misiniz?";
-"traffic_warning_calming" = "Trafik-hızı-yavaşlatıcı-düzenek";
+"traffic_warning_calming" = "Trafik sakinleştirme";
 "left_side_navigation" = "Soldan-direksiyonlu araç sürüşü";
 "clear_all_intermediates" = "Tüm başlangıç noktalarını temizle";
 "cancel_navigation" = "Navigasyonu durdur";

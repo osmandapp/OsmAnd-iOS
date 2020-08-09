@@ -612,7 +612,7 @@
 "speak_speed_limit" = "Obmedzenie rýchlosti";
 "speak_cameras" = "Rýchlostné radary";
 "speak_traffic_warnings" = "Dopravné varovania";
-"announce_gpx_waypoints" = "GPX waypointy";
+"announce_gpx_waypoints" = "Waypointy stopy";
 "speak_favorites" = "Blízke Obľúbené body";
 "speak_poi" = "Blízke body záujmu";
 "speak_pedestrian" = "Priechody pre chodcov";

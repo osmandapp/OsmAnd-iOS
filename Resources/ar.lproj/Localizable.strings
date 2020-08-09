@@ -105,7 +105,7 @@
 "speak_speed_limit" = "السرعة القصوى";
 "speak_cameras" = "كاميرات السرعة";
 "speak_traffic_warnings" = "تحذيرات حركة المرور";
-"announce_gpx_waypoints" = "نقاط الطريق GPX";
+"announce_gpx_waypoints" = "نقاط المسار";
 "speak_favorites" = "النقاط المفضلة المجاورة";
 "speak_poi" = "نقاط الاهتمام المجاورة";
 "speak_pedestrian" = "ممرات الراجلين";
@@ -230,7 +230,7 @@
 "traffic_warning_border_control" = "مراقبة الحدود";
 "traffic_warning_payment" = "كشك الرسوم";
 "traffic_warning_stop" = "إشارة توقف";
-"traffic_warning_calming" = "تخفيف الازدحام";
+"traffic_warning_calming" = "مطب";
 "traffic_warning_speed_camera" = "كاميرا مراقبة السرعة";
 "traffic_warning" = "تنبيه مروري";
 "traffic_warning_railways" = "عبور خط السكة الحديدية";

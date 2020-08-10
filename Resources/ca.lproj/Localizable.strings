@@ -1811,3 +1811,5 @@
 "new_profile" = "Nou perfil";
 "create_profile" = "Crea un perfil";
 "configure_screen_descr" = "Seleccioneu les opcions de pantalla per al perfil";
+"selected_profile" = "Perfil seleccionat";
+"custom_profile" = "Perfil personalitzat";

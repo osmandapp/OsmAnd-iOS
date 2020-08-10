@@ -1,5 +1,5 @@
 "OsmAnd Maps" = "OsmAnd Maps";
-"shared_string_never" = "Warǧin";
+"shared_string_never" = "Werǧin";
 "col_purple" = "Amidadi";
 "region_asia" = "Asya";
 "rendering_attr_surface_wood_name" = "Amadeɣ";
@@ -81,7 +81,7 @@
 "osm_poi_delete_title" = "Kkes";
 "rendering_value_low_name" = "Faible";
 "shared_string_update" = "Leqqem";
-"avoid_in_routing_title" = "Zgel tulsa n wawalen d yisekkilen.";
+"avoid_in_routing_title" = "Zgel…";
 "city_type_neighbourhood" = "Azniq";
 "rendering_attr_piste_difficulty_undefined_name" = "D arbadu";
 "rendering_value_green_name" = "Adal";
@@ -140,7 +140,7 @@
 "history" = "Amezray";
 "sort_by_name" = "Smizzwer s yisem";
 "help_versions" = "Ileqman";
-"map_widget_left" = "Tafelwit n yiri, tattayt, ukessar, ufella,ɣumm, tiddi, amrussu";
+"map_widget_left" = "Agalis azelmaḍ";
 "rendering_value_default13_name" = "(Amezwer)";
 "rendering_attr_moreDetailed_name" = "Ugar n telqayt";
 "maps" = "Tikarḍiwin";
@@ -170,7 +170,7 @@
 "shared_string_from" = "sɣur";
 "res_type" = "Type ";
 "key_hint_select" = "Fren";
-"speak_street_names" = "Ismawen n iberdan (TTS)";
+"speak_street_names" = "Ismawen n yiberdan (TTS)";
 "loading_poi_obj" = "Asali...";
 "fav_replace_all" = "Selselsi imeṛṛa";
 "add_action" = "Rnu tigawt";
@@ -204,7 +204,7 @@
 "help_legend" = "Taneffust";
 "col_green" = "Adal";
 "m_style_overview" = "Agzul";
-"map_markers" = "Ticṛaḍ";
+"map_markers" = "Ticraḍ n tkarḍa";
 "fav_name" = "Isem";
 "int_seconds" = "Tasinin";
 "res_world_region" = "azul-i-medden-meṛṛa";
@@ -284,16 +284,16 @@
 "osmand_live_last_live_update" = "Asedɣi aneggaru : %@";
 "osm_alert_message" = "Izen";
 "parking" = "Aneɣsar";
-"arrival_distance_factor_late" = "Aneḍru yettwaheggan iɛedda fell-as lḥal";
+"arrival_distance_factor_late" = "Iɛedda lḥal";
 "green" = "Adal";
 "fav_replace" = "Semselsi";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Plat";
 "shared_string_retry" = "Ɛreḍ tikkelt nniḍen";
 "rendering_value_white_name" = "Amellal";
-"show_warnings_title" = "Ilɣa";
+"show_warnings_title" = "Sken ilɣa…";
 "rendering_value_darkyellow_name" = "Awraɣ";
 "map_widget_next_turn" = "ar zdat";
-"arrival_distance_factor_early" = "Détection SKIP précoce sur images P";
+"arrival_distance_factor_early" = "Zik";
 "shared_string_upload" = "Sali";
 "shared_string_filters" = "Imzizdigen";
 "configure_map" = "Swel…";
@@ -351,7 +351,7 @@
 "shared_string_is_open" = "Ldi tura";
 "shared_string_save" = "Sekles";
 "osm_alert_button_ok" = "rnu";
-"prefer_in_routing_title" = "Smenyifi…";
+"prefer_in_routing_title" = "Smenyif…";
 "app_mode_utv" = "Côte à côte";
 "shared_string_buy" = "AΓ";
 "actions" = "Tigawin";
@@ -401,7 +401,7 @@
 "menu_feedback" = "Tikti";
 "help_faq_descr" = "Isteqsiyen i d-yettuɣalen s waṭas";
 "rendering_category_routes" = "Iberdan";
-"map_widget_plain_time" = "Tasaɛet imir-a";
+"map_widget_plain_time" = "Akud amiran";
 "poi_filter_custom_filter" = "Imsizdeg udmawan";
 "rendering_value_translucent_lightgreen_name" = "Amumad afessas";
 "shared_string_select" = "Fren";
@@ -495,3 +495,25 @@
 "shared_string_done" = "Yemmug";
 "units_and_formats" = "Tayunin d yimasalen";
 "shared_string_exit" = "Tuffɣa";
+"default_speed_system" = "Tayunt n urured";
+"change_map_behavior" = "Beddel tiddin n tkarḍa deg tunigin";
+"map_behavior" = "Tiddin n tkarḍa";
+"nav_type_descr" = "Fren amek ara tessiḍneḍ abrid i umaɣnu-a";
+"screen_alerts" = "Ilɣa n ugdil";
+"nav_type_title" = "Anaw n tugniwin";
+"fast_route_mode" = "Abrid arurad akk";
+"route_params" = "Iɣewwaṛen n ubrid";
+"arrival_distance_factor_at_last" = "Deg lmitrat tineggura";
+"routing_settings_descr" = "Swel tunigin";
+"general_settings_descr" = "Asentel n usnas, tayunin, tamnaḍt";
+"direction_lines" = "Izirigen n tnila";
+"arrows_on_map" = "Ineccaben ɣef tkarḍa";
+"two" = "Sin";
+// Dirrection appearance
+"one" = "Yiwen";
+"speak_speed_limit" = "Talast n urured";
+"show_lanes" = "Izirigen";
+"configure_screen_descr" = "Fren Iɣewwaṛen n ugdil i umaɣnu";
+"layer_map_appearance" = "Swel agdil";
+"map_widget_right" = "Agalis ayeffus";
+"map_widget_appearance_rem" = "Iferdisen i d-iqqimen";

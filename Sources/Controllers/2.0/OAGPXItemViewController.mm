@@ -929,7 +929,7 @@
     if ([_exportFileName hasSuffix:@".xml"])
     {
         gpxUrl = [self renameXmlToGpx:gpxUrl];
-        _exportFileName = [_exportFileName stringByReplacingOccurrencesOfString:@".xml" withString:@".gpx"];
+        _exportFileName = [[_exportFileName stringByDeletingPathExtension] stringByAppendingPathComponent: @"xml"];
     }
     
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
@@ -943,17 +943,11 @@
 
 - (NSURL*) renameXmlToGpx:(NSURL *)xmlFileUrl
 {
-    NSString* gpxFileName = [[[xmlFileUrl.lastPathComponent stringByDeletingPathExtension] stringByAppendingFormat:@".gpx"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSString* gpxFileName = [[[xmlFileUrl.lastPathComponent stringByDeletingPathExtension] stringByAppendingPathExtension:@"gpx"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
     NSURL* gpxFileURL = [NSURL URLWithString:gpxFileName relativeToURL:[xmlFileUrl URLByDeletingLastPathComponent]];
-
-    NSError *error;
-    if ([[NSFileManager defaultManager] copyItemAtURL:xmlFileUrl toURL:gpxFileURL error:&error]){
-        return gpxFileURL;
-    }
-    else{
-        NSLog(@"Copying file error: %@ %@", xmlFileUrl.path, error);
-        return xmlFileUrl;
-    }
+    [[NSFileManager defaultManager] removeItemAtURL:gpxFileURL error:nil];
+    [[NSFileManager defaultManager] copyItemAtURL:xmlFileUrl toURL:gpxFileURL error:nil];
+    return gpxFileURL;
 }
 
 - (void)renameTrip

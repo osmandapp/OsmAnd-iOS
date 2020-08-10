@@ -132,14 +132,17 @@
 "save_global_track_interval_descr" = "Choose logging interval for the general trip recording (enabled via the GPX logging widget on the map).";
 "logging_interval_navigation" = "Logging interval during navigation";
 "logging_interval_navigation_descr" = "Choose logging interval for trip recording during navigation";
-"logging_min_distance" = "Minimum logging distance";
+"logging_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
-"logging_min_accuracy" = "Minimum logging accuracy";
+"logging_accuracy" = "Logging accuracy";
+"logging_min_accuracy" = "Minimum accuracy";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
-"logging_min_speed" = "Minimum logging speed";
+"logging_min_speed" = "Minimum speed";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
 "auto_split_gap" = "Auto-split recordings after gap";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new trip after 2 h gap, or new file after a longer gap";
+"trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
+"plugin_settings_reset" = "Reset plugin settings to default";
 
 "map_widget_magnetic_bearing" = "Magnetic bearing";
 "map_widget_bearing" = "Relative bearing";
@@ -169,6 +172,7 @@
 "map_widget_right" = "Right panel";
 "map_widget_left" = "Left panel";
 "layer_map_appearance" = "Configure screen";
+"configure_screen_descr" = "Select screen options for the profile";
 "map_markers" = "Map markers";
 "confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
 
@@ -180,7 +184,7 @@
 "speak_speed_limit" = "Speed limit";
 "speak_cameras" = "Speed cameras";
 "speak_traffic_warnings" = "Traffic warnings";
-"announce_gpx_waypoints" = "GPX waypoints";
+"announce_gpx_waypoints" = "Track waypoints";
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
@@ -205,8 +209,8 @@
 "shared_string_never" = "Never";
 "shared_setting_always_ask" = "Always ask";
 "general_settings_2" = "General settings";
-"general_settings_descr" = "Configure display and common settings for the application";
-"routing_settings_descr" = "Specify options for navigation";
+"general_settings_descr" = "App theme, units, region";
+"routing_settings_descr" = "Configure navigation";
 "auto_zoom_none" = "No auto zoom";
 "auto_zoom_close" = "To close-up";
 "auto_zoom_far" = "To mid-range";
@@ -591,8 +595,8 @@
 "poi_list" = "POI list";
 
 
-"track_during_nav" = "Auto-record trip during navigation";
-"track_during_nav_descr" = "A trip is automatically saved during navigation";
+"track_during_nav" = "Auto-record trip";
+"track_during_nav_descr" = "Turn on to automatically save a trip during navigation";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
@@ -663,6 +667,7 @@
 "device_settings" = "Device settings";
 "global_settings" = "Global settings";
 "global_settings_descr" = "Affect the entire application.";
+"plugin_settings_descr" = "Plugin settings for the selected profile.";
 
 // Intro
 "intro_skip" = "Skip";
@@ -715,10 +720,17 @@
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
 
+"export_profile" = "Export profile";
 "create_profile" = "Create profile";
 "create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "custom_profile" = "Custom profile";
 "new_profile" = "New profile";
+"configure_profile" = "Configure profile";
+"profile_settings" = "Profile settings";
+"profile_appearance" = "Profile appearance";
+"profile_appearance_descr" = "Icon, color, and name";
+"ui_customization" = "UI customization";
+"ui_customization_descr" = "Drawer items, context menu";
 "edit_profile_list" = "Edit profile list";
 "enter_profile_name" = "Enter profile name";
 "select_color" = "Select color";
@@ -737,7 +749,15 @@
 "all_application_profiles" = "All application profiles";
 "after_tapping_done" = "After you tap Done, deleted profiles will be lost completely.";
 "empty_profile_name_warning" = "Profile name cannot be empty.";
+"err_profile_import" = "Error reading item data: %@";
+"profile_import_success" = "Application profile was imported successfully";
+"not_available_profile_name" = "Profile with this name already exists.";
 "base_profile_descr" = "Base profile";
+"osmand_profile" = "OsmAnd profile";
+"selected_profile" = "Selected profile";
+"app_profiles" = "App profiles";
+"profile_sett_descr" = "Affect selected application profile";
+"export_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -850,6 +870,7 @@
 "res_online_source_cache_alert" = "Applying these changes will clear the cached data for this tile source";
 
 // Menu
+"menu" = "Menu";
 "menu_my_places" = "My Places";
 "menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
@@ -870,6 +891,7 @@
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
+"osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
 "osm_note" = "OSM Note";
 "osm_created" = "Created";
@@ -935,6 +957,7 @@
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 "save_poi_too_many_uppercase" = "The name contains too many capital letters. Continue?";
 "osm_editing_loading_poi" = "Loading POI information";
+"osm_editing_access_descr" = "You can view all your local edits and notes in %@. Already uploaded points are not listed in OsmAnd.";
 
 
 // Mapillary
@@ -976,6 +999,7 @@
 "add_action" = "Add action";
 "create_items" = "Create items";
 "configure_map" = "Configure map";
+"configure_map_descr" = "Map appearance";
 "add_map_marker" = "Add map marker";
 "select_map_marker" = "Select map marker";
 "add_gpx_waypoint" = "Add GPX waypoint";
@@ -1503,6 +1527,11 @@
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
 
+"email_example_hint" = "user@example.com";
+"shared_string_required" = "Required";
+"shared_string_account" = "Account";
+"shared_string_account_add" = "Add account";
+"shared_string_email" = "Email";
 "shared_string_password" = "Password";
 "shared_string_filters" = "Filters";
 "edit_filter" = "Edit categories";
@@ -1901,7 +1930,13 @@
 "routing_attr_allow_motorway_description" = "Allows motorways.";
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
-"vehicle_height_descr" = "Provide your vehicle height, some routes restrictions may apply for high vehicles.";
+"weight_limit_description" = "Provide your vehicle weight, some route restrictions may apply for heavy vehicles.";
+"height_limit_description" = "Provide your vehicle height, some route restrictions may apply for high vehicles.";
+"lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
+"width_limit_description" = "Provide your vehicle width some route restrictions may apply for wide vehicles.";
+"vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
+"vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
+"default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";

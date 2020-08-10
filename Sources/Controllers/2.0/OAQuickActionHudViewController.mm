@@ -136,13 +136,13 @@
     BOOL isLandscape = [OAUtilities isLandscape];
     if (isLandscape)
     {
-        x = _settings.quickActionLandscapeX;
-        y = _settings.quickActionLandscapeY;
+        x = [_settings.quickActionLandscapeX get];
+        y = [_settings.quickActionLandscapeY get];
     }
     else
     {
-        x = _settings.quickActionPortraitX;
-        y = _settings.quickActionPortraitY;
+        x = [_settings.quickActionPortraitX get];
+        y = [_settings.quickActionPortraitY get];
     }
     if (x == 0. && y == 0.)
     {

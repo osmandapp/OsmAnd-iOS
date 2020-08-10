@@ -39,6 +39,7 @@
 #import "OATransportStopsLayer.h"
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
+#import "OAFavoriteViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -1998,16 +1999,36 @@ static const NSInteger _buttonsCount = 4;
 {
     // http://osmand.net/go.html?lat=12.6313&lon=-7.9955&z=8&title=New+York The location was shared with you by OsmAnd
     
-    UIImage *image = [self.mapView getGLScreenshot];
+    UIActivityViewController *activityViewController;
     
-    //NSString *title = [_targetPoint.title stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
-    
-    NSString *string = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
-    
-    UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[image, string]
-                                      applicationActivities:nil];
-    
+    if (_previousTargetType == OATargetFavorite)
+    {
+        NSMutableString *sharingText = [[NSMutableString alloc] init];
+        OAFavoriteViewController *source = (OAFavoriteViewController *)self.customController;
+        
+        if (source.getItemName.length > 0)
+            [sharingText appendString:[NSString stringWithFormat:@"%@\n", source.getItemName]];
+        if (source.getItemGroup.length > 0)
+            [sharingText appendString:[NSString stringWithFormat:@"%@\n", source.getItemGroup]];
+        if (source.getItemDesc.length > 0)
+            [sharingText appendString:[NSString stringWithFormat:@"%@\n", source.getItemDesc]];
+        
+        [sharingText appendString:[NSString stringWithFormat:@"http://osmand.net/go.html?lat=%.5f&lon=%.5f&z=%d\nThe location was shared with you by OsmAnd", _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel]];
+        
+        activityViewController =
+        [[UIActivityViewController alloc] initWithActivityItems:@[sharingText]
+                                          applicationActivities:nil];
+    }
+    else
+    {
+        UIImage *screenshot = [self.mapView getGLScreenshot];
+        NSString *sharingText = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
+        
+        activityViewController =
+        [[UIActivityViewController alloc] initWithActivityItems:@[screenshot, sharingText]
+                                          applicationActivities:nil];
+    }
+
     activityViewController.popoverPresentationController.sourceView = self;
     activityViewController.popoverPresentationController.sourceRect = _backView2.frame;
     

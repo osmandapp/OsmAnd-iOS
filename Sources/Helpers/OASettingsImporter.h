@@ -7,17 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OASettingsCollect.h"
-#import "OACheckDuplicates.h"
-#import "OASettingsImport.h"
+#import "OASettingsHelper.h"
 
 #pragma mark - OASettingsImporter
 
-@class OASettingsItem, OASettingsCollect, OASettingsImport, OACheckDuplicates;
+@class OASettingsItem;
 
 @interface OASettingsImporter : NSObject
-
-- (instancetype) initWithApp;
 
 @end
 
@@ -34,10 +30,12 @@
 
 @interface OAImportAsyncTask : NSObject
 
-- (instancetype) initWithFile:(NSString *)filePath latestChanges:(NSString *)latestChanges version:(NSInteger)version collectListener:(OASettingsCollect *)collectListener;
-- (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version importListener:(OASettingsImport *)importListener;
-- (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems duplicatesListener:(OACheckDuplicates *)duplicatesListener;
-- (void) executeParameters;
+@property (nonatomic, weak) id<OASettingsImportExportDelegate> delegate;
+
+- (instancetype) initWithFile:(NSString *)filePath latestChanges:(NSString *)latestChanges version:(NSInteger)version;
+- (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version;
+- (instancetype) initWithFile:(NSString *)filePath items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems;
+- (void) execute;
 - (NSArray<OASettingsItem *> *) getItems;
 - (NSString *) getFile;
 - (EOAImportType) getImportType;
@@ -52,7 +50,9 @@
 
 @interface OAImportItemsAsyncTask : NSObject
 
-- (instancetype) initWithFile:(NSString *)file listener:(OASettingsImport *)listener items:(NSArray<OASettingsItem *> *)items;
-- (void) executeParameters;
+@property (nonatomic, weak) id<OASettingsImportExportDelegate> delegate;
+
+- (instancetype) initWithFile:(NSString *)file items:(NSArray<OASettingsItem *> *)items;
+- (void) execute;
 
 @end

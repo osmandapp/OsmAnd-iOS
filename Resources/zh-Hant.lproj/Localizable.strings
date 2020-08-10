@@ -1301,7 +1301,7 @@
 "rendering_value_medium_w_name" = "中";
 "rendering_value_blue_name" = "藍色";
 "routing_attr_avoid_toll_description" = "避開收費道路";
-"routeInfo_smoothness_name" = "光滑度";
+"routeInfo_smoothness_name" = "平順度";
 "rendering_attr_surface_cobblestone_name" = "鵝卵石";
 "rendering_attr_smoothness_excellent_name" = "優秀";
 "rendering_attr_highway_class_street_name" = "街道";
@@ -1435,3 +1435,11 @@
 "select_color" = "選取顏色";
 "units_and_formats" = "單位與格式";
 "routing_attr_length_name" = "長度限制";
+"configure_profile" = "設定設定檔";
+"export_profile" = "匯出設定檔";
+"default_speed_dialog_msg" = "估計未知道路類型的到達時間，並限制所有道路的速度（可能會影響路徑）";
+"selected_profile" = "選定的設定檔";
+"profile_appearance" = "設定檔外觀";
+"width_limit_description" = "提供您的車輛寬度，某些路線的限制可能適用於超寬車輛。";
+"height_limit_description" = "提供您的車輛高度，某些路線的限制可能適用於超高車輛。";
+"weight_limit_description" = "提供您的車輛重量，某些路線的限制可能適用於重型車輛。";

@@ -266,7 +266,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
 - (void) changeState:(NSString *)stateId
 {
-    _settings.showRelativeBearing = [BEARING_WIDGET_STATE_RELATIVE_BEARING isEqualToString:stateId];
+    [_settings.showRelativeBearing set:[BEARING_WIDGET_STATE_RELATIVE_BEARING isEqualToString:stateId]];
 }
 
 @end
@@ -653,7 +653,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     
     bearingControl.onClickFunction = ^(id sender) {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        settings.showRelativeBearing = !settings.showRelativeBearing;
+        [settings.showRelativeBearing set:![settings.showRelativeBearing get]];
         [bearingControlWeak updateInfo];
     };
     

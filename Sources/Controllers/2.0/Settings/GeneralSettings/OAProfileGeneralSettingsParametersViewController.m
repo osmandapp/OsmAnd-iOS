@@ -74,8 +74,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = _title;
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

@@ -49,6 +49,7 @@
 #import "OARouteAvoidSettingsViewController.h"
 #import "OARoutePreferencesParameters.h"
 #import "OATransportRoutingHelper.h"
+#import "OAMainSettingsViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -176,6 +177,9 @@ typedef enum
         
     NSMutableArray<OAToolbarViewController *> *_toolbars;
     BOOL _topControlsVisible;
+    
+    BOOL _reopenSettings;
+    OAApplicationMode *_targetAppMode;
 }
 
 - (instancetype) init
@@ -314,7 +318,7 @@ typedef enum
         _destinationViewController.delegate = self;
         _destinationViewController.destinationDelegate = self;
         
-        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisability get])
+        if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
             [self showToolbar:_destinationViewController];
     }
     else if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY)
@@ -357,7 +361,7 @@ typedef enum
 - (void) refreshToolbar
 {
     [_destinationViewController refreshView];
-    if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndicationVisability get] && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
+    if ([OADestinationsHelper instance].sortedDestinations.count > 0 && [_settings.distanceIndicationVisibility get] && [_settings.distanceIndication get] == TOP_BAR_DISPLAY)
         [self showToolbar:_destinationViewController];
     else
         [self hideToolbar:_destinationViewController];
@@ -676,7 +680,15 @@ typedef enum
         
         if ([_dashboard isKindOfClass:[OAWaypointsViewController class]] && _routeInfoView.superview)
             [self createShadowButton:@selector(closeRouteInfo) withLongPressEvent:nil topView:_routeInfoView];
-
+        
+        if (_targetAppMode && _reopenSettings)
+        {
+            OAMainSettingsViewController *settingsVC = [[OAMainSettingsViewController alloc] initWithTargetAppMode:_targetAppMode];
+            [OARootViewController.instance.navigationController pushViewController:settingsVC animated:NO];
+        }
+        _targetAppMode = nil;
+        _reopenSettings = NO;
+        
         _dashboard = nil;
 
         [self.targetMenuView quickShow];
@@ -717,7 +729,15 @@ typedef enum
 
 - (void) mapSettingsButtonClick:(id)sender
 {
+    [self mapSettingsButtonClick:sender mode:nil];
+}
+
+- (void) mapSettingsButtonClick:(id)sender mode:(OAApplicationMode *)targetMode
+{
     [OAAnalyticsHelper logEvent:@"configure_map_open"];
+    
+    _targetAppMode = targetMode;
+    _reopenSettings = _targetAppMode != nil;
     
     [self removeGestureRecognizers];
     
@@ -733,7 +753,15 @@ typedef enum
 
 - (void) showConfigureScreen
 {
+    [self showConfigureScreen:nil];
+}
+
+- (void) showConfigureScreen:(OAApplicationMode *)targetMode
+{
     [OAAnalyticsHelper logEvent:@"configure_screen_open"];
+    
+    _targetAppMode = targetMode;
+    _reopenSettings = _targetAppMode != nil;
     
     [self removeGestureRecognizers];
     
@@ -3280,7 +3308,7 @@ typedef enum
 
 - (void)destinationsAdded
 {
-    if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisability get])
+    if ([_settings.distanceIndication get] == TOP_BAR_DISPLAY && [_settings.distanceIndicationVisibility get])
         [self showToolbar:_destinationViewController];
 }
 
@@ -3352,7 +3380,7 @@ typedef enum
     
         [cardsController doViewWillDisappear];
 
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisability get]) || ([_settings.distanceIndication get] == WIDGET_DISPLAY))
+        if ([OADestinationsHelper instance].sortedDestinations.count == 0 || !([_settings.distanceIndicationVisibility get]) || ([_settings.distanceIndication get] == WIDGET_DISPLAY))
         {
             [self hideToolbar:_destinationViewController];
         }

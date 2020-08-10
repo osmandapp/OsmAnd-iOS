@@ -619,8 +619,8 @@
 "int_seconds" = "sekúnd";
 "shared_string_never" = "Nikdy";
 "general_settings_2" = "Všeobecné nastavenia";
-"general_settings_descr" = "Konfigurácia zobrazenia a iných globálnych nastavení";
-"routing_settings_descr" = "Určiť možnosti navigácie";
+"general_settings_descr" = "Vzhľad aplikácie, jednotky, oblasť";
+"routing_settings_descr" = "Nastaviť navigáciu";
 "auto_zoom_none" = "Žiadne automatické približovanie";
 "auto_zoom_close" = "Veľké priblíženie";
 "auto_zoom_far" = "Stredné priblíženie";
@@ -1571,3 +1571,11 @@
 "screen_alerts" = "Varovania na obrazovke";
 "units_and_formats" = "Jednotky & formáty";
 "routing_attr_length_name" = "Limit dĺžky";
+"weight_limit_description" = "Zadajte hmotnosť vášho vozidla, pretože na trase môžu byť obmedzenia pre ťažké vozidlá.";
+"default_speed_dialog_msg" = "Odhaduje čas na cestách neznámeho typu a obmedzuje rýchlosť na všetkých cestách (môže ovplyvniť trasu)";
+"width_limit_description" = "Zadajte šírku vášho vozidla, pretože na trase môžu byť obmedzenia pre široké vozidlá.";
+"height_limit_description" = "Zadajte výšku vášho vozidla, pretože na trase môžu byť obmedzenia pre vysoké vozidlá.";
+"export_profile" = "Exportovať profil";
+"profile_appearance" = "Vzhľad profilu";
+"selected_profile" = "Zvolený profil";
+"configure_profile" = "Nastaviť profil";

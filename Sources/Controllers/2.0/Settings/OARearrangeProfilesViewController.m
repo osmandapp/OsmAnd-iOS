@@ -176,7 +176,7 @@
     }
     if (cell)
     {
-        cell.titleLabel.text = mode.name;
+        cell.titleLabel.text = mode.toHumanString;
         NSString *imageName = @"";
         if (isAllProfiles)
             imageName = mode.isCustomProfile ? @"ic_custom_delete" : @"ic_custom_delete_disable";
@@ -251,6 +251,14 @@
     return section == kAllApplicationProfilesSection ? @"" : OALocalizedString(@"after_tapping_done");
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
+        headerView.textLabel.textColor  = UIColorFromRGB(color_text_footer);
+    }
+}
+
 - (void) actionButtonPressed:(UIButton *)sender
 {
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
@@ -297,13 +305,6 @@
     [_tableView moveRowAtIndexPath:indexPath toIndexPath:targetPath];
     [_tableView endUpdates];
     [CATransaction commit];
-}
-
-- (CGFloat) heightForLabel:(NSString *)text
-{
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGFloat textWidth = self.view.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    return [OAUtilities calculateTextBounds:text width:textWidth font:labelFont].height;
 }
 
 @end

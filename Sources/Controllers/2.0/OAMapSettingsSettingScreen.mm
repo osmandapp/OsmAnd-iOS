@@ -65,7 +65,7 @@
     if ([settingKeyName isEqualToString:settingAppModeKey])
     {
         title = OALocalizedString(@"map_settings_mode");
-        int mode = _settings.settingAppMode;
+        int mode = [_settings.settingAppMode get];
         data = @[
                  @{
                      @"name" : OALocalizedString(@"daynight_mode_auto"),
@@ -232,11 +232,11 @@
     {
         int index = (int)indexPath.row;
         if (index == 1)
-            [_settings setSettingAppMode:APPEARANCE_MODE_DAY];
+            [_settings setAppMode:APPEARANCE_MODE_DAY];
         else if (index == 2)
-            [_settings setSettingAppMode:APPEARANCE_MODE_NIGHT];
+            [_settings setAppMode:APPEARANCE_MODE_NIGHT];
         else
-            [_settings setSettingAppMode:APPEARANCE_MODE_AUTO];
+            [_settings setAppMode:APPEARANCE_MODE_AUTO];
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {

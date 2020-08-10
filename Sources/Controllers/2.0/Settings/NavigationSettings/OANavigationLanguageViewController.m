@@ -59,8 +59,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"language");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

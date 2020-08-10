@@ -9,6 +9,12 @@
 #import "OACompoundViewController.h"
 #import "OAApplicationMode.h"
 
+@protocol OAVehicleParametersSettingDelegate <NSObject>
+
+- (void) onSettingsChanged;
+
+@end
+
 @interface OASettingsModalPresentationViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -17,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *subtitleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) id<OAVehicleParametersSettingDelegate> delegate;
 
 - (CGFloat) heightForLabel:(NSString *)text;
 - (void) setupTableHeaderViewWithText:(NSString *)text;

@@ -17,6 +17,7 @@
 #import "OATargetPoint.h"
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
+#import "OAPOIFiltersHelper.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
@@ -40,7 +41,18 @@
     NSString *_poiKeyword;
     NSString *_prefLang;
     
+    OAPOIFiltersHelper *_filtersHelper;
+    
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
+}
+
+- (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController
+{
+    self = [super initWithMapViewController:mapViewController];
+    if (self) {
+        _filtersHelper = [OAPOIFiltersHelper sharedInstance];
+    }
+    return self;
 }
 
 - (NSString *) layerId
@@ -54,34 +66,35 @@
     {
         [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
         _amenitySymbolsProvider.reset();
+        _showPoiOnMap = NO;
     }
+}
+
+- (void) updateVisiblePoiFilter
+{
+    if (_showPoiOnMap && _amenitySymbolsProvider)
+    {
+        [self.mapViewController runWithRenderSync:^{
+            [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+            _amenitySymbolsProvider.reset();
+        }];
+        _showPoiOnMap = NO;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSSet<OAPOIUIFilter *> *filters = [_filtersHelper getSelectedPoiFilters];
+        if (filters.count > 0)
+        {
+            OAPOIUIFilter *f = [_filtersHelper combineSelectedFilters:filters];
+            [self showPoiOnMap:f keyword:f.filterId];
+        }
+    });
+    
 }
 
 - (BOOL) updateLayer
 {
-    if (_showPoiOnMap)
-    {
-        if (_poiUiFilter)
-            [self doShowPoiUiFilterOnMap];
-        else
-            [self doShowPoiOnMap];
-    }
-    
+    [self updateVisiblePoiFilter];
     return YES;
-}
-
-- (void) showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword
-{
-    _showPoiOnMap = YES;
-    _poiCategoryName = category;
-    _poiFilterName = filter;
-    _poiTypeName = type;
-    _poiKeyword = keyword;
-    _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self doShowPoiOnMap];
-    });
 }
 
 - (void) showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword
@@ -94,86 +107,6 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self doShowPoiUiFilterOnMap];
     });
-}
-
-- (void) doShowPoiOnMap
-{
-    [self.mapViewController runWithRenderSync:^{
-        auto categoriesFilter = QHash<QString, QStringList>();
-        if (_poiCategoryName && _poiTypeName) {
-            categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList(QString::fromNSString(_poiTypeName)));
-        } else if (_poiCategoryName) {
-            categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList());
-        }
-        
-        OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
-        ([self]
-         (const std::shared_ptr<const OsmAnd::Amenity>& amenity)
-         {
-             bool res = false;
-             
-             if (_poiFilterName)
-             {
-                 NSString *category;
-                 NSString *type;
-                 const auto& decodedCategories = amenity->getDecodedCategories();
-                 if (!decodedCategories.isEmpty())
-                 {
-                     const auto& entry = decodedCategories.first();
-                     category = entry.category.toNSString();
-                     type = entry.subcategory.toNSString();
-                 }
-                 
-                 if (category && type)
-                 {
-                     OAPOIType *poiType = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:category name:type];
-                     if (poiType && [poiType.filter.name isEqualToString:_poiFilterName])
-                         res = true;
-                 }
-             }
-             else
-             {
-                 res = true;
-             }
-             
-             if (res && _poiKeyword)
-             {
-                 NSString *name = amenity->nativeName.toNSString();
-                 
-                 NSString *nameLocalized;
-                 const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
-                 for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
-                 {
-                     if (lang != QString::null && entry.key() == lang)
-                         nameLocalized = entry.value().toNSString();
-                 }
-                 
-                 if (_poiKeyword.length == 0 || [self beginWith:_poiKeyword text:nameLocalized] || [self beginWithAfterSpace:_poiKeyword text:nameLocalized] || [self beginWith:_poiKeyword text:name] || [self beginWithAfterSpace:_poiKeyword text:name])
-                 {
-                     res = true;
-                 }
-                 else
-                 {
-                     res = false;
-                 }
-                 
-             }
-             
-             return res;
-         });
-        
-        
-        if (categoriesFilter.count() > 0)
-        {
-            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.mapViewController.displayDensityFactor, 1.0)));
-        }
-        else
-        {
-            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.mapViewController.displayDensityFactor, 1.0)));
-        }
-        
-        [self.mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
-    }];
 }
 
 - (void) doShowPoiUiFilterOnMap
@@ -229,24 +162,6 @@
         
         [self.mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
     }];
-}
-
-- (void) hidePoi
-{
-    if (!_showPoiOnMap)
-        return;
-    
-    _showPoiOnMap = NO;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self.mapViewController runWithRenderSync:^{
-            if (_amenitySymbolsProvider)
-            {
-                [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
-                _amenitySymbolsProvider.reset();
-            }
-        }];
-    });
 }
 
 - (BOOL) beginWithOrAfterSpace:(NSString *)str text:(NSString *)text

@@ -12,6 +12,9 @@
 #import "OAApplicationMode.h"
 #import "OANavigationIcon.h"
 #import "OALocationIcon.h"
+#import "OAMainSettingsViewController.h"
+#import "OAConfigureProfileViewController.h"
+#import "OAAppSettings.h"
 
 #import "OATextInputCell.h"
 #import "OAColorsTableViewCell.h"
@@ -25,42 +28,142 @@
 #define kIconsAtRestRow 0
 #define kIconsWhileMovingRow 1
 
+@interface OAApplicationProfileObject : NSObject
+
+@property (nonatomic) NSString *stringKey;
+@property (nonatomic) OAApplicationMode *parent;
+@property (nonatomic) NSString *name;
+@property (nonatomic) int color;
+@property (nonatomic) NSString *iconName;
+@property (nonatomic) NSString *routingProfile;
+@property (nonatomic) EOARouteService routeService;
+@property (nonatomic) EOANavigationIcon navigationIcon;
+@property (nonatomic) EOALocationIcon locationIcon;
+
+@end
+
+@implementation OAApplicationProfileObject
+
+- (BOOL)isEqual:(id)other
+{
+    if (other == self) {
+        return YES;
+    } else if (![super isEqual:other]) {
+        return NO;
+    } else {
+        OAApplicationProfileObject *that = (OAApplicationProfileObject *) other;
+
+        if (![_iconName isEqualToString:that.iconName])
+            return NO;
+        if (_stringKey != nil ? ![_stringKey isEqualToString:that.stringKey] : that.stringKey != nil)
+            return NO;
+        if (_parent != nil ? ![_parent isEqual:that.parent] : that.parent != nil)
+            return NO;
+        if (_name != nil ? ![_name isEqualToString:that.name] : that.name != nil)
+            return NO;
+        if (_color != that.color)
+            return NO;
+        if (_routingProfile != nil ? ![_routingProfile isEqualToString:that.routingProfile] : that.routingProfile != nil)
+            return NO;
+        if (_routeService != that.routeService)
+            return NO;
+        if (_navigationIcon != that.navigationIcon)
+            return NO;
+        return _locationIcon == that.locationIcon;
+    }
+}
+
+- (NSUInteger)hash
+{
+    NSUInteger result = _stringKey != nil ? _stringKey.hash : 0;
+    result = 31 * result + (_parent != nil ? _parent.hash : 0);
+    result = 31 * result + (_name != nil ? _name.hash : 0);
+    result = 31 * result + @(_color).hash;
+    result = 31 * result + (_iconName != nil ? _iconName.hash : 0);
+    result = 31 * result + (_routingProfile != nil ? _routingProfile.hash : 0);
+    result = 31 * result + @(_routeService).hash;
+    result = 31 * result + @(_navigationIcon).hash;
+    result = 31 * result + @(_locationIcon).hash;
+    return result;
+}
+
+@end
+
 @interface OAProfileAppearanceViewController() <UITableViewDelegate, UITableViewDataSource, OAColorsTableViewCellDelegate,  OAIconsTableViewCellDelegate, OALocationIconsTableViewCellDelegate, UITextFieldDelegate>
 
 @end
 
 @implementation OAProfileAppearanceViewController
 {
-    OAApplicationMode *_parent;
+    OAApplicationProfileObject *_profile;
+    OAApplicationProfileObject *_changedProfile;
+    
+    BOOL _isNewProfile;
+    
     NSArray<NSArray *> *_data;
     
-    NSString *_profileName;
     NSArray<NSNumber *> *_colors;
-    NSArray<NSString *> *_colorNames;
-    NSInteger _currentColor;
+    NSDictionary<NSNumber *, NSString *> *_colorNames;
     NSArray<NSString *> *_icons;
-    NSInteger _currentIcon;
-    EOALocationIcon _currentIconAtRest;
-    EOANavigationIcon _currentIconWhileMoving;
+}
+
+- (instancetype) initWithParentProfile:(OAApplicationMode *)profile
+{
+    self = [super init];
+    if (self) {
+        _isNewProfile = YES;
+        _profile = [[OAApplicationProfileObject alloc] init];
+        [self setupAppProfileObjectFromAppMode:profile];
+        _profile.parent = profile;
+        _profile.stringKey = [self getUniqueStringKey:profile];
+        
+        [self setupChangedProfile];
+        
+        [self commonInit];
+    }
+    return self;
 }
 
 - (instancetype) initWithProfile:(OAApplicationMode *)profile
 {
     self = [super init];
     if (self) {
-        _parent = profile;
+        _isNewProfile = NO;
+        _profile = [[OAApplicationProfileObject alloc] init];
+        [self setupAppProfileObjectFromAppMode:profile];
+        
+        [self setupChangedProfile];
+        
         [self commonInit];
     }
     return self;
 }
 
-- (instancetype) init
+- (void) setupChangedProfile
 {
-    self = [super init];
-    if (self) {
-        [self commonInit];
-    }
-    return self;
+    _changedProfile = [[OAApplicationProfileObject alloc] init];
+    _changedProfile.stringKey = _profile.stringKey;
+    _changedProfile.parent = _profile.parent;
+    _changedProfile.name = _isNewProfile ? [self createNonDuplicateName:_profile.name] : _profile.name;
+    _changedProfile.color = _profile.color;
+    _changedProfile.iconName = _profile.iconName;
+    _changedProfile.routeService = _profile.routeService;
+    _changedProfile.routingProfile = _profile.routingProfile;
+    _changedProfile.navigationIcon = _profile.navigationIcon;
+    _changedProfile.locationIcon = _profile.locationIcon;
+}
+
+- (void) setupAppProfileObjectFromAppMode:(OAApplicationMode *) baseModeForNewProfile
+{
+    _profile.stringKey = baseModeForNewProfile.stringKey;
+    _profile.parent = baseModeForNewProfile.parent;
+    _profile.name = baseModeForNewProfile.toHumanString;
+    _profile.color = baseModeForNewProfile.getIconColor;
+    _profile.iconName = baseModeForNewProfile.getIconName;
+    _profile.routingProfile = baseModeForNewProfile.getRoutingProfile;
+    _profile.routeService = (EOARouteService) baseModeForNewProfile.getRouterService;
+    _profile.locationIcon = baseModeForNewProfile.getLocationIcon;
+    _profile.navigationIcon = baseModeForNewProfile.getNavigationIcon;
 }
 
 - (void) commonInit
@@ -71,7 +174,12 @@
 - (void) applyLocalization
 {
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
-    _titleLabel.text = OALocalizedString(@"new_profile");
+    _titleLabel.text = _changedProfile.name.length == 0 ? [self getEmptyNameTitle] : _changedProfile.name;
+}
+
+- (NSString *) getEmptyNameTitle
+{
+    return _isNewProfile ? OALocalizedString(@"new_profile") : OALocalizedString(@"profile_appearance");
 }
 
 - (void) viewDidLoad
@@ -80,6 +188,7 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
+    _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     [self setupNavBar];
     [self setupView];
 
@@ -96,14 +205,39 @@
 
 - (void) setupNavBar
 {
-    NSString *imgName = _parent.getIconName;
-    NSUInteger iconIndex = [_icons indexOfObject:imgName];
-    _currentIcon = iconIndex != NSNotFound ? iconIndex : 0;
-    NSString *iconName = _icons[_currentIcon];
-    UIImage *img = [UIImage imageNamed:iconName];
+    NSString *imgName = _changedProfile.iconName;
+    UIImage *img = [UIImage imageNamed:imgName];
     _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _profileIconImageView.tintColor = UIColorFromRGB(_parent.getIconColor);
+    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.color);
     _profileIconView.layer.cornerRadius = _profileIconView.frame.size.height/2;
+}
+
+- (NSString *) createNonDuplicateName:(NSString *)profileName
+{
+    NSRange lastSpace = [profileName rangeOfString:@" " options:NSBackwardsSearch];
+    NSString *baseString;
+    NSString *numberString;
+    NSInteger number = 0;
+    if (lastSpace.length == 0)
+    {
+        baseString = profileName;
+    }
+    else
+    {
+        baseString = [profileName substringToIndex:lastSpace.location];
+        numberString = [profileName substringFromIndex:lastSpace.location];
+        number = [numberString intValue];
+        if (number == 0)
+            baseString = profileName;
+    }
+    NSString *proposedProfileName;
+    for (NSInteger value = number + 1; ; value++)
+    {
+        proposedProfileName = [NSString stringWithFormat:@"%@ %ld", baseString, value];
+        if ([OAApplicationMode isProfileNameAvailable:proposedProfileName])
+            break;
+    }
+    return proposedProfileName;
 }
 
 - (void) setupView
@@ -113,22 +247,20 @@
     NSMutableArray *profileNameArr = [NSMutableArray array];
     NSMutableArray *profileAppearanceArr = [NSMutableArray array];
     NSMutableArray *profileMapAppearanceArr = [NSMutableArray array];
-    NSString* profileColor = OALocalizedString(_colorNames[_currentColor]);
+    NSString* profileColor = OALocalizedString(_colorNames[@(_changedProfile.color)]);
     [profileNameArr addObject:@{
         @"type" : kCellTypeInput,
-        @"title" : OALocalizedString(@"enter_profile_name"),
+        @"title" : _changedProfile.name,
     }];
     [profileAppearanceArr addObject:@{
         @"type" : kCellTypeColorCollection,
         @"title" : OALocalizedString(@"select_color"),
         @"value" : profileColor,
-        @"arrayToDisplay" : @"colors",
     }];
     [profileAppearanceArr addObject:@{
         @"type" : kCellTypeIconCollection,
         @"title" : OALocalizedString(@"select_icon"),
         @"value" : @"",
-        @"arrayToDisplay" : @"icons",
     }];
     [profileMapAppearanceArr addObject:@{
         @"type" : kCellTypePositionIconCollection,
@@ -148,8 +280,6 @@
 
 - (void) generateData
 {
-    _profileName = @"";
-    
     _colors = @[
         @(profile_icon_color_blue_light_default),
         @(profile_icon_color_purple_light),
@@ -159,8 +289,8 @@
         @(profile_icon_color_yellow_light),
         @(profile_icon_color_magenta_light),
     ];
-    _colorNames = @[@"lightblue", @"purple", @"green", @"blue", @"red", @"yellow", @"col_magenta"];
-    _currentColor = 0;
+    
+    _colorNames = @{@(profile_icon_color_blue_light_default): @"lightblue", @(profile_icon_color_purple_light) : @"purple", @(profile_icon_color_green_light) : @"green", @(profile_icon_color_blue_light) : @"blue",  @(profile_icon_color_red_light) : @"red", @(profile_icon_color_yellow_light) : @"yellow", @(profile_icon_color_magenta_light) : @"col_magenta"};
     
     _icons = @[@"ic_world_globe_dark",
                @"ic_action_car_dark",
@@ -197,20 +327,17 @@
                @"ic_action_wagon",
                @"ic_action_go_cart",
                @"ic_action_openstreetmap_logo"];
-    
-    _currentIconAtRest = LOCATION_ICON_DEFAULT;
-    _currentIconWhileMoving = NAVIGATION_ICON_DEFAULT;
 }
 
 - (NSArray<UIImage *> *) getIconsAtRest
 {
-    UIColor *currColor = UIColorFromRGB(_colors[_currentColor].integerValue);
+    UIColor *currColor = UIColorFromRGB(_changedProfile.color);
     return @[[OALocationIcon getIcon:LOCATION_ICON_DEFAULT color:currColor], [OALocationIcon getIcon:LOCATION_ICON_CAR color:currColor], [OALocationIcon getIcon:LOCATION_ICON_BICYCLE color:currColor]];
 }
 
 - (NSArray<UIImage *> *) getNavIcons
 {
-    UIColor *currColor = UIColorFromRGB(_colors[_currentColor].integerValue);
+    UIColor *currColor = UIColorFromRGB(_changedProfile.color);
     return @[[OANavigationIcon getIcon:NAVIGATION_ICON_DEFAULT color:currColor], [OANavigationIcon getIcon:NAVIGATION_ICON_NAUTICAL color:currColor], [OANavigationIcon getIcon:NAVIGATION_ICON_CAR color:currColor]];
 }
 
@@ -231,31 +358,68 @@
 
 - (IBAction) saveButtonClicked:(id)sender
 {
-    if (_profileName.length == 0)
+    _changedProfile.name = [_changedProfile.name trim];
+    if (_changedProfile.name.length == 0)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"empty_profile_name_warning") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
     }
+    else if (![OAApplicationMode isProfileNameAvailable:_changedProfile.name] && _isNewProfile)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"not_available_profile_name") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
     else
     {
+        [self saveProfile];
+        for (UIViewController *vc in [self.navigationController viewControllers])
+        {
+            if (([vc isKindOfClass:OAMainSettingsViewController.class] && _isNewProfile)
+                || ([vc isKindOfClass:OAConfigureProfileViewController.class] && !_isNewProfile))
+            {
+                [self.navigationController popToViewController:vc animated:YES];
+            }
+        }
+    }
+}
+
+- (void) saveProfile
+{
+    _profile = _changedProfile;
+    if (_isNewProfile)
+    {
         [self saveNewProfile];
-        [self.navigationController popViewControllerAnimated:YES];
-        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else
+    {
+        OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:_changedProfile.stringKey
+                                                                 def:[[OAApplicationMode alloc] initWithName:@"" stringKey:_changedProfile.stringKey]];
+        [mode setParent:_changedProfile.parent];
+        [mode setIconName:_changedProfile.iconName];
+        [mode setUserProfileName:[_changedProfile.name trim]];
+        [mode setRoutingProfile:_changedProfile.routingProfile];
+        [mode setRouterService:_changedProfile.routeService];
+        [mode setIconColor:_changedProfile.color];
+        [mode setLocationIcon:_changedProfile.locationIcon];
+        [mode setNavigationIcon:_changedProfile.navigationIcon];
     }
 }
 
 - (void) saveNewProfile
 {
-    OAApplicationMode *newMode = [[OAApplicationMode alloc] initWithName:_profileName stringKey:[self getUniqueStringKey:_parent]];
-    [newMode setParent:_parent];
-    [newMode setIconName:_icons[_currentIcon]];
-    [newMode setUserProfileName:_profileName];
-    [newMode setRoutingProfile:_parent.getRoutingProfile];
-    [newMode setRouterService:_parent.getRouterService];
-    [newMode setIconColor:_colors[_currentColor].intValue];
-    [newMode setLocationIcon:_currentIconAtRest];
-    [newMode setNavigationIcon:_currentIconWhileMoving];
+    _changedProfile.stringKey = [self getUniqueStringKey:_changedProfile.parent];
+    
+    OAApplicationMode *newMode = [[OAApplicationMode alloc] initWithName:@"" stringKey:_changedProfile.stringKey];
+    [newMode setParent:_changedProfile.parent];
+    [newMode setIconName:_changedProfile.iconName];
+    [newMode setUserProfileName:_changedProfile.name.trim];
+    [newMode setRoutingProfile:_changedProfile.routingProfile];
+    [newMode setRouterService:_changedProfile.routeService];
+    [newMode setIconColor:_changedProfile.color];
+    [newMode setLocationIcon:_changedProfile.locationIcon];
+    [newMode setNavigationIcon:_changedProfile.navigationIcon];
     [newMode setOrder:(int) OAApplicationMode.allPossibleValues.count];
     
     [OAApplicationMode saveProfile:newMode];
@@ -321,8 +485,7 @@
             cell = (OATextInputCell *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
         }
-        cell.inputField.placeholder = item[@"title"];
-        cell.inputField.text = _profileName;
+        cell.inputField.text = item[@"title"];
         cell.inputField.delegate = self;
         return cell;
     }
@@ -344,7 +507,8 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
-            cell.currentColor = _currentColor;
+            cell.valueLabel.tintColor = UIColorFromRGB(color_text_footer);
+            cell.currentColor = [_colors indexOfObject:@(_changedProfile.color)];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
         }
@@ -367,8 +531,8 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.currentColor = [_colors[_currentColor] integerValue];
-            cell.currentIcon = _currentIcon;
+            cell.currentColor = _changedProfile.color;
+            cell.currentIcon = [_icons indexOfObject:_changedProfile.iconName];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
         }
@@ -391,9 +555,9 @@
             BOOL isAtRestRow = indexPath.row == kIconsAtRestRow;
             cell.locationType = isAtRestRow ? EOALocationTypeRest : EOALocationTypeMoving;
             cell.dataArray = isAtRestRow ? [self getIconsAtRest] : [self getNavIcons];
-            cell.selectedIndex = isAtRestRow ? _currentIconAtRest : _currentIconWhileMoving;
+            cell.selectedIndex = isAtRestRow ? _changedProfile.locationIcon : _changedProfile.navigationIcon;
             cell.titleLabel.text = item[@"title"];
-            cell.currentColor = [_colors[_currentColor] intValue];
+            cell.currentColor = _changedProfile.color;
             cell.delegate = self;
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -409,14 +573,22 @@
     return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
+        headerView.textLabel.textColor  = UIColorFromRGB(color_text_footer);
+    }
+}
+
 #pragma mark - OAColorsTableViewCellDelegate
 
 - (void)colorChanged:(NSInteger)tag
 {
-    _currentColor = tag;
+    _changedProfile.color = _colors[tag].intValue;
     
     [self setupView];
-    _profileIconImageView.tintColor = UIColorFromRGB([_colors[_currentColor] intValue]);
+    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.color);
     [_tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _tableView.numberOfSections - 1)] withRowAnimation:UITableViewRowAnimationNone];
 }
 
@@ -424,10 +596,10 @@
 
 - (void)iconChanged:(NSInteger)tag
 {
-    _currentIcon = tag;
+    _changedProfile.iconName = _icons[tag];
     
     UIImage *img = nil;
-    NSString *imgName = _icons[_currentIcon];
+    NSString *imgName = _changedProfile.iconName;
     img = [UIImage imageNamed:imgName];
     _profileIconImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
@@ -438,9 +610,9 @@
 - (void)mapIconChanged:(NSInteger)newValue type:(EOALocationType)locType
 {
     if (locType == EOALocationTypeRest)
-        _currentIconAtRest = (EOALocationIcon) newValue;
+        _changedProfile.locationIcon = (EOALocationIcon) newValue;
     else if (locType == EOALocationTypeMoving)
-        _currentIconWhileMoving = (EOANavigationIcon) newValue;
+        _changedProfile.navigationIcon = (EOANavigationIcon) newValue;
     
     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:locType == EOALocationTypeRest ? 0 : 1 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -455,7 +627,8 @@
 
 - (void) textViewDidChange:(UITextView *)textView
 {
-    _profileName = textView.text;
+    _changedProfile.name = textView.text;
+    _titleLabel.text = _changedProfile.name.length == 0 ? [self getEmptyNameTitle] : _changedProfile.name;
 }
 
 #pragma mark - Keyboard Notifications

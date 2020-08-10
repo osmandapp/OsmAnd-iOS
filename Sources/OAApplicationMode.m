@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
+#import "OAColors.h"
 
 @interface OAApplicationMode ()
 
@@ -167,9 +168,24 @@ static OAApplicationMode *_SKI;
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     OAApplicationMode *m = [[OAApplicationMode alloc] initWithName:@"" stringKey:key];
-    m.name = [settings.userProfileName get:m];
+//    m.name = [settings.userProfileName get:m];
     m.parent = [self valueOfStringKey:[settings.parentAppMode get:m] def:nil];
     return m;
+}
+
++ (OAApplicationMode *) fromModeBean:(OAApplicationModeBean *)modeBean
+{
+    OAApplicationMode *am = [[OAApplicationMode alloc] initWithName:modeBean.userProfileName stringKey:modeBean.stringKey];
+    [am setParent:[OAApplicationMode valueOfStringKey:modeBean.parent def:nil]];
+    [am setUserProfileName:modeBean.userProfileName];
+    [am setIconName:modeBean.iconName];
+    [am setIconColor:modeBean.iconColor];
+    [am setRoutingProfile:modeBean.routingProfile];
+    [am setRouterService:modeBean.routeService];
+    [am setLocationIcon:modeBean.locIcon];
+    [am setNavigationIcon:modeBean.navIcon];
+    [am setOrder:modeBean.order];
+    return am;
 }
 
 - (instancetype)initWithName:(NSString *)name stringKey:(NSString *)stringKey
@@ -226,6 +242,22 @@ static OAApplicationMode *_SKI;
     return list;
 }
 
+- (NSDictionary *) toJson
+{
+    return @{
+        @"stringKey" : self.stringKey,
+        @"userProfileName" : self.getUserProfileName,
+        @"iconColor" : self.getIconColorName,
+        @"iconName" : self.getIconName,
+        @"parent" : self.parent ? self.parent.stringKey : @"",
+        @"routeService" : self.getRouterServiceName,
+        @"routingProfile" : self.getRoutingProfile,
+        @"locIcon" : self.getLocationIconName,
+        @"navIcon" : self.getNavigationIconName,
+        @"order" : @(self.getOrder)
+    };
+}
+
 - (BOOL) hasFastSpeed
 {
     return [self getDefaultSpeed] > 10;
@@ -245,6 +277,15 @@ static OAApplicationMode *_SKI;
     float speed = MAX([self getDefaultSpeed], 0.3f);
     // 2 sec + 7 m: 50 kmh - 35 m, 10 kmh - 12 m, 4 kmh - 9 m, 400 kmh - 230 m
     return (int) (7 + speed * 2);
+}
+
+- (NSString *) toHumanString
+{
+    NSString *userProfileName = [self getUserProfileName];
+    if (userProfileName.length == 0 && _name.length > 0)
+        return _name;
+    else
+        return userProfileName;
 }
 
 - (BOOL) isCustomProfile
@@ -345,6 +386,21 @@ static OAApplicationMode *_SKI;
         [OAAppSettings.sharedManager.routingProfile set:routingProfile mode:self];
 }
 
+- (NSString *) getRouterServiceName
+{
+    switch (self.getRouterService)
+    {
+        case OSMAND:
+            return @"OSMAND";
+        case DIRECT_TO:
+            return @"DIRECT_TO";
+        case STRAIGHT:
+            return @"STRAIGHT";
+        default:
+            return @"OSMAND";
+    }
+}
+
 - (NSInteger) getRouterService
 {
     return [OAAppSettings.sharedManager.routerService get:self];
@@ -353,6 +409,21 @@ static OAApplicationMode *_SKI;
 - (void) setRouterService:(NSInteger) routerService
 {
     [OAAppSettings.sharedManager.routerService set:(int) routerService mode:self];
+}
+
+- (NSString *) getNavigationIconName
+{
+    switch (self.getNavigationIcon)
+    {
+        case NAVIGATION_ICON_DEFAULT:
+            return @"DEFAULT";
+        case NAVIGATION_ICON_NAUTICAL:
+            return @"NAUTICAL";
+        case NAVIGATION_ICON_CAR:
+            return @"CAR";
+        default:
+            return @"DEFAULT";
+    }
 }
 
 - (EOANavigationIcon) getNavigationIcon
@@ -365,6 +436,21 @@ static OAApplicationMode *_SKI;
     [OAAppSettings.sharedManager.navigationIcon set:(int)navIcon mode:self];
 }
 
+- (NSString *) getLocationIconName
+{
+    switch (self.getLocationIcon)
+    {
+        case LOCATION_ICON_DEFAULT:
+            return @"DEFAULT";
+        case LOCATION_ICON_CAR:
+            return @"CAR";
+        case LOCATION_ICON_BICYCLE:
+            return @"BICYCLE";
+        default:
+            return @"DEFAULT";
+    }
+}
+
 - (EOALocationIcon) getLocationIcon
 {
     return [OAAppSettings.sharedManager.locationIcon get:self];
@@ -373,6 +459,29 @@ static OAApplicationMode *_SKI;
 - (void) setLocationIcon:(EOALocationIcon) locIcon
 {
     [OAAppSettings.sharedManager.locationIcon set:(int)locIcon mode:self];
+}
+
+- (NSString *) getIconColorName
+{
+    switch (self.getIconColor)
+    {
+        case profile_icon_color_blue_light_default:
+            return @"DEFAULT";
+        case profile_icon_color_purple_light:
+            return @"PURPLE";
+        case profile_icon_color_green_light:
+            return @"GREEN";
+        case profile_icon_color_blue_light:
+            return @"BLUE";
+        case profile_icon_color_red_light:
+            return @"RED";
+        case profile_icon_color_yellow_light:
+            return @"DARK_YELLOW";
+        case profile_icon_color_magenta_light:
+            return @"MAGENTA";
+        default:
+            return @"DEFAULT";
+    }
 }
 
 - (int) getIconColor
@@ -498,6 +607,14 @@ static OAApplicationMode *_SKI;
     [self saveCustomAppModesToSettings];
 }
 
++ (BOOL) isProfileNameAvailable:(NSString *)profileName
+{
+    for (OAApplicationMode *profile in _values)
+        if ([profile.toHumanString isEqual:profileName])
+            return NO;
+    return YES;
+}
+
 + (void) deleteCustomModes:(NSArray<OAApplicationMode *> *) modes
 {
     [_values removeObjectsInArray:modes];
@@ -608,6 +725,91 @@ static OAApplicationMode *_SKI;
         return true;
     
     return [set containsObject:self];
+}
+
+@end
+
+@implementation OAApplicationModeBean
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self) {
+        _iconName = @"map_world_globe_dark";
+        _iconColor = profile_icon_color_blue_light_default;
+        _routeService = 0;
+        _order = -1;
+    }
+    return self;
+}
+
++ (OAApplicationModeBean *) fromJson:(NSDictionary *)jsonData
+{
+    OAApplicationModeBean *res = [[OAApplicationModeBean alloc] init];
+    res.userProfileName = jsonData[@"userProfileName"];
+    res.iconColor = [self parseColor:jsonData[@"iconColor"]];
+    res.iconName = jsonData[@"iconName"];
+    res.locIcon = [self parseLocationIcon:jsonData[@"locIcon"]];
+    res.navIcon = [self parseNavIcon:jsonData[@"navIcon"]];
+    res.order = [jsonData[@"order"] intValue];
+    res.routeService = [jsonData[@"routeService"] integerValue];
+    res.routingProfile = jsonData[@"routingProfile"];
+    res.parent = jsonData[@"parent"];
+    res.stringKey = jsonData[@"stringKey"];
+    return res;
+}
+
++ (EOANavigationIcon) parseNavIcon:(NSString *)locIcon
+{
+    if ([locIcon isEqualToString:@"DEFAULT"])
+        return NAVIGATION_ICON_DEFAULT;
+    else if ([locIcon isEqualToString:@"NAUTICAL"])
+        return NAVIGATION_ICON_NAUTICAL;
+    else if ([locIcon isEqualToString:@"CAR"])
+        return NAVIGATION_ICON_CAR;
+    return NAVIGATION_ICON_DEFAULT;
+}
+
++ (EOALocationIcon) parseLocationIcon:(NSString *)locIcon
+{
+    if ([locIcon isEqualToString:@"DEFAULT"])
+        return LOCATION_ICON_DEFAULT;
+    else if ([locIcon isEqualToString:@"CAR"])
+        return LOCATION_ICON_CAR;
+    else if ([locIcon isEqualToString:@"BICYCLE"])
+        return LOCATION_ICON_BICYCLE;
+    return LOCATION_ICON_DEFAULT;
+}
+
++ (NSInteger) parseRouterService:(NSString *)routerService
+{
+    // Brouter not currently supported
+    if ([routerService isEqualToString:@"OSMAND"])
+        return 0;
+    else if ([routerService isEqualToString:@"DIRECT_TO"])
+        return 1;
+    else if ([routerService isEqualToString:@"STRAIGHT"])
+        return 2;
+    return 0; // OSMAND
+}
+
++ (int) parseColor:(NSString *)color
+{
+    if ([color isEqualToString:@"DEFAULT"])
+        return profile_icon_color_blue_light_default;
+    else if ([color isEqualToString:@"PURPLE"])
+        return profile_icon_color_purple_light;
+    else if ([color isEqualToString:@"GREEN"])
+        return profile_icon_color_green_light;
+    else if ([color isEqualToString:@"BLUE"])
+        return profile_icon_color_blue_light;
+    else if ([color isEqualToString:@"RED"])
+        return profile_icon_color_red_light;
+    else if ([color isEqualToString:@"DARK_YELLOW"])
+        return profile_icon_color_yellow_light;
+    else if ([color isEqualToString:@"MAGENTA"])
+        return profile_icon_color_magenta_light;
+    return profile_icon_color_blue_light_default;
 }
 
 @end

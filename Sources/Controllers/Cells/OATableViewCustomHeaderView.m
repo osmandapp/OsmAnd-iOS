@@ -14,6 +14,9 @@
 @end
 
 @implementation OATableViewCustomHeaderView
+{
+    CGFloat _yOffset;
+}
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -23,6 +26,11 @@
         [self setupView];
     }
     return self;
+}
+
+- (void) setYOffset:(CGFloat)yOffset
+{
+    _yOffset = yOffset;
 }
 
 + (UIFont *) font
@@ -40,7 +48,7 @@
     self.userInteractionEnabled = YES;
     [self.textLabel removeFromSuperview];
     [self.detailTextLabel removeFromSuperview];
-    
+    _yOffset = 17.;
     
     _label = [[UITextView alloc] init];
     _label.backgroundColor = [UIColor clearColor];
@@ -66,11 +74,11 @@
 {
     CGFloat leftMargin = OAUtilities.getLeftMargin;
     CGFloat w = self.bounds.size.width - 32. - leftMargin * 2;
-    CGFloat height = [self.class getTextHeight:_label.text ? _label.text : _label.attributedText.string width:w];
+    CGFloat height = [self.class getTextHeight:_label.text ? _label.text : _label.attributedText.string width:w font:_label.font];
     if (_label.text.length > 0 || _label.attributedText.length > 0)
     {
         _label.hidden = NO;
-        _label.frame = CGRectMake(16.0 + leftMargin, 17.0, w, height);
+        _label.frame = CGRectMake(16.0 + leftMargin, _yOffset, w, height);
     }
     else
     {
@@ -81,16 +89,21 @@
 
 + (CGFloat) getHeight:(NSString *)text width:(CGFloat)width
 {
+    return [self getHeight:text width:width yOffset:17. font:self.class.font];
+}
+
++ (CGFloat) getHeight:(NSString *)text width:(CGFloat)width yOffset:(CGFloat)yOffset font:(UIFont *)font
+{
     if (text.length > 0)
-        return MAX(38.5, [self.class getTextHeight:text width:width - 32.0 - OAUtilities.getLeftMargin * 2] + 5.0);
+        return [self.class getTextHeight:text width:width - 32.0 - OAUtilities.getLeftMargin * 2 font:font] + 5.0 + yOffset;
     else
         return 0.01;
 }
 
-+ (CGFloat) getTextHeight:(NSString *)text width:(CGFloat)width
++ (CGFloat) getTextHeight:(NSString *)text width:(CGFloat)width font:(UIFont *)font
 {
     if (text.length > 0)
-        return [OAUtilities calculateTextBounds:text width:width font:self.class.font].height + 17.0;
+        return [OAUtilities calculateTextBounds:text width:width font:font].height;
     else
         return 0.01;
 }

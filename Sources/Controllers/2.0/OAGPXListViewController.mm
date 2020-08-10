@@ -99,6 +99,8 @@ typedef enum
     NSString *_newGpxName;
 
     NSInteger _selectedIndex;
+    
+    BOOL _popToParent;
 }
 
 @property (strong, nonatomic) NSMutableArray* gpxList;
@@ -184,6 +186,11 @@ static UIViewController *parentController;
 {
     [[OAGPXDatabase sharedDb] removeGpxItem:[_importUrl.path lastPathComponent]];
     [[OAGPXDatabase sharedDb] save];
+}
+
+- (void) setShouldPopToParent:(BOOL)shouldPop
+{
+    _popToParent = shouldPop;
 }
 
 - (void) showImportGpxAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray <NSString *> *) otherButtonTitles {
@@ -722,7 +729,10 @@ static UIViewController *parentController;
 
 - (IBAction)goRootScreen:(id)sender
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if (_popToParent)
+        [super backButtonClicked:sender];
+    else
+        [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)updateRecButtonsAnimated
@@ -1172,9 +1182,9 @@ static UIViewController *parentController;
                                      
                                      if (!cancelled)
                                      {
-                                         settings.mapSettingSaveTrackIntervalGlobal = [settings.trackIntervalArray[[view getInterval]] intValue];
+                                         [settings.mapSettingSaveTrackIntervalGlobal set:[settings.trackIntervalArray[[view getInterval]] intValue]];
                                          if (view.swRemember.isOn)
-                                             settings.mapSettingSaveTrackIntervalApproved = YES;
+                                             [settings.mapSettingSaveTrackIntervalApproved set:YES];
 
                                          settings.mapSettingTrackRecording = YES;
                                          dispatch_async(dispatch_get_main_queue(), ^{

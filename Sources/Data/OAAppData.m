@@ -12,8 +12,28 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OrderedDictionary.h"
 
 #include <objc/runtime.h>
+
+#define kLastMapSourceKey @"lastMapSource"
+#define kOverlaySourceKey @"overlayMapSource"
+#define kUnderlaySourceKey @"underlayMapSource"
+#define kLastOverlayKey @"lastOverlayMapSource"
+#define kLastUnderlayKey @"lastUnderlayMapSource"
+#define kOverlayAlphaKey @"overlayAlpha"
+#define kUnderlayAlphaKey @"underlayAlpha"
+#define kMapLayersConfigurationKey @"mapLayersConfiguration"
+
+#define kTerrainTypeKey @"terrainType"
+#define kLastTerrainTypeKey @"lastTerrainType"
+#define kHillshadeAlphaKey @"hillshadeAlpha"
+#define kSlopeAlphaKey @"slopeAlpha"
+#define kHillshadeMinZoomKey @"hillshadeMinZoom"
+#define kHillshadeMaxZoomKey @"hillshadeMaxZoom"
+#define kSlopeMinZoomKey @"slopeMinZoom"
+#define kSlopeMaxZoomKey @"slopeMaxZoom"
+#define kMapillaryKey @"mapillary"
 
 @implementation OAAppData
 {
@@ -23,6 +43,24 @@
     OAAutoObserverProxy *_applicationModeChangedObserver;
     
     NSMutableArray<OARTargetPoint *> *_intermediates;
+    
+    OAProfileMapSource *_lastMapSourceProfile;
+    OAProfileMapSource *_overlayMapSourceProfile;
+    OAProfileMapSource *_lastOverlayMapSourceProfile;
+    OAProfileMapSource *_underlayMapSourceProfile;
+    OAProfileMapSource  *_lastUnderlayMapSourceProfile;
+    OAProfileDouble *_overlayAlphaProfile;
+    OAProfileDouble *_underlayAlphaProfile;
+    OAProfileMapLayersConfiguartion *_mapLayersConfigurationProfile;
+    OAProfileTerrain *_terrainTypeProfile;
+    OAProfileTerrain *_lastTerrainTypeProfile;
+    OAProfileDouble *_hillshadeAlphaProfile;
+    OAProfileInteger *_hillshadeMinZoomProfile;
+    OAProfileInteger *_hillshadeMaxZoomProfile;
+    OAProfileDouble *_slopeAlphaProfile;
+    OAProfileInteger *_slopeMinZoomProfile;
+    OAProfileInteger *_slopeMaxZoomProfile;
+    OAProfileBoolean *_mapillaryProfile;
 }
 
 @synthesize applicationModeChangedObservable = _applicationModeChangedObservable;
@@ -33,10 +71,65 @@
     if (self)
     {
         [self commonInit];
-        _lastMapSource = nil;
         [self safeInit];
     }
     return self;
+}
+
+- (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        if ([key isEqualToString:@"terrain_mode"])
+        {
+            [_lastTerrainTypeProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"hillshade_min_zoom"])
+        {
+            [_hillshadeMinZoomProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"hillshade_max_zoom"])
+        {
+            [_hillshadeMaxZoomProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"hillshade_transparency"])
+        {
+            double alpha = [value doubleValue] / 100;
+            [_hillshadeAlphaProfile set:alpha mode:mode];
+        }
+        else if ([key isEqualToString:@"slope_transparency"])
+        {
+            double alpha = [value doubleValue] / 100;
+            [_slopeAlphaProfile set:alpha mode:mode];
+        }
+        else if ([key isEqualToString:@"slope_min_zoom"])
+        {
+            [_slopeMinZoomProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"slope_max_zoom"])
+        {
+            [_slopeMaxZoomProfile setValueFromString:value appMode:mode];
+        }
+        else if ([key isEqualToString:@"show_mapillary"])
+        {
+            [_mapillaryProfile setValueFromString:value appMode:mode];
+        }
+    }
+}
+
+- (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        prefs[@"terrain_mode"] = [_lastTerrainTypeProfile toStringValue:mode];
+        prefs[@"hillshade_min_zoom"] = [_hillshadeMinZoomProfile toStringValue:mode];
+        prefs[@"hillshade_max_zoom"] = [_hillshadeMaxZoomProfile toStringValue:mode];
+        prefs[@"hillshade_transparency"] = [NSString stringWithFormat:@"%d", (int) ([_hillshadeAlphaProfile get:mode] * 100)];
+        prefs[@"slope_transparency"] = [NSString stringWithFormat:@"%d", (int) ([_slopeAlphaProfile get:mode] * 100)];
+        prefs[@"slope_min_zoom"] = [_slopeMinZoomProfile toStringValue:mode];
+        prefs[@"slope_max_zoom"] = [_slopeMaxZoomProfile toStringValue:mode];
+        prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
+    }
 }
 
 - (void) commonInit
@@ -64,6 +157,25 @@
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
                                                             andObserve:_applicationModeChangedObservable];
+    // Profile settings
+    _lastMapSourceProfile = [OAProfileMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
+                                                                                                              andVariant:@"type_default"]];
+    _overlayMapSourceProfile = [OAProfileMapSource withKey:kOverlaySourceKey defValue:nil];
+    _underlayMapSourceProfile = [OAProfileMapSource withKey:kUnderlaySourceKey defValue:nil];
+    _lastOverlayMapSourceProfile = [OAProfileMapSource withKey:kLastOverlayKey defValue:nil];
+    _lastUnderlayMapSourceProfile = [OAProfileMapSource withKey:kLastUnderlayKey defValue:nil];
+    _overlayAlphaProfile = [OAProfileDouble withKey:kOverlayAlphaKey defValue:0.5];
+    _underlayAlphaProfile = [OAProfileDouble withKey:kUnderlayAlphaKey defValue:0.5];
+    _terrainTypeProfile = [OAProfileTerrain withKey:kTerrainTypeKey defValue:EOATerrainTypeDisabled];
+    _lastTerrainTypeProfile = [OAProfileTerrain withKey:kLastTerrainTypeKey defValue:EOATerrainTypeHillshade];
+    _hillshadeAlphaProfile = [OAProfileDouble withKey:kHillshadeAlphaKey defValue:0.45];
+    _slopeAlphaProfile = [OAProfileDouble withKey:kSlopeAlphaKey defValue:0.35];
+    _hillshadeMinZoomProfile = [OAProfileInteger withKey:kHillshadeMinZoomKey defValue:3];
+    _hillshadeMaxZoomProfile = [OAProfileInteger withKey:kHillshadeMaxZoomKey defValue:16];
+    _slopeMinZoomProfile = [OAProfileInteger withKey:kSlopeMinZoomKey defValue:3];
+    _slopeMaxZoomProfile = [OAProfileInteger withKey:kSlopeMaxZoomKey defValue:16];
+    _mapillaryProfile = [OAProfileBoolean withKey:kMapillaryKey defValue:NO];
+    _mapLayersConfigurationProfile = [OAProfileMapLayersConfiguartion withKey:kMapLayersConfigurationKey defValue:[[OAMapLayersConfiguration alloc] init]];
 
 }
 
@@ -79,6 +191,12 @@
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
+        [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
+        [_terrainChangeObservable notifyEventWithKey:self andValue:@YES];
+        if (self.terrainType != EOATerrainTypeDisabled)
+            [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:self.terrainType == EOATerrainTypeHillshade ? @(self.hillshadeAlpha) : @(self.slopeAlpha)];
+        [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:self.lastMapSource];
         [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.variantKey];
     });
 }
@@ -89,8 +207,6 @@
         _lastMapSources = [[NSMutableDictionary alloc] init];
     if (_mapLastViewedState == nil)
         _mapLastViewedState = [[OAMapViewState alloc] init];
-    if (_mapLayersConfiguration == nil)
-        _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     if (_destinations == nil)
         _destinations = [NSMutableArray array];
     if (_intermediates == nil)
@@ -110,31 +226,37 @@
     
 }
 
-@synthesize prevOfflineSource = _prevOfflineSource;
-
-- (OAMapSource*) prevOfflineSource
-{
-    @synchronized(_lock)
-    {
-        return _prevOfflineSource;
-    }
-}
-
-- (void) setPrevOfflineSource:(OAMapSource *)prevOfflineSource
-{
-    @synchronized(_lock)
-    {
-        _prevOfflineSource = prevOfflineSource;
-    }
-}
-
-@synthesize lastMapSource = _lastMapSource;
-
 - (OAMapSource*) lastMapSource
 {
     @synchronized(_lock)
     {
-        return _lastMapSource;
+        return [_lastMapSourceProfile get];
+    }
+}
+
+- (OAMapSource *) getLastMapSource:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_lastMapSourceProfile get:mode];
+    }
+}
+
+- (void) setLastMapSource:(OAMapSource *)lastMapSource mode:(OAApplicationMode *)mode
+{
+    @synchronized(_lock)
+    {
+        if (![lastMapSource isEqual:[_lastMapSourceProfile get:mode]])
+        {
+            OAMapSource *savedSource = [_lastMapSourceProfile get:mode];
+            // Store previous, if such exists
+            if (savedSource != nil)
+            {
+                [_lastMapSources setObject:savedSource.variant != nil ? savedSource.variant : [NSNull null]
+                                    forKey:savedSource.resourceId];
+            }
+            [_lastMapSourceProfile set:[lastMapSource copy] mode:mode];
+        }
     }
 }
 
@@ -142,29 +264,31 @@
 {
     @synchronized(_lock)
     {
-        if (![lastMapSource isEqual:_lastMapSource])
+        if (![lastMapSource isEqual:self.lastMapSource])
         {
+            OAMapSource *savedSource = [_lastMapSourceProfile get];
             // Store previous, if such exists
-            if (_lastMapSource != nil)
+            if (savedSource != nil)
             {
-                [_lastMapSources setObject:_lastMapSource.variant != nil ? _lastMapSource.variant : [NSNull null]
-                                    forKey:_lastMapSource.resourceId];
+                [_lastMapSources setObject:savedSource.variant != nil ? savedSource.variant : [NSNull null]
+                                    forKey:savedSource.resourceId];
             }
             
             // Save new one
-            _lastMapSource = [lastMapSource copy];
-            [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:_lastMapSource];
+            [_lastMapSourceProfile set:[lastMapSource copy]];
+            [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:self.lastMapSource];
         }
     }
 }
 
 - (void) setLastMapSourceVariant:(NSString *)variant
 {
-    if ([_lastMapSource.resourceId isEqualToString:@"online_tiles"])
+    OAMapSource *lastSource = self.lastMapSource;
+    if ([lastSource.resourceId isEqualToString:@"online_tiles"])
         return;
     
-    OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:_lastMapSource.resourceId andVariant:variant name:_lastMapSource.name];
-    self.lastMapSource = mapSource;
+    OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:lastSource.resourceId andVariant:variant name:lastSource.name];
+    [_lastMapSourceProfile set:mapSource];
 }
 
 @synthesize lastMapSourceChangeObservable = _lastMapSourceChangeObservable;
@@ -173,8 +297,9 @@
 {
     @synchronized(_lock)
     {
-        if (_lastMapSource != nil && [_lastMapSource.resourceId isEqualToString:resourceId])
-            return _lastMapSource;
+        OAMapSource *lastMapSource = self.lastMapSource;
+        if (lastMapSource != nil && [lastMapSource.resourceId isEqualToString:resourceId])
+            return lastMapSource;
 
         NSNull* variant = [_lastMapSources objectForKey:resourceId];
         if (variant == nil || variant == [NSNull null])
@@ -198,13 +323,11 @@
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 @synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
 
-@synthesize overlayMapSource = _overlayMapSource;
-
 - (OAMapSource*) overlayMapSource
 {
     @synchronized(_lock)
     {
-        return _overlayMapSource;
+        return [_overlayMapSourceProfile get];
     }
 }
 
@@ -212,18 +335,16 @@
 {
     @synchronized(_lock)
     {
-        _overlayMapSource = [overlayMapSource copy];
-        [_overlayMapSourceChangeObservable notifyEventWithKey:self andValue:_overlayMapSource];
+        [_overlayMapSourceProfile set:[overlayMapSource copy]];
+        [_overlayMapSourceChangeObservable notifyEventWithKey:self andValue:self.overlayMapSource];
     }
 }
-
-@synthesize lastOverlayMapSource = _lastOverlayMapSource;
 
 - (OAMapSource*) lastOverlayMapSource
 {
     @synchronized(_lock)
     {
-        return _lastOverlayMapSource;
+        return [_lastOverlayMapSourceProfile get];
     }
 }
 
@@ -231,18 +352,15 @@
 {
     @synchronized(_lock)
     {
-        _lastOverlayMapSource = [lastOverlayMapSource copy];
+        [_lastOverlayMapSourceProfile set:[lastOverlayMapSource copy]];
     }
 }
-
-
-@synthesize underlayMapSource = _underlayMapSource;
 
 - (OAMapSource*) underlayMapSource
 {
     @synchronized(_lock)
     {
-        return _underlayMapSource;
+        return [_underlayMapSourceProfile get];
     }
 }
 
@@ -250,18 +368,16 @@
 {
     @synchronized(_lock)
     {
-        _underlayMapSource = [underlayMapSource copy];
-        [_underlayMapSourceChangeObservable notifyEventWithKey:self andValue:_underlayMapSource];
+        [_underlayMapSourceProfile set:[underlayMapSource copy]];
+        [_underlayMapSourceChangeObservable notifyEventWithKey:self andValue:self.underlayMapSource];
     }
 }
-
-@synthesize lastUnderlayMapSource = _lastUnderlayMapSource;
 
 - (OAMapSource*) lastUnderlayMapSource
 {
     @synchronized(_lock)
     {
-        return _lastUnderlayMapSource;
+        return [_lastUnderlayMapSourceProfile get];
     }
 }
 
@@ -269,20 +385,32 @@
 {
     @synchronized(_lock)
     {
-        _lastUnderlayMapSource = [lastUnderlayMapSource copy];
+        [_lastUnderlayMapSourceProfile set:[lastUnderlayMapSource copy]];
     }
 }
 
-
-@synthesize overlayAlpha = _overlayAlpha;
-@synthesize underlayAlpha = _underlayAlpha;
+- (double) overlayAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_overlayAlphaProfile get];
+    }
+}
 
 - (void) setOverlayAlpha:(double)overlayAlpha
 {
     @synchronized(_lock)
     {
-        _overlayAlpha = overlayAlpha;
-        [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_overlayAlpha]];
+        [_overlayAlphaProfile set:overlayAlpha];
+        [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
+    }
+}
+
+- (double) underlayAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_underlayAlphaProfile get];
     }
 }
 
@@ -290,18 +418,24 @@
 {
     @synchronized(_lock)
     {
-        _underlayAlpha = underlayAlpha;
-        [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_underlayAlpha]];
+        [_underlayAlphaProfile set:underlayAlpha];
+        [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
     }
 }
 
-@synthesize hillshadeMinZoom = _hillshadeMinZoom;
+- (OAMapLayersConfiguration *)mapLayersConfiguration
+{
+    @synchronized (_lock)
+    {
+        return [_mapLayersConfigurationProfile get];
+    }
+}
 
 - (NSInteger) hillshadeMinZoom
 {
     @synchronized(_lock)
     {
-        return _hillshadeMinZoom;
+        return [_hillshadeMinZoomProfile get];
     }
 }
 
@@ -309,18 +443,16 @@
 {
     @synchronized(_lock)
     {
-        _hillshadeMinZoom = hillshadeMinZoom;
+        [_hillshadeMinZoomProfile set:(int)hillshadeMinZoom];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
     }
 }
-
-@synthesize hillshadeMaxZoom = _hillshadeMaxZoom;
 
 - (NSInteger) hillshadeMaxZoom
 {
     @synchronized(_lock)
     {
-        return _hillshadeMaxZoom;
+        return [_hillshadeMaxZoomProfile get];
     }
 }
 
@@ -328,18 +460,16 @@
 {
     @synchronized(_lock)
     {
-        _hillshadeMaxZoom = hillshadeMaxZoom;
+        [_hillshadeMaxZoomProfile set:(int)hillshadeMaxZoom];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
     }
 }
-
-@synthesize slopeMinZoom = _slopeMinZoom;
 
 - (NSInteger) slopeMinZoom
 {
     @synchronized(_lock)
     {
-        return _slopeMinZoom;
+        return [_slopeMinZoomProfile get];
     }
 }
 
@@ -347,18 +477,16 @@
 {
     @synchronized(_lock)
     {
-        _slopeMinZoom = slopeMinZoom;
+        [_slopeMinZoomProfile set:(int)slopeMinZoom];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
     }
 }
-
-@synthesize slopeMaxZoom = _slopeMaxZoom;
 
 - (NSInteger) slopeMaxZoom
 {
     @synchronized(_lock)
     {
-        return _slopeMaxZoom;
+        return [_slopeMaxZoomProfile get];
     }
 }
 
@@ -366,40 +494,68 @@
 {
     @synchronized(_lock)
     {
-        _slopeMaxZoom = slopeMaxZoom;
+        [_slopeMaxZoomProfile set:(int)slopeMaxZoom];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
     }
 }
-
-@synthesize terrainType = _terrainType;
 
 - (EOATerrainType) terrainType
 {
     @synchronized(_lock)
     {
-        return _terrainType;
+        return [_terrainTypeProfile get];
     }
 }
 
-- (void) setTerrainType:(EOATerrainType)hillshade
+- (void) setTerrainType:(EOATerrainType)terrainType
 {
     @synchronized(_lock)
     {
-        _terrainType = hillshade;
-        if (hillshade == EOATerrainTypeHillshade || hillshade == EOATerrainTypeSlope)
+        [_terrainTypeProfile set:terrainType];
+        if (terrainType == EOATerrainTypeHillshade || terrainType == EOATerrainTypeSlope)
             [_terrainChangeObservable notifyEventWithKey:self andValue:@(YES)];
         else
             [_terrainChangeObservable notifyEventWithKey:self andValue:@(NO)];
     }
 }
 
-@synthesize lastTerrainType = _lastTerrainType;
+- (EOATerrainType) getTerrainType:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_terrainTypeProfile get:mode];
+    }
+}
+
+- (void) setTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        [_terrainTypeProfile set:terrainType mode:mode];
+    }
+}
+
+- (EOATerrainType) getLastTerrainType:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        return [_lastTerrainTypeProfile get:mode];
+    }
+}
+
+- (void) setLastTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode
+{
+    @synchronized (_lock)
+    {
+        [_lastTerrainTypeProfile set:terrainType mode:mode];
+    }
+}
 
 - (EOATerrainType) lastTerrainType
 {
     @synchronized(_lock)
     {
-        return _lastTerrainType;
+        return [_lastTerrainTypeProfile get];
     }
 }
 
@@ -407,39 +563,50 @@
 {
     @synchronized(_lock)
     {
-        _lastTerrainType = lastTerrainType;
+        [_lastTerrainTypeProfile set:lastTerrainType];
     }
 }
 
-@synthesize hillshadeAlpha = _hillshadeAlpha;
+
+- (double)hillshadeAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_hillshadeAlphaProfile get];
+    }
+}
 
 - (void) setHillshadeAlpha:(double)hillshadeAlpha
 {
     @synchronized(_lock)
     {
-        _hillshadeAlpha = hillshadeAlpha;
-        [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_hillshadeAlpha]];
+        [_hillshadeAlphaProfile set:hillshadeAlpha];
+        [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:self.hillshadeAlpha]];
     }
 }
 
-@synthesize slopeAlpha = _slopeAlpha;
+- (double)slopeAlpha
+{
+    @synchronized (_lock)
+    {
+        return [_slopeAlphaProfile get];
+    }
+}
 
 - (void) setSlopeAlpha:(double)slopeAlpha
 {
     @synchronized(_lock)
     {
-        _slopeAlpha = slopeAlpha;
-        [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_slopeAlpha]];
+        [_slopeAlphaProfile set:slopeAlpha];
+        [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:self.slopeAlpha]];
     }
 }
-
-@synthesize mapillary = _mapillary;
 
 - (BOOL) mapillary
 {
     @synchronized (_lock)
     {
-        return _mapillary;
+        return [_mapillaryProfile get];
     }
 }
 
@@ -447,13 +614,12 @@
 {
     @synchronized (_lock)
     {
-        _mapillary = mapillary;
-        [_mapillaryChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithBool:_mapillary]];
+        [_mapillaryProfile set:mapillary];
+        [_mapillaryChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithBool:self.mapillary]];
     }
 }
 
 @synthesize mapLastViewedState = _mapLastViewedState;
-@synthesize mapLayersConfiguration = _mapLayersConfiguration;
 
 - (void) backupTargetPoints
 {
@@ -550,19 +716,6 @@
 + (OAAppData*) defaults
 {
     OAAppData* defaults = [[OAAppData alloc] init];
-
-    defaults.overlayAlpha = 0.5;
-    defaults.underlayAlpha = 0.5;
-    defaults.lastOverlayMapSource = nil;
-    defaults.lastUnderlayMapSource = nil;
-    defaults.terrainType = EOATerrainTypeDisabled;
-    defaults.lastTerrainType = EOATerrainTypeHillshade;
-    defaults.hillshadeAlpha = 0.45;
-    defaults.slopeAlpha = 0.35;
-    defaults.hillshadeMinZoom = 3;
-    defaults.hillshadeMaxZoom = 16;
-    defaults.slopeMinZoom = 3;
-    defaults.slopeMaxZoom = 16;
     
     // Imagine that last viewed location was center of the world
     Point31 centerOfWorld;
@@ -572,37 +725,20 @@
     defaults.mapLastViewedState.azimuth = 0.0f;
     defaults.mapLastViewedState.elevationAngle = 90.0f;
 
-    // Set offline maps as default map source
-    defaults.lastMapSource = [[OAMapSource alloc] initWithResource:@"default.render.xml"
-                                                        andVariant:@"type_default"];
-
     return defaults;
+}
+
++ (OAMapSource *) defaultMapSource
+{
+    return [[OAMapSource alloc] initWithResource:@"default.render.xml"
+                                      andVariant:@"type_default"];
 }
 
 #pragma mark - NSCoding
 
-#define kLastMapSource @"last_map_source"
 #define kLastMapSources @"last_map_sources"
 #define kMapLastViewedState @"map_last_viewed_state"
-#define kMapLayersConfiguration @"map_layers_configuration"
 #define kDestinations @"destinations"
-
-#define kOverlayMapSource @"overlay_map_source"
-#define kLastOverlayMapSource @"last_overlay_map_source"
-#define kUnderlayMapSource @"underlay_map_source"
-#define kLastUnderlayMapSource @"last_underlay_map_source"
-#define kOverlayAlpha @"overlay_alpha"
-#define kUnderlayAlpha @"underlay_alpha"
-
-#define kHillshadeMinZoom @"hillshade_min_zoom"
-#define kHillshadeMaxZoom @"hillshade_max_zoom"
-#define kHillshadeAlpha @"hillshade_alpha"
-#define kSlopeMinZoom @"slope_min_zoom"
-#define kSlopeMaxZoom @"slope_max_zoom"
-#define kSlopeAlpha @"slope_alpha"
-#define kTerrainType @"terrain_type"
-#define kLastTerrainType @"last_terrain_type"
-#define kMapillary @"mapillary"
 
 #define kPointToStart @"pointToStart"
 #define kPointToNavigate @"pointToNavigate"
@@ -618,28 +754,9 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:_lastMapSource forKey:kLastMapSource];
     [aCoder encodeObject:_lastMapSources forKey:kLastMapSources];
     [aCoder encodeObject:_mapLastViewedState forKey:kMapLastViewedState];
-    [aCoder encodeObject:_mapLayersConfiguration forKey:kMapLayersConfiguration];
     [aCoder encodeObject:_destinations forKey:kDestinations];
-
-    [aCoder encodeObject:_overlayMapSource forKey:kOverlayMapSource];
-    [aCoder encodeObject:_lastOverlayMapSource forKey:kLastOverlayMapSource];
-    [aCoder encodeObject:_underlayMapSource forKey:kUnderlayMapSource];
-    [aCoder encodeObject:_lastUnderlayMapSource forKey:kLastUnderlayMapSource];
-    [aCoder encodeObject:[NSNumber numberWithDouble:_overlayAlpha] forKey:kOverlayAlpha];
-    [aCoder encodeObject:[NSNumber numberWithDouble:_underlayAlpha] forKey:kUnderlayAlpha];
-
-    [aCoder encodeObject:[NSNumber numberWithInteger:_hillshadeMinZoom] forKey:kHillshadeMinZoom];
-    [aCoder encodeObject:[NSNumber numberWithInteger:_hillshadeMaxZoom] forKey:kHillshadeMaxZoom];
-    [aCoder encodeObject:[NSNumber numberWithInteger:_slopeMinZoom] forKey:kSlopeMinZoom];
-    [aCoder encodeObject:[NSNumber numberWithInteger:_slopeMaxZoom] forKey:kSlopeMaxZoom];
-    [aCoder encodeObject:[NSNumber numberWithInteger:_terrainType] forKey:kTerrainType];
-    [aCoder encodeObject:[NSNumber numberWithInteger:_lastTerrainType] forKey:kLastTerrainType];
-    [aCoder encodeObject:[NSNumber numberWithDouble:_hillshadeAlpha] forKey:kHillshadeAlpha];
-    [aCoder encodeObject:[NSNumber numberWithDouble:_slopeAlpha] forKey:kSlopeAlpha];
-    [aCoder encodeObject:[NSNumber numberWithBool:_mapillary] forKey:kMapillary];
     
     [aCoder encodeObject:_pointToStart forKey:kPointToStart];
     [aCoder encodeObject:_pointToNavigate forKey:kPointToNavigate];
@@ -657,28 +774,9 @@
     self = [super init];
     if (self) {
         [self commonInit];
-        _lastMapSource = [aDecoder decodeObjectForKey:kLastMapSource];
         _lastMapSources = [aDecoder decodeObjectForKey:kLastMapSources];
         _mapLastViewedState = [aDecoder decodeObjectForKey:kMapLastViewedState];
-        _mapLayersConfiguration = [aDecoder decodeObjectForKey:kMapLayersConfiguration];
         _destinations = [aDecoder decodeObjectForKey:kDestinations];
-
-        _overlayMapSource = [aDecoder decodeObjectForKey:kOverlayMapSource];
-        _lastOverlayMapSource = [aDecoder decodeObjectForKey:kLastOverlayMapSource];
-        _underlayMapSource = [aDecoder decodeObjectForKey:kUnderlayMapSource];
-        _lastUnderlayMapSource = [aDecoder decodeObjectForKey:kLastUnderlayMapSource];
-        _overlayAlpha = [[aDecoder decodeObjectForKey:kOverlayAlpha] doubleValue];
-        _underlayAlpha = [[aDecoder decodeObjectForKey:kUnderlayAlpha] doubleValue];
-
-        _hillshadeMinZoom = [[aDecoder decodeObjectForKey:kHillshadeMinZoom] integerValue];
-        _hillshadeMaxZoom = [[aDecoder decodeObjectForKey:kHillshadeMaxZoom] integerValue];
-        _slopeMinZoom = [[aDecoder decodeObjectForKey:kSlopeMinZoom] integerValue];
-        _slopeMaxZoom = [[aDecoder decodeObjectForKey:kSlopeMaxZoom] integerValue];
-        _terrainType = [[aDecoder decodeObjectForKey:kTerrainType] integerValue];
-        _lastTerrainType = [[aDecoder decodeObjectForKey:kLastTerrainType] integerValue];
-        _hillshadeAlpha = [[aDecoder decodeObjectForKey:kHillshadeAlpha] doubleValue];
-        _slopeAlpha = [[aDecoder decodeObjectForKey:kSlopeAlpha] doubleValue];
-        _mapillary = [[aDecoder decodeObjectForKey:kMapillary] boolValue];
 
         _pointToStart = [aDecoder decodeObjectForKey:kPointToStart];
         _pointToNavigate = [aDecoder decodeObjectForKey:kPointToNavigate];
@@ -694,7 +792,5 @@
     }
     return self;
 }
-
-#pragma mark -
 
 @end

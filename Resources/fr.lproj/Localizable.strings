@@ -32,7 +32,7 @@
 "shared_string_update" = "Mettre à jour";
 "shared_string_install" = "Installer";
 "shared_string_uninstall" = "Désinstaller";
-"shared_string_done" = "Effectué";
+"shared_string_done" = "Terminé";
 "shared_string_remove" = "Supprimer";
 "shared_string_buy" = "Acheter";
 "shared_string_buy_for" = "pour";
@@ -1596,7 +1596,7 @@
 "selected_roads" = "Routes sélectionnées";
 "select_work_point" = "Sélectionnez votre lieu de travail";
 "consider_limitations_param" = "Prendre en compte les restrictions temporaires";
-"allow_3d_descr" = "Activez cette option pour voir la carte en perspective 2.5D";
+"allow_3d_descr" = "Activez cette option pour voir la carte en perspective 2,5D";
 "active_markers" = "Marques actives";
 "shared_string_exit" = "Quitter";
 "base_profile_descr_aircraft" = "Avion, parapente";
@@ -1610,3 +1610,17 @@
 "vehicle_parameters" = "Caractéristiques du véhicule";
 "select_nav_profile_dialog_message" = "Le type de navigation détermine les règles de calcul des itinéraires.";
 "select_color" = "Sélectionnez la couleur";
+"no_active_route" = "Pas de route active";
+"change_map_behavior" = "Modifier le comportement de la carte pendant la navigation";
+"map_behavior" = "Comportement de la carte";
+"nav_type_title" = "Type de navigation";
+"appearance_on_map" = "Apparence sur la carte";
+"arrows_on_map" = "Flèches sur la carte";
+"two" = "Deux";
+"max_speed" = "Vitesse max.";
+"min_speed" = "Vitesse min.";
+"default_speed" = "Vitesse par défaut";
+"routing_attr_length_name" = "Limite de longueur";
+"send_anonymous_data_desc" = "Envoyez à OsmAnd des statistiques de téléchargement des cartes. Nous ne collectons aucune donnée de localisation, ni aucune information personnelle.";
+"default_profile_descr" = "Sélectionnez un profil qui sera utilisé pour le lancement de l'application.";
+"allow_3d" = "Autoriser la vue 2,5D";

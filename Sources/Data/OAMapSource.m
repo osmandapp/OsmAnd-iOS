@@ -15,6 +15,15 @@
 @synthesize name = _name;
 @synthesize type = _type;
 
++ (OAMapSource *)fromDictionary:(NSDictionary<NSString *,NSString *> *)dictionary
+{
+    NSString *resId = dictionary[@"resourceId"];
+    NSString *var = dictionary[@"variant"];
+    NSString *name = dictionary[@"name"];
+    NSString *type = dictionary[@"type"];
+    return [[OAMapSource alloc] initWithResource:resId andVariant:var name:name type:type];
+}
+
 - (instancetype) init
 {
     self = [super init];
@@ -88,6 +97,20 @@
 
 - (void) commonInit
 {
+}
+
+- (NSDictionary<NSString *,NSString *> *)toDictionary
+{
+    NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
+    if (_resourceId)
+        [result setObject:_resourceId forKey:@"resourceId"];
+    if (_variant)
+        [result setObject:_variant forKey:@"variant"];
+    if (_name)
+        [result setObject:_name forKey:@"name"];
+    if (_type)
+        [result setObject:_type forKey:@"type"];
+    return result;
 }
 
 - (BOOL) isEqual:(id)object

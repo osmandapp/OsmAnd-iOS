@@ -305,11 +305,10 @@
 
 - (void) resetDefaultAppearance:(OAApplicationMode *)appMode
 {
-    [_settings.showDestinationArrow resetToDefault];
+    [_settings.distanceIndicationVisibility resetToDefault];
     [_settings.transparentMapTheme resetToDefault];
     [_settings.showStreetName resetToDefault];
     [_settings.centerPositionOnMap resetToDefault];
-    [_settings.mapMarkersMode resetToDefault];
 }
 
 - (NSOrderedSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet

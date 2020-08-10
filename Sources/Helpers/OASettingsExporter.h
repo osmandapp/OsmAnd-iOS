@@ -7,14 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OASettingsHelper.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OASettingsItem, OASettingsExport;
+@class OASettingsItem;
 
 @interface OASettingsExporter : NSObject
 
-- (instancetype) init;
+- (instancetype) initWithExportParam:(BOOL)exportItemsFiles;
 - (void) addSettingsItem:(OASettingsItem *)item;
 - (void) addAdditionalParam:(NSString *)key value:(NSString *)value;
 - (void) exportSettings:(NSString *)file error:(NSError * _Nullable *)error;
@@ -25,7 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAExportAsyncTask : NSObject
 
-- (instancetype) initWithFile:(NSString *)settingsFile listener:(OASettingsExport * _Nullable)listener items:(NSArray<OASettingsItem *> *)items;
+@property (weak, nonatomic) id<OASettingsImportExportDelegate> settingsExportDelegate;
+
+- (instancetype) initWithFile:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles;
 - (void) execute;
 
 @end

@@ -11,18 +11,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OALocationPoint.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
-
-typedef NS_ENUM(NSInteger, EOARouteService)
-{
-    OSMAND = 0,
-    /*YOURS,
-    OSRM,
-    BROUTER,*/
-    DIRECT_TO,
-    STRAIGHT
-};
 
 @class OAGPXDocument, OARouteCalculationResult, OAApplicationMode;
 struct RoutingConfiguration;
@@ -77,6 +68,8 @@ struct GeneralRouter;
 @end
 
 @interface OARouteProvider : NSObject
+
++ (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am;
 
 - (OARouteCalculationResult *) calculateRouteImpl:(OARouteCalculationParams *)params;
 - (OARouteCalculationResult *) recalculatePartOfflineRoute:(OARouteCalculationResult *)res params:(OARouteCalculationParams *)params;

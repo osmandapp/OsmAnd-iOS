@@ -591,7 +591,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 [[OAPOIFiltersHelper sharedInstance] addSelectedPoiFilter:filter];
                 
                 OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-                [mapVC showPoiOnMap:filter keyword:[[searchPhrase getUnknownSearchPhrase] trim]];
+                [mapVC updatePoiLayer];
                 [self showToolbar];
                 [self dismissViewControllerAnimated:YES completion:nil];
             }
@@ -1243,8 +1243,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) hidePoi
 {
+    [OAPOIFiltersHelper.sharedInstance hidePoiFilters];
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    [mapVC hidePoi];
+    [mapVC updatePoiLayer];
 }
 
 -(void) updateData:(NSMutableArray<OAQuickSearchListItem *> *)dataArray append:(BOOL)append
@@ -1987,6 +1988,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     [self resetSearch];
     [[OAPOIFiltersHelper sharedInstance] clearSelectedPoiFilters];
+    [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
     [[OARootViewController instance].mapPanel hideToolbar:_searchToolbarViewController];
 }
 

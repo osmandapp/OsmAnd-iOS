@@ -104,7 +104,7 @@
 "select_city" = "Selectați orașul";
 "osm_edits_basic" = "De bază";
 "osm_alert_message" = "Mesaj";
-"driving_region_automatic" = "Automatic";
+"driving_region_automatic" = "Automat";
 "show_all" = "Arată tot";
 "arrival_distance" = "Anunţ de sosire";
 "access_intermediate_arrival_time" = "Timp intermediar de sosire";
@@ -651,7 +651,7 @@
 "rendering_attr_noAdminboundaries_name" = "Ascunde limitele administrative";
 "rendering_value_lightgreen_name" = "Verde deschis";
 "rendering_attr_piste_type_skitour_name" = "traseu pentru skiori";
-"routing_attr_avoid_unpaved_description" = "Evită drumurile neasfaltate.";
+"routing_attr_avoid_unpaved_description" = "Evită drumurile neasfaltate";
 "rendering_attr_piste_type_sleigh_name" = "Sanie";
 "rendering_attr_piste_type_hike_name" = "excursie pe jos";
 "rendering_value_green_name" = "Verde";
@@ -785,7 +785,6 @@
 "wikivoyage_offline" = "Wikivoyage offline";
 "wikipedia_offline" = "Wikipedia offline";
 "rendering_attr_streetLightingNight_name" = "Afișați doar noaptea";
-
 "app_mode_helicopter" = "Elicopter";
 "app_mode_camper" = "Camping";
 "app_mode_pedestrian" = "Pieton";
@@ -813,3 +812,8 @@
 "app_mode_scooter" = "Scuter";
 "app_mode_shuttle_bus" = "Autobuz expres";
 "app_mode_ufo" = "OZN";
+"select_color" = "Selectează culoarea";
+"shared_string_uninstall" = "Dezinstalare";
+"routing_attr_length_name" = "Limită lungime";
+"shared_string_done" = "Gata";
+"routing_attr_height_obstacles_name" = "Utilizare date altitudine";

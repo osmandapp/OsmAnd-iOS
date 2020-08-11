@@ -929,7 +929,6 @@
     if ([_exportFileName hasSuffix:@".xml"])
     {
         gpxUrl = [self renameXmlToGpx:gpxUrl];
-        _exportFileName = [[_exportFileName stringByDeletingPathExtension] stringByAppendingPathComponent: @"xml"];
     }
     
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
@@ -944,7 +943,7 @@
 - (NSURL*) renameXmlToGpx:(NSURL *)xmlFileUrl
 {
     NSString* gpxFileName = [[[xmlFileUrl.lastPathComponent stringByDeletingPathExtension] stringByAppendingPathExtension:@"gpx"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-    NSURL* gpxFileURL = [NSURL URLWithString:gpxFileName relativeToURL:[xmlFileUrl URLByDeletingLastPathComponent]];
+    NSURL* gpxFileURL = [[xmlFileUrl URLByDeletingLastPathComponent] URLByAppendingPathComponent:gpxFileName];
     [[NSFileManager defaultManager] removeItemAtURL:gpxFileURL error:nil];
     [[NSFileManager defaultManager] copyItemAtURL:xmlFileUrl toURL:gpxFileURL error:nil];
     return gpxFileURL;

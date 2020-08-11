@@ -191,13 +191,15 @@
         if (mapillaryUrl)
             urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_mapillary_key=%@", mapillaryUrl]];
     }
-    NSURL *urlObj = [[NSURL alloc] initWithString:urlString];
+    NSURL *urlObj = [[NSURL alloc] initWithString:[[urlString stringByReplacingOccurrencesOfString:@" "  withString:@"_"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200) {
             if (data) {
                 NSError *error;
-                NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                NSString *safeCharsString = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
+                NSData *safeCharsData = [safeCharsString dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:safeCharsData options:NSJSONReadingAllowFragments error:&error];
                 if (!error)
                 {
                     for (NSDictionary *dict in jsonDict[@"features"])
@@ -243,6 +245,8 @@
     else if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type])
         return [[OAMapillaryContributeCard alloc] init];
     else if ([TYPE_URL_PHOTO isEqualToString:type])
+        return [[OAUrlImageCard alloc] initWithData:feature];
+    else if ([TYPE_WIKIMEDIA_PHOTO isEqualToString:type])
         return [[OAUrlImageCard alloc] initWithData:feature];
     
     return nil;

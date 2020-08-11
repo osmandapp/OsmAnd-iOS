@@ -27,7 +27,7 @@
 "shared_string_add" = "Ajouter";
 "shared_string_and" = "et";
 "shared_string_edit" = "Modifier";
-"shared_string_dismiss" = "Ignorer";
+"shared_string_dismiss" = "Arrêter";
 "description" = "Description";
 "shared_string_update" = "Mettre à jour";
 "shared_string_install" = "Installer";

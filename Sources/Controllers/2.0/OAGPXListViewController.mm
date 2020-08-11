@@ -370,14 +370,14 @@ static UIViewController *parentController;
     if (_newGpxName) {
         [[NSFileManager defaultManager] moveItemAtPath:_importUrl.path toPath:[_app.gpxPath stringByAppendingPathComponent:_newGpxName] error:nil];
     } else {
-        [[NSFileManager defaultManager] moveItemAtPath:_importUrl.path toPath:[_app.gpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
+        [[NSFileManager defaultManager] moveItemAtPath:_importUrl.path toPath:[_app.gpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] error:nil];
     }
     
     OAGPXTrackAnalysis *analysis = [_doc getAnalysis:0];
     if (_newGpxName) {
         item = [[OAGPXDatabase sharedDb] addGpxItem:_newGpxName title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     } else {
-        item = [[OAGPXDatabase sharedDb] addGpxItem:[_importUrl.path lastPathComponent] title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        item = [[OAGPXDatabase sharedDb] addGpxItem:[self getCorrectedFilename:[_importUrl.path lastPathComponent]] title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     }
     [[OAGPXDatabase sharedDb] save];
     [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
@@ -391,6 +391,14 @@ static UIViewController *parentController;
         [self setupView];
     }
     return item;
+}
+
+- (NSString *)getCorrectedFilename:(NSString *)filename
+{
+    if ([filename hasSuffix:@".xml"])
+        return [[filename stringByDeletingPathExtension] stringByAppendingPathExtension:@"gpx"];
+    else
+        return filename;
 }
 
 - (void) showProgressHUD

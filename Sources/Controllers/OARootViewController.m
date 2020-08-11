@@ -504,7 +504,7 @@ typedef enum : NSUInteger {
     NSData *databuffer = [file readDataOfLength: 100];
     [file closeFile];
     
-    NSString *fileIntro = [[NSString alloc] initWithData:databuffer encoding:4];
+    NSString *fileIntro = [[NSString alloc] initWithData:databuffer encoding:NSUTF8StringEncoding];
     return [fileIntro containsString:@"<gpx "];
 }
 

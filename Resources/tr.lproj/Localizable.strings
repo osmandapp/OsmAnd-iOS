@@ -550,7 +550,7 @@
 "speak_speed_limit" = "Hız sınırı";
 "speak_cameras" = "Hız kameraları";
 "speak_traffic_warnings" = "Trafik uyarıları";
-"announce_gpx_waypoints" = "GPX uğranacak-ara-noktaları";
+"announce_gpx_waypoints" = "İzlenen yol ara noktaları";
 "speak_favorites" = "Yakındaki Sık Kıllanılanlar";
 "speak_poi" = "Yakınlardaki POI";
 "speak_pedestrian" = "Yaya geçitleri";

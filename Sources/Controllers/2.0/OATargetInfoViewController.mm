@@ -58,8 +58,6 @@
         _typeName = typeName;
         _isPhoneNumber = isPhoneNumber;
         _isUrl = isUrl;
-        _lat = 0.0;
-        _lon = 0.0;
     }
     return self;
 }
@@ -300,8 +298,6 @@
         OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
         coordinatesRow.collapsed = YES;
         coordinatesRow.collapsable = YES;
-        coordinatesRow.lat = self.location.latitude;
-        coordinatesRow.lon = self.location.longitude;
         OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
         [collapsableView setupWithLat:self.location.latitude lon:self.location.longitude];
         coordinatesRow.collapsableView = collapsableView;
@@ -480,9 +476,11 @@
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierCollapsableСoordinates owner:self options:nil];
                 cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
             }
-            [cell setupCellWithLat:info.lat lon:info.lon];
             
-            cell.collapsableView = info.collapsableView;
+            OACollapsableCoordinatesView *coordinateView = (OACollapsableCoordinatesView *) info.collapsableView;
+            [cell setupCellWithLat:coordinateView.lat lon:coordinateView.lon];
+            
+            cell.collapsableView = coordinateView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
             
             return cell;

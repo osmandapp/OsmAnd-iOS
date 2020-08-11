@@ -20,12 +20,110 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
+#include <OsmAndCore/Utilities.h>
 #include "Localization.h"
-
 
 @implementation OAFavoriteViewController
 {
     OsmAndAppInstance _app;
+}
+
+- (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly
+{
+    self = [self initWithItem:favorite];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        self.favorite = favorite;
+
+        self.name = [self getItemName];
+        self.desc = [self getItemDesc];
+        
+        if (!headerOnly)
+        {
+            [self setupCollapableViews:favorite];
+        }
+        
+        NSString *groupName = self.favorite.favorite->getGroup().toNSString();
+        self.groupTitle = groupName.length == 0 ? OALocalizedString(@"favorite") : groupName;
+        self.groupColor = [self.favorite getColor];
+
+        self.topToolbarType = ETopToolbarTypeMiddleFixed;
+    }
+    return self;
+}
+
+- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation headerOnly:(BOOL)headerOnly
+{
+    self = [self initWithLocation:location andTitle:formattedLocation];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        
+        // Create favorite
+        OsmAnd::PointI locationPoint;
+        locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
+        locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
+        
+        QString title = QString::fromNSString(formattedLocation);
+        
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSInteger defaultColor = 0;
+        if ([userDefaults objectForKey:kFavoriteDefaultColorKey])
+            defaultColor = [userDefaults integerForKey:kFavoriteDefaultColorKey];
+        
+        NSString *groupName;
+        if ([userDefaults objectForKey:kFavoriteDefaultGroupKey])
+            groupName = [userDefaults stringForKey:kFavoriteDefaultGroupKey];
+        
+        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
+        
+        UIColor* color_ = favCol.color;
+        CGFloat r,g,b,a;
+        [color_ getRed:&r
+                 green:&g
+                  blue:&b
+                 alpha:&a];
+        
+        QString group;
+        if (groupName)
+            group = QString::fromNSString(groupName);
+        else
+            group = QString::null;
+        
+        OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
+        fav.favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
+                                                                       title,
+                                                                       group,
+                                                                       OsmAnd::FColorRGB(r,g,b));
+        self.favorite = fav;
+        [_app saveFavoritesToPermamentStorage];
+        
+        if (!headerOnly)
+        {
+            [self setupCollapableViews:fav];
+        }
+        
+        NSString *groupStr = self.favorite.favorite->getGroup().toNSString();
+        self.groupTitle = groupStr.length == 0 ? OALocalizedString(@"favorite") : groupStr;
+        self.groupColor = [self.favorite getColor];
+
+        self.topToolbarType = ETopToolbarTypeMiddleFixed;
+    }
+    return self;
+
+}
+
+- (void) setupCollapableViews:(OAFavoriteItem *)favorite
+{
+    OACollapsableWaypointsView *collapsableGroupView = [[OACollapsableWaypointsView alloc] init];
+    [collapsableGroupView setData:favorite];
+    collapsableGroupView.collapsed = YES;
+    self.collapsableGroupView = collapsableGroupView;
+    
+    OACollapsableCoordinatesView *collapsableCoordinatesView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+    collapsableCoordinatesView.collapsed = YES;
+    self.collapsableCoordinatesView = collapsableCoordinatesView;
 }
 
 - (BOOL) supportMapInteraction

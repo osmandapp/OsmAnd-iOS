@@ -39,6 +39,8 @@
 
 -(void) setupWithLat:(double)lat lon:(double)lon
 {
+    self.lat = lat;
+    self.lon = lon;
     NSDictionary<NSNumber *, NSString*> *values = [OAPointDescription getLocationData:lat lon:lon];
     [self setData:values];
 }

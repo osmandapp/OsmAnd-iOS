@@ -7,8 +7,13 @@
 //
 
 #import "OAEditTargetViewController.h"
-//#import <CoreLocation/CoreLocation.h>
+#import "OAFavoriteItem.h"
+#import <CoreLocation/CoreLocation.h>
 
 @interface OAFavoriteViewController : OAEditTargetViewController
+
+@property (nonatomic) OAFavoriteItem *favorite;
+- (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly;
+- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation headerOnly:(BOOL)headerOnly;
 
 @end

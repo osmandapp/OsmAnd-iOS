@@ -36,9 +36,6 @@
 @property (nonatomic) int order;
 @property (nonatomic) NSString *typeName;
 
-@property (nonatomic) double lat;
-@property (nonatomic) double lon;
-
 @property (nonatomic) int height;
 @property (nonatomic) BOOL moreText;
 

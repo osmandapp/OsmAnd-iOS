@@ -12,6 +12,8 @@
 
 @interface OACollapsableCoordinatesView : OACollapsableView
 
+@property (nonatomic) double lat;
+@property (nonatomic) double lon;
 @property (nonatomic, readonly) NSDictionary<NSNumber *, NSString *> *coordinates;
 
 -(void) setupWithLat:(double)lat lon:(double)lon;

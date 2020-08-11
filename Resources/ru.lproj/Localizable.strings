@@ -1765,7 +1765,7 @@
 "enter_profile_name" = "Введите название профиля";
 "edit_profile_list" = "Изменить список профилей";
 "new_profile" = "Новый профиль";
-"custom_profile" = "Пользовательский профиль";
+"profile_type_custom_string" = "Пользовательский профиль";
 "create_profile" = "Создать профиль";
 "import_from_files" = "Импорт из файлов";
 "shared_string_exit" = "Выход";

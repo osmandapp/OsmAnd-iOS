@@ -1736,7 +1736,7 @@
 "select_nav_profile_dialog_message" = "Der 'Navigationstyp' bestimmt, wie die Routen berechnet werden.";
 "select_color" = "Farbe wählen";
 "edit_profile_list" = "Profilliste bearbeiten";
-"custom_profile" = "Benutzerdefiniertes Profil";
+"profile_type_custom_string" = "Benutzerdefiniertes Profil";
 "create_profile" = "Profil erstellen";
 "online_sources" = "Online-Quellen";
 "select_online_source" = "Quelle auswählen";
@@ -1823,7 +1823,7 @@
 "profile_sett_descr" = "Betrifft das ausgewählte Anwendungsprofil";
 "app_profiles" = "App-Profile";
 "selected_profile" = "Ausgewähltes Profil";
-"base_profile_descr" = "Basisprofil";
+"profile_type_base_string" = "Basisprofil";
 "not_available_profile_name" = "Profil mit diesem Namen existiert bereits.";
 "profile_import_success" = "Anwendungsprofil wurde erfolgreich importiert";
 "ui_customization_descr" = "Schubladenelemente, Kontextmenü";

@@ -148,7 +148,7 @@
 
 - (NSString *) getProfileDescription:(OAApplicationMode *)am
 {
-    return am.isCustomProfile ? OALocalizedString(@"custom_profile") : OALocalizedString(@"base_profile_descr");
+    return am.isCustomProfile ? OALocalizedString(@"profile_type_custom_string") : OALocalizedString(@"profile_type_base_string");
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath

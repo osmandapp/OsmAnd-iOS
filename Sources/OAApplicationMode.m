@@ -50,7 +50,7 @@ static OAApplicationMode *_SKI;
     _cachedFilteredValues = [NSMutableArray array];
     
     _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_overview") stringKey:@"default"];
-    _DEFAULT.descr = OALocalizedString(@"base_profile_descr");
+    _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
     [_values addObject:_DEFAULT];
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
@@ -506,7 +506,7 @@ static OAApplicationMode *_SKI;
 
 - (NSString *) getProfileDescription
 {
-    return _descr && _descr.length > 0 ? _descr : OALocalizedString(@"custom_profile");
+    return _descr && _descr.length > 0 ? _descr : OALocalizedString(@"profile_type_custom_string");
 }
 
 + (void) onApplicationStart

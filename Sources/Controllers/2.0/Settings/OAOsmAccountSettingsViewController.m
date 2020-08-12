@@ -54,6 +54,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self showKeyboardForCellForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -93,6 +99,16 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void) showKeyboardForCellForIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if (cell && [cell isKindOfClass:OAInputCellWithTitle.class])
+    {
+        OAInputCellWithTitle *resCell = (OAInputCellWithTitle *) cell;
+        [resCell.inputField becomeFirstResponder];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -126,6 +142,7 @@
         cell.inputField.placeholder = [self getHintForIndex:indexPath.row];
         cell.inputField.textContentType = indexPath.row == 0 ? UITextContentTypeUsername : UITextContentTypePassword;
         cell.inputField.tag = indexPath.row;
+        cell.inputField.returnKeyType = UIReturnKeyDone;
         
         if (indexPath.row != 0)
         {
@@ -140,12 +157,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (cell && [cell isKindOfClass:OAInputCellWithTitle.class])
-    {
-        OAInputCellWithTitle *resCell = (OAInputCellWithTitle *) cell;
-        [resCell.inputField becomeFirstResponder];
-    }
+    [self showKeyboardForCellForIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

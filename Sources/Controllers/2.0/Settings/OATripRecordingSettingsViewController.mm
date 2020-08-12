@@ -101,6 +101,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+    self.tableView.separatorColor =  UIColorFromRGB(color_tint_gray);
 }
 
 - (void) didReceiveMemoryWarning
@@ -581,6 +582,18 @@ static NSArray<NSString *> *minTrackSpeedNames;
     {
         return nil;
     }
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
+    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 #pragma mark - UITableViewDelegate

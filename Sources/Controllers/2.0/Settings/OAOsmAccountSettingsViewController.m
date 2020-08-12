@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OAAppSettings.h"
 #import "OAInputCellWithTitle.h"
+#import "OAColors.h"
 
 @interface OAOsmAccountSettingsViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -42,6 +43,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -118,11 +120,20 @@
     if (cell)
     {
         cell.titleLabel.text = [self getTitleForIndex:indexPath.row];
+        cell.titleLabel.textColor = [UIColor blackColor];
         NSString *text = [self getTextForIndex:indexPath.row];
         cell.inputField.text = text;
         cell.inputField.placeholder = [self getHintForIndex:indexPath.row];
         cell.inputField.textContentType = indexPath.row == 0 ? UITextContentTypeUsername : UITextContentTypePassword;
         cell.inputField.tag = indexPath.row;
+        
+        if (indexPath.row != 0)
+        {
+            if (@available(iOS 13.0, *))
+                cell.inputField.font = [UIFont monospacedSystemFontOfSize:17 weight:UIFontWeightRegular];
+            else
+                cell.inputField.font = [UIFont monospacedDigitSystemFontOfSize:16 weight:UIFontWeightRegular];
+        }
     }
     return cell;
 }

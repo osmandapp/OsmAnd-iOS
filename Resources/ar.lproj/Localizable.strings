@@ -1827,3 +1827,15 @@
 "configure_profile" = "تكوين ملف التعريف";
 "plugin_settings_descr" = "إعدادات البرنامج المساعد لملف التعريف المحدد.";
 "configure_screen_descr" = "حدد خيارات الشاشة لملف التعريف";
+"shared_string_email" = "البريد الإلكتروني";
+"shared_string_account_add" = "إضافة حساب";
+"shared_string_account" = "الحساب";
+"shared_string_required" = "مطلوب";
+"email_example_hint" = "user@example.com";
+"osm_editing_access_descr" = "يمكنك عرض كافة عمليات التحرير والملاحظات المحلية في %@. لم يتم سرد النقاط التي تم تحميلها بالفعل في أوسماند.";
+"osm_editing_settings_descr" = "إعدادات المكون الإضافي هذه شاملة، وتنطبق على جميع الملفات الشخصية.";
+// Menu
+"menu" = "القائمة";
+"plugin_settings_reset" = "إعادة ضبط الملحقات للافتراضي";
+"trip_rec_actions_descr" = "يمكنك العثور على جميع المسارات المسجلة في % @";
+"logging_accuracy" = "دقة التسجيل";

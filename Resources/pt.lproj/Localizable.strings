@@ -543,7 +543,7 @@
 "traffic_warning_border_control" = "Posto alfandegário";
 "traffic_warning_payment" = "Portagem";
 "traffic_warning_stop" = "Sinal de stop";
-"traffic_warning_calming" = "Acalmia de tráfego";
+"traffic_warning_calming" = "Moderação de trafego";
 "traffic_warning_speed_camera" = "Radar de velocidade";
 "traffic_warning" = "Aviso de tráfego";
 "traffic_warning_railways" = "Cruzamento de ferrovia";
@@ -1621,3 +1621,6 @@
 "width_limit_description" = "Forneça a largura do seu veículo, algumas restrições de rotas podem ser aplicadas a veículos largos.";
 "height_limit_description" = "Forneça a altura do seu veículo, algumas restrições de rotas podem ser aplicadas a veículos altos.";
 "weight_limit_description" = "Forneça o peso do seu veículo, algumas restrições de rotas podem ser aplicadas a veículos pesados.";
+"configure_profile" = "Configurar o perfil";
+"selected_profile" = "Perfil selecionado";
+"profile_appearance" = "Aspeto do perfil";

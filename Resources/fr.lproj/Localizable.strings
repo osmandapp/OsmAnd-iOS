@@ -1624,3 +1624,4 @@
 "send_anonymous_data_desc" = "Envoyez à OsmAnd des statistiques de téléchargement des cartes. Nous ne collectons aucune donnée de localisation, ni aucune information personnelle.";
 "default_profile_descr" = "Sélectionnez un profil qui sera utilisé pour le lancement de l'application.";
 "allow_3d" = "Autoriser la vue 2,5D";
+"weight_limit_description" = "Indiquez le poids de votre véhicule, certaines restrictions d'itinéraire peuvent s'appliquer aux véhicules lourds.";

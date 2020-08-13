@@ -37,6 +37,7 @@
 #define kCellTypeSingleSelectionList @"single_selection_list"
 #define kCellTypeMultiSelectionList @"multi_selection_list"
 #define kCellTypeCheck @"check"
+#define kNavigationSection 4
 
 @interface OATripRecordingSettingsViewController ()
 
@@ -334,13 +335,31 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [value set:isChecked mode:self.appMode];
             if ([name isEqualToString:@"track_during_nav"])
             {
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath, [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self updateNavigationSection:isChecked];
             }
         }
         else if ([name isEqualToString:@"auto_split_gap"])
         {
             [_settings.autoSplitRecording set:isChecked mode:self.appMode];
         }
+    }
+}
+
+- (void) updateNavigationSection:(BOOL)isOn
+{
+    if (isOn)
+    {
+        [self.tableView beginUpdates];
+        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:kNavigationSection]] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kNavigationSection] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
+    }
+    else
+    {
+        [self.tableView beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:kNavigationSection]] withRowAnimation:(UITableViewRowAnimation)UITableViewRowAnimationFade];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kNavigationSection] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
     }
 }
 
@@ -356,6 +375,13 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section == kNavigationSection)
+    {
+        OAProfileBoolean *value = [self getItem:[NSIndexPath indexPathForRow:0 inSection:kNavigationSection]][@"value"];
+        BOOL isAutoRecordOn = [value get:self.appMode];
+        return isAutoRecordOn ? 2 : 1;
+    }
+    
     if (_settingsType == kTripRecordingSettingsScreenGeneral)
     {
         NSArray *sectionData = _data[section];

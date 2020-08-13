@@ -16,7 +16,6 @@
 @property (nonatomic) double lon;
 @property (nonatomic, readonly) NSDictionary<NSNumber *, NSString *> *coordinates;
 
--(void) setupWithLat:(double)lat lon:(double)lon;
-- (void) setData:(NSDictionary<NSNumber *, NSString *> *)data;
+- (void) setupWithLat:(double)lat lon:(double)lon;
 
 @end

@@ -53,4 +53,6 @@
 - (NSString *) getItemDesc;
 - (void) setItemDesc:(NSString *)desc;
 
+- (void) setupCollapableViewsWithData:(id)data lat:(double)lat lon:(double)lon;
+
 @end

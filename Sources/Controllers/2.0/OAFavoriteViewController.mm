@@ -30,7 +30,7 @@
 
 - (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly
 {
-    self = [self initWithItem:favorite];
+    self = [super initWithItem:favorite];
     if (self)
     {
         _app = [OsmAndApp instance];
@@ -41,7 +41,7 @@
         
         if (!headerOnly)
         {
-            [self setupCollapableViews:favorite];
+            [super setupCollapableViewsWithData:favorite lat:favorite.getLatitude lon:favorite.getLongitude];
         }
         
         NSString *groupName = self.favorite.favorite->getGroup().toNSString();
@@ -55,7 +55,7 @@
 
 - (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation headerOnly:(BOOL)headerOnly
 {
-    self = [self initWithLocation:location andTitle:formattedLocation];
+    self = [super initWithLocation:location andTitle:formattedLocation];
     if (self)
     {
         _app = [OsmAndApp instance];
@@ -101,7 +101,7 @@
         
         if (!headerOnly)
         {
-            [self setupCollapableViews:fav];
+            [super setupCollapableViewsWithData:fav lat:location.latitude lon:location.longitude];
         }
         
         NSString *groupStr = self.favorite.favorite->getGroup().toNSString();
@@ -112,18 +112,6 @@
     }
     return self;
 
-}
-
-- (void) setupCollapableViews:(OAFavoriteItem *)favorite
-{
-    OACollapsableWaypointsView *collapsableGroupView = [[OACollapsableWaypointsView alloc] init];
-    [collapsableGroupView setData:favorite];
-    collapsableGroupView.collapsed = YES;
-    self.collapsableGroupView = collapsableGroupView;
-    
-    OACollapsableCoordinatesView *collapsableCoordinatesView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-    collapsableCoordinatesView.collapsed = YES;
-    self.collapsableCoordinatesView = collapsableCoordinatesView;
 }
 
 - (BOOL) supportMapInteraction
@@ -160,8 +148,6 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     [settings setShowFavorites:YES];
     self.titleGradient.frame = self.navBar.frame;
-    
-    [self.collapsableCoordinatesView setupWithLat:self.location.latitude lon:self.location.longitude];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

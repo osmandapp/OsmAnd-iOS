@@ -31,6 +31,13 @@
 
 #include "Localization.h"
 
+#define kRowName 0
+#define kRowColor 1
+#define kRowGroup 2
+#define kRowDescription 3
+#define kRowWaypoints 4
+#define kRowCoordinates 5
+
 @interface OAEditTargetViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAEditDescriptionViewControllerDelegate, UITextFieldDelegate>
 
 @end
@@ -381,6 +388,19 @@
         [self.deleteButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
 }
 
+- (void) setupCollapableViewsWithData:(id)data lat:(double)lat lon:(double)lon
+{
+    OACollapsableWaypointsView *collapsableGroupView = [[OACollapsableWaypointsView alloc] init];
+    [collapsableGroupView setData:data];
+    collapsableGroupView.collapsed = YES;
+    self.collapsableGroupView = collapsableGroupView;
+
+    OACollapsableCoordinatesView *collapsableCoordinatesView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+    [collapsableCoordinatesView setupWithLat:lat lon:lon];
+    collapsableCoordinatesView.collapsed = YES;
+    self.collapsableCoordinatesView = collapsableCoordinatesView;
+}
+
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -557,7 +577,6 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const reusableIdentifierText = @"OAIconTextTableViewCell";
     static NSString* const reusableIdentifierColorCell = @"OAColorViewCell";
     static NSString* const reusableIdentifierGroupCell = @"OAGroupViewCell";
     static NSString* const reusableIdentifierTextViewCell = @"OATextViewTableViewCell";
@@ -570,27 +589,10 @@
     {
         index++;
     }
-    
-    if (indexPath.row == [tableView numberOfRowsInSection:0] - 1)
-    {
-        OATargetInfoCollapsableCoordinatesViewCell* cell;
-        cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsableСoordinates];
-        
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierCollapsableСoordinates owner:self options:nil];
-            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
-        }
-        
-        [cell setupCellWithLat:self.location.latitude lon:self.location.longitude];
-        cell.collapsableView = self.collapsableCoordinatesView;
-        [cell setCollapsed:self.collapsableCoordinatesView.collapsed rawHeight:64.];
-        return cell;
-    }
 
     switch (index)
     {
-        case 0:
+        case kRowName:
         {
             OATextViewTableViewCell* cell;
             cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTextViewCell];
@@ -615,7 +617,7 @@
                 return cell;
             }
         }
-        case 1:
+        case kRowColor:
         {
             OAColorViewCell* cell;
             cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierColorCell];
@@ -636,7 +638,7 @@
             
             return cell;
         }
-        case 2:
+        case kRowGroup:
         {
             OAGroupViewCell* cell;
             cell = (OAGroupViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierGroupCell];
@@ -656,7 +658,7 @@
             
             return cell;
         }
-        case 3:
+        case kRowDescription:
         {
             OATextMultiViewCell* cell;
             cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTextMultiViewCell];
@@ -694,7 +696,7 @@
             
             return cell;
         }
-        case 4:
+        case kRowWaypoints:
         {
             OATargetInfoCollapsableViewCell* cell;
             cell = (OATargetInfoCollapsableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];
@@ -714,6 +716,22 @@
             cell.collapsableView = self.collapsableGroupView;
             [cell setCollapsed:self.collapsableGroupView.collapsed rawHeight:64.];
             
+            return cell;
+        }
+        case kRowCoordinates:
+        {
+            OATargetInfoCollapsableCoordinatesViewCell* cell;
+            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsableСoordinates];
+            
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierCollapsableСoordinates owner:self options:nil];
+                cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
+            }
+            
+            [cell setupCellWithLat:self.location.latitude lon:self.location.longitude];
+            cell.collapsableView = self.collapsableCoordinatesView;
+            [cell setCollapsed:self.collapsableCoordinatesView.collapsed rawHeight:64.];
             return cell;
         }
             
@@ -745,14 +763,17 @@
     if (!self.editing)
         index++;
     
-    if (index == 3)     // description
-        return _descHeight;
-    else if (index == 4) // points
-        return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
-    else if (index == 5) // coords
-        return 64. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height);
-    else
-        return 44.0;
+    switch (index)
+    {
+        case kRowDescription:
+            return _descHeight;
+        case kRowWaypoints:
+            return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
+        case kRowCoordinates:
+            return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
+        default:
+            return 44.0;
+    }
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -765,28 +786,28 @@
     
     switch (index)
     {
-        case 0: // name
+        case kRowName:
         {
             break;
         }
-        case 1: // color
+        case kRowColor:
         {
             if ([self supportEditing])
                 [self changeColorClicked];
             break;
         }
-        case 2: // group
+        case kRowGroup:
         {
             if ([self supportEditing])
                 [self changeGroupClicked];
             break;
         }
-        case 3: // description
+        case kRowDescription:
         {
             [self changeDescriptionClicked];
             break;
         }
-        case 4: // wpts
+        case kRowWaypoints:
         {
             UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
             if ([cell isKindOfClass:OATargetInfoCollapsableViewCell.class])
@@ -799,7 +820,7 @@
             }
             break;
         }
-        case 5: // coords
+        case kRowCoordinates:
         {
             UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
             if ([cell isKindOfClass:OATargetInfoCollapsableCoordinatesViewCell.class])

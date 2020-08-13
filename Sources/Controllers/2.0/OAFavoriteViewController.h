@@ -14,6 +14,6 @@
 
 @property (nonatomic) OAFavoriteItem *favorite;
 - (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly;
-- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation headerOnly:(BOOL)headerOnly;
+- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation headerOnly:(BOOL)headerOnly;
 
 @end

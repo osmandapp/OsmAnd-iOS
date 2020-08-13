@@ -925,6 +925,7 @@
     }
     
     NSURL* gpxUrl = [NSURL fileURLWithPath:_exportFilePath];
+    
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
     _exportController.UTI = @"net.osmand.gpx";
     _exportController.delegate = self;

@@ -741,7 +741,7 @@
 "replace_destination_point" = "Remplacer la destination";
 "shared_string_current" = "Actuelle";
 "make_as_start_point" = "Utiliser comme point de départ";
-"keep_and_add_destination_point" = "Ajouter comme destination suivante";
+"keep_and_add_destination_point" = "Ajouter comme destination";
 "subsequent_dest_description" = "Monter et créer comme destination";
 "add_as_first_destination_point" = "Ajouter comme première étape";
 "first_intermediate_dest_description" = "Ajoute la première étape de l'itinéraire";

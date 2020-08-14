@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OAEditTargetViewController.h"
 #define kDefaultMapillaryZoomOnShow 17.0f
 
 @class OAMapillaryImage;

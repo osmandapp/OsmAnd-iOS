@@ -298,8 +298,7 @@
         OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
         coordinatesRow.collapsed = YES;
         coordinatesRow.collapsable = YES;
-        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-        [collapsableView setupWithLat:self.location.latitude lon:self.location.longitude];
+        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
         coordinatesRow.collapsableView = collapsableView;
         [_rows addObject:coordinatesRow];
     }

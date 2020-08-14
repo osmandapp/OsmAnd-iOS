@@ -31,18 +31,23 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        // init
+        _lat = 0;
+        _lon = 0;
     }
     return self;
 }
 
-
--(void) setupWithLat:(double)lat lon:(double)lon
+- (instancetype) initWithFrame:(CGRect)frame lat:(double)lat lon:(double)lon
 {
-    self.lat = lat;
-    self.lon = lon;
-    NSDictionary<NSNumber *, NSString*> *values = [OAPointDescription getLocationData:lat lon:lon];
-    [self setData:values];
+    self = [super initWithFrame:frame];
+    if (self)
+    {
+        _lat = lat;
+        _lon = lon;
+        NSDictionary<NSNumber *, NSString*> *values = [OAPointDescription getLocationData:lat lon:lon];
+        [self setData:values];
+    }
+    return self;
 }
 
 -(void) setData:(NSDictionary<NSNumber *,NSString *> *)data

@@ -395,8 +395,7 @@
     collapsableGroupView.collapsed = YES;
     self.collapsableGroupView = collapsableGroupView;
 
-    OACollapsableCoordinatesView *collapsableCoordinatesView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-    [collapsableCoordinatesView setupWithLat:lat lon:lon];
+    OACollapsableCoordinatesView *collapsableCoordinatesView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:lat lon:lon];
     collapsableCoordinatesView.collapsed = YES;
     self.collapsableCoordinatesView = collapsableCoordinatesView;
 }
@@ -770,7 +769,7 @@
         case kRowWaypoints:
             return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
         case kRowCoordinates:
-            return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
+            return 64. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height);
         default:
             return 44.0;
     }

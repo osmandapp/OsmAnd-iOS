@@ -1653,3 +1653,4 @@
 "configure_screen_descr" = "Sélectionnez les options d'écran pour le profil";
 "logging_accuracy" = "Précision de l'enregistrement";
 "get_discount_first_few_parts" = "%@ pour premier %@";
+"distance_indication" = "Indication de la distance";

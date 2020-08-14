@@ -13,6 +13,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OASwitchTableViewCell.h"
 #import "OAIconTextDescCell.h"
+#import "OATitleRightIconCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAPlugin.h"
@@ -32,6 +33,7 @@
 #define kHeaderId @"TableViewSectionHeader"
 #define kSwitchCell @"OASettingSwitchCell"
 #define kIconTitleDescrCell @"OAIconTextDescCell"
+#define kCellTypeAction @"OATitleRightIconCell"
 
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeNone = 0,
@@ -149,6 +151,22 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     
     if (plugins.count > 0)
         [data addObject:plugins];
+    
+    
+    [data addObject:@[
+    @{
+        @"title" : OALocalizedString(@"reset_to_default"),
+        @"img" : @"ic_custom_reset",
+        @"type" : kCellTypeAction,
+        @"name" : @"reset_to_default"
+    }]];
+    
+//    @"type" : kIconTitleDescrCell,
+//    @"title" : OALocalizedString(@"general_settings_2"),
+//    @"descr" : OALocalizedString(@"general_settings_descr"),
+//    @"img" : @"left_menu_icon_settings",
+//    @"key" : @"general_settings"
+    
     
     _data = data;
 }
@@ -351,6 +369,23 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
         }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeAction])
+    {
+        static NSString* const identifierCell = kCellTypeAction;
+        OATitleRightIconCell *cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
+            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+        }
+        cell.titleView.text = item[@"title"];
+        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         return cell;
     }
     return nil;

@@ -757,7 +757,8 @@
 "selected_profile" = "Selected profile";
 "app_profiles" = "App profiles";
 "profile_sett_descr" = "Affect selected application profile";
-"export_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
+"export_profile_descr" = "You can export all profile settings. Copy all settings from other profile. Reset all profile settings to default state.";
+"reset_to_default" = "Reset to default";
 
 // Purchases
 "prch_addons" = "Addons";

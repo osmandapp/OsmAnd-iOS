@@ -775,11 +775,11 @@
 "poi_clear" = "Limpiar";
 "logging_interval_navigation" = "Intervalo de registro durante la navegación";
 "logging_interval_navigation_descr" = "Intervalo de registro del viaje durante la navegación";
-"logging_min_distance" = "Distancia mínima de registro";
+"logging_min_distance" = "Desplazamiento mínimo";
 "logging_min_distance_descr" = "Filtro: distancia mínima para registrar un nuevo punto";
-"logging_min_accuracy" = "Precisión mínima de registro";
+"logging_min_accuracy" = "Precisión mínima";
 "logging_min_accuracy_descr" = "Filtro: no registrar a menos que se alcance la precisión establecida";
-"logging_min_speed" = "Velocidad mínima de registro";
+"logging_min_speed" = "Velocidad mínima";
 "logging_min_speed_descr" = "Filtro: no registrar por debajo de la velocidad establecida";
 "auto_split_gap" = "Dividir grabaciones automáticamente después de un hueco";
 "auto_split_gap_descr" = "Comenzar un nuevo segmento después de un intervalo de 6 minutos, un nuevo viaje después de un intervalo de 2 horas, o un nuevo archivo después de un intervalo de tiempo más largo";
@@ -788,8 +788,8 @@
 "recording_preferences_descr" = "Preferencias de grabación del viaje";
 "traffic_warning_tunnel" = "Túnel adelante";
 "track_save_descr" = "Guarda ahora el viaje actual como archivo GPX.";
-"track_during_nav" = "Guardar el viaje automáticamente durante la navegación";
-"track_during_nav_descr" = "El viaje se guarda automáticamente durante la navegación";
+"track_during_nav" = "Guardar el viaje automáticamente";
+"track_during_nav_descr" = "Activar para guardar automáticamente un viaje al navegar";
 "menu_help" = "Ayuda";
 // Help
 "help_first_steps" = "Primeros pasos";
@@ -1832,3 +1832,9 @@
 "configure_profile" = "Configurar perfil";
 "plugin_settings_descr" = "Ajustes del complemento para el perfil elegido.";
 "configure_screen_descr" = "Elige las opciones de pantalla para el perfil";
+"osm_editing_settings_descr" = "Los ajustes de este complemento son globales y se aplica a todos los perfiles.";
+// Menu
+"menu" = "Menú";
+"plugin_settings_reset" = "Restablecer ajustes del complemento a valores predefinidos";
+"trip_rec_actions_descr" = "Puedes encontrar todas las trazas grabadas en %@";
+"logging_accuracy" = "Precisión de registro";

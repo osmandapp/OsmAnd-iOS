@@ -116,7 +116,7 @@
     }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(16, 0, 0, 0)];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
     }
     else
     {

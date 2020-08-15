@@ -20,6 +20,7 @@
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditingSettingsViewController.h"
+#import "OAPluginResetBottomSheetViewController.h"
 
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
@@ -158,7 +159,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         @"title" : OALocalizedString(@"reset_to_default"),
         @"img" : @"ic_custom_reset",
         @"type" : kCellTypeAction,
-        @"name" : @"reset_to_default"
+        @"key" : @"reset_to_default"
     }]];
     
 //    @"type" : kIconTitleDescrCell,
@@ -434,6 +435,12 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
+    else if ([key isEqualToString:@"reset_to_default"])
+    {
+        OAPluginResetBottomSheetViewController *screen = [[OAPluginResetBottomSheetViewController alloc] initWithParam:_appMode];
+        [screen show];
+    }
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

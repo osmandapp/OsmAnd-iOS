@@ -758,7 +758,9 @@
 "app_profiles" = "App profiles";
 "profile_sett_descr" = "Affect selected application profile";
 "export_profile_descr" = "You can export all profile settings. Copy all settings from other profile. Reset all profile settings to default state.";
+
 "reset_to_default" = "Reset to default";
+"reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will disvard all your changes, this action can't be undo.";
 
 // Purchases
 "prch_addons" = "Addons";

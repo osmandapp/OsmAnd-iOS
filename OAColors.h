@@ -149,4 +149,6 @@
 
 #define parking_pin_color_blue 0x4A69EC
 
+#define color_primary_red 0xFF470D
+
 #endif /* OAColors_h */

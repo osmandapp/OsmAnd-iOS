@@ -327,6 +327,10 @@
 		336CAAB324AF63520085BF0A /* ic_custom_transport_bus@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 336CAAA724AF63500085BF0A /* ic_custom_transport_bus@3x.png */; };
 		336CAAB424AF63520085BF0A /* ic_custom_transport_tram@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 336CAAA824AF63510085BF0A /* ic_custom_transport_tram@3x.png */; };
 		336CAAB524AF63520085BF0A /* ic_custom_transport_bus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 336CAAA924AF63510085BF0A /* ic_custom_transport_bus@2x.png */; };
+		33A061F424E6DEAA004617D4 /* OAPluginResetBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A061F324E6DEAA004617D4 /* OAPluginResetBottomSheetViewController.m */; };
+		33A061F524E6DEAA004617D4 /* OAPluginResetBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A061F324E6DEAA004617D4 /* OAPluginResetBottomSheetViewController.m */; };
+		33A061F824E6F712004617D4 /* OABottomSheetHeaderButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33A061F724E6F712004617D4 /* OABottomSheetHeaderButtonCell.xib */; };
+		33A061F924E6F712004617D4 /* OABottomSheetHeaderButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33A061F724E6F712004617D4 /* OABottomSheetHeaderButtonCell.xib */; };
 		33BE664224A2771600245A78 /* OAShowHideTransportLinesAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33B14E1E249F9576000DC288 /* OAShowHideTransportLinesAction.mm */; };
 		33BE664324A2771800245A78 /* OAShowHideTransportLinesAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33B14E1E249F9576000DC288 /* OAShowHideTransportLinesAction.mm */; };
 		33BE666B24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33BE666A24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm */; };
@@ -6284,6 +6288,9 @@
 		336CAAA724AF63500085BF0A /* ic_custom_transport_bus@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_transport_bus@3x.png"; path = "Resources/Icons/ic_custom_transport_bus@3x.png"; sourceTree = "<group>"; };
 		336CAAA824AF63510085BF0A /* ic_custom_transport_tram@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_transport_tram@3x.png"; path = "Resources/Icons/ic_custom_transport_tram@3x.png"; sourceTree = "<group>"; };
 		336CAAA924AF63510085BF0A /* ic_custom_transport_bus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_transport_bus@2x.png"; path = "Resources/Icons/ic_custom_transport_bus@2x.png"; sourceTree = "<group>"; };
+		33A061F224E6DE56004617D4 /* OAPluginResetBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPluginResetBottomSheetViewController.h; sourceTree = "<group>"; };
+		33A061F324E6DEAA004617D4 /* OAPluginResetBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPluginResetBottomSheetViewController.m; sourceTree = "<group>"; };
+		33A061F724E6F712004617D4 /* OABottomSheetHeaderButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OABottomSheetHeaderButtonCell.xib; path = Resources/Controllers/Cells/OABottomSheetHeaderButtonCell.xib; sourceTree = "<group>"; };
 		33B14E1D249F954E000DC288 /* OAShowHideTransportLinesAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideTransportLinesAction.h; sourceTree = "<group>"; };
 		33B14E1E249F9576000DC288 /* OAShowHideTransportLinesAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideTransportLinesAction.mm; sourceTree = "<group>"; };
 		33BE666924A36EB200245A78 /* OAPublicTransportOptionsBottomSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPublicTransportOptionsBottomSheet.h; sourceTree = "<group>"; };
@@ -10127,6 +10134,15 @@
 			name = DownloadMapSource;
 			sourceTree = "<group>";
 		};
+		33A061F124E6DE26004617D4 /* PluginResetBottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				33A061F224E6DE56004617D4 /* OAPluginResetBottomSheetViewController.h */,
+				33A061F324E6DEAA004617D4 /* OAPluginResetBottomSheetViewController.m */,
+			);
+			path = PluginResetBottomSheet;
+			sourceTree = "<group>";
+		};
 		33BE666824A36E1D00245A78 /* PublicTransportOptionsBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
@@ -10283,6 +10299,7 @@
 				787AC300242A398B0007944C /* OAImageDescTableViewCell.xib */,
 				1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */,
 				DA2267A4240E5B0800FFEA91 /* OABottomSheetHeaderDescrButtonCell.xib */,
+				33A061F724E6F712004617D4 /* OABottomSheetHeaderButtonCell.xib */,
 				78496C5624126B4C006EA39E /* OAColorsCollectionViewCell.h */,
 				78496C5724126B4C006EA39E /* OAColorsCollectionViewCell.m */,
 				78496C5824126B4C006EA39E /* OAColorsCollectionViewCell.xib */,
@@ -13079,6 +13096,7 @@
 		84AB9D8B2073842F009DA206 /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				33A061F124E6DE26004617D4 /* PluginResetBottomSheet */,
 				33BE666824A36E1D00245A78 /* PublicTransportOptionsBottomSheet */,
 				DA68B408233B925C00F5ACCC /* RouteInfoBottomSheet */,
 				DABD68AA230FC09E009DFBDE /* QuickActionBottomSheet */,
@@ -16412,6 +16430,7 @@
 				DAF3454622F4482B009E2EB6 /* ic_custom_compound_action_play@3x.png in Resources */,
 				DAEC05FC2296C6C500045298 /* ic_custom_show@3x.png in Resources */,
 				847A1F0D1DF94E9B003C1246 /* ic_destination_pin_3@2x.png in Resources */,
+				33A061F924E6F712004617D4 /* OABottomSheetHeaderButtonCell.xib in Resources */,
 				DA134169243DC5A80039D214 /* map_action_pedestrian_dark@3x.png in Resources */,
 				847A1F0E1DF94E9B003C1246 /* ic_tabbar_maps_active.png in Resources */,
 				DABD68B5230FF019009DFBDE /* OAActionAddMapSourceViewController.xib in Resources */,
@@ -19824,6 +19843,7 @@
 				844499601AAA1FC000ACA20D /* bt_buy_addon@3x.png in Resources */,
 				DAF345D222F45C74009E2EB6 /* OAQuickActionsSheetView.xib in Resources */,
 				8477774E1FAA260E00CA8C1F /* widget_speed_night.png in Resources */,
+				33A061F824E6F712004617D4 /* OABottomSheetHeaderButtonCell.xib in Resources */,
 				0CEF2C2824B717CD00BAAC4B /* ic_action_enduro_motorcycle@2x.png in Resources */,
 				84F3A96C1B4F9D0400D16EBC /* OAGPXRouteGroupsViewController.xib in Resources */,
 				15720BF124BF3B0F00BFC84F /* OAGlobalSettingsViewController.xib in Resources */,
@@ -20697,6 +20717,7 @@
 				DACB92B323E0405400771E40 /* OARouteDetailsGraphViewController.mm in Sources */,
 				847A1D6A1DF94E9B003C1246 /* OAMapSettingsLanguageScreen.mm in Sources */,
 				DAA738E523E2E0B600FAB0DE /* OASaveGpxToTripsActivity.m in Sources */,
+				33A061F524E6DEAA004617D4 /* OAPluginResetBottomSheetViewController.m in Sources */,
 				847A1D6B1DF94E9B003C1246 /* OAGPXTrackAnalysis.mm in Sources */,
 				847A1D6C1DF94E9B003C1246 /* OAMapSettingsGpxScreen.mm in Sources */,
 				8AD63B6821CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm in Sources */,
@@ -20787,6 +20808,7 @@
 				84FF844D1F9E1AE500176521 /* OAConfigureMenuVisibilityScreen.mm in Sources */,
 				151558B924A349270081BB8E /* OADeviceScreenTableViewCell.m in Sources */,
 				8A253F9921DDF09B0047FA3C /* OAOsmLiveBannerView.m in Sources */,
+				33A061F424E6DEAA004617D4 /* OAPluginResetBottomSheetViewController.m in Sources */,
 				BBA3AF39197FC4BB0039D991 /* OAManageResourcesViewController.mm in Sources */,
 				84F3A9691B4F9D0400D16EBC /* OAGPXRouteGroupsViewController.mm in Sources */,
 				8424316F1AEA19C700925821 /* OAOcbfHelper.m in Sources */,

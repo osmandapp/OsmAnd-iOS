@@ -22,10 +22,11 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
-#import "OASettingsImageCell.h"
 #import "OAApplicationMode.h"
+#import "OATitleTwoIconsRoundCell.h"
 
 #define kButtonsDividerTag 150
+#define kTitleIconRoundCell @"OATitleTwoIconsRoundCell"
 
 @interface OAPluginResetBottomSheetScreen ()
 
@@ -36,7 +37,7 @@
     OsmAndAppInstance _app;
     OAPluginResetBottomSheetViewController *vwController;
     OAMapWidgetRegistry *_mapWidgetRegistry;
-    NSArray* _data;
+    NSDictionary* _data;
     OAApplicationMode *_appMode;
 }
 
@@ -70,29 +71,43 @@
 - (void) setupView
 {
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
+    
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderDescrButtonCell",
                      @"title" : OALocalizedString(@"reset_to_default"),
                      @"description" : @"",
                      @"img" : @"ic_custom_reset.png"
                      }];
+    [model setObject:[NSArray arrayWithArray:arr] forKey:@(0)];
     
+    [arr removeAllObjects];
     [arr addObject:@{
-                    @"type" : @"OASettingsImageCell",
-                    @"title" : _appMode.name,
-                    @"img" : _appMode.getIconName
-                    }];
+           @"type" : kTitleIconRoundCell,
+           @"title" : _appMode.name,
+           @"img" : _appMode.getIconName,
+           @"key" : @"swap_points",
+           @"round_bottom" : @(YES),
+           @"round_top" : @(YES)
+       }];
+    [model setObject:[NSArray arrayWithArray:arr] forKey:@(1)];
     
+    [arr removeAllObjects];
     [arr addObject:@{
                      @"type" : @"OADescrTitleCell",
                      @"title" : OALocalizedString(@"reset_profile_action_descr"),
                      @"description" : @""
                      }];
-    
     [arr addObject:@{ @"type" : @"OADividerCell" } ];
-    
-    _data = [NSArray arrayWithArray:arr];
+    [model setObject:[NSArray arrayWithArray:arr] forKey:@(2)];
+     
+    _data = [NSDictionary dictionaryWithDictionary:model];
+}
+
+- (NSDictionary *) getItem:(NSIndexPath *)indexPath
+{
+    return _data[@(indexPath.section)][indexPath.row];
 }
 
 - (void) initData
@@ -101,7 +116,7 @@
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
-    NSDictionary *item = _data[indexPath.row];
+    NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderDescrButtonCell"])
     {
         return UITableViewAutomaticDimension;
@@ -114,9 +129,13 @@
     {
         return [OASettingSwitchNoImageCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:tableView.bounds.size.width];
     }
+    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
+    {
+        return [OATitleTwoIconsRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+    }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(0, 0, 8, 0)];
     }
     else
     {
@@ -128,18 +147,18 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return _data.count;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.count;
+    NSArray *sectionData = _data[@(section)];
+    return sectionData.count;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
-    
+    NSDictionary *item = [self getItem:indexPath];
     
     if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderDescrButtonCell"])
     {
@@ -163,24 +182,35 @@
         }
         return cell;
     }
-    if ([item[@"type"] isEqualToString:@"OASettingsImageCell"])
+    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
     {
-        static NSString* const identifierCell = @"OASettingsImageCell";
-        OASettingsImageCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = kTitleIconRoundCell;
+        OATitleTwoIconsRoundCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsImageCell" owner:self options:nil];
-            cell = (OASettingsImageCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleIconRoundCell owner:self options:nil];
+            cell = (OATitleTwoIconsRoundCell *)[nib objectAtIndex:0];
         }
         if (cell)
         {
-            cell.layer.cornerRadius = 12;
-            cell.layer.masksToBounds = YES;
-            cell.backgroundColor = UIColor.whiteColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.textView.text = item[@"title"];
-            [cell.imgView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-            cell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.backgroundColor = UIColor.clearColor;
+            cell.titleView.text = item[@"title"];
+            if (![item[@"skip_tint"] boolValue])
+            {
+                [cell.leftIconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+                cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+                cell.rightIconView.hidden = YES;
+            }
+            else
+            {
+                [cell.leftIconView setImage:[UIImage imageNamed:item[@"img"]]];
+                cell.rightIconView.hidden = YES;
+            }
+            [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
+            cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
         }
         return cell;
     }
@@ -217,7 +247,7 @@
         }
         cell.backgroundColor = UIColor.clearColor;
         cell.dividerColor = UIColorFromRGB(color_divider_blur);
-        cell.dividerInsets = UIEdgeInsetsMake(16, 0, 0, 0);
+        cell.dividerInsets = UIEdgeInsetsMake(16, 0, 8, 0);
         cell.dividerHight = 0.5;
         return cell;
     }
@@ -231,12 +261,6 @@
 {
     [vwController dismiss];
 }
-
-- (NSDictionary *) getItem:(NSIndexPath *)indexPath
-{
-    return _data[indexPath.row];
-}
-
 
 #pragma mark - UITableViewDelegate
 
@@ -252,7 +276,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 32.0;
+    return 16.0;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section

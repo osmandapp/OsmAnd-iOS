@@ -196,10 +196,16 @@
         @"key" : @"nearbyPOI",
     }];
     
+    NSString *val;
+    if ([_settings.keepInforming get:self.appMode] == 0)
+        val = OALocalizedString(@"only_manually");
+    else
+        val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"units_min")];
+    
     [fifthSection addObject:@{
         @"type" : kCellTypeTitleValue,
         @"title" : OALocalizedString(@"keep_informing"),
-        @"value" : @"7 min", // needs to be changed
+        @"value" : val,
         @"key" : @"repeatInstructions",
     }];
     [fifthSection addObject:@{

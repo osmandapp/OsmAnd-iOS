@@ -256,6 +256,7 @@
 "speak_title" = "Announce…";
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
 "keep_informing" = "Repeat navigation instructions";
+"repeat_after" = "Repeat after";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "Arrival announcement";
 "arrival_distance_descr" = "How soon do you want the arrival announcement?";
@@ -283,7 +284,7 @@
 "arrival_announcement_frequency" = "How soon do you want the arrival announcement?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
-"instructions_repeat" = "Tap \"Next turn\" widget for instructions repeat";
+"instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";

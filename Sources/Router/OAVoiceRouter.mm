@@ -511,11 +511,11 @@ std::string preferredLanguage;
 
 - (BOOL) needsInforming
 {
-//    int repeat = _settings.KEEP_INFORMING.get();
-//    if (repeat == null || repeat == 0) return false;
-    return false;
-//    long notBefore = lastAnnouncement * 60 * 1000L;
-//    return (CACurrentMediaTime() * 1000) > notBefore;
+    int repeat = [_settings.keepInforming get];
+    if (repeat == 0)
+        return NO;
+    long double notBefore = lastAnnouncement + repeat * 60 * 1000L;
+    return (CACurrentMediaTime() * 1000) > notBefore;
 }
 
 - (BOOL) statusNotPassed:(int) statusToCheck

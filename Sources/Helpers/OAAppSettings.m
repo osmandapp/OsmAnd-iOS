@@ -1964,6 +1964,7 @@
         [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
         [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
+        [_registeredPreferences setObject:_routingProfile forKey:routingProfileKey];
         
         _profileIconName = [OAProfileString withKey:profileIconNameKey defValue:@"ic_world_globe_dark"];
         [_profileIconName setModeDefaultValue:@"ic_world_globe_dark" mode:OAApplicationMode.DEFAULT];
@@ -2125,9 +2126,11 @@
         _settingGeoFormat = [OAProfileInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OAProfileInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
         
+        [_registeredPreferences setObject:_settingAllow3DView forKey:settingEnable3DViewKey];
         [_registeredPreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
         [_registeredPreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_registeredPreferences setObject:_metricSystem forKey:@"default_metric_system"];
+        [_registeredPreferences setObject:_metricSystemChangedManually forKey:metricSystemChangedManuallyKey];
         [_registeredPreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_registeredPreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
         
@@ -2277,6 +2280,24 @@
 - (OAProfileSetting *) getSettingById:(NSString *)stringId
 {
     return [_registeredPreferences objectForKey:stringId];
+}
+
+- (void) resetAllProfileSettingsForMode:(OAApplicationMode *)appMode
+{
+    for (OAProfileSetting *value in [_registeredPreferences objectEnumerator].allObjects)
+    {
+        [value resetModeToDefault:appMode];
+    }
+    
+    for (OAProfileBoolean *value in [_customBooleanRoutingProps objectEnumerator].allObjects)
+    {
+        [value resetModeToDefault:appMode];
+    }
+    
+    for (OAProfileString *value in [_customRoutingProps objectEnumerator].allObjects)
+    {
+        [value resetModeToDefault:appMode];
+    }
 }
 
 // Common Settings

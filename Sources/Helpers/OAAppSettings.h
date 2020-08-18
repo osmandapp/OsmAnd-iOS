@@ -636,6 +636,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 - (void) registerPreference:(OAProfileSetting *)pref forKey:(NSString *)key;
 - (NSMapTable<NSString *, OAProfileSetting *> *) getRegisteredSettings;
+- (void) resetAllProfileSettingsForMode:(OAApplicationMode *)appMode;
 
 // Direction Appearance
 

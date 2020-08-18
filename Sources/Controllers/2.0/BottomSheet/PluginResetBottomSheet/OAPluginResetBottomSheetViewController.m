@@ -325,9 +325,7 @@
 
 -(void) doneButtonPressed:(id)sender
 {
-    //TODO: reseting to defaults
-    OAApplicationMode *appMode = (OAApplicationMode *)self.customParam;
-    NSLog(@"Reseting to defaults in %@ mode", appMode.name);
+    [OAAppSettings.sharedManager resetAllProfileSettingsForMode:(OAApplicationMode *)self.customParam];
     [self dismiss];
 }
 

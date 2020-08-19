@@ -1398,6 +1398,41 @@ static const double d180PI = 180.0 / M_PI_2;
     return tableHeaderView;
 }
 
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font titntColor:(UIColor *)tintColor icon:(NSString *)iconName
+{
+    CGFloat iconFrameSize = 34;
+    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
+    label.text = text;
+    label.font = font;
+    label.textColor = UIColor.blackColor;
+    label.numberOfLines = 2;
+    label.lineBreakMode = NSLineBreakByTruncatingTail;
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [label sizeToFit];
+    CGRect frame = label.frame;
+    frame.size.height = label.frame.size.height;
+    frame.origin.y = 8.0;
+    label.frame = frame;
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 8)];
+    [tableHeaderView addSubview:label];
+    UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 12 - OAUtilities.getLeftMargin - iconFrameSize, tableHeaderView.frame.size.height / 2 - iconFrameSize / 2, iconFrameSize, iconFrameSize)];
+    imageContainer.backgroundColor = UIColor.whiteColor;
+    
+    UIImageView *imageView = [[UIImageView alloc] init];
+    imageView.frame = CGRectMake(2, 2, 30, 30);
+    imageView.contentMode = UIViewContentModeCenter;
+    [imageView setTintColor:tintColor];
+    [imageView setImage:[[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    
+    [imageContainer insertSubview:imageView atIndex:0];
+    imageContainer.layer.cornerRadius = iconFrameSize / 2;
+    
+    [tableHeaderView addSubview:imageContainer];
+    
+    return tableHeaderView;
+}
+
 + (CGFloat) heightForHeaderViewText:(NSString *)text width:(CGFloat)width font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing
 {
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];

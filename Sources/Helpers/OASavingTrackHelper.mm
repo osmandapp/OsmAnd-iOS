@@ -581,7 +581,7 @@
                     record = true;
                 }
                 else if (settings.mapSettingTrackRecording
-                    && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackIntervalGlobal)
+                    && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackIntervalGlobal get])
                 {
                     record = true;
                 }

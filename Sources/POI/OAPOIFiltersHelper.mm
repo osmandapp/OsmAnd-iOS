@@ -17,6 +17,8 @@
 #import <sqlite3.h>
 #import "OALog.h"
 #import "OAAppSettings.h"
+#import "OAAutoObserverProxy.h"
+#import "OsmAndApp.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -366,6 +368,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     
     OAPOIFilterDbHelper *_helper;
     OAPOIHelper *_poiHelper;
+    
+    OAAutoObserverProxy *_applicationModeObserver;
 }
 
 + (OAPOIFiltersHelper *)sharedInstance
@@ -387,8 +391,20 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         _selectedPoiFilters = [NSMutableSet set];
         _helper = [[OAPOIFilterDbHelper alloc] init];
         _poiHelper = [OAPOIHelper sharedInstance];
+        
+        _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onApplicationModeChanged)
+                                                              andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
     }
     return self;
+}
+
+- (void) onApplicationModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hidePoiFilters];
+        [self loadSelectedPoiFilters];
+    });
 }
 
 - (OAPOIUIFilter *) getSearchByNamePOIFilter
@@ -694,7 +710,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (void) loadSelectedPoiFilters
 {
-    NSArray<NSString *> *filters = [OAAppSettings sharedManager].selectedPoiFilters;
+    NSArray<NSString *> *filters = [[[OAAppSettings sharedManager].selectedPoiFilters get] componentsSeparatedByString:@","];
     for (NSString *f in filters)
     {
         OAPOIUIFilter *filter = [self getFilterById:f];
@@ -705,12 +721,16 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (void) saveSelectedPoiFilters
 {
-    NSMutableArray<NSString *> *filters = [NSMutableArray array];
-    for (OAPOIUIFilter *f in _selectedPoiFilters)
+    NSMutableString *filtersStr = [NSMutableString new];
+    NSArray<OAPOIUIFilter *> *filters = _selectedPoiFilters.allObjects;
+    for (NSInteger i = 0; i < filters.count; i++)
     {
-        [filters addObject:f.filterId];
+        OAPOIUIFilter *f = filters[i];
+        [filtersStr appendString:f.filterId];
+        if (i != filters.count - 1)
+            [filtersStr appendString:@","];
     }
-    [[OAAppSettings sharedManager] setSelectedPoiFilters:filters];
+    [[OAAppSettings sharedManager].selectedPoiFilters set:filtersStr];
 }
 
 @end

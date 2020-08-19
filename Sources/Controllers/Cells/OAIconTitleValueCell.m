@@ -23,6 +23,7 @@
 
 -(void)showImage:(BOOL)show
 {
+    self.leftImageView.hidden = !show;
     self.imageTextLeadingMargin.active = show;
     self.noImageTextLeadingMargin.active = !show;
 }

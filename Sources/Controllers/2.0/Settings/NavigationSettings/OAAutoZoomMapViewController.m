@@ -65,8 +65,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"auto_zoom_map");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

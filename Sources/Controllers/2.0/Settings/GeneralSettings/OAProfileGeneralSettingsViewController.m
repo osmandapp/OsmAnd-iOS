@@ -14,7 +14,6 @@
 #import "OASettingSwitchCell.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OACoordinatesFormatViewController.h"
-#import "PXAlertView.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -31,23 +30,12 @@
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
-    BOOL _showAppModeDialog;
-}
-
-- (id) initWithSettingsMode:(OAApplicationMode *)applicationMode
-{
-    self = [super initWithAppMode:applicationMode];
-    if (self)
-    {
-        _showAppModeDialog = NO;
-    }
-    return self;
 }
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"general_settings_2");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -56,8 +44,9 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     _settings = [OAAppSettings sharedManager];
-    self.profileButton.hidden = NO;
     [self.tableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 48.;
     [self setupView];
 }
 
@@ -65,48 +54,7 @@
 {
     [super viewWillAppear:animated];
     [self setupView];
-    if (_showAppModeDialog)
-    {
-        _showAppModeDialog = NO;
-        [self showAppModeDialog];
-    }
     [self.tableView reloadData];
-}
-
-- (void) showAppModeDialog
-{
-    NSMutableArray *titles = [NSMutableArray array];
-    NSMutableArray *images = [NSMutableArray array];
-    NSMutableArray *modes = [NSMutableArray array];
-    
-    NSArray<OAApplicationMode *> *values = [OAApplicationMode values];
-    for (OAApplicationMode *v in values)
-    {
-        if (v == [OAApplicationMode DEFAULT])
-            continue;
-        
-        [titles addObject:v.name];
-        [images addObject:v.getIconName];
-        [modes addObject:v];
-    }
-    
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"map_settings_mode")
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_cancel")
-                        otherTitles:titles
-                          otherDesc:nil
-                        otherImages:images
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-        if (!cancelled)
-        {
-            self.appMode = modes[buttonIndex];
-            [self setupView];
-        }
-    }];
-}
-
-- (IBAction)profileButtonPressed:(id)sender {
-    [self showAppModeDialog];
 }
 
 - (void) setupView
@@ -120,6 +68,7 @@
         rotateMapValue = OALocalizedString(@"do_not_rotate");
     
     NSNumber *allow3DValue = @([_settings.settingAllow3DView get:self.appMode]);
+    NSNumber *positionInCenter = @([_settings.centerPositionOnMap get:self.appMode]);
     
     NSString *drivingRegionValue;
     if ([_settings.drivingRegionAutomatic get:self.appMode])
@@ -249,8 +198,17 @@
         @"type" : kCellTypeIconTextSwitch,
         @"title" : OALocalizedString(@"allow_3D_view"),
         @"isOn" : allow3DValue,
-        @"icon" : @"ic_action_compass",
+        @"icon" : @"ic_custom_2_5d_view",
         @"key" : @"3dView",
+    }];
+    [appearanceArr addObject:@{
+        @"name" : @"center_position",
+        @"type" : kCellTypeIconTextSwitch,
+        @"title" : OALocalizedString(@"always_center_position_on_map"),
+        @"key" : @"always_center_position_on_map",
+        @"isOn" : positionInCenter,
+        @"icon" : [positionInCenter boolValue] ? @"ic_custom_display_position_center.png" : @"ic_custom_display_position_bottom.png",
+        @"key" : @"center_position",
     }];
     [unitsAndFormatsArr addObject:@{
         @"type" : kCellTypeIconTitleValue,
@@ -298,13 +256,11 @@
     [tableData addObject:otherArr];
     _data = [NSArray arrayWithArray:tableData];
     [self updateNavBar];
-    [self.tableView reloadData];
 }
 
 - (void) updateNavBar
 {
-    [self.profileButton setImage:self.appMode.getIcon forState:UIControlStateNormal];
-    self.subtitleLabel.text = self.appMode.name;
+    self.subtitleLabel.text = self.appMode.toHumanString;
 }
 
 #pragma mark - TableView
@@ -323,7 +279,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.leftImageView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.leftImageView.tintColor = UIColorFromRGB(color_chart_orange);
         }
         if (cell)
         {
@@ -351,6 +307,7 @@
             cell.textView.text = item[@"title"];
             cell.switchView.on = [item[@"isOn"] boolValue];
             cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -454,6 +411,12 @@
                         [app.mapModeObservable notifyEvent];
                 }
             }
+            else if ([name isEqualToString:@"center_position"])
+            {
+                [_settings.centerPositionOnMap set:isChecked mode:self.appMode];
+            }
+            [self setupView];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
 }

@@ -20,7 +20,6 @@
 #import "OAAppSettings.h"
 #import "OAProfileDataObject.h"
 #import "OsmAndApp.h"
-#import "PXAlertView.h"
 #import "OASettingsHelper.h"
 
 #import "Localization.h"
@@ -60,53 +59,23 @@
     return self;
 }
 
-- (void) showAppModeDialog
-{
-    NSMutableArray *titles = [NSMutableArray array];
-    NSMutableArray *images = [NSMutableArray array];
-    NSMutableArray *modes = [NSMutableArray array];
-    
-    NSArray<OAApplicationMode *> *values = [OAApplicationMode values];
-    for (OAApplicationMode *v in values)
-    {
-        if (v == [OAApplicationMode DEFAULT])
-            continue;
-        
-        [titles addObject:v.name];
-        [images addObject:v.getIconName];
-        [modes addObject:v];
-    }
-    
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"map_settings_mode")
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_cancel")
-                        otherTitles:titles
-                          otherDesc:nil
-                        otherImages:images
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-        if (!cancelled)
-        {
-            self.appMode = modes[buttonIndex];
-            [self generateData];
-        }
-    }];
-}
-
-- (IBAction)profileButtonPressed:(id)sender {
-    [self showAppModeDialog];
-}
-
 - (void) updateNavBar
 {
-    [self.profileButton setImage:self.appMode.getIcon forState:UIControlStateNormal];
-    self.subtitleLabel.text = self.appMode.name;
+    self.subtitleLabel.text = self.appMode.toHumanString;
 }
 
 - (void) generateData
 {
+    NSString *selectedProfileName = [_settings.routingProfile get];
     _routingProfileDataObjects = [self.class getRoutingProfiles];
-    
-    OARoutingProfileDataObject *routingData = _routingProfileDataObjects[[_settings.routingProfile get]];
+    NSArray *profiles = [_routingProfileDataObjects allValues];
+    OARoutingProfileDataObject *routingData;
+
+    for (OARoutingProfileDataObject *profile in profiles)
+    {
+        if([profile.stringKey isEqual:selectedProfileName])
+            routingData = profile;
+    }
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *navigationArr = [NSMutableArray array];
@@ -161,8 +130,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"routing_settings_2");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -170,7 +139,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.profileButton.hidden = NO;
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
 }
 
 + (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles
@@ -377,7 +346,7 @@
     else if ([itemKey isEqualToString:@"exportProfile"])
     {
         OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
-        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:self.appMode.name settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:self.appMode] exportItemFiles:YES];
+        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:self.appMode.toHumanString settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:self.appMode] exportItemFiles:YES];
     }
     settingsViewController.delegate = self;
     [self.navigationController pushViewController:settingsViewController animated:YES];

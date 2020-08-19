@@ -20,6 +20,7 @@
 #import "OAVehicleParametersSettingsViewController.h"
 #import "OADefaultSpeedViewController.h"
 #import "OARouteSettingsBaseViewController.h"
+#import "OARouteProvider.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -50,8 +51,8 @@
 
 -(void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"vehicle_parameters");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -68,7 +69,7 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
     NSMutableArray *defaultSpeedArr = [NSMutableArray array];
-    auto router = [self.class getRouter:self.appMode];
+    auto router = [OARouteProvider getRouter:self.appMode];
     _otherParameters.clear();
     if (router && self.appMode != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode != OAApplicationMode.SKI && self.appMode.parent != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode.parent != OAApplicationMode.SKI)
     {
@@ -87,21 +88,24 @@
             {
                 OAProfileString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue: @"0"];
                 NSString *value = [stringParam get:self.appMode];
-                NSMutableArray *possibleValues = [NSMutableArray array];
-                NSMutableArray *possibleValuesDescr = [NSMutableArray array];
                 int index = -1;
+                
+                NSMutableArray<NSNumber *> *possibleValues = [NSMutableArray new];
+                NSMutableArray<NSString *> *valueDescriptions = [NSMutableArray new];
+                
+                double d = value ? floorf(value.doubleValue * 100 + 0.5) / 100 : DBL_MAX;
+                
                 for (int i = 0; i < p.possibleValues.size(); i++)
                 {
-                    NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
-                    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-                    [formatter setMaximumFractionDigits:1];
-                    [formatter setMinimumFractionDigits:0];
-                    
-                    [possibleValues addObject:[formatter numberFromString:[NSString stringWithFormat:@"%.1f", p.possibleValues[i]]]];
-                    [possibleValuesDescr addObject:[NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()]];
-                    if ([value isEqualToString:[possibleValues[i] stringValue]])
+                    double vl = floorf(p.possibleValues[i] * 100 + 0.5) / 100;
+                    [possibleValues addObject:@(vl)];
+                    [valueDescriptions addObject:[NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()]];
+                    if (vl == d)
+                    {
                         index = i;
+                    }
                 }
+
                 if (index == 0)
                     value = OALocalizedString(@"sett_no_ext_input");
                 else if (index != -1)
@@ -116,7 +120,7 @@
                      @"selectedItem" : [NSNumber numberWithInt:index],
                      @"icon" : [self getParameterIcon:paramId],
                      @"possibleValues" : possibleValues,
-                     @"possibleValuesDescr" : possibleValuesDescr,
+                     @"possibleValuesDescr" : valueDescriptions,
                      @"setting" : stringParam,
                      @"type" : kCellTypeIconTitleValue }
                  ];
@@ -150,15 +154,6 @@
     if (defaultSpeedArr.count > 0)
         [tableData addObject:defaultSpeedArr];
     _data = [NSArray arrayWithArray:tableData];
-}
-
-+ (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    auto router = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
-    if (!router && am.parent)
-        router = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
-    return router;
 }
 
 - (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName

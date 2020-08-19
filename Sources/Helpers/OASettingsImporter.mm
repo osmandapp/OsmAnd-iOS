@@ -199,8 +199,12 @@
     
     for (NSDictionary* item in itemsJson)
     {
-        OASettingsItem *settingsItem = [self createItem:item];
-        [_items addObject:settingsItem];
+        // TODO: import other item types later
+        if ([item[@"type"] isEqualToString:@"PROFILE"])
+        {
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
+        }
         // TODO: implement custom plugins
 //        NSString *pluginId = item.pluginId;
 //        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)

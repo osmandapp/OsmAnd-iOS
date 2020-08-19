@@ -456,35 +456,32 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                 OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
                 OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
                 [helper clearSelectedPoiFilters];
-                [mapVC hidePoi];
-                NSMutableSet<OAPOIUIFilter *> *selectedFilters = [NSMutableSet new];
                 for (NSObject *object in objects)
                 {
                     if ([object isKindOfClass:[OAPOIUIFilter class]])
                     {
-                        [selectedFilters addObject:(OAPOIUIFilter *) object];
+                        [helper addSelectedPoiFilter:(OAPOIUIFilter *) object];
                     }
                     else if ([object isKindOfClass:[OAPOIFilter class]])
                     {
                         OAPOIFilter *poiFilter = (OAPOIFilter *) object;
                         OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiFilter idSuffix:@""];
-                        [selectedFilters addObject:uiFilter];
+                        [helper addSelectedPoiFilter:uiFilter];
                     }
                     else if ([object isKindOfClass:[OAPOIType class]])
                     {
                         OAPOIType *poiType = (OAPOIType *) object;
                         OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiType idSuffix:@""];
-                        [selectedFilters addObject:uiFilter];
+                        [helper addSelectedPoiFilter:uiFilter];
                     }
                     else if ([object isKindOfClass:[OAPOICategory class]])
                     {
                         OAPOICategory *poiCategory = (OAPOICategory *) object;
                         OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""];
-                        [selectedFilters addObject:uiFilter];
+                        [helper addSelectedPoiFilter:uiFilter];
                     }
                 }
-                OAPOIUIFilter *combinedFilter = [helper combineSelectedFilters:selectedFilters];
-                [mapVC showPoiOnMap:combinedFilter keyword:combinedFilter.filterId];
+                [mapVC updatePoiLayer];
             }
         }
         else if ([_url hasPrefix:@"show-choose-plan:"])

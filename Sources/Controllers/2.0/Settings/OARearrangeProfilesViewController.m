@@ -175,7 +175,7 @@
     }
     if (cell)
     {
-        cell.titleLabel.text = mode.name;
+        cell.titleLabel.text = mode.toHumanString;
         NSString *imageName = @"";
         if (isAllProfiles)
             imageName = mode.isCustomProfile ? @"ic_custom_delete" : @"ic_custom_delete_disable";

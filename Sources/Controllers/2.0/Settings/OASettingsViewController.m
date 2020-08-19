@@ -171,7 +171,7 @@
             {
                 [arr addObject: @{
                                   @"name" : mode.stringKey,
-                                  @"title" : mode.name,
+                                  @"title" : mode.toHumanString,
                                   @"value" : @"",
                                   @"img" : appMode == mode ? @"menu_cell_selected.png" : @"",
                                   @"type" : kCellTypeCheck }];
@@ -401,7 +401,7 @@
     }
     else if ([name isEqualToString:@"track_recording"])
     {
-        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral];
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:OAApplicationMode.CAR];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([name isEqualToString:@"osm_editing"])

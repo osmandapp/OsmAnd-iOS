@@ -40,8 +40,8 @@
 
 -(void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"map_behavior");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

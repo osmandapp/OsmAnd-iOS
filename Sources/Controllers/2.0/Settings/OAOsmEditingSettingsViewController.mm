@@ -7,48 +7,39 @@
 //
 
 #import "OAOsmEditingSettingsViewController.h"
+#import "OAOsmAccountSettingsViewController.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OAIconTextTableViewCell.h"
+#import "OATitleRightIconCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
-#import "PXAlertView.h"
-#import "OASettingsViewController.h"
+#import "OAOsmEditsListViewController.h"
 #import "OATextInputCell.h"
 #import "OAButtonCell.h"
 #import "OAColors.h"
 
-
+#define kCellTypeTitle @"OAIconTextCell"
+#define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeSwitch @"switch"
-#define kCellTypeSingleSelectionList @"single_selection_list"
-#define kCellTypeMultiSelectionList @"multi_selection_list"
 #define kCellTypeButton @"button"
-#define kCellTypeTextInput @"text_input_cell"
 
-@interface OAOsmEditingSettingsViewController () <UITextFieldDelegate>
+@interface OAOsmEditingSettingsViewController () <OAAccontSettingDelegate>
 
 @end
 
 @implementation OAOsmEditingSettingsViewController
 {
-    NSArray *_credentialsSectionData;
-    NSArray *_offlineModeSectionData;
-    
-    OATextInputCell *_passwordCell;
-    OATextInputCell *_userNameCell;
-    OAButtonCell *_buttonCell;
-    
-    UITextField *_textFieldBeingEdited;
-    BOOL _isInEditingMode;
+    NSArray<NSArray *> *_data;
     
     OAAppSettings *_settings;
 }
 
 static const NSInteger credentialsSectionIndex = 0;
-static const NSInteger offlineSectionIndex = 1;
-static const NSInteger sectionCount = 2;
+static const NSInteger actionsSectionIndex = 2;
 
 - (void) applyLocalization
 {
@@ -64,24 +55,8 @@ static const NSInteger sectionCount = 2;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
-    _userNameCell = (OATextInputCell *)[nib objectAtIndex:0];
-    _userNameCell.inputField.text = _settings.osmUserName;
-    _userNameCell.inputField.textColor = UIColorFromRGB(color_dialog_text_description_color);
-    _userNameCell.inputField.placeholder = OALocalizedString(@"osm_name");
-    _userNameCell.inputField.delegate = self;
-    _userNameCell.userInteractionEnabled = NO;
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"osm_editing_settings_descr") font:[UIFont systemFontOfSize:15] textColor:UIColorFromRGB(color_text_footer) lineSpacing:0.0 isTitle:NO];
     
-    nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
-    _passwordCell = (OATextInputCell *)[nib objectAtIndex:0];
-    _passwordCell.inputField.text = _settings.osmUserPassword;
-    _passwordCell.inputField.textColor = UIColorFromRGB(color_dialog_text_description_color);
-    _passwordCell.inputField.placeholder = OALocalizedString(@"shared_string_password");
-    _passwordCell.inputField.delegate = self;
-    _passwordCell.inputField.secureTextEntry = YES;
-    _passwordCell.userInteractionEnabled = NO;
-    
-    _buttonCell = [self getButtonCell];
 }
 
 - (OAButtonCell *) getButtonCell
@@ -94,20 +69,15 @@ static const NSInteger sectionCount = 2;
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
         cell = (OAButtonCell *)[nib objectAtIndex:0];
+        [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
     }
     if (cell)
     {
-        [cell.button setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
+        [cell.button setTitle:_settings.osmUserName.length == 0 ? OALocalizedString(@"shared_string_account_add") : _settings.osmUserName forState:UIControlStateNormal];
         [cell.button addTarget:self action:@selector(editPressed) forControlEvents:UIControlEventTouchDown];
         [cell showImage:NO];
     }
     return cell;
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -123,37 +93,53 @@ static const NSInteger sectionCount = 2;
 - (void) setupView
 {
     [self applySafeAreaMargins];
-    NSMutableArray *dataArr = [NSMutableArray array];
+    NSMutableArray<NSArray *> *sectionArr = [NSMutableArray new];
+    NSMutableArray *dataArr = [NSMutableArray new];
     
     [dataArr addObject:
      @{
-       @"name" : @"username_input",
-       @"type" : kCellTypeTextInput }];
+         @"name" : @"edit_credentials",
+         @"type" : kCellTypeButton
+     }];
     
-    [dataArr addObject:
-     @{
-       @"name" : @"password_input",
-       @"type" : kCellTypeTextInput }];
-    
-    [dataArr addObject:
-     @{
-       @"name" : @"edit_credentials",
-       @"type" : kCellTypeButton
-       }];
-    
-    _credentialsSectionData = [NSArray arrayWithArray:dataArr];
+    [sectionArr addObject:[NSArray arrayWithArray:dataArr]];
     
     [dataArr removeAllObjects];
     
     [dataArr addObject:
      @{
-       @"name" : @"offline_editing",
-       @"type" : kCellTypeSwitch,
-       @"title" : OALocalizedString(@"osm_offline_editing"),
-       @"value" : @(_settings.offlineEditing)
-       }];
+         @"name" : @"offline_editing",
+         @"type" : kCellTypeSwitch,
+         @"title" : OALocalizedString(@"osm_offline_editing"),
+         @"value" : @(_settings.offlineEditing)
+     }];
     
-    _offlineModeSectionData = [NSArray arrayWithArray:dataArr];
+    [sectionArr addObject:[NSArray arrayWithArray:dataArr]];
+    
+    [dataArr removeAllObjects];
+    
+    NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"osm_edits_title")];
+    NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"osm_editing_access_descr"), menuPath];
+    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
+    [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]} range:[actionsDescr rangeOfString:menuPath]];
+    
+    [dataArr addObject:
+     @{
+         @"type" : kCellTypeTitle,
+         @"title" : str
+     }];
+    
+    [dataArr addObject:
+     @{
+         @"type" : kCellTypeAction,
+         @"title" : OALocalizedString(@"osm_edits_title"),
+         @"img" : @"ic_custom_folder",
+         @"name" : @"open_edits"
+     }];
+    
+    [sectionArr addObject:[NSArray arrayWithArray:dataArr]];
+    
+    _data = sectionArr;
     
     [self.tableView reloadData];
     self.backButton.imageView.image = [self.backButton.imageView.image imageFlippedForRightToLeftLayoutDirection];
@@ -161,12 +147,7 @@ static const NSInteger sectionCount = 2;
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == credentialsSectionIndex)
-        return _credentialsSectionData[indexPath.row];
-    else if (indexPath.section == offlineSectionIndex)
-        return _offlineModeSectionData[indexPath.row];
-    
-    return nil;
+    return _data[indexPath.section][indexPath.row];
 }
 
 - (void) applyParameter:(id)sender
@@ -187,45 +168,21 @@ static const NSInteger sectionCount = 2;
 
 - (void) editPressed
 {
-    if (_isInEditingMode)
-    {
-        NSLog(@"%@ %@", _userNameCell.textLabel.text, _passwordCell.textLabel.text);
-        if (_textFieldBeingEdited)
-            [_textFieldBeingEdited resignFirstResponder];
-        [_buttonCell.button setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
-        [_settings setOsmUserName:_userNameCell.inputField.text];
-        [_settings setOsmUserPassword:_passwordCell.inputField.text];
-        _passwordCell.inputField.textColor = UIColorFromRGB(color_dialog_text_description_color);
-        _userNameCell.inputField.textColor = UIColorFromRGB(color_dialog_text_description_color);
-    }
-    else
-    {
-        [_buttonCell.button setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
-        [_userNameCell.inputField becomeFirstResponder];
-        _passwordCell.inputField.textColor = [UIColor blackColor];
-        _userNameCell.inputField.textColor = [UIColor blackColor];
-    }
-    _isInEditingMode = !_isInEditingMode;
-    _userNameCell.userInteractionEnabled = _isInEditingMode;
-    _passwordCell.userInteractionEnabled = _isInEditingMode;
-    
+    OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
+    accountSettings.delegate = self;
+    [self presentViewController:accountSettings animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return sectionCount;
+    return _data.count;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == credentialsSectionIndex)
-        return _credentialsSectionData.count;
-    else if (section == offlineSectionIndex)
-        return _offlineModeSectionData.count;
-    else
-        return 0;
+    return _data[section].count;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -257,90 +214,110 @@ static const NSInteger sectionCount = 2;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeTextInput])
+    else if ([type isEqualToString:kCellTypeTitle])
     {
-        if ([item[@"name"] isEqualToString:@"username_input"])
-            return _userNameCell;
-        if ([item[@"name"] isEqualToString:@"password_input"])
-            return _passwordCell;
+        static NSString* const identifierCell = kCellTypeTitle;
+        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            cell.arrowIconView.hidden = YES;
+            cell.iconView.hidden = YES;
+            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
+            cell.textView.numberOfLines = 0;
+            cell.textView.lineBreakMode = NSLineBreakByWordWrapping;
+        }
+        if (cell)
+        {
+            cell.textView.attributedText = item[@"title"];
+        }
+        return cell;
+    }
+    else if ([type isEqualToString:kCellTypeAction])
+    {
+        static NSString* const identifierCell = kCellTypeAction;
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
+            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+        }
+        cell.titleView.text = item[@"title"];
+        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        return cell;
     }
     else if ([type isEqualToString:kCellTypeButton])
     {
-        return _buttonCell;
+        return [self getButtonCell];
     }
     return nil;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *type = item[@"type"];
-
-    if ([type isEqualToString:kCellTypeSwitch])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else
-    {
-        return 44.0;
-    }
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == credentialsSectionIndex)
-        return OALocalizedString(@"osm_editing_login_and_pass");
-    else if (section == offlineSectionIndex)
-        return OALocalizedString(@"osm_editing_offline");
-    else
-        return @"";
+        return OALocalizedString(@"shared_string_account");
+    else if (section == actionsSectionIndex)
+        return OALocalizedString(@"actions");
+    return nil;
 }
 
-#pragma mark - Keyboard Notifications
-
-- (void) keyboardWillShow:(NSNotification *)notification;
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    NSDictionary *userInfo = [notification userInfo];
-    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
+    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"osm_editing_settings_descr") font:[UIFont systemFontOfSize:15] textColor:UIColorFromRGB(color_text_footer) lineSpacing:0.0 isTitle:NO];
+    } completion:nil];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
     
-    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    UIEdgeInsets insets = [[self tableView] contentInset];
-    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
-        [[self view] layoutIfNeeded];
-    } completion:nil];
+    if ([item[@"name"] isEqualToString:@"open_edits"])
+    {
+        UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+        [myPlacesViewController setSelectedIndex:2];
+        
+        OAOsmEditsListViewController *osmEdits = myPlacesViewController.viewControllers[2];
+        if (osmEdits == nil)
+            return;
+
+        [osmEdits setShouldPopToParent:YES];
+        
+        [self.navigationController pushViewController:myPlacesViewController animated:YES];
+    }
+    else if ([item[@"name"] isEqualToString:@"edit_credentials"])
+    {
+        [self editPressed];
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 
-- (void) keyboardWillHide:(NSNotification *)notification;
-{
-    NSDictionary *userInfo = [notification userInfo];
-    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    UIEdgeInsets insets = [[self tableView] contentInset];
-    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
-        [[self view] layoutIfNeeded];
-    } completion:nil];
-}
+#pragma mark - OAAccontSettingDelegate
 
-#pragma mark - UITextFieldDelegate
-
-- (void) textFieldDidBeginEditing:(UITextField *)textField
+- (void)onAccountInformationUpdated
 {
-    _textFieldBeingEdited = textField;
-}
-
-- (void) textFieldDidEndEditing:(UITextField *)textField
-{
-    _textFieldBeingEdited = nil;
-}
-
-- (BOOL) textFieldShouldReturn:(UITextField *)sender
-{
-    [sender resignFirstResponder];
-    return YES;
+    [self.tableView reloadData];
 }
 
 @end

@@ -353,4 +353,16 @@
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
+-(void) resetToDefault
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (OAMapStyleParameter *p in self.parameters)
+        {
+            p.value = p.defaultValue;
+            p.storedValue = p.defaultValue;
+        }
+        [self saveParameters];
+    });
+}
+
 @end

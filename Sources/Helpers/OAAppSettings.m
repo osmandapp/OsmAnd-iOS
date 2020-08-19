@@ -1855,6 +1855,7 @@
 
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
         _settingAppMode = [OAProfileInteger withKey:settingAppModeKey defValue:0];
+        [_registeredPreferences setObject:_settingAppMode forKey:settingAppModeKey];
 
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;
@@ -1894,6 +1895,8 @@
         [_registeredPreferences setObject:_mapSettingShowFavorites forKey:@"show_favorites"];
         [_registeredPreferences setObject:_mapSettingShowOfflineEdits forKey:@"show_osm_edits"];
         [_registeredPreferences setObject:_mapSettingShowOnlineNotes forKey:@"show_osm_bugs"];
+        [_registeredPreferences setObject:_mapSettingShowOverlayOpacitySlider forKey:mapSettingShowOverlayOpacitySliderKey];
+        [_registeredPreferences setObject:_mapSettingShowUnderlayOpacitySlider forKey:mapSettingShowUnderlayOpacitySliderKey];
     
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
@@ -2007,7 +2010,7 @@
         _minSpeed = [OAProfileDouble withKey:minSpeedKey defValue:0.];
         _maxSpeed = [OAProfileDouble withKey:maxSpeedKey defValue:0.];
         _routeStraightAngle = [OAProfileDouble withKey:routeStraightAngleKey defValue:30.];
-        
+
         [_registeredPreferences setObject:_minSpeed forKey:@"min_speed"];
         [_registeredPreferences setObject:_maxSpeed forKey:@"max_speed"];
         [_registeredPreferences setObject:_routeStraightAngle forKey:@"routing_straight_angle"];
@@ -2148,6 +2151,7 @@
         [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode CAR]];
         [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode BICYCLE]];
         [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_wakeOnVoiceInt forKey:wakeOnVoiceIntKey];
 
         _showTrafficWarnings = [OAProfileBoolean withKey:showTrafficWarningsKey defValue:NO];
         [_showTrafficWarnings setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
@@ -2250,6 +2254,7 @@
         [_registeredPreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
     
         _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
+        [_registeredPreferences setObject:_contourLinesZoom forKey:contourLinesZoomKey];
         
         // riirection Appearance
         _activeMarkers = [OAProfileActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
@@ -2299,6 +2304,9 @@
     {
         [value resetModeToDefault:appMode];
     }
+    
+    //proflie undepended settings
+    [self hideGpx:_mapSettingVisibleGpx];
 }
 
 // Common Settings

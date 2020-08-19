@@ -18,12 +18,12 @@
 #import "OADescrTitleCell.h"
 #import "OADividerCell.h"
 #import "OASettingSwitchNoImageCell.h"
-#import "OARootViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAApplicationMode.h"
 #import "OATitleTwoIconsRoundCell.h"
+#import "OAAppData.h"
 
 #define kButtonsDividerTag 150
 #define kTitleIconRoundCell @"OATitleTwoIconsRoundCell"
@@ -326,6 +326,7 @@
 -(void) doneButtonPressed:(id)sender
 {
     [OAAppSettings.sharedManager resetAllProfileSettingsForMode:(OAApplicationMode *)self.customParam];
+    [OAAppData.defaults resetProfileSettingsForMode:(OAApplicationMode *)self.customParam];
     [self dismiss];
 }
 

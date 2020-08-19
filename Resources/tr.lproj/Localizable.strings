@@ -1730,7 +1730,7 @@
 "select_icon" = "Simge seçin";
 "enter_profile_name" = "Profil adı girin";
 "edit_profile_list" = "Profil listesini düzenle";
-"custom_profile" = "Özel profil";
+"profile_type_custom_string" = "Özel profil";
 "create_profile_descr" = "Özel profilinizi öntanımlı uygulama profillerinden birine dayandırın, bu widget'ların öntanımlı görünürlüğü ile hız ve mesafe birimleri gibi temel ayarları tanımlar. Bunlar, genişletilebilecekleri özel profillerin örnekleri ile birlikte öntanımlı uygulama profilleridir:";
 "create_profile" = "Profil oluştur";
 "import_from_files" = "Dosyadan içe aktar";
@@ -1796,7 +1796,7 @@
 "route_recalculation_descr" = "Güzergahtan geçerli konuma olan mesafe seçilen değerden fazla ise güzergah yeniden hesaplanacaktır.";
 "avoid_routes_and_road" = "Belirli güzergahlardan ve yol türlerinden kaçının";
 "send_anonymous_data" = "Anonim veri gönder";
-"base_profile_descr" = "Temel profil";
+"profile_type_base_string" = "Temel profil";
 "global_settings_descr" = "Tüm uygulamayı etkiler.";
 "global_settings" = "Genel ayarlar";
 "send_anonymous_data_desc" = "OsmAnd harita indirme istatistiklerini gönder, konum verileri veya herhangi bir kişisel bilgi toplamıyoruz.";

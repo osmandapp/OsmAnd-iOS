@@ -44,9 +44,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     _settings = [OAAppSettings sharedManager];
-    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 48.;
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
     [self setupView];
 }
 
@@ -57,15 +55,33 @@
     [self.tableView reloadData];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
 - (void) setupView
 {
     NSString *rotateMapValue;
+    NSString *rotateMapIcon;
     if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_BEARING)
+    {
         rotateMapValue = OALocalizedString(@"rotate_map_bearing_opt");
+        rotateMapIcon = @"ic_custom_direction_movement";
+    }
     else if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_COMPASS)
+    {
         rotateMapValue = OALocalizedString(@"rotate_map_compass_opt");
+        rotateMapIcon = @"ic_custom_direction_compass";
+    }
     else
-        rotateMapValue = OALocalizedString(@"do_not_rotate");
+    {
+        rotateMapValue = OALocalizedString(@"rotate_map_none_opt");
+        rotateMapIcon = @"ic_custom_direction_north";
+    }
     
     NSNumber *allow3DValue = @([_settings.settingAllow3DView get:self.appMode]);
     NSNumber *positionInCenter = @([_settings.centerPositionOnMap get:self.appMode]);
@@ -190,7 +206,7 @@
         @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"rotate_map_to_bearing"),
         @"value" : rotateMapValue,
-        @"icon" : @"ic_action_compass",
+        @"icon" : rotateMapIcon,
         @"key" : @"map_orientation",
     }];
     [appearanceArr addObject:@{

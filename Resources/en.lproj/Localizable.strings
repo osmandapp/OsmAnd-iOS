@@ -723,7 +723,7 @@
 "export_profile" = "Export profile";
 "create_profile" = "Create profile";
 "create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
-"custom_profile" = "Custom profile";
+"profile_type_custom_string" = "Custom profile";
 "new_profile" = "New profile";
 "configure_profile" = "Configure profile";
 "profile_settings" = "Profile settings";
@@ -752,7 +752,7 @@
 "err_profile_import" = "Error reading item data: %@";
 "profile_import_success" = "Application profile was imported successfully";
 "not_available_profile_name" = "Profile with this name already exists.";
-"base_profile_descr" = "Base profile";
+"profile_type_base_string" = "Base profile";
 "osmand_profile" = "OsmAnd profile";
 "selected_profile" = "Selected profile";
 "app_profiles" = "App profiles";

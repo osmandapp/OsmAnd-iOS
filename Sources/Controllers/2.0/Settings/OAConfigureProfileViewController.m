@@ -156,10 +156,16 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setNeedsStatusBarAppearanceUpdate];
     [self setupTableHeaderView];
     [self generateData];
     [self applyLocalization];
     [self.tableView reloadData];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
 }
 
 - (void) applyLocalization
@@ -220,6 +226,9 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) onModeSwitchPressed:(UISwitch *)sender
 {
     [OAApplicationMode changeProfileAvailability:_appMode isSelected:sender.isOn];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    });
 }
 
 - (void) setCurrentModeActive:(EOADashboardScreenType)type
@@ -276,9 +285,16 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     {
         [vw setYOffset:17.];
         vw.label.text = [title upperCase];
+        vw.label.textColor = UIColorFromRGB(color_text_footer);
     }
     [vw sizeToFit];
     return vw;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
+    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -322,7 +338,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = [OAApplicationMode.values containsObject:_appMode];
             [cell.switchView addTarget:self action:@selector(onModeSwitchPressed:) forControlEvents:UIControlEventValueChanged];
-            cell.textView.text = item[@"title"];
+            cell.textView.text = [OAApplicationMode.values containsObject:_appMode] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
         }
         return cell;
     }
@@ -343,8 +359,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         if (cell)
         {
             [cell.textView setText:item[@"title"]];
-            [cell.descView setText:item[@"descr"]];
-            cell.descView.hidden = !cell.descView.text || cell.descView.text.length == 0;
+            cell.descView.hidden = YES;
                 
             [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
             

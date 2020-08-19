@@ -294,12 +294,12 @@
             {
                 OAProfileBoolean *value = v;
                 cell.switchView.on = [value get:self.appMode];
-                cell.imgView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
             }
             else
             {
                 cell.switchView.on = [v boolValue];
             }
+            cell.imgView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -361,18 +361,24 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         BOOL isChecked = ((UISwitch *) sender).on;
-        if (item[@"key"] isEqualToString:@"")
-        for (const auto& routingParameter : _otherParameters)
+        if ([item[@"key"] isEqualToString:@"reverseDir"])
         {
-            NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
-            if ([param isEqualToString:item[@"name"]])
+            [_settings.disableWrongDirectionRecalc set:isChecked mode:self.appMode];
+        }
+        else
+        {
+            for (const auto& routingParameter : _otherParameters)
             {
-                OAProfileBoolean *property = [[OAAppSettings sharedManager] getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:routingParameter.id.c_str()] defaultValue:routingParameter.defaultBoolean];
-                [property set:isChecked mode:self.appMode];
+                NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
+                if ([param isEqualToString:item[@"name"]])
+                {
+                    OAProfileBoolean *property = [[OAAppSettings sharedManager] getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:routingParameter.id.c_str()] defaultValue:routingParameter.defaultBoolean];
+                    [property set:isChecked mode:self.appMode];
+                }
             }
         }
         [self setupView];
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 

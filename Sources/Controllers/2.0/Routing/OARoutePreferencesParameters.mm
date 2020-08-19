@@ -412,7 +412,7 @@
 
 - (BOOL) isSelected
 {
-    return [_voiceRouter isMute];
+    return [self.settings.voiceMute get:self.getApplicationMode];
 }
 
 - (void) setSelected:(BOOL)isChecked
@@ -442,7 +442,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:[self.settings.voiceMute get] ? @"ic_custom_sound_off" : @"ic_custom_sound"];
+    return [UIImage imageNamed:![self.settings.voiceMute get:self.getApplicationMode] ? @"ic_custom_sound_off" : @"ic_custom_sound"];
 }
 
 - (NSString *) getCellType

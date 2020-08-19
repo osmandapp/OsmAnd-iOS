@@ -66,11 +66,10 @@
 
 - (void) generateData
 {
-    NSString *selectedProfileName = [_settings.routingProfile get];
+    NSString *selectedProfileName = self.appMode.getRoutingProfile;
     _routingProfileDataObjects = [self.class getRoutingProfiles];
     NSArray *profiles = [_routingProfileDataObjects allValues];
     OARoutingProfileDataObject *routingData;
-
     for (OARoutingProfileDataObject *profile in profiles)
     {
         if([profile.stringKey isEqual:selectedProfileName])

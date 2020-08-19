@@ -49,17 +49,8 @@
 
 - (void) generateData
 {
-    NSMutableArray *customProfileList = [NSMutableArray array];
-    NSMutableArray *defaultProfileList = [NSMutableArray array];
-    for (OAApplicationMode *profile in OAApplicationMode.allPossibleValues)
-        if (profile.isCustomProfile)
-            [customProfileList addObject:profile];
-        else
-            [defaultProfileList addObject:profile];
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)];
-    NSArray *sortedArray = [customProfileList sortedArrayUsingDescriptors:@[sort]];
-    [defaultProfileList addObjectsFromArray:sortedArray];
-    [defaultProfileList removeObjectAtIndex:0];
+    NSMutableArray *defaultProfileList = [NSMutableArray arrayWithArray:OAApplicationMode.allPossibleValues];
+    [defaultProfileList removeObject:OAApplicationMode.DEFAULT];
     _profileList = [NSArray arrayWithArray:defaultProfileList];
 }
 
@@ -127,7 +118,7 @@
     UIImage *img = am.getIcon;
     cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
-    cell.textView.text = _profileList[indexPath.row].name;
+    cell.textView.text = _profileList[indexPath.row].toHumanString;
     cell.descView.text = _profileList[indexPath.row].getProfileDescription;
     return cell;
 }

@@ -449,15 +449,15 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 
 @property (assign, nonatomic) BOOL mapSettingTrackRecording;
-@property (assign, nonatomic) int mapSettingSaveTrackIntervalGlobal;
-@property (assign, nonatomic) BOOL mapSettingSaveTrackIntervalApproved;
+@property (nonatomic) OAProfileInteger *mapSettingSaveTrackIntervalGlobal;
+@property (nonatomic) OAProfileBoolean *mapSettingSaveTrackIntervalApproved;
 
 @property (assign, nonatomic) BOOL mapSettingShowRecordingTrack;
 
 @property (nonatomic) NSString* mapSettingActiveRouteFileName;
 @property (nonatomic) int mapSettingActiveRouteVariantType;
 
-@property (nonatomic) NSArray<NSString *> *selectedPoiFilters;
+@property (nonatomic) OAProfileString *selectedPoiFilters;
 
 @property (nonatomic) NSInteger discountId;
 @property (nonatomic) NSInteger discountShowNumberOfStarts;

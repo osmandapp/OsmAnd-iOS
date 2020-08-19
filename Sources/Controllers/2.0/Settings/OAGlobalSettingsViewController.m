@@ -95,7 +95,7 @@
             NSMutableArray *arr = [NSMutableArray arrayWithObjects:@{
                 @"name" : @"settings_preset",
                 @"title" : OALocalizedString(@"settings_preset"),
-                @"value" : _settings.defaultApplicationMode.name,
+                @"value" : _settings.defaultApplicationMode.toHumanString,
                 @"description" : OALocalizedString(@"default_profile_descr"),
                 @"img" : @"menu_cell_pointer.png",
                 @"type" : kCellTypeTitle },
@@ -123,7 +123,7 @@
             for (OAApplicationMode *mode in _profileList)
             {
                 [arr addObject: @{
-                    @"name" : mode.name,
+                    @"name" : mode.toHumanString,
                     @"descr" : mode.stringKey,
                     @"isSelected" : @(appMode == mode),
                     @"type" : kCellTypeCheck }];
@@ -209,7 +209,7 @@
         UIImage *img = am.getIcon;
         cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
-        cell.textView.text = _profileList[indexPath.row].name;
+        cell.textView.text = _profileList[indexPath.row].toHumanString;
         cell.descView.text = _profileList[indexPath.row].getProfileDescription;
         [cell setOverflowVisibility:![item[@"isSelected"] boolValue]];
         return cell;

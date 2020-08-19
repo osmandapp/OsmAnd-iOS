@@ -11,6 +11,7 @@
 #import "OAUtilities.h"
 #import "OATargetInfoViewCell.h"
 #import "OATargetInfoCollapsableViewCell.h"
+#import "OATargetInfoCollapsableCoordinatesViewCell.h"
 #import "OAWebViewCell.h"
 #import "OAEditDescriptionViewController.h"
 #import "Localization.h"
@@ -294,13 +295,11 @@
     
     if ([self needCoords])
     {
-        NSInteger f = [OAPointDescription coordinatesFormatToFormatterMode:[[OAAppSettings sharedManager].settingGeoFormat get]];
-        NSDictionary<NSNumber *, NSString*> *values = [OAPointDescription getLocationData:self.location.latitude lon:self.location.longitude];
-        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:values[@(f)] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
         coordinatesRow.collapsed = YES;
-        coordinatesRow.collapsable = values.count > 1;
-        coordinatesRow.collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-        [((OACollapsableCoordinatesView *)coordinatesRow.collapsableView) setData:values];
+        coordinatesRow.collapsable = YES;
+        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
+        coordinatesRow.collapsableView = collapsableView;
         [_rows addObject:coordinatesRow];
     }
     
@@ -460,12 +459,32 @@
     static NSString* const reusableIdentifierText = @"OATargetInfoViewCell";
     static NSString* const reusableIdentifierCollapsable = @"OATargetInfoCollapsableViewCell";
     static NSString* const reusableIdentifierWeb = @"OAWebViewCell";
+    static NSString* const reusableIdentifierCollapsableСoordinates = @"OATargetInfoCollapsableCoordinatesViewCell";
     
     OARowInfo *info = _rows[indexPath.row];
     
     if (!info.isHtml)
     {
-        if (info.collapsable)
+        if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
+        {
+            OATargetInfoCollapsableCoordinatesViewCell *cell;
+            cell = (OATargetInfoCollapsableCoordinatesViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsableСoordinates];
+            
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierCollapsableСoordinates owner:self options:nil];
+                cell = (OATargetInfoCollapsableCoordinatesViewCell *)[nib objectAtIndex:0];
+            }
+            
+            OACollapsableCoordinatesView *coordinateView = (OACollapsableCoordinatesView *) info.collapsableView;
+            [cell setupCellWithLat:coordinateView.lat lon:coordinateView.lon];
+            
+            cell.collapsableView = coordinateView;
+            [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
+            
+            return cell;
+        }
+        else if (info.collapsable)
         {
             OATargetInfoCollapsableViewCell* cell;
             cell = (OATargetInfoCollapsableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];

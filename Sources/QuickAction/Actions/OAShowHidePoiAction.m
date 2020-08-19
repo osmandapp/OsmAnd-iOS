@@ -34,7 +34,6 @@ static OAQuickActionType *TYPE;
     OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
     if (![self isCurrentFilters])
     {
-        OAPOIUIFilter *filter;
         [pf clearSelectedPoiFilters];
         
         for (OAPOIUIFilter *filter in poiFilters)
@@ -44,13 +43,11 @@ static OAQuickActionType *TYPE;
     
             [pf addSelectedPoiFilter:filter];
         }
-        filter = [pf combineSelectedFilters:[NSSet setWithArray:poiFilters]];
-        [mapVC showPoiOnMap:filter keyword:filter.filterId];
     } else
     {
         [pf clearSelectedPoiFilters];
-        [mapVC hidePoi];
     }
+    [mapVC updatePoiLayer];
     
     [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
 }

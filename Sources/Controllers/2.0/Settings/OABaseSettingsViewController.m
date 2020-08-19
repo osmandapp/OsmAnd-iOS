@@ -8,6 +8,7 @@
 
 #import "OABaseSettingsViewController.h"
 #import "OAColors.h"
+#import "OAApplicationMode.h"
 
 #define kSidePadding 16
 
@@ -34,6 +35,11 @@
     [super viewDidLoad];
 }
 
+- (void)applyLocalization
+{
+    self.subtitleLabel.text = _appMode.toHumanString;
+}
+
 - (void) commonInit
 {
 }
@@ -56,7 +62,7 @@
                                                         NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
                                                         NSFontAttributeName : [UIFont systemFontOfSize:15.0],
                                                         NSBackgroundColorAttributeName : UIColor.clearColor}];
-    label.textAlignment = NSTextAlignmentJustified;
+    label.textAlignment = NSTextAlignmentLeft;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;

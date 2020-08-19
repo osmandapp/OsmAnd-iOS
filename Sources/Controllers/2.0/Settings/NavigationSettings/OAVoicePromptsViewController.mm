@@ -52,8 +52,8 @@
 
 -(void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"voice_prompts");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad

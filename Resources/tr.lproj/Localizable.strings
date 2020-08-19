@@ -420,7 +420,7 @@
 "hist_remove_q" = "Geçmişi öğelerini kaldırmak istiyor musunuz?";
 "gpx_edit_mode" = "Düzenleme modu";
 "fav_import_desc" = "Sık kullanılanlarınızı GPX dosyasında ara noktalar olarak içe aktarabilirsiniz (yaygın GPS veri biçimi)\n\nfavourites.gpx dosyasını paylaşmak için Dropbox, e-posta veya başka bir kaynaktan dosyayı açabilirsiniz - Şurada aç işlevini kullanın.";
-"gpx_import_desc" = "GPX dosyalarınızı (yaygın GPS veri biçimi) Dropbox, E-posta veya başka bir kaynaktan içe aktarmak için \"OsmAnd Haritalarına Kopyala\" seçeneğini kullanın";
+"gpx_import_desc" = "GPX dosyalarınızı (yaygın GPS veri biçimi) Dropbox, E-posta veya başka bir kaynaktan içe aktarmak için \"OsmAnd Haritalara Kopyala\" seçeneğini kullanın";
 "map_settings_hillshade" = "Tepe gölgesi";
 "sett_lang_trans" = "başka alfabeyle yaz";
 "sett_lang_show_trans" = "İsimleri başka alfabeyle yaz";
@@ -550,14 +550,14 @@
 "speak_speed_limit" = "Hız sınırı";
 "speak_cameras" = "Hız kameraları";
 "speak_traffic_warnings" = "Trafik uyarıları";
-"announce_gpx_waypoints" = "GPX uğranacak-ara-noktaları";
+"announce_gpx_waypoints" = "İzlenen yol ara noktaları";
 "speak_favorites" = "Yakındaki Sık Kıllanılanlar";
 "speak_poi" = "Yakınlardaki POI";
 "speak_pedestrian" = "Yaya geçitleri";
 "int_seconds" = "saniyeler";
 "shared_string_never" = "Hiçbir zaman";
 "general_settings_2" = "Genel ayarlar";
-"general_settings_descr" = "App için görüntü ve genel seçenekleri ayarla";
+"general_settings_descr" = "Uygulama teması, birimler, bölge";
 "auto_zoom_none" = "Kendiliğinden görüntü-yakınlaştırma olmasın";
 "auto_zoom_close" = "Yakınlatırılmış görüntüye";
 "auto_zoom_far" = "Orta seviye görüntüye";
@@ -661,7 +661,7 @@
 "calculate_osmand_route_without_internet" = "İnternet olmadan OsmAnd rota bölümünü hesaplayın";
 "navigation_over_track" = "Seyahat boyunca navigasyona başla?";
 "use_displayed_track_for_navigation" = "Navigasyon için görüntülenen seyahati kullanmak ister misiniz?";
-"traffic_warning_calming" = "Trafik-hızı-yavaşlatıcı-düzenek";
+"traffic_warning_calming" = "Trafik sakinleştirme";
 "left_side_navigation" = "Soldan-direksiyonlu araç sürüşü";
 "clear_all_intermediates" = "Tüm başlangıç noktalarını temizle";
 "cancel_navigation" = "Navigasyonu durdur";
@@ -812,11 +812,11 @@
 "route_stops_before" = "%d durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında loglama aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında gezi kaydı için kayıt aralığını seçin";
-"logging_min_distance" = "Asgari kayıt mesafesi";
+"logging_min_distance" = "Asgari yer değiştirme";
 "logging_min_distance_descr" = "Filtre: yeni bir nokta kaydetmek için asgari mesafe";
-"logging_min_accuracy" = "Asgari kayıt doğruluğu";
+"logging_min_accuracy" = "Asgari doğruluk";
 "logging_min_accuracy_descr" = "Filtre: bu doğruluğa ulaşılmadıkça kaydetme yok";
-"logging_min_speed" = "Asgari kayıt hızı";
+"logging_min_speed" = "En düşük hız";
 "logging_min_speed_descr" = "Filtre: seçili hızın altında kaydetme yok";
 "auto_split_gap" = "Boşluktan sonra kayıtları otomatik bölme";
 "angular_units" = "Açısal ölçüm birimleri";
@@ -974,7 +974,7 @@
 "translucent_blue" = "Yarı saydam açık mavi";
 "map_underlays" = "Harita alt katmanları";
 "change_map_overlay" = "Harita üst katmanını değiştir";
-"routing_settings_descr" = "Navigasyon seçeneklerini belirtin";
+"routing_settings_descr" = "Navigasyonu yapılandır";
 "osm_live_payment_month_cost_descr" = "%@ / aylık";
 "quick_action_tags" = "Etiketler";
 "offline_vector_maps" = "Çevrim dışı vektör haritaları";
@@ -1054,8 +1054,8 @@
 "poi_overlay" = "POI Üst Katmanı";
 "auto_split_gap_descr" = "6 dakikalık boşluktan sonra yeni segment, 2 saatlik boşluktan sonra yeni seyahat veya daha uzun bir boşluktan sonra yeni dosya başlat";
 "track_save_descr" = "Geçerli seyahati GPX dosyası olarak şimdi kaydedin.";
-"track_during_nav" = "Navigasyon sırasında seyahati otomatik kaydet";
-"track_during_nav_descr" = "Navigasyon sırasında seyahat otomatik olarak kaydedilir";
+"track_during_nav" = "Seyahati otomatik kaydet";
+"track_during_nav_descr" = "Navigasyon sırasında seyahati otomatik olarak kaydetmek için etkinleştirin";
 // Help
 "help_first_steps" = "İlk adımlar";
 "help_first_use_descr" = "Nasıl harita indirilir ve temel ayarlar belirlenir";
@@ -1730,7 +1730,7 @@
 "select_icon" = "Simge seçin";
 "enter_profile_name" = "Profil adı girin";
 "edit_profile_list" = "Profil listesini düzenle";
-"custom_profile" = "Özel profil";
+"profile_type_custom_string" = "Özel profil";
 "create_profile_descr" = "Özel profilinizi öntanımlı uygulama profillerinden birine dayandırın, bu widget'ların öntanımlı görünürlüğü ile hız ve mesafe birimleri gibi temel ayarları tanımlar. Bunlar, genişletilebilecekleri özel profillerin örnekleri ile birlikte öntanımlı uygulama profilleridir:";
 "create_profile" = "Profil oluştur";
 "import_from_files" = "Dosyadan içe aktar";
@@ -1796,7 +1796,7 @@
 "route_recalculation_descr" = "Güzergahtan geçerli konuma olan mesafe seçilen değerden fazla ise güzergah yeniden hesaplanacaktır.";
 "avoid_routes_and_road" = "Belirli güzergahlardan ve yol türlerinden kaçının";
 "send_anonymous_data" = "Anonim veri gönder";
-"base_profile_descr" = "Temel profil";
+"profile_type_base_string" = "Temel profil";
 "global_settings_descr" = "Tüm uygulamayı etkiler.";
 "global_settings" = "Genel ayarlar";
 "send_anonymous_data_desc" = "OsmAnd harita indirme istatistiklerini gönder, konum verileri veya herhangi bir kişisel bilgi toplamıyoruz.";
@@ -1812,3 +1812,29 @@
 "lenght_limit_description" = "Aracınızın uzunluğunu belirtin, uzun araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
 "height_limit_description" = "Aracınızın yüksekliğini belirtin, yüksek araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
 "export_profile" = "Profili dışa aktar";
+"profile_settings" = "Profil ayarları";
+"configure_map_descr" = "Harita görünümü";
+"export_profile_descr" = "Bir profili içe aktarmak için herhangi bir uygulamada gerekli dosyaya (*.osf) dokunun ve \"OsmAnd Haritalara Kopyala\" seçeneğini seçin";
+"profile_sett_descr" = "Seçili uygulama profilini etkiler";
+"app_profiles" = "Uygulama profilleri";
+"selected_profile" = "Seçilen profil";
+"osmand_profile" = "OsmAnd profili";
+"ui_customization_descr" = "Çekmece ögeleri, içerik menüsü";
+"ui_customization" = "Kullanıcı arayüzü özelleştirme";
+"profile_appearance_descr" = "Simge, renk ve ad";
+"profile_appearance" = "Profil görünümü";
+"configure_profile" = "Profili yapılandır";
+"plugin_settings_descr" = "Seçilen profil için eklenti ayarları.";
+"configure_screen_descr" = "Profil için ekran seçeneklerini seçin";
+"shared_string_account_add" = "Hesap ekle";
+"shared_string_email" = "E-posta";
+"shared_string_account" = "Hesap";
+"shared_string_required" = "Gerekli";
+"email_example_hint" = "kullanici@example.com";
+"osm_editing_access_descr" = "Tüm yerel düzenlemelerinizi ve notlarınızı %@ içinde görüntüleyebilirsiniz. Karşıya yüklenmiş olan puanlar OsmAnd'da listelenmez.";
+"osm_editing_settings_descr" = "Bu eklentinin ayarları geneldir ve tüm profiller için geçerlidir.";
+// Menu
+"menu" = "Menü";
+"plugin_settings_reset" = "Eklenti ayarlarını öntanımlılara sıfırla";
+"trip_rec_actions_descr" = "Kaydedilen tüm yollarınızı %@ içinde bulabilirsiniz";
+"logging_accuracy" = "Kayıt tutma doğruluğu";

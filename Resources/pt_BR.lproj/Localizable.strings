@@ -1843,3 +1843,5 @@
 "plugin_settings_reset" = "Redefinir as configurações do plug-in para o padrão";
 "trip_rec_actions_descr" = "Você pode encontrar todas as suas trilhas gravadas em %@";
 "logging_accuracy" = "Precisão de registro";
+"profile_type_base_string" = "Perfil base";
+"profile_type_custom_string" = "Perfil personalizado";

@@ -10,7 +10,7 @@
 #import "OAColors.h"
 #import "OAApplicationMode.h"
 
-#define kSidePadding 16
+#define kSidePadding 20
 
 @interface OABaseSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 

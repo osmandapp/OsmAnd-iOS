@@ -148,7 +148,7 @@
 
 - (NSString *) getProfileDescription:(OAApplicationMode *)am
 {
-    return am.isCustomProfile ? OALocalizedString(@"custom_profile") : OALocalizedString(@"osmand_profile");
+    return am.isCustomProfile ? OALocalizedString(@"profile_type_custom_string") : OALocalizedString(@"profile_type_base_string");
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -286,6 +286,18 @@
     else if (section == 2)
         return OALocalizedString(@"export_profile_descr");
     return nil;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
+    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 #pragma mark - UITableViewDelegate

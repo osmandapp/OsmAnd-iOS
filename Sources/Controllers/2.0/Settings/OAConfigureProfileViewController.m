@@ -22,6 +22,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAProfileAppearanceViewController.h"
+#import "OACopyProfileBottomSheetViewController.h"
 
 #define kSidePadding 16.
 
@@ -37,6 +38,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 };
 
 @interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource>
+
+@property (strong, nonatomic) OACopyProfileBottomSheetViewController* cpyProfileView;
 
 @end
 
@@ -164,9 +167,9 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     self.titleLabel.text = _appMode.name;
 }
 
-- (UIView *)setupTableHeaderView
+- (UIView *) setupTableHeaderView
 {
-    return self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold] titntColor:UIColorFromRGB(_appMode.getIconColor) icon:_appMode.getIconName];
+    return self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold] tintColor:UIColorFromRGB(_appMode.getIconColor) icon:_appMode.getIconName];
 }
 
 - (void)viewDidLoad
@@ -191,6 +194,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    self.cpyProfileView = [[OACopyProfileBottomSheetViewController alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0) mode:_appMode];
 }
 
 - (void)openDashboardScreen:(EOADashboardScreenType)type
@@ -426,7 +430,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
     else if ([key isEqualToString:@"copy_profile"])
     {
-        
+        [self showCopyProfileView];
     }
     else if ([key isEqualToString:@"reset_to_default"])
     {
@@ -437,6 +441,21 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) showCopyProfileView
+{
+    CGRect frame = self.cpyProfileView.frame;
+    frame.origin.y = DeviceScreenHeight + 10.0;
+    self.cpyProfileView.frame = frame;
+    
+    [self.cpyProfileView.layer removeAllAnimations];
+    if ([self.view.subviews containsObject:self.cpyProfileView])
+        [self.cpyProfileView removeFromSuperview];
+    
+    [self.view addSubview:self.cpyProfileView];
+
+    [self.cpyProfileView show:YES];
 }
 
 @end

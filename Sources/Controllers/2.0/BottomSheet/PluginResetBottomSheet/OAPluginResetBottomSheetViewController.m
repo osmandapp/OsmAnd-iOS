@@ -85,7 +85,7 @@
     [arr removeAllObjects];
     [arr addObject:@{
            @"type" : kTitleIconRoundCell,
-           @"title" : _appMode.name,
+           @"title" : _appMode.toHumanString,
            @"img" : _appMode.getIconName,
            @"key" : @"swap_points",
            @"round_bottom" : @(YES),

@@ -2158,6 +2158,7 @@
         [_registeredPreferences setObject:_showPedestrian forKey:@"show_pedestrian"];
 
         _showCameras = [OAProfileBoolean withKey:showCamerasKey defValue:NO];
+        [_registeredPreferences setObject:_showCameras forKey:showCamerasKey];
         _showTunnels = [OAProfileBoolean withKey:showTunnelsKey defValue:NO];
         [_showTunnels setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_registeredPreferences setObject:_showTunnels forKey:@"show_tunnels"];

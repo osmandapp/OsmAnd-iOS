@@ -69,6 +69,8 @@ struct GeneralRouter;
 
 @interface OARouteProvider : NSObject
 
++ (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am;
+
 - (OARouteCalculationResult *) calculateRouteImpl:(OARouteCalculationParams *)params;
 - (OARouteCalculationResult *) recalculatePartOfflineRoute:(OARouteCalculationResult *)res params:(OARouteCalculationParams *)params;
 

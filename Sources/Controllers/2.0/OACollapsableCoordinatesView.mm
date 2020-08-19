@@ -14,6 +14,7 @@
 #import "OAInAppCell.h"
 #import "OAColors.h"
 #import "OALocationConvert.h"
+#import "OAPointDescription.h"
 
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
@@ -30,7 +31,21 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        // init
+        _lat = 0;
+        _lon = 0;
+    }
+    return self;
+}
+
+- (instancetype) initWithFrame:(CGRect)frame lat:(double)lat lon:(double)lon
+{
+    self = [super initWithFrame:frame];
+    if (self)
+    {
+        _lat = lat;
+        _lon = lon;
+        NSDictionary<NSNumber *, NSString*> *values = [OAPointDescription getLocationData:lat lon:lon];
+        [self setData:values];
     }
     return self;
 }

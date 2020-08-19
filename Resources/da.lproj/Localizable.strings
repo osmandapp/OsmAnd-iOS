@@ -1732,7 +1732,7 @@
 "enter_profile_name" = "Indtast profilnavn";
 "edit_profile_list" = "Rediger profilliste";
 "new_profile" = "Ny profil";
-"custom_profile" = "Brugerdefineret profil";
+"profile_type_custom_string" = "Brugerdefineret profil";
 "create_profile" = "Opret profil";
 "import_from_files" = "Importer fra filer";
 "update_map" = "Opdater kort";
@@ -1743,3 +1743,6 @@
 "screen_alerts" = "Alarmer på skærmen";
 "voice_anounces" = "Talevejledning";
 "nav_type_title" = "Navigationstype";
+"voice_prompts" = "Talevejledning";
+"configure_screen_descr" = "Vælg skærmindstillinger for profilen";
+"min_speed" = "Min. hastighed";

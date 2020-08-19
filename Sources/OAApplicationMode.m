@@ -50,7 +50,7 @@ static OAApplicationMode *_SKI;
     _cachedFilteredValues = [NSMutableArray array];
     
     _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_overview") stringKey:@"default"];
-    _DEFAULT.descr = OALocalizedString(@"base_profile_descr");
+    _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
     [_values addObject:_DEFAULT];
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
@@ -168,7 +168,7 @@ static OAApplicationMode *_SKI;
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     OAApplicationMode *m = [[OAApplicationMode alloc] initWithName:@"" stringKey:key];
-    m.name = [settings.userProfileName get:m];
+//    m.name = [settings.userProfileName get:m];
     m.parent = [self valueOfStringKey:[settings.parentAppMode get:m] def:nil];
     return m;
 }
@@ -279,6 +279,15 @@ static OAApplicationMode *_SKI;
     return (int) (7 + speed * 2);
 }
 
+- (NSString *) toHumanString
+{
+    NSString *userProfileName = [self getUserProfileName];
+    if (userProfileName.length == 0 && _name.length > 0)
+        return _name;
+    else
+        return userProfileName;
+}
+
 - (BOOL) isCustomProfile
 {
     return _parent != nil;
@@ -363,11 +372,7 @@ static OAApplicationMode *_SKI;
 - (void) setUserProfileName:(NSString *)userProfileName
 {
     if (userProfileName.length > 0)
-    {
         [OAAppSettings.sharedManager.userProfileName set:userProfileName mode:self];
-        _name = userProfileName;
-    }
-    
 }
 
 - (NSString *) getRoutingProfile
@@ -501,7 +506,7 @@ static OAApplicationMode *_SKI;
 
 - (NSString *) getProfileDescription
 {
-    return _descr && _descr.length > 0 ? _descr : OALocalizedString(@"custom_profile");
+    return _descr && _descr.length > 0 ? _descr : OALocalizedString(@"profile_type_custom_string");
 }
 
 + (void) onApplicationStart
@@ -605,7 +610,7 @@ static OAApplicationMode *_SKI;
 + (BOOL) isProfileNameAvailable:(NSString *)profileName
 {
     for (OAApplicationMode *profile in _values)
-        if ([profile.name isEqual:profileName])
+        if ([profile.toHumanString isEqual:profileName])
             return NO;
     return YES;
 }

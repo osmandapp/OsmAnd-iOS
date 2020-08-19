@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAOsmEditsListViewController : OACompoundViewController
 
+- (void) setShouldPopToParent:(BOOL)shouldPop;
+
 @end
 
 NS_ASSUME_NONNULL_END

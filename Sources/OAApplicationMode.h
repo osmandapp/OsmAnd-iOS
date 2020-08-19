@@ -74,6 +74,8 @@
 - (NSInteger) getMinDistanceForTurn;
 - (double) getDefaultSpeed;
 
+- (NSString *) toHumanString;
+
 - (void) setParent:(OAApplicationMode *)parent;
 - (UIImage *) getIcon;
 - (NSString *) getIconName;

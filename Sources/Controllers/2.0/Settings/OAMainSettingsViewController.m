@@ -148,7 +148,7 @@
 
 - (NSString *) getProfileDescription:(OAApplicationMode *)am
 {
-    return am.isCustomProfile ? OALocalizedString(@"custom_profile") : OALocalizedString(@"osmand_profile");
+    return am.isCustomProfile ? OALocalizedString(@"profile_type_custom_string") : OALocalizedString(@"profile_type_base_string");
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -224,7 +224,7 @@
         UIImage *img = am.getIcon;
         cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
-        cell.textView.text = am.name;
+        cell.textView.text = am.toHumanString;
         cell.descView.text = [self getProfileDescription:am];
         cell.contentView.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
         return cell;
@@ -243,7 +243,7 @@
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.leftIconView.tintColor = UIColorFromRGB(am.getIconColor);
-        cell.titleLabel.text = am.name;
+        cell.titleLabel.text = am.toHumanString;
         cell.descLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
         [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
@@ -286,6 +286,18 @@
     else if (section == 2)
         return OALocalizedString(@"export_profile_descr");
     return nil;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
+    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 #pragma mark - UITableViewDelegate

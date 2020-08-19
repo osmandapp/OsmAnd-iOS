@@ -260,15 +260,10 @@
             OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""];
             filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
         }
-        if ([selectedFilters count] > 0) {
-            [mapVC showPoiOnMap:filter keyword:filter.filterId];
-        } else {
-            [mapVC hidePoi];
-        }
     } else if ([item getType] == BUTTON) {
         [helper clearSelectedPoiFilters];
-        [mapVC hidePoi];
     }
+    [mapVC updatePoiLayer];
     [tblView reloadData];
 }
 @end

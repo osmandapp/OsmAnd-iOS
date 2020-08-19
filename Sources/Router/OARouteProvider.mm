@@ -247,6 +247,15 @@
     return self;
 }
 
++ (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    auto router = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
+    if (!router && am.parent)
+        router = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
+    return router;
+}
+
 + (NSString *) getExtensionValue:(OAGpxExtensions *)exts key:(NSString *)key
 {
     for (OAGpxExtension *e in exts.extensions) {

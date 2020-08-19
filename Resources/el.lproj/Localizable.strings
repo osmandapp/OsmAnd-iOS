@@ -16,7 +16,7 @@
 "driving_region_canada" = "Καναδάς";
 "layer_map_appearance" = "Διαμόρφωση οθόνης";
 "map_overlays" = "Επιστρώματα χάρτη";
-"traffic_warning_calming" = "Ήπια κυκλοφορία";
+"traffic_warning_calming" = "Χαλάρωση κυκλοφορίας";
 "type_address" = "Πληκτρολόγησε διεύθυνση";
 "closing_changeset" = "Κλείσιμο ομάδας αλλαγών…";
 "osm_note" = "Σημείωση OSM";
@@ -903,7 +903,6 @@
 "rendering_value_thin_name" = "Λεπτή";
 "switch_start_finish" = "Αντιστροφή αρχικού σημείου & προορισμού";
 "contour_lines_hillshade_maps" = "Χάρτες ισοϋψών γραμμών & σκίασης αναγλύφου";
-
 "app_mode_horse" = "Άλογο";
 "app_mode_wagon" = "Οικογενειακό αυτοκίνητο";
 "app_mode_taxi" = "Ταξί";
@@ -935,3 +934,9 @@
 "app_mode_offroad" = "Εκτός δρόμου";
 "shared_string_warning" = "Προσοχή";
 "app_mode_car" = "Οδήγηση";
+"width_limit_description" = "Δώστε το πλάτος του οχήματός σας, κάποιοι περιορισμοί μπορεί να εφαρμόζονται για πλατιά οχήματα.";
+"height_limit_description" = "Δώστε το ύψος του οχήματός σας, κάποιοι περιορισμοί διαδρομής μπορεί να εφαρμόζονται για υψηλά οχήματα.";
+"weight_limit_description" = "Δώστε το βάρος του οχήματός σας, κάποιοι περιορισμοί διαδρομής μπορεί να εφαρμόζονται για βαριά οχήματα.";
+"shared_string_uninstall" = "Απεγκατάσταση";
+"routing_attr_length_name" = "Όριο μήκους";
+"shared_string_done" = "Έτοιμο";

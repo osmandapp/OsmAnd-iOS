@@ -99,6 +99,8 @@ typedef enum
     NSString *_newGpxName;
 
     NSInteger _selectedIndex;
+    
+    BOOL _popToParent;
 }
 
 @property (strong, nonatomic) NSMutableArray* gpxList;
@@ -184,6 +186,11 @@ static UIViewController *parentController;
 {
     [[OAGPXDatabase sharedDb] removeGpxItem:[_importUrl.path lastPathComponent]];
     [[OAGPXDatabase sharedDb] save];
+}
+
+- (void) setShouldPopToParent:(BOOL)shouldPop
+{
+    _popToParent = shouldPop;
 }
 
 - (void) showImportGpxAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray <NSString *> *) otherButtonTitles {
@@ -370,14 +377,14 @@ static UIViewController *parentController;
     if (_newGpxName) {
         [[NSFileManager defaultManager] moveItemAtPath:_importUrl.path toPath:[_app.gpxPath stringByAppendingPathComponent:_newGpxName] error:nil];
     } else {
-        [[NSFileManager defaultManager] moveItemAtPath:_importUrl.path toPath:[_app.gpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
+        [[NSFileManager defaultManager] moveItemAtPath:_importUrl.path toPath:[_app.gpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]] error:nil];
     }
     
     OAGPXTrackAnalysis *analysis = [_doc getAnalysis:0];
     if (_newGpxName) {
         item = [[OAGPXDatabase sharedDb] addGpxItem:_newGpxName title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     } else {
-        item = [[OAGPXDatabase sharedDb] addGpxItem:[_importUrl.path lastPathComponent] title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        item = [[OAGPXDatabase sharedDb] addGpxItem:[self getCorrectedFilename:[_importUrl.path lastPathComponent]] title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     }
     [[OAGPXDatabase sharedDb] save];
     [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
@@ -391,6 +398,14 @@ static UIViewController *parentController;
         [self setupView];
     }
     return item;
+}
+
+- (NSString *)getCorrectedFilename:(NSString *)filename
+{
+    if ([filename hasSuffix:@".xml"])
+        return [[filename stringByDeletingPathExtension] stringByAppendingPathExtension:@"gpx"];
+    else
+        return filename;
 }
 
 - (void) showProgressHUD
@@ -722,7 +737,10 @@ static UIViewController *parentController;
 
 - (IBAction)goRootScreen:(id)sender
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if (_popToParent)
+        [super backButtonClicked:sender];
+    else
+        [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)updateRecButtonsAnimated
@@ -1172,9 +1190,9 @@ static UIViewController *parentController;
                                      
                                      if (!cancelled)
                                      {
-                                         settings.mapSettingSaveTrackIntervalGlobal = [settings.trackIntervalArray[[view getInterval]] intValue];
+                                         [settings.mapSettingSaveTrackIntervalGlobal set:[settings.trackIntervalArray[[view getInterval]] intValue]];
                                          if (view.swRemember.isOn)
-                                             settings.mapSettingSaveTrackIntervalApproved = YES;
+                                             [settings.mapSettingSaveTrackIntervalApproved set:YES];
 
                                          settings.mapSettingTrackRecording = YES;
                                          dispatch_async(dispatch_get_main_queue(), ^{

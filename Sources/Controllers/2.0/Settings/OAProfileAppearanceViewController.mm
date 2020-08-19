@@ -157,7 +157,7 @@
 {
     _profile.stringKey = baseModeForNewProfile.stringKey;
     _profile.parent = baseModeForNewProfile.parent;
-    _profile.name = baseModeForNewProfile.name;
+    _profile.name = baseModeForNewProfile.toHumanString;
     _profile.color = baseModeForNewProfile.getIconColor;
     _profile.iconName = baseModeForNewProfile.getIconName;
     _profile.routingProfile = baseModeForNewProfile.getRoutingProfile;
@@ -395,7 +395,7 @@
     else
     {
         OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:_changedProfile.stringKey
-                                                                 def:[[OAApplicationMode alloc] initWithName:_changedProfile.name stringKey:_changedProfile.stringKey]];
+                                                                 def:[[OAApplicationMode alloc] initWithName:@"" stringKey:_changedProfile.stringKey]];
         [mode setParent:_changedProfile.parent];
         [mode setIconName:_changedProfile.iconName];
         [mode setUserProfileName:[_changedProfile.name trim]];
@@ -411,7 +411,7 @@
 {
     _changedProfile.stringKey = [self getUniqueStringKey:_changedProfile.parent];
     
-    OAApplicationMode *newMode = [[OAApplicationMode alloc] initWithName:_changedProfile.name stringKey:_changedProfile.stringKey];
+    OAApplicationMode *newMode = [[OAApplicationMode alloc] initWithName:@"" stringKey:_changedProfile.stringKey];
     [newMode setParent:_changedProfile.parent];
     [newMode setIconName:_changedProfile.iconName];
     [newMode setUserProfileName:_changedProfile.name.trim];

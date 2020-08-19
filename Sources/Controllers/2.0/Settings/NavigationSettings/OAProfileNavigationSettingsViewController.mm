@@ -61,14 +61,21 @@
 
 - (void) updateNavBar
 {
-    self.subtitleLabel.text = self.appMode.name;
+    self.subtitleLabel.text = self.appMode.toHumanString;
 }
 
 - (void) generateData
 {
+    NSString *selectedProfileName = [_settings.routingProfile get];
     _routingProfileDataObjects = [self.class getRoutingProfiles];
-    
-    OARoutingProfileDataObject *routingData = _routingProfileDataObjects[[_settings.routingProfile get]];
+    NSArray *profiles = [_routingProfileDataObjects allValues];
+    OARoutingProfileDataObject *routingData;
+
+    for (OARoutingProfileDataObject *profile in profiles)
+    {
+        if([profile.stringKey isEqual:selectedProfileName])
+            routingData = profile;
+    }
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *navigationArr = [NSMutableArray array];
@@ -123,8 +130,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"routing_settings_2");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -132,6 +139,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
 }
 
 + (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles
@@ -338,7 +346,7 @@
     else if ([itemKey isEqualToString:@"exportProfile"])
     {
         OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
-        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:self.appMode.name settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:self.appMode] exportItemFiles:YES];
+        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:self.appMode.toHumanString settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:self.appMode] exportItemFiles:YES];
     }
     settingsViewController.delegate = self;
     [self.navigationController pushViewController:settingsViewController animated:YES];

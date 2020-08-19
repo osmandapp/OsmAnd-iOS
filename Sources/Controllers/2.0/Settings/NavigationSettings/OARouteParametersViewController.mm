@@ -17,6 +17,7 @@
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OARouteSettingsBaseViewController.h"
+#import "OARouteProvider.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -54,8 +55,8 @@
 
 -(void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"route_params");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewDidLoad
@@ -86,7 +87,7 @@
         @"key" : @"recalculateRoute",
     }];
     
-    auto router = [self.class getRouter:self.appMode];
+    auto router = [OARouteProvider getRouter:self.appMode];
     [self clearParameters];
     if (router)
     {
@@ -155,15 +156,6 @@
     if ([res isEqualToString:key])
         res = defaultName;
     return res;
-}
-
-+ (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    auto router = app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
-    if (!router && am.parent)
-        router = app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
-    return router;
 }
  
 - (BOOL) checkIfAnyParameterIsSelected:(vector <RoutingParameter>)routingParameters

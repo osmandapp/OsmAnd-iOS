@@ -84,8 +84,8 @@
 
 -(void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"speed_limit_exceed");
-    self.subtitleLabel.text = self.appMode.name;
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

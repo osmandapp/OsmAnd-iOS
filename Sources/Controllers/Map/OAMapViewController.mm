@@ -496,11 +496,6 @@
     
     [[OAMapViewTrackingUtilities instance] setMapViewController:self];
     [[OAMapViewTrackingUtilities instance] updateSettings];
-    
-    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-    if ([helper isShowingAnyPoi]) {
-        [self showPoiOnMap:[helper combineSelectedFilters:[helper getSelectedPoiFilters]] keyword:(NSString *)@""];
-    }
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -1965,19 +1960,9 @@
     }
 }
 
-- (void) showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword
+- (void) updatePoiLayer
 {
-    [_mapLayers.poiLayer showPoiOnMap:category type:type filter:filter keyword:keyword];
-}
-
-- (void) showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword
-{
-    [_mapLayers.poiLayer showPoiOnMap:uiFilter keyword:keyword];
-}
-
-- (void) hidePoi
-{
-    [_mapLayers.poiLayer hidePoi];
+    [_mapLayers.poiLayer updateLayer];
 }
 
 - (void) onLayersConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value

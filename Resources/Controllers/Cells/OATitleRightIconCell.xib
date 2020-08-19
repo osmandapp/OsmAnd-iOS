@@ -36,8 +36,10 @@
                     <constraint firstAttribute="trailing" secondItem="4Ja-QP-zZg" secondAttribute="trailing" constant="16" id="DWY-LJ-mmO"/>
                     <constraint firstItem="4Ja-QP-zZg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="GSF-IK-Jav"/>
                     <constraint firstItem="4Ja-QP-zZg" firstAttribute="leading" secondItem="89O-4B-FGn" secondAttribute="trailing" constant="16" id="Gn1-hz-Lw6"/>
-                    <constraint firstItem="89O-4B-FGn" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Rie-kd-AoW"/>
-                    <constraint firstAttribute="bottom" secondItem="4Ja-QP-zZg" secondAttribute="bottom" constant="7" id="Uif-hj-quj"/>
+                    <constraint firstItem="89O-4B-FGn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="JaX-5l-GjH"/>
+                    <constraint firstAttribute="bottom" secondItem="4Ja-QP-zZg" secondAttribute="bottom" constant="7" id="cdb-3j-9us"/>
+                    <constraint firstItem="4Ja-QP-zZg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="ruh-xL-iCb"/>
+                    <constraint firstAttribute="bottom" secondItem="89O-4B-FGn" secondAttribute="bottom" constant="11" id="u6P-Ef-4sJ"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>

@@ -1743,3 +1743,6 @@
 "screen_alerts" = "Alarmer på skærmen";
 "voice_anounces" = "Talevejledning";
 "nav_type_title" = "Navigationstype";
+"voice_prompts" = "Talevejledning";
+"configure_screen_descr" = "Vælg skærmindstillinger for profilen";
+"min_speed" = "Min. hastighed";

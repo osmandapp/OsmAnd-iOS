@@ -488,7 +488,7 @@
 "speak_speed_limit" = "Limite de velocidade";
 "speak_cameras" = "Radares";
 "speak_traffic_warnings" = "Moderadores de tráfego";
-"announce_gpx_waypoints" = "Pontos de passagem GPX";
+"announce_gpx_waypoints" = "Rastrear pontos de trilha";
 "speak_favorites" = "Favoritos próximos";
 "speak_poi" = "POIs próximos";
 "speak_pedestrian" = "Faixas de pedestre";
@@ -557,8 +557,8 @@
 "traffic_warning_speed_limit" = "Limite de velocidade";
 "traffic_warning_border_control" = "Alfândega";
 "traffic_warning_payment" = "Pedágio";
-"traffic_warning_stop" = "Placa de pare";
-"traffic_warning_calming" = "Moderação de trafego";
+"traffic_warning_stop" = "Sinal de pare";
+"traffic_warning_calming" = "Moderação do trafego";
 "traffic_warning_speed_camera" = "Radar";
 "traffic_warning" = "Aviso de tráfego";
 "traffic_warning_railways" = "Cruzamento de ferrovia";
@@ -718,11 +718,11 @@
 "driving_region_descr" = "Selecione a região de condução: EUA, Europa, Reino Unido, Ásia e outros.";
 "logging_interval_navigation" = "Intervalo de registro durante a navegação";
 "logging_interval_navigation_descr" = "Escolha o intervalo de registro para a gravação de viagem durante a navegação";
-"logging_min_distance" = "Distância mínima de registro";
+"logging_min_distance" = "Deslocamento mínimo";
 "logging_min_distance_descr" = "Filtro: distância mínima para registrar um novo ponto";
-"logging_min_accuracy" = "Precisão mínima de registro";
+"logging_min_accuracy" = "Precisão mínima";
 "logging_min_accuracy_descr" = "Filtro: sem registro, a menos que a precisão seja atingida";
-"logging_min_speed" = "Velocidade mínima de registro";
+"logging_min_speed" = "Velocidade mínima";
 "logging_min_speed_descr" = "Filtro: sem registro abaixo da velocidade selecionada";
 "auto_split_gap" = "Autodividir gravações após um intervalo";
 "auto_split_gap_descr" = "Inicie um novo segmento após um intervalo de 6 min, uma nova viagem após um intervalo de 2 h ou um novo arquivo após um intervalo maior";
@@ -773,8 +773,8 @@
 "import_from_docs" = "Importar de documentos";
 "track_save_descr" = "Salvar a viagem atual como arquivo GPX agora.";
 "poi_clear" = "Limpar";
-"track_during_nav" = "Auto-registrar a viagem durante a navegação";
-"track_during_nav_descr" = "Uma viagem é salva automaticamente durante a navegação";
+"track_during_nav" = "Auto-registrar a viagem";
+"track_during_nav_descr" = "Ativar para salvar automaticamente uma viagem durante a navegação";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Atualização ao vivo";
 "osmand_live_available_maps" = "Mapas disponíveis";
@@ -1831,3 +1831,15 @@
 "configure_profile" = "Configurar perfil";
 "plugin_settings_descr" = "Configurações de plug-in para o perfil selecionado.";
 "configure_screen_descr" = "Selecione as opções de tela para o perfil";
+"shared_string_account_add" = "Adicionar conta";
+"shared_string_email" = "Email";
+"shared_string_account" = "Conta";
+"shared_string_required" = "Requerido";
+"email_example_hint" = "usuário@exemplo.com";
+"osm_editing_access_descr" = "Você pode ver todas as suas edições e notas locais em %@. Os pontos já enviados não estão listados no OsmAnd.";
+"osm_editing_settings_descr" = "As configurações deste plugin são globais e se aplicam a todos os perfis.";
+// Menu
+"menu" = "Menu";
+"plugin_settings_reset" = "Redefinir as configurações do plug-in para o padrão";
+"trip_rec_actions_descr" = "Você pode encontrar todas as suas trilhas gravadas em %@";
+"logging_accuracy" = "Precisão de registro";

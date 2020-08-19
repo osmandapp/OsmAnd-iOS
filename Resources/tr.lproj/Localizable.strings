@@ -550,7 +550,7 @@
 "speak_speed_limit" = "Hız sınırı";
 "speak_cameras" = "Hız kameraları";
 "speak_traffic_warnings" = "Trafik uyarıları";
-"announce_gpx_waypoints" = "GPX uğranacak-ara-noktaları";
+"announce_gpx_waypoints" = "İzlenen yol ara noktaları";
 "speak_favorites" = "Yakındaki Sık Kıllanılanlar";
 "speak_poi" = "Yakınlardaki POI";
 "speak_pedestrian" = "Yaya geçitleri";
@@ -812,11 +812,11 @@
 "route_stops_before" = "%d durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında loglama aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında gezi kaydı için kayıt aralığını seçin";
-"logging_min_distance" = "Asgari kayıt mesafesi";
+"logging_min_distance" = "Asgari yer değiştirme";
 "logging_min_distance_descr" = "Filtre: yeni bir nokta kaydetmek için asgari mesafe";
-"logging_min_accuracy" = "Asgari kayıt doğruluğu";
+"logging_min_accuracy" = "Asgari doğruluk";
 "logging_min_accuracy_descr" = "Filtre: bu doğruluğa ulaşılmadıkça kaydetme yok";
-"logging_min_speed" = "Asgari kayıt hızı";
+"logging_min_speed" = "En düşük hız";
 "logging_min_speed_descr" = "Filtre: seçili hızın altında kaydetme yok";
 "auto_split_gap" = "Boşluktan sonra kayıtları otomatik bölme";
 "angular_units" = "Açısal ölçüm birimleri";
@@ -1054,8 +1054,8 @@
 "poi_overlay" = "POI Üst Katmanı";
 "auto_split_gap_descr" = "6 dakikalık boşluktan sonra yeni segment, 2 saatlik boşluktan sonra yeni seyahat veya daha uzun bir boşluktan sonra yeni dosya başlat";
 "track_save_descr" = "Geçerli seyahati GPX dosyası olarak şimdi kaydedin.";
-"track_during_nav" = "Navigasyon sırasında seyahati otomatik kaydet";
-"track_during_nav_descr" = "Navigasyon sırasında seyahat otomatik olarak kaydedilir";
+"track_during_nav" = "Seyahati otomatik kaydet";
+"track_during_nav_descr" = "Navigasyon sırasında seyahati otomatik olarak kaydetmek için etkinleştirin";
 // Help
 "help_first_steps" = "İlk adımlar";
 "help_first_use_descr" = "Nasıl harita indirilir ve temel ayarlar belirlenir";
@@ -1826,3 +1826,15 @@
 "configure_profile" = "Profili yapılandır";
 "plugin_settings_descr" = "Seçilen profil için eklenti ayarları.";
 "configure_screen_descr" = "Profil için ekran seçeneklerini seçin";
+"shared_string_account_add" = "Hesap ekle";
+"shared_string_email" = "E-posta";
+"shared_string_account" = "Hesap";
+"shared_string_required" = "Gerekli";
+"email_example_hint" = "kullanici@example.com";
+"osm_editing_access_descr" = "Tüm yerel düzenlemelerinizi ve notlarınızı %@ içinde görüntüleyebilirsiniz. Karşıya yüklenmiş olan puanlar OsmAnd'da listelenmez.";
+"osm_editing_settings_descr" = "Bu eklentinin ayarları geneldir ve tüm profiller için geçerlidir.";
+// Menu
+"menu" = "Menü";
+"plugin_settings_reset" = "Eklenti ayarlarını öntanımlılara sıfırla";
+"trip_rec_actions_descr" = "Kaydedilen tüm yollarınızı %@ içinde bulabilirsiniz";
+"logging_accuracy" = "Kayıt tutma doğruluğu";

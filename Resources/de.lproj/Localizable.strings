@@ -630,7 +630,7 @@
 "speak_speed_limit" = "Tempolimit";
 "speak_cameras" = "Blitzer";
 "speak_traffic_warnings" = "Verkehrswarnungen";
-"announce_gpx_waypoints" = "GPX-Wegpunkte";
+"announce_gpx_waypoints" = "Track-Wegpunkte";
 "speak_favorites" = "Nahegelegene Favoriten";
 "speak_poi" = "Nahegelegene POI";
 "speak_pedestrian" = "Fußgängerübergänge";

@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OAAppSettings.h"
 #import "OAInputCellWithTitle.h"
+#import "OAColors.h"
 
 @interface OAOsmAccountSettingsViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -42,6 +43,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -50,6 +52,12 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self showKeyboardForCellForIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -91,6 +99,16 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void) showKeyboardForCellForIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if (cell && [cell isKindOfClass:OAInputCellWithTitle.class])
+    {
+        OAInputCellWithTitle *resCell = (OAInputCellWithTitle *) cell;
+        [resCell.inputField becomeFirstResponder];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -118,23 +136,28 @@
     if (cell)
     {
         cell.titleLabel.text = [self getTitleForIndex:indexPath.row];
+        cell.titleLabel.textColor = [UIColor blackColor];
         NSString *text = [self getTextForIndex:indexPath.row];
         cell.inputField.text = text;
         cell.inputField.placeholder = [self getHintForIndex:indexPath.row];
         cell.inputField.textContentType = indexPath.row == 0 ? UITextContentTypeUsername : UITextContentTypePassword;
         cell.inputField.tag = indexPath.row;
+        cell.inputField.returnKeyType = UIReturnKeyDone;
+        
+        if (indexPath.row != 0)
+        {
+            if (@available(iOS 13.0, *))
+                cell.inputField.font = [UIFont monospacedSystemFontOfSize:17 weight:UIFontWeightRegular];
+            else
+                cell.inputField.font = [UIFont monospacedDigitSystemFontOfSize:16 weight:UIFontWeightRegular];
+        }
     }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (cell && [cell isKindOfClass:OAInputCellWithTitle.class])
-    {
-        OAInputCellWithTitle *resCell = (OAInputCellWithTitle *) cell;
-        [resCell.inputField becomeFirstResponder];
-    }
+    [self showKeyboardForCellForIndexPath:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

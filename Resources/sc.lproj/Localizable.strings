@@ -545,7 +545,7 @@
 "traffic_warning_border_control" = "Puntu de controllu";
 "traffic_warning_payment" = "Casellu";
 "traffic_warning_stop" = "Cartellu de Stop";
-"traffic_warning_calming" = "Minimadore de lestresa";
+"traffic_warning_calming" = "Minimadore de tràficu";
 "traffic_warning_speed_camera" = "Autovelox";
 "traffic_warning" = "Avisu de tràficu";
 "traffic_warning_railways" = "Atraessamentu de sa ferrovia";
@@ -627,7 +627,7 @@
 "speak_speed_limit" = "Lìmites de lestresa";
 "speak_cameras" = "Autovelox";
 "speak_traffic_warnings" = "Avisos de tràfficu";
-"announce_gpx_waypoints" = "Puntos de coladòrgiu GPX";
+"announce_gpx_waypoints" = "Puntos de coladòrgiu";
 "speak_favorites" = "Preferidos a curtzu";
 "speak_poi" = "PDI a curtzu";
 "speak_pedestrian" = "Atraessamentos pedonales";
@@ -1830,3 +1830,4 @@
 "configure_profile" = "Cunfigura su profilu";
 "plugin_settings_descr" = "Impostatziones de s'estensione pro su profilu ischertadu.";
 "configure_screen_descr" = "Ischerta sas optziones de s'ischermu pro su profilu";
+"profile_settings" = "Impostatziones de su profilu";

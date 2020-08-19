@@ -16,7 +16,7 @@
 "driving_region_canada" = "Καναδάς";
 "layer_map_appearance" = "Διαμόρφωση οθόνης";
 "map_overlays" = "Επιστρώματα χάρτη";
-"traffic_warning_calming" = "Ήπια κυκλοφορία";
+"traffic_warning_calming" = "Χαλάρωση κυκλοφορίας";
 "type_address" = "Πληκτρολόγησε διεύθυνση";
 "closing_changeset" = "Κλείσιμο ομάδας αλλαγών…";
 "osm_note" = "Σημείωση OSM";

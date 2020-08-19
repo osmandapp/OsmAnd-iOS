@@ -4449,8 +4449,8 @@
 		DA2558A824ADE40F0081D155 /* OAAutoCenterMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25585F24ADE40F0081D155 /* OAAutoCenterMapViewController.m */; };
 		DA2558A924ADE40F0081D155 /* OADefaultSpeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.mm */; };
 		DA2558AA24ADE40F0081D155 /* OADefaultSpeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.mm */; };
-		DA2558AB24ADE40F0081D155 /* OARecalculateRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.m */; };
-		DA2558AC24ADE40F0081D155 /* OARecalculateRouteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.m */; };
+		DA2558AB24ADE40F0081D155 /* OARecalculateRouteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.mm */; };
+		DA2558AC24ADE40F0081D155 /* OARecalculateRouteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.mm */; };
 		DA2558AD24ADE40F0081D155 /* OAMapOrientationThresholdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25586524ADE40F0081D155 /* OAMapOrientationThresholdViewController.m */; };
 		DA2558AE24ADE40F0081D155 /* OAMapOrientationThresholdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25586524ADE40F0081D155 /* OAMapOrientationThresholdViewController.m */; };
 		DA2558AF24ADE40F0081D155 /* OANavigationLanguageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA25586624ADE40F0081D155 /* OANavigationLanguageViewController.m */; };
@@ -9031,7 +9031,7 @@
 		DA25586124ADE40F0081D155 /* OADefaultSpeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADefaultSpeedViewController.mm; sourceTree = "<group>"; };
 		DA25586224ADE40F0081D155 /* OASpeedLimitToleranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASpeedLimitToleranceViewController.h; sourceTree = "<group>"; };
 		DA25586324ADE40F0081D155 /* OAVoicePromptsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVoicePromptsViewController.h; sourceTree = "<group>"; };
-		DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARecalculateRouteViewController.m; sourceTree = "<group>"; };
+		DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARecalculateRouteViewController.mm; sourceTree = "<group>"; };
 		DA25586524ADE40F0081D155 /* OAMapOrientationThresholdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapOrientationThresholdViewController.m; sourceTree = "<group>"; };
 		DA25586624ADE40F0081D155 /* OANavigationLanguageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavigationLanguageViewController.m; sourceTree = "<group>"; };
 		DA25586724ADE40F0081D155 /* OAScreenAlertsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAScreenAlertsViewController.m; sourceTree = "<group>"; };
@@ -14765,7 +14765,7 @@
 				DA25586824ADE40F0081D155 /* OAProfileNavigationSettingsViewController.h */,
 				DA25585624ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm */,
 				DA25587724ADE40F0081D155 /* OARecalculateRouteViewController.h */,
-				DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.m */,
+				DA25586424ADE40F0081D155 /* OARecalculateRouteViewController.mm */,
 				DA25586C24ADE40F0081D155 /* OARepeatNavigationInstructionsViewController.h */,
 				DA25585C24ADE40F0081D155 /* OARepeatNavigationInstructionsViewController.m */,
 				DA25586D24ADE40F0081D155 /* OARouteParametersViewController.h */,
@@ -20739,7 +20739,7 @@
 				DA25588E24ADE40F0081D155 /* OASettingsViewController.m in Sources */,
 				DA1605AE22FEB7CA001E02AD /* OAMapOverlayAction.mm in Sources */,
 				DAD49D93229D5D810050751B /* OAMapillaryImageCard.mm in Sources */,
-				DA2558AC24ADE40F0081D155 /* OARecalculateRouteViewController.m in Sources */,
+				DA2558AC24ADE40F0081D155 /* OARecalculateRouteViewController.mm in Sources */,
 				DA2558AE24ADE40F0081D155 /* OAMapOrientationThresholdViewController.m in Sources */,
 				847A1D721DF94E9B003C1246 /* OAPOILocationType.mm in Sources */,
 				DA2FA6F92302E409006DB2E5 /* OAMarkerAction.mm in Sources */,
@@ -20872,7 +20872,7 @@
 				DA2267A2240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m in Sources */,
 				84B6E06E2073C1C9002CA15B /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				845E06721B5F95E300DFC2A7 /* OAPluginsViewController.mm in Sources */,
-				DA2558AB24ADE40F0081D155 /* OARecalculateRouteViewController.m in Sources */,
+				DA2558AB24ADE40F0081D155 /* OARecalculateRouteViewController.mm in Sources */,
 				DA1C18BF23116C1800613732 /* OAMapStyleTitles.m in Sources */,
 				15BECC65249B895700B36DC0 /* OAIconsTableViewCell.m in Sources */,
 				84DE415B2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */,

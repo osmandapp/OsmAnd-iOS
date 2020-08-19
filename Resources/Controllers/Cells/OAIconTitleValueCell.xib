@@ -55,12 +55,12 @@
                     <constraint firstItem="sBM-Kj-IT8" firstAttribute="leading" secondItem="TVY-ES-CU4" secondAttribute="trailing" constant="16" id="5f4-N5-a2N"/>
                     <constraint firstItem="oCO-hD-EJk" firstAttribute="centerY" secondItem="NX6-3V-6tN" secondAttribute="centerY" id="Cyo-u9-oHt"/>
                     <constraint firstItem="9jr-sR-1Hx" firstAttribute="leading" secondItem="oCO-hD-EJk" secondAttribute="trailing" constant="16" id="Eq9-Nf-XoF"/>
+                    <constraint firstItem="sBM-Kj-IT8" firstAttribute="top" secondItem="NX6-3V-6tN" secondAttribute="top" constant="13" id="QTI-9c-q40"/>
+                    <constraint firstAttribute="bottom" secondItem="sBM-Kj-IT8" secondAttribute="bottom" constant="13" id="RFe-c8-GDk"/>
                     <constraint firstItem="TVY-ES-CU4" firstAttribute="leading" secondItem="NX6-3V-6tN" secondAttribute="leading" constant="16" id="RnQ-VF-5KH"/>
-                    <constraint firstItem="sBM-Kj-IT8" firstAttribute="centerY" secondItem="NX6-3V-6tN" secondAttribute="centerY" id="YBH-lB-F3E"/>
+                    <constraint firstItem="TVY-ES-CU4" firstAttribute="centerY" secondItem="NX6-3V-6tN" secondAttribute="centerY" id="W5Z-Ku-PR4"/>
                     <constraint firstItem="oCO-hD-EJk" firstAttribute="leading" secondItem="sBM-Kj-IT8" secondAttribute="trailing" constant="16" id="ae8-pj-6On"/>
-                    <constraint firstItem="TVY-ES-CU4" firstAttribute="top" secondItem="NX6-3V-6tN" secondAttribute="top" constant="9" id="heZ-6b-BYK"/>
                     <constraint firstItem="9jr-sR-1Hx" firstAttribute="trailing" secondItem="NX6-3V-6tN" secondAttribute="trailing" constant="-16" id="kor-Yf-fyT"/>
-                    <constraint firstAttribute="bottom" secondItem="TVY-ES-CU4" secondAttribute="bottom" constant="9" id="qxl-39-JBA"/>
                     <constraint firstItem="9jr-sR-1Hx" firstAttribute="centerY" secondItem="NX6-3V-6tN" secondAttribute="centerY" id="yo9-30-pN7"/>
                 </constraints>
             </tableViewCellContentView>

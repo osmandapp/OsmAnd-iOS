@@ -219,6 +219,8 @@
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
             [cell setOverflowVisibility:YES];
+            cell.textView.numberOfLines = 3;
+            cell.textView.lineBreakMode = NSLineBreakByTruncatingTail;
         }
         OAApplicationMode *am = item[@"app_mode"];
         UIImage *img = am.getIcon;

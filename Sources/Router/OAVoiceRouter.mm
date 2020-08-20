@@ -514,7 +514,7 @@ std::string preferredLanguage;
     int repeat = [_settings.keepInforming get];
     if (repeat == 0)
         return NO;
-    long double notBefore = lastAnnouncement + repeat * 60 * 1000L;
+    double notBefore = lastAnnouncement + repeat * 60 * 1000L;
     return (CACurrentMediaTime() * 1000) > notBefore;
 }
 

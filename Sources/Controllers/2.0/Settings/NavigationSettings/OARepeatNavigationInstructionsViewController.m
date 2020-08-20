@@ -226,6 +226,12 @@
     return section == 0 ? OALocalizedString(@"instructions_repeat") : @"";
 }
 
+-(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
 # pragma mark - Switch
 
 - (void)applyParameter:(id)sender

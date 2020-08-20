@@ -226,7 +226,8 @@
         cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
         cell.textView.text = am.toHumanString;
         cell.descView.text = [self getProfileDescription:am];
-        cell.contentView.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
+        cell.contentView.backgroundColor = UIColor.clearColor;
+        cell.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
         return cell;
     }
     else if ([type isEqualToString:kCellTypeProfileSwitch])
@@ -242,7 +243,7 @@
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? 62.0 : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.leftIconView.tintColor = UIColorFromRGB(am.getIconColor);
+        cell.leftIconView.tintColor = [OAApplicationMode.values containsObject:am] ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
         cell.titleLabel.text = am.toHumanString;
         cell.descLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;

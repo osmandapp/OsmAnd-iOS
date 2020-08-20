@@ -1558,7 +1558,7 @@ static NSDictionary *screenVoiceProviders;
 }
 - (void) slectVoiceLanguage:(NSDictionary *)item
 {
-    [[OAAppSettings sharedManager] setVoiceProvider:item[@"name"]];
+    [[OAAppSettings sharedManager].voiceProvider set:item[@"name"] mode:_am];
     [[OsmAndApp instance] initVoiceCommandPlayer:_am warningNoneProvider:NO showDialog:YES force:NO];
     [self backButtonClicked:nil];
 }

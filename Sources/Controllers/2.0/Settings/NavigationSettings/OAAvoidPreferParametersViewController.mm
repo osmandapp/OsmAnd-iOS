@@ -62,7 +62,7 @@
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    auto router = [self.class getRouter:self.appMode];
+    auto router = [OARouteProvider getRouter:self.appMode];
     NSString *prefix = _isAvoid ? @"avoid_" : @"prefer_";
     if (router)
     {

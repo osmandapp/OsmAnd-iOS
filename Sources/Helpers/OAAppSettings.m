@@ -141,6 +141,7 @@
 #define showArrivalTimeKey @"showArrivalTime"
 #define showIntermediateArrivalTimeKey @"showIntermediateArrivalTime"
 #define showRelativeBearingKey @"showRelativeBearing"
+#define routeRecalculationDistanceKey @"routeRecalculationDistance"
 
 #define showTrafficWarningsKey @"showTrafficWarnings"
 #define showPedestrianKey @"showPedestrian"
@@ -2090,8 +2091,12 @@
         _enableTimeConditionalRouting = [OAProfileBoolean withKey:enableTimeConditionalRoutingKey defValue:NO];
         [_registeredPreferences setObject:_enableTimeConditionalRouting forKey:@"enable_time_conditional_routing"];
         _useIntermediatePointsNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:useIntermediatePointsNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useIntermediatePointsNavigationKey] : NO;
-        _disableOffrouteRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableOffrouteRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableOffrouteRecalcKey] : NO;
-        _disableWrongDirectionRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableWrongDirectionRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableWrongDirectionRecalcKey] : NO;
+        
+        _disableOffrouteRecalc = [OAProfileBoolean withKey:disableOffrouteRecalcKey defValue:NO];
+        _disableWrongDirectionRecalc = [OAProfileBoolean withKey:disableWrongDirectionRecalcKey defValue:NO];
+        
+        [_registeredPreferences setObject:_disableOffrouteRecalc forKey:@"disable_offroute_recalc"];
+        [_registeredPreferences setObject:_disableWrongDirectionRecalc forKey:@"disable_wrong_direction_recalc"];
         
         _autoFollowRoute = [OAProfileInteger withKey:autoFollowRouteKey defValue:0];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];
@@ -2140,6 +2145,9 @@
         [_registeredPreferences setObject:_speedLimitExceed forKey:@"speed_limit_exceed"];
         [_registeredPreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_registeredPreferences setObject:_speedSystem forKey:@"default_speed_system"];
+        
+        _routeRecalculationDistance = [OAProfileDouble withKey:routeRecalculationDistanceKey defValue:0.];
+        [_registeredPreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];
 
         _wakeOnVoiceInt = [OAProfileInteger withKey:wakeOnVoiceIntKey defValue:0];
         [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode CAR]];
@@ -2840,18 +2848,6 @@
 {
     _useIntermediatePointsNavigation = useIntermediatePointsNavigation;
     [[NSUserDefaults standardUserDefaults] setBool:_useIntermediatePointsNavigation forKey:useIntermediatePointsNavigationKey];
-}
-
-- (void) setDisableOffrouteRecalc:(BOOL)disableOffrouteRecalc
-{
-    _disableOffrouteRecalc = disableOffrouteRecalc;
-    [[NSUserDefaults standardUserDefaults] setBool:_disableOffrouteRecalc forKey:disableOffrouteRecalcKey];
-}
-
-- (void) setDisableWrongDirectionRecalc:(BOOL)disableWrongDirectionRecalc
-{
-    _disableWrongDirectionRecalc = disableWrongDirectionRecalc;
-    [[NSUserDefaults standardUserDefaults] setBool:_disableWrongDirectionRecalc forKey:disableWrongDirectionRecalcKey];
 }
 
 - (void) setGpxRouteCalcOsmandParts:(BOOL)gpxRouteCalcOsmandParts

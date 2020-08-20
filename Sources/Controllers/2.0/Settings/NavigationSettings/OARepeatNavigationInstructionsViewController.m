@@ -10,6 +10,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
+#import "OAAppSettings.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -27,8 +28,11 @@
 {
     NSArray<NSArray *> *_data;
     NSIndexPath *_pickerIndexPath;
-    NSArray<NSString *> *_possibleTimeValues;
-    NSString *_timeValue;
+    NSArray<NSNumber *> *_keepInformingValues;
+    NSArray<NSString *> *_keepInformingEntries;
+    NSInteger _selectedValue;
+    
+    OAAppSettings *_settings;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -36,6 +40,7 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
+        _settings = OAAppSettings.sharedManager;
         [self generateData];
     }
     return self;
@@ -43,14 +48,22 @@
 
 - (void) generateData
 {
-    _timeValue = @"7 min"; // needs to be changed
-    _possibleTimeValues = @[@"4 min", @"5 min", @"6 min", @"7 min", @"8 min", @"8 min", @"10 min"]; // needs to be changed
+    _keepInformingValues = @[@1, @2, @3, @5, @7, @10, @15, @20, @25, @30];
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSNumber *val in _keepInformingValues)
+    {
+        [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"units_min")]];
+    }
+    _keepInformingEntries = [NSArray arrayWithArray:array];
+    
+    _selectedValue = [_keepInformingValues indexOfObject:@([_settings.keepInforming get:self.appMode])];
+    _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
 }
 
 -(void) applyLocalization
 {
     self.titleLabel.text = OALocalizedString(@"keep_informing");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
+    [super applyLocalization];
 }
 
 - (void) viewDidLoad
@@ -66,22 +79,25 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *statusArr = [NSMutableArray array];
     NSMutableArray *distanceArr = [NSMutableArray array];
+    BOOL isManualAnnunce = [_settings.keepInforming get:self.appMode] == 0;
     [statusArr addObject:@{
         @"type" : @"OASwitchCell",
         @"title" : OALocalizedString(@"only_manually"),
-        @"isOn" : @NO,
+        @"isOn" : @(isManualAnnunce),
     }];
-    [distanceArr addObject:@{
-        @"type" : kCellTypeDistance,
-        @"title" : OALocalizedString(@"shared_string_distance"),
-        @"value" : _timeValue,
-    }];
-    [distanceArr addObject:@{
-        @"type" : kCellTypePicker,
-    }];
-    
     [tableData addObject:statusArr];
-    [tableData addObject:distanceArr];
+    if (!isManualAnnunce)
+    {
+        [distanceArr addObject:@{
+            @"type" : kCellTypeDistance,
+            @"title" : OALocalizedString(@"repeat_after"),
+        }];
+        [distanceArr addObject:@{
+            @"type" : kCellTypePicker,
+        }];
+        [tableData addObject:distanceArr];
+    }
+    
     _data = [NSArray arrayWithArray:tableData];
 }
 
@@ -121,7 +137,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.lbTitle.text = item[@"title"];
-        cell.lbTime.text = item[@"value"];
+        cell.lbTime.text = _keepInformingEntries[_selectedValue];
         cell.lbTime.textColor = UIColorFromRGB(color_text_footer);
 
         return cell;
@@ -136,8 +152,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
-        cell.dataArray = _possibleTimeValues;
-        NSInteger valueRow = [_possibleTimeValues indexOfObject:_timeValue];
+        cell.dataArray = _keepInformingEntries;
+        NSInteger valueRow = _selectedValue;
         [cell.picker selectRow:valueRow inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
@@ -214,7 +230,19 @@
 
 - (void)applyParameter:(id)sender
 {
-    
+    if ([sender isKindOfClass:UISwitch.class])
+    {
+        UISwitch *control = (UISwitch *)sender;
+        [_settings.keepInforming set:(control.isOn ? 0 : _keepInformingValues[_selectedValue].intValue) mode:self.appMode];
+        [self hidePicker];
+        [self.tableView beginUpdates];
+        [self setupView];
+        if (control.isOn)
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+        else
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView endUpdates];
+    }
 }
 
 # pragma mark - Picker
@@ -248,7 +276,9 @@
 }
 
 - (void)zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag {
-    _timeValue = zoom;
+    _selectedValue = [_keepInformingEntries indexOfObject:zoom];
+    _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
+    [_settings.keepInforming set:_keepInformingValues[_selectedValue].intValue mode:self.appMode];
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }

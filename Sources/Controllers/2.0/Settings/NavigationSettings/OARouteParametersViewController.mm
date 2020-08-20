@@ -18,6 +18,7 @@
 #import "OAAppSettings.h"
 #import "OARouteSettingsBaseViewController.h"
 #import "OARouteProvider.h"
+#import "OARoutingHelper.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -79,13 +80,25 @@
         @"foregroundImage" : @"img_settings_sreen_route_parameters@3x.png",
         @"backgroundImage" : @"img_settings_device_bottom_light@3x.png",
     }];
+    
+    double recalcDist = [_settings.routeRecalculationDistance get:self.appMode];
+    NSString *descr = recalcDist == -1 ? OALocalizedString(@"rendering_value_disabled_name") : [OsmAndApp.instance getFormattedDistance:recalcDist];
     [parametersArr addObject:@{
         @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"recalculate_route"),
-        @"value" : @"120 m", // has to be changed
+        @"value" : descr,
         @"icon" : @"ic_custom_minimal_distance",
         @"key" : @"recalculateRoute",
     }];
+    
+    [parametersArr addObject:
+     @{
+         @"key" : @"reverseDir",
+         @"title" : OALocalizedString(@"recalculate_wrong_dir"),
+         @"icon" : @"ic_custom_reverse_direction",
+         @"value" : @([settings.disableWrongDirectionRecalc get:self.appMode]),
+         @"type" : kCellTypeSwitch }
+     ];
     
     auto router = [OARouteProvider getRouter:self.appMode];
     [self clearParameters];
@@ -230,6 +243,10 @@
         {
             cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftImageView.tintColor = UIColorFromRGB(_iconColor);
+            if ([item[@"key"] isEqualToString:@"recalculateRoute"])
+            {
+                cell.leftImageView.tintColor = [_settings.routeRecalculationDistance get:self.appMode] == -1 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(_iconColor);
+            }
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
         }
@@ -277,12 +294,12 @@
             {
                 OAProfileBoolean *value = v;
                 cell.switchView.on = [value get:self.appMode];
-                cell.imgView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
             }
             else
             {
                 cell.switchView.on = [v boolValue];
             }
+            cell.imgView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -325,14 +342,11 @@
     }
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"recalculateRoute"])
-    {
         settingsViewController = [[OARecalculateRouteViewController alloc] initWithAppMode:self.appMode];
-    }
     else if ([itemKey isEqualToString:@"avoidRoads"])
-    {
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:YES];
-        settingsViewController.delegate = self;
-    }
+
+    settingsViewController.delegate = self;
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -347,17 +361,24 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         BOOL isChecked = ((UISwitch *) sender).on;
-        for (const auto& routingParameter : _otherParameters)
+        if ([item[@"key"] isEqualToString:@"reverseDir"])
         {
-            NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
-            if ([param isEqualToString:item[@"name"]])
+            [_settings.disableWrongDirectionRecalc set:isChecked mode:self.appMode];
+        }
+        else
+        {
+            for (const auto& routingParameter : _otherParameters)
             {
-                OAProfileBoolean *property = [[OAAppSettings sharedManager] getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:routingParameter.id.c_str()] defaultValue:routingParameter.defaultBoolean];
-                [property set:isChecked mode:self.appMode];
+                NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
+                if ([param isEqualToString:item[@"name"]])
+                {
+                    OAProfileBoolean *property = [[OAAppSettings sharedManager] getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:routingParameter.id.c_str()] defaultValue:routingParameter.defaultBoolean];
+                    [property set:isChecked mode:self.appMode];
+                }
             }
         }
         [self setupView];
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 

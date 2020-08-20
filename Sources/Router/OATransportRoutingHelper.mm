@@ -196,21 +196,12 @@
     _prevRunningJob = prevRunningJob;
 }
 
-- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
-{
-    auto router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
-    if (!router && am.parent)
-        router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
-    
-    return router;
-}
-
 - (vector<SHARED_PTR<TransportRouteResult>>) calculateRouteImpl:(OATransportRouteCalculationParams *)params
 {
     vector<SHARED_PTR<TransportRouteResult>> res;
     auto config = _app.defaultRoutingConfig;
     MAP_STR_STR paramsRes;
-    auto router = [self getRouter:params.mode];
+    auto router = [OARouteProvider getRouter:params.mode];
     auto paramsMap = router->getParameters();
     for (auto it = paramsMap.begin(); it != paramsMap.end(); ++it)
     {

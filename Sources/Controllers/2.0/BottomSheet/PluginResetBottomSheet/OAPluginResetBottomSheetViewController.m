@@ -24,6 +24,7 @@
 #import "OAApplicationMode.h"
 #import "OATitleTwoIconsRoundCell.h"
 #import "OAAppData.h"
+#import "OsmAndApp.h"
 
 #define kButtonsDividerTag 150
 #define kTitleIconRoundCell @"OATitleTwoIconsRoundCell"
@@ -325,8 +326,10 @@
 
 -(void) doneButtonPressed:(id)sender
 {
-    [OAAppSettings.sharedManager resetAllProfileSettingsForMode:(OAApplicationMode *)self.customParam];
-    [OAAppData.defaults resetProfileSettingsForMode:(OAApplicationMode *)self.customParam];
+    OAApplicationMode * appMode = (OAApplicationMode *)self.customParam;
+    [OAAppSettings.sharedManager resetAllProfileSettingsForMode:appMode];
+    [OAAppData.defaults resetProfileSettingsForMode:appMode];
+     [OsmAndApp.instance resetMapStyleForAppMode:appMode.stringKey];
     [self dismiss];
 }
 

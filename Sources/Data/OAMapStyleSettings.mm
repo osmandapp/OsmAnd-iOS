@@ -353,16 +353,24 @@
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
--(void) resetToDefault
+-(void) resetMapStyleForAppMode:(NSString *)appModeName
 {
+    NSArray<OAMapStyleParameter *> *clearParameters = [NSArray arrayWithArray:self.parameters];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        for (OAMapStyleParameter *p in self.parameters)
+        for (OAMapStyleParameter *p in clearParameters)
         {
             p.value = p.defaultValue;
             p.storedValue = p.defaultValue;
+            p.mapPresetName = appModeName;
+
+            NSString *name = [NSString stringWithFormat:@"%@_type_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
+            [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
         }
-        [self saveParameters];
+        
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     });
+
 }
 
 @end

@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;
+@property (weak, nonatomic) IBOutlet UIButton *switchAreaButton;
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
 
 

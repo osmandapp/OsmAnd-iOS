@@ -66,11 +66,10 @@
 
 - (void) generateData
 {
-    NSString *selectedProfileName = [_settings.routingProfile get];
+    NSString *selectedProfileName = self.appMode.getRoutingProfile;
     _routingProfileDataObjects = [self.class getRoutingProfiles];
     NSArray *profiles = [_routingProfileDataObjects allValues];
     OARoutingProfileDataObject *routingData;
-
     for (OARoutingProfileDataObject *profile in profiles)
     {
         if([profile.stringKey isEqual:selectedProfileName])
@@ -276,6 +275,7 @@
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.leftImageView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
         }
         if (cell)
         {
@@ -370,6 +370,18 @@
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return section == 0 ? @"" : OALocalizedString(@"change_map_behavior");
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 #pragma mark - OASettingsDataDelegate

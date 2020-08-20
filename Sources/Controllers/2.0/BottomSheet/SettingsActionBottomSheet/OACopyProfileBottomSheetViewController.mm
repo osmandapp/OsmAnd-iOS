@@ -16,6 +16,7 @@
 #import "OAMapStyleSettings.h"
 #import "OrderedDictionary.h"
 #import "OAConfigureProfileViewController.h"
+#import "OARouteProvider.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -341,54 +342,87 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 
 - (void) copyProfile
 {
-//    OASettingsHelper *settingsHelper = [OASettingsHelper sharedInstance];
-//    settingsHelper.
- 
+    OAAppSettings *settings= [OAAppSettings sharedManager];
+    NSDictionary *settingsPref = [[[OAProfileSettingsItem alloc] initWithAppMode:_selectedMode] getSettingsJson];
+    //NSSet<NSString *> *appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
     
-    MutableOrderedDictionary *res = [MutableOrderedDictionary new];
-    OAAppSettings *settings = [OAAppSettings sharedManager];
+    //MutableOrderedDictionary *res = [MutableOrderedDictionary new];
     
+    // registeredPreferences
     for (NSString *key in settings.getRegisteredSettings)
     {
-        NSLog(@"getRegisteredSettings -> %@", key);
         OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:key];
-        NSLog(@"type -> %@", setting.key);
-        //[setting set]
-        
-        //[setting setValueFromString:<#(NSString *)#> appMode:<#(OAApplicationMode *)#>];
-        
         if (setting)
-            res[key] = [setting toStringValue:_appMode];
+            [setting setValueFromString:[setting toStringValue:_selectedMode] appMode:_appMode];
     }
-    [OsmAndApp.instance.data addPreferenceValuesToDictionary:res mode:_appMode];
+    
+    // routing preferences
+    const auto router = [OARouteProvider getRouter:_selectedMode];
+    if (router)
+    {
+        const auto& parameters = router->getParametersList();
+        for (const auto& p : parameters)
+        {
+            if (p.type == RoutingParameterType::BOOLEAN)
+            {
+                OAProfileBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
+                [boolSetting set:[boolSetting get:_selectedMode] mode:_appMode];
+            }
+            else
+            {
+                OAProfileString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                [stringSetting set:[stringSetting get:_selectedMode] mode:_appMode];
+            }
+        }
+    }
+    
+    
     OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
-    NSString *renderer = nil;
     for (OAMapStyleParameter *param in [styleSettings getAllParameters])
     {
-        if (!renderer)
-            renderer = param.mapStyleName;
-        NSLog(@"param ->%@", param);
-       // res[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
+        OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:param.name];
+        if (setting)
+            [setting setValueFromString:param.value appMode:_appMode];
     }
-    if (renderer)
-    {
-        NSLog(@"renderer ->%@", renderer);
-        //res[@"renderer"] = [self getRendererStringValue:renderer];
-    }
+    
+    
+    
+//    for (NSString *key in settingsPref)
+//    {
+//        NSLog(@"key -> %@", key);
+//        NSLog(@"value -> %@\n", [settingsPref valueForKey:key]);
+//        if ([self canPreferenceBeCopied] && ![_appMode.getUserProfileName isEqualToString:_selectedMode.getUserProfileName])
+//        {
+//            OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:key];
+//            if (_appMode.parent == _selectedMode.parent)
+//            {
+//                if ([_appMode isCustomProfile])
+//                {
+//                    [_appMode setParent:[_selectedMode isCustomProfile] ? _selectedMode.parent : _selectedMode];
+//                }
+//            }
+//            else
+//            {
+//                [setting setValueFromString:[setting getProfileDefaultValue:_selectedMode] appMode:_appMode];
+//
+//                NSString *copiedValue = [setting toStringValue:_selectedMode];
+//                [setting setValueFromString:copiedValue appMode:_appMode];
+//            }
+//        }
+//    }
+//    [_appMode setIconName:_selectedMode.getIconName];
+//    [_appMode setUserProfileName:[_selectedMode.name trim]];
+//    [_appMode setRoutingProfile:_selectedMode.getRoutingProfile];
+//    [_appMode setRouterService:_selectedMode.getRouterService];
+//    [_appMode setIconColor:_selectedMode.getIconColor];
+//    [_appMode setLocationIcon:_selectedMode.getLocationIcon];
+//    [_appMode setNavigationIcon:_selectedMode.getNavigationIcon];
 }
-    /*
-//    OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:_selectedMode.stringKey
-//                                                             def:[[OAApplicationMode alloc] initWithName:_selectedMode.name stringKey:_selectedMode.stringKey]];
-//    [mode setParent:_selectedMode.parent];
-//    [mode setIconName:_selectedMode.iconName];
-//    [mode setUserProfileName:[_selectedMode.name trim]];
-//    [mode setRoutingProfile:_selectedMode.routingProfile];
-//    [mode setRouterService:_selectedMode.routeService];
-//    [mode setIconColor:_selectedMode.color];
-//    [mode setLocationIcon:_selectedMode.locationIcon];
-//    [mode setNavigationIcon:_selectedMode.navigationIcon];
+
+- (BOOL) canPreferenceBeCopied
+{
+    return _appMode.getOrder != _selectedMode.getOrder;
 }
-*/
 
 #pragma mark - Table View
 

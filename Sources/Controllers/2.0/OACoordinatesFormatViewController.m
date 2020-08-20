@@ -43,8 +43,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"coords_format");
-    self.subtitleLabel.text = self.appMode.toHumanString;
 }
 
 - (void) viewDidLoad

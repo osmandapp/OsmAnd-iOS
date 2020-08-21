@@ -25,9 +25,14 @@
 #import "OATitleTwoIconsRoundCell.h"
 #import "OAAppData.h"
 #import "OsmAndApp.h"
+#import "OAMapWidgetRegistry.h"
+#import "OARootViewController.h"
 
 #define kButtonsDividerTag 150
 #define kTitleIconRoundCell @"OATitleTwoIconsRoundCell"
+#define update_vidgests_notification @"update_vidgests_notification"
+#define reset_vidgests_notification @"reset_vidgests_notification"
+#define reseting_appmode_key @"appMode"
 
 @interface OAPluginResetBottomSheetScreen ()
 
@@ -329,7 +334,10 @@
     OAApplicationMode * appMode = (OAApplicationMode *)self.customParam;
     [OAAppSettings.sharedManager resetAllProfileSettingsForMode:appMode];
     [OAAppData.defaults resetProfileSettingsForMode:appMode];
-     [OsmAndApp.instance resetMapStyleForAppMode:appMode.stringKey];
+    [OsmAndApp.instance resetMapStyleForAppMode:appMode.stringKey];
+    NSDictionary* appModeDict = [NSDictionary dictionaryWithObject:appMode forKey:reseting_appmode_key];
+    [[NSNotificationCenter defaultCenter] postNotificationName:reset_vidgests_notification object:nil userInfo:appModeDict];
+    [[NSNotificationCenter defaultCenter] postNotificationName:update_vidgests_notification object:nil userInfo:nil];
     [self dismiss];
 }
 

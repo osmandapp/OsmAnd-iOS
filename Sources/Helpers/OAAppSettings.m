@@ -1958,6 +1958,7 @@
         _customAppModes = [NSUserDefaults.standardUserDefaults objectForKey:customAppModesKey] ? [NSUserDefaults.standardUserDefaults stringForKey:customAppModesKey] : @"";
 
         _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
+        [_registeredPreferences setObject:_mapInfoControls forKey:mapInfoControlsKey];
         
         _routingProfile = [OAProfileString withKey:routingProfileKey defValue:@""];
         [_routingProfile setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
@@ -2307,6 +2308,9 @@
     
     //proflie undepended settings
     [self hideGpx:_mapSettingVisibleGpx];
+    [self setSettingPrefMapLanguage:nil];
+    [self setSettingMapLanguageShowLocal:nil];
+    [self setSettingMapLanguageTranslit:nil];
 }
 
 // Common Settings

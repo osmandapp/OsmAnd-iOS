@@ -18,6 +18,8 @@
 #define HIDE_PREFIX @"-"
 #define SHOW_PREFIX @""
 #define SETTINGS_SEPARATOR @";"
+#define reset_vidgests_notification @"reset_vidgests_notification"
+#define reseting_appmode_key @"appMode"
 
 @implementation OAMapWidgetRegistry
 {
@@ -52,8 +54,15 @@
                 [set addObjectsFromArray:split];
             }
         }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetVidgets:) name:reset_vidgests_notification object:nil];
     }
     return self;
+}
+
+- (void) deinit
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:reset_vidgests_notification object:nil];
 }
 
 - (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode left:(BOOL)left expanded:(BOOL)expanded
@@ -296,10 +305,16 @@
 - (void) resetToDefault
 {
     OAApplicationMode *appMode = _settings.applicationMode;
-    [self resetDefault:appMode set:_leftWidgetSet];
-    [self resetDefault:appMode set:_rightWidgetSet];
-    [self resetDefaultAppearance:appMode];
-    [_visibleElementsFromSettings setObject:nil forKey:appMode];
+    [self resetToDefault: appMode];
+}
+
+- (void) resetToDefault:(OAApplicationMode *)mode
+{
+    [self resetDefault:mode set:_leftWidgetSet];
+    [self resetDefault:mode set:_rightWidgetSet];
+    [self setVisibility:mode m:[self widgetByKey:@"radius_ruler"] visible:NO collapsed:NO];
+    [self resetDefaultAppearance:mode];
+    [_visibleElementsFromSettings setObject:nil forKey:mode];
     [_settings.mapInfoControls set:SHOW_PREFIX];
 }
 
@@ -309,6 +324,13 @@
     [_settings.transparentMapTheme resetToDefault];
     [_settings.showStreetName resetToDefault];
     [_settings.centerPositionOnMap resetToDefault];
+}
+
+- (void) resetVidgets:(NSNotification *)notification;
+{
+    OAApplicationMode * mode = [[notification userInfo] objectForKey:reseting_appmode_key] ;
+    if (mode)
+        [self resetToDefault:mode];
 }
 
 - (NSOrderedSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet

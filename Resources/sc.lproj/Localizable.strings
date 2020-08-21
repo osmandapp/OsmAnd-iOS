@@ -774,16 +774,16 @@
 "recording_preferences_descr" = "Preferèntzias pro sa registratzione de su biàgiu";
 "traffic_warning_tunnel" = "Galleria a curtzu";
 "track_save_descr" = "Sarva como su biàgiu currente comente unu documentu GPX.";
-"track_during_nav" = "Sarva automaticamente su biàgiu in GPX durante sa navigatzione";
+"track_during_nav" = "Sarva automaticamente su biàgiu";
 "logging_interval_navigation_descr" = "Issèbera s’intervallu de sarvamentu pro sa registratzione de sos biàgios durante sa navigatzione";
-"logging_min_distance" = "Distàntzia mìnima de registratzione";
+"logging_min_distance" = "Movimentu mìnimu";
 "logging_min_distance_descr" = "FIltru: distàntzia mìnima pro registrare unu puntu nou";
-"logging_min_accuracy" = "Pretzisione mìnima de registratzione";
+"logging_min_accuracy" = "Acuradesa mìnima";
 "logging_min_accuracy_descr" = "Filtru: peruna registratzione si sa pretzisione no est istada retzida";
-"logging_min_speed" = "Lestresa mìnima de registratzione";
+"logging_min_speed" = "Lestresa mìnima";
 "logging_min_speed_descr" = "Filtru: peruna registratzione in suta de sa lestresa isseberada";
 "auto_split_gap_descr" = "Incumintza unu segmentu nou a pustis de una pàusa de 6 minutos, unu biàgiu nou a pustis de duas oras, o unu documentu nou a pustis de una pàusa prus longa";
-"track_during_nav_descr" = "Una biàgiu benit sarvadu automaticamente durante sa navigatzione";
+"track_during_nav_descr" = "Allughe·lu pro sarvare automaticamente unu biàgiu durante sa navigatzione";
 "menu_help" = "Agiudu";
 // Help
 "help_first_steps" = "Primos passos";
@@ -1761,7 +1761,7 @@
 "use_of_downloaded_map" = "Como podes impreare custa mapa non in lìnia comente mitza printzipale de sa mapa o comente istratu superiore/inferiore";
 "size_of_downloaded_data" = "Sa diferèntzia manna intre sos livellos de ismanniamentu podet ismanniare sa mannària de sos datos iscarrigados.";
 "online_sources" = "Mitzas in lìnia";
-"select_online_source" = "Ischerta una mitza";
+"select_online_source" = "Ischerta sa mitza";
 "preview_of_selected_zoom_levels" = "Anteprima de sos livellos de ismanniamentu ischertados";
 "download_size" = "Mannària de s'iscarrigamentu";
 "number_of_tiles" = "Nùmeru de tasseddos";
@@ -1831,3 +1831,16 @@
 "plugin_settings_descr" = "Impostatziones de s'estensione pro su profilu ischertadu.";
 "configure_screen_descr" = "Ischerta sas optziones de s'ischermu pro su profilu";
 "profile_settings" = "Impostatziones de su profilu";
+"shared_string_email" = "P.eletrònica";
+"shared_string_account" = "Contu";
+"shared_string_required" = "Obligatòriu";
+"email_example_hint" = "impreadore@esèmpiu.com";
+"osm_editing_access_descr" = "Podes pompiare totu sas modìficas locales e sas notas tuas in %@. Sos puntos giai carrigados non sunt allistados in OsmAnd.";
+"osm_editing_settings_descr" = "Custas impostatziones de s'estensione sunt globales e s'aplicant a totu sos profilos.";
+// Menu
+"menu" = "Menù";
+"profile_type_base_string" = "Profilu de base";
+"profile_type_custom_string" = "Profilu personalizadu";
+"plugin_settings_reset" = "Riprìstina sas impostatziones predefinidas de s'estensione";
+"trip_rec_actions_descr" = "Podes agatare totu sas rastas registradas tuas in %@";
+"logging_accuracy" = "Pretzisione de registratzione";

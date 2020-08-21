@@ -769,7 +769,7 @@
         case kRowWaypoints:
             return 64. + (self.collapsableGroupView.collapsed ? 0. : self.collapsableGroupView.frame.size.height);
         case kRowCoordinates:
-            return 64. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height);
+            return 48. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height);
         default:
             return 44.0;
     }
@@ -814,7 +814,7 @@
                 self.collapsableGroupView.collapsed = !self.collapsableGroupView.collapsed;
                 [self.collapsableGroupView adjustHeightForWidth:tableView.frame.size.width];
                 if (self.delegate)
-                    [self.delegate contentHeightChanged:0];
+                    [self.delegate contentHeightChanged];
                 [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             }
             break;
@@ -827,7 +827,7 @@
                 self.collapsableCoordinatesView.collapsed = !self.collapsableCoordinatesView.collapsed;
                 [self.collapsableCoordinatesView adjustHeightForWidth:tableView.frame.size.width];
                 if (self.delegate)
-                    [self.delegate contentHeightChanged:0];
+                    [self.delegate contentHeightChanged];
                 [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             }
             break;

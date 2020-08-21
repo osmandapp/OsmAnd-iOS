@@ -21,9 +21,9 @@
 #import "OATextInputCell.h"
 #import "OAButtonCell.h"
 #import "OAColors.h"
-#import "OAMultyLabelCell.h"
+#import "OAMultiLineLabelCell.h"
 
-#define kCellTypeTitle @"OAMultyLabelCell"
+#define kCellTypeTitle @"OAMultiLineLabelCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeSwitch @"switch"
 #define kCellTypeButton @"button"
@@ -218,11 +218,11 @@ static const NSInteger actionsSectionIndex = 2;
     else if ([type isEqualToString:kCellTypeTitle])
     {
         static NSString* const identifierCell = kCellTypeTitle;
-        OAMultyLabelCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMultiLineLabelCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OAMultyLabelCell *)[nib objectAtIndex:0];
+            cell = (OAMultiLineLabelCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
             cell.textView.numberOfLines = 0;
             cell.textView.lineBreakMode = NSLineBreakByWordWrapping;

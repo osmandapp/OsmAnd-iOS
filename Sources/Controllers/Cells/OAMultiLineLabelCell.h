@@ -1,5 +1,5 @@
 //
-//  OAMultyLabelCell.h
+//  OAMultiLineLabelCell.h
 //  OsmAnd
 //
 //  Created by nnngrach on 21.08.2020.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAMultyLabelCell : UITableViewCell
+@interface OAMultiLineLabelCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 

@@ -139,7 +139,7 @@
                 _reliefFactorParameters.push_back(p);
             else if ("driving_style" == p.group)
                 _drivingStyleParameters.push_back(p);
-            else if ("weight" != p.group && "height" != p.group && "length" != p.group && "width" != p.group)
+            else if ("weight" != p.id && "height" != p.id && "length" != p.id && "width" != p.id)
                 _otherParameters.push_back(p);
         }
         if (_drivingStyleParameters.size() > 0)

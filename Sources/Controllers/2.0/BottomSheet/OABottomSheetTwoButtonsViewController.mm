@@ -43,21 +43,27 @@
 
 - (void) setupButtons
 {
+    [self layoutButtons];
+    
+    _doneButton.backgroundColor = UIColorFromRGB(color_primary_purple);
+    _doneButton.layer.cornerRadius = 9;
+    _doneButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+    
+    self.cancelButton.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary);
+    self.cancelButton.layer.cornerRadius = 9;
+    self.cancelButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+    [self.cancelButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+}
+
+- (void) layoutButtons
+{
     if (_doneButton.hidden)
         return [self hideDoneButton];
     
     CGFloat buttonWidth = (self.buttonsView.frame.size.width - 48.0) / 2;
     _doneButton.frame = CGRectMake(self.buttonsView.frame.size.width - 16.0 - buttonWidth, 4.0, buttonWidth, 42.0);
-    _doneButton.backgroundColor = UIColorFromRGB(color_primary_purple);
-    _doneButton.layer.cornerRadius = 9;
-    _doneButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
-    
     self.cancelButton.frame = CGRectMake(16.0 , 4.0, buttonWidth, 42.0);
     self.cancelButton.autoresizingMask = UIViewAutoresizingNone;
-    self.cancelButton.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary);
-    self.cancelButton.layer.cornerRadius = 9;
-    self.cancelButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
-    [self.cancelButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
 }
 
 - (void) hideDoneButton
@@ -85,7 +91,7 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self setupButtons];
+        [self layoutButtons];
         [OAUtilities setMaskTo:self.tableBackgroundView byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
     } completion:nil];
 }

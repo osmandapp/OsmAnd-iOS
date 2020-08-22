@@ -18,6 +18,8 @@
 #import "OAArrivalAnnouncementViewController.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
+#import "OARoutingHelper.h"
+#import "OAVoiceRouter.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -80,7 +82,7 @@
     NSMutableArray *fourthSection = [NSMutableArray array];
     NSMutableArray *fifthSection = [NSMutableArray array];
     
-    _voiceOn = [_settings.voiceMute get:self.appMode];
+    _voiceOn = ![_settings.voiceMute get:self.appMode];
     NSDictionary *screenVoiceProviders = [OAUtilities getSortedVoiceProviders];
     NSString *selectedLanguage = @"";
     NSString *selectedValue = [_settings.voiceProvider get:self.appMode];
@@ -196,10 +198,16 @@
         @"key" : @"nearbyPOI",
     }];
     
+    NSString *val;
+    if ([_settings.keepInforming get:self.appMode] == 0)
+        val = OALocalizedString(@"only_manually");
+    else
+        val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"units_min")];
+    
     [fifthSection addObject:@{
         @"type" : kCellTypeTitleValue,
         @"title" : OALocalizedString(@"keep_informing"),
-        @"value" : @"7 min", // needs to be changed
+        @"value" : val,
         @"key" : @"repeatInstructions",
     }];
     [fifthSection addObject:@{
@@ -244,7 +252,7 @@
             if ([v isKindOfClass:[OAProfileBoolean class]])
             {
                 OAProfileBoolean *value = v;
-                cell.switchView.on = [value get:self.appMode];
+                cell.switchView.on = [[v key] isEqualToString:@"voiceMute"] ? ![value get:self.appMode] : [value get:self.appMode];
             }
             else
             {
@@ -345,6 +353,18 @@
     return section == 0 ? OALocalizedString(@"speak_descr") : @"";
 }
 
+-(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -400,11 +420,16 @@
     if ([v isKindOfClass:[OAProfileBoolean class]])
     {
         OAProfileBoolean *value = v;
-        [value set:isChecked mode:self.appMode];
         if ([[v key] isEqualToString:@"voiceMute"])
         {
+            [value set:!isChecked mode:self.appMode];
+            [OARoutingHelper.sharedInstance.getVoiceRouter setMute:!isChecked];
             _voiceOn = isChecked;
             [self updateTableView];
+        }
+        else
+        {
+            [value set:isChecked mode:self.appMode];
         }
     }
     if (self.delegate)

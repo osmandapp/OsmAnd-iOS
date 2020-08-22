@@ -641,7 +641,7 @@
 "shared_string_never" = "Mai";
 "general_settings_2" = "Paràmetres generals";
 "general_settings_descr" = "Tema de la aplicació, unitats, regió";
-"routing_settings_descr" = "Especifiqueu les opcions de navegació";
+"routing_settings_descr" = "Configura la navegació";
 "auto_zoom_none" = "Sense escalat automàtic";
 "auto_zoom_close" = "Apropa't";
 "auto_zoom_far" = "Abast mitjà";
@@ -777,19 +777,19 @@
 "traffic_warning_tunnel" = "Túnel encarat";
 "logging_interval_navigation" = "Interval d'enregistrament durant la navegació";
 "logging_interval_navigation_descr" = "Seleccioneu l'interval d'enregistrament en generar la traça de la navegació";
-"logging_min_distance" = "Distància mínima d'enregistrament";
+"logging_min_distance" = "Desplaçament mínim";
 "logging_min_distance_descr" = "Filtre: distància mínima per enregistrar un punt nou";
-"logging_min_accuracy" = "Precisió mínima de registre";
+"logging_min_accuracy" = "Precisió mínima";
 "logging_min_accuracy_descr" = "Filtre: no s'enregistra sense assolir la precisió mínima";
-"logging_min_speed" = "Velocitat mínima de registre";
+"logging_min_speed" = "Velocitat mínima";
 "logging_min_speed_descr" = "Filtre: no s'enregistra per sota de la velocitat seleccionada";
 "auto_split_gap" = "Fragmentació automàtica d'enregistraments aprofitant les pauses";
 "auto_split_gap_descr" = "Comença un nou segment si la pausa és major de 6 minuts, una nova traça si supera les dues hores i un nou arxiu si encara és més llarga";
 "shared_setting_always_ask" = "Confirma sempre";
 "recording_preferences_descr" = "Preferències d'enregistrament del viatge";
 "track_save_descr" = "Desa ara el trajecte actual en un fitxer GPX.";
-"track_during_nav" = "Enregistra automàticament el trajecte durant la navegació";
-"track_during_nav_descr" = "Durant la navegació es desa automàticament un trajecte";
+"track_during_nav" = "Enregistrament automàtic del trajecte";
+"track_during_nav_descr" = "Activa per enregistrar automàticament la traça durant la navegació";
 "menu_help" = "Ajuda";
 // Help
 "help_first_steps" = "Primeres passes";
@@ -1825,3 +1825,13 @@
 "ui_customization" = "Personalització de la IU";
 "profile_appearance" = "Aparença del perfil";
 "plugin_settings_descr" = "Configuració del connector per al perfil seleccionat.";
+"shared_string_email" = "Correu electrònic";
+"shared_string_account" = "Compte";
+"shared_string_required" = "Obligatori";
+"osm_editing_access_descr" = "Podeu veure totes les vostres edicions i anotacions locals a %@. Els punts que ja heu pujat no es mostren a OsmAnd.";
+"osm_editing_settings_descr" = "Aquesta configuració del connector és global i afecta tots els perfils.";
+// Menu
+"menu" = "Menú";
+"plugin_settings_reset" = "Restableix la configuració predeterminada del complement";
+"trip_rec_actions_descr" = "Podeu trobar totes les vostres tracs gravades a %@";
+"logging_accuracy" = "Precisió de registre";

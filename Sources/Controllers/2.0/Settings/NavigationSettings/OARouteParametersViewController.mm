@@ -17,7 +17,11 @@
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OARouteSettingsBaseViewController.h"
+#import "OARouteParameterValuesViewController.h"
 #import "OARouteProvider.h"
+#import "OARoutingHelper.h"
+#import "OARoutePreferencesParameters.h"
+#import "OARouteSettingsParameterController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -27,7 +31,7 @@
 #define kCellTypeIconTitle @"OAIconTextCell"
 #define kCellTypeSwitch @"OASettingSwitchCell"
 
-@interface OARouteParametersViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OARouteParametersViewController () <UITableViewDelegate, UITableViewDataSource, OARoutePreferencesParametersDelegate>
 
 @end
 
@@ -68,6 +72,26 @@
     [self setupView];
 }
 
+- (void)populateGroup:(OALocalRoutingParameterGroup *)group params:(vector<RoutingParameter>&)params
+{
+    for (const auto& p : params)
+    {
+        [group addRoutingParameter:p];
+    }
+}
+
+- (void)addParameterGroupRow:(OALocalRoutingParameterGroup *)group parametersArr:(NSMutableArray *)parametersArr iconName:(NSString *)iconName
+{
+    [parametersArr addObject:@{
+        @"type" : kCellTypeIconTitleValue,
+        @"title" : [group getText],
+        @"icon" : iconName,
+        @"value" : [group getValue],
+        @"param" : group,
+        @"key" : @"paramGroup"
+    }];
+}
+
 - (void) setupView
 {
     NSMutableArray *tableData = [NSMutableArray array];
@@ -79,13 +103,25 @@
         @"foregroundImage" : @"img_settings_sreen_route_parameters@3x.png",
         @"backgroundImage" : @"img_settings_device_bottom_light@3x.png",
     }];
+    
+    double recalcDist = [_settings.routeRecalculationDistance get:self.appMode];
+    NSString *descr = recalcDist == -1 ? OALocalizedString(@"rendering_value_disabled_name") : [OsmAndApp.instance getFormattedDistance:recalcDist];
     [parametersArr addObject:@{
         @"type" : kCellTypeIconTitleValue,
         @"title" : OALocalizedString(@"recalculate_route"),
-        @"value" : @"120 m", // has to be changed
+        @"value" : descr,
         @"icon" : @"ic_custom_minimal_distance",
         @"key" : @"recalculateRoute",
     }];
+    
+    [parametersArr addObject:
+     @{
+         @"key" : @"reverseDir",
+         @"title" : OALocalizedString(@"recalculate_wrong_dir"),
+         @"icon" : @"ic_custom_reverse_direction",
+         @"value" : @([settings.disableWrongDirectionRecalc get:self.appMode]),
+         @"type" : kCellTypeSwitch }
+     ];
     
     auto router = [OARouteProvider getRouter:self.appMode];
     [self clearParameters];
@@ -103,8 +139,15 @@
                 _reliefFactorParameters.push_back(p);
             else if ("driving_style" == p.group)
                 _drivingStyleParameters.push_back(p);
-            else
+            else if ("weight" != p.id && "height" != p.id && "length" != p.id && "width" != p.id)
                 _otherParameters.push_back(p);
+        }
+        if (_drivingStyleParameters.size() > 0)
+        {
+            OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:self.appMode groupName:@"driving_style"];
+            group.delegate = self;
+            [self populateGroup:group params:_drivingStyleParameters];
+            [self addParameterGroupRow:group parametersArr:parametersArr iconName:@"ic_profile_bicycle"];
         }
         if (_avoidParameters.size() > 0)
         {
@@ -116,21 +159,75 @@
                 @"key" : @"avoidRoads"
             }];
         }
-        for (const auto& p : _otherParameters)
+        if (_reliefFactorParameters.size() > 0)
         {
+            OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:self.appMode groupName:@"relief_smoothness_factor"];
+            group.delegate = self;
+            [self populateGroup:group params:_reliefFactorParameters];
+            [self addParameterGroupRow:group parametersArr:parametersArr iconName:@"ic_custom_elevation"];
+        }
+        NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
+        for (NSInteger i = 0; i < _otherParameters.size(); i++)
+        {
+            const auto& p = _otherParameters[i];
             NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
             NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
             if (p.type == RoutingParameterType::BOOLEAN)
             {
-                OAProfileBoolean *booleanParam = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
-                [parametersArr addObject:
-                 @{
-                   @"name" : paramId,
-                   @"title" : title,
-                   @"icon" : [self getParameterIcon:paramId isSelected:[booleanParam get:self.appMode]],
-                   @"value" : booleanParam,
-                   @"type" : kCellTypeSwitch }
-                 ];
+                if (!p.group.empty())
+                {
+                    OALocalRoutingParameterGroup *rpg = [self getLocalRoutingParameterGroup:list groupName:[NSString stringWithUTF8String:p.group.c_str()]];
+                    if (!rpg)
+                    {
+                        rpg = [[OALocalRoutingParameterGroup alloc] initWithAppMode:self.appMode groupName:[NSString stringWithUTF8String:p.group.c_str()]];
+                        [list addObject:rpg];
+                    }
+                    rpg.delegate = self;
+                    [rpg addRoutingParameter:p];
+                }
+                else
+                {
+                    OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:self.appMode];
+                    rp.routingParameter = p;
+                    [list addObject:rp];
+                    
+                    OAProfileBoolean *booleanParam = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
+                    [parametersArr addObject:
+                     @{
+                         @"name" : paramId,
+                         @"title" : title,
+                         @"icon" : [self getParameterIcon:paramId isSelected:[booleanParam get:self.appMode]],
+                         @"value" : booleanParam,
+                         @"type" : kCellTypeSwitch }
+                     ];
+                }
+            }
+            else
+            {
+                OAProfileString *setting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                NSString *value = [NSString stringWithUTF8String:p.possibleValueDescriptions[[setting get:self.appMode].intValue].c_str()];
+                [parametersArr addObject:@{
+                    @"type" : kCellTypeIconTitleValue,
+                    @"title" : [NSString stringWithUTF8String:p.name.c_str()],
+                    @"icon" : @"",
+                    @"value" : value,
+                    @"ind" : @(i),
+                    @"key" : @"multiValuePref"
+                }];
+            }
+        }
+        for (OALocalRoutingParameter *p in list)
+        {
+            if ([p isKindOfClass:OALocalRoutingParameterGroup.class])
+            {
+                [parametersArr addObject:@{
+                    @"type" : kCellTypeIconTitleValue,
+                    @"title" : [p getText],
+                    @"icon" : [self getParameterIcon:[NSString stringWithUTF8String:p.routingParameter.id.c_str()] isSelected:[p isSelected]],
+                    @"value" : [p getValue],
+                    @"param" : p,
+                    @"key" : @"paramGroup"
+                }];
             }
         }
         if (_preferParameters.size() > 0)
@@ -143,10 +240,30 @@
                 @"key" : @"preferRoads"
             }];
         }
+        [parametersArr addObject:
+        @{
+            @"key" : @"temp_limitation",
+            @"title" : OALocalizedString(@"consider_limitations_param"),
+            @"icon" : @"ic_custom_alert",
+            @"value" : @([settings.enableTimeConditionalRouting get:self.appMode]),
+            @"type" : kCellTypeSwitch }
+        ];
     }
     [tableData addObject:otherArr];
     [tableData addObject:parametersArr];
     _data = [NSArray arrayWithArray:tableData];
+}
+
+- (OALocalRoutingParameterGroup *) getLocalRoutingParameterGroup:(NSMutableArray<OALocalRoutingParameter *> *)list groupName:(NSString *)groupName
+{
+    for (OALocalRoutingParameter *p in list)
+    {
+        if ([p isKindOfClass:[OALocalRoutingParameterGroup class]] && [groupName isEqualToString:[((OALocalRoutingParameterGroup *) p) getGroupName]])
+        {
+            return (OALocalRoutingParameterGroup *) p;
+        }
+    }
+    return nil;
 }
 
 - (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName
@@ -180,7 +297,7 @@
         return isSelected ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
     else if ([parameterName isEqualToString:@"height_obstacles"])
         return @"ic_custom_ascent";
-    return @"";
+    return @"ic_custom_alert";
 }
 
 - (void) clearParameters
@@ -230,6 +347,10 @@
         {
             cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftImageView.tintColor = UIColorFromRGB(_iconColor);
+            if ([item[@"key"] isEqualToString:@"recalculateRoute"])
+            {
+                cell.leftImageView.tintColor = [_settings.routeRecalculationDistance get:self.appMode] == -1 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(_iconColor);
+            }
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
         }
@@ -277,12 +398,12 @@
             {
                 OAProfileBoolean *value = v;
                 cell.switchView.on = [value get:self.appMode];
-                cell.imgView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
             }
             else
             {
                 cell.switchView.on = [v boolValue];
             }
+            cell.imgView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -315,24 +436,25 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
-    if ([itemKey isEqualToString:@"preferRoads"])
+    if ([itemKey isEqualToString:@"paramGroup"])
     {
-        OABaseSettingsViewController *preferViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
-        preferViewController.delegate = self;
-        [self presentViewController:preferViewController animated:YES completion:nil];
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        OALocalRoutingParameterGroup *group = item[@"param"];
+        [group rowSelectAction:tableView indexPath:indexPath];
         return;
     }
+
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"recalculateRoute"])
-    {
         settingsViewController = [[OARecalculateRouteViewController alloc] initWithAppMode:self.appMode];
-    }
     else if ([itemKey isEqualToString:@"avoidRoads"])
-    {
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:YES];
-        settingsViewController.delegate = self;
-    }
+    else if ([itemKey isEqualToString:@"multiValuePref"])
+        settingsViewController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameter:_otherParameters[[item[@"ind"] intValue]] appMode:self.appMode];
+    else if ([itemKey isEqualToString:@"preferRoads"])
+        settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
+
+    settingsViewController.delegate = self;
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -347,17 +469,28 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         BOOL isChecked = ((UISwitch *) sender).on;
-        for (const auto& routingParameter : _otherParameters)
+        if ([item[@"key"] isEqualToString:@"reverseDir"])
         {
-            NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
-            if ([param isEqualToString:item[@"name"]])
+            [_settings.disableWrongDirectionRecalc set:isChecked mode:self.appMode];
+        }
+        else if ([item[@"key"] isEqualToString:@"temp_limitation"])
+        {
+            [_settings.enableTimeConditionalRouting set:isChecked mode:self.appMode];
+        }
+        else
+        {
+            for (const auto& routingParameter : _otherParameters)
             {
-                OAProfileBoolean *property = [[OAAppSettings sharedManager] getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:routingParameter.id.c_str()] defaultValue:routingParameter.defaultBoolean];
-                [property set:isChecked mode:self.appMode];
+                NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
+                if ([param isEqualToString:item[@"name"]])
+                {
+                    OAProfileBoolean *property = [[OAAppSettings sharedManager] getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:routingParameter.id.c_str()] defaultValue:routingParameter.defaultBoolean];
+                    [property set:isChecked mode:self.appMode];
+                }
             }
         }
         [self setupView];
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
@@ -367,6 +500,40 @@
 {
     [self setupView];
     [self.tableView reloadData];
+}
+
+#pragma mark - OARoutePreferencesParametersDelegate
+
+- (void)showParameterGroupScreen:(OALocalRoutingParameterGroup *)group
+{
+    OARouteParameterValuesViewController *settingsViewController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameterGroup:group appMode:self.appMode];
+    settingsViewController.delegate = self;
+    [self.navigationController pushViewController:settingsViewController animated:YES];
+}
+
+- (void)updateParameters
+{
+    [self onSettingsChanged];
+}
+
+- (void) openNavigationSettings
+{
+}
+
+- (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (void) showAvoidRoadsScreen
+{
+}
+
+- (void) showTripSettingsScreen
+{
+}
+
+- (void) showAvoidTransportScreen
+{
 }
 
 @end

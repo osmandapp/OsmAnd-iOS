@@ -13,6 +13,8 @@
 #import "OARootViewController.h"
 #import "OAMapStyleSettings.h"
 
+#import "OAVoiceRouter.h"
+#import "OARoutingHelper.h"
 #import "OARouteProvider.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
@@ -751,7 +753,17 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         OAProfileSetting *setting = [settings getSettingById:key];
         if (setting)
         {
-            [setting setValueFromString:value appMode:_appMode];
+            if ([key isEqualToString:@"voice_provider"])
+            {
+                [setting setValueFromString:[value stringByReplacingOccurrencesOfString:@"-tts" withString:@""] appMode:_appMode];
+                [[OsmAndApp instance] initVoiceCommandPlayer:_appMode warningNoneProvider:NO showDialog:NO force:NO];
+            }
+            else
+            {
+                [setting setValueFromString:value appMode:_appMode];
+                if ([key isEqualToString:@"voice_mute"])
+                    [OARoutingHelper.sharedInstance.getVoiceRouter setMute:[OAAppSettings.sharedManager.voiceMute get:_appMode]];
+            }
         }
         else if ([key isEqualToString:@"terrain_layer"])
         {
@@ -900,7 +912,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:key];
         if (setting)
-            res[key] = [setting toStringValue:self.appMode];
+        {
+            if ([setting.key isEqualToString:@"voice_provider"])
+                res[key] = [[setting toStringValue:self.appMode] stringByAppendingString:@"-tts"];
+            else
+                res[key] = [setting toStringValue:self.appMode];
+        }
     }
     
     [OsmAndApp.instance.data addPreferenceValuesToDictionary:res mode:self.appMode];

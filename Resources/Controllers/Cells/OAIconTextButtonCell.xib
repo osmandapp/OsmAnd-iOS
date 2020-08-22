@@ -48,10 +48,7 @@
                         <state key="normal" image="ic_close.png"/>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SrV-zJ-1Ec">
-                        <rect key="frame" x="61" y="33" width="163" height="17"/>
-                        <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="6he-0F-t4n"/>
-                        </constraints>
+                        <rect key="frame" x="61" y="33" width="37.5" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
@@ -65,10 +62,11 @@
                     <constraint firstItem="SrV-zJ-1Ec" firstAttribute="leading" secondItem="65O-CH-lvT" secondAttribute="trailing" constant="16" id="N29-E7-kAf"/>
                     <constraint firstItem="qsz-ht-xes" firstAttribute="leading" secondItem="SrV-zJ-1Ec" secondAttribute="trailing" constant="16" id="Q4u-nu-I8n"/>
                     <constraint firstAttribute="trailing" secondItem="Q4g-0D-g2k" secondAttribute="trailing" id="VjB-if-ics"/>
-                    <constraint firstItem="Q4g-0D-g2k" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="XGr-Bg-8of"/>
-                    <constraint firstItem="qsz-ht-xes" firstAttribute="leading" secondItem="9uQ-Vw-tpV" secondAttribute="trailing" constant="16" id="cuB-Xi-rbL"/>
                     <constraint firstItem="9uQ-Vw-tpV" firstAttribute="leading" secondItem="65O-CH-lvT" secondAttribute="trailing" constant="16" id="goD-ZY-Q0T"/>
+                    <constraint firstItem="qsz-ht-xes" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="gw1-Uc-l5R"/>
                     <constraint firstItem="Q4g-0D-g2k" firstAttribute="leading" secondItem="qsz-ht-xes" secondAttribute="trailing" id="hlW-Cb-TKf"/>
+                    <constraint firstItem="Q4g-0D-g2k" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="kiB-RS-rxy"/>
+                    <constraint firstItem="SrV-zJ-1Ec" firstAttribute="top" secondItem="9uQ-Vw-tpV" secondAttribute="bottom" constant="2" id="pFo-kR-rBF"/>
                     <constraint firstItem="65O-CH-lvT" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="r5w-Mw-OUW"/>
                     <constraint firstItem="9uQ-Vw-tpV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="vll-WI-vfe"/>
                 </constraints>

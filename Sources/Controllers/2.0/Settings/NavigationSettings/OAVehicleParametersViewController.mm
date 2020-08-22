@@ -261,6 +261,12 @@
     return section == 0 ? OALocalizedString(@"touting_specified_vehicle_parameters_descr") : OALocalizedString(@"default_speed_descr");
 }
 
+-(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
 #pragma mark - OAVehicleParametersSettingDelegate
 
 - (void) onSettingsChanged

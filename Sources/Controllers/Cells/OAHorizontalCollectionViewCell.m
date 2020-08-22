@@ -23,6 +23,12 @@
     [self.collectionView registerNib:[UINib nibWithNibName:@"OALabelCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"OALabelCollectionViewCell"];
 }
 
+- (void)setSelectedIndex:(NSInteger)selectedIndex
+{
+    _selectedIndex = selectedIndex;
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
+}
+
 - (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority
 {
     self.contentView.frame = self.bounds;

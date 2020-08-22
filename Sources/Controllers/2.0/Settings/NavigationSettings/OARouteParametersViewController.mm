@@ -105,6 +105,7 @@
     }];
     
     double recalcDist = [_settings.routeRecalculationDistance get:self.appMode];
+    recalcDist = recalcDist == 0 ? [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]] : recalcDist;
     NSString *descr = recalcDist == -1 ? OALocalizedString(@"rendering_value_disabled_name") : [OsmAndApp.instance getFormattedDistance:recalcDist];
     [parametersArr addObject:@{
         @"type" : kCellTypeIconTitleValue,

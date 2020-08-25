@@ -162,13 +162,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         @"key" : @"reset_to_default"
     }]];
     
-//    @"type" : kIconTitleDescrCell,
-//    @"title" : OALocalizedString(@"general_settings_2"),
-//    @"descr" : OALocalizedString(@"general_settings_descr"),
-//    @"img" : @"left_menu_icon_settings",
-//    @"key" : @"general_settings"
-    
-    
     _data = data;
 }
 

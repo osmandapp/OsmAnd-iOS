@@ -37,7 +37,7 @@
 
 }
 
-@synthesize tableData, vwController, tblView;
+@synthesize tableData, _vwController, tblView;
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OATargetOptionsBottomSheetViewController *)viewController
 {
@@ -66,7 +66,7 @@
     _targetPointsHelper = [OATargetPointsHelper sharedInstance];
     _waypointHelper = [OAWaypointHelper sharedInstance];
     
-    vwController = viewController;
+    _vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -145,7 +145,7 @@
 {
     if (showMap)
     {
-        [vwController dismiss];
+        [_vwController dismiss];
     }
     else if (selectionDone && _targetOptionsDelegate)
     {
@@ -313,7 +313,7 @@
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [vwController dismiss];
+    [_vwController dismiss];
 }
 
 @end

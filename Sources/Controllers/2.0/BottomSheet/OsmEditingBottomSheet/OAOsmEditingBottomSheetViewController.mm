@@ -52,7 +52,7 @@
 @implementation OAOsmEditingBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAOsmEditingBottomSheetViewController *vwController;
+    OAOsmEditingBottomSheetViewController *_vwController;
     NSArray* _data;
     
     NSMutableArray *_floatingTextFieldControllers;
@@ -74,7 +74,7 @@
         _editingUtil = param;
         [self initOnConstruct:tableView viewController:viewController];
         _floatingTextFieldControllers = [NSMutableArray new];
-        _osmPoints = vwController.osmPoints;
+        _osmPoints = _vwController.osmPoints;
         _closeChangeset = NO;
         for (OAOsmPoint *p in _osmPoints)
         {
@@ -93,7 +93,7 @@
 {
     _app = [OsmAndApp instance];
     
-    vwController = viewController;
+    _vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -103,7 +103,7 @@
 - (void) setupView
 {
     [_floatingTextFieldControllers removeAllObjects];
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     BOOL shouldDelete = ((OAOsmPoint *)_osmPoints.firstObject).getAction == DELETE;
     [arr addObject:@{
@@ -263,9 +263,9 @@
 {
     OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
     NSString *comment = cell.inputField.text;
-    OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:comment bottomSheetDelegate:vwController.delegate];
+    OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:comment bottomSheetDelegate:_vwController.delegate];
     [uploadTask uploadPoints];
-    [vwController dismiss];
+    [_vwController dismiss];
 }
 
 - (void) initData
@@ -455,7 +455,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
-@synthesize vwController;
+@synthesize _vwController;
 
 # pragma mark OAOsmMessageForwardingDelegate
 

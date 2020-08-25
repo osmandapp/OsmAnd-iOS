@@ -43,7 +43,7 @@
 {
     OsmAndAppInstance _app;
     OADestinationsHelper *_destinationsHelper;
-    OAAddDestinationBottomSheetViewController *vwController;
+    OAAddDestinationBottomSheetViewController *_vwController;
     OATargetPointsHelper *_pointsHelper;
     NSDictionary* _data;
     
@@ -69,7 +69,7 @@
     _destinationsHelper = [OADestinationsHelper instance];
     _pointsHelper = [OATargetPointsHelper sharedInstance];
     
-    vwController = viewController;
+    _vwController = viewController;
     tblView = tableView;
     
     [self initData];
@@ -185,7 +185,7 @@
 - (void) setupView
 {
     tblView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
@@ -507,18 +507,18 @@
     else if ([item[@"key"] isEqualToString:@"swap_points"])
     {
         [mapPanel swapStartAndFinish];
-        [self.vwController dismiss];
+        [self._vwController dismiss];
         return;
     }
     
-    if (vwController.delegate)
-        [vwController.delegate waypointSelectionDialogComplete:selectionDone showMap:showMap calculatingRoute:NO];
+    if (_vwController.delegate)
+        [_vwController.delegate waypointSelectionDialogComplete:selectionDone showMap:showMap calculatingRoute:NO];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self.vwController dismiss];
+    [self._vwController dismiss];
 }
 
-@synthesize vwController;
+@synthesize _vwController;
 
 #pragma mark - OACollectionViewCellDelegate
 
@@ -526,7 +526,7 @@
 {
     if (key && key.length > 0)
     {
-        [vwController dismiss];
+        [_vwController dismiss];
         OADestinationItemsListViewController *destinations = [[OADestinationItemsListViewController alloc] initWithDestinationType:[key isEqualToString:@"favorites"] ? EOADestinationPointTypeFavorite : EOADestinationPointTypeMarker];
         destinations.delegate = self;
         [[OARootViewController instance].navigationController presentViewController:destinations animated:YES completion:nil];
@@ -575,9 +575,9 @@
         [_pointsHelper setWorkPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     }
     
-    [vwController dismiss];
-    if (vwController.delegate)
-        [vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
+    [_vwController dismiss];
+    if (_vwController.delegate)
+        [_vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
     
     [_pointsHelper updateRouteAndRefresh:YES];
 }
@@ -601,9 +601,9 @@
         _app.data.workPoint = [[OARTargetPoint alloc] initWithPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     }
     
-    [vwController dismiss];
-    if (vwController.delegate)
-        [vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
+    [_vwController dismiss];
+    if (_vwController.delegate)
+        [_vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
     
     [_pointsHelper updateRouteAndRefresh:YES];
 }
@@ -623,9 +623,9 @@
         [_pointsHelper setWorkPoint:[[CLLocation alloc] initWithLatitude:destination.point.coordinate.latitude longitude:destination.point.coordinate.longitude] description:destination.pointDescription];
     }
     
-    [vwController dismiss];
-    if (vwController.delegate)
-        [vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
+    [_vwController dismiss];
+    if (_vwController.delegate)
+        [_vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
     
     [_pointsHelper updateRouteAndRefresh:YES];
 }

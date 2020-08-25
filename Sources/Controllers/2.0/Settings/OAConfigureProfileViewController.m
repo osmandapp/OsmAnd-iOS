@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OAConfigureProfileDelegate>
+@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OAPluginResetBottomSheetDelegate>
 
 @end
 
@@ -455,7 +455,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 #pragma mark - OAConfigureProfileDelegate
 
-- (void) updateViewControllerWithAppMode:(OAApplicationMode *)appMode
+- (void) onAppModeChangedByPluginResetBottomSheet:(OAApplicationMode *)appMode
 {
     _appMode = appMode;
     self.titleLabel.text = appMode.toHumanString;

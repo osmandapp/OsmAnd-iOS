@@ -27,12 +27,12 @@
 #import "OsmAndApp.h"
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
+#import "OAMapStyleSettings.h"
 
+#define kButtonsTag 1
 #define kButtonsDividerTag 150
 #define kTitleIconRoundCell @"OATitleTwoIconsRoundCell"
-#define update_vidgests_notification @"update_vidgests_notification"
-#define reset_vidgests_notification @"reset_vidgests_notification"
-#define reseting_appmode_key @"appMode"
+#define kResetingAppModeKey @"appMode"
 
 @interface OAPluginResetBottomSheetScreen ()
 
@@ -41,13 +41,11 @@
 @implementation OAPluginResetBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAPluginResetBottomSheetViewController *vwController;
+    OAPluginResetBottomSheetViewController *_vwController;
     OAMapWidgetRegistry *_mapWidgetRegistry;
-    NSDictionary* _data;
+    NSArray* _data;
     OAApplicationMode *_appMode;
 }
-
-
 
 @synthesize tableData, tblView;
 
@@ -67,7 +65,7 @@
     _app = [OsmAndApp instance];
     _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
     
-    vwController = viewController;
+    _vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
  
@@ -76,8 +74,8 @@
 
 - (void) setupView
 {
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
-    NSMutableDictionary *model = [NSMutableDictionary new];
+    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    NSMutableArray *model = [NSMutableArray new];
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
@@ -86,7 +84,8 @@
                      @"description" : @"",
                      @"img" : @"ic_custom_reset.png"
                      }];
-    [model setObject:[NSArray arrayWithArray:arr] forKey:@(0)];
+    
+    [model addObject:[NSArray arrayWithArray:arr]];
     
     [arr removeAllObjects];
     [arr addObject:@{
@@ -97,7 +96,7 @@
            @"round_bottom" : @(YES),
            @"round_top" : @(YES)
        }];
-    [model setObject:[NSArray arrayWithArray:arr] forKey:@(1)];
+    [model addObject:[NSArray arrayWithArray:arr]];
     
     [arr removeAllObjects];
     [arr addObject:@{
@@ -106,14 +105,14 @@
                      @"description" : @""
                      }];
     [arr addObject:@{ @"type" : @"OADividerCell" } ];
-    [model setObject:[NSArray arrayWithArray:arr] forKey:@(2)];
-     
-    _data = [NSDictionary dictionaryWithDictionary:model];
+    [model addObject:[NSArray arrayWithArray:arr]];
+
+    _data = [NSArray arrayWithArray:model];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
-    return _data[@(indexPath.section)][indexPath.row];
+    return _data[indexPath.section][indexPath.row];
 }
 
 - (void) initData
@@ -123,23 +122,24 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderDescrButtonCell"])
+    NSString *type = item[@"type"];
+    if ([type isEqualToString:@"OABottomSheetHeaderDescrButtonCell"])
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
+    else if ([type isEqualToString:@"OADescrTitleCell"])
     {
         return [OADescrTitleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:DeviceScreenWidth];
     }
-    else if ([item[@"type"] isEqualToString:@"OASettingSwitchNoImageCell"])
+    else if ([type isEqualToString:@"OASettingSwitchNoImageCell"])
     {
         return [OASettingSwitchNoImageCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:tableView.bounds.size.width];
     }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
+    else if ([type isEqualToString:kTitleIconRoundCell])
     {
         return [OATitleTwoIconsRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    else if ([type isEqualToString:@"OADividerCell"])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(0, 0, 8, 0)];
     }
@@ -158,7 +158,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSArray *sectionData = _data[@(section)];
+    NSArray *sectionData = _data[section];
     return sectionData.count;
 }
 
@@ -174,14 +174,14 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderButtonCell" owner:self options:nil];
             cell = (OABottomSheetHeaderDescrButtonCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.clearColor;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
-            cell.backgroundColor = UIColor.clearColor;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.titleView.text = item[@"title"];
             [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.hidden = !cell.iconView.image;
             [cell.closeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.closeButton addTarget:self action:@selector(onCloseButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -198,11 +198,12 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleIconRoundCell owner:self options:nil];
             cell = (OATitleTwoIconsRoundCell *)[nib objectAtIndex:0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.backgroundColor = UIColor.clearColor;
+            cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
         }
         if (cell)
         {
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.backgroundColor = UIColor.clearColor;
             cell.titleView.text = item[@"title"];
             if (![item[@"skip_tint"] boolValue])
             {
@@ -216,7 +217,6 @@
                 cell.rightIconView.hidden = YES;
             }
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
-            cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
         }
         return cell;
     }
@@ -228,17 +228,16 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADescrTitleCell" owner:self options:nil];
             cell = (OADescrTitleCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
             cell.backgroundColor = UIColor.clearColor;
             cell.contentView.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.descriptionView.text = item[@"title"];
             cell.descriptionView.textColor = [UIColor blackColor];
             cell.descriptionView.backgroundColor = UIColor.clearColor;
             cell.textView.hidden = YES;
+        }
+        if (cell)
+        {
+            cell.descriptionView.text = item[@"title"];
         }
         return cell;
     }
@@ -250,11 +249,11 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.clearColor;
+            cell.dividerColor = UIColorFromRGB(color_divider_blur);
+            cell.dividerInsets = UIEdgeInsetsMake(16, 0, 8, 0);
+            cell.dividerHight = 0.5;
         }
-        cell.backgroundColor = UIColor.clearColor;
-        cell.dividerColor = UIColorFromRGB(color_divider_blur);
-        cell.dividerInsets = UIEdgeInsetsMake(16, 0, 8, 0);
-        cell.dividerHight = 0.5;
         return cell;
     }
     else
@@ -265,7 +264,7 @@
 
 - (void) onCloseButtonPressed:(id)sender
 {
-    [vwController dismiss];
+    [_vwController dismiss];
 }
 
 #pragma mark - UITableViewDelegate
@@ -290,7 +289,7 @@
     view.hidden = YES;
 }
 
-@synthesize vwController;
+@synthesize _vwController;
 
 @end
 
@@ -313,6 +312,8 @@
     [super setupButtons];
     self.doneButton.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary);
     [self.doneButton setTitleColor:UIColorFromRGB(color_primary_red) forState:UIControlStateNormal];
+    self.doneButton.tag = kButtonsTag;
+    self.cancelButton.tag = kButtonsTag;
 }
 
 - (void)additionalSetup
@@ -320,7 +321,12 @@
     [super additionalSetup];
     self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
     self.buttonsView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
-    self.buttonsView.subviews.firstObject.backgroundColor = UIColor.clearColor;
+ 
+    for (UIView *v in self.buttonsView.subviews)
+    {
+        if (v.tag != kButtonsTag)
+            v.backgroundColor = UIColor.clearColor;
+    }
 }
 
 - (void)applyLocalization
@@ -342,7 +348,7 @@
     }
     
     if (self.delegate)
-        [self.delegate updateViewControllerWithAppMode:menuAppMode];
+        [self.delegate onAppModeChangedByPluginResetBottomSheet:menuAppMode];
     
     [self dismiss];
 }
@@ -351,10 +357,12 @@
 {
     [OAAppSettings.sharedManager resetAllProfileSettingsForMode:appMode];
     [OAAppData.defaults resetProfileSettingsForMode:appMode];
-    [OsmAndApp.instance resetMapStyleForAppMode:appMode.stringKey];
-    NSDictionary* appModeDict = [NSDictionary dictionaryWithObject:appMode forKey:reseting_appmode_key];
-    [[NSNotificationCenter defaultCenter] postNotificationName:reset_vidgests_notification object:nil userInfo:appModeDict];
-    [[NSNotificationCenter defaultCenter] postNotificationName:update_vidgests_notification object:nil userInfo:nil];
+    [OAMapStyleSettings.sharedInstance resetMapStyleForAppMode:appMode.variantKey];
+    
+    NSDictionary* appModeDict = [NSDictionary dictionaryWithObject:appMode forKey:kResetingAppModeKey];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kResetWidgetsNotification object:nil userInfo:appModeDict];
+    if ([OAAppSettings sharedManager].applicationMode == appMode)
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateWidgestsNotification object:nil userInfo:nil];
 }
 
 @end

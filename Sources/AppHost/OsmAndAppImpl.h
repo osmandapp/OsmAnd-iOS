@@ -31,6 +31,4 @@
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
 
-- (void)resetMapStyleForAppMode:(NSString *)appModeName;
-
 @end

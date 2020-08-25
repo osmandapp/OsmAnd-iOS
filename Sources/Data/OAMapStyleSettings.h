@@ -7,10 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OAApplicationMode.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Map/UnresolvedMapStyle.h>
 
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {

@@ -45,8 +45,7 @@
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
-#define update_vidgests_notification @"update_vidgests_notification"
-
+    
 @interface OAMapHudViewController () <OAMapInfoControllerProtocol>
 
 @property (nonatomic) OADownloadProgressView *downloadView;
@@ -151,7 +150,7 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateVidgets:) name:update_vidgests_notification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateVidgets:) name:kUpdateWidgestsNotification object:nil];
 }
 
 - (void) deinit
@@ -627,13 +626,11 @@
 
 - (void) updateVidgets:(NSNotification *)notification
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
         [self updateInfo];
         [self updateColors];
         [self recreateControls];
         [_quickActionController updateViewVisibility];
         [_mapPanelViewController refreshToolbar];
-    });
 }
 
 - (void) onProfileSettingSet:(NSNotification *)notification

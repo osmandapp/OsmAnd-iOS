@@ -2315,12 +2315,6 @@
         [self.profileIconName resetModeToDefault:appMode];
         [self.profileIconColor resetModeToDefault:appMode];
     }
-    
-    //proflie undepended settings
-    [self hideGpx:_mapSettingVisibleGpx];
-    [self setSettingPrefMapLanguage:nil];
-    [self setSettingMapLanguageShowLocal:nil];
-    [self setSettingMapLanguageTranslit:nil];
 }
 
 // Common Settings

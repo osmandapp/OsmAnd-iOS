@@ -113,6 +113,4 @@
 
 - (void)checkAndDownloadOsmAndLiveUpdates;
 
-- (void)resetMapStyleForAppMode:(NSString *)appModeName;
-
 @end

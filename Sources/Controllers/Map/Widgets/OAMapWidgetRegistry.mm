@@ -18,8 +18,7 @@
 #define HIDE_PREFIX @"-"
 #define SHOW_PREFIX @""
 #define SETTINGS_SEPARATOR @";"
-#define reset_vidgests_notification @"reset_vidgests_notification"
-#define reseting_appmode_key @"appMode"
+#define kResetingAppModeKey @"appMode"
 
 @implementation OAMapWidgetRegistry
 {
@@ -55,14 +54,14 @@
             }
         }
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetVidgets:) name:reset_vidgests_notification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetVidgets:) name:kResetWidgetsNotification object:nil];
     }
     return self;
 }
 
 - (void) deinit
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:reset_vidgests_notification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kResetWidgetsNotification object:nil];
 }
 
 - (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode left:(BOOL)left expanded:(BOOL)expanded
@@ -328,7 +327,7 @@
 
 - (void) resetVidgets:(NSNotification *)notification;
 {
-    OAApplicationMode * mode = [[notification userInfo] objectForKey:reseting_appmode_key] ;
+    OAApplicationMode *mode = [[notification userInfo] objectForKey:kResetingAppModeKey];
     if (mode)
         [self resetToDefault:mode];
 }

@@ -1060,9 +1060,4 @@
         [[OAAppSettings sharedManager].drivingRegion set:drg.region];
 }
 
-- (void)resetMapStyleForAppMode:(NSString *)appModeName
-{
-    [OAMapStyleSettings.sharedInstance resetMapStyleForAppMode:appModeName];
-}
-
 @end

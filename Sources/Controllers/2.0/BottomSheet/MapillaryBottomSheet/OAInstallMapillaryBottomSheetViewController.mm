@@ -28,7 +28,7 @@
 @implementation OAInstallMapillaryBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAInstallMapillaryBottomSheetViewController *vwController;
+    OAInstallMapillaryBottomSheetViewController *_vwController;
     NSArray* _data;
 }
 
@@ -50,7 +50,7 @@
 {
     _app = [OsmAndApp instance];
     
-    vwController = viewController;
+    _vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -59,7 +59,7 @@
 
 - (void) setupView
 {
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderIconCell",
@@ -82,7 +82,7 @@
 -(void) doneButtonPressed
 {
     [[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id757286802?mt=8"]];
-    [vwController dismiss];
+    [_vwController dismiss];
 }
 
 - (void) initData
@@ -203,7 +203,7 @@
         return nil;
 }
 
-@synthesize vwController;
+@synthesize _vwController;
 
 @end
 

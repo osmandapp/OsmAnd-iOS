@@ -11,6 +11,8 @@
 #import "OAApplicationMode.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
+#define kUpdateWidgestsNotification @"kUpdateWidgestsNotification"
+#define kResetWidgetsNotification @"kResetWidgetsNotification"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
 
 #define settingAppModeKey @"settingAppModeKey"

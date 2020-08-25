@@ -37,7 +37,7 @@
 @implementation OATextEditingBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OATextEditingBottomSheetViewController *vwController;
+    OATextEditingBottomSheetViewController *_vwController;
     NSArray* _data;
     
     NSMutableArray *_floatingTextFieldControllers;
@@ -66,7 +66,7 @@
 {
     _app = [OsmAndApp instance];
     
-    vwController = viewController;
+    _vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -75,7 +75,7 @@
 
 - (void) setupView
 {
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     _data = [NSArray arrayWithObject:@{
                                        @"type" : @"OATextInputFloatingCell",
                                        @"cell" : [self getInputCellWithHint:_selectedCellData[@"placeholder"] text:_selectedCellData[@"title"]]
@@ -113,7 +113,7 @@
 
 -(BOOL) cancelButtonPressed
 {
-    [vwController.messageDelegate refreshData];
+    [_vwController.messageDelegate refreshData];
     return YES;
 }
 
@@ -124,17 +124,17 @@
     switch (_inputType) {
         case USERNAME_INPUT:
             [settings setOsmUserName:cell.inputField.text];
-            [vwController.messageDelegate refreshData];
-            [vwController dismiss];
+            [_vwController.messageDelegate refreshData];
+            [_vwController dismiss];
             break;
         case PASSWORD_INPUT:
             [settings setOsmUserPassword:cell.inputField.text];
-            [vwController.messageDelegate refreshData];
-            [vwController dismiss];
+            [_vwController.messageDelegate refreshData];
+            [_vwController dismiss];
             break;
         case MESSAGE_INPUT:
-            [vwController.messageDelegate setMessageText:cell.inputField.text];
-            [vwController dismiss];
+            [_vwController.messageDelegate setMessageText:cell.inputField.text];
+            [_vwController dismiss];
             break;
         default:
             break;
@@ -216,7 +216,7 @@
     return nil;
 }
 
-@synthesize vwController;
+@synthesize _vwController;
 
 
 #pragma mark - MDCMultilineTextInputLayoutDelegate
@@ -225,7 +225,7 @@
 {
     [self.tblView beginUpdates];
     [self.tblView endUpdates];
-    [vwController updateTableHeaderView:CurrentInterfaceOrientation];
+    [_vwController updateTableHeaderView:CurrentInterfaceOrientation];
 }
 
 @end

@@ -41,7 +41,7 @@
 {
     OsmAndAppInstance _app;
     OATargetPointsHelper *_targetPointsHelper;
-    OAMoreOprionsBottomSheetViewController *vwController;
+    OAMoreOprionsBottomSheetViewController *_vwController;
     OATargetPoint *_targetPoint;
     OAIAPHelper *_iapHelper;
     OAOsmEditingPlugin *_editingAddon;
@@ -77,7 +77,7 @@
     _targetPointsHelper = [OATargetPointsHelper sharedInstance];
     _iapHelper = [OAIAPHelper sharedInstance];
     
-    vwController = viewController;
+    _vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -86,7 +86,7 @@
 
 - (void) setupView
 {
-    [vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
+    [_vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
     NSMutableArray *arr = [NSMutableArray array];
     // Directions from here
     [arr addObject:@{ @"title" : OALocalizedString(@"directions_more_options"),
@@ -307,16 +307,16 @@
         {
             [_targetPointsHelper setStartPoint:menuLocation updateRoute:YES name:menuName];
             
-            [vwController.menuViewDelegate targetHide];
-            [vwController.menuViewDelegate navigateFrom:_targetPoint];
+            [_vwController.menuViewDelegate targetHide];
+            [_vwController.menuViewDelegate navigateFrom:_targetPoint];
         }
         else if ([key isEqualToString:@"addon_add_waypoint"])
-            [vwController.menuViewDelegate targetPointAddWaypoint];
+            [_vwController.menuViewDelegate targetPointAddWaypoint];
         
         else if ([key isEqualToString:@"addon_add_parking"])
-            [vwController.menuViewDelegate targetPointParking];
+            [_vwController.menuViewDelegate targetPointParking];
         else if ([key isEqualToString:@"nearby_search"]) {
-            [vwController.menuViewDelegate targetHide];
+            [_vwController.menuViewDelegate targetHide];
             [mapPanel openSearch:OAQuickSearchType::REGULAR location:menuLocation tabIndex:1];
         }
         else if ([key isEqualToString:@"change_object_posiotion"])
@@ -385,7 +385,7 @@
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [vwController dismiss];
+    [_vwController dismiss];
 }
 
 - (OAOsmNotePoint *) constructFromTargetPoint:(OATargetPoint *)targetPoint
@@ -398,7 +398,7 @@
     return point;
 }
 
-@synthesize vwController;
+@synthesize _vwController;
 
 @end
 

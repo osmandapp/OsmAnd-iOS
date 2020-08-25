@@ -364,7 +364,7 @@
             p.storedValue = p.defaultValue;
             p.mapPresetName = appModeName;
 
-            NSString *name = [NSString stringWithFormat:@"%@_type_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
+            NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
             [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
         }
         

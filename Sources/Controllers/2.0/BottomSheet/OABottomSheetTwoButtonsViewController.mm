@@ -44,6 +44,8 @@
 - (void) setupButtons
 {
     [self layoutButtons];
+    if (_doneButton.hidden)
+        [self hideDoneButton];
     
     _doneButton.backgroundColor = UIColorFromRGB(color_primary_purple);
     _doneButton.layer.cornerRadius = 9;
@@ -58,19 +60,23 @@
 - (void) layoutButtons
 {
     if (_doneButton.hidden)
-        return [self hideDoneButton];
-    
-    CGFloat buttonWidth = (self.buttonsView.frame.size.width - 48.0) / 2;
-    _doneButton.frame = CGRectMake(self.buttonsView.frame.size.width - 16.0 - buttonWidth, 4.0, buttonWidth, 42.0);
-    self.cancelButton.frame = CGRectMake(16.0 , 4.0, buttonWidth, 42.0);
-    self.cancelButton.autoresizingMask = UIViewAutoresizingNone;
+    {
+        CGFloat buttonWidth = self.buttonsView.frame.size.width - 32;
+        self.cancelButton.frame = CGRectMake(16.0 , 4.0, buttonWidth, 42.0);
+    }
+    else
+    {
+        CGFloat buttonWidth = (self.buttonsView.frame.size.width - 48.0) / 2;
+        _doneButton.frame = CGRectMake(self.buttonsView.frame.size.width - 16.0 - buttonWidth, 4.0, buttonWidth, 42.0);
+        self.cancelButton.frame = CGRectMake(16.0 , 4.0, buttonWidth, 42.0);
+        self.cancelButton.autoresizingMask = UIViewAutoresizingNone;
+    }
 }
 
 - (void) hideDoneButton
 {
     _doneButton.hidden = YES;
-    CGFloat buttonWidth = self.buttonsView.frame.size.width - 32;
-    self.cancelButton.frame = CGRectMake(16.0 , 4.0, buttonWidth, 42.0);
+    [self layoutButtons];
 }
 
 - (void)adjustViewHeight

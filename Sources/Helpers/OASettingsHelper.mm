@@ -656,10 +656,33 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     OAApplicationMode *am = [OAApplicationMode fromModeBean:_modeBean];
     if (![am isCustomProfile])
         am = [OAApplicationMode valueOfStringKey:am.stringKey def:am];
+    else
+        [self saveBackupFromOsfJson:(NSDictionary *)json];
+ 
     _appMode = am;
 }
 
-- (void)readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (void) saveBackupFromOsfJson:(NSDictionary *)json
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    NSString *backupFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"];
+    
+    BOOL isDir = YES;
+    if (![fileManager fileExistsAtPath:backupFolderPath isDirectory:&isDir])
+          [fileManager createDirectoryAtPath:backupFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    if (json[@"appMode"][@"stringKey"])
+    {
+        NSString *backupFilePath = [[backupFolderPath stringByAppendingPathComponent:json[@"appMode"][@"stringKey"]] stringByAppendingPathExtension:@"plst"];
+        [json writeToFile:backupFilePath atomically:YES];
+    }
+    else
+    {
+        return;
+    }
+}
+
+- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     _additionalPrefs = json[@"prefs"];
 }

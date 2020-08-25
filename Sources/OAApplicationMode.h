@@ -76,6 +76,7 @@
 
 - (NSString *) toHumanString;
 
+- (OAApplicationMode *) getParent;
 - (void) setParent:(OAApplicationMode *)parent;
 - (UIImage *) getIcon;
 - (NSString *) getIconName;

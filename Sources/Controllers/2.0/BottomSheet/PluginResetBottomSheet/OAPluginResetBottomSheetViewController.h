@@ -8,6 +8,13 @@
 
 #import "OABottomSheetTwoButtonsViewController.h"
 
+@protocol OAConfigureProfileDelegate <NSObject>
+
+- (void) updateViewControllerWithAppMode:(OAApplicationMode *)appMode;
+
+@end
+
+
 @class OAPluginResetBottomSheetViewController;
 
 @interface OAPluginResetBottomSheetScreen : NSObject<OABottomSheetScreen>
@@ -19,4 +26,5 @@
 
 @interface OAPluginResetBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
+    @property (nonatomic, weak) id<OAConfigureProfileDelegate> delegate;
 @end

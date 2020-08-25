@@ -111,6 +111,13 @@
     _data = [NSDictionary dictionaryWithDictionary:model];
 }
 
+- (void) updateWithAppMode:(OAApplicationMode *)appMode
+{
+    _appMode = appMode;
+    [self setupView];
+    [self.tblView reloadData];
+}
+
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[@(indexPath.section)][indexPath.row];
@@ -331,14 +338,43 @@
 
 -(void) doneButtonPressed:(id)sender
 {
-    OAApplicationMode * appMode = (OAApplicationMode *)self.customParam;
+    OAApplicationMode * menuAppMode = (OAApplicationMode *)self.customParam;
+    
+    [self resetProfileSettingsForAppMode: menuAppMode];
+    
+    if (menuAppMode.isCustomProfile)
+        menuAppMode = [self readBackupForAppMode:menuAppMode];
+    
+    if (self.delegate)
+        [self.delegate updateViewControllerWithAppMode:menuAppMode];
+    
+    [self dismiss];
+}
+
+-(OAApplicationMode *) readBackupForAppMode:(OAApplicationMode *)appMode
+{
+    NSString *backupFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:appMode.stringKey] stringByAppendingPathExtension:@"plst"];
+    NSDictionary *backup = [NSDictionary dictionaryWithContentsOfFile:backupFilePath];
+    
+    if (backup && backup[@"appMode"])
+    {
+        [OAApplicationMode deleteCustomModes:@[appMode]];
+        appMode = [OAApplicationMode fromModeBean:[OAApplicationModeBean fromJson:backup[@"appMode"]]];
+        [OAApplicationMode saveProfile:appMode];
+        self.customParam = appMode;
+        return appMode;
+    }
+    return appMode;
+}
+
+-(void) resetProfileSettingsForAppMode:(OAApplicationMode *)appMode
+{
     [OAAppSettings.sharedManager resetAllProfileSettingsForMode:appMode];
     [OAAppData.defaults resetProfileSettingsForMode:appMode];
     [OsmAndApp.instance resetMapStyleForAppMode:appMode.stringKey];
     NSDictionary* appModeDict = [NSDictionary dictionaryWithObject:appMode forKey:reseting_appmode_key];
     [[NSNotificationCenter defaultCenter] postNotificationName:reset_vidgests_notification object:nil userInfo:appModeDict];
     [[NSNotificationCenter defaultCenter] postNotificationName:update_vidgests_notification object:nil userInfo:nil];
-    [self dismiss];
 }
 
 @end

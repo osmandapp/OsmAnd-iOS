@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OAConfigureProfileDelegate>
 
 @end
 
@@ -453,10 +453,22 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     else if ([key isEqualToString:@"reset_to_default"])
     {
         OAPluginResetBottomSheetViewController *screen = [[OAPluginResetBottomSheetViewController alloc] initWithParam:_appMode];
+        screen.delegate = self;
         [screen show];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - OAConfigureProfileDelegate
+
+- (void) updateViewControllerWithAppMode:(OAApplicationMode *)appMode
+{
+    _appMode = appMode;
+    self.titleLabel.text = appMode.toHumanString;
+    [self setupTableHeaderView];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

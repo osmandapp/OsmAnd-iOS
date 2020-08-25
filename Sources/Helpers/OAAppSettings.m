@@ -1986,15 +1986,18 @@
         
         _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.AIRCRAFT];
+        [_registeredPreferences setObject:_routerService forKey:routerServiceKey];
         
         _navigationIcon = [OAProfileInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
         [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
+        [_registeredPreferences setObject:_navigationIcon forKey:navigationIconKey];
         
         _locationIcon = [OAProfileInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
+        [_registeredPreferences setObject:_locationIcon forKey:locationIconKey];
         
         _appModeOrder = [OAProfileInteger withKey:appModeOrderKey defValue:0];
         
@@ -2304,6 +2307,13 @@
     for (OAProfileString *value in [_customRoutingProps objectEnumerator].allObjects)
     {
         [value resetModeToDefault:appMode];
+    }
+    
+    if (!appMode.isCustomProfile)
+    {
+        [self.userProfileName resetModeToDefault:appMode];
+        [self.profileIconName resetModeToDefault:appMode];
+        [self.profileIconColor resetModeToDefault:appMode];
     }
     
     //proflie undepended settings

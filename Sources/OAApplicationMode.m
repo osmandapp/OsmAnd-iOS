@@ -601,10 +601,46 @@ static OAApplicationMode *_SKI;
     else if (![_values containsObject:appMode])
     {
         [_values addObject:appMode];
+        [OAApplicationMode saveBackupOfAppMode: appMode];
     }
     
     [self reorderAppModes];
     [self saveCustomAppModesToSettings];
+}
+
++ (void) saveBackupOfAppMode:(OAApplicationMode *)appMode
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    NSString *backupFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"];
+    
+    BOOL isDir = YES;
+    if (![fileManager fileExistsAtPath:backupFolderPath isDirectory:&isDir])
+          [fileManager createDirectoryAtPath:backupFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    if (appMode.stringKey)
+    {
+        NSString *backupFilePath = [[backupFolderPath stringByAppendingPathComponent:appMode.stringKey] stringByAppendingPathExtension:@"plst"];
+        [appMode.toJson writeToFile:backupFilePath atomically:YES];
+    }
+    else
+    {
+        return;
+    }
+}
+
++ (OAApplicationMode *) restoreBackupForAppMode:(OAApplicationMode *)appMode
+{
+    NSString *backupFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:appMode.stringKey] stringByAppendingPathExtension:@"plst"];
+    NSDictionary *backup = [NSDictionary dictionaryWithContentsOfFile:backupFilePath];
+    
+    if (backup)
+    {
+        [OAApplicationMode deleteCustomModes:@[appMode]];
+        appMode = [OAApplicationMode fromModeBean:[OAApplicationModeBean fromJson:backup]];
+        [OAApplicationMode saveProfile:appMode];
+        return appMode;
+    }
+    return appMode;
 }
 
 + (BOOL) isProfileNameAvailable:(NSString *)profileName

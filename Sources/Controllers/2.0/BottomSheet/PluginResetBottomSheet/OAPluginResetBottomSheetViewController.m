@@ -111,13 +111,6 @@
     _data = [NSDictionary dictionaryWithDictionary:model];
 }
 
-- (void) updateWithAppMode:(OAApplicationMode *)appMode
-{
-    _appMode = appMode;
-    [self setupView];
-    [self.tblView reloadData];
-}
-
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[@(indexPath.section)][indexPath.row];
@@ -343,28 +336,15 @@
     [self resetProfileSettingsForAppMode: menuAppMode];
     
     if (menuAppMode.isCustomProfile)
-        menuAppMode = [self readBackupForAppMode:menuAppMode];
+    {
+        menuAppMode = [OAApplicationMode restoreBackupForAppMode:menuAppMode];
+        self.customParam = menuAppMode;
+    }
     
     if (self.delegate)
         [self.delegate updateViewControllerWithAppMode:menuAppMode];
     
     [self dismiss];
-}
-
--(OAApplicationMode *) readBackupForAppMode:(OAApplicationMode *)appMode
-{
-    NSString *backupFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:appMode.stringKey] stringByAppendingPathExtension:@"plst"];
-    NSDictionary *backup = [NSDictionary dictionaryWithContentsOfFile:backupFilePath];
-    
-    if (backup && backup[@"appMode"])
-    {
-        [OAApplicationMode deleteCustomModes:@[appMode]];
-        appMode = [OAApplicationMode fromModeBean:[OAApplicationModeBean fromJson:backup[@"appMode"]]];
-        [OAApplicationMode saveProfile:appMode];
-        self.customParam = appMode;
-        return appMode;
-    }
-    return appMode;
 }
 
 -(void) resetProfileSettingsForAppMode:(OAApplicationMode *)appMode

@@ -11,6 +11,7 @@
 #import "OALog.h"
 #import "Localization.h"
 #import "OAMapCreatorHelper.h"
+#import "OAMapStyleTitles.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -355,22 +356,24 @@
 
 -(void) resetMapStyleForAppMode:(NSString *)appModeName
 {
-    NSArray<OAMapStyleParameter *> *clearParameters = [NSArray arrayWithArray:self.parameters];
-    
+    NSArray<OAMapStyleParameter *> *clearingParameters = [NSArray arrayWithArray:self.parameters];
     dispatch_async(dispatch_get_main_queue(), ^{
-        for (OAMapStyleParameter *p in clearParameters)
+        for (OAMapStyleParameter *p in clearingParameters)
         {
             p.value = p.defaultValue;
             p.storedValue = p.defaultValue;
             p.mapPresetName = appModeName;
-
-            NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
-            [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
+            
+            NSArray *allStyles = [OAMapStyleTitles getMapStyleRenderKeys];
+            for (NSString *styleName in allStyles)
+            {
+                p.mapStyleName = styleName;
+                NSString *name = [NSString stringWithFormat:@"%@_%@_%@", styleName, appModeName, p.name];
+                [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
+            }
         }
-        
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     });
-
 }
 
 @end

@@ -62,23 +62,23 @@
 
 - (void) setupView
 {
-    if ([settingKeyName isEqualToString:settingAppModeKey])
+    if ([settingKeyName isEqualToString:settingDayNightModeKey])
     {
         title = OALocalizedString(@"map_settings_mode");
-        int mode = [_settings.settingAppMode get];
+        int mode = [_settings.dayNightMode get];
         data = @[
                  @{
                      @"name" : OALocalizedString(@"daynight_mode_auto"),
                      @"value" : @"",
-                     @"img" : mode == APPEARANCE_MODE_AUTO ? @"menu_cell_selected.png" : @"" },
+                     @"img" : mode == DAYNIGHT_MODE_AUTO ? @"menu_cell_selected.png" : @"" },
                  @{
                      @"name" : OALocalizedString(@"map_settings_day"),
                      @"value" : @"",
-                     @"img" : mode == APPEARANCE_MODE_DAY ? @"menu_cell_selected.png" : @"" },
+                     @"img" : mode == DAYNIGHT_MODE_DAY ? @"menu_cell_selected.png" : @"" },
                  @{
                      @"name" : OALocalizedString(@"map_settings_night"),
                      @"value" : @"",
-                     @"img" : mode == APPEARANCE_MODE_NIGHT ? @"menu_cell_selected.png" : @"" }
+                     @"img" : mode == DAYNIGHT_MODE_NIGHT ? @"menu_cell_selected.png" : @"" }
                  ];
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
@@ -228,15 +228,15 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([settingKeyName isEqualToString:settingAppModeKey])
+    if ([settingKeyName isEqualToString:settingDayNightModeKey])
     {
         int index = (int)indexPath.row;
         if (index == 1)
-            [_settings setAppMode:APPEARANCE_MODE_DAY];
+            [_settings setAppMode:DAYNIGHT_MODE_DAY];
         else if (index == 2)
-            [_settings setAppMode:APPEARANCE_MODE_NIGHT];
+            [_settings setAppMode:DAYNIGHT_MODE_NIGHT];
         else
-            [_settings setAppMode:APPEARANCE_MODE_AUTO];
+            [_settings setAppMode:DAYNIGHT_MODE_AUTO];
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {

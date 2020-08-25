@@ -11,11 +11,11 @@
 #import "OAApplicationMode.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
-#define kUpdateWidgestsNotification @"kUpdateWidgestsNotification"
-#define kResetWidgetsNotification @"kResetWidgetsNotification"
+#define kUpdateWidgestsVisibilityNotification @"kUpdateWidgestsVisibilityNotification"
+#define kResetWidgetsSettingsNotification @"kResetWidgetsSettingsNotification"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
 
-#define settingAppModeKey @"settingAppModeKey"
+#define settingDayNightModeKey @"daynight_mode"
 
 #define mapDensityKey @"mapDensity"
 #define textSizeKey @"textSize"
@@ -371,9 +371,9 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL settingMapLanguageShowLocal;
 @property (assign, nonatomic) BOOL settingMapLanguageTranslit;
 
-#define APPEARANCE_MODE_DAY 0
-#define APPEARANCE_MODE_NIGHT 1
-#define APPEARANCE_MODE_AUTO 2
+#define DAYNIGHT_MODE_DAY 0
+#define DAYNIGHT_MODE_NIGHT 1
+#define DAYNIGHT_MODE_AUTO 2
 
 #define MAP_ARROWS_LOCATION 0
 #define MAP_ARROWS_MAP_CENTER 1
@@ -404,7 +404,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic, readonly) NSArray *rtlLanguages;
 
 
-@property (nonatomic) OAProfileInteger *settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (nonatomic) OAProfileInteger *dayNightMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (readonly, nonatomic) BOOL nightMode;
 @property (nonatomic) OAProfileMetricSystem *metricSystem;
 @property (nonatomic) OAProfileBoolean *drivingRegionAutomatic;

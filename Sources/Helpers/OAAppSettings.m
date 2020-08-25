@@ -1812,7 +1812,7 @@
     OADayNightHelper *_dayNightHelper;
 }
 
-@synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, settingAppMode=_settingAppMode;
+@synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, dayNightMode=_dayNightMode;
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
 @synthesize mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, settingPrefMapLanguage=_settingPrefMapLanguage;
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
@@ -1854,8 +1854,8 @@
         _settingMapLanguageTranslit = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageTranslitKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapLanguageTranslitKey] : NO;
 
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
-        _settingAppMode = [OAProfileInteger withKey:settingAppModeKey defValue:0];
-        [_registeredPreferences setObject:_settingAppMode forKey:settingAppModeKey];
+        _dayNightMode = [OAProfileInteger withKey:settingDayNightModeKey defValue:0];
+        [_registeredPreferences setObject:_dayNightMode forKey:settingDayNightModeKey];
 
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;
@@ -2350,7 +2350,7 @@
 
 - (void) setAppMode:(int)settingAppMode
 {
-    [_settingAppMode set:settingAppMode];
+    [_dayNightMode set:settingAppMode];
     [_dayNightHelper forceUpdate];
 }
 

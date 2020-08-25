@@ -23,9 +23,9 @@ static OAQuickActionType *TYPE;
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (settings.nightMode)
-        [settings setAppMode:APPEARANCE_MODE_DAY];
+        [settings setAppMode:DAYNIGHT_MODE_DAY];
     else
-        [settings setAppMode:APPEARANCE_MODE_NIGHT];
+        [settings setAppMode:DAYNIGHT_MODE_NIGHT];
 }
 
 - (NSString *)getIconResName

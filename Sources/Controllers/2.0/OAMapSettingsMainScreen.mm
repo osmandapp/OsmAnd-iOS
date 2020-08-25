@@ -232,11 +232,11 @@
         _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
         NSMutableArray *categoriesList = [NSMutableArray array];
         NSString *modeStr;
-        if ([_settings.settingAppMode get] == APPEARANCE_MODE_DAY)
+        if ([_settings.dayNightMode get] == DAYNIGHT_MODE_DAY)
             modeStr = OALocalizedString(@"map_settings_day");
-        else if ([_settings.settingAppMode get] == APPEARANCE_MODE_NIGHT)
+        else if ([_settings.dayNightMode get] == DAYNIGHT_MODE_NIGHT)
             modeStr = OALocalizedString(@"map_settings_night");
-        else if ([_settings.settingAppMode get] == APPEARANCE_MODE_AUTO)
+        else if ([_settings.dayNightMode get] == DAYNIGHT_MODE_AUTO)
             modeStr = OALocalizedString(@"daynight_mode_auto");
         else
             modeStr = OALocalizedString(@"-");
@@ -733,7 +733,7 @@
                 NSArray *categories = [self getAllCategories];
                 if (indexPath.row == 0)
                 {
-                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingDayNightModeKey];
                 }
                 else if (indexPath.row == 1)
                 {

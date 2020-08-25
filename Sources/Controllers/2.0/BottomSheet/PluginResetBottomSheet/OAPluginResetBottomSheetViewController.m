@@ -360,9 +360,9 @@
     [OAMapStyleSettings.sharedInstance resetMapStyleForAppMode:appMode.variantKey];
     
     NSDictionary* appModeDict = [NSDictionary dictionaryWithObject:appMode forKey:kResetingAppModeKey];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kResetWidgetsNotification object:nil userInfo:appModeDict];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kResetWidgetsSettingsNotification object:nil userInfo:appModeDict];
     if ([OAAppSettings sharedManager].applicationMode == appMode)
-        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateWidgestsNotification object:nil userInfo:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateWidgestsVisibilityNotification object:nil userInfo:nil];
 }
 
 @end

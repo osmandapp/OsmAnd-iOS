@@ -51,4 +51,20 @@ static NSDictionary<NSString *, NSString *> *stylesTitlesOffline;
         return 7;
 }
 
++ (NSArray<NSString *> *)getMapStyleRenderKeys
+{
+    return @[
+                @"default",
+                @"UniRS",
+                @"Touring-view_(more-contrast-and-details)",
+                @"LightRS",
+                @"offroad",
+                @"topo",
+                @"mapnik",
+                @"desert",
+                @"skimap",
+                @"nautical"
+            ];
+}
+
 @end

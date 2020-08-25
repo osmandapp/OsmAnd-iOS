@@ -54,14 +54,14 @@
             }
         }
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetVidgets:) name:kResetWidgetsNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetVidgets:) name:kResetWidgetsSettingsNotification object:nil];
     }
     return self;
 }
 
 - (void) deinit
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kResetWidgetsNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kResetWidgetsSettingsNotification object:nil];
 }
 
 - (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode left:(BOOL)left expanded:(BOOL)expanded

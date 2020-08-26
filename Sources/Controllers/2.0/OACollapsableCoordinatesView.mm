@@ -147,7 +147,7 @@
         i++;
     }
     
-    viewHeight += 8.0;
+    viewHeight += 24.0;
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 

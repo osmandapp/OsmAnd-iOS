@@ -2310,9 +2310,14 @@ static const NSInteger _buttonsCount = 4;
 - (void) contentHeightChanged:(CGFloat)newHeight
 {
     [UIView animateWithDuration:.3 animations:^{
-        [self doLayoutSubviews:NO];
-        [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
+        [self contentHeightChanged];
     }];
+}
+
+- (void) contentHeightChanged
+{
+    [self doLayoutSubviews:NO];
+    [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
 }
 
 - (void) contentChanged

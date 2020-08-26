@@ -398,7 +398,7 @@
     return point;
 }
 
-@synthesize _vwController;
+@synthesize vwController;
 
 @end
 

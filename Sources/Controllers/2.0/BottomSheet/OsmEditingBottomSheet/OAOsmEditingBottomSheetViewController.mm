@@ -103,7 +103,7 @@
 - (void) setupView
 {
     [_floatingTextFieldControllers removeAllObjects];
-    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     BOOL shouldDelete = ((OAOsmPoint *)_osmPoints.firstObject).getAction == DELETE;
     [arr addObject:@{
@@ -455,7 +455,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
-@synthesize _vwController;
+@synthesize vwController;
 
 # pragma mark OAOsmMessageForwardingDelegate
 

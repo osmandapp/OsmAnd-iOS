@@ -15,7 +15,7 @@
 
 @protocol OABottomSheetScreen <NSObject, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic) OABottomSheetViewController *_vwController;
+@property (nonatomic) OABottomSheetViewController *vwController;
 @property (nonatomic) UITableView *tblView;
 @property (nonatomic) NSArray *tableData;
 

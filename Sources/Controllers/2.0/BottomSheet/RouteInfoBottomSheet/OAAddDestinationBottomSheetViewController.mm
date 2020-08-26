@@ -185,7 +185,7 @@
 - (void) setupView
 {
     tblView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
@@ -507,7 +507,7 @@
     else if ([item[@"key"] isEqualToString:@"swap_points"])
     {
         [mapPanel swapStartAndFinish];
-        [self._vwController dismiss];
+        [self.vwController dismiss];
         return;
     }
     
@@ -515,10 +515,10 @@
         [_vwController.delegate waypointSelectionDialogComplete:selectionDone showMap:showMap calculatingRoute:NO];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self._vwController dismiss];
+    [self.vwController dismiss];
 }
 
-@synthesize _vwController;
+@synthesize vwController;
 
 #pragma mark - OACollectionViewCellDelegate
 

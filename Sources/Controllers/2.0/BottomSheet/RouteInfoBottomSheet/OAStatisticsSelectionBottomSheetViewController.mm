@@ -72,7 +72,7 @@
 - (void) setupView
 {
     tblView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderCell",
@@ -244,10 +244,10 @@
     if (_vwController.delegate)
         [_vwController.delegate onNewModeSelected:(EOARouteStatisticsMode)[[self getItem:indexPath][@"mode"] integerValue]];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self._vwController dismiss];
+    [self.vwController dismiss];
 }
 
-@synthesize _vwController;
+@synthesize vwController;
 
 @end
 

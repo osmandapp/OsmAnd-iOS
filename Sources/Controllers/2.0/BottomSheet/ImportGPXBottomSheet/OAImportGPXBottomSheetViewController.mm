@@ -28,7 +28,7 @@
     NSArray* _data;
 }
 
-@synthesize tableData, _vwController, tblView;
+@synthesize tableData, vwController, tblView;
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAImportGPXBottomSheetViewController *)viewController param:(id)param
 {
@@ -46,7 +46,7 @@
     
     _gpxImportDelegate = param;
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -229,7 +229,7 @@
         [_gpxImportDelegate importAllGPXFromDocuments];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 @end

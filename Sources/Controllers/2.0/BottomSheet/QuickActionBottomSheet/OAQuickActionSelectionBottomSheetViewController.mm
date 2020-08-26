@@ -66,7 +66,7 @@
 
 - (void) setupView
 {
-    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     NSArray *params = _action.loadListFromParams;
     [arr addObject:@{
@@ -282,17 +282,17 @@
         [_action executeWithParams:item[@"param"]];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];
-    [self._vwController dismiss];
+    [self.vwController dismiss];
 }
 
 - (void)doneButtonPressed
 {
     OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:_action isNew:NO];
     [[OARootViewController instance].navigationController pushViewController:actionScreen animated:YES];
-    [self._vwController dismiss];
+    [self.vwController dismiss];
 }
 
-@synthesize _vwController;
+@synthesize vwController;
 
 @end
 

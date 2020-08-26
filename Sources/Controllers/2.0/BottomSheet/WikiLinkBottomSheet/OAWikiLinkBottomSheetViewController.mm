@@ -77,7 +77,7 @@
 - (void) setupView
 {
     tblView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary<NSNumber *, NSArray *> *dict = [NSMutableDictionary new];
     [dict setObject:@[@{
                          @"type" : @"OABottomSheetHeaderDescrButtonCell",
@@ -260,10 +260,10 @@
         [OAUtilities callUrl:_url];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self._vwController dismiss];
+    [self.vwController dismiss];
 }
 
-@synthesize _vwController;
+@synthesize vwController;
 
 @end
 

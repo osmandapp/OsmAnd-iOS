@@ -26,7 +26,7 @@
     NSArray* _data;
 }
 
-@synthesize tableData, _vwController, tblView;
+@synthesize tableData, vwController, tblView;
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAAddWaypointBottomSheetViewController *)viewController
 {
@@ -54,7 +54,7 @@
     _app = [OsmAndApp instance];
     _targetPointsHelper = [OATargetPointsHelper sharedInstance];
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -278,7 +278,7 @@
         if ([key isEqualToString:@"replace_destination_point"])
         {
             [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:-1 historyName:menuName];
-            [_vwController dismiss];
+            [vwController dismiss];
         }
         else if ([key isEqualToString:@"make_as_start_point"])
         {
@@ -289,26 +289,26 @@
                 [_targetPointsHelper navigateToPoint:location updateRoute:NO intermediate:0 historyName:[start getPointDescription]];
             }
             [_targetPointsHelper setStartPoint:menuLocation updateRoute:YES name:menuName];
-            [_vwController dismiss];
+            [vwController dismiss];
         }
         else if ([key isEqualToString:@"keep_and_add_destination_point"])
         {
             [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:(int)([_targetPointsHelper getIntermediatePoints].count + 1) historyName:menuName];
-            [_vwController dismiss];
+            [vwController dismiss];
         }
         else if ([key isEqualToString:@"add_as_first_destination_point"])
         {
             [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:0 historyName:menuName];
-            [_vwController dismiss];
+            [vwController dismiss];
         }
         else if ([key isEqualToString:@"add_as_last_destination_point"])
         {
             [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:(int)[_targetPointsHelper getIntermediatePoints].count historyName:menuName];
-            [_vwController dismiss];
+            [vwController dismiss];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 @end

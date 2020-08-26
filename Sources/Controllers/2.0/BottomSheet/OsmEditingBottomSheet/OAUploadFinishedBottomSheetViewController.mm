@@ -81,7 +81,7 @@
 - (void) setupView
 {
     [_floatingTextFieldControllers removeAllObjects];
-    [[self._vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : _hasFailedPoints ? @"OABottomSheetHeaderIconCell" : @"OABottomSheetHeaderCell",
@@ -168,7 +168,7 @@
 - (void) doneButtonPressed
 {
     [_vwController.delegate retryUpload];
-    [self._vwController dismiss];
+    [self.vwController dismiss];
 }
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
@@ -370,7 +370,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
-@synthesize _vwController;
+@synthesize vwController;
 
 # pragma mark OAOsmMessageForwardingDelegate
 

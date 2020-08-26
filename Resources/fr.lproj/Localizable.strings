@@ -1363,7 +1363,7 @@
 "routing_attr_avoid_share_taxi_description" = "Éviter le taxi partagé";
 "rendering_attr_contourDensity_description" = "Densité des courbes de niveaux";
 "routing_attr_avoid_toll_description" = "Éviter les péages";
-"routing_attr_allow_skating_only_name" = "Autoriser uniquement les pistes skating";
+"routing_attr_allow_skating_only_name" = "Autoriser uniquement les pistes de skating";
 "rendering_attr_tracktype_grade3_name" = "Principalement compact";
 "routing_attr_piste_type_sled_description" = "Pistes pour chiens de traîneau.";
 "rendering_attr_hideWoodScrubs_name" = "Végétation";
@@ -1705,3 +1705,6 @@
 "instructions_repeat" = "Appuyez sur le gadget \"Prochain tour\" pour répéter les instructions";
 "only_manually" = "Seulement manuellement";
 "speed_limit_tolerance_descr" = "Sélectionnez la marge de tolérance de la limite de vitesse au-dessus de laquelle vous recevrez un avertissement vocal.";
+"profile_type_custom_string" = "Profil personnalisé";
+"profile_type_base_string" = "Profil de base";
+"shared_string_account" = "Compte";

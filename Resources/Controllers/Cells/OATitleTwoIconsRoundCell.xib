@@ -16,29 +16,52 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lMm-Of-Cn0">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lMm-Of-Cn0">
                         <rect key="frame" x="16" y="0.0" width="288" height="44"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQ0-wT-faZ">
-                                <rect key="frame" x="62" y="0.0" width="185" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQ0-wT-faZ">
+                                <rect key="frame" x="62" y="0.0" width="172" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Nld-NS-Wyw"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6M0-5x-Pr0">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6M0-5x-Pr0">
                                 <rect key="frame" x="250" y="7" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="ZHs-BB-oio"/>
+                                    <constraint firstAttribute="width" constant="30" id="l3W-vs-ANq"/>
+                                </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B3r-Cw-M4p">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="B3r-Cw-M4p">
                                 <rect key="frame" x="16" y="7" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="ALj-wZ-KQ6"/>
+                                    <constraint firstAttribute="height" constant="30" id="cHt-Tr-Kq5"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="6M0-5x-Pr0" firstAttribute="centerY" secondItem="lMm-Of-Cn0" secondAttribute="centerY" id="PG9-vR-LKs"/>
+                            <constraint firstItem="B3r-Cw-M4p" firstAttribute="leading" secondItem="lMm-Of-Cn0" secondAttribute="leading" constant="16" id="TkO-S1-Cvh"/>
+                            <constraint firstItem="jQ0-wT-faZ" firstAttribute="leading" secondItem="B3r-Cw-M4p" secondAttribute="trailing" constant="16" id="nEp-xu-MZA"/>
+                            <constraint firstItem="jQ0-wT-faZ" firstAttribute="top" secondItem="lMm-Of-Cn0" secondAttribute="top" id="utd-7l-n5V"/>
+                            <constraint firstItem="B3r-Cw-M4p" firstAttribute="centerY" secondItem="lMm-Of-Cn0" secondAttribute="centerY" id="wto-J9-Dpd"/>
+                            <constraint firstItem="6M0-5x-Pr0" firstAttribute="leading" secondItem="jQ0-wT-faZ" secondAttribute="trailing" constant="16" id="x6I-1F-wgC"/>
+                            <constraint firstAttribute="trailing" secondItem="6M0-5x-Pr0" secondAttribute="trailing" constant="8" id="y1f-zh-QLw"/>
+                            <constraint firstAttribute="bottom" secondItem="jQ0-wT-faZ" secondAttribute="bottom" id="y6n-ZN-uHd"/>
+                        </constraints>
                     </view>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="lMm-Of-Cn0" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="RFK-oP-SBP"/>
+                    <constraint firstAttribute="bottom" secondItem="lMm-Of-Cn0" secondAttribute="bottom" id="XZj-DQ-oHa"/>
+                    <constraint firstItem="lMm-Of-Cn0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="aE1-B4-hk5"/>
+                    <constraint firstAttribute="trailing" secondItem="lMm-Of-Cn0" secondAttribute="trailing" constant="16" id="kIz-wE-GsI"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="contentContainer" destination="lMm-Of-Cn0" id="XgD-WL-Flk"/>

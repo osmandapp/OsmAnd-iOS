@@ -733,7 +733,7 @@
                 NSArray *categories = [self getAllCategories];
                 if (indexPath.row == 0)
                 {
-                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingDayNightModeKey];
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:daynight_mode];
                 }
                 else if (indexPath.row == 1)
                 {

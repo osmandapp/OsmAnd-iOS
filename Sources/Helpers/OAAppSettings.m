@@ -1854,8 +1854,8 @@
         _settingMapLanguageTranslit = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageTranslitKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapLanguageTranslitKey] : NO;
 
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
-        _dayNightMode = [OAProfileInteger withKey:settingDayNightModeKey defValue:0];
-        [_registeredPreferences setObject:_dayNightMode forKey:settingDayNightModeKey];
+        _dayNightMode = [OAProfileInteger withKey:daynight_mode defValue:0];
+        [_registeredPreferences setObject:_dayNightMode forKey:daynight_mode];
 
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;

@@ -15,7 +15,7 @@
 #define kResetWidgetsSettingsNotification @"kResetWidgetsSettingsNotification"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
 
-#define settingDayNightModeKey @"daynight_mode"
+#define daynight_mode @"daynight_mode"
 
 #define mapDensityKey @"mapDensity"
 #define textSizeKey @"textSize"

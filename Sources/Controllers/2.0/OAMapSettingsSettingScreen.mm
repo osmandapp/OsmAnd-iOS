@@ -62,7 +62,7 @@
 
 - (void) setupView
 {
-    if ([settingKeyName isEqualToString:settingDayNightModeKey])
+    if ([settingKeyName isEqualToString:daynight_mode])
     {
         title = OALocalizedString(@"map_settings_mode");
         int mode = [_settings.dayNightMode get];
@@ -228,7 +228,7 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([settingKeyName isEqualToString:settingDayNightModeKey])
+    if ([settingKeyName isEqualToString:daynight_mode])
     {
         int index = (int)indexPath.row;
         if (index == 1)

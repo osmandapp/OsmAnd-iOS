@@ -476,7 +476,7 @@
 "traffic_warning_border_control" = "Kontrola graniczna";
 "traffic_warning_payment" = "Punkt poboru opłat";
 "traffic_warning_stop" = "Znak Stop";
-"traffic_warning_calming" = "Uspokojenie ruchu";
+"traffic_warning_calming" = "Spowolnienie ruchu";
 "traffic_warning_speed_camera" = "Fotoradar";
 "traffic_warning" = "Ostrzeżenia drogowe";
 "traffic_warning_railways" = "Przejazd kolejowy";

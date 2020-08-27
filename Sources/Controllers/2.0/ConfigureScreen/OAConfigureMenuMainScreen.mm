@@ -87,7 +87,7 @@
                                             @"key" : @"quick_action",
                                             @"img" : @"ic_custom_quick_action",
                                             @"selected" : @([_settings.quickActionIsOn get]),
-                                            @"color" : [_settings.quickActionIsOn get] ? UIColorFromRGB(0xff8f00) : [NSNull null],
+                                            @"color" : [_settings.quickActionIsOn get] ? UIColorFromRGB(_settings.applicationMode.getIconColor) : [NSNull null],
                                             @"secondaryImg" : @"ic_action_additional_option",
                                             @"type" : @"OASettingSwitchCell"}]
                             }];
@@ -124,10 +124,12 @@
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_transparent"),
                                @"key" : @"map_widget_transparent",
                                @"selected" : @([_settings.transparentMapTheme get]),
-                               
+                               @"color" : [_settings.quickActionIsOn get] ? UIColorFromRGB(_settings.applicationMode.getIconColor) : [NSNull null],
                                @"type" : @"OASettingSwitchCell"} ];
+    
     [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
                                @"key" : @"show_lanes",
+                               @"color" : [_settings.quickActionIsOn get] ? UIColorFromRGB(_settings.applicationMode.getIconColor) : [NSNull null],
                                @"selected" : @([_settings.showLanes get]),
     
                                @"type" : @"OASettingSwitchCell"} ];
@@ -152,7 +154,7 @@
                                    @"key" : r.key,
                                    @"img" : [r getImageId],
                                    @"selected" : @(selected),
-                                   @"color" : selected ? UIColorFromRGB(0xff8f00) : [NSNull null],
+                                   @"color" : selected ? UIColorFromRGB(_settings.applicationMode.getIconColor) : [NSNull null],
                                    @"secondaryImg" : r.widget ? @"ic_action_additional_option" : @"",
                                    
                                    @"type" : @"OASettingSwitchCell"} ];
@@ -298,7 +300,7 @@
         if (color)
             img = [OAUtilities tintImageWithColor:[UIImage imageNamed:imgName] color:color];
         else
-            img = [UIImage imageNamed:imgName];
+            img = [OAUtilities tintImageWithColor:[UIImage imageNamed:imgName] color:UIColorFromRGB(_settings.applicationMode.getIconColor)];
     }
     
     cell.textView.text = data[@"title"];

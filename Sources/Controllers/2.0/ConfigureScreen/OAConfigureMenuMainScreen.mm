@@ -20,6 +20,7 @@
 #import "OAMapHudViewController.h"
 #import "OAQuickActionHudViewController.h"
 #import "OAQuickActionListViewController.h"
+#import "OAColors.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -87,7 +88,7 @@
                                             @"key" : @"quick_action",
                                             @"img" : @"ic_custom_quick_action",
                                             @"selected" : @([_settings.quickActionIsOn get]),
-                                            @"color" : [_settings.quickActionIsOn get] ? UIColorFromRGB(_settings.applicationMode.getIconColor) : [NSNull null],
+                                            @"color" : UIColorFromRGB(_settings.applicationMode.getIconColor),
                                             @"secondaryImg" : @"ic_action_additional_option",
                                             @"type" : @"OASettingSwitchCell"}]
                             }];
@@ -124,12 +125,12 @@
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_transparent"),
                                @"key" : @"map_widget_transparent",
                                @"selected" : @([_settings.transparentMapTheme get]),
-                               @"color" : [_settings.quickActionIsOn get] ? UIColorFromRGB(_settings.applicationMode.getIconColor) : [NSNull null],
+                               @"color" : UIColorFromRGB(_settings.applicationMode.getIconColor),
                                @"type" : @"OASettingSwitchCell"} ];
     
     [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
                                @"key" : @"show_lanes",
-                               @"color" : [_settings.quickActionIsOn get] ? UIColorFromRGB(_settings.applicationMode.getIconColor) : [NSNull null],
+                               @"color" : UIColorFromRGB(_settings.applicationMode.getIconColor),
                                @"selected" : @([_settings.showLanes get]),
     
                                @"type" : @"OASettingSwitchCell"} ];
@@ -154,7 +155,7 @@
                                    @"key" : r.key,
                                    @"img" : [r getImageId],
                                    @"selected" : @(selected),
-                                   @"color" : selected ? UIColorFromRGB(_settings.applicationMode.getIconColor) : [NSNull null],
+                                   @"color" : UIColorFromRGB(_settings.applicationMode.getIconColor),
                                    @"secondaryImg" : r.widget ? @"ic_action_additional_option" : @"",
                                    
                                    @"type" : @"OASettingSwitchCell"} ];
@@ -167,6 +168,9 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
     NSString *key = data[@"key"];
+    
+    OASettingSwitchCell *cell = [self.tblView cellForRowAtIndexPath:indexPath];
+    cell.imgView.tintColor = sw.on ? data[@"color"] : UIColorFromRGB(color_icon_inactive);
     
     if ([key isEqualToString:@"quick_action"])
     {
@@ -288,26 +292,19 @@
 
 - (void) updateSettingSwitchCell:(OASettingSwitchCell *)cell data:(NSDictionary *)data
 {
-    UIImage *img = nil;
+    cell.imgView.image = nil;
     NSString *imgName = data[@"img"];
-    NSString *secondaryImgName = data[@"secondaryImg"];
     if (imgName)
     {
-        UIColor *color = nil;
-        if (data[@"color"] != [NSNull null])
-            color = data[@"color"];
-        
-        if (color)
-            img = [OAUtilities tintImageWithColor:[UIImage imageNamed:imgName] color:color];
-        else
-            img = [OAUtilities tintImageWithColor:[UIImage imageNamed:imgName] color:UIColorFromRGB(_settings.applicationMode.getIconColor)];
+        cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.imgView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? data[@"color"] : UIColorFromRGB(color_icon_inactive);
     }
     
     cell.textView.text = data[@"title"];
     NSString *desc = data[@"description"];
     cell.descriptionView.text = desc;
     cell.descriptionView.hidden = desc.length == 0;
-    cell.imgView.image = img;
+    NSString *secondaryImgName = data[@"secondaryImg"];
     [cell setSecondaryImage:secondaryImgName.length > 0 ? [UIImage imageNamed:data[@"secondaryImg"]] : nil];
     if ([cell needsUpdateConstraints])
         [cell setNeedsUpdateConstraints];

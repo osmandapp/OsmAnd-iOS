@@ -88,7 +88,6 @@
                                             @"key" : @"quick_action",
                                             @"img" : @"ic_custom_quick_action",
                                             @"selected" : @([_settings.quickActionIsOn get]),
-                                            @"color" : UIColorFromRGB(_settings.applicationMode.getIconColor),
                                             @"secondaryImg" : @"ic_action_additional_option",
                                             @"type" : @"OASettingSwitchCell"}]
                             }];
@@ -125,12 +124,10 @@
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_transparent"),
                                @"key" : @"map_widget_transparent",
                                @"selected" : @([_settings.transparentMapTheme get]),
-                               @"color" : UIColorFromRGB(_settings.applicationMode.getIconColor),
                                @"type" : @"OASettingSwitchCell"} ];
     
     [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
                                @"key" : @"show_lanes",
-                               @"color" : UIColorFromRGB(_settings.applicationMode.getIconColor),
                                @"selected" : @([_settings.showLanes get]),
     
                                @"type" : @"OASettingSwitchCell"} ];
@@ -155,7 +152,6 @@
                                    @"key" : r.key,
                                    @"img" : [r getImageId],
                                    @"selected" : @(selected),
-                                   @"color" : UIColorFromRGB(_settings.applicationMode.getIconColor),
                                    @"secondaryImg" : r.widget ? @"ic_action_additional_option" : @"",
                                    
                                    @"type" : @"OASettingSwitchCell"} ];
@@ -170,7 +166,7 @@
     NSString *key = data[@"key"];
     
     OASettingSwitchCell *cell = [self.tblView cellForRowAtIndexPath:indexPath];
-    cell.imgView.tintColor = sw.on ? data[@"color"] : UIColorFromRGB(color_icon_inactive);
+    cell.imgView.tintColor = sw.on ? UIColorFromRGB(_settings.applicationMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
     
     if ([key isEqualToString:@"quick_action"])
     {
@@ -292,12 +288,15 @@
 
 - (void) updateSettingSwitchCell:(OASettingSwitchCell *)cell data:(NSDictionary *)data
 {
-    cell.imgView.image = nil;
     NSString *imgName = data[@"img"];
     if (imgName)
     {
         cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.imgView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? data[@"color"] : UIColorFromRGB(color_icon_inactive);
+        cell.imgView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? UIColorFromRGB(_settings.applicationMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+    }
+    else
+    {
+        cell.imgView.image = nil;
     }
     
     cell.textView.text = data[@"title"];

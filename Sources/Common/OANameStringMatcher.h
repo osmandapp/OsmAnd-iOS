@@ -12,7 +12,7 @@
 
 @interface OANameStringMatcher : NSObject<OAStringMatcher>
 
-- (instancetype) initWithLastWord:(NSString *)lastWordTrim mode:(StringMatcherMode)mode;
+- (instancetype) initWithNamePart:(NSString *)namePart mode:(StringMatcherMode)mode;
 
 - (BOOL) matchesMap:(NSArray<NSString *>  *)map;
 

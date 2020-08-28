@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (BOOL) hasObjectType:(EOAObjectType)p;
 - (void) syncWordsWithResults;
 
-- (NSString *) getText:(BOOL)includeLastWord;
+- (NSString *) getText:(BOOL)includeUnknownPart;
 - (NSString *) getTextWithoutLastWord;
 - (NSString *) getStringRerpresentation;
 - (NSString *) toString;

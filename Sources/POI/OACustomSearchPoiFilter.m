@@ -11,6 +11,11 @@
 
 @implementation OACustomSearchPoiFilter
 
+- (NSString *)getFilterId
+{
+    return nil; //override
+}
+
 -(NSString *)getName
 {
     return nil; //override

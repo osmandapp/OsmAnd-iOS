@@ -419,6 +419,13 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             [((OASearchAmenityTypesAPI *) capi) addCustomFilter:poiFilter priority:priority];
 }
 
+- (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *) filterOrders
+{
+    for (OASearchCoreAPI *capi : _apis)
+        if ([capi isKindOfClass:[OASearchAmenityTypesAPI class]]) {
+            [((OASearchAmenityTypesAPI *) capi) setActivePoiFiltersByOrder:filterOrders];
+}
+
 - (void) registerAPI:(OASearchCoreAPI *)api
 {
     [_apis addObject:api];

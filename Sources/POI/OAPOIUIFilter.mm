@@ -405,7 +405,7 @@
 - (OAAmenityNameFilter *) getNameFilterInternal:(NSMutableString *)nmFilter allTime:(BOOL)allTime open:(BOOL)open poiAdditionals:(NSArray<OAPOIType *> *)poiAdds
 {
     OANameStringMatcher __block *sm = nmFilter.length > 0 ?
-				[[OANameStringMatcher alloc] initWithLastWord:[nmFilter trim] mode:CHECK_STARTS_FROM_SPACE] : nil;
+				[[OANameStringMatcher alloc] initWithNamePart:[nmFilter trim] mode:CHECK_STARTS_FROM_SPACE] : nil;
 
     return [[OAAmenityNameFilter alloc] initWithAcceptFunc:^BOOL(OAPOI *poi) {
 
@@ -531,6 +531,11 @@
 - (NSString *) getName
 {
     return self.name;
+}
+
+- (NSString *) getFilterId
+{
+    return self.filterId;
 }
 
 - (NSString *) getGeneratedName:(int)chars

@@ -29,6 +29,7 @@
 #import "OACity.h"
 #import "OAStreetIntersection.h"
 #import "OALocationParser.h"
+#import "OrderedDictionary.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -52,6 +53,57 @@
 #include <GeographicLib/GeoCoords.hpp>
 
 #define OLC_RECALC_DISTANCE_THRESHOLD 100000 // 100 km
+
+@interface OAPoiAdditionalCustomFilter : OAPOIBaseType
+
+@property (nonatomic) NSMutableArray<OAPOIType *> *additionalPoiTypes;
+
+- (instancetype) initWithType:(OAPOIType *)pt;
+
+@end
+
+@implementation OAPoiAdditionalCustomFilter
+{
+    OAPOIHelper *_poiHelper;
+}
+
+- (instancetype) initWithType:(OAPOIType *)pt
+{
+    self = [super initWithName:pt.name];
+    if (self) {
+        _poiHelper = OAPOIHelper.sharedInstance;
+        _additionalPoiTypes = [NSMutableArray new];
+        [_additionalPoiTypes addObject:pt];
+    }
+    return self;
+}
+
+- (BOOL)isAdditional
+{
+    return YES;
+}
+
+- (NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes
+{
+    for (OAPOIType *p in _additionalPoiTypes)
+    {
+        if ([p.parent isEqual:_poiHelper.otherMapCategory])
+        {
+            for (OAPOICategory *c in [_poiHelper getCategories:NO])
+            {
+                [c putTypes:acceptedTypes];
+            }
+        }
+        else
+        {
+            [p.parentType putTypes:acceptedTypes];
+        }
+
+    }
+    return acceptedTypes;
+}
+
+@end
 
 @interface OASearchCoreFactory ()
 
@@ -572,7 +624,7 @@
     OANameStringMatcher *nm = [phrase getNameStringMatcher:searchWord complete:[phrase isUnknownSearchWordComplete]];
     OANameStringMatcher *phraseMatcher = nil;
     if (unknownSearchPhrase.length > 0)
-        phraseMatcher = [[OANameStringMatcher alloc] initWithLastWord:unknownSearchPhrase mode:CHECK_EQUALS];
+        phraseMatcher = [[OANameStringMatcher alloc] initWithNamePart:unknownSearchPhrase mode:CHECK_EQUALS];
     
     QuadRect *bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS_INSIDE];
     
@@ -692,6 +744,26 @@
 
 @end
 
+@interface OAPoiTypeResult : NSObject
+
+@property (nonatomic) OAPOIBaseType *pt;
+@property (nonatomic) NSMutableOrderedSet<NSString *> *foundWords;
+
+@end
+
+@implementation OAPoiTypeResult
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self) {
+        _foundWords = [NSMutableOrderedSet new];
+    }
+    return self;
+}
+
+@end
+
 
 @interface OASearchAmenityTypesAPI ()
 
@@ -702,7 +774,8 @@
     NSArray<OAPOIBaseType *> *_topVisibleFilters;
     NSArray<OAPOICategory *> *_categories;
     NSMutableArray<OACustomSearchPoiFilter *> *_customPoiFilters;
-    NSMutableArray<NSNumber *> *_customPoiFiltersPriorites ;
+    NSMutableDictionary<NSString *, NSNumber *> *_activePoiFilters;
+    NSDictionary<NSString *, OAPOIType *> *_translatedNames;
     OAPOIHelper *_types;
 }
 
@@ -713,35 +786,160 @@
     {
         _types = [OAPOIHelper sharedInstance];
         _customPoiFilters = [NSMutableArray array];
-        _customPoiFiltersPriorites = [NSMutableArray array];
+        _activePoiFilters = [NSMutableDictionary new];
         _topVisibleFilters = [_types getTopVisibleFilters];
         _categories = _types.poiCategoriesNoOther;
+        _translatedNames = [NSDictionary new];
     }
     return self;
+}
+
+- (void) initPoiTypes
+{
+    if (_translatedNames.count == 0)
+    {
+        _translatedNames = [_types getAllTranslatedNames:NO];
+        NSMutableArray<OAPOIBaseType *> *topVisibleFilters = [NSMutableArray arrayWithArray:_types.getTopVisibleFilters];
+        [topVisibleFilters removeObject:_types.getOsmwiki];
+        _topVisibleFilters = topVisibleFilters;
+        _categories = [_types getCategories:NO];
+    }
 }
 
 - (void) clearCustomFilters
 {
     [_customPoiFilters removeAllObjects];
-    [_customPoiFiltersPriorites removeAllObjects];
+    [_activePoiFilters removeAllObjects];
 }
 
 - (void) addCustomFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority
 {
     [_customPoiFilters addObject:poiFilter];
-    [_customPoiFiltersPriorites addObject:[NSNumber numberWithInt:priority]];
+    if (priority > 0)
+        [_activePoiFilters setObject:[NSNumber numberWithInt:priority] forKey:poiFilter.getFilterId];
+}
+
+- (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrder
+{
+    for (int i = 0; i < filterOrder.count; i++)
+    {
+        [_activePoiFilters setObject:[NSNumber numberWithInt:i] forKey:filterOrder[i]];
+    }
+}
+
+- (NSDictionary<NSString *, OAPoiTypeResult *> *) getPoiTypeResults:(OANameStringMatcher *)nm additionalMatcher:(OANameStringMatcher *)nmAdditional
+{
+    MutableOrderedDictionary<NSString *, OAPoiTypeResult *> *results = [MutableOrderedDictionary new];
+    for (OAPOIBaseType *pf in _topVisibleFilters)
+    {
+        OAPoiTypeResult *res = [self checkPoiType:nm type:pf];
+        if(res)
+            results[res.pt.name] = res;
+    }
+    if (nmAdditional)
+        [self addAditonals:nmAdditional results:results type:_types.otherMapCategory];
+    
+    for (OAPOICategory *c in _categories)
+    {
+        OAPoiTypeResult *res = [self checkPoiType:nm type:c];
+        if(res)
+            results[res.pt.name] = res;
+        if (nmAdditional != nil)
+            [self addAditonals:nmAdditional results:results type:c];
+    }
+    [_translatedNames enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, OAPOIType * _Nonnull pt, BOOL * _Nonnull stop) {
+        if (![pt.category isEqual:_types.otherMapCategory] && !pt.isReference)
+        {
+            OAPoiTypeResult *res = [self checkPoiType:nm type:pt];
+            if(res != nil)
+                results[res.pt.name] = res;
+            if (nmAdditional != nil)
+                [self addAditonals:nmAdditional results:results type:pt];
+        }
+    }];
+    return results;
+}
+
+- (void) addAditonals:(OANameStringMatcher *) nm results:(MutableOrderedDictionary *)results type:(OAPOIBaseType *)pt
+{
+    NSArray<OAPOIType *> *additionals = pt.poiAdditionals;
+    if (additionals != nil)
+    {
+        for (OAPOIType *a in additionals)
+        {
+            OAPoiTypeResult *existingResult = results[a.name];
+            if (existingResult != nil) {
+                OAPoiAdditionalCustomFilter *f;
+                if ([existingResult.pt isKindOfClass:OAPoiAdditionalCustomFilter.class])
+                    f = (OAPoiAdditionalCustomFilter *) existingResult.pt;
+                else
+                    f = [[OAPoiAdditionalCustomFilter alloc] initWithType:(OAPOIType *)existingResult.pt];
+                
+                [f.additionalPoiTypes addObject:a];
+                existingResult.pt = f;
+            }
+            else
+            {
+                NSString *enTranslation = [a.nameLocalizedEN lowerCase];
+                if (![@"no" isEqualToString:enTranslation]) // && !"yes".equals(enTranslation))
+                {
+                    OAPoiTypeResult *ptr = [self checkPoiType:nm type:a];
+                    if (ptr != nil)
+                        results[a.name] = ptr;
+                }
+            }
+        }
+    }
+}
+
+- (OAPoiTypeResult *) checkPoiType:(OANameStringMatcher *)nm type:(OAPOIBaseType *)pf
+{
+    OAPoiTypeResult *res = nil;
+    if ([nm matches:pf.nameLocalized])
+        res = [self addIfMatch:nm name:pf.nameLocalized type:pf res:res];
+    
+    if ([nm matches:pf.nameLocalizedEN])
+        res = [self addIfMatch:nm name:pf.nameLocalizedEN type:pf res:res];
+    
+    if ([nm matches:pf.name])
+        res = [self addIfMatch:nm name:[pf.name stringByReplacingOccurrencesOfString:@"_" withString:@" "] type:pf res:res];
+
+    if ([nm matches:pf.nameSynonyms])
+    {
+        NSArray<NSString *> *synonyms = [pf.nameSynonyms componentsSeparatedByString:@";"];
+        for (NSString *synonym in synonyms)
+        {
+            res = [self addIfMatch:nm name:synonym type:pf res:res];
+        }
+    }
+    return res;
+}
+
+- (OAPoiTypeResult *) addIfMatch:(OANameStringMatcher *) nm name:(NSString *) s type:(OAPOIBaseType *)pf res:(OAPoiTypeResult *) res
+{
+    if ([nm matches:s])
+    {
+        if (res == nil) {
+            res = [[OAPoiTypeResult alloc] init];
+            res.pt = pf;
+        }
+        [res.foundWords addObject:s];
+    }
+    return res;
 }
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
+    BOOL showTopFiltersOnly = !phrase.isUnknownSearchWordPresent;
+    OANameStringMatcher *nm = phrase.firs
     NSMutableArray<OAPOIBaseType *> *results = [NSMutableArray array];
     NSMutableArray<OAPOIBaseType *> *searchWordTypes = [NSMutableArray array];
     OANameStringMatcher *nm;
     NSString *unknownSearchPhrase = [phrase getUnknownSearchPhrase];
     if ([phrase getUnknownSearchWord].length < unknownSearchPhrase.length)
-        nm = [[OANameStringMatcher alloc] initWithLastWord:unknownSearchPhrase mode:CHECK_ONLY_STARTS_WITH_TRIM];
+        nm = [[OANameStringMatcher alloc] initWithNamePart:unknownSearchPhrase mode:CHECK_ONLY_STARTS_WITH_TRIM];
     else
-        nm = [[OANameStringMatcher alloc] initWithLastWord:unknownSearchPhrase mode:CHECK_STARTS_FROM_SPACE];
+        nm = [[OANameStringMatcher alloc] initWithNamePart:unknownSearchPhrase mode:CHECK_STARTS_FROM_SPACE];
     
     for (OAPOIBaseType *pf in _topVisibleFilters)
     {
@@ -792,7 +990,7 @@
     if (resultMatcher)
     {
         NSString *word = [phrase getUnknownSearchWord];
-        OANameStringMatcher *startMatch = [[OANameStringMatcher alloc] initWithLastWord:word mode:CHECK_ONLY_STARTS_WITH];
+        OANameStringMatcher *startMatch = [[OANameStringMatcher alloc] initWithNamePart:word mode:CHECK_ONLY_STARTS_WITH];
         for (OAPOIBaseType *pt in results)
         {
             if ([resultMatcher isCancelled])
@@ -813,7 +1011,7 @@
                 break;
             
             OACustomSearchPoiFilter *csf = _customPoiFilters[i];
-            int p = _customPoiFiltersPriorites[i].intValue;
+            int p = _activePoiFilters[i].intValue;
             if (![phrase isUnknownSearchWordPresent] || [nm matches:[csf getName]])
             {
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
@@ -1027,7 +1225,7 @@
     NSString *unknownSearchPhrase = [[phrase getUnknownSearchPhrase] trim];
     OANameStringMatcher *phraseMatcher = nil;
     if (unknownSearchPhrase.length > 0)
-        phraseMatcher = [[OANameStringMatcher alloc] initWithLastWord:unknownSearchPhrase mode:CHECK_EQUALS];
+        phraseMatcher = [[OANameStringMatcher alloc] initWithNamePart:unknownSearchPhrase mode:CHECK_EQUALS];
 
     OANameStringMatcher *ns;
     BOOL hasCustomName = customName && customName.length > 0;
@@ -1224,7 +1422,7 @@
         }
         QString lw = QString::fromNSString([phrase getUnknownWordToSearchBuilding]);
         OANameStringMatcher *buildingMatch = [phrase getNameStringMatcher:lw.toNSString() complete:[phrase isLastUnknownSearchWordComplete]];
-        OANameStringMatcher *startMatch = [[OANameStringMatcher alloc] initWithLastWord:lw.toNSString() mode:CHECK_ONLY_STARTS_WITH];
+        OANameStringMatcher *startMatch = [[OANameStringMatcher alloc] initWithNamePart:lw.toNSString() mode:CHECK_ONLY_STARTS_WITH];
         for (const auto& b : s->buildings)
         {
             if ([resultMatcher isCancelled])
@@ -1303,6 +1501,32 @@
 }
 
 @end
+
+protected List<PoiType> additionalPoiTypes = new ArrayList<PoiType>();
+
+public PoiAdditionalCustomFilter(MapPoiTypes registry, PoiType pt) {
+    super(pt.getKeyName(), registry);
+    additionalPoiTypes.add(pt);
+}
+
+@Override
+public boolean isAdditional() {
+    return true;
+}
+
+public Map<PoiCategory, LinkedHashSet<String>> putTypes(Map<PoiCategory, LinkedHashSet<String>> acceptedTypes) {
+    for (PoiType p : additionalPoiTypes) {
+        if (p.getParentType() == registry.getOtherMapCategory()) {
+            for (PoiCategory c : registry.getCategories(false)) {
+                c.putTypes(acceptedTypes);
+            }
+        } else {
+            p.getParentType().putTypes(acceptedTypes);
+        }
+
+    }
+    return acceptedTypes;
+}
 
 
 @interface OASearchStreetByCityAPI ()

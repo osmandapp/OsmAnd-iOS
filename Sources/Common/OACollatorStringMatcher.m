@@ -35,24 +35,26 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
 }
 
 
-+ (BOOL) cmatches:(NSString *)base part:(NSString *)part mode:(StringMatcherMode)mode
++ (BOOL) cmatches:(NSString *)fullName part:(NSString *)part mode:(StringMatcherMode)mode
 {
     switch (mode)
     {
         case CHECK_CONTAINS:
-            return [self.class ccontains:base part:part];
+            return [self.class ccontains:fullName part:part];
         case CHECK_EQUALS_FROM_SPACE:
-            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:YES equals:YES trim:NO];
+            return [self.class cstartsWith:fullName theStart:part checkBeginning:YES checkSpaces:YES equals:YES];
         case CHECK_STARTS_FROM_SPACE:
-            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:YES equals:NO trim:NO];
+            return [self.class cstartsWith:fullName theStart:part checkBeginning:YES checkSpaces:YES equals:NO];
         case CHECK_STARTS_FROM_SPACE_NOT_BEGINNING:
-            return [self.class cstartsWith:base theStart:part checkBeginning:NO checkSpaces:YES equals:NO trim:NO];
+            return [self.class cstartsWith:fullName theStart:part checkBeginning:NO checkSpaces:YES equals:NO];
         case CHECK_ONLY_STARTS_WITH:
-            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:NO equals:NO trim:NO];
-        case CHECK_ONLY_STARTS_WITH_TRIM:
-            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:NO equals:NO trim:YES];
+            return [self.class cstartsWith:fullName theStart:part checkBeginning:YES checkSpaces:NO equals:NO];
+        case TRIM_AND_CHECK_ONLY_STARTS_WITH:
+            if (part.length > fullName.length)
+                part = [part substringWithRange:NSMakeRange(0, fullName.length)];
+            return [self.class cstartsWith:fullName theStart:part checkBeginning:YES checkSpaces:NO equals:NO];
         case CHECK_EQUALS:
-            return [self.class cstartsWith:base theStart:part checkBeginning:NO checkSpaces:NO equals:YES trim:NO];
+            return [self.class cstartsWith:fullName theStart:part checkBeginning:NO checkSpaces:NO equals:YES];
     }
     return false;
 }
@@ -106,14 +108,13 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
  *
  * @param searchIn
  * @param theStart
+ * @param fullText
  * @return true if searchIn starts with token
  */
-+ (BOOL) cstartsWith:(NSString *)searchInParam theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals trim:(BOOL)trim
++ (BOOL) cstartsWith:(NSString *)fullText theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals
 {
     NSString *searchIn = [searchInParam lowerCase];
     NSInteger searchInLength = searchIn.length;
-    if (trim && searchInLength > 0 && theStart.length > searchInLength)
-        theStart = [theStart substringToIndex:searchInLength];
     
     NSInteger startLength = theStart.length;
     if (startLength == 0)

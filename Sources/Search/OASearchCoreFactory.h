@@ -76,6 +76,7 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 - (void) clearCustomFilters;
 - (void) addCustomFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority;
+- (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrder;
 
 @end
 

@@ -241,6 +241,12 @@
     return [[[self componentsSeparatedByCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length > 0"]] componentsJoinedByString:@"_"];
 }
 
+- (NSArray<NSString *> *) componentsSeparatedByRegex:(NSRegularExpression *)regex
+{
+    NSString *modifiedString = [regex stringByReplacingMatchesInString:self options:0 range:NSMakeRange(0, [self length]) withTemplate:@"\x00"];
+    return [modifiedString componentsSeparatedByString: @"\x00"];
+}
+
 @end
 
 @implementation UIView (utils)

@@ -132,6 +132,7 @@ typedef enum : NSUInteger {
 #pragma mark - OASettingsItemJsonReader
 
 @interface OASettingsItemJsonReader : OASettingsItemReader<OASettingsItem *>
+- (void) restoreFromBackup:(NSString *)filename;
 
 @end
 

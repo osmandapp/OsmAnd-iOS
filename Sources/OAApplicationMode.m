@@ -619,7 +619,8 @@ static OAApplicationMode *_SKI;
     
     if (appMode.stringKey)
     {
-        NSString *backupFilePath = [[backupFolderPath stringByAppendingPathComponent:appMode.stringKey] stringByAppendingPathExtension:@"plst"];
+        NSString *backupFilename = [appMode.stringKey add:@"_item"];
+        NSString *backupFilePath = [[backupFolderPath stringByAppendingPathComponent:backupFilename] stringByAppendingPathExtension:@"plst"];
         [appMode.toJson writeToFile:backupFilePath atomically:YES];
     }
     else
@@ -630,7 +631,8 @@ static OAApplicationMode *_SKI;
 
 + (OAApplicationMode *) restoreBackupForAppMode:(OAApplicationMode *)appMode
 {
-    NSString *backupFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:appMode.stringKey] stringByAppendingPathExtension:@"plst"];
+    NSString *backupFilename = [appMode.stringKey add:@"_item"];
+    NSString *backupFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:backupFilename] stringByAppendingPathExtension:@"plst"];
     NSDictionary *backup = [NSDictionary dictionaryWithContentsOfFile:backupFilePath];
     
     if (backup)

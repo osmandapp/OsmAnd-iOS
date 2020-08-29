@@ -20,6 +20,7 @@
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditingSettingsViewController.h"
+#import "OASettingsHelper.h"
 
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
@@ -472,7 +473,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //    }
     else if ([key isEqualToString:@"export_profile"])
     {
-        
+        OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
+        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:_appMode.toHumanString settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:_appMode] exportItemFiles:YES];
     }
     else if ([key isEqualToString:@"copy_profile"])
     {

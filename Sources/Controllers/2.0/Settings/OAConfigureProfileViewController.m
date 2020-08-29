@@ -84,42 +84,46 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }
     ]];
     
-    [data addObject:@[
-        @{
-            @"type" : kIconTitleDescrCell,
-            @"title" : OALocalizedString(@"general_settings_2"),
-            @"descr" : OALocalizedString(@"general_settings_descr"),
-            @"img" : @"left_menu_icon_settings",
-            @"key" : @"general_settings"
-        },
-        @{
+    NSMutableArray<NSDictionary *> *profileSettings = [NSMutableArray new];
+    [profileSettings addObject:@{
+        @"type" : kIconTitleDescrCell,
+        @"title" : OALocalizedString(@"general_settings_2"),
+        @"descr" : OALocalizedString(@"general_settings_descr"),
+        @"img" : @"left_menu_icon_settings",
+        @"key" : @"general_settings"
+    }];
+    if (_appMode != OAApplicationMode.DEFAULT)
+    {
+        [profileSettings addObject:@{
             @"type" : kIconTitleDescrCell,
             @"title" : OALocalizedString(@"routing_settings_2"),
             @"descr" : OALocalizedString(@"routing_settings_descr"),
             @"img" : @"left_menu_icon_navigation",
             @"key" : @"nav_settings"
-        },
-        @{
-            @"type" : kIconTitleDescrCell,
-            @"title" : OALocalizedString(@"configure_map"),
-            @"descr" : OALocalizedString(@"configure_map_descr"),
-            @"img" : @"left_menu_icon_map",
-            @"key" : @"configure_map"
-        },
-        @{
-            @"type" : kIconTitleDescrCell,
-            @"title" : OALocalizedString(@"layer_map_appearance"),
-            @"descr" : OALocalizedString(@"configure_screen_descr"),
-            @"img" : @"left_menu_configure_screen",
-            @"key" : @"configure_screen"
-        },
-        @{
-            @"type" : kIconTitleDescrCell,
-            @"title" : OALocalizedString(@"profile_appearance"),
-            @"descr" : OALocalizedString(@"profile_appearance_descr"),
-            @"img" : _appMode.getIconName,
-            @"key" : @"profile_appearance"
-        },
+        }];
+    }
+    [profileSettings addObject:@{
+        @"type" : kIconTitleDescrCell,
+        @"title" : OALocalizedString(@"configure_map"),
+        @"descr" : OALocalizedString(@"configure_map_descr"),
+        @"img" : @"left_menu_icon_map",
+        @"key" : @"configure_map"
+    }];
+    [profileSettings addObject:@{
+        @"type" : kIconTitleDescrCell,
+        @"title" : OALocalizedString(@"layer_map_appearance"),
+        @"descr" : OALocalizedString(@"configure_screen_descr"),
+        @"img" : @"left_menu_configure_screen",
+        @"key" : @"configure_screen"
+    }];
+    [profileSettings addObject:@{
+        @"type" : kIconTitleDescrCell,
+        @"title" : OALocalizedString(@"profile_appearance"),
+        @"descr" : OALocalizedString(@"profile_appearance_descr"),
+        @"img" : _appMode.getIconName,
+        @"key" : @"profile_appearance"
+    }];
+    
         // TODO: add ui customization
 //        @{
 //            @"type" : kIconTitleDescrCell,
@@ -128,7 +132,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //            @"img" : todo,
 //            @"key" : @"ui_customization"
 //        }
-    ]];
+    [data addObject:profileSettings];
     [data addObject:@[
         @{
             @"type" : kTitleRightIconCell,

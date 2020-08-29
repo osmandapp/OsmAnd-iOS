@@ -35,7 +35,9 @@
     NSIndexPath *_pickerIndexPath;
     NSArray<NSNumber *> *_possibleDistanceValues;
     NSArray<NSString *> *_valueSummaries;
+    
     NSInteger _selectedValue;
+    NSString *_defaultValue;
     
     OAAppSettings *_settings;
     OsmAndAppInstance _app;
@@ -61,6 +63,7 @@
         _possibleDistanceValues = @[@(9.1), @(18.3), @(30.5), @(45.7), @(91.5), @(183.0), @(482.0), @(965.0), @(1609.0)];
     
     NSInteger selectedInd = [_possibleDistanceValues indexOfObject:@([_settings.routeRecalculationDistance get:self.appMode])];
+    _defaultValue = selectedInd == NSNotFound ? [self getDefaultValue] : nil;
     _selectedValue = selectedInd != NSNotFound ? selectedInd : 0;
     
     NSMutableArray<NSString *> *arr = [NSMutableArray new];
@@ -71,12 +74,11 @@
     _valueSummaries = arr;
 }
 
-- (void) getDefaultValue
+- (NSString *) getDefaultValue
 {
     double defValue = [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]];
     defValue = defValue == -1 ? _possibleDistanceValues.firstObject.doubleValue : defValue;
-    _selectedValue = [_possibleDistanceValues indexOfObject:@(defValue)];
-    _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
+    return [OsmAndApp.instance getFormattedDistance:defValue];
 }
 
 -(void) applyLocalization
@@ -158,7 +160,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.lbTitle.text = item[@"title"];
-        cell.lbTime.text = _valueSummaries[_selectedValue];
+        cell.lbTime.text = _defaultValue ? _defaultValue : _valueSummaries[_selectedValue];
         cell.lbTime.textColor = UIColorFromRGB(color_text_footer);
 
         return cell;
@@ -321,6 +323,7 @@
 {
     _selectedValue = [_valueSummaries indexOfObject:zoom];
     _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
+    _defaultValue = nil;
     [_settings.routeRecalculationDistance set:_possibleDistanceValues[_selectedValue].doubleValue mode:self.appMode];
     [_settings.disableOffrouteRecalc set:[_settings.routeRecalculationDistance get:self.appMode] != kDisableMode];
     [self setupView];

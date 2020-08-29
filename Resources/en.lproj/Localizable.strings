@@ -1153,6 +1153,8 @@
 "units_min_short" = "m";
 "units_sec_short" = "s";
 
+"units_t" = "t";
+
 // Help
 "help_first_steps" = "First steps";
 "help_first_use" = "First use";

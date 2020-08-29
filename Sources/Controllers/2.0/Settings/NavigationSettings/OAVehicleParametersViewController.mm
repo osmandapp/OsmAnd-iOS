@@ -64,6 +64,17 @@
     [self setupView];
 }
 
+- (NSString *)addSpaceToValue:(NSString *)descr
+{
+    NSString *editedDescr;
+    NSRange range = [descr rangeOfCharacterFromSet:[NSCharacterSet letterCharacterSet]];
+    if (range.location != NSNotFound && descr.length > 1)
+        editedDescr = [[[descr substringToIndex:range.location] stringByAppendingString:@" "] stringByAppendingString:[descr substringFromIndex:range.location]];
+    else
+        editedDescr = descr;
+    return editedDescr;
+}
+
 - (void) setupView
 {
     NSMutableArray *tableData = [NSMutableArray array];
@@ -99,7 +110,9 @@
                 {
                     double vl = floorf(p.possibleValues[i] * 100 + 0.5) / 100;
                     [possibleValues addObject:@(vl)];
-                    [valueDescriptions addObject:[NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()]];
+                    NSString *descr = [NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()];
+                    NSString *editedDescr = [self addSpaceToValue:descr];
+                    [valueDescriptions addObject:editedDescr];
                     if (vl == d)
                     {
                         index = i;
@@ -109,9 +122,9 @@
                 if (index == 0)
                     value = OALocalizedString(@"sett_no_ext_input");
                 else if (index != -1)
-                    value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
+                    value = [self addSpaceToValue:[NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()]];
                 else
-                    value = [NSString stringWithFormat:@"%@%@", value, [paramId isEqualToString:@"weight"] ? @"t" : @"m"];
+                    value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"units_t") : OALocalizedString(@"units_m")];
                 [parametersArr addObject:
                  @{
                      @"name" : paramId,
@@ -200,7 +213,7 @@
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
             cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftImageView.tintColor = [item[@"value"] isEqualToString:@"-"] ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(color_osmand_orange);
+            cell.leftImageView.tintColor = [item[@"value"] isEqualToString:@"-"] ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }

@@ -176,13 +176,18 @@
         {
             OAPOIUIFilter *f1 = obj1;
             OAPOIUIFilter *f2 = obj2;
-            
-            if ([f2.filterId isEqualToString:f1.filterId ])
+            if (f1.order != INVALID_ORDER && f2.order != INVALID_ORDER)
+            {
+                return (f1.order < f2.order) ? NSOrderedAscending : ((f1.order == f2.order) ? NSOrderedSame : NSOrderedDescending);
+            }
+            else if ([f2.filterId isEqualToString:f1.filterId])
             {
                 NSString *f1FilterByName = !f1.filterByName ? @"" : f1.filterByName;
                 NSString *f2FilterByName = !f2.filterByName ? @"" : f2.filterByName;
                 return [f1FilterByName localizedCaseInsensitiveCompare:f2FilterByName];
-            } else {
+            }
+            else
+            {
                 return [f1.name localizedCaseInsensitiveCompare:f2.name];
             }
         };

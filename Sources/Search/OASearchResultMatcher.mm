@@ -121,13 +121,18 @@
     }
 }
 
+- (OASearchResult *) getParentSearchResult
+{
+    return _parentSearchResult;
+}
+
 -(BOOL)publish:(OASearchResult *)object
 {
-    if (_phrase && object.otherNames && ![[_phrase getNameStringMatcher] matches:object.localeName])
+    if (_phrase && object.otherNames && ![[_phrase getFirstUnknownNameStringMatcher] matches:object.localeName])
     {
         for (NSString *s in object.otherNames)
         {
-            if ([[_phrase getNameStringMatcher] matches:s])
+            if ([[_phrase getFirstUnknownNameStringMatcher] matches:s])
             {
                 object.alternateName = s;
                 break;
@@ -137,18 +142,19 @@
         {
             [((OAPOI *) object.object).values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop)
             {
-                if ([[_phrase getNameStringMatcher] matches:value])
+                if ([[_phrase getFirstUnknownNameStringMatcher] matches:value])
                 {
                     object.alternateName = value;
                     *stop = YES;
                 }
             }];
         }
-        if (object.localeName.length == 0 && object.alternateName.length > 0) {
-            object.localeName = object.alternateName;
-            object.alternateName = nil;
-        }
     }
+    if (object.localeName.length == 0 && object.alternateName.length > 0) {
+        object.localeName = object.alternateName;
+        object.alternateName = nil;
+    }
+    object.parentSearchResult = _parentSearchResult;
     if (!_matcher || [_matcher publish:object])
     {
         _count++;

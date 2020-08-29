@@ -16,7 +16,7 @@
 
 - (OAPOIUIFilter *) getSearchByNamePOIFilter;
 - (OAPOIUIFilter *) getCustomPOIFilter;
-- (OAPOIUIFilter *) getLocalWikiPOIFilter;
+- (OAPOIUIFilter *) getTopWikiPoiFilter;
 - (OAPOIUIFilter *) getShowAllPOIFilter;
 - (OAPOIUIFilter *) getFilterById:(NSString *)filterId;
 - (void) reloadAllPoiFilters;
@@ -39,6 +39,7 @@
 - (void) loadSelectedPoiFilters;
 - (void) saveSelectedPoiFilters;
 - (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters;
+- (NSArray<NSString *> *) getPoiFilterOrders:(BOOL)onlyActive;
 
 
 @end

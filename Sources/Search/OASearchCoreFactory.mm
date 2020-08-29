@@ -119,6 +119,7 @@
 @interface OASearchBaseAPI ()
 
 - (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api;
+- (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api publish:(BOOL)publish;
 
 @end
 
@@ -178,20 +179,82 @@
     return [phrase getRadiusLevel] < MAX_DEFAULT_SEARCH_RADIUS;
 }
 
-- (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api
+- (void)subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api
 {
-    [phrase countUnknownWordsMatch:res];
-    NSArray<NSString *> *ws = [phrase getUnknownSearchWords:res.otherWordsMatch];
-    if (!res.firstUnknownWordMatches)
-        ws = [ws arrayByAddingObject:[phrase getUnknownSearchWord]];
+    return [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:api publish:YES];
+}
+
+- (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api publish:(BOOL)publish
+{
+    [phrase countUnknownWordsMatchMainResult:res];
+    BOOL firstUnknownWordMatches = res.firstUnknownWordMatches;
+    NSMutableArray<NSString *> *leftUnknownSearchWords = [NSMutableArray arrayWithArray:[phrase getUnknownSearchWords]];
+    if (res.otherWordsMatch)
+        [leftUnknownSearchWords removeObjectsInArray:[res.otherWordsMatch allObjects]];
+    
+    OASearchResult *newParentSearchResult = nil;
+    if (res.parentSearchResult == nil && resultMatcher.getParentSearchResult == nil &&
+        res.objectType == STREET && [res.object isKindOfClass:OAStreet.class] && ((OAStreet *) res.object).city != nil) {
+        OACity *ct = ((OAStreet *) res.object).city;
+        OASearchResult *cityResult = [[OASearchResult alloc] initWithPhrase:phrase];
+        cityResult.object = ct;
+        cityResult.objectType = CITY;
+        cityResult.localeName = [ct getName:phrase.getSettings.getLang transliterate:phrase.getSettings.isTransliterate];
+        cityResult.otherNames = [NSMutableArray arrayWithArray:ct.localizedNames.allValues];
+        cityResult.location = [[CLLocation alloc] initWithLatitude:ct.latitude longitude:ct.longitude];
+        QString lang = QString::fromNSString([[phrase getSettings] getLang]);
+        bool transliterate = [[phrase getSettings] isTransliterate];
+        cityResult.localeRelatedObjectName = ct.city->getName(lang, transliterate).toNSString();
+        [phrase countUnknownWordsMatchMainResult:cityResult];
+        __block BOOL match = NO;
+        if (firstUnknownWordMatches)
+        {
+            cityResult.firstUnknownWordMatches = NO; // don't count same name twice
+        }
+        else if (cityResult.firstUnknownWordMatches)
+        {
+            firstUnknownWordMatches = YES;
+            match = YES;
+        }
+        if (cityResult.otherWordsMatch != nil)
+        {
+            NSMutableSet<NSString *> *toDelete = [NSMutableSet new];
+            [cityResult.otherWordsMatch enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+                BOOL wasPresent = [leftUnknownSearchWords containsObject:obj];
+                [leftUnknownSearchWords removeObject:obj];
+                if (wasPresent)
+                    match = YES;
+                else
+                    [toDelete addObject:obj]; // don't count same name twice
+            }];
+            [cityResult.otherWordsMatch minusSet:toDelete];
+        }
+        // include parent search result even if it is empty
+        if (match)
+            newParentSearchResult = cityResult;
+    }
+    if (!firstUnknownWordMatches)
+        [leftUnknownSearchWords insertObject:[phrase getFirstUnknownSearchWord] atIndex:0];
     
     // publish result to set parentSearchResult before search
-    [resultMatcher publish:res];
-    if (ws.count > 0 && api && [api isSearchAvailable:phrase])
+    if (publish)
     {
-        OASearchPhrase *nphrase = [phrase selectWord:res unknownWords:ws lastComplete:[phrase isLastUnknownSearchWordComplete]];
-        OASearchResult *prev = [resultMatcher setParentSearchResult:res];
-        res.parentSearchResult = prev;
+        if (newParentSearchResult != nil)
+        {
+            OASearchResult *prev = [resultMatcher setParentSearchResult:newParentSearchResult];
+            [resultMatcher publish:res];
+            [resultMatcher setParentSearchResult:prev];
+        }
+        else
+        {
+            [resultMatcher publish:res];
+        }
+    }
+    if (leftUnknownSearchWords.count > 0 && api != nil && [api isSearchAvailable:phrase])
+    {
+        OASearchPhrase *nphrase = [phrase selectWord:res unknownWords:leftUnknownSearchWords lastComplete:phrase.isLastUnknownSearchWordComplete || ![leftUnknownSearchWords containsObject:phrase.getLastUnknownSearchWord]];
+        OASearchResult *prev = [resultMatcher setParentSearchResult:publish ? res :
+                resultMatcher.getParentSearchResult];
         [api search:nphrase resultMatcher:resultMatcher];
         [resultMatcher setParentSearchResult:prev];
     }
@@ -1063,6 +1126,9 @@
     std::shared_ptr<const OsmAnd::Amenity> _currentAmenity;
     QString _lang;
     bool _transliterate;
+    
+    OAPOIBaseType *_unselectedPoiType;
+    NSString *_nameFilter;
 }
 
 - (instancetype) initWithTypesAPI:(OASearchAmenityTypesAPI *)typesAPI
@@ -1109,6 +1175,16 @@
         for (OAPOIType *ps in ((OAPOIFilter *)pt).poiTypes)
             [self fillPoiAdditionals:ps];
     }
+}
+
+- (OAPOIBaseType *) getUnselectedPoiType
+{
+    return _unselectedPoiType;
+}
+
+- (NSString *) getNameFilter
+{
+    return _nameFilter;
 }
 
 - (void) searchPoi:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher obj:(NSObject *)obj customName:(NSString *)customName ptf:(OASearchPoiTypeFilter *)ptf

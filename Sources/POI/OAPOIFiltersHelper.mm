@@ -177,8 +177,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     });
     return YES;
 }
-
-- (NSArray<OAPOIUIFilter *> *) getFilters
+// TODO: Implement filters deletion later!
+- (NSArray<OAPOIUIFilter *> *) getFilters:(BOOL)includeDeleted
 {
     NSMutableArray<OAPOIUIFilter *> *list = [NSMutableArray array];
     
@@ -362,7 +362,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     OAPOIUIFilter *_searchByNamePOIFilter;
     OAPOIUIFilter *_customPOIFilter;
     OAPOIUIFilter *_showAllPOIFilter;
-    OAPOIUIFilter *_localWikiPoiFilter;
+    OAPOIUIFilter *_topWikiPoiFilter;
     NSMutableArray<OAPOIUIFilter *> *_cacheTopStandardFilters;
     NSMutableSet<OAPOIUIFilter *> *_selectedPoiFilters;
     
@@ -429,20 +429,20 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     return _customPOIFilter;
 }
 
-- (OAPOIUIFilter *) getLocalWikiPOIFilter
+- (OAPOIUIFilter *) getTopWikiPoiFilter
 {
-    if (!_localWikiPoiFilter)
-    {
-        OAPOIType *place = [_poiHelper getPoiTypeByName:@"wiki_place"];
-        if (place)
+    if (_topWikiPoiFilter == nil) {
+        NSString *wikiFilterId = [STD_PREFIX stringByAppendingString:@"osmwiki"];
+        for (OAPOIUIFilter *filter in [self getTopDefinedPoiFilters])
         {
-            OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithBasePoiType:place idSuffix:[@" " stringByAppendingString:[OAUtilities translatedLangName:[OAUtilities currentLang]]]];
-            filter.savedFilterByName = [@"wiki:lang:" stringByAppendingString:[OAUtilities currentLang]];
-            filter.isStandardFilter = YES;
-            _localWikiPoiFilter = filter;
+            if ([wikiFilterId isEqualToString:filter.getFilterId])
+            {
+                _topWikiPoiFilter = filter;
+                break;
+            }
         }
     }
-    return _localWikiPoiFilter;
+    return _topWikiPoiFilter;
 }
 
 - (OAPOIUIFilter *) getShowAllPOIFilter
@@ -476,16 +476,21 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (OAPOIUIFilter *) getFilterById:(NSString *)filterId
 {
+    return [self getFilterById:filterId includeDeleted:NO];
+}
+
+- (OAPOIUIFilter *) getFilterById:(NSString *)filterId includeDeleted:(BOOL)includeDeleted
+{
     if (!filterId)
         return nil;
 
-    for (OAPOIUIFilter *f in [self getTopDefinedPoiFilters])
+    for (OAPOIUIFilter *f in [self getTopDefinedPoiFilters:includeDeleted])
     {
         if ([f.filterId isEqualToString:filterId])
             return f;
     }
     OAPOIUIFilter *ff = [self getFilterById:filterId filters:@[[self getCustomPOIFilter], [self getSearchByNamePOIFilter],
-                                                               [self getLocalWikiPOIFilter], [self getShowAllPOIFilter]]];
+                                                               [self getTopWikiPoiFilter], [self getShowAllPOIFilter]]];
     if (ff)
         return ff;
 
@@ -496,7 +501,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         if (tp)
         {
             OAPOIUIFilter *lf = [[OAPOIUIFilter alloc] initWithBasePoiType:tp idSuffix:@""];;
-            NSMutableArray<OAPOIUIFilter *> *copy = [NSMutableArray arrayWithArray:_cacheTopStandardFilters];
+            NSMutableArray<OAPOIUIFilter *> *copy = _cacheTopStandardFilters ? [NSMutableArray arrayWithArray:_cacheTopStandardFilters] : [NSMutableArray new];
             [copy addObject:lf];
             [copy sortUsingComparator:[OAPOIUIFilter getComparator]];
             _cacheTopStandardFilters = copy;
@@ -506,7 +511,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         if (lt)
         {
             OAPOIUIFilter *lf = [[OAPOIUIFilter alloc] initWithBasePoiType:lt idSuffix:@""];;
-            NSMutableArray<OAPOIUIFilter *> *copy = [NSMutableArray arrayWithArray:_cacheTopStandardFilters];
+            NSMutableArray<OAPOIUIFilter *> *copy = _cacheTopStandardFilters ? [NSMutableArray arrayWithArray:_cacheTopStandardFilters] : [NSMutableArray new];
             [copy addObject:lf];
             [copy sortUsingComparator:[OAPOIUIFilter getComparator]];
             _cacheTopStandardFilters = copy;
@@ -524,11 +529,14 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     [self getTopDefinedPoiFilters];
 }
 
-- (NSArray<OAPOIUIFilter *> *) getUserDefinedPoiFilters
+- (NSArray<OAPOIUIFilter *> *) getUserDefinedPoiFilters:(BOOL)includeDeleted
 {
-    NSMutableArray<OAPOIUIFilter *> *userDefinedFilters = [NSMutableArray array];
-    NSArray<OAPOIUIFilter *> *userDefined = [_helper getFilters];
-    [userDefinedFilters addObjectsFromArray:userDefined];
+    NSMutableArray<OAPOIUIFilter *> *userDefinedFilters = [NSMutableArray new];
+    if (_helper != nil)
+    {
+        NSArray<OAPOIUIFilter *> *userDefined = [_helper getFilters:includeDeleted];
+        [userDefinedFilters addObjectsFromArray:userDefined];
+    }
     return userDefinedFilters;
 }
 
@@ -546,14 +554,17 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (NSArray<OAPOIUIFilter *> *) getTopDefinedPoiFilters
 {
-    if (!_cacheTopStandardFilters)
-    {
-        NSMutableArray<OAPOIUIFilter *> *top = [NSMutableArray array];
-        // user defined
-        [top addObjectsFromArray:[self getUserDefinedPoiFilters]];
-        if ([self getLocalWikiPOIFilter])
-            [top addObject:[self getLocalWikiPOIFilter]];
+    return [self getTopDefinedPoiFilters:NO];
+}
 
+- (NSArray<OAPOIUIFilter *> *) getTopDefinedPoiFilters:(BOOL)includeDeleted
+{
+    NSMutableArray<OAPOIUIFilter *> *top = _cacheTopStandardFilters;
+    if (!top)
+    {
+        top = [NSMutableArray new];
+        // user defined
+        [top addObjectsFromArray:[self getUserDefinedPoiFilters:YES]];
         // default
         for (OAPOIBaseType *t in [_poiHelper getTopVisibleFilters])
         {
@@ -564,9 +575,155 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         _cacheTopStandardFilters = top;
     }
     NSMutableArray<OAPOIUIFilter *> *result = [NSMutableArray array];
-    [result addObjectsFromArray:_cacheTopStandardFilters];
+    for (OAPOIUIFilter *filter in top)
+    {
+        if (includeDeleted || !filter.isDeleted)
+            [result addObject:filter];
+    }
     [result addObject:[self getShowAllPOIFilter]];
     return result;
+}
+
+- (NSArray<NSString *> *) getPoiFilterOrders:(BOOL)onlyActive
+{
+    NSMutableArray<NSString *> *filterOrders = [NSMutableArray new];
+    for (OAPOIUIFilter *filter in [self getSortedPoiFilters:onlyActive])
+         [filterOrders addObject:filter.getFilterId];
+    return filterOrders;
+}
+
+- (NSArray<OAPOIUIFilter *> *) getSortedPoiFilters:(BOOL) onlyActive
+{
+    OAApplicationMode *selectedAppMode = OAAppSettings.sharedManager.applicationMode;
+    return [self getSortedPoiFilters:selectedAppMode onlyActive:onlyActive];
+}
+
+- (NSArray<OAPOIUIFilter *> *) getSortedPoiFilters:(OAApplicationMode *)appMode onlyActive:(BOOL)onlyActive
+{
+    [self initPoiUIFiltersState:appMode];
+    NSMutableArray<OAPOIUIFilter *> *allFilters = [NSMutableArray new];
+    [allFilters addObjectsFromArray:[self getTopDefinedPoiFilters]];
+    [allFilters addObjectsFromArray:[self getSearchPoiFilters]];
+    [allFilters sortUsingComparator:[OAPOIUIFilter getComparator]];
+    if (onlyActive)
+    {
+        NSMutableArray<OAPOIUIFilter *> *onlyActiveFilters = [NSMutableArray new];
+        for (OAPOIUIFilter *f in allFilters)
+        {
+            if (f.isActive)
+            {
+                [onlyActiveFilters addObject:f];
+            }
+        }
+        return onlyActiveFilters;
+    }
+    return allFilters;
+}
+
+- (void) initPoiUIFiltersState:(OAApplicationMode *) appMode
+{
+    NSMutableArray<OAPOIUIFilter *> *allFilters = [NSMutableArray new];
+    [allFilters addObjectsFromArray:[self getTopDefinedPoiFilters]];
+    [allFilters addObjectsFromArray:[self getSearchPoiFilters]];
+
+    [self refreshPoiFiltersActivation:appMode filters:allFilters];
+    [self refreshPoiFiltersOrder:appMode filters:allFilters];
+    
+    //set up the biggest order to custom filter
+    OAPOIUIFilter *customFilter = [self getCustomPOIFilter];
+    customFilter.isActive = YES;
+    customFilter.order = (int) allFilters.count;
+}
+
+- (void) refreshPoiFiltersOrder:(OAApplicationMode *)appMode
+                        filters:(NSArray<OAPOIUIFilter *> *)filters
+{
+    NSDictionary<NSString *, NSNumber *> *orders = [self getPoiFiltersOrder:appMode];
+    NSMutableArray<OAPOIUIFilter *> *existedFilters = [NSMutableArray new];
+    NSMutableArray<OAPOIUIFilter *> *newFilters = [NSMutableArray new];
+    if (orders != nil)
+    {
+        //set up orders from settings
+        for (OAPOIUIFilter *filter in filters)
+        {
+            NSNumber *order = orders[filter.getFilterId];
+            if (order != nil) {
+                filter.order = order.intValue;
+                [existedFilters addObject:filter];
+            }
+            else
+            {
+                [newFilters addObject:filter];
+            }
+        }
+        //make order values without spaces
+        [existedFilters sortUsingComparator:[OAPOIUIFilter getComparator]];
+        for (int i = 0; i < existedFilters.count; i++)
+        {
+            existedFilters[i].order = i;
+        }
+        //set up maximum orders for new poi filters
+        [newFilters sortUsingComparator:[OAPOIUIFilter getComparator]];
+        for (OAPOIUIFilter *filter in newFilters)
+        {
+            filter.order = (int) existedFilters.count;
+            [existedFilters addObject:filter];
+        }
+    }
+    else
+    {
+        for (OAPOIUIFilter *filter in filters)
+        {
+            filter.order = INVALID_ORDER;
+        }
+    }
+}
+
+- (void) refreshPoiFiltersActivation:(OAApplicationMode *)appMode
+                                         filters:(NSArray<OAPOIUIFilter *> *)filters
+{
+    NSArray<NSString *> *inactiveFiltersIds = [self getInactivePoiFiltersIds:appMode];
+    if (inactiveFiltersIds != nil)
+    {
+        for (OAPOIUIFilter *filter in filters)
+        {
+            filter.isActive = ![inactiveFiltersIds containsObject:filter.getFilterId];
+        }
+    } else {
+        for (OAPOIUIFilter *filter in filters)
+        {
+            filter.isActive = YES;
+        }
+    }
+}
+
+- (void) saveFiltersOrder:(OAApplicationMode *)appMode filterIdes:(NSArray<NSString *> *)filterIds
+{
+    [OAAppSettings.sharedManager.poiFiltersOrder set:filterIds mode:appMode];
+}
+
+- (void) saveInactiveFilters:(OAApplicationMode *)appMode filterIds:(NSArray<NSString *> *) filterIds
+{
+    [OAAppSettings.sharedManager.inactivePoiFilters set:filterIds mode:appMode];
+}
+
+- (NSDictionary<NSString *, NSNumber *> *) getPoiFiltersOrder:(OAApplicationMode *)appMode
+{
+    NSArray<NSString *> *ids = [OAAppSettings.sharedManager.poiFiltersOrder get:appMode];
+    if (ids == nil)
+        return nil;
+    
+    NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
+    for (int i = 0; i < ids.count; i++)
+    {
+        result[ids[i]] = @(i);
+    }
+    return result;
+}
+
+- (NSArray<NSString *> *) getInactivePoiFiltersIds:(OAApplicationMode *)appMode
+{
+    return [OAAppSettings.sharedManager.inactivePoiFilters get:appMode];
 }
 
 - (BOOL) removePoiFilter:(OAPOIUIFilter *)filter

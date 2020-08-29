@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchPhrase.java
-//  git revision 727b6ba399858098c30125a4d4b8d4ec46a0013e
+//  git revision 3c9d940fbbb0be194b3f06d75e4151ab8a0b9913
 
 #import <Foundation/Foundation.h>
 #import "OANameStringMatcher.h"
@@ -28,20 +28,24 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 
 @interface OASearchPhrase : NSObject
 
-- (instancetype) initWithSettings:(OASearchSettings *)settings;
++ (OASearchPhrase *) emptyPhrase;
++ (OASearchPhrase *) emptyPhrase:(OASearchSettings *)settings;
 
 - (OASearchPhrase *) generateNewPhrase:(NSString *)text settings:(OASearchSettings *)settings;
 - (NSMutableArray<OASearchWord *> *) getWords;
+- (NSInteger) countWords:(NSString *)word;
 
-- (BOOL) isUnknownSearchWordComplete;
+- (BOOL) isMainUnknownSearchWordComplete;
 - (BOOL) isLastUnknownSearchWordComplete;
+- (BOOL) hasMoreThanOneSearchWord;
 
 - (NSMutableArray<NSString *> *) getUnknownSearchWords;
-- (NSMutableArray<NSString *> *) getUnknownSearchWords:(NSSet<NSString *> *)exclude;
-- (NSString *) getUnknownSearchWord;
+- (NSString *) getFirstUnknownSearchWord;
+- (BOOL) isFirstUnknownSearchWordComplete;
+
+- (NSString *) getFullSearchPhrase;
 - (NSString *) getUnknownSearchPhrase;
 - (BOOL) isUnknownSearchWordPresent;
-- (int) getUnknownSearchWordLength;
 
 - (QuadRect *) getRadiusBBoxToSearch:(int)radius;
 - (QuadRect *) get1km31Rect;
@@ -52,9 +56,6 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (OASearchPhrase *) selectWord:(OASearchResult *)res unknownWords:(NSArray<NSString *> *)unknownWords lastComplete:(BOOL)lastComplete;
 - (BOOL) isLastWord:(EOAObjectType)p;
 - (OAObjectType *) getExclusiveSearchType;
-
-- (OANameStringMatcher *) getNameStringMatcher;
-- (OANameStringMatcher *) getNameStringMatcher:(NSString *)word complete:(BOOL)complete;
 
 - (BOOL) hasObjectType:(EOAObjectType)p;
 - (void) syncWordsWithResults;
@@ -70,8 +71,10 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (OASearchWord *) getLastSelectedWord;
 - (CLLocation *) getWordLocation;
 - (CLLocation *) getLastTokenLocation;
-- (void) countUnknownWordsMatch:(OASearchResult *)sr;
-- (void) countUnknownWordsMatch:(OASearchResult *)sr localeName:(NSString *)localeName otherNames:(NSMutableArray<NSString *> *)otherNames;
+- (NSString *) getLastUnknownSearchWord;
+- (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *)sr;
+- (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *) sr matchingWordsCount:(NSInteger)matchingWordsCount;
+- (NSInteger) countUnknownWordsMatch:(OASearchResult *)sr localeName:(NSString *)localeName otherNames:(NSMutableArray<NSString *> *)otherNames matchingWordsCount:(NSInteger)matchingWordsCount;
 
 - (int) getRadiusSearch:(int)meters;
 - (int) getNextRadiusSearch:(int) meters;
@@ -84,20 +87,13 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (BOOL) isSortByName;
 - (BOOL) isInAddressSearch;
 
+- (OANameStringMatcher *) getMainUnknownNameStringMatcher;
+- (OANameStringMatcher *) getFirstUnknownNameStringMatcher;
+- (OANameStringMatcher *) getUnknownNameStringMatcher;
+- (OANameStringMatcher *) getUnknownWordToSearchBuildingNameMatcher;
+
 - (NSString *) getUnknownWordToSearchBuilding;
 - (NSString *) getUnknownWordToSearch;
-
-- (NSString *) getRawUnknownSearchPhrase;
-- (OAPOIBaseType *) getUnknownSearchWordPoiType;
-- (void) setUnknownSearchWordPoiType:(OAPOIBaseType *)unknownSearchWordPoiType;
-- (BOOL) hasUnknownSearchWordPoiType;
-
-- (NSArray<OAPOIBaseType *> *) getUnknownSearchWordPoiTypes;
-- (void) setUnknownSearchWordPoiTypes:(NSArray<OAPOIBaseType *> *)unknownSearchWordPoiTypes;
-- (BOOL) hasUnknownSearchWordPoiTypes;
-
-- (NSString *) getPoiNameFilter;
-- (NSString *) getPoiNameFilter:(OAPOIBaseType *)pt;
 
 - (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt;
 - (NSArray<NSString *> *) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt;

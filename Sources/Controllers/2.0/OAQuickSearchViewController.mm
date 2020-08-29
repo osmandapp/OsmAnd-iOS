@@ -551,20 +551,20 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 OAPOIUIFilter *filter;
                 if ([searchPhrase isNoSelectedType])
                 {
-                    if ([searchPhrase hasUnknownSearchWordPoiType])
+                    OAPOIBaseType *unselectedPoiType = [self.searchUICore getUnselectedPoiType];
+                    if (unselectedPoiType)
                     {
-                        OAPOIBaseType *pt = [searchPhrase getUnknownSearchWordPoiType];
-                        filter = [[OAPOIUIFilter alloc] initWithBasePoiType:pt idSuffix:@""];
-                        NSString *customName = [searchPhrase getPoiNameFilter];
+                        filter = [[OAPOIUIFilter alloc] initWithBasePoiType:unselectedPoiType idSuffix:@""];
+                        NSString *customName = [self.searchUICore getCustomNameFilter];
                         if (customName.length > 0)
                             [filter setFilterByName:customName];
                     }
                     else
                     {
                         filter = [[OAPOIFiltersHelper sharedInstance] getSearchByNamePOIFilter];
-                        if ([searchPhrase getUnknownSearchWord].length > 0)
+                        if ([searchPhrase getFirstUnknownSearchWord].length > 0)
                         {
-                            [filter setFilterByName:[searchPhrase getUnknownSearchWord]];
+                            [filter setFilterByName:[searchPhrase getFirstUnknownSearchWord]];
                             [filter clearCurrentResults];
                         }
                     }
@@ -580,8 +580,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                         OAPOIBaseType *abstractPoiType = (OAPOIBaseType *) [searchPhrase getLastSelectedWord].result.object;
                         filter = [[OAPOIUIFilter alloc] initWithBasePoiType:abstractPoiType idSuffix:@""];
                     }
-                    if ([searchPhrase getUnknownSearchWord].length > 0)
-                        [filter setFilterByName:[searchPhrase getUnknownSearchWord]];
+                    if ([searchPhrase getFirstUnknownSearchWord].length > 0)
+                        [filter setFilterByName:[searchPhrase getFirstUnknownSearchWord]];
                 }
                 else
                 {

@@ -9,6 +9,8 @@
 #import "OASearchResult.h"
 #import "OASearchPhrase.h"
 
+#define MAX_TYPE_WEIGHT 10
+
 @implementation OASearchResult
 
 - (instancetype) initWithPhrase:(OASearchPhrase *)sp
@@ -24,36 +26,46 @@
     return self;
 }
 
+// maximum corresponds to the top entry
 - (double) unknownPhraseMatchWeight
 {
-    return [self unknownPhraseMatchWeight:NO];
+    // if result is a complete match in the search we prioritize it higher
+    return [self getSumPhraseMatchWeight] / pow(MAX_TYPE_WEIGHT, [self getDepth] - 1);
 }
 
-- (double) unknownPhraseMatchWeight:(BOOL)isHouse
+- (double) getSumPhraseMatchWeight
 {
-    double res = 0;
-    isHouse = isHouse || _objectType == HOUSE;
-    if (_unknownPhraseMatches)
-        res = isHouse ? [OAObjectType getTypeWeight:HOUSE] : [OAObjectType getTypeWeight:_objectType];
-    
-    if (res == 0 && _parentSearchResult)
-        return [_parentSearchResult unknownPhraseMatchWeight:isHouse];
+    // if result is a complete match in the search we prioritize it higher
+    BOOL match = [_requiredSearchPhrase countWords:_localeName] <= [self getSelfWordCount];
+    double res = [OAObjectType getTypeWeight:match ? _objectType : CITY];
+    if (_parentSearchResult != nil)
+        res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_TYPE_WEIGHT;
     
     return res;
 }
 
+- (int) getDepth
+{
+    if (_parentSearchResult != nil)
+        return 1 + [_parentSearchResult getDepth];
+    return 1;
+}
+
 - (int) getFoundWordCount
 {
+    int inc = [self getSelfWordCount];
+    if (_parentSearchResult != nil)
+        inc += [_parentSearchResult getFoundWordCount];
+    return inc;
+}
+
+- (int) getSelfWordCount
+{
     int inc = 0;
-    if (self.firstUnknownWordMatches)
+    if (_firstUnknownWordMatches)
         inc = 1;
-    
-    if (self.otherWordsMatch)
-        inc += self.otherWordsMatch.count;
-    
-    if (self.parentSearchResult)
-        inc += [self.parentSearchResult getFoundWordCount];
-    
+    if (_otherWordsMatch != nil)
+        inc += _otherWordsMatch.count;
     return inc;
 }
 
@@ -73,6 +85,13 @@
         distance = [location distanceFromLocation:self.location];
     
     return self.priority - 1 / (1 + pd * distance);
+}
+
+- (OASearchResult *)setNewParentSearchResult:(OASearchResult *)parentSearchResult
+{
+    OASearchResult *prev = _parentSearchResult;
+    _parentSearchResult = parentSearchResult;
+    return prev;
 }
 
 @end

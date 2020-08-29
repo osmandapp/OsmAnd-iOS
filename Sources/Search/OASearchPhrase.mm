@@ -141,6 +141,16 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     }
 }
 
++ (OASearchPhrase *) emptyPhrase
+{
+    return [self emptyPhrase:nil];
+}
+
++ (OASearchPhrase *) emptyPhrase:(OASearchSettings *)settings
+{
+    return [[OASearchPhrase alloc] initWithSettings:settings];
+}
+
 - (OASearchPhrase *) createNewSearchPhrase:(OASearchSettings *)settings fullText:(NSString *)text foundWords:(NSMutableArray<OASearchWord *> *)foundWords textToSearch:(NSString *)textToSearch
 {
     OASearchPhrase *sp = [[OASearchPhrase alloc] initWithSettings:settings];
@@ -256,7 +266,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return s;
 }
 
-- (NSInteger) countWords:(NSString *) word
+- (NSInteger) countWords:(NSString *)word
 {
     NSArray<NSString *> *ws = [word componentsSeparatedByRegex:regex];
     NSInteger cnt = 0;
@@ -314,7 +324,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     {
         _mainUnknownSearchWordComplete = YES;
         NSMutableArray<NSString *> *searchWords = [NSMutableArray arrayWithArray:unknownSearchWords];
-        [searchWords insertObject:[self getFirstUnknownSearchWord] atIndex:0];
+        [searchWords insertObject:_firstUnknownSearchWord atIndex:0];
         [searchWords sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2) {
             int i1 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o1 lowerCase]));
             int i2 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o2 lowerCase]));
@@ -386,23 +396,23 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return _fullTextSearchPhrase;
 }
 
-- (NSString *)getUnknownSearchPhrase
+- (NSString *) getUnknownSearchPhrase
 {
     return _unknownSearchPhrase;
 }
 
-- (NSMutableArray<NSString *> *) getUnknownSearchWords:(NSSet<NSString *> *)exclude
+- (NSString *) getFirstUnknownSearchWord
 {
-    if (!exclude || self.unknownWords.count == 0 || exclude.count == 0)
-        return self.unknownWords;
+    return _firstUnknownSearchWord;
+}
 
-    NSMutableArray<NSString *> *l = [NSMutableArray array];
-    for (NSString *uw in self.unknownWords)
-    {
-        if (!exclude || ![exclude containsObject:uw])
-            [l addObject:uw];
-    }
-    return l;
+- (OANameStringMatcher *) getFullUnknownNameMatcher
+{
+    // TODO investigate diesel 95
+    if ([self isLastUnknownSearchWordComplete] || [self hasMoreThanOneUnknownSearchWord])
+        return [[OANameStringMatcher alloc] initWithNamePart:_unknownSearchPhrase mode:TRIM_AND_CHECK_ONLY_STARTS_WITH];
+    else
+        return [[OANameStringMatcher alloc] initWithNamePart:_unknownSearchPhrase mode:CHECK_STARTS_FROM_SPACE];
 }
 
 - (BOOL) isUnknownSearchWordPresent
@@ -587,34 +597,6 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return [self selectWord:res unknownWords:nil lastComplete:NO];
 }
 
-- (OASearchPhrase *) selectWord:(OASearchResult *)res unknownWords:(NSArray<NSString *> *)unknownWords lastComplete:(BOOL)lastComplete
-{
-    OASearchPhrase *sp = [[OASearchPhrase alloc] initWithSettings:self.settings];
-    [self addResult:res sp:sp];
-    OASearchResult *prnt = res.parentSearchResult;
-    while (prnt)
-    {
-        [self addResult:prnt sp:sp];
-        prnt = prnt.parentSearchResult;
-    }
-    int i = 0;
-    for (OASearchWord *w in self.words)
-        [sp.words insertObject:w atIndex:i++];
-
-    if (unknownWords)
-    {
-        sp.lastUnknownSearchWordComplete = lastComplete;
-        for (int i = 0; i < unknownWords.count; i++)
-        {
-            if (i == 0)
-                sp.unknownSearchWordTrim = unknownWords[0];
-            else
-                [sp.unknownWords addObject:unknownWords[i]];
-        }
-    }
-    return sp;
-}
-
 - (void) addResult:(OASearchResult *)res sp:(OASearchPhrase *)sp
 {
     OASearchWord *sw = [[OASearchWord alloc] initWithWord:res.wordsSpan ? res.wordsSpan : [res.localeName trim] res:res];
@@ -662,7 +644,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return _firstUnknownNameStringMatcher;
 }
 
-- (OANameStringMatcher *) getUnknownNameStringMatcher:(int) i
+- (OANameStringMatcher *) getUnknownNameStringMatcher:(NSInteger)i
 {
     while (_unknownWordsMatcher.count <= i)
     {
@@ -876,7 +858,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *) sr
 {
-    return [self countUnknownWordsMatch:sr localeName:sr.localeName otherNasmes:sr.otherNames matchingWordsCount:0];
+    return [self countUnknownWordsMatch:sr localeName:sr.localeName otherNames:sr.otherNames matchingWordsCount:0];
 }
 
 - (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *) sr matchingWordsCount:(NSInteger)matchingWordsCount
@@ -884,7 +866,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return [self countUnknownWordsMatch:sr localeName:sr.localeName otherNames:sr.otherNames matchingWordsCount:matchingWordsCount];
 }
 
-- (void) countUnknownWordsMatch:(OASearchResult *)sr localeName:(NSString *)localeName otherNames:(NSMutableArray<NSString *> *)otherNames matchingWordsCount:(NSInteger)matchingWordsCount
+- (NSInteger) countUnknownWordsMatch:(OASearchResult *)sr localeName:(NSString *)localeName otherNames:(NSMutableArray<NSString *> *)otherNames matchingWordsCount:(NSInteger)matchingWordsCount
 {
     NSInteger r = 0;
     if (_otherUnknownWords.count > 0)
@@ -892,53 +874,74 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         for (NSInteger i = 0; i < _otherUnknownWords.count; i++)
         {
             BOOL match = NO;
-            if (self.unknownWordsMatcher.count == i)
+            if (i < matchingWordsCount - 1)
             {
-                [self.unknownWordsMatcher addObject:[[OANameStringMatcher alloc] initWithLastWord:self.unknownWords[i] mode:i < self.unknownWords.count - 1 || [self isLastUnknownSearchWordComplete] ? CHECK_EQUALS_FROM_SPACE : CHECK_STARTS_FROM_SPACE]];
+                match = YES;
             }
-            OANameStringMatcher *ms = self.unknownWordsMatcher[i];
-            if ([ms matches:localeName] || [ms matchesMap:otherNames])
+            else
             {
-                if (!sr.otherWordsMatch)
-                    sr.otherWordsMatch = [NSMutableSet set];
-                
-                [sr.otherWordsMatch addObject:self.unknownWords[i]];
+                OANameStringMatcher *ms = [self getUnknownNameStringMatcher:i];
+                if ([ms matches:localeName] || [ms matchesMap:otherNames])
+                {
+                    match = YES;
+                }
+            }
+            if (match)
+            {
+                if (sr.otherWordsMatch == nil)
+                    sr.otherWordsMatch = [NSMutableSet new];
+                [sr.otherWordsMatch addObject:_otherUnknownWords[i]];
+                r++;
             }
         }
     }
-    if (!sr.firstUnknownWordMatches)
-        sr.firstUnknownWordMatches = [localeName isEqualToString:[self getUnknownSearchWord]]
-            || [[self getNameStringMatcher] matches:localeName]
-            || [[self getNameStringMatcher] matchesMap:otherNames];
+    if (matchingWordsCount > 0)
+    {
+        sr.firstUnknownWordMatches = YES;
+        r++;
+    }
+    else
+    {
+        BOOL match = [localeName isEqualToString:_firstUnknownSearchWord]
+            || [[self getFirstUnknownNameStringMatcher] matches:localeName]
+            || [[self getFirstUnknownNameStringMatcher] matchesMap:otherNames];
+        if (match)
+            r++;
+        sr.firstUnknownWordMatches = match || sr.firstUnknownWordMatches;
+    }
+    return r;
+}
+
+- (NSString *) getLastUnknownSearchWord
+{
+    if (_otherUnknownWords.count > 0)
+        return _otherUnknownWords[_otherUnknownWords.count - 1];
+    return _firstUnknownSearchWord;
+}
+
+- (int) getRadiusSearch:(int)meters radiusLevel:(int)radiusLevel
+{
+    int res = meters;
+    for (int k = 0; k < radiusLevel; k++)
+    {
+        res = res * (k % 2 == 0 ? 2 : 3);
+    }
+    return res;
 }
 
 - (int) getRadiusSearch:(int)meters
 {
-    return (1 << ([self getRadiusLevel] - 1)) * meters;
+    return [self getRadiusSearch:meters radiusLevel:self.getRadiusLevel];
 }
 
 - (int) getNextRadiusSearch:(int) meters
 {
-    return (1 << [self getRadiusLevel]) * meters;
+    return [self getRadiusSearch:meters radiusLevel:self.getRadiusLevel];
 }
 
 + (NSComparisonResult) icompare:(int)x y:(int)y
 {
     return (x < y) ? NSOrderedAscending : ((x == y) ? NSOrderedSame : NSOrderedDescending);
-}
-
-- (NSString *) getUnknownWordToSearchBuilding
-{
-    NSArray<NSString *> *unknownSearchWords = [self getUnknownSearchWords];
-    if (unknownSearchWords.count > 0 && [OAUtilities extractFirstIntegerNumber:[self getUnknownSearchWord]] == 0)
-    {
-        for (NSString *wrd in unknownSearchWords)
-        {
-            if ([OAUtilities extractFirstIntegerNumber:wrd] != 0)
-                return wrd;
-        }
-    }
-    return [self getUnknownSearchWord];
 }
 
 - (int) lengthWithoutNumbers:(NSString *)s
@@ -957,31 +960,45 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return len;
 }
 
+- (int) getUnknownWordToSearchBuildingInd
+{
+    if (_otherUnknownWords.count > 0 && [OAUtilities extractFirstIntegerNumber:[self getFirstUnknownSearchWord]] == 0)
+    {
+        int ind = 0;
+        for (NSString *wrd in _otherUnknownWords)
+        {
+            ind++;
+            if ([OAUtilities extractFirstIntegerNumber:wrd] != 0)
+                return ind;
+        }
+    }
+    return 0;
+}
+
+- (OANameStringMatcher *) getUnknownWordToSearchBuildingNameMatcher
+{
+    int ind = [self getUnknownWordToSearchBuildingInd];
+    if(ind > 0) {
+        return [self getUnknownNameStringMatcher:ind - 1];
+    } else {
+        return [self getFirstUnknownNameStringMatcher];
+    }
+}
+
+- (NSString *) getUnknownWordToSearchBuilding
+{
+    int ind = [self getUnknownWordToSearchBuildingInd];
+    if(ind > 0) {
+        return _otherUnknownWords[ind - 1];
+    } else {
+        return _firstUnknownSearchWord;
+    }
+}
+
 - (NSString *) getUnknownWordToSearch
 {
-    NSArray<NSString *> *unknownSearchWords = [self getUnknownSearchWords];
-    
-    NSString *wordToSearch = [self getUnknownSearchWord];
-    if (unknownSearchWords.count > 0)
-    {
-        NSMutableArray<NSString *> *searchWords = [NSMutableArray arrayWithArray:unknownSearchWords];
-        [searchWords insertObject:[self getUnknownSearchWord] atIndex:0];
-        [searchWords sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2)
-        {
-            int i1 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o1 lowerCase]));
-            int i2 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o2 lowerCase]));
-            if (i1 != i2)
-                return [self.class icompare:i1 y:i2];
-            
-            // compare length without numbers to not include house numbers
-            return (NSComparisonResult)-[self.class icompare:[self lengthWithoutNumbers:o1] y:[self lengthWithoutNumbers:o2]];
-        }];
-        for (NSString *s in searchWords)
-            if (s.length > 0 && !isdigit([s characterAtIndex:0]))
-                return s;
-    }
-    
-    return wordToSearch;
+    [self calcMainUnknownWordToSearch];
+    return _mainUnknownWordToSearch;
 }
 
 - (BOOL) isTextComplete:(NSString *)fullText

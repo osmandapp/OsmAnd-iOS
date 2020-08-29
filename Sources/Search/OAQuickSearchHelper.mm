@@ -54,9 +54,9 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         sr.objectType = FAVORITE;
         sr.location = [[CLLocation alloc] initWithLatitude:point->getLatLon().latitude longitude:point->getLatLon().longitude];
         sr.preferredZoom = 17;
-        if ([phrase getUnknownSearchWordLength] <= 1 && [phrase isNoSelectedType])
+        if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
             [resultMatcher publish:sr];
-        else if ([[phrase getNameStringMatcher] matches:sr.localeName])
+        else if ([[phrase getFirstUnknownNameStringMatcher] matches:sr.localeName])
             [resultMatcher publish:sr];
     }
     return YES;
@@ -92,7 +92,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         sr.objectType = FAVORITE;
         sr.location = [[CLLocation alloc] initWithLatitude:point->getLatLon().latitude longitude:point->getLatLon().longitude];
         sr.preferredZoom = 17;
-        if (!point->getGroup().isNull() && [[phrase getNameStringMatcher] matches:point->getGroup().toNSString()])
+        if (!point->getGroup().isNull() && [[phrase getFirstUnknownNameStringMatcher] matches:point->getGroup().toNSString()])
             [resultMatcher publish:sr];
     }
     return YES;
@@ -163,9 +163,9 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
             sr.localeRelatedObjectName = i < _paths.count ? [_paths[i] lastPathComponent] : OALocalizedString(@"track_recording_name");
             sr.relatedGpx = gpx;
             sr.preferredZoom = 17;
-            if ([phrase getUnknownSearchWordLength] <= 1 && [phrase isNoSelectedType])
+            if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
                 [resultMatcher publish:sr];
-            else if ([[phrase getNameStringMatcher] matches:sr.localeName])
+            else if ([[phrase getFirstUnknownNameStringMatcher] matches:sr.localeName])
                 [resultMatcher publish:sr];
         }
         i++;
@@ -205,9 +205,9 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         sr.objectType = RECENT_OBJ;
         sr.location = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
         sr.preferredZoom = 17;
-        if ([phrase getUnknownSearchWordLength] <= 1 && [phrase isNoSelectedType])
+        if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
             [resultMatcher publish:sr];
-        else if ([[phrase getNameStringMatcher] matches:sr.localeName])
+        else if ([[phrase getFirstUnknownNameStringMatcher] matches:sr.localeName])
             [resultMatcher publish:sr];
     }
     return YES;
@@ -297,9 +297,19 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     OAPOIFiltersHelper *poiFilters = [OAPOIFiltersHelper sharedInstance];
     for (OACustomSearchPoiFilter *udf in [poiFilters getUserDefinedPoiFilters])
         [_core addCustomSearchPoiFilter:udf priority:0];
+    OAPOIUIFilter *topWikiPoiFilter = [poiFilters getTopWikiPoiFilter];
+    if (topWikiPoiFilter && topWikiPoiFilter.isActive)
+        [_core addCustomSearchPoiFilter:topWikiPoiFilter priority:1];
+    OAPOIUIFilter *showAllPOIFilter = [poiFilters getShowAllPOIFilter];
+    if (showAllPOIFilter != nil && showAllPOIFilter.isActive)
+        [_core addCustomSearchPoiFilter:showAllPOIFilter priority:1];
+    [self refreshFilterOrders];
+}
 
-    [_core addCustomSearchPoiFilter:[poiFilters getLocalWikiPOIFilter] priority:1];
-    [_core addCustomSearchPoiFilter:[poiFilters getShowAllPOIFilter] priority:1];
+- (void) refreshFilterOrders
+{
+    OAPOIFiltersHelper *poiFilters = [OAPOIFiltersHelper sharedInstance];
+    [_core setActivePoiFiltersByOrder:[poiFilters getPoiFilterOrders:YES]];
 }
 
 - (void) setResourcesForSearchUICore

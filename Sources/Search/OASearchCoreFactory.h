@@ -84,6 +84,9 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 - (instancetype) initWithTypesAPI:(OASearchAmenityTypesAPI *)typesAPI;
 
+- (OAPOIBaseType *) getUnselectedPoiType;
+- (NSString *) getNameFilter;
+
 @end
 
 @interface OASearchStreetByCityAPI : OASearchBaseAPI

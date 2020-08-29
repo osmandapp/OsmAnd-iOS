@@ -355,7 +355,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
         
         _searchSettings = [[OASearchSettings alloc] init];
         _searchSettings = [_searchSettings setLang:lang transliterateIfMissing:transliterate];
-        _phrase = [[OASearchPhrase alloc] initWithSettings:_searchSettings];
+        _phrase = [OASearchPhrase emptyPhrase:_searchSettings];
         _currentSearchResult = [[OASearchResultCollection alloc] initWithPhrase:_phrase];
     }
     return self;
@@ -419,11 +419,13 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             [((OASearchAmenityTypesAPI *) capi) addCustomFilter:poiFilter priority:priority];
 }
 
-- (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *) filterOrders
+- (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrders
 {
     for (OASearchCoreAPI *capi : _apis)
-        if ([capi isKindOfClass:[OASearchAmenityTypesAPI class]]) {
+    {
+        if ([capi isKindOfClass:[OASearchAmenityTypesAPI class]])
             [((OASearchAmenityTypesAPI *) capi) setActivePoiFiltersByOrder:filterOrders];
+    }
 }
 
 - (void) registerAPI:(OASearchCoreAPI *)api
@@ -470,7 +472,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
 
 - (BOOL) filterOneResult:(OASearchResult *)object phrase:(OASearchPhrase *)phrase
 {
-    OANameStringMatcher *nameStringMatcher = [phrase getNameStringMatcher];
+    OANameStringMatcher *nameStringMatcher = [phrase getFirstUnknownNameStringMatcher];
     return [nameStringMatcher matches:object.localeName] || [nameStringMatcher matchesMap:object.otherNames];
 }
 
@@ -606,6 +608,28 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
         }
     }
     return radius;
+}
+    
+- (OAPOIBaseType *) getUnselectedPoiType
+{
+    for (OASearchCoreAPI *capi in _apis)
+    {
+        if ([capi isKindOfClass:OASearchAmenityByTypeAPI.class]) {
+            return [((OASearchAmenityByTypeAPI *) capi) getUnselectedPoiType];
+        }
+    }
+    return nil;
+}
+
+- (NSString *) getCustomNameFilter
+{
+    for (OASearchCoreAPI *capi : _apis)
+    {
+        if ([capi isKindOfClass:OASearchAmenityByTypeAPI.class]) {
+            return [((OASearchAmenityByTypeAPI *) capi) getNameFilter];
+        }
+    }
+    return nil;
 }
 
 - (void) searchInBackground:(OASearchPhrase *)phrase matcher:(OASearchResultMatcher *)matcher

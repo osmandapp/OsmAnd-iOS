@@ -138,7 +138,7 @@
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <state key="normal" title="Copy">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </state>
                                     <connections>
                                         <action selector="copyProfileButtonPressed:" destination="Sco-Tu-qdI" eventType="touchUpInside" id="H2a-cU-xoz"/>
@@ -168,7 +168,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstItem="Uev-GO-Hlk" firstAttribute="bottom" secondItem="CbV-nP-EzT" secondAttribute="top" priority="750" constant="60" id="3Xk-xm-tEf"/>
                 <constraint firstItem="CbV-nP-EzT" firstAttribute="trailing" secondItem="Sco-Tu-qdI" secondAttribute="trailing" id="8N4-If-lhW"/>

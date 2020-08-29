@@ -14,9 +14,10 @@
 #import "OAUtilities.h"
 #import "OASettingsHelper.h"
 #import "OAMapStyleSettings.h"
-#import "OrderedDictionary.h"
-#import "OAConfigureProfileViewController.h"
 #import "OARouteProvider.h"
+#import "OAMapWidgetRegInfo.h"
+#import "OAMapWidgetRegistry.h"
+#import "OARootViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -24,8 +25,8 @@
 
 #define kCellTypeCheck @"OAIconTextCell"
 #define kIconTitleIconRoundCell @"OAIconTitleIconRoundCell"
-#define kButtonsDividerTag 150
-#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
+#define kOABottomSheetWidth 320.0
+#define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 
 typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 {
@@ -40,16 +41,16 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 @implementation OACopyProfileBottomSheetViewController
 {
     NSArray<NSArray *> *_data;
-    NSArray<OAApplicationMode *> *_appProfiles;
-    OAApplicationMode *_appMode;
-    OAApplicationMode *_selectedMode;
+    OAAppSettings *_settings;
+    OAApplicationMode *_targetAppMode;
+    OAApplicationMode *_sourceAppMode;
     NSInteger _selectedModeIndex;
+    
     UIPanGestureRecognizer *_panGesture;
     EOACopyProfileMenuState _currentState;
     CGFloat _initialTouchPoint;
     BOOL _isDragging;
     BOOL _isHiding;
-    BOOL _topOverScroll;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame mode:(OAApplicationMode *)am
@@ -63,7 +64,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     if (self)
     {
         self.frame = frame;
-        _appMode = am;
+        _targetAppMode = am;
         [self commonInit];
     }
     return self;
@@ -72,11 +73,13 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-
+    
     [self.layer setShadowColor:[UIColor blackColor].CGColor];
     [self.layer setShadowOpacity:0.3];
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    [self.layer setCornerRadius:12.];
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     _titleView.text = OALocalizedString(@"copy_profile");
     
@@ -92,8 +95,10 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDragged:)];
     _panGesture.maximumNumberOfTouches = 1;
     _panGesture.minimumNumberOfTouches = 1;
-    [self addGestureRecognizer:_panGesture];
+    _panGesture.delaysTouchesBegan = NO;
+    _panGesture.delaysTouchesEnded = NO;
     _panGesture.delegate = self;
+    [self addGestureRecognizer:_panGesture];
     
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     _cancelButton.layer.cornerRadius = 9.;
@@ -107,27 +112,30 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 
 - (void) commonInit
 {
+    _settings = [OAAppSettings sharedManager];
     [self generateData];
 }
 
 - (void) generateData
 {
-    NSMutableArray *tableData = [NSMutableArray array];
-    NSMutableArray *arr = [NSMutableArray array];
+    NSMutableArray *dataArr = [NSMutableArray array];
     
     for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
     {
-        if ([am.name isEqualToString:_appMode.name])
+        if ([am.name isEqualToString:_targetAppMode.name])
             continue;
-        [arr addObject:@{
+        [dataArr addObject:@{
             @"type" : kIconTitleIconRoundCell,
             @"app_mode" : am,
-            @"selected" : @(_selectedMode == am),
+            @"selected" : @(_sourceAppMode == am),
         }];
     }
-    [tableData addObject:arr];
-    _data = [NSArray arrayWithArray:tableData];
-    _cpyProfileButton.userInteractionEnabled = _selectedMode;
+    _data = [NSArray arrayWithObject:dataArr];
+    
+    _cpyProfileButton.userInteractionEnabled = _sourceAppMode;
+    _cpyProfileButton.backgroundColor = _sourceAppMode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    [_cpyProfileButton setTintColor:_sourceAppMode ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
+    [_cpyProfileButton setTitleColor:_sourceAppMode ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
 }
 
 - (CGFloat) heightForLabel:(NSString *)text
@@ -137,59 +145,22 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
 }
 
-- (BOOL) isLandscape
-{
-    return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
-}
-
-- (BOOL) onlyDefaultProfiles // check if needed
-{
-    for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
-    {
-        if ([am isCustomProfile])
-            return NO;
-    }
-    return YES;
-}
-
-- (CGFloat) getViewWidthForPad
-{
-    return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
-}
-
 - (void) layoutSubviews
 {
-    if (_isHiding)
+    if (_isHiding || _isDragging)
         return;
     [super layoutSubviews];
     [self adjustFrame];
     
-    BOOL isLandscape = [self isLandscape];
+    BOOL isLandscape = OAUtilities.isLandscape;
     [_tableView setScrollEnabled:isLandscape];
-    
-    CGRect sliderFrame = _sliderView.frame;
-    sliderFrame.origin.x = self.bounds.size.width / 2 - sliderFrame.size.width / 2;
-    _sliderView.frame = sliderFrame;
-    
-    CGRect buttonsFrame = _buttonsView.frame;
-    buttonsFrame.size.width = self.bounds.size.width;
-    _buttonsView.frame = buttonsFrame;
-    
+
     CGRect contentFrame = _contentContainer.frame;
     contentFrame.size.width = self.bounds.size.width;
     contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
     contentFrame.size.height -= contentFrame.origin.y;
     _contentContainer.frame = contentFrame;
     
-    CGFloat width = buttonsFrame.size.width - OAUtilities.getLeftMargin * (isLandscape ? 1 : 2) - 32.;
-    CGFloat buttonWidth = width / 2 - 8;
-    
-    _cancelButton.frame = CGRectMake(16. + OAUtilities.getLeftMargin, 9., buttonWidth, 42.);
-    _cpyProfileButton.frame = CGRectMake(CGRectGetMaxX(_cancelButton.frame) + 16., 9., buttonWidth, 42.);
-    _sliderView.hidden = isLandscape;
-    
-    CGFloat tableViewY = CGRectGetMaxY(_headerView.frame);
-    _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
     _headerView.frame = CGRectMake(0., _headerView.frame.origin.y, contentFrame.size.width, _headerView.frame.size.height);
     
     [self applyCornerRadius:self.headerView];
@@ -200,10 +171,10 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 {
     CGRect f = self.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    if ([self isLandscape])
+    if (OAUtilities.isLandscape)
     {
         f.size.height = DeviceScreenHeight;
-        f.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
+        f.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
         f.origin = CGPointMake(DeviceScreenWidth/2 - f.size.width / 2, 0.);
         
         CGRect buttonsFrame = _buttonsView.frame;
@@ -218,12 +189,12 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     }
     else
     {
-        CGRect buttonsFrame = _buttonsView.frame;
-        buttonsFrame.size.height = 60. + bottomMargin;
         f.size.height = [self getViewHeight];
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
         
+        CGRect buttonsFrame = _buttonsView.frame;
+        buttonsFrame.size.height = 60. + bottomMargin;
         buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
         _buttonsView.frame = buttonsFrame;
         
@@ -239,7 +210,6 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 {
     CAShapeLayer * maskLayer = [CAShapeLayer layer];
     maskLayer.path = [UIBezierPath bezierPathWithRoundedRect: view.bounds byRoundingCorners: UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii: CGSizeMake(12., 12.)].CGPath;
-
     view.layer.mask = maskLayer;
 }
 
@@ -258,9 +228,8 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 - (void) show:(BOOL)animated
 {
     [_tableView setContentOffset:CGPointZero];
-    BOOL isLandscape = [self isLandscape];
     _isHiding = NO;
-    _currentState = isLandscape ? EOACopyProfileMenuStateFullScreen : EOACopyProfileMenuStateInitial;
+    _currentState = OAUtilities.isLandscape ? EOACopyProfileMenuStateFullScreen : EOACopyProfileMenuStateInitial;
     [_tableView setScrollEnabled:_currentState == EOACopyProfileMenuStateFullScreen];
     [self generateData];
     [self setNeedsLayout];
@@ -269,10 +238,10 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     if (animated)
     {
         CGRect frame = self.frame;
-        if ([self isLandscape])
+        if (OAUtilities.isLandscape)
         {
             frame.origin.x = DeviceScreenWidth/2 - frame.size.width / 2;
-            frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
+            frame.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
         }
         else
         {
@@ -289,7 +258,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     else
     {
         CGRect frame = self.frame;
-        if ([self isLandscape])
+        if (OAUtilities.isLandscape)
             frame.origin.y = 0.0;
         else
             frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
@@ -311,6 +280,8 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
             [UIView animateWithDuration:0.3 animations:^{
                 self.frame = frame;
             } completion:^(BOOL finished) {
+                if (self.delegate)
+                    [self.delegate onCopyProfileDismessed];
                 [self removeFromSuperview];
             }];
         }
@@ -336,28 +307,30 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 
 - (IBAction) copyProfileButtonPressed:(id)sender
 {
-    NSLog(@"Copy");
     [self copyProfile];
+    if (self.delegate)
+        [self.delegate onCopyProfileCompleted];
+    [self hide:YES];
 }
 
-- (void) copyProfile
+- (void) copyRegisteredPreferences
 {
-    OAAppSettings *settings= [OAAppSettings sharedManager];
-    NSDictionary *settingsPref = [[[OAProfileSettingsItem alloc] initWithAppMode:_selectedMode] getSettingsJson];
-    //NSSet<NSString *> *appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
-    
-    //MutableOrderedDictionary *res = [MutableOrderedDictionary new];
-    
-    // registeredPreferences
-    for (NSString *key in settings.getRegisteredSettings)
+    for (NSString *key in _settings.getRegisteredSettings)
     {
-        OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:key];
+        OAProfileSetting *setting = [_settings.getRegisteredSettings objectForKey:key];
         if (setting)
-            [setting setValueFromString:[setting toStringValue:_selectedMode] appMode:_appMode];
+        {
+            if ([key isEqualToString:@"voice_provider"])
+                [setting setValueFromString:[[setting toStringValue:_sourceAppMode] stringByReplacingOccurrencesOfString:@"-tts" withString:@""] appMode:_targetAppMode];
+            else
+                [setting setValueFromString:[setting toStringValue:_sourceAppMode] appMode:_targetAppMode];
+        }
     }
-    
-    // routing preferences
-    const auto router = [OARouteProvider getRouter:_selectedMode];
+}
+
+- (void) copyRoutingPreferences
+{
+    const auto router = [OARouteProvider getRouter:_sourceAppMode];
     if (router)
     {
         const auto& parameters = router->getParametersList();
@@ -365,63 +338,84 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
         {
             if (p.type == RoutingParameterType::BOOLEAN)
             {
-                OAProfileBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
-                [boolSetting set:[boolSetting get:_selectedMode] mode:_appMode];
+                OAProfileBoolean *boolSetting = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
+                [boolSetting set:[boolSetting get:_sourceAppMode] mode:_targetAppMode];
             }
             else
             {
-                OAProfileString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
-                [stringSetting set:[stringSetting get:_selectedMode] mode:_appMode];
+                OAProfileString *stringSetting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
+                [stringSetting set:[stringSetting get:_sourceAppMode] mode:_targetAppMode];
             }
         }
     }
-    
-    
-    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
-    for (OAMapStyleParameter *param in [styleSettings getAllParameters])
-    {
-        OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:param.name];
-        if (setting)
-            [setting setValueFromString:param.value appMode:_appMode];
-    }
-    
-    
-    
-//    for (NSString *key in settingsPref)
-//    {
-//        NSLog(@"key -> %@", key);
-//        NSLog(@"value -> %@\n", [settingsPref valueForKey:key]);
-//        if ([self canPreferenceBeCopied] && ![_appMode.getUserProfileName isEqualToString:_selectedMode.getUserProfileName])
-//        {
-//            OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:key];
-//            if (_appMode.parent == _selectedMode.parent)
-//            {
-//                if ([_appMode isCustomProfile])
-//                {
-//                    [_appMode setParent:[_selectedMode isCustomProfile] ? _selectedMode.parent : _selectedMode];
-//                }
-//            }
-//            else
-//            {
-//                [setting setValueFromString:[setting getProfileDefaultValue:_selectedMode] appMode:_appMode];
-//
-//                NSString *copiedValue = [setting toStringValue:_selectedMode];
-//                [setting setValueFromString:copiedValue appMode:_appMode];
-//            }
-//        }
-//    }
-//    [_appMode setIconName:_selectedMode.getIconName];
-//    [_appMode setUserProfileName:[_selectedMode.name trim]];
-//    [_appMode setRoutingProfile:_selectedMode.getRoutingProfile];
-//    [_appMode setRouterService:_selectedMode.getRouterService];
-//    [_appMode setIconColor:_selectedMode.getIconColor];
-//    [_appMode setLocationIcon:_selectedMode.getLocationIcon];
-//    [_appMode setNavigationIcon:_selectedMode.getNavigationIcon];
 }
 
-- (BOOL) canPreferenceBeCopied
+- (void) copyRenderingPreferences
 {
-    return _appMode.getOrder != _selectedMode.getOrder;
+    OAMapStyleSettings *sourceStyleSettings = [self getMapStyleSettingsForMode:_sourceAppMode];
+    OAMapStyleSettings *targetStyleSettings = [self getMapStyleSettingsForMode:_targetAppMode];
+    
+    for (OAMapStyleParameter *param in [sourceStyleSettings getAllParameters])
+    {
+        OAMapStyleParameter *p = [targetStyleSettings getParameter:param.name];
+        if (p)
+        {
+            p.value = param.value;
+            [targetStyleSettings save:p];
+        }
+    }
+}
+
+- (NSString *) getRendererByName:(NSString *)rendererName
+{
+    if ([rendererName isEqualToString:@"OsmAnd"])
+        return @"default";
+    else if ([rendererName isEqualToString:@"Touring view (contrast and details)"])
+        return @"Touring-view_(more-contrast-and-details)";
+    else if (![rendererName isEqualToString:@"LightRS"] && ![rendererName isEqualToString:@"UniRS"])
+        return [rendererName lowerCase];
+    
+    return rendererName;
+}
+
+- (OAMapStyleSettings *) getMapStyleSettingsForMode:(OAApplicationMode *)am
+{
+    NSString *renderer = [OAAppSettings.sharedManager.renderer get:am];
+    NSString *resName = [self getRendererByName:renderer];
+    return [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:am.variantKey];
+}
+
+- (void) copyMapWidgetRegistryPreference
+{
+    OAMapWidgetRegistry *mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
+    for (OAMapWidgetRegInfo *r in [mapWidgetRegistry getLeftWidgetSet])
+    {
+        [mapWidgetRegistry setVisibility:_targetAppMode m:r visible:[r visible:_sourceAppMode] collapsed:[r visibleCollapsed:_sourceAppMode]];
+    }
+    for (OAMapWidgetRegInfo *r in [mapWidgetRegistry getRightWidgetSet])
+    {
+        [mapWidgetRegistry setVisibility:_targetAppMode m:r visible:[r visible:_sourceAppMode] collapsed:[r visibleCollapsed:_sourceAppMode]];
+    }
+}
+
+- (void) copyProfile
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
+    [self copyRegisteredPreferences];
+    [self copyRoutingPreferences];
+    [app.data copyAppDataFrom:_sourceAppMode toMode:_targetAppMode];
+    [self copyRenderingPreferences];
+    [self copyMapWidgetRegistryPreference];
+    
+    if ([_targetAppMode isCustomProfile])
+        [_targetAppMode setParent: [_sourceAppMode isCustomProfile] ? _sourceAppMode.parent : _sourceAppMode];
+    [_targetAppMode setIconName:_sourceAppMode.getIconName];
+    [_targetAppMode setRoutingProfile:_sourceAppMode.getRoutingProfile];
+    [_targetAppMode setRouterService:_sourceAppMode.getRouterService];
+    [_targetAppMode setIconColor:_sourceAppMode.getIconColor];
+    [_targetAppMode setLocationIcon:_sourceAppMode.getLocationIcon];
+    [_targetAppMode setNavigationIcon:_sourceAppMode.getNavigationIcon];
 }
 
 #pragma mark - Table View
@@ -451,14 +445,14 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
             cell = (OAIconTitleIconRoundCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.clearColor;
             cell.secondaryImageView.image = [[UIImage imageNamed:@"ic_checkmark_default"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.secondaryImageView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
-            cell.backgroundColor = UIColor.clearColor;
-            cell.titleView.text = am.name;
+            cell.titleView.text = am.toHumanString;
             UIImage *img = am.getIcon;
             cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
@@ -474,7 +468,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    _selectedMode = item[@"app_mode"];
+    _sourceAppMode = item[@"app_mode"];
     [self generateData];
     [tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section], [NSIndexPath indexPathForRow:_selectedModeIndex inSection:indexPath.section]] withRowAnimation:(UITableViewRowAnimation)UITableViewRowAnimationFade];
     _selectedModeIndex = indexPath.row;
@@ -482,18 +476,18 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:@"%@%@.", OALocalizedString(@"copy_profile_descr"), _appMode.name] width:tableView.bounds.size.width - 32 font:[UIFont systemFontOfSize:15] lineSpacing:6.];
+    CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:@"%@%@.", OALocalizedString(@"copy_profile_descr"), _targetAppMode.toHumanString] width:tableView.bounds.size.width - 32 font:[UIFont systemFontOfSize:15] lineSpacing:6.];
     return labelHeight + 32;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSString *descriptionString = [NSString stringWithFormat:@"%@%@.", OALocalizedString(@"copy_profile_descr"), _appMode.name];
+    NSString *descriptionString = [NSString stringWithFormat:@"%@%@.", OALocalizedString(@"copy_profile_descr"), _targetAppMode.toHumanString];
     CGFloat textWidth = tableView.bounds.size.width - 32;
     CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionString width:textWidth font:[UIFont systemFontOfSize:15] lineSpacing:6.] + 16;
     UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
-    description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:OALocalizedString(@"copy_profile_descr") boldString:_appMode.name lineSpacing:4.];
+    description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:OALocalizedString(@"copy_profile_descr") boldString:_targetAppMode.toHumanString lineSpacing:4.];
     description.textColor = UIColorFromRGB(color_text_footer);
     description.numberOfLines = 0;
     description.lineBreakMode = NSLineBreakByWordWrapping;
@@ -511,96 +505,87 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 
 - (void) onDragged:(UIPanGestureRecognizer *)recognizer
 {
+    CGPoint translation = [recognizer translationInView:self];
+    CGFloat cardPanStartingTopConstant = OAUtilities.getStatusBarHeight;
+    
     CGFloat velocity = [recognizer velocityInView:self.superview].y;
     BOOL slidingDown = velocity > 0;
-    BOOL fastUpSlide = velocity < -1500.;
-    BOOL fastDownSlide = velocity > 1500.;
+    BOOL slidingUP = velocity < 0;
     CGPoint touchPoint = [recognizer locationInView:self.superview];
-    CGPoint initialPoint = [self calculateInitialPoint];
-
-    CGFloat fullScreenAnchor = OAUtilities.getStatusBarHeight + 40.;
-    CGFloat expandedAnchor = DeviceScreenHeight / 4 + 40.;
-
+    
     switch (recognizer.state)
     {
         case UIGestureRecognizerStateBegan:
+        {
             _isDragging = YES;
+            cardPanStartingTopConstant = self.frame.origin.y;
             _initialTouchPoint = [recognizer locationInView:self].y;
+        }
         case UIGestureRecognizerStateChanged:
         {
-            CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if (self.frame.origin.y > OAUtilities.getStatusBarHeight
-                || (_initialTouchPoint < _tableView.frame.origin.y && _tableView.contentOffset.y > 0))
+            if (cardPanStartingTopConstant + translation.y > 30.0)
             {
-                [_tableView setContentOffset:CGPointZero];
-            }
-
-            if (newY <= OAUtilities.getStatusBarHeight || _tableView.contentOffset.y > 0)
-            {
-                newY = 0;
-                if (_tableView.contentOffset.y > 0)
-                    _initialTouchPoint = [recognizer locationInView:self].y;
-            }
-            else if (DeviceScreenHeight - newY < _buttonsView.frame.size.height)
-            {
+                CGFloat newY = touchPoint.y - _initialTouchPoint;
+                if (self.frame.origin.y > OAUtilities.getStatusBarHeight
+                    || (_initialTouchPoint < _tableView.frame.origin.y && _tableView.contentOffset.y > 0))
+                {
+                    [_tableView setContentOffset:CGPointZero];
+                }
+                
+                if (newY <= OAUtilities.getStatusBarHeight || _tableView.contentOffset.y > 0)
+                {
+                    newY = 0;
+                    if (_tableView.contentOffset.y > 0)
+                        _initialTouchPoint = [recognizer locationInView:self].y;
+                }
+                else if (DeviceScreenHeight - newY < _buttonsView.frame.size.height)
+                {
+                    return;
+                }
+                
+                CGRect frame = self.frame;
+                frame.origin.y = newY > 0 && newY <= OAUtilities.getStatusBarHeight ? OAUtilities.getStatusBarHeight : newY;
+                frame.size.height = DeviceScreenHeight - newY;
+                self.frame = frame;
+                
+                _statusBarBackgroundView.frame = newY == 0 ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
+                
+                CGRect buttonsFrame = _buttonsView.frame;
+                buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;
+                _buttonsView.frame = buttonsFrame;
+                
+                CGRect contentFrame = _contentContainer.frame;
+                contentFrame.size.width = self.bounds.size.width;
+                contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
+                contentFrame.size.height = frame.size.height - buttonsFrame.size.height - contentFrame.origin.y;
+                _contentContainer.frame = contentFrame;
+                
+                CGFloat tableViewY = CGRectGetMaxY(_headerView.frame);
+                _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
+                
                 return;
             }
-
-            CGRect frame = self.frame;
-            frame.origin.y = newY > 0 && newY <= OAUtilities.getStatusBarHeight ? OAUtilities.getStatusBarHeight : newY;
-            frame.size.height = DeviceScreenHeight - newY;
-            self.frame = frame;
-
-            CGRect buttonsFrame = _buttonsView.frame;
-            buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;
-            _buttonsView.frame = buttonsFrame;
-
-            CGRect contentFrame = _contentContainer.frame;
-            contentFrame.size.width = self.bounds.size.width;
-            contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
-            contentFrame.size.height = frame.size.height - buttonsFrame.size.height - contentFrame.origin.y;
-            _contentContainer.frame = contentFrame;
-
-            CGFloat tableViewY = CGRectGetMaxY(_headerView.frame);
-            _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
-
-            return;
         }
         case UIGestureRecognizerStateEnded:
         case UIGestureRecognizerStateCancelled:
         {
             _isDragging = NO;
-            BOOL shouldRefresh = NO;
-            CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if ((newY - initialPoint.y > 180 || fastDownSlide) && _currentState == EOACopyProfileMenuStateInitial)
+            if (slidingDown && _currentState == EOACopyProfileMenuStateInitial)
             {
-                [self hide:YES];//[[OARootViewController instance].mapPanel closeRouteInfo];
+                [self hide:YES];
                 break;
             }
-            else if (newY > DeviceScreenHeight - (170.0 + _buttonsView.frame.size.height + _tableView.frame.origin.y) && !fastUpSlide)
-            {
-                shouldRefresh = YES;
-                _currentState = EOACopyProfileMenuStateInitial;
-            }
-            else if (newY < fullScreenAnchor || (!slidingDown && _currentState == EOACopyProfileMenuStateInitial) || fastUpSlide)
+            else if (slidingUP)
             {
                 _currentState = EOACopyProfileMenuStateFullScreen;
-                [_tableView setScrollEnabled:YES];
             }
-            else if ((newY < expandedAnchor || (newY > expandedAnchor && !slidingDown)) && !fastDownSlide)
+            else if (slidingDown)
             {
-                shouldRefresh = YES;
                 _currentState = EOACopyProfileMenuStateInitial;
             }
-            else
-            {
-                shouldRefresh = YES;
-                _currentState = EOACopyProfileMenuStateInitial;
-            }
-            [UIView animateWithDuration: 0.2 animations:^{
-                [self layoutSubviews];
-            } completion:^(BOOL finished) {
-            }];
+             [UIView animateWithDuration: 0.2 animations:^{
+                 [self layoutSubviews];
+             } completion:nil];
         }
         default:
         {
@@ -611,7 +596,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    return ![self isLandscape];
+    return !OAUtilities.isLandscape;
 }
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -619,13 +604,12 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     return YES;
 }
 
-//- (void) scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-//    if (scrollView.contentOffset.y <= 0 || self.frame.origin.y != 0)
-//        [scrollView setContentOffset:CGPointZero animated:NO];
-//
-//    //[self setupModeViewShadowVisibility];
-//}
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentOffset.y <= 0 || self.frame.origin.y != 0)
+        [scrollView setContentOffset:CGPointZero animated:NO];
+    [self setupModeViewShadowVisibility];
+}
 
 - (void) setupModeViewShadowVisibility
 {

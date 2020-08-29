@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate>
 
 @property (strong, nonatomic) OACopyProfileBottomSheetViewController* cpyProfileView;
 
@@ -60,6 +60,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     OAAutoObserverProxy* _appModeChangeObserver;
     
     EOADashboardScreenType _screenToOpen;
+    UIView *_cpyProfileViewUnderlay;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)mode
@@ -496,14 +497,48 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     CGRect frame = self.cpyProfileView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
     self.cpyProfileView.frame = frame;
-    
+    self.cpyProfileView.delegate = self;
     [self.cpyProfileView.layer removeAllAnimations];
     if ([self.view.subviews containsObject:self.cpyProfileView])
         [self.cpyProfileView removeFromSuperview];
-    
+    [self addUnderlay];
     [self.view addSubview:self.cpyProfileView];
-
     [self.cpyProfileView show:YES];
+}
+
+- (void) addUnderlay
+{
+    _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
+    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.clearColor];
+
+    UITapGestureRecognizer *underlayTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUnderlayTapped)];
+    [_cpyProfileViewUnderlay addGestureRecognizer:underlayTap];
+    [self.view addSubview:_cpyProfileViewUnderlay];
+}
+
+
+- (void) onUnderlayTapped
+{
+    if ([self.cpyProfileView superview])
+    {
+        [_cpyProfileViewUnderlay removeFromSuperview];
+        [self.cpyProfileView hide:YES];
+    }
+}
+
+#pragma mark - OACopyProfileBottomSheetDelegate
+
+- (void) onCopyProfileCompleted
+{
+    [self setupTableHeaderView];
+    [self generateData];
+    [self applyLocalization];
+    [self.tableView reloadData];
+}
+
+- (void) onCopyProfileDismessed
+{
+    [_cpyProfileViewUnderlay removeFromSuperview];
 }
 
 @end

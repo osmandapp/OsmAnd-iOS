@@ -11,6 +11,15 @@
 #import "OABottomSheetTwoButtonsViewController.h"
 #import "OAApplicationMode.h"
 
+@protocol OACopyProfileBottomSheetDelegate <NSObject>
+
+@required
+
+- (void) onCopyProfileCompleted;
+- (void) onCopyProfileDismessed;
+
+@end
+
 @interface OACopyProfileBottomSheetViewController : UIView<UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
@@ -25,23 +34,10 @@
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 
+@property (nonatomic) id<OACopyProfileBottomSheetDelegate> delegate;
+
 - (instancetype) initWithFrame:(CGRect)frame mode:(OAApplicationMode *)am;
 - (void) show:(BOOL)animated;
 - (void) hide:(BOOL)animated;
 
 @end
-/*
-@class OACopyProfileBottomSheetViewController;
-
-@interface OACopyProfileBottomSheetScreen : NSObject<OABottomSheetScreen>
-
-- (id) initWithTable:(UITableView *)tableView viewController:(OACopyProfileBottomSheetViewController *)viewController appMode:(OAApplicationMode *)am;
-
-@end
-
-@interface OACopyProfileBottomSheetViewController : OABottomSheetTwoButtonsViewController
-
-- (instancetype) initWithMode:(OAApplicationMode *)am;
-
-@end
-*/

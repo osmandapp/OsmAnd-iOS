@@ -58,7 +58,7 @@
 "shared_string_search" = "検索";
 "search_radius" = "検索範囲";
 "targets" = "目的地";
-"search_radius_proximity" = "内";
+"search_radius_proximity" = "以内";
 "poi" = "POI";
 "day_off_label" = "OFF";
 "open_from" = "以下の場所から開く";
@@ -1649,3 +1649,7 @@
 "app_mode_personal_transporter" = "個人輸送業者";
 "open_wiki_online" = "記事をオンラインで開く";
 "download_wiki_data" = "%@のWikipediaデータをダウンロード";
+"width_limit_description" = "車幅を入力してください。一部のルートにおいては、幅の広い車両では通行できない場合があります。";
+"height_limit_description" = "車高を入力してください。一部のルートにおいては、車高の高い車両では通行できない場合があります。";
+"weight_limit_description" = "車両の重量を入力してください。一部のルートにおいては、大型車両では通行できない場合があります。";
+"routing_attr_length_name" = "長さ制限";

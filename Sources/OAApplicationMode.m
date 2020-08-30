@@ -662,6 +662,13 @@ static OAApplicationMode *_SKI;
         [settings setApplicationMode:_DEFAULT];
     [_cachedFilteredValues removeObjectsInArray:modes];
     [self saveCustomAppModesToSettings];
+    
+    for (OAApplicationMode *mode in modes) {
+        NSString *backupItemFilePath = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_item.plst", mode.stringKey]];
+        NSString *backupProfileFilePath = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:[NSString stringWithFormat:@"profile_%@_data.plst", mode.stringKey]] ;
+        [NSFileManager.defaultManager removeItemAtPath:backupItemFilePath error:nil];
+        [NSFileManager.defaultManager removeItemAtPath:backupProfileFilePath error:nil];
+    }
 }
 
 + (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected

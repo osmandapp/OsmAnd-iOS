@@ -65,11 +65,9 @@
 {
     _app = [OsmAndApp instance];
     _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
-    
     _vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
- 
     [self initData];
 }
 
@@ -85,7 +83,6 @@
                      @"description" : @"",
                      @"img" : @"ic_custom_reset.png"
                      }];
-    
     [model addObject:[NSArray arrayWithArray:arr]];
     
     [arr removeAllObjects];
@@ -93,6 +90,7 @@
            @"type" : kTitleIconRoundCell,
            @"title" : _appMode.toHumanString,
            @"img" : _appMode.getIconName,
+           @"color" : UIColorFromRGB(_appMode.getIconColor),
            @"key" : @"swap_points",
            @"round_bottom" : @(YES),
            @"round_top" : @(YES)
@@ -209,7 +207,7 @@
             if (![item[@"skip_tint"] boolValue])
             {
                 [cell.leftIconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-                cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+                cell.leftIconView.tintColor = item[@"color"];
                 cell.rightIconView.hidden = YES;
             }
             else

@@ -1839,3 +1839,6 @@
 "plugin_settings_reset" = "إعادة ضبط الملحقات للافتراضي";
 "trip_rec_actions_descr" = "يمكنك العثور على جميع المسارات المسجلة في % @";
 "logging_accuracy" = "دقة التسجيل";
+"units_t" = "t";
+"recalculate_wrong_dir" = "إعادة حساب المسار في حالة الانحراف";
+"repeat_after" = "إعادة بعد";

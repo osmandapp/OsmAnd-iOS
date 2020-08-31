@@ -24,8 +24,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) id<OAVehicleParametersSettingDelegate> delegate;
+@property (nonatomic) OAApplicationMode *appMode;
 
+- (instancetype) initWithAppMode:(OAApplicationMode *)am;
 - (CGFloat) heightForLabel:(NSString *)text;
-- (void) setupTableHeaderViewWithText:(NSString *)text;
+- (UIView *) setupTableHeaderViewWithText:(NSString *)text;
 
 @end

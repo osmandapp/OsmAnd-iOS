@@ -29,7 +29,6 @@
 @implementation OAVehicleParametersSettingsViewController
 {
     NSArray<NSArray *> *_data;
-    OAApplicationMode *_applicationMode;
     NSDictionary *_vehicleParameter;
     OAAppSettings *_settings;
     
@@ -41,11 +40,10 @@
 
 - (instancetype) initWithApplicationMode:(OAApplicationMode *)am vehicleParameter:(NSDictionary *)vp
 {
-    self = [super init];
+    self = [super initWithAppMode:am];
     if (self)
     {
         _settings = [OAAppSettings sharedManager];
-        _applicationMode = am;
         _vehicleParameter = vp;
         [self commonInit];
     }
@@ -67,7 +65,7 @@
 
 - (BOOL) isBoat
 {
-    return [_applicationMode.getRoutingProfile isEqualToString:@"boat"];
+    return [self.appMode.getRoutingProfile isEqualToString:@"boat"];
 }
 
 - (void) generateData
@@ -187,7 +185,7 @@
     if (_selectedParameter.intValue != -1)
         _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].doubleValue];
     OAProfileString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
-    [property set:_measurementValue mode:_applicationMode];
+    [property set:_measurementValue mode:self.appMode];
     [self dismissViewControllerAnimated:YES completion:nil];
     if (self.delegate)
         [self.delegate onSettingsChanged];

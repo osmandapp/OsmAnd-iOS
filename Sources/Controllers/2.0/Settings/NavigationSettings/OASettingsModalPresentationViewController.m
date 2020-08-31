@@ -21,11 +21,12 @@
     UIView *_tableHeaderView;
 }
 
-- (instancetype) init
+- (instancetype) initWithAppMode:(OAApplicationMode *)am
 {
     self = [super initWithNibName:@"OASettingsModalPresentationViewController" bundle:nil];
     if (self)
     {
+        _appMode = am;
     }
     return self;
 }
@@ -33,6 +34,11 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+}
+
+- (void) applyLocalization
+{
+    _subtitleLabel.text = _appMode.toHumanString;
 }
 
 - (IBAction)cancelButtonPressed:(id)sender
@@ -44,7 +50,7 @@
 {
 }
 
-- (void) setupTableHeaderViewWithText:(NSString *)text
+- (UIView *) setupTableHeaderViewWithText:(NSString *)text
 {
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     CGFloat textHeight = [self heightForLabel:text];
@@ -63,7 +69,7 @@
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _tableHeaderView.backgroundColor = UIColor.clearColor;
     [_tableHeaderView addSubview:label];
-    self.tableView.tableHeaderView = _tableHeaderView;
+    return _tableHeaderView;
 }
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath

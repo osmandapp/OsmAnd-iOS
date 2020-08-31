@@ -1835,3 +1835,6 @@
 "plugin_settings_reset" = "Restableix la configuració predeterminada del complement";
 "trip_rec_actions_descr" = "Podeu trobar totes les vostres tracs gravades a %@";
 "logging_accuracy" = "Precisió de registre";
+"shared_string_account_add" = "Afegeix un compte";
+"profile_type_base_string" = "Perfil base";
+"profile_type_custom_string" = "Perfil personalitzat";

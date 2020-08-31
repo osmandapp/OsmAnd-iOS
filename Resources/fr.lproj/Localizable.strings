@@ -1363,7 +1363,7 @@
 "routing_attr_avoid_share_taxi_description" = "Éviter le taxi partagé";
 "rendering_attr_contourDensity_description" = "Densité des courbes de niveaux";
 "routing_attr_avoid_toll_description" = "Éviter les péages";
-"routing_attr_allow_skating_only_name" = "Autoriser uniquement les pistes skating";
+"routing_attr_allow_skating_only_name" = "Autoriser uniquement les pistes de skating";
 "rendering_attr_tracktype_grade3_name" = "Principalement compact";
 "routing_attr_piste_type_sled_description" = "Pistes pour chiens de traîneau.";
 "rendering_attr_hideWoodScrubs_name" = "Végétation";
@@ -1705,3 +1705,14 @@
 "instructions_repeat" = "Appuyez sur le gadget \"Prochain tour\" pour répéter les instructions";
 "only_manually" = "Seulement manuellement";
 "speed_limit_tolerance_descr" = "Sélectionnez la marge de tolérance de la limite de vitesse au-dessus de laquelle vous recevrez un avertissement vocal.";
+"profile_type_custom_string" = "Profil personnalisé";
+"profile_type_base_string" = "Profil de base";
+"shared_string_account" = "Compte";
+"res_zoom_warning" = "La valeur du zoom minimal ne peut être égale ou supérieure à celle du zoom maximal.";
+"res_name_warning" = "Le nom du fichier ne peut être vide";
+"res_expire_time_desc" = "Temps d'expiration en minutes. Après la durée définie, les tuiles dans le cache seront rechargées. Laissez ce champ vide si vous n'avez pas besoin de recharger des tuiles depuis cette source.\nUn jour équivaut à 1440 minutes.\nUne semaine équivaut à 10 080 minutes.\n30 jours équivalent à 43 200 minutes.";
+"res_zoom_levels_desc" = "Ces paramètres vont affecter l'affichage de la carte lorsque celle-ci est utilisée en tant que sur-couche ou sous-couche.\n\nType de carte : la carte sera limitée aux zooms sélectionnés.\n\nSur-couche ou sous-couche : les niveaux de zoom auxquels les tuiles seront visibles. L'agrandissement ou le rétrécissement auront lieu au-dessus ou en-dessous des valeurs choisies.";
+"res_source_one_per_tile" = "Un fichier image par tuile";
+"res_online_url_descr" = "Entrez ou copiez et collez l'URL de la source en ligne";
+"res_online_name_descr" = "Fournissez un nom pour la source en ligne";
+"res_edit_map_source" = "Éditer la source de la carte";

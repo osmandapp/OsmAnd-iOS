@@ -1443,3 +1443,5 @@
 "width_limit_description" = "提供您的車輛寬度，某些路線的限制可能適用於超寬車輛。";
 "height_limit_description" = "提供您的車輛高度，某些路線的限制可能適用於超高車輛。";
 "weight_limit_description" = "提供您的車輛重量，某些路線的限制可能適用於重型車輛。";
+"profile_type_base_string" = "基本設定檔";
+"profile_type_custom_string" = "自訂設定檔";

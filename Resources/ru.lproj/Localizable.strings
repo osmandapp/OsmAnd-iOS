@@ -1329,7 +1329,7 @@
 "rendering_attr_piste_type_downhill_name" = "Спуск";
 "routing_attr_width_description" = "Укажите ширину транспортного средства для учёта при построении маршрута.";
 "routing_attr_avoid_motorway_name" = "Без автомагистралей";
-"routing_attr_avoid_ice_roads_fords_description" = "Избегать ледовые дороги и броды.";
+"routing_attr_avoid_ice_roads_fords_description" = "Избегать ледовых дорог и бродов.";
 "routing_attr_difficulty_preference_name" = "Предпочитаемая сложность";
 "rendering_value_medium_name" = "Средне";
 "rendering_attr_piste_type_connection_name" = "Соединение";
@@ -1369,13 +1369,13 @@
 "rendering_value_lightgreen_name" = "Светло-зелёный";
 "rendering_attr_trainLightrailRoutes_name" = "Маршруты поездов";
 "routing_attr_avoid_bus_description" = "Избегать автобусы и троллейбусы";
-"routing_attr_allow_intermediate_description" = "Более сложные маршруты с крутыми участками. Может содержать препятствия, которые следует избегать.";
+"routing_attr_allow_intermediate_description" = "Более сложные маршруты с крутыми участками. Возможны препятствия, которых следует избегать.";
 "rendering_attr_appMode_description" = "Оптимизация карты для соответствующего профиля";
 "routing_attr_driving_style_safety_name" = "Предпочитать переулки";
 "rendering_attr_subwayMode_name" = "Маршруты метро";
 "routing_attr_avoid_train_description" = "Избегать поезда";
 "rendering_attr_showRoadMaps_description" = "Выберите, когда показывать только дорожные карты:";
-"routing_attr_avoid_toll_description" = "Избегать платные дороги";
+"routing_attr_avoid_toll_description" = "Избегать платных дорог";
 "rendering_attr_roadColors_name" = "Цветовая схема дорог";
 "rendering_attr_hideUnderground_name" = "Подземные объекты";
 "routing_attr_weight_description" = "Укажите допустимый предел массы автомобиля для учёта при построении маршрута.";
@@ -1584,7 +1584,7 @@
 "routing_attr_piste_type_downhill_name" = "Альпийские/горные лыжи";
 "routing_attr_height_name" = "Максимальная высота";
 "rendering_attr_piste_type_sled_name" = "Только самоходные сани";
-"routing_attr_avoid_unpaved_description" = "Избегать грунтовые дороги";
+"routing_attr_avoid_unpaved_description" = "Избегать грунтовых дорог";
 "rendering_attr_depthContours_description" = "Показывать контуры и точки глубины.";
 "routing_attr_no_new_routing_description" = "Не использовать для построения маршрута алгоритм представленный в версии 1.9.";
 "rendering_attr_noPolygons_name" = "Полигоны";

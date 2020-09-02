@@ -427,7 +427,7 @@
     }] resume];
 }
 
-- (BOOL) isCardUnical:(OAUrlImageCard *)exampleCard
+- (BOOL) isCardUnique:(OAUrlImageCard *)exampleCard
 {
     for (OAUrlImageCard *card in _cards)
     {
@@ -489,7 +489,7 @@
                             if (imageName)
                             {
                                 OAUrlImageCard *card = [self getWikimediaCard:[NSString stringWithFormat:@"File:%@",imageName] poi:poi];
-                                if (card && [self isCardUnical:card])
+                                if (card && [self isCardUnique:card])
                                 {
                                     [_cards addObject: card];
                                     [self updateDispayingCardsInRow:nearbyImagesRowInfo];
@@ -515,7 +515,7 @@
     if ([wikiMediaTagContent hasPrefix:wikimediaFilePrefix])
     {
         OAUrlImageCard *card = [self getWikimediaCard:wikiMediaTagContent poi:poi];
-        if (card && [self isCardUnical:card])
+        if (card && [self isCardUnique:card])
         {
             [_cards addObject:card];
             [self updateDispayingCardsInRow:nearbyImagesRowInfo];
@@ -544,7 +544,7 @@
                             if (imageName)
                             {
                                 OAUrlImageCard *card = [self getWikimediaCard:imageName poi:poi];
-                                if (card && [self isCardUnical:card])
+                                if (card && [self isCardUnique:card])
                                    [_cards addObject:card];
                             }
                         }

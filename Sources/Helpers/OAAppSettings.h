@@ -155,6 +155,8 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @property (nonatomic, readonly) NSString *key;
 
+- (NSObject *) getProfileValue:(OAApplicationMode *)mode;
+- (void) setProfileValue:(NSObject *)value mode:(OAApplicationMode *)mode;
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
 - (void) resetModeToDefault:(OAApplicationMode *)mode;
 - (void) resetToDefault;

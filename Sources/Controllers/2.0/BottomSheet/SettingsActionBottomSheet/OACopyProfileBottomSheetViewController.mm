@@ -319,12 +319,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     {
         OAProfileSetting *setting = [_settings.getRegisteredSettings objectForKey:key];
         if (setting)
-        {
-            if ([key isEqualToString:@"voice_provider"])
-                [setting setValueFromString:[[setting toStringValue:_sourceAppMode] stringByReplacingOccurrencesOfString:@"-tts" withString:@""] appMode:_targetAppMode];
-            else
-                [setting setValueFromString:[setting toStringValue:_sourceAppMode] appMode:_targetAppMode];
-        }
+            [setting setProfileValue:[setting getProfileValue:_sourceAppMode] mode:_targetAppMode];
     }
 }
 

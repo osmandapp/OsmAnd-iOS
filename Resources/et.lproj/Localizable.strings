@@ -1800,3 +1800,8 @@
 "plugin_settings_reset" = "Lähtesta lisaprogrammi seaded vaikeväärtustele";
 "trip_rec_actions_descr" = "Kõik oma salvestatud rajad leiad kaustast %@";
 "logging_accuracy" = "Logimise täpsus";
+"map_settings_line_density_slowdown_warning" = "Suur joonetihedus võib kaardi visualiseerimist aeglustada";
+"map_settings_contour_zoom_level_descr" = "Vali suumitase, millest alates kuvatakse kõrgusjooned";
+"map_settings_add_maps_desc" = "Sa saad lisada uusi kaarte lingi kaudu või importides SQLite faile.";
+"profile_sett_descr" = "Mõjuta valitud rakenduse profiili";
+"err_profile_import" = "Viga kirje andmete lugemisel: %@";

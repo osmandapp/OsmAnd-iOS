@@ -572,6 +572,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             [top addObject:f];
         }
         [top sortUsingComparator:[OAPOIUIFilter getComparator]];
+        OAPOIBaseType *osmWiki = _poiHelper.getOsmwiki;
+        [top addObject:[[OAPOIUIFilter alloc] initWithBasePoiType:osmWiki idSuffix:@""]];
         _cacheTopStandardFilters = top;
     }
     NSMutableArray<OAPOIUIFilter *> *result = [NSMutableArray array];

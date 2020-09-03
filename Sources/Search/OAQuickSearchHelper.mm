@@ -19,6 +19,7 @@
 #import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OARootViewController.h"
+#import "OASearchWord.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
 
@@ -295,7 +296,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
 {
     [_core clearCustomSearchPoiFilters];
     OAPOIFiltersHelper *poiFilters = [OAPOIFiltersHelper sharedInstance];
-    for (OACustomSearchPoiFilter *udf in [poiFilters getUserDefinedPoiFilters])
+    for (OACustomSearchPoiFilter *udf in [poiFilters getUserDefinedPoiFilters:NO])
         [_core addCustomSearchPoiFilter:udf priority:0];
     OAPOIUIFilter *topWikiPoiFilter = [poiFilters getTopWikiPoiFilter];
     if (topWikiPoiFilter && topWikiPoiFilter.isActive)

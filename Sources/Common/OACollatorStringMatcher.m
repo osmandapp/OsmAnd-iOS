@@ -23,7 +23,16 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
     self = [super init];
     if (self)
     {
-        _part = [part lowerCase];
+        part = [self.class simplifyStringAndAlignChars:part];
+        if (part.length > 0 && [part characterAtIndex:(part.length - 1)] == '.')
+        {
+            part = [part substringToIndex:part.length - 1];
+            if (mode == CHECK_EQUALS_FROM_SPACE)
+                mode = CHECK_STARTS_FROM_SPACE;
+            else if (mode == CHECK_EQUALS)
+                mode = CHECK_ONLY_STARTS_WITH;
+        }
+        _part = part;
         _mode = mode;
     }
     return self;
@@ -106,20 +115,20 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
  * Checks if string starts with another string.
  * Special check try to find as well in the middle of name
  *
- * @param searchIn
+ * @param fullTextP
  * @param theStart
  * @param fullText
  * @return true if searchIn starts with token
  */
-+ (BOOL) cstartsWith:(NSString *)fullText theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals
++ (BOOL) cstartsWith:(NSString *)fullTextP theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals
 {
-    NSString *searchIn = [searchInParam lowerCase];
+    NSString *searchIn = [self simplifyStringAndAlignChars:fullTextP];
     NSInteger searchInLength = searchIn.length;
     
     NSInteger startLength = theStart.length;
     if (startLength == 0)
         return YES;
-
+    // this is not correct because of Auhofstrasse != Auhofstraße
     if (startLength > searchInLength)
         return NO;
 
@@ -174,6 +183,16 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
 + (BOOL) isSpace:(unichar) c
 {
     return ![[NSCharacterSet letterCharacterSet] characterIsMember:c] && ![[NSCharacterSet decimalDigitCharacterSet] characterIsMember:c];
+}
+
++ (NSString *) simplifyStringAndAlignChars:(NSString *)fullText
+{
+    int i;
+    fullText = fullText.lowerCase;
+    while( (i = [fullText indexOf:@"ß"] ) != -1 ) {
+        fullText = [NSString stringWithFormat:@"%@ss%@", [fullText substringToIndex:i], [fullText substringFromIndex:i+1]];
+    }
+    return fullText;
 }
 
 @end

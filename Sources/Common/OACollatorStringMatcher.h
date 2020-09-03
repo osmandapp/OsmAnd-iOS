@@ -36,7 +36,7 @@ typedef enum
 - (BOOL) matches:(NSString *)name;
 
 + (BOOL) cmatches:(NSString *)fullName part:(NSString *)part mode:(StringMatcherMode)mode;
-+ (BOOL) ccontains:(NSString *)fullText part:(NSString *)part;
++ (BOOL) ccontains:(NSString *)fullTextP part:(NSString *)part;
 + (BOOL) cstartsWith:(NSString *)fullText theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals;
 
 

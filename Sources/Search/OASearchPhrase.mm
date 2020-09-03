@@ -16,6 +16,7 @@
 #import "OAPOIBaseType.h"
 #import "OAUtilities.h"
 #import "OALocationParser.h"
+#import <RegexKitLite.h>
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -165,7 +166,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     else
     {
         sp.firstUnknownSearchWord = @"";
-        NSArray<NSString *> *ws = [textToSearch componentsSeparatedByRegex:regex];
+        NSArray<NSString *> *ws = [textToSearch componentsSeparatedByRegex:ALLDELIMITERS];
         BOOL first = YES;
         for (NSInteger i = 0; i < ws.count; i++)
         {
@@ -214,17 +215,15 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 - (OASearchPhrase *) generateNewPhrase:(NSString *)text settings:(OASearchSettings *)settings
 {
     NSString *textToSearch = [self normalizeSearchText:text];
-    NSMutableArray<OASearchWord *> *leftWords = _words;
+    NSMutableArray<OASearchWord *> *leftWords = [NSMutableArray arrayWithArray:_words];
     NSString *thisTxt = [self getText:YES];
     NSMutableArray<OASearchWord *> *foundWords = [NSMutableArray new];
     if ([text hasPrefix:thisTxt])
     {
         // string is longer
-        // TODO: compare value with android
         textToSearch = [text substringFromIndex:[self getText:NO].length];
         [foundWords addObjectsFromArray:_words];
-        leftWords = [NSMutableArray arrayWithArray:@[leftWords.lastObject]];
-//        leftWords.subList(leftWords.size(), leftWords.size());
+        [leftWords removeAllObjects];
     }
     for (OASearchWord *w in leftWords)
     {
@@ -238,7 +237,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
             break;
         }
     }
-    OASearchPhrase *sp = [self createNewSearchPhrase:_settings fullText:text foundWords:foundWords textToSearch:textToSearch];
+    OASearchPhrase *sp = [self createNewSearchPhrase:settings fullText:text foundWords:foundWords textToSearch:textToSearch];
     
     return sp;
 }
@@ -266,11 +265,11 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return s;
 }
 
-- (NSInteger) countWords:(NSString *)word
+- (int) countWords:(NSString *)word
 {
-    NSArray<NSString *> *ws = [word componentsSeparatedByRegex:regex];
-    NSInteger cnt = 0;
-    for (NSInteger i = 0; i < ws.count; i++)
+    NSArray<NSString *> *ws = [word componentsSeparatedByRegex:ALLDELIMITERS];
+    int cnt = 0;
+    for (int i = 0; i < ws.count; i++)
     {
         NSString *wd = ws[i].trim;
         if (wd.length > 0)

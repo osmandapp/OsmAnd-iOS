@@ -722,19 +722,11 @@
                     
                     return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
                 }
-                else if ([res.object isKindOfClass:[OAPOIType class]])
+                else if ([res.object isKindOfClass:[OAPOIBaseType class]])
                 {
                     NSString *name = [item getName];
                     NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
-                    UIImage *icon = [((OAPOIType *)res.object) icon];
-                    
-                    return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
-                }
-                else if ([res.object isKindOfClass:[OAPOIFilter class]])
-                {
-                    NSString *name = [item getName];
-                    NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
-                    UIImage *icon = [((OAPOIFilter *)res.object) icon];
+                    UIImage *icon = [((OAPOIBaseType *)res.object) icon];
                     
                     return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
                 }
@@ -846,7 +838,7 @@
     NSString *typeName = [OAQuickSearchListItem getTypeName:res];
     OAPOIBaseType *basePoiType = (OAPOIBaseType *)res.object;
     NSArray<NSString *> *synonyms = [basePoiType.nameSynonyms componentsSeparatedByString:@";"];
-    OANameStringMatcher *nm = [res.requiredSearchPhrase getNameStringMatcher];
+    OANameStringMatcher *nm = [res.requiredSearchPhrase getMainUnknownNameStringMatcher];
     if (![res.requiredSearchPhrase isEmpty] && ![nm matches:basePoiType.nameLocalized])
     {
         if ([nm matches:basePoiType.nameLocalizedEN])

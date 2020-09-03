@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 
 - (OASearchPhrase *) generateNewPhrase:(NSString *)text settings:(OASearchSettings *)settings;
 - (NSMutableArray<OASearchWord *> *) getWords;
-- (NSInteger) countWords:(NSString *)word;
+- (int) countWords:(NSString *)word;
 
 - (BOOL) isMainUnknownSearchWordComplete;
 - (BOOL) isLastUnknownSearchWordComplete;
@@ -101,6 +101,8 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 
 - (void) selectFile:(NSString *)resourceId;
 - (void) sortFiles;
+
+- (BOOL) hasMoreThanOneUnknownSearchWord;
 
 + (NSComparisonResult) icompare:(int)x y:(int)y;
 

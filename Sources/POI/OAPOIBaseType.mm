@@ -10,6 +10,7 @@
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAUtilities.h"
+#import "OAPOIHelper.h"
 
 static NSMutableSet<NSString *> *nullTypeSetInstance;
 
@@ -29,6 +30,27 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
         _name = name;
     }
     return self;
+}
+
+- (NSString *)nameLocalized
+{
+    if (!_nameLocalized)
+        _nameLocalized = [OAPOIHelper.sharedInstance getPhraseByName:_name];
+    return _nameLocalized;
+}
+
+- (NSString *)nameLocalizedEN
+{
+    if (!_nameLocalizedEN)
+        _nameLocalizedEN = [OAPOIHelper.sharedInstance getPhraseENByName:_name];
+    return _nameLocalizedEN;
+}
+
+- (NSString *)nameSynonyms
+{
+    if (!_nameSynonyms)
+        _nameSynonyms = [OAPOIHelper.sharedInstance getSynonymsByName:_name];
+    return _nameSynonyms;
 }
 
 - (UIImage *)icon

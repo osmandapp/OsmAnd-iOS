@@ -55,7 +55,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (BOOL) isValidEmail;
 - (NSString *) escapeUrl;
 - (NSString *) sanitizeFileName;
-- (NSArray<NSString *> *) componentsSeparatedByRegex:(NSRegularExpression *)regex;
 
 @end
 

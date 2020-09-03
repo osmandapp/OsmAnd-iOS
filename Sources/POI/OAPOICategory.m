@@ -10,7 +10,6 @@
 #import "OAUtilities.h"
 #import "OAPOIType.h"
 #import "OAPOIFilter.h"
-#import "OAPOIHelper.h"
 
 @implementation OAPOICategory
 
@@ -82,7 +81,7 @@
 
 - (BOOL)isWiki
 {
-    return [self.name isEqualToString:OSM_WIKI_CATEGORY];
+    return [self.name isEqualToString:@"osmwiki"];
 }
 
 + (void) addReferenceTypes:(NSArray<OAPOIType *> *)pTypes acceptedTypes:(NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes

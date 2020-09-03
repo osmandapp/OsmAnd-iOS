@@ -709,7 +709,7 @@
 		842CF9531EE99FFC00324893 /* OAMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 842CF9511EE99FFC00324893 /* OAMapLayer.mm */; };
 		8431769A1FF0E33E0044F90B /* OAVoiceCommandPending.mm in Sources */ = {isa = PBXBuildFile; fileRef = 843176991FF0E33E0044F90B /* OAVoiceCommandPending.mm */; };
 		8431769B1FF0E33E0044F90B /* OAVoiceCommandPending.mm in Sources */ = {isa = PBXBuildFile; fileRef = 843176991FF0E33E0044F90B /* OAVoiceCommandPending.mm */; };
-		8431CF441CEEF58500018C9C /* OAPOIBaseType.m in Sources */ = {isa = PBXBuildFile; fileRef = 8431CF411CEEF58500018C9C /* OAPOIBaseType.m */; };
+		8431CF441CEEF58500018C9C /* OAPOIBaseType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8431CF411CEEF58500018C9C /* OAPOIBaseType.mm */; };
 		8431E7651B3715A00063C9AF /* OAGPXWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8431E7611B3715A00063C9AF /* OAGPXWptListViewController.mm */; };
 		8431E7681B3715A00063C9AF /* OAGPXWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8431E7621B3715A00063C9AF /* OAGPXWptListViewController.xib */; };
 		8431E7711B380D010063C9AF /* ic_dialog_export.png in Resources */ = {isa = PBXBuildFile; fileRef = 8431E7691B380D010063C9AF /* ic_dialog_export.png */; };
@@ -1731,7 +1731,7 @@
 		847A1D041DF94E9B003C1246 /* OAColorViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D17531B1C97C100A656F4 /* OAColorViewCell.m */; };
 		847A1D051DF94E9B003C1246 /* OAMapSettingsMapTypeScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2311A98DD1500D807B4 /* OAMapSettingsMapTypeScreen.mm */; };
 		847A1D061DF94E9B003C1246 /* OANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B02719880DEC0039D991 /* OANavigationController.m */; };
-		847A1D071DF94E9B003C1246 /* OAPOIBaseType.m in Sources */ = {isa = PBXBuildFile; fileRef = 8431CF411CEEF58500018C9C /* OAPOIBaseType.m */; };
+		847A1D071DF94E9B003C1246 /* OAPOIBaseType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8431CF411CEEF58500018C9C /* OAPOIBaseType.mm */; };
 		847A1D081DF94E9B003C1246 /* OAMapHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AED1197500DE0039D991 /* OAMapHudViewController.mm */; };
 		847A1D091DF94E9B003C1246 /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D29E190D186F00D90F0A /* OAAppDelegate.mm */; };
 		847A1D0B1DF94E9B003C1246 /* OALocalResourceInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */; };
@@ -6698,7 +6698,7 @@
 		843176981FF0E33E0044F90B /* OAVoiceCommandPending.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAVoiceCommandPending.h; sourceTree = "<group>"; };
 		843176991FF0E33E0044F90B /* OAVoiceCommandPending.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAVoiceCommandPending.mm; sourceTree = "<group>"; };
 		8431CF401CEEF58500018C9C /* OAPOIBaseType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOIBaseType.h; sourceTree = "<group>"; };
-		8431CF411CEEF58500018C9C /* OAPOIBaseType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPOIBaseType.m; sourceTree = "<group>"; };
+		8431CF411CEEF58500018C9C /* OAPOIBaseType.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOIBaseType.mm; sourceTree = "<group>"; };
 		8431E7601B3715A00063C9AF /* OAGPXWptListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXWptListViewController.h; path = Sources/Controllers/2.0/OAGPXWptListViewController.h; sourceTree = "<group>"; };
 		8431E7611B3715A00063C9AF /* OAGPXWptListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXWptListViewController.mm; path = Sources/Controllers/2.0/OAGPXWptListViewController.mm; sourceTree = "<group>"; };
 		8431E7621B3715A00063C9AF /* OAGPXWptListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXWptListViewController.xib; path = Sources/Controllers/2.0/OAGPXWptListViewController.xib; sourceTree = "<group>"; };
@@ -13220,7 +13220,7 @@
 				84387B281ABB36A600504DA7 /* OAPOI.h */,
 				84387B291ABB36A600504DA7 /* OAPOI.m */,
 				8431CF401CEEF58500018C9C /* OAPOIBaseType.h */,
-				8431CF411CEEF58500018C9C /* OAPOIBaseType.m */,
+				8431CF411CEEF58500018C9C /* OAPOIBaseType.mm */,
 				84387B231ABB369700504DA7 /* OAPOICategory.h */,
 				84387B241ABB369700504DA7 /* OAPOICategory.m */,
 				84B0AE271AC82ED3005E1F78 /* OAPOIFilter.h */,
@@ -20463,7 +20463,7 @@
 				847A20AD1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */,
 				847A1D061DF94E9B003C1246 /* OANavigationController.m in Sources */,
 				844E07B41E3F942D00EFC525 /* OAAddress.mm in Sources */,
-				847A1D071DF94E9B003C1246 /* OAPOIBaseType.m in Sources */,
+				847A1D071DF94E9B003C1246 /* OAPOIBaseType.mm in Sources */,
 				8A13FED320EF99DE0029B2EE /* OATspAnt.m in Sources */,
 				847A1D081DF94E9B003C1246 /* OAMapHudViewController.mm in Sources */,
 				847A1D091DF94E9B003C1246 /* OAAppDelegate.mm in Sources */,
@@ -21106,7 +21106,7 @@
 				8AE4E33121BFED24000CBE16 /* OAProducts.mm in Sources */,
 				844E079C1E3C82F400EFC525 /* OAQuickSearchViewController.mm in Sources */,
 				DA303D482420F532006F8BC7 /* OATransportRoutingHelper.mm in Sources */,
-				8431CF441CEEF58500018C9C /* OAPOIBaseType.m in Sources */,
+				8431CF441CEEF58500018C9C /* OAPOIBaseType.mm in Sources */,
 				DA1605AD22FEB7CA001E02AD /* OAMapOverlayAction.mm in Sources */,
 				8474AB951E1CD73000355F88 /* OAPOIFilterViewController.mm in Sources */,
 				DA0462E922F5A26B00166CFF /* OAQuickActionCell.mm in Sources */,

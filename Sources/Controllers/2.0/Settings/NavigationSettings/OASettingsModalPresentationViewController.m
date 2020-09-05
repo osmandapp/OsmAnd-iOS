@@ -38,19 +38,20 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     _subtitleLabel.text = _appMode.toHumanString;
 }
 
-- (IBAction)cancelButtonPressed:(id)sender
+- (IBAction) cancelButtonPressed:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)doneButtonPressed:(id)sender
+- (IBAction) doneButtonPressed:(id)sender
 {
 }
 
-- (UIView *) setupTableHeaderViewWithText:(NSString *)text
+- (UIView *) getTableHeaderViewWithText:(NSString *)text
 {
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     CGFloat textHeight = [self heightForLabel:text];

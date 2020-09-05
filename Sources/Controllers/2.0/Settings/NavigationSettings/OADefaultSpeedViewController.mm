@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "OsmAndApp.h"
 #import "OsmAndAppImpl.h"
+#import "OARoutingHelper.h"
 
 #define kCellTypeSpeed @"time_cell"
 #define kCellTypePicker @"pickerCell"
@@ -34,12 +35,12 @@
     NSInteger _minValue;
     NSInteger _defaultValue;
     NSInteger _selectedValue;
-    NSString *units;
+    NSString *_units;
 }
 
-- (instancetype)initWithApplicationMode:(OAApplicationMode *)ap speedParameters:(NSDictionary *)speedParameters
+- (instancetype) initWithApplicationMode:(OAApplicationMode *)am speedParameters:(NSDictionary *)speedParameters
 {
-    self = [super initWithAppMode:ap];
+    self = [super initWithAppMode:am];
     if (self)
     {
         _settings = [OAAppSettings sharedManager];
@@ -64,7 +65,7 @@
 
 - (void) generateData
 {
-    units = [OASpeedConstant toShortString:[_settings.speedSystem get:self.appMode]];
+    _units = [OASpeedConstant toShortString:[_settings.speedSystem get:self.appMode]];
     switch ([_settings.speedSystem get:self.appMode])
     {
         case MILES_PER_HOUR:
@@ -75,21 +76,21 @@
             break;
         case MINUTES_PER_KILOMETER:
             _ratio = 3600. / METERS_IN_KILOMETER;
-            units = OALocalizedString(@"units_kmh");
+            _units = OALocalizedString(@"units_kmh");
             break;
         case NAUTICALMILES_PER_HOUR:
             _ratio = 3600. / METERS_IN_ONE_NAUTICALMILE;
             break;
         case MINUTES_PER_MILE:
             _ratio = 3600. / METERS_IN_ONE_MILE;
-            units = OALocalizedString(@"units_mph");
+            _units = OALocalizedString(@"units_mph");
             break;
         case METERS_PER_SECOND:
             _ratio = 1;
             break;
     }
-    CGFloat settingsMinSpeed = [_settings.minSpeed get:self.appMode];
-    CGFloat settingsMaxSpeed = [_settings.maxSpeed get:self.appMode];
+    CGFloat settingsMinSpeed = self.appMode.getMinSpeed;
+    CGFloat settingsMaxSpeed = self.appMode.getMaxSpeed;
     if ([_speedParameters[@"defaultSpeedOnly"] boolValue])
     {
         _minValue = round(1 * _ratio);
@@ -100,10 +101,10 @@
         CGFloat minSpeedValue = settingsMinSpeed > 0 ? settingsMinSpeed : [_speedParameters[@"minSpeed"] floatValue];
         CGFloat maxSpeedValue = settingsMaxSpeed > 0 ? settingsMaxSpeed : [_speedParameters[@"maxSpeed"] floatValue];
         
-        _minValue = round(MIN(minSpeedValue, [_settings.defaultSpeed get:self.appMode]) * _ratio / 2);
-        _maxValue = round(MAX(maxSpeedValue, [_settings.defaultSpeed get:self.appMode]) * _ratio * 1.5);
+        _minValue = round(MIN(minSpeedValue, self.appMode.getDefaultSpeed) * _ratio / 2);
+        _maxValue = round(MAX(maxSpeedValue, self.appMode.getDefaultSpeed) * _ratio * 1.5);
     }
-    _defaultValue = round([_settings.defaultSpeed get:self.appMode] * _ratio);
+    _defaultValue = round(self.appMode.getDefaultSpeed * _ratio);
 }
 
 - (void) viewDidLoad
@@ -111,7 +112,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self setupTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
+    [self getTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
     [self setupView];
 }
 
@@ -120,24 +121,25 @@
     NSMutableArray *tableData = [NSMutableArray array];
     if (_selectedValue == 0)
         _selectedValue = _defaultValue;
-    
     [tableData addObject:@{
         @"type" : kCellTypeSpeed,
         @"title" : OALocalizedString(@"default_speed"),
-        @"value" : [NSString stringWithFormat:@"%ld %@", _selectedValue, units],
+        @"value" : [NSString stringWithFormat:@"%ld %@", _selectedValue, _units],
     }];
     [tableData addObject:@{
         @"type" : kCellTypeSlider,
-        @"minValue" : [NSString stringWithFormat:@"%ld %@", (long)_minValue, units],
-        @"maxValue" : [NSString stringWithFormat:@"%ld %@", (long)_maxValue, units],
+        @"minValue" : [NSString stringWithFormat:@"%ld %@", (long)_minValue, _units],
+        @"maxValue" : [NSString stringWithFormat:@"%ld %@", (long)_maxValue, _units],
     }];
-    
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (IBAction)doneButtonPressed:(id)sender
+- (IBAction) doneButtonPressed:(id)sender
 {
-    [_settings.defaultSpeed set:(_selectedValue / _ratio) mode:self.appMode];
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    [self.appMode setDefaultSpeed:_selectedValue / _ratio];
+    if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
+        [routingHelper recalculateRouteDueToSettingsChange];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -191,7 +193,7 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
+        [self getTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
         [self.tableView reloadData];
     } completion:nil];
 }
@@ -220,7 +222,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    return [self setupTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
+    return [self getTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
 }
 
 @end

@@ -28,6 +28,6 @@
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)am;
 - (CGFloat) heightForLabel:(NSString *)text;
-- (UIView *) setupTableHeaderViewWithText:(NSString *)text;
+- (UIView *) getTableHeaderViewWithText:(NSString *)text;
 
 @end

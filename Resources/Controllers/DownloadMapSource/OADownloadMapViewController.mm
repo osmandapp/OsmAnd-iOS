@@ -16,6 +16,7 @@
 #import "OASQLiteTileSource.h"
 #import "OAResourcesUIHelper.h"
 #import "OADownloadMapProgressViewController.h"
+#import "OAAutoObserverProxy.h"
 
 #include "Localization.h"
 #include "OAColors.h"
@@ -74,11 +75,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSInteger _numberOfTiles;
     CGFloat _downloadSize;
     NSArray<NSString *> *_possibleZoomValues;
-    CALayer *_horizontalLine;
     BOOL _minZoomPickerIsShown;
     BOOL _maxZoomPickerIsShown;
     
     NSDictionary<OAMapSource *, OAResourceItem *> *_onlineMapSources;
+    OAAutoObserverProxy* _framePreparedObserver;
 }
 
 - (UIView *) getMiddleView
@@ -182,12 +183,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onMapRendererFramePrepared)
+                                                        andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.bottomToolBarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.bottomToolBarView.layer addSublayer:_horizontalLine];
     [self updateToolBar];
     _cancelButton.layer.cornerRadius = 9.0;
     _downloadButton.layer.cornerRadius = 9.0;
@@ -200,6 +201,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self calculateDownloadInfo];
     [self setupView];
     self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, self.bottomToolBarView.bounds.size.height, 0.0);
+}
+
+- (void) dealloc
+{
+    if (_framePreparedObserver && [_framePreparedObserver isAttached])
+        [_framePreparedObserver detach];
 }
 
 - (void) setZoomValues
@@ -361,6 +368,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _downloadSize = _numberOfTiles * 12000;
 }
 
+- (void) onMapRendererFramePrepared
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self calculateDownloadInfo];
+        [self setupView];
+        [self.tableView reloadData];
+    });
+}
+
 - (void) updateDownloadInfo
 {
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kNumberOfTilesRow inSection:kDownloadInfoSection], [NSIndexPath indexPathForRow:kDownloadSizeRow inSection:kDownloadInfoSection]] withRowAnimation:UITableViewRowAnimationFade];
@@ -389,8 +405,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
 {
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, width, 0.5);
-    
     CGFloat w = width - 32.0 - OAUtilities.getLeftMargin;
     CGRect leftBtnFrame = _cancelButton.frame;
     CGRect rightBtnFrame = _downloadButton.frame;
@@ -590,6 +604,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             return 0.01;
     }
     return UITableViewAutomaticDimension;
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath

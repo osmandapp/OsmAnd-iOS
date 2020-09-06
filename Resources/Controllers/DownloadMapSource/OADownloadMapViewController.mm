@@ -203,6 +203,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, self.bottomToolBarView.bounds.size.height, 0.0);
 }
 
+- (void) dealloc
+{
+    if (_framePreparedObserver && [_framePreparedObserver isAttached])
+        [_framePreparedObserver detach];
+}
+
 - (void) setZoomValues
 {
     _minZoom = (int)[self getDefaultItemMinZoom];

@@ -35,8 +35,7 @@
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
 #define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
-#define mapSettingShowOverlayOpacitySliderKey @"mapSettingShowOverlayOpacitySliderKey"
-#define mapSettingShowUnderlayOpacitySliderKey @"mapSettingShowUnderlayOpacitySliderKey"
+#define layerTransparencySeekbarModeKey @"layerTransparencySeekbarModeKey"
 #define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
 
 #define billingUserIdKey @"billingUserIdKey"
@@ -1816,8 +1815,6 @@
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
 @synthesize mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, settingPrefMapLanguage=_settingPrefMapLanguage;
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
-@synthesize mapSettingShowOverlayOpacitySlider=_mapSettingShowOverlayOpacitySlider;
-@synthesize mapSettingShowUnderlayOpacitySlider=_mapSettingShowUnderlayOpacitySlider;
 
 + (OAAppSettings*) sharedManager
 {
@@ -1889,14 +1886,12 @@
         _mapSettingShowFavorites = [OAProfileBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
         _mapSettingShowOfflineEdits = [OAProfileBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
         _mapSettingShowOnlineNotes = [OAProfileBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
-        _mapSettingShowOverlayOpacitySlider = [OAProfileBoolean withKey:mapSettingShowOverlayOpacitySliderKey defValue:NO];
-        _mapSettingShowUnderlayOpacitySlider = [OAProfileBoolean withKey:mapSettingShowUnderlayOpacitySliderKey defValue:NO];
+        _layerTransparencySeekbarMode = [OAProfileInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
         
         [_registeredPreferences setObject:_mapSettingShowFavorites forKey:@"show_favorites"];
         [_registeredPreferences setObject:_mapSettingShowOfflineEdits forKey:@"show_osm_edits"];
         [_registeredPreferences setObject:_mapSettingShowOnlineNotes forKey:@"show_osm_bugs"];
-        [_registeredPreferences setObject:_mapSettingShowOverlayOpacitySlider forKey:mapSettingShowOverlayOpacitySliderKey];
-        [_registeredPreferences setObject:_mapSettingShowUnderlayOpacitySlider forKey:mapSettingShowUnderlayOpacitySliderKey];
+        [_registeredPreferences setObject:_layerTransparencySeekbarMode forKey:@"layer_transparency_seekbar_mode"];
     
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
@@ -3024,6 +3019,55 @@
         }
     }
     return @"en";
+}
+
+- (BOOL) getOverlayOpacitySliderVisibility
+{
+    return [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL;
+}
+
+- (void) setOverlayOpacitySliderVisibility:(BOOL)isVisible
+{
+    if (isVisible)
+        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY)
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL];
+        else
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];
+   else
+        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY];
+        else
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
+}
+
+- (BOOL) getUnderlayOpacitySliderVisibility
+{
+    return [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL;
+}
+
+- (void) setUnderlayOpacitySliderVisibility:(BOOL)isVisible
+{
+    if (isVisible)
+        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY)
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL];
+        else
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];
+   else
+        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];
+        else
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
+}
+
+- (OAProfileBoolean *) getCustomRoutingBooleanProperty1:(NSString *)attrName defaultValue:(BOOL)defaultValue
+{
+    OAProfileBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
+    if (!value)
+    {
+        value = [OAProfileBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
+        [_customBooleanRoutingProps setObject:value forKey:attrName];
+    }
+    return value;
 }
 
 - (BOOL) nightMode

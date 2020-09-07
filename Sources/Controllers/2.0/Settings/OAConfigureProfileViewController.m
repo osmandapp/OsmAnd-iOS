@@ -20,6 +20,7 @@
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditingSettingsViewController.h"
+#import "OASettingsHelper.h"
 
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
@@ -27,6 +28,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAProfileAppearanceViewController.h"
 #import "OACopyProfileBottomSheetView.h"
+#import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 
 #define kSidePadding 16.
@@ -133,32 +135,35 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //            @"key" : @"ui_customization"
 //        }
     [data addObject:profileSettings];
-    [data addObject:@[
-        @{
-            @"type" : kTitleRightIconCell,
-            @"title" : OALocalizedString(@"export_profile"),
-            @"img" : @"ic_custom_export",
-            @"key" : @"export_profile"
-        },
-        @{
-            @"type" : kTitleRightIconCell,
-            @"title" : OALocalizedString(@"copy_profile"),
-            @"img" : @"ic_custom_copy",
-            @"key" : @"copy_profile"
-        },
-        @{
-            @"type" : kTitleRightIconCell,
-            @"title" : OALocalizedString(@"reset_to_default"),
-            @"img" : @"ic_custom_reset",
-            @"key" : @"reset_to_default"
-        },
-        @{
-            @"type" : kTitleRightIconCell,
-            @"title" : OALocalizedString(@"delete_profile"),
+    
+    NSMutableArray<NSDictionary *> *settingsActions = [NSMutableArray new];
+    [settingsActions addObject:@{
+        @"type" : kTitleRightIconCell,
+        @"title" : OALocalizedString(@"export_profile"),
+        @"img" : @"ic_custom_export",
+        @"key" : @"export_profile"
+    }];
+    [settingsActions addObject:@{
+        @"type" : kTitleRightIconCell,
+        @"title" : OALocalizedString(@"copy_from_other_profile"),
+        @"img" : @"ic_custom_copy",
+        @"key" : @"copy_profile"
+    }];
+    [settingsActions addObject:@{
+        @"type" : kTitleRightIconCell,
+        @"title" : OALocalizedString(@"reset_to_default"),
+        @"img" : @"ic_custom_reset",
+        @"key" : @"reset_to_default"
+    }];
+    if ([_appMode isCustomProfile])
+        [settingsActions addObject:@{
+           @"type" : kTitleRightIconCell,
+            @"title" : OALocalizedString(@"profile_alert_delete_title"),
             @"img" : @"ic_custom_remove_outlined",
             @"key" : @"delete_profile"
-        }
-    ]];
+        }];
+    [data addObject:settingsActions];
+    
     NSMutableArray *plugins = [NSMutableArray new];
     OAPlugin *tripRec = [OAPlugin getEnabledPlugin:OAMonitoringPlugin.class];
     if (tripRec)
@@ -468,7 +473,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //    }
     else if ([key isEqualToString:@"export_profile"])
     {
-        
+        OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
+        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:_appMode.toHumanString settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:_appMode] exportItemFiles:YES];
     }
     else if ([key isEqualToString:@"copy_profile"])
     {
@@ -480,7 +486,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
     else if ([key isEqualToString:@"delete_profile"])
     {
-    
+        OADeleteProfileBottomSheetViewController *bottomSheet = [[OADeleteProfileBottomSheetViewController alloc] initWithMode:_appMode];
+        [bottomSheet show];
     }
     else if ([key isEqualToString:@"trip_rec"])
     {
@@ -540,7 +547,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [self.tableView reloadData];
 }
 
-- (void) onCopyProfileDismessed
+- (void) onCopyProfileDismissed
 {
     [_cpyProfileViewUnderlay removeFromSuperview];
 }

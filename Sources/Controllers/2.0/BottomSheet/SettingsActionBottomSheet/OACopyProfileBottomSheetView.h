@@ -16,7 +16,7 @@
 @required
 
 - (void) onCopyProfileCompleted;
-- (void) onCopyProfileDismessed;
+- (void) onCopyProfileDismissed;
 
 @end
 

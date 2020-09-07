@@ -80,7 +80,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     [self.layer setCornerRadius:12.];
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    _titleView.text = OALocalizedString(@"copy_profile");
+    _titleView.text = OALocalizedString(@"copy_from_other_profile");
     
     _tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 0.01f)];
     [_tableView setShowsVerticalScrollIndicator:YES];
@@ -280,7 +280,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
                 self.frame = frame;
             } completion:^(BOOL finished) {
                 if (self.delegate)
-                    [self.delegate onCopyProfileDismessed];
+                    [self.delegate onCopyProfileDismissed];
                 [self removeFromSuperview];
             }];
         }
@@ -318,7 +318,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     {
         OAProfileSetting *setting = [_settings.getRegisteredSettings objectForKey:key];
         if (setting)
-            [setting setProfileValue:[setting getProfileValue:_sourceAppMode] mode:_targetAppMode];
+            [setting copyValueFromAppMode:_sourceAppMode targetAppMode:_targetAppMode];
     }
 }
 
@@ -470,18 +470,18 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:@"%@%@.", OALocalizedString(@"copy_profile_descr"), _targetAppMode.toHumanString] width:tableView.bounds.size.width - 32 font:[UIFont systemFontOfSize:15] lineSpacing:6.];
+    CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:@"%@%@.", OALocalizedString(@"copy_from_other_profile_descr"), _targetAppMode.toHumanString] width:tableView.bounds.size.width - 32 font:[UIFont systemFontOfSize:15] lineSpacing:6.];
     return labelHeight + 32;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSString *descriptionString = [NSString stringWithFormat:@"%@%@.", OALocalizedString(@"copy_profile_descr"), _targetAppMode.toHumanString];
+    NSString *descriptionString = [NSString stringWithFormat:@"%@%@.", OALocalizedString(@"copy_from_other_profile_descr"), _targetAppMode.toHumanString];
     CGFloat textWidth = tableView.bounds.size.width - 32;
     CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionString width:textWidth font:[UIFont systemFontOfSize:15] lineSpacing:6.] + 16;
     UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
-    description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:OALocalizedString(@"copy_profile_descr") boldString:_targetAppMode.toHumanString lineSpacing:4.];
+    description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:OALocalizedString(@"copy_from_other_profile_descr") boldString:_targetAppMode.toHumanString lineSpacing:4.];
     description.textColor = UIColorFromRGB(color_text_footer);
     description.numberOfLines = 0;
     description.lineBreakMode = NSLineBreakByWordWrapping;

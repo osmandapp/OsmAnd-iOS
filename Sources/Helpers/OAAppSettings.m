@@ -606,6 +606,8 @@
 @property (nonatomic) NSMapTable<OAApplicationMode *, NSObject *> *defaultValues;
 
 + (instancetype) withKey:(NSString *)key;
+- (NSObject *) getValue:(OAApplicationMode *)mode;
+- (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -633,7 +635,7 @@
     return obj;
 }
 
-- (NSObject *) getProfileValue:(OAApplicationMode *)mode
+- (NSObject *) getValue:(OAApplicationMode *)mode
 {
     NSObject *cachedValue = [self.cachedValues objectForKey:mode];
     if (!cachedValue)
@@ -649,7 +651,7 @@
     return cachedValue;
 }
 
-- (void) setProfileValue:(NSObject *)value mode:(OAApplicationMode *)mode
+- (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode
 {
     [self.cachedValues setObject:value forKey:mode];
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getModeKey:self.key mode:mode]];
@@ -667,7 +669,7 @@
 - (void) resetModeToDefault:(OAApplicationMode *)mode
 {
     NSObject *defValue = [self getProfileDefaultValue:mode];
-    [self setProfileValue:defValue mode:mode];
+    [self setValue:defValue mode:mode];
 }
 
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode
@@ -693,6 +695,11 @@
 - (NSString *) toStringValue:(OAApplicationMode *)mode
 {
     return @"";
+}
+
+- (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode
+{
+    [self setValue:[self getValue:sourceAppMode] mode:targetAppMode];
 }
 
 @end
@@ -729,7 +736,7 @@
 
 - (BOOL) get:(OAApplicationMode *)mode
 {
-    NSObject *value = [self getProfileValue:mode];
+    NSObject *value = [self getValue:mode];
     if (value)
         return ((NSNumber *)value).boolValue;
     else
@@ -738,7 +745,7 @@
 
 - (void) set:(BOOL)boolean mode:(OAApplicationMode *)mode
 {
-    [self setProfileValue:@(boolean) mode:mode];
+    [self setValue:@(boolean) mode:mode];
 }
 
 - (void) resetToDefault
@@ -795,7 +802,7 @@
 
 - (int) get:(OAApplicationMode *)mode
 {
-    NSObject *value = [self getProfileValue:mode];
+    NSObject *value = [self getValue:mode];
     if (value)
         return ((NSNumber *)value).intValue;
     else
@@ -804,7 +811,7 @@
 
 - (void) set:(int)integer mode:(OAApplicationMode *)mode
 {
-    [self setProfileValue:@(integer) mode:mode];
+    [self setValue:@(integer) mode:mode];
 }
 
 - (void) resetToDefault
@@ -861,7 +868,7 @@
 
 - (NSString *) get:(OAApplicationMode *)mode
 {
-    NSObject *value = [self getProfileValue:mode];
+    NSObject *value = [self getValue:mode];
     if (value)
         return (NSString *)value;
     else
@@ -870,7 +877,7 @@
 
 - (void) set:(NSString *)string mode:(OAApplicationMode *)mode
 {
-    [self setProfileValue:string mode:mode];
+    [self setValue:string mode:mode];
 }
 
 - (void) resetToDefault
@@ -927,7 +934,7 @@
 
 - (double) get:(OAApplicationMode *)mode
 {
-    NSObject *value = [self getProfileValue:mode];
+    NSObject *value = [self getValue:mode];
     if (value)
         return ((NSNumber *)value).doubleValue;
     else
@@ -936,7 +943,7 @@
 
 - (void) set:(double)dbl mode:(OAApplicationMode *)mode
 {
-    [self setProfileValue:@(dbl) mode:mode];
+    [self setValue:@(dbl) mode:mode];
 }
 
 - (void) resetToDefault
@@ -993,13 +1000,13 @@
 
 - (NSArray<NSString *> *) get:(OAApplicationMode *)mode
 {
-    NSObject *value = [self getProfileValue:mode];
+    NSObject *value = [self getValue:mode];
     return value ? (NSArray<NSString *> *)value : self.defValue;
 }
 
 - (void) set:(NSArray<NSString *> *)arr mode:(OAApplicationMode *)mode
 {
-    [self setProfileValue:arr mode:mode];
+    [self setValue:arr mode:mode];
 }
 
 - (void) add:(NSString *)string
@@ -1070,13 +1077,13 @@
 
 - (OAMapSource *) get:(OAApplicationMode *)mode
 {
-    NSObject *val = [self getProfileValue:mode];
+    NSObject *val = [self getValue:mode];
     return val ? [OAMapSource fromDictionary:(NSDictionary *)val] : self.defValue;
 }
 
 - (void) set:(OAMapSource *)mapSource mode:(OAApplicationMode *)mode
 {
-    [self setProfileValue:[mapSource toDictionary] mode:mode];
+    [self setValue:[mapSource toDictionary] mode:mode];
 }
 
 - (void) resetToDefault
@@ -1123,14 +1130,14 @@
 
 - (OAMapLayersConfiguration *) get:(OAApplicationMode *)mode
 {
-    NSObject *val = [self getProfileValue:mode];
+    NSObject *val = [self getValue:mode];
     return val ? [[OAMapLayersConfiguration alloc] initWithHiddenLayers:(NSMutableSet *)val] : self.defValue;
 }
 
 - (void) set:(OAMapLayersConfiguration *)layersConfig mode:(OAApplicationMode *)mode
 {
     NSArray *hiddenLayersArray = [NSArray arrayWithArray:[layersConfig.hiddenLayers allObjects]];
-    [self setProfileValue:hiddenLayersArray mode:mode];
+    [self setValue:hiddenLayersArray mode:mode];
 }
 
 - (void) resetToDefault

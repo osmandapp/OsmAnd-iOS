@@ -12,6 +12,7 @@
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OASwitchTableViewCell.h"
+#import "OATitleRightIconCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
@@ -19,12 +20,15 @@
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditingSettingsViewController.h"
+#import "OASettingsHelper.h"
 
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAProfileAppearanceViewController.h"
+#import "OACopyProfileBottomSheetViewController.h"
+#import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 
 #define kSidePadding 16.
@@ -32,6 +36,7 @@
 #define kHeaderId @"TableViewSectionHeader"
 #define kSwitchCell @"OASettingSwitchCell"
 #define kIconTitleDescrCell @"OAIconTextDescCell"
+#define kTitleRightIconCell @"OATitleRightIconCell"
 
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeNone = 0,
@@ -39,7 +44,9 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate>
+
+@property (strong, nonatomic) OACopyProfileBottomSheetViewController* cpyProfileView;
 
 @end
 
@@ -55,6 +62,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     OAAutoObserverProxy* _appModeChangeObserver;
     
     EOADashboardScreenType _screenToOpen;
+    UIView *_cpyProfileViewUnderlay;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)mode
@@ -128,6 +136,34 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //        }
     [data addObject:profileSettings];
     
+    NSMutableArray<NSDictionary *> *settingsActions = [NSMutableArray new];
+    [settingsActions addObject:@{
+        @"type" : kTitleRightIconCell,
+        @"title" : OALocalizedString(@"export_profile"),
+        @"img" : @"ic_custom_export",
+        @"key" : @"export_profile"
+    }];
+    [settingsActions addObject:@{
+        @"type" : kTitleRightIconCell,
+        @"title" : OALocalizedString(@"copy_from_other_profile"),
+        @"img" : @"ic_custom_copy",
+        @"key" : @"copy_profile"
+    }];
+    [settingsActions addObject:@{
+        @"type" : kTitleRightIconCell,
+        @"title" : OALocalizedString(@"reset_to_default"),
+        @"img" : @"ic_custom_reset",
+        @"key" : @"reset_to_default"
+    }];
+    if ([_appMode isCustomProfile])
+        [settingsActions addObject:@{
+           @"type" : kTitleRightIconCell,
+            @"title" : OALocalizedString(@"profile_alert_delete_title"),
+            @"img" : @"ic_custom_remove_outlined",
+            @"key" : @"delete_profile"
+        }];
+    [data addObject:settingsActions];
+    
     NSMutableArray *plugins = [NSMutableArray new];
     OAPlugin *tripRec = [OAPlugin getEnabledPlugin:OAMonitoringPlugin.class];
     if (tripRec)
@@ -177,9 +213,9 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     self.titleLabel.text = _appMode.toHumanString;
 }
 
-- (UIView *)setupTableHeaderView
+- (UIView *) setupTableHeaderView
 {
-    return self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold] titntColor:UIColorFromRGB(_appMode.getIconColor) icon:_appMode.getIconName];
+    return self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold] tintColor:UIColorFromRGB(_appMode.getIconColor) icon:_appMode.getIconName];
 }
 
 - (void)viewDidLoad
@@ -190,8 +226,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
                                                        withHandler:@selector(onAvailableAppModesChanged)
                                                         andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
     
-    _sectionHeaderTitles = @[OALocalizedString(@"configure_profile"), OALocalizedString(@"profile_settings"), OALocalizedString(@"plugins"), OALocalizedString(@"actions")];
-    _sectionFooterTitles = @[@"", OALocalizedString(@"profile_sett_descr"), OALocalizedString(@"plugin_settings_descr"), OALocalizedString(@"export_profile_descr")];
+    _sectionHeaderTitles = @[OALocalizedString(@"configure_profile"),
+                             OALocalizedString(@"profile_settings"),
+                             //OALocalizedString(@"plugins"),
+                             OALocalizedString(@"actions")];
+    _sectionFooterTitles = @[@"", OALocalizedString(@"profile_sett_descr"),
+                             //OALocalizedString(@"plugin_settings_descr"),
+                             OALocalizedString(@"export_profile_descr")];
     
     self.backButton.hidden = YES;
     self.backImageButton.hidden = NO;
@@ -199,6 +240,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    self.cpyProfileView = [[OACopyProfileBottomSheetViewController alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0) mode:_appMode];
 }
 
 - (void)openDashboardScreen:(EOADashboardScreenType)type
@@ -372,6 +414,27 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:kTitleRightIconCell])
+    {
+        OATitleRightIconCell* cell;
+        cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:@"OATitleRightIconCell"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleRightIconCell" owner:self options:nil];
+            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
+            [cell.iconView setTintColor:UIColorFromRGB(color_primary_purple)];
+            [cell.titleView setTextColor:UIColorFromRGB(color_primary_purple)];
+            [cell.titleView setFont:[UIFont systemFontOfSize:17.0f weight:UIFontWeightMedium]];
+        }
+        if (cell)
+        {
+            [cell.titleView setText:item[@"title"]];
+            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
+        }
+        return cell;
+    }
     return nil;
 }
 
@@ -408,6 +471,24 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //    {
 //
 //    }
+    else if ([key isEqualToString:@"export_profile"])
+    {
+        OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
+        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:_appMode.toHumanString settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:_appMode] exportItemFiles:YES];
+    }
+    else if ([key isEqualToString:@"copy_profile"])
+    {
+        [self showCopyProfileView];
+    }
+    else if ([key isEqualToString:@"reset_to_default"])
+    {
+        
+    }
+    else if ([key isEqualToString:@"delete_profile"])
+    {
+        OADeleteProfileBottomSheetViewController *bottomSheet = [[OADeleteProfileBottomSheetViewController alloc] initWithMode:_appMode];
+        [bottomSheet show];
+    }
     else if ([key isEqualToString:@"trip_rec"])
     {
         OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
@@ -417,8 +498,58 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     {
         OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
         [self.navigationController pushViewController:settingsViewController animated:YES];
+
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) showCopyProfileView
+{
+    CGRect frame = self.cpyProfileView.frame;
+    frame.origin.y = DeviceScreenHeight + 10.0;
+    self.cpyProfileView.frame = frame;
+    self.cpyProfileView.delegate = self;
+    [self.cpyProfileView.layer removeAllAnimations];
+    if ([self.view.subviews containsObject:self.cpyProfileView])
+        [self.cpyProfileView removeFromSuperview];
+    [self addUnderlay];
+    [self.view addSubview:self.cpyProfileView];
+    [self.cpyProfileView show:YES];
+}
+
+- (void) addUnderlay
+{
+    _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
+    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.clearColor];
+
+    UITapGestureRecognizer *underlayTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUnderlayTapped)];
+    [_cpyProfileViewUnderlay addGestureRecognizer:underlayTap];
+    [self.view addSubview:_cpyProfileViewUnderlay];
+}
+
+
+- (void) onUnderlayTapped
+{
+    if ([self.cpyProfileView superview])
+    {
+        [_cpyProfileViewUnderlay removeFromSuperview];
+        [self.cpyProfileView hide:YES];
+    }
+}
+
+#pragma mark - OACopyProfileBottomSheetDelegate
+
+- (void) onCopyProfileCompleted
+{
+    [self setupTableHeaderView];
+    [self generateData];
+    [self applyLocalization];
+    [self.tableView reloadData];
+}
+
+- (void) onCopyProfileDismessed
+{
+    [_cpyProfileViewUnderlay removeFromSuperview];
 }
 
 @end

@@ -1788,7 +1788,7 @@
 "meters" = "metros";
 "tones" = "tonos";
 "announce" = "Anunciar";
-"instructions_repeat" = "Pulsa el widget «Próximo giro» para que las indicaciones se repitan";
+"instructions_repeat" = "Pulsa el widget «Próximo giro» para repetir las indicaciones";
 "only_manually" = "Sólo manualmente";
 "default_profile_descr" = "Elige el perfil que se usará al ejecutar la aplicación.";
 "speed_limit_tolerance_descr" = "Elige el margen de tolerancia del límite de velocidad por encima del cual se recibirá una advertencia por voz.";
@@ -1838,3 +1838,14 @@
 "plugin_settings_reset" = "Restablecer ajustes del complemento a valores predefinidos";
 "trip_rec_actions_descr" = "Puedes encontrar todas las trazas grabadas en %@";
 "logging_accuracy" = "Precisión de registro";
+"shared_string_account_add" = "Añadir cuenta";
+"shared_string_required" = "Obligatorio";
+"osm_editing_access_descr" = "Puedes ver todas las ediciones y notas locales en «%@». Los puntos ya subidos no aparecen en OsmAnd.";
+"shared_string_email" = "Correo electrónico";
+"shared_string_account" = "Cuenta";
+"email_example_hint" = "usuario@ejemplo.com";
+"profile_type_base_string" = "Perfil base";
+"profile_type_custom_string" = "Perfil personalizado";
+"units_t" = "t";
+"recalculate_wrong_dir" = "Recalcular la ruta en caso de dirección inversa";
+"repeat_after" = "Repetir después";

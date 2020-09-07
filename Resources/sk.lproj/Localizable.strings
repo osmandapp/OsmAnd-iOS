@@ -1581,3 +1581,7 @@
 "configure_profile" = "Nastaviť profil";
 "profile_type_base_string" = "Základný profil";
 "profile_type_custom_string" = "Vlastný profil";
+"profile_alert_delete_title" = "Odstrániť profil";
+"reset_to_default" = "Obnoviť do základného nastavenia";
+"copy_from_other_profile" = "Kopírovať z iného profilu";
+"shared_string_copy" = "Kopírovať";

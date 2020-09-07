@@ -1,5 +1,5 @@
 //
-//  OACopyProfileBottomSheetViewController.h
+//  OACopyProfileBottomSheetView.h
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 05.08.2020.
@@ -36,7 +36,7 @@
 
 @property (nonatomic) id<OACopyProfileBottomSheetDelegate> delegate;
 
-- (instancetype) initWithFrame:(CGRect)frame mode:(OAApplicationMode *)am;
+- (instancetype) initWithMode:(OAApplicationMode *)am;
 - (void) show:(BOOL)animated;
 - (void) hide:(BOOL)animated;
 

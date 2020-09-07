@@ -256,7 +256,7 @@
 		157F3CF024A23A94000A66F0 /* ic_custom_undo_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CED24A23A94000A66F0 /* ic_custom_undo_button@3x.png */; };
 		1582989F24DC042600323768 /* OAIconTitleIconRoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1582989E24DC042600323768 /* OAIconTitleIconRoundCell.xib */; };
 		158298A124DC045D00323768 /* OAIconTitleIconRoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 158298A024DC045D00323768 /* OAIconTitleIconRoundCell.m */; };
-		158298A424E13F1A00323768 /* OACopyProfileBottomSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158298A324E13F1A00323768 /* OACopyProfileBottomSheetViewController.xib */; };
+		158298A424E13F1A00323768 /* OACopyProfileBottomSheetView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158298A324E13F1A00323768 /* OACopyProfileBottomSheetView.xib */; };
 		1586E11F242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E120242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */; };
@@ -307,7 +307,7 @@
 		15BDDEA624DAF3D400079C83 /* ic_custom_remove_outlined.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BDDEA324DAF3D300079C83 /* ic_custom_remove_outlined.png */; };
 		15BDDEA724DAF3D400079C83 /* ic_custom_remove_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BDDEA424DAF3D400079C83 /* ic_custom_remove_outlined@3x.png */; };
 		15BDDEA824DAF3D400079C83 /* ic_custom_remove_outlined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BDDEA524DAF3D400079C83 /* ic_custom_remove_outlined@2x.png */; };
-		15BDDEAD24DAF84900079C83 /* OACopyProfileBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15BDDEAC24DAF84900079C83 /* OACopyProfileBottomSheetViewController.mm */; };
+		15BDDEAD24DAF84900079C83 /* OACopyProfileBottomSheetView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15BDDEAC24DAF84900079C83 /* OACopyProfileBottomSheetView.mm */; };
 		15BECC63249B88F700B36DC0 /* OAIconsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15BECC62249B88F700B36DC0 /* OAIconsTableViewCell.xib */; };
 		15BECC65249B895700B36DC0 /* OAIconsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BECC64249B895700B36DC0 /* OAIconsTableViewCell.m */; };
 		15BECC68249B8B2800B36DC0 /* OAIconsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15BECC67249B8B2800B36DC0 /* OAIconsCollectionViewCell.xib */; };
@@ -6241,7 +6241,7 @@
 		1582989E24DC042600323768 /* OAIconTitleIconRoundCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAIconTitleIconRoundCell.xib; path = Resources/Controllers/Cells/OAIconTitleIconRoundCell.xib; sourceTree = "<group>"; };
 		158298A024DC045D00323768 /* OAIconTitleIconRoundCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAIconTitleIconRoundCell.m; sourceTree = "<group>"; };
 		158298A224DC048F00323768 /* OAIconTitleIconRoundCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAIconTitleIconRoundCell.h; path = Controllers/Cells/OAIconTitleIconRoundCell.h; sourceTree = "<group>"; };
-		158298A324E13F1A00323768 /* OACopyProfileBottomSheetViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACopyProfileBottomSheetViewController.xib; sourceTree = "<group>"; };
+		158298A324E13F1A00323768 /* OACopyProfileBottomSheetView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACopyProfileBottomSheetView.xib; sourceTree = "<group>"; };
 		1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointHeaderCell.xib; path = Resources/Controllers/Cells/OAPointHeaderCell.xib; sourceTree = "<group>"; };
 		1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointHeaderTableViewCell.m; path = Controllers/Cells/OAPointHeaderTableViewCell.m; sourceTree = "<group>"; };
 		1586E122242209F300DA5625 /* OAPointHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointHeaderTableViewCell.h; path = Controllers/Cells/OAPointHeaderTableViewCell.h; sourceTree = "<group>"; };
@@ -6293,8 +6293,8 @@
 		15BDDEA324DAF3D300079C83 /* ic_custom_remove_outlined.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_remove_outlined.png; path = Resources/Icons/ic_custom_remove_outlined.png; sourceTree = "<group>"; };
 		15BDDEA424DAF3D400079C83 /* ic_custom_remove_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_remove_outlined@3x.png"; path = "Resources/Icons/ic_custom_remove_outlined@3x.png"; sourceTree = "<group>"; };
 		15BDDEA524DAF3D400079C83 /* ic_custom_remove_outlined@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_remove_outlined@2x.png"; path = "Resources/Icons/ic_custom_remove_outlined@2x.png"; sourceTree = "<group>"; };
-		15BDDEAC24DAF84900079C83 /* OACopyProfileBottomSheetViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACopyProfileBottomSheetViewController.mm; sourceTree = "<group>"; };
-		15BDDEAE24DAF85D00079C83 /* OACopyProfileBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACopyProfileBottomSheetViewController.h; sourceTree = "<group>"; };
+		15BDDEAC24DAF84900079C83 /* OACopyProfileBottomSheetView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACopyProfileBottomSheetView.mm; sourceTree = "<group>"; };
+		15BDDEAE24DAF85D00079C83 /* OACopyProfileBottomSheetView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACopyProfileBottomSheetView.h; sourceTree = "<group>"; };
 		15BECC62249B88F700B36DC0 /* OAIconsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAIconsTableViewCell.xib; path = Resources/Controllers/Cells/OAIconsTableViewCell.xib; sourceTree = "<group>"; };
 		15BECC64249B895700B36DC0 /* OAIconsTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAIconsTableViewCell.m; path = Controllers/Cells/OAIconsTableViewCell.m; sourceTree = "<group>"; };
 		15BECC66249B897100B36DC0 /* OAIconsTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAIconsTableViewCell.h; path = Controllers/Cells/OAIconsTableViewCell.h; sourceTree = "<group>"; };
@@ -10200,9 +10200,9 @@
 		15BDDEAF24DAF87300079C83 /* SettingsActionBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				158298A324E13F1A00323768 /* OACopyProfileBottomSheetViewController.xib */,
-				15BDDEAC24DAF84900079C83 /* OACopyProfileBottomSheetViewController.mm */,
-				15BDDEAE24DAF85D00079C83 /* OACopyProfileBottomSheetViewController.h */,
+				158298A324E13F1A00323768 /* OACopyProfileBottomSheetView.xib */,
+				15BDDEAC24DAF84900079C83 /* OACopyProfileBottomSheetView.mm */,
+				15BDDEAE24DAF85D00079C83 /* OACopyProfileBottomSheetView.h */,
 			);
 			path = SettingsActionBottomSheet;
 			sourceTree = "<group>";
@@ -18689,7 +18689,7 @@
 				843E5CCC1AB341E000BE14BE /* icon_drive_mode.png in Resources */,
 				84C41DDD1AB8600D0089EABB /* follow_map_mode_button@3x.png in Resources */,
 				0CF58570244072EC0081238D /* widget_marker_triangle_pin_3@3x.png in Resources */,
-				158298A424E13F1A00323768 /* OACopyProfileBottomSheetViewController.xib in Resources */,
+				158298A424E13F1A00323768 /* OACopyProfileBottomSheetView.xib in Resources */,
 				DA25589B24ADE40F0081D155 /* OASettingsViewController.xib in Resources */,
 				844499691AAA1FC000ACA20D /* ic_tabbar_addons_active@3x.png in Resources */,
 				8476E2B81F6C1EEC00EC274F /* map_intermediate_point@3x.png in Resources */,
@@ -20968,7 +20968,7 @@
 				8490B1C92064F053007694A5 /* OAWaypointsRadiusScreen.mm in Sources */,
 				DA25589F24ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm in Sources */,
 				156A5D2424976C9200BE44CD /* OADownloadProgressBarCell.m in Sources */,
-				15BDDEAD24DAF84900079C83 /* OACopyProfileBottomSheetViewController.mm in Sources */,
+				15BDDEAD24DAF84900079C83 /* OACopyProfileBottomSheetView.mm in Sources */,
 				157F3CE924A1FE6D000A66F0 /* OADeleteButtonTableViewCell.m in Sources */,
 				84EE2DF01AFD2D58007C9A94 /* OABannerView.m in Sources */,
 				BBA3B01319878ADD0039D991 /* OADownloadsManager.m in Sources */,

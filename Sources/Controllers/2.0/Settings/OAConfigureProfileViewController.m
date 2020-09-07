@@ -26,7 +26,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAProfileAppearanceViewController.h"
-#import "OACopyProfileBottomSheetViewController.h"
+#import "OACopyProfileBottomSheetView.h"
 #import "OATripRecordingSettingsViewController.h"
 
 #define kSidePadding 16.
@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 @interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate>
 
-@property (strong, nonatomic) OACopyProfileBottomSheetViewController* cpyProfileView;
+@property (strong, nonatomic) OACopyProfileBottomSheetView* cpyProfileView;
 
 @end
 
@@ -235,7 +235,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    self.cpyProfileView = [[OACopyProfileBottomSheetViewController alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0) mode:_appMode];
+    self.cpyProfileView = [[OACopyProfileBottomSheetView alloc] initWithMode:_appMode];
 }
 
 - (void)openDashboardScreen:(EOADashboardScreenType)type

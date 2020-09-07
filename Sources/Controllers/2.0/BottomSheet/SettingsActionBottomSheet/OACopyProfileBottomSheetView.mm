@@ -1,12 +1,12 @@
 //
-//  OACopyProfileBottomSheetViewController.m
+//  OACopyProfileBottomSheetView.m
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 05.08.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OACopyProfileBottomSheetViewController.h"
+#import "OACopyProfileBottomSheetView.h"
 #import "OAAppSettings.h"
 #import "OABottomSheetHeaderDescrButtonCell.h"
 #import "OAIconTextTableViewCell.h"
@@ -34,11 +34,11 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     EOACopyProfileMenuStateFullScreen
 };
 
-@interface OACopyProfileBottomSheetViewController()<UIGestureRecognizerDelegate>
+@interface OACopyProfileBottomSheetView()<UIGestureRecognizerDelegate>
 
 @end
 
-@implementation OACopyProfileBottomSheetViewController
+@implementation OACopyProfileBottomSheetView
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
@@ -53,17 +53,16 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     BOOL _isHiding;
 }
 
-- (instancetype) initWithFrame:(CGRect)frame mode:(OAApplicationMode *)am
+- (instancetype) initWithMode:(OAApplicationMode *)am
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     for (UIView *v in bundle)
     {
-        if ([v isKindOfClass:[OACopyProfileBottomSheetViewController class]])
-            self = (OACopyProfileBottomSheetViewController *) v;
+        if ([v isKindOfClass:[OACopyProfileBottomSheetView class]])
+            self = (OACopyProfileBottomSheetView *) v;
     }
     if (self)
     {
-        self.frame = frame;
         _targetAppMode = am;
         [self commonInit];
     }

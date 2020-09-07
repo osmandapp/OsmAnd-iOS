@@ -234,7 +234,7 @@
         NSString *modeStr;
         if ([_settings.dayNightMode get] == DAYNIGHT_MODE_DAY)
             modeStr = OALocalizedString(@"map_settings_day");
-        else if ([_settings.dayNightMode get] == DAYNIGHT_MODE_NIGHT)
+        else if ([_settings.dayNightMode get] == APPEARANCE_MODE_NIGHT)
             modeStr = OALocalizedString(@"map_settings_night");
         else if ([_settings.dayNightMode get] == DAYNIGHT_MODE_AUTO)
             modeStr = OALocalizedString(@"daynight_mode_auto");
@@ -733,7 +733,7 @@
                 NSArray *categories = [self getAllCategories];
                 if (indexPath.row == 0)
                 {
-                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:daynight_mode];
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
                 }
                 else if (indexPath.row == 1)
                 {

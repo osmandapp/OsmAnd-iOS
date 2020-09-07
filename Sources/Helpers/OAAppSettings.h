@@ -15,7 +15,7 @@
 #define kResetWidgetsSettingsNotification @"kResetWidgetsSettingsNotification"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
 
-#define daynight_mode @"daynight_mode"
+#define settingAppModeKey @"settingAppModeKey"
 
 #define mapDensityKey @"mapDensity"
 #define textSizeKey @"textSize"
@@ -372,7 +372,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL settingMapLanguageTranslit;
 
 #define DAYNIGHT_MODE_DAY 0
-#define DAYNIGHT_MODE_NIGHT 1
+#define APPEARANCE_MODE_NIGHT 1
 #define DAYNIGHT_MODE_AUTO 2
 
 #define MAP_ARROWS_LOCATION 0

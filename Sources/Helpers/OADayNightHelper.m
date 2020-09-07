@@ -59,7 +59,7 @@
     {
         nightMode = NO;
     }
-    else if (dayNightMode == DAYNIGHT_MODE_NIGHT)
+    else if (dayNightMode == APPEARANCE_MODE_NIGHT)
     {
         nightMode = YES;
     }

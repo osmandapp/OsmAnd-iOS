@@ -62,7 +62,7 @@
 
 - (void) setupView
 {
-    if ([settingKeyName isEqualToString:daynight_mode])
+    if ([settingKeyName isEqualToString:settingAppModeKey])
     {
         title = OALocalizedString(@"map_settings_mode");
         int mode = [_settings.dayNightMode get];
@@ -78,7 +78,7 @@
                  @{
                      @"name" : OALocalizedString(@"map_settings_night"),
                      @"value" : @"",
-                     @"img" : mode == DAYNIGHT_MODE_NIGHT ? @"menu_cell_selected.png" : @"" }
+                     @"img" : mode == APPEARANCE_MODE_NIGHT ? @"menu_cell_selected.png" : @"" }
                  ];
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
@@ -228,13 +228,13 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([settingKeyName isEqualToString:daynight_mode])
+    if ([settingKeyName isEqualToString:settingAppModeKey])
     {
         int index = (int)indexPath.row;
         if (index == 1)
             [_settings setAppMode:DAYNIGHT_MODE_DAY];
         else if (index == 2)
-            [_settings setAppMode:DAYNIGHT_MODE_NIGHT];
+            [_settings setAppMode:APPEARANCE_MODE_NIGHT];
         else
             [_settings setAppMode:DAYNIGHT_MODE_AUTO];
     }

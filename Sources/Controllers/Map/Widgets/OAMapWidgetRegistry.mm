@@ -18,7 +18,7 @@
 #define HIDE_PREFIX @"-"
 #define SHOW_PREFIX @""
 #define SETTINGS_SEPARATOR @";"
-#define kResetingAppModeKey @"appMode"
+#define kResetingAppModeKey @"resettingAppModeKey"
 
 @implementation OAMapWidgetRegistry
 {
@@ -54,7 +54,7 @@
             }
         }
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetVidgets:) name:kResetWidgetsSettingsNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetWidgets:) name:kResetWidgetsSettingsNotification object:nil];
     }
     return self;
 }
@@ -325,7 +325,7 @@
     [_settings.centerPositionOnMap resetToDefault];
 }
 
-- (void) resetVidgets:(NSNotification *)notification;
+- (void) resetWidgets:(NSNotification *)notification;
 {
     OAApplicationMode *mode = [[notification userInfo] objectForKey:kResetingAppModeKey];
     if (mode)

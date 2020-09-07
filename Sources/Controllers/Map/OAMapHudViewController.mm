@@ -150,7 +150,7 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateVidgets:) name:kUpdateWidgestsVisibilityNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateWidgets:) name:kUpdateWidgestsVisibilityNotification object:nil];
 }
 
 - (void) deinit
@@ -624,7 +624,7 @@
     });
 }
 
-- (void) updateVidgets:(NSNotification *)notification
+- (void) updateWidgets:(NSNotification *)notification
 {
         [self updateInfo];
         [self updateColors];

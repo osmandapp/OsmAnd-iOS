@@ -33,7 +33,7 @@
 #define kButtonsTag 1
 #define kButtonsDividerTag 150
 #define kTitleIconRoundCell @"OATitleTwoIconsRoundCell"
-#define kResetingAppModeKey @"appMode"
+#define kResetingAppModeKey @"resettingAppModeKey"
 
 @interface OAPluginResetBottomSheetScreen ()
 

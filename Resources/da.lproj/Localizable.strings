@@ -1447,7 +1447,7 @@
 "rendering_attr_hideHouseNumbers_name" = "Husnumre";
 "rendering_attr_depthContours_name" = "Havdybdekonturer";
 "rendering_attr_piste_difficulty_aerialway_name" = "Lift";
-"rendering_attr_piste_type_skitour_name" = "Skitour";
+"rendering_attr_piste_type_skitour_name" = "Skitur";
 "routing_attr_prefer_motorway_name" = "Foretræk motorveje";
 "rendering_value_purple_name" = "Lilla";
 "rendering_attr_publicTransportMode_name" = "Bus-, trolleybus-, shuttlebusruter";
@@ -1492,7 +1492,7 @@
 "rendering_attr_surface_paving_stones_name" = "Belægningssten";
 "rendering_value_yellow_name" = "Gul";
 "rendering_value_car_name" = "Bil";
-"rendering_attr_piste_difficulty_freeride_name" = "Freeride";
+"rendering_attr_piste_difficulty_freeride_name" = "Gratis tur";
 "routing_attr_allow_expert_description" = "Ekstremt vanskelige ruter, med farlige forhindringer og omgivelser.";
 "rendering_attr_transportStops_name" = "Stoppesteder";
 "routing_attr_avoid_ice_roads_fords_description" = "Undgår isglatte veje og vadesteder.";
@@ -1747,3 +1747,10 @@
 "configure_screen_descr" = "Vælg skærmindstillinger for profilen";
 "min_speed" = "Min. hastighed";
 "shared_string_account" = "Konto";
+"default_speed_dialog_msg" = "Anslår ankomsttid for ukendte vejtyper og begrænser hastigheden for alle veje (kan påvirke ruten)";
+"profile_type_base_string" = "Basisprofil";
+"units_and_formats" = "Enheder & formater";
+"configure_profile" = "Konfigurere profil";
+"export_profile" = "Eksportere profil";
+"selected_profile" = "Valgt profil";
+"profile_appearance" = "Profil udseende";

@@ -145,7 +145,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }];
     [settingsActions addObject:@{
         @"type" : kTitleRightIconCell,
-        @"title" : OALocalizedString(@"copy_profile"),
+        @"title" : OALocalizedString(@"copy_from_other_profile"),
         @"img" : @"ic_custom_copy",
         @"key" : @"copy_profile"
     }];
@@ -158,7 +158,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if ([_appMode isCustomProfile])
         [settingsActions addObject:@{
            @"type" : kTitleRightIconCell,
-            @"title" : OALocalizedString(@"delete_profile"),
+            @"title" : OALocalizedString(@"profile_alert_delete_title"),
             @"img" : @"ic_custom_remove_outlined",
             @"key" : @"delete_profile"
         }];

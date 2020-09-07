@@ -57,7 +57,7 @@
     
     [arr addObject:@{
         @"type" : @"OABottomSheetHeaderDescrButtonCell",
-        @"title" : [NSString stringWithFormat:@"%@?", OALocalizedString(@"delete_profile")],
+        @"title" : [NSString stringWithFormat:@"%@?", OALocalizedString(@"profile_alert_delete_title")],
         @"img" : @"ic_custom_remove_outlined",
         @"description" : @""
     }];
@@ -136,12 +136,12 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    NSString *descriptionString = [NSString stringWithFormat:OALocalizedString(@"delete_profile_descr"), _appMode.toHumanString];
+    NSString *descriptionString = [NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString];
     CGFloat textWidth = tableView.bounds.size.width - 32;
     CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionString width:textWidth font:[UIFont systemFontOfSize:15] lineSpacing:6.] + 16;
     UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
-    description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:[NSString stringWithFormat:OALocalizedString(@"delete_profile_descr"), _appMode.toHumanString] boldString:_appMode.toHumanString lineSpacing:4.];
+    description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString] boldString:_appMode.toHumanString lineSpacing:4.];
     description.numberOfLines = 0;
     description.lineBreakMode = NSLineBreakByWordWrapping;
     description.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -151,7 +151,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:OALocalizedString(@"delete_profile_descr"), _appMode.toHumanString] width:tableView.bounds.size.width - 32 font:[UIFont systemFontOfSize:15] lineSpacing:6.];
+    CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString] width:tableView.bounds.size.width - 32 font:[UIFont systemFontOfSize:15] lineSpacing:6.];
     return labelHeight + 60;
 }
 

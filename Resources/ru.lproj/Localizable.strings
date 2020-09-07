@@ -1869,3 +1869,9 @@
 "units_t" = "т";
 "recalculate_wrong_dir" = "Пересчитать маршрут в случае обратного направления";
 "repeat_after" = "Повторить после";
+"profile_alert_delete_msg" = "Вы действительно хотите удалить профиль \"%@\"?";
+"profile_alert_delete_title" = "Удалить профиль";
+"reset_to_default" = "Сброс к настройкам по умолчанию";
+"copy_from_other_profile_descr" = "Вы можете скопировать все настройки из любого профиля в выбранный профиль: ";
+"copy_from_other_profile" = "Копировать из другого профиля";
+"shared_string_copy" = "Копировать";

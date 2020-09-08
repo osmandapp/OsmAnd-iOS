@@ -3,7 +3,7 @@
 "OsmAnd Maps" = "Mapas de OsmAnd";
 // Shared Strings
 "shared_string_back" = "Atrás";
-"shared_string_ok" = "Aplicar";
+"shared_string_ok" = "Aceptar";
 "shared_string_cancel" = "Cancelar";
 "shared_string_no" = "No";
 "shared_string_yes" = "Sí";
@@ -41,7 +41,7 @@
 "fav_rename_q" = "Renombrar favorito";
 "fav_enter_new_name" = "Ingrese el nuevo nombre para el favorito";
 "poi_max_radius_reached" = "Alcanzado máximo radio de búsqueda";
-"shared_string_done" = "Hecho";
+"shared_string_done" = "Listo";
 // HUD
 "hud_heading" = "Cabecera";
 // POI
@@ -1849,3 +1849,9 @@
 "units_t" = "t";
 "recalculate_wrong_dir" = "Recalcular la ruta en caso de dirección inversa";
 "repeat_after" = "Repetir después";
+"profile_alert_delete_title" = "Borrar perfil";
+"profile_alert_delete_msg" = "¿Borrar el perfil «%s»?";
+"reset_to_default" = "Restaurar a valores predefinidos";
+"copy_from_other_profile_descr" = "Puedes copiar todos los ajustes de cualquier perfil al perfil elegido: ";
+"copy_from_other_profile" = "Copiar desde otro perfil";
+"shared_string_copy" = "Copiar";

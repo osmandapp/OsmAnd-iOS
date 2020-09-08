@@ -1805,3 +1805,9 @@
 "map_settings_add_maps_desc" = "Sa saad lisada uusi kaarte lingi kaudu või importides SQLite faile.";
 "profile_sett_descr" = "Mõjuta valitud rakenduse profiili";
 "err_profile_import" = "Viga kirje andmete lugemisel: %@";
+"copy_from_other_profile_descr" = "Sa võid kopeerida ükspuha missugusest profiilist kõik seadistused valitud profiili: ";
+"profile_alert_delete_msg" = "Kas sa oled kindel, et soovid täielikult kustutada „%@“ profiili?";
+"shared_string_copy" = "Kopeeri";
+"profile_alert_delete_title" = "Kustuta profiil";
+"copy_from_other_profile" = "Kopeeri teiselt profiililt";
+"reset_to_default" = "Taasta algväärtused";

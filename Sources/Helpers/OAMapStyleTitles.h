@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSDictionary<NSString *, NSString *> *)getMapStyleTitles;
 + (int) getSortIndexForTitle:(NSString *)title;
-+ (NSArray<NSString *> *)getMapStyleRenderKeys;
 
 @end
 

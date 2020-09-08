@@ -356,7 +356,7 @@
 
 -(void) resetMapStyleForAppMode:(NSString *)appModeName
 {
-    NSArray *allRenderStyles = [OAMapStyleTitles getMapStyleRenderKeys];
+    NSMutableArray <NSString *> *allRenderStyles = [self getMapStyleRenderKeys];
     dispatch_async(dispatch_get_main_queue(), ^{
         for (NSString *renderStyleName in allRenderStyles)
         {
@@ -371,6 +371,27 @@
         }
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     });
+}
+
+- (NSMutableArray <NSString *> *)getMapStyleRenderKeys
+{
+    NSMutableArray <NSString *> *keys = [NSMutableArray new];
+    typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
+    
+    const auto localResources = [OsmAndApp instance].resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
+    {
+        if (localResource->type == OsmAndResourceType::MapStyle)
+            mapStylesResources.push_back(localResource);
+    }
+    
+    for(const auto& resource : mapStylesResources)
+    {
+        const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+        [keys addObject: mapStyle->name.toNSString()];
+    }
+    return keys;
 }
 
 @end

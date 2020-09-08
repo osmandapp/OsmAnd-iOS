@@ -1833,3 +1833,4 @@
 "global_settings_descr" = "Betreffen die ganze Anwendung.";
 "configure_screen_descr" = "Bildschirmoptionen für das Profil auswählen";
 "send_anonymous_data_desc" = "Karten-Download-Statistik an OsmAnd senden. Wir sammeln keine Standortdaten oder persönliche Informationen.";
+"shared_string_account" = "Konto";

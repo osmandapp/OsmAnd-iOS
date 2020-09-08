@@ -282,7 +282,7 @@
 "shared_string_no" = "Ne";
 "shared_string_yes" = "Ano";
 "shared_string_save" = "Uložit";
-"shared_string_done" = "Done";
+"shared_string_done" = "Hotovo";
 "shared_string_update" = "Aktualizovat";
 "shared_string_install" = "Instalovat";
 "shared_string_uninstall" = "Uninstall";
@@ -1381,3 +1381,4 @@
 "map_settings_appearance" = "Vzhled";
 "shared_string_warning" = "Upozornění";
 "wiki_sheet_title" = "Jak otevřít články Wikipedie?";
+"routing_attr_length_name" = "Omezení délky";

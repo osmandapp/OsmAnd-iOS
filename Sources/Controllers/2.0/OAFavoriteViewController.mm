@@ -23,7 +23,6 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-
 @implementation OAFavoriteViewController
 {
     OsmAndAppInstance _app;
@@ -42,10 +41,7 @@
         
         if (!headerOnly)
         {
-            OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
-            [collapsableView setData:favorite];
-            collapsableView.collapsed = YES;
-            self.collapsableView = collapsableView;
+            [super setupCollapableViewsWithData:favorite lat:favorite.getLatitude lon:favorite.getLongitude];
         }
         
         NSString *groupName = self.favorite.favorite->getGroup().toNSString();
@@ -53,7 +49,7 @@
         self.groupColor = [self.favorite getColor];
 
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
-}
+    }
     return self;
 }
 
@@ -105,10 +101,7 @@
         
         if (!headerOnly)
         {
-            OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
-            [collapsableView setData:fav];
-            collapsableView.collapsed = YES;
-            self.collapsableView = collapsableView;
+            [super setupCollapableViewsWithData:fav lat:location.latitude lon:location.longitude];
         }
         
         NSString *groupStr = self.favorite.favorite->getGroup().toNSString();
@@ -118,6 +111,7 @@
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
     return self;
+
 }
 
 - (BOOL) supportMapInteraction

@@ -84,7 +84,7 @@
 
 - (void) refreshSoundButton
 {
-    BOOL isMuted = ![[OAAppSettings sharedManager].voiceMute get:[OARoutingHelper sharedInstance].getAppMode];
+    BOOL isMuted = [[OAAppSettings sharedManager].voiceMute get:[OARoutingHelper sharedInstance].getAppMode];
     [_soundButton setImage:isMuted ? [UIImage imageNamed:@"ic_custom_sound_off"] : [UIImage imageNamed:@"ic_custom_sound"]forState:UIControlStateNormal];
     [_soundButton setTitle:isMuted ? OALocalizedString(@"shared_string_off") : OALocalizedString(@"shared_string_on") forState:UIControlStateNormal];
     [self adjustButtonSize];
@@ -100,7 +100,7 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     OAApplicationMode *am = [OARoutingHelper sharedInstance].getAppMode;
     [settings.voiceMute set:![settings.voiceMute get:am] mode:am];
-    [[OARoutingHelper sharedInstance].getVoiceRouter setMute:settings.voiceMute];
+    [[OARoutingHelper sharedInstance].getVoiceRouter setMute:[settings.voiceMute get:am]];
     [self refreshSoundButton];
 }
 

@@ -66,8 +66,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.view.backgroundColor = UIColor.yellowColor;
-    [self.tableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
     [self setupView];
 }
 
@@ -76,6 +75,14 @@
     [super viewWillAppear:animated];
     [self setupView];
     [self.tableView reloadData];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
+        [self.tableView reloadData];
+    } completion:nil];
 }
 
 - (void) setupView
@@ -156,6 +163,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
             cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.numberOfLines = 1;
             cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
@@ -197,6 +205,8 @@
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
             [cell.overflowButton setImage:[[UIImage imageNamed:@"ic_checkmark_default"]  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
             cell.overflowButton.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.textView.numberOfLines = 3;
+            cell.textView.lineBreakMode = NSLineBreakByTruncatingTail;
         }
         OAApplicationMode *am = _profileList[indexPath.row];
         UIImage *img = am.getIcon;

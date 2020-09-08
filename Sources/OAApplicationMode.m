@@ -42,45 +42,8 @@ static OAApplicationMode *_AIRCRAFT;
 static OAApplicationMode *_BOAT;
 static OAApplicationMode *_SKI;
 
-+ (void) initialize
++ (void)initRegVisibility
 {
-    _widgetsVisibilityMap = [NSMapTable strongToStrongObjectsMapTable];
-    _widgetsAvailabilityMap = [NSMapTable strongToStrongObjectsMapTable];
-    _values = [NSMutableArray array];
-    _cachedFilteredValues = [NSMutableArray array];
-    
-    _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_overview") stringKey:@"default"];
-    _DEFAULT.descr = OALocalizedString(@"base_profile_descr");
-    [_values addObject:_DEFAULT];
-    
-    _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
-    _CAR.descr = OALocalizedString(@"base_profile_descr_car");
-    [_values addObject:_CAR];
-    
-    _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
-    _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
-    [_values addObject:_BICYCLE];
-    
-    _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
-    _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
-    [_values addObject:_PEDESTRIAN];
-    
-    _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
-    _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
-    [_values addObject:_PUBLIC_TRANSPORT];
-    
-    _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
-    _AIRCRAFT.descr = OALocalizedString(@"base_profile_descr_aircraft");
-    [_values addObject:_AIRCRAFT];
-    
-    _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
-    _BOAT.descr = OALocalizedString(@"base_profile_descr_boat");
-    [_values addObject:_BOAT];
-    
-    _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_skiing") stringKey:@"ski"];
-    _SKI.descr = OALocalizedString(@"app_mode_skiing");
-    [_values addObject:_SKI];
-    
     NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _PEDESTRIAN, _BICYCLE, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI];
     
     NSArray<OAApplicationMode *> *all = nil;
@@ -122,6 +85,46 @@ static OAApplicationMode *_SKI;
     [self regWidgetVisibility:@"back_to_location" am:all];
     [self regWidgetVisibility:@"monitoring_services" am:none];
     [self regWidgetVisibility:@"bgService" am:none];
+}
+
++ (void) initialize
+{
+    _widgetsVisibilityMap = [NSMapTable strongToStrongObjectsMapTable];
+    _widgetsAvailabilityMap = [NSMapTable strongToStrongObjectsMapTable];
+    _values = [NSMutableArray array];
+    _cachedFilteredValues = [NSMutableArray array];
+    
+    _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_overview") stringKey:@"default"];
+    _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
+    [_values addObject:_DEFAULT];
+    
+    _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
+    _CAR.descr = OALocalizedString(@"base_profile_descr_car");
+    [_values addObject:_CAR];
+    
+    _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
+    _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
+    [_values addObject:_BICYCLE];
+    
+    _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
+    _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
+    [_values addObject:_PEDESTRIAN];
+    
+    _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
+    _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
+    [_values addObject:_PUBLIC_TRANSPORT];
+    
+    _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
+    _AIRCRAFT.descr = OALocalizedString(@"base_profile_descr_aircraft");
+    [_values addObject:_AIRCRAFT];
+    
+    _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
+    _BOAT.descr = OALocalizedString(@"base_profile_descr_boat");
+    [_values addObject:_BOAT];
+    
+    _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_skiing") stringKey:@"ski"];
+    _SKI.descr = OALocalizedString(@"app_mode_skiing");
+    [_values addObject:_SKI];
 }
 
 + (OAApplicationMode *) DEFAULT
@@ -506,14 +509,14 @@ static OAApplicationMode *_SKI;
 
 - (NSString *) getProfileDescription
 {
-    return _descr && _descr.length > 0 ? _descr : OALocalizedString(@"custom_profile");
+    return _descr && _descr.length > 0 ? _descr : OALocalizedString(@"profile_type_custom_string");
 }
 
 + (void) onApplicationStart
 {
     [self initCustomModes];
 //    [self initModesParams];
-//    [self initRegVisibility];
+    [self initRegVisibility];
     [self reorderAppModes];
 }
 
@@ -710,9 +713,11 @@ static OAApplicationMode *_SKI;
         [set addObjectsFromArray:am];
     
     for (OAApplicationMode *m in _values)
+    {
         // add derived modes
         if ([set containsObject:m.parent])
             [set addObject:m];
+    }
         
     [_widgetsAvailabilityMap setObject:set forKey:widgetId];
     return set;

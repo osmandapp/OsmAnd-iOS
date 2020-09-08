@@ -21,8 +21,9 @@
 #import "OATextInputCell.h"
 #import "OAButtonCell.h"
 #import "OAColors.h"
+#import "OAMultiLineLabelCell.h"
 
-#define kCellTypeTitle @"OAIconTextCell"
+#define kCellTypeTitle @"OAMultiLineLabelCell"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeSwitch @"switch"
 #define kCellTypeButton @"button"
@@ -217,13 +218,11 @@ static const NSInteger actionsSectionIndex = 2;
     else if ([type isEqualToString:kCellTypeTitle])
     {
         static NSString* const identifierCell = kCellTypeTitle;
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMultiLineLabelCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.arrowIconView.hidden = YES;
-            cell.iconView.hidden = YES;
+            cell = (OAMultiLineLabelCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
             cell.textView.numberOfLines = 0;
             cell.textView.lineBreakMode = NSLineBreakByWordWrapping;
@@ -265,6 +264,18 @@ static const NSInteger actionsSectionIndex = 2;
     else if (section == actionsSectionIndex)
         return OALocalizedString(@"actions");
     return nil;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
+    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

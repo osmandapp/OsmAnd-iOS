@@ -43,8 +43,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"coords_format");
-    self.subtitleLabel.text = OALocalizedString(@"app_mode_car");
 }
 
 - (void) viewDidLoad

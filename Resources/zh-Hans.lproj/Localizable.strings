@@ -1280,3 +1280,4 @@
 "day_off_label" = "关闭";
 "routing_attr_length_name" = "长度限制";
 "rendering_value_thick_name" = "粗";
+"profile_type_base_string" = "基本配置文件";

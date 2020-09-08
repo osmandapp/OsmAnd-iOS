@@ -105,7 +105,7 @@
 "speak_speed_limit" = "السرعة القصوى";
 "speak_cameras" = "كاميرات السرعة";
 "speak_traffic_warnings" = "تحذيرات حركة المرور";
-"announce_gpx_waypoints" = "نقاط الطريق GPX";
+"announce_gpx_waypoints" = "نقاط المسار";
 "speak_favorites" = "النقاط المفضلة المجاورة";
 "speak_poi" = "نقاط الاهتمام المجاورة";
 "speak_pedestrian" = "ممرات الراجلين";
@@ -230,7 +230,7 @@
 "traffic_warning_border_control" = "مراقبة الحدود";
 "traffic_warning_payment" = "كشك الرسوم";
 "traffic_warning_stop" = "إشارة توقف";
-"traffic_warning_calming" = "تخفيف الازدحام";
+"traffic_warning_calming" = "مطب";
 "traffic_warning_speed_camera" = "كاميرا مراقبة السرعة";
 "traffic_warning" = "تنبيه مروري";
 "traffic_warning_railways" = "عبور خط السكة الحديدية";
@@ -888,7 +888,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "حدد فترة الدفع المناسبة لك:";
 "osm_live_payment_contribute_descr" = "جزء من الدخل يذهب إلى المساهمين خريطة الشارع المفتوح.";
-"osmand_live_upd_frequency" = "تحديث التردد";
+"osmand_live_upd_frequency" = "تحديث";
 "osmand_live_wifi_only" = "تحديث واي فاي فقط";
 "free_version_message" = "يمكنك تنزيل الخرائط%d أو تحديثها";
 "get_osmand_live" = "الحصول علي أوسماند لايف لفتح جميع الميزات:";
@@ -1461,7 +1461,7 @@
 "rendering_attr_contourDensity_name" = "كثافة الخط المحيطي";
 "routing_attr_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
 "rendering_attr_surface_paving_stones_name" = "حجارة الرصف";
-"rendering_attr_contourWidth_description" = "عرض الخطوط الكنتورية";
+"rendering_attr_contourWidth_description" = "عرض الخطوط المحيطية";
 "rendering_attr_lessDetailed_name" = "تفاصيل أقل";
 "rendering_value_green_name" = "أخضر";
 "rendering_attr_showSurfaceGrade_name" = "عرض جودة الطريق";
@@ -1564,7 +1564,7 @@
 "routing_attr_piste_type_nordic_description" = "مسارات للتزلج الشمالي أو الريفي علي الثلج.";
 "routeInfo_piste_type_name" = "نوع المدرج";
 "routing_attr_piste_type_sled_name" = "تزلج";
-"rendering_attr_contourWidth_name" = "عرض الخطوط الكنتورية";
+"rendering_attr_contourWidth_name" = "عرض الخطوط المحيطية";
 "rendering_value_boldOutline_name" = "مخطط واضح";
 "routing_attr_allow_classic_only_description" = "تم إعداد الطرق للأسلوب الكلاسيكي فقط دون مسارات التزلج. يشمل ذلك الطرق التي يتم إعدادها بواسطة عربة ثلجية أصغر مع زحلقة مرنة ومسارات مصنوعة يدوياً بواسطة المتزلجين.";
 "rendering_attr_appMode_name" = "وضع التقديم";
@@ -1673,8 +1673,8 @@
 "transfers" = "النقل:";
 "consider_limitations_param" = "النظر في القيود المؤقتة";
 "avoid_transport_type" = "تجنب أنواع النقل";
-"allow_3d_descr" = "قم بتمكين هذا الخيار لتتمكن من عرض الخريطة في منظور 2.5D";
-"allow_3d" = "السماح بعرض 2.5D";
+"allow_3d_descr" = "قم بتمكين هذا الخيار لتتمكن من عرض الخريطة في منظور 3D";
+"allow_3d" = "السماح بعرض 3D";
 "product_desc_antarctica" = "تنزيلات خريطة غير محدودة للقطب الجنوبي";
 "product_title_antarctica" = "القطب الجنوبي";
 "map_settings_add_maps_slopes" = "تحتاج لخرائط إضافية لعرض المنحدرات على الخريطة";
@@ -1738,7 +1738,7 @@
 "enter_profile_name" = "أدخل اسم الملف الشخصي";
 "edit_profile_list" = "تحرير قائمة ملفات التعريف";
 "new_profile" = "ملف تعريف جديد";
-"custom_profile" = "ملف تعريف مخصص";
+"profile_type_custom_string" = "ملف تعريف مخصص";
 "create_profile_descr" = "إسناد الوضع المخصص الخاص بك إلى أحد أوضاع التطبيق الافتراضية ، يحدد الإعداد الأساسي مثل الرؤية الافتراضية لعناصر واجهة المستخدم ووحدات السرعة والمسافة. وهذه هي أوضاع التطبيق الافتراضية ، إلى جانب أمثلة لأوضاع مخصصة يمكن تمديدها إلى:";
 "create_profile" = "إنشاء ملف تعريف";
 "import_from_files" = "استيراد من الملف";
@@ -1761,8 +1761,8 @@
 "number_of_tiles" = "عدد الطبقات";
 "move_map_to_select_area" = "نقل الخريطة لتحديد المساحة المطلوبة.";
 "update_map" = "تحديث الخريطة";
-"change_map_behavior" = "تغيير إيماء الخريطة أثناء التنقل";
-"map_behavior" = "إيماء الخريطة";
+"change_map_behavior" = "تغيير الخريطة أثناء التنقل";
+"map_behavior" = "خريطة أثناء التنقل";
 "quick_action_transport_descr" = "انقر على هذا الإجراء لإظهار أو إخفاء مسارات / محطات النقل العام على الخريطة.";
 "vehicle_height_descr" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
 "touting_specified_vehicle_parameters_descr" = "قد تؤثر معلمات المركبات المحددة على التوجيه.";
@@ -1770,7 +1770,7 @@
 "device_settings" = "إعدادات الجهاز";
 "angular_measurment_units" = "وحدات قياس الزاوية";
 "units_of_speed" = "وحدات السرعة";
-"allow_3D_view" = "عرض 2.5D";
+"allow_3D_view" = "عرض 3D";
 "do_not_rotate" = "عدم تدوير";
 "app_theme_light" = "نهاري";
 "settings_app_theme" = "نمط الخريطة";
@@ -1797,7 +1797,7 @@
 "units_and_formats" = "الوحدات والأشكال";
 "routing_attr_length_name" = "حد الطول";
 "send_anonymous_data" = "إرسال بيانات مجهولة المصدر";
-"base_profile_descr" = "ملف التعريف الأساسي";
+"profile_type_base_string" = "ملف التعريف الأساسي";
 "global_settings_descr" = "تؤثر على التطبيق بأكمله.";
 "global_settings" = "الاعدادات العامة";
 "send_anonymous_data_desc" = "أرسل إلى أوسماند إحصائيات تنزيل الخريطة ، نحن لا نجمع بيانات الموقع ، أو أي معلومات شخصية.";
@@ -1827,3 +1827,18 @@
 "configure_profile" = "تكوين ملف التعريف";
 "plugin_settings_descr" = "إعدادات البرنامج المساعد لملف التعريف المحدد.";
 "configure_screen_descr" = "حدد خيارات الشاشة لملف التعريف";
+"shared_string_email" = "البريد الإلكتروني";
+"shared_string_account_add" = "إضافة حساب";
+"shared_string_account" = "الحساب";
+"shared_string_required" = "مطلوب";
+"email_example_hint" = "user@example.com";
+"osm_editing_access_descr" = "يمكنك عرض كافة عمليات التحرير والملاحظات المحلية في %@. لم يتم سرد النقاط التي تم تحميلها بالفعل في أوسماند.";
+"osm_editing_settings_descr" = "إعدادات المكون الإضافي هذه شاملة، وتنطبق على جميع الملفات الشخصية.";
+// Menu
+"menu" = "القائمة";
+"plugin_settings_reset" = "إعادة ضبط الملحقات للافتراضي";
+"trip_rec_actions_descr" = "يمكنك العثور على جميع المسارات المسجلة في % @";
+"logging_accuracy" = "دقة التسجيل";
+"units_t" = "t";
+"recalculate_wrong_dir" = "إعادة حساب المسار في حالة الانحراف";
+"repeat_after" = "إعادة بعد";

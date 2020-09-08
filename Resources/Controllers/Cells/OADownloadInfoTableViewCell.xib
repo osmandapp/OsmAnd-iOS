@@ -29,21 +29,21 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xro-W7-JcK">
-                        <rect key="frame" x="281" y="12" width="28" height="21"/>
+                        <rect key="frame" x="281" y="11" width="28" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Xro-W7-JcK" firstAttribute="top" secondItem="r7K-wP-46z" secondAttribute="top" constant="12" id="1e2-XT-1P1"/>
+                    <constraint firstItem="Xro-W7-JcK" firstAttribute="top" secondItem="r7K-wP-46z" secondAttribute="top" constant="11" id="1e2-XT-1P1"/>
                     <constraint firstItem="3vy-dR-Ypk" firstAttribute="leading" secondItem="r7K-wP-46z" secondAttribute="leading" constant="16" id="4bJ-VD-SZL"/>
                     <constraint firstItem="RmK-Qz-rki" firstAttribute="top" secondItem="r7K-wP-46z" secondAttribute="top" constant="11" id="5Xc-Pe-659"/>
                     <constraint firstItem="RmK-Qz-rki" firstAttribute="leading" secondItem="Xro-W7-JcK" secondAttribute="trailing" constant="8" id="SiV-Pq-ORU"/>
                     <constraint firstItem="3vy-dR-Ypk" firstAttribute="top" secondItem="r7K-wP-46z" secondAttribute="top" constant="12" id="cEE-ng-a1a"/>
                     <constraint firstAttribute="bottom" secondItem="RmK-Qz-rki" secondAttribute="bottom" constant="12" id="f3h-mJ-IKZ"/>
                     <constraint firstAttribute="bottom" secondItem="3vy-dR-Ypk" secondAttribute="bottom" constant="11" id="fgM-eX-trw"/>
-                    <constraint firstAttribute="bottom" secondItem="Xro-W7-JcK" secondAttribute="bottom" constant="11" id="gJD-1a-p94"/>
+                    <constraint firstAttribute="bottom" secondItem="Xro-W7-JcK" secondAttribute="bottom" constant="12" id="gJD-1a-p94"/>
                     <constraint firstAttribute="trailing" secondItem="RmK-Qz-rki" secondAttribute="trailing" constant="16" id="woC-cQ-JJ5"/>
                 </constraints>
             </tableViewCellContentView>

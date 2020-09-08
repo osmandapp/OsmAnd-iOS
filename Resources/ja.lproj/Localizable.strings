@@ -58,7 +58,7 @@
 "shared_string_search" = "検索";
 "search_radius" = "検索範囲";
 "targets" = "目的地";
-"search_radius_proximity" = "内";
+"search_radius_proximity" = "以内";
 "poi" = "POI";
 "day_off_label" = "OFF";
 "open_from" = "以下の場所から開く";
@@ -1369,7 +1369,7 @@
 "routing_attr_allow_private_name" = "専有エリア(私有地など)を通行可とみなす";
 "rendering_attr_piste_difficulty_novice_name" = "初心者向け";
 "rendering_attr_piste_type_hike_name" = "ノルディックスキーまたはハイキング用ゲレンデ";
-"rendering_attr_tramTrainRoutes_name" = "路面電車と鉄道の路線";
+"rendering_attr_tramTrainRoutes_name" = "路面電車＆鉄道路線";
 "rendering_attr_shareTaxiRoutes_name" = "タクシーのルート共有";
 "routing_attr_height_obstacles_name" = "標高データを使用";
 "rendering_attr_surface_paved_name" = "舗装有り";
@@ -1441,7 +1441,7 @@
 "rendering_attr_surface_fine_gravel_name" = "砂利と砂の複数舗装";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "自転車ルートのノードネットワーク";
 "rendering_attr_noAdminboundaries_description" = "地域の境界線(管理レベル 5-9)を非表示";
-"rendering_attr_hikingRoutesOSMC_description" = "OSMCトレースに従って道を描写";
+"rendering_attr_hikingRoutesOSMC_description" = "OSMCトレースに従って道を描写します。";
 "routing_attr_allow_motorway_description" = "高速道路を利用可能とみなします。";
 "rendering_attr_showLez_description" = "マップ上に低排出ゾーン(CO2排出量の多い車両に課税するエリア)を表示します。ルーティングには影響しません。";
 "rendering_attr_winter_road_name" = "冬期道路";
@@ -1649,3 +1649,7 @@
 "app_mode_personal_transporter" = "個人輸送業者";
 "open_wiki_online" = "記事をオンラインで開く";
 "download_wiki_data" = "%@のWikipediaデータをダウンロード";
+"width_limit_description" = "車幅を入力してください。一部のルートにおいては、幅の広い車両では通行できない場合があります。";
+"height_limit_description" = "車高を入力してください。一部のルートにおいては、車高の高い車両では通行できない場合があります。";
+"weight_limit_description" = "車両の重量を入力してください。一部のルートにおいては、大型車両では通行できない場合があります。";
+"routing_attr_length_name" = "長さ制限";

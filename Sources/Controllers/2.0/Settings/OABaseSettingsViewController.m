@@ -10,7 +10,7 @@
 #import "OAColors.h"
 #import "OAApplicationMode.h"
 
-#define kSidePadding 16
+#define kSidePadding 20
 
 @interface OABaseSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -76,9 +76,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)profileButtonPressed:(id)sender {
-}
-
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     return nil;
 }
@@ -92,6 +89,22 @@
     UIFont *labelFont = [UIFont systemFontOfSize:15.0];
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
+        headerView.textLabel.textColor = UIColorFromRGB(color_text_footer);
+    }
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
+        headerView.textLabel.textColor = UIColorFromRGB(color_text_footer);
+    }
 }
 
 #pragma mark - OASettingsDataDelegate

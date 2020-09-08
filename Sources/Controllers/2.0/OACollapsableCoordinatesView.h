@@ -12,8 +12,10 @@
 
 @interface OACollapsableCoordinatesView : OACollapsableView
 
+@property (nonatomic, readonly) double lat;
+@property (nonatomic, readonly) double lon;
 @property (nonatomic, readonly) NSDictionary<NSNumber *, NSString *> *coordinates;
 
-- (void) setData:(NSDictionary<NSNumber *, NSString *> *)data;
+- (instancetype) initWithFrame:(CGRect)frame lat:(double)lat lon:(double)lon;
 
 @end

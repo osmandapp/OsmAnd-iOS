@@ -67,7 +67,7 @@
 
 - (BOOL) isBoat
 {
-    return _applicationMode == OAApplicationMode.BOAT || _applicationMode.parent == OAApplicationMode.BOAT;
+    return [_applicationMode.getRoutingProfile isEqualToString:@"boat"];
 }
 
 - (void) generateData
@@ -82,7 +82,13 @@
     if ([_selectedParameter intValue] != -1)
     {
         double vl = floorf(_measurementRangeValuesArr[_selectedParameter.intValue].doubleValue * 100 + 0.5) / 100;
-        _measurementValue = [NSString stringWithFormat:@"%.1f", vl];
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
+        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        formatter.minimumIntegerDigits = 1;
+        formatter.minimumFractionDigits = 0;
+        formatter.maximumFractionDigits = 1;
+        formatter.decimalSeparator = @".";
+        _measurementValue = [formatter stringFromNumber:@(vl)];
     }
     else
         _measurementValue = [valueString substringToIndex:valueString.length - (valueString.length > 0)];
@@ -94,6 +100,8 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 48.;
     [self setupView];
 }
 
@@ -213,11 +221,11 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAInputCellWithTitle *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
             cell.inputField.tintColor = UIColorFromRGB(color_primary_purple);
             cell.inputField.delegate = self;
+            cell.inputField.userInteractionEnabled = NO;
         }
         if (cell)
         {
@@ -316,11 +324,32 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:@"OAInputCellWithTitle"])
+    {
+        OAInputCellWithTitle *cell = (OAInputCellWithTitle *) [tableView cellForRowAtIndexPath:indexPath];
+        if (cell.inputField.isFirstResponder)
+        {
+            [cell.inputField resignFirstResponder];
+            cell.inputField.userInteractionEnabled = NO;
+        }
+        else
+        {
+            cell.inputField.userInteractionEnabled = YES;
+            [cell.inputField becomeFirstResponder];
+        }
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL) textFieldShouldReturn:(UITextField *)sender
 {
     [sender resignFirstResponder];
+    sender.userInteractionEnabled = NO;
     return YES;
 }
 
@@ -348,6 +377,7 @@
 - (BOOL) textFieldShouldClear:(UITextField *)textField
 {
     [textField resignFirstResponder];
+    textField.userInteractionEnabled = NO;
     return NO;
 }
 

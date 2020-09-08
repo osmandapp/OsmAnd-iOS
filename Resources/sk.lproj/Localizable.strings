@@ -612,7 +612,7 @@
 "speak_speed_limit" = "Obmedzenie rýchlosti";
 "speak_cameras" = "Rýchlostné radary";
 "speak_traffic_warnings" = "Dopravné varovania";
-"announce_gpx_waypoints" = "GPX waypointy";
+"announce_gpx_waypoints" = "Waypointy stopy";
 "speak_favorites" = "Blízke Obľúbené body";
 "speak_poi" = "Blízke body záujmu";
 "speak_pedestrian" = "Priechody pre chodcov";
@@ -771,11 +771,11 @@
 "route_stops_before" = "%d zastávok pred";
 "logging_interval_navigation" = "Interval zaznamenávania pri navigácii";
 "logging_interval_navigation_descr" = "Zvoľte interval zaznamenávania výletu pri navigácii";
-"logging_min_distance" = "Minimálna vzdialenosť pri zaznamenávaní";
+"logging_min_distance" = "Minimálny posun";
 "logging_min_distance_descr" = "Filter: minimálna vzdialenosť pre zaznamenanie nového bodu";
-"logging_min_accuracy" = "Minimálna presnosť zaznamenávania";
+"logging_min_accuracy" = "Minimálna presnosť";
 "logging_min_accuracy_descr" = "Filter: nezaznamenať ak nie je dosiahnutá presnosť";
-"logging_min_speed" = "Minimálna rýchlosť zaznamenávania";
+"logging_min_speed" = "Minimálna rýchlosť";
 "logging_min_speed_descr" = "Filter: nezaznamenať ak nie je dosiahnutá rýchlosť";
 "auto_split_gap" = "Automaticky prerušiť nahrávku po medzere";
 "auto_split_gap_descr" = "Začať nový úsek po medzere na 6 minút, nový výlet po medzere 2 hodín alebo nový súbor po dlhšej medzere";
@@ -786,8 +786,8 @@
 "poi_overlay" = "Prekryvná vrstva POI";
 "track_save_descr" = "Uložiť aktuálny výlet ako súbor GPX.";
 "poi_clear" = "Vymazať";
-"track_during_nav" = "Automaticky zaznamenávať výlet počas navigácie";
-"track_during_nav_descr" = "Počas navigácie sa automaticky uloží výlet";
+"track_during_nav" = "Automaticky zaznamenávať výlet";
+"track_during_nav_descr" = "Zapnite pre automatické uloženie výletu počas navigácie";
 "menu_help" = "Pomoc";
 // Help
 "help_first_steps" = "Prvé kroky";
@@ -1579,3 +1579,5 @@
 "profile_appearance" = "Vzhľad profilu";
 "selected_profile" = "Zvolený profil";
 "configure_profile" = "Nastaviť profil";
+"profile_type_base_string" = "Základný profil";
+"profile_type_custom_string" = "Vlastný profil";

@@ -364,13 +364,22 @@
 
 - (int) getDistanceToFinish:(CLLocation *)fromLoc
 {
-    if (_listDistance && _currentRoute < _listDistance.count)
+    CLLocation *ap = _currentStraightAnglePoint;
+    int rp = MAX(_currentStraightAngleRoute, _currentRoute);
+    if (_listDistance && rp < _listDistance.count)
     {
-        int dist = _listDistance[_currentRoute].intValue;
-        CLLocation *l = _locations[_currentRoute];
-        if (fromLoc)
+        int dist = _listDistance[rp].intValue;
+        CLLocation *l = _locations[rp];
+        if (ap)
+        {
+            if (fromLoc)
+                dist += [fromLoc distanceFromLocation:ap];
+            dist += [ap distanceFromLocation:l];
+        }
+        else if (fromLoc)
+        {
             dist += [fromLoc distanceFromLocation:l];
-        
+        }
         return dist;
     }
     return 0;
@@ -390,15 +399,16 @@
     return 0;
 }
 
+- (int) getListDistance:(int)index
+{
+    return _listDistance.count > index ? _listDistance[index].intValue : 0;
+}
+
 - (int) getDistanceToNextIntermediate:(CLLocation *)fromLoc
 {
+    int dist = [self getDistanceToFinish:fromLoc];
     if (_listDistance && _currentRoute < _listDistance.count)
     {
-        int dist = _listDistance[_currentRoute].intValue;
-        CLLocation *l = _locations[_currentRoute];
-        if (fromLoc)
-            dist += [fromLoc distanceFromLocation:l];
-        
         if (_nextIntermediate >= _intermediatePoints.count)
         {
             return 0;
@@ -406,7 +416,7 @@
         else
         {
             int directionInd = _intermediatePoints[_nextIntermediate].intValue;
-            return dist - _listDistance[_directions[directionInd].routePointOffset].intValue;
+            return dist - [self getListDistance:_directions[directionInd].routePointOffset];
         }
     }
     return 0;
@@ -1215,10 +1225,9 @@
         [self.class updateDirectionsTime:_directions listDistance:_listDistance];
         _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];
         
-        // TODO: add additional routing params
-        _routeRecalcDistance = /*params.ctx.getSettings().ROUTE_RECALCULATION_DISTANCE.getModeValue(params.mode)*/ 0;
-        _routeVisibleAngle = /*_routeProvider == STRAIGHT ?
-                        getSettings().ROUTE_STRAIGHT_ANGLE.getModeValue(params.mode) : */0;
+        OAAppSettings *settings = OAAppSettings.sharedManager;
+        _routeRecalcDistance = [settings.routeRecalculationDistance get:_appMode];
+        _routeVisibleAngle = _routeProvider == STRAIGHT ? [settings.routeStraightAngle get:_appMode] : 0;
     }
     return self;
 }
@@ -1252,10 +1261,9 @@
         _alarmInfo = alarms;
         _routeProvider = (EOARouteService) [OAAppSettings.sharedManager.routerService get:_appMode];
         
-        // TODO: add additional routing params
-        _routeRecalcDistance = /*params.ctx.getSettings().ROUTE_RECALCULATION_DISTANCE.getModeValue(params.mode)*/ 0;
-        _routeVisibleAngle = /*_routeProvider == STRAIGHT ?
-                        getSettings().ROUTE_STRAIGHT_ANGLE.getModeValue(params.mode) : */0;
+        OAAppSettings *settings = OAAppSettings.sharedManager;
+        _routeRecalcDistance = [settings.routeRecalculationDistance get:_appMode];
+        _routeVisibleAngle = _routeProvider == STRAIGHT ? [settings.routeStraightAngle get:_appMode] : 0;
     }
     return self;
 }

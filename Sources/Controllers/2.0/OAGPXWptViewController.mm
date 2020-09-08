@@ -42,10 +42,7 @@
         
         if (!headerOnly)
         {
-            OACollapsableWaypointsView *collapsableView = [[OACollapsableWaypointsView alloc] init];
-            [collapsableView setData:wpt];
-            collapsableView.collapsed = YES;
-            self.collapsableView = collapsableView;
+            [super setupCollapableViewsWithData:wpt lat:wpt.point.position.latitude lon:wpt.point.position.longitude];
         }
         
         self.groupTitle = self.wpt.docPath == nil ? OALocalizedString(@"track_recording_name") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
@@ -93,6 +90,7 @@
         self.wpt = wpt;
         
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
+        [super setupCollapableViewsWithData:wpt lat:wpt.point.position.latitude lon:wpt.point.position.longitude];
     }
     return self;
 }

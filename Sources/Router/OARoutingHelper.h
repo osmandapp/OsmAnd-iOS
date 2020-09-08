@@ -104,4 +104,7 @@ struct RouteSegmentResult;
 + (NSInteger) getGpsTolerance;
 + (double) getArrivalDistanceFactor;
 
++ (double) getDefaultAllowedDeviation:(OAApplicationMode *)mode posTolerance:(double)posTolerance;
++ (double) getPosTolerance:(double)accuracy;
+
 @end

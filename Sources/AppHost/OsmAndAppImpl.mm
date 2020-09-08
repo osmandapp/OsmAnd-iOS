@@ -560,7 +560,7 @@
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force
 {
-    NSString *voiceProvider = [[OAAppSettings sharedManager].voiceProvider get];
+    NSString *voiceProvider = [[OAAppSettings sharedManager].voiceProvider get:applicationMode];
     OAVoiceRouter *vrt = [OARoutingHelper sharedInstance].getVoiceRouter;
     [vrt setPlayer:[[OATTSCommandPlayerImpl alloc] initWithVoiceRouter:vrt voiceProvider:voiceProvider]];
 }

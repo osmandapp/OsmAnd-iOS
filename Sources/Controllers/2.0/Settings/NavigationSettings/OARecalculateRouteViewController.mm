@@ -11,6 +11,9 @@
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAApplicationMode.h"
+#import "OAAppSettings.h"
+#import "OsmAndApp.h"
+#import "OARoutingHelper.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -20,6 +23,8 @@
 #define kCellTypeDistance @"time_cell"
 #define kCellTypePicker @"pickerCell"
 
+#define kDisableMode -1
+
 @interface OARecalculateRouteViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
 
 @end
@@ -28,8 +33,14 @@
 {
     NSArray<NSArray *> *_data;
     NSIndexPath *_pickerIndexPath;
-    NSArray<NSString *> *_possibleDistanceValues;
-    NSString *_distanceValue;
+    NSArray<NSNumber *> *_possibleDistanceValues;
+    NSArray<NSString *> *_valueSummaries;
+    
+    NSInteger _selectedValue;
+    NSString *_defaultValue;
+    
+    OAAppSettings *_settings;
+    OsmAndAppInstance _app;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -37,6 +48,8 @@
     self = [super initWithAppMode:appMode];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
+        _app = OsmAndApp.instance;
         [self generateData];
     }
     return self;
@@ -44,8 +57,28 @@
 
 - (void) generateData
 {
-    _distanceValue = @"200 m"; // needs to be changed
-    _possibleDistanceValues = @[@"30 m", @"50 m", @"100 m", @"200 m", @"500 m", @"1 km", @"1.5 km"]; // needs to be changed
+    if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
+        _possibleDistanceValues = @[@(10.), @(20.0), @(30.0), @(50.0), @(100.0), @(200.0), @(500.0), @(1000.0), @(1500.0)];
+    else
+        _possibleDistanceValues = @[@(9.1), @(18.3), @(30.5), @(45.7), @(91.5), @(183.0), @(482.0), @(965.0), @(1609.0)];
+    
+    NSInteger selectedInd = [_possibleDistanceValues indexOfObject:@([_settings.routeRecalculationDistance get:self.appMode])];
+    _defaultValue = selectedInd == NSNotFound ? [self getDefaultValue] : nil;
+    _selectedValue = selectedInd != NSNotFound ? selectedInd : 0;
+    
+    NSMutableArray<NSString *> *arr = [NSMutableArray new];
+    for (NSNumber *n in _possibleDistanceValues)
+    {
+        [arr addObject:[_app getFormattedDistance:n.doubleValue]];
+    }
+    _valueSummaries = arr;
+}
+
+- (NSString *) getDefaultValue
+{
+    double defValue = [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]];
+    defValue = defValue == -1 ? _possibleDistanceValues.firstObject.doubleValue : defValue;
+    return [OsmAndApp.instance getFormattedDistance:defValue];
 }
 
 -(void) applyLocalization
@@ -67,21 +100,26 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *statusArr = [NSMutableArray array];
     NSMutableArray *distanceArr = [NSMutableArray array];
+    BOOL disabled = [_settings.routeRecalculationDistance get:self.appMode] == kDisableMode;
     [statusArr addObject:@{
         @"type" : @"OASwitchCell",
-        @"title" : OALocalizedString(@"shared_string_enabled"),
-        @"isOn" : @NO,
-    }];
-    [distanceArr addObject:@{
-        @"type" : kCellTypeDistance,
-        @"title" : OALocalizedString(@"shared_string_distance"),
-        @"value" : _distanceValue,
-    }];
-    [distanceArr addObject:@{
-        @"type" : kCellTypePicker,
+        @"title" : disabled ? OALocalizedString(@"rendering_value_disabled_name") : OALocalizedString(@"shared_string_enabled"),
+        @"isOn" : @(!disabled),
     }];
     [tableData addObject:statusArr];
-    [tableData addObject:distanceArr];
+    
+    if (!disabled)
+    {
+        [distanceArr addObject:@{
+            @"type" : kCellTypeDistance,
+            @"title" : OALocalizedString(@"shared_string_distance"),
+        }];
+        [distanceArr addObject:@{
+            @"type" : kCellTypePicker,
+        }];
+        
+        [tableData addObject:distanceArr];
+    }
     _data = [NSArray arrayWithArray:tableData];
 }
 
@@ -122,7 +160,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.lbTitle.text = item[@"title"];
-        cell.lbTime.text = item[@"value"];
+        cell.lbTime.text = _defaultValue ? _defaultValue : _valueSummaries[_selectedValue];
         cell.lbTime.textColor = UIColorFromRGB(color_text_footer);
 
         return cell;
@@ -137,9 +175,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
-        cell.dataArray = _possibleDistanceValues;
-        NSInteger valueRow = [_possibleDistanceValues indexOfObject:_distanceValue];
-        [cell.picker selectRow:valueRow inComponent:0 animated:NO];
+        cell.dataArray = _valueSummaries;
+        [cell.picker selectRow:_selectedValue inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
         return cell;
@@ -212,10 +249,41 @@
     return section == 0 ? OALocalizedString(@"route_recalculation_descr") : OALocalizedString(@"select_distance_for_recalculation");
 }
 
+-(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
 #pragma mark - Switch
 
 - (void) applyParameter:(id)sender
 {
+    if ([sender isKindOfClass:UISwitch.class])
+    {
+        UISwitch *control = (UISwitch *)sender;
+        [_settings.routeRecalculationDistance set:control.isOn ? _possibleDistanceValues[_selectedValue].doubleValue : kDisableMode mode:self.appMode];
+        [_settings.disableOffrouteRecalc set:!control.isOn mode:self.appMode];
+        [self hidePicker];
+        [self.tableView beginUpdates];
+        [self setupView];
+        if (!control.isOn)
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        else
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
+        
+        if (self.delegate)
+            [self.delegate onSettingsChanged];
+    }
 }
 
 #pragma mark - Picker
@@ -253,9 +321,16 @@
 
 - (void) zoomChanged:(NSString *)zoom tag:(NSInteger)pickerTag
 {
-    _distanceValue = zoom;
+    _selectedValue = [_valueSummaries indexOfObject:zoom];
+    _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
+    _defaultValue = nil;
+    [_settings.routeRecalculationDistance set:_possibleDistanceValues[_selectedValue].doubleValue mode:self.appMode];
+    [_settings.disableOffrouteRecalc set:[_settings.routeRecalculationDistance get:self.appMode] != kDisableMode];
     [self setupView];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
 }
 
 @end

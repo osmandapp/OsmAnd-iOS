@@ -111,6 +111,7 @@
 #define color_chart_red_grid 0xc3b30000
 #define color_chart_orange 0xff8800
 #define color_chart_red 0xff0000
+#define color_support_red 0xff470d
 
 #define color_route_button_inactive 0xE0DDE3
 

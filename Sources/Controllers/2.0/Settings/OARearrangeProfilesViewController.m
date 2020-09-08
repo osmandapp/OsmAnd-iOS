@@ -48,6 +48,8 @@
 {
     NSMutableArray<OAEditProfileItem *> *_appProfiles;
     NSMutableArray<OAEditProfileItem *> *_deletedProfiles;
+    
+    BOOL _hasChangesBeenMade;
 }
 
 - (instancetype) init
@@ -93,6 +95,19 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     [_tableView setEditing:YES];
+    
+    [self.navigationController.interactivePopGestureRecognizer addTarget:self
+                                                                  action:@selector(swipeToCloseRecognized:)];
+}
+
+- (void) swipeToCloseRecognized:(UIGestureRecognizer *)recognizer
+{
+    if (_hasChangesBeenMade)
+    {
+        recognizer.enabled = NO;
+        recognizer.enabled = YES;
+        [self showChangesAlert];
+    }
 }
 
 - (void) viewDidLayoutSubviews
@@ -116,9 +131,26 @@
     return isAllModes ? _appProfiles[indexPath.row] : _deletedProfiles[indexPath.row];
 }
 
+- (void)showChangesAlert
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (IBAction) cancelButtonClicked:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_hasChangesBeenMade)
+    {
+        [self showChangesAlert];
+    }
+    else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (IBAction) doneButtonClicked:(id)sender
@@ -228,6 +260,7 @@
 
 - (void) tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
+    _hasChangesBeenMade = YES;
     OAEditProfileItem *item = [self getItem:sourceIndexPath];
     // Deferr the data update until the animation is complete
     [CATransaction begin];
@@ -260,6 +293,7 @@
 
 - (void) actionButtonPressed:(UIButton *)sender
 {
+    _hasChangesBeenMade = YES;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
     if (indexPath.section == kAllApplicationProfilesSection)
     {

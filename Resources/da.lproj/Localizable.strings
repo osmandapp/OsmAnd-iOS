@@ -297,7 +297,7 @@
 "import_title" = "Importer data";
 "import_choose_type" = "Vælg hvad der skal importeres";
 // Alerts
-"alert_inet_needed" = "Internetforbindelse kræves for at udføre  handlingen. Kontroller internetforbindelse.";
+"alert_inet_needed" = "Internetforbindelse kræves for at udføre handlingen. Kontroller internetforbindelse.";
 "cannot_access_calendar" = "Kan ikke få adgang til Kalender";
 "product_desc_parking" = "Gør det nemt at huske hvor bilen er parkeret og hvor meget tid der er tilbage, hvis parkeringen er tidsbegrænset";
 "add_as" = "Tilføj som";
@@ -401,7 +401,7 @@
 "product_desc_ext_skimap" = "OsmAnd Skikort er en udvidelse til OsmAnd designet til at navigere på vintersportssteder. Giver oplysninger om skipister, skiliftsmarkører og endda farvede linjer med angivelse af spor kompleksitet. Få infomation om skispor såvel som de omgivende infrastrukturer.\n\nBrugsvejledning: Aktiver udvidelsen i OsmAnd, tryk på kort-knappen og sæt korttype til Skikort.";
 "product_desc_ext_track_recording" = "Optage ruter og gem dem manuelt ved hjælp af ruteoptagelse udvidelsen. Eksportere rutensom en gpx fil, dele den eller brug den til bidrag til OpenStreetMap projektet.  Et praktisk værktøj for løbere, vandrere og alle interesserede i at optage ruter.";
 "product_desc_ext_wiki" = "Få oplysninger om interessepunkter fra Wikipedia. En lomme offlineguide - aktiver Wikipedia udvidelsen og nyd artikler omkring omgivelserne.";
-"product_desc_ext_srtm" = "Udvidelsen giver højdekurver og reliefoverlejring, som kan vises i OsmAnd offline kort. Højdekurver indeholder oplysninger om højder af området, mens reliefoverlejring er deres visualisering. Se navnene på bjergtoppe og specifikke egenskaber i terræn ved hjælp af udvidelsen.\n\nDe globale data (mellem 70 grader nord og 70 grader syd) er baseret på målinger af SRTM (Shuttle Radar Topografi Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), et billeddannende instrument ombord på Terra satellitten, flagskibet i NASAs Earth Observering system. ASTER er et samarbejde mellem NASA, Japans Ministry of Economy, Trade and Industry  (METI), og Japan Space Systems (J-spacesystems).";
+"product_desc_ext_srtm" = "Udvidelsen giver højdekurver og reliefoverlejring, som kan vises i OsmAnd offline kort. Højdekurver indeholder oplysninger om højder af området, mens reliefoverlejring er deres visualisering. Se navnene på bjergtoppe og specifikke egenskaber i terræn ved hjælp af udvidelsen.\n\nDe globale data (mellem 70 grader nord og 70 grader syd) er baseret på målinger af SRTM (Shuttle Radar Topografi Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), et billeddannende instrument ombord på Terra satellitten, flagskibet i NASAs Earth Observering system. ASTER er et samarbejde mellem NASA, Japans Ministry of Economy, Trade and Industry (METI), og Japan Space Systems (J-spacesystems).";
 "plugin_popup_wiki_ask" = "For at hente Wikipedia data, aktiver udvidelsen: <b>Wikipedia</b>";
 "plugin_popup_srtm_ask" = "For at hente højdekurver, aktiver udvidelsen: <b>Højdekurver</b>";
 "turn_on_plugin" = "Aktiver udvidelse";
@@ -513,7 +513,7 @@
 "driving_region_japan" = "Japan";
 "driving_region_us" = "USA";
 "driving_region_canada" = "Canada";
-"driving_region_europe_asia" = "Europa, Asien, Latinamerika og og tilsvarende";
+"driving_region_europe_asia" = "Europa, Asien, Latinamerika og tilsvarende";
 "driving_region_uk" = "Storbritannien, Indien og lignende";
 "driving_region_australia" = "Australien";
 "left_side_navigation" = "Venstrekørsel";
@@ -611,7 +611,7 @@
 "app_mode_boat" = "Båd";
 "app_mode_aircraft" = "Fly";
 "fast_route_mode" = "Hurtigste rute";
-"fast_route_mode_descr" = "Aktiver for at beregne den hurtigste rute eller deaktiver for  brændstofbesparende rute";
+"fast_route_mode_descr" = "Aktiver for at beregne den hurtigste rute eller deaktiver for brændstofbesparende rute";
 "avoid_in_routing_title" = "Undgå…";
 "avoid_in_routing_descr" = "Undgå betalingsveje, grusveje, færger";
 "prefer_in_routing_title" = "Foretræk…";
@@ -1160,7 +1160,7 @@
 "replace_destination" = "Udskift destination";
 "add_destination" = "Tilføj destination";
 "add_first_inermediate" = "Tilføj første mellemliggende punkt";
-"toggle_auto_zoom" = "Automatisk  zoom til/fra";
+"toggle_auto_zoom" = "Automatisk zoom til/fra";
 "pause_resume_nav" = "Pause/genoptag navigation";
 "toggle_nav" = "Start/stop navigation";
 "toggle_day_night" = "Skift dag/nat tilstand";
@@ -1200,12 +1200,12 @@
 "quick_action_day_night_descr" = "Tryk genvejsknappen skifter mellem dag-og natkort tilstand.";
 "quick_action_parking_descr" = "Ved tryk på genvejsknappen tilføjes en parkeringsplacering ved kortets midtpunkt.";
 "quick_action_marker_descr" = "Tryk på genvejsknappen tilføjer en kortmarkør på midten af skærmen.";
-"quick_action_show_gpx_descr" = "Tryk på genvejsknappen viser eller skjuler de aktuelt viste  GPX-spor.";
+"quick_action_show_gpx_descr" = "Tryk på genvejsknappen viser eller skjuler de aktuelt viste GPX-spor.";
 "quick_action_voice_descr" = "Tryk på genvejsknappen deaktiverer eller aktivere stemmevejledning under navigation.";
 "quick_action_add_dest_descr" = "Tryk på genvejen tilføjer en destination på skærmens centrum. Enhver tidligere valgt destination bliver den sidste mellemliggende destination.";
 "quick_action_first_intermediate_descr" = "Ved tryk på genvejsknappen tilføjes et første mellemliggende punkt på skærmens centrum.";
 "quick_action_replace_dest_descr" = "Ved tryk på genvejsknappen angiver destinationen til skærmens centrum og erstatter den tidligere valgte destination (hvis nogen).";
-"quick_action_autozoom_descr" = "Ved tryk på  genvejsknappen, tændes/slukkes den automatiske zoomtilstand i henhold til den aktuelle hastighed.";
+"quick_action_autozoom_descr" = "Ved tryk på genvejsknappen, tændes/slukkes den automatiske zoomtilstand i henhold til den aktuelle hastighed.";
 "quick_action_start_stop_nav_descr" = "Tryk på knappen for at starte eller stoppe navigationen.";
 "quick_action_pause_nav_descr" = "Tryk på knappen for at sætte navigationen på pause eller genoptage den.";
 "quick_action_toggle_notes_descr" = "Tryk på genvejsknappen viser eller skjuler online OSM-noter.";
@@ -1447,7 +1447,7 @@
 "rendering_attr_hideHouseNumbers_name" = "Husnumre";
 "rendering_attr_depthContours_name" = "Havdybdekonturer";
 "rendering_attr_piste_difficulty_aerialway_name" = "Lift";
-"rendering_attr_piste_type_skitour_name" = "Skitour";
+"rendering_attr_piste_type_skitour_name" = "Skitur";
 "routing_attr_prefer_motorway_name" = "Foretræk motorveje";
 "rendering_value_purple_name" = "Lilla";
 "rendering_attr_publicTransportMode_name" = "Bus-, trolleybus-, shuttlebusruter";
@@ -1492,7 +1492,7 @@
 "rendering_attr_surface_paving_stones_name" = "Belægningssten";
 "rendering_value_yellow_name" = "Gul";
 "rendering_value_car_name" = "Bil";
-"rendering_attr_piste_difficulty_freeride_name" = "Freeride";
+"rendering_attr_piste_difficulty_freeride_name" = "Gratis tur";
 "routing_attr_allow_expert_description" = "Ekstremt vanskelige ruter, med farlige forhindringer og omgivelser.";
 "rendering_attr_transportStops_name" = "Stoppesteder";
 "routing_attr_avoid_ice_roads_fords_description" = "Undgår isglatte veje og vadesteder.";
@@ -1600,7 +1600,7 @@
 "res_expire_time" = "Udløbstid";
 "res_mercator" = "Mercator-projektion";
 "res_pseudo_mercator" = "Pseudo-Mercator-projektion";
-"res_zoom_levels_desc" = "Parametre vil påvirkerkortvisningen, når det bruges som korttype eller over-/underlejring.\n\nKorttype: Kortet begrænses til de valgte zoomniveauer.\n\nOver-/underlejring: Zoomniveauer, hvor fliser vil være synlige. \nOp- eller nedskalering vil forekomme over eller under de indstillede værdier.";
+"res_zoom_levels_desc" = "Parametre vil påvirkerkortvisningen, når det bruges som korttype eller over-/underlejring.\n\nKorttype: Kortet begrænses til de valgte zoomniveauer.\n\nOver-/underlejring: Zoomniveauer, hvor fliser vil være synlige. Op- eller nedskalering vil forekomme over eller under de indstillede værdier.";
 "res_expire_time_desc" = "Udløbstid i minutter. Cachelagrede felter genindlæses efter angivet tid. Lad feltet være tomt, hvis der ikke er brug for at genindlæse felter til kilden.\nEn dag er 1.440 minutter.\nEn uge er 10.080 minutter.\n30 dage er 43.200 minutter.";
 "res_name_warning" = "Filnavnet må ikke være tomt";
 "res_url_warning" = "Webadressen kan ikke være tom";
@@ -1695,7 +1695,7 @@
 "show_terrain" = "Vis terræn";
 "map_settings_legend" = "Tegnforklaring";
 "map_settings_add_maps_slopes" = "Yderligere kort er nødvendige for at se hældninger på kortet.";
-"map_settings_add_maps_hillshade" = "Yderligere kort er nødvendige for at se reliefskygger på kortet.";
+"map_settings_add_maps_hillshade" = "Yderligere kort er nødvendige for at se reliefskygger på kortet";
 "map_settings_zoom_level_description" = "Indstil minimum og maksimum zoomniveau for at få vist laget";
 "map_settings_slopes_legend" = "Læs mere om skråninger på Wikipedia";
 "map_settings_slopes_description" = "Skråningskort bruger forskellige farver til at visualisere terrænet";
@@ -1746,3 +1746,11 @@
 "voice_prompts" = "Talevejledning";
 "configure_screen_descr" = "Vælg skærmindstillinger for profilen";
 "min_speed" = "Min. hastighed";
+"shared_string_account" = "Konto";
+"default_speed_dialog_msg" = "Anslår ankomsttid for ukendte vejtyper og begrænser hastigheden for alle veje (kan påvirke ruten)";
+"profile_type_base_string" = "Basisprofil";
+"units_and_formats" = "Enheder & formater";
+"configure_profile" = "Konfigurere profil";
+"export_profile" = "Eksportere profil";
+"selected_profile" = "Valgt profil";
+"profile_appearance" = "Profil udseende";

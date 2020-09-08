@@ -427,7 +427,9 @@
         
         outCell = _appModeCell;
         
-    } else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"]) {
+    }
+    else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"])
+    {
         
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -437,13 +439,16 @@
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
+        if (cell)
+        {
             [cell.textView setText:[data objectForKey:@"name"]];
             [cell.descriptionView setText:[data objectForKey:@"value"]];
         }
         outCell = cell;
         
-    } else if ([[data objectForKey:@"type"] isEqualToString:@"OASwitchCell"]) {
+    }
+    else if ([[data objectForKey:@"type"] isEqualToString:@"OASwitchCell"])
+    {
         
         static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -458,7 +463,8 @@
             [cell.textView setText: [data objectForKey:@"name"]];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             
-            if (indexPath.section == favSection && indexPath.row == favRow) {
+            if (indexPath.section == favSection && indexPath.row == favRow)
+            {
                 [cell.switchView setOn:[_settings.mapSettingShowFavorites get]];
                 [cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
             }

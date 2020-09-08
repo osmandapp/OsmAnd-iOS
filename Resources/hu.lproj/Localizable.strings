@@ -392,7 +392,7 @@
 "plugin_popup_ski_desc" = "A <b>Sítérkép</b> stílus bekapcsolásához menjen a <b>Térképbeállítások</b> > <b>Térképtípus</b> menüponthoz";
 "plugin_popup_wiki_title" = "Wikipédia letöltése";
 "plugin_popup_wiki_desc" = "A Wikipédia bővítmény használatának megkezdéséhez először töltse egy terület Wikipédia adatait";
-"plugin_popup_wiki_ask" = "A Wikipédia adatok letöltéséhez be kell kapcsolnia a következő bővítményt: <b>Wikipédia</b>";
+"plugin_popup_wiki_ask" = "A Wikipédia-adatok letöltéséhez be kell kapcsolnia a következő bővítményt: <b>Wikipédia</b>";
 "plugin_popup_srtm_title" = "Szintvonalak letöltése";
 "plugin_popup_srtm_desc" = "A szintvonalak szolgáltatás használatának megkezdéséhez először töltse egy terület szintvonalait";
 "plugin_popup_srtm_ask" = "A szintvonalak letöltéséhez be kell kapcsolnia a következő bővítményt: <b>Szintvonalak</b>";
@@ -423,7 +423,7 @@
 "gpx_edit_mode" = "Szerkesztő mód";
 "go_to_map" = "Ugrás a térképhez";
 "product_title_trip_planning" = "Utazástervezés";
-"sqlitedb_import_title" = "Map Creator fájl importálása";
+"sqlitedb_import_title" = "Raszteres térképfájl importálása";
 "map_creator" = "Map Creator";
 "device_memory" = "Eszköz memóriája";
 "free_memory" = "%@ szabad";
@@ -483,7 +483,7 @@
 "shared_string_street_intersection" = "Utcakereszteződés";
 "shared_string_address" = "Cím";
 "do_not_send_anonymous_data" = "Ne küldjön anonim adatokat";
-"map_an_region" = "egy régió";
+"map_an_region" = "ez a régió";
 "shared_string_from" = "innen";
 "do_not_show_discount" = "Ne mutasson promóciókat";
 "nothing_found_descr" = "Módosítsd a keresőkifejezést vagy növeld a keresés sugarát";
@@ -519,7 +519,7 @@
 "traffic_warning_border_control" = "Határellenőrzés";
 "traffic_warning_payment" = "Fizetőkapu";
 "traffic_warning_stop" = "Stop tábla";
-"traffic_warning_calming" = "Forgalomcsillapító";
+"traffic_warning_calming" = "Forgalomcsillapítás";
 "traffic_warning_speed_camera" = "Traffipax";
 "traffic_warning" = "Forgalmi figyelmeztetés";
 "traffic_warning_railways" = "Vasúti átjáró";
@@ -550,7 +550,7 @@
 "min_mile" = "perc/mérföld";
 "min_km" = "perc/km";
 "m_s" = "m/s";
-"nothing_found" = "Nincs találat :(";
+"nothing_found" = "Nincs találat: %@";
 "select_street" = "Utca kijelölése";
 "shared_string_in_name" = "itt: %@";
 "select_city" = "Település kijelölése";
@@ -589,7 +589,7 @@
 "will_open_on" = "Ekkor fog kinyitni:";
 "will_open_tomorrow_at" = "Holnap ekkor nyit:";
 "error_avoid_specific_road" = "Nem található kerülőút";
-"road_blocked" = "Út blokkolva";
+"road_blocked" = "Lezárt út";
 "starting_point" = "Kiindulópont";
 "shared_string_road" = "Út";
 "avoid_roads_msg" = "Az elkerülendő utak kijelölésével alternatív utat aktiválhatsz";
@@ -811,7 +811,7 @@
 "shared_string_off" = "Kikapcsolás";
 "osmand_live_support_reg_title" = "Támogatott régió";
 "poi_list" = "POI lista";
-"shared_string_filter" = "Szűrés:";
+"shared_string_filter" = "Szűrő";
 "translucent_red" = "Átlátszó piros";
 "osm_target_modified" = "Módosított OSM POI";
 "osmand_live_hourly" = "Óránként";
@@ -862,12 +862,12 @@
 "actions" = "Műveletek";
 "osm_note_created" = "Létrehozott OSM Jegyzet";
 "help_tech_articles" = "Technikai cikkek";
-"angular_units_descr" = "Az azimutmérés mértékegységének módosítása.";
+"angular_units_descr" = "Azimut mértékegységének módosítása.";
 "osm_close_changeset" = "Módosításkészlet lezárása";
 "purple" = "Lila";
 "gpx_descent" = "Lejtő";
 "osmand_live_update_now" = "Frissítés most";
-"routing_settings_descr" = "Navigáció beállításainak megadása";
+"routing_settings_descr" = "Navigáció testreszabása";
 "help_trip_planning" = "Utazás tervezése";
 "toggle_voice" = "Hang be/ki";
 "nearby_search" = "Keresés a közelben";
@@ -1323,3 +1323,16 @@
 "select_nav_profile_dialog_message" = "A navigációtípus határozza meg az útvonalszámítás módját.";
 "select_color" = "Szín kijelölése";
 "routing_attr_length_name" = "Hosszkorlátozás";
+"shared_string_account" = "Fiók";
+"configure_profile" = "Profil testreszabása";
+"profile_type_base_string" = "Alapprofil";
+"export_profile" = "Profil exportálása";
+"default_speed_dialog_msg" = "Az érkezési időt becsüli ismeretlen úttípus esetén, valamint korlátozza a sebességet valamennyi úttípusnál (az útvonalat befolyásolhatja)";
+"selected_profile" = "Kiválasztott profil";
+"profile_appearance" = "Profil megjelenése";
+"profile_type_custom_string" = "Egyéni profil";
+"width_limit_description" = "Adja meg a járműve szélességét (a széles járművekre útvonalkorlátozások vonatkozhatnak).";
+"height_limit_description" = "Adja meg a járműve magasságát (a magas járművekre útvonalkorlátozások vonatkozhatnak).";
+"weight_limit_description" = "Adja meg a járműve tömegét (a nehéz járművekre útvonalkorlátozások vonatkozhatnak).";
+"monitoring_control_start" = "REC";
+"shared_string_exit" = "Kilépés";

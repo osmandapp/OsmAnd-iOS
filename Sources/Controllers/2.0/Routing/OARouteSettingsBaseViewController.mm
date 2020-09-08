@@ -105,20 +105,11 @@
     [self setupView];
 }
 
-- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
-{
-    auto router = _app.defaultRoutingConfig->getRouter([am.getRoutingProfile UTF8String]);
-    if (!router && am.parent)
-        router = _app.defaultRoutingConfig->getRouter([am.parent.getRoutingProfile UTF8String]);
-    
-    return router;
-}
-
 - (NSArray<OALocalRoutingParameter *> *) getNonAvoidRoutingParameters:(OAApplicationMode *) am
 {
     NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
     
-    auto rm = [self getRouter:am];
+    auto rm = [OARouteProvider getRouter:am];
     
     auto& params = rm->getParametersList();
     for (auto& r : params)
@@ -156,7 +147,7 @@
 {
     NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
     
-    auto rm = [self getRouter:am];
+    auto rm = [OARouteProvider getRouter:am];
     
     auto& params = rm->getParametersList();
     for (auto& r : params)

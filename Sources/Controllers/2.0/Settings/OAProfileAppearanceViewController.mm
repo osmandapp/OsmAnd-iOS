@@ -99,6 +99,7 @@
     OAApplicationProfileObject *_changedProfile;
     
     BOOL _isNewProfile;
+    BOOL _hasChangesBeenMade;
     
     NSArray<NSArray *> *_data;
     
@@ -194,6 +195,18 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [self.navigationController.interactivePopGestureRecognizer addTarget:self
+                                                                      action:@selector(swipeToCloseRecognized:)];
+}
+
+- (void) swipeToCloseRecognized:(UIGestureRecognizer *)recognizer
+{
+    if (_hasChangesBeenMade)
+    {
+        recognizer.enabled = NO;
+        recognizer.enabled = YES;
+        [self showExitWithoutSavingAlert];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -346,14 +359,21 @@
     return UIStatusBarStyleDefault;
 }
 
-- (IBAction) cancelButtonClicked:(id)sender
-{
+- (void)showExitWithoutSavingAlert {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.navigationController popViewControllerAnimated:YES];
     }]];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (IBAction) cancelButtonClicked:(id)sender
+{
+    if (_hasChangesBeenMade)
+        [self showExitWithoutSavingAlert];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction) saveButtonClicked:(id)sender
@@ -484,6 +504,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
             cell = (OATextInputCell *)[nib objectAtIndex:0];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+            cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
         }
         cell.inputField.text = item[@"title"];
         cell.inputField.delegate = self;
@@ -585,6 +606,7 @@
 
 - (void)colorChanged:(NSInteger)tag
 {
+    _hasChangesBeenMade = YES;
     _changedProfile.color = _colors[tag].intValue;
     
     [self setupView];
@@ -596,6 +618,7 @@
 
 - (void)iconChanged:(NSInteger)tag
 {
+    _hasChangesBeenMade = YES;
     _changedProfile.iconName = _icons[tag];
     
     UIImage *img = nil;
@@ -609,6 +632,7 @@
 
 - (void)mapIconChanged:(NSInteger)newValue type:(EOALocationType)locType
 {
+    _hasChangesBeenMade = YES;
     if (locType == EOALocationTypeRest)
         _changedProfile.locationIcon = (EOALocationIcon) newValue;
     else if (locType == EOALocationTypeMoving)
@@ -627,6 +651,7 @@
 
 - (void) textViewDidChange:(UITextView *)textView
 {
+    _hasChangesBeenMade = YES;
     _changedProfile.name = textView.text;
     _titleLabel.text = _changedProfile.name.length == 0 ? [self getEmptyNameTitle] : _changedProfile.name;
 }

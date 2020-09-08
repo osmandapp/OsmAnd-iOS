@@ -109,5 +109,6 @@
 - (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode;
 
 - (void) resetProfileSettingsForMode:(OAApplicationMode *)mode;
+- (void) copyAppDataFrom:(OAApplicationMode *)sourceMode toMode:(OAApplicationMode *)targetMode;
 
 @end

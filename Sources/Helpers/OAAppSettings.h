@@ -533,8 +533,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *enableTimeConditionalRouting;
 @property (nonatomic) OAProfileDouble *arrivalDistanceFactor;
 @property (assign, nonatomic) BOOL useIntermediatePointsNavigation;
-@property (assign, nonatomic) BOOL disableOffrouteRecalc;
-@property (assign, nonatomic) BOOL disableWrongDirectionRecalc;
+@property (nonatomic) OAProfileBoolean *disableOffrouteRecalc;
+@property (nonatomic) OAProfileBoolean *disableWrongDirectionRecalc;
 @property (assign, nonatomic) BOOL gpxRouteCalcOsmandParts;
 @property (assign, nonatomic) BOOL gpxCalculateRtept;
 @property (assign, nonatomic) BOOL gpxRouteCalc;
@@ -551,6 +551,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileDouble *speedLimitExceed;
 @property (nonatomic) OAProfileDouble *switchMapDirectionToCompass;
 @property (nonatomic) OAProfileInteger *wakeOnVoiceInt;
+@property (nonatomic) OAProfileDouble *routeRecalculationDistance;
 
 @property (nonatomic) OAProfileBoolean *showScreenAlerts;
 @property (nonatomic) OAProfileBoolean *showTrafficWarnings;

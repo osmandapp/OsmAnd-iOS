@@ -159,12 +159,14 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         @"key" : @"reset_to_default"
     }];
     if ([_appMode isCustomProfile])
+    {
         [settingsActions addObject:@{
            @"type" : kTitleRightIconCell,
             @"title" : OALocalizedString(@"profile_alert_delete_title"),
             @"img" : @"ic_custom_remove_outlined",
             @"key" : @"delete_profile"
         }];
+    }
     [data addObject:settingsActions];
     
     NSMutableArray *plugins = [NSMutableArray new];
@@ -192,16 +194,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     
     if (plugins.count > 0)
         [data addObject:plugins];
-    
-    
-    [data addObject:@[
-    @{
-        @"title" : OALocalizedString(@"reset_to_default"),
-        @"img" : @"ic_custom_reset",
-        @"type" : kCellTypeAction,
-        @"key" : @"reset_to_default"
-    }]];
-    
+
     _data = data;
 }
 
@@ -511,7 +504,9 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
     else if ([key isEqualToString:@"reset_to_default"])
     {
-        
+        OAPluginResetBottomSheetViewController *screen = [[OAPluginResetBottomSheetViewController alloc] initWithParam:_appMode];
+        screen.delegate = self;
+        [screen show];
     }
     else if ([key isEqualToString:@"delete_profile"])
     {
@@ -528,12 +523,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
         [self.navigationController pushViewController:settingsViewController animated:YES];
 
-    }
-    else if ([key isEqualToString:@"reset_to_default"])
-    {
-        OAPluginResetBottomSheetViewController *screen = [[OAPluginResetBottomSheetViewController alloc] initWithParam:_appMode];
-        screen.delegate = self;
-        [screen show];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

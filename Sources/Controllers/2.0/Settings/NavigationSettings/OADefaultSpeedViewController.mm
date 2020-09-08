@@ -176,8 +176,8 @@
         }
         if (cell)
         {
-            cell.leftTitleLabel.text = item[@"minValue"];
-            cell.rightTitleLabel.text = item[@"maxValue"];
+            cell.titleLabel.text = item[@"minValue"];
+            cell.valueLabel.text = item[@"maxValue"];
             cell.sliderView.minimumValue = _minValue;
             cell.sliderView.maximumValue = _maxValue;
             cell.sliderView.value = _selectedValue;

@@ -7,11 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OASegmentSliderTableViewCell.h"
 
-@interface OASliderWithBordersCell : UITableViewCell
-
-@property (weak, nonatomic) IBOutlet UISlider *sliderView;
-@property (weak, nonatomic) IBOutlet UILabel *leftTitleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *rightTitleLabel;
+@interface OASliderWithBordersCell : OASegmentSliderTableViewCell
 
 @end

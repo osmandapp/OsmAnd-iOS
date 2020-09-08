@@ -18,6 +18,10 @@
                 <subviews>
                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="NAQ-g5-4SF">
                         <rect key="frame" x="14" y="8" width="347" height="31"/>
+                        <connections>
+                            <action selector="sliderDidEndEditing:" destination="rzv-TK-pP4" eventType="valueChanged" id="Pst-B3-Iou"/>
+                            <action selector="sliderValueChanged:" destination="rzv-TK-pP4" eventType="valueChanged" id="l0D-Ll-Dah"/>
+                        </connections>
                     </slider>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 km/h" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WTt-t5-0gi">
                         <rect key="frame" x="16" y="44" width="48" height="17"/>
@@ -50,9 +54,9 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="leftTitleLabel" destination="WTt-t5-0gi" id="rg6-Ay-nA8"/>
-                <outlet property="rightTitleLabel" destination="JAj-MY-rYI" id="daK-Ij-r6S"/>
-                <outlet property="sliderView" destination="NAQ-g5-4SF" id="ELa-Zi-dnq"/>
+                <outlet property="sliderView" destination="NAQ-g5-4SF" id="SRd-ee-kkM"/>
+                <outlet property="titleLabel" destination="WTt-t5-0gi" id="lXZ-4J-JyO"/>
+                <outlet property="valueLabel" destination="JAj-MY-rYI" id="uN9-2U-jW7"/>
             </connections>
             <point key="canvasLocation" x="93.478260869565219" y="134.26339285714286"/>
         </tableViewCell>

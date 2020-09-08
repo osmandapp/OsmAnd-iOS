@@ -205,9 +205,9 @@
 		156E91E7244F709100B181BA /* OADestinationLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 156E91E6244F709100B181BA /* OADestinationLineDelegate.m */; };
 		156E91E82450446900B181BA /* OADestinationLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 156E91E6244F709100B181BA /* OADestinationLineDelegate.m */; };
 		156E91E92450446900B181BA /* OADestinationsLineWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 156E91E1244ED6BE00B181BA /* OADestinationsLineWidget.mm */; };
+		156F4E6124FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 156F4E6024FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m */; };
 		156F4E6424FA98B8008ED1DD /* OASliderWithBordersCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 156F4E6324FA98B8008ED1DD /* OASliderWithBordersCell.xib */; };
 		156F4E6624FA98ED008ED1DD /* OASliderWithBordersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 156F4E6524FA98ED008ED1DD /* OASliderWithBordersCell.m */; };
-		156F4E6124FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 156F4E6024FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m */; };
 		1571CE1824ADEDF500083F92 /* ic_custom_direction_movement@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1571CE1524ADEDF400083F92 /* ic_custom_direction_movement@3x.png */; };
 		1571CE1924ADEDF500083F92 /* ic_custom_direction_movement@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1571CE1624ADEDF400083F92 /* ic_custom_direction_movement@2x.png */; };
 		1571CE1A24ADEDF500083F92 /* ic_custom_direction_movement.png in Resources */ = {isa = PBXBuildFile; fileRef = 1571CE1724ADEDF500083F92 /* ic_custom_direction_movement.png */; };
@@ -6186,11 +6186,11 @@
 		156E91E3244ED6D500B181BA /* OADestinationsLineWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADestinationsLineWidget.h; sourceTree = "<group>"; };
 		156E91E6244F709100B181BA /* OADestinationLineDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OADestinationLineDelegate.m; sourceTree = "<group>"; };
 		156E91EA2450609F00B181BA /* OADestinationLineDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADestinationLineDelegate.h; sourceTree = "<group>"; };
+		156F4E5F24FA5115008ED1DD /* OADeleteProfileBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADeleteProfileBottomSheetViewController.h; sourceTree = "<group>"; };
+		156F4E6024FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OADeleteProfileBottomSheetViewController.m; sourceTree = "<group>"; };
 		156F4E6324FA98B8008ED1DD /* OASliderWithBordersCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OASliderWithBordersCell.xib; path = Resources/Controllers/Cells/OASliderWithBordersCell.xib; sourceTree = "<group>"; };
 		156F4E6524FA98ED008ED1DD /* OASliderWithBordersCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OASliderWithBordersCell.m; path = Sources/Controllers/Cells/OASliderWithBordersCell.m; sourceTree = "<group>"; };
 		156F4E6724FA9901008ED1DD /* OASliderWithBordersCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASliderWithBordersCell.h; path = Sources/Controllers/Cells/OASliderWithBordersCell.h; sourceTree = "<group>"; };
-		156F4E5F24FA5115008ED1DD /* OADeleteProfileBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADeleteProfileBottomSheetViewController.h; sourceTree = "<group>"; };
-		156F4E6024FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OADeleteProfileBottomSheetViewController.m; sourceTree = "<group>"; };
 		1571CE1524ADEDF400083F92 /* ic_custom_direction_movement@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_movement@3x.png"; path = "Resources/Icons/ic_custom_direction_movement@3x.png"; sourceTree = "<group>"; };
 		1571CE1624ADEDF400083F92 /* ic_custom_direction_movement@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_movement@2x.png"; path = "Resources/Icons/ic_custom_direction_movement@2x.png"; sourceTree = "<group>"; };
 		1571CE1724ADEDF500083F92 /* ic_custom_direction_movement.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_direction_movement.png; path = Resources/Icons/ic_custom_direction_movement.png; sourceTree = "<group>"; };

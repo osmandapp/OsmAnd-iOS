@@ -13,6 +13,7 @@
 #define TYPE_MAPILLARY_EMPTY @"mapillary-empty"
 #define TYPE_URL_PHOTO @"url-photo"
 #define TYPE_WIKIMEDIA_PHOTO @"wikimedia-photo"
+#define TYPE_WIKIDATA_PHOTO @"wikidata-photo"
 
 @class OAAbstractCard;
 

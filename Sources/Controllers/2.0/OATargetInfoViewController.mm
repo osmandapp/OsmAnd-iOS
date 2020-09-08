@@ -424,7 +424,7 @@
                             {
                                 NSString *imageName = records.firstObject[@"mainsnak"][@"datavalue"][@"value"];
                                 if (imageName)
-                                    resultCard = [self createWikimediaCard:[NSString stringWithFormat:@"File:%@",imageName]];
+                                    resultCard = [self createWikimediaCard:[NSString stringWithFormat:@"File:%@",imageName] isFromWikidata:YES];
                             }
                         }
                         catch(NSException *e)
@@ -467,7 +467,7 @@
     
     if (wikiMediaTagContent && [wikiMediaTagContent hasPrefix:wikimediaFilePrefix])
     {
-        OAUrlImageCard *card = [self createWikimediaCard:wikiMediaTagContent];
+        OAUrlImageCard *card = [self createWikimediaCard:wikiMediaTagContent isFromWikidata:NO];
         if (card)
             dispatch_async(dispatch_get_main_queue(), ^{
                 [cards addObject:card];
@@ -500,7 +500,7 @@
                             NSString *imageName = imageDict[@"title"];
                             if (imageName)
                             {
-                                OAAbstractCard *card = [self createWikimediaCard:imageName];
+                                OAAbstractCard *card = [self createWikimediaCard:imageName isFromWikidata:NO];
                                 if (card)
                                     [resultCards addObject:card];
                             }
@@ -527,7 +527,7 @@
     [self updateDisplayingCards:cards inRow:nearbyImagesRowInfo];
 }
 
-- (OAUrlImageCard *) createWikimediaCard:(NSString *)wikiMediaTagContent
+- (OAUrlImageCard *) createWikimediaCard:(NSString *)wikiMediaTagContent isFromWikidata:(BOOL)isFromWikidata
 {
     NSString *wikimediaFilePrefix = @"File:";
     NSString *imageFileName = [wikiMediaTagContent substringWithRange:NSMakeRange(wikimediaFilePrefix.length, wikiMediaTagContent.length - wikimediaFilePrefix.length)];
@@ -542,9 +542,10 @@
     NSString *url = [NSString stringWithFormat:@"https://commons.wikimedia.org/wiki/%@", [wikiMediaTagContent stringByReplacingOccurrencesOfString:@" "  withString:@"_"]];
     NSString *imageHiResUrl = [NSString stringWithFormat:@"https://upload.wikimedia.org/wikipedia/commons/%@/%@/%@", hashFirstPart, hashSecondPart, urlSafeFileName];
     NSString *imageStubUrl = [NSString stringWithFormat:@"https://upload.wikimedia.org/wikipedia/commons/thumb/%@/%@/%@/%@px-%@", hashFirstPart, hashSecondPart, urlSafeFileName, thumbSize, urlSafeFileName];
+    NSString *type = isFromWikidata ? @"wikidata-photo" : @"wikimedia-photo";
     
     NSDictionary *wikimediaFeature = @{
-        @"type": @"wikimedia-photo",
+        @"type": type,
         @"lat": [NSNumber numberWithDouble:self.location.latitude],
         @"lon": [NSNumber numberWithDouble:self.location.longitude],
         @"key": wikiMediaTagContent,
@@ -571,6 +572,8 @@
     else if ([TYPE_URL_PHOTO isEqualToString:type])
         return [[OAUrlImageCard alloc] initWithData:feature];
     else if ([TYPE_WIKIMEDIA_PHOTO isEqualToString:type])
+        return [[OAUrlImageCard alloc] initWithData:feature];
+    else if ([TYPE_WIKIDATA_PHOTO isEqualToString:type])
         return [[OAUrlImageCard alloc] initWithData:feature];
     
     return nil;

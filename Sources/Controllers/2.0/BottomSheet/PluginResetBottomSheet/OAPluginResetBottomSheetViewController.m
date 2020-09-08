@@ -29,11 +29,11 @@
 #import "OARootViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OASettingsHelper.h"
+#import "OAProfileSettingsResetHelper.h"
 
 #define kButtonsTag 1
 #define kButtonsDividerTag 150
 #define kTitleIconRoundCell @"OATitleTwoIconsRoundCell"
-#define kResetingAppModeKey @"resettingAppModeKey"
 
 @interface OAPluginResetBottomSheetScreen ()
 
@@ -337,8 +337,7 @@
 -(void) doneButtonPressed:(id)sender
 {
     OAApplicationMode * menuAppMode = (OAApplicationMode *)self.customParam;
-    
-    [self resetProfileSettingsForAppMode: menuAppMode];
+    [OAProfileSettingsResetHelper resetProfileSettingsForAppMode:menuAppMode];
     
     if (menuAppMode.isCustomProfile)
     {
@@ -350,38 +349,6 @@
         [self.delegate onAppModeChangedByPluginResetBottomSheet:menuAppMode];
     
     [self dismiss];
-}
-
--(void) resetProfileSettingsForAppMode:(OAApplicationMode *)appMode
-{
-    [OAAppSettings.sharedManager resetAllProfileSettingsForMode:appMode];
-    [OAAppData.defaults resetProfileSettingsForMode:appMode];
-    
-    NSDictionary* appModeDict = [NSDictionary dictionaryWithObject:appMode forKey:kResetingAppModeKey];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kResetWidgetsSettingsNotification object:nil userInfo:appModeDict];
-    
-    if ([OAAppSettings sharedManager].applicationMode == appMode)
-        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateWidgestsVisibilityNotification object:nil userInfo:nil];
-    
-    if (appMode.isCustomProfile)
-        [self restoreCustomProfileFromBackup:appMode];
-    else
-        [OAMapStyleSettings.sharedInstance resetMapStyleForAppMode:appMode.variantKey];
-}
-
-- (void) restoreCustomProfileFromBackup:(OAApplicationMode *)appMode
-{
-    NSError *err = nil;
-    NSDictionary *initialJson = @{
-        @"type" : @"PROFILE",
-        @"file" : [NSString stringWithFormat:@"profile_%@.json", appMode.stringKey],
-        @"appMode" : appMode.toJson
-    };
-    
-    OASettingsItem *item = [[OAProfileSettingsItem alloc] initWithJson:initialJson error:&err];
-    OASettingsItemJsonReader *jsonReader = [[OASettingsItemJsonReader alloc] initWithItem:item];
-    [jsonReader restoreFromBackup:[NSString stringWithFormat:@"profile_%@", appMode.stringKey]];
-    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 @end

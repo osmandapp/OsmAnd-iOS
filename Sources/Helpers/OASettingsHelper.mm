@@ -32,6 +32,7 @@
 #import "OAPlugin.h"
 #import "OAMapStyleTitles.h"
 #import "OrderedDictionary.h"
+#import "OAProfileSettingsResetHelper.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -504,54 +505,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return NO;
     }
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
-    [self applyReadedSettings:settings];
-    [self saveToBackup:settings withFilename:[[filePath lastPathComponent] stringByDeletingPathExtension]];
+    [OAProfileSettingsResetHelper applyReadedSettings:settings actor:self];
+    [OAProfileSettingsResetHelper saveToBackup:settings withFilename:[[filePath lastPathComponent] stringByDeletingPathExtension]];
     return YES;
-}
-
-- (void) applyReadedSettings:(NSDictionary<NSString *, NSString *> *)settings
-{
-    NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
-    NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
-    
-    [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([key hasPrefix:@"nrenderer_"] || [key isEqualToString:@"displayed_transport_settings"])
-            [rendererSettings setObject:obj forKey:key];
-        else if ([key hasPrefix:@"prouting_"])
-            [routingSettings setObject:obj forKey:key];
-        else
-            [self.item readPreferenceFromJson:key value:obj];
-    }];
-    
-    [self.item applyRendererPreferences:rendererSettings];
-    [self.item applyRoutingPreferences:routingSettings];
-    
-    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
-}
-
-- (void) saveToBackup:(NSDictionary<NSString *, NSString *> *)settings withFilename:(NSString *)filename
-{
-    NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSString *backupFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"];
-    
-    BOOL isDir = YES;
-    if (![fileManager fileExistsAtPath:backupFolderPath isDirectory:&isDir])
-          [fileManager createDirectoryAtPath:backupFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
-    
-    NSString *backupFilename = [filename add:@"_data"];
-    NSString *backupFilePath = [[backupFolderPath stringByAppendingPathComponent:backupFilename] stringByAppendingPathExtension:@"plst"];
-    [settings writeToFile:backupFilePath atomically:YES];
-}
-
-- (void) restoreFromBackup:(NSString *)filename
-{
-    NSString *backupFilename = [filename add:@"_data"];
-    NSString *backupFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:backupFilename] stringByAppendingPathExtension:@"plst"];
-    
-    NSDictionary<NSString *, NSString *> *restoredSettings = (NSDictionary<NSString *, NSString *> *)[NSDictionary dictionaryWithContentsOfFile:backupFilePath];
-    
-    if (restoredSettings)
-        [self applyReadedSettings:restoredSettings];
 }
 
 @end

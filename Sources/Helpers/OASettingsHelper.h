@@ -104,6 +104,9 @@ typedef enum : NSUInteger {
 - (OASettingsItemWriter *) getWriter;
 
 - (void) writeToJson:(id)json;
+- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value;
+- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs;
+- (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs;
 
 @end
 
@@ -132,7 +135,6 @@ typedef enum : NSUInteger {
 #pragma mark - OASettingsItemJsonReader
 
 @interface OASettingsItemJsonReader : OASettingsItemReader<OASettingsItem *>
-- (void) restoreFromBackup:(NSString *)filename;
 
 @end
 

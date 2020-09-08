@@ -1461,7 +1461,7 @@
 "rendering_attr_contourDensity_name" = "كثافة الخط المحيطي";
 "routing_attr_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
 "rendering_attr_surface_paving_stones_name" = "حجارة الرصف";
-"rendering_attr_contourWidth_description" = "عرض الخطوط الكنتورية";
+"rendering_attr_contourWidth_description" = "عرض الخطوط المحيطية";
 "rendering_attr_lessDetailed_name" = "تفاصيل أقل";
 "rendering_value_green_name" = "أخضر";
 "rendering_attr_showSurfaceGrade_name" = "عرض جودة الطريق";
@@ -1564,7 +1564,7 @@
 "routing_attr_piste_type_nordic_description" = "مسارات للتزلج الشمالي أو الريفي علي الثلج.";
 "routeInfo_piste_type_name" = "نوع المدرج";
 "routing_attr_piste_type_sled_name" = "تزلج";
-"rendering_attr_contourWidth_name" = "عرض الخطوط الكنتورية";
+"rendering_attr_contourWidth_name" = "عرض الخطوط المحيطية";
 "rendering_value_boldOutline_name" = "مخطط واضح";
 "routing_attr_allow_classic_only_description" = "تم إعداد الطرق للأسلوب الكلاسيكي فقط دون مسارات التزلج. يشمل ذلك الطرق التي يتم إعدادها بواسطة عربة ثلجية أصغر مع زحلقة مرنة ومسارات مصنوعة يدوياً بواسطة المتزلجين.";
 "rendering_attr_appMode_name" = "وضع التقديم";

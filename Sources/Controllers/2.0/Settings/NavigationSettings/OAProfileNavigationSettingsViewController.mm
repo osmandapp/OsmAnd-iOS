@@ -115,11 +115,6 @@
         @"title" : OALocalizedString(@"map_behavior"),
         @"key" : @"mapBehavior",
     }];
-    [otherArr addObject:@{
-        @"type" : kCellTypeTitle,
-        @"title" : OALocalizedString(@"export_profile"),
-        @"key" : @"exportProfile",
-    }];
     [tableData addObject:navigationArr];
     [tableData addObject:otherArr];
     _data = [NSArray arrayWithArray:tableData];
@@ -343,11 +338,6 @@
         settingsViewController = [[OAVehicleParametersViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"mapBehavior"])
         settingsViewController = [[OAMapBehaviorViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"exportProfile"])
-    {
-        OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
-        [settingsHelper exportSettings:NSTemporaryDirectory() fileName:self.appMode.toHumanString settingsItem:[[OAProfileSettingsItem alloc] initWithAppMode:self.appMode] exportItemFiles:YES];
-    }
     settingsViewController.delegate = self;
     [self.navigationController pushViewController:settingsViewController animated:YES];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];

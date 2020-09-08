@@ -1788,7 +1788,7 @@
 "meters" = "metros";
 "tones" = "tonos";
 "announce" = "Anunciar";
-"instructions_repeat" = "Pulsa el widget «Próximo giro» para que las indicaciones se repitan";
+"instructions_repeat" = "Pulsa el widget «Próximo giro» para repetir las indicaciones";
 "only_manually" = "Sólo manualmente";
 "default_profile_descr" = "Elige el perfil que se usará al ejecutar la aplicación.";
 "speed_limit_tolerance_descr" = "Elige el margen de tolerancia del límite de velocidad por encima del cual se recibirá una advertencia por voz.";
@@ -1846,3 +1846,6 @@
 "email_example_hint" = "usuario@ejemplo.com";
 "profile_type_base_string" = "Perfil base";
 "profile_type_custom_string" = "Perfil personalizado";
+"units_t" = "t";
+"recalculate_wrong_dir" = "Recalcular la ruta en caso de dirección inversa";
+"repeat_after" = "Repetir después";

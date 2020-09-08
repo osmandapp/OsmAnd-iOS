@@ -1838,3 +1838,6 @@
 "shared_string_account_add" = "Afegeix un compte";
 "profile_type_base_string" = "Perfil base";
 "profile_type_custom_string" = "Perfil personalitzat";
+"email_example_hint" = "usuari@exemple.com";
+"ui_customization_descr" = "Elements de representació, menú contextual";
+"recalculate_wrong_dir" = "Recalcula la ruta cas de direcció inversa";

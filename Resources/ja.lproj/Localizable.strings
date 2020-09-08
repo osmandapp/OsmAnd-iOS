@@ -1441,7 +1441,7 @@
 "rendering_attr_surface_fine_gravel_name" = "砂利と砂の複数舗装";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "自転車ルートのノードネットワーク";
 "rendering_attr_noAdminboundaries_description" = "地域の境界線(管理レベル 5-9)を非表示";
-"rendering_attr_hikingRoutesOSMC_description" = "OSMCトレースに従って道を描写";
+"rendering_attr_hikingRoutesOSMC_description" = "OSMCトレースに従って道を描写します。";
 "routing_attr_allow_motorway_description" = "高速道路を利用可能とみなします。";
 "rendering_attr_showLez_description" = "マップ上に低排出ゾーン(CO2排出量の多い車両に課税するエリア)を表示します。ルーティングには影響しません。";
 "rendering_attr_winter_road_name" = "冬期道路";

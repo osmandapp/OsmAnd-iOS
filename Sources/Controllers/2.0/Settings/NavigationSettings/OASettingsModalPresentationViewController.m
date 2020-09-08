@@ -17,9 +17,6 @@
 @end
 
 @implementation OASettingsModalPresentationViewController
-{
-    UIView *_tableHeaderView;
-}
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)am
 {
@@ -55,7 +52,7 @@
 {
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     CGFloat textHeight = [self heightForLabel:text];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, kSidePadding, textWidth, textHeight)];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:6];
@@ -68,9 +65,9 @@
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    return _tableHeaderView;
+    tableHeaderView.backgroundColor = UIColor.clearColor;
+    [tableHeaderView addSubview:label];
+    return tableHeaderView;
 }
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath

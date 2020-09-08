@@ -679,7 +679,7 @@
 "max_speed_none" = "perunu";
 "access_arrival_time" = "Oràriu de lòmpida";
 "map_widget_time" = "Tempus abarrau";
-"monitoring_control_start" = "REC";
+"monitoring_control_start" = "Registra";
 "map_widget_altitude" = "Artària";
 "always_center_position_on_map" = "Ammustra sa positzione semper a su tzentru";
 "map_widget_appearance_rem" = "Elementos chi abarrant";
@@ -1844,3 +1844,7 @@
 "plugin_settings_reset" = "Riprìstina sas impostatziones predefinidas de s'estensione";
 "trip_rec_actions_descr" = "Podes agatare totu sas rastas registradas tuas in %@";
 "logging_accuracy" = "Pretzisione de registratzione";
+"shared_string_account_add" = "Annanghe unu contu";
+"units_t" = "t";
+"recalculate_wrong_dir" = "Torra a carculare s'àndala in casu de diretzione furriada";
+"repeat_after" = "Repite a pustis de";

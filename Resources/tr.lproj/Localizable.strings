@@ -1838,3 +1838,4 @@
 "plugin_settings_reset" = "Eklenti ayarlarını öntanımlılara sıfırla";
 "trip_rec_actions_descr" = "Kaydedilen tüm yollarınızı %@ içinde bulabilirsiniz";
 "logging_accuracy" = "Kayıt tutma doğruluğu";
+"units_t" = "t";

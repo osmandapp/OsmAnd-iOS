@@ -958,7 +958,7 @@
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    return [NSString stringWithFormat:@"%.1f", [self get:mode]];
+    return [NSString stringWithFormat:@"%.2f", [self get:mode]];
 }
 
 @end
@@ -1126,7 +1126,7 @@
 - (OAMapLayersConfiguration *) get:(OAApplicationMode *)mode
 {
     NSObject *val = [self getValue:mode];
-    return val ? [[OAMapLayersConfiguration alloc] initWithHiddenLayers:(NSMutableSet *)val] : self.defValue;
+    return val ? [[OAMapLayersConfiguration alloc] initWithHiddenLayers:(NSMutableArray *)val] : self.defValue;
 }
 
 - (void) set:(OAMapLayersConfiguration *)layersConfig mode:(OAApplicationMode *)mode

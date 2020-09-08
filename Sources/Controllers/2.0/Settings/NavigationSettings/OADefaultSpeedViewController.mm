@@ -112,7 +112,6 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self getTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
     [self setupView];
 }
 
@@ -163,7 +162,7 @@
         cell.lbTime.text = item[@"value"];
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeSlider])
+    else if ([cellType isEqualToString:kCellTypeSlider])
     {
         static NSString* const identifierCell = @"OASliderWithBordersCell";
         OASliderWithBordersCell* cell = nil;
@@ -193,7 +192,6 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self getTableHeaderViewWithText:OALocalizedString(@"default_speed_dialog_msg")];
         [self.tableView reloadData];
     } completion:nil];
 }

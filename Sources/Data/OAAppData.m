@@ -793,4 +793,27 @@
     return self;
 }
 
+#pragma mark - Copying profiles
+
+- (void) copyAppDataFrom:(OAApplicationMode *)sourceMode toMode:(OAApplicationMode *)targetMode
+{
+    [_lastMapSourceProfile set:[_lastMapSourceProfile get:sourceMode] mode:targetMode];
+    [_overlayMapSourceProfile set:[_overlayMapSourceProfile get:sourceMode] mode:targetMode];
+    [_underlayMapSourceProfile set:[_underlayMapSourceProfile get:sourceMode] mode:targetMode];
+    [_lastOverlayMapSourceProfile set:[_lastOverlayMapSourceProfile get:sourceMode] mode:targetMode];
+    [_lastUnderlayMapSourceProfile set:[_lastUnderlayMapSourceProfile get:sourceMode] mode:targetMode];
+    [_overlayAlphaProfile set:[_overlayAlphaProfile get:sourceMode] mode:targetMode];
+    [_underlayAlphaProfile set:[_underlayAlphaProfile get:sourceMode] mode:targetMode];
+    [_terrainTypeProfile set:[_terrainTypeProfile get:sourceMode] mode:targetMode];
+    [_lastTerrainTypeProfile set:[_lastTerrainTypeProfile get:sourceMode] mode:targetMode];
+    [_hillshadeAlphaProfile set:[_hillshadeAlphaProfile get:sourceMode] mode:targetMode];
+    [_slopeAlphaProfile set:[_slopeAlphaProfile get:sourceMode] mode:targetMode];
+    [_hillshadeMinZoomProfile set:[_hillshadeMinZoomProfile get:sourceMode] mode:targetMode];
+    [_hillshadeMaxZoomProfile set:[_hillshadeMaxZoomProfile get:sourceMode] mode:targetMode];
+    [_slopeMinZoomProfile set:[_slopeMinZoomProfile get:sourceMode] mode:targetMode];
+    [_slopeMaxZoomProfile set:[_slopeMaxZoomProfile get:sourceMode] mode:targetMode];
+    [_mapillaryProfile set:[_mapillaryProfile get:sourceMode] mode:targetMode];
+    [_mapLayersConfigurationProfile set:[_mapLayersConfigurationProfile get:sourceMode] mode:targetMode];
+}
+
 @end

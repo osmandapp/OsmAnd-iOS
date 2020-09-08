@@ -1842,3 +1842,9 @@
 "units_t" = "t";
 "recalculate_wrong_dir" = "إعادة حساب المسار في حالة الانحراف";
 "repeat_after" = "إعادة بعد";
+"profile_alert_delete_msg" = "هل أنت متأكد أنك تريد حذف ملف تعريف \"٪ @\" بالكامل؟";
+"profile_alert_delete_title" = "حذف الملف الشخصي";
+"reset_to_default" = "استعادة الضبط الافتراضي";
+"copy_from_other_profile_descr" = "يمكنك نسخ جميع الإعدادات من أي ملف تعريف إلى ملف التعريف المحدد: ";
+"copy_from_other_profile" = "نسخة من ملف تعريف آخر";
+"shared_string_copy" = "نسخ";

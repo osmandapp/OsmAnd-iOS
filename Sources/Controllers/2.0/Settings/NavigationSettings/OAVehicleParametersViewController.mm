@@ -82,7 +82,13 @@
     NSMutableArray *defaultSpeedArr = [NSMutableArray array];
     auto router = [OARouteProvider getRouter:self.appMode];
     _otherParameters.clear();
-    if (router && self.appMode != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode != OAApplicationMode.SKI && self.appMode.parent != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode.parent != OAApplicationMode.SKI)
+    NSString *appModeRoutingProfile = self.appMode.getRoutingProfile;
+    NSString *parantAppModeRoutingProfile = self.appMode.parent.getRoutingProfile;
+    
+    if (router && ![appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
+        ![appModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey] &&
+        ![parantAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
+        ![parantAppModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey])
     {
         auto& parameters = router->getParametersList();
         for (const auto& p : parameters)

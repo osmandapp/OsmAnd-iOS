@@ -431,8 +431,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileInteger *layerTransparencySeekbarMode; // 0 - overlay, 1 - underlay, 2 - off, 3 - undefined, 4 - overlay&underlay
 - (BOOL) getOverlayOpacitySliderVisibility;
 - (BOOL) getUnderlayOpacitySliderVisibility;
-- (void) setOverlayOpacitySliderVisibility:(BOOL)isVisible;
-- (void) setUnderlayOpacitySliderVisibility:(BOOL)isVisible;
+- (void) setOverlayOpacitySliderVisibility:(BOOL)visibility;
+- (void) setUnderlayOpacitySliderVisibility:(BOOL)visibility;
 
 @property (nonatomic) NSString *billingUserId;
 @property (nonatomic) NSString *billingUserName;

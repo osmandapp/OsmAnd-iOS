@@ -3055,17 +3055,6 @@
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
 }
 
-- (OAProfileBoolean *) getCustomRoutingBooleanProperty1:(NSString *)attrName defaultValue:(BOOL)defaultValue
-{
-    OAProfileBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
-    if (!value)
-    {
-        value = [OAProfileBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
-        [_customBooleanRoutingProps setObject:value forKey:attrName];
-    }
-    return value;
-}
-
 - (BOOL) nightMode
 {
     return [_dayNightHelper isNightMode];

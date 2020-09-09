@@ -410,7 +410,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic, readonly) NSArray *rtlLanguages;
 
 
-@property (nonatomic) OAProfileInteger *dayNightMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (nonatomic) OAProfileInteger *appearanceMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (readonly, nonatomic) BOOL nightMode;
 @property (nonatomic) OAProfileMetricSystem *metricSystem;
 @property (nonatomic) OAProfileBoolean *drivingRegionAutomatic;

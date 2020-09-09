@@ -65,7 +65,7 @@
     if ([settingKeyName isEqualToString:settingAppModeKey])
     {
         title = OALocalizedString(@"map_settings_mode");
-        int mode = [_settings.dayNightMode get];
+        int mode = [_settings.appearanceMode get];
         data = @[
                  @{
                      @"name" : OALocalizedString(@"daynight_mode_auto"),

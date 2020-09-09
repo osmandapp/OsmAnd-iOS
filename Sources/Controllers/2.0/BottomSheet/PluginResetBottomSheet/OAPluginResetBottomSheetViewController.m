@@ -73,7 +73,7 @@
 
 - (void) setupView
 {
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *model = [NSMutableArray new];
     NSMutableArray *arr = [NSMutableArray array];
     
@@ -287,8 +287,6 @@
 {
     view.hidden = YES;
 }
-
-@synthesize vwController;
 
 @end
 

@@ -79,7 +79,7 @@
 
 - (void) setupView
 {
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     _pbCell = [self getProgressBarCell];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
@@ -203,8 +203,6 @@
 {
     view.hidden = YES;
 }
-
-@synthesize vwController;
 
 # pragma mark OAOsmMessageForwardingDelegate
 

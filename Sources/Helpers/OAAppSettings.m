@@ -1812,7 +1812,7 @@
     OADayNightHelper *_dayNightHelper;
 }
 
-@synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, dayNightMode=_dayNightMode;
+@synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, appearanceMode=_appearanceMode;
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
 @synthesize mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, settingPrefMapLanguage=_settingPrefMapLanguage;
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
@@ -1852,8 +1852,8 @@
         _settingMapLanguageTranslit = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageTranslitKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapLanguageTranslitKey] : NO;
 
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
-        _dayNightMode = [OAProfileInteger withKey:settingAppModeKey defValue:0];
-        [_registeredPreferences setObject:_dayNightMode forKey:@"daynight_mode"];
+        _appearanceMode = [OAProfileInteger withKey:settingAppModeKey defValue:0];
+        [_registeredPreferences setObject:_appearanceMode forKey:@"daynight_mode"];
 
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;
@@ -2353,7 +2353,7 @@
 
 - (void) setAppMode:(int)settingAppMode
 {
-    [_dayNightMode set:settingAppMode];
+    [_appearanceMode set:settingAppMode];
     [_dayNightHelper forceUpdate];
 }
 
@@ -3022,10 +3022,10 @@
     return [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL;
 }
 
-- (void) setOverlayOpacitySliderVisibility:(BOOL)isVisible
+- (void) setOverlayOpacitySliderVisibility:(BOOL)visibility
 {
-    if (isVisible)
-        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY)
+    if (visibility)
+        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL];
         else
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];
@@ -3041,10 +3041,10 @@
     return [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL;
 }
 
-- (void) setUnderlayOpacitySliderVisibility:(BOOL)isVisible
+- (void) setUnderlayOpacitySliderVisibility:(BOOL)visibility
 {
-    if (isVisible)
-        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY)
+    if (visibility)
+        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL];
         else
             [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];

@@ -103,7 +103,7 @@
 - (void) setupView
 {
     [_floatingTextFieldControllers removeAllObjects];
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     NSString *title = [self getTitle];
     [arr addObject:@{
@@ -193,7 +193,7 @@
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_note_empty_message") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-            [self.vwController presentViewController:alert animated:YES completion:nil];
+            [_vwController presentViewController:alert animated:YES completion:nil];
             return;
         }
     }
@@ -474,8 +474,6 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
-
-@synthesize vwController;
 
 # pragma mark OAOsmMessageForwardingDelegate
 

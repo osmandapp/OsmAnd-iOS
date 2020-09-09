@@ -75,7 +75,7 @@
 
 - (void) setupView
 {
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     _data = [NSArray arrayWithObject:@{
                                        @"type" : @"OATextInputFloatingCell",
                                        @"cell" : [self getInputCellWithHint:_selectedCellData[@"placeholder"] text:_selectedCellData[@"title"]]
@@ -215,9 +215,6 @@
 {
     return nil;
 }
-
-@synthesize vwController;
-
 
 #pragma mark - MDCMultilineTextInputLayoutDelegate
 - (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField

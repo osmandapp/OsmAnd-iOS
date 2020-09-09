@@ -51,7 +51,7 @@
 
 - (void) setupView
 {
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
@@ -261,8 +261,6 @@
     else
         return nil;
 }
-
-@synthesize vwController;
 
 @end
 

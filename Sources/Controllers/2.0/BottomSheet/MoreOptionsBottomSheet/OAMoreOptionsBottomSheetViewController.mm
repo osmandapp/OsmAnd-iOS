@@ -398,8 +398,6 @@
     return point;
 }
 
-@synthesize vwController;
-
 @end
 
 @interface OAMoreOprionsBottomSheetViewController ()

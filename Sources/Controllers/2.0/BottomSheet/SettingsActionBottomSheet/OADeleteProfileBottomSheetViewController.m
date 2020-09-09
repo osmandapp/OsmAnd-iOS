@@ -24,7 +24,7 @@
 @implementation OADeleteProfileBottomSheetScreen
 {
     OAApplicationMode *_appMode;
-    OADeleteProfileBottomSheetViewController *vwController;
+    OADeleteProfileBottomSheetViewController *_vwController;
     NSArray* _data;
 }
 
@@ -43,7 +43,7 @@
 
 - (void) initOnConstruct:(UITableView *)tableView viewController:(OADeleteProfileBottomSheetViewController *)viewController
 {
-    vwController = viewController;
+    _vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -52,7 +52,7 @@
 
 - (void) setupView
 {
-    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
@@ -71,13 +71,13 @@
 
 - (void) onCloseButtonPressed:(id)sender
 {
-    [vwController dismiss];
+    [_vwController dismiss];
 }
 
 - (void) doneButtonPressed
 {
     [OAApplicationMode deleteCustomModes:[NSArray arrayWithObject:_appMode]];
-    [vwController dismiss];
+    [_vwController dismiss];
     for (UIViewController *vc in [[OARootViewController instance].navigationController viewControllers])
     {
         if ([vc isKindOfClass:OAMainSettingsViewController.class])
@@ -154,8 +154,6 @@
     CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString] width:tableView.bounds.size.width - 32 font:[UIFont systemFontOfSize:15] lineSpacing:6.];
     return labelHeight + 60;
 }
-
-@synthesize vwController;
 
 @end
 

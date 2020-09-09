@@ -213,7 +213,7 @@
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
             cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftImageView.tintColor = [item[@"value"] isEqualToString:@"-"] ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
+            cell.leftImageView.tintColor = ([item[@"value"] isEqualToString:@"-"] || [item[@"value"] isEqualToString:@"None"]) ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }

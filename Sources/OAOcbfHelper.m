@@ -38,9 +38,7 @@
     NSHTTPURLResponse *response;
     [NSURLConnection sendSynchronousRequest:request returningResponse:&response error: NULL];
     if ([response respondsToSelector:@selector(allHeaderFields)])
-    {
         lastModifiedString = [[response allHeaderFields] objectForKey:@"Last-Modified"];
-    }
     
     NSDate *lastModifiedServer = nil;
     @try

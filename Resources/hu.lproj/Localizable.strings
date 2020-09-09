@@ -1336,3 +1336,7 @@
 "weight_limit_description" = "Adja meg a járműve tömegét (a nehéz járművekre útvonalkorlátozások vonatkozhatnak).";
 "monitoring_control_start" = "REC";
 "shared_string_exit" = "Kilépés";
+"shared_string_copy" = "Másolás";
+"copy_from_other_profile" = "Másolás egy másik profilból";
+"profile_alert_delete_title" = "Profil törlése";
+"reset_to_default" = "Alapértelmezés visszaállítása";

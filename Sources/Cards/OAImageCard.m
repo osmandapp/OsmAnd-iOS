@@ -44,6 +44,10 @@
 {
     if (serverIconName && [serverIconName isEqualToString:@"ic_logo_mapillary"])
         return @"ic_custom_mapillary_color_logo.png";
+    else if ([_type isEqualToString:@"wikimedia-photo"])
+        return @"ic_custom_logo_wikimedia.png";
+    else if ([_type isEqualToString:@"wikidata-photo"])
+        return @"ic_custom_logo_wikidata.png";
     else
         return serverIconName;
 }

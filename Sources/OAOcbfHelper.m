@@ -39,7 +39,6 @@
     [NSURLConnection sendSynchronousRequest:request returningResponse:&response error: NULL];
     if ([response respondsToSelector:@selector(allHeaderFields)])
     {
-        NSDictionary *headers = [response allHeaderFields];
         lastModifiedString = [[response allHeaderFields] objectForKey:@"Last-Modified"];
     }
     

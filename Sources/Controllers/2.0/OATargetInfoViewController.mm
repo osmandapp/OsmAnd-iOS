@@ -97,9 +97,9 @@
     CGFloat _calculatedWidth;
     
     OARowInfo *_nearbyImagesRowInfo;
-    BOOL _isWikidataBlockDone;
-    BOOL _isWikimediaBlockDone;
-    BOOL _isOsmImageBlockDone;
+    BOOL _wikidataCardsReady;
+    BOOL _wikimediaCardsReady;
+    BOOL _otherCardsReady;
 }
 
 - (BOOL) needCoords
@@ -379,38 +379,35 @@
         return;
     
     [cardsView setCards:@[[[OAImageCard alloc] initWithData:@{@"key" : @"loading"}]]];
-    dispatch_group_t dispatchGroup = dispatch_group_create();
     NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
     NSString *imageTagContent = nil;
     NSString *mapillaryTagContent = nil;
-    _isWikidataBlockDone = NO;
-    _isWikimediaBlockDone = NO;
-    _isOsmImageBlockDone = NO;
-    
+    NSString *wikimediaTagContent = nil;
+    NSString *wikidataTagContent = nil;
     if ([self.getTargetObj isKindOfClass:OAPOI.class])
     {
         OAPOI *poi = self.getTargetObj;
-        NSString *wikimediaTagContent = poi.values[@"wikimedia_commons"];
-        NSString *wikidataTagContent = poi.values[@"wikidata"];
         imageTagContent = poi.values[@"image"];
         mapillaryTagContent = poi.values[@"mapillary"];
-        
-        [self addWikimediaImage:wikimediaTagContent cards:cards inRow:nearbyImagesRowInfo];
-        [self addWikidataImage:wikidataTagContent cards:cards inRow:nearbyImagesRowInfo];
+        wikimediaTagContent = poi.values[@"wikimedia_commons"];
+        wikidataTagContent = poi.values[@"wikidata"];
     }
-    [self addOsmImage:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:nearbyImagesRowInfo];
+    _wikidataCardsReady = NO;
+    _wikimediaCardsReady = NO;
+    _otherCardsReady = NO;
+    [self addWikimediaCards:wikimediaTagContent cards:cards rowInfo:nearbyImagesRowInfo];
+    [self addWikidataCards:wikidataTagContent cards:cards rowInfo:nearbyImagesRowInfo];
+    [self addOtherCards:imageTagContent mapillary:mapillaryTagContent cards:cards rowInfo:nearbyImagesRowInfo];
 }
 
-- (void) addWikidataImage:(NSString *)wikidataTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards inRow:(OARowInfo *)nearbyImagesRowInfo
+- (void) addWikidataCards:(NSString *)wikidataTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
     if (wikidataTagContent && [wikidataTagContent hasPrefix:@"Q"])
     {
         NSURL *urlObj = [[NSURL alloc] initWithString: [NSString stringWithFormat:@"https://www.wikidata.org/w/api.php?action=wbgetclaims&property=P18&entity=%@&format=json", wikidataTagContent]];
         NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-
         [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
             OAUrlImageCard *resultCard = nil;
-            
             if (((NSHTTPURLResponse *)response).statusCode == 200)
             {
                 if (data && !error)
@@ -433,34 +430,27 @@
                         }
                     }
                 }
-
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
                 if (resultCard)
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [cards addObject:resultCard];
-                        [self setWikidataBlockDone:cards inRow:nearbyImagesRowInfo];
-                    });
-                else
-                    [self setWikidataBlockDone:cards inRow:nearbyImagesRowInfo];
-            }
-            else
-            {
-                [self setWikidataBlockDone:cards inRow:nearbyImagesRowInfo];
-            }
+                    [cards addObject:resultCard];
+                [self onWikidataCardsReady:cards rowInfo:nearbyImagesRowInfo];
+            });
         }] resume];
     }
     else
     {
-        [self setWikidataBlockDone:cards inRow:nearbyImagesRowInfo];
+        [self onWikidataCardsReady:cards rowInfo:nearbyImagesRowInfo];
     }
 }
 
-- (void) setWikidataBlockDone:(NSMutableArray<OAAbstractCard *> *)cards inRow:(OARowInfo *)nearbyImagesRowInfo
+- (void) onWikidataCardsReady:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
-    _isWikidataBlockDone = YES;
-    [self updateDisplayingCards:cards inRow:nearbyImagesRowInfo];
+    _wikidataCardsReady = YES;
+    [self updateDisplayingCards:cards rowInfo:nearbyImagesRowInfo];
 }
 
-- (void) addWikimediaImage:(NSString *)wikiMediaTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards inRow:(OARowInfo *)nearbyImagesRowInfo
+- (void) addWikimediaCards:(NSString *)wikiMediaTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
     NSString *wikimediaFilePrefix = @"File:";
     NSString *wikimediaCategoryPrefix = @"Category:";
@@ -469,12 +459,10 @@
     {
         OAUrlImageCard *card = [self createWikimediaCard:wikiMediaTagContent isFromWikidata:NO];
         if (card)
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [cards addObject:card];
-                [self setWikimediaBlockDone:cards inRow:nearbyImagesRowInfo];
-            });
-        else
-            [self setWikimediaBlockDone:cards inRow:nearbyImagesRowInfo];
+        {
+            [cards addObject:card];
+            [self onWikimediaCardsReady:cards rowInfo:nearbyImagesRowInfo];
+        }
     }
     else if (wikiMediaTagContent && [wikiMediaTagContent hasPrefix:wikimediaCategoryPrefix])
     {
@@ -482,10 +470,8 @@
         NSString *url = [NSString stringWithFormat:@"https://commons.wikimedia.org/w/api.php?action=query&list=categorymembers&cmtitle=%@&cmlimit=500&format=json", urlSafeFileName];
         NSURL *urlObj = [[NSURL alloc] initWithString:url];
         NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-        
         [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            NSMutableArray<OAAbstractCard *> *resultCards = [NSMutableArray new];
-            
+            NSMutableArray<OAAbstractCard *> *resultCards = [NSMutableArray array];
             if (((NSHTTPURLResponse *)response).statusCode == 200)
             {
                 if (data)
@@ -508,23 +494,22 @@
                     }
                 }
             }
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [cards addObjectsFromArray:resultCards];
-                [self setWikimediaBlockDone:cards inRow:nearbyImagesRowInfo];
+                [self onWikimediaCardsReady:cards rowInfo:nearbyImagesRowInfo];
             });
         }] resume];
     }
     else
     {
-        [self setWikimediaBlockDone:cards inRow:nearbyImagesRowInfo];
+        [self onWikimediaCardsReady:cards rowInfo:nearbyImagesRowInfo];
     }
 }
 
-- (void) setWikimediaBlockDone:(NSMutableArray<OAAbstractCard *> *)cards inRow:(OARowInfo *)nearbyImagesRowInfo
+- (void) onWikimediaCardsReady:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
-    _isWikimediaBlockDone = YES;
-    [self updateDisplayingCards:cards inRow:nearbyImagesRowInfo];
+    _wikimediaCardsReady = YES;
+    [self updateDisplayingCards:cards rowInfo:nearbyImagesRowInfo];
 }
 
 - (OAUrlImageCard *) createWikimediaCard:(NSString *)wikiMediaTagContent isFromWikidata:(BOOL)isFromWikidata
@@ -579,7 +564,7 @@
     return nil;
 }
 
-- (void) addOsmImage:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent  cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
+- (void) addOtherCards:(NSString *)imageTagContent mapillary:(NSString *)mapillaryTagContent  cards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
     NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f",
     self.location.latitude, self.location.longitude];
@@ -590,10 +575,8 @@
     
     NSURL *urlObj = [[NSURL alloc] initWithString:[[urlString stringByReplacingOccurrencesOfString:@" "  withString:@"_"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    
     [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSMutableArray<OAAbstractCard *> *resultCards = [NSMutableArray new];
-        
+        NSMutableArray<OAAbstractCard *> *resultCards = [NSMutableArray array];
         if (((NSHTTPURLResponse *)response).statusCode == 200)
         {
             if (data)
@@ -613,23 +596,22 @@
                 }
             }
         }
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             [cards addObjectsFromArray:resultCards];
-            [self setOsmBlockDone:cards inRow:nearbyImagesRowInfo];
+            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
         });
     }] resume];
 }
 
-- (void) setOsmBlockDone:(NSMutableArray<OAAbstractCard *> *)cards inRow:(OARowInfo *)nearbyImagesRowInfo
+- (void) onOtherCardsReady:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
-    _isOsmImageBlockDone = YES;
-    [self updateDisplayingCards:cards inRow:nearbyImagesRowInfo];
+    _otherCardsReady = YES;
+    [self updateDisplayingCards:cards rowInfo:nearbyImagesRowInfo];
 }
 
-- (void) updateDisplayingCards:(NSMutableArray<OAAbstractCard *> *)cards inRow:(OARowInfo *)nearbyImagesRowInfo
+- (void) updateDisplayingCards:(NSMutableArray<OAAbstractCard *> *)cards rowInfo:(OARowInfo *)nearbyImagesRowInfo
 {
-    if(_isWikidataBlockDone && _isWikimediaBlockDone && _isOsmImageBlockDone)
+    if (_wikidataCardsReady && _wikimediaCardsReady && _otherCardsReady)
     {
         if (cards.count == 0)
             [cards addObject:[[OANoImagesCard alloc] init]];

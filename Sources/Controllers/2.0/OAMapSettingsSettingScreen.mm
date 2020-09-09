@@ -70,11 +70,11 @@
                  @{
                      @"name" : OALocalizedString(@"daynight_mode_auto"),
                      @"value" : @"",
-                     @"img" : mode == DAYNIGHT_MODE_AUTO ? @"menu_cell_selected.png" : @"" },
+                     @"img" : mode == APPEARANCE_MODE_AUTO ? @"menu_cell_selected.png" : @"" },
                  @{
                      @"name" : OALocalizedString(@"map_settings_day"),
                      @"value" : @"",
-                     @"img" : mode == DAYNIGHT_MODE_DAY ? @"menu_cell_selected.png" : @"" },
+                     @"img" : mode == APPEARANCE_MODE_DAY ? @"menu_cell_selected.png" : @"" },
                  @{
                      @"name" : OALocalizedString(@"map_settings_night"),
                      @"value" : @"",
@@ -232,11 +232,11 @@
     {
         int index = (int)indexPath.row;
         if (index == 1)
-            [_settings setAppMode:DAYNIGHT_MODE_DAY];
+            [_settings setAppMode:APPEARANCE_MODE_DAY];
         else if (index == 2)
             [_settings setAppMode:APPEARANCE_MODE_NIGHT];
         else
-            [_settings setAppMode:DAYNIGHT_MODE_AUTO];
+            [_settings setAppMode:APPEARANCE_MODE_AUTO];
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {

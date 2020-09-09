@@ -23,7 +23,7 @@ static OAQuickActionType *TYPE;
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (settings.nightMode)
-        [settings setAppMode:DAYNIGHT_MODE_DAY];
+        [settings setAppMode:APPEARANCE_MODE_DAY];
     else
         [settings setAppMode:APPEARANCE_MODE_NIGHT];
 }

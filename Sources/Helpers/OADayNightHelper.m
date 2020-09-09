@@ -55,7 +55,7 @@
 {
     BOOL nightMode = _lastNightMode;
     int dayNightMode = [[OAAppSettings sharedManager].dayNightMode get];
-    if (dayNightMode == DAYNIGHT_MODE_DAY)
+    if (dayNightMode == APPEARANCE_MODE_DAY)
     {
         nightMode = NO;
     }
@@ -63,7 +63,7 @@
     {
         nightMode = YES;
     }
-    else if (dayNightMode == DAYNIGHT_MODE_AUTO)
+    else if (dayNightMode == APPEARANCE_MODE_AUTO)
     {
         NSTimeInterval currentTime = CACurrentMediaTime();
         // allow recalculation each 60 seconds

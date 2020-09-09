@@ -371,9 +371,9 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL settingMapLanguageShowLocal;
 @property (assign, nonatomic) BOOL settingMapLanguageTranslit;
 
-#define DAYNIGHT_MODE_DAY 0
+#define APPEARANCE_MODE_DAY 0
 #define APPEARANCE_MODE_NIGHT 1
-#define DAYNIGHT_MODE_AUTO 2
+#define APPEARANCE_MODE_AUTO 2
 
 #define MAP_ARROWS_LOCATION 0
 #define MAP_ARROWS_MAP_CENTER 1

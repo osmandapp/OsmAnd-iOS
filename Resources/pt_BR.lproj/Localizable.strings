@@ -1810,7 +1810,7 @@
 "profile_import_success" = "O perfil do aplicativo foi importado com sucesso";
 "err_profile_import" = "Erro ao ler dados do item: %@";
 "width_limit_description" = "Forneça a largura do seu veículo. Algumas restrições de rota podem se aplicar a veículos largos.";
-"vessel_width_limit_description" = "Defina a largura da embarcação para evitar pontes estreitas";
+"vessel_width_limit_description" = "Defina a largura da embarcação para evitar pontes estreitas.";
 "weight_limit_description" = "Forneça o peso do seu veículo. Algumas restrições de rota podem ser aplicadas a veículos pesados.";
 "default_speed_dialog_msg" = "Estima a hora de chegada de tipos de estradas desconhecidas e limita a velocidade de todas as estradas (pode afetar o roteamento)";
 "vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Lembre-se, se a ponte for móvel, usaremos sua altura no estado aberto.";
@@ -1848,3 +1848,9 @@
 "units_t" = "t";
 "recalculate_wrong_dir" = "Recalcular a rota em caso de direção reversa";
 "repeat_after" = "Repetir depois";
+"profile_alert_delete_msg" = "Tem certeza de que deseja excluir o perfil de \"%@\"";
+"profile_alert_delete_title" = "Excluir perfil";
+"reset_to_default" = "Restaurar para o padrão";
+"copy_from_other_profile_descr" = "Você pode copiar todas as configurações de qualquer perfil para o perfil selecionado: ";
+"copy_from_other_profile" = "Copiar de outro perfil";
+"shared_string_copy" = "Copiar";

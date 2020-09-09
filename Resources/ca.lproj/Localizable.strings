@@ -1841,3 +1841,9 @@
 "email_example_hint" = "usuari@exemple.com";
 "ui_customization_descr" = "Elements de representació, menú contextual";
 "recalculate_wrong_dir" = "Recalcula la ruta cas de direcció inversa";
+"profile_alert_delete_msg" = "Confirmeu que voleu eliminar totalment el perfil \"%@\"?";
+"reset_to_default" = "Restableix els valors per defecte";
+"copy_from_other_profile_descr" = "Podeu copiar tota la configuració de qualsevol perfil al que està seleccionat: ";
+"copy_from_other_profile" = "Còpia d'un altre perfil";
+"shared_string_copy" = "Copia";
+"repeat_after" = "Repeteix després";

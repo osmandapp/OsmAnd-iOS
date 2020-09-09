@@ -8,7 +8,7 @@
 
 #import "OADefaultSpeedViewController.h"
 #import "OATimeTableViewCell.h"
-#import "OASliderWithBordersCell.h"
+#import "OASliderWithValuesCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -17,8 +17,7 @@
 #import "OARoutingHelper.h"
 
 #define kCellTypeSpeed @"time_cell"
-#define kCellTypePicker @"pickerCell"
-#define kCellTypeSlider @"OASliderWithBordersCell"
+#define kCellTypeSlider @"OASliderWithValuesCell"
 
 @interface OADefaultSpeedViewController()
 
@@ -164,20 +163,20 @@
     }
     else if ([cellType isEqualToString:kCellTypeSlider])
     {
-        static NSString* const identifierCell = @"OASliderWithBordersCell";
-        OASliderWithBordersCell* cell = nil;
-        cell = (OASliderWithBordersCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = @"OASliderWithValuesCell";
+        OASliderWithValuesCell* cell = nil;
+        cell = (OASliderWithValuesCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASliderWithBordersCell" owner:self options:nil];
-            cell = (OASliderWithBordersCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASliderWithValuesCell" owner:self options:nil];
+            cell = (OASliderWithValuesCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.sliderView.continuous = YES;
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"minValue"];
-            cell.valueLabel.text = item[@"maxValue"];
+            cell.leftValueLabel.text = item[@"minValue"];
+            cell.rightValueLabel.text = item[@"maxValue"];
             cell.sliderView.minimumValue = _minValue;
             cell.sliderView.maximumValue = _maxValue;
             cell.sliderView.value = _selectedValue;

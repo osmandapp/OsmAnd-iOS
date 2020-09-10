@@ -83,12 +83,12 @@
     auto router = [OARouteProvider getRouter:self.appMode];
     _otherParameters.clear();
     NSString *appModeRoutingProfile = self.appMode.getRoutingProfile;
-    NSString *parantAppModeRoutingProfile = self.appMode.parent.getRoutingProfile;
+    NSString *parentAppModeRoutingProfile = self.appMode.parent.getRoutingProfile;
     
     if (router && ![appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
         ![appModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey] &&
-        ![parantAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
-        ![parantAppModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey])
+        ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
+        ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey])
     {
         auto& parameters = router->getParametersList();
         for (const auto& p : parameters)

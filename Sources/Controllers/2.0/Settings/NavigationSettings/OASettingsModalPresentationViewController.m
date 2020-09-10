@@ -17,15 +17,13 @@
 @end
 
 @implementation OASettingsModalPresentationViewController
-{
-    UIView *_tableHeaderView;
-}
 
-- (instancetype) init
+- (instancetype) initWithAppMode:(OAApplicationMode *)am
 {
     self = [super initWithNibName:@"OASettingsModalPresentationViewController" bundle:nil];
     if (self)
     {
+        _appMode = am;
     }
     return self;
 }
@@ -35,20 +33,26 @@
     [super viewDidLoad];
 }
 
-- (IBAction)cancelButtonPressed:(id)sender
+- (void) applyLocalization
+{
+    [super applyLocalization];
+    _subtitleLabel.text = _appMode.toHumanString;
+}
+
+- (IBAction) cancelButtonPressed:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)doneButtonPressed:(id)sender
+- (IBAction) doneButtonPressed:(id)sender
 {
 }
 
-- (void) setupTableHeaderViewWithText:(NSString *)text
+- (UIView *) getTableHeaderViewWithText:(NSString *)text
 {
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     CGFloat textHeight = [self heightForLabel:text];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, kSidePadding, textWidth, textHeight)];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:6];
@@ -61,9 +65,9 @@
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    self.tableView.tableHeaderView = _tableHeaderView;
+    tableHeaderView.backgroundColor = UIColor.clearColor;
+    [tableHeaderView addSubview:label];
+    return tableHeaderView;
 }
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath

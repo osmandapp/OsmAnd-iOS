@@ -228,11 +228,12 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     
     _sectionHeaderTitles = @[OALocalizedString(@"configure_profile"),
                              OALocalizedString(@"profile_settings"),
-                             //OALocalizedString(@"plugins"),
-                             OALocalizedString(@"actions")];
-    _sectionFooterTitles = @[@"", OALocalizedString(@"profile_sett_descr"),
-                             //OALocalizedString(@"plugin_settings_descr"),
-                             OALocalizedString(@"export_profile_descr")];
+                             OALocalizedString(@"actions"),
+                             OALocalizedString(@"plugins")];
+    _sectionFooterTitles = @[@"",
+                             OALocalizedString(@"profile_sett_descr"),
+                             OALocalizedString(@"export_profile_descr"),
+                             OALocalizedString(@"plugin_settings_descr")];
     
     self.backButton.hidden = YES;
     self.backImageButton.hidden = NO;

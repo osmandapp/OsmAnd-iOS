@@ -77,15 +77,18 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void) generateData
 {
+    NSMutableArray<NSString *> *sectionHeaderTitles = [NSMutableArray array];
+    NSMutableArray<NSString *> *sectionFooterTitles = [NSMutableArray array];
     NSMutableArray<NSArray *> *data = [NSMutableArray new];
-    
     [data addObject:@[
         @{
             @"type" : kSwitchCell,
             @"title" : OALocalizedString(@"shared_string_enabled")
         }
     ]];
-    
+    [sectionHeaderTitles addObject:OALocalizedString(@"configure_profile")];
+    [sectionFooterTitles addObject:@""];
+
     NSMutableArray<NSDictionary *> *profileSettings = [NSMutableArray new];
     [profileSettings addObject:@{
         @"type" : kIconTitleDescrCell,
@@ -135,7 +138,41 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //            @"key" : @"ui_customization"
 //        }
     [data addObject:profileSettings];
+    [sectionHeaderTitles addObject:OALocalizedString(@"profile_settings")];
+    [sectionFooterTitles addObject:OALocalizedString(@"profile_sett_descr")];
+
+    // Plugins
+    NSMutableArray *plugins = [NSMutableArray new];
+    OAPlugin *tripRec = [OAPlugin getEnabledPlugin:OAMonitoringPlugin.class];
+    if (tripRec)
+    {
+        [plugins addObject:@{
+            @"type" : kIconTitleDescrCell,
+            @"title" : tripRec.getName,
+            @"img" : @"ic_custom_trip",
+            @"key" : @"trip_rec"
+        }];
+    }
     
+    OAPlugin *osmEdit = [OAPlugin getEnabledPlugin:OAOsmEditingPlugin.class];
+    if (osmEdit)
+    {
+        [plugins addObject:@{
+            @"type" : kIconTitleDescrCell,
+            @"title" : osmEdit.getName,
+            @"img" : @"ic_custom_osm_edits",
+            @"key" : @"osm_edits"
+        }];
+    }
+    
+    if (plugins.count > 0)
+    {
+        [data addObject:plugins];
+        [sectionHeaderTitles addObject:OALocalizedString(@"plugins")];
+        [sectionFooterTitles addObject:OALocalizedString(@"plugin_settings_descr")];
+    }
+    
+    // Actions
     NSMutableArray<NSDictionary *> *settingsActions = [NSMutableArray new];
     [settingsActions addObject:@{
         @"type" : kTitleRightIconCell,
@@ -163,34 +200,12 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"key" : @"delete_profile"
         }];
     [data addObject:settingsActions];
-    
-    NSMutableArray *plugins = [NSMutableArray new];
-    OAPlugin *tripRec = [OAPlugin getEnabledPlugin:OAMonitoringPlugin.class];
-    if (tripRec)
-    {
-        [plugins addObject:@{
-            @"type" : kIconTitleDescrCell,
-            @"title" : tripRec.getName,
-            @"img" : @"ic_custom_trip",
-            @"key" : @"trip_rec"
-        }];
-    }
-    
-    OAPlugin *osmEdit = [OAPlugin getEnabledPlugin:OAOsmEditingPlugin.class];
-    if (osmEdit)
-    {
-        [plugins addObject:@{
-            @"type" : kIconTitleDescrCell,
-            @"title" : osmEdit.getName,
-            @"img" : @"ic_custom_osm_edits",
-            @"key" : @"osm_edits"
-        }];
-    }
-    
-    if (plugins.count > 0)
-        [data addObject:plugins];
-    
+    [sectionHeaderTitles addObject:OALocalizedString(@"actions")];
+    [sectionFooterTitles addObject:OALocalizedString(@"export_profile_descr")];
+
     _data = data;
+    _sectionHeaderTitles = sectionHeaderTitles;
+    _sectionFooterTitles = sectionFooterTitles;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -225,16 +240,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     _appModeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onAvailableAppModesChanged)
                                                         andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
-    
-    _sectionHeaderTitles = @[OALocalizedString(@"configure_profile"),
-                             OALocalizedString(@"profile_settings"),
-                             OALocalizedString(@"actions"),
-                             OALocalizedString(@"plugins")];
-    _sectionFooterTitles = @[@"",
-                             OALocalizedString(@"profile_sett_descr"),
-                             OALocalizedString(@"export_profile_descr"),
-                             OALocalizedString(@"plugin_settings_descr")];
-    
+        
     self.backButton.hidden = YES;
     self.backImageButton.hidden = NO;
     

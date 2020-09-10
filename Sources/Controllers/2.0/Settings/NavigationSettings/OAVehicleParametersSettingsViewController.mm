@@ -78,14 +78,7 @@
         [arr replaceObjectAtIndex:0 withObject:OALocalizedString(@"sett_no_ext_input")];
     _measurementRangeStringArr = [NSArray arrayWithArray:arr];
     _selectedParameter = _vehicleParameter[@"selectedItem"];
-   
-    NSString *valueString = @"None";
-    id value = _vehicleParameter[@"value"];
-    if (value && [value isKindOfClass:NSString.class])
-        valueString = _vehicleParameter[@"value"];
-    else if (value)
-        valueString = [_vehicleParameter[@"value"] stringValue];
-
+    NSString *valueString = [_vehicleParameter[@"value"] stringValue];
     if ([_selectedParameter intValue] != -1)
     {
         double vl = floorf(_measurementRangeValuesArr[_selectedParameter.intValue].doubleValue * 100 + 0.5) / 100;

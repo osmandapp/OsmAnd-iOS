@@ -31,13 +31,13 @@
 
 @interface OAMapLayersConfiguration : NSObject <NSCoding>
 
-- (instancetype) initWithHiddenLayers:(NSMutableArray *)hiddenLayers;
+- (instancetype) initWithHiddenLayers:(NSMutableSet *)hiddenLayers;
 
 - (BOOL)isLayerVisible:(NSString*)layerId;
 - (void)setLayer:(NSString*)layerId Visibility:(BOOL)isVisible;
 - (BOOL)toogleLayerVisibility:(NSString*)layerId;
 
 @property (readonly) OAObservable* changeObservable;
-@property (nonatomic, readonly) NSMutableArray* hiddenLayers;
+@property (nonatomic, readonly) NSMutableSet* hiddenLayers;
 
 @end

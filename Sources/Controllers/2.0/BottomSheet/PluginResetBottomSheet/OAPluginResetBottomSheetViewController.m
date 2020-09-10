@@ -33,7 +33,10 @@
 
 #define kButtonsTag 1
 #define kButtonsDividerTag 150
-#define kTitleIconRoundCell @"OATitleTwoIconsRoundCell"
+#define kBottomSheetHeaderDescrButtonCell @"OABottomSheetHeaderDescrButtonCell"
+#define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
+#define kDescrTitleCell @"OADescrTitleCell"
+#define kDividerCell @"OADividerCell"
 
 @interface OAPluginResetBottomSheetScreen ()
 
@@ -78,7 +81,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
-                     @"type" : @"OABottomSheetHeaderDescrButtonCell",
+                     @"type" : kBottomSheetHeaderDescrButtonCell,
                      @"title" : OALocalizedString(@"reset_to_default"),
                      @"description" : @"",
                      @"img" : @"ic_custom_reset.png"
@@ -87,7 +90,7 @@
     
     [arr removeAllObjects];
     [arr addObject:@{
-           @"type" : kTitleIconRoundCell,
+           @"type" : kTitleTwoIconsRoundCell,
            @"title" : _appMode.toHumanString,
            @"img" : _appMode.getIconName,
            @"color" : UIColorFromRGB(_appMode.getIconColor),
@@ -99,11 +102,11 @@
     
     [arr removeAllObjects];
     [arr addObject:@{
-                     @"type" : @"OADescrTitleCell",
+                     @"type" : kDescrTitleCell,
                      @"title" : OALocalizedString(@"reset_profile_action_descr"),
                      @"description" : @""
                      }];
-    [arr addObject:@{ @"type" : @"OADividerCell" } ];
+    [arr addObject:@{ @"type" : kDividerCell } ];
     [model addObject:[NSArray arrayWithArray:arr]];
 
     _data = [NSArray arrayWithArray:model];
@@ -122,23 +125,19 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:@"OABottomSheetHeaderDescrButtonCell"])
+    if ([type isEqualToString:kBottomSheetHeaderDescrButtonCell])
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([type isEqualToString:@"OADescrTitleCell"])
-    {
-        return [OADescrTitleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:DeviceScreenWidth];
-    }
-    else if ([type isEqualToString:@"OASettingSwitchNoImageCell"])
-    {
-        return [OASettingSwitchNoImageCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:kTitleIconRoundCell])
+    else if ([type isEqualToString:kTitleTwoIconsRoundCell])
     {
         return [OATitleTwoIconsRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
-    else if ([type isEqualToString:@"OADividerCell"])
+    else if ([type isEqualToString:kDescrTitleCell])
+    {
+        return [OADescrTitleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:DeviceScreenWidth];
+    }
+    else if ([type isEqualToString:kDividerCell])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(0, 0, 8, 0)];
     }
@@ -165,13 +164,13 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderDescrButtonCell"])
+    if ([item[@"type"] isEqualToString:kBottomSheetHeaderDescrButtonCell])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderDescrButtonCell";
+        static NSString* const identifierCell = kBottomSheetHeaderDescrButtonCell;
         OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OABottomSheetHeaderButtonCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetHeaderDescrButtonCell owner:self options:nil];
             cell = (OABottomSheetHeaderDescrButtonCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -187,15 +186,15 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
+    else if ([item[@"type"] isEqualToString:kTitleTwoIconsRoundCell])
     {
-        static NSString* const identifierCell = kTitleIconRoundCell;
+        static NSString* const identifierCell = kTitleTwoIconsRoundCell;
         OATitleTwoIconsRoundCell* cell = nil;
         
         cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleIconRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleTwoIconsRoundCell owner:self options:nil];
             cell = (OATitleTwoIconsRoundCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
@@ -219,13 +218,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
+    else if ([item[@"type"] isEqualToString:kDescrTitleCell])
     {
         OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:@"OADescrTitleCell"];
+        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:kDescrTitleCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADescrTitleCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDescrTitleCell owner:self options:nil];
             cell = (OADescrTitleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.contentView.backgroundColor = UIColor.clearColor;
@@ -240,13 +239,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    else if ([item[@"type"] isEqualToString:kDividerCell])
     {
-        static NSString* const identifierCell = @"OADividerCell";
+        static NSString* const identifierCell = kDividerCell;
         OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDividerCell owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);

@@ -242,7 +242,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.tintColor = _voiceOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_icon_inactive);
+            cell.imgView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
                                   
             id v = item[@"value"];
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
@@ -275,7 +275,8 @@
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftImageView.image = [UIImage imageNamed:item[@"icon"]];
+            cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftImageView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }

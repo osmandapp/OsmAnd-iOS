@@ -18,6 +18,8 @@
 #import "OASearchResultMatcher.h"
 #import "OASearchCoreFactory.h"
 #import "OACustomSearchPoiFilter.h"
+#import "OAPOIBaseType.h"
+#import "OAStreet.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -28,10 +30,26 @@ static const double TIMEOUT_BEFORE_SEARCH = 0.05; // seconds
 static const double TIMEOUT_BEFORE_FILTER = 0.02; // seconds
 static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
 
+typedef NS_ENUM(NSInteger, EOAResultCompareStep) {
+    EOATopVisible = 0,
+    EOAFoundWordCount, // more is better (top)
+    EOAUnknownPhraseMatchWeight, // more is better (top)
+    EOACompareAmenityTypeAdditional,
+    EOASearchDistanceIfNotByName,
+    EOACompareFirstNumberInName,
+    EOACompareDistanceToParentSearchResult, // makes sense only for inner subqueries
+    EOACompareByName,
+    EOACompareByDistance,
+    EOAAmenityLastAndSortBySubtype
+};
+
 @interface OASearchUICore ()
 
 @end
 
+const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAFoundWordCount), @(EOAUnknownPhraseMatchWeight),
+                                                         @(EOACompareAmenityTypeAdditional), @(EOASearchDistanceIfNotByName), @(EOACompareFirstNumberInName),
+                                                         @(EOACompareDistanceToParentSearchResult), @(EOACompareByName), @(EOACompareByDistance), @(EOAAmenityLastAndSortBySubtype)];
 
 @interface OASearchResultComparator ()
 
@@ -56,46 +74,118 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
         __weak OASearchResultComparator *weakSelf = self;
         _comparator = ^NSComparisonResult(OASearchResult * _Nonnull o1, OASearchResult * _Nonnull o2)
         {
+            for(NSNumber *stepN in compareStepValues)
+            {
+                EOAResultCompareStep step = (EOAResultCompareStep) stepN.integerValue;
+                NSComparisonResult r = [weakSelf compare:o1 o2:o2 comparator:weakSelf step:step];
+                if(r != NSOrderedSame)
+                {
+                    return r;
+                }
+            }
+            return NSOrderedSame;
+        };
+    }
+    return self;
+}
+
+// -1 - means 1st is less (higher) than 2nd
+-(NSComparisonResult) compare:(OASearchResult *)o1 o2:(OASearchResult *)o2 comparator:(OASearchResultComparator *)c step:(EOAResultCompareStep)step
+{
+    switch(step)
+    {
+        case EOATopVisible:
+        {
             BOOL topVisible1 = [OAObjectType isTopVisible:o1.objectType];
             BOOL topVisible2 = [OAObjectType isTopVisible:o2.objectType];
             if (topVisible1 != topVisible2)
             {
-                // -1 - means 1st is less than 2nd
+                // NSOrderedAscending - means 1st is less than 2nd
                 return topVisible1 ? NSOrderedAscending : NSOrderedDescending;
             }
-            if (o1.unknownPhraseMatchWeight != o2.unknownPhraseMatchWeight)
-                return [OAUtilities compareDouble:o2.unknownPhraseMatchWeight y:o1.unknownPhraseMatchWeight];
-
+            break;
+        }
+        case EOAFoundWordCount:
+        {
             if (o1.getFoundWordCount != o2.getFoundWordCount)
-                return [OAUtilities compareInt:o2.getFoundWordCount y:o1.getFoundWordCount];
-
-            if (!weakSelf.sortByName)
             {
-                double s1 = [o1 getSearchDistance:weakSelf.loc];
-                double s2 = [o2 getSearchDistance:weakSelf.loc];
-                if (s1 != s2)
-                    return [OAUtilities compareDouble:s1 y:s2];
+                return (NSComparisonResult)(-[OAUtilities compareInt:o1.getFoundWordCount y:o2.getFoundWordCount]);
             }
-            QString o1name = QString::fromNSString(o1.localeName);
-            QString o2name = QString::fromNSString(o2.localeName);
-            int st1 = OsmAnd::Utilities::extractFirstInteger(o1name);
-            int st2 = OsmAnd::Utilities::extractFirstInteger(o2name);
+            break;
+        }
+        case EOAUnknownPhraseMatchWeight:
+        {
+            // here we check how much each sub search result matches the phrase
+            // also we sort it by type house -> street/poi -> city/postcode/village/other
+            if (o1.unknownPhraseMatchWeight != o2.unknownPhraseMatchWeight)
+            {
+                return (NSComparisonResult)-([OAUtilities compareDouble:o1.unknownPhraseMatchWeight y:o2.unknownPhraseMatchWeight]);
+            }
+            break;
+        }
+        case EOASearchDistanceIfNotByName:
+        {
+            if (!c.sortByName) {
+                double s1 = [o1 getSearchDistance:c.loc];
+                double s2 = [o2 getSearchDistance:c.loc];
+                if (s1 != s2) {
+                    return [OAUtilities compareDouble:s1 y:s2];
+                }
+            }
+            break;
+        }
+        case EOACompareFirstNumberInName:
+        {
+            NSString *localeName1 = o1.localeName == nil ? @"" : o1.localeName;
+            NSString *localeName2 = o2.localeName == nil ? @"" : o2.localeName;
+            int st1 = [OAUtilities extractFirstIntegerNumber:localeName1];
+            int st2 = [OAUtilities extractFirstIntegerNumber:localeName2];
             if (st1 != st2)
                 return [OAUtilities compareInt:st1 y:st2];
-            
-            double s1 = [o1 getSearchDistance:weakSelf.loc pd:1];
-            double s2 = [o2 getSearchDistance:weakSelf.loc pd:1];
-            double ps1 = !o1.parentSearchResult ? 0 : [o1.parentSearchResult getSearchDistance:weakSelf.loc];
-            double ps2 = !o2.parentSearchResult ? 0 : [o2.parentSearchResult getSearchDistance:weakSelf.loc];
+            break;
+        }
+        case EOACompareAmenityTypeAdditional:
+        {
+            if([o1.object isKindOfClass:OAPOIBaseType.class] && [o2.object isKindOfClass:OAPOIBaseType.class]) {
+                BOOL additional1 = ((OAPOIBaseType *) o1.object).isAdditional;
+                BOOL additional2 = ((OAPOIBaseType *) o2.object).isAdditional;
+                if (additional1 != additional2)
+                {
+                    // NSOrderedAscending - means 1st is less than 2nd
+                    return additional1 ? NSOrderedDescending : NSOrderedAscending;
+                }
+            }
+            break;
+        }
+        case EOACompareDistanceToParentSearchResult:
+        {
+            double ps1 = o1.parentSearchResult == nil ? 0 : [o1.parentSearchResult getSearchDistance:c.loc];
+            double ps2 = o2.parentSearchResult == nil ? 0 : [o2.parentSearchResult getSearchDistance:c.loc];
             if (ps1 != ps2)
+            {
                 return [OAUtilities compareDouble:ps1 y:ps2];
-            
-            NSComparisonResult cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(o1name, o2name);
-            if (cmp != NSOrderedSame)
-                return cmp;
+            }
+            break;
+        }
+        case EOACompareByName:
+        {
+            NSString *localeName1 = o1.localeName == nil ? @"" : o1.localeName;
+            NSString *localeName2 = o2.localeName == nil ? @"" : o2.localeName;
+            int cmp = OsmAnd::ICU::ccompare(QString::fromNSString(localeName1), QString::fromNSString(localeName2));
+            if (cmp != 0)
+                return (NSComparisonResult)cmp;
+            break;
+        }
+        case EOACompareByDistance:
+        {
+            double s1 = [o1 getSearchDistance:c.loc pd:1];
+            double s2 = [o2 getSearchDistance:c.loc pd:1];
             if (s1 != s2)
                 return [OAUtilities compareDouble:s1 y:s2];
-            
+            break;
+        }
+        case EOAAmenityLastAndSortBySubtype:
+        {
             BOOL am1 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o1.amenity) != nullptr;
             BOOL am2 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o2.amenity) != nullptr;
             if (am1 != am2)
@@ -106,7 +196,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             {
                 const auto& a1 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o1.amenity);
                 const auto& a2 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o2.amenity);
-                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->type, a2->type);
+                NSComparisonResult cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->type, a2->type);
                 if (cmp != NSOrderedSame)
                     return cmp;
                 
@@ -114,10 +204,10 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
                 if (cmp != NSOrderedSame)
                     return cmp;
             }
-            return NSOrderedSame;
-        };
+            break;
+        }
     }
-    return self;
+    return NSOrderedSame;
 }
 
 @end
@@ -278,6 +368,14 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
 {
     if (r1.location && r2.location && ![OAObjectType isTopVisible:r1.objectType] && ![OAObjectType isTopVisible:r2.objectType])
     {
+        if (r1.objectType == r2.objectType && r1.objectType == STREET)
+        {
+            OAStreet *st1 = (OAStreet *) r1.object;
+            OAStreet *st2 = (OAStreet *) r2.object;
+            BOOL equalLat = [OAUtilities doublesEqualUpToDigits:4 source:st1.latitude destination:st2.latitude];
+            BOOL equalLon = [OAUtilities doublesEqualUpToDigits:4 source:st1.longitude destination:st2.longitude];
+            return equalLat && equalLon;
+        }
         std::shared_ptr<const OsmAnd::Amenity> a1;
         if (r1.objectType == POI)
             a1 = r1.amenity;

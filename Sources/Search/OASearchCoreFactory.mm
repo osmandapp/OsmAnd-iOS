@@ -217,6 +217,7 @@
         QString lang = QString::fromNSString([[phrase getSettings] getLang]);
         bool transliterate = [[phrase getSettings] isTransliterate];
         cityResult.localeRelatedObjectName = ct.city->getName(lang, transliterate).toNSString();
+        cityResult.relatedResourceId = res.resourceId;
         [phrase countUnknownWordsMatchMainResult:cityResult];
         __block BOOL match = NO;
         if (firstUnknownWordMatches)
@@ -234,10 +235,10 @@
             [cityResult.otherWordsMatch enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, BOOL * _Nonnull stop) {
                 BOOL wasPresent = [leftUnknownSearchWords containsObject:obj];
                 [leftUnknownSearchWords removeObject:obj];
-                if (wasPresent)
-                    match = YES;
-                else
+                if (!wasPresent)
                     [toDelete addObject:obj]; // don't count same name twice
+                else
+                    match = YES;
             }];
             [cityResult.otherWordsMatch minusSet:toDelete];
         }
@@ -396,6 +397,9 @@
         _resArray.clear();
         const OsmAnd::AreaI area(bbox.left, bbox.top, bbox.right, bbox.bottom);
         _townCitiesQR->query(area, _resArray);
+        LogPrintf(OsmAnd::LogSeverityLevel::Debug,
+        "Resulting cities '%d'",
+                  _resArray.count());
         int limit = 0;
         for (const auto& c : _resArray)
         {
@@ -672,7 +676,7 @@
         return NO;
     
     // don't search by name when type is selected or poi type is part of name
-    if ([phrase isNoSelectedType])
+    if (![phrase isNoSelectedType])
         return NO;
     // Take into account POI [bar] - 'Hospital 512'
     // BEFORE: it was searching exact match of whole phrase.getUnknownSearchPhrase() [ Check feedback ]
@@ -1431,7 +1435,6 @@
         return NO;
         
     } getTypesFunction:^NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *{
-        
         return _acceptedTypes;
     }];
 }
@@ -1632,7 +1635,7 @@
     OASearchBaseAPI *_streetsAPI;
 }
 
-- (instancetype) initWithAPI:(OASearchBuildingAndIntersectionsByStreetAPI *) streetsAPI
+- (instancetype) initWithAPI:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsAPI
 {
     self = [super initWithSearchTypes:@[[OAObjectType withType:HOUSE],
                                         [OAObjectType withType:STREET],
@@ -1700,7 +1703,6 @@
             res.priority = SEARCH_STREET_BY_CITY_PRIORITY;
             //res.priorityDistance = 1;
             res.objectType = STREET;
-            
             [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsAPI publish:pub];
             if (limit++ > LIMIT)
                 break;
@@ -1880,7 +1882,7 @@
             OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
             sp.priority = SEARCH_LOCATION_PRIORITY;
             sp.object = sp.location = ll;
-            sp.localeName = [NSString stringWithFormat:@"%f, <input> f", (float) sp.location.coordinate.latitude];
+            sp.localeName = [NSString stringWithFormat:@"%.1f, <input> f", (float) sp.location.coordinate.latitude];
             sp.objectType = PARTIAL_LOCATION;
             [resultMatcher publish:sp];
         }

@@ -171,9 +171,9 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         for (NSInteger i = 0; i < ws.count; i++)
         {
             NSString *wd = [ws[i] trim];
-            BOOL conjubction = [conjunctions containsObject:wd.lowerCase];
+            BOOL conjunction = [conjunctions containsObject:wd.lowerCase];
             BOOL lastAndComplete = i == (ws.count - 1) && !sp.lastUnknownSearchWordComplete;
-            if (wd.length > 0 && (!conjubction || lastAndComplete))
+            if (wd.length > 0 && (!conjunction || lastAndComplete))
             {
                 if (first)
                 {
@@ -855,12 +855,12 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     }
 }
 
-- (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *) sr
+- (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *)sr
 {
     return [self countUnknownWordsMatch:sr localeName:sr.localeName otherNames:sr.otherNames matchingWordsCount:0];
 }
 
-- (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *) sr matchingWordsCount:(NSInteger)matchingWordsCount
+- (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *)sr matchingWordsCount:(NSInteger)matchingWordsCount
 {
     return [self countUnknownWordsMatch:sr localeName:sr.localeName otherNames:sr.otherNames matchingWordsCount:matchingWordsCount];
 }

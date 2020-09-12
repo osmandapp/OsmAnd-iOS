@@ -53,4 +53,6 @@ typedef NS_ENUM(NSInteger, EOAObjectType)
 + (OAObjectType *) getExclusiveSearchType:(EOAObjectType)objectType;
 + (double) getTypeWeight:(EOAObjectType)objectType;
 
++ (OAObjectType *)valueOf:(NSString *)type;
+
 @end

@@ -5105,7 +5105,6 @@
 		DA71EAB1234624B200B9D7F3 /* OARouteSettingsBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA71EAAC234624B100B9D7F3 /* OARouteSettingsBaseViewController.mm */; };
 		DA7235272164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
 		DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
-		DA72AB8C2508F41000851313 /* OsmAnd_MapsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DA72AB8B2508F41000851313 /* OsmAnd_MapsTests.m */; };
 		DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA72AB942508F44900851313 /* SearchUICoreTest.mm */; };
 		DA72ABD42508F45E00851313 /* turn_lanes_test.osm in Resources */ = {isa = PBXBuildFile; fileRef = DA72AB972508F45D00851313 /* turn_lanes_test.osm */; };
 		DA72ABD52508F45E00851313 /* synthetic_test_rendering.osm in Resources */ = {isa = PBXBuildFile; fileRef = DA72AB982508F45D00851313 /* synthetic_test_rendering.osm */; };
@@ -9560,7 +9559,6 @@
 		DA7235252164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMoreOptionsBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMoreOptionsBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA72AB892508F40F00851313 /* OsmAnd MapsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd MapsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA72AB8B2508F41000851313 /* OsmAnd_MapsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OsmAnd_MapsTests.m; sourceTree = "<group>"; };
 		DA72AB8D2508F41000851313 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA72AB942508F44900851313 /* SearchUICoreTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SearchUICoreTest.mm; sourceTree = "<group>"; };
 		DA72AB972508F45D00851313 /* turn_lanes_test.osm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = turn_lanes_test.osm; sourceTree = "<group>"; };
@@ -15259,7 +15257,6 @@
 			children = (
 				DA72AB962508F45D00851313 /* test-resources */,
 				DA72AB932508F44900851313 /* Search */,
-				DA72AB8B2508F41000851313 /* OsmAnd_MapsTests.m */,
 				DA72AB8D2508F41000851313 /* Info.plist */,
 			);
 			path = "OsmAnd MapsTests";
@@ -21894,7 +21891,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
-				DA72AB8C2508F41000851313 /* OsmAnd_MapsTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

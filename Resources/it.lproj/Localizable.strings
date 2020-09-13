@@ -624,7 +624,7 @@
 "map_widget_compass" = "Bussola";
 "map_widget_intermediate_distance" = "Destinazione intermedia";
 "map_widget_distance" = "Destinazione";
-"monitoring_control_start" = "Registra";
+"monitoring_control_start" = "REG";
 "map_widget_altitude" = "Altitudine";
 "map_widget_max_speed" = "Limite di velocità";
 "max_speed_none" = "nessuno";
@@ -1591,3 +1591,7 @@
 "profile_appearance" = "Aspetto del profilo";
 "select_color" = "Seleziona il colore";
 "profile_type_custom_string" = "Profilo personalizzato";
+"copy_from_other_profile" = "Copia da un altro profilo";
+"shared_string_copy" = "Copia";
+"profile_alert_delete_title" = "Elimina il profilo";
+"reset_to_default" = "Reimposta predefiniti";

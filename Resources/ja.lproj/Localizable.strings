@@ -1249,7 +1249,7 @@
 "purchase_unlim_title" = "%@で購入";
 "in_app_purchase" = "アプリ内課金";
 "in_app_purchase_desc" = "1回払い";
-"in_app_purchase_desc_ex" = "買いきり購入の場合、期限を気にせず利用できるようになります。";
+"in_app_purchase_desc_ex" = "買いきりの場合、期限を問わず利用可能です。";
 "unlock_all_features" = "OsmAnd機能のすべてをアンロック";
 "subscribe_email_desc" = "メーリングリストに登録すると？:<br/>•マップが3個追加でダウンロードできます<br/>•割引については気軽にご質問ください<br/>•プロモーションコードにも<a href='https://osmand.net/giveaway'>参加</a>できます";
 "osm_live_subscribe_btn" = "サブスクリプション契約をする";

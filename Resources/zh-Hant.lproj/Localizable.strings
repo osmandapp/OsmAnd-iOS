@@ -1445,3 +1445,7 @@
 "weight_limit_description" = "提供您的車輛重量，某些路線的限制可能適用於重型車輛。";
 "profile_type_base_string" = "基本設定檔";
 "profile_type_custom_string" = "自訂設定檔";
+"shared_string_copy" = "複製";
+"profile_alert_delete_title" = "刪除設定檔";
+"copy_from_other_profile" = "從其他設定檔複製";
+"reset_to_default" = "重設為預設值";

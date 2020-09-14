@@ -29,7 +29,6 @@
 #import "OARootViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OASettingsHelper.h"
-#import "OAProfileSettingsResetHelper.h"
 
 #define kButtonsTag 1
 #define kButtonsDividerTag 150
@@ -333,17 +332,8 @@
 
 -(void) doneButtonPressed:(id)sender
 {
-    OAApplicationMode * menuAppMode = (OAApplicationMode *)self.customParam;
-    [OAProfileSettingsResetHelper resetProfileSettingsForAppMode:menuAppMode];
-    
-    if (menuAppMode.isCustomProfile)
-    {
-        menuAppMode = [OAApplicationMode restoreBackupForAppMode:menuAppMode];
-        self.customParam = menuAppMode;
-    }
-    
     if (self.delegate)
-        [self.delegate onAppModeChangedByPluginResetBottomSheet:menuAppMode];
+        [self.delegate onAppModeChangedByPluginResetBottomSheet];
     
     [self dismiss];
 }

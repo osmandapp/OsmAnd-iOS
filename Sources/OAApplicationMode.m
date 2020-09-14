@@ -12,6 +12,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OASettingsHelper.h"
 
 @interface OAApplicationMode ()
 
@@ -604,48 +605,10 @@ static OAApplicationMode *_SKI;
     else if (![_values containsObject:appMode])
     {
         [_values addObject:appMode];
-        [OAApplicationMode saveBackupOfAppMode: appMode];
     }
     
     [self reorderAppModes];
     [self saveCustomAppModesToSettings];
-}
-
-+ (void) saveBackupOfAppMode:(OAApplicationMode *)appMode
-{
-    NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSString *backupFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"];
-    
-    BOOL isDir = YES;
-    if (![fileManager fileExistsAtPath:backupFolderPath isDirectory:&isDir])
-          [fileManager createDirectoryAtPath:backupFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
-    
-    if (appMode.stringKey)
-    {
-        NSString *backupFilename = [appMode.stringKey add:@"_item"];
-        NSString *backupFilePath = [[backupFolderPath stringByAppendingPathComponent:backupFilename] stringByAppendingPathExtension:@"plst"];
-        [appMode.toJson writeToFile:backupFilePath atomically:YES];
-    }
-    else
-    {
-        return;
-    }
-}
-
-+ (OAApplicationMode *) restoreBackupForAppMode:(OAApplicationMode *)appMode
-{
-    NSString *backupFilename = [appMode.stringKey add:@"_item"];
-    NSString *backupFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:backupFilename] stringByAppendingPathExtension:@"plst"];
-    NSDictionary *backup = [NSDictionary dictionaryWithContentsOfFile:backupFilePath];
-    
-    if (backup)
-    {
-        [OAApplicationMode deleteCustomModes:@[appMode]];
-        appMode = [OAApplicationMode fromModeBean:[OAApplicationModeBean fromJson:backup]];
-        [OAApplicationMode saveProfile:appMode];
-        return appMode;
-    }
-    return appMode;
 }
 
 + (BOOL) isProfileNameAvailable:(NSString *)profileName
@@ -665,12 +628,8 @@ static OAApplicationMode *_SKI;
         [settings setApplicationMode:_DEFAULT];
     [_cachedFilteredValues removeObjectsInArray:modes];
     [self saveCustomAppModesToSettings];
-    
     for (OAApplicationMode *mode in modes) {
-        NSString *backupItemFilePath = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_item.plst", mode.stringKey]];
-        NSString *backupProfileFilePath = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:[NSString stringWithFormat:@"profile_%@_data.plst", mode.stringKey]] ;
-        [NSFileManager.defaultManager removeItemAtPath:backupItemFilePath error:nil];
-        [NSFileManager.defaultManager removeItemAtPath:backupProfileFilePath error:nil];
+        [OASettingsHelper.sharedInstance deleteBackupForCustomAppMode:mode];
     }
 }
 

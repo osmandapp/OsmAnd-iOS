@@ -62,8 +62,6 @@
 - (instancetype)initWithName:(NSString *)name stringKey:(NSString *)stringKey;
 
 - (NSDictionary *) toJson;
-+ (void) saveBackupOfAppMode:(OAApplicationMode *)appMode;
-+ (OAApplicationMode *) restoreBackupForAppMode:(OAApplicationMode *)appMode;
 
 - (BOOL) hasFastSpeed;
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode;

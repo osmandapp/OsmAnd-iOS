@@ -152,12 +152,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         @"img" : @"ic_custom_copy",
         @"key" : @"copy_profile"
     }];
-    [settingsActions addObject:@{
-        @"type" : kTitleRightIconCell,
-        @"title" : OALocalizedString(@"reset_to_default"),
-        @"img" : @"ic_custom_reset",
-        @"key" : @"reset_to_default"
-    }];
+    
+    if (![_appMode isCustomProfile] || ([_appMode isCustomProfile] && [OASettingsHelper.sharedInstance getBackupFileForCustomProfile:_appMode]))
+    {
+        [settingsActions addObject:@{
+            @"type" : kTitleRightIconCell,
+            @"title" : OALocalizedString(@"reset_to_default"),
+            @"img" : @"ic_custom_reset",
+            @"key" : @"reset_to_default"
+        }];
+    }
+    
     if ([_appMode isCustomProfile])
     {
         [settingsActions addObject:@{
@@ -530,10 +535,10 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 #pragma mark - OAConfigureProfileDelegate
 
-- (void) onAppModeChangedByPluginResetBottomSheet:(OAApplicationMode *)appMode
+- (void) onAppModeChangedByPluginResetBottomSheet
 {
-    _appMode = appMode;
-    self.titleLabel.text = appMode.toHumanString;
+    [OASettingsHelper.sharedInstance resetAppModePrefs: _appMode];
+    self.titleLabel.text = _appMode.toHumanString;
     [self setupTableHeaderView];
     [self generateData];
     [self.tableView reloadData];

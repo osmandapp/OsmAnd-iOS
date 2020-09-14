@@ -60,6 +60,7 @@ typedef enum
 - (id)initWithCurrentGPXItem;
 - (id)initWithCurrentGPXItem:(OAGPXItemViewControllerState *)ctrlState;
 
-+(NSAttributedString *)getAttributedTypeStr:(OAGPX *)item;
++(NSAttributedString *)getAttributedTypeStr:(OAGPX *)item labelWidth:(CGFloat)labelWidth;
+-(NSAttributedString *)getAttributedTypeStrForWidth:(CGFloat)labelWidth;
 
 @end

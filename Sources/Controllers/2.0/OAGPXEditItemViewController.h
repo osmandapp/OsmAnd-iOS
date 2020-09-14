@@ -36,6 +36,6 @@
 - (id) initWithGPXItem:(OAGPX *)gpxItem ctrlState:(OAGPXEditItemViewControllerState *)ctrlState;
 - (id) initWithCurrentGPXItem;
 - (id) initWithCurrentGPXItem:(OAGPXEditItemViewControllerState *)ctrlState;
-
+-(NSAttributedString *)getAttributedTypeStrForWidth:(CGFloat)labelWidth;
 
 @end

@@ -166,11 +166,17 @@
 
 -(NSAttributedString *)getAttributedTypeStr
 {
-    return [OAGPXItemViewController getAttributedTypeStr:self.gpx];
+    return [OAGPXItemViewController getAttributedTypeStr:self.gpx labelWidth: 230.0];
 }
 
-+(NSAttributedString *)getAttributedTypeStr:(OAGPX *)item
+-(NSAttributedString *)getAttributedTypeStrForWidth:(CGFloat)labelWidth
 {
+    return [OAGPXItemViewController getAttributedTypeStr:self.gpx labelWidth:labelWidth];
+}
+
++(NSAttributedString *)getAttributedTypeStr:(OAGPX *)item labelWidth:(CGFloat)labelWidth
+{
+    NSString *separator = @"|";
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
     UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
     
@@ -191,7 +197,7 @@
         NSMutableAttributedString *stringWaypoints = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", waypointsStr]];
         NSMutableAttributedString *stringTimeMoving;
         if (item.timeMoving > 0)
-            stringTimeMoving = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", timeMovingStr]];
+            stringTimeMoving = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@    %@", separator, timeMovingStr]];
         NSMutableAttributedString *stringAvgSpeed;
         if (item.avgSpeed > 0)
             stringAvgSpeed =[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", avgSpeedStr]];
@@ -249,9 +255,16 @@
     
     [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
     
+    CGRect textRect = [string boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil];
+    CGFloat textWidth = textRect.size.width;
+    NSString *replacingString = [NSString stringWithFormat:@"%@ ", separator];
+    if (textWidth >= labelWidth)
+        [string.mutableString replaceOccurrencesOfString:replacingString withString:@"\n" options:NSCaseInsensitiveSearch range:NSMakeRange(0, string.length)];
+    else
+        [string.mutableString replaceOccurrencesOfString:replacingString withString:@" " options:NSCaseInsensitiveSearch range:NSMakeRange(0, string.length)];
+    
     return string;
 }
-
 
 -(CGFloat) getNavBarHeight
 {

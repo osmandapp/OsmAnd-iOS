@@ -138,7 +138,12 @@
 
 - (NSAttributedString *) getAttributedTypeStr
 {
-    return [OAGPXItemViewController getAttributedTypeStr:self.gpx];
+    return [OAGPXItemViewController getAttributedTypeStr:self.gpx labelWidth:230.0];
+}
+
+-(NSAttributedString *)getAttributedTypeStrForWidth:(CGFloat)labelWidth
+{
+    return [OAGPXItemViewController getAttributedTypeStr:self.gpx labelWidth:labelWidth];
 }
 
 - (void) updateCurrentGPXData

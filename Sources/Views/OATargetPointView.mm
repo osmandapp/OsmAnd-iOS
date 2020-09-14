@@ -40,6 +40,8 @@
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
 #import "OAFavoriteViewController.h"
+#import "OAGPXItemViewController.h"
+#import "OAGPXEditItemViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -1512,6 +1514,8 @@ static const NSInteger _buttonsCount = 4;
         [OAUtilities setMaskTo:self.containerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
     }
     
+    [self updateAddressLabel];
+    
     return newOffset;
 }
 
@@ -1699,7 +1703,14 @@ static const NSInteger _buttonsCount = 4;
 {
     if (self.customController)
     {
-        NSAttributedString *attributedTypeStr = [self.customController getAttributedTypeStr];
+        NSAttributedString *attributedTypeStr;
+        if([self.customController isKindOfClass:OAGPXItemViewController.class])
+            attributedTypeStr = [((OAGPXItemViewController *)self.customController) getAttributedTypeStrForWidth:_coordinateLabel.frame.size.width];
+        else if([self.customController isKindOfClass:OAGPXEditItemViewController.class])
+            attributedTypeStr = [((OAGPXEditItemViewController *)self.customController) getAttributedTypeStrForWidth:_coordinateLabel.frame.size.width];
+        else
+            attributedTypeStr = [self.customController getAttributedTypeStr];
+
         if (attributedTypeStr)
         {
             [_coordinateLabel setAttributedText:attributedTypeStr];

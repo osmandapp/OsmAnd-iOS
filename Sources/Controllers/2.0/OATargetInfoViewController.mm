@@ -637,23 +637,27 @@
         else if ([card isKindOfClass:OAMapillaryContributeCard.class])
             mapilaryConributeCard = card;
     }
-    NSArray *sortedWikimediaCards = [wikimediaCards sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-        NSString *first = [(OAUrlImageCard *)a imageHiresUrl];
-        NSString *second = [(OAUrlImageCard *)b imageHiresUrl];
-        return [first compare:second];
-    }];
-    
-    [wikimediaCards removeAllObjects];
-    [wikimediaCards addObject:sortedWikimediaCards.firstObject];
-    OAUrlImageCard *previousCard = sortedWikimediaCards.firstObject;
-    
-    for (int i = 1; i < sortedWikimediaCards.count; i++)
+
+    if (wikimediaCards.count > 0)
     {
-        OAUrlImageCard *card = sortedWikimediaCards[i];
-        if (![card.imageHiresUrl isEqualToString:previousCard.imageHiresUrl])
+        NSArray *sortedWikimediaCards = [wikimediaCards sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            NSString *first = [(OAUrlImageCard *)a imageHiresUrl];
+            NSString *second = [(OAUrlImageCard *)b imageHiresUrl];
+            return [first compare:second];
+        }];
+        
+        [wikimediaCards removeAllObjects];
+        [wikimediaCards addObject:sortedWikimediaCards.firstObject];
+        OAUrlImageCard *previousCard = sortedWikimediaCards.firstObject;
+    
+        for (int i = 1; i < sortedWikimediaCards.count; i++)
         {
-            [wikimediaCards addObject:card];
-            previousCard = card;
+            OAUrlImageCard *card = sortedWikimediaCards[i];
+            if (![card.imageHiresUrl isEqualToString:previousCard.imageHiresUrl])
+            {
+                [wikimediaCards addObject:card];
+                previousCard = card;
+            }
         }
     }
     

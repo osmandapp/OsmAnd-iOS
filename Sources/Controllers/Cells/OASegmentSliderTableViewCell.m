@@ -91,7 +91,7 @@ const CGFloat kMarkWidth = 2.0;
         return;
     
     CGFloat segments = _numberOfMarks - 1;
-    CGFloat sliderViewWidth = self.frame.size.width - 2 * 14 - OAUtilities.getLeftMargin;
+    CGFloat sliderViewWidth = self.frame.size.width - 2 * 14 - (DeviceScreenWidth > self.frame.size.width ? OAUtilities.getLeftMargin : OAUtilities.getLeftMargin * 2);
     CGFloat sliderViewHeight = self.sliderView.frame.size.height;
     CGRect sliderViewBounds = CGRectMake(0, 0, sliderViewWidth, sliderViewHeight);
     CGRect trackRect = [self.sliderView trackRectForBounds:sliderViewBounds];

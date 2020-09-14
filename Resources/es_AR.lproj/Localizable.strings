@@ -688,7 +688,7 @@
 "access_arrival_time" = "Hora de llegada";
 "map_widget_time" = "Tiempo de llegada";
 "map_widget_altitude" = "Altitud";
-"monitoring_control_start" = "GRABAR";
+"monitoring_control_start" = "Grabar";
 "map_widget_intermediate_distance" = "Destino intermedio";
 "map_widget_distance" = "Destino";
 "always_center_position_on_map" = "Mostrar ubicación en el centro";

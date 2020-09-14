@@ -195,8 +195,8 @@
     }
     [self.cancelButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
     self.doneButton.layer.borderWidth = 2.0;
-    self.doneButton.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
-    [self.doneButton setBackgroundColor:UIColorFromRGB(color_primary_purple)];
+    self.doneButton.layer.borderColor = UIColorFromRGB(color_route_button_inactive).CGColor;
+    [self.doneButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
     [self.doneButton setTitleColor:UIColorFromRGB(color_support_red) forState:UIControlStateNormal];
 }
 

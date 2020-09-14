@@ -350,6 +350,15 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:kTitleRightIconCell])
+        return 45.;
+    else
+        return UITableViewAutomaticDimension;
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;

@@ -1994,6 +1994,7 @@ typedef enum
         {
             [self.targetMenuView doInit:showFullMenu showFullScreen:NO];
             [self.mapViewController disableRotationAnd3DView:YES];
+            [self.mapViewController restoreViewAngle];
             break;
         }
         default:

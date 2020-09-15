@@ -1645,6 +1645,11 @@
     _rotationAnd3DViewDisabled = disabled;
 }
 
+- (void) restoreViewAngle
+{
+    _mapView.elevationAngle = 90.;
+}
+
 - (void) updateCurrentMapSource
 {
     if (!self.mapViewLoaded)

@@ -669,7 +669,7 @@
 "wiki_download_description" = "Pour lire les articles complets, téléchargez les données Wikipédia de %@";
 "map_widget_intermediate_distance" = "Étape";
 "map_widget_distance" = "Arrivée";
-"monitoring_control_start" = "REC";
+"monitoring_control_start" = "ENR";
 "map_widget_altitude" = "Altitude";
 "always_center_position_on_map" = "Centrer l'écran sur la position actuelle";
 "map_widget_appearance_rem" = "Autres éléments";
@@ -1716,3 +1716,7 @@
 "res_online_url_descr" = "Entrez ou copiez et collez l'URL de la source en ligne";
 "res_online_name_descr" = "Fournissez un nom pour la source en ligne";
 "res_edit_map_source" = "Éditer la source de la carte";
+"shared_string_copy" = "Copier";
+"profile_alert_delete_title" = "Supprimer le profil";
+"copy_from_other_profile" = "Copier depuis un autre profil";
+"reset_to_default" = "Rétablir les paramètres par défaut";

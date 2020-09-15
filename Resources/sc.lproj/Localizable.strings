@@ -1848,3 +1848,8 @@
 "units_t" = "t";
 "recalculate_wrong_dir" = "Torra a carculare s'àndala in casu de diretzione furriada";
 "repeat_after" = "Repite a pustis de";
+"profile_alert_delete_msg" = "Ses seguru de chèrrere iscantzellare su profilu \"%@\"?";
+"reset_to_default" = "Reimposta sos valores predefinidos";
+"copy_from_other_profile_descr" = "Podes copiare totu sas impostatziones dae cale si siat profilu in su profilu ischertadu: ";
+"copy_from_other_profile" = "Còpia dae un'àteru profilu";
+"shared_string_copy" = "Còpia";

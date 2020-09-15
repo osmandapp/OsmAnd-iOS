@@ -82,7 +82,13 @@
     NSMutableArray *defaultSpeedArr = [NSMutableArray array];
     auto router = [OARouteProvider getRouter:self.appMode];
     _otherParameters.clear();
-    if (router && self.appMode != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode != OAApplicationMode.SKI && self.appMode.parent != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode.parent != OAApplicationMode.SKI)
+    NSString *appModeRoutingProfile = self.appMode.getRoutingProfile;
+    NSString *parentAppModeRoutingProfile = self.appMode.parent.getRoutingProfile;
+    
+    if (router && ![appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
+        ![appModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey] &&
+        ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
+        ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.SKI.stringKey])
     {
         auto& parameters = router->getParametersList();
         for (const auto& p : parameters)
@@ -140,28 +146,27 @@
             }
         }
     }
-    // TODO: add default speed functionality when it's ready
-//    if (self.appMode != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode.parent != OAApplicationMode.PUBLIC_TRANSPORT)
-//    {
-//        if (self.appMode != OAApplicationMode.AIRCRAFT && self.appMode.parent != OAApplicationMode.AIRCRAFT)
-//            [defaultSpeedArr addObject:@{
-//                @"type" : kCellTypeIconText,
-//                @"title" : OALocalizedString(@"default_speed"),
-//                @"minSpeed" : [NSNumber numberWithDouble:router->getMinSpeed()],
-//                @"defaultSpeed" : [NSNumber numberWithDouble:router->getDefaultSpeed()],
-//                @"maxSpeed" : [NSNumber numberWithDouble:router->getMaxSpeed()],
-//                @"icon" : @"ic_action_speed",
-//                @"name" : @"defaultSpeed",
-//            }];
-//        else
-//            [defaultSpeedArr addObject:@{
-//                @"type" : kCellTypeIconText,
-//                @"title" : OALocalizedString(@"default_speed"),
-//                @"defaultSpeedOnly" : @YES,
-//                @"icon" : @"ic_action_speed",
-//                @"name" : @"defaultSpeed",
-//            }];
-//    }
+    if (self.appMode != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode.parent != OAApplicationMode.PUBLIC_TRANSPORT)
+    {
+        if (self.appMode != OAApplicationMode.AIRCRAFT && self.appMode.parent != OAApplicationMode.AIRCRAFT)
+            [defaultSpeedArr addObject:@{
+                @"type" : kCellTypeIconText,
+                @"title" : OALocalizedString(@"default_speed"),
+                @"minSpeed" : [NSNumber numberWithDouble:router->getMinSpeed()],
+                @"defaultSpeed" : [NSNumber numberWithDouble:router->getDefaultSpeed()],
+                @"maxSpeed" : [NSNumber numberWithDouble:router->getMaxSpeed()],
+                @"icon" : @"ic_action_speed",
+                @"name" : @"defaultSpeed",
+            }];
+        else
+            [defaultSpeedArr addObject:@{
+                @"type" : kCellTypeIconText,
+                @"title" : OALocalizedString(@"default_speed"),
+                @"defaultSpeedOnly" : @YES,
+                @"icon" : @"ic_action_speed",
+                @"name" : @"defaultSpeed",
+            }];
+    }
     if (parametersArr.count > 0)
         [tableData addObject:parametersArr];
     if (defaultSpeedArr.count > 0)

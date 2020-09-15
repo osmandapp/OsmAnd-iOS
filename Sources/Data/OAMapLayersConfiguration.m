@@ -18,12 +18,12 @@
     self = [super init];
     if (self) {
         [self commonInit];
-        _hiddenLayers = [NSMutableArray array];
+        _hiddenLayers = [NSMutableSet set];
     }
     return self;
 }
 
-- (instancetype) initWithHiddenLayers:(NSMutableArray *)hiddenLayers
+- (instancetype) initWithHiddenLayers:(NSMutableSet *)hiddenLayers
 {
     self = [super init];
     if (self)

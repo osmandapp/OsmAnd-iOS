@@ -235,6 +235,18 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
         {
             skip = YES;
         }
+        else if ([key hasPrefix:@"image"])
+        {
+            skip = YES;
+        }
+        else if ([key hasPrefix:@"wikimedia_commons"])
+        {
+            skip = YES;
+        }
+        else if ([key hasPrefix:@"wikidata"])
+        {
+            skip = YES;
+        }
         else if ([key isEqualToString:@"opening_hours"])
         {
             iconId = @"ic_working_time.png";

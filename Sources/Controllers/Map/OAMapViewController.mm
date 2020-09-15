@@ -1645,7 +1645,7 @@
     _rotationAnd3DViewDisabled = disabled;
 }
 
-- (void) restoreViewAngle
+- (void) resetViewAngle
 {
     _mapView.elevationAngle = 90.;
 }

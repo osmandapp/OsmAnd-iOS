@@ -189,6 +189,6 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void) hideProgressHUD;
 
 - (void) disableRotationAnd3DView:(BOOL)disabled;
-- (void) restoreViewAngle;
+- (void) resetViewAngle;
 
 @end

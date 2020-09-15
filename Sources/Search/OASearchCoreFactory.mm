@@ -1882,7 +1882,13 @@
             OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
             sp.priority = SEARCH_LOCATION_PRIORITY;
             sp.object = sp.location = ll;
-            sp.localeName = [NSString stringWithFormat:@"%.1f, <input> f", (float) sp.location.coordinate.latitude];
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
+            [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+            formatter.minimumIntegerDigits = 1;
+            formatter.minimumFractionDigits = 1;
+            formatter.maximumFractionDigits = 2;
+            formatter.decimalSeparator = @".";
+            sp.localeName = [NSString stringWithFormat:@"%@, <input>", [formatter stringFromNumber:@((float) sp.location.coordinate.latitude)]];
             sp.objectType = PARTIAL_LOCATION;
             [resultMatcher publish:sp];
         }

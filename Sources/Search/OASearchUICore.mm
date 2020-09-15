@@ -109,7 +109,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
         {
             if (o1.getFoundWordCount != o2.getFoundWordCount)
             {
-                return (NSComparisonResult)(-[OAUtilities compareInt:o1.getFoundWordCount y:o2.getFoundWordCount]);
+                return [OAUtilities compareInt:o2.getFoundWordCount y:o1.getFoundWordCount];
             }
             break;
         }
@@ -119,7 +119,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
             // also we sort it by type house -> street/poi -> city/postcode/village/other
             if (o1.unknownPhraseMatchWeight != o2.unknownPhraseMatchWeight)
             {
-                return (NSComparisonResult)-([OAUtilities compareDouble:o1.unknownPhraseMatchWeight y:o2.unknownPhraseMatchWeight]);
+                return [OAUtilities compareDouble:o2.unknownPhraseMatchWeight y:o1.unknownPhraseMatchWeight];
             }
             break;
         }

@@ -6,12 +6,13 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/ObjectType.java
-//  git revision 78e7bb4d3d7ae61759c68be3eea8cdc7d27d60a4
+//  git revision f1c7d7e276fd3f2ea7cb80699387c3e8cfb7d809
 
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, EOAObjectType)
 {
+    UNDEFINED = -1,
     CITY = 0,
     VILLAGE,
     POSTCODE,

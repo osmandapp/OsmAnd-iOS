@@ -174,6 +174,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
                 expected = [expected substringToIndex:[expected indexOf:@"["]].trim;
             //                String present = result.toString();
             NSString *present = res == nil ? [NSString stringWithFormat:@"#MISSING %ld", i+1] : [self formatResult:simpleTest res:res phrase:phrase];
+            XCTAssertEqualObjects(expected, present);
             if (![expected isEqualToString:present])
             {
                 NSLog(@"Phrase: %@", [phrase toString]);
@@ -185,7 +186,6 @@ static BOOL TEST_EXTRA_RESULTS = YES;
                 passed = NO;
                 break;
             }
-            XCTAssertEqualObjects(expected, present);
         }
         NSLog(@"Test phrase: %@ done (%@)", [phrase toString], passed ? @"PASSED" : @"FAILED");
     }

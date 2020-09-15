@@ -17,7 +17,7 @@
 #import "OAPOIFilter.h"
 #import "OAPOICategory.h"
 
-#define MAX_TYPE_WEIGHT 10
+#define MAX_TYPE_WEIGHT 10.0
 
 @implementation OASearchResult
 
@@ -43,7 +43,7 @@
 {
     // if result is a complete match in the search we prioritize it higher
     BOOL match = [_requiredSearchPhrase countWords:_localeName] <= [self getSelfWordCount];
-    double res = [OAObjectType getTypeWeight:match ? _objectType : CITY];
+    double res = [OAObjectType getTypeWeight:match ? _objectType : UNDEFINED];
     if (_parentSearchResult != nil)
         res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_TYPE_WEIGHT;
     

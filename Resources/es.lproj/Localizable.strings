@@ -423,7 +423,7 @@
 "show_region_on_map_go" = "Ir al mapa";
 "offline_maps" = "Mapas sin conexión";
 "download_map" = "Descargar mapa";
-"sqlitedb_import_title" = "Importar archivo creador de mapa";
+"sqlitedb_import_title" = "Importar archivo de mapa rasterizado";
 "sqlitedb_import_already_exists" = "El archivo sqlitedb elegido ya existe. Elija una acción.";
 "map_creator" = "Creador de mapa";
 "local_names" = "Nombres locales";
@@ -500,7 +500,7 @@
 "wiki_buy_description" = "Para leer los artículos completos - compra el complemento de Wikipedia y descarga los datos Wikipedia de %@";
 "wiki_download_description" = "Para leer los artículos completos - descarga los datos Wikipedia de %@";
 "map_an_region" = "esta región";
-"nothing_found" = "¡Nada por aquí! :-(";
+"nothing_found" = "Nada se encontró: %@";
 "nothing_found_descr" = "Modifica la consulta de búsqueda o aumenta el radio de búsqueda";
 "select_street" = "Elegir la calle";
 "shared_string_in_name" = "en %@";
@@ -622,15 +622,15 @@
 "speak_speed_limit" = "Límite de velocidad";
 "speak_cameras" = "Radares de velocidad";
 "speak_traffic_warnings" = "Avisos de tráfico";
-"announce_gpx_waypoints" = "Puntos de ruta GPX";
+"announce_gpx_waypoints" = "Puntos de ruta";
 "speak_favorites" = "Favoritos cercanos";
 "speak_poi" = "PDI cercanos";
 "speak_pedestrian" = "Pasos de peatones";
 "int_seconds" = "segundos";
 "shared_string_never" = "Nunca";
 "general_settings_2" = "Ajustes generales";
-"general_settings_descr" = "Configura la pantalla y otros ajustes comunes para la aplicación";
-"routing_settings_descr" = "Indica las opciones de navegación";
+"general_settings_descr" = "Tema de aplicación, unidades y región";
+"routing_settings_descr" = "Configure la navegación";
 "auto_zoom_none" = "Sin zoom automático";
 "auto_zoom_close" = "Para corto alcance";
 "auto_zoom_far" = "Para mediano alcance";
@@ -695,7 +695,7 @@
 "map_widget_compass" = "Brújula";
 "map_widget_intermediate_distance" = "Destino intermedio";
 "map_widget_distance" = "Destino";
-"monitoring_control_start" = "REC";
+"monitoring_control_start" = "GRABAR";
 "map_widget_altitude" = "Altitud";
 "map_widget_next_turn" = "Próximo giro";
 "map_widget_next_turn_small" = "Próximo giro (pequeño)";
@@ -780,11 +780,11 @@
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "logging_interval_navigation_descr" = "Elige el intervalo de registro para la grabación de viajes durante la navegación";
-"logging_min_distance" = "Distancia mínima de registro";
+"logging_min_distance" = "Desplazamiento mínimo";
 "logging_min_distance_descr" = "Filtro: distancia mínima para registrar un nuevo punto";
-"logging_min_accuracy" = "Precisión mínima de registro";
+"logging_min_accuracy" = "Precisión mínima";
 "logging_min_accuracy_descr" = "Filtro: no registrar, a menos que se alcance esta precisión";
-"logging_min_speed" = "Velocidad mínima de registro";
+"logging_min_speed" = "Velocidad mínima";
 "logging_min_speed_descr" = "Filtro: sin registro por debajo de la velocidad elegida";
 "auto_split_gap" = "Dividir grabaciones tras un hueco";
 "auto_split_gap_descr" = "Comenzar un nuevo segmento después de un espacio de 6 minutos, un nuevo viaje después de un espacio de 2 horas, o un nuevo archivo después de un espacio de tiempo más largo";
@@ -794,8 +794,8 @@
 "traffic_warning_tunnel" = "Túnel adelante";
 "shared_string_close" = "Cerrar";
 "track_save_descr" = "Guarda ahora el viaje actual como archivo GPX.";
-"track_during_nav" = "Guardar el viaje automáticamente durante la navegación";
-"track_during_nav_descr" = "Un viaje se guarda automáticamente durante la navegación";
+"track_during_nav" = "Guardar el viaje automáticamente";
+"track_during_nav_descr" = "Enciéndelo para guardar automáticamente un viaje durante la navegación";
 "menu_help" = "Ayuda";
 "actions" = "Acciones";
 // Help
@@ -883,7 +883,7 @@
 "osmand_live_public_name" = "Ingrese su nombre público";
 "res_world_region" = "Mundo";
 "unlock_all_features" = "Desbloquear todas las características de OsmAnd";
-"subscribe_email_desc" = "Suscríbase a nuestra lista de correo:\n<br/>• Obtenga 3 mapas adicionales para descargar \n<br/>• Entérese primero sobre los descuentos \n<br/>• Participe en <a href='https://osmand.net/giveaway'>regalos promocionales</a>";
+"subscribe_email_desc" = "Suscríbase a nuestra lista de correo:<br/>• Obtenga 3 mapas adicionales para descargar <br/>• Entérese primero sobre los descuentos <br/>• Participe en <a href='https://osmand.net/giveaway'>regalos promocionales</a>";
 "osm_live_subscribe_btn" = "Suscribirse";
 "shared_string_email_address" = "Correo electrónico";
 "osmand_live_subscription_canceled" = "Suscripción a OsmAnd Live cancelada";
@@ -1086,7 +1086,7 @@
 "key_hint_zoom_in" = "Acercar";
 "key_hint_select" = "Seleccionar";
 "key_hint_goback" = "Volver";
-"osm_tag_too_long_message" = "La etiqueta %@  tiene un valor máximo de 255 caracteres.\nPor favor acórtala para continuar.";
+"osm_tag_too_long_message" = "La etiqueta %@ tiene un valor máximo de 255 caracteres.\nPor favor acórtala para continuar.";
 "save_poi_without_poi_type_message" = "¿Deseas guardar el PDI sin especificar el tipo?";
 "osm_edit_uploading" = "Subiendo...";
 "key_hint_zoom_out" = "Alejar";
@@ -1097,7 +1097,7 @@
 "navigate_point_format_DMS" = "GGG MM SS.SS";
 "navigate_point_format_OLC" = "Código de ubicación abierto (OLC)";
 "coordinates_example" = "Ejemplo";
-"utm_description" = "OsmAnd usa el formato estándar UTM que es similar pero no idéntico al formato UTM NATO.";
+"utm_description" = "Por favor note, OsmAnd usa el formato estándar UTM que es similar pero no idéntico al formato UTM NATO.";
 "coordinates_copy_descr" = "Toca para copiar las coordenadas al portapapeles.";
 "months_3" = "Tres meses";
 "osm_live_cancel_subscription" = "Cancelar suscripción";
@@ -1116,7 +1116,7 @@
 "obf_import_success" = "Archivo importado correctamente";
 "obf_import_failed" = "Importación del archivo fallida";
 "res_import_success" = "%@ fue importado correctamente";
-"res_import_unsupported" = "Tipo de archivo incorrecto. Solo se soportan los archivos  routing.xml and *.render.xml.";
+"res_import_unsupported" = "Tipo de archivo incorrecto. Solo se soportan los archivos routing.xml and *.render.xml.";
 "routing_import_please_restart" = "Para usar el nuevo routing.xml por favor reinicia la aplicación.";
 "day_short" = "D";
 "week_short" = "Sm";
@@ -1613,3 +1613,7 @@
 "app_mode_pickup_truck" = "Camioneta";
 "exit_at" = "Bajarse en";
 "public_transport_warning_title" = "La navegación en transporte público se encuentra actualmente en fase de pruebas beta, se esperan errores e imprecisiones.";
+"profile_type_custom_string" = "Perfil personalizado";
+"shared_string_account" = "Cuenta";
+"shared_string_exit" = "Salir";
+"units_and_formats" = "Unidades y formatos";

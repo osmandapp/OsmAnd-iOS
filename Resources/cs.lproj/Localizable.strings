@@ -1381,3 +1381,4 @@
 "map_settings_appearance" = "Vzhled";
 "shared_string_warning" = "Upozornění";
 "wiki_sheet_title" = "Jak otevřít články Wikipedie?";
+"routing_attr_length_name" = "Omezení délky";

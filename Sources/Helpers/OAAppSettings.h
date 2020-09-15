@@ -160,6 +160,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 - (void) resetToDefault;
 - (void) setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode;
 - (NSString *) toStringValue:(OAApplicationMode *)mode;
+- (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode;
 
 @end
 

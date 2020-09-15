@@ -806,6 +806,9 @@
     }
     for (int i = 0; i < ro->pointsX.size(); i++)
     {
+        if (i >= ro->pointTypes.size())
+            break;
+
         auto& pointTypes = ro->pointTypes[i];
         const auto& region = ro->region;
         if (!pointTypes.empty())

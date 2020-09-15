@@ -700,6 +700,11 @@
     return @"";
 }
 
+- (void) copyValueFromAppMode:(OAApplicationMode *)sourceAppMode targetAppMode:(OAApplicationMode *)targetAppMode
+{
+    [self setValue:[self getValue:sourceAppMode] mode:targetAppMode];
+}
+
 @end
 
 @interface OAProfileBoolean ()
@@ -1134,7 +1139,8 @@
 
 - (void) set:(OAMapLayersConfiguration *)layersConfig mode:(OAApplicationMode *)mode
 {
-    [self setValue:layersConfig.hiddenLayers mode:mode];
+    NSArray *hiddenLayersArray = [NSArray arrayWithArray:[layersConfig.hiddenLayers allObjects]];
+    [self setValue:hiddenLayersArray mode:mode];
 }
 
 - (void) resetToDefault

@@ -469,7 +469,7 @@
 "map_widget_compass" = "Bússola";
 "map_widget_intermediate_distance" = "Destino intermediário";
 "map_widget_distance" = "Destino";
-"monitoring_control_start" = "GRAVAR";
+"monitoring_control_start" = "REC";
 "map_widget_altitude" = "Altitude";
 "map_widget_battery" = "Nível da bateria";
 "map_widget_plain_time" = "Hora atual";
@@ -1782,7 +1782,7 @@
 "meters" = "metros";
 "tones" = "tons";
 "announce" = "Anunciar";
-"instructions_repeat" = "Toque no widget \"Próxima curva\" para repetir as instruções";
+"instructions_repeat" = "Toque no widget \"próxima curva\" para repetir as instruções";
 "only_manually" = "Apenas manualmente";
 "speed_limit_tolerance_descr" = "Selecione a margem de tolerância do limite de velocidade acima da qual você receberá um aviso de voz.";
 "arrival_announcement_frequency" = "Em quanto tempo você quer o anúncio da chegada?";
@@ -1810,7 +1810,7 @@
 "profile_import_success" = "O perfil do aplicativo foi importado com sucesso";
 "err_profile_import" = "Erro ao ler dados do item: %@";
 "width_limit_description" = "Forneça a largura do seu veículo. Algumas restrições de rota podem se aplicar a veículos largos.";
-"vessel_width_limit_description" = "Defina a largura da embarcação para evitar pontes estreitas";
+"vessel_width_limit_description" = "Defina a largura da embarcação para evitar pontes estreitas.";
 "weight_limit_description" = "Forneça o peso do seu veículo. Algumas restrições de rota podem ser aplicadas a veículos pesados.";
 "default_speed_dialog_msg" = "Estima a hora de chegada de tipos de estradas desconhecidas e limita a velocidade de todas as estradas (pode afetar o roteamento)";
 "vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Lembre-se, se a ponte for móvel, usaremos sua altura no estado aberto.";
@@ -1843,3 +1843,14 @@
 "plugin_settings_reset" = "Redefinir as configurações do plug-in para o padrão";
 "trip_rec_actions_descr" = "Você pode encontrar todas as suas trilhas gravadas em %@";
 "logging_accuracy" = "Precisão de registro";
+"profile_type_base_string" = "Perfil base";
+"profile_type_custom_string" = "Perfil personalizado";
+"units_t" = "t";
+"recalculate_wrong_dir" = "Recalcular a rota em caso de direção reversa";
+"repeat_after" = "Repetir depois";
+"profile_alert_delete_msg" = "Tem certeza de que deseja excluir o perfil de \"%@\"";
+"profile_alert_delete_title" = "Excluir perfil";
+"reset_to_default" = "Restaurar para o padrão";
+"copy_from_other_profile_descr" = "Você pode copiar todas as configurações de qualquer perfil para o perfil selecionado: ";
+"copy_from_other_profile" = "Copiar de outro perfil";
+"shared_string_copy" = "Copiar";

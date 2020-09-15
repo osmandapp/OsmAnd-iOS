@@ -10,6 +10,6 @@
 
 @interface OADefaultSpeedViewController : OASettingsModalPresentationViewController
 
-- (instancetype)initWithApplicationMode:(OAApplicationMode *)ap speedParameters:(NSDictionary *)speedParameters;
+- (instancetype) initWithApplicationMode:(OAApplicationMode *)am speedParameters:(NSDictionary *)speedParameters;
 
 @end

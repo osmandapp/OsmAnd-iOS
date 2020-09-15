@@ -146,26 +146,23 @@
         @"key" : @"speedLimit",
     }];
     
-    if ([self.appMode isDerivedRoutingFrom:[OAApplicationMode CAR]])
+    NSString *value = nil;
+    if ([_settings.metricSystem get] == KILOMETERS_AND_METERS)
     {
-        NSString *value = nil;
-        if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
-        {
-            value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceed get:self.appMode], OALocalizedString(@"units_kmh")];
-        }
-        else
-        {
-            NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceed get:self.appMode])];
-            if (index != NSNotFound)
-                value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
-        }
-        [thirdSection addObject:@{
-            @"type" : kCellTypeTitleValue,
-            @"title" : OALocalizedString(@"speed_limit_exceed"),
-            @"value" : value,
-            @"key" : @"speedLimitTolerance",
-        }];
+        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceed get:self.appMode], OALocalizedString(@"units_kmh")];
     }
+    else
+    {
+        NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceed get:self.appMode])];
+        if (index != NSNotFound)
+            value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
+    }
+    [thirdSection addObject:@{
+        @"type" : kCellTypeTitleValue,
+        @"title" : OALocalizedString(@"speed_limit_exceed"),
+        @"value" : value,
+        @"key" : @"speedLimitTolerance",
+    }];
     
     [fourthSection addObject:@{
         @"type" : kCellTypeSwitch,
@@ -245,7 +242,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.tintColor = _voiceOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_icon_inactive);
+            cell.imgView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
                                   
             id v = item[@"value"];
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
@@ -278,7 +275,8 @@
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftImageView.image = [UIImage imageNamed:item[@"icon"]];
+            cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftImageView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }

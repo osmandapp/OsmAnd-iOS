@@ -1398,7 +1398,7 @@ static const double d180PI = 180.0 / M_PI_2;
     return tableHeaderView;
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font titntColor:(UIColor *)tintColor icon:(NSString *)iconName
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName
 {
     CGFloat iconFrameSize = 34;
     CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
@@ -1441,6 +1441,21 @@ static const double d180PI = 180.0 / M_PI_2;
     NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : font}];
     
     return [self calculateTextBounds:attributedText width:width].height;
+}
+
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing
+{
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setLineSpacing:lineSpacing];
+    NSMutableAttributedString *descriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:wholeString
+                                                                                                    attributes:@{NSParagraphStyleAttributeName : style}];
+    NSString *boldString = bs;
+    NSString *mainString = ms;
+    NSRange boldRange = [wholeString rangeOfString:boldString];
+    NSRange mainRange = [wholeString rangeOfString:mainString];
+    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:15] range:mainRange];
+    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont boldSystemFontOfSize:15] range:boldRange];
+    return descriptionAttributedString;
 }
 
 @end

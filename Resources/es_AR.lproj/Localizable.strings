@@ -3,7 +3,7 @@
 "OsmAnd Maps" = "Mapas de OsmAnd";
 // Shared Strings
 "shared_string_back" = "Atrás";
-"shared_string_ok" = "Aplicar";
+"shared_string_ok" = "Aceptar";
 "shared_string_cancel" = "Cancelar";
 "shared_string_no" = "No";
 "shared_string_yes" = "Sí";
@@ -41,7 +41,7 @@
 "fav_rename_q" = "Renombrar favorito";
 "fav_enter_new_name" = "Ingrese el nuevo nombre para el favorito";
 "poi_max_radius_reached" = "Alcanzado máximo radio de búsqueda";
-"shared_string_done" = "Hecho";
+"shared_string_done" = "Listo";
 // HUD
 "hud_heading" = "Cabecera";
 // POI
@@ -688,7 +688,7 @@
 "access_arrival_time" = "Hora de llegada";
 "map_widget_time" = "Tiempo de llegada";
 "map_widget_altitude" = "Altitud";
-"monitoring_control_start" = "GRABAR";
+"monitoring_control_start" = "Grabar";
 "map_widget_intermediate_distance" = "Destino intermedio";
 "map_widget_distance" = "Destino";
 "always_center_position_on_map" = "Mostrar ubicación en el centro";
@@ -1788,7 +1788,7 @@
 "meters" = "metros";
 "tones" = "tonos";
 "announce" = "Anunciar";
-"instructions_repeat" = "Pulsa el widget «Próximo giro» para que las indicaciones se repitan";
+"instructions_repeat" = "Pulsa el widget «Próximo giro» para repetir las indicaciones";
 "only_manually" = "Sólo manualmente";
 "default_profile_descr" = "Elige el perfil que se usará al ejecutar la aplicación.";
 "speed_limit_tolerance_descr" = "Elige el margen de tolerancia del límite de velocidad por encima del cual se recibirá una advertencia por voz.";
@@ -1838,3 +1838,20 @@
 "plugin_settings_reset" = "Restablecer ajustes del complemento a valores predefinidos";
 "trip_rec_actions_descr" = "Puedes encontrar todas las trazas grabadas en %@";
 "logging_accuracy" = "Precisión de registro";
+"shared_string_account_add" = "Añadir cuenta";
+"shared_string_required" = "Obligatorio";
+"osm_editing_access_descr" = "Puedes ver todas las ediciones y notas locales en «%@». Los puntos ya subidos no aparecen en OsmAnd.";
+"shared_string_email" = "Correo electrónico";
+"shared_string_account" = "Cuenta";
+"email_example_hint" = "usuario@ejemplo.com";
+"profile_type_base_string" = "Perfil base";
+"profile_type_custom_string" = "Perfil personalizado";
+"units_t" = "t";
+"recalculate_wrong_dir" = "Recalcular la ruta en caso de dirección inversa";
+"repeat_after" = "Repetir después";
+"profile_alert_delete_title" = "Borrar perfil";
+"profile_alert_delete_msg" = "¿Borrar el perfil «%s»?";
+"reset_to_default" = "Restaurar a valores predefinidos";
+"copy_from_other_profile_descr" = "Puedes copiar todos los ajustes de cualquier perfil al perfil elegido: ";
+"copy_from_other_profile" = "Copiar desde otro perfil";
+"shared_string_copy" = "Copiar";

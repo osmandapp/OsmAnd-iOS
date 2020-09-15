@@ -888,7 +888,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "حدد فترة الدفع المناسبة لك:";
 "osm_live_payment_contribute_descr" = "جزء من الدخل يذهب إلى المساهمين خريطة الشارع المفتوح.";
-"osmand_live_upd_frequency" = "تحديث التردد";
+"osmand_live_upd_frequency" = "تحديث";
 "osmand_live_wifi_only" = "تحديث واي فاي فقط";
 "free_version_message" = "يمكنك تنزيل الخرائط%d أو تحديثها";
 "get_osmand_live" = "الحصول علي أوسماند لايف لفتح جميع الميزات:";
@@ -1461,7 +1461,7 @@
 "rendering_attr_contourDensity_name" = "كثافة الخط المحيطي";
 "routing_attr_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
 "rendering_attr_surface_paving_stones_name" = "حجارة الرصف";
-"rendering_attr_contourWidth_description" = "عرض الخطوط الكنتورية";
+"rendering_attr_contourWidth_description" = "عرض الخطوط المحيطية";
 "rendering_attr_lessDetailed_name" = "تفاصيل أقل";
 "rendering_value_green_name" = "أخضر";
 "rendering_attr_showSurfaceGrade_name" = "عرض جودة الطريق";
@@ -1564,7 +1564,7 @@
 "routing_attr_piste_type_nordic_description" = "مسارات للتزلج الشمالي أو الريفي علي الثلج.";
 "routeInfo_piste_type_name" = "نوع المدرج";
 "routing_attr_piste_type_sled_name" = "تزلج";
-"rendering_attr_contourWidth_name" = "عرض الخطوط الكنتورية";
+"rendering_attr_contourWidth_name" = "عرض الخطوط المحيطية";
 "rendering_value_boldOutline_name" = "مخطط واضح";
 "routing_attr_allow_classic_only_description" = "تم إعداد الطرق للأسلوب الكلاسيكي فقط دون مسارات التزلج. يشمل ذلك الطرق التي يتم إعدادها بواسطة عربة ثلجية أصغر مع زحلقة مرنة ومسارات مصنوعة يدوياً بواسطة المتزلجين.";
 "rendering_attr_appMode_name" = "وضع التقديم";
@@ -1673,8 +1673,8 @@
 "transfers" = "النقل:";
 "consider_limitations_param" = "النظر في القيود المؤقتة";
 "avoid_transport_type" = "تجنب أنواع النقل";
-"allow_3d_descr" = "قم بتمكين هذا الخيار لتتمكن من عرض الخريطة في منظور 2.5D";
-"allow_3d" = "السماح بعرض 2.5D";
+"allow_3d_descr" = "قم بتمكين هذا الخيار لتتمكن من عرض الخريطة في منظور 3D";
+"allow_3d" = "السماح بعرض 3D";
 "product_desc_antarctica" = "تنزيلات خريطة غير محدودة للقطب الجنوبي";
 "product_title_antarctica" = "القطب الجنوبي";
 "map_settings_add_maps_slopes" = "تحتاج لخرائط إضافية لعرض المنحدرات على الخريطة";
@@ -1761,8 +1761,8 @@
 "number_of_tiles" = "عدد الطبقات";
 "move_map_to_select_area" = "نقل الخريطة لتحديد المساحة المطلوبة.";
 "update_map" = "تحديث الخريطة";
-"change_map_behavior" = "تغيير إيماء الخريطة أثناء التنقل";
-"map_behavior" = "إيماء الخريطة";
+"change_map_behavior" = "تغيير الخريطة أثناء التنقل";
+"map_behavior" = "خريطة أثناء التنقل";
 "quick_action_transport_descr" = "انقر على هذا الإجراء لإظهار أو إخفاء مسارات / محطات النقل العام على الخريطة.";
 "vehicle_height_descr" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
 "touting_specified_vehicle_parameters_descr" = "قد تؤثر معلمات المركبات المحددة على التوجيه.";
@@ -1770,7 +1770,7 @@
 "device_settings" = "إعدادات الجهاز";
 "angular_measurment_units" = "وحدات قياس الزاوية";
 "units_of_speed" = "وحدات السرعة";
-"allow_3D_view" = "عرض 2.5D";
+"allow_3D_view" = "عرض 3D";
 "do_not_rotate" = "عدم تدوير";
 "app_theme_light" = "نهاري";
 "settings_app_theme" = "نمط الخريطة";
@@ -1839,3 +1839,12 @@
 "plugin_settings_reset" = "إعادة ضبط الملحقات للافتراضي";
 "trip_rec_actions_descr" = "يمكنك العثور على جميع المسارات المسجلة في % @";
 "logging_accuracy" = "دقة التسجيل";
+"units_t" = "t";
+"recalculate_wrong_dir" = "إعادة حساب المسار في حالة الانحراف";
+"repeat_after" = "إعادة بعد";
+"profile_alert_delete_msg" = "هل أنت متأكد أنك تريد حذف ملف تعريف \"٪ @\" بالكامل؟";
+"profile_alert_delete_title" = "حذف الملف الشخصي";
+"reset_to_default" = "استعادة الضبط الافتراضي";
+"copy_from_other_profile_descr" = "يمكنك نسخ جميع الإعدادات من أي ملف تعريف إلى ملف التعريف المحدد: ";
+"copy_from_other_profile" = "نسخة من ملف تعريف آخر";
+"shared_string_copy" = "نسخ";

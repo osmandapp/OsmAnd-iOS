@@ -527,7 +527,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) addUnderlay
 {
     _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
-    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.clearColor];
+    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.blackColor];
+    [_cpyProfileViewUnderlay setAlpha:0.2];
 
     UITapGestureRecognizer *underlayTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUnderlayTapped)];
     [_cpyProfileViewUnderlay addGestureRecognizer:underlayTap];

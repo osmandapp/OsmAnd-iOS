@@ -727,7 +727,7 @@
                                   
                                   const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
                                   
-                                  NSString *poiID = [NSString stringWithFormat:@"%@_%lld", amenity->nativeName.toNSString(), amenity->id.getOsmId()];
+                                  NSString *poiID = [NSString stringWithFormat:@"%@_%lld", amenity->type.toNSString(), amenity->id.id];
                                   if ([ids containsObject:poiID])
                                       return false;
                                   

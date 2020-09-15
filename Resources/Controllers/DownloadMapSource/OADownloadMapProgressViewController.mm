@@ -16,6 +16,7 @@
 
 #include "Localization.h"
 #include "OASizes.h"
+#include "OAColors.h"
 
 #define kDownloadProgressCell @"OADownloadProgressBarCell"
 #define kGeneralInfoCell @"time_cell"
@@ -228,6 +229,14 @@
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
+        UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
+        headerView.textLabel.textColor = UIColorFromRGB(color_text_footer);
+    }
 }
 
 #pragma mark - OATileDownloadDelegate

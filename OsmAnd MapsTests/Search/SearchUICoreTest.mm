@@ -43,67 +43,35 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 }
 
-- (void)setUp
+- (void) setUp
 {
     [self defaultSetup];
 }
 
-- (void)defaultSetup
+- (void) defaultSetup
 {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
 //    NSString *path = [bundle pathForResource:@"poi_types" ofType:@"xml"];
-    _filePaths = [NSBundle pathsForResourcesOfType:@"json" inDirectory:[bundle bundlePath]];
+    _filePaths = [NSBundle pathsForResourcesOfType:@"json" inDirectory:[[bundle bundlePath] stringByAppendingPathComponent:kSearchResourcesPath]];
 }
 
-- (void)tearDown {
+- (void) tearDown
+{
     // Put teardown code here. This method is called after the invocation of each test method in the class.
 }
 
-- (void)testSearch
+- (void) testSearch
 {
-    
     for (NSString *path in _filePaths)
-    {
-        NSMutableArray<NSNumber *> *matches = [NSMutableArray new];
-        NSLog(@"Testing case: %@", path.lastPathComponent);
-        [self testSearchCase:path matches:matches];
-        if (matches.count > 0)
-        {
-            NSInteger startMatch = -1;
-            NSInteger endMatch = -1;
-            for (NSInteger i = 0; i < matches.count; i++)
-            {
-                BOOL match = [matches[i] boolValue];
-                if (match)
-                {
-                    if (startMatch == -1)
-                        startMatch = i + 1;
-                    endMatch = i + 1;
-                }
-                else
-                {
-                    if (startMatch != -1 && endMatch != -1)
-                    {
-                        NSLog(@"First match range:%ld-%ld case: %@", startMatch, endMatch, path.lastPathComponent);
-                        break;
-                    }
-                    startMatch = -1;
-                    endMatch = -1;
-                }
-            }
-        }
-        NSInteger totalMatches = 0;
-        for(NSNumber *n in matches)
-        {
-            if ([n boolValue])
-                totalMatches++;
-        }
-        NSLog(@"Matches in total:%ld out of %ld case: %@", totalMatches, matches.count, path.lastPathComponent);
-    }
+        [self testSearchCase:path];
+
+    NSLog(@"Search tests done");
 }
 
-- (void)testSearchCase:(NSString *)path matches:(NSMutableArray<NSNumber *> *)matches
+- (void) testSearchCase:(NSString *)path
 {
+    NSLog(@"Testing case: %@", path.lastPathComponent);
+
     NSString *jsonFile = path;
     NSString *obfFile = [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"obf"];
     //        NSString *obfZipFile = [[path stringByDeletingPathExtension] stringByAppendingPathExtension:@"obf.gz"];
@@ -188,6 +156,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
     OASearchPhrase *emptyPhrase = [OASearchPhrase emptyPhrase:s];
     for (NSInteger k = 0; k < phrases.count; k++)
     {
+        BOOL passed = YES;
         NSString *text = phrases[k];
         NSArray<NSString *> *result = results[k];
         OASearchPhrase *phrase = [emptyPhrase generateNewPhrase:text settings:s];
@@ -207,23 +176,21 @@ static BOOL TEST_EXTRA_RESULTS = YES;
             NSString *present = res == nil ? [NSString stringWithFormat:@"#MISSING %ld", i+1] : [self formatResult:simpleTest res:res phrase:phrase];
             if (![expected isEqualToString:present])
             {
-//                NSLog(@"Phrase: %@", phrase);
-//                NSLog(@"Mismatch for '%@' != '%@'. Result: ", expected, present);
-//                for (OASearchResult *r : searchResults)
-//                {
-//                    NSLog(@"\t\"%@\",", [self formatResult:NO res:r phrase:phrase]);
-//                }
-                [matches addObject:@NO];
-            }
-            else
-            {
-                [matches addObject:@YES];
+                NSLog(@"Phrase: %@", [phrase toString]);
+                NSLog(@"Mismatch for '%@' != '%@'. Result: ", expected, present);
+                for (OASearchResult *r : searchResults)
+                {
+                    NSLog(@"\t\"%@\",", [self formatResult:NO res:r phrase:phrase]);
+                }
+                passed = NO;
+                break;
             }
             XCTAssertEqualObjects(expected, present);
         }
+        NSLog(@"Test phrase: %@ done (%@)", [phrase toString], passed ? @"PASSED" : @"FAILED");
     }
     // Do not use this map for future searches
-    [OsmAndApp.instance removeTestResource:obfFile];
+    //[OsmAndApp.instance removeTestResource:obfFile];
 }
 
 - (void) parseResults:(NSDictionary *)sourceJson tag:(NSString *)tag results:(NSMutableArray<NSMutableArray<NSString *> *> *)results

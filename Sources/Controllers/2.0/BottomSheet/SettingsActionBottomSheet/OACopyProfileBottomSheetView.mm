@@ -151,8 +151,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     [super layoutSubviews];
     [self adjustFrame];
     
-    BOOL isLandscape = OAUtilities.isLandscape;
-    [_tableView setScrollEnabled:isLandscape];
+    [_tableView setScrollEnabled:_currentState == EOACopyProfileMenuStateFullScreen];
 
     CGRect contentFrame = _contentContainer.frame;
     contentFrame.size.width = self.bounds.size.width;
@@ -505,6 +504,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     CGFloat velocity = [recognizer velocityInView:self.superview].y;
     BOOL slidingDown = velocity > 0;
     BOOL slidingUP = velocity < 0;
+    BOOL fastDownSlide = velocity > 1000.;
     CGPoint touchPoint = [recognizer locationInView:self.superview];
     
     switch (recognizer.state)
@@ -520,13 +520,16 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
             if (cardPanStartingTopConstant + translation.y > 30.0)
             {
                 CGFloat newY = touchPoint.y - _initialTouchPoint;
-                if (self.frame.origin.y > OAUtilities.getStatusBarHeight
+                if (_currentState == EOACopyProfileMenuStateFullScreen)
+                {
+                    return;
+                }
+                else if (self.frame.origin.y > OAUtilities.getStatusBarHeight
                     || (_initialTouchPoint < _tableView.frame.origin.y && _tableView.contentOffset.y > 0))
                 {
                     [_tableView setContentOffset:CGPointZero];
                 }
-                
-                if (newY <= OAUtilities.getStatusBarHeight || _tableView.contentOffset.y > 0)
+                else if (newY <= OAUtilities.getStatusBarHeight || _tableView.contentOffset.y > 0)
                 {
                     newY = 0;
                     if (_tableView.contentOffset.y > 0)
@@ -569,14 +572,16 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
                 [self hide:YES];
                 break;
             }
-            else if (slidingUP)
+            else if (slidingUP && _currentState != EOACopyProfileMenuStateFullScreen)
             {
                 _currentState = EOACopyProfileMenuStateFullScreen;
             }
-            else if (slidingDown)
+            else if (slidingDown && !fastDownSlide)
             {
                 _currentState = EOACopyProfileMenuStateInitial;
             }
+            else
+                return;
              [UIView animateWithDuration: 0.2 animations:^{
                  [self layoutSubviews];
              } completion:nil];
@@ -596,19 +601,6 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return YES;
-}
-
-- (void) scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView.contentOffset.y <= 0 || self.frame.origin.y != 0)
-        [scrollView setContentOffset:CGPointZero animated:NO];
-    [self setupModeViewShadowVisibility];
-}
-
-- (void) setupModeViewShadowVisibility
-{
-    BOOL shouldShow = _tableView.contentOffset.y > 0 && self.frame.origin.y == 0;
-    _headerView.layer.shadowOpacity = shouldShow ? 0.15 : 0.0;
 }
 
 @end

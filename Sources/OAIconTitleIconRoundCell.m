@@ -30,6 +30,10 @@
 {
     [super layoutSubviews];
     
+    for (UIView *view in self.subviews) {
+        if ([view isEqual:self.contentView]) continue;
+        view.hidden = view.bounds.size.width == self.bounds.size.width;
+    }
     CGFloat w = self.bounds.size.width;
     _contentContainer.frame = CGRectMake(16.0, 0.0, w - 32.0, self.bounds.size.height);
     

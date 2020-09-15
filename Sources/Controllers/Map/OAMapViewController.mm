@@ -205,6 +205,7 @@
     CLLocationCoordinate2D _centerLocationForMapArrows;
     
     MBProgressHUD *_progressHUD;
+    BOOL _rotationAnd3DViewDisabled;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -434,7 +435,7 @@
     self.mapViewLoaded = YES;
     
     // Create map layers
-    [_mapLayers createLayers];    
+    [_mapLayers createLayers];
 }
 
 - (void) didReceiveMemoryWarning
@@ -946,7 +947,7 @@
 - (void) rotateGestureDetected:(UIRotationGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
-    if (!self.mapViewLoaded)
+    if (!self.mapViewLoaded || _rotationAnd3DViewDisabled)
         return;
     
     // Zeroify accumulated rotation on gesture begin
@@ -1122,7 +1123,7 @@
 - (void) elevationGestureDetected:(UIPanGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view or if 3D view is disabled
-    if (!self.mapViewLoaded || ![OAAppSettings.sharedManager.settingAllow3DView get])
+    if (!self.mapViewLoaded || ![OAAppSettings.sharedManager.settingAllow3DView get] || _rotationAnd3DViewDisabled)
         return;
 
     if (recognizer.state == UIGestureRecognizerStateBegan)
@@ -1637,6 +1638,11 @@
 {
     if (_app.locationServices.status == OALocationServicesStatusActive)
         [[OAMapViewTrackingUtilities instance] refreshLocation];
+}
+
+- (void) disableRotationAnd3DView:(BOOL)disabled
+{
+    _rotationAnd3DViewDisabled = disabled;
 }
 
 - (void) updateCurrentMapSource

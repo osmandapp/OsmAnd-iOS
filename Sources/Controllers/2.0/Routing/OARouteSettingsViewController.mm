@@ -164,6 +164,7 @@
     NSString *value = [param getValue];
     //UIImage *icon = [param getIcon];
     NSString *type = [param getCellType];
+    OAApplicationMode *appMode = [self.routingHelper getAppMode];
     
     if ([type isEqualToString:@"OASettingsCell"])
     {
@@ -179,6 +180,7 @@
             [cell.textView setText:text];
             [cell.descriptionView setText:value];
         }
+        cell.backgroundColor = UIColor.redColor;
         return cell;
     }
     else if ([type isEqualToString:@"OASettingSwitchCell"])
@@ -200,7 +202,7 @@
             cell.descriptionView.hidden = YES;
             [cell setSecondaryImage:param.getSecondaryIcon];
             cell.imgView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.tintColor = param.getTintColor;
+            cell.imgView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : UIColorFromRGB(color_icon_inactive);
             [param setControlAction:cell.switchView];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -225,7 +227,7 @@
             cell.descriptionView.text = value;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.leftImageView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftImageView.tintColor = param.getTintColor;
+            cell.leftImageView.tintColor = UIColorFromRGB([appMode getIconColor]);
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
         }
         return cell;

@@ -218,7 +218,7 @@
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
             cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftImageView.tintColor = [item[@"value"] isEqualToString:@"-"] ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
+            cell.leftImageView.tintColor = [item[@"selectedItem"] intValue] == 0 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }
@@ -238,7 +238,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.iconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }

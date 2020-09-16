@@ -170,8 +170,8 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 {
     xmlWriter.writeStartElement(QLatin1String("node"));
     xmlWriter.writeAttribute(QStringLiteral("id"), QString::number([node getId]));
-    xmlWriter.writeAttribute(QStringLiteral("lat"), QString::number([node getLatitude]));
-    xmlWriter.writeAttribute(QStringLiteral("lon"), QString::number([node getLongitude]));
+    xmlWriter.writeAttribute(QStringLiteral("lat"), QString::number([node getLatitude], 'f', 10));
+    xmlWriter.writeAttribute(QStringLiteral("lon"), QString::number([node getLongitude], 'f', 10));
     
     if (info)
     {

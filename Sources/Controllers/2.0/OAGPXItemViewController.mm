@@ -182,19 +182,19 @@
     {
         NSMutableString *distanceStr = [[[OsmAndApp instance] getFormattedDistance:item.totalDistance] mutableCopy];
         if (item.points > 0)
-            [distanceStr appendFormat:@" (%d)", item.points];
+            [distanceStr appendFormat:@"\u00a0(%d)", item.points];
         NSString *waypointsStr = [NSString stringWithFormat:@"%d", item.wptPoints];
         NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:item.timeMoving shortFormat:NO];
         NSString *avgSpeedStr = [[OsmAndApp instance] getFormattedSpeed:item.avgSpeed];
         
-        NSMutableAttributedString *stringDistance = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", distanceStr]];
-        NSMutableAttributedString *stringWaypoints = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", waypointsStr]];
+        NSMutableAttributedString *stringDistance = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\u00a0\u00a0%@", [distanceStr stringByReplacingOccurrencesOfString:@" " withString:@"\u00a0"]]];
+        NSMutableAttributedString *stringWaypoints = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  \u00a0\u00a0%@", [waypointsStr stringByReplacingOccurrencesOfString:@" " withString:@"\u00a0"]]];
         NSMutableAttributedString *stringTimeMoving;
         if (item.timeMoving > 0)
-            stringTimeMoving = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", timeMovingStr]];
+            stringTimeMoving = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  \u00a0\u00a0%@", [timeMovingStr stringByReplacingOccurrencesOfString:@" " withString:@"\u00a0"]]];
         NSMutableAttributedString *stringAvgSpeed;
         if (item.avgSpeed > 0)
-            stringAvgSpeed =[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", avgSpeedStr]];
+            stringAvgSpeed =[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  \u00a0\u00a0%@", [avgSpeedStr stringByReplacingOccurrencesOfString:@" " withString:@"\u00a0"]]];
         
         NSTextAttachment *distanceAttachment = [[NSTextAttachment alloc] init];
         distanceAttachment.image = [UIImage imageNamed:@"ic_gpx_distance.png"];

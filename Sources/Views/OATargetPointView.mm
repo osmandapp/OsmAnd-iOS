@@ -1216,7 +1216,12 @@ static const NSInteger _buttonsCount = 4;
     if ([_addressLabel isDirectionRTL])
         _addressLabel.textAlignment = NSTextAlignmentRight;
     
-    CGFloat coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
+    CGFloat coordinateHeight;
+    if (_coordinateLabel.attributedText)
+        coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.attributedText width:labelPreferredWidth].height;
+    else
+        coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
+        
     _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
     _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + (_addressLabel.frame.size.height == 0 ? 0.0 : 10.0), labelPreferredWidth, coordinateHeight);
     if ([_coordinateLabel isDirectionRTL])

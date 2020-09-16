@@ -18,6 +18,7 @@
 
 - (OASearchResult *) setParentSearchResult:(OASearchResult *)parentSearchResult;
 - (NSArray<OASearchResult *> *) getRequestResults;
+- (OASearchResult *) getParentSearchResult;
 - (int) getCount;
 - (void) apiSearchFinished:(OASearchCoreAPI *)api phrase:(OASearchPhrase *)phrase;
 - (void) apiSearchRegionFinished:(OASearchCoreAPI *)api resourceId:(NSString *)resourceId phrase:(OASearchPhrase *)phrase;

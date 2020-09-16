@@ -577,6 +577,9 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (nonatomic) EOARulerWidgetMode rulerMode;
 
+@property (nonatomic) OAProfileStringList *poiFiltersOrder;
+@property (nonatomic) OAProfileStringList *inactivePoiFilters;
+
 // OSM Editing
 @property (nonatomic) NSString *osmUserName;
 @property (nonatomic) NSString *osmUserPassword;

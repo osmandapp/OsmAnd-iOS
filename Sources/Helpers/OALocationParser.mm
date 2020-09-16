@@ -64,12 +64,12 @@
 
 - (CLLocation *) recover:(CLLocation *) searchLocation
 {
-    NSInteger digitsToRecover = SEPARATOR_POSITION - [_code indexOf:SEPARATOR];
-    NSString *shortCode = [_code substringToIndex:digitsToRecover];
-    NSString *newCode = [OLCConverter recoverNearestWithShortcode:shortCode referenceLatitude:searchLocation.coordinate.latitude referenceLongitude:searchLocation.coordinate.longitude];
-    OLCArea *codeArea = [OLCConverter decode:newCode];
-    _latLon = [[CLLocation alloc] initWithLatitude:codeArea.latitudeCenter longitude:codeArea.longitudeCenter];
-    
+    if (_code)
+    {
+        NSString *newCode = [OLCConverter recoverNearestWithShortcode:_code referenceLatitude:searchLocation.coordinate.latitude referenceLongitude:searchLocation.coordinate.longitude];
+        OLCArea *codeArea = [OLCConverter decode:newCode];
+        _latLon = [[CLLocation alloc] initWithLatitude:codeArea.latitudeCenter longitude:codeArea.longitudeCenter];
+    }
     return _latLon;
 }
 

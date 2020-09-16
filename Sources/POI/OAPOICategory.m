@@ -79,6 +79,11 @@
     return acceptedTypes;
 }
 
+- (BOOL)isWiki
+{
+    return [self.name isEqualToString:@"osmwiki"];
+}
+
 + (void) addReferenceTypes:(NSArray<OAPOIType *> *)pTypes acceptedTypes:(NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes
 {
     for (OAPOIType *pt in pTypes)

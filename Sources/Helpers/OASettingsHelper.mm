@@ -1848,7 +1848,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
     _helper = [OAPOIHelper sharedInstance];
     _filtersHelper = [OAPOIFiltersHelper sharedInstance];
-    self.existingItems = [_filtersHelper getUserDefinedPoiFilters].mutableCopy;
+    self.existingItems = [_filtersHelper getUserDefinedPoiFilters:NO].mutableCopy;
 }
 
 - (void) apply

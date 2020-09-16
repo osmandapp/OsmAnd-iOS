@@ -126,6 +126,14 @@
     _otherPoiCategory = pc;
 }
 
+- (NSArray<OAPOICategory *> *) getCategories:(BOOL)includeMapCategory
+{
+    NSMutableArray<OAPOICategory *> *lst = [NSMutableArray arrayWithArray:_poiCategories];
+    if (!includeMapCategory)
+        [lst removeObject:self.otherMapCategory];
+    return lst;
+}
+
 - (NSString *) replaceDeprecatedSubtype:(NSString *)subtype
 {
     NSString *result = [_deprecatedTags objectForKey:subtype];
@@ -515,6 +523,18 @@
 - (NSString *) getPoiAdditionalCategoryIcon:(NSString *)category
 {
     return [_poiAdditionalCategoryIcons objectForKey:category];
+}
+
+- (OAPOICategory *) getOsmwiki
+{
+    for (int i = 0; i < _poiCategories.count; i++)
+    {
+        OAPOICategory *category = _poiCategories[i];
+        if (category.isWiki) {
+            return category;
+        }
+    }
+    return nil;
 }
 
 - (NSArray<OAPOIBaseType *> *) getTopVisibleFilters

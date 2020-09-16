@@ -211,6 +211,9 @@
 #define mapArrowsOnMapKey @"mapArrowsOnMapKey"
 #define mapDirectionLinesKey @"mapDirectionLinesKey"
 
+#define poiFiltersOrderKey @"poi_filters_order"
+#define inactivePoiFiltersKey @"inactive_poi_filters"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -2228,6 +2231,11 @@
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
         [_registeredPreferences setObject:_snapToRoad forKey:@"snap_to_road"];
+        
+        _poiFiltersOrder = [OAProfileStringList withKey:poiFiltersOrderKey defValue:nil];
+        _inactivePoiFilters = [OAProfileStringList withKey:inactivePoiFiltersKey defValue:nil];
+        [_registeredPreferences setObject:_poiFiltersOrder forKey:poiFiltersOrderKey];
+        [_registeredPreferences setObject:_inactivePoiFilters forKey:inactivePoiFiltersKey];
         
         _rulerMode = [[NSUserDefaults standardUserDefaults] objectForKey:rulerModeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:rulerModeKey] : RULER_MODE_DARK;
         

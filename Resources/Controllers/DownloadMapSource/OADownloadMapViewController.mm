@@ -377,11 +377,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     });
 }
 
-- (void) updateDownloadInfo
-{
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kNumberOfTilesRow inSection:kDownloadInfoSection], [NSIndexPath indexPathForRow:kDownloadSizeRow inSection:kDownloadInfoSection]] withRowAnimation:UITableViewRowAnimationFade];
-}
-
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];

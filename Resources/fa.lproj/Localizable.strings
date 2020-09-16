@@ -1353,3 +1353,7 @@
 "active_markers" = "نشانه‌های فعال";
 "rendering_attr_piste_type_connection_name" = "اتصال";
 "rendering_attr_piste_difficulty_connection_name" = "اتصال";
+"month_short" = "Mo";
+"weeks_short" = "Wks";
+"week_short" = "wk";
+"day_short" = "D";

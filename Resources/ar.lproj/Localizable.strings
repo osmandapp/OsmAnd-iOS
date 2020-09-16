@@ -1797,7 +1797,7 @@
 "units_and_formats" = "الوحدات والأشكال";
 "routing_attr_length_name" = "حد الطول";
 "send_anonymous_data" = "إرسال بيانات مجهولة المصدر";
-"profile_type_base_string" = "ملف التعريف الأساسي";
+"profile_type_base_string" = "وضع أساسي";
 "global_settings_descr" = "تؤثر على التطبيق بأكمله.";
 "global_settings" = "الاعدادات العامة";
 "send_anonymous_data_desc" = "أرسل إلى أوسماند إحصائيات تنزيل الخريطة ، نحن لا نجمع بيانات الموقع ، أو أي معلومات شخصية.";
@@ -1822,9 +1822,9 @@
 "ui_customization_descr" = "عناصر الدرج، قائمة السياق";
 "ui_customization" = "تخصيص واجهة المستخدم";
 "profile_appearance_descr" = "اختر الايقونة واللون والاسم";
-"profile_appearance" = "مظهر الملف الشخصي";
+"profile_appearance" = "مظهر الوضع";
 "profile_settings" = "إعدادات ملف التعريف";
-"configure_profile" = "تكوين ملف التعريف";
+"configure_profile" = "إعداد الوضع";
 "plugin_settings_descr" = "إعدادات البرنامج المساعد لملف التعريف المحدد.";
 "configure_screen_descr" = "حدد خيارات الشاشة لملف التعريف";
 "shared_string_email" = "البريد الإلكتروني";

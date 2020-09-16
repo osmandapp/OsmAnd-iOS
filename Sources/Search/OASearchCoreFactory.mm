@@ -1868,7 +1868,7 @@
             OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
             sp.priority = SEARCH_LOCATION_PRIORITY;
             sp.object = sp.location = l;
-            sp.localeName = [NSString stringWithFormat:@"%f, %f", (float) sp.location.coordinate.latitude, (float) sp.location.coordinate.longitude];
+            sp.localeName = [NSString stringWithFormat:@"%.5f, %.5f", (float) sp.location.coordinate.latitude, (float) sp.location.coordinate.longitude];
             sp.objectType = LOCATION;
             sp.wordsSpan = lw;
             [resultMatcher publish:sp];

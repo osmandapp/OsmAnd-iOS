@@ -97,7 +97,6 @@
         [self applyCorrectSizes];
         [self adjustViewHeight];
         [self updateTableHeaderView:CurrentInterfaceOrientation];
-        [_tableView reloadData];
         [self updateBackgroundViewLayout];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _rotating = NO;

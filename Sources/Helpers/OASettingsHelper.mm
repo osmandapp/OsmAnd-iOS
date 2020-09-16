@@ -34,10 +34,14 @@
 #import "OAPlugin.h"
 #import "OAMapStyleTitles.h"
 #import "OrderedDictionary.h"
+#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
+
+#define OSMAND_SETTINGS_FILE_EXT @"osf"
+#define BACKUP_INDEX_DIR @"backup"
 #define kResetingAppModeKey @"resettingAppModeKey"
 
 NSString *const kSettingsHelperErrorDomain = @"SettingsHelper";
@@ -238,21 +242,17 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) updateCopiedOrResetPrefs:(OAApplicationMode *)appMode
 {
     if ([OAAppSettings sharedManager].applicationMode == appMode)
-        [[NSNotificationCenter defaultCenter] postNotificationName:kUpdateWidgestsVisibilityNotification object:nil userInfo:nil];
+        [[[OsmAndApp instance] widgetSettingsChangingDoneObservable] notifyEvent];
     
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void) resetPreferencesForProfile:(OAApplicationMode *)appMode
 {
-    OAAppSettings.sharedManager.applicationMode = appMode;
     [OAAppSettings.sharedManager resetAllProfileSettingsForMode:appMode];
     [OAAppData.defaults resetProfileSettingsForMode:appMode];
     [OAMapStyleSettings.sharedInstance resetMapStyleForAppMode:appMode.variantKey];
-
-    
-    NSDictionary* appModeDict = [NSDictionary dictionaryWithObject:appMode forKey:kResetingAppModeKey];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kResetWidgetsSettingsNotification object:nil userInfo:appModeDict];
+    [[[OsmAndApp instance] widgetSettingsChangingStartObservable] notifyEventWithKey:appMode];
 }
 
 - (OAApplicationMode *)restoreCustomAppMode:(OAApplicationMode *)appMode appModeBackup:(NSDictionary *)appModeBackup profileBackup:(NSDictionary *)profileBackup
@@ -266,7 +266,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         };
         OASettingsItem *item = [[OAProfileSettingsItem alloc] initWithJsonWithoutBackup:initialJson error:nil];
         OASettingsItemJsonReader *jsonReader = [[OASettingsItemJsonReader alloc] initWithItem:item];
-        [jsonReader applyReadedSettings:profileBackup];
+        [jsonReader applyParsedSettings:profileBackup];
     }
     if (appModeBackup)
     {
@@ -282,43 +282,42 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return appMode;
 }
 
-- (void) saveToBackupCustomProfileData:(NSDictionary<NSString *, NSString *> *)settings withFilename:(NSString *)filename
+- (void) saveToBackupCustomProfileData:(NSDictionary<NSString *, NSString *> *)settings withFileName:(NSString *)fileName
 {
-    NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSString *backupFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"];
-    [fileManager createDirectoryAtPath:backupFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
+    NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
+    [self createDirectoryIfNotExist:backupDir];
     
-    NSString *backupFilePath = [[backupFolderPath stringByAppendingPathComponent:filename] stringByAppendingPathExtension:@"plst"];
+    NSString *backupFilePath = [[backupDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:OSMAND_SETTINGS_FILE_EXT];
     [settings writeToFile:backupFilePath atomically:YES];
 }
 
 - (void) saveToBackupCustomProfileAppMode:(OAApplicationMode *)appMode
 {
-    NSFileManager *fileManager = NSFileManager.defaultManager;
-    NSString *backupFolderPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"];
-    [fileManager createDirectoryAtPath:backupFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
+    NSString *fileName = appMode.stringKey;
+    NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
+    [self createDirectoryIfNotExist:backupDir];
     
-    if (appMode.stringKey)
-    {
-        NSString *backupFilePath = [[backupFolderPath stringByAppendingPathComponent:appMode.stringKey] stringByAppendingPathExtension:@"plst"];
-        [appMode.toJson writeToFile:backupFilePath atomically:YES];
-    }
-    else
-    {
-        return;
-    }
+    NSString *backupFilePath = [[backupDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:OSMAND_SETTINGS_FILE_EXT];
+    [appMode.toJson writeToFile:backupFilePath atomically:YES];
 }
 
 - (NSDictionary<NSString *, NSString *> *) getBackupFileForCustomProfile:(OAApplicationMode *)appMode
 {
-    NSString *filename = [NSString stringWithFormat:@"profile_%@", appMode.stringKey];
-    NSString *backupFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:filename] stringByAppendingPathExtension:@"plst"];
+    NSString *fileName = [NSString stringWithFormat:@"profile_%@", appMode.stringKey];
+    NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
+    [self createDirectoryIfNotExist:backupDir];
+    
+    NSString *backupFilePath = [[backupDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:OSMAND_SETTINGS_FILE_EXT];
     return [NSDictionary dictionaryWithContentsOfFile:backupFilePath];
 }
 
 - (NSDictionary<NSString *, NSString *> *) getBackupFileForCustomAppMode:(OAApplicationMode *)appMode
 {
-    NSString *backupFilePath = [[[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:appMode.stringKey] stringByAppendingPathExtension:@"plst"];
+    NSString *fileName = appMode.stringKey;
+    NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
+    [self createDirectoryIfNotExist:backupDir];
+    
+    NSString *backupFilePath = [[backupDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:OSMAND_SETTINGS_FILE_EXT];
     return [NSDictionary dictionaryWithContentsOfFile:backupFilePath];
 }
 
@@ -326,11 +325,17 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     if (appMode.isCustomProfile)
     {
-        NSString *backupItemFilePath = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plst", appMode.stringKey]];
-        NSString *backupProfileFilePath = [[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"osfBackup"] stringByAppendingPathComponent:[NSString stringWithFormat:@"profile_%@.plst", appMode.stringKey]] ;
+        NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
+        NSString *backupItemFilePath = [backupDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", appMode.stringKey, OSMAND_SETTINGS_FILE_EXT]];
+        NSString *backupProfileFilePath = [backupDir stringByAppendingPathComponent:[NSString stringWithFormat:@"profile_%@.%@", appMode.stringKey, OSMAND_SETTINGS_FILE_EXT]] ;
         [NSFileManager.defaultManager removeItemAtPath:backupItemFilePath error:nil];
         [NSFileManager.defaultManager removeItemAtPath:backupProfileFilePath error:nil];
     }
+}
+
+- (void) createDirectoryIfNotExist:(NSString *)path
+{
+    [NSFileManager.defaultManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
 @end
@@ -631,12 +636,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return NO;
     }
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
-    [self applyReadedSettings:settings];
-    [OASettingsHelper.sharedInstance saveToBackupCustomProfileData:settings withFilename:[[filePath lastPathComponent] stringByDeletingPathExtension]];
+    [self applyParsedSettings:settings];
+    [OASettingsHelper.sharedInstance saveToBackupCustomProfileData:settings withFileName:[[filePath lastPathComponent] stringByDeletingPathExtension]];
     return YES;
 }
 
-- (void) applyReadedSettings:(NSDictionary<NSString *, NSString *> *)settings
+- (void) applyParsedSettings:(NSDictionary<NSString *, NSString *> *)settings
 {
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
@@ -824,7 +829,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
 {
     NSString *renderer = [OAAppSettings.sharedManager.renderer get:_appMode];
-    NSString *resName = [self getRendererByName:renderer];
+    NSString *resName = [OAProfileSettingsItem getRendererByName:renderer];
     NSString *ext = @".render.xml";
     renderer = OAMapStyleTitles.getMapStyleTitles[resName];
     BOOL isTouringView = [resName hasPrefix:@"Touring"];
@@ -874,7 +879,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }];
 }
 
-- (NSString *) getRendererByName:(NSString *)rendererName
++ (NSString *) getRendererByName:(NSString *)rendererName
 {
     if ([rendererName isEqualToString:@"OsmAnd"])
         return @"default";
@@ -886,7 +891,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return rendererName;
 }
 
-- (NSString *) getRendererStringValue:(NSString *)renderer
++ (NSString *) getRendererStringValue:(NSString *)renderer
 {
     if ([renderer hasPrefix:@"Touring"])
         return @"Touring view (contrast and details)";
@@ -1121,7 +1126,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     if (renderer)
     {
-        res[@"renderer"] = [self getRendererStringValue:renderer];
+        res[@"renderer"] = [OAProfileSettingsItem getRendererStringValue:renderer];
     }
     return res;
 }

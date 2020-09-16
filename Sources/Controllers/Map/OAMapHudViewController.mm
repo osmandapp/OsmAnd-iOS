@@ -77,6 +77,7 @@
     OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
     OAAutoObserverProxy* _applicaionModeObserver;
+    OAAutoObserverProxy* _widgetSettingsChangeDoneObserver;
     
     OAOverlayUnderlayView* _overlayUnderlayView;
     
@@ -147,10 +148,12 @@
     _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onApplicationModeChanged:)
                                                          andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+    
+    _widgetSettingsChangeDoneObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onWidgetSettingsUpdated)
+                                                        andObserve:_app.widgetSettingsChangingDoneObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateWidgets:) name:kUpdateWidgestsVisibilityNotification object:nil];
 }
 
 - (void) deinit
@@ -624,13 +627,15 @@
     });
 }
 
-- (void) updateWidgets:(NSNotification *)notification
+- (void) onWidgetSettingsUpdated
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self updateInfo];
         [self updateColors];
         [self recreateControls];
         [_quickActionController updateViewVisibility];
         [_mapPanelViewController refreshToolbar];
+    });
 }
 
 - (void) onProfileSettingSet:(NSNotification *)notification

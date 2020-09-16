@@ -44,9 +44,6 @@
 - (void) setupButtons
 {
     [self layoutButtons];
-    if (_doneButton.hidden)
-        [self hideDoneButton];
-    
     _doneButton.backgroundColor = UIColorFromRGB(color_primary_purple);
     _doneButton.layer.cornerRadius = 9;
     _doneButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];

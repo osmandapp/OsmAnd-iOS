@@ -13,12 +13,12 @@
 #import "OATextInfoWidget.h"
 #import "OAWidgetState.h"
 #import "OAApplicationMode.h"
+#import "OAAutoObserverProxy.h"
 
 #define COLLAPSED_PREFIX @"+"
 #define HIDE_PREFIX @"-"
 #define SHOW_PREFIX @""
 #define SETTINGS_SEPARATOR @";"
-#define kResetingAppModeKey @"resettingAppModeKey"
 
 @implementation OAMapWidgetRegistry
 {
@@ -26,6 +26,7 @@
     NSMutableOrderedSet<OAMapWidgetRegInfo *> *_rightWidgetSet;
     NSMapTable<OAApplicationMode *, NSMutableSet<NSString *> *> *_visibleElementsFromSettings;
     OAAppSettings *_settings;
+    OAAutoObserverProxy* _widgetSettingsChangeDoneObserver;
 }
 
 - (instancetype) init
@@ -53,15 +54,10 @@
                 [set addObjectsFromArray:split];
             }
         }
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resetWidgets:) name:kResetWidgetsSettingsNotification object:nil];
+    
+        _widgetSettingsChangeDoneObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onWidgetSettingsReset:withKey:) andObserve:[OsmAndApp instance].widgetSettingsChangingStartObservable];
     }
     return self;
-}
-
-- (void) deinit
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kResetWidgetsSettingsNotification object:nil];
 }
 
 - (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode left:(BOOL)left expanded:(BOOL)expanded
@@ -325,11 +321,10 @@
     [_settings.centerPositionOnMap resetToDefault];
 }
 
-- (void) resetWidgets:(NSNotification *)notification;
+- (void) onWidgetSettingsReset:(id)sender withKey:(id)key;
 {
-    OAApplicationMode *mode = [[notification userInfo] objectForKey:kResetingAppModeKey];
-    if (mode)
-        [self resetToDefault:mode];
+    if (key && [key isKindOfClass:OAApplicationMode.class])
+        [self resetToDefault:(OAApplicationMode *)key];
 }
 
 - (NSOrderedSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet

@@ -71,7 +71,7 @@ typedef enum : NSUInteger {
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version;
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles;
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName settingsItem:(OASettingsItem *)item exportItemFiles:(BOOL)exportItemFiles;
-- (void) saveToBackupCustomProfileData:(NSDictionary<NSString *, NSString *> *)settings withFilename:(NSString *)filename;
+- (void) saveToBackupCustomProfileData:(NSDictionary<NSString *, NSString *> *)settings withFileName:(NSString *)filename;
 - (void) saveToBackupCustomProfileAppMode:(OAApplicationMode *)appMode;
 - (OAApplicationMode *) restoreBackupForCustomAppMode:(OAApplicationMode *)appMode;
 - (NSDictionary<NSString *, NSString *> *) getBackupFileForCustomProfile:(OAApplicationMode *)appMode;
@@ -142,7 +142,7 @@ typedef enum : NSUInteger {
 
 @interface OASettingsItemJsonReader : OASettingsItemReader<OASettingsItem *>
 
-- (void) applyReadedSettings:(NSDictionary<NSString *, NSString *> *)settings;
+- (void) applyParsedSettings:(NSDictionary<NSString *, NSString *> *)settings;
 
 @end
 
@@ -165,6 +165,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, readonly) OAApplicationMode *appMode;
 @property (nonatomic, readonly) OAApplicationModeBean *modeBean;
 
++ (NSString *) getRendererByName:(NSString *)rendererName;
++ (NSString *) getRendererStringValue:(NSString *)renderer;
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
 - (instancetype _Nullable) initWithJsonWithoutBackup:(id)json error:(NSError * _Nullable *)error;
 

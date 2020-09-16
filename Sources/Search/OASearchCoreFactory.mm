@@ -1303,9 +1303,9 @@
                         nameFilter = @"";
                         for(NSInteger k = countExtraWords - 1; k < otherSearchWords.count; k++) {
                             if (nameFilter.length > 0)
-                                [nameFilter stringByAppendingString:@" "];
+                                nameFilter = [nameFilter stringByAppendingString:@" "];
                             
-                            [nameFilter stringByAppendingString:otherSearchWords[k]];
+                            nameFilter = [nameFilter stringByAppendingString:otherSearchWords[k]];
                         }
                     }
                     poiTypeFilter = [self getPoiTypeFilter:poiTypeResult.pt poiAdditionals:poiAdditionals];

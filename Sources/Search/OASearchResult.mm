@@ -17,6 +17,9 @@
 #import "OAPOIFilter.h"
 #import "OAPOICategory.h"
 
+#include <CommonCollections.h>
+#include <commonOsmAndCore.h>
+
 #define MAX_TYPE_WEIGHT 10.0
 
 @implementation OASearchResult
@@ -79,7 +82,13 @@
 {
     double distance = 0;
     if (location && self.location)
-        distance = [location distanceFromLocation:self.location];
+    {
+        CLLocationDegrees lat1 = self.location.coordinate.latitude;
+        CLLocationDegrees lon1 = self.location.coordinate.longitude;
+        CLLocationDegrees lat2 = location.coordinate.latitude;
+        CLLocationDegrees lon2 = location.coordinate.longitude;
+        distance = getDistance(lat1, lon1, lat2, lon2);
+    }
     
     return self.priority - 1 / (1 + self.priorityDistance * distance);
 }

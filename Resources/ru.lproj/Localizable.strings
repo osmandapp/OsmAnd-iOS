@@ -1433,7 +1433,7 @@
 "rendering_attr_transportStops_name" = "Остановки транспорта";
 "rendering_attr_showSurfaceGrade_name" = "Качество дорог";
 "rendering_attr_contourLines_name" = "Показывать контурные линии";
-"rendering_attr_moreDetailed_name" = "Более подробно";
+"rendering_attr_moreDetailed_name" = "Повышенная детализация";
 "routing_attr_weight_name" = "Максимальная масса";
 "routing_attr_height_description" = "Укажите высоту транспортного средства для учёта при построении маршрута.";
 "routing_attr_avoid_unpaved_name" = "Без грунтовых дорог";

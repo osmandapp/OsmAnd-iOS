@@ -196,7 +196,7 @@
 "traffic_warning_border_control" = "کنترل مرزی";
 "traffic_warning_payment" = "عوارضی";
 "traffic_warning_stop" = "علامت ایست";
-"traffic_warning_calming" = "سرعتگیر";
+"traffic_warning_calming" = "آرام‌سازی ترافیک";
 "traffic_warning_speed_camera" = "دوربین سرعت";
 "traffic_warning" = "هشدار ترافیکی";
 "traffic_warning_railways" = "تقاطع جاده با راه‌آهن";
@@ -1353,7 +1353,7 @@
 "active_markers" = "نشانه‌های فعال";
 "rendering_attr_piste_type_connection_name" = "اتصال";
 "rendering_attr_piste_difficulty_connection_name" = "اتصال";
-"month_short" = "Mo";
-"weeks_short" = "Wks";
-"week_short" = "wk";
-"day_short" = "D";
+"month_short" = "ماه";
+"weeks_short" = "هفـ";
+"week_short" = "هفـ";
+"day_short" = "ر";

@@ -215,8 +215,10 @@
         cityResult.otherNames = [NSMutableArray arrayWithArray:ct.localizedNames.allValues];
         cityResult.location = [[CLLocation alloc] initWithLatitude:ct.latitude longitude:ct.longitude];
         QString lang = QString::fromNSString([[phrase getSettings] getLang]);
-        bool transliterate = [[phrase getSettings] isTransliterate];
-        cityResult.localeRelatedObjectName = ct.city->getName(lang, transliterate).toNSString();
+        const auto& r = OsmAndApp.instance.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
+        const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
+        if (obfMetadata)
+            cityResult.localeRelatedObjectName = obfMetadata->obfFile->getRegionName().toNSString();
         cityResult.relatedResourceId = res.resourceId;
         [phrase countUnknownWordsMatchMainResult:cityResult];
         __block BOOL match = NO;

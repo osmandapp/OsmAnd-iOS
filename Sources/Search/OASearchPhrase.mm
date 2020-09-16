@@ -930,7 +930,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (int) getRadiusSearch:(int)meters
 {
-    return [self getRadiusSearch:meters radiusLevel:self.getRadiusLevel];
+    return [self getRadiusSearch:meters radiusLevel:self.getRadiusLevel - 1];
 }
 
 - (int) getNextRadiusSearch:(int) meters

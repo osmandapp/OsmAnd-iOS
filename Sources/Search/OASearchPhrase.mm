@@ -333,11 +333,11 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
                     return (NSComparisonResult)-1;
                 else if (i2 == -1)
                     return (NSComparisonResult)1;
-                return (NSComparisonResult)-[self.class icompare:i1 y:i1];
+                return [OAUtilities compareInt:i2 y:i1];
             }
             
             // compare length without numbers to not include house numbers
-            return (NSComparisonResult)-[self.class icompare:[self lengthWithoutNumbers:o1] y:[self lengthWithoutNumbers:o2]];
+            return [OAUtilities compareInt:[self lengthWithoutNumbers:o2] y:[self lengthWithoutNumbers:o1]];
         }];
         for (NSString *s in searchWords)
         {

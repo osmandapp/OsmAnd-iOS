@@ -738,7 +738,6 @@
                                   sr.object = object;
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
                                   sr.localeName = amenity->getName(lang, transliterate).toNSString();
-            // TODO: Check object values in Android and here
                                   if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames]
                                       && ![nm matchesMap:object.values.allValues]) {
                                       return false;

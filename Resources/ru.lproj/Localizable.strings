@@ -835,7 +835,7 @@
 "search_radius_proximity" = "В радиусе";
 "poi" = "POI";
 "show_poi_over_map" = "Отображать POI";
-"keep_and_add_destination_point" = "Добавить следующим пунктом назначения";
+"keep_and_add_destination_point" = "Добавить как новый пункт назначения";
 "add_as_first_destination_point" = "Добавить первым промежуточным пунктом";
 "add_as_last_destination_point" = "Добавить последним промежуточным пунктом";
 "intermediate_items_sort_by_distance" = "В порядке следования домов";

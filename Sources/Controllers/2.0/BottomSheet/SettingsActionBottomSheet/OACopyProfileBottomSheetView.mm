@@ -409,6 +409,8 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     [_targetAppMode setIconColor:_sourceAppMode.getIconColor];
     [_targetAppMode setLocationIcon:_sourceAppMode.getLocationIcon];
     [_targetAppMode setNavigationIcon:_sourceAppMode.getNavigationIcon];
+    [_targetAppMode setBaseMinSpeed:_sourceAppMode.baseMinSpeed];
+    [_targetAppMode setBaseMaxSpeed:_sourceAppMode.baseMaxSpeed];
 }
 
 #pragma mark - Table View

@@ -468,11 +468,11 @@
 "filter_poi_hint" = "Szűrés név szerint";
 "search_map" = "Térkép keresése…";
 "skip_map_downloading_desc" = "Nincs telepítve offline térképed. Választhatsz egy térképet a listából, vagy letölthetsz térképet később a Menü - Térképek kezelése alól";
-"city_type_suburb" = "településrész";
-"city_type_hamlet" = "falucska";
-"city_type_village" = "község";
-"city_type_town" = "város";
-"city_type_city" = "város";
+"city_type_suburb" = "Településrész";
+"city_type_hamlet" = "Falucska";
+"city_type_village" = "Község";
+"city_type_town" = "Kisváros";
+"city_type_city" = "Város";
 "city_type_district" = "Kerület";
 "city_type_neighbourhood" = "Városrész";
 "postcode" = "Irányítószám";

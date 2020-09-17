@@ -5,7 +5,7 @@
 //  Created by Alexey Kulish on 21/12/2016.
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
-//  ffd9c5c6cb351111fa9c7d81303fd4bc64619254
+//  8298dbdf17d9ece341fa7b790019c193e01698c5
 
 #import <Foundation/Foundation.h>
 #import "OAStringMatcher.h"

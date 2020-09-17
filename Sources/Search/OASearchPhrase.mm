@@ -171,9 +171,9 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         for (NSInteger i = 0; i < ws.count; i++)
         {
             NSString *wd = [ws[i] trim];
-            BOOL conjubction = [conjunctions containsObject:wd.lowerCase];
+            BOOL conjunction = [conjunctions containsObject:wd.lowerCase];
             BOOL lastAndComplete = i == (ws.count - 1) && !sp.lastUnknownSearchWordComplete;
-            if (wd.length > 0 && (!conjubction || lastAndComplete))
+            if (wd.length > 0 && (!conjunction || lastAndComplete))
             {
                 if (first)
                 {
@@ -333,11 +333,11 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
                     return (NSComparisonResult)-1;
                 else if (i2 == -1)
                     return (NSComparisonResult)1;
-                return (NSComparisonResult)-[self.class icompare:i1 y:i1];
+                return [OAUtilities compareInt:i2 y:i1];
             }
             
             // compare length without numbers to not include house numbers
-            return (NSComparisonResult)-[self.class icompare:[self lengthWithoutNumbers:o1] y:[self lengthWithoutNumbers:o2]];
+            return [OAUtilities compareInt:[self lengthWithoutNumbers:o2] y:[self lengthWithoutNumbers:o1]];
         }];
         for (NSString *s in searchWords)
         {
@@ -855,12 +855,12 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     }
 }
 
-- (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *) sr
+- (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *)sr
 {
     return [self countUnknownWordsMatch:sr localeName:sr.localeName otherNames:sr.otherNames matchingWordsCount:0];
 }
 
-- (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *) sr matchingWordsCount:(NSInteger)matchingWordsCount
+- (NSInteger) countUnknownWordsMatchMainResult:(OASearchResult *)sr matchingWordsCount:(NSInteger)matchingWordsCount
 {
     return [self countUnknownWordsMatch:sr localeName:sr.localeName otherNames:sr.otherNames matchingWordsCount:matchingWordsCount];
 }
@@ -930,7 +930,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (int) getRadiusSearch:(int)meters
 {
-    return [self getRadiusSearch:meters radiusLevel:self.getRadiusLevel];
+    return [self getRadiusSearch:meters radiusLevel:self.getRadiusLevel - 1];
 }
 
 - (int) getNextRadiusSearch:(int) meters

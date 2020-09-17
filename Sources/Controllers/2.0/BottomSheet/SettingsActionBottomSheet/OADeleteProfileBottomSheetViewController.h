@@ -10,6 +10,14 @@
 #import "OABottomSheetTwoButtonsViewController.h"
 #import "OAApplicationMode.h"
 
+@protocol OADeleteProfileBottomSheetDelegate <NSObject>
+
+@required
+
+- (void) onDeleteProfileDismissed;
+
+@end
+
 @interface OADeleteProfileBottomSheetScreen : NSObject<OABottomSheetScreen>
 
 - (instancetype) initWithTable:(UITableView *)tableView viewController:(OABottomSheetTwoButtonsViewController *)viewController
@@ -18,6 +26,8 @@
 @end
 
 @interface OADeleteProfileBottomSheetViewController : OABottomSheetTwoButtonsViewController
+
+@property (nonatomic) id<OADeleteProfileBottomSheetDelegate> delegate;
 
 - (id) initWithMode:(OAApplicationMode *)am;
 

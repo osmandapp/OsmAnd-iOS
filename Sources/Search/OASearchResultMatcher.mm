@@ -158,7 +158,6 @@
     if (!_matcher || [_matcher publish:object])
     {
         _count++;
-        object.parentSearchResult = _parentSearchResult;
         if (_totalLimit == -1 || _count < _totalLimit) {
             [_requestResults addObject:object];
         }

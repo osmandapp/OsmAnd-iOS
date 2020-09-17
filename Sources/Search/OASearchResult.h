@@ -63,9 +63,10 @@
 - (double) getSearchDistance:(CLLocation *)location;
 - (double) getSearchDistance:(CLLocation *)location pd:(double)pd;
 
-- (double) getUnknownPhraseMatchWeight;
 - (double) getSumPhraseMatchWeight;
 - (int) getDepth;
 - (OASearchResult *)setNewParentSearchResult:(OASearchResult *)parentSearchResult;
+
+- (NSString *) toString;
 
 @end

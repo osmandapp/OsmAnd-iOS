@@ -12,7 +12,7 @@
 #import "OASearchResult.h"
 #import "OAResultMatcher.h"
 
-@class OASearchPhrase, OASearchCoreAPI, OACustomSearchPoiFilter, OASearchSettings, OAPOIBaseType;
+@class OASearchPhrase, OASearchCoreAPI, OACustomSearchPoiFilter, OASearchSettings, OAPOIBaseType, OASearchResultMatcher;
 
 @interface OASearchResultCollection : NSObject
 
@@ -74,5 +74,8 @@ typedef void (^OASearchUICoreRunnable)();
 
 - (OAPOIBaseType *) getUnselectedPoiType;
 - (NSString *) getCustomNameFilter;
+
+// Public for testing only
+- (void) searchInBackground:(OASearchPhrase *)phrase matcher:(OASearchResultMatcher *)matcher;
 
 @end

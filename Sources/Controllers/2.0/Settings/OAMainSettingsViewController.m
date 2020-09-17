@@ -32,14 +32,18 @@
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kFooterId @"TableViewSectionFooter"
 
+@interface OAMainSettingsViewController() <OAConfigureProfileDelegate>
+
+@end
+
 @implementation OAMainSettingsViewController
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
     
-    OAAutoObserverProxy* _appModeChangeObserver;
-    
     OAApplicationMode *_targetAppMode;
+    
+    NSMutableArray<NSNumber *> *_profileStates;
 }
 
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode
@@ -62,10 +66,6 @@
     self.settingsTableView.rowHeight = UITableViewAutomaticDimension;
     self.settingsTableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    _appModeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                       withHandler:@selector(onAvailableAppModesChanged)
-                                                        andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
-    
     _settings = OAAppSettings.sharedManager;
     
     if (_targetAppMode)
@@ -79,12 +79,19 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setupEnabledProfilesState];
+    [self.settingsTableView setDataSource: self];
+    [self.settingsTableView setDelegate:self];
+    self.settingsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.settingsTableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
     [self setupView];
 }
 
-- (void)dealloc
+- (void) setupEnabledProfilesState
 {
-    [_appModeChangeObserver detach];
+    _profileStates = [NSMutableArray new];
+    for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
+        [_profileStates addObject:@([OAApplicationMode.values containsObject:am])];
 }
 
 - (void) setupView
@@ -137,13 +144,6 @@
     [data addObject:profilesSection];
     
     _data = [NSArray arrayWithArray:data];
-    
-    [self.settingsTableView setDataSource: self];
-    [self.settingsTableView setDelegate:self];
-    self.settingsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.settingsTableView reloadData];
-    [self.settingsTableView reloadInputViews];
-    [self.settingsTableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
 }
 
 - (NSString *) getProfileDescription:(OAApplicationMode *)am
@@ -162,14 +162,21 @@
     {
         OAApplicationMode *am = OAApplicationMode.allPossibleValues[sender.tag];
         [OAApplicationMode changeProfileAvailability:am isSelected:sender.isOn];
+        _profileStates[sender.tag] = @(sender.isOn);
+        [self.settingsTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sender.tag inSection:2]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
-- (void) onAvailableAppModesChanged
+#pragma mark - OAConfigureProfileDelegate
+
+- (void)onModeAvailabilityChanged:(OAApplicationMode *)mode isOn:(BOOL)isOn
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self setupView];
-    });
+    NSInteger index = [OAApplicationMode.allPossibleValues indexOfObject:mode];
+    if (index != NSNotFound)
+    {
+        _profileStates[index] = @(isOn);
+        [self.settingsTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:2]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -242,15 +249,16 @@
             cell = (OAIconTextDescSwitchCell *)[nib objectAtIndex:0];
         }
         OAApplicationMode *am = item[@"app_mode"];
+        BOOL isEnabled = _profileStates[indexPath.row].boolValue;
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? 62.0 : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.leftIconView.tintColor = [OAApplicationMode.values containsObject:am] ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
+        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
         cell.titleLabel.text = am.toHumanString;
         cell.descLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
         [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-        [cell.switchView setOn:[OAApplicationMode.values containsObject:am]];
+        [cell.switchView setOn:isEnabled];
         return cell;
     }
     else if ([type isEqualToString:kCellTypeAction])
@@ -331,6 +339,7 @@
     {
         OAApplicationMode *mode = item[@"app_mode"];
         OAConfigureProfileViewController *profileConf = [[OAConfigureProfileViewController alloc] initWithAppMode:mode];
+        profileConf.delegate = self;
         [self.navigationController pushViewController:profileConf animated:YES];
     }
     else if ([name isEqualToString:@"add_profile"])
@@ -343,19 +352,6 @@
         OARearrangeProfilesViewController* rearrangeProfilesViewController = [[OARearrangeProfilesViewController alloc] init];
         [self.navigationController pushViewController:rearrangeProfilesViewController animated:YES];
     }
-//    else if ([name isEqualToString:@"general_settings"])
-//    {
-//        OAProfileGeneralSettingsViewController* settingsViewController = [[OAProfileGeneralSettingsViewController alloc] initWithAppMode:OAApplicationMode.CAR];
-//        [self.navigationController pushViewController:settingsViewController animated:YES];
-//    }
-//    else if ([name isEqualToString:@"routing_settings"])
-//    {
-//        // TODO: pass selected mode after refactoring
-//        OAProfileNavigationSettingsViewController* settingsViewController = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:OAApplicationMode.CAR];
-//        [self.navigationController pushViewController:settingsViewController animated:YES];
-//    }
-//
-//
 }
 
 @end

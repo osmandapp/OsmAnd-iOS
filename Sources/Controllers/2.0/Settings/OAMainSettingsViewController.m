@@ -250,8 +250,10 @@
         cell.titleLabel.text = am.toHumanString;
         cell.descLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
-        [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         BOOL isDefault = am == OAApplicationMode.DEFAULT;
+        [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        if (!isDefault)
+            [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         cell.switchView.hidden = isDefault;
         cell.dividerView.hidden = isDefault;
         [cell.switchView setOn:isEnabled];

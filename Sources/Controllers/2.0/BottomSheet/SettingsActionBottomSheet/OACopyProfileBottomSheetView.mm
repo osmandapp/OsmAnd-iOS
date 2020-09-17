@@ -354,7 +354,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
         if (p)
         {
             p.value = param.value;
-            [targetStyleSettings save:p];
+            [targetStyleSettings save:p refreshMap:NO];
         }
     }
 }
@@ -411,6 +411,8 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     [_targetAppMode setNavigationIcon:_sourceAppMode.getNavigationIcon];
     [_targetAppMode setBaseMinSpeed:_sourceAppMode.baseMinSpeed];
     [_targetAppMode setBaseMaxSpeed:_sourceAppMode.baseMaxSpeed];
+    
+    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
 }
 
 #pragma mark - Table View

@@ -1134,7 +1134,7 @@
 - (OAMapLayersConfiguration *) get:(OAApplicationMode *)mode
 {
     NSObject *val = [self getValue:mode];
-    return val ? [[OAMapLayersConfiguration alloc] initWithHiddenLayers:(NSMutableSet *)val] : self.defValue;
+    return val ? [[OAMapLayersConfiguration alloc] initWithHiddenLayers:[NSMutableSet setWithArray:(NSArray *)val]] : self.defValue;
 }
 
 - (void) set:(OAMapLayersConfiguration *)layersConfig mode:(OAApplicationMode *)mode

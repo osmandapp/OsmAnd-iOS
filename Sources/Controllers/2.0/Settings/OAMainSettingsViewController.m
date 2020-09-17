@@ -253,6 +253,7 @@
         [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         BOOL isDefault = am == OAApplicationMode.DEFAULT;
         cell.switchView.hidden = isDefault;
+        cell.switchView.userInteractionEnabled = !isDefault;
         cell.dividerView.hidden = isDefault;
         [cell.switchView setOn:isEnabled];
         return cell;

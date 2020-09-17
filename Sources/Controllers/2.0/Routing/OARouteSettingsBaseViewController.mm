@@ -110,6 +110,8 @@
     NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
     
     auto rm = [OARouteProvider getRouter:am];
+    if (rm == nullptr)
+        return list;
     
     auto& params = rm->getParametersList();
     for (auto& r : params)
@@ -148,6 +150,8 @@
     NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
     
     auto rm = [OARouteProvider getRouter:am];
+    if (rm == nullptr)
+        return list;
     
     auto& params = rm->getParametersList();
     for (auto& r : params)

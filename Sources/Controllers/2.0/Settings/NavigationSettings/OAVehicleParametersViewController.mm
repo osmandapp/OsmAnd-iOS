@@ -160,7 +160,6 @@
             [defaultSpeedArr addObject:@{
                 @"type" : kCellTypeIconText,
                 @"title" : OALocalizedString(@"default_speed"),
-                @"defaultSpeedOnly" : @YES,
                 @"icon" : @"ic_action_speed",
                 @"name" : @"defaultSpeed",
             }];

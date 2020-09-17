@@ -88,16 +88,8 @@
             _ratio = 1;
             break;
     }
-    if ([_speedParameters[@"defaultSpeedOnly"] boolValue])
-    {
-        _minValue = round(self.appMode.baseMinSpeed * _ratio);
-        _maxValue = round(self.appMode.baseMaxSpeed * _ratio);
-    }
-    else
-    {
-        _minValue = round(self.appMode.baseMinSpeed * _ratio / 2);
-        _maxValue = round(self.appMode.baseMaxSpeed * _ratio * 1.5);
-    }
+    _minValue = MAX(1, floor(self.appMode.baseMinSpeed * _ratio));
+    _maxValue = round(self.appMode.baseMaxSpeed * _ratio);
     _defaultValue = round(self.appMode.getDefaultSpeed * _ratio);
 }
 

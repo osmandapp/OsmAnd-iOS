@@ -100,20 +100,20 @@ static OAApplicationMode *_SKI;
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
     _CAR.descr = OALocalizedString(@"base_profile_descr_car");
-    _CAR.baseMinSpeed = 5.55;
-    _CAR.baseMaxSpeed = 36.11;
+    _CAR.baseMinSpeed = 2.78;
+    _CAR.baseMaxSpeed = 54.17;
     [_values addObject:_CAR];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
     _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
-    _BICYCLE.baseMinSpeed = 1.39;
-    _BICYCLE.baseMaxSpeed = 9.17;
+    _BICYCLE.baseMinSpeed = 0.7;
+    _BICYCLE.baseMaxSpeed = 13.76;
     [_values addObject:_BICYCLE];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
     _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
-    _PEDESTRIAN.baseMinSpeed = 0.56;
-    _PEDESTRIAN.baseMaxSpeed = 2.77;
+    _PEDESTRIAN.baseMinSpeed = 0.28;
+    _PEDESTRIAN.baseMaxSpeed = 4.16;
     [_values addObject:_PEDESTRIAN];
     
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
@@ -128,14 +128,14 @@ static OAApplicationMode *_SKI;
     
     _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
     _BOAT.descr = OALocalizedString(@"base_profile_descr_boat");
-    _BOAT.baseMinSpeed = 0.83;
-    _BOAT.baseMaxSpeed = 5.55;
+    _BOAT.baseMinSpeed = 0.42;
+    _BOAT.baseMaxSpeed = 8.33;
     [_values addObject:_BOAT];
     
     _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_skiing") stringKey:@"ski"];
     _SKI.descr = OALocalizedString(@"app_mode_skiing");
-    _SKI.baseMinSpeed = 0.84;
-    _SKI.baseMaxSpeed = 41.67;
+    _SKI.baseMinSpeed = 0.42;
+    _SKI.baseMaxSpeed = 62.5;
     [_values addObject:_SKI];
 }
 

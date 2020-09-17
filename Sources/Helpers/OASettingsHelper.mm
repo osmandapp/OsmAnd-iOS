@@ -225,27 +225,24 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [self resetPreferencesForBaseProfile:appMode];
             NSDictionary *customAppModeBackup = [self getBackupFileForCustomAppMode:appMode];
             NSDictionary *customProfileBackup = [self getBackupFileForCustomProfile:appMode];
-            
             if (customProfileBackup)
                 appMode = [self restorePreferencesForCustomProfile:appMode appModeBackup:customAppModeBackup profileBackup:customProfileBackup];
-            
-            [self updateCopiedOrResetPrefs:appMode];
         }
         else
         {
             [self resetPreferencesForBaseProfile:appMode];
-            [self updateCopiedOrResetPrefs:appMode];
+            [self resetMapStylesForBaseProfile:appMode];
         }
+        [self updateCopiedOrResetPrefs:appMode];
     }
     return appMode;
 }
 
 - (void) updateCopiedOrResetPrefs:(OAApplicationMode *)appMode
 {
-    if ([OAAppSettings sharedManager].applicationMode == appMode)
+        [OAMapStyleSettings.sharedInstance loadParameters];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
         [[[OsmAndApp instance] widgetSettingsChangingDoneObservable] notifyEvent];
-    
-    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void) resetPreferencesForBaseProfile:(OAApplicationMode *)appMode
@@ -253,7 +250,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [OAAppSettings.sharedManager resetAllProfileSettingsForMode:appMode];
     [OAAppData.defaults resetProfileSettingsForMode:appMode];
     [[[OsmAndApp instance] widgetSettingsChangingStartObservable] notifyEventWithKey:appMode];
+}
 
+- (void) resetMapStylesForBaseProfile:(OAApplicationMode *)appMode
+{
     NSString *renderer = [OAAppSettings.sharedManager.renderer get:appMode];
     NSString *resName = [OAProfileSettingsItem getRendererByName:renderer];
     OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:appMode.variantKey];

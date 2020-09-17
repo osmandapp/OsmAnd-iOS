@@ -369,6 +369,8 @@
                     [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
                 }
         }
+        
+        [OAMapStyleSettings.sharedInstance loadParameters];
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     });
 }

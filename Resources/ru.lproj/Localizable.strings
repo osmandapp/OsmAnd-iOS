@@ -266,7 +266,7 @@
 "track_start_rec" = "Начать запись маршрута";
 "track_rec_addon_q" = "Активируйте дополнение \"Запись треков\" для записи ваших путешествий";
 "track_interval_remember" = "Запомнить мой выбор";
-"shared_string_add" = "Сохранить";
+"shared_string_add" = "Добавить";
 "other_options" = "Другие настройки";
 "add_parking" = "Добавить парковку";
 "add_parking_short" = "Парковка";
@@ -838,7 +838,7 @@
 "keep_and_add_destination_point" = "Добавить следующим пунктом назначения";
 "add_as_first_destination_point" = "Добавить первым промежуточным пунктом";
 "add_as_last_destination_point" = "Добавить последним промежуточным пунктом";
-"intermediate_items_sort_by_distance" = "Сортировать от двери до двери";
+"intermediate_items_sort_by_distance" = "В порядке следования домов";
 "route_stops_before" = "%d остановок до выбранной";
 "osm_live_plan_pricing" = "Планы и цены";
 "osm_live_payment_monthly_title" = "Ежемесячно";
@@ -1183,7 +1183,7 @@
 "shared_string_start_date" = "Дата открытия";
 "shared_string_end_date" = "Дата закрытия";
 "tile_cache" = "Кеш тайлов";
-"shared_string_reload" = "Перезагрузить";
+"shared_string_reload" = "Обновить";
 "mapil_reload_cache" = "Перезагрузить тайлы, чтобы видеть новейшие данные";
 "mapil_filter_user_descr" = "Фильтровать изображение по пользователю";
 "mapil_filter_date" = "Фильтровать изображения по дате";
@@ -1193,7 +1193,7 @@
 "osm_edit_without_name" = "Без названия";
 "osm_tag_too_long_message" = "Максимальное значение длины для тега %@ составляет 255 символов. \nПожалуйста, сделайте его короче для продолжения.";
 "save_poi_without_poi_type_message" = "Вы действительно хотите сохранить POI без указания типа?";
-"save_poi_too_many_uppercase" = "Название содержит слишком много заглавных букв. Вы хотите продолжить?";
+"save_poi_too_many_uppercase" = "В названии слишком много заглавных букв. Продолжить?";
 "short_location_on_map" = "Широта %@ Долгота %@";
 "navigate_point_format_D" = "ГГГ.ГГ";
 "navigate_point_format_DM" = "ГГГ ММ.ММ";
@@ -1403,7 +1403,7 @@
 "rendering_attr_tracktype_grade2_name" = "Почти твёрдое";
 "rendering_attr_busRoutes_name" = "Маршруты автобусов";
 "rendering_attr_piste_type_nordic_name" = "Скандинавский";
-"rendering_value_bold_name" = "Толстый";
+"rendering_value_bold_name" = "Жирно";
 "rendering_attr_highway_class_path_name" = "Тропа";
 "rendering_attr_highway_class_motorway_name" = "Автомагистраль";
 "rendering_attr_highway_class_service_name" = "Служебная";
@@ -1545,7 +1545,7 @@
 "rendering_attr_showLez_name" = "Зоны с низким уровнем выбросов";
 "rendering_value_translucent_purple_name" = "Полупрозрачный фиолетовый";
 "rendering_attr_piste_difficulty_aerialway_name" = "Канатная дорога";
-"rendering_attr_hideWaterPolygons_name" = "Скрыть воду";
+"rendering_attr_hideWaterPolygons_name" = "Водные объекты";
 "rendering_value_default13_name" = "По умолчанию (13)";
 "rendering_attr_coloredBuildings_name" = "Цветовая маркировка зданий по типу";
 "routing_attr_width_name" = "Ограничение по ширине";
@@ -1761,7 +1761,7 @@
 "position_icon_while_moving" = "Положение значка при движении";
 "position_icon_at_rest" = "Положение значка в состоянии покоя";
 "select_icon" = "Выберите значок";
-"select_color" = "Цвет";
+"select_color" = "Выберите цвет";
 "enter_profile_name" = "Введите название профиля";
 "edit_profile_list" = "Изменить список профилей";
 "new_profile" = "Новый профиль";

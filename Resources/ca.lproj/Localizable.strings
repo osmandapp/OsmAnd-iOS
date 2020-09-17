@@ -1847,3 +1847,4 @@
 "copy_from_other_profile" = "Còpia d'un altre perfil";
 "shared_string_copy" = "Copia";
 "repeat_after" = "Repeteix després";
+"profile_alert_delete_title" = "Suprimeix el perfil";

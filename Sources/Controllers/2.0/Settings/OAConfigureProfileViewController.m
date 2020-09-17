@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate>
+@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate>
 
 @property (strong, nonatomic) OACopyProfileBottomSheetView* cpyProfileView;
 
@@ -350,6 +350,15 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:kTitleRightIconCell])
+        return 45.;
+    else
+        return UITableViewAutomaticDimension;
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
@@ -494,6 +503,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     else if ([key isEqualToString:@"delete_profile"])
     {
         OADeleteProfileBottomSheetViewController *bottomSheet = [[OADeleteProfileBottomSheetViewController alloc] initWithMode:_appMode];
+        bottomSheet.delegate = self;
+        [self addUnderlay];
         [bottomSheet show];
     }
     else if ([key isEqualToString:@"trip_rec"])
@@ -527,7 +538,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) addUnderlay
 {
     _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
-    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.clearColor];
+    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.blackColor];
+    [_cpyProfileViewUnderlay setAlpha:0.2];
 
     UITapGestureRecognizer *underlayTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUnderlayTapped)];
     [_cpyProfileViewUnderlay addGestureRecognizer:underlayTap];
@@ -555,6 +567,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 }
 
 - (void) onCopyProfileDismissed
+{
+    [_cpyProfileViewUnderlay removeFromSuperview];
+}
+
+#pragma mark - OADeleteProfileBottomSheetDelegate
+
+- (void) onDeleteProfileDismissed
 {
     [_cpyProfileViewUnderlay removeFromSuperview];
 }

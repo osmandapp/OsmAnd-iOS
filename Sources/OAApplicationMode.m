@@ -100,14 +100,20 @@ static OAApplicationMode *_SKI;
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
     _CAR.descr = OALocalizedString(@"base_profile_descr_car");
+    _CAR.baseMinSpeed = 5.55;
+    _CAR.baseMaxSpeed = 36.11;
     [_values addObject:_CAR];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
     _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
+    _BICYCLE.baseMinSpeed = 1.39;
+    _BICYCLE.baseMaxSpeed = 9.17;
     [_values addObject:_BICYCLE];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
     _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
+    _PEDESTRIAN.baseMinSpeed = 0.56;
+    _PEDESTRIAN.baseMaxSpeed = 2.77;
     [_values addObject:_PEDESTRIAN];
     
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
@@ -116,14 +122,20 @@ static OAApplicationMode *_SKI;
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
     _AIRCRAFT.descr = OALocalizedString(@"base_profile_descr_aircraft");
+    _AIRCRAFT.baseMinSpeed = 1.;
+    _AIRCRAFT.baseMaxSpeed = 300.;
     [_values addObject:_AIRCRAFT];
     
     _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
     _BOAT.descr = OALocalizedString(@"base_profile_descr_boat");
+    _BOAT.baseMinSpeed = 0.83;
+    _BOAT.baseMaxSpeed = 5.55;
     [_values addObject:_BOAT];
     
     _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_skiing") stringKey:@"ski"];
     _SKI.descr = OALocalizedString(@"app_mode_skiing");
+    _SKI.baseMinSpeed = 0.84;
+    _SKI.baseMaxSpeed = 41.67;
     [_values addObject:_SKI];
 }
 
@@ -600,6 +612,8 @@ static OAApplicationMode *_SKI;
         [mode setLocationIcon:appMode.getLocationIcon];
         [mode setNavigationIcon:appMode.getNavigationIcon];
         [mode setOrder:appMode.getOrder];
+        [mode setBaseMinSpeed:appMode.baseMinSpeed];
+        [mode setBaseMaxSpeed:appMode.baseMaxSpeed];
     }
     else if (![_values containsObject:appMode])
     {

@@ -32,6 +32,8 @@
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kFooterId @"TableViewSectionFooter"
 
+#define kAppModesSection 2
+
 @interface OAMainSettingsViewController() <OAConfigureProfileDelegate>
 
 @end
@@ -163,7 +165,7 @@
         OAApplicationMode *am = OAApplicationMode.allPossibleValues[sender.tag];
         [OAApplicationMode changeProfileAvailability:am isSelected:sender.isOn];
         _profileStates[sender.tag] = @(sender.isOn);
-        [self.settingsTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sender.tag inSection:2]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.settingsTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sender.tag inSection:kAppModesSection]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
@@ -175,7 +177,7 @@
     if (index != NSNotFound)
     {
         _profileStates[index] = @(isOn);
-        [self.settingsTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:2]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.settingsTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:kAppModesSection]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 

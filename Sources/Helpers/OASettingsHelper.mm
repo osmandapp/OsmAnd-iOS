@@ -41,6 +41,7 @@
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
 #define OSMAND_SETTINGS_FILE_EXT @"osf"
+#define JSON_FILE_EXT @"json"
 #define BACKUP_INDEX_DIR @"backup"
 #define kResetingAppModeKey @"resettingAppModeKey"
 
@@ -221,18 +222,18 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         if (appMode.isCustomProfile)
         {
-            [self resetPreferencesForProfile:appMode];
+            [self resetPreferencesForBaseProfile:appMode];
             NSDictionary *customAppModeBackup = [self getBackupFileForCustomAppMode:appMode];
             NSDictionary *customProfileBackup = [self getBackupFileForCustomProfile:appMode];
             
             if (customProfileBackup)
-                appMode = [self restoreCustomAppMode:appMode appModeBackup:customAppModeBackup profileBackup:customProfileBackup];
+                appMode = [self restorePreferencesForCustomProfile:appMode appModeBackup:customAppModeBackup profileBackup:customProfileBackup];
             
             [self updateCopiedOrResetPrefs:appMode];
         }
         else
         {
-            [self resetPreferencesForProfile:appMode];
+            [self resetPreferencesForBaseProfile:appMode];
             [self updateCopiedOrResetPrefs:appMode];
         }
     }
@@ -247,21 +248,25 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
-- (void) resetPreferencesForProfile:(OAApplicationMode *)appMode
+- (void) resetPreferencesForBaseProfile:(OAApplicationMode *)appMode
 {
     [OAAppSettings.sharedManager resetAllProfileSettingsForMode:appMode];
     [OAAppData.defaults resetProfileSettingsForMode:appMode];
-    [OAMapStyleSettings.sharedInstance resetMapStyleForAppMode:appMode.variantKey];
     [[[OsmAndApp instance] widgetSettingsChangingStartObservable] notifyEventWithKey:appMode];
+
+    NSString *renderer = [OAAppSettings.sharedManager.renderer get:appMode];
+    NSString *resName = [OAProfileSettingsItem getRendererByName:renderer];
+    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:appMode.variantKey];
+    [styleSettings resetMapStyleForAppMode:appMode.variantKey];
 }
 
-- (OAApplicationMode *)restoreCustomAppMode:(OAApplicationMode *)appMode appModeBackup:(NSDictionary *)appModeBackup profileBackup:(NSDictionary *)profileBackup
+- (OAApplicationMode *)restorePreferencesForCustomProfile:(OAApplicationMode *)appMode appModeBackup:(NSDictionary *)appModeBackup profileBackup:(NSDictionary *)profileBackup
 {
     if (profileBackup)
     {
         NSDictionary *initialJson = @{
             @"type" : @"PROFILE",
-            @"file" : [NSString stringWithFormat:@"profile_%@.json", appMode.stringKey],
+            @"file" : [NSString stringWithFormat:@"profile_%@.%@", appMode.stringKey, JSON_FILE_EXT],
             @"appMode" : appMode.toJson
         };
         OASettingsItem *item = [[OAProfileSettingsItem alloc] initWithJsonWithoutBackup:initialJson error:nil];

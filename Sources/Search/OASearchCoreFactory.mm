@@ -739,7 +739,7 @@
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
                                   sr.localeName = amenity->getName(lang, transliterate).toNSString();
                                   if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames]
-                                      && ![nm matchesMap:object.values.allValues]) {
+                                      && ![nm matchesMap:object.getAdditionalInfo.allValues]) {
                                       return false;
                                   }
             /*
@@ -775,9 +775,8 @@
                                   [phrase countUnknownWordsMatchMainResult:sr];
                                   
                                   sr.objectType = POI;
-                                  [ids addObject:poiID];
                                   [resultMatcher publish:sr];
-                                  
+                                  [ids addObject:poiID];
                                   return false;
                               },
                               ctrl);

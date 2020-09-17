@@ -51,4 +51,6 @@
 - (BOOL) isClosed;
 - (NSString *) getTagContent:(NSString *)tag lang:(NSString *)lang;
 
+- (NSDictionary<NSString *, NSString *> *) getAdditionalInfo;
+
 @end

@@ -168,4 +168,9 @@
     return _tag2;
 }
 
+- (BOOL)isReference
+{
+    return _referenceType != nil;
+}
+
 @end

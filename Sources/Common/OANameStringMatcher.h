@@ -10,9 +10,12 @@
 #import "OAStringMatcher.h"
 #import "OACollatorStringMatcher.h"
 
+//  NameStringMatcher.java
+//  git revision 7b10a094efad6f6a05d7d55f4503a99047416806
+
 @interface OANameStringMatcher : NSObject<OAStringMatcher>
 
-- (instancetype) initWithLastWord:(NSString *)lastWordTrim mode:(StringMatcherMode)mode;
+- (instancetype) initWithNamePart:(NSString *)namePart mode:(StringMatcherMode)mode;
 
 - (BOOL) matchesMap:(NSArray<NSString *>  *)map;
 

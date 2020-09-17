@@ -357,12 +357,30 @@ typedef enum : NSUInteger {
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (BOOL) handleIncomingURL:(NSURL *)url
+- (BOOL) handleIncomingURL:(NSURL *)url_
 {
+    NSURL *url = url_;
+    
     NSString *path = url.path;
     NSString *fileName = [url.path lastPathComponent];
     NSString *ext = [[path pathExtension] lowercaseString];
-    
+
+    if ([fileName hasSuffix:@".wpt.chart"] || [fileName hasSuffix:@".3d.chart"])
+    {
+        NSString *newFileName = [fileName stringByReplacingOccurrencesOfString:@".wpt.chart" withString:@".gpx"];
+        newFileName = [newFileName stringByReplacingOccurrencesOfString:@".3d.chart" withString:@".sqlitedb"];
+        NSString *newPath = [NSTemporaryDirectory() stringByAppendingString:newFileName];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:newPath])
+            [[NSFileManager defaultManager] removeItemAtPath:newPath error:nil];
+        
+        [[NSFileManager defaultManager] moveItemAtPath:path toPath:newPath error:nil];
+        url = [NSURL fileURLWithPath:newPath];
+    }
+
+    path = url.path;
+    fileName = [url.path lastPathComponent];
+    ext = [[path pathExtension] lowercaseString];
+
     if ([ext isEqualToString:@"sqlitedb"])
     {
         NSString *newFileName = [[OAMapCreatorHelper sharedInstance] getNewNameIfExists:fileName];
@@ -460,7 +478,6 @@ typedef enum : NSUInteger {
         else
             [self importAsGPX:url];
     }
-
     else if ([ext caseInsensitiveCompare:@"kml"] == NSOrderedSame || [ext caseInsensitiveCompare:@"kmz"] == NSOrderedSame)
     {
         [self importAsGPX:url];

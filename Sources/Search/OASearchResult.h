@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchResult.java
-//  git revision fa77b30a13fa9d5f7f91e5636ffe941d5bd8111f
+//  git revision aa56153a53fa1d9774f9d6fa9b1fddcfcd1722d8
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -24,6 +24,11 @@
 // search phrase that makes search result valid
 @property (nonatomic) OASearchPhrase *requiredSearchPhrase;
 
+// internal package fields (used for sorting)
+@property (nonatomic) OASearchResult *parentSearchResult;
+@property (nonatomic) NSString *wordsSpan;
+@property (nonatomic) BOOL firstUnknownWordMatches;
+
 @property (nonatomic) NSObject *object;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::Amenity> amenity;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::IFavoriteLocation> favorite;
@@ -34,10 +39,7 @@
 
 @property (nonatomic) double priority;
 @property (nonatomic) double priorityDistance;
-@property (nonatomic) NSString *wordsSpan ;
-@property (nonatomic) OASearchResult *parentSearchResult;
 @property (nonatomic) NSMutableSet<NSString *> *otherWordsMatch;
-@property (nonatomic) BOOL firstUnknownWordMatches;
 @property (nonatomic) BOOL unknownPhraseMatches;
 @property (nonatomic) double unknownPhraseMatchWeight;
 
@@ -60,6 +62,11 @@
 - (int) getFoundWordCount;
 - (double) getSearchDistance:(CLLocation *)location;
 - (double) getSearchDistance:(CLLocation *)location pd:(double)pd;
-- (double) unknownPhraseMatchWeight:(BOOL)isHouse;
+
+- (double) getSumPhraseMatchWeight;
+- (int) getDepth;
+- (OASearchResult *)setNewParentSearchResult:(OASearchResult *)parentSearchResult;
+
+- (NSString *) toString;
 
 @end

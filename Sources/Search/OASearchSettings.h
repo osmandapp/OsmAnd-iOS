@@ -42,4 +42,6 @@
 - (BOOL) isInAddressSearch;
 - (OASearchSettings *) setAddressSearch:(BOOL)addressSearch;
 
++ (OASearchSettings *) parseJSON:(NSDictionary *)json;
+
 @end

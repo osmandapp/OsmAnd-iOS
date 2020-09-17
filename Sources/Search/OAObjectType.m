@@ -148,23 +148,68 @@
 {
     switch (objectType)
     {
-        case CITY:
-            return 1.0;
-        case VILLAGE:
-            return 1.0;
-        case POSTCODE:
-            return 1.0;
-        case STREET:
-            return 2.0;
         case HOUSE:
-            return 3.0;
         case STREET_INTERSECTION:
-            return 3.0;
+            return 4;
+        case STREET:
+            return 3;
+        case CITY:
+        case VILLAGE:
+        case POSTCODE:
+            return 2;
         case POI:
-            return 2.0;
+            return 1;
         default:
-            return 1.0;
+            return 1;
     }
+}
+
++ (OAObjectType *)valueOf:(NSString *)type
+{
+    if ([type isEqualToString:@"CITY"])
+        return [OAObjectType withType:CITY];
+    if ([type isEqualToString:@"VILLAGE"])
+        return [OAObjectType withType:VILLAGE];
+    if ([type isEqualToString:@"POSTCODE"])
+        return [OAObjectType withType:POSTCODE];
+    if ([type isEqualToString:@"STREET"])
+        return [OAObjectType withType:STREET];
+    if ([type isEqualToString:@"HOUSE"])
+        return [OAObjectType withType:HOUSE];
+    if ([type isEqualToString:@"STREET_INTERSECTION"])
+        return [OAObjectType withType:STREET_INTERSECTION];
+    if ([type isEqualToString:@"POI_TYPE"])
+        return [OAObjectType withType:POI_TYPE];
+    if ([type isEqualToString:@"POI"])
+        return [OAObjectType withType:POI];
+    if ([type isEqualToString:@"LOCATION"])
+        return [OAObjectType withType:LOCATION];
+    if ([type isEqualToString:@"PARTIAL_LOCATION"])
+        return [OAObjectType withType:PARTIAL_LOCATION];
+    if ([type isEqualToString:@"FAVORITE"])
+        return [OAObjectType withType:FAVORITE];
+    if ([type isEqualToString:@"FAVORITE_GROUP"])
+        return [OAObjectType withType:FAVORITE_GROUP];
+    if ([type isEqualToString:@"WPT"])
+        return [OAObjectType withType:WPT];
+    if ([type isEqualToString:@"RECENT_OBJ"])
+        return [OAObjectType withType:RECENT_OBJ];
+    if ([type isEqualToString:@"REGION"])
+        return [OAObjectType withType:REGION];
+    if ([type isEqualToString:@"SEARCH_STARTED"])
+        return [OAObjectType withType:SEARCH_STARTED];
+    if ([type isEqualToString:@"SEARCH_FINISHED"])
+        return [OAObjectType withType:SEARCH_FINISHED];
+    if ([type isEqualToString:@"FILTER_FINISHED"])
+        return [OAObjectType withType:FILTER_FINISHED];
+    if ([type isEqualToString:@"SEARCH_API_FINISHED"])
+        return [OAObjectType withType:SEARCH_API_FINISHED];
+    if ([type isEqualToString:@"SEARCH_API_REGION_FINISHED"])
+        return [OAObjectType withType:SEARCH_API_REGION_FINISHED];
+    if ([type isEqualToString:@"UNKNOWN_NAME_FILTER"])
+        return [OAObjectType withType:UNKNOWN_NAME_FILTER];
+    
+    return [OAObjectType withType:CITY];
 }
 
 @end

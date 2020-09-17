@@ -615,6 +615,33 @@
     }
 }
 
+- (BOOL) installTestResource:(NSString *)filePath
+{
+    if(_resourcesManager == nullptr)
+    {
+        _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
+                                                             _documentsDir.absolutePath(),
+                                                             QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
+                                                             _worldMiniBasemapFilename != nil
+                                                             ? QString::fromNSString(_worldMiniBasemapFilename)
+                                                             : QString::null,
+                                                             QString::fromNSString(NSTemporaryDirectory()),
+                                                             QString::fromNSString(_cachePath),
+                                                             QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
+                                                             QString::fromNSString(@"http://download.osmand.net"),
+                                                             _webClient));
+    }
+    
+    const auto filePathQ = QString::fromNSString(filePath);
+    return _resourcesManager->addLocalResource(filePathQ);
+}
+
+- (BOOL) removeTestResource:(NSString *)filePath
+{
+    NSString *fileId = filePath.lastPathComponent.lowerCase;
+    return _resourcesManager->uninstallResource(QString::fromNSString(fileId));
+}
+
 - (void) loadWorldRegions
 {
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];

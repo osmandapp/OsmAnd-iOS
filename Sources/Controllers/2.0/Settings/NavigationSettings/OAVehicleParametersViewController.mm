@@ -146,15 +146,13 @@
             }
         }
     }
-    if (self.appMode != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode.parent != OAApplicationMode.PUBLIC_TRANSPORT)
+    if (![appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
+        ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey])
     {
         if (self.appMode != OAApplicationMode.AIRCRAFT && self.appMode.parent != OAApplicationMode.AIRCRAFT)
             [defaultSpeedArr addObject:@{
                 @"type" : kCellTypeIconText,
                 @"title" : OALocalizedString(@"default_speed"),
-                @"minSpeed" : [NSNumber numberWithDouble:router->getMinSpeed()],
-                @"defaultSpeed" : [NSNumber numberWithDouble:router->getDefaultSpeed()],
-                @"maxSpeed" : [NSNumber numberWithDouble:router->getMaxSpeed()],
                 @"icon" : @"ic_action_speed",
                 @"name" : @"defaultSpeed",
             }];
@@ -162,7 +160,6 @@
             [defaultSpeedArr addObject:@{
                 @"type" : kCellTypeIconText,
                 @"title" : OALocalizedString(@"default_speed"),
-                @"defaultSpeedOnly" : @YES,
                 @"icon" : @"ic_action_speed",
                 @"name" : @"defaultSpeed",
             }];
@@ -218,7 +215,7 @@
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
             cell.leftImageView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftImageView.tintColor = [item[@"value"] isEqualToString:@"-"] ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
+            cell.leftImageView.tintColor = [item[@"selectedItem"] intValue] == 0 ? UIColorFromRGB(color_icon_inactive) : UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }
@@ -238,7 +235,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.iconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }

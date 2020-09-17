@@ -116,4 +116,8 @@
 
 - (void)checkAndDownloadOsmAndLiveUpdates;
 
+// Tests only
+- (BOOL) installTestResource:(NSString *)filePath;
+- (BOOL) removeTestResource:(NSString *)filePath;
+
 @end

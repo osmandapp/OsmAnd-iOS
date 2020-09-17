@@ -11,6 +11,8 @@
 #import "OACustomSearchPoiFilter.h"
 #import <CoreLocation/CoreLocation.h>
 
+#define INVALID_ORDER -1
+
 static NSString* const STD_PREFIX = @"std_";
 static NSString* const USER_PREFIX = @"user_";
 static NSString* const CUSTOM_FILTER_ID = @"user_custom_id";
@@ -37,6 +39,9 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 @property (assign) BOOL isStandardFilter;
 
 @property (readonly) int distanceInd;
+@property (nonatomic) int order;
+@property (nonatomic) BOOL isActive;
+@property (nonatomic) BOOL isDeleted;
 
 @property (nonatomic, readonly) NSString *filterByName;
 @property (nonatomic) NSString *savedFilterByName;

@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OAPluginResetBottomSheetDelegate, OACopyProfileBottomSheetDelegate>
+@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate, OAPluginResetBottomSheetDelegate>
 
 @property (strong, nonatomic) OACopyProfileBottomSheetView* cpyProfileView;
 
@@ -83,14 +83,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     NSMutableArray<NSString *> *sectionHeaderTitles = [NSMutableArray array];
     NSMutableArray<NSString *> *sectionFooterTitles = [NSMutableArray array];
     NSMutableArray<NSArray *> *data = [NSMutableArray new];
-    [data addObject:@[
-        @{
-            @"type" : kSwitchCell,
-            @"title" : OALocalizedString(@"shared_string_enabled")
-        }
-    ]];
-    [sectionHeaderTitles addObject:OALocalizedString(@"configure_profile")];
-    [sectionFooterTitles addObject:@""];
+    if (_appMode != OAApplicationMode.DEFAULT)
+    {
+        [data addObject:@[
+            @{
+                @"type" : kSwitchCell,
+                @"title" : OALocalizedString(@"shared_string_enabled")
+            }
+        ]];
+        [sectionHeaderTitles addObject:OALocalizedString(@"configure_profile")];
+        [sectionFooterTitles addObject:@""];
+    }
 
     NSMutableArray<NSDictionary *> *profileSettings = [NSMutableArray new];
     [profileSettings addObject:@{
@@ -336,7 +339,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     
     NSString *title = _sectionHeaderTitles[section];
     
-    if (section == 0)
+    if (section == 0 && _appMode != OAApplicationMode.DEFAULT)
     {
         [vw setYOffset:6.];
         UIFont *labelFont = [UIFont systemFontOfSize:15.0];
@@ -360,10 +363,19 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:kTitleRightIconCell])
+        return 45.;
+    else
+        return UITableViewAutomaticDimension;
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    if (section == 0)
+    if (section == 0 && _appMode != OAApplicationMode.DEFAULT)
         return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth yOffset:6. font:[UIFont systemFontOfSize:15.0]] + 10.;
     
     return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth];
@@ -371,7 +383,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? 0.01 : [OAUtilities calculateTextBounds:_sectionFooterTitles[section] width:DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2 font:[UIFont systemFontOfSize:13.]].height + 16.;
+    return section == 0 && _appMode != OAApplicationMode.DEFAULT ? 0.01 : [OAUtilities calculateTextBounds:_sectionFooterTitles[section] width:DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2 font:[UIFont systemFontOfSize:13.]].height + 16.;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -523,6 +535,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     else if ([key isEqualToString:@"delete_profile"])
     {
         OADeleteProfileBottomSheetViewController *bottomSheet = [[OADeleteProfileBottomSheetViewController alloc] initWithMode:_appMode];
+        bottomSheet.delegate = self;
+        [self addUnderlay];
         [bottomSheet show];
     }
     else if ([key isEqualToString:@"trip_rec"])
@@ -568,7 +582,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) addUnderlay
 {
     _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
-    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.clearColor];
+    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.blackColor];
+    [_cpyProfileViewUnderlay setAlpha:0.2];
 
     UITapGestureRecognizer *underlayTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUnderlayTapped)];
     [_cpyProfileViewUnderlay addGestureRecognizer:underlayTap];
@@ -596,6 +611,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 }
 
 - (void) onCopyProfileDismissed
+{
+    [_cpyProfileViewUnderlay removeFromSuperview];
+}
+
+#pragma mark - OADeleteProfileBottomSheetDelegate
+
+- (void) onDeleteProfileDismissed
 {
     [_cpyProfileViewUnderlay removeFromSuperview];
 }

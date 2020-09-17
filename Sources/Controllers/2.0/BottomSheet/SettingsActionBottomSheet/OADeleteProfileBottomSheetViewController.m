@@ -65,7 +65,7 @@
     _data = [NSArray arrayWithArray:arr];
 }
 
-- (void)initData
+- (void) initData
 {
 }
 
@@ -134,7 +134,7 @@
     return UITableViewAutomaticDimension;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     NSString *descriptionString = [NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString];
     CGFloat textWidth = tableView.bounds.size.width - 32;
@@ -181,7 +181,7 @@
     [super setupView];
 }
 
-- (void)additionalSetup
+- (void) additionalSetup
 {
     [super additionalSetup];
     self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
@@ -193,15 +193,22 @@
     }
     [self.cancelButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
     self.doneButton.layer.borderWidth = 2.0;
-    self.doneButton.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
-    [self.doneButton setBackgroundColor:UIColorFromRGB(color_primary_purple)];
+    self.doneButton.layer.borderColor = UIColorFromRGB(color_route_button_inactive).CGColor;
+    [self.doneButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
     [self.doneButton setTitleColor:UIColorFromRGB(color_support_red) forState:UIControlStateNormal];
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
+}
+
+- (void) dismiss
+{
+    [super dismiss];
+    if (self.delegate)
+        [self.delegate onDeleteProfileDismissed];
 }
 
 @end

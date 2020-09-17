@@ -146,15 +146,13 @@
             }
         }
     }
-    if (self.appMode != OAApplicationMode.PUBLIC_TRANSPORT && self.appMode.parent != OAApplicationMode.PUBLIC_TRANSPORT)
+    if (![appModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey] &&
+        ![parentAppModeRoutingProfile isEqualToString:OAApplicationMode.PUBLIC_TRANSPORT.stringKey])
     {
         if (self.appMode != OAApplicationMode.AIRCRAFT && self.appMode.parent != OAApplicationMode.AIRCRAFT)
             [defaultSpeedArr addObject:@{
                 @"type" : kCellTypeIconText,
                 @"title" : OALocalizedString(@"default_speed"),
-                @"minSpeed" : [NSNumber numberWithDouble:router->getMinSpeed()],
-                @"defaultSpeed" : [NSNumber numberWithDouble:router->getDefaultSpeed()],
-                @"maxSpeed" : [NSNumber numberWithDouble:router->getMaxSpeed()],
                 @"icon" : @"ic_action_speed",
                 @"name" : @"defaultSpeed",
             }];
@@ -162,7 +160,6 @@
             [defaultSpeedArr addObject:@{
                 @"type" : kCellTypeIconText,
                 @"title" : OALocalizedString(@"default_speed"),
-                @"defaultSpeedOnly" : @YES,
                 @"icon" : @"ic_action_speed",
                 @"name" : @"defaultSpeed",
             }];

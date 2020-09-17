@@ -279,6 +279,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) onModeSwitchPressed:(UISwitch *)sender
 {
     [OAApplicationMode changeProfileAvailability:_appMode isSelected:sender.isOn];
+    if (self.delegate)
+        [self.delegate onModeAvailabilityChanged:_appMode isOn:sender.isOn];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     });

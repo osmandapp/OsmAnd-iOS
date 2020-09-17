@@ -76,7 +76,8 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
                                                                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                                          timeoutInterval:30.0];
     [request setHTTPMethod:requestMethod];
-    [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [request addValue:[NSString stringWithFormat:@"OsmAndiOS %@", version] forHTTPHeaderField:@"User-Agent"];
 
     if ([requestMethod isEqualToString:@"PUT"] || [requestMethod isEqualToString:@"POST"] || [requestMethod isEqualToString:@"DELETE"])
     {

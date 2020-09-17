@@ -130,6 +130,20 @@
     return nil;
 }
 
+- (NSDictionary<NSString *, NSString *> *) getAdditionalInfo
+{
+    NSMutableDictionary<NSString *, NSString *> *res = [NSMutableDictionary new];
+    if (!_values)
+        return res;
+    
+    for (NSString *key in _values)
+    {
+        if (![key isEqualToString:@"name"])
+            res[key] = _values[key];
+    }
+    return res;
+}
+
 - (BOOL) isEqual:(id)o
 {
     if (self == o)

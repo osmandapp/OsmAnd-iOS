@@ -1017,12 +1017,12 @@ static UIViewController *parentController;
 {
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
     
-    static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
+    static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewSmallCell";
     OAIconTextTableViewCell* cell;
     cell = (OAIconTextTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextSmallCell" owner:self options:nil];
         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
     }
     

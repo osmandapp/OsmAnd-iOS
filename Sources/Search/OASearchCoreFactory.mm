@@ -1421,7 +1421,7 @@
         if (![_types isRegisteredType:type])
             type = _types.otherPoiCategory;
         
-        NSSet<NSString *> *set = [_acceptedTypes objectForKey:type];
+        NSSet<NSString *> *set = [acceptedTypes objectForKey:type];
         if (!set)
             return NO;
         
@@ -1435,7 +1435,7 @@
         return NO;
         
     } getTypesFunction:^NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *{
-        return _acceptedTypes;
+        return acceptedTypes;
     }];
 }
 

@@ -10250,7 +10250,8 @@
 				15BDDEAC24DAF84900079C83 /* OACopyProfileBottomSheetView.mm */,
 				15BDDEAE24DAF85D00079C83 /* OACopyProfileBottomSheetView.h */,
 				156F4E5F24FA5115008ED1DD /* OADeleteProfileBottomSheetViewController.h */,
-				156F4E6024FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m */,			);
+				156F4E6024FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m */,
+			);
 			path = SettingsActionBottomSheet;
 			sourceTree = "<group>";
 		};
@@ -22026,7 +22027,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.46;
+				CURRENT_PROJECT_VERSION = 3.47;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -22081,7 +22082,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.46;
+				CURRENT_PROJECT_VERSION = 3.47;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -234,17 +234,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
-@interface OAProfileMapLayersConfiguartion : OAProfileSetting
-
-+ (instancetype) withKey:(NSString *)key defValue:(OAMapLayersConfiguration *)defValue;
-
-- (OAMapLayersConfiguration *) get;
-- (OAMapLayersConfiguration *) get:(OAApplicationMode *)mode;
-- (void) set:(OAMapLayersConfiguration *)layersConfig;
-- (void) set:(OAMapLayersConfiguration *)layersConfig mode:(OAApplicationMode *)mode;
-
-@end
-
 typedef NS_ENUM(NSInteger, EOATerrainType)
 {
     EOATerrainTypeDisabled = 0,

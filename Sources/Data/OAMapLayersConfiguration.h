@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OAObservable.h"
-
 #define kFavoritesLayerId @"favorites"
 #define kDestinationsLayerId @"destinations"
 #define kMyPositionLayerId @"my_position"
@@ -29,15 +27,15 @@
 #define kImpassableRoadsLayerId @"impassable_map_roads"
 #define kTransportLayerId @"transport_map"
 
-@interface OAMapLayersConfiguration : NSObject <NSCoding>
+@interface OAMapLayersConfiguration : NSObject
 
 - (instancetype) initWithHiddenLayers:(NSMutableSet *)hiddenLayers;
 
 - (BOOL)isLayerVisible:(NSString*)layerId;
 - (void)setLayer:(NSString*)layerId Visibility:(BOOL)isVisible;
 - (BOOL)toogleLayerVisibility:(NSString*)layerId;
+- (void)resetConfigutation;
 
-@property (readonly) OAObservable* changeObservable;
 @property (nonatomic, readonly) NSMutableSet* hiddenLayers;
 
 @end

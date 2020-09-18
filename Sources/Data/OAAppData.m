@@ -51,7 +51,6 @@
     OAProfileMapSource  *_lastUnderlayMapSourceProfile;
     OAProfileDouble *_overlayAlphaProfile;
     OAProfileDouble *_underlayAlphaProfile;
-    OAProfileMapLayersConfiguartion *_mapLayersConfigurationProfile;
     OAProfileTerrain *_terrainTypeProfile;
     OAProfileTerrain *_lastTerrainTypeProfile;
     OAProfileDouble *_hillshadeAlphaProfile;
@@ -63,7 +62,7 @@
     OAProfileBoolean *_mapillaryProfile;
 }
 
-@synthesize applicationModeChangedObservable = _applicationModeChangedObservable;
+@synthesize applicationModeChangedObservable = _applicationModeChangedObservable, mapLayersConfiguration = _mapLayersConfiguration;
 
 - (instancetype) init
 {
@@ -152,11 +151,13 @@
     _destinationRemoveObservable = [[OAObservable alloc] init];
     _destinationShowObservable = [[OAObservable alloc] init];
     _destinationHideObservable = [[OAObservable alloc] init];
+    _mapLayersConfigurationChangeObservable = [[OAObservable alloc] init];
     
     _applicationModeChangedObservable = [[OAObservable alloc] init];
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
                                                             andObserve:_applicationModeChangedObservable];
+    _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     // Profile settings
     _lastMapSourceProfile = [OAProfileMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
                                                                                                               andVariant:@"type_default"]];
@@ -175,7 +176,6 @@
     _slopeMinZoomProfile = [OAProfileInteger withKey:kSlopeMinZoomKey defValue:3];
     _slopeMaxZoomProfile = [OAProfileInteger withKey:kSlopeMaxZoomKey defValue:16];
     _mapillaryProfile = [OAProfileBoolean withKey:kMapillaryKey defValue:NO];
-    _mapLayersConfigurationProfile = [OAProfileMapLayersConfiguartion withKey:kMapLayersConfigurationKey defValue:[[OAMapLayersConfiguration alloc] init]];
 
 }
 
@@ -191,6 +191,7 @@
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [_mapLayersConfiguration resetConfigutation];
         [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
         [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@YES];
@@ -427,7 +428,7 @@
 {
     @synchronized (_lock)
     {
-        return [_mapLayersConfigurationProfile get];
+        return _mapLayersConfiguration;
     }
 }
 
@@ -797,6 +798,7 @@
 
 - (void) copyAppDataFrom:(OAApplicationMode *)sourceMode toMode:(OAApplicationMode *)targetMode
 {
+    [_mapLayersConfiguration resetConfigutation];
     [_lastMapSourceProfile set:[_lastMapSourceProfile get:sourceMode] mode:targetMode];
     [_overlayMapSourceProfile set:[_overlayMapSourceProfile get:sourceMode] mode:targetMode];
     [_underlayMapSourceProfile set:[_underlayMapSourceProfile get:sourceMode] mode:targetMode];
@@ -813,7 +815,6 @@
     [_slopeMinZoomProfile set:[_slopeMinZoomProfile get:sourceMode] mode:targetMode];
     [_slopeMaxZoomProfile set:[_slopeMaxZoomProfile get:sourceMode] mode:targetMode];
     [_mapillaryProfile set:[_mapillaryProfile get:sourceMode] mode:targetMode];
-    [_mapLayersConfigurationProfile set:[_mapLayersConfigurationProfile get:sourceMode] mode:targetMode];
 }
 
 @end

@@ -39,4 +39,6 @@
 
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint;
 
+- (BOOL) isVisible;
+
 @end

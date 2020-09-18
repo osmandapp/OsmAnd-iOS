@@ -100,20 +100,10 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_mapViewController)
             _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        if ([self isActive])
-        {
-            if ([_settings.mapSettingShowOfflineEdits get] && ![_app.data.mapLayersConfiguration isLayerVisible:kOsmEditsLayerId])
-                [_mapViewController.mapLayers showLayer:kOsmEditsLayerId];
-            if ([_settings.mapSettingShowOnlineNotes get] && ![_app.data.mapLayersConfiguration isLayerVisible:kOsmBugsLayerId])
-                [_mapViewController.mapLayers showLayer:kOsmBugsLayerId];
-        }
-        else
-        {
-            if ([_settings.mapSettingShowOfflineEdits get] && [_app.data.mapLayersConfiguration isLayerVisible:kOsmEditsLayerId])
-                [_mapViewController.mapLayers hideLayer:kOsmEditsLayerId];
-            if ([_settings.mapSettingShowOnlineNotes get] && [_app.data.mapLayersConfiguration isLayerVisible:kOsmBugsLayerId])
-                [_mapViewController.mapLayers hideLayer:kOsmBugsLayerId];
-        }
+        OAMapLayer *editsLayer = _mapViewController.mapLayers.osmEditsLayer;
+        OAMapLayer *bugsLayer = _mapViewController.mapLayers.osmBugsLayer;
+        [_app.data.mapLayersConfiguration setLayer:kOsmEditsLayerId Visibility:editsLayer.isVisible];
+        [_app.data.mapLayersConfiguration setLayer:kOsmBugsLayerId Visibility:bugsLayer.isVisible];
     });
 }
 

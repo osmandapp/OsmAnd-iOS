@@ -121,7 +121,7 @@
 			<key>CFBundleTypeIconFiles</key>
 			<array/>
 			<key>CFBundleTypeName</key>
-            <string>WPT/3D Charts</string>
+			<string>WPT/3D Charts</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -303,8 +303,8 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.xml</string>
-                <string>public.database</string>
-                <string>public.data</string>
+				<string>public.database</string>
+				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>GPS eXchange format / SQLite Map Tiles</string>
@@ -317,11 +317,11 @@
 					<string>chart</string>
 				</array>
 				<key>public.mime-type</key>
-                <array>
-                    <string>application/gpx+xml</string>
-                    <string>application/x-sqlite3</string>
-                    <string>application/octet-stream</string>
-                </array>
+				<array>
+					<string>application/gpx+xml</string>
+					<string>application/x-sqlite3</string>
+					<string>application/octet-stream</string>
+				</array>
 			</dict>
 		</dict>
 	</array>

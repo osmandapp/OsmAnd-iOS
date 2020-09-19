@@ -1101,60 +1101,6 @@
 
 @end
 
-@interface OAProfileMapLayersConfiguartion ()
-
-@property (nonatomic) OAMapLayersConfiguration *defValue;
-
-@end
-
-@implementation OAProfileMapLayersConfiguartion
-
-+ (instancetype) withKey:(NSString *)key defValue:(OAMapLayersConfiguration *)defValue
-{
-    OAProfileMapLayersConfiguartion *obj = [[OAProfileMapLayersConfiguartion alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    
-    return obj;
-}
-
-- (OAMapLayersConfiguration *) get
-{
-    return [self get:self.appMode];
-}
-
-- (void) set:(OAMapLayersConfiguration *)layersConfig
-{
-    [self set:layersConfig mode:self.appMode];
-}
-
-- (OAMapLayersConfiguration *) get:(OAApplicationMode *)mode
-{
-    NSObject *val = [self getValue:mode];
-    return val ? [[OAMapLayersConfiguration alloc] initWithHiddenLayers:(NSMutableSet *)val] : self.defValue;
-}
-
-- (void) set:(OAMapLayersConfiguration *)layersConfig mode:(OAApplicationMode *)mode
-{
-    NSArray *hiddenLayersArray = [NSArray arrayWithArray:[layersConfig.hiddenLayers allObjects]];
-    [self setValue:hiddenLayersArray mode:mode];
-}
-
-- (void) resetToDefault
-{
-    OAMapLayersConfiguration *defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (OAMapLayersConfiguration *) pDefault;
-    
-    [self set:defaultValue];
-}
-
-@end
-
 @interface OAProfileTerrain ()
 
 @property (nonatomic) EOATerrainType defValue;

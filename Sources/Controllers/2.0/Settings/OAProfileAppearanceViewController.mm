@@ -39,6 +39,8 @@
 @property (nonatomic) EOARouteService routeService;
 @property (nonatomic) EOANavigationIcon navigationIcon;
 @property (nonatomic) EOALocationIcon locationIcon;
+@property (nonatomic) CGFloat minSpeed;
+@property (nonatomic) CGFloat maxSpeed;
 
 @end
 
@@ -68,6 +70,10 @@
         if (_routeService != that.routeService)
             return NO;
         if (_navigationIcon != that.navigationIcon)
+            return NO;
+        if (_minSpeed != that.minSpeed)
+            return NO;
+        if (_maxSpeed != that.maxSpeed)
             return NO;
         return _locationIcon == that.locationIcon;
     }
@@ -152,6 +158,8 @@
     _changedProfile.routingProfile = _profile.routingProfile;
     _changedProfile.navigationIcon = _profile.navigationIcon;
     _changedProfile.locationIcon = _profile.locationIcon;
+    _changedProfile.minSpeed = _profile.minSpeed;
+    _changedProfile.maxSpeed = _profile.maxSpeed;
 }
 
 - (void) setupAppProfileObjectFromAppMode:(OAApplicationMode *) baseModeForNewProfile
@@ -165,6 +173,8 @@
     _profile.routeService = (EOARouteService) baseModeForNewProfile.getRouterService;
     _profile.locationIcon = baseModeForNewProfile.getLocationIcon;
     _profile.navigationIcon = baseModeForNewProfile.getNavigationIcon;
+    _profile.minSpeed = baseModeForNewProfile.baseMinSpeed;
+    _profile.maxSpeed = baseModeForNewProfile.baseMaxSpeed;
 }
 
 - (void) commonInit
@@ -441,6 +451,8 @@
     [newMode setLocationIcon:_changedProfile.locationIcon];
     [newMode setNavigationIcon:_changedProfile.navigationIcon];
     [newMode setOrder:(int) OAApplicationMode.allPossibleValues.count];
+    [newMode setBaseMinSpeed:_changedProfile.minSpeed];
+    [newMode setBaseMaxSpeed:_changedProfile.maxSpeed];
     
     [OAApplicationMode saveProfile:newMode];
     if (![OAApplicationMode.values containsObject:newMode])

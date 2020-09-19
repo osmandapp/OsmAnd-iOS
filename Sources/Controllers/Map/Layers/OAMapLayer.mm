@@ -63,6 +63,11 @@
 {
 }
 
+- (BOOL)isVisible
+{
+    return YES;
+}
+
 - (void) showProgressHUD
 {
     dispatch_async(dispatch_get_main_queue(), ^{

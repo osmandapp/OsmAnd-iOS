@@ -7,6 +7,8 @@
 //
 
 #import "OAMapLayersConfiguration.h"
+#import "OAAppData.h"
+#import "OsmAndApp.h"
 
 @implementation OAMapLayersConfiguration
 {
@@ -36,7 +38,11 @@
 - (void)commonInit
 {
     _lock = [[NSObject alloc] init];
-    _changeObservable = [[OAObservable alloc] init];
+}
+
+- (void) resetConfigutation
+{
+    _hiddenLayers = [NSMutableSet new];
 }
 
 - (BOOL)isLayerVisible:(NSString*)layerId
@@ -56,7 +62,8 @@
         else
             [_hiddenLayers addObject:layerId];
 
-        [_changeObservable notifyEventWithKey:self andValue:layerId];
+        OAAppData *data = OsmAndApp.instance.data;
+        [data.mapLayersConfigurationChangeObservable notifyEventWithKey:self andValue:layerId];
     }
 }
 
@@ -75,34 +82,11 @@
             [_hiddenLayers addObject:layerId];
             isVisibleNow = NO;
         }
-
-        [_changeObservable notifyEventWithKey:self andValue:layerId];
+        OAAppData *data = OsmAndApp.instance.data;
+        [data.mapLayersConfigurationChangeObservable notifyEventWithKey:self andValue:layerId];
 
         return isVisibleNow;
     }
 }
-
-@synthesize changeObservable = _changeObservable;
-
-#pragma mark - NSCoding
-
-#define kHiddenLayers @"hidden_layers"
-
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
-    [aCoder encodeObject:_hiddenLayers forKey:kHiddenLayers];
-}
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super init];
-    if (self) {
-        [self commonInit];
-        _hiddenLayers = [aDecoder decodeObjectForKey:kHiddenLayers];
-    }
-    return self;
-}
-
-#pragma mark -
 
 @end

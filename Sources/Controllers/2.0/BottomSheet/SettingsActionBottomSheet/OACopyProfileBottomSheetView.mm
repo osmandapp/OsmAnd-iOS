@@ -121,7 +121,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     
     for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
     {
-        if ([am.toHumanString isEqualToString:_targetAppMode.toHumanString])
+        if ([am.stringKey isEqualToString:_targetAppMode.stringKey])
             continue;
         [dataArr addObject:@{
             @"type" : kIconTitleIconRoundCell,

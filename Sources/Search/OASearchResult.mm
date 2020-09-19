@@ -95,11 +95,17 @@
 
 - (double) getSearchDistance:(CLLocation *)location pd:(double)pd
 {
-    double distance = 0;
+    double distance = 0.0;
     if (location && self.location)
-        distance = [location distanceFromLocation:self.location];
+    {
+        CLLocationDegrees lat1 = self.location.coordinate.latitude;
+        CLLocationDegrees lon1 = self.location.coordinate.longitude;
+        CLLocationDegrees lat2 = location.coordinate.latitude;
+        CLLocationDegrees lon2 = location.coordinate.longitude;
+        distance = getDistance(lat1, lon1, lat2, lon2);
+    }
     
-    return self.priority - 1 / (1 + pd * distance);
+    return self.priority - 1.0 / (1.0 + pd * distance);
 }
 
 - (OASearchResult *)setNewParentSearchResult:(OASearchResult *)parentSearchResult

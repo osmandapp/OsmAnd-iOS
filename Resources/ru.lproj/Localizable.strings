@@ -967,7 +967,7 @@
 "osm_edits_edits_label" = "Правки";
 "shared_string_retry" = "Повторить";
 "mapil_add_photos" = "Добавить фотографии";
-"mapillary_get_title" = "Улучшить фотопокрытие через Mapillary";
+"mapillary_get_title" = "Улучшить фотопокрытие в Mapillary";
 "shared_string_not_set" = "Не установлено";
 "shared_string_reset" = "Сбросить";
 "shared_string_filter" = "Фильтр";
@@ -1175,7 +1175,7 @@
 "mapil_no_inet_descr" = "Для просмотра фотографий Mapillary необходимо подключение к Интернету.";
 "mapil_images_nearby" = "Снимки рядом";
 "mapil_no_images" = "Для этой локации фотографий нет.";
-"mapillary_get_descr" = "Загрузите Mapillary, чтобы добавить фотографии к этому месту";
+"mapillary_get_descr" = "Скачайте Mapillary, чтобы добавить к этому месту фотографии";
 "mapil_contribute" = "Добавьте свои собственные снимки улиц";
 "mapillary_descr" = "Уличные онлайн фотографии для всех. Открывайте места, сотрудничайте, снимайте мир";
 "mapillary_turn_on_widget" = "Включить виджет Mapillary";

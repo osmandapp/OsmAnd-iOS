@@ -82,5 +82,6 @@
 - (int) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc;
 - (void) updateNextVisiblePoint:(int) nextPoint location:(CLLocation *) mp;
 - (int) getDistanceFromPoint:(int) locationIndex;
+- (BOOL) isPointPassed:(int)locationIndex;
 
 @end

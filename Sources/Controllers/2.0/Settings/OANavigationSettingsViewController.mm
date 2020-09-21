@@ -452,11 +452,11 @@ static NSDictionary *screenVoiceProviders;
                 value = nil;
                 if ([settings.metricSystem get] == KILOMETERS_AND_METERS)
                 {
-                    value = [NSString stringWithFormat:@"%d %@", (int)[settings.speedLimitExceed get:_am], OALocalizedString(@"units_kmh")];
+                    value = [NSString stringWithFormat:@"%d %@", (int)[settings.speedLimitExceedKmh get:_am], OALocalizedString(@"units_kmh")];
                 }
                 else
                 {
-                    NSUInteger index = [speedLimitsKm indexOfObject:@([settings.speedLimitExceed get:_am])];
+                    NSUInteger index = [speedLimitsKm indexOfObject:@([settings.speedLimitExceedKmh get:_am])];
                     if (index != NSNotFound)
                         value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
                 }
@@ -925,7 +925,7 @@ static NSDictionary *screenVoiceProviders;
             if (self.settingsType == kNavigationSettingsScreenSpeedLimitExceed)
             {
                 _titleView.text = OALocalizedString(@"speed_limit_exceed");
-                index = [speedLimitsKm indexOfObject:@([settings.speedLimitExceed get:_am])];
+                index = [speedLimitsKm indexOfObject:@([settings.speedLimitExceedKmh get:_am])];
             }
             else
             {
@@ -1565,7 +1565,7 @@ static NSDictionary *screenVoiceProviders;
 
 - (void) selectSpeedLimitExceed:(NSDictionary *)item
 {
-    [[OAAppSettings sharedManager].speedLimitExceed set:((NSNumber *)item[@"name"]).doubleValue mode:_am];
+    [[OAAppSettings sharedManager].speedLimitExceedKmh set:((NSNumber *)item[@"name"]).doubleValue mode:_am];
     [self backButtonClicked:nil];
 }
 

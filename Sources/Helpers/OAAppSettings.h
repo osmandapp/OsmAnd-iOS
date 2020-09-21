@@ -73,6 +73,7 @@ typedef NS_ENUM(NSInteger, EOASpeedConstant)
 
 + (instancetype) withSpeedConstant:(EOASpeedConstant)sc;
 + (NSArray<OASpeedConstant *> *) values;
++ (BOOL) imperial:(EOASpeedConstant)sc;
 
 + (NSString *) toHumanString:(EOASpeedConstant)sc;
 + (NSString *) toShortString:(EOASpeedConstant)sc;
@@ -527,12 +528,13 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileInteger *keepInforming;
 @property (nonatomic) OAProfileSpeedConstant *speedSystem;
 @property (nonatomic) OAProfileAngularConstant *angularUnits;
-@property (nonatomic) OAProfileDouble *speedLimitExceed;
+@property (nonatomic) OAProfileDouble *speedLimitExceedKmh;
 @property (nonatomic) OAProfileDouble *switchMapDirectionToCompass;
 @property (nonatomic) OAProfileInteger *wakeOnVoiceInt;
 @property (nonatomic) OAProfileDouble *routeRecalculationDistance;
 
 @property (nonatomic) OAProfileBoolean *showScreenAlerts;
+@property (nonatomic) OAProfileBoolean *showRoutingAlarms;
 @property (nonatomic) OAProfileBoolean *showTrafficWarnings;
 @property (nonatomic) OAProfileBoolean *showPedestrian;
 @property (nonatomic) OAProfileBoolean *showCameras;

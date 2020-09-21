@@ -706,6 +706,11 @@ std::string preferredLanguage;
         return -1;
 }
 
+- (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon
+{
+    return [self isDistanceLess:currentSpeed dist:dist etalon:etalon defSpeed:_DEFAULT_SPEED];
+}
+
 - (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon defSpeed:(float)defSpeed
 {
     if (defSpeed <= 0)

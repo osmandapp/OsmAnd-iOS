@@ -52,7 +52,7 @@
     NSMutableArray *dataArr = [NSMutableArray array];
     NSArray<NSNumber *> *speedLimitsKm = @[ @-10.f, @-7.f, @-5.f, @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
     NSArray<NSNumber *> *speedLimitsMiles = @[ @-7.f, @-5.f, @-3.f, @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
-    NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceed get:self.appMode])];
+    NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceedKmh get:self.appMode])];
     if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
     {
         for (int i = 0; i < speedLimitsKm.count; i++)
@@ -145,7 +145,7 @@
 
 - (void) selectSpeedLimitExceed:(NSDictionary *)item
 {
-    [_settings.speedLimitExceed set:((NSNumber *)item[@"name"]).doubleValue mode:self.appMode];
+    [_settings.speedLimitExceedKmh set:((NSNumber *)item[@"name"]).doubleValue mode:self.appMode];
     [self backButtonClicked:nil];
 }
 

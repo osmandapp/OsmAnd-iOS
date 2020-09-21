@@ -399,6 +399,11 @@
     return 0;
 }
 
+- (BOOL) isPointPassed:(int)locationIndex
+{
+    return locationIndex < _currentRoute;
+}
+
 - (int) getListDistance:(int)index
 {
     return _listDistance.count > index ? _listDistance[index].intValue : 0;

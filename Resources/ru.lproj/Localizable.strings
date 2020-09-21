@@ -1772,7 +1772,7 @@
 "select_nav_profile_dialog_message" = "«Тип навигации» определяет способ расчета маршрутов.";
 "change_map_behavior" = "Изменение поведения карты во время навигации";
 "map_behavior" = "Поведение карты";
-"vehicle_parameters" = "Параметры автомобиля";
+"vehicle_parameters" = "Физические параметры";
 "screen_alerts" = "Экранные оповещения";
 "voice_anounces" = "Голосовые анонсы";
 "downloading" = "Скачивание";

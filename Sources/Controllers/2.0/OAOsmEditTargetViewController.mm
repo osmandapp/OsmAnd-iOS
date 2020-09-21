@@ -176,7 +176,7 @@
         int poiTypeOrder = 0;
         NSString *poiTypeKeyName = @"";
         
-        if ([key isEqualToString:POI_TYPE_TAG])
+        if ([key isEqualToString:POI_TYPE_TAG] || [key hasPrefix:REMOVE_TAG_PREFIX])
             skip = YES;
         
         OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:key];

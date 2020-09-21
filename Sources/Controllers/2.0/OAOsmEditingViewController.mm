@@ -318,8 +318,9 @@ typedef NS_ENUM(NSInteger, EditingTab)
     else
         return;
     [poiData.getTagValues enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
-        if (key.length > 0 && value.length > 0 && ![key isEqualToString:POI_TYPE_TAG] && ![key hasPrefix:REMOVE_TAG_PREFIX])
+        if (key.length > 0 && value.length > 0 && ![key isEqualToString:POI_TYPE_TAG])
             [entity putTagNoLC:key value:value];
+        
     }];
     
     NSString *poiTypeTag = poiData.getTagValues[POI_TYPE_TAG];

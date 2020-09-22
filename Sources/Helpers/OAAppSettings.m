@@ -35,8 +35,7 @@
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
 #define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
-#define mapSettingShowOverlayOpacitySliderKey @"mapSettingShowOverlayOpacitySliderKey"
-#define mapSettingShowUnderlayOpacitySliderKey @"mapSettingShowUnderlayOpacitySliderKey"
+#define layerTransparencySeekbarModeKey @"layerTransparencySeekbarModeKey"
 #define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
 
 #define billingUserIdKey @"billingUserIdKey"
@@ -1768,12 +1767,10 @@
     OADayNightHelper *_dayNightHelper;
 }
 
-@synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, settingAppMode=_settingAppMode;
+@synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, appearanceMode=_appearanceMode;
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
 @synthesize mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, settingPrefMapLanguage=_settingPrefMapLanguage;
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
-@synthesize mapSettingShowOverlayOpacitySlider=_mapSettingShowOverlayOpacitySlider;
-@synthesize mapSettingShowUnderlayOpacitySlider=_mapSettingShowUnderlayOpacitySlider;
 
 + (OAAppSettings*) sharedManager
 {
@@ -1810,7 +1807,8 @@
         _settingMapLanguageTranslit = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageTranslitKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapLanguageTranslitKey] : NO;
 
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
-        _settingAppMode = [OAProfileInteger withKey:settingAppModeKey defValue:0];
+        _appearanceMode = [OAProfileInteger withKey:settingAppModeKey defValue:0];
+        [_registeredPreferences setObject:_appearanceMode forKey:@"daynight_mode"];
 
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;
@@ -1844,12 +1842,12 @@
         _mapSettingShowFavorites = [OAProfileBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
         _mapSettingShowOfflineEdits = [OAProfileBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
         _mapSettingShowOnlineNotes = [OAProfileBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
-        _mapSettingShowOverlayOpacitySlider = [OAProfileBoolean withKey:mapSettingShowOverlayOpacitySliderKey defValue:NO];
-        _mapSettingShowUnderlayOpacitySlider = [OAProfileBoolean withKey:mapSettingShowUnderlayOpacitySliderKey defValue:NO];
+        _layerTransparencySeekbarMode = [OAProfileInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
         
         [_registeredPreferences setObject:_mapSettingShowFavorites forKey:@"show_favorites"];
         [_registeredPreferences setObject:_mapSettingShowOfflineEdits forKey:@"show_osm_edits"];
         [_registeredPreferences setObject:_mapSettingShowOnlineNotes forKey:@"show_osm_bugs"];
+        [_registeredPreferences setObject:_layerTransparencySeekbarMode forKey:@"layer_transparency_seekbar_mode"];
     
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
@@ -1911,6 +1909,7 @@
         _customAppModes = [NSUserDefaults.standardUserDefaults objectForKey:customAppModesKey] ? [NSUserDefaults.standardUserDefaults stringForKey:customAppModesKey] : @"";
 
         _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
+        [_registeredPreferences setObject:_mapInfoControls forKey:mapInfoControlsKey];
         
         _routingProfile = [OAProfileString withKey:routingProfileKey defValue:@""];
         [_routingProfile setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
@@ -1920,6 +1919,7 @@
         [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
         [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
+        [_registeredPreferences setObject:_routingProfile forKey:routingProfileKey];
         
         _profileIconName = [OAProfileString withKey:profileIconNameKey defValue:@"ic_world_globe_dark"];
         [_profileIconName setModeDefaultValue:@"ic_world_globe_dark" mode:OAApplicationMode.DEFAULT];
@@ -1937,15 +1937,18 @@
         
         _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.AIRCRAFT];
+        [_registeredPreferences setObject:_routerService forKey:routerServiceKey];
         
         _navigationIcon = [OAProfileInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
         [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
+        [_registeredPreferences setObject:_navigationIcon forKey:navigationIconKey];
         
         _locationIcon = [OAProfileInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
+        [_registeredPreferences setObject:_locationIcon forKey:locationIconKey];
         
         _appModeOrder = [OAProfileInteger withKey:appModeOrderKey defValue:0];
         
@@ -2085,9 +2088,11 @@
         _settingGeoFormat = [OAProfileInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OAProfileInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
         
+        [_registeredPreferences setObject:_settingAllow3DView forKey:settingEnable3DViewKey];
         [_registeredPreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
         [_registeredPreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_registeredPreferences setObject:_metricSystem forKey:@"default_metric_system"];
+        [_registeredPreferences setObject:_metricSystemChangedManually forKey:metricSystemChangedManuallyKey];
         [_registeredPreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_registeredPreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
         
@@ -2108,6 +2113,7 @@
         [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode CAR]];
         [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode BICYCLE]];
         [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
+        [_registeredPreferences setObject:_wakeOnVoiceInt forKey:wakeOnVoiceIntKey];
 
         _showTrafficWarnings = [OAProfileBoolean withKey:showTrafficWarningsKey defValue:NO];
         [_showTrafficWarnings setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
@@ -2118,6 +2124,7 @@
         [_registeredPreferences setObject:_showPedestrian forKey:@"show_pedestrian"];
 
         _showCameras = [OAProfileBoolean withKey:showCamerasKey defValue:NO];
+        [_registeredPreferences setObject:_showCameras forKey:showCamerasKey];
         _showTunnels = [OAProfileBoolean withKey:showTunnelsKey defValue:NO];
         [_showTunnels setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_registeredPreferences setObject:_showTunnels forKey:@"show_tunnels"];
@@ -2214,6 +2221,7 @@
         [_registeredPreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
     
         _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
+        [_registeredPreferences setObject:_contourLinesZoom forKey:contourLinesZoomKey];
         
         // riirection Appearance
         _activeMarkers = [OAProfileActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
@@ -2278,9 +2286,9 @@
     [[NSUserDefaults standardUserDefaults] setBool:_settingMapLanguageTranslit forKey:settingMapLanguageTranslitKey];
 }
 
-- (void) setAppMode:(int)settingAppMode
+- (void) setAppearanceMode:(int)appearanceMode
 {
-    [_settingAppMode set:settingAppMode];
+    [_appearanceMode set:appearanceMode];
     [_dayNightHelper forceUpdate];
 }
 
@@ -2942,6 +2950,44 @@
         }
     }
     return @"en";
+}
+
+- (BOOL) getOverlayOpacitySliderVisibility
+{
+    return [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL;
+}
+
+- (void) setOverlayOpacitySliderVisibility:(BOOL)visibility
+{
+    if (visibility)
+        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL];
+        else
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];
+   else
+        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY];
+        else
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
+}
+
+- (BOOL) getUnderlayOpacitySliderVisibility
+{
+    return [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL;
+}
+
+- (void) setUnderlayOpacitySliderVisibility:(BOOL)visibility
+{
+    if (visibility)
+        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY || [_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL];
+        else
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];
+   else
+        if ([_layerTransparencySeekbarMode get] == LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL)
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY];
+        else
+            [_layerTransparencySeekbarMode set:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
 }
 
 - (BOOL) nightMode

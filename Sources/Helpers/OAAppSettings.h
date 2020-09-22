@@ -386,13 +386,19 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 #define MAGNIFIER_DEFAULT_VALUE 1.0
 #define MAGNIFIER_DEFAULT_CAR 1.5
 
+#define LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY 0
+#define LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY 1
+#define LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF 2
+#define LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY 3
+#define LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL 4
+
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
 @property (nonatomic, readonly) NSArray *mapLanguages;
 @property (nonatomic, readonly) NSArray *ttsAvailableVoices;
 @property (nonatomic, readonly) NSArray *rtlLanguages;
 
 
-@property (nonatomic) OAProfileInteger *settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (nonatomic) OAProfileInteger *appearanceMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (readonly, nonatomic) BOOL nightMode;
 @property (nonatomic) OAProfileMetricSystem *metricSystem;
 @property (nonatomic) OAProfileBoolean *drivingRegionAutomatic;
@@ -409,9 +415,12 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *mapSettingShowFavorites;
 @property (nonatomic) OAProfileBoolean *mapSettingShowOfflineEdits;
 @property (nonatomic) OAProfileBoolean *mapSettingShowOnlineNotes;
-@property (nonatomic) OAProfileBoolean *mapSettingShowOverlayOpacitySlider;
-@property (nonatomic) OAProfileBoolean *mapSettingShowUnderlayOpacitySlider;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
+@property (nonatomic) OAProfileInteger *layerTransparencySeekbarMode; // 0 - overlay, 1 - underlay, 2 - off, 3 - undefined, 4 - overlay&underlay
+- (BOOL) getOverlayOpacitySliderVisibility;
+- (BOOL) getUnderlayOpacitySliderVisibility;
+- (void) setOverlayOpacitySliderVisibility:(BOOL)visibility;
+- (void) setUnderlayOpacitySliderVisibility:(BOOL)visibility;
 
 @property (nonatomic) NSString *billingUserId;
 @property (nonatomic) NSString *billingUserName;
@@ -604,7 +613,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 - (void) setShowOnlineNotes:(BOOL)mapSettingShowOnlineNotes;
 - (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits;
-- (void) setAppMode:(int)settingAppMode;
+- (void) setAppearanceMode:(int)settingAppMode;
 - (void) setShowFavorites:(BOOL)mapSettingShowFavorites;
 
 - (void) addImpassableRoad:(OAAvoidRoadInfo *)roadInfo;

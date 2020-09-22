@@ -60,6 +60,8 @@
     OAProfileInteger *_slopeMinZoomProfile;
     OAProfileInteger *_slopeMaxZoomProfile;
     OAProfileBoolean *_mapillaryProfile;
+    
+    NSMapTable<NSString *, OAProfileSetting *> *_registeredPreferences;
 }
 
 @synthesize applicationModeChangedObservable = _applicationModeChangedObservable, mapLayersConfiguration = _mapLayersConfiguration;
@@ -177,6 +179,21 @@
     _slopeMaxZoomProfile = [OAProfileInteger withKey:kSlopeMaxZoomKey defValue:16];
     _mapillaryProfile = [OAProfileBoolean withKey:kMapillaryKey defValue:NO];
 
+    _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
+    [_registeredPreferences setObject:_lastMapSourceProfile forKey:kLastMapSourceKey];
+    [_registeredPreferences setObject:_overlayMapSourceProfile forKey:kLastOverlayKey];
+    [_registeredPreferences setObject:_underlayMapSourceProfile forKey:kLastUnderlayKey];
+    [_registeredPreferences setObject:_overlayAlphaProfile forKey:kOverlayAlphaKey];
+    [_registeredPreferences setObject:_underlayAlphaProfile forKey:kUnderlayAlphaKey];
+    [_registeredPreferences setObject:_terrainTypeProfile forKey:kTerrainTypeKey];
+    [_registeredPreferences setObject:_lastTerrainTypeProfile forKey:kLastTerrainTypeKey];
+    [_registeredPreferences setObject:_hillshadeAlphaProfile forKey:kHillshadeAlphaKey];
+    [_registeredPreferences setObject:_slopeAlphaProfile forKey:kSlopeAlphaKey];
+    [_registeredPreferences setObject:_hillshadeMinZoomProfile forKey:kHillshadeMinZoomKey];
+    [_registeredPreferences setObject:_hillshadeMaxZoomProfile forKey:kHillshadeMaxZoomKey];
+    [_registeredPreferences setObject:_slopeMinZoomProfile forKey:kSlopeMinZoomKey];
+    [_registeredPreferences setObject:_slopeMaxZoomProfile forKey:kSlopeMaxZoomKey];
+    [_registeredPreferences setObject:_mapillaryProfile forKey:kMapillaryKey];
 }
 
 - (void) dealloc

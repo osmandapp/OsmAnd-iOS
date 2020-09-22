@@ -1541,7 +1541,7 @@
 "routing_attr_allow_advanced_name" = "Разрешить расширенные маршруты";
 "routing_attr_prefer_motorway_name" = "Предпочитать автомагистрали";
 "rendering_attr_roadStyle_description" = "Стиль отображения дорог";
-"routing_attr_allow_motorway_name" = "Использовать автомагистрали";
+"routing_attr_allow_motorway_name" = "Разрешить автомагистрали";
 "rendering_attr_showLez_name" = "Зоны с низким уровнем выбросов";
 "rendering_value_translucent_purple_name" = "Полупрозрачный фиолетовый";
 "rendering_attr_piste_difficulty_aerialway_name" = "Канатная дорога";
@@ -1769,7 +1769,7 @@
 "create_profile" = "Создать профиль";
 "import_from_files" = "Импорт из файлов";
 "shared_string_exit" = "Выход";
-"select_nav_profile_dialog_message" = "«Тип навигации» определяет способ расчета маршрутов.";
+"select_nav_profile_dialog_message" = "Режим навигации определяет правила расчета маршрутов.";
 "change_map_behavior" = "Изменение поведения карты во время навигации";
 "map_behavior" = "Поведение карты";
 "vehicle_parameters" = "Физические параметры";

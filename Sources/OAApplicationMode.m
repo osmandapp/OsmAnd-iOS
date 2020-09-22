@@ -641,6 +641,7 @@ static OAApplicationMode *_SKI;
         [settings setApplicationMode:_DEFAULT];
     [_cachedFilteredValues removeObjectsInArray:modes];
     [self saveCustomAppModesToSettings];
+    [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
 }
 
 + (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected

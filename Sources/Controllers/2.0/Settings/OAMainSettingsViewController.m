@@ -311,13 +311,6 @@
 
 #pragma mark - UITableViewDelegate
 
-- (nullable NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath;
-{
-    NSDictionary *item = [self getItem:indexPath];
-    BOOL nonClickable = item[@"nonclickable"] != nil;
-    return nonClickable ? nil : indexPath;
-}
-
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];

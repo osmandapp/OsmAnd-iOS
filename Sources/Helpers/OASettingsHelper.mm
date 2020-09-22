@@ -675,11 +675,16 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     BOOL isTouringView = [resName hasPrefix:@"Touring"];
     if (!renderer && isTouringView)
         renderer = OAMapStyleTitles.getMapStyleTitles[@"Touring-view_(more-contrast-and-details).render"];
+    else if (!renderer && [resName isEqualToString:@"offroad"])
+        renderer = OAMapStyleTitles.getMapStyleTitles[@"Offroad by ZLZK"];
+    
+    if (!renderer)
+        return;
     OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:_appMode.variantKey];
     OAAppData *data = OsmAndApp.instance.data;
     // if the last map source was offline set it to the selected source
     if ([[data getLastMapSource:_appMode].resourceId hasSuffix:ext])
-        [data setLastMapSource:[[OAMapSource alloc] initWithResource:[(isTouringView ? resName.lowerCase : resName) stringByAppendingString:ext] andVariant:_appMode.variantKey name:renderer] mode:_appMode];
+        [data setLastMapSource:[[OAMapSource alloc] initWithResource:[resName.lowerCase stringByAppendingString:ext] andVariant:_appMode.variantKey name:renderer] mode:_appMode];
     [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         if ([key isEqualToString:@"displayed_transport_settings"])
         {

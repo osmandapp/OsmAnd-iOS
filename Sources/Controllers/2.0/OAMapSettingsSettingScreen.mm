@@ -232,11 +232,11 @@
     {
         int index = (int)indexPath.row;
         if (index == 1)
-            [_settings setAppMode:APPEARANCE_MODE_DAY];
+            [_settings setAppearanceMode:APPEARANCE_MODE_DAY];
         else if (index == 2)
-            [_settings setAppMode:APPEARANCE_MODE_NIGHT];
+            [_settings setAppearanceMode:APPEARANCE_MODE_NIGHT];
         else
-            [_settings setAppMode:APPEARANCE_MODE_AUTO];
+            [_settings setAppearanceMode:APPEARANCE_MODE_AUTO];
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {

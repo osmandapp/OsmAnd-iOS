@@ -8,7 +8,7 @@
 
 #import "OAPluginResetBottomSheetViewController.h"
 #import "Localization.h"
-#import "OABottomSheetHeaderDescrButtonCell.h"
+#import "OABottomSheetHeaderButtonCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OAMapPanelViewController.h"
@@ -32,7 +32,7 @@
 
 #define kButtonsTag 1
 #define kButtonsDividerTag 150
-#define kBottomSheetHeaderDescrButtonCell @"OABottomSheetHeaderDescrButtonCell"
+#define kBottomSheetHeaderButtonCell @"OABottomSheetHeaderButtonCell"
 #define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
 #define kDescrTitleCell @"OADescrTitleCell"
 #define kDividerCell @"OADividerCell"
@@ -80,7 +80,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
-                     @"type" : kBottomSheetHeaderDescrButtonCell,
+                     @"type" : kBottomSheetHeaderButtonCell,
                      @"title" : OALocalizedString(@"reset_to_default"),
                      @"description" : @"",
                      @"img" : @"ic_custom_reset.png"
@@ -124,7 +124,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kBottomSheetHeaderDescrButtonCell])
+    if ([type isEqualToString:kBottomSheetHeaderButtonCell])
     {
         return UITableViewAutomaticDimension;
     }
@@ -163,14 +163,14 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:kBottomSheetHeaderDescrButtonCell])
+    if ([item[@"type"] isEqualToString:kBottomSheetHeaderButtonCell])
     {
-        static NSString* const identifierCell = kBottomSheetHeaderDescrButtonCell;
+        static NSString* const identifierCell = kBottomSheetHeaderButtonCell;
         OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetHeaderDescrButtonCell owner:self options:nil];
-            cell = (OABottomSheetHeaderDescrButtonCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetHeaderButtonCell owner:self options:nil];
+            cell = (OABottomSheetHeaderButtonCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
@@ -333,7 +333,7 @@
 -(void) doneButtonPressed:(id)sender
 {
     if (self.delegate)
-        [self.delegate onAppModeChangedByPluginResetBottomSheet];
+        [self.delegate onPluginSettingsReset];
     
     [self dismiss];
 }

@@ -624,7 +624,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 - (void) setShowOnlineNotes:(BOOL)mapSettingShowOnlineNotes;
 - (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits;
-- (void) setAppMode:(int)settingAppMode;
+- (void) setAppearanceMode:(int)settingAppMode;
 - (void) setShowFavorites:(BOOL)mapSettingShowFavorites;
 
 - (void) addImpassableRoad:(OAAvoidRoadInfo *)roadInfo;

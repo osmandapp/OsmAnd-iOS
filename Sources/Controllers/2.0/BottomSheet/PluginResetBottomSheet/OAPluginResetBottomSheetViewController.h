@@ -10,7 +10,7 @@
 
 @protocol OAPluginResetBottomSheetDelegate <NSObject>
 
-- (void) onAppModeChangedByPluginResetBottomSheet;
+- (void) onPluginSettingsReset;
 
 @end
 

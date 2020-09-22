@@ -2365,9 +2365,9 @@
     [[NSUserDefaults standardUserDefaults] setBool:_settingMapLanguageTranslit forKey:settingMapLanguageTranslitKey];
 }
 
-- (void) setAppMode:(int)settingAppMode
+- (void) setAppearanceMode:(int)appearanceMode
 {
-    [_appearanceMode set:settingAppMode];
+    [_appearanceMode set:appearanceMode];
     [_dayNightHelper forceUpdate];
 }
 

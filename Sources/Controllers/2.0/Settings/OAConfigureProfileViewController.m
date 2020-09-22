@@ -556,7 +556,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 #pragma mark - OAConfigureProfileDelegate
 
-- (void) onAppModeChangedByPluginResetBottomSheet
+- (void) onPluginSettingsReset
 {
     [OASettingsHelper.sharedInstance resetAppModePrefs: _appMode];
     self.titleLabel.text = _appMode.toHumanString;

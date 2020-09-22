@@ -913,8 +913,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     MutableOrderedDictionary *res = [MutableOrderedDictionary new];
     OAAppSettings *settings = OAAppSettings.sharedManager;
+    NSSet<NSString *> *appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
     for (NSString *key in settings.getRegisteredSettings)
     {
+        if ([appModeBeanPrefsIds containsObject:key])
+            continue;
         OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:key];
         if (setting)
         {

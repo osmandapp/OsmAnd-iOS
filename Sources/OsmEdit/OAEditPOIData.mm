@@ -212,6 +212,8 @@
         _category = type;
         [_tagValues setObject:@"" forKey:POI_TYPE_TAG];
         [_changedTags addObject:POI_TYPE_TAG];
+        [self removeCurrentTypeTag];
+        _currentPoiType = nil;
     }
 }
 
@@ -285,8 +287,8 @@
     NSString *oldValue = [_tagValues objectForKey:tag];
     if (!oldValue || ![oldValue isEqualToString:value])
         [_changedTags addObject:tag];
-    
-    [_tagValues setObject:value forKey:tag];
+    NSString *tagVal = value ? value : @"";
+    [_tagValues setObject:tagVal forKey:tag];
     // TODO: check if notification is necessary after the advanced editing is implemented
     //notifyDatasetChanged(tag);
     _hasChangesBeenMade = YES;
@@ -341,19 +343,21 @@
 {
     if (_isInEdit)
         return;
-    
-    [_tagValues setObject:newTag forKey:POI_TYPE_TAG];
+    NSString *value = newTag != nil ? newTag : @"";
+    [_tagValues setObject:value forKey:POI_TYPE_TAG];
     if (userChanges)
         [_changedTags addObject:POI_TYPE_TAG];
     
     [self retrieveType];
     OAPOIType *pt = [self getPoiTypeDefined];
-    if (pt) {
+    NSString *editOsmTag = pt ? [pt getEditOsmTag] : nil;
+    if (editOsmTag) {
         [self removeTypeTagWithPrefix:[_tagValues objectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:pt.getEditOsmTag]] == nil];
         _currentPoiType = pt;
-        [_tagValues setObject:pt.getEditOsmValue forKey:pt.getEditOsmTag];
+        NSString *tagVal = [pt getEditOsmValue] ? [pt getEditOsmValue]  : @"";
+        [_tagValues setObject:tagVal forKey:editOsmTag];
         if (userChanges)
-            [_changedTags addObject:pt.getEditOsmTag];
+            [_changedTags addObject:editOsmTag];
         
         _category = pt.category;
     }
@@ -409,6 +413,14 @@
         [_tagValues removeObjectForKey:_currentPoiType.getOsmTag2];
         [_changedTags minusSet:[NSSet setWithObjects:_currentPoiType.getEditOsmTag, _currentPoiType.getOsmTag2, nil]];
     }
+}
+
+- (BOOL) hasEmptyValue
+{
+    for (NSString *key in _tagValues.allKeys)
+        if ([[_tagValues objectForKey:key] isEmpty] && [POI_TYPE_TAG isEqualToString:key])
+            return YES;
+    return NO;
 }
 
 @end

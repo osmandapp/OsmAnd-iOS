@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/LocationPoint.java
-//  git revision e5a489637a08d21827a1edd2cf6581339b5f748a
+//  git revision a196c4b11c6d74d8896eb9d51279871804d5b4b5
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>

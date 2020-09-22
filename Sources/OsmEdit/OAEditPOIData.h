@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 //  OsmAnd/src/net/osmand/plus/osmedit/EditPoiData.java
-//  git revision dcd05c455facb38793c06dda9ba5a14e93423450
+//  git revision 638a9c62310c3682dd629f34fad56ecd667808ce
 
 #import <Foundation/Foundation.h>
 
@@ -55,6 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(BOOL)hasChangesBeenMade;
 -(void)updateTypeTag:(NSString *)newTag userChanges:(BOOL)userChanges;
+- (BOOL) hasEmptyValue;
 
 @end
 

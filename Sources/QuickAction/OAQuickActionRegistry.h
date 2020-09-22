@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 //  OsmAnd/src/net/osmand/plus/quickaction/QuickActionRegistry.java
-//  git revision 8c4ac76b98a3ceddb0353b52b63574534c8ea4b3
+//  git revision 8dedb3908aabe6e4fdd59751914516461f09e6d9
 
 #import "OAObservable.h"
 #import <Foundation/Foundation.h>

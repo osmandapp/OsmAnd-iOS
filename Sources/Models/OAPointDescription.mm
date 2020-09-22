@@ -139,24 +139,7 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     NSInteger f = [self.class coordinatesFormatToFormatterMode:[settings.settingGeoFormat get]];
-    if (f == FORMAT_UTM)
-    {
-        return [OALocationConvert getUTMCoordinateString:lat lon:lon];
-    }
-    else if (f == FORMAT_OLC)
-        return [OALocationConvert getLocationOlcName:lat lon:lon];
-    else
-    {
-        if (!sh)
-        {
-            return [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"sett_arr_loc"),
-                    [OALocationConvert formatLocationCoordinates:lat lon:lon format:f]];
-        }
-        else
-        {
-            return [OALocationConvert formatLocationCoordinates:lat lon:lon format:f];
-        }
-    }
+    return [OALocationConvert formatLocationCoordinates:lat lon:lon format:f];
 }
 
 + (NSString *) getLocationNamePlain:(double)lat lon:(double)lon

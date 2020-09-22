@@ -6,13 +6,15 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/routing/PointDescription.java
-//  git revision e5a489637a08d21827a1edd2cf6581339b5f748a
+//  git revision e225ad7b03693623bbad7fac3a60700248aee43d
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
 #define POINT_TYPE_FAVORITE @"favorite"
 #define POINT_TYPE_WPT @"wpt"
+#define POINT_TYPE_GPX @"gpx"
+#define POINT_TYPE_RTE @"rte"
 #define POINT_TYPE_POI @"poi"
 #define POINT_TYPE_ADDRESS @"address"
 #define POINT_TYPE_OSM_NOTE "osm_note"
@@ -34,8 +36,11 @@
 #define POINT_TYPE_TRANSPORT_ROUTE @"transport_route"
 #define POINT_TYPE_TRANSPORT_STOP @"transport_stop"
 #define POINT_TYPE_MAPILLARY_IMAGE @"mapillary_image"
+#define POINT_TYPE_POI_TYPE = "poi_type"
+#define POINT_TYPE_CUSTOM_POI_FILTER = "custom_poi_filter"
 
 #define POINT_LOCATION_URL 200
+#define POINT_LOCATION_LIST_HEADER = 201
 
 @protocol OALocationPoint;
 

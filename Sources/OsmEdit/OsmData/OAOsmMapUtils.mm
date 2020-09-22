@@ -23,6 +23,16 @@
     if ([nodes count] == 0)
         return kCLLocationCoordinate2DInvalid;
     BOOL area = [way getFirstNodeId] == [way getLastNodeId];
+    // double check for area (could be negative all)
+    if (area)
+    {
+        OANode *fn = [way getFirstNode];
+        OANode *ln = [way getLastNode];
+        if (fn && ln && [self getDistance:fn second:ln] < 50)
+            area = YES;
+        else
+            area = NO;
+    }
     CLLocationCoordinate2D ll = area ? [self.class getMathWeightCenterForNodes:nodes] : [self.class getWeightCenterForNodes:nodes];
     if(!CLLocationCoordinate2DIsValid(ll))
         return ll;

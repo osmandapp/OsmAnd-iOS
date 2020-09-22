@@ -237,6 +237,8 @@
 		1575409D2452F2D300327879 /* OASettingsCheckmarkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1575409C2452F2D200327879 /* OASettingsCheckmarkCell.xib */; };
 		157540A02452F3D900327879 /* OASettingsCheckmarkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1575409F2452F3D900327879 /* OASettingsCheckmarkCell.m */; };
 		157540A32452F45A00327879 /* OADirectionAppearanceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 157540A22452F45A00327879 /* OADirectionAppearanceViewController.m */; };
+		1577352D2519FD3300464554 /* OABottomSheetHeaderButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1577352C2519FD3300464554 /* OABottomSheetHeaderButtonCell.xib */; };
+		15773530251A0A1E00464554 /* OABottomSheetHeaderButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1577352F251A0A1E00464554 /* OABottomSheetHeaderButtonCell.m */; };
 		157F3CBF24A0F04C000A66F0 /* ic_custom_navigation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBC24A0F04B000A66F0 /* ic_custom_navigation@2x.png */; };
 		157F3CC024A0F04C000A66F0 /* ic_custom_navigation.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBD24A0F04B000A66F0 /* ic_custom_navigation.png */; };
 		157F3CC124A0F04C000A66F0 /* ic_custom_navigation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */; };
@@ -6237,6 +6239,9 @@
 		1575409F2452F3D900327879 /* OASettingsCheckmarkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASettingsCheckmarkCell.m; path = Controllers/Cells/OASettingsCheckmarkCell.m; sourceTree = "<group>"; };
 		157540A12452F45900327879 /* OADirectionAppearanceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADirectionAppearanceViewController.h; path = Controllers/Panels/OADirectionAppearanceViewController.h; sourceTree = "<group>"; };
 		157540A22452F45A00327879 /* OADirectionAppearanceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADirectionAppearanceViewController.m; path = Controllers/Panels/OADirectionAppearanceViewController.m; sourceTree = "<group>"; };
+		1577352C2519FD3300464554 /* OABottomSheetHeaderButtonCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OABottomSheetHeaderButtonCell.xib; path = Resources/Controllers/Cells/OABottomSheetHeaderButtonCell.xib; sourceTree = "<group>"; };
+		1577352E251A074400464554 /* OABottomSheetHeaderButtonCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABottomSheetHeaderButtonCell.h; sourceTree = "<group>"; };
+		1577352F251A0A1E00464554 /* OABottomSheetHeaderButtonCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABottomSheetHeaderButtonCell.m; sourceTree = "<group>"; };
 		157F3CBC24A0F04B000A66F0 /* ic_custom_navigation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_navigation@2x.png"; path = "Resources/Icons/ic_custom_navigation@2x.png"; sourceTree = "<group>"; };
 		157F3CBD24A0F04B000A66F0 /* ic_custom_navigation.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_navigation.png; path = Resources/Icons/ic_custom_navigation.png; sourceTree = "<group>"; };
 		157F3CBE24A0F04C000A66F0 /* ic_custom_navigation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_navigation@3x.png"; path = "Resources/Icons/ic_custom_navigation@3x.png"; sourceTree = "<group>"; };
@@ -10230,7 +10235,8 @@
 				15BDDEAC24DAF84900079C83 /* OACopyProfileBottomSheetView.mm */,
 				15BDDEAE24DAF85D00079C83 /* OACopyProfileBottomSheetView.h */,
 				156F4E5F24FA5115008ED1DD /* OADeleteProfileBottomSheetViewController.h */,
-				156F4E6024FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m */,			);
+				156F4E6024FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m */,
+			);
 			path = SettingsActionBottomSheet;
 			sourceTree = "<group>";
 		};
@@ -10366,6 +10372,7 @@
 			isa = PBXGroup;
 			children = (
 				1582989E24DC042600323768 /* OAIconTitleIconRoundCell.xib */,
+				1577352C2519FD3300464554 /* OABottomSheetHeaderButtonCell.xib */,
 				DA0F8CC824D4430700929B90 /* OAIconTextDescSwitchCell.xib */,
 				15C428E224A7753C00B21005 /* OALabelCollectionViewCell.xib */,
 				15C428C924A75E1000B21005 /* OAInputCellWithTitle.xib */,
@@ -10739,6 +10746,8 @@
 				780AB019242B2C52001DF5EF /* OAButtonIconTableViewCell.m */,
 				33D40F1424EF213500AFFF06 /* OAMultiLineLabelCell.m */,
 				33D40F1724EF218200AFFF06 /* OAMultiLineLabelCell.h */,
+				1577352E251A074400464554 /* OABottomSheetHeaderButtonCell.h */,
+				1577352F251A0A1E00464554 /* OABottomSheetHeaderButtonCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -19096,6 +19105,7 @@
 				BBA3AFBE197FC4BB0039D991 /* menu_item_update_icon@2x.png in Resources */,
 				0CBDD099245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_3.png in Resources */,
 				84B6E09C2073D7BD002CA15B /* OADividerCell.xib in Resources */,
+				1577352D2519FD3300464554 /* OABottomSheetHeaderButtonCell.xib in Resources */,
 				1535D8EA243DDA390061220F /* ic_custom_map_online.png in Resources */,
 				3A8AC24B19E57A220062DDE9 /* Btn-Pause.png in Resources */,
 				8441CB4F1B1370580033AC95 /* move_items.png in Resources */,
@@ -21420,6 +21430,7 @@
 				DA357C5622A689E400A1F82D /* OAUsernameFilterViewController.mm in Sources */,
 				84B4FD5B1A912F7E00A147BA /* OAGPXDatabase.mm in Sources */,
 				845AFB5B1E264EE800170026 /* OASearchUICore.mm in Sources */,
+				15773530251A0A1E00464554 /* OABottomSheetHeaderButtonCell.m in Sources */,
 				846D1F121F38EF79007472A6 /* OAWaypointHelper.mm in Sources */,
 				DA18B0C023AA3447009A89CC /* OARouteStatistics.m in Sources */,
 				84BE7D3E1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */,

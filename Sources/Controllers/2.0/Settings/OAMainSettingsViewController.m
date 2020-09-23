@@ -96,6 +96,7 @@
 - (void)dealloc
 {
     [_appModesAvailabilityChangeObserver detach];
+    [_appModeChangedObservable detach];
 }
 
 - (void) setupView

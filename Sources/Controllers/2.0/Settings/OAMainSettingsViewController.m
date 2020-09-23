@@ -39,7 +39,8 @@
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
     
-    OAAutoObserverProxy* _appModeChangeObserver;
+    OAAutoObserverProxy* _appModesAvailabilityChangeObserver;
+    OAAutoObserverProxy* _appModeChangedObservable;
     
     OAApplicationMode *_targetAppMode;
 }
@@ -66,9 +67,13 @@
     
     _settings = OAAppSettings.sharedManager;
     
-    _appModeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+    _appModesAvailabilityChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onAvailableAppModesChanged)
                                                         andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
+    
+    _appModeChangedObservable = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onAvailableAppModesChanged)
+                                                           andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
     
     if (_targetAppMode)
     {
@@ -90,7 +95,7 @@
 
 - (void)dealloc
 {
-    [_appModeChangeObserver detach];
+    [_appModesAvailabilityChangeObserver detach];
 }
 
 - (void) setupView

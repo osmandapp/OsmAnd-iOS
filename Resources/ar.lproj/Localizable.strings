@@ -1140,7 +1140,7 @@
 "map_styles" = "أنماط الخريطة";
 "add_action" = "إضافة إجراء";
 "create_items" = "إنشاء عناصر";
-"configure_map" = "إعداد الخريطة";
+"configure_map" = "ضبط الخريطة";
 "add_map_marker" = "إضافة توجيه مباشر للخريطة";
 "add_gpx_waypoint" = "إضافة الإحداثية GPX";
 "toggle_fav" = "إظهار/إخفاء المفضلة";
@@ -1737,8 +1737,8 @@
 "select_icon" = "اختر أيقونة";
 "enter_profile_name" = "أدخل اسم الملف الشخصي";
 "edit_profile_list" = "تحرير قائمة ملفات التعريف";
-"new_profile" = "ملف تعريف جديد";
-"profile_type_custom_string" = "ملف تعريف مخصص";
+"new_profile" = "وضع جديد";
+"profile_type_custom_string" = "وضع مخصص";
 "create_profile_descr" = "إسناد الوضع المخصص الخاص بك إلى أحد أوضاع التطبيق الافتراضية ، يحدد الإعداد الأساسي مثل الرؤية الافتراضية لعناصر واجهة المستخدم ووحدات السرعة والمسافة. وهذه هي أوضاع التطبيق الافتراضية ، إلى جانب أمثلة لأوضاع مخصصة يمكن تمديدها إلى:";
 "create_profile" = "إنشاء ملف تعريف";
 "import_from_files" = "استيراد من الملف";
@@ -1812,12 +1812,12 @@
 "lenght_limit_description" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
 "height_limit_description" = "أدل بارتفاع مركبتك ،قد يتم تطبيق بعض القيود على المركبات المرتفعة.";
 "weight_limit_description" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
-"export_profile" = "تصدير الملف الشخصي";
+"export_profile" = "تصدير الوضع";
 "configure_map_descr" = "مظهر الخريطة";
 "export_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد \"نسخ إلى أوسماند\"";
 "profile_sett_descr" = "تؤثر على ملف التعريف المحدد";
 "app_profiles" = "أوضاع التطبيق";
-"selected_profile" = "الملف الشخصي المحدد";
+"selected_profile" = "الوضع المحدد";
 "osmand_profile" = "ملف تعريف أوسماند";
 "ui_customization_descr" = "عناصر الدرج، قائمة السياق";
 "ui_customization" = "تخصيص واجهة المستخدم";
@@ -1843,8 +1843,8 @@
 "recalculate_wrong_dir" = "إعادة حساب المسار في حالة الانحراف";
 "repeat_after" = "إعادة بعد";
 "profile_alert_delete_msg" = "هل أنت متأكد أنك تريد حذف ملف تعريف \"٪ @\" بالكامل؟";
-"profile_alert_delete_title" = "حذف الملف الشخصي";
+"profile_alert_delete_title" = "حذف الوضع";
 "reset_to_default" = "استعادة الضبط الافتراضي";
 "copy_from_other_profile_descr" = "يمكنك نسخ جميع الإعدادات من أي ملف تعريف إلى ملف التعريف المحدد: ";
-"copy_from_other_profile" = "نسخة من ملف تعريف آخر";
+"copy_from_other_profile" = "نسخ من وضع آخر";
 "shared_string_copy" = "نسخ";

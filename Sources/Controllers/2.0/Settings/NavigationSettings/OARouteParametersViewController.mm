@@ -82,14 +82,17 @@
 
 - (void)addParameterGroupRow:(OALocalRoutingParameterGroup *)group parametersArr:(NSMutableArray *)parametersArr iconName:(NSString *)iconName
 {
-    [parametersArr addObject:@{
-        @"type" : kCellTypeIconTitleValue,
-        @"title" : [group getText],
-        @"icon" : iconName,
-        @"value" : [group getValue],
-        @"param" : group,
-        @"key" : @"paramGroup"
-    }];
+    if (group && group.getText && group.getValue)
+    {
+        [parametersArr addObject:@{
+            @"type" : kCellTypeIconTitleValue,
+            @"title" : [group getText],
+            @"icon" : iconName,
+            @"value" : [group getValue],
+            @"param" : group,
+            @"key" : @"paramGroup"
+        }];
+    }
 }
 
 - (void) setupView

@@ -181,19 +181,19 @@
 
     _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
     [_registeredPreferences setObject:_lastMapSourceProfile forKey:kLastMapSourceKey];
-    [_registeredPreferences setObject:_overlayMapSourceProfile forKey:kLastOverlayKey];
-    [_registeredPreferences setObject:_underlayMapSourceProfile forKey:kLastUnderlayKey];
-    [_registeredPreferences setObject:_overlayAlphaProfile forKey:kOverlayAlphaKey];
-    [_registeredPreferences setObject:_underlayAlphaProfile forKey:kUnderlayAlphaKey];
+    [_registeredPreferences setObject:_overlayMapSourceProfile forKey:@"map_overlay_previous"];
+    [_registeredPreferences setObject:_underlayMapSourceProfile forKey:@"map_underlay_previous"];
+    [_registeredPreferences setObject:_overlayAlphaProfile forKey:@"overlay_transparency"];
+    [_registeredPreferences setObject:_underlayAlphaProfile forKey:@"map_transparency"]; //
     [_registeredPreferences setObject:_terrainTypeProfile forKey:kTerrainTypeKey];
-    [_registeredPreferences setObject:_lastTerrainTypeProfile forKey:kLastTerrainTypeKey];
-    [_registeredPreferences setObject:_hillshadeAlphaProfile forKey:kHillshadeAlphaKey];
-    [_registeredPreferences setObject:_slopeAlphaProfile forKey:kSlopeAlphaKey];
-    [_registeredPreferences setObject:_hillshadeMinZoomProfile forKey:kHillshadeMinZoomKey];
-    [_registeredPreferences setObject:_hillshadeMaxZoomProfile forKey:kHillshadeMaxZoomKey];
-    [_registeredPreferences setObject:_slopeMinZoomProfile forKey:kSlopeMinZoomKey];
-    [_registeredPreferences setObject:_slopeMaxZoomProfile forKey:kSlopeMaxZoomKey];
-    [_registeredPreferences setObject:_mapillaryProfile forKey:kMapillaryKey];
+    [_registeredPreferences setObject:_lastTerrainTypeProfile forKey:@"terrain_mode"];
+    [_registeredPreferences setObject:_hillshadeAlphaProfile forKey:@"hillshade_transparency"];
+    [_registeredPreferences setObject:_slopeAlphaProfile forKey:@"slope_transparency"];
+    [_registeredPreferences setObject:_hillshadeMinZoomProfile forKey:@"hillshade_min_zoom"];
+    [_registeredPreferences setObject:_hillshadeMaxZoomProfile forKey:@"hillshade_max_zoom"];
+    [_registeredPreferences setObject:_slopeMinZoomProfile forKey:@"slope_min_zoom"];
+    [_registeredPreferences setObject:_slopeMaxZoomProfile forKey:@"slope_max_zoom"];
+    [_registeredPreferences setObject:_mapillaryProfile forKey:@"show_mapillary"];
 }
 
 - (void) dealloc

@@ -26,7 +26,6 @@ typedef enum
     kNavigationSettingsScreenSpeedSystem,
     kNavigationSettingsScreenSpeedLimitExceed,
     kNavigationSettingsScreenSwitchMapDirectionToCompass,
-    kNavigationSettingsScreenWakeOnVoice,
     kNavigationSettingsScreenVoiceGudanceLanguage
     
 } kNavigationSettingsScreen;

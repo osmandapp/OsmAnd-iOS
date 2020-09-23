@@ -31,7 +31,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xhW-YR-yce">
-                        <rect key="frame" x="66" y="11" width="209" height="26"/>
+                        <rect key="frame" x="66" y="13" width="209" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="SSu-YV-b9J"/>
                         </constraints>
@@ -41,7 +41,6 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="xhW-YR-yce" secondAttribute="bottom" constant="11" id="4SD-3t-7Xe"/>
                     <constraint firstItem="tSM-AM-xaM" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="CNM-Fb-ts7"/>
                     <constraint firstItem="gBR-c5-fSF" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="HF6-jr-gjb"/>
                     <constraint firstAttribute="trailing" secondItem="xhW-YR-yce" secondAttribute="trailing" constant="45" id="HUI-Gy-YTt"/>
@@ -49,7 +48,6 @@
                     <constraint firstItem="xhW-YR-yce" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="cWK-jp-UX6"/>
                     <constraint firstItem="xhW-YR-yce" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="751" constant="16" id="fC7-oj-5hJ"/>
                     <constraint firstAttribute="trailing" secondItem="gBR-c5-fSF" secondAttribute="trailing" constant="16" id="fLu-jH-2dA"/>
-                    <constraint firstItem="xhW-YR-yce" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="mwZ-i2-8G8"/>
                     <constraint firstItem="tSM-AM-xaM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="qcq-ob-Xdq"/>
                     <constraint firstAttribute="trailing" secondItem="xhW-YR-yce" secondAttribute="trailing" priority="751" constant="8" id="vFk-Ak-yuq"/>
                 </constraints>

@@ -637,7 +637,6 @@
         else if ([card isKindOfClass:OAMapillaryContributeCard.class])
             mapilaryConributeCard = card;
     }
-
     if (wikimediaCards.count > 0)
     {
         NSArray *sortedWikimediaCards = [wikimediaCards sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
@@ -649,7 +648,6 @@
         [wikimediaCards removeAllObjects];
         [wikimediaCards addObject:sortedWikimediaCards.firstObject];
         OAUrlImageCard *previousCard = sortedWikimediaCards.firstObject;
-    
         for (int i = 1; i < sortedWikimediaCards.count; i++)
         {
             OAUrlImageCard *card = sortedWikimediaCards[i];

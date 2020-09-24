@@ -587,7 +587,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
-
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

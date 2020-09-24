@@ -2091,7 +2091,7 @@
         [_registeredPreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
         [_registeredPreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_registeredPreferences setObject:_metricSystem forKey:@"default_metric_system"];
-        [_registeredPreferences setObject:_metricSystemChangedManually forKey:metricSystemChangedManuallyKey];
+        [_registeredPreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
         [_registeredPreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_registeredPreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
         

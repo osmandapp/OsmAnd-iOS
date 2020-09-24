@@ -195,13 +195,12 @@
                     rp.routingParameter = p;
                     [list addObject:rp];
                     
-                    OAProfileBoolean *booleanParam = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
                     [parametersArr addObject:
                      @{
                          @"name" : paramId,
                          @"title" : title,
-                         @"icon" : [self getParameterIcon:paramId isSelected:[booleanParam get:self.appMode]],
-                         @"value" : booleanParam,
+                         @"icon" : [self getParameterIcon:paramId isSelected:rp.isSelected],
+                         @"value" : rp,
                          @"type" : kCellTypeSwitch }
                      ];
                 }
@@ -398,18 +397,19 @@
             cell.imgView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             id v = item[@"value"];
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            if ([v isKindOfClass:[OAProfileBoolean class]])
+            if ([v isKindOfClass:[OALocalRoutingParameter class]])
             {
-                OAProfileBoolean *value = v;
-                cell.switchView.on = [value get:self.appMode];
+                OALocalRoutingParameter *value = v;
+                cell.switchView.on = [value isSelected];
+                [value setControlAction:cell.switchView];
             }
             else
             {
                 cell.switchView.on = [v boolValue];
+                [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
             }
             cell.imgView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
@@ -480,18 +480,6 @@
         else if ([item[@"key"] isEqualToString:@"temp_limitation"])
         {
             [_settings.enableTimeConditionalRouting set:isChecked mode:self.appMode];
-        }
-        else
-        {
-            for (const auto& routingParameter : _otherParameters)
-            {
-                NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
-                if ([param isEqualToString:item[@"name"]])
-                {
-                    OAProfileBoolean *property = [[OAAppSettings sharedManager] getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:routingParameter.id.c_str()] defaultValue:routingParameter.defaultBoolean];
-                    [property set:isChecked mode:self.appMode];
-                }
-            }
         }
         [self setupView];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];

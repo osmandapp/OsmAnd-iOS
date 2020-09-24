@@ -636,7 +636,7 @@
 "transport_nearby_routes" = "В пределах";
 "transport_stop" = "Стоп";
 "cancel_navigation" = "Остановить навигацию";
-"switch_start_finish" = "Обратить пункты отправления и назначения";
+"switch_start_finish" = "Поменять местами пункты отправления и назначения";
 "shared_string_options" = "Опции";
 "new_destination_point_dialog" = "Вы уже установили пункт назначения";
 "replace_destination_point" = "Заменить пункт назначения";
@@ -1772,7 +1772,7 @@
 "select_nav_profile_dialog_message" = "Режим навигации определяет правила расчета маршрутов.";
 "change_map_behavior" = "Изменение поведения карты во время навигации";
 "map_behavior" = "Поведение карты";
-"vehicle_parameters" = "Физические параметры";
+"vehicle_parameters" = "Параметры транспортного средства";
 "screen_alerts" = "Экранные оповещения";
 "voice_anounces" = "Голосовые анонсы";
 "downloading" = "Скачивание";

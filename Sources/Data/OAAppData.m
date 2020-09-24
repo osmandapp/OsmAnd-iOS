@@ -183,7 +183,7 @@
     [_registeredPreferences setObject:_overlayMapSourceProfile forKey:@"map_overlay_previous"];
     [_registeredPreferences setObject:_underlayMapSourceProfile forKey:@"map_underlay_previous"];
     [_registeredPreferences setObject:_overlayAlphaProfile forKey:@"overlay_transparency"];
-    [_registeredPreferences setObject:_underlayAlphaProfile forKey:@"map_transparency"]; //
+    [_registeredPreferences setObject:_underlayAlphaProfile forKey:@"map_transparency"];
     [_registeredPreferences setObject:_lastTerrainTypeProfile forKey:@"terrain_mode"];
     [_registeredPreferences setObject:_hillshadeAlphaProfile forKey:@"hillshade_transparency"];
     [_registeredPreferences setObject:_slopeAlphaProfile forKey:@"slope_transparency"];

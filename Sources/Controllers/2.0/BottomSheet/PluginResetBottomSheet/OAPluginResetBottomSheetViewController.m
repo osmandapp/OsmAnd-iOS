@@ -44,7 +44,7 @@
 @implementation OAPluginResetBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAPluginResetBottomSheetViewController *_vwController;
+    OAPluginResetBottomSheetViewController *vwController;
     OAMapWidgetRegistry *_mapWidgetRegistry;
     NSArray* _data;
     OAApplicationMode *_appMode;
@@ -66,7 +66,7 @@
 {
     _app = [OsmAndApp instance];
     _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self initData];
@@ -74,7 +74,7 @@
 
 - (void) setupView
 {
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *model = [NSMutableArray new];
     NSMutableArray *arr = [NSMutableArray array];
     
@@ -260,7 +260,7 @@
 
 - (void) onCloseButtonPressed:(id)sender
 {
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 #pragma mark - UITableViewDelegate

@@ -43,7 +43,7 @@
 @implementation OAOsmEditActionsBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAOsmEditActionsViewController *_vwController;
+    OAOsmEditActionsViewController *vwController;
     NSArray* _data;
     
     OAOsmEditingPlugin *_plugin;
@@ -59,7 +59,7 @@
     {
         _plugin = param;
         [self initOnConstruct:tableView viewController:viewController];
-        _point = _vwController.osmPoint;
+        _point = vwController.osmPoint;
     }
     return self;
 }
@@ -68,7 +68,7 @@
 {
     _app = [OsmAndApp instance];
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -77,7 +77,7 @@
 
 - (void) setupView
 {
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderCell",
@@ -256,7 +256,7 @@
         OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:_point];
         newTarget.centerMap = YES;
         [mapPanel showContextMenu:newTarget];
-        [_vwController dismiss];
+        [vwController dismiss];
         [[OARootViewController instance].mapPanel.navigationController popToRootViewControllerAnimated:YES];
     }
     else if ([item[@"key"] isEqualToString:@"poi_modify"])
@@ -264,9 +264,9 @@
         if (_point.getGroup == POI)
         {
             OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithEntity:((OAOpenStreetMapPoint *)_point).getEntity];
-            editingScreen.delegate = _vwController.delegate;
+            editingScreen.delegate = vwController.delegate;
             [[OARootViewController instance].mapPanel.navigationController pushViewController:editingScreen animated:YES];
-            [_vwController dismiss];
+            [vwController dismiss];
         }
         else
         {
@@ -281,8 +281,8 @@
         else
             [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)_point];
         
-        [_vwController.delegate refreshData];
-        [_vwController dismiss];
+        [vwController.delegate refreshData];
+        [vwController dismiss];
         [_app.osmEditsChangeObservable notifyEvent];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];
@@ -295,7 +295,7 @@
         OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
                                                          initWithEditingUtils:_plugin.getOnlineModificationUtil
                                                          points:[NSArray arrayWithObject:_point]];
-        dialog.delegate = _vwController.delegate;
+        dialog.delegate = vwController.delegate;
         [dialog show];
     }
     else if (_point.getGroup == BUG)
@@ -303,10 +303,10 @@
         OAOsmNoteBottomSheetViewController *dialog = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_plugin
                                                                                                                 points:[NSArray arrayWithObject:_point]
                                                                                                                   type:TYPE_UPLOAD];
-        dialog.delegate = _vwController.delegate;
+        dialog.delegate = vwController.delegate;
         [dialog show];
     }
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 @end

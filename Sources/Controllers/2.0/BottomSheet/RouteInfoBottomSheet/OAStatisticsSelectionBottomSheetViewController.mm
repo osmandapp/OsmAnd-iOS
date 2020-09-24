@@ -42,7 +42,7 @@
 @implementation OAStatisticsSelectionBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAStatisticsSelectionBottomSheetViewController *_vwController;
+    OAStatisticsSelectionBottomSheetViewController *vwController;
     OATargetPointsHelper *_pointsHelper;
     NSArray* _data;
 }
@@ -63,7 +63,7 @@
 {
     _app = [OsmAndApp instance];
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     
     [self initData];
@@ -72,7 +72,7 @@
 - (void) setupView
 {
     tblView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderCell",
@@ -185,7 +185,7 @@
             cell.titleView.text = item[@"title"];
             
             [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-            cell.iconColorNormal = _vwController.mode == (EOARouteStatisticsMode) [item[@"mode"] integerValue] ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
+            cell.iconColorNormal = vwController.mode == (EOARouteStatisticsMode) [item[@"mode"] integerValue] ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
             cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -241,10 +241,10 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_vwController.delegate)
-        [_vwController.delegate onNewModeSelected:(EOARouteStatisticsMode)[[self getItem:indexPath][@"mode"] integerValue]];
+    if (vwController.delegate)
+        [vwController.delegate onNewModeSelected:(EOARouteStatisticsMode)[[self getItem:indexPath][@"mode"] integerValue]];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 @end

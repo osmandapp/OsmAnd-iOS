@@ -52,7 +52,7 @@
 @implementation OAOsmEditingBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAOsmEditingBottomSheetViewController *_vwController;
+    OAOsmEditingBottomSheetViewController *vwController;
     NSArray* _data;
     
     NSMutableArray *_floatingTextFieldControllers;
@@ -74,7 +74,7 @@
         _editingUtil = param;
         [self initOnConstruct:tableView viewController:viewController];
         _floatingTextFieldControllers = [NSMutableArray new];
-        _osmPoints = _vwController.osmPoints;
+        _osmPoints = vwController.osmPoints;
         _closeChangeset = NO;
         for (OAOsmPoint *p in _osmPoints)
         {
@@ -93,7 +93,7 @@
 {
     _app = [OsmAndApp instance];
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -103,7 +103,7 @@
 - (void) setupView
 {
     [_floatingTextFieldControllers removeAllObjects];
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     BOOL shouldDelete = ((OAOsmPoint *)_osmPoints.firstObject).getAction == DELETE;
     [arr addObject:@{
@@ -263,9 +263,9 @@
 {
     OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
     NSString *comment = cell.inputField.text;
-    OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:comment bottomSheetDelegate:_vwController.delegate];
+    OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:comment bottomSheetDelegate:vwController.delegate];
     [uploadTask uploadPoints];
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 - (void) initData

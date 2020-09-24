@@ -33,7 +33,7 @@
 @implementation OAQuickActionSelectionBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAQuickActionSelectionBottomSheetViewController *_vwController;
+    OAQuickActionSelectionBottomSheetViewController *vwController;
     NSArray* _data;
     
     OASwitchableAction *_action;
@@ -57,7 +57,7 @@
 {
     _app = [OsmAndApp instance];
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -66,7 +66,7 @@
 
 - (void) setupView
 {
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     NSArray *params = _action.loadListFromParams;
     [arr addObject:@{
@@ -74,7 +74,7 @@
                      @"title" : _action.getDescrTitle,
                      @"description" : @""
                      }];
-    if (_vwController.type == EOAMapSourceTypeStyle)
+    if (vwController.type == EOAMapSourceTypeStyle)
     {
         if ([_action isKindOfClass:OAMapStyleAction.class])
         {
@@ -193,7 +193,7 @@
             if (!cell.accessoryView)
                 cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected"]];
             BOOL isActive;
-            switch (_vwController.type)
+            switch (vwController.type)
             {
                 case EOAMapSourceTypeSource:
                 case EOAMapSourceTypeStyle:
@@ -274,7 +274,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (_vwController.type == EOAMapSourceTypeStyle)
+    if (vwController.type == EOAMapSourceTypeStyle)
     {
         OAMapSource *newMapSource = item[@"source"];
         _app.data.lastMapSource = newMapSource;
@@ -284,14 +284,14 @@
         [_action executeWithParams:item[@"param"]];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 - (void)doneButtonPressed
 {
     OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:_action isNew:NO];
     [[OARootViewController instance].navigationController pushViewController:actionScreen animated:YES];
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 @end

@@ -44,7 +44,7 @@
 @implementation OAUploadProgressBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAUploadProgressBottomSheetViewController *_vwController;
+    OAUploadProgressBottomSheetViewController *vwController;
     NSArray* _data;
     
     OAProgressBarCell *_pbCell;
@@ -70,7 +70,7 @@
 {
     _app = [OsmAndApp instance];
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -79,7 +79,7 @@
 
 - (void) setupView
 {
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     _pbCell = [self getProgressBarCell];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{

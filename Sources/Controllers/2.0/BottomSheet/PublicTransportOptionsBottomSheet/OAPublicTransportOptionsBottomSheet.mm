@@ -23,7 +23,7 @@
 @implementation OAPublicTransportOptionsBottomSheetScreen
 {
     OAMapStyleSettings* _styleSettings;
-    OAPublicTransportOptionsBottomSheetViewController *_vwController;
+    OAPublicTransportOptionsBottomSheetViewController *vwController;
     NSArray* _data;
 }
 
@@ -42,7 +42,7 @@
 - (void) initOnConstruct:(UITableView *)tableView viewController:(OAPublicTransportOptionsBottomSheetViewController *)viewController
 {
     _styleSettings = [OAMapStyleSettings sharedInstance];
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -51,7 +51,7 @@
 
 - (void) setupView
 {
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
@@ -81,7 +81,7 @@
  
     _data = [NSArray arrayWithArray:arr];
     
-    [_vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
+    [vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
 }
 
 - (NSString *) getIconNameForStyleName:(NSString *)name

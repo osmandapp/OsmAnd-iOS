@@ -37,7 +37,7 @@
 @implementation OATextEditingBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OATextEditingBottomSheetViewController *_vwController;
+    OATextEditingBottomSheetViewController *vwController;
     NSArray* _data;
     
     NSMutableArray *_floatingTextFieldControllers;
@@ -66,7 +66,7 @@
 {
     _app = [OsmAndApp instance];
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -75,7 +75,7 @@
 
 - (void) setupView
 {
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     _data = [NSArray arrayWithObject:@{
                                        @"type" : @"OATextInputFloatingCell",
                                        @"cell" : [self getInputCellWithHint:_selectedCellData[@"placeholder"] text:_selectedCellData[@"title"]]
@@ -113,7 +113,7 @@
 
 -(BOOL) cancelButtonPressed
 {
-    [_vwController.messageDelegate refreshData];
+    [vwController.messageDelegate refreshData];
     return YES;
 }
 
@@ -124,17 +124,17 @@
     switch (_inputType) {
         case USERNAME_INPUT:
             [settings setOsmUserName:cell.inputField.text];
-            [_vwController.messageDelegate refreshData];
-            [_vwController dismiss];
+            [vwController.messageDelegate refreshData];
+            [vwController dismiss];
             break;
         case PASSWORD_INPUT:
             [settings setOsmUserPassword:cell.inputField.text];
-            [_vwController.messageDelegate refreshData];
-            [_vwController dismiss];
+            [vwController.messageDelegate refreshData];
+            [vwController dismiss];
             break;
         case MESSAGE_INPUT:
-            [_vwController.messageDelegate setMessageText:cell.inputField.text];
-            [_vwController dismiss];
+            [vwController.messageDelegate setMessageText:cell.inputField.text];
+            [vwController dismiss];
             break;
         default:
             break;
@@ -222,7 +222,7 @@
 {
     [self.tblView beginUpdates];
     [self.tblView endUpdates];
-    [_vwController updateTableHeaderView:CurrentInterfaceOrientation];
+    [vwController updateTableHeaderView:CurrentInterfaceOrientation];
 }
 
 @end

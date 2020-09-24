@@ -25,7 +25,7 @@
 @implementation OADeleteProfileBottomSheetScreen
 {
     OAApplicationMode *_appMode;
-    OADeleteProfileBottomSheetViewController *_vwController;
+    OADeleteProfileBottomSheetViewController *vwController;
     NSArray* _data;
 }
 
@@ -44,7 +44,7 @@
 
 - (void) initOnConstruct:(UITableView *)tableView viewController:(OADeleteProfileBottomSheetViewController *)viewController
 {
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -53,7 +53,7 @@
 
 - (void) setupView
 {
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
@@ -72,13 +72,13 @@
 
 - (void) onCloseButtonPressed:(id)sender
 {
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 - (void) doneButtonPressed
 {
     [OAApplicationMode deleteCustomModes:[NSArray arrayWithObject:_appMode]];
-    [_vwController dismiss];
+    [vwController dismiss];
     for (UIViewController *vc in [[OARootViewController instance].navigationController viewControllers])
     {
         if ([vc isKindOfClass:OAMainSettingsViewController.class])

@@ -58,7 +58,7 @@
 @implementation OAOsmNoteBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAOsmNoteBottomSheetViewController *_vwController;
+    OAOsmNoteBottomSheetViewController *vwController;
     NSArray* _data;
     
     NSMutableArray *_floatingTextFieldControllers;
@@ -82,7 +82,7 @@
         [self initOnConstruct:tableView viewController:viewController];
         _floatingTextFieldControllers = [NSMutableArray new];
         _uploadAnonymously = NO;
-        _bugPoints = _vwController.osmPoints;
+        _bugPoints = vwController.osmPoints;
         _screenType = viewController.type;
         _uploadImmediately = NO;
     }
@@ -93,7 +93,7 @@
 {
     _app = [OsmAndApp instance];
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -103,7 +103,7 @@
 - (void) setupView
 {
     [_floatingTextFieldControllers removeAllObjects];
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     NSString *title = [self getTitle];
     [arr addObject:@{
@@ -193,21 +193,21 @@
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_note_empty_message") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-            [_vwController presentViewController:alert animated:YES completion:nil];
+            [vwController presentViewController:alert animated:YES completion:nil];
             return;
         }
     }
     if (shouldUpload)
     {
-        OAUploadOsmPointsAsyncTask *task = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:_plugin points:_bugPoints closeChangeset:NO anonymous:_uploadAnonymously comment:nil bottomSheetDelegate:_vwController.delegate];
+        OAUploadOsmPointsAsyncTask *task = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:_plugin points:_bugPoints closeChangeset:NO anonymous:_uploadAnonymously comment:nil bottomSheetDelegate:vwController.delegate];
         [task uploadPoints];
     }
     else
         [self saveNote];
     
-    [_vwController dismiss];
-    if ([_vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
-        [_vwController.delegate dismissEditingScreen];
+    [vwController dismiss];
+    if ([vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
+        [vwController.delegate dismissEditingScreen];
 }
 
 - (void) saveNote
@@ -234,7 +234,7 @@
             OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
             OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
             [mapPanel showContextMenu:newTarget];
-            [_vwController.delegate refreshData];
+            [vwController.delegate refreshData];
         });
     });
 }
@@ -394,7 +394,7 @@
             {
                 _uploadImmediately = isChecked;
                 [self updatePasswordSection:isChecked];
-                OABottomSheetTwoButtonsViewController *controller = (OABottomSheetTwoButtonsViewController *)_vwController;
+                OABottomSheetTwoButtonsViewController *controller = (OABottomSheetTwoButtonsViewController *)vwController;
                 [controller.doneButton setTitle:_uploadImmediately ?
                     OALocalizedString(@"shared_string_upload") : OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
             }

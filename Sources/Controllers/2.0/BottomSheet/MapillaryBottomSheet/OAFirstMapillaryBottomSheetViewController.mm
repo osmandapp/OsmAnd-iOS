@@ -33,7 +33,7 @@
 @implementation OAFirstMapillaryBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAFirstMapillaryBottomSheetViewController *_vwController;
+    OAFirstMapillaryBottomSheetViewController *vwController;
     OAMapWidgetRegistry *_mapWidgetRegistry;
     NSArray* _data;
 }
@@ -57,7 +57,7 @@
     _app = [OsmAndApp instance];
     _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -66,7 +66,7 @@
 
 - (void) setupView
 {
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderIconCell",

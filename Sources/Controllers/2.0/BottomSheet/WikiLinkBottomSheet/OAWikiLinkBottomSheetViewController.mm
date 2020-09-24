@@ -36,7 +36,7 @@
 @implementation OAWikiLinkBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAWikiLinkBottomSheetViewController *_vwController;
+    OAWikiLinkBottomSheetViewController *vwController;
     NSDictionary <NSNumber *, NSArray *> *_data;
     NSString *_url;
     NSString *_regionName;
@@ -68,7 +68,7 @@
     else
         _regionName = OALocalizedString(@"map_an_region");
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     
     [self initData];
@@ -77,7 +77,7 @@
 - (void) setupView
 {
     tblView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary<NSNumber *, NSArray *> *dict = [NSMutableDictionary new];
     [dict setObject:@[@{
                          @"type" : @"OABottomSheetHeaderDescrButtonCell",
@@ -113,7 +113,7 @@
 
 - (void) onCloseButtonPressed:(id)sender
 {
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
@@ -260,7 +260,7 @@
         [OAUtilities callUrl:_url];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 @end

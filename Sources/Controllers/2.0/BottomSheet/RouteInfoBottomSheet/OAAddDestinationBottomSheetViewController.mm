@@ -43,7 +43,7 @@
 {
     OsmAndAppInstance _app;
     OADestinationsHelper *_destinationsHelper;
-    OAAddDestinationBottomSheetViewController *_vwController;
+    OAAddDestinationBottomSheetViewController *vwController;
     OATargetPointsHelper *_pointsHelper;
     NSDictionary* _data;
     
@@ -69,7 +69,7 @@
     _destinationsHelper = [OADestinationsHelper instance];
     _pointsHelper = [OATargetPointsHelper sharedInstance];
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     
     [self initData];
@@ -185,7 +185,7 @@
 - (void) setupView
 {
     tblView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
@@ -507,15 +507,15 @@
     else if ([item[@"key"] isEqualToString:@"swap_points"])
     {
         [mapPanel swapStartAndFinish];
-        [_vwController dismiss];
+        [vwController dismiss];
         return;
     }
     
-    if (_vwController.delegate)
-        [_vwController.delegate waypointSelectionDialogComplete:selectionDone showMap:showMap calculatingRoute:NO];
+    if (vwController.delegate)
+        [vwController.delegate waypointSelectionDialogComplete:selectionDone showMap:showMap calculatingRoute:NO];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [_vwController dismiss];
+    [vwController dismiss];
 }
 
 #pragma mark - OACollectionViewCellDelegate
@@ -524,7 +524,7 @@
 {
     if (key && key.length > 0)
     {
-        [_vwController dismiss];
+        [vwController dismiss];
         OADestinationItemsListViewController *destinations = [[OADestinationItemsListViewController alloc] initWithDestinationType:[key isEqualToString:@"favorites"] ? EOADestinationPointTypeFavorite : EOADestinationPointTypeMarker];
         destinations.delegate = self;
         [[OARootViewController instance].navigationController presentViewController:destinations animated:YES completion:nil];
@@ -573,9 +573,9 @@
         [_pointsHelper setWorkPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     }
     
-    [_vwController dismiss];
-    if (_vwController.delegate)
-        [_vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
+    [vwController dismiss];
+    if (vwController.delegate)
+        [vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
     
     [_pointsHelper updateRouteAndRefresh:YES];
 }
@@ -599,9 +599,9 @@
         _app.data.workPoint = [[OARTargetPoint alloc] initWithPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     }
     
-    [_vwController dismiss];
-    if (_vwController.delegate)
-        [_vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
+    [vwController dismiss];
+    if (vwController.delegate)
+        [vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
     
     [_pointsHelper updateRouteAndRefresh:YES];
 }
@@ -621,9 +621,9 @@
         [_pointsHelper setWorkPoint:[[CLLocation alloc] initWithLatitude:destination.point.coordinate.latitude longitude:destination.point.coordinate.longitude] description:destination.pointDescription];
     }
     
-    [_vwController dismiss];
-    if (_vwController.delegate)
-        [_vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
+    [vwController dismiss];
+    if (vwController.delegate)
+        [vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
     
     [_pointsHelper updateRouteAndRefresh:YES];
 }

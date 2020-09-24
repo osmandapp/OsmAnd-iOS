@@ -42,7 +42,7 @@
 @implementation OAUploadFinishedBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAUploadFinishedBottomSheetViewController *_vwController;
+    OAUploadFinishedBottomSheetViewController *vwController;
     NSArray* _data;
     
     NSArray<OAOsmPoint *> *_failedPoints;
@@ -60,7 +60,7 @@
     if (self)
     {
         [self initOnConstruct:tableView viewController:viewController];
-        _failedPoints = _vwController.customParam;
+        _failedPoints = vwController.customParam;
         _hasFailedPoints = _failedPoints.count > 0;
         _floatingTextFieldControllers = [NSMutableArray new];
     }
@@ -71,7 +71,7 @@
 {
     _app = [OsmAndApp instance];
     
-    _vwController = viewController;
+    vwController = viewController;
     tblView = tableView;
     tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
@@ -81,7 +81,7 @@
 - (void) setupView
 {
     [_floatingTextFieldControllers removeAllObjects];
-    [[_vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : _hasFailedPoints ? @"OABottomSheetHeaderIconCell" : @"OABottomSheetHeaderCell",
@@ -98,10 +98,10 @@
                          @"img" : @"ic_custom_success"
                          }];
     }
-    else if (_vwController.successfulUploadsCount > 0)
+    else if (vwController.successfulUploadsCount > 0)
     {
         NSString *value = [NSString stringWithFormat:@"%@: %zd\n%@: %zd", OALocalizedString(@"osm_succsessful_uploads"),
-                           _vwController.successfulUploadsCount,
+                           vwController.successfulUploadsCount,
                            OALocalizedString(@"osm_failed_uploads"),
                            _failedPoints.count];
         NSMutableString *names = [NSMutableString string];
@@ -167,8 +167,8 @@
 
 - (void) doneButtonPressed
 {
-    [_vwController.delegate retryUpload];
-    [_vwController dismiss];
+    [vwController.delegate retryUpload];
+    [vwController dismiss];
 }
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView

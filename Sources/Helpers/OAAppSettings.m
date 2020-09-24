@@ -2309,7 +2309,7 @@
     return [_registeredPreferences objectForKey:stringId];
 }
 
-- (void) resetAllProfileSettingsForMode:(OAApplicationMode *)appMode
+- (void) resetPreferencesForProfile:(OAApplicationMode *)appMode
 {
     for (OAProfileSetting *value in [_registeredPreferences objectEnumerator].allObjects)
     {
@@ -2332,6 +2332,9 @@
         [self.profileIconName resetModeToDefault:appMode];
         [self.profileIconColor resetModeToDefault:appMode];
     }
+    
+    [OAAppData.defaults resetProfileSettingsForMode:appMode];
+    [[[OsmAndApp instance] widgetSettingsChangingStartObservable] notifyEventWithKey:appMode];
 }
 
 // Common Settings

@@ -38,23 +38,7 @@
         _rightWidgetSet = [NSMutableOrderedSet orderedSet];
         _visibleElementsFromSettings = [NSMapTable strongToStrongObjectsMapTable];
         _settings = [OAAppSettings sharedManager];
-        
-        for (OAApplicationMode *ms in [OAApplicationMode values])
-        {
-            NSString *mpf = [_settings.mapInfoControls get:ms];
-            if ([mpf isEqualToString:SHOW_PREFIX])
-            {
-                [_visibleElementsFromSettings setObject:nil forKey:ms];
-            }
-            else
-            {
-                NSMutableSet<NSString *> *set = [NSMutableSet set];
-                [_visibleElementsFromSettings setObject:set forKey:ms];
-                NSArray<NSString *> *split = [mpf componentsSeparatedByString:SETTINGS_SEPARATOR];
-                [set addObjectsFromArray:split];
-            }
-        }
-    
+        [self loadVisibleElementsFromSettings];
         _widgetSettingsChangeDoneObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onWidgetSettingsReset:withKey:) andObserve:[OsmAndApp instance].widgetSettingsChangingStartObservable];
     }
     return self;
@@ -281,6 +265,12 @@
     [_settings.mapInfoControls set:[NSString stringWithString:bs]];
 }
 
+- (void) onWidgetSettingsReset:(id)sender withKey:(id)key;
+{
+    if (key && [key isKindOfClass:OAApplicationMode.class])
+        [self resetToDefault:(OAApplicationMode *)key];
+}
+
 - (void) resetDefault:(OAApplicationMode *)mode set:(NSMutableOrderedSet<OAMapWidgetRegInfo *> *)set
 {
     for (OAMapWidgetRegInfo *ri in set)
@@ -321,10 +311,34 @@
     [_settings.centerPositionOnMap resetToDefault];
 }
 
-- (void) onWidgetSettingsReset:(id)sender withKey:(id)key;
+- (void) updateVisibleWidgets
 {
-    if (key && [key isKindOfClass:OAApplicationMode.class])
-        [self resetToDefault:(OAApplicationMode *)key];
+    [self loadVisibleElementsFromSettings];
+    for (OAMapWidgetRegInfo *ri in _leftWidgetSet)
+        [self processVisibleModes:ri.key ii:ri];
+    for (OAMapWidgetRegInfo *ri in _leftWidgetSet)
+        [self processVisibleModes:ri.key ii:ri];
+}
+
+- (void) loadVisibleElementsFromSettings
+{
+    _visibleElementsFromSettings = [NSMapTable strongToStrongObjectsMapTable];
+    for (OAApplicationMode *ms in OAApplicationMode.values)
+    {
+        NSString *mpf = [_settings.mapInfoControls get:ms];
+        if ([mpf isEqualToString:SHOW_PREFIX])
+        {
+            [_visibleElementsFromSettings setObject:nil forKey:ms];
+        }
+        else
+        {
+            NSMutableSet<NSString *> *set = [NSMutableSet set];
+            [_visibleElementsFromSettings setObject:set forKey:ms];
+            NSArray<NSString *> *split = [mpf componentsSeparatedByString:SETTINGS_SEPARATOR];
+            [set addObjectsFromArray:split];
+        }
+        
+    }
 }
 
 - (NSOrderedSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet

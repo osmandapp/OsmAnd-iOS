@@ -759,6 +759,7 @@
 "empty_profile_name_warning" = "Profile name cannot be empty.";
 "err_profile_import" = "Error reading item data: %@";
 "profile_import_success" = "Application profile was imported successfully";
+"profile_prefs_reset_successful" = "All profile settings restored to default";
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Base profile";
 "osmand_profile" = "OsmAnd profile";

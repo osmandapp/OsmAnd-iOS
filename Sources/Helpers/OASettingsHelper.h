@@ -67,16 +67,12 @@ typedef enum : NSUInteger {
 + (OASettingsHelper *) sharedInstance;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version;
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate;
 - (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems;
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version;
+- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate;
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles;
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName settingsItem:(OASettingsItem *)item exportItemFiles:(BOOL)exportItemFiles;
-- (void) saveToBackupCustomProfileData:(NSDictionary<NSString *, NSString *> *)settings withFileName:(NSString *)filename;
-- (void) saveToBackupCustomProfileAppMode:(OAApplicationMode *)appMode;
-- (OAApplicationMode *) restoreBackupForCustomAppMode:(OAApplicationMode *)appMode;
-- (NSDictionary<NSString *, NSString *> *) getBackupFileForCustomProfile:(OAApplicationMode *)appMode;
-- (void) deleteBackupForCustomAppMode:(OAApplicationMode *)appMode;
-- (OAApplicationMode *) resetAppModePrefs:(OAApplicationMode *)appMode;
 
 @end
 
@@ -141,8 +137,6 @@ typedef enum : NSUInteger {
 #pragma mark - OASettingsItemJsonReader
 
 @interface OASettingsItemJsonReader : OASettingsItemReader<OASettingsItem *>
-
-- (void) applyParsedSettings:(NSDictionary<NSString *, NSString *> *)settings;
 
 @end
 

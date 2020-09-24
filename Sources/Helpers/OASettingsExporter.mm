@@ -220,7 +220,6 @@
     [_settingsHelper.exportTasks removeObjectForKey:_filePath];
     if (_settingsExportDelegate)
         [_settingsExportDelegate onSettingsExportFinished:_filePath succeed:success];
-    
 }
 
 @end

@@ -642,8 +642,14 @@ static OAApplicationMode *_SKI;
         [settings setApplicationMode:_DEFAULT];
     [_cachedFilteredValues removeObjectsInArray:modes];
     [self saveCustomAppModesToSettings];
+    
     for (OAApplicationMode *mode in modes) {
-        [OASettingsHelper.sharedInstance deleteBackupForCustomAppMode:mode];
+        if (mode.isCustomProfile)
+        {
+            NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
+            NSString *backupItemFilePath = [[backupDir stringByAppendingPathComponent:mode.stringKey] stringByAppendingPathExtension:@"osf"];
+            [NSFileManager.defaultManager removeItemAtPath:backupItemFilePath error:nil];
+        }
     }
 }
 

@@ -126,8 +126,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
+    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:self];
+}
+
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
+{
     OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
-    task.delegate = self;
+    task.delegate = delegate;
     [task execute];
 }
  
@@ -140,9 +145,14 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
-    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
-    task.delegate = self;
-    [task execute];
+    [self importSettings:settingsFile items:items latestChanges:latestChanges version:version delegate:self];
+}
+
+- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
+{
+   OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
+   task.delegate = delegate;
+   [task execute];
 }
 
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles
@@ -184,10 +194,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             else if (item.pluginId.length == 0)
                 [pluginIndependentItems addObject:item];
         }
-//        for (OAPluginSettingsItem *pluginItem in pluginSettingsItems)
-//        {
-//            handlePluginImport(pluginItem, file);
-//        }
         if (pluginIndependentItems.count > 0)
         {
             // TODO: add ui dialogs as in Android
@@ -212,135 +218,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *>*)duplicates items:(NSArray<OASettingsItem *>*)items
 {
     
-}
-
-#pragma mark - Reset to defaults
-
-- (OAApplicationMode *) resetAppModePrefs:(OAApplicationMode *)appMode
-{
-    if (appMode)
-    {
-        if (appMode.isCustomProfile)
-        {
-            [self resetPreferencesForBaseProfile:appMode];
-            NSDictionary *customAppModeBackup = [self getBackupFileForCustomAppMode:appMode];
-            NSDictionary *customProfileBackup = [self getBackupFileForCustomProfile:appMode];
-            if (customProfileBackup)
-                appMode = [self restorePreferencesForCustomProfile:appMode appModeBackup:customAppModeBackup profileBackup:customProfileBackup];
-        }
-        else
-        {
-            [self resetPreferencesForBaseProfile:appMode];
-            [self resetMapStylesForBaseProfile:appMode];
-        }
-        [self updateCopiedOrResetPrefs:appMode];
-    }
-    return appMode;
-}
-
-- (void) updateCopiedOrResetPrefs:(OAApplicationMode *)appMode
-{
-        [OAMapStyleSettings.sharedInstance loadParameters];
-        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
-        [[[OsmAndApp instance] widgetSettingsChangingDoneObservable] notifyEvent];
-}
-
-- (void) resetPreferencesForBaseProfile:(OAApplicationMode *)appMode
-{
-    [OAAppSettings.sharedManager resetAllProfileSettingsForMode:appMode];
-    [OAAppData.defaults resetProfileSettingsForMode:appMode];
-    [[[OsmAndApp instance] widgetSettingsChangingStartObservable] notifyEventWithKey:appMode];
-}
-
-- (void) resetMapStylesForBaseProfile:(OAApplicationMode *)appMode
-{
-    NSString *renderer = [OAAppSettings.sharedManager.renderer get:appMode];
-    NSString *resName = [OAProfileSettingsItem getRendererByName:renderer];
-    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:appMode.variantKey];
-    [styleSettings resetMapStyleForAppMode:appMode.variantKey];
-}
-
-- (OAApplicationMode *)restorePreferencesForCustomProfile:(OAApplicationMode *)appMode appModeBackup:(NSDictionary *)appModeBackup profileBackup:(NSDictionary *)profileBackup
-{
-    if (profileBackup)
-    {
-        NSDictionary *initialJson = @{
-            @"type" : @"PROFILE",
-            @"file" : [NSString stringWithFormat:@"profile_%@.%@", appMode.stringKey, JSON_FILE_EXT],
-            @"appMode" : appMode.toJson
-        };
-        OASettingsItem *item = [[OAProfileSettingsItem alloc] initWithJsonWithoutBackup:initialJson error:nil];
-        OASettingsItemJsonReader *jsonReader = [[OASettingsItemJsonReader alloc] initWithItem:item];
-        [jsonReader applyParsedSettings:profileBackup];
-    }
-    if (appModeBackup)
-    {
-        appMode = [OAApplicationMode fromModeBean:[OAApplicationModeBean fromJson:appModeBackup]];
-        for (int i = 0; i < OAApplicationMode.values.count; i++)
-        {
-            OAApplicationMode *storedMode = OAApplicationMode.values[i];
-            if ([storedMode.variantKey isEqualToString:appMode.variantKey])
-                storedMode = appMode;
-        }
-        [OAApplicationMode saveProfile:appMode];
-    }
-    return appMode;
-}
-
-- (void) saveToBackupCustomProfileData:(NSDictionary<NSString *, NSString *> *)settings withFileName:(NSString *)fileName
-{
-    NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
-    [self createDirectoryIfNotExist:backupDir];
-    
-    NSString *backupFilePath = [[backupDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:OSMAND_SETTINGS_FILE_EXT];
-    [settings writeToFile:backupFilePath atomically:YES];
-}
-
-- (void) saveToBackupCustomProfileAppMode:(OAApplicationMode *)appMode
-{
-    NSString *fileName = appMode.stringKey;
-    NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
-    [self createDirectoryIfNotExist:backupDir];
-    
-    NSString *backupFilePath = [[backupDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:OSMAND_SETTINGS_FILE_EXT];
-    [appMode.toJson writeToFile:backupFilePath atomically:YES];
-}
-
-- (NSDictionary<NSString *, NSString *> *) getBackupFileForCustomProfile:(OAApplicationMode *)appMode
-{
-    NSString *fileName = [NSString stringWithFormat:@"profile_%@", appMode.stringKey];
-    NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
-    [self createDirectoryIfNotExist:backupDir];
-    
-    NSString *backupFilePath = [[backupDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:OSMAND_SETTINGS_FILE_EXT];
-    return [NSDictionary dictionaryWithContentsOfFile:backupFilePath];
-}
-
-- (NSDictionary<NSString *, NSString *> *) getBackupFileForCustomAppMode:(OAApplicationMode *)appMode
-{
-    NSString *fileName = appMode.stringKey;
-    NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
-    [self createDirectoryIfNotExist:backupDir];
-    
-    NSString *backupFilePath = [[backupDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:OSMAND_SETTINGS_FILE_EXT];
-    return [NSDictionary dictionaryWithContentsOfFile:backupFilePath];
-}
-
-- (void) deleteBackupForCustomAppMode:(OAApplicationMode *)appMode
-{
-    if (appMode.isCustomProfile)
-    {
-        NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
-        NSString *backupItemFilePath = [backupDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", appMode.stringKey, OSMAND_SETTINGS_FILE_EXT]];
-        NSString *backupProfileFilePath = [backupDir stringByAppendingPathComponent:[NSString stringWithFormat:@"profile_%@.%@", appMode.stringKey, OSMAND_SETTINGS_FILE_EXT]] ;
-        [NSFileManager.defaultManager removeItemAtPath:backupItemFilePath error:nil];
-        [NSFileManager.defaultManager removeItemAtPath:backupProfileFilePath error:nil];
-    }
-}
-
-- (void) createDirectoryIfNotExist:(NSString *)path
-{
-    [NSFileManager.defaultManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
 @end
@@ -641,13 +518,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return NO;
     }
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
-    [self applyParsedSettings:settings];
-    [OASettingsHelper.sharedInstance saveToBackupCustomProfileData:settings withFileName:[[filePath lastPathComponent] stringByDeletingPathExtension]];
-    return YES;
-}
-
-- (void) applyParsedSettings:(NSDictionary<NSString *, NSString *> *)settings
-{
+    
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
 
@@ -664,6 +535,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [self.item applyRoutingPreferences:routingSettings];
 
     [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
+    return YES;
 }
 
 @end
@@ -810,7 +682,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     [self readFromJsonWithoutBackup:json error:error];
-    [OASettingsHelper.sharedInstance saveToBackupCustomProfileAppMode:_appMode];
 }
 
 - (void)readFromJsonWithoutBackup:(id)json error:(NSError * _Nullable __autoreleasing *)error

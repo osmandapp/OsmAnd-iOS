@@ -15,8 +15,6 @@
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
 #import "OAAppSettings.h"
-#import "OASettingsHelper.h"
-#import "OsmAndApp.h"
 
 #import "OATextInputCell.h"
 #import "OAColorsTableViewCell.h"

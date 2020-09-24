@@ -49,7 +49,6 @@
     NSArray* _data;
     OAApplicationMode *_appMode;
 }
-
 @synthesize tableData, tblView;
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAPluginResetBottomSheetViewController *)viewController param:(id)param

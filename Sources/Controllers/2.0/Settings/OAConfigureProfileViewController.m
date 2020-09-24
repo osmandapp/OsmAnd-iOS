@@ -14,7 +14,6 @@
 #import "OASwitchTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAIconTextDescCell.h"
-#import "OATitleRightIconCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAPlugin.h"
@@ -25,8 +24,6 @@
 #import "OASettingsHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAPOIFiltersHelper.h"
-#import "OAMapWidgetRegistry.h"
-
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OARootViewController.h"

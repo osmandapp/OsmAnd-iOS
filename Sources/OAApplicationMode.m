@@ -12,7 +12,6 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
-#import "OASettingsHelper.h"
 
 @interface OAApplicationMode ()
 

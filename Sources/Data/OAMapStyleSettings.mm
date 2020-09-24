@@ -11,7 +11,6 @@
 #import "OALog.h"
 #import "Localization.h"
 #import "OAMapCreatorHelper.h"
-#import "OAMapStyleTitles.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>

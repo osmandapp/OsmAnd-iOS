@@ -34,16 +34,10 @@
 #import "OAPlugin.h"
 #import "OAMapStyleTitles.h"
 #import "OrderedDictionary.h"
-#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
-
-#define OSMAND_SETTINGS_FILE_EXT @"osf"
-#define JSON_FILE_EXT @"json"
-#define BACKUP_INDEX_DIR @"backup"
-#define kResetingAppModeKey @"resettingAppModeKey"
 
 NSString *const kSettingsHelperErrorDomain = @"SettingsHelper";
 

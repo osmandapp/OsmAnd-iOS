@@ -2019,7 +2019,6 @@
         _minSpeed = [OAProfileDouble withKey:minSpeedKey defValue:0.];
         _maxSpeed = [OAProfileDouble withKey:maxSpeedKey defValue:0.];
         _routeStraightAngle = [OAProfileDouble withKey:routeStraightAngleKey defValue:30.];
-
         [_registeredPreferences setObject:_minSpeed forKey:@"min_speed"];
         [_registeredPreferences setObject:_maxSpeed forKey:@"max_speed"];
         [_registeredPreferences setObject:_routeStraightAngle forKey:@"routing_straight_angle"];

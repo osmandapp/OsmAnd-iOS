@@ -2620,8 +2620,11 @@
 {
     OAApplicationMode *prevAppMode = _applicationMode;
     _applicationMode = applicationMode;
-    [[NSUserDefaults standardUserDefaults] setObject:applicationMode.stringKey forKey:applicationModeKey];
-    [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
+    if (prevAppMode != _applicationMode)
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:applicationMode.stringKey forKey:applicationModeKey];
+        [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
+    }
 }
 
 - (void) setDefaultApplicationMode:(OAApplicationMode *)defaultApplicationMode

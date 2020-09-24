@@ -24,7 +24,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ryS-ae-NqK">
-                        <rect key="frame" x="66" y="19" width="192" height="20.5"/>
+                        <rect key="frame" x="66" y="20" width="192" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -62,13 +62,14 @@
                     <constraint firstItem="ryS-ae-NqK" firstAttribute="leading" secondItem="9Uu-OT-AHV" secondAttribute="trailing" constant="20" id="QKY-Xj-HHT"/>
                     <constraint firstItem="a9L-gE-DfK" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="WP7-eB-kll"/>
                     <constraint firstItem="Ah2-FI-gpg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Y2t-oR-GnB"/>
-                    <constraint firstAttribute="bottom" secondItem="9Uu-OT-AHV" secondAttribute="bottom" constant="15" id="ijT-fp-wT5"/>
+                    <constraint firstItem="ryS-ae-NqK" firstAttribute="top" secondItem="a9L-gE-DfK" secondAttribute="bottom" constant="10" id="fve-DB-xbt"/>
                     <constraint firstItem="9Uu-OT-AHV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="ioJ-m8-ONv"/>
                     <constraint firstItem="kCa-db-nBd" firstAttribute="leading" secondItem="ryS-ae-NqK" secondAttribute="trailing" constant="16" id="jkM-vh-cYd"/>
+                    <constraint firstItem="Ah2-FI-gpg" firstAttribute="top" secondItem="ryS-ae-NqK" secondAttribute="bottom" constant="19" id="s2i-di-euQ"/>
                     <constraint firstAttribute="trailing" secondItem="Ah2-FI-gpg" secondAttribute="trailing" id="spk-Op-QHb"/>
                     <constraint firstAttribute="trailing" secondItem="kCa-db-nBd" secondAttribute="trailing" constant="16" id="uWQ-Yb-Ub1"/>
+                    <constraint firstItem="ryS-ae-NqK" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="y69-Og-1Ft"/>
                     <constraint firstItem="9Uu-OT-AHV" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="ydM-Jm-hzs"/>
-                    <constraint firstItem="ryS-ae-NqK" firstAttribute="top" secondItem="a9L-gE-DfK" secondAttribute="bottom" constant="9" id="zE9-9R-i27"/>
                 </constraints>
             </tableViewCellContentView>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>

@@ -27,10 +27,11 @@
 #define settingEnable3DViewKey @"settingEnable3DView"
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingUseFirebaseKey @"settingUseFirebaseKey"
-#define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
+#define settinlastMapSourcegExternalInputDeviceKey @"settingExternalInputDeviceKey"
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
 #define liveUpdatesPurchasedKey @"liveUpdatesPurchasedKey"
 #define settingOsmAndLiveEnabledKey @"settingOsmAndLiveEnabledKey"
+#define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
@@ -1100,60 +1101,6 @@
 
 @end
 
-@interface OAProfileMapLayersConfiguartion ()
-
-@property (nonatomic) OAMapLayersConfiguration *defValue;
-
-@end
-
-@implementation OAProfileMapLayersConfiguartion
-
-+ (instancetype) withKey:(NSString *)key defValue:(OAMapLayersConfiguration *)defValue
-{
-    OAProfileMapLayersConfiguartion *obj = [[OAProfileMapLayersConfiguartion alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    
-    return obj;
-}
-
-- (OAMapLayersConfiguration *) get
-{
-    return [self get:self.appMode];
-}
-
-- (void) set:(OAMapLayersConfiguration *)layersConfig
-{
-    [self set:layersConfig mode:self.appMode];
-}
-
-- (OAMapLayersConfiguration *) get:(OAApplicationMode *)mode
-{
-    NSObject *val = [self getValue:mode];
-    return val ? [[OAMapLayersConfiguration alloc] initWithHiddenLayers:[NSMutableSet setWithArray:(NSArray *)val]] : self.defValue;
-}
-
-- (void) set:(OAMapLayersConfiguration *)layersConfig mode:(OAApplicationMode *)mode
-{
-    NSArray *hiddenLayersArray = [NSArray arrayWithArray:[layersConfig.hiddenLayers allObjects]];
-    [self setValue:hiddenLayersArray mode:mode];
-}
-
-- (void) resetToDefault
-{
-    OAMapLayersConfiguration *defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (OAMapLayersConfiguration *) pDefault;
-    
-    [self set:defaultValue];
-}
-
-@end
-
 @interface OAProfileTerrain ()
 
 @property (nonatomic) EOATerrainType defValue;
@@ -1963,7 +1910,7 @@
         _customAppModes = [NSUserDefaults.standardUserDefaults objectForKey:customAppModesKey] ? [NSUserDefaults.standardUserDefaults stringForKey:customAppModesKey] : @"";
 
         _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
-        [_registeredPreferences setObject:_mapInfoControls forKey:mapInfoControlsKey];
+        [_registeredPreferences setObject:_mapInfoControls forKey:@"map_info_controls"];
         
         _routingProfile = [OAProfileString withKey:routingProfileKey defValue:@""];
         [_routingProfile setModeDefaultValue:@"car" mode:OAApplicationMode.CAR];
@@ -1973,7 +1920,7 @@
         [_routingProfile setModeDefaultValue:@"boat" mode:OAApplicationMode.BOAT];
         [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
-        [_registeredPreferences setObject:_routingProfile forKey:routingProfileKey];
+        [_registeredPreferences setObject:_routingProfile forKey:@"routing_profile"];
         
         _profileIconName = [OAProfileString withKey:profileIconNameKey defValue:@"ic_world_globe_dark"];
         [_profileIconName setModeDefaultValue:@"ic_world_globe_dark" mode:OAApplicationMode.DEFAULT];
@@ -1991,18 +1938,18 @@
         
         _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.AIRCRAFT];
-        [_registeredPreferences setObject:_routerService forKey:routerServiceKey];
-        
+        [_registeredPreferences setObject:_routerService forKey:@"route_service"];
+
         _navigationIcon = [OAProfileInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
         [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
-        [_registeredPreferences setObject:_navigationIcon forKey:navigationIconKey];
+        [_registeredPreferences setObject:_navigationIcon forKey:@"navigation_icon"];
         
         _locationIcon = [OAProfileInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
-        [_registeredPreferences setObject:_locationIcon forKey:locationIconKey];
+        [_registeredPreferences setObject:_locationIcon forKey:@"location_icon"];    
         
         _appModeOrder = [OAProfileInteger withKey:appModeOrderKey defValue:0];
         
@@ -2066,7 +2013,7 @@
         [_registeredPreferences setObject:_textSize forKey:@"text_scale"];
         
         _renderer = [OAProfileString withKey:rendererKey defValue:@"OsmAnd"];
-        [_registeredPreferences setObject:_renderer forKey:rendererKey];
+        [_registeredPreferences setObject:_renderer forKey:@"renderer"];
 
         _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;
 
@@ -2141,11 +2088,11 @@
         _settingGeoFormat = [OAProfileInteger withKey:settingGeoFormatKey defValue:MAP_GEO_FORMAT_DEGREES];
         _settingExternalInputDevice = [OAProfileInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
         
-        [_registeredPreferences setObject:_settingAllow3DView forKey:settingEnable3DViewKey];
+        [_registeredPreferences setObject:_settingAllow3DView forKey:@"enable_3d_view"];
         [_registeredPreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
         [_registeredPreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_registeredPreferences setObject:_metricSystem forKey:@"default_metric_system"];
-        [_registeredPreferences setObject:_metricSystemChangedManually forKey:metricSystemChangedManuallyKey];
+        [_registeredPreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
         [_registeredPreferences setObject:_settingGeoFormat forKey:@"coordinates_format"];
         [_registeredPreferences setObject:_settingExternalInputDevice forKey:@"external_input_device"];
         
@@ -2177,7 +2124,8 @@
         [_registeredPreferences setObject:_showPedestrian forKey:@"show_pedestrian"];
 
         _showCameras = [OAProfileBoolean withKey:showCamerasKey defValue:NO];
-        [_registeredPreferences setObject:_showCameras forKey:showCamerasKey];
+        [_registeredPreferences setObject:_showCameras forKey:@"show_cameras"];
+        
         _showTunnels = [OAProfileBoolean withKey:showTunnelsKey defValue:NO];
         [_showTunnels setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_registeredPreferences setObject:_showTunnels forKey:@"show_tunnels"];
@@ -2240,8 +2188,8 @@
         
         _poiFiltersOrder = [OAProfileStringList withKey:poiFiltersOrderKey defValue:nil];
         _inactivePoiFilters = [OAProfileStringList withKey:inactivePoiFiltersKey defValue:nil];
-        [_registeredPreferences setObject:_poiFiltersOrder forKey:poiFiltersOrderKey];
-        [_registeredPreferences setObject:_inactivePoiFilters forKey:inactivePoiFiltersKey];
+        [_registeredPreferences setObject:_poiFiltersOrder forKey:@"poi_filters_order"];
+        [_registeredPreferences setObject:_inactivePoiFilters forKey:@"inactive_poi_filters"];
         
         _rulerMode = [[NSUserDefaults standardUserDefaults] objectForKey:rulerModeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:rulerModeKey] : RULER_MODE_DARK;
         
@@ -2274,7 +2222,7 @@
         [_registeredPreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
     
         _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
-        [_registeredPreferences setObject:_contourLinesZoom forKey:contourLinesZoomKey];
+        [_registeredPreferences setObject:_contourLinesZoom forKey:@"contour_lines_zoom"];
         
         // riirection Appearance
         _activeMarkers = [OAProfileActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
@@ -2709,8 +2657,11 @@
 {
     OAApplicationMode *prevAppMode = _applicationMode;
     _applicationMode = applicationMode;
-    [[NSUserDefaults standardUserDefaults] setObject:applicationMode.stringKey forKey:applicationModeKey];
-    [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
+    if (prevAppMode != _applicationMode)
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:applicationMode.stringKey forKey:applicationModeKey];
+        [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
+    }
 }
 
 - (void) setDefaultApplicationMode:(OAApplicationMode *)defaultApplicationMode

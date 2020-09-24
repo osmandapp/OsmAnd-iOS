@@ -82,6 +82,8 @@
             for (NSString *param in params)
             {
                 OAMapSource *source = mapStyleAction.offlineMapSources[param];
+                if (!source)
+                    continue;
                 [arr addObject:@{
                     @"type" : kBottomSheetActionCell,
                     @"title" : param,

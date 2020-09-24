@@ -967,7 +967,7 @@
 "osm_edits_edits_label" = "Правки";
 "shared_string_retry" = "Повторить";
 "mapil_add_photos" = "Добавить фотографии";
-"mapillary_get_title" = "Улучшить фотопокрытие через Mapillary";
+"mapillary_get_title" = "Улучшить фотопокрытие в Mapillary";
 "shared_string_not_set" = "Не установлено";
 "shared_string_reset" = "Сбросить";
 "shared_string_filter" = "Фильтр";
@@ -1175,7 +1175,7 @@
 "mapil_no_inet_descr" = "Для просмотра фотографий Mapillary необходимо подключение к Интернету.";
 "mapil_images_nearby" = "Снимки рядом";
 "mapil_no_images" = "Для этой локации фотографий нет.";
-"mapillary_get_descr" = "Загрузите Mapillary, чтобы добавить фотографии к этому месту";
+"mapillary_get_descr" = "Скачайте Mapillary, чтобы добавить к этому месту фотографии";
 "mapil_contribute" = "Добавьте свои собственные снимки улиц";
 "mapillary_descr" = "Уличные онлайн фотографии для всех. Открывайте места, сотрудничайте, снимайте мир";
 "mapillary_turn_on_widget" = "Включить виджет Mapillary";
@@ -1541,7 +1541,7 @@
 "routing_attr_allow_advanced_name" = "Разрешить расширенные маршруты";
 "routing_attr_prefer_motorway_name" = "Предпочитать автомагистрали";
 "rendering_attr_roadStyle_description" = "Стиль отображения дорог";
-"routing_attr_allow_motorway_name" = "Использовать автомагистрали";
+"routing_attr_allow_motorway_name" = "Разрешить автомагистрали";
 "rendering_attr_showLez_name" = "Зоны с низким уровнем выбросов";
 "rendering_value_translucent_purple_name" = "Полупрозрачный фиолетовый";
 "rendering_attr_piste_difficulty_aerialway_name" = "Канатная дорога";
@@ -1769,10 +1769,10 @@
 "create_profile" = "Создать профиль";
 "import_from_files" = "Импорт из файлов";
 "shared_string_exit" = "Выход";
-"select_nav_profile_dialog_message" = "«Тип навигации» определяет способ расчета маршрутов.";
+"select_nav_profile_dialog_message" = "Режим навигации определяет правила расчета маршрутов.";
 "change_map_behavior" = "Изменение поведения карты во время навигации";
 "map_behavior" = "Поведение карты";
-"vehicle_parameters" = "Параметры автомобиля";
+"vehicle_parameters" = "Физические параметры";
 "screen_alerts" = "Экранные оповещения";
 "voice_anounces" = "Голосовые анонсы";
 "downloading" = "Скачивание";

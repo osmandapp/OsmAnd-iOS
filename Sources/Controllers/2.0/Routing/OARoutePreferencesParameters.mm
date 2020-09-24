@@ -417,8 +417,7 @@
 
 - (void) setSelected:(BOOL)isChecked
 {
-    [self.settings.voiceMute set:isChecked mode:self.getApplicationMode];
-    [_voiceRouter setMute:isChecked];
+    [_voiceRouter setMute:isChecked mode:self.getApplicationMode];
     if (self.delegate)
         [self.delegate updateParameters];
     [[OARootViewController instance].mapPanel updateRouteInfo];

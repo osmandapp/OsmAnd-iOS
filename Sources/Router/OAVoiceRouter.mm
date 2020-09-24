@@ -53,7 +53,6 @@ id<OACommandPlayer> player;
 OAVoiceCommandPending *pendingCommand;
 OARouteDirectionInfo *nextRouteDirection;
 
-BOOL mute = false;
 int currentStatus = STATUS_UNKNOWN;
 BOOL playedAndArriveAtTarget = false;
 float playGoAheadDist = 0;
@@ -75,8 +74,6 @@ std::string preferredLanguage;
     {
         _router = router;
         _settings = [OAAppSettings sharedManager];
-        
-        mute = [_settings.voiceMute get];
         
         NSString *prefLang =  _settings.settingPrefMapLanguage == nil ? OALocalizedString(@"local_names") : _settings.settingPrefMapLanguage;
         preferredLanguage = std::string([prefLang UTF8String]);
@@ -118,14 +115,19 @@ std::string preferredLanguage;
     return player;
 }
 
-- (void) setMute:(BOOL)mute_
+- (void) setMute:(BOOL)mute
 {
-    mute = mute_;
+    [OAAppSettings.sharedManager.voiceMute set:mute];
+}
+
+- (void) setMute:(BOOL)mute mode:(OAApplicationMode *)mode
+{
+    [OAAppSettings.sharedManager.voiceMute set:mute mode:mode];
 }
 
 - (BOOL) isMute
 {
-    return mute;
+    return [OAAppSettings.sharedManager.voiceMute get];
 }
 
 - (OACommandBuilder *) getNewCommandPlayerToPlay

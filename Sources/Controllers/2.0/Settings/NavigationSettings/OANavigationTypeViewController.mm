@@ -146,7 +146,18 @@
     OARoutingProfileDataObject *profileData = _sortedRoutingProfiles[[item[@"profile_ind"] integerValue]];
     if (profileData)
     {
-        [OAAppSettings.sharedManager.routingProfile set:profileData.stringKey mode:self.appMode];
+        int routeService;
+        if ([profileData.stringKey isEqualToString:@"STRAIGHT_LINE_MODE"])
+            routeService = STRAIGHT;
+        else if ([profileData.stringKey isEqualToString:@"DIRECT_TO_MODE"])
+            routeService = DIRECT_TO;
+//        else if (profileKey.equals(RoutingProfilesResources.BROUTER_MODE.name())) {
+//            routeService = RouteProvider.RouteService.BROUTER;
+        else
+            routeService = OSMAND;
+        OAAppSettings *settings = OAAppSettings.sharedManager;
+        [settings.routingProfile set:profileData.stringKey mode:self.appMode];
+        [settings.routerService set:routeService mode:self.appMode];
         if (self.delegate)
             [self.delegate onSettingsChanged];
         [self.navigationController popViewControllerAnimated:YES];

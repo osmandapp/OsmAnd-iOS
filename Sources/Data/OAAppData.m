@@ -51,7 +51,6 @@
     OAProfileMapSource  *_lastUnderlayMapSourceProfile;
     OAProfileDouble *_overlayAlphaProfile;
     OAProfileDouble *_underlayAlphaProfile;
-    OAProfileMapLayersConfiguartion *_mapLayersConfigurationProfile;
     OAProfileTerrain *_terrainTypeProfile;
     OAProfileTerrain *_lastTerrainTypeProfile;
     OAProfileDouble *_hillshadeAlphaProfile;
@@ -64,7 +63,7 @@
     NSMapTable<NSString *, OAProfileSetting *> *_registeredPreferences;
 }
 
-@synthesize applicationModeChangedObservable = _applicationModeChangedObservable;
+@synthesize applicationModeChangedObservable = _applicationModeChangedObservable, mapLayersConfiguration = _mapLayersConfiguration;
 
 - (instancetype) init
 {
@@ -153,11 +152,13 @@
     _destinationRemoveObservable = [[OAObservable alloc] init];
     _destinationShowObservable = [[OAObservable alloc] init];
     _destinationHideObservable = [[OAObservable alloc] init];
+    _mapLayersConfigurationChangeObservable = [[OAObservable alloc] init];
     
     _applicationModeChangedObservable = [[OAObservable alloc] init];
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
                                                             andObserve:_applicationModeChangedObservable];
+    _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     // Profile settings
     _lastMapSourceProfile = [OAProfileMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
                                                                                                               andVariant:@"type_default"]];
@@ -176,24 +177,21 @@
     _slopeMinZoomProfile = [OAProfileInteger withKey:kSlopeMinZoomKey defValue:3];
     _slopeMaxZoomProfile = [OAProfileInteger withKey:kSlopeMaxZoomKey defValue:16];
     _mapillaryProfile = [OAProfileBoolean withKey:kMapillaryKey defValue:NO];
-    _mapLayersConfigurationProfile = [OAProfileMapLayersConfiguartion withKey:kMapLayersConfigurationKey defValue:[[OAMapLayersConfiguration alloc] init]];
 
     _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
-    [_registeredPreferences setObject:_lastMapSourceProfile forKey:kLastMapSourceKey];
-    [_registeredPreferences setObject:_overlayMapSourceProfile forKey:kLastOverlayKey];
-    [_registeredPreferences setObject:_underlayMapSourceProfile forKey:kLastUnderlayKey];
-    [_registeredPreferences setObject:_overlayAlphaProfile forKey:kOverlayAlphaKey];
-    [_registeredPreferences setObject:_underlayAlphaProfile forKey:kUnderlayAlphaKey];
-    [_registeredPreferences setObject:_terrainTypeProfile forKey:kTerrainTypeKey];
-    [_registeredPreferences setObject:_lastTerrainTypeProfile forKey:kLastTerrainTypeKey];
-    [_registeredPreferences setObject:_hillshadeAlphaProfile forKey:kHillshadeAlphaKey];
-    [_registeredPreferences setObject:_slopeAlphaProfile forKey:kSlopeAlphaKey];
-    [_registeredPreferences setObject:_hillshadeMinZoomProfile forKey:kHillshadeMinZoomKey];
-    [_registeredPreferences setObject:_hillshadeMaxZoomProfile forKey:kHillshadeMaxZoomKey];
-    [_registeredPreferences setObject:_slopeMinZoomProfile forKey:kSlopeMinZoomKey];
-    [_registeredPreferences setObject:_slopeMaxZoomProfile forKey:kSlopeMaxZoomKey];
-    [_registeredPreferences setObject:_mapillaryProfile forKey:kMapillaryKey];
-    [_registeredPreferences setObject:_mapLayersConfigurationProfile forKey:kMapLayersConfigurationKey];
+    [_registeredPreferences setObject:_overlayMapSourceProfile forKey:@"map_overlay_previous"];
+    [_registeredPreferences setObject:_underlayMapSourceProfile forKey:@"map_underlay_previous"];
+    [_registeredPreferences setObject:_overlayAlphaProfile forKey:@"overlay_transparency"];
+    [_registeredPreferences setObject:_underlayAlphaProfile forKey:@"map_transparency"];
+    [_registeredPreferences setObject:_lastTerrainTypeProfile forKey:@"terrain_mode"];
+    [_registeredPreferences setObject:_hillshadeAlphaProfile forKey:@"hillshade_transparency"];
+    [_registeredPreferences setObject:_slopeAlphaProfile forKey:@"slope_transparency"];
+    [_registeredPreferences setObject:_hillshadeMinZoomProfile forKey:@"hillshade_min_zoom"];
+    [_registeredPreferences setObject:_hillshadeMaxZoomProfile forKey:@"hillshade_max_zoom"];
+    [_registeredPreferences setObject:_slopeMinZoomProfile forKey:@"slope_min_zoom"];
+    [_registeredPreferences setObject:_slopeMaxZoomProfile forKey:@"slope_max_zoom"];
+    [_registeredPreferences setObject:_mapillaryProfile forKey:@"show_mapillary"];
+    [_registeredPreferences setObject:_terrainTypeProfile forKey:@"terrain_mode"];
 }
 
 - (void) dealloc
@@ -208,6 +206,7 @@
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [_mapLayersConfiguration resetConfigutation];
         [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
         [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@YES];
@@ -444,7 +443,7 @@
 {
     @synchronized (_lock)
     {
-        return [_mapLayersConfigurationProfile get];
+        return _mapLayersConfiguration;
     }
 }
 
@@ -822,6 +821,7 @@
 
 - (void) copyAppDataFrom:(OAApplicationMode *)sourceMode toMode:(OAApplicationMode *)targetMode
 {
+    [_mapLayersConfiguration resetConfigutation];
     [_lastMapSourceProfile set:[_lastMapSourceProfile get:sourceMode] mode:targetMode];
     [_overlayMapSourceProfile set:[_overlayMapSourceProfile get:sourceMode] mode:targetMode];
     [_underlayMapSourceProfile set:[_underlayMapSourceProfile get:sourceMode] mode:targetMode];
@@ -838,7 +838,6 @@
     [_slopeMinZoomProfile set:[_slopeMinZoomProfile get:sourceMode] mode:targetMode];
     [_slopeMaxZoomProfile set:[_slopeMaxZoomProfile get:sourceMode] mode:targetMode];
     [_mapillaryProfile set:[_mapillaryProfile get:sourceMode] mode:targetMode];
-    [_mapLayersConfigurationProfile set:[_mapLayersConfigurationProfile get:sourceMode] mode:targetMode];
 }
 
 @end

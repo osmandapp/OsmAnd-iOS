@@ -99,8 +99,7 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     OAApplicationMode *am = [OARoutingHelper sharedInstance].getAppMode;
-    [settings.voiceMute set:![settings.voiceMute get:am] mode:am];
-    [[OARoutingHelper sharedInstance].getVoiceRouter setMute:[settings.voiceMute get:am]];
+    [[OARoutingHelper sharedInstance].getVoiceRouter setMute:[settings.voiceMute get:am] mode:am];
     [self refreshSoundButton];
 }
 

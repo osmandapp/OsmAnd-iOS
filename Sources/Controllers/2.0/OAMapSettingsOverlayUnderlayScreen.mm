@@ -594,11 +594,11 @@ static NSInteger kButtonsSection;
 {
     if (_mapSettingType == EMapSettingOverlay)
     {
-        return [[_settings mapSettingShowOverlayOpacitySlider] get];
+        return [_settings getOverlayOpacitySliderVisibility];
     }
     else if (_mapSettingType == EMapSettingUnderlay)
     {
-        return [[_settings mapSettingShowUnderlayOpacitySlider] get];
+        return [_settings getUnderlayOpacitySliderVisibility];
     }
 }
 
@@ -606,11 +606,11 @@ static NSInteger kButtonsSection;
 {
     if (_mapSettingType == EMapSettingOverlay)
     {
-        [_settings.mapSettingShowOverlayOpacitySlider set:show];
+        [_settings setOverlayOpacitySliderVisibility:show];
     }
     else if (_mapSettingType == EMapSettingUnderlay)
     {
-        [_settings.mapSettingShowUnderlayOpacitySlider set:show];
+        [_settings setUnderlayOpacitySliderVisibility:show];
     }
 }
 

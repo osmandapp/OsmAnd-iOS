@@ -518,10 +518,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return NO;
     }
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
-    
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
-
     [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         if ([key hasPrefix:@"nrenderer_"] || [key isEqualToString:@"displayed_transport_settings"])
             [rendererSettings setObject:obj forKey:key];
@@ -530,10 +528,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         else
             [self.item readPreferenceFromJson:key value:obj];
     }];
-
     [self.item applyRendererPreferences:rendererSettings];
     [self.item applyRoutingPreferences:routingSettings];
-
     [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
     return YES;
 }
@@ -693,7 +689,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     OAApplicationMode *am = [OAApplicationMode fromModeBean:_modeBean];
     if (![am isCustomProfile])
         am = [OAApplicationMode valueOfStringKey:am.stringKey def:am];
-
     _appMode = am;
 }
 

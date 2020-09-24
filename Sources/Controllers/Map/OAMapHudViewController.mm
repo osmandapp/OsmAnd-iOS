@@ -45,7 +45,6 @@
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
-    
 @interface OAMapHudViewController () <OAMapInfoControllerProtocol>
 
 @property (nonatomic) OADownloadProgressView *downloadView;
@@ -148,10 +147,6 @@
     _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onApplicationModeChanged:)
                                                          andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
-    
-    _widgetSettingsChangeDoneObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                       withHandler:@selector(onWidgetSettingsUpdated)
-                                                        andObserve:_app.widgetSettingsChangingDoneObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 }
@@ -622,17 +617,6 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateColors];
-        [_quickActionController updateViewVisibility];
-        [_mapPanelViewController refreshToolbar];
-    });
-}
-
-- (void) onWidgetSettingsUpdated
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateInfo];
-        [self updateColors];
-        [self recreateControls];
         [_quickActionController updateViewVisibility];
         [_mapPanelViewController refreshToolbar];
     });

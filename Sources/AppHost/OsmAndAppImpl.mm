@@ -123,7 +123,6 @@
 @synthesize simulateRoutingObservable = _simulateRoutingObservable;
 
 @synthesize widgetSettingsChangingStartObservable = _widgetSettingsChangingStartObservable;
-@synthesize widgetSettingsChangingDoneObservable = _widgetSettingsChangingDoneObservable;
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
@@ -465,7 +464,6 @@
     _simulateRoutingObservable = [[OAObservable alloc] init];
     
     _widgetSettingsChangingStartObservable = [[OAObservable alloc] init];
-    _widgetSettingsChangingDoneObservable = [[OAObservable alloc] init];
 
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];

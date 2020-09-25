@@ -27,10 +27,10 @@
 #define settingEnable3DViewKey @"settingEnable3DView"
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingUseFirebaseKey @"settingUseFirebaseKey"
-#define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
 #define liveUpdatesPurchasedKey @"liveUpdatesPurchasedKey"
 #define settingOsmAndLiveEnabledKey @"settingOsmAndLiveEnabledKey"
+#define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
@@ -1937,7 +1937,6 @@
         _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.AIRCRAFT];
         [_registeredPreferences setObject:_routerService forKey:@"route_service"];
-        
         _navigationIcon = [OAProfileInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
         [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
         [_registeredPreferences setObject:_navigationIcon forKey:@"navigation_icon"];
@@ -1947,7 +1946,7 @@
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
         [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
-        [_registeredPreferences setObject:_locationIcon forKey:@"location_icon"];
+        [_registeredPreferences setObject:_locationIcon forKey:@"location_icon"];    
         
         _appModeOrder = [OAProfileInteger withKey:appModeOrderKey defValue:0];
         
@@ -1964,7 +1963,6 @@
         _minSpeed = [OAProfileDouble withKey:minSpeedKey defValue:0.];
         _maxSpeed = [OAProfileDouble withKey:maxSpeedKey defValue:0.];
         _routeStraightAngle = [OAProfileDouble withKey:routeStraightAngleKey defValue:30.];
-        
         [_registeredPreferences setObject:_minSpeed forKey:@"min_speed"];
         [_registeredPreferences setObject:_maxSpeed forKey:@"max_speed"];
         [_registeredPreferences setObject:_routeStraightAngle forKey:@"routing_straight_angle"];
@@ -2246,6 +2244,34 @@
 - (OAProfileSetting *) getSettingById:(NSString *)stringId
 {
     return [_registeredPreferences objectForKey:stringId];
+}
+
+- (void) resetPreferencesForProfile:(OAApplicationMode *)appMode
+{
+    for (OAProfileSetting *value in [_registeredPreferences objectEnumerator].allObjects)
+    {
+        [value resetModeToDefault:appMode];
+    }
+    
+    for (OAProfileBoolean *value in [_customBooleanRoutingProps objectEnumerator].allObjects)
+    {
+        [value resetModeToDefault:appMode];
+    }
+    
+    for (OAProfileString *value in [_customRoutingProps objectEnumerator].allObjects)
+    {
+        [value resetModeToDefault:appMode];
+    }
+    
+    if (!appMode.isCustomProfile)
+    {
+        [self.userProfileName resetModeToDefault:appMode];
+        [self.profileIconName resetModeToDefault:appMode];
+        [self.profileIconColor resetModeToDefault:appMode];
+    }
+    
+    [OAAppData.defaults resetProfileSettingsForMode:appMode];
+    [[[OsmAndApp instance] widgetSettingResetObservable] notifyEventWithKey:appMode];
 }
 
 // Common Settings

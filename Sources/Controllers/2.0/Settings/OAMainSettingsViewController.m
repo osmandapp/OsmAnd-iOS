@@ -299,7 +299,7 @@
     if (section == 0)
         return OALocalizedString(@"global_settings_descr");
     else if (section == 2)
-        return OALocalizedString(@"export_profile_descr");
+        return OALocalizedString(@"import_profile_descr");
     return nil;
 }
 

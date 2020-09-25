@@ -185,7 +185,7 @@
 - (void) setupView
 {
     tblView.separatorColor = UIColorFromRGB(color_tint_gray);
-    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
@@ -507,7 +507,7 @@
     else if ([item[@"key"] isEqualToString:@"swap_points"])
     {
         [mapPanel swapStartAndFinish];
-        [vwController dismiss];
+        [self.vwController dismiss];
         return;
     }
     
@@ -515,7 +515,7 @@
         [vwController.delegate waypointSelectionDialogComplete:selectionDone showMap:showMap calculatingRoute:NO];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [vwController dismiss];
+    [self.vwController dismiss];
 }
 
 @synthesize vwController;

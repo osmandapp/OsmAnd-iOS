@@ -77,7 +77,7 @@
 
 - (void) setupView
 {
-    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
+    [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderCell",
@@ -256,7 +256,7 @@
         OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:_point];
         newTarget.centerMap = YES;
         [mapPanel showContextMenu:newTarget];
-        [vwController dismiss];
+        [self.vwController dismiss];
         [[OARootViewController instance].mapPanel.navigationController popToRootViewControllerAnimated:YES];
     }
     else if ([item[@"key"] isEqualToString:@"poi_modify"])
@@ -266,7 +266,7 @@
             OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithEntity:((OAOpenStreetMapPoint *)_point).getEntity];
             editingScreen.delegate = vwController.delegate;
             [[OARootViewController instance].mapPanel.navigationController pushViewController:editingScreen animated:YES];
-            [vwController dismiss];
+            [self.vwController dismiss];
         }
         else
         {
@@ -282,7 +282,7 @@
             [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)_point];
         
         [vwController.delegate refreshData];
-        [vwController dismiss];
+        [self.vwController dismiss];
         [_app.osmEditsChangeObservable notifyEvent];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];
@@ -306,7 +306,7 @@
         dialog.delegate = vwController.delegate;
         [dialog show];
     }
-    [vwController dismiss];
+    [self.vwController dismiss];
 }
 
 @synthesize vwController;

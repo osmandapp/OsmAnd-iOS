@@ -1847,3 +1847,4 @@
 "profile_alert_delete_msg" = "\"%@\" profilini tamamen silmek istediğinizden emin misiniz?";
 "profile_alert_delete_title" = "Profili sil";
 "reset_to_default" = "Öntanımlılara sıfırla";
+"help_nav_profiles" = "Navigasyon profilleri";

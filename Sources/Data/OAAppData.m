@@ -60,6 +60,7 @@
     OAProfileInteger *_slopeMinZoomProfile;
     OAProfileInteger *_slopeMaxZoomProfile;
     OAProfileBoolean *_mapillaryProfile;
+    
     NSMapTable<NSString *, OAProfileSetting *> *_registeredPreferences;
 }
 

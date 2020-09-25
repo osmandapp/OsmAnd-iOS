@@ -70,6 +70,7 @@ static UIFont *_titleFont;
 {
     CGFloat textWidth = cellWidth - titleTextWidthDelta - maxButtonWidth;
     return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text]);
+    
 }
 
 - (void) layoutSubviews

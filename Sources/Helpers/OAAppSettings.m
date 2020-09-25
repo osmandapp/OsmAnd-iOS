@@ -1937,7 +1937,6 @@
         _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
         [_routerService setModeDefaultValue:@2 mode:OAApplicationMode.AIRCRAFT];
         [_registeredPreferences setObject:_routerService forKey:@"route_service"];
-
         _navigationIcon = [OAProfileInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
         [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
         [_registeredPreferences setObject:_navigationIcon forKey:@"navigation_icon"];
@@ -2117,7 +2116,6 @@
 
         _showCameras = [OAProfileBoolean withKey:showCamerasKey defValue:NO];
         [_registeredPreferences setObject:_showCameras forKey:@"show_cameras"];
-        
         _showTunnels = [OAProfileBoolean withKey:showTunnelsKey defValue:NO];
         [_showTunnels setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_registeredPreferences setObject:_showTunnels forKey:@"show_tunnels"];

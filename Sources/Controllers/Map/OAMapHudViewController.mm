@@ -45,6 +45,7 @@
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
+
 @interface OAMapHudViewController () <OAMapInfoControllerProtocol>
 
 @property (nonatomic) OADownloadProgressView *downloadView;

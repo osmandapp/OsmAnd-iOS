@@ -1,8 +1,8 @@
 //
 //  OABottomSheetHeaderButtonCell.m
-//  OsmAnd
+//  OsmAnd Maps
 //
-//  Created by nnngrach on 22.09.2020.
+//  Created by Anna Bibyk on 22.09.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
@@ -17,5 +17,6 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 }
+
 
 @end

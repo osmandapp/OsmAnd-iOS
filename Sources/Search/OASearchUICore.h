@@ -5,8 +5,8 @@
 //  Created by Alexey Kulish on 11/01/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
-//  OsmAnd-java/src/net/osmand/search/SearchUICore.java
-//  git revision fc65678ce44a0045e194dc6d839898a7b3c00dbc
+//  OsmAnd-java/src/main/java/net/osmand/search/SearchUICore.java
+//  git revision 5e103acc507b583bfcbd0327372b0b08deddc4de
 
 #import <Foundation/Foundation.h>
 #import "OASearchResult.h"
@@ -48,6 +48,7 @@ typedef void (^OASearchUICoreRunnable)();
 
 - (OASearchCoreAPI *) getApiByClass:(Class)cl;
 - (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher;
+- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates;
 - (void) initApi;
 
 - (void) clearCustomSearchPoiFilters;

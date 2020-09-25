@@ -1854,3 +1854,4 @@
 "copy_from_other_profile_descr" = "Você pode copiar todas as configurações de qualquer perfil para o perfil selecionado: ";
 "copy_from_other_profile" = "Copiar de outro perfil";
 "shared_string_copy" = "Copiar";
+"help_nav_profiles" = "Perfis de navegação";

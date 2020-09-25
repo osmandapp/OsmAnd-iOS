@@ -1875,3 +1875,4 @@
 "copy_from_other_profile_descr" = "Вы можете скопировать все настройки из любого профиля в выбранный профиль: ";
 "copy_from_other_profile" = "Копировать из другого профиля";
 "shared_string_copy" = "Копировать";
+"help_nav_profiles" = "Профили навигации";

@@ -262,6 +262,8 @@
         return nil;
 }
 
+@synthesize vwController;
+
 @end
 
 

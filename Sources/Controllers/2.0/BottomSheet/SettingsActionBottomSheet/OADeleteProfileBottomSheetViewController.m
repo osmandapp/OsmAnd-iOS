@@ -156,6 +156,8 @@
     return labelHeight + 60;
 }
 
+@synthesize vwController;
+
 @end
 
 

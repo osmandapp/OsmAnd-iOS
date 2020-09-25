@@ -475,6 +475,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
+@synthesize vwController;
+
 # pragma mark OAOsmMessageForwardingDelegate
 
 - (void)setMessageText:(NSString *)text {

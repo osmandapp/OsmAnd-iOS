@@ -204,6 +204,8 @@
     view.hidden = YES;
 }
 
+@synthesize vwController;
+
 # pragma mark OAOsmMessageForwardingDelegate
 
 - (void) refreshData

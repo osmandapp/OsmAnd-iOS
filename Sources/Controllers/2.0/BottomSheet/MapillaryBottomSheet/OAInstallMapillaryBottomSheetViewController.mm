@@ -203,6 +203,8 @@
         return nil;
 }
 
+@synthesize vwController;
+
 @end
 
 @interface OAInstallMapillaryBottomSheetViewController ()

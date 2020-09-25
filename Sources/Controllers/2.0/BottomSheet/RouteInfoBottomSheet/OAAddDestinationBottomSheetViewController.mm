@@ -518,6 +518,8 @@
     [vwController dismiss];
 }
 
+@synthesize vwController;
+
 #pragma mark - OACollectionViewCellDelegate
 
 - (void) onItemSelected:(NSString *)key point:(id)point

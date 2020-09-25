@@ -282,6 +282,8 @@
         return nil;
 }
 
+@synthesize vwController;
+
 @end
 
 @interface OAFirstMapillaryBottomSheetViewController ()

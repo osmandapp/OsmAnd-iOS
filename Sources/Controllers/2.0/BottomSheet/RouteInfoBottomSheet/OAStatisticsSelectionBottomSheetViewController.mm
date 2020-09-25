@@ -247,6 +247,8 @@
     [vwController dismiss];
 }
 
+@synthesize vwController;
+
 @end
 
 @interface OAStatisticsSelectionBottomSheetViewController ()

@@ -216,6 +216,9 @@
     return nil;
 }
 
+@synthesize vwController;
+
+
 #pragma mark - MDCMultilineTextInputLayoutDelegate
 - (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
       didChangeContentSize:(CGSize)size

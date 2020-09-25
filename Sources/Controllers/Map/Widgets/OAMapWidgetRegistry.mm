@@ -267,8 +267,10 @@
 
 - (void) onWidgetSettingsReset:(id)sender withKey:(id)key;
 {
-    if (key && [key isKindOfClass:OAApplicationMode.class])
-        [self resetToDefault:(OAApplicationMode *)key];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (key && [key isKindOfClass:OAApplicationMode.class])
+            [self resetToDefault:(OAApplicationMode *)key];
+    });
 }
 
 - (void) resetDefault:(OAApplicationMode *)mode set:(NSMutableOrderedSet<OAMapWidgetRegInfo *> *)set

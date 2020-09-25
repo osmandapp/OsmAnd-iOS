@@ -1828,3 +1828,7 @@
 "repeat_after" = "Korda pärast";
 "nav_type_osmand" = "OsmAnd (võrguühenduseta teekonnad)";
 "nav_type_descr" = "Vali, kuidas selle profiili jaoks teekonda arvutada";
+"quick_action_dir_from_descr" = "Alustamaks teekonda kaardi keskpunktist puuduta seda tegevusnuppu.";
+"quick_action_transport_descr" = "Ühistranspordiliinide ja nende peatuste kuvamiseks või peitmiseks puuduta seda tegevusnuppu.";
+"export_profile_descr" = "Profiili importimiseks klõpsi ükspuha mis rakenduses vajaliku faili (*.osf) ja vali „Kopeeri OsmAnd Maps rakendusse“";
+"create_profile_descr" = "Oma kohandatud profiili loomisel võid aluseks võtta mõne vaikimisi lisatud profiilidest ning sellega saad määratleda üldisi seadistusi, nagu vidinate nähtavus ning kiiruse ja vahemaa mõõtühikud. Need on vaikimisi lisatud profiilid koos näidetega kohandatud profiilidest:";

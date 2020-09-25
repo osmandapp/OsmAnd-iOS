@@ -353,13 +353,13 @@
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
--(void) resetMapStyleForAppMode:(NSString *)appModeName
+-(void) resetMapStyleForAppMode:(NSString *)mapPresetName
 {
     NSMutableArray <NSString *> *allRenderStyles = [self getMapStyleRenderKeys];
     dispatch_async(dispatch_get_main_queue(), ^{
         for (NSString *renderStyleName in allRenderStyles)
         {
-            OAMapStyleSettings *resetingMapStyle = [[OAMapStyleSettings alloc] initWithStyleName:renderStyleName mapPresetName:appModeName];
+            OAMapStyleSettings *resetingMapStyle = [[OAMapStyleSettings alloc] initWithStyleName:renderStyleName mapPresetName:mapPresetName];
                 for (OAMapStyleParameter *p in resetingMapStyle.parameters)
                 {
                     p.value = p.defaultValue;

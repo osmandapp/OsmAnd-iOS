@@ -26,7 +26,7 @@
     NSMutableOrderedSet<OAMapWidgetRegInfo *> *_rightWidgetSet;
     NSMapTable<OAApplicationMode *, NSMutableSet<NSString *> *> *_visibleElementsFromSettings;
     OAAppSettings *_settings;
-    OAAutoObserverProxy* _widgetSettingsChangeDoneObserver;
+    OAAutoObserverProxy* _widgetSettingResetObserver;
 }
 
 - (instancetype) init
@@ -39,7 +39,7 @@
         _visibleElementsFromSettings = [NSMapTable strongToStrongObjectsMapTable];
         _settings = [OAAppSettings sharedManager];
         [self loadVisibleElementsFromSettings];
-        _widgetSettingsChangeDoneObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onWidgetSettingsReset:withKey:) andObserve:[OsmAndApp instance].widgetSettingsChangingStartObservable];
+        _widgetSettingResetObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onWidgetSettingsReset:withKey:) andObserve:[OsmAndApp instance].widgetSettingResetObservable];
     }
     return self;
 }

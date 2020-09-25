@@ -76,7 +76,6 @@
     OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
     OAAutoObserverProxy* _applicaionModeObserver;
-    OAAutoObserverProxy* _widgetSettingsChangeDoneObserver;
     
     OAOverlayUnderlayView* _overlayUnderlayView;
     

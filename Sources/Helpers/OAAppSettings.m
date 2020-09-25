@@ -2281,7 +2281,7 @@
     }
     
     [OAAppData.defaults resetProfileSettingsForMode:appMode];
-    [[[OsmAndApp instance] widgetSettingsChangingStartObservable] notifyEventWithKey:appMode];
+    [[[OsmAndApp instance] widgetSettingResetObservable] notifyEventWithKey:appMode];
 }
 
 // Common Settings

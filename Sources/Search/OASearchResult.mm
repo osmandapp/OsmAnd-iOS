@@ -114,7 +114,7 @@
     double distance = 0;
     if (location && self.location)
     {
-        // round to 5 decimal places
+        // floor to 5 decimal places
         CLLocationDegrees lat1 = (floor(self.location.coordinate.latitude * 100000)) / 100000.0;
         CLLocationDegrees lon1 = (floor(self.location.coordinate.longitude * 100000)) / 100000.0;
         CLLocationDegrees lat2 = location.coordinate.latitude;

@@ -188,6 +188,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             else if (item.pluginId.length == 0)
                 [pluginIndependentItems addObject:item];
         }
+//        for (OAPluginSettingsItem *pluginItem in pluginSettingsItems)
+//        {
+//            handlePluginImport(pluginItem, file);
+//        }
         if (pluginIndependentItems.count > 0)
         {
             // TODO: add ui dialogs as in Android
@@ -624,24 +628,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return self;
 }
 
-- (instancetype _Nullable) initWithJsonWithoutBackup:(id)json error:(NSError * _Nullable *)error
-{
-    self = [super init];
-    if (self)
-    {
-        [self initialization];
-        NSError *readError;
-        [self readFromJsonWithoutBackup:json error:&readError];
-        if (readError)
-        {
-            if (error)
-                *error = readError;
-            return nil;
-        }
-    }
-    return self;
-}
-
 - (EOASettingsItemType) type
 {
     return EOASettingsItemTypeProfile;
@@ -670,11 +656,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 }
 
 - (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
-{
-    [self readFromJsonWithoutBackup:json error:error];
-}
-
-- (void)readFromJsonWithoutBackup:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     [super readFromJson:json error:error];
     NSDictionary *appModeJson = json[@"appMode"];

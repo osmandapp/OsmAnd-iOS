@@ -538,7 +538,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileAngularConstant *angularUnits;
 @property (nonatomic) OAProfileDouble *speedLimitExceed;
 @property (nonatomic) OAProfileDouble *switchMapDirectionToCompass;
-@property (nonatomic) OAProfileInteger *wakeOnVoiceInt;
 @property (nonatomic) OAProfileDouble *routeRecalculationDistance;
 
 @property (nonatomic) OAProfileBoolean *showScreenAlerts;

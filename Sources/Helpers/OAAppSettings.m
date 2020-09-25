@@ -27,7 +27,6 @@
 #define settingEnable3DViewKey @"settingEnable3DView"
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingUseFirebaseKey @"settingUseFirebaseKey"
-#define settinlastMapSourcegExternalInputDeviceKey @"settingExternalInputDeviceKey"
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
 #define liveUpdatesPurchasedKey @"liveUpdatesPurchasedKey"
 #define settingOsmAndLiveEnabledKey @"settingOsmAndLiveEnabledKey"
@@ -137,7 +136,6 @@
 #define angularUnitsKey @"angularUnits"
 #define speedLimitExceedKey @"speedLimitExceed"
 #define switchMapDirectionToCompassKey @"switchMapDirectionToCompass"
-#define wakeOnVoiceIntKey @"wakeOnVoiceInt"
 #define showArrivalTimeKey @"showArrivalTime"
 #define showIntermediateArrivalTimeKey @"showIntermediateArrivalTime"
 #define showRelativeBearingKey @"showRelativeBearing"
@@ -2108,12 +2106,6 @@
         
         _routeRecalculationDistance = [OAProfileDouble withKey:routeRecalculationDistanceKey defValue:0.];
         [_registeredPreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];
-
-        _wakeOnVoiceInt = [OAProfileInteger withKey:wakeOnVoiceIntKey defValue:0];
-        [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode CAR]];
-        [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode BICYCLE]];
-        [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
-        [_registeredPreferences setObject:_wakeOnVoiceInt forKey:wakeOnVoiceIntKey];
 
         _showTrafficWarnings = [OAProfileBoolean withKey:showTrafficWarningsKey defValue:NO];
         [_showTrafficWarnings setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];

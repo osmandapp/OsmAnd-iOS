@@ -1819,7 +1819,7 @@
 "export_profile" = "Exportar perfil";
 "profile_settings" = "Configurações de perfil";
 "configure_map_descr" = "Aparência do mapa";
-"export_profile_descr" = "Para importar um perfil, toque no arquivo necessário (*.osf) em qualquer aplicativo e selecione \"Copiar para o OsmAnd Maps\"";
+"export_profile_descr" = "Você pode exportar todas as configurações do perfil, copiar todas as configurações de outro perfil ou redefinir todas as configurações do perfil para o estado padrão.";
 "profile_sett_descr" = "Afetar o perfil de aplicativo selecionado";
 "app_profiles" = "Perfis do aplicativo";
 "selected_profile" = "Perfil selecionado";
@@ -1855,3 +1855,6 @@
 "copy_from_other_profile" = "Copiar de outro perfil";
 "shared_string_copy" = "Copiar";
 "help_nav_profiles" = "Perfis de navegação";
+"reset_profile_action_descr" = "Redefina todas as configurações de perfil para os padrões de instalação. Tocar em Redefinir irá descartar todas as suas alterações, esta ação não pode ser desfeita.";
+"import_profile_descr" = "Para importar um perfil, toque no arquivo necessário (*.osf) em qualquer aplicativo e selecione \"Copiar para OsmAnd Maps\"";
+"profile_prefs_reset_successful" = "Todas as configurações de perfil foram restauradas para o padrão";

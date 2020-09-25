@@ -1814,7 +1814,7 @@
 "export_profile" = "Profili dışa aktar";
 "profile_settings" = "Profil ayarları";
 "configure_map_descr" = "Harita görünümü";
-"export_profile_descr" = "Bir profili içe aktarmak için herhangi bir uygulamada gerekli dosyaya (*.osf) dokunun ve \"OsmAnd Haritalara Kopyala\" seçeneğini seçin";
+"export_profile_descr" = "Tüm profil ayarlarını dışa aktarabilir, başka bir profilden kopyalayabilir veya öntanımlı durumlarına sıfırlayabilirsiniz.";
 "profile_sett_descr" = "Seçili uygulama profilini etkiler";
 "app_profiles" = "Uygulama profilleri";
 "selected_profile" = "Seçilen profil";
@@ -1848,3 +1848,6 @@
 "profile_alert_delete_title" = "Profili sil";
 "reset_to_default" = "Öntanımlılara sıfırla";
 "help_nav_profiles" = "Navigasyon profilleri";
+"reset_profile_action_descr" = "Tüm profil ayarlarını kurulum öntanımlı değerlerine sıfırlayın. Sıfırla düğmesine dokunduğunuzda tüm değişiklikleriniz atılacaktır, bu işlem geri alınamaz.";
+"import_profile_descr" = "Bir profili içe aktarmak için, herhangi bir uygulamada gerekli dosyanın üzerine (*.osf) dokunun ve \"OsmAnd Haritalara Kopyala\" seçeneğini seçin";
+"profile_prefs_reset_successful" = "Tüm profil ayarları öntanımlı değerlerine geri yüklendi";

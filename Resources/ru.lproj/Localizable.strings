@@ -1761,7 +1761,7 @@
 "position_icon_while_moving" = "Положение значка при движении";
 "position_icon_at_rest" = "Положение значка в состоянии покоя";
 "select_icon" = "Выберите значок";
-"select_color" = "Выберите цвет";
+"select_color" = "Цвет";
 "enter_profile_name" = "Введите название профиля";
 "edit_profile_list" = "Изменить список профилей";
 "new_profile" = "Новый профиль";

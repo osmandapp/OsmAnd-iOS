@@ -570,7 +570,7 @@
 // Rendering categories
 "rendering_category_hide" = "إخفاء";
 "rendering_category_routes" = "المسارات الرياضية";
-"rendering_category_details" = "التفاصيل";
+"rendering_category_details" = "تفاصيل إضافية";
 "rendering_category_transport" = "وسائل المواصلات";
 "rendering_category_others" = "سمات أخرى للخريطة";
 // Rendering attributes
@@ -1458,7 +1458,7 @@
 "routing_attr_avoid_tram_description" = "تجنب مركبة الترام";
 "rendering_attr_piste_difficulty_extreme_name" = "أقصى";
 "rendering_attr_pisteGrooming_name" = "مسار زلق";
-"rendering_attr_contourDensity_name" = "كثافة الخط المحيطي";
+"rendering_attr_contourDensity_name" = "كثافة الخط الكنتوري";
 "routing_attr_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
 "rendering_attr_surface_paving_stones_name" = "حجارة الرصف";
 "rendering_attr_contourWidth_description" = "عرض الخطوط الكنتورية";
@@ -1587,7 +1587,7 @@
 "routing_attr_avoid_stairs_description" = "تجنب السلالم";
 "rendering_attr_highway_class_footway_name" = "طريق للمشاة";
 "rendering_attr_surface_ground_name" = "الأرض";
-"rendering_attr_contourDensity_description" = "كثافة الخط المحيطي";
+"rendering_attr_contourDensity_description" = "كثافة الخط الكنتوري";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "إظهار شبكة مسارات الدارجات الهوائية";
 "rendering_attr_showLez_name" = "إظهار مناطق الانبعاثات المنخفضة";
 "routing_attr_avoid_borders_name" = "تخطي الحدود";
@@ -1814,7 +1814,7 @@
 "weight_limit_description" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
 "export_profile" = "تصدير الوضع";
 "configure_map_descr" = "مظهر الخريطة";
-"export_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد \"نسخ إلى أوسماند\"";
+"export_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد نسخ إلى أوسماند.";
 "profile_sett_descr" = "تؤثر على ملف التعريف المحدد";
 "app_profiles" = "أوضاع التطبيق";
 "selected_profile" = "الوضع المحدد";
@@ -1849,3 +1849,6 @@
 "copy_from_other_profile" = "نسخ من وضع آخر";
 "shared_string_copy" = "نسخ";
 "help_nav_profiles" = "ملف تعريف الملاحة";
+"reset_profile_action_descr" = "إعادة تعيين كافة إعدادات ملف التعريف إلى إعدادات التثبيت الافتراضية. سيؤدي النقر فوق إعادة التعيين إلى تجاهل جميع التغييرات ، ولا يمكن التراجع عن هذا الإجراء.";
+"import_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد \"نسخ إلى أوسماند\"";
+"profile_prefs_reset_successful" = "تمت استعادة جميع إعدادات الملف الشخصي إلى الحالة الافتراضية";

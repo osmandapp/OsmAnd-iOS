@@ -1830,5 +1830,11 @@
 "nav_type_descr" = "Vali, kuidas selle profiili jaoks teekonda arvutada";
 "quick_action_dir_from_descr" = "Alustamaks teekonda kaardi keskpunktist puuduta seda tegevusnuppu.";
 "quick_action_transport_descr" = "Ühistranspordiliinide ja nende peatuste kuvamiseks või peitmiseks puuduta seda tegevusnuppu.";
-"export_profile_descr" = "Profiili importimiseks klõpsi ükspuha mis rakenduses vajaliku faili (*.osf) ja vali „Kopeeri OsmAnd Maps rakendusse“";
+"export_profile_descr" = "Sa võid eksportida profiili kõik seadistused, kopeerida kõik seadistused teisest profiilist või seada profiili algolekusse.";
 "create_profile_descr" = "Oma kohandatud profiili loomisel võid aluseks võtta mõne vaikimisi lisatud profiilidest ning sellega saad määratleda üldisi seadistusi, nagu vidinate nähtavus ning kiiruse ja vahemaa mõõtühikud. Need on vaikimisi lisatud profiilid koos näidetega kohandatud profiilidest:";
+"map_settings_hillshade_description" = "Kasutades erinevaid halli varjundeid kuvavad kõrgusreljeefi kaardid nõlvasid, tippe ja tasandikke";
+"import_routing_file_descr" = "Sa võid importida teekonnafaili ükspuha missugusest pilvepõhise salvestusruumi rakendusest või tõstes ta OsmAnd kausta iTunes'is.";
+"help_nav_profiles" = "Navigeerimisprofiilid";
+"profile_prefs_reset_successful" = "Kõik profiili seadistused on muudetud vaikimisi väärtusteks";
+"import_profile_descr" = "Profiili importimiseks klõpsi ükspuha mis rakenduses vajaliku faili (*.osf) ja vali „Kopeeri OsmAnd Maps rakendusse“";
+"reset_profile_action_descr" = "Muuda kõik profiili seadistused paigaldusjärgsesse algeolekusse. Klõpsates Lähtesta-nuppu kaovad kõik sinu tehtud muudatused ja seda tegevust ei saa tagasi pöörata.";

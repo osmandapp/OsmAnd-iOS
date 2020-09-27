@@ -1838,3 +1838,11 @@
 "logging_accuracy" = "Nákvæmni skráninga";
 "settings_item_read_error" = "Gat ekki lesið %@.";
 "screen_alerts" = "Aðvaranir á skjá";
+"profile_prefs_reset_successful" = "Allar stillingar sniðs endurheimtar í sjálfgefina stöðu";
+"profile_alert_delete_msg" = "Ertu viss um að þú viljir eyða notkunarsniðinu \"%@\"?";
+"profile_alert_delete_title" = "Eyða notkunarsniði";
+"reset_to_default" = "Frumstilla á sjálfgefið";
+"copy_from_other_profile" = "Afrita úr öðru sniði";
+"shared_string_copy" = "Afrita";
+"recalculate_wrong_dir" = "Endurreikna leið ef farið er í öfuga átt";
+"repeat_after" = "Endurtaka eftir";

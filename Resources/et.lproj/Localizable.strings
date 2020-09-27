@@ -1809,7 +1809,7 @@
 "profile_alert_delete_msg" = "Kas sa oled kindel, et soovid täielikult kustutada „%@“ profiili?";
 "shared_string_copy" = "Kopeeri";
 "profile_alert_delete_title" = "Kustuta profiil";
-"copy_from_other_profile" = "Kopeeri teiselt profiililt";
+"copy_from_other_profile" = "Kopeeri teisest profiilist";
 "reset_to_default" = "Taasta algväärtused";
 "res_expire_time" = "Aegumise ajavahemik";
 "res_online_url_descr" = "Kirjuta või kopeeri veebiallika aadress";

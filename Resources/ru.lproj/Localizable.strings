@@ -392,7 +392,7 @@
 "shared_string_dismiss" = "Отменить";
 "shared_string_modify" = "Изменить";
 "shared_string_later" = "Позже";
-"offline_maps" = "Офлайн карты";
+"offline_maps" = "Офлайн-карты";
 "download_map" = "Загрузить карту";
 "gpx_route" = "Маршрут";
 "map_settings_hillshade" = "Рельеф местности";

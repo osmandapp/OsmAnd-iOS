@@ -1838,3 +1838,7 @@
 "profile_prefs_reset_successful" = "Kõik profiili seadistused on muudetud vaikimisi väärtusteks";
 "import_profile_descr" = "Profiili importimiseks klõpsi ükspuha mis rakenduses vajaliku faili (*.osf) ja vali „Kopeeri OsmAnd Maps rakendusse“";
 "reset_profile_action_descr" = "Muuda kõik profiili seadistused paigaldusjärgsesse algeolekusse. Klõpsates Lähtesta-nuppu kaovad kõik sinu tehtud muudatused ja seda tegevust ei saa tagasi pöörata.";
+"res_zoom_levels_desc" = "Need parameetrid mõjutavad kaardi kuvamist, kui seda kasutatakse kaardi liigina või ülekatte / aluskattena.\n\nKaardi liik: kaart piirdub valitud suurendustasemetega.\n\nÜlekate / aluskate: suurendustasemed, kus kaardiosad on nähtavad. Üles või alla skaleerimine toimub seatud väärtustest kõrgemal või madalamal.";
+"ui_customization_descr" = "Sahtli osad, kontekstimenüü";
+"arrows_direction_to_markers" = "Nooled osutavad aktiivse markeri suunda, kui see asub väljaspool ekraani. Suunajooned viitavad aktiivsetele markeritele.";
+"specify_number_of_dir_indicators" = "Määra suunamärguannete arv, see mõjutab kõiki allpool olevaid seadeid.";

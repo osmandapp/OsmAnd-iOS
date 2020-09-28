@@ -1801,7 +1801,7 @@
 "tones" = "Tonnen";
 "plugin_settings_descr" = "Erweiterungsmodul-Einstellungen für das ausgewählte Profil.";
 "settings_app_theme" = "Thema der Anwendung";
-"instructions_repeat" = "Zur Wiederholung der Anweisung auf das Widget \"Nächste Richtungsangabe\" tippen";
+"instructions_repeat" = "Tippen Sie auf das Widget \"Nächste Richtungsangabe\", um Anweisungen zu wiederholen.";
 "default_speed_dialog_msg" = "Schätzt die Ankunftszeit für unbekannte Straßentypen und begrenzt die Geschwindigkeit für alle Straßen (kann die Navigation beeinflussen)";
 "vessel_width_limit_description" = "Stellen Sie die Schiffsbreite ein, um schmale Brücken zu vermeiden.";
 "lenght_limit_description" = "Bitte geben Sie Ihre Fahrzeuglänge an. Für lange Fahrzeuge könnten einige Streckenabschnitte nicht befahrbar sein.";

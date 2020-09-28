@@ -53,7 +53,20 @@
     [self refreshFavoritesMarkersCollection];
     
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
-                                    Visibility:[[OAAppSettings sharedManager] mapSettingShowFavorites]];
+                                    Visibility:self.isVisible];
+}
+
+- (BOOL)updateLayer
+{
+    [self.app.data.mapLayersConfiguration setLayer:self.layerId
+                                        Visibility:self.isVisible];
+    return YES;
+}
+
+
+- (BOOL)isVisible
+{
+    return [OAAppSettings.sharedManager.mapSettingShowFavorites get];
 }
 
 - (void) deinitLayer

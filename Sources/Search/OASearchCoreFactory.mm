@@ -29,6 +29,7 @@
 #import "OACity.h"
 #import "OAStreetIntersection.h"
 #import "OALocationParser.h"
+#import "OrderedDictionary.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -53,6 +54,69 @@
 
 #define OLC_RECALC_DISTANCE_THRESHOLD 100000 // 100 km
 
+#define STD_POI_FILTER_PREFIX  @"std_"
+
+@interface OAPoiAdditionalCustomFilter : OAPOIBaseType
+
+@property (nonatomic) NSMutableArray<OAPOIType *> *additionalPoiTypes;
+
+- (instancetype) initWithType:(OAPOIType *)pt;
+
+@end
+
+@implementation OAPoiAdditionalCustomFilter
+{
+    OAPOIHelper *_poiHelper;
+}
+
+- (instancetype) initWithType:(OAPOIType *)pt
+{
+    self = [super initWithName:pt.name];
+    if (self) {
+        _poiHelper = OAPOIHelper.sharedInstance;
+        _additionalPoiTypes = [NSMutableArray new];
+        [_additionalPoiTypes addObject:pt];
+    }
+    return self;
+}
+
+- (BOOL)isAdditional
+{
+    return YES;
+}
+
+- (NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes
+{
+    for (OAPOIType *p in _additionalPoiTypes)
+    {
+        if ([p.parent isEqual:_poiHelper.otherMapCategory])
+        {
+            for (OAPOICategory *c in [_poiHelper getCategories:NO])
+            {
+                [c putTypes:acceptedTypes];
+            }
+        }
+        else
+        {
+            [p.parentType putTypes:acceptedTypes];
+        }
+
+    }
+    return acceptedTypes;
+}
+
+- (UIImage *)icon
+{
+    return [UIImage imageNamed:@"ic_custom_search"];
+}
+
+- (NSString *)iconName
+{
+    return @"ic_custom_search";
+}
+
+@end
+
 @interface OASearchCoreFactory ()
 
 + (NSString *) stripBraces:(NSString *)localeName;
@@ -67,6 +131,7 @@
 @interface OASearchBaseAPI ()
 
 - (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api;
+- (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api publish:(BOOL)publish;
 
 @end
 
@@ -126,20 +191,85 @@
     return [phrase getRadiusLevel] < MAX_DEFAULT_SEARCH_RADIUS;
 }
 
-- (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api
+- (void)subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api
 {
-    [phrase countUnknownWordsMatch:res];
-    NSArray<NSString *> *ws = [phrase getUnknownSearchWords:res.otherWordsMatch];
-    if (!res.firstUnknownWordMatches)
-        ws = [ws arrayByAddingObject:[phrase getUnknownSearchWord]];
+    return [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:api publish:YES];
+}
+
+- (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api publish:(BOOL)publish
+{
+    [phrase countUnknownWordsMatchMainResult:res];
+    BOOL firstUnknownWordMatches = res.firstUnknownWordMatches;
+    NSMutableArray<NSString *> *leftUnknownSearchWords = [NSMutableArray arrayWithArray:[phrase getUnknownSearchWords]];
+    if (res.otherWordsMatch)
+        [leftUnknownSearchWords removeObjectsInArray:[res.otherWordsMatch allObjects]];
+    
+    OASearchResult *newParentSearchResult = nil;
+    if (res.parentSearchResult == nil && resultMatcher.getParentSearchResult == nil &&
+        res.objectType == STREET && [res.object isKindOfClass:OAStreet.class] && ((OAStreet *) res.object).city != nil) {
+        OACity *ct = ((OAStreet *) res.object).city;
+        OASearchResult *cityResult = [[OASearchResult alloc] initWithPhrase:phrase];
+        cityResult.object = ct;
+        cityResult.objectType = CITY;
+        cityResult.localeName = [ct getName:phrase.getSettings.getLang transliterate:phrase.getSettings.isTransliterate];
+        cityResult.otherNames = [NSMutableArray arrayWithArray:ct.localizedNames.allValues];
+        cityResult.location = [[CLLocation alloc] initWithLatitude:ct.latitude longitude:ct.longitude];
+        QString lang = QString::fromNSString([[phrase getSettings] getLang]);
+        const auto& r = OsmAndApp.instance.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
+        const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
+        if (obfMetadata)
+            cityResult.localeRelatedObjectName = obfMetadata->obfFile->getRegionName().toNSString();
+        cityResult.relatedResourceId = res.resourceId;
+        [phrase countUnknownWordsMatchMainResult:cityResult];
+        __block BOOL match = NO;
+        if (firstUnknownWordMatches)
+        {
+            cityResult.firstUnknownWordMatches = NO; // don't count same name twice
+        }
+        else if (cityResult.firstUnknownWordMatches)
+        {
+            firstUnknownWordMatches = YES;
+            match = YES;
+        }
+        if (cityResult.otherWordsMatch != nil)
+        {
+            NSMutableSet<NSString *> *toDelete = [NSMutableSet new];
+            [cityResult.otherWordsMatch enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+                BOOL wasPresent = [leftUnknownSearchWords containsObject:obj];
+                [leftUnknownSearchWords removeObject:obj];
+                if (!wasPresent)
+                    [toDelete addObject:obj]; // don't count same name twice
+                else
+                    match = YES;
+            }];
+            [cityResult.otherWordsMatch minusSet:toDelete];
+        }
+        // include parent search result even if it is empty
+        if (match)
+            newParentSearchResult = cityResult;
+    }
+    if (!firstUnknownWordMatches)
+        [leftUnknownSearchWords insertObject:[phrase getFirstUnknownSearchWord] atIndex:0];
     
     // publish result to set parentSearchResult before search
-    [resultMatcher publish:res];
-    if (ws.count > 0 && api && [api isSearchAvailable:phrase])
+    if (publish)
     {
-        OASearchPhrase *nphrase = [phrase selectWord:res unknownWords:ws lastComplete:[phrase isLastUnknownSearchWordComplete]];
-        OASearchResult *prev = [resultMatcher setParentSearchResult:res];
-        res.parentSearchResult = prev;
+        if (newParentSearchResult != nil)
+        {
+            OASearchResult *prev = [resultMatcher setParentSearchResult:newParentSearchResult];
+            [resultMatcher publish:res];
+            [resultMatcher setParentSearchResult:prev];
+        }
+        else
+        {
+            [resultMatcher publish:res];
+        }
+    }
+    if (leftUnknownSearchWords.count > 0 && api != nil && [api isSearchAvailable:phrase])
+    {
+        OASearchPhrase *nphrase = [phrase selectWord:res unknownWords:leftUnknownSearchWords lastComplete:phrase.isLastUnknownSearchWordComplete || ![leftUnknownSearchWords containsObject:phrase.getLastUnknownSearchWord]];
+        OASearchResult *prev = [resultMatcher setParentSearchResult:publish ? res :
+                resultMatcher.getParentSearchResult];
         [api search:nphrase resultMatcher:resultMatcher];
         [resultMatcher setParentSearchResult:prev];
     }
@@ -265,16 +395,18 @@
     }
     if ([phrase isNoSelectedType] && bbox && ([phrase isUnknownSearchWordPresent] || [phrase isEmptyQueryAllowed]) && [phrase isSearchTypeAllowed:CITY])
     {
-        NSString *word = [phrase getUnknownWordToSearch];
-        OANameStringMatcher *nm = [phrase getNameStringMatcher:word complete:[phrase isUnknownSearchWordComplete]];
-        OANameStringMatcher *wordEqualsMatcher = [phrase getNameStringMatcher:word complete:YES];
-        BOOL firstUnknownWordMatches = [word isEqualToString:[phrase getUnknownSearchWord]];
+        OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
         _resArray.clear();
         const OsmAnd::AreaI area(bbox.left, bbox.top, bbox.right, bbox.bottom);
         _townCitiesQR->query(area, _resArray);
+        LogPrintf(OsmAnd::LogSeverityLevel::Debug,
+        "Resulting cities '%d'",
+                  _resArray.count());
         int limit = 0;
         for (const auto& c : _resArray)
         {
+//            if (phrase.getSettings.isExportObjects)
+//                [resultMatcher exportCity:phrase city:c];
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             res.object = [[OACity alloc] initWithCity:c];
             res.resourceId = _streetGroupResourceIds.value(c).toNSString();
@@ -306,8 +438,6 @@
                 }
                 else if ([nm matches:res.localeName] || [nm matchesMap:res.otherNames])
                 {
-                    res.firstUnknownWordMatches = firstUnknownWordMatches;
-                    res.unknownPhraseMatches = [wordEqualsMatcher matches:res.localeName];
                     [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
                 }
                 if (limit++ > LIMIT * [phrase getRadiusLevel])
@@ -317,10 +447,9 @@
     }
 }
 
-
 - (void) searchByName:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    if ([phrase getRadiusLevel] > 1 || [phrase getUnknownSearchWordLength] > 3 || [phrase getUnknownSearchWords].count > 0 || [phrase isSearchTypeAllowed:POSTCODE exclusive:YES])
+    if ([phrase getRadiusLevel] > 1 || [phrase getUnknownWordToSearch].length > 3 || [phrase hasMoreThanOneUnknownSearchWord] || [phrase isSearchTypeAllowed:POSTCODE exclusive:YES])
     {
         NSString *wordToSearch = [phrase getUnknownWordToSearch];
         if (wordToSearch.length == 0)
@@ -330,9 +459,6 @@
 
         QString lang = QString::fromNSString([[phrase getSettings] getLang]);
         bool transliterate = [[phrase getSettings] isTransliterate];
-
-        OANameStringMatcher *wordEqualsMatcher = [phrase getNameStringMatcher:wordToSearch complete:YES];
-        BOOL firstUnknownWordMatches = [wordToSearch isEqualToString:[phrase getUnknownSearchWord]];
         
         BOOL locSpecified = [phrase getLastTokenLocation] != nil;
         CLLocation *loc = [phrase getLastTokenLocation];
@@ -362,7 +488,7 @@
         
         searchCriteria->name = QString::fromNSString([wordToSearch lowerCase]);
         searchCriteria->includeStreets = true;
-        searchCriteria->matcherMode = [phrase isUnknownSearchWordComplete] ? OsmAnd::StringMatcherMode::CHECK_EQUALS_FROM_SPACE : OsmAnd::StringMatcherMode::CHECK_STARTS_FROM_SPACE;
+        searchCriteria->matcherMode = [phrase isMainUnknownSearchWordComplete] ? OsmAnd::StringMatcherMode::CHECK_EQUALS_FROM_SPACE : OsmAnd::StringMatcherMode::CHECK_STARTS_FROM_SPACE;
         
         if (locSpecified)
         {
@@ -411,7 +537,7 @@
                                           if (address->nativeName.startsWith("<"))
                                               return NO;
                                           
-                                          if (![[phrase getNameStringMatcher] matches:[OASearchCoreFactory stripBraces:sr.localeName]])
+                                          if (![[phrase getUnknownWordToSearchBuildingNameMatcher] matches:[OASearchCoreFactory stripBraces:sr.localeName]])
                                               sr.priorityDistance = 5;
                                           
                                           const auto& street = std::dynamic_pointer_cast<const OsmAnd::Street>(address);
@@ -492,14 +618,8 @@
                 if ([resultMatcher isCancelled])
                     break;
                 
-                res.firstUnknownWordMatches = firstUnknownWordMatches;
-                res.unknownPhraseMatches = [wordEqualsMatcher matches:res.localeName];
                 if (res.objectType == STREET)
                 {
-                    OAStreet *street = (OAStreet *)res.object;
-                    OACity *ct = street.city;
-                    NSMutableArray<NSString *> *otherNames = [NSMutableArray arrayWithArray:ct.localizedNames.allValues];
-                    [phrase countUnknownWordsMatch:res localeName:[ct getNameQ:lang transliterate:transliterate] otherNames:otherNames];
                     [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsApi];
                 } else {
                     [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
@@ -557,7 +677,11 @@
     if (![phrase isUnknownSearchWordPresent])
         return NO;
     
-    BOOL hasUnselectedType = [phrase isNoSelectedType] && [phrase isUnknownSearchWordPresent] && [phrase isUnknownSearchWordComplete] && [phrase hasUnknownSearchWordPoiTypes];
+    // don't search by name when type is selected or poi type is part of name
+    if (![phrase isNoSelectedType])
+        return NO;
+    // Take into account POI [bar] - 'Hospital 512'
+    // BEFORE: it was searching exact match of whole phrase.getUnknownSearchPhrase() [ Check feedback ]
     
     OsmAndAppInstance app = [OsmAndApp instance];
     QString lang = QString::fromNSString([[phrase getSettings] getLang]);
@@ -567,12 +691,8 @@
     NSArray<NSString *> *offlineIndexes = [phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI];
     NSMutableSet<NSString *> *ids = [NSMutableSet new];
 
-    NSString *unknownSearchPhrase = [[phrase getUnknownSearchPhrase] trim];
-    NSString *searchWord = hasUnselectedType ? unknownSearchPhrase : [phrase getUnknownWordToSearch];
-    OANameStringMatcher *nm = [phrase getNameStringMatcher:searchWord complete:[phrase isUnknownSearchWordComplete]];
-    OANameStringMatcher *phraseMatcher = nil;
-    if (unknownSearchPhrase.length > 0)
-        phraseMatcher = [[OANameStringMatcher alloc] initWithLastWord:unknownSearchPhrase mode:CHECK_EQUALS];
+    NSString *searchWord = [phrase getUnknownWordToSearch];
+    OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
     
     QuadRect *bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS_INSIDE];
     
@@ -601,7 +721,7 @@
         searchCriteria->localResources = {r};
 
         search->performSearch(*searchCriteria,
-                              [self, &limit, &phrase, &lang, transliterate, &nm, &currentResId, &resultMatcher, &phraseMatcher, &ids]
+                              [self, &limit, &phrase, &lang, transliterate, &nm, &currentResId, &resultMatcher, &ids]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
                                   if (limit++ > LIMIT)
@@ -609,14 +729,19 @@
                                   
                                   const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
                                   
-                                  NSString *poiID = [NSString stringWithFormat:@"%@_%lld", amenity->nativeName.toNSString(), amenity->id.getOsmId()];
+                                  NSString *poiID = [NSString stringWithFormat:@"%@_%lld", amenity->type.toNSString(), amenity->id.id];
                                   if ([ids containsObject:poiID])
                                       return false;
                                   
                                   OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-                                  sr.object = [OAPOIHelper parsePOIByAmenity:amenity];
+                                  OAPOI *object = [OAPOIHelper parsePOIByAmenity:amenity];
+                                  sr.object = object;
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
                                   sr.localeName = amenity->getName(lang, transliterate).toNSString();
+                                  if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames]
+                                      && ![nm matchesMap:object.getAdditionalInfo.allValues]) {
+                                      return false;
+                                  }
             /*
                                   if (sr.localeName.length == 0)
                                   {
@@ -627,11 +752,6 @@
                                           sr.localeName = amenity->subType.toNSString();
                                   }
              */
-                                  if ([phrase isUnknownSearchWordComplete])
-                                  {
-                                      if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames])
-                                          return false;
-                                  }
                                   sr.amenity = amenity;
                                   sr.preferredZoom = 17;
                                   sr.resourceId = currentResId;
@@ -652,14 +772,11 @@
                                       sr.priorityDistance = 1;
                                   }
                                   sr.priority = SEARCH_AMENITY_BY_NAME_PRIORITY;
-                                  if (phraseMatcher)
-                                      sr.unknownPhraseMatches = [phraseMatcher matches:sr.localeName];
+                                  [phrase countUnknownWordsMatchMainResult:sr];
                                   
-                                  [phrase countUnknownWordsMatch:sr];
                                   sr.objectType = POI;
-                                  [ids addObject:poiID];
                                   [resultMatcher publish:sr];
-                                  
+                                  [ids addObject:poiID];
                                   return false;
                               },
                               ctrl);
@@ -679,7 +796,7 @@
     if ([p hasObjectType:POI_TYPE])
         return -1;
     
-    if ([p getUnknownSearchWordLength] >= FIRST_WORD_MIN_LENGTH || [p getRadiusLevel] > 1)
+    if ([p getUnknownWordToSearch].length >= FIRST_WORD_MIN_LENGTH || [p getRadiusLevel] > 1)
         return SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR;
     
     return -1;
@@ -688,6 +805,26 @@
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
     return [super isSearchMoreAvailable:phrase] && [self getSearchPriority:phrase] != -1;
+}
+
+@end
+
+@interface OAPoiTypeResult : NSObject
+
+@property (nonatomic) OAPOIBaseType *pt;
+@property (nonatomic) NSMutableOrderedSet<NSString *> *foundWords;
+
+@end
+
+@implementation OAPoiTypeResult
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self) {
+        _foundWords = [NSMutableOrderedSet new];
+    }
+    return self;
 }
 
 @end
@@ -702,7 +839,8 @@
     NSArray<OAPOIBaseType *> *_topVisibleFilters;
     NSArray<OAPOICategory *> *_categories;
     NSMutableArray<OACustomSearchPoiFilter *> *_customPoiFilters;
-    NSMutableArray<NSNumber *> *_customPoiFiltersPriorites ;
+    NSMutableDictionary<NSString *, NSNumber *> *_activePoiFilters;
+    NSDictionary<NSString *, OAPOIType *> *_translatedNames;
     OAPOIHelper *_types;
 }
 
@@ -713,119 +851,238 @@
     {
         _types = [OAPOIHelper sharedInstance];
         _customPoiFilters = [NSMutableArray array];
-        _customPoiFiltersPriorites = [NSMutableArray array];
+        _activePoiFilters = [NSMutableDictionary new];
         _topVisibleFilters = [_types getTopVisibleFilters];
         _categories = _types.poiCategoriesNoOther;
+        _translatedNames = [NSDictionary new];
     }
     return self;
+}
+
+- (void) initPoiTypes
+{
+    if (_translatedNames.count == 0)
+    {
+        _translatedNames = [_types getAllTranslatedNames:NO];
+        NSMutableArray<OAPOIBaseType *> *topVisibleFilters = [NSMutableArray arrayWithArray:_types.getTopVisibleFilters];
+        [topVisibleFilters removeObject:_types.getOsmwiki];
+        _topVisibleFilters = topVisibleFilters;
+        _categories = [_types getCategories:NO];
+    }
 }
 
 - (void) clearCustomFilters
 {
     [_customPoiFilters removeAllObjects];
-    [_customPoiFiltersPriorites removeAllObjects];
+    [_activePoiFilters removeAllObjects];
 }
 
 - (void) addCustomFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority
 {
     [_customPoiFilters addObject:poiFilter];
-    [_customPoiFiltersPriorites addObject:[NSNumber numberWithInt:priority]];
+    if (priority > 0)
+        [_activePoiFilters setObject:[NSNumber numberWithInt:priority] forKey:poiFilter.getFilterId];
+}
+
+- (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrder
+{
+    for (int i = 0; i < filterOrder.count; i++)
+    {
+        [_activePoiFilters setObject:[NSNumber numberWithInt:i] forKey:filterOrder[i]];
+    }
+}
+
+- (NSDictionary<NSString *, OAPoiTypeResult *> *) getPoiTypeResults:(OANameStringMatcher *)nm additionalMatcher:(OANameStringMatcher *)nmAdditional
+{
+    MutableOrderedDictionary<NSString *, OAPoiTypeResult *> *results = [MutableOrderedDictionary new];
+    for (OAPOIBaseType *pf in _topVisibleFilters)
+    {
+        OAPoiTypeResult *res = [self checkPoiType:nm type:pf];
+        if(res)
+            results[res.pt.name] = res;
+    }
+    if (nmAdditional)
+        [self addAditonals:nmAdditional results:results type:_types.otherMapCategory];
+    
+    for (OAPOICategory *c in _categories)
+    {
+        OAPoiTypeResult *res = [self checkPoiType:nm type:c];
+        if(res)
+            results[res.pt.name] = res;
+        if (nmAdditional != nil)
+            [self addAditonals:nmAdditional results:results type:c];
+    }
+    [_translatedNames enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, OAPOIType * _Nonnull pt, BOOL * _Nonnull stop) {
+        if (![pt.category isEqual:_types.otherMapCategory] && !pt.isReference)
+        {
+            OAPoiTypeResult *res = [self checkPoiType:nm type:pt];
+            if(res != nil)
+                results[res.pt.name] = res;
+            if (nmAdditional != nil)
+                [self addAditonals:nmAdditional results:results type:pt];
+        }
+    }];
+    return results;
+}
+
+- (void) addAditonals:(OANameStringMatcher *) nm results:(MutableOrderedDictionary *)results type:(OAPOIBaseType *)pt
+{
+    NSArray<OAPOIType *> *additionals = pt.poiAdditionals;
+    if (additionals != nil)
+    {
+        for (OAPOIType *a in additionals)
+        {
+            OAPoiTypeResult *existingResult = results[a.name];
+            if (existingResult != nil) {
+                OAPoiAdditionalCustomFilter *f;
+                if ([existingResult.pt isKindOfClass:OAPoiAdditionalCustomFilter.class])
+                    f = (OAPoiAdditionalCustomFilter *) existingResult.pt;
+                else
+                    f = [[OAPoiAdditionalCustomFilter alloc] initWithType:(OAPOIType *)existingResult.pt];
+                
+                [f.additionalPoiTypes addObject:a];
+                existingResult.pt = f;
+            }
+            else
+            {
+                NSString *enTranslation = [a.nameLocalizedEN lowerCase];
+                if (![@"no" isEqualToString:enTranslation]) // && !"yes".equals(enTranslation))
+                {
+                    OAPoiTypeResult *ptr = [self checkPoiType:nm type:a];
+                    if (ptr != nil)
+                        results[a.name] = ptr;
+                }
+            }
+        }
+    }
+}
+
+- (OAPoiTypeResult *) checkPoiType:(OANameStringMatcher *)nm type:(OAPOIBaseType *)pf
+{
+    OAPoiTypeResult *res = nil;
+    if ([nm matches:pf.nameLocalized])
+        res = [self addIfMatch:nm name:pf.nameLocalized type:pf res:res];
+    
+    if ([nm matches:pf.nameLocalizedEN])
+        res = [self addIfMatch:nm name:pf.nameLocalizedEN type:pf res:res];
+    
+    if ([nm matches:pf.name])
+        res = [self addIfMatch:nm name:[pf.name stringByReplacingOccurrencesOfString:@"_" withString:@" "] type:pf res:res];
+
+    if ([nm matches:pf.nameSynonyms])
+    {
+        NSArray<NSString *> *synonyms = [pf.nameSynonyms componentsSeparatedByString:@";"];
+        for (NSString *synonym in synonyms)
+        {
+            res = [self addIfMatch:nm name:synonym type:pf res:res];
+        }
+    }
+    return res;
+}
+
+- (OAPoiTypeResult *) addIfMatch:(OANameStringMatcher *) nm name:(NSString *) s type:(OAPOIBaseType *)pf res:(OAPoiTypeResult *) res
+{
+    if ([nm matches:s])
+    {
+        if (res == nil) {
+            res = [[OAPoiTypeResult alloc] init];
+            res.pt = pf;
+        }
+        [res.foundWords addObject:s];
+    }
+    return res;
 }
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    NSMutableArray<OAPOIBaseType *> *results = [NSMutableArray array];
-    NSMutableArray<OAPOIBaseType *> *searchWordTypes = [NSMutableArray array];
-    OANameStringMatcher *nm;
-    NSString *unknownSearchPhrase = [phrase getUnknownSearchPhrase];
-    if ([phrase getUnknownSearchWord].length < unknownSearchPhrase.length)
-        nm = [[OANameStringMatcher alloc] initWithLastWord:unknownSearchPhrase mode:CHECK_ONLY_STARTS_WITH_TRIM];
-    else
-        nm = [[OANameStringMatcher alloc] initWithLastWord:unknownSearchPhrase mode:CHECK_STARTS_FROM_SPACE];
+    BOOL showTopFiltersOnly = !phrase.isUnknownSearchWordPresent;
+    OANameStringMatcher *nm = phrase.getFirstUnknownNameStringMatcher;
     
-    for (OAPOIBaseType *pf in _topVisibleFilters)
+    [self initPoiTypes];
+    if (showTopFiltersOnly)
     {
-        if (![phrase isUnknownSearchWordPresent] || [nm matches:pf.nameLocalized] || [nm matches:pf.nameLocalizedEN] || [nm matches:pf.nameSynonyms])
+        for (OAPOIBaseType *pt in _topVisibleFilters)
         {
-            [results addObject:pf];
-            [searchWordTypes addObject:pf];
-        }
-    }
-    if ([phrase isUnknownSearchWordPresent])
-    {
-        for (OAPOICategory *c in _categories)
-        {
-            if (![results containsObject:c] && ([nm matches:c.nameLocalized] || [nm matches:c.nameLocalizedEN] || [nm matches:c.nameSynonyms]))
-            {
-                [results addObject:c];
-                [searchWordTypes addObject:c];
-            }
-        }
-        
-        NSEnumerator<OAPOIType *> *poiTypesEnum = _types.poiTypesByName.objectEnumerator;
-        for (OAPOIType *pt in poiTypesEnum)
-        {
-            if (pt.category != _types.otherMapCategory)
-            {
-                if (![results containsObject:pt] && ([nm matches:pt.nameLocalized] || [nm matches:pt.nameLocalizedEN] || [nm matches:pt.nameSynonyms]))
-                {
-                    [results addObject:pt];
-                    [searchWordTypes addObject:pt];
-                }
-                if (pt.poiAdditionals) {
-                    for (OAPOIType *a in pt.poiAdditionals)
-                    {
-                        if (![results containsObject:a])
-                        {
-                            NSString *enTranslation = [a.nameLocalizedEN lowerCase];
-                            if (![@"yes" isEqualToString:enTranslation] && ![@"no" isEqualToString:enTranslation] && ([nm matches:enTranslation] || [nm matches:a.nameLocalized] || [nm matches:a.nameSynonyms]))
-                            {
-                                [results addObject:a];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    [phrase setUnknownSearchWordPoiTypes:searchWordTypes];
-    if (resultMatcher)
-    {
-        NSString *word = [phrase getUnknownSearchWord];
-        OANameStringMatcher *startMatch = [[OANameStringMatcher alloc] initWithLastWord:word mode:CHECK_ONLY_STARTS_WITH];
-        for (OAPOIBaseType *pt in results)
-        {
-            if ([resultMatcher isCancelled])
-                break;
-            
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             res.localeName = pt.nameLocalized;
             res.object = pt;
-            res.priority = SEARCH_AMENITY_TYPE_PRIORITY;
-            res.priorityDistance = 0;
-            res.objectType = POI_TYPE;
-            res.firstUnknownWordMatches = [startMatch matches:res.localeName];
-            [resultMatcher publish:res];
+            [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:showTopFiltersOnly stdFilterId:[self getStandardFilterId:pt] searchResult:res];
         }
-        for (int i = 0; i < _customPoiFilters.count; i++)
+    }
+    else
+    {
+        BOOL includeAdditional = ![phrase hasMoreThanOneUnknownSearchWord];
+        OANameStringMatcher *nmAdditional = includeAdditional ? [[OANameStringMatcher alloc] initWithNamePart:phrase.getLastUnknownSearchWord mode:CHECK_EQUALS_FROM_SPACE] : nil;
+        NSDictionary<NSString *, OAPoiTypeResult *> *poiTypes = [self getPoiTypeResults:nm additionalMatcher:nmAdditional];
+        for (OAPoiTypeResult *ptr in poiTypes.allValues)
         {
-            if ([resultMatcher isCancelled])
-                break;
-            
-            OACustomSearchPoiFilter *csf = _customPoiFilters[i];
-            int p = _customPoiFiltersPriorites[i].intValue;
-            if (![phrase isUnknownSearchWordPresent] || [nm matches:[csf getName]])
+            BOOL match = ![phrase isFirstUnknownSearchWordComplete];
+            if (!match)
+            {
+                for (NSString *foundName in ptr.foundWords)
+                {
+                    OACollatorStringMatcher *csm = [[OACollatorStringMatcher alloc] initWithPart:foundName mode:CHECK_ONLY_STARTS_WITH];
+                    match = [csm matches:phrase.getUnknownSearchPhrase];
+                    if (match)
+                        break;
+                }
+            }
+            if (match)
             {
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-                res.localeName = [csf getName];
-                res.object = csf;
-                res.priority = SEARCH_AMENITY_TYPE_PRIORITY + p;
-                res.objectType = POI_TYPE;
-                [resultMatcher publish:res];
+                res.localeName = ptr.pt.nameLocalized;
+                res.object = ptr.pt;
+                [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:showTopFiltersOnly stdFilterId:[self getStandardFilterId:ptr.pt] searchResult:res];
             }
         }
     }
-    return true;
+    for (NSInteger i = 0; i < _customPoiFilters.count; i++)
+    {
+        OACustomSearchPoiFilter *csf = _customPoiFilters[i];
+        if (showTopFiltersOnly || [nm matches:csf.getName])
+        {
+            OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+            res.localeName = csf.getName;
+            res.object = csf;
+            [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:showTopFiltersOnly stdFilterId:csf.getFilterId searchResult:res];
+        }
+    }
+    return YES;
+}
+
+- (void) addPoiTypeResult:(OASearchPhrase *) phrase resultMatcher:(OASearchResultMatcher *)resultMatcher topFiltersOnly:(BOOL)showTopFiltersOnly
+                              stdFilterId:(NSString *)stdFilterId searchResult:(OASearchResult *)res
+{
+    res.priorityDistance = 0;
+    res.objectType = POI_TYPE;
+    res.firstUnknownWordMatches = YES;
+    if (showTopFiltersOnly)
+    {
+        if ([_activePoiFilters.allKeys containsObject:stdFilterId])
+        {
+            res.priority = [self getPoiTypePriority:stdFilterId];
+            [resultMatcher publish:res];
+        }
+    }
+    else
+    {
+        [phrase countUnknownWordsMatchMainResult:res];
+        res.priority = SEARCH_AMENITY_TYPE_PRIORITY;
+        [resultMatcher publish:res];
+    }
+}
+
+- (int) getPoiTypePriority:(NSString *) stdFilterId
+{
+    NSNumber *i = _activePoiFilters[stdFilterId];
+    if (i == nil)
+        return SEARCH_AMENITY_TYPE_PRIORITY;
+    return SEARCH_AMENITY_TYPE_PRIORITY + i.intValue;
+}
+
+- (NSString *) getStandardFilterId:(OAPOIBaseType *)poi
+{
+    return [STD_POI_FILTER_PREFIX stringByAppendingString:poi.name];
 }
 
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
@@ -865,6 +1122,9 @@
     std::shared_ptr<const OsmAnd::Amenity> _currentAmenity;
     QString _lang;
     bool _transliterate;
+    
+    OAPOIBaseType *_unselectedPoiType;
+    NSString *_nameFilter;
 }
 
 - (instancetype) initWithTypesAPI:(OASearchAmenityTypesAPI *)typesAPI
@@ -913,24 +1173,35 @@
     }
 }
 
-- (void) searchPoi:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher obj:(NSObject *)obj customName:(NSString *)customName ptf:(OASearchPoiTypeFilter *)ptf
+- (OAPOIBaseType *) getUnselectedPoiType
 {
+    return _unselectedPoiType;
+}
+
+- (NSString *) getNameFilter
+{
+    return _nameFilter;
+}
+
+- (void)searchPoi:(int)countExtraWords nameFilter:(NSString *)nameFilter phrase:(OASearchPhrase *)phrase poiAdditionals:(NSMutableOrderedSet<NSString *> *)poiAdditionals poiTypeFilter:(OASearchPoiTypeFilter *)poiTypeFilter resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    NSMutableSet<NSString *> *searchedPois = [NSMutableSet new];
     OsmAndAppInstance app = [OsmAndApp instance];
     _lang = QString::fromNSString([[phrase getSettings] getLang]);
     _transliterate = [[phrase getSettings] isTransliterate];
     
-    QuadRect *bbox = [phrase getRadiusBBoxToSearch:10000];
+    QuadRect *bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS];
     
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]
                                                   (const OsmAnd::IQueryController* const controller)
                                                   {
-                                                      return [resultMatcher isCancelled];
-                                                  }));
+        return [resultMatcher isCancelled];
+    }));
     
     const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
     
-    NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *acceptedTypes = [ptf getAcceptedTypes];
+    NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *acceptedTypes = [poiTypeFilter getAcceptedTypes];
     if (acceptedTypes.count > 0)
     {
         auto categoriesFilter = QHash<QString, QStringList>();
@@ -961,9 +1232,9 @@
     NSArray<NSString *> *offlineIndexes = [phrase getOfflineIndexes];
     for (NSString *resId in offlineIndexes)
     {
-        OAResultMatcher<OAPOI *> *rm = [self getResultMatcher:phrase resultMatcher:resultMatcher customName:customName resourceId:resId];
-        if([obj isKindOfClass:[OACustomSearchPoiFilter class]])
-            rm = [((OACustomSearchPoiFilter *)obj) wrapResultMatcher:rm];
+        OAResultMatcher<OAPOI *> *rm = [self getResultMatcher:phrase resultMatcher:resultMatcher nameFilter:nameFilter resourceId:resId searchedPois:searchedPois poiAdditionals:poiAdditionals countExtraWords:countExtraWords];
+        if([poiTypeFilter isKindOfClass:[OACustomSearchPoiFilter class]])
+            rm = [((OACustomSearchPoiFilter *)poiTypeFilter) wrapResultMatcher:rm];
         
         const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
         searchCriteria->localResources = {r};
@@ -972,73 +1243,115 @@
                               [self, &rm]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
-                                  const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                                  OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
-                                  if (poi)
-                                  {
-                                      _currentAmenity = amenity;
-                                      [rm publish:poi];
-                                  }
-                              },
+            const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+            OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
+            if (poi)
+            {
+                _currentAmenity = amenity;
+                [rm publish:poi];
+            }
+        },
                               ctrl);
         
         if (![resultMatcher isCancelled])
             [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
+        
     }
 }
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
+    _unselectedPoiType = nil;
+    OASearchPoiTypeFilter *poiTypeFilter = nil;
+    NSString *nameFilter = nil;
+    int countExtraWords = 0;
+    NSMutableOrderedSet<NSString *> *poiAdditionals = [NSMutableOrderedSet new];
     if ([phrase isLastWord:POI_TYPE])
     {
-        NSObject *obj = [phrase getLastSelectedWord].result.object;
-        OASearchPoiTypeFilter *ptf;
-        if ([obj isKindOfClass:[OAPOIBaseType class]])
-            ptf = [self getPoiTypeFilter:(OAPOIBaseType *)obj];
-        else if ([obj isKindOfClass:[OASearchPoiTypeFilter class]])
-            ptf = (OASearchPoiTypeFilter *)obj;
+        NSObject *obj = phrase.getLastSelectedWord.result.object;
+        if ([obj isKindOfClass:OAPOIBaseType.class])
+            poiTypeFilter = [self getPoiTypeFilter:(OAPOIBaseType *)obj poiAdditionals:poiAdditionals];
+        else if ([obj isKindOfClass:OASearchPoiTypeFilter.class])
+            poiTypeFilter = (OASearchPoiTypeFilter *) obj;
         else
-            [NSException raise:NSInvalidArgumentException format:@"LastSelectedWord result contains wrong object"];
+            @throw [NSException exceptionWithName:@"UnsupportedOperationException" reason:@"Incorrect last result" userInfo:nil];
         
-        [self searchPoi:phrase resultMatcher:resultMatcher obj:obj customName:nil ptf:ptf];
+        nameFilter = phrase.getUnknownSearchPhrase;
     }
-    else if (_typesAPI)
+    else if (_typesAPI != nil && phrase.isFirstUnknownSearchWordComplete)
     {
-        if (![phrase getUnknownSearchWordPoiTypes])
-            [_typesAPI search:phrase resultMatcher:nil];
-
-        OAPOIBaseType *poiType = [phrase getUnknownSearchWordPoiType];
-        if (poiType)
+        OANameStringMatcher *nm = phrase.getFirstUnknownNameStringMatcher;
+        OANameStringMatcher *nmAdditional = [[OANameStringMatcher alloc] initWithNamePart:phrase.getFirstUnknownSearchWord mode:CHECK_EQUALS_FROM_SPACE];
+        
+        [_typesAPI initPoiTypes];
+        NSDictionary<NSString *, OAPoiTypeResult *> *poiTypeResults = [_typesAPI getPoiTypeResults:nm additionalMatcher:nmAdditional];
+        // find first full match only
+        for (OAPoiTypeResult *poiTypeResult in poiTypeResults.allValues)
         {
-            OASearchPoiTypeFilter *ptf = [self getPoiTypeFilter:poiType];
-            NSString *customName = [phrase getPoiNameFilter:poiType];
-            if (customName)
+            for (NSString *foundName in poiTypeResult.foundWords)
             {
-                [phrase setUnknownSearchWordPoiType:poiType];
-                [self searchPoi:phrase resultMatcher:resultMatcher obj:nil customName:customName.length == 0 ? nil : customName ptf:ptf];
+                OACollatorStringMatcher *csm = [[OACollatorStringMatcher alloc] initWithPart:foundName mode:CHECK_ONLY_STARTS_WITH];
+                // matches only completely
+                int mwords = [phrase countWords:foundName];
+                if ([csm matches:phrase.getUnknownSearchPhrase] && countExtraWords < mwords)
+                {
+                    countExtraWords = [phrase countWords:foundName];
+                    NSArray<NSString *> *otherSearchWords = phrase.getUnknownSearchWords;
+                    nameFilter = nil;
+                    if (countExtraWords - 1 < otherSearchWords.count)
+                    {
+                        nameFilter = @"";
+                        for(NSInteger k = countExtraWords - 1; k < otherSearchWords.count; k++) {
+                            if (nameFilter.length > 0)
+                                nameFilter = [nameFilter stringByAppendingString:@" "];
+                            
+                            nameFilter = [nameFilter stringByAppendingString:otherSearchWords[k]];
+                        }
+                    }
+                    poiTypeFilter = [self getPoiTypeFilter:poiTypeResult.pt poiAdditionals:poiAdditionals];
+                    _unselectedPoiType = poiTypeResult.pt;
+                }
             }
         }
+    }
+    _nameFilter = nameFilter;
+    if (poiTypeFilter != nil)
+    {
+        [self searchPoi:countExtraWords nameFilter:nameFilter phrase:phrase poiAdditionals:poiAdditionals poiTypeFilter:poiTypeFilter resultMatcher:resultMatcher];
     }
     return YES;
 }
 
-- (OAResultMatcher<OAPOI *> *) getResultMatcher:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher customName:(NSString *)customName resourceId:(NSString *)selected
+- (OAResultMatcher<OAPOI *> *) getResultMatcher:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher nameFilter:(NSString *)nameFilter resourceId:(NSString *)selected searchedPois:(NSMutableSet<NSString *> *)searchedPois poiAdditionals:(NSOrderedSet<NSString *> *)poiAdditionals countExtraWords:(const int)countExtraWords
 {
-    NSString *unknownSearchPhrase = [[phrase getUnknownSearchPhrase] trim];
-    OANameStringMatcher *phraseMatcher = nil;
-    if (unknownSearchPhrase.length > 0)
-        phraseMatcher = [[OANameStringMatcher alloc] initWithLastWord:unknownSearchPhrase mode:CHECK_EQUALS];
-
-    OANameStringMatcher *ns;
-    BOOL hasCustomName = customName && customName.length > 0;
-    if (hasCustomName)
-        ns = [phrase getNameStringMatcher:customName complete:[phrase isLastUnknownSearchWordComplete]];
-    else
-        ns = [phrase getNameStringMatcher];
+    OANameStringMatcher *ns = nameFilter == nil ? nil : [[OANameStringMatcher alloc] initWithNamePart:nameFilter mode:CHECK_STARTS_FROM_SPACE];
     
     return [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *poi) {
-
+//        if (phrase.getSettings.isExportObjects)
+//            [resultMatcher exportObject:phrase object:poi];
         OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+        NSString *poiID = [NSString stringWithFormat:@"%@_%llu", (*poi).type.name, (*poi).obfId];
+        if ([searchedPois containsObject:poiID])
+            return NO;
+        [searchedPois addObject:poiID];
+        if ([*poi isClosed])
+            return NO;
+        
+        if (poiAdditionals.count > 0)
+        {
+            BOOL found = NO;
+            for (NSString *add in poiAdditionals)
+            {
+                if ((*poi).values[add] != nil)
+                {
+                    found = YES;
+                    break;
+                }
+            }
+            if (!found)
+                return NO;
+        }
+        
         res.localeName = _currentAmenity->getName(_lang, _transliterate).toNSString();
         res.otherNames = [OASearchCoreFactory getAllNames:_currentAmenity->localizedNames nativeName:_currentAmenity->nativeName];
         if (res.localeName.length == 0)
@@ -1049,33 +1362,38 @@
             else
                 res.localeName = _currentAmenity->subType.toNSString();
         }
-        if ([phrase isUnknownSearchWordPresent] && !([ns matches:res.localeName] || [ns matchesMap:res.otherNames]))
+        if (ns)
         {
-            NSString *ref = [*poi getTagContent:OSM_REF_TAG lang:nil];
-            if (!ref || ![ns matches:ref])
-                return NO;
+            if ([ns matches:res.localeName] || [ns matchesMap:res.otherNames])
+            {
+                [phrase countUnknownWordsMatchMainResult:res matchingWordsCount:countExtraWords];
+            }
             else
-                res.localeName = [res.localeName stringByAppendingFormat:@" %@", ref];
+            {
+                NSString *ref = [*poi getTagContent:OSM_REF_TAG lang:nil];
+                if (!ref || ![ns matches:ref])
+                {
+                    return NO;
+                }
+                else
+                {
+                    [phrase countUnknownWordsMatch:res localeName:ref otherNames:nil matchingWordsCount:countExtraWords];
+                    res.localeName = [NSString stringWithFormat:@"%@ %@", res.localeName, ref];
+                }
+            }
+        }
+        else
+        {
+            [phrase countUnknownWordsMatch:res localeName:@"" otherNames:nil matchingWordsCount:countExtraWords];
         }
         
+        res.object = *poi;
         res.preferredZoom = 17;
         res.resourceId = selected;
         res.location = [OASearchCoreFactory getLocation:_currentAmenity->position31];
         res.priority = SEARCH_AMENITY_BY_TYPE_PRIORITY;
         res.priorityDistance = 1;
-        if (phraseMatcher)
-        {
-            BOOL unknownPhraseMatches = [phraseMatcher matches:res.localeName];
-            OAPOIBaseType *unknownSearchWordPoiType = [phrase getUnknownSearchWordPoiType];
-            if (unknownPhraseMatches && unknownSearchWordPoiType)
-            {
-                unknownPhraseMatches = ![phraseMatcher matches:unknownSearchWordPoiType.nameLocalized] && ![phraseMatcher matches:unknownSearchWordPoiType.nameLocalizedEN] && ![phraseMatcher matches:unknownSearchWordPoiType.nameSynonyms];
-            }
-            res.unknownPhraseMatches = unknownPhraseMatches;
-        }
-
         res.objectType = POI;
-        res.object = *poi;
         res.amenity = qMove(_currentAmenity);
         
         [resultMatcher publish:res];
@@ -1087,10 +1405,13 @@
     }];
 }
 
-- (OASearchPoiTypeFilter *) getPoiTypeFilter:(OAPOIBaseType *)pt
+- (OASearchPoiTypeFilter *) getPoiTypeFilter:(OAPOIBaseType *)pt poiAdditionals:(NSMutableOrderedSet<NSString *> *)poiAdditionals
 {
-    [_acceptedTypes removeAllObjects];
-    [self updateTypesToAccept:pt];
+    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
+    [pt putTypes:acceptedTypes];
+    [poiAdditionals removeAllObjects];
+    if (pt.isAdditional)
+        [poiAdditionals addObject:pt.name];
     
     return [[OASearchPoiTypeFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
 
@@ -1100,7 +1421,7 @@
         if (![_types isRegisteredType:type])
             type = _types.otherPoiCategory;
         
-        NSSet<NSString *> *set = [_acceptedTypes objectForKey:type];
+        NSSet<NSString *> *set = [acceptedTypes objectForKey:type];
         if (!set)
             return NO;
         
@@ -1114,8 +1435,7 @@
         return NO;
         
     } getTypesFunction:^NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *{
-        
-        return _acceptedTypes;
+        return acceptedTypes;
     }];
 }
 
@@ -1160,16 +1480,11 @@
     QString lang = QString::fromNSString([[phrase getSettings] getLang]);
     bool transliterate = [[phrase getSettings] isTransliterate];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
-
-    OASearchWord *lastSelectedWord = [phrase getLastSelectedWord];
-    NSString *resId = lastSelectedWord.result.resourceId;
-    const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
-    const auto& dataInterface = obfsCollection->obtainDataInterface({r});
     
     std::shared_ptr<const OsmAnd::Street> s;
     int priority = SEARCH_BUILDING_BY_STREET_PRIORITY;
     if ([phrase isLastWord:STREET])
-        s = ((OAStreet *)lastSelectedWord.result.object).street;
+        s = ((OAStreet *)phrase.getLastSelectedWord.result.object).street;
     
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]
@@ -1180,8 +1495,11 @@
 
     if ([OASearchCoreFactory isLastWordCityGroup:phrase])
     {
+        const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(phrase.getLastSelectedWord.result.resourceId));
+        const auto& dataInterface = obfsCollection->obtainDataInterface({r});
+        
         priority = SEARCH_BUILDING_BY_CITY_PRIORITY;
-        const auto& city = ((OACity *)lastSelectedWord.result.object).city;
+        const auto& city = ((OACity *)phrase.getLastSelectedWord.result.object).city;
         bool res = dataInterface->preloadStreets({std::const_pointer_cast<OsmAnd::StreetGroup>(city)}, ctrl);
         if (res)
         {
@@ -1206,6 +1524,10 @@
     
     if (s)
     {
+        NSString *resId = phrase.getLastSelectedWord.result.resourceId;
+        const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+        const auto& dataInterface = obfsCollection->obtainDataInterface({r});
+        
         if (_cacheBuilding != s)
         {
             _cacheBuilding = s;
@@ -1223,8 +1545,8 @@
             }
         }
         QString lw = QString::fromNSString([phrase getUnknownWordToSearchBuilding]);
-        OANameStringMatcher *buildingMatch = [phrase getNameStringMatcher:lw.toNSString() complete:[phrase isLastUnknownSearchWordComplete]];
-        OANameStringMatcher *startMatch = [[OANameStringMatcher alloc] initWithLastWord:lw.toNSString() mode:CHECK_ONLY_STARTS_WITH];
+        OANameStringMatcher *buildingMatch = [phrase getUnknownWordToSearchBuildingNameMatcher];
+        OANameStringMatcher *startMatch = [[OANameStringMatcher alloc] initWithNamePart:lw.toNSString() mode:CHECK_ONLY_STARTS_WITH];
         for (const auto& b : s->buildings)
         {
             if ([resultMatcher isCancelled])
@@ -1259,7 +1581,7 @@
             [resultMatcher publish:res];
         }
         QString streetIntersection = QString::fromNSString([phrase getUnknownWordToSearch]);
-        OANameStringMatcher *streetMatch = [phrase getNameStringMatcher:streetIntersection.toNSString() complete:[phrase isLastUnknownSearchWordComplete]];
+        OANameStringMatcher *streetMatch = [phrase getMainUnknownNameStringMatcher];
         if (streetIntersection.isEmpty() || (!streetIntersection[0].isDigit() && OsmAnd::CommonWords::getCommonSearch(streetIntersection) == -1))
         {
             for (const auto& streetInter : s->intersectedStreets)
@@ -1283,7 +1605,7 @@
                 res.objectType = STREET_INTERSECTION;
                 res.location = [OASearchCoreFactory getLocation:street->position31];
                 res.preferredZoom = 16;
-                
+                [phrase countUnknownWordsMatchMainResult:res];
                 [resultMatcher publish:res];
             }
         }
@@ -1304,7 +1626,6 @@
 
 @end
 
-
 @interface OASearchStreetByCityAPI ()
 
 @end
@@ -1316,7 +1637,7 @@
     OASearchBaseAPI *_streetsAPI;
 }
 
-- (instancetype) initWithAPI:(OASearchBuildingAndIntersectionsByStreetAPI *) streetsAPI
+- (instancetype) initWithAPI:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsAPI
 {
     self = [super initWithSearchTypes:@[[OAObjectType withType:HOUSE],
                                         [OAObjectType withType:STREET],
@@ -1364,28 +1685,17 @@
         }
         
         int limit = 0;
-        NSString *wordToSearch = [phrase getUnknownWordToSearch];
-        BOOL firstUnknownWordMatches = [wordToSearch isEqualToString:[phrase getUnknownSearchWord]];
-        OANameStringMatcher *nm = [phrase getNameStringMatcher:wordToSearch complete:[phrase isUnknownSearchWordComplete]];
-        NSString *unknownSearchPhrase = [[phrase getUnknownSearchPhrase] trim];
-        OANameStringMatcher *phraseMatcher = nil;
-        if (unknownSearchPhrase.length > 0)
-            phraseMatcher = [[OANameStringMatcher alloc] initWithLastWord:unknownSearchPhrase mode:CHECK_EQUALS];
-        
+        OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
         for (const auto& object : c->streets)
         {
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             res.localeName = object->getName(lang, transliterate).toNSString();
             res.otherNames = [OASearchCoreFactory getAllNames:object->localizedNames nativeName:object->nativeName];
+            BOOL pub = YES;
             if (object->nativeName.startsWith('<'))
-                continue; // streets related to city
-            
-            if ([phrase isUnknownSearchWordPresent] && !([nm matches:res.localeName] || [nm matchesMap:res.otherNames]))
+                pub = NO; // streets related to city
+            else if ([phrase isUnknownSearchWordPresent] && !([nm matches:res.localeName] || [nm matchesMap:res.otherNames]))
                 continue;
-            
-            res.firstUnknownWordMatches = firstUnknownWordMatches || [[phrase getNameStringMatcher] matches:res.localeName] || [[phrase getNameStringMatcher] matchesMap:res.otherNames];
-            if (phraseMatcher)
-                res.unknownPhraseMatches = [phraseMatcher matches:res.localeName];
             
             res.localeRelatedObjectName = c->getName(lang, transliterate).toNSString();
             res.object = [[OAStreet alloc] initWithStreet:object];
@@ -1395,8 +1705,7 @@
             res.priority = SEARCH_STREET_BY_CITY_PRIORITY;
             //res.priorityDistance = 1;
             res.objectType = STREET;
-            
-            [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsAPI];
+            [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsAPI publish:pub];
             if (limit++ > LIMIT)
                 break;
         }
@@ -1561,7 +1870,7 @@
             OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
             sp.priority = SEARCH_LOCATION_PRIORITY;
             sp.object = sp.location = l;
-            sp.localeName = [NSString stringWithFormat:@"%f, %f", (float) sp.location.coordinate.latitude, (float) sp.location.coordinate.longitude];
+            sp.localeName = [NSString stringWithFormat:@"%.5f, %.5f", (float) sp.location.coordinate.latitude, (float) sp.location.coordinate.longitude];
             sp.objectType = LOCATION;
             sp.wordsSpan = lw;
             [resultMatcher publish:sp];
@@ -1575,7 +1884,13 @@
             OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
             sp.priority = SEARCH_LOCATION_PRIORITY;
             sp.object = sp.location = ll;
-            sp.localeName = [NSString stringWithFormat:@"%f, <input> f", (float) sp.location.coordinate.latitude];
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
+            [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+            formatter.minimumIntegerDigits = 1;
+            formatter.minimumFractionDigits = 1;
+            formatter.maximumFractionDigits = 2;
+            formatter.decimalSeparator = @".";
+            sp.localeName = [NSString stringWithFormat:@"%@, <input>", [formatter stringFromNumber:@((float) sp.location.coordinate.latitude)]];
             sp.objectType = PARTIAL_LOCATION;
             [resultMatcher publish:sp];
         }

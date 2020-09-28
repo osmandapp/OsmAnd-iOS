@@ -72,6 +72,11 @@
                                         Visibility:shouldShow];
 }
 
+- (BOOL)isVisible
+{
+    return [_plugin isActive] && [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
+}
+
 - (void) deinitLayer
 {
     [super deinitLayer];

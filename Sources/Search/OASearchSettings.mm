@@ -196,4 +196,33 @@
     return s;
 }
 
++ (OASearchSettings *) parseJSON:(NSDictionary *)json
+{
+    OASearchSettings *s = [[OASearchSettings alloc] initWithIndexes:@[]];
+    if (json[@"lat"] && json[@"lon"])
+    {
+        s.pOriginalLocation = [[CLLocation alloc] initWithLatitude:[json[@"lat"] doubleValue] longitude:[json[@"lon"] doubleValue]];
+    }
+    s.pRadiusLevel = [json[@"radiusLevel"] intValue];
+    s.pTotalLimit = [json[@"totalLimit"] intValue];
+    s.pTransliterateIfMissing = [json[@"transliterateIfMissing"] boolValue];
+    s.pEmptyQueryAllowed = [json[@"emptyQueryAllowed"] boolValue];
+    s.pSortByName = [json[@"sortByName"] boolValue];
+    if (json[@"lang"])
+        s.pLang = json[@"lang"];
+    
+    if (json[@"searchTypes"])
+    {
+        NSArray *searchTypesArr = json[@"searchTypes"];
+        NSMutableArray<OAObjectType *> *searchTypes = [NSMutableArray new];
+        for (NSInteger i = 0; i < searchTypesArr.count; i++)
+        {
+            NSString *name = searchTypesArr[i];
+            searchTypes[i] = [OAObjectType valueOf:name];
+        }
+        s.pSearchTypes = searchTypes;
+    }
+    return s;
+}
+
 @end

@@ -26,7 +26,6 @@ static OAQuickActionType *TYPE;
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL voice = [settings.voiceMute get];
     
-    [settings.voiceMute set:!voice];
     [[OARoutingHelper sharedInstance].getVoiceRouter setMute:!voice];
 }
 

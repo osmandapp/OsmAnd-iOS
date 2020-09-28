@@ -759,13 +759,18 @@
 "empty_profile_name_warning" = "Profile name cannot be empty.";
 "err_profile_import" = "Error reading item data: %@";
 "profile_import_success" = "Application profile was imported successfully";
+"profile_prefs_reset_successful" = "All profile settings restored to default";
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Base profile";
 "osmand_profile" = "OsmAnd profile";
 "selected_profile" = "Selected profile";
 "app_profiles" = "App profiles";
 "profile_sett_descr" = "Affect selected application profile";
-"export_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
+"import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
+"export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
+
+"reset_to_default" = "Reset to default";
+"reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1167,6 +1172,7 @@
 "help_map_viewing" = "Map viewing";
 "help_search" = "Map search";
 "help_trip_planning" = "Planning a trip";
+"help_nav_profiles" = "Navigation profiles";
 "help_purchases" = "OsmAnd purchases";
 "help_osmand_live" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";

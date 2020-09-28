@@ -94,6 +94,8 @@
 @property(readonly) OAObservable* mapillaryImageChangedObservable;
 @property(readonly) OAObservable* simulateRoutingObservable;
 
+@property(readonly) OAObservable* widgetSettingResetObservable;
+
 @property(readonly) OAObservable* trackRecordingObservable;
 
 @property(readonly) BOOL isRepositoryUpdating;
@@ -112,5 +114,9 @@
 - (void) showShortToastMessage:(NSString *)message;
 
 - (void)checkAndDownloadOsmAndLiveUpdates;
+
+// Tests only
+- (BOOL) installTestResource:(NSString *)filePath;
+- (BOOL) removeTestResource:(NSString *)filePath;
 
 @end

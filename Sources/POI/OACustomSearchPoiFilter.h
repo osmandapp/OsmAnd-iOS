@@ -13,6 +13,7 @@
 
 @interface OACustomSearchPoiFilter : OASearchPoiTypeFilter
 
+- (NSString *) getFilterId;
 - (NSString *) getName;
 
 - (NSObject *) getIconResource;

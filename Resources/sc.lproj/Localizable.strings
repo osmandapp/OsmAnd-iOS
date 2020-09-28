@@ -1818,7 +1818,7 @@
 "weight_limit_description" = "Inserta su pesu de su veìculu tuo, ca unas cantas restritziones si diat pòdere aplicare pro veìculos pesantes ebbia.";
 "export_profile" = "Esporta su profilu";
 "configure_map_descr" = "Aparèntzia de sa mapa";
-"export_profile_descr" = "Pro importare unu profilu, toca in su documentu netzessàriu (*.osf) in cale si siat aplicatzione e ischerta \"Còpia in OsmAnd\"";
+"export_profile_descr" = "Podes esportare totu sas impostatziones de unu profilu, copiare totu sas impostatziones dae un'àteru profilu o torrare sas impostatziones de profilu a s'istadu predefinidu issoro.";
 "profile_sett_descr" = "Influentzat sos profilos de s'aplicatzione ischertados";
 "app_profiles" = "Profilos de s'aplicatzione";
 "selected_profile" = "Profilu ischertadu";
@@ -1853,3 +1853,8 @@
 "copy_from_other_profile_descr" = "Podes copiare totu sas impostatziones dae cale si siat profilu in su profilu ischertadu: ";
 "copy_from_other_profile" = "Còpia dae un'àteru profilu";
 "shared_string_copy" = "Còpia";
+"profile_alert_delete_title" = "Iscantzella su profilu";
+"help_nav_profiles" = "Profilos de navigatzione";
+"reset_profile_action_descr" = "Torra totu sas impostatziones de profilu a sos valores predefinidos de installatzione. Incarchende Reseta as a imbolare totu sas modìficas tuas. Custa atzione non la podes annullare.";
+"import_profile_descr" = "Pro importare unu profilu incarca in su documentu netzessàriu (*.osf) in cale si siat aplicatzione e ischerta \"Còpia in OsmAnd Maps\"";
+"profile_prefs_reset_successful" = "Totu sas impostatziones de sos profilos sunt torradas a s'istadu predefinidu";

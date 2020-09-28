@@ -13,12 +13,12 @@
     OACollatorStringMatcher *_sm;
 }
 
-- (instancetype) initWithLastWord:(NSString *)lastWordTrim mode:(StringMatcherMode)mode
+- (instancetype) initWithNamePart:(NSString *)namePart mode:(StringMatcherMode)mode
 {
     self = [self init];
     if (self)
     {
-        _sm = [[OACollatorStringMatcher alloc] initWithPart:lastWordTrim mode:mode];
+        _sm = [[OACollatorStringMatcher alloc] initWithPart:namePart mode:mode];
     }
     return self;
 }

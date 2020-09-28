@@ -50,7 +50,6 @@
     
     OAAppModeCell *_appModeCell;
     
-    BOOL mapStyleCellPresent;
     NSInteger favSection;
     NSInteger favRow;
     NSInteger tripsRow;
@@ -137,8 +136,8 @@
 {
     _styleSettings = [OAMapStyleSettings sharedInstance];
 
-    NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
-    [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
+    NSMutableDictionary *sectionAppMode = [NSMutableDictionary dictionary];
+    [sectionAppMode setObject:@"OAAppModeCell" forKey:@"type"];
 
     NSMutableDictionary *section0fav = [NSMutableDictionary dictionary];
     [section0fav setObject:OALocalizedString(@"favorites") forKey:@"name"];
@@ -196,7 +195,9 @@
         [section0 addObject:section0tracks];
     }
         
-    NSArray *arrTop = @[@{@"groupName": OALocalizedString(@"map_settings_show"),
+    NSArray *arrTop = @[@{@"groupName": @"",
+                          @"cells": @[sectionAppMode]},
+                        @{@"groupName": OALocalizedString(@"map_settings_show"),
                           @"cells": section0
                           },
                         @{@"groupName": OALocalizedString(@"map_settings_type"),
@@ -211,7 +212,6 @@
     if (isOnlineMapSource)
     {
         tableData = arrTop;
-        mapStyleCellPresent = NO;
         favSection = 0;
         favRow = 0;
     }
@@ -219,12 +219,6 @@
     {
         NSMutableArray *arr = [NSMutableArray arrayWithArray:arrTop];
 
-        NSDictionary *mapStyles = @{@"groupName": @"",
-                                    @"cells": @[sectionMapStyle]
-                                    };
-        [arr insertObject:mapStyles atIndex:0];
-
-        mapStyleCellPresent = YES;
         favSection = 1;
         favRow = 0;
                 
@@ -232,11 +226,11 @@
         _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
         NSMutableArray *categoriesList = [NSMutableArray array];
         NSString *modeStr;
-        if ([_settings.settingAppMode get] == APPEARANCE_MODE_DAY)
+        if ([_settings.appearanceMode get] == APPEARANCE_MODE_DAY)
             modeStr = OALocalizedString(@"map_settings_day");
-        else if ([_settings.settingAppMode get] == APPEARANCE_MODE_NIGHT)
+        else if ([_settings.appearanceMode get] == APPEARANCE_MODE_NIGHT)
             modeStr = OALocalizedString(@"map_settings_night");
-        else if ([_settings.settingAppMode get] == APPEARANCE_MODE_AUTO)
+        else if ([_settings.appearanceMode get] == APPEARANCE_MODE_AUTO)
             modeStr = OALocalizedString(@"daynight_mode_auto");
         else
             modeStr = OALocalizedString(@"-");
@@ -705,7 +699,7 @@
     OAMapSettingsViewController *mapSettingsViewController;
     
     NSInteger section = indexPath.section;
-    if (mapStyleCellPresent)
+    if ((isOnlineMapSource && section < 3) || !isOnlineMapSource)
         section--;
     
     switch (section)
@@ -734,7 +728,7 @@
             
         case 2: // Map Style
         {
-            if (mapStyleCellPresent)
+            if (!isOnlineMapSource)
             {
                 NSArray *categories = [self getAllCategories];
                 if (indexPath.row == 0)

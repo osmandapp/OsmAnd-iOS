@@ -43,14 +43,13 @@
 @implementation OAOsmEditActionsBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAOsmEditActionsViewController *vwController;
     NSArray* _data;
     
     OAOsmEditingPlugin *_plugin;
     OAOsmPoint *_point;
 }
 
-@synthesize tableData, tblView;
+@synthesize tableData, tblView, vwController;
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAOsmEditActionsViewController *)viewController param:(id)param
 {
@@ -308,8 +307,6 @@
     }
     [self.vwController dismiss];
 }
-
-@synthesize vwController;
 
 @end
 

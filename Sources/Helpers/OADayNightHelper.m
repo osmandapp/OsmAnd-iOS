@@ -54,7 +54,7 @@
 - (BOOL) isNightMode
 {
     BOOL nightMode = _lastNightMode;
-    int dayNightMode = [[OAAppSettings sharedManager].settingAppMode get];
+    int dayNightMode = [[OAAppSettings sharedManager].appearanceMode get];
     if (dayNightMode == APPEARANCE_MODE_DAY)
     {
         nightMode = NO;

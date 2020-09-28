@@ -13,6 +13,8 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/Amenity.h>
 
+#define OSM_WIKI_CATEGORY @"osmwiki"
+
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
@@ -69,10 +71,12 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 -(NSString *)getPoiStringWithoutType:(OAPOI *)poi;
 
+- (NSArray<OAPOICategory *> *) getCategories:(BOOL)includeMapCategory;
 - (OAPOICategory *) getPoiCategoryByName:(NSString *)name;
 - (OAPOICategory *) getPoiCategoryByName:(NSString *)name create:(BOOL)create;
 
 - (NSArray<OAPOIBaseType *> *) getTopVisibleFilters;
+- (OAPOICategory *) getOsmwiki;
 
 - (void) setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 

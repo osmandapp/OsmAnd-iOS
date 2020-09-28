@@ -54,4 +54,6 @@
 -(NSString *) getOsmTag;
 -(NSString *) getOsmTag2;
 
+- (BOOL) isReference;
+
 @end

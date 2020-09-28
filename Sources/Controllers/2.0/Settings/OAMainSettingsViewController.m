@@ -32,12 +32,15 @@
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kFooterId @"TableViewSectionFooter"
 
+#define kAppModesSection 2
+
 @implementation OAMainSettingsViewController
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
     
-    OAAutoObserverProxy* _appModeChangeObserver;
+    OAAutoObserverProxy* _appModesAvailabilityChangeObserver;
+    OAAutoObserverProxy* _appModeChangedObservable;
     
     OAApplicationMode *_targetAppMode;
 }
@@ -62,11 +65,15 @@
     self.settingsTableView.rowHeight = UITableViewAutomaticDimension;
     self.settingsTableView.estimatedRowHeight = kEstimatedRowHeight;
     
-    _appModeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+    _settings = OAAppSettings.sharedManager;
+    
+    _appModesAvailabilityChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onAvailableAppModesChanged)
                                                         andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
     
-    _settings = OAAppSettings.sharedManager;
+    _appModeChangedObservable = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onAvailableAppModesChanged)
+                                                           andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
     
     if (_targetAppMode)
     {
@@ -79,12 +86,17 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.settingsTableView setDataSource: self];
+    [self.settingsTableView setDelegate:self];
+    self.settingsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.settingsTableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
     [self setupView];
 }
 
 - (void)dealloc
 {
-    [_appModeChangeObserver detach];
+    [_appModesAvailabilityChangeObserver detach];
+    [_appModeChangedObservable detach];
 }
 
 - (void) setupView
@@ -137,13 +149,6 @@
     [data addObject:profilesSection];
     
     _data = [NSArray arrayWithArray:data];
-    
-    [self.settingsTableView setDataSource: self];
-    [self.settingsTableView setDelegate:self];
-    self.settingsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.settingsTableView reloadData];
-    [self.settingsTableView reloadInputViews];
-    [self.settingsTableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
 }
 
 - (NSString *) getProfileDescription:(OAApplicationMode *)am
@@ -165,10 +170,11 @@
     }
 }
 
-- (void) onAvailableAppModesChanged
+- (void)onAvailableAppModesChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupView];
+        [self.settingsTableView reloadData];
     });
 }
 
@@ -242,15 +248,21 @@
             cell = (OAIconTextDescSwitchCell *)[nib objectAtIndex:0];
         }
         OAApplicationMode *am = item[@"app_mode"];
+        BOOL isEnabled = [OAApplicationMode.values containsObject:am];
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? 62.0 : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.leftIconView.tintColor = [OAApplicationMode.values containsObject:am] ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
+        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
         cell.titleLabel.text = am.toHumanString;
         cell.descLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
-        [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-        [cell.switchView setOn:[OAApplicationMode.values containsObject:am]];
+        BOOL isDefault = am == OAApplicationMode.DEFAULT;
+        [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        if (!isDefault)
+            [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        cell.switchView.hidden = isDefault;
+        cell.dividerView.hidden = isDefault;
+        [cell.switchView setOn:isEnabled];
         return cell;
     }
     else if ([type isEqualToString:kCellTypeAction])
@@ -287,7 +299,7 @@
     if (section == 0)
         return OALocalizedString(@"global_settings_descr");
     else if (section == 2)
-        return OALocalizedString(@"export_profile_descr");
+        return OALocalizedString(@"import_profile_descr");
     return nil;
 }
 
@@ -304,13 +316,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (nullable NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath;
-{
-    NSDictionary *item = [self getItem:indexPath];
-    BOOL nonClickable = item[@"nonclickable"] != nil;
-    return nonClickable ? nil : indexPath;
-}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -343,19 +348,6 @@
         OARearrangeProfilesViewController* rearrangeProfilesViewController = [[OARearrangeProfilesViewController alloc] init];
         [self.navigationController pushViewController:rearrangeProfilesViewController animated:YES];
     }
-//    else if ([name isEqualToString:@"general_settings"])
-//    {
-//        OAProfileGeneralSettingsViewController* settingsViewController = [[OAProfileGeneralSettingsViewController alloc] initWithAppMode:OAApplicationMode.CAR];
-//        [self.navigationController pushViewController:settingsViewController animated:YES];
-//    }
-//    else if ([name isEqualToString:@"routing_settings"])
-//    {
-//        // TODO: pass selected mode after refactoring
-//        OAProfileNavigationSettingsViewController* settingsViewController = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:OAApplicationMode.CAR];
-//        [self.navigationController pushViewController:settingsViewController animated:YES];
-//    }
-//
-//
 }
 
 @end

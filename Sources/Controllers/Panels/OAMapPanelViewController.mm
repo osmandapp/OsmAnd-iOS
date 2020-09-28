@@ -329,7 +329,7 @@ typedef enum
     {
         self.hudViewController = [[OAMapHudViewController alloc] initWithNibName:@"OAMapHudViewController"
                                                                                              bundle:nil];
-        self.hudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;        
+        self.hudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self addChildViewController:self.hudViewController];
         
         // Switch views
@@ -1993,6 +1993,8 @@ typedef enum
         case OATargetDownloadMapSource:
         {
             [self.targetMenuView doInit:showFullMenu showFullScreen:NO];
+            [self.mapViewController disableRotationAnd3DView:YES];
+            [self.mapViewController resetViewAngle];
             break;
         }
         default:
@@ -2172,6 +2174,7 @@ typedef enum
     [self setNeedsStatusBarAppearanceUpdate];
 
     self.sidePanelController.recognizesPanGesture = NO; //YES;
+    [self.mapViewController disableRotationAnd3DView:NO];
 }
 
 - (void) hideTargetPointMenuAndPopup:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete
@@ -2245,6 +2248,7 @@ typedef enum
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
     
+    [self.mapViewController disableRotationAnd3DView:NO];
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
@@ -2359,7 +2363,7 @@ typedef enum
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
-    NSString *caption = item.name;    
+    NSString *caption = item.name;
     UIImage *icon = [item icon];
     
     targetPoint.type = OATargetHistoryItem;

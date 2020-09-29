@@ -1819,7 +1819,7 @@
 "height_limit_description" = "Proporciona la altura del vehículo, pueden aplicarse algunas restricciones de ruta para vehículos altos.";
 "export_profile" = "Exportar perfil";
 "configure_map_descr" = "Apariencia del mapa";
-"export_profile_descr" = "Para importar un perfil, pulsa en el archivo necesario (*.osf) en cualquier aplicación y marca «Copiar a Mapas de OsmAnd»";
+"export_profile_descr" = "Puedes exportar todos los ajustes del perfil, copiar todos los ajustes de otro perfil o restablecer todos los ajustes del perfil al estado predefinido.";
 "profile_sett_descr" = "Afecta al perfil de la aplicación elegido";
 "app_profiles" = "Perfiles de la aplicación";
 "selected_profile" = "Perfil marcado";
@@ -1856,3 +1856,6 @@
 "copy_from_other_profile" = "Copiar desde otro perfil";
 "shared_string_copy" = "Copiar";
 "help_nav_profiles" = "Perfiles de navegación";
+"reset_profile_action_descr" = "Restablecer todos los ajustes del perfil a los valores predefinidos de la instalación. Al pulsar en «Restablecer» serán descartados todos los cambios. Esta acción no se puede deshacer.";
+"import_profile_descr" = "Para importar un perfil, pulsa en el archivo necesario (*.osf) en cualquier aplicación y marca «Copiar a mapas de OsmAnd»";
+"profile_prefs_reset_successful" = "Todos los ajustes del perfil se restauraron al valor predefinido";

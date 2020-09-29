@@ -118,6 +118,8 @@ static OAApplicationMode *_SKI;
     
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
     _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
+    _PUBLIC_TRANSPORT.baseMinSpeed = 0.28;
+    _PUBLIC_TRANSPORT.baseMaxSpeed = 41.66;
     [_values addObject:_PUBLIC_TRANSPORT];
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
@@ -641,6 +643,17 @@ static OAApplicationMode *_SKI;
         [settings setApplicationMode:_DEFAULT];
     [_cachedFilteredValues removeObjectsInArray:modes];
     [self saveCustomAppModesToSettings];
+    
+    for (OAApplicationMode *mode in modes) {
+        if (mode.isCustomProfile)
+        {
+            NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
+            NSString *backupItemFilePath = [[backupDir stringByAppendingPathComponent:mode.stringKey] stringByAppendingPathExtension:@"osf"];
+            [NSFileManager.defaultManager removeItemAtPath:backupItemFilePath error:nil];
+        }
+    }
+
+    [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
 }
 
 + (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected

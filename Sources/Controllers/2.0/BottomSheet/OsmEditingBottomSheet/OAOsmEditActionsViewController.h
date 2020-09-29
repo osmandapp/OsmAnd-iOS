@@ -14,13 +14,6 @@
 @class OAOsmEditingPlugin;
 @class OAOsmEditActionsViewController;
 
-@interface OAOsmEditActionsBottomSheetScreen : NSObject<OABottomSheetScreen>
-
-- (id) initWithTable:(UITableView *)tableView viewController:(OAOsmEditActionsViewController *)viewController
-               param:(id)param;
-
-@end
-
 @interface OAOsmEditActionsViewController : OABottomSheetTwoButtonsViewController
 
 @property (nonatomic, readonly) OAOsmPoint *osmPoint;
@@ -30,3 +23,11 @@
 
 @end
 
+@interface OAOsmEditActionsBottomSheetScreen : NSObject<OABottomSheetScreen>
+
+@property (nonatomic) OAOsmEditActionsViewController *vwController;
+
+- (id) initWithTable:(UITableView *)tableView viewController:(OAOsmEditActionsViewController *)viewController
+               param:(id)param;
+
+@end

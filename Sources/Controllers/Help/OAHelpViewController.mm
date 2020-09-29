@@ -142,6 +142,14 @@ static const NSInteger groupCount = 5;
        }];
     
     [dataArr addObject:
+     @{
+       @"name" : @"help_navigation_profiles",
+       @"title" : OALocalizedString(@"help_nav_profiles"),
+       @"type" : kLinkInternalType,
+       @"html" : @"navigation-profiles"
+       }];
+    
+    [dataArr addObject:
     @{
       @"name" : @"help_purchases",
       @"title" : OALocalizedString(@"help_purchases"),

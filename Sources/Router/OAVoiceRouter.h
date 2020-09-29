@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OARoutingHelper, OALocationPointWrapper, OAAlarmInfo;
+@class OARoutingHelper, OALocationPointWrapper, OAAlarmInfo, OAApplicationMode;
 
 @protocol OACommandPlayer;
 
@@ -34,6 +34,7 @@
 - (id<OACommandPlayer>) getPlayer;
 - (void) updateAppMode;
 - (void) setMute:(BOOL)mute;
+- (void) setMute:(BOOL)mute mode:(OAApplicationMode *)mode;
 - (BOOL) isMute;
 
 - (void) arrivedIntermediatePoint:(NSString *)name;

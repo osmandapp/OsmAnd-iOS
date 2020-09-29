@@ -122,6 +122,8 @@
 @synthesize mapillaryImageChangedObservable = _mapillaryImageChangedObservable;
 @synthesize simulateRoutingObservable = _simulateRoutingObservable;
 
+@synthesize widgetSettingResetObservable = _widgetSettingResetObservable;
+
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
 
@@ -460,6 +462,8 @@
     _osmEditsChangeObservable = [[OAObservable alloc] init];
     _mapillaryImageChangedObservable = [[OAObservable alloc] init];
     _simulateRoutingObservable = [[OAObservable alloc] init];
+    
+    _widgetSettingResetObservable = [[OAObservable alloc] init];
 
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];

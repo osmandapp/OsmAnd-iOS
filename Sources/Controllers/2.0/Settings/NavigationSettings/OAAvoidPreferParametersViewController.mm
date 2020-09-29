@@ -125,10 +125,7 @@
 
 - (IBAction) backButtonPressed:(id)sender
 {
-    if (_isAvoid)
-        [self.navigationController popViewControllerAnimated:YES];
-    else
-        [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - TableView

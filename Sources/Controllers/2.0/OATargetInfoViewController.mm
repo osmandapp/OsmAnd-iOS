@@ -626,15 +626,17 @@
 {
     NSMutableArray *wikimediaCards = [NSMutableArray new];
     NSMutableArray *mapilaryCards = [NSMutableArray new];
+    OAMapillaryContributeCard *mapilaryContributeCard = nil;
     
     for (OAAbstractCard *card in cards)
     {
         if ([card isKindOfClass:OAUrlImageCard.class])
             [wikimediaCards addObject:card];
-        else
+        else if ([card isKindOfClass:OAMapillaryImageCard.class])
             [mapilaryCards addObject:card];
+        else if ([card isKindOfClass:OAMapillaryContributeCard.class])
+            mapilaryContributeCard = card;
     }
-    
     if (wikimediaCards.count > 0)
     {
         NSArray *sortedWikimediaCards = [wikimediaCards sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
@@ -646,7 +648,6 @@
         [wikimediaCards removeAllObjects];
         [wikimediaCards addObject:sortedWikimediaCards.firstObject];
         OAUrlImageCard *previousCard = sortedWikimediaCards.firstObject;
-        
         for (int i = 1; i < sortedWikimediaCards.count; i++)
         {
             OAUrlImageCard *card = sortedWikimediaCards[i];
@@ -661,6 +662,8 @@
     [cards removeAllObjects];
     [cards addObjectsFromArray:wikimediaCards];
     [cards addObjectsFromArray:mapilaryCards];
+    if (mapilaryContributeCard)
+        [cards addObject:mapilaryContributeCard];
 }
 
 - (void) addNearbyImagesIfNeeded

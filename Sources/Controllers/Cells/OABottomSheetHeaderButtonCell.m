@@ -1,14 +1,14 @@
 //
-//  OAButtonIconTableViewCell.m
-//  OsmAnd
+//  OABottomSheetHeaderButtonCell.m
+//  OsmAnd Maps
 //
-//  Created by igor on 25.03.2020.
+//  Created by Anna Bibyk on 22.09.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAButtonIconTableViewCell.h"
+#import "OABottomSheetHeaderButtonCell.h"
 
-@implementation OAButtonIconTableViewCell
+@implementation OABottomSheetHeaderButtonCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -17,5 +17,6 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 }
+
 
 @end

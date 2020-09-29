@@ -120,8 +120,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
+    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:self];
+}
+
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
+{
     OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
-    task.delegate = self;
+    task.delegate = delegate;
     [task execute];
 }
  
@@ -134,9 +139,14 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version
 {
-    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
-    task.delegate = self;
-    [task execute];
+    [self importSettings:settingsFile items:items latestChanges:latestChanges version:version delegate:self];
+}
+
+- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
+{
+   OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
+   task.delegate = delegate;
+   [task execute];
 }
 
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles
@@ -508,7 +518,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
-    
     [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         if ([key hasPrefix:@"nrenderer_"] || [key isEqualToString:@"displayed_transport_settings"])
             [rendererSettings setObject:obj forKey:key];
@@ -517,12 +526,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         else
             [self.item readPreferenceFromJson:key value:obj];
     }];
-    
     [self.item applyRendererPreferences:rendererSettings];
     [self.item applyRoutingPreferences:routingSettings];
-    
     [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
-    
     return YES;
 }
 
@@ -661,7 +667,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     _appMode = am;
 }
 
-- (void)readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     _additionalPrefs = json[@"prefs"];
 }
@@ -669,17 +675,22 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs
 {
     NSString *renderer = [OAAppSettings.sharedManager.renderer get:_appMode];
-    NSString *resName = [self getRendererByName:renderer];
+    NSString *resName = [OAProfileSettingsItem getRendererByName:renderer];
     NSString *ext = @".render.xml";
     renderer = OAMapStyleTitles.getMapStyleTitles[resName];
     BOOL isTouringView = [resName hasPrefix:@"Touring"];
     if (!renderer && isTouringView)
         renderer = OAMapStyleTitles.getMapStyleTitles[@"Touring-view_(more-contrast-and-details).render"];
+    else if (!renderer && [resName isEqualToString:@"offroad"])
+        renderer = OAMapStyleTitles.getMapStyleTitles[@"Offroad by ZLZK"];
+    
+    if (!renderer)
+        return;
     OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:_appMode.variantKey];
     OAAppData *data = OsmAndApp.instance.data;
     // if the last map source was offline set it to the selected source
     if ([[data getLastMapSource:_appMode].resourceId hasSuffix:ext])
-        [data setLastMapSource:[[OAMapSource alloc] initWithResource:[(isTouringView ? resName.lowerCase : resName) stringByAppendingString:ext] andVariant:_appMode.variantKey name:renderer] mode:_appMode];
+        [data setLastMapSource:[[OAMapSource alloc] initWithResource:[resName.lowerCase stringByAppendingString:ext] andVariant:_appMode.variantKey name:renderer] mode:_appMode];
     [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         if ([key isEqualToString:@"displayed_transport_settings"])
         {
@@ -719,7 +730,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }];
 }
 
-- (NSString *) getRendererByName:(NSString *)rendererName
++ (NSString *) getRendererByName:(NSString *)rendererName
 {
     if ([rendererName isEqualToString:@"OsmAnd"])
         return @"default";
@@ -731,7 +742,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return rendererName;
 }
 
-- (NSString *) getRendererStringValue:(NSString *)renderer
++ (NSString *) getRendererStringValue:(NSString *)renderer
 {
     if ([renderer hasPrefix:@"Touring"])
         return @"Touring view (contrast and details)";
@@ -908,8 +919,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     MutableOrderedDictionary *res = [MutableOrderedDictionary new];
     OAAppSettings *settings = OAAppSettings.sharedManager;
+    NSSet<NSString *> *appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
     for (NSString *key in settings.getRegisteredSettings)
     {
+        if ([appModeBeanPrefsIds containsObject:key])
+            continue;
         OAProfileSetting *setting = [settings.getRegisteredSettings objectForKey:key];
         if (setting)
         {
@@ -966,7 +980,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     if (renderer)
     {
-        res[@"renderer"] = [self getRendererStringValue:renderer];
+        res[@"renderer"] = [OAProfileSettingsItem getRendererStringValue:renderer];
     }
     return res;
 }

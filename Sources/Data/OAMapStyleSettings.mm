@@ -353,4 +353,46 @@
         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
+-(void) resetMapStyleForAppMode:(NSString *)mapPresetName
+{
+    NSMutableArray <NSString *> *allRenderStyles = [self getMapStyleRenderKeys];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (NSString *renderStyleName in allRenderStyles)
+        {
+            OAMapStyleSettings *resetingMapStyle = [[OAMapStyleSettings alloc] initWithStyleName:renderStyleName mapPresetName:mapPresetName];
+                for (OAMapStyleParameter *p in resetingMapStyle.parameters)
+                {
+                    p.value = p.defaultValue;
+                    p.storedValue = p.defaultValue;
+                    NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
+                    [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
+                }
+        }
+        
+        [OAMapStyleSettings.sharedInstance loadParameters];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    });
+}
+
+- (NSMutableArray <NSString *> *)getMapStyleRenderKeys
+{
+    NSMutableArray <NSString *> *keys = [NSMutableArray new];
+    typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
+    
+    const auto localResources = [OsmAndApp instance].resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
+    {
+        if (localResource->type == OsmAndResourceType::MapStyle)
+            mapStylesResources.push_back(localResource);
+    }
+    
+    for(const auto& resource : mapStylesResources)
+    {
+        const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+        [keys addObject: mapStyle->name.toNSString()];
+    }
+    return keys;
+}
+
 @end

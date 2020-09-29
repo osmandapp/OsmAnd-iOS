@@ -94,6 +94,8 @@
 @property(readonly) OAObservable* mapillaryImageChangedObservable;
 @property(readonly) OAObservable* simulateRoutingObservable;
 
+@property(readonly) OAObservable* widgetSettingResetObservable;
+
 @property(readonly) OAObservable* trackRecordingObservable;
 
 @property(readonly) BOOL isRepositoryUpdating;

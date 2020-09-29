@@ -39,7 +39,8 @@
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
     
-    OAAutoObserverProxy* _appModeChangeObserver;
+    OAAutoObserverProxy* _appModesAvailabilityChangeObserver;
+    OAAutoObserverProxy* _appModeChangedObservable;
     
     OAApplicationMode *_targetAppMode;
 }
@@ -66,9 +67,13 @@
     
     _settings = OAAppSettings.sharedManager;
     
-    _appModeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+    _appModesAvailabilityChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onAvailableAppModesChanged)
                                                         andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
+    
+    _appModeChangedObservable = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onAvailableAppModesChanged)
+                                                           andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
     
     if (_targetAppMode)
     {
@@ -90,7 +95,8 @@
 
 - (void)dealloc
 {
-    [_appModeChangeObserver detach];
+    [_appModesAvailabilityChangeObserver detach];
+    [_appModeChangedObservable detach];
 }
 
 - (void) setupView
@@ -293,7 +299,7 @@
     if (section == 0)
         return OALocalizedString(@"global_settings_descr");
     else if (section == 2)
-        return OALocalizedString(@"export_profile_descr");
+        return OALocalizedString(@"import_profile_descr");
     return nil;
 }
 
@@ -310,13 +316,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (nullable NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath;
-{
-    NSDictionary *item = [self getItem:indexPath];
-    BOOL nonClickable = item[@"nonclickable"] != nil;
-    return nonClickable ? nil : indexPath;
-}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

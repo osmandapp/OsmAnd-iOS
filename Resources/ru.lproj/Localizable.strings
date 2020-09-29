@@ -862,7 +862,7 @@
 "wikivoyage_offline" = "Локальный Викигид";
 "unlimited_downloads" = "Неограниченные загрузки";
 "wikipedia_offline" = "Локальная Википедия";
-"contour_lines_hillshade_maps" = "Карты горизонталей и карты с отмывкой рельефа";
+"contour_lines_hillshade_maps" = "Карты горизонталей и затенение рельефа";
 "monthly_map_updates" = "Обновления карт: ежемесячные";
 "daily_map_updates" = "Обновления карт: ежечасные";
 "index_item_depth_contours_osmand_ext" = "Контуры морских глубин";
@@ -1517,7 +1517,7 @@
 "rendering_attr_hideWoodScrubs_name" = "Леса и кустарники";
 "rendering_value__name" = "По умолчанию";
 "routing_attr_allow_skating_only_description" = "Маршруты, подготовленные для фристайла или катания только на коньках без классических треков.";
-"routing_attr_piste_type_downhill_description" = "Склоны для катания на альпийских или горных лыжах и доступ к подъёмникам.";
+"routing_attr_piste_type_downhill_description" = "Склоны для катания и спуска на горных лыжах и доступ к подъёмникам.";
 "rendering_value_bicycle_name" = "Велосипед";
 "rendering_attr_surface_ice_name" = "Лёд";
 "routeInfo_piste_difficulty_name" = "Сложность горнолыжной трассы";

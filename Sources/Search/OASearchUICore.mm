@@ -468,11 +468,6 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
 
 - (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher
 {
-    return [self shallowSearch:cl text:text matcher:matcher resortAll:YES removeDuplicates:YES];
-}
-
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
-{
     OASearchCoreAPI *api = [self getApiByClass:cl];
     if (api)
     {
@@ -483,7 +478,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
         [api search:sphrase resultMatcher:rm];
         
         OASearchResultCollection *collection = [[OASearchResultCollection alloc] initWithPhrase:sphrase];
-        [collection addSearchResults:[rm getRequestResults] resortAll:resortAll removeDuplicates:removeDuplicates];
+        [collection addSearchResults:[rm getRequestResults] resortAll:YES removeDuplicates:YES];
 
         NSLog(@">> Shallow Search phrase %@ %d", [_phrase toString], (int)([rm getRequestResults].count));
 
@@ -660,10 +655,6 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
                 [collection addSearchResults:[rm getRequestResults] resortAll:YES removeDuplicates:YES];
                 NSLog(@">> Search phrase %@ %d", [phrase toString], (int)([rm getRequestResults].count));
                 _currentSearchResult = collection;
-                if ([[phrase getSettings] isExportObjects])
-                {
-                    [rm createTestJSON:collection];
-                }
                 [rm searchFinished:phrase];
                 if (_onResultsComplete)
                     _onResultsComplete();

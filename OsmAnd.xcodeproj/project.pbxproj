@@ -6363,6 +6363,7 @@
 		333168B72507803B00266047 /* ic_custom_logo_wikidata@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikidata@3x.png"; path = "Resources/Icons/ic_custom_logo_wikidata@3x.png"; sourceTree = "<group>"; };
 		333168B82507803E00266047 /* ic_custom_logo_wikidata@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikidata@2x.png"; path = "Resources/Icons/ic_custom_logo_wikidata@2x.png"; sourceTree = "<group>"; };
 		333168B92507804100266047 /* ic_custom_logo_wikimedia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_logo_wikimedia.png; path = Resources/Icons/ic_custom_logo_wikimedia.png; sourceTree = "<group>"; };
+		3357B56E2521F3CE0089E0CB /* OASearchSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASearchSettings.h; path = Search/OASearchSettings.h; sourceTree = "<group>"; };
 		336CAA9E24AF634B0085BF0A /* ic_custom_transport_stop@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_transport_stop@3x.png"; path = "Resources/Icons/ic_custom_transport_stop@3x.png"; sourceTree = "<group>"; };
 		336CAA9F24AF634C0085BF0A /* ic_custom_transport_subway@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_transport_subway@2x.png"; path = "Resources/Icons/ic_custom_transport_subway@2x.png"; sourceTree = "<group>"; };
 		336CAAA024AF634D0085BF0A /* ic_custom_transport_stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_transport_stop.png; path = Resources/Icons/ic_custom_transport_stop.png; sourceTree = "<group>"; };
@@ -7139,7 +7140,6 @@
 		845AFB461E261E9000170026 /* OASearchPhrase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASearchPhrase.mm; path = Search/OASearchPhrase.mm; sourceTree = "<group>"; };
 		845AFB491E264E7B00170026 /* OASearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASearchResult.h; path = Search/OASearchResult.h; sourceTree = "<group>"; };
 		845AFB4A1E264E7B00170026 /* OASearchResult.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASearchResult.mm; path = Search/OASearchResult.mm; sourceTree = "<group>"; };
-		845AFB4D1E264E9300170026 /* OASearchSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASearchSettings.h; path = Search/OASearchSettings.h; sourceTree = "<group>"; };
 		845AFB4E1E264E9300170026 /* OASearchSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASearchSettings.mm; path = Search/OASearchSettings.mm; sourceTree = "<group>"; };
 		845AFB511E264EA400170026 /* OASearchWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASearchWord.h; path = Search/OASearchWord.h; sourceTree = "<group>"; };
 		845AFB521E264EA400170026 /* OASearchWord.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASearchWord.mm; path = Search/OASearchWord.mm; sourceTree = "<group>"; };
@@ -12657,7 +12657,7 @@
 				845AFB421E261E3B00170026 /* OASearchCoreAPI.mm */,
 				845AFB491E264E7B00170026 /* OASearchResult.h */,
 				845AFB4A1E264E7B00170026 /* OASearchResult.mm */,
-				845AFB4D1E264E9300170026 /* OASearchSettings.h */,
+				3357B56E2521F3CE0089E0CB /* OASearchSettings.h */,
 				845AFB4E1E264E9300170026 /* OASearchSettings.mm */,
 				845AFB511E264EA400170026 /* OASearchWord.h */,
 				845AFB521E264EA400170026 /* OASearchWord.mm */,

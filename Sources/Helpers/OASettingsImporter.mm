@@ -289,6 +289,12 @@
         case EOASettingsItemTypeAvoidRoads:
             item = [[OAAvoidRoadsSettingsItem alloc] initWithJson:json error:&error];
             break;
+        case EOASettingsItemTypeSuggestedDownloads:
+            item = [[OASuggestedDownloadsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeDownloads:
+            item = [[OADownloadsItem alloc] initWithJson:json error:&error];
+            break;
         default:
             item = nil;
             break;

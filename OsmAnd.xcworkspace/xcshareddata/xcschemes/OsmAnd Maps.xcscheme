@@ -41,16 +41,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DA72AA8325079EE100851313"
-               BuildableName = "OsmAndMapsTests.xctest"
-               BlueprintName = "OsmAndMapsTests"
-               ReferencedContainer = "container:OsmAnd.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "DA72AB882508F40F00851313"
                BuildableName = "OsmAnd MapsTests.xctest"
                BlueprintName = "OsmAnd MapsTests"

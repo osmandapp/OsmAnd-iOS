@@ -192,6 +192,7 @@
     [_registeredPreferences setObject:_slopeMinZoomProfile forKey:@"slope_min_zoom"];
     [_registeredPreferences setObject:_slopeMaxZoomProfile forKey:@"slope_max_zoom"];
     [_registeredPreferences setObject:_mapillaryProfile forKey:@"show_mapillary"];
+    [_registeredPreferences setObject:_terrainTypeProfile forKey:@"terrain_mode"];
 }
 
 - (void) dealloc
@@ -807,6 +808,14 @@
         [self safeInit];
     }
     return self;
+}
+
+- (void) resetProfileSettingsForMode:(OAApplicationMode *)mode
+{
+    for (OAProfileSetting *value in [_registeredPreferences objectEnumerator].allObjects)
+    {
+        [value resetModeToDefault:mode];
+    }
 }
 
 #pragma mark - Copying profiles

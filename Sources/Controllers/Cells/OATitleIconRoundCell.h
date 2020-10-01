@@ -19,5 +19,6 @@
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
 
 + (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
++ (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text;
 
 @end

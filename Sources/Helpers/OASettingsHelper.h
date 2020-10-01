@@ -67,8 +67,10 @@ typedef enum : NSUInteger {
 + (OASettingsHelper *) sharedInstance;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version;
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate;
 - (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems;
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version;
+- (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate;
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles;
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName settingsItem:(OASettingsItem *)item exportItemFiles:(BOOL)exportItemFiles;
 
@@ -104,6 +106,9 @@ typedef enum : NSUInteger {
 - (OASettingsItemWriter *) getWriter;
 
 - (void) writeToJson:(id)json;
+- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value;
+- (void) applyRendererPreferences:(NSDictionary<NSString *, NSString *> *)prefs;
+- (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs;
 
 @end
 
@@ -154,7 +159,10 @@ typedef enum : NSUInteger {
 @property (nonatomic, readonly) OAApplicationMode *appMode;
 @property (nonatomic, readonly) OAApplicationModeBean *modeBean;
 
++ (NSString *) getRendererByName:(NSString *)rendererName;
++ (NSString *) getRendererStringValue:(NSString *)renderer;
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
+- (instancetype _Nullable) initWithJsonWithoutBackup:(id)json error:(NSError * _Nullable *)error;
 
 @end
 

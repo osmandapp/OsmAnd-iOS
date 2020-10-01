@@ -1809,7 +1809,7 @@
 "profile_alert_delete_msg" = "Kas sa oled kindel, et soovid täielikult kustutada „%@“ profiili?";
 "shared_string_copy" = "Kopeeri";
 "profile_alert_delete_title" = "Kustuta profiil";
-"copy_from_other_profile" = "Kopeeri teiselt profiililt";
+"copy_from_other_profile" = "Kopeeri teisest profiilist";
 "reset_to_default" = "Taasta algväärtused";
 "res_expire_time" = "Aegumise ajavahemik";
 "res_online_url_descr" = "Kirjuta või kopeeri veebiallika aadress";
@@ -1828,3 +1828,17 @@
 "repeat_after" = "Korda pärast";
 "nav_type_osmand" = "OsmAnd (võrguühenduseta teekonnad)";
 "nav_type_descr" = "Vali, kuidas selle profiili jaoks teekonda arvutada";
+"quick_action_dir_from_descr" = "Alustamaks teekonda kaardi keskpunktist puuduta seda tegevusnuppu.";
+"quick_action_transport_descr" = "Ühistranspordiliinide ja nende peatuste kuvamiseks või peitmiseks puuduta seda tegevusnuppu.";
+"export_profile_descr" = "Sa võid eksportida profiili kõik seadistused, kopeerida kõik seadistused teisest profiilist või seada profiili algolekusse.";
+"create_profile_descr" = "Oma kohandatud profiili loomisel võid aluseks võtta mõne vaikimisi lisatud profiilidest ning sellega saad määratleda üldisi seadistusi, nagu vidinate nähtavus ning kiiruse ja vahemaa mõõtühikud. Need on vaikimisi lisatud profiilid koos näidetega kohandatud profiilidest:";
+"map_settings_hillshade_description" = "Kasutades erinevaid halli varjundeid kuvavad kõrgusreljeefi kaardid nõlvasid, tippe ja tasandikke";
+"import_routing_file_descr" = "Sa võid importida teekonnafaili ükspuha missugusest pilvepõhise salvestusruumi rakendusest või tõstes ta OsmAnd kausta iTunes'is.";
+"help_nav_profiles" = "Navigeerimisprofiilid";
+"profile_prefs_reset_successful" = "Kõik profiili seadistused on muudetud vaikimisi väärtusteks";
+"import_profile_descr" = "Profiili importimiseks klõpsi ükspuha mis rakenduses vajaliku faili (*.osf) ja vali „Kopeeri OsmAnd Maps rakendusse“";
+"reset_profile_action_descr" = "Muuda kõik profiili seadistused paigaldusjärgsesse algeolekusse. Klõpsates Lähtesta-nuppu kaovad kõik sinu tehtud muudatused ja seda tegevust ei saa tagasi pöörata.";
+"res_zoom_levels_desc" = "Need parameetrid mõjutavad kaardi kuvamist, kui seda kasutatakse kaardi liigina või ülekatte / aluskattena.\n\nKaardi liik: kaart piirdub valitud suurendustasemetega.\n\nÜlekate / aluskate: suurendustasemed, kus kaardiosad on nähtavad. Üles või alla skaleerimine toimub seatud väärtustest kõrgemal või madalamal.";
+"ui_customization_descr" = "Sahtli osad, kontekstimenüü";
+"arrows_direction_to_markers" = "Nooled osutavad aktiivse markeri suunda, kui see asub väljaspool ekraani. Suunajooned viitavad aktiivsetele markeritele.";
+"specify_number_of_dir_indicators" = "Määra suunamärguannete arv, see mõjutab kõiki allpool olevaid seadeid.";

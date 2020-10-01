@@ -1743,3 +1743,14 @@
 "default_speed" = "Domyślna prędkość";
 "send_anonymous_data_desc" = "Wysyłaj do OsmAnd statystyki pobranych map, nie zbieramy danych o lokalizacji ani informacji osobistych.";
 "default_profile_descr" = "Wybierz który profil będzie używany po starcie aplikacji.";
+"repeat_after" = "Powtórz po";
+"plugin_settings_reset" = "Zresetuj ustawienia wtyczek";
+"trip_rec_actions_descr" = "Znajdziesz wszystkie zarejestrowane trazy w %@";
+"logging_accuracy" = "Dokładność rejestrowania";
+"map_settings_add_maps_hillshade" = "Cieniowanie wzniesień wymaga dodatkowych map";
+"map_settings_slopes_description" = "Mapy nachylenia używają różnych kolorów do wizualizacji terenu";
+"map_settings_layer_transparency" = "Przezroczystość warstwy";
+"map_settings_terrain" = "Teren";
+"import_from_files" = "Importuj z plików";
+"shared_string_copy" = "Skopiuj";
+"recalculate_wrong_dir" = "Przelicz trasę w przypadku zmiany kierunku";

@@ -392,7 +392,7 @@
 "shared_string_dismiss" = "Отменить";
 "shared_string_modify" = "Изменить";
 "shared_string_later" = "Позже";
-"offline_maps" = "Офлайн карты";
+"offline_maps" = "Офлайн-карты";
 "download_map" = "Загрузить карту";
 "gpx_route" = "Маршрут";
 "map_settings_hillshade" = "Рельеф местности";
@@ -636,7 +636,7 @@
 "transport_nearby_routes" = "В пределах";
 "transport_stop" = "Стоп";
 "cancel_navigation" = "Остановить навигацию";
-"switch_start_finish" = "Обратить пункты отправления и назначения";
+"switch_start_finish" = "Поменять местами пункты отправления и назначения";
 "shared_string_options" = "Опции";
 "new_destination_point_dialog" = "Вы уже установили пункт назначения";
 "replace_destination_point" = "Заменить пункт назначения";
@@ -862,7 +862,7 @@
 "wikivoyage_offline" = "Локальный Викигид";
 "unlimited_downloads" = "Неограниченные загрузки";
 "wikipedia_offline" = "Локальная Википедия";
-"contour_lines_hillshade_maps" = "Карты горизонталей и карты с отмывкой рельефа";
+"contour_lines_hillshade_maps" = "Карты горизонталей и затенение рельефа";
 "monthly_map_updates" = "Обновления карт: ежемесячные";
 "daily_map_updates" = "Обновления карт: ежечасные";
 "index_item_depth_contours_osmand_ext" = "Контуры морских глубин";
@@ -1177,9 +1177,9 @@
 "mapil_no_images" = "Для этой локации фотографий нет.";
 "mapillary_get_descr" = "Скачайте Mapillary, чтобы добавить к этому месту фотографии";
 "mapil_contribute" = "Добавьте свои собственные снимки улиц";
-"mapillary_descr" = "Уличные онлайн фотографии для всех. Открывайте места, сотрудничайте, снимайте мир";
+"mapillary_descr" = "Уличные фото онлайн для всех. Открывайте места, сотрудничайте, снимайте мир";
 "mapillary_turn_on_widget" = "Включить виджет Mapillary";
-"mapillary_turn_on_widget_descr" = "Позволяет быстро вносить вклад в Mapillary";
+"mapillary_turn_on_widget_descr" = "Позволяет быстро внести лепту в Mapillary";
 "shared_string_start_date" = "Дата открытия";
 "shared_string_end_date" = "Дата закрытия";
 "tile_cache" = "Кеш тайлов";
@@ -1386,7 +1386,7 @@
 "rendering_value_defaultTranslucentCyan_name" = "По умолчанию (полупрозрачный голубой)";
 "rendering_value_highContrastRoads_name" = "Высокий контраст";
 "rendering_value_car_name" = "Автомобиль";
-"routing_attr_allow_motorway_description" = "Разрешает автомагистрали.";
+"routing_attr_allow_motorway_description" = "Разрешает движение по автомагистралям.";
 "routing_attr_driving_style_speed_name" = "Короткие маршруты";
 "rendering_value_boldOutline_name" = "Жирный контур";
 "rendering_value_fine_name" = "Правильно";
@@ -1395,7 +1395,7 @@
 "routing_attr_freeride_policy_description" = "Фрирайды и офписты являются неофициальными неадаптированными трассами. Обычно неухоженные, неразмеченные и неосвещённые вечером. Вход на свой страх и риск.";
 "rendering_attr_surface_sett_name" = "Брусчатка";
 "rendering_attr_highway_class_track_grade4_name" = "Класс 4";
-"routing_attr_relief_smoothness_factor_hills_name" = "Холмистый";
+"routing_attr_relief_smoothness_factor_hills_name" = "Гористый";
 "rendering_attr_showMtbRoutes_name" = "Трассы для горных велосипедов";
 "rendering_attr_piste_type_hike_name" = "Хайк";
 "rendering_attr_surface_snow_name" = "Снег";
@@ -1410,7 +1410,7 @@
 "rendering_attr_pisteGrooming_name" = "Тип лыжной трассы";
 "rendering_value_americanRoadAtlas_name" = "Атлас дорог Америки";
 "rendering_attr_highway_class_street_name" = "Улица";
-"routing_attr_relief_smoothness_factor_more_plains_name" = "Равнинный";
+"routing_attr_relief_smoothness_factor_more_plains_name" = "Ровный";
 "rendering_attr_horseRoutes_name" = "Конные маршруты";
 "rendering_attr_surface_gravel_name" = "Гравий";
 "routeInfo_piste_type_name" = "Тип горнолыжной трассы";
@@ -1442,7 +1442,7 @@
 "routing_attr_avoid_tram_description" = "Исключить трамваи";
 "rendering_attr_surface_grass_paver_name" = "Газонная решётка";
 "routing_attr_avoid_shuttle_train_name" = "Без челночных поездов (шаттлов)";
-"routing_attr_prefer_motorway_description" = "Предпочитать автомагистрали";
+"routing_attr_prefer_motorway_description" = "Предпочитать магистрали";
 "rendering_attr_hideHouseNumbers_name" = "Номера домов";
 "rendering_attr_piste_difficulty_freeride_name" = "Фрирайд";
 "routing_attr_avoid_borders_name" = "Без пересечений границ";
@@ -1472,7 +1472,7 @@
 "rendering_attr_highway_class_track_grade2_name" = "Класс 2";
 "rendering_attr_hideIcons_name" = "Значки POI";
 "routing_attr_avoid_shuttle_train_description" = "Избегать использования челночных поездов (шаттлов)";
-"routing_attr_relief_smoothness_factor_name" = "Выберите пересечённость местности";
+"routing_attr_relief_smoothness_factor_name" = "Колебания высоты ландшафта";
 "rendering_attr_depthContours_name" = "Контуры морских глубин";
 "rendering_attr_publicTransportMode_name" = "Маршруты автобусов, троллейбусов и маршрутных такси";
 "rendering_attr_surface_wood_name" = "Дерево";
@@ -1493,7 +1493,7 @@
 "rendering_attr_winter_road_name" = "Автозимник";
 "rendering_attr_roadColors_description" = "Выберите цветовую схему дорог:";
 "routing_attr_allow_classic_only_name" = "Разрешить только классические маршруты";
-"routing_attr_relief_smoothness_factor_plains_name" = "Менее холмистый";
+"routing_attr_relief_smoothness_factor_plains_name" = "Сглаженный";
 "rendering_attr_surface_grass_name" = "Трава";
 "rendering_attr_highway_class_cycleway_name" = "Велодорожка";
 "rendering_attr_highway_class_track_grade5_name" = "Класс 5";
@@ -1517,15 +1517,15 @@
 "rendering_attr_hideWoodScrubs_name" = "Леса и кустарники";
 "rendering_value__name" = "По умолчанию";
 "routing_attr_allow_skating_only_description" = "Маршруты, подготовленные для фристайла или катания только на коньках без классических треков.";
-"routing_attr_piste_type_downhill_description" = "Склоны для катания на альпийских или горных лыжах и доступ к подъёмникам.";
+"routing_attr_piste_type_downhill_description" = "Склоны для катания и спуска на горных лыжах и доступ к подъёмникам.";
 "rendering_value_bicycle_name" = "Велосипед";
 "rendering_attr_surface_ice_name" = "Лёд";
 "routeInfo_piste_difficulty_name" = "Сложность горнолыжной трассы";
 "rendering_attr_hidePOILabels_name" = "Названия POI";
 "rendering_value_low_name" = "Низкая";
-"routeInfo_steepness_name" = "Крутость";
+"routeInfo_steepness_name" = "Крутизна";
 "rendering_value_browse_map_name" = "Обзор карты";
-"routeInfo_surface_name" = "Поверхность";
+"routeInfo_surface_name" = "Покрытие";
 "routing_attr_allow_expert_description" = "Чрезвычайно сложные маршруты с опасными препятствиями и небезопасным окружением.";
 "rendering_attr_hideOverground_name" = "Надземные объекты";
 "rendering_value_disabled_name" = "Выключено";
@@ -1541,7 +1541,7 @@
 "routing_attr_allow_advanced_name" = "Разрешить расширенные маршруты";
 "routing_attr_prefer_motorway_name" = "Предпочитать автомагистрали";
 "rendering_attr_roadStyle_description" = "Стиль отображения дорог";
-"routing_attr_allow_motorway_name" = "Разрешить автомагистрали";
+"routing_attr_allow_motorway_name" = "Разрешить магистрали";
 "rendering_attr_showLez_name" = "Зоны с низким уровнем выбросов";
 "rendering_value_translucent_purple_name" = "Полупрозрачный фиолетовый";
 "rendering_attr_piste_difficulty_aerialway_name" = "Канатная дорога";
@@ -1772,7 +1772,7 @@
 "select_nav_profile_dialog_message" = "Режим навигации определяет правила расчета маршрутов.";
 "change_map_behavior" = "Изменение поведения карты во время навигации";
 "map_behavior" = "Поведение карты";
-"vehicle_parameters" = "Физические параметры";
+"vehicle_parameters" = "Параметры транспортного средства";
 "screen_alerts" = "Экранные оповещения";
 "voice_anounces" = "Голосовые анонсы";
 "downloading" = "Скачивание";
@@ -1824,7 +1824,7 @@
 "osm_editing_settings_descr" = "Настройки этого плагина глобальны и применяются ко всем профилям.";
 // Menu
 "menu" = "Меню";
-"export_profile_descr" = "Чтобы импортировать профиль, нажмите на нужный файл (*.osf) в любом приложении и выберите \"Копировать в OsmAnd Maps\"";
+"export_profile_descr" = "Вы можете экспортировать все настройки профиля, скопировать все настройки из другого профиля или сбросить все настройки профиля до состояния по умолчанию.";
 "profile_sett_descr" = "Влияет на выбранный профиль приложения";
 "app_profiles" = "Профили приложения";
 "osmand_profile" = "Профиль OsmAnd";
@@ -1875,3 +1875,7 @@
 "copy_from_other_profile_descr" = "Вы можете скопировать все настройки из любого профиля в выбранный профиль: ";
 "copy_from_other_profile" = "Копировать из другого профиля";
 "shared_string_copy" = "Копировать";
+"help_nav_profiles" = "Профили навигации";
+"import_profile_descr" = "Чтобы импортировать профиль, нажмите на нужный файл (*.osf) в любом приложении и выберите \"Копировать в OsmAnd Maps\"";
+"profile_prefs_reset_successful" = "Все настройки профиля восстановлены до состояния по умолчанию";
+"reset_profile_action_descr" = "Сбросить все настройки профиля до значений по умолчанию. Нажатие на \"Сброс\" отменяет все ваши изменения, это действие нельзя отменить.";

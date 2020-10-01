@@ -715,7 +715,7 @@
 "contour_lines_hillshade_maps" = "Mapas de curvas de nível e de sombras de relevo";
 "index_item_depth_contours_osmand_ext" = "Contornos de profundidade náutica";
 "donation_to_osm" = "Doação para a comunidade OpenStreetMap";
-"in_app_purchase" = "Compra na aplicação";
+"in_app_purchase" = "Compra na app";
 "in_app_purchase_desc" = "Pagamento de uma só vez";
 "in_app_purchase_desc_ex" = "Uma vez comprado, estará sempre disponível para si.";
 "unlock_all_features" = "Desbloquear todas as características de OsmAnd";

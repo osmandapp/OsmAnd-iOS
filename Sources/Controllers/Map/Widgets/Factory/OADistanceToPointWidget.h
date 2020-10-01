@@ -9,7 +9,7 @@
 #import "OATextInfoWidget.h"
 #import <CoreLocation/CoreLocation.h>
 
-@interface OADistanceToPointInfoControl : OATextInfoWidget
+@interface OADistanceToPointWidget : OATextInfoWidget
 
 - (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId;
 

@@ -23,11 +23,13 @@
 #import "OAMapWidgetRegInfo.h"
 #import "OARouteInfoWidgetsFactory.h"
 #import "OAMapInfoWidgetsFactory.h"
-#import "OANextTurnInfoWidget.h"
+#import "OANextTurnWidget.h"
 #import "OALanesControl.h"
 #import "OATopTextView.h"
 #import "OAAlarmWidget.h"
 #import "OARulerWidget.h"
+#import "OATimeWidgetState.h"
+#import "OABearingWidgetState.h"
 
 @interface OATextState : NSObject
 
@@ -565,11 +567,11 @@
     
     [self registerSideWidget:nil imageId:@"ic_action_compass" message:OALocalizedString(@"map_widget_compass") key:@"compass" left:YES priorityOrder:4];
     
-    OANextTurnInfoWidget *bigInfoControl = [ric createNextInfoControl:NO];
+    OANextTurnWidget *bigInfoControl = [ric createNextInfoControl:NO];
     [self registerSideWidget:bigInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_turn") key:@"next_turn" left:YES priorityOrder:5];
-    OANextTurnInfoWidget *smallInfoControl = [ric createNextInfoControl:YES];
+    OANextTurnWidget *smallInfoControl = [ric createNextInfoControl:YES];
     [self registerSideWidget:smallInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_turn_small") key:@"next_turn_small" left:YES priorityOrder:6];
-    OANextTurnInfoWidget *nextNextInfoControl = [ric createNextNextInfoControl:YES];
+    OANextTurnWidget *nextNextInfoControl = [ric createNextNextInfoControl:YES];
     [self registerSideWidget:nextNextInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_next_turn") key:@"next_next_turn" left:YES priorityOrder:7];
 
     // register right stack
@@ -582,7 +584,7 @@
     OATextInfoWidget *dist = [ric createDistanceControl];
     [self registerSideWidget:dist imageId:@"ic_action_target" message:OALocalizedString(@"map_widget_distance") key:@"distance" left:NO priorityOrder:15];
     OATextInfoWidget *time = [ric createTimeControl:NO];
-    [self registerSideWidget:time widgetState:[[OATimeControlWidgetState alloc] init] key:@"time" left:NO priorityOrder:16];
+    [self registerSideWidget:time widgetState:[[OATimeWidgetState alloc] init] key:@"time" left:NO priorityOrder:16];
     OATextInfoWidget *bearing = [ric createBearingControl];
     [self registerSideWidget:bearing widgetState:[[OABearingWidgetState alloc] init] key:@"bearing" left:NO priorityOrder:17];
     

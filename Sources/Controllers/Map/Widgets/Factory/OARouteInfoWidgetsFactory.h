@@ -6,22 +6,14 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd/src/net/osmand/plus/views/mapwidgets/RouteInfoWidgetsFactory.java
-//  git revision 20fbb153804c15d7a2cb09a9315ed1a15f301f3b
+//  git revision 24f59ca8abdaffe133d2a5cd8068e71a8b481125
 
 #import <Foundation/Foundation.h>
 #import "OAWidgetState.h"
 
-@class OATextInfoWidget, OANextTurnInfoWidget, OALanesControl, OAAlarmWidget, OARulerWidget;
-
-@interface OATimeControlWidgetState : OAWidgetState
-
-@end
+@class OATextInfoWidget, OANextTurnWidget, OALanesControl, OAAlarmWidget, OARulerWidget;
 
 @interface OAIntermediateTimeControlWidgetState : OAWidgetState
-
-@end
-
-@interface OABearingWidgetState : OAWidgetState
 
 @end
 
@@ -35,8 +27,8 @@
 - (OATextInfoWidget *) createDistanceControl;
 - (OATextInfoWidget *) createBearingControl;
 - (OATextInfoWidget *) createIntermediateDistanceControl;
-- (OANextTurnInfoWidget *) createNextInfoControl:(BOOL)horisontalMini;
-- (OANextTurnInfoWidget *) createNextNextInfoControl:(BOOL)horisontalMini;
+- (OANextTurnWidget *) createNextInfoControl:(BOOL)horisontalMini;
+- (OANextTurnWidget *) createNextNextInfoControl:(BOOL)horisontalMini;
 
 - (OARulerWidget *) createRulerControl;
 - (OALanesControl *) createLanesControl;

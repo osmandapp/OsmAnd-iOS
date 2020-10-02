@@ -1754,3 +1754,20 @@
 "import_from_files" = "Importuj z plików";
 "shared_string_copy" = "Skopiuj";
 "recalculate_wrong_dir" = "Przelicz trasę w przypadku zmiany kierunku";
+"osm_editing_settings_descr" = "Ustawienia tej wtyczki są globalne i dotyczą wszystkich profili.";
+
+// Menu
+"menu" = "Menu";
+"downloading" = "Pobieranie";
+"app_profiles" = "Profile aplikacji";
+"selected_profile" = "Wybrany profil";
+"osmand_profile" = "Profil OsmAnd";
+"profile_type_base_string" = "Profil podstawowy";
+"not_available_profile_name" = "Profil o tej nazwie już istnieje.";
+"profile_prefs_reset_successful" = "Ustawienia profili przywrócone do stanu domyślnego.";
+"profile_import_success" = "Profil aplikacji został zaimportowany pomyślnie";
+"err_profile_import" = "Błąd odczytu danych elementu: %@";
+"empty_profile_name_warning" = "Nazwa profilu nie może być pusta.";
+"after_tapping_done" = "Po dotknięciu przycisku Gotowe, usunięte profile zostaną całkowicie utracone.";
+"all_application_profiles" = "Wszystkie profile aplikacji";
+"rearrange_profile_descr" = "Domyślnych profili OsmAnd nie można usunąć, ale można je wyłączyć na poprzednim ekranie lub przeciągnąć na dół listy.";

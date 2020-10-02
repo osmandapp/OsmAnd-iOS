@@ -1585,7 +1585,7 @@
 "routing_attr_height_name" = "Максимальная высота";
 "rendering_attr_piste_type_sled_name" = "Только самоходные сани";
 "routing_attr_avoid_unpaved_description" = "Избегать грунтовых дорог";
-"rendering_attr_depthContours_description" = "Показывать контуры и точки глубины.";
+"rendering_attr_depthContours_description" = "Показывать контуры и точки глубин.";
 "routing_attr_no_new_routing_description" = "Не использовать для построения маршрута алгоритм представленный в версии 1.9.";
 "rendering_attr_noPolygons_name" = "Полигоны";
 "rendering_attr_ice_road_name" = "Ледовый автозимник";

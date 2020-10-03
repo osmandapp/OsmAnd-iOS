@@ -835,9 +835,9 @@
 "search_radius_proximity" = "В радиусе";
 "poi" = "POI";
 "show_poi_over_map" = "Отображать POI";
-"keep_and_add_destination_point" = "Добавить пункт назначения";
+"keep_and_add_destination_point" = "Добавить новым пунктом назначения";
 "add_as_first_destination_point" = "Первый промежуточный пункт";
-"add_as_last_destination_point" = "Последний промежуточный пункт";
+"add_as_last_destination_point" = "Добавить последним промежуточным пунктом";
 "intermediate_items_sort_by_distance" = "Расположить в оптимальном порядке";
 "route_stops_before" = "%d остановок до выбранной";
 "osm_live_plan_pricing" = "Планы и цены";

@@ -893,7 +893,7 @@
 "poi_opening_hours" = "Часы работы";
 "poi_select_category" = "Выбор категории";
 "poi_select_type" = "Выбор типа";
-"access_intermediate_arrival_time" = "Промежуточное время прибытия";
+"access_intermediate_arrival_time" = "Прибытие в промежуточный пункт";
 "map_widget_intermediate_time" = "Прибытие в промежуточный пункт";
 "shared_string_milliradians" = "Миллирадианы";
 "angular_units_descr" = "Сменить единицы измерения азимута.";
@@ -919,7 +919,7 @@
 "cancel_route" = "Отменить маршрут";
 "select_route_start_on_map" = "Выберите начальную точку маршрута";
 "select_route_finish_on_map" = "Выберите конечную точку маршрута";
-"interrupt_music" = "Приостанавливать музыку";
+"interrupt_music" = "Прерывать музыку";
 "app_mode_hiking" = "Пеший туризм";
 "avoid_in_routing_title" = "Избегать…";
 "prefer_in_routing_title" = "Предпочитать…";

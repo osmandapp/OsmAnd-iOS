@@ -893,7 +893,7 @@
 "poi_opening_hours" = "Часы работы";
 "poi_select_category" = "Выбор категории";
 "poi_select_type" = "Выбор типа";
-"access_intermediate_arrival_time" = "Прибытие в промежуточный пункт";
+"access_intermediate_arrival_time" = "Промежуточное время прибытия";
 "map_widget_intermediate_time" = "Прибытие в промежуточный пункт";
 "shared_string_milliradians" = "Миллирадианы";
 "angular_units_descr" = "Сменить единицы измерения азимута.";

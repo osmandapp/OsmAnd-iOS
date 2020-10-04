@@ -1351,7 +1351,7 @@
 "rendering_attr_contourColorScheme_name" = "Цветовая гамма горизонталей";
 "rendering_attr_highway_class_footway_name" = "Пешеходная";
 "rendering_attr_surface_paving_stones_name" = "Брусчатка";
-"rendering_attr_alpineHiking_description" = "Визуализация пути по шкале SAC.";
+"rendering_attr_alpineHiking_description" = "Визуализация маршрута по шкале SAC.";
 "rendering_attr_showLez_description" = "Показывать на карте зоны с низким уровнем выбросов. Не влияет на навигацию.";
 "rendering_value_high_name" = "Высокая";
 "routing_attr_allow_classic_only_description" = "Маршруты, подготовленные только для классического стиля без конькобежных трасс. Сюда входят маршруты, подготовленные небольшим снегоходом с более свободной лыжнёй и трассами, подготовленные вручную лыжниками.";

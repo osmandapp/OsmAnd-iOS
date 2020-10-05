@@ -1372,7 +1372,7 @@
 "routing_attr_allow_intermediate_description" = "Более сложные маршруты с крутыми участками дороги. В целом, препятствия, которых следует избегать.";
 "rendering_attr_appMode_description" = "Оптимизация карты для соответствующего профиля";
 "routing_attr_driving_style_safety_name" = "Предпочитать переулки";
-"rendering_attr_subwayMode_name" = "Маршруты метро";
+"rendering_attr_subwayMode_name" = "Линии метро";
 "routing_attr_avoid_train_description" = "Исключить поезда";
 "rendering_attr_showRoadMaps_description" = "Выберите, когда показывать только дорожные карты:";
 "routing_attr_avoid_toll_description" = "Избегать платных дорог";

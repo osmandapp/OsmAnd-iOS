@@ -36,11 +36,11 @@
 #define POINT_TYPE_TRANSPORT_ROUTE @"transport_route"
 #define POINT_TYPE_TRANSPORT_STOP @"transport_stop"
 #define POINT_TYPE_MAPILLARY_IMAGE @"mapillary_image"
-#define POINT_TYPE_POI_TYPE = "poi_type"
-#define POINT_TYPE_CUSTOM_POI_FILTER = "custom_poi_filter"
+#define POINT_TYPE_POI_TYPE @"poi_type"
+#define POINT_TYPE_CUSTOM_POI_FILTER @"custom_poi_filter"
 
 #define POINT_LOCATION_URL 200
-#define POINT_LOCATION_LIST_HEADER = 201
+#define POINT_LOCATION_LIST_HEADER 201
 
 @protocol OALocationPoint;
 
@@ -87,5 +87,7 @@
 - (BOOL) isMapMarker;
 - (BOOL) isParking;
 - (BOOL) isMyLocation;
+- (BOOL) isCustomPoiFilter;
+- (BOOL) isGpxPoint;
 
 @end

@@ -153,6 +153,7 @@ typedef enum
 @property (nonatomic) double positionDilutionOfPrecision;
 @property (nonatomic) double ageOfGpsData;
 @property (nonatomic) int dgpsStationId;
+@property (nonatomic) NSString *profileType;
 
 - (void) fillWithWpt:(OAGpxWpt *)gpxWpt;
 
@@ -223,5 +224,34 @@ typedef enum
 
 @property (nonatomic) NSString *source;
 @property (nonatomic) int slotNumber;
+
+@end
+
+@interface OAGpxRouteSegment : NSObject
+
+@property (nonatomic) NSString *ID;
+@property (nonatomic) NSString *length;
+@property (nonatomic) NSString *segmentTime;
+@property (nonatomic) NSString *speed;
+@property (nonatomic) NSString *turnType;
+@property (nonatomic) NSString *turnAngle;
+@property (nonatomic) NSString *types;
+@property (nonatomic) NSString *pointTypes;
+@property (nonatomic) NSString *names;
+
+- (instancetype) init;
++ (OAGpxRouteSegment *) fromStringBundle:(NSDictionary *)bundle;
+- (NSDictionary *) toStringBundle;
+
+@end
+
+@interface OAGpxRouteType : NSObject
+
+@property (nonatomic) NSString *tag;
+@property (nonatomic) NSString *value;
+
+- (instancetype) init;
++ (OAGpxRouteType *) fromStringBundle:(NSDictionary *)bundle;
+- (NSDictionary *) toStringBundle;
 
 @end

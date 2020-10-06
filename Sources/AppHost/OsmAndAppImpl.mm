@@ -546,20 +546,37 @@
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig
 {
-    float tm = [[NSDate date] timeIntervalSince1970];
-    @try
+    return [self getRoutingConfigForMode: OAApplicationMode.DEFAULT];
+}
+
+- (std::shared_ptr<RoutingConfigurationBuilder>) getRoutingConfigForMode:(OAApplicationMode *)mode
+{
+    std::shared_ptr<RoutingConfigurationBuilder> builder;
+    NSString *routingProfileKey = [mode getRoutingProfile];
+    if (routingProfileKey.length > 0)
     {
-        NSString *customRoutingPath = [self.documentsPath stringByAppendingPathComponent:@"routing.xml"];
-        BOOL useCustomRouting = [[NSFileManager defaultManager] fileExistsAtPath:customRoutingPath];
-        return parseRoutingConfigurationFromXml(useCustomRouting ? [customRoutingPath UTF8String] :
-                                                [[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String]);
+        int index = [routingProfileKey indexOf:@".xml"];
+        if (index != -1)
+        {
+            NSString *configKey = [routingProfileKey substringToIndex:index];
+            
+            float tm = [[NSDate date] timeIntervalSince1970];
+            @try
+            {
+                NSString *customRoutingPath = [self.documentsPath stringByAppendingPathComponent:routingProfileKey];
+                BOOL useCustomRouting = [[NSFileManager defaultManager] fileExistsAtPath:customRoutingPath];
+                return parseRoutingConfigurationFromXml(useCustomRouting ? [customRoutingPath UTF8String] :
+                                                        [[[NSBundle mainBundle] pathForResource:configKey ofType:@"xml"] UTF8String]);
+            }
+            @finally
+            {
+                float te = [[NSDate date] timeIntervalSince1970];
+                if (te - tm > 30)
+                    NSLog(@"Routing config init took %f ms", (te - tm));
+            }
+        }
     }
-    @finally
-    {
-        float te = [[NSDate date] timeIntervalSince1970];
-        if (te - tm > 30)
-            NSLog(@"Defalt routing config init took %f ms", (te - tm));
-    }
+    return [self getDefaultRoutingConfig];
 }
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force

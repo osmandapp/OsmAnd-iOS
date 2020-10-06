@@ -487,17 +487,23 @@
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute
 {
+    return [self getOriginalRoute:0];
+}
+
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex
+{
     if (_segments.size() == 0)
         return std::vector<std::shared_ptr<RouteSegmentResult>>();
     
     std::vector<std::shared_ptr<RouteSegmentResult>> list;
-    list.push_back(_segments.front());
-    for (int i = 1; i < _segments.size(); i++)
+    list.push_back(_segments[startIndex++]);
+    for (int i = startIndex; i < _segments.size(); i++)
         if (_segments[i - 1] != _segments[i])
             list.push_back(_segments[i]);
     
     return list;
 }
+
 
 /**
  * PREPARATION

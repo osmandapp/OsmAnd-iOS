@@ -551,6 +551,7 @@
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
+"gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 
 "gpx_export_title" = "Export trip";
 "gpx_export_select_track" = "Please select trip for Export";

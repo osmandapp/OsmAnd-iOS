@@ -1457,7 +1457,7 @@
 "rendering_attr_hideWaterPolygons_description" = "Agua";
 "rendering_attr_surfaceIntegrity_name" = "Integridad de la superficie del camino";
 "rendering_attr_piste_type_skitour_name" = "Esquí de travesía";
-"rendering_attr_highway_class_street_name" = "Calle residencial";
+"rendering_attr_highway_class_street_name" = "Calle";
 "rendering_attr_subwayMode_name" = "Rutas de metro";
 "routing_attr_avoid_train_description" = "Evitar trenes";
 "rendering_attr_surface_mud_name" = "Lodazal";

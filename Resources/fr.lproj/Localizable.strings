@@ -1007,7 +1007,7 @@
 "index_item_depth_contours_osmand_ext" = "Isobathes";
 "in_app_purchase" = "Achat depuis l'application";
 "in_app_purchase_desc_ex" = "La validité de votre achat sera permanente.";
-"subscribe_email_desc" = "Abonnez-vous à notre liste de diffusion:<br/>- Obtenez 3 cartes supplémentaires à télécharger <br/>- Écoutez d'abord les réductions <br/>- Participez aux promocodes <a href='https://osmand.net/giveaway'>ici</a>";
+"subscribe_email_desc" = "Abonnez-vous à notre liste de diffusion :<br/>- Obtenez 3 cartes supplémentaires à télécharger <br/>- Écoutez d'abord les réductions <br/>- Participez aux promocodes <a href='https://osmand.net/giveaway'>ici</a>";
 "osm_live_payment_desc" = "Vous pouvez modifier et annuler vos abonnements dans votre compte App Store après l'achat";
 "osm_live_unlock_updates" = "Déverrouiller les mises à jour des cartes toutes les heures";
 "osm_live_banner_descr" = "Abonnez-vous à OsmAnd Live et obtenez un nombre illimité de mises à jour de cartes <b>toutes les heures</b> et <b>toutes les fonctionnalités</b> incluses de %@";
@@ -1696,13 +1696,13 @@
 "shared_string_not_set" = "Non défini";
 "meters" = "mètres";
 "tones" = "tonalités";
-"announce" = "Annoncer";
+"announce" = "Annonce";
 "transfers" = "Transferts :";
 "displayed_trips" = "Itinéraires affichés";
 "select_home" = "Sélectionnez le point d'origine";
 "select_route_intermediate" = "Sélectionnez un point intermédiaire";
 "avoid_transport_type" = "Éviter les types de transport";
-"instructions_repeat" = "Appuyez sur le gadget \"Prochain tour\" pour répéter les instructions";
+"instructions_repeat" = "Appuyez sur le gadget « Prochain tour » pour répéter les instructions";
 "only_manually" = "Seulement manuellement";
 "speed_limit_tolerance_descr" = "Sélectionnez la marge de tolérance de la limite de vitesse au-dessus de laquelle vous recevrez un avertissement vocal.";
 "profile_type_custom_string" = "Profil personnalisé";
@@ -1720,3 +1720,7 @@
 "profile_alert_delete_title" = "Supprimer le profil";
 "copy_from_other_profile" = "Copier depuis un autre profil";
 "reset_to_default" = "Rétablir les paramètres par défaut";
+"recalculate_wrong_dir" = "Recalculer l'itinéraire en cas de direction inverse";
+"repeat_after" = "Répéter après";
+"shared_string_email" = "Courriel";
+"email_example_hint" = "utilisateur@exemple.com";

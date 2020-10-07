@@ -418,7 +418,7 @@
 - (BOOL) hasEmptyValue
 {
     for (NSString *key in _tagValues.allKeys)
-        if ([[_tagValues objectForKey:key] isEmpty] && [POI_TYPE_TAG isEqualToString:key])
+        if ([[_tagValues objectForKey:key] isEmpty] && ![POI_TYPE_TAG isEqualToString:key])
             return YES;
     return NO;
 }

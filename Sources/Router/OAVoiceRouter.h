@@ -5,12 +5,12 @@
 //  Created by Alexey Kulish on 15/07/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
-// Android version: 713b86d
+// Android version: 1eda59acc7a35cb9cd3bc7c30561fbce7bf396d2
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OARoutingHelper, OALocationPointWrapper, OAAlarmInfo;
+@class OARoutingHelper, OALocationPointWrapper, OAAlarmInfo, OAApplicationMode;
 
 @protocol OACommandPlayer;
 
@@ -34,6 +34,7 @@
 - (id<OACommandPlayer>) getPlayer;
 - (void) updateAppMode;
 - (void) setMute:(BOOL)mute;
+- (void) setMute:(BOOL)mute mode:(OAApplicationMode *)mode;
 - (BOOL) isMute;
 
 - (void) arrivedIntermediatePoint:(NSString *)name;
@@ -45,6 +46,7 @@
 - (void) announceBackOnRoute;
 - (void) announceCurrentDirection:(CLLocation *)currentLocation;
 - (int) calculateImminent:(float)dist loc:(CLLocation *)loc;
+- (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon;
 - (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon defSpeed:(float)defSpeed;
 - (void) gpsLocationLost;
 - (void) gpsLocationRecover;

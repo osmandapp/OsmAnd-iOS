@@ -60,8 +60,10 @@
 - (instancetype)initWithPhrase:(OASearchPhrase *)sp;
 
 - (int) getFoundWordCount;
-- (double) getSearchDistance:(CLLocation *)location;
-- (double) getSearchDistance:(CLLocation *)location pd:(double)pd;
+- (double) getSearchDistanceRound:(CLLocation *)location;
+- (double) getSearchDistanceRound:(CLLocation *)location pd:(double)pd;
+- (double) getSearchDistanceFloored:(CLLocation *)location;
+- (double) getSearchDistanceFloored:(CLLocation *)location pd:(double)pd;
 
 - (double) getSumPhraseMatchWeight;
 - (int) getDepth;

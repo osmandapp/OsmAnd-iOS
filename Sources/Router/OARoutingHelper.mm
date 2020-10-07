@@ -1111,7 +1111,7 @@ static BOOL _isDeviatedFromRoute = false;
             speed = l.speed;
         
         if (n.distanceTo > 0  && n.directionInfo && !n.directionInfo.turnType->isSkipToSpeak() &&
-            [_voiceRouter isDistanceLess:speed dist:n.distanceTo etalon:_voiceRouter.PREPARE_DISTANCE * 0.75f defSpeed:0.f])
+            [_voiceRouter isDistanceLess:speed dist:n.distanceTo etalon:_voiceRouter.PREPARE_DISTANCE * 0.75f])
         {
             NSString *nm = n.directionInfo.streetName;
             NSString *rf = n.directionInfo.ref;

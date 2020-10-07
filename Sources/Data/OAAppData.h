@@ -33,6 +33,7 @@
 @property (readonly) OAObservable* underlayMapSourceChangeObservable;
 @property (readonly) OAObservable* overlayAlphaChangeObservable;
 @property (readonly) OAObservable* underlayAlphaChangeObservable;
+@property (readonly) OAObservable* mapLayersConfigurationChangeObservable;
 
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 
@@ -108,6 +109,7 @@
 - (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode;
 - (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode;
 
+- (void) resetProfileSettingsForMode:(OAApplicationMode *)mode;
 - (void) copyAppDataFrom:(OAApplicationMode *)sourceMode toMode:(OAApplicationMode *)targetMode;
 
 @end

@@ -7,10 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OAApplicationMode.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Map/UnresolvedMapStyle.h>
 
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {
@@ -52,6 +49,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 
 + (OAMapStyleSettings *) sharedInstance;
 
+- (void) loadParameters;
 - (NSArray<OAMapStyleParameter *> *) getAllParameters;
 - (OAMapStyleParameter *) getParameter:(NSString *)name;
 
@@ -65,5 +63,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 - (void) saveParameters;
 - (void) save:(OAMapStyleParameter *)parameter;
 - (void) save:(OAMapStyleParameter *)parameter refreshMap:(BOOL)refreshMap;
+
+-(void) resetMapStyleForAppMode:(NSString *)mapPresetName;
 
 @end

@@ -961,22 +961,6 @@ static NSDictionary *screenVoiceProviders;
             }
             break;
         }
-        case kNavigationSettingsScreenWakeOnVoice:
-        {
-            _titleView.text = OALocalizedString(@"wake_on_voice");
-            int selectedValue = [settings.wakeOnVoiceInt get:_am];
-            for (int i = 0; i < screenPowerSaveValues.count; i++)
-            {
-                [dataArr addObject:
-                 @{
-                   @"name" : screenPowerSaveValues[i],
-                   @"title" : screenPowerSaveNames[i],
-                   @"img" : screenPowerSaveValues[i].intValue == selectedValue ? @"menu_cell_selected.png" : @"",
-                   @"type" : kCellTypeCheck }
-                 ];
-            }
-            break;
-        }
         case kNavigationSettingsScreenVoiceGudanceLanguage:
         {
             _titleView.text = OALocalizedString(@"voice_provider");
@@ -1389,9 +1373,6 @@ static NSDictionary *screenVoiceProviders;
         case kNavigationSettingsScreenSwitchMapDirectionToCompass:
             [self selectSwitchMapDirectionToCompass:item];
             break;
-        case kNavigationSettingsScreenWakeOnVoice:
-            [self selectWakeOnVoice:item];
-            break;
         case kNavigationSettingsScreenVoiceGudanceLanguage:
             [self slectVoiceLanguage:item];
             break;
@@ -1462,10 +1443,6 @@ static NSDictionary *screenVoiceProviders;
     else if ([@"speed_for_map_to_direction_of_movement" isEqualToString:name])
     {
         settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSwitchMapDirectionToCompass applicationMode:_am];
-    }
-    else if ([@"wake_on_voice_int" isEqualToString:name])
-    {
-        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenWakeOnVoice applicationMode:_am];
     }
     else if ([@"voice_provider" isEqualToString:name])
     {
@@ -1572,12 +1549,6 @@ static NSDictionary *screenVoiceProviders;
 - (void) selectSwitchMapDirectionToCompass:(NSDictionary *)item
 {
     [[OAAppSettings sharedManager].switchMapDirectionToCompass set:((NSNumber *)item[@"name"]).doubleValue mode:_am];
-    [self backButtonClicked:nil];
-}
-
-- (void) selectWakeOnVoice:(NSDictionary *)item
-{
-    [[OAAppSettings sharedManager].wakeOnVoiceInt set:((NSNumber *)item[@"name"]).intValue mode:_am];
     [self backButtonClicked:nil];
 }
 

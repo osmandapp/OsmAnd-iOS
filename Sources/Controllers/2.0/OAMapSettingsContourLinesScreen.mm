@@ -244,39 +244,60 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [switchArr addObject:@{
         @"type" : kCellTypeSwitch
     }];
+    OAMapStyleParameter *param = nil;
     if ([self isContourLinesOn])
     {
         NSMutableArray *zoomArr = [NSMutableArray array];
-        [zoomArr addObject:@{
-            @"type" : kCellTypeValue,
-            @"title" : OALocalizedString(@"display_starting_at_zoom_level"),
-            @"parameter" : [_styleSettings getParameter:kContourLinesZoomLevel]
-        }];
-        if (_showZoomPicker)
+        param = [_styleSettings getParameter:kContourLinesZoomLevel];
+        if (param)
         {
             [zoomArr addObject:@{
-                @"type" : kCellTypePicker,
-                @"value" : _visibleZoomValues,
-                @"parameter" : [_styleSettings getParameter:kContourLinesZoomLevel]
+                @"type" : kCellTypeValue,
+                @"title" : OALocalizedString(@"display_starting_at_zoom_level"),
+                @"parameter" : param
             }];
+        }
+        if (_showZoomPicker)
+        {
+            param = [_styleSettings getParameter:kContourLinesZoomLevel];
+            if (param)
+            {
+                [zoomArr addObject:@{
+                    @"type" : kCellTypePicker,
+                    @"value" : _visibleZoomValues,
+                    @"parameter" : param
+                }];
+            }
         }
         
         NSMutableArray *linesArr = [NSMutableArray array];
-        [linesArr addObject:@{
-            @"type" : kCellTypeCollection,
-            @"title" : OALocalizedString(@"map_settings_color_scheme"),
-            @"parameter" : [_styleSettings getParameter:kContourLinesColorScheme]
-        }];
-        [linesArr addObject:@{
-            @"type" : kCellTypeSlider,
-            @"parameter" : [_styleSettings getParameter:kContourLinesWidth],
-            @"name" : OALocalizedString(@"map_settings_line_width")
-        }];
-        [linesArr addObject:@{
-            @"type" : kCellTypeSlider,
-            @"parameter" : [_styleSettings getParameter:kContourLinesDensity],
-            @"name" : OALocalizedString(@"map_settings_line_density")
-        }];
+        param = [_styleSettings getParameter:kContourLinesColorScheme];
+        if (param)
+        {
+            [linesArr addObject:@{
+                @"type" : kCellTypeCollection,
+                @"title" : OALocalizedString(@"map_settings_color_scheme"),
+                @"parameter" : param
+            }];
+        }
+        param = [_styleSettings getParameter:kContourLinesWidth];
+        if (param)
+        {
+            [linesArr addObject:@{
+                @"type" : kCellTypeSlider,
+                @"parameter" : param,
+                @"name" : OALocalizedString(@"map_settings_line_width")
+            }];
+        }
+        param = [_styleSettings getParameter:kContourLinesDensity];
+        if (param)
+        {
+            [linesArr addObject:@{
+                @"type" : kCellTypeSlider,
+                @"parameter" : param,
+                @"name" : OALocalizedString(@"map_settings_line_density")
+            }];
+        }
         
         NSMutableArray *availableMapsArr = [NSMutableArray array];
         for (OARepositoryResourceItem* item in _mapItems)

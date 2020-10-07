@@ -9,29 +9,5 @@
 #import "OAExitInfo.h"
 
 @implementation OAExitInfo
-{
-    NSString *_ref;
-    NSString *_exitStreetName;
-}
-
-- (NSString *) getRef
-{
-    return _ref;
-}
-
-- (void) setRef:(NSString *)ref
-{
-    _ref = ref;
-}
-
-- (NSString *) getExitStreetName
-{
-    return _exitStreetName;
-}
-
-- (void) setExitStreetName:(NSString *) exitStreetName
-{
-    _exitStreetName = exitStreetName;
-}
 
 @end

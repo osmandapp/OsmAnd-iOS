@@ -91,7 +91,7 @@
 "map_widget_compass" = "Compás";
 "map_widget_intermediate_distance" = "Destino intermedio";
 "map_widget_distance" = "Destination";
-"monitoring_control_start" = "GPX";
+"monitoring_control_start" = "Gravar";
 "map_widget_altitude" = "Altitude";
 "map_widget_battery" = "Nivel da batería";
 "map_widget_plain_time" = "Tempo actual";
@@ -245,7 +245,7 @@
 "traffic_warning_border_control" = "Control fronteirizo";
 "traffic_warning_payment" = "Portaxe ou peaxe";
 "traffic_warning_stop" = "Sinal de stop";
-"traffic_warning_calming" = "Lomba";
+"traffic_warning_calming" = "Redutor de velocidade";
 "traffic_warning_speed_camera" = "Radar de velocidade";
 "traffic_warning" = "Aviso do tráfico";
 "traffic_warning_railways" = "Cruzamento ferroviario";
@@ -299,7 +299,7 @@
 "shared_string_no" = "Non";
 "shared_string_yes" = "Si";
 "shared_string_save" = "Gardar";
-"shared_string_done" = "Done";
+"shared_string_done" = "Feito";
 "shared_string_update" = "Actualizar";
 "shared_string_install" = "Instalar";
 "shared_string_uninstall" = "Desinstalar";
@@ -965,7 +965,7 @@
 "osm_live_payment_renews_annually" = "Renovación anual";
 "osm_website" = "Sitio web";
 "my_places" = "Os meus lugares";
-"show_tunnels" = "Túneis";
+"show_tunnels" = "Túneles";
 "osm_live_payment_renews_quarterly" = "Renovación trimestral";
 "osmand_live_daily" = "Cada día";
 "translucent_pink" = "Rosa translúcido";

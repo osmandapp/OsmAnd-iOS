@@ -7,13 +7,14 @@
 //
 
 #import "OADeleteProfileBottomSheetViewController.h"
-#import "OABottomSheetHeaderDescrButtonCell.h"
+#import "OABottomSheetHeaderButtonCell.h"
 #import "OAMainSettingsViewController.h"
 #import "OARootViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
+#define kBottomSheetHeaderButtonCell @"OABottomSheetHeaderButtonCell"
 #define kButtonsDividerTag 150
 #define kButtonsTag 1
 
@@ -56,7 +57,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     
     [arr addObject:@{
-        @"type" : @"OABottomSheetHeaderDescrButtonCell",
+        @"type" : kBottomSheetHeaderButtonCell,
         @"title" : [NSString stringWithFormat:@"%@?", OALocalizedString(@"profile_alert_delete_title")],
         @"img" : @"ic_custom_remove_outlined",
         @"description" : @""
@@ -104,14 +105,14 @@
 {
     NSDictionary *item = _data[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderDescrButtonCell"])
+    if ([item[@"type"] isEqualToString:kBottomSheetHeaderButtonCell])
     {
-        static NSString* const identifierCell = @"OABottomSheetHeaderDescrButtonCell";
-        OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = kBottomSheetHeaderButtonCell;
+        OABottomSheetHeaderButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OABottomSheetHeaderDescrButtonCell *)[nib objectAtIndex:0];
+            cell = (OABottomSheetHeaderButtonCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -209,6 +210,13 @@
 - (void) dismiss
 {
     [super dismiss];
+    if (self.delegate)
+        [self.delegate onDeleteProfileDismissed];
+}
+
+- (void) dismiss:(id)sender
+{
+    [super dismiss:sender];
     if (self.delegate)
         [self.delegate onDeleteProfileDismissed];
 }

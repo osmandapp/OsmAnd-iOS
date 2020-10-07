@@ -540,8 +540,20 @@
 - (BOOL) doInBackground
 {
     [_importer importItems:_file items:_items];
-    return YES;
     
+    NSString *tempDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
+    [NSFileManager.defaultManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    for (OAProfileSettingsItem *item in _items)
+    {
+        NSString *bakupPatch = [[tempDir stringByAppendingPathComponent:item.appMode.stringKey] stringByAppendingPathExtension:@"osf"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:bakupPatch])
+        {
+            [[NSFileManager defaultManager] copyItemAtPath:_file toPath:bakupPatch error:nil];
+        }
+    }
+    
+    return YES;
 }
  
 - (void) onPostExecute:(BOOL)success

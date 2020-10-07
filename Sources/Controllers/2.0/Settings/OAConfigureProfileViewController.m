@@ -20,8 +20,10 @@
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditingSettingsViewController.h"
+#import "OAPluginResetBottomSheetViewController.h"
 #import "OASettingsHelper.h"
-
+#import "OAMapStyleSettings.h"
+#import "OAPOIFiltersHelper.h"
 #import "OAProfileGeneralSettingsViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
 #import "OARootViewController.h"
@@ -30,12 +32,16 @@
 #import "OACopyProfileBottomSheetView.h"
 #import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
+#import "OAMapWidgetRegistry.h"
 
 #define kSidePadding 16.
+#define BACKUP_INDEX_DIR @"backup"
+#define OSMAND_SETTINGS_FILE_EXT @"osf"
 
 #define kHeaderId @"TableViewSectionHeader"
 #define kSwitchCell @"OASettingSwitchCell"
 #define kIconTitleDescrCell @"OAIconTextDescCell"
+#define kCellTypeAction @"OATitleRightIconCell"
 #define kTitleRightIconCell @"OATitleRightIconCell"
 
 typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
@@ -44,7 +50,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate>
+@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate, OAPluginResetBottomSheetDelegate, OASettingsImportExportDelegate>
 
 @property (strong, nonatomic) OACopyProfileBottomSheetView* cpyProfileView;
 
@@ -63,6 +69,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     
     EOADashboardScreenType _screenToOpen;
     UIView *_cpyProfileViewUnderlay;
+    NSString *_importedFileName;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)mode
@@ -189,19 +196,26 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         @"img" : @"ic_custom_copy",
         @"key" : @"copy_profile"
     }];
-    [settingsActions addObject:@{
-        @"type" : kTitleRightIconCell,
-        @"title" : OALocalizedString(@"reset_to_default"),
-        @"img" : @"ic_custom_reset",
-        @"key" : @"reset_to_default"
-    }];
+    
+    if (![_appMode isCustomProfile] || ([_appMode isCustomProfile] && [self getBackupFileForCustomMode:_appMode.stringKey]))
+    {
+        [settingsActions addObject:@{
+            @"type" : kTitleRightIconCell,
+            @"title" : OALocalizedString(@"reset_to_default"),
+            @"img" : @"ic_custom_reset",
+            @"key" : @"reset_to_default"
+        }];
+    }
+    
     if ([_appMode isCustomProfile])
+    {
         [settingsActions addObject:@{
            @"type" : kTitleRightIconCell,
             @"title" : OALocalizedString(@"profile_alert_delete_title"),
             @"img" : @"ic_custom_remove_outlined",
             @"key" : @"delete_profile"
         }];
+    }
     [data addObject:settingsActions];
     [sectionHeaderTitles addObject:OALocalizedString(@"actions")];
     [sectionFooterTitles addObject:OALocalizedString(@"export_profile_descr")];
@@ -282,8 +296,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) onModeSwitchPressed:(UISwitch *)sender
 {
     [OAApplicationMode changeProfileAvailability:_appMode isSelected:sender.isOn];
-    if (self.delegate)
-        [self.delegate onModeAvailabilityChanged:_appMode isOn:sender.isOn];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     });
@@ -300,6 +312,41 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     else
     {
         [self openDashboardScreen:type];
+    }
+}
+
+- (void) showCopyProfileView
+{
+    CGRect frame = self.cpyProfileView.frame;
+    frame.origin.y = DeviceScreenHeight + 10.0;
+    self.cpyProfileView.frame = frame;
+    self.cpyProfileView.delegate = self;
+    [self.cpyProfileView.layer removeAllAnimations];
+    if ([self.view.subviews containsObject:self.cpyProfileView])
+        [self.cpyProfileView removeFromSuperview];
+    [self addUnderlay];
+    [self.view addSubview:self.cpyProfileView];
+    [self.cpyProfileView show:YES];
+}
+
+- (void) addUnderlay
+{
+    _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
+    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.blackColor];
+    [_cpyProfileViewUnderlay setAlpha:0.2];
+    
+    UITapGestureRecognizer *underlayTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUnderlayTapped)];
+    [_cpyProfileViewUnderlay addGestureRecognizer:underlayTap];
+    [self.view addSubview:_cpyProfileViewUnderlay];
+}
+
+
+- (void) onUnderlayTapped
+{
+    if ([self.cpyProfileView superview])
+    {
+        [_cpyProfileViewUnderlay removeFromSuperview];
+        [self.cpyProfileView hide:YES];
     }
 }
 
@@ -435,6 +482,23 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:kCellTypeAction])
+    {
+        static NSString* const identifierCell = kCellTypeAction;
+        OATitleRightIconCell *cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeAction owner:self options:nil];
+            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
+            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+        }
+        cell.titleView.text = item[@"title"];
+        [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        return cell;
+    }
     else if ([item[@"type"] isEqualToString:kTitleRightIconCell])
     {
         OATitleRightIconCell* cell;
@@ -503,7 +567,9 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
     else if ([key isEqualToString:@"reset_to_default"])
     {
-        
+        OAPluginResetBottomSheetViewController *screen = [[OAPluginResetBottomSheetViewController alloc] initWithParam:_appMode];
+        screen.delegate = self;
+        [screen show];
     }
     else if ([key isEqualToString:@"delete_profile"])
     {
@@ -521,44 +587,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     {
         OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
         [self.navigationController pushViewController:settingsViewController animated:YES];
-
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (void) showCopyProfileView
-{
-    CGRect frame = self.cpyProfileView.frame;
-    frame.origin.y = DeviceScreenHeight + 10.0;
-    self.cpyProfileView.frame = frame;
-    self.cpyProfileView.delegate = self;
-    [self.cpyProfileView.layer removeAllAnimations];
-    if ([self.view.subviews containsObject:self.cpyProfileView])
-        [self.cpyProfileView removeFromSuperview];
-    [self addUnderlay];
-    [self.view addSubview:self.cpyProfileView];
-    [self.cpyProfileView show:YES];
-}
-
-- (void) addUnderlay
-{
-    _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
-    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.blackColor];
-    [_cpyProfileViewUnderlay setAlpha:0.2];
-
-    UITapGestureRecognizer *underlayTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUnderlayTapped)];
-    [_cpyProfileViewUnderlay addGestureRecognizer:underlayTap];
-    [self.view addSubview:_cpyProfileViewUnderlay];
-}
-
-
-- (void) onUnderlayTapped
-{
-    if ([self.cpyProfileView superview])
-    {
-        [_cpyProfileViewUnderlay removeFromSuperview];
-        [self.cpyProfileView hide:YES];
-    }
 }
 
 #pragma mark - OACopyProfileBottomSheetDelegate
@@ -581,6 +611,108 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) onDeleteProfileDismissed
 {
     [_cpyProfileViewUnderlay removeFromSuperview];
+}
+
+#pragma mark - OAPluginResetBottomSheetDelegate
+
+- (void) onPluginSettingsReset
+{
+    [self resetAppModePrefs: _appMode];
+}
+
+- (void) resetAppModePrefs:(OAApplicationMode *)appMode
+{
+    if (appMode)
+    {
+        if (appMode.isCustomProfile)
+        {
+            [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
+            NSString *fileName = [self getBackupFileForCustomMode: appMode.stringKey];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:fileName])
+                [self restoreCustomModeFromFile:fileName];
+        }
+        else
+        {
+            [OAAppSettings.sharedManager resetPreferencesForProfile:appMode];
+            [self resetMapStylesForBaseProfile:appMode];
+            [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
+            [self updateCopiedOrResetPrefs];
+        }
+    }
+}
+
+- (void) restoreCustomModeFromFile:(NSString *)filePath
+{
+    _importedFileName = filePath;
+    [OASettingsHelper.sharedInstance collectSettings:filePath latestChanges:@"" version:1 delegate:self];
+}
+
+- (void) resetMapStylesForBaseProfile:(OAApplicationMode *)appMode
+{
+    NSString *renderer = [OAAppSettings.sharedManager.renderer get:appMode];
+    NSString *resName = [OAProfileSettingsItem getRendererByName:renderer];
+    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:resName mapPresetName:appMode.variantKey];
+    [styleSettings resetMapStyleForAppMode:appMode.variantKey];
+}
+
+
+- (void) importBackupSettingsItems:(nonnull NSString *)file items:(nonnull NSArray<OASettingsItem *> *)items
+{
+    [OASettingsHelper.sharedInstance importSettings:file items:items latestChanges:@"" version:1 delegate:self];
+}
+
+- (void) updateCopiedOrResetPrefs
+{
+    [[OAPOIFiltersHelper sharedInstance] loadSelectedPoiFilters];
+    [[OARootViewController instance].mapPanel.mapWidgetRegistry updateVisibleWidgets];
+    [OAMapStyleSettings.sharedInstance loadParameters];
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:nil];
+    [self updateView];
+}
+
+- (void) updateView
+{
+    self.titleLabel.text = _appMode.toHumanString;
+    [self setupTableHeaderView];
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+- (NSString *) getBackupFileForCustomMode:(NSString *)appModeKey
+{
+    NSString *fileName = [appModeKey stringByAppendingPathExtension:OSMAND_SETTINGS_FILE_EXT];
+    NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:BACKUP_INDEX_DIR];
+    [self createDirectoryIfNotExist:backupDir];
+    return [backupDir stringByAppendingPathComponent:fileName];
+}
+
+- (void) createDirectoryIfNotExist:(NSString *)path
+{
+    [NSFileManager.defaultManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+}
+
+- (void) showAlertMessage:(NSString *)message
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark - OASettingsImportExportDelegate
+
+- (void)onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(nonnull NSArray<OASettingsItem *> *)items {
+    if (succeed)
+    {
+        for (OASettingsItem *item in items)
+            item.shouldReplace = YES;
+        [self importBackupSettingsItems:_importedFileName items:items];
+    }
+}
+
+- (void)onSettingsImportFinished:(BOOL)succeed items:(nonnull NSArray<OASettingsItem *> *)items {
+    [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
+    [self updateCopiedOrResetPrefs];
 }
 
 @end

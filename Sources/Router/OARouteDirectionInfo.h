@@ -15,6 +15,8 @@
 #include <turnType.h>
 #include <binaryRead.h>
 
+@class OAExitInfo;
+
 @interface OARouteDirectionInfo : NSObject
 // location when you should action (turn or go ahead)
 @property (nonatomic) int routePointOffset;

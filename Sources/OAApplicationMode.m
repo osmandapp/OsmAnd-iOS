@@ -100,30 +100,44 @@ static OAApplicationMode *_SKI;
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
     _CAR.descr = OALocalizedString(@"base_profile_descr_car");
+    _CAR.baseMinSpeed = 2.78;
+    _CAR.baseMaxSpeed = 54.17;
     [_values addObject:_CAR];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
     _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
+    _BICYCLE.baseMinSpeed = 0.7;
+    _BICYCLE.baseMaxSpeed = 13.76;
     [_values addObject:_BICYCLE];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
     _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
+    _PEDESTRIAN.baseMinSpeed = 0.28;
+    _PEDESTRIAN.baseMaxSpeed = 4.16;
     [_values addObject:_PEDESTRIAN];
     
     _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
     _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
+    _PUBLIC_TRANSPORT.baseMinSpeed = 0.28;
+    _PUBLIC_TRANSPORT.baseMaxSpeed = 41.66;
     [_values addObject:_PUBLIC_TRANSPORT];
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
     _AIRCRAFT.descr = OALocalizedString(@"base_profile_descr_aircraft");
+    _AIRCRAFT.baseMinSpeed = 1.;
+    _AIRCRAFT.baseMaxSpeed = 300.;
     [_values addObject:_AIRCRAFT];
     
     _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
     _BOAT.descr = OALocalizedString(@"base_profile_descr_boat");
+    _BOAT.baseMinSpeed = 0.42;
+    _BOAT.baseMaxSpeed = 8.33;
     [_values addObject:_BOAT];
     
     _SKI = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_skiing") stringKey:@"ski"];
     _SKI.descr = OALocalizedString(@"app_mode_skiing");
+    _SKI.baseMinSpeed = 0.42;
+    _SKI.baseMaxSpeed = 62.5;
     [_values addObject:_SKI];
 }
 
@@ -600,6 +614,8 @@ static OAApplicationMode *_SKI;
         [mode setLocationIcon:appMode.getLocationIcon];
         [mode setNavigationIcon:appMode.getNavigationIcon];
         [mode setOrder:appMode.getOrder];
+        [mode setBaseMinSpeed:appMode.baseMinSpeed];
+        [mode setBaseMaxSpeed:appMode.baseMaxSpeed];
     }
     else if (![_values containsObject:appMode])
     {
@@ -627,6 +643,17 @@ static OAApplicationMode *_SKI;
         [settings setApplicationMode:_DEFAULT];
     [_cachedFilteredValues removeObjectsInArray:modes];
     [self saveCustomAppModesToSettings];
+    
+    for (OAApplicationMode *mode in modes) {
+        if (mode.isCustomProfile)
+        {
+            NSString *backupDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
+            NSString *backupItemFilePath = [[backupDir stringByAppendingPathComponent:mode.stringKey] stringByAppendingPathExtension:@"osf"];
+            [NSFileManager.defaultManager removeItemAtPath:backupItemFilePath error:nil];
+        }
+    }
+
+    [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
 }
 
 + (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected

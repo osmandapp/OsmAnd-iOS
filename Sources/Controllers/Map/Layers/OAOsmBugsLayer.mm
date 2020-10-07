@@ -63,6 +63,10 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     [self.mapView addTiledSymbolsProvider:_notesMapProvider];
 }
 
+- (BOOL)isVisible
+{
+    return _plugin.isActive && [[OAAppSettings sharedManager].mapSettingShowOnlineNotes get];
+}
 
 - (void) show
 {

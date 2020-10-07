@@ -12,9 +12,7 @@
 
 @interface OAExitInfo : NSObject
 
-- (NSString *) getRef;
-- (void) setRef:(NSString *)ref;
-- (NSString *) getExitStreetName;
-- (void) setExitStreetName:(NSString *)exitStreetName;
+@property (nonatomic) NSString* ref;
+@property (nonatomic) NSString* exitStreetName;
 
 @end

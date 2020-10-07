@@ -10,15 +10,7 @@
 
 @class OAApplicationMode;
 
-@protocol OAConfigureProfileDelegate <NSObject>
-
-- (void) onModeAvailabilityChanged:(OAApplicationMode *)mode isOn:(BOOL)isOn;
-
-@end
-
 @interface OAConfigureProfileViewController : OABaseBigTitleSettingsViewController
-
-@property (nonatomic) id<OAConfigureProfileDelegate> delegate;
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)mode;
 

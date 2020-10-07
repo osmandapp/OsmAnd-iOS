@@ -578,10 +578,10 @@ public enum GPXDataSetAxisType: String {
         let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
         let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS)
         let convEle: Double = useFeet ? 3.28084 : 1.0
-        let totalDistance: Float = analysis.totalDistance;
+        let totalDistance: Double = Double(analysis.totalDistance)
         
         let xAxis: XAxis = chartView.xAxis
-        let divX: Double = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
+        let divX: Double = setupAxisDistance(axisBase: xAxis, meters: totalDistance)
         
         let mainUnitY: String = "%"
         
@@ -620,13 +620,13 @@ public enum GPXDataSetAxisType: String {
         
         var step: Double = 5
         var l: Int = 10
-        while (l > 0 && Double(totalDistance) / step > GpxUIHelper.MAX_CHART_DATA_ITEMS) {
-            step = max(step, Double(totalDistance) / Double(values.count * l))
+        while (l > 0 && totalDistance / step > GpxUIHelper.MAX_CHART_DATA_ITEMS) {
+            step = max(step, totalDistance / Double(values.count * l))
             l -= 1
         }
         
-        var calculatedDist: Array<Double> = Array(repeating: 0, count: Int(Double(totalDistance) / step) + 1)
-        var calculatedH: Array<Double> = Array(repeating: 0, count: Int(Double(totalDistance) / step) + 1)
+        var calculatedDist: Array<Double> = Array(repeating: 0, count: Int(totalDistance / step) + 1)
+        var calculatedH: Array<Double> = Array(repeating: 0, count: Int(totalDistance / step) + 1)
         var nextW: Int = 0
         for k in 0...(calculatedDist.count - 1) {
             if (k > 0) {
@@ -642,15 +642,15 @@ public enum GPXDataSetAxisType: String {
         
         let slopeProximity: Double = max(100, step * 2)
         
-        if (Double(totalDistance) - slopeProximity < 0) {
+        if (totalDistance - slopeProximity < 0) {
             if (useRightAxis) {
                 yAxis.enabled = false
             }
             return nil;
         }
         
-        var calculatedSlopeDist: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step)) + 1)
-        var calculatedSlope: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step)) + 1)
+        var calculatedSlopeDist: Array<Double> = Array(repeating: 0, count: Int(((totalDistance - slopeProximity) / step)) + 1)
+        var calculatedSlope: Array<Double> = Array(repeating: 0, count: Int(((totalDistance - slopeProximity) / step)) + 1)
         let index: Int = Int((slopeProximity / step) / 2)
         for k in 0...(calculatedSlopeDist.count - 1) {
             calculatedSlopeDist[k] = calculatedDist[index + k]

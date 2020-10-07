@@ -1421,7 +1421,7 @@
         if (![_types isRegisteredType:type])
             type = _types.otherPoiCategory;
         
-        NSSet<NSString *> *set = [_acceptedTypes objectForKey:type];
+        NSSet<NSString *> *set = [acceptedTypes objectForKey:type];
         if (!set)
             return NO;
         
@@ -1435,7 +1435,7 @@
         return NO;
         
     } getTypesFunction:^NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *{
-        return _acceptedTypes;
+        return acceptedTypes;
     }];
 }
 
@@ -1480,16 +1480,11 @@
     QString lang = QString::fromNSString([[phrase getSettings] getLang]);
     bool transliterate = [[phrase getSettings] isTransliterate];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
-
-    OASearchWord *lastSelectedWord = [phrase getLastSelectedWord];
-    NSString *resId = lastSelectedWord.result.resourceId;
-    const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
-    const auto& dataInterface = obfsCollection->obtainDataInterface({r});
     
     std::shared_ptr<const OsmAnd::Street> s;
     int priority = SEARCH_BUILDING_BY_STREET_PRIORITY;
     if ([phrase isLastWord:STREET])
-        s = ((OAStreet *)lastSelectedWord.result.object).street;
+        s = ((OAStreet *)phrase.getLastSelectedWord.result.object).street;
     
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]
@@ -1500,8 +1495,11 @@
 
     if ([OASearchCoreFactory isLastWordCityGroup:phrase])
     {
+        const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(phrase.getLastSelectedWord.result.resourceId));
+        const auto& dataInterface = obfsCollection->obtainDataInterface({r});
+        
         priority = SEARCH_BUILDING_BY_CITY_PRIORITY;
-        const auto& city = ((OACity *)lastSelectedWord.result.object).city;
+        const auto& city = ((OACity *)phrase.getLastSelectedWord.result.object).city;
         bool res = dataInterface->preloadStreets({std::const_pointer_cast<OsmAnd::StreetGroup>(city)}, ctrl);
         if (res)
         {
@@ -1526,6 +1524,10 @@
     
     if (s)
     {
+        NSString *resId = phrase.getLastSelectedWord.result.resourceId;
+        const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+        const auto& dataInterface = obfsCollection->obtainDataInterface({r});
+        
         if (_cacheBuilding != s)
         {
             _cacheBuilding = s;

@@ -29,6 +29,8 @@
 - (OACommandBuilder *) prepareMakeUT:(double)dist streetName:(id)streetName;
 - (OACommandBuilder *) turn:(NSString *)param streetName:(id)streetName;
 - (OACommandBuilder *) turn:(NSString *)param dist:(double)dist streetName:(id)streetName;
+- (OACommandBuilder *) takeExit:(NSString *)turnType exitString:(NSString *)exitString exitInt:(NSInteger)exitInt streetName:(id)streetName;
+- (OACommandBuilder *) takeExit:(NSString *)turnType dist:(double)dist exitString:(NSString *)exitString exitInt:(NSInteger)exitInt streetName:(id)streetName;
 
 /**
  *

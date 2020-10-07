@@ -121,7 +121,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     
     for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
     {
-        if ([am.name isEqualToString:_targetAppMode.name])
+        if ([am.stringKey isEqualToString:_targetAppMode.stringKey])
             continue;
         [dataArr addObject:@{
             @"type" : kIconTitleIconRoundCell,
@@ -354,7 +354,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
         if (p)
         {
             p.value = param.value;
-            [targetStyleSettings save:p];
+            [targetStyleSettings save:p refreshMap:NO];
         }
     }
 }
@@ -409,6 +409,10 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     [_targetAppMode setIconColor:_sourceAppMode.getIconColor];
     [_targetAppMode setLocationIcon:_sourceAppMode.getLocationIcon];
     [_targetAppMode setNavigationIcon:_sourceAppMode.getNavigationIcon];
+    [_targetAppMode setBaseMinSpeed:_sourceAppMode.baseMinSpeed];
+    [_targetAppMode setBaseMaxSpeed:_sourceAppMode.baseMaxSpeed];
+    
+    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
 }
 
 #pragma mark - Table View

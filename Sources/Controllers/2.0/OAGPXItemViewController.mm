@@ -1233,8 +1233,8 @@
             case 2: // Up/Down
             {
                 [cell.textView setText:OALocalizedString(@"gpx_updown")];
-                [cell.elev1View setText:[_app getFormattedAlt:self.gpx.diffElevationDown]];
-                [cell.elev2View setText:[_app getFormattedAlt:self.gpx.diffElevationUp]];
+                [cell.elev1View setText:[_app getFormattedAlt:self.gpx.diffElevationUp]];
+                [cell.elev2View setText:[_app getFormattedAlt:self.gpx.diffElevationDown]];
                 cell.showArrows = YES;
                 cell.showUpDown = YES;
                 break;

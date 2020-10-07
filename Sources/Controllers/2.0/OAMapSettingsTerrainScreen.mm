@@ -845,11 +845,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return kEstimatedRowHeight;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [indexPath isEqual:_pickerIndexPath] ? 162 : UITableViewAutomaticDimension;
-}
-
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self onItemClicked:indexPath];

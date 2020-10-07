@@ -631,13 +631,9 @@ static const NSInteger panoImageFilterSection = 3;
     {
         return [OAIconTitleButtonCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
-    else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"])
+    else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"] || [indexPath isEqual:_datePickerIndexPath])
     {
         return UITableViewAutomaticDimension;
-    }
-    else if ([indexPath isEqual:_datePickerIndexPath])
-    {
-        return 162.0;
     }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {

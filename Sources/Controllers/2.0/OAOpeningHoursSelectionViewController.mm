@@ -426,10 +426,8 @@ static const NSInteger timeSectionIndex = 1;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeSwitch])
+    if ([item[@"type"] isEqualToString:kCellTypeSwitch] || [indexPath isEqual:_datePickerIndexPath])
         return UITableViewAutomaticDimension;
-    if ([indexPath isEqual:_datePickerIndexPath])
-        return 162.0;
     else
         return 44.0;
 }

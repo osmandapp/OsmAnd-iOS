@@ -17,9 +17,6 @@
                 <subviews>
                     <pickerView contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pge-FJ-7m6">
                         <rect key="frame" x="0.0" y="0.0" width="426" height="162"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="162" id="nch-Kk-qDj"/>
-                        </constraints>
                     </pickerView>
                 </subviews>
                 <constraints>

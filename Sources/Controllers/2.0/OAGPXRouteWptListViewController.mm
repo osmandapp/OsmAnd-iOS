@@ -18,7 +18,7 @@
 #import "OAGPXRouteDocument.h"
 #import "OAGPXRouter.h"
 #import "OAGPXRouteWaypointTableViewCell.h"
-#import "OAIconTextExTableViewCell.h"
+#import "OAIconTextTableViewCell.h"
 #import "MGSwipeButton.h"
 #import "MGSwipeTableCell.h"
 #import "OAGPXRouteGroupsViewController.h"
@@ -455,14 +455,14 @@
 {
     if (indexPath.section == _sectionIndexGroups)
     {
-        static NSString* const reusableIdentifierPoint = @"OAIconTextExTableViewCell";
+        static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
         
-        OAIconTextExTableViewCell* cell;
-        cell = (OAIconTextExTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        OAIconTextTableViewCell* cell;
+        cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextExCell" owner:self options:nil];
-            cell = (OAIconTextExTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 2;
         }
         

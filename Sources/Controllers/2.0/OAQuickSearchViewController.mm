@@ -18,7 +18,6 @@
 #import "OAPOIHelper.h"
 #import "OAPointDescCell.h"
 #import "OAIconTextTableViewCell.h"
-#import "OAIconTextExTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"

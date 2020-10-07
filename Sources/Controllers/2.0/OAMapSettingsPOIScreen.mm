@@ -15,7 +15,7 @@
 #import "OACustomSearchPoiFilter.h"
 #import "OAUtilities.h"
 #import "OAIconTextDescCell.h"
-#import "OAIconTextExTableViewCell.h"
+#import "OAIconTextTableViewCell.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAIconButtonCell.h"
 #import "OAPOIUIFilter.h"
@@ -133,12 +133,12 @@
             }
             else if ([res.object isKindOfClass:[OAPOICategory class]])
             {
-                OAIconTextExTableViewCell* cell;
-                cell = (OAIconTextExTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextExTableViewCell"];
+                OAIconTextTableViewCell* cell;
+                cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextExCell" owner:self options:nil];
-                    cell = (OAIconTextExTableViewCell *)[nib objectAtIndex:0];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                    cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                     cell.textView.numberOfLines = 0;
                 }
                 

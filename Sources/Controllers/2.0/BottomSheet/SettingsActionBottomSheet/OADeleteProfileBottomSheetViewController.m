@@ -214,5 +214,12 @@
         [self.delegate onDeleteProfileDismissed];
 }
 
+- (void) dismiss:(id)sender
+{
+    [super dismiss:sender];
+    if (self.delegate)
+        [self.delegate onDeleteProfileDismissed];
+}
+
 @end
 

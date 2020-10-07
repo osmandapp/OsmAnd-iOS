@@ -14,6 +14,4 @@
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 
-+ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
-
 @end

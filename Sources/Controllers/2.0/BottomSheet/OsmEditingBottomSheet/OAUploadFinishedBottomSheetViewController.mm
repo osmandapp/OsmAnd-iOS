@@ -180,7 +180,7 @@
     }
     else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"])
     {
-        return [OABottomSheetHeaderIconCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
+        return UITableViewAutomaticDimension;
     }
     else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {

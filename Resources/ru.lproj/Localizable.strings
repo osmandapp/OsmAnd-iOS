@@ -1840,7 +1840,7 @@
 "global_settings_descr" = "Влияет на всё приложение.";
 "global_settings" = "Глобальные настройки";
 "angular_measurment_units" = "Угловые единицы измерения";
-"units_of_speed" = "Единицы измерения скорости";
+"units_of_speed" = "Единицы скорости";
 "meters" = "м";
 "tones" = "тонны";
 "announce" = "Объявлять";

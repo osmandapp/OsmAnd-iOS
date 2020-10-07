@@ -27,7 +27,7 @@
 #import <MBProgressHUD.h>
 #import "OAAutoObserverProxy.h"
 #import "OAImageDescTableViewCell.h"
-#import "OAButtonIconTableViewCell.h"
+#import "OATitleRightIconCell.h"
 #import "OAMapViewController.h"
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
@@ -646,19 +646,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
-        static NSString* const identifierCell = @"OAButtonIconTableViewCell";
-        OAButtonIconTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = @"OATitleRightIconCell";
+        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonIconTableViewCell" owner:self options:nil];
-            cell = (OAButtonIconTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];;
-            [cell.buttonView setTitle:item[@"title"] forState:UIControlStateNormal];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleRightIconCell" owner:self options:nil];
+            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
+            cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.titleView.text = item[@"title"];
+            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
-        [cell.buttonView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-        [cell.buttonView addTarget:self action:@selector(linkButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        
         return cell;
     }
     else
@@ -772,16 +771,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
     }
+    else if ([item[@"type"] isEqualToString:kCellTypeButton])
+    {
+        [self linkButtonPressed];
+    }
 }
 
-- (void) linkButtonPressed:(UIButton*)sender
+- (void) linkButtonPressed
 {
-    if (sender)
-    {
-        NSURL *url = [NSURL URLWithString:@"https://osmand.net/features/contour-lines-plugin"];
-        if ([[UIApplication sharedApplication] canOpenURL:url])
-            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
-    }
+    NSURL *url = [NSURL URLWithString:@"https://osmand.net/features/contour-lines-plugin"];
+    if ([[UIApplication sharedApplication] canOpenURL:url])
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
 
 - (void) widthChanged:(UISlider *)sender

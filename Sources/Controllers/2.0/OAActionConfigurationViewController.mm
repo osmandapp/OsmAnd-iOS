@@ -23,7 +23,7 @@
 #import "OAEditGroupViewController.h"
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
-#import "OABottomSheetActionCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OAButtonCell.h"
 #import "OAActionAddCategoryViewController.h"
 #import "OAQuickSearchListItem.h"
@@ -50,7 +50,7 @@
 #define kCellTypeSwitch @"OASwitchTableViewCell"
 #define kTextInputIconCell @"OATextInputIconCell"
 #define kIconTitleValueCell @"OAIconTitleValueCell"
-#define kBottomSheetActionCell @"OABottomSheetActionCell"
+#define kBottomSheetActionCell @"OAMenuSimpleCell"
 #define kButtonCell @"OAButtonCell"
 #define kTitleDescrDraggableCell @"OATitleDescrDraggableCell"
 #define kTextInputFloatingCellWithIcon @"OATextInputFloatingCellWithIcon"
@@ -597,13 +597,13 @@
     else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
     {
         static NSString* const identifierCell = kBottomSheetActionCell;
-        OABottomSheetActionCell* cell = nil;
+        OAMenuSimpleCell* cell = nil;
         
         cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetActionCell owner:self options:nil];
-            cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
+            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         }
         
         if (cell)
@@ -615,11 +615,13 @@
             
             cell.textView.text = item[@"title"];
             NSString *desc = item[@"descr"];
-            cell.descView.text = desc;
-            cell.descView.hidden = desc.length == 0;
-            [cell.iconView setTintColor:UIColorFromRGB(color_icon_color)];
-            cell.iconView.image = img;
+            cell.descriptionView.text = desc;
+            cell.descriptionView.hidden = desc.length == 0;
+            [cell.imgView setTintColor:UIColorFromRGB(color_icon_color)];
+            cell.imgView.image = img;
             cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
         }
         return cell;
     }
@@ -783,13 +785,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kIconTitleValueCell])
+    if ([item[@"type"] isEqualToString:kIconTitleValueCell] || [item[@"type"] isEqualToString:kBottomSheetActionCell])
     {
         return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
-    {
-        return [OABottomSheetActionCell getHeight:item[@"title"] value:nil cellWidth:tableView.bounds.size.width];
     }
     else if ([item[@"type"] isEqualToString:kTitleDescrDraggableCell])
     {
@@ -1042,7 +1040,7 @@
             [newItems addObject:@{
                                   @"title" : filter.getName,
                                   @"value" : filter.filterId,
-                                  @"type" : @"OABottomSheetActionCell",
+                                  @"type" : @"OAMenuSimpleCell",
                                   @"img" : iconId
                                   }];
             [titles addObject:filter.getName];
@@ -1053,7 +1051,7 @@
             [newItems addObject:@{
                                   @"title" : filter.nameLocalized,
                                   @"value" : [STD_PREFIX stringByAppendingString:filter.name],
-                                  @"type" : @"OABottomSheetActionCell",
+                                  @"type" : @"OAMenuSimpleCell",
                                   @"img" : filter.name
                                   }];
             [titles addObject:filter.nameLocalized];

@@ -103,7 +103,7 @@ static OAQuickActionType *TYPE;
         [items addObject:@{
                            @"title" : filter.getName,
                            @"value" : filter.filterId,
-                           @"type" : @"OABottomSheetActionCell",
+                           @"type" : @"OAMenuSimpleCell",
                            @"img" : iconId
                            }];
     }

@@ -22,7 +22,7 @@
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmNotePoint.h"
-#import "OABottomSheetActionCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OABottomSheetTwoButtonsViewController.h"
 #import "OAOsmEditingBottomSheetViewController.h"
 #import "OAOsmBugsRemoteUtil.h"
@@ -34,7 +34,7 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-#define kBottomSheetActionCell @"OABottomSheetActionCell"
+#define kBottomSheetActionCell @"OAMenuSimpleCell"
 
 @interface OAOsmEditActionsBottomSheetScreen ()
 
@@ -115,14 +115,14 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    
+    // TODO: migate to autolayout
     if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
     {
         return [OABottomSheetHeaderCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
     }
     else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
     {
-        return [OABottomSheetActionCell getHeight:item[@"title"] value:item[@"descr"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else
     {
@@ -167,13 +167,13 @@
     else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
     {
         static NSString* const identifierCell = kBottomSheetActionCell;
-        OABottomSheetActionCell* cell = nil;
+        OAMenuSimpleCell* cell = nil;
         
         cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetActionCell owner:self options:nil];
-            cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
+            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
         }
         
@@ -186,10 +186,12 @@
             
             cell.textView.text = item[@"title"];
             NSString *desc = item[@"descr"];
-            cell.descView.text = desc;
-            cell.descView.hidden = desc.length == 0;
-            [cell.iconView setTintColor:UIColorFromRGB(color_icon_color)];
-            cell.iconView.image = img;
+            cell.descriptionView.text = desc;
+            cell.descriptionView.hidden = desc.length == 0;
+            [cell.imgView setTintColor:UIColorFromRGB(color_icon_color)];
+            cell.imgView.image = img;
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
         }
         
         return cell;

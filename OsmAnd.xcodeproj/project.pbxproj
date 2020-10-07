@@ -5506,10 +5506,6 @@
 		DAAE21E72269D6010006E016 /* ic_custom_my_places@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE21E22269D6000006E016 /* ic_custom_my_places@3x.png */; };
 		DAAE21E82269D6010006E016 /* ic_custom_my_places@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE21E32269D6010006E016 /* ic_custom_my_places@2x.png */; };
 		DAAE21E92269D6010006E016 /* ic_custom_my_places@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE21E32269D6010006E016 /* ic_custom_my_places@2x.png */; };
-		DAAE21EB2269F3380006E016 /* OABottomSheetActionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAAE21EA2269F3370006E016 /* OABottomSheetActionCell.xib */; };
-		DAAE21EC2269F3380006E016 /* OABottomSheetActionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAAE21EA2269F3370006E016 /* OABottomSheetActionCell.xib */; };
-		DAAE21EF2269F3AE0006E016 /* OABottomSheetActionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAE21ED2269F3AD0006E016 /* OABottomSheetActionCell.m */; };
-		DAAE21F02269F3AE0006E016 /* OABottomSheetActionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAE21ED2269F3AD0006E016 /* OABottomSheetActionCell.m */; };
 		DAB048F221CB729100275456 /* ic_action_plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB048EF21CB729000275456 /* ic_action_plus@2x.png */; };
 		DAB048F321CB729100275456 /* ic_action_plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB048EF21CB729000275456 /* ic_action_plus@2x.png */; };
 		DAB048F421CB729100275456 /* ic_action_plus.png in Resources */ = {isa = PBXBuildFile; fileRef = DAB048F021CB729000275456 /* ic_action_plus.png */; };
@@ -9801,9 +9797,6 @@
 		DAAE21E12269D6000006E016 /* ic_custom_my_places.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_my_places.png; path = Resources/Icons/ic_custom_my_places.png; sourceTree = "<group>"; };
 		DAAE21E22269D6000006E016 /* ic_custom_my_places@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_my_places@3x.png"; path = "Resources/Icons/ic_custom_my_places@3x.png"; sourceTree = "<group>"; };
 		DAAE21E32269D6010006E016 /* ic_custom_my_places@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_my_places@2x.png"; path = "Resources/Icons/ic_custom_my_places@2x.png"; sourceTree = "<group>"; };
-		DAAE21EA2269F3370006E016 /* OABottomSheetActionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OABottomSheetActionCell.xib; path = Resources/Controllers/Cells/OABottomSheetActionCell.xib; sourceTree = "<group>"; };
-		DAAE21ED2269F3AD0006E016 /* OABottomSheetActionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OABottomSheetActionCell.m; path = Controllers/Cells/OABottomSheetActionCell.m; sourceTree = "<group>"; };
-		DAAE21EE2269F3AD0006E016 /* OABottomSheetActionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OABottomSheetActionCell.h; path = Controllers/Cells/OABottomSheetActionCell.h; sourceTree = "<group>"; };
 		DAB048EF21CB729000275456 /* ic_action_plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_plus@2x.png"; path = "Resources/Icons/ic_action_plus@2x.png"; sourceTree = "<group>"; };
 		DAB048F021CB729000275456 /* ic_action_plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_plus.png; path = Resources/Icons/ic_action_plus.png; sourceTree = "<group>"; };
 		DAB048F121CB729000275456 /* ic_action_plus@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_plus@3x.png"; path = "Resources/Icons/ic_action_plus@3x.png"; sourceTree = "<group>"; };
@@ -10477,7 +10470,6 @@
 				DA5793D622A00A6B00750C8F /* OASettingSwitchNoImageCell.xib */,
 				DA5793C7229FD19D00750C8F /* OAMapillaryContributeCell.xib */,
 				DA540DB2229EA4E90069201E /* OABottomSheetHeaderIconCell.xib */,
-				DAAE21EA2269F3370006E016 /* OABottomSheetActionCell.xib */,
 				DABA3DBD22684D22005BB777 /* OAMultiIconTextDescCell.xib */,
 				DA73D28A223264E400FB2084 /* OABottomSheetHeaderCell.xib */,
 				DA975EAE21E8B05F00BE195A /* OAOsmAndLiveCell.xib */,
@@ -10676,8 +10668,6 @@
 				DA9A062A229974C9000A80F1 /* OANoImagesCell.mm */,
 				DA9A061B2297EF46000A80F1 /* OAImageCardCell.h */,
 				DA9A061C2297EF47000A80F1 /* OAImageCardCell.mm */,
-				DAAE21EE2269F3AD0006E016 /* OABottomSheetActionCell.h */,
-				DAAE21ED2269F3AD0006E016 /* OABottomSheetActionCell.m */,
 				DABA3DC022684D7E005BB777 /* OAMultiIconTextDescCell.h */,
 				DABA3DC122684D7E005BB777 /* OAMultiIconTextDescCell.m */,
 				DA88AD56224F7F8700DA82A9 /* OADescrTitleCell.h */,
@@ -16207,7 +16197,6 @@
 				DA0462E622F5A21400166CFF /* OAQuickActionCell.xib in Resources */,
 				847A1E631DF94E9B003C1246 /* move_items@2x.png in Resources */,
 				8AE0195724505C8B00DA5C33 /* ic_small_arrow_forward.png in Resources */,
-				DAAE21EC2269F3380006E016 /* OABottomSheetActionCell.xib in Resources */,
 				847A1E641DF94E9B003C1246 /* ic_popup_no_internet.png in Resources */,
 				DAA4EDEE240E85B800F16073 /* ic_custom_online@2x.png in Resources */,
 				8A755A5621CBF92400E42699 /* ic_live_nautical_depth.png in Resources */,
@@ -17974,7 +17963,6 @@
 				1571CE2A24ADEE2F00083F92 /* ic_custom_ruler@2x.png in Resources */,
 				847AF57D1F8A3D4900FC7F90 /* widget_battery_charging_day.png in Resources */,
 				336CAAB324AF63520085BF0A /* ic_custom_transport_bus@3x.png in Resources */,
-				DAAE21EB2269F3380006E016 /* OABottomSheetActionCell.xib in Resources */,
 				84B6E0802073CF55002CA15B /* ic_action_route_first_intermediate.png in Resources */,
 				84E441B61AF8A07500F87542 /* add_waypoint_to_track@2x.png in Resources */,
 				845E06FC1B60D71100DFC2A7 /* OAPluginPopupViewController.xib in Resources */,
@@ -20833,7 +20821,6 @@
 				847A1D2B1DF94E9B003C1246 /* UITableViewCell+getTableView.m in Sources */,
 				84E37046205920D300959B94 /* OAWaypointsViewController.mm in Sources */,
 				847A1D2C1DF94E9B003C1246 /* OAMapMarkersCollection.mm in Sources */,
-				DAAE21F02269F3AE0006E016 /* OABottomSheetActionCell.m in Sources */,
 				DA2FA7092302F9B7006DB2E5 /* OANavReplaceDestinationAction.mm in Sources */,
 				847A1D2D1DF94E9B003C1246 /* OATextLineViewCell.m in Sources */,
 				DA26408122019D7500A554AD /* OAOsmBugsDBHelper.m in Sources */,
@@ -21062,7 +21049,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				84B4FD851A92179600A147BA /* OAGPXDetailsTableViewCell.m in Sources */,
-				DAAE21EF2269F3AE0006E016 /* OABottomSheetActionCell.m in Sources */,
 				BBA3AF35197FC4BB0039D991 /* main.m in Sources */,
 				841766371B721604002A08CB /* OAHistoryHelper.m in Sources */,
 				840E70301F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,

@@ -9,7 +9,7 @@
 #import "OAActionAddMapStyleViewController.h"
 #import "OAActionConfigurationViewController.h"
 #import "Localization.h"
-#import "OABottomSheetActionCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OASizes.h"
 #import "OsmAndApp.h"
 #import "OAIAPHelper.h"
@@ -57,6 +57,8 @@
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 55., 0.0, 0.0);
     [self.tableView setEditing:YES];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 48.;
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
 }
@@ -172,14 +174,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapStyleResourceItem* item = [self getItem:indexPath];
-    static NSString* const identifierCell = @"OABottomSheetActionCell";
-    OABottomSheetActionCell* cell = nil;
+    static NSString* const identifierCell = @"OAMenuSimpleCell";
+    OAMenuSimpleCell* cell = nil;
     
     cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-        cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
+        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
     }
     
     if (cell)
@@ -190,14 +192,16 @@
             img = [UIImage imageNamed:imgName];
         
         cell.textView.text = item.mapSource.name;
-        cell.descView.hidden = YES;
-        cell.iconView.image = img;
+        cell.descriptionView.hidden = YES;
+        cell.imgView.image = img;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         if ([_initialValues containsObject:item.mapSource.name])
         {
             [_tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
             [_initialValues removeObject:item.mapSource.name];
         }
+        if ([cell needsUpdateConstraints])
+            [cell setNeedsUpdateConstraints];
     }
     return cell;
 }
@@ -215,12 +219,6 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     return OALocalizedString(@"available_map_styles");
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAMapStyleResourceItem *item = [self getItem:indexPath];
-    return [OABottomSheetActionCell getHeight:item.mapSource.name value:nil cellWidth:tableView.bounds.size.width];
 }
 
 @end

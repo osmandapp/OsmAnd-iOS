@@ -11,7 +11,6 @@
 #import "OATextInputFloatingCell.h"
 #import "OABottomSheetHeaderCell.h"
 #import "OASettingsTitleTableViewCell.h"
-#import "OAMenuSimpleCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"

@@ -19,6 +19,7 @@
 #import "OARouteCalculationResult.h"
 #import "OARouteDirectionInfo.h"
 #import "Localization.h"
+#import "OAExitInfo.h"
 
 #import <AudioToolbox/AudioToolbox.h>
 
@@ -28,7 +29,7 @@
     OARoutingHelper *_router;
     OAAppSettings *_settings;
     
-    double _btScoDelayDistance;
+    double _voicePromptDelayDistance;
 }
 
 const int STATUS_UTWP_TOLD = -1;
@@ -78,7 +79,7 @@ std::string preferredLanguage;
         NSString *prefLang =  _settings.settingPrefMapLanguage == nil ? OALocalizedString(@"local_names") : _settings.settingPrefMapLanguage;
         preferredLanguage = std::string([prefLang UTF8String]);
         
-        _btScoDelayDistance = 0.0;
+        _voicePromptDelayDistance = 0.0;
         //empty = new Struct("");
         //voiceMessageListeners = new ConcurrentHashMap<VoiceRouter.VoiceMessageListener, Integer>();
         
@@ -117,17 +118,17 @@ std::string preferredLanguage;
 
 - (void) setMute:(BOOL)mute
 {
-    [OAAppSettings.sharedManager.voiceMute set:mute];
+    [_settings.voiceMute set:mute];
 }
 
 - (void) setMute:(BOOL)mute mode:(OAApplicationMode *)mode
 {
-    [OAAppSettings.sharedManager.voiceMute set:mute mode:mode];
+    [_settings.voiceMute set:mute mode:mode];
 }
 
 - (BOOL) isMute
 {
-    return [OAAppSettings.sharedManager.voiceMute get];
+    return [_settings.voiceMute get];
 }
 
 - (OACommandBuilder *) getNewCommandPlayerToPlay
@@ -141,15 +142,21 @@ std::string preferredLanguage;
 
 - (void) updateAppMode
 {
-    // Turn prompt starts either at distance, or additionally (TURN_IN and TURN only) if actual-lead-time(currentSpeed) < maximum-lead-time(defined by default speed)
-    if ([[_router getAppMode] isDerivedRoutingFrom:[OAApplicationMode CAR]])
+    OAApplicationMode *appMode = _router.getAppMode == nil ? _settings.applicationMode : _router.getAppMode;
+    // could be changed in future as others by default in settings is 45 kmh
+    if ([appMode isDerivedRoutingFrom:[OAApplicationMode CAR]])
     {
         _DEFAULT_SPEED = 14;                       //   ~50 km/h
+        //DEFAULT speed is configurable
+        //        } else if (router.getAppMode().isDerivedRoutingFrom(ApplicationMode.BICYCLE)) {
+        //            DEFAULT_SPEED = 2.77f;   //   10 km/h
+        //        } else if (router.getAppMode().isDerivedRoutingFrom(ApplicationMode.PEDESTRIAN)) {
+        //            DEFAULT_SPEED = 1.11f; //4 km/h 2f;     // 7,2 km/h
     }
     else
     {
         // minimal is 1 meter for turn now
-        _DEFAULT_SPEED = MAX([[_router getAppMode] getDefaultSpeed], 0.3);
+        _DEFAULT_SPEED = MAX([appMode getDefaultSpeed], 0.3);
     }
     // Do not play [issue 1411]: prepare_long_distance warning not needed, used only for goAhead prompt
     // 300 sec: 4 200 - 3 500 m - car [ 115 - 95 sec @ 120 km/h]
@@ -169,7 +176,7 @@ std::string preferredLanguage;
     _PREPARE_DISTANCE_END = (int) (_DEFAULT_SPEED * 90);
     
     // 22 sec: 310 m - car, 60 m - bicycle, 50m - pedestrian
-    _TURN_IN_DISTANCE = (int) (_DEFAULT_SPEED  * 22);
+    _TURN_IN_DISTANCE = (int) (_DEFAULT_SPEED * 22);
     // 15 sec: 210 m - car, 40 m - bicycle, 30 m - pedestrian
     _TURN_IN_DISTANCE_END = (int) (_DEFAULT_SPEED * 15);
     
@@ -288,13 +295,13 @@ std::string preferredLanguage;
         [self nextStatusAfter:STATUS_TURN];
 
         // STATUS_TURN_IN = "Turn in ..."
-    } else if ((repeat || [self statusNotPassed:STATUS_TURN_IN]) && [self isDistanceLess:speed dist:dist etalon:_TURN_IN_DISTANCE defSpeed:0]) {
+    } else if ((repeat || [self statusNotPassed:STATUS_TURN_IN]) && [self isDistanceLess:speed dist:dist etalon:_TURN_IN_DISTANCE]) {
         if (repeat || dist >= _TURN_IN_DISTANCE_END) {
-            if (([self isDistanceLess:speed dist:nextNextInfo.distanceTo etalon:_TURN_NOW_DISTANCE defSpeed:0] || nextNextInfo.distanceTo < _TURN_IN_DISTANCE_END) &&
+            if (([self isDistanceLess:speed dist:nextNextInfo.distanceTo etalon:_TURN_NOW_DISTANCE] || nextNextInfo.distanceTo < _TURN_IN_DISTANCE_END) &&
                 nextNextInfo != nil) {
-                [self playMakeTurnIn:currentSegment info:next dist:(dist - (int) _btScoDelayDistance) nextInfo:nextNextInfo.directionInfo];
+                [self playMakeTurnIn:currentSegment info:next dist:(dist - (int) _voicePromptDelayDistance) nextInfo:nextNextInfo.directionInfo];
             } else {
-                [self playMakeTurnIn:currentSegment info:next dist:(dist - (int) _btScoDelayDistance) nextInfo:nil];
+                [self playMakeTurnIn:currentSegment info:next dist:(dist - (int) _voicePromptDelayDistance) nextInfo:nil];
             }
             [self playGoAndArriveAtDestination:repeat nextInfo:nextInfo currSegment:currentSegment];
         }
@@ -336,8 +343,17 @@ std::string preferredLanguage;
     if (play != nil) {
         NSString *tParam = [self getTurnType:next.turnType];
         BOOL isPlay = YES;
+        OAExitInfo *exitInfo = next.exitInfo;
         if (tParam != nil) {
-            [play turn:tParam dist:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
+            if (exitInfo != nil && exitInfo.ref.length > 0)
+            {
+                NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
+                [play takeExit:tParam dist:dist exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo includeDest:YES]];
+            }
+            else
+            {
+                [play turn:tParam dist:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
+            }
             suppressDest = YES;
         } else if (next.turnType->isRoundAbout()) {
             [play roundAbout:dist angle:next.turnType->getTurnAngle() exit:next.turnType->getExitOut() streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
@@ -365,7 +381,6 @@ std::string preferredLanguage;
             }
         }
         if (isPlay) {
-//            notifyOnVoiceMessage();
             [play play];
         }
     }
@@ -439,15 +454,24 @@ std::string preferredLanguage;
     }
 }
 
-- (void) playMakeTurn:(std::shared_ptr<RouteSegmentResult>) currentSegment routeDirectionInfo: (OARouteDirectionInfo *) nextInfo nextDirectionInfo: (OANextDirectionInfo *) nextNextInfo
+- (void) playMakeTurn:(std::shared_ptr<RouteSegmentResult>)currentSegment routeDirectionInfo: (OARouteDirectionInfo *)nextInfo nextDirectionInfo:(OANextDirectionInfo *)nextNextInfo
 {
     OACommandBuilder *play = [self getNewCommandPlayerToPlay];
     if (play != nil)
     {
         NSString *tParam = [self getTurnType:nextInfo.turnType];
+        OAExitInfo *exitInfo = nextInfo.exitInfo;
         BOOL isplay = YES;
         if (tParam != nil) {
-            [play turn:tParam streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:nextInfo includeDestination:!suppressDest]];
+            if (exitInfo != nil && exitInfo.ref.length > 0)
+            {
+                NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
+                [play takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:nextInfo exitInfo:exitInfo includeDest:!suppressDest]];
+            }
+            else
+            {
+                [play turn:tParam streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:nextInfo includeDestination:!suppressDest]];
+            }
         } else if (nextInfo.turnType->isRoundAbout()) {
             [play roundAbout:nextInfo.turnType->getTurnAngle() exit:nextInfo.turnType->getExitOut() streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:nextInfo includeDestination:!suppressDest]];
         } else if (nextInfo.turnType->getValue() == TurnType::TU || nextInfo.turnType->getValue() == TurnType::TRU) {
@@ -602,8 +626,8 @@ std::string preferredLanguage;
 
 - (void) announceBackOnRoute
 {
-    OACommandBuilder *p = [self getNewCommandPlayerToPlay];
-    if (announceBackOnRoute == true) {
+    if (announceBackOnRoute) {
+        OACommandBuilder *p = [self getNewCommandPlayerToPlay];
         if (p != nil) {
 //            notifyOnVoiceMessage();
             [[p backOnRoute] play];
@@ -675,6 +699,72 @@ std::string preferredLanguage;
     }
 }
 
+- (NSDictionary *) getSpeakableExitName:(OARouteDirectionInfo *)routeInfo exitInfo:(OAExitInfo *)exitInfo includeDest:(BOOL)includeDest
+{
+    NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
+    if (![_settings.speakStreetNames get])
+        return result;
+    if (player != nil && player.supportsStructuredStreetNames)
+    {
+        result[@"toRef"] = [self getSpeakablePointName:exitInfo.ref];
+        result[@"toStreetName"] = [self getSpeakablePointName:exitInfo.exitStreetName];
+        result[@"toDest"] = includeDest ? [self getSpeakablePointName:routeInfo.ref] : @"";
+    }
+    else
+    {
+        result[@"toRef"] = [self getSpeakablePointName:exitInfo.ref];
+        result[@"toStreetName"] = [self getSpeakablePointName:exitInfo.exitStreetName];
+        result[@"toDest"] = @"";
+    }
+    return result;
+}
+
+- (BOOL) charIsDigit:(unichar)ch
+{
+    NSCharacterSet *numericSet = [NSCharacterSet decimalDigitCharacterSet];
+    return [numericSet characterIsMember:ch];
+}
+
+- (BOOL) charIsLetter:(unichar)ch
+{
+    NSCharacterSet *numericSet = [NSCharacterSet letterCharacterSet];
+    return [numericSet characterIsMember:ch];
+}
+
+- (NSString *) getSpeakableExitRef:(NSString *)exit
+{
+    NSMutableString *sb = [NSMutableString new];
+    if (exit != nil)
+    {
+        exit = [exit stringByReplacingOccurrencesOfString:@"-" withString:@" "];
+        exit = [exit stringByReplacingOccurrencesOfString:@":" withString:@" "];
+        //    Add spaces between digits and letters for better pronunciation
+        NSUInteger length = exit.length;
+        for (int i = 0; i < length; i++)
+        {
+            if (i + 1 < length &&  [self charIsDigit:[exit characterAtIndex:i]] && [self charIsLetter:[exit characterAtIndex:i + 1]])
+            {
+                [sb appendFormat:@"%C", [exit characterAtIndex:i]];
+                [sb appendString:@" "];
+            }
+            else
+            {
+                [sb appendFormat:@"%C", [exit characterAtIndex:i]];
+            }
+        }
+    }
+    return sb;
+}
+
+- (NSInteger) getIntRef:(NSString *)stringRef
+{
+    NSInteger intRef = [OAUtilities findFirstNumberEndIndex:stringRef];
+    if (intRef > 0)
+        intRef = [[stringRef substringToIndex:intRef] integerValue];
+    
+    return intRef;
+}
+
 - (NSString *) getSpeakablePointName: (NSString *) streetName
 {
     if (streetName != nil) {
@@ -690,7 +780,7 @@ std::string preferredLanguage;
         //    }
 //        return res;
     }
-    return [NSString new];
+    return @"";
 }
 - (int) calculateImminent:(float)dist loc:(CLLocation *)loc
 {
@@ -698,7 +788,7 @@ std::string preferredLanguage;
     if (loc && loc.speed >= 0)
         speed = loc.speed;
     
-    if ([self isDistanceLess:speed dist:dist etalon:_TURN_NOW_DISTANCE defSpeed:0])
+    if ([self isDistanceLess:speed dist:dist etalon:_TURN_NOW_DISTANCE])
         return 0;
     else if (dist <= _PREPARE_DISTANCE)
         return 1;
@@ -708,11 +798,13 @@ std::string preferredLanguage;
         return -1;
 }
 
+- (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon
+{
+    return [self isDistanceLess:currentSpeed dist:dist etalon:etalon defSpeed:_DEFAULT_SPEED];
+}
+
 - (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon defSpeed:(float)defSpeed
 {
-    if (defSpeed <= 0)
-        defSpeed = _DEFAULT_SPEED;
-    
     if (currentSpeed <= 0)
         currentSpeed = _DEFAULT_SPEED;
     
@@ -722,7 +814,7 @@ std::string preferredLanguage;
     //    btScoDelayDistance = currentSpeed * (double) settings.BT_SCO_DELAY.get() / 1000;
     //}
     
-    if ((dist < etalon + _btScoDelayDistance) || ((dist - _btScoDelayDistance) / currentSpeed) < (etalon / defSpeed))
+    if ((dist - _voicePromptDelayDistance < etalon) || ((dist - _voicePromptDelayDistance) / currentSpeed) < (etalon / defSpeed))
         return YES;
     
     return NO;
@@ -844,7 +936,6 @@ std::string preferredLanguage;
     if (!p)
         return;
     
-    [self notifyOnVoiceMessage];
     double dist;
     [self makeSound];
     NSString *text = [self getText:location points:points dist:&dist];
@@ -857,7 +948,6 @@ std::string preferredLanguage;
     if (!p)
         return;
     
-    [self notifyOnVoiceMessage];
     double dist;
     [self makeSound];
     NSString *text = [self getText:location points:points dist:&dist];
@@ -869,8 +959,7 @@ std::string preferredLanguage;
     OACommandBuilder *p = [self getNewCommandPlayerToPlay];
     if (!p)
         return;
-    
-    [self notifyOnVoiceMessage];
+
     double dist;
     [self makeSound];
     NSString *text = [self getText:location points:points dist:&dist];

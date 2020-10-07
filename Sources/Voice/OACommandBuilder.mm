@@ -40,6 +40,7 @@ static NSString * const C_SPEAD_ALARM = @"speed_alarm";
 static NSString * const C_ATTENTION = @"attention";
 static NSString * const C_OFF_ROUTE = @"off_route";
 static NSString * const C_BACK_ON_ROUTE = @"back_on_route";
+static NSString * const C_TAKE_EXIT = @"take_exit";
 
 static NSString * const C_BEAR_LEFT = @"bear_left";
 static NSString * const C_BEAR_RIGHT = @"bear_right";
@@ -76,6 +77,11 @@ static NSString * const C_SET_MODE = @"setMode";
 {
     [context[C_SET_METRICS] callWithArguments:@[metricConstant]];
     [context[C_SET_MODE] callWithArguments:@[@(YES)]];
+}
+
+- (BOOL) isJSCommandExsists:(NSString *)name
+{
+    return context[name] != nil;
 }
 
 - (OACommandBuilder *) addCommand:(NSString * _Nonnull)name
@@ -148,6 +154,18 @@ static NSString * const C_SET_MODE = @"setMode";
 - (OACommandBuilder *) turn:(NSString *)param dist:(double)dist streetName:(id)streetName
 {
     return [self addCommand:C_TURN args:@[param, @(dist), streetName]];
+}
+
+- (OACommandBuilder *) takeExit:(NSString *)turnType exitString:(NSString *)exitString exitInt:(NSInteger)exitInt streetName:(id)streetName
+{
+    return [self takeExit:turnType dist:-1 exitString:exitString exitInt:exitInt streetName:streetName];
+}
+
+- (OACommandBuilder *) takeExit:(NSString *)turnType dist:(double)dist exitString:(NSString *)exitString exitInt:(NSInteger)exitInt streetName:(id)streetName
+{
+    return [self isJSCommandExsists:C_TAKE_EXIT] ?
+        [self addCommand:C_TAKE_EXIT args:@[turnType, @(dist), exitString, @(exitInt), streetName]] :
+        [self addCommand:C_TURN args:@[turnType, @(dist), streetName]];
 }
 
 /**

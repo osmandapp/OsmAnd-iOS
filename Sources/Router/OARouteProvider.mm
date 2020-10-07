@@ -841,6 +841,7 @@
                     ch.routeEndPointOffset = info.routeEndPointOffset - startI[0].intValue;
                 
                 [ch setDescriptionRoute:[info getDescriptionRoutePart]];
+                ch.routeDataObject = info.routeDataObject;
                 
                 // Issue #2894
                 if (info.ref && ![@"null" isEqualToString:info.ref])

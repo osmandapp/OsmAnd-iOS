@@ -5768,6 +5768,8 @@
 		DAE6BED622201B46004A4045 /* ic_custom_clear_field@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED122201B45004A4045 /* ic_custom_clear_field@3x.png */; };
 		DAE6BED722201B46004A4045 /* ic_custom_clear_field.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED222201B46004A4045 /* ic_custom_clear_field.png */; };
 		DAE6BED822201B46004A4045 /* ic_custom_clear_field.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED222201B46004A4045 /* ic_custom_clear_field.png */; };
+		DAE7C567252C6BD400114A77 /* OAExitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE7C566252C6BD400114A77 /* OAExitInfo.m */; };
+		DAE7C568252C6BD400114A77 /* OAExitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE7C566252C6BD400114A77 /* OAExitInfo.m */; };
 		DAEB14CC2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */; };
 		DAEB14CD2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */; };
 		DAEC05EF2296C6C500045298 /* ic_custom_mapillary_color_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEC05E62296C6C200045298 /* ic_custom_mapillary_color_logo@3x.png */; };
@@ -9976,6 +9978,8 @@
 		DAE6BED022201B45004A4045 /* ic_custom_clear_field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clear_field@2x.png"; path = "Resources/Icons/ic_custom_clear_field@2x.png"; sourceTree = "<group>"; };
 		DAE6BED122201B45004A4045 /* ic_custom_clear_field@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clear_field@3x.png"; path = "Resources/Icons/ic_custom_clear_field@3x.png"; sourceTree = "<group>"; };
 		DAE6BED222201B46004A4045 /* ic_custom_clear_field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_clear_field.png; path = Resources/Icons/ic_custom_clear_field.png; sourceTree = "<group>"; };
+		DAE7C565252C6BD400114A77 /* OAExitInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExitInfo.h; sourceTree = "<group>"; };
+		DAE7C566252C6BD400114A77 /* OAExitInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAExitInfo.m; sourceTree = "<group>"; };
 		DAEB14CA2204549400D20C45 /* OAOpenStreetMapRemoteUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapRemoteUtil.h; sourceTree = "<group>"; };
 		DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpenStreetMapRemoteUtil.mm; sourceTree = "<group>"; };
 		DAEC05E62296C6C200045298 /* ic_custom_mapillary_color_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_mapillary_color_logo@3x.png"; path = "Resources/Icons/ic_custom_mapillary_color_logo@3x.png"; sourceTree = "<group>"; };
@@ -13345,6 +13349,8 @@
 				DA303D472420F532006F8BC7 /* OATransportRoutingHelper.mm */,
 				DA303D4D24210AF9006F8BC7 /* OATransportRouteCalculationParams.h */,
 				DA303D4E24210AF9006F8BC7 /* OATransportRouteCalculationParams.mm */,
+				DAE7C565252C6BD400114A77 /* OAExitInfo.h */,
+				DAE7C566252C6BD400114A77 /* OAExitInfo.m */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -20465,6 +20471,7 @@
 				8A3F030121C7C1600043797E /* OAOsmLivePlansCardView.m in Sources */,
 				DA2558B824ADE40F0081D155 /* OASettingsModalPresentationViewController.m in Sources */,
 				DA32E02921EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */,
+				DAE7C568252C6BD400114A77 /* OAExitInfo.m in Sources */,
 				846F03721E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA3305CB21D3BA440081BA1D /* OATextInputCell.mm in Sources */,
 				8433946F1FF3C09A006205A5 /* OALaunchScreenViewController.m in Sources */,
@@ -21300,6 +21307,7 @@
 				848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
 				84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				15DF4052242B3437004AF26B /* OASettingsHelper.mm in Sources */,
+				DAE7C567252C6BD400114A77 /* OAExitInfo.m in Sources */,
 				3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */,
 				8476E1F21F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
 				DA32E02821EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */,

@@ -23,6 +23,7 @@ def defaultPods
     pod 'HTAutocompleteTextField', '~> 1.3.1'
     pod 'MaterialComponents/TextFields', '~> 84.0.0'
     pod 'BRCybertron', '~> 1.1.1'
+    pod 'MCBinaryHeap', '~> 0.1'
 end
 
 target 'OsmAnd Maps' do

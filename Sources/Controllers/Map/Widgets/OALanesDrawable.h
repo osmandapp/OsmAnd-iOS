@@ -5,8 +5,8 @@
 //  Created by Alexey Kulish on 07/11/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
-//  OsmAnd/src/net/osmand/plus/views/mapwidgets/RouteInfoWidgetsFactory.java
-//  git revision 20fbb153804c15d7a2cb09a9315ed1a15f301f3b
+//  OsmAnd/src/net/osmand/plus/views/mapwidgets/LanesDrawable.java
+//  git revision 790f4dbab324c4cfbeb94e9b90f5d50a61bf2ddd
 
 #import <UIKit/UIKit.h>
 #include <vector>

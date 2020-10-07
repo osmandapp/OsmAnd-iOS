@@ -12,15 +12,12 @@
 @interface OARelationMember()
 
 @property (nonatomic) OAEntity *entity;
+@property (nonatomic) OAEntityId *entityId;
+@property (nonatomic) NSString *role;
 
 @end
 
 @implementation OARelationMember
-{
-    OAEntityId *_entityId;
-    NSString *_role;
-}
-
 
 -(id)initWithEntityId:(OAEntityId *)entityId role:(NSString *)role
 {
@@ -65,12 +62,16 @@
 
 -(void)addMember:(long long)identifier entityType:(EOAEntityType)type role:(NSString *)role
 {
+    [self addMember:[[OAEntityId alloc] initWithEntityType:type identifier:identifier] role:role];
+}
+
+- (void) addMember:(OAEntityId *)identifier role:(NSString *)role
+{
     if (!_members)
         _members = [NSMutableArray new];
-    [_members addObject:[[OARelationMember alloc] initWithEntityId:
-                         [[OAEntityId alloc] initWithEntityType:type identifier:identifier] role:role]];
-    
+    [_members addObject:[[OARelationMember alloc] initWithEntityId:identifier role:role]];
 }
+
 -(NSArray<OARelationMember *> *)getMembers:(NSString *)role
 {
     if (!_members)
@@ -125,6 +126,17 @@
             }
         }
     }
+}
+
+- (void) update:(OARelationMember *)r newEntityId:(OAEntityId *)newEntityId
+{
+    r.entity = nil;
+    r.entityId = newEntityId;
+}
+
+- (void) updateRole:(OARelationMember*)r newRole:(NSString *)newRole
+{
+    r.role = newRole;
 }
 
 // Unused in Android

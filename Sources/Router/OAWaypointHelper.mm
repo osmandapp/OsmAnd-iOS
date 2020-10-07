@@ -333,19 +333,19 @@
                             double d1 = MAX(0.0, [lastKnownLocation distanceFromLocation:[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]]] - lwp.deviationDistance);
                             NSNumber *state = [_locationPointsStates objectForKey:point];
                             if (state && state.intValue == ANNOUNCED_ONCE
-                                && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:SHORT_ANNOUNCE_RADIUS defSpeed:0.f])
+                                && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:SHORT_ANNOUNCE_RADIUS])
                             {
                                 [_locationPointsStates setObject:@(ANNOUNCED_DONE) forKey:point];
                                 [announcePoints addObject:lwp];
                             }
                             else if (type != LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED)
-                                     && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:LONG_ANNOUNCE_RADIUS defSpeed:0.f])
+                                     && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:LONG_ANNOUNCE_RADIUS])
                             {
                                 [_locationPointsStates setObject:@(ANNOUNCED_ONCE) forKey:point];
                                 [approachPoints addObject:lwp];
                             }
                             else if (type == LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED)
-                                     && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:ALARMS_ANNOUNCE_RADIUS defSpeed:0.f])
+                                     && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:ALARMS_ANNOUNCE_RADIUS])
                             {
                                 OAAlarmInfo *alarm = (OAAlarmInfo *) point;
                                 EOAAlarmInfoType t = alarm.type;
@@ -361,7 +361,7 @@
                                         announceRadius = ALARMS_ANNOUNCE_RADIUS;
                                         break;
                                 }
-                                BOOL proceed = [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:announceRadius defSpeed:0.f];
+                                BOOL proceed = [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:announceRadius];
                                 if (proceed && filter)
                                 {
                                     OAAlarmInfo *lastAlarm = [_lastAnnouncedAlarms objectForKey:@(t)];

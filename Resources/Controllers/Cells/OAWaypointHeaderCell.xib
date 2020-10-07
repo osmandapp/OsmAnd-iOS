@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,45 +13,72 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" animating="YES" style="gray" id="Tlc-1h-3j8">
-                        <rect key="frame" x="8" y="11" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <activityIndicatorView contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Tlc-1h-3j8">
+                        <rect key="frame" x="8" y="12" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="Ygg-EY-m5J"/>
+                            <constraint firstAttribute="height" constant="20" id="xG0-wz-dG3"/>
+                        </constraints>
                     </activityIndicatorView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ryS-ae-NqK">
-                        <rect key="frame" x="36" y="0.0" width="82" height="44"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ryS-ae-NqK">
+                        <rect key="frame" x="36" y="0.0" width="190" height="44"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="95I-Ur-1tg">
-                        <rect key="frame" x="142" y="7" width="49" height="31"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="95I-Ur-1tg">
+                        <rect key="frame" x="255" y="7" width="51" height="31"/>
                     </switch>
-                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bjz-cZ-kaA">
-                        <rect key="frame" x="197" y="0.0" width="44" height="44"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bjz-cZ-kaA">
+                        <rect key="frame" x="260" y="0.0" width="44" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="bTd-aG-qKm"/>
+                            <constraint firstAttribute="width" constant="44" id="rxt-Aq-IBG"/>
+                        </constraints>
                         <state key="normal" image="three_dots.png"/>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" id="41l-Vq-Jcy">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="41l-Vq-Jcy">
                         <rect key="frame" x="242" y="0.0" width="78" height="44"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="78" id="lng-3g-gh3"/>
+                            <constraint firstAttribute="height" constant="44" id="rzo-eb-4mw"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <state key="normal" title="Clear"/>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="95I-Ur-1tg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="1f7-LJ-ola"/>
+                    <constraint firstItem="41l-Vq-Jcy" firstAttribute="leading" secondItem="ryS-ae-NqK" secondAttribute="trailing" constant="16" id="4xa-p8-AGl"/>
+                    <constraint firstItem="ryS-ae-NqK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="999" constant="16" id="DzB-dl-1mi"/>
+                    <constraint firstAttribute="bottom" secondItem="41l-Vq-Jcy" secondAttribute="bottom" id="Hs0-o2-LSs"/>
+                    <constraint firstAttribute="bottom" secondItem="ryS-ae-NqK" secondAttribute="bottom" id="IDC-Rt-wKl"/>
+                    <constraint firstItem="41l-Vq-Jcy" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="SFd-fo-sxf"/>
+                    <constraint firstItem="ryS-ae-NqK" firstAttribute="leading" secondItem="Tlc-1h-3j8" secondAttribute="trailing" constant="8" id="TIK-tf-pau"/>
+                    <constraint firstAttribute="trailing" secondItem="41l-Vq-Jcy" secondAttribute="trailing" id="Tcx-8i-9ZU"/>
+                    <constraint firstAttribute="bottom" secondItem="bjz-cZ-kaA" secondAttribute="bottom" id="UoL-dI-sVt"/>
+                    <constraint firstAttribute="trailing" secondItem="bjz-cZ-kaA" secondAttribute="trailing" constant="16" id="Z2n-dR-NZZ"/>
+                    <constraint firstItem="Tlc-1h-3j8" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="bR8-5m-X9Q"/>
+                    <constraint firstItem="Tlc-1h-3j8" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="hEF-DL-TPp"/>
+                    <constraint firstAttribute="trailing" secondItem="95I-Ur-1tg" secondAttribute="trailing" constant="16" id="hMR-4K-vEI"/>
+                    <constraint firstItem="bjz-cZ-kaA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="idN-kp-6pt"/>
+                    <constraint firstAttribute="bottom" secondItem="95I-Ur-1tg" secondAttribute="bottom" constant="6" id="rVX-Ue-SBx"/>
+                    <constraint firstItem="ryS-ae-NqK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="rg9-tp-iFL"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="imageButton" destination="bjz-cZ-kaA" id="w0Z-Fn-YW0"/>
+                <outlet property="leftTitleMarginNoProgress" destination="DzB-dl-1mi" id="ywg-wH-RLF"/>
+                <outlet property="leftTitleMarginWithProgressView" destination="TIK-tf-pau" id="Gvz-3T-cgs"/>
                 <outlet property="progressView" destination="Tlc-1h-3j8" id="Sfa-60-jo7"/>
                 <outlet property="switchView" destination="95I-Ur-1tg" id="85D-HU-gxe"/>
                 <outlet property="textButton" destination="41l-Vq-Jcy" id="f3H-p8-m00"/>
                 <outlet property="titleView" destination="ryS-ae-NqK" id="Nwh-ZK-uCy"/>
             </connections>
-            <point key="canvasLocation" x="25" y="52"/>
+            <point key="canvasLocation" x="36.231884057971016" y="34.821428571428569"/>
         </tableViewCell>
     </objects>
     <resources>

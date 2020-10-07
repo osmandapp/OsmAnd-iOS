@@ -1021,6 +1021,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAWaypointCell" owner:self options:nil];
             cell = (OAWaypointCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0., 50, 0., 0.);
         }
         if (cell)
         {

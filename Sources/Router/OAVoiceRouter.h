@@ -5,7 +5,7 @@
 //  Created by Alexey Kulish on 15/07/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
-// Android version: 713b86d
+// Android version: 1eda59acc7a35cb9cd3bc7c30561fbce7bf396d2
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>

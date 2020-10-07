@@ -235,6 +235,7 @@
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.sliderView.layer.cornerRadius = 3.0;
+            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
         if (cell)
             cell.titleView.text = item[@"title"];

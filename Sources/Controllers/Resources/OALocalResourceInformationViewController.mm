@@ -18,6 +18,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OASQLiteTileSource.h"
 #import "OASizes.h"
+#import "OAColors.h"
 #import "OAOnlineTilesEditingViewController.h"
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
@@ -348,7 +349,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
         cell = (OAButtonCell *)[nib objectAtIndex:0];
         [cell showImage:NO];
-        [cell.button setTitleColor:[UIColor colorWithRed:87.0/255.0 green:20.0/255.0 blue:204.0/255.0 alpha:1] forState:UIControlStateNormal];
+        [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
     }
     if (cell)
     {

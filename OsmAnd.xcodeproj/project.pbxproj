@@ -5180,6 +5180,18 @@
 		DA8093B62260899600A1479F /* ic_custom_osm_note_resolved@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8093AB2260899600A1479F /* ic_custom_osm_note_resolved@2x.png */; };
 		DA8093B72260899600A1479F /* ic_custom_osm_note_unresolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8093AC2260899600A1479F /* ic_custom_osm_note_unresolved@3x.png */; };
 		DA8093B82260899600A1479F /* ic_custom_osm_note_unresolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8093AC2260899600A1479F /* ic_custom_osm_note_unresolved@3x.png */; };
+		DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */; };
+		DA80DAB6251E2339008E6267 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAB5251E2338008E6267 /* CoreLocation.framework */; };
+		DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
+		DA80DABD251E2CB7008E6267 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
+		DA80DABE251E2CB7008E6267 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
+		DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DABF251E2CB7008E6267 /* libQt5Xml.a */; };
+		DA80DAC2251E2CB8008E6267 /* libQt5Concurrent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */; };
+		DA80DAC6251E2D57008E6267 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAC5251E2D57008E6267 /* Foundation.framework */; };
+		DA80DACB251E3412008E6267 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
+		DA80DACF251E3440008E6267 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DACE251E3440008E6267 /* UIKit.framework */; };
+		DA80DAD3251F13F6008E6267 /* libarchive_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAD2251F13F6008E6267 /* libarchive_static.a */; };
+		DA80DAD5251F13F6008E6267 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAD4251F13F6008E6267 /* libexpat_static.a */; };
 		DA835FEB23436F1A003374B5 /* OADestinationItemsListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA835FE923436F1A003374B5 /* OADestinationItemsListViewController.mm */; };
 		DA835FEC23436F1A003374B5 /* OADestinationItemsListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA835FE923436F1A003374B5 /* OADestinationItemsListViewController.mm */; };
 		DA835FED23436F1A003374B5 /* OADestinationItemsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA835FEA23436F1A003374B5 /* OADestinationItemsListViewController.xib */; };
@@ -9590,6 +9602,14 @@
 		DA8093AA2260899500A1479F /* ic_custom_osm_note_resolved.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_osm_note_resolved.png; path = Resources/Icons/ic_custom_osm_note_resolved.png; sourceTree = "<group>"; };
 		DA8093AB2260899600A1479F /* ic_custom_osm_note_resolved@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_note_resolved@2x.png"; path = "Resources/Icons/ic_custom_osm_note_resolved@2x.png"; sourceTree = "<group>"; };
 		DA8093AC2260899600A1479F /* ic_custom_osm_note_unresolved@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_note_unresolved@3x.png"; path = "Resources/Icons/ic_custom_osm_note_unresolved@3x.png"; sourceTree = "<group>"; };
+		DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteResultPreparationTest.mm; sourceTree = "<group>"; };
+		DA80DAB5251E2338008E6267 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
+		DA80DABF251E2CB7008E6267 /* libQt5Xml.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Xml.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Xml.a"; sourceTree = "<group>"; };
+		DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Concurrent.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Concurrent.a"; sourceTree = "<group>"; };
+		DA80DAC5251E2D57008E6267 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		DA80DACE251E3440008E6267 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		DA80DAD2251F13F6008E6267 /* libarchive_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libarchive_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA80DAD4251F13F6008E6267 /* libexpat_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libexpat_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA835FE823436F19003374B5 /* OADestinationItemsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADestinationItemsListViewController.h; sourceTree = "<group>"; };
 		DA835FE923436F1A003374B5 /* OADestinationItemsListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADestinationItemsListViewController.mm; sourceTree = "<group>"; };
 		DA835FEA23436F1A003374B5 /* OADestinationItemsListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADestinationItemsListViewController.xib; sourceTree = "<group>"; };
@@ -10225,6 +10245,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA80DAD5251F13F6008E6267 /* libexpat_static.a in Frameworks */,
+				DA80DACF251E3440008E6267 /* UIKit.framework in Frameworks */,
+				DA80DAC6251E2D57008E6267 /* Foundation.framework in Frameworks */,
+				DA80DAB6251E2339008E6267 /* CoreLocation.framework in Frameworks */,
+				DA80DACB251E3412008E6267 /* libQt5Core.a in Frameworks */,
+				DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */,
+				DA80DAC2251E2CB8008E6267 /* libQt5Concurrent.a in Frameworks */,
+				DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */,
+				DA80DABD251E2CB7008E6267 /* libQt5Sql.a in Frameworks */,
+				DA80DAD3251F13F6008E6267 /* libarchive_static.a in Frameworks */,
+				DA80DABE251E2CB7008E6267 /* libqtpcre.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13990,6 +14021,13 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA80DAD2251F13F6008E6267 /* libarchive_static.a */,
+				DA80DAD4251F13F6008E6267 /* libexpat_static.a */,
+				DA80DACE251E3440008E6267 /* UIKit.framework */,
+				DA80DAC5251E2D57008E6267 /* Foundation.framework */,
+				DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */,
+				DA80DABF251E2CB7008E6267 /* libQt5Xml.a */,
+				DA80DAB5251E2338008E6267 /* CoreLocation.framework */,
 				DA5F21D12295270000B0D7B6 /* WebKit.framework */,
 				DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */,
 				DA35226B20F245BC0038CDA7 /* AVFoundation.framework */,
@@ -15238,6 +15276,7 @@
 		DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXGroup;
 			children = (
+				DA80DAA8251E0C0C008E6267 /* Router */,
 				8A1CF862250D145C003D3829 /* test-resources */,
 				DA72AB932508F44900851313 /* Search */,
 				DA72AB8D2508F41000851313 /* Info.plist */,
@@ -15294,6 +15333,14 @@
 				DA7F258F231A68CD00E54F77 /* Charts.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		DA80DAA8251E0C0C008E6267 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */,
+			);
+			path = Router;
 			sourceTree = "<group>";
 		};
 		DA846BD62293FBA9006EFC7B /* Mapillary */ = {
@@ -21737,6 +21784,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -22220,8 +22268,20 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
+					"${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
+					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lOsmAndCore_static_standalone",
+					"-lprotobuf_static",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -22271,6 +22331,11 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lOsmAndCore_static_standalone",
+					"-lprotobuf_static",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";

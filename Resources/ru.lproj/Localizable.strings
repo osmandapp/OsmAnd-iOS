@@ -393,7 +393,7 @@
 "shared_string_modify" = "Изменить";
 "shared_string_later" = "Позже";
 "offline_maps" = "Офлайн-карты";
-"download_map" = "Загрузить карту";
+"download_map" = "Загрузка карты";
 "gpx_route" = "Маршрут";
 "map_settings_hillshade" = "Рельеф местности";
 "edit_waypoint_short" = "Изменить точку";
@@ -541,7 +541,7 @@
 "edit_filter" = "Редактировать категории";
 "filter_poi_hint" = "Фильтровать по имени";
 "city_type_suburb" = "Пригород";
-"nothing_found_descr" = "Изменить запрос или увеличить радиус поиска";
+"nothing_found_descr" = "Измените запрос или увеличьте радиус поиска.";
 "map_orientation_change_in_accordance_with_speed" = "Смена ориентации карты";
 "map_orientation_change_in_accordance_with_speed_descr" = "Выберите скорость с которой ориентация карты переключится с \"По направлению движения\" на \"По направлению компаса\"";
 "monitoring_control_start" = "REC";
@@ -612,7 +612,7 @@
 "si_min_km" = "Минут на километр";
 "si_min_m" = "Минут на милю";
 "si_nm_h" = "Морских миль в час (узел)";
-"search_poi_category_hint" = "Напечатайте для поиска";
+"search_poi_category_hint" = "Любой текст для поиска";
 "shared_string_is_open" = "Открыто";
 "open_from" = "Открыто с";
 "open_till" = "Открыто до";
@@ -1200,7 +1200,7 @@
 "navigate_point_format_DMS" = "ГГГ ММ СС.СС";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "coordinates_copy_descr" = "Нажмите, чтобы скопировать координаты в буфер обмена.";
-"download_pending" = "Загрузка ожидается";
+"download_pending" = "Ожидание загрузки";
 // Quick action
 "quick_action_name" = "Быстрое действие";
 "quick_action_no_overlay" = "Без наложения";
@@ -1781,7 +1781,7 @@
 "preview_of_selected_zoom_levels" = "Предпросмотр выбранных уровней масштабирования";
 "download_size" = "Размер загрузки";
 "move_map_to_select_area" = "Переместите карту, чтобы выбрать нужную область.";
-"update_map" = "Обновить карту";
+"update_map" = "Обновление карты";
 "number_of_tiles" = "Количество тайлов";
 "quick_action_transport_descr" = "Нажмите на это действие, чтобы показать или скрыть маршруты/остановки общественного транспорта на карте.";
 "rearrange_profile_descr" = "Профили OsmAnd по умолчанию не могут быть удалены, но вы можете отключить их на предыдущем экране или перетащить их в конец списка.";
@@ -1841,7 +1841,7 @@
 "global_settings" = "Глобальные настройки";
 "angular_measurment_units" = "Угловые единицы измерения";
 "units_of_speed" = "Единицы скорости";
-"meters" = "метров";
+"meters" = "м";
 "tones" = "тонны";
 "announce" = "Объявлять";
 "instructions_repeat" = "Нажмите на виджет \"Следующий поворот\", чтобы повторить инструкции";

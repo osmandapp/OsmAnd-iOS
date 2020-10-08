@@ -836,7 +836,7 @@
 "poi" = "POI";
 "show_poi_over_map" = "Отображать POI";
 "keep_and_add_destination_point" = "Добавить пункт назначения";
-"add_as_first_destination_point" = "Сделать начальной остановкой";
+"add_as_first_destination_point" = "Первый промежуточный пункт";
 "add_as_last_destination_point" = "Сделать последней остановкой";
 "intermediate_items_sort_by_distance" = "Расположить в оптимальном порядке";
 "route_stops_before" = "%d остановок до выбранной";
@@ -1841,7 +1841,7 @@
 "global_settings" = "Глобальные настройки";
 "angular_measurment_units" = "Угловые единицы измерения";
 "units_of_speed" = "Единицы скорости";
-"meters" = "м";
+"meters" = "метров";
 "tones" = "тонны";
 "announce" = "Объявлять";
 "instructions_repeat" = "Нажмите на виджет \"Следующий поворот\", чтобы повторить инструкции";

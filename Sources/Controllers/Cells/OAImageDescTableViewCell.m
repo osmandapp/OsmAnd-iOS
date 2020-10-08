@@ -22,23 +22,4 @@
     // Configure the view for the selected state
 }
 
-- (void)updateConstraints
-{
-    CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
-    self.iconViewHeight.constant = (self.frame.size.width - 2 * 16 - OAUtilities.getLeftMargin) * ratio;
-
-    [super updateConstraints];
-}
-
-- (BOOL)needsUpdateConstraints
-{
-    BOOL res = [super needsUpdateConstraints];
-    if (!res)
-    {
-        CGFloat ratio = self.iconView.image.size.height / self.iconView.image.size.width;
-        res |= self.iconViewHeight.constant != (self.frame.size.width - 2 * 16 - OAUtilities.getLeftMargin) * ratio;
-    }
-    return res;
-}
-
 @end

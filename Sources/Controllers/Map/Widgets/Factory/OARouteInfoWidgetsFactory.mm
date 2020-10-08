@@ -271,7 +271,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     NSTimeInterval __block cachedLeftTime = 0;
     plainTimeControl.updateInfoFunction = ^BOOL{
         NSTimeInterval time = [NSDate date].timeIntervalSince1970;
-        if ([plainTimeControl isUpdateNeeded] || time - cachedLeftTime > 5)
+        if ([plainTimeControlWeak isUpdateNeeded] || time - cachedLeftTime > 5)
         {
             cachedLeftTime = time;
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -366,7 +366,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
         {
             mx = 0;
         }
-        if ([speedControl isUpdateNeeded] || cachedSpeed != mx)
+        if ([speedControlWeak isUpdateNeeded] || cachedSpeed != mx)
         {
             cachedSpeed = mx;
             if (cachedSpeed == 0)
@@ -414,7 +414,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
             if (cachedSpeed < 6)
                 minDelta = .015f;
 
-            if ([speedControl isUpdateNeeded] || ABS(loc.speed - cachedSpeed) > minDelta)
+            if ([speedControlWeak isUpdateNeeded] || ABS(loc.speed - cachedSpeed) > minDelta)
             {
                 cachedSpeed = loc.speed;
                 NSString *ds = [_app getFormattedSpeed:cachedSpeed];
@@ -533,7 +533,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
             cachedAngularUnits = angularUnits;
             modeChanged = YES;
         }
-        if ([bearingControl isUpdateNeeded] || [OARouteInfoWidgetsFactory degreesChanged:cachedDegrees degrees:b] || modeChanged)
+        if ([bearingControlWeak isUpdateNeeded] || [OARouteInfoWidgetsFactory degreesChanged:cachedDegrees degrees:b] || modeChanged)
         {
             cachedDegrees = b;
             if (b != -1000)

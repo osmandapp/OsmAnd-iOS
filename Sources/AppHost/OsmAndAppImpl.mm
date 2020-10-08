@@ -90,6 +90,7 @@
     NSString *_unitsMph;
     
     BOOL _firstLaunch;
+    std::map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
 }
 
 @synthesize dataPath = _dataPath;
@@ -546,7 +547,7 @@
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig
 {
-    return [self getRoutingConfigForMode: OAApplicationMode.DEFAULT];
+    return getDefault();
 }
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getRoutingConfigForMode:(OAApplicationMode *)mode
@@ -558,25 +559,11 @@
         int index = [routingProfileKey indexOf:@".xml"];
         if (index != -1)
         {
-            NSString *configKey = [routingProfileKey substringToIndex:index];
-            
-            float tm = [[NSDate date] timeIntervalSince1970];
-            @try
-            {
-                NSString *customRoutingPath = [self.documentsPath stringByAppendingPathComponent:routingProfileKey];
-                BOOL useCustomRouting = [[NSFileManager defaultManager] fileExistsAtPath:customRoutingPath];
-                return parseRoutingConfigurationFromXml(useCustomRouting ? [customRoutingPath UTF8String] :
-                                                        [[[NSBundle mainBundle] pathForResource:configKey ofType:@"xml"] UTF8String]);
-            }
-            @finally
-            {
-                float te = [[NSDate date] timeIntervalSince1970];
-                if (te - tm > 30)
-                    NSLog(@"Routing config init took %f ms", (te - tm));
-            }
+            NSString *configKey = [routingProfileKey substringToIndex:index + @".xml".length];
+            builder = _customRoutingConfigs[configKey.UTF8String];
         }
     }
-    return [self getDefaultRoutingConfig];
+    return builder;
 }
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force

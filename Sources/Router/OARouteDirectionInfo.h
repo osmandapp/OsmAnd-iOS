@@ -12,7 +12,6 @@
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <turnType.h>
-#include "binaryRead.h"
 
 @interface OARouteDirectionInfo : NSObject
 // location when you should action (turn or go ahead)
@@ -40,8 +39,6 @@
 - (NSString *) getDescriptionRoutePart;
 - (NSString *) getDescriptionRoute:(int)collectedDistance;
 - (void) setDescriptionRoute:(NSString *)descriptionRoute;
-- (std::shared_ptr<RouteDataObject>) getRouteDataObject;
-- (void) setRouteDataObject:(std::shared_ptr<RouteDataObject>)routeDataObject;
 
 - (int) getExpectedTime;
 

@@ -198,7 +198,7 @@
     BOOL deviatedFromRoute = false;
     int turnImminent = 0;
     int nextTurnDistance = 0;
-    if (routingHelper.isRouteCalculated && [routingHelper isRouteCalculated] && followingMode)
+    if (routingHelper && [routingHelper isRouteCalculated] && followingMode)
     {
         deviatedFromRoute = [OARoutingHelper isDeviatedFromRoute];
         if (!_nextNext)

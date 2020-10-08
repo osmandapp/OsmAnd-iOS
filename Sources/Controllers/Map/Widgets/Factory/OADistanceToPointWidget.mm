@@ -74,7 +74,7 @@
 - (BOOL) updateInfo
 {
     CLLocationDistance d = [self getDistance];
-    if ([self distChanged:_cachedMeters dist:d])
+    if ([self isUpdateNeeded] || [self distChanged:_cachedMeters dist:d])
     {
         _cachedMeters = d;
         if (_cachedMeters <= 20)

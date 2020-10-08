@@ -14,7 +14,6 @@
 {
     // Description of the turn and route after
     NSString *_descriptionRoute;
-    std::shared_ptr<RouteDataObject> _routeDataObject;
 }
 
 - (instancetype)initWithAverageSpeed:(float)averageSpeed turnType:(std::shared_ptr<TurnType>)turnType
@@ -64,16 +63,6 @@
 - (int) getExpectedTime
 {
     return (int) round(self.distance / self.averageSpeed);
-}
-
-- (std::shared_ptr<RouteDataObject>) getRouteDataObject
-{
-    return _routeDataObject;
-}
-
-- (void) setRouteDataObject:(std::shared_ptr<RouteDataObject>)routeDataObject
-{
-    _routeDataObject = routeDataObject;
 }
 
 @end

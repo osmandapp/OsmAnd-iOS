@@ -6,15 +6,13 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/routing/RouteProvider.java
-//  git revision a814e2120744068570e49689a62d48a8730873df
+//  git revision c8ccf21c737e239dda267c89ef2edf504ad9d3e6
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OALocationPoint.h"
 #import "OAAppSettings.h"
-#import "OAGPXDocumentPrimitives.h"
 
-#include <routeSegmentResult.h>
 #include <OsmAndCore.h>
 
 @class OAGPXDocument, OARouteCalculationResult, OAApplicationMode;
@@ -41,9 +39,6 @@ struct GeneralRouter;
 
 @property (nonatomic) NSArray<CLLocation *> *points;
 @property (nonatomic) NSArray<OARouteDirectionInfo *> *directions;
-@property (nonatomic) std::vector<std::shared_ptr<RouteSegmentResult>> route;
-@property (nonatomic) NSArray<OAGpxWpt *> *routePoints;
-@property (nonatomic) BOOL reverse;
 @property (nonatomic) BOOL calculateOsmAndRoute;
 @property (nonatomic) BOOL passWholeRoute;
 @property (nonatomic) BOOL calculateOsmAndRouteParts;
@@ -51,8 +46,6 @@ struct GeneralRouter;
 @property (nonatomic) NSArray<id<OALocationPoint>> *wpt;
     
 @property (nonatomic) BOOL addMissingTurns;
-
-- (int) findStartIndexFromRoute:(NSArray<CLLocation *> *)route startLoc:(CLLocation *)startLoc calculateOsmAndRouteParts:(BOOL)calculateOsmAndRouteParts;
     
 @end
 
@@ -69,7 +62,7 @@ struct GeneralRouter;
 
 - (instancetype)initWithDoc:(OAGPXDocument *)document;
 
-- (OAGPXRouteParams *) build;
+- (OAGPXRouteParams *) build:(CLLocation *)start;
 - (NSArray<CLLocation *> *) getPoints;
 
 @end

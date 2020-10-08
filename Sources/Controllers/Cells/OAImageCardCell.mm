@@ -54,11 +54,15 @@
 - (void) setUserName:(NSString *)username
 {
     if (!username || username.length == 0)
+    {
         [_usernameLabel setHidden:YES];
+        [_usernameLabelShadow setHidden:YES];
+    }
     else
     {
         username = [NSString stringWithFormat:@"@%@", username];
         [_usernameLabel setHidden:NO];
+        [_usernameLabelShadow setHidden:NO];
         UIFont *font = [UIFont systemFontOfSize:13.0];
         CGSize stringBox = [username sizeWithAttributes:@{NSFontAttributeName: font}];
         CGRect usernameFrame = _usernameLabel.frame;

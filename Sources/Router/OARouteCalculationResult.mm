@@ -16,9 +16,14 @@
 #import "OARoutingHelper.h"
 #import "OAUtilities.h"
 #import "QuadRect.h"
+#import "OAExitInfo.h"
 
 #define distanceClosestToIntermediate 400.0
 #define distanceThresholdToIntroduceFirstAndLastPoints 50
+
+// Evaluates street name that the route follows after turn within specified distance.
+// It is useful to find names for short segments on intersections and roundabouts.
+#define distanceSeekStreetName 150.0
 
 @implementation OANextDirectionInfo
 
@@ -328,7 +333,9 @@
                     p = [[OARouteDirectionInfo alloc] initWithAverageSpeed:i.averageSpeed turnType:i.turnType];
                     p.routePointOffset = i.routePointOffset;
                     p.routeEndPointOffset = i.routeEndPointOffset;
+                    p.routeDataObject = i.routeDataObject;
                     p.destinationName = i.destinationName;
+                    p.routeDataObject = i.routeDataObject;
                     p.ref = i.ref;
                     p.streetName = i.streetName;
                     [p setDescriptionRoute:[i getDescriptionRoutePart]];
@@ -586,7 +593,7 @@
         while (prevBearingLocation < i - 1)
         {
             if ([locations[prevBearingLocation + 1] distanceFromLocation:current] > 70) {
-                prevBearingLocation ++;
+                prevBearingLocation++;
             } else {
                 break;
             }
@@ -791,6 +798,7 @@
             
             auto locale = std::string([lang UTF8String]);
             BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+            info.routeDataObject = routeDataObject;
             info.ref = [NSString stringWithUTF8String:routeDataObject->getRef(locale, transliterate, lastSegmentResult->isForwardDirection()).c_str()];
             info.streetName = [NSString stringWithUTF8String:routeDataObject->getName(locale, transliterate).c_str()];
             info.destinationName = [NSString stringWithUTF8String:routeDataObject->getDestinationName(locale, transliterate, lastSegmentResult->isForwardDirection()).c_str()];
@@ -955,6 +963,7 @@
                     OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:localDirections[currentDirection].averageSpeed turnType:TurnType::ptrStraight()];
                     info.ref = toSplit.ref;
                     info.streetName = toSplit.streetName;
+                    info.routeDataObject = toSplit.routeDataObject;
                     info.destinationName = toSplit.destinationName;
                     info.routePointOffset = interLocations[currentIntermediate].intValue;
                     info.descriptionRoute = OALocalizedString(@"route_head");
@@ -1087,10 +1096,10 @@
         }
         while (true)
         {
-            auto lat = get31LatitudeY(s->object->pointsY[i]);
-            auto lon = get31LongitudeX(s->object->pointsX[i]);
             if (i == s->getEndPointIndex() && routeInd != list.size() - 1)
                 break;
+            auto lat = get31LatitudeY(s->object->pointsY[i]);
+            auto lon = get31LongitudeX(s->object->pointsX[i]);
             
             NSNumber *alt = nil;
             if (i * 2 + 1 < vls.size())
@@ -1109,11 +1118,23 @@
                 }
                 lastHeight = h;
             }
+            // FIXME: investigate gpx file
+            if (s->object->pointsX[i] == 0 && s->object->pointsY[i] == 0)
+            {
+                if (locations.count > 0)
+                {
+                    CLLocation *prev = locations[locations.count - 1];
+                    lat = prev.coordinate.latitude;
+                    lon = prev.coordinate.longitude;
+                    if (prev.altitude)
+                        alt = @(prev.altitude);
+                }
+            }
             [locations addObject:[[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon) altitude:alt? alt.doubleValue : NAN horizontalAccuracy:0 verticalAccuracy:0 timestamp:[NSDate date]]];
 
             [self.class attachAlarmInfo:alarms res:s intId:i locInd:(int)locations.count];
             segmentsToPopulate.push_back(s);
-            if (i == s->getEndPointIndex() )
+            if (i == s->getEndPointIndex())
                 break;
             
             if (plus)
@@ -1126,7 +1147,7 @@
         if (turn)
         {
             OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:s->segmentSpeed turnType:turn];
-            if (routeInd  < list.size())
+            if (routeInd < list.size())
             {
                 int lind = routeInd;
                 if (turn->isRoundAbout())
@@ -1149,9 +1170,58 @@
                 
                 auto locale = std::string([lang UTF8String]);
                 BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
-                info.ref = [NSString stringWithUTF8String:next->object->getRef(locale, transliterate, next->isForwardDirection()).c_str()];
-                info.streetName = [NSString stringWithUTF8String:next->object->getName(locale, transliterate).c_str()];
+                
+                NSString *ref = [NSString stringWithUTF8String:next->object->getRef(locale,
+                                            transliterate, next->isForwardDirection()).c_str()];
+                info.ref = ref;
+                NSString *streetName = [NSString stringWithUTF8String:next->object->getName(locale,
+                                            transliterate).c_str()];
+                if (streetName.length == 0)
+                {
+                    // try to get street names from following segments
+                    float distanceFromTurn = next->distance;
+                    for (int n = lind + 1; n + 1 < list.size(); n++)
+                    {
+                        const auto& s1 = list[n];
+                        // scan the list only until the next turn
+                        if (s1->turnType != nullptr || distanceFromTurn > distanceSeekStreetName || streetName.length > 0)
+                            break;
+
+                        streetName = [NSString stringWithUTF8String:s1->object->getName(locale, transliterate).c_str()];
+                        distanceFromTurn += s1->distance;
+                    }
+                }
+                
+                info.streetName = streetName;
                 info.destinationName = [NSString stringWithUTF8String:next->object->getDestinationName(locale, transliterate, next->isForwardDirection()).c_str()];
+                if (s->object->isExitPoint() && next->object->getHighway() == "motorway_link")
+                {
+                    OAExitInfo *exitInfo = [[OAExitInfo alloc] init];
+                    exitInfo.ref = [NSString stringWithUTF8String:next->object->getExitRef().c_str()];
+                    exitInfo.exitStreetName = [NSString stringWithUTF8String:next->object->getExitName().c_str()];
+                    info.exitInfo = exitInfo;
+                }
+                
+                if (ref)
+                {
+                    const auto& nextRoad = next->object;
+                    info.routeDataObject = nextRoad;
+                    
+                    BOOL isNextShieldFound = nextRoad->hasNameTagStartsWith("road_ref");
+                    for (int ind = lind; ind < list.size() && !isNextShieldFound; ind++) {
+                        if (list[ind]->turnType != nullptr)
+                        {
+                            isNextShieldFound = YES;
+                        } else {
+                            const auto& obj = list[ind]->object;
+                            if (obj->hasNameTagStartsWith("road_ref"))
+                            {
+                                info.routeDataObject = obj;
+                                isNextShieldFound = YES;
+                            }
+                        }
+                    }
+                }
             }
             
             NSString *description = [[NSString stringWithFormat:@"%@ %@", [self.class toString:turn shortName:false],  [OARoutingHelper formatStreetName:info.streetName ref:info.ref destination:info.destinationName towards:OALocalizedString(@"towards")]] trim];

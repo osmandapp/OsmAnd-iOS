@@ -6,12 +6,16 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/routing/RouteDirectionInfo.java
-//  git revision e5a489637a08d21827a1edd2cf6581339b5f748a
+//  git revision fcd69744821733a04ce15dee7f111576bac478d6
 
 #import <Foundation/Foundation.h>
+#import "OAExitInfo.h"
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <turnType.h>
+#include <binaryRead.h>
+
+@class OAExitInfo;
 
 @interface OARouteDirectionInfo : NSObject
 // location when you should action (turn or go ahead)
@@ -32,6 +36,8 @@
 @property (nonatomic) NSString* ref;
 @property (nonatomic) NSString* streetName;
 @property (nonatomic) NSString* destinationName;
+@property (nonatomic) std::shared_ptr<RouteDataObject> routeDataObject;
+@property (nonatomic) OAExitInfo *exitInfo;
 
 - (instancetype)initWithAverageSpeed:(float)averageSpeed turnType:(std::shared_ptr<TurnType>)turnType;
 

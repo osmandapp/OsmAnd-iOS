@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/osm/edit/Relation.java
-//  git revision db3b280a26eaf721222ec918e8c0baf4dca9b1fd
+//  git revision 99503fdec5b1a6139bde6af4707d776779a33c78
 
 #import "OAEntity.h"
 

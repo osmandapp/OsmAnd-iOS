@@ -125,6 +125,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) currentLang;
 + (NSString *) capitalizeFirstLetterAndLowercase:(NSString *)s;
 + (NSString *) translatedLangName:(NSString *)lang;
++ (NSInteger) findFirstNumberEndIndex:(NSString *)value;
 
 + (void) callUrl:(NSString *)url;
 + (void) callPhone:(NSString *)phonesString;

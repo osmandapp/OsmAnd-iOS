@@ -21,6 +21,11 @@
     return CLLocationCoordinate2DMake([self getLatitude], [self getLongitude]);
 }
 
+- (CLLocation *) getLocation
+{
+    return [[CLLocation alloc] initWithLatitude:[self getLatitude] longitude:[self getLongitude]];
+}
+
 - (void)initializeLinks:(nonnull NSDictionary<OAEntityId *,OAEntity *> *)entities {
     // nothing to initialize for Node
 }

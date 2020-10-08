@@ -875,6 +875,23 @@
     }
 }
 
++ (NSInteger) findFirstNumberEndIndex:(NSString *)value
+{
+    uint i = 0;
+    BOOL valid = NO;
+    if (value.length > 0 && [value characterAtIndex:i] == '-')
+        i++;
+    while (i < value.length && (([value characterAtIndex:i] >= '0' && [value characterAtIndex:i] <= '9') || [value characterAtIndex:i] == '.'))
+    {
+        i++;
+        valid = YES;
+    }
+    if (valid)
+        return i;
+    else
+        return -1;
+}
+
 + (NSString *) translatedLangName:(NSString *)lang
 {
     NSString *langName = [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang];

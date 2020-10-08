@@ -231,7 +231,8 @@ static BOOL TEST_EXTRA_RESULTS = YES;
         }
         else
         {
-            [result addObject:resultsArr[i]];
+            if (![resultsArr[i] containsString:@"[[ios, "])
+                [result addObject:resultsArr[i]];
         }
     }
 }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -33,7 +34,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="8mP-Xc-aIi" firstAttribute="leading" secondItem="VHb-gO-u6g" secondAttribute="leading" constant="6" id="0Ov-d0-3G3"/>
                             <constraint firstItem="OEf-VO-Xmx" firstAttribute="leading" secondItem="8mP-Xc-aIi" secondAttribute="trailing" constant="6" id="0YO-9m-rVX"/>
@@ -45,17 +46,17 @@
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="enb-Nn-aO6">
                         <rect key="frame" x="30" y="0.0" width="2" height="44"/>
-                        <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemYellowColor"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="2" id="LRN-KW-qKD"/>
                         </constraints>
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="VHb-gO-u6g" secondAttribute="trailing" constant="16" id="32u-c5-3hM"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="VHb-gO-u6g" secondAttribute="trailing" id="32u-c5-3hM"/>
                     <constraint firstAttribute="bottom" secondItem="enb-Nn-aO6" secondAttribute="bottom" id="3cu-vB-npK"/>
                     <constraint firstItem="VHb-gO-u6g" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="2" id="LUG-gJ-Byz"/>
-                    <constraint firstItem="enb-Nn-aO6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="30" id="aFG-H7-pMX"/>
+                    <constraint firstItem="enb-Nn-aO6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="aFG-H7-pMX"/>
                     <constraint firstItem="VHb-gO-u6g" firstAttribute="leading" secondItem="enb-Nn-aO6" secondAttribute="trailing" constant="33" id="abk-gD-PMQ"/>
                     <constraint firstItem="enb-Nn-aO6" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="itG-fN-S8N"/>
                     <constraint firstAttribute="bottom" secondItem="VHb-gO-u6g" secondAttribute="bottom" constant="10" id="wwt-i6-ZjU"/>
@@ -70,4 +71,12 @@
             <point key="canvasLocation" x="299.19999999999999" y="193.4032983508246"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

@@ -310,7 +310,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     NSTimeInterval __block cachedLeftTime = 0;
     batteryControl.updateInfoFunction = ^BOOL{
         NSTimeInterval time = [NSDate date].timeIntervalSince1970;
-        if ([batteryControl isUpdateNeeded] || time - cachedLeftTime > 1)
+        if ([batteryControlWeak isUpdateNeeded] || time - cachedLeftTime > 1)
         {
             cachedLeftTime = time;
 

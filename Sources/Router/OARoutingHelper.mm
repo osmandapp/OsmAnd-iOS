@@ -732,7 +732,7 @@ static BOOL _isDeviatedFromRoute = false;
         params.start = start;
         params.end = end;
         params.intermediates = intermediates;
-        //params.gpxRoute = gpxRoute == nil ? nil : [gpxRoute build];
+        params.gpxRoute = gpxRoute == nil ? nil : [gpxRoute build:start];
         params.onlyStartPointChanged = onlyStartPointChanged;
         if (_recalculateCountInInterval < RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE || (gpxRoute && gpxRoute.passWholeRoute && _isDeviatedFromRoute))
         {

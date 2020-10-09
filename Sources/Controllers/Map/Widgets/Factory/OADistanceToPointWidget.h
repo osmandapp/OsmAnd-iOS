@@ -16,7 +16,6 @@
 - (instancetype) initWithIcons:(NSString *)dayIconId nightIconId:(NSString *)nightIconId;
 
 - (void) click;
-- (BOOL) updateInfo;
 - (CLLocation *) getPointToNavigate;
 - (CLLocationDistance) getDistance;
 

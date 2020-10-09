@@ -545,12 +545,11 @@
     }
 }
 
-// TODO: sync with android
-//public synchronized RoutingConfiguration.Builder getDefaultRoutingConfig() {
-//    return RoutingConfiguration.getDefault();
-//}
 - (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig
 {
+    // TODO: sync with android
+    // return RoutingConfiguration.getDefault();
+    
     float tm = [[NSDate date] timeIntervalSince1970];
     @try
     {
@@ -580,7 +579,7 @@
             builder = _customRoutingConfigs[configKey.UTF8String];
         }
     }
-    return builder;
+    return builder != NULL ? builder : [self getDefaultRoutingConfig];
 }
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force

@@ -126,6 +126,8 @@
     
     _metricSystemDepended = NO;
     _angularUnitsDepended = NO;
+    _cachedMetricSystem = -1;
+    _cachedAngularUnits = -1;
 }
 
 - (void) onWidgetClicked:(id)sender
@@ -319,13 +321,13 @@
     if ([self isMetricSystemDepended])
     {
         int metricSystem = (int)[[OAAppSettings sharedManager].metricSystem get];
-        res |= _cachedMetricSystem != NULL || _cachedMetricSystem != metricSystem;
+        res |= _cachedMetricSystem != metricSystem;
         _cachedMetricSystem = metricSystem;
     }
     if ([self isAngularUnitsDepended])
     {
         int angularUnits = (int)[[OAAppSettings sharedManager].angularUnits get];
-        res |= _cachedAngularUnits != NULL || _cachedAngularUnits != angularUnits;
+        res |= _cachedAngularUnits != angularUnits;
         _cachedAngularUnits = angularUnits;
     }
     return res;

@@ -46,6 +46,7 @@
     UIBackgroundTaskIdentifier _appInitTask;
     BOOL _coreInitDone;
     BOOL _appInitDone;
+    BOOL _appInitializing;
     
     NSURL *loadedURL;
     NSTimer *_checkLiveTimer;
@@ -56,6 +57,10 @@
 
 - (BOOL) initialize
 {
+    if (_appInitDone || _appInitializing)
+        return YES;
+    
+    _appInitializing = YES;
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
     [device beginGeneratingDeviceOrientationNotifications];
@@ -127,6 +132,8 @@
             }
             
             _appInitDone = YES;
+            _appInitializing = NO;
+            
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
             

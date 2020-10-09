@@ -511,7 +511,6 @@
     return list;
 }
 
-
 /**
  * PREPARATION
  * Check points for duplicates (it is very bad for routing) - cloudmade could return it

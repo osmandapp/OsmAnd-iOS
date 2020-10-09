@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 //  OsmAnd/src/net/osmand/plus/osmedit/OsmBugsRemoteUtil.java
-//  git revision 146449a936925552950be737b9645f9b9a043477
+//  git revision f5f971874f8bffbb6471d905f699874519957f4f
 
 #import <Foundation/Foundation.h>
 #import "OAOsmBugsUtilsProtocol.h"

@@ -232,7 +232,7 @@
 "impassable_road" = "Avoid roads";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
-"interrupt_music" = "Avbryt musikk";
+"interrupt_music" = "Sett musikk på pause";
 "shared_string_do_not_use" = "Do not use";
 "shared_string_sound" = "Lyd";
 "select_route_start_on_map" = "Select start point of the route";
@@ -1666,3 +1666,4 @@
 "min_speed" = "Min. hastighet";
 "default_speed" = "Forvalgt hastighet";
 "allow_3d" = "Tillat 2,5D-visning";
+"default_speed_dialog_msg" = "Estimerer ankomsttid for ukjente veityper og begrenser farten for alle veier (kan påvirke ruting)";

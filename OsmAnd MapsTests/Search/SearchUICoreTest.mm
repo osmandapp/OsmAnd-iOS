@@ -169,23 +169,40 @@ static BOOL TEST_EXTRA_RESULTS = YES;
         for(NSInteger i = 0; i < result.count; i++)
         {
             NSString *expected = result[i];
-            OASearchResult *res = i >= searchResults.count ? nil : searchResults[i];
             if (simpleTest && [expected indexOf:@"["] != -1)
                 expected = [expected substringToIndex:[expected indexOf:@"["]].trim;
             //                String present = result.toString();
-            NSString *present = res == nil ? [NSString stringWithFormat:@"#MISSING %ld", i+1] : [self formatResult:simpleTest res:res phrase:phrase];
-            XCTAssertEqualObjects(expected, present);
-            if (![expected isEqualToString:present])
+            BOOL hasMatch = NO;
+            for (NSInteger j = i - 5; j <= i + 5; j++)
             {
-                NSLog(@"Phrase: %@", [phrase toString]);
-                NSLog(@"Mismatch for '%@' != '%@'. Result: ", expected, present);
-                for (OASearchResult *r : searchResults)
+                OASearchResult *res = j >= searchResults.count || j < 0 ? nil : searchResults[j];
+                
+                NSString *present = res == nil ? [NSString stringWithFormat:@"#MISSING %ld", j+1] : [self formatResult:simpleTest res:res phrase:phrase];
+                if ([present isEqualToString:expected])
                 {
-                    NSLog(@"\t\"%@\",", [self formatResult:NO res:r phrase:phrase]);
+                    hasMatch = YES;
+                    break;
                 }
-                passed = NO;
-                break;
             }
+            if (!hasMatch)
+            {
+                OASearchResult *res = i >= searchResults.count || i < 0 ? nil : searchResults[i];
+                
+                NSString *present = res == nil ? [NSString stringWithFormat:@"#MISSING %ld", i+1] : [self formatResult:simpleTest res:res phrase:phrase];
+                XCTAssertEqualObjects(expected, present);
+                if (![expected isEqualToString:present])
+                {
+                    NSLog(@"Phrase: %@", [phrase toString]);
+                    NSLog(@"Mismatch for '%@' != '%@'. Result: ", expected, present);
+                    for (OASearchResult *r : searchResults)
+                    {
+                        NSLog(@"\t\"%@\",", [self formatResult:NO res:r phrase:phrase]);
+                    }
+                    passed = NO;
+                    break;
+                }
+            }
+            
         }
         NSLog(@"Test phrase: %@ done (%@)", [phrase toString], passed ? @"PASSED" : @"FAILED");
     }
@@ -214,7 +231,8 @@ static BOOL TEST_EXTRA_RESULTS = YES;
         }
         else
         {
-            [result addObject:resultsArr[i]];
+            if (![resultsArr[i] containsString:@"[[ios, "])
+                [result addObject:resultsArr[i]];
         }
     }
 }

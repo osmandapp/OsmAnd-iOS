@@ -51,9 +51,7 @@
     self = [super init];
     if (self) {
         _id = identifier;
-        for (NSString *t in [copy getTagKeySet]) {
-            [self putTagNoLC:t value:[copy getTagFromString:t]];
-        }
+        [self copyTags:copy];
         _dataLoaded = [copy isDataLoaded];
         _latitude = [copy getLatitude];
         _longitude = [copy getLongitude];
@@ -61,6 +59,12 @@
     return self;
 }
 
+- (void) copyTags:(OAEntity *)copy
+{
+    for (NSString *t in [copy getTagKeySet]) {
+        [self putTagNoLC:t value:[copy getTagFromString:t]];
+    }
+}
 
 -(NSSet<NSString *> *) getChangedTags
 {

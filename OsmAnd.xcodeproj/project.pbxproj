@@ -269,6 +269,7 @@
 		158B1F772487B838007BC45A /* OADownloadMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158B1F722487B837007BC45A /* OADownloadMapViewController.xib */; };
 		158B1F782487B838007BC45A /* OASelectMapSourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 158B1F732487B837007BC45A /* OASelectMapSourceViewController.mm */; };
 		158B1F792487B838007BC45A /* OADownloadMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 158B1F752487B838007BC45A /* OADownloadMapViewController.mm */; };
+		15A3B4F02524784E00331177 /* OAExitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A3B4EF2524784E00331177 /* OAExitInfo.m */; };
 		15B4E48C24AB3F8600119365 /* ic_custom_minimal_distance.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B4E48924AB3F8400119365 /* ic_custom_minimal_distance.png */; };
 		15B4E48D24AB3F8600119365 /* ic_custom_minimal_distance@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B4E48A24AB3F8500119365 /* ic_custom_minimal_distance@2x.png */; };
 		15B4E48E24AB3F8600119365 /* ic_custom_minimal_distance@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B4E48B24AB3F8500119365 /* ic_custom_minimal_distance@3x.png */; };
@@ -5184,6 +5185,18 @@
 		DA8093B62260899600A1479F /* ic_custom_osm_note_resolved@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8093AB2260899600A1479F /* ic_custom_osm_note_resolved@2x.png */; };
 		DA8093B72260899600A1479F /* ic_custom_osm_note_unresolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8093AC2260899600A1479F /* ic_custom_osm_note_unresolved@3x.png */; };
 		DA8093B82260899600A1479F /* ic_custom_osm_note_unresolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8093AC2260899600A1479F /* ic_custom_osm_note_unresolved@3x.png */; };
+		DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */; };
+		DA80DAB6251E2339008E6267 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAB5251E2338008E6267 /* CoreLocation.framework */; };
+		DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
+		DA80DABD251E2CB7008E6267 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
+		DA80DABE251E2CB7008E6267 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
+		DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DABF251E2CB7008E6267 /* libQt5Xml.a */; };
+		DA80DAC2251E2CB8008E6267 /* libQt5Concurrent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */; };
+		DA80DAC6251E2D57008E6267 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAC5251E2D57008E6267 /* Foundation.framework */; };
+		DA80DACB251E3412008E6267 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
+		DA80DACF251E3440008E6267 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DACE251E3440008E6267 /* UIKit.framework */; };
+		DA80DAD3251F13F6008E6267 /* libarchive_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAD2251F13F6008E6267 /* libarchive_static.a */; };
+		DA80DAD5251F13F6008E6267 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAD4251F13F6008E6267 /* libexpat_static.a */; };
 		DA835FEB23436F1A003374B5 /* OADestinationItemsListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA835FE923436F1A003374B5 /* OADestinationItemsListViewController.mm */; };
 		DA835FEC23436F1A003374B5 /* OADestinationItemsListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA835FE923436F1A003374B5 /* OADestinationItemsListViewController.mm */; };
 		DA835FED23436F1A003374B5 /* OADestinationItemsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA835FEA23436F1A003374B5 /* OADestinationItemsListViewController.xib */; };
@@ -5772,6 +5785,8 @@
 		DAE6BED622201B46004A4045 /* ic_custom_clear_field@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED122201B45004A4045 /* ic_custom_clear_field@3x.png */; };
 		DAE6BED722201B46004A4045 /* ic_custom_clear_field.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED222201B46004A4045 /* ic_custom_clear_field.png */; };
 		DAE6BED822201B46004A4045 /* ic_custom_clear_field.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED222201B46004A4045 /* ic_custom_clear_field.png */; };
+		DAE7C567252C6BD400114A77 /* OAExitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE7C566252C6BD400114A77 /* OAExitInfo.m */; };
+		DAE7C568252C6BD400114A77 /* OAExitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE7C566252C6BD400114A77 /* OAExitInfo.m */; };
 		DAEB14CC2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */; };
 		DAEB14CD2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */; };
 		DAEC05EF2296C6C500045298 /* ic_custom_mapillary_color_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAEC05E62296C6C200045298 /* ic_custom_mapillary_color_logo@3x.png */; };
@@ -6297,6 +6312,8 @@
 		158B1F732487B837007BC45A /* OASelectMapSourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASelectMapSourceViewController.mm; path = Resources/Controllers/DownloadMapSource/OASelectMapSourceViewController.mm; sourceTree = "<group>"; };
 		158B1F742487B837007BC45A /* OADownloadMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadMapViewController.h; path = Resources/Controllers/DownloadMapSource/OADownloadMapViewController.h; sourceTree = "<group>"; };
 		158B1F752487B838007BC45A /* OADownloadMapViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadMapViewController.mm; path = Resources/Controllers/DownloadMapSource/OADownloadMapViewController.mm; sourceTree = "<group>"; };
+		15A3B4EF2524784E00331177 /* OAExitInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAExitInfo.m; sourceTree = "<group>"; };
+		15A3B4F12524785F00331177 /* OAExitInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExitInfo.h; sourceTree = "<group>"; };
 		15B4E48924AB3F8400119365 /* ic_custom_minimal_distance.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_minimal_distance.png; path = Resources/Icons/ic_custom_minimal_distance.png; sourceTree = "<group>"; };
 		15B4E48A24AB3F8500119365 /* ic_custom_minimal_distance@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_minimal_distance@2x.png"; path = "Resources/Icons/ic_custom_minimal_distance@2x.png"; sourceTree = "<group>"; };
 		15B4E48B24AB3F8500119365 /* ic_custom_minimal_distance@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_minimal_distance@3x.png"; path = "Resources/Icons/ic_custom_minimal_distance@3x.png"; sourceTree = "<group>"; };
@@ -9598,6 +9615,14 @@
 		DA8093AA2260899500A1479F /* ic_custom_osm_note_resolved.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_osm_note_resolved.png; path = Resources/Icons/ic_custom_osm_note_resolved.png; sourceTree = "<group>"; };
 		DA8093AB2260899600A1479F /* ic_custom_osm_note_resolved@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_note_resolved@2x.png"; path = "Resources/Icons/ic_custom_osm_note_resolved@2x.png"; sourceTree = "<group>"; };
 		DA8093AC2260899600A1479F /* ic_custom_osm_note_unresolved@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_note_unresolved@3x.png"; path = "Resources/Icons/ic_custom_osm_note_unresolved@3x.png"; sourceTree = "<group>"; };
+		DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteResultPreparationTest.mm; sourceTree = "<group>"; };
+		DA80DAB5251E2338008E6267 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
+		DA80DABF251E2CB7008E6267 /* libQt5Xml.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Xml.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Xml.a"; sourceTree = "<group>"; };
+		DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Concurrent.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Concurrent.a"; sourceTree = "<group>"; };
+		DA80DAC5251E2D57008E6267 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		DA80DACE251E3440008E6267 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		DA80DAD2251F13F6008E6267 /* libarchive_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libarchive_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA80DAD4251F13F6008E6267 /* libexpat_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libexpat_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA835FE823436F19003374B5 /* OADestinationItemsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADestinationItemsListViewController.h; sourceTree = "<group>"; };
 		DA835FE923436F1A003374B5 /* OADestinationItemsListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADestinationItemsListViewController.mm; sourceTree = "<group>"; };
 		DA835FEA23436F1A003374B5 /* OADestinationItemsListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADestinationItemsListViewController.xib; sourceTree = "<group>"; };
@@ -9984,6 +10009,8 @@
 		DAE6BED022201B45004A4045 /* ic_custom_clear_field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clear_field@2x.png"; path = "Resources/Icons/ic_custom_clear_field@2x.png"; sourceTree = "<group>"; };
 		DAE6BED122201B45004A4045 /* ic_custom_clear_field@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clear_field@3x.png"; path = "Resources/Icons/ic_custom_clear_field@3x.png"; sourceTree = "<group>"; };
 		DAE6BED222201B46004A4045 /* ic_custom_clear_field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_clear_field.png; path = Resources/Icons/ic_custom_clear_field.png; sourceTree = "<group>"; };
+		DAE7C565252C6BD400114A77 /* OAExitInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExitInfo.h; sourceTree = "<group>"; };
+		DAE7C566252C6BD400114A77 /* OAExitInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAExitInfo.m; sourceTree = "<group>"; };
 		DAEB14CA2204549400D20C45 /* OAOpenStreetMapRemoteUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapRemoteUtil.h; sourceTree = "<group>"; };
 		DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpenStreetMapRemoteUtil.mm; sourceTree = "<group>"; };
 		DAEC05E62296C6C200045298 /* ic_custom_mapillary_color_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_mapillary_color_logo@3x.png"; path = "Resources/Icons/ic_custom_mapillary_color_logo@3x.png"; sourceTree = "<group>"; };
@@ -10233,6 +10260,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA80DAD5251F13F6008E6267 /* libexpat_static.a in Frameworks */,
+				DA80DACF251E3440008E6267 /* UIKit.framework in Frameworks */,
+				DA80DAC6251E2D57008E6267 /* Foundation.framework in Frameworks */,
+				DA80DAB6251E2339008E6267 /* CoreLocation.framework in Frameworks */,
+				DA80DACB251E3412008E6267 /* libQt5Core.a in Frameworks */,
+				DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */,
+				DA80DAC2251E2CB8008E6267 /* libQt5Concurrent.a in Frameworks */,
+				DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */,
+				DA80DABD251E2CB7008E6267 /* libQt5Sql.a in Frameworks */,
+				DA80DAD3251F13F6008E6267 /* libarchive_static.a in Frameworks */,
+				DA80DABE251E2CB7008E6267 /* libqtpcre.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13338,6 +13376,8 @@
 			children = (
 				84B524111EF2AFD500E580DC /* GPX */,
 				84A05F1F1F1297D000296B7F /* OARoutingHelper.h */,
+				15A3B4EF2524784E00331177 /* OAExitInfo.m */,
+				15A3B4F12524785F00331177 /* OAExitInfo.h */,
 				84A05F201F1297D000296B7F /* OARoutingHelper.mm */,
 				84D0C89D1F1AA31600B0856B /* OATargetPointsHelper.h */,
 				84D0C89E1F1AA31600B0856B /* OATargetPointsHelper.mm */,
@@ -13365,6 +13405,8 @@
 				DA303D472420F532006F8BC7 /* OATransportRoutingHelper.mm */,
 				DA303D4D24210AF9006F8BC7 /* OATransportRouteCalculationParams.h */,
 				DA303D4E24210AF9006F8BC7 /* OATransportRouteCalculationParams.mm */,
+				DAE7C565252C6BD400114A77 /* OAExitInfo.h */,
+				DAE7C566252C6BD400114A77 /* OAExitInfo.m */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -14010,6 +14052,13 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA80DAD2251F13F6008E6267 /* libarchive_static.a */,
+				DA80DAD4251F13F6008E6267 /* libexpat_static.a */,
+				DA80DACE251E3440008E6267 /* UIKit.framework */,
+				DA80DAC5251E2D57008E6267 /* Foundation.framework */,
+				DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */,
+				DA80DABF251E2CB7008E6267 /* libQt5Xml.a */,
+				DA80DAB5251E2338008E6267 /* CoreLocation.framework */,
 				DA5F21D12295270000B0D7B6 /* WebKit.framework */,
 				DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */,
 				DA35226B20F245BC0038CDA7 /* AVFoundation.framework */,
@@ -15258,6 +15307,7 @@
 		DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXGroup;
 			children = (
+				DA80DAA8251E0C0C008E6267 /* Router */,
 				8A1CF862250D145C003D3829 /* test-resources */,
 				DA72AB932508F44900851313 /* Search */,
 				DA72AB8D2508F41000851313 /* Info.plist */,
@@ -15314,6 +15364,14 @@
 				DA7F258F231A68CD00E54F77 /* Charts.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		DA80DAA8251E0C0C008E6267 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */,
+			);
+			path = Router;
 			sourceTree = "<group>";
 		};
 		DA846BD62293FBA9006EFC7B /* Mapillary */ = {
@@ -20486,6 +20544,7 @@
 				8A3F030121C7C1600043797E /* OAOsmLivePlansCardView.m in Sources */,
 				DA2558B824ADE40F0081D155 /* OASettingsModalPresentationViewController.m in Sources */,
 				DA32E02921EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */,
+				DAE7C568252C6BD400114A77 /* OAExitInfo.m in Sources */,
 				846F03721E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA3305CB21D3BA440081BA1D /* OATextInputCell.mm in Sources */,
 				8433946F1FF3C09A006205A5 /* OALaunchScreenViewController.m in Sources */,
@@ -21085,6 +21144,7 @@
 				BBA3AF37197FC4BB0039D991 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				84D1F90F1F4EBE2C006E2526 /* OASelectedGPXHelper.mm in Sources */,
 				84B4FDA11A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
+				15A3B4F02524784E00331177 /* OAExitInfo.m in Sources */,
 				84D81EFB1AA370E9001098FD /* OADestination.mm in Sources */,
 				DAB2A55921F1FDCD00D9F01A /* OAOsmBugsLayer.mm in Sources */,
 				DA92555924A60A6E00871AAF /* OAMapTileDownloader.mm in Sources */,
@@ -21322,6 +21382,7 @@
 				848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
 				84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				15DF4052242B3437004AF26B /* OASettingsHelper.mm in Sources */,
+				DAE7C567252C6BD400114A77 /* OAExitInfo.m in Sources */,
 				3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */,
 				8476E1F21F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
 				DA32E02821EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */,
@@ -21761,6 +21822,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -22244,8 +22306,20 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
+					"${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
+					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lOsmAndCore_static_standalone",
+					"-lprotobuf_static",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -22295,6 +22369,11 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lOsmAndCore_static_standalone",
+					"-lprotobuf_static",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "net.osmand.maps.OsmAnd-MapsTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";

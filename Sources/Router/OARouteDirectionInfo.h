@@ -12,6 +12,7 @@
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <turnType.h>
+#include "binaryRead.h"
 
 @interface OARouteDirectionInfo : NSObject
 // location when you should action (turn or go ahead)
@@ -32,6 +33,7 @@
 @property (nonatomic) NSString* ref;
 @property (nonatomic) NSString* streetName;
 @property (nonatomic) NSString* destinationName;
+@property (nonatomic) std::shared_ptr<RouteDataObject> routeDataObject;
 
 - (instancetype)initWithAverageSpeed:(float)averageSpeed turnType:(std::shared_ptr<TurnType>)turnType;
 

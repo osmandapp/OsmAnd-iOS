@@ -5,8 +5,8 @@
 //  Created by Paul on 1/23/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
-//  OsmAnd-java/src/main/java/net/osmand/osm/edit/Way.java
-//  git revision 3f950ab57a273d38d92d41eeb169459ef58c1d31
+//  OsmAnd-java/src/net/osmand/osm/edit/Way.java
+//  git revision cc94ead73db0af7a3793cd56ba08a750d2c992f9
 
 #import "OAEntity.h"
 
@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAWay : OAEntity <OAEntityProtocol>
 
--(id)initWithWay:(OAWay *)way identifier:(long long)identifier;
+-(id)initWithWay:(OAWay *)way;
 -(id)initWithId:(long long)identifier nodes:(NSArray<OANode *> *)nodes;
 -(id)initWithId:(long long)identifier latitude:(double)lat longitude:(double)lon ids:(NSArray<NSNumber *> *)nodeIds;
 

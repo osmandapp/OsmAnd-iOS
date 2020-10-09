@@ -325,7 +325,7 @@
     if ([self isAngularUnitsDepended])
     {
         int angularUnits = (int)[[OAAppSettings sharedManager].angularUnits get];
-        res |= (!_cachedAngularUnits) || (_cachedAngularUnits != angularUnits);
+        res |= (_cachedAngularUnits != angularUnits);
         _cachedAngularUnits = angularUnits;
     }
     return res;

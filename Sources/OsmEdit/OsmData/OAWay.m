@@ -17,9 +17,9 @@
     NSMutableArray<OANode *> *_nodes;
 }
 
--(id)initWithWay:(OAWay *)way identifier:(long long)identifier
+-(id)initWithWay:(OAWay *)way
 {
-    self = [super initWithEntity:way identifier:identifier];
+    self = [super initWithId:[way getId]];
     if (self) {
         NSArray<NSNumber *> *nodeIds = [way getNodeIds];
         if (nodeIds)

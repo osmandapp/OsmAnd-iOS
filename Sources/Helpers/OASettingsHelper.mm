@@ -71,10 +71,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             return @"MAP_SOURCES";
         case EOASettingsItemTypeAvoidRoads:
             return @"AVOID_ROADS";
-        case EOASettingsItemTypeSuggestedDownloads:
-            return @"SUGGESTED_DOWNLOADS";
-        case EOASettingsItemTypeDownloads:
-            return @"DOWNLOADS";
         default:
             return nil;
     }
@@ -100,10 +96,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return EOASettingsItemTypeMapSources;
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOASettingsItemTypeAvoidRoads;
-    if ([typeName isEqualToString:@"SUGGESTED_DOWNLOADS"])
-        return EOASettingsItemTypeSuggestedDownloads;
-    if ([typeName isEqualToString:@"DOWNLOADS"])
-        return EOASettingsItemTypeDownloads;
     
     return EOASettingsItemTypeUnknown;
 }
@@ -236,6 +228,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @property (nonatomic) NSString *pluginId;
 @property (nonatomic) NSString *defaultName;
 @property (nonatomic) NSString *defaultFileExtension;
+@property (nonatomic) NSMutableArray<NSString *> *warnings;
 
 - (void) initialization;
 - (void) readFromJson:(id)json error:(NSError * _Nullable *)error;
@@ -258,21 +251,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return self;
 }
  
-- (instancetype _Nullable) initWithSettingsItem:(OASettingsItem  * _Nullable)baseItem
-{
-    self = [super init];
-    if (self)
-    {
-        if (baseItem)
-        {
-            _pluginId = baseItem.pluginId;
-            _fileName = baseItem.fileName;
-        }
-        [self initialization];
-    }
-    return self;
-}
-
 - (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error
 {
     self = [super init];
@@ -648,12 +626,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         _appMode = appMode;
     }
     return self;
-}
-
-- (void) initialization
-{
-    [super initialization];
-    _appModeBeanPrefsIds = [NSSet setWithArray:[OAAppSettings sharedManager].appModeBeanPrefsIds];
 }
 
 - (EOASettingsItemType) type
@@ -1215,251 +1187,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @end
 
-#pragma mark - SuggestedDownloadsItem
-
-@implementation OASuggestedDownloadsItem
-{
-    NSString *_scopeId;
-    NSString *_searchType;
-    NSMutableArray<NSString *> *_names;
-    int _limit;
-    NSMutableArray<OASuggestedDownloadsItem *> *_items;
-}
-@dynamic type, name;
-
-- (instancetype) initWithScopeId:(NSString *)scopeId searchType:(NSString *)searchType names:(NSMutableArray<NSString *> *)names limit:(int)limit
-{
-    self = [super init];
-    if (self) {
-        _scopeId = scopeId;
-        _searchType = searchType;
-        _names = names;
-        _limit = limit;
-    }
-    return self;
-}
-
-- (NSString *) getScopeId
-{
-    return _scopeId;
-}
-
-- (NSString *) getSearchType
-{
-    return _searchType;
-}
-
-- (NSMutableArray<NSString *> *) getNames
-{
-    return _names;
-}
-
-- (int) getLimit
-{
-    return _limit;
-}
-
-- (void) initialization
-{
-    [super initialization];
-    _items = [NSMutableArray new];
-}
-
-- (EOASettingsItemType) type
-{
-    return EOASettingsItemTypeSuggestedDownloads;
-}
-
-- (NSString *) name
-{
-    return @"suggested_downloads";
-}
-
-- (NSString *) publicName
-{
-    return @"suggested_downloads";
-}
-
-- (NSMutableArray<OASuggestedDownloadsItem *> *) getItems
-{
-    return _items;
-}
-
-- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
-{
-    try
-    {
-        if (![json contains:@"items"])
-            return;
-        NSArray *jsonArray = [json[@"items"] allValues];
-        for (int i = 0; i < jsonArray.count; i++)
-        {
-            NSDictionary *object = jsonArray[i];
-            NSString *scopeId = object[@"scope-id"] ? object[@"scope-id"] : @"";
-            NSString *searchType = object[@"search-type"] ? object[@"search-type"] : @"";
-            int limit = object[@"limit"] ? [object[@"limit"] intValue] : -1;
-            
-            NSMutableArray *names = [NSMutableArray new];
-            if (object[@"names"])
-            {
-                NSArray *namesArray = [json[@"names"] allValues];
-                for (int j = 0; j < namesArray.count; j++)
-                {
-                    [names addObject:[namesArray[j] stringValue]];
-                }
-            }
-            OASuggestedDownloadsItem *suggestedDownload = [[OASuggestedDownloadsItem alloc] initWithScopeId:scopeId searchType:searchType names:names limit:limit];
-            [_items addObject:suggestedDownload];
-        }
-    }
-    catch (NSException *e)
-    {
-        [self.warnings addObject:OALocalizedString(@"settings_item_read_error", [OASettingsItemType typeName:[self type]])];
-    }
-}
-
-- (void) writeItemsToJson:(id)json
-{
-    NSMutableArray *jsonArray = [NSMutableArray new];
-    if (_items.count != 0)
-    {
-        try
-        {
-            for (OASuggestedDownloadsItem *downloadItem in _items)
-            {
-                NSDictionary *jsonObject = [NSDictionary new];
-                [jsonObject setValue:[downloadItem getScopeId] forKey:@"scope-id"];
-                if ([downloadItem getLimit] != -1)
-                {
-                    [jsonObject setValue:@([downloadItem getLimit]) forKey:@"limit"];
-                }
-                if ([downloadItem getSearchType] && [downloadItem getSearchType].length > 0)
-                {
-                    [jsonObject setValue:[downloadItem getSearchType] forKey:@"search-type"];
-                }
-                if ([downloadItem getNames] && [downloadItem getNames].count > 0)
-                {
-                    [jsonObject setValue:[downloadItem getNames] forKey:@"names"];
-                }
-                [jsonArray addObject:jsonObject];
-            }
-            [((NSDictionary *)json) setValue:jsonArray forKey:@"items"];
-        }
-        catch (NSException *e)
-        {
-            [self.warnings addObject:OALocalizedString(@"settings_item_write_error", [OASettingsItemType typeName:[self type]])];
-        }
-    }
-}
-
-- (OASettingsItemReader *) getReader
-{
-    return nil;
-}
-
-- (OASettingsItemWriter *) getWriter
-{
-    return nil;
-}
-
-@end
-
-#pragma mark - DownloadsItem
-
-@implementation OADownloadsItem
-{
-    NSMutableArray<OAWorldRegion *> *_items;
-}
-
-- (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error
-{
-    return [super initWithJson:json error:error];
-}
-
-- (void) initialization
-{
-    [super initialization];
-    _items = [NSMutableArray new];
-}
-
-- (EOASettingsItemType) type
-{
-    return EOASettingsItemTypeDownloads;
-}
-
-- (NSString *) name
-{
-    return @"downloads";
-}
-
-- (NSString *) publicName
-{
-    return @"downloads";
-}
-
-- (NSMutableArray<OAWorldRegion *> *) getItems
-{
-    return _items;
-}
-
-/*
-// implement CustomOsmandPlugin.java
- 
-- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
-{
-    try
-    {
-        if (!json[@"items"])
-            return;
-        
-        NSMutableArray *jsonArray = json[@"items"];
- 
-        //items.addAll(CustomOsmandPlugin.collectRegionsFromJson(app, jsonArray));
-    }
-    catch(NSException *e)
-    {
-        [self.warnings addObject:OALocalizedString(@"settings_item_read_error", [OASettingsItemType typeName:[self type]])];
-    }
-}
-
-- (void) writeItemsToJson:(id)json
-{
-    NSMutableArray *jsonArray = [NSMutableArray new];
-    if (_items && _items.count > 0)
-    {
-        try
-        {
-            for (OAWorldRegion *region in _items)
-            {
- 
-//                if (region instanceof CustomRegion) {
-//                    JSONObject regionJson = ((CustomRegion) region).toJson();
-//                    jsonArray.put(regionJson);
-//                }
- 
-            }
-            [((NSDictionary *)json) setValue:jsonArray forKey:@"items"];
-        }
-        catch(NSException *e)
-        {
-            [self.warnings addObject:OALocalizedString(@"settings_item_write_error", [OASettingsItemType typeName:[self type]])];
-        }
-    }
-}
-*/
-
-- (OASettingsItemReader *) getReader
-{
-    return nil;
-}
-
-- (OASettingsItemWriter *) getWriter
-{
-    return nil;
-}
-
-@end
-
 #pragma mark - OAFileSettingsItemReader
 
 @implementation OAFileSettingsItemReader
@@ -1933,9 +1660,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     self.duplicateItems = [NSMutableArray array];
 }
 
-- (instancetype) initWithItems:(NSArray<id> *)items settingsItem:(OASettingsItem  * _Nullable )baseItem
+- (instancetype) initWithItems:(NSArray<id> *) items
 {
-    self = [super initWithSettingsItem:baseItem];
+    self = [super init];
     if (self)
         _items = items.mutableCopy;
     
@@ -2281,9 +2008,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
 }
 
-- (instancetype) initWithItems:(NSArray<OALocalResourceItem *> *)items settingsItem:(OASettingsItem  * _Nullable )baseItem
+- (instancetype) initWithItems:(NSArray<OALocalResourceItem *> *)items
 {
-    self = [super initWithItems:items settingsItem:baseItem];
+    self = [super initWithItems:items];
     if (self)
     {
         if (self.items.count > 0)
@@ -2490,7 +2217,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         BOOL ellipsoid = object[@"ellipsoid"] ? [object[@"ellipsoid"] boolValue] : NO;
         BOOL invertedY = object[@"inverted_y"] ? [object[@"inverted_y"] boolValue] : NO;
         NSString *referer = object[@"referer"];
-        NSString *userAgent = object[@"userAgent"];
         BOOL timesupported = object[@"timesupported"] ? [object[@"timesupported"] boolValue] : NO;
         long expire = [object[@"expire"] longValue];
         BOOL inversiveZoom = object[@"inversiveZoom"] ? [object[@"inversiveZoom"] boolValue] : NO;
@@ -2499,11 +2225,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         int bitDensity = [object[@"bitDensity"] intValue];
         int avgSize = [object[@"avgSize"] intValue];
         NSString *rule = object[@"rule"];
-        
-        if (expire > 0 && expire < 3600000)
-        {
-            expire = expire * 60 * 1000L;
-        }
         
         if (!sql)
         {
@@ -2591,7 +2312,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 jsonObject[@"ellipsoid"] = [@(1) isEqual:params[@"ellipsoid"]] ? @"true" : @"false";
                 jsonObject[@"inverted_y"] = [@(1) isEqual:params[@"inverted_y"]] ? @"true" : @"false";
                 jsonObject[@"referer"] = params[@"referer"];
-                jsonObject[@"userAgent"] = params[@"userAgent"];
                 jsonObject[@"timesupported"] = params[@"timecolumn"];
                 NSString *expMinStr = params[@"expireminutes"];
                 jsonObject[@"expire"] = expMinStr ? [NSString stringWithFormat:@"%lld", expMinStr.longLongValue * 60000] : @"0";

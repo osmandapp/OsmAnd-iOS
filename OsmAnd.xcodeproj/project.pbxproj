@@ -378,8 +378,6 @@
 		33BE664324A2771800245A78 /* OAShowHideTransportLinesAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33B14E1E249F9576000DC288 /* OAShowHideTransportLinesAction.mm */; };
 		33BE666B24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33BE666A24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm */; };
 		33BE666C24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33BE666A24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm */; };
-		33C609392527C8D700B2FA0B /* OARouteDataResources.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33C609382527C8D700B2FA0B /* OARouteDataResources.mm */; };
-		33C609412527D3C700B2FA0B /* OARouteDataResources.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33C609382527C8D700B2FA0B /* OARouteDataResources.mm */; };
 		33D40F1124EF1CA500AFFF06 /* OAMultiLineLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33D40F1024EF1CA300AFFF06 /* OAMultiLineLabelCell.xib */; };
 		33D40F1224EF1CA500AFFF06 /* OAMultiLineLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33D40F1024EF1CA300AFFF06 /* OAMultiLineLabelCell.xib */; };
 		33D40F1524EF213500AFFF06 /* OAMultiLineLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33D40F1424EF213500AFFF06 /* OAMultiLineLabelCell.m */; };
@@ -6412,8 +6410,6 @@
 		33B14E1E249F9576000DC288 /* OAShowHideTransportLinesAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideTransportLinesAction.mm; sourceTree = "<group>"; };
 		33BE666924A36EB200245A78 /* OAPublicTransportOptionsBottomSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPublicTransportOptionsBottomSheet.h; sourceTree = "<group>"; };
 		33BE666A24A36EE700245A78 /* OAPublicTransportOptionsBottomSheet.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPublicTransportOptionsBottomSheet.mm; sourceTree = "<group>"; };
-		33C609372527C8BE00B2FA0B /* OARouteDataResources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteDataResources.h; sourceTree = "<group>"; };
-		33C609382527C8D700B2FA0B /* OARouteDataResources.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteDataResources.mm; sourceTree = "<group>"; };
 		33D40F1024EF1CA300AFFF06 /* OAMultiLineLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAMultiLineLabelCell.xib; path = Resources/Controllers/Cells/OAMultiLineLabelCell.xib; sourceTree = "<group>"; };
 		33D40F1424EF213500AFFF06 /* OAMultiLineLabelCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAMultiLineLabelCell.m; path = Controllers/Cells/OAMultiLineLabelCell.m; sourceTree = "<group>"; };
 		33D40F1724EF218200AFFF06 /* OAMultiLineLabelCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMultiLineLabelCell.h; path = Controllers/Cells/OAMultiLineLabelCell.h; sourceTree = "<group>"; };
@@ -13369,8 +13365,6 @@
 				DA303D472420F532006F8BC7 /* OATransportRoutingHelper.mm */,
 				DA303D4D24210AF9006F8BC7 /* OATransportRouteCalculationParams.h */,
 				DA303D4E24210AF9006F8BC7 /* OATransportRouteCalculationParams.mm */,
-				33C609372527C8BE00B2FA0B /* OARouteDataResources.h */,
-				33C609382527C8D700B2FA0B /* OARouteDataResources.mm */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -20658,7 +20652,6 @@
 				847A1CE71DF94E9B003C1246 /* OADirectionTableViewCell.m in Sources */,
 				847A1CEA1DF94E9B003C1246 /* OAParkingViewController.mm in Sources */,
 				847A1CEB1DF94E9B003C1246 /* OALocationServices.mm in Sources */,
-				33C609412527D3C700B2FA0B /* OARouteDataResources.mm in Sources */,
 				84DD6FED1F5AA554009F26E3 /* OADashboardViewController.mm in Sources */,
 				8490B1BB20600D63007694A5 /* OAWaypointHeaderCell.m in Sources */,
 				DA2558A224ADE40F0081D155 /* OANavigationTypeViewController.mm in Sources */,
@@ -21118,7 +21111,6 @@
 				84735EE71ED4598B00E89F8B /* OAAddressTableViewController.mm in Sources */,
 				DA9D54A822D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm in Sources */,
 				843EC9C81F57FFBA009152D7 /* OARouteTargetViewController.mm in Sources */,
-				33C609392527C8D700B2FA0B /* OARouteDataResources.mm in Sources */,
 				84C12C831FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */,
 				8A6CBCFE21CEBC3A004033C7 /* OAChoosePlanHelper.mm in Sources */,
 				84B524161EF2B01000E580DC /* OAGPXRouter.mm in Sources */,

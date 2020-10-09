@@ -240,8 +240,8 @@ typedef enum
 @property (nonatomic) NSString *names;
 
 - (instancetype) init;
-+ (OAGpxRouteSegment *) fromStringBundle:(NSDictionary *)bundle;
-- (NSDictionary *) toStringBundle;
++ (OAGpxRouteSegment *) fromStringBundle:(NSDictionary<NSString *, NSString *> *)bundle;
+- (NSDictionary<NSString *, NSString *> *) toStringBundle;
 
 @end
 
@@ -251,7 +251,7 @@ typedef enum
 @property (nonatomic) NSString *value;
 
 - (instancetype) init;
-+ (OAGpxRouteType *) fromStringBundle:(NSDictionary *)bundle;
-- (NSDictionary *) toStringBundle;
++ (OAGpxRouteType *) fromStringBundle:(NSDictionary<NSString *, NSString *> *)bundle;
+- (NSDictionary<NSString *, NSString *> *) toStringBundle;
 
 @end

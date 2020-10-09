@@ -274,11 +274,7 @@
     return self;
 }
 
-//The StringBundle class is used here in Java. I've used NSDictionary instead it for now to make it quicker.
-//https://github.com/osmandapp/OsmAnd/blob/7907e72781c96a1d8bf5225197952d5ebf0774a3/OsmAnd-java/src/main/java/net/osmand/GPXUtilities.java#L464
-//https://github.com/osmandapp/OsmAnd/blob/66f0b4cd77232800ceaad31508b327c0d68d523b/OsmAnd-java/src/main/java/net/osmand/binary/StringBundle.java#L16
-
-+ (OAGpxRouteSegment *) fromStringBundle:(NSDictionary *)bundle
++ (OAGpxRouteSegment *) fromStringBundle:(NSDictionary<NSString *, NSString *> *)bundle
 {
     OAGpxRouteSegment *s = [[OAGpxRouteSegment alloc] init];
     s.ID = bundle[@"id"];
@@ -293,18 +289,18 @@
     return s;
 }
 
-- (NSDictionary *) toStringBundle
+- (NSDictionary<NSString *, NSString *> *) toStringBundle
 {
     NSMutableDictionary *bundle = [NSMutableDictionary new];
-    [bundle setValue:_ID forKey:@"id"];
-    [bundle setValue:_length forKey:@"length"];
-    [bundle setValue:_segmentTime forKey:@"segmentTime"];
-    [bundle setValue:_speed forKey:@"speed"];
-    [bundle setValue:_turnType forKey:@"turnType"];
-    [bundle setValue:_turnAngle forKey:@"turnAngle"];
-    [bundle setValue:_types forKey:@"types"];
-    [bundle setValue:_pointTypes forKey:@"pointTypes"];
-    [bundle setValue:_names forKey:@"names"];
+    bundle[@"id"] = _ID;
+    bundle[@"length"] = _length;
+    bundle[@"segmentTime"] = _segmentTime;
+    bundle[@"speed"] = _speed;
+    bundle[@"turnType"] = _turnType;
+    bundle[@"turnAngle"] = _turnAngle;
+    bundle[@"types"] = _types;
+    bundle[@"pointTypes"] = _pointTypes;
+    bundle[@"names"] = _names;
     return bundle;
 }
 
@@ -323,7 +319,7 @@
     return self;
 }
 
-+ (OAGpxRouteType *) fromStringBundle:(NSDictionary *)bundle
++ (OAGpxRouteType *) fromStringBundle:(NSDictionary<NSString *, NSString *> *)bundle
 {
     OAGpxRouteType *t = [[OAGpxRouteType alloc] init];
     t.tag = bundle[@"t"];
@@ -331,11 +327,11 @@
     return t;
 }
 
-- (NSDictionary *) toStringBundle
+- (NSDictionary<NSString *, NSString *> *) toStringBundle
 {
     NSMutableDictionary *bundle = [NSMutableDictionary new];
-    [bundle setValue:_tag forKey:@"t"];
-    [bundle setValue:_value forKey:@"v"];
+    bundle[@"t"] = _tag;
+    bundle[@"v"] = _value;
     return bundle;
 }
 

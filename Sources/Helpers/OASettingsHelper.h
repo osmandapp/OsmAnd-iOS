@@ -5,11 +5,10 @@
 //  Created by Anna Bibyk on 25.03.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
-//  OsmAnd-java/src/net/osmand/plus/settings/backend/SettingHelper.java
-//  git revision 55f848becdd8c050f759571ea46966ee45fb613a
+//  OsmAnd-java/src/net/osmand/plus/SettingHelper.java
+//  git revision 92fb9b7efc66f373b1714e9e489bdf3b815a67f1
 
 #import <Foundation/Foundation.h>
-#import "OAWorldRegion.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -44,9 +43,7 @@ typedef enum : NSInteger {
     EOASettingsItemTypeQuickActions,
     EOASettingsItemTypePoiUIFilters,
     EOASettingsItemTypeMapSources,
-    EOASettingsItemTypeAvoidRoads,
-    EOASettingsItemTypeSuggestedDownloads,
-    EOASettingsItemTypeDownloads
+    EOASettingsItemTypeAvoidRoads
 } EOASettingsItemType;
 
 typedef enum : NSUInteger {
@@ -93,7 +90,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, readonly) NSString *defaultFileName;
 @property (nonatomic, readonly) NSString *defaultFileExtension;
 
-@property (nonatomic, readwrite) NSMutableArray<NSString *> *warnings;
+@property (nonatomic, readonly) NSMutableArray<NSString *> *warnings;
 @property (nonatomic, assign) BOOL shouldReplace;
 
 - (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error;
@@ -242,40 +239,6 @@ typedef enum : NSInteger {
 
 @end
 
-#pragma mark - SuggestedDownloadsItem
-
-@interface OASuggestedDownloadsItem : OASettingsItem
-
-- (instancetype) initWithScopeId:(NSString *)scopeId searchType:(NSString *)searchType names:(NSMutableArray<NSString *> *)names limit:(int)limit;
-- (void) initialization;
-- (NSString *) getScopeId;
-- (NSString *) getSearchType;
-- (NSMutableArray<NSString *> *) getNames;
-- (int) getLimit;
-- (EOASettingsItemType) type;
-- (NSString *) name;
-- (NSString *) publicName;
-- (NSMutableArray<OASuggestedDownloadsItem *> *) getItems;
-- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error;
-- (void) writeItemsToJson:(id)json;
-
-@end
-
-#pragma mark - DownloadsItem
-
-@interface OADownloadsItem : OASettingsItem
-
-- (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error;
-- (void) initialization;
-- (EOASettingsItemType) type;
-- (NSString *) name;
-- (NSString *) publicName;
-- (NSMutableArray<OAWorldRegion *> *) getItems;
-//- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error;
-//- (void) writeItemsToJson:(id)json;
-
-@end
-
 #pragma mark - OAFileSettingsItemReader
 
 @interface OAFileSettingsItemReader : OASettingsItemReader<OAFileSettingsItem *>
@@ -297,7 +260,7 @@ typedef enum : NSInteger {
 @property (nonatomic, readonly) NSArray<ObjectType> *duplicateItems;
 @property (nonatomic, readonly) NSArray<ObjectType> *existingItems;
 
-- (instancetype) initWithItems:(NSArray<id> *)items settingsItem:(OASettingsItem  * _Nullable )baseItem;
+- (instancetype) initWithItems:(NSArray<ObjectType> *)items;
 - (NSArray<ObjectType> *) processDuplicateItems;
 - (NSArray<ObjectType> *) getNewItems;
 - (BOOL) isDuplicate:(ObjectType)item;

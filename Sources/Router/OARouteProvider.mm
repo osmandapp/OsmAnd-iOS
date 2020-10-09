@@ -231,6 +231,22 @@
 
 @end
 
+@implementation OARoutingEnvironment
+
+- (instancetype)initWithRouter:(std::shared_ptr<RoutePlannerFrontEnd>)router context:(std::shared_ptr<RoutingContext>)ctx complextCtx:(std::shared_ptr<RoutingContext>)complexCtx precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated
+{
+    self = [super init];
+    if (self) {
+        _router = router;
+        _ctx = ctx;
+        _complexCtx = complexCtx;
+        _precalculated = precalculated;
+    }
+    return self;
+}
+
+@end
+
 
 @implementation OARouteProvider
 {
@@ -704,7 +720,30 @@
     return router;
 }
 
-- (OARouteCalculationResult *) findVectorMapsRoute:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute
+- (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end
+{
+    OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
+        params.mode = mode;
+        params.start = start;
+        params.end = end;
+        return [self calculateRoutingEnvironment:params calcGPXRoute:NO skipComplex:YES];
+}
+
+// TODO: sync with Android in GPX task
+//public List<GpxPoint> generateGpxPoints(RoutingEnvironment env, GpxRouteApproximation gctx, LocationsHolder locationsHolder) {
+//    return env.router.generateGpxPoints(gctx, locationsHolder);
+//}
+//
+//public GpxRouteApproximation calculateGpxPointsApproximation(RoutingEnvironment env, GpxRouteApproximation gctx, List<GpxPoint> points) throws IOException, InterruptedException {
+//    if (points != null && points.size() > 1) {
+//        if (!Algorithms.isEmpty(points)) {
+//            return env.router.searchGpxRoute(gctx, points);
+//        }
+//    }
+//    return null;
+//}
+
+- (OARoutingEnvironment *) calculateRoutingEnvironment:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute skipComplex:(BOOL)skipComplex
 {
     auto router = std::make_shared<RoutePlannerFrontEnd>();
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -714,11 +753,11 @@
     auto config = app.defaultRoutingConfig;
     auto generalRouter = [self getRouter:params.mode];
     if (!generalRouter)
-        return [self applicationModeNotSupported:params];
+        return nil;
     
     auto cf = [self initOsmAndRoutingConfig:config params:params generalRouter:generalRouter];
     if (!cf)
-        return [self applicationModeNotSupported:params];
+        return nil;
     
     std::shared_ptr<PrecalculatedRouteDirection> precalculated = nullptr;
     if (calcGPXRoute)
@@ -762,7 +801,7 @@
     auto ctx = router->buildRoutingContext(cf, RouteCalculationMode::NORMAL);
     
     std:shared_ptr<RoutingContext> complexCtx = nullptr;
-    BOOL complex = [params.mode isDerivedRoutingFrom:[OAApplicationMode CAR]] && !settings.disableComplexRouting && !precalculated;
+    BOOL complex = !skipComplex && [params.mode isDerivedRoutingFrom:[OAApplicationMode CAR]] && !settings.disableComplexRouting && !precalculated;
     ctx->leftSideNavigation = params.leftSide;
     ctx->progress = params.calculationProgress;
     ctx->setConditionalTime(cf->routeCalculationTime);
@@ -789,7 +828,24 @@
         complexCtx->setConditionalTime(cf->routeCalculationTime);
     }
     
-    return [self calcOfflineRouteImpl:params router:router ctx:ctx complexCtx:complexCtx st:params.start en:params.end inters:params.intermediates precalculated:precalculated];
+    return [[OARoutingEnvironment alloc] initWithRouter:router context:ctx complextCtx:complexCtx precalculated:precalculated];
+}
+
+- (OARouteCalculationResult *) findVectorMapsRoute:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute
+{
+    OARoutingEnvironment *env = [self calculateRoutingEnvironment:params calcGPXRoute:calcGPXRoute skipComplex:NO];
+    
+    if (!env)
+        return [self applicationModeNotSupported:params];
+    
+    CLLocation *start = [[CLLocation alloc] initWithLatitude:params.start.coordinate.latitude longitude:params.start.coordinate.longitude];
+    CLLocation *end = [[CLLocation alloc] initWithLatitude:params.end.coordinate.latitude longitude:params.end.coordinate.longitude];
+    NSArray<CLLocation *> *inters = [NSArray new];
+    
+    if (params.intermediates)
+        inters = [NSArray arrayWithArray:params.intermediates];
+    
+    return [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
 }
 
 - (OARouteCalculationResult *) calculateOsmAndRouteWithIntermediatePoints:(OARouteCalculationParams *)routeParams intermediates:(NSArray<CLLocation *> *)intermediates

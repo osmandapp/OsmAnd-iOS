@@ -102,25 +102,6 @@ static UIFont *_descFont;
 - (void) layoutSubviews
 {
     [super layoutSubviews];
-    /*
-    CGFloat w = self.bounds.size.width;
-    CGFloat h = self.bounds.size.height;
-    
-    CGFloat textX = self.imgView.hidden ? 16.0 : 62.0;
-    CGFloat textWidth = w - titleTextWidthDelta - (self.secondaryImgView.image ? secondaryImgWidth : switchCellWidth);
-    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
-    
-    if (self.descriptionView.hidden)
-    {
-        self.textView.frame = CGRectMake(textX, 0.0, textWidth, MAX(defaultCellHeight, titleHeight));
-    }
-    else
-    {
-        CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.descriptionView.text];
-        self.textView.frame = CGRectMake(textX, 2.0, textWidth, MAX(minTextHeight, titleHeight));
-        self.descriptionView.frame = CGRectMake(textX, h - descHeight - 1.0, textWidth, descHeight);
-    }
-     */
 }
 
 + (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text

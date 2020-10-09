@@ -545,9 +545,26 @@
     }
 }
 
+// TODO: sync with android
+//public synchronized RoutingConfiguration.Builder getDefaultRoutingConfig() {
+//    return RoutingConfiguration.getDefault();
+//}
 - (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig
 {
-    return getDefault();
+    float tm = [[NSDate date] timeIntervalSince1970];
+    @try
+    {
+        NSString *customRoutingPath = [self.documentsPath stringByAppendingPathComponent:@"routing.xml"];
+        BOOL useCustomRouting = [[NSFileManager defaultManager] fileExistsAtPath:customRoutingPath];
+        return parseRoutingConfigurationFromXml(useCustomRouting ? [customRoutingPath UTF8String] :
+                                                [[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String]);
+    }
+    @finally
+    {
+        float te = [[NSDate date] timeIntervalSince1970];
+        if (te - tm > 30)
+            NSLog(@"Defalt routing config init took %f ms", (te - tm));
+    }
 }
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getRoutingConfigForMode:(OAApplicationMode *)mode

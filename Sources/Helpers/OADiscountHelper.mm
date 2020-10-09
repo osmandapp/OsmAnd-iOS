@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd/src/net/osmand/plus/helpers/DiscountHelper.java
-//  git revision 52019817dde6b0bbab8bfc03ae2b22ff74580661
+//  git revision f5f971874f8bffbb6471d905f699874519957f4f
 
 #import "OADiscountHelper.h"
 #import <Reachability.h>

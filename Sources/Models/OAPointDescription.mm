@@ -90,6 +90,11 @@
     return [POINT_TYPE_WPT isEqualToString:_type];
 }
 
+- (BOOL) isRte
+{
+    return [POINT_TYPE_RTE isEqualToString:_type];
+}
+
 - (BOOL) isPoi
 {
     return [POINT_TYPE_POI isEqualToString:_type];
@@ -135,51 +140,33 @@
     return [POINT_TYPE_MY_LOCATION isEqualToString:_type];
 }
 
+- (BOOL) isCustomPoiFilter
+{
+    return [POINT_TYPE_CUSTOM_POI_FILTER isEqualToString:_type];
+}
+
+- (BOOL) isGpxPoint
+{
+    return [POINT_TYPE_GPX isEqualToString:_type];
+}
+
 + (NSString *) getLocationName:(double)lat lon:(double)lon sh:(BOOL)sh
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     NSInteger f = [self.class coordinatesFormatToFormatterMode:[settings.settingGeoFormat get]];
-    if (f == FORMAT_UTM)
-    {
-        return [OALocationConvert getUTMCoordinateString:lat lon:lon];
-    }
-    else if (f == FORMAT_OLC)
-        return [OALocationConvert getLocationOlcName:lat lon:lon];
-    else
-    {
-        if (!sh)
-        {
-            return [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"sett_arr_loc"),
-                    [OALocationConvert formatLocationCoordinates:lat lon:lon format:f]];
-        }
-        else
-        {
-            return [OALocationConvert formatLocationCoordinates:lat lon:lon format:f];
-        }
-    }
+    return [OALocationConvert formatLocationCoordinates:lat lon:lon format:f];
 }
 
 + (NSString *) getLocationNamePlain:(double)lat lon:(double)lon
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     NSInteger f = [self.class coordinatesFormatToFormatterMode:[settings.settingGeoFormat get]];
-    if (f == FORMAT_UTM)
-    {
-        return [OALocationConvert getUTMCoordinateString:lat lon:lon];
-    }
-    else if (f == FORMAT_OLC)
-        return [OALocationConvert getLocationOlcName:lat lon:lon];
-    else {
-        NSString *coordStr = [OALocationConvert formatLocationCoordinates:lat lon:lon format:f];
-        if (coordStr.length > 0)
-            return coordStr;
-        else
-            return @"0, 0";
-    }
+    return [OALocationConvert formatLocationCoordinates:lat lon:lon format:f];
 }
 
 + (NSDictionary <NSNumber *, NSString *> *) getLocationData:(double) lat lon:(double)lon
 {
+    OAAppSettings *settings = [OAAppSettings sharedManager];
     MutableOrderedDictionary<NSNumber *, NSString *> *results = [[MutableOrderedDictionary alloc] init];
     
     for (NSInteger i = FORMAT_DEGREES_SHORT; i <= FORMAT_OLC; i++)
@@ -190,6 +177,19 @@
     float zoom = [OARootViewController instance].mapPanel.mapViewController.getMapZoom;
     NSString *url = [NSString stringWithFormat:@"https://osmand.net/go?lat=%f&lon=%f&z=%f", lat, lon, zoom];
     [results setObject:url forKey:@(POINT_LOCATION_URL)];
+    
+    NSInteger f = [self.class coordinatesFormatToFormatterMode:[settings.settingGeoFormat get]];
+    
+    if (f == MAP_GEO_UTM_FORMAT)
+        [results setObject:[OALocationConvert formatLocationCoordinates:lat lon:lon format:MAP_GEO_UTM_FORMAT] forKey:@(POINT_LOCATION_LIST_HEADER)];
+    else if (f == MAP_GEO_OLC_FORMAT)
+        [results setObject:[OALocationConvert formatLocationCoordinates:lat lon:lon format:MAP_GEO_OLC_FORMAT] forKey:@(POINT_LOCATION_LIST_HEADER)];
+    else if (f == FORMAT_DEGREES)
+        [results setObject:[OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_DEGREES] forKey:@(POINT_LOCATION_LIST_HEADER)];
+    else if (f == FORMAT_MINUTES)
+        [results setObject:[OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_MINUTES] forKey:@(POINT_LOCATION_LIST_HEADER)];
+    else if (f == FORMAT_SECONDS)
+        [results setObject:[OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_SECONDS] forKey:@(POINT_LOCATION_LIST_HEADER)];
     return results;
 }
 

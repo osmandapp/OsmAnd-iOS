@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/osm/edit/Node.java
-//  git revision cc94ead73db0af7a3793cd56ba08a750d2c992f9
+//  git revision f7bdb0f04af2f48a6cd7b1963d6c5cceac9383a7
 
 #import "OAEntity.h"
 

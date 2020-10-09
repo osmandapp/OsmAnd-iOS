@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 //  OsmAnd/src/net/osmand/plus/quickaction/QuickActionType.java
-//  git revision 52ac8118e44e246f8517ff9c7f5899858efeef5a
+//  git revision 908544e5608bda9e17973b313d6787032d35032d
 
 #import <Foundation/Foundation.h>
 

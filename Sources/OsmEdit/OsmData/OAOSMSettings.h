@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/osm/edit/OSMSettings.java
-//  git revision a01998324f1731e901cacce1dccf8ad090716728
+//  git revision b439f2dd5beb81e6bfe5ba04ee53f4d539c9e1f7
 
 #import <Foundation/Foundation.h>
 
@@ -44,9 +44,11 @@ typedef NS_ENUM(NSInteger, EOAOsmTagKey)
     // address
     PLACE,
     ADDR_HOUSE_NUMBER,
+    ADDR2_HOUSE_NUMBER,
     ADDR_HOUSE_NAME,
     ADDR_STREET,
     ADDR_STREET2,
+    ADDR2_STREET,
     ADDR_CITY,
     ADDR_PLACE,
     ADDR_POSTCODE,

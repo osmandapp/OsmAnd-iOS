@@ -399,7 +399,14 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
             [entity removeTag:type.getEditOsmTag];
             [entity putTagNoLC:POI_TYPE_TAG value:[type.name stringByReplacingOccurrencesOfString:@"_" withString:@" "]];
         } else {
-            // later we could try to determine tags
+            for (OAPOIType *pt in type.category.poiTypes)
+            {
+                if ([pt.getEditOsmValue isEqualToString:[entity getTagFromString:pt.getEditOsmTag]])
+                {
+                    [entity removeTag:pt.getEditOsmTag];
+                    [entity putTagNoLC:POI_TYPE_TAG value:[pt.name stringByReplacingOccurrencesOfString:@"_" withString:@" "]];
+                }
+            }
         }
     }
     return entity;

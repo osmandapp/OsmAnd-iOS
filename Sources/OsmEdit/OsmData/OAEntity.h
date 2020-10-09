@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/osm/edit/Entity.java
-//  git revision cc94ead73db0af7a3793cd56ba08a750d2c992f9
+//  git revision 3641bd0ccc24f88c1a1e44afd36cb5f6efb6a657
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>

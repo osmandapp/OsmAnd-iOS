@@ -1,8 +1,8 @@
 //
 //  OAExitInfo.m
-//  OsmAnd
+//  OsmAnd Maps
 //
-//  Created by Paul on 06.10.2020.
+//  Created by Anna Bibyk on 30.09.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 

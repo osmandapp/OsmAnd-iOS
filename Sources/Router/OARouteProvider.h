@@ -6,7 +6,10 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/routing/RouteProvider.java
-//  git revision c8ccf21c737e239dda267c89ef2edf504ad9d3e6
+//  git revision 355d6bb3096f532d1398eaaebac1fcfbd4421b83
+//
+//  Partially syncronized
+//  To sync: GPXRouteParams, GPXRouteParamsBuilder, parseOsmAndGPXRoute()
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -19,6 +22,20 @@
 struct RoutingConfiguration;
 struct RoutingConfigurationBuilder;
 struct GeneralRouter;
+struct RoutePlannerFrontEnd;
+struct RoutingContext;
+struct PrecalculatedRouteDirection;
+
+@interface OARoutingEnvironment : NSObject
+
+@property (nonatomic, readonly) std::shared_ptr<RoutePlannerFrontEnd> router;
+@property (nonatomic, readonly) std::shared_ptr<RoutingContext> ctx;
+@property (nonatomic, readonly) std::shared_ptr<RoutingContext> complexCtx;
+@property (nonatomic, readonly) std::shared_ptr<PrecalculatedRouteDirection> precalculated;
+
+- (instancetype)initWithRouter:(std::shared_ptr<RoutePlannerFrontEnd>)router context:(std::shared_ptr<RoutingContext>)ctx complextCtx:(std::shared_ptr<RoutingContext>)complexCtx precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated;
+
+@end
 
 @interface OARouteService : NSObject
 

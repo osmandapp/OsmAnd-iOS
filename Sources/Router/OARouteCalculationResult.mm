@@ -333,6 +333,7 @@
                     p = [[OARouteDirectionInfo alloc] initWithAverageSpeed:i.averageSpeed turnType:i.turnType];
                     p.routePointOffset = i.routePointOffset;
                     p.routeEndPointOffset = i.routeEndPointOffset;
+                    p.routeDataObject = i.routeDataObject;
                     p.destinationName = i.destinationName;
                     p.routeDataObject = i.routeDataObject;
                     p.ref = i.ref;
@@ -592,7 +593,7 @@
         while (prevBearingLocation < i - 1)
         {
             if ([locations[prevBearingLocation + 1] distanceFromLocation:current] > 70) {
-                prevBearingLocation ++;
+                prevBearingLocation++;
             } else {
                 break;
             }
@@ -1095,10 +1096,10 @@
         }
         while (true)
         {
-            auto lat = get31LatitudeY(s->object->pointsY[i]);
-            auto lon = get31LongitudeX(s->object->pointsX[i]);
             if (i == s->getEndPointIndex() && routeInd != list.size() - 1)
                 break;
+            auto lat = get31LatitudeY(s->object->pointsY[i]);
+            auto lon = get31LongitudeX(s->object->pointsX[i]);
             
             NSNumber *alt = nil;
             if (i * 2 + 1 < vls.size())
@@ -1117,11 +1118,23 @@
                 }
                 lastHeight = h;
             }
+            // FIXME: investigate gpx file
+            if (s->object->pointsX[i] == 0 && s->object->pointsY[i] == 0)
+            {
+                if (locations.count > 0)
+                {
+                    CLLocation *prev = locations[locations.count - 1];
+                    lat = prev.coordinate.latitude;
+                    lon = prev.coordinate.longitude;
+                    if (prev.altitude)
+                        alt = @(prev.altitude);
+                }
+            }
             [locations addObject:[[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon) altitude:alt? alt.doubleValue : NAN horizontalAccuracy:0 verticalAccuracy:0 timestamp:[NSDate date]]];
 
             [self.class attachAlarmInfo:alarms res:s intId:i locInd:(int)locations.count];
             segmentsToPopulate.push_back(s);
-            if (i == s->getEndPointIndex() )
+            if (i == s->getEndPointIndex())
                 break;
             
             if (plus)
@@ -1134,7 +1147,7 @@
         if (turn)
         {
             OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:s->segmentSpeed turnType:turn];
-            if (routeInd  < list.size())
+            if (routeInd < list.size())
             {
                 int lind = routeInd;
                 if (turn->isRoundAbout())
@@ -1181,7 +1194,6 @@
                 
                 info.streetName = streetName;
                 info.destinationName = [NSString stringWithUTF8String:next->object->getDestinationName(locale, transliterate, next->isForwardDirection()).c_str()];
-                
                 if (s->object->isExitPoint() && next->object->getHighway() == "motorway_link")
                 {
                     OAExitInfo *exitInfo = [[OAExitInfo alloc] init];

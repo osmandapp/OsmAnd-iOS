@@ -6,7 +6,11 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/SettingHelper.java
-//  git revision 92fb9b7efc66f373b1714e9e489bdf3b815a67f1
+//  git revision 6ec5d526a81dd94623439ff99ac5a76e2e23b557
+//
+//  Fully ported: OASettingsItemReader, OASettingsItemWriter, OAProfileSettingsItem, OAGlobalSettingsItem
+//  To implement: EOASettingsItemTypePlugin, EOASettingsItemTypeData, EOASettingsItemTypeFile, EOASettingsItemTypeResources,
+//                EOASettingsItemTypeQuickActions, EOASettingsItemTypePoiUIFilters, EOASettingsItemTypeMapSources, EOASettingsItemTypeAvoidRoads
 
 #import <Foundation/Foundation.h>
 

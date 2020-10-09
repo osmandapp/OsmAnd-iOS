@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 //  Extracted from: OsmAnd/src/net/osmand/plus/osmedit/OsmBugsLayer.java
-//  git revision 0fbb4df13460fdec70ae3fb51eb64608e5962497
+//  git revision 90ec2ddd7980aeb9d6e45d3befc029d8b27060c1
 
 #include <OsmAndCore.h>
 

@@ -1667,3 +1667,4 @@
 "default_speed" = "Forvalgt hastighet";
 "allow_3d" = "Tillat 2,5D-visning";
 "default_speed_dialog_msg" = "Estimerer ankomsttid for ukjente veityper og begrenser farten for alle veier (kan påvirke ruting)";
+"routing_attr_length_name" = "Lengdebegrensning";

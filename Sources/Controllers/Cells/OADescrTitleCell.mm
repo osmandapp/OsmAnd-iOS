@@ -9,14 +9,6 @@
 #import "OADescrTitleCell.h"
 #import "OAUtilities.h"
 
-#define defaultCellHeight 44.0
-#define titleTextWidthDelta 32.0
-#define textMarginVertical 5.0
-#define minTextHeight 32.0
-
-static UIFont *_titleFont;
-static UIFont *_descFont;
-
 @implementation OADescrTitleCell
 
 - (void) awakeFromNib
@@ -30,60 +22,6 @@ static UIFont *_descFont;
     [super setSelected:selected animated:animated];
     
     // Configure the view for the selected state
-}
-
-+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc cellWidth:(CGFloat)cellWidth
-{
-    CGFloat textWidth = cellWidth - titleTextWidthDelta;
-    if (!desc || desc.length == 0)
-    {
-        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text]);
-    }
-    else
-    {
-        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text] + [self.class getDescViewHeightWithWidth:textWidth text:desc] + 15.);
-    }
-}
-
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-    
-    CGFloat w = self.bounds.size.width;
-    
-    CGFloat textX = 16.0;
-    CGFloat textWidth = w - titleTextWidthDelta;
-    NSString *text = self.textView.hidden ? self.descriptionView.text : self.textView.text;
-    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:text];
-    
-    if (self.textView.hidden)
-    {
-        self.descriptionView.font = [UIFont systemFontOfSize:17.0];
-        self.descriptionView.frame = CGRectMake(textX, 0.0, textWidth, MAX(defaultCellHeight, titleHeight));
-    }
-    else
-    {
-        self.descriptionView.font = [UIFont systemFontOfSize:13.0];
-        CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.descriptionView.text];
-        self.descriptionView.frame = CGRectMake(textX, 4.0, textWidth, descHeight);
-        self.textView.frame = CGRectMake(textX, CGRectGetMaxY(self.descriptionView.frame) + textMarginVertical, textWidth, titleHeight);
-    }
-}
-
-+ (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_titleFont)
-        _titleFont = [UIFont systemFontOfSize:17.0];
-    
-    return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical;
-}
-
-+ (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_descFont)
-        _descFont = [UIFont systemFontOfSize:13.0];
-    
-    return [OAUtilities calculateTextBounds:text width:width font:_descFont].height + textMarginVertical;
 }
 
 @end

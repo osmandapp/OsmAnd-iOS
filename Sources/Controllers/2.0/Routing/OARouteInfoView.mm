@@ -44,7 +44,6 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OAStateChangedListener.h"
 #import "OADividerCell.h"
-#import "OADescrTitleCell.h"
 #import "OADescrTitleIconCell.h"
 #import "OARouteProvider.h"
 #import "OASelectedGPXHelper.h"

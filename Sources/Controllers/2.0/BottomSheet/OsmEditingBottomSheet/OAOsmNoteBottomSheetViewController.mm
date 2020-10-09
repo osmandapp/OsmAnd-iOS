@@ -254,13 +254,9 @@
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
-    else if ([item[@"type"] isEqualToString:@"OASwitchCell"] || [item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    else if ([item[@"type"] isEqualToString:@"OASwitchCell"] || [item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:@"OADescrTitleCell"])
     {
         return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
-    {
-        return [OADescrTitleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:DeviceScreenWidth];
     }
     else
     {

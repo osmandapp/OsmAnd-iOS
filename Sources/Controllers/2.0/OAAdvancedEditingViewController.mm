@@ -267,7 +267,7 @@
     if ([item[@"type"] isEqualToString:kInputImage])
         return [OATextInputFloatingCellWithIcon getHeight:item[@"value"] desc:item[@"hint"] cellWidth:DeviceScreenWidth];
     else if ([item[@"type"] isEqualToString:kDescrText])
-        return [OADescrTitleCell getHeight:item[@"value"] desc:item[@"hint"] cellWidth:DeviceScreenWidth];
+        return UITableViewAutomaticDimension;
     return 44.0;
 }
 

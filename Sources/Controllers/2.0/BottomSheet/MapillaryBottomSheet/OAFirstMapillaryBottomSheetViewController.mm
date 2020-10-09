@@ -102,13 +102,9 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"])
+    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"] || [item[@"type"] isEqualToString:@"OADescrTitleCell"])
     {
         return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
-    {
-        return [OADescrTitleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:DeviceScreenWidth];
     }
     else if ([item[@"type"] isEqualToString:@"OASettingSwitchNoImageCell"])
     {

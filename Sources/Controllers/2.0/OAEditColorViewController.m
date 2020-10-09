@@ -7,11 +7,13 @@
 //
 
 #import "OAEditColorViewController.h"
-#import "OAViewTextTableViewCell.h"
+#import "OAIconTextTableViewCell.h"
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #include "Localization.h"
+
+#define kCellTypeCheck @"OAIconTextCell"
 
 @implementation OAEditColorViewController
 
@@ -86,23 +88,23 @@
 {
     static NSString* const reusableIdentifierPoint = @"OAViewTextTableViewCell";
     
-    OAViewTextTableViewCell* cell;
-    cell = (OAViewTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    OAIconTextTableViewCell* cell;
+    cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAViewTextCell" owner:self options:nil];
-        cell = (OAViewTextTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeCheck owner:self options:nil];
+        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
     }
     
     if (cell) {
         
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][indexPath.row];
         [cell.textView setText:favCol.name];
-        [cell.titleIcon setImage:favCol.icon];
-        [cell.iconView setImage:nil];
-        
-        if (indexPath.row == self.colorIndex)
-            [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
+        [cell.iconView setImage:favCol.icon];
+        //[cell.iconView setImage:nil];
+        cell.textLeftMargin.constant -= 8.;
+        [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
+        cell.arrowIconView.hidden = indexPath.row != self.colorIndex;
     }
     return cell;
 }

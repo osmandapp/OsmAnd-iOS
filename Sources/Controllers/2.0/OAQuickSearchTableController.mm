@@ -44,7 +44,7 @@
 #import "OAReverseGeocoder.h"
 
 #import "OAIconTextTableViewCell.h"
-#import "OAIconTextExTableViewCell.h"
+#import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
 #import "OAIconTextDescCell.h"
@@ -732,12 +732,12 @@
                 }
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
-                    OAIconTextExTableViewCell* cell;
-                    cell = (OAIconTextExTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextExTableViewCell"];
+                    OAIconTextTableViewCell* cell;
+                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
                     if (cell == nil)
                     {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextExCell" owner:self options:nil];
-                        cell = (OAIconTextExTableViewCell *)[nib objectAtIndex:0];
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                     }
                     if (cell)
                     {

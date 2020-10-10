@@ -665,6 +665,7 @@
             cell.allowsSwipeWhenEditing = NO;
             cell.overflowButton.hidden = YES;
             cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+            [cell updateConstraintsIfNeeded];
         }
         return cell;
     }
@@ -785,13 +786,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kIconTitleValueCell] || [item[@"type"] isEqualToString:kBottomSheetActionCell])
+    if ([item[@"type"] isEqualToString:kIconTitleValueCell] || [item[@"type"] isEqualToString:kBottomSheetActionCell] || [item[@"type"] isEqualToString:kTitleDescrDraggableCell])
     {
         return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:kTitleDescrDraggableCell])
-    {
-        [OATitleDescrDraggableCell getHeight:item[@"title"] value:@"" cellWidth:DeviceScreenWidth];
     }
     else if ([item[@"type"] isEqualToString:kTextInputFloatingCellWithIcon])
     {

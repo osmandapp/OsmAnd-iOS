@@ -14,7 +14,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbTime;
 @property (weak, nonatomic) IBOutlet UIImageView *leftImageView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageWidthConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageLeftConstrraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleToImageConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleToMarginConstraint;
+
 
 - (void) showLeftImageView:(BOOL)show;
 

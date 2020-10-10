@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
-#import "OAIconTextButtonCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAProfileAppearanceViewController.h"
 #import "OAUtilities.h"
@@ -21,7 +21,7 @@
 #define kHeaderId @"TableViewSectionHeader"
 #define kSidePadding 16
 #define kTopPadding 6
-#define kCellTypeIconTitleSubtitle @"OAIconTextButtonCell"
+#define kCellTypeIconTitleSubtitle @"OAMenuSimpleCell"
 
 @interface OACreateProfileViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -104,22 +104,20 @@
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     static NSString* const identifierCell = kCellTypeIconTitleSubtitle;
-    OAIconTextButtonCell* cell;
-    cell = (OAIconTextButtonCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+    OAMenuSimpleCell* cell;
+    cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kCellTypeIconTitleSubtitle owner:self options:nil];
-        cell = (OAIconTextButtonCell *)[nib objectAtIndex:0];
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
-        cell.buttonView.hidden = YES;
-        cell.detailsIconView.hidden = YES;
+        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
+        cell.separatorInset = UIEdgeInsetsMake(0.0, 70.0, 0.0, 0.0);
     }
     OAApplicationMode *am = _profileList[indexPath.row];
     UIImage *img = am.getIcon;
-    cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
+    cell.imgView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    cell.imgView.tintColor = UIColorFromRGB(am.getIconColor);
     cell.textView.text = _profileList[indexPath.row].toHumanString;
-    cell.descView.text = _profileList[indexPath.row].getProfileDescription;
+    cell.descriptionView.text = _profileList[indexPath.row].getProfileDescription;
     return cell;
 }
 

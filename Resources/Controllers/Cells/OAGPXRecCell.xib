@@ -23,8 +23,8 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="42,9 km," lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY0-9e-Mrs">
-                        <rect key="frame" x="29" y="31" width="44" height="15"/>
-                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="11"/>
+                        <rect key="frame" x="29" y="31" width="46" height="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
                         <color key="textColor" red="0.64662808179855347" green="0.64161229133605957" blue="0.66008782386779785" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -36,13 +36,13 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="25 points" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QcL-Um-3UV">
-                        <rect key="frame" x="89" y="31" width="47.5" height="15"/>
-                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="11"/>
+                        <rect key="frame" x="91" y="31" width="49.5" height="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
                         <color key="textColor" red="0.64662808179855347" green="0.64161229133605957" blue="0.66008782386779785" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_points.png" translatesAutoresizingMaskIntoConstraints="NO" id="ooY-br-udb">
-                        <rect key="frame" x="76" y="33" width="10" height="10"/>
+                        <rect key="frame" x="78" y="33" width="10" height="10"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="10" id="YUJ-d8-inm"/>
                             <constraint firstAttribute="height" constant="10" id="f7f-l8-q7W"/>

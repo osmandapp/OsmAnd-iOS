@@ -51,7 +51,7 @@
     NSTimeInterval tripDuration = [[OAGPXRouter sharedInstance] getRouteDuration];
 
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
-    UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
+    UIFont *font = [UIFont systemFontOfSize:12];
     
     NSMutableString *distanceStr = [[[OsmAndApp instance] getFormattedDistance:distance] mutableCopy];
     NSString *waypointsStr = [NSString stringWithFormat:@"%d", wptCount];

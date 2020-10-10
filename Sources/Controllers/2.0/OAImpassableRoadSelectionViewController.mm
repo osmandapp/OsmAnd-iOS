@@ -12,7 +12,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAAvoidSpecificRoads.h"
-#import "OAIconTextButtonCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
@@ -45,7 +45,7 @@
                                    @"roadId" : @((unsigned long long)r.roadId),
                                    @"descr"  : [OARouteAvoidSettingsViewController getDescr:r],
                                    @"header" : @"",
-                                   @"type"   : @"OAIconTextButtonCell"} ];
+                                   @"type"   : @"OAMenuSimpleCell"} ];
         }
     }
     
@@ -272,17 +272,6 @@
     return _data.count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OAIconTextButtonCell"])
-    {
-        NSString *value = item[@"descr"];
-        return [OAIconTextButtonCell getHeight:item[@"title"] descHidden:(!value || value.length == 0) detailsIconHidden:NO cellWidth:tableView.bounds.size.width];
-    }
-    return 44.0;
-}
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     return OALocalizedString(@"selected_roads");
@@ -293,24 +282,24 @@
     NSDictionary *item = _data[indexPath.row];
     NSString *text = item[@"title"];
     NSString *value = item[@"descr"];
-    if ([item[@"type"] isEqualToString:@"OAIconTextButtonCell"])
+    if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
     {
-        static NSString* const identifierCell = @"OAIconTextButtonCell";
-        OAIconTextButtonCell *cell = (OAIconTextButtonCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = @"OAMenuSimpleCell";
+        OAMenuSimpleCell *cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OAIconTextButtonCell *)[nib objectAtIndex:0];
+            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         }
         
         if (cell)
         {
-            cell.iconView.image = [UIImage imageNamed:@"ic_custom_alert_color"];
-            cell.descView.hidden = !value || value.length == 0;
-            cell.descView.text = value;
-            cell.buttonView.hidden = YES;
-            cell.detailsIconView.hidden = YES;
+            cell.imgView.image = [UIImage imageNamed:@"ic_custom_alert_color"];
+            cell.descriptionView.hidden = !value || value.length == 0;
+            cell.descriptionView.text = value;
             [cell.textView setText:text];
+            
+            [cell updateConstraintsIfNeeded];
         }
         return cell;
     }

@@ -1000,7 +1000,7 @@ static UIViewController *parentController;
                 UITableViewCell *cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.bounds.size.width, 44.0)];
                 
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12.0, 0.0, tableView.bounds.size.width - 42.0, 44.0)];
-                label.font = [UIFont fontWithName:@"AvenirNext-Regular" size:14.0];
+                label.font = [UIFont systemFontOfSize:14.0];
                 label.numberOfLines = 2;
                 label.textAlignment = NSTextAlignmentLeft;
                 label.textColor = [UIColor darkGrayColor];

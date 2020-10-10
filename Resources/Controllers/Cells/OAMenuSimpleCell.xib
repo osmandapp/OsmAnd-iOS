@@ -29,16 +29,16 @@
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="751" constant="34" id="lO1-Le-no6"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="vIO-Ub-ALl"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" systemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w3O-3E-SaM">
-                        <rect key="frame" x="66" y="26" width="238" height="16"/>
+                        <rect key="frame" x="66" y="28" width="238" height="16"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="0YX-7Z-sDl"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.73716437820000003" green="0.73714232440000005" blue="0.73715484139999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -47,12 +47,12 @@
                     <constraint firstItem="law-Oa-FEW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="1cO-DM-Bi7"/>
                     <constraint firstAttribute="trailingMargin" secondItem="4zh-tm-rJ3" secondAttribute="trailing" id="2fx-K4-4sI"/>
                     <constraint firstAttribute="bottom" secondItem="4zh-tm-rJ3" secondAttribute="bottom" priority="751" constant="5" id="3jB-hu-Udu"/>
-                    <constraint firstItem="w3O-3E-SaM" firstAttribute="top" secondItem="4zh-tm-rJ3" secondAttribute="bottom" id="Nxa-NC-rEt"/>
+                    <constraint firstItem="w3O-3E-SaM" firstAttribute="top" secondItem="4zh-tm-rJ3" secondAttribute="bottom" constant="2" id="Nxa-NC-rEt"/>
                     <constraint firstAttribute="trailingMargin" secondItem="w3O-3E-SaM" secondAttribute="trailing" id="WfC-WU-Vku"/>
                     <constraint firstItem="w3O-3E-SaM" firstAttribute="leading" secondItem="law-Oa-FEW" secondAttribute="trailing" constant="20" id="cnt-Rt-CML"/>
                     <constraint firstItem="4zh-tm-rJ3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="6" id="g2Q-bX-Hpp"/>
                     <constraint firstItem="4zh-tm-rJ3" firstAttribute="leading" secondItem="law-Oa-FEW" secondAttribute="trailing" constant="20" id="qfd-QC-AYd"/>
-                    <constraint firstAttribute="bottom" secondItem="w3O-3E-SaM" secondAttribute="bottom" constant="6" id="rzR-MC-hVX"/>
+                    <constraint firstAttribute="bottom" secondItem="w3O-3E-SaM" secondAttribute="bottom" constant="4" id="rzR-MC-hVX"/>
                     <constraint firstItem="law-Oa-FEW" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="vze-Yp-dot"/>
                 </constraints>
             </tableViewCellContentView>

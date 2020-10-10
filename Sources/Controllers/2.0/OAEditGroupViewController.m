@@ -142,7 +142,7 @@
         if (cell)
         {
             [cell.textView setPlaceholder:OALocalizedString(@"fav_enter_group_name")];
-            [cell.textView setFont:[UIFont fontWithName:@"AvenirNext-Regular" size:14]];
+            [cell.textView setFont:[UIFont systemFontOfSize:14]];
             [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
             [cell.textView setDelegate:self];

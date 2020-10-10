@@ -7,78 +7,12 @@
 //
 
 #import "OATitleDescrDraggableCell.h"
-#import "OAUtilities.h"
-
-#define defaultCellHeight 44.0
-#define textMarginVertical 5.0
-#define titleTextWidthDelta 100.0
-#define minTextHeight 35.0
-
-static UIFont *_titleTextFont;
-static UIFont *_valueTextFont;
 
 @implementation OATitleDescrDraggableCell
 
 - (void)awakeFromNib {
     // Initialization code
     [super awakeFromNib];
-}
-
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-    
-    CGFloat w = self.bounds.size.width;
-    CGFloat h = self.bounds.size.height;
-    
-    CGFloat textX = 62.0;
-    CGFloat textWidth = w - titleTextWidthDelta - [OAUtilities getLeftMargin] * 2;
-    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];;
-    
-    if (self.descView.hidden || self.descView.text.length == 0)
-    {
-        self.textView.frame = CGRectMake(textX, 0.0, textWidth, MAX(defaultCellHeight, titleHeight));
-    }
-    else
-    {
-        CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.descView.text];
-        self.textView.frame = CGRectMake(textX, 4.0, textWidth, MAX(minTextHeight, titleHeight));
-        self.descView.frame = CGRectMake(textX, h - descHeight - 10.0, textWidth, descHeight);
-    }
-}
-
-+ (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth
-{
-    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title value:value] + 14.0);
-}
-
-+ (CGFloat) getTextViewHeightWithWidth:(CGFloat)cellWidth title:(NSString *)title value:(NSString *)value
-{
-    CGFloat w = cellWidth - titleTextWidthDelta - [OAUtilities getLeftMargin] * 2;
-    return [self getTitleViewHeightWithWidth:w text:title] + [self getDescViewHeightWithWidth:w text:value];
-}
-
-
-+ (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_titleTextFont)
-        _titleTextFont = [UIFont systemFontOfSize:17.0];
-    CGFloat titleHeight = 0;
-    if (text)
-        titleHeight = [OAUtilities calculateTextBounds:text width:width font:_titleTextFont].height + textMarginVertical;
-    return titleHeight;
-}
-
-+ (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_valueTextFont)
-        _valueTextFont = [UIFont systemFontOfSize:15.0];
-    
-    CGFloat valueHeight = 0;
-    if (text && text.length > 0)
-        valueHeight = [OAUtilities calculateTextBounds:text width:width font:_valueTextFont].height;
-    
-    return valueHeight;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -90,22 +24,55 @@ static UIFont *_valueTextFont;
 
 -(void)showImage:(BOOL)show
 {
-    if (show)
+    _iconView.hidden = !show;
+    
+    _titleToMarginConstraint.active = !show;
+    _titleToIconCostraint.active = show;
+    
+    _descrToMarginConstraint.active = !show;
+    _descrToIconConstraint.active = show;
+    
+    [self updateConstraintsIfNeeded];
+}
+
+- (void) updateConstraints
+{
+    BOOL hasImage = !self.iconView.hidden;
+
+    self.titleToIconCostraint.active = hasImage;
+    self.titleToMarginConstraint.active = !hasImage;
+
+    self.descrToIconConstraint.active = hasImage;
+    self.descrToMarginConstraint.active = !hasImage;
+
+    self.textHeightPrimary.active = self.descView.hidden;
+    self.textHeightSecondary.active = !self.descView.hidden;
+    
+    self.descrBottomConstraint.active = !self.descView.hidden;
+    self.titleBottomToCenter.active = self.descView.hidden;
+    
+    [super updateConstraints];
+}
+
+- (BOOL) needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
     {
-        CGRect frame = CGRectMake(51.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
-        self.textView.frame = frame;
-        
-        frame = CGRectMake(51.0, self.descView.frame.origin.y, self.descView.frame.size.width, self.descView.frame.size.height);
-        self.descView.frame = frame;
+        BOOL hasImage = !self.iconView.hidden;;
+
+        res = res || self.titleToIconCostraint.active != hasImage;
+        res = res || self.titleToMarginConstraint.active != !hasImage;
+
+        res = res || self.descrToIconConstraint.active != hasImage;
+        res = res || self.descrToMarginConstraint.active != !hasImage;
+
+        res = res || self.textHeightPrimary.active != self.descView.hidden;
+        res = res || self.textHeightSecondary.active != !self.descView.hidden;
+        res = res || self.descrBottomConstraint.active != !self.descView.hidden;
+        res = res || self.titleBottomToCenter.active != self.descView.hidden;
     }
-    else
-    {
-        CGRect frame = CGRectMake(16.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
-        self.textView.frame = frame;
-        
-        frame = CGRectMake(16.0, self.descView.frame.origin.y, self.descView.frame.size.width, self.descView.frame.size.height);
-        self.descView.frame = frame;
-    }
+    return res;
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated

@@ -33,9 +33,7 @@
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OAAvoidSpecificRoads.h"
-#import "OAIconTextButtonCell.h"
 #import "OAButtonCell.h"
 
 #include <OsmAndCore/Utilities.h>

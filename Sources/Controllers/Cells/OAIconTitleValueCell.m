@@ -10,6 +10,9 @@
 #import "OAUtilities.h"
 
 @implementation OAIconTitleValueCell
+{
+    BOOL _isImageShown;
+}
 
 - (void)awakeFromNib
 {
@@ -19,6 +22,8 @@
     else
         self.descriptionView.textAlignment = NSTextAlignmentRight;
     [self.iconView setImage:self.iconView.image.imageFlippedForRightToLeftLayoutDirection];
+    
+    _isImageShown = YES;
 }
 
 -(void)showImage:(BOOL)show

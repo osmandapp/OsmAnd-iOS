@@ -25,6 +25,4 @@
 @property (nonatomic) IBOutlet NSLayoutConstraint *textHeightPrimary;
 @property (nonatomic) IBOutlet NSLayoutConstraint *textHeightSecondary;
 
-+ (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth;
-
 @end

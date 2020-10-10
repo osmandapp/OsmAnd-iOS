@@ -53,6 +53,8 @@
     [self commonInit];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 48.0;
     [self.tableView registerClass:OAMultiselectableHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [self.btnAdd setImage:[[UIImage imageNamed:@"ic_custom_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.btnAdd setTintColor:UIColor.whiteColor];
@@ -324,12 +326,12 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATitleDescrDraggableCell" owner:self options:nil];
         cell = (OATitleDescrDraggableCell *)[nib objectAtIndex:0];
+        cell.descView.hidden = YES;
     }
     
     if (cell)
     {
         [cell.textView setText:action.getName];
-        [cell.descView setText:@""];
         [cell.iconView setImage:[UIImage imageNamed:action.getIconResName]];
         if (cell.iconView.subviews.count > 0)
             [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -353,6 +355,8 @@
         [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
         cell.tintColor = UIColorFromRGB(color_primary_purple);
+        
+        [cell updateConstraintsIfNeeded];
     }
     return cell;
 }
@@ -367,11 +371,6 @@
     BOOL oneSection = _data.count / 6 < 1;
     BOOL lastSection = section == _data.count / 6;
     return oneSection || lastSection ? _data.count % 6 : 6;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [OATitleDescrDraggableCell getHeight:_data.firstObject.getName value:@"" cellWidth:DeviceScreenWidth];
 }
 
 #pragma mark - Swipe Delegate

@@ -22,7 +22,6 @@
 #import "OASelectedGPXHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAUtilities.h"
-#import "OAIconTextButtonCell.h"
 #import "OAGPXDatabase.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAMapActions.h"

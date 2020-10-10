@@ -19,8 +19,6 @@
 - (void)awakeFromNib {
     // Initialization code
     [super awakeFromNib];
-    _imageLeftConstrraint.constant = 0.;
-    _imageWidthConstraint.constant = 0.;
     _lbTime.textAlignment = [self.contentView isDirectionRTL] ? NSTextAlignmentLeft : NSTextAlignmentRight;
 }
 
@@ -34,8 +32,10 @@
 {
     _leftImageView.hidden = !show;
     _imageWidthConstraint.constant = show ? 30. : 0.;
-    _imageLeftConstrraint.constant = show ? 16. : 0.;
-    [self setNeedsLayout];
+    _titleToImageConstraint.active = show;
+    _titleToMarginConstraint.active = !show;
+    [self setNeedsUpdateConstraints];
+    [self updateConstraintsIfNeeded];
 }
 
 @end

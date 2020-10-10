@@ -447,6 +447,7 @@ static const NSInteger panoImageFilterSection = 3;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            [cell showLeftImageView:YES];
         }
         if (cell)
         {

@@ -19,7 +19,7 @@
 #import "OAPOIFilter.h"
 #import "OAUtilities.h"
 #import "OAIconTextCollapseCell.h"
-#import "OAIconTextSwitchCell.h"
+#import "OASettingSwitchCell.h"
 #import "OAIconButtonCell.h"
 #import "OAIconTextFieldCell.h"
 #import "OASizes.h"
@@ -799,7 +799,7 @@ typedef enum
     if (!item || item.type != SWITCH_ITEM)
         return 51.0;
     else
-        return [OAIconTextSwitchCell getHeight:item.text descHidden:YES detailsIconHidden:YES cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -857,15 +857,14 @@ typedef enum
         }
         case SWITCH_ITEM:
         {
-            OAIconTextSwitchCell* cell;
-            cell = (OAIconTextSwitchCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextSwitchCell"];
+            OASettingSwitchCell* cell;
+            cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:@"OASettingSwitchCell"];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextSwitchCell" owner:self options:nil];
-                cell = (OAIconTextSwitchCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(0x727272);
-                cell.descView.hidden = YES;
-                cell.detailsIconView.hidden = YES;
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+                cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+                cell.imgView.tintColor = UIColorFromRGB(0x727272);
+                cell.descriptionView.hidden = YES;
             }
             
             if (cell)
@@ -875,12 +874,12 @@ typedef enum
                 [cell.switchView addTarget:self action:@selector(toggleCheckbox:) forControlEvents:UIControlEventValueChanged];
                 if (item.icon)
                 {
-                    cell.iconView.image = item.icon;
-                    cell.iconView.hidden = NO;
+                    cell.imgView.image = item.icon;
+                    cell.imgView.hidden = NO;
                 }
                 else
                 {
-                    cell.iconView.hidden = YES;
+                    cell.imgView.hidden = YES;
                 }
                 [cell.textView setText:item.text];
                 cell.switchView.on = item.checked;
@@ -946,7 +945,7 @@ typedef enum
         }
         case SWITCH_ITEM:
         {
-            OAIconTextSwitchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            OASettingSwitchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             if (cell)
             {
                 UISwitch *switchView = cell.switchView;

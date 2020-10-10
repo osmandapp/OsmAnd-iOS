@@ -49,7 +49,7 @@
 #import "OAPointDescCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAIconButtonCell.h"
-#import "OAHeaderCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OAEmptySearchCell.h"
 
 #include <OsmAndCore.h>
@@ -808,20 +808,21 @@
         }
         else if ([item getType] == HEADER)
         {
-            OAHeaderCell *cell;
-            cell = (OAHeaderCell *)[tableView dequeueReusableCellWithIdentifier:@"OAHeaderCell"];
+            OAMenuSimpleCell *cell;
+            cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMenuSimpleCell"];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAHeaderCell" owner:self options:nil];
-                cell = (OAHeaderCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMenuSimpleCell" owner:self options:nil];
+                cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             }
             
             if (cell)
             {
-                cell.contentView.backgroundColor = [UIColor whiteColor];
                 [cell.textView setText:[item getName]];
-                [cell setImage:nil tint:NO];
+                cell.descriptionView.hidden = YES;
             }
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
             return cell;
         }
     }

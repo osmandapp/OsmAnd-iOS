@@ -21,6 +21,15 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *descIcon;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *vDotsTopHeightHidden;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *vDostTopHeightVisible;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *vDotsBottomHeightVisible;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *vDotsBottomHeightHidden;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descIconWidthHidden;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descIconWidthVisible;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleTrailingButtonHidden;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleTrailingButtonVisible;
+
 @property (assign, nonatomic) BOOL topVDotsVisible;
 @property (assign, nonatomic) BOOL bottomVDotsVisible;
 

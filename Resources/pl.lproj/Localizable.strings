@@ -1771,3 +1771,4 @@
 "after_tapping_done" = "Po dotknięciu przycisku Gotowe, usunięte profile zostaną całkowicie utracone.";
 "all_application_profiles" = "Wszystkie profile aplikacji";
 "rearrange_profile_descr" = "Domyślnych profili OsmAnd nie można usunąć, ale można je wyłączyć na poprzednim ekranie lub przeciągnąć na dół listy.";
+"profile_sett_descr" = "Wpływa na wybrany profil aplikacji";

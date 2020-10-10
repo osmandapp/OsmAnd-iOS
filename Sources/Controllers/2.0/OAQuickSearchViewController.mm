@@ -16,7 +16,6 @@
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"
 #import "OAPOIHelper.h"
-#import "OAPointDescCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAIconTextDescCell.h"

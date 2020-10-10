@@ -1278,9 +1278,9 @@
 "rendering_value_green_name" = "Grønn";
 "rendering_attr_surface_asphalt_name" = "Asfalt";
 "routeInfo_road_types_name" = "Veityper";
-"rendering_attr_highway_class_footway_name" = "Tursti";
+"rendering_attr_highway_class_footway_name" = "Gangvei";
 "rendering_value_thin_name" = "Tynn";
-"routing_attr_piste_type_sled_name" = "Slede";
+"routing_attr_piste_type_sled_name" = "Kjelke";
 "rendering_value_lightblue_name" = "Lyseblå";
 "routeInfo_piste_difficulty_name" = "Løypevanskelighetsgrad";
 "routing_attr_height_description" = "Spesifiser kjøretøyhøyde som tillates på ruter.";
@@ -1304,7 +1304,7 @@
 "rendering_attr_highway_class_road_name" = "Vei";
 "rendering_attr_winter_road_name" = "Vintervei";
 "rendering_value_yellow_name" = "Gul";
-"routing_attr_piste_type_sled_description" = "Løyper for sledebruk.";
+"routing_attr_piste_type_sled_description" = "Løyper for kjelkebruk.";
 "rendering_attr_hideWoodScrubs_name" = "Skog og kratt";
 "routing_attr_avoid_stairs_name" = "Ingen trapper";
 "rendering_attr_horseRoutes_name" = "Hesteruter";

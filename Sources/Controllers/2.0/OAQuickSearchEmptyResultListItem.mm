@@ -16,7 +16,7 @@
     self = [super init];
     if (self)
     {
-        _title = OALocalizedString(@"nothing_found");
+        _title = OALocalizedString(@"nothing_found_empty");
         _message = OALocalizedString(@"nothing_found_descr");
     }
     return self;

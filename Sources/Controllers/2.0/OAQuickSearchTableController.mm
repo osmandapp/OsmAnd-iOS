@@ -549,11 +549,6 @@
                 CGSize size = [OAUtilities calculateTextBounds:text width:tableView.bounds.size.width - 59.0 font:[UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold]];
                 return 30.0 + size.height;
             }
-            case EMPTY_SEARCH:
-            {
-                OAQuickSearchEmptyResultListItem *emptyResultItem = (OAQuickSearchEmptyResultListItem *) item;
-                return [OAEmptySearchCell getHeightWithTitle:emptyResultItem.title message:emptyResultItem.message cellWidth:tableView.bounds.size.width];
-            }
             default:
             {
                 return UITableViewAutomaticDimension;

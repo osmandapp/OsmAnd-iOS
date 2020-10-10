@@ -7,8 +7,6 @@
 //
 
 #import "OAGPXRouteViewController.h"
-#import "OAGPXDetailsTableViewCell.h"
-#import "OAGPXElevationTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"

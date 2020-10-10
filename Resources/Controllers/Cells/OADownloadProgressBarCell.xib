@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="af4-W9-ki2">
-                        <rect key="frame" x="16" y="19" width="382" height="3"/>
+                        <rect key="frame" x="20" y="19" width="374" height="3"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="3" id="LO0-hF-BOG"/>
                         </constraints>
@@ -25,25 +25,25 @@
                         <color key="trackTintColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                     </progressView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GCB-w4-09b">
-                        <rect key="frame" x="16" y="43" width="100" height="20"/>
+                        <rect key="frame" x="20" y="43" width="100" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="45%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0B-u1-UVp">
-                        <rect key="frame" x="363" y="43" width="35" height="20"/>
+                        <rect key="frame" x="358" y="43" width="36" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="af4-W9-ki2" firstAttribute="leading" secondItem="dtJ-z4-amE" secondAttribute="leading" constant="16" id="0we-Pa-awn"/>
+                    <constraint firstItem="af4-W9-ki2" firstAttribute="leading" secondItem="dtJ-z4-amE" secondAttribute="leadingMargin" id="0we-Pa-awn"/>
                     <constraint firstItem="GCB-w4-09b" firstAttribute="top" secondItem="af4-W9-ki2" secondAttribute="bottom" constant="21" id="9MR-TL-JRK"/>
                     <constraint firstItem="af4-W9-ki2" firstAttribute="top" secondItem="dtJ-z4-amE" secondAttribute="top" constant="19" id="SkU-UA-YqX"/>
-                    <constraint firstAttribute="trailing" secondItem="af4-W9-ki2" secondAttribute="trailing" constant="16" id="TbS-Ui-x87"/>
-                    <constraint firstAttribute="trailing" secondItem="d0B-u1-UVp" secondAttribute="trailing" constant="16" id="Yxl-NX-GYk"/>
-                    <constraint firstItem="GCB-w4-09b" firstAttribute="leading" secondItem="dtJ-z4-amE" secondAttribute="leading" constant="16" id="adn-u5-b43"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="af4-W9-ki2" secondAttribute="trailing" id="TbS-Ui-x87"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="d0B-u1-UVp" secondAttribute="trailing" id="Yxl-NX-GYk"/>
+                    <constraint firstItem="GCB-w4-09b" firstAttribute="leading" secondItem="dtJ-z4-amE" secondAttribute="leadingMargin" id="adn-u5-b43"/>
                     <constraint firstItem="d0B-u1-UVp" firstAttribute="top" secondItem="af4-W9-ki2" secondAttribute="bottom" constant="21" id="cYx-cf-dBh"/>
                     <constraint firstAttribute="bottom" secondItem="d0B-u1-UVp" secondAttribute="bottom" constant="13" id="eTr-Qk-3si"/>
                     <constraint firstAttribute="bottom" secondItem="GCB-w4-09b" secondAttribute="bottom" constant="13" id="ysG-mb-lI7"/>

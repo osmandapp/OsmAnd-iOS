@@ -90,6 +90,7 @@
     NSString *_unitsMph;
     
     BOOL _firstLaunch;
+    std::map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
 }
 
 @synthesize dataPath = _dataPath;
@@ -546,6 +547,9 @@
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig
 {
+    // TODO: sync with android
+    // return RoutingConfiguration.getDefault();
+    
     float tm = [[NSDate date] timeIntervalSince1970];
     @try
     {
@@ -560,6 +564,23 @@
         if (te - tm > 30)
             NSLog(@"Defalt routing config init took %f ms", (te - tm));
     }
+}
+
+- (std::shared_ptr<RoutingConfigurationBuilder>) getRoutingConfigForMode:(OAApplicationMode *)mode
+{
+    std::shared_ptr<RoutingConfigurationBuilder> builder = self.defaultRoutingConfig;
+    NSString *routingProfileKey = [mode getRoutingProfile];
+    if (routingProfileKey.length > 0)
+    {
+        int index = [routingProfileKey indexOf:@".xml"];
+        if (index != -1)
+        {
+            NSString *configKey = [routingProfileKey substringToIndex:index + @".xml".length];
+            if (_customRoutingConfigs.find(configKey.UTF8String) != _customRoutingConfigs.end())
+                builder = _customRoutingConfigs[configKey.UTF8String];
+        }
+    }
+    return builder;
 }
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force

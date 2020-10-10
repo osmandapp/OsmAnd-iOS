@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd/src/net/osmand/plus/helpers/WaypointHelper.java
-//  git revision ac6b6bf788e2205b61fbdd0cb61addcad2fae327
+//  git revision 81bf4ea094840169243f365fb46859ef375aa262
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -27,13 +27,14 @@ struct RouteDataObject;
 - (NSArray<OALocationPointWrapper *> *) getWaypoints:(int)type;
 - (void) locationChanged:(CLLocation *)location;
 - (int) getRouteDistance:(OALocationPointWrapper *)point;
+- (BOOL) isPointPassed:(OALocationPointWrapper *)point;
 - (NSArray<OALocationPointWrapper *> *) getAllPoints;
 
 - (void) removeVisibleLocationPoint:(OALocationPointWrapper *)lp;
 - (void) removeVisibleLocationPoints:(NSMutableArray<OALocationPointWrapper *> *)points;
 
 - (OALocationPointWrapper *) getMostImportantLocationPoint:(NSMutableArray<OALocationPointWrapper *> *)list;
-- (OAAlarmInfo *) getMostImportantAlarm:(EOAMetricsConstant)mc showCameras:(BOOL)showCameras;
+- (OAAlarmInfo *) getMostImportantAlarm:(EOASpeedConstant)sc showCameras:(BOOL)showCameras;
 - (void) enableWaypointType:(int)type enable:(BOOL)enable;
 
 - (void) recalculatePoints:(int)type;
@@ -45,7 +46,7 @@ struct RouteDataObject;
 - (BOOL) isTypeVisible:(int)waypointType;
 - (BOOL) isTypeEnabled:(int)type;
 
-- (OAAlarmInfo *) calculateMostImportantAlarm:(const std::shared_ptr<RouteDataObject>)ro loc:(CLLocation *)loc mc:(EOAMetricsConstant)mc showCameras:(BOOL)showCameras;
+- (OAAlarmInfo *) calculateMostImportantAlarm:(const std::shared_ptr<RouteDataObject>)ro loc:(CLLocation *)loc mc:(EOAMetricsConstant)mc sc:(EOASpeedConstant)sc showCameras:(BOOL)showCameras;
 
 - (void) announceVisibleLocations;
 

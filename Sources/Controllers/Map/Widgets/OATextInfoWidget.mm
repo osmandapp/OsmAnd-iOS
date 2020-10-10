@@ -9,6 +9,7 @@
 #import "OATextInfoWidget.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OAAppSettings.h"
 
 #define textHeight 22
 #define minTextWidth 64
@@ -41,6 +42,10 @@
     UIFont *_smallFont;
     UIFont *_smallBoldFont;
 
+    BOOL _metricSystemDepended;
+    BOOL _angularUnitsDepended;
+    int _cachedMetricSystem;
+    int _cachedAngularUnits;
 }
 
 - (instancetype) init
@@ -118,6 +123,11 @@
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_shadowButton];
+    
+    _metricSystemDepended = NO;
+    _angularUnitsDepended = NO;
+    _cachedMetricSystem = -1;
+    _cachedAngularUnits = -1;
 }
 
 - (void) onWidgetClicked:(id)sender
@@ -302,6 +312,45 @@
         return self.updateInfoFunction();
     else
         return NO;
+}
+
+- (BOOL) isUpdateNeeded
+{
+    BOOL res = NO;
+    
+    if ([self isMetricSystemDepended])
+    {
+        int metricSystem = (int)[[OAAppSettings sharedManager].metricSystem get];
+        res |= _cachedMetricSystem != metricSystem;
+        _cachedMetricSystem = metricSystem;
+    }
+    if ([self isAngularUnitsDepended])
+    {
+        int angularUnits = (int)[[OAAppSettings sharedManager].angularUnits get];
+        res |= _cachedAngularUnits != angularUnits;
+        _cachedAngularUnits = angularUnits;
+    }
+    return res;
+}
+
+- (BOOL) isMetricSystemDepended
+{
+    return _metricSystemDepended;
+}
+
+- (BOOL) isAngularUnitsDepended
+{
+    return _angularUnitsDepended;
+}
+
+- (void) setMetricSystemDepended:(BOOL)newValue
+{
+    _metricSystemDepended = newValue;
+}
+
+- (void) setAngularUnitsDepended:(BOOL)newValue
+{
+    _angularUnitsDepended = newValue;
 }
 
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible

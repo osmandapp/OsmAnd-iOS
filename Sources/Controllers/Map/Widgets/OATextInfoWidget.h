@@ -52,6 +52,11 @@
 - (BOOL) isVisible;
 
 - (BOOL) updateInfo;
+- (BOOL) isUpdateNeeded;
+- (BOOL) isMetricSystemDepended;
+- (BOOL) isAngularUnitsDepended;
+- (void) setMetricSystemDepended:(BOOL)newValue;
+- (void) setAngularUnitsDepended:(BOOL)newValue;
 - (BOOL) isExplicitlyVisible;
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible;
 - (void) updateIconMode:(BOOL)night;

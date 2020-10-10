@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OADistanceToPointInfoControl.h"
+#import "OADistanceToPointWidget.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -16,7 +16,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
-@implementation OADistanceToPointInfoControl
+@implementation OADistanceToPointWidget
 {
     OsmAndAppInstance _app;
     CLLocationDistance _cachedMeters;
@@ -32,7 +32,7 @@
         if (dayIconId && nightIconId)
             [self setIcons:dayIconId widgetNightIcon:nightIconId];
         [self setText:nil subtext:nil];
-        __weak OADistanceToPointInfoControl *selfWeak = self;
+        __weak OADistanceToPointWidget *selfWeak = self;
         self.onClickFunction = ^(id sender) {
             [selfWeak click];
         };
@@ -74,7 +74,7 @@
 - (BOOL) updateInfo
 {
     CLLocationDistance d = [self getDistance];
-    if ([self distChanged:_cachedMeters dist:d])
+    if ([self isUpdateNeeded] || [self distChanged:_cachedMeters dist:d])
     {
         _cachedMeters = d;
         if (_cachedMeters <= 20)

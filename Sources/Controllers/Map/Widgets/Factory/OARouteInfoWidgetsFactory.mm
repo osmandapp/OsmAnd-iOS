@@ -15,10 +15,10 @@
 #import "OAUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OACurrentPositionHelper.h"
-#import "OADistanceToPointInfoControl.h"
+#import "OADistanceToPointWidget.h"
 #import "OARTargetPoint.h"
 #import "OATargetPointsHelper.h"
-#import "OANextTurnInfoWidget.h"
+#import "OANextTurnWidget.h"
 #import "OALanesControl.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
@@ -30,16 +30,12 @@
 #include <CommonCollections.h>
 #include <binaryRead.h>
 
-#define TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME @"time_control_widget_state_arrival_time"
-#define TIME_CONTROL_WIDGET_STATE_TIME_TO_GO @"time_control_widget_state_time_to_go"
 #define INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME @"intermediate_time_control_widget_state_arrival_time"
 #define INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_TIME_TO_GO @"intermediate_time_control_widget_state_time_to_go"
-#define BEARING_WIDGET_STATE_RELATIVE_BEARING @"bearing_widget_state_relative_bearing"
-#define BEARING_WIDGET_STATE_MAGNETIC_BEARING @"bearing_widget_state_magnetic_bearing"
 
 static float MIN_SPEED_FOR_HEADING = 1.f;
 
-@interface OADistanceControl : OADistanceToPointInfoControl
+@interface OADistanceControl : OADistanceToPointWidget
 
 @end
 
@@ -71,7 +67,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
 @end
 
-@interface OAIntermediateDistanceControl : OADistanceToPointInfoControl
+@interface OAIntermediateDistanceControl : OADistanceToPointWidget
 
 @end
 
@@ -111,58 +107,6 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
         return [routinHelper getLeftDistanceNextIntermediate];
     
     return [super getDistance];
-}
-
-@end
-
-@implementation OATimeControlWidgetState
-{
-    OAProfileBoolean *_showArrival;
-}
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        _showArrival = [OAAppSettings sharedManager].showArrivalTime;
-    }
-    return self;
-}
-
-- (NSString *) getMenuTitle
-{
-    return [_showArrival get] ? OALocalizedString(@"access_arrival_time") : OALocalizedString(@"map_widget_time");
-}
-
-- (NSString *) getMenuIconId
-{
-    return [_showArrival get] ? @"ic_action_time" : @"ic_action_time_to_distance";
-}
-
-- (NSString *) getMenuItemId
-{
-    return [_showArrival get] ? TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME : TIME_CONTROL_WIDGET_STATE_TIME_TO_GO;
-}
-
-- (NSArray<NSString *> *) getMenuTitles
-{
-    return @[ @"access_arrival_time", @"map_widget_time" ];
-}
-
-- (NSArray<NSString *> *) getMenuIconIds
-{
-    return @[ @"ic_action_time", @"ic_action_time_to_distance" ];
-}
-
-- (NSArray<NSString *> *) getMenuItemIds
-{
-    return @[ TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME, TIME_CONTROL_WIDGET_STATE_TIME_TO_GO ];
-}
-
-- (void) changeState:(NSString *)stateId
-{
-    [_showArrival set:[TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME isEqualToString:stateId]];
 }
 
 @end
@@ -215,58 +159,6 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 - (void) changeState:(NSString *)stateId
 {
     [_showArrival set:[INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME isEqualToString:stateId]];
-}
-
-@end
-
-@implementation OABearingWidgetState
-{
-    OAAppSettings *_settings;
-}
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
-}
-
-- (NSString *) getMenuTitle
-{
-    return _settings.showRelativeBearing ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing");
-}
-
-- (NSString *) getMenuIconId
-{
-    return _settings.showRelativeBearing ? @"ic_action_relative_bearing" : @"ic_action_bearing";
-}
-
-- (NSString *) getMenuItemId
-{
-    return _settings.showRelativeBearing ? BEARING_WIDGET_STATE_RELATIVE_BEARING : BEARING_WIDGET_STATE_MAGNETIC_BEARING;
-}
-
-- (NSArray<NSString *> *) getMenuTitles
-{
-    return @[ @"map_widget_magnetic_bearing", @"map_widget_bearing" ];
-}
-
-- (NSArray<NSString *> *) getMenuIconIds
-{
-    return @[ @"ic_action_bearing", @"ic_action_relative_bearing" ];
-}
-
-- (NSArray<NSString *> *) getMenuItemIds
-{
-    return @[ BEARING_WIDGET_STATE_MAGNETIC_BEARING, BEARING_WIDGET_STATE_RELATIVE_BEARING ];
-}
-
-- (void) changeState:(NSString *)stateId
-{
-    [_settings.showRelativeBearing set:[BEARING_WIDGET_STATE_RELATIVE_BEARING isEqualToString:stateId]];
 }
 
 @end
@@ -379,7 +271,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     NSTimeInterval __block cachedLeftTime = 0;
     plainTimeControl.updateInfoFunction = ^BOOL{
         NSTimeInterval time = [NSDate date].timeIntervalSince1970;
-        if (time - cachedLeftTime > 5)
+        if ([plainTimeControlWeak isUpdateNeeded] || time - cachedLeftTime > 5)
         {
             cachedLeftTime = time;
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -418,7 +310,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     NSTimeInterval __block cachedLeftTime = 0;
     batteryControl.updateInfoFunction = ^BOOL{
         NSTimeInterval time = [NSDate date].timeIntervalSince1970;
-        if (time - cachedLeftTime > 1)
+        if ([batteryControlWeak isUpdateNeeded] || time - cachedLeftTime > 1)
         {
             cachedLeftTime = time;
 
@@ -451,6 +343,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     OATextInfoWidget *speedControl = [[OATextInfoWidget alloc] init];
     __weak OATextInfoWidget *speedControlWeak = speedControl;
     float __block cachedSpeed = 0.f;
+    [speedControl setMetricSystemDepended:YES];
     speedControl.updateInfoFunction = ^BOOL{
         float mx = 0;
         OAMapViewTrackingUtilities *trackingUtilities = [OAMapViewTrackingUtilities instance];
@@ -473,7 +366,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
         {
             mx = 0;
         }
-        if (cachedSpeed != mx)
+        if ([speedControlWeak isUpdateNeeded] || cachedSpeed != mx)
         {
             cachedSpeed = mx;
             if (cachedSpeed == 0)
@@ -508,6 +401,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     OATextInfoWidget *speedControl = [[OATextInfoWidget alloc] init];
     __weak OATextInfoWidget *speedControlWeak = speedControl;
     float __block cachedSpeed = 0;
+    [speedControl setMetricSystemDepended:YES];
     speedControl.updateInfoFunction = ^BOOL{
         CLLocation *loc = _app.locationServices.lastKnownLocation;
         // draw speed
@@ -520,7 +414,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
             if (cachedSpeed < 6)
                 minDelta = .015f;
 
-            if (ABS(loc.speed - cachedSpeed) > minDelta)
+            if ([speedControlWeak isUpdateNeeded] || ABS(loc.speed - cachedSpeed) > minDelta)
             {
                 cachedSpeed = loc.speed;
                 NSString *ds = [_app getFormattedSpeed:cachedSpeed];
@@ -619,6 +513,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     OATextInfoWidget *bearingControl = [[OATextInfoWidget alloc] init];
     __weak OATextInfoWidget *bearingControlWeak = bearingControl;
     int __block cachedDegrees = 0;
+    [bearingControl setAngularUnitsDepended:YES];
     EOAAngularConstant __block cachedAngularUnits = DEGREES;
 
     static NSString *bearingResId = @"widget_bearing_day";
@@ -638,7 +533,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
             cachedAngularUnits = angularUnits;
             modeChanged = YES;
         }
-        if ([OARouteInfoWidgetsFactory degreesChanged:cachedDegrees degrees:b] || modeChanged)
+        if ([bearingControlWeak isUpdateNeeded] || [OARouteInfoWidgetsFactory degreesChanged:cachedDegrees degrees:b] || modeChanged)
         {
             cachedDegrees = b;
             if (b != -1000)
@@ -673,16 +568,16 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     return [[OAIntermediateDistanceControl alloc] init];
 }
 
-- (OANextTurnInfoWidget *) createNextInfoControl:(BOOL)horisontalMini
+- (OANextTurnWidget *) createNextInfoControl:(BOOL)horisontalMini
 {
-    OANextTurnInfoWidget *widget = [[OANextTurnInfoWidget alloc] initWithHorisontalMini:horisontalMini nextNext:NO];
+    OANextTurnWidget *widget = [[OANextTurnWidget alloc] initWithHorisontalMini:horisontalMini nextNext:NO];
     [widget updateVisibility:NO];
     return widget;
 }
 
-- (OANextTurnInfoWidget *) createNextNextInfoControl:(BOOL)horisontalMini
+- (OANextTurnWidget *) createNextNextInfoControl:(BOOL)horisontalMini
 {
-    OANextTurnInfoWidget *widget = [[OANextTurnInfoWidget alloc] initWithHorisontalMini:horisontalMini nextNext:YES];
+    OANextTurnWidget *widget = [[OANextTurnWidget alloc] initWithHorisontalMini:horisontalMini nextNext:YES];
     [widget updateVisibility:NO];
     return widget;
 }

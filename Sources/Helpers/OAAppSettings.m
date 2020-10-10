@@ -141,6 +141,7 @@
 #define showRelativeBearingKey @"showRelativeBearing"
 #define routeRecalculationDistanceKey @"routeRecalculationDistance"
 
+#define showRoutingAlarmsKey @"showRoutingAlarms"
 #define showTrafficWarningsKey @"showTrafficWarnings"
 #define showPedestrianKey @"showPedestrian"
 #define showCamerasKey @"showCameras"
@@ -302,6 +303,28 @@
               [OASpeedConstant withSpeedConstant:MINUTES_PER_MILE],
               [OASpeedConstant withSpeedConstant:MINUTES_PER_KILOMETER],
               [OASpeedConstant withSpeedConstant:NAUTICALMILES_PER_HOUR] ];
+}
+
++ (BOOL) imperial:(EOASpeedConstant)sc
+{
+    switch (sc)
+    {
+        case KILOMETERS_PER_HOUR:
+            return NO;
+        case MILES_PER_HOUR:
+            return YES;
+        case METERS_PER_SECOND:
+            return NO;
+        case MINUTES_PER_MILE:
+            return YES;
+        case MINUTES_PER_KILOMETER:
+            return NO;
+        case NAUTICALMILES_PER_HOUR:
+            return YES;
+            
+        default:
+            return NO;
+    }
 }
 
 + (NSString *) toHumanString:(EOASpeedConstant)sc
@@ -2095,11 +2118,11 @@
         
         _speedSystem = [OAProfileSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _angularUnits = [OAProfileAngularConstant withKey:angularUnitsKey defValue:DEGREES];
-        _speedLimitExceed = [OAProfileDouble withKey:speedLimitExceedKey defValue:5.f];
+        _speedLimitExceedKmh = [OAProfileDouble withKey:speedLimitExceedKey defValue:5.f];
         _switchMapDirectionToCompass = [OAProfileDouble withKey:switchMapDirectionToCompassKey defValue:0.f];
         
         [_registeredPreferences setObject:_switchMapDirectionToCompass forKey:@"speed_for_map_to_direction_of_movement"];
-        [_registeredPreferences setObject:_speedLimitExceed forKey:@"speed_limit_exceed"];
+        [_registeredPreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_registeredPreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_registeredPreferences setObject:_speedSystem forKey:@"default_speed_system"];
         

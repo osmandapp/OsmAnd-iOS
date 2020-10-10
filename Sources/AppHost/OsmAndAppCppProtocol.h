@@ -31,4 +31,6 @@
 
 @property(nonatomic, readonly) std::shared_ptr<RoutingConfigurationBuilder> defaultRoutingConfig;
 
+- (std::shared_ptr<RoutingConfigurationBuilder>) getRoutingConfigForMode:(OAApplicationMode *)mode;
+
 @end

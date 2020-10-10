@@ -149,11 +149,11 @@
     NSString *value = nil;
     if ([_settings.metricSystem get] == KILOMETERS_AND_METERS)
     {
-        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceed get:self.appMode], OALocalizedString(@"units_kmh")];
+        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"units_kmh")];
     }
     else
     {
-        NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceed get:self.appMode])];
+        NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceedKmh get:self.appMode])];
         if (index != NSNotFound)
             value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
     }

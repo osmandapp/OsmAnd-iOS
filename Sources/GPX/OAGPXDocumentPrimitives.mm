@@ -253,3 +253,86 @@
 @end
 @implementation OAGpxMetadata
 @end
+
+@implementation OAGpxRouteSegment
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        _ID = @"";
+        _length = @"";
+        _segmentTime = @"";
+        _speed = @"";
+        _turnType = @"";
+        _turnAngle = @"";
+        _types = @"";
+        _pointTypes = @"";
+        _names = @"";
+    }
+    return self;
+}
+
++ (OAGpxRouteSegment *) fromStringBundle:(NSDictionary<NSString *, NSString *> *)bundle
+{
+    OAGpxRouteSegment *s = [[OAGpxRouteSegment alloc] init];
+    s.ID = bundle[@"id"];
+    s.length = bundle[@"length"];
+    s.segmentTime = bundle[@"segmentTime"];
+    s.speed = bundle[@"speed"];
+    s.turnType = bundle[@"turnType"];
+    s.turnAngle = bundle[@"turnAngle"];
+    s.types = bundle[@"types"];
+    s.pointTypes = bundle[@"pointTypes"];
+    s.names = bundle[@"names"];
+    return s;
+}
+
+- (NSDictionary<NSString *, NSString *> *) toStringBundle
+{
+    NSMutableDictionary *bundle = [NSMutableDictionary new];
+    bundle[@"id"] = _ID;
+    bundle[@"length"] = _length;
+    bundle[@"segmentTime"] = _segmentTime;
+    bundle[@"speed"] = _speed;
+    bundle[@"turnType"] = _turnType;
+    bundle[@"turnAngle"] = _turnAngle;
+    bundle[@"types"] = _types;
+    bundle[@"pointTypes"] = _pointTypes;
+    bundle[@"names"] = _names;
+    return bundle;
+}
+
+@end
+
+@implementation OAGpxRouteType
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        _tag = @"";
+        _value = @"";
+    }
+    return self;
+}
+
++ (OAGpxRouteType *) fromStringBundle:(NSDictionary<NSString *, NSString *> *)bundle
+{
+    OAGpxRouteType *t = [[OAGpxRouteType alloc] init];
+    t.tag = bundle[@"t"];
+    t.value = bundle[@"v"];
+    return t;
+}
+
+- (NSDictionary<NSString *, NSString *> *) toStringBundle
+{
+    NSMutableDictionary *bundle = [NSMutableDictionary new];
+    bundle[@"t"] = _tag;
+    bundle[@"v"] = _value;
+    return bundle;
+}
+
+@end

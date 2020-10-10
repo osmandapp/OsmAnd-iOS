@@ -28,6 +28,9 @@
 @property (nonatomic) NSArray<OAGpxRte *> *routes;
 @property (nonatomic) OAExtraData *extraData;
 
+@property (nonatomic) NSArray<OAGpxRouteSegment *> *routeSegments;
+@property (nonatomic) NSArray<OAGpxRouteType *> *routeTypes;
+
 @property (nonatomic) OAGpxBounds bounds;
 
 @property (nonatomic) BOOL hasAltitude;

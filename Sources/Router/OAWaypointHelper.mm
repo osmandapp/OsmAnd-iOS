@@ -137,6 +137,29 @@
     return [_route getDistanceToPoint:point.routeIndex];
 }
 
+- (BOOL) isPointPassed:(OALocationPointWrapper *)point
+{
+    return [_route isPointPassed:point.routeIndex];
+}
+
+- (BOOL) isAmenityNoPassed:(OAPOI *) a
+{
+    if (a)
+    {
+        NSMutableArray<OALocationPointWrapper *> *points = _locationPoints[[OAWaypointHelper POI]];
+        for (OALocationPointWrapper *point in points)
+        {
+            if ([point.point  isKindOfClass:OAAmenityLocationPoint.class])
+            {
+                if ([a isEqual:((OAAmenityLocationPoint *) point.point).poi])
+                    return ![self isPointPassed: point];
+            }
+        }
+    }
+    
+    return NO;
+}
+
 - (NSMutableArray<OALocationPointWrapper *> *) getTargets:(NSMutableArray<OALocationPointWrapper *> *)points
 {
     NSArray<OARTargetPoint *> *wts = [[OATargetPointsHelper sharedInstance] getIntermediatePointsWithTarget];
@@ -267,7 +290,7 @@
     return found;
 }
 
-+ (OAAlarmInfo *) createSpeedAlarm:(EOAMetricsConstant)mc mxspeed:(float)mxspeed loc:(CLLocation *)loc delta:(float)delta
++ (OAAlarmInfo *) createSpeedAlarm:(EOASpeedConstant)sc mxspeed:(float)mxspeed loc:(CLLocation *)loc delta:(float)delta
 {
     OAAlarmInfo *speedAlarm = nil;
     if (mxspeed != 0 && loc && loc.speed >= 0 && mxspeed != 40.f/*NONE_MAX_SPEED*/)
@@ -275,11 +298,10 @@
         if (loc.speed > mxspeed + delta)
         {
             int speed;
-            if (mc == KILOMETERS_AND_METERS)
-                speed = roundf(mxspeed * 3.6f);
-            else
+            if ([OASpeedConstant imperial:sc])
                 speed = roundf(mxspeed * 3.6f / 1.6f);
-            
+            else
+                speed = roundf(mxspeed * 3.6f);
             speedAlarm = [OAAlarmInfo createSpeedLimit:speed coordinate:loc.coordinate];
         }
     }
@@ -332,20 +354,17 @@
                             id<OALocationPoint> point = lwp.point;
                             double d1 = MAX(0.0, [lastKnownLocation distanceFromLocation:[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]]] - lwp.deviationDistance);
                             NSNumber *state = [_locationPointsStates objectForKey:point];
-                            if (state && state.intValue == ANNOUNCED_ONCE
-                                && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:SHORT_ANNOUNCE_RADIUS])
+                            if (state && state.intValue == ANNOUNCED_ONCE && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:SHORT_ANNOUNCE_RADIUS])
                             {
                                 [_locationPointsStates setObject:@(ANNOUNCED_DONE) forKey:point];
                                 [announcePoints addObject:lwp];
                             }
-                            else if (type != LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED)
-                                     && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:LONG_ANNOUNCE_RADIUS])
+                            else if (type != LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED) && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:LONG_ANNOUNCE_RADIUS])
                             {
                                 [_locationPointsStates setObject:@(ANNOUNCED_ONCE) forKey:point];
                                 [approachPoints addObject:lwp];
                             }
-                            else if (type == LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED)
-                                     && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:ALARMS_ANNOUNCE_RADIUS])
+                            else if (type == LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED) && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:ALARMS_ANNOUNCE_RADIUS])
                             {
                                 OAAlarmInfo *alarm = (OAAlarmInfo *) point;
                                 EOAAlarmInfoType t = alarm.type;
@@ -361,6 +380,7 @@
                                         announceRadius = ALARMS_ANNOUNCE_RADIUS;
                                         break;
                                 }
+
                                 BOOL proceed = [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:announceRadius];
                                 if (proceed && filter)
                                 {
@@ -436,12 +456,12 @@
     return [[OARoutingHelper sharedInstance] getVoiceRouter];
 }
 
-- (OAAlarmInfo *) getMostImportantAlarm:(EOAMetricsConstant)mc showCameras:(BOOL)showCameras
+- (OAAlarmInfo *) getMostImportantAlarm:(EOASpeedConstant)sc showCameras:(BOOL)showCameras
 {
     CLLocation *lastProjection = [[OARoutingHelper sharedInstance] getLastProjection];
     float mxspeed = [_route getCurrentMaxSpeed];
-    float delta = [[OAAppSettings sharedManager].speedLimitExceed get] / 3.6f;
-    OAAlarmInfo *speedAlarm = [self.class createSpeedAlarm:mc mxspeed:mxspeed loc:lastProjection delta:delta];
+    float delta = [[OAAppSettings sharedManager].speedLimitExceedKmh get] / 3.6f;
+    OAAlarmInfo *speedAlarm = [self.class createSpeedAlarm:sc mxspeed:mxspeed loc:lastProjection delta:delta];
     if (speedAlarm)
         [[self getVoiceRouter] announceSpeedAlarm:speedAlarm.intValue speed:lastProjection.speed];
     
@@ -577,7 +597,7 @@
     {
         if (i.type == AIT_SPEED_CAMERA)
         {
-            if ([settings.showCameras get:mode] || [settings.speakCameras get:mode])
+            if (([settings.showRoutingAlarms get:mode] && [settings.showCameras get:mode]) || [settings.speakCameras get:mode])
             {
                 OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
                 if (prevSpeedCam && [[[CLLocation alloc] initWithLatitude:prevSpeedCam.coordinate.latitude longitude:prevSpeedCam.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:i.coordinate.latitude longitude:i.coordinate.longitude]] < [self.class DISTANCE_IGNORE_DOUBLE_SPEEDCAMS])
@@ -594,7 +614,7 @@
         }
         else
         {
-            if ([settings.showTrafficWarnings get:mode] || [settings.speakTrafficWarnings get:mode])
+            if (([settings.showRoutingAlarms get:mode] && [settings.showTrafficWarnings get:mode]) || [settings.speakTrafficWarnings get:mode])
             {
                 OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
                 [lw setAnnounce:[settings.speakTrafficWarnings get:mode]];
@@ -616,14 +636,17 @@
 
         for (OAPOI *a in amenities)
         {
-            OAPOIRoutePoint *rp = a.routePoint;
-            NSInteger i = [locs indexOfObject:rp.pointA];
-            if (i >= 0)
+            OAPOIRoutePoint *routePoint = a.routePoint;
+            if (routePoint)
             {
-                OALocationPointWrapper *lwp = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_POI point:[[OAAmenityLocationPoint alloc] initWithPoi:a] deviationDistance:rp.deviateDistance routeIndex:(int)i];
-                lwp.deviationDirectionRight = rp.deviationDirectionRight;
-                lwp.announce = announcePOI;
-                [locationPoints addObject:lwp];
+                NSInteger i = [locs indexOfObject:routePoint.pointA];
+                if (i >= 0)
+                {
+                    OALocationPointWrapper *lwp = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_POI point:[[OAAmenityLocationPoint alloc] initWithPoi:a] deviationDistance:routePoint.deviateDistance routeIndex:(int)i];
+                    lwp.deviationDirectionRight = routePoint.deviationDirectionRight;
+                    lwp.announce = announcePOI;
+                    [locationPoints addObject:lwp];
+                }
             }
         }
     }
@@ -757,7 +780,7 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (type == LPW_ALARMS)
-        return [settings.showTrafficWarnings get:_appMode];
+        return [settings.showRoutingAlarms get] && [settings.showTrafficWarnings get:_appMode];
     else if (type == LPW_POI)
         return [settings.showNearbyPoi get:_appMode];
     else if (type == LPW_FAVORITES)
@@ -793,12 +816,12 @@
     [self setLocationPoints:locationPoints route:route];
 }
 
-- (OAAlarmInfo *) calculateMostImportantAlarm:(const std::shared_ptr<RouteDataObject>)ro loc:(CLLocation *)loc mc:(EOAMetricsConstant)mc showCameras:(BOOL)showCameras
+- (OAAlarmInfo *) calculateMostImportantAlarm:(const std::shared_ptr<RouteDataObject>)ro loc:(CLLocation *)loc mc:(EOAMetricsConstant)mc sc:(EOASpeedConstant)sc showCameras:(BOOL)showCameras
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     float mxspeed = ro->getMaximumSpeed(ro->bearingVsRouteDirection(loc.course));
-    float delta = [settings.speedLimitExceed get] / 3.6f;
-    OAAlarmInfo *speedAlarm = [self.class createSpeedAlarm:mc mxspeed:mxspeed loc:loc delta:delta];
+    float delta = [settings.speedLimitExceedKmh get] / 3.6f;
+    OAAlarmInfo *speedAlarm = [self.class createSpeedAlarm:sc mxspeed:mxspeed loc:loc delta:delta];
     if (speedAlarm)
     {
         [[self getVoiceRouter] announceSpeedAlarm:speedAlarm.intValue speed:loc.speed];

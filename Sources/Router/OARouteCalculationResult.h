@@ -52,6 +52,7 @@
 - (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode;
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute;
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex;
 - (QuadRect *) getLocationsRect;
 + (NSString *) toString:(std::shared_ptr<TurnType>)type shortName:(BOOL)shortName;
 
@@ -82,5 +83,6 @@
 - (int) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc;
 - (void) updateNextVisiblePoint:(int) nextPoint location:(CLLocation *) mp;
 - (int) getDistanceFromPoint:(int) locationIndex;
+- (BOOL) isPointPassed:(int)locationIndex;
 
 @end

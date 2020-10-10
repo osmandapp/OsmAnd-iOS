@@ -109,7 +109,7 @@
         OAAlarmInfo *alarm;
         if([_rh isFollowingMode] && ![OARoutingHelper isDeviatedFromRoute] && ![_rh getCurrentGPXRoute])
         {
-            alarm = [_wh getMostImportantAlarm:[_settings.metricSystem get] showCameras:cams];
+            alarm = [_wh getMostImportantAlarm:[_settings.speedSystem get] showCameras:cams];
         }
         else
         {
@@ -117,7 +117,7 @@
             const auto ro = [_currentPositionHelper getLastKnownRouteSegment:loc];
             if (loc && ro)
             {
-                alarm = [_wh calculateMostImportantAlarm:ro loc:loc mc:[_settings.metricSystem get] showCameras:cams];
+                alarm = [_wh calculateMostImportantAlarm:ro loc:loc mc:[_settings.metricSystem get] sc:[_settings.speedSystem get] showCameras:cams];
             }
         }
         if (alarm)

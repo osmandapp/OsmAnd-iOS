@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OANextTurnInfoWidget.h"
+#import "OANextTurnWidget.h"
 #import "OsmAndApp.h"
 #import "OATurnDrawable.h"
 #import "OARoutingHelper.h"
@@ -16,14 +16,14 @@
 #import "OAVoiceRouter.h"
 #import "OAAppSettings.h"
 
-@interface OANextTurnInfoWidget ()
+@interface OANextTurnWidget ()
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UIView *leftView;
 
 @end
 
-@implementation OANextTurnInfoWidget
+@implementation OANextTurnWidget
 {
     BOOL _horisontalMini;
     

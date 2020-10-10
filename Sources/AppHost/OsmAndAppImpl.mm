@@ -568,7 +568,7 @@
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getRoutingConfigForMode:(OAApplicationMode *)mode
 {
-    std::shared_ptr<RoutingConfigurationBuilder> builder = nullptr;
+    std::shared_ptr<RoutingConfigurationBuilder> builder = self.defaultRoutingConfig;
     NSString *routingProfileKey = [mode getRoutingProfile];
     if (routingProfileKey.length > 0)
     {
@@ -580,7 +580,7 @@
                 builder = _customRoutingConfigs[configKey.UTF8String];
         }
     }
-    return builder ? builder : [self getDefaultRoutingConfig];
+    return builder;
 }
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force

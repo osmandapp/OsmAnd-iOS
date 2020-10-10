@@ -1787,7 +1787,7 @@
 "quick_action_transport_descr" = "Premeu aquesta acció per mostrar o amagar les rutes / parades de transport públic al mapa.";
 "configure_map_descr" = "Aparença del mapa";
 "downloading" = "S’està baixant";
-"export_profile_descr" = "Per importar un perfil, premeu necessàriament un arxiu (*.osf) a qualsevol aplicació i seleccioneu \"Copia a OsmAnd\"";
+"export_profile_descr" = "Podeu exportar totes les configuracions dels perfils, copiar-les  d'un altre perfil o retornar-les als valors predeterminats.";
 "profile_sett_descr" = "Afecta als perfils d'aplicació seleccionats";
 "app_profiles" = "Perfils de l'aplicació";
 "osmand_profile" = "Perfil OsmAnd";
@@ -1848,3 +1848,5 @@
 "shared_string_copy" = "Copia";
 "repeat_after" = "Repeteix després";
 "profile_alert_delete_title" = "Suprimeix el perfil";
+"import_profile_descr" = "Per importar un perfil, premeu necessàriament un arxiu (*.osf) a qualsevol aplicació i seleccioneu \"Copia a OsmAnd\"";
+"profile_prefs_reset_successful" = "Totes les configuracions dels perfils s'han restablert per defecte";

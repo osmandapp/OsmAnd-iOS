@@ -715,7 +715,7 @@
 "poi_opening_hours" = "Çalışma saatleri";
 "driving_region_australia" = "Avustralya";
 "towards" = "karşı";
-"route_head" = "Baş";
+"route_head" = "Düz gidin";
 "map_widget_magnetic_bearing" = "Manyetik hareket";
 "unit_of_length" = "Uzunluk birimleri";
 "error_avoid_specific_road" = "Bypass bulunamadı";

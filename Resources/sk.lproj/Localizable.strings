@@ -1585,3 +1585,4 @@
 "reset_to_default" = "Obnoviť do základného nastavenia";
 "copy_from_other_profile" = "Kopírovať z iného profilu";
 "shared_string_copy" = "Kopírovať";
+"gpx_parse_error" = "GPX OsmAndu nemá správny tvar, prosím kontaktuje tím podpory pre bližšie preverenie.";

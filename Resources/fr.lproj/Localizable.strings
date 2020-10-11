@@ -715,7 +715,7 @@
 "map_widget_next_turn" = "Prochaine bifurcation";
 "shared_string_turn" = "Bifurcation";
 "day_off_label" = "fermé";
-"open_from" = "Ouvert du";
+"open_from" = "Ouvre à";
 "open_till" = "Ouvert jusqu'à";
 "will_close_at" = "Ferme à";
 "will_open_at" = "Ouvre à";

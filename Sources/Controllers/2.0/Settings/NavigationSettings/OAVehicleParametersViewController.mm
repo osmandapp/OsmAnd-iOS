@@ -11,7 +11,6 @@
 #import "OAApplicationMode.h"
 #import "OAIconTitleValueCell.h"
 #import "OAIconTextTableViewCell.h"
-#import "OASettingsTitleTableViewCell.h"
 #import "OANavigationTypeViewController.h"
 #import "OARouteParametersViewController.h"
 #import "OAVoicePromptsViewController.h"

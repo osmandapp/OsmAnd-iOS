@@ -17,7 +17,6 @@
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OADividerCell.h"
-#import "OASettingSwitchNoImageCell.h"
 #import "OARootViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"

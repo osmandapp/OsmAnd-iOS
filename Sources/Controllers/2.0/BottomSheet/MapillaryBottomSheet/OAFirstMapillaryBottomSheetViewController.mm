@@ -18,7 +18,7 @@
 #import "OAAppSettings.h"
 #import "OADescrTitleCell.h"
 #import "OADividerCell.h"
-#import "OASettingSwitchNoImageCell.h"
+#import "OASettingSwitchCell.h"
 #import "OARootViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
@@ -84,7 +84,7 @@
     [arr addObject:@{ @"type" : @"OADividerCell" } ];
     
     [arr addObject:@{
-                     @"type" : @"OASettingSwitchNoImageCell",
+                     @"type" : @"OASettingSwitchCell",
                      @"name" : @"enable_mapil_widget",
                      @"title" : OALocalizedString(@"mapillary_turn_on_widget"),
                      @"description" : OALocalizedString(@"mapillary_turn_on_widget_descr"),
@@ -106,9 +106,9 @@
     {
         return UITableViewAutomaticDimension;
     }
-    else if ([item[@"type"] isEqualToString:@"OASettingSwitchNoImageCell"])
+    else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        return [OASettingSwitchNoImageCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:tableView.bounds.size.width];
+        return [OASettingSwitchCell getHeight:item[@"title"] desc:item[@"description"] hasSecondaryImg:NO cellWidth:tableView.bounds.size.width];
     }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
@@ -211,21 +211,23 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"OASettingSwitchNoImageCell"])
+    else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        static NSString* const identifierCell = @"OASettingSwitchNoImageCell";
-        OASettingSwitchNoImageCell* cell = nil;
+        static NSString* const identifierCell = @"OASettingSwitchCell";
+        OASettingSwitchCell* cell = nil;
         
         cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchNoImageCell" owner:self options:nil];
-            cell = (OASettingSwitchNoImageCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
         }
         
         if (cell)
         {
+            [self updateSettingSwitchCell:cell data:item];
+            
             cell.backgroundColor = [UIColor clearColor];
             [cell.textView setText: item[@"title"]];
             [cell.descriptionView setText:item[@"description"]];
@@ -240,6 +242,26 @@
     {
         return nil;
     }
+}
+
+- (void) updateSettingSwitchCell:(OASettingSwitchCell *)cell data:(NSDictionary *)data
+{
+    UIImage *img = nil;
+    NSString *imgName = data[@"img"];
+    NSString *secondaryImgName = data[@"secondaryImg"];
+    if (imgName)
+        img = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    
+    cell.textView.text = data[@"title"];
+    NSString *desc = data[@"description"];
+    cell.descriptionView.text = desc;
+    cell.descriptionView.hidden = desc.length == 0;
+    cell.imgView.image = img;
+    cell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
+    
+    [cell setSecondaryImage:secondaryImgName.length > 0 ? [UIImage imageNamed:data[@"secondaryImg"]] : nil];
+    if ([cell needsUpdateConstraints])
+        [cell setNeedsUpdateConstraints];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath

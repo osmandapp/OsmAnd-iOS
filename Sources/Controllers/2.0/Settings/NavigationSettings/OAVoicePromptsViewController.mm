@@ -9,7 +9,6 @@
 #import "OAVoicePromptsViewController.h"
 #import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OAIconTextTableViewCell.h"
 #import "OASettingSwitchCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OANavigationLanguageViewController.h"

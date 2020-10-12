@@ -29,18 +29,4 @@ static UIFont *_textFont;
     // Configure the view for the selected state
 }
 
-
-+ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth
-{
-    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth text:text] + 1.0);
-}
-
-+ (CGFloat) getTextViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_textFont)
-        _textFont = [UIFont systemFontOfSize:17.0];
-    
-    return [OAUtilities calculateTextBounds:text width:width font:_textFont].height + textMarginVertical * 2;
-}
-
 @end

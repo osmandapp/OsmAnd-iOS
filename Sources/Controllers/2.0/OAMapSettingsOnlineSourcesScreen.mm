@@ -9,7 +9,6 @@
 #import "OAMapSettingsOnlineSourcesScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "Localization.h"
-#import "OASliderCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapCreatorHelper.h"

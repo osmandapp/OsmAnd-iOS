@@ -226,18 +226,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id object = _data[indexPath.row];
-    if ([object isKindOfClass:OAPOIUIFilter.class])
-    {
-        OAPOIUIFilter *filter = (OAPOIUIFilter *)object;
-        return [OATextLineViewCell getHeight:filter.getName cellWidth:tableView.bounds.size.width];
-    }
-    else if ([object isKindOfClass:OAPOIBaseType.class])
-    {
-        OAPOIBaseType *filter = (OAPOIBaseType *)object;
-        return [OATextLineViewCell getHeight:filter.name cellWidth:tableView.bounds.size.width];
-    }
-    return 44.0;
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewAutomaticDimension;
 }
 
 - (NSString *)getName:(id)item {

@@ -8,7 +8,6 @@
 
 #import "OAHistoryViewController.h"
 #import "OADirectionTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
 #import "OAMapViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"

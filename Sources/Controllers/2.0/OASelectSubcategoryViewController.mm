@@ -195,7 +195,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [OATextLineViewCell getHeight:_data[indexPath.row] cellWidth:tableView.bounds.size.width];
+    return UITableViewAutomaticDimension;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

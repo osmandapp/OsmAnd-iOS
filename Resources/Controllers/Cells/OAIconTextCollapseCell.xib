@@ -24,12 +24,6 @@
                             <constraint firstAttribute="height" constant="25" id="xH4-iG-EnK"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l3O-lh-YFI">
-                        <rect key="frame" x="51" y="0.0" width="226" height="51"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5cb-dg-Yi6">
                         <rect key="frame" x="285" y="13" width="25" height="25"/>
                         <color key="tintColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -38,16 +32,22 @@
                             <constraint firstAttribute="height" constant="25" id="PQ4-tT-f5P"/>
                         </constraints>
                     </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l3O-lh-YFI">
+                        <rect key="frame" x="45.5" y="16.5" width="231.5" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="l3O-lh-YFI" firstAttribute="leading" secondItem="Qn1-bX-smA" secondAttribute="trailing" constant="13.5" id="1lW-bh-qU8"/>
-                    <constraint firstItem="l3O-lh-YFI" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="2um-QH-LfW"/>
                     <constraint firstItem="5cb-dg-Yi6" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="5ZT-T2-SUm"/>
+                    <constraint firstItem="5cb-dg-Yi6" firstAttribute="leading" secondItem="l3O-lh-YFI" secondAttribute="trailing" constant="8" id="78m-dY-U3G"/>
                     <constraint firstItem="Qn1-bX-smA" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="7Hh-ze-bSJ"/>
-                    <constraint firstItem="5cb-dg-Yi6" firstAttribute="leading" secondItem="l3O-lh-YFI" secondAttribute="trailing" constant="8" id="ONm-Qx-CzN"/>
+                    <constraint firstItem="l3O-lh-YFI" firstAttribute="leading" secondItem="Qn1-bX-smA" secondAttribute="trailing" constant="8" id="D8O-Fh-eqw"/>
+                    <constraint firstItem="l3O-lh-YFI" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16.5" id="GK5-1V-Tm7"/>
                     <constraint firstAttribute="trailing" secondItem="5cb-dg-Yi6" secondAttribute="trailing" constant="10" id="UaA-vi-aNp"/>
+                    <constraint firstAttribute="bottom" secondItem="l3O-lh-YFI" secondAttribute="bottom" constant="16.5" id="aKJ-3O-4nI"/>
                     <constraint firstItem="Qn1-bX-smA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12.5" id="h8t-gL-lcL"/>
-                    <constraint firstAttribute="bottom" secondItem="l3O-lh-YFI" secondAttribute="bottom" id="z5X-WM-A0W"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

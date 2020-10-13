@@ -997,11 +997,13 @@ static UIViewController *parentController;
         {
             if (!_addonCell)
             {
-                UITableViewCell *cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.bounds.size.width, 44.0)];
+                CGFloat cellHeight = MAX(48.0, [OAUtilities calculateTextBounds:OALocalizedString(@"track_rec_addon_q") width:tableView.bounds.size.width - 40.0 font:[UIFont systemFontOfSize:14.0]].height + 8.0);
+                UITableViewCell *cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.bounds.size.width, cellHeight)];
                 
-                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12.0, 0.0, tableView.bounds.size.width - 42.0, 44.0)];
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 0.0, tableView.bounds.size.width - 40.0, cellHeight)];
                 label.font = [UIFont systemFontOfSize:14.0];
-                label.numberOfLines = 2;
+                label.numberOfLines = 0;
+                label.lineBreakMode = NSLineBreakByWordWrapping;
                 label.textAlignment = NSTextAlignmentLeft;
                 label.textColor = [UIColor darkGrayColor];
                 label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

@@ -1655,7 +1655,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
         return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
-        return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[[item[@"route_index"] integerValue]]];
+        return UITableViewAutomaticDimension;
     return 44.0;
 }
 

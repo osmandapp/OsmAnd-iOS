@@ -315,47 +315,6 @@ static UIFont *_shieldFont;
     return [NSArray arrayWithArray:titles];
 }
 
-+ (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route
-{
-    return [self getCellHeight:width route:route needsSafeArea:YES];
-}
-
-+ (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route needsSafeArea:(BOOL)needsSafeArea
-{
-    NSArray<NSString *> *shields = [self generateTitlesForFoute:route];
-    CGFloat margin = needsSafeArea ? OAUtilities.getLeftMargin : 0.;
-    width = width - margin - kShieldMargin * 2;
-    if (!_shieldFont)
-        _shieldFont = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
-    
-    CGFloat currWidth = 0.0;
-    NSInteger rowsCount = 1;
-    
-    for (NSInteger i = 0; i < shields.count; i++)
-    {
-        NSString *shieldTitle = shields[i];
-        CGFloat shieldWidth = [OARouteSegmentShieldView getViewWidth:shieldTitle];
-        currWidth += shieldWidth;
-        
-        if (currWidth >= width)
-        {
-            rowsCount++;
-            currWidth = shieldWidth;
-        }
-        
-        CGFloat arrowWidth = kArrowWidth + kViewSpacing * 2;
-        if (i != shields.count - 1)
-            currWidth += arrowWidth;
-        
-        if (currWidth >= width)
-        {
-            rowsCount++;
-            currWidth = arrowWidth;
-        }
-    }
-    return kRowHeight * rowsCount + (rowsCount > 1 ? 6.0 : 0.0);
-}
-
 /*
  This method is required because auto-layout doesn't take safe area into consideration
  when the tableview is embedded into UIPageViewController

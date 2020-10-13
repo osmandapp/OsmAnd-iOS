@@ -124,7 +124,7 @@
     }
     else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
     {
-        return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else
     {

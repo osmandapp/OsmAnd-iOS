@@ -625,11 +625,11 @@ static const NSInteger panoImageFilterSection = 3;
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        return [OASettingSwitchCell getHeight:item[@"title"] desc:item[@"description"] hasSecondaryImg:NO cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([item[@"type"] isEqualToString:@"OAIconTitleButtonCell"])
     {
-        return [OAIconTitleButtonCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"] || [indexPath isEqual:_datePickerIndexPath])
     {

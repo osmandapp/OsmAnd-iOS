@@ -90,6 +90,7 @@
         OADestinationCollectionViewCell *destCell = (OADestinationCollectionViewCell *) cell;
         destCell.titleLabel.text = item[@"title"];
         destCell.descrLabel.text = item[@"descr"];
+        destCell.hidden = !item[@"descr"] || item[@"descr"] == 0;
         UIColor *tint = item[@"color"];
         if (!tint)
         {

@@ -176,7 +176,7 @@
 +(NSAttributedString *)getAttributedTypeStr:(OAGPX *)item
 {
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
-    UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
+    UIFont *font = [UIFont systemFontOfSize:12 weight:UIFontWeightSemibold];
     
     if (item.newGpx && item.wptPoints == 0)
     {

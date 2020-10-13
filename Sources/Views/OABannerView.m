@@ -110,13 +110,13 @@
     
     _freeTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 19.0, 240.0, 20.0)];
     _freeTextLabel.textColor = [UIColor whiteColor];
-    _freeTextLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:17.5];
+    _freeTextLabel.font = [UIFont systemFontOfSize:17.5 weight:UIFontWeightSemibold];
     _freeTextLabel.numberOfLines = 1;
     [self addSubview:_freeTextLabel];
     
     _freeTextDescLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 43.0, 240.0, 36.0)];
     _freeTextDescLabel.textColor = [UIColor colorWithRed:0.882f green:0.890f blue:0.890f alpha:1.00f];
-    _freeTextDescLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.5];
+    _freeTextDescLabel.font = [UIFont systemFontOfSize:12.5];
     _freeTextDescLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _freeTextDescLabel.numberOfLines = 2;
     [self addSubview:_freeTextDescLabel];
@@ -124,7 +124,7 @@
     _btnBanner = [UIButton buttonWithType:UIButtonTypeSystem];
     _btnBanner.frame = CGRectMake(60.0, 85.0, 100.0, 27.0);
     [_btnBanner setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_btnBanner.titleLabel setFont:[UIFont fontWithName:@"AvenirNext-DemiBold" size:12.5]];
+    [_btnBanner.titleLabel setFont:[UIFont systemFontOfSize:12.5 weight:UIFontWeightSemibold]];
     [_btnBanner addTarget:self action:@selector(btnBannerClicked:) forControlEvents:UIControlEventTouchUpInside];
     _btnBanner.backgroundColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
     _btnBanner.layer.cornerRadius = 2;

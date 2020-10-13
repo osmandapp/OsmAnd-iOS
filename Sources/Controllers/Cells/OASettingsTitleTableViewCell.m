@@ -25,7 +25,7 @@ static UIFont *_titleTextFont;
 + (CGFloat) getTextViewHeightWithWidth:(CGFloat)cellWidth title:(NSString *)title
 {
     if (!_titleTextFont)
-        _titleTextFont = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
+        _titleTextFont = [UIFont systemFontOfSize:16.0];
     
     CGFloat w = cellWidth - titleTextDelta;
     CGFloat titleHeight = 0;

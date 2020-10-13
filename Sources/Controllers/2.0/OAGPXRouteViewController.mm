@@ -108,7 +108,7 @@
     NSTimeInterval tripDuration = [_gpxRouter getRouteDuration];
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
-    UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
+    UIFont *font = [UIFont systemFontOfSize:12 weight:UIFontWeightSemibold];
     
     NSString *waypointsStr = [NSString stringWithFormat:@"%d", wptCount];
     NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:tripDuration shortFormat:NO];
@@ -288,7 +288,7 @@
     }
     
     UILabel *badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 50.0)];
-    badgeLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:11.0];
+    badgeLabel.font = [UIFont systemFontOfSize:11 weight:UIFontWeightSemibold];
     badgeLabel.text = [NSString stringWithFormat:@"%d", (int)_gpxRouter.routeDoc.locationMarks.count];
     badgeLabel.textColor = [self getNavBarColor];
     badgeLabel.textAlignment = NSTextAlignmentCenter;

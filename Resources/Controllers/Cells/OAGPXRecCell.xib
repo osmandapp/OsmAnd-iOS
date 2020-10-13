@@ -16,7 +16,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="byW-vi-ODc">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="byW-vi-ODc">
                         <rect key="frame" x="16" y="8" width="192" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -49,7 +49,7 @@
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7a-PV-50u">
-                        <rect key="frame" x="266" y="7" width="38" height="38"/>
+                        <rect key="frame" x="266" y="6.5" width="38" height="38"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="38" id="9wS-7Z-Xiw"/>
                             <constraint firstAttribute="width" constant="38" id="bIb-4X-4E7"/>
@@ -61,7 +61,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ei3-YO-3Hy">
-                        <rect key="frame" x="218" y="7" width="38" height="38"/>
+                        <rect key="frame" x="218" y="6.5" width="38" height="38"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="38" id="Qq4-1s-vOj"/>
                             <constraint firstAttribute="width" constant="38" id="SEk-7J-cEp"/>

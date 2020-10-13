@@ -34,30 +34,4 @@ static UIFont *_valueTextFont;
     }
 }
 
-+ (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth
-{
-    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title value:value] + 1.0);
-}
-
-+ (CGFloat) getTextViewHeightWithWidth:(CGFloat)cellWidth title:(NSString *)title value:(NSString *)value
-{
-    if (!_titleTextFont)
-        _titleTextFont = [UIFont systemFontOfSize:17.0];
-    
-    if (!_valueTextFont)
-        _valueTextFont = [UIFont systemFontOfSize:17.0];
-    
-    CGFloat w = cellWidth / titleTextWidthKoef;
-    CGFloat titleHeight = 0;
-    if (title)
-        titleHeight = [OAUtilities calculateTextBounds:title width:w font:_titleTextFont].height + textMarginVertical * 2;
-    
-    w = cellWidth / valueTextWidthKoef;
-    CGFloat valueHeight = 0;
-    if (value && value.length > 0)
-        valueHeight = [OAUtilities calculateTextBounds:value width:w font:_valueTextFont].height + textMarginVertical * 2;
-    
-    return MAX(titleHeight, valueHeight);
-}
-
 @end

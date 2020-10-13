@@ -785,24 +785,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kIconTitleValueCell] || [item[@"type"] isEqualToString:kBottomSheetActionCell] || [item[@"type"] isEqualToString:kTitleDescrDraggableCell])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:kTextInputFloatingCellWithIcon])
-    {
-        return [OATextInputFloatingCellWithIcon getHeight:item[@"title"] desc:item[@"hint"] cellWidth:DeviceScreenWidth];
-    }
-    else if ([item[@"type"] isEqualToString:kMultilineTextViewCell])
-    {
-        return [OAMultilineTextViewCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
-    }
-    else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    return 44.0;
+    return UITableViewAutomaticDimension;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

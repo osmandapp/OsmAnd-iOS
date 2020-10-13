@@ -16,7 +16,7 @@
 #import "OALocalResourceInfoCell.h"
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
-#import "OAOsmandLiveCell.h"
+#import "OAIconTextDescCell.h"
 #import "OAQuickSearchTableController.h"
 #import "OADonationSettingsViewController.h"
 #import "OAUtilities.h"
@@ -412,10 +412,7 @@ static const NSInteger sectionCount = 2;
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *value = item[@"description"];
-    NSString *text = item[@"title"];
-    return [OAOsmAndLiveCell getHeight:text desc:value cellWidth:tableView.bounds.size.width];
+    return UITableViewAutomaticDimension;
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -459,17 +456,23 @@ static const NSInteger sectionCount = 2;
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    OAOsmAndLiveCell *cell = (OAOsmAndLiveCell *)[tableView dequeueReusableCellWithIdentifier:@"OAOsmAndLiveCell"];
+    
+    OAIconTextDescCell* cell;
+    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAOsmAndLiveCell" owner:self options:nil];
-        cell = (OAOsmAndLiveCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+        cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
+        
+        cell.textView.numberOfLines = 0;
+        cell.descView.font = [UIFont systemFontOfSize:12.];
+        cell.iconView.hidden = YES;
+        [cell.arrowIconView setTintColor:UIColorFromRGB(color_icon_inactive)];
     }
-    
     if (cell)
     {
-        cell.descriptionView.hidden = item[@"description"] == nil || [item[@"description"] length] == 0;
         [cell.textView setText:item[@"title"]];
+        cell.descView.hidden = item[@"description"] == nil || [item[@"description"] length] == 0;
         BOOL isAvailable = [item[@"type"] isEqualToString:kMapAvailableType];
         if (!isAvailable)
         {
@@ -477,10 +480,10 @@ static const NSInteger sectionCount = 2;
                                                                                                       stringByReplacingOccurrencesOfString:@".map.obf" withString:@""]];
             NSString *frequencyString = [OAOsmAndLiveHelper getFrequencyString:frequency];
             NSMutableAttributedString *formattedText = [self setColorForText:frequencyString inText:item[@"description"] withColor:UIColorFromRGB(color_live_frequency)];
-            cell.descriptionView.attributedText = formattedText;
+            cell.descView.attributedText = formattedText;
         } else
-            [cell.descriptionView setText:item[@"description"]];
-        [cell.arrowIconView setImage:[UIImage imageNamed:isAvailable ? @"ic_action_plus" : @"menu_cell_pointer"]];
+            [cell.descView setText:item[@"description"]];
+        [cell.arrowIconView setImage:[[UIImage imageNamed:isAvailable ? @"ic_action_plus" : @"menu_cell_pointer"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         if (isAvailable)
         {
             CGRect iconView = cell.arrowIconView.frame;
@@ -488,6 +491,8 @@ static const NSInteger sectionCount = 2;
             iconView.origin.y = y;
             cell.arrowIconView.frame = iconView;
         }
+        if ([cell needsUpdateConstraints])
+            [cell setNeedsUpdateConstraints];
     }
     return cell;
 }

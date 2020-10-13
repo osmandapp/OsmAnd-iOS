@@ -18,7 +18,4 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftTitleMarginNoProgress;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftTitleMarginWithProgressView;
 
-
-+ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
-
 @end

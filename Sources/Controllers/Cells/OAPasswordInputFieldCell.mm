@@ -37,34 +37,6 @@ static UIFont *_descFont;
     // Configure the view for the selected state
 }
 
-+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc cellWidth:(CGFloat)cellWidth
-{
-    CGFloat textWidth = cellWidth - titleTextWidthDelta;
-    return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text]);
-}
-
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-    
-    CGFloat w = self.bounds.size.width;
-    CGFloat textX = 16.0;
-    CGFloat textWidth = w - textX;
-    CGFloat titleHeight = _inputField.intrinsicContentSize.height;
-    CGFloat cellHeight = MAX(defaultCellHeight, titleHeight);
-    
-    self.inputField.frame = CGRectMake(textX, 0.0, textWidth - textX, cellHeight);
-    self.togglePasswordButton.frame = CGRectMake(w - 32 - self.togglePasswordButton.frame.size.width, cellHeight / 2 - self.togglePasswordButton.frame.size.height / 2, self.togglePasswordButton.frame.size.width, self.togglePasswordButton.frame.size.height);
-}
-
-+ (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_titleFont)
-        _titleFont = [UIFont systemFontOfSize:16.0];
-    
-    return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical;
-}
-
 - (void) setupPasswordButton
 {
     _togglePasswordButton.tintColor = UIColorFromRGB(color_primary_purple);

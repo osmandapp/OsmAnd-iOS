@@ -221,11 +221,6 @@
     return outCell;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return kEstimatedRowHeight;
-}
-
 - (void) showLocalChanged:(id)sender
 {
     UISwitch *sw = sender;

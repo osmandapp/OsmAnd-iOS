@@ -7,7 +7,6 @@
 //
 
 #import "OAOsmAndLiveSelectionViewController.h"
-#import "OAMenuSimpleCellNoIcon.h"
 #import "Localization.h"
 #import "Reachability.h"
 #import "OAOsmAndLiveHelper.h"

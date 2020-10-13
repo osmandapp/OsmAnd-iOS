@@ -420,27 +420,15 @@ static const NSInteger groupCount = 5;
         [cell.textView setTextColor:[UIColor blackColor]];
         [cell.textView setText:item[@"title"]];
         [cell.descriptionView setText:item[@"description"]];
+        [cell.textView setFont:[UIFont systemFontOfSize:16]];
+        [cell.descriptionView setFont:[UIFont systemFontOfSize:12]];
     }
     return cell;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *value = item[@"description"];
-    NSString *text = item[@"title"];
-    
-    return [OAMenuSimpleCellNoIcon getHeight:text desc:value cellWidth:tableView.bounds.size.width];
+    return UITableViewAutomaticDimension;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

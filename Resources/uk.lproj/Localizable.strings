@@ -578,7 +578,7 @@
 "gpx_option_calculate_first_last_segment" = "Обчислити маршрут OsmAnd для першого та останнього сегментів маршруту";
 "gpx_option_from_start_point" = "Пройдіть по усьому треку";
 "gpx_option_reverse_route" = "Зворотній напрямок GPX";
-"use_points_as_intermediates" = "Розрахувати маршрут між точками";
+"use_points_as_intermediates" = "Обчислити маршрут між точками";
 "calculate_osmand_route_without_internet" = "Розрахувати ділянку маршруту OsmAnd без Інтернету";
 "routing_settings_2" = "Налаштування навігації";
 "gpx_navigation" = "Йти за подорожжю";
@@ -1853,3 +1853,4 @@
 "reset_profile_action_descr" = "Відновіть всі налаштування профілю до типових значень. Натискання \"Відновити\" призведе до скасування всіх змін, цю дію не можна скасувати.";
 "import_profile_descr" = "Щоб імпортувати профіль, натисніть на потрібний файл (*.osf) в будь-якому застосунку й виберіть \"Копіювати до OsmAnd Maps\"";
 "profile_prefs_reset_successful" = "Усі налаштування профілю відновлено до типових";
+"gpx_parse_error" = "OsmAnd GPX недостатньо сформований. Зверніться до служби підтримки для подальшого дослідження.";

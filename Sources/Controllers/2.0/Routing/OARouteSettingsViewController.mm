@@ -80,11 +80,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    return UITableViewAutomaticDimension;
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView

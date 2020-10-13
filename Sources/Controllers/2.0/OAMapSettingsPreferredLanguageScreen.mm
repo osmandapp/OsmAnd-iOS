@@ -146,12 +146,6 @@
         [_settings setSettingMapLanguage:newValue];
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-     return UITableViewAutomaticDimension;
-}
-
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

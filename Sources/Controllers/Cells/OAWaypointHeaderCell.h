@@ -15,10 +15,7 @@
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;
 @property (weak, nonatomic) IBOutlet UIButton *imageButton;
 @property (weak, nonatomic) IBOutlet UIButton *textButton;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftTitleMarginNoProgress;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftTitleMarginWithProgressView;
-
-
-+ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftTitleMarginNoProgress;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftTitleMarginWithProgressView;
 
 @end

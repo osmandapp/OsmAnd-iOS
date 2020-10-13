@@ -16,7 +16,6 @@
 #import "OADefaultFavorite.h"
 #import "OARootViewController.h"
 #import "OAUtilities.h"
-#import "OAIconTextTableViewCell.h"
 #import "OATargetInfoCollapsableViewCell.h"
 #import "OATargetInfoCollapsableCoordinatesViewCell.h"
 #import "OACollapsableWaypointsView.h"

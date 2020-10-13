@@ -13,6 +13,4 @@
 
 @property (weak, nonatomic) IBOutlet MDCMultilineTextField *inputField;
 
-+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc cellWidth:(CGFloat)cellWidth;
-
 @end

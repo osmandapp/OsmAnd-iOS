@@ -12,7 +12,7 @@
 #import "OAMapWidgetRegInfo.h"
 #import "OAConfigureMenuViewController.h"
 #import "Localization.h"
-#import "OASettingsImageCell.h"
+#import "OAIconTextTableViewCell.h"
 #import "OARootViewController.h"
 #import "OAUtilities.h"
 
@@ -91,7 +91,7 @@
                                    @"selected" : @(showSelected),
                                    @"color" : showSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : showSelected ? @"menu_cell_selected" : [NSNull null],
-                                   @"type" : @"OASettingsImageCell"} ];
+                                   @"type" : @"OAIconTextTableViewCell"} ];
 
         [standardList addObject:@{ @"title" : OALocalizedString(@"poi_hide"),
                                    @"key" : @"action_hide",
@@ -99,7 +99,7 @@
                                    @"selected" : @(hideSelected),
                                    @"color" : hideSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : hideSelected ? @"menu_cell_selected" : [NSNull null],
-                                   @"type" : @"OASettingsImageCell"} ];
+                                   @"type" : @"OAIconTextTableViewCell"} ];
         
         [standardList addObject:@{ @"title" : OALocalizedString(@"shared_string_collapse"),
                                    @"key" : @"action_collapse",
@@ -107,7 +107,7 @@
                                    @"selected" : @(collapsedSelected),
                                    @"color" : collapsedSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : collapsedSelected ? @"menu_cell_selected" : [NSNull null],
-                                   @"type" : @"OASettingsImageCell"} ];
+                                   @"type" : @"OAIconTextTableViewCell"} ];
         
         NSMutableArray *additionalList = [NSMutableArray array];
         if ([_r getItemIds])
@@ -124,7 +124,7 @@
                                            @"selected" : @(selected),
                                            @"color" : selected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                            @"secondaryImg" : selected ? @"menu_cell_selected" : [NSNull null],
-                                           @"type" : @"OASettingsImageCell"} ];
+                                           @"type" : @"OAIconTextTableViewCell"} ];
             }
         }
         
@@ -145,12 +145,6 @@
     }
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
-    return [OASettingsImageCell getHeight:item[@"title"] hasSecondaryImg:item[@"secondaryImg"] != [NSNull null] cellWidth:tableView.bounds.size.width];
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -167,17 +161,19 @@
 {
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
           
-    static NSString* const identifierCell = @"OASettingsImageCell";
-    OASettingsImageCell *cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    OAIconTextTableViewCell* cell;
+    cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsImageCell" owner:self options:nil];
-        cell = (OASettingsImageCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        cell.textView.numberOfLines = 0;
     }
-    
     if (cell)
     {
         cell.textView.text = item[@"title"];
+        [cell.textView setTextColor:[UIColor blackColor]];
+        
         NSString *imageName = item[@"img"];
         if (imageName)
         {
@@ -186,29 +182,27 @@
                 color = item[@"color"];
             
             if (color)
-                cell.imgView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:imageName] color:color];
+                cell.iconView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:imageName] color:color];
             else
-                cell.imgView.image = [UIImage imageNamed:imageName];
+                cell.iconView.image = [UIImage imageNamed:imageName];
         }
         cell.textView.text = item[@"title"];
         if (item[@"secondaryImg"] != [NSNull null])
-            [cell setSecondaryImage:[UIImage imageNamed:item[@"secondaryImg"]]];
+            cell.arrowIconView.image = [UIImage imageNamed:item[@"secondaryImg"]];
         else
-            [cell setSecondaryImage:nil];
+            cell.arrowIconView.image = nil;
     }
-    
     return cell;
-    
 }
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath tableView:tableView];
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath tableView:tableView];
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITableViewDelegate

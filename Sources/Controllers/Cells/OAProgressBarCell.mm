@@ -23,14 +23,4 @@
     // Configure the view for the selected state
 }
 
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-    
-    CGFloat w = self.bounds.size.width;
-    CGFloat h = self.bounds.size.height;
-    
-    self.progressBar.frame = CGRectMake(16.0, h / 2 + 1, w - 32, 2.0);
-}
-
 @end

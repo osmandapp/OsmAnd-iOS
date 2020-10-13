@@ -309,7 +309,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     if (indexPath.section == _nameSectionIndex)
         return MAX(_poiNameCell.inputField.intrinsicContentSize.height, 44.0);
     else if ([item[@"type"] isEqualToString:kCellTypeSetting])
-        return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:self.tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     else if (indexPath.section == _contactInfoSectionIndex)
         return MAX(((OATextInputFloatingCell *)_contactInfoItems[indexPath.row]).inputField.intrinsicContentSize.height, 60.0);
     else

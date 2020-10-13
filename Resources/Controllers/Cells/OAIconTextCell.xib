@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -30,12 +30,12 @@
                             <constraint firstAttribute="width" constant="21" id="n5S-Do-5ZO"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xhW-YR-yce">
-                        <rect key="frame" x="66" y="11" width="209" height="26"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xhW-YR-yce">
+                        <rect key="frame" x="62" y="11" width="213" height="26"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="SSu-YV-b9J"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -43,7 +43,7 @@
                 <constraints>
                     <constraint firstItem="tSM-AM-xaM" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="CNM-Fb-ts7"/>
                     <constraint firstItem="gBR-c5-fSF" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="HF6-jr-gjb"/>
-                    <constraint firstItem="xhW-YR-yce" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="66" id="U88-5L-86L"/>
+                    <constraint firstItem="xhW-YR-yce" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="62" id="U88-5L-86L"/>
                     <constraint firstItem="xhW-YR-yce" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="Xlf-8y-sl6"/>
                     <constraint firstAttribute="bottom" secondItem="xhW-YR-yce" secondAttribute="bottom" constant="11" id="ZbG-O2-8Ai"/>
                     <constraint firstItem="xhW-YR-yce" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="cWK-jp-UX6"/>

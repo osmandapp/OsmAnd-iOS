@@ -90,11 +90,7 @@
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
-    OAMapStyleParameter *p = _parameters[indexPath.row];
-    if (p.dataType != OABoolean)
-        return [OASettingsTableViewCell getHeight:p.title value:[p getValueTitle] cellWidth:tableView.bounds.size.width];
-    else
-        return UITableViewAutomaticDimension;
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITableViewDataSource

@@ -139,18 +139,7 @@
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
-    if (indexPath.row == 0)
-    {
-        return [OASettingsTableViewCell getHeight:OALocalizedString(@"sett_pref_lang") value:_prefLang cellWidth:tableView.bounds.size.width];
-    }
-    else if (indexPath.row == 1)
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else
-    {
-        return UITableViewAutomaticDimension;
-    }
+     return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITableViewDataSource

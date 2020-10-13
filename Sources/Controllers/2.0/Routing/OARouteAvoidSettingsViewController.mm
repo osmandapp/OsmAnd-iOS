@@ -23,7 +23,6 @@
 #import "OARouteProvider.h"
 #import "OAGPXDocument.h"
 #import "OASwitchTableViewCell.h"
-#import "OASettingsTableViewCell.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OANavigationSettingsViewController.h"

@@ -1047,11 +1047,17 @@
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[NSNumber class]] || [item isKindOfClass:[OALocationPointWrapper class]])
+        return UITableViewAutomaticDimension;
     return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[NSNumber class]] || [item isKindOfClass:[OALocationPointWrapper class]])
+        return UITableViewAutomaticDimension;
     return [self heightForRow:indexPath tableView:tableView];
 }
 

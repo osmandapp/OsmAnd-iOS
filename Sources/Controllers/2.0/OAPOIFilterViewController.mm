@@ -796,7 +796,7 @@ typedef enum
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAPOIFilterListItem *item = [self getItem:indexPath];
-    if (!item || item.type != SWITCH_ITEM)
+    if (!item || (item.type != SWITCH_ITEM && item.type != GROUP_HEADER))
         return 51.0;
     else
         return UITableViewAutomaticDimension;

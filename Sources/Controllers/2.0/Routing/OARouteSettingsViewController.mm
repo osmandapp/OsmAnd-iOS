@@ -82,30 +82,7 @@
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
-    OALocalRoutingParameter *param = _data[@(indexPath.section)][indexPath.row];
-    NSString *type = [param getCellType];
-    NSString *text = [param getText];
-    NSString *value = [param getValue];
-    
-    if ([type isEqualToString:@"OASettingsCell"])
-    {
-        return [OASettingsTableViewCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:@"OASettingSwitchCell"])
-    {
-        return [OASettingSwitchCell getHeight:text
-                                         desc:value
-                              hasSecondaryImg:YES
-                                    cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:@"OAIconTitleValueCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else
-    {
-        return 48.0;
-    }
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITableViewDataSource

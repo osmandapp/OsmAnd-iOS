@@ -214,11 +214,19 @@
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    OAQuickSearchListItem *item = [rows objectAtIndex:indexPath.row];
+    OASearchResult *res = [item getSearchResult];
+    if ([res.object isKindOfClass:[OAPOICategory class]])
+        return UITableViewAutomaticDimension;
     return 50.0;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    OAQuickSearchListItem *item = [rows objectAtIndex:indexPath.row];
+    OASearchResult *res = [item getSearchResult];
+    if ([res.object isKindOfClass:[OAPOICategory class]])
+        return UITableViewAutomaticDimension;
     return 50.0;
 }
 

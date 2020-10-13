@@ -368,7 +368,7 @@
                 [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
             }
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
-            cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
+            cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 20.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;

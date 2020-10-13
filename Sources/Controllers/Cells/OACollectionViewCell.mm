@@ -33,13 +33,12 @@
     // Initialization code
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
-    _collectionView.contentInset = UIEdgeInsetsMake(0., 16., 0., 16.);
     [_collectionView registerNib:[UINib nibWithNibName:kDestCell bundle:nil] forCellWithReuseIdentifier:kDestCell];
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     layout.minimumInteritemSpacing = 8.;
     layout.minimumLineSpacing = 8.;
-    layout.sectionInset = UIEdgeInsetsZero;
+    layout.sectionInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [_collectionView setCollectionViewLayout:layout];
     [_collectionView setShowsHorizontalScrollIndicator:NO];
     [_collectionView setShowsVerticalScrollIndicator:NO];

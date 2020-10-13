@@ -598,14 +598,12 @@
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
                 cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
-                cell.textView.frame = CGRectMake(15.0, 0, DeviceScreenWidth - 20.0, 44.0);
             }
             
             if (cell)
             {
                 [cell.textView setText:self.name];
                 [cell.textView setPlaceholder:OALocalizedString(@"enter_name")];
-                [cell.textView setFont:[UIFont systemFontOfSize:16]];
                 [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
                 [cell.textView addTarget:self action:@selector(editFavName:) forControlEvents:UIControlEventEditingChanged];
                 [cell.textView setDelegate:self];

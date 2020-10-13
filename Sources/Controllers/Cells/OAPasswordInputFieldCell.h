@@ -14,8 +14,6 @@
 @property (weak, nonatomic) IBOutlet MDCTextField *inputField;
 @property (weak, nonatomic) IBOutlet UIButton *togglePasswordButton;
 
-+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc cellWidth:(CGFloat)cellWidth;
-
 - (void) setupPasswordButton;
 
 @end

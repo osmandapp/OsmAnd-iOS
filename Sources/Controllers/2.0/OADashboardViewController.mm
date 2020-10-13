@@ -8,7 +8,6 @@
 
 #import "OADashboardViewController.h"
 
-#import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 
 #import "OAAutoObserverProxy.h"

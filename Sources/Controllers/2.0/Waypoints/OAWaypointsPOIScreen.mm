@@ -18,7 +18,7 @@
 #import "OARootViewController.h"
 
 #import "OALocationPointWrapper.h"
-#import "OASettingsImageCell.h"
+#import "OAIconTextTableViewCell.h"
 
 @implementation OAWaypointsPOIScreen
 {
@@ -180,12 +180,6 @@
     }
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary *item = _data[indexPath.row];
-    return [OASettingsImageCell getHeight:item[@"name"] hasSecondaryImg:NO cellWidth:tableView.bounds.size.width - (_multiSelect ? 38.0 : 0.0)];
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -200,28 +194,28 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OASettingsImageCell";
-    OASettingsImageCell* cell = nil;
-    
     NSDictionary *item = _data[indexPath.row];
     OAPOIUIFilter *f = item[@"value"];
     NSString *name = item[@"name"];
     NSString *imgName = item[@"img"];
-
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    
+    OAIconTextTableViewCell* cell;
+    cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsImageCell" owner:self options:nil];
-        cell = (OASettingsImageCell *)[nib objectAtIndex:0];
-        [cell setSecondaryImage:nil];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        cell.textView.numberOfLines = 0;
+        cell.arrowIconView.hidden = YES;
     }
     
     if (cell)
     {
         [cell.textView setText:name];
+        [cell.textView setTextColor:[UIColor blackColor]];
         if (imgName)
         {
-            [cell.imgView setImage:[UIImage imageNamed:imgName]];
+            [cell.iconView setImage:[UIImage imageNamed:imgName]];
         }
         else
         {
@@ -230,7 +224,7 @@
             if (!img)
                 img = [OAUtilities getMxIcon:@"user_defined"];
             
-            [cell.imgView setImage:img];
+            [cell.iconView setImage:img];
         }
     }
     
@@ -239,12 +233,12 @@
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath tableView:tableView];
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath tableView:tableView];
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITableViewDelegate

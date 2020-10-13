@@ -9,7 +9,6 @@
 #import "OADestinationCardsViewController.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
-#import "OAIconTextTableViewCell.h"
 #import "MGSwipeButton.h"
 #import "MGSwipeTableCell.h"
 

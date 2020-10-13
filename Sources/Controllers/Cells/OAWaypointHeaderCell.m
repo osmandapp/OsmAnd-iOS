@@ -9,10 +9,6 @@
 #import "OAWaypointHeaderCell.h"
 #import "OAUtilities.h"
 
-#define titleTextWidthDelta 44.0
-#define defaultCellHeight 44.0
-#define textMarginVertical 5.0
-
 @implementation OAWaypointHeaderCell
 
 - (void) awakeFromNib
@@ -32,18 +28,6 @@
     _leftTitleMarginNoProgress.active = self.progressView.hidden;
     _leftTitleMarginWithProgressView.active = !self.progressView.hidden;
     [super updateConstraints];
-}
-
-+ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth
-{
-    CGFloat textWidth = cellWidth - titleTextWidthDelta;
-    return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text]);
-}
-
-+ (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    UIFont *titleFont = [UIFont systemFontOfSize:16.0];
-    return [OAUtilities calculateTextBounds:text width:width font:titleFont].height + textMarginVertical;
 }
 
 @end

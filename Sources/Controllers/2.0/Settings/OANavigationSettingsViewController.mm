@@ -1289,25 +1289,7 @@ static NSDictionary *screenVoiceProviders;
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *type = item[@"type"];
-    
-    if ([type isEqualToString:kCellTypeSwitch])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeCheck])
-    {
-        return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:kCellTypeCheck])
-    {
-        return [OASettingsTitleTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
-    }
-    else
-    {
-        return 44.0;
-    }
+     return UITableViewAutomaticDimension;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

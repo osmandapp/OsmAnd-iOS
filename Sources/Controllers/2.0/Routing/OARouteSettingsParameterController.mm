@@ -16,7 +16,6 @@
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
-#import "OASettingsTableViewCell.h"
 #import "OANavigationSettingsViewController.h"
 #import "OAUtilities.h"
 #import "OASettingsTitleTableViewCell.h"
@@ -84,10 +83,7 @@
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
-    OALocalRoutingParameter *param = _group.getRoutingParameters[indexPath.row];
-    NSString *text = [param getText];
-    
-    return [OASettingsTitleTableViewCell getHeight:text cellWidth:tableView.bounds.size.width];
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITableViewDataSource

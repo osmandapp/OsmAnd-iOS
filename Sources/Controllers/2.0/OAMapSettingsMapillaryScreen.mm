@@ -15,7 +15,6 @@
 #import "OACustomSearchPoiFilter.h"
 #import "OAUtilities.h"
 #import "OAIconTextDescCell.h"
-#import "OAIconTextTableViewCell.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAIconButtonCell.h"
 #import "OAPOIUIFilter.h"

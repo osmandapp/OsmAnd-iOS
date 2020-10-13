@@ -8,9 +8,6 @@
 
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
-#import "OASettingsTableViewCell.h"
-#import "OASettingsTitleTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAppSettings.h"

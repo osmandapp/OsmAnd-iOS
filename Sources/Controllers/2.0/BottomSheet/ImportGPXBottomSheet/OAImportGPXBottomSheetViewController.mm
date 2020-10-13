@@ -78,21 +78,13 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0)];
     }
-    else if ([item[@"type"] isEqualToString:@"OAWaypointHeaderCell"])
-    {
-        return [OAWaypointHeaderCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
-    }
     else
     {
-        return 44.0;
+        return UITableViewAutomaticDimension;
     }
 }
 

@@ -166,8 +166,7 @@
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
-    NSDictionary *item = data[indexPath.row];
-    return [OASettingsTableViewCell getHeight:[item objectForKey:@"name"] value:[item objectForKey:@"value"] cellWidth:tableView.bounds.size.width];
+     return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITableViewDataSource

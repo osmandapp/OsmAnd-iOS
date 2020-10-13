@@ -832,7 +832,7 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCollapseCell" owner:self options:nil];
                 cell = (OAIconTextCollapseCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(0x727272);
+                cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
             }
             
             if (cell)
@@ -863,7 +863,7 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
                 cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-                cell.imgView.tintColor = UIColorFromRGB(0x727272);
+                cell.imgView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.descriptionView.hidden = YES;
             }
             
@@ -894,7 +894,7 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconButtonCell" owner:self options:nil];
                 cell = (OAIconButtonCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(0x727272);
+                cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.arrowIconView.hidden = YES;
             }
             

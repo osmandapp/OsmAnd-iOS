@@ -16,20 +16,15 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1at-JS-K13">
-                        <rect key="frame" x="12" y="12" width="25" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1at-JS-K13">
+                        <rect key="frame" x="15" y="16" width="25" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="25" id="6xh-tZ-J8s"/>
+                            <constraint firstAttribute="height" constant="25" id="hdr-OB-g4P"/>
+                        </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ул. Академика Крымского  " lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGc-pw-v0w">
-                        <rect key="frame" x="51" y="1" width="256" height="32"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cad-YV-DSA">
-                        <rect key="frame" x="51" y="29" width="256" height="28"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cad-YV-DSA">
+                        <rect key="frame" x="56" y="31.5" width="249" height="20.5"/>
                         <attributedString key="attributedText">
                             <fragment content="50.46548, 30.37344">
                                 <attributes>
@@ -41,7 +36,24 @@
                         </attributedString>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ул. Академика Крымского  " lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGc-pw-v0w">
+                        <rect key="frame" x="56" y="10" width="249" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailingMargin" secondItem="CGc-pw-v0w" secondAttribute="trailing" id="AVx-k6-vCG"/>
+                    <constraint firstItem="1at-JS-K13" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="NRd-ek-leC"/>
+                    <constraint firstAttribute="bottom" secondItem="cad-YV-DSA" secondAttribute="bottom" constant="8" id="ROP-aG-c8f"/>
+                    <constraint firstItem="CGc-pw-v0w" firstAttribute="leading" secondItem="1at-JS-K13" secondAttribute="trailing" constant="16" id="Vu7-6t-aRa"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="cad-YV-DSA" secondAttribute="trailing" id="Yq6-Wp-KY6"/>
+                    <constraint firstItem="cad-YV-DSA" firstAttribute="top" secondItem="CGc-pw-v0w" secondAttribute="bottom" constant="1" id="hvB-6L-fmI"/>
+                    <constraint firstItem="cad-YV-DSA" firstAttribute="leading" secondItem="1at-JS-K13" secondAttribute="trailing" constant="16" id="jmb-Hp-dhl"/>
+                    <constraint firstItem="1at-JS-K13" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="oRS-YT-FjL"/>
+                    <constraint firstItem="CGc-pw-v0w" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="pUD-mC-b6W"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="descriptionView" destination="cad-YV-DSA" id="VoC-so-hwY"/>

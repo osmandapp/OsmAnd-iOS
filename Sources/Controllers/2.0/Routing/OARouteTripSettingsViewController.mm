@@ -123,11 +123,7 @@
         value = [OAGPXUIHelper getDescription:gpx];
     }
     
-    if ([type isEqualToString:@"OASwitchCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([type isEqualToString:@"OAMultiIconTextDescCell"])
+    if ([type isEqualToString:@"OASwitchCell"] || [type isEqualToString:@"OAMultiIconTextDescCell"])
     {
         return UITableViewAutomaticDimension;
     }

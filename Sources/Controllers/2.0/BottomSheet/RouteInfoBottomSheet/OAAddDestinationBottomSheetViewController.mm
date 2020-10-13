@@ -283,6 +283,24 @@
 {
 }
 
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    NSDictionary *item = [self getItem:indexPath];
+    
+    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:kTitleIconRoundCell])
+    {
+        return UITableViewAutomaticDimension;
+    }
+    else if ([item[@"type"] isEqualToString:kCollectionViewCell])
+    {
+        return 60.0;
+    }
+    else
+    {
+        return 44.0;
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView

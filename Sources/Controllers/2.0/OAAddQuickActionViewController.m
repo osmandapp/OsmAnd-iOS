@@ -301,11 +301,6 @@
     return 38.5;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return UITableViewAutomaticDimension;
-}
-
 -(void)textViewDidChange:(UITextView *)textView
 {
     if (textView.text.length == 0)

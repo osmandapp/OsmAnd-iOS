@@ -23,7 +23,4 @@
 -(void) setData:(SHARED_PTR<TransportRouteResult>)data;
 -(void) needsSafeAreaInsets:(BOOL)needsInsets;
 
-+ (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route;
-+ (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route needsSafeArea:(BOOL)needsSafeArea;
-
 @end

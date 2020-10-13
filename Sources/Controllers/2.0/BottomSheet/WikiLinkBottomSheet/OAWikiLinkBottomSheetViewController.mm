@@ -116,21 +116,6 @@
     [vwController dismiss];
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary *item = [self getItem:indexPath];
-    
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderDescrButtonCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    return 44.0;
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -202,16 +187,6 @@
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[@(indexPath.section)][indexPath.row];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 #pragma mark - UITableViewDelegate

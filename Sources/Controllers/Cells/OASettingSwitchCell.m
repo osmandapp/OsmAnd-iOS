@@ -86,38 +86,4 @@ static UIFont *_descFont;
     self.secondaryImgView.image = image.imageFlippedForRightToLeftLayoutDirection;
 }
 
-+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth
-{
-    CGFloat textWidth = cellWidth - titleTextWidthDelta - (hasSecondaryImg ? secondaryImgWidth : switchCellWidth);
-    if (!desc || desc.length == 0)
-    {
-        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text]);
-    }
-    else
-    {
-        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text] + [self.class getDescViewHeightWithWidth:textWidth text:desc]);
-    }
-}
-
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-}
-
-+ (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_titleFont)
-        _titleFont = [UIFont systemFontOfSize:17.0];
-
-    return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical;
-}
-
-+ (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_descFont)
-        _descFont = [UIFont systemFontOfSize:12.0];
-    
-    return [OAUtilities calculateTextBounds:text width:width font:_descFont].height + textMarginVertical;
-}
-
 @end

@@ -183,10 +183,7 @@
     }
     else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        return [OASettingSwitchCell getHeight:[item objectForKey:@"title"]
-                                         desc:[item objectForKey:@"description"]
-                              hasSecondaryImg:NO
-                                    cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {

@@ -108,7 +108,7 @@
     }
     else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        return [OASettingSwitchCell getHeight:item[@"title"] desc:item[@"description"] hasSecondaryImg:NO cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {

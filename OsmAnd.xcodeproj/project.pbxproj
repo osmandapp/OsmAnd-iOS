@@ -440,8 +440,6 @@
 		3AFEEE981A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE951A110BFD00900A47 /* OATextViewTableViewCell.m */; };
 		3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE9A1A13722500900A47 /* OAMapSettingsViewController.mm */; };
 		526FF546DD6B4B0F45CF84E1 /* libPods-OsmAnd Maps DEV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9AC62E897E956760B72D089 /* libPods-OsmAnd Maps DEV.a */; };
-		780AB01B242B2C52001DF5EF /* OAButtonIconTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 780AB019242B2C52001DF5EF /* OAButtonIconTableViewCell.m */; };
-		780AB01C242B2C52001DF5EF /* OAButtonIconTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 780AB019242B2C52001DF5EF /* OAButtonIconTableViewCell.m */; };
 		780AB025242B3730001DF5EF /* ic_custom_safari.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB022242B372E001DF5EF /* ic_custom_safari.png */; };
 		780AB026242B3730001DF5EF /* ic_custom_safari.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB022242B372E001DF5EF /* ic_custom_safari.png */; };
 		780AB027242B3730001DF5EF /* ic_custom_safari@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */; };
@@ -6444,8 +6442,6 @@
 		3B25E5CC46EA81B5524F61E3 /* libPods-OsmAnd DEV (prebuilt Core).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd DEV (prebuilt Core).a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4812C702BBB164A7AE849D7E /* libPods-OsmAnd Maps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6538B979131C8E1FEFC12FB3 /* libPods-OsmAnd Maps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		780AB018242B2C52001DF5EF /* OAButtonIconTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAButtonIconTableViewCell.h; path = Controllers/Cells/OAButtonIconTableViewCell.h; sourceTree = "<group>"; };
-		780AB019242B2C52001DF5EF /* OAButtonIconTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAButtonIconTableViewCell.m; path = Controllers/Cells/OAButtonIconTableViewCell.m; sourceTree = "<group>"; };
 		780AB022242B372E001DF5EF /* ic_custom_safari.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_safari.png; path = Resources/Icons/ic_custom_safari.png; sourceTree = "<group>"; };
 		780AB023242B372F001DF5EF /* ic_custom_safari@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@2x.png"; path = "Resources/Icons/ic_custom_safari@2x.png"; sourceTree = "<group>"; };
 		780AB024242B372F001DF5EF /* ic_custom_safari@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_safari@3x.png"; path = "Resources/Icons/ic_custom_safari@3x.png"; sourceTree = "<group>"; };
@@ -10684,8 +10680,6 @@
 				DA503D9B23239442006F34E7 /* OATableViewCustomHeaderView.m */,
 				DAFCB00923A8C72B00CFBA58 /* OALineChartCell.h */,
 				DAFCB00A23A8C72B00CFBA58 /* OALineChartCell.m */,
-				780AB018242B2C52001DF5EF /* OAButtonIconTableViewCell.h */,
-				780AB019242B2C52001DF5EF /* OAButtonIconTableViewCell.m */,
 				33D40F1424EF213500AFFF06 /* OAMultiLineLabelCell.m */,
 				33D40F1724EF218200AFFF06 /* OAMultiLineLabelCell.h */,
 				33AA1220252DE3E400292229 /* OAColorsCollectionViewCell.h */,
@@ -20852,7 +20846,6 @@
 				845665501FED41E8003149C9 /* OALocationPointWrapper.mm in Sources */,
 				8438B81E1EEDC7E6007AEF77 /* OAPOILayer.mm in Sources */,
 				DA31EE0222CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */,
-				780AB01C242B2C52001DF5EF /* OAButtonIconTableViewCell.m in Sources */,
 				847A1D601DF94E9B003C1246 /* OAGPXTableViewCell.m in Sources */,
 				845837391F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */,
 				847A1D611DF94E9B003C1246 /* OAHistoryDB.m in Sources */,
@@ -21520,7 +21513,6 @@
 				DA8EEF8424D54BCD00E3CA75 /* OABaseBigTitleSettingsViewController.m in Sources */,
 				DABA3DF3226896B0005BB777 /* OAOsmEditActionsViewController.mm in Sources */,
 				BBA3AF62197FC4BB0039D991 /* OALocalResourceInformationViewController.mm in Sources */,
-				780AB01B242B2C52001DF5EF /* OAButtonIconTableViewCell.m in Sources */,
 				845E06E81B6001CA00DFC2A7 /* OAPluginDetailsViewController.mm in Sources */,
 				84B4FD771A91E08600A147BA /* OAGPXTableViewCell.m in Sources */,
 				841766321B7215F2002A08CB /* OAHistoryDB.m in Sources */,

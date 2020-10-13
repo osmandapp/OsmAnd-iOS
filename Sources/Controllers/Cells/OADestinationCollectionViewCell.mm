@@ -15,11 +15,4 @@
     [super awakeFromNib];
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    BOOL hasDescription = !_descrLabel.hidden && _descrLabel.text.length > 0;
-    _descrLabel.hidden = !hasDescription;
-}
-
 @end

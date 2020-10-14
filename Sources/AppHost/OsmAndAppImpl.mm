@@ -283,11 +283,8 @@
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
     
-    if (!settings.followTheRoute)
-    {
-        settings.applicationMode = settings.defaultApplicationMode;
-        [_data setLastMapSourceVariant:settings.applicationMode.variantKey];
-    }
+    settings.applicationMode = settings.defaultApplicationMode;
+    [_data setLastMapSourceVariant:settings.applicationMode.variantKey];
     
     // Get location of a shipped world mini-basemap and it's version stamp
     _worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"

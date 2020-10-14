@@ -48,7 +48,7 @@
 
 - (void) generateData
 {
-    _profileList = [NSArray arrayWithArray:OAApplicationMode.allPossibleValues];
+    _profileList = [NSArray arrayWithArray:OAApplicationMode.values];
 }
 
 - (UIView *) getTopView

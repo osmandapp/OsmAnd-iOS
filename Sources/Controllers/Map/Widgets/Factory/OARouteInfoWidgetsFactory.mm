@@ -236,17 +236,17 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
 - (NSString *) getMenuTitle
 {
-    return _settings.showRelativeBearing ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing");
+    return [_settings.showRelativeBearing get] ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing");
 }
 
 - (NSString *) getMenuIconId
 {
-    return _settings.showRelativeBearing ? @"ic_action_relative_bearing" : @"ic_action_bearing";
+    return [_settings.showRelativeBearing get] ? @"ic_action_relative_bearing" : @"ic_action_bearing";
 }
 
 - (NSString *) getMenuItemId
 {
-    return _settings.showRelativeBearing ? BEARING_WIDGET_STATE_RELATIVE_BEARING : BEARING_WIDGET_STATE_MAGNETIC_BEARING;
+    return [_settings.showRelativeBearing get] ? BEARING_WIDGET_STATE_RELATIVE_BEARING : BEARING_WIDGET_STATE_MAGNETIC_BEARING;
 }
 
 - (NSArray<NSString *> *) getMenuTitles
@@ -628,7 +628,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     
     bearingControl.updateInfoFunction = ^BOOL {
         
-        BOOL relative = [OAAppSettings sharedManager].showRelativeBearing;
+        BOOL relative = [[OAAppSettings sharedManager].showRelativeBearing get];
         BOOL modeChanged = [bearingControlWeak setIcons:relative ? relativeBearingResId : bearingResId widgetNightIcon:relative ? relativeBearingNightResId : bearingNightResId];
         [bearingControlWeak setContentTitle:relative ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing")];
         int b = [OARouteInfoWidgetsFactory getBearing:relative];
@@ -657,7 +657,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
         [bearingControlWeak updateInfo];
     };
     
-    BOOL showRelativeBearing = [OAAppSettings sharedManager].showRelativeBearing;
+    BOOL showRelativeBearing = [[OAAppSettings sharedManager].showRelativeBearing get];
     [bearingControl setText:nil subtext:nil];
     [bearingControl setIcons:!showRelativeBearing ? bearingResId : relativeBearingResId widgetNightIcon:!showRelativeBearing ? bearingNightResId : relativeBearingNightResId];
     return bearingControl;

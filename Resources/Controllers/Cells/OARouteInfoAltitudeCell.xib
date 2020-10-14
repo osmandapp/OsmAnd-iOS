@@ -165,10 +165,12 @@
             <connections>
                 <outlet property="altRangeTitle" destination="zcZ-Em-nmH" id="nsX-Qy-O1e"/>
                 <outlet property="altRangeValue" destination="Kq5-HX-6Bf" id="jgl-re-LCy"/>
+                <outlet property="ascentIcon" destination="sve-UR-1RB" id="KSt-BC-0nW"/>
                 <outlet property="ascentTitle" destination="nfS-Gg-vCD" id="ogT-Ei-6dM"/>
                 <outlet property="ascentValue" destination="RJb-B5-eLm" id="05l-A6-Nw3"/>
                 <outlet property="avgAltitudeTitle" destination="Xhd-83-aLA" id="YAV-49-Vck"/>
                 <outlet property="avgAltitudeValue" destination="do0-rV-szd" id="vKg-yl-f1H"/>
+                <outlet property="descentIcon" destination="S5r-Wh-5J3" id="SDz-be-xbQ"/>
                 <outlet property="descentTitle" destination="OcL-Pc-sdB" id="P4S-Qe-U2f"/>
                 <outlet property="descentValue" destination="k8p-3H-Xli" id="pD2-cL-YXQ"/>
             </connections>

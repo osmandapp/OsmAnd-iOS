@@ -11,4 +11,16 @@
 
 @implementation OASettingsTitleTableViewCell
 
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+    self.iconView.image = self.iconView.image.imageFlippedForRightToLeftLayoutDirection;
+}
+
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+}
+
 @end

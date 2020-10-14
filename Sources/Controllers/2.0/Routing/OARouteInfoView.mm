@@ -744,17 +744,19 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _cancelButton.frame = CGRectMake(16. + OAUtilities.getLeftMargin, 9., buttonWidth, 42.);
     _goButton.frame = CGRectMake(CGRectGetMaxX(_cancelButton.frame) + 16., 9., buttonWidth, 42.);
     
+    CGFloat goIconOffset = 12;
+    CGFloat goLabelOffset = (buttonWidth / 2) - goIconOffset - _goButton.imageView.bounds.size.width - (_goButton.titleLabel.bounds.size.width / 2);
     if ([_goButton isDirectionRTL])
     {
         _goButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 12);
-        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 11);
+        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, goIconOffset);
+        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, goLabelOffset);
     }
     else
     {
         _goButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 12, 0, 0);
-        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 11, 0, 0);
+        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, goIconOffset, 0, 0);
+        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, goLabelOffset, 0, 0);
     }
     
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,42 +17,48 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1at-JS-K13">
-                        <rect key="frame" x="15" y="16" width="25" height="25"/>
+                        <rect key="frame" x="16" y="17.5" width="25" height="25"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="25" id="6xh-tZ-J8s"/>
                             <constraint firstAttribute="height" constant="25" id="hdr-OB-g4P"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cad-YV-DSA">
-                        <rect key="frame" x="56" y="31.5" width="249" height="20.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cad-YV-DSA">
+                        <rect key="frame" x="57" y="32" width="247" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="Le8-f5-yTO"/>
+                        </constraints>
                         <attributedString key="attributedText">
                             <fragment content="50.46548, 30.37344">
                                 <attributes>
                                     <color key="NSColor" red="0.5170014500617981" green="0.51698595285415649" blue="0.51699477434158325" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <font key="NSFont" size="15" name="AvenirNext-Regular"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural"/>
+                                    <font key="NSFont" size="15" name=".SFNS-Regular"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="truncatingTail" baseWritingDirection="natural"/>
                                 </attributes>
                             </fragment>
                         </attributedString>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ул. Академика Крымского  " lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGc-pw-v0w">
-                        <rect key="frame" x="56" y="10" width="249" height="20.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ул. Академика Крымского  " textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGc-pw-v0w">
+                        <rect key="frame" x="57" y="8" width="247" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="MRV-K1-omo"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="CGc-pw-v0w" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="8iB-KT-3Fg"/>
                     <constraint firstAttribute="trailingMargin" secondItem="CGc-pw-v0w" secondAttribute="trailing" id="AVx-k6-vCG"/>
-                    <constraint firstItem="1at-JS-K13" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="NRd-ek-leC"/>
-                    <constraint firstAttribute="bottom" secondItem="cad-YV-DSA" secondAttribute="bottom" constant="8" id="ROP-aG-c8f"/>
+                    <constraint firstItem="1at-JS-K13" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="BEl-jM-N3m"/>
+                    <constraint firstAttribute="bottom" secondItem="cad-YV-DSA" secondAttribute="bottom" constant="11" id="FI7-Gr-fhx"/>
                     <constraint firstItem="CGc-pw-v0w" firstAttribute="leading" secondItem="1at-JS-K13" secondAttribute="trailing" constant="16" id="Vu7-6t-aRa"/>
                     <constraint firstAttribute="trailingMargin" secondItem="cad-YV-DSA" secondAttribute="trailing" id="Yq6-Wp-KY6"/>
-                    <constraint firstItem="cad-YV-DSA" firstAttribute="top" secondItem="CGc-pw-v0w" secondAttribute="bottom" constant="1" id="hvB-6L-fmI"/>
+                    <constraint firstItem="cad-YV-DSA" firstAttribute="top" secondItem="CGc-pw-v0w" secondAttribute="bottom" constant="3" id="gfA-W9-nLv"/>
                     <constraint firstItem="cad-YV-DSA" firstAttribute="leading" secondItem="1at-JS-K13" secondAttribute="trailing" constant="16" id="jmb-Hp-dhl"/>
                     <constraint firstItem="1at-JS-K13" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="oRS-YT-FjL"/>
-                    <constraint firstItem="CGc-pw-v0w" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="pUD-mC-b6W"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

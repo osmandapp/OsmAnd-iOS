@@ -1858,3 +1858,4 @@
 "help_nav_profiles" = "Navigationsprofile";
 "reset_profile_action_descr" = "Setzen Sie alle Profileinstellungen auf die Installationsvorgaben zurück. Wenn Sie auf Zurücksetzen tippen, werden alle Ihre Änderungen verworfen, diese Aktion kann nicht rückgängig gemacht werden.";
 "import_profile_descr" = "Um ein Profil zu importieren, tippen Sie in einer beliebigen Anwendung auf die gewünschte Datei (*.osf) und wählen Sie \"Nach OsmAnd Maps kopieren\"";
+"gpx_parse_error" = "OsmAnd GPX ist nicht optimal geformt, bitte kontaktieren Sie das Support-Team, um weitere Nachforschungen anzustellen.";

@@ -202,9 +202,8 @@ static UIFont *_shieldFont;
 
 - (void)layoutSubviews
 {
-    CGFloat leftMargin = _needsSafeAreaInset ? OAUtilities.getLeftMargin : 0.;
-    CGFloat rightMargin = _needsSafeAreaInset ? (self.frame.size.width - 20.) : self.frame.size.width;
-    CGFloat width = self.frame.size.width - leftMargin - kShieldMargin * 2;
+    CGFloat margin = _needsSafeAreaInset ? OAUtilities.getLeftMargin : 0.;
+    CGFloat width = self.frame.size.width - margin - kShieldMargin * 2;
     CGFloat currWidth = 0.0;
     NSInteger rowsCount = 0;
     
@@ -226,10 +225,7 @@ static UIFont *_shieldFont;
         currWidth += viewFrame.size.width;
         if (i == 0)
         {
-            if ([self isDirectionRTL])
-                viewFrame.origin = CGPointMake(rightMargin - kShieldMargin - viewFrame.size.width, kShieldY);
-            else
-                viewFrame.origin = CGPointMake(leftMargin + kShieldMargin, kShieldY);
+            viewFrame.origin = CGPointMake(margin + kShieldMargin, kShieldY);
         }
         else
         {
@@ -238,20 +234,14 @@ static UIFont *_shieldFont;
             {
                 CGFloat additionalHeight = kRowHeight * rowsCount;
                 CGRect prevRect = _views[i - 1].frame;
-                if ([self isDirectionRTL])
-                    viewFrame.origin = CGPointMake(CGRectGetMinX(prevRect) - kViewSpacing - viewFrame.size.width, isShield ? kShieldY + additionalHeight : kArrowY + additionalHeight);
-                else
-                    viewFrame.origin = CGPointMake(CGRectGetMaxX(prevRect) + kViewSpacing, isShield ? kShieldY + additionalHeight : kArrowY + additionalHeight);
+                viewFrame.origin = CGPointMake(CGRectGetMaxX(prevRect) + kViewSpacing, isShield ? kShieldY + additionalHeight : kArrowY + additionalHeight);
             }
             else
             {
                 currWidth = viewFrame.size.width + kViewSpacing;
                 rowsCount++;
                 CGFloat additionalHeight = kRowHeight * rowsCount;
-                if ([self isDirectionRTL])
-                    viewFrame.origin = CGPointMake(rightMargin - kShieldMargin - viewFrame.size.width, isShield ? kShieldY + additionalHeight : kArrowY + additionalHeight);
-                else
-                    viewFrame.origin = CGPointMake(leftMargin + kShieldMargin, isShield ? kShieldY + additionalHeight : kArrowY + additionalHeight);
+                viewFrame.origin = CGPointMake(margin + kShieldMargin, isShield ? kShieldY + additionalHeight : kArrowY + additionalHeight);
             }
         }
         currView.frame = viewFrame;
@@ -262,10 +252,7 @@ static UIFont *_shieldFont;
 {
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., 20., 20.)];
     imgView.tintColor = UIColorFromRGB(color_tint_gray);
-    if ([self isDirectionRTL])
-        [imgView setImage:_arrowIcon.imageFlippedForRightToLeftLayoutDirection];
-    else
-        imgView.image = _arrowIcon;
+    imgView.image = _arrowIcon;
     return imgView;
 }
 
@@ -326,6 +313,47 @@ static UIFont *_shieldFont;
         prevSegment = s;
     }
     return [NSArray arrayWithArray:titles];
+}
+
++ (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route
+{
+    return [self getCellHeight:width route:route needsSafeArea:YES];
+}
+
++ (CGFloat) getCellHeight:(CGFloat)width route:(SHARED_PTR<TransportRouteResult>)route needsSafeArea:(BOOL)needsSafeArea
+{
+    NSArray<NSString *> *shields = [self generateTitlesForFoute:route];
+    CGFloat margin = needsSafeArea ? OAUtilities.getLeftMargin : 0.;
+    width = width - margin - kShieldMargin * 2;
+    if (!_shieldFont)
+        _shieldFont = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+    
+    CGFloat currWidth = 0.0;
+    NSInteger rowsCount = 1;
+    
+    for (NSInteger i = 0; i < shields.count; i++)
+    {
+        NSString *shieldTitle = shields[i];
+        CGFloat shieldWidth = [OARouteSegmentShieldView getViewWidth:shieldTitle];
+        currWidth += shieldWidth;
+        
+        if (currWidth >= width)
+        {
+            rowsCount++;
+            currWidth = shieldWidth;
+        }
+        
+        CGFloat arrowWidth = kArrowWidth + kViewSpacing * 2;
+        if (i != shields.count - 1)
+            currWidth += arrowWidth;
+        
+        if (currWidth >= width)
+        {
+            rowsCount++;
+            currWidth = arrowWidth;
+        }
+    }
+    return kRowHeight * rowsCount + (rowsCount > 1 ? 6.0 : 0.0);
 }
 
 /*

@@ -242,6 +242,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [_goButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
         [_goButton setImage:[[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     }
+    [self layoutSubviews];
 }
 
 - (void) setupModeViewShadowVisibility
@@ -745,7 +746,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _goButton.frame = CGRectMake(CGRectGetMaxX(_cancelButton.frame) + 16., 9., buttonWidth, 42.);
     
     CGFloat goIconOffset = 12;
-    CGFloat goLabelOffset = (buttonWidth / 2) - goIconOffset - _goButton.imageView.bounds.size.width - (_goButton.titleLabel.bounds.size.width / 2);
+    CGFloat goIconSecondOffset = 8;
+    CGFloat estimatedLabelWith = [OAUtilities calculateTextBounds:_goButton.titleLabel.text width:_goButton.frame.size.width font:_goButton.titleLabel.font].width;
+    CGFloat estimatedContentWidth = goIconOffset + _goButton.imageView.frame.size.width + goIconOffset + estimatedLabelWith;
+    CGFloat goLabelOffset = (buttonWidth / 2) - (estimatedLabelWith / 2) - _goButton.imageView.frame.size.width - goIconSecondOffset;
+    if (estimatedContentWidth > buttonWidth || goLabelOffset < 0)
+        goLabelOffset = 0;
     if ([_goButton isDirectionRTL])
     {
         _goButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;

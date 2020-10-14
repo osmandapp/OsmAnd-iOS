@@ -173,15 +173,7 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:@"OADescrTitleCell"])
-    {
-        return 20.0;
-    }
-    else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"] || [item[@"type"] isEqualToString:@"OASettingSwitchCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 0.0, 16.0, 0.0)];
     }
@@ -191,7 +183,7 @@
     }
     else
     {
-        return 44.0;
+        return UITableViewAutomaticDimension;
     }
 }
 

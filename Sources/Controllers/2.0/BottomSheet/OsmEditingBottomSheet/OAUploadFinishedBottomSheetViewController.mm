@@ -177,11 +177,7 @@
     {
         return 20.0;
     }
-    else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"] || [item[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
         return UITableViewAutomaticDimension;
     }

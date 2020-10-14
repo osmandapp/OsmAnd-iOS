@@ -116,6 +116,17 @@
     [vwController dismiss];
 }
 
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    NSDictionary *item = [self getItem:indexPath];
+    
+    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderDescrButtonCell"] || [item[@"type"] isEqualToString:kTitleIconRoundCell])
+    {
+        return UITableViewAutomaticDimension;
+    }
+    return 44.0;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView

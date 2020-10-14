@@ -1287,11 +1287,6 @@ static NSDictionary *screenVoiceProviders;
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-     return UITableViewAutomaticDimension;
-}
-
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (_settingsType == kNavigationSettingsScreenGeneral)

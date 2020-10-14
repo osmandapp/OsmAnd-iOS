@@ -22,7 +22,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AEu-zA-LLm">
                                 <rect key="frame" x="76" y="35" width="212" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="16" id="KO8-3P-3P8"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="KO8-3P-3P8"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.64662808179855347" green="0.64161229133605957" blue="0.66008782386779785" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -31,7 +31,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o8c-dn-1dR">
                                 <rect key="frame" x="53" y="9" width="235" height="21"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="SC4-JW-SC1"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="SC4-JW-SC1"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

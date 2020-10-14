@@ -17,6 +17,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OASizes.h"
+#import "OAColors.h"
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>
 
@@ -224,7 +225,7 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
         cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-        cell.imgView.tintColor = UIColorFromRGB(0x727272);
+        cell.imgView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
     }
     
     if (cell)

@@ -18,10 +18,10 @@
 {
     [super awakeFromNib];
     if ([self.descriptionView isDirectionRTL])
+    {
         self.descriptionView.textAlignment = NSTextAlignmentLeft;
-    else
-        self.descriptionView.textAlignment = NSTextAlignmentRight;
-    [self.iconView setImage:self.iconView.image.imageFlippedForRightToLeftLayoutDirection];
+        [self.iconView setImage:self.iconView.image.imageFlippedForRightToLeftLayoutDirection];
+    }
     
     _isImageShown = YES;
 }

@@ -10,6 +10,7 @@
 #import "OAGPXItemViewController.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAMapViewController.h"
+#import "OAMenuSimpleCellNoIcon.h"
 
 #import "OAGPXTableViewCell.h"
 #import "OAGPXRecTableViewCell.h"
@@ -26,6 +27,7 @@
 #import "OARootViewController.h"
 #import "OAGPXRouteTableViewCell.h"
 #import "OASizes.h"
+#import "OAColors.h"
 #import "OAKml2Gpx.h"
 
 #include <OsmAndCore.h>
@@ -116,7 +118,6 @@ typedef enum
     OAIAPHelper *_iapHelper;
 
     OAGPXRecTableViewCell* _recCell;
-    UITableViewCell *_addonCell;
     OAAutoObserverProxy* _trackRecordingObserver;
 
     NSInteger _recSectionIndex;
@@ -995,31 +996,19 @@ static UIViewController *parentController;
         }
         else
         {
-            if (!_addonCell)
+            OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:@"OAMenuSimpleCellNoIcon"];
+            if (cell == nil)
             {
-                CGFloat cellHeight = MAX(48.0, [OAUtilities calculateTextBounds:OALocalizedString(@"track_rec_addon_q") width:tableView.bounds.size.width - 40.0 font:[UIFont systemFontOfSize:14.0]].height + 8.0);
-                UITableViewCell *cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.bounds.size.width, cellHeight)];
-                
-                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20.0, 0.0, tableView.bounds.size.width - 40.0, cellHeight)];
-                label.font = [UIFont systemFontOfSize:14.0];
-                label.numberOfLines = 0;
-                label.lineBreakMode = NSLineBreakByWordWrapping;
-                label.textAlignment = NSTextAlignmentLeft;
-                label.textColor = [UIColor darkGrayColor];
-                label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-                label.text = OALocalizedString(@"track_rec_addon_q");
-                [cell addSubview:label];
-                
-                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.bounds.size.width - 30.0, 12.5, 21.0, 21.0)];
-                imageView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
-                imageView.contentMode = UIViewContentModeCenter;
-                imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-                [cell addSubview:imageView];
-                
-                _addonCell = cell;
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMenuSimpleCellNoIcon" owner:self options:nil];
+                cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
+                cell.descriptionView.hidden = YES;
+                cell.textView.font = [UIFont systemFontOfSize:14.0];
+                cell.textView.textColor = [UIColor darkGrayColor];
             }
             
-            return _addonCell;
+            if (cell)
+                [cell.textView setText:OALocalizedString(@"track_rec_addon_q")];
+            return cell;
         }
     }
     else if (indexPath.section == _routeSectionIndex)

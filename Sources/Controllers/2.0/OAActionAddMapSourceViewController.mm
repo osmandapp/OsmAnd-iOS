@@ -185,8 +185,6 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
         cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
         cell.descriptionView.hidden = YES;
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
     }
     
     if (cell)

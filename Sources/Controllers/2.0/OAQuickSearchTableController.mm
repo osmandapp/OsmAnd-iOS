@@ -502,8 +502,6 @@
         }
         [cell.iconView setImage:icon];
         cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
     }
     return cell;
 }

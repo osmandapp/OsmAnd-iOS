@@ -157,9 +157,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_checmark_default.png"]];
         else
             cell.accessoryView = nil;
-        
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
     }
     return cell;
 }

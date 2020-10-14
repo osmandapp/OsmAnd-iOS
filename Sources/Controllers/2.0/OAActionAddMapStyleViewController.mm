@@ -200,8 +200,6 @@
             [_tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
             [_initialValues removeObject:item.mapSource.name];
         }
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
     }
     return cell;
 }

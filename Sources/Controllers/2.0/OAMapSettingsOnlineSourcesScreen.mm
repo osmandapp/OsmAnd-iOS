@@ -207,8 +207,6 @@ typedef enum
         cell.descriptionView.hidden = YES;
         cell.imgView.image = img;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
     }
     return cell;
 }

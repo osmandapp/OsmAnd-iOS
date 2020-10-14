@@ -639,8 +639,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
         return cell;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])

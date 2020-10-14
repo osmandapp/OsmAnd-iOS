@@ -491,8 +491,6 @@ static const NSInteger sectionCount = 2;
             iconView.origin.y = y;
             cell.arrowIconView.frame = iconView;
         }
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
     }
     return cell;
 }

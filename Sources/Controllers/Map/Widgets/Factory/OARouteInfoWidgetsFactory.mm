@@ -523,7 +523,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     
     bearingControl.updateInfoFunction = ^BOOL {
         
-        BOOL relative = [OAAppSettings sharedManager].showRelativeBearing;
+        BOOL relative = [[OAAppSettings sharedManager].showRelativeBearing get];
         BOOL modeChanged = [bearingControlWeak setIcons:relative ? relativeBearingResId : bearingResId widgetNightIcon:relative ? relativeBearingNightResId : bearingNightResId];
         [bearingControlWeak setContentTitle:relative ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing")];
         int b = [OARouteInfoWidgetsFactory getBearing:relative];
@@ -552,7 +552,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
         [bearingControlWeak updateInfo];
     };
     
-    BOOL showRelativeBearing = [OAAppSettings sharedManager].showRelativeBearing;
+    BOOL showRelativeBearing = [[OAAppSettings sharedManager].showRelativeBearing get];
     [bearingControl setText:nil subtext:nil];
     [bearingControl setIcons:!showRelativeBearing ? bearingResId : relativeBearingResId widgetNightIcon:!showRelativeBearing ? bearingNightResId : relativeBearingNightResId];
     return bearingControl;

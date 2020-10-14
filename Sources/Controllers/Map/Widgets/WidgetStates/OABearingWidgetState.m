@@ -30,17 +30,17 @@
 
 - (NSString *) getMenuTitle
 {
-    return _settings.showRelativeBearing ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing");
+    return [_settings.showRelativeBearing get] ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing");
 }
 
 - (NSString *) getMenuIconId
 {
-    return _settings.showRelativeBearing ? @"ic_action_relative_bearing" : @"ic_action_bearing";
+    return [_settings.showRelativeBearing get] ? @"ic_action_relative_bearing" : @"ic_action_bearing";
 }
 
 - (NSString *) getMenuItemId
 {
-    return _settings.showRelativeBearing ? BEARING_WIDGET_STATE_RELATIVE_BEARING : BEARING_WIDGET_STATE_MAGNETIC_BEARING;
+    return [_settings.showRelativeBearing get] ? BEARING_WIDGET_STATE_RELATIVE_BEARING : BEARING_WIDGET_STATE_MAGNETIC_BEARING;
 }
 
 - (NSArray<NSString *> *) getMenuTitles

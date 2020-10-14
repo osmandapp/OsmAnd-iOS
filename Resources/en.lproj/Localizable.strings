@@ -43,6 +43,7 @@
 "access_intermediate_arrival_time" = "Intermediate arrival time";
 "map_widget_intermediate_time" = "Intermediate time";
 "shared_string_previous" = "Previous";
+"shared_string_next" = "Next";
 "route_stops_before" = "%d stops before";
 "transport_routes" = "Routes";
 "transport_nearby_routes_within" = "Nearby routes within";

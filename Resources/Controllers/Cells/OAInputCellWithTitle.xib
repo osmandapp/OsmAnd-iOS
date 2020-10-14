@@ -22,7 +22,7 @@
                         <color key="textColor" red="0.64313725490196072" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jj4-nm-1ad">
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jj4-nm-1ad">
                         <rect key="frame" x="66" y="0.0" width="332" height="48"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="9B1-4P-umu"/>

@@ -10,6 +10,20 @@
 
 @implementation OATextViewTableViewCell
 
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    // Initialization code
+    if ([_textView isDirectionRTL])
+        _textView.textAlignment = NSTextAlignmentRight;
+}
+
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+    // Configure the view for the selected state
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

@@ -23,8 +23,8 @@
                             <constraint firstAttribute="width" constant="30" id="sgK-H8-cW5"/>
                         </constraints>
                     </imageView>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your e-mail address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sc8-o3-g0a">
-                        <rect key="frame" x="61" y="12" width="244" height="21"/>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your e-mail address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sc8-o3-g0a">
+                        <rect key="frame" x="61" y="11.5" width="244" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="1yd-Hx-iwr"/>
                         </constraints>

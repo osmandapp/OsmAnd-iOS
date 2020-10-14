@@ -15,6 +15,8 @@
 {
     [super awakeFromNib];
     // Initialization code
+    if ([_inputField isDirectionRTL])
+        _inputField.textAlignment = NSTextAlignmentRight;
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated

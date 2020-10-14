@@ -15,6 +15,11 @@
     // Initialization code
     self.textView.selectable = NO;
     self.iconView.hidden = YES;
+    if ([self isDirectionRTL])
+    {
+        [self.iconView setImage:self.iconView.image.imageFlippedForRightToLeftLayoutDirection];
+        self.textView.textAlignment = NSTextAlignmentRight;
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

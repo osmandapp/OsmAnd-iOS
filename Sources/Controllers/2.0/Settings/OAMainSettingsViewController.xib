@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMainSettingsViewController">
             <connections>
                 <outlet property="backButton" destination="Hgq-Ly-zUQ" id="jOq-sW-BLq"/>
+                <outlet property="existProfileBtn" destination="6fW-qM-aRE" id="BZC-RQ-4RL"/>
                 <outlet property="importProfileBtn" destination="bWb-1Z-HPM" id="ce6-l4-vdT"/>
                 <outlet property="navBarView" destination="qia-hR-c4Q" id="blX-Y3-1LS"/>
                 <outlet property="settingsTableView" destination="Qav-vV-6gv" id="BI6-81-LUy"/>
@@ -26,17 +27,30 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qia-hR-c4Q">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bWb-1Z-HPM">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bWb-1Z-HPM">
                             <rect key="frame" x="360" y="50" width="46" height="30"/>
                             <state key="normal" title="Import"/>
                             <connections>
                                 <action selector="importProfileBtnPressed:" destination="-1" eventType="touchUpInside" id="TSu-mb-STp"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6fW-qM-aRE">
+                            <rect key="frame" x="298" y="50" width="46" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="Otr-Pj-FLd"/>
+                                <constraint firstAttribute="width" constant="46" id="tJS-pS-W0A"/>
+                            </constraints>
+                            <state key="normal" title="Exist"/>
+                            <connections>
+                                <action selector="existProfileBtnPressed:" destination="-1" eventType="touchUpInside" id="jhc-E2-Acu"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.53333333333333333" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstAttribute="bottom" secondItem="6fW-qM-aRE" secondAttribute="bottom" constant="8" id="73u-P6-Azk"/>
                         <constraint firstAttribute="bottom" secondItem="bWb-1Z-HPM" secondAttribute="bottom" constant="8" id="LBG-wJ-jQi"/>
+                        <constraint firstItem="bWb-1Z-HPM" firstAttribute="leading" secondItem="6fW-qM-aRE" secondAttribute="trailing" constant="16" id="Zso-pp-MtZ"/>
                         <constraint firstAttribute="trailing" secondItem="bWb-1Z-HPM" secondAttribute="trailing" constant="8" id="uGp-d3-dkX"/>
                     </constraints>
                 </view>
@@ -54,7 +68,7 @@
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hgq-Ly-zUQ">
+                <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hgq-Ly-zUQ">
                     <rect key="frame" x="8" y="44" width="44" height="44"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="44" id="3os-tS-bJQ"/>
@@ -67,6 +81,7 @@
                     </connections>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="Oti-gl-zsH"/>
             <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="Qav-vV-6gv" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="4eY-kB-YXp"/>
@@ -82,7 +97,6 @@
                 <constraint firstItem="qia-hR-c4Q" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="mnA-On-cFA"/>
                 <constraint firstItem="Hgq-Ly-zUQ" firstAttribute="bottom" secondItem="qia-hR-c4Q" secondAttribute="bottom" id="xJk-dd-dl4"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="Oti-gl-zsH"/>
             <point key="canvasLocation" x="-407.24637681159425" y="95.758928571428569"/>
         </view>
     </objects>

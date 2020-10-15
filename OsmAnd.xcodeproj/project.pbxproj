@@ -386,6 +386,8 @@
 		33D40F1224EF1CA500AFFF06 /* OAMultiLineLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33D40F1024EF1CA300AFFF06 /* OAMultiLineLabelCell.xib */; };
 		33D40F1524EF213500AFFF06 /* OAMultiLineLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33D40F1424EF213500AFFF06 /* OAMultiLineLabelCell.m */; };
 		33D40F1624EF213500AFFF06 /* OAMultiLineLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33D40F1424EF213500AFFF06 /* OAMultiLineLabelCell.m */; };
+		33D9453C2538B4DC0070636F /* OAItemExistViewControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 33D9453B2538B4DC0070636F /* OAItemExistViewControllers.m */; };
+		33D9453D2538B4DC0070636F /* OAItemExistViewControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 33D9453B2538B4DC0070636F /* OAItemExistViewControllers.m */; };
 		33EA857E251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EA857D251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m */; };
 		33EA857F251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EA857D251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m */; };
 		3A02BFB71A31F2FA0019377F /* OAGPXListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A02BFB31A31F2FA0019377F /* OAGPXListViewController.mm */; };
@@ -6438,6 +6440,8 @@
 		33D40F1024EF1CA300AFFF06 /* OAMultiLineLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAMultiLineLabelCell.xib; path = Resources/Controllers/Cells/OAMultiLineLabelCell.xib; sourceTree = "<group>"; };
 		33D40F1424EF213500AFFF06 /* OAMultiLineLabelCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAMultiLineLabelCell.m; path = Controllers/Cells/OAMultiLineLabelCell.m; sourceTree = "<group>"; };
 		33D40F1724EF218200AFFF06 /* OAMultiLineLabelCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMultiLineLabelCell.h; path = Controllers/Cells/OAMultiLineLabelCell.h; sourceTree = "<group>"; };
+		33D9453A2538B4C00070636F /* OAItemExistViewControllers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAItemExistViewControllers.h; sourceTree = "<group>"; };
+		33D9453B2538B4DC0070636F /* OAItemExistViewControllers.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAItemExistViewControllers.m; sourceTree = "<group>"; };
 		33EA857C251A09C40030A4C9 /* OABottomSheetHeaderButtonCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OABottomSheetHeaderButtonCell.h; path = Controllers/Cells/OABottomSheetHeaderButtonCell.h; sourceTree = "<group>"; };
 		33EA857D251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OABottomSheetHeaderButtonCell.m; path = Controllers/Cells/OABottomSheetHeaderButtonCell.m; sourceTree = "<group>"; };
 		3A02BFB21A31F2FA0019377F /* OAGPXListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXListViewController.h; path = Sources/Controllers/2.0/OAGPXListViewController.h; sourceTree = "<group>"; };
@@ -14972,6 +14976,8 @@
 				155AC6B225387BBC00703073 /* OABaseSettingsWithBottomButtonsViewController.h */,
 				155AC6B325387EAB00703073 /* OAImportProfileViewController.m */,
 				155AC6B525387EB900703073 /* OAImportProfileViewController.h */,
+				33D9453B2538B4DC0070636F /* OAItemExistViewControllers.m */,
+				33D9453A2538B4C00070636F /* OAItemExistViewControllers.h */,
 				DA2558D524ADE4F20081D155 /* OABaseSettingsViewController.h */,
 				15720BED24BF36B400BFC84F /* OAGlobalSettingsViewController.m */,
 				15720BEF24BF36C800BFC84F /* OAGlobalSettingsViewController.h */,
@@ -21010,6 +21016,7 @@
 				DA4B982C21F8660300CED009 /* OARelation.m in Sources */,
 				847A1D461DF94E9B003C1246 /* OAAutoObserverProxy.m in Sources */,
 				78496C4D24123687006EA39E /* OAColorsTableViewCell.m in Sources */,
+				33D9453D2538B4DC0070636F /* OAItemExistViewControllers.m in Sources */,
 				847A1D471DF94E9B003C1246 /* OAGpxWptItem.mm in Sources */,
 				DADBC61A24250AB4008B7423 /* OATransportDetailsTableViewController.mm in Sources */,
 				847A1D481DF94E9B003C1246 /* OAPluginPopupViewController.mm in Sources */,
@@ -21162,6 +21169,7 @@
 				BBA3AF35197FC4BB0039D991 /* main.m in Sources */,
 				841766371B721604002A08CB /* OAHistoryHelper.m in Sources */,
 				840E70301F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
+				33D9453C2538B4DC0070636F /* OAItemExistViewControllers.m in Sources */,
 				DA5AA2DB2351C97300DF0B7B /* OAHomeWorkCollectionViewCell.mm in Sources */,
 				BBA3AF37197FC4BB0039D991 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				84D1F90F1F4EBE2C006E2526 /* OASelectedGPXHelper.mm in Sources */,

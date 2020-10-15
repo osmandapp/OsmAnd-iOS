@@ -27,6 +27,7 @@
 #import "OAConfigureProfileViewController.h"
 #import "OABaseSettingsWithBottomButtonsViewController.h" // to remove
 #import "OAImportProfileViewController.h" // to remove
+#import "OAItemExistViewControllers.h" // to remove"
 
 #define kCellTypeIconTitleValue @"OAIconTitleValueCell"
 #define kCellTypeCheck @"OAMultiIconTextDescCell"
@@ -107,6 +108,13 @@
     OABaseSettingsWithBottomButtonsViewController* importProfileViewController = [[OAImportProfileViewController alloc] init];
     [self.navigationController pushViewController:importProfileViewController animated:YES];
 }
+
+
+- (IBAction)existProfileBtnPressed:(id)sender { // to remove
+    OABaseSettingsWithBottomButtonsViewController* existProfileViewController = [[OAItemExistViewControllers alloc] init];
+    [self.navigationController pushViewController:existProfileViewController animated:YES];
+}
+
 
 
 - (void) setupView

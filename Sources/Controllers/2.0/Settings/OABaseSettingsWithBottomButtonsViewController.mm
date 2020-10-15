@@ -8,8 +8,11 @@
 
 #import "OABaseSettingsWithBottomButtonsViewController.h"
 #include <OsmAndCore/Utilities.h>
+#import "Localization.h"
 
 #define kTopBottomPadding 8
+#define kButtonTopBottomPadding 10
+#define kButtonSidePadding 16
 
 @implementation OABaseSettingsWithBottomButtonsViewController
 {
@@ -27,7 +30,7 @@
 
 - (void) applyLocalization
 {
-    
+    [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad
@@ -67,6 +70,25 @@
         
         self.bottomViewHeigh.constant = self.primaryBottomButton.frame.size.height + kTopBottomPadding * 2 + [OAUtilities getBottomMargin];
     }
+}
+
+- (void) setToButton:(UIButton *)button firstLabelText:(NSString *)firstLabelText firstLabelFont:(UIFont *)firstLabelFont firstLabelColor:(UIColor *)firstLabelColor secondLabelText:(NSString *)secondLabelText secondLabelFont:(UIFont *)secondLabelFont secondLabelColor:(UIColor *)secondLabelColor
+{
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", firstLabelText, secondLabelText]];
+    
+    NSMutableParagraphStyle *paragraphStyles = [NSMutableParagraphStyle new];
+    paragraphStyles.alignment = NSTextAlignmentCenter;
+    paragraphStyles.lineSpacing = 3;
+    
+    NSDictionary *firstLabelAttributes = @{NSForegroundColorAttributeName: firstLabelColor, NSFontAttributeName: firstLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
+    NSDictionary *secondLabelAttributes = @{NSForegroundColorAttributeName: secondLabelColor, NSFontAttributeName: secondLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
+    
+    [attributedText setAttributes:firstLabelAttributes range:NSMakeRange(0,  [firstLabelText length])];
+    [attributedText setAttributes:secondLabelAttributes range:NSMakeRange([firstLabelText length], [secondLabelText length] + 1)];
+    
+    button.titleLabel.numberOfLines = 0;
+    button.contentEdgeInsets = UIEdgeInsetsMake(kButtonTopBottomPadding, kButtonSidePadding, kButtonTopBottomPadding, kButtonSidePadding);
+    [button setAttributedTitle:attributedText forState:UIControlStateNormal];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle

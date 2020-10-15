@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) IBOutlet UIButton *importProfileBtn; // to remove
+@property (strong, nonatomic) IBOutlet UIButton *existProfileBtn; // to remove
 
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode;
 

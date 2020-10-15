@@ -172,6 +172,9 @@
 		1535D8EC243DDA390061220F /* ic_custom_map.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E6243DDA380061220F /* ic_custom_map.png */; };
 		1535D8ED243DDA390061220F /* ic_custom_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E7243DDA380061220F /* ic_custom_map@2x.png */; };
 		1535D8EE243DDA390061220F /* ic_custom_map_online@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E8243DDA390061220F /* ic_custom_map_online@2x.png */; };
+		155AC6AF2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155AC6AE2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib */; };
+		155AC6B125387B9B00703073 /* OABaseSettingsWithBottomButtonsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.m */; };
+		155AC6B425387EAB00703073 /* OAImportProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 155AC6B325387EAB00703073 /* OAImportProfileViewController.m */; };
 		155B7137247D215D00A1587D /* OAPreviewZoomLevelsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155B7136247D215D00A1587D /* OAPreviewZoomLevelsCell.xib */; };
 		155B7139247D247100A1587D /* OAPreviewZoomLevelsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 155B7138247D247100A1587D /* OAPreviewZoomLevelsCell.m */; };
 		155B7143247FE2C100A1587D /* ic_custom_update@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 155B7140247FE2BE00A1587D /* ic_custom_update@3x.png */; };
@@ -6201,6 +6204,11 @@
 		1535D8E6243DDA380061220F /* ic_custom_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_map.png; path = Resources/Icons/ic_custom_map.png; sourceTree = "<group>"; };
 		1535D8E7243DDA380061220F /* ic_custom_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map@2x.png"; path = "Resources/Icons/ic_custom_map@2x.png"; sourceTree = "<group>"; };
 		1535D8E8243DDA390061220F /* ic_custom_map_online@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_online@2x.png"; path = "Resources/Icons/ic_custom_map_online@2x.png"; sourceTree = "<group>"; };
+		155AC6AE2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseSettingsWithBottomButtonsViewController.xib; sourceTree = "<group>"; };
+		155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseSettingsWithBottomButtonsViewController.m; sourceTree = "<group>"; };
+		155AC6B225387BBC00703073 /* OABaseSettingsWithBottomButtonsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseSettingsWithBottomButtonsViewController.h; sourceTree = "<group>"; };
+		155AC6B325387EAB00703073 /* OAImportProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAImportProfileViewController.m; sourceTree = "<group>"; };
+		155AC6B525387EB900703073 /* OAImportProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAImportProfileViewController.h; sourceTree = "<group>"; };
 		155B7136247D215D00A1587D /* OAPreviewZoomLevelsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPreviewZoomLevelsCell.xib; sourceTree = "<group>"; };
 		155B7138247D247100A1587D /* OAPreviewZoomLevelsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAPreviewZoomLevelsCell.m; path = Controllers/Cells/OAPreviewZoomLevelsCell.m; sourceTree = "<group>"; };
 		155B713A247D247E00A1587D /* OAPreviewZoomLevelsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPreviewZoomLevelsCell.h; sourceTree = "<group>"; };
@@ -10293,6 +10301,13 @@
 			children = (
 			);
 			name = Panels;
+			sourceTree = "<group>";
+		};
+		155AC6AD253873A200703073 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		158B1F6B24878CA6007BC45A /* DownloadMapSource */ = {
@@ -14951,6 +14966,12 @@
 			children = (
 				DA25583D24ADE40E0081D155 /* GeneralSettings */,
 				DA25585224ADE40E0081D155 /* NavigationSettings */,
+				155AC6AD253873A200703073 /* New Group */,
+				155AC6AE2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib */,
+				155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.m */,
+				155AC6B225387BBC00703073 /* OABaseSettingsWithBottomButtonsViewController.h */,
+				155AC6B325387EAB00703073 /* OAImportProfileViewController.m */,
+				155AC6B525387EB900703073 /* OAImportProfileViewController.h */,
 				DA2558D524ADE4F20081D155 /* OABaseSettingsViewController.h */,
 				15720BED24BF36B400BFC84F /* OAGlobalSettingsViewController.m */,
 				15720BEF24BF36C800BFC84F /* OAGlobalSettingsViewController.h */,
@@ -19721,6 +19742,7 @@
 				DA134180243DC5A80039D214 /* map_action_offroad@3x.png in Resources */,
 				843E5CF01AB341E000BE14BE /* icon_gpx.png in Resources */,
 				15B4E49324AB3FAF00119365 /* ic_custom_map_languge.png in Resources */,
+				155AC6AF2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib in Resources */,
 				8415030A1DEED6AE007FAC50 /* ic_refresh@2x.png in Resources */,
 				BB27270119CB38D7007C5613 /* fonts in Resources */,
 				DAF7A4FE21786BED00FB94FD /* widget_ruler_circle_hide_day@2x.png in Resources */,
@@ -21584,6 +21606,7 @@
 				DA5793D422A00A4C00750C8F /* OASettingSwitchNoImageCell.m in Sources */,
 				84A05F211F1297D000296B7F /* OARoutingHelper.mm in Sources */,
 				841766461B72942A002A08CB /* OAHistoryCardController.mm in Sources */,
+				155AC6B425387EAB00703073 /* OAImportProfileViewController.m in Sources */,
 				DA835FEB23436F1A003374B5 /* OADestinationItemsListViewController.mm in Sources */,
 				8490B1A4205FEF74007694A5 /* OARadiusCell.m in Sources */,
 				841511901FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */,
@@ -21790,6 +21813,7 @@
 				DAC93F7622C389C400C40392 /* OAUploadProgressBottomSheetViewController.mm in Sources */,
 				DA9B27C622FC343F00C4DBB8 /* OAGPXAction.mm in Sources */,
 				842034021FB3023D002784EF /* OATurnResource.m in Sources */,
+				155AC6B125387B9B00703073 /* OABaseSettingsWithBottomButtonsViewController.m in Sources */,
 				84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				DAFCB01023A90BC500CFBA58 /* OARouteDetailsViewController.mm in Sources */,
 				DAD228A02410E6F600D4D9DC /* OACollapsableWaypointsView.mm in Sources */,

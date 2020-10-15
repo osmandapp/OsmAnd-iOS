@@ -473,6 +473,7 @@
 "shared_string_maximum" = "Maximum";
 "shared_string_warning" = "Warning";
 "shared_string_copy" = "Copy";
+"shared_string_continue" = "Continue";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -725,7 +726,9 @@
 "available_map_sources" = "Available map sources";
 
 "export_profile" = "Export profile";
+"import_profile" = "Import profile";
 "create_profile" = "Create profile";
+"Import_profile_descr" = "Select the data to be imported.";
 "copy_from_other_profile" = "Copy from another profile";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "reset_to_default" = "Reset to default";

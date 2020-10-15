@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *settingsTableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (strong, nonatomic) IBOutlet UIButton *importProfileBtn; // to remove
 
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode;
 

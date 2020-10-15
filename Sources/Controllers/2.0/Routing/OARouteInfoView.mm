@@ -242,6 +242,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [_goButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
         [_goButton setImage:[[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     }
+    [self layoutSubviews];
 }
 
 - (void) setupModeViewShadowVisibility
@@ -744,17 +745,24 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _cancelButton.frame = CGRectMake(16. + OAUtilities.getLeftMargin, 9., buttonWidth, 42.);
     _goButton.frame = CGRectMake(CGRectGetMaxX(_cancelButton.frame) + 16., 9., buttonWidth, 42.);
     
+    CGFloat goIconOffset = 12;
+    CGFloat goIconSecondOffset = 8;
+    CGFloat estimatedLabelWith = [OAUtilities calculateTextBounds:_goButton.titleLabel.text width:_goButton.frame.size.width font:_goButton.titleLabel.font].width;
+    CGFloat estimatedContentWidth = goIconOffset + _goButton.imageView.frame.size.width + goIconOffset + estimatedLabelWith;
+    CGFloat goLabelOffset = (buttonWidth / 2) - (estimatedLabelWith / 2) - _goButton.imageView.frame.size.width - goIconSecondOffset;
+    if (estimatedContentWidth > buttonWidth || goLabelOffset < 0)
+        goLabelOffset = 0;
     if ([_goButton isDirectionRTL])
     {
         _goButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 12);
-        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 11);
+        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, goIconOffset);
+        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, goLabelOffset);
     }
     else
     {
         _goButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 12, 0, 0);
-        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 11, 0, 0);
+        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, goIconOffset, 0, 0);
+        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, goLabelOffset, 0, 0);
     }
     
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);

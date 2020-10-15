@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -39,7 +38,7 @@
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="enb-Nn-aO6">
                         <rect key="frame" x="30" y="0.0" width="2" height="60"/>
-                        <color key="backgroundColor" systemColor="systemYellowColor"/>
+                        <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="2" id="LRN-KW-qKD"/>
                         </constraints>
@@ -55,13 +54,13 @@
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="enb-Nn-aO6" secondAttribute="bottom" id="3cu-vB-npK"/>
                     <constraint firstItem="6QZ-eh-lvr" firstAttribute="top" secondItem="XXz-m7-fDz" secondAttribute="bottom" id="5cc-LG-VXk"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="nva-Vc-WAa" secondAttribute="trailing" id="FFn-nY-h67"/>
+                    <constraint firstAttribute="trailing" secondItem="nva-Vc-WAa" secondAttribute="trailing" constant="16" id="FFn-nY-h67"/>
                     <constraint firstItem="nva-Vc-WAa" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="RWz-3M-fSM"/>
                     <constraint firstItem="nva-Vc-WAa" firstAttribute="leading" secondItem="XXz-m7-fDz" secondAttribute="trailing" constant="16" id="Wrf-Wi-VkJ"/>
                     <constraint firstItem="XXz-m7-fDz" firstAttribute="leading" secondItem="enb-Nn-aO6" secondAttribute="trailing" constant="33" id="YNO-Jn-q5O"/>
                     <constraint firstItem="XXz-m7-fDz" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="ZjZ-7L-qxF"/>
                     <constraint firstAttribute="bottom" secondItem="6QZ-eh-lvr" secondAttribute="bottom" constant="9" id="ZkH-D5-Gak"/>
-                    <constraint firstItem="enb-Nn-aO6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="aFG-H7-pMX"/>
+                    <constraint firstItem="enb-Nn-aO6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="30" id="aFG-H7-pMX"/>
                     <constraint firstItem="enb-Nn-aO6" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="itG-fN-S8N"/>
                     <constraint firstItem="nva-Vc-WAa" firstAttribute="leading" secondItem="6QZ-eh-lvr" secondAttribute="trailing" constant="16" id="nLC-Xe-NFl"/>
                     <constraint firstItem="6QZ-eh-lvr" firstAttribute="leading" secondItem="enb-Nn-aO6" secondAttribute="trailing" constant="33" id="qIq-Dx-10s"/>
@@ -80,9 +79,4 @@
             <point key="canvasLocation" x="299.19999999999999" y="193.4032983508246"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <systemColor name="systemYellowColor">
-            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-    </resources>
 </document>

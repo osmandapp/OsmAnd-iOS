@@ -101,22 +101,11 @@
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][indexPath.row];
         [cell.textView setText:favCol.name];
         [cell.iconView setImage:favCol.icon];
-        //[cell.iconView setImage:nil];
         cell.textLeftMargin.constant -= 8.;
         [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
         cell.arrowIconView.hidden = indexPath.row != self.colorIndex;
     }
     return cell;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return UITableViewAutomaticDimension;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITableViewDelegate

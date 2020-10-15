@@ -978,7 +978,7 @@ static UIViewController *parentController;
         else
         {
             cell.arrowImage.image = [[UIImage imageNamed:@"ic_custom_arrow_right"]
-            imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
             if ([cell isDirectionRTL])
                 [cell.arrowImage setImage:cell.arrowImage.image.imageFlippedForRightToLeftLayoutDirection];
         }

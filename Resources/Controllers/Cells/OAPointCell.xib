@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,7 +20,7 @@
                         <rect key="frame" x="16" y="0.0" width="288" height="60"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AEu-zA-LLm">
-                                <rect key="frame" x="76" y="35" width="212" height="16"/>
+                                <rect key="frame" x="69" y="35" width="219" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="KO8-3P-3P8"/>
                                 </constraints>
@@ -29,7 +29,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o8c-dn-1dR">
-                                <rect key="frame" x="53" y="9" width="235" height="21"/>
+                                <rect key="frame" x="46" y="9" width="242" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="SC4-JW-SC1"/>
                                 </constraints>
@@ -45,7 +45,7 @@
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_direction.png" translatesAutoresizingMaskIntoConstraints="NO" id="VrJ-ig-6T6">
-                                <rect key="frame" x="53" y="33" width="20" height="20"/>
+                                <rect key="frame" x="46" y="33" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="ceU-TM-H0U"/>
                                     <constraint firstAttribute="width" constant="20" id="yhP-Kv-mx5"/>
@@ -57,13 +57,15 @@
                             <constraint firstItem="SGv-NM-IvK" firstAttribute="centerY" secondItem="v7M-wb-9kc" secondAttribute="centerY" id="3hl-cV-7CP"/>
                             <constraint firstItem="AEu-zA-LLm" firstAttribute="leading" secondItem="VrJ-ig-6T6" secondAttribute="trailing" constant="3" id="Agg-Au-OsL"/>
                             <constraint firstAttribute="trailing" secondItem="AEu-zA-LLm" secondAttribute="trailing" id="L1b-Xz-rjq"/>
-                            <constraint firstItem="o8c-dn-1dR" firstAttribute="leading" secondItem="SGv-NM-IvK" secondAttribute="trailing" constant="23" id="MYY-g2-xdA"/>
                             <constraint firstItem="SGv-NM-IvK" firstAttribute="leading" secondItem="v7M-wb-9kc" secondAttribute="leading" id="ScQ-KH-dRX"/>
-                            <constraint firstItem="VrJ-ig-6T6" firstAttribute="leading" secondItem="SGv-NM-IvK" secondAttribute="trailing" constant="23" id="U92-Nz-pb8"/>
                             <constraint firstItem="AEu-zA-LLm" firstAttribute="top" secondItem="o8c-dn-1dR" secondAttribute="bottom" constant="5" id="UCW-ib-kxl"/>
+                            <constraint firstItem="VrJ-ig-6T6" firstAttribute="leading" secondItem="SGv-NM-IvK" secondAttribute="trailing" constant="16" id="VMi-gr-Uno"/>
                             <constraint firstItem="VrJ-ig-6T6" firstAttribute="top" secondItem="o8c-dn-1dR" secondAttribute="bottom" constant="3" id="YHC-6n-oCW"/>
                             <constraint firstAttribute="bottom" secondItem="AEu-zA-LLm" secondAttribute="bottom" constant="9" id="aOz-sT-kBa"/>
+                            <constraint firstItem="o8c-dn-1dR" firstAttribute="leading" secondItem="SGv-NM-IvK" secondAttribute="trailing" constant="16" id="jT7-8u-Jdp"/>
                             <constraint firstItem="o8c-dn-1dR" firstAttribute="top" secondItem="v7M-wb-9kc" secondAttribute="top" constant="9" id="llh-y9-oQq"/>
+                            <constraint firstItem="VrJ-ig-6T6" firstAttribute="leading" secondItem="v7M-wb-9kc" secondAttribute="leading" priority="999" id="mkL-oZ-nHd"/>
+                            <constraint firstItem="o8c-dn-1dR" firstAttribute="leading" secondItem="v7M-wb-9kc" secondAttribute="leading" priority="999" id="vfG-sR-5U0"/>
                             <constraint firstAttribute="bottom" secondItem="VrJ-ig-6T6" secondAttribute="bottom" constant="7" id="xPp-ak-3FG"/>
                         </constraints>
                     </view>
@@ -79,8 +81,12 @@
                 <outlet property="cellView" destination="v7M-wb-9kc" id="CiI-Hi-0el"/>
                 <outlet property="directionImageView" destination="VrJ-ig-6T6" id="eZF-Fc-HFb"/>
                 <outlet property="distanceView" destination="AEu-zA-LLm" id="XcB-c8-dMi"/>
+                <outlet property="imageViewMarginNoIcon" destination="mkL-oZ-nHd" id="epN-cU-q5r"/>
+                <outlet property="imageViewMarginWithIcon" destination="VMi-gr-Uno" id="m59-jB-xNu"/>
                 <outlet property="titleIcon" destination="SGv-NM-IvK" id="Olz-x7-8ig"/>
                 <outlet property="titleView" destination="o8c-dn-1dR" id="E5l-Pm-tMN"/>
+                <outlet property="titleViewMarginNoIcon" destination="vfG-sR-5U0" id="8ES-ow-2RS"/>
+                <outlet property="titleViewMarginWithIcon" destination="jT7-8u-Jdp" id="aSe-gj-tHy"/>
             </connections>
             <point key="canvasLocation" x="323.1884057971015" y="189.50892857142856"/>
         </tableViewCell>

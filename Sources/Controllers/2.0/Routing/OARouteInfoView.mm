@@ -1393,7 +1393,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             [cell.textView setText:item[@"title"]];
             [cell.descView setText:item[@"descr"]];
-            cell.descView.hidden = cell.descView.text == nil || cell.descView.text.length == 0;
             [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
         }
         if ([cell needsUpdateConstraints])

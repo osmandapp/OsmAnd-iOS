@@ -7,7 +7,6 @@
 //
 
 #import "OAGPXRouteWptListViewController.h"
-#import "OAPointTableViewCell.h"
 #import "OAGPXListViewController.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxRouteWptItem.h"

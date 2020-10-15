@@ -1,5 +1,5 @@
 //
-//  OABaseSettingsWithBottomButtonsViewController.m
+//  OABaseSettingsWithBottomButtonsViewController.mm
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 15.10.2020.
@@ -7,6 +7,9 @@
 //
 
 #import "OABaseSettingsWithBottomButtonsViewController.h"
+#include <OsmAndCore/Utilities.h>
+
+#define kTopBottomPadding 8
 
 @implementation OABaseSettingsWithBottomButtonsViewController
 {
@@ -31,26 +34,39 @@
 {
     [super viewDidLoad];
     [self setupNavbar];
+    [self setupBottomView];
 }
 
 - (void) setupNavbar
 {
     BOOL hasImage = !self.backImageButton.hidden;
     
-    self.cancelButtonLeftMarginWithIcon.active = !hasImage;
-    self.cancelButtonLeftMarginNoIcon.active = hasImage;
+    self.cancelButtonLeftMarginWithIcon.active = hasImage;
+    self.cancelButtonLeftMarginNoIcon.active = !hasImage;
 }
 
-- (void) setupBottomView
+- (void) setupBottomView // needs refactoring
 {
-    BOOL hasPromaryButton = !self.primaryBottomButton.hidden;
+    BOOL hasPrimaryButton = !self.primaryBottomButton.hidden;
     BOOL hasSecondaryButton = !self.secondaryBottomButton.hidden;
     
     self.primaryBottomButton.layer.cornerRadius = 9.;
-    self.secondaryBottomButton.layer.cornerRadius = 9.0;
+    self.secondaryBottomButton.layer.cornerRadius = 9.;
     
-    
-    
+    if (hasPrimaryButton && hasSecondaryButton)
+    {
+        self.primaryButtonTopMarginYesSecondary.active = YES;
+        self.primaryButtonTopMarginNoSecondary.active = NO;
+        
+        self.bottomViewHeigh.constant = self.primaryBottomButton.frame.size.height + self.secondaryBottomButton.frame.size.height + kTopBottomPadding * 3 + [OAUtilities getBottomMargin];
+    }
+    else
+    {
+        self.primaryButtonTopMarginYesSecondary.active = hasSecondaryButton;
+        self.primaryButtonTopMarginNoSecondary.active = !hasSecondaryButton;
+        
+        self.bottomViewHeigh.constant = self.primaryBottomButton.frame.size.height + kTopBottomPadding * 2 + [OAUtilities getBottomMargin];
+    }
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle

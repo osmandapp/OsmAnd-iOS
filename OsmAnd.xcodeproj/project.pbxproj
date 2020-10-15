@@ -173,7 +173,7 @@
 		1535D8ED243DDA390061220F /* ic_custom_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E7243DDA380061220F /* ic_custom_map@2x.png */; };
 		1535D8EE243DDA390061220F /* ic_custom_map_online@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1535D8E8243DDA390061220F /* ic_custom_map_online@2x.png */; };
 		155AC6AF2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155AC6AE2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib */; };
-		155AC6B125387B9B00703073 /* OABaseSettingsWithBottomButtonsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.m */; };
+		155AC6B125387B9B00703073 /* OABaseSettingsWithBottomButtonsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.mm */; };
 		155AC6B425387EAB00703073 /* OAImportProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 155AC6B325387EAB00703073 /* OAImportProfileViewController.m */; };
 		155B7137247D215D00A1587D /* OAPreviewZoomLevelsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155B7136247D215D00A1587D /* OAPreviewZoomLevelsCell.xib */; };
 		155B7139247D247100A1587D /* OAPreviewZoomLevelsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 155B7138247D247100A1587D /* OAPreviewZoomLevelsCell.m */; };
@@ -6205,7 +6205,7 @@
 		1535D8E7243DDA380061220F /* ic_custom_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map@2x.png"; path = "Resources/Icons/ic_custom_map@2x.png"; sourceTree = "<group>"; };
 		1535D8E8243DDA390061220F /* ic_custom_map_online@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_online@2x.png"; path = "Resources/Icons/ic_custom_map_online@2x.png"; sourceTree = "<group>"; };
 		155AC6AE2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseSettingsWithBottomButtonsViewController.xib; sourceTree = "<group>"; };
-		155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseSettingsWithBottomButtonsViewController.m; sourceTree = "<group>"; };
+		155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseSettingsWithBottomButtonsViewController.mm; sourceTree = "<group>"; };
 		155AC6B225387BBC00703073 /* OABaseSettingsWithBottomButtonsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseSettingsWithBottomButtonsViewController.h; sourceTree = "<group>"; };
 		155AC6B325387EAB00703073 /* OAImportProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAImportProfileViewController.m; sourceTree = "<group>"; };
 		155AC6B525387EB900703073 /* OAImportProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAImportProfileViewController.h; sourceTree = "<group>"; };
@@ -14968,7 +14968,7 @@
 				DA25585224ADE40E0081D155 /* NavigationSettings */,
 				155AC6AD253873A200703073 /* New Group */,
 				155AC6AE2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib */,
-				155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.m */,
+				155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.mm */,
 				155AC6B225387BBC00703073 /* OABaseSettingsWithBottomButtonsViewController.h */,
 				155AC6B325387EAB00703073 /* OAImportProfileViewController.m */,
 				155AC6B525387EB900703073 /* OAImportProfileViewController.h */,
@@ -21813,7 +21813,7 @@
 				DAC93F7622C389C400C40392 /* OAUploadProgressBottomSheetViewController.mm in Sources */,
 				DA9B27C622FC343F00C4DBB8 /* OAGPXAction.mm in Sources */,
 				842034021FB3023D002784EF /* OATurnResource.m in Sources */,
-				155AC6B125387B9B00703073 /* OABaseSettingsWithBottomButtonsViewController.m in Sources */,
+				155AC6B125387B9B00703073 /* OABaseSettingsWithBottomButtonsViewController.mm in Sources */,
 				84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				DAFCB01023A90BC500CFBA58 /* OARouteDetailsViewController.mm in Sources */,
 				DAD228A02410E6F600D4D9DC /* OACollapsableWaypointsView.mm in Sources */,

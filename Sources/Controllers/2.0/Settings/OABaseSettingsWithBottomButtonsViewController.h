@@ -18,6 +18,9 @@
 @property (strong, nonatomic) IBOutlet UIButton *secondaryBottomButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *cancelButtonLeftMarginWithIcon;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *cancelButtonLeftMarginNoIcon;
-
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *primaryButtonTopMarginNoSecondary;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *primaryButtonTopMarginYesSecondary;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *secondaryButtonBottomMarginYesPrimary;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeigh;
 
 @end

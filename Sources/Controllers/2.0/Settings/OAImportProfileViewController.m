@@ -51,17 +51,12 @@
 
 - (void) viewDidLoad
 {
-    [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
     self.secondaryBottomButton.hidden = YES;
-    [self setupView];
-}
-
-- (void) setupView
-{
-    
+    self.primaryBottomButton.hidden = NO; // to remove
+    [super viewDidLoad];
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

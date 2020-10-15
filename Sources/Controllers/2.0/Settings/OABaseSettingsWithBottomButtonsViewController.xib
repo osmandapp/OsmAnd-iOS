@@ -13,10 +13,14 @@
                 <outlet property="additionalNavBarButton" destination="Emr-yd-xz4" id="hJ7-qe-cH5"/>
                 <outlet property="backButton" destination="kXa-gs-sfl" id="yZE-7E-p9v"/>
                 <outlet property="bottomBarView" destination="L3y-hy-OUi" id="sT9-8n-dVL"/>
+                <outlet property="bottomViewHeigh" destination="EeE-6d-k0f" id="8Xa-dF-YLC"/>
                 <outlet property="cancelButtonLeftMarginNoIcon" destination="WDL-fk-eK7" id="tZd-sT-1QL"/>
                 <outlet property="cancelButtonLeftMarginWithIcon" destination="1vg-Pu-W0u" id="VAS-be-C5b"/>
                 <outlet property="primaryBottomButton" destination="BaW-Xn-8jB" id="UMw-gs-His"/>
+                <outlet property="primaryButtonTopMarginNoSecondary" destination="U2a-dE-yCx" id="Lka-60-l4U"/>
+                <outlet property="primaryButtonTopMarginYesSecondary" destination="mbf-uc-2Xl" id="0O1-B0-uQ5"/>
                 <outlet property="secondaryBottomButton" destination="2hH-bq-Urf" id="VvA-fN-mAg"/>
+                <outlet property="secondaryButtonBottomMarginYesPrimary" destination="mbf-uc-2Xl" id="PuQ-8y-kc0"/>
                 <outlet property="tableView" destination="047-sX-bmi" id="BJ7-yw-FRF"/>
                 <outlet property="view" destination="mrf-Nc-zcj" id="7ep-ym-Z3s"/>
             </connections>
@@ -27,7 +31,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="047-sX-bmi">
-                    <rect key="frame" x="0.0" y="44" width="414" height="718"/>
+                    <rect key="frame" x="0.0" y="44" width="414" height="710"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z1H-Xh-Vqx" userLabel="navBarView">
@@ -47,7 +51,7 @@
                         <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="hHf-xD-cwb"/>
                     </connections>
                 </button>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VY7-at-aSe">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VY7-at-aSe">
                     <rect key="frame" x="10" y="50" width="30" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="30" id="HOu-up-JIv"/>
@@ -73,7 +77,7 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L3y-hy-OUi">
-                    <rect key="frame" x="0.0" y="762" width="414" height="134"/>
+                    <rect key="frame" x="0.0" y="754" width="414" height="142"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UVn-Dp-Y28">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
@@ -114,9 +118,11 @@
                     <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="BaW-Xn-8jB" firstAttribute="trailing" secondItem="L3y-hy-OUi" secondAttribute="trailingMargin" id="Dgo-Mt-9xF"/>
+                        <constraint firstAttribute="height" constant="142" id="EeE-6d-k0f"/>
                         <constraint firstItem="2hH-bq-Urf" firstAttribute="top" secondItem="L3y-hy-OUi" secondAttribute="top" constant="9" id="M1v-fN-EdF"/>
                         <constraint firstItem="2hH-bq-Urf" firstAttribute="leading" secondItem="L3y-hy-OUi" secondAttribute="leadingMargin" id="Qkc-vz-gXE"/>
                         <constraint firstAttribute="trailing" secondItem="UVn-Dp-Y28" secondAttribute="trailing" id="S3C-2i-0UR"/>
+                        <constraint firstItem="BaW-Xn-8jB" firstAttribute="top" secondItem="UVn-Dp-Y28" secondAttribute="bottom" priority="999" constant="8" id="U2a-dE-yCx"/>
                         <constraint firstItem="UVn-Dp-Y28" firstAttribute="leading" secondItem="L3y-hy-OUi" secondAttribute="leading" id="VKK-C8-5ob"/>
                         <constraint firstItem="BaW-Xn-8jB" firstAttribute="leading" secondItem="L3y-hy-OUi" secondAttribute="leadingMargin" id="ZUh-9K-KIv"/>
                         <constraint firstItem="2hH-bq-Urf" firstAttribute="trailing" secondItem="L3y-hy-OUi" secondAttribute="trailingMargin" id="bvI-gw-pDd"/>
@@ -132,7 +138,7 @@
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="3jf-Lw-BUF"/>
                 <constraint firstItem="L3y-hy-OUi" firstAttribute="top" secondItem="047-sX-bmi" secondAttribute="bottom" id="3zT-Ng-etm"/>
                 <constraint firstItem="3w3-gS-5vz" firstAttribute="trailing" secondItem="Emr-yd-xz4" secondAttribute="trailing" constant="16" id="6QD-D0-fKn"/>
-                <constraint firstItem="3w3-gS-5vz" firstAttribute="bottom" secondItem="L3y-hy-OUi" secondAttribute="top" priority="999" constant="100" id="A6v-DD-5g0"/>
+                <constraint firstItem="3w3-gS-5vz" firstAttribute="bottom" secondItem="L3y-hy-OUi" secondAttribute="top" priority="999" constant="108" id="A6v-DD-5g0"/>
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="bottom" secondItem="3w3-gS-5vz" secondAttribute="top" priority="750" constant="44" id="BeD-vI-G7t"/>
                 <constraint firstItem="kXa-gs-sfl" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" id="MGh-G1-cob"/>
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="top" secondItem="mrf-Nc-zcj" secondAttribute="top" id="MyA-mE-gyB"/>

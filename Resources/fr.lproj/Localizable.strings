@@ -1724,3 +1724,4 @@
 "repeat_after" = "Répéter après";
 "shared_string_email" = "Courriel";
 "email_example_hint" = "utilisateur@exemple.com";
+"gpx_parse_error" = "Le fichier GPX OsmAnd n'est pas construit correctement. Vous pouvez transmettre ce fichier à l'équipe support OsmAnd pour investiguer.";

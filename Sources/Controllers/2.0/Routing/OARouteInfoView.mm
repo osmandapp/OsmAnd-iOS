@@ -1654,7 +1654,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
         return 2.0;
-    return UITableViewAutomaticDimension;
+    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
+        return UITableViewAutomaticDimension;
+    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
+        return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[[item[@"route_index"] integerValue]]];
+    return 44.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath

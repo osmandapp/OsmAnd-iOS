@@ -34,8 +34,10 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="sc8-o3-g0a" secondAttribute="trailing" id="JAB-SU-CB0"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="BfI-Uq-2NM" secondAttribute="bottom" constant="7" id="Nj0-4C-Qbn"/>
                     <constraint firstItem="BfI-Uq-2NM" firstAttribute="centerY" secondItem="CtX-P1-KKP" secondAttribute="centerY" id="PY4-eS-hGh"/>
                     <constraint firstItem="sc8-o3-g0a" firstAttribute="leading" secondItem="BfI-Uq-2NM" secondAttribute="trailing" constant="16" id="WCH-1B-2Pu"/>
+                    <constraint firstItem="BfI-Uq-2NM" firstAttribute="top" relation="greaterThanOrEqual" secondItem="CtX-P1-KKP" secondAttribute="top" constant="7" id="aQt-7R-0Rc"/>
                     <constraint firstItem="sc8-o3-g0a" firstAttribute="centerY" secondItem="CtX-P1-KKP" secondAttribute="centerY" id="bUI-Ad-fh8"/>
                     <constraint firstItem="BfI-Uq-2NM" firstAttribute="leading" secondItem="CtX-P1-KKP" secondAttribute="leadingMargin" id="tpD-bf-A6z"/>
                 </constraints>

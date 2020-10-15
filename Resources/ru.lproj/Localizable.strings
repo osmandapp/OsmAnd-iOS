@@ -623,7 +623,7 @@
 "road_blocked" = "Дорога перекрыта";
 "shared_string_road" = "Дорога";
 "arrival_distance_descr" = "Как скоро следует сообщать о прибытии?";
-"app_mode_aircraft" = "Самолёт";
+"app_mode_aircraft" = "Воздушное судно";
 "stop_routing_confirm" = "Остановить навигацию?";
 "clear_all_intermediates" = "Очистить все промежуточные точки";
 "shared_string_current" = "Текущий";

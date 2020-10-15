@@ -1386,17 +1386,18 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
+            [cell setOverflowVisibility:YES];
         }
         
         if (cell)
         {
             [cell.textView setText:item[@"title"]];
             [cell.descView setText:item[@"descr"]];
+            cell.descView.hidden = cell.descView.text == nil || cell.descView.text.length == 0;
             [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
-            [cell setOverflowVisibility:YES];
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
         }
+        if ([cell needsUpdateConstraints])
+            [cell updateConstraints];
         return cell;
     }
     else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
@@ -1654,11 +1655,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
         return 2.0;
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
-        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
         return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[[item[@"route_index"] integerValue]]];
-    return 44.0;
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath

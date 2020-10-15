@@ -32,6 +32,4 @@
 
 - (void) setSecondaryImage:(UIImage *)image;
 
-+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth;
-
 @end

@@ -879,11 +879,14 @@ typedef enum
                 }
                 else
                 {
+                    cell.imgView.image = nil;
                     cell.imgView.hidden = YES;
                 }
                 [cell.textView setText:item.text];
                 cell.switchView.on = item.checked;
             }
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
             return cell;
         }
         case BUTTON_ITEM:

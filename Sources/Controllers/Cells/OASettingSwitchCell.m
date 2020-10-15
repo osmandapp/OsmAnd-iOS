@@ -7,17 +7,6 @@
 //
 
 #import "OASettingSwitchCell.h"
-#import "OAUtilities.h"
-
-#define defaultCellHeight 48.0
-#define titleTextWidthDelta 108.0
-#define secondaryImgWidth 111.0
-#define switchCellWidth 67.0
-#define textMarginVertical 5.0
-#define minTextHeight 32.0
-
-static UIFont *_titleFont;
-static UIFont *_descFont;
 
 @implementation OASettingSwitchCell
 
@@ -36,7 +25,7 @@ static UIFont *_descFont;
 
 - (void) updateConstraints
 {
-    BOOL hasImage = self.imgView.image != nil;
+    BOOL hasImage = self.imgView.image != nil && !self.imageView.hidden;
     BOOL hasSecondaryImage = self.secondaryImgView.image != nil;
 
     self.textLeftMargin.active = hasImage;
@@ -61,7 +50,7 @@ static UIFont *_descFont;
     BOOL res = [super needsUpdateConstraints];
     if (!res)
     {
-        BOOL hasImage = self.imgView.image != nil;
+        BOOL hasImage = self.imgView.image != nil && !self.imageView.hidden;
         BOOL hasSecondaryImage = self.secondaryImgView.image != nil;
 
         res = res || self.textLeftMargin.active != hasImage;

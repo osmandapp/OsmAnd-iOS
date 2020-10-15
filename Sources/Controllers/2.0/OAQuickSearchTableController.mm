@@ -819,8 +819,6 @@
                 [cell.textView setText:[item getName]];
                 cell.descriptionView.hidden = YES;
             }
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
             return cell;
         }
     }

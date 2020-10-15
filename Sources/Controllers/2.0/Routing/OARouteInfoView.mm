@@ -1646,25 +1646,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] || [item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
+    if ([item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
         return 60.0;
-    else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier] || [item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
-        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
         return 50.0;
-    else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])
-        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
-    else if ([item[@"cell"] isEqualToString:@"OADescrTitleIconCell"])
-        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
         return 2.0;
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
-        return UITableViewAutomaticDimension;
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
-        return UITableViewAutomaticDimension;
-    return 44.0;
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath

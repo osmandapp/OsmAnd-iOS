@@ -833,6 +833,7 @@ typedef enum
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCollapseCell" owner:self options:nil];
                 cell = (OAIconTextCollapseCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             }
             
             if (cell)
@@ -876,11 +877,13 @@ typedef enum
                 {
                     cell.imgView.image = item.icon;
                     cell.imgView.hidden = NO;
+                    cell.separatorInset = UIEdgeInsetsMake(0., 70., 0., 0.);
                 }
                 else
                 {
                     cell.imgView.image = nil;
                     cell.imgView.hidden = YES;
+                    cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
                 }
                 [cell.textView setText:item.text];
                 cell.switchView.on = item.checked;

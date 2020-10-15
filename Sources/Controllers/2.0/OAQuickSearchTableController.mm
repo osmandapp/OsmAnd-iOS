@@ -82,7 +82,8 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
-        _tableView.estimatedRowHeight = 50.0;
+        _tableView.estimatedRowHeight = 48.0;
+        _tableView.rowHeight = UITableViewAutomaticDimension;
     }
     return self;
 }
@@ -503,6 +504,8 @@
         [cell.iconView setImage:icon];
         cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
     }
+    if ([cell needsUpdateConstraints])
+        [cell updateConstraints];
     return cell;
 }
 
@@ -521,42 +524,6 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return section == _dataGroups.count - 1 ? [OAPOISearchHelper getHeightForFooter] : 0.01;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSInteger row = indexPath.row;
-    NSArray<OAQuickSearchListItem *> *dataArray = nil;
-    if (indexPath.section < _dataGroups.count)
-        dataArray = _dataGroups[indexPath.section];
-
-    if (dataArray && row < dataArray.count)
-    {
-        OAQuickSearchListItem *item = dataArray[row];
-        switch ([item getType])
-        {
-            case HEADER:
-            {
-                CGSize size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 59.0 font:[UIFont systemFontOfSize:14.0]];
-                return 24.0 + size.height;
-            }
-            case BUTTON:
-            {
-                OAQuickSearchButtonListItem *btnItem = (OAQuickSearchButtonListItem *) item;
-                NSString *text = [btnItem getAttributedName] ? [btnItem getAttributedName].string : [btnItem getName];
-                CGSize size = [OAUtilities calculateTextBounds:text width:tableView.bounds.size.width - 59.0 font:[UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold]];
-                return 30.0 + size.height;
-            }
-            default:
-            {
-                return UITableViewAutomaticDimension;
-            }
-        }
-    }
-    else
-    {
-        return UITableViewAutomaticDimension;
-    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

@@ -16,7 +16,6 @@
 #import "OAUtilities.h"
 #import "OAIconTextDescCell.h"
 #import "OAQuickSearchButtonListItem.h"
-#import "OAIconButtonCell.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAMapViewController.h"

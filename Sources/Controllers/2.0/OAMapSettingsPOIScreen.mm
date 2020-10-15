@@ -187,6 +187,8 @@
                 else
                     [cell.textView setText:@""];
             }
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
             return cell;
         }
     }

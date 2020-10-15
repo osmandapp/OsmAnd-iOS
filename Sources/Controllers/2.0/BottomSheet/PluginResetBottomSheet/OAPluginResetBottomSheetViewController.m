@@ -17,7 +17,6 @@
 #import "OAAppSettings.h"
 #import "OADescrTitleCell.h"
 #import "OADividerCell.h"
-#import "OASettingSwitchNoImageCell.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
@@ -123,17 +122,13 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:kBottomSheetHeaderButtonCell])
+    if ([type isEqualToString:kBottomSheetHeaderButtonCell] || [type isEqualToString:kDescrTitleCell])
     {
         return UITableViewAutomaticDimension;
     }
     else if ([type isEqualToString:kTitleTwoIconsRoundCell])
     {
-        return [OATitleTwoIconsRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:kDescrTitleCell])
-    {
-        return [OADescrTitleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:DeviceScreenWidth];
+        return UITableViewAutomaticDimension;
     }
     else if ([type isEqualToString:kDividerCell])
     {

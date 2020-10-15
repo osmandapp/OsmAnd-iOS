@@ -44,12 +44,12 @@
 #import "OAReverseGeocoder.h"
 
 #import "OAIconTextTableViewCell.h"
-#import "OAIconTextExTableViewCell.h"
+#import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAIconButtonCell.h"
-#import "OAHeaderCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OAEmptySearchCell.h"
 
 #include <OsmAndCore.h>
@@ -82,7 +82,8 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
-        _tableView.estimatedRowHeight = 50.0;
+        _tableView.estimatedRowHeight = 48.0;
+        _tableView.rowHeight = UITableViewAutomaticDimension;
     }
     return self;
 }
@@ -502,9 +503,9 @@
         }
         [cell.iconView setImage:icon];
         cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
-        if ([cell needsUpdateConstraints])
-            [cell setNeedsUpdateConstraints];
     }
+    if ([cell needsUpdateConstraints])
+        [cell updateConstraints];
     return cell;
 }
 
@@ -523,47 +524,6 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return section == _dataGroups.count - 1 ? [OAPOISearchHelper getHeightForFooter] : 0.01;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSInteger row = indexPath.row;
-    NSArray<OAQuickSearchListItem *> *dataArray = nil;
-    if (indexPath.section < _dataGroups.count)
-        dataArray = _dataGroups[indexPath.section];
-
-    if (dataArray && row < dataArray.count)
-    {
-        OAQuickSearchListItem *item = dataArray[row];
-        switch ([item getType])
-        {
-            case HEADER:
-            {
-                CGSize size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 59.0 font:[UIFont systemFontOfSize:14.0]];
-                return 24.0 + size.height;
-            }
-            case BUTTON:
-            {
-                OAQuickSearchButtonListItem *btnItem = (OAQuickSearchButtonListItem *) item;
-                NSString *text = [btnItem getAttributedName] ? [btnItem getAttributedName].string : [btnItem getName];
-                CGSize size = [OAUtilities calculateTextBounds:text width:tableView.bounds.size.width - 59.0 font:[UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold]];
-                return 30.0 + size.height;
-            }
-            case EMPTY_SEARCH:
-            {
-                OAQuickSearchEmptyResultListItem *emptyResultItem = (OAQuickSearchEmptyResultListItem *) item;
-                return [OAEmptySearchCell getHeightWithTitle:emptyResultItem.title message:emptyResultItem.message cellWidth:tableView.bounds.size.width];
-            }
-            default:
-            {
-                return UITableViewAutomaticDimension;
-            }
-        }
-    }
-    else
-    {
-        return UITableViewAutomaticDimension;
-    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -732,12 +692,12 @@
                 }
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
-                    OAIconTextExTableViewCell* cell;
-                    cell = (OAIconTextExTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextExTableViewCell"];
+                    OAIconTextTableViewCell* cell;
+                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
                     if (cell == nil)
                     {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextExCell" owner:self options:nil];
-                        cell = (OAIconTextExTableViewCell *)[nib objectAtIndex:0];
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                     }
                     if (cell)
                     {
@@ -813,19 +773,18 @@
         }
         else if ([item getType] == HEADER)
         {
-            OAHeaderCell *cell;
-            cell = (OAHeaderCell *)[tableView dequeueReusableCellWithIdentifier:@"OAHeaderCell"];
+            OAMenuSimpleCell *cell;
+            cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMenuSimpleCell"];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAHeaderCell" owner:self options:nil];
-                cell = (OAHeaderCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMenuSimpleCell" owner:self options:nil];
+                cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             }
             
             if (cell)
             {
-                cell.contentView.backgroundColor = [UIColor whiteColor];
                 [cell.textView setText:[item getName]];
-                [cell setImage:nil tint:NO];
+                cell.descriptionView.hidden = YES;
             }
             return cell;
         }

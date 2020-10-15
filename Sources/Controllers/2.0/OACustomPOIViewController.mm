@@ -9,7 +9,7 @@
 #import "OACustomPOIViewController.h"
 #import "OAPOIHelper.h"
 #import "OAPOICategory.h"
-#import "OAIconTextSwitchCell.h"
+#import "OASettingSwitchCell.h"
 #import "OAPOISearchHelper.h"
 #import "OASelectSubcategoryViewController.h"
 #import "OAPOIUIFilter.h"
@@ -17,6 +17,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OASizes.h"
+#import "OAColors.h"
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>
 
@@ -216,21 +217,15 @@
     return [OAPOISearchHelper getHeightForHeader];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAPOICategory* item = _dataArray[indexPath.row];
-    return [OAIconTextSwitchCell getHeight:item.nameLocalized descHidden:YES detailsIconHidden:NO cellWidth:tableView.bounds.size.width];
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAIconTextSwitchCell* cell;
-    cell = (OAIconTextSwitchCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextSwitchCell"];
+    OASettingSwitchCell* cell;
+    cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:@"OASettingSwitchCell"];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextSwitchCell" owner:self options:nil];
-        cell = (OAIconTextSwitchCell *)[nib objectAtIndex:0];
-        cell.iconView.tintColor = UIColorFromRGB(0x727272);
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+        cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+        cell.imgView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
     }
     
     if (cell)
@@ -249,13 +244,13 @@
         
         if (isSelected)
         {
-            [cell.iconView setImage: [item icon]];
-            cell.descView.hidden = NO;
+            [cell.imgView setImage: [item icon]];
+            cell.descriptionView.hidden = NO;
             cell.switchView.on = YES;
             NSSet<NSString *> *subtypes = [_filter getAcceptedSubtypes:item];
             if (subtypes == [OAPOIBaseType nullSet])
             {
-                cell.descView.text = OALocalizedString(@"shared_string_all");
+                cell.descriptionView.text = OALocalizedString(@"shared_string_all");
             }
             else
             {
@@ -266,16 +261,17 @@
                         [str appendString:@", "];
                     [str appendString:[[OAPOIHelper sharedInstance] getPhraseByName:st]];
                 }
-                cell.descView.text = str;
+                cell.descriptionView.text = str;
             }
         }
         else
         {
             UIImage *img = [[item icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            [cell.iconView setImage: img];
-            cell.descView.hidden = YES;
+            [cell.imgView setImage: img];
+            cell.descriptionView.hidden = YES;
             cell.switchView.on = NO;
         }
+        [cell updateConstraintsIfNeeded];
     }
     return cell;
 }

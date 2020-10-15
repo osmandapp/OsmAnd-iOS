@@ -16,15 +16,12 @@
 #import "OARootViewController.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
-#import "OADescrTitleCell.h"
 #import "OADividerCell.h"
-#import "OASettingSwitchNoImageCell.h"
 #import "OARootViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OASettingSwitchCell.h"
-#import "OADescrTitleCell.h"
 #import "OAOsmEditingPlugin.h"
 #import "OADividerCell.h"
 #import "MaterialTextFields.h"
@@ -121,19 +118,6 @@
 {
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
-    {
-        return [OABottomSheetHeaderCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
-    }
-    else
-    {
-        return 44.0;
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -162,6 +146,7 @@
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.sliderView.layer.cornerRadius = 3.0;
+            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
         if (cell)
             cell.titleView.text = item[@"title"];
@@ -180,11 +165,6 @@
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.row];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 #pragma mark - UITableViewDelegate

@@ -13,6 +13,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 
-+ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
-
 @end

@@ -22,7 +22,6 @@
 #import "OASelectedGPXHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAUtilities.h"
-#import "OAIconTextButtonCell.h"
 #import "OAGPXDatabase.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAMapActions.h"
@@ -124,11 +123,7 @@
         value = [OAGPXUIHelper getDescription:gpx];
     }
     
-    if ([type isEqualToString:@"OASwitchCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([type isEqualToString:@"OAMultiIconTextDescCell"])
+    if ([type isEqualToString:@"OASwitchCell"] || [type isEqualToString:@"OAMultiIconTextDescCell"])
     {
         return UITableViewAutomaticDimension;
     }

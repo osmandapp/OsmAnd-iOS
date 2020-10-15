@@ -7,7 +7,6 @@
 //
 
 #import "OAGPXEditItemViewController.h"
-#import "OAGPXDetailsTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"

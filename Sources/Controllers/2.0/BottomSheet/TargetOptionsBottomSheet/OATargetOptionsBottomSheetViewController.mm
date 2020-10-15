@@ -121,7 +121,7 @@
     }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0)];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 70.0, 4.0, 0.0)];
     }
     else
     {
@@ -233,7 +233,7 @@
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
-            cell.dividerInsets = UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0);
+            cell.dividerInsets = UIEdgeInsetsMake(6.0, 70.0, 4.0, 0.0);
             cell.dividerHight = 0.5;
         }
         return cell;

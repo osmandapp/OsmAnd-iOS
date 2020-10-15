@@ -17,14 +17,14 @@
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OASwitchableAction.h"
-#import "OABottomSheetActionCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OAMapSource.h"
 #import "OAMapStyleAction.h"
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-#define kBottomSheetActionCell @"OABottomSheetActionCell"
+#define kBottomSheetActionCell @"OAMenuSimpleCell"
 
 @interface OAQuickActionSelectionBottomSheetScreen ()
 
@@ -113,24 +113,6 @@
 {
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary *item = _data[indexPath.row];
-    
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
-    {
-        return [OABottomSheetHeaderCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
-    }
-    else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
-    {
-        return [OABottomSheetActionCell getHeight:item[@"title"] value:item[@"descr"] cellWidth:tableView.bounds.size.width];
-    }
-    else
-    {
-        return 44.0;
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -157,6 +139,7 @@
             cell = (OABottomSheetHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
         if (cell)
         {
@@ -168,13 +151,13 @@
     else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
     {
         static NSString* const identifierCell = kBottomSheetActionCell;
-        OABottomSheetActionCell* cell = nil;
+        OAMenuSimpleCell* cell = nil;
         
         cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetActionCell owner:self options:nil];
-            cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
+            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
         }
         
@@ -187,11 +170,13 @@
             
             cell.textView.text = item[@"title"];
             NSString *desc = item[@"descr"];
-            cell.descView.text = desc;
-            cell.descView.hidden = desc.length == 0;
-            cell.iconView.image = img;
+            cell.descriptionView.text = desc;
+            cell.descriptionView.hidden = desc.length == 0;
+            cell.imgView.image = img;
             if (!cell.accessoryView)
                 cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected"]];
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
             BOOL isActive;
             switch (vwController.type)
             {
@@ -232,17 +217,6 @@
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.row];
-}
-
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 #pragma mark - UITableViewDelegate

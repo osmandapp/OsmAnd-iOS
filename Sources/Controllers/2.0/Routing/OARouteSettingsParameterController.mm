@@ -12,11 +12,9 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
-#import "OAPointTableViewCell.h"
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
-#import "OASettingsTableViewCell.h"
 #import "OANavigationSettingsViewController.h"
 #import "OAUtilities.h"
 #import "OASettingsTitleTableViewCell.h"
@@ -82,14 +80,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    OALocalRoutingParameter *param = _group.getRoutingParameters[indexPath.row];
-    NSString *text = [param getText];
-    
-    return [OASettingsTitleTableViewCell getHeight:text cellWidth:tableView.bounds.size.width];
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -115,16 +105,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.001;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

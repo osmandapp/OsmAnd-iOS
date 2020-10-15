@@ -9,7 +9,7 @@
 #import "OASelectMapSourceViewController.h"
 #import "OAMapSource.h"
 #import "OsmAndApp.h"
-#import "OABottomSheetActionCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OAMapCreatorHelper.h"
 #import "OASQLiteTileSource.h"
 #import "OAResourcesUIHelper.h"
@@ -137,14 +137,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         itemMapSource = ((OAOnlineTilesResourceItem *) item).mapSource;
         caption = itemMapSource.name;
     }
-    static NSString* const identifierCell = @"OABottomSheetActionCell";
-    OABottomSheetActionCell* cell = nil;
+    static NSString* const identifierCell = @"OAMenuSimpleCell";
+    OAMenuSimpleCell* cell = nil;
     cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-        cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
-        cell.descView.hidden = YES;
+        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
+        cell.descriptionView.hidden = YES;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 61.0, 0.0, 0.0);
     }
     if (cell)
@@ -152,7 +152,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         UIImage *img = nil;
         img = [UIImage imageNamed:@"ic_custom_map_online"];
         cell.textView.text = caption;
-        cell.iconView.image = img;
+        cell.imgView.image = img;
         if ([_app.data.lastMapSource isEqual:itemMapSource])
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_checmark_default.png"]];
         else

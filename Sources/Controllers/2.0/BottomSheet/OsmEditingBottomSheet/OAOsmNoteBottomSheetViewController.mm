@@ -11,7 +11,6 @@
 #import "Localization.h"
 #import "OATextInputFloatingCell.h"
 #import "OABottomSheetHeaderCell.h"
-#import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAPasswordInputFieldCell.h"
 #import "OADividerCell.h"
@@ -250,21 +249,13 @@
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 16.0, 5.0, 0.0)];
     }
-    else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
-    {
-        return [OABottomSheetHeaderCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
-    }
     else if ([item[@"type"] isEqualToString:@"OATextInputFloatingCell"])
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
-    else if ([item[@"type"] isEqualToString:@"OASwitchCell"])
+    else if ([item[@"type"] isEqualToString:@"OASwitchCell"] || [item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:@"OADescrTitleCell"])
     {
         return UITableViewAutomaticDimension;
-    }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
-    {
-        return [OADescrTitleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:DeviceScreenWidth];
     }
     else
     {
@@ -313,6 +304,7 @@
             cell = (OABottomSheetHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
         if (cell)
         {

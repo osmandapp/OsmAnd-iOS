@@ -14,6 +14,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 
-+ (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth;
-
 @end

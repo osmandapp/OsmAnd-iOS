@@ -12,7 +12,6 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
-#import "OAPointTableViewCell.h"
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
@@ -80,34 +79,6 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    OALocalRoutingParameter *param = _data[@(indexPath.section)][indexPath.row];
-    NSString *type = [param getCellType];
-    NSString *text = [param getText];
-    NSString *value = [param getValue];
-    
-    if ([type isEqualToString:@"OASettingsCell"])
-    {
-        return [OASettingsTableViewCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:@"OASettingSwitchCell"])
-    {
-        return [OASettingSwitchCell getHeight:text
-                                         desc:value
-                              hasSecondaryImg:YES
-                                    cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:@"OAIconTitleValueCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else
-    {
-        return 48.0;
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -149,11 +120,6 @@
         CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont systemFontOfSize:13.]].height;
         return MAX(38.0, height + 10.0);
     }
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -12,6 +12,4 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 
-+ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
-
 @end

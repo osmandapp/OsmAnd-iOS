@@ -577,29 +577,6 @@
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *type = item[@"type"];
-    
-    if ([type isEqualToString:kCellTypeSwitch])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeSwitch])
-    {
-        return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:kCellTypeTextInput])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else
-    {
-        return 50.0;
-    }
-}
-
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (_settingsType == EDonationSettingsScreenMain)

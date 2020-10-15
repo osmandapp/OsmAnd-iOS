@@ -22,7 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *altRangeValue;
 @property (weak, nonatomic) IBOutlet UILabel *descentTitle;
 @property (weak, nonatomic) IBOutlet UILabel *descentValue;
-
+@property (weak, nonatomic) IBOutlet UIImageView *ascentIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *descentIcon;
 
 @end
 

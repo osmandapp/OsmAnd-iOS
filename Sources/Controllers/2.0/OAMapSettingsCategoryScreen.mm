@@ -88,15 +88,6 @@
     [tblView reloadData];
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    OAMapStyleParameter *p = _parameters[indexPath.row];
-    if (p.dataType != OABoolean)
-        return [OASettingsTableViewCell getHeight:p.title value:[p getValueTitle] cellWidth:tableView.bounds.size.width];
-    else
-        return UITableViewAutomaticDimension;
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -154,11 +145,6 @@
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return kEstimatedRowHeight;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

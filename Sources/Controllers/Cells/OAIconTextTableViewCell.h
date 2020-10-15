@@ -18,6 +18,8 @@
 @property (nonatomic) IBOutlet NSLayoutConstraint *textLeftMarginNoImage;
 @property (nonatomic) IBOutlet NSLayoutConstraint *textRightMargin;
 @property (nonatomic) IBOutlet NSLayoutConstraint *textRightMarginNoImage;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *iconViewWidthConstraint;
 
 - (void) showImage:(BOOL)show;
 

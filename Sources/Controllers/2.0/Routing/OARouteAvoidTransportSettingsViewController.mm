@@ -12,7 +12,6 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
-#import "OAPointTableViewCell.h"
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OADestinationItem.h"
@@ -23,7 +22,6 @@
 #import "OARouteProvider.h"
 #import "OAGPXDocument.h"
 #import "OASwitchTableViewCell.h"
-#import "OASettingsTableViewCell.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OANavigationSettingsViewController.h"
@@ -33,9 +31,7 @@
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
-#import "OAIconTitleValueCell.h"
 #import "OAAvoidSpecificRoads.h"
-#import "OAIconTextButtonCell.h"
 #import "OAButtonCell.h"
 
 #include <OsmAndCore/Utilities.h>

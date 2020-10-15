@@ -9,11 +9,10 @@
 #import "OAMapSettingsOnlineSourcesScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "Localization.h"
-#import "OASliderCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapCreatorHelper.h"
-#import "OABottomSheetActionCell.h"
+#import "OAMenuSimpleCell.h"
 
 #include <QSet>
 
@@ -59,6 +58,8 @@ typedef enum
         
         vwController = viewController;
         tblView = tableView;
+        tblView.rowHeight = UITableViewAutomaticDimension;
+        tblView.estimatedRowHeight = 48.;
         
         vwController.okButton.hidden = false;
         [vwController.okButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
@@ -188,13 +189,13 @@ typedef enum
     const auto& item = _onlineMapSources[(int) indexPath.row];
     NSString* caption = item->name.toNSString();
     
-    static NSString* const identifierCell = @"OABottomSheetActionCell";
-    OABottomSheetActionCell* cell = nil;
+    static NSString* const identifierCell = @"OAMenuSimpleCell";
+    OAMenuSimpleCell* cell = nil;
     cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-        cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
+        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
     }
     
     if (cell)
@@ -203,8 +204,8 @@ typedef enum
         img = [UIImage imageNamed:@"ic_custom_map_style"];
         
         cell.textView.text = caption;
-        cell.descView.hidden = YES;
-        cell.iconView.image = img;
+        cell.descriptionView.hidden = YES;
+        cell.imgView.image = img;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
     }
     return cell;
@@ -215,12 +216,6 @@ typedef enum
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    const auto& item = _onlineMapSources[(int) indexPath.row];
-    return [OABottomSheetActionCell getHeight:item->name.toNSString() value:nil cellWidth:tableView.bounds.size.width];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

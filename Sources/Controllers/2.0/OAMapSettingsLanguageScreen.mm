@@ -137,22 +137,6 @@
         [_settings setSettingMapLanguage:newValue];
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    if (indexPath.row == 0)
-    {
-        return [OASettingsTableViewCell getHeight:OALocalizedString(@"sett_pref_lang") value:_prefLang cellWidth:tableView.bounds.size.width];
-    }
-    else if (indexPath.row == 1)
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else
-    {
-        return UITableViewAutomaticDimension;
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -235,16 +219,6 @@
     }
     
     return outCell;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return kEstimatedRowHeight;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (void) showLocalChanged:(id)sender

@@ -12,7 +12,6 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
-#import "OAPointTableViewCell.h"
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OADestinationItem.h"
@@ -23,7 +22,6 @@
 #import "OARouteProvider.h"
 #import "OAGPXDocument.h"
 #import "OASwitchTableViewCell.h"
-#import "OASettingsTableViewCell.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OANavigationSettingsViewController.h"
@@ -35,7 +33,7 @@
 #import "OASettingSwitchCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAAvoidSpecificRoads.h"
-#import "OAIconTextButtonCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OAButtonCell.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -102,7 +100,7 @@
                                    @"roadId" : @((unsigned long long)r.roadId),
                                    @"descr"  : [self.class getDescr:r],
                                    @"header" : @"",
-                                   @"type"   : @"OAIconTextButtonCell"} ];
+                                   @"type"   : @"OAMenuSimpleCell"} ];
         }
         
         [sectionData addObjectsFromArray:roadList];
@@ -175,43 +173,6 @@
     [[OARootViewController instance].mapPanel openTargetViewWithImpassableRoadSelection];
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    id param = _data[@(indexPath.section)][indexPath.row];
-    NSString *type;
-    NSString *text;
-    NSString *value;
-    if ([param isKindOfClass:OALocalRoutingParameter.class])
-    {
-        type = [param getCellType];
-        text = [param getText];
-        value = [param getValue];
-    }
-    else
-    {
-        type = param[@"type"];
-        text = param[@"title"];
-        value = param[@"descr"];
-    }
-    
-    if ([type isEqualToString:@"OASwitchCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([type isEqualToString:@"OAIconTitleValueCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else if ([type isEqualToString:@"OAIconTextButtonCell"])
-    {
-        return [OAIconTextButtonCell getHeight:text descHidden:(!value || value.length == 0) detailsIconHidden:NO cellWidth:tableView.bounds.size.width];
-    }
-    else
-    {
-        return 48.0;
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -252,11 +213,6 @@
     }
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
 - (UITableViewCell *) cellForRoutingParam:(OALocalRoutingParameter *)param
 {
     NSString *text = [param getText];
@@ -295,24 +251,25 @@
     {
         NSString *text = item[@"title"];
         NSString *value = item[@"descr"];
-        if ([item[@"type"] isEqualToString:@"OAIconTextButtonCell"])
+        if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
         {
-            static NSString* const identifierCell = @"OAIconTextButtonCell";
-            OAIconTextButtonCell *cell = (OAIconTextButtonCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+            static NSString* const identifierCell = @"OAMenuSimpleCell";
+            OAMenuSimpleCell *cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-                cell = (OAIconTextButtonCell *)[nib objectAtIndex:0];
+                cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
             }
             
             if (cell)
             {
-                cell.iconView.image = [UIImage imageNamed:@"ic_custom_alert_color"];
-                cell.descView.hidden = !value || value.length == 0;
-                cell.descView.text = value;
-                cell.buttonView.hidden = YES;
-                cell.detailsIconView.hidden = YES;
+                cell.imgView.image = [UIImage imageNamed:@"ic_custom_alert_color"];
+                cell.descriptionView.hidden = !value || value.length == 0;
+                cell.descriptionView.text = value;
                 [cell.textView setText:text];
+                
+                if ([cell needsUpdateConstraints])
+                    [cell updateConstraintsIfNeeded];
             }
             return cell;
         }

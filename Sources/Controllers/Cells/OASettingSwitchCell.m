@@ -7,17 +7,6 @@
 //
 
 #import "OASettingSwitchCell.h"
-#import "OAUtilities.h"
-
-#define defaultCellHeight 48.0
-#define titleTextWidthDelta 108.0
-#define secondaryImgWidth 111.0
-#define switchCellWidth 67.0
-#define textMarginVertical 5.0
-#define minTextHeight 32.0
-
-static UIFont *_titleFont;
-static UIFont *_descFont;
 
 @implementation OASettingSwitchCell
 
@@ -36,7 +25,7 @@ static UIFont *_descFont;
 
 - (void) updateConstraints
 {
-    BOOL hasImage = self.imgView.image != nil;
+    BOOL hasImage = self.imgView.image != nil && !self.imageView.hidden;
     BOOL hasSecondaryImage = self.secondaryImgView.image != nil;
 
     self.textLeftMargin.active = hasImage;
@@ -61,7 +50,7 @@ static UIFont *_descFont;
     BOOL res = [super needsUpdateConstraints];
     if (!res)
     {
-        BOOL hasImage = self.imgView.image != nil;
+        BOOL hasImage = self.imgView.image != nil && !self.imageView.hidden;
         BOOL hasSecondaryImage = self.secondaryImgView.image != nil;
 
         res = res || self.textLeftMargin.active != hasImage;
@@ -84,59 +73,6 @@ static UIFont *_descFont;
 - (void) setSecondaryImage:(UIImage *)image
 {
     self.secondaryImgView.image = image.imageFlippedForRightToLeftLayoutDirection;
-}
-
-+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth
-{
-    CGFloat textWidth = cellWidth - titleTextWidthDelta - (hasSecondaryImg ? secondaryImgWidth : switchCellWidth);
-    if (!desc || desc.length == 0)
-    {
-        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text]);
-    }
-    else
-    {
-        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text] + [self.class getDescViewHeightWithWidth:textWidth text:desc]);
-    }
-}
-
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-    /*
-    CGFloat w = self.bounds.size.width;
-    CGFloat h = self.bounds.size.height;
-    
-    CGFloat textX = self.imgView.hidden ? 16.0 : 62.0;
-    CGFloat textWidth = w - titleTextWidthDelta - (self.secondaryImgView.image ? secondaryImgWidth : switchCellWidth);
-    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
-    
-    if (self.descriptionView.hidden)
-    {
-        self.textView.frame = CGRectMake(textX, 0.0, textWidth, MAX(defaultCellHeight, titleHeight));
-    }
-    else
-    {
-        CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.descriptionView.text];
-        self.textView.frame = CGRectMake(textX, 2.0, textWidth, MAX(minTextHeight, titleHeight));
-        self.descriptionView.frame = CGRectMake(textX, h - descHeight - 1.0, textWidth, descHeight);
-    }
-     */
-}
-
-+ (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_titleFont)
-        _titleFont = [UIFont systemFontOfSize:17.0];
-
-    return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical;
-}
-
-+ (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_descFont)
-        _descFont = [UIFont systemFontOfSize:12.0];
-    
-    return [OAUtilities calculateTextBounds:text width:width font:_descFont].height + textMarginVertical;
 }
 
 @end

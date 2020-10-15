@@ -16,6 +16,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *distanceView;
 @property (weak, nonatomic) IBOutlet UIView *cellView;
 @property (weak, nonatomic) IBOutlet UIImageView *rightArrow;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleViewMarginWithIcon;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleViewMarginNoIcon;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageViewMarginWithIcon;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageViewMarginNoIcon;
 
 
 @end

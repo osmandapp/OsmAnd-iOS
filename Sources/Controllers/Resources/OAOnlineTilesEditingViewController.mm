@@ -942,14 +942,6 @@
     return _data.count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([indexPath isEqual:_pickerIndexPath])
-        return 162.0;
-    
-    return UITableViewAutomaticDimension;
-}
-
 #pragma mark - UITextViewDelegate
 
 -(void)textViewDidChange:(UITextView *)textView

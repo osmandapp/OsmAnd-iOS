@@ -12,6 +12,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    [super awakeFromNib];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -26,24 +27,38 @@
     {
         self.vDotsTop.hidden = YES;
         self.vDotsBottom.hidden = YES;
+        
+        self.vDotsTopHeightHidden.active = YES;
+        self.vDotsBottomHeightHidden.active = YES;
+        
+        self.vDostTopHeightVisible.active = NO;
+        self.vDotsBottomHeightVisible.active = NO;
     }
     else
     {
         self.vDotsTop.hidden = !self.topVDotsVisible;
         self.vDotsBottom.hidden = !self.bottomVDotsVisible;
+        
+        self.vDotsTopHeightHidden.active = !self.topVDotsVisible;
+        self.vDotsBottomHeightHidden.active = !self.bottomVDotsVisible;
+        
+        self.vDostTopHeightVisible.active = self.topVDotsVisible;
+        self.vDotsBottomHeightVisible.active = self.bottomVDotsVisible;
     }
+    
+    [self setNeedsUpdateConstraints];
+    [self updateFocusIfNeeded];
 }
 
 - (void)hideDescIcon:(BOOL)hide
 {
-    CGRect f = self.descLabel.frame;
-    if (hide)
-        f.origin.x = self.titleLabel.frame.origin.x;
-    else
-        f.origin.x = 66.0;
-
-    self.descLabel.frame = f;
     self.descIcon.hidden = hide;
+    
+    self.descIconWidthHidden.active = hide;
+    self.descIconWidthVisible.active = !hide;
+    
+    [self setNeedsUpdateConstraints];
+    [self updateFocusIfNeeded];
 }
 
 - (void)hideRightButton:(BOOL)hide
@@ -53,21 +68,11 @@
     
     self.rightButton.hidden = hide;
     
-    CGRect f = self.titleLabel.frame;
-    if (hide)
-        f.size.width = self.contentView.frame.size.width - f.origin.x - 5.0;
-    else
-        f.size.width = self.contentView.frame.size.width - f.origin.x - 5.0 - self.rightButton.bounds.size.width;
-
-    self.titleLabel.frame = f;
+    self.titleTrailingButtonHidden.active = hide;
+    self.titleTrailingButtonVisible.active = !hide;
     
-    f = self.descLabel.frame;
-    if (hide)
-        f.size.width = self.contentView.frame.size.width - f.origin.x - 5.0;
-    else
-        f.size.width = self.contentView.frame.size.width - f.origin.x - 5.0 - self.rightButton.bounds.size.width;
-    
-    self.descLabel.frame = f;
+    [self setNeedsUpdateConstraints];
+    [self updateFocusIfNeeded];
 }
 
 @end

@@ -9,7 +9,6 @@
 #import "OADestinationCardsViewController.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
-#import "OAIconTextTableViewCell.h"
 #import "MGSwipeButton.h"
 #import "MGSwipeTableCell.h"
 
@@ -472,11 +471,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 50.0;
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {

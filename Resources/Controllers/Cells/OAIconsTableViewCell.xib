@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,7 +20,7 @@
                 <subviews>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="B9W-ie-Ile">
                         <rect key="frame" x="12" y="50" width="296" height="140"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="height" priority="750" constant="140" id="NOY-9q-kdM"/>
                         </constraints>
@@ -32,7 +33,7 @@
                         </collectionViewFlowLayout>
                     </collectionView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hEo-Ng-Ewe">
-                        <rect key="frame" x="16" y="11" width="42" height="20.5"/>
+                        <rect key="frame" x="16" y="11" width="41.5" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -41,7 +42,7 @@
                 <constraints>
                     <constraint firstItem="B9W-ie-Ile" firstAttribute="leading" secondItem="OyU-Tj-OXE" secondAttribute="leading" constant="12" id="6ev-xV-d8J"/>
                     <constraint firstItem="B9W-ie-Ile" firstAttribute="top" secondItem="hEo-Ng-Ewe" secondAttribute="bottom" priority="999" constant="18.5" id="KZK-tp-9BF"/>
-                    <constraint firstItem="hEo-Ng-Ewe" firstAttribute="leading" secondItem="OyU-Tj-OXE" secondAttribute="leading" constant="16" id="aGH-sB-XfE"/>
+                    <constraint firstItem="hEo-Ng-Ewe" firstAttribute="leading" secondItem="OyU-Tj-OXE" secondAttribute="leadingMargin" id="aGH-sB-XfE"/>
                     <constraint firstAttribute="bottom" secondItem="B9W-ie-Ile" secondAttribute="bottom" constant="15" id="pmF-KY-WB3"/>
                     <constraint firstItem="hEo-Ng-Ewe" firstAttribute="top" secondItem="OyU-Tj-OXE" secondAttribute="top" constant="11" id="xGi-q5-MDT"/>
                     <constraint firstAttribute="trailing" secondItem="B9W-ie-Ile" secondAttribute="trailing" constant="12" id="ymg-LJ-h1n"/>
@@ -56,4 +57,9 @@
             <point key="canvasLocation" x="153.62318840579712" y="160.37946428571428"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

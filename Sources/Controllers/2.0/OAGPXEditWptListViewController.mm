@@ -322,27 +322,8 @@
                 cell.rightArrow.hidden = NO;
                 cell.titleIcon.hidden = YES;
             }
-
-            if (!cell.titleIcon.hidden)
-            {
-                if (cell.titleView.frame.origin.x != 38.0)
-                {
-                    CGRect f = cell.titleView.frame;
-                    cell.titleView.frame = CGRectMake(38.0, f.origin.y, cell.frame.size.width - 83.0, f.size.height);
-                    cell.directionImageView.frame = CGRectMake(36.0, 28.0, 15.0, 15.0);
-                    cell.distanceView.frame = CGRectMake(54.0, cell.distanceView.frame.origin.y, cell.distanceView.frame.size.width, cell.distanceView.frame.size.height);
-                }
-            }
-            else
-            {
-                if (cell.titleView.frame.origin.x != 15.0)
-                {
-                    CGRect f = cell.titleView.frame;
-                    cell.titleView.frame = CGRectMake(38.0 - 23.0, f.origin.y, cell.frame.size.width - 83.0 + 23.0, f.size.height);
-                    cell.directionImageView.frame = CGRectMake(36.0 - 23.0, 28.0, 15.0, 15.0);
-                    cell.distanceView.frame = CGRectMake(54.0 - 23.0, cell.distanceView.frame.origin.y, cell.distanceView.frame.size.width, cell.distanceView.frame.size.height);
-                }
-            }
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
         }
         return cell;
     }

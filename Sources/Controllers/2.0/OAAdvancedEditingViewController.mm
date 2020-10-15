@@ -263,12 +263,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kInputImage])
-        return [OATextInputFloatingCellWithIcon getHeight:item[@"value"] desc:item[@"hint"] cellWidth:DeviceScreenWidth];
-    else if ([item[@"type"] isEqualToString:kDescrText])
-        return [OADescrTitleCell getHeight:item[@"value"] desc:item[@"hint"] cellWidth:DeviceScreenWidth];
-    return 44.0;
+     return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITextViewDelegate

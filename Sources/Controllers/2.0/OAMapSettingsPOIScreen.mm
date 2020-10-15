@@ -15,7 +15,7 @@
 #import "OACustomSearchPoiFilter.h"
 #import "OAUtilities.h"
 #import "OAIconTextDescCell.h"
-#import "OAIconTextExTableViewCell.h"
+#import "OAIconTextTableViewCell.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAIconButtonCell.h"
 #import "OAPOIUIFilter.h"
@@ -133,12 +133,12 @@
             }
             else if ([res.object isKindOfClass:[OAPOICategory class]])
             {
-                OAIconTextExTableViewCell* cell;
-                cell = (OAIconTextExTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextExTableViewCell"];
+                OAIconTextTableViewCell* cell;
+                cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextExCell" owner:self options:nil];
-                    cell = (OAIconTextExTableViewCell *)[nib objectAtIndex:0];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                    cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
                     cell.textView.numberOfLines = 0;
                 }
                 
@@ -187,6 +187,8 @@
                 else
                     [cell.textView setText:@""];
             }
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
             return cell;
         }
     }
@@ -210,16 +212,6 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 50.0;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 50.0;
 }
 
 - (OAPOIUIFilter *) getFilter:(OAPOIUIFilter *)filter helper:(OAPOIFiltersHelper *)helper selectedFilters:(NSMutableSet<OAPOIUIFilter *> *)selectedFilters uiFilter:(OAPOIUIFilter *)uiFilter {

@@ -660,13 +660,9 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"] || [item[@"cell"] isEqualToString:@"OAPublicTransportPointCell"] || [item[@"cell"] isEqualToString:@"OAPublicTransportCollapsableCell"] || [item[@"cell"] isEqualToString:@"OAPublicTransportRouteShieldCell"])
-        return UITableViewAutomaticDimension;
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
-        return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[_routeIndex] needsSafeArea:NO];
-    else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
+    if ([item[@"cell"] isEqualToString:@"OADividerCell"])
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
-    return 44.0;
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath

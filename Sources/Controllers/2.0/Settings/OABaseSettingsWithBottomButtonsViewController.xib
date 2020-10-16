@@ -13,17 +13,18 @@
             <connections>
                 <outlet property="additionalNavBarButton" destination="Emr-yd-xz4" id="hJ7-qe-cH5"/>
                 <outlet property="backButton" destination="kXa-gs-sfl" id="yZE-7E-p9v"/>
+                <outlet property="backImageButton" destination="VY7-at-aSe" id="7Bs-V0-T43"/>
                 <outlet property="bottomBarView" destination="L3y-hy-OUi" id="sT9-8n-dVL"/>
                 <outlet property="bottomViewHeigh" destination="EeE-6d-k0f" id="8Xa-dF-YLC"/>
                 <outlet property="cancelButtonLeftMarginNoIcon" destination="WDL-fk-eK7" id="tZd-sT-1QL"/>
                 <outlet property="cancelButtonLeftMarginWithIcon" destination="1vg-Pu-W0u" id="VAS-be-C5b"/>
                 <outlet property="primaryBottomButton" destination="BaW-Xn-8jB" id="UMw-gs-His"/>
-                <outlet property="primaryButtonHeight" destination="7Vi-jr-tCz" id="F52-5O-DzR"/>
+                <outlet property="primaryButtonHeight" destination="7Vi-jr-tCz" id="vGk-kb-WYP"/>
                 <outlet property="primaryButtonTopMarginNoSecondary" destination="U2a-dE-yCx" id="Lka-60-l4U"/>
                 <outlet property="primaryButtonTopMarginYesSecondary" destination="mbf-uc-2Xl" id="0O1-B0-uQ5"/>
                 <outlet property="secondaryBottomButton" destination="2hH-bq-Urf" id="VvA-fN-mAg"/>
                 <outlet property="secondaryButtonBottomMarginYesPrimary" destination="mbf-uc-2Xl" id="PuQ-8y-kc0"/>
-                <outlet property="secondaryButtonHeight" destination="KdK-NY-Aan" id="AZy-k0-7Ru"/>
+                <outlet property="secondaryButtonHeight" destination="KdK-NY-Aan" id="ZkI-IG-M62"/>
                 <outlet property="tableView" destination="047-sX-bmi" id="BJ7-yw-FRF"/>
                 <outlet property="view" destination="mrf-Nc-zcj" id="7ep-ym-Z3s"/>
             </connections>
@@ -138,7 +139,7 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="kXa-gs-sfl" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" constant="30" id="1vg-Pu-W0u"/>
-                <constraint firstItem="L3y-hy-OUi" firstAttribute="trailing" secondItem="3w3-gS-5vz" secondAttribute="trailing" id="327-JA-Eo7"/>
+                <constraint firstItem="L3y-hy-OUi" firstAttribute="trailing" secondItem="mrf-Nc-zcj" secondAttribute="trailing" id="327-JA-Eo7"/>
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="3jf-Lw-BUF"/>
                 <constraint firstItem="L3y-hy-OUi" firstAttribute="top" secondItem="047-sX-bmi" secondAttribute="bottom" id="3zT-Ng-etm"/>
                 <constraint firstItem="3w3-gS-5vz" firstAttribute="trailing" secondItem="Emr-yd-xz4" secondAttribute="trailing" constant="16" id="6QD-D0-fKn"/>
@@ -151,9 +152,9 @@
                 <constraint firstItem="kXa-gs-sfl" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" priority="999" constant="16" id="WDL-fk-eK7"/>
                 <constraint firstItem="VY7-at-aSe" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" constant="6" id="dgD-TD-aFT"/>
                 <constraint firstAttribute="bottom" secondItem="L3y-hy-OUi" secondAttribute="bottom" id="gjD-G8-rb0"/>
-                <constraint firstItem="047-sX-bmi" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" id="iu1-97-N7o"/>
-                <constraint firstItem="047-sX-bmi" firstAttribute="trailing" secondItem="3w3-gS-5vz" secondAttribute="trailing" id="sSo-KD-uVY"/>
-                <constraint firstItem="L3y-hy-OUi" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" id="tcQ-Au-p8U"/>
+                <constraint firstItem="047-sX-bmi" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="iu1-97-N7o"/>
+                <constraint firstItem="047-sX-bmi" firstAttribute="trailing" secondItem="mrf-Nc-zcj" secondAttribute="trailing" id="sSo-KD-uVY"/>
+                <constraint firstItem="L3y-hy-OUi" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="tcQ-Au-p8U"/>
                 <constraint firstItem="VY7-at-aSe" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" constant="10" id="tj2-G3-XnQ"/>
                 <constraint firstItem="047-sX-bmi" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" id="wVW-pC-sp1"/>
             </constraints>

@@ -23,14 +23,8 @@
     self = [super initWithNibName:@"OABaseSettingsWithBottomButtonsViewController" bundle:nil];
     if (self)
     {
-        
     }
     return self;
-}
-
-- (void) applyLocalization
-{
-    [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad
@@ -56,7 +50,7 @@
     self.cancelButtonLeftMarginNoIcon.active = !hasImage;
 }
 
-- (void) setupBottomView // needs refactoring
+- (void) setupBottomView
 {
     BOOL hasPrimaryButton = !self.primaryBottomButton.hidden;
     BOOL hasSecondaryButton = !self.secondaryBottomButton.hidden;
@@ -64,18 +58,10 @@
     self.primaryBottomButton.layer.cornerRadius = 9.;
     self.secondaryBottomButton.layer.cornerRadius = 9.;
     
-    if (hasPrimaryButton && hasSecondaryButton)
-    {
-        self.primaryButtonTopMarginYesSecondary.active = YES;
-        self.primaryButtonTopMarginNoSecondary.active = NO;
-        self.bottomViewHeigh.constant = self.primaryButtonHeight.constant + self.secondaryButtonHeight.constant + kTopBottomPadding * 3 + [OAUtilities getBottomMargin];
-    }
-    else
-    {
-        self.primaryButtonTopMarginYesSecondary.active = hasSecondaryButton;
-        self.primaryButtonTopMarginNoSecondary.active = !hasSecondaryButton;
-        self.bottomViewHeigh.constant = self.primaryButtonHeight.constant + kTopBottomPadding * 2 + [OAUtilities getBottomMargin];
-    }
+    self.primaryButtonTopMarginYesSecondary.active = hasPrimaryButton && hasSecondaryButton;
+    self.primaryButtonTopMarginNoSecondary.active = !hasSecondaryButton;
+    
+    self.bottomViewHeigh.constant = (hasPrimaryButton ? self.primaryButtonHeight.constant : 0.) + (hasSecondaryButton ? self.secondaryButtonHeight.constant : 0.) + kTopBottomPadding * (hasPrimaryButton && hasSecondaryButton ? 3 : 2) + [OAUtilities getBottomMargin];
 }
 
 - (void) setToButton:(UIButton *)button firstLabelText:(NSString *)firstLabelText firstLabelFont:(UIFont *)firstLabelFont firstLabelColor:(UIColor *)firstLabelColor secondLabelText:(NSString *)secondLabelText secondLabelFont:(UIFont *)secondLabelFont secondLabelColor:(UIColor *)secondLabelColor
@@ -89,12 +75,18 @@
     NSDictionary *firstLabelAttributes = @{NSForegroundColorAttributeName: firstLabelColor, NSFontAttributeName: firstLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
     NSDictionary *secondLabelAttributes = @{NSForegroundColorAttributeName: secondLabelColor, NSFontAttributeName: secondLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
     
-    [attributedText setAttributes:firstLabelAttributes range:NSMakeRange(0,  [firstLabelText length])];
+    [attributedText setAttributes:firstLabelAttributes range:NSMakeRange(0, [firstLabelText length])];
     [attributedText setAttributes:secondLabelAttributes range:NSMakeRange([firstLabelText length], [secondLabelText length] + 1)];
     
     button.titleLabel.numberOfLines = 0;
     button.contentEdgeInsets = UIEdgeInsetsMake(kButtonTopBottomPadding, kButtonSidePadding, kButtonTopBottomPadding, kButtonSidePadding);
     [button setAttributedTitle:attributedText forState:UIControlStateNormal];
+    
+    CGFloat height = [OAUtilities calculateTextBounds:attributedText width:button.frame.size.width].height + kButtonTopBottomPadding + kButtonTopBottomPadding;
+    if ([button isEqual:self.primaryBottomButton])
+        self.primaryButtonHeight.constant = height;
+    else
+        self.secondaryButtonHeight.constant = height;
 }
 
 - (void) layoutMultyLabelBottomButtoms

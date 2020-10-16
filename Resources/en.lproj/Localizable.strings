@@ -733,7 +733,7 @@
 "import_profile_exists_header" = "Some items already exist";
 "import_profile_exists_descr" = "OsmAnd already has elements with the same";
 "import_profile_exists_keep_booth" = "Keep both";
-"import_profile_exists_keep_booth_descr" = "Imported items will be added with prexif";
+"import_profile_exists_keep_booth_descr" = "Imported items will be added with prefix";
 "import_profile_exists_keep_replace" = "Replace all";
 "import_profile_exists_keep_replace_descr" = "Current items will be replaced with items from
 the file";

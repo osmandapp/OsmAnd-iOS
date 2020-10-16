@@ -41,6 +41,8 @@
 {
     [super applyLocalization];
     
+    [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self.additionalNavBarButton setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
     [self.primaryBottomButton setTitle:OALocalizedString(@"shared_string_continue") forState:UIControlStateNormal];
 }
 
@@ -55,7 +57,7 @@
     self.tableView.dataSource = self;
     
     self.secondaryBottomButton.hidden = YES;
-    self.primaryBottomButton.hidden = NO; // to remove
+    self.backImageButton.hidden = YES;
     [super viewDidLoad];
 }
 

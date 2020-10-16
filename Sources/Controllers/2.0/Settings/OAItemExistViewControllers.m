@@ -37,9 +37,9 @@
     return self;
 }
 
--(void) applyLocalization
+- (void) applyLocalization
 {
-    [super applyLocalization];
+    [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (NSString *) getTableHeaderTitle

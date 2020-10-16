@@ -103,8 +103,6 @@
 }
 
 - (IBAction)importProfileBtnPressed:(id)sender { // to remove
-    NSLog(@"Import Profile");
-    
     OABaseSettingsWithBottomButtonsViewController* importProfileViewController = [[OAImportProfileViewController alloc] init];
     [self.navigationController pushViewController:importProfileViewController animated:YES];
 }

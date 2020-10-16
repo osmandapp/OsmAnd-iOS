@@ -1340,3 +1340,4 @@
 "copy_from_other_profile" = "Másolás egy másik profilból";
 "profile_alert_delete_title" = "Profil törlése";
 "reset_to_default" = "Alapértelmezés visszaállítása";
+"gpx_parse_error" = "Az OsmAnd GPX formázása helytelen, további vizsgálatért kérem, lépjen kapcsolatba a támogató csapattal.";

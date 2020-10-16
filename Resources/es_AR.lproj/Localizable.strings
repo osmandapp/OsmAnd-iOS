@@ -1859,3 +1859,4 @@
 "reset_profile_action_descr" = "Restablecer todos los ajustes del perfil a los valores predefinidos de la instalación. Al pulsar en «Restablecer» serán descartados todos los cambios. Esta acción no se puede deshacer.";
 "import_profile_descr" = "Para importar un perfil, pulsa en el archivo necesario (*.osf) en cualquier aplicación y marca «Copiar a mapas de OsmAnd»";
 "profile_prefs_reset_successful" = "Todos los ajustes del perfil se restauraron al valor predefinido";
+"gpx_parse_error" = "El GPX de OsmAnd no está bien formado, por favor, contacta con el equipo de soporte para investigar más a fondo.";

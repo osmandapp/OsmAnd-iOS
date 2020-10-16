@@ -130,7 +130,7 @@
 "map_widget_distance" = "目的地";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "標高";
-"map_widget_battery" = "バッテリーレベル";
+"map_widget_battery" = "バッテリー残量";
 "map_widget_plain_time" = "現在時刻";
 "map_widget_max_speed" = "制限速度";
 "max_speed_none" = "なし";
@@ -325,7 +325,7 @@
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
-"nothing_found" = "見つかりませんでした(´・ω・`)";
+"nothing_found" = "見つかりませんでした: %@";
 "nothing_found_descr" = "検索ワードを変更するか、検索範囲を広げてください";
 "select_street" = "道路名を選択";
 "shared_string_in_name" = "in %@";
@@ -400,7 +400,7 @@
 "fav_no_group" = "グループなし";
 "fav_add_group" = "グループの追加";
 "fav_remove_q" = "お気に入りを削除してもよろしいですか？";
-"fav_import" = "Import";
+"fav_import" = "インポート";
 "fav_import_title" = "お気に入りのインポート";
 "fav_export_title" = "お気に入りのエクスポート";
 "fav_select_remove" = "削除するお気に入りを選択してください";
@@ -426,14 +426,14 @@
 "poi_hide" = "非表示";
 // My Places
 "favorites" = "お気に入り";
-"tracks" = "ヒント";
+"tracks" = "旅程";
 // GPX
 "gpx_point" = "Point";
 "gpx_waypoint" = "経由地点";
 "gpx_waypoints" = "経由地点";
 "gpx_points" = "Point(s)";
 "gpx_export" = "Export";
-"import_export" = "Import/Export";
+"import_export" = "インポート/エクスポート";
 "gpx_import_title" = "旅程ファイルのインポート";
 "gpx_import_already_exists" = "指定された旅程ファイルは既にリストに存在します。どのように処理するかを選択してください。";
 "gpx_add_new" = "新しいファイルを追加";
@@ -492,7 +492,7 @@
 "map_settings_mode" = "アプリケーションモード";
 "map_settings_map_magnifier" = "マップ表示倍率";
 "map_settings_text_size" = "テキストサイズ";
-"map_settings_day" = "Day";
+"map_settings_day" = "昼";
 "map_settings_night" = "夜";
 "map_settings_style" = "マップスタイル";
 "map_settings_overunder" = "オーバーレイ / アンダーレイ";
@@ -537,7 +537,7 @@
 "coordinates_example" = "例";
 "utm_description" = "OsmAndは座標形式の一つとしてUTM標準形式を使用します。これはUTM NATO形式と似ていますが異なるものなのでご注意ください。";
 "coordinates_copy_descr" = "座標情報をタップするとクリップボードにコピーします。";
-"sett_lang_local" = "Local";
+"sett_lang_local" = "ローカル";
 "sett_lang_trans" = "変換";
 "sett_pref_lang" = "優先言語";
 "sett_lang_show_local" = "ローカル名(その国の言語)で表示";
@@ -623,7 +623,7 @@
 "res_cancel_inst_q" = "%@のインストールをキャンセルします。";
 "res_uninst_managed_q" = "%@をアンインストールします。後でカタログから再インストールできます。";
 "res_uninst_unmanaged_q" = "%@を削除します。カタログを利用したアンインストールではないので、必要に応じてバックアップがされているかどうかを確認してください。";
-"res_details" = "Details";
+"res_details" = "詳細";
 "res_type" = "Type";
 "res_unknown" = "不明";
 "res_size" = "サイズ";
@@ -637,7 +637,7 @@
 "menu_my_trips" = "旅程履歴";
 "menu_my_directions" = "案内履歴";
 "menu_feedback" = "フィードバック";
-"menu_help" = "Help";
+"menu_help" = "ヘルプ";
 // OSM Editing actions
 "opening_changeset" = "変更セットを開いています…";
 "closing_changeset" = "変更セットを閉じています…";
@@ -863,7 +863,7 @@
 "osm_alert_message" = "Message";
 "osm_alert_button_ok" = "メモを作成";
 "modify_poi" = "POI情報を変更";
-"actions" = "Actions";
+"actions" = "その他";
 "parking_marker" = "駐車位置マーカー";
 "time_limited" = "制限時間";
 "pickup_car" = "駐車車両の回収";
@@ -905,7 +905,7 @@
 "help_tech_articles" = "技術関連情報";
 "help_versions" = "Versions";
 "help_contact_us" = "Contact us";
-"help_about" = "About";
+"help_about" = "OsmAnd Maps & Navigationについて";
 "help_follow_us" = "OsmAndをフォロー";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
@@ -963,14 +963,14 @@
 "brown" = "ブラウン";
 "black" = "Black";
 // World Regions
-"region_africa" = "Africa";
+"region_africa" = "アフリカ";
 "region_asia" = "アジア";
 "region_ausralia_and_oceania" = "オーストラリアとオセアニア";
-"region_central_america" = "Central America";
+"region_central_america" = "中央アメリカ";
 "region_europe" = "ヨーロッパ";
-"region_north_america" = "North America";
-"region_russia" = "Russia";
-"region_south_america" = "South America";
+"region_north_america" = "北アメリカ";
+"region_russia" = "ロシア";
+"region_south_america" = "南アメリカ";
 // Help
 "help_quiz" = "クイズ";
 // Rendering categories
@@ -988,7 +988,7 @@
 "product_title_nautical" = "航海マップ";
 "product_desc_nautical" = "全世界の航海図";
 "product_desc_ext_nautical" = "OsmAndの海図は『OsmAnd Maps&Navigation』アプリのプラグインで海洋表現、海、沿岸地域、河川などをグラフィカルにより詳しく表示することができます。海図には航路、航海灯、危険区域、航行許可区域、入渠禁止区域など、さまざまな情報が含まれています。\n\n使用方法:マップを表示するには詳細マップの有無に関係なく、航海ベースマップをダウンロードすることを強くお勧めします。航海マップを表示するには[マップ設定]＞[マップスタイル]からを[海洋]を選択するか、アプリプロファイルで[船舶]を選択してください。\n\n注意:プロの船員はOsmAndに頼ることなく、船に公式の航海図を配備することを忘れないでください。\n\nOsmAnd航海マップはOpenSeaMapプロジェクトのデータに基づいています。現在のOpenSeaMapの海図は、公式の海図と競合するものではありませんが、レジャー目的のオリエンテーションやルートプランニング程度に利用するのが適しています。";
-"product_title_parking" = "Parking Position";
+"product_title_parking" = "駐車場";
 "product_desc_parking" = "制限時間がある駐車場にて、いつ駐車したのか、どれくらいの時間が残っているのかを把握するのに便利です";
 "product_desc_ext_parking" = "OsmAnd駐車場プラグインは『OsmAnd Maps＆Navigation』アプリのプラグインの一つで、駐車位置を記録しておくことができます。\n制限時間の無い駐車乗用リマインダー(マップ上マーカーのみ)、または時間制限のある駐車場向けの時間切れ時にアラームが鳴るリマインダー(マップ上のマーカーも含む)を選択できます。使用するには[プラグイン]メニューで有効にしてください。";
 "product_title_skimap" = "スキーマップ";
@@ -1003,25 +1003,25 @@
 "product_title_osm_editing" = "OpenStreetMap編集";
 "product_desc_osm_editing" = "OsmAndからOpenStreetMapの情報を直接変更できます";
 "product_desc_ext_osm_editing" = "OSM編集プラグインを使用すると、POIオブジェクトの作成や修正、OSMメモの参照やコメント付け、記録されたGPXファイルの提出などOSMへの情報提供を行うことができます。OSMはコミュニティ主導のグローバルパブリックドメインマッピングプロジェクトです。詳細については、https://osm.orgを参照してください。アプリケーションでOSM認証情報を入力すると、OsmAndから情報の編集やデータ提供を行うことができます。";
-"product_title_africa" = "Africa";
+"product_title_africa" = "アフリカ";
 "product_desc_africa" = "アフリカ向けマップの無制限ダウンロード";
 "product_desc_africa_short" = "アフリカ地域のマップ";
-"product_title_australia" = "Australia";
+"product_title_australia" = "オーストラリア";
 "product_desc_australia" = "オーストラリア向けマップの無制限ダウンロード";
 "product_desc_australia_short" = "オーストラリア地域のマップ";
-"product_title_centralamerica" = "Central America";
+"product_title_centralamerica" = "中央アメリカ";
 "product_desc_centralamerica" = "中央アメリカ向けマップの無制限ダウンロード";
 "product_desc_centralamerica_short" = "中央アメリカ地域のマップ";
 "product_title_europe" = "ヨーロッパ";
 "product_desc_europe" = "ヨーロッパ向けマップの無制限ダウンロード";
 "product_desc_europe_short" = "ヨーロッパ地域のマップ";
-"product_title_northamerica" = "North America";
+"product_title_northamerica" = "北アメリカ";
 "product_desc_northamerica" = "北アメリカ向けマップの無制限ダウンロード";
 "product_desc_northamerica_short" = "北アメリカ地域のマップ";
-"product_title_russia" = "Russia";
+"product_title_russia" = "ロシア";
 "product_desc_russia" = "ロシア向けマップの無制限ダウンロード";
 "product_desc_russia_short" = "ロシア地域のマップ";
-"product_title_southamerica" = "South America";
+"product_title_southamerica" = "南アメリカ";
 "product_desc_southamerica" = "南アメリカ向けマップの無制限ダウンロード";
 "product_desc_southamerica_short" = "南アメリカ地域のマップ";
 "product_title_allworld" = "世界地図";
@@ -1653,3 +1653,8 @@
 "height_limit_description" = "車高を入力してください。一部のルートにおいては、車高の高い車両では通行できない場合があります。";
 "weight_limit_description" = "車両の重量を入力してください。一部のルートにおいては、大型車両では通行できない場合があります。";
 "routing_attr_length_name" = "長さ制限";
+"shared_string_copy" = "コピー";
+"product_desc_antarctica" = "南極大陸向けマップの無制限ダウンロード";
+"product_title_antarctica" = "南極大陸";
+"send_anonymous_data" = "匿名データを送信する";
+"m_style_pulic_transport" = "公共交通機関";

@@ -567,7 +567,7 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Geç";
 "arrival_distance_factor_at_last" = "Son metrelerde";
-"map_orientation_change_in_accordance_with_speed" = "Harita oryantasyon eşiği";
+"map_orientation_change_in_accordance_with_speed" = "Harita yönlendirme eşiği";
 "fast_route_mode" = "En hızlı rota";
 "fast_route_mode_descr" = "En hızlı rota hesaplamayı etkinleştirin ya da yakıt tasarruflu rota için devre dışı bırakın";
 "avoid_in_routing_title" = "Kaçın…";
@@ -595,7 +595,7 @@
 "app_mode_boat" = "Tekne";
 "app_mode_aircraft" = "Uçak";
 "gpx_option_reverse_route" = "GPX yönünü tersine çevir";
-"use_points_as_intermediates" = "Noktalar arasındaki rotayı hesaplamak";
+"use_points_as_intermediates" = "Noktalar arasındaki güzergahı hesapla";
 "routing_settings_2" = "Navigasyon ayarları";
 "gpx_navigation" = "Seyahati takip et";
 "impassable_road" = "Yollardan kaçının";
@@ -612,7 +612,7 @@
 "route_to" = "Buraya";
 "route_from" = "Buradan";
 "error_calculating_route" = "Rota hesaplama hatası";
-"internet_connection_required_for_online_route" = "Çevrim içi navigasyon servisi seçildi ancak hiçbir İnternet bağlantısı yok.";
+"internet_connection_required_for_online_route" = "Çevrim içi navigasyon hizmeti seçildi ancak internet bağlantısı yok.";
 "empty_route_calculated" = "Hata: Hesaplanan rota boş";
 "route_kl" = "Solda kalın ve devam edin";
 "route_kr" = "Sağda kalın ve devam edin";
@@ -715,7 +715,7 @@
 "poi_opening_hours" = "Çalışma saatleri";
 "driving_region_australia" = "Avustralya";
 "towards" = "karşı";
-"route_head" = "Baş";
+"route_head" = "Düz gidin";
 "map_widget_magnetic_bearing" = "Manyetik hareket";
 "unit_of_length" = "Uzunluk birimleri";
 "error_avoid_specific_road" = "Bypass bulunamadı";
@@ -1851,3 +1851,4 @@
 "reset_profile_action_descr" = "Tüm profil ayarlarını kurulum öntanımlı değerlerine sıfırlayın. Sıfırla düğmesine dokunduğunuzda tüm değişiklikleriniz atılacaktır, bu işlem geri alınamaz.";
 "import_profile_descr" = "Bir profili içe aktarmak için, herhangi bir uygulamada gerekli dosyanın üzerine (*.osf) dokunun ve \"OsmAnd Haritalara Kopyala\" seçeneğini seçin";
 "profile_prefs_reset_successful" = "Tüm profil ayarları öntanımlı değerlerine geri yüklendi";
+"gpx_parse_error" = "OsmAnd GPX doğru biçimlendirilmemiş, daha derinlemesine incelemek için lütfen destek ekibiyle iletişime geçin.";

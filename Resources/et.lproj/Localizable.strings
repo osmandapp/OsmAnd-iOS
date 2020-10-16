@@ -1843,3 +1843,5 @@
 "arrows_direction_to_markers" = "Nooled osutavad aktiivse markeri suunda, kui see asub väljaspool ekraani. Suunajooned viitavad aktiivsetele markeritele.";
 "specify_number_of_dir_indicators" = "Määra suunamärguannete arv, see mõjutab kõiki allpool olevaid seadeid.";
 "gpx_parse_error" = "OsmAnd GPX-andmestiku vorming on vigane. Täpsemaks uurimiseks palun võta ühendust meie kasutajatoega.";
+"nothing_found_empty" = "Ei leidnud midagi";
+"shared_string_next" = "Järgmine";

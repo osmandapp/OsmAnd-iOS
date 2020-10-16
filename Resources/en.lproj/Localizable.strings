@@ -730,13 +730,12 @@
 "create_profile" = "Create profile";
 "Import_profile_descr" = "Select the data to be imported.";
 
-"import_profile_exists_header" = "Some items already exist";
-"import_profile_exists_descr" = "OsmAnd already has elements with the same";
-"import_profile_exists_keep_booth" = "Keep both";
-"import_profile_exists_keep_booth_descr" = "Imported items will be added with prexif";
-"import_profile_exists_keep_replace" = "Replace all";
-"import_profile_exists_keep_replace_descr" = "Current items will be replaced with items from
-the file";
+"import_duplicates_title" = "Some items already exist";
+"import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
+"keep_both" = "Keep both";
+"keep_both_desc" = "Imported items will be added with prefix";
+"replace_all" = "Replace all";
+"replace_all_desc" = "Current items will be replaced with items from the file";
 
 "copy_from_other_profile" = "Copy from another profile";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";

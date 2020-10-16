@@ -31,14 +31,6 @@
 {
     [super viewDidLoad];
     [self setupNavbar];
-    [self layoutMultyLabelBottomButtoms];
-    [self setupBottomView];
-}
-
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    [self layoutMultyLabelBottomButtoms];
     [self setupBottomView];
 }
 
@@ -82,22 +74,11 @@
     button.contentEdgeInsets = UIEdgeInsetsMake(kButtonTopBottomPadding, kButtonSidePadding, kButtonTopBottomPadding, kButtonSidePadding);
     [button setAttributedTitle:attributedText forState:UIControlStateNormal];
     
-    CGFloat height = [OAUtilities calculateTextBounds:attributedText width:button.frame.size.width].height + kButtonTopBottomPadding + kButtonTopBottomPadding;
+    CGFloat height = [OAUtilities calculateTextBounds:attributedText width:(button.frame.size.width - 2*kButtonSidePadding)].height + 2*kButtonTopBottomPadding;
     if ([button isEqual:self.primaryBottomButton])
         self.primaryButtonHeight.constant = height;
     else
         self.secondaryButtonHeight.constant = height;
-}
-
-- (void) layoutMultyLabelBottomButtoms
-{
-    CGFloat estimatedLabelWidth = self.view.frame.size.width - 2*[OAUtilities getLeftMargin] - 2*kButtonSidePadding;
-    if (self.primaryBottomButton.titleLabel.attributedText)
-        self.primaryButtonHeight.constant = [OAUtilities calculateTextBounds:self.primaryBottomButton.titleLabel.attributedText width:estimatedLabelWidth].height + 2*kButtonTopBottomPadding;
-    if (self.secondaryBottomButton.titleLabel.attributedText)
-        self.secondaryButtonHeight.constant = [OAUtilities calculateTextBounds:self.secondaryBottomButton.titleLabel.attributedText width:estimatedLabelWidth].height + 2*kButtonTopBottomPadding;
-    if (self.primaryBottomButton.titleLabel.attributedText || self.secondaryBottomButton.titleLabel.attributedText)
-        [self setupBottomView];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle

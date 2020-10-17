@@ -74,7 +74,7 @@
     button.contentEdgeInsets = UIEdgeInsetsMake(kButtonTopBottomPadding, kButtonSidePadding, kButtonTopBottomPadding, kButtonSidePadding);
     [button setAttributedTitle:attributedText forState:UIControlStateNormal];
     
-    CGFloat height = [OAUtilities calculateTextBounds:attributedText width:button.frame.size.width].height + kButtonTopBottomPadding + kButtonTopBottomPadding;
+    CGFloat height = [OAUtilities calculateTextBounds:attributedText width:(button.frame.size.width - 2*kButtonSidePadding)].height + 2*kButtonTopBottomPadding;
     if ([button isEqual:self.primaryBottomButton])
         self.primaryButtonHeight.constant = height;
     else

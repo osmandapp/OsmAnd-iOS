@@ -193,11 +193,6 @@
     return _headerView;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [OATextLineViewCell getHeight:_data[indexPath.row] cellWidth:tableView.bounds.size.width];
-}
-
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _data.count;

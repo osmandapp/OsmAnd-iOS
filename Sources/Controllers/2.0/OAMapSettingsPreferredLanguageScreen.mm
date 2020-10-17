@@ -146,13 +146,6 @@
         [_settings setSettingMapLanguage:newValue];
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary *item = _data[indexPath.row];
-    return [OASettingsTableViewCell getHeight:[item objectForKey:@"name"] value:[item objectForKey:@"value"] cellWidth:tableView.bounds.size.width];
-}
-
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -182,16 +175,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

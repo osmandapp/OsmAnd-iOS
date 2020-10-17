@@ -90,6 +90,7 @@
     _pageControl.numberOfPages = _numberOfRoutes;
     CGRect pageControlFrame = _pageControl.frame;
     pageControlFrame.size = [_pageControl sizeForNumberOfPages:_numberOfRoutes];
+    pageControlFrame.origin.y = _pageControlContainer.frame.size.height / 2 - pageControlFrame.size.height / 2;
     _pageControl.frame = pageControlFrame;
     
     CGRect pageControlContainerFrame = _pageControlContainer.frame;

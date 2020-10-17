@@ -14,6 +14,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UILabel *messageView;
 
-+ (CGFloat) getHeightWithTitle:(NSString *)title message:(NSString *)message cellWidth:(CGFloat)cellWidth;
-
 @end

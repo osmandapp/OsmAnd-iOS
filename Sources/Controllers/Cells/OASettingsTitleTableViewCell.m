@@ -9,30 +9,18 @@
 #import "OASettingsTitleTableViewCell.h"
 #import "OAUtilities.h"
 
-#define defaultCellHeight 44.0
-#define titleTextDelta 50.0
-#define textMarginVertical 5.0
-
-static UIFont *_titleTextFont;
-
 @implementation OASettingsTitleTableViewCell
 
-+ (CGFloat) getHeight:(NSString *)title cellWidth:(CGFloat)cellWidth
+- (void) awakeFromNib
 {
-    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title] + 1.0);
+    [super awakeFromNib];
+    
+    self.iconView.image = self.iconView.image.imageFlippedForRightToLeftLayoutDirection;
 }
 
-+ (CGFloat) getTextViewHeightWithWidth:(CGFloat)cellWidth title:(NSString *)title
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
-    if (!_titleTextFont)
-        _titleTextFont = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
-    
-    CGFloat w = cellWidth - titleTextDelta;
-    CGFloat titleHeight = 0;
-    if (title)
-        titleHeight = [OAUtilities calculateTextBounds:title width:w font:_titleTextFont].height + textMarginVertical * 2;
-    
-    return titleHeight;
+    [super setSelected:selected animated:animated];
 }
 
 @end

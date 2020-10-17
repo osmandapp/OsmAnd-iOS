@@ -11,7 +11,6 @@
 #import "OAApplicationMode.h"
 #import "OAIconTitleValueCell.h"
 #import "OAIconTextTableViewCell.h"
-#import "OASettingsTitleTableViewCell.h"
 #import "OANavigationTypeViewController.h"
 #import "OARouteParametersViewController.h"
 #import "OAVoicePromptsViewController.h"
@@ -195,7 +194,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)
@@ -216,7 +215,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.arrowIconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.arrowIconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
             cell.arrowIconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         if (cell)

@@ -1724,7 +1724,7 @@
 "quick_action_transport_descr" = "Ýttu á þessa aðgerð til að birta leiðir / biðstöðvar almenningssamgangna á korti.";
 "use_of_downloaded_map" = "Þú getur núna notað þetta kort án nettengingar sem gunn aðalkorts eða sem yfirlag/undirlag";
 "import_routing_file_descr" = "Þú getur flutt inn leiðaskrá úr hvaða skýjageymsluhugbúnaði sem er eða sett hana inn í OsmAnd-möppuna í iTunes.";
-"export_profile_descr" = "Til að flytja inn leiðsagnarsnið, skaltu ýta á viðeigandi skrá (*.osf) í einhverju forriti og velja 'Afrita í OsmAnd-kort' aðgerðina";
+"export_profile_descr" = "Þú getur flutt út allar stillingar leiðsagnarsniðs, afritað allar stillingar úr öðru sniði eða frumstillt allar stillingar leiðsagnarsniðs á upprunalega stöðu.";
 "plugin_settings_descr" = "Stillingar viðbótarinnar í valda sniðinu.";
 "size_of_downloaded_data" = "Hinn mikli munur milli aðdráttarstiga getur aukið stærð sóttra gagna.";
 "osm_editing_access_descr" = "Þú getur skoðað allar staðværar breytingar og minnispunkta sem þú hefur gert í %@. Punktar sem þegar hafa verið sendir inn eru ekki taldir upp í OsmAnd.";
@@ -1846,3 +1846,5 @@
 "shared_string_copy" = "Afrita";
 "recalculate_wrong_dir" = "Endurreikna leið ef farið er í öfuga átt";
 "repeat_after" = "Endurtaka eftir";
+"copy_from_other_profile_descr" = "Þú getur afritað allar stillingar frá hvaða sniði sem er yfir í valda sniðið: ";
+"gpx_parse_error" = "GPX-ferill OsmAnd er gallaður, hafðu samband við aðstoðarteymið til að fá botn í þetta.";

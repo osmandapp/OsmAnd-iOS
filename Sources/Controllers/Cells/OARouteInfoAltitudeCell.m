@@ -13,6 +13,11 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    if ([self isDirectionRTL])
+    {
+        [_ascentIcon setImage:_ascentIcon.image.imageFlippedForRightToLeftLayoutDirection];
+        [_descentIcon setImage:_descentIcon.image.imageFlippedForRightToLeftLayoutDirection];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

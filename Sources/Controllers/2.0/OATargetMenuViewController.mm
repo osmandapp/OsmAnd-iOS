@@ -445,7 +445,7 @@
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
-    UIFont *font = [UIFont fontWithName:@"AvenirNext-Regular" size:15.0];
+    UIFont *font = [UIFont systemFontOfSize:15.0];
     
     NSMutableAttributedString *stringGroup = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", group]];
     NSTextAttachment *groupAttachment = [[NSTextAttachment alloc] init];

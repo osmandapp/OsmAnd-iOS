@@ -89,23 +89,6 @@
 {
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"])
-    {
-        return [OABottomSheetHeaderIconCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
-    }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
-    {
-        return [OADescrTitleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:DeviceScreenWidth];
-    }
-    else
-    {
-        return 44.0;
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -170,11 +153,6 @@
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.row];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 #pragma mark - UITableViewDelegate

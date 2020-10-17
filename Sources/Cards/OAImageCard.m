@@ -115,7 +115,6 @@
                 [imageCell.loadingIndicatorView stopAnimating];
             }
         }
-        imageCell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
         [imageCell setUserName:self.userName];
         
         if (self.topIcon && self.topIcon.length > 0)

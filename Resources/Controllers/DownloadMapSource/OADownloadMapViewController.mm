@@ -594,7 +594,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (indexPath.section == kZoomSection && (indexPath.row == kMinZoomPickerRow || indexPath.row == kMaxZoomPickerRow))
     {
         if ((indexPath.row == kMinZoomPickerRow && _minZoomPickerIsShown) || (indexPath.row == kMaxZoomPickerRow && _maxZoomPickerIsShown))
-            return 162.0;
+            return UITableViewAutomaticDimension;
         else
             return 0.01;
     }

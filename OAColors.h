@@ -152,4 +152,7 @@
 
 #define color_primary_red 0xFF470D
 
+#define color_gpx_up 0x4CB237
+#define color_gpx_down 0xDB5364
+
 #endif /* OAColors_h */

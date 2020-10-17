@@ -121,28 +121,6 @@
     return _data.count;
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"])
-    {
-        return [OABottomSheetHeaderIconCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
-    }
-    else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
-    {
-        return UITableViewAutomaticDimension;
-    }
-    else
-    {
-        return 44.0;
-    }
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.row];

@@ -15,9 +15,7 @@
 #import "OACustomSearchPoiFilter.h"
 #import "OAUtilities.h"
 #import "OAIconTextDescCell.h"
-#import "OAIconTextTableViewCell.h"
 #import "OAQuickSearchButtonListItem.h"
-#import "OAIconButtonCell.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAMapViewController.h"
@@ -447,6 +445,7 @@ static const NSInteger panoImageFilterSection = 3;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            [cell showLeftImageView:YES];
         }
         if (cell)
         {
@@ -623,21 +622,9 @@ static const NSInteger panoImageFilterSection = 3;
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
-    {
-        return [OASettingSwitchCell getHeight:item[@"title"] desc:item[@"description"] hasSecondaryImg:NO cellWidth:tableView.bounds.size.width];
-    }
-    else if ([item[@"type"] isEqualToString:@"OAIconTitleButtonCell"])
-    {
-        return [OAIconTitleButtonCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
-    }
-    else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"])
+    if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"] || [item[@"type"] isEqualToString:@"OAIconTitleButtonCell"] || [item[@"type"] isEqualToString:@"OAIconTitleValueCell"] || [indexPath isEqual:_datePickerIndexPath])
     {
         return UITableViewAutomaticDimension;
-    }
-    else if ([indexPath isEqual:_datePickerIndexPath])
-    {
-        return 162.0;
     }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {

@@ -347,16 +347,6 @@
     return 0.01;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == 2)
-        return 162.0;
-    else if (indexPath.row == 0 || indexPath.row == 3)
-        return UITableViewAutomaticDimension;
-    else
-        return 44.0;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 }

@@ -7,7 +7,6 @@
 //
 
 #import "OAInAppCell.h"
-#import "OAUtilities.h"
 
 @implementation OAInAppCell
 
@@ -26,39 +25,6 @@
     // Configure the view for the selected state
 }
 
--(void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    [_btnPrice sizeToFit];
-    CGSize priceSize = CGSizeMake(MAX(kPriceMinTextWidth, _btnPrice.bounds.size.width + (_btnPrice.titleLabel.text.length > 0 ? kPriceTextInset * 2.0 : 0.0)), kPriceMinTextHeight);
-    CGRect priceFrame = _btnPrice.frame;
-    priceFrame.origin = CGPointMake(self.bounds.size.width - priceSize.width - kPriceRectBorder, self.bounds.size.height / 2.0 - priceSize.height / 2.0);
-    priceFrame.size = priceSize;
-    _btnPrice.frame = priceFrame;
-
-    CGRect titleFrame = _lbTitle.frame;
-    CGFloat titleY = 18.0;
-    if (_lbDescription.text.length == 0)
-        titleY = 26.0;
-    
-    _lbTitle.frame = CGRectMake(74.0, titleY, _btnPrice.frame.origin.x  + (_btnPrice.hidden ? _btnPrice.frame.size.width : 0) - titleFrame.origin.x - 8.0, titleFrame.size.height);
-
-    CGRect descFrame = _lbDescription.frame;
-    _lbDescription.frame = CGRectMake(75.0, 36.0, _btnPrice.frame.origin.x - descFrame.origin.x - 8.0, descFrame.size.height);
-    
-    CGSize s = [_lbDescription.text boundingRectWithSize:CGSizeMake(_lbDescription.frame.size.width, 10000.0)
-                                   options:NSStringDrawingUsesLineFragmentOrigin
-                                attributes:@{NSFontAttributeName : _lbDescription.font}
-                                   context:nil].size;
-    
-    if (s.height < 21.0) {
-        _lbDescription.frame = CGRectMake(_lbDescription.frame.origin.x, _lbDescription.frame.origin.y, _lbDescription.frame.size.width, 21.0);
-    } else {
-        _lbDescription.frame = CGRectMake(_lbDescription.frame.origin.x, _lbDescription.frame.origin.y, _lbDescription.frame.size.width, 36.0);
-    }
-
-}
 
 -(void)setPurchased:(BOOL)purchased disabled:(BOOL)disabled
 {

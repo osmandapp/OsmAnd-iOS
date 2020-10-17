@@ -44,7 +44,6 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OAStateChangedListener.h"
 #import "OADividerCell.h"
-#import "OADescrTitleCell.h"
 #import "OADescrTitleIconCell.h"
 #import "OARouteProvider.h"
 #import "OASelectedGPXHelper.h"
@@ -243,6 +242,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [_goButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
         [_goButton setImage:[[UIImage imageNamed:@"ic_custom_map"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     }
+    [self layoutSubviews];
 }
 
 - (void) setupModeViewShadowVisibility
@@ -745,17 +745,24 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _cancelButton.frame = CGRectMake(16. + OAUtilities.getLeftMargin, 9., buttonWidth, 42.);
     _goButton.frame = CGRectMake(CGRectGetMaxX(_cancelButton.frame) + 16., 9., buttonWidth, 42.);
     
+    CGFloat goIconOffset = 12;
+    CGFloat goIconSecondOffset = 8;
+    CGFloat estimatedLabelWith = [OAUtilities calculateTextBounds:_goButton.titleLabel.text width:_goButton.frame.size.width font:_goButton.titleLabel.font].width;
+    CGFloat estimatedContentWidth = goIconOffset + _goButton.imageView.frame.size.width + goIconOffset + estimatedLabelWith;
+    CGFloat goLabelOffset = (buttonWidth / 2) - (estimatedLabelWith / 2) - _goButton.imageView.frame.size.width - goIconSecondOffset;
+    if (estimatedContentWidth > buttonWidth || goLabelOffset < 0)
+        goLabelOffset = 0;
     if ([_goButton isDirectionRTL])
     {
         _goButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 12);
-        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 11);
+        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, goIconOffset);
+        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, goLabelOffset);
     }
     else
     {
         _goButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 12, 0, 0);
-        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 11, 0, 0);
+        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, goIconOffset, 0, 0);
+        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, goLabelOffset, 0, 0);
     }
     
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
@@ -1379,6 +1386,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
+            [cell setOverflowVisibility:YES];
         }
         
         if (cell)
@@ -1386,10 +1394,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [cell.textView setText:item[@"title"]];
             [cell.descView setText:item[@"descr"]];
             [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
-            [cell setOverflowVisibility:YES];
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
         }
+        if ([cell needsUpdateConstraints])
+            [cell updateConstraints];
         return cell;
     }
     else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
@@ -1639,25 +1646,17 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] || [item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
+    if ([item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
         return 60.0;
-    else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier] || [item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
-        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
         return 50.0;
-    else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])
-        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
-    else if ([item[@"cell"] isEqualToString:@"OADescrTitleIconCell"])
-        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
         return 2.0;
-    else if ([item[@"cell"] isEqualToString:@"OAPublicTransportRouteCell"])
-        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OAPublicTransportShieldCell"])
         return [OAPublicTransportShieldCell getCellHeight:tableView.frame.size.width route:_transportHelper.getRoutes[[item[@"route_index"] integerValue]]];
-    return 44.0;
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath

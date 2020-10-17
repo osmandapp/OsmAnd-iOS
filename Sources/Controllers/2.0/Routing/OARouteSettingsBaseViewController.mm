@@ -14,7 +14,6 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
-#import "OAPointTableViewCell.h"
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OADestinationItem.h"

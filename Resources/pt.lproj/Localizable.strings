@@ -1630,3 +1630,4 @@
 "profile_type_base_string" = "Perfil de base";
 "copy_from_other_profile" = "Copiar de outro perfil";
 "profile_type_custom_string" = "Perfil personalizado";
+"gpx_parse_error" = "OsmAnd GPX não está bem formado, por favor entre em contacto com a equipa de suporte para investigar mais.";

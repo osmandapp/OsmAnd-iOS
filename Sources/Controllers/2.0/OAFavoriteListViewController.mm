@@ -971,11 +971,17 @@ static UIViewController *parentController;
             [cell.openCloseGroupButton setHidden:YES];
         
         if (groupData.isOpen)
+        {
             cell.arrowImage.image = [[UIImage imageNamed:@"ic_custom_arrow_down"]
             imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        }
         else
+        {
             cell.arrowImage.image = [[UIImage imageNamed:@"ic_custom_arrow_right"]
-            imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            if ([cell isDirectionRTL])
+                [cell.arrowImage setImage:cell.arrowImage.image.imageFlippedForRightToLeftLayoutDirection];
+        }
         cell.arrowImage.tintColor = UIColorFromRGB(color_tint_gray);
     }
     return cell;

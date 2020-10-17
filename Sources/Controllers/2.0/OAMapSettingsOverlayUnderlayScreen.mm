@@ -9,7 +9,6 @@
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "Localization.h"
-#import "OASliderCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"

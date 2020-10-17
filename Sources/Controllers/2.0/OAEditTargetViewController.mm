@@ -16,7 +16,6 @@
 #import "OADefaultFavorite.h"
 #import "OARootViewController.h"
 #import "OAUtilities.h"
-#import "OAIconTextTableViewCell.h"
 #import "OATargetInfoCollapsableViewCell.h"
 #import "OATargetInfoCollapsableCoordinatesViewCell.h"
 #import "OACollapsableWaypointsView.h"
@@ -25,7 +24,7 @@
 #import <UIAlertView+Blocks.h>
 #import "OAColors.h"
 #import "OAColorViewCell.h"
-#import "OAGroupViewCell.h"
+#import "OAIconTitleValueCell.h"
 #import "OATextViewTableViewCell.h"
 #import "OATextMultiViewCell.h"
 
@@ -577,7 +576,7 @@
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const reusableIdentifierColorCell = @"OAColorViewCell";
-    static NSString* const reusableIdentifierGroupCell = @"OAGroupViewCell";
+    static NSString* const reusableIdentifierGroupCell = @"OAIconTitleValueCell";
     static NSString* const reusableIdentifierTextViewCell = @"OATextViewTableViewCell";
     static NSString* const reusableIdentifierTextMultiViewCell = @"OATextMultiViewCell";
     static NSString* const reusableIdentifierCollapsable = @"OATargetInfoCollapsableViewCell";
@@ -599,14 +598,12 @@
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
                 cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
-                cell.textView.frame = CGRectMake(15.0, 0, DeviceScreenWidth - 20.0, 44.0);
             }
             
             if (cell)
             {
                 [cell.textView setText:self.name];
                 [cell.textView setPlaceholder:OALocalizedString(@"enter_name")];
-                [cell.textView setFont:[UIFont systemFontOfSize:16]];
                 [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
                 [cell.textView addTarget:self action:@selector(editFavName:) forControlEvents:UIControlEventEditingChanged];
                 [cell.textView setDelegate:self];
@@ -639,14 +636,15 @@
         }
         case kRowGroup:
         {
-            OAGroupViewCell* cell;
-            cell = (OAGroupViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierGroupCell];
+            OAIconTitleValueCell* cell;
+            cell = (OAIconTitleValueCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierGroupCell];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGroupViewCell" owner:self options:nil];
-                cell = (OAGroupViewCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleValueCell" owner:self options:nil];
+                cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             }
             
+            [cell showImage:NO];
             if ([self getItemGroup].length == 0)
                 [cell.descriptionView setText: OALocalizedString(@"favorites")];
             else
@@ -771,7 +769,7 @@
         case kRowCoordinates:
             return 48. + (self.collapsableCoordinatesView.collapsed ? 0. : self.collapsableCoordinatesView.frame.size.height + 16.);
         default:
-            return 44.0;
+            return UITableViewAutomaticDimension;
     }
 }
 

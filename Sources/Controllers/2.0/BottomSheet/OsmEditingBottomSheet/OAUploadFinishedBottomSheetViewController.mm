@@ -18,7 +18,6 @@
 #import "OAAppSettings.h"
 #import "OADescrTitleCell.h"
 #import "OADividerCell.h"
-#import "OASettingSwitchNoImageCell.h"
 #import "OARootViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
@@ -174,26 +173,7 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
-    {
-        return 20.0;
-    }
-    else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderIconCell"])
-    {
-        return [OABottomSheetHeaderIconCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
-    }
-    else if ([item[@"type"] isEqualToString:@"OASettingSwitchCell"])
-    {
-        return [OASettingSwitchCell getHeight:[item objectForKey:@"title"]
-                                         desc:[item objectForKey:@"description"]
-                              hasSecondaryImg:NO
-                                    cellWidth:tableView.bounds.size.width];
-    }
-    else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
-    {
-        return [OADescrTitleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:DeviceScreenWidth];
-    }
-    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 0.0, 16.0, 0.0)];
     }
@@ -203,7 +183,7 @@
     }
     else
     {
-        return 44.0;
+        return UITableViewAutomaticDimension;
     }
 }
 
@@ -235,6 +215,7 @@
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.sliderView.layer.cornerRadius = 3.0;
+            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
         if (cell)
             cell.titleView.text = item[@"title"];

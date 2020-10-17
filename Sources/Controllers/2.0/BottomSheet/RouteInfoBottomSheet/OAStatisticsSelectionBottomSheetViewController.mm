@@ -118,13 +118,9 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:kTitleIconRoundCell])
     {
-        return [OABottomSheetHeaderCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
-    }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
-    {
-        return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else
     {
@@ -158,6 +154,7 @@
             cell = (OABottomSheetHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
         if (cell)
         {
@@ -201,16 +198,6 @@
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.row];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 #pragma mark - UITableViewDelegate

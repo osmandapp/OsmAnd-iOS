@@ -8,9 +8,6 @@
 
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
-#import "OASettingsTableViewCell.h"
-#import "OASettingsTitleTableViewCell.h"
-#import "OAIconTextTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAppSettings.h"
@@ -21,9 +18,9 @@
 #import "OATextInputCell.h"
 #import "OAButtonCell.h"
 #import "OAColors.h"
-#import "OAMultiLineLabelCell.h"
+#import "OAMenuSimpleCellNoIcon.h"
 
-#define kCellTypeTitle @"OAMultiLineLabelCell"
+#define kCellTypeTitle @"OAMenuSimpleCellNoIcon"
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kCellTypeSwitch @"switch"
 #define kCellTypeButton @"button"
@@ -218,14 +215,13 @@ static const NSInteger actionsSectionIndex = 2;
     else if ([type isEqualToString:kCellTypeTitle])
     {
         static NSString* const identifierCell = kCellTypeTitle;
-        OAMultiLineLabelCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OAMultiLineLabelCell *)[nib objectAtIndex:0];
+            cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
-            cell.textView.numberOfLines = 0;
-            cell.textView.lineBreakMode = NSLineBreakByWordWrapping;
+            cell.descriptionView.hidden = YES;
         }
         if (cell)
         {

@@ -301,12 +301,6 @@
     return 38.5;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAQuickActionType *action = [self getItem:indexPath];
-    return [OAIconTitleButtonCell getHeight:action.name cellWidth:tableView.bounds.size.width];
-}
-
 -(void)textViewDidChange:(UITextView *)textView
 {
     if (textView.text.length == 0)

@@ -15,6 +15,7 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    [super awakeFromNib];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -26,7 +27,7 @@
 - (void) setDistance:(double)distance wptCount:(NSInteger)wptCount tripDuration:(NSTimeInterval)tripDuration
 {
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
-    UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:11];
+    UIFont *font = [UIFont systemFontOfSize:11];
     
     NSMutableString *distanceStr = [[[OsmAndApp instance] getFormattedDistance:distance] mutableCopy];
     NSString *waypointsStr = [NSString stringWithFormat:@"%d", (int) wptCount];

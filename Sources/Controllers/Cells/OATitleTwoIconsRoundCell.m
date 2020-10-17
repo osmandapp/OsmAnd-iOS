@@ -15,18 +15,4 @@
     BOOL _topCorners;
 }
 
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-
-    UIRectCorner corners;
-    if (_topCorners && _bottomCorners)
-        corners = UIRectCornerAllCorners;
-    else
-        corners = _topCorners ? UIRectCornerTopRight | UIRectCornerTopLeft : UIRectCornerBottomLeft | UIRectCornerBottomRight;
-
-    if (_topCorners || _bottomCorners)
-        [OAUtilities setMaskTo:self.contentContainer byRoundingCorners:corners radius:12.];
-}
-
 @end

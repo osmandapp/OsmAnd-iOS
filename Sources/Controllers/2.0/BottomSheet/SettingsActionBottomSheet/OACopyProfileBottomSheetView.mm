@@ -23,7 +23,6 @@
 #import "OAColors.h"
 #import "OASizes.h"
 
-#define kCellTypeCheck @"OAIconTextCell"
 #define kIconTitleIconRoundCell @"OAIconTitleIconRoundCell"
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)

@@ -287,13 +287,9 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
+    if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"] || [item[@"type"] isEqualToString:kTitleIconRoundCell])
     {
-        return [OABottomSheetHeaderCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
-    }
-    else if ([item[@"type"] isEqualToString:kTitleIconRoundCell])
-    {
-        return [OATitleIconRoundCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([item[@"type"] isEqualToString:kCollectionViewCell])
     {
@@ -332,6 +328,7 @@
             cell = (OABottomSheetHeaderCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
         if (cell)
         {
@@ -367,7 +364,7 @@
                 [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
             }
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
-            cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
+            cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 20.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;

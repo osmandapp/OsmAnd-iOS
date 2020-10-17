@@ -19,7 +19,7 @@
 #import "OAPOIFilter.h"
 #import "OAUtilities.h"
 #import "OAIconTextCollapseCell.h"
-#import "OAIconTextSwitchCell.h"
+#import "OASettingSwitchCell.h"
 #import "OAIconButtonCell.h"
 #import "OAIconTextFieldCell.h"
 #import "OASizes.h"
@@ -796,10 +796,10 @@ typedef enum
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAPOIFilterListItem *item = [self getItem:indexPath];
-    if (!item || item.type != SWITCH_ITEM)
+    if (!item || (item.type != SWITCH_ITEM && item.type != GROUP_HEADER))
         return 51.0;
     else
-        return [OAIconTextSwitchCell getHeight:item.text descHidden:YES detailsIconHidden:YES cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -832,7 +832,8 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCollapseCell" owner:self options:nil];
                 cell = (OAIconTextCollapseCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(0x727272);
+                cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
             }
             
             if (cell)
@@ -857,15 +858,14 @@ typedef enum
         }
         case SWITCH_ITEM:
         {
-            OAIconTextSwitchCell* cell;
-            cell = (OAIconTextSwitchCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextSwitchCell"];
+            OASettingSwitchCell* cell;
+            cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:@"OASettingSwitchCell"];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextSwitchCell" owner:self options:nil];
-                cell = (OAIconTextSwitchCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(0x727272);
-                cell.descView.hidden = YES;
-                cell.detailsIconView.hidden = YES;
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+                cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+                cell.imgView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                cell.descriptionView.hidden = YES;
             }
             
             if (cell)
@@ -875,16 +875,21 @@ typedef enum
                 [cell.switchView addTarget:self action:@selector(toggleCheckbox:) forControlEvents:UIControlEventValueChanged];
                 if (item.icon)
                 {
-                    cell.iconView.image = item.icon;
-                    cell.iconView.hidden = NO;
+                    cell.imgView.image = item.icon;
+                    cell.imgView.hidden = NO;
+                    cell.separatorInset = UIEdgeInsetsMake(0., 70., 0., 0.);
                 }
                 else
                 {
-                    cell.iconView.hidden = YES;
+                    cell.imgView.image = nil;
+                    cell.imgView.hidden = YES;
+                    cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
                 }
                 [cell.textView setText:item.text];
                 cell.switchView.on = item.checked;
             }
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
             return cell;
         }
         case BUTTON_ITEM:
@@ -895,7 +900,7 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconButtonCell" owner:self options:nil];
                 cell = (OAIconButtonCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(0x727272);
+                cell.iconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
                 cell.arrowIconView.hidden = YES;
             }
             
@@ -946,7 +951,7 @@ typedef enum
         }
         case SWITCH_ITEM:
         {
-            OAIconTextSwitchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            OASettingSwitchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             if (cell)
             {
                 UISwitch *switchView = cell.switchView;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,6 +19,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6QZ-eh-lvr">
                         <rect key="frame" x="62" y="9" width="202" height="22"/>
                         <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="28" id="4qi-8g-05l"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="XyQ-Io-3dA"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -74,6 +75,7 @@
                 <outlet property="iconView" destination="8j3-TG-nwo" id="aRW-Lo-ruw"/>
                 <outlet property="overflowButton" destination="kvn-zS-5Ae" id="70F-Y5-9o8"/>
                 <outlet property="textHeightPrimary" destination="XyQ-Io-3dA" id="DqE-Jx-Uut"/>
+                <outlet property="textHeightSecondary" destination="4qi-8g-05l" id="iPV-gl-aix"/>
                 <outlet property="textLeftMargin" destination="G5a-Uh-qqI" id="oOb-ic-bm1"/>
                 <outlet property="textLeftMarginNoIcon" destination="IgY-OJ-vUV" id="1UW-UX-8Am"/>
                 <outlet property="textRightMargin" destination="WR6-YQ-8sx" id="Rsr-Qi-Ssh"/>

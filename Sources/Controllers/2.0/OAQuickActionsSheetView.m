@@ -96,8 +96,8 @@
 - (void)setupPageControls {
     [_pageControlIndicator setNumberOfPages:[self getPagesCount]];
     [_pageControlIndicator setCurrentPage:0];
-    [self setupButton:_controlBtnPrev active:NO];
-    [self setupButton:_controlBtnNext active:_pageControlIndicator.numberOfPages > 1];
+    [self setupButton:_controlBtnPrev active:NO title:OALocalizedString(@"shared_string_previous")];
+    [self setupButton:_controlBtnNext active:_pageControlIndicator.numberOfPages > 1 title:OALocalizedString(@"shared_string_next")];
 }
 
 - (void) commonInit
@@ -256,8 +256,9 @@
 - (void)didMoveToWindow
 {
     [self setupDayNightColors];
-    [self setupButton:_controlBtnPrev active:NO];
-    [self setupButton:_controlBtnNext active:_pageControlIndicator.numberOfPages > 1];
+    [self setupButton:_controlBtnPrev active:NO title:OALocalizedString(@"shared_string_previous")];
+    [self setupButton:_controlBtnNext active:_pageControlIndicator.numberOfPages > 1 title:OALocalizedString(@"shared_string_next")];
+    [_closeBtn setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
     [_pageControlIndicator setCurrentPage:0];
     [_collectionView reloadData];
 }
@@ -268,9 +269,10 @@
       forCellWithReuseIdentifier:kActionCellIdentifier];
 }
 
-- (void) setupButton:(UIButton *)button active:(BOOL)active
+- (void) setupButton:(UIButton *)button active:(BOOL)active title:(NSString *)title
 {
     BOOL isDayMode = !_settings.nightMode;
+    [button setTitle:title forState:UIControlStateNormal];
     if (isDayMode)
     {
         [button setBackgroundColor:active ? UIColorFromRGB(color_primary_purple) :
@@ -363,8 +365,8 @@
 
 - (void)updateControlButtons:(NSIndexPath *)indexPath
 {
-    [self setupButton:_controlBtnPrev active:indexPath.section > 0];
-    [self setupButton:_controlBtnNext active:indexPath.section + 1 < _collectionView.numberOfSections];
+    [self setupButton:_controlBtnPrev active:indexPath.section > 0 title:OALocalizedString(@"shared_string_previous")];
+    [self setupButton:_controlBtnNext active:indexPath.section + 1 < _collectionView.numberOfSections title:OALocalizedString(@"shared_string_next")];
 }
 
 - (NSInteger)getPagesCount

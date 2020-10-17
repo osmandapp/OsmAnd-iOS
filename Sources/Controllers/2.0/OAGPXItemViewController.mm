@@ -7,10 +7,9 @@
 //
 
 #import "OAGPXItemViewController.h"
-#import "OAGPXDetailsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OATimeTableViewCell.h"
 #import "OAColorViewCell.h"
-#import "OAGPXElevationTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -25,6 +24,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OAGPXRouter.h"
 #import "OASizes.h"
+#import "OAColors.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -90,6 +90,10 @@
     CALayer *_horizontalLine;
     
     UIView *_headerView;
+    
+    UIFont *_upDownFont;
+    NSTextAttachment *_arrowUp;
+    NSTextAttachment *_arrowDown;
 }
 
 @synthesize editing = _editing;
@@ -172,7 +176,7 @@
 +(NSAttributedString *)getAttributedTypeStr:(OAGPX *)item
 {
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
-    UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
+    UIFont *font = [UIFont systemFontOfSize:12 weight:UIFontWeightSemibold];
     
     if (item.newGpx && item.wptPoints == 0)
     {
@@ -442,6 +446,16 @@
     self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.editToolbarView.layer addSublayer:_horizontalLine];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
+    
+    _upDownFont = [UIFont systemFontOfSize:17.];
+    
+    _arrowUp = [[NSTextAttachment alloc] init];
+    _arrowUp.image = [UIImage imageNamed:@"ic_arrow_up"];
+    [_arrowUp setBounds:CGRectMake(0, roundf(_upDownFont.capHeight - 16.)/ 2., 16., 16.)];
+    
+    _arrowDown = [[NSTextAttachment alloc] init];
+    _arrowDown.image = [UIImage imageNamed:@"ic_arrow_down"];
+    [_arrowDown setBounds:CGRectMake(0, roundf(_upDownFont.capHeight - 16.)/ 2., 16., 16.)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -1069,8 +1083,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const reusableIdentifierPoint = @"OAGPXDetailsTableViewCell";
-
     if (indexPath.section == _controlsSectionIndex)
     {
         switch (indexPath.row)
@@ -1122,28 +1134,29 @@
     }
     if (indexPath.section == _speedSectionIndex)
     {
-        OAGPXDetailsTableViewCell* cell;
-        cell = (OAGPXDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
+        OATimeTableViewCell* cell;
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXDetailCell" owner:self options:nil];
-            cell = (OAGPXDetailsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            cell.lbTime.textColor = UIColor.blackColor;
+            cell.lbTime.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         
         switch (indexPath.row)
         {
             case 0: // Average speed
             {
-                [cell.textView setText:OALocalizedString(@"gpx_average_speed")];
-                [cell.descView setText:[_app getFormattedSpeed:self.gpx.avgSpeed]];
-                cell.iconView.hidden = YES;
+                [cell.lbTitle setText:OALocalizedString(@"gpx_average_speed")];
+                [cell.lbTitle setText:[_app getFormattedSpeed:self.gpx.avgSpeed]];
                 break;
             }
             case 1: // Max speed
             {
-                [cell.textView setText:OALocalizedString(@"gpx_max_speed")];
-                [cell.descView setText:[_app getFormattedSpeed:self.gpx.maxSpeed]];
-                cell.iconView.hidden = YES;
+                [cell.lbTitle setText:OALocalizedString(@"gpx_max_speed")];
+                [cell.lbTime setText:[_app getFormattedSpeed:self.gpx.maxSpeed]];
                 break;
             }
                 
@@ -1155,42 +1168,41 @@
     }
     else if (indexPath.section == _timeSectionIndex)
     {
-        OAGPXDetailsTableViewCell* cell;
-        cell = (OAGPXDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
+        OATimeTableViewCell* cell;
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXDetailCell" owner:self options:nil];
-            cell = (OAGPXDetailsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            cell.lbTime.textColor = UIColor.blackColor;
+            cell.lbTime.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         
         switch (indexPath.row)
         {
             case 0: // Start Time
             {
-                [cell.textView setText:OALocalizedString(@"gpx_start")];
-                [cell.descView setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.startTime]]];
-                cell.iconView.hidden = YES;
+                [cell.lbTitle setText:OALocalizedString(@"gpx_start")];
+                [cell.lbTime setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.startTime]]];
                 break;
             }
             case 1: // Finish Time
             {
-                [cell.textView setText:OALocalizedString(@"gpx_finish")];
-                [cell.descView setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.endTime]]];
-                cell.iconView.hidden = YES;
+                [cell.lbTitle setText:OALocalizedString(@"gpx_finish")];
+                [cell.lbTime setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.endTime]]];
                 break;
             }
             case 2: // Total Time
             {
-                [cell.textView setText:OALocalizedString(@"total_time")];
-                [cell.descView setText:[_app getFormattedTimeInterval:self.gpx.timeSpan shortFormat:NO]];
-                cell.iconView.hidden = YES;
+                [cell.lbTitle setText:OALocalizedString(@"total_time")];
+                [cell.lbTime setText:[_app getFormattedTimeInterval:self.gpx.timeSpan shortFormat:NO]];
                 break;
             }
             case 3: // Moving Time
             {
-                [cell.textView setText:OALocalizedString(@"moving_time")];
-                [cell.descView setText:[_app getFormattedTimeInterval:self.gpx.timeMoving shortFormat:NO]];
-                cell.iconView.hidden = YES;
+                [cell.lbTitle setText:OALocalizedString(@"moving_time")];
+                [cell.lbTime setText:[_app getFormattedTimeInterval:self.gpx.timeMoving shortFormat:NO]];
                 break;
             }
                 
@@ -1202,49 +1214,65 @@
     }
     else if (indexPath.section == _uphillsSectionIndex)
     {
-        static NSString* const reusableIdentifierPointElev = @"OAGPXElevationTableViewCell";
-        
-        OAGPXElevationTableViewCell* cell;
-        cell = (OAGPXElevationTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPointElev];
+        static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
+        OATimeTableViewCell* cell;
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXElevationCell" owner:self options:nil];
-            cell = (OAGPXElevationTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
         }
+        NSDictionary *attributesUp = @{NSForegroundColorAttributeName : UIColorFromRGB(color_gpx_up), NSFontAttributeName : _upDownFont};
+        NSDictionary *attributesDown = @{NSForegroundColorAttributeName : UIColorFromRGB(color_gpx_down), NSFontAttributeName : _upDownFont};
         
         switch (indexPath.row) {
             case 0: // Avg Elevation
             {
-                [cell.textView setText:OALocalizedString(@"gpx_avg_elev")];
-                [cell.elev1View setText:[_app getFormattedAlt:self.gpx.avgElevation]];
-                cell.showArrows = NO;
-                cell.showUpDown = NO;
+                [cell.lbTitle setText:OALocalizedString(@"gpx_avg_elev")];
+                NSString *ele = [_app getFormattedAlt:self.gpx.avgElevation];
+                cell.lbTime.attributedText = [[NSAttributedString alloc] initWithString:ele attributes:attributesUp];
                 break;
             }
             case 1: // Elevation Range
             {
-                [cell.textView setText:OALocalizedString(@"gpx_elev_range")];
-                [cell.elev1View setText:[_app getFormattedAlt:self.gpx.minElevation]];
-                [cell.elev2View setText:[_app getFormattedAlt:self.gpx.maxElevation]];
-                cell.showArrows = NO;
-                cell.showUpDown = YES;
+                [cell.lbTitle setText:OALocalizedString(@"gpx_elev_range")];
+                
+                NSMutableAttributedString *rangeUp = [[NSMutableAttributedString alloc] initWithString:[_app getFormattedAlt:self.gpx.minElevation] attributes:attributesUp];
+                NSMutableAttributedString *rangeDown = [[NSMutableAttributedString alloc] initWithString:[_app getFormattedAlt:self.gpx.maxElevation] attributes:attributesDown];
+                [rangeUp appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+                [rangeUp appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+                [rangeUp appendAttributedString:rangeDown];
+                cell.lbTime.attributedText = rangeUp;
+                
                 break;
             }
             case 2: // Up/Down
             {
-                [cell.textView setText:OALocalizedString(@"gpx_updown")];
-                [cell.elev1View setText:[_app getFormattedAlt:self.gpx.diffElevationUp]];
-                [cell.elev2View setText:[_app getFormattedAlt:self.gpx.diffElevationDown]];
-                cell.showArrows = YES;
-                cell.showUpDown = YES;
+                [cell.lbTitle setText:OALocalizedString(@"gpx_updown")];
+                
+                NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
+                NSAttributedString *arrowUpStr = [NSAttributedString attributedStringWithAttachment:_arrowUp];
+                NSAttributedString *arrowDownStr = [NSAttributedString attributedStringWithAttachment:_arrowDown];
+                NSAttributedString *eleUp = [[NSAttributedString alloc] initWithString:[_app getFormattedAlt:self.gpx.diffElevationUp] attributes:attributesUp];
+                NSAttributedString *eleDown = [[NSAttributedString alloc] initWithString:[_app getFormattedAlt:self.gpx.diffElevationDown] attributes:attributesDown];
+                
+                NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithAttributedString:arrowUpStr];
+                [res appendAttributedString:space];
+                [res appendAttributedString:eleUp];
+                [res appendAttributedString:space];
+                [res appendAttributedString:space];
+                [res appendAttributedString:arrowDownStr];
+                [res appendAttributedString:space];
+                [res appendAttributedString:eleDown];
+                
+                cell.lbTime.attributedText = res;
+                
                 break;
             }
             case 3: // Uphills Total
             {
-                [cell.textView setText:OALocalizedString(@"gpx_uphills_total")];
-                [cell.elev1View setText:[_app getFormattedAlt:self.gpx.maxElevation - self.gpx.minElevation]];
-                cell.showArrows = NO;
-                cell.showUpDown = NO;
+                [cell.lbTitle setText:OALocalizedString(@"gpx_uphills_total")];
+                cell.lbTime.attributedText = [[NSAttributedString alloc] initWithString:[_app getFormattedAlt:self.gpx.maxElevation - self.gpx.minElevation] attributes:attributesUp];
                 break;
             }
                 
@@ -1288,14 +1316,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == _controlsSectionIndex && indexPath.row == 0) {
-        return UITableViewAutomaticDimension;
-    }
-    return 44.0;
-}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

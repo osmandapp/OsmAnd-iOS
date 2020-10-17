@@ -77,8 +77,8 @@
     NSRange valueRange = NSMakeRange(0, prefix.length);
     NSRange unitRange = NSMakeRange(prefix.length, text.length);
     
-    [string addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0] range:valueRange];
-    [string addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"AvenirNext-Bold" size:15.0] range:unitRange];
+    [string addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:valueRange];
+    [string addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:unitRange];
     
     _lbInterval.attributedText = string;
 }

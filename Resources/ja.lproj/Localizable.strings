@@ -21,7 +21,7 @@
 "months_3" = "3ヶ月";
 "price_free" = "無料";
 "get_discount_title" = "%d %@が%d%%割引で入手できます。";
-"get_free_trial_title" = "";
+"get_free_trial_title" = "%d %@ の無料トライアルを始める。";
 "get_discount_short_descr" = "";
 "get_discount_first_part" = "";
 "get_discount_first_few_parts" = "";
@@ -163,8 +163,8 @@
 "shared_string_never" = "しない";
 "shared_setting_always_ask" = "常に尋ねる";
 "general_settings_2" = "全般設定";
-"general_settings_descr" = "アプリの表示オプションや共通の設定をおこないます";
-"routing_settings_descr" = "ナビゲーションに関する設定をおこないます";
+"general_settings_descr" = "アプリテーマ、ユニット、リージョン";
+"routing_settings_descr" = "ナビゲーション設定";
 "auto_zoom_none" = "自動ズームしない";
 "auto_zoom_close" = "近距離表示";
 "auto_zoom_far" = "中距離表示";
@@ -386,9 +386,9 @@
 "hud_heading" = "HUDの実行";
 "hud_no_movement" = "HUDを動かさない";
 // Favorites
-"fav_color" = "Color";
+"fav_color" = "色";
 "fav_colors" = "色";
-"fav_name" = "Name";
+"fav_name" = "名前";
 "fav_group" = "グループ";
 "groups" = "グループ";
 "favorite" = "お気に入り";
@@ -475,7 +475,7 @@
 "record_trip" = "旅程を記録";
 "poi_clear" = "消去";
 "poi_list" = "POI一覧";
-"track_during_nav" = "ナビゲーション中は旅程を自動記録";
+"track_during_nav" = "旅程の自動記録";
 "track_during_nav_descr" = "旅程はナビゲーション中に自動で記録されます";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "最大速度";
@@ -788,10 +788,10 @@
 "pause_resume_nav" = "ナビゲーションの一時停止/再開";
 "resume_nav" = "ナビゲーションを続ける";
 "pause_nav" = "Pause navigation";
-"toggle_nav" = "Start/stop navigation";
+"toggle_nav" = "ナビゲーションの開始/停止";
 "toggle_day_night" = "昼間/夜間モードの切替";
 "night_mode" = "夜間モード";
-"day_mode" = "Day mode";
+"day_mode" = "昼モード";
 "mute_voice" = "音声をミュート";
 "unmute_voice" = "音声ミュートを解除";
 "show_hide_gpx" = "旅程の表示/非表示";
@@ -802,7 +802,7 @@
 "show_edits" = "オフライン編集を表示";
 "hide_edits" = "オフライン編集を非表示";
 "search_results" = "検索結果";
-"quick_action_name_str" = "Action name";
+"quick_action_name_str" = "アクション名";
 "quick_action_name_alert" = "重複を避けるため、クイックアクション名は%@に変更されました。";
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "%ld個のアイテムを削除してもよろしいですか？";
@@ -857,7 +857,7 @@
 "modify_poi_short" = "POIを変更";
 "create_poi_short" = "POIを作成";
 "modify_edit_short" = "OSMの変更を切替";
-"open_osm_note" = "Open OSM Note";
+"open_osm_note" = "OSMでの注釈を開く";
 "edit_osm_note" = "OSMメモの編集";
 "osm_alert_title" = "Commit";
 "osm_alert_message" = "Message";
@@ -900,7 +900,7 @@
 "help_search" = "マップ内検索";
 "help_trip_planning" = "旅程の計画";
 "help_legend" = "マップ利用の凡例";
-"help_other_header" = "Other";
+"help_other_header" = "その他";
 "help_install_and_troubleshoot" = "インストールとトラブルシューティング";
 "help_tech_articles" = "技術関連情報";
 "help_versions" = "Versions";
@@ -925,7 +925,7 @@
 "alert_inet_needed" = "この機能を使うにはインターネット接続が必要です。インターネット接続がなされているかを確認してください。";
 // Context menu
 "ctx_mnu_edit_fav" = "お気に入りを編集";
-"ctx_mnu_add_fav" = "お気に入りを追加";
+"ctx_mnu_add_fav" = "お気に入りに追加";
 "ctx_mnu_share" = "共有";
 "ctx_mnu_direction" = "Direction";
 // Location Services
@@ -933,16 +933,16 @@
 "loc_access_denied_desc" = "位置情報サービスへのアクセスが拒否されました";
 // Colors
 "col_purple" = "パープル";
-"col_green" = "Green";
+"col_green" = "グリーン";
 "col_yellow" = "イエロー";
-"col_orange" = "Orange";
+"col_orange" = "オレンジ";
 "col_gray" = "グレー";
-"col_red" = "Red";
+"col_red" = "レッド";
 "col_blue" = "ブルー";
-"col_magenta" = "Magenta";
+"col_magenta" = "マゼンタ";
 // GPX colors
-"red" = "Red";
-"orange" = "Orange";
+"red" = "レッド";
+"orange" = "オレンジ";
 "lightblue" = "ライトブルー";
 "blue" = "ブルー";
 "purple" = "パープル";
@@ -958,7 +958,7 @@
 "translucent_yellow" = "イエロー(半透明)";
 "lightgreen" = "ライトグリーン";
 "translucent_lightgreen" = "ライトグリーン(半透明)";
-"green" = "Green";
+"green" = "グリーン";
 "translucent_green" = "グリーン(半透明)";
 "brown" = "ブラウン";
 "black" = "Black";
@@ -994,7 +994,7 @@
 "product_title_skimap" = "スキーマップ";
 "product_desc_skimap" = "世界中のスキーリゾート用ゲレンデなど";
 "product_desc_ext_skimap" = "OsmAndスキーマップは『OsmAnd Maps&Navigation』アプリのプラグインの一つで、ウィンタースポーツに関する場所へのナビゲートができるように設計されています。このツールはスキーゲレンデ、スキーリフトマーカー、および各経路の難易度などを色付きの線で示しそれらの情報を提供します。周辺のインフラだけでなく、スキー場自体に関する情報も得られます。\n\n使用方法:プラグインをOsmAndアプリ内で有効にし、[マップ設定]＞[マップスタイル]をタップしてマップの種類を[スキーマップ]に変更するか、アプリプロファイルを[スキー]に設定してください。";
-"product_title_track_recording" = "旅程の記録中";
+"product_title_track_recording" = "旅程・経路記録";
 "product_desc_track_recording" = "旅程を記録して保存する機能を有効にします";
 "product_desc_ext_track_recording" = "旅程・経路記録プラグインを使用して、旅程を記録し手動で保存します。旅程をGPXファイルとして書き出し共有したり、OpenStreetMapプロジェクトに貢献するために使用することもできます。ランナーやハイカーなど進んだ経路や旅程の記録にも興味のある人なら誰でも使える便利なツールです。";
 "product_title_trip_planning" = "旅程計画";
@@ -1048,8 +1048,8 @@
 "track_save_short_q" = "非常に短い旅程ですが保存しますか？";
 "add_as" = "以下のものを保存：";
 "make_call" = "電話を掛ける";
-"enter_description" = "Enter description";
-"description" = "Description";
+"enter_description" = "説明を入力";
+"description" = "詳細";
 "enter_fav_name" = "お気に入りの名前を入力";
 "res_installing" = "インストールしています…";
 "res_roads" = "道路";
@@ -1063,8 +1063,8 @@
 "wpt_remove_q" = "経由地点を削除しますか？";
 "gpx_select_track" = "旅程の選択";
 "gpx_curr_new_track" = "現在の旅程";
-"enter_name" = "Enter name";
-"not_selected" = "選択されませんでした";
+"enter_name" = "名前を入力";
+"not_selected" = "指定しない";
 "language" = "言語";
 "you_searching" = "検索中";
 "from_location" = "離れる";
@@ -1102,11 +1102,11 @@
 "est_travel_time" = "所要時間の見積もり";
 "pedestrian" = "徒歩";
 "sorting" = "並び替え";
-"plugins" = "Plugins";
+"plugins" = "プラグイン";
 "open_map_settings" = "オープンマップ設定";
 "plugin_popup_ski_title" = "スキーマップスタイルをONにする";
 "plugin_popup_ski_desc" = "<b>スキーマップ</b>スタイルをONにするには、<b>マップ設定</b>＞ <b>マップタイプ</b>へと移動してください";
-"plugin_popup_wiki_title" = "Download Wikipedia";
+"plugin_popup_wiki_title" = "Wikipediaをダウンロード";
 "plugin_popup_wiki_desc" = "Wikipediaプラグインの使用を開始するには、まず目的地域のWikipediaデータをダウンロードしてください";
 "plugin_popup_wiki_ask" = "Wikipediaのデータをダウンロードするには、<b>Wikipedia</b>プラグインを有効にする必要があります";
 "plugin_popup_srtm_title" = "等高線データのダウンロード";
@@ -1210,7 +1210,7 @@
 "sett_no_ext_input" = "無し";
 "sett_generic_ext_input" = "汎用キーボード";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
-"key_hint_zoom_in" = "Zoom In";
+"key_hint_zoom_in" = "拡大";
 "key_hint_zoom_out" = "縮小";
 "key_hint_select" = "選択";
 "key_hint_deselect" = "選択解除";
@@ -1658,3 +1658,27 @@
 "product_title_antarctica" = "南極大陸";
 "send_anonymous_data" = "匿名データを送信する";
 "m_style_pulic_transport" = "公共交通機関";
+"toggle_public_transport" = "公共交通機関の表示/非表示";
+"nav_type_title" = "ナビゲーションタイプ";
+"consider_limitations_param" = "一時的な制限の検討";
+"profile_type_base_string" = "基本プロファイル";
+"rearrange_profile_descr" = "OsmAndの標準プロファイルは削除できませんが、前の画面でそれらを無効にしたり、リストの下の方へ移動させることはできます。";
+"rearrange_profiles" = "プロファイルを整理";
+"create_profile_descr" = "カスタムプロファイルは標準のアプリケーションプロファイルを元に作成します。ウィジェットなどの表示設定や速度と距離の単位などの標準設定をプロファイルごとに定義可能です。これらは標準のアプリプロファイルを基本としており、今後それらと共に拡張される可能性があります:";
+"create_profile" = "プロファイルを作成";
+"edit_profile_list" = "プロファイルリストの編集";
+"new_profile" = "新規プロファイル";
+"app_profiles" = "アプリプロファイル";
+"selected_profile" = "現在選択中のプロファイル";
+"global_settings" = "グローバル設定";
+"logging_accuracy" = "ロギング精度";
+"trip_rec_actions_descr" = "記録された経路は %@ にあります";
+"plugin_settings_reset" = "プラグイン設定を初期値に戻す";
+"profile_appearance" = "プロファイルの外観";
+"device_settings" = "端末の設定";
+"units_of_speed" = "速度の単位";
+"angular_measurment_units" = "角度の単位";
+"units_and_formats" = "単位と形式";
+"allow_3D_view" = "2.5D表示";
+"allow_3d" = "2.5D表示を許可する";
+"shared_string_next" = "次へ";

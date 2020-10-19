@@ -739,6 +739,14 @@
 "keep_both_desc" = "Imported items will be added with prefix";
 "replace_all" = "Replace all";
 "replace_all_desc" = "Current items will be replaced with items from the file";
+"shared_string_profiles" = "Profiles";
+"shared_string_quick_actions" = "Quick actions";
+"listed_exist" = "Listed %@, already exist in OsmAnd.";
+
+"shared_string_import_complete" = "Import complete";
+"import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
+"shared_string_finish" = "Finish";
+"added_items" = "Added items: %@";
 
 "copy_from_other_profile" = "Copy from another profile";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";

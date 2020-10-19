@@ -7,15 +7,19 @@
 //
 
 #import "OABaseSettingsWithBottomButtonsViewController.h"
-#include <OsmAndCore/Utilities.h>
 #import "Localization.h"
+#import "OAColors.h"
+#include <OsmAndCore/Utilities.h>
 
 #define kTopBottomPadding 8
 #define kButtonTopBottomPadding 10
 #define kButtonSidePadding 16
+#define kSidePadding 16
+#define kTopPadding 6
 
 @implementation OABaseSettingsWithBottomButtonsViewController
 {
+    CGFloat _heightForHeader;
 }
 
 - (instancetype) init
@@ -79,6 +83,42 @@
         self.primaryButtonHeight.constant = height;
     else
         self.secondaryButtonHeight.constant = height;
+}
+
+- (UIView *) generateHeaderForTableView:(UITableView *)tableView withFirstSessionText:(NSString *)text forSection:(NSInteger)section
+{
+    if (section == 0)
+    {
+        UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, tableView.bounds.size.width - OAUtilities.getLeftMargin * 2, _heightForHeader)];
+        CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
+        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 6.0, textWidth, _heightForHeader)];
+        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+        description.font = labelFont;
+        [description setTextColor: UIColorFromRGB(color_text_footer)];
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        [style setLineSpacing:6];
+        description.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
+        description.numberOfLines = 0;
+        [vw addSubview:description];
+        return vw;
+    }
+    else
+    {
+        return nil;
+    }
+}
+
+- (CGFloat) generateHeightForHeaderWithFirstHeaderText:(NSString *)text inSection:(NSInteger)section
+{
+    if (section == 0)
+    {
+        _heightForHeader = [self heightForLabel:text];
+        return _heightForHeader + kSidePadding + kTopPadding;
+    }
+    else
+    {
+        return UITableViewAutomaticDimension;
+    }
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle

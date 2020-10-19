@@ -1859,3 +1859,5 @@
 "import_profile_descr" = "Para importar um perfil, toque no arquivo necessário (*.osf) em qualquer aplicativo e selecione \"Copiar para OsmAnd Maps\"";
 "profile_prefs_reset_successful" = "Todas as configurações de perfil foram restauradas para o padrão";
 "gpx_parse_error" = "OsmA GPX não está bem formado, entre em contato com a equipe de suporte para investigar mais.";
+"nothing_found_empty" = "Nada foi encontrado";
+"shared_string_next" = "Próximo";

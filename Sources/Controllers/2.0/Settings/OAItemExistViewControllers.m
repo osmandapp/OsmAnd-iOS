@@ -7,18 +7,15 @@
 //
 
 #import "OAItemExistViewControllers.h"
-
 #import "Localization.h"
 #import "OAColors.h"
-
 #import "OAApplicationMode.h"
-
 #import "OAQuickActionRegistry.h"
-#import "OAQuickAction.h"
 #import "OAQuickActionType.h"
-
+#import "OAQuickAction.h"
 #import "OAMenuSimpleCell.h"
 #import "OAIconTitleButtonCell.h"
+#import "OAImportCompleteViewController.h"
 
 #define kSidePadding 16
 #define kTopPadding 6
@@ -35,8 +32,6 @@
     NSMutableArray<NSMutableArray<NSDictionary *> *> *_data;
     NSArray<OAApplicationMode *> * _profileList;
     NSArray<OAQuickActionType *> *_quickActionsList;
-
-    
     CGFloat _heightForHeader;
 }
 
@@ -55,7 +50,7 @@
     [self generateData];
 }
 
-- (void) generateData
+- (void) generateFakeData
 {
     //TODO: for now here is generating fake data, just for demo
     
@@ -65,17 +60,19 @@
     
     NSArray<OAQuickActionType *> *allQuickActions = [[OAQuickActionRegistry sharedInstance] produceTypeActionsListWithHeaders];
     _quickActionsList = [allQuickActions subarrayWithRange:NSMakeRange(1,2)];
-    
+}
 
+- (void) generateData
+{
+    [self generateFakeData];
+    
     if (_profileList.count > 0)
     {
-        //TODO: add header strings to LocalizableStrings
-        
         NSMutableArray<NSDictionary *> *profileItems = [NSMutableArray new];
         [profileItems addObject: @{
             @"type": @"header",
-            @"label": @"Profiles",
-            @"description": @"Listed profiles, already exist in OsmAnd."
+            @"label": OALocalizedString(@"shared_string_profiles"),
+            @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_profiles") lowerCase]]
         }];
         for (OAApplicationMode *profile in _profileList)
         {
@@ -95,8 +92,8 @@
         NSMutableArray<NSDictionary *> *quickActionsItems = [NSMutableArray new];
         [quickActionsItems addObject: @{
             @"type": @"header",
-            @"label": @"Quick actions",
-            @"description": @"Listed quick actions, already exist in OsmAnd."
+            @"label": OALocalizedString(@"shared_string_quick_actions"),
+            @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_quick_actions") lowerCase]]
         }];
         for (OAQuickActionType *action in _quickActionsList)
         {
@@ -277,14 +274,23 @@
                 view.frame = frame;
                 [cell.iconView addSubview:view];
             }
-            [cell setButtonText:nil];
-            cell.buttonView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.buttonView setImage:[[UIImage imageNamed:@"ic_custom_plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-            [cell.buttonView addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
+            cell.buttonView.hidden = YES;
             cell.buttonView.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonView.frame.size.width - 30, 0, 0);
         }
         return cell;
     }
+}
+
+- (IBAction)primaryButtonPressed:(id)sender
+{
+    NSLog(@"primaryButtonPressed");
+    OAImportCompleteViewController* importComplete = [[OAImportCompleteViewController alloc] init];
+    [self.navigationController pushViewController:importComplete animated:YES];
+}
+
+- (IBAction)secondaryButtonPressed:(id)sender
+{
+    NSLog(@"secondaryButtonPressed");
 }
 
 @end

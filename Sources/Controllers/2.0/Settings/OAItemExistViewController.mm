@@ -29,10 +29,11 @@
 {
     OsmAndAppInstance _app;
     NSMutableArray<NSMutableArray<NSDictionary *> *> *_data;
-    NSArray<OAApplicationMode *> * _profileList;
-    NSArray<OAQuickActionType *> *_quickActionsList;
+    NSArray<OAApplicationMode *> * _profiles;
+    NSArray<OAQuickActionType *> *_quickActions;
     NSArray<OAResourceItem *> *_mapSources;
     NSArray<OAMapSource * > *_renderStyles;
+    NSArray<NSString * > *_routingFiles;
 }
 
 - (instancetype) init
@@ -55,18 +56,23 @@
 {
     //TODO: for now here is generating fake data, just for demo
     _data = [NSMutableArray new];
-    _profileList = [NSArray arrayWithObject:OAApplicationMode.CAR];
+    
+    _profiles = [NSArray arrayWithObject:OAApplicationMode.CAR];
+    
     NSArray<OAQuickActionType *> *allQuickActions = [[OAQuickActionRegistry sharedInstance] produceTypeActionsListWithHeaders];
-    _quickActionsList = [allQuickActions subarrayWithRange:NSMakeRange(3,2)];
+    _quickActions = [allQuickActions subarrayWithRange:NSMakeRange(3,2)];
+    
     _mapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
     _renderStyles = @[_app.data.lastMapSource];
+    
+    _routingFiles = @[@"Desert.xml", @"moon.xml", @"pt.xml"];
 }
 
 - (void) generateData
 {
     [self generateFakeData];
     
-    if (_profileList.count > 0)
+    if (_profiles.count > 0)
     {
         NSMutableArray<NSDictionary *> *profileItems = [NSMutableArray new];
         [profileItems addObject: @{
@@ -74,20 +80,21 @@
             @"label": OALocalizedString(@"shared_string_profiles"),
             @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_profiles") lowerCase]]
         }];
-        for (OAApplicationMode *profile in _profileList)
+        for (OAApplicationMode *profile in _profiles)
         {
             [profileItems addObject: @{
                 @"cellType": kMenuSimpleCell,
                 @"label": profile.toHumanString,
                 @"description": profile.getProfileDescription,
                 @"icon": profile.getIcon,
-                @"iconColor": UIColorFromRGB(profile.getIconColor)
+                //@"iconColor": UIColorFromRGB(profile.getIconColor)
+                @"iconColor": UIColorFromRGB(color_chart_orange)
             }];
         }
         [_data addObject:profileItems];
     }
     
-    if (_quickActionsList.count > 0)
+    if (_quickActions.count > 0)
     {
         NSMutableArray<NSDictionary *> *quickActionsItems = [NSMutableArray new];
         [quickActionsItems addObject: @{
@@ -95,13 +102,14 @@
             @"label": OALocalizedString(@"shared_string_quick_actions"),
             @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_quick_actions") lowerCase]]
         }];
-        for (OAQuickActionType *action in _quickActionsList)
+        for (OAQuickActionType *action in _quickActions)
         {
             [quickActionsItems addObject: @{
                 @"cellType": kMenuSimpleCell,
                 @"label": action.name,
                 @"description": @"",
-                @"icon": [UIImage imageNamed:action.iconName]
+                @"icon": [UIImage imageNamed:action.iconName],
+                @"iconColor": UIColorFromRGB(color_chart_orange)
             }];
         }
         [_data addObject:quickActionsItems];
@@ -121,7 +129,8 @@
                 @"cellType": kMenuSimpleCell,
                 @"label": ((OAOnlineTilesResourceItem *) mapSource).mapSource.name,
                 @"description": @"",
-                @"icon": [UIImage imageNamed:@"ic_custom_map_style"]
+                @"icon": [UIImage imageNamed:@"ic_custom_map_style"],
+                @"iconColor": UIColorFromRGB(color_chart_orange)
             }];
         }
         [_data addObject:mapSourcesItems];
@@ -151,7 +160,28 @@
         }
         [_data addObject:mapSourcesItems];
     }
-};
+    
+    if (_routingFiles.count > 0)
+    {
+        NSMutableArray<NSDictionary *> *routingItems = [NSMutableArray new];
+        [routingItems addObject: @{
+            @"cellType": kMenuSimpleCellNoIcon,
+            @"label": OALocalizedString(@"shared_string_routing"),
+            @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_routing") lowerCase]]
+        }];
+        for (NSString *routingFileName in _routingFiles)
+        {
+            [routingItems addObject: @{
+                @"cellType": kMenuSimpleCell,
+                @"label": routingFileName,
+                @"description": @"",
+                @"icon": [UIImage imageNamed:@"ic_custom_navigation"],
+                @"iconColor": UIColorFromRGB(color_tint_gray)
+            }];
+        }
+        [_data addObject:routingItems];
+    }
+}
 
 - (void) applyLocalization
 {
@@ -251,8 +281,7 @@
         if (item[@"icon"] && item[@"iconColor"])
         {
             cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.tintColor = UIColorFromRGB(color_chart_orange);
-            //cell.imgView.tintColor = item[@"iconColor"];
+            cell.imgView.tintColor = item[@"iconColor"];
         }
         else if (item[@"icon"])
         {

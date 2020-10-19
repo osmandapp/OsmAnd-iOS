@@ -17,8 +17,6 @@
 #import "OAIconTitleButtonCell.h"
 #import "OAImportCompleteViewController.h"
 
-#define kSidePadding 16
-#define kTopPadding 6
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
 #define kIconTitleButtonCell @"OAIconTitleButtonCell"
@@ -32,7 +30,6 @@
     NSMutableArray<NSMutableArray<NSDictionary *> *> *_data;
     NSArray<OAApplicationMode *> * _profileList;
     NSArray<OAQuickActionType *> *_quickActionsList;
-    CGFloat _heightForHeader;
 }
 
 - (instancetype) init
@@ -139,60 +136,12 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-    {
-        UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, tableView.bounds.size.width - OAUtilities.getLeftMargin * 2, _heightForHeader)];
-        CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 6.0, textWidth, _heightForHeader)];
-        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-        description.font = labelFont;
-        [description setTextColor: UIColorFromRGB(color_text_footer)];
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        [style setLineSpacing:6];
-        description.attributedText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"import_duplicates_description") attributes:@{NSParagraphStyleAttributeName : style}];
-        description.numberOfLines = 0;
-        [vw addSubview:description];
-        return vw;
-    }
-    else
-    {
-        return nil;
-    }
+    return [self generateHeaderForTableView:tableView withFirstSessionText:OALocalizedString(@"import_duplicates_description") forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-    {
-        _heightForHeader = [self heightForLabel:OALocalizedString(@"import_duplicates_description")];
-        return _heightForHeader + kSidePadding + kTopPadding;
-    }
-    else
-    {
-        return UITableViewAutomaticDimension;
-    }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    
-    if ([item[@"type"] isEqualToString:@"header"])
-    {
-        return 56.;
-    }
-    else if ([item[@"type"] isEqualToString:@"profile"])
-    {
-        return 60.;
-    }
-    else if ([item[@"type"] isEqualToString:@"quickAction"])
-    {
-        return 44.;
-    }
-    else
-    {
-        return 48.;
-    }
+    return [self generateHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_duplicates_description") inSection:section];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

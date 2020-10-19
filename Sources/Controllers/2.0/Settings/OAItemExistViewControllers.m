@@ -53,11 +53,8 @@
 - (void) generateFakeData
 {
     //TODO: for now here is generating fake data, just for demo
-    
     _data = [NSMutableArray new];
-    
     _profileList = [NSArray arrayWithObject:OAApplicationMode.CAR];
-    
     NSArray<OAQuickActionType *> *allQuickActions = [[OAQuickActionRegistry sharedInstance] produceTypeActionsListWithHeaders];
     _quickActionsList = [allQuickActions subarrayWithRange:NSMakeRange(1,2)];
 }
@@ -122,6 +119,7 @@
 {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.allowsSelection = NO;
     
     self.additionalNavBarButton.hidden = YES;
     [self setupBottomViewMultyLabelButtons];
@@ -253,30 +251,27 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleButtonCell" owner:self options:nil];
             cell = (OAIconTitleButtonCell *)[nib objectAtIndex:0];
         }
-        if (cell)
+        cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+        cell.titleView.text = item[@"label"];
+        cell.iconView.image = [UIImage imageNamed:item[@"iconName"]];
+        if (cell.iconView.subviews.count > 0)
+            [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        
+        NSString* secondaryIconName = item[@"secondaryIconName"];
+        if (secondaryIconName.length > 0)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.titleView.text = item[@"label"];
-            cell.iconView.image = [UIImage imageNamed:item[@"iconName"]];
-            if (cell.iconView.subviews.count > 0)
-                [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-            
-            NSString* secondaryIconName = item[@"secondaryIconName"];
-            if (secondaryIconName.length > 0)
-            {
-                CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
-                UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-                [background setTintColor:UIColor.whiteColor];
-                [cell.iconView addSubview:background];
-                UIImage *img = [UIImage imageNamed:item[@"secondaryIconName"]];
-                UIImageView *view = [[UIImageView alloc] initWithImage:img];
-                view.frame = frame;
-                [cell.iconView addSubview:view];
-            }
-            cell.buttonView.hidden = YES;
-            cell.buttonView.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonView.frame.size.width - 30, 0, 0);
+            CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
+            UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
+            [background setTintColor:UIColor.whiteColor];
+            [cell.iconView addSubview:background];
+            UIImage *img = [UIImage imageNamed:item[@"secondaryIconName"]];
+            UIImageView *view = [[UIImageView alloc] initWithImage:img];
+            view.frame = frame;
+            [cell.iconView addSubview:view];
         }
+        cell.buttonView.hidden = YES;
+        cell.buttonView.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonView.frame.size.width - 30, 0, 0);
         return cell;
     }
 }

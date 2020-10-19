@@ -745,6 +745,7 @@
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "shared_string_finish" = "Finish";
+"added_items" = "Added items: %@";
 
 "copy_from_other_profile" = "Copy from another profile";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";

@@ -9,7 +9,7 @@
 #import "OAImportCompleteViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OAMenuSimpleCell.h"
+#import "OAMultiIconTextDescCell.h"
 
 #define kSidePadding 16
 #define kTopPadding 6
@@ -57,22 +57,22 @@
     _data = @[
         @{
             @"label": @"Quick Action",
-            @"icon": @"???",
+            @"iconName": @"ic_custom_quick_action.png",
             @"count": @7
         },
          @{
              @"label": @"Map",
-             @"icon": @"???",
+             @"iconName": @"ic_custom_overlay_map.png",
              @"count": @2
          },
          @{
              @"label": @"Settings",
-             @"icon": @"???",
+             @"iconName": @"left_menu_icon_settings.png",
              @"count": @1
          },
          @{
              @"label": @"Search",
-             @"icon": @"???",
+             @"iconName": @"ic_custom_search.png",
              @"count": @1
          }
      ];
@@ -92,13 +92,13 @@
 {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
-    self.additionalNavBarButton.hidden = YES;
+    self.tableView.allowsSelection = NO;
     
     self.primaryBottomButton.hidden = YES;
     self.secondaryBottomButton.hidden = NO;
     [self.secondaryBottomButton setTitle:OALocalizedString(@"shared_string_finish") forState:UIControlStateNormal];
     
+    self.additionalNavBarButton.hidden = YES;
     [super viewDidLoad];
 }
 
@@ -134,19 +134,21 @@
 {
     NSDictionary *item = _data[indexPath.row];
       
-    //TODO: find correct cell xib
-    
-    NSString* const identifierCell = kMenuSimpleCellNoIcon;
-    OAMenuSimpleCell* cell;
-    cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+    OAMultiIconTextDescCell *cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMultiIconTextDescCell"];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMenuSimpleCellNoIcon owner:self options:nil];
-        cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMultiIconTextDescCell" owner:self options:nil];
+        cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
     }
-    cell.textView.text = item[@"label"];
-    cell.descriptionView.text = item[@"description"];
+    [cell.textView setText:item[@"label"]];
+    NSString *countString = [NSString stringWithFormat:OALocalizedString(@"added_items"), item[@"count"]];
+    [cell.descView setText:countString];
+    cell.iconView.hidden = YES;
+    cell.overflowButton.enabled = NO;
+    [cell.overflowButton setImage:[[UIImage imageNamed:item[@"iconName"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateDisabled];
+    [cell.overflowButton setTintColor:UIColorFromRGB(color_primary_purple)];
+    [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
+    cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
     return cell;
 }
 

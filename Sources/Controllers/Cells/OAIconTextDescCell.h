@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *descView;
 @property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
+@property (strong, nonatomic) IBOutlet UIButton *openCloseGroupButton;
 
 @property (nonatomic) IBOutlet NSLayoutConstraint *textLeftMargin;
 @property (nonatomic) IBOutlet NSLayoutConstraint *textLeftMarginNoImage;

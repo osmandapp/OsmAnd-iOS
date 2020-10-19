@@ -8,7 +8,7 @@
 
 #import "OABaseSettingsWithBottomButtonsViewController.h"
 
-@interface OAItemExistViewControllers : OABaseSettingsWithBottomButtonsViewController
+@interface OAItemExistViewController : OABaseSettingsWithBottomButtonsViewController
 
 
 @end

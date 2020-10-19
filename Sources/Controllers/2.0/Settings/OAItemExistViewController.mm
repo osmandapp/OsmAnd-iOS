@@ -6,30 +6,33 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAItemExistViewControllers.h"
+#import "OAItemExistViewController.h"
+#import "OAImportCompleteViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
 #import "OAQuickActionRegistry.h"
 #import "OAQuickActionType.h"
 #import "OAQuickAction.h"
+#import "OAMapSource.h"
 #import "OAMenuSimpleCell.h"
-#import "OAIconTitleButtonCell.h"
-#import "OAImportCompleteViewController.h"
+#import "OAResourcesUIHelper.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
-#define kIconTitleButtonCell @"OAIconTitleButtonCell"
 
-@interface OAItemExistViewControllers () <UITableViewDelegate, UITableViewDataSource>
+@interface OAItemExistViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OAItemExistViewControllers
+@implementation OAItemExistViewController
 {
+    OsmAndAppInstance _app;
     NSMutableArray<NSMutableArray<NSDictionary *> *> *_data;
     NSArray<OAApplicationMode *> * _profileList;
     NSArray<OAQuickActionType *> *_quickActionsList;
+    NSArray<OAResourceItem *> *_mapSources;
+    NSArray<OAMapSource * > *_renderStyles;
 }
 
 - (instancetype) init
@@ -44,6 +47,7 @@
 
 - (void) commonInit
 {
+    _app = [OsmAndApp instance];
     [self generateData];
 }
 
@@ -53,7 +57,9 @@
     _data = [NSMutableArray new];
     _profileList = [NSArray arrayWithObject:OAApplicationMode.CAR];
     NSArray<OAQuickActionType *> *allQuickActions = [[OAQuickActionRegistry sharedInstance] produceTypeActionsListWithHeaders];
-    _quickActionsList = [allQuickActions subarrayWithRange:NSMakeRange(1,2)];
+    _quickActionsList = [allQuickActions subarrayWithRange:NSMakeRange(3,2)];
+    _mapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
+    _renderStyles = @[_app.data.lastMapSource];
 }
 
 - (void) generateData
@@ -64,14 +70,14 @@
     {
         NSMutableArray<NSDictionary *> *profileItems = [NSMutableArray new];
         [profileItems addObject: @{
-            @"type": @"header",
+            @"cellType": kMenuSimpleCellNoIcon,
             @"label": OALocalizedString(@"shared_string_profiles"),
             @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_profiles") lowerCase]]
         }];
         for (OAApplicationMode *profile in _profileList)
         {
             [profileItems addObject: @{
-                @"type": @"profile",
+                @"cellType": kMenuSimpleCell,
                 @"label": profile.toHumanString,
                 @"description": profile.getProfileDescription,
                 @"icon": profile.getIcon,
@@ -85,20 +91,65 @@
     {
         NSMutableArray<NSDictionary *> *quickActionsItems = [NSMutableArray new];
         [quickActionsItems addObject: @{
-            @"type": @"header",
+            @"cellType": kMenuSimpleCellNoIcon,
             @"label": OALocalizedString(@"shared_string_quick_actions"),
             @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_quick_actions") lowerCase]]
         }];
         for (OAQuickActionType *action in _quickActionsList)
         {
             [quickActionsItems addObject: @{
-                @"type": @"quickAction",
+                @"cellType": kMenuSimpleCell,
                 @"label": action.name,
-                @"iconName": action.iconName,
-                @"secondaryIconName": action.hasSecondaryIcon ? [action createNew].getSecondaryIconName : @""
+                @"description": @"",
+                @"icon": [UIImage imageNamed:action.iconName]
             }];
         }
         [_data addObject:quickActionsItems];
+    }
+    
+    if (_mapSources.count > 0)
+    {
+        NSMutableArray<NSDictionary *> *mapSourcesItems = [NSMutableArray new];
+        [mapSourcesItems addObject: @{
+            @"cellType": kMenuSimpleCellNoIcon,
+            @"label": OALocalizedString(@"map_sources"),
+            @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"map_sources") lowerCase]]
+        }];
+        for (OAResourceItem *mapSource in _mapSources)
+        {
+            [mapSourcesItems addObject: @{
+                @"cellType": kMenuSimpleCell,
+                @"label": ((OAOnlineTilesResourceItem *) mapSource).mapSource.name,
+                @"description": @"",
+                @"icon": [UIImage imageNamed:@"ic_custom_map_style"]
+            }];
+        }
+        [_data addObject:mapSourcesItems];
+    }
+    
+    if (_renderStyles.count > 0)
+    {
+        NSMutableArray<NSDictionary *> *mapSourcesItems = [NSMutableArray new];
+        [mapSourcesItems addObject: @{
+            @"cellType": kMenuSimpleCellNoIcon,
+            @"label": OALocalizedString(@"shared_string_rendering_styles"),
+            @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_rendering_styles") lowerCase]]
+        }];
+        for (OAMapSource *style in _renderStyles)
+        {
+            UIImage *icon;
+            NSString *iconName = [NSString stringWithFormat:@"img_mapstyle_%@", [style.resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]];
+            if (iconName)
+                icon = [UIImage imageNamed:iconName];
+            
+            [mapSourcesItems addObject: @{
+                @"cellType": kMenuSimpleCell,
+                @"label": style.name,
+                @"description": @"",
+                @"icon": icon
+            }];
+        }
+        [_data addObject:mapSourcesItems];
     }
 };
 
@@ -158,9 +209,9 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
-    if ([item[@"type"] isEqualToString:@"header"])
+    if ([item[@"cellType"] isEqualToString:kMenuSimpleCellNoIcon])
     {
-        NSString* const identifierCell = kMenuSimpleCellNoIcon;
+        static NSString* const identifierCell = kMenuSimpleCellNoIcon;
         OAMenuSimpleCell* cell;
         cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
@@ -173,9 +224,10 @@
         cell.descriptionView.text = item[@"description"];
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:@"profile"])
+    
+    else if ([item[@"cellType"] isEqualToString:kMenuSimpleCell])
     {
-        NSString* const identifierCell = kMenuSimpleCell;
+        static NSString* const identifierCell = kMenuSimpleCell;
         OAMenuSimpleCell* cell;
         cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
@@ -185,42 +237,32 @@
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62., 0.0, 0.0);
         }
         cell.textView.text = item[@"label"];
-        cell.descriptionView.text = item[@"description"];
-        cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        //cell.imgView.tintColor = item[@"iconColor"];
-        cell.imgView.tintColor = UIColorFromRGB(color_chart_orange);
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:@"quickAction"])
-    {
-        NSString* const identifierCell = kIconTitleButtonCell;
-        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleButtonCell" owner:self options:nil];
-            cell = (OAIconTitleButtonCell *)[nib objectAtIndex:0];
-        }
-        cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-        cell.titleView.text = item[@"label"];
-        cell.iconView.image = [UIImage imageNamed:item[@"iconName"]];
-        if (cell.iconView.subviews.count > 0)
-            [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
         
-        NSString* secondaryIconName = item[@"secondaryIconName"];
-        if (secondaryIconName.length > 0)
+        if (((NSString *)item[@"description"]).length > 0)
         {
-            CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
-            UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-            [background setTintColor:UIColor.whiteColor];
-            [cell.iconView addSubview:background];
-            UIImage *img = [UIImage imageNamed:item[@"secondaryIconName"]];
-            UIImageView *view = [[UIImageView alloc] initWithImage:img];
-            view.frame = frame;
-            [cell.iconView addSubview:view];
+            cell.descriptionView.hidden = NO;
+            cell.descriptionView.text = item[@"description"];
         }
-        cell.buttonView.hidden = YES;
-        cell.buttonView.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonView.frame.size.width - 30, 0, 0);
+        else
+        {
+            cell.descriptionView.hidden = YES;
+        }
+        
+        if (item[@"icon"] && item[@"iconColor"])
+        {
+            cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.imgView.tintColor = UIColorFromRGB(color_chart_orange);
+            //cell.imgView.tintColor = item[@"iconColor"];
+        }
+        else if (item[@"icon"])
+        {
+            cell.imgView.image = item[@"icon"];
+        }
+        else
+        {
+            cell.imgView.hidden = YES;
+        }
+        
         return cell;
     }
 }

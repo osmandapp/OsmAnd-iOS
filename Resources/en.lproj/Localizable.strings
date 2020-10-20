@@ -742,6 +742,9 @@
 "replace_all_desc" = "Current items will be replaced with items from the file";
 "shared_string_profiles" = "Profiles";
 "shared_string_quick_actions" = "Quick actions";
+"shared_string_rendering_styles" = "Rendering styles";
+"shared_string_routing" = "Routing";
+
 "listed_exist" = "Listed %@, already exist in OsmAnd.";
 
 "shared_string_import_complete" = "Import complete";

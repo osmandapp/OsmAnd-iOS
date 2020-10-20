@@ -50,6 +50,7 @@
 {
     BOOL hasPrimaryButton = !self.primaryBottomButton.hidden;
     BOOL hasSecondaryButton = !self.secondaryBottomButton.hidden;
+    BOOL hasBottomView = !self.bottomBarView.hidden;
     
     self.primaryBottomButton.layer.cornerRadius = 9.;
     self.secondaryBottomButton.layer.cornerRadius = 9.;
@@ -58,6 +59,9 @@
     self.primaryButtonTopMarginNoSecondary.active = !hasSecondaryButton;
     
     self.bottomViewHeigh.constant = (hasPrimaryButton ? self.primaryButtonHeight.constant : 0.) + (hasSecondaryButton ? self.secondaryButtonHeight.constant : 0.) + kTopBottomPadding * (hasPrimaryButton && hasSecondaryButton ? 3 : 2) + [OAUtilities getBottomMargin];
+    
+    self.tableViewBottomMarginYesView.active = hasBottomView;
+    self.tableViewBottomMarginNoView.active = !hasBottomView;
 }
 
 - (void) setToButton:(UIButton *)button firstLabelText:(NSString *)firstLabelText firstLabelFont:(UIFont *)firstLabelFont firstLabelColor:(UIColor *)firstLabelColor secondLabelText:(NSString *)secondLabelText secondLabelFont:(UIFont *)secondLabelFont secondLabelColor:(UIColor *)secondLabelColor

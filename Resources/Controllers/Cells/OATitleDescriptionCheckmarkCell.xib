@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -35,25 +35,33 @@
                             <constraint firstAttribute="width" constant="30" id="6Mo-ts-6N7"/>
                         </constraints>
                     </imageView>
+                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="grl-0r-JnU" userLabel="Open Close Button Group">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="9Em-pM-N5g" secondAttribute="bottom" constant="15" id="0ky-i1-a9p"/>
                     <constraint firstItem="qFY-zc-7s4" firstAttribute="leading" secondItem="H0e-1h-kDC" secondAttribute="leadingMargin" id="2SA-1X-uBP"/>
                     <constraint firstItem="9Em-pM-N5g" firstAttribute="leading" secondItem="Hl5-QD-FCC" secondAttribute="trailing" constant="20" id="4Ab-l2-tBW"/>
                     <constraint firstItem="9Em-pM-N5g" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" constant="15" id="5gy-mL-n3L"/>
+                    <constraint firstItem="grl-0r-JnU" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" id="Epb-wh-lNK"/>
+                    <constraint firstItem="grl-0r-JnU" firstAttribute="leading" secondItem="H0e-1h-kDC" secondAttribute="leading" id="LOb-tV-l6N"/>
                     <constraint firstAttribute="trailingMargin" secondItem="9Em-pM-N5g" secondAttribute="trailing" id="VRy-Ie-nev"/>
+                    <constraint firstAttribute="trailing" secondItem="grl-0r-JnU" secondAttribute="trailing" id="aq5-yR-ge2"/>
                     <constraint firstItem="9Em-pM-N5g" firstAttribute="leading" secondItem="qFY-zc-7s4" secondAttribute="trailing" constant="20" id="asz-CI-6I0"/>
                     <constraint firstItem="Hl5-QD-FCC" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" constant="10" id="cfD-Gu-5yI"/>
                     <constraint firstAttribute="bottom" secondItem="qFY-zc-7s4" secondAttribute="bottom" constant="10" id="h5h-Z3-aKL"/>
                     <constraint firstItem="Hl5-QD-FCC" firstAttribute="leading" secondItem="H0e-1h-kDC" secondAttribute="leadingMargin" id="iVa-tR-D9P"/>
+                    <constraint firstAttribute="bottom" secondItem="grl-0r-JnU" secondAttribute="bottom" id="xtU-sG-kVm"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="descriptionView" destination="qFY-zc-7s4" id="JBn-Wg-RrU"/>
                 <outlet property="iconView" destination="9Em-pM-N5g" id="AAn-6a-rTb"/>
+                <outlet property="openCloseGroupButton" destination="grl-0r-JnU" id="JPj-BR-5nR"/>
                 <outlet property="textView" destination="Hl5-QD-FCC" id="aHL-uX-jcc"/>
             </connections>
-            <point key="canvasLocation" x="101" y="117"/>
+            <point key="canvasLocation" x="100.00000000000001" y="116.51785714285714"/>
         </tableViewCell>
     </objects>
 </document>

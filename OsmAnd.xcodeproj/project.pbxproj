@@ -175,6 +175,9 @@
 		155AC6AF2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155AC6AE2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib */; };
 		155AC6B125387B9B00703073 /* OABaseSettingsWithBottomButtonsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.mm */; };
 		155AC6B425387EAB00703073 /* OAImportProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 155AC6B325387EAB00703073 /* OAImportProfileViewController.m */; };
+		155AC6BB253DE1A200703073 /* OACheckForProfileDuplicatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 155AC6BA253DE1A100703073 /* OACheckForProfileDuplicatesViewController.m */; };
+		155AC6BE253ECEEC00703073 /* OAActivityViewWithTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155AC6BD253ECEEC00703073 /* OAActivityViewWithTitleCell.xib */; };
+		155AC6C0253ED01400703073 /* OAActivityViewWithTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 155AC6BF253ED01400703073 /* OAActivityViewWithTitleCell.m */; };
 		155B7137247D215D00A1587D /* OAPreviewZoomLevelsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 155B7136247D215D00A1587D /* OAPreviewZoomLevelsCell.xib */; };
 		155B7139247D247100A1587D /* OAPreviewZoomLevelsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 155B7138247D247100A1587D /* OAPreviewZoomLevelsCell.m */; };
 		155B7143247FE2C100A1587D /* ic_custom_update@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 155B7140247FE2BE00A1587D /* ic_custom_update@3x.png */; };
@@ -6145,6 +6148,11 @@
 		155AC6B225387BBC00703073 /* OABaseSettingsWithBottomButtonsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseSettingsWithBottomButtonsViewController.h; sourceTree = "<group>"; };
 		155AC6B325387EAB00703073 /* OAImportProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAImportProfileViewController.m; sourceTree = "<group>"; };
 		155AC6B525387EB900703073 /* OAImportProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAImportProfileViewController.h; sourceTree = "<group>"; };
+		155AC6BA253DE1A100703073 /* OACheckForProfileDuplicatesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACheckForProfileDuplicatesViewController.m; sourceTree = "<group>"; };
+		155AC6BC253DE1B700703073 /* OACheckForProfileDuplicatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACheckForProfileDuplicatesViewController.h; sourceTree = "<group>"; };
+		155AC6BD253ECEEC00703073 /* OAActivityViewWithTitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAActivityViewWithTitleCell.xib; path = Resources/Controllers/Cells/OAActivityViewWithTitleCell.xib; sourceTree = "<group>"; };
+		155AC6BF253ED01400703073 /* OAActivityViewWithTitleCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAActivityViewWithTitleCell.m; sourceTree = "<group>"; };
+		155AC6C1253ED03D00703073 /* OAActivityViewWithTitleCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAActivityViewWithTitleCell.h; path = Controllers/Cells/OAActivityViewWithTitleCell.h; sourceTree = "<group>"; };
 		155B7136247D215D00A1587D /* OAPreviewZoomLevelsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPreviewZoomLevelsCell.xib; sourceTree = "<group>"; };
 		155B7138247D247100A1587D /* OAPreviewZoomLevelsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAPreviewZoomLevelsCell.m; path = Controllers/Cells/OAPreviewZoomLevelsCell.m; sourceTree = "<group>"; };
 		155B713A247D247E00A1587D /* OAPreviewZoomLevelsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPreviewZoomLevelsCell.h; sourceTree = "<group>"; };
@@ -10433,6 +10441,7 @@
 				DA5793C7229FD19D00750C8F /* OAMapillaryContributeCell.xib */,
 				DA540DB2229EA4E90069201E /* OABottomSheetHeaderIconCell.xib */,
 				DABA3DBD22684D22005BB777 /* OAMultiIconTextDescCell.xib */,
+				155AC6BD253ECEEC00703073 /* OAActivityViewWithTitleCell.xib */,
 				DA73D28A223264E400FB2084 /* OABottomSheetHeaderCell.xib */,
 				847F8FD91EE0818900CF5EA5 /* OAEmptySearchCell.xib */,
 				845E05A21B53E61800DFC2A7 /* OADirectionCell.xib */,
@@ -10496,6 +10505,8 @@
 			isa = PBXGroup;
 			children = (
 				DA87A48624D44C12002F8C77 /* OATitleRightIconCell.h */,
+				155AC6BF253ED01400703073 /* OAActivityViewWithTitleCell.m */,
+				155AC6C1253ED03D00703073 /* OAActivityViewWithTitleCell.h */,
 				158298A024DC045D00323768 /* OAIconTitleIconRoundCell.m */,
 				158298A224DC048F00323768 /* OAIconTitleIconRoundCell.h */,
 				DA87A48724D44C12002F8C77 /* OATitleRightIconCell.m */,
@@ -14807,6 +14818,8 @@
 				155AC6AD253873A200703073 /* New Group */,
 				155AC6AE2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib */,
 				155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.mm */,
+				155AC6BA253DE1A100703073 /* OACheckForProfileDuplicatesViewController.m */,
+				155AC6BC253DE1B700703073 /* OACheckForProfileDuplicatesViewController.h */,
 				155AC6B225387BBC00703073 /* OABaseSettingsWithBottomButtonsViewController.h */,
 				155AC6B325387EAB00703073 /* OAImportProfileViewController.m */,
 				155AC6B525387EB900703073 /* OAImportProfileViewController.h */,
@@ -19890,6 +19903,7 @@
 				DA13A0112345FA0100C1A1A8 /* ic_custom_altitude_and_slope.png in Resources */,
 				DA84E85221D77EEA006954D0 /* ic_action_close_banner@2x.png in Resources */,
 				8454DA571B31774F00E5A5C5 /* ic_mode_pedestrian.png in Resources */,
+				155AC6BE253ECEEC00703073 /* OAActivityViewWithTitleCell.xib in Resources */,
 				DA134150243DC5A80039D214 /* ic_action_car_dark@3x.png in Resources */,
 				8476E2621F6C1EEC00EC274F /* map_bicycle_location_view_angle_night@2x.png in Resources */,
 				DA1341C4243DC5A90039D214 /* map_action_snowmobile@2x.png in Resources */,
@@ -21107,6 +21121,7 @@
 				DA796662220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */,
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
+				155AC6BB253DE1A200703073 /* OACheckForProfileDuplicatesViewController.m in Sources */,
 				DA6C5F1E21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm in Sources */,
 				DACFAC3621C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */,
 				DA9A061A2297E9EE000A80F1 /* OACollapsableCardsView.mm in Sources */,
@@ -21193,6 +21208,7 @@
 				848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
 				84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				15DF4052242B3437004AF26B /* OASettingsHelper.mm in Sources */,
+				155AC6C0253ED01400703073 /* OAActivityViewWithTitleCell.m in Sources */,
 				DAE7C567252C6BD400114A77 /* OAExitInfo.m in Sources */,
 				3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */,
 				8476E1F21F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,

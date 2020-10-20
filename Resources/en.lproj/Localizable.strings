@@ -792,6 +792,9 @@
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 "downloading" = "Downloading";
 
+// Route planning
+"plan_route" = "Plan a route";
+
 // Resources
 "res_mapsres" = "Maps & Resources";
 "res_installed" = "Installed";

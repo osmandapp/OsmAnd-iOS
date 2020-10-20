@@ -19,7 +19,7 @@
 @class OAHistoryItem, OAAddress, OARTargetPoint;
 @class OAToolbarViewController;
 @class OAMapActions, OAMapWidgetRegistry;
-@class OAMapHudViewController, OAApplicationMode;
+@class OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode;
 @class OAGPXDocument, OAGPXTrackAnalysis;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
@@ -28,6 +28,7 @@
 
 @property (nonatomic, strong, readonly) OAMapViewController* mapViewController;
 @property (nonatomic, strong, readonly) OAMapHudViewController* hudViewController;
+@property (nonatomic, readonly) OABaseScrollableHudViewController* scrollableHudViewController;
 @property (nonatomic, readonly) OAMapActions *mapActions;
 @property (nonatomic, readonly) OAMapWidgetRegistry *mapWidgetRegistry;
 @property (nonatomic, readonly) UIView *shadeView;
@@ -47,6 +48,8 @@
 - (void) modifyMapAfterReuse:(Point31)destinationPoint zoom:(CGFloat)zoom azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated;
 
 - (void) modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated;
+
+- (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller;
 
 - (BOOL) gpxModeActive;
 

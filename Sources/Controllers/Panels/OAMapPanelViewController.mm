@@ -50,6 +50,7 @@
 #import "OARoutePreferencesParameters.h"
 #import "OATransportRoutingHelper.h"
 #import "OAMainSettingsViewController.h"
+#import "OABaseScrollableHudViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -356,6 +357,15 @@ typedef enum
     [self updateToolbar];
 
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
+{
+    _scrollableHudViewController = controller;
+    _scrollableHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self addChildViewController:_scrollableHudViewController];
+    _scrollableHudViewController.view.frame = self.view.bounds;
+    [self.view addSubview:_scrollableHudViewController.view];
 }
 
 - (void) refreshToolbar

@@ -264,7 +264,9 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    self.cpyProfileView = [[OACopyProfileBottomSheetView alloc] initWithMode:_appMode];
+    self.cpyProfileView = [[OACopyProfileBottomSheetView alloc] initWithDataController:<#(OABaseBottomSheetDataController *)#>];
+    self.cpyProfileView.targetAppMode = _appMode;
+    
 }
 
 - (void)openDashboardScreen:(EOADashboardScreenType)type
@@ -317,11 +319,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void) showCopyProfileView
 {
-    CGRect frame = self.cpyProfileView.frame;
-    frame.origin.y = DeviceScreenHeight + 10.0;
-    self.cpyProfileView.frame = frame;
+    self.cpyProfileView.frame = self.view.bounds;
     self.cpyProfileView.delegate = self;
-    [self.cpyProfileView.layer removeAllAnimations];
     if ([self.view.subviews containsObject:self.cpyProfileView])
         [self.cpyProfileView removeFromSuperview];
     [self addUnderlay];

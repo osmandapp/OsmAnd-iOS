@@ -264,9 +264,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    self.cpyProfileView = [[OACopyProfileBottomSheetView alloc] initWithDataController:<#(OABaseBottomSheetDataController *)#>];
-    self.cpyProfileView.targetAppMode = _appMode;
-    
+    self.cpyProfileView = [[OACopyProfileBottomSheetView alloc] initWithMode:_appMode];
 }
 
 - (void)openDashboardScreen:(EOADashboardScreenType)type

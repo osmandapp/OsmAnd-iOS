@@ -76,7 +76,7 @@
         UIFont *labelFont = [UIFont systemFontOfSize:15.0];
         description.font = labelFont;
         [description setTextColor: UIColorFromRGB(color_text_footer)];
-        description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:[NSString stringWithFormat:OALocalizedString(@"checking_for_duplicates_descr"), @"Strikelines.ocf"] boldString:@"Strikelines.ocf" lineSpacing:4.];
+        description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:[NSString stringWithFormat:OALocalizedString(@"checking_for_duplicates_descr"), @"Strikelines.ocf"] boldString:@"Strikelines.ocf" lineSpacing:4. highlightColor:UIColor.blackColor];
         description.numberOfLines = 0;
         description.lineBreakMode = NSLineBreakByWordWrapping;
         description.autoresizingMask = UIViewAutoresizingFlexibleWidth;

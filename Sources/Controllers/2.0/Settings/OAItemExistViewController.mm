@@ -16,10 +16,13 @@
 #import "OAQuickAction.h"
 #import "OAMapSource.h"
 #import "OAMenuSimpleCell.h"
+#import "OAMenuSimpleCellNoIcon.h"
+#import "OATitleTwoIconsRoundCell.h"
 #import "OAResourcesUIHelper.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
+#define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
 
 @interface OAItemExistViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -105,9 +108,8 @@
         for (OAQuickActionType *action in _quickActions)
         {
             [quickActionsItems addObject: @{
-                @"cellType": kMenuSimpleCell,
+                @"cellType": kTitleTwoIconsRoundCell,
                 @"label": action.name,
-                @"description": @"",
                 @"icon": [UIImage imageNamed:action.iconName],
                 @"iconColor": UIColorFromRGB(color_chart_orange)
             }];
@@ -126,9 +128,8 @@
         for (OAResourceItem *mapSource in _mapSources)
         {
             [mapSourcesItems addObject: @{
-                @"cellType": kMenuSimpleCell,
+                @"cellType": kTitleTwoIconsRoundCell,
                 @"label": ((OAOnlineTilesResourceItem *) mapSource).mapSource.name,
-                @"description": @"",
                 @"icon": [UIImage imageNamed:@"ic_custom_map_style"],
                 @"iconColor": UIColorFromRGB(color_chart_orange)
             }];
@@ -152,9 +153,8 @@
                 icon = [UIImage imageNamed:iconName];
             
             [mapSourcesItems addObject: @{
-                @"cellType": kMenuSimpleCell,
+                @"cellType": kTitleTwoIconsRoundCell,
                 @"label": style.name,
-                @"description": @"",
                 @"icon": icon
             }];
         }
@@ -172,9 +172,8 @@
         for (NSString *routingFileName in _routingFiles)
         {
             [routingItems addObject: @{
-                @"cellType": kMenuSimpleCell,
+                @"cellType": kTitleTwoIconsRoundCell,
                 @"label": routingFileName,
-                @"description": @"",
                 @"icon": [UIImage imageNamed:@"ic_custom_navigation"],
                 @"iconColor": UIColorFromRGB(color_tint_gray)
             }];
@@ -238,24 +237,25 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    
-    if ([item[@"cellType"] isEqualToString:kMenuSimpleCellNoIcon])
+    NSString *type = item[@"cellType"];
+
+    if ([type isEqualToString:kMenuSimpleCellNoIcon])
     {
         static NSString* const identifierCell = kMenuSimpleCellNoIcon;
-        OAMenuSimpleCell* cell;
-        cell = (OAMenuSimpleCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAMenuSimpleCellNoIcon* cell;
+        cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMenuSimpleCellNoIcon owner:self options:nil];
-            cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
+            cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
         }
+        cell.descriptionView.hidden = NO;
         cell.textView.text = item[@"label"];
         cell.descriptionView.text = item[@"description"];
         return cell;
     }
-    
-    else if ([item[@"cellType"] isEqualToString:kMenuSimpleCell])
+    else if ([type isEqualToString:kMenuSimpleCell])
     {
         static NSString* const identifierCell = kMenuSimpleCell;
         OAMenuSimpleCell* cell;
@@ -267,17 +267,10 @@
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62., 0.0, 0.0);
         }
         cell.textView.text = item[@"label"];
-        
-        if (((NSString *)item[@"description"]).length > 0)
-        {
-            cell.descriptionView.hidden = NO;
-            cell.descriptionView.text = item[@"description"];
-        }
-        else
-        {
-            cell.descriptionView.hidden = YES;
-        }
-        
+        cell.descriptionView.hidden = NO;
+        cell.descriptionView.text = item[@"description"];
+
+        cell.imgView.hidden = NO;
         if (item[@"icon"] && item[@"iconColor"])
         {
             cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -287,13 +280,37 @@
         {
             cell.imgView.image = item[@"icon"];
         }
-        else
-        {
-            cell.imgView.hidden = YES;
-        }
-        
         return cell;
     }
+    
+    else if ([type isEqualToString:kTitleTwoIconsRoundCell])
+    {
+        static NSString* const identifierCell = kTitleTwoIconsRoundCell;
+        OATitleTwoIconsRoundCell* cell;
+        cell = (OATitleTwoIconsRoundCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleTwoIconsRoundCell owner:self options:nil];
+            cell = (OATitleTwoIconsRoundCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 62., 0.0, 0.0);
+        }
+        cell.rightIconView.hidden = YES;
+        cell.leftIconView.hidden = NO;
+        cell.titleView.text = item[@"label"];
+        
+        cell.leftIconView.hidden = NO;
+        if (item[@"icon"] && item[@"iconColor"])
+        {
+            cell.leftIconView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.tintColor = item[@"iconColor"];
+        }
+        else if (item[@"icon"])
+        {
+            cell.leftIconView.image = item[@"icon"];
+        }
+        return cell;
+    }
+    return nil;
 }
 
 - (IBAction)primaryButtonPressed:(id)sender

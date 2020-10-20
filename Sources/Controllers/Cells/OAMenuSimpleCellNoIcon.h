@@ -13,4 +13,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 
+@property (nonatomic) IBOutlet NSLayoutConstraint *textBottomMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *descrTopMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textHeightPrimary;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textHeightSecondary;
+
 @end

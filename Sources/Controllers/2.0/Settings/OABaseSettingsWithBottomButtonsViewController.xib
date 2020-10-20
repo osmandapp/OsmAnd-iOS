@@ -25,6 +25,8 @@
                 <outlet property="secondaryButtonBottomMarginYesPrimary" destination="mbf-uc-2Xl" id="PuQ-8y-kc0"/>
                 <outlet property="secondaryButtonHeight" destination="KdK-NY-Aan" id="ZkI-IG-M62"/>
                 <outlet property="tableView" destination="047-sX-bmi" id="BJ7-yw-FRF"/>
+                <outlet property="tableViewBottomMarginNoView" destination="lBv-pO-4t0" id="FF6-SZ-VIy"/>
+                <outlet property="tableViewBottomMarginYesView" destination="3zT-Ng-etm" id="CRx-Fg-UHq"/>
                 <outlet property="view" destination="mrf-Nc-zcj" id="7ep-ym-Z3s"/>
             </connections>
         </placeholder>
@@ -151,6 +153,7 @@
                 <constraint firstItem="VY7-at-aSe" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" constant="6" id="dgD-TD-aFT"/>
                 <constraint firstAttribute="bottom" secondItem="L3y-hy-OUi" secondAttribute="bottom" id="gjD-G8-rb0"/>
                 <constraint firstItem="047-sX-bmi" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="iu1-97-N7o"/>
+                <constraint firstAttribute="bottom" secondItem="047-sX-bmi" secondAttribute="bottom" priority="999" id="lBv-pO-4t0"/>
                 <constraint firstItem="047-sX-bmi" firstAttribute="trailing" secondItem="mrf-Nc-zcj" secondAttribute="trailing" id="sSo-KD-uVY"/>
                 <constraint firstItem="L3y-hy-OUi" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="tcQ-Au-p8U"/>
                 <constraint firstItem="VY7-at-aSe" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" constant="10" id="tj2-G3-XnQ"/>

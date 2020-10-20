@@ -7,8 +7,10 @@
 //
 
 #import "OAImportProfileViewController.h"
+#import "OACheckForProfileDuplicatesViewController.h"
 #import "OAAppSettings.h"
-#import "OAIconTextDescCell.h"
+#import "OATitleDescriptionCheckmarkCell.h"
+#import "OAMultiIconTextDescCell.h"
 #import "OAIconTextTableViewCell.h"
 
 #import "Localization.h"
@@ -17,8 +19,8 @@
 #define kSidePadding 16
 #define kTopPadding 6
 #define kBottomPadding 32
-#define kCellTypeSectionHeader @"OAIconTextNoDescCell"
-#define kCellTypeTitleDescription @"OAIconTextWithDescCell"
+#define kCellTypeSectionHeader @"OATitleDescriptionCheckmarkCell"
+#define kCellTypeTitleDescription @"OAMultiIconTextDescCell"
 #define kCellTypeTitle @"OAIconTextCell"
 
 @interface TableGroupToImport : NSObject
@@ -164,6 +166,12 @@
     _data = [NSMutableArray arrayWithArray:data];
 }
 
+- (IBAction) primaryButtonPressed:(id)sender
+{
+    OACheckForProfileDuplicatesViewController* checkForDuplicates = [[OACheckForProfileDuplicatesViewController alloc] init];
+    [self.navigationController pushViewController:checkForDuplicates animated:YES];
+}
+
 - (void) selectDeselectAllItems:(id)sender
 {
     if (_selectedItems.count > 0)
@@ -190,19 +198,14 @@
     if (groupData.isOpen)
     {
         groupData.isOpen = NO;
-        [self.tableView beginUpdates];
         [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
         if ([_selectedItems containsObject: [NSIndexPath indexPathForRow:0 inSection:indexPath.section]])
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     else
     {
         groupData.isOpen = YES;
-        [self.tableView beginUpdates];
         [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
-        
         [self selectPreselectedCells:indexPath];
     }
 }
@@ -256,36 +259,36 @@
 - (UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     TableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
+    NSLog(@"number of rows -> %li", (long)[tableView numberOfRowsInSection:indexPath.section]);
     
     if (indexPath.row == 0)
     {
-        static NSString* const identifierCell = @"OAIconTextDescCell";
-        OAIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = @"OATitleDescriptionCheckmarkCell";
+        OATitleDescriptionCheckmarkCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-            cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.hidden = YES;
+            cell = (OATitleDescriptionCheckmarkCell *)[nib objectAtIndex:0];
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.openCloseGroupButton.hidden = NO;
         }
         if (cell)
         {
             cell.textView.text = groupData.groupName;
-            cell.descView.text = groupData.selectedItems;
+            cell.descriptionView.text = groupData.selectedItems;
             cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             if (groupData.isOpen)
             {
-                cell.arrowIconView.image = [[UIImage imageNamed:@"ic_custom_arrow_up"]
+                cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_up"]
                 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             }
             else
             {
-                cell.arrowIconView.image = [[UIImage imageNamed:@"ic_custom_arrow_down"]
+                cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_down"]
                 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
                 if ([cell isDirectionRTL])
-                    [cell.arrowIconView setImage:cell.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection];
+                    [cell.iconView setImage:cell.iconView.image.imageFlippedForRightToLeftLayoutDirection];
             }
         }
         return cell;
@@ -297,14 +300,14 @@
         NSString *cellType = item[@"type"];
         if ([cellType isEqualToString:kCellTypeTitleDescription])
         {
-            static NSString* const identifierCell = @"OAIconTextDescCell";
-            OAIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            static NSString* const identifierCell = kCellTypeTitleDescription;
+            OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-                cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
+                cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
                 cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-                cell.arrowIconView.hidden = YES;
+                cell.overflowButton.alpha = 0.;
             }
             if (cell)
             {

@@ -49,27 +49,20 @@
                             <constraint firstAttribute="height" constant="21" id="WCR-ul-dnF"/>
                         </constraints>
                     </imageView>
-                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KfJ-VL-5Bg" userLabel="Open Close Button Group">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="48"/>
-                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="6QZ-eh-lvr" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="6" id="5ku-c4-Cs9"/>
                     <constraint firstItem="i7x-fl-kCw" firstAttribute="leading" secondItem="XXz-m7-fDz" secondAttribute="trailing" constant="8" id="FYa-5W-5Tq"/>
                     <constraint firstItem="XXz-m7-fDz" firstAttribute="top" secondItem="6QZ-eh-lvr" secondAttribute="bottom" constant="1" id="OrS-hy-Xjb"/>
-                    <constraint firstAttribute="bottom" secondItem="KfJ-VL-5Bg" secondAttribute="bottom" id="QdL-cP-nAK"/>
                     <constraint firstAttribute="trailingMargin" secondItem="i7x-fl-kCw" secondAttribute="trailing" id="RcM-vj-dpS"/>
                     <constraint firstItem="6QZ-eh-lvr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="62" id="Vax-wD-Oiu"/>
                     <constraint firstItem="XXz-m7-fDz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="751" constant="16" id="WZq-1u-wKt"/>
                     <constraint firstItem="XXz-m7-fDz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="62" id="Xcr-TF-LTs"/>
-                    <constraint firstAttribute="trailing" secondItem="KfJ-VL-5Bg" secondAttribute="trailing" id="Z1t-7s-fF6"/>
                     <constraint firstAttribute="bottom" secondItem="6QZ-eh-lvr" secondAttribute="bottom" priority="751" constant="6" id="bia-8B-sxK"/>
                     <constraint firstItem="8j3-TG-nwo" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="cve-19-lXb"/>
-                    <constraint firstItem="KfJ-VL-5Bg" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="irV-Nb-56t"/>
                     <constraint firstItem="i7x-fl-kCw" firstAttribute="leading" secondItem="6QZ-eh-lvr" secondAttribute="trailing" constant="8" id="jir-ST-zWA"/>
                     <constraint firstItem="6QZ-eh-lvr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="751" constant="16" id="qDY-iJ-Yax"/>
                     <constraint firstAttribute="bottom" secondItem="XXz-m7-fDz" secondAttribute="bottom" constant="6" id="qWq-6O-hue"/>
-                    <constraint firstItem="KfJ-VL-5Bg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="swF-eU-Pwv"/>
                     <constraint firstItem="8j3-TG-nwo" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="tSh-04-VIg"/>
                     <constraint firstItem="i7x-fl-kCw" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="zEf-0w-lp7"/>
                 </constraints>
@@ -81,7 +74,6 @@
                 <outlet property="descrLeftMarginNoImage" destination="WZq-1u-wKt" id="8kB-lA-uFi"/>
                 <outlet property="descrTopMargin" destination="OrS-hy-Xjb" id="hH4-Na-0ho"/>
                 <outlet property="iconView" destination="8j3-TG-nwo" id="aRW-Lo-ruw"/>
-                <outlet property="openCloseGroupButton" destination="KfJ-VL-5Bg" id="qrR-F2-bou"/>
                 <outlet property="textBottomMargin" destination="bia-8B-sxK" id="xr8-lD-Hfa"/>
                 <outlet property="textHeightPrimary" destination="d9L-xl-AJO" id="wIQ-tC-vNU"/>
                 <outlet property="textHeightSecondary" destination="QxD-CC-kgE" id="Xgf-Fg-UiA"/>

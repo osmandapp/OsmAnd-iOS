@@ -24,6 +24,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeigh;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *primaryButtonHeight;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *secondaryButtonHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewBottomMarginYesView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewBottomMarginNoView;
 
 
 - (void) setToButton:(UIButton *)button firstLabelText:(NSString *)firstLabelText firstLabelFont:(UIFont *)firstLabelFont firstLabelColor:(UIColor *)firstLabelColor secondLabelText:(NSString *)secondLabelText secondLabelFont:(UIFont *)secondLabelFont secondLabelColor:(UIColor *)secondLabelColor;

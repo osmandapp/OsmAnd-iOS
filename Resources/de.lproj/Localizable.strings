@@ -839,7 +839,7 @@
 "osmand_live_donations" = "Spenden";
 "osmand_live_donation_switch_title" = "Spende an die OpenStreetMap-Gemeinschaft";
 "osmand_live_donation_switch_descr" = "Ein Teil Ihrer Spende wird an die OSM-Benutzer verteilt, die Änderungen an OpenStreetMap vornehmen. Die Kosten für das Abonnement bleiben gleich";
-"osmand_live_donations_enter_email" = "Geben Sie ihre E-Mail Adresse ein";
+"osmand_live_donations_enter_email" = "Geben Sie ihre E-Mail-Adresse ein";
 "osmand_live_donations_email_descr" = "Bitte geben Sie Ihre E-Mail-Adresse an, um die Spendenberichte zu erhalten";
 "osmand_live_support_reg_title" = "Unterstützte Region";
 "osmand_live_support_reg_descr" = "Teile Ihrer Spende werden an OSM-Mitwirkende weitergegeben, die diese Region bearbeiten";

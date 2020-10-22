@@ -794,6 +794,7 @@
 
 // Route planning
 "plan_route" = "Plan a route";
+"add_point" = "Add point";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

@@ -24,6 +24,13 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 
 @interface OAScrollableTableToolBarView : UIView
 
+@property (nonatomic, readonly) CGFloat initialMenuHeight;
+@property (nonatomic, readonly) CGFloat expandedMenuHeight;
+
+@property (nonatomic, readonly) EOADraggableMenuState currentState;
+
+@property (nonatomic, readonly) BOOL supportsFullScreen;
+
 @property (strong, nonatomic) IBOutlet UIView *contentView;
 
 @property (strong, nonatomic) IBOutlet UIView *sliderView;
@@ -37,7 +44,14 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 
 + (BOOL) isVisible;
 
-- (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete;
+- (void) show:(BOOL)animated state:(EOADraggableMenuState)state onComplete:(void (^)(void))onComplete;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
+
+- (void) goExpanded;
+- (void) goMinimized;
+- (void) goFullScreen;
+
+- (CGFloat) getViewHeight:(EOADraggableMenuState)state;
+- (CGFloat) getViewHeight;
 
 @end

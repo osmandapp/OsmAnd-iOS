@@ -49,7 +49,8 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetRouteDetailsGraph,
     OATargetChangePosition,
     OATargetTransportRouteDetails,
-    OATargetDownloadMapSource
+    OATargetDownloadMapSource,
+    OATargetRoutePlanning
 };
 
 @interface OATargetPoint : NSObject

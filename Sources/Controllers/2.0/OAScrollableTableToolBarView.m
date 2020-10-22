@@ -21,7 +21,6 @@ static BOOL visible = false;
 @implementation OAScrollableTableToolBarView
 {
     UIPanGestureRecognizer *_panGesture;
-    EOADraggableMenuState _currentState;
     
     BOOL _isDragging;
     BOOL _isHiding;
@@ -101,7 +100,7 @@ static BOOL visible = false;
     [super layoutSubviews];
     
     BOOL isLandscape = [self isLandscape];
-    _currentState = isLandscape ? EOADraggableMenuStateFullScreen : _currentState;
+    _currentState = isLandscape ? EOADraggableMenuStateFullScreen : (!self.supportsFullScreen && _currentState == EOADraggableMenuStateFullScreen ? EOADraggableMenuStateExpanded : _currentState);
     
     [self adjustFrame];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -147,6 +146,9 @@ static BOOL visible = false;
     _topHeaderContainerView.frame = CGRectMake(OAUtilities.getLeftMargin, _topHeaderContainerView.frame.origin.y, contentFrame.size.width - OAUtilities.getLeftMargin, _topHeaderContainerView.frame.size.height);
     
     [self applyCornerRadius:!isLandscape && _currentState != EOADraggableMenuStateFullScreen];
+    
+    if (self.delegate)
+        [self.delegate onViewHeightChanged:self.getViewHeight];
 }
 
 - (void) adjustFrame
@@ -188,18 +190,38 @@ static BOOL visible = false;
     self.frame = f;
 }
 
-- (CGFloat) getViewHeight
+- (CGFloat)initialMenuHeight
 {
-    switch (_currentState) {
+    return 170.; // override
+}
+
+- (CGFloat)expandedMenuHeight
+{
+    return DeviceScreenHeight - DeviceScreenHeight / 4; // override
+}
+
+- (BOOL)supportsFullScreen
+{
+    return YES; // override
+}
+
+- (CGFloat) getViewHeight:(EOADraggableMenuState)state
+{
+    switch (state) {
         case EOADraggableMenuStateInitial:
-            return 170; // TODO: override for individual view controllers
+            return self.initialMenuHeight;
         case EOADraggableMenuStateExpanded:
-            return DeviceScreenHeight - DeviceScreenHeight / 4;
+            return self.expandedMenuHeight;
         case EOADraggableMenuStateFullScreen:
             return DeviceScreenHeight;
         default:
             return 0.0;
     }
+}
+
+- (CGFloat) getViewHeight
+{
+    return [self getViewHeight:_currentState];
 }
 
 - (CGPoint) calculateInitialPoint
@@ -217,11 +239,11 @@ static BOOL visible = false;
     return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
 }
 
-- (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
+- (void) show:(BOOL)animated state:(EOADraggableMenuState)state onComplete:(void (^)(void))onComplete
 {
     visible = YES;
     [_tableView setContentOffset:CGPointZero];
-    _currentState = EOADraggableMenuStateFullScreen;
+    _currentState = state;
     [_tableView setScrollEnabled:YES];
     
     [self setNeedsLayout];
@@ -335,7 +357,7 @@ static BOOL visible = false;
 - (void) updateMenu
 {
     if ([self superview])
-        [self show:NO onComplete:nil];
+        [self show:NO state:EOADraggableMenuStateInitial onComplete:nil];
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -417,7 +439,7 @@ static BOOL visible = false;
                 shouldRefresh = YES;
                 _currentState = EOADraggableMenuStateInitial;
             }
-            else if (newY < fullScreenAnchor || (!slidingDown && _currentState == EOADraggableMenuStateExpanded) || fastUpSlide)
+            else if ((newY < fullScreenAnchor || (!slidingDown && _currentState == EOADraggableMenuStateExpanded) || fastUpSlide) && self.supportsFullScreen)
             {
                 _currentState = EOADraggableMenuStateFullScreen;
             }
@@ -431,7 +453,7 @@ static BOOL visible = false;
                 shouldRefresh = YES;
                 _currentState = EOADraggableMenuStateInitial;
             }
-            [UIView animateWithDuration: 0.2 animations:^{
+            [UIView animateWithDuration:0.2 animations:^{
                 [self layoutSubviews];
             } completion:nil];
         }
@@ -440,6 +462,31 @@ static BOOL visible = false;
             break;
         }
     }
+}
+
+- (void) updateViewAnimated
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        [self layoutSubviews];
+    } completion:nil];
+}
+
+- (void) goExpanded
+{
+    _currentState = EOADraggableMenuStateExpanded;
+    [self updateViewAnimated];
+}
+
+- (void) goMinimized
+{
+    _currentState = EOADraggableMenuStateInitial;
+    [self updateViewAnimated];
+}
+
+- (void) goFullScreen
+{
+    _currentState = EOADraggableMenuStateFullScreen;
+    [self updateViewAnimated];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch

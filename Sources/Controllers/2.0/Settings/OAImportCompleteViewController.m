@@ -21,8 +21,8 @@
 
 @implementation OAImportCompleteViewController
 {
-    NSArray<NSDictionary *> *_data;
-    NSString *_importedFileName;
+    NSArray * _settingsItems;
+    NSString *_fileName;
 }
 
 - (instancetype) init
@@ -42,37 +42,37 @@
 
 - (void) generateData
 {
-    _data = [NSMutableArray new];
+    _settingsItems = [NSMutableArray new];
     [self generateFakeData];
 }
 
 - (void) generateFakeData
 {
     //TODO: for now here is generating fake data, just for demo
-    _importedFileName = @"Strikeline.ocf";
+    _fileName = @"Strikeline.ocf";
     
-    _data = @[
-        @{
-            @"label": @"Quick Action",
-            @"iconName": @"ic_custom_quick_action.png",
-            @"count": @7
-        },
-         @{
-             @"label": @"Map",
-             @"iconName": @"ic_custom_overlay_map.png",
-             @"count": @2
-         },
-         @{
-             @"label": @"Settings",
-             @"iconName": @"left_menu_icon_settings.png",
-             @"count": @1
-         },
-         @{
-             @"label": @"Search",
-             @"iconName": @"ic_custom_search.png",
-             @"count": @1
-         }
-     ];
+    _settingsItems = @[
+                      @{
+                          @"label": @"Quick Action",
+                          @"iconName": @"ic_custom_quick_action.png",
+                          @"count": @7
+                      },
+                       @{
+                           @"label": @"Map",
+                           @"iconName": @"ic_custom_overlay_map.png",
+                           @"count": @2
+                       },
+                       @{
+                           @"label": @"Settings",
+                           @"iconName": @"left_menu_icon_settings.png",
+                           @"count": @1
+                       },
+                       @{
+                           @"label": @"Search",
+                           @"iconName": @"ic_custom_search.png",
+                           @"count": @1
+                       }
+                   ];
 }
 
 - (void) applyLocalization
@@ -101,22 +101,22 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeaderForTableView:tableView withFirstSessionText:[NSString stringWithFormat:OALocalizedString(@"import_complete_description"), _importedFileName] forSection:section];
+    return [self generateHeaderForTableView:tableView withFirstSessionText:[NSString stringWithFormat:OALocalizedString(@"import_complete_description"), _fileName] forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeightForHeaderWithFirstHeaderText:[NSString stringWithFormat:OALocalizedString(@"import_complete_description"), _importedFileName] inSection:section];
+    return [self generateHeightForHeaderWithFirstHeaderText:[NSString stringWithFormat:OALocalizedString(@"import_complete_description"), _fileName] inSection:section];
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.count;
+    return _settingsItems.count;
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
+    NSDictionary *item = _settingsItems[indexPath.row];
       
     OAMultiIconTextDescCell *cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMultiIconTextDescCell"];
     if (cell == nil)

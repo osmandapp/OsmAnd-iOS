@@ -34,6 +34,7 @@
 #import "OAPlugin.h"
 #import "OAMapStyleTitles.h"
 #import "OrderedDictionary.h"
+#import "OAImportProfileViewController.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -102,6 +103,52 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @end
 
+@implementation OAExportSettingsType
+
++ (NSString * _Nullable) typeName:(EOAExportSettingsType)type
+{
+    switch (type)
+    {
+        case EOAExportSettingsTypeProfile:
+            return @"PROFILE";
+        case EOAExportSettingsTypeQuickActions:
+            return @"QUICK_ACTIONS";
+        case EOAExportSettingsTypePoiTypes:
+            return @"POI_TYPES";
+        case EOAExportSettingsTypeMapSources:
+            return @"MAP_SOURCES";
+        case EOAExportSettingsTypeCustomRendererStyle:
+            return @"CUSTOM_RENDER_STYLE";
+        case EOAExportSettingsTypeCustomRouting:
+            return @"CUSTOM_ROUTING";
+        case EOAExportSettingsTypeAvoidRoads:
+            return @"AVOID_ROADS";
+        default:
+            return nil;
+    }
+}
+
++ (EOAExportSettingsType) parseType:(NSString *)typeName
+{
+    if ([typeName isEqualToString:@"PROFILE"])
+        return EOAExportSettingsTypeProfile;
+    if ([typeName isEqualToString:@"QUICK_ACTIONS"])
+        return EOAExportSettingsTypeQuickActions;
+    if ([typeName isEqualToString:@"POI_TYPES"])
+        return EOAExportSettingsTypePoiTypes;
+    if ([typeName isEqualToString:@"MAP_SOURCES"])
+        return EOAExportSettingsTypeMapSources;
+    if ([typeName isEqualToString:@"CUSTOM_RENDER_STYLE"])
+        return EOAExportSettingsTypeCustomRendererStyle;
+    if ([typeName isEqualToString:@"CUSTOM_ROUTING"])
+        return EOAExportSettingsTypeCustomRouting;
+    if ([typeName isEqualToString:@"AVOID_ROADS"])
+        return EOAExportSettingsTypeAvoidRoads;
+    return EOAExportSettingsTypeUnknown;
+}
+
+@end
+
 @interface OASettingsHelper() <OASettingsImportExportDelegate>
 
 @end
@@ -144,9 +191,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
 {
-   OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
-   task.delegate = delegate;
-   [task execute];
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
+    task.delegate = delegate;
+    [task execute];
 }
 
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles
@@ -195,9 +242,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if (pluginIndependentItems.count > 0)
         {
             // TODO: add ui dialogs as in Android
-//            FragmentManager fragmentManager = activity.getSupportFragmentManager();
-//            ImportSettingsFragment.showInstance(fragmentManager, pluginIndependentItems, file);
-            [self importSettings:_importTask.getFile items:_importTask.getItems latestChanges:@"" version:1];
+            //            FragmentManager fragmentManager = activity.getSupportFragmentManager();
+            //            ImportSettingsFragment.showInstance(fragmentManager, pluginIndependentItems, file);
+            UIViewController* incomingURLViewController = [[OAImportProfileViewController alloc] initWithItems:pluginIndependentItems];
+            [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
+            //[self importSettings:_importTask.getFile items:_importTask.getItems latestChanges:@"" version:1];
         }
     }
     else if (empty)
@@ -2487,7 +2536,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             jsonObject[@"name"] = avoidRoad.name;
             jsonObject[@"appModeKey"] = avoidRoad.appModeKey;
             [jsonArray addObject:jsonObject];
-        }        
+        }
         json[@"items"] = jsonArray;
     }
 }

@@ -35,6 +35,18 @@
     return self;
 }
 
+- (instancetype) initWithSettingsItems:(NSArray<OASettingsItem *> *)settingsItems fileName:(NSString *)fileName
+{
+    self = [super init];
+    if (self)
+    {
+        _settingsItems = settingsItems;
+        _fileName = fileName;
+        [self commonInit];
+    }
+    return self;
+}
+
 - (void) commonInit
 {
     [self generateData];

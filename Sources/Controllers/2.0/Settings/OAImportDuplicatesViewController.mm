@@ -11,7 +11,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAResourcesUIHelper.h"
-#import "OASettingsHelper.h"
 #import "OASettingsImporter.h"
 #import "OAApplicationMode.h"
 #import "OAQuickActionRegistry.h"
@@ -544,11 +543,12 @@
 
 - (IBAction)primaryButtonPressed:(id)sender
 {
-    [self importItems: YES];
+    //[self importItems: YES];
     
     //for test
-    //OAImportCompleteViewController* importComplete = [[OAImportCompleteViewController alloc] init];
-    //[self.navigationController pushViewController:importComplete animated:YES];
+    //OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] init];
+    OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:_settingsItems fileName:[_file lastPathComponent]];
+    [self.navigationController pushViewController:importCompleteVC animated:YES];
 }
 
 - (IBAction)secondaryButtonPressed:(id)sender
@@ -564,7 +564,7 @@
         //app.getRendererRegistry().updateExternalRenderers();
         //AppInitializer.loadRoutingFiles(app, null);
         
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] init];
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:_settingsItems fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
     }
 }

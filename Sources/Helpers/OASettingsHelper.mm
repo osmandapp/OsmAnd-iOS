@@ -264,7 +264,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *>*)duplicates items:(NSArray<OASettingsItem *>*)items
 {
-    
+    [self importSettings:_importTask.getFile items:items latestChanges:@"" version:1]; // to delete
 }
 
 @end

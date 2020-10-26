@@ -7,7 +7,11 @@
 //
 
 #import "OABaseSettingsWithBottomButtonsViewController.h"
+#import "OASettingsHelper.h"
 
 @interface OACheckForProfileDuplicatesViewController : OABaseSettingsWithBottomButtonsViewController
+
+- (instancetype) initWithItems:(NSArray<OASettingsItem *> *)items file:(NSString *)file selectedItems:(NSArray<OASettingsItem *> *)selectedItems;
+- (void) prepareToImport;
 
 @end

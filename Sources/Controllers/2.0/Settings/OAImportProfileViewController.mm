@@ -54,7 +54,6 @@
 
 @implementation OAImportProfileViewController
 {
-    OAAppSettings *_settings;
     OASettingsHelper *_settingsHelper;
     NSMutableArray *_data;
     OsmAndAppInstance _app;
@@ -74,7 +73,6 @@
     self = [super init];
     if (self)
     {
-        _settings = [OAAppSettings sharedManager];
         _settingsHelper = OASettingsHelper.sharedInstance;
         _settingsItems = [NSArray arrayWithArray:items];
         _app = [OsmAndApp instance];
@@ -386,10 +384,9 @@
 
 - (IBAction) primaryButtonPressed:(id)sender
 {
-    NSLog(@"Selected items count -> %lu", (unsigned long)_selectedItems.count);
-    NSLog(@"_selectedItems -> %@", _selectedIndexPaths);
-//    OACheckForProfileDuplicatesViewController* checkForDuplicates = [[OACheckForProfileDuplicatesViewController alloc] init];
-//    [self.navigationController pushViewController:checkForDuplicates animated:YES];
+    OACheckForProfileDuplicatesViewController* checkForDuplicates = [[OACheckForProfileDuplicatesViewController alloc] initWithItems:_settingsItems file:(NSString *)_file selectedItems:_selectedItems];
+    [checkForDuplicates prepareToImport];
+    [self.navigationController pushViewController:checkForDuplicates animated:YES];
 }
 
 - (void) selectDeselectAllItems:(id)sender

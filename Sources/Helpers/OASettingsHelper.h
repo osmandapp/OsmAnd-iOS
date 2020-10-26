@@ -63,6 +63,24 @@ typedef enum : NSUInteger {
 
 @end
 
+typedef enum : NSInteger {
+    EOAExportSettingsTypeUnknown = -1,
+    EOAExportSettingsTypeProfile = 0,
+    EOAExportSettingsTypeQuickActions,
+    EOAExportSettingsTypePoiTypes,
+    EOAExportSettingsTypeMapSources,
+    EOAExportSettingsTypeCustomRendererStyle,
+    EOAExportSettingsTypeCustomRouting,
+    EOAExportSettingsTypeAvoidRoads,
+} EOAExportSettingsType;
+
+@interface OAExportSettingsType : NSObject
+
++ (NSString * _Nullable) typeName:(EOAExportSettingsType)type;
++ (EOAExportSettingsType) parseType:(NSString *)typeName;
+
+@end
+
 @interface OASettingsHelper : NSObject
 
 @property (nonatomic) OAImportAsyncTask* importTask;

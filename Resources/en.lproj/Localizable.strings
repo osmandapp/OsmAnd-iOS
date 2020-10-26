@@ -730,9 +730,11 @@
 "available_map_sources" = "Available map sources";
 
 "export_profile" = "Export profile";
-"import_profile" = "Import profile";
+"shared_string_import" = "Import profile";
 "create_profile" = "Create profile";
-"Import_profile_descr" = "Select the data to be imported.";
+"import_profile_select_descr" = "Select the data to be imported.";
+"selected_profiles" = "%d of %d";
+"nav_type_hint" = "Navigation type: %@";
 
 "import_duplicates_title" = "Some items already exist";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";

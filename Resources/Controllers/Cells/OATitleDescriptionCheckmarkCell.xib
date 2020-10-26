@@ -40,10 +40,10 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="9Em-pM-N5g" secondAttribute="bottom" constant="15" id="0ky-i1-a9p"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="9Em-pM-N5g" secondAttribute="bottom" constant="15" id="0ky-i1-a9p"/>
                     <constraint firstItem="qFY-zc-7s4" firstAttribute="leading" secondItem="H0e-1h-kDC" secondAttribute="leadingMargin" id="2SA-1X-uBP"/>
                     <constraint firstItem="9Em-pM-N5g" firstAttribute="leading" secondItem="Hl5-QD-FCC" secondAttribute="trailing" constant="20" id="4Ab-l2-tBW"/>
-                    <constraint firstItem="9Em-pM-N5g" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" constant="15" id="5gy-mL-n3L"/>
+                    <constraint firstItem="9Em-pM-N5g" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H0e-1h-kDC" secondAttribute="top" constant="15" id="5gy-mL-n3L"/>
                     <constraint firstItem="grl-0r-JnU" firstAttribute="top" secondItem="H0e-1h-kDC" secondAttribute="top" id="Epb-wh-lNK"/>
                     <constraint firstItem="grl-0r-JnU" firstAttribute="leading" secondItem="H0e-1h-kDC" secondAttribute="leading" id="LOb-tV-l6N"/>
                     <constraint firstAttribute="trailingMargin" secondItem="9Em-pM-N5g" secondAttribute="trailing" id="VRy-Ie-nev"/>

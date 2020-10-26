@@ -7,8 +7,10 @@
 //
 
 #import "OABaseSettingsWithBottomButtonsViewController.h"
+#import "OASettingsHelper.h"
 
 @interface OAImportProfileViewController : OABaseSettingsWithBottomButtonsViewController
 
+- (instancetype) initWithItems:(NSArray<OASettingsItem *> *)items;
 
 @end

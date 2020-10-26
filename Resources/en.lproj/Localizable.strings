@@ -747,7 +747,7 @@
 "shared_string_poi_types" = "POI types";
 "quick_action_map_source_title" = "Map sources";
 "shared_string_routing" = "Routing";
-"shared_string_rendering_styles" = "Rendering styles";
+"shared_string_rendering_style" = "Rendering styles";
 "avoid_road" = "Avoid road";
 "shared_string_importing" = "Importing";
 "importing_from" = "Importing data from %@";

@@ -34,6 +34,25 @@
 #define RENDERERS_DIR @"rendering/"
 #define ROUTING_PROFILES_DIR @"routing/"
 
+
+@interface HeaderType : NSObject
+@property (nonatomic) NSString *label;
+@end
+
+@implementation HeaderType
+- (instancetype) initWithLabel:(NSString *)label
+{
+    self = [super init];
+    if (self)
+    {
+        _label = label;
+    }
+    return self;
+}
+@end
+
+
+
 @interface OAImportDuplicatesViewController () <UITableViewDelegate, UITableViewDataSource, OASettingsImportExportDelegate>
 
 @end
@@ -48,19 +67,19 @@
     
     NSString *_title;
     NSString *_description;
-    
+
     NSMutableArray<NSMutableArray<NSDictionary *> *> *_data;
 }
 
-//- (instancetype) init
-//{
-//    self = [super init];
-//    if (self)
-//    {
-//        [self commonInit];
-//    }
-//    return self;
-//}
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        [self commonInit];
+    }
+    return self;
+}
 
 - (instancetype) initWithDuplicatesList:(NSArray<id> *)duplicatesList settingsItems:(NSArray<OASettingsItem *> *)settingsItems file:(NSString *)file
 {
@@ -120,43 +139,60 @@
     
     [self turnOnLoadingIndicator];
     self.bottomBarView.hidden = YES;
+    self.view.backgroundColor = self.tableView.backgroundColor;
     [self.tableView reloadData];
+    
 }
 
 - (void) turnOnLoadingIndicator
 {
     _data = @[ @[ @{
         @"cellType": kCellTypeWithActivity,
-        @"label": @"",
+        @"label": OALocalizedString(@"shared_string_importing"),
     }]];
 }
 
 - (void) generateFakeData
 {
     //TODO: for now here is generating fake data, just for demo
-    //old version
-    
-    _duplicatesList = [NSMutableArray new];
-    //_data = [NSMutableArray new];
-    
-    /*
-    NSArray<OAApplicationMode *> *profiles = [NSArray arrayWithObject:OAApplicationMode.CAR];
+    NSMutableArray *fakeDataArray = [NSMutableArray new];
+
+    OAApplicationModeBean *appMode = [[OAApplicationModeBean alloc] init];
+    appMode.userProfileName = @"Test Profile Name";
+    appMode.routingProfile = @"Test value";
+    appMode.iconName = @"ic_custom_transport_tram";
+    appMode.iconColor = color_primary_purple;
+    [fakeDataArray addObject: appMode];
     
     NSArray<OAQuickActionType *> *allQuickActions = [[OAQuickActionRegistry sharedInstance] produceTypeActionsListWithHeaders];
-    NSArray<OAQuickActionType *> *quickActions = [allQuickActions subarrayWithRange:NSMakeRange(3,2)];
+    OAQuickAction *action = [[OAQuickAction alloc] initWithActionType:allQuickActions[3]];
+    [fakeDataArray addObject: action];
     
-    NSArray<OAResourceItem *> *mapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
-    NSArray<OAMapSource * > *renderStyles = @[_app.data.lastMapSource];
+    OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithName:OALocalizedString(@"poi_filter_custom_filter") filterId:CUSTOM_FILTER_ID acceptedTypes:[NSMapTable strongToStrongObjectsMapTable]];
+    filter.isStandardFilter = YES;
+    [fakeDataArray addObject: filter];
+
+    OASQLiteTileSource *tileSource = [[OASQLiteTileSource alloc] init];
+    [fakeDataArray addObject: tileSource];
     
-    NSArray<NSString * > *routingFiles = @[@"Desert.xml", @"moon.xml", @"pt.xml"];
-     */
+    NSString *renderTestSting = @"rendering/Desert.xml";
+    [fakeDataArray addObject: renderTestSting];
+    NSString *routingTestSting = @"routing/Moon.xml";
+    [fakeDataArray addObject: routingTestSting];
+    
+    OAAvoidRoadInfo *avoidRoad = [[OAAvoidRoadInfo alloc] init];
+    avoidRoad.name = @"Avoid Fake Road";
+    [fakeDataArray addObject: avoidRoad];
+    
+    _duplicatesList = [NSArray arrayWithArray:fakeDataArray];
 }
 
 
 
-- (NSMutableArray<id> *) prepareDuplicates:(NSArray<id> *)duplicatesList
+- (NSArray<NSArray <id>*> *) prepareDuplicates:(NSArray *)duplicatesList
 {
-    NSMutableArray<id> *duplicates = [NSMutableArray new];
+    NSMutableArray<NSMutableArray <id>*> *duplicates = [NSMutableArray new];
+    
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray new];
     NSMutableArray<OAQuickAction *> *actions = [NSMutableArray new];
     NSMutableArray<OAPOIUIFilter *> *filters = [NSMutableArray new];
@@ -165,7 +201,7 @@
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray new];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray new];
     
-    for (id object in duplicates)
+    for (id object in duplicatesList)
     {
         if ([object isKindOfClass:OAApplicationModeBean.class])
             [profiles addObject: (OAApplicationModeBean *)object];
@@ -188,252 +224,170 @@
     }
     if (profiles.count > 0)
     {
-        [duplicates addObject:OALocalizedString(@"shared_string_profiles")];
-        [duplicates addObjectsFromArray:profiles];
+        NSMutableArray *profilesSection = [NSMutableArray new];
+        [profilesSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_profiles")]];
+        [profilesSection addObjectsFromArray:profiles];
+        [duplicates addObject:profilesSection];
         
-        //??? variant of separating cell list by sections.
-        /*
-        NSMutableArray *profilesToDisplay = [NSMutableArray new];
-        [profilesToDisplay addObject:OALocalizedString(@"shared_string_profiles")];
-        [profilesToDisplay addObjectsFromArray:profiles];
-        [duplicates addObject:profilesToDisplay];
-        */
     }
     if (actions.count > 0)
     {
-        [duplicates addObject:OALocalizedString(@"shared_string_quick_actions")];
-        [duplicates addObjectsFromArray:actions];
+        NSMutableArray *actionsSection = [NSMutableArray new];
+        [actionsSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_quick_actions")]];
+        [actionsSection addObjectsFromArray:actions];
+        [duplicates addObject:actionsSection];
     }
     if (filters.count > 0)
     {
-        [duplicates addObject:OALocalizedString(@"shared_string_poi_types")];
-        [duplicates addObjectsFromArray:filters];
+        NSMutableArray *filtersSection = [NSMutableArray new];
+        [filtersSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_poi_types")]];
+        [filtersSection addObjectsFromArray:filters];
+        [duplicates addObject:filtersSection];
     }
     if (tileSources.count > 0)
     {
-        [duplicates addObject:OALocalizedString(@"quick_action_map_source_title")];
-        [duplicates addObjectsFromArray:tileSources];
+        NSMutableArray *tileSourcesSection = [NSMutableArray new];
+        [tileSourcesSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"quick_action_map_source_title")]];
+        [tileSourcesSection addObjectsFromArray:tileSources];
+        [duplicates addObject:tileSourcesSection];
     }
     if (routingFilesList.count > 0)
     {
-        [duplicates addObject:OALocalizedString(@"shared_string_routing")];
-        [duplicates addObjectsFromArray:routingFilesList];
+        NSMutableArray *routingSection = [NSMutableArray new];
+        [routingSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_routing")]];
+        [routingSection addObjectsFromArray:routingFilesList];
+        [duplicates addObject:routingSection];
     }
     if (renderFilesList.count > 0)
     {
-        [duplicates addObject:OALocalizedString(@"shared_string_rendering_style")];
-        [duplicates addObjectsFromArray:renderFilesList];
+        NSMutableArray *renderSection = [NSMutableArray new];
+        [renderSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_rendering_style")]];
+        [renderSection addObjectsFromArray:renderFilesList];
+        [duplicates addObject:renderSection];
     }
     if (avoidRoads.count > 0)
     {
-        [duplicates addObject:OALocalizedString(@"avoid_road")];
-        [duplicates addObjectsFromArray:avoidRoads];
+        NSMutableArray *avoidRoadsSection = [NSMutableArray new];
+        [avoidRoadsSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"avoid_road")]];
+        [avoidRoadsSection addObjectsFromArray:avoidRoads];
+        [duplicates addObject:avoidRoadsSection];
     }
     return duplicates;
-    
-    //------------------------
-    //TODO: Check tableView correctly work and delete this old code
-    /*
-    if (_profiles.count > 0)
-    {
-        NSMutableArray<NSDictionary *> *profileItems = [NSMutableArray new];
-        [profileItems addObject: @{
-            @"cellType": kMenuSimpleCellNoIcon,
-            @"label": OALocalizedString(@"shared_string_profiles"),
-            @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_profiles") lowerCase]]
-        }];
-        for (OAApplicationMode *profile in _profiles)
-        {
-            [profileItems addObject: @{
-                @"cellType": kMenuSimpleCell,
-                @"label": profile.toHumanString,
-                @"description": profile.getProfileDescription,
-                @"icon": profile.getIcon,
-                //@"iconColor": UIColorFromRGB(profile.getIconColor)
-                @"iconColor": UIColorFromRGB(color_chart_orange)
-            }];
-        }
-        [_data addObject:profileItems];
-    }
-    
-    if (_quickActions.count > 0)
-    {
-        NSMutableArray<NSDictionary *> *quickActionsItems = [NSMutableArray new];
-        [quickActionsItems addObject: @{
-            @"cellType": kMenuSimpleCellNoIcon,
-            @"label": OALocalizedString(@"shared_string_quick_actions"),
-            @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_quick_actions") lowerCase]]
-        }];
-        for (OAQuickActionType *action in _quickActions)
-        {
-            [quickActionsItems addObject: @{
-                @"cellType": kTitleTwoIconsRoundCell,
-                @"label": action.name,
-                @"icon": [UIImage imageNamed:action.iconName],
-                @"iconColor": UIColorFromRGB(color_chart_orange)
-            }];
-        }
-        [_data addObject:quickActionsItems];
-    }
-    
-    if (_mapSources.count > 0)
-    {
-        NSMutableArray<NSDictionary *> *mapSourcesItems = [NSMutableArray new];
-        [mapSourcesItems addObject: @{
-            @"cellType": kMenuSimpleCellNoIcon,
-            @"label": OALocalizedString(@"map_sources"),
-            @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"map_sources") lowerCase]]
-        }];
-        for (OAResourceItem *mapSource in _mapSources)
-        {
-            [mapSourcesItems addObject: @{
-                @"cellType": kTitleTwoIconsRoundCell,
-                @"label": ((OAOnlineTilesResourceItem *) mapSource).mapSource.name,
-                @"icon": [UIImage imageNamed:@"ic_custom_map_style"],
-                @"iconColor": UIColorFromRGB(color_chart_orange)
-            }];
-        }
-        [_data addObject:mapSourcesItems];
-    }
-    
-    if (_renderStyles.count > 0)
-    {
-        NSMutableArray<NSDictionary *> *mapSourcesItems = [NSMutableArray new];
-        [mapSourcesItems addObject: @{
-            @"cellType": kMenuSimpleCellNoIcon,
-            @"label": OALocalizedString(@"shared_string_rendering_styles"),
-            @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_rendering_styles") lowerCase]]
-        }];
-        for (OAMapSource *style in _renderStyles)
-        {
-            UIImage *icon;
-            NSString *iconName = [NSString stringWithFormat:@"img_mapstyle_%@", [style.resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]];
-            if (iconName)
-                icon = [UIImage imageNamed:iconName];
-            
-            [mapSourcesItems addObject: @{
-                @"cellType": kTitleTwoIconsRoundCell,
-                @"label": style.name,
-                @"icon": icon
-            }];
-        }
-        [_data addObject:mapSourcesItems];
-    }
-    
-    if (_routingFiles.count > 0)
-    {
-        NSMutableArray<NSDictionary *> *routingItems = [NSMutableArray new];
-        [routingItems addObject: @{
-            @"cellType": kMenuSimpleCellNoIcon,
-            @"label": OALocalizedString(@"shared_string_routing"),
-            @"description": [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [OALocalizedString(@"shared_string_routing") lowerCase]]
-        }];
-        for (NSString *routingFileName in _routingFiles)
-        {
-            [routingItems addObject: @{
-                @"cellType": kTitleTwoIconsRoundCell,
-                @"label": routingFileName,
-                @"icon": [UIImage imageNamed:@"ic_custom_navigation"],
-                @"iconColor": UIColorFromRGB(color_tint_gray)
-            }];
-        }
-        [_data addObject:routingItems];
-    }
-     */
 }
 
 
 // from DuplicatesSettingsAdapter.java : onBindViewHolder()
-- (void) prepareData:(NSArray<id> *)duplicates
+- (void) prepareData:(NSArray<NSArray <id>*> *)duplicates
 {
     _data = [NSMutableArray new];
-    for (id currentItem in duplicates)
+    for (NSArray *section in duplicates)
     {
-        NSMutableDictionary *item = [NSMutableDictionary new];
-        if ([currentItem isKindOfClass:OAApplicationModeBean.class])
+        NSMutableArray *sectionData = [NSMutableArray new];
+        for (id currentItem in section)
         {
-            OAApplicationModeBean *modeBean = (OAApplicationModeBean *)currentItem;
-            NSString *profileName = modeBean.userProfileName;
-            if (!profileName || profileName.length == 0)
+            NSMutableDictionary *item = [NSMutableDictionary new];
+            if ([currentItem isKindOfClass:HeaderType.class])
             {
-                OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
-                profileName = appMode.name; //?
+                HeaderType *header = (HeaderType *)currentItem;
+                item[@"label"] = header.label;
+                item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [header.label lowerCase]];
+                item[@"cellType"] = kMenuSimpleCellNoIcon;
             }
-            item[@"label"] = profileName;
-            NSString *routingProfile = @"";
-            NSString *routingProfileValue = modeBean.routingProfile;
-            if (routingProfileValue && routingProfileValue.length > 0)
+            else if ([currentItem isKindOfClass:OAApplicationModeBean.class])
             {
-                try
+                OAApplicationModeBean *modeBean = (OAApplicationModeBean *)currentItem;
+                NSString *profileName = modeBean.userProfileName;
+                if (!profileName || profileName.length == 0)
                 {
-                    routingProfile = [OARoutingProfileDataObject getLocalizedName: [OARoutingProfileDataObject getValueOf: [routingProfileValue upperCase]]];
-                    routingProfile = [routingProfile capitalizedString];
-
-                } catch (NSException *e)
-                {
-                    routingProfile = [routingProfileValue capitalizedString];
-                    NSLog(@"Error trying to get routing resource for %@ \n %@ %@", routingProfileValue, e.name, e.reason);
+                    OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
+                    profileName = appMode.name; //?
                 }
+                item[@"label"] = profileName;
+                NSString *routingProfile = @"";
+                NSString *routingProfileValue = modeBean.routingProfile;
+                if (routingProfileValue && routingProfileValue.length > 0)
+                {
+                    try
+                    {
+                        routingProfile = [OARoutingProfileDataObject getLocalizedName: [OARoutingProfileDataObject getValueOf: [routingProfileValue upperCase]]];
+                        routingProfile = [routingProfile capitalizedString];
+
+                    } catch (NSException *e)
+                    {
+                        routingProfile = [routingProfileValue capitalizedString];
+                        NSLog(@"Error trying to get routing resource for %@ \n %@ %@", routingProfileValue, e.name, e.reason);
+                    }
+                }
+                if (!routingProfile || routingProfile.length == 0)
+                {
+                    item[@"description"] = @""; //TODO: hide cell label if text == "" ??
+                    item[@"cellType"] = kTitleTwoIconsRoundCell;
+                }
+                else
+                {
+                    item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), OALocalizedString(@"nav_type_hint"), routingProfile];
+                    item[@"cellType"] = kMenuSimpleCell;
+                }
+                item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
+                item[@"iconColor"] = UIColorFromRGB(modeBean.iconColor);
             }
-            if (!routingProfile || routingProfile.length == 0)
+            else if ([currentItem isKindOfClass:OAQuickAction.class])
             {
-                item[@"label"] = @""; //TODO: hide cell label if text == "" ??
+                OAQuickAction *action = (OAQuickAction *)currentItem;
+                item[@"label"] = [action getName];
+                item[@"icon"] = [UIImage imageNamed:[action getIconResName]];
+                item[@"description"] = @"";
+                item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
-            else
+            else if ([currentItem isKindOfClass:OAPOIUIFilter.class])
             {
-                item[@"label"] = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), OALocalizedString(@"nav_type_hint"), routingProfile];
+                OAPOIUIFilter *filter = (OAPOIUIFilter *)currentItem;
+                item[@"label"] = [filter getName];
+                NSString *iconRes = [filter getIconId];
+                //item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_action_user")]; // ??
+                item[@"icon"] = [UIImage imageNamed: @"ic_action_wheelchair_forward"]; // ??
+                item[@"description"] = @"";
+                item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
-            item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
-            item[@"iconColor"] = UIColorFromRGB(modeBean.iconColor);
-        }
-        else if ([currentItem isKindOfClass:OAQuickAction.class])
-        {
-            OAQuickAction *action = (OAQuickAction *)currentItem;
-            item[@"label"] = [action getName];
-            item[@"icon"] = [UIImage imageNamed:[action getIconResName]];
-            item[@"description"] = @"";
-        }
-        else if ([currentItem isKindOfClass:OAPOIUIFilter.class])
-        {
-            OAPOIUIFilter *filter = (OAPOIUIFilter *)currentItem;
-            item[@"label"] = [filter getName];
-            NSString *iconRes = [filter getIconId];
-            item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_action_user")]; // ?
-            item[@"description"] = @"";
-        }
-        else if ([currentItem isKindOfClass:OASQLiteTileSource.class]) //ITileSource ???
-        {
-            item[@"label"] = ((OASQLiteTileSource *)currentItem).name;
-            item[@"icon"] = [UIImage imageNamed:@"ic_map"];
-            item[@"description"] = @"";
-        }
-        else if ([currentItem isKindOfClass:NSString.class])
-        {
-            NSString *file = (NSString *)currentItem;
-            item[@"label"] = [[file lastPathComponent] stringByDeletingPathExtension];
-            if ([file containsString:RENDERERS_DIR])
+            else if ([currentItem isKindOfClass:OASQLiteTileSource.class]) //ITileSource ???
             {
-                item[@"icon"] = [UIImage imageNamed:@"ic_action_map_style"];
+                //item[@"label"] = ((OASQLiteTileSource *)currentItem).name; // ???
+                item[@"label"] = @"Faked name"; // ???
+                //item[@"icon"] = [UIImage imageNamed:@"ic_map"]; //???
+                item[@"icon"] = [UIImage imageNamed:@"ic_action_marker"]; //???
+                item[@"description"] = @"";
+                item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
-            else if ([file containsString:ROUTING_PROFILES_DIR])
+            else if ([currentItem isKindOfClass:NSString.class])
             {
-                item[@"icon"] = [UIImage imageNamed:@"ic_action_route_distance"];
+                NSString *file = (NSString *)currentItem;
+                item[@"label"] = [[file lastPathComponent] stringByDeletingPathExtension];
+                if ([file containsString:RENDERERS_DIR])
+                {
+                    //item[@"icon"] = [UIImage imageNamed:@"ic_action_map_style"]; // correct name
+                    item[@"icon"] = [UIImage imageNamed:@"ic_action_world_globe"]; // for testing name name
+                }
+                else if ([file containsString:ROUTING_PROFILES_DIR])
+                {
+                    item[@"icon"] = [UIImage imageNamed:@"ic_action_route_distance"];
+                }
+                item[@"description"] = @"";
+                item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
-            item[@"description"] = @"";
+            else if ([currentItem isKindOfClass:OAAvoidRoadInfo.class])
+            {
+                item[@"label"] = ((OAAvoidRoadInfo *)currentItem).name;
+                item[@"icon"] = [UIImage imageNamed:@"ic_action_alert"];
+                item[@"description"] = @"";
+                item[@"cellType"] = kTitleTwoIconsRoundCell;
+            }
+            NSDictionary *newDict = [NSDictionary dictionaryWithDictionary:item];
+            [sectionData addObject:newDict];
+            //itemHolder.divider.setVisibility(shouldShowDivider(position) ? View.VISIBLE : View.GONE);
         }
-        else if ([currentItem isKindOfClass:OAAvoidRoadInfo.class])
-        {
-            item[@"label"] = ((OAAvoidRoadInfo *)currentItem).name;
-            item[@"icon"] = [UIImage imageNamed:@"ic_action_alert"];
-            item[@"description"] = @"";
-        }
-        [data addObject:item];
-        //itemHolder.divider.setVisibility(shouldShowDivider(position) ? View.VISIBLE : View.GONE);
+        [_data addObject:sectionData];
     }
 }
-
-
-
 
 - (void) applyLocalization
 {
@@ -444,8 +398,6 @@
 {
     return OALocalizedString(@"import_duplicates_title");
 }
-
-
 
 - (void) setupBottomViewMultyLabelButtons
 {
@@ -553,7 +505,7 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kTitleTwoIconsRoundCell])
+    else if ([type isEqualToString:kCellTypeWithActivity])
     {
         static NSString* const identifierCell = kCellTypeWithActivity;
         OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -561,22 +513,14 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAActivityViewWithTitleCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.clearColor;
+            cell.contentView.backgroundColor = UIColor.clearColor;
         }
         if (cell)
         {
-            //cell.titleView.text = OALocalizedString(@"checking_for_duplicates");
-            
-            BOOL inProgress = YES; // to change
-            if (inProgress)
-            {
-                cell.activityIndicatorView.hidden = NO;
-                [cell.activityIndicatorView startAnimating];
-            }
-            else
-            {
-                cell.activityIndicatorView.hidden = YES;
-                [cell.activityIndicatorView startAnimating];
-            }
+            cell.titleView.text = item[@"label"];;
+            cell.activityIndicatorView.hidden = NO;
+            [cell.activityIndicatorView startAnimating];
         }
         return cell;
     }
@@ -585,6 +529,8 @@
 
 - (void) importItems:(BOOL)shouldReplace
 {
+    [self setupImportingUI]; //for test
+    
     if (_settingsItems && _file)
     {
         [self setupImportingUI];
@@ -600,6 +546,7 @@
 {
     [self importItems: YES];
     
+    //for test
     //OAImportCompleteViewController* importComplete = [[OAImportCompleteViewController alloc] init];
     //[self.navigationController pushViewController:importComplete animated:YES];
 }

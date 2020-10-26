@@ -144,7 +144,7 @@
     NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
     NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    //NSMutableArray<OAMapSource *> *tileSourceTemplates = [NSMutableArray array]; // List<ITileSource> tileSourceTemplates = new ArrayList<>();
+    NSMutableArray<OAMapSource *> *tileSourceTemplates = [NSMutableArray array]; // to check type
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     
     for (NSObject *object in _selectedItems)
@@ -155,10 +155,10 @@
             [quickActions addObject:(OAQuickAction *)object];
         else if ([object isKindOfClass:OAPOIUIFilter.class])
             [poiUIFilters addObject:(OAPOIUIFilter *)object];
-//        else if ([object isKindOfClass:OASqliteDbResourceItem.class] || [object isKindOfClass:OAOnlineTilesResourceItem.class])
-//            [tileSourceTemplates addObject:(OAMapSource *)object];
-        //        else if ([object isKindOfClass:OAAvoidRoadInfo.class]) // else if (object instanceof File) {
-        //            [avoidRoads addObject:object];
+        else if ([object isKindOfClass:OASqliteDbResourceItem.class] || [object isKindOfClass:OAOnlineTilesResourceItem.class])
+            [tileSourceTemplates addObject:(OAMapSource *)object]; // to check type
+        else if ([object isKindOfClass:NSString.class]) // to check all
+            [settingsItems addObject: [[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject:(OAAvoidRoadInfo *)object];
     }
@@ -184,18 +184,15 @@
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)
             [settingsItems addObject:[self getBaseProfileSettingsItem:modeBean]];
-    
-//    if (appModeBeans.count > 0) // probably wrong
-//        for (OAApplicationModeBean *modeBean in appModeBeans)
-//            [settingsItems addObject:[[OAProfileSettingsItem alloc] initWithAppMode:[OAApplicationMode fromModeBean:modeBean]]];
-//    if (quickActions.count > 0)
-//        [settingsItems addObject:[[OAQuickActionsSettingsItem alloc] initWithItems:quickActions]];
-//    if (poiUIFilters.count > 0)
-//        [settingsItems addObject:[[OAPoiUiFilterSettingsItem alloc] initWithItems:poiUIFilters]];
-//    if (avoidRoads.count > 0)
-//        [settingsItems addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
+    if (quickActions.count > 0)
+        [settingsItems addObject:[self getBaseQuickActionsSettingsItem]];
+    if (poiUIFilters.count > 0)
+        [settingsItems addObject:[self getBasePoiUiFiltersSettingsItem]];
+    if (tileSourceTemplates.count > 0)
+        [settingsItems addObject:[self getBaseMapSourcesSettingsItem]];
+    if (avoidRoads.count > 0)
+        [settingsItems addObject:[self getBaseAvoidRoadsSettingsItem]];
     return settingsItems;
-    
 }
 
 #pragma mark - Table View
@@ -265,6 +262,7 @@
     return cell;
 }
 
+// ???
 - (void) checkForDuplicates
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -276,25 +274,7 @@
 
 - (void) reloadDataAnimated:(BOOL)animated
 {
-    //NSInteger numberOfSections = _sections.count;
-    //if (!animated || numberOfSections < 4)
-    //{
-    //[self setupView];
-    //return;
-    //}
     
-    //[self setupViewInternal];
-    //    if (numberOfSections != _sections.count)
-    //    {
-    //        [tblView reloadData];
-    //        return;
-    //    }
-    
-    [self.tableView beginUpdates];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [self.tableView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
-    
-    //[self updateVisibleCells];
 }
 
 @end

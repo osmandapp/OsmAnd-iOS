@@ -31,8 +31,6 @@
     @property NSString* type;
     @property BOOL isOpen;
     @property NSString* groupName;
-    @property NSString *groupSubtitle;
-    @property NSInteger selectedItems;
     @property NSMutableArray* groupItems;
 @end
 
@@ -272,7 +270,6 @@
             {
                 NSArray *settings = [NSArray arrayWithArray:[_items objectForKey:type]];
                 profilesSection.groupName = OALocalizedString(@"shared_string_profiles");
-                profilesSection.groupSubtitle = [self getSelectedItemsAmount:settings];
                 profilesSection.type = kCellTypeSectionHeader;
                 profilesSection.isOpen = NO;
                 for (OAApplicationModeBean *modeBean in settings)
@@ -299,7 +296,6 @@
             case EOAExportSettingsTypeQuickActions:
             {
                 quickActionsSection.groupName = OALocalizedString(@"shared_string_quick_actions");
-                quickActionsSection.groupSubtitle = @"0 of 20"; //
                 quickActionsSection.type = kCellTypeSectionHeader;
                 quickActionsSection.isOpen = NO;
                 for (OAQuickActionType *quickAction in [_items objectForKey:type])
@@ -317,7 +313,6 @@
             case EOAExportSettingsTypePoiTypes:
             {
                 poiTypesSection.groupName = OALocalizedString(@"poi_type"); // to check
-                poiTypesSection.groupSubtitle = @"0 of 20"; //
                 poiTypesSection.type = kCellTypeSectionHeader;
                 poiTypesSection.isOpen = NO;
                 
@@ -327,7 +322,6 @@
             case EOAExportSettingsTypeMapSources:
             {
                 mapSourcesSection.groupName = OALocalizedString(@"map_sources");
-                mapSourcesSection.groupSubtitle = @"0 of 20"; //
                 mapSourcesSection.type = kCellTypeSectionHeader;
                 mapSourcesSection.isOpen = NO;
                 
@@ -337,7 +331,6 @@
             case EOAExportSettingsTypeCustomRendererStyle:
             {
                 customRendererStyleSection.groupName = OALocalizedString(@"shared_string_rendering_styles");
-                customRendererStyleSection.groupSubtitle = @"0 of 20"; //
                 customRendererStyleSection.type = kCellTypeSectionHeader;
                 customRendererStyleSection.isOpen = NO;
                 
@@ -347,7 +340,6 @@
             case EOAExportSettingsTypeCustomRouting:
             {
                 customRoutingSection.groupName = OALocalizedString(@"shared_string_routing");
-                customRoutingSection.groupSubtitle = @"0 of 20"; //
                 customRoutingSection.type = kCellTypeSectionHeader;
                 customRoutingSection.isOpen = NO;
                 
@@ -357,7 +349,6 @@
             case EOAExportSettingsTypeAvoidRoads:
             {
                 avoidRoadsStyleSection.groupName = OALocalizedString(@"impassable_road");
-                avoidRoadsStyleSection.groupSubtitle = @"0 of 20"; //
                 avoidRoadsStyleSection.type = kCellTypeSectionHeader;
                 avoidRoadsStyleSection.isOpen = NO;
                 
@@ -371,13 +362,13 @@
     _data = [NSMutableArray arrayWithArray:data];
 }
 
-- (NSString *)getSelectedItemsAmount:(NSArray *)listItems
+- (NSInteger) getSelectedItemsAmount:(NSArray *)listItems
 {
     NSInteger amount = 0;
     for (OASettingsItem *item in listItems)
         if ([_selectedItems containsObject:item])
             amount++;
-    return [NSString stringWithFormat: OALocalizedString(@"selected_profiles"), amount, listItems.count];
+    return amount;
 }
 
 #pragma mark - Actions
@@ -391,7 +382,7 @@
 
 - (void) selectDeselectAllItems:(id)sender
 {
-    if (_selectedIndexPaths.count > 0)
+    if (_selectedIndexPaths.count > 1)
         for (NSInteger section = 0; section < [self.tableView numberOfSections]; section++)
             [self deselectAllGroup:[NSIndexPath indexPathForRow:0 inSection:section]];
     else
@@ -473,7 +464,7 @@
     return UITableViewAutomaticDimension;
 }
 
-- (UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     TableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
     if (indexPath.row == 0)
@@ -489,8 +480,11 @@
         }
         if (cell)
         {
+            NSInteger selectedAmount = [self getSelectedItemsAmount:[_items objectForKey:_itemsType[indexPath.section]]];
             cell.textView.text = groupData.groupName;
-            cell.descriptionView.text = groupData.groupSubtitle;
+            cell.descriptionView.text = [NSString stringWithFormat: OALocalizedString(@"selected_profiles"), selectedAmount, groupData.groupItems.count];
+            if (selectedAmount == groupData.groupItems.count)
+                [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
             cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.openCloseGroupButton addTarget:self action:@selector(openCloseGroupButtonAction:) forControlEvents:UIControlEventTouchUpInside];
             if (groupData.isOpen)
@@ -561,7 +555,7 @@
 
 #pragma mark - Items selection
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0)
         [self selectAllGroup:indexPath];
@@ -676,6 +670,7 @@
         [_selectedIndexPaths addObject:indexPath];
         if (indexPath.row != 0)
             [_selectedItems addObject:objects[indexPath.row - 1]];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
     }
     
 }
@@ -688,6 +683,7 @@
         [_selectedIndexPaths removeObject:indexPath];
         if (indexPath.row != 0)
             [_selectedItems removeObject:objects[indexPath.row - 1]];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

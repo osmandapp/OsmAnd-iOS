@@ -50,6 +50,7 @@ typedef NS_ENUM(NSInteger, EOARouringProfilesResource)
 + (NSString *) getIconName:(EOARouringProfilesResource)res;
 + (NSString *) getProfileKey:(EOARouringProfilesResource)type;
 + (OARoutingProfileDataObject *) getRoutingProfileDataByName:(NSString *)key;
++ (EOARouringProfilesResource) getValueOf:(NSString *)key;
 
 + (BOOL) isRpValue:(NSString *)value;
 

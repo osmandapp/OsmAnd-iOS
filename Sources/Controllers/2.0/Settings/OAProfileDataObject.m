@@ -149,6 +149,32 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
     };
 }
 
++ (EOARouringProfilesResource) getValueOf:(NSString *)key
+{
+    if ([key isEqualToString: @"DIRECT_TO_MODE"])
+        return EOARouringProfilesResourceDirectTo;
+    else if ([key isEqualToString: @"STRAIGHT_LINE_MODE"])
+        return EOARouringProfilesResourceStraightLine;
+    else if ([key isEqualToString: @"BROUTER_MODE"])
+        return EOARouringProfilesResourceBrouter;
+    else if ([key isEqualToString: @"CAR"])
+        return EOARouringProfilesResourceCar;
+    else if ([key isEqualToString: @"PEDESTRIAN"])
+        return EOARouringProfilesResourcePedestrian;
+    else if ([key isEqualToString: @"BICYCLE"])
+        return EOARouringProfilesResourceBicycle;
+    else if ([key isEqualToString: @"SKI"])
+        return EOARouringProfilesResourceSki;
+    else if ([key isEqualToString: @"PUBLIC_TRANSPORT"])
+        return EOARouringProfilesResourcePublicTransport;
+    else if ([key isEqualToString: @"BOAT"])
+        return EOARouringProfilesResourceBoat;
+    else if ([key isEqualToString: @"GEOCODING"])
+        return EOARouringProfilesResourceGeocoding;
+    else
+        return EOARouringProfilesResourceDirectTo;
+}
+
 + (OARoutingProfileDataObject *) getRoutingProfileDataByName:(NSString *)key
 {
     return _rpValues[key];

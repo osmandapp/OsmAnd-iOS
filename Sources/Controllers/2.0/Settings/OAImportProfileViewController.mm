@@ -60,10 +60,10 @@
     OsmAndAppInstance _app;
     
     NSArray<OASettingsItem *> *_settingsItems;
-    //NSArray<OASettingsItem *> *_selectedItems
-    NSMutableArray<NSIndexPath *> *_selectedItems;
     NSMutableDictionary *_items;
     NSArray <NSString *>*_itemsType;
+    NSMutableArray<OASettingsItem *> *_selectedItems;
+    NSMutableArray<NSIndexPath *> *_selectedIndexPaths;
     NSString *_file;
     
     CGFloat _heightForHeader;
@@ -93,7 +93,7 @@
 
 - (void) updateNavigationBarItem
 {
-    [self.additionalNavBarButton setTitle:_selectedItems.count >= 2 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [self.additionalNavBarButton setTitle:_selectedIndexPaths.count >= 2 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all") forState:UIControlStateNormal];
 }
 
 - (NSString *) getTableHeaderTitle
@@ -112,10 +112,11 @@
     [self.additionalNavBarButton addTarget:self action:@selector(selectDeselectAllItems:) forControlEvents:UIControlEventTouchUpInside];
     self.secondaryBottomButton.hidden = YES;
     self.backImageButton.hidden = YES;
-    _selectedItems = [[NSMutableArray alloc] init]; //
+    _selectedIndexPaths = [[NSMutableArray alloc] init]; //
+    _selectedItems = [[NSMutableArray alloc] init];
     [super viewDidLoad];
 }
- 
+
 - (void) setupView
 {
     OAImportAsyncTask *importTask = _settingsHelper.importTask;
@@ -135,7 +136,7 @@
         //            }
         //        }
         if (duplicates.count == 0)
-            if (_selectedItems && _file)
+            if (_selectedIndexPaths && _file)
                 [_settingsHelper importSettings:_file items:selectedItems latestChanges:@"" version:1];
         
         //NSMutableDictionary *items = [NSMutableDictionary dictionary];
@@ -272,10 +273,8 @@
             case EOAExportSettingsTypeProfile:
             {
                 NSArray *settings = [NSArray arrayWithArray:[_items objectForKey:type]];
-                NSInteger totalNumberOfProfiles = settings.count;
-                NSInteger selectedNumberOfItems = profilesSection.selectedItems; // to change
                 profilesSection.groupName = OALocalizedString(@"shared_string_profiles");
-                profilesSection.groupSubtitle = [NSString stringWithFormat: OALocalizedString(@"selected_profiles"), selectedNumberOfItems, totalNumberOfProfiles]; // ???
+                profilesSection.groupSubtitle = [self getSelectedItemsAmount:settings];
                 profilesSection.type = kCellTypeSectionHeader;
                 profilesSection.isOpen = NO;
                 for (OAApplicationModeBean *modeBean in settings)
@@ -374,17 +373,28 @@
     _data = [NSMutableArray arrayWithArray:data];
 }
 
+- (NSString *)getSelectedItemsAmount:(NSArray *)listItems
+{
+    NSInteger amount = 0;
+    for (OASettingsItem *item in listItems)
+        if ([_selectedItems containsObject:item])
+            amount++;
+    return [NSString stringWithFormat: OALocalizedString(@"selected_profiles"), amount, listItems.count];
+}
+
 #pragma mark - Actions
 
 - (IBAction) primaryButtonPressed:(id)sender
 {
-    OACheckForProfileDuplicatesViewController* checkForDuplicates = [[OACheckForProfileDuplicatesViewController alloc] init];
-    [self.navigationController pushViewController:checkForDuplicates animated:YES];
+    NSLog(@"Selected items count -> %lu", (unsigned long)_selectedItems.count);
+    NSLog(@"_selectedItems -> %@", _selectedIndexPaths);
+//    OACheckForProfileDuplicatesViewController* checkForDuplicates = [[OACheckForProfileDuplicatesViewController alloc] init];
+//    [self.navigationController pushViewController:checkForDuplicates animated:YES];
 }
 
 - (void) selectDeselectAllItems:(id)sender
 {
-    if (_selectedItems.count > 0)
+    if (_selectedIndexPaths.count > 0)
         for (NSInteger section = 0; section < [self.tableView numberOfSections]; section++)
             [self deselectAllGroup:[NSIndexPath indexPathForRow:0 inSection:section]];
     else
@@ -409,7 +419,7 @@
     {
         groupData.isOpen = NO;
         [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
-        if ([_selectedItems containsObject: [NSIndexPath indexPathForRow:0 inSection:indexPath.section]])
+        if ([_selectedIndexPaths containsObject: [NSIndexPath indexPathForRow:0 inSection:indexPath.section]])
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
     }
     else
@@ -430,7 +440,7 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     TableGroupToImport* groupData = [_data objectAtIndex:section];
-
+    
     if (groupData.isOpen)
         return [groupData.groupItems count] + 1;
     return 1;
@@ -489,12 +499,12 @@
             if (groupData.isOpen)
             {
                 cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_up"]
-                imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                                       imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             }
             else
             {
                 cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_down"]
-                imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+                                       imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
                 if ([cell isDirectionRTL])
                     [cell.iconView setImage:cell.iconView.image.imageFlippedForRightToLeftLayoutDirection];
             }
@@ -575,7 +585,7 @@
 - (void) selectAllItemsInGroup:(NSIndexPath *)indexPath selectHeader:(BOOL)selectHeader
 {
     NSInteger rowsCount = [self.tableView numberOfRowsInSection:indexPath.section];
-
+    
     [self.tableView beginUpdates];
     if (selectHeader)
         for (int i = 0; i < rowsCount; i++)
@@ -604,7 +614,7 @@
 
 - (void) deselectAllGroup:(NSIndexPath *)indexPath
 {
-    NSMutableArray *tmp = [[NSMutableArray alloc] initWithArray:_selectedItems];
+    NSMutableArray *tmp = [[NSMutableArray alloc] initWithArray:_selectedIndexPaths];
     for (NSUInteger i = 0; i < tmp.count; i++)
         [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
     [self selectAllItemsInGroup:indexPath selectHeader: NO];
@@ -629,8 +639,8 @@
     }
     else
     {
-        [self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
-        [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
+        //[self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+        //[self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
     }
     return;
 }
@@ -663,20 +673,30 @@
 
 - (void) addIndexPathToSelectedCellsArray:(NSIndexPath *)indexPath
 {
-    if (![_selectedItems containsObject:indexPath])
-         [_selectedItems addObject:indexPath];
+    NSArray* objects = [NSArray arrayWithArray:[_items objectForKey:_itemsType[indexPath.section]]];
+    if (![_selectedIndexPaths containsObject:indexPath])
+    {
+        [_selectedIndexPaths addObject:indexPath];
+        if (indexPath.row != 0)
+            [_selectedItems addObject:objects[indexPath.row - 1]];
+    }
     
 }
 
 - (void) removeIndexPathFromSelectedCellsArray:(NSIndexPath *)indexPath
 {
-    if ([_selectedItems containsObject:indexPath])
-        [_selectedItems removeObject:indexPath];
+    NSArray* objects = [NSArray arrayWithArray:[_items objectForKey:_itemsType[indexPath.section]]];
+    if ([_selectedIndexPaths containsObject:indexPath])
+    {
+        [_selectedIndexPaths removeObject:indexPath];
+        if (indexPath.row != 0)
+            [_selectedItems removeObject:objects[indexPath.row - 1]];
+    }
 }
 
 - (void) selectPreselectedCells:(NSIndexPath *)indexPath
 {
-    for (NSIndexPath *itemPath in _selectedItems)
+    for (NSIndexPath *itemPath in _selectedIndexPaths)
         if (itemPath.section == indexPath.section)
             [self.tableView selectRowAtIndexPath:itemPath animated:YES scrollPosition:UITableViewScrollPositionNone];
 }

@@ -1,5 +1,5 @@
 //
-//  OAItemExistViewControllers.h
+//  OAImportDuplicatesViewControllers.h
 //  OsmAnd
 //
 //  Created by nnngrach on 15.10.2020.
@@ -8,7 +8,7 @@
 
 #import "OABaseSettingsWithBottomButtonsViewController.h"
 
-@interface OAItemExistViewController : OABaseSettingsWithBottomButtonsViewController
+@interface OAImportDuplicatesViewController : OABaseSettingsWithBottomButtonsViewController
 
 
 @end

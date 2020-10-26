@@ -7,8 +7,10 @@
 //
 
 #import "OABaseSettingsWithBottomButtonsViewController.h"
+#import "OASettingsHelper.h"
 
 @interface OAImportDuplicatesViewController : OABaseSettingsWithBottomButtonsViewController
 
+- (instancetype) initWithDuplicatesList:(NSArray<id> *)duplicatesList settingsItems:(NSArray<OASettingsItem *> *)settingsItems file:(NSString *)file;
 
 @end

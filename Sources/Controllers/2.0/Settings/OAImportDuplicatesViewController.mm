@@ -51,7 +51,6 @@
 @end
 
 
-
 @interface OAImportDuplicatesViewController () <UITableViewDelegate, UITableViewDataSource, OASettingsImportExportDelegate>
 
 @end
@@ -186,12 +185,9 @@
     _duplicatesList = [NSArray arrayWithArray:fakeDataArray];
 }
 
-
-
 - (NSArray<NSArray <id>*> *) prepareDuplicates:(NSArray *)duplicatesList
 {
     NSMutableArray<NSMutableArray <id>*> *duplicates = [NSMutableArray new];
-    
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray new];
     NSMutableArray<OAQuickAction *> *actions = [NSMutableArray new];
     NSMutableArray<OAPOIUIFilter *> *filters = [NSMutableArray new];
@@ -227,7 +223,6 @@
         [profilesSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_profiles")]];
         [profilesSection addObjectsFromArray:profiles];
         [duplicates addObject:profilesSection];
-        
     }
     if (actions.count > 0)
     {
@@ -273,7 +268,6 @@
     }
     return duplicates;
 }
-
 
 // from DuplicatesSettingsAdapter.java : onBindViewHolder()
 - (void) prepareData:(NSArray<NSArray <id>*> *)duplicates
@@ -340,13 +334,12 @@
                 item[@"label"] = [filter getName];
                 NSString *iconRes = [filter getIconId];
                 item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_custom_user")]; // check this
-                //item[@"icon"] = [UIImage imageNamed: @"ic_action_wheelchair_forward"]; // to remove
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
             else if ([currentItem isKindOfClass:OASQLiteTileSource.class]) //ITileSource ???
             {
-                //item[@"label"] = ((OASQLiteTileSource *)currentItem).name; // ?? find how to extract name
+                //item[@"label"] = ((OASQLiteTileSource *)currentItem).name; // ?? find how to correctly extract name
                 item[@"label"] = @"Faked name"; // ???
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_map"];
                 item[@"description"] = @"";
@@ -473,7 +466,6 @@
         }
         return cell;
     }
-    
     else if ([type isEqualToString:kTitleTwoIconsRoundCell])
     {
         static NSString* const identifierCell = kTitleTwoIconsRoundCell;
@@ -525,8 +517,6 @@
 
 - (void) importItems:(BOOL)shouldReplace
 {
-    [self setupImportingUI]; //for test
-    
     if (_settingsItems && _file)
     {
         [self setupImportingUI];
@@ -541,11 +531,6 @@
 - (IBAction)primaryButtonPressed:(id)sender
 {
     [self importItems: YES];
-    
-    //for test
-    //OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] init];
-//    OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:_settingsItems fileName:[_file lastPathComponent]];
-//    [self.navigationController pushViewController:importCompleteVC animated:YES];
 }
 
 - (IBAction)secondaryButtonPressed:(id)sender

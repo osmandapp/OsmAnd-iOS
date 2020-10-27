@@ -8,6 +8,7 @@
 
 #import "OACheckForProfileDuplicatesViewController.h"
 #import "OAImportDuplicatesViewController.h"
+#import "OAImportCompleteViewController.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OASettingsHelper.h"
 #import "OASettingsImporter.h"
@@ -252,8 +253,23 @@
 
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *>*)duplicates items:(NSArray<OASettingsItem *>*)items
 {
-    OAImportDuplicatesViewController *dublicatesVC = [[OAImportDuplicatesViewController alloc] initWithDuplicatesList:duplicates settingsItems:_settingsItems file:_file];
-    [self.navigationController pushViewController:dublicatesVC animated:YES];
+    if (duplicates.count == 0)
+    {
+        [_settingsHelper importSettings:_file items:[self getSettingsItemsFromData] latestChanges:@"" version:1 delegate:self];
+    }
+    else
+    {
+        OAImportDuplicatesViewController *dublicatesVC = [[OAImportDuplicatesViewController alloc] initWithDuplicatesList:duplicates settingsItems:[self getSettingsItemsFromData] file:_file];
+        [self.navigationController pushViewController:dublicatesVC animated:YES];
+    }
+}
+
+- (void)onSettingsImportFinished:(BOOL)succeed items:(nonnull NSArray<OASettingsItem *> *)items {
+    if (succeed)
+    {
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:items fileName:[_file lastPathComponent]];
+        [self.navigationController pushViewController:importCompleteVC animated:YES];
+    }
 }
 
 @end

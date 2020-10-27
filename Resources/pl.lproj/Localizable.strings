@@ -1775,3 +1775,4 @@
 "public_transport_menu" = "Transport publiczny";
 "nothing_found_empty" = "Nic nie odnaleziono";
 "shared_string_next" = "Dalej";
+"map_update_warning" = "Chcesz przeładować dane dotyczące fragmentów mapy z Internetu?";

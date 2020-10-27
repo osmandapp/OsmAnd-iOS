@@ -752,6 +752,10 @@
 "shared_string_importing" = "Importing";
 "importing_from" = "Importing data from %@";
 
+"shared_string_settings" = "Settings";
+"configure_screen_quick_action" = "Quick action";
+"search_activity" = "Search";
+
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "nav_type_hint" = "Navigation type";

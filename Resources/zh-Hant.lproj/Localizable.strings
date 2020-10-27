@@ -1450,3 +1450,4 @@
 "copy_from_other_profile" = "從其他設定檔複製";
 "reset_to_default" = "重設為預設值";
 "gpx_parse_error" = "OsmAnd GPX 格式不正確，請聯絡支援團隊以進一步調查。";
+"shared_string_next" = "下一頁";

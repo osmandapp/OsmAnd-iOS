@@ -339,8 +339,8 @@
                 OAPOIUIFilter *filter = (OAPOIUIFilter *)currentItem;
                 item[@"label"] = [filter getName];
                 NSString *iconRes = [filter getIconId];
-                //item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_action_user")]; // no icon
-                item[@"icon"] = [UIImage imageNamed: @"ic_action_wheelchair_forward"]; // to remove
+                item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_custom_user")]; // check this
+                //item[@"icon"] = [UIImage imageNamed: @"ic_action_wheelchair_forward"]; // to remove
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
@@ -357,7 +357,7 @@
                 NSString *file = (NSString *)currentItem;
                 item[@"label"] = [[file lastPathComponent] stringByDeletingPathExtension];
                 if ([file containsString:RENDERERS_DIR])
-                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_map_style"]; // to remove
+                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_map_style"];
                 else if ([file containsString:ROUTING_PROFILES_DIR])
                     item[@"icon"] = [UIImage imageNamed:@"ic_action_route_distance"];
                 item[@"description"] = @"";

@@ -223,8 +223,7 @@
 
 - (IBAction)secondaryButtonPressed:(id)sender
 {
-    NSLog(@"secondaryButtonPressed");
-    //TODO: Close this VC
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

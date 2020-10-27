@@ -54,10 +54,9 @@
 {
     OASettingsHelper *_settingsHelper;
     NSMutableArray *_data;
-    OsmAndAppInstance _app;
     
     NSArray<OASettingsItem *> *_settingsItems;
-    NSMutableDictionary *_items;
+    NSMutableDictionary<NSString *, NSArray *> *_items;
     NSArray <NSString *>*_itemsType;
     NSMutableArray<OASettingsItem *> *_selectedItems;
     NSMutableArray<NSIndexPath *> *_selectedIndexPaths;
@@ -73,7 +72,6 @@
     {
         _settingsHelper = OASettingsHelper.sharedInstance;
         _settingsItems = [NSArray arrayWithArray:items];
-        _app = [OsmAndApp instance];
     }
     return self;
 }
@@ -92,13 +90,13 @@
     [self.additionalNavBarButton setTitle:_selectedIndexPaths.count >= 2 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all") forState:UIControlStateNormal];
 }
 
-//- (void) updateButtonView
-//{
-//    self.primaryBottomButton.userInteractionEnabled = _selectedItems.count > 0;
-//    self.primaryBottomButton.backgroundColor = _selectedItems.count > 0 ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
-//    [self.primaryBottomButton setTintColor:_selectedItems.count > 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
-//    [self.primaryBottomButton setTitleColor:_selectedItems.count > 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
-//}
+- (void) updateButtonView
+{
+    self.primaryBottomButton.userInteractionEnabled = _selectedItems.count > 0;
+    self.primaryBottomButton.backgroundColor = _selectedItems.count > 0 ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    [self.primaryBottomButton setTintColor:_selectedItems.count > 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
+    [self.primaryBottomButton setTitleColor:_selectedItems.count > 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
+}
 
 - (NSString *) getTableHeaderTitle
 {
@@ -115,7 +113,7 @@
     
     [self.additionalNavBarButton addTarget:self action:@selector(selectDeselectAllItems:) forControlEvents:UIControlEventTouchUpInside];
     self.secondaryBottomButton.hidden = YES;
-//    [self updateButtonView];
+    [self updateButtonView];
     self.backImageButton.hidden = YES;
     _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
@@ -131,42 +129,11 @@
             _settingsItems = [NSArray arrayWithArray:[importTask getItems]];
         if (!_file)
             _file = importTask.getFile;
-        NSArray<NSObject *> *duplicates = [NSArray arrayWithArray:[importTask getDuplicates]];
-        NSArray<OASettingsItem *> *selectedItems = [NSArray arrayWithArray:[importTask getSelectedItems]];
-        //        if (duplicates == null) {
-        //            importTask.setDuplicatesListener(getDuplicatesListener());
-        //        } else if (duplicates.isEmpty()) {
-        //            if (selectedItems != null && file != null) {
-        //                settingsHelper.importSettings(file, selectedItems, "", 1, getImportListener());
-        //            }
-        //        }
-        if (duplicates.count == 0)
-            if (_selectedIndexPaths && _file)
-                [_settingsHelper importSettings:_file items:selectedItems latestChanges:@"" version:1];
-        
-        //NSMutableDictionary *items = [NSMutableDictionary dictionary];
         if (_settingsItems)
         {
             _items = [NSMutableDictionary dictionaryWithDictionary:[self getSettingsToOperate:_settingsItems importComplete:NO]];
             _itemsType = [NSArray arrayWithArray:[_items allKeys]];
             [self generateData];
-            //            adapter.updateSettingsList(itemsMap);
-        }
-        //        expandableList.setAdapter(adapter);
-        //        toolbarLayout.setTitle(getString(R.string.shared_string_import));
-        
-        EOAImportType importTaskType = importTask.getImportType;
-        if (importTaskType == EOAImportTypeCheckDuplicates)// && [_settingsHelper importDone])
-        {
-            
-        }
-        else if (importTaskType == EOAImportTypeImport)
-        {
-            
-        }
-        else
-        {
-            
         }
         if (_items.count == 1 && [_items objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]])
         {
@@ -188,7 +155,8 @@
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
-        switch (item.type) {
+        switch (item.type)
+        {
             case EOASettingsItemTypeProfile:
             {
                 [profiles addObject:[(OAProfileSettingsItem *)item modeBean]];
@@ -273,11 +241,11 @@
     for (NSString *type in [_items allKeys])
     {
         EOAExportSettingsType itemType = [OAExportSettingsType parseType:type];
+        NSArray *settings = [NSArray arrayWithArray:[_items objectForKey:type]];
         switch (itemType)
         {
             case EOAExportSettingsTypeProfile:
             {
-                NSArray *settings = [NSArray arrayWithArray:[_items objectForKey:type]];
                 profilesSection.groupName = OALocalizedString(@"shared_string_profiles");
                 profilesSection.type = kCellTypeSectionHeader;
                 profilesSection.isOpen = NO;
@@ -321,7 +289,7 @@
             }
             case EOAExportSettingsTypePoiTypes:
             {
-                poiTypesSection.groupName = OALocalizedString(@"poi_type"); // to check
+                poiTypesSection.groupName = OALocalizedString(@"poi_type");
                 poiTypesSection.type = kCellTypeSectionHeader;
                 poiTypesSection.isOpen = NO;
                 
@@ -557,7 +525,7 @@
             {
                 cell.textView.text = item[@"title"];
                 cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.iconView.tintColor = item[@"color"];
+                cell.iconView.tintColor = item[@"color"] ? item[@"color"] : UIColorFromRGB(color_tint_gray);
             }
             return cell;
         }
@@ -683,9 +651,8 @@
         if (indexPath.row != 0)
             [_selectedItems addObject:objects[indexPath.row - 1]];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
-//        [self updateButtonView];
+        [self updateButtonView];
     }
-    
 }
 
 - (void) removeIndexPathFromSelectedCellsArray:(NSIndexPath *)indexPath
@@ -697,7 +664,7 @@
         if (indexPath.row != 0)
             [_selectedItems removeObject:objects[indexPath.row - 1]];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
-//        [self updateButtonView];
+        [self updateButtonView];
     }
 }
 

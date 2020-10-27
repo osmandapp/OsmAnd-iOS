@@ -99,7 +99,7 @@
     _app = [OsmAndApp instance];
     _settingsHelper = [OASettingsHelper sharedInstance];
     
-    [self generateFakeData]; //TODO: delete this
+    //[self generateFakeData]; //TODO: delete this
     
     OAImportAsyncTask *importTask = _settingsHelper.importTask;
     if (!importTask)
@@ -299,7 +299,7 @@
                 if (!profileName || profileName.length == 0)
                 {
                     OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
-                    profileName = appMode.name; //?
+                    profileName = appMode.name;
                 }
                 item[@"label"] = profileName;
                 NSString *routingProfile = @"";
@@ -318,17 +318,13 @@
                     }
                 }
                 if (!routingProfile || routingProfile.length == 0)
-                {
-                    item[@"description"] = @""; //TODO: hide cell label if text == "" ??
-                    item[@"cellType"] = kTitleTwoIconsRoundCell;
-                }
+                    item[@"description"] = @"";
                 else
-                {
                     item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), OALocalizedString(@"nav_type_hint"), routingProfile];
-                    item[@"cellType"] = kMenuSimpleCell;
-                }
+                
                 item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
                 item[@"iconColor"] = UIColorFromRGB(modeBean.iconColor);
+                item[@"cellType"] = kMenuSimpleCell;
             }
             else if ([currentItem isKindOfClass:OAQuickAction.class])
             {
@@ -343,17 +339,16 @@
                 OAPOIUIFilter *filter = (OAPOIUIFilter *)currentItem;
                 item[@"label"] = [filter getName];
                 NSString *iconRes = [filter getIconId];
-                //item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_action_user")]; // ??
-                item[@"icon"] = [UIImage imageNamed: @"ic_action_wheelchair_forward"]; // ??
+                //item[@"icon"] = [UIImage imageNamed: (![iconRes isEqualToString:@"0"] ? iconRes : @"ic_action_user")]; // no icon
+                item[@"icon"] = [UIImage imageNamed: @"ic_action_wheelchair_forward"]; // to remove
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
             else if ([currentItem isKindOfClass:OASQLiteTileSource.class]) //ITileSource ???
             {
-                //item[@"label"] = ((OASQLiteTileSource *)currentItem).name; // ???
+                //item[@"label"] = ((OASQLiteTileSource *)currentItem).name; // ?? find how to extract name
                 item[@"label"] = @"Faked name"; // ???
-                //item[@"icon"] = [UIImage imageNamed:@"ic_map"]; //???
-                item[@"icon"] = [UIImage imageNamed:@"ic_action_marker"]; //???
+                item[@"icon"] = [UIImage imageNamed:@"ic_custom_map"];
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
@@ -362,14 +357,9 @@
                 NSString *file = (NSString *)currentItem;
                 item[@"label"] = [[file lastPathComponent] stringByDeletingPathExtension];
                 if ([file containsString:RENDERERS_DIR])
-                {
-                    //item[@"icon"] = [UIImage imageNamed:@"ic_action_map_style"]; // correct name
-                    item[@"icon"] = [UIImage imageNamed:@"ic_action_world_globe"]; // for testing name name
-                }
+                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_map_style"]; // to remove
                 else if ([file containsString:ROUTING_PROFILES_DIR])
-                {
                     item[@"icon"] = [UIImage imageNamed:@"ic_action_route_distance"];
-                }
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
@@ -382,7 +372,6 @@
             }
             NSDictionary *newDict = [NSDictionary dictionaryWithDictionary:item];
             [sectionData addObject:newDict];
-            //itemHolder.divider.setVisibility(shouldShowDivider(position) ? View.VISIBLE : View.GONE);
         }
         [_data addObject:sectionData];
     }
@@ -461,8 +450,16 @@
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62., 0.0, 0.0);
         }
         cell.textView.text = item[@"label"];
-        cell.descriptionView.hidden = NO;
-        cell.descriptionView.text = item[@"description"];
+        
+        if (!item[@"description"] || ((NSString *)item[@"description"]).length > 0)
+        {
+            cell.descriptionView.hidden = NO;
+            cell.descriptionView.text = item[@"description"];
+        }
+        else
+        {
+            cell.descriptionView.hidden = YES;
+        }
 
         cell.imgView.hidden = NO;
         if (item[@"icon"] && item[@"iconColor"])
@@ -543,12 +540,12 @@
 
 - (IBAction)primaryButtonPressed:(id)sender
 {
-    //[self importItems: YES];
+    [self importItems: YES];
     
     //for test
     //OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] init];
-    OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:_settingsItems fileName:[_file lastPathComponent]];
-    [self.navigationController pushViewController:importCompleteVC animated:YES];
+//    OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:_settingsItems fileName:[_file lastPathComponent]];
+//    [self.navigationController pushViewController:importCompleteVC animated:YES];
 }
 
 - (IBAction)secondaryButtonPressed:(id)sender
@@ -564,7 +561,7 @@
         //app.getRendererRegistry().updateExternalRenderers();
         //AppInitializer.loadRoutingFiles(app, null);
         
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:_settingsItems fileName:[_file lastPathComponent]];
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:items fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
     }
 }

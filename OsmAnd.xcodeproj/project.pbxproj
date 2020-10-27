@@ -391,8 +391,8 @@
 		33D9453D2538B4DC0070636F /* OAImportDuplicatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33D9453B2538B4DC0070636F /* OAImportDuplicatesViewController.mm */; };
 		33EA857E251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EA857D251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m */; };
 		33EA857F251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EA857D251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m */; };
-		33EAEB22253DAC6A00741F12 /* OAImportCompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EAEB21253DAC6A00741F12 /* OAImportCompleteViewController.m */; };
-		33EAEB23253DAC6A00741F12 /* OAImportCompleteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33EAEB21253DAC6A00741F12 /* OAImportCompleteViewController.m */; };
+		33EAEB22253DAC6A00741F12 /* OAImportCompleteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33EAEB21253DAC6A00741F12 /* OAImportCompleteViewController.mm */; };
+		33EAEB23253DAC6A00741F12 /* OAImportCompleteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33EAEB21253DAC6A00741F12 /* OAImportCompleteViewController.mm */; };
 		3A02BFB71A31F2FA0019377F /* OAGPXListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A02BFB31A31F2FA0019377F /* OAGPXListViewController.mm */; };
 		3A02BFBF1A31FA820019377F /* icon_gpx_fill@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A02BFBB1A31FA820019377F /* icon_gpx_fill@2x.png */; };
 		3A02BFC21A31FA820019377F /* icon_star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A02BFBC1A31FA820019377F /* icon_star@2x.png */; };
@@ -6386,7 +6386,7 @@
 		33EA857C251A09C40030A4C9 /* OABottomSheetHeaderButtonCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OABottomSheetHeaderButtonCell.h; path = Controllers/Cells/OABottomSheetHeaderButtonCell.h; sourceTree = "<group>"; };
 		33EA857D251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OABottomSheetHeaderButtonCell.m; path = Controllers/Cells/OABottomSheetHeaderButtonCell.m; sourceTree = "<group>"; };
 		33EAEB20253DAC2900741F12 /* OAImportCompleteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAImportCompleteViewController.h; sourceTree = "<group>"; };
-		33EAEB21253DAC6A00741F12 /* OAImportCompleteViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAImportCompleteViewController.m; sourceTree = "<group>"; };
+		33EAEB21253DAC6A00741F12 /* OAImportCompleteViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAImportCompleteViewController.mm; sourceTree = "<group>"; };
 		3A02BFB21A31F2FA0019377F /* OAGPXListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXListViewController.h; path = Sources/Controllers/2.0/OAGPXListViewController.h; sourceTree = "<group>"; };
 		3A02BFB31A31F2FA0019377F /* OAGPXListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXListViewController.mm; path = Sources/Controllers/2.0/OAGPXListViewController.mm; sourceTree = "<group>"; };
 		3A02BFBB1A31FA820019377F /* icon_gpx_fill@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon_gpx_fill@2x.png"; path = "Resources/Icons/icon_gpx_fill@2x.png"; sourceTree = "<group>"; };
@@ -14826,7 +14826,7 @@
 				33D9453B2538B4DC0070636F /* OAImportDuplicatesViewController.mm */,
 				33D9453A2538B4C00070636F /* OAImportDuplicatesViewController.h */,
 				33EAEB20253DAC2900741F12 /* OAImportCompleteViewController.h */,
-				33EAEB21253DAC6A00741F12 /* OAImportCompleteViewController.m */,
+				33EAEB21253DAC6A00741F12 /* OAImportCompleteViewController.mm */,
 				15720BED24BF36B400BFC84F /* OAGlobalSettingsViewController.m */,
 				15720BEF24BF36C800BFC84F /* OAGlobalSettingsViewController.h */,
 				15720BF024BF3B0F00BFC84F /* OAGlobalSettingsViewController.xib */,
@@ -20672,7 +20672,7 @@
 				844E079D1E3C82F400EFC525 /* OAQuickSearchViewController.mm in Sources */,
 				DA2267A3240E5AC600FFEA91 /* OABottomSheetHeaderDescrButtonCell.m in Sources */,
 				844E07C01E3F97FB00EFC525 /* OACity.mm in Sources */,
-				33EAEB23253DAC6A00741F12 /* OAImportCompleteViewController.m in Sources */,
+				33EAEB23253DAC6A00741F12 /* OAImportCompleteViewController.mm in Sources */,
 				845AFB481E261E9000170026 /* OASearchPhrase.mm in Sources */,
 				847A1D161DF94E9B003C1246 /* OALog.mm in Sources */,
 				DAE2D489230D3A76006A3F7D /* OATextInputIconCell.mm in Sources */,
@@ -21166,7 +21166,7 @@
 				8485FA4A1FC95F88005991FE /* SunriseSunset.m in Sources */,
 				DA2558C324ADE40F0081D155 /* OAVoicePromptsViewController.mm in Sources */,
 				84FF0C4B1F3D89AF00AD1029 /* OARoutingTargetCell.m in Sources */,
-				33EAEB22253DAC6A00741F12 /* OAImportCompleteViewController.m in Sources */,
+				33EAEB22253DAC6A00741F12 /* OAImportCompleteViewController.mm in Sources */,
 				DA25588924ADE40F0081D155 /* OAProfileGeneralSettingsParametersViewController.m in Sources */,
 				848B28C31EED8A3400F1A19D /* OATerrainMapLayer.mm in Sources */,
 				3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,

@@ -476,7 +476,7 @@
  
 - (NSArray*) getDuplicatesData:(NSMutableArray<OASettingsItem *> *)items
 {
-    NSMutableArray* duplicateItems = [NSMutableArray alloc];
+    NSMutableArray* duplicateItems = [NSMutableArray new];
     for (OASettingsItem *item in items)
     {
         if ([item isKindOfClass:OAProfileSettingsItem.class]) {

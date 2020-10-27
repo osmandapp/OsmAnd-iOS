@@ -7,6 +7,7 @@
 //
 
 #import "OACheckForProfileDuplicatesViewController.h"
+#import "OAImportDuplicatesViewController.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OASettingsHelper.h"
 #import "OASettingsImporter.h"
@@ -25,7 +26,7 @@
 #define kBottomPadding 32
 #define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
 
-@interface OACheckForProfileDuplicatesViewController() <UITableViewDelegate, UITableViewDataSource>
+@interface OACheckForProfileDuplicatesViewController() <UITableViewDelegate, UITableViewDataSource, OASettingsImportExportDelegate>
 
 @end
 
@@ -79,7 +80,11 @@
 {
     NSArray <OASettingsItem *> *selectedSettingsItems = [self getSettingsItemsFromData];
     if (_file && _settingsItems)
-        [_settingsHelper checkDuplicates:_file items:_settingsItems selectedItems:selectedSettingsItems];
+    {
+        OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:_file items:_settingsItems selectedItems:selectedSettingsItems];
+        task.delegate = self;
+        [task execute];
+    }
 }
 
 - (OAProfileSettingsItem *)getBaseProfileSettingsItem:(OAApplicationModeBean *)modeBean
@@ -295,6 +300,15 @@
     [self.tableView endUpdates];
     
     //[self updateVisibleCells];
+}
+
+
+//MARK: OASettingsImportExportDelegate
+
+- (void) onDuplicatesChecked:(NSArray<OASettingsItem *>*)duplicates items:(NSArray<OASettingsItem *>*)items
+{
+    OAImportDuplicatesViewController *dublicatesVC = [[OAImportDuplicatesViewController alloc] initWithDuplicatesList:duplicates settingsItems:_settingsItems file:_file];
+    [self.navigationController pushViewController:dublicatesVC animated:YES];
 }
 
 @end

@@ -9,11 +9,19 @@
 #import "OAImportCompleteViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OAProfileDataObject.h"
+#import "OAQuickAction.h"
+#import "OASQLiteTileSource.h"
+#import "OAPOIUIFilter.h"
+#import "OAAvoidRoadInfo.h"
 #import "OAMultiIconTextDescCell.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
 #define kIconTitleButtonCell @"OAIconTitleButtonCell"
+
+#define RENDERERS_DIR @"rendering/"
+#define ROUTING_PROFILES_DIR @"routing/"
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -21,8 +29,9 @@
 
 @implementation OAImportCompleteViewController
 {
-    NSArray * _settingsItems;
+    NSArray<OASettingsItem *> * _settingsItems;
     NSString *_fileName;
+    NSMutableArray<NSDictionary *> * _data;
 }
 
 - (instancetype) init
@@ -54,39 +63,102 @@
 
 - (void) generateData
 {
-    _settingsItems = [NSMutableArray new];
-    [self generateFakeData];
-}
-
-- (void) generateFakeData
-{
-    //TODO: for now here is generating fake data, just for demo
-    _fileName = @"Strikeline.ocf";
+    _data = [NSMutableArray new];
+    int profilesCount = 0;
+    int actionsCount = 0;
+    int filtersCount = 0;
+    int tileSourcesCount = 0;
+    int renderFilesCount = 0;
+    int routingFilesCount = 0;
+    int avoidRoads = 0;
     
-    _settingsItems = @[
-                      @{
-                          @"label": @"Quick Action",
-                          @"iconName": @"ic_custom_quick_action.png",
-                          @"count": @7
-                      },
-                       @{
-                           @"label": @"Map",
-                           @"iconName": @"ic_custom_overlay_map.png",
-                           @"count": @2
-                       },
-                       @{
-                           @"label": @"Settings",
-                           @"iconName": @"left_menu_icon_settings.png",
-                           @"count": @1
-                       },
-                       @{
-                           @"label": @"Search",
-                           @"iconName": @"ic_custom_search.png",
-                           @"count": @1
-                       }
-                   ];
+    for (id item in _settingsItems)
+    {
+        if ([item isKindOfClass:OAProfileSettingsItem.class])
+            profilesCount += 1;
+        else if ([item isKindOfClass:OAQuickAction.class])
+            actionsCount += 1;
+        else if ([item isKindOfClass:OAPOIUIFilter.class])
+            filtersCount += 1;
+        else if ([item isKindOfClass:OASQLiteTileSource.class])
+            tileSourcesCount += 1;
+        else if ([item isKindOfClass:NSString.class])
+        {
+            NSString *filePath = (NSString *)item;
+            if ([filePath containsString:RENDERERS_DIR])
+                renderFilesCount += 1;
+            if ([filePath containsString:ROUTING_PROFILES_DIR])
+                routingFilesCount += 1;
+        }
+        else if ([item isKindOfClass:OAAvoidRoadInfo.class])
+            avoidRoads += 1;
+    }
+    
+    if (profilesCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"shared_string_settings"),
+            @"iconName": @"ic_action_settings",
+            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            }
+         ];
+    }
+    if (actionsCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"configure_screen_quick_action"),
+            @"iconName": @"ic_custom_quick_action",
+            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            }
+         ];
+    }
+    if (filtersCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"search_activity"),
+            @"iconName": @"ic_custom_search",
+            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            }
+         ];
+    }
+    if (tileSourcesCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"configure_map"),
+            @"iconName": @"ic_custom_overlay_map",
+            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            }
+         ];
+    }
+    if (renderFilesCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"shared_string_rendering_style"),
+            @"iconName": @"ic_custom_map_style",
+            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            }
+         ];
+    }
+    if (routingFilesCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"shared_string_routing"),
+            @"iconName": @"ic_action_route_distance",
+            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            }
+         ];
+    }
+    if (avoidRoads > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"avoid_road"),
+            @"iconName": @"ic_custom_alert",
+            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            }
+         ];
+    }
 }
-
+ 
 - (void) applyLocalization
 {
     [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
@@ -119,16 +191,17 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return [self generateHeightForHeaderWithFirstHeaderText:[NSString stringWithFormat:OALocalizedString(@"import_complete_description"), _fileName] inSection:section];
+    //TODO: Add bold text
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _settingsItems.count;
+    return _data.count;
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    NSDictionary *item = _settingsItems[indexPath.row];
+    NSDictionary *item = _data[indexPath.row];
       
     OAMultiIconTextDescCell *cell = (OAMultiIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAMultiIconTextDescCell"];
     if (cell == nil)
@@ -151,6 +224,7 @@
 - (IBAction)secondaryButtonPressed:(id)sender
 {
     NSLog(@"secondaryButtonPressed");
+    //TODO: Close this VC
 }
 
 @end

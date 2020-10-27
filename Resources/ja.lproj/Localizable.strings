@@ -176,7 +176,7 @@
 "arrival_distance_factor_at_last" = "最後の数メートル";
 "map_orientation_change_in_accordance_with_speed" = "マップ向きのしきい値";
 "map_orientation_change_in_accordance_with_speed_descr" = "マップの向きが’移動方向'から'方位'に切り替わる速度を選択します";
-"route_params" = "Route parameters";
+"route_params" = "ルートパラメーター";
 "fast_route_mode" = "最速ルート";
 "fast_route_mode_descr" = "有効なら目的地までの最速ルートで計算し、無効なら燃費を抑えた短いルートで計算します";
 "avoid_in_routing_title" = "回避ルートの指定…";
@@ -396,7 +396,7 @@
 "poi_overlay" = "POIのオーバーレイ表示";
 "poi_type" = "POIの種類";
 "my_favorites" = "お気に入り";
-"my_places" = "お気に入り";
+"my_places" = "ブックマーク";
 "fav_no_group" = "グループなし";
 "fav_add_group" = "グループの追加";
 "fav_remove_q" = "お気に入りを削除してもよろしいですか？";
@@ -465,7 +465,7 @@
 "track_continue_rec" = "記録の続行";
 "track_continue_rec_q" = "記録を続行しますか？";
 "rec_interval" = "ログ記録間隔";
-"rec_interval_minimum" = "Minimum";
+"rec_interval_minimum" = "最小値";
 "track_start_rec" = "旅程記録の開始";
 "track_rec_addon_q" = "旅程を記録保存するには、旅程記録アドオンを有効にしてください";
 "track_interval_remember" = "選択した項目を記憶する";
@@ -483,7 +483,7 @@
 "gpx_slope" = "勾配";
 // Map settings
 "m_style_overview" = "概要";
-"m_style_car" = "Car";
+"m_style_car" = "車";
 "m_style_walk" = "徒歩";
 "m_style_bicycle" = "自転車";
 "map_settings_map" = "地図表示";
@@ -633,7 +633,7 @@
 "res_updates_avail_q" = "更新が利用可能です。";
 "res_updates_exp" = "大陸マップを購入し、マップを更新してください";
 // Menu
-"menu_my_places" = "お気に入り";
+"menu_my_places" = "ブックマーク";
 "menu_my_trips" = "旅程履歴";
 "menu_my_directions" = "案内履歴";
 "menu_feedback" = "フィードバック";
@@ -720,7 +720,7 @@
 "mapil_images_nearby" = "近隣の写真";
 "mapil_no_images" = "この近辺の写真はありません。";
 "mapil_add_photos" = "写真を追加する";
-"mapillary_get_title" = "Mapillaryを利用し近隣写真のカバー率を改善する";
+"mapillary_get_title" = "Mapillaryにて写真によるレポートを強化しましょう";
 "mapillary_get_descr" = "Mapillaryを導入し、この場所の写真を追加します";
 "mapil_contribute" = "自身が撮影した写真をストリート画像として提供する";
 "mapillary_descr" = "皆で作るオンラインストリート写真。発見した場所を皆でコラボレーションし、全世界を写真におさめよう";
@@ -779,7 +779,7 @@
 "add_intermediate" = "中間経由地点を追加";
 "add_home" = "自宅を追加";
 "add_work" = "勤務先を追加";
-"home_pt" = "Home";
+"home_pt" = "自宅";
 "work_pt" = "勤務先";
 "add_first_inermediate" = "最初の経由地点を追加";
 "toggle_auto_zoom" = "自動ズームのON/OFF";
@@ -884,7 +884,7 @@
 "units_kmh" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "h";
-"units_min" = "min";
+"units_min" = "分";
 "units_sec" = "秒";
 "units_min_short" = "m";
 "units_sec_short" = "s";
@@ -980,7 +980,7 @@
 "rendering_category_transport" = "交通機関の追加描写";
 "rendering_category_others" = "その他のマップ属性";
 // Rendering attributes
-"units_minutes_short" = "min";
+"units_minutes_short" = "分";
 "units_seconds_short" = "秒";
 "cannot_access_calendar" = "カレンダーにアクセスできません";
 "reminder_not_set_text" = "カレンダーへのアクセスが許可されていないため、リマインダーは設定できませんでした";
@@ -1290,7 +1290,7 @@
 "rendering_value_brown_name" = "ブラウン";
 "rendering_value_walkingRoutesOSMCNodes_name" = "ノードネットワーク";
 "rendering_attr_depthContours_description" = "等深線や深度を表示します。";
-"rendering_value_disabled_name" = "無効化";
+"rendering_value_disabled_name" = "無効";
 "rendering_attr_publicTransportMode_name" = "バス、トロリーバス、シャトルバス路線";
 "rendering_attr_currentTrackWidth_name" = "GPX経路の幅";
 "rendering_attr_showLez_name" = "低排出ゾーンの表示";
@@ -1595,7 +1595,7 @@
 "res_expire_warning" = "有効期限は0〜10000000の数値である必要があります";
 "res_source_format" = "ソースフォーマット";
 "res_source_sqlite" = "SQLite DBファイル";
-"res_source_one_per_tile" = "タイル毎に1画像ファイル";
+"res_source_one_per_tile" = "タイルごとに1つの画像ファイル";
 "res_zoom_invalid_value" = "ズーム値は1～22の範囲でなければなりません";
 "online_raster_map" = "オンラインラスターマップ";
 "offline_raster_map" = "オフラインラスターマップ";
@@ -1682,3 +1682,52 @@
 "allow_3D_view" = "2.5D表示";
 "allow_3d" = "2.5D表示を許可する";
 "shared_string_next" = "次へ";
+"choose_auto_center_map_view_descr" = "マップ表示時、移動後に現在地が画面中央に戻るまでの間隔を指定します";
+"change_map_behavior" = "ナビゲーション中のマップ動作を変更する";
+"map_behavior" = "マップ動作";
+"tones" = "トン";
+"lenght_limit_description" = "車の長さを入力してください。一部のルートにおいては、長い車両では通行できない場合があります。";
+"meters" = "メートル";
+"default_speed_dialog_msg" = "すべての道路の移動速度を制限し、種別や制限速度が不明な道路が多い場合の到着時間予測に役立ちます(ルート計算に影響します)";
+"default_speed" = "予想標準速度";
+"touting_specified_vehicle_parameters_descr" = "指定した車両パラメーターはルート計算に影響を与える可能性があります。";
+"announce" = "案内";
+"arrival_announcement_frequency" = "目的地周辺でのアナウンスをするタイミングを設定します";
+"repeat_after" = "繰り返す間隔";
+"instructions_repeat" = "「次の曲がる方向」ウィジェットをタップすると繰り返し指示されます";
+"only_manually" = "手動のみ";
+"speed_limit_tolerance_descr" = "制限速度超過の許容値を選択し、それを超えると音声警告がなされるようになります。";
+"voice_prompts" = "音声案内";
+"avoid_routes_and_road" = "特定のルートや特定の道路種別を避けるよう設定ができます";
+"recalculate_wrong_dir" = "逆方向の場合にルートを再計算";
+"select_distance_for_recalculation" = "ルートを再計算する距離を選択します。";
+"route_recalculation_descr" = "ルートから現在地までの距離が選択された値よりも大きい場合、ルートが再計算されます。";
+"recalculate_route" = "ルート再計算の逸脱しきい値";
+"nav_type_straight_line" = "直線";
+"nav_type_ski" = "スキー";
+"base_profile_descr_public_transport" = "公共交通機関の種類";
+"nav_type_direct_to" = "直接指示";
+"osmand_routing" = "OsmAndルーティング";
+"select_nav_profile_dialog_message" = "'ナビゲーションタイプ'は、ルート計算方法の管理をおこないます。";
+"vehicle_parameters" = "車両パラメーター";
+"screen_alerts" = "画面アラート";
+"two" = "二つ";
+
+// Dirrection appearance
+"one" = "一つ";
+"direction_lines" = "案内線を表示";
+"arrows_on_map" = "マップ上に矢印を表示";
+"choose_how_display_distance" = "アクティブマーカーまでの距離を示す情報をどこに表示するか選択してください";
+"distance_indication" = "距離表示";
+"specify_number_of_dir_indicators" = "マーカーの方向と距離を示すインジケーターの数を指定してください。以下の設定すべてに影響します。";
+"active_markers" = "アクティブマーカー";
+"avoid_transport_type" = "避けたい移動手段の種類";
+"reset_to_default" = "標準設定に戻す";
+"copy_from_other_profile" = "他のプロファイルからコピー";
+"shared_string_exit" = "終了";
+"position_icon_while_moving" = "移動中の位置アイコン";
+"appearance_on_map" = "マップ画面での表示設定";
+"select_icon" = "アイコン選択";
+"select_color" = "プロファイルの色";
+"profile_settings" = "プロファイル設定";
+"configure_profile" = "プロファイルの構築";

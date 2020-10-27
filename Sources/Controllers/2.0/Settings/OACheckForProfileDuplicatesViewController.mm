@@ -167,25 +167,6 @@
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject:(OAAvoidRoadInfo *)object];
     }
-    /*
-     if (!appModeBeans.isEmpty()) {
-         for (ApplicationModeBean modeBean : appModeBeans) {
-             settingsItems.add(new ProfileSettingsItem(app, getBaseProfileSettingsItem(modeBean), modeBean));
-         }
-     }
-     if (!quickActions.isEmpty()) {
-         settingsItems.add(new QuickActionsSettingsItem(app, getBaseQuickActionsSettingsItem(), quickActions));
-     }
-     if (!poiUIFilters.isEmpty()) {
-         settingsItems.add(new PoiUiFiltersSettingsItem(app, getBasePoiUiFiltersSettingsItem(), poiUIFilters));
-     }
-     if (!tileSourceTemplates.isEmpty()) {
-         settingsItems.add(new MapSourcesSettingsItem(app, getBaseMapSourcesSettingsItem(), tileSourceTemplates));
-     }
-     if (!avoidRoads.isEmpty()) {
-         settingsItems.add(new AvoidRoadsSettingsItem(app, getBaseAvoidRoadsSettingsItem(), avoidRoads));
-     }
-     */
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)
             [settingsItems addObject:[self getBaseProfileSettingsItem:modeBean]];
@@ -266,22 +247,6 @@
     }
     return cell;
 }
-
-// ???
-- (void) checkForDuplicates
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        BOOL animated = _checkingDuplicates;
-        _checkingDuplicates = NO;
-        [self reloadDataAnimated:animated];
-    });
-}
-
-- (void) reloadDataAnimated:(BOOL)animated
-{
-    
-}
-
 
 //MARK: OASettingsImportExportDelegate
 

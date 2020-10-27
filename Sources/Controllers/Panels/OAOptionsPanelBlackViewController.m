@@ -254,8 +254,7 @@
     imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [_menuButtonNavigation setImage:[[UIImage imageNamed:@"left_menu_icon_navigation.png"]
     imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    // TODO: change image
-    [_menuButtonPlanRoute setImage:[[UIImage imageNamed:@"left_menu_icon_navigation.png"]
+    [_menuButtonPlanRoute setImage:[[UIImage imageNamed:@"ic_custom_routes.png"]
     imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 
     [_menuButtonMaps setTintColor:UIColorFromRGB(color_options_panel_icon)];

@@ -795,6 +795,8 @@
 // Route planning
 "plan_route" = "Plan a route";
 "add_point" = "Add point";
+"point_num" = "Point %ld";
+"points_count" = "Points:";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

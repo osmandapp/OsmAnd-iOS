@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -29,16 +29,6 @@
                 <userLayoutGuide location="391" affinity="minY"/>
             </userGuides>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Xh-BD-ZOh" customClass="OARoutePlanningScrollableView">
-                    <rect key="frame" x="0.0" y="719" width="414" height="170"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <viewLayoutGuide key="safeArea" id="bHM-xy-GW9"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                </view>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lff-A9-ANx">
-                    <rect key="frame" x="192" y="361" width="30" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
                 <view autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UgQ-6v-Ku0">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                     <subviews>
@@ -67,10 +57,10 @@
                             </constraints>
                         </view>
                         <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cZ1-QP-9LE">
-                            <rect key="frame" x="319" y="45" width="75" height="42"/>
+                            <rect key="frame" x="330" y="45" width="64" height="42"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fzm-by-GwC">
-                                    <rect key="frame" x="0.0" y="0.0" width="75" height="42"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="64" height="42"/>
                                     <state key="normal" title="Done">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </state>
@@ -85,15 +75,11 @@
                                 <constraint firstAttribute="height" constant="42" id="KtV-E0-4rS"/>
                                 <constraint firstAttribute="bottom" secondItem="fzm-by-GwC" secondAttribute="bottom" id="XZT-CI-dU1"/>
                                 <constraint firstItem="fzm-by-GwC" firstAttribute="top" secondItem="cZ1-QP-9LE" secondAttribute="top" id="glZ-pm-m7u"/>
-                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="75" id="ocM-8A-CW8"/>
                                 <constraint firstItem="fzm-by-GwC" firstAttribute="leading" secondItem="cZ1-QP-9LE" secondAttribute="leading" id="vvx-ck-8ff"/>
                             </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="erB-WB-vq9">
-                            <rect key="frame" x="104" y="56" width="195" height="20.5"/>
-                            <constraints>
-                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="195" id="WQO-hv-N7s"/>
-                            </constraints>
+                            <rect key="frame" x="104" y="56" width="206" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -107,6 +93,7 @@
                         <constraint firstItem="erB-WB-vq9" firstAttribute="top" secondItem="UgQ-6v-Ku0" secondAttribute="topMargin" constant="48" id="ET9-5q-YVS"/>
                         <constraint firstItem="ApU-du-yM9" firstAttribute="top" secondItem="UgQ-6v-Ku0" secondAttribute="top" id="Oru-wV-9eg"/>
                         <constraint firstItem="erB-WB-vq9" firstAttribute="leading" secondItem="2JT-lW-dRA" secondAttribute="trailing" constant="20" id="WDB-BA-a0n"/>
+                        <constraint firstItem="erB-WB-vq9" firstAttribute="centerX" secondItem="UgQ-6v-Ku0" secondAttribute="centerX" id="Yl6-dL-bA3"/>
                         <constraint firstItem="cZ1-QP-9LE" firstAttribute="top" secondItem="UgQ-6v-Ku0" secondAttribute="topMargin" constant="37" id="fgk-QS-UpC"/>
                         <constraint firstItem="2JT-lW-dRA" firstAttribute="top" secondItem="UgQ-6v-Ku0" secondAttribute="topMargin" constant="37" id="iqy-lH-Q1Q"/>
                         <constraint firstItem="ApU-du-yM9" firstAttribute="leading" secondItem="UgQ-6v-Ku0" secondAttribute="leading" id="lNJ-3A-Xen"/>
@@ -115,6 +102,16 @@
                         <constraint firstAttribute="height" constant="100" id="zvX-uQ-FwK"/>
                     </constraints>
                 </view>
+                <view contentMode="scaleToFill" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Xh-BD-ZOh" customClass="OARoutePlanningScrollableView">
+                    <rect key="frame" x="0.0" y="719" width="414" height="170"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <viewLayoutGuide key="safeArea" id="bHM-xy-GW9"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lff-A9-ANx">
+                    <rect key="frame" x="192" y="361" width="30" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="65V-g6-Wgg"/>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>

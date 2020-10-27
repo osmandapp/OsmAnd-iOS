@@ -19,8 +19,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *addPointButton;
 @property (weak, nonatomic) IBOutlet UIButton *expandButton;
 @property (weak, nonatomic) IBOutlet UIImageView *leftImageVIew;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 
 @end
 
@@ -31,10 +29,14 @@
     [super awakeFromNib];
     [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
     [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
-    _titleLabel.text = @"5km, 5 points";
-    _descriptionLabel.text = @"260m, 131";
     _expandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
     [_expandButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    
+    [_undoButton setImage:[[UIImage imageNamed:@"ic_custom_undo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_redoButton setImage:[[UIImage imageNamed:@"ic_custom_redo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    
+    _undoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    _redoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
 }
 
 - (BOOL)supportsFullScreen
@@ -73,6 +75,29 @@
             [button setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         }
     }
+}
+- (IBAction)onOptionsButtonPressed:(id)sender
+{
+    if (_routePlanningDelegate)
+        [_routePlanningDelegate onOptionsPressed];
+}
+
+- (IBAction)onUndoButtonPressed:(id)sender
+{
+    if (_routePlanningDelegate)
+        [_routePlanningDelegate onUndoPressed];
+}
+
+- (IBAction)onRedoButtonPressed:(id)sender
+{
+    if (_routePlanningDelegate)
+        [_routePlanningDelegate onRedoPressed];
+}
+
+- (IBAction)onAddPointPressed:(id)sender
+{
+    if (_routePlanningDelegate)
+        [_routePlanningDelegate onAddPointPressed];
 }
 
 @end

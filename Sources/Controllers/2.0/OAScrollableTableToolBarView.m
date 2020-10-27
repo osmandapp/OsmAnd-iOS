@@ -138,6 +138,10 @@ static BOOL visible = false;
     contentFrame.size.height -= contentFrame.origin.y;
     _contentContainer.frame = contentFrame;
     
+    CGRect viewFrame = contentFrame;
+    viewFrame.size.height += buttonsFrame.size.height;
+    _contentView.frame = viewFrame;
+    
     _sliderView.hidden = isLandscape;
     
     CGFloat tableViewY = CGRectGetMaxY(_topHeaderContainerView.frame);

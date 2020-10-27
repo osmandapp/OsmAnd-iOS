@@ -44,7 +44,7 @@ static OAQuickActionType *ACTION_TYPE;
     
     if (plugin)
     {
-        const auto& latLon = OsmAnd::Utilities::convert31ToLatLon([OARootViewController instance].mapPanel.mapViewController.mapView.target31);
+        const auto latLon = OsmAnd::Utilities::convert31ToLatLon([OARootViewController instance].mapPanel.mapViewController.mapView.target31);
         OANode *node = [[OANode alloc] initWithId:-1 latitude:latLon.latitude longitude:latLon.longitude];
         [node replaceTags:[self getTagsFromParams]];
         

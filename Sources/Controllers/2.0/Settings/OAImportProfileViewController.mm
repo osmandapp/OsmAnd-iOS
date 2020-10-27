@@ -92,6 +92,14 @@
     [self.additionalNavBarButton setTitle:_selectedIndexPaths.count >= 2 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all") forState:UIControlStateNormal];
 }
 
+//- (void) updateButtonView
+//{
+//    self.primaryBottomButton.userInteractionEnabled = _selectedItems.count > 0;
+//    self.primaryBottomButton.backgroundColor = _selectedItems.count > 0 ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+//    [self.primaryBottomButton setTintColor:_selectedItems.count > 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
+//    [self.primaryBottomButton setTitleColor:_selectedItems.count > 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
+//}
+
 - (NSString *) getTableHeaderTitle
 {
     return OALocalizedString(@"shared_string_import");
@@ -107,8 +115,9 @@
     
     [self.additionalNavBarButton addTarget:self action:@selector(selectDeselectAllItems:) forControlEvents:UIControlEventTouchUpInside];
     self.secondaryBottomButton.hidden = YES;
+//    [self updateButtonView];
     self.backImageButton.hidden = YES;
-    _selectedIndexPaths = [[NSMutableArray alloc] init]; //
+    _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
     [super viewDidLoad];
 }
@@ -375,9 +384,12 @@
 
 - (IBAction) primaryButtonPressed:(id)sender
 {
-    OACheckForProfileDuplicatesViewController* checkForDuplicates = [[OACheckForProfileDuplicatesViewController alloc] initWithItems:_settingsItems file:(NSString *)_file selectedItems:_selectedItems];
-    [checkForDuplicates prepareToImport];
-    [self.navigationController pushViewController:checkForDuplicates animated:YES];
+    if (_selectedItems.count > 0)
+    {
+        OACheckForProfileDuplicatesViewController* checkForDuplicates = [[OACheckForProfileDuplicatesViewController alloc] initWithItems:_settingsItems file:(NSString *)_file selectedItems:_selectedItems];
+        [checkForDuplicates prepareToImport];
+        [self.navigationController pushViewController:checkForDuplicates animated:YES];
+    }
 }
 
 - (void) selectDeselectAllItems:(id)sender
@@ -671,6 +683,7 @@
         if (indexPath.row != 0)
             [_selectedItems addObject:objects[indexPath.row - 1]];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+//        [self updateButtonView];
     }
     
 }
@@ -684,6 +697,7 @@
         if (indexPath.row != 0)
             [_selectedItems removeObject:objects[indexPath.row - 1]];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+//        [self updateButtonView];
     }
 }
 

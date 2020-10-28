@@ -56,11 +56,14 @@ static BOOL visible = false;
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
-    _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDragged:)];
-    _panGesture.maximumNumberOfTouches = 1;
-    _panGesture.minimumNumberOfTouches = 1;
-    [self addGestureRecognizer:_panGesture];
-    _panGesture.delegate = self;
+    if (self.useGestureRecognizer)
+    {
+        _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDragged:)];
+        _panGesture.maximumNumberOfTouches = 1;
+        _panGesture.minimumNumberOfTouches = 1;
+        [self addGestureRecognizer:_panGesture];
+        _panGesture.delegate = self;
+    }
     _currentState = EOADraggableMenuStateInitial;
     
     _sliderView.layer.cornerRadius = 3.;
@@ -212,6 +215,11 @@ static BOOL visible = false;
 - (BOOL)supportsFullScreen
 {
     return YES; // override
+}
+
+- (BOOL) useGestureRecognizer
+{
+    return YES;
 }
 
 - (CGFloat) getViewHeight:(EOADraggableMenuState)state

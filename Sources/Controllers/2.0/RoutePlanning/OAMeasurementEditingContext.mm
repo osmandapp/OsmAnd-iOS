@@ -25,10 +25,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 @implementation OAMeasurementEditingContext
 {
-    OATrackSegment *_before;
-    OATrackSegment *_beforeCacheForSnap;
-    OATrackSegment *_after;
-    OATrackSegment *_afterCacheForSnap;
+    OAGpxTrkSeg *_before;
+    OAGpxTrkSeg *_beforeCacheForSnap;
+    OAGpxTrkSeg *_after;
+    OAGpxTrkSeg *_afterCacheForSnap;
     
     NSInteger _calculatedPairs;
     NSInteger _pointsToCalculateSize;
@@ -156,14 +156,14 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //    roadSegmentData.clear();
 //}
 //
-- (OATrackSegment *) getBeforeTrkSegmentLine
+- (OAGpxTrkSeg *) getBeforeTrkSegmentLine
 {
     if (_beforeCacheForSnap != nil)
         return _beforeCacheForSnap;
     return _before;
 }
 
-- (OATrackSegment *) getAfterTrkSegmentLine
+- (OAGpxTrkSeg *) getAfterTrkSegmentLine
 {
     if (_afterCacheForSnap != nil) {
         return _afterCacheForSnap;

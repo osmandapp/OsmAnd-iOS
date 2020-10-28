@@ -24,7 +24,7 @@
 #import "OARoutePlanningScrollableView.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAAddPointCommand.h"
-#import "OAIconTextDescButtonTableViewCell.h"
+#import "OAMenuSimpleCellNoIcon.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OALocationServices.h"
 #import "OAGpxData.h"
@@ -33,9 +33,14 @@
 #import "OASelectedGPXHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDatabase.h"
+#import "OAReorderPointCommand.h"
+#import "OARemovePointCommand.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
+
+#define kDefaultMapRulerMarginBottom -17.0
+#define kDefaultMapRulerMarginLeft 120.0
 
 typedef NS_ENUM(NSInteger, EOAFinalSaveAction) {
     SHOW_SNACK_BAR_AND_CLOSE = 0,
@@ -98,6 +103,7 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
     _scrollableView.routePlanningDelegate = self;
     _scrollableView.tableView.delegate = self;
     _scrollableView.tableView.dataSource = self;
+    [_scrollableView.tableView setEditing:YES];
     [self updateDistancePointsText];
     [_scrollableView show:YES state:EOADraggableMenuStateInitial onComplete:nil];
 //    BOOL isNight = [OAAppSettings sharedManager].nightMode;
@@ -118,6 +124,14 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
     _layer.delegate = self;
     
     [self adjustMapViewPort];
+    [self changeMapRulerPosition];
+}
+
+- (void) changeMapRulerPosition
+{
+    CGFloat bottomMargin = OAUtilities.isLandscapeIpadAware ? kDefaultMapRulerMarginBottom : (-_scrollableView.getViewHeight + OAUtilities.getBottomMargin - 25.);
+    CGFloat leftMargin = OAUtilities.isLandscapeIpadAware ? _scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 : kDefaultMapRulerMarginLeft;
+    [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
 - (void) changeCenterOffset:(CGFloat)contentHeight
@@ -171,6 +185,7 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
 - (IBAction)closePressed:(id)sender
 {
     [_scrollableView hide:YES duration:.2 onComplete:^{
+        [_mapPanel targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
         [self restoreMapViewPort];
         [OARootViewController.instance.mapPanel hideScrollableHudViewController];
         _layer.editingCtx = nil;
@@ -185,6 +200,7 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
 //    else
     [self saveChanges:SHOW_SNACK_BAR_AND_CLOSE showDialog:NO];
     [_scrollableView hide:YES duration:.2 onComplete:^{
+        [_mapPanel targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
         [self restoreMapViewPort];
         [OARootViewController.instance.mapPanel hideScrollableHudViewController];
         _layer.editingCtx = nil;
@@ -455,7 +471,8 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void)onViewHeightChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:height animated:YES];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:OAUtilities.isLandscapeIpadAware ? 0. : (height - 30.) animated:YES];
+    [self changeMapRulerPosition];
     [self adjustMapViewPort];
 }
 
@@ -518,14 +535,14 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OAIconTextDescButtonCell";
-    OAIconTextDescButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    static NSString* const identifierCell = @"OAMenuSimpleCellNoIcon";
+    OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescButtonTableViewCell" owner:self options:nil];
-        cell = (OAIconTextDescButtonCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+        cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
     }
-    cell.titleLabel.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), indexPath.row + 1];
+    cell.textView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), indexPath.row + 1];
     
     OAGpxTrkPt *point1 = _editingContext.getPoints[indexPath.row];
     CLLocation *location1 = [[CLLocation alloc] initWithLatitude:point1.getLatitude longitude:point1.getLongitude];
@@ -535,11 +552,11 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
         if (currentLocation)
         {
             double azimuth = [location1 bearingTo:currentLocation];
-            cell.descLabel.text = [NSString stringWithFormat:@"%@ • %@ • %@", OALocalizedString(@"gpx_start"), [_app getFormattedDistance:[location1 distanceFromLocation:currentLocation]], [OsmAndApp.instance getFormattedAzimuth:azimuth]];
+            cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@ • %@", OALocalizedString(@"gpx_start"), [_app getFormattedDistance:[location1 distanceFromLocation:currentLocation]], [OsmAndApp.instance getFormattedAzimuth:azimuth]];
         }
         else
         {
-            cell.descLabel.text = OALocalizedString(@"gpx_start");
+            cell.descriptionView.text = OALocalizedString(@"gpx_start");
         }
     }
     else
@@ -547,9 +564,58 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
         OAGpxTrkPt *point2 = indexPath.row == 0 && _editingContext.getPointsCount > 1 ? _editingContext.getPoints[indexPath.row + 1] : _editingContext.getPoints[indexPath.row - 1];
         CLLocation *location2 = [[CLLocation alloc] initWithLatitude:point2.getLatitude longitude:point2.getLongitude];
         double azimuth = [location1 bearingTo:location2];
-        cell.descLabel.text = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:[location1 distanceFromLocation:location2]], [OsmAndApp.instance getFormattedAzimuth:azimuth]];
+        cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:[location1 distanceFromLocation:location2]], [OsmAndApp.instance getFormattedAzimuth:azimuth]];
     }
     return cell;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        [_editingContext.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:_layer position:indexPath.row]];
+        [tableView beginUpdates];
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView endUpdates];
+        [self updateDistancePointsText];
+    }
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    return proposedDestinationIndexPath;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    // Deferr the data update until the animation is complete
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [tableView reloadData];
+    }];
+    [_editingContext.commandManager execute:[[OAReorderPointCommand alloc] initWithLayer:_layer from:sourceIndexPath.row to:destinationIndexPath.row]];
+    [self updateDistancePointsText];
+    [CATransaction commit];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - OAMeasurementLayerDelegate

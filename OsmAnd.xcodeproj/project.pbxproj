@@ -4680,6 +4680,10 @@
 		DA48614721F9D72100106848 /* OAOpenStreetMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */; };
 		DA49C1AC2549796400CD48DC /* OACopyProfileBottomSheetView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA49C1AB2549796300CD48DC /* OACopyProfileBottomSheetView.xib */; };
 		DA49C1AD2549796400CD48DC /* OACopyProfileBottomSheetView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA49C1AB2549796300CD48DC /* OACopyProfileBottomSheetView.xib */; };
+		DA49C1B22549982900CD48DC /* OAReorderPointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA49C1B12549982900CD48DC /* OAReorderPointCommand.mm */; };
+		DA49C1B32549982900CD48DC /* OAReorderPointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA49C1B12549982900CD48DC /* OAReorderPointCommand.mm */; };
+		DA49C1BA25499A0800CD48DC /* OARemovePointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA49C1B925499A0800CD48DC /* OARemovePointCommand.mm */; };
+		DA49C1BB25499A0800CD48DC /* OARemovePointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA49C1B925499A0800CD48DC /* OARemovePointCommand.mm */; };
 		DA4B981321F74EAD00CED009 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4B981121F74EAD00CED009 /* OrderedDictionary.m */; };
 		DA4B981421F74EAD00CED009 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4B981121F74EAD00CED009 /* OrderedDictionary.m */; };
 		DA4B981B21F7559C00CED009 /* OAOSMSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4B981A21F7559C00CED009 /* OAOSMSettings.m */; };
@@ -9343,6 +9347,10 @@
 		DA48614421F9D72100106848 /* OAOpenStreetMapPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapPoint.h; sourceTree = "<group>"; };
 		DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOpenStreetMapPoint.m; sourceTree = "<group>"; };
 		DA49C1AB2549796300CD48DC /* OACopyProfileBottomSheetView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OACopyProfileBottomSheetView.xib; sourceTree = "<group>"; };
+		DA49C1B02549982900CD48DC /* OAReorderPointCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAReorderPointCommand.h; sourceTree = "<group>"; };
+		DA49C1B12549982900CD48DC /* OAReorderPointCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAReorderPointCommand.mm; sourceTree = "<group>"; };
+		DA49C1B825499A0800CD48DC /* OARemovePointCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARemovePointCommand.h; sourceTree = "<group>"; };
+		DA49C1B925499A0800CD48DC /* OARemovePointCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARemovePointCommand.mm; sourceTree = "<group>"; };
 		DA4B981121F74EAD00CED009 /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
 		DA4B981221F74EAD00CED009 /* OrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderedDictionary.h; sourceTree = "<group>"; };
 		DA4B981921F7559C00CED009 /* OAOSMSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOSMSettings.h; sourceTree = "<group>"; };
@@ -15562,6 +15570,10 @@
 				DACC0EFE2541879E00904F66 /* OAMeasurementModeCommand.mm */,
 				DA188D1F25444A220033A809 /* OAAddPointCommand.h */,
 				DA188D2025444A220033A809 /* OAAddPointCommand.mm */,
+				DA49C1B02549982900CD48DC /* OAReorderPointCommand.h */,
+				DA49C1B12549982900CD48DC /* OAReorderPointCommand.mm */,
+				DA49C1B825499A0800CD48DC /* OARemovePointCommand.h */,
+				DA49C1B925499A0800CD48DC /* OARemovePointCommand.mm */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -20678,6 +20690,7 @@
 				847A1CB21DF94E9B003C1246 /* OATargetMenuViewController.mm in Sources */,
 				84E370522059597200959B94 /* OATableView.m in Sources */,
 				78D57B85238D2F690068CF48 /* OAMapSettingsContourLinesScreen.mm in Sources */,
+				DA49C1BB25499A0800CD48DC /* OARemovePointCommand.mm in Sources */,
 				847B2DB91F7A6BBE008C7AD9 /* OASettingsTitleTableViewCell.m in Sources */,
 				84C3C1851E3B88F2000C77A5 /* OAQuickSearchHelper.mm in Sources */,
 				84BEEE521DFF021000750848 /* OATargetMultiView.mm in Sources */,
@@ -20826,6 +20839,7 @@
 				DADBC6232426495C008B7423 /* OAPublicTransportShieldCell.mm in Sources */,
 				DA1605B622FEF023001E02AD /* OAMapUnderlayAction.mm in Sources */,
 				DABB8E4D2308165A00DBD77F /* OAQuickActionListViewController.m in Sources */,
+				DA49C1B32549982900CD48DC /* OAReorderPointCommand.mm in Sources */,
 				847A1CDA1DF94E9B003C1246 /* OANativeUtilities.mm in Sources */,
 				847A1CDB1DF94E9B003C1246 /* OAMultiDestinationCell.mm in Sources */,
 				845AFB581E264ED200170026 /* OASearchCoreFactory.mm in Sources */,
@@ -21465,6 +21479,7 @@
 				8483D3B21FA5B9B900A985CF /* OAPlugin.mm in Sources */,
 				845AFB471E261E9000170026 /* OASearchPhrase.mm in Sources */,
 				8431769A1FF0E33E0044F90B /* OAVoiceCommandPending.mm in Sources */,
+				DA49C1BA25499A0800CD48DC /* OARemovePointCommand.mm in Sources */,
 				DA92FFC4233E0098001A14B7 /* OADestinationCollectionViewCell.mm in Sources */,
 				DA71B75F214B985000FE8B7E /* OAHelpViewController.mm in Sources */,
 				DA88AD57224F7F8800DA82A9 /* OADescrTitleCell.mm in Sources */,
@@ -21743,6 +21758,7 @@
 				84A819F41CFAC981000C9E8C /* OAPOIViewController.mm in Sources */,
 				DA9C6247221D41380087E140 /* OAOsmEditingViewController.mm in Sources */,
 				DA25589924ADE40F0081D155 /* OATripRecordingSettingsViewController.mm in Sources */,
+				DA49C1B22549982900CD48DC /* OAReorderPointCommand.mm in Sources */,
 				DA846BDA2293FBC1006EFC7B /* OAMapillaryImageViewController.mm in Sources */,
 				DA25588D24ADE40F0081D155 /* OASettingsViewController.m in Sources */,
 				84387B2C1ABB36A600504DA7 /* OAPOI.m in Sources */,

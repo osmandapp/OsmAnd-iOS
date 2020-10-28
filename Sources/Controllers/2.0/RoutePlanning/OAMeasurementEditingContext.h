@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
     WHOLE_TRACK
 };
 
-@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OATrackSegment;
+@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxTrkSeg;
 
 @interface OAMeasurementEditingContext : NSObject
 
@@ -41,8 +41,8 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 - (OAGpxTrkPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad;
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt;
 
-- (OATrackSegment *) getBeforeTrkSegmentLine;
-- (OATrackSegment *) getAfterTrkSegmentLine;
+- (OAGpxTrkSeg *) getBeforeTrkSegmentLine;
+- (OAGpxTrkSeg *) getAfterTrkSegmentLine;
 
 - (void) addPoint:(OAGpxTrkPt *)pt;
 

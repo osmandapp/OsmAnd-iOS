@@ -54,9 +54,9 @@
     return DeviceScreenHeight / 2;
 }
 
-- (void) onDragged:(UIPanGestureRecognizer *)recognizer
+- (BOOL)useGestureRecognizer
 {
-    return;
+    return NO;
 }
 
 - (CGFloat) additionalLandscapeOffset

@@ -247,6 +247,7 @@
     {
         OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:items fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
+        _settingsHelper.importTask = nil;
     }
 }
 

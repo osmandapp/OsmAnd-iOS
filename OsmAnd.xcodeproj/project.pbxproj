@@ -4678,6 +4678,8 @@
 		DA47B28F23FD33B500F66843 /* OAChangePositionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA47B28B23FD33B500F66843 /* OAChangePositionViewController.xib */; };
 		DA48614621F9D72100106848 /* OAOpenStreetMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */; };
 		DA48614721F9D72100106848 /* OAOpenStreetMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */; };
+		DA49C1AC2549796400CD48DC /* OACopyProfileBottomSheetView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA49C1AB2549796300CD48DC /* OACopyProfileBottomSheetView.xib */; };
+		DA49C1AD2549796400CD48DC /* OACopyProfileBottomSheetView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA49C1AB2549796300CD48DC /* OACopyProfileBottomSheetView.xib */; };
 		DA4B981321F74EAD00CED009 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4B981121F74EAD00CED009 /* OrderedDictionary.m */; };
 		DA4B981421F74EAD00CED009 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4B981121F74EAD00CED009 /* OrderedDictionary.m */; };
 		DA4B981B21F7559C00CED009 /* OAOSMSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4B981A21F7559C00CED009 /* OAOSMSettings.m */; };
@@ -9340,6 +9342,7 @@
 		DA47B28B23FD33B500F66843 /* OAChangePositionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAChangePositionViewController.xib; path = Sources/Controllers/2.0/OAChangePositionViewController.xib; sourceTree = "<group>"; };
 		DA48614421F9D72100106848 /* OAOpenStreetMapPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapPoint.h; sourceTree = "<group>"; };
 		DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOpenStreetMapPoint.m; sourceTree = "<group>"; };
+		DA49C1AB2549796300CD48DC /* OACopyProfileBottomSheetView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OACopyProfileBottomSheetView.xib; sourceTree = "<group>"; };
 		DA4B981121F74EAD00CED009 /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
 		DA4B981221F74EAD00CED009 /* OrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderedDictionary.h; sourceTree = "<group>"; };
 		DA4B981921F7559C00CED009 /* OAOSMSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOSMSettings.h; sourceTree = "<group>"; };
@@ -10373,6 +10376,7 @@
 			children = (
 				15BDDEAC24DAF84900079C83 /* OACopyProfileBottomSheetView.mm */,
 				15BDDEAE24DAF85D00079C83 /* OACopyProfileBottomSheetView.h */,
+				DA49C1AB2549796300CD48DC /* OACopyProfileBottomSheetView.xib */,
 				156F4E5F24FA5115008ED1DD /* OADeleteProfileBottomSheetViewController.h */,
 				156F4E6024FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m */,
 			);
@@ -16253,6 +16257,7 @@
 				DA0C641F21245B8F00B2A350 /* hi_tts.js in Resources */,
 				DA13A0282345FA0100C1A1A8 /* ic_custom_avoid_motorways@2x.png in Resources */,
 				847A1E3A1DF94E9B003C1246 /* img_plugin_trip_recording.jpg in Resources */,
+				DA49C1AD2549796400CD48DC /* OACopyProfileBottomSheetView.xib in Resources */,
 				8A755A6E21CBF92400E42699 /* ic_live_wikipedia@2x.png in Resources */,
 				847A1E3B1DF94E9B003C1246 /* ic_operator.png in Resources */,
 				DAE0834C253F0CFD009B5A11 /* ic_custom_undo@3x.png in Resources */,
@@ -19283,6 +19288,7 @@
 				DAF3459522F4482C009E2EB6 /* ic_custom_moon@3x.png in Resources */,
 				DA65834222BBB6FA0095B03D /* ic_custom_success@3x.png in Resources */,
 				DABA3DD322686E72005BB777 /* ic_custom_overflow_menu@2x.png in Resources */,
+				DA49C1AC2549796400CD48DC /* OACopyProfileBottomSheetView.xib in Resources */,
 				DA6471B922CF5433008F937F /* ic_custom_timer.png in Resources */,
 				DAB985AB212423410081F8F8 /* cs_tts.js in Resources */,
 				DA9C6239221C46590087E140 /* ic_custom_trip.png in Resources */,

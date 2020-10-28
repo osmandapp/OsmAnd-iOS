@@ -155,14 +155,19 @@ static BOOL visible = false;
         [self.delegate onViewHeightChanged:self.getViewHeight];
 }
 
+- (CGFloat) additionalLandscapeOffset
+{
+    return 0.;
+}
+
 - (void) adjustFrame
 {
     CGRect f = self.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if ([self isLandscape])
     {
-        f.origin = CGPointZero;
-        f.size.height = DeviceScreenHeight;
+        f.origin = CGPointMake(0., self.additionalLandscapeOffset);
+        f.size.height = DeviceScreenHeight - self.additionalLandscapeOffset;
         f.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
         
         CGRect buttonsFrame = _toolBarView.frame;
@@ -172,7 +177,7 @@ static BOOL visible = false;
         
         CGRect contentFrame = _contentContainer.frame;
         contentFrame.size.height = f.size.height - buttonsFrame.size.height;
-        contentFrame.origin = CGPointZero;
+        contentFrame.origin = f.origin;
         _contentContainer.frame = contentFrame;
     }
     else
@@ -235,7 +240,7 @@ static BOOL visible = false;
 
 - (BOOL) isLandscape
 {
-    return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
+    return OAUtilities.isLandscapeIpadAware;
 }
 
 - (CGFloat) getViewWidthForPad

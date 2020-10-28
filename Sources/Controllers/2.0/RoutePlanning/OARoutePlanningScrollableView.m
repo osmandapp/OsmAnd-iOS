@@ -59,6 +59,11 @@
     return;
 }
 
+- (CGFloat) additionalLandscapeOffset
+{
+    return 100.;
+}
+
 - (IBAction)onExpandButtonPressed:(id)sender
 {
     if ([sender isKindOfClass:UIButton.class])

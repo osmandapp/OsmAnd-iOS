@@ -47,5 +47,6 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 - (void) addPoint:(OAGpxTrkPt *)pt;
 
 - (double) getRouteDistance;
+- (BOOL) isNewData;
 
 @end

@@ -10,10 +10,11 @@
 
 typedef NS_ENUM(NSInteger, EOAActionType)
 {
-        ADD_SEGMENT = 0,
-        ADD_ROUTE_POINTS,
-        EDIT_SEGMENT,
-        OVERWRITE_SEGMENT
+    UNDEFINED = -1,
+    ADD_SEGMENT = 0,
+    ADD_ROUTE_POINTS,
+    EDIT_SEGMENT,
+    OVERWRITE_SEGMENT
 };
 
 @class OAGPXDocument, OATrackSegment, QuadRect;

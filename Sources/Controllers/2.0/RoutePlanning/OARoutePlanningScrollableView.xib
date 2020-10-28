@@ -124,29 +124,44 @@
                                 <action selector="onOptionsButtonPressed:" destination="-1" eventType="touchUpInside" id="UTS-q2-azA"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukI-8o-rdt">
-                            <rect key="frame" x="121" y="13" width="30" height="30"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="las-TP-5UJ">
+                            <rect key="frame" x="115" y="0.0" width="90" height="60"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukI-8o-rdt">
+                                    <rect key="frame" x="0.0" y="14" width="30" height="30"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="30" id="W1E-Vw-9hj"/>
+                                        <constraint firstAttribute="height" constant="30" id="oB9-WA-pnt"/>
+                                    </constraints>
+                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    <state key="normal" image="ic_custom_undo.png"/>
+                                    <connections>
+                                        <action selector="onUndoButtonPressed:" destination="-1" eventType="touchUpInside" id="SBV-q4-PO1"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xiN-ra-UDi">
+                                    <rect key="frame" x="60" y="14" width="30" height="30"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="30" id="gzI-Vh-ega"/>
+                                        <constraint firstAttribute="width" constant="30" id="qWw-FZ-gH0"/>
+                                    </constraints>
+                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    <state key="normal" image="ic_custom_redo.png"/>
+                                    <connections>
+                                        <action selector="onRedoButtonPressed:" destination="-1" eventType="touchUpInside" id="lb6-k6-Hq8"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="30" id="W1E-Vw-9hj"/>
-                                <constraint firstAttribute="height" constant="30" id="oB9-WA-pnt"/>
+                                <constraint firstItem="ukI-8o-rdt" firstAttribute="leading" secondItem="las-TP-5UJ" secondAttribute="leading" id="658-TK-i0r"/>
+                                <constraint firstAttribute="trailing" secondItem="xiN-ra-UDi" secondAttribute="trailing" id="LdF-1c-ZDH"/>
+                                <constraint firstItem="ukI-8o-rdt" firstAttribute="top" secondItem="las-TP-5UJ" secondAttribute="top" constant="14" id="ZvE-G4-AFC"/>
+                                <constraint firstAttribute="width" constant="90" id="d5y-TP-WdU"/>
+                                <constraint firstItem="xiN-ra-UDi" firstAttribute="top" secondItem="las-TP-5UJ" secondAttribute="top" constant="14" id="w8c-6V-7wx"/>
+                                <constraint firstItem="xiN-ra-UDi" firstAttribute="leading" secondItem="ukI-8o-rdt" secondAttribute="trailing" constant="30" id="xFC-IP-syw"/>
                             </constraints>
-                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                            <state key="normal" image="ic_custom_undo.png"/>
-                            <connections>
-                                <action selector="onUndoButtonPressed:" destination="-1" eventType="touchUpInside" id="SBV-q4-PO1"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xiN-ra-UDi">
-                            <rect key="frame" x="181" y="13" width="30" height="30"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="30" id="gzI-Vh-ega"/>
-                                <constraint firstAttribute="width" constant="30" id="qWw-FZ-gH0"/>
-                            </constraints>
-                            <state key="normal" image="ic_custom_redo.png"/>
-                            <connections>
-                                <action selector="onRedoButtonPressed:" destination="-1" eventType="touchUpInside" id="lb6-k6-Hq8"/>
-                            </connections>
-                        </button>
+                        </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nTF-Pn-qfs">
                             <rect key="frame" x="226" y="11" width="74" height="33"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -167,18 +182,17 @@
                     </subviews>
                     <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstItem="ukI-8o-rdt" firstAttribute="centerX" secondItem="aAT-eD-KPk" secondAttribute="centerX" multiplier="0.85" id="0Wl-i7-Tjv"/>
-                        <constraint firstItem="xiN-ra-UDi" firstAttribute="top" secondItem="aAT-eD-KPk" secondAttribute="top" constant="13" id="AdN-Xk-5tA"/>
                         <constraint firstItem="Z7B-BF-3fv" firstAttribute="top" secondItem="aAT-eD-KPk" secondAttribute="top" constant="11" id="BP2-fJ-DKH"/>
                         <constraint firstItem="fun-l1-fNH" firstAttribute="leading" secondItem="aAT-eD-KPk" secondAttribute="leading" id="DzB-ZB-l4P"/>
                         <constraint firstItem="Z7B-BF-3fv" firstAttribute="leading" secondItem="aAT-eD-KPk" secondAttribute="leadingMargin" constant="12" id="FUu-8r-0gS"/>
                         <constraint firstItem="fun-l1-fNH" firstAttribute="top" secondItem="aAT-eD-KPk" secondAttribute="top" id="MCF-iO-sy0"/>
-                        <constraint firstItem="nTF-Pn-qfs" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="xiN-ra-UDi" secondAttribute="trailing" constant="10" id="Vy7-Bl-nSR"/>
+                        <constraint firstItem="las-TP-5UJ" firstAttribute="centerX" secondItem="aAT-eD-KPk" secondAttribute="centerX" id="NJY-HH-KKP"/>
                         <constraint firstItem="nTF-Pn-qfs" firstAttribute="top" secondItem="aAT-eD-KPk" secondAttribute="top" constant="11" id="ZwF-Zo-686"/>
-                        <constraint firstItem="xiN-ra-UDi" firstAttribute="leading" secondItem="ukI-8o-rdt" secondAttribute="trailing" constant="30" id="jAP-Uw-ejH"/>
+                        <constraint firstItem="las-TP-5UJ" firstAttribute="top" secondItem="aAT-eD-KPk" secondAttribute="top" id="ciw-NR-UK4"/>
+                        <constraint firstItem="nTF-Pn-qfs" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="las-TP-5UJ" secondAttribute="trailing" constant="20" id="hLp-cW-ElI"/>
                         <constraint firstAttribute="trailing" secondItem="fun-l1-fNH" secondAttribute="trailing" id="jCN-6z-hJH"/>
-                        <constraint firstItem="ukI-8o-rdt" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Z7B-BF-3fv" secondAttribute="trailing" constant="10" id="npu-TY-RzQ"/>
-                        <constraint firstItem="ukI-8o-rdt" firstAttribute="top" secondItem="aAT-eD-KPk" secondAttribute="top" constant="13" id="s00-br-FdT"/>
+                        <constraint firstItem="las-TP-5UJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Z7B-BF-3fv" secondAttribute="trailing" constant="20" id="kdz-f9-EVa"/>
+                        <constraint firstAttribute="bottom" secondItem="las-TP-5UJ" secondAttribute="bottom" id="q6Z-dK-a38"/>
                         <constraint firstAttribute="trailing" secondItem="nTF-Pn-qfs" secondAttribute="trailing" constant="20" id="zLM-tE-h2c"/>
                     </constraints>
                 </view>

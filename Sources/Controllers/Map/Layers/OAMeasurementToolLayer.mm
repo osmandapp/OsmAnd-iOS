@@ -62,7 +62,7 @@
     _lastLineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _pointMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     
-    _pointMarkerIcon = [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location"];
+    _pointMarkerIcon = [OANativeUtilities skBitmapFromPngResource:@"map_plan_route_point_normal"];
     
     _initDone = YES;
     

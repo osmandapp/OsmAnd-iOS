@@ -217,30 +217,6 @@
 - (QVector<OsmAnd::PointI>) calculatePointsToDraw
 {
     QVector<OsmAnd::PointI> points;
-//    [self drawBeforeAfterPath:points];
-    
-//    if (_editingCtx.selectedPointPosition == -1)
-//    {
-//        if (measureDistanceToCenterListener != null) {
-//            float distance = 0;
-//            float bearing = 0;
-//            if (editingCtx.getPointsCount() > 0) {
-//                WptPt lastPoint = editingCtx.getPoints().get(editingCtx.getPointsCount() - 1);
-//                LatLon centerLatLon = tb.getCenterLatLon();
-//                distance = (float) MapUtils.getDistance(
-//                                                        lastPoint.lat, lastPoint.lon, centerLatLon.getLatitude(), centerLatLon.getLongitude());
-//                bearing = getLocationFromLL(lastPoint.lat, lastPoint.lon)
-//                .bearingTo(getLocationFromLL(centerLatLon.getLatitude(), centerLatLon.getLongitude()));
-//            }
-//            measureDistanceToCenterListener.onMeasure(distance, bearing);
-//        }
-//    }
-    
-//    if (beforePoints.count > 0)
-//        drawPointIcon(canvas, tb, beforePoints.get(beforePoints.size() - 1));
-    
-//    if (afterPoints.count > 0)
-//        drawPointIcon(canvas, tb, afterPoints.get(0));
     
     OAGpxRtePt *lastBeforePoint = nil;
     NSMutableArray<OAGpxRtePt *> *beforePoints = [NSMutableArray arrayWithArray:_editingCtx.getBeforePoints];

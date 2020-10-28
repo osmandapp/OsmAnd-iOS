@@ -29,7 +29,7 @@
 
 
 - (void) setToButton:(UIButton *)button firstLabelText:(NSString *)firstLabelText firstLabelFont:(UIFont *)firstLabelFont firstLabelColor:(UIColor *)firstLabelColor secondLabelText:(NSString *)secondLabelText secondLabelFont:(UIFont *)secondLabelFont secondLabelColor:(UIColor *)secondLabelColor;
-- (UIView *) generateHeaderForTableView:(UITableView *)tableView withFirstSessionText:(NSString *)text forSection:(NSInteger)section;
-- (CGFloat) generateHeightForHeaderWithFirstHeaderText:(NSString *)text inSection:(NSInteger)section;
+- (UIView *) generateHeaderForTableView:(UITableView *)tableView withFirstSectionText:(NSString *)text boldFragment:(NSString *)boldFragment forSection:(NSInteger)section;
+- (CGFloat) generateHeightForHeaderWithFirstHeaderText:(NSString *)text boldFragment:(NSString *)boldFragment inSection:(NSInteger)section;
 
 @end

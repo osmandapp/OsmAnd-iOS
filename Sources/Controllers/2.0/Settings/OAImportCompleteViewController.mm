@@ -185,13 +185,12 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeaderForTableView:tableView withFirstSessionText:[NSString stringWithFormat:OALocalizedString(@"import_complete_description"), _fileName] forSection:section];
+    return [self generateHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_complete_description") boldFragment:_fileName forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeightForHeaderWithFirstHeaderText:[NSString stringWithFormat:OALocalizedString(@"import_complete_description"), _fileName] inSection:section];
-    //TODO: Add bold text
+    return [self generateHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_complete_description") boldFragment:_fileName inSection:section];
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section

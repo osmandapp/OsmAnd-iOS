@@ -191,34 +191,12 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-    {
-        NSString *descriptionString = [NSString stringWithFormat:OALocalizedString(@"checking_for_duplicates_descr"), [_file lastPathComponent]];
-        CGFloat textWidth = tableView.bounds.size.width - 32;
-        CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionString width:textWidth font:[UIFont systemFontOfSize:15] lineSpacing:6.] + 16;
-        UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
-        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
-        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-        description.font = labelFont;
-        [description setTextColor: UIColorFromRGB(color_text_footer)];
-        description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:[NSString stringWithFormat:OALocalizedString(@"checking_for_duplicates_descr"), [_file lastPathComponent]] boldString:[_file lastPathComponent] lineSpacing:4. highlightColor:UIColor.blackColor];
-        description.numberOfLines = 0;
-        description.lineBreakMode = NSLineBreakByWordWrapping;
-        description.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [vw addSubview:description];
-        return vw;
-    }
-    return nil;
+    return [self generateHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-    {
-        _heightForHeader = [self heightForLabel:OALocalizedString(@"checking_for_duplicates_descr")];
-        return _heightForHeader + kBottomPadding + kTopPadding;
-    }
-    return UITableViewAutomaticDimension;
+    return [self generateHeightForHeaderWithFirstHeaderText:OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] inSection:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

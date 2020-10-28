@@ -416,32 +416,12 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-    {
-        UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, tableView.bounds.size.width - OAUtilities.getLeftMargin * 2, _heightForHeader)];
-        CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 6.0, textWidth, _heightForHeader)];
-        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-        description.font = labelFont;
-        [description setTextColor: UIColorFromRGB(color_text_footer)];
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        [style setLineSpacing:6];
-        description.attributedText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"import_profile_select_descr") attributes:@{NSParagraphStyleAttributeName : style}];
-        description.numberOfLines = 0;
-        [vw addSubview:description];
-        return vw;
-    }
-    return nil;
+    return [self generateHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_profile_select_descr") boldFragment:nil forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-    {
-        _heightForHeader = [self heightForLabel:OALocalizedString(@"import_profile_select_descr")];
-        return _heightForHeader + kBottomPadding + kTopPadding;
-    }
-    return UITableViewAutomaticDimension;
+    return [self generateHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_profile_select_descr") boldFragment:nil inSection:section];
 }
 
 - (UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

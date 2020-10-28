@@ -16,6 +16,8 @@
 #define kButtonSidePadding 16
 #define kSidePadding 16
 #define kTopPadding 6
+#define kBottomPadding 32
+
 
 @implementation OABaseSettingsWithBottomButtonsViewController
 {
@@ -89,20 +91,36 @@
         self.secondaryButtonHeight.constant = height;
 }
 
-- (UIView *) generateHeaderForTableView:(UITableView *)tableView withFirstSessionText:(NSString *)text forSection:(NSInteger)section
+- (UIView *) generateHeaderForTableView:(UITableView *)tableView withFirstSectionText:(NSString *)text boldFragment:(NSString *)boldFragment forSection:(NSInteger)section
 {
     if (section == 0)
     {
-        UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, tableView.bounds.size.width - OAUtilities.getLeftMargin * 2, _heightForHeader)];
-        CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 6.0, textWidth, _heightForHeader)];
+        NSString *descriptionText;
+        if (boldFragment && boldFragment.length > 0)
+            descriptionText = [NSString stringWithFormat:text, boldFragment];
+        else
+            descriptionText = text;
+            
+        CGFloat textWidth = tableView.bounds.size.width - 32;
+        CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionText width:textWidth font:[UIFont systemFontOfSize:15] lineSpacing:6.] + 16;
+        UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
+        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
         UIFont *labelFont = [UIFont systemFontOfSize:15.0];
         description.font = labelFont;
         [description setTextColor: UIColorFromRGB(color_text_footer)];
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        [style setLineSpacing:6];
-        description.attributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSParagraphStyleAttributeName : style}];
+        
+        if (boldFragment && boldFragment.length > 0)
+            description.attributedText = [OAUtilities getStringWithBoldPart:descriptionText mainString:descriptionText boldString:boldFragment lineSpacing:4. highlightColor:UIColor.blackColor];
+        else
+        {
+            NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+            [style setLineSpacing:6];
+            description.attributedText = [[NSAttributedString alloc] initWithString:descriptionText attributes:@{NSParagraphStyleAttributeName : style}];
+        }
+            
         description.numberOfLines = 0;
+        description.lineBreakMode = NSLineBreakByWordWrapping;
+        description.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [vw addSubview:description];
         return vw;
     }
@@ -112,12 +130,17 @@
     }
 }
 
-- (CGFloat) generateHeightForHeaderWithFirstHeaderText:(NSString *)text inSection:(NSInteger)section
+- (CGFloat) generateHeightForHeaderWithFirstHeaderText:(NSString *)text boldFragment:(NSString *)boldFragment inSection:(NSInteger)section
 {
     if (section == 0)
-    {
-        _heightForHeader = [self heightForLabel:text];
-        return _heightForHeader + kSidePadding + kTopPadding;
+    {   NSString *descriptionText;
+        if (boldFragment && boldFragment.length > 0)
+            descriptionText = [NSString stringWithFormat:text, boldFragment];
+        else
+            descriptionText = text;
+        
+        _heightForHeader = [self heightForLabel:descriptionText];
+        return _heightForHeader + kBottomPadding + kTopPadding;
     }
     else
     {

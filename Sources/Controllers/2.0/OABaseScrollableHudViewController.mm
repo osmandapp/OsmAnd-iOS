@@ -42,17 +42,14 @@
     [super viewDidLoad];
     _scrollableView.delegate = self;
     [_scrollableView show:YES state:EOADraggableMenuStateInitial onComplete:nil];
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
 }
 
 - (void)adjustMapViewPort
 {
-    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
 }
 
 - (void) restoreMapViewPort
 {
-    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
 }
 
 - (void) updateViewVisibility
@@ -68,7 +65,6 @@
 
 - (void)onViewSwippedDown
 {
-    // TODO: implement custom behavior to prevent swipe down
     [_scrollableView hide:YES duration:.2 onComplete:^{
             [self.view removeFromSuperview];
     }];

@@ -577,7 +577,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }];
     [self.item applyRendererPreferences:rendererSettings];
     [self.item applyRoutingPreferences:routingSettings];
-    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
     return YES;
 }
 

@@ -112,6 +112,7 @@
     }
     
     [fileManager removeItemAtPath:_tmpFilesDir error:nil];
+    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
     
     return items;
 }

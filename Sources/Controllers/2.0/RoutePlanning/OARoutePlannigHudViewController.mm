@@ -50,7 +50,7 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
 
 @interface OARoutePlannigHudViewController () <OADraggableViewDelegate, OARoutePlanningViewDelegate, UITableViewDelegate, UITableViewDataSource, OAMeasurementLayerDelegate>
 
-@property (strong, nonatomic) IBOutlet OARoutePlanningScrollableView *scrollableView;
+@property (weak, nonatomic) IBOutlet OARoutePlanningScrollableView *scrollableView;
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;

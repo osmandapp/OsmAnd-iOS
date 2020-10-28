@@ -31,14 +31,14 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 
 @property (nonatomic, readonly) BOOL supportsFullScreen;
 
-@property (strong, nonatomic) IBOutlet UIView *contentView;
+@property (weak, nonatomic) IBOutlet UIView *contentView;
 
-@property (strong, nonatomic) IBOutlet UIView *sliderView;
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet UIView *topHeaderContainerView;
-@property (strong, nonatomic) IBOutlet UIView *toolBarView;
-@property (strong, nonatomic) IBOutlet UIView *statusBarBackgroundView;
-@property (strong, nonatomic) IBOutlet UIView *contentContainer;
+@property (weak, nonatomic) IBOutlet UIView *sliderView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *topHeaderContainerView;
+@property (weak, nonatomic) IBOutlet UIView *toolBarView;
+@property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
+@property (weak, nonatomic) IBOutlet UIView *contentContainer;
 
 @property (nonatomic, weak) id<OADraggableViewDelegate> delegate;
 

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OAApplicationMode.h"
 
 @class OAPointDescription, OAGPX, OATargetPoint;
 
@@ -25,5 +26,6 @@
 - (void) setGPXRouteParams:(OAGPX *)result;
 
 - (void) navigate:(OATargetPoint *)targetPoint;
+- (OAApplicationMode *) getRouteMode;
 
 @end

@@ -47,6 +47,16 @@
     CALayer *_horizontalLine;
 }
 
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        _isShouldBeClosedByBackButton = NO;
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -135,7 +145,10 @@
 
 - (IBAction)backPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_isShouldBeClosedByBackButton)
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)saveChanges

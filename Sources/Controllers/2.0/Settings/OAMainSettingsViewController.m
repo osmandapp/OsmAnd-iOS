@@ -48,8 +48,10 @@
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _targetAppMode = mode;
+        _isShouldBeClosedByBackButton = NO;
     }
     return self;
 }
@@ -348,6 +350,14 @@
         OARearrangeProfilesViewController* rearrangeProfilesViewController = [[OARearrangeProfilesViewController alloc] init];
         [self.navigationController pushViewController:rearrangeProfilesViewController animated:YES];
     }
+}
+
+- (IBAction) backButtonClicked:(id)sender
+{
+    if (_isShouldBeClosedByBackButton)
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    else
+        [super backButtonClicked:sender];
 }
 
 @end

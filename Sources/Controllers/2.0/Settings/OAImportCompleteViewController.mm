@@ -7,6 +7,14 @@
 //
 
 #import "OAImportCompleteViewController.h"
+#import "OARootViewController.h"
+#import "OAMainSettingsViewController.h"
+#import "OAMapSettingsViewController.h"
+#import "OAQuickActionListViewController.h"
+#import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OARouteAvoidSettingsViewController.h"
+#import "OARoutingHelper.h"
+#import "OAMapActions.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAProfileDataObject.h"
@@ -19,6 +27,13 @@
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
 #define kIconTitleButtonCell @"OAIconTitleButtonCell"
+#define kProfiles @"kProfiles"
+#define kQuickActioins @"kQuickActioins"
+#define kTileSources @"kTileSources"
+#define kPoiFilters @"kPoiFilters"
+#define kRenderSettings @"kRenderSettings"
+#define kRoutingSettings @"kRoutingSettings"
+#define kAvoidRoads @"kAvoidRoads"
 
 #define RENDERERS_DIR @"rendering/"
 #define ROUTING_PROFILES_DIR @"routing/"
@@ -99,7 +114,8 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_settings"),
             @"iconName": @"ic_action_settings",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"category" : kProfiles
             }
          ];
     }
@@ -108,7 +124,8 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_screen_quick_action"),
             @"iconName": @"ic_custom_quick_action",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"category" : kQuickActioins
             }
          ];
     }
@@ -117,7 +134,8 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"search_activity"),
             @"iconName": @"ic_custom_search",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"category" : kPoiFilters
             }
          ];
     }
@@ -126,7 +144,8 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_map"),
             @"iconName": @"ic_custom_overlay_map",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"category" : kTileSources
             }
          ];
     }
@@ -135,7 +154,8 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_rendering_style"),
             @"iconName": @"ic_custom_map_style",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"category" : kRenderSettings
             }
          ];
     }
@@ -144,7 +164,8 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_routing"),
             @"iconName": @"ic_action_route_distance",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"category" : kRoutingSettings
             }
          ];
     }
@@ -153,7 +174,8 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"avoid_road"),
             @"iconName": @"ic_custom_alert",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount]
+            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"category" : kAvoidRoads
             }
          ];
     }
@@ -173,7 +195,6 @@
 {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.allowsSelection = NO;
     
     self.primaryBottomButton.hidden = YES;
     self.secondaryBottomButton.hidden = NO;
@@ -218,6 +239,54 @@
     [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
     cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.row];
+    NSString *category = (NSString *) item[@"category"];
+    
+    if ([category isEqualToString:kProfiles] || [category isEqualToString:kRoutingSettings])
+    {
+        OAMainSettingsViewController *profileSettings = [[OAMainSettingsViewController alloc] init];
+        profileSettings.isShouldBeClosedByBackButton = YES;
+        [self.navigationController pushViewController:profileSettings animated:YES];
+    }
+    else if ([category isEqualToString:kQuickActioins])
+    {
+        OAQuickActionListViewController *actionsList = [[OAQuickActionListViewController alloc] init];
+        actionsList.isShouldBeClosedByBackButton = YES;
+        [self.navigationController pushViewController:actionsList animated:YES];
+    }
+    else if ([category isEqualToString:kPoiFilters])
+    {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        [[OARootViewController instance].mapPanel openSearch];
+    }
+    else if ([category isEqualToString:kTileSources])
+    {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        [[OARootViewController instance].mapPanel mapSettingsButtonClick:nil];
+    }
+    else if ([category isEqualToString:kRenderSettings])
+    {
+        //TODO: navigate to SelectMapStyleBottomSheetDialogFragment
+    }
+    else if ([category isEqualToString:kAvoidRoads])
+    {
+        [self loadCurrentRoutingMode];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        OARouteAvoidSettingsViewController *avoidController = [[OARouteAvoidSettingsViewController alloc] init];
+        avoidController.isBackButtonHidden = YES;
+        [[OARootViewController instance] presentViewController:avoidController animated:YES completion:nil];
+    }
+}
+
+-(void) loadCurrentRoutingMode
+{
+    OAMapActions *mapActions = [[OAMapActions alloc] init];
+    OAApplicationMode *currentRoutingMode = [mapActions getRouteMode];
+    [OARoutingHelper.sharedInstance setAppMode:currentRoutingMode];
 }
 
 - (IBAction)secondaryButtonPressed:(id)sender

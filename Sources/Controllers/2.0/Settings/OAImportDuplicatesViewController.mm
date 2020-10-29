@@ -98,8 +98,6 @@
     _app = [OsmAndApp instance];
     _settingsHelper = [OASettingsHelper sharedInstance];
     
-    //[self generateFakeData]; //TODO: delete this
-    
     OAImportAsyncTask *importTask = _settingsHelper.importTask;
     if (!importTask)
         _settingsItems = [importTask getSelectedItems];
@@ -148,41 +146,6 @@
         @"cellType": kCellTypeWithActivity,
         @"label": OALocalizedString(@"shared_string_importing"),
     }]];
-}
-
-- (void) generateFakeData
-{
-    //TODO: for now here is generating fake data, just for demo
-    NSMutableArray *fakeDataArray = [NSMutableArray new];
-
-    OAApplicationModeBean *appMode = [[OAApplicationModeBean alloc] init];
-    appMode.userProfileName = @"Test Profile Name";
-    appMode.routingProfile = @"Test value";
-    appMode.iconName = @"ic_custom_transport_tram";
-    appMode.iconColor = color_primary_purple;
-    [fakeDataArray addObject: appMode];
-    
-    NSArray<OAQuickActionType *> *allQuickActions = [[OAQuickActionRegistry sharedInstance] produceTypeActionsListWithHeaders];
-    OAQuickAction *action = [[OAQuickAction alloc] initWithActionType:allQuickActions[3]];
-    [fakeDataArray addObject: action];
-    
-    OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithName:OALocalizedString(@"poi_filter_custom_filter") filterId:CUSTOM_FILTER_ID acceptedTypes:[NSMapTable strongToStrongObjectsMapTable]];
-    filter.isStandardFilter = YES;
-    [fakeDataArray addObject: filter];
-
-    OASQLiteTileSource *tileSource = [[OASQLiteTileSource alloc] init];
-    [fakeDataArray addObject: tileSource];
-    
-    NSString *renderTestSting = @"rendering/Desert.xml";
-    [fakeDataArray addObject: renderTestSting];
-    NSString *routingTestSting = @"routing/Moon.xml";
-    [fakeDataArray addObject: routingTestSting];
-    
-    OAAvoidRoadInfo *avoidRoad = [[OAAvoidRoadInfo alloc] init];
-    avoidRoad.name = @"Avoid Fake Road";
-    [fakeDataArray addObject: avoidRoad];
-    
-    _duplicatesList = [NSArray arrayWithArray:fakeDataArray];
 }
 
 - (NSArray<NSArray <id>*> *) prepareDuplicates:(NSArray *)duplicatesList

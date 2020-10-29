@@ -206,6 +206,11 @@
             OASettingsItem *settingsItem = [self createItem:item];
             [_items addObject:settingsItem];
         }
+        if ([item[@"type"] isEqualToString:@"QUICK_ACTIONS"])
+        {
+//            OASettingsItem *settingsItem = [self createItem:item];
+//            [_items addObject:settingsItem];
+        }
         // TODO: implement custom plugins
 //        NSString *pluginId = item.pluginId;
 //        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)

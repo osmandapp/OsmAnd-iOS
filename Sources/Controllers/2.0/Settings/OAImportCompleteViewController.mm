@@ -13,6 +13,7 @@
 #import "OAQuickActionListViewController.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
+#import "OAMapSettingsViewController.h"
 #import "OARoutingHelper.h"
 #import "OAMapActions.h"
 #import "Localization.h"
@@ -270,7 +271,8 @@
     }
     else if ([category isEqualToString:kRenderSettings])
     {
-        //TODO: navigate to SelectMapStyleBottomSheetDialogFragment
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        [[OARootViewController instance].mapPanel showMapStylesScreen];
     }
     else if ([category isEqualToString:kAvoidRoads])
     {

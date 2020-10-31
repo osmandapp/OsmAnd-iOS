@@ -29,7 +29,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAProfileAppearanceViewController.h"
-#import "OACopyProfileBottomSheetView.h"
+#import "OACopyProfileBottomSheetViewControler.h"
 #import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAMapWidgetRegistry.h"
@@ -51,8 +51,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 };
 
 @interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate, OAPluginResetBottomSheetDelegate, OASettingsImportExportDelegate>
-
-@property (strong, nonatomic) OACopyProfileBottomSheetView* cpyProfileView;
 
 @end
 
@@ -264,7 +262,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
-    self.cpyProfileView = [[OACopyProfileBottomSheetView alloc] initWithMode:_appMode];
 }
 
 - (void)openDashboardScreen:(EOADashboardScreenType)type
@@ -315,17 +312,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
 }
 
-- (void) showCopyProfileView
-{
-    self.cpyProfileView.frame = self.view.bounds;
-    self.cpyProfileView.delegate = self;
-    if ([self.view.subviews containsObject:self.cpyProfileView])
-        [self.cpyProfileView removeFromSuperview];
-    [self addUnderlay];
-    [self.view addSubview:self.cpyProfileView];
-    [self.cpyProfileView show:YES];
-}
-
 - (void) addUnderlay
 {
     _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
@@ -340,11 +326,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void) onUnderlayTapped
 {
-    if ([self.cpyProfileView superview])
-    {
-        [_cpyProfileViewUnderlay removeFromSuperview];
-        [self.cpyProfileView hide:YES];
-    }
+    
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -560,7 +542,10 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
     else if ([key isEqualToString:@"copy_profile"])
     {
-        [self showCopyProfileView];
+        OACopyProfileBottomSheetViewControler *bottomSheet = [[OACopyProfileBottomSheetViewControler alloc] initWithMode:_appMode];
+        bottomSheet.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        bottomSheet.delegate = self;
+        [self presentViewController:bottomSheet animated:NO completion:nil];
     }
     else if ([key isEqualToString:@"reset_to_default"])
     {

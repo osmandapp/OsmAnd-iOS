@@ -376,9 +376,10 @@ typedef enum
     if (_scrollableHudViewController != nil && self.view == _scrollableHudViewController.view.superview)
     {
         [_scrollableHudViewController.view removeFromSuperview];
+        [_scrollableHudViewController removeFromParentViewController];
         _scrollableHudViewController = nil;
-        [_hudViewController.quickActionController updateViewVisibility];
     }
+    [_hudViewController.quickActionController updateViewVisibility];
     _activeTargetType = OATargetNone;
     [self restoreFromContextMenuMode];
 }

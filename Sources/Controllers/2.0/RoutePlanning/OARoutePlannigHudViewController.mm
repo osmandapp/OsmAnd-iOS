@@ -12,7 +12,6 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
-#import "OAScrollableTableToolBarView.h"
 #import "OAColors.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
@@ -21,7 +20,6 @@
 #import "OAMeasurementToolLayer.h"
 #import "OAMeasurementEditingContext.h"
 #import "Localization.h"
-#import "OARoutePlanningScrollableView.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAAddPointCommand.h"
 #import "OAMenuSimpleCellNoIcon.h"
@@ -53,15 +51,22 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
     LINE
 };
 
-@interface OARoutePlannigHudViewController () <OADraggableViewDelegate, OARoutePlanningViewDelegate, UITableViewDelegate, UITableViewDataSource, OAMeasurementLayerDelegate>
+@interface OARoutePlannigHudViewController () <UITableViewDelegate, UITableViewDataSource, OAMeasurementLayerDelegate>
 
-@property (weak, nonatomic) IBOutlet OARoutePlanningScrollableView *scrollableView;
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UIButton *optionsButton;
+@property (weak, nonatomic) IBOutlet UIButton *undoButton;
+@property (weak, nonatomic) IBOutlet UIButton *redoButton;
+@property (weak, nonatomic) IBOutlet UIButton *addPointButton;
+@property (weak, nonatomic) IBOutlet UIButton *expandButton;
+@property (weak, nonatomic) IBOutlet UIImageView *leftImageVIew;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 
 @end
 
@@ -99,18 +104,28 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _scrollableView.delegate = self;
-    _scrollableView.routePlanningDelegate = self;
-    _scrollableView.tableView.delegate = self;
-    _scrollableView.tableView.dataSource = self;
-    [_scrollableView.tableView setEditing:YES];
+    
+    [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
+    [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
+    _expandButton.imageView.tintColor = UIColorFromRGB(color_icon_inactive);
+    [_expandButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    
+    [_undoButton setImage:[[UIImage imageNamed:@"ic_custom_undo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_redoButton setImage:[[UIImage imageNamed:@"ic_custom_redo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    
+    _undoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    _redoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.tableView setEditing:YES];
     [self updateDistancePointsText];
-    [_scrollableView show:YES state:EOADraggableMenuStateInitial onComplete:nil];
+    [self show:YES state:EOADraggableMenuStateInitial onComplete:nil];
 //    BOOL isNight = [OAAppSettings sharedManager].nightMode;
     [_mapPanel setTopControlsVisible:NO customStatusBarStyle:UIStatusBarStyleLightContent];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:_scrollableView.getViewHeight animated:YES];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:self.getViewHeight animated:YES];
     _centerImageView.image = [UIImage imageNamed:@"ic_ruler_center.png"];
-    [self changeCenterOffset:[_scrollableView getViewHeight]];
+    [self changeCenterOffset:[self getViewHeight]];
     
     _closeButtonContainerView.layer.cornerRadius = 12.;
     _doneButtonContainerView.layer.cornerRadius = 12.;
@@ -127,10 +142,35 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
     [self changeMapRulerPosition];
 }
 
+- (BOOL)supportsFullScreen
+{
+    return NO;
+}
+
+- (CGFloat)initialMenuHeight
+{
+    return 60. + self.toolBarView.frame.size.height;
+}
+
+- (CGFloat)expandedMenuHeight
+{
+    return DeviceScreenHeight / 2;
+}
+
+- (BOOL)useGestureRecognizer
+{
+    return NO;
+}
+
+- (CGFloat) additionalLandscapeOffset
+{
+    return 100.;
+}
+
 - (void) changeMapRulerPosition
 {
-    CGFloat bottomMargin = OAUtilities.isLandscapeIpadAware ? kDefaultMapRulerMarginBottom : (-_scrollableView.getViewHeight + OAUtilities.getBottomMargin - 25.);
-    CGFloat leftMargin = OAUtilities.isLandscapeIpadAware ? _scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 : kDefaultMapRulerMarginLeft;
+    CGFloat bottomMargin = OAUtilities.isLandscapeIpadAware ? kDefaultMapRulerMarginBottom : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
+    CGFloat leftMargin = OAUtilities.isLandscapeIpadAware ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 : kDefaultMapRulerMarginLeft;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
@@ -159,7 +199,7 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
     else
     {
         mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
-        mapView.viewportYScale = _scrollableView.getViewHeight / DeviceScreenHeight;
+        mapView.viewportYScale = self.getViewHeight / DeviceScreenHeight;
     }
 }
 
@@ -177,14 +217,14 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
     if (_layer != nil)
     {
         NSString *distanceStr = [_app getFormattedDistance:_editingContext.getRouteDistance];
-        _scrollableView.titleLabel.text = [NSString stringWithFormat:@"%@, %@ %ld", distanceStr, OALocalizedString(@"points_count"), _editingContext.getPointsCount];
+        self.titleLabel.text = [NSString stringWithFormat:@"%@, %@ %ld", distanceStr, OALocalizedString(@"points_count"), _editingContext.getPointsCount];
     }
 }
 
 
 - (IBAction)closePressed:(id)sender
 {
-    [_scrollableView hide:YES duration:.2 onComplete:^{
+    [self hide:YES duration:.2 onComplete:^{
         [_mapPanel targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
         [self restoreMapViewPort];
         [OARootViewController.instance.mapPanel hideScrollableHudViewController];
@@ -199,13 +239,51 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
 //        [self startTrackNavigation];
 //    else
     [self saveChanges:SHOW_SNACK_BAR_AND_CLOSE showDialog:NO];
-    [_scrollableView hide:YES duration:.2 onComplete:^{
+    [self hide:YES duration:.2 onComplete:^{
         [_mapPanel targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
         [self restoreMapViewPort];
         [OARootViewController.instance.mapPanel hideScrollableHudViewController];
         _layer.editingCtx = nil;
         [_layer resetLayer];
     }];
+}
+
+- (IBAction)onExpandButtonPressed:(id)sender
+{
+    if ([sender isKindOfClass:UIButton.class])
+    {
+        UIButton *button = (UIButton *) sender;
+        if (self.currentState == EOADraggableMenuStateInitial)
+        {
+            [self goExpanded];
+            [button setImage:[[UIImage imageNamed:@"ic_custom_arrow_down"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        }
+        else
+        {
+            [self goMinimized];
+            [button setImage:[[UIImage imageNamed:@"ic_custom_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        }
+    }
+}
+- (IBAction)onOptionsButtonPressed:(id)sender
+{
+}
+
+- (IBAction)onUndoButtonPressed:(id)sender
+{
+    [_editingContext.commandManager undo];
+    [self onPointsListChanged];
+}
+
+- (IBAction)onRedoButtonPressed:(id)sender
+{
+    [_editingContext.commandManager redo];
+    [self onPointsListChanged];
+}
+
+- (IBAction)onAddPointPressed:(id)sender
+{
+    [self addCenterPoint];
 }
 
 - (NSString *) getSuggestedFileName
@@ -458,15 +536,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 //    }
 }
 
-#pragma mark - OADraggableViewDelegate
-
-- (void)onViewSwippedDown
-{
-    [_scrollableView hide:YES duration:.2 onComplete:^{
-        [self restoreMapViewPort];
-        [OARootViewController.instance.mapPanel hideScrollableHudViewController];
-    }];
-}
+#pragma mark - OADraggableViewActions
 
 - (void)onViewHeightChanged:(CGFloat)height
 {
@@ -476,11 +546,9 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
     [self adjustMapViewPort];
 }
 
-#pragma mark - OARoutePlanningViewDelegate
-
 - (void) onPointsListChanged
 {
-    [_scrollableView.tableView reloadData];
+    [self.tableView reloadData];
     [self updateDistancePointsText];
 }
 
@@ -492,28 +560,6 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
         [self onPointsListChanged];
     }
     return added;
-}
-
-- (void)onAddPointPressed
-{
-    [self addCenterPoint];
-}
-
-- (void)onOptionsPressed
-{
-
-}
-
-- (void)onRedoPressed
-{
-    [_editingContext.commandManager redo];
-    [self onPointsListChanged];
-}
-
-- (void)onUndoPressed
-{
-    [_editingContext.commandManager undo];
-    [self onPointsListChanged];
 }
 
 #pragma mark - UITableViewDataSource
@@ -623,7 +669,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void)onMeasue:(double)distance bearing:(double)bearing
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _scrollableView.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:distance], [OsmAndApp.instance getFormattedAzimuth:bearing]];
+        self.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:distance], [OsmAndApp.instance getFormattedAzimuth:bearing]];
     });
 }
 

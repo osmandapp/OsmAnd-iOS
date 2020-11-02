@@ -88,7 +88,7 @@
     }
 }
 
-- (OAProfileSettingsItem *)getBaseProfileSettingsItem:(OAApplicationModeBean *)modeBean
+- (OAProfileSettingsItem *) getBaseProfileSettingsItem:(OAApplicationModeBean *)modeBean
 {
     for (OASettingsItem *settingsItem in _settingsItems)
     {
@@ -104,7 +104,7 @@
     return nil;
 }
 
-- (OAQuickActionsSettingsItem *)getBaseQuickActionsSettingsItem
+- (OAQuickActionsSettingsItem *) getBaseQuickActionsSettingsItem
 {
     for (OASettingsItem * settingsItem in _settingsItems)
     {
@@ -114,7 +114,7 @@
     return nil;
 }
  
-- (OAPoiUiFilterSettingsItem *)getBasePoiUiFiltersSettingsItem
+- (OAPoiUiFilterSettingsItem *) getBasePoiUiFiltersSettingsItem
 {
     for (OASettingsItem * settingsItem in _settingsItems)
     {
@@ -124,7 +124,7 @@
     return nil;
 }
 
-- (OAMapSourcesSettingsItem *)getBaseMapSourcesSettingsItem
+- (OAMapSourcesSettingsItem *) getBaseMapSourcesSettingsItem
 {
     for (OASettingsItem * settingsItem in _settingsItems)
     {
@@ -134,7 +134,7 @@
     return nil;
 }
 
-- (OAAvoidRoadsSettingsItem *)getBaseAvoidRoadsSettingsItem
+- (OAAvoidRoadsSettingsItem *) getBaseAvoidRoadsSettingsItem
 {
     for (OASettingsItem * settingsItem in _settingsItems)
     {
@@ -199,7 +199,7 @@
     return [self generateHeightForHeaderWithFirstHeaderText:OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] inSection:section];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const identifierCell = kCellTypeWithActivity;
     OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -242,7 +242,7 @@
     }
 }
 
-- (void)onSettingsImportFinished:(BOOL)succeed items:(nonnull NSArray<OASettingsItem *> *)items {
+- (void) onSettingsImportFinished:(BOOL)succeed items:(nonnull NSArray<OASettingsItem *> *)items {
     if (succeed)
     {
         OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:items fileName:[_file lastPathComponent]];

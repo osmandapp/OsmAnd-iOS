@@ -95,7 +95,7 @@
             actionsCount += 1;
         else if ([item isKindOfClass:OAPOIUIFilter.class])
             filtersCount += 1;
-        else if ([item isKindOfClass:OASQLiteTileSource.class])
+        else if ([item isKindOfClass:OAMapSourcesSettingsItem.class])
             tileSourcesCount += 1;
         else if ([item isKindOfClass:NSString.class])
         {

@@ -16,6 +16,9 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAProfileDataObject.h"
+#import "OAAvoidRoadInfo.h"
+#import "OASQLiteTileSource.h"
+#import "OAResourcesUIHelper.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -302,6 +305,25 @@
                 mapSourcesSection.type = kCellTypeSectionHeader;
                 mapSourcesSection.isOpen = NO;
                 
+                for (OAMapSourceResourceItem *item in settings)
+                {
+                    NSString *caption;
+                    if ([item isKindOfClass:OASqliteDbResourceItem.class])
+                    {
+                        OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *) item;
+                        caption = sqlite.title;
+                    }
+                    else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
+                    {
+                        OAOnlineTilesResourceItem* resourcesItem = (OAOnlineTilesResourceItem*) item;
+                        caption = resourcesItem.title;
+                    }
+                    [mapSourcesSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_map",
+                        @"title" : caption,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
                 [data addObject:mapSourcesSection];
                 break;
             }
@@ -329,7 +351,17 @@
                 avoidRoadsStyleSection.type = kCellTypeSectionHeader;
                 avoidRoadsStyleSection.isOpen = NO;
                 
-                [data addObject:avoidRoadsStyleSection];
+//                for (OAAvoidRoadInfo *avoidRoads in [_items objectForKey:type])
+//                {
+//                    NSString *name = avoidRoads.name;
+//                    [avoidRoadsStyleSection.groupItems addObject:@{
+//                        @"icon" : @"ic_custom_alert", // to check
+//                        @"title" : name,
+//                        @"type" : kCellTypeTitle,
+//                    }];
+//                }
+//
+//                [data addObject:avoidRoadsStyleSection];
                 break;
             }
             default:

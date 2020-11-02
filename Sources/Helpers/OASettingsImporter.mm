@@ -112,7 +112,6 @@
     }
     
     [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
     
     return items;
 }
@@ -206,6 +205,38 @@
             OASettingsItem *settingsItem = [self createItem:item];
             [_items addObject:settingsItem];
         }
+        if ([item[@"type"] isEqualToString:@"GLOBAL"])
+        {
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
+        }
+//        if ([item[@"type"] isEqualToString:@"FILE"])
+//        {
+//            OASettingsItem *settingsItem = [self createItem:item];
+//            [_items addObject:settingsItem];
+//        }
+//        if ([item[@"type"] isEqualToString:@"POI_UI_FILTERS"])
+//        {
+//            OASettingsItem *settingsItem = [self createItem:item];
+//            [_items addObject:settingsItem];
+//        }
+        if ([item[@"type"] isEqualToString:@"MAP_SOURCES"])
+        {
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
+        }
+//        if ([item[@"type"] isEqualToString:@"AVOID_ROADS"])
+//        {
+//            OASettingsItem *settingsItem = [self createItem:item];
+//            [_items addObject:settingsItem];
+//        }
+//        if ([item[@"type"] isEqualToString:@"POI_UI_FILTERS"])
+//        {
+//            OASettingsItem *settingsItem = [self createItem:item];
+//            [_items addObject:settingsItem];
+//        }
+        
+        
         // TODO: implement custom plugins
 //        NSString *pluginId = item.pluginId;
 //        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
@@ -430,11 +461,11 @@
             {
                 for (OASettingsItem *item in items)
                 {
-                    if ([item isKindOfClass:OAProfileSettingsItem.class])
-                    {
+//                    if ([item isKindOfClass:OAProfileSettingsItem.class])
+//                    {
                         // TODO: remove this check while implementing other types of import (e.g. Quick action)
                         [item apply];
-                    }
+//                    }
                 }
                 
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
@@ -483,8 +514,8 @@
         if ([item isKindOfClass:OAProfileSettingsItem.class]) {
             if ([item exists])
                 [duplicateItems addObject:((OAProfileSettingsItem *)item).modeBean];
-        } else
-        if ([item isKindOfClass:OACollectionSettingsItem.class])
+        }
+        else if ([item isKindOfClass:OACollectionSettingsItem.class])
         {
             NSArray *duplicates = [(OACollectionSettingsItem *)item processDuplicateItems];
             if (duplicates.count > 0)
@@ -542,17 +573,18 @@
 {
     [_importer importItems:_file items:_items];
     
-    NSString *tempDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
-    [NSFileManager.defaultManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:nil];
-    
-    for (OAProfileSettingsItem *item in _items)
-    {
-        NSString *bakupPatch = [[tempDir stringByAppendingPathComponent:item.appMode.stringKey] stringByAppendingPathExtension:@"osf"];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:bakupPatch])
-        {
-            [[NSFileManager defaultManager] copyItemAtPath:_file toPath:bakupPatch error:nil];
-        }
-    }
+    // to check if we need it
+//    NSString *tempDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
+//    [NSFileManager.defaultManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:nil];
+//
+//    for (OAProfileSettingsItem *item in _items)
+//    {
+//        NSString *bakupPatch = [[tempDir stringByAppendingPathComponent:item.appMode.stringKey] stringByAppendingPathExtension:@"osf"];
+//        if (![[NSFileManager defaultManager] fileExistsAtPath:bakupPatch])
+//        {
+//            [[NSFileManager defaultManager] copyItemAtPath:_file toPath:bakupPatch error:nil];
+//        }
+//    }
     
     return YES;
 }

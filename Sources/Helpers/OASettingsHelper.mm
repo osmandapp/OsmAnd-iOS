@@ -2031,6 +2031,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [super initialization];
     
     _newSqliteData = [NSMutableDictionary dictionary];
+    self.existingItems = [NSMutableArray array];
+    self.appliedItems = [NSMutableArray array];
+    self.items = [NSMutableArray array];
     
     OsmAndAppInstance app = [OsmAndApp instance];
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)

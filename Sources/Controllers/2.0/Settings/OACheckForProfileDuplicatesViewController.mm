@@ -88,7 +88,7 @@
     }
 }
 
-- (OAProfileSettingsItem *)getBaseProfileSettingsItem:(OAApplicationModeBean *)modeBean
+- (OAProfileSettingsItem *) getBaseProfileSettingsItem:(OAApplicationModeBean *)modeBean
 {
     for (OASettingsItem *settingsItem in _settingsItems)
     {
@@ -104,7 +104,7 @@
     return nil;
 }
 
-- (OAQuickActionsSettingsItem *)getBaseQuickActionsSettingsItem
+- (OAQuickActionsSettingsItem *) getBaseQuickActionsSettingsItem
 {
     for (OASettingsItem * settingsItem in _settingsItems)
     {
@@ -114,7 +114,7 @@
     return nil;
 }
  
-- (OAPoiUiFilterSettingsItem *)getBasePoiUiFiltersSettingsItem
+- (OAPoiUiFilterSettingsItem *) getBasePoiUiFiltersSettingsItem
 {
     for (OASettingsItem * settingsItem in _settingsItems)
     {
@@ -124,7 +124,7 @@
     return nil;
 }
 
-- (OAMapSourcesSettingsItem *)getBaseMapSourcesSettingsItem
+- (OAMapSourcesSettingsItem *) getBaseMapSourcesSettingsItem
 {
     for (OASettingsItem * settingsItem in _settingsItems)
     {
@@ -134,7 +134,7 @@
     return nil;
 }
 
-- (OAAvoidRoadsSettingsItem *)getBaseAvoidRoadsSettingsItem
+- (OAAvoidRoadsSettingsItem *) getBaseAvoidRoadsSettingsItem
 {
     for (OASettingsItem * settingsItem in _settingsItems)
     {
@@ -150,7 +150,7 @@
     NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
     NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<OAMapSource *> *tileSourceTemplates = [NSMutableArray array]; // to check type
+    NSMutableArray<OAMapSource *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     
     for (NSObject *object in _selectedItems)
@@ -191,12 +191,12 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] forSection:section];
+    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeightForHeaderWithFirstHeaderText:OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] inSection:section];
+    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] inSection:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -211,18 +211,8 @@
     if (cell)
     {
         cell.titleView.text = OALocalizedString(@"checking_for_duplicates");
-        
-        BOOL inProgress = YES; // to change
-        if (inProgress)
-        {
-            cell.activityIndicatorView.hidden = NO;
-            [cell.activityIndicatorView startAnimating];
-        }
-        else
-        {
-            cell.activityIndicatorView.hidden = YES;
-            [cell.activityIndicatorView startAnimating];
-        }
+        cell.activityIndicatorView.hidden = NO;
+        [cell.activityIndicatorView startAnimating];
     }
     return cell;
 }

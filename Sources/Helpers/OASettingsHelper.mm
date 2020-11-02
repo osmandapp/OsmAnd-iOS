@@ -241,12 +241,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        }
         if (pluginIndependentItems.count > 0)
         {
-            // TODO: add ui dialogs as in Android
-            //            FragmentManager fragmentManager = activity.getSupportFragmentManager();
-            //            ImportSettingsFragment.showInstance(fragmentManager, pluginIndependentItems, file);
             UIViewController* incomingURLViewController = [[OAImportProfileViewController alloc] initWithItems:pluginIndependentItems];
             [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
-            //[self importSettings:_importTask.getFile items:_importTask.getItems latestChanges:@"" version:1];
         }
     }
     else if (empty)
@@ -264,7 +260,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *>*)duplicates items:(NSArray<OASettingsItem *>*)items
 {
-    [self importSettings:_importTask.getFile items:items latestChanges:@"" version:1]; // to delete
+    
 }
 
 @end

@@ -355,12 +355,12 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_duplicates_description") boldFragment:nil forSection:section];
+    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_duplicates_description") boldFragment:nil forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_duplicates_description") boldFragment:nil inSection:section];
+    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_duplicates_description") boldFragment:nil inSection:section];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

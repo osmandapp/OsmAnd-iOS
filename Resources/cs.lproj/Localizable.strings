@@ -285,7 +285,7 @@
 "shared_string_done" = "Hotovo";
 "shared_string_update" = "Aktualizovat";
 "shared_string_install" = "Instalovat";
-"shared_string_uninstall" = "Uninstall";
+"shared_string_uninstall" = "Odinstalovat";
 "shared_string_delete" = "Vymazat";
 "shared_string_remove" = "Odstranit";
 "shared_string_dismiss" = "Zavřít";

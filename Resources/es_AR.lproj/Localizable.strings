@@ -1727,7 +1727,7 @@
 "settings_item_read_error" = "No se ha podido leer %@.";
 "downloading" = "Descargando";
 "empty_profile_name_warning" = "El nombre del perfil no debe estar vacío.";
-"after_tapping_done" = "Después de pulsar «Aplicar», los perfiles borrados se perderán completamente.";
+"after_tapping_done" = "Después de pulsar «Listo», los perfiles borrados se perderán completamente.";
 "all_application_profiles" = "Todos los perfiles de la aplicación";
 "rearrange_profile_descr" = "Los perfiles predefinidos de OsmAnd no se pueden borrar, pero puedes desactivarlos en la pantalla anterior o arrastrarlos al final de la lista.";
 "rearrange_profiles" = "Reorganizar los perfiles";

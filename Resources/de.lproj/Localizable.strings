@@ -981,7 +981,7 @@
 "poi_opening_hours" = "Öffnungszeiten";
 "poi_select_category" = "Kategorie auswählen";
 "poi_select_type" = "Typ auswählen";
-"amenity" = "Ausstattung";
+"amenity" = "Einrichtung";
 "osm_upload_failed_title" = "Upload fehlgeschlagen";
 "osm_upload_failed_descr" = "Bitte überprüfen Sie Ihre Zugangsdaten und Ihre Internetverbindung und versuchen Sie es erneut.";
 "osm_editing_lost_changes_title" = "Beenden ohne zu speichern?";

@@ -88,11 +88,11 @@
 "max_speed_none" = "بدون";
 "access_arrival_time" = "وقت الوصول";
 "map_widget_time" = "وقت الذهاب";
-"shared_string_collapse" = "تدلي";
+"shared_string_collapse" = "أقل";
 "shared_string_topbar" = "شريط بالأعلى";
 "shared_string_widgets" = "شريط جانبي";
-"map_widget_right" = "العدادات على اليمين";
-"map_widget_left" = "العدادات على اليسار";
+"map_widget_right" = "العدادات على اليسار";
+"map_widget_left" = "العدادات على اليمين";
 "layer_map_appearance" = "الاختصارات";
 "map_markers" = "التوجيه المباشر";
 "select_gpx" = "اختر GPX…";
@@ -294,7 +294,7 @@
 "shared_string_buy_for" = "إلى";
 "shared_string_or" = "أو";
 "shared_string_and" = "و";
-"shared_string_edit" = "تعديل/حذف";
+"shared_string_edit" = "تعديل";
 "shared_string_modify" = "تعديل";
 "shared_string_later" = "لاحقا";
 "shared_string_of" = "من";
@@ -1526,7 +1526,7 @@
 "rendering_attr_buildings15zoom_name" = "المباني في التقريب 15";
 "rendering_attr_highway_class_motorway_name" = "طريق سريع";
 "routing_attr_piste_type_sled_description" = "منحدرات للاستخدام الزلاجات.";
-"routing_attr_relief_smoothness_factor_plains_name" = "أقل تضاريس";
+"routing_attr_relief_smoothness_factor_plains_name" = "تضاريس أقل";
 "routeInfo_smoothness_name" = "السلاسة";
 "routing_attr_weight_description" = "تحديد الوزن الأعلى المسموح به على الطرق.";
 "routing_attr_avoid_subway_name" = "تجنب قطارالانفاق";
@@ -1598,7 +1598,7 @@
 "routing_attr_avoid_unpaved_name" = "تجنب الطرق غير المعبّدة";
 "routeInfo_tracktype_name" = "متانة السطح";
 "rendering_value_americanRoadAtlas_name" = "أطلس الطرق الأمريكية";
-"routing_attr_short_way_name" = "طريق أقل استهلاكا للوقود";
+"routing_attr_short_way_name" = "طريق أقل استهلاكاً للوقود";
 "rendering_attr_highway_class_steps_name" = "خطوات";
 "rendering_attr_surface_sand_name" = "الرمال";
 "rendering_value_car_name" = "سيارة";

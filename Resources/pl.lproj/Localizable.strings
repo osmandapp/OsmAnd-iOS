@@ -724,7 +724,7 @@
 "product_desc_parking" = "Łatwo zapamiętasz, kiedy samochód był zaparkowany i ile czasu zostało, jeśli parkowanie jest ograniczone czasowo";
 "product_desc_skimap" = "Stoki narciarskie dla wszystkich ośrodków narciarskich na świecie";
 "product_desc_track_recording" = "Aktywuje funkcję nagrywania i zapisywania śladów";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin pozwala łatwo zapamiętać, gdzie został zaparkowany samochód oraz ile pozostało czasu parkowania, jeśli jest on ograniczony.\n\nMiejsce parkowania oraz czas można znaleźć na karcie w panelu oraz na widżecie mapy. Wtyczka może dodać powiadomienie i przypomnienie do kalendarza.";
+"product_desc_ext_parking" = "OsmAnd Parking Plugin pozwala łatwo zapamiętać, gdzie został zaparkowany samochód oraz ile pozostało czasu parkowania, jeśli jest on ograniczony.\nMiejsce parkowania oraz czas można znaleźć na karcie w panelu oraz na widżecie mapy. Wtyczka może dodać powiadomienie i przypomnienie do kalendarza.";
 "poi_clear" = "Wyczyść";
 "make_call" = "Zadzwoń";
 "gpx_select_track" = "Wybierz podróż";
@@ -748,7 +748,7 @@
 "logging_min_distance_descr" = "Filtr: minimalna odległość do zarejestrowania nowego punktu";
 "logging_min_accuracy" = "Minimalna dokładność rejestrowania";
 "logging_min_accuracy_descr" = "Filtr: brak rejestrowania, chyba że zostanie osiągnięta dokładność";
-"product_desc_ext_track_recording" = "Aktywuje funkcje rejestrowania i zapisywania śladów za pomocą widżetu rejestrowania śladów GPX na ekranie mapy lub automatyczne rejestruje przebiegi wszystkich tras do plików GPX.\n\nNagrane ślady można udostępnić znajomym lub wykorzystać na rzecz rowoju map Openstreetmap. Sportowcy mogą korzystać z nagranych śladów do monitorowania treningów. W tym celu OsmAnd udostępnia podstawowe informacje takie, jak czasy okrążeń, średnia prędkość itp. Ślady mogą być później analizowane w specjalnych narzędziach do analizy przygotowanych przez innych dostawców.";
+"product_desc_ext_track_recording" = "Aktywuje funkcje rejestrowania i zapisywania śladów za pomocą widżetu rejestrowania śladów GPX na ekranie mapy lub automatyczne rejestruje przebiegi wszystkich tras do plików GPX.  Nagrane ślady można udostępnić znajomym lub wykorzystać na rzecz rowoju map Openstreetmap. Sportowcy mogą korzystać z nagranych śladów do monitorowania treningów. W tym celu OsmAnd udostępnia podstawowe informacje takie, jak czasy okrążeń, średnia prędkość itp. Ślady mogą być później analizowane w specjalnych narzędziach do analizy przygotowanych przez innych dostawców.";
 "logging_min_speed" = "Minimalna szybkość rejestrowania";
 "logging_min_speed_descr" = "Filtr: Brak rejestrowania poniżej wybranej prędkości";
 "auto_split_gap" = "Automatyczne dzielenie nagrań po przerwaniu";
@@ -890,7 +890,7 @@
 "osm_live_unlock_updates" = "Odblokuj cogodzinną aktualizację map";
 "osmand_live_update_now" = "Aktualizuj teraz";
 "osm_live_enter_user_name" = "Proszę wpisać nazwę publiczną";
-"osm_live_banner_descr" = "Subskrybuj OsmAnd i uzyskaj nielimitowane <b>cogodzinne</b> aktualizacje mapy i  <b>wszystkie funkcje</b> zawarte w %@";
+"osm_live_banner_descr" = "Subskrybuj OsmAnd i uzyskaj nielimitowane <b>cogodzinne</b> aktualizacje mapy i <b>wszystkie funkcje</b> zawarte w %@";
 "osm_live_get_title" = "Uzyskaj OsmAnd Live";
 "osm_live_ask_for_purchase" = "Proszę najpierw zakupić subskrypcję OsmAnd Live";
 "shared_string_io_error" = "Błąd wejścia/wyjścia";
@@ -1728,7 +1728,7 @@
 "nav_type_title" = "Typ nawigacji";
 "arrows_direction_to_markers" = "Strzałki pokazują kierunek do aktywnego znacznika, jeśli jest on poza ekranem. Linie kierunków rysują linię do aktywnych znaczników.";
 "appearance_on_map" = "Wygląd na mapie";
-"choose_how_display_distance" = "Wybierz sposób wyświetlania odległości do aktywnych znaczników.";
+"choose_how_display_distance" = "Wybierz sposób wyświetlania odległości do aktywnych znaczników";
 "specify_number_of_dir_indicators" = "Wybierz liczbę wskaźników kierunków, to wpływa na wszystkie ustawienia poniżej.";
 "active_markers" = "Aktywne znaczniki";
 "direction_lines" = "Linie kierunków";
@@ -1764,7 +1764,7 @@
 "osmand_profile" = "Profil OsmAnd";
 "profile_type_base_string" = "Profil podstawowy";
 "not_available_profile_name" = "Profil o tej nazwie już istnieje.";
-"profile_prefs_reset_successful" = "Ustawienia profili przywrócone do stanu domyślnego.";
+"profile_prefs_reset_successful" = "Ustawienia profili przywrócone do domyślnych";
 "profile_import_success" = "Profil aplikacji został zaimportowany pomyślnie";
 "err_profile_import" = "Błąd odczytu danych elementu: %@";
 "empty_profile_name_warning" = "Nazwa profilu nie może być pusta.";
@@ -1775,3 +1775,17 @@
 "public_transport_menu" = "Transport publiczny";
 "nothing_found_empty" = "Nic nie odnaleziono";
 "shared_string_next" = "Dalej";
+"map_update_warning" = "Chcesz przeładować dane dotyczące fragmentów mapy z Internetu?";
+"shared_string_account" = "Konto";
+"reset_to_default" = "Przywróć ustawienia domyślne";
+"profile_alert_delete_title" = "Usuń profil";
+"copy_from_other_profile" = "Skopiuj z innego profilu";
+"units_and_formats" = "Jednostki i formaty";
+"configure_profile" = "Skonfiguruj profil";
+"export_profile" = "Eksportuj profil";
+"default_speed_dialog_msg" = "Szacuje czas przyjazdu dla nieznanego rodzaju dróg i ograniczenia prędkości na wszystkich drogach (może zmienić trasę)";
+"profile_appearance" = "Wygląd profilu";
+"profile_type_custom_string" = "Dostosowany profil";
+"width_limit_description" = "Wprowadź szerokość pojazdu, niektóre restrykcje dróg mogą dotyczyć szerokich pojazdów.";
+"height_limit_description" = "Wprowadź wysokość pojazdu, niektóre restrykcje dróg mogą dotyczyć wysokich pojazdów.";
+"weight_limit_description" = "Wprowadź wagę pojazdu, niektóre restrykcje dróg mogą dotyczyć ciężkich pojazdów.";

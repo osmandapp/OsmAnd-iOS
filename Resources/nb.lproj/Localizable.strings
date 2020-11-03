@@ -131,7 +131,7 @@
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Høyde";
 "map_widget_battery" = "Batterinivå";
-"map_widget_plain_time" = "Nåtid";
+"map_widget_plain_time" = "Gjeldende tid";
 "map_widget_max_speed" = "Fartsgrense";
 "max_speed_none" = "ingen";
 "access_arrival_time" = "Ankomsttid";
@@ -273,7 +273,7 @@
 "intermediate_point" = "Intermediate destination %@";
 "arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
 "starting_point_too_far" = "Starting point too far from nearest road.";
-"ending_point_too_far" = "Sluttpunkt for langt fra nærmeste vei.";
+"ending_point_too_far" = "Endepunkt for langt fra nærmeste vei.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
 "towards" = "mot";
 "route_roundabout" = "Roundabout: take %d exit and go";
@@ -352,7 +352,7 @@
 "shared_string_update" = "Oppdater";
 "shared_string_install" = "Installer";
 "shared_string_uninstall" = "Avinstaller";
-"shared_string_delete" = "slett";
+"shared_string_delete" = "Slett";
 "shared_string_upload" = "Last opp";
 "shared_string_remove" = "Fjern";
 "shared_string_dismiss" = "Avvis";
@@ -367,7 +367,7 @@
 "shared_string_of" = "of";
 "shared_string_all" = "Alle";
 "shared_string_from" = "fra";
-"shared_string_time" = "tid";
+"shared_string_time" = "Tid";
 "shared_string_time_of_day" = "Tid på dagen";
 "shared_string_distance" = "Avstand";
 "shared_string_retry" = "Prøv igjen";
@@ -1421,7 +1421,7 @@
 "rendering_attr_tracktype_grade4_name" = "For det meste mykt";
 "routing_attr_piste_type_nordic_name" = "Langrenn";
 "rendering_attr_currentTrackColor_name" = "GPX-farge";
-"rendering_attr_subwayMode_name" = "Undergrunnsruter";
+"rendering_attr_subwayMode_name" = "T-bane-ruter";
 "routing_attr_allow_classic_only_name" = "Tillat løyper kun for klassisk";
 "rendering_attr_hmRendered_name" = "Vis flere kartdetaljer";
 "rendering_attr_piste_type_connection_name" = "Forbindelse";
@@ -1499,7 +1499,7 @@
 "routing_attr_height_name" = "Høydegrense";
 "rendering_attr_tramRoutes_name" = "Trikkeruter";
 "routing_attr_avoid_share_taxi_name" = "Ingen delingsdrosje";
-"rendering_attr_depthContours_description" = "Vis havdybdekonturer og punkter.";
+"rendering_attr_depthContours_description" = "Vis dybdekonturer og punkter.";
 "rendering_attr_surface_wood_name" = "Tre";
 "routeInfo_smoothness_name" = "Jevnhet";
 "routing_attr_freeride_policy_description" = "Frikjøring og terrengkjøring er uoffisielle ruter og passasjer. Typisk upreparert, ikke vedlikeholdt av bakkepersonell, og ikke sjekket på kveldene. Kjør på egen risiko.";
@@ -1668,3 +1668,4 @@
 "allow_3d" = "Tillat 2,5D-visning";
 "default_speed_dialog_msg" = "Estimerer ankomsttid for ukjente veityper og begrenser farten for alle veier (kan påvirke ruting)";
 "routing_attr_length_name" = "Lengdebegrensning";
+"shared_string_copy" = "Kopier";

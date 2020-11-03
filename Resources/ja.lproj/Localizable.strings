@@ -153,7 +153,7 @@
 "speak_speed_limit" = "制限速度";
 "speak_cameras" = "スピードカメラ";
 "speak_traffic_warnings" = "交通指示警告";
-"announce_gpx_waypoints" = "GPX経由地点";
+"announce_gpx_waypoints" = "経路データ内の経由地点";
 "speak_favorites" = "近隣のお気に入り";
 "speak_poi" = "近隣のPOI";
 "speak_pedestrian" = "横断歩道";
@@ -163,7 +163,7 @@
 "shared_string_never" = "しない";
 "shared_setting_always_ask" = "常に尋ねる";
 "general_settings_2" = "全般設定";
-"general_settings_descr" = "アプリテーマ、ユニット、リージョン";
+"general_settings_descr" = "アプリテーマ、単位、地域";
 "routing_settings_descr" = "ナビゲーション設定";
 "auto_zoom_none" = "自動ズームしない";
 "auto_zoom_close" = "近距離表示";
@@ -372,9 +372,9 @@
 "shared_string_distance" = "距離";
 "shared_string_retry" = "再試行";
 "shared_string_enabled" = "有効";
-"shared_string_start_date" = "Start date";
-"shared_string_end_date" = "End date";
-"shared_string_not_set" = "Not set";
+"shared_string_start_date" = "開始日";
+"shared_string_end_date" = "終了日";
+"shared_string_not_set" = "未設定";
 "shared_string_reset" = "リセット";
 "shared_string_read_more" = "続きを読む";
 "shared_string_on" = "On";
@@ -409,7 +409,7 @@
 "fav_create_group" = "新しいグループを作成";
 "fav_enter_group_name" = "グループ名を入力";
 "fav_exists" = "\"%@\"という名前のお気に入りは既に存在します";
-"fav_ignore" = "Ignore";
+"fav_ignore" = "無視";
 "fav_rename" = "名前の変更";
 "fav_replace" = "置き換え";
 "fav_replace_all" = "すべて置き換え";
@@ -428,11 +428,11 @@
 "favorites" = "お気に入り";
 "tracks" = "旅程";
 // GPX
-"gpx_point" = "Point";
+"gpx_point" = "地点";
 "gpx_waypoint" = "経由地点";
 "gpx_waypoints" = "経由地点";
-"gpx_points" = "Point(s)";
-"gpx_export" = "Export";
+"gpx_points" = "地点";
+"gpx_export" = "エクスポート";
 "import_export" = "インポート/エクスポート";
 "gpx_import_title" = "旅程ファイルのインポート";
 "gpx_import_already_exists" = "指定された旅程ファイルは既にリストに存在します。どのように処理するかを選択してください。";
@@ -446,15 +446,15 @@
 "gpx_no_tracks" = "旅程ファイルはありません";
 "gpx_remove" = "旅程を削除しますか？";
 "gpx_stat" = "統計";
-"gpx_route" = "Route";
+"gpx_route" = "ルート";
 "gpx_route_time" = "所要時間";
 "gpx_uphldownhl" = "上り坂/下り坂";
 "gpx_average_speed" = "平均速度";
-"gpx_start" = "Start";
+"gpx_start" = "開始";
 "gpx_finish" = "完了";
 "gpx_avg_elev" = "平均標高";
 "gpx_elev_range" = "標高範囲";
-"gpx_updown" = "Up/Down";
+"gpx_updown" = "上り/下り";
 "gpx_uphills_total" = "上り坂合計";
 "track_recording" = "経路記録";
 "track_recording_name" = "現在記録中の経路";
@@ -465,7 +465,7 @@
 "track_continue_rec" = "記録の続行";
 "track_continue_rec_q" = "記録を続行しますか？";
 "rec_interval" = "ログ記録間隔";
-"rec_interval_minimum" = "最小値";
+"rec_interval_minimum" = "最小";
 "track_start_rec" = "旅程記録の開始";
 "track_rec_addon_q" = "旅程を記録保存するには、旅程記録アドオンを有効にしてください";
 "track_interval_remember" = "選択した項目を記憶する";
@@ -577,7 +577,7 @@
 "osmand_live_weekly" = "毎週";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "サーバー側の最終更新: %@";
-"osmand_live_upd_frequency" = "Update frequency";
+"osmand_live_upd_frequency" = "更新間隔";
 "osmand_live_wifi_only" = "Wi-Fi接続時のみ更新";
 "osmand_live_donation_header" = "寄付の設定";
 "osmand_live_donations" = "寄付";
@@ -701,7 +701,7 @@
 "osm_edits_advanced" = "拡張";
 "osm_edits_all" = "すべての編集";
 "osm_edits_poi" = "POIの編集";
-"osm_edits_notes" = "Notes";
+"osm_edits_notes" = "メモ";
 "osm_poi_id_label" = "POI ID:";
 "osm_edits_title" = "OSMの編集";
 "osm_edits_edits_label" = "編集";
@@ -883,7 +883,7 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "h";
+"units_hour" = "時間";
 "units_min" = "分";
 "units_sec" = "秒";
 "units_min_short" = "m";
@@ -894,7 +894,7 @@
 "help_first_use_descr" = "マップのダウンロード、および基本的な設定のやり方";
 "help_navigation_descr" = "ナビゲーション設定のやり方";
 "help_faq" = "FAQ";
-"help_faq_descr" = "FAQ";
+"help_faq_descr" = "よくある質問";
 "help_features" = "特徴";
 "help_map_viewing" = "マップ表示関連";
 "help_search" = "マップ内検索";
@@ -927,7 +927,7 @@
 "ctx_mnu_edit_fav" = "お気に入りを編集";
 "ctx_mnu_add_fav" = "お気に入りに追加";
 "ctx_mnu_share" = "共有";
-"ctx_mnu_direction" = "Direction";
+"ctx_mnu_direction" = "方向";
 // Location Services
 "loc_access_denied" = "アクセスが拒否されました";
 "loc_access_denied_desc" = "位置情報サービスへのアクセスが拒否されました";
@@ -961,7 +961,7 @@
 "green" = "グリーン";
 "translucent_green" = "グリーン(半透明)";
 "brown" = "ブラウン";
-"black" = "Black";
+"black" = "黒";
 // World Regions
 "region_africa" = "アフリカ";
 "region_asia" = "アジア";
@@ -1030,7 +1030,7 @@
 "product_desc_asia" = "アジア向けマップの無制限ダウンロード";
 "product_desc_asia_short" = "アジア地域のマップ";
 "product_title_wiki" = "Wikipedia";
-"product_desc_wiki" = "Wikipedia data";
+"product_desc_wiki" = "Wikipediaデータ";
 "product_desc_ext_wiki" = "Wikipediaから観光名所など旅行者が関心をもちそうな場所(POI)に関する情報を取得します。Wikipediaプラグインを有効にするだけで、今いる地域では何が有名か、などの記事を楽しむことができます。";
 "product_title_srtm" = "等高線";
 "product_desc_srtm" = "等高線の表示";
@@ -1776,3 +1776,13 @@
 "shared_string_account_add" = "アカウント追加";
 "shared_string_account" = "アカウント";
 "res_slope" = "勾配";
+"configure_screen_descr" = "指定プロファイルの画面構成";
+"help_legend_descr" = "地図記号の説明";
+"map_coords" = "マップ: 緯度 %.5f 経度 %.5f";
+"vessel_height_limit_description" = "低い橋を避けるために船の高さを設定します。注：橋が可動式の場合は、開いた状態の高さで計算されます。";
+"vessel_width_limit_description" = "狭い橋を避けるために船の幅を設定します。";
+"download_size" = "ダウンロードサイズ";
+"nothing_found_empty" = "見つかりませんでした";
+"nav_type_osmand" = "OsmAnd(オフラインルーティング)";
+"update_map" = "マップを更新";
+"import_from_files" = "ファイルからインポート";

@@ -543,9 +543,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     else if ([key isEqualToString:@"copy_profile"])
     {
         OACopyProfileBottomSheetViewControler *bottomSheet = [[OACopyProfileBottomSheetViewControler alloc] initWithMode:_appMode];
-        bottomSheet.modalPresentationStyle = UIModalPresentationOverCurrentContext;
         bottomSheet.delegate = self;
-        [self presentViewController:bottomSheet animated:NO completion:nil];
+        [bottomSheet presentInViewController:self];
     }
     else if ([key isEqualToString:@"reset_to_default"])
     {

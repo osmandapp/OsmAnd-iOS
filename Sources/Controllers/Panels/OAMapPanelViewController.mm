@@ -361,6 +361,7 @@ typedef enum
 
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
 {
+    self.sidePanelController.recognizesPanGesture = NO;
     _scrollableHudViewController = controller;
     _scrollableHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addChildViewController:_scrollableHudViewController];
@@ -373,6 +374,7 @@ typedef enum
 
 - (void) hideScrollableHudViewController
 {
+    self.sidePanelController.recognizesPanGesture = YES;
     if (_scrollableHudViewController != nil && self.view == _scrollableHudViewController.view.superview)
     {
         [_scrollableHudViewController.view removeFromSuperview];

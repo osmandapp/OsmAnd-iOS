@@ -18,6 +18,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *bottomSheetView;
 
+- (void) presentInViewController:(UIViewController *)viewController;
+
 - (void) onRightButtonPressed;
 
 @end

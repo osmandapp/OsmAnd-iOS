@@ -33,6 +33,7 @@
 #import "OAGPXDatabase.h"
 #import "OAReorderPointCommand.h"
 #import "OARemovePointCommand.h"
+#import "OAPointOptionsBottomSheetViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -51,7 +52,7 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
     LINE
 };
 
-@interface OARoutePlannigHudViewController () <UITableViewDelegate, UITableViewDataSource, OAMeasurementLayerDelegate>
+@interface OARoutePlannigHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAMeasurementLayerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
@@ -140,6 +141,9 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
     
     [self adjustMapViewPort];
     [self changeMapRulerPosition];
+    
+    self.tableView.userInteractionEnabled = YES;
+    [self.view bringSubviewToFront:self.tableView];
 }
 
 - (BOOL)supportsFullScreen
@@ -661,6 +665,8 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    OAPointOptionsBottomSheetViewController *bottomSheet = [[OAPointOptionsBottomSheetViewController alloc] initWithPoint:_editingContext.getPoints[indexPath.row] index:indexPath.row];
+    [bottomSheet presentInViewController:self];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

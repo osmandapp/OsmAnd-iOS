@@ -53,6 +53,12 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
                            bundle:nil];
 }
 
+- (void) presentInViewController:(UIViewController *)viewController
+{
+    self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [viewController presentViewController:self animated:NO completion:nil];
+}
+
 - (void) generateData
 {
     
@@ -61,6 +67,11 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 - (void) commonInit
 {
 
+}
+
+- (void) applyLocalization
+{
+    
 }
 
 - (void)viewDidLoad {
@@ -90,6 +101,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     
     _currentState = EOACopyProfileMenuStateInitial;
     
+    [self applyLocalization];
     [self layoutSubviews];
 }
 
@@ -115,7 +127,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 {
     CGRect f = _bottomSheetView.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    if (OAUtilities.isLandscape)
+    if ([OAUtilities isLandscape])
     {
         f.size.height = DeviceScreenHeight;
         f.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
@@ -133,12 +145,12 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     }
     else
     {
+        CGRect buttonsFrame = _buttonsView.frame;
+        buttonsFrame.size.height = 60. + bottomMargin;
         f.size.height = [self getViewHeight];
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
         
-        CGRect buttonsFrame = _buttonsView.frame;
-        buttonsFrame.size.height = 60. + bottomMargin;
         buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
         _buttonsView.frame = buttonsFrame;
         
@@ -245,6 +257,9 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     
     _headerView.frame = CGRectMake(0., _headerView.frame.origin.y, contentFrame.size.width, _headerView.frame.size.height);
     
+    CGFloat tableViewY = CGRectGetMaxY(_headerView.frame);
+    _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
+    
     [self applyCornerRadius:self.headerView];
     [self applyCornerRadius:self.contentContainer];
 }
@@ -310,7 +325,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
             
             if (newY <= OAUtilities.getStatusBarHeight || _tableView.contentOffset.y > 0)
             {
-                newY = 0;
+                newY = OAUtilities.getStatusBarHeight;
                 if (_tableView.contentOffset.y > 0)
                     _initialTouchPoint = [recognizer locationInView:_bottomSheetView].y;
             }
@@ -320,14 +335,14 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
             }
             
             CGRect frame = _bottomSheetView.frame;
-            frame.origin.y = newY >= 0 && newY <= OAUtilities.getStatusBarHeight ? OAUtilities.getStatusBarHeight : newY;
+            frame.origin.y = newY < OAUtilities.getStatusBarHeight ? OAUtilities.getStatusBarHeight : newY;
             frame.size.height = DeviceScreenHeight - newY;
             _bottomSheetView.frame = frame;
             
-            _statusBarBackgroundView.frame = newY == 0 ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
+//            _statusBarBackgroundView.frame = newY == 0 ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
             
             CGRect buttonsFrame = _buttonsView.frame;
-            buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height - frame.origin.y;
+            buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;
             _buttonsView.frame = buttonsFrame;
             
             CGRect contentFrame = _contentContainer.frame;

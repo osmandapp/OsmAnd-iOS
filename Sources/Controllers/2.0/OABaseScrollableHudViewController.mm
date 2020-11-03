@@ -15,7 +15,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 
-@interface OABaseScrollableHudViewController ()
+@interface OABaseScrollableHudViewController () <UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
@@ -56,6 +56,12 @@
     [_scrollableView.layer setShadowRadius:3.0];
     [_scrollableView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
+    _topHeaderContainerView.layer.shadowColor = UIColor.blackColor.CGColor;
+    _topHeaderContainerView.layer.shadowOpacity = 0.0;
+    _topHeaderContainerView.layer.shadowRadius = 2.0;
+    _topHeaderContainerView.layer.shadowOffset = CGSizeMake(0.0, 3.0);
+    _topHeaderContainerView.layer.masksToBounds = NO;
+    
     if (self.useGestureRecognizer)
     {
         _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDragged:)];
@@ -84,7 +90,7 @@
 
 - (void) setupModeViewShadowVisibility
 {
-    BOOL shouldShow = _tableView.contentOffset.y > 0 && _scrollableView.frame.origin.y == 0;
+    BOOL shouldShow = _tableView.contentOffset.y > 0;
     _topHeaderContainerView.layer.shadowOpacity = shouldShow ? 0.15 : 0.0;
 }
 
@@ -107,6 +113,8 @@
     
     BOOL isLandscape = [self isLandscape];
     _currentState = isLandscape ? EOADraggableMenuStateFullScreen : (!self.supportsFullScreen && _currentState == EOADraggableMenuStateFullScreen ? EOADraggableMenuStateExpanded : _currentState);
+    
+    [_tableView setScrollEnabled:_currentState == EOADraggableMenuStateFullScreen || (!self.supportsFullScreen && EOADraggableMenuStateExpanded)];
     
     [self adjustFrame];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -143,10 +151,6 @@
     contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
     contentFrame.size.height -= contentFrame.origin.y;
     _contentContainer.frame = contentFrame;
-    
-//    CGRect viewFrame = _scrollableView.frame;
-//    viewFrame.size.height += buttonsFrame.size.height;
-//    _scrollableView.frame = viewFrame;
     
     _sliderView.hidden = isLandscape;
     
@@ -261,7 +265,7 @@
 - (void) show:(BOOL)animated state:(EOADraggableMenuState)state onComplete:(void (^)(void))onComplete
 {
     [_tableView setContentOffset:CGPointZero];
-    _currentState = state;
+    _currentState = self.isLandscape ? EOADraggableMenuStateFullScreen : state;
     [_tableView setScrollEnabled:YES];
     
     [self adjustFrame];
@@ -290,9 +294,7 @@
         }
         
         [UIView animateWithDuration:0.3 animations:^{
-            
             _scrollableView.frame = frame;
-            
         } completion:^(BOOL finished) {
             if (onComplete)
                 onComplete();
@@ -498,7 +500,7 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollView.contentOffset.y <= 0 || _scrollableView.frame.origin.y != 0)
+    if (scrollView.contentOffset.y <= 0)
         [scrollView setContentOffset:CGPointZero animated:NO];
     
     [self setupModeViewShadowVisibility];
@@ -508,7 +510,7 @@
 
 - (void)onViewHeightChanged:(CGFloat)height
 {
-    
+    //override
 }
 
 @end

@@ -55,8 +55,6 @@
 {
     [super viewDidLoad];
     
-    self.titleView.text = OALocalizedString(@"copy_from_other_profile");
-    
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 0.01f)];
     [self.tableView setShowsVerticalScrollIndicator:YES];
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
@@ -64,9 +62,13 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
+}
+
+- (void) applyLocalization
+{
+    self.titleView.text = OALocalizedString(@"copy_from_other_profile");
     [self.leftButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.rightButton setTitle:OALocalizedString(@"shared_string_copy") forState:UIControlStateNormal];
-    
 }
 
 - (void) commonInit

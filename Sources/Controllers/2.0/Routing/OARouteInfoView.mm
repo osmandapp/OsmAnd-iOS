@@ -197,6 +197,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _appModeViewContainer.layer.shadowRadius = 2.0;
     _appModeViewContainer.layer.shadowOffset = CGSizeMake(0.0, 3.0);
     _appModeViewContainer.layer.masksToBounds = NO;
+
     
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDragged:)];
     _panGesture.maximumNumberOfTouches = 1;

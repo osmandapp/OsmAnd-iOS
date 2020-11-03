@@ -45,6 +45,8 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _pointMarkers;
     
     std::shared_ptr<SkBitmap> _pointMarkerIcon;
+    
+    OsmAnd::PointI _cachedCenter;
 
     BOOL _initDone;
 }
@@ -119,6 +121,9 @@
     if (lastBeforePoint)
     {
         const auto center = self.mapViewController.mapView.target31;
+        if (center == _cachedCenter)
+            return;
+        _cachedCenter = center;
         const auto lastBeforePnt = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastBeforePoint.getLatitude, lastBeforePoint.getLongitude));
         [self.mapViewController runWithRenderSync:^{
             QVector<OsmAnd::PointI> points;

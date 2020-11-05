@@ -10,7 +10,15 @@
 
 @class OAGpxTrkPt;
 
+@protocol OAPointOptionsBottmSheetDelegate <NSObject>
+
+- (void) onMovePoint:(NSInteger)point;
+
+@end
+
 @interface OAPointOptionsBottomSheetViewController : OABaseBottomSheetViewController
+
+@property (nonatomic, weak) id<OAPointOptionsBottmSheetDelegate> delegate;
 
 - (instancetype) initWithPoint:(OAGpxTrkPt *)point index:(NSInteger)pointIndex;
 

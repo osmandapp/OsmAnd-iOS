@@ -54,9 +54,9 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         _lastCalculationMode = WHOLE_TRACK;
         _appMode = DEFAULT_APP_MODE;
         
-        _before = [[OATrackSegment alloc] init];
+        _before = [[OAGpxTrkSeg alloc] init];
         _before.points = @[];
-        _after = [[OATrackSegment alloc] init];
+        _after = [[OAGpxTrkSeg alloc] init];
         _after.points = @[];
     }
     return self;

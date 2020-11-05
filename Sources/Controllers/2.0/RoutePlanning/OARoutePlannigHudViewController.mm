@@ -34,6 +34,8 @@
 #import "OAReorderPointCommand.h"
 #import "OARemovePointCommand.h"
 #import "OAPointOptionsBottomSheetViewController.h"
+#import "OAInfoBottomView.h"
+#import "OAMovePointCommand.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -52,7 +54,12 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
     LINE
 };
 
-@interface OARoutePlannigHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAMeasurementLayerDelegate>
+typedef NS_ENUM(NSInteger, EOAHudMode) {
+    EOAHudModeRoutePlanning = 0,
+    EOAHudModeMovePoint
+};
+
+@interface OARoutePlannigHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
@@ -82,6 +89,10 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
     OAMeasurementEditingContext *_editingContext;
     
     CGFloat _cachedYViewPort;
+    
+    EOAHudMode _hudMode;
+    
+    OAInfoBottomView *_infoView;
 }
 
 - (instancetype) init
@@ -105,6 +116,7 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _hudMode = EOAHudModeRoutePlanning;
     
     [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
     [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
@@ -153,7 +165,7 @@ typedef NS_ENUM(NSInteger, EOASaveType) {
 
 - (CGFloat)initialMenuHeight
 {
-    return 60. + self.toolBarView.frame.size.height;
+    return _hudMode == EOAHudModeRoutePlanning ? 60. + self.toolBarView.frame.size.height : 240.;
 }
 
 - (CGFloat)expandedMenuHeight
@@ -666,6 +678,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAPointOptionsBottomSheetViewController *bottomSheet = [[OAPointOptionsBottomSheetViewController alloc] initWithPoint:_editingContext.getPoints[indexPath.row] index:indexPath.row];
+    bottomSheet.delegate = self;
     [bottomSheet presentInViewController:self];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -677,6 +690,73 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
     dispatch_async(dispatch_get_main_queue(), ^{
         self.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:distance], [OsmAndApp.instance getFormattedAzimuth:bearing]];
     });
+}
+
+#pragma mark - OAPointOptionsBottmSheetDelegate
+
+- (void)showMovingInfoView
+{
+    _infoView = [[OAInfoBottomView alloc] init];
+    _infoView.frame = self.scrollableView.bounds;
+    _infoView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _infoView.leftIconView.image = [UIImage imageNamed:@"ic_custom_change_object_position"];
+    _infoView.titleView.text = OALocalizedString(@"move_point");
+    _infoView.mainInfoLabel.text = OALocalizedString(@"move_point_descr");
+    [_infoView.leftButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [_infoView.rightButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
+    _infoView.layer.cornerRadius = 9.;
+    _infoView.clipsToBounds = NO;
+    _infoView.layer.masksToBounds = YES;
+    
+    _infoView.delegate = self;
+    [self.scrollableView addSubview:_infoView];
+    _hudMode = EOAHudModeMovePoint;
+    [self goMinimized];
+}
+
+- (void) onMovePoint:(NSInteger)pointPosition
+{
+    [self showMovingInfoView];
+    [self enterMovingMode:pointPosition];
+}
+
+- (void) enterMovingMode:(NSInteger)pointPosition
+{
+    _editingContext.selectedPointPosition = pointPosition;
+    OAGpxTrkPt *pt = _editingContext.getPoints[pointPosition];
+    _editingContext.originalPointToMove = pt;
+    [_layer enterMovingPointMode];
+}
+
+#pragma mark - OAInfoBottomViewDelegate
+
+- (void)onLeftButtonPressed
+{
+    [self onCloseButtonPressed];
+}
+
+- (void)onRightButtonPressed
+{
+    OAGpxTrkPt *newPoint = [_layer getMovedPointToApply];
+    [_editingContext.commandManager execute:[[OAMovePointCommand alloc] initWithLayer:_layer oldPoint:_editingContext.originalPointToMove newPoint:newPoint position:_editingContext.selectedPointPosition]];
+    
+    [self onCloseButtonPressed];
+}
+
+- (void)onCloseButtonPressed
+{
+    _editingContext.selectedPointPosition = -1;
+    _editingContext.originalPointToMove = nil;
+    
+    [UIView animateWithDuration:.2 animations:^{
+        _infoView.alpha = 0.;
+        _hudMode = EOAHudModeRoutePlanning;
+        [self goMinimized];
+    } completion:^(BOOL finished) {
+        [_layer exitMovingMode];
+        [_infoView removeFromSuperview];
+        _infoView = nil;
+    }];
 }
 
 @end

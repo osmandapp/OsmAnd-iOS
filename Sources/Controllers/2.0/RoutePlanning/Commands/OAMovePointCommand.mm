@@ -31,6 +31,8 @@
 
 - (BOOL)execute
 {
+    [[self getEditingCtx] removePoint:_position updateSnapToRoad:NO];
+    [[self getEditingCtx] addPoint:_position pt:_newPoint];
     return YES;
 }
 

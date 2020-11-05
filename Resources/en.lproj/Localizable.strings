@@ -802,6 +802,7 @@
 "save_new_track" = "Save as new track";
 "add_to_track" = "Add to a track";
 "move_point" = "Move point";
+"move_point_descr" = "Move map to change the position of this point.";
 "add_before" = "Add points before";
 "add_after" = "Add points after";
 "trim_before" = "Trim up to this point";

@@ -47,7 +47,15 @@
     std::shared_ptr<SkBitmap> _pointMarkerIcon;
     
     OsmAnd::PointI _cachedCenter;
-
+    OAGpxTrkPt *_cachedLastPoint;
+    
+    BOOL _isInMovingMode;
+    std::shared_ptr<OsmAnd::MapMarker> _markerToMove;
+    std::shared_ptr<OsmAnd::VectorLine> _lineBefore;
+    std::shared_ptr<OsmAnd::VectorLine> _lineAfter;
+    OsmAnd::PointI _prevPosition;
+    OsmAnd::PointI _nextPosition;
+    
     BOOL _initDone;
 }
 
@@ -97,32 +105,100 @@
     [self updateDistAndBearing];
 }
 
+- (void)buildLine:(OsmAnd::VectorLineBuilder &)builder collection:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection linePoints:(const QVector<OsmAnd::PointI> &)linePoints {
+    builder.setPoints(linePoints);
+    const auto line = builder.buildAndAddToCollection(collection);
+    if (_isInMovingMode)
+    {
+        OAGpxTrkPt *pt = _editingCtx.originalPointToMove;
+        const auto pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
+        if (linePoints.contains(pos))
+        {
+            if (linePoints.contains(_prevPosition))
+                _lineBefore = line;
+            else if (linePoints.contains(_nextPosition))
+                _lineAfter = line;
+        }
+    }
+}
+
 - (void)drawLines:(const QVector<OsmAnd::PointI> &)points collection:(std::shared_ptr<OsmAnd::VectorLinesCollection>&)collection
 {
-    OsmAnd::ColorARGB lineColor = OsmAnd::ColorARGB(0xff, 0xff, 0x88, 0x00);
+    if (points.size() < 2)
+        return;
     
+    OsmAnd::ColorARGB lineColor = OsmAnd::ColorARGB(0xff, 0xff, 0x88, 0x00);
     OsmAnd::VectorLineBuilder builder;
     builder.setBaseOrder(self.baseOrder)
     .setIsHidden(points.size() == 0)
     .setLineId(1)
-    .setLineWidth(30)
-    .setPoints(points);
+    .setLineWidth(30);
     
     builder.setFillColor(lineColor);
     
-    builder.buildAndAddToCollection(collection);
+    for (int i = 0; i < points.size(); i += 2)
+    {
+        QVector<OsmAnd::PointI> linePoints;
+        QVector<OsmAnd::PointI> lineToPrevPoints;
+        if (i + 1 == points.size() && points.size() % 2 == 1)
+        {
+            linePoints.append(points[i - 1]);
+            linePoints.append(points[i]);
+        }
+        else
+        {
+            linePoints.append(points[i]);
+            linePoints.append(points[i + 1]);
+            if (i - 1 > 0)
+            {
+                lineToPrevPoints.append(points[i - 1]);
+                lineToPrevPoints.append(points[i]);
+            }
+
+        }
+        [self buildLine:builder collection:collection linePoints:linePoints];
+        if (lineToPrevPoints.size() > 0)
+            [self buildLine:builder collection:collection linePoints:lineToPrevPoints];
+    }
 }
 
 - (void) updateLastPointToCenter
 {
+    if (_editingCtx && _editingCtx.selectedPointPosition != -1)
+    {
+        _lastLineCollection->removeAllLines();
+//        _collection->getLines()[_editingCtx.selectedPointPosition]
+        const auto center = self.mapViewController.mapView.target31;
+        if (center != _cachedCenter && _markerToMove != nullptr)
+        {
+            _cachedCenter = center;
+            _markerToMove->setPosition(center);
+            if (_lineAfter != nullptr)
+            {
+                QVector<OsmAnd::PointI> updatedPoints;
+                updatedPoints.append(center);
+                updatedPoints.append(_nextPosition);
+                _lineAfter->setPoints(updatedPoints);
+            }
+            if (_lineBefore != nullptr)
+            {
+                QVector<OsmAnd::PointI> updatedPoints;
+                updatedPoints.append(_prevPosition);
+                updatedPoints.append(center);
+                _lineBefore->setPoints(updatedPoints);
+            }
+        }
+        return;
+    }
     OAGpxTrkPt *lastBeforePoint = nil;
     if (_editingCtx.getBeforePoints.count > 0)
         lastBeforePoint = _editingCtx.getBeforePoints.lastObject;
     if (lastBeforePoint)
     {
         const auto center = self.mapViewController.mapView.target31;
-        if (center == _cachedCenter)
+        if (center == _cachedCenter && _cachedLastPoint == lastBeforePoint)
             return;
+        _cachedLastPoint = lastBeforePoint;
         _cachedCenter = center;
         const auto lastBeforePnt = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastBeforePoint.getLatitude, lastBeforePoint.getLongitude));
         [self.mapViewController runWithRenderSync:^{
@@ -157,6 +233,38 @@
     [self drawRouteSegment:points addToExsisting:YES];
     [self addPointMarkers:points];
     return YES;
+}
+
+- (void) enterMovingPointMode
+{
+    _isInMovingMode = YES;
+    [self updateLayer];
+//    moveMapToPoint(editingCtx.getSelectedPointPosition());
+//    editingCtx.splitSegments(editingCtx.getSelectedPointPosition());
+}
+
+- (void) exitMovingMode
+{
+    _isInMovingMode = NO;
+    _prevPosition = OsmAnd::PointI(0, 0);
+    _nextPosition = OsmAnd::PointI(0, 0);
+    _markerToMove = nullptr;
+    _lineBefore = nullptr;
+    _lineAfter = nullptr;
+    
+    [self updateLayer];
+}
+
+- (OAGpxTrkPt *) getMovedPointToApply
+{
+    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(self.mapViewController.mapView.target31);
+    
+    OAGpxTrkPt *originalPoint = _editingCtx.originalPointToMove;
+    OAGpxTrkPt *point = [[OAGpxTrkPt alloc] initWithPoint:originalPoint];
+    point.position = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+//    point.trkpt->position = latLon;
+//    [point copyExtensions:originalPoint];
+    return point;
 }
 
 //- (OAGpxTrkPt *) addPoint
@@ -205,8 +313,9 @@
 - (void)addPointMarkers:(const QVector<OsmAnd::PointI>&)points
 {
     OsmAnd::MapMarkerBuilder pointMarkerBuilder;
-    for (const auto& point : points)
+    for (int i = 0; i < points.size(); i++)
     {
+        const auto& point = points[i];
         pointMarkerBuilder.setIsAccuracyCircleSupported(false);
         pointMarkerBuilder.setBaseOrder(self.baseOrder - 15);
         pointMarkerBuilder.setIsHidden(false);
@@ -216,6 +325,10 @@
         
         auto marker = pointMarkerBuilder.buildAndAddToCollection(_pointMarkers);
         marker->setPosition(point);
+        if (i == _editingCtx.selectedPointPosition && _isInMovingMode)
+        {
+            _markerToMove = marker;
+        }
     }
 }
 
@@ -237,7 +350,20 @@
     for (int i = 0; i < beforePoints.count; i++)
     {
         OAGpxRtePt *pt = beforePoints[i];
-        points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
+        points.append(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
+        if (i == _editingCtx.selectedPointPosition && _isInMovingMode)
+        {
+            if (i > 0)
+            {
+                _prevPosition = points[i - 1];
+            }
+            if (i < beforePoints.count - 1)
+            {
+                OAGpxRtePt *nextPt = beforePoints[i + 1];
+                const auto pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(nextPt.getLatitude, nextPt.getLongitude));
+                _nextPosition = pos;
+            }
+        }
     }
     
     return points;

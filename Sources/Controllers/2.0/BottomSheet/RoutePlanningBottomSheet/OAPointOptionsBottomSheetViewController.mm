@@ -67,12 +67,12 @@
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"add_before"),
-            @"img" : @"ic_custom_change_object_position"
+            @"img" : @"ic_custom_add_point_before"
         },
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"add_after"),
-            @"img" : @"ic_custom_change_object_position"
+            @"img" : @"ic_custom_add_point_after"
         }
     ]];
     
@@ -80,27 +80,27 @@
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"trim_before"),
-            @"img" : @"ic_custom_change_object_position"
+            @"img" : @"ic_custom_trim_before"
         },
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"trim_after"),
-            @"img" : @"ic_custom_change_object_position"
+            @"img" : @"ic_custom_trim_after"
         }
     ]];
     
-    [data addObject:@[
-        @{
-            @"type" : kIconTitleIconRoundCell,
-            @"title" : OALocalizedString(@"change_route_type_before"),
-            @"img" : @"ic_custom_straight_line"
-        },
-        @{
-            @"type" : kIconTitleIconRoundCell,
-            @"title" : OALocalizedString(@"change_route_type_after"),
-            @"img" : @"ic_custom_straight_line"
-        }
-    ]];
+//    [data addObject:@[
+//        @{
+//            @"type" : kIconTitleIconRoundCell,
+//            @"title" : OALocalizedString(@"change_route_type_before"),
+//            @"img" : @"ic_custom_straight_line"
+//        },
+//        @{
+//            @"type" : kIconTitleIconRoundCell,
+//            @"title" : OALocalizedString(@"change_route_type_after"),
+//            @"img" : @"ic_custom_straight_line"
+//        }
+//    ]];
     
     [data addObject:@[
         @{
@@ -174,9 +174,11 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"key"] isEqualToString:@"move_point"])
     {
-        
+        if (self.delegate)
+            [self.delegate onMovePoint:_pointIndex];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

@@ -23,5 +23,10 @@
 
 - (OAGpxTrkPt *) addCenterPoint;
 
+- (void) enterMovingPointMode;
+- (void) exitMovingMode;
+
+- (OAGpxTrkPt *) getMovedPointToApply;
+
 @end
 

@@ -8,7 +8,11 @@
 
 #import "OAMeasurementModeCommand.h"
 
+@class OAMeasurementToolLayer, OAGpxTrkPt;
+
 @interface OAMovePointCommand : OAMeasurementModeCommand
+
+- (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer oldPoint:(OAGpxTrkPt *)oldPoint newPoint:(OAGpxTrkPt *)newPoint position:(NSInteger)position;
 
 @end
 

@@ -16,6 +16,12 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
     WHOLE_TRACK
 };
 
+typedef NS_ENUM(NSInteger, EOAAddPointMode) {
+    EOAAddPointModeUndefined = -1,
+    EOAAddPointModeBefore = 0,
+    EOAAddPointModeAfter
+};
+
 @class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxTrkSeg;
 
 @interface OAMeasurementEditingContext : NSObject
@@ -33,6 +39,9 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 
 @property (nonatomic) EOACalculationMode lastCalculationMode;
 
+@property (nonatomic) EOAAddPointMode addPointMode;
+
+- (NSArray<OAGpxTrkPt *> *) getAllPoints;
 - (NSArray<OAGpxTrkPt *> *) getPoints;
 - (NSArray<OAGpxTrkPt *> *) getBeforePoints;
 - (NSArray<OAGpxTrkPt *> *) getAfterPoints;
@@ -40,6 +49,7 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 
 - (OAGpxTrkPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad;
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt;
+- (void) addPoints:(NSArray<OAGpxTrkPt *> *)points;
 
 - (OAGpxTrkSeg *) getBeforeTrkSegmentLine;
 - (OAGpxTrkSeg *) getAfterTrkSegmentLine;
@@ -48,5 +58,10 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 
 - (double) getRouteDistance;
 - (BOOL) isNewData;
+
+- (void) clearSegments;
+- (void) trimBefore:(NSInteger)selectedPointPosition;
+- (void) trimAfter:(NSInteger)selectedPointPosition;
+- (void) splitSegments:(NSInteger)position;
 
 @end

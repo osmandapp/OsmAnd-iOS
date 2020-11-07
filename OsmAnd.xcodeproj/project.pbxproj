@@ -5083,10 +5083,12 @@
 		DA6D0791255173C5004FE017 /* ic_custom_add_point_after@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6D077A255173C4004FE017 /* ic_custom_add_point_after@2x.png */; };
 		DA6D0792255173C5004FE017 /* ic_custom_add_point_after@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6D077B255173C5004FE017 /* ic_custom_add_point_after@3x.png */; };
 		DA6D0793255173C5004FE017 /* ic_custom_add_point_after@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6D077B255173C5004FE017 /* ic_custom_add_point_after@3x.png */; };
-		DA6D079A25518D79004FE017 /* OAInfoBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D079925518D79004FE017 /* OAInfoBottomView.m */; };
-		DA6D079B25518D79004FE017 /* OAInfoBottomView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D079925518D79004FE017 /* OAInfoBottomView.m */; };
+		DA6D079A25518D79004FE017 /* OAInfoBottomView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6D079925518D79004FE017 /* OAInfoBottomView.mm */; };
+		DA6D079B25518D79004FE017 /* OAInfoBottomView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6D079925518D79004FE017 /* OAInfoBottomView.mm */; };
 		DA6D079F25518D90004FE017 /* OAInfoBottomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA6D079E25518D90004FE017 /* OAInfoBottomView.xib */; };
 		DA6D07A025518D90004FE017 /* OAInfoBottomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA6D079E25518D90004FE017 /* OAInfoBottomView.xib */; };
+		DA6D07A525543735004FE017 /* OAClearPointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6D07A425543735004FE017 /* OAClearPointsCommand.mm */; };
+		DA6D07A625543735004FE017 /* OAClearPointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6D07A425543735004FE017 /* OAClearPointsCommand.mm */; };
 		DA6D51E321F328AA00EC84E2 /* OAOsmEditsDBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51E221F328AA00EC84E2 /* OAOsmEditsDBHelper.m */; };
 		DA6D51E421F328AA00EC84E2 /* OAOsmEditsDBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51E221F328AA00EC84E2 /* OAOsmEditsDBHelper.m */; };
 		DA6D51E721F33B2800EC84E2 /* OAOsmPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51E621F33B2800EC84E2 /* OAOsmPoint.m */; };
@@ -9615,8 +9617,10 @@
 		DA6D077A255173C4004FE017 /* ic_custom_add_point_after@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_add_point_after@2x.png"; path = "Resources/Icons/ic_custom_add_point_after@2x.png"; sourceTree = "<group>"; };
 		DA6D077B255173C5004FE017 /* ic_custom_add_point_after@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_add_point_after@3x.png"; path = "Resources/Icons/ic_custom_add_point_after@3x.png"; sourceTree = "<group>"; };
 		DA6D079825518D79004FE017 /* OAInfoBottomView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAInfoBottomView.h; sourceTree = "<group>"; };
-		DA6D079925518D79004FE017 /* OAInfoBottomView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAInfoBottomView.m; sourceTree = "<group>"; };
+		DA6D079925518D79004FE017 /* OAInfoBottomView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAInfoBottomView.mm; sourceTree = "<group>"; };
 		DA6D079E25518D90004FE017 /* OAInfoBottomView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAInfoBottomView.xib; sourceTree = "<group>"; };
+		DA6D07A325543735004FE017 /* OAClearPointsCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAClearPointsCommand.h; sourceTree = "<group>"; };
+		DA6D07A425543735004FE017 /* OAClearPointsCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAClearPointsCommand.mm; sourceTree = "<group>"; };
 		DA6D51E121F328AA00EC84E2 /* OAOsmEditsDBHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmEditsDBHelper.h; sourceTree = "<group>"; };
 		DA6D51E221F328AA00EC84E2 /* OAOsmEditsDBHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmEditsDBHelper.m; sourceTree = "<group>"; };
 		DA6D51E521F33B2800EC84E2 /* OAOsmPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmPoint.h; sourceTree = "<group>"; };
@@ -15274,7 +15278,7 @@
 				DA2E08E82541A823008B881F /* OAGpxData.h */,
 				DA2E08E92541A823008B881F /* OAGpxData.mm */,
 				DA6D079825518D79004FE017 /* OAInfoBottomView.h */,
-				DA6D079925518D79004FE017 /* OAInfoBottomView.m */,
+				DA6D079925518D79004FE017 /* OAInfoBottomView.mm */,
 				DA6D079E25518D90004FE017 /* OAInfoBottomView.xib */,
 			);
 			name = RoutePlanning;
@@ -15638,6 +15642,8 @@
 				DA49C1B925499A0800CD48DC /* OARemovePointCommand.mm */,
 				DA6D076A25515FFB004FE017 /* OAMovePointCommand.h */,
 				DA6D076B25515FFB004FE017 /* OAMovePointCommand.mm */,
+				DA6D07A325543735004FE017 /* OAClearPointsCommand.h */,
+				DA6D07A425543735004FE017 /* OAClearPointsCommand.mm */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -20921,6 +20927,7 @@
 				DA87A48A24D44C12002F8C77 /* OATitleRightIconCell.m in Sources */,
 				DAB854A623053043002566A6 /* OAAddQuickActionViewController.m in Sources */,
 				DA71EAAA2346232E00B9D7F3 /* OARouteAvoidSettingsViewController.mm in Sources */,
+				DA6D07A625543735004FE017 /* OAClearPointsCommand.mm in Sources */,
 				DADBC6232426495C008B7423 /* OAPublicTransportShieldCell.mm in Sources */,
 				DA1605B622FEF023001E02AD /* OAMapUnderlayAction.mm in Sources */,
 				DABB8E4D2308165A00DBD77F /* OAQuickActionListViewController.m in Sources */,
@@ -21213,7 +21220,7 @@
 				DAF3F556225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */,
 				DAC0278C22A14CC300D1689E /* OAIconTitleButtonCell.m in Sources */,
 				8A755A8221CC0F8F00E42699 /* OAPurchaseDialogItemView.m in Sources */,
-				DA6D079B25518D79004FE017 /* OAInfoBottomView.m in Sources */,
+				DA6D079B25518D79004FE017 /* OAInfoBottomView.mm in Sources */,
 				84BED2301FF670C500B456D1 /* OAAlarmWidget.mm in Sources */,
 				847A1D411DF94E9B003C1246 /* OADownloadProgressView.m in Sources */,
 				847A1D421DF94E9B003C1246 /* OATargetDestinationViewController.m in Sources */,
@@ -21781,7 +21788,7 @@
 				DABB8E552308206200DBD77F /* OATitleDescrDraggableCell.m in Sources */,
 				84FF0C441F3CB89300AD1029 /* OAAppModeCell.m in Sources */,
 				DA83600F23449720003374B5 /* OARoutingSettingsCell.mm in Sources */,
-				DA6D079A25518D79004FE017 /* OAInfoBottomView.m in Sources */,
+				DA6D079A25518D79004FE017 /* OAInfoBottomView.mm in Sources */,
 				BBA3AF57197FC4BB0039D991 /* OAUserInteractionPassThroughView.m in Sources */,
 				84686AB01E05282500DA09BC /* OACategoriesTableViewController.mm in Sources */,
 				84DE41552000C9BB00F022F9 /* OARouteTargetSelectionViewController.m in Sources */,
@@ -21909,6 +21916,7 @@
 				844E07B31E3F942D00EFC525 /* OAAddress.mm in Sources */,
 				15BECC6A249B8B7600B36DC0 /* OAIconsCollectionViewCell.m in Sources */,
 				DAC1DB8D246BE0BF00FF4A78 /* OAImageTextViewCell.m in Sources */,
+				DA6D07A525543735004FE017 /* OAClearPointsCommand.mm in Sources */,
 				DA08F15B216776C8009584C1 /* OARulerWidget.mm in Sources */,
 				DAFC9CF02358799400E5ECAE /* OADescrTitleIconCell.m in Sources */,
 				DA2558B124ADE40F0081D155 /* OAScreenAlertsViewController.m in Sources */,

@@ -65,8 +65,11 @@
     }
 //    else
 //    {
-//        point = measurementLayer.addPoint();
+//        _point = [self.measurementLayer addPoint];
 //    }
+    // Skip unnecessary refresh if adding more points
+    if (self.getEditingCtx.addPointMode == EOAAddPointModeUndefined)
+        [self.measurementLayer updateLayer];
     return _point != nil;
 }
 

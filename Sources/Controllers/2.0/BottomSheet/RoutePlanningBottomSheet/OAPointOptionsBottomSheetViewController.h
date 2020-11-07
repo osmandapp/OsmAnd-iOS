@@ -7,12 +7,17 @@
 //
 
 #import "OABaseBottomSheetViewController.h"
+#import "OAClearPointsCommand.h"
+#import "OAInfoBottomView.h"
 
 @class OAGpxTrkPt;
 
 @protocol OAPointOptionsBottmSheetDelegate <NSObject>
 
 - (void) onMovePoint:(NSInteger)point;
+- (void) onClearPoints:(EOAClearPointsMode)mode;
+- (void) onAddPoints:(EOAAddPointMode)type;
+- (void) onDeletePoint;
 
 @end
 

@@ -67,12 +67,16 @@
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"add_before"),
-            @"img" : @"ic_custom_add_point_before"
+            @"img" : @"ic_custom_add_point_before",
+            @"key" : @"add_points",
+            @"value" : @(EOAAddPointModeBefore)
         },
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"add_after"),
-            @"img" : @"ic_custom_add_point_after"
+            @"img" : @"ic_custom_add_point_after",
+            @"key" : @"add_points",
+            @"value" : @(EOAAddPointModeAfter)
         }
     ]];
     
@@ -80,12 +84,16 @@
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"trim_before"),
-            @"img" : @"ic_custom_trim_before"
+            @"img" : @"ic_custom_trim_before",
+            @"key" : @"trim",
+            @"value" : @(EOAClearPointsModeBefore)
         },
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"trim_after"),
-            @"img" : @"ic_custom_trim_after"
+            @"img" : @"ic_custom_trim_after",
+            @"key" : @"trim",
+            @"value" : @(EOAClearPointsModeAfter)
         }
     ]];
     
@@ -107,7 +115,8 @@
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"delete_point"),
             @"img" : @"ic_custom_remove_outlined",
-            @"custom_color" : UIColorFromRGB(color_primary_red)
+            @"custom_color" : UIColorFromRGB(color_primary_red),
+            @"key" : @"delete_point"
         }
     ]];
     _data = data;
@@ -172,10 +181,28 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"key"] isEqualToString:@"move_point"])
+    NSString *key = item[@"key"];
+    if ([key isEqualToString:@"move_point"])
     {
         if (self.delegate)
             [self.delegate onMovePoint:_pointIndex];
+    }
+    else if ([key isEqualToString:@"trim"])
+    {
+        EOAClearPointsMode mode = (EOAClearPointsMode) [item[@"value"] integerValue];
+        if (self.delegate)
+            [self.delegate onClearPoints:mode];
+    }
+    else if ([key isEqualToString:@"add_points"])
+    {
+        EOAAddPointMode type = (EOAAddPointMode) [item[@"value"] integerValue];
+        if (self.delegate)
+            [self.delegate onAddPoints:type];
+    }
+    else if ([key isEqualToString:@"delete_point"])
+    {
+        if (self.delegate)
+            [self.delegate onDeletePoint];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];

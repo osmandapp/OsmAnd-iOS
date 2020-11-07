@@ -53,6 +53,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         _selectedPointPosition = -1;
         _lastCalculationMode = WHOLE_TRACK;
         _appMode = DEFAULT_APP_MODE;
+        _addPointMode = EOAAddPointModeUndefined;
         
         _before = [[OAGpxTrkSeg alloc] init];
         _before.points = @[];
@@ -171,6 +172,11 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return _after;
 }
 
+- (NSArray<OAGpxTrkPt *> *) getAllPoints
+{
+    return [_before.points arrayByAddingObjectsFromArray:_after.points];
+}
+
 - (NSArray<OAGpxTrkPt *> *) getPoints
 {
     return [self getBeforePoints];
@@ -205,21 +211,81 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //    return allSegments.size() > 0 ? allSegments : null;
 //}
 
-//void splitSegments(int position) {
-//    List<WptPt> points = new ArrayList<>();
-//    points.addAll(before.points);
-//    points.addAll(after.points);
-//    before.points.clear();
-//    after.points.clear();
-//    before.points.addAll(points.subList(0, position));
-//    after.points.addAll(points.subList(position, points.size()));
-//    updateCacheForSnap(true);
+- (void) splitSegments:(NSInteger)position
+{
+    NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray new];
+    [points addObjectsFromArray:_before.points];
+    [points addObjectsFromArray:_after.points];
+    
+    _before.points = [points subarrayWithRange:NSMakeRange(0, position)];
+    _after.points = [points subarrayWithRange:NSMakeRange(position, points.count - position)];
+    
+//    [self updateCacheForSnap:YES];
+}
+
+//- (void) preAddPoint:(NSInteger)position mode:(EOAAddPointMode)mode point:(OAGpxTrkPt *)point
+//{
+//    switch (mode) {
+//        case EOAAddPointModeUndefined:
+//        {
+//            //                if (appMode != MeasurementEditingContext.DEFAULT_APP_MODE) {
+//            //                    point.setProfileType(appMode.getStringKey());
+//            //                }
+//            break;
+//        }
+//        case EOAAddPointModeAfter:
+//        {
+//            NSArray<OAGpxTrkPt *> *points = [self getBeforePoints];
+//            if (position > 0 && position <= points.count)
+//            {
+//                OAGpxTrkPt *prevPt = points[position - 1];
+//                //                    if (prevPt.isGap()) {
+//                //                        point.setGap();
+//                if (position > 1)
+//                {
+//                    OAGpxTrkPt *pt = points[position - 2];
+//                    if (pt.hasProfile()) {
+//                        prevPt.setProfileType(pt.getProfileType());
+//                    } else {
+//                        prevPt.removeProfileType();
+//                    }
+//                }
+//                //                    } else if (prevPt.hasProfile()) {
+//                //                        point.setProfileType(prevPt.getProfileType());
+//                //                    }
+//            } else if (appMode != MeasurementEditingContext.DEFAULT_APP_MODE) {
+//                point.setProfileType(appMode.getStringKey());
+//            }
+//            break;
+//        }
+//        case EOAAddPointModeBefore: {
+//            List<WptPt> points = getAfterPoints();
+//            if (position >= -1 && position + 1 < points.size()) {
+//                WptPt nextPt = points.get(position + 1);
+//                if (nextPt.hasProfile()) {
+//                    point.setProfileType(nextPt.getProfileType());
+//                }
+//            } else if (appMode != MeasurementEditingContext.DEFAULT_APP_MODE) {
+//                point.setProfileType(appMode.getStringKey());
+//            }
+//            break;
+//        }
+//    }
 //}
 
 - (void) addPoint:(OAGpxTrkPt *)pt
 {
     _before.points = [_before.points arrayByAddingObject:pt];
 //    [self updateCacheForSnap:NO];
+}
+
+- (void) addPoint:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode
+{
+//    if (mode == EOAAddPointModeAfter || mode == EOAAddPointModeBefore)
+//        self preAddPoint:(additionMode == AdditionMode.ADD_BEFORE ? -1 : getBeforePoints().size(), additionMode, pt);
+
+    _before.points = [_before.points arrayByAddingObject:pt];
+//    updateSegmentsForSnap(false);
 }
 
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt
@@ -251,15 +317,17 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return pt;
 }
 
-//public void trimBefore(int selectedPointPosition) {
-//    splitSegments(selectedPointPosition);
-//    clearBeforeSegments();
-//}
-//
-//public void trimAfter(int selectedPointPosition) {
-//    splitSegments(selectedPointPosition + 1);
-//    clearAfterSegments();
-//}
+- (void) trimBefore:(NSInteger)selectedPointPosition
+{
+    [self splitSegments:selectedPointPosition];
+    [self clearBeforeSegments];
+}
+
+- (void) trimAfter:(NSInteger)selectedPointPosition
+{
+    [self splitSegments:selectedPointPosition + 1];
+    [self clearAfterSegments];
+}
 
 - (void) clearSegments
 {

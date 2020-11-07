@@ -397,7 +397,7 @@
     }
 }
 
-#pragma mark - Table View
+#pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -410,16 +410,6 @@
     if (groupData.isOpen)
         return [groupData.groupItems count] + 1;
     return 1;
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_profile_select_descr") boldFragment:nil forSection:section];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_profile_select_descr") boldFragment:nil inSection:section];
 }
 
 - (UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -509,6 +499,18 @@
         }
     }
     return nil;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_profile_select_descr") boldFragment:nil forSection:section];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_profile_select_descr") boldFragment:nil inSection:section];
 }
 
 #pragma mark - Items selection

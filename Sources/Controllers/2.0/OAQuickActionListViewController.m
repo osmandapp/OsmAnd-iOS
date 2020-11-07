@@ -52,7 +52,7 @@
     self = [super init];
     if (self)
     {
-        _isShouldBeClosedByBackButton = NO;
+        _shouldBeClosedByBackButton = NO;
     }
     return self;
 }
@@ -143,12 +143,12 @@
     return [self.tableView isEditing] ? favoritesToolBarHeight : 0.;
 }
 
-- (IBAction)backPressed:(id)sender
+- (IBAction) backButtonClicked:(id)sender
 {
-    if (_isShouldBeClosedByBackButton)
+    if (_shouldBeClosedByBackButton)
         [self.navigationController popToRootViewControllerAnimated:YES];
     else
-        [self.navigationController popViewControllerAnimated:YES];
+        [super backButtonClicked:sender];
 }
 
 - (void)saveChanges

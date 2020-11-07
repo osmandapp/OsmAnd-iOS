@@ -10200,13 +10200,6 @@
 			name = Panels;
 			sourceTree = "<group>";
 		};
-		155AC6AD253873A200703073 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		158B1F6B24878CA6007BC45A /* DownloadMapSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -14815,7 +14808,6 @@
 			children = (
 				DA25583D24ADE40E0081D155 /* GeneralSettings */,
 				DA25585224ADE40E0081D155 /* NavigationSettings */,
-				155AC6AD253873A200703073 /* New Group */,
 				155AC6AE2538744E00703073 /* OABaseSettingsWithBottomButtonsViewController.xib */,
 				155AC6B025387B9A00703073 /* OABaseSettingsWithBottomButtonsViewController.mm */,
 				155AC6BA253DE1A100703073 /* OACheckForProfileDuplicatesViewController.mm */,

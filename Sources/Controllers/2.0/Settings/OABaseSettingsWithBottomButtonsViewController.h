@@ -27,8 +27,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewBottomMarginYesView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *tableViewBottomMarginNoView;
 
-
-- (void) setToButton:(UIButton *)button firstLabelText:(NSString *)firstLabelText firstLabelFont:(UIFont *)firstLabelFont firstLabelColor:(UIColor *)firstLabelColor secondLabelText:(NSString *)secondLabelText secondLabelFont:(UIFont *)secondLabelFont secondLabelColor:(UIColor *)secondLabelColor;
+- (void) setParams:(NSDictionary *)params forTwoLableButton:(UIButton *)button;
 - (UIView *) getHeaderForTableView:(UITableView *)tableView withFirstSectionText:(NSString *)text boldFragment:(NSString *)boldFragment forSection:(NSInteger)section;
 - (CGFloat) getHeightForHeaderWithFirstHeaderText:(NSString *)text boldFragment:(NSString *)boldFragment inSection:(NSInteger)section;
 

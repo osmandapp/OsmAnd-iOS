@@ -182,21 +182,11 @@
     return settingsItems;
 }
 
-#pragma mark - Table View
+#pragma mark - UITableViewDataSource
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 1;
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] forSection:section];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] inSection:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -215,6 +205,18 @@
         [cell.activityIndicatorView startAnimating];
     }
     return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] forSection:section];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] inSection:section];
 }
 
 //MARK: OASettingsImportExportDelegate

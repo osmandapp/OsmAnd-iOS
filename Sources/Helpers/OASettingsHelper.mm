@@ -1807,7 +1807,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         
         if (quickAction)
         {
-            NSDictionary *params = object[@"params"];
+            NSString *paramsString = object[@"params"];
+            NSError *jsonError;
+            NSData* paramsData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *params = [NSJSONSerialization JSONObjectWithData:paramsData options:kNilOptions error:&jsonError];
+            
             if (name.length > 0)
                 [quickAction setName:name];
             
@@ -1817,6 +1821,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [self.warnings addObject:OALocalizedString(@"settings_item_read_error", self.name)];
         }
     }
+}
+
+- (void) readPreferenceFromJson:(NSString *)key value:(NSString *)value
+{
+    [self readItemsFromJson:@{@"items" : value} error:nil];
 }
 
 - (void) writeItemsToJson:(id)json

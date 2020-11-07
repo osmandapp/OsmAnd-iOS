@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
 #import "Localization.h"
+#import "OAQuickAction.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -53,8 +54,9 @@
 {
     NSFileManager *fileManager = NSFileManager.defaultManager;
     // Clear temp profile data
-    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-    [fileManager createDirectoryAtPath:_tmpFilesDir withIntermediateDirectories:YES attributes:nil error:nil];
+    // (This cleaning stops multy-json file import)
+    //[fileManager removeItemAtPath:_tmpFilesDir error:nil];
+    //[fileManager createDirectoryAtPath:_tmpFilesDir withIntermediateDirectories:YES attributes:nil error:nil];
     
     BOOL collecting = items == nil;
     if (collecting)
@@ -201,6 +203,11 @@
     {
         // TODO: import other item types later
         if ([item[@"type"] isEqualToString:@"PROFILE"])
+        {
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
+        }
+        if ([item[@"type"] isEqualToString:@"QUICK_ACTIONS"])
         {
             OASettingsItem *settingsItem = [self createItem:item];
             [_items addObject:settingsItem];
@@ -428,13 +435,7 @@
             if (items != nil && items.count > 0)
             {
                 for (OASettingsItem *item in items)
-                {
-                    if ([item isKindOfClass:OAProfileSettingsItem.class])
-                    {
-                        // TODO: remove this check while implementing other types of import (e.g. Quick action)
-                        [item apply];
-                    }
-                }
+                    [item apply];
                 
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;
@@ -544,12 +545,16 @@
     NSString *tempDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
     [NSFileManager.defaultManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:nil];
     
-    for (OAProfileSettingsItem *item in _items)
+    for (OASettingsItem *item in _items)
     {
-        NSString *bakupPatch = [[tempDir stringByAppendingPathComponent:item.appMode.stringKey] stringByAppendingPathExtension:@"osf"];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:bakupPatch])
+        if ([item isKindOfClass:OAProfileSettingsItem.class])
         {
-            [[NSFileManager defaultManager] copyItemAtPath:_file toPath:bakupPatch error:nil];
+            OAProfileSettingsItem *progifileItem = (OAProfileSettingsItem *)item;
+            NSString *bakupPatch = [[tempDir stringByAppendingPathComponent:progifileItem.appMode.stringKey] stringByAppendingPathExtension:@"osf"];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:bakupPatch])
+            {
+                [[NSFileManager defaultManager] copyItemAtPath:_file toPath:bakupPatch error:nil];
+            }
         }
     }
     

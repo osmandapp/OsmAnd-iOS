@@ -166,7 +166,6 @@ typedef enum : NSUInteger {
 + (NSString *) getRendererByName:(NSString *)rendererName;
 + (NSString *) getRendererStringValue:(NSString *)renderer;
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
-- (instancetype _Nullable) initWithJsonWithoutBackup:(id)json error:(NSError * _Nullable *)error;
 
 @end
 

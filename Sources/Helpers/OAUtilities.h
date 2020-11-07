@@ -164,6 +164,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (CGFloat) heightForHeaderViewText:(NSString *)text width:(CGFloat)width font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing;
 
 + (NSDictionary *) getSortedVoiceProviders;
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing;
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing highlightColor:(UIColor *)highlightColor;
 
 @end

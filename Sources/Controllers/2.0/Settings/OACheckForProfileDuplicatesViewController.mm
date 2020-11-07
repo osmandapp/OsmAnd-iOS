@@ -37,6 +37,7 @@
     CGFloat _heightForHeader;
     NSArray<OASettingsItem *> *_settingsItems;
     NSArray<OASettingsItem *> *_selectedItems;
+    NSArray<OASettingsItem *> *_selectedSettingsItems;
     NSString *_file;
     BOOL _checkingDuplicates;
 }
@@ -79,10 +80,10 @@
 
 - (void) prepareToImport
 {
-    NSArray <OASettingsItem *> *selectedSettingsItems = [self getSettingsItemsFromData];
+    _selectedSettingsItems = [NSArray arrayWithArray:[self getSettingsItemsFromData]];
     if (_file && _settingsItems)
     {
-        OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:_file items:_settingsItems selectedItems:selectedSettingsItems];
+        OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:_file items:_settingsItems selectedItems:_selectedSettingsItems];
         task.delegate = self;
         [task execute];
     }
@@ -150,7 +151,7 @@
     NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
     NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<OAMapSource *> *tileSourceTemplates = [NSMutableArray array]; // to check type
+    NSMutableArray<OALocalResourceItem *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     
     for (NSObject *object in _selectedItems)
@@ -162,7 +163,7 @@
         else if ([object isKindOfClass:OAPOIUIFilter.class])
             [poiUIFilters addObject:(OAPOIUIFilter *)object];
         else if ([object isKindOfClass:OASqliteDbResourceItem.class] || [object isKindOfClass:OAOnlineTilesResourceItem.class])
-            [tileSourceTemplates addObject:(OAMapSource *)object]; // to check type
+            [tileSourceTemplates addObject:(OALocalResourceItem *)object];
         else if ([object isKindOfClass:NSString.class]) // to check all
             [settingsItems addObject: [[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
@@ -176,7 +177,7 @@
     if (poiUIFilters.count > 0)
         [settingsItems addObject:[self getBasePoiUiFiltersSettingsItem]];
     if (tileSourceTemplates.count > 0)
-        [settingsItems addObject:[self getBaseMapSourcesSettingsItem]];
+        [settingsItems addObject:[[self getBaseMapSourcesSettingsItem] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
         [settingsItems addObject:[self getBaseAvoidRoadsSettingsItem]];
     return settingsItems;
@@ -191,12 +192,12 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] forSection:section];
+    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeightForHeaderWithFirstHeaderText:OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] inSection:section];
+    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"checking_for_duplicates_descr") boldFragment:[_file lastPathComponent] inSection:section];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -211,18 +212,8 @@
     if (cell)
     {
         cell.titleView.text = OALocalizedString(@"checking_for_duplicates");
-        
-        BOOL inProgress = YES; // to change
-        if (inProgress)
-        {
-            cell.activityIndicatorView.hidden = NO;
-            [cell.activityIndicatorView startAnimating];
-        }
-        else
-        {
-            cell.activityIndicatorView.hidden = YES;
-            [cell.activityIndicatorView startAnimating];
-        }
+        cell.activityIndicatorView.hidden = NO;
+        [cell.activityIndicatorView startAnimating];
     }
     return cell;
 }
@@ -233,11 +224,11 @@
 {
     if (duplicates.count == 0)
     {
-        [_settingsHelper importSettings:_file items:[self getSettingsItemsFromData] latestChanges:@"" version:1 delegate:self];
+        [_settingsHelper importSettings:_file items:_selectedSettingsItems latestChanges:@"" version:1 delegate:self];
     }
     else
     {
-        OAImportDuplicatesViewController *dublicatesVC = [[OAImportDuplicatesViewController alloc] initWithDuplicatesList:duplicates settingsItems:[self getSettingsItemsFromData] file:_file];
+        OAImportDuplicatesViewController *dublicatesVC = [[OAImportDuplicatesViewController alloc] initWithDuplicatesList:duplicates settingsItems:_selectedSettingsItems file:_file];
         [self.navigationController pushViewController:dublicatesVC animated:YES];
     }
 }

@@ -733,7 +733,7 @@
 "shared_string_import" = "Import profile";
 "create_profile" = "Create profile";
 "import_profile_select_descr" = "Select the data to be imported.";
-"selected_profiles" = "%d of %d";
+"selected_profiles" = "%ld of %ld";
 "nav_type_hint" = "Navigation type: %@";
 
 "import_duplicates_title" = "Some items already exist";

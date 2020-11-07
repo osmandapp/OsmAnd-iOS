@@ -1460,6 +1460,11 @@ static const double d180PI = 180.0 / M_PI_2;
     return [self calculateTextBounds:attributedText width:width].height;
 }
 
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing
+{
+    return [self.class getStringWithBoldPart:wholeString mainString:ms boldString:bs lineSpacing:lineSpacing highlightColor:nil];
+}
+
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing highlightColor:(UIColor *)highlightColor
 {
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];

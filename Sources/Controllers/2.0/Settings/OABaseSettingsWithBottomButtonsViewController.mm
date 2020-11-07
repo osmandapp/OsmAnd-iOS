@@ -27,9 +27,6 @@
 - (instancetype) init
 {
     self = [super initWithNibName:@"OABaseSettingsWithBottomButtonsViewController" bundle:nil];
-    if (self)
-    {
-    }
     return self;
 }
 
@@ -91,7 +88,7 @@
         self.secondaryButtonHeight.constant = height;
 }
 
-- (UIView *) generateHeaderForTableView:(UITableView *)tableView withFirstSectionText:(NSString *)text boldFragment:(NSString *)boldFragment forSection:(NSInteger)section
+- (UIView *) getHeaderForTableView:(UITableView *)tableView withFirstSectionText:(NSString *)text boldFragment:(NSString *)boldFragment forSection:(NSInteger)section
 {
     if (section == 0)
     {
@@ -130,7 +127,7 @@
     }
 }
 
-- (CGFloat) generateHeightForHeaderWithFirstHeaderText:(NSString *)text boldFragment:(NSString *)boldFragment inSection:(NSInteger)section
+- (CGFloat) getHeightForHeaderWithFirstHeaderText:(NSString *)text boldFragment:(NSString *)boldFragment inSection:(NSInteger)section
 {
     if (section == 0)
     {   NSString *descriptionText;

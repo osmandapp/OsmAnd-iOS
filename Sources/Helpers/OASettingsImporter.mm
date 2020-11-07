@@ -199,7 +199,7 @@
     
     for (NSDictionary* item in itemsJson)
     {
-        // TODO: import other item types later
+        // TODO: import other item types later and clean up
         if ([item[@"type"] isEqualToString:@"PROFILE"])
         {
             OASettingsItem *settingsItem = [self createItem:item];
@@ -235,8 +235,11 @@
 //            OASettingsItem *settingsItem = [self createItem:item];
 //            [_items addObject:settingsItem];
 //        }
-        
-        
+        if ([item[@"type"] isEqualToString:@"QUICK_ACTIONS"])
+        {
+//            OASettingsItem *settingsItem = [self createItem:item];
+//            [_items addObject:settingsItem];
+        }
         // TODO: implement custom plugins
 //        NSString *pluginId = item.pluginId;
 //        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)

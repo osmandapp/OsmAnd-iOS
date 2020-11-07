@@ -241,12 +241,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        }
         if (pluginIndependentItems.count > 0)
         {
-            // TODO: add ui dialogs as in Android
-            //            FragmentManager fragmentManager = activity.getSupportFragmentManager();
-            //            ImportSettingsFragment.showInstance(fragmentManager, pluginIndependentItems, file);
             UIViewController* incomingURLViewController = [[OAImportProfileViewController alloc] initWithItems:pluginIndependentItems];
             [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
-            //[self importSettings:_importTask.getFile items:_importTask.getItems latestChanges:@"" version:1];
         }
     }
     else if (empty)
@@ -264,7 +260,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *>*)duplicates items:(NSArray<OASettingsItem *>*)items
 {
-    [self importSettings:_importTask.getFile items:items latestChanges:@"" version:1]; // to delete
+    
 }
 
 @end
@@ -1690,10 +1686,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @interface OACollectionSettingsItem()
 
-@property (nonatomic) NSMutableArray<id> *items;
-@property (nonatomic) NSMutableArray<id> *appliedItems;
-@property (nonatomic) NSMutableArray<id> *duplicateItems;
-@property (nonatomic) NSMutableArray<id> *existingItems;
+@property (nonatomic) NSMutableArray<OASettingsItem *> *items;
+@property (nonatomic) NSMutableArray<OASettingsItem *> *appliedItems;
+@property (nonatomic) NSMutableArray<OASettingsItem *> *duplicateItems;
+@property (nonatomic) NSMutableArray<OASettingsItem *> *existingItems;
 
 @end
 
@@ -1708,7 +1704,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     self.duplicateItems = [NSMutableArray array];
 }
 
-- (instancetype) initWithItems:(NSArray<id> *) items
+- (instancetype) initWithItems:(NSArray<OASettingsItem *> *) items
 {
     self = [super init];
     if (self)
@@ -1726,26 +1722,26 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     if (_items.count > 0)
     {
-        for (id item in _items)
+        for (OASettingsItem *item in _items)
             if ([self isDuplicate:item])
                 [_duplicateItems addObject:item];
     }
     return _duplicateItems;
 }
 
-- (NSArray<id> *) getNewItems
+- (NSArray<OASettingsItem *> *) getNewItems
 {
-    NSMutableArray<id> *res = [NSMutableArray arrayWithArray:_items];
+    NSMutableArray<OASettingsItem *> *res = [NSMutableArray arrayWithArray:_items];
     [res removeObjectsInArray:_duplicateItems];
     return res;
 }
 
-- (BOOL) isDuplicate:(id)item
+- (BOOL) isDuplicate:(OASettingsItem *)item
 {
     return [self.existingItems containsObject:item];
 }
 
-- (id) renameItem:(id)item
+- (id) renameItem:(OASettingsItem *)item
 {
     return nil;
 }
@@ -2032,8 +2028,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     
     _newSqliteData = [NSMutableDictionary dictionary];
     self.existingItems = [NSMutableArray array];
-    self.appliedItems = [NSMutableArray array];
-    self.items = [NSMutableArray array];
     
     OsmAndAppInstance app = [OsmAndApp instance];
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
@@ -2208,13 +2202,32 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
         {
+            NSString *newTitle = [NSString stringWithFormat:@"%@_%d", localItem.title, number];
             OAOnlineTilesResourceItem *oldItem = (OAOnlineTilesResourceItem *)localItem;
             OAOnlineTilesResourceItem *renamedItem = [[OAOnlineTilesResourceItem alloc] init];
-            renamedItem.title = [NSString stringWithFormat:@"%@_%d", oldItem.title, number];
+            renamedItem.title = newTitle;
             if (![self isDuplicate:renamedItem])
             {
+                const auto &oldSource = _newSources[QString::fromNSString(oldItem.title)];
+                const auto newSource = std::make_shared<OsmAnd::IOnlineTileSources::Source>(QString::fromNSString(newTitle));
+                
                 renamedItem.path = oldItem.path;
-                _newSources[QString::fromNSString(renamedItem.title)] = _newSources[QString::fromNSString(oldItem.title)];
+                newSource->urlToLoad = oldSource->urlToLoad;
+                newSource->minZoom = oldSource->minZoom;
+                newSource->maxZoom = oldSource->maxZoom;
+                newSource->expirationTimeMillis = oldSource->expirationTimeMillis;
+                newSource->ellipticYTile = oldSource->ellipticYTile;
+                //newSource->priority = oldSource->priority;
+                newSource->tileSize = oldSource->tileSize;
+                newSource->ext = oldSource->ext;
+                newSource->avgSize = oldSource->avgSize;
+                newSource->bitDensity =oldSource->bitDensity;
+                newSource->invertedYTile = oldSource->invertedYTile;
+                newSource->randoms = oldSource->randoms;
+                newSource->randomsArray = oldSource->randomsArray;
+                newSource->rule = oldSource->rule;
+                
+                _newSources[QString::fromNSString(newTitle)] = newSource;
                 _newSources.remove(QString::fromNSString(oldItem.title));
                 return renamedItem;
             }
@@ -2296,9 +2309,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             result->randomsArray = OsmAnd::OnlineTileSources::parseRandoms(QString::fromNSString(randoms));
             result->rule = QString::fromNSString(rule);
 
-            OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
-            app.resourcesManager->installTilesResource(result);
-
             OAOnlineTilesResourceItem *item = [[OAOnlineTilesResourceItem alloc] init];
             item.path = [app.cachePath stringByAppendingPathComponent:name];
             item.title = name;
@@ -2328,7 +2338,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"sqlitedb"];
             if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
             {
-                [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
                 OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
                 item.title = [[name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                 item.fileName = name;

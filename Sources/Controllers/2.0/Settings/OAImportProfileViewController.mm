@@ -30,14 +30,14 @@
 #define kCellTypeTitleDescription @"OAMultiIconTextDescCell"
 #define kCellTypeTitle @"OAIconTextCell"
 
-@interface TableGroupToImport : NSObject
+@interface OATableGroupToImport : NSObject
     @property NSString* type;
     @property BOOL isOpen;
     @property NSString* groupName;
     @property NSMutableArray* groupItems;
 @end
 
-@implementation TableGroupToImport
+@implementation OATableGroupToImport
 
 -(id) init {
     self = [super init];
@@ -140,7 +140,7 @@
         }
         if (_items.count == 1 && [_items objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]])
         {
-            TableGroupToImport* groupData = [_data objectAtIndex:0];
+            OATableGroupToImport* groupData = [_data objectAtIndex:0];
             groupData.isOpen = YES;
         }
     }
@@ -234,13 +234,13 @@
 - (void) generateData
 {
     NSMutableArray *data = [NSMutableArray array];
-    TableGroupToImport *profilesSection = [[TableGroupToImport alloc] init];
-    TableGroupToImport *quickActionsSection = [[TableGroupToImport alloc] init];
-    TableGroupToImport *poiTypesSection = [[TableGroupToImport alloc] init];
-    TableGroupToImport *mapSourcesSection = [[TableGroupToImport alloc] init];
-    TableGroupToImport *customRendererStyleSection = [[TableGroupToImport alloc] init];
-    TableGroupToImport *customRoutingSection = [[TableGroupToImport alloc] init];
-    TableGroupToImport *avoidRoadsStyleSection = [[TableGroupToImport alloc] init];
+    OATableGroupToImport *profilesSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *quickActionsSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *poiTypesSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *mapSourcesSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *customRendererStyleSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *customRoutingSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *avoidRoadsStyleSection = [[OATableGroupToImport alloc] init];
     for (NSString *type in [_items allKeys])
     {
         EOAExportSettingsType itemType = [OAExportSettingsType parseType:type];
@@ -413,8 +413,7 @@
 
 - (void) openCloseGroup:(NSIndexPath *)indexPath
 {
-    TableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
-    
+    OATableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
     if (groupData.isOpen)
     {
         groupData.isOpen = NO;
@@ -439,8 +438,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    TableGroupToImport* groupData = [_data objectAtIndex:section];
-    
+    OATableGroupToImport* groupData = [_data objectAtIndex:section];
     if (groupData.isOpen)
         return [groupData.groupItems count] + 1;
     return 1;
@@ -448,17 +446,17 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_profile_select_descr") boldFragment:nil forSection:section];
+    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_profile_select_descr") boldFragment:nil forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_profile_select_descr") boldFragment:nil inSection:section];
+    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_profile_select_descr") boldFragment:nil inSection:section];
 }
 
 - (UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
+    OATableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
     if (indexPath.row == 0)
     {
         static NSString* const identifierCell = @"OATitleDescriptionCheckmarkCell";
@@ -587,8 +585,7 @@
 
 - (void) selectAllGroup:(NSIndexPath *)indexPath
 {
-    TableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
-    
+    OATableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
     if (!groupData.isOpen)
         for (NSInteger i = 0; i <= groupData.groupItems.count; i++)
             [self addIndexPathToSelectedCellsArray:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
@@ -619,11 +616,6 @@
     {
         [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES scrollPosition:UITableViewScrollPositionNone];
         [self addIndexPathToSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
-    }
-    else
-    {
-        //[self removeIndexPathFromSelectedCellsArray:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
-        //[self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:YES];
     }
     return;
 }

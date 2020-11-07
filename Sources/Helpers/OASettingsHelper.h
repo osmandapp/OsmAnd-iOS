@@ -36,7 +36,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeIllegalType;
 FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeUnknownFileSubtype;
 FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeEmptyJson;
 
-typedef enum : NSInteger {
+typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypeUnknown = -1,
     EOASettingsItemTypeGlobal = 0,
     EOASettingsItemTypeProfile,
@@ -48,13 +48,13 @@ typedef enum : NSInteger {
     EOASettingsItemTypePoiUIFilters,
     EOASettingsItemTypeMapSources,
     EOASettingsItemTypeAvoidRoads
-} EOASettingsItemType;
+};
 
-typedef enum : NSUInteger {
+typedef NS_ENUM(NSInteger, EOAImportType) {
     EOAImportTypeCollect = 0,
     EOAImportTypeCheckDuplicates,
     EOAImportTypeImport
-} EOAImportType;
+};
 
 @interface OASettingsItemType : NSObject
 
@@ -63,7 +63,7 @@ typedef enum : NSUInteger {
 
 @end
 
-typedef enum : NSInteger {
+typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
     EOAExportSettingsTypeUnknown = -1,
     EOAExportSettingsTypeProfile = 0,
     EOAExportSettingsTypeQuickActions,
@@ -72,7 +72,7 @@ typedef enum : NSInteger {
     EOAExportSettingsTypeCustomRendererStyle,
     EOAExportSettingsTypeCustomRouting,
     EOAExportSettingsTypeAvoidRoads,
-} EOAExportSettingsType;
+};
 
 @interface OAExportSettingsType : NSObject
 

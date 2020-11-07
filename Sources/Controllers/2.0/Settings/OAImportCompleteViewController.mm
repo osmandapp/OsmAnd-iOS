@@ -13,6 +13,7 @@
 #import "OAQuickActionListViewController.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
+#import "OAMapSettingsViewController.h"
 #import "OARoutingHelper.h"
 #import "OAMapActions.h"
 #import "Localization.h"
@@ -96,7 +97,10 @@
         else if ([item isKindOfClass:OAPOIUIFilter.class])
             filtersCount += 1;
         else if ([item isKindOfClass:OAMapSourcesSettingsItem.class])
-            tileSourcesCount += 1;
+        {
+            OAMapSourcesSettingsItem *mapSourcesItem = (OAMapSourcesSettingsItem *) item;
+            tileSourcesCount = (int)mapSourcesItem.items.count;
+        }
         else if ([item isKindOfClass:NSString.class])
         {
             NSString *filePath = (NSString *)item;
@@ -144,7 +148,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_map"),
             @"iconName": @"ic_custom_overlay_map",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%i", tileSourcesCount],
             @"category" : kTileSources
             }
          ];
@@ -206,12 +210,12 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_complete_description") boldFragment:_fileName forSection:section];
+    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_complete_description") boldFragment:_fileName forSection:section];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [self generateHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_complete_description") boldFragment:_fileName inSection:section];
+    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_complete_description") boldFragment:_fileName inSection:section];
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -270,7 +274,8 @@
     }
     else if ([category isEqualToString:kRenderSettings])
     {
-        //TODO: navigate to SelectMapStyleBottomSheetDialogFragment
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        [[OARootViewController instance].mapPanel showMapStylesScreen];
     }
     else if ([category isEqualToString:kAvoidRoads])
     {

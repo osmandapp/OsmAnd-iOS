@@ -82,6 +82,7 @@
 - (void) showConfigureScreen;
 - (void) showConfigureScreen:(OAApplicationMode *)targetMode;
 - (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
+- (void) showMapStylesScreen;
 
 - (void) addWaypoint;
 

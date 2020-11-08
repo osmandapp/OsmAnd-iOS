@@ -1382,3 +1382,7 @@
 "shared_string_warning" = "Upozornění";
 "wiki_sheet_title" = "Jak otevřít články Wikipedie?";
 "routing_attr_length_name" = "Omezení délky";
+"width_limit_description" = "Zadejte šířku svého vozidla, na trase mohou být omezení pro široká vozidla.";
+"height_limit_description" = "Zadejte výšku svého vozidla, na trase mohou být omezení pro vysoká vozidla.";
+"weight_limit_description" = "Zadejte hmotnost svého vozidla, na trase mohou být omezení pro těžká vozidla.";
+"gpx_parse_error" = "GPX nemá správný tvar pro OsmAnd, kontaktujte prosím podporu pro další přezkoumání.";

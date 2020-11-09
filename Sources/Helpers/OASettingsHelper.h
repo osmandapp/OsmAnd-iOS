@@ -71,6 +71,8 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
     EOAExportSettingsTypeMapSources,
     EOAExportSettingsTypeCustomRendererStyle,
     EOAExportSettingsTypeCustomRouting,
+    EOAExportSettingsTypeGPX,
+    EOAExportSettingsTypeMapFile,
     EOAExportSettingsTypeAvoidRoads,
 };
 
@@ -106,7 +108,7 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 
 @property (nonatomic, readonly) EOASettingsItemType type;
 @property (nonatomic, readonly) NSString *pluginId;
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic) NSString *name;
 @property (nonatomic, readonly) NSString *publicName;
 @property (nonatomic) NSString *fileName;
 @property (nonatomic, readonly) NSString *defaultFileName;

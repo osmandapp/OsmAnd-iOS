@@ -152,6 +152,8 @@
     NSMutableArray<OALocalResourceItem *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
+    NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
+    NSMutableArray<NSString *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
@@ -168,7 +170,11 @@
                 if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
                     [renderFilesList addObject:fileItem.filePath];
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
-                    [renderFilesList addObject:fileItem.filePath];
+                    [routingFilesList addObject:fileItem.filePath];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeGpx)
+                    [gpxFilesList addObject:fileItem.filePath];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeObfMap)
+                    [mapFilesList addObject:fileItem.filePath];
                 break;
             }
             case EOASettingsItemTypeQuickActions:
@@ -223,6 +229,10 @@
         [settingsToOperate setObject:renderFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRendererStyle]];
     if (routingFilesList.count > 0)
         [settingsToOperate setObject:routingFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRouting]];
+    if (gpxFilesList.count > 0)
+        [settingsToOperate setObject:gpxFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeGPX]];
+    if (mapFilesList.count > 0)
+        [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFile]];
     if (avoidRoads.count > 0)
         [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
     return settingsToOperate;
@@ -237,6 +247,8 @@
     OATableGroupToImport *mapSourcesSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customRendererStyleSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customRoutingSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *customGPXSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *customObgMapSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *avoidRoadsStyleSection = [[OATableGroupToImport alloc] init];
     for (NSString *type in [_items allKeys])
     {
@@ -307,10 +319,18 @@
             }
             case EOAExportSettingsTypeCustomRendererStyle:
             {
-                customRendererStyleSection.groupName = OALocalizedString(@"shared_string_rendering_styles");
+                customRendererStyleSection.groupName = OALocalizedString(@"shared_string_rendering_style");
                 customRendererStyleSection.type = kCellTypeSectionHeader;
                 customRendererStyleSection.isOpen = NO;
-                
+                for (NSString *rendererItem in [_items objectForKey:type])
+                {
+                    NSString *rendererName = [[[rendererItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    [customRendererStyleSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_map_style",
+                        @"title" : [rendererName stringByDeletingPathExtension],
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
                 [data addObject:customRendererStyleSection];
                 break;
             }
@@ -319,8 +339,50 @@
                 customRoutingSection.groupName = OALocalizedString(@"shared_string_routing");
                 customRoutingSection.type = kCellTypeSectionHeader;
                 customRoutingSection.isOpen = NO;
-                
+                for (NSString *routingItem in [_items objectForKey:type])
+                {
+                    NSString *routingName = [[[routingItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    [customRoutingSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_route",
+                        @"title" : routingName,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
                 [data addObject:customRoutingSection];
+                break;
+            }
+            case EOAExportSettingsTypeGPX:
+            {
+                customGPXSection.groupName = @"GPX"; // check
+                customGPXSection.type = kCellTypeSectionHeader;
+                customGPXSection.isOpen = NO;
+                for (NSString *gpxItem in [_items objectForKey:type])
+                {
+                    NSString *routingName = [[[gpxItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    [customGPXSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_trip",
+                        @"title" : routingName,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
+                [data addObject:customGPXSection];
+                break;
+            }
+            case EOAExportSettingsTypeMapFile:
+            {
+                customObgMapSection.groupName = @"Maps"; // check
+                customObgMapSection.type = kCellTypeSectionHeader;
+                customObgMapSection.isOpen = NO;
+                for (NSString *mapItem in [_items objectForKey:type])
+                {
+                    NSString *routingName = [[[mapItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    [customObgMapSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_map_style",
+                        @"title" : routingName,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
+                [data addObject:customObgMapSection];
                 break;
             }
             case EOAExportSettingsTypeAvoidRoads:

@@ -121,6 +121,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             return @"CUSTOM_RENDER_STYLE";
         case EOAExportSettingsTypeCustomRouting:
             return @"CUSTOM_ROUTING";
+        case EOAExportSettingsTypeGPX: // check
+            return @"GPX"; // check
+        case EOAExportSettingsTypeMapFile: // check
+            return @"MAP_FILE"; // check
         case EOAExportSettingsTypeAvoidRoads:
             return @"AVOID_ROADS";
         default:
@@ -142,6 +146,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return EOAExportSettingsTypeCustomRendererStyle;
     if ([typeName isEqualToString:@"CUSTOM_ROUTING"])
         return EOAExportSettingsTypeCustomRouting;
+    if ([typeName isEqualToString:@"GPX"]) // check
+        return EOAExportSettingsTypeGPX; // check
+    if ([typeName isEqualToString:@"MAP_FILE"]) // check
+        return EOAExportSettingsTypeMapFile; // check
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOAExportSettingsTypeAvoidRoads;
     return EOAExportSettingsTypeUnknown;
@@ -1303,6 +1311,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 + (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype
 {
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    if (documentsPath.length > 0 && ![documentsPath hasSuffix:@"/"])
+        documentsPath = [documentsPath stringByAppendingString:@"/"];
     switch (subtype)
     {
         case EOASettingsItemFileSubtypeOther:
@@ -1421,7 +1431,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     _docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     _libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
-    _subtype = EOASettingsItemFileSubtypeUnknown;
 }
 
 - (instancetype) initWithFilePath:(NSString *)filePath error:(NSError * _Nullable *)error
@@ -1474,7 +1483,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         {
             _filePath = [_docPath stringByAppendingString:self.name];
         }
-        else if (self.subtype == EOASettingsItemFileSubtypeUnknown)
+        else if (self.subtype == EOASettingsItemFileSubtypeUnknown || !self.subtype)
         {
             if (error)
                 *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFileSubtype userInfo:nil];
@@ -1546,15 +1555,16 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             *error = readError;
         return;
     }
-    self.name = json[@"name"];
-    NSString *fileName = self.fileName;
-    if (self.subtype == EOASettingsItemFileSubtypeUnknown)
+    NSString *fileName = json[@"file"];
+    if (!_subtype)
     {
         NSString *subtypeStr = json[@"subtype"];
         if (subtypeStr.length > 0)
             _subtype = [OAFileSettingsItemFileSubtype getSubtypeByName:subtypeStr];
         else if (fileName.length > 0)
             _subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:fileName];
+        else
+            _subtype = EOASettingsItemFileSubtypeUnknown;
     }
     if (fileName.length > 0)
     {

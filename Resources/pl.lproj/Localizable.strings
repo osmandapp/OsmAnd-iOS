@@ -1789,3 +1789,10 @@
 "width_limit_description" = "Wprowadź szerokość pojazdu, niektóre restrykcje dróg mogą dotyczyć szerokich pojazdów.";
 "height_limit_description" = "Wprowadź wysokość pojazdu, niektóre restrykcje dróg mogą dotyczyć wysokich pojazdów.";
 "weight_limit_description" = "Wprowadź wagę pojazdu, niektóre restrykcje dróg mogą dotyczyć ciężkich pojazdów.";
+"global_settings" = "Ustawienia ogólne";
+"device_settings" = "Ustawienia urządzenia";
+"allow_3D_view" = "Widok 2.5D";
+"app_theme_light" = "Jasny";
+"settings_app_theme" = "Motyw aplikacji";
+"map_settings_legend" = "Legenda";
+"gpx_parse_error" = "Plik OsmAnd GPX nie jest poprawnie skonstruowany, prosimy o kontakt z zespołem wsparcia technicznego w celu dalszego zbadania sprawy.";

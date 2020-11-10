@@ -1094,8 +1094,8 @@
 "osm_live_payment_contribute_descr" = "Частина доходу йде авторам OpenStreetMap.";
 "free_version_message" = "Ви можете завантажити або оновити %d мап";
 "get_osmand_live" = "Придбайте OsmAnd Live, щоб розблокувати всі функції:";
-"monthly_map_updates" = "Оновлення мап: щомісячне";
-"daily_map_updates" = "Оновлення мап: щогодинне";
+"monthly_map_updates" = "Оновлення мап: щомісячно";
+"daily_map_updates" = "Оновлення мап: щогодинно";
 "purchase_unlim_title" = "Купувати – %@";
 "shared_string_category" = "Категорія";
 "poi_category_and_type" = "Категорія і тип POI";

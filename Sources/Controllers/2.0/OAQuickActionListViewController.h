@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAQuickActionListViewController : OACompoundViewController
 
-@property (nonatomic) BOOL isShouldBeClosedByBackButton;
+@property (nonatomic) BOOL shouldBeClosedByBackButton;
 
 @end
 

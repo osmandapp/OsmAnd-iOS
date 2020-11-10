@@ -208,15 +208,21 @@
     [super viewDidLoad];
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+-(void) loadCurrentRoutingMode
 {
-    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_complete_description") boldFragment:_fileName forSection:section];
+    OAMapActions *mapActions = [[OAMapActions alloc] init];
+    OAApplicationMode *currentRoutingMode = [mapActions getRouteMode];
+    [OARoutingHelper.sharedInstance setAppMode:currentRoutingMode];
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+#pragma mark - Actions
+
+- (IBAction)secondaryButtonPressed:(id)sender
 {
-    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_complete_description") boldFragment:_fileName inSection:section];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -245,6 +251,18 @@
     return cell;
 }
 
+#pragma mark - UITableViewDelegate
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_complete_description") boldFragment:_fileName forSection:section];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_complete_description") boldFragment:_fileName inSection:section];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
@@ -253,13 +271,13 @@
     if ([category isEqualToString:kProfiles] || [category isEqualToString:kRoutingSettings])
     {
         OAMainSettingsViewController *profileSettings = [[OAMainSettingsViewController alloc] init];
-        profileSettings.isShouldBeClosedByBackButton = YES;
+        profileSettings.shouldBeClosedByBackButton = YES;
         [self.navigationController pushViewController:profileSettings animated:YES];
     }
     else if ([category isEqualToString:kQuickActioins])
     {
         OAQuickActionListViewController *actionsList = [[OAQuickActionListViewController alloc] init];
-        actionsList.isShouldBeClosedByBackButton = YES;
+        actionsList.shouldBeClosedByBackButton = YES;
         [self.navigationController pushViewController:actionsList animated:YES];
     }
     else if ([category isEqualToString:kPoiFilters])
@@ -287,16 +305,5 @@
     }
 }
 
--(void) loadCurrentRoutingMode
-{
-    OAMapActions *mapActions = [[OAMapActions alloc] init];
-    OAApplicationMode *currentRoutingMode = [mapActions getRouteMode];
-    [OARoutingHelper.sharedInstance setAppMode:currentRoutingMode];
-}
-
-- (IBAction)secondaryButtonPressed:(id)sender
-{
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
 
 @end

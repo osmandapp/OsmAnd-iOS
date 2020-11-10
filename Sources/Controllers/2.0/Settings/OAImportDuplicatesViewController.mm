@@ -36,16 +36,16 @@
 
 
 @interface HeaderType : NSObject
-@property (nonatomic) NSString *label;
+@property (nonatomic) NSString *title;
 @end
 
 @implementation HeaderType
-- (instancetype) initWithLabel:(NSString *)label
+- (instancetype) initWithTitle:(NSString *)title
 {
     self = [super init];
     if (self)
     {
-        _label = label;
+        _title = title;
     }
     return self;
 }
@@ -59,7 +59,7 @@
 @implementation OAImportDuplicatesViewController
 {
     OsmAndAppInstance _app;
-    NSArray<id> *_duplicatesList;
+    NSArray *_duplicatesList;
     NSArray<OASettingsItem *> * _settingsItems;
     NSString *_file;
     OASettingsHelper *_settingsHelper;
@@ -80,7 +80,7 @@
     return self;
 }
 
-- (instancetype) initWithDuplicatesList:(NSArray<id> *)duplicatesList settingsItems:(NSArray<OASettingsItem *> *)settingsItems file:(NSString *)file
+- (instancetype) initWithDuplicatesList:(NSArray *)duplicatesList settingsItems:(NSArray<OASettingsItem *> *)settingsItems file:(NSString *)file
 {
     self = [super init];
     if (self)
@@ -133,27 +133,23 @@
 
 - (void) setupImportingUI
 {
-    _title = OALocalizedString(@"shared_string_importing");
-    _description = [NSString stringWithFormat:OALocalizedString(@"importing_from"), _file];
-    
     [self turnOnLoadingIndicator];
     self.bottomBarView.hidden = YES;
     self.view.backgroundColor = self.tableView.backgroundColor;
     [self.tableView reloadData];
-    
 }
 
 - (void) turnOnLoadingIndicator
 {
-    _data = @[ @[ @{
-        @"cellType": kCellTypeWithActivity,
-        @"label": OALocalizedString(@"shared_string_importing"),
-    }]];
+    NSDictionary * loadingItem = @{@"cellType": kCellTypeWithActivity,
+                                   @"label": OALocalizedString(@"shared_string_importing")};
+    NSMutableArray *firstSection = [NSMutableArray arrayWithObject:loadingItem];
+    _data = [NSMutableArray arrayWithObject:firstSection];
 }
 
-- (NSArray<NSArray <id>*> *) prepareDuplicates:(NSArray *)duplicatesList
+- (NSArray<NSArray *> *) prepareDuplicates:(NSArray *)duplicatesList
 {
-    NSMutableArray<NSMutableArray <id>*> *duplicates = [NSMutableArray new];
+    NSMutableArray<NSMutableArray *> *duplicates = [NSMutableArray new];
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray new];
     NSMutableArray<OAQuickAction *> *actions = [NSMutableArray new];
     NSMutableArray<OAPOIUIFilter *> *filters = [NSMutableArray new];
@@ -186,49 +182,49 @@
     if (profiles.count > 0)
     {
         NSMutableArray *profilesSection = [NSMutableArray new];
-        [profilesSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_profiles")]];
+        [profilesSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_profiles")]];
         [profilesSection addObjectsFromArray:profiles];
         [duplicates addObject:profilesSection];
     }
     if (actions.count > 0)
     {
         NSMutableArray *actionsSection = [NSMutableArray new];
-        [actionsSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_quick_actions")]];
+        [actionsSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_quick_actions")]];
         [actionsSection addObjectsFromArray:actions];
         [duplicates addObject:actionsSection];
     }
     if (filters.count > 0)
     {
         NSMutableArray *filtersSection = [NSMutableArray new];
-        [filtersSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_poi_types")]];
+        [filtersSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_poi_types")]];
         [filtersSection addObjectsFromArray:filters];
         [duplicates addObject:filtersSection];
     }
     if (tileSources.count > 0)
     {
         NSMutableArray *tileSourcesSection = [NSMutableArray new];
-        [tileSourcesSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"quick_action_map_source_title")]];
+        [tileSourcesSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title")]];
         [tileSourcesSection addObjectsFromArray:tileSources];
         [duplicates addObject:tileSourcesSection];
     }
     if (routingFilesList.count > 0)
     {
         NSMutableArray *routingSection = [NSMutableArray new];
-        [routingSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_routing")]];
+        [routingSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_routing")]];
         [routingSection addObjectsFromArray:routingFilesList];
         [duplicates addObject:routingSection];
     }
     if (renderFilesList.count > 0)
     {
         NSMutableArray *renderSection = [NSMutableArray new];
-        [renderSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"shared_string_rendering_style")]];
+        [renderSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_rendering_style")]];
         [renderSection addObjectsFromArray:renderFilesList];
         [duplicates addObject:renderSection];
     }
     if (avoidRoads.count > 0)
     {
         NSMutableArray *avoidRoadsSection = [NSMutableArray new];
-        [avoidRoadsSection addObject:[[HeaderType alloc] initWithLabel:OALocalizedString(@"avoid_road")]];
+        [avoidRoadsSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"avoid_road")]];
         [avoidRoadsSection addObjectsFromArray:avoidRoads];
         [duplicates addObject:avoidRoadsSection];
     }
@@ -236,7 +232,7 @@
 }
 
 // from DuplicatesSettingsAdapter.java : onBindViewHolder()
-- (void) prepareData:(NSArray<NSArray <id>*> *)duplicates
+- (void) prepareData:(NSArray<NSArray *> *)duplicates
 {
     _data = [NSMutableArray new];
     for (NSArray *section in duplicates)
@@ -248,8 +244,8 @@
             if ([currentItem isKindOfClass:HeaderType.class])
             {
                 HeaderType *header = (HeaderType *)currentItem;
-                item[@"label"] = header.label;
-                item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [header.label lowerCase]];
+                item[@"label"] = header.title;
+                item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [header.title lowerCase]];
                 item[@"cellType"] = kMenuSimpleCellNoIcon;
             }
             else if ([currentItem isKindOfClass:OAApplicationModeBean.class])
@@ -348,6 +344,8 @@
 
 - (void) applyLocalization
 {
+    _title = OALocalizedString(@"shared_string_importing");
+    _description = [NSString stringWithFormat:OALocalizedString(@"importing_from"), _file];
     [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
@@ -361,20 +359,54 @@
     self.primaryBottomButton.hidden = NO;
     self.secondaryBottomButton.hidden = NO;
     
-    [self setToButton: self.secondaryBottomButton firstLabelText:OALocalizedString(@"keep_both") firstLabelFont:[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold] firstLabelColor:UIColorFromRGB(color_primary_purple) secondLabelText:OALocalizedString(@"keep_both_desc") secondLabelFont:[UIFont systemFontOfSize:13] secondLabelColor:UIColorFromRGB(color_icon_inactive)];
+    NSDictionary *secondaryButtonParams = @{
+        @"firstLabelText": OALocalizedString(@"keep_both"),
+        @"firstLabelFont": [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold],
+        @"firstLabelColor": UIColorFromRGB(color_primary_purple),
+        @"secondLabelText": OALocalizedString(@"keep_both_desc"),
+        @"secondLabelFont": [UIFont systemFontOfSize:13],
+        @"secondLabelColor": UIColorFromRGB(color_icon_inactive)
+    };
     
-    [self setToButton: self.primaryBottomButton firstLabelText:OALocalizedString(@"replace_all") firstLabelFont:[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold] firstLabelColor:[UIColor whiteColor] secondLabelText:OALocalizedString(@"replace_all_desc") secondLabelFont:[UIFont systemFontOfSize:13] secondLabelColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
+    NSDictionary *primaryButtonParams = @{
+        @"firstLabelText": OALocalizedString(@"replace_all"),
+        @"firstLabelFont": [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold],
+        @"firstLabelColor": [UIColor whiteColor],
+        @"secondLabelText": OALocalizedString(@"replace_all_desc"),
+        @"secondLabelFont": [UIFont systemFontOfSize:13],
+        @"secondLabelColor": [[UIColor whiteColor] colorWithAlphaComponent:0.5]
+    };
+    
+    [self setParams:secondaryButtonParams forTwoLableButton:self.secondaryBottomButton];
+    [self setParams:primaryButtonParams forTwoLableButton:self.primaryBottomButton];
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (void) importItems:(BOOL)shouldReplace
 {
-    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_duplicates_description") boldFragment:nil forSection:section];
+    if (_settingsItems && _file)
+    {
+        [self setupImportingUI];
+        for (OASettingsItem *item in _settingsItems)
+        {
+            [item setShouldReplace:shouldReplace];
+        }
+        [_settingsHelper importSettings:_file items:_settingsItems latestChanges:@"" version:1 delegate:self];
+    }
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+#pragma mark - Actions
+
+- (IBAction)primaryButtonPressed:(id)sender
 {
-    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_duplicates_description") boldFragment:nil inSection:section];
+    [self importItems: YES];
 }
+
+- (IBAction)secondaryButtonPressed:(id)sender
+{
+    [self importItems: NO];
+}
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -491,27 +523,16 @@
     return nil;
 }
 
-- (void) importItems:(BOOL)shouldReplace
+#pragma mark - UITableViewDelegate
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (_settingsItems && _file)
-    {
-        [self setupImportingUI];
-        for (OASettingsItem *item in _settingsItems)
-        {
-            [item setShouldReplace:shouldReplace];
-        }
-        [_settingsHelper importSettings:_file items:_settingsItems latestChanges:@"" version:1 delegate:self];
-    }
+    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_duplicates_description") boldFragment:nil forSection:section];
 }
 
-- (IBAction)primaryButtonPressed:(id)sender
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    [self importItems: YES];
-}
-
-- (IBAction)secondaryButtonPressed:(id)sender
-{
-    [self importItems: NO];
+    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_duplicates_description") boldFragment:nil inSection:section];
 }
 
 #pragma mark - OASettingsImportExportDelegate

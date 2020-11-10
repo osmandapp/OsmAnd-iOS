@@ -51,7 +51,7 @@
     if (self)
     {
         _targetAppMode = mode;
-        _isShouldBeClosedByBackButton = NO;
+        _shouldBeClosedByBackButton = NO;
     }
     return self;
 }
@@ -354,7 +354,7 @@
 
 - (IBAction) backButtonClicked:(id)sender
 {
-    if (_isShouldBeClosedByBackButton)
+    if (_shouldBeClosedByBackButton)
         [self.navigationController popToRootViewControllerAnimated:YES];
     else
         [super backButtonClicked:sender];

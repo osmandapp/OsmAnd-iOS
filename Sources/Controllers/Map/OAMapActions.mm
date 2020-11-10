@@ -17,6 +17,7 @@
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
+#import "OAApplicationMode.h"
 #import "OAMapSource.h"
 #import "OARouteProvider.h"
 #import "OAMapViewTrackingUtilities.h"

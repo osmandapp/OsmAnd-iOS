@@ -241,7 +241,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        }
         if (pluginIndependentItems.count > 0)
         {
-            UIViewController* incomingURLViewController = [[OAImportProfileViewController alloc] initWithItems:pluginIndependentItems];
+            OAImportProfileViewController* incomingURLViewController = [[OAImportProfileViewController alloc] initWithItems:pluginIndependentItems];
             [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
         }
     }

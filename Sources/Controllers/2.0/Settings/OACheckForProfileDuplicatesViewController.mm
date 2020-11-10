@@ -177,7 +177,7 @@
     if (poiUIFilters.count > 0)
         [settingsItems addObject:[self getBasePoiUiFiltersSettingsItem]];
     if (tileSourceTemplates.count > 0)
-        [settingsItems addObject:[[self getBaseMapSourcesSettingsItem] initWithItems:tileSourceTemplates]];
+        [settingsItems addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
         [settingsItems addObject:[self getBaseAvoidRoadsSettingsItem]];
     return settingsItems;

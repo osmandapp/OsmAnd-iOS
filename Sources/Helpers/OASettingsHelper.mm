@@ -2088,22 +2088,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
                 {
                     OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
-                    std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> tileSource;
-                    const auto& resource = [OsmAndApp instance].resourcesManager->getResource(QStringLiteral("online_tiles"));
-                    if (resource)
-                    {
-                        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
-                        for(const auto& onlineTileSource : onlineTileSources->getCollection())
-                        {
-                            if (QString::compare(QString::fromNSString(item.title), onlineTileSource->name) == 0)
-                            {
-                                tileSource = onlineTileSource;
-                                break;
-                            }
-                        }
-                    }
-                    if (tileSource)
-                        _newSources[QString::fromNSString(item.title)] = tileSource;
+                    if (item.onlineTileSource)
+                        _newSources[QString::fromNSString(item.title)] = item.onlineTileSource;
                 }
             }
         }
@@ -2312,6 +2298,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             OAOnlineTilesResourceItem *item = [[OAOnlineTilesResourceItem alloc] init];
             item.path = [app.cachePath stringByAppendingPathComponent:name];
             item.title = name;
+            item.onlineTileSource = result;
             _newSources[QString::fromNSString(name)] = result;
 
             [self.items addObject:item];

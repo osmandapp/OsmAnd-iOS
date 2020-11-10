@@ -34,7 +34,7 @@
 #import "OAPlugin.h"
 #import "OAMapStyleTitles.h"
 #import "OrderedDictionary.h"
-#import "OAImportProfileViewController.h"
+#import "OAImportSettingsViewController.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -179,8 +179,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
  
 - (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems
 {
+    [self checkDuplicates:settingsFile items:items selectedItems:selectedItems delegate:self];
+}
+
+- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems delegate:(id<OASettingsImportExportDelegate>)delegate
+{
     OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems];
-    task.delegate = self;
+    task.delegate = delegate;
     [task execute];
 }
 
@@ -241,7 +246,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        }
         if (pluginIndependentItems.count > 0)
         {
-            OAImportProfileViewController* incomingURLViewController = [[OAImportProfileViewController alloc] initWithItems:pluginIndependentItems];
+            OAImportSettingsViewController* incomingURLViewController = [[OAImportSettingsViewController alloc] initWithItems:pluginIndependentItems];
             [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
         }
     }

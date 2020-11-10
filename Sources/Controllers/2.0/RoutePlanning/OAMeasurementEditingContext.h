@@ -5,6 +5,9 @@
 //  Created by Paul on 22.10.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
+// OsmAnd/src/net/osmand/plus/measurementtool/MeasurementEditingContext.java
+// git revision 17b7386514528d4ac1ca6fd729278d6321ec95a8
+// Partially synced!
 
 #import <Foundation/Foundation.h>
 

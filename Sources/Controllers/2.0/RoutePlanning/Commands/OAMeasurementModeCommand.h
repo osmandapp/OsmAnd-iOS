@@ -5,6 +5,8 @@
 //  Created by Paul on 22.10.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
+// OsmAnd/src/net/osmand/plus/measurementtool/command/MeasurementModeCommand.java
+// git revision 17fe5589712362fb66b10be2dd73f7b00cf381ec
 
 #import <Foundation/Foundation.h>
 

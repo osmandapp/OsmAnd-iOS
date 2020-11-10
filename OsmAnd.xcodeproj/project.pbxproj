@@ -4708,10 +4708,10 @@
 		DA526A982539941200E489D3 /* OABaseScrollableHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA526A942539941000E489D3 /* OABaseScrollableHudViewController.mm */; };
 		DA526A992539941200E489D3 /* OABaseScrollableHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA526A952539941100E489D3 /* OABaseScrollableHudViewController.xib */; };
 		DA526A9A2539941200E489D3 /* OABaseScrollableHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA526A952539941100E489D3 /* OABaseScrollableHudViewController.xib */; };
-		DA526AB1253AE29100E489D3 /* OARoutePlannigHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA526AAF253AE29100E489D3 /* OARoutePlannigHudViewController.mm */; };
-		DA526AB2253AE29100E489D3 /* OARoutePlannigHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA526AAF253AE29100E489D3 /* OARoutePlannigHudViewController.mm */; };
-		DA526AB3253AE29100E489D3 /* OARoutePlannigHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA526AB0253AE29100E489D3 /* OARoutePlannigHudViewController.xib */; };
-		DA526AB4253AE29100E489D3 /* OARoutePlannigHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA526AB0253AE29100E489D3 /* OARoutePlannigHudViewController.xib */; };
+		DA526AB1253AE29100E489D3 /* OARoutePlanningHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA526AAF253AE29100E489D3 /* OARoutePlanningHudViewController.mm */; };
+		DA526AB2253AE29100E489D3 /* OARoutePlanningHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA526AAF253AE29100E489D3 /* OARoutePlanningHudViewController.mm */; };
+		DA526AB3253AE29100E489D3 /* OARoutePlanningHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA526AB0253AE29100E489D3 /* OARoutePlanningHudViewController.xib */; };
+		DA526AB4253AE29100E489D3 /* OARoutePlanningHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA526AB0253AE29100E489D3 /* OARoutePlanningHudViewController.xib */; };
 		DA52CDCE24ADFAA900CC309D /* OAProfileDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA52CDCD24ADFAA900CC309D /* OAProfileDataObject.m */; };
 		DA52CDCF24ADFAA900CC309D /* OAProfileDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA52CDCD24ADFAA900CC309D /* OAProfileDataObject.m */; };
 		DA52CDE924AE087F00CC309D /* img_help_weight_limit_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA52CDD024AE087700CC309D /* img_help_weight_limit_day@3x.png */; };
@@ -9401,9 +9401,9 @@
 		DA526A942539941000E489D3 /* OABaseScrollableHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OABaseScrollableHudViewController.mm; path = Controllers/2.0/OABaseScrollableHudViewController.mm; sourceTree = "<group>"; };
 		DA526A952539941100E489D3 /* OABaseScrollableHudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OABaseScrollableHudViewController.xib; path = Controllers/2.0/OABaseScrollableHudViewController.xib; sourceTree = "<group>"; };
 		DA526A962539941100E489D3 /* OABaseScrollableHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OABaseScrollableHudViewController.h; path = Controllers/2.0/OABaseScrollableHudViewController.h; sourceTree = "<group>"; };
-		DA526AAE253AE29000E489D3 /* OARoutePlannigHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutePlannigHudViewController.h; sourceTree = "<group>"; };
-		DA526AAF253AE29100E489D3 /* OARoutePlannigHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutePlannigHudViewController.mm; sourceTree = "<group>"; };
-		DA526AB0253AE29100E489D3 /* OARoutePlannigHudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARoutePlannigHudViewController.xib; sourceTree = "<group>"; };
+		DA526AAE253AE29000E489D3 /* OARoutePlanningHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutePlanningHudViewController.h; sourceTree = "<group>"; };
+		DA526AAF253AE29100E489D3 /* OARoutePlanningHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutePlanningHudViewController.mm; sourceTree = "<group>"; };
+		DA526AB0253AE29100E489D3 /* OARoutePlanningHudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARoutePlanningHudViewController.xib; sourceTree = "<group>"; };
 		DA52CDCC24ADFAA900CC309D /* OAProfileDataObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAProfileDataObject.h; sourceTree = "<group>"; };
 		DA52CDCD24ADFAA900CC309D /* OAProfileDataObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAProfileDataObject.m; sourceTree = "<group>"; };
 		DA52CDD024AE087700CC309D /* img_help_weight_limit_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_help_weight_limit_day@3x.png"; path = "Resources/Icons/img_help_weight_limit_day@3x.png"; sourceTree = "<group>"; };
@@ -15270,9 +15270,9 @@
 			isa = PBXGroup;
 			children = (
 				DACC0EF42541868A00904F66 /* Commands */,
-				DA526AAE253AE29000E489D3 /* OARoutePlannigHudViewController.h */,
-				DA526AAF253AE29100E489D3 /* OARoutePlannigHudViewController.mm */,
-				DA526AB0253AE29100E489D3 /* OARoutePlannigHudViewController.xib */,
+				DA526AAE253AE29000E489D3 /* OARoutePlanningHudViewController.h */,
+				DA526AAF253AE29100E489D3 /* OARoutePlanningHudViewController.mm */,
+				DA526AB0253AE29100E489D3 /* OARoutePlanningHudViewController.xib */,
 				DACC0EEE254185C200904F66 /* OAMeasurementEditingContext.h */,
 				DACC0EEF254185C200904F66 /* OAMeasurementEditingContext.mm */,
 				DA2E08E82541A823008B881F /* OAGpxData.h */,
@@ -16090,7 +16090,7 @@
 				847A1DE51DF94E9B003C1246 /* map_pedestrian_bearing@2x.png in Resources */,
 				847A1DE61DF94E9B003C1246 /* ic_destination_pin_4.png in Resources */,
 				847A1DE71DF94E9B003C1246 /* ic_firstscreen_map@3x.png in Resources */,
-				DA526AB4253AE29100E489D3 /* OARoutePlannigHudViewController.xib in Resources */,
+				DA526AB4253AE29100E489D3 /* OARoutePlanningHudViewController.xib in Resources */,
 				DAB854C223057EE9002566A6 /* ic_custom_favorites.png in Resources */,
 				847A1DE81DF94E9B003C1246 /* menu_item_install_icon.png in Resources */,
 				843394A41FF54A19006205A5 /* list_intermediate@2x.png in Resources */,
@@ -18529,7 +18529,7 @@
 				BBA3AF9B197FC4BB0039D991 /* menu_item_my_data_icon@2x.png in Resources */,
 				DA5AA2DE2351C9A000DF0B7B /* OAHomeWorkCollectionViewCell.xib in Resources */,
 				8476E2841F6C1EEC00EC274F /* map_car_location_night.png in Resources */,
-				DA526AB3253AE29100E489D3 /* OARoutePlannigHudViewController.xib in Resources */,
+				DA526AB3253AE29100E489D3 /* OARoutePlanningHudViewController.xib in Resources */,
 				8A836B5B227B43DF005EE20E /* widget_intermediate_time_day@3x.png in Resources */,
 				8476E2D41F6C1EEC00EC274F /* map_pedestrian_location_view_angle_night@2x.png in Resources */,
 				8AFC2BC124334A4E0095BA9F /* map_navigation_nautical_bottom@3x.png in Resources */,
@@ -20941,7 +20941,7 @@
 				7851F2FC241A97FA00F7F1ED /* OASegmentTableViewCell.m in Sources */,
 				847A1CDE1DF94E9B003C1246 /* OAMapSettingsMainScreen.mm in Sources */,
 				847A1CDF1DF94E9B003C1246 /* OAGPXRouteWaypointTableViewCell.m in Sources */,
-				DA526AB2253AE29100E489D3 /* OARoutePlannigHudViewController.mm in Sources */,
+				DA526AB2253AE29100E489D3 /* OARoutePlanningHudViewController.mm in Sources */,
 				847A1CE01DF94E9B003C1246 /* OAGPXRouteWptListViewController.mm in Sources */,
 				84E3704E2059254900959B94 /* OAWaypointsMainScreen.mm in Sources */,
 				845AFB441E261E3B00170026 /* OASearchCoreAPI.mm in Sources */,
@@ -21469,7 +21469,7 @@
 				8A78D938229326BE007F2E6E /* OAMapillaryImage.mm in Sources */,
 				DA94C73F224B663B006C1116 /* OATextInputFloatingCellWithIcon.mm in Sources */,
 				848A3EC81B6A6F180016F6F4 /* QuadTree.m in Sources */,
-				DA526AB1253AE29100E489D3 /* OARoutePlannigHudViewController.mm in Sources */,
+				DA526AB1253AE29100E489D3 /* OARoutePlanningHudViewController.mm in Sources */,
 				8490B1C92064F053007694A5 /* OAWaypointsRadiusScreen.mm in Sources */,
 				DA25589F24ADE40F0081D155 /* OAProfileNavigationSettingsViewController.mm in Sources */,
 				156A5D2424976C9200BE44CD /* OADownloadProgressBarCell.m in Sources */,

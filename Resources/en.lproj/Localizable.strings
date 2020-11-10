@@ -795,7 +795,7 @@
 // Route planning
 "plan_route" = "Plan a route";
 "add_point" = "Add point";
-"point_num" = "Point %ld";
+"point_num" = "Point %d";
 "points_count" = "Points:";
 "route_betw_points" = "Route between points";
 "save_changes" = "Save changes";

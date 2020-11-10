@@ -12,10 +12,10 @@
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 
-typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
+typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 {
-    EOACopyProfileMenuStateInitial = 0,
-    EOACopyProfileMenuStateFullScreen
+    EOAScrollableMenuStateInitial = 0,
+    EOAScrollableMenuStateFullScreen
 };
 
 @interface OABaseBottomSheetViewController () <UIGestureRecognizerDelegate>
@@ -31,7 +31,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 @implementation OABaseBottomSheetViewController
 {
     UIPanGestureRecognizer *_panGesture;
-    EOACopyProfileMenuState _currentState;
+    EOAScrollableMenuState _currentState;
     CGFloat _initialTouchPoint;
     BOOL _isDragging;
     BOOL _isHiding;
@@ -99,7 +99,7 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
     [self.closeButton setImage:[[UIImage imageNamed:@"ic_custom_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     self.closeButton.tintColor = UIColorFromRGB(color_primary_purple);
     
-    _currentState = EOACopyProfileMenuStateInitial;
+    _currentState = EOAScrollableMenuStateInitial;
     
     [self applyLocalization];
     [self layoutSubviews];
@@ -114,9 +114,9 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 - (CGFloat) getViewHeight
 {
     switch (_currentState) {
-        case EOACopyProfileMenuStateInitial:
+        case EOAScrollableMenuStateInitial:
             return DeviceScreenHeight - DeviceScreenHeight / 4;
-        case EOACopyProfileMenuStateFullScreen:
+        case EOAScrollableMenuStateFullScreen:
             return DeviceScreenHeight - OAUtilities.getTopMargin;
         default:
             return 0.0;
@@ -173,8 +173,8 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
 {
     [_tableView setContentOffset:CGPointZero];
     _isHiding = NO;
-    _currentState = OAUtilities.isLandscape ? EOACopyProfileMenuStateFullScreen : EOACopyProfileMenuStateInitial;
-    [_tableView setScrollEnabled:_currentState == EOACopyProfileMenuStateFullScreen];
+    _currentState = OAUtilities.isLandscape ? EOAScrollableMenuStateFullScreen : EOAScrollableMenuStateInitial;
+    [_tableView setScrollEnabled:_currentState == EOAScrollableMenuStateFullScreen];
     [self generateData];
     [self adjustFrame];
     [self.tableView reloadData];
@@ -246,8 +246,8 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
         return;
     [self adjustFrame];
     
-    _currentState = OAUtilities.isLandscape ? EOACopyProfileMenuStateFullScreen : _currentState;
-    [_tableView setScrollEnabled:_currentState == EOACopyProfileMenuStateFullScreen];
+    _currentState = OAUtilities.isLandscape ? EOAScrollableMenuStateFullScreen : _currentState;
+    [_tableView setScrollEnabled:_currentState == EOAScrollableMenuStateFullScreen];
 
     CGRect contentFrame = _contentContainer.frame;
     contentFrame.size.width = _bottomSheetView.bounds.size.width;
@@ -361,22 +361,22 @@ typedef NS_ENUM(NSInteger, EOACopyProfileMenuState)
         {
             _isDragging = NO;
             CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if ((newY - initialPoint.y > 180 || fastDownSlide) && _currentState == EOACopyProfileMenuStateInitial)
+            if ((newY - initialPoint.y > 180 || fastDownSlide) && _currentState == EOAScrollableMenuStateInitial)
             {
                 [self hide:YES];
                 break;
             }
             else if (newY > DeviceScreenHeight - (DeviceScreenHeight - DeviceScreenHeight / 4) + _buttonsView.frame.size.height + _tableView.frame.origin.y && !fastUpSlide)
             {
-                _currentState = EOACopyProfileMenuStateInitial;
+                _currentState = EOAScrollableMenuStateInitial;
             }
             else if (newY < fullScreenAnchor || fastUpSlide)
             {
-                _currentState = EOACopyProfileMenuStateFullScreen;
+                _currentState = EOAScrollableMenuStateFullScreen;
             }
             else
             {
-                _currentState = EOACopyProfileMenuStateInitial;
+                _currentState = EOAScrollableMenuStateInitial;
             }
             [UIView animateWithDuration: 0.2 animations:^{
                 [self layoutSubviews];

@@ -1,12 +1,12 @@
 //
-//  OARoutePlannigHudViewController.m
+//  OARoutePlanningHudViewController.m
 //  OsmAnd
 //
 //  Created by Paul on 10/16/20.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OARoutePlannigHudViewController.h"
+#import "OARoutePlanningHudViewController.h"
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     EOAHudModeAddPoints
 };
 
-@interface OARoutePlannigHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate>
+@interface OARoutePlanningHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
@@ -80,7 +80,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 @end
 
-@implementation OARoutePlannigHudViewController
+@implementation OARoutePlanningHudViewController
 {
     OAAppSettings *_settings;
     OsmAndAppInstance _app;
@@ -167,7 +167,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (CGFloat)initialMenuHeight
 {
-    return _hudMode == EOAHudModeRoutePlanning ? 60. + self.toolBarView.frame.size.height : _infoView.getViewHeight;
+    return _hudMode == EOAHudModeRoutePlanning ? 58. + self.toolBarView.frame.size.height : _infoView.getViewHeight;
 }
 
 - (CGFloat)expandedMenuHeight
@@ -407,7 +407,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void) saveGpxRoute:(NSString *)outFile gpxFile:(OAGPXDocument *)gpxFile actionType:(EOAActionType)actionType saveType:(EOASaveType)saveType showOnMap:(BOOL)showOnMap
            onComplete:(void(^)(OAGPXDocument *, NSString *))onComplete
 {
-    OARoutePlannigHudViewController * __weak weakSelf = self;
+    OARoutePlanningHudViewController * __weak weakSelf = self;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (weakSelf == nil)
@@ -813,6 +813,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
     [_editingContext splitSegments:_editingContext.getBeforePoints.count + _editingContext.getAfterPoints.count];
     if (_hudMode == EOAHudModeMovePoint)
         [_layer exitMovingMode];
+    [_layer updateLayer];
     _hudMode = EOAHudModeRoutePlanning;
     
     [UIView animateWithDuration:.2 animations:^{

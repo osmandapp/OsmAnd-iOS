@@ -1,5 +1,5 @@
 //
-//  OARoutePlannigHudViewController.h
+//  OARoutePlanningHudViewController.h
 //  OsmAnd
 //
 //  Created by Paul on 10/16/20.
@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "OABaseScrollableHudViewController.h"
 
-@interface OARoutePlannigHudViewController : OABaseScrollableHudViewController
+@interface OARoutePlanningHudViewController : OABaseScrollableHudViewController
 
 @end

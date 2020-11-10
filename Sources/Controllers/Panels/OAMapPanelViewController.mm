@@ -1053,7 +1053,7 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
-    if (self.cannotBeClosedByContextMenu)
+    if (self.isNewContextMenuDisabled)
         return;
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
     for (OATargetPoint *targetPoint in targetPoints)
@@ -1086,7 +1086,7 @@ typedef enum
     }];
 }
 
-- (BOOL) cannotBeClosedByContextMenu
+- (BOOL) isNewContextMenuDisabled
 {
     return _activeTargetType == OATargetImpassableRoadSelection
     || _activeTargetType == OATargetRouteDetailsGraph
@@ -1096,7 +1096,7 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
 {
-    if (self.cannotBeClosedByContextMenu)
+    if (self.isNewContextMenuDisabled)
         return;
     
     if (targetPoint.type == OATargetMapillaryImage)

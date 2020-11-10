@@ -16,7 +16,7 @@
 #import "OAHelpViewController.h"
 #import "OAColors.h"
 
-#import "OARoutePlannigHudViewController.h"
+#import "OARoutePlanningHudViewController.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -303,7 +303,7 @@
 {
     // TODO: for test only, change later!
     [self.sidePanelController toggleLeftPanel:self];
-    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlannigHudViewController alloc] init]];
+    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
 }
 
 - (IBAction) configureScreenButtonClicked:(id)sender

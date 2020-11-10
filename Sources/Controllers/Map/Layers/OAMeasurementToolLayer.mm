@@ -376,12 +376,22 @@
     return nil;
 }
 
-- (void)addPointMarkers:(const QVector<OsmAnd::PointI>&)points
+- (void)addPointMarkers:(const QVector<OsmAnd::PointI>&)points collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
+    OsmAnd::MapMarkerBuilder pointMarkerBuilder;
+    pointMarkerBuilder.setIsAccuracyCircleSupported(false);
+    pointMarkerBuilder.setBaseOrder(self.baseOrder - 15);
+    pointMarkerBuilder.setIsHidden(false);
+    pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+    pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
+    pointMarkerBuilder.setPinIcon(_pointMarkerIcon);
+    
     for (int i = 0; i < points.size(); i++)
     {
         const auto& point = points[i];
-        auto marker = [self drawMarker:point collection:_pointMarkers];
+        auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
+        marker->setPosition(point);
+        pointMarkerBuilder.setMarkerId(collection->getMarkers().count());
         if (i == _editingCtx.selectedPointPosition && _isInMovingMode)
             _markerToMove = marker;
     }
@@ -453,7 +463,7 @@
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points {
     [self.mapViewController runWithRenderSync:^{
         [self drawLines:points collection:_collection modeAware:YES];
-        [self addPointMarkers:points];
+        [self addPointMarkers:points collection:_pointMarkers];
     }];
 }
 

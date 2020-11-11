@@ -2032,6 +2032,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [super initialization];
     
     _newSqliteData = [NSMutableDictionary dictionary];
+    self.existingItems = [NSMutableArray array];
     
     OsmAndAppInstance app = [OsmAndApp instance];
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
@@ -2092,22 +2093,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
                 {
                     OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
-                    std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> tileSource;
-                    const auto& resource = [OsmAndApp instance].resourcesManager->getResource(QStringLiteral("online_tiles"));
-                    if (resource)
-                    {
-                        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
-                        for(const auto& onlineTileSource : onlineTileSources->getCollection())
-                        {
-                            if (QString::compare(QString::fromNSString(item.title), onlineTileSource->name) == 0)
-                            {
-                                tileSource = onlineTileSource;
-                                break;
-                            }
-                        }
-                    }
-                    if (tileSource)
-                        _newSources[QString::fromNSString(item.title)] = tileSource;
+                    if (item.onlineTileSource)
+                        _newSources[QString::fromNSString(item.title)] = item.onlineTileSource;
                 }
             }
         }
@@ -2206,13 +2193,32 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
         {
+            NSString *newTitle = [NSString stringWithFormat:@"%@_%d", localItem.title, number];
             OAOnlineTilesResourceItem *oldItem = (OAOnlineTilesResourceItem *)localItem;
             OAOnlineTilesResourceItem *renamedItem = [[OAOnlineTilesResourceItem alloc] init];
-            renamedItem.title = [NSString stringWithFormat:@"%@_%d", oldItem.title, number];
+            renamedItem.title = newTitle;
             if (![self isDuplicate:renamedItem])
             {
+                const auto &oldSource = _newSources[QString::fromNSString(oldItem.title)];
+                const auto newSource = std::make_shared<OsmAnd::IOnlineTileSources::Source>(QString::fromNSString(newTitle));
+                
                 renamedItem.path = oldItem.path;
-                _newSources[QString::fromNSString(renamedItem.title)] = _newSources[QString::fromNSString(oldItem.title)];
+                newSource->urlToLoad = oldSource->urlToLoad;
+                newSource->minZoom = oldSource->minZoom;
+                newSource->maxZoom = oldSource->maxZoom;
+                newSource->expirationTimeMillis = oldSource->expirationTimeMillis;
+                newSource->ellipticYTile = oldSource->ellipticYTile;
+                //newSource->priority = oldSource->priority;
+                newSource->tileSize = oldSource->tileSize;
+                newSource->ext = oldSource->ext;
+                newSource->avgSize = oldSource->avgSize;
+                newSource->bitDensity =oldSource->bitDensity;
+                newSource->invertedYTile = oldSource->invertedYTile;
+                newSource->randoms = oldSource->randoms;
+                newSource->randomsArray = oldSource->randomsArray;
+                newSource->rule = oldSource->rule;
+                
+                _newSources[QString::fromNSString(newTitle)] = newSource;
                 _newSources.remove(QString::fromNSString(oldItem.title));
                 return renamedItem;
             }
@@ -2294,12 +2300,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             result->randomsArray = OsmAnd::OnlineTileSources::parseRandoms(QString::fromNSString(randoms));
             result->rule = QString::fromNSString(rule);
 
-            OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
-            app.resourcesManager->installTilesResource(result);
-
             OAOnlineTilesResourceItem *item = [[OAOnlineTilesResourceItem alloc] init];
             item.path = [app.cachePath stringByAppendingPathComponent:name];
             item.title = name;
+            item.onlineTileSource = result;
             _newSources[QString::fromNSString(name)] = result;
 
             [self.items addObject:item];
@@ -2326,7 +2330,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"sqlitedb"];
             if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
             {
-                [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
                 OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
                 item.title = [[name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                 item.fileName = name;

@@ -80,13 +80,13 @@
 - (void) generateData
 {
     _data = [NSMutableArray new];
-    int profilesCount = 0;
-    int actionsCount = 0;
-    int filtersCount = 0;
-    int tileSourcesCount = 0;
-    int renderFilesCount = 0;
-    int routingFilesCount = 0;
-    int avoidRoads = 0;
+    NSInteger profilesCount = 0;
+    NSInteger actionsCount = 0;
+    NSInteger filtersCount = 0;
+    NSInteger tileSourcesCount = 0;
+    NSInteger renderFilesCount = 0;
+    NSInteger routingFilesCount = 0;
+    NSInteger avoidRoads = 0;
     
     for (id item in _settingsItems)
     {
@@ -96,8 +96,11 @@
             actionsCount += 1;
         else if ([item isKindOfClass:OAPOIUIFilter.class])
             filtersCount += 1;
-        else if ([item isKindOfClass:OASQLiteTileSource.class])
-            tileSourcesCount += 1;
+        else if ([item isKindOfClass:OAMapSourcesSettingsItem.class])
+        {
+            OAMapSourcesSettingsItem *mapSourcesItem = (OAMapSourcesSettingsItem *) item;
+            tileSourcesCount = mapSourcesItem.items.count;
+        }
         else if ([item isKindOfClass:NSString.class])
         {
             NSString *filePath = (NSString *)item;
@@ -115,7 +118,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_settings"),
             @"iconName": @"ic_action_settings",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
             @"category" : kProfiles
             }
          ];
@@ -125,7 +128,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_screen_quick_action"),
             @"iconName": @"ic_custom_quick_action",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
             @"category" : kQuickActioins
             }
          ];
@@ -135,7 +138,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"search_activity"),
             @"iconName": @"ic_custom_search",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
             @"category" : kPoiFilters
             }
          ];
@@ -145,7 +148,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_map"),
             @"iconName": @"ic_custom_overlay_map",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld", (long)tileSourcesCount],
             @"category" : kTileSources
             }
          ];
@@ -155,7 +158,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_rendering_style"),
             @"iconName": @"ic_custom_map_style",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
             @"category" : kRenderSettings
             }
          ];
@@ -165,7 +168,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_routing"),
             @"iconName": @"ic_action_route_distance",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
             @"category" : kRoutingSettings
             }
          ];
@@ -175,7 +178,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"avoid_road"),
             @"iconName": @"ic_custom_alert",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
             @"category" : kAvoidRoads
             }
          ];

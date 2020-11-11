@@ -36,8 +36,9 @@
 #define kRoutingSettings @"kRoutingSettings"
 #define kAvoidRoads @"kAvoidRoads"
 
-#define RENDERERS_DIR @"rendering/"
-#define ROUTING_PROFILES_DIR @"routing/"
+#define RENDERERS_DIR @"render.xml" // check prbly has to be @"rendering/"
+#define ROUTING_PROFILES_DIR @".xml" // check prbly has to be @"routing/"
+#define GPX_PROFILES_DIR @".gpx" // check
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -86,6 +87,7 @@
     int tileSourcesCount = 0;
     int renderFilesCount = 0;
     int routingFilesCount = 0;
+    NSInteger gpxFilesCount = 0;
     int avoidRoads = 0;
     
     for (id item in _settingsItems)
@@ -98,13 +100,15 @@
             filtersCount += 1;
         else if ([item isKindOfClass:OASQLiteTileSource.class])
             tileSourcesCount += 1;
-        else if ([item isKindOfClass:NSString.class])
+        else if ([item isKindOfClass:OAFileSettingsItem.class])
         {
-            NSString *filePath = (NSString *)item;
+            NSString *filePath = ((OAFileSettingsItem *)item).filePath;
             if ([filePath containsString:RENDERERS_DIR])
                 renderFilesCount += 1;
-            if ([filePath containsString:ROUTING_PROFILES_DIR])
+            else if ([filePath containsString:ROUTING_PROFILES_DIR])
                 routingFilesCount += 1;
+            else if ([filePath containsString:GPX_PROFILES_DIR])
+                gpxFilesCount += 1;
         }
         else if ([item isKindOfClass:OAAvoidRoadInfo.class])
             avoidRoads += 1;
@@ -155,7 +159,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_rendering_style"),
             @"iconName": @"ic_custom_map_style",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%i", renderFilesCount],
             @"category" : kRenderSettings
             }
          ];
@@ -165,8 +169,18 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_routing"),
             @"iconName": @"ic_action_route_distance",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%i", routingFilesCount],
             @"category" : kRoutingSettings
+            }
+         ];
+    }
+    if (gpxFilesCount > 0)
+    {
+        [_data addObject: @{
+            @"label": @"GPX", // change
+            @"iconName": @"ic_custom_trip",
+            @"count": [NSString stringWithFormat:@"%ld", gpxFilesCount],
+            @"category" : kRoutingSettings // check where to go
             }
          ];
     }

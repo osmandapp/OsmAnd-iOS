@@ -30,9 +30,9 @@
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
 #define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
 #define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
-#define RENDERERS_DIR @"rendering/"
-#define ROUTING_PROFILES_DIR @"routing/"
-
+#define RENDERERS_DIR @"render.xml" // check prbly has to be @"rendering/"
+#define ROUTING_PROFILES_DIR @".xml" // check prbly has to be @"routing/"
+#define GPX_PROFILES_DIR @".gpx" // check
 
 @interface HeaderType : NSObject
 @property (nonatomic) NSString *label;
@@ -157,6 +157,7 @@
     NSMutableArray<OASQLiteTileSource *> *tileSources = [NSMutableArray new]; //ITileSource ???
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray new];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray new];
+    NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray new];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray new];
     
     for (id object in duplicatesList)
@@ -174,8 +175,10 @@
             NSString *file = (NSString *)object;
             if ([file containsString:RENDERERS_DIR])
                 [renderFilesList addObject: file];
-            if ([file containsString:ROUTING_PROFILES_DIR])
+            else if ([file containsString:ROUTING_PROFILES_DIR])
                 [routingFilesList addObject: file];
+            else if ([file containsString:GPX_PROFILES_DIR])
+                [gpxFilesList addObject: file];
         }
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject: (OAAvoidRoadInfo *)object];
@@ -311,11 +314,22 @@
             else if ([currentItem isKindOfClass:NSString.class])
             {
                 NSString *file = (NSString *)currentItem;
-                item[@"label"] = [[file lastPathComponent] stringByDeletingPathExtension];
+                NSString *fileName = [[[file lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                 if ([file containsString:RENDERERS_DIR])
+                {
+                    item[@"label"] = [fileName stringByDeletingPathExtension];
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_map_style"];
+                }
                 else if ([file containsString:ROUTING_PROFILES_DIR])
+                {
+                    item[@"label"] = fileName;
                     item[@"icon"] = [UIImage imageNamed:@"ic_action_route_distance"];
+                }
+                else if ([file containsString:GPX_PROFILES_DIR])
+                {
+                    item[@"label"] = fileName;
+                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_trip"];
+                }
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }

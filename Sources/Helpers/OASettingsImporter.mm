@@ -440,14 +440,7 @@
             if (items != nil && items.count > 0)
             {
                 for (OASettingsItem *item in items)
-                {
-                    if ([item isKindOfClass:OAProfileSettingsItem.class])
-                    {
-                        // TODO: remove this check while implementing other types of import (e.g. Quick action)
-                        [item apply];
-                    }
-                }
-                
+                    [item apply];
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;
                 [task execute];
@@ -556,15 +549,17 @@
     NSString *tempDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
     [NSFileManager.defaultManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:nil];
     
-    for (OAProfileSettingsItem *item in _items)
+    for (OASettingsItem *item in _items)
     {
-        NSString *bakupPatch = [[tempDir stringByAppendingPathComponent:item.appMode.stringKey] stringByAppendingPathExtension:@"osf"];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:bakupPatch])
+        if ([item isKindOfClass:OAProfileSettingsItem.class])
         {
-            [[NSFileManager defaultManager] copyItemAtPath:_file toPath:bakupPatch error:nil];
+            NSString *bakupPatch = [[tempDir stringByAppendingPathComponent:((OAProfileSettingsItem *)item).appMode.stringKey] stringByAppendingPathExtension:@"osf"];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:bakupPatch])
+            {
+                [[NSFileManager defaultManager] copyItemAtPath:_file toPath:bakupPatch error:nil];
+            }
         }
     }
-    
     return YES;
 }
  

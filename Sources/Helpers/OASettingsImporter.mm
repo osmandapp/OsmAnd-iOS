@@ -112,7 +112,6 @@
     }
     
     [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
     
     return items;
 }
@@ -200,8 +199,18 @@
     
     for (NSDictionary* item in itemsJson)
     {
-        // TODO: import other item types later
+        // TODO: import other item types later and clean up
         if ([item[@"type"] isEqualToString:@"PROFILE"])
+        {
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
+        }
+        if ([item[@"type"] isEqualToString:@"GLOBAL"])
+        {
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
+        }
+        if ([item[@"type"] isEqualToString:@"MAP_SOURCES"])
         {
             OASettingsItem *settingsItem = [self createItem:item];
             [_items addObject:settingsItem];
@@ -434,14 +443,7 @@
             if (items != nil && items.count > 0)
             {
                 for (OASettingsItem *item in items)
-                {
-                    if ([item isKindOfClass:OAProfileSettingsItem.class])
-                    {
-                        // TODO: remove this check while implementing other types of import (e.g. Quick action)
-                        [item apply];
-                    }
-                }
-                
+                    [item apply];
                 OAImportItemsAsyncTask *task = [[OAImportItemsAsyncTask alloc] initWithFile:_filePath items:_items];
                 task.delegate = _delegate;
                 [task execute];
@@ -488,8 +490,8 @@
         if ([item isKindOfClass:OAProfileSettingsItem.class]) {
             if ([item exists])
                 [duplicateItems addObject:((OAProfileSettingsItem *)item).modeBean];
-        } else
-        if ([item isKindOfClass:OACollectionSettingsItem.class])
+        }
+        else if ([item isKindOfClass:OACollectionSettingsItem.class])
         {
             NSArray *duplicates = [(OACollectionSettingsItem *)item processDuplicateItems];
             if (duplicates.count > 0)
@@ -549,13 +551,16 @@
     
     NSString *tempDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
     [NSFileManager.defaultManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:nil];
-    
-    for (OAProfileSettingsItem *item in _items)
+
+    for (OASettingsItem *item in _items)
     {
-        NSString *bakupPatch = [[tempDir stringByAppendingPathComponent:item.appMode.stringKey] stringByAppendingPathExtension:@"osf"];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:bakupPatch])
+        if ([item isKindOfClass:OAProfileSettingsItem.class])
         {
-            [[NSFileManager defaultManager] copyItemAtPath:_file toPath:bakupPatch error:nil];
+            NSString *bakupPatch = [[tempDir stringByAppendingPathComponent:((OAProfileSettingsItem *)item).appMode.stringKey] stringByAppendingPathExtension:@"osf"];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:bakupPatch])
+            {
+                [[NSFileManager defaultManager] copyItemAtPath:_file toPath:bakupPatch error:nil];
+            }
         }
     }
     

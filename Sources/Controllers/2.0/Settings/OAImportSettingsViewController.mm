@@ -23,6 +23,9 @@
 #import "OAIconTextTableViewCell.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OAProfileDataObject.h"
+#import "OAAvoidRoadInfo.h"
+#import "OASQLiteTileSource.h"
+#import "OAResourcesUIHelper.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -367,6 +370,25 @@
                 mapSourcesSection.type = kCellTypeSectionHeader;
                 mapSourcesSection.isOpen = NO;
                 
+                for (OAMapSourceResourceItem *item in settings)
+                {
+                    NSString *caption;
+                    if ([item isKindOfClass:OASqliteDbResourceItem.class])
+                    {
+                        OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *) item;
+                        caption = sqlite.title;
+                    }
+                    else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
+                    {
+                        OAOnlineTilesResourceItem* resourcesItem = (OAOnlineTilesResourceItem*) item;
+                        caption = resourcesItem.title;
+                    }
+                    [mapSourcesSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_map",
+                        @"title" : caption,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
                 [data addObject:mapSourcesSection];
                 break;
             }

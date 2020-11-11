@@ -25,6 +25,7 @@
 #import "OAMenuSimpleCellNoIcon.h"
 #import "OATitleTwoIconsRoundCell.h"
 #import "OAActivityViewWithTitleCell.h"
+#import "OAMapSource.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -100,13 +101,15 @@
     
     OAImportAsyncTask *importTask = _settingsHelper.importTask;
     if (!importTask)
-        _settingsItems = [importTask getSelectedItems];
-    if (!_duplicatesList)
-        _duplicatesList = [importTask getDuplicates];
-    if (!_file)
-        _file = [importTask getFile];
-    
-    importTask.delegate = self;
+    {
+        if (!_settingsItems)
+            _settingsItems = [importTask getSelectedItems];
+        if (!_duplicatesList)
+            _duplicatesList = [importTask getDuplicates];
+        if (!_file)
+            _file = [importTask getFile];
+        importTask.delegate = self;
+    }
 }
 
 //onActivityCreated
@@ -151,7 +154,7 @@
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray new];
     NSMutableArray<OAQuickAction *> *actions = [NSMutableArray new];
     NSMutableArray<OAPOIUIFilter *> *filters = [NSMutableArray new];
-    NSMutableArray<OASQLiteTileSource *> *tileSources = [NSMutableArray new]; //ITileSource ???
+    NSMutableArray<OALocalResourceItem *> *tileSources = [NSMutableArray new];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray new];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray new];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray new];
@@ -164,8 +167,8 @@
             [actions addObject: (OAQuickAction *)object];
         if ([object isKindOfClass:OAPOIUIFilter.class])
             [filters addObject: (OAPOIUIFilter *)object];
-        else if ([object isKindOfClass:OASQLiteTileSource.class])
-            [tileSources addObject: (OASQLiteTileSource *)object];
+        else if ([object isKindOfClass:OALocalResourceItem.class])
+            [tileSources addObject: (OALocalResourceItem *)object];
         else if ([object isKindOfClass:NSString.class])
         {
             NSString *file = (NSString *)object;
@@ -297,9 +300,20 @@
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
-            else if ([currentItem isKindOfClass:OASQLiteTileSource.class])
+            else if ([currentItem isKindOfClass:OALocalResourceItem.class])
             {
-                //item[@"label"] = ((OASQLiteTileSource *)currentItem).name;
+                NSString *caption;
+                if ([currentItem isKindOfClass:OASqliteDbResourceItem.class])
+                {
+                    OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *) currentItem;
+                    caption = sqlite.title;
+                }
+                else if ([currentItem isKindOfClass:OAOnlineTilesResourceItem.class])
+                {
+                    OAOnlineTilesResourceItem* resourcesItem = (OAOnlineTilesResourceItem*) currentItem;
+                    caption = resourcesItem.title;
+                }
+                item[@"label"] = caption;
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_map"];
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;

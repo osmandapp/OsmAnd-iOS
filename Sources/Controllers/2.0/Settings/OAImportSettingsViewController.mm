@@ -64,7 +64,7 @@
 @implementation OAImportSettingsViewController
 {
     OASettingsHelper *_settingsHelper;
-    NSMutableArray *_data;
+    NSArray *_data;
     NSArray<OASettingsItem *> *_settingsItems;
     NSMutableDictionary<NSString *, NSArray *> *_itemsMap;
     NSArray <NSString *>*_itemsType;
@@ -330,7 +330,7 @@
                 profilesSection.isOpen = NO;
                 for (OAApplicationModeBean *modeBean in settings)
                 {
-                    OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
+                    OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:[OAApplicationMode fromModeBean:modeBean]];
                     NSString *title = modeBean.userProfileName;
                     if (!title || title.length == 0)
                         title = appMode.name;
@@ -479,7 +479,7 @@
                 break;
         }
     }
-    _data = [NSMutableArray arrayWithArray:data];
+    _data = [NSArray arrayWithArray:data];
 }
 
 - (void) showActivityIndicatorWithLabel:(NSString *)labelText
@@ -933,7 +933,7 @@
 #pragma mark - OASettingsImportExportDelegate
 
 //getImportListener
-- (void) onSettingsImportFinished:(BOOL)succeed items:(nonnull NSArray<OASettingsItem *> *)items {
+- (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items {
     if (succeed)
     {
         [self.tableView reloadData];

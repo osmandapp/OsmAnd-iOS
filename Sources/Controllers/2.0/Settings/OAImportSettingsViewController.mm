@@ -103,7 +103,6 @@
 
 - (void) setupButtonView
 {
-    self.primaryBottomButton.userInteractionEnabled = YES;
     self.primaryBottomButton.backgroundColor = UIColorFromRGB(color_primary_purple);
     [self.primaryBottomButton setTintColor:UIColor.whiteColor];
     [self.primaryBottomButton setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];

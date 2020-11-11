@@ -71,8 +71,10 @@
     paragraphStyles.alignment = NSTextAlignmentCenter;
     paragraphStyles.lineSpacing = 3;
     
-    NSDictionary *firstLabelAttributes = @{NSForegroundColorAttributeName: params[@"firstLabelColor"], NSFontAttributeName: params[@"firstLabelFont"], NSParagraphStyleAttributeName:paragraphStyles};
-    NSDictionary *secondLabelAttributes = @{NSForegroundColorAttributeName: params[@"secondLabelColor"], NSFontAttributeName: params[@"secondLabelFont"], NSParagraphStyleAttributeName:paragraphStyles};
+    UIFont *firstLabelFont = params[@"firstLabelFont"] ? params[@"firstLabelFont"] :[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]; [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+    UIFont *secondLabelFont = params[@"secondLabelFont"] ? params[@"secondLabelFont"] : [UIFont systemFontOfSize:13];
+    NSDictionary *firstLabelAttributes = @{NSForegroundColorAttributeName: params[@"firstLabelColor"], NSFontAttributeName: firstLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
+    NSDictionary *secondLabelAttributes = @{NSForegroundColorAttributeName: params[@"secondLabelColor"], NSFontAttributeName: secondLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
     
     [attributedText setAttributes:firstLabelAttributes range:NSMakeRange(0, [params[@"firstLabelText"] length])];
     [attributedText setAttributes:secondLabelAttributes range:NSMakeRange([params[@"firstLabelText"] length], [params[@"secondLabelText"] length] + 1)];

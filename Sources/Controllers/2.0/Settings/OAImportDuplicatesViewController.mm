@@ -363,19 +363,15 @@
     
     NSDictionary *secondaryButtonParams = @{
         @"firstLabelText": OALocalizedString(@"keep_both"),
-        @"firstLabelFont": [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold],
         @"firstLabelColor": UIColorFromRGB(color_primary_purple),
         @"secondLabelText": OALocalizedString(@"keep_both_desc"),
-        @"secondLabelFont": [UIFont systemFontOfSize:13],
         @"secondLabelColor": UIColorFromRGB(color_icon_inactive)
     };
     
     NSDictionary *primaryButtonParams = @{
         @"firstLabelText": OALocalizedString(@"replace_all"),
-        @"firstLabelFont": [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold],
         @"firstLabelColor": [UIColor whiteColor],
         @"secondLabelText": OALocalizedString(@"replace_all_desc"),
-        @"secondLabelFont": [UIFont systemFontOfSize:13],
         @"secondLabelColor": [[UIColor whiteColor] colorWithAlphaComponent:0.5]
     };
     

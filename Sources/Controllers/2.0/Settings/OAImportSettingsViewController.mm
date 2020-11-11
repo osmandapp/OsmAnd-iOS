@@ -318,14 +318,26 @@
                 profilesSection.isOpen = NO;
                 for (OAApplicationModeBean *modeBean in settings)
                 {
-                    OAApplicationMode *appMode = [OAApplicationMode fromModeBean:modeBean];
+                    OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
                     NSString *title = modeBean.userProfileName;
-                    if (title.length == 0)
-                        title =  [OAUtilities capitalizeFirstLetterAndLowercase:[appMode.stringKey stringByReplacingOccurrencesOfString:@"_" withString:@" "]];
+                    if (!title || title.length == 0)
+                        title = appMode.name;
                     
-                    NSString *routingProfile = modeBean.routingProfile;
-                    if (routingProfile.length > 0)
-                        routingProfile = [NSString stringWithFormat: OALocalizedString(@"nav_type_hint"), [OAUtilities capitalizeFirstLetterAndLowercase:[routingProfile stringByReplacingOccurrencesOfString:@"_" withString:@" "]]];
+                    NSString *routingProfile = @"";
+                    NSString *routingProfileValue = modeBean.routingProfile;
+                    if (routingProfileValue && routingProfileValue.length > 0)
+                    {
+                        try
+                        {
+                            routingProfile = [OARoutingProfileDataObject getLocalizedName: [OARoutingProfileDataObject getValueOf: [routingProfileValue upperCase]]];
+                            routingProfile = [NSString stringWithFormat: OALocalizedString(@"nav_type_hint"), [routingProfile capitalizedString]];
+
+                        } catch (NSException *e)
+                        {
+                            routingProfile = [routingProfileValue capitalizedString];
+                            NSLog(@"Error trying to get routing resource for %@ \n %@ %@", routingProfileValue, e.name, e.reason);
+                        }
+                    }
                     
                     [profilesSection.groupItems addObject:@{
                         @"app_mode" : appMode,

@@ -16,6 +16,8 @@
 #import "OAHelpViewController.h"
 #import "OAColors.h"
 
+#import "OARoutePlanningHudViewController.h"
+
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
 
@@ -29,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyData;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyWaypoints;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonNavigation;
+@property (weak, nonatomic) IBOutlet UIButton *menuButtonPlanRoute;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonSettings;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMapsAndResources;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonConfigureScreen;
@@ -42,6 +45,7 @@
     CALayer *_menuButtonMyDataDiv;
     CALayer *_menuButtonMyWaypointsDiv;
     CALayer *_menuButtonNavigationDiv;
+    CALayer *_menuButtonPlanRouteDiv;
     CALayer *_menuButtonConfigureScreenDiv;
     CALayer *_menuButtonSettingsDiv;
     CALayer *_menuButtonMapsAndResourcesDiv;
@@ -75,13 +79,14 @@
     CGFloat buttonHeight = 50.0;
     CGFloat width = kDrawerWidth;
 
-    _menuButtonNavigationDiv.hidden = NO;
+    _menuButtonPlanRouteDiv.hidden = NO;
     
     NSArray<UIButton *> *topButtons = @[ self.menuButtonMaps,
                                          self.menuButtonMyData,
                                          self.menuButtonMyWaypoints,
                                          self.menuButtonMapsAndResources,
-                                         self.menuButtonNavigation
+                                         self.menuButtonNavigation,
+                                         self.menuButtonPlanRoute
                                          ];
     
     NSArray<UIButton *> *bottomButtons = @[ self.menuButtonConfigureScreen,
@@ -89,7 +94,7 @@
                                             self.menuButtonHelp
                                             ];
     
-    CALayer *bottomDiv = _menuButtonNavigationDiv;
+    CALayer *bottomDiv = _menuButtonPlanRouteDiv;
     
     NSInteger buttonsCount = topButtons.count + bottomButtons.count;
     CGFloat buttonsHeight = buttonHeight * buttonsCount;
@@ -147,6 +152,7 @@
     _menuButtonMyDataDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonMyWaypointsDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonNavigationDiv.frame = CGRectMake(divX, divY, divW, divH);
+    _menuButtonPlanRouteDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonMapsAndResourcesDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonConfigureScreenDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonSettingsDiv.frame = CGRectMake(divX, divY, divW, divH);
@@ -195,6 +201,7 @@
     _menuButtonMyDataDiv = [[CALayer alloc] init];
     _menuButtonMyWaypointsDiv = [[CALayer alloc] init];
     _menuButtonNavigationDiv = [[CALayer alloc] init];
+    _menuButtonPlanRouteDiv = [[CALayer alloc] init];
     _menuButtonMapsAndResourcesDiv = [[CALayer alloc] init];
     _menuButtonConfigureScreenDiv = [[CALayer alloc] init];
     _menuButtonSettingsDiv = [[CALayer alloc] init];
@@ -205,6 +212,7 @@
     _menuButtonMyDataDiv.backgroundColor = divColor.CGColor;
     _menuButtonMyWaypointsDiv.backgroundColor = divColor.CGColor;
     _menuButtonNavigationDiv.backgroundColor = divColor.CGColor;
+    _menuButtonPlanRouteDiv.backgroundColor = divColor.CGColor;
     _menuButtonMapsAndResourcesDiv.backgroundColor = divColor.CGColor;
     _menuButtonConfigureScreenDiv.backgroundColor = divColor.CGColor;
     _menuButtonSettingsDiv.backgroundColor = divColor.CGColor;
@@ -219,6 +227,7 @@
     [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
     [_menuButtonHelp setTitle:OALocalizedString(@"menu_help") forState:UIControlStateNormal];
     [_menuButtonNavigation setTitle:OALocalizedString(@"routing_settings") forState:UIControlStateNormal];
+    [_menuButtonPlanRoute setTitle:OALocalizedString(@"plan_route") forState:UIControlStateNormal];
     
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
     [_menuButtonMyData.layer addSublayer:_menuButtonMyDataDiv];
@@ -227,6 +236,7 @@
     [_menuButtonNavigation.layer addSublayer:_menuButtonNavigationDiv];
     [_menuButtonConfigureScreen.layer addSublayer:_menuButtonConfigureScreenDiv];
     [_menuButtonSettings.layer addSublayer:_menuButtonSettingsDiv];
+    [_menuButtonPlanRoute.layer addSublayer:_menuButtonPlanRouteDiv];
     
     [_menuButtonMaps setImage:[[UIImage imageNamed:@"left_menu_icon_map.png"]
     imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
@@ -244,6 +254,8 @@
     imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [_menuButtonNavigation setImage:[[UIImage imageNamed:@"left_menu_icon_navigation.png"]
     imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_menuButtonPlanRoute setImage:[[UIImage imageNamed:@"ic_custom_routes.png"]
+    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
 
     [_menuButtonMaps setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonMyData setTintColor:UIColorFromRGB(color_options_panel_icon)];
@@ -253,6 +265,7 @@
     [_menuButtonSettings setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonHelp setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonNavigation setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [_menuButtonPlanRoute setTintColor:UIColorFromRGB(color_options_panel_icon)];
 }
 
 - (void) didReceiveMemoryWarning
@@ -284,6 +297,13 @@
 {
     [self.sidePanelController toggleLeftPanel:self];
     [[OARootViewController instance].mapPanel onNavigationClick:NO];
+}
+
+- (IBAction)planRouteButtonClicked:(id)sender
+{
+    // TODO: for test only, change later!
+    [self.sidePanelController toggleLeftPanel:self];
+    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
 }
 
 - (IBAction) configureScreenButtonClicked:(id)sender

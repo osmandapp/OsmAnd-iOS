@@ -1859,3 +1859,5 @@
 "import_profile_descr" = "Pro importare unu profilu incarca in su documentu netzessàriu (*.osf) in cale si siat aplicatzione e ischerta \"Còpia in OsmAnd Maps\"";
 "profile_prefs_reset_successful" = "Totu sas impostatziones de sos profilos sunt torradas a s'istadu predefinidu";
 "gpx_parse_error" = "Su GPX de OsmAnd no est fraigadu bene, pro praghere cuntata s'iscuadra de suportu pro investigare prus a fundu.";
+"nothing_found_empty" = "Nudda de agatadu";
+"shared_string_next" = "Imbeniente";

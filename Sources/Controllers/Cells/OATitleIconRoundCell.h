@@ -13,12 +13,11 @@
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
 
 @property (nonatomic) UIColor *iconColorNormal;
+@property (nonatomic) UIColor *textColorNormal;
 
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
-
-+ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
-+ (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text;
 
 @end

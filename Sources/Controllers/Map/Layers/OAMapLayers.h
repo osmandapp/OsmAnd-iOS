@@ -16,6 +16,7 @@
 #import "OAGPXLayer.h"
 #import "OAGPXRecLayer.h"
 #import "OARouteLayer.h"
+#import "OAMeasurementToolLayer.h"
 #import "OARoutePointsLayer.h"
 #import "OAImpassableRoadsLayer.h"
 #import "OATransportStopsLayer.h"
@@ -51,6 +52,7 @@
 @property (nonatomic, readonly) OAGPXLayer *gpxMapLayer;
 @property (nonatomic, readonly) OAGPXRecLayer *gpxRecMapLayer;
 @property (nonatomic, readonly) OARouteLayer *routeMapLayer;
+@property (nonatomic, readonly) OAMeasurementToolLayer *routePlanningLayer;
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController;
 

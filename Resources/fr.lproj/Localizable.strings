@@ -299,7 +299,7 @@
 "gpx_elev_range" = "Gamme d'élévation";
 "device_memory" = "Mémoire de l'appareil";
 "free_memory" = "%@ libre";
-"fav_import_desc" = "Vous pouvez importer vos favoris en tant que points de passage au format GPX (format de données GPS usuel)\n\nPour partager le fichier favorites.gpx, vous pouvez l'ouvrir à partir de Dropbox, d'un courriel ou d'une autre source - Utilisez la fonction 'ouvrir'.";
+"fav_import_desc" = "Vous pouvez importer vos favoris en tant que points de passage au format GPX (format de données GPS usuel)\n\nPour partager le fichier favorites.gpx, vous pouvez l'ouvrir à partir de Dropbox, d'un courriel ou d'une autre source – utilisez la fonction « ouvrir ».";
 "gpx_waypoint" = "Point de passage";
 "gpx_import_already_exists" = "Le fichier de trajet spécifié existe déjà dans la liste. Choisissez une action.";
 "gpx_import_desc" = "Pour importer vos fichiers GPX (format d'enregistrement classique de données GPS) depuis Dropbox, un courriel ou toute autre source utilisez la fonction « Copier vers OsmAnd Maps »";
@@ -1725,3 +1725,17 @@
 "shared_string_email" = "Courriel";
 "email_example_hint" = "utilisateur@exemple.com";
 "gpx_parse_error" = "Le fichier GPX OsmAnd n'est pas construit correctement. Vous pouvez transmettre ce fichier à l'équipe support OsmAnd pour investiguer.";
+"empty_profile_name_warning" = "Le nom du profil ne peut pas être vide.";
+"rearrange_profiles" = "Réorganiser les profils";
+"will_be_show_while_moving" = "Ce sera affiché pendant le déplacement";
+"select_icon" = "Sélectionnez une icône";
+"enter_profile_name" = "Entrez un nom de profil";
+"edit_profile_list" = "Modifier la liste de profil";
+"ui_customization" = "Personnalisation de l'interface";
+"profile_appearance_descr" = "Icône, couleur et nom";
+"profile_appearance" = "Apparence du profil";
+"profile_settings" = "Paramètres du profil";
+"configure_profile" = "Configurer le profil";
+"profile_alert_delete_msg" = "Voulez-vous vraiment supprimer complètement le profil « %@ » ?";
+"copy_from_other_profile_descr" = "Vous pouvez copier tous les paramètres de n'importe quel profil vers le profil sélectionné : ";
+"shared_string_next" = "Suivant";

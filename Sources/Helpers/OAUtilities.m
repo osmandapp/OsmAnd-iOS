@@ -1115,6 +1115,11 @@ static const double d180PI = 180.0 / M_PI_2;
     return orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight;
 }
 
++ (BOOL) isLandscapeIpadAware
+{
+    return (self.class.isLandscape || self.class.isIPad) && !self.class.isWindowed;
+}
+
 /*
  controlPointsFromPoints calculates control points of smooth Bezier path through set os points.
  

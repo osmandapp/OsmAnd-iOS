@@ -205,6 +205,8 @@ typedef enum
 
 @interface OAGpxRtePt : OARoutePoint
 
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxRtePt> rtept;
+
 @property (nonatomic) double speed;
 @property (nonatomic) double magneticVariation;
 @property (nonatomic) double geoidHeight;
@@ -218,9 +220,13 @@ typedef enum
 @property (nonatomic) double ageOfGpsData;
 @property (nonatomic) int dgpsStationId;
 
+- (instancetype) initWithTrkPt:(OAGpxTrkPt *)point;
+
 @end
 
 @interface OAGpxRte : OARoute
+
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxRte> rte;
 
 @property (nonatomic) NSString *source;
 @property (nonatomic) int slotNumber;

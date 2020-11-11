@@ -1850,3 +1850,9 @@
 "profile_alert_delete_title" = "Suprimeix el perfil";
 "import_profile_descr" = "Per importar un perfil, premeu necessàriament un arxiu (*.osf) a qualsevol aplicació i seleccioneu \"Copia a OsmAnd\"";
 "profile_prefs_reset_successful" = "Totes les configuracions dels perfils s'han restablert per defecte";
+"help_nav_profiles" = "Perfils de navegació";
+"units_t" = "t";
+"reset_profile_action_descr" = "Reinicialitza la configuració de tots els perfils als valors inicials d'instal·lació. Si toqueu Restableix, es descartaran tots els canvis i no es podrà desfer aquesta acció.";
+"gpx_parse_error" = "No s'ha generat correctament l'arxiu GPX. Indiqueu-ho a l'equip de suport per continuar investigant.";
+"nothing_found_empty" = "No s'ha trobat res";
+"shared_string_next" = "Endavant";

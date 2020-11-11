@@ -736,6 +736,7 @@
 "import_profile_select_descr" = "Select the data to be imported.";
 "selected_profiles" = "%ld of %ld";
 "nav_type_hint" = "Navigation type: %@";
+"shared_string_nothing_selected" = "Nothing selected";
 
 "import_duplicates_title" = "Some items already exist";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
@@ -759,7 +760,6 @@
 
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
-"nav_type_hint" = "Navigation type";
 
 "listed_exist" = "Listed %@, already exist in OsmAnd.";
 
@@ -816,7 +816,7 @@
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 
 "checking_for_duplicates" = "Checking for duplicates...";
-"checking_for_duplicates_descr" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
+"checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -834,6 +834,26 @@
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 "downloading" = "Downloading";
+
+// Route planning
+"plan_route" = "Plan a route";
+"add_point" = "Add point";
+"point_num" = "Point %d";
+"points_count" = "Points:";
+"route_betw_points" = "Route between points";
+"save_changes" = "Save changes";
+"save_new_track" = "Save as new track";
+"add_to_track" = "Add to a track";
+"move_point" = "Move point";
+"move_point_descr" = "Move map to change the position of this point.";
+"add_before" = "Add points before";
+"add_after" = "Add points after";
+"trim_before" = "Trim before this point";
+"trim_after" = "Trim after this point";
+"change_route_type_before" = "Change route type before this point";
+"change_route_type_after" = "Change route type after this point";
+"delete_point" = "Delete point";
+"add_one_more_pnt" = "Add one more point";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

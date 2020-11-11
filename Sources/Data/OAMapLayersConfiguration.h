@@ -26,6 +26,7 @@
 #define kRoutePointsLayerId @"route_map_points"
 #define kImpassableRoadsLayerId @"impassable_map_roads"
 #define kTransportLayerId @"transport_map"
+#define kRoutePlanningLayerId @"route_planning_map"
 
 @interface OAMapLayersConfiguration : NSObject
 

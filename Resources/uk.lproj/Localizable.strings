@@ -1094,8 +1094,8 @@
 "osm_live_payment_contribute_descr" = "Частина доходу йде авторам OpenStreetMap.";
 "free_version_message" = "Ви можете завантажити або оновити %d мап";
 "get_osmand_live" = "Придбайте OsmAnd Live, щоб розблокувати всі функції:";
-"monthly_map_updates" = "Оновлення мап: щомісячне";
-"daily_map_updates" = "Оновлення мап: щогодинне";
+"monthly_map_updates" = "Оновлення мап: щомісячно";
+"daily_map_updates" = "Оновлення мап: щогодинно";
 "purchase_unlim_title" = "Купувати – %@";
 "shared_string_category" = "Категорія";
 "poi_category_and_type" = "Категорія і тип POI";
@@ -1854,3 +1854,5 @@
 "import_profile_descr" = "Щоб імпортувати профіль, натисніть на потрібний файл (*.osf) в будь-якому застосунку й виберіть \"Копіювати до OsmAnd Maps\"";
 "profile_prefs_reset_successful" = "Усі налаштування профілю відновлено до типових";
 "gpx_parse_error" = "OsmAnd GPX недостатньо сформований. Зверніться до служби підтримки для подальшого дослідження.";
+"nothing_found_empty" = "Нічого не знайдено";
+"shared_string_next" = "Наступний";

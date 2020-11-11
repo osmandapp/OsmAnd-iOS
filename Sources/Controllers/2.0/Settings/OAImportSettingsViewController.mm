@@ -6,16 +6,26 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAImportProfileViewController.h"
-#import "OACheckForProfileDuplicatesViewController.h"
+#import "OAImportSettingsViewController.h"
+#import "OAImportDuplicatesViewController.h"
+#import "OAImportCompleteViewController.h"
 #import "OAAppSettings.h"
 #import "OASettingsImporter.h"
 #import "OsmAndApp.h"
 #import "OAQuickActionType.h"
+#import "OAQuickAction.h"
+#import "OAPOIUIFilter.h"
+#import "OAMapSource.h"
+#import "OAResourcesUIHelper.h"
+#import "OAAvoidRoadInfo.h"
 #import "OATitleDescriptionCheckmarkCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAIconTextTableViewCell.h"
+#import "OAActivityViewWithTitleCell.h"
 #import "OAProfileDataObject.h"
+#import "OAAvoidRoadInfo.h"
+#import "OASQLiteTileSource.h"
+#import "OAResourcesUIHelper.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -23,6 +33,7 @@
 #define kSidePadding 16
 #define kTopPadding 6
 #define kBottomPadding 32
+#define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
 #define kCellTypeSectionHeader @"OATitleDescriptionCheckmarkCell"
 #define kCellTypeTitleDescription @"OAMultiIconTextDescCell"
 #define kCellTypeTitle @"OAIconTextCell"
@@ -46,22 +57,22 @@
 
 @end
 
-@interface OAImportProfileViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAImportSettingsViewController () <UITableViewDelegate, UITableViewDataSource, OASettingsImportExportDelegate>
 
 @end
 
-@implementation OAImportProfileViewController
+@implementation OAImportSettingsViewController
 {
     OASettingsHelper *_settingsHelper;
     NSMutableArray *_data;
-    
     NSArray<OASettingsItem *> *_settingsItems;
-    NSMutableDictionary<NSString *, NSArray *> *_items;
+    NSMutableDictionary<NSString *, NSArray *> *_itemsMap;
     NSArray <NSString *>*_itemsType;
     NSMutableArray<OASettingsItem *> *_selectedItems;
     NSMutableArray<NSIndexPath *> *_selectedIndexPaths;
     NSString *_file;
-    
+    NSString *_descriptionText;
+    NSString *_descriptionBoldText;
     CGFloat _heightForHeader;
 }
 
@@ -90,21 +101,17 @@
     [self.additionalNavBarButton setTitle:_selectedIndexPaths.count >= 2 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all") forState:UIControlStateNormal];
 }
 
-- (void) updateButtonView
+- (void) setupButtonView
 {
-    self.primaryBottomButton.userInteractionEnabled = _selectedItems.count > 0;
-    self.primaryBottomButton.backgroundColor = _selectedItems.count > 0 ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
-    [self.primaryBottomButton setTintColor:_selectedItems.count > 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
-    [self.primaryBottomButton setTitleColor:_selectedItems.count > 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
-}
-
-- (NSString *) getTableHeaderTitle
-{
-    return OALocalizedString(@"shared_string_import");
+    self.primaryBottomButton.backgroundColor = UIColorFromRGB(color_primary_purple);
+    [self.primaryBottomButton setTintColor:UIColor.whiteColor];
+    [self.primaryBottomButton setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad
 {
+    _descriptionText = OALocalizedString(@"import_profile_select_descr");
+    _descriptionBoldText = nil;
     [self setupView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -113,11 +120,12 @@
     
     [self.additionalNavBarButton addTarget:self action:@selector(selectDeselectAllItems:) forControlEvents:UIControlEventTouchUpInside];
     self.secondaryBottomButton.hidden = YES;
-    [self updateButtonView];
+    [self setupButtonView];
     self.backImageButton.hidden = YES;
     _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
     [super viewDidLoad];
+    [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
 }
 
 - (void) setupView
@@ -129,18 +137,77 @@
             _settingsItems = [NSArray arrayWithArray:[importTask getItems]];
         if (!_file)
             _file = importTask.getFile;
+        
+        NSArray *duplicates = [importTask getDuplicates];
+        NSArray *selectedItems = [importTask getSelectedItems];
+        
+        if (!duplicates)
+        {
+            importTask.delegate = self;
+        }
+        else if (duplicates.count == 0)
+        {
+            if (selectedItems && _file)
+                [_settingsHelper importSettings:_file items:selectedItems latestChanges:@"" version:1 delegate:self];
+        }
+        
         if (_settingsItems)
         {
-            _items = [NSMutableDictionary dictionaryWithDictionary:[self getSettingsToOperate:_settingsItems importComplete:NO]];
-            _itemsType = [NSArray arrayWithArray:[_items allKeys]];
+            _itemsMap = [NSMutableDictionary dictionaryWithDictionary:[self getSettingsToOperate:_settingsItems importComplete:NO]];
+            _itemsType = [NSArray arrayWithArray:[_itemsMap allKeys]];
             [self generateData];
         }
-        if (_items.count == 1 && [_items objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]])
+        
+        [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
+        
+        EOAImportType importTaskType = [importTask getImportType];
+        
+        if (importTaskType == EOAImportTypeCheckDuplicates)
+        {
+            [self updateUI:OALocalizedString(@"shared_string_preparing") descriptionRes:OALocalizedString(@"checking_for_duplicate_description") activityLabel:OALocalizedString(@"checking_for_duplicates")];
+        }
+        else if (importTaskType == EOAImportTypeImport)
+        {
+            [self updateUI:OALocalizedString(@"shared_string_importing") descriptionRes:OALocalizedString(@"importing_from") activityLabel:OALocalizedString(@"shared_string_importing")];
+        }
+        else
+            [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
+
+        if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
+        {
+            OATableGroupToImport* groupData = [_data objectAtIndex:0];
+            groupData.isOpen = YES;
+        }
+          
+        if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
         {
             OATableGroupToImport* groupData = [_data objectAtIndex:0];
             groupData.isOpen = YES;
         }
     }
+}
+
+- (void) updateUI:(NSString *)toolbarTitleRes descriptionRes:(NSString *)descriptionRes activityLabel:(NSString *)activityLabel
+{
+    if (_file)
+    {
+        NSString *filename = [_file lastPathComponent];
+        [self setTableHeaderView:toolbarTitleRes];
+        _descriptionText = [NSString stringWithFormat:descriptionRes, filename];
+        _descriptionBoldText = filename;
+        self.bottomBarView.hidden =YES;
+        [self showActivityIndicatorWithLabel:activityLabel];
+        [self.tableView reloadData];
+    }
+}
+
+- (NSInteger) getSelectedItemsAmount:(NSArray *)listItems
+{
+    NSInteger amount = 0;
+    for (OASettingsItem *item in listItems)
+        if ([_selectedItems containsObject:item])
+            amount++;
+    return amount;
 }
 
 - (NSDictionary *) getSettingsToOperate:(NSArray <OASettingsItem *> *)settingsItems importComplete:(BOOL)importComplete
@@ -250,10 +317,10 @@
     OATableGroupToImport *customGPXSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customObgMapSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *avoidRoadsStyleSection = [[OATableGroupToImport alloc] init];
-    for (NSString *type in [_items allKeys])
+    for (NSString *type in [_itemsMap allKeys])
     {
         EOAExportSettingsType itemType = [OAExportSettingsType parseType:type];
-        NSArray *settings = [NSArray arrayWithArray:[_items objectForKey:type]];
+        NSArray *settings = [NSArray arrayWithArray:[_itemsMap objectForKey:type]];
         switch (itemType)
         {
             case EOAExportSettingsTypeProfile:
@@ -263,15 +330,27 @@
                 profilesSection.isOpen = NO;
                 for (OAApplicationModeBean *modeBean in settings)
                 {
-                    OAApplicationMode *appMode = [OAApplicationMode fromModeBean:modeBean];
+                    OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
                     NSString *title = modeBean.userProfileName;
-                    if (title.length == 0)
-                        title =  [OAUtilities capitalizeFirstLetterAndLowercase:[appMode.stringKey stringByReplacingOccurrencesOfString:@"_" withString:@" "]];
-                    
-                    NSString *routingProfile = modeBean.routingProfile;
-                    if (routingProfile.length > 0)
-                        routingProfile = [NSString stringWithFormat: OALocalizedString(@"nav_type_hint"), [OAUtilities capitalizeFirstLetterAndLowercase:[routingProfile stringByReplacingOccurrencesOfString:@"_" withString:@" "]]];
-                    
+                    if (!title || title.length == 0)
+                        title = appMode.name;
+
+                    NSString *routingProfile = @"";
+                    NSString *routingProfileValue = modeBean.routingProfile;
+                    if (routingProfileValue && routingProfileValue.length > 0)
+                    {
+                        try
+                        {
+                            routingProfile = [OARoutingProfileDataObject getLocalizedName: [OARoutingProfileDataObject getValueOf: [routingProfileValue upperCase]]];
+                            routingProfile = [NSString stringWithFormat: OALocalizedString(@"nav_type_hint"), [routingProfile capitalizedString]];
+
+                        } catch (NSException *e)
+                        {
+                            routingProfile = [routingProfileValue capitalizedString];
+                            NSLog(@"Error trying to get routing resource for %@ \n %@ %@", routingProfileValue, e.name, e.reason);
+                        }
+                    }
+
                     [profilesSection.groupItems addObject:@{
                         @"app_mode" : appMode,
                         @"title" : title,
@@ -287,11 +366,11 @@
                 quickActionsSection.groupName = OALocalizedString(@"shared_string_quick_actions");
                 quickActionsSection.type = kCellTypeSectionHeader;
                 quickActionsSection.isOpen = NO;
-                for (OAQuickActionType *quickAction in [_items objectForKey:type])
+                for (OAQuickActionType *quickAction in [_itemsMap objectForKey:type])
                 {
                     [quickActionsSection.groupItems addObject:@{
                         @"icon" : [quickAction iconName],
-                        @"color" : UIColor.orangeColor, //
+                        @"color" : UIColor.orangeColor,
                         @"title" : [quickAction name],
                         @"type" : kCellTypeTitle,
                     }];
@@ -314,6 +393,25 @@
                 mapSourcesSection.type = kCellTypeSectionHeader;
                 mapSourcesSection.isOpen = NO;
                 
+                for (OAMapSourceResourceItem *item in settings)
+                {
+                    NSString *caption;
+                    if ([item isKindOfClass:OASqliteDbResourceItem.class])
+                    {
+                        OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *) item;
+                        caption = sqlite.title;
+                    }
+                    else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
+                    {
+                        OAOnlineTilesResourceItem* resourcesItem = (OAOnlineTilesResourceItem*) item;
+                        caption = resourcesItem.title;
+                    }
+                    [mapSourcesSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_map",
+                        @"title" : caption,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
                 [data addObject:mapSourcesSection];
                 break;
             }
@@ -322,7 +420,7 @@
                 customRendererStyleSection.groupName = OALocalizedString(@"shared_string_rendering_style");
                 customRendererStyleSection.type = kCellTypeSectionHeader;
                 customRendererStyleSection.isOpen = NO;
-                for (NSString *rendererItem in [_items objectForKey:type])
+                for (NSString *rendererItem in settings)
                 {
                     NSString *rendererName = [[[rendererItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     [customRendererStyleSection.groupItems addObject:@{
@@ -339,7 +437,7 @@
                 customRoutingSection.groupName = OALocalizedString(@"shared_string_routing");
                 customRoutingSection.type = kCellTypeSectionHeader;
                 customRoutingSection.isOpen = NO;
-                for (NSString *routingItem in [_items objectForKey:type])
+                for (NSString *routingItem in settings)
                 {
                     NSString *routingName = [[[routingItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     [customRoutingSection.groupItems addObject:@{
@@ -356,7 +454,7 @@
                 customGPXSection.groupName = OALocalizedString(@"shared_string_gpx");
                 customGPXSection.type = kCellTypeSectionHeader;
                 customGPXSection.isOpen = NO;
-                for (NSString *gpxItem in [_items objectForKey:type])
+                for (NSString *gpxItem in settings)
                 {
                     NSString *routingName = [[[gpxItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     [customGPXSection.groupItems addObject:@{
@@ -366,23 +464,6 @@
                     }];
                 }
                 [data addObject:customGPXSection];
-                break;
-            }
-            case EOAExportSettingsTypeMapFile:
-            {
-                customObgMapSection.groupName = @"Maps"; // check
-                customObgMapSection.type = kCellTypeSectionHeader;
-                customObgMapSection.isOpen = NO;
-                for (NSString *mapItem in [_items objectForKey:type])
-                {
-                    NSString *routingName = [[[mapItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-                    [customObgMapSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_map_style",
-                        @"title" : routingName,
-                        @"type" : kCellTypeTitle,
-                    }];
-                }
-                [data addObject:customObgMapSection];
                 break;
             }
             case EOAExportSettingsTypeAvoidRoads:
@@ -401,25 +482,139 @@
     _data = [NSMutableArray arrayWithArray:data];
 }
 
-- (NSInteger) getSelectedItemsAmount:(NSArray *)listItems
+- (void) showActivityIndicatorWithLabel:(NSString *)labelText
 {
-    NSInteger amount = 0;
-    for (OASettingsItem *item in listItems)
-        if ([_selectedItems containsObject:item])
-            amount++;
-    return amount;
+    _data = [NSMutableArray arrayWithObject:
+                 @{
+                     @"cellType": kCellTypeWithActivity,
+                     @"label": labelText
+                 }];
+    
+    [self.tableView setEditing:NO];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.tableView reloadData];
+    self.bottomBarView.hidden =YES;
+}
+
+#pragma mark - Base settings items methods
+
+- (OAProfileSettingsItem *) getBaseProfileSettingsItem:(OAApplicationModeBean *)modeBean
+{
+    for (OASettingsItem *settingsItem in _settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypeProfile)
+        {
+            OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *)settingsItem;
+            OAApplicationModeBean *bean = [profileItem modeBean];
+            if ([bean.stringKey isEqualToString:modeBean.stringKey] && [bean.userProfileName isEqualToString:modeBean.userProfileName])
+                return profileItem;
+        }
+    }
+    
+    return nil;
+}
+
+- (OAQuickActionsSettingsItem *) getBaseQuickActionsSettingsItem
+{
+    for (OASettingsItem * settingsItem in _settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypeQuickActions)
+            return (OAQuickActionsSettingsItem *)settingsItem;
+    }
+    return nil;
+}
+ 
+- (OAPoiUiFilterSettingsItem *) getBasePoiUiFiltersSettingsItem
+{
+    for (OASettingsItem * settingsItem in _settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypePoiUIFilters)
+            return (OAPoiUiFilterSettingsItem *)settingsItem;
+    }
+    return nil;
+}
+
+- (OAMapSourcesSettingsItem *) getBaseMapSourcesSettingsItem
+{
+    for (OASettingsItem * settingsItem in _settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypeMapSources)
+            return (OAMapSourcesSettingsItem *)settingsItem;
+    }
+    return nil;
+}
+
+- (OAAvoidRoadsSettingsItem *) getBaseAvoidRoadsSettingsItem
+{
+    for (OASettingsItem * settingsItem in _settingsItems)
+    {
+        if (settingsItem.type == EOASettingsItemTypeAvoidRoads)
+            return (OAAvoidRoadsSettingsItem *)settingsItem;
+    }
+    return nil;
+}
+
+- (NSArray <OASettingsItem *>*) getSettingsItemsFromData
+{
+    NSMutableArray<OASettingsItem *> *settingsItems = [NSMutableArray array];
+    NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
+    NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
+    NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
+    NSMutableArray<OALocalResourceItem *> *tileSourceTemplates = [NSMutableArray array];
+    NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    
+    for (NSObject *object in _selectedItems)
+    {
+        if ([object isKindOfClass:OAApplicationModeBean.class])
+            [appModeBeans addObject:(OAApplicationModeBean *)object];
+        else if ([object isKindOfClass:OAQuickAction.class])
+            [quickActions addObject:(OAQuickAction *)object];
+        else if ([object isKindOfClass:OAPOIUIFilter.class])
+            [poiUIFilters addObject:(OAPOIUIFilter *)object];
+        else if ([object isKindOfClass:OASqliteDbResourceItem.class] || [object isKindOfClass:OAOnlineTilesResourceItem.class])
+            [tileSourceTemplates addObject:(OALocalResourceItem *)object];
+        else if ([object isKindOfClass:NSString.class]) // to check all
+            [settingsItems addObject: [[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
+        else if ([object isKindOfClass:OAAvoidRoadInfo.class])
+            [avoidRoads addObject:(OAAvoidRoadInfo *)object];
+    }
+    if (appModeBeans.count > 0)
+        for (OAApplicationModeBean *modeBean in appModeBeans)
+            [settingsItems addObject:[self getBaseProfileSettingsItem:modeBean]];
+    if (quickActions.count > 0)
+        [settingsItems addObject:[self getBaseQuickActionsSettingsItem]];
+    if (poiUIFilters.count > 0)
+        [settingsItems addObject:[self getBasePoiUiFiltersSettingsItem]];
+    if (tileSourceTemplates.count > 0)
+        [settingsItems addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
+    if (avoidRoads.count > 0)
+        [settingsItems addObject:[self getBaseAvoidRoadsSettingsItem]];
+    return settingsItems;
 }
 
 #pragma mark - Actions
 
 - (IBAction) primaryButtonPressed:(id)sender
 {
-    if (_selectedItems.count > 0)
+    if (_selectedItems.count == 0)
     {
-        OACheckForProfileDuplicatesViewController* checkForDuplicates = [[OACheckForProfileDuplicatesViewController alloc] initWithItems:_settingsItems file:(NSString *)_file selectedItems:_selectedItems];
-        [checkForDuplicates prepareToImport];
-        [self.navigationController pushViewController:checkForDuplicates animated:YES];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"shared_string_nothing_selected") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+        [self presentViewController:alert animated:YES completion:nil];
     }
+    else
+    {
+        [self importItems];
+    }
+}
+
+- (void) importItems
+{
+    [self updateUI:OALocalizedString(@"shared_string_preparing") descriptionRes:OALocalizedString(@"checking_for_duplicate_description") activityLabel:OALocalizedString(@"checking_for_duplicates")];
+    NSArray <OASettingsItem *> *selectedItems = [self getSettingsItemsFromData];
+    
+    if (_file && _settingsItems)
+        [_settingsHelper checkDuplicates:_file items:_settingsItems selectedItems:selectedItems delegate:self];
 }
 
 - (void) selectDeselectAllItems:(id)sender
@@ -459,7 +654,7 @@
     }
 }
 
-#pragma mark - Table View
+#pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -468,25 +663,42 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    OATableGroupToImport* groupData = [_data objectAtIndex:section];
-    if (groupData.isOpen)
-        return [groupData.groupItems count] + 1;
-    return 1;
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_profile_select_descr") boldFragment:nil forSection:section];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_profile_select_descr") boldFragment:nil inSection:section];
+    if ([[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
+    {
+        return 1;
+    }
+    else
+    {
+        OATableGroupToImport* groupData = [_data objectAtIndex:section];
+        if (groupData.isOpen)
+            return [groupData.groupItems count] + 1;
+        return 1;
+    }
 }
 
 - (UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATableGroupToImport* groupData = [_data objectAtIndex:indexPath.section];
+    id sectionObject = [_data objectAtIndex:indexPath.section];
+    if ([sectionObject isKindOfClass:NSDictionary.class] && [sectionObject[@"cellType"] isEqualToString: kCellTypeWithActivity])
+    {
+        static NSString* const identifierCell = kCellTypeWithActivity;
+        OAActivityViewWithTitleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OAActivityViewWithTitleCell *)[nib objectAtIndex:0];
+        }
+        if (cell)
+        {
+            cell.titleView.text = sectionObject[@"label"];
+            cell.activityIndicatorView.hidden = NO;
+            [cell.activityIndicatorView startAnimating];
+            
+        }
+        return cell;
+    }
+    
+    OATableGroupToImport* groupData = sectionObject;
     if (indexPath.row == 0)
     {
         static NSString* const identifierCell = @"OATitleDescriptionCheckmarkCell";
@@ -500,7 +712,7 @@
         }
         if (cell)
         {
-            NSInteger selectedAmount = [self getSelectedItemsAmount:[_items objectForKey:_itemsType[indexPath.section]]];
+            NSInteger selectedAmount = [self getSelectedItemsAmount:[_itemsMap objectForKey:_itemsType[indexPath.section]]];
             cell.textView.text = groupData.groupName;
             cell.descriptionView.text = [NSString stringWithFormat: OALocalizedString(@"selected_profiles"), selectedAmount, groupData.groupItems.count];
             if (selectedAmount == groupData.groupItems.count)
@@ -546,6 +758,7 @@
                 cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
                 cell.textView.text = item[@"title"];
                 cell.descView.text = item[@"description"];
+                cell.descView.hidden = ((NSString *)item[@"description"]).length == 0;
             }
             return cell;
         }
@@ -573,7 +786,17 @@
     return nil;
 }
 
-#pragma mark - Items selection
+#pragma mark - UITableViewDelegate
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [self getHeaderForTableView:tableView withFirstSectionText:_descriptionText boldFragment:_descriptionBoldText forSection:section];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return [self getHeightForHeaderWithFirstHeaderText:_descriptionText boldFragment:_descriptionBoldText inSection:section];
+}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -678,27 +901,25 @@
 
 - (void) addIndexPathToSelectedCellsArray:(NSIndexPath *)indexPath
 {
-    NSArray* objects = [NSArray arrayWithArray:[_items objectForKey:_itemsType[indexPath.section]]];
+    NSArray* objects = [NSArray arrayWithArray:[_itemsMap objectForKey:_itemsType[indexPath.section]]];
     if (![_selectedIndexPaths containsObject:indexPath])
     {
         [_selectedIndexPaths addObject:indexPath];
         if (indexPath.row != 0)
             [_selectedItems addObject:objects[indexPath.row - 1]];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
-        [self updateButtonView];
     }
 }
 
 - (void) removeIndexPathFromSelectedCellsArray:(NSIndexPath *)indexPath
 {
-    NSArray* objects = [NSArray arrayWithArray:[_items objectForKey:_itemsType[indexPath.section]]];
+    NSArray* objects = [NSArray arrayWithArray:[_itemsMap objectForKey:_itemsType[indexPath.section]]];
     if ([_selectedIndexPaths containsObject:indexPath])
     {
         [_selectedIndexPaths removeObject:indexPath];
         if (indexPath.row != 0)
             [_selectedItems removeObject:objects[indexPath.row - 1]];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
-        [self updateButtonView];
     }
 }
 
@@ -707,6 +928,42 @@
     for (NSIndexPath *itemPath in _selectedIndexPaths)
         if (itemPath.section == indexPath.section)
             [self.tableView selectRowAtIndexPath:itemPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+}
+
+#pragma mark - OASettingsImportExportDelegate
+
+//getImportListener
+- (void) onSettingsImportFinished:(BOOL)succeed items:(nonnull NSArray<OASettingsItem *> *)items {
+    if (succeed)
+    {
+        [self.tableView reloadData];
+        
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:items fileName:[_file lastPathComponent]];
+        [self.navigationController pushViewController:importCompleteVC animated:YES];
+        _settingsHelper.importTask = nil;
+    }
+}
+
+- (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
+{
+    [self processDuplicates:duplicates items:items];
+}
+
+- (void) processDuplicates:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
+{
+    if (_file)
+    {
+        if (duplicates.count == 0)
+        {
+            [self updateUI:OALocalizedString(@"shared_string_importing") descriptionRes:OALocalizedString(@"importing_from") activityLabel:OALocalizedString(@"shared_string_importing")];
+        [_settingsHelper importSettings:_file items:items latestChanges:@"" version:1 delegate:self];
+        }
+        else
+        {
+            OAImportDuplicatesViewController *dublicatesVC = [[OAImportDuplicatesViewController alloc] initWithDuplicatesList:duplicates settingsItems:items file:_file];
+            [self.navigationController pushViewController:dublicatesVC animated:YES];
+        }
+    }
 }
 
 @end

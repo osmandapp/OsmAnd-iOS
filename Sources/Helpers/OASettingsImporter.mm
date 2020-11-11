@@ -112,7 +112,6 @@
     }
     
     [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
     
     return items;
 }
@@ -200,8 +199,18 @@
     
     for (NSDictionary* item in itemsJson)
     {
-        // TODO: import other item types later
+        // TODO: import other item types later and clean up
         if ([item[@"type"] isEqualToString:@"PROFILE"])
+        {
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
+        }
+        if ([item[@"type"] isEqualToString:@"GLOBAL"])
+        {
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
+        }
+        if ([item[@"type"] isEqualToString:@"MAP_SOURCES"])
         {
             OASettingsItem *settingsItem = [self createItem:item];
             [_items addObject:settingsItem];
@@ -487,8 +496,8 @@
         if ([item isKindOfClass:OAProfileSettingsItem.class]) {
             if ([item exists])
                 [duplicateItems addObject:((OAProfileSettingsItem *)item).modeBean];
-        } else
-        if ([item isKindOfClass:OACollectionSettingsItem.class])
+        }
+        else if ([item isKindOfClass:OACollectionSettingsItem.class])
         {
             NSArray *duplicates = [(OACollectionSettingsItem *)item processDuplicateItems];
             if (duplicates.count > 0)
@@ -548,7 +557,7 @@
     
     NSString *tempDir = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"backup"];
     [NSFileManager.defaultManager createDirectoryAtPath:tempDir withIntermediateDirectories:YES attributes:nil error:nil];
-    
+
     for (OASettingsItem *item in _items)
     {
         if ([item isKindOfClass:OAProfileSettingsItem.class])

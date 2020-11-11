@@ -81,14 +81,14 @@
 - (void) generateData
 {
     _data = [NSMutableArray new];
-    int profilesCount = 0;
-    int actionsCount = 0;
-    int filtersCount = 0;
-    int tileSourcesCount = 0;
-    int renderFilesCount = 0;
-    int routingFilesCount = 0;
+    NSInteger profilesCount = 0;
+    NSInteger actionsCount = 0;
+    NSInteger filtersCount = 0;
+    NSInteger tileSourcesCount = 0;
+    NSInteger renderFilesCount = 0;
+    NSInteger routingFilesCount = 0;
     NSInteger gpxFilesCount = 0;
-    int avoidRoads = 0;
+    NSInteger avoidRoads = 0;
     
     for (id item in _settingsItems)
     {
@@ -98,8 +98,11 @@
             actionsCount += 1;
         else if ([item isKindOfClass:OAPOIUIFilter.class])
             filtersCount += 1;
-        else if ([item isKindOfClass:OASQLiteTileSource.class])
-            tileSourcesCount += 1;
+        else if ([item isKindOfClass:OAMapSourcesSettingsItem.class])
+        {
+            OAMapSourcesSettingsItem *mapSourcesItem = (OAMapSourcesSettingsItem *) item;
+            tileSourcesCount = mapSourcesItem.items.count;
+        }
         else if ([item isKindOfClass:OAFileSettingsItem.class])
         {
             NSString *filePath = ((OAFileSettingsItem *)item).filePath;
@@ -119,7 +122,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_settings"),
             @"iconName": @"ic_action_settings",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
             @"category" : kProfiles
             }
          ];
@@ -129,7 +132,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_screen_quick_action"),
             @"iconName": @"ic_custom_quick_action",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
             @"category" : kQuickActioins
             }
          ];
@@ -139,7 +142,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"search_activity"),
             @"iconName": @"ic_custom_search",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
             @"category" : kPoiFilters
             }
          ];
@@ -149,7 +152,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_map"),
             @"iconName": @"ic_custom_overlay_map",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld", (long)tileSourcesCount],
             @"category" : kTileSources
             }
          ];
@@ -159,7 +162,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_rendering_style"),
             @"iconName": @"ic_custom_map_style",
-            @"count": [NSString stringWithFormat:@"%i", renderFilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)renderFilesCount],
             @"category" : kRenderSettings
             }
          ];
@@ -169,7 +172,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_routing"),
             @"iconName": @"ic_action_route_distance",
-            @"count": [NSString stringWithFormat:@"%i", routingFilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)routingFilesCount],
             @"category" : kRoutingSettings
             }
          ];
@@ -189,7 +192,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"avoid_road"),
             @"iconName": @"ic_custom_alert",
-            @"count": [NSString stringWithFormat:@"%i",profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
             @"category" : kAvoidRoads
             }
          ];
@@ -219,15 +222,21 @@
     [super viewDidLoad];
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+-(void) loadCurrentRoutingMode
 {
-    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_complete_description") boldFragment:_fileName forSection:section];
+    OAMapActions *mapActions = [[OAMapActions alloc] init];
+    OAApplicationMode *currentRoutingMode = [mapActions getRouteMode];
+    [OARoutingHelper.sharedInstance setAppMode:currentRoutingMode];
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+#pragma mark - Actions
+
+- (IBAction)secondaryButtonPressed:(id)sender
 {
-    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_complete_description") boldFragment:_fileName inSection:section];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -256,6 +265,18 @@
     return cell;
 }
 
+#pragma mark - UITableViewDelegate
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [self getHeaderForTableView:tableView withFirstSectionText:(NSString *)OALocalizedString(@"import_complete_description") boldFragment:_fileName forSection:section];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return [self getHeightForHeaderWithFirstHeaderText:OALocalizedString(@"import_complete_description") boldFragment:_fileName inSection:section];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
@@ -264,13 +285,13 @@
     if ([category isEqualToString:kProfiles] || [category isEqualToString:kRoutingSettings])
     {
         OAMainSettingsViewController *profileSettings = [[OAMainSettingsViewController alloc] init];
-        profileSettings.isShouldBeClosedByBackButton = YES;
+        profileSettings.shouldBeClosedByBackButton = YES;
         [self.navigationController pushViewController:profileSettings animated:YES];
     }
     else if ([category isEqualToString:kQuickActioins])
     {
         OAQuickActionListViewController *actionsList = [[OAQuickActionListViewController alloc] init];
-        actionsList.isShouldBeClosedByBackButton = YES;
+        actionsList.shouldBeClosedByBackButton = YES;
         [self.navigationController pushViewController:actionsList animated:YES];
     }
     else if ([category isEqualToString:kPoiFilters])
@@ -296,18 +317,6 @@
         avoidController.isBackButtonHidden = YES;
         [[OARootViewController instance] presentViewController:avoidController animated:YES completion:nil];
     }
-}
-
--(void) loadCurrentRoutingMode
-{
-    OAMapActions *mapActions = [[OAMapActions alloc] init];
-    OAApplicationMode *currentRoutingMode = [mapActions getRouteMode];
-    [OARoutingHelper.sharedInstance setAppMode:currentRoutingMode];
-}
-
-- (IBAction)secondaryButtonPressed:(id)sender
-{
-    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

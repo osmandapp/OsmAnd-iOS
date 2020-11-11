@@ -8,9 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "OAApplicationMode.h"
 
-@class OAPointDescription, OAGPX, OATargetPoint;
+@class OAPointDescription, OAGPX, OATargetPoint, OAApplicationMode;
 
 @interface OAMapActions : NSObject
 

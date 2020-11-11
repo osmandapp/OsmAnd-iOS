@@ -11,6 +11,6 @@
 
 @interface OAImportDuplicatesViewController : OABaseSettingsWithBottomButtonsViewController
 
-- (instancetype) initWithDuplicatesList:(NSArray<id> *)duplicatesList settingsItems:(NSArray<OASettingsItem *> *)settingsItems file:(NSString *)file;
+- (instancetype) initWithDuplicatesList:(NSArray *)duplicatesList settingsItems:(NSArray<OASettingsItem *> *)settingsItems file:(NSString *)file;
 
 @end

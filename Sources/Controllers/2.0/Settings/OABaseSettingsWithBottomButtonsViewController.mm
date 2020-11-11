@@ -63,19 +63,21 @@
     self.tableViewBottomMarginNoView.active = !hasBottomView;
 }
 
-- (void) setToButton:(UIButton *)button firstLabelText:(NSString *)firstLabelText firstLabelFont:(UIFont *)firstLabelFont firstLabelColor:(UIColor *)firstLabelColor secondLabelText:(NSString *)secondLabelText secondLabelFont:(UIFont *)secondLabelFont secondLabelColor:(UIColor *)secondLabelColor
+- (void) setParams:(NSDictionary *)params forTwoLabelButton:(UIButton *)button
 {
-    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", firstLabelText, secondLabelText]];
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", params[@"firstLabelText"], params[@"secondLabelText"]]];
     
     NSMutableParagraphStyle *paragraphStyles = [NSMutableParagraphStyle new];
     paragraphStyles.alignment = NSTextAlignmentCenter;
     paragraphStyles.lineSpacing = 3;
     
-    NSDictionary *firstLabelAttributes = @{NSForegroundColorAttributeName: firstLabelColor, NSFontAttributeName: firstLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
-    NSDictionary *secondLabelAttributes = @{NSForegroundColorAttributeName: secondLabelColor, NSFontAttributeName: secondLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
+    UIFont *firstLabelFont = params[@"firstLabelFont"] ? params[@"firstLabelFont"] :[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]; [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+    UIFont *secondLabelFont = params[@"secondLabelFont"] ? params[@"secondLabelFont"] : [UIFont systemFontOfSize:13];
+    NSDictionary *firstLabelAttributes = @{NSForegroundColorAttributeName: params[@"firstLabelColor"], NSFontAttributeName: firstLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
+    NSDictionary *secondLabelAttributes = @{NSForegroundColorAttributeName: params[@"secondLabelColor"], NSFontAttributeName: secondLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
     
-    [attributedText setAttributes:firstLabelAttributes range:NSMakeRange(0, [firstLabelText length])];
-    [attributedText setAttributes:secondLabelAttributes range:NSMakeRange([firstLabelText length], [secondLabelText length] + 1)];
+    [attributedText setAttributes:firstLabelAttributes range:NSMakeRange(0, [params[@"firstLabelText"] length])];
+    [attributedText setAttributes:secondLabelAttributes range:NSMakeRange([params[@"firstLabelText"] length], [params[@"secondLabelText"] length] + 1)];
     
     button.titleLabel.numberOfLines = 0;
     button.contentEdgeInsets = UIEdgeInsetsMake(kButtonTopBottomPadding, kButtonSidePadding, kButtonTopBottomPadding, kButtonSidePadding);

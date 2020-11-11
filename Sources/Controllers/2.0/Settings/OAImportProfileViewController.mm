@@ -351,17 +351,7 @@
                 avoidRoadsStyleSection.type = kCellTypeSectionHeader;
                 avoidRoadsStyleSection.isOpen = NO;
                 
-//                for (OAAvoidRoadInfo *avoidRoads in [_items objectForKey:type])
-//                {
-//                    NSString *name = avoidRoads.name;
-//                    [avoidRoadsStyleSection.groupItems addObject:@{
-//                        @"icon" : @"ic_custom_alert", // to check
-//                        @"title" : name,
-//                        @"type" : kCellTypeTitle,
-//                    }];
-//                }
-//
-//                [data addObject:avoidRoadsStyleSection];
+                [data addObject:avoidRoadsStyleSection];
                 break;
             }
             default:

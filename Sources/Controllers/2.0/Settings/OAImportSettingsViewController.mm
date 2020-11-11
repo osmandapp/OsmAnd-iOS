@@ -503,7 +503,7 @@
     NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
     NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<OAMapSource *> *tileSourceTemplates = [NSMutableArray array];
+    NSMutableArray<OALocalResourceItem *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     
     for (NSObject *object in _selectedItems)
@@ -515,7 +515,7 @@
         else if ([object isKindOfClass:OAPOIUIFilter.class])
             [poiUIFilters addObject:(OAPOIUIFilter *)object];
         else if ([object isKindOfClass:OASqliteDbResourceItem.class] || [object isKindOfClass:OAOnlineTilesResourceItem.class])
-            [tileSourceTemplates addObject:(OAMapSource *)object]; // to check type
+            [tileSourceTemplates addObject:(OALocalResourceItem *)object];
         else if ([object isKindOfClass:NSString.class]) // to check all
             [settingsItems addObject: [[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
@@ -529,7 +529,7 @@
     if (poiUIFilters.count > 0)
         [settingsItems addObject:[self getBasePoiUiFiltersSettingsItem]];
     if (tileSourceTemplates.count > 0)
-        [settingsItems addObject:[self getBaseMapSourcesSettingsItem]];
+        [settingsItems addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
         [settingsItems addObject:[self getBaseAvoidRoadsSettingsItem]];
     return settingsItems;

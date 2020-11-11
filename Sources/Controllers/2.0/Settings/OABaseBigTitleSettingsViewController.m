@@ -34,14 +34,14 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
     _tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
-    [self updateTableViewLabel:self.getTableHeaderTitle];
+    [self setTableHeaderView:self.getTableHeaderTitle];
     
     _navBarBackgroundView = [self createNavBarBackgroundView];
     _navBarBackgroundView.frame = _navBarView.bounds;
     [_navBarView insertSubview:_navBarBackgroundView atIndex:0];
 }
 
-- (void) updateTableViewLabel:(NSString *)label
+- (void) setTableHeaderView:(NSString *)label
 {
     _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:label
                                                                       font:kHeaderViewFont

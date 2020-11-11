@@ -1747,7 +1747,7 @@
 "min_speed" = "Velocitat mínima";
 "default_speed" = "Velocitat predeterminada";
 "routing_attr_length_name" = "Llargada màxima";
-"create_profile_descr" = "Comenceu el vostre perfil personalitzat des d'un perfil predeterminat de l'aplicació,que defineixi la configuració bàsica com visibilitat predeterminada, extensions i unitats de velocitat i distància. Aquests són els perfils d'aplicació predeterminats, junt amb exemples de personalització que es poden  anar ampliant:";
+"create_profile_descr" = "Comenceu el vostre perfil personalitzat des d'un perfil predeterminat de l'aplicació,que defineixi la configuració bàsica com visibilitat predeterminada, extensions i unitats de velocitat i distància. Aquests són els perfils d'aplicació predeterminats, junt amb exemples de personalització que es poden anar ampliant:";
 "export_profile" = "Exporta el perfil";
 "global_settings_descr" = "Afecta tota l’aplicació.";
 "global_settings" = "Configuració global";
@@ -1787,7 +1787,7 @@
 "quick_action_transport_descr" = "Premeu aquesta acció per mostrar o amagar les rutes / parades de transport públic al mapa.";
 "configure_map_descr" = "Aparença del mapa";
 "downloading" = "S’està baixant";
-"export_profile_descr" = "Podeu exportar totes les configuracions dels perfils, copiar-les  d'un altre perfil o retornar-les als valors predeterminats.";
+"export_profile_descr" = "Podeu exportar totes les configuracions dels perfils, copiar-les d'un altre perfil o retornar-les als valors predeterminats.";
 "profile_sett_descr" = "Afecta als perfils d'aplicació seleccionats";
 "app_profiles" = "Perfils de l'aplicació";
 "osmand_profile" = "Perfil OsmAnd";

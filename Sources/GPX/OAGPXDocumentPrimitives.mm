@@ -248,6 +248,40 @@
 @implementation OAGpxRte
 @end
 @implementation OAGpxRtePt
+
+- (instancetype) initWithTrkPt:(OAGpxTrkPt *)point
+{
+    self = [super init];
+    if (self) {
+        self.ageOfGpsData = point.ageOfGpsData;
+        self.dgpsStationId = point.dgpsStationId;
+        self.fixType = point.fixType;
+        self.geoidHeight = point.geoidHeight;
+        self.horizontalDilutionOfPrecision = point.horizontalDilutionOfPrecision;
+        self.magneticVariation = point.magneticVariation;
+        self.positionDilutionOfPrecision = point.positionDilutionOfPrecision;
+        self.satellitesUsedForFixCalculation = point.satellitesUsedForFixCalculation;
+        self.source = point.source;
+        self.speed = point.speed;
+        self.symbol = point.symbol;
+        self.verticalDilutionOfPrecision = point.verticalDilutionOfPrecision;
+        
+        self.firstPoint = point.firstPoint;
+        self.lastPoint = point.lastPoint;
+        self.position = point.position;
+        self.name = point.name;
+        self.desc = point.desc;
+        self.elevation = point.elevation;
+        self.time = point.time;
+        self.comment = point.comment;
+        self.type = point.type;
+        self.links = point.links;
+        self.extraData = point.extraData;
+        self.distance = point.distance;
+    }
+    return self;
+}
+
 @end
 @implementation OAGpxLink
 @end

@@ -50,6 +50,7 @@
 #import "OARoutePreferencesParameters.h"
 #import "OATransportRoutingHelper.h"
 #import "OAMainSettingsViewController.h"
+#import "OABaseScrollableHudViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -358,6 +359,33 @@ typedef enum
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
 
+- (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller
+{
+    self.sidePanelController.recognizesPanGesture = NO;
+    _scrollableHudViewController = controller;
+    _scrollableHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self addChildViewController:_scrollableHudViewController];
+    _scrollableHudViewController.view.frame = self.view.bounds;
+    [self.view addSubview:_scrollableHudViewController.view];
+    [_hudViewController.quickActionController updateViewVisibility];
+    _activeTargetType = OATargetRoutePlanning;
+    [self enterContextMenuMode];
+}
+
+- (void) hideScrollableHudViewController
+{
+    self.sidePanelController.recognizesPanGesture = YES;
+    if (_scrollableHudViewController != nil && self.view == _scrollableHudViewController.view.superview)
+    {
+        [_scrollableHudViewController.view removeFromSuperview];
+        [_scrollableHudViewController removeFromParentViewController];
+        _scrollableHudViewController = nil;
+    }
+    [_hudViewController.quickActionController updateViewVisibility];
+    _activeTargetType = OATargetNone;
+    [self restoreFromContextMenuMode];
+}
+
 - (void) refreshToolbar
 {
     [_destinationViewController refreshView];
@@ -652,7 +680,9 @@ typedef enum
 
 - (BOOL) isContextMenuVisible
 {
-    return (_targetMenuView && _targetMenuView.superview && !_targetMenuView.hidden) || (_targetMultiMenuView && _targetMultiMenuView.superview);
+    return (_targetMenuView && _targetMenuView.superview && !_targetMenuView.hidden)
+        || (_targetMultiMenuView && _targetMultiMenuView.superview)
+        || (_scrollableHudViewController && _scrollableHudViewController.view.superview);
 }
 
 - (BOOL) isRouteInfoVisible
@@ -1023,6 +1053,8 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
+    if (self.isNewContextMenuDisabled)
+        return;
     NSMutableArray<OATargetPoint *> *validPoints = [NSMutableArray array];
     for (OATargetPoint *targetPoint in targetPoints)
     {
@@ -1054,14 +1086,18 @@ typedef enum
     }];
 }
 
+- (BOOL) isNewContextMenuDisabled
+{
+    return _activeTargetType == OATargetImpassableRoadSelection
+    || _activeTargetType == OATargetRouteDetailsGraph
+    || _activeTargetType == OATargetRouteDetails
+    || _activeTargetType == OATargetRoutePlanning;
+}
+
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
 {
-    if (_activeTargetType == OATargetImpassableRoadSelection
-        || _activeTargetType == OATargetRouteDetailsGraph
-        || _activeTargetType == OATargetRouteDetails)
-    {
+    if (self.isNewContextMenuDisabled)
         return;
-    }
     
     if (targetPoint.type == OATargetMapillaryImage)
     {

@@ -63,7 +63,7 @@
     self.tableViewBottomMarginNoView.active = !hasBottomView;
 }
 
-- (void) setParams:(NSDictionary *)params forTwoLableButton:(UIButton *)button
+- (void) setParams:(NSDictionary *)params forTwoLabelButton:(UIButton *)button
 {
     NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", params[@"firstLabelText"], params[@"secondLabelText"]]];
     

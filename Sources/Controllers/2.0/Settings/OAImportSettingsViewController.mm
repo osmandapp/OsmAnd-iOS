@@ -98,11 +98,6 @@
     [self.additionalNavBarButton setTitle:_selectedIndexPaths.count >= 2 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all") forState:UIControlStateNormal];
 }
 
-- (NSString *) getTableHeaderTitle
-{
-    return OALocalizedString(@"shared_string_import");
-}
-
 - (void) setupButtonView
 {
     self.primaryBottomButton.userInteractionEnabled = YES;
@@ -128,9 +123,9 @@
     _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
     [super viewDidLoad];
+    [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
 }
 
-//onActivityCreated
 - (void) setupView
 {
     OAImportAsyncTask *importTask = _settingsHelper.importTask;
@@ -161,7 +156,7 @@
             [self generateData];
         }
         
-        [self updateTableViewLabel:OALocalizedString(@"shared_string_import")];
+        [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
         
         EOAImportType importTaskType = [importTask getImportType];
         
@@ -174,7 +169,7 @@
             [self updateUI:OALocalizedString(@"shared_string_importing") descriptionRes:OALocalizedString(@"importing_from") activityLabel:OALocalizedString(@"shared_string_importing")];
         }
         else
-            [self updateTableViewLabel:OALocalizedString(@"shared_string_import")];
+            [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
 
         if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
         {
@@ -195,7 +190,7 @@
     if (_file)
     {
         NSString *filename = [_file lastPathComponent];
-        [self updateTableViewLabel:toolbarTitleRes];
+        [self setTableHeaderView:toolbarTitleRes];
         _descriptionText = [NSString stringWithFormat:descriptionRes, filename];
         _descriptionBoldText = filename;
         self.bottomBarView.hidden =YES;
@@ -411,13 +406,16 @@
 
 - (void) showActivityIndicatorWithLabel:(NSString *)labelText
 {
-    [self.tableView setEditing:NO];
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     _data = [NSMutableArray arrayWithObject:
                  @{
                      @"cellType": kCellTypeWithActivity,
                      @"label": labelText
                  }];
+    
+    [self.tableView setEditing:NO];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [self.tableView reloadData];
+    self.bottomBarView.hidden =YES;
 }
 
 #pragma mark - Base settings items methods
@@ -682,6 +680,7 @@
                 cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
                 cell.textView.text = item[@"title"];
                 cell.descView.text = item[@"description"];
+                cell.descView.hidden = ((NSString *)item[@"description"]).length == 0;
             }
             return cell;
         }

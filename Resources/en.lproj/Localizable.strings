@@ -759,7 +759,6 @@
 
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
-"nav_type_hint" = "Navigation type";
 
 "listed_exist" = "Listed %@, already exist in OsmAnd.";
 

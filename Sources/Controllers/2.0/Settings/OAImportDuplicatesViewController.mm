@@ -66,7 +66,7 @@
     NSString *_title;
     NSString *_description;
 
-    NSMutableArray<NSMutableArray<NSDictionary *> *> *_data;
+    NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
 - (instancetype) init
@@ -141,7 +141,7 @@
     NSDictionary * loadingItem = @{@"cellType": kCellTypeWithActivity,
                                    @"label": OALocalizedString(@"shared_string_importing")};
     NSMutableArray *firstSection = [NSMutableArray arrayWithObject:loadingItem];
-    _data = [NSMutableArray arrayWithObject:firstSection];
+    _data = [NSArray arrayWithObject:firstSection];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
@@ -232,7 +232,7 @@
 // from DuplicatesSettingsAdapter.java : onBindViewHolder()
 - (void) prepareData:(NSArray<NSArray *> *)duplicates
 {
-    _data = [NSMutableArray new];
+    NSMutableArray *result = [NSMutableArray new];
     for (NSArray *section in duplicates)
     {
         NSMutableArray *sectionData = [NSMutableArray new];
@@ -274,7 +274,7 @@
                 if (!routingProfile || routingProfile.length == 0)
                     item[@"description"] = @"";
                 else
-                    item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), OALocalizedString(@"nav_type_hint"), routingProfile];
+                    item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"nav_type_hint"), routingProfile];
                 
                 item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
                 item[@"iconColor"] = UIColorFromRGB(modeBean.iconColor);
@@ -325,8 +325,9 @@
             NSDictionary *newDict = [NSDictionary dictionaryWithDictionary:item];
             [sectionData addObject:newDict];
         }
-        [_data addObject:sectionData];
+        [result addObject:sectionData];
     }
+    _data = [NSArray arrayWithArray:result];
 }
 
 - (void) applyLocalization
@@ -364,8 +365,8 @@
         @"secondLabelColor": [[UIColor whiteColor] colorWithAlphaComponent:0.5]
     };
     
-    [self setParams:secondaryButtonParams forTwoLableButton:self.secondaryBottomButton];
-    [self setParams:primaryButtonParams forTwoLableButton:self.primaryBottomButton];
+    [self setParams:secondaryButtonParams forTwoLabelButton:self.secondaryBottomButton];
+    [self setParams:primaryButtonParams forTwoLabelButton:self.primaryBottomButton];
 }
 
 - (void) importItems:(BOOL)shouldReplace

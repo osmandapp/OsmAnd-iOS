@@ -210,31 +210,11 @@
             OASettingsItem *settingsItem = [self createItem:item];
             [_items addObject:settingsItem];
         }
-//        if ([item[@"type"] isEqualToString:@"FILE"])
-//        {
-//            OASettingsItem *settingsItem = [self createItem:item];
-//            [_items addObject:settingsItem];
-//        }
-//        if ([item[@"type"] isEqualToString:@"POI_UI_FILTERS"])
-//        {
-//            OASettingsItem *settingsItem = [self createItem:item];
-//            [_items addObject:settingsItem];
-//        }
         if ([item[@"type"] isEqualToString:@"MAP_SOURCES"])
         {
             OASettingsItem *settingsItem = [self createItem:item];
             [_items addObject:settingsItem];
         }
-//        if ([item[@"type"] isEqualToString:@"AVOID_ROADS"])
-//        {
-//            OASettingsItem *settingsItem = [self createItem:item];
-//            [_items addObject:settingsItem];
-//        }
-//        if ([item[@"type"] isEqualToString:@"POI_UI_FILTERS"])
-//        {
-//            OASettingsItem *settingsItem = [self createItem:item];
-//            [_items addObject:settingsItem];
-//        }
         if ([item[@"type"] isEqualToString:@"QUICK_ACTIONS"])
         {
 //            OASettingsItem *settingsItem = [self createItem:item];

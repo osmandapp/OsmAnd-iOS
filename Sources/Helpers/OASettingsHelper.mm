@@ -1686,10 +1686,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @interface OACollectionSettingsItem()
 
-@property (nonatomic) NSMutableArray<OASettingsItem *> *items;
-@property (nonatomic) NSMutableArray<OASettingsItem *> *appliedItems;
-@property (nonatomic) NSMutableArray<OASettingsItem *> *duplicateItems;
-@property (nonatomic) NSMutableArray<OASettingsItem *> *existingItems;
+@property (nonatomic) NSMutableArray<id> *items;
+@property (nonatomic) NSMutableArray<id> *appliedItems;
+@property (nonatomic) NSMutableArray<id> *duplicateItems;
+@property (nonatomic) NSMutableArray<id> *existingItems;
 
 @end
 
@@ -1704,7 +1704,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     self.duplicateItems = [NSMutableArray array];
 }
 
-- (instancetype) initWithItems:(NSArray<OASettingsItem *> *) items
+- (instancetype) initWithItems:(NSArray<id> *) items
 {
     self = [super init];
     if (self)
@@ -1722,26 +1722,26 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     if (_items.count > 0)
     {
-        for (OASettingsItem *item in _items)
+        for (id item in _items)
             if ([self isDuplicate:item])
                 [_duplicateItems addObject:item];
     }
     return _duplicateItems;
 }
 
-- (NSArray<OASettingsItem *> *) getNewItems
+- (NSArray<id> *) getNewItems
 {
-    NSMutableArray<OASettingsItem *> *res = [NSMutableArray arrayWithArray:_items];
+    NSMutableArray<id> *res = [NSMutableArray arrayWithArray:_items];
     [res removeObjectsInArray:_duplicateItems];
     return res;
 }
 
-- (BOOL) isDuplicate:(OASettingsItem *)item
+- (BOOL) isDuplicate:(id)item
 {
     return [self.existingItems containsObject:item];
 }
 
-- (id) renameItem:(OASettingsItem *)item
+- (id) renameItem:(id)item
 {
     return nil;
 }

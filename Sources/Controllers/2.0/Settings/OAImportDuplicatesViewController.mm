@@ -145,6 +145,7 @@
                                    @"label": OALocalizedString(@"shared_string_importing")};
     NSMutableArray *firstSection = [NSMutableArray arrayWithObject:loadingItem];
     _data = [NSMutableArray arrayWithObject:firstSection];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 }
 
 - (NSArray<NSArray *> *) prepareDuplicates:(NSArray *)duplicatesList
@@ -540,9 +541,6 @@
 - (void)onSettingsImportFinished:(BOOL)succeed items:(nonnull NSArray<OASettingsItem *> *)items {
     if (succeed)
     {
-        //app.getRendererRegistry().updateExternalRenderers();
-        //AppInitializer.loadRoutingFiles(app, null);
-        
         OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:items fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;

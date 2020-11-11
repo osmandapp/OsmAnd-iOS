@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *backImageButton;
 
 - (NSString *) getTableHeaderTitle;
+- (void) updateTableViewLabel:(NSString *)label;
 - (CGFloat) heightForLabel:(NSString *)text;
 
 @end

@@ -353,7 +353,7 @@
             }
             case EOAExportSettingsTypeGPX:
             {
-                customGPXSection.groupName = @"GPX"; // check
+                customGPXSection.groupName = OALocalizedString(@"shared_string_gpx");
                 customGPXSection.type = kCellTypeSectionHeader;
                 customGPXSection.isOpen = NO;
                 for (NSString *gpxItem in [_items objectForKey:type])

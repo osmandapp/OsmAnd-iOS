@@ -30,9 +30,9 @@
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
 #define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
 #define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
-#define RENDERERS_DIR @"render.xml" // check prbly has to be @"rendering/"
-#define ROUTING_PROFILES_DIR @".xml" // check prbly has to be @"routing/"
-#define GPX_PROFILES_DIR @".gpx" // check
+#define RENDERERS_DIR @"render.xml" // has to be @"rendering/" but was change for a quick check
+#define ROUTING_PROFILES_DIR @".xml" // has to be @"routing/" but was change for a quick check
+#define GPX_PROFILES_DIR @".gpx" // check correct name
 
 @interface HeaderType : NSObject
 @property (nonatomic) NSString *label;

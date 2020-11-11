@@ -36,9 +36,9 @@
 #define kRoutingSettings @"kRoutingSettings"
 #define kAvoidRoads @"kAvoidRoads"
 
-#define RENDERERS_DIR @"render.xml" // check prbly has to be @"rendering/"
-#define ROUTING_PROFILES_DIR @".xml" // check prbly has to be @"routing/"
-#define GPX_PROFILES_DIR @".gpx" // check
+#define RENDERERS_DIR @"render.xml" // has to be @"rendering/" but was change for a quick check
+#define ROUTING_PROFILES_DIR @".xml" // has to be @"routing/" but was change for a quick check
+#define GPX_PROFILES_DIR @".gpx" // check correct name
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -177,10 +177,10 @@
     if (gpxFilesCount > 0)
     {
         [_data addObject: @{
-            @"label": @"GPX", // change
+            @"label": OALocalizedString(@"shared_string_gpx"),
             @"iconName": @"ic_custom_trip",
             @"count": [NSString stringWithFormat:@"%ld", gpxFilesCount],
-            @"category" : kRoutingSettings // check where to go
+            @"category" : kRoutingSettings // check what screen should be opened after tapping
             }
          ];
     }

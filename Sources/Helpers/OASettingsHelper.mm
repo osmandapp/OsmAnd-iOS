@@ -1512,6 +1512,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return [[NSFileManager defaultManager] fileExistsAtPath:_filePath];
 }
 
+// TODO: doesn't work properly with render.xml files
 - (NSString *) renameFile:(NSString*)filePath
 {
     int number = 0;

@@ -10,6 +10,4 @@
 
 @interface OAQuickActionListViewController : OACompoundViewController
 
-- (instancetype) initWithPopParam:(BOOL)shouldPopToRoot;
-
 @end

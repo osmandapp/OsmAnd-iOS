@@ -12,10 +12,10 @@
 
 @interface OABaseSettingsWithBottomButtonsViewController : OABaseBigTitleSettingsViewController
 
-@property (strong, nonatomic) IBOutlet UIButton *additionalNavBarButton;
-@property (strong, nonatomic) IBOutlet UIView *bottomBarView;
-@property (strong, nonatomic) IBOutlet UIButton *primaryBottomButton;
-@property (strong, nonatomic) IBOutlet UIButton *secondaryBottomButton;
+@property (weak, nonatomic) IBOutlet UIButton *additionalNavBarButton;
+@property (weak, nonatomic) IBOutlet UIView *bottomBarView;
+@property (weak, nonatomic) IBOutlet UIButton *primaryBottomButton;
+@property (weak, nonatomic) IBOutlet UIButton *secondaryBottomButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *cancelButtonLeftMarginWithIcon;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *cancelButtonLeftMarginNoIcon;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *primaryButtonTopMarginNoSecondary;

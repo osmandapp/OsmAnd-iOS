@@ -43,6 +43,18 @@
     OAAutoObserverProxy* _appModeChangedObservable;
     
     OAApplicationMode *_targetAppMode;
+    
+    BOOL _shouldPopToRoot;
+}
+
+- (instancetype) initWithPopParam:(BOOL)shouldPopToRoot
+{
+    self = [super init];
+    if (self)
+    {
+        _shouldPopToRoot = shouldPopToRoot;
+    }
+    return self;
 }
 
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode
@@ -51,7 +63,7 @@
     if (self)
     {
         _targetAppMode = mode;
-        _shouldBeClosedByBackButton = NO;
+        _shouldPopToRoot = NO;
     }
     return self;
 }
@@ -354,7 +366,7 @@
 
 - (IBAction) backButtonClicked:(id)sender
 {
-    if (_shouldBeClosedByBackButton)
+    if (_shouldPopToRoot)
         [self.navigationController popToRootViewControllerAnimated:YES];
     else
         [super backButtonClicked:sender];

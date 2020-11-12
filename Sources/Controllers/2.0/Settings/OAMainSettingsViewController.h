@@ -16,8 +16,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *settingsTableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (nonatomic) BOOL shouldBeClosedByBackButton;
 
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode;
+- (instancetype) initWithPopParam:(BOOL)shouldPopToRoot;
 
 @end

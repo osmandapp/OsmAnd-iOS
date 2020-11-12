@@ -273,14 +273,12 @@
     
     if ([category isEqualToString:kProfiles] || [category isEqualToString:kRoutingSettings])
     {
-        OAMainSettingsViewController *profileSettings = [[OAMainSettingsViewController alloc] init];
-        profileSettings.shouldBeClosedByBackButton = YES;
+        OAMainSettingsViewController *profileSettings = [[OAMainSettingsViewController alloc] initWithPopParam:YES];
         [self.navigationController pushViewController:profileSettings animated:YES];
     }
     else if ([category isEqualToString:kQuickActioins])
     {
-        OAQuickActionListViewController *actionsList = [[OAQuickActionListViewController alloc] init];
-        actionsList.shouldBeClosedByBackButton = YES;
+        OAQuickActionListViewController *actionsList = [[OAQuickActionListViewController alloc] initWithPopParam:YES];
         [self.navigationController pushViewController:actionsList animated:YES];
     }
     else if ([category isEqualToString:kPoiFilters])
@@ -302,8 +300,7 @@
     {
         [self loadCurrentRoutingMode];
         [self.navigationController popToRootViewControllerAnimated:YES];
-        OARouteAvoidSettingsViewController *avoidController = [[OARouteAvoidSettingsViewController alloc] init];
-        avoidController.isBackButtonHidden = YES;
+        OARouteAvoidSettingsViewController *avoidController = [[OARouteAvoidSettingsViewController alloc] initWithBackButtonVisibility:YES];
         [[OARootViewController instance] presentViewController:avoidController animated:YES completion:nil];
     }
 }

@@ -10,7 +10,7 @@
 
 @interface OAActivityViewWithTitleCell : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet UILabel *titleView;
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorView;
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorView;
 
 @end

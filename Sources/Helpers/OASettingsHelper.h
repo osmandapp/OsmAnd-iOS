@@ -6,13 +6,17 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/SettingHelper.java
-//  git revision 6ec5d526a81dd94623439ff99ac5a76e2e23b557
+//  git revision 1b3247780ad2cd0119f09c89537a8f8138806481
 //
 //  Fully ported: OASettingsItemReader, OASettingsItemWriter, OAProfileSettingsItem, OAGlobalSettingsItem
 //  To implement: EOASettingsItemTypePlugin, EOASettingsItemTypeData, EOASettingsItemTypeFile, EOASettingsItemTypeResources,
 //                EOASettingsItemTypeQuickActions, EOASettingsItemTypePoiUIFilters, EOASettingsItemTypeMapSources, EOASettingsItemTypeAvoidRoads
 
 #import <Foundation/Foundation.h>
+
+#define RENDERERS_DIR @"rendering/"
+#define ROUTING_PROFILES_DIR @"routing/"
+#define GPX_PROFILES_DIR @"gpx/"
 
 @class OAImportAsyncTask, OAExportAsyncTask, OACheckDuplicates, OALocalResourceItem;
 @class OASettingsItem;

@@ -14,7 +14,6 @@
 @interface OARouteAvoidSettingsViewController : OARouteSettingsBaseViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic) id<OASettingsDataDelegate> delegate;
-@property (nonatomic) BOOL isBackButtonHidden;
 
 + (NSString *) getDescr:(OAAvoidRoadInfo *)roadInfo;
 

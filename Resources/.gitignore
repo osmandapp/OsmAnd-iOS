@@ -2,7 +2,7 @@
 /Shipped
 
 # Ignore all rasterized resources
-/Rasterized
+#/Rasterized
 
 # Ignore XSB resources (since they are copied from the core project)
 /XSB

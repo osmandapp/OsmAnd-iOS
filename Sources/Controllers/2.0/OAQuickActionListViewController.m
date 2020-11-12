@@ -47,16 +47,6 @@
     CALayer *_horizontalLine;
 }
 
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        _shouldBeClosedByBackButton = NO;
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -141,14 +131,6 @@
 -(CGFloat) getToolBarHeight
 {
     return [self.tableView isEditing] ? favoritesToolBarHeight : 0.;
-}
-
-- (IBAction) backButtonClicked:(id)sender
-{
-    if (_shouldBeClosedByBackButton)
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    else
-        [super backButtonClicked:sender];
 }
 
 - (void)saveChanges

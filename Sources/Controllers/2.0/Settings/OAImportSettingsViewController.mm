@@ -19,7 +19,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAAvoidRoadInfo.h"
 #import "OATitleDescriptionCheckmarkCell.h"
-#import "OAMultiIconTextDescCell.h"
+#import "OAMenuSimpleCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OAProfileDataObject.h"
@@ -35,7 +35,7 @@
 #define kBottomPadding 32
 #define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
 #define kCellTypeSectionHeader @"OATitleDescriptionCheckmarkCell"
-#define kCellTypeTitleDescription @"OAMultiIconTextDescCell"
+#define kCellTypeTitleDescription @"OAMenuSimpleCell"
 #define kCellTypeTitle @"OAIconTextCell"
 
 @interface OATableGroupToImport : NSObject
@@ -112,10 +112,8 @@
 {
     _descriptionText = OALocalizedString(@"import_profile_select_descr");
     _descriptionBoldText = nil;
-    [self setupView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView setEditing:YES];
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
     
     [self.additionalNavBarButton addTarget:self action:@selector(selectDeselectAllItems:) forControlEvents:UIControlEventTouchUpInside];
@@ -124,8 +122,18 @@
     self.backImageButton.hidden = YES;
     _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
-    [super viewDidLoad];
     [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
+    
+    [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setupView];
+    [self.tableView reloadData];
+    [self.tableView setEditing:YES];
+    self.bottomBarView.hidden = NO;
 }
 
 - (void) setupView
@@ -150,40 +158,40 @@
             if (selectedItems && _file)
                 [_settingsHelper importSettings:_file items:selectedItems latestChanges:@"" version:1 delegate:self];
         }
-        
-        if (_settingsItems)
-        {
-            _itemsMap = [NSMutableDictionary dictionaryWithDictionary:[self getSettingsToOperate:_settingsItems importComplete:NO]];
-            _itemsType = [NSArray arrayWithArray:[_itemsMap allKeys]];
-            [self generateData];
-        }
-        
+    }
+    
+    if (_settingsItems)
+    {
+        _itemsMap = [NSMutableDictionary dictionaryWithDictionary:[self getSettingsToOperate:_settingsItems importComplete:NO]];
+        _itemsType = [NSArray arrayWithArray:[_itemsMap allKeys]];
+        [self generateData];
+    }
+    
+    [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
+    
+    EOAImportType importTaskType = [importTask getImportType];
+    
+    if (importTaskType == EOAImportTypeCheckDuplicates)
+    {
+        [self updateUI:OALocalizedString(@"shared_string_preparing") descriptionRes:OALocalizedString(@"checking_for_duplicate_description") activityLabel:OALocalizedString(@"checking_for_duplicates")];
+    }
+    else if (importTaskType == EOAImportTypeImport)
+    {
+        [self updateUI:OALocalizedString(@"shared_string_importing") descriptionRes:OALocalizedString(@"importing_from") activityLabel:OALocalizedString(@"shared_string_importing")];
+    }
+    else
         [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
-        
-        EOAImportType importTaskType = [importTask getImportType];
-        
-        if (importTaskType == EOAImportTypeCheckDuplicates)
-        {
-            [self updateUI:OALocalizedString(@"shared_string_preparing") descriptionRes:OALocalizedString(@"checking_for_duplicate_description") activityLabel:OALocalizedString(@"checking_for_duplicates")];
-        }
-        else if (importTaskType == EOAImportTypeImport)
-        {
-            [self updateUI:OALocalizedString(@"shared_string_importing") descriptionRes:OALocalizedString(@"importing_from") activityLabel:OALocalizedString(@"shared_string_importing")];
-        }
-        else
-            [self setTableHeaderView:OALocalizedString(@"shared_string_import")];
-
-        if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
-        {
-            OATableGroupToImport* groupData = [_data objectAtIndex:0];
-            groupData.isOpen = YES;
-        }
-          
-        if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
-        {
-            OATableGroupToImport* groupData = [_data objectAtIndex:0];
-            groupData.isOpen = YES;
-        }
+    
+    if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
+    {
+        OATableGroupToImport* groupData = [_data objectAtIndex:0];
+        groupData.isOpen = YES;
+    }
+    
+    if (_itemsMap.count == 1 && [_itemsMap objectForKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]] && ![[_data objectAtIndex:0] isKindOfClass:NSDictionary.class])
+    {
+        OATableGroupToImport* groupData = [_data objectAtIndex:0];
+        groupData.isOpen = YES;
     }
 }
 
@@ -195,7 +203,7 @@
         [self setTableHeaderView:toolbarTitleRes];
         _descriptionText = [NSString stringWithFormat:descriptionRes, filename];
         _descriptionBoldText = filename;
-        self.bottomBarView.hidden =YES;
+        self.bottomBarView.hidden = YES;
         [self showActivityIndicatorWithLabel:activityLabel];
         [self.tableView reloadData];
     }
@@ -608,6 +616,12 @@
     }
 }
 
+- (IBAction) backButtonPressed:(id)sender
+{
+    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void) importItems
 {
     [self updateUI:OALocalizedString(@"shared_string_preparing") descriptionRes:OALocalizedString(@"checking_for_duplicate_description") activityLabel:OALocalizedString(@"checking_for_duplicates")];
@@ -742,23 +756,24 @@
         if ([cellType isEqualToString:kCellTypeTitleDescription])
         {
             static NSString* const identifierCell = kCellTypeTitleDescription;
-            OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            OAMenuSimpleCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-                cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
+                cell = (OAMenuSimpleCell *)[nib objectAtIndex:0];
                 cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-                cell.overflowButton.alpha = 0.;
             }
             if (cell)
             {
                 OAApplicationMode *am = item[@"app_mode"];
                 UIImage *img = am.getIcon;
-                cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
+                cell.imgView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.tintColor = UIColorFromRGB(am.getIconColor);
                 cell.textView.text = item[@"title"];
-                cell.descView.text = item[@"description"];
-                cell.descView.hidden = ((NSString *)item[@"description"]).length == 0;
+                cell.descriptionView.text = item[@"description"];
+                cell.descriptionView.hidden = ((NSString *)item[@"description"]).length == 0;
+                if ([cell needsUpdateConstraints])
+                    [cell updateConstraints];
             }
             return cell;
         }
@@ -932,7 +947,6 @@
 
 #pragma mark - OASettingsImportExportDelegate
 
-//getImportListener
 - (void) onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items {
     if (succeed)
     {
@@ -942,11 +956,22 @@
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }
+    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
 }
 
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
 {
     [self processDuplicates:duplicates items:items];
+}
+
+- (void)onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items
+{
+    
+}
+
+- (void)onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed
+{
+    
 }
 
 - (void) processDuplicates:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items
@@ -956,7 +981,7 @@
         if (duplicates.count == 0)
         {
             [self updateUI:OALocalizedString(@"shared_string_importing") descriptionRes:OALocalizedString(@"importing_from") activityLabel:OALocalizedString(@"shared_string_importing")];
-        [_settingsHelper importSettings:_file items:items latestChanges:@"" version:1 delegate:self];
+            [_settingsHelper importSettings:_file items:items latestChanges:@"" version:1 delegate:self];
         }
         else
         {

@@ -8,18 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, EOARouringProfilesResource)
+typedef NS_ENUM(NSInteger, EOARoutingProfilesResource)
 {
-    EOARouringProfilesResourceDirectTo = 0,
-    EOARouringProfilesResourceStraightLine,
-    EOARouringProfilesResourceBrouter,
-    EOARouringProfilesResourceCar,
-    EOARouringProfilesResourcePedestrian,
-    EOARouringProfilesResourceBicycle,
-    EOARouringProfilesResourceSki,
-    EOARouringProfilesResourcePublicTransport,
-    EOARouringProfilesResourceBoat,
-    EOARouringProfilesResourceGeocoding
+    EOARoutingProfilesResourceDirectTo = 0,
+    EOARoutingProfilesResourceStraightLine,
+    EOARoutingProfilesResourceBrouter,
+    EOARoutingProfilesResourceCar,
+    EOARoutingProfilesResourcePedestrian,
+    EOARoutingProfilesResourceBicycle,
+    EOARoutingProfilesResourceSki,
+    EOARoutingProfilesResourcePublicTransport,
+    EOARoutingProfilesResourceBoat,
+    EOARoutingProfilesResourceGeocoding
 };
 
 @interface OAProfileDataObject : NSObject
@@ -44,13 +44,13 @@ typedef NS_ENUM(NSInteger, EOARouringProfilesResource)
 
 - (instancetype) initWithStringKey:(NSString *)stringKey name:(NSString *)name descr:(NSString *)descr iconName:(NSString *)iconName isSelected:(BOOL)isSelected fileName:(NSString *) fileName;
 
-- (instancetype) initWithResource:(EOARouringProfilesResource)res;
+- (instancetype) initWithResource:(EOARoutingProfilesResource)res;
 
-+ (NSString *) getLocalizedName:(EOARouringProfilesResource)res;
-+ (NSString *) getIconName:(EOARouringProfilesResource)res;
-+ (NSString *) getProfileKey:(EOARouringProfilesResource)type;
++ (NSString *) getLocalizedName:(EOARoutingProfilesResource)res;
++ (NSString *) getIconName:(EOARoutingProfilesResource)res;
++ (NSString *) getProfileKey:(EOARoutingProfilesResource)type;
 + (OARoutingProfileDataObject *) getRoutingProfileDataByName:(NSString *)key;
-+ (EOARouringProfilesResource) getValueOf:(NSString *)key;
++ (EOARoutingProfilesResource) getValueOf:(NSString *)key;
 
 + (BOOL) isRpValue:(NSString *)value;
 

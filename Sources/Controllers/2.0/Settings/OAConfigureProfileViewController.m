@@ -682,7 +682,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 #pragma mark - OASettingsImportExportDelegate
 
-- (void)onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(nonnull NSArray<OASettingsItem *> *)items {
+- (void)onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(nonnull NSArray<OASettingsItem *> *)items
+{
     if (succeed)
     {
         for (OASettingsItem *item in items)
@@ -691,7 +692,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
 }
 
-- (void)onSettingsImportFinished:(BOOL)succeed items:(nonnull NSArray<OASettingsItem *> *)items {
+- (void)onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
+{
     [self showAlertMessage:OALocalizedString(OALocalizedString(@"profile_prefs_reset_successful"))];
     [self updateCopiedOrResetPrefs];
 }

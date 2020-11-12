@@ -133,11 +133,6 @@
     return [self.tableView isEditing] ? favoritesToolBarHeight : 0.;
 }
 
-- (IBAction)backPressed:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (void)saveChanges
 {
     [_registry updateQuickActions:[NSArray arrayWithArray:_data]];

@@ -56,7 +56,7 @@
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" image="ic_navbar_chevron.png"/>
                             <connections>
-                                <action selector="backPressed:" destination="-1" eventType="touchUpInside" id="wsU-lh-OPj"/>
+                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="Xzq-4X-TUi"/>
                             </connections>
                         </button>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UOa-Cg-QCt">

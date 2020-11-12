@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/SettingHelper.java
-//  git revision 6ec5d526a81dd94623439ff99ac5a76e2e23b557
+//  git revision 1b3247780ad2cd0119f09c89537a8f8138806481
 //
 //  Fully ported: OASettingsItemReader, OASettingsItemWriter, OAProfileSettingsItem, OAGlobalSettingsItem
 //  To implement: EOASettingsItemTypePlugin, EOASettingsItemTypeData, EOASettingsItemTypeFile, EOASettingsItemTypeResources,
@@ -14,7 +14,8 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+#define RENDERERS_DIR @"rendering/"
+#define ROUTING_PROFILES_DIR @"routing/"
 
 @class OAImportAsyncTask, OAExportAsyncTask, OACheckDuplicates, OALocalResourceItem;
 @class OASettingsItem;
@@ -36,7 +37,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeIllegalType;
 FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeUnknownFileSubtype;
 FOUNDATION_EXTERN NSInteger const kSettingsHelperErrorCodeEmptyJson;
 
-typedef enum : NSInteger {
+typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypeUnknown = -1,
     EOASettingsItemTypeGlobal = 0,
     EOASettingsItemTypeProfile,
@@ -48,18 +49,36 @@ typedef enum : NSInteger {
     EOASettingsItemTypePoiUIFilters,
     EOASettingsItemTypeMapSources,
     EOASettingsItemTypeAvoidRoads
-} EOASettingsItemType;
+};
 
-typedef enum : NSUInteger {
+typedef NS_ENUM(NSInteger, EOAImportType) {
     EOAImportTypeCollect = 0,
     EOAImportTypeCheckDuplicates,
     EOAImportTypeImport
-} EOAImportType;
+};
 
 @interface OASettingsItemType : NSObject
 
 + (NSString * _Nullable) typeName:(EOASettingsItemType)type;
 + (EOASettingsItemType) parseType:(NSString *)typeName;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
+    EOAExportSettingsTypeUnknown = -1,
+    EOAExportSettingsTypeProfile = 0,
+    EOAExportSettingsTypeQuickActions,
+    EOAExportSettingsTypePoiTypes,
+    EOAExportSettingsTypeMapSources,
+    EOAExportSettingsTypeCustomRendererStyle,
+    EOAExportSettingsTypeCustomRouting,
+    EOAExportSettingsTypeAvoidRoads,
+};
+
+@interface OAExportSettingsType : NSObject
+
++ (NSString * _Nullable) typeName:(EOAExportSettingsType)type;
++ (EOAExportSettingsType) parseType:(NSString *)typeName;
 
 @end
 
@@ -72,6 +91,7 @@ typedef enum : NSUInteger {
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version;
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate;
+- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems delegate:(id<OASettingsImportExportDelegate>)delegate;
 - (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems;
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version;
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate;
@@ -295,5 +315,3 @@ typedef enum : NSInteger {
 @interface OAAvoidRoadsSettingsItem : OACollectionSettingsItem<OAAvoidRoadInfo *>
 
 @end
-
-NS_ASSUME_NONNULL_END

@@ -48,7 +48,8 @@
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _targetAppMode = mode;
     }
     return self;

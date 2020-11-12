@@ -34,14 +34,19 @@
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
     _tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle
-                                                                      font:kHeaderViewFont
-                                                                 textColor:UIColor.blackColor
-                                                               lineSpacing:0.0 isTitle:YES];
+    [self setTableHeaderView:self.getTableHeaderTitle];
     
     _navBarBackgroundView = [self createNavBarBackgroundView];
     _navBarBackgroundView.frame = _navBarView.bounds;
     [_navBarView insertSubview:_navBarBackgroundView atIndex:0];
+}
+
+- (void) setTableHeaderView:(NSString *)label
+{
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:label
+                                                                      font:kHeaderViewFont
+                                                                 textColor:UIColor.blackColor
+                                                               lineSpacing:0.0 isTitle:YES];
 }
 
 - (void) applyLocalization
@@ -77,10 +82,7 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle
-                                                                          font:kHeaderViewFont
-                                                                     textColor:UIColor.blackColor
-                                                                   lineSpacing:0.0 isTitle:YES];
+        [self setTableHeaderView:self.getTableHeaderTitle];
         [_tableView reloadData];
     } completion:nil];
 }

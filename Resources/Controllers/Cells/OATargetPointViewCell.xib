@@ -32,7 +32,7 @@
                             <fragment content="50.46548, 30.37344">
                                 <attributes>
                                     <color key="NSColor" red="0.5170014500617981" green="0.51698595285415649" blue="0.51699477434158325" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <font key="NSFont" size="15" name=".SFNS-Regular"/>
+                                    <font key="NSFont" metaFont="system" size="15"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="truncatingTail" baseWritingDirection="natural"/>
                                 </attributes>
                             </fragment>

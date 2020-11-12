@@ -166,5 +166,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSDictionary *) getSortedVoiceProviders;
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing;
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing highlightColor:(UIColor *)highlightColor;
 
 @end

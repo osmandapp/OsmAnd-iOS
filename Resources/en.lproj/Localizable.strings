@@ -475,6 +475,9 @@
 "shared_string_maximum" = "Maximum";
 "shared_string_warning" = "Warning";
 "shared_string_copy" = "Copy";
+"shared_string_continue" = "Continue";
+"shared_string_deselect_all" = "Deselect all";
+"shared_string_preparing" = "Preparing";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -727,7 +730,43 @@
 "available_map_sources" = "Available map sources";
 
 "export_profile" = "Export profile";
+"shared_string_import" = "Import profile";
 "create_profile" = "Create profile";
+"import_profile_select_descr" = "Select the data to be imported.";
+"selected_profiles" = "%d of %d";
+"nav_type_hint" = "Navigation type: %@";
+"shared_string_nothing_selected" = "Nothing selected";
+
+"import_duplicates_title" = "Some items already exist";
+"import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
+"keep_both" = "Keep both";
+"keep_both_desc" = "Imported items will be added with prefix";
+"replace_all" = "Replace all";
+"replace_all_desc" = "Current items will be replaced with items from the file";
+"shared_string_profiles" = "Profiles";
+"shared_string_quick_actions" = "Quick actions";
+"shared_string_poi_types" = "POI types";
+"quick_action_map_source_title" = "Map sources";
+"shared_string_routing" = "Routing";
+"shared_string_rendering_style" = "Rendering styles";
+"avoid_road" = "Avoid road";
+"shared_string_importing" = "Importing";
+"importing_from" = "Importing data from %@";
+
+"shared_string_settings" = "Settings";
+"configure_screen_quick_action" = "Quick action";
+"search_activity" = "Search";
+
+"ltr_or_rtl_combine_via_space" = "%@ %@";
+"ltr_or_rtl_combine_via_colon" = "%@: %@";
+
+"listed_exist" = "Listed %@, already exist in OsmAnd.";
+
+"shared_string_import_complete" = "Import complete";
+"import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
+"shared_string_finish" = "Finish";
+"added_items" = "Added items: %@";
+
 "copy_from_other_profile" = "Copy from another profile";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "reset_to_default" = "Reset to default";
@@ -774,6 +813,9 @@
 
 "reset_to_default" = "Reset to default";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
+
+"checking_for_duplicates" = "Checking for duplicates...";
+"checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
 "prch_addons" = "Addons";

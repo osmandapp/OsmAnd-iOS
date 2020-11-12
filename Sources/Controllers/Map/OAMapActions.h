@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAPointDescription, OAGPX, OATargetPoint;
+@class OAPointDescription, OAGPX, OATargetPoint, OAApplicationMode;
 
 @interface OAMapActions : NSObject
 
@@ -25,5 +25,6 @@
 - (void) setGPXRouteParams:(OAGPX *)result;
 
 - (void) navigate:(OATargetPoint *)targetPoint;
+- (OAApplicationMode *) getRouteMode;
 
 @end

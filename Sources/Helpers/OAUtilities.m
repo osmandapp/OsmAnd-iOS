@@ -1467,6 +1467,11 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing
 {
+    return [self.class getStringWithBoldPart:wholeString mainString:ms boldString:bs lineSpacing:lineSpacing highlightColor:nil];
+}
+
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing highlightColor:(UIColor *)highlightColor
+{
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:lineSpacing];
     NSMutableAttributedString *descriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:wholeString
@@ -1477,6 +1482,8 @@ static const double d180PI = 180.0 / M_PI_2;
     NSRange mainRange = [wholeString rangeOfString:mainString];
     [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:15] range:mainRange];
     [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont boldSystemFontOfSize:15] range:boldRange];
+    if (highlightColor)
+        [descriptionAttributedString addAttribute: NSForegroundColorAttributeName value:highlightColor range:boldRange];
     return descriptionAttributedString;
 }
 

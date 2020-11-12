@@ -781,6 +781,26 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO;
 }
 
+
+- (void) showMapStylesScreen
+{
+    [OAAnalyticsHelper logEvent:@"configure_map_styles_open"];
+    
+    _targetAppMode = nil;
+    _reopenSettings = _targetAppMode != nil;
+    
+    [self removeGestureRecognizers];
+    
+    _dashboard = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
+    [_dashboard show:self parentViewController:nil animated:YES];
+    
+    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
+    
+    [self.targetMenuView quickHide];
+
+    self.sidePanelController.recognizesPanGesture = NO;
+}
+
 - (void) showConfigureScreen
 {
     [self showConfigureScreen:nil];

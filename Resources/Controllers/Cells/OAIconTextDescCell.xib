@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6QZ-eh-lvr">
-                        <rect key="frame" x="62" y="6" width="213" height="20"/>
+                        <rect key="frame" x="62" y="6" width="214" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="QxD-CC-kgE"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="751" constant="36" id="d9L-xl-AJO"/>
@@ -27,7 +27,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXz-m7-fDz">
-                        <rect key="frame" x="62" y="27" width="213" height="15"/>
+                        <rect key="frame" x="62" y="27" width="214" height="15"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="15" id="TmO-dC-mgG"/>
                         </constraints>
@@ -43,7 +43,7 @@
                         </constraints>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_cell_pointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="i7x-fl-kCw">
-                        <rect key="frame" x="283" y="13.5" width="21" height="21"/>
+                        <rect key="frame" x="284" y="13.5" width="21" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="21" id="D5x-fd-d1g"/>
                             <constraint firstAttribute="height" constant="21" id="WCR-ul-dnF"/>

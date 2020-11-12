@@ -34,6 +34,7 @@
 #import "OAPlugin.h"
 #import "OAMapStyleTitles.h"
 #import "OrderedDictionary.h"
+#import "OAImportSettingsViewController.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -102,6 +103,52 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @end
 
+@implementation OAExportSettingsType
+
++ (NSString * _Nullable) typeName:(EOAExportSettingsType)type
+{
+    switch (type)
+    {
+        case EOAExportSettingsTypeProfile:
+            return @"PROFILE";
+        case EOAExportSettingsTypeQuickActions:
+            return @"QUICK_ACTIONS";
+        case EOAExportSettingsTypePoiTypes:
+            return @"POI_TYPES";
+        case EOAExportSettingsTypeMapSources:
+            return @"MAP_SOURCES";
+        case EOAExportSettingsTypeCustomRendererStyle:
+            return @"CUSTOM_RENDER_STYLE";
+        case EOAExportSettingsTypeCustomRouting:
+            return @"CUSTOM_ROUTING";
+        case EOAExportSettingsTypeAvoidRoads:
+            return @"AVOID_ROADS";
+        default:
+            return nil;
+    }
+}
+
++ (EOAExportSettingsType) parseType:(NSString *)typeName
+{
+    if ([typeName isEqualToString:@"PROFILE"])
+        return EOAExportSettingsTypeProfile;
+    if ([typeName isEqualToString:@"QUICK_ACTIONS"])
+        return EOAExportSettingsTypeQuickActions;
+    if ([typeName isEqualToString:@"POI_TYPES"])
+        return EOAExportSettingsTypePoiTypes;
+    if ([typeName isEqualToString:@"MAP_SOURCES"])
+        return EOAExportSettingsTypeMapSources;
+    if ([typeName isEqualToString:@"CUSTOM_RENDER_STYLE"])
+        return EOAExportSettingsTypeCustomRendererStyle;
+    if ([typeName isEqualToString:@"CUSTOM_ROUTING"])
+        return EOAExportSettingsTypeCustomRouting;
+    if ([typeName isEqualToString:@"AVOID_ROADS"])
+        return EOAExportSettingsTypeAvoidRoads;
+    return EOAExportSettingsTypeUnknown;
+}
+
+@end
+
 @interface OASettingsHelper() <OASettingsImportExportDelegate>
 
 @end
@@ -132,8 +179,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
  
 - (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems
 {
+    [self checkDuplicates:settingsFile items:items selectedItems:selectedItems delegate:self];
+}
+
+- (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems delegate:(id<OASettingsImportExportDelegate>)delegate
+{
     OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items selectedItems:selectedItems];
-    task.delegate = self;
+    task.delegate = delegate;
     [task execute];
 }
 
@@ -144,9 +196,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) importSettings:(NSString *)settingsFile items:(NSArray<OASettingsItem*> *)items latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate
 {
-   OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
-   task.delegate = delegate;
-   [task execute];
+    OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile items:items latestChanges:latestChanges version:version];
+    task.delegate = delegate;
+    [task execute];
 }
 
 - (void) exportSettings:(NSString *)fileDir fileName:(NSString *)fileName items:(NSArray<OASettingsItem *> *)items exportItemFiles:(BOOL)exportItemFiles
@@ -194,10 +246,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 //        }
         if (pluginIndependentItems.count > 0)
         {
-            // TODO: add ui dialogs as in Android
-//            FragmentManager fragmentManager = activity.getSupportFragmentManager();
-//            ImportSettingsFragment.showInstance(fragmentManager, pluginIndependentItems, file);
-            [self importSettings:_importTask.getFile items:_importTask.getItems latestChanges:@"" version:1];
+            OAImportSettingsViewController* incomingURLViewController = [[OAImportSettingsViewController alloc] initWithItems:pluginIndependentItems];
+            [OARootViewController.instance.navigationController pushViewController:incomingURLViewController animated:YES];
         }
     }
     else if (empty)
@@ -528,7 +578,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }];
     [self.item applyRendererPreferences:rendererSettings];
     [self.item applyRoutingPreferences:routingSettings];
-    [OsmAndApp.instance.data.mapLayerChangeObservable notifyEvent];
     return YES;
 }
 
@@ -652,7 +701,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (BOOL)exists
 {
-    return [OAApplicationMode valueOfStringKey:_appMode.toHumanString def:nil] != nil;
+    return [OAApplicationMode valueOfStringKey:_appMode.stringKey def:nil] != nil;
 }
 
 - (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
@@ -1983,6 +2032,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [super initialization];
     
     _newSqliteData = [NSMutableDictionary dictionary];
+    self.existingItems = [NSMutableArray array];
     
     OsmAndAppInstance app = [OsmAndApp instance];
     for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
@@ -2043,22 +2093,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
                 {
                     OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)localItem;
-                    std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> tileSource;
-                    const auto& resource = [OsmAndApp instance].resourcesManager->getResource(QStringLiteral("online_tiles"));
-                    if (resource)
-                    {
-                        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
-                        for(const auto& onlineTileSource : onlineTileSources->getCollection())
-                        {
-                            if (QString::compare(QString::fromNSString(item.title), onlineTileSource->name) == 0)
-                            {
-                                tileSource = onlineTileSource;
-                                break;
-                            }
-                        }
-                    }
-                    if (tileSource)
-                        _newSources[QString::fromNSString(item.title)] = tileSource;
+                    if (item.onlineTileSource)
+                        _newSources[QString::fromNSString(item.title)] = item.onlineTileSource;
                 }
             }
         }
@@ -2157,13 +2193,32 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         else if ([localItem isKindOfClass:OAOnlineTilesResourceItem.class])
         {
+            NSString *newTitle = [NSString stringWithFormat:@"%@_%d", localItem.title, number];
             OAOnlineTilesResourceItem *oldItem = (OAOnlineTilesResourceItem *)localItem;
             OAOnlineTilesResourceItem *renamedItem = [[OAOnlineTilesResourceItem alloc] init];
-            renamedItem.title = [NSString stringWithFormat:@"%@_%d", oldItem.title, number];
+            renamedItem.title = newTitle;
             if (![self isDuplicate:renamedItem])
             {
+                const auto &oldSource = _newSources[QString::fromNSString(oldItem.title)];
+                const auto newSource = std::make_shared<OsmAnd::IOnlineTileSources::Source>(QString::fromNSString(newTitle));
+                
                 renamedItem.path = oldItem.path;
-                _newSources[QString::fromNSString(renamedItem.title)] = _newSources[QString::fromNSString(oldItem.title)];
+                newSource->urlToLoad = oldSource->urlToLoad;
+                newSource->minZoom = oldSource->minZoom;
+                newSource->maxZoom = oldSource->maxZoom;
+                newSource->expirationTimeMillis = oldSource->expirationTimeMillis;
+                newSource->ellipticYTile = oldSource->ellipticYTile;
+                //newSource->priority = oldSource->priority;
+                newSource->tileSize = oldSource->tileSize;
+                newSource->ext = oldSource->ext;
+                newSource->avgSize = oldSource->avgSize;
+                newSource->bitDensity =oldSource->bitDensity;
+                newSource->invertedYTile = oldSource->invertedYTile;
+                newSource->randoms = oldSource->randoms;
+                newSource->randomsArray = oldSource->randomsArray;
+                newSource->rule = oldSource->rule;
+                
+                _newSources[QString::fromNSString(newTitle)] = newSource;
                 _newSources.remove(QString::fromNSString(oldItem.title));
                 return renamedItem;
             }
@@ -2245,12 +2300,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             result->randomsArray = OsmAnd::OnlineTileSources::parseRandoms(QString::fromNSString(randoms));
             result->rule = QString::fromNSString(rule);
 
-            OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
-            app.resourcesManager->installTilesResource(result);
-
             OAOnlineTilesResourceItem *item = [[OAOnlineTilesResourceItem alloc] init];
             item.path = [app.cachePath stringByAppendingPathComponent:name];
             item.title = name;
+            item.onlineTileSource = result;
             _newSources[QString::fromNSString(name)] = result;
 
             [self.items addObject:item];
@@ -2277,7 +2330,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             NSString *path = [[NSTemporaryDirectory() stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"sqlitedb"];
             if ([OASQLiteTileSource createNewTileSourceDbAtPath:path parameters:params])
             {
-                [[OAMapCreatorHelper sharedInstance] installFile:path newFileName:nil];
                 OASqliteDbResourceItem *item = [[OASqliteDbResourceItem alloc] init];
                 item.title = [[name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                 item.fileName = name;
@@ -2487,7 +2539,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             jsonObject[@"name"] = avoidRoad.name;
             jsonObject[@"appModeKey"] = avoidRoad.appModeKey;
             [jsonArray addObject:jsonObject];
-        }        
+        }
         json[@"items"] = jsonArray;
     }
 }

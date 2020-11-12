@@ -18,6 +18,5 @@
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode;
-- (instancetype) initWithPopParam:(BOOL)shouldPopToRoot;
 
 @end

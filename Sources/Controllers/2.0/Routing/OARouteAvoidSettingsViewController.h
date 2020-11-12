@@ -15,8 +15,6 @@
 
 @property (nonatomic) id<OASettingsDataDelegate> delegate;
 
-- (instancetype)initWithBackButtonVisibility:(BOOL)hidden;
-
 + (NSString *) getDescr:(OAAvoidRoadInfo *)roadInfo;
 
 @end

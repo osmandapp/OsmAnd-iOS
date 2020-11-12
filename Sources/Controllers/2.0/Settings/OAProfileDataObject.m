@@ -38,7 +38,7 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
 + (void)initialize
 {
     NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *rps = [NSMutableDictionary new];
-    for (NSInteger i = EOARouringProfilesResourceDirectTo; i < EOARouringProfilesResourceGeocoding; i++)
+    for (NSInteger i = EOARoutingProfilesResourceDirectTo; i < EOARoutingProfilesResourceGeocoding; i++)
     {
         [rps setObject:[[OARoutingProfileDataObject alloc] initWithResource:i] forKey:[self getProfileKey:i]];
     }
@@ -54,7 +54,7 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
     return self;
 }
 
-- (instancetype) initWithResource:(EOARouringProfilesResource)res
+- (instancetype) initWithResource:(EOARoutingProfilesResource)res
 {
     self = [super init];
     if (self) {
@@ -65,114 +65,114 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
     return self;
 }
 
-+ (NSString *) getProfileKey:(EOARouringProfilesResource)type
++ (NSString *) getProfileKey:(EOARoutingProfilesResource)type
 {
     switch (type) {
-        case EOARouringProfilesResourceDirectTo:
+        case EOARoutingProfilesResourceDirectTo:
             return @"DIRECT_TO_MODE";
-        case EOARouringProfilesResourceStraightLine:
+        case EOARoutingProfilesResourceStraightLine:
             return @"STRAIGHT_LINE_MODE";
-        case EOARouringProfilesResourceBrouter:
+        case EOARoutingProfilesResourceBrouter:
             return @"BROUTER_MODE";
-        case EOARouringProfilesResourceCar:
+        case EOARoutingProfilesResourceCar:
             return @"CAR";
-        case EOARouringProfilesResourcePedestrian:
+        case EOARoutingProfilesResourcePedestrian:
             return @"PEDESTRIAN";
-        case EOARouringProfilesResourceBicycle:
+        case EOARoutingProfilesResourceBicycle:
             return @"BICYCLE";
-        case EOARouringProfilesResourceSki:
+        case EOARoutingProfilesResourceSki:
             return @"SKI";
-        case EOARouringProfilesResourcePublicTransport:
+        case EOARoutingProfilesResourcePublicTransport:
             return @"PUBLIC_TRANSPORT";
-        case EOARouringProfilesResourceBoat:
+        case EOARoutingProfilesResourceBoat:
             return @"BOAT";
-        case EOARouringProfilesResourceGeocoding:
+        case EOARoutingProfilesResourceGeocoding:
             return @"GEOCODING";
         default:
             return @"";
     };
 }
 
-+ (NSString *) getIconName:(EOARouringProfilesResource)res
++ (NSString *) getIconName:(EOARoutingProfilesResource)res
 {
     switch (res) {
-        case EOARouringProfilesResourceDirectTo:
+        case EOARoutingProfilesResourceDirectTo:
             return @"ic_custom_navigation_type_direct_to";
-        case EOARouringProfilesResourceStraightLine:
+        case EOARoutingProfilesResourceStraightLine:
             return @"ic_custom_straight_line";
-        case EOARouringProfilesResourceBrouter:
+        case EOARoutingProfilesResourceBrouter:
             return @"ic_custom_straight_line";
-        case EOARouringProfilesResourceCar:
+        case EOARoutingProfilesResourceCar:
             return @"ic_profile_car";
-        case EOARouringProfilesResourcePedestrian:
+        case EOARoutingProfilesResourcePedestrian:
             return @"ic_profile_pedestrian";
-        case EOARouringProfilesResourceBicycle:
+        case EOARoutingProfilesResourceBicycle:
             return @"ic_profile_bicycle";
-        case EOARouringProfilesResourceSki:
+        case EOARoutingProfilesResourceSki:
             return @"ic_action_skiing";
-        case EOARouringProfilesResourcePublicTransport:
+        case EOARoutingProfilesResourcePublicTransport:
             return @"ic_action_bus_dark";
-        case EOARouringProfilesResourceBoat:
+        case EOARoutingProfilesResourceBoat:
             return @"ic_action_sail_boat_dark";
-        case EOARouringProfilesResourceGeocoding:
+        case EOARoutingProfilesResourceGeocoding:
             return @"ic_custom_online";
         default:
             return @"";
     };
 }
 
-+ (NSString *) getLocalizedName:(EOARouringProfilesResource)res
++ (NSString *) getLocalizedName:(EOARoutingProfilesResource)res
 {
     switch (res) {
-        case EOARouringProfilesResourceDirectTo:
+        case EOARoutingProfilesResourceDirectTo:
             return OALocalizedString(@"nav_type_direct_to");
-        case EOARouringProfilesResourceStraightLine:
+        case EOARoutingProfilesResourceStraightLine:
             return OALocalizedString(@"nav_type_straight_line");
-        case EOARouringProfilesResourceBrouter:
+        case EOARoutingProfilesResourceBrouter:
             return OALocalizedString(@"nav_type_brouter");
-        case EOARouringProfilesResourceCar:
+        case EOARoutingProfilesResourceCar:
             return OALocalizedString(@"m_style_car");
-        case EOARouringProfilesResourcePedestrian:
+        case EOARoutingProfilesResourcePedestrian:
             return OALocalizedString(@"rendering_value_pedestrian_name");
-        case EOARouringProfilesResourceBicycle:
+        case EOARoutingProfilesResourceBicycle:
             return OALocalizedString(@"m_style_bicycle");
-        case EOARouringProfilesResourceSki:
+        case EOARoutingProfilesResourceSki:
             return OALocalizedString(@"nav_type_ski");
-        case EOARouringProfilesResourcePublicTransport:
+        case EOARoutingProfilesResourcePublicTransport:
             return OALocalizedString(@"m_style_pulic_transport");
-        case EOARouringProfilesResourceBoat:
+        case EOARoutingProfilesResourceBoat:
             return OALocalizedString(@"app_mode_boat");
-        case EOARouringProfilesResourceGeocoding:
+        case EOARoutingProfilesResourceGeocoding:
             return OALocalizedString(@"nav_type_geocoding");
         default:
             return @"";
     };
 }
 
-+ (EOARouringProfilesResource) getValueOf:(NSString *)key
++ (EOARoutingProfilesResource) getValueOf:(NSString *)key
 {
     if ([key isEqualToString: @"DIRECT_TO_MODE"])
-        return EOARouringProfilesResourceDirectTo;
+        return EOARoutingProfilesResourceDirectTo;
     else if ([key isEqualToString: @"STRAIGHT_LINE_MODE"])
-        return EOARouringProfilesResourceStraightLine;
+        return EOARoutingProfilesResourceStraightLine;
     else if ([key isEqualToString: @"BROUTER_MODE"])
-        return EOARouringProfilesResourceBrouter;
+        return EOARoutingProfilesResourceBrouter;
     else if ([key isEqualToString: @"CAR"])
-        return EOARouringProfilesResourceCar;
+        return EOARoutingProfilesResourceCar;
     else if ([key isEqualToString: @"PEDESTRIAN"])
-        return EOARouringProfilesResourcePedestrian;
+        return EOARoutingProfilesResourcePedestrian;
     else if ([key isEqualToString: @"BICYCLE"])
-        return EOARouringProfilesResourceBicycle;
+        return EOARoutingProfilesResourceBicycle;
     else if ([key isEqualToString: @"SKI"])
-        return EOARouringProfilesResourceSki;
+        return EOARoutingProfilesResourceSki;
     else if ([key isEqualToString: @"PUBLIC_TRANSPORT"])
-        return EOARouringProfilesResourcePublicTransport;
+        return EOARoutingProfilesResourcePublicTransport;
     else if ([key isEqualToString: @"BOAT"])
-        return EOARouringProfilesResourceBoat;
+        return EOARoutingProfilesResourceBoat;
     else if ([key isEqualToString: @"GEOCODING"])
-        return EOARouringProfilesResourceGeocoding;
+        return EOARoutingProfilesResourceGeocoding;
     else
-        return EOARouringProfilesResourceDirectTo;
+        return EOARoutingProfilesResourceDirectTo;
 }
 
 + (OARoutingProfileDataObject *) getRoutingProfileDataByName:(NSString *)key

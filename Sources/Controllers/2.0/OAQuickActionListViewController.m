@@ -45,28 +45,6 @@
     UIView *_tableHeaderView;
     UIView *_toolbarBackgroundView;
     CALayer *_horizontalLine;
-    
-    BOOL _shouldPopToRoot;
-}
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        _shouldPopToRoot = NO;
-    }
-    return self;
-}
-
-- (instancetype) initWithPopParam:(BOOL)shouldPopToRoot
-{
-    self = [super init];
-    if (self)
-    {
-        _shouldPopToRoot = shouldPopToRoot;
-    }
-    return self;
 }
 
 - (void)viewDidLoad
@@ -153,14 +131,6 @@
 -(CGFloat) getToolBarHeight
 {
     return [self.tableView isEditing] ? favoritesToolBarHeight : 0.;
-}
-
-- (IBAction) backButtonClicked:(id)sender
-{
-    if (_shouldPopToRoot)
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    else
-        [super backButtonClicked:sender];
 }
 
 - (void)saveChanges

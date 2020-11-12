@@ -31,9 +31,6 @@
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
 #define kTitleTwoIconsRoundCell @"OATitleTwoIconsRoundCell"
 #define kCellTypeWithActivity @"OAActivityViewWithTitleCell"
-#define RENDERERS_DIR @"rendering/"
-#define ROUTING_PROFILES_DIR @"routing/"
-
 
 @interface OAHeaderType : NSObject
 
@@ -548,7 +545,7 @@
 
 #pragma mark - OASettingsImportExportDelegate
 
-- (void)onSettingsImportFinished:(BOOL)succeed items:(nonnull NSArray<OASettingsItem *> *)items {
+- (void)onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items {
     if (succeed)
     {
         OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:items fileName:[_file lastPathComponent]];

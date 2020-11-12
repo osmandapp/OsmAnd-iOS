@@ -139,13 +139,13 @@
 + (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles
 {
     NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *profilesObjects = [NSMutableDictionary new];
-    OARoutingProfileDataObject *straightLine = [[OARoutingProfileDataObject alloc] initWithResource:EOARouringProfilesResourceStraightLine];
+    OARoutingProfileDataObject *straightLine = [[OARoutingProfileDataObject alloc] initWithResource:EOARoutingProfilesResourceStraightLine];
     straightLine.descr = OALocalizedString(@"special_routing");
-    [profilesObjects setObject:straightLine forKey:[OARoutingProfileDataObject getProfileKey:EOARouringProfilesResourceStraightLine]];
+    [profilesObjects setObject:straightLine forKey:[OARoutingProfileDataObject getProfileKey:EOARoutingProfilesResourceStraightLine]];
     
-    OARoutingProfileDataObject *directTo = [[OARoutingProfileDataObject alloc] initWithResource:EOARouringProfilesResourceDirectTo];
+    OARoutingProfileDataObject *directTo = [[OARoutingProfileDataObject alloc] initWithResource:EOARoutingProfilesResourceDirectTo];
     directTo.descr = OALocalizedString(@"special_routing");
-    [profilesObjects setObject:directTo forKey:[OARoutingProfileDataObject getProfileKey:EOARouringProfilesResourceDirectTo]];
+    [profilesObjects setObject:directTo forKey:[OARoutingProfileDataObject getProfileKey:EOARoutingProfilesResourceDirectTo]];
     
 //    if (context.getBRouterService() != null) {
 //        profilesObjects.put(RoutingProfilesResources.BROUTER_MODE.name(), new RoutingProfileDataObject(

@@ -36,9 +36,6 @@
 #define kRoutingSettings @"kRoutingSettings"
 #define kAvoidRoads @"kAvoidRoads"
 
-#define RENDERERS_DIR @"rendering/"
-#define ROUTING_PROFILES_DIR @"routing/"
-
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -270,38 +267,36 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *category = (NSString *) item[@"category"];
-    
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    OARootViewController *rootController = [OARootViewController instance];
     if ([category isEqualToString:kProfiles] || [category isEqualToString:kRoutingSettings])
     {
-        OAMainSettingsViewController *profileSettings = [[OAMainSettingsViewController alloc] initWithPopParam:YES];
-        [self.navigationController pushViewController:profileSettings animated:YES];
+        OAMainSettingsViewController *profileSettings = [[OAMainSettingsViewController alloc] init];
+        [rootController.navigationController pushViewController:profileSettings animated:YES];
     }
     else if ([category isEqualToString:kQuickActioins])
     {
-        OAQuickActionListViewController *actionsList = [[OAQuickActionListViewController alloc] initWithPopParam:YES];
-        [self.navigationController pushViewController:actionsList animated:YES];
+        OAQuickActionListViewController *actionsList = [[OAQuickActionListViewController alloc] init];
+        [rootController.navigationController pushViewController:actionsList animated:YES];
     }
     else if ([category isEqualToString:kPoiFilters])
     {
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        [[OARootViewController instance].mapPanel openSearch];
+        [rootController.mapPanel openSearch];
     }
     else if ([category isEqualToString:kTileSources])
     {
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        [[OARootViewController instance].mapPanel mapSettingsButtonClick:nil];
+        [rootController.mapPanel mapSettingsButtonClick:nil];
     }
     else if ([category isEqualToString:kRenderSettings])
     {
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        [[OARootViewController instance].mapPanel showMapStylesScreen];
+        [rootController.mapPanel showMapStylesScreen];
     }
     else if ([category isEqualToString:kAvoidRoads])
     {
+        // TODO: change this while implementing Avoid roads import!
         [self loadCurrentRoutingMode];
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        OARouteAvoidSettingsViewController *avoidController = [[OARouteAvoidSettingsViewController alloc] initWithBackButtonVisibility:YES];
-        [[OARootViewController instance] presentViewController:avoidController animated:YES completion:nil];
+        OARouteAvoidSettingsViewController *avoidController = [[OARouteAvoidSettingsViewController alloc] init];
+        [rootController.navigationController pushViewController:avoidController animated:YES];
     }
 }
 

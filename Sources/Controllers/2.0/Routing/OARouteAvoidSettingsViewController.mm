@@ -51,26 +51,6 @@
     OAAvoidSpecificRoads *_avoidRoads;
     
     UIView *_tableHeaderView;
-    
-    BOOL _backButtonHidden;
-}
-
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _backButtonHidden = NO;
-    }
-    return self;
-}
-
-- (instancetype)initWithBackButtonVisibility:(BOOL)hidden
-{
-    self = [super init];
-    if (self) {
-        _backButtonHidden = hidden;
-    }
-    return self;
 }
 
 -(void) applyLocalization
@@ -160,7 +140,6 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
     [self.tableView reloadData];
-    self.backButton.hidden = _backButtonHidden;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

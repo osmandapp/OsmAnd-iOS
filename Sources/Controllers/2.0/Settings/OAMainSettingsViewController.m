@@ -43,18 +43,6 @@
     OAAutoObserverProxy* _appModeChangedObservable;
     
     OAApplicationMode *_targetAppMode;
-    
-    BOOL _shouldPopToRoot;
-}
-
-- (instancetype) initWithPopParam:(BOOL)shouldPopToRoot
-{
-    self = [super init];
-    if (self)
-    {
-        _shouldPopToRoot = shouldPopToRoot;
-    }
-    return self;
 }
 
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode
@@ -63,7 +51,6 @@
     if (self)
     {
         _targetAppMode = mode;
-        _shouldPopToRoot = NO;
     }
     return self;
 }
@@ -362,14 +349,6 @@
         OARearrangeProfilesViewController* rearrangeProfilesViewController = [[OARearrangeProfilesViewController alloc] init];
         [self.navigationController pushViewController:rearrangeProfilesViewController animated:YES];
     }
-}
-
-- (IBAction) backButtonClicked:(id)sender
-{
-    if (_shouldPopToRoot)
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    else
-        [super backButtonClicked:sender];
 }
 
 @end

@@ -45,9 +45,9 @@ if [ $retcode -ne 0 ]; then
 fi
 
 # Generate resources from SVG
-"$SRCLOC/rasterize-resources.sh"
-retcode=$?
-if [ $retcode -ne 0 ]; then
-	echo "Failed to rasterize resources, aborting..."
-	exit $retcode
-fi
+#"$SRCLOC/rasterize-resources.sh"
+#retcode=$?
+#if [ $retcode -ne 0 ]; then
+#	echo "Failed to rasterize resources, aborting..."
+#	exit $retcode
+#fi

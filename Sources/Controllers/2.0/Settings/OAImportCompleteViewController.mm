@@ -200,6 +200,9 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
+    self.backButton.hidden = YES;
+    self.backImageButton.hidden = YES;
+    
     self.primaryBottomButton.hidden = YES;
     self.secondaryBottomButton.hidden = NO;
     [self.secondaryBottomButton setTitle:OALocalizedString(@"shared_string_finish") forState:UIControlStateNormal];

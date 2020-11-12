@@ -82,10 +82,7 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle
-                                                                          font:kHeaderViewFont
-                                                                     textColor:UIColor.blackColor
-                                                                   lineSpacing:0.0 isTitle:YES];
+        [self setTableHeaderView:self.getTableHeaderTitle];
         [_tableView reloadData];
     } completion:nil];
 }

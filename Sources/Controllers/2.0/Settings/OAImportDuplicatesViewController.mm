@@ -35,11 +35,14 @@
 #define ROUTING_PROFILES_DIR @"routing/"
 
 
-@interface HeaderType : NSObject
+@interface OAHeaderType : NSObject
+
 @property (nonatomic) NSString *title;
+
 @end
 
-@implementation HeaderType
+@implementation OAHeaderType
+
 - (instancetype) initWithTitle:(NSString *)title
 {
     self = [super init];
@@ -49,6 +52,7 @@
     }
     return self;
 }
+
 @end
 
 
@@ -93,7 +97,6 @@
     return self;
 }
 
-//onCreate
 - (void) commonInit
 {
     _app = [OsmAndApp instance];
@@ -112,7 +115,6 @@
     }
 }
 
-//onActivityCreated
 - (void) viewDidLoad
 {
     self.tableView.delegate = self;
@@ -183,49 +185,49 @@
     if (profiles.count > 0)
     {
         NSMutableArray *profilesSection = [NSMutableArray new];
-        [profilesSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_profiles")]];
+        [profilesSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_profiles")]];
         [profilesSection addObjectsFromArray:profiles];
         [duplicates addObject:profilesSection];
     }
     if (actions.count > 0)
     {
         NSMutableArray *actionsSection = [NSMutableArray new];
-        [actionsSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_quick_actions")]];
+        [actionsSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_quick_actions")]];
         [actionsSection addObjectsFromArray:actions];
         [duplicates addObject:actionsSection];
     }
     if (filters.count > 0)
     {
         NSMutableArray *filtersSection = [NSMutableArray new];
-        [filtersSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_poi_types")]];
+        [filtersSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_poi_types")]];
         [filtersSection addObjectsFromArray:filters];
         [duplicates addObject:filtersSection];
     }
     if (tileSources.count > 0)
     {
         NSMutableArray *tileSourcesSection = [NSMutableArray new];
-        [tileSourcesSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title")]];
+        [tileSourcesSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title")]];
         [tileSourcesSection addObjectsFromArray:tileSources];
         [duplicates addObject:tileSourcesSection];
     }
     if (routingFilesList.count > 0)
     {
         NSMutableArray *routingSection = [NSMutableArray new];
-        [routingSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_routing")]];
+        [routingSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_routing")]];
         [routingSection addObjectsFromArray:routingFilesList];
         [duplicates addObject:routingSection];
     }
     if (renderFilesList.count > 0)
     {
         NSMutableArray *renderSection = [NSMutableArray new];
-        [renderSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_rendering_style")]];
+        [renderSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_rendering_style")]];
         [renderSection addObjectsFromArray:renderFilesList];
         [duplicates addObject:renderSection];
     }
     if (avoidRoads.count > 0)
     {
         NSMutableArray *avoidRoadsSection = [NSMutableArray new];
-        [avoidRoadsSection addObject:[[HeaderType alloc] initWithTitle:OALocalizedString(@"avoid_road")]];
+        [avoidRoadsSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"avoid_road")]];
         [avoidRoadsSection addObjectsFromArray:avoidRoads];
         [duplicates addObject:avoidRoadsSection];
     }
@@ -242,9 +244,9 @@
         for (id currentItem in section)
         {
             NSMutableDictionary *item = [NSMutableDictionary new];
-            if ([currentItem isKindOfClass:HeaderType.class])
+            if ([currentItem isKindOfClass:OAHeaderType.class])
             {
-                HeaderType *header = (HeaderType *)currentItem;
+                OAHeaderType *header = (OAHeaderType *)currentItem;
                 item[@"label"] = header.title;
                 item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [header.title lowerCase]];
                 item[@"cellType"] = kMenuSimpleCellNoIcon;
@@ -392,6 +394,18 @@
     }
 }
 
+- (IBAction)backImageButtonPressed:(id)sender
+{
+    OASettingsHelper.sharedInstance.importTask = nil;
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)backButtonPressed:(id)sender
+{
+    OASettingsHelper.sharedInstance.importTask = nil;
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - Actions
 
 - (IBAction)primaryButtonPressed:(id)sender
@@ -460,7 +474,6 @@
             cell.descriptionView.hidden = YES;
         }
 
-        cell.imgView.hidden = NO;
         if (item[@"icon"] && item[@"iconColor"])
         {
             cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -470,6 +483,8 @@
         {
             cell.imgView.image = item[@"icon"];
         }
+        if ([cell needsUpdateConstraints])
+            [cell updateConstraints];
         return cell;
     }
     else if ([type isEqualToString:kTitleTwoIconsRoundCell])
@@ -482,12 +497,10 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleTwoIconsRoundCell owner:self options:nil];
             cell = (OATitleTwoIconsRoundCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0.0, 62., 0.0, 0.0);
+            cell.rightIconView.hidden = YES;
+            cell.leftIconView.hidden = NO;
         }
-        cell.rightIconView.hidden = YES;
-        cell.leftIconView.hidden = NO;
         cell.titleView.text = item[@"label"];
-        
-        cell.leftIconView.hidden = NO;
         if (item[@"icon"] && item[@"iconColor"])
         {
             cell.leftIconView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -542,6 +555,21 @@
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }
+    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
+}
+
+- (void)onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items {
+    
+}
+
+
+- (void)onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items {
+    
+}
+
+
+- (void)onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed {
+    
 }
 
 @end

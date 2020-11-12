@@ -100,10 +100,10 @@
         else
             descriptionText = text;
             
-        CGFloat textWidth = tableView.bounds.size.width - 32;
+        CGFloat textWidth = tableView.bounds.size.width - 32 - OAUtilities.getLeftMargin * 2;
         CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionText width:textWidth font:[UIFont systemFontOfSize:15] lineSpacing:6.] + 16;
         UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
-        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
+        UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16. + OAUtilities.getLeftMargin, 8., textWidth, heightForHeader)];
         UIFont *labelFont = [UIFont systemFontOfSize:15.0];
         description.font = labelFont;
         [description setTextColor: UIColorFromRGB(color_text_footer)];

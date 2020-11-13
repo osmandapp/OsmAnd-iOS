@@ -176,7 +176,7 @@
                 [renderFilesList addObject: file];
             else if ([file containsString:ROUTING_PROFILES_DIR])
                 [routingFilesList addObject: file];
-            else if ([file containsString:GPX_PROFILES_DIR])
+            else if ([file.pathExtension isEqualToString:GPX_EXT])
                 [gpxFilesList addObject: file];
         }
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
@@ -230,6 +230,13 @@
         [avoidRoadsSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"avoid_road")]];
         [avoidRoadsSection addObjectsFromArray:avoidRoads];
         [duplicates addObject:avoidRoadsSection];
+    }
+    if (gpxFilesList.count > 0)
+    {
+        NSMutableArray *gpxSection = [NSMutableArray new];
+        [gpxSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"tracks")]];
+        [gpxSection addObjectsFromArray:gpxFilesList];
+        [duplicates addObject:gpxSection];
     }
     return duplicates;
 }
@@ -334,7 +341,7 @@
                     item[@"label"] = fileName;
                     item[@"icon"] = [UIImage imageNamed:@"ic_action_route_distance"];
                 }
-                else if ([file containsString:GPX_PROFILES_DIR])
+                else if ([file.pathExtension isEqualToString:GPX_EXT])
                 {
                     item[@"label"] = fileName;
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_trip"];

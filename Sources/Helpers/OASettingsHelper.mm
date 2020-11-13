@@ -35,6 +35,9 @@
 #import "OAMapStyleTitles.h"
 #import "OrderedDictionary.h"
 #import "OAImportSettingsViewController.h"
+#import "OAGPXDocument.h"
+#import "OAGPXDatabase.h"
+#import "OAGPXTrackAnalysis.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -1261,6 +1264,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (error && copyError)
         *error = copyError;
     
+    [self.item installItem];
+    
     return res;
 }
 
@@ -1301,6 +1306,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         case EOASettingsItemFileSubtypeObfMap:
             return @"obf_map";
         case EOASettingsItemFileSubtypeTilesMap:
+        case EOASettingsItemFileSubtypeSqliteMap:
             return @"tiles_map";
         case EOASettingsItemFileSubtypeGpx:
             return @"gpx";
@@ -1315,23 +1321,25 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 + (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype
 {
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    if (documentsPath.length > 0 && ![documentsPath hasSuffix:@"/"])
-        documentsPath = [documentsPath stringByAppendingString:@"/"];
+    NSString *documentsPath = OsmAndApp.instance.documentsPath;
     switch (subtype)
     {
         case EOASettingsItemFileSubtypeOther:
         case EOASettingsItemFileSubtypeObfMap:
-        case EOASettingsItemFileSubtypeRoutingConfig:
         case EOASettingsItemFileSubtypeRenderingStyle:
-        case EOASettingsItemFileSubtypeTravel:
             return documentsPath;
+        case EOASettingsItemFileSubtypeRoutingConfig:
+            return [documentsPath stringByAppendingPathComponent:@"routing"];
         case EOASettingsItemFileSubtypeTilesMap:
-            return [documentsPath stringByAppendingPathComponent:@"Tiles"];
+            return OsmAndApp.instance.cachePath;
+        case EOASettingsItemFileSubtypeSqliteMap:
+            return OAMapCreatorHelper.sharedInstance.filesDir;
         case EOASettingsItemFileSubtypeGpx:
-            return [documentsPath stringByAppendingPathComponent:@"GPX"];
-        case EOASettingsItemFileSubtypeVoice:
-            return [documentsPath stringByAppendingPathComponent:@"Voice"];
+            return OsmAndApp.instance.gpxPath;
+            // unsupported
+//        case EOASettingsItemFileSubtypeTravel:
+//        case EOASettingsItemFileSubtypeVoice:
+//            return [documentsPath stringByAppendingPathComponent:@"Voice"];
         default:
             return @"";
     }
@@ -1385,9 +1393,15 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     return subtype;
                 break;
             }
+            case EOASettingsItemFileSubtypeSqliteMap:
+            {
+                if ([name hasSuffix:@".sqlite"])
+                    return subtype;
+                break;
+            }
             case EOASettingsItemFileSubtypeTilesMap:
             {
-                if ([name hasSuffix:@"tts.js"])
+                if ([name hasSuffix:@".metainfo"])
                     return subtype;
                 break;
             }
@@ -1444,18 +1458,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (self)
     {
         [self commonInit];
-        if ([filePath hasPrefix:_docPath])
+        self.name = [filePath lastPathComponent];
+        if (error)
         {
-            self.name = [filePath stringByReplacingOccurrencesOfString:_docPath withString:@""];
-        }
-        else if ([filePath hasPrefix:_libPath])
-        {
-            self.name = [filePath stringByReplacingOccurrencesOfString:_libPath withString:@""];
-        }
-        else
-        {
-            if (error)
-                *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
+            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
             return nil;
         }
             
@@ -1496,10 +1502,29 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         else
         {
-            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingString:self.name];
+            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
         }
     }
     return self;
+}
+
+- (void) installItem
+{
+    switch (_subtype)
+    {
+        case EOASettingsItemFileSubtypeGpx:
+        {
+            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:_filePath];
+            [doc saveTo:_filePath];
+            OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
+            [[OAGPXDatabase sharedDb] addGpxItem:[_filePath lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] save];
+            break;
+        }
+            
+        default:
+            break;
+    }
 }
 
 - (EOASettingsItemType) type

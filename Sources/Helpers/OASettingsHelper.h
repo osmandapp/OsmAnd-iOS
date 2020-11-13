@@ -16,7 +16,9 @@
 
 #define RENDERERS_DIR @"rendering/"
 #define ROUTING_PROFILES_DIR @"routing/"
-#define GPX_PROFILES_DIR @"gpx/"
+#define GPX_EXT @"gpx"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @class OAImportAsyncTask, OAExportAsyncTask, OACheckDuplicates, OALocalResourceItem;
 @class OASettingsItem;
@@ -189,7 +191,7 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 + (NSString *) getRendererByName:(NSString *)rendererName;
 + (NSString *) getRendererStringValue:(NSString *)renderer;
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
-- (instancetype _Nullable) initWithJsonWithoutBackup:(id)json error:(NSError * _Nullable *)error;
+- (instancetype) initWithJsonWithoutBackup:(id)json error:(NSError * _Nullable *)error;
 
 @end
 
@@ -224,18 +226,19 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 
 #pragma mark - OAFileSettingsItemFileSubtype
 
-typedef enum : NSInteger {
+typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
     EOASettingsItemFileSubtypeUnknown = -1,
     EOASettingsItemFileSubtypeOther = 0,
     EOASettingsItemFileSubtypeRoutingConfig,
     EOASettingsItemFileSubtypeRenderingStyle,
     EOASettingsItemFileSubtypeObfMap,
     EOASettingsItemFileSubtypeTilesMap,
+    EOASettingsItemFileSubtypeSqliteMap,
     EOASettingsItemFileSubtypeGpx,
     EOASettingsItemFileSubtypeVoice,
     EOASettingsItemFileSubtypeTravel,
     EOASettingsItemFileSubtypesCount
-} EOASettingsItemFileSubtype;
+};
 
 @interface OAFileSettingsItemFileSubtype : NSObject
 
@@ -257,6 +260,7 @@ typedef enum : NSInteger {
 - (BOOL) exists;
 - (NSString *) renameFile:(NSString *)file;
 - (NSString *) getPluginPath;
+- (void) installItem;
 
 @end
 
@@ -318,3 +322,5 @@ typedef enum : NSInteger {
 @interface OAAvoidRoadsSettingsItem : OACollectionSettingsItem<OAAvoidRoadInfo *>
 
 @end
+
+NS_ASSUME_NONNULL_END

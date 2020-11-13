@@ -323,7 +323,7 @@
     OATableGroupToImport *customRendererStyleSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customRoutingSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customGPXSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *customObgMapSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *customObfMapSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *avoidRoadsStyleSection = [[OATableGroupToImport alloc] init];
     for (NSString *type in [_itemsMap allKeys])
     {
@@ -459,15 +459,15 @@
             }
             case EOAExportSettingsTypeGPX:
             {
-                customGPXSection.groupName = OALocalizedString(@"shared_string_gpx");
+                customGPXSection.groupName = OALocalizedString(@"tracks");
                 customGPXSection.type = kCellTypeSectionHeader;
                 customGPXSection.isOpen = NO;
                 for (NSString *gpxItem in settings)
                 {
-                    NSString *routingName = [[[gpxItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    NSString *gpxName = [[[gpxItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     [customGPXSection.groupItems addObject:@{
                         @"icon" : @"ic_custom_trip",
-                        @"title" : routingName,
+                        @"title" : gpxName,
                         @"type" : kCellTypeTitle,
                     }];
                 }
@@ -581,7 +581,7 @@
             [poiUIFilters addObject:(OAPOIUIFilter *)object];
         else if ([object isKindOfClass:OASqliteDbResourceItem.class] || [object isKindOfClass:OAOnlineTilesResourceItem.class])
             [tileSourceTemplates addObject:(OALocalResourceItem *)object];
-        else if ([object isKindOfClass:NSString.class]) // to check all
+        else if ([object isKindOfClass:NSString.class])
             [settingsItems addObject: [[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject:(OAAvoidRoadInfo *)object];

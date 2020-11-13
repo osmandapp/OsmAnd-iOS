@@ -28,13 +28,17 @@
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
 #define kIconTitleButtonCell @"OAIconTitleButtonCell"
-#define kProfiles @"kProfiles"
-#define kQuickActioins @"kQuickActioins"
-#define kTileSources @"kTileSources"
-#define kPoiFilters @"kPoiFilters"
-#define kRenderSettings @"kRenderSettings"
-#define kRoutingSettings @"kRoutingSettings"
-#define kAvoidRoads @"kAvoidRoads"
+
+typedef NS_ENUM(NSInteger, EOAImportDataType) {
+    EOAImportDataTypeProfiles = 0,
+    EOAImportDataTypeQuickActions,
+    EOAImportDataTypeTileSources,
+    EOAImportDataTypePoiFilters,
+    EOAImportDataTypeRenderSettings,
+    EOAImportDataTypeRoutingSettings,
+    EOAImportDataTypeAvoidRoads,
+    EOAImportDataTypeGpxTrips
+};
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -106,7 +110,7 @@
                 renderFilesCount += 1;
             else if ([filePath containsString:ROUTING_PROFILES_DIR])
                 routingFilesCount += 1;
-            else if ([filePath containsString:GPX_PROFILES_DIR])
+            else if ([filePath.pathExtension isEqualToString:GPX_EXT])
                 gpxFilesCount += 1;
         }
         else if ([item isKindOfClass:OAAvoidRoadInfo.class])
@@ -119,7 +123,7 @@
             @"label": OALocalizedString(@"shared_string_settings"),
             @"iconName": @"ic_action_settings",
             @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
-            @"category" : kProfiles
+            @"category" : @(EOAImportDataTypeProfiles)
             }
          ];
     }
@@ -129,7 +133,7 @@
             @"label": OALocalizedString(@"configure_screen_quick_action"),
             @"iconName": @"ic_custom_quick_action",
             @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
-            @"category" : kQuickActioins
+            @"category" : @(EOAImportDataTypeQuickActions)
             }
          ];
     }
@@ -139,7 +143,7 @@
             @"label": OALocalizedString(@"search_activity"),
             @"iconName": @"ic_custom_search",
             @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
-            @"category" : kPoiFilters
+            @"category" : @(EOAImportDataTypePoiFilters)
             }
          ];
     }
@@ -149,7 +153,7 @@
             @"label": OALocalizedString(@"configure_map"),
             @"iconName": @"ic_custom_overlay_map",
             @"count": [NSString stringWithFormat:@"%ld", (long)tileSourcesCount],
-            @"category" : kTileSources
+            @"category" : @(EOAImportDataTypeTileSources)
             }
          ];
     }
@@ -159,7 +163,7 @@
             @"label": OALocalizedString(@"shared_string_rendering_style"),
             @"iconName": @"ic_custom_map_style",
             @"count": [NSString stringWithFormat:@"%ld",(long)renderFilesCount],
-            @"category" : kRenderSettings
+            @"category" : @(EOAImportDataTypeRenderSettings)
             }
          ];
     }
@@ -168,18 +172,18 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_routing"),
             @"iconName": @"ic_action_route_distance",
-            @"count": [NSString stringWithFormat:@"%ld",(long)routingFilesCount],
-            @"category" : kRoutingSettings
+            @"count": [NSString stringWithFormat:@"%ld",routingFilesCount],
+            @"category" : @(EOAImportDataTypeRoutingSettings)
             }
          ];
     }
     if (gpxFilesCount > 0)
     {
         [_data addObject: @{
-            @"label": OALocalizedString(@"shared_string_gpx"),
+            @"label": OALocalizedString(@"tracks"),
             @"iconName": @"ic_custom_trip",
             @"count": [NSString stringWithFormat:@"%ld", gpxFilesCount],
-            @"category" : kRoutingSettings // check what screen should be opened after tapping
+            @"category" : @(EOAImportDataTypeGpxTrips)
             }
          ];
     }
@@ -188,8 +192,8 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"avoid_road"),
             @"iconName": @"ic_custom_alert",
-            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
-            @"category" : kAvoidRoads
+            @"count": [NSString stringWithFormat:@"%ld", profilesCount],
+            @"category" : @(EOAImportDataTypeGpxTrips)
             }
          ];
     }
@@ -279,32 +283,38 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    NSString *category = (NSString *) item[@"category"];
     [self.navigationController popToRootViewControllerAnimated:NO];
     OARootViewController *rootController = [OARootViewController instance];
-    if ([category isEqualToString:kProfiles] || [category isEqualToString:kRoutingSettings])
+    EOAImportDataType dataType = (EOAImportDataType) [item[@"category"] integerValue];
+    if (dataType == EOAImportDataTypeProfiles || dataType == EOAImportDataTypeRoutingSettings)
     {
         OAMainSettingsViewController *profileSettings = [[OAMainSettingsViewController alloc] init];
         [rootController.navigationController pushViewController:profileSettings animated:YES];
     }
-    else if ([category isEqualToString:kQuickActioins])
+    else if (dataType == EOAImportDataTypeQuickActions)
     {
         OAQuickActionListViewController *actionsList = [[OAQuickActionListViewController alloc] init];
         [rootController.navigationController pushViewController:actionsList animated:YES];
     }
-    else if ([category isEqualToString:kPoiFilters])
+    else if (dataType == EOAImportDataTypePoiFilters)
     {
         [rootController.mapPanel openSearch];
     }
-    else if ([category isEqualToString:kTileSources])
+    else if (dataType == EOAImportDataTypeTileSources)
     {
         [rootController.mapPanel mapSettingsButtonClick:nil];
     }
-    else if ([category isEqualToString:kRenderSettings])
+    else if (dataType == EOAImportDataTypeRenderSettings)
     {
         [rootController.mapPanel showMapStylesScreen];
     }
-    else if ([category isEqualToString:kAvoidRoads])
+    else if (dataType == EOAImportDataTypeGpxTrips)
+    {
+        UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+        [myPlacesViewController setSelectedIndex:1];
+        [rootController.navigationController pushViewController:myPlacesViewController animated:YES];
+    }
+    else if (dataType == EOAImportDataTypeAvoidRoads)
     {
         // TODO: change this while implementing Avoid roads import!
         [self loadCurrentRoutingMode];

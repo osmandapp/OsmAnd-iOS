@@ -224,7 +224,7 @@
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
     NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<OALocalResourceItem *> *tileSourceTemplates = [NSMutableArray array];
+    NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
@@ -401,19 +401,9 @@
                 mapSourcesSection.type = kCellTypeSectionHeader;
                 mapSourcesSection.isOpen = NO;
                 
-                for (OAMapSourceResourceItem *item in settings)
+                for (NSDictionary *item in settings)
                 {
-                    NSString *caption;
-                    if ([item isKindOfClass:OASqliteDbResourceItem.class])
-                    {
-                        OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *) item;
-                        caption = sqlite.title;
-                    }
-                    else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
-                    {
-                        OAOnlineTilesResourceItem* resourcesItem = (OAOnlineTilesResourceItem*) item;
-                        caption = resourcesItem.title;
-                    }
+                    NSString *caption = item[@"name"];
                     [mapSourcesSection.groupItems addObject:@{
                         @"icon" : @"ic_custom_map",
                         @"title" : caption,
@@ -568,7 +558,7 @@
     NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
     NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<OALocalResourceItem *> *tileSourceTemplates = [NSMutableArray array];
+    NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     
     for (NSObject *object in _selectedItems)
@@ -579,8 +569,8 @@
             [quickActions addObject:(OAQuickAction *)object];
         else if ([object isKindOfClass:OAPOIUIFilter.class])
             [poiUIFilters addObject:(OAPOIUIFilter *)object];
-        else if ([object isKindOfClass:OASqliteDbResourceItem.class] || [object isKindOfClass:OAOnlineTilesResourceItem.class])
-            [tileSourceTemplates addObject:(OALocalResourceItem *)object];
+        else if ([object isKindOfClass:NSDictionary.class])
+            [tileSourceTemplates addObject:(NSDictionary *)object];
         else if ([object isKindOfClass:NSString.class])
             [settingsItems addObject: [[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])

@@ -24,6 +24,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAMultiIconTextDescCell.h"
+#import "OAIndexConstants.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -106,11 +107,11 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         else if ([item isKindOfClass:OAFileSettingsItem.class])
         {
             NSString *filePath = ((OAFileSettingsItem *)item).filePath;
-            if ([filePath containsString:RENDERERS_DIR])
+            if ([filePath hasSuffix:RENDERER_INDEX_EXT])
                 renderFilesCount += 1;
-            else if ([filePath containsString:ROUTING_PROFILES_DIR])
+            else if ([filePath hasSuffix:ROUTING_FILE_EXT])
                 routingFilesCount += 1;
-            else if ([filePath.pathExtension isEqualToString:GPX_EXT])
+            else if ([filePath hasSuffix:GPX_FILE_EXT])
                 gpxFilesCount += 1;
         }
         else if ([item isKindOfClass:OAAvoidRoadInfo.class])

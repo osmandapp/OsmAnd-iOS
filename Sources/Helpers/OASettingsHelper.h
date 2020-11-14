@@ -14,12 +14,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define RENDERERS_DIR @"rendering/"
-#define ROUTING_PROFILES_DIR @"routing/"
-#define GPX_EXT @"gpx"
-
-NS_ASSUME_NONNULL_BEGIN
-
 @class OAImportAsyncTask, OAExportAsyncTask, OACheckDuplicates, OALocalResourceItem;
 @class OASettingsItem;
 @class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode, OAApplicationModeBean;
@@ -123,6 +117,7 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 @property (nonatomic, assign) BOOL shouldReplace;
 
 - (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error;
+- (instancetype) initWithBaseItem:(OASettingsItem *)baseItem;
 
 - (BOOL) shouldReadOnCollecting;
 - (BOOL) exists;
@@ -260,7 +255,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 - (BOOL) exists;
 - (NSString *) renameFile:(NSString *)file;
 - (NSString *) getPluginPath;
-- (void) installItem;
+- (void) installItem:(NSString *)destFilePath;
 
 @end
 
@@ -292,6 +287,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 @property (nonatomic, readonly) NSArray<ObjectType> *existingItems;
 
 - (instancetype) initWithItems:(NSArray<ObjectType> *)items;
+- (instancetype) initWithItems:(NSArray<id> *)items baseItem:(OACollectionSettingsItem<ObjectType> *)baseItem;
 - (NSArray<ObjectType> *) processDuplicateItems;
 - (NSArray<ObjectType> *) getNewItems;
 - (BOOL) isDuplicate:(ObjectType)item;
@@ -313,7 +309,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 
 #pragma mark - OAMapSourcesSettingsItem
 
-@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<OALocalResourceItem *>
+@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<NSDictionary *>
 
 @end
 
@@ -322,5 +318,3 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 @interface OAAvoidRoadsSettingsItem : OACollectionSettingsItem<OAAvoidRoadInfo *>
 
 @end
-
-NS_ASSUME_NONNULL_END

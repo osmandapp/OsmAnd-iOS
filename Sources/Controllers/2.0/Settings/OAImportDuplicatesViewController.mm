@@ -26,6 +26,7 @@
 #import "OATitleTwoIconsRoundCell.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OAMapSource.h"
+#import "OAIndexConstants.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -153,7 +154,7 @@
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray new];
     NSMutableArray<OAQuickAction *> *actions = [NSMutableArray new];
     NSMutableArray<OAPOIUIFilter *> *filters = [NSMutableArray new];
-    NSMutableArray<OALocalResourceItem *> *tileSources = [NSMutableArray new];
+    NSMutableArray<NSDictionary *> *tileSources = [NSMutableArray new];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray new];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray new];
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray new];
@@ -167,17 +168,17 @@
             [actions addObject: (OAQuickAction *)object];
         if ([object isKindOfClass:OAPOIUIFilter.class])
             [filters addObject: (OAPOIUIFilter *)object];
-        else if ([object isKindOfClass:OALocalResourceItem.class])
-            [tileSources addObject: (OALocalResourceItem *)object];
+        else if ([object isKindOfClass:NSDictionary.class])
+            [tileSources addObject: (NSDictionary *)object];
         else if ([object isKindOfClass:NSString.class])
         {
             NSString *file = (NSString *)object;
-            if ([file containsString:RENDERERS_DIR])
-                [renderFilesList addObject: file];
-            else if ([file containsString:ROUTING_PROFILES_DIR])
-                [routingFilesList addObject: file];
-            else if ([file.pathExtension isEqualToString:GPX_EXT])
-                [gpxFilesList addObject: file];
+            if ([file hasSuffix:RENDERER_INDEX_EXT])
+                [renderFilesList addObject:file];
+            else if ([file hasSuffix:ROUTING_FILE_EXT])
+                [routingFilesList addObject:file];
+            else if ([file hasSuffix:GPX_FILE_EXT])
+                [gpxFilesList addObject:file];
         }
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject: (OAAvoidRoadInfo *)object];
@@ -309,19 +310,9 @@
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
-            else if ([currentItem isKindOfClass:OALocalResourceItem.class])
+            else if ([currentItem isKindOfClass:NSDictionary.class])
             {
-                NSString *caption;
-                if ([currentItem isKindOfClass:OASqliteDbResourceItem.class])
-                {
-                    OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *) currentItem;
-                    caption = sqlite.title;
-                }
-                else if ([currentItem isKindOfClass:OAOnlineTilesResourceItem.class])
-                {
-                    OAOnlineTilesResourceItem* resourcesItem = (OAOnlineTilesResourceItem*) currentItem;
-                    caption = resourcesItem.title;
-                }
+                NSString *caption = currentItem[@"name"];
                 item[@"label"] = caption;
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_map"];
                 item[@"description"] = @"";
@@ -331,21 +322,22 @@
             {
                 NSString *file = (NSString *)currentItem;
                 NSString *fileName = [[[file lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-                if ([file containsString:RENDERERS_DIR])
+                if ([file hasSuffix:RENDERER_INDEX_EXT])
                 {
                     item[@"label"] = [fileName stringByDeletingPathExtension];
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_map_style"];
                 }
-                else if ([file containsString:ROUTING_PROFILES_DIR])
+                else if ([file hasSuffix:ROUTING_FILE_EXT])
                 {
                     item[@"label"] = fileName;
                     item[@"icon"] = [UIImage imageNamed:@"ic_action_route_distance"];
                 }
-                else if ([file.pathExtension isEqualToString:GPX_EXT])
+                else if ([file hasSuffix:GPX_FILE_EXT])
                 {
                     item[@"label"] = fileName;
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_trip"];
                 }
+                item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }

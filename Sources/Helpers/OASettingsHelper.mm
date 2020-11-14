@@ -121,13 +121,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             return @"POI_TYPES";
         case EOAExportSettingsTypeMapSources:
             return @"MAP_SOURCES";
-        case EOAExportSettingsTypeCustomRendererStyle:
+        case EOAExportSettingsTypeCustomRendererStyles:
             return @"CUSTOM_RENDER_STYLE";
         case EOAExportSettingsTypeCustomRouting:
             return @"CUSTOM_ROUTING";
         case EOAExportSettingsTypeGPX: // check
             return @"GPX"; // check
-        case EOAExportSettingsTypeMapFile: // check
+        case EOAExportSettingsTypeMapFiles: // check
             return @"MAP_FILE"; // check
         case EOAExportSettingsTypeAvoidRoads:
             return @"AVOID_ROADS";
@@ -147,13 +147,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if ([typeName isEqualToString:@"MAP_SOURCES"])
         return EOAExportSettingsTypeMapSources;
     if ([typeName isEqualToString:@"CUSTOM_RENDER_STYLE"])
-        return EOAExportSettingsTypeCustomRendererStyle;
+        return EOAExportSettingsTypeCustomRendererStyles;
     if ([typeName isEqualToString:@"CUSTOM_ROUTING"])
         return EOAExportSettingsTypeCustomRouting;
     if ([typeName isEqualToString:@"GPX"]) // check
         return EOAExportSettingsTypeGPX; // check
     if ([typeName isEqualToString:@"MAP_FILE"]) // check
-        return EOAExportSettingsTypeMapFile; // check
+        return EOAExportSettingsTypeMapFiles; // check
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOAExportSettingsTypeAvoidRoads;
     return EOAExportSettingsTypeUnknown;
@@ -1359,7 +1359,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         case EOASettingsItemFileSubtypeObfMap:
             return @"obf_map";
         case EOASettingsItemFileSubtypeTilesMap:
-        case EOASettingsItemFileSubtypeSqliteMap:
             return @"tiles_map";
         case EOASettingsItemFileSubtypeGpx:
             return @"gpx";
@@ -1385,8 +1384,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             return [documentsPath stringByAppendingPathComponent:@"routing"];
         case EOASettingsItemFileSubtypeTilesMap:
             return OsmAndApp.instance.cachePath;
-        case EOASettingsItemFileSubtypeSqliteMap:
-            return OAMapCreatorHelper.sharedInstance.filesDir;
         case EOASettingsItemFileSubtypeGpx:
             return OsmAndApp.instance.gpxPath;
             // unsupported
@@ -1412,19 +1409,31 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 + (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName
 {
     NSString *name = fileName;
-    if ([fileName hasPrefix:@"/"]) {
+    if ([fileName hasPrefix:@"/"])
         name = [fileName substringFromIndex:1];
-    }
+
     for (int i = 0; i < EOASettingsItemFileSubtypesCount; i++)
     {
-        EOASettingsItemFileSubtype subtype = (EOASettingsItemFileSubtype)i;
+        EOASettingsItemFileSubtype subtype = (EOASettingsItemFileSubtype) i;
         switch (subtype) {
             case EOASettingsItemFileSubtypeUnknown:
             case EOASettingsItemFileSubtypeOther:
                 break;
             case EOASettingsItemFileSubtypeObfMap:
             {
-                if ([name hasSuffix:@".obf"])
+                if ([name hasSuffix:BINARY_MAP_INDEX_EXT] && ![name containsString:@"/"])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeSrtmMap:
+            {
+                if ([name hasSuffix:BINARY_SRTM_MAP_INDEX_EXT])
+                    return subtype;
+                break;
+            }
+            case EOASettingsItemFileSubtypeWikiMap:
+            {
+                if ([name hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
                     return subtype;
                 break;
             }
@@ -1446,15 +1455,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     return subtype;
                 break;
             }
-            case EOASettingsItemFileSubtypeSqliteMap:
-            {
-                if ([name hasSuffix:@".sqlite"])
-                    return subtype;
-                break;
-            }
             case EOASettingsItemFileSubtypeTilesMap:
             {
-                if ([name hasSuffix:@".metainfo"])
+                if ([name hasSuffix:@".sqlitedb"])
                     return subtype;
                 break;
             }
@@ -1481,6 +1484,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
     }
     return EOASettingsItemFileSubtypeUnknown;
+}
+
++ (BOOL) isMap:(EOASettingsItemFileSubtype)type
+{
+    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap;
 }
 
 @end

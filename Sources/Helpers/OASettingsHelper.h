@@ -67,10 +67,10 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
     EOAExportSettingsTypeQuickActions,
     EOAExportSettingsTypePoiTypes,
     EOAExportSettingsTypeMapSources,
-    EOAExportSettingsTypeCustomRendererStyle,
+    EOAExportSettingsTypeCustomRendererStyles,
     EOAExportSettingsTypeCustomRouting,
     EOAExportSettingsTypeGPX,
-    EOAExportSettingsTypeMapFile,
+    EOAExportSettingsTypeMapFiles,
     EOAExportSettingsTypeAvoidRoads,
 };
 
@@ -226,9 +226,11 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
     EOASettingsItemFileSubtypeOther = 0,
     EOASettingsItemFileSubtypeRoutingConfig,
     EOASettingsItemFileSubtypeRenderingStyle,
+    EOASettingsItemFileSubtypeWikiMap,
+    EOASettingsItemFileSubtypeSrtmMap,
     EOASettingsItemFileSubtypeObfMap,
     EOASettingsItemFileSubtypeTilesMap,
-    EOASettingsItemFileSubtypeSqliteMap,
+    EOASettingsItemFileSubtypeRoadMap,
     EOASettingsItemFileSubtypeGpx,
     EOASettingsItemFileSubtypeVoice,
     EOASettingsItemFileSubtypeTravel,
@@ -241,6 +243,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 + (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype;
 + (EOASettingsItemFileSubtype) getSubtypeByName:(NSString *)name;
 + (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName;
++ (BOOL) isMap:(EOASettingsItemFileSubtype)type;
 
 @end
     

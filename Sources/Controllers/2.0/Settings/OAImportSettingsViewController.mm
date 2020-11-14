@@ -248,7 +248,7 @@
                     [routingFilesList addObject:fileItem.filePath];
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeGpx)
                     [gpxFilesList addObject:fileItem.filePath];
-                else if (fileItem.subtype == EOASettingsItemFileSubtypeObfMap)
+                else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
                     [mapFilesList addObject:fileItem.filePath];
                 break;
             }
@@ -301,13 +301,13 @@
     if (tileSourceTemplates.count > 0)
         [settingsToOperate setObject:tileSourceTemplates forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapSources]];
     if (renderFilesList.count > 0)
-        [settingsToOperate setObject:renderFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRendererStyle]];
+        [settingsToOperate setObject:renderFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRendererStyles]];
     if (routingFilesList.count > 0)
         [settingsToOperate setObject:routingFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRouting]];
     if (gpxFilesList.count > 0)
         [settingsToOperate setObject:gpxFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeGPX]];
     if (mapFilesList.count > 0)
-        [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFile]];
+        [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
     if (avoidRoads.count > 0)
         [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
     return settingsToOperate;
@@ -413,7 +413,7 @@
                 [data addObject:mapSourcesSection];
                 break;
             }
-            case EOAExportSettingsTypeCustomRendererStyle:
+            case EOAExportSettingsTypeCustomRendererStyles:
             {
                 customRendererStyleSection.groupName = OALocalizedString(@"shared_string_rendering_style");
                 customRendererStyleSection.type = kCellTypeSectionHeader;
@@ -428,6 +428,24 @@
                     }];
                 }
                 [data addObject:customRendererStyleSection];
+                break;
+            }
+            case EOAExportSettingsTypeMapFiles:
+            {
+                customObfMapSection.groupName = OALocalizedString(@"maps");
+                customObfMapSection.type = kCellTypeSectionHeader;
+                customObfMapSection.isOpen = NO;
+                for (NSString *mapItem in settings)
+                {
+                    // TODO: implement all map types with appropriate icons
+                    NSString *mapName = [[[mapItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    [customObfMapSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_route",
+                        @"title" : mapName,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
+                [data addObject:customObfMapSection];
                 break;
             }
             case EOAExportSettingsTypeCustomRouting:
@@ -572,7 +590,7 @@
         else if ([object isKindOfClass:NSDictionary.class])
             [tileSourceTemplates addObject:(NSDictionary *)object];
         else if ([object isKindOfClass:NSString.class])
-            [settingsItems addObject: [[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
+            [settingsItems addObject:[[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject:(OAAvoidRoadInfo *)object];
     }

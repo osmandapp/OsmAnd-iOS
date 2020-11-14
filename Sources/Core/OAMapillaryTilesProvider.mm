@@ -73,7 +73,6 @@ OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFac
 
 OAMapillaryTilesProvider::~OAMapillaryTilesProvider()
 {
-    this->waitForTasksDone();
 }
 
 OsmAnd::AlphaChannelPresence OAMapillaryTilesProvider::getAlphaChannelPresence() const

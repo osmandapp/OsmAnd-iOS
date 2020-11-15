@@ -34,7 +34,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 @implementation OAOsmBugsLayer
 {
-    std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider> _notesMapProvider;
+    std::shared_ptr<OAOsmNotesMapLayerProvider> _notesMapProvider;
     OAOsmEditingPlugin *_plugin;
 }
 
@@ -61,9 +61,21 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     
     _notesMapProvider.reset(new OAOsmNotesMapLayerProvider());
     [self.mapView addTiledSymbolsProvider:_notesMapProvider];
+    
+    const OAOsmNotesMapLayerProvider::DataReadyCallback callback =
+    [self] ()
+    {
+        [self.mapView invalidateFrame];
+    };
+    _notesMapProvider->setDataReadyCallback(callback);
 }
 
-- (BOOL)isVisible
+- (void) onMapFrameRendered
+{
+    _notesMapProvider->setRequestedBBox31(self.mapView.getVisibleBBox31);
+}
+
+- (BOOL) isVisible
 {
     return _plugin.isActive && [[OAAppSettings sharedManager].mapSettingShowOnlineNotes get];
 }

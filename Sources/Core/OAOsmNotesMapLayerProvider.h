@@ -11,6 +11,7 @@
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore/ignore_warnings_on_external_includes.h>
+#include <QHash>
 #include <QList>
 #include <OsmAndCore/restore_internal_warnings.h>
 
@@ -26,7 +27,9 @@
 #include <OsmAndCore/Map/CoreResourcesAmenityIconProvider.h>
 #include "OAOnlineOsmNote.h"
 
-class OAOsmNotesMapLayerProvider : public OsmAnd::IMapTiledSymbolsProvider
+class OAOsmNotesMapLayerProvider
+    : public std::enable_shared_from_this<OAOsmNotesMapLayerProvider>
+    , public OsmAnd::IMapTiledSymbolsProvider
 {
 public:
     class Data : public IMapTiledSymbolsProvider::Data
@@ -34,8 +37,7 @@ public:
     private:
     protected:
     public:
-        Data(
-             const OsmAnd::TileId tileId,
+        Data(const OsmAnd::TileId tileId,
              const OsmAnd::ZoomLevel zoom,
              const QList< std::shared_ptr<OsmAnd::MapSymbolsGroup> >& symbolsGroups,
              const RetainableCacheMetadata* const pRetainableCacheMetadata = nullptr);
@@ -44,7 +46,6 @@ public:
     
     class NotesSymbolsGroup : public OsmAnd::MapSymbolsGroup
     {
-        
     public:
     protected:
     public:
@@ -59,15 +60,36 @@ public:
         bool operator<(const OAOnlineOsmNote& other) const;
     };
     
+    typedef std::function<void()> DataReadyCallback;
+
 private:
     std::shared_ptr<OsmAnd::IWebClient> webClient;
-    QByteArray queryOsmNotes(const OsmAnd::AreaI &tileBBox31);
-    bool parseResponse(const QByteArray &buffer, QList<std::shared_ptr<OsmAnd::MapSymbolsGroup> > &mapSymbolsGroups, const OsmAnd::ZoomLevel &zoomLevel);
-    int getItemLimitForZoomLevel(const OsmAnd::ZoomLevel &zoom);
+    
+    mutable QReadWriteLock _lock;
+    QList<std::shared_ptr<const OAOnlineOsmNote>> _notesCache;
+    OsmAnd::AreaI _cacheBBox31;
+    OsmAnd::ZoomLevel _cacheZoom;
+    
+    DataReadyCallback _dataReadyCallback;
+    OsmAnd::AreaI _requestedBBox31;
+    OsmAnd::AreaI _requestingBBox31;
+    OsmAnd::ZoomLevel _requestingZoom;
+
+    bool queryOsmNotes(const OsmAnd::AreaI &bbox31,
+                       const OsmAnd::ZoomLevel &zoom);
+    bool parseResponse(const QByteArray &buffer,
+                       const OsmAnd::AreaI &bbox31,
+                       const OsmAnd::ZoomLevel &zoom);
+    QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> buildMapSymbolsGroups(const OsmAnd::AreaI &bbox31);
 protected:
 public:
     OAOsmNotesMapLayerProvider();
     virtual ~OAOsmNotesMapLayerProvider();
+
+    virtual OsmAnd::AreaI getRequestedBBox31() const;
+    virtual void setRequestedBBox31(const OsmAnd::AreaI &bbox31);
+
+    virtual void setDataReadyCallback(const DataReadyCallback dataReadyCallback);
     
     virtual OsmAnd::ZoomLevel getMinZoom() const override;
     virtual OsmAnd::ZoomLevel getMaxZoom() const override;
@@ -75,14 +97,12 @@ public:
     virtual bool supportsNaturalObtainData() const override;
     QByteArray extracted(const OsmAnd::Area<int> &tileBBox31);
     
-    virtual bool obtainData(
-                            const IMapDataProvider::Request& request,
+    virtual bool obtainData(const IMapDataProvider::Request& request,
                             std::shared_ptr<IMapDataProvider::Data>& outData,
                             std::shared_ptr<OsmAnd::Metric>* const pOutMetric = nullptr) override;
     
     virtual bool supportsNaturalObtainDataAsync() const override;
-    virtual void obtainDataAsync(
-                                 const IMapDataProvider::Request& request,
+    virtual void obtainDataAsync(const IMapDataProvider::Request& request,
                                  const IMapDataProvider::ObtainDataAsyncCallback callback,
                                  const bool collectMetric = false) override;
 };

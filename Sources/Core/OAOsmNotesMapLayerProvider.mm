@@ -17,15 +17,38 @@
 #include <OsmAndCore/LatLon.h>
 #include <OsmAndCore/IWebClient.h>
 #include <OsmAndCore/Map/VectorLine.h>
+#include <OsmAndCore/QRunnableFunctor.h>
 #include "OAWebClient.h"
 
 OAOsmNotesMapLayerProvider::OAOsmNotesMapLayerProvider()
-:webClient(std::make_shared<OAWebClient>())
+: webClient(std::make_shared<OAWebClient>())
+, _dataReadyCallback(nullptr)
+, _cacheBBox31()
+, _cacheZoom(OsmAnd::ZoomLevel::InvalidZoomLevel)
 {
 }
 
 OAOsmNotesMapLayerProvider::~OAOsmNotesMapLayerProvider()
 {
+}
+
+OsmAnd::AreaI OAOsmNotesMapLayerProvider::getRequestedBBox31() const
+{
+    QReadLocker scopedLocker(&_lock);
+    
+    return _requestedBBox31;
+}
+
+void OAOsmNotesMapLayerProvider::setRequestedBBox31(const OsmAnd::AreaI &bbox31)
+{
+    QWriteLocker scopedLocker(&_lock);
+    
+    _requestedBBox31 = bbox31;
+}
+
+void OAOsmNotesMapLayerProvider::setDataReadyCallback(const DataReadyCallback dataReadyCallback)
+{
+    _dataReadyCallback = dataReadyCallback;
 }
 
 OsmAnd::ZoomLevel OAOsmNotesMapLayerProvider::getMinZoom() const
@@ -43,50 +66,34 @@ bool OAOsmNotesMapLayerProvider::supportsNaturalObtainData() const
     return true;
 }
 
-QByteArray OAOsmNotesMapLayerProvider::queryOsmNotes(const OsmAnd::AreaI &tileBBox31)
+bool OAOsmNotesMapLayerProvider::queryOsmNotes(const OsmAnd::AreaI &bbox31, const OsmAnd::ZoomLevel &zoom)
 {
-    double bottom = OsmAnd::Utilities::get31LatitudeY(tileBBox31.bottom());
-    double top = OsmAnd::Utilities::get31LatitudeY(tileBBox31.top());
-    double right = OsmAnd::Utilities::get31LongitudeX(tileBBox31.right());
-    double left = OsmAnd::Utilities::get31LongitudeX(tileBBox31.left());
-    
+    double bottom = OsmAnd::Utilities::get31LatitudeY(bbox31.bottom());
+    double top = OsmAnd::Utilities::get31LatitudeY(bbox31.top());
+    double right = OsmAnd::Utilities::get31LongitudeX(bbox31.right());
+    double left = OsmAnd::Utilities::get31LongitudeX(bbox31.left());
     QString url = "https://api.openstreetmap.org/api/0.6/notes?bbox=";
     url.append(QString::number(left)).append(",").append(QString::number(bottom)).append(",").append(QString::number(right)).append(",").append(QString::number(top));
-    std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-    return webClient->downloadData(url,
-                                   &requestResult);
+    const auto data = webClient->downloadData(url);
+    return data.size() > 0 ? parseResponse(data, bbox31, zoom) : false;
 }
 
-int OAOsmNotesMapLayerProvider::getItemLimitForZoomLevel(const OsmAnd::ZoomLevel &zoom)
+bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer,
+                                               const OsmAnd::AreaI &bbox31,
+                                               const OsmAnd::ZoomLevel &zoom)
 {
-    int res = 100;
-    if (zoom < OsmAnd::ZoomLevel13)
-        res = 7;
-    else if (zoom < OsmAnd::ZoomLevel16)
-        res = 10;
-    
-    return res;
-}
+    QList<std::shared_ptr<const OAOnlineOsmNote>> notesCache;
 
-bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer, QList<std::shared_ptr<OsmAnd::MapSymbolsGroup> > &mapSymbolsGroups, const OsmAnd::ZoomLevel &zoomLevel)
-{
-    
     QXmlStreamReader xmlReader(buffer);
     
     std::shared_ptr<OAOnlineOsmNote> currentNote = nullptr;
     int commentIndex = -1;
-    
-    // Filter out notes on lower zoom levels to prevent clutter
-    int elementLimit = getItemLimitForZoomLevel(zoomLevel);
-    int elementCount = 0;
-    const auto iconOpen = [OANativeUtilities skBitmapFromPngResource:@"map_osm_note_unresolved"];
-    const auto iconClosed = [OANativeUtilities skBitmapFromPngResource:@"map_osm_note_resolved"];
-    
-    while(!xmlReader.atEnd() && !xmlReader.hasError() && elementCount < elementLimit) {
+    while (!xmlReader.atEnd() && !xmlReader.hasError())
+    {
         // Read next element
         QXmlStreamReader::TokenType token = xmlReader.readNext();
         //If token is just StartDocument - go to next
-        if(token == QXmlStreamReader::StartDocument)
+        if (token == QXmlStreamReader::StartDocument)
             continue;
         
         QString tagName = xmlReader.name().toString();
@@ -138,35 +145,66 @@ bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer, QList<s
         else if (token == QXmlStreamReader::EndElement && tagName == QStringLiteral("note"))
         {
             currentNote->acquireDescriptionAndType();
-            const auto mapSymbolsGroup = std::make_shared<NotesSymbolsGroup>(currentNote);
-            const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
-            mapSymbol->order = -120000;
-            
-            mapSymbol->bitmap = currentNote->isOpened() ? iconOpen : iconClosed;
-            mapSymbol->size = OsmAnd::PointI(
-                                             iconOpen->width(),
-                                             iconOpen->height());
-            mapSymbol->languageId = OsmAnd::LanguageId::Invariant;
-            mapSymbol->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currentNote->getLatitude(), currentNote->getLongitude()));
-            mapSymbolsGroup->symbols.push_back(mapSymbol);
-            mapSymbolsGroups.push_back(mapSymbolsGroup);
+            notesCache.push_back(currentNote);
             currentNote = nullptr;
-            elementCount++;
         }
     }
     bool success = !xmlReader.hasError();
     xmlReader.clear();
     
+    QWriteLocker scopedLocker(&_lock);
+    
+    if (_requestingBBox31 != bbox31 || _requestingZoom != zoom)
+        return false;
+
+    if (success)
+    {
+        _cacheBBox31 = bbox31;
+        _cacheZoom = zoom;
+        _notesCache = notesCache;
+    }
+    else
+    {
+        _cacheBBox31 = OsmAnd::AreaI();
+        _cacheZoom = OsmAnd::ZoomLevel::InvalidZoomLevel;
+        _notesCache.clear();
+    }
+    
     return success;
 }
 
-bool OAOsmNotesMapLayerProvider::obtainData(
-                                                const IMapDataProvider::Request& request,
-                                                std::shared_ptr<IMapDataProvider::Data>& outData,
+QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> OAOsmNotesMapLayerProvider::buildMapSymbolsGroups(const OsmAnd::AreaI &bbox31)
+{
+    QReadLocker scopedLocker(&_lock);
+
+    const auto iconOpen = [OANativeUtilities skBitmapFromPngResource:@"map_osm_note_unresolved"];
+    const auto iconClosed = [OANativeUtilities skBitmapFromPngResource:@"map_osm_note_resolved"];
+    QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> mapSymbolsGroups;
+
+    for (const auto note : _notesCache)
+    {
+        const auto pos31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(note->getLatitude(), note->getLongitude()));
+        if (bbox31.contains(pos31))
+        {
+            const auto mapSymbolsGroup = std::make_shared<NotesSymbolsGroup>(note);
+            const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
+            mapSymbol->order = -120000;
+            mapSymbol->bitmap = note->isOpened() ? iconOpen : iconClosed;
+            mapSymbol->size = OsmAnd::PointI(iconOpen->width(), iconOpen->height());
+            mapSymbol->languageId = OsmAnd::LanguageId::Invariant;
+            mapSymbol->position31 = pos31;
+            mapSymbolsGroup->symbols.push_back(mapSymbol);
+            mapSymbolsGroups.push_back(mapSymbolsGroup);
+        }
+    }
+    return mapSymbolsGroups;
+}
+
+bool OAOsmNotesMapLayerProvider::obtainData(const IMapDataProvider::Request& request,
+                                            std::shared_ptr<IMapDataProvider::Data>& outData,
                                             std::shared_ptr<OsmAnd::Metric>* const pOutMetric /*= nullptr*/)
 {
     const auto& req = OsmAnd::MapDataProviderHelpers::castRequest<OAOsmNotesMapLayerProvider::Request>(request);
-    
     if (pOutMetric)
         pOutMetric->reset();
     
@@ -176,25 +214,55 @@ bool OAOsmNotesMapLayerProvider::obtainData(
         return true;
     }
     
-    const auto tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
-    
-    QByteArray buffer = queryOsmNotes(tileBBox31);
-    if (buffer.size() == 0)
-        return false;
-    
-    QList< std::shared_ptr<OsmAnd::MapSymbolsGroup> > mapSymbolsGroups;
-    
-    bool success = parseResponse(buffer, mapSymbolsGroups, req.zoom);
-    
-    if (success)
-    {
-        outData.reset(new Data(
-                               req.tileId,
-                               req.zoom,
-                               mapSymbolsGroups));
-    }
+    const auto tileId = req.tileId;
+    const auto zoom = req.zoom;
+    const auto tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(tileId, zoom);
+    OsmAnd::AreaI queryBbox31;
 
-    return success;
+    {
+        QReadLocker scopedLocker(&_lock);
+        
+        if (_cacheBBox31.contains(tileBBox31) && _cacheZoom == zoom)
+        {
+            const auto mapSymbolsGroups = buildMapSymbolsGroups(tileBBox31);
+            outData.reset(new Data(tileId, zoom, mapSymbolsGroups));
+            return true;
+        }
+        else if (_requestingBBox31.contains(_requestedBBox31) && _requestingZoom == zoom)
+        {
+            return false;
+        }
+        queryBbox31 = OsmAnd::Utilities::roundBoundingBox31(
+                        _requestedBBox31.getEnlargedBy(_requestedBBox31.height() / 2, _requestedBBox31.width() / 2,
+                                                       _requestedBBox31.height() / 2, _requestedBBox31.width() / 2), zoom);
+    }
+    {
+        QWriteLocker scopedLocker(&_lock);
+        _requestingBBox31 = queryBbox31;
+        _requestingZoom = zoom;
+    }
+    
+    const auto selfWeak = std::weak_ptr<OAOsmNotesMapLayerProvider>(shared_from_this());
+    const auto requestClone = request.clone();
+    const OsmAnd::QRunnableFunctor::Callback task =
+    [selfWeak, requestClone, zoom, queryBbox31]
+    (const OsmAnd::QRunnableFunctor* const runnable)
+    {
+        const auto self = selfWeak.lock();
+        if (self)
+        {
+            if (self->queryOsmNotes(queryBbox31, zoom))
+            {
+                if (self->_dataReadyCallback)
+                    self->_dataReadyCallback();
+            }
+        }
+    };
+
+    const auto taskRunnable = new OsmAnd::QRunnableFunctor(task);
+    taskRunnable->setAutoDelete(true);
+    QThreadPool::globalInstance()->start(taskRunnable);
+    return false;
 }
 
 bool OAOsmNotesMapLayerProvider::supportsNaturalObtainDataAsync() const
@@ -202,19 +270,17 @@ bool OAOsmNotesMapLayerProvider::supportsNaturalObtainDataAsync() const
     return false;
 }
 
-void OAOsmNotesMapLayerProvider::obtainDataAsync(
-                                                     const IMapDataProvider::Request& request,
-                                                     const IMapDataProvider::ObtainDataAsyncCallback callback,
-                                                     const bool collectMetric /*= false*/)
+void OAOsmNotesMapLayerProvider::obtainDataAsync(const IMapDataProvider::Request& request,
+                                                 const IMapDataProvider::ObtainDataAsyncCallback callback,
+                                                 const bool collectMetric /*= false*/)
 {
     OsmAnd::MapDataProviderHelpers::nonNaturalObtainDataAsync(this, request, callback, collectMetric);
 }
 
-OAOsmNotesMapLayerProvider::Data::Data(
-                                       const OsmAnd::TileId tileId_,
+OAOsmNotesMapLayerProvider::Data::Data(const OsmAnd::TileId tileId_,
                                        const OsmAnd::ZoomLevel zoom_,
                                        const QList< std::shared_ptr<OsmAnd::MapSymbolsGroup> >& symbolsGroups_,
-                                           const RetainableCacheMetadata* const pRetainableCacheMetadata_ /*= nullptr*/)
+                                       const RetainableCacheMetadata* const pRetainableCacheMetadata_ /*= nullptr*/)
 : IMapTiledSymbolsProvider::Data(tileId_, zoom_, symbolsGroups_, pRetainableCacheMetadata_)
 {
 }
@@ -224,8 +290,7 @@ OAOsmNotesMapLayerProvider::Data::~Data()
     release();
 }
 
-OAOsmNotesMapLayerProvider::NotesSymbolsGroup::NotesSymbolsGroup(
-                                                                 const std::shared_ptr<const OAOnlineOsmNote>& note_)
+OAOsmNotesMapLayerProvider::NotesSymbolsGroup::NotesSymbolsGroup(const std::shared_ptr<const OAOnlineOsmNote>& note_)
 : note(note_)
 {
 }

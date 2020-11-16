@@ -1854,7 +1854,7 @@
 "shared_string_rendering_style" = "Visualiseerimise stiilid";
 "nav_type_hint" = "Navigeerimise liik: %@";
 "selected_profiles" = "%d / %d";
-"import_duplicates_description" = "OsmAndis on juba samade nimedega kirjed kui need, mis imporditud.\n\nVali toiming.";
+"import_duplicates_description" = "OsmAndis on juba samade nimedega kirjed kui need, mis imporditud.\n\nVali tegevus.";
 "shared_string_finish" = "Lõpp-punkt";
 "shared_string_import_complete" = "Imporditud";
 "search_activity" = "Otsi";
@@ -1878,3 +1878,25 @@
 "shared_string_preparing" = "Valmistun";
 "shared_string_deselect_all" = "Eemalda kõik valikud";
 "shared_string_continue" = "Jätka";
+"add_one_more_pnt" = "Lisa veel üks punkt";
+"delete_point" = "Kustuta punkt";
+"change_route_type_after" = "Muuda teekonna tüüpi peale seda punkti";
+"change_route_type_before" = "Muuda teekonna tüüpi enne seda punkti";
+"trim_after" = "Kärbi pärast seda punkti";
+"trim_before" = "Kärbi enne seda punkti";
+"add_after" = "Lisa punkt peale";
+"add_before" = "Lisa punkte enne";
+"move_point_descr" = "Selle punkti asukoha muutmiseks liiguta kaarti.";
+"move_point" = "Teisalda punkt";
+"add_to_track" = "Lisa rajale";
+"save_new_track" = "Salvesta uue rajana";
+"save_changes" = "Salvesta muudatused";
+"route_betw_points" = "Teekond punktide vahel";
+"points_count" = "Punktid:";
+"point_num" = "Punkt %d";
+"add_point" = "Lisa punkt";
+
+// Route planning
+"plan_route" = "Kavanda teekonda";
+"checking_for_duplicate_description" = "OsmAnd kontrollib %1$s rakenduses korduvate kirjete osas. Selleks võib kuluda aega.";
+"import_complete_description" = "Kõik andmed %@-st on imporditud, rakenduse vajaliku osaga töötamiseks võid kasutada nuppe allpool";

@@ -128,7 +128,7 @@
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Mellomliggende reisemål";
 "map_widget_distance" = "Reisemål";
-"monitoring_control_start" = "REC";
+"monitoring_control_start" = "START";
 "map_widget_altitude" = "Høyde";
 "map_widget_battery" = "Batterinivå";
 "map_widget_plain_time" = "Gjeldende tid";

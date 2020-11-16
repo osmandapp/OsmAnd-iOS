@@ -1921,3 +1921,10 @@
 "shared_string_import" = "Импорт профиля";
 "shared_string_preparing" = "Подготовка";
 "shared_string_continue" = "Продолжить";
+"move_point" = "Переместить точку";
+"route_betw_points" = "Маршрут между точками";
+"point_num" = "Точка %d";
+"shared_string_rendering_style" = "Стиль отрисовки";
+"shared_string_routing" = "Маршрутизация";
+"selected_profiles" = "%d из %d";
+"shared_string_deselect_all" = "Отменить выбор";

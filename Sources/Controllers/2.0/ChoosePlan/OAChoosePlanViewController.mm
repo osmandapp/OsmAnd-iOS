@@ -264,6 +264,7 @@
     OAIAPHelper *_iapHelper;
     OAOsmLiveCardView *_osmLiveCard;
     OAPurchaseCardView *_planTypeCard;
+    BOOL _shouldShowIntroLabel;
     
     UIView *_navBarBackgroundView;
 }
@@ -274,6 +275,18 @@
     if (self)
     {
         [self commonInit];
+        _shouldShowIntroLabel = NO;
+    }
+    return self;
+}
+
+- (instancetype) initWithFreeMapsSpent:(BOOL)isFreeMapsSpent
+{
+    self = [super init];
+    if (self)
+    {
+        [self commonInit];
+        _shouldShowIntroLabel = isFreeMapsSpent;
     }
     return self;
 }
@@ -490,12 +503,27 @@
         y -= kMargin;
     
     CGRect cf = self.cardsContainer.frame;
-    cf.origin.y =  kNavBarHeight + kMargin;
+    CGFloat publicInfoWidth = w - kMargin * 2;
+    
+    if (_shouldShowIntroLabel)
+    {
+        self.lbIntoduction.hidden = NO;
+        NSString *text = OALocalizedString(@"res_free_exp");
+        self.lbIntoduction.text = text;
+        CGFloat ih = [OAUtilities calculateTextBounds:text width:publicInfoWidth font:self.lbIntoduction.font].height;
+        self.lbIntoduction.frame = CGRectMake(kMargin, kNavBarHeight + kMargin, publicInfoWidth, ih);
+        cf.origin.y = self.lbIntoduction.frame.origin.y + ih + kMargin;
+    }
+    else
+    {
+        self.lbIntoduction.hidden = YES;
+        cf.origin.y =  kNavBarHeight + kMargin;
+    }
+    
     cf.size.height = y;
     cf.size.width = cw;
     self.cardsContainer.frame = cf;
     
-    CGFloat publicInfoWidth = w - kMargin * 2;
     CGFloat buttonSpacing = 21;
     // Use bigger font size to compensate the line spacing
     CGFloat bh = [OAUtilities calculateTextBounds:self.lbPublicInfo.attributedText.string width:publicInfoWidth font:[UIFont systemFontOfSize:18]].height;

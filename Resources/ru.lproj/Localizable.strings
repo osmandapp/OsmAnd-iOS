@@ -1928,3 +1928,9 @@
 "shared_string_routing" = "Маршрутизация";
 "selected_profiles" = "%d из %d";
 "shared_string_deselect_all" = "Отменить выбор";
+"move_point_descr" = "Переместите карту, чтобы изменить положение этой точки.";
+
+// Route planning
+"plan_route" = "Планирование маршрута";
+"listed_exist" = "Указанные %@, уже существуют в OsmAnd.";
+"keep_both_desc" = "Импортированные элементы будут добавлены с префиксом";

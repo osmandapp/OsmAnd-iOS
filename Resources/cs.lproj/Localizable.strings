@@ -1109,7 +1109,7 @@
 "routing_attr_avoid_ferry_name" = "Vyhnout se trajektům";
 "rendering_attr_smoothness_horrible_name" = "Hrozná";
 "rendering_attr_hidePOILabels_name" = "Popisky bodů";
-"routing_attr_driving_style_prefer_unpaved_description" = "Upřednostňovat nezpevněné cesty.";
+"routing_attr_driving_style_prefer_unpaved_description" = "Pro navigaci upřednostňovat nezpevněné cesty před zpevněnými.";
 "rendering_attr_hideNonVehicleHighways_name" = "Cesty, které nejsou pro vozidla";
 "rendering_attr_tramRoutes_name" = "Tramvajové linky";
 "routing_attr_piste_type_downhill_name" = "Alpské/sjezdové lyžování";
@@ -1413,3 +1413,4 @@
 "app_mode_osm" = "OSM";
 "shared_string_routing" = "Navigace";
 "rendering_attr_streetLightingNight_name" = "Zobrazit pouze v noci";
+"default_speed_dialog_msg" = "Odhaduje času příjezdu u cest s neznámým povrchem a omezuje rychlost na všech cestách (může ovlivnit trasu)";

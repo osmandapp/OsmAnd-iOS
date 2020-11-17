@@ -14,8 +14,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define RENDERERS_DIR @"rendering/"
-#define ROUTING_PROFILES_DIR @"routing/"
+NS_ASSUME_NONNULL_BEGIN
 
 @class OAImportAsyncTask, OAExportAsyncTask, OACheckDuplicates, OALocalResourceItem;
 @class OASettingsItem;
@@ -70,8 +69,10 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
     EOAExportSettingsTypeQuickActions,
     EOAExportSettingsTypePoiTypes,
     EOAExportSettingsTypeMapSources,
-    EOAExportSettingsTypeCustomRendererStyle,
+    EOAExportSettingsTypeCustomRendererStyles,
     EOAExportSettingsTypeCustomRouting,
+    EOAExportSettingsTypeGPX,
+    EOAExportSettingsTypeMapFiles,
     EOAExportSettingsTypeAvoidRoads,
 };
 
@@ -106,9 +107,9 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 
 @interface OASettingsItem : NSObject
 
+@property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) EOASettingsItemType type;
 @property (nonatomic, readonly) NSString *pluginId;
-@property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *publicName;
 @property (nonatomic) NSString *fileName;
 @property (nonatomic, readonly) NSString *defaultFileName;
@@ -118,6 +119,7 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 @property (nonatomic, assign) BOOL shouldReplace;
 
 - (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error;
+- (instancetype) initWithBaseItem:(OASettingsItem *)baseItem;
 
 - (BOOL) shouldReadOnCollecting;
 - (BOOL) exists;
@@ -186,7 +188,6 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 + (NSString *) getRendererByName:(NSString *)rendererName;
 + (NSString *) getRendererStringValue:(NSString *)renderer;
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
-- (instancetype _Nullable) initWithJsonWithoutBackup:(id)json error:(NSError * _Nullable *)error;
 
 @end
 
@@ -221,18 +222,21 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 
 #pragma mark - OAFileSettingsItemFileSubtype
 
-typedef enum : NSInteger {
+typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
     EOASettingsItemFileSubtypeUnknown = -1,
     EOASettingsItemFileSubtypeOther = 0,
     EOASettingsItemFileSubtypeRoutingConfig,
     EOASettingsItemFileSubtypeRenderingStyle,
+    EOASettingsItemFileSubtypeWikiMap,
+    EOASettingsItemFileSubtypeSrtmMap,
     EOASettingsItemFileSubtypeObfMap,
     EOASettingsItemFileSubtypeTilesMap,
+    EOASettingsItemFileSubtypeRoadMap,
     EOASettingsItemFileSubtypeGpx,
     EOASettingsItemFileSubtypeVoice,
     EOASettingsItemFileSubtypeTravel,
     EOASettingsItemFileSubtypesCount
-} EOASettingsItemFileSubtype;
+};
 
 @interface OAFileSettingsItemFileSubtype : NSObject
 
@@ -240,6 +244,7 @@ typedef enum : NSInteger {
 + (NSString *) getSubtypeFolder:(EOASettingsItemFileSubtype)subtype;
 + (EOASettingsItemFileSubtype) getSubtypeByName:(NSString *)name;
 + (EOASettingsItemFileSubtype) getSubtypeByFileName:(NSString *)fileName;
++ (BOOL) isMap:(EOASettingsItemFileSubtype)type;
 
 @end
     
@@ -254,6 +259,8 @@ typedef enum : NSInteger {
 - (BOOL) exists;
 - (NSString *) renameFile:(NSString *)file;
 - (NSString *) getPluginPath;
+- (void) installItem:(NSString *)destFilePath;
+- (NSString *) getIconName;
 
 @end
 
@@ -285,6 +292,7 @@ typedef enum : NSInteger {
 @property (nonatomic, readonly) NSArray<ObjectType> *existingItems;
 
 - (instancetype) initWithItems:(NSArray<ObjectType> *)items;
+- (instancetype) initWithItems:(NSArray<ObjectType> *)items baseItem:(OACollectionSettingsItem<ObjectType> *)baseItem;
 - (NSArray<ObjectType> *) processDuplicateItems;
 - (NSArray<ObjectType> *) getNewItems;
 - (BOOL) isDuplicate:(ObjectType)item;
@@ -306,7 +314,7 @@ typedef enum : NSInteger {
 
 #pragma mark - OAMapSourcesSettingsItem
 
-@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<OALocalResourceItem *>
+@interface OAMapSourcesSettingsItem : OACollectionSettingsItem<NSDictionary *>
 
 @end
 
@@ -315,3 +323,5 @@ typedef enum : NSInteger {
 @interface OAAvoidRoadsSettingsItem : OACollectionSettingsItem<OAAvoidRoadInfo *>
 
 @end
+
+NS_ASSUME_NONNULL_END

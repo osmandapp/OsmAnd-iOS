@@ -51,9 +51,9 @@
 
 - (void) addSettingsItem:(OASettingsItem *)item
 {
-    if (_items[item.getName])
-        NSLog(@"Already has such item: %@", item.getName);
-    [_items setObject:item forKey:item.getName];
+    if (_items[item.name])
+        NSLog(@"Already has such item: %@", item.name);
+    [_items setObject:item forKey:item.name];
 }
  
 - (void) addAdditionalParam:(NSString *)key value:(NSString *)value

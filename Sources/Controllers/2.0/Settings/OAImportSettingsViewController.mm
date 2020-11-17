@@ -437,7 +437,7 @@
                 customObfMapSection.isOpen = NO;
                 for (OAFileSettingsItem *mapItem in settings)
                 {
-                    NSString *mapName = [[mapItem.getName stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    NSString *mapName = [[mapItem.name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     NSInteger dotLoc = [mapName indexOf:@"."];
                     if (dotLoc > 0)
                         mapName = [mapName substringToIndex:dotLoc];

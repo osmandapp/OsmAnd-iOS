@@ -264,7 +264,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     else if (empty)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), items.firstObject.getName] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), items.firstObject.name] preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
         [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
     }
@@ -386,11 +386,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return @{};
 }
 
-- (NSString *) getName
-{
-    return _name;
-}
-
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error
 {
     NSString *typeStr = json[@"type"];
@@ -506,7 +501,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         OASettingsItem *item = (OASettingsItem *) object;
         return _type == item.type
-            && (item.getName == _name || [item.getName isEqualToString:_name])
+            && (item.name == _name || [item.name isEqualToString:_name])
             && (item.fileName == self.fileName || [item.fileName isEqualToString:self.fileName])
             && (item.pluginId == self.pluginId || [item.pluginId isEqualToString:self.pluginId]);
     }
@@ -730,7 +725,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSSet<NSString *> *_appModeBeanPrefsIds;
 }
 
-@dynamic type, fileName;
+@dynamic type, name, fileName;
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode
 {
@@ -1114,7 +1109,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @implementation OAGlobalSettingsItem
 
-@dynamic type, fileName;
+@dynamic type, name, fileName;
 
 - (EOASettingsItemType) type
 {
@@ -1156,7 +1151,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSArray<OASettingsItem *> *_pluginDependentItems;
 }
 
-@dynamic type, fileName;
+@dynamic type, name, fileName;
 
 - (EOASettingsItemType) type
 {
@@ -1516,12 +1511,18 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @interface OAFileSettingsItem()
 
+@property (nonatomic) NSString *name;
 @property (nonatomic) NSString *docPath;
 @property (nonatomic) NSString *libPath;
 
 @end
 
 @implementation OAFileSettingsItem
+{
+    NSString *_name;
+}
+
+@dynamic name;
 
 - (void) commonInit
 {
@@ -1535,7 +1536,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (self)
     {
         [self commonInit];
-        _name = [filePath lastPathComponent];
+        self.name = [filePath lastPathComponent];
         if (error)
         {
             *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
@@ -1569,7 +1570,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         [self commonInit];
         if (self.subtype == EOASettingsItemFileSubtypeOther)
         {
-            _filePath = [_docPath stringByAppendingString:_name];
+            _filePath = [_docPath stringByAppendingString:self.name];
         }
         else if (self.subtype == EOASettingsItemFileSubtypeUnknown || !self.subtype)
         {
@@ -1579,7 +1580,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         else
         {
-            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:_name];
+            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
         }
     }
     return self;
@@ -1657,6 +1658,16 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 }
 
 - (NSString *) fileName
+{
+    return self.name;
+}
+
+- (void) setName:(NSString *)name
+{
+    _name = name;
+}
+
+- (NSString *) name
 {
     return _name;
 }
@@ -1736,9 +1747,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (fileName.length > 0)
     {
         if (self.subtype == EOASettingsItemFileSubtypeOther)
-            _name = fileName;
+            self.name = fileName;
         else if (self.subtype != EOASettingsItemFileSubtypeUnknown)
-            _name = [fileName lastPathComponent];
+            self.name = [fileName lastPathComponent];
     }
 }
 

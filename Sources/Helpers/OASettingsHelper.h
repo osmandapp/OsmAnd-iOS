@@ -105,11 +105,9 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 
 @class OASettingsItemReader, OASettingsItemWriter;
 
-@interface OASettingsItem : NSObject {
-@protected
-    NSString *_name;
-}
+@interface OASettingsItem : NSObject
 
+@property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) EOASettingsItemType type;
 @property (nonatomic, readonly) NSString *pluginId;
 @property (nonatomic, readonly) NSString *publicName;
@@ -129,7 +127,6 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 - (BOOL) applyFileName:(NSString *)fileName;
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
 - (NSDictionary *) getSettingsJson;
-- (NSString *) getName;
 
 - (OASettingsItemReader *) getReader;
 - (OASettingsItemWriter *) getWriter;
@@ -191,7 +188,6 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 + (NSString *) getRendererByName:(NSString *)rendererName;
 + (NSString *) getRendererStringValue:(NSString *)renderer;
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
-- (instancetype) initWithJsonWithoutBackup:(id)json error:(NSError * _Nullable *)error;
 
 @end
 

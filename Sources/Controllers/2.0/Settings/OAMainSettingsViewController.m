@@ -43,7 +43,7 @@
     OAAutoObserverProxy* _appModeChangedObservable;
     
     OAApplicationMode *_targetAppMode;
-    BOOL _isSelfUpdating;
+    BOOL _isUpdating;
 }
 
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode
@@ -52,7 +52,7 @@
     if (self)
     {
         _targetAppMode = mode;
-        _isSelfUpdating = NO;
+        _isUpdating = NO;
     }
     return self;
 }
@@ -168,7 +168,7 @@
 {
     if (sender.tag < OAApplicationMode.allPossibleValues.count)
     {
-        _isSelfUpdating = YES;
+        _isUpdating = YES;
         OAApplicationMode *am = OAApplicationMode.allPossibleValues[sender.tag];
         [OAApplicationMode changeProfileAvailability:am isSelected:sender.isOn];
     }
@@ -266,8 +266,8 @@
             [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         cell.switchView.hidden = isDefault;
         cell.dividerView.hidden = isDefault;
-        if (_isSelfUpdating)
-            (_isSelfUpdating) = NO;
+        if (_isUpdating)
+            _isUpdating = NO;
         else
             [cell.switchView setOn:isEnabled];
         return cell;

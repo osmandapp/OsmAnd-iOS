@@ -38,7 +38,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeRenderSettings,
     EOAImportDataTypeRoutingSettings,
     EOAImportDataTypeAvoidRoads,
-    EOAImportDataTypeGpxTrips
+    EOAImportDataTypeGpxTrips,
+    EOAImportDataTypeMaps
 };
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -89,7 +90,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     NSInteger renderFilesCount = 0;
     NSInteger routingFilesCount = 0;
     NSInteger gpxFilesCount = 0;
-    NSInteger avoidRoads = 0;
+    NSInteger avoidRoadsCount = 0;
+    NSInteger mapsCount = 0;
     
     for (id item in _settingsItems)
     {
@@ -107,15 +109,18 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         else if ([item isKindOfClass:OAFileSettingsItem.class])
         {
             NSString *filePath = ((OAFileSettingsItem *)item).filePath;
+            EOASettingsItemFileSubtype subType = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath];
             if ([filePath hasSuffix:RENDERER_INDEX_EXT])
                 renderFilesCount += 1;
             else if ([filePath hasSuffix:ROUTING_FILE_EXT])
                 routingFilesCount += 1;
             else if ([filePath hasSuffix:GPX_FILE_EXT])
                 gpxFilesCount += 1;
+            else if ([OAFileSettingsItemFileSubtype isMap:subType])
+                mapsCount += 1;
         }
         else if ([item isKindOfClass:OAAvoidRoadInfo.class])
-            avoidRoads += 1;
+            avoidRoadsCount += 1;
     }
     
     if (profilesCount > 0)
@@ -188,13 +193,23 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             }
          ];
     }
-    if (avoidRoads > 0)
+    if (avoidRoadsCount > 0)
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"avoid_road"),
             @"iconName": @"ic_custom_alert",
             @"count": [NSString stringWithFormat:@"%ld", profilesCount],
             @"category" : @(EOAImportDataTypeGpxTrips)
+            }
+         ];
+    }
+    if (mapsCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"maps"),
+            @"iconName": @"ic_custom_map",
+            @"count": [NSString stringWithFormat:@"%ld", mapsCount],
+            @"category" : @(EOAImportDataTypeMaps)
             }
          ];
     }
@@ -321,6 +336,11 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [self loadCurrentRoutingMode];
         OARouteAvoidSettingsViewController *avoidController = [[OARouteAvoidSettingsViewController alloc] init];
         [rootController.navigationController pushViewController:avoidController animated:YES];
+    }
+    else if (dataType == EOAImportDataTypeMaps)
+    {
+        UIViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+        [rootController.navigationController pushViewController:resourcesViewController animated:YES];
     }
 }
 

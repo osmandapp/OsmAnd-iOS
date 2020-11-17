@@ -228,7 +228,7 @@
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
-    NSMutableArray<NSString *> *mapFilesList = [NSMutableArray array];
+    NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
@@ -249,7 +249,7 @@
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeGpx)
                     [gpxFilesList addObject:fileItem.filePath];
                 else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
-                    [mapFilesList addObject:fileItem.filePath];
+                    [mapFilesList addObject:fileItem];
                 break;
             }
             case EOASettingsItemTypeQuickActions:
@@ -435,12 +435,14 @@
                 customObfMapSection.groupName = OALocalizedString(@"maps");
                 customObfMapSection.type = kCellTypeSectionHeader;
                 customObfMapSection.isOpen = NO;
-                for (NSString *mapItem in settings)
+                for (OAFileSettingsItem *mapItem in settings)
                 {
-                    // TODO: implement all map types with appropriate icons
-                    NSString *mapName = [[[mapItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    NSString *mapName = [[mapItem.getName stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    NSInteger dotLoc = [mapName indexOf:@"."];
+                    if (dotLoc > 0)
+                        mapName = [mapName substringToIndex:dotLoc];
                     [customObfMapSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_route",
+                        @"icon" : mapItem.getIconName,
                         @"title" : mapName,
                         @"type" : kCellTypeTitle,
                     }];
@@ -579,6 +581,7 @@
     NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     
+    
     for (NSObject *object in _selectedItems)
     {
         if ([object isKindOfClass:OAApplicationModeBean.class])
@@ -593,6 +596,8 @@
             [settingsItems addObject:[[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject:(OAAvoidRoadInfo *)object];
+        else if ([object isKindOfClass:OAFileSettingsItem.class])
+            [settingsItems addObject:(OAFileSettingsItem *)object];
     }
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)

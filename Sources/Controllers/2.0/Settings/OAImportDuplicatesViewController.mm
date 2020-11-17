@@ -159,6 +159,7 @@
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray new];
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray new];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray new];
+    NSMutableArray<NSString *> *mapFiles = [NSMutableArray new];
     
     for (id object in duplicatesList)
     {
@@ -173,12 +174,15 @@
         else if ([object isKindOfClass:NSString.class])
         {
             NSString *file = (NSString *)object;
+            EOASettingsItemFileSubtype subType = [OAFileSettingsItemFileSubtype getSubtypeByFileName:file];
             if ([file hasSuffix:RENDERER_INDEX_EXT])
                 [renderFilesList addObject:file];
             else if ([file hasSuffix:ROUTING_FILE_EXT])
                 [routingFilesList addObject:file];
             else if ([file hasSuffix:GPX_FILE_EXT])
                 [gpxFilesList addObject:file];
+            else if ([OAFileSettingsItemFileSubtype isMap:subType])
+                [mapFiles addObject:file];
         }
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject: (OAAvoidRoadInfo *)object];
@@ -238,6 +242,13 @@
         [gpxSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"tracks")]];
         [gpxSection addObjectsFromArray:gpxFilesList];
         [duplicates addObject:gpxSection];
+    }
+    if (mapFiles.count > 0)
+    {
+        NSMutableArray *mapsSection = [NSMutableArray new];
+        [mapsSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"maps")]];
+        [mapsSection addObjectsFromArray:mapFiles];
+        [duplicates addObject:mapsSection];
     }
     return duplicates;
 }
@@ -321,6 +332,7 @@
             else if ([currentItem isKindOfClass:NSString.class])
             {
                 NSString *file = (NSString *)currentItem;
+                EOASettingsItemFileSubtype type = [OAFileSettingsItemFileSubtype getSubtypeByFileName:file];
                 NSString *fileName = [[[file lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                 if ([file hasSuffix:RENDERER_INDEX_EXT])
                 {
@@ -336,6 +348,21 @@
                 {
                     item[@"label"] = fileName;
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_trip"];
+                }
+                else if (type == EOASettingsItemFileSubtypeWikiMap)
+                {
+                    item[@"label"] = fileName;
+                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_wikipedia"];
+                }
+                else if (type == EOASettingsItemFileSubtypeSrtmMap)
+                {
+                    item[@"label"] = fileName;
+                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_contour_lines"];
+                }
+                else
+                {
+                    item[@"label"] = fileName;
+                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_map"];
                 }
                 item[@"iconColor"] = UIColorFromRGB(color_tint_gray);
                 item[@"description"] = @"";

@@ -103,11 +103,13 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 
 @class OASettingsItemReader, OASettingsItemWriter;
 
-@interface OASettingsItem : NSObject
+@interface OASettingsItem : NSObject {
+@protected
+    NSString *_name;
+}
 
 @property (nonatomic, readonly) EOASettingsItemType type;
 @property (nonatomic, readonly) NSString *pluginId;
-@property (nonatomic) NSString *name;
 @property (nonatomic, readonly) NSString *publicName;
 @property (nonatomic) NSString *fileName;
 @property (nonatomic, readonly) NSString *defaultFileName;
@@ -125,6 +127,7 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 - (BOOL) applyFileName:(NSString *)fileName;
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
 - (NSDictionary *) getSettingsJson;
+- (NSString *) getName;
 
 - (OASettingsItemReader *) getReader;
 - (OASettingsItemWriter *) getWriter;
@@ -259,6 +262,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 - (NSString *) renameFile:(NSString *)file;
 - (NSString *) getPluginPath;
 - (void) installItem:(NSString *)destFilePath;
+- (NSString *) getIconName;
 
 @end
 
@@ -290,7 +294,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 @property (nonatomic, readonly) NSArray<ObjectType> *existingItems;
 
 - (instancetype) initWithItems:(NSArray<ObjectType> *)items;
-- (instancetype) initWithItems:(NSArray<id> *)items baseItem:(OACollectionSettingsItem<ObjectType> *)baseItem;
+- (instancetype) initWithItems:(NSArray<ObjectType> *)items baseItem:(OACollectionSettingsItem<ObjectType> *)baseItem;
 - (NSArray<ObjectType> *) processDuplicateItems;
 - (NSArray<ObjectType> *) getNewItems;
 - (BOOL) isDuplicate:(ObjectType)item;

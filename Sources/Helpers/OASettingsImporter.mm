@@ -107,7 +107,7 @@
             }
             
             if (err)
-                [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), item.name]];
+                [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), item.getName]];
         }
     }
     

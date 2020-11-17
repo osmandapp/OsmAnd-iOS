@@ -264,7 +264,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     else if (empty)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), items.firstObject.name] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), items.firstObject.getName] preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
         [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
     }
@@ -357,7 +357,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (NSString *) defaultFileName
 {
-    return [self.name stringByAppendingString:self.defaultFileExtension];
+    return [_name stringByAppendingString:self.defaultFileExtension];
 }
 
 - (NSString *) defaultFileExtension
@@ -384,6 +384,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     // override
     return @{};
+}
+
+- (NSString *) getName
+{
+    return _name;
 }
 
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error
@@ -484,7 +489,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (NSUInteger) hash
 {
     NSInteger result = _type;
-    result = 31 * result + (self.name != nil ? [self.name hash] : 0);
+    result = 31 * result + (_name != nil ? [_name hash] : 0);
     result = 31 * result + (self.fileName != nil ? [self.fileName hash] : 0);
     result = 31 * result + (self.pluginId != nil ? [self.pluginId hash] : 0);
     return result;
@@ -501,7 +506,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         OASettingsItem *item = (OASettingsItem *) object;
         return _type == item.type
-            && (item.name == self.name || [item.name isEqualToString:self.name])
+            && (item.getName == _name || [item.getName isEqualToString:_name])
             && (item.fileName == self.fileName || [item.fileName isEqualToString:self.fileName])
             && (item.pluginId == self.pluginId || [item.pluginId isEqualToString:self.pluginId]);
     }
@@ -725,7 +730,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSSet<NSString *> *_appModeBeanPrefsIds;
 }
 
-@dynamic type, name, fileName;
+@dynamic type, fileName;
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode
 {
@@ -1109,7 +1114,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @implementation OAGlobalSettingsItem
 
-@dynamic type, name, fileName;
+@dynamic type, fileName;
 
 - (EOASettingsItemType) type
 {
@@ -1151,7 +1156,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSArray<OASettingsItem *> *_pluginDependentItems;
 }
 
-@dynamic type, name, fileName;
+@dynamic type, fileName;
 
 - (EOASettingsItemType) type
 {
@@ -1360,6 +1365,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             return @"obf_map";
         case EOASettingsItemFileSubtypeTilesMap:
             return @"tiles_map";
+        case EOASettingsItemFileSubtypeWikiMap:
+            return @"wiki_map";
+        case EOASettingsItemFileSubtypeSrtmMap:
+            return @"srtm_map";
+        case EOASettingsItemFileSubtypeRoadMap:
+            return @"road_map";
         case EOASettingsItemFileSubtypeGpx:
             return @"gpx";
         case EOASettingsItemFileSubtypeVoice:
@@ -1378,12 +1389,15 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         case EOASettingsItemFileSubtypeOther:
         case EOASettingsItemFileSubtypeObfMap:
+        case EOASettingsItemFileSubtypeWikiMap:
+        case EOASettingsItemFileSubtypeRoadMap:
+        case EOASettingsItemFileSubtypeSrtmMap:
         case EOASettingsItemFileSubtypeRenderingStyle:
             return documentsPath;
+        case EOASettingsItemFileSubtypeTilesMap:
+            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];;
         case EOASettingsItemFileSubtypeRoutingConfig:
             return [documentsPath stringByAppendingPathComponent:@"routing"];
-        case EOASettingsItemFileSubtypeTilesMap:
-            return OsmAndApp.instance.cachePath;
         case EOASettingsItemFileSubtypeGpx:
             return OsmAndApp.instance.gpxPath;
             // unsupported
@@ -1473,7 +1487,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                     return subtype;
                 break;
             }
-
+            case EOASettingsItemFileSubtypeRoadMap:
+            {
+                if ([name containsString:@"road"])
+                    return subtype;
+                break;
+            }
             default:
             {
                 NSString *subtypeFolder = [self.class getSubtypeFolder:subtype];
@@ -1497,15 +1516,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 @interface OAFileSettingsItem()
 
-@property (nonatomic) NSString *name;
 @property (nonatomic) NSString *docPath;
 @property (nonatomic) NSString *libPath;
 
 @end
 
 @implementation OAFileSettingsItem
-
-@dynamic name;
 
 - (void) commonInit
 {
@@ -1519,7 +1535,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (self)
     {
         [self commonInit];
-        self.name = [filePath lastPathComponent];
+        _name = [filePath lastPathComponent];
         if (error)
         {
             *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFilePath userInfo:nil];
@@ -1553,7 +1569,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         [self commonInit];
         if (self.subtype == EOASettingsItemFileSubtypeOther)
         {
-            _filePath = [_docPath stringByAppendingString:self.name];
+            _filePath = [_docPath stringByAppendingString:_name];
         }
         else if (self.subtype == EOASettingsItemFileSubtypeUnknown || !self.subtype)
         {
@@ -1563,7 +1579,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         else
         {
-            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
+            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:_name];
         }
     }
     return self;
@@ -1583,9 +1599,52 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             break;
         }
         case EOASettingsItemFileSubtypeRenderingStyle:
+        case EOASettingsItemFileSubtypeObfMap:
+        case EOASettingsItemFileSubtypeRoadMap:
+        case EOASettingsItemFileSubtypeWikiMap:
+        case EOASettingsItemFileSubtypeSrtmMap:
         {
             OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths();
             break;
+        }
+        case EOASettingsItemFileSubtypeTilesMap:
+        {
+            NSString *path = [destFilePath stringByDeletingLastPathComponent];
+            NSString *fileName = destFilePath.lastPathComponent;
+            NSString *ext = fileName.pathExtension;
+            fileName = [fileName stringByDeletingPathExtension].lowerCase;
+            NSString *newFileName = fileName;
+            BOOL isHillShade = [fileName containsString:@"hillshade"];
+            BOOL isSlope = [fileName containsString:@"slope"];
+            if (isHillShade)
+            {
+                newFileName = [fileName stringByReplacingOccurrencesOfString:@"hillshade" withString:@""];
+                newFileName = [newFileName trim];
+                newFileName = [newFileName stringByAppendingString:@".hillshade"];
+            }
+            else if (isSlope)
+            {
+                newFileName = [fileName stringByReplacingOccurrencesOfString:@"slope" withString:@""];
+                newFileName = [newFileName trim];
+                newFileName = [newFileName stringByAppendingString:@".slope"];
+            }
+            newFileName = [newFileName stringByAppendingPathExtension:ext];
+            newFileName = [newFileName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+            path = [path stringByAppendingPathComponent:newFileName];
+            
+            NSFileManager *fileManager = NSFileManager.defaultManager;
+            [fileManager moveItemAtPath:destFilePath toPath:path error:nil];
+            OsmAnd::ResourcesManager::ResourceType resType = OsmAnd::ResourcesManager::ResourceType::Unknown;
+            if (isHillShade)
+                resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
+            else if (isSlope)
+                resType = OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
+            
+            if (resType != OsmAnd::ResourcesManager::ResourceType::Unknown)
+            {
+                // TODO: update exisitng sqlite
+                OsmAndApp.instance.resourcesManager->installFromFile(QString::fromNSString(path), resType);
+            }
         }
         default:
             break;
@@ -1599,7 +1658,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (NSString *) fileName
 {
-    return self.name;
+    return _name;
 }
 
 - (BOOL) exists
@@ -1629,6 +1688,19 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         NSString *newFilePath = [NSString stringWithFormat:@"%@_%d%@", prefix, number, suffix];
         if (![fileManager fileExistsAtPath:newFilePath])
             return newFilePath;
+    }
+}
+
+- (NSString *) getIconName
+{
+    switch (_subtype)
+    {
+        case EOASettingsItemFileSubtypeWikiMap:
+            return @"ic_custom_wikipedia";
+        case EOASettingsItemFileSubtypeSrtmMap:
+            return @"ic_custom_contour_lines";
+        default:
+            return @"ic_custom_show_on_map";
     }
 }
 
@@ -1664,9 +1736,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (fileName.length > 0)
     {
         if (self.subtype == EOASettingsItemFileSubtypeOther)
-            self.name = fileName;
+            _name = fileName;
         else if (self.subtype != EOASettingsItemFileSubtypeUnknown)
-            self.name = [fileName lastPathComponent];
+            _name = [fileName lastPathComponent];
     }
 }
 

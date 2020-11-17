@@ -187,7 +187,8 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     NSString *prefLang = [OAUtilities preferredLang];
-    
+    NSArray <NSString *> *clickableContactCells = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
+    NSArray *phoneNumberCells = @[@"phone", @"mobile", @"whatsapp", @"viber"];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
     
     if (self.poi.type
@@ -260,7 +261,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
             collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             ((OACollapsableLabelView *)collapsableView).label.text = value;
         }
-        else if ([key isEqualToString:@"phone"])
+        else if ([phoneNumberCells containsObject:key])
         {
             iconId = @"ic_phone_number.png";
             textColor = UIColorFromRGB(kHyperlinkColor);
@@ -321,6 +322,11 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 
                 poiTypeOrder = pType.order;
                 poiTypeKeyName = pType.name;
+                if ([clickableContactCells containsObject:key])
+                {
+                    textColor = UIColorFromRGB(kHyperlinkColor);
+                    isUrl = YES;
+                }
                 if (pType.parentType && [pType.parentType isKindOfClass:[OAPOIType class]])
                 {
                     icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@.png", ((OAPOIType *) pType.parentType).tag, [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"], pType.value]];

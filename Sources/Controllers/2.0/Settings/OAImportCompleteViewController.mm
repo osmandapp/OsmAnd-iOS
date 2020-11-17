@@ -89,8 +89,8 @@
     {
         if ([item isKindOfClass:OAProfileSettingsItem.class])
             profilesCount += 1;
-        else if ([item isKindOfClass:OAQuickAction.class])
-            actionsCount += 1;
+        else if ([item isKindOfClass:OAQuickActionsSettingsItem.class])
+            actionsCount += ((OAQuickActionsSettingsItem *)item).items.count;
         else if ([item isKindOfClass:OAPOIUIFilter.class])
             filtersCount += 1;
         else if ([item isKindOfClass:OAMapSourcesSettingsItem.class])
@@ -125,7 +125,7 @@
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_screen_quick_action"),
             @"iconName": @"ic_custom_quick_action",
-            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",(long)actionsCount],
             @"category" : kQuickActioins
             }
          ];

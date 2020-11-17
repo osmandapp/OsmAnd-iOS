@@ -186,7 +186,6 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 + (NSString *) getRendererByName:(NSString *)rendererName;
 + (NSString *) getRendererStringValue:(NSString *)renderer;
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
-- (instancetype _Nullable) initWithJsonWithoutBackup:(id)json error:(NSError * _Nullable *)error;
 
 @end
 
@@ -295,6 +294,12 @@ typedef enum : NSInteger {
 #pragma mark - OAQuickActionsSettingsItem
 
 @interface OAQuickActionsSettingsItem : OACollectionSettingsItem<OAQuickAction *>
+
+@end
+
+#pragma mark - OAQuickActionsSettingsItemReader
+
+@interface OAQuickActionsSettingsItemReader : OASettingsItemReader<OAQuickActionsSettingsItem *>
 
 @end
 

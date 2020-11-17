@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
 #import "Localization.h"
+#import "OAQuickAction.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -53,8 +54,9 @@
 {
     NSFileManager *fileManager = NSFileManager.defaultManager;
     // Clear temp profile data
-    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-    [fileManager createDirectoryAtPath:_tmpFilesDir withIntermediateDirectories:YES attributes:nil error:nil];
+    // (This cleaning stops multy-json file import)
+    //[fileManager removeItemAtPath:_tmpFilesDir error:nil];
+    //[fileManager createDirectoryAtPath:_tmpFilesDir withIntermediateDirectories:YES attributes:nil error:nil];
     
     BOOL collecting = items == nil;
     if (collecting)
@@ -217,8 +219,8 @@
         }
         if ([item[@"type"] isEqualToString:@"QUICK_ACTIONS"])
         {
-//            OASettingsItem *settingsItem = [self createItem:item];
-//            [_items addObject:settingsItem];
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
         }
         // TODO: implement custom plugins
 //        NSString *pluginId = item.pluginId;

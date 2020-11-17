@@ -76,7 +76,10 @@
         if ([userDefaults objectForKey:kFavoriteDefaultGroupKey])
             groupName = [userDefaults stringForKey:kFavoriteDefaultGroupKey];
         
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
+        NSArray *colors = [OADefaultFavorite builtinColors];
+        if (defaultColor < 0 || defaultColor >= colors.count)
+            defaultColor = 0;
+        OAFavoriteColor *favCol = colors[defaultColor];
         
         UIColor* color_ = favCol.color;
         CGFloat r,g,b,a;

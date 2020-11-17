@@ -1834,7 +1834,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (OASettingsItemReader *) getReader
 {
-    return [self getJsonReader];
+    return [[OAQuickActionsSettingsItemReader alloc] initWithItem:self];
 }
 
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
@@ -1856,16 +1856,38 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         
         if (quickAction)
         {
-            NSDictionary *params = object[@"params"];
+            NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary: [self serializeToDictionary:object[@"params"]]];
+            if (params[@"styles"])
+                params[@"styles"] = [self serializeToArray:params[@"styles"]];
+            [quickAction setParams:params];
+            
             if (name.length > 0)
                 [quickAction setName:name];
             
-            [quickAction setParams:params];
             [self.items addObject:quickAction];
         } else {
             [self.warnings addObject:OALocalizedString(@"settings_item_read_error", self.name)];
         }
     }
+}
+
+- (NSDictionary *)serializeToDictionary:(id)object
+{
+    if ([object isKindOfClass:NSString.class])
+    {
+        NSString *stringValue = (NSString *)object;
+        NSError *jsonError;
+        NSData* stringData = [stringValue dataUsingEncoding:NSUTF8StringEncoding];
+        return [NSJSONSerialization JSONObjectWithData:stringData options:kNilOptions error:&jsonError];
+    }
+    return object;
+}
+
+- (NSArray *)serializeToArray:(id)object
+{
+    if (![object isKindOfClass:NSArray.class])
+        return [(NSString *)object componentsSeparatedByString:@","];
+    return object;
 }
 
 - (void) writeItemsToJson:(id)json
@@ -1883,6 +1905,47 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         json[@"items"] = jsonArray;
     }
+}
+
+@end
+
+@implementation OAQuickActionsSettingsItemReader
+
+- (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
+{
+    NSError *readError;
+    NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
+    if (readError)
+    {
+        if (error)
+            *error = readError;
+        
+        return NO;
+    }
+    if (data.length == 0)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeEmptyJson userInfo:nil];
+        
+        return NO;
+    }
+    
+    NSError *jsonError;
+    id json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&jsonError];
+    if (jsonError)
+    {
+        if (error)
+            *error = jsonError;
+        
+        return NO;
+    }
+    
+    NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
+    [self.item readFromJson:json error:error];
+    if (error)
+        return NO;
+
+    return YES;
 }
 
 @end

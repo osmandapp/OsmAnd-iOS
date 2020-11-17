@@ -20702,7 +20702,6 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";

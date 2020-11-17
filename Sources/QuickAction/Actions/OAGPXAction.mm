@@ -164,7 +164,10 @@ static OAQuickActionType *TYPE;
     if (self.getParams[KEY_CATEGORY_COLOR])
         defaultColor = [self.getParams[KEY_CATEGORY_COLOR] integerValue];
     
-    color = [OADefaultFavorite builtinColors][defaultColor];
+    NSArray *colors = [OADefaultFavorite builtinColors];
+    if (defaultColor < 0 || defaultColor >= colors.count)
+        defaultColor = 0;
+    color = colors[defaultColor];
     
     [data setObject:@[@{
                           @"type" : @"OAIconTitleValueCell",

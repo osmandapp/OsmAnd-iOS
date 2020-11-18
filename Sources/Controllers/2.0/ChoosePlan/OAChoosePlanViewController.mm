@@ -609,8 +609,6 @@
     return cardView;
 }
 
-
-
 - (UIView *) createNavBarBackgroundView
 {
     if (!UIAccessibilityIsReduceTransparencyEnabled())

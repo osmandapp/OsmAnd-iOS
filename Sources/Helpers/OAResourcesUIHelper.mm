@@ -21,7 +21,6 @@
 #import "OATerrainLayer.h"
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
-
 #import "OAChoosePlanHelper.h"
 
 #include "Localization.h"

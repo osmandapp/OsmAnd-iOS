@@ -43,7 +43,6 @@
     OAAutoObserverProxy* _appModeChangedObservable;
     
     OAApplicationMode *_targetAppMode;
-    BOOL _isUpdating;
 }
 
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode
@@ -51,9 +50,7 @@
     self = [super init];
     if (self)
     {
-        _targetAppMode = mode;
-        _isUpdating = NO;
-    }
+        _targetAppMode = mode;    }
     return self;
 }
 
@@ -168,7 +165,6 @@
 {
     if (sender.tag < OAApplicationMode.allPossibleValues.count)
     {
-        _isUpdating = YES;
         OAApplicationMode *am = OAApplicationMode.allPossibleValues[sender.tag];
         [OAApplicationMode changeProfileAvailability:am isSelected:sender.isOn];
     }
@@ -263,13 +259,12 @@
         BOOL isDefault = am == OAApplicationMode.DEFAULT;
         [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
         if (!isDefault)
+        {
+            [cell.switchView setOn:isEnabled];
             [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        }
         cell.switchView.hidden = isDefault;
         cell.dividerView.hidden = isDefault;
-        if (_isUpdating)
-            _isUpdating = NO;
-        else
-            [cell.switchView setOn:isEnabled];
         return cell;
     }
     else if ([type isEqualToString:kCellTypeAction])

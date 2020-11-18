@@ -637,7 +637,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 [_settings.mapSettingSaveTrackIntervalApproved set:NO mode:self.appMode];
                 [self backButtonClicked:nil];
             } else {
-                [self selectRecInterval:indexPath.row];
+                [self selectRecInterval:indexPath.row - 1];
             }
             break;
         case kTripRecordingSettingsScreenNavRecInterval:

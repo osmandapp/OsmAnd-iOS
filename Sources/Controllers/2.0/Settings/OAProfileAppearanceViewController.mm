@@ -349,7 +349,9 @@
                @"ic_action_utv",
                @"ic_action_wagon",
                @"ic_action_go_cart",
-               @"ic_action_openstreetmap_logo"];
+               @"ic_action_openstreetmap_logo",
+               @"ic_action_kayak",
+               @"ic_action_motorboat"];
 }
 
 - (NSArray<UIImage *> *) getIconsAtRest

@@ -29,7 +29,6 @@ OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QSt
 
 OASQLiteTileSourceMapLayerProvider::~OASQLiteTileSourceMapLayerProvider()
 {
-    this->waitForTasksDone();
     ts = nil;
 }
 

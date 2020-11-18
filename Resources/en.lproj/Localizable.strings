@@ -483,6 +483,8 @@
 "shared_string_continue" = "Continue";
 "shared_string_deselect_all" = "Deselect all";
 "shared_string_preparing" = "Preparing";
+"shared_string_min" = "Min.";
+"shared_string_max" = "Max.";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";

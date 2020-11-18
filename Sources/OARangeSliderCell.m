@@ -27,9 +27,9 @@
 {
     self.rangeSlider.handleColor = UIColorFromRGB(color_menu_button);
     self.rangeSlider.lineBorderColor = UIColorFromRGB(color_slider_gray);
-    self.rangeSlider.handleDiameter = 28.;
-    self.rangeSlider.handleBorderWidth = 0.5;
-    self.rangeSlider.handleColor = UIColor.whiteColor;
+    UIImage *handle = [[UIImage imageNamed:@"ic_control_knob"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.rangeSlider setHandleImage:handle];
+    self.rangeSlider.handleDiameter = 30.;
     self.rangeSlider.handleBorderColor = UIColorFromRGB(color_slider_gray);
     self.rangeSlider.selectedHandleDiameterMultiplier = 1.;
 }

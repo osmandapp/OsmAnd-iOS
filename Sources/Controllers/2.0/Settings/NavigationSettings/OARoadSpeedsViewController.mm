@@ -113,16 +113,13 @@
             _ratio = 1;
             break;
     }
-    
     CGFloat settingsMinSpeed = self.appMode.getMinSpeed;
     CGFloat settingsMaxSpeed = self.appMode.getMaxSpeed;
-    
     CGFloat minSpeedValue = settingsMinSpeed > 0 ? settingsMinSpeed : router->getMinSpeed();
     CGFloat maxSpeedValue = settingsMaxSpeed > 0 ? settingsMaxSpeed : router->getMaxSpeed();
 
-    _minValue = round(MIN(minSpeedValue, self.appMode.getDefaultSpeed) * _ratio);
-    _maxValue = round(MAX(maxSpeedValue, self.appMode.getDefaultSpeed) * _ratio);
- 
+    _minValue = round(minSpeedValue * _ratio);
+    _maxValue = round(maxSpeedValue * _ratio);
     _baseMinSpeed = MAX(1, floor(self.appMode.baseMinSpeed * _ratio));
     _baseMaxSpeed = round(self.appMode.baseMaxSpeed * _ratio);
 }
@@ -191,6 +188,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARangeSliderCell" owner:self options:nil];
             cell = (OARangeSliderCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.minLabel.text = OALocalizedString(@"shared_string_min");
+            cell.maxLabel.text = OALocalizedString(@"shared_string_max");
         }
         if (cell)
         {
@@ -199,7 +198,6 @@
             cell.rangeSlider.maxValue = _baseMaxSpeed;
             cell.rangeSlider.selectedMinimum = _minValue;
             cell.rangeSlider.selectedMaximum = _maxValue;
-           
             cell.minValueLabel.text = item[@"minValue"];
             cell.maxValueLabel.text = item[@"maxValue"];
         }

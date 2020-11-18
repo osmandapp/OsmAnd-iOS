@@ -32,20 +32,10 @@
 
 + (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController
 {
-    [self.class showChoosePlanScreenWithProduct:product navController:navController purchasing:NO isFreeMapsSpent:NO];
-}
-
-+ (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController isFreeMapsSpent:(BOOL)isFreeMapsSpent
-{
-    [self.class showChoosePlanScreenWithProduct:product navController:navController purchasing:NO isFreeMapsSpent:isFreeMapsSpent];
+    [self.class showChoosePlanScreenWithProduct:product navController:navController purchasing:NO];
 }
 
 + (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController purchasing:(BOOL)purchasing
-{
-    [self.class showChoosePlanScreenWithProduct:product navController:navController purchasing:NO isFreeMapsSpent:NO];
-}
-
-+ (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController purchasing:(BOOL)purchasing isFreeMapsSpent:(BOOL)isFreeMapsSpent
 {
     if (!product || [product isKindOfClass:[OASubscription class]])
         [OAChoosePlanHelper showImpl:[[OAChooseOsmLivePlanViewController alloc] init] navController:navController purchasing:purchasing product:product];
@@ -76,7 +66,7 @@
     else if ([product isEqual:[OAChoosePlanRussiaMapsViewController getPlanTypeProduct]])
         [OAChoosePlanHelper showImpl:[[OAChoosePlanRussiaMapsViewController alloc] init] navController:navController purchasing:purchasing product:product];
     else if ([product isEqual:[OAChoosePlanEuropeMapsViewController getPlanTypeProduct]])
-        [OAChoosePlanHelper showImpl:[[OAChoosePlanEuropeMapsViewController alloc] initWithFreeMapsSpent:isFreeMapsSpent] navController:navController purchasing:purchasing product:product];
+        [OAChoosePlanHelper showImpl:[[OAChoosePlanEuropeMapsViewController alloc] init] navController:navController purchasing:purchasing product:product];
     else if ([product isEqual:[OAChoosePlanAustraliaMapsViewController getPlanTypeProduct]])
         [OAChoosePlanHelper showImpl:[[OAChoosePlanAustraliaMapsViewController alloc] init] navController:navController purchasing:purchasing product:product];
     else if ([product isEqual:[OAChoosePlanNorthAmericaMapsViewController getPlanTypeProduct]])

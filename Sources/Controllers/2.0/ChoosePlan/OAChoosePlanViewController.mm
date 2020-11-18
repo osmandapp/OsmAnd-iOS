@@ -13,10 +13,7 @@
 #import "OAIAPHelper.h"
 #import "OAOsmLiveCardView.h"
 #import "OAPurchaseCardView.h"
-
-//#import "OATextCardView.h"
 #import "OALabelCardView.h"
-
 #import "OAColors.h"
 #import "OAAnalyticsHelper.h"
 #import "OADonationSettingsViewController.h"
@@ -268,9 +265,7 @@
     OAIAPHelper *_iapHelper;
     OAOsmLiveCardView *_osmLiveCard;
     OAPurchaseCardView *_planTypeCard;
-//    OATextCardView *_introTextCard;
     OALabelCardView *_introTextCard;
-    BOOL _shouldShowIntroLabel;
     
     UIView *_navBarBackgroundView;
 }
@@ -281,18 +276,6 @@
     if (self)
     {
         [self commonInit];
-        _shouldShowIntroLabel = NO;
-    }
-    return self;
-}
-
-- (instancetype) initWithFreeMapsSpent:(BOOL)isFreeMapsSpent
-{
-    self = [super init];
-    if (self)
-    {
-        [self commonInit];
-        _shouldShowIntroLabel = isFreeMapsSpent;
     }
     return self;
 }
@@ -439,10 +422,8 @@
     if (!UIAccessibilityIsReduceTransparencyEnabled())
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     
-    //BUILD_CARD()
     _introTextCard = [self buildLabelCard];
     [self.cardsContainer addSubview:_introTextCard];
-    
     
     _planTypeCard = [self buildPlanTypeCard];
     [self.cardsContainer addSubview:_planTypeCard];
@@ -519,27 +500,12 @@
         y -= kMargin;
     
     CGRect cf = self.cardsContainer.frame;
-    CGFloat publicInfoWidth = w - kMargin * 2;
-    
-    if (_shouldShowIntroLabel)
-    {
-        self.lbIntoduction.hidden = NO;
-        NSString *text = OALocalizedString(@"res_free_exp");
-        self.lbIntoduction.text = text;
-        CGFloat ih = [OAUtilities calculateTextBounds:text width:publicInfoWidth font:self.lbIntoduction.font].height;
-        self.lbIntoduction.frame = CGRectMake(kMargin, kNavBarHeight + kMargin, publicInfoWidth, ih);
-        cf.origin.y = self.lbIntoduction.frame.origin.y + ih + kMargin;
-    }
-    else
-    {
-        self.lbIntoduction.hidden = YES;
-        cf.origin.y =  kNavBarHeight + kMargin;
-    }
-    
+    cf.origin.y =  kNavBarHeight + kMargin;
     cf.size.height = y;
     cf.size.width = cw;
     self.cardsContainer.frame = cf;
     
+    CGFloat publicInfoWidth = w - kMargin * 2;
     CGFloat buttonSpacing = 21;
     // Use bigger font size to compensate the line spacing
     CGFloat bh = [OAUtilities calculateTextBounds:self.lbPublicInfo.attributedText.string width:publicInfoWidth font:[UIFont systemFontOfSize:18]].height;
@@ -802,87 +768,6 @@
         }
     }
 }
-
-//- (void) setupTexteCardButtons:(BOOL)progress
-//{
-//    if (progress)
-//    {
-//        [_osmLiveCard setProgressVisibile:YES];
-//        [self.view setNeedsLayout];
-//        return;
-//    }
-//    else
-//    {
-//        for (UIView *v in _osmLiveCard.buttonsContainer.subviews)
-//            [v removeFromSuperview];
-//        
-//        NSDictionary *attributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]};
-//        NSArray<OASubscription *> *visibleSubscriptions = [_iapHelper.liveUpdates getVisibleSubscriptions];
-//        OASubscription *s;
-//        BOOL anyPurchased = NO;
-//        for (OASubscription *subscription in visibleSubscriptions)
-//        {
-//            if ([subscription isPurchased])
-//                anyPurchased = YES;
-//            if ([subscription isKindOfClass:OALiveUpdatesAnnual.class])
-//                s = subscription;
-//        }
-//        if (!s)
-//            s = visibleSubscriptions.firstObject;
-//        
-//        BOOL purchased = NO;
-//        OAChoosePlanViewController * __weak weakSelf = self;
-//        purchased = [s isPurchased];
-//        
-//        BOOL showTopDiv = NO;
-//        BOOL showBottomDiv = NO;
-//        if (purchased)
-//        {
-//            showTopDiv = YES;
-//            showBottomDiv = NO;
-//        }
-//        else
-//        {
-//            showTopDiv = NO;
-//        }
-//        
-//        if (purchased)
-//        {
-//            [_osmLiveCard addCardButtonWithTitle:[s getTitle:17.0] description:[s getDescription:15.0] buttonText:[[NSAttributedString alloc] initWithString:s.formattedPrice attributes:attributes] buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
-//            
-//            [_osmLiveCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:15.0] buttonText:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_cancel_subscription") attributes:attributes] buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
-//                [weakSelf manageSubscription];
-//            }];
-//        }
-//        else
-//        {
-//            EOAPurchaseDialogCardButtonType buttonType;
-//            if (self.purchasing)
-//                buttonType = ![self.product isEqual:s] ? EOAPurchaseDialogCardButtonTypeDisabled : EOAPurchaseDialogCardButtonTypeExtended;
-//            else
-//                buttonType = EOAPurchaseDialogCardButtonTypeRegular;
-//            
-//            OAAppSettings *settings = [OAAppSettings sharedManager];
-//            OAProductDiscount *discountOffer;
-//            if (settings.eligibleForIntroductoryPrice)
-//                discountOffer = s.introductoryPrice;
-//            else if (settings.eligibleForSubscriptionOffer)
-//            {
-//                if (s.discounts && s.discounts.count > 0)
-//                    discountOffer = s.discounts[0];
-//            }
-//            
-//            BOOL hasSpecialOffer = discountOffer != nil;
-//            buttonType = hasSpecialOffer ? EOAPurchaseDialogCardButtonTypeOffer : buttonType;
-//            
-//            [_osmLiveCard addCardButtonWithTitle:[s getTitle:17.0] description:hasSpecialOffer ? [[NSAttributedString alloc] initWithString:discountOffer.getDescriptionTitle attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}] : [s getDescription:15.0] buttonText:hasSpecialOffer ? discountOffer.getFormattedDescription : [[NSAttributedString alloc] initWithString:s.formattedPrice attributes:attributes] buttonType:buttonType active:NO showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
-//                [weakSelf subscribe:s];
-//            }];
-//        }
-//    }
-//    [_osmLiveCard setProgressVisibile:NO];
-//    [self.view setNeedsLayout];
-//}
 
 - (void) productPurchased:(NSNotification *)notification
 {

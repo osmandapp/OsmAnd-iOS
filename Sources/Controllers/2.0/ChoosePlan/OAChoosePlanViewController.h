@@ -58,7 +58,6 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIButton *btnBack;
 @property (weak, nonatomic) IBOutlet UIView *cardsContainer;
 @property (weak, nonatomic) IBOutlet UIView *publicInfoContainer;
-@property (weak, nonatomic) IBOutlet UILabel *lbIntoduction;
 @property (weak, nonatomic) IBOutlet UILabel *lbPublicInfo;
 @property (weak, nonatomic) IBOutlet UIButton *btnTermsOfUse;
 @property (weak, nonatomic) IBOutlet UIButton *btnPrivacyPolicy;
@@ -73,7 +72,6 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) BOOL purchasing;
 @property (nonatomic) OAProduct *product;
 
-- (instancetype) initWithFreeMapsSpent:(BOOL)isFreeMapsSpent;
 - (void) commonInit;
 
 - (UIView *) createNavBarBackgroundView;

@@ -17,9 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void) showChoosePlanScreenWithSuffix:(NSString *)productIdentifierSuffix navController:(UINavigationController *)navController;
 
 + (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController;
-+ (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController isFreeMapsSpent:(BOOL)isFreeMapsSpent;
 + (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController purchasing:(BOOL)purchasing;
-+ (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController purchasing:(BOOL)purchasing isFreeMapsSpent:(BOOL)isFreeMapsSpent;
 
 @end
 

@@ -268,7 +268,7 @@ static BOOL dataInvalidated = NO;
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
     OAProduct *product = OAIAPHelper.sharedInstance.europe;
-    [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController isFreeMapsSpent:YES];
+    [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
     
     //[OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:self.navigationController];
     //[OAChoosePlanHelper showImpl:[[OAChooseOsmLivePlanViewController alloc] init] navController:navController purchasing:purchasing product:product];

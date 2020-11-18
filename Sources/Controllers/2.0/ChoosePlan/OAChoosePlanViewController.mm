@@ -14,6 +14,7 @@
 #import "OAOsmLiveCardView.h"
 #import "OAPurchaseCardView.h"
 #import "OAColors.h"
+#import "OATextCardView.h"
 #import "OAAnalyticsHelper.h"
 #import "OADonationSettingsViewController.h"
 #import "OARootViewController.h"
@@ -264,6 +265,7 @@
     OAIAPHelper *_iapHelper;
     OAOsmLiveCardView *_osmLiveCard;
     OAPurchaseCardView *_planTypeCard;
+    OATextCardView *_introTextCard;
     
     UIView *_navBarBackgroundView;
 }
@@ -303,6 +305,11 @@
 {
     return [UIImage imageNamed:@"img_logo_38dp_osmand"];
 }
+
+- (NSString *) getPlanTypeTopText
+ {
+     return nil; // not implemented
+ }
 
 - (NSString *) getPlanTypeHeaderTitle
 {
@@ -415,6 +422,13 @@
     if (!UIAccessibilityIsReduceTransparencyEnabled())
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     
+    NSString *introText = [self getPlanTypeTopText];
+    if (introText)
+    {
+        _introTextCard = [self buildTextCard: introText];
+        [self.cardsContainer addSubview:_introTextCard];
+    }
+
     _planTypeCard = [self buildPlanTypeCard];
     [self.cardsContainer addSubview:_planTypeCard];
     
@@ -587,6 +601,13 @@
     
     return (!self.planTypeFeatures || self.planTypeFeatures.count == 0) ? nil : cardView;
 }
+
+- (OATextCardView *) buildTextCard:(NSString *)text
+ {
+     OATextCardView *cardView = [[OATextCardView alloc] initWithFrame:{0, 0, 300, 200}];
+     cardView.textLabel.text = text;
+     return cardView;
+ }
 
 - (UIView *) createNavBarBackgroundView
 {

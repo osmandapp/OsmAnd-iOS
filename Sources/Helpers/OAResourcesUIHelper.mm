@@ -21,6 +21,7 @@
 #import "OATerrainLayer.h"
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
+#import "OAChoosePlanHelper.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -288,6 +289,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
++ (BOOL) checkIfDownloadAvailable
+{
+    NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
+    return ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]);
+}
+
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region
 {
 #if defined(OSMAND_IOS_DEV)
@@ -455,9 +462,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     BOOL isAvailable = [self.class checkIfDownloadAvailable:region];
     if (!isAvailable)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_free_exp") preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+        OAWorldRegion * globalRegion = [region getPrimarySuperregion];
+        OAProduct* product = [globalRegion getProduct];
+        if (!product)
+            product = OAIAPHelper.sharedInstance.allWorld;
+        [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
         return NO;
     }
     return isAvailable;

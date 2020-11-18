@@ -340,6 +340,10 @@
 		15C428E324A7753C00B21005 /* OALabelCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C428E224A7753C00B21005 /* OALabelCollectionViewCell.xib */; };
 		15C428E524A776BE00B21005 /* OALabelCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C428E424A776BE00B21005 /* OALabelCollectionViewCell.m */; };
 		15DF4052242B3437004AF26B /* OASettingsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15DF4051242B3437004AF26B /* OASettingsHelper.mm */; };
+		324B735B25653CB100B6EE52 /* OATextCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 324B735825653CB000B6EE52 /* OATextCardView.m */; };
+		324B735C25653CB100B6EE52 /* OATextCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 324B735825653CB000B6EE52 /* OATextCardView.m */; };
+		324B735D25653CB100B6EE52 /* OATextCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 324B735925653CB000B6EE52 /* OATextCardView.xib */; };
+		324B735E25653CB100B6EE52 /* OATextCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 324B735925653CB000B6EE52 /* OATextCardView.xib */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BB2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BC2507804400266047 /* ic_custom_logo_wikidata.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B52507803500266047 /* ic_custom_logo_wikidata.png */; };
@@ -6484,6 +6488,9 @@
 		15DF4051242B3437004AF26B /* OASettingsHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OASettingsHelper.mm; path = Helpers/OASettingsHelper.mm; sourceTree = "<group>"; };
 		15DF4053242B3462004AF26B /* OASettingsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASettingsHelper.h; path = Helpers/OASettingsHelper.h; sourceTree = "<group>"; };
 		2CFA9B52B7169930B7654453 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
+		324B735825653CB000B6EE52 /* OATextCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATextCardView.m; sourceTree = "<group>"; };
+		324B735925653CB000B6EE52 /* OATextCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATextCardView.xib; sourceTree = "<group>"; };
+		324B735A25653CB100B6EE52 /* OATextCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATextCardView.h; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B52507803500266047 /* ic_custom_logo_wikidata.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_logo_wikidata.png; path = Resources/Icons/ic_custom_logo_wikidata.png; sourceTree = "<group>"; };
 		333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@3x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@3x.png"; sourceTree = "<group>"; };
@@ -13886,6 +13893,9 @@
 		8A3F02FD21C7C13A0043797E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				324B735A25653CB100B6EE52 /* OATextCardView.h */,
+				324B735825653CB000B6EE52 /* OATextCardView.m */,
+				324B735925653CB000B6EE52 /* OATextCardView.xib */,
 				DA9D549222D4840F003AD7F9 /* OAOsmLiveCardView.h */,
 				DA9D549322D4840F003AD7F9 /* OAOsmLiveCardView.m */,
 				DA9D549122D4840E003AD7F9 /* OAOsmLiveCardView.xib */,
@@ -17968,6 +17978,7 @@
 				DA52CDF424AE087F00CC309D /* ic_custom_direction_movement.png in Resources */,
 				DA23424B23477F33003911B8 /* ic_custom_undo@3x.png in Resources */,
 				847A206E1DF94E9B003C1246 /* ic_destination_pin_5_small.png in Resources */,
+				324B735E25653CB100B6EE52 /* OATextCardView.xib in Resources */,
 				847A206F1DF94E9B003C1246 /* ic_mode_browsing@2x.png in Resources */,
 				DAE08346253F0CFD009B5A11 /* ic_custom_redo@2x.png in Resources */,
 				DAE08332253F0953009B5A11 /* ic_custom_save_as_new_file@3x.png in Resources */,
@@ -18277,6 +18288,7 @@
 				784B3E1523D9C22F003A22CB /* OAOnlineTilesEditingViewController.xib in Resources */,
 				8477772C1FAA260E00CA8C1F /* widget_speed_night@3x.png in Resources */,
 				84F3A8F81B4DA93100D16EBC /* ic_trip_location@2x.png in Resources */,
+				324B735D25653CB100B6EE52 /* OATextCardView.xib in Resources */,
 				DA1994B7224CDAF200B25BB0 /* ic_custom_delete.png in Resources */,
 				843257AC1A9DAE9400A7964E /* ic_map_resources@2x.png in Resources */,
 				8454DA1B1B2F16D700E5A5C5 /* ic_coordinates.png in Resources */,
@@ -21246,6 +21258,7 @@
 				DABA3DF4226896B0005BB777 /* OAOsmEditActionsViewController.mm in Sources */,
 				33AA1223252DE3E500292229 /* OAColorsCollectionViewCell.m in Sources */,
 				DA31EDFE22CB9C480038AB49 /* OALocationConvert.mm in Sources */,
+				324B735C25653CB100B6EE52 /* OATextCardView.m in Sources */,
 				847A1D3C1DF94E9B003C1246 /* OARootViewController.m in Sources */,
 				8490B1CE20652F66007694A5 /* OAWaypointsPOIScreen.mm in Sources */,
 				847A1D3D1DF94E9B003C1246 /* OASavingTrackHelper.mm in Sources */,
@@ -21704,6 +21717,7 @@
 				DAB2A55721F1FDCD00D9F01A /* OAOsmEditsLayer.mm in Sources */,
 				DAF3F550225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */,
 				DA94C736224B6222006C1116 /* OAAdvancedEditingViewController.mm in Sources */,
+				324B735B25653CB100B6EE52 /* OATextCardView.m in Sources */,
 				DAF3F555225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */,
 				DA31EDFD22CB9C480038AB49 /* OALocationConvert.mm in Sources */,
 				844E07C71E40CE9100EFC525 /* OADistanceDirection.mm in Sources */,

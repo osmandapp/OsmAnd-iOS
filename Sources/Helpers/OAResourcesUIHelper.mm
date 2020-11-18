@@ -464,6 +464,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     {
         OAWorldRegion * globalRegion = [region getPrimarySuperregion];
         OAProduct* product = [globalRegion getProduct];
+        if (!product)
+            product = OAIAPHelper.sharedInstance.allWorld;
         [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
         return NO;
     }

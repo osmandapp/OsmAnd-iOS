@@ -24,6 +24,7 @@ def defaultPods
     pod 'MaterialComponents/TextFields', '~> 84.0.0'
     pod 'BRCybertron', '~> 1.1.1'
     pod 'MCBinaryHeap', '~> 0.1'
+    pod "TTRangeSlider"
 end
 
 target 'OsmAnd Maps' do

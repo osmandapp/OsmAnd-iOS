@@ -1465,12 +1465,12 @@ static const double d180PI = 180.0 / M_PI_2;
     return [self calculateTextBounds:attributedText width:width].height;
 }
 
-+ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize
 {
-    return [self.class getStringWithBoldPart:wholeString mainString:ms boldString:bs lineSpacing:lineSpacing highlightColor:nil];
+    return [self.class getStringWithBoldPart:wholeString mainString:ms boldString:bs lineSpacing:lineSpacing fontSize:fontSize highlightColor:nil];
 }
 
-+ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing highlightColor:(UIColor *)highlightColor
++ (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize highlightColor:(UIColor *)highlightColor
 {
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:lineSpacing];
@@ -1480,8 +1480,8 @@ static const double d180PI = 180.0 / M_PI_2;
     NSString *mainString = ms;
     NSRange boldRange = [wholeString rangeOfString:boldString];
     NSRange mainRange = [wholeString rangeOfString:mainString];
-    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:15] range:mainRange];
-    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont boldSystemFontOfSize:15] range:boldRange];
+    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:mainRange];
+    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont boldSystemFontOfSize:fontSize] range:boldRange];
     if (highlightColor)
         [descriptionAttributedString addAttribute: NSForegroundColorAttributeName value:highlightColor range:boldRange];
     return descriptionAttributedString;

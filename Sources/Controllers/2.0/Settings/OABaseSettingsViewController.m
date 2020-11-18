@@ -76,6 +76,16 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (IBAction)cancelButtonPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)doneButtonPressed:(id)sender
+{
+    
+}
+
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     return nil;
 }

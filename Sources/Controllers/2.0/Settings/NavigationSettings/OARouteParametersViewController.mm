@@ -22,6 +22,7 @@
 #import "OARoutingHelper.h"
 #import "OARoutePreferencesParameters.h"
 #import "OARouteSettingsParameterController.h"
+#import "OARoadSpeedsViewController.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -251,6 +252,13 @@
             @"value" : @([settings.enableTimeConditionalRouting get:self.appMode]),
             @"type" : kCellTypeSwitch }
         ];
+        [parametersArr addObject:@{
+            @"type" : kCellTypeIconTitle,
+            @"title" : OALocalizedString(@"road_speeds"),
+            @"icon" : @"ic_custom_alert",
+            //@"value" : @([self checkIfAnyParameterIsSelected:_preferParameters]),
+            @"key" : @"roadSpeeds"
+        }];
     }
     [tableData addObject:otherArr];
     [tableData addObject:parametersArr];
@@ -457,6 +465,8 @@
         settingsViewController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameter:_otherParameters[[item[@"ind"] intValue]] appMode:self.appMode];
     else if ([itemKey isEqualToString:@"preferRoads"])
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
+    else if ([itemKey isEqualToString:@"roadSpeeds"])
+        settingsViewController = [[OARoadSpeedsViewController alloc] initWithApplicationMode:self.appMode speedParameters:item];
 
     settingsViewController.delegate = self;
     [self.navigationController pushViewController:settingsViewController animated:YES];

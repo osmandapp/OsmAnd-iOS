@@ -274,6 +274,9 @@
 		158B1F782487B838007BC45A /* OASelectMapSourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 158B1F732487B837007BC45A /* OASelectMapSourceViewController.mm */; };
 		158B1F792487B838007BC45A /* OADownloadMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 158B1F752487B838007BC45A /* OADownloadMapViewController.mm */; };
 		15A3B4F02524784E00331177 /* OAExitInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A3B4EF2524784E00331177 /* OAExitInfo.m */; };
+		15AAEE0D2563D286006EF9F0 /* OARoadSpeedsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15AAEE0C2563D286006EF9F0 /* OARoadSpeedsViewController.mm */; };
+		15AAEE172563FBFA006EF9F0 /* OARangeSliderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15AAEE162563FBFA006EF9F0 /* OARangeSliderCell.xib */; };
+		15AAEE1C2563FDD6006EF9F0 /* OARangeSliderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15AAEE1B2563FDD6006EF9F0 /* OARangeSliderCell.m */; };
 		15B4E48C24AB3F8600119365 /* ic_custom_minimal_distance.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B4E48924AB3F8400119365 /* ic_custom_minimal_distance.png */; };
 		15B4E48D24AB3F8600119365 /* ic_custom_minimal_distance@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B4E48A24AB3F8500119365 /* ic_custom_minimal_distance@2x.png */; };
 		15B4E48E24AB3F8600119365 /* ic_custom_minimal_distance@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B4E48B24AB3F8500119365 /* ic_custom_minimal_distance@3x.png */; };
@@ -6407,6 +6410,11 @@
 		158B1F752487B838007BC45A /* OADownloadMapViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadMapViewController.mm; path = Resources/Controllers/DownloadMapSource/OADownloadMapViewController.mm; sourceTree = "<group>"; };
 		15A3B4EF2524784E00331177 /* OAExitInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAExitInfo.m; sourceTree = "<group>"; };
 		15A3B4F12524785F00331177 /* OAExitInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExitInfo.h; sourceTree = "<group>"; };
+		15AAEE0B2563D263006EF9F0 /* OARoadSpeedsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoadSpeedsViewController.h; sourceTree = "<group>"; };
+		15AAEE0C2563D286006EF9F0 /* OARoadSpeedsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoadSpeedsViewController.mm; sourceTree = "<group>"; };
+		15AAEE162563FBFA006EF9F0 /* OARangeSliderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARangeSliderCell.xib; sourceTree = "<group>"; };
+		15AAEE1A2563FDC8006EF9F0 /* OARangeSliderCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARangeSliderCell.h; sourceTree = "<group>"; };
+		15AAEE1B2563FDD6006EF9F0 /* OARangeSliderCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARangeSliderCell.m; sourceTree = "<group>"; };
 		15B4E48924AB3F8400119365 /* ic_custom_minimal_distance.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_minimal_distance.png; path = Resources/Icons/ic_custom_minimal_distance.png; sourceTree = "<group>"; };
 		15B4E48A24AB3F8500119365 /* ic_custom_minimal_distance@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_minimal_distance@2x.png"; path = "Resources/Icons/ic_custom_minimal_distance@2x.png"; sourceTree = "<group>"; };
 		15B4E48B24AB3F8500119365 /* ic_custom_minimal_distance@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_minimal_distance@3x.png"; path = "Resources/Icons/ic_custom_minimal_distance@3x.png"; sourceTree = "<group>"; };
@@ -10719,6 +10727,7 @@
 				DA99918F23F6AE6000784994 /* OATextViewResizingCell.xib */,
 				DA87A48D24D44C96002F8C77 /* OATitleRightIconCell.xib */,
 				156F4E6324FA98B8008ED1DD /* OASliderWithValuesCell.xib */,
+				15AAEE162563FBFA006EF9F0 /* OARangeSliderCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -10946,6 +10955,8 @@
 				33AA1221252DE3E500292229 /* OAColorsCollectionViewCell.m */,
 				156F4E6524FA98ED008ED1DD /* OASliderWithValuesCell.m */,
 				156F4E6724FA9901008ED1DD /* OASliderWithValuesCell.h */,
+				15AAEE1A2563FDC8006EF9F0 /* OARangeSliderCell.h */,
+				15AAEE1B2563FDD6006EF9F0 /* OARangeSliderCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -15167,6 +15178,8 @@
 		DA25585224ADE40E0081D155 /* NavigationSettings */ = {
 			isa = PBXGroup;
 			children = (
+				15AAEE0B2563D263006EF9F0 /* OARoadSpeedsViewController.h */,
+				15AAEE0C2563D286006EF9F0 /* OARoadSpeedsViewController.mm */,
 				DA25585D24ADE40F0081D155 /* OAArrivalAnnouncementViewController.h */,
 				DA25587324ADE40F0081D155 /* OAArrivalAnnouncementViewController.m */,
 				DA25587024ADE40F0081D155 /* OAAutoCenterMapViewController.h */,
@@ -18420,6 +18433,7 @@
 				DA83602723449C6B003374B5 /* ic_custom_sound_off@2x.png in Resources */,
 				843394701FF3C09A006205A5 /* OALaunchScreenViewController.xib in Resources */,
 				8420340E1FB5FC05002784EF /* ic_action_next_turn.png in Resources */,
+				15AAEE172563FBFA006EF9F0 /* OARangeSliderCell.xib in Resources */,
 				DA134156243DC5A80039D214 /* ic_action_shuttle_bus@2x.png in Resources */,
 				84C102961FBDC10800D3E5EE /* warnings_hazard_us@2x.png in Resources */,
 				DAB625B72125A94900E6AF2E /* sk_tts.js in Resources */,
@@ -21912,6 +21926,7 @@
 				847A20A81DF9DD70003C1246 /* OACollapsableView.m in Sources */,
 				3ACA4AB51A0B954900ECC792 /* OASettingsTableViewCell.m in Sources */,
 				DACB92B223E0405400771E40 /* OARouteDetailsGraphViewController.mm in Sources */,
+				15AAEE1C2563FDD6006EF9F0 /* OARangeSliderCell.m in Sources */,
 				BBA3AF5A197FC4BB0039D991 /* UIViewController+OARootViewController.m in Sources */,
 				3AFEEE981A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
 				840ED48B1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */,
@@ -22105,6 +22120,7 @@
 				8AF3C81E20F656F3006C86AA /* OATransportStopType.m in Sources */,
 				DA47B28C23FD33B500F66843 /* OAChangePositionViewController.mm in Sources */,
 				840E70241F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm in Sources */,
+				15AAEE0D2563D286006EF9F0 /* OARoadSpeedsViewController.mm in Sources */,
 				84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */,
 				8A5D78AB2116110500B88E2A /* OASharedVariables.m in Sources */,
 				DA68628A22CCB0A500C32E32 /* OpenLocationCode.swift in Sources */,

@@ -245,6 +245,16 @@
     _superregion = superregion;
 }
 
+- (OAWorldRegion *) getPrimarySuperregion
+{
+    OAWorldRegion *primarySuperregion = _superregion;
+    while (primarySuperregion.superregion.regionId)
+    {
+        primarySuperregion = primarySuperregion.superregion;
+    }
+    return primarySuperregion;
+}
+
 - (OAWorldRegion *) makeImmutable
 {
     if (![_subregions isKindOfClass:[NSArray class]])
@@ -482,44 +492,48 @@
     if (_regionId == nil)
         return YES;
     
-    OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
-    
-    if ([iapHelper.allWorld isPurchased])
-        return YES;
-    
-    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AntarcticaRegionId.toNSString()]) {
-        return [iapHelper.antarctica isPurchased];
-    }
-    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()]) {
-        return [iapHelper.africa isPurchased];
-    }
-    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()]) {
-        return [iapHelper.asia isPurchased];
-    }
-    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()]) {
-        return [iapHelper.australia isPurchased];
-    }
-    if ([_regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()]) {
-        return [iapHelper.centralAmerica isPurchased];
-    }
-    if ([_regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()]) {
-        return [iapHelper.europe isPurchased];
-    }
-    if ([_regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()]) {
-        return [iapHelper.northAmerica isPurchased];
-    }
-    if ([_regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()]) {
-        return [iapHelper.russia isPurchased];
-    }
-    if ([_regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()]) {
-        return [iapHelper.southAmerica isPurchased];
-    }
-    if ([_regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()]) {
-        return [iapHelper.nautical isPurchased];
-    }
-    return NO;
+    OAProduct *product = [self getProduct];
+    if (product)
+        return [product isPurchased];
+    else
+        return NO;
 }
 
+- (OAProduct *) getProduct
+{
+    OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AntarcticaRegionId.toNSString()]) {
+        return iapHelper.antarctica;
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()]) {
+        return iapHelper.africa;
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()]) {
+        return iapHelper.asia;
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()]) {
+        return iapHelper.australia;
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()]) {
+        return iapHelper.centralAmerica;
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()]) {
+        return iapHelper.europe;
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()]) {
+        return iapHelper.northAmerica;
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()]) {
+        return iapHelper.russia;
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()]) {
+        return iapHelper.southAmerica;
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()]) {
+        return iapHelper.nautical;
+    }
+    return nil;
+}
 
 - (BOOL) isInPurchasedArea
 {

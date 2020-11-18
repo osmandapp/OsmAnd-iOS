@@ -462,7 +462,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     BOOL isAvailable = [self.class checkIfDownloadAvailable:region];
     if (!isAvailable)
     {
-        OAProduct *product = OAIAPHelper.sharedInstance.allWorld;
+        OAWorldRegion * globalRegion = [region getPrimarySuperregion];
+        OAProduct* product = [globalRegion getProduct];
         [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
         return NO;
     }

@@ -424,7 +424,7 @@
     
     if ([self getPlanTypeTopText])
     {
-        _introTextCard = [self buildLabelCard];
+        _introTextCard = [self buildTextCard: [self getPlanTypeTopText]];
         [self.cardsContainer addSubview:_introTextCard];
     }
 
@@ -601,10 +601,10 @@
     return (!self.planTypeFeatures || self.planTypeFeatures.count == 0) ? nil : cardView;
 }
 
-- (OATextCardView *) buildLabelCard
+- (OATextCardView *) buildTextCard:(NSString *)text
  {
      OATextCardView *cardView = [[OATextCardView alloc] initWithFrame:{0, 0, 300, 200}];
-     cardView.textLabel.text = [self getPlanTypeTopText];
+     cardView.textLabel.text = text;
      return cardView;
  }
 

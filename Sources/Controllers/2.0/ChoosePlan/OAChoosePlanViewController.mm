@@ -13,6 +13,10 @@
 #import "OAIAPHelper.h"
 #import "OAOsmLiveCardView.h"
 #import "OAPurchaseCardView.h"
+
+//#import "OATextCardView.h"
+#import "OALabelCardView.h"
+
 #import "OAColors.h"
 #import "OAAnalyticsHelper.h"
 #import "OADonationSettingsViewController.h"
@@ -264,6 +268,8 @@
     OAIAPHelper *_iapHelper;
     OAOsmLiveCardView *_osmLiveCard;
     OAPurchaseCardView *_planTypeCard;
+//    OATextCardView *_introTextCard;
+    OALabelCardView *_introTextCard;
     BOOL _shouldShowIntroLabel;
     
     UIView *_navBarBackgroundView;
@@ -315,6 +321,11 @@
 - (UIImage *) getPlanTypeHeaderImage
 {
     return [UIImage imageNamed:@"img_logo_38dp_osmand"];
+}
+
+- (NSString *) getPlanTopTitle
+{
+    return OALocalizedString(@"res_free_exp");
 }
 
 - (NSString *) getPlanTypeHeaderTitle
@@ -427,6 +438,11 @@
     [_navBarView insertSubview:_navBarBackgroundView atIndex:0];
     if (!UIAccessibilityIsReduceTransparencyEnabled())
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    
+    //BUILD_CARD()
+    _introTextCard = [self buildLabelCard];
+    [self.cardsContainer addSubview:_introTextCard];
+    
     
     _planTypeCard = [self buildPlanTypeCard];
     [self.cardsContainer addSubview:_planTypeCard];
@@ -616,6 +632,15 @@
     return (!self.planTypeFeatures || self.planTypeFeatures.count == 0) ? nil : cardView;
 }
 
+- (OALabelCardView *) buildLabelCard
+{
+    OALabelCardView *cardView = [[OALabelCardView alloc] initWithFrame:{0, 0, 300, 200}];
+    cardView.textLabel.text = [self getPlanTopTitle];
+    return cardView;
+}
+
+
+
 - (UIView *) createNavBarBackgroundView
 {
     if (!UIAccessibilityIsReduceTransparencyEnabled())
@@ -777,6 +802,87 @@
         }
     }
 }
+
+//- (void) setupTexteCardButtons:(BOOL)progress
+//{
+//    if (progress)
+//    {
+//        [_osmLiveCard setProgressVisibile:YES];
+//        [self.view setNeedsLayout];
+//        return;
+//    }
+//    else
+//    {
+//        for (UIView *v in _osmLiveCard.buttonsContainer.subviews)
+//            [v removeFromSuperview];
+//        
+//        NSDictionary *attributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]};
+//        NSArray<OASubscription *> *visibleSubscriptions = [_iapHelper.liveUpdates getVisibleSubscriptions];
+//        OASubscription *s;
+//        BOOL anyPurchased = NO;
+//        for (OASubscription *subscription in visibleSubscriptions)
+//        {
+//            if ([subscription isPurchased])
+//                anyPurchased = YES;
+//            if ([subscription isKindOfClass:OALiveUpdatesAnnual.class])
+//                s = subscription;
+//        }
+//        if (!s)
+//            s = visibleSubscriptions.firstObject;
+//        
+//        BOOL purchased = NO;
+//        OAChoosePlanViewController * __weak weakSelf = self;
+//        purchased = [s isPurchased];
+//        
+//        BOOL showTopDiv = NO;
+//        BOOL showBottomDiv = NO;
+//        if (purchased)
+//        {
+//            showTopDiv = YES;
+//            showBottomDiv = NO;
+//        }
+//        else
+//        {
+//            showTopDiv = NO;
+//        }
+//        
+//        if (purchased)
+//        {
+//            [_osmLiveCard addCardButtonWithTitle:[s getTitle:17.0] description:[s getDescription:15.0] buttonText:[[NSAttributedString alloc] initWithString:s.formattedPrice attributes:attributes] buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
+//            
+//            [_osmLiveCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:15.0] buttonText:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_cancel_subscription") attributes:attributes] buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
+//                [weakSelf manageSubscription];
+//            }];
+//        }
+//        else
+//        {
+//            EOAPurchaseDialogCardButtonType buttonType;
+//            if (self.purchasing)
+//                buttonType = ![self.product isEqual:s] ? EOAPurchaseDialogCardButtonTypeDisabled : EOAPurchaseDialogCardButtonTypeExtended;
+//            else
+//                buttonType = EOAPurchaseDialogCardButtonTypeRegular;
+//            
+//            OAAppSettings *settings = [OAAppSettings sharedManager];
+//            OAProductDiscount *discountOffer;
+//            if (settings.eligibleForIntroductoryPrice)
+//                discountOffer = s.introductoryPrice;
+//            else if (settings.eligibleForSubscriptionOffer)
+//            {
+//                if (s.discounts && s.discounts.count > 0)
+//                    discountOffer = s.discounts[0];
+//            }
+//            
+//            BOOL hasSpecialOffer = discountOffer != nil;
+//            buttonType = hasSpecialOffer ? EOAPurchaseDialogCardButtonTypeOffer : buttonType;
+//            
+//            [_osmLiveCard addCardButtonWithTitle:[s getTitle:17.0] description:hasSpecialOffer ? [[NSAttributedString alloc] initWithString:discountOffer.getDescriptionTitle attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}] : [s getDescription:15.0] buttonText:hasSpecialOffer ? discountOffer.getFormattedDescription : [[NSAttributedString alloc] initWithString:s.formattedPrice attributes:attributes] buttonType:buttonType active:NO showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
+//                [weakSelf subscribe:s];
+//            }];
+//        }
+//    }
+//    [_osmLiveCard setProgressVisibile:NO];
+//    [self.view setNeedsLayout];
+//}
 
 - (void) productPurchased:(NSNotification *)notification
 {

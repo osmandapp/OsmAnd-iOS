@@ -111,6 +111,7 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 + (OAWorldRegion *) findRegionOrAnySubregionOf:(OAWorldRegion*)region
                           thatContainsResource:(const QString&)resourceId;
 + (NSString *) getCountryName:(OAResourceItem *)item;
++ (BOOL) checkIfDownloadAvailable;
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region;
 + (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate resourceType:(OsmAnd::ResourcesManager::ResourceType)resourceType onComplete:(void (^)(NSArray<OAResourceItem *>*))onComplete;
 + (void) clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(float)zoom onComplete:(void (^)(void))onComplete;

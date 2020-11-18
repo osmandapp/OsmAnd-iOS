@@ -27,6 +27,8 @@
 #import "OASQLiteTileSource.h"
 #import "OATargetMenuViewController.h"
 
+#import "OAChoosePlanHelper.h"
+
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
 
@@ -265,11 +267,18 @@ static BOOL dataInvalidated = NO;
 
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
+    OAProduct *product = OAIAPHelper.sharedInstance.europe;
+    [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController isFreeMapsSpent:YES];
+    
+    //[OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:self.navigationController];
+    //[OAChoosePlanHelper showImpl:[[OAChooseOsmLivePlanViewController alloc] init] navController:navController purchasing:purchasing product:product];
+    /*
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
     } onTaskResumed:^(id<OADownloadTask> task) {
         [self showDownloadViewForTask:task];
     }];
+     */
 }
 
 - (void) offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item

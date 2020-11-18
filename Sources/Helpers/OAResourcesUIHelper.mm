@@ -22,6 +22,8 @@
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
 
+#import "OAChoosePlanHelper.h"
+
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
 
@@ -450,8 +452,22 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return countryName;
 }
 
++ (BOOL) checkIfDownloadEnabled
+{
+    NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
+    return ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]);
+}
+
 + (BOOL) checkIfDownloadEnabled:(OAWorldRegion *)region
 {
+    
+    
+//    OAProduct *product = OAIAPHelper.sharedInstance.europe;
+//    [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
+    
+    return NO;
+    
+    /*
     BOOL isAvailable = [self.class checkIfDownloadAvailable:region];
     if (!isAvailable)
     {
@@ -461,6 +477,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return NO;
     }
     return isAvailable;
+     */
 }
 
 + (BOOL) checkIfUpdateEnabled:(OAWorldRegion *)region

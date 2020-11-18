@@ -256,7 +256,7 @@
             @"type" : kCellTypeIconTitle,
             @"title" : OALocalizedString(@"road_speeds"),
             @"icon" : @"ic_custom_alert",
-            //@"value" : @([self checkIfAnyParameterIsSelected:_preferParameters]),
+            @"value" : @(YES),
             @"key" : @"roadSpeeds"
         }];
     }

@@ -155,7 +155,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
 #pragma mark - TableView
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
@@ -224,13 +223,11 @@
 - (UILabel *) getDescriptionLabel:(NSAttributedString *)string frame:(CGRect)frame
 {
     UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:frame];
-    
     descriptionLabel.attributedText = string;
     descriptionLabel.numberOfLines = 0;
     descriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
     descriptionLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     descriptionLabel.textColor = UIColorFromRGB(color_text_footer);
-    
     return descriptionLabel;
 }
 

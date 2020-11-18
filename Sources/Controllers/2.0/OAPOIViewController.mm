@@ -41,8 +41,18 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 {
     OAPOIHelper *_poiHelper;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
-    NSSet *_clickableContactCells;
-    NSSet *_phoneNumberCells;
+}
+
+static NSSet<NSString *> *_clickableContactCells;
+static NSSet<NSString *> *_phoneNumberCells;
+
++ (void) initialize
+{
+    if (self == [OAPOIViewController class])
+    {
+        _clickableContactCells = [NSSet setWithArray:@[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"]];
+        _phoneNumberCells = [NSSet setWithArray:@[@"phone", @"mobile", @"whatsapp", @"viber"]];
+    }
 }
 
 - (instancetype) init
@@ -82,8 +92,6 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
             if (showTransportStops)
                 [self processTransportStop];
         }
-        _clickableContactCells = [NSSet setWithArray:@[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"]];
-        _phoneNumberCells = [NSSet setWithArray:@[@"phone", @"mobile", @"whatsapp", @"viber"]];
     }
     return self;
 }

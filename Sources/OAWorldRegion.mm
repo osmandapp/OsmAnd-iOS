@@ -25,7 +25,6 @@
 @implementation OAWorldRegion
 {
     std::shared_ptr<const OsmAnd::WorldRegion> _worldRegion;
-    OAIAPHelper *_iapHelper;
 }
 
 - (instancetype) initWorld
@@ -128,7 +127,6 @@
     _superregion = nil;
     _subregions = [[NSMutableArray alloc] init];
     _flattenedSubregions = [[NSMutableArray alloc] init];
-    _iapHelper = [OAIAPHelper sharedInstance];
 }
 
 - (void) deinit
@@ -493,7 +491,7 @@
     // world map
     if (_regionId == nil)
         return YES;
-    if ([_iapHelper.allWorld isPurchased])
+    if ([[OAIAPHelper sharedInstance].allWorld isPurchased])
         return YES;
     
     OAProduct *product = [self getProduct];
@@ -505,35 +503,36 @@
 
 - (OAProduct *) getProduct
 {
+    OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::AntarcticaRegionId.toNSString()]) {
-        return _iapHelper.antarctica;
+        return iapHelper.antarctica;
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()]) {
-        return _iapHelper.africa;
+        return iapHelper.africa;
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()]) {
-        return _iapHelper.asia;
+        return iapHelper.asia;
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()]) {
-        return _iapHelper.australia;
+        return iapHelper.australia;
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()]) {
-        return _iapHelper.centralAmerica;
+        return iapHelper.centralAmerica;
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()]) {
-        return _iapHelper.europe;
+        return iapHelper.europe;
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()]) {
-        return _iapHelper.northAmerica;
+        return iapHelper.northAmerica;
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()]) {
-        return _iapHelper.russia;
+        return iapHelper.russia;
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()]) {
-        return _iapHelper.southAmerica;
+        return iapHelper.southAmerica;
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()]) {
-        return _iapHelper.nautical;
+        return iapHelper.nautical;
     }
     return nil;
 }

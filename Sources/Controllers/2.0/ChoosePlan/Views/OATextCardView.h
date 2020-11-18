@@ -1,5 +1,5 @@
 //
-//  OALabelCardView.h
+//  OATextCardView.h
 //  OsmAnd
 //
 //  Created by Max Kojin on 17.11.2020.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "OAPurchaseDialogItemView.h"
 
-@interface OALabelCardView : OAPurchaseDialogItemView
+@interface OATextCardView : OAPurchaseDialogItemView
 
 @property (weak, nonatomic) IBOutlet UILabel *textLabel;
 

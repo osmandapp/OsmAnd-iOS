@@ -26,7 +26,6 @@
 #import "OARootViewController.h"
 #import "OASQLiteTileSource.h"
 #import "OATargetMenuViewController.h"
-#import "OAChoosePlanHelper.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>

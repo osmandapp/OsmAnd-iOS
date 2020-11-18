@@ -14,11 +14,10 @@
 #import "OAOsmLiveCardView.h"
 #import "OAPurchaseCardView.h"
 #import "OAColors.h"
-#import "OALabelCardView.h"
+#import "OATextCardView.h"
 #import "OAAnalyticsHelper.h"
 #import "OADonationSettingsViewController.h"
 #import "OARootViewController.h"
-#import "OAResourcesUIHelper.h"
 
 #define kMargin 16.0
 #define kTextBorderH 32.0
@@ -266,7 +265,7 @@
     OAIAPHelper *_iapHelper;
     OAOsmLiveCardView *_osmLiveCard;
     OAPurchaseCardView *_planTypeCard;
-    OALabelCardView *_introTextCard;
+    OATextCardView *_introTextCard;
     
     UIView *_navBarBackgroundView;
 }
@@ -307,9 +306,9 @@
     return [UIImage imageNamed:@"img_logo_38dp_osmand"];
 }
 
-- (NSString *) getPlanTopTitle
+- (NSString *) getPlanTypeTopText
  {
-     return OALocalizedString(@"res_free_exp");
+     return nil; // not implemented
  }
 
 - (NSString *) getPlanTypeHeaderTitle
@@ -423,7 +422,7 @@
     if (!UIAccessibilityIsReduceTransparencyEnabled())
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     
-    if (![OAResourcesUIHelper checkIfDownloadAvailable])
+    if ([self getPlanTypeTopText])
     {
         _introTextCard = [self buildLabelCard];
         [self.cardsContainer addSubview:_introTextCard];
@@ -602,10 +601,10 @@
     return (!self.planTypeFeatures || self.planTypeFeatures.count == 0) ? nil : cardView;
 }
 
-- (OALabelCardView *) buildLabelCard
+- (OATextCardView *) buildLabelCard
  {
-     OALabelCardView *cardView = [[OALabelCardView alloc] initWithFrame:{0, 0, 300, 200}];
-     cardView.textLabel.text = [self getPlanTopTitle];
+     OATextCardView *cardView = [[OATextCardView alloc] initWithFrame:{0, 0, 300, 200}];
+     cardView.textLabel.text = [self getPlanTypeTopText];
      return cardView;
  }
 

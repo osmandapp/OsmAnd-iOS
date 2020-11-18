@@ -1,23 +1,23 @@
 //
-//  OALabelCardView.m
+//  OATextCardView.m
 //  OsmAnd
 //
 //  Created by Max Kojin on 17.11.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OALabelCardView.h"
+#import "OATextCardView.h"
 #import "OAUtilities.h"
 
-@implementation OALabelCardView
+@implementation OATextCardView
 
 - (instancetype) init
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     for (UIView *v in bundle)
-        if ([v isKindOfClass:[OALabelCardView class]])
+        if ([v isKindOfClass:[OATextCardView class]])
         {
-            self = (OALabelCardView *)v;
+            self = (OATextCardView *)v;
             break;
         }
     
@@ -32,9 +32,9 @@
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     for (UIView *v in bundle)
-        if ([v isKindOfClass:[OALabelCardView class]])
+        if ([v isKindOfClass:[OATextCardView class]])
         {
-            self = (OALabelCardView *)v;
+            self = (OATextCardView *)v;
             break;
         }
     

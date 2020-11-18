@@ -75,7 +75,7 @@ typedef enum : NSUInteger {
 - (void) commonInit;
 
 - (UIView *) createNavBarBackgroundView;
-- (NSString *) getPlanTopTitle;
+- (NSString *) getPlanTypeTopText;
 - (NSString *) getPlanTypeHeaderTitle;
 - (NSString *) getPlanTypeHeaderDescription;
 - (NSString *) getPlanTypeButtonTitle;

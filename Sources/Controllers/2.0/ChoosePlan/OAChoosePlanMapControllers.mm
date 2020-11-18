@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
+#import "OAResourcesUIHelper.h"
 
 @interface OAChoosePlanAllMapsViewController ()
 
@@ -47,6 +48,14 @@
                               [[OAFeature alloc] initWithFeature:EOAFeatureMonthlyMapUpdates]];
     
     self.selectedPlanTypeFeatures = @[];
+}
+
+- (NSString *) getPlanTypeTopText
+{
+    if (![OAResourcesUIHelper checkIfDownloadAvailable])
+        return OALocalizedString(@"res_free_exp");
+    else
+        return nil;
 }
 
 - (NSString *) getPlanTypeHeaderTitle

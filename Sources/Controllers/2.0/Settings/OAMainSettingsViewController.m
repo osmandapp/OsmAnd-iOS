@@ -260,10 +260,12 @@
         BOOL isDefault = am == OAApplicationMode.DEFAULT;
         [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
         if (!isDefault)
+        {
+            [cell.switchView setOn:isEnabled];
             [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        }
         cell.switchView.hidden = isDefault;
         cell.dividerView.hidden = isDefault;
-        [cell.switchView setOn:isEnabled];
         return cell;
     }
     else if ([type isEqualToString:kCellTypeAction])

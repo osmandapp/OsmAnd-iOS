@@ -43,8 +43,8 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
-static NSArray<NSString *> *_clickableContactArray = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
-static NSArray<NSString *> *_clickablePhoneNumberArray = @[@"phone", @"mobile", @"whatsapp", @"viber"];
+static const NSArray<NSString *> *kContactUrlTags = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
+static const NSArray<NSString *> *kContactPhoneTags = @[@"phone", @"mobile", @"whatsapp", @"viber"];
 
 - (instancetype) init
 {
@@ -262,7 +262,7 @@ static NSArray<NSString *> *_clickablePhoneNumberArray = @[@"phone", @"mobile", 
             collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             ((OACollapsableLabelView *)collapsableView).label.text = value;
         }
-        else if ([_clickablePhoneNumberArray containsObject:key])
+        else if ([kContactPhoneTags containsObject:key])
         {
             iconId = @"ic_phone_number.png";
             textColor = UIColorFromRGB(kHyperlinkColor);
@@ -323,7 +323,7 @@ static NSArray<NSString *> *_clickablePhoneNumberArray = @[@"phone", @"mobile", 
 
                 poiTypeOrder = pType.order;
                 poiTypeKeyName = pType.name;
-                if ([_clickableContactArray containsObject:key])
+                if ([kContactUrlTags containsObject:key])
                 {
                     textColor = UIColorFromRGB(kHyperlinkColor);
                     isUrl = YES;

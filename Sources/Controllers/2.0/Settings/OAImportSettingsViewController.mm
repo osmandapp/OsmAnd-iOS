@@ -224,9 +224,11 @@
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
     NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<OALocalResourceItem *> *tileSourceTemplates = [NSMutableArray array];
+    NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
+    NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
+    NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
@@ -243,7 +245,11 @@
                 if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
                     [renderFilesList addObject:fileItem.filePath];
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
-                    [renderFilesList addObject:fileItem.filePath];
+                    [routingFilesList addObject:fileItem.filePath];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeGpx)
+                    [gpxFilesList addObject:fileItem.filePath];
+                else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
+                    [mapFilesList addObject:fileItem];
                 break;
             }
             case EOASettingsItemTypeQuickActions:
@@ -295,9 +301,13 @@
     if (tileSourceTemplates.count > 0)
         [settingsToOperate setObject:tileSourceTemplates forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapSources]];
     if (renderFilesList.count > 0)
-        [settingsToOperate setObject:renderFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRendererStyle]];
+        [settingsToOperate setObject:renderFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRendererStyles]];
     if (routingFilesList.count > 0)
         [settingsToOperate setObject:routingFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRouting]];
+    if (gpxFilesList.count > 0)
+        [settingsToOperate setObject:gpxFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeGPX]];
+    if (mapFilesList.count > 0)
+        [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
     if (avoidRoads.count > 0)
         [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
     return settingsToOperate;
@@ -312,6 +322,8 @@
     OATableGroupToImport *mapSourcesSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customRendererStyleSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customRoutingSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *customGPXSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *customObfMapSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *avoidRoadsStyleSection = [[OATableGroupToImport alloc] init];
     for (NSString *type in [_itemsMap allKeys])
     {
@@ -330,7 +342,7 @@
                     NSString *title = modeBean.userProfileName;
                     if (!title || title.length == 0)
                         title = appMode.name;
-                    
+
                     NSString *routingProfile = @"";
                     NSString *routingProfileValue = modeBean.routingProfile;
                     if (routingProfileValue && routingProfileValue.length > 0)
@@ -346,7 +358,7 @@
                             NSLog(@"Error trying to get routing resource for %@ \n %@ %@", routingProfileValue, e.name, e.reason);
                         }
                     }
-                    
+
                     [profilesSection.groupItems addObject:@{
                         @"app_mode" : appMode,
                         @"title" : title,
@@ -389,19 +401,9 @@
                 mapSourcesSection.type = kCellTypeSectionHeader;
                 mapSourcesSection.isOpen = NO;
                 
-                for (OAMapSourceResourceItem *item in settings)
+                for (NSDictionary *item in settings)
                 {
-                    NSString *caption;
-                    if ([item isKindOfClass:OASqliteDbResourceItem.class])
-                    {
-                        OASqliteDbResourceItem *sqlite = (OASqliteDbResourceItem *) item;
-                        caption = sqlite.title;
-                    }
-                    else if ([item isKindOfClass:OAOnlineTilesResourceItem.class])
-                    {
-                        OAOnlineTilesResourceItem* resourcesItem = (OAOnlineTilesResourceItem*) item;
-                        caption = resourcesItem.title;
-                    }
+                    NSString *caption = item[@"name"];
                     [mapSourcesSection.groupItems addObject:@{
                         @"icon" : @"ic_custom_map",
                         @"title" : caption,
@@ -411,13 +413,41 @@
                 [data addObject:mapSourcesSection];
                 break;
             }
-            case EOAExportSettingsTypeCustomRendererStyle:
+            case EOAExportSettingsTypeCustomRendererStyles:
             {
-                customRendererStyleSection.groupName = OALocalizedString(@"shared_string_rendering_styles");
+                customRendererStyleSection.groupName = OALocalizedString(@"shared_string_rendering_style");
                 customRendererStyleSection.type = kCellTypeSectionHeader;
                 customRendererStyleSection.isOpen = NO;
-                
+                for (NSString *rendererItem in settings)
+                {
+                    NSString *rendererName = [[[rendererItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    [customRendererStyleSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_map_style",
+                        @"title" : [rendererName stringByDeletingPathExtension],
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
                 [data addObject:customRendererStyleSection];
+                break;
+            }
+            case EOAExportSettingsTypeMapFiles:
+            {
+                customObfMapSection.groupName = OALocalizedString(@"maps");
+                customObfMapSection.type = kCellTypeSectionHeader;
+                customObfMapSection.isOpen = NO;
+                for (OAFileSettingsItem *mapItem in settings)
+                {
+                    NSString *mapName = [[mapItem.name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    NSInteger dotLoc = [mapName indexOf:@"."];
+                    if (dotLoc > 0)
+                        mapName = [mapName substringToIndex:dotLoc];
+                    [customObfMapSection.groupItems addObject:@{
+                        @"icon" : mapItem.getIconName,
+                        @"title" : mapName,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
+                [data addObject:customObfMapSection];
                 break;
             }
             case EOAExportSettingsTypeCustomRouting:
@@ -425,8 +455,33 @@
                 customRoutingSection.groupName = OALocalizedString(@"shared_string_routing");
                 customRoutingSection.type = kCellTypeSectionHeader;
                 customRoutingSection.isOpen = NO;
-                
+                for (NSString *routingItem in settings)
+                {
+                    NSString *routingName = [[[routingItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    [customRoutingSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_route",
+                        @"title" : routingName,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
                 [data addObject:customRoutingSection];
+                break;
+            }
+            case EOAExportSettingsTypeGPX:
+            {
+                customGPXSection.groupName = OALocalizedString(@"tracks");
+                customGPXSection.type = kCellTypeSectionHeader;
+                customGPXSection.isOpen = NO;
+                for (NSString *gpxItem in settings)
+                {
+                    NSString *gpxName = [[[gpxItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    [customGPXSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_trip",
+                        @"title" : gpxName,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
+                [data addObject:customGPXSection];
                 break;
             }
             case EOAExportSettingsTypeAvoidRoads:
@@ -523,8 +578,9 @@
     NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
     NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
-    NSMutableArray<OALocalResourceItem *> *tileSourceTemplates = [NSMutableArray array];
+    NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    
     
     for (NSObject *object in _selectedItems)
     {
@@ -534,12 +590,14 @@
             [quickActions addObject:(OAQuickAction *)object];
         else if ([object isKindOfClass:OAPOIUIFilter.class])
             [poiUIFilters addObject:(OAPOIUIFilter *)object];
-        else if ([object isKindOfClass:OASqliteDbResourceItem.class] || [object isKindOfClass:OAOnlineTilesResourceItem.class])
-            [tileSourceTemplates addObject:(OALocalResourceItem *)object];
-        else if ([object isKindOfClass:NSString.class]) // to check all
-            [settingsItems addObject: [[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
+        else if ([object isKindOfClass:NSDictionary.class])
+            [tileSourceTemplates addObject:(NSDictionary *)object];
+        else if ([object isKindOfClass:NSString.class])
+            [settingsItems addObject:[[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject:(OAAvoidRoadInfo *)object];
+        else if ([object isKindOfClass:OAFileSettingsItem.class])
+            [settingsItems addObject:(OAFileSettingsItem *)object];
     }
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)

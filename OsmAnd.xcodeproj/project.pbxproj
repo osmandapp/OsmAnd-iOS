@@ -9616,6 +9616,7 @@
 		DA6B361C2265EF3800FBB46D /* MyPlaces.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MyPlaces.storyboard; sourceTree = "<group>"; };
 		DA6B361F2265F92200FBB46D /* OAFavoritesTabBarViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesTabBarViewController.h; sourceTree = "<group>"; };
 		DA6B36202265F92200FBB46D /* OAFavoritesTabBarViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAFavoritesTabBarViewController.m; sourceTree = "<group>"; };
+		DA6B6C1E255EB2F300300363 /* OAIndexConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAIndexConstants.h; sourceTree = "<group>"; };
 		DA6BF93824DBF21600F7DC7B /* ic_custom_remove_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_remove_outlined@3x.png"; path = "Resources/Icons/ic_custom_remove_outlined@3x.png"; sourceTree = "<group>"; };
 		DA6BF93924DBF21700F7DC7B /* ic_custom_export.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_export.png; path = Resources/Icons/ic_custom_export.png; sourceTree = "<group>"; };
 		DA6BF93A24DBF21700F7DC7B /* ic_custom_copy@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_copy@3x.png"; path = "Resources/Icons/ic_custom_copy@3x.png"; sourceTree = "<group>"; };
@@ -14880,6 +14881,7 @@
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
 				DA3E239F219B06B6006B10E8 /* OASizes.h */,
 				84D2A7E31FADFDCB00B2D3DD /* OAColors.h */,
+				DA6B6C1E255EB2F300300363 /* OAIndexConstants.h */,
 				843394721FF41F33006205A5 /* LaunchScreen.xib */,
 			);
 			name = Resources;

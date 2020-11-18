@@ -7,6 +7,15 @@
 //
 
 #import "OAFileNameTranslationHelper.h"
+#import "OAIndexConstants.h"
+#import "Localization.h"
+#import "OAWorldRegion.h"
+#import "OsmAndApp.h"
+
+#define WIKI_NAME @"_wiki"
+#define HILL_SHADE @"Hillshade"
+#define SLOPE @"Slope"
+#define SEA_DEPTH @"Depth_"
 
 @implementation OAFileNameTranslationHelper
 

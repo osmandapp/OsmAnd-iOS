@@ -41,6 +41,8 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 {
     OAPOIHelper *_poiHelper;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
+    NSSet *_clickableContactCells;
+    NSSet *_phoneNumberCells;
 }
 
 - (instancetype) init
@@ -80,6 +82,8 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
             if (showTransportStops)
                 [self processTransportStop];
         }
+        _clickableContactCells = [NSSet setWithArray:@[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"]];
+        _phoneNumberCells = [NSSet setWithArray:@[@"phone", @"mobile", @"whatsapp", @"viber"]];
     }
     return self;
 }
@@ -187,8 +191,6 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     NSString *prefLang = [OAUtilities preferredLang];
-    NSArray <NSString *> *clickableContactCells = @[@"youtube", @"facebook", @"instagram", @"twitter", @"vk", @"ok", @"webcam", @"telegram", @"linkedin", @"pinterest", @"foursquare", @"xing", @"flickr", @"email", @"mastodon", @"diaspora", @"gnusocial", @"skype"];
-    NSArray *phoneNumberCells = @[@"phone", @"mobile", @"whatsapp", @"viber"];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
     
     if (self.poi.type
@@ -261,7 +263,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
             collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             ((OACollapsableLabelView *)collapsableView).label.text = value;
         }
-        else if ([phoneNumberCells containsObject:key])
+        else if ([_phoneNumberCells containsObject:key])
         {
             iconId = @"ic_phone_number.png";
             textColor = UIColorFromRGB(kHyperlinkColor);
@@ -322,7 +324,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
 
                 poiTypeOrder = pType.order;
                 poiTypeKeyName = pType.name;
-                if ([clickableContactCells containsObject:key])
+                if ([_clickableContactCells containsObject:key])
                 {
                     textColor = UIColorFromRGB(kHyperlinkColor);
                     isUrl = YES;

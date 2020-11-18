@@ -50,7 +50,7 @@
     self = [super init];
     if (self)
     {
-        _targetAppMode = mode;    
+        _targetAppMode = mode;
     }
     return self;
 }

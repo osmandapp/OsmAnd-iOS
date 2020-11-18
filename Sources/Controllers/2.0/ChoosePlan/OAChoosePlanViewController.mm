@@ -422,9 +422,10 @@
     if (!UIAccessibilityIsReduceTransparencyEnabled())
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     
-    if ([self getPlanTypeTopText])
+    NSString *introText = [self getPlanTypeTopText];
+    if (introText)
     {
-        _introTextCard = [self buildTextCard: [self getPlanTypeTopText]];
+        _introTextCard = [self buildTextCard: introText];
         [self.cardsContainer addSubview:_introTextCard];
     }
 

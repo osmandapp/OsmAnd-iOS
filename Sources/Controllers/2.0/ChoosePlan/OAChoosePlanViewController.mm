@@ -18,6 +18,7 @@
 #import "OAAnalyticsHelper.h"
 #import "OADonationSettingsViewController.h"
 #import "OARootViewController.h"
+#import "OAResourcesUIHelper.h"
 
 #define kMargin 16.0
 #define kTextBorderH 32.0
@@ -422,8 +423,11 @@
     if (!UIAccessibilityIsReduceTransparencyEnabled())
         self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     
-    _introTextCard = [self buildLabelCard];
-    [self.cardsContainer addSubview:_introTextCard];
+    if (![OAResourcesUIHelper checkIfDownloadAvailable])
+    {
+        _introTextCard = [self buildLabelCard];
+        [self.cardsContainer addSubview:_introTextCard];
+    }
     
     _planTypeCard = [self buildPlanTypeCard];
     [self.cardsContainer addSubview:_planTypeCard];

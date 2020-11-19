@@ -24,6 +24,8 @@
 
 - (void) setupSliderView
 {
+    if ([self.rangeSlider isDirectionRTL])
+        self.rangeSlider.transform = CGAffineTransformMakeScale(-1.0, 1.0);
     self.rangeSlider.handleColor = UIColorFromRGB(color_menu_button);
     self.rangeSlider.lineBorderColor = UIColorFromRGB(color_slider_gray);
     UIImage *handle = [[UIImage imageNamed:@"ic_control_knob"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

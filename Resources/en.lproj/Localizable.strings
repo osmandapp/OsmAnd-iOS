@@ -128,7 +128,7 @@
 "min_speed" = "Min. speed";
 "max_speed" = "Max. speed";
 "maximum_speed" = "Maximum speed";
-"road_speeds_descr" = "These parameters can affect the final route.";
+"road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
 

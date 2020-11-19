@@ -21,6 +21,7 @@
 
 #define kCellTypeSpeed @"time_cell"
 #define kCellTypeSlider @"OASliderWithValuesCell"
+#define kSidePadding 16
 
 @interface OARoadSpeedsViewController() <UITableViewDelegate, UITableViewDataSource, TTRangeSliderDelegate>
 
@@ -130,17 +131,17 @@
     [tableData addObject:@{
         @"type" : kCellTypeSpeed,
         @"title" : OALocalizedString(@"logging_min_speed"),
-        @"value" : [NSString stringWithFormat:@"%ld %@", (long)_minValue, _units],
+        @"value" : [NSString stringWithFormat:@"%ld %@", _minValue, _units],
     }];
     [tableData addObject:@{
         @"type" : kCellTypeSpeed,
         @"title" : OALocalizedString(@"maximum_speed"),
-        @"value" : [NSString stringWithFormat:@"%ld %@", (long)_maxValue, _units],
+        @"value" : [NSString stringWithFormat:@"%ld %@", _maxValue, _units],
     }];
     [tableData addObject:@{
         @"type" : kCellTypeSlider,
-        @"minValue" : [NSString stringWithFormat:@"%ld %@", (long)_baseMinSpeed, _units],
-        @"maxValue" : [NSString stringWithFormat:@"%ld %@", (long)_baseMaxSpeed, _units],
+        @"minValue" : [NSString stringWithFormat:@"%ld %@", _baseMinSpeed, _units],
+        @"maxValue" : [NSString stringWithFormat:@"%ld %@", _baseMaxSpeed, _units],
     }];
     _data = [NSArray arrayWithArray:tableData];
 }
@@ -237,12 +238,12 @@
     NSString *maximumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"maximum_speed"), OALocalizedString(@"road_max_speed_descr")];
     NSAttributedString *minSpeedAttrString = [OAUtilities getStringWithBoldPart:minimumSpeedDescriptionString mainString:OALocalizedString(@"road_min_speed_descr") boldString:OALocalizedString(@"logging_min_speed") lineSpacing:1. fontSize:13.];
     NSAttributedString *maxSpeedAttrString = [OAUtilities getStringWithBoldPart:maximumSpeedDescriptionString mainString:OALocalizedString(@"road_max_speed_descr") boldString:OALocalizedString(@"maximum_speed") lineSpacing:1. fontSize:13.];
-    CGFloat textWidth = tableView.bounds.size.width - 32;
-    CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:minimumSpeedDescriptionString width:textWidth font:[UIFont systemFontOfSize:15] lineSpacing:6.];
+    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
+    CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:minimumSpeedDescriptionString width:textWidth font:[UIFont systemFontOfSize:13] lineSpacing:1.];
 
-    UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0. + [OAUtilities getLeftMargin], 0., tableView.bounds.size.width, heightForHeader * 2)];
-    UILabel *minSpeedDescription = [self getDescriptionLabel:minSpeedAttrString frame:CGRectMake(16., 0., textWidth, heightForHeader)];
-    UILabel *maxSpeedDescription = [self getDescriptionLabel:maxSpeedAttrString frame:CGRectMake(16., heightForHeader, textWidth, heightForHeader)];
+    UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, heightForHeader * 2 + kSidePadding)];
+    UILabel *minSpeedDescription = [self getDescriptionLabel:minSpeedAttrString frame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 0., textWidth, heightForHeader)];
+    UILabel *maxSpeedDescription = [self getDescriptionLabel:maxSpeedAttrString frame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, heightForHeader, textWidth, heightForHeader)];
     [vw addSubview:minSpeedDescription];
     [vw addSubview:maxSpeedDescription];
     return vw;
@@ -250,8 +251,8 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:@"%@\n%@", OALocalizedString(@"logging_min_speed"), OALocalizedString(@"road_min_speed_descr")] width:tableView.bounds.size.width - 32 font:[UIFont systemFontOfSize:13] lineSpacing:1.];
-    return labelHeight;
+    CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:@"%@\n%@", OALocalizedString(@"logging_min_speed"), OALocalizedString(@"road_min_speed_descr")] width:DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2 font:[UIFont systemFontOfSize:13] lineSpacing:1.];
+    return labelHeight * 2;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

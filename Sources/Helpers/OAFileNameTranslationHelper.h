@@ -13,4 +13,6 @@
 + (NSString *) getVoiceName:(NSString *)fileName;
 + (NSArray<NSString *> *) getVoiceNames:(NSArray *) languageCodes;
 
++ (NSString *) getMapName:(NSString *)fileName;
+
 @end

@@ -128,7 +128,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_settings"),
             @"iconName": @"ic_action_settings",
-            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld", profilesCount],
             @"category" : @(EOAImportDataTypeProfiles)
             }
          ];
@@ -138,7 +138,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_screen_quick_action"),
             @"iconName": @"ic_custom_quick_action",
-            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld", profilesCount],
             @"category" : @(EOAImportDataTypeQuickActions)
             }
          ];
@@ -148,7 +148,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"search_activity"),
             @"iconName": @"ic_custom_search",
-            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld", profilesCount],
             @"category" : @(EOAImportDataTypePoiFilters)
             }
          ];
@@ -158,7 +158,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_map"),
             @"iconName": @"ic_custom_overlay_map",
-            @"count": [NSString stringWithFormat:@"%ld", (long)tileSourcesCount],
+            @"count": [NSString stringWithFormat:@"%ld", tileSourcesCount],
             @"category" : @(EOAImportDataTypeTileSources)
             }
          ];
@@ -168,7 +168,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_rendering_style"),
             @"iconName": @"ic_custom_map_style",
-            @"count": [NSString stringWithFormat:@"%ld",(long)renderFilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",renderFilesCount],
             @"category" : @(EOAImportDataTypeRenderSettings)
             }
          ];

@@ -174,6 +174,8 @@
             [self drawLines:pointsBefore collection:_lastLineCollection];
         if (_nextPosition.x != 0 && _nextPosition.y != 0)
             [self drawLines:pointsAfter collection:_lastLineCollection];
+        
+        [self.mapView addKeyedSymbolsProvider:_lastLineCollection];
     }
     
     if (_markerToMove)
@@ -229,11 +231,14 @@
         [self drawLines:pointsBefore collection:_lastLineCollection];
         if (nextPt)
             [self drawLines:pointsAfter collection:_lastLineCollection];
+        
+        [self.mapView addKeyedSymbolsProvider:_lastLineCollection];
     }
     
     if (_selectedMarkerCollection->getMarkers().size() == 0)
     {
         [self drawMarker:center collection:_selectedMarkerCollection];
+        [self.mapView addKeyedSymbolsProvider:_selectedMarkerCollection];
     }
     else
     {
@@ -265,6 +270,7 @@
         else
         {
             [self drawLines:points collection:_lastLineCollection];
+            [self.mapView addKeyedSymbolsProvider:_lastLineCollection];
         }
     }
 }
@@ -290,10 +296,17 @@
 
 - (void) resetLayer
 {
-    _collection->removeAllLines();
-    _lastLineCollection->removeAllLines();
-    _pointMarkers->removeAllMarkers();
-    _selectedMarkerCollection->removeAllMarkers();
+    
+    [self.mapView removeKeyedSymbolsProvider:_collection];
+    [self.mapView removeKeyedSymbolsProvider:_lastLineCollection];
+    [self.mapView removeKeyedSymbolsProvider:_pointMarkers];
+    [self.mapView removeKeyedSymbolsProvider:_selectedMarkerCollection];
+    
+    _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _lastLineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _pointMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+    
     _cachedCenter = OsmAnd::PointI(0, 0);
     _cachedLastPoint = nil;
 }
@@ -464,6 +477,9 @@
     [self.mapViewController runWithRenderSync:^{
         [self drawLines:points collection:_collection modeAware:YES];
         [self addPointMarkers:points collection:_pointMarkers];
+        
+        [self.mapView addKeyedSymbolsProvider:_collection];
+        [self.mapView addKeyedSymbolsProvider:_pointMarkers];
     }];
 }
 

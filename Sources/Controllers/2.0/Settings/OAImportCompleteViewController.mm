@@ -108,13 +108,12 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         }
         else if ([item isKindOfClass:OAFileSettingsItem.class])
         {
-            NSString *filePath = ((OAFileSettingsItem *)item).filePath;
-            EOASettingsItemFileSubtype subType = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath];
-            if ([filePath hasSuffix:RENDERER_INDEX_EXT])
+            EOASettingsItemFileSubtype subType = ((OAFileSettingsItem *)item).subtype;
+            if (subType == EOASettingsItemFileSubtypeRenderingStyle)
                 renderFilesCount += 1;
-            else if ([filePath hasSuffix:ROUTING_FILE_EXT])
+            else if (subType == EOASettingsItemFileSubtypeRoutingConfig)
                 routingFilesCount += 1;
-            else if ([filePath hasSuffix:GPX_FILE_EXT])
+            else if (subType == EOASettingsItemFileSubtypeGpx)
                 gpxFilesCount += 1;
             else if ([OAFileSettingsItemFileSubtype isMap:subType])
                 mapsCount += 1;

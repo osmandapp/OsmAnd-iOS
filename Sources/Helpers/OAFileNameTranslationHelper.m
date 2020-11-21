@@ -32,13 +32,22 @@
         return fileName;
 }
 
-+ (NSArray<NSString *> *) getVoiceNames:(NSArray *) languageCodes
++ (NSArray<NSString *> *) getVoiceNames:(NSArray *)languageCodes
 {
     NSMutableArray<NSString *> *fullNames = [NSMutableArray new];
     for (NSString *code in languageCodes) {
         [fullNames addObject:[OAFileNameTranslationHelper getVoiceName:code]];
     }
     return fullNames;
+}
+
++ (NSString *) getMapName:(NSString *)fileName
+{
+    NSString *title = [[fileName stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "].capitalizedString;
+    NSInteger dotLoc = [title lastIndexOf:@"."];
+    if (dotLoc > 0)
+        title = [title substringToIndex:dotLoc];
+    return title;
 }
 
 @end

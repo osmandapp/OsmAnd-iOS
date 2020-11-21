@@ -93,10 +93,15 @@
 
 - (void) resetLayer
 {
-    _collection->removeAllLines();
+    [self.mapView removeKeyedSymbolsProvider:_collection];
+    [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
+    [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
+    
+    _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
+
     _locationMarker->setIsHidden(true);
-    _currentGraphXAxisPositions->removeAllMarkers();
-    _transportRouteMarkers->removeAllMarkers();
 }
 
 - (BOOL) updateLayer
@@ -105,7 +110,8 @@
     return YES;
 }
 
-- (void)drawRouteMarkers:(const std::shared_ptr<TransportRouteResultSegment> &)routeSegment {
+- (void)drawRouteMarkers:(const std::shared_ptr<TransportRouteResultSegment> &)routeSegment
+{
     OsmAnd::MapMarkerBuilder transportMarkerBuilder;
     transportMarkerBuilder.setIsAccuracyCircleSupported(false);
     transportMarkerBuilder.setBaseOrder(self.baseOrder - 15);
@@ -199,11 +205,19 @@
     }];
 }
 
-- (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points addToExsisting:(BOOL)addToExsisting {
+- (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points addToExisting:(BOOL)addToExisting
+{
     [self.mapViewController runWithRenderSync:^{
         const auto& lines = _collection->getLines();
-        if (lines.empty() || addToExsisting)
+        if (lines.empty() || addToExisting)
         {
+            BOOL isFirstLine = lines.empty() && !addToExisting;
+            if (isFirstLine)
+            {
+                [self.mapView removeKeyedSymbolsProvider:_collection];
+                _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+            }
+            
             int baseOrder = self.baseOrder;
             BOOL isNight = [OAAppSettings sharedManager].nightMode;
             
@@ -224,6 +238,9 @@
             .setPathIconStep(40);
             
             builder.buildAndAddToCollection(_collection);
+            
+            if (isFirstLine)
+                [self.mapView addKeyedSymbolsProvider:_collection];
         }
         else
         {
@@ -248,6 +265,11 @@
             CLLocation *p = start;
             SHARED_PTR<TransportRouteResultSegment> prev = nullptr;
             
+            [self.mapView removeKeyedSymbolsProvider:_collection];
+            _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+            
+            [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
+            _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
             for (const auto &seg : route->segments)
             {
                 [self drawTransportSegment:seg];
@@ -257,6 +279,9 @@
                 prev = seg;
             }
             [self addWalkRoute:prev s2:nullptr start:p end:end];
+            
+            [self.mapView addKeyedSymbolsProvider:_collection];
+            [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
         }
     }
     else if ([_routingHelper getFinalLocation] && route && [route isCalculated])
@@ -279,7 +304,7 @@
         
         if (points.size() > 1)
         {
-            [self drawRouteSegment:points addToExsisting:NO];
+            [self drawRouteSegment:points addToExisting:NO];
         }
         else
         {
@@ -308,7 +333,7 @@
             CLLocation *p = locations[i];
             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(p.coordinate.latitude, p.coordinate.longitude)));
         }
-        [self drawRouteSegment:points addToExsisting:YES];
+        [self drawRouteSegment:points addToExisting:YES];
     }
 }
 
@@ -325,7 +350,9 @@
     xAxisMarkerBuilder.setIsHidden(false);
     if (trackPoints.axisPointsInvalidated)
     {
-        _currentGraphXAxisPositions->removeAllMarkers();
+        [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
+        _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
+        
         for (CLLocation *location in trackPoints.xAxisPoints)
         {
             xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey,
@@ -334,6 +361,7 @@
             const auto& marker = xAxisMarkerBuilder.buildAndAddToCollection(_currentGraphXAxisPositions);
             marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
         }
+        [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
         trackPoints.axisPointsInvalidated = NO;
     }
 }
@@ -343,7 +371,8 @@
     if (_locationMarker)
         _locationMarker->setIsHidden(true);
     
-    _currentGraphXAxisPositions->removeAllMarkers();
+    [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
+    _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
 }
 
 @end

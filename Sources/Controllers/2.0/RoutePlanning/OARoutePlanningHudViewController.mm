@@ -77,6 +77,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIImageView *leftImageVIew;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+@property (weak, nonatomic) IBOutlet UIView *actionButtonsContainer;
+@property (weak, nonatomic) IBOutlet UIButton *modeButton;
 
 @end
 
@@ -155,6 +157,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     [self adjustMapViewPort];
     [self changeMapRulerPosition];
+    [self adjustActionButtonsPosition:self.getViewHeight];
     
     self.tableView.userInteractionEnabled = YES;
     [self.view bringSubviewToFront:self.tableView];
@@ -183,6 +186,16 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (CGFloat) additionalLandscapeOffset
 {
     return 100.;
+}
+
+- (void) adjustActionButtonsPosition:(CGFloat)height
+{
+    CGRect buttonsFrame = _actionButtonsContainer.frame;
+    if (OAUtilities.isLandscapeIpadAware)
+        buttonsFrame.origin = CGPointMake(16. + self.scrollableView.frame.size.width, DeviceScreenHeight - 15.);
+    else
+        buttonsFrame.origin = CGPointMake(16., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
+    _actionButtonsContainer.frame = buttonsFrame;
 }
 
 - (void) changeMapRulerPosition
@@ -302,6 +315,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (IBAction)onAddPointPressed:(id)sender
 {
     [self addCenterPoint];
+}
+
+- (IBAction)modeButtonPressed:(id)sender {
 }
 
 - (NSString *) getSuggestedFileName
@@ -560,6 +576,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 {
     [self changeCenterOffset:height];
     [_mapPanel targetSetBottomControlsVisible:YES menuHeight:OAUtilities.isLandscapeIpadAware ? 0. : (height - 30.) animated:YES];
+    [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];
     [self adjustMapViewPort];
 }

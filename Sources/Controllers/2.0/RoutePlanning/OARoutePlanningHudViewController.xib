@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OARoutePlanningHudViewController">
             <connections>
+                <outlet property="actionButtonsContainer" destination="8b4-dc-g4J" id="shW-oV-g8p"/>
                 <outlet property="addPointButton" destination="EvX-Tp-Ber" id="S3h-JD-9vk"/>
                 <outlet property="centerImageView" destination="Lff-A9-ANx" id="dxe-VS-K1c"/>
                 <outlet property="closeButton" destination="onx-Gz-iEg" id="jlc-6l-4af"/>
@@ -20,6 +21,7 @@
                 <outlet property="doneButtonContainerView" destination="cZ1-QP-9LE" id="Mgl-dx-g0C"/>
                 <outlet property="expandButton" destination="1a9-hh-9hN" id="qtD-HP-Bpb"/>
                 <outlet property="leftImageVIew" destination="Aod-ON-ikl" id="hEe-Rf-FRm"/>
+                <outlet property="modeButton" destination="oTM-Ht-rdV" id="FkB-ug-cZZ"/>
                 <outlet property="optionsButton" destination="OjE-FK-TpN" id="2Sa-49-Amu"/>
                 <outlet property="redoButton" destination="FIz-se-4BK" id="Tju-by-mBp"/>
                 <outlet property="scrollableView" destination="7aH-3y-W6U" id="W3f-q3-2Rm"/>
@@ -290,6 +292,28 @@
                     <viewLayoutGuide key="safeArea" id="eW6-l7-OW4"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
+                <view contentMode="scaleToFill" id="8b4-dc-g4J">
+                    <rect key="frame" x="13" y="347" width="69" height="55"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTM-Ht-rdV">
+                            <rect key="frame" x="9.5" y="2.5" width="50" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="50" id="oBJ-eC-M4w"/>
+                                <constraint firstAttribute="height" constant="50" id="und-VO-fgZ"/>
+                            </constraints>
+                            <state key="normal" image="ic_custom_straight_line.png" backgroundImage="bg_circle_button_day.png"/>
+                            <connections>
+                                <action selector="modeButtonPressed:" destination="-1" eventType="touchUpInside" id="2rF-Dj-IpU"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="oTM-Ht-rdV" firstAttribute="centerY" secondItem="8b4-dc-g4J" secondAttribute="centerY" id="Rh1-au-rS9"/>
+                        <constraint firstItem="oTM-Ht-rdV" firstAttribute="centerX" secondItem="8b4-dc-g4J" secondAttribute="centerX" id="cGd-Yp-4ci"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="65V-g6-Wgg"/>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -304,10 +328,12 @@
         </view>
     </objects>
     <resources>
+        <image name="bg_circle_button_day.png" width="53" height="53"/>
         <image name="bg_title.png" width="320" height="64"/>
         <image name="ic_custom_arrow_up.png" width="30" height="30"/>
         <image name="ic_custom_redo.png" width="30" height="30"/>
         <image name="ic_custom_routes.png" width="30" height="30"/>
+        <image name="ic_custom_straight_line.png" width="30" height="30"/>
         <image name="ic_custom_undo.png" width="30" height="30"/>
         <image name="ic_navbar_close.png" width="28" height="28"/>
     </resources>

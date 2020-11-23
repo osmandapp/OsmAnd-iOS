@@ -33,6 +33,8 @@
 #import "OADeleteProfileBottomSheetViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAMapWidgetRegistry.h"
+#import "OASettingsItem.h"
+#import "OAProfileSettingsItem.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"

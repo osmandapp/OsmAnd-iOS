@@ -26,6 +26,13 @@
 #import "OAAvoidRoadInfo.h"
 #import "OASQLiteTileSource.h"
 #import "OAResourcesUIHelper.h"
+#import "OAExportSettingsType.h"
+#import "OAProfileSettingsItem.h"
+#import "OAFileSettingsItem.h"
+#import "OAQuickActionsSettingsItem.h"
+#import "OAPoiUiFilterSettingsItem.h"
+#import "OAMapSourcesSettingsItem.h"
+#import "OAAvoidRoadsSettingsItem.h"
 
 #import "Localization.h"
 #import "OAColors.h"

@@ -27,6 +27,8 @@
 #import "OAActivityViewWithTitleCell.h"
 #import "OAMapSource.h"
 #import "OAIndexConstants.h"
+#import "OAFileSettingsItem.h"
+#import "OASettingsItem.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"

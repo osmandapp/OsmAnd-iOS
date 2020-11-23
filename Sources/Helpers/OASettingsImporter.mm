@@ -12,13 +12,23 @@
 #import "OASettingsHelper.h"
 #import "Localization.h"
 
+#import "OASettingsItem.h"
+#import "OAAvoidRoadsSettingsItem.h"
+#import "OAMapSourcesSettingsItem.h"
+#import "OAPoiUiFilterSettingsItem.h"
+#import "OAQuickActionsSettingsItem.h"
+#import "OAResourcesSettingsItem.h"
+#import "OAFileSettingsItem.h"
+#import "OADataSettingsItem.h"
+#import "OAPluginSettingsItem.h"
+#import "OAProfileSettingsItem.h"
+#import "OAGlobalSettingsItem.h"
+
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 
 #define kTmpProfileFolder @"tmpProfileData"
-
 #define kVersion 1
-
 
 #pragma mark - OASettingsImporter
 

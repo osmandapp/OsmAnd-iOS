@@ -25,6 +25,9 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAIndexConstants.h"
+#import "OAProfileSettingsItem.h"
+#import "OAFileSettingsItem.h"
+#import "OAMapSourcesSettingsItem.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"

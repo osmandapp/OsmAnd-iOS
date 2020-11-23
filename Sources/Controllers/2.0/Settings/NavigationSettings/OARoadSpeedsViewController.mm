@@ -221,38 +221,38 @@
     return [NSString stringWithFormat:@"%@\n\n%@", OALocalizedString(@"road_min_speed_descr"), OALocalizedString(@"road_max_speed_descr")];
 }
 
-- (UILabel *) getDescriptionLabel:(NSAttributedString *)string frame:(CGRect)frame
-{
-    UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:frame];
-    descriptionLabel.attributedText = string;
-    descriptionLabel.numberOfLines = 0;
-    descriptionLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    descriptionLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    descriptionLabel.textColor = UIColorFromRGB(color_text_footer);
-    return descriptionLabel;
-}
-
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    NSString *minimumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"logging_min_speed"), OALocalizedString(@"road_min_speed_descr")];
-    NSString *maximumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"maximum_speed"), OALocalizedString(@"road_max_speed_descr")];
+    NSString *minimumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\f%@\n", OALocalizedString(@"logging_min_speed"), OALocalizedString(@"road_min_speed_descr")];
+    NSString *maximumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\f%@", OALocalizedString(@"maximum_speed"), OALocalizedString(@"road_max_speed_descr")];
     NSAttributedString *minSpeedAttrString = [OAUtilities getStringWithBoldPart:minimumSpeedDescriptionString mainString:OALocalizedString(@"road_min_speed_descr") boldString:OALocalizedString(@"logging_min_speed") lineSpacing:1. fontSize:13.];
     NSAttributedString *maxSpeedAttrString = [OAUtilities getStringWithBoldPart:maximumSpeedDescriptionString mainString:OALocalizedString(@"road_max_speed_descr") boldString:OALocalizedString(@"maximum_speed") lineSpacing:1. fontSize:13.];
+    NSMutableAttributedString *footerAttrString = [[NSMutableAttributedString alloc] initWithAttributedString:minSpeedAttrString];
+    [footerAttrString appendAttributedString:maxSpeedAttrString];
+    
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:minimumSpeedDescriptionString width:textWidth font:[UIFont systemFontOfSize:13] lineSpacing:1.];
-
     UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, heightForHeader * 2 + kSidePadding)];
-    UILabel *minSpeedDescription = [self getDescriptionLabel:minSpeedAttrString frame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 0., textWidth, heightForHeader)];
-    UILabel *maxSpeedDescription = [self getDescriptionLabel:maxSpeedAttrString frame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, heightForHeader, textWidth, heightForHeader)];
-    [vw addSubview:minSpeedDescription];
-    [vw addSubview:maxSpeedDescription];
+    UILabel *footerDescription = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 0., textWidth, heightForHeader * 2)];
+    
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setLineSpacing:2.];
+    [style setParagraphSpacing:12.];
+    [footerAttrString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, footerAttrString.length)];
+    footerDescription.attributedText = [[NSAttributedString alloc] initWithAttributedString:footerAttrString];
+    footerDescription.numberOfLines = 0;
+    footerDescription.lineBreakMode = NSLineBreakByWordWrapping;
+    footerDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    footerDescription.textColor = UIColorFromRGB(color_text_footer);
+    
+    [vw addSubview:footerDescription];
     return vw;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     CGFloat labelHeight = [OAUtilities heightForHeaderViewText:[NSString stringWithFormat:@"%@\n%@", OALocalizedString(@"logging_min_speed"), OALocalizedString(@"road_min_speed_descr")] width:DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2 font:[UIFont systemFontOfSize:13] lineSpacing:1.];
-    return labelHeight * 2;
+    return (labelHeight + kSidePadding) * 2;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

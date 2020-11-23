@@ -25,7 +25,7 @@
 #import "OAEntity.h"
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOsmBugsLocalUtil.h"
-#import "OAOsmNotePoint.h"
+#import "OAOsmNotesPoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmEditingViewController.h"
 #import "OAOsmNoteBottomSheetViewController.h"
@@ -357,7 +357,7 @@
         {
             [mapPanel targetHide];
             BOOL shouldEdit = _targetPoint.type == OATargetOsmNote;
-            OAOsmNotePoint *point = shouldEdit ? _targetPoint.targetObj : [self constructFromTargetPoint:_targetPoint];
+            OAOsmNotesPoint *point = shouldEdit ? _targetPoint.targetObj : [self constructFromTargetPoint:_targetPoint];
             OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingAddon points:[NSArray arrayWithObject:point] type:TYPE_CREATE];
             [noteScreen show];
         }
@@ -388,9 +388,9 @@
     [vwController dismiss];
 }
 
-- (OAOsmNotePoint *) constructFromTargetPoint:(OATargetPoint *)targetPoint
+- (OAOsmNotesPoint *) constructFromTargetPoint:(OATargetPoint *)targetPoint
 {
-    OAOsmNotePoint *point = [[OAOsmNotePoint alloc] init];
+    OAOsmNotesPoint *point = [[OAOsmNotesPoint alloc] init];
     [point setLatitude:_targetPoint.location.latitude];
     [point setLongitude:_targetPoint.location.longitude];
     [point setAuthor:@""];

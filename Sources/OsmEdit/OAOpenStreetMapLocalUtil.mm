@@ -11,7 +11,7 @@
 #import "OANode.h"
 #import "OAWay.h"
 #import "OARelation.h"
-#import "OAOsmEditsDBHelper.h"
+#import "OpenstreetmapsDbHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OsmAndApp.h"
 #import "OAPOIType.h"
@@ -21,7 +21,6 @@
 #import "OAEditPOIData.h"
 #import "OAOSMSettings.h"
 #import "OATargetPoint.h"
-#import "OAOsmEditsDBHelper.h"
 #import "OATransportStop.h"
 #import "OAPOILocationType.h"
 
@@ -43,7 +42,7 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
 
 - (OAEntity *)commitEntityImpl:(EOAAction)action entity:(OAEntity *)entity entityInfo:(OAEntityInfo *)info comment:(NSString *)comment closeChangeSet:(BOOL)closeChangeSet changedTags:(NSSet<NSString *> *)changedTags {
     OAEntity *newEntity = entity;
-    OAOsmEditsDBHelper *osmEditsDb = [OAOsmEditsDBHelper sharedDatabase];
+    OpenstreetmapsDbHelper *osmEditsDb = [OpenstreetmapsDbHelper sharedDatabase];
     if ([entity getId] == -1) {
         if ([entity isKindOfClass:[OANode class]])
             newEntity = [[OANode alloc] initWithNode:(OANode *)entity identifier:MIN(-2, ([osmEditsDb getMinID] - 1))];

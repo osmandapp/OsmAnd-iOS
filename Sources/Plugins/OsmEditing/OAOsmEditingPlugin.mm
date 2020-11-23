@@ -25,7 +25,7 @@
 #import "OAMapViewController.h"
 #import "OANativeUtilities.h"
 #import "OAOsmEditsLayer.h"
-#import "OAOsmEditsDBHelper.h"
+#import "OpenstreetmapsDbHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OANode.h"
 #import "OAMapViewController.h"
@@ -37,12 +37,13 @@
 #import "OAOsmBugsLocalUtil.h"
 #import "Reachability.h"
 #import "OAEditPOIData.h"
-#import "OAOsmNotePoint.h"
+#import "OAOsmNotesPoint.h"
 #import "OAOsmNoteBottomSheetViewController.h"
 #import "OAAddPOIAction.h"
 #import "OAAddOSMBugAction.h"
 #import "OAShowHideLocalOSMChanges.h"
 #import "OAShowHideOSMBugAction.h"
+#import "OAOsmBugsDBHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -60,11 +61,12 @@
 
 @implementation OAOsmEditingPlugin
 {
-    OAOsmEditsDBHelper *_editsDb;
-    OAOpenStreetMapLocalUtil *_localOsmUtil;
-    OAOsmBugsLocalUtil *_localBugsUtil;
-    OAOpenStreetMapRemoteUtil *_remoteOsmUtil;
-    OAOsmBugsRemoteUtil *_remoteBugsUtil;
+    OpenstreetmapsDbHelper *_dbpoi;
+    OAOsmBugsDBHelper *_dbbug;
+    OAOpenStreetMapLocalUtil *_localUtil;
+    OAOpenStreetMapRemoteUtil *_remoteUtil;
+    OAOsmBugsRemoteUtil *_remoteNotesUtil;
+    OAOsmBugsLocalUtil *_localNotesUtil;
 }
 
 - (instancetype) init
@@ -76,11 +78,11 @@
         _settings = [OAAppSettings sharedManager];
         _helper = [OADestinationsHelper instance];
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        _editsDb = [OAOsmEditsDBHelper sharedDatabase];
-        _localOsmUtil = [[OAOpenStreetMapLocalUtil alloc] init];
-        _localBugsUtil = [[OAOsmBugsLocalUtil alloc] init];
-        _remoteOsmUtil = [[OAOpenStreetMapRemoteUtil alloc] init];
-        _remoteBugsUtil = [[OAOsmBugsRemoteUtil alloc] init];
+        _dbpoi = [OpenstreetmapsDbHelper sharedDatabase];
+        _localUtil = [[OAOpenStreetMapLocalUtil alloc] init];
+        _localNotesUtil = [[OAOsmBugsLocalUtil alloc] init];
+        _remoteUtil = [[OAOpenStreetMapRemoteUtil alloc] init];
+        _remoteNotesUtil = [[OAOsmBugsRemoteUtil alloc] init];
     }
     return self;
 }
@@ -88,6 +90,15 @@
 + (NSString *) getId
 {
     return PLUGIN_ID;
+}
+
+- (OpenstreetmapsDbHelper *) getDBPOI
+{
+    if (!_dbpoi)
+    {
+        _dbpoi = [[OpenstreetmapsDbHelper alloc] init];
+    }
+    return _dbpoi;
 }
 
 - (void) registerLayers
@@ -110,41 +121,46 @@
 - (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationUtil
 {
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && !_settings.offlineEditing)
-        return _remoteOsmUtil;
+        return _remoteUtil;
     else
-        return _localOsmUtil;
+        return _localUtil;
 }
 
-- (id<OAOpenStreetMapUtilsProtocol>)getOfflineModificationUtil
+- (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationLocalUtil
 {
-    return _localOsmUtil;
+    return _localUtil;
 }
 
-- (id<OAOpenStreetMapUtilsProtocol>)getOnlineModificationUtil
+- (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationRemoteUtil
 {
-    return _remoteOsmUtil;
+    return _remoteUtil;
 }
 
--(id<OAOsmBugsUtilsProtocol>)getLocalOsmNotesUtil
+-(id<OAOsmBugsUtilsProtocol>)getOsmNotesRemoteUtil
 {
-    return _localBugsUtil;
+    return _remoteNotesUtil;
 }
 
--(id<OAOsmBugsUtilsProtocol>)getRemoteOsmNotesUtil
+-(id<OAOsmBugsUtilsProtocol>)getOsmNotesLocalUtil
 {
-    return _remoteBugsUtil;
+    return _localNotesUtil;
+}
+
+- (OAOsmBugsDBHelper *) getDBBug
+{
+    return [OAOsmBugsDBHelper sharedDatabase];
 }
 
 -(void) openOsmNote:(double)latitude longitude:(double)longitude message:(NSString *)message autoFill:(BOOL)autofill
 {
-    OAOsmNotePoint *p = [[OAOsmNotePoint alloc] init];
+    OAOsmNotesPoint *p = [[OAOsmNotesPoint alloc] init];
     [p setLatitude:latitude];
     [p setLongitude:longitude];
     [p setAuthor:@""];
     if (autofill)
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [_localBugsUtil commit:p text:message action:CREATE]; /*OAOsmBugResult *res = */
+            [_localNotesUtil commit:p text:message action:CREATE]; /*OAOsmBugResult *res = */
         });
     }
     else

@@ -19,9 +19,9 @@
 #import "OAAppSettings.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
-#import "OAOsmEditsDBHelper.h"
+#import "OpenstreetmapsDbHelper.h"
 #import "OAOsmEditingPlugin.h"
-#import "OAOsmNotePoint.h"
+#import "OAOsmNotesPoint.h"
 #import "OAMenuSimpleCell.h"
 #import "OABottomSheetTwoButtonsViewController.h"
 #import "OAOsmEditingBottomSheetViewController.h"
@@ -250,9 +250,9 @@
     else if ([item[@"key"] isEqualToString:@"edit_delete"])
     {
         if (_point.getGroup == POI)
-            [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_point];
+            [[OpenstreetmapsDbHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_point];
         else
-            [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)_point];
+            [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotesPoint *)_point];
         
         [vwController.delegate refreshData];
         [self.vwController dismiss];
@@ -266,7 +266,7 @@
     if (_point.getGroup == POI)
     {
         OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                         initWithEditingUtils:_plugin.getOnlineModificationUtil
+                                                         initWithEditingUtils:_plugin.getPoiModificationRemoteUtil
                                                          points:[NSArray arrayWithObject:_point]];
         dialog.delegate = vwController.delegate;
         [dialog show];

@@ -1,16 +1,16 @@
 //
-//  OAOsmNotePoint.m
+//  OAOsmNotesPoint.m
 //  OsmAnd
 //
 //  Created by Paul on 1/30/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAOsmNotePoint.h"
+#import "OAOsmNotesPoint.h"
 
 // static const long serialVersionUID = 729654300829771468L;
 
-@implementation OAOsmNotePoint
+@implementation OAOsmNotesPoint
 {
     long long _id;
     NSString *_text;

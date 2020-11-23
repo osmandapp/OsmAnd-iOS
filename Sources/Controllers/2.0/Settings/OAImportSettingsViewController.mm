@@ -26,6 +26,7 @@
 #import "OAAvoidRoadInfo.h"
 #import "OASQLiteTileSource.h"
 #import "OAResourcesUIHelper.h"
+#import "OAOsmNotesPoint.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -230,6 +231,7 @@
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    NSMutableArray<OAOsmNotesPoint *> *notesPointList  = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
         switch (item.type)
@@ -288,6 +290,15 @@
                     [avoidRoads addObjectsFromArray:avoidRoadsItem.items];
                 break;
             }
+            case EOASettingsItemTypeOsmNotes:
+            {
+                OAOsmNotesSettingsItem *osmNotesSettingsItem = (OAOsmNotesSettingsItem *) item;
+                if (importComplete)
+                    [notesPointList addObjectsFromArray:osmNotesSettingsItem.appliedItems];
+                else
+                    [notesPointList addObjectsFromArray:osmNotesSettingsItem.items];
+                break;
+            }
             default:
                 break;
         }
@@ -310,6 +321,9 @@
         [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
     if (avoidRoads.count > 0)
         [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
+    if (notesPointList.count > 0)
+        [settingsToOperate setObject:notesPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmNotes]];
+        
     return settingsToOperate;
 }
 
@@ -325,6 +339,7 @@
     OATableGroupToImport *customGPXSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customObfMapSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *avoidRoadsStyleSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *notesPoinStyleSection = [[OATableGroupToImport alloc] init];
     for (NSString *type in [_itemsMap allKeys])
     {
         EOAExportSettingsType itemType = [OAExportSettingsType parseType:type];
@@ -493,6 +508,24 @@
                 [data addObject:avoidRoadsStyleSection];
                 break;
             }
+            case EOAExportSettingsTypeOsmNotes:
+            {
+                notesPoinStyleSection.groupName = OALocalizedString(@"osm_notes");
+                notesPoinStyleSection.type = kCellTypeSectionHeader;
+                notesPoinStyleSection.isOpen = NO;
+                
+                for (OAOsmNotesPoint *item in settings)
+                {
+                    NSString *caption = [item getText];
+                    [notesPoinStyleSection.groupItems addObject:@{
+                        @"icon" : @"ic_action_add_osm_note",
+                        @"title" : caption,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
+                [data addObject:notesPoinStyleSection];
+                break;
+            }
             default:
                 break;
         }
@@ -572,6 +605,17 @@
     return nil;
 }
 
+//TODO: in Android it uses Generics
+- (id) getBaseItem:(EOASettingsItemType)settingsItemType clazz:(id)clazz
+{
+    for (OASettingsItem * settingsItem in _settingsItems)
+    {
+        if (settingsItem.type == settingsItemType && [settingsItem isKindOfClass:clazz])
+            return settingsItem;
+    }
+    return nil;
+}
+
 - (NSArray <OASettingsItem *>*) getSettingsItemsFromData
 {
     NSMutableArray<OASettingsItem *> *settingsItems = [NSMutableArray array];
@@ -580,6 +624,7 @@
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    NSMutableArray<OAOsmNotesPoint *> *osmNotesPointList = [NSMutableArray array];
     
     
     for (NSObject *object in _selectedItems)
@@ -596,6 +641,8 @@
             [settingsItems addObject:[[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject:(OAAvoidRoadInfo *)object];
+        else if ([object isKindOfClass:OAOsmNotesPoint.class])
+            [osmNotesPointList addObject:(OAOsmNotesPoint *)object];
         else if ([object isKindOfClass:OAFileSettingsItem.class])
             [settingsItems addObject:(OAFileSettingsItem *)object];
     }
@@ -610,6 +657,11 @@
         [settingsItems addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
         [settingsItems addObject:[self getBaseAvoidRoadsSettingsItem]];
+    if (osmNotesPointList.count > 0)
+    {
+        OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmNotes clazz:OAOsmNotesSettingsItem.class];
+        [settingsItems addObject:baseItem];
+    }
     return settingsItems;
 }
 

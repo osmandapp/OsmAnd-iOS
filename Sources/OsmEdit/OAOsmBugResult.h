@@ -10,11 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAOsmNotePoint;
+@class OAOsmNotesPoint;
 
 @interface OAOsmBugResult : NSObject
 
-@property (nonatomic) OAOsmNotePoint *localPoint;
+@property (nonatomic) OAOsmNotesPoint *localPoint;
 @property (nonatomic) NSString *warning;
 
 @end

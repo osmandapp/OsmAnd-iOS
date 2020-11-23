@@ -32,7 +32,7 @@
 #import "OAWay.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
-#import "OAOsmEditsDBHelper.h"
+#import "OpenstreetmapsDbHelper.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIBaseType.h"

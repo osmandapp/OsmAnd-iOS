@@ -9,7 +9,7 @@
 #import "OAOsmEditsListViewController.h"
 #import "OASizes.h"
 #import "Localization.h"
-#import "OAOsmEditsDBHelper.h"
+#import "OpenstreetmapsDbHelper.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
@@ -108,8 +108,8 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 {
     [_headerView setTitleText:[self getLocalizedHeaderTitle]];
     NSMutableArray *dataArr = [NSMutableArray new];
-    NSArray *poi = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
-    NSArray *notes = [[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints];
+    NSArray *poi = [[OpenstreetmapsDbHelper sharedDatabase] getOpenstreetmapPoints];
+    NSArray *notes = [[OAOsmBugsDBHelper sharedDatabase] getOsmbugsPoints];
     if (_screenType == EDITS_ALL || _screenType == EDITS_POI)
     {
         for (OAOpenStreetMapPoint *p in poi)
@@ -316,9 +316,9 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
                     if (point)
                     {
                         if (point.getGroup == POI)
-                            [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)point];
+                            [[OpenstreetmapsDbHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)point];
                         else
-                            [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)point];
+                            [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotesPoint *)point];
                     }
                 }
                 [self setupView];
@@ -355,7 +355,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         }
         if (edits.count > 0)
         {
-            OAOsmEditingBottomSheetViewController *editsBottomsheet = [[OAOsmEditingBottomSheetViewController alloc] initWithEditingUtils:((OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class]).getOnlineModificationUtil points:edits];
+            OAOsmEditingBottomSheetViewController *editsBottomsheet = [[OAOsmEditingBottomSheetViewController alloc] initWithEditingUtils:((OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class]).getPoiModificationRemoteUtil points:edits];
             editsBottomsheet.delegate = self;
             _pendingNotes = notes;
             [editsBottomsheet show];

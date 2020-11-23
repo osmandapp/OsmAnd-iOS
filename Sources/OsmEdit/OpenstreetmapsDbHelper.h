@@ -1,5 +1,5 @@
 //
-//  OAOsmEditsDBHelper.h
+//  OpenstreetmapsDbHelper.h
 //  OsmAnd
 //
 //  Created by Paul on 1/19/19.
@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAOpenStreetMapPoint;
 
-@interface OAOsmEditsDBHelper : NSObject
+@interface OpenstreetmapsDbHelper : NSObject
 
-+ (OAOsmEditsDBHelper *)sharedDatabase;
++ (OpenstreetmapsDbHelper *)sharedDatabase;
 
 -(NSArray<OAOpenStreetMapPoint *> *) getOpenstreetmapPoints;
 -(void)addOpenstreetmap:(OAOpenStreetMapPoint *)point;

@@ -39,6 +39,10 @@
 #import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXTrackAnalysis.h"
+#import "OAOsmEditingPlugin.h"
+#import "OAOsmBugsDBHelper.h"
+#import "OpenstreetmapsDbHelper.h"
+#import "OAOsmNotesPoint.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -76,6 +80,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             return @"MAP_SOURCES";
         case EOASettingsItemTypeAvoidRoads:
             return @"AVOID_ROADS";
+        case EOASettingsItemTypeOsmNotes:
+            return @"OSM_NOTES";
         default:
             return nil;
     }
@@ -101,6 +107,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return EOASettingsItemTypeMapSources;
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOASettingsItemTypeAvoidRoads;
+    if ([typeName isEqualToString:@"OSM_NOTES"])
+        return EOASettingsItemTypeOsmNotes;
     
     return EOASettingsItemTypeUnknown;
 }
@@ -131,6 +139,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             return @"MAP_FILE"; // check
         case EOAExportSettingsTypeAvoidRoads:
             return @"AVOID_ROADS";
+        case EOAExportSettingsTypeOsmNotes:
+            return @"OSM_NOTES";
         default:
             return nil;
     }
@@ -156,6 +166,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         return EOAExportSettingsTypeMapFiles; // check
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOAExportSettingsTypeAvoidRoads;
+    if ([typeName isEqualToString:@"OSM_NOTES"])
+        return EOAExportSettingsTypeOsmNotes;
     return EOAExportSettingsTypeUnknown;
 }
 
@@ -1148,7 +1160,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @implementation OAPluginSettingsItem
 {
     OAPlugin *_plugin;
-    NSArray<OASettingsItem *> *_pluginDependentItems;
+    NSMutableArray<OASettingsItem *> *_pluginDependentItems;
 }
 
 @dynamic type, name, fileName;
@@ -1166,6 +1178,11 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 - (NSString *) publicName
 {
     return _plugin.getName;
+}
+
+- (NSMutableArray<OASettingsItem *> *) getPluginDependentItems
+{
+    return _pluginDependentItems;
 }
 
 - (BOOL)exists
@@ -2623,6 +2640,154 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         json[@"items"] = jsonArray;
     }
+}
+
+@end
+
+#pragma mark - OAOsmNotesSettingsItem
+
+@interface OAOsmNotesSettingsItem()
+
+@property (nonatomic) NSMutableArray<OAOsmNotesPoint *> *items;
+@property (nonatomic) NSMutableArray<OAOsmNotesPoint *> *appliedItems;
+@property (nonatomic) NSMutableArray<OAOsmNotesPoint *> *duplicateItems;
+@property (nonatomic) NSMutableArray<OAOsmNotesPoint *> *existingItems;
+
+@end
+
+@implementation OAOsmNotesSettingsItem
+{
+}
+
+@dynamic items, appliedItems, duplicateItems, existingItems;
+
+NSString *ID_KEY = @"id";
+NSString *TEXT_KEY = @"text";
+NSString *LAT_KEY = @"lat";
+NSString *LON_KEY = @"lon";
+NSString *AUTHOR_KEY = @"author";
+NSString *ACTION_KEY = @"action";
+
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
+        if (osmEditingPlugin)
+            [self setExistingItems: [NSMutableArray arrayWithArray:[[osmEditingPlugin getDBBug] getOsmbugsPoints]]];
+    }
+    return self;
+}
+
+- (EOASettingsItemType) type
+{
+    return EOASettingsItemTypeOsmNotes;
+}
+
+- (void) apply
+{
+    NSArray<OAOsmNotesPoint *>*newItems = [self getNewItems];
+    if (newItems.count > 0 || [self duplicateItems].count > 0)
+    {
+        self.appliedItems = [NSMutableArray arrayWithArray:newItems];
+        
+        for (OAOsmNotesPoint *duplicate in [self duplicateItems])
+        {
+            [self.appliedItems addObject: self.shouldReplace ? duplicate : [self renameItem:duplicate]];
+        }
+        OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
+        if (osmEditingPlugin)
+        {
+            OAOsmBugsDBHelper *db = [osmEditingPlugin getDBBug];
+            for (OAOsmNotesPoint *point in self.appliedItems)
+            {
+                [db addOsmbugs:point];
+            }
+        }
+    }
+}
+
+- (BOOL) isDuplicate:(OAOsmNotesPoint *)item
+{
+    return NO;
+}
+
+- (OAOsmNotesPoint *) renameItem:(OAOsmNotesPoint *)item
+{
+    return item;
+}
+
+- (NSString *) getName
+{
+    return @"osm_notes";
+}
+
+- (NSString *) getPublicName
+{
+    return OALocalizedString(@"osm_notes");
+}
+
+- (BOOL) shouldReadOnCollecting
+{
+    return YES;
+}
+
+- (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error
+{
+    NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
+    if (itemsJson.count == 0)
+        return;
+    
+    for (id object in itemsJson)
+    {
+        long long iD = [object[ID_KEY] longLongValue];
+        NSString *text = object[TEXT_KEY];
+        double lat = [object[LAT_KEY] doubleValue];
+        double lon = [object[LON_KEY] doubleValue];
+        NSString *author = object[AUTHOR_KEY];
+        author = author.length > 0 ? author : nil;        
+        NSString *action = object[ACTION_KEY];
+        OAOsmNotesPoint *point = [[OAOsmNotesPoint alloc] init];
+        [point setId:iD];
+        [point setText:text];
+        [point setLatitude:lat];
+        [point setLongitude:lon];
+        [point setAuthor:author];
+        [point setAction:[OAOsmPoint getActionByName:action]];
+        [self.items addObject:point];
+    }
+}
+
+- (void) writeItemsToJson:(id)json
+{
+    NSMutableArray *jsonArray = [NSMutableArray array];
+    if (self.items.count > 0)
+    {
+        for (OAOsmNotesPoint *point in self.items)
+        {
+            NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
+            jsonObject[ID_KEY] = [NSNumber numberWithLongLong: [point getId]];
+            jsonObject[TEXT_KEY] = [point getText];
+            jsonObject[LAT_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLatitude]];
+            jsonObject[LON_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLongitude]];
+            jsonObject[AUTHOR_KEY] = [point getAuthor];
+            jsonObject[ACTION_KEY] = [OAOsmPoint getStringAction][[NSNumber numberWithInteger:[point getAction]]];
+            [jsonArray addObject:jsonObject];
+        }
+        json[@"items"] = jsonArray;
+    }
+}
+
+- (OASettingsItemReader *) getReader
+{
+    return [self getJsonReader];
+}
+
+- (OASettingsItemWriter *) getWriter
+{
+    return [self getJsonWriter];
 }
 
 @end

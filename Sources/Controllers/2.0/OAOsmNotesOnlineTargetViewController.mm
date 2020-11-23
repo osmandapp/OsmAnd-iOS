@@ -19,7 +19,7 @@
 #import "OACollapsableLabelView.h"
 #import "OAOsmNoteBottomSheetViewController.h"
 #import "OAOsmEditingPlugin.h"
-#import "OAOsmNotePoint.h"
+#import "OAOsmNotesPoint.h"
 #import "Reachability.h"
 #import "OAOnlineOsmNoteWrapper.h"
 
@@ -88,9 +88,9 @@
     [bottomSheet show];
 }
 
-- (OAOsmNotePoint *)getNote:(EOAAction)action
+- (OAOsmNotesPoint *)getNote:(EOAAction)action
 {
-    OAOsmNotePoint *p = [[OAOsmNotePoint alloc] init];
+    OAOsmNotesPoint *p = [[OAOsmNotesPoint alloc] init];
     [p setId:_point.identifier];
     [p setLatitude:_point.latitude];
     [p setLongitude:_point.longitude];

@@ -12,14 +12,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OAOsmBugsDBHelper;
+
 @interface OAOsmEditingPlugin : OAPlugin
 
 - (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationUtil;
-- (id<OAOpenStreetMapUtilsProtocol>)getOfflineModificationUtil;
-- (id<OAOpenStreetMapUtilsProtocol>)getOnlineModificationUtil;
+- (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationLocalUtil;
+- (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationRemoteUtil;
 
-- (id<OAOsmBugsUtilsProtocol>)getLocalOsmNotesUtil;
-- (id<OAOsmBugsUtilsProtocol>)getRemoteOsmNotesUtil;
+- (id<OAOsmBugsUtilsProtocol>)getOsmNotesLocalUtil;
+- (id<OAOsmBugsUtilsProtocol>)getOsmNotesRemoteUtil;
+
+- (OAOsmBugsDBHelper *) getDBBug;
 
 -(void) openOsmNote:(double)latitude longitude:(double)longitude message:(NSString *)message autoFill:(BOOL)autofill;
 

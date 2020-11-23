@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAImportAsyncTask, OAExportAsyncTask, OACheckDuplicates, OALocalResourceItem;
 @class OASettingsItem;
-@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode, OAApplicationModeBean;
+@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode, OAApplicationModeBean, OAOsmNotesPoint;
 
 @protocol OASettingsImportExportDelegate <NSObject>
 
@@ -47,7 +47,8 @@ typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypeQuickActions,
     EOASettingsItemTypePoiUIFilters,
     EOASettingsItemTypeMapSources,
-    EOASettingsItemTypeAvoidRoads
+    EOASettingsItemTypeAvoidRoads,
+    EOASettingsItemTypeOsmNotes
 };
 
 typedef NS_ENUM(NSInteger, EOAImportType) {
@@ -74,6 +75,7 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
     EOAExportSettingsTypeGPX,
     EOAExportSettingsTypeMapFiles,
     EOAExportSettingsTypeAvoidRoads,
+    EOAExportSettingsTypeOsmNotes,
 };
 
 @interface OAExportSettingsType : NSObject
@@ -194,6 +196,8 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
 #pragma mark - OAPluginSettingsItem
 
 @interface OAPluginSettingsItem : OASettingsItem
+
+- (NSMutableArray<OASettingsItem *> *) getPluginDependentItems;
 
 @end
 
@@ -321,6 +325,12 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 #pragma mark - OAAvoidRoadsSettingsItem
 
 @interface OAAvoidRoadsSettingsItem : OACollectionSettingsItem<OAAvoidRoadInfo *>
+
+@end
+
+#pragma mark - OAOsmNotesSettingsItem
+
+@interface OAOsmNotesSettingsItem : OACollectionSettingsItem<OAOsmNotesPoint *>
 
 @end
 

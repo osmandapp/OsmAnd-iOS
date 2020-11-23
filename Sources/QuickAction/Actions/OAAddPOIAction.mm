@@ -20,7 +20,7 @@
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAPOIType.h"
 #import "OAOsmEditingViewController.h"
-#import "OAOsmEditsDBHelper.h"
+#import "OpenstreetmapsDbHelper.h"
 #import "OAQuickActionType.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -57,7 +57,7 @@ static OAQuickActionType *ACTION_TYPE;
         }
         else
         {
-            [OAOsmEditingViewController savePoi:@"" poiData:data editingUtil:plugin.getOfflineModificationUtil closeChangeSet:NO];
+            [OAOsmEditingViewController savePoi:@"" poiData:data editingUtil:plugin.getPoiModificationLocalUtil closeChangeSet:NO];
         }
     }
 }

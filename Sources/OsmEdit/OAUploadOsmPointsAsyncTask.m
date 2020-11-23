@@ -16,10 +16,10 @@
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOpenStreetMapRemoteUtil.h"
-#import "OAOsmEditsDBHelper.h"
+#import "OpenstreetmapsDbHelper.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmBugsRemoteUtil.h"
-#import "OAOsmNotePoint.h"
+#import "OAOsmNotesPoint.h"
 #import "OAOsmBugResult.h"
 
 @interface OAUploadOsmPointsAsyncTask() <OAUploadBottomSheetDelegate>
@@ -72,7 +72,7 @@
             OAOsmPoint *osmPoint = _points[i];
             if (osmPoint.getGroup == POI)
             {
-                OAOpenStreetMapRemoteUtil *editsUtil = (OAOpenStreetMapRemoteUtil *)_plugin.getOnlineModificationUtil;
+                OAOpenStreetMapRemoteUtil *editsUtil = (OAOpenStreetMapRemoteUtil *)_plugin.getPoiModificationRemoteUtil;
                 OAEntityInfo *entityInfo = nil;
                 OAOpenStreetMapPoint *point  = (OAOpenStreetMapPoint *) osmPoint;
                 if (point.getAction != CREATE)
@@ -82,7 +82,7 @@
                 
                 if (entity)
                 {
-                    [[OAOsmEditsDBHelper sharedDatabase] deletePOI:point];
+                    [[OpenstreetmapsDbHelper sharedDatabase] deletePOI:point];
                     [_app.osmEditsChangeObservable notifyEvent];
                 }
                 else
@@ -90,8 +90,8 @@
             }
             else if (osmPoint.getGroup == BUG)
             {
-                OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
-                OAOsmNotePoint *p = (OAOsmNotePoint *) osmPoint;
+                OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getOsmNotesRemoteUtil];
+                OAOsmNotesPoint *p = (OAOsmNotesPoint *) osmPoint;
                 NSString *message = [util commit:p text:p.getText action:p.getAction anonymous:_loadAnonymous].warning;
                 
                 if (!message)

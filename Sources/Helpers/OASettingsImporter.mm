@@ -147,7 +147,6 @@
             NSString *itemsJson = [NSString stringWithContentsOfFile:tmpFileName encoding:NSUTF8StringEncoding error:nil];
             OASettingsItemsFactory *factory = [[OASettingsItemsFactory alloc] initWithJSON:itemsJson];
             [items addObjectsFromArray:factory.getItems];
-            [fileManager removeItemAtPath:_tmpFilesDir error:nil];
             break;
         }
     }
@@ -187,74 +186,51 @@
         return;
     }
     
+    NSArray* itemsJson = json[@"items"];
     NSInteger version = json[@"version"] ? [json[@"version"] integerValue] : 1;
     if (version > kVersion)
     {
         NSLog(@"Error: unsupported version");
         return;
     }
-    
-    NSArray* itemsJson = json[@"items"];
-//    NSMutableDictionary *pluginItems = [NSMutableDictionary new];
-    
-    for (NSDictionary* item in itemsJson)
+    NSMutableDictionary *pluginItems = [NSMutableDictionary new];
+    for (NSDictionary* itemJSON in itemsJson)
     {
-        // TODO: import other item types later and clean up
-        if ([item[@"type"] isEqualToString:@"PROFILE"])
-        {
-            OASettingsItem *settingsItem = [self createItem:item];
-            [_items addObject:settingsItem];
-        }
-        if ([item[@"type"] isEqualToString:@"GLOBAL"])
-        {
-            OASettingsItem *settingsItem = [self createItem:item];
-            [_items addObject:settingsItem];
-        }
-        if ([item[@"type"] isEqualToString:@"MAP_SOURCES"])
-        {
-            OASettingsItem *settingsItem = [self createItem:item];
-            [_items addObject:settingsItem];
-        }
-        if ([item[@"type"] isEqualToString:@"QUICK_ACTIONS"])
-        {
-//            OASettingsItem *settingsItem = [self createItem:item];
-//            [_items addObject:settingsItem];
-        }
-        if ([item[@"type"] isEqualToString:@"FILE"])
-        {
-            OASettingsItem *settingsItem = [self createItem:item];
-            if (settingsItem)
-                [_items addObject:settingsItem];
-        }
+        OASettingsItem *item = [self createItem:itemJSON];
+        [_items addObject:item];
+        
         // TODO: implement custom plugins
-//        NSString *pluginId = item.pluginId;
-//        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
-//        {
-//            List<SettingsItem> items = pluginItems.get(pluginId);
-//            if (items != null) {
-//                items.add(item);
-//            } else {
-//                items = new ArrayList<>();
-//                items.add(item);
-//                pluginItems.put(pluginId, items);
-//            }
-//        }
+        NSString *pluginId = item.pluginId;
+        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
+        {
+            NSMutableArray<OASettingsItem *> *items = pluginItems[pluginId];
+            if (items)
+            {
+                [items addObject:item];
+            }
+            else
+            {
+                items = [NSMutableArray new];
+                [items addObject:item];
+                pluginItems[pluginId] = items;
+            }
+        }
     }
     if ([_items count] == 0)
     {
         NSLog(@"No items");
         return;
     }
-//    for (OASettingsItem *item in self.items)
-//    {
-//        if (item instanceof PluginSettingsItem) {
-//            PluginSettingsItem pluginSettingsItem = ((PluginSettingsItem) item);
-//            List<SettingsItem> pluginDependentItems = pluginItems.get(pluginSettingsItem.getName());
-//            if (!Algorithms.isEmpty(pluginDependentItems)) {
-//                pluginSettingsItem.getPluginDependentItems().addAll(pluginDependentItems);
-//            }
-//        }
-//    }
+    for (OASettingsItem *item in _items)
+    {
+        if ([item isKindOfClass:OAPluginSettingsItem.class])
+        {
+            OAPluginSettingsItem *pluginSettingsItem = (OAPluginSettingsItem *)item;
+            NSMutableArray *pluginDependentItems = pluginItems[pluginSettingsItem.name];
+            if (pluginDependentItems && pluginDependentItems.count > 0)
+                [[pluginSettingsItem getPluginDependentItems] addObjectsFromArray:pluginDependentItems];
+        }
+    }
 }
 
 - (NSArray<OASettingsItem *> *) getItems
@@ -281,6 +257,7 @@
         return nil;
     
     NSError *error;
+    // TODO: import other item types later and clean up
     switch (type)
     {
         case EOASettingsItemTypeGlobal:
@@ -309,6 +286,9 @@
             break;
         case EOASettingsItemTypeAvoidRoads:
             item = [[OAAvoidRoadsSettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeOsmNotes:
+            item = [[OAOsmNotesSettingsItem alloc] initWithJson:json error:&error];
             break;
         default:
             item = nil;

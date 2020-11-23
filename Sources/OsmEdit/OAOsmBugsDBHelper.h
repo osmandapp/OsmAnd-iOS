@@ -13,16 +13,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAOsmNotePoint;
+@class OAOsmNotesPoint;
 
 @interface OAOsmBugsDBHelper : NSObject
 
 + (OAOsmBugsDBHelper *)sharedDatabase;
 
--(NSArray<OAOsmNotePoint *> *) getOsmBugsPoints;
+-(NSArray<OAOsmNotesPoint *> *) getOsmbugsPoints;
 -(void) updateOsmBug:(long) identifier text:(NSString *)text;
--(void)addOsmBug:(OAOsmNotePoint *)point;
--(void)deleteAllBugModifications:(OAOsmNotePoint *) point;
+-(void) addOsmbugs:(OAOsmNotesPoint *)point;
+-(void) deleteAllBugModifications:(OAOsmNotesPoint *) point;
 -(long long) getMinID;
 
 - (void) updateOsmBugLocation:(long long)identifier newPosition:(CLLocationCoordinate2D)newPosition;

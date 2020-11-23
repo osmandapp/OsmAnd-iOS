@@ -25,7 +25,7 @@
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAEditPOIData.h"
-#import "OAOsmEditsDBHelper.h"
+#import "OpenstreetmapsDbHelper.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmEditingBottomSheetViewController.h"
 #import "OAOsmNoteBottomSheetViewController.h"
@@ -80,9 +80,9 @@
 - (void) leftControlButtonPressed
 {
     if (_osmPoint.getGroup == BUG)
-        [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)_osmPoint];
+        [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotesPoint *)_osmPoint];
     else if (_osmPoint.getGroup == POI)
-        [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_osmPoint];
+        [[OpenstreetmapsDbHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_osmPoint];
     [_app.osmEditsChangeObservable notifyEvent];
     [[OARootViewController instance].mapPanel targetHide];
 }
@@ -92,7 +92,7 @@
     if (_osmPoint.getGroup == POI)
     {
         OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                         initWithEditingUtils:_editingPlugin.getOnlineModificationUtil
+                                                         initWithEditingUtils:_editingPlugin.getPoiModificationRemoteUtil
                                                          points:[NSArray arrayWithObject:_osmPoint]];
         dialog.delegate = self;
         [dialog show];

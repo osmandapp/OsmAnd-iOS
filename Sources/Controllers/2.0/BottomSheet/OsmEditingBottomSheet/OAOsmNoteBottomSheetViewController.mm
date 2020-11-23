@@ -34,12 +34,12 @@
 #import "OAWay.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
-#import "OAOsmEditsDBHelper.h"
+#import "OpenstreetmapsDbHelper.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIBaseType.h"
 #import "OAOsmEditingPlugin.h"
-#import "OAOsmNotePoint.h"
+#import "OAOsmNotesPoint.h"
 #import "OADescrTitleCell.h"
 #import "OABottomSheetTwoButtonsViewController.h"
 #import "OAOsmBugsRemoteUtil.h"
@@ -124,7 +124,7 @@
         [arr addObject:@{
                          @"type" : @"OATextInputFloatingCell",
                          @"name" : @"osm_message",
-                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:((OAOsmNotePoint *)_bugPoints.firstObject).getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:((OAOsmNotesPoint *)_bugPoints.firstObject).getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
         
         if (_screenType == TYPE_CREATE)
@@ -186,7 +186,7 @@
     BOOL shouldUpload = _screenType != TYPE_CREATE || _uploadImmediately;
     if (shouldWarn)
     {
-        OAOsmNotePoint *p = _bugPoints.firstObject;
+        OAOsmNotesPoint *p = _bugPoints.firstObject;
         NSString *comment = p.getText;
         if (!comment || comment.length == 0)
         {
@@ -212,8 +212,8 @@
 - (void) saveNote
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
-        OAOsmNotePoint *p = _bugPoints.firstObject;
+        id<OAOsmBugsUtilsProtocol> util = [_plugin getOsmNotesLocalUtil];
+        OAOsmNotesPoint *p = _bugPoints.firstObject;
         if (!p)
             return;
         
@@ -222,7 +222,7 @@
         else
             [util modify:p text:p.getText];
         
-        OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
+        OAOsmNotesPoint *note = [[OAOsmNotesPoint alloc] init];
         [note setLatitude:p.getLatitude];
         [note setLongitude:p.getLongitude];
         [note setId:p.getId];
@@ -472,7 +472,7 @@
 # pragma mark OAOsmMessageForwardingDelegate
 
 - (void)setMessageText:(NSString *)text {
-    [(OAOsmNotePoint *) _bugPoints.firstObject setText:text];
+    [(OAOsmNotesPoint *) _bugPoints.firstObject setText:text];
     [self.tblView reloadData];
 }
 

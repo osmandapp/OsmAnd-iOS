@@ -27,6 +27,7 @@
 #import "OASQLiteTileSource.h"
 #import "OAResourcesUIHelper.h"
 #import "OAOsmNotesPoint.h"
+#import "OAFileNameTranslationHelper.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -452,10 +453,8 @@
                 customObfMapSection.isOpen = NO;
                 for (OAFileSettingsItem *mapItem in settings)
                 {
-                    NSString *mapName = [[mapItem.name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-                    NSInteger dotLoc = [mapName indexOf:@"."];
-                    if (dotLoc > 0)
-                        mapName = [mapName substringToIndex:dotLoc];
+                    
+                    NSString *mapName = [OAFileNameTranslationHelper getMapName:mapItem.name];
                     [customObfMapSection.groupItems addObject:@{
                         @"icon" : mapItem.getIconName,
                         @"title" : mapName,

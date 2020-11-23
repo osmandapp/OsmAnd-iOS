@@ -1405,9 +1405,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         case EOASettingsItemFileSubtypeRoadMap:
         case EOASettingsItemFileSubtypeSrtmMap:
         case EOASettingsItemFileSubtypeRenderingStyle:
-            return documentsPath;
         case EOASettingsItemFileSubtypeTilesMap:
-            return [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];;
+            return documentsPath;
         case EOASettingsItemFileSubtypeRoutingConfig:
             return [documentsPath stringByAppendingPathComponent:@"routing"];
         case EOASettingsItemFileSubtypeGpx:
@@ -1603,6 +1602,59 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return self;
 }
 
+- (NSString *) fileNameWithSubtype:(EOASettingsItemFileSubtype)subtype name:(NSString *)name
+{
+    if ([OAFileSettingsItemFileSubtype isMap:subtype])
+    {
+        switch (subtype)
+        {
+            case EOASettingsItemFileSubtypeTilesMap:
+            {
+                NSString *ext = name.pathExtension;
+                NSString *newFileName = [name stringByDeletingPathExtension].lowerCase;
+                
+                NSString *hillshadeExt = @"hillshade";
+                NSString *slopeExt = @"slope";
+                BOOL isHillShade = [newFileName containsString:hillshadeExt];
+                BOOL isSlope = [newFileName containsString:slopeExt];
+                NSString *typeExt = @"";
+                if (isHillShade)
+                {
+                    newFileName = [newFileName stringByReplacingOccurrencesOfString:hillshadeExt withString:@""];
+                    typeExt = hillshadeExt;
+                }
+                else if (isSlope)
+                {
+                    newFileName = [newFileName stringByReplacingOccurrencesOfString:slopeExt withString:@""];
+                    typeExt = slopeExt;
+                }
+                newFileName = [newFileName trim];
+                newFileName = [newFileName stringByAppendingPathExtension:typeExt];
+                newFileName = [newFileName stringByAppendingPathExtension:ext];
+                newFileName = [newFileName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+                
+                return newFileName;
+            }
+            case EOASettingsItemFileSubtypeObfMap:
+            {
+                NSString *newName = [name stringByDeletingPathExtension].lowerCase;
+                NSString *ext = name.pathExtension;
+                return [[newName stringByAppendingPathExtension:@"map"] stringByAppendingPathExtension:ext];
+            }
+            case EOASettingsItemFileSubtypeSrtmMap:
+            case EOASettingsItemFileSubtypeWikiMap:
+            case EOASettingsItemFileSubtypeRoadMap:
+            {
+                return name.lowerCase;
+            }
+
+            default:
+                break;
+        }
+    }
+    return name;
+}
+
 - (void) installItem:(NSString *)destFilePath
 {
     switch (_subtype)
@@ -1617,56 +1669,44 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             break;
         }
         case EOASettingsItemFileSubtypeRenderingStyle:
-        case EOASettingsItemFileSubtypeObfMap:
-        case EOASettingsItemFileSubtypeRoadMap:
-        case EOASettingsItemFileSubtypeWikiMap:
-        case EOASettingsItemFileSubtypeSrtmMap:
         {
             OsmAndApp.instance.resourcesManager->rescanUnmanagedStoragePaths();
             break;
         }
+        case EOASettingsItemFileSubtypeObfMap:
+        {
+            OsmAndApp.instance.resourcesManager->installImportedResource(QString::fromNSString(destFilePath), QString::fromNSString([self fileNameWithSubtype:self.subtype name:destFilePath.lastPathComponent]), OsmAnd::ResourcesManager::ResourceType::MapRegion);
+            break;
+        }
+        case EOASettingsItemFileSubtypeRoadMap:
+        {
+            OsmAndApp.instance.resourcesManager->installImportedResource(QString::fromNSString(destFilePath), QString::fromNSString([self fileNameWithSubtype:self.subtype name:destFilePath.lastPathComponent]), OsmAnd::ResourcesManager::ResourceType::RoadMapRegion);
+            break;
+        }
+        case EOASettingsItemFileSubtypeWikiMap:
+        {
+            OsmAndApp.instance.resourcesManager->installImportedResource(QString::fromNSString(destFilePath), QString::fromNSString([self fileNameWithSubtype:self.subtype name:destFilePath.lastPathComponent]), OsmAnd::ResourcesManager::ResourceType::WikiMapRegion);
+            break;
+        }
+        case EOASettingsItemFileSubtypeSrtmMap:
+        {
+            OsmAndApp.instance.resourcesManager->installImportedResource(QString::fromNSString(destFilePath), QString::fromNSString([self fileNameWithSubtype:self.subtype name:destFilePath.lastPathComponent]), OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion);
+            break;
+        }
         case EOASettingsItemFileSubtypeTilesMap:
         {
-            NSString *path = [destFilePath stringByDeletingLastPathComponent];
-            NSString *fileName = destFilePath.lastPathComponent;
-            NSString *ext = fileName.pathExtension;
-            fileName = [fileName stringByDeletingPathExtension].lowerCase;
-            NSString *newFileName = fileName;
-            BOOL isHillShade = [fileName containsString:@"hillshade"];
-            BOOL isSlope = [fileName containsString:@"slope"];
-            if (isHillShade)
-            {
-                newFileName = [fileName stringByReplacingOccurrencesOfString:@"hillshade" withString:@""];
-                newFileName = [newFileName trim];
-                newFileName = [newFileName stringByAppendingString:@".hillshade"];
-            }
-            else if (isSlope)
-            {
-                newFileName = [fileName stringByReplacingOccurrencesOfString:@"slope" withString:@""];
-                newFileName = [newFileName trim];
-                newFileName = [newFileName stringByAppendingString:@".slope"];
-            }
-            newFileName = [newFileName stringByAppendingPathExtension:ext];
-            newFileName = [newFileName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-            path = [path stringByAppendingPathComponent:newFileName];
-            
-            NSFileManager *fileManager = NSFileManager.defaultManager;
-            [fileManager moveItemAtPath:destFilePath toPath:path error:nil];
-            OsmAnd::ResourcesManager::ResourceType resType = OsmAnd::ResourcesManager::ResourceType::Unknown;
-            if (isHillShade)
-                resType = OsmAnd::ResourcesManager::ResourceType::HillshadeRegion;
-            else if (isSlope)
-                resType = OsmAnd::ResourcesManager::ResourceType::SlopeRegion;
-            
-            if (resType != OsmAnd::ResourcesManager::ResourceType::Unknown)
-            {
-                // TODO: update exisitng sqlite
-                OsmAndApp.instance.resourcesManager->installFromFile(QString::fromNSString(path), resType);
-            }
+            NSString *newName = [self fileNameWithSubtype:_subtype name:destFilePath.lastPathComponent];
+            if ([newName containsString:@"hillshade"])
+                OsmAndApp.instance.resourcesManager->installImportedResource(QString::fromNSString(destFilePath), QString::fromNSString(newName), OsmAnd::ResourcesManager::ResourceType::HillshadeRegion);
+            else if ([newName containsString:@"slope"])
+                OsmAndApp.instance.resourcesManager->installImportedResource(QString::fromNSString(destFilePath), QString::fromNSString(newName), OsmAnd::ResourcesManager::ResourceType::SlopeRegion);
+            break;
         }
         default:
             break;
     }
+    if ([OAFileSettingsItemFileSubtype isMap:_subtype])
+        [NSFileManager.defaultManager removeItemAtPath:destFilePath error:nil];
 }
 
 - (EOASettingsItemType) type
@@ -1691,6 +1731,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (BOOL) exists
 {
+    if ([OAFileSettingsItemFileSubtype isMap:self.subtype])
+    {
+        NSString *destPath = [OsmAndApp.instance.dataPath stringByAppendingPathComponent:@"Resources"];
+        destPath = [destPath stringByAppendingPathComponent:[self fileNameWithSubtype:self.subtype name:self.name]];
+        return [[NSFileManager defaultManager] fileExistsAtPath:destPath];
+    }
     return [[NSFileManager defaultManager] fileExistsAtPath:_filePath];
 }
 
@@ -1709,6 +1755,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         prefix = [filePath substringToIndex:[filePath lastIndexOf:@"."]];
     
     NSString *suffix = [filePath stringByReplacingOccurrencesOfString:prefix withString:@""];
+    if ([OAFileSettingsItemFileSubtype isMap:_subtype])
+        return [self renameMap:suffix prefix:prefix];
 
     while (true)
     {
@@ -1716,6 +1764,20 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         NSString *newFilePath = [NSString stringWithFormat:@"%@_%d%@", prefix, number, suffix];
         if (![fileManager fileExistsAtPath:newFilePath])
             return newFilePath;
+    }
+}
+
+- (NSString *) renameMap:(NSString *)suffix prefix:(NSString *)prefix
+{
+    int number = 0;
+    const auto& resManager = OsmAndApp.instance.resourcesManager;
+    while (true)
+    {
+        number++;
+        NSString *newFileName = [NSString stringWithFormat:@"%@_%d%@", prefix, number, suffix];
+        NSString *localId = [self fileNameWithSubtype:self.subtype name:newFileName.lastPathComponent];
+        if (!resManager->getLocalResource(QString::fromNSString(localId)))
+            return newFileName;
     }
 }
 

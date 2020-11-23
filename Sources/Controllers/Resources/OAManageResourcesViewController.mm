@@ -36,6 +36,7 @@
 #import "OASubscribeEmailView.h"
 #import "OANetworkUtilities.h"
 #import "OASQLiteTileSource.h"
+#import "OAFileNameTranslationHelper.h"
 
 #include "Localization.h"
 
@@ -956,6 +957,16 @@ static BOOL _lackOfResources;
     return nil;
 }
 
+- (BOOL)isMapResource:(const OsmAnd::ResourcesManager::ResourceType)resourceType
+{
+    return resourceType == OsmAndResourceType::MapRegion ||
+        resourceType == OsmAndResourceType::RoadMapRegion ||
+        resourceType == OsmAndResourceType::SrtmMapRegion ||
+        resourceType == OsmAndResourceType::WikiMapRegion ||
+        resourceType == OsmAndResourceType::SlopeRegion ||
+        resourceType == OsmAndResourceType::HillshadeRegion;
+}
+
 - (void) collectResourcesDataAndItems
 {
     [self collectSubregionItems:self.region];
@@ -1045,19 +1056,24 @@ static BOOL _lackOfResources;
         OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
                                                           thatContainsResource:resource->id];
         
-        if (!match && (resource->type != OsmAndResourceType::MapRegion))
+        if (!match && ![self isMapResource:resource->type])
             continue;
         
         OALocalResourceItem* item = [[OALocalResourceItem alloc] init];
         item.resourceId = resource->id;
         item.resourceType = resource->type;
         if (match)
+        {
             item.title = [OAResourcesUIHelper titleOfResource:resource
                                                      inRegion:match
                                                withRegionName:YES
                                              withResourceType:NO];
+        }
         else
-            item.title = resource->id.toNSString();
+        {
+            NSString *title = [OAFileNameTranslationHelper getMapName:resource->id.toNSString()];
+            item.title = title;
+        }
             
         item.resource = resource;
         if (match)

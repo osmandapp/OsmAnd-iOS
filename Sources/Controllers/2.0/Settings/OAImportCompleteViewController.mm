@@ -111,13 +111,12 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         }
         else if ([item isKindOfClass:OAFileSettingsItem.class])
         {
-            NSString *filePath = ((OAFileSettingsItem *)item).filePath;
-            EOASettingsItemFileSubtype subType = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath];
-            if ([filePath hasSuffix:RENDERER_INDEX_EXT])
+            EOASettingsItemFileSubtype subType = ((OAFileSettingsItem *)item).subtype;
+            if (subType == EOASettingsItemFileSubtypeRenderingStyle)
                 renderFilesCount += 1;
-            else if ([filePath hasSuffix:ROUTING_FILE_EXT])
+            else if (subType == EOASettingsItemFileSubtypeRoutingConfig)
                 routingFilesCount += 1;
-            else if ([filePath hasSuffix:GPX_FILE_EXT])
+            else if (subType == EOASettingsItemFileSubtypeGpx)
                 gpxFilesCount += 1;
             else if ([OAFileSettingsItemFileSubtype isMap:subType])
                 mapsCount += 1;
@@ -131,7 +130,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_settings"),
             @"iconName": @"ic_action_settings",
-            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld", profilesCount],
             @"category" : @(EOAImportDataTypeProfiles)
             }
          ];
@@ -141,7 +140,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_screen_quick_action"),
             @"iconName": @"ic_custom_quick_action",
-            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld", profilesCount],
             @"category" : @(EOAImportDataTypeQuickActions)
             }
          ];
@@ -151,7 +150,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"search_activity"),
             @"iconName": @"ic_custom_search",
-            @"count": [NSString stringWithFormat:@"%ld",(long)profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld", profilesCount],
             @"category" : @(EOAImportDataTypePoiFilters)
             }
          ];
@@ -161,7 +160,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_map"),
             @"iconName": @"ic_custom_overlay_map",
-            @"count": [NSString stringWithFormat:@"%ld", (long)tileSourcesCount],
+            @"count": [NSString stringWithFormat:@"%ld", tileSourcesCount],
             @"category" : @(EOAImportDataTypeTileSources)
             }
          ];
@@ -171,7 +170,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"shared_string_rendering_style"),
             @"iconName": @"ic_custom_map_style",
-            @"count": [NSString stringWithFormat:@"%ld",(long)renderFilesCount],
+            @"count": [NSString stringWithFormat:@"%ld",renderFilesCount],
             @"category" : @(EOAImportDataTypeRenderSettings)
             }
          ];

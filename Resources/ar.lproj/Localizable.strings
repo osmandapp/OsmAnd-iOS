@@ -88,7 +88,7 @@
 "max_speed_none" = "بدون";
 "access_arrival_time" = "وقت الوصول";
 "map_widget_time" = "وقت الذهاب";
-"shared_string_collapse" = "أقل";
+"shared_string_collapse" = "تدلي";
 "shared_string_topbar" = "شريط بالأعلى";
 "shared_string_widgets" = "شريط جانبي";
 "map_widget_right" = "العدادات على اليسار";
@@ -159,7 +159,7 @@
 "choose_audio_stream_descr" = "اختيار قناة لتشغيل التوجيه الصوتي";
 "guidance_preferences_descr" = "تفضيلات الملاحة";
 "routing_preferences_descr" = "تفضيلات الطريق";
-"routing_settings" = "الملاحة";
+"routing_settings" = "التوجيه مع الطرق";
 "app_mode_bus" = "حافلة";
 "app_mode_train" = "قطار";
 "app_mode_truck" = "شاحنة";
@@ -392,7 +392,7 @@
 "m_style_car" = "سيارة";
 "m_style_walk" = "مشي";
 "m_style_bicycle" = "دراجة";
-"map_settings_map" = "ضبط الخريطة";
+"map_settings_map" = "الخرائط العادية";
 "map_settings_show" = "عرض على الخريطة";
 "map_settings_type" = "نمط الخريطة";
 "map_settings_mode" = "وضع الخريطة";
@@ -452,23 +452,23 @@
 "prch_items_failed" = "لم تتم استعادة العنصر (العناصر). حاول مرة أخرى.";
 // Resources
 "res_mapsres" = "إدارة الخرائط";
-"res_installed" = "المثبتة";
+"res_installed" = "الخرائط المثبتة";
 "res_banner_free_maps_title" = "لديك %d خرائط مجانية!";
 "res_banner_free_maps_desc" = "يمكنك تنزيل %d خرائط مجانية ، دون تحديثات";
 "res_banner_no_free_maps_title" = "ليس لديك خرائط مجانية!";
 "res_banner_no_free_maps_desc" = "يرجى شراء خرائط المنطقة أو خرائط جميع العالم";
 "res_search_world" = "البحث في جميع أنحاء العالم";
 "res_catalog_upd" = "تحديث الدليل";
-"res_world_map" = "خريطة العالم";
+"res_world_map" = "خريطة العالم العامة";
 "res_updates" = "التحديثات";
-"res_worldwide" = "في جميع أنحاء العالم";
+"res_worldwide" = "جميع خرائط العالم";
 "res_region_map" = "خريطة المنطقة";
 "res_updates_avail" = "التحديثات المتوفرة";
 "res_maps_inst" = "خرائط";
 "res_deleting" = "حذف …";
 "res_wsea_map" = "خريطة العلامات البحرية العالمية";
-"res_wmap" = "نظرة عامة على خريطة العالم";
-"res_dmap" = "نظرة خريطة عامة مفصلة";
+"res_wmap" = "خريطة العالم";
+"res_dmap" = "نظرة عامة مفصلة على الخريطة";
 "res_map_of_region" = "خريطة المنطقة";
 "res_update_no_space" = "لا توجد مساحة كافية للتحديث";
 "res_install_no_space" = "لا توجد مساحة كافية للتثبيت";
@@ -586,7 +586,7 @@
 "product_desc_parking" = "تتيح لك الحفظ بسهولة متى كانت السيارة متوقفة وكم الوقت المتبقي إذا كان وقوف السيارات محدودًا بالوقت";
 "product_desc_ext_parking" = "يذكرك إضافة أوسماند موقف بموقفك في مواقف السيارات. إنه مكون إضافي لتطبيق أوسماند للملاحة.\nاختر تذكيرًا مستقلًا عن الوقت (فقط علامة على الخريطة) أو تذكيرًا محددًا بالوقت مع تنبيه عند انتهاء الصلاحية (يشمل أيضًا علامة على الخريطة). لاستخدام المكوّن الإضافي ، قم بتمكينه في قائمة الإضافات.";
 "product_title_skimap" = "خريطة التزلج";
-"product_desc_skimap" = "منحدرات التزلج لجميع منتجعات التزلج على الجليد في العالم";
+"product_desc_skimap" = "منحدرات لجميع منتجعات التزلج على الجليد في العالم";
 "product_desc_ext_skimap" = "خريطة أوسماند للتزلج هي مكون إضافي لتطبيق أوسماند للملاحة وهو مصمم للتنقل في مواقع الرياضات الشتوية. إنه يوفر معلومات حول مسارات التزلج وعلامات رفع التزلج وحتى الخطوط الملونة التي تشير إلى تعقيد كل مسار. يمكنك الحصول على معلومات حول مسارات التزلج نفسها وكذلك البنية التحتية المحيطة بها.\n\nتعليمات الاستخدام: قم بتمكين المكون الإضافي في تطبيق أوسماند ، واضغط على زر الخريطة واضبط نوع الخريطة على خرائط التزلج.";
 "product_title_track_recording" = "تسجيل الرحلة";
 "product_desc_track_recording" = "تنشيط الوظيفة لتسجيل مساراتك وحفظها";
@@ -609,7 +609,7 @@
 "product_title_southamerica" = "أمريكا الجنوبية";
 "product_desc_southamerica" = "تنزيلات خرائط غير محدودة لأمريكا الجنوبية";
 "product_title_allworld" = "جميع خرائط العالم";
-"product_desc_allworld" = "خرائط العالم كله";
+"product_desc_allworld" = "جميع خرائط العالم";
 "product_title_asia" = "آسيا";
 "product_desc_asia" = "تنزيلات خرائط غير محدودة لآسيا";
 "product_title_wiki" = "ويكيبيديا";
@@ -1231,7 +1231,7 @@
 "hide_edits" = "إخفاء التعديلات المحلية";
 "quick_action_edit_list" = "تحرير قائمة الإجراءات";
 "shared_string_time_of_day" = "الوقت من اليوم";
-"gpx_slope" = "منحدر";
+"gpx_slope" = "الانحدار";
 "simulate_navigation" = "محاكاة الملاحة";
 "select_avoid_descr" = "حدد الطرق التي تريد تجنبها أثناء التنقل. يمكنك إما تحديد طريق على الخريطة أو اختيار نوع من القائمة أدناه.";
 "route_params" = "معلمات الطريق";
@@ -1282,7 +1282,7 @@
 // World Regions
 "region_antarctica" = "القطب الجنوبي";
 "region_others" = "خرائط أخرى";
-"gpx_descent" = "منحدر";
+"gpx_descent" = "الانحدار";
 "gpx_avg_altitude" = "متوسط الارتفاع";
 "gpx_ascent" = "مرتفع";
 "download_depth_countours" = "محيطات الأعماق البحرية";
@@ -1525,7 +1525,7 @@
 "rendering_attr_contourColorScheme_description" = "لون الخطوط الكنتورية";
 "rendering_attr_buildings15zoom_name" = "المباني في التقريب 15";
 "rendering_attr_highway_class_motorway_name" = "طريق سريع";
-"routing_attr_piste_type_sled_description" = "منحدرات للاستخدام الزلاجات.";
+"routing_attr_piste_type_sled_description" = "منحدرات لاستخدام الزلاجات.";
 "routing_attr_relief_smoothness_factor_plains_name" = "تضاريس أقل";
 "routeInfo_smoothness_name" = "السلاسة";
 "routing_attr_weight_description" = "تحديد الوزن الأعلى المسموح به على الطرق.";
@@ -1606,16 +1606,16 @@
 "res_source_sqlite" = "ملف SQLiteDB";
 "res_source_one_per_tile" = "ملف صورة واحد لكل إطار متجانب";
 "res_zoom_invalid_value" = "يجب أن تكون قيم التكبير في النطاق 1 - 22";
-"online_raster_map" = "الخريطة النقطية على الانترنت";
+"online_raster_map" = "خريطة نقطية على الانترنت";
 "offline_raster_map" = "خريطة النقطية دون اتصال";
-"offline_raster_maps" = "خرائط النقطية دون اتصال";
+"offline_raster_maps" = "خرائط نقطية دون اتصال";
 "res_edit_map_source" = "تحرير مصدر الخريطة";
 "res_offlineSQL_URL_warning" = "هذا النوع من الخرائط غير معتمدة";
 "shared_string_warning" = "تحذير";
 "res_online_source_cache_alert" = "سيؤدي تطبيق هذه التغييرات إلى مسح البيانات المخزنة مؤقتًا لمصدر الطبقات";
 "change_object_posiotion" = "تغيير موضع الكائن";
 "change_position_descr" = "انقل الخريطة لتغيير موضع الكائن";
-"online_raster_maps" = "الخريطة النقطية على الانترنت";
+"online_raster_maps" = "خريطة نقطية على الانترنت";
 "import_raster_map_success" = "تم استيراد الخريطة النقطية. افتح \"إعدادات الخريطة\" وقم بتنشيطها عبر \"تراكب / تحجيم\"";
 "import_raster_map_failed" = "فشل استيراد الخريطة النقطية";
 "map_settings_show_slider_map" = "إظهار شريط التمرير على الخريطة";
@@ -1681,7 +1681,7 @@
 "map_settings_add_maps_hillshade" = "تحتاج إلى خرائط إضافية لعرض التضاريس على الخريطة";
 "public_transport_empty_warning_descr" = "حاول تغيير الإعدادات.";
 "public_transport_empty_warning_title" = "لسوء الحظ، تعذر على أوسماند العثور على مسار للإعدادات الخاصة بك.";
-"res_slope" = "منحدر";
+"res_slope" = "الانحدار";
 "help_legend_descr" = "دليل رموز الخريطة";
 "help_mapillary" = "أوسماند+ مابيلاري";
 "help_travel" = "السفر (ويكيبيديا وويكيفويا)";
@@ -1877,7 +1877,7 @@
 "add_point" = "إضافة نقطة";
 
 // Route planning
-"plan_route" = "تخطيط مسار";
+"plan_route" = "إضافة تخطيط مسار";
 "checking_for_duplicate_description" = "OsmAnd يتحقق %@ من التكرارات مع العناصر الموجودة في التطبيق. قد يستغرق الأمر بعض الوقت.";
 "checking_for_duplicates" = "التحقق من التكرارات ...";
 "added_items" = "العناصر المضافة: % @";

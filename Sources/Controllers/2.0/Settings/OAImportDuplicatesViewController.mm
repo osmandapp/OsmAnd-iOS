@@ -29,6 +29,8 @@
 #import "OAIndexConstants.h"
 #import "OAFileSettingsItem.h"
 #import "OASettingsItem.h"
+#import "OASettingsHelper.h"
+#import "OAFileNameTranslationHelper.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -353,17 +355,17 @@
                 }
                 else if (type == EOASettingsItemFileSubtypeWikiMap)
                 {
-                    item[@"label"] = fileName;
+                    item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_wikipedia"];
                 }
                 else if (type == EOASettingsItemFileSubtypeSrtmMap)
                 {
-                    item[@"label"] = fileName;
+                    item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_contour_lines"];
                 }
                 else
                 {
-                    item[@"label"] = fileName;
+                    item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
                     item[@"icon"] = [UIImage imageNamed:@"ic_custom_map"];
                 }
                 item[@"iconColor"] = UIColorFromRGB(color_tint_gray);

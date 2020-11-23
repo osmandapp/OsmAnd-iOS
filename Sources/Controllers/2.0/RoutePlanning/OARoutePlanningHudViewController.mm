@@ -99,7 +99,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (instancetype) init
 {
-    self = [super initWithNibName:@"OARoutePlannigHudViewController"
+    self = [super initWithNibName:@"OARoutePlanningHudViewController"
                            bundle:nil];
     if (self)
     {

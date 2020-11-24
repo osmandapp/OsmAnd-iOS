@@ -15,6 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *maxLabel;
 @property (weak, nonatomic) IBOutlet UILabel *minValueLabel;
 @property (weak, nonatomic) IBOutlet UILabel *maxValueLabel;
-@property (strong, nonatomic) IBOutlet TTRangeSlider *rangeSlider;
+@property (weak, nonatomic) IBOutlet TTRangeSlider *rangeSlider;
 
 @end

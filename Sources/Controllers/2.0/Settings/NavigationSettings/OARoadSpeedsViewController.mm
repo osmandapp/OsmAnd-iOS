@@ -223,22 +223,22 @@
 
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    NSString *minimumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\f%@\n", OALocalizedString(@"logging_min_speed"), OALocalizedString(@"road_min_speed_descr")];
-    NSString *maximumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\f%@", OALocalizedString(@"maximum_speed"), OALocalizedString(@"road_max_speed_descr")];
-    NSAttributedString *minSpeedAttrString = [OAUtilities getStringWithBoldPart:minimumSpeedDescriptionString mainString:OALocalizedString(@"road_min_speed_descr") boldString:OALocalizedString(@"logging_min_speed") lineSpacing:1. fontSize:13.];
-    NSAttributedString *maxSpeedAttrString = [OAUtilities getStringWithBoldPart:maximumSpeedDescriptionString mainString:OALocalizedString(@"road_max_speed_descr") boldString:OALocalizedString(@"maximum_speed") lineSpacing:1. fontSize:13.];
+    NSString *minimumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@\n", OALocalizedString(@"logging_min_speed"), OALocalizedString(@"road_min_speed_descr")];
+    NSString *maximumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"maximum_speed"), OALocalizedString(@"road_max_speed_descr")];
+
+    NSMutableAttributedString *minSpeedAttrString = [OAUtilities getStringWithBoldPart:minimumSpeedDescriptionString mainString:OALocalizedString(@"road_min_speed_descr") boldString:OALocalizedString(@"logging_min_speed") lineSpacing:1. fontSize:13.];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setParagraphSpacing:12.];
+    CGFloat breakLinePosition = [minimumSpeedDescriptionString indexOf:@"\n"] + 1;
+    [minSpeedAttrString addAttribute:NSParagraphStyleAttributeName value: style range:NSMakeRange(breakLinePosition, minimumSpeedDescriptionString.length - breakLinePosition)];
     NSMutableAttributedString *footerAttrString = [[NSMutableAttributedString alloc] initWithAttributedString:minSpeedAttrString];
+    NSAttributedString *maxSpeedAttrString = [OAUtilities getStringWithBoldPart:maximumSpeedDescriptionString mainString:OALocalizedString(@"road_max_speed_descr") boldString:OALocalizedString(@"maximum_speed") lineSpacing:1. fontSize:13.];
     [footerAttrString appendAttributedString:maxSpeedAttrString];
     
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:minimumSpeedDescriptionString width:textWidth font:[UIFont systemFontOfSize:13] lineSpacing:1.];
     UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, heightForHeader * 2 + kSidePadding)];
     UILabel *footerDescription = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 0., textWidth, heightForHeader * 2)];
-    
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setLineSpacing:2.];
-    [style setParagraphSpacing:12.];
-    [footerAttrString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, footerAttrString.length)];
     footerDescription.attributedText = [[NSAttributedString alloc] initWithAttributedString:footerAttrString];
     footerDescription.numberOfLines = 0;
     footerDescription.lineBreakMode = NSLineBreakByWordWrapping;

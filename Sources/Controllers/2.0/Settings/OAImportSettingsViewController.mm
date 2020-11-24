@@ -495,7 +495,14 @@
                 avoidRoadsStyleSection.groupName = OALocalizedString(@"impassable_road");
                 avoidRoadsStyleSection.type = kCellTypeSectionHeader;
                 avoidRoadsStyleSection.isOpen = NO;
-                
+                for (OAAvoidRoadsSettingsItem *avoidRoads in settings)
+                {
+                    [avoidRoadsStyleSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_alert",
+                        @"title" : [avoidRoads name],
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
                 [data addObject:avoidRoadsStyleSection];
                 break;
             }

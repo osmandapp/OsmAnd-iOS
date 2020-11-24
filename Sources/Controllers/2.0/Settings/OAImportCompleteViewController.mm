@@ -28,6 +28,7 @@
 #import "OAProfileSettingsItem.h"
 #import "OAFileSettingsItem.h"
 #import "OAMapSourcesSettingsItem.h"
+#import "OAAvoidRoadsSettingsItem.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -121,7 +122,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             else if ([OAFileSettingsItemFileSubtype isMap:subType])
                 mapsCount += 1;
         }
-        else if ([item isKindOfClass:OAAvoidRoadInfo.class])
+        else if ([item isKindOfClass:OAAvoidRoadsSettingsItem.class])
             avoidRoadsCount += 1;
     }
     
@@ -200,8 +201,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"avoid_road"),
             @"iconName": @"ic_custom_alert",
-            @"count": [NSString stringWithFormat:@"%ld", profilesCount],
-            @"category" : @(EOAImportDataTypeGpxTrips)
+            @"count": [NSString stringWithFormat:@"%ld", avoidRoadsCount],
+            @"category" : @(EOAImportDataTypeAvoidRoads)
             }
          ];
     }

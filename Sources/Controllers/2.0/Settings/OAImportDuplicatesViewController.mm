@@ -375,7 +375,7 @@
             else if ([currentItem isKindOfClass:OAAvoidRoadInfo.class])
             {
                 item[@"label"] = ((OAAvoidRoadInfo *)currentItem).name;
-                item[@"icon"] = [UIImage imageNamed:@"ic_action_alert"];
+                item[@"icon"] = [UIImage imageNamed:@"ic_custom_alert"];
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }

@@ -76,6 +76,16 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (IBAction)cancelButtonPressed:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)doneButtonPressed:(id)sender
+{
+    
+}
+
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     return nil;
 }
@@ -87,7 +97,7 @@
 - (CGFloat) heightForLabel:(NSString *)text
 {
     UIFont *labelFont = [UIFont systemFontOfSize:15.0];
-    CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
+    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
 }
 

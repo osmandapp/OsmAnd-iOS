@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAImportAsyncTask, OAExportAsyncTask, OACheckDuplicates, OALocalResourceItem;
 @class OASettingsItem;
-@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode, OAApplicationModeBean, OAOsmNotesPoint;
+@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode, OAApplicationModeBean, OAOsmNotesPoint, OAOpenStreetMapPoint;
 
 @protocol OASettingsImportExportDelegate <NSObject>
 
@@ -48,7 +48,8 @@ typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypePoiUIFilters,
     EOASettingsItemTypeMapSources,
     EOASettingsItemTypeAvoidRoads,
-    EOASettingsItemTypeOsmNotes
+    EOASettingsItemTypeOsmNotes,
+    EOASettingsItemTypeOsmEdits
 };
 
 typedef NS_ENUM(NSInteger, EOAImportType) {
@@ -76,6 +77,7 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
     EOAExportSettingsTypeMapFiles,
     EOAExportSettingsTypeAvoidRoads,
     EOAExportSettingsTypeOsmNotes,
+    EOAExportSettingsTypeOsmEdits,
 };
 
 @interface OAExportSettingsType : NSObject
@@ -331,6 +333,12 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 #pragma mark - OAOsmNotesSettingsItem
 
 @interface OAOsmNotesSettingsItem : OACollectionSettingsItem<OAOsmNotesPoint *>
+
+@end
+
+#pragma mark - OAOsmEditsSettingsItem
+
+@interface OAOsmEditsSettingsItem : OACollectionSettingsItem<OAOpenStreetMapPoint *>
 
 @end
 

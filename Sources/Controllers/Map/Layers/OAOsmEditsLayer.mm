@@ -14,7 +14,7 @@
 #import "OAMapRendererView.h"
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
-#import "OpenstreetmapsDbHelper.h"
+#import "OAOpenstreetmapsDbHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmBugsDBHelper.h"
@@ -180,7 +180,7 @@
 
 - (NSArray *)getAllPoints {
     NSMutableArray *data = [NSMutableArray new];
-    [data addObjectsFromArray:[[OpenstreetmapsDbHelper sharedDatabase] getOpenstreetmapPoints]];
+    [data addObjectsFromArray:[[OAOpenstreetmapsDbHelper sharedDatabase] getOpenstreetmapPoints]];
     [data addObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmbugsPoints]];
     return [NSArray arrayWithArray:data];
 }
@@ -225,7 +225,7 @@
         if ([p isKindOfClass:OAOpenStreetMapPoint.class])
         {
             OAOpenStreetMapPoint *point = (OAOpenStreetMapPoint *)p;
-            [[OpenstreetmapsDbHelper sharedDatabase] updateEditLocation:point.getId newPosition:position];
+            [[OAOpenstreetmapsDbHelper sharedDatabase] updateEditLocation:point.getId newPosition:position];
         }
         else if ([p isKindOfClass:OAOsmNotesPoint.class])
         {

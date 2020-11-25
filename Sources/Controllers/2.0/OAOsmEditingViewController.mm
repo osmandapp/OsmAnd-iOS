@@ -19,7 +19,7 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOpenStreetMapRemoteUtil.h"
-#import "OpenstreetmapsDbHelper.h"
+#import "OAOpenstreetmapsDbHelper.h"
 #import "OARootViewController.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAMapLayers.h"
@@ -358,7 +358,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
             else if (result)
             {
                 OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                NSArray<OAOpenStreetMapPoint *> *points = [[OpenstreetmapsDbHelper sharedDatabase] getOpenstreetmapPoints];
+                NSArray<OAOpenStreetMapPoint *> *points = [[OAOpenstreetmapsDbHelper sharedDatabase] getOpenstreetmapPoints];
                 if (points.count > 0)
                 {
                     OAOsmPoint *p = points[points.count - 1];

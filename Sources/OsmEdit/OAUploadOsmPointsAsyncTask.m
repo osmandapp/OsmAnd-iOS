@@ -16,7 +16,7 @@
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOpenStreetMapRemoteUtil.h"
-#import "OpenstreetmapsDbHelper.h"
+#import "OAOpenstreetmapsDbHelper.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmNotesPoint.h"
@@ -82,7 +82,7 @@
                 
                 if (entity)
                 {
-                    [[OpenstreetmapsDbHelper sharedDatabase] deletePOI:point];
+                    [[OAOpenstreetmapsDbHelper sharedDatabase] deletePOI:point];
                     [_app.osmEditsChangeObservable notifyEvent];
                 }
                 else

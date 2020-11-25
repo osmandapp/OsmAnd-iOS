@@ -9,7 +9,7 @@
 #import "OAOsmEditsListViewController.h"
 #import "OASizes.h"
 #import "Localization.h"
-#import "OpenstreetmapsDbHelper.h"
+#import "OAOpenstreetmapsDbHelper.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
@@ -108,7 +108,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 {
     [_headerView setTitleText:[self getLocalizedHeaderTitle]];
     NSMutableArray *dataArr = [NSMutableArray new];
-    NSArray *poi = [[OpenstreetmapsDbHelper sharedDatabase] getOpenstreetmapPoints];
+    NSArray *poi = [[OAOpenstreetmapsDbHelper sharedDatabase] getOpenstreetmapPoints];
     NSArray *notes = [[OAOsmBugsDBHelper sharedDatabase] getOsmbugsPoints];
     if (_screenType == EDITS_ALL || _screenType == EDITS_POI)
     {
@@ -316,7 +316,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
                     if (point)
                     {
                         if (point.getGroup == POI)
-                            [[OpenstreetmapsDbHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)point];
+                            [[OAOpenstreetmapsDbHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)point];
                         else
                             [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotesPoint *)point];
                     }

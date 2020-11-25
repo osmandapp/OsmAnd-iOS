@@ -72,6 +72,7 @@ typedef NS_ENUM(NSInteger, EOAEntityType)
 -(void)setVersion:(NSInteger)version;
 -(NSDictionary<NSString *, NSString *> *)getTags;
 -(NSArray<NSString *> *)getTagKeySet;
+-(BOOL)isNotValid:(NSString *)tag;
 
 -(BOOL)isDataLoaded;
 -(NSString *) toNSString;

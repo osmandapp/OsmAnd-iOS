@@ -13,6 +13,9 @@
 #import "OAWay.h"
 #import "OARelation.h"
 
+#define kREMOVE_TAG_PREFIX @"----"
+#define kPOI_TYPE_TAG @"poi_type_tag"
+
 @implementation OAEntity
 {
     MutableOrderedDictionary<NSString *, NSString *> *_tags;
@@ -172,6 +175,12 @@
 -(NSDictionary<NSString *, NSString *> *)getTags
 {
     return _tags;
+}
+
+-(BOOL)isNotValid:(NSString *)tag
+{
+    NSString *val = [self getTagFromString:tag];
+    return val == nil || val.length == 0 || tag.length == 0 || [tag hasPrefix:kREMOVE_TAG_PREFIX] || [tag isEqualToString:kPOI_TYPE_TAG];
 }
 
 -(NSArray<NSString *> *)getTagKeySet

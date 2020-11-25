@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OpenstreetmapsDbHelper.h"
+#import "OAOpenstreetmapsDbHelper.h"
 #import "OALog.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAEntity.h"
@@ -31,13 +31,13 @@
 #define OPENSTREETMAP_COL_CHANGED_TAGS @"changed_tags"
 #define OPENSTREETMAP_COL_ENTITY_TYPE @"entity_type"
 
-@interface OpenstreetmapsDbHelper ()
+@interface OAOpenstreetmapsDbHelper ()
 
 @property (nonatomic) NSString *dbFilePath;
 
 @end
 
-@implementation OpenstreetmapsDbHelper
+@implementation OAOpenstreetmapsDbHelper
 {
     sqlite3 *osmEditsDB;
     dispatch_queue_t dbQueue;
@@ -45,12 +45,12 @@
     NSArray<OAOpenStreetMapPoint *> *_cache;
 }
 
-+ (OpenstreetmapsDbHelper *)sharedDatabase
++ (OAOpenstreetmapsDbHelper *)sharedDatabase
 {
-    static OpenstreetmapsDbHelper *_sharedDb = nil;
+    static OAOpenstreetmapsDbHelper *_sharedDb = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedDb = [[OpenstreetmapsDbHelper alloc] init];
+        _sharedDb = [[OAOpenstreetmapsDbHelper alloc] init];
     });
     return _sharedDb;
 }

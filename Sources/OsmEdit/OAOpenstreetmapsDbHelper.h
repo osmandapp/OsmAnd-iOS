@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAOpenStreetMapPoint;
 
-@interface OpenstreetmapsDbHelper : NSObject
+@interface OAOpenstreetmapsDbHelper : NSObject
 
-+ (OpenstreetmapsDbHelper *)sharedDatabase;
++ (OAOpenstreetmapsDbHelper *)sharedDatabase;
 
 -(NSArray<OAOpenStreetMapPoint *> *) getOpenstreetmapPoints;
 -(void)addOpenstreetmap:(OAOpenStreetMapPoint *)point;

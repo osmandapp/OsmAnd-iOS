@@ -19,7 +19,7 @@
 #import "OAAppSettings.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
-#import "OpenstreetmapsDbHelper.h"
+#import "OAOpenstreetmapsDbHelper.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmNotesPoint.h"
 #import "OAMenuSimpleCell.h"
@@ -250,7 +250,7 @@
     else if ([item[@"key"] isEqualToString:@"edit_delete"])
     {
         if (_point.getGroup == POI)
-            [[OpenstreetmapsDbHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_point];
+            [[OAOpenstreetmapsDbHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_point];
         else
             [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotesPoint *)_point];
         

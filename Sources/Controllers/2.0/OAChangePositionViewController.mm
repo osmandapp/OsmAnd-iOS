@@ -25,7 +25,7 @@
 #import "OARoutePointsLayer.h"
 #import "OAOsmEditsLayer.h"
 #import "OATargetPointsHelper.h"
-#import "OpenstreetmapsDbHelper.h"
+#import "OAOpenstreetmapsDbHelper.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OADestination.h"
 #import "OAGpxWptItem.h"

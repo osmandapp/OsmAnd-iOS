@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAOsmBugsDBHelper;
+@class OAOsmBugsDBHelper, OAOpenstreetmapsDbHelper;
 
 @interface OAOsmEditingPlugin : OAPlugin
 
@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<OAOsmBugsUtilsProtocol>)getOsmNotesRemoteUtil;
 
 - (OAOsmBugsDBHelper *) getDBBug;
+- (OAOpenstreetmapsDbHelper *) getDBPOI;
 
 -(void) openOsmNote:(double)latitude longitude:(double)longitude message:(NSString *)message autoFill:(BOOL)autofill;
 

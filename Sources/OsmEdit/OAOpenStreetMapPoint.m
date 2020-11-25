@@ -88,6 +88,22 @@
     return [_entity getLongitude];
 }
 
+- (NSString *)getTagsString
+{
+    NSMutableString *sb;
+    for (NSString *tag in [_entity getTags].allKeys)
+    {
+        NSString *val = [_entity getTags][tag];
+        if ([_entity isNotValid:tag])
+        {
+            continue;
+        }
+        [sb appendString: [NSString stringWithFormat:@"$@ : ", tag]];
+        [sb appendString: [NSString stringWithFormat:@"$@; ", val]];
+    }
+    return sb;
+}
+
 -(NSDictionary<NSString *, NSString *> *)getTags
 {
     return _entity ? _entity.getTags : [NSDictionary new];

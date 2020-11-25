@@ -25,7 +25,7 @@
 #import "OAMapViewController.h"
 #import "OANativeUtilities.h"
 #import "OAOsmEditsLayer.h"
-#import "OpenstreetmapsDbHelper.h"
+#import "OAOpenstreetmapsDbHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OANode.h"
 #import "OAMapViewController.h"
@@ -61,7 +61,7 @@
 
 @implementation OAOsmEditingPlugin
 {
-    OpenstreetmapsDbHelper *_dbpoi;
+    OAOpenstreetmapsDbHelper *_dbpoi;
     OAOsmBugsDBHelper *_dbbug;
     OAOpenStreetMapLocalUtil *_localUtil;
     OAOpenStreetMapRemoteUtil *_remoteUtil;
@@ -78,7 +78,7 @@
         _settings = [OAAppSettings sharedManager];
         _helper = [OADestinationsHelper instance];
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        _dbpoi = [OpenstreetmapsDbHelper sharedDatabase];
+        _dbpoi = [OAOpenstreetmapsDbHelper sharedDatabase];
         _localUtil = [[OAOpenStreetMapLocalUtil alloc] init];
         _localNotesUtil = [[OAOsmBugsLocalUtil alloc] init];
         _remoteUtil = [[OAOpenStreetMapRemoteUtil alloc] init];
@@ -92,11 +92,11 @@
     return PLUGIN_ID;
 }
 
-- (OpenstreetmapsDbHelper *) getDBPOI
+- (OAOpenstreetmapsDbHelper *) getDBPOI
 {
     if (!_dbpoi)
     {
-        _dbpoi = [[OpenstreetmapsDbHelper alloc] init];
+        _dbpoi = [[OAOpenstreetmapsDbHelper alloc] init];
     }
     return _dbpoi;
 }

@@ -20,7 +20,7 @@
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAPOIType.h"
 #import "OAOsmEditingViewController.h"
-#import "OpenstreetmapsDbHelper.h"
+#import "OAOpenstreetmapsDbHelper.h"
 #import "OAQuickActionType.h"
 
 #include <OsmAndCore/Utilities.h>

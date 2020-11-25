@@ -240,6 +240,8 @@
         cell.contentView.backgroundColor = UIColor.clearColor;
         if ([item[@"isColored"] boolValue])
             cell.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
+        else
+            cell.backgroundColor = UIColor.whiteColor;
         return cell;
     }
     else if ([type isEqualToString:kCellTypeProfileSwitch])

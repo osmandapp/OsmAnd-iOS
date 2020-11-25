@@ -1818,3 +1818,5 @@
 "shared_string_preparing" = "Przygotowanie";
 "shared_string_import_complete" = "Zakończono importowanie";
 "shared_string_importing" = "Importowanie";
+"shared_string_finish" = "Koniec trasy";
+"import_duplicates_description" = "OsmAnd ma już elementy o takich samych nazwach jak te importowane.\n\nWybierz akcję.";

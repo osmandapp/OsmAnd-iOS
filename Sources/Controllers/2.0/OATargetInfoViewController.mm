@@ -38,6 +38,10 @@
 #include <OsmAndCore/Utilities.h>
 
 #define kWikiLink @".wikipedia.org/w"
+#define kWhatsAppLink @"https://wa.me/%@"
+#define kViberLink @"viber://contact?number=%@"
+#define kSkypeLink @"skype:%@"
+#define kMailLink @"mailto:%@"
 #define kViewPortHtml @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>"
 
 @implementation OARowInfo
@@ -842,7 +846,22 @@
     }
     else if (info.isPhoneNumber)
     {
-        [OAUtilities callPhone:info.text];
+        if ([info.key isEqual:@"phone"] || [info.key isEqual:@"mobile"])
+            [OAUtilities callPhone:info.text];
+        else
+        {
+            NSString *url;
+            if ([info.key isEqual:@"whatsapp"])
+            {
+                NSString *phoneNumber = [[info.text componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""];
+                url = [NSString stringWithFormat:kWhatsAppLink, phoneNumber];
+            }
+            else if ([info.key isEqual:@"viber"])
+            {
+                url = [NSString stringWithFormat:kViberLink, info.text];
+            }
+            [OAUtilities callUrl:url];
+        }
     }
     else if (info.isUrl)
     {
@@ -857,6 +876,14 @@
             {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
             }
+        }
+        else if ([info.key isEqual:@"skype"])
+        {
+            [OAUtilities callUrl:[NSString stringWithFormat:kSkypeLink, info.text]];
+        }
+        else if ([info.text isValidEmail])
+        {
+            [OAUtilities callUrl:[NSString stringWithFormat:kMailLink, info.text]];
         }
         else
         {

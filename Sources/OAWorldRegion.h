@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+@class OAProduct;
+
 @interface OAWorldRegion : NSObject
 
 // Region data:
@@ -48,6 +50,8 @@
 - (NSInteger) getLevel;
 - (BOOL) containsSubregion:(NSString *)regionId;
 - (OAWorldRegion *) getSubregion:(NSString *)regionId;
+- (OAWorldRegion *) getPrimarySuperregion;
+- (OAProduct *) getProduct;
 
 + (OAWorldRegion *) loadFrom:(NSString *)ocbfFilename;
 

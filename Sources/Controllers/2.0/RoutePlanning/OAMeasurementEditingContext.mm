@@ -12,23 +12,21 @@
 #import "OAGpxData.h"
 #import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OARoadSegmentData.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
-
-
-// TODO: implement RoadSegmentData
-
-
 
 static OAApplicationMode *DEFAULT_APP_MODE;
 
 @implementation OAMeasurementEditingContext
 {
     OAGpxTrkSeg *_before;
-    OAGpxTrkSeg *_beforeCacheForSnap;
+    NSMutableArray<OAGpxTrkSeg *> *_beforeSegments;
+    NSMutableArray<OAGpxTrkSeg *> *_beforeSegmentsForSnap;
     OAGpxTrkSeg *_after;
-    OAGpxTrkSeg *_afterCacheForSnap;
+    NSMutableArray<OAGpxTrkSeg *> *_afterSegments;
+    NSMutableArray<OAGpxTrkSeg *> *_afterSegmentsForSnap;
     
     NSInteger _calculatedPairs;
     NSInteger _pointsToCalculateSize;
@@ -149,27 +147,28 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return distance;
 }
 
-//public boolean hasRoute() {
-//    return !roadSegmentData.isEmpty();
-//}
-//
-//public void clearSnappedToRoadPoints() {
-//    roadSegmentData.clear();
-//}
-//
-- (OAGpxTrkSeg *) getBeforeTrkSegmentLine
+- (BOOL) hasRoute
 {
-    if (_beforeCacheForSnap != nil)
-        return _beforeCacheForSnap;
-    return _before;
+    return _roadSegmentData.count > 0;
 }
 
-- (OAGpxTrkSeg *) getAfterTrkSegmentLine
+- (void) clearSnappedToRoadPoints
 {
-    if (_afterCacheForSnap != nil) {
-        return _afterCacheForSnap;
-    }
-    return _after;
+    _roadSegmentData = [NSDictionary new];
+}
+
+- (NSArray<OAGpxTrkSeg *> *) getBeforeTrkSegmentLine
+{
+    if (_beforeSegmentsForSnap != nil)
+        return _beforeSegmentsForSnap;
+    return _beforeSegments;
+}
+
+- (NSArray<OAGpxTrkSeg *> *) getAfterTrkSegmentLine
+{
+    if (_afterSegmentsForSnap != nil)
+        return _afterSegmentsForSnap;
+    return _afterSegments;
 }
 
 - (NSArray<OAGpxTrkPt *> *) getAllPoints
@@ -195,6 +194,11 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 - (NSInteger) getPointsCount
 {
     return _before.points.count;
+}
+
+- (void) clearPoints
+{
+    _before.points = [NSArray new];
 }
 
 //public List<RouteSegmentResult> getAllRouteSegments() {
@@ -339,15 +343,15 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 - (void) clearBeforeSegments
 {
     _before.points = [NSArray new];
-    if (_beforeCacheForSnap != nil)
-        _beforeCacheForSnap.points = [NSArray new];
+    if (_beforeSegmentsForSnap != nil)
+        [_beforeSegmentsForSnap removeAllObjects];
 }
 
 - (void) clearAfterSegments
 {
     _after.points = [NSArray new];
-    if (_afterCacheForSnap != nil)
-        _afterCacheForSnap.points = [NSArray new];
+    if (_afterSegmentsForSnap != nil)
+        [_afterSegmentsForSnap removeAllObjects];
 }
 
 - (BOOL) isFirstPointSelected
@@ -417,7 +421,152 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //    }
 //    return keys;
 //}
-//
+  
+- (void) recreateSegments:(NSMutableArray<OAGpxTrkSeg *> *)segments segmentsForSnap:(NSMutableArray<OAGpxTrkSeg *> *)segmentsForSnap points:(NSArray<OAGpxTrkPt *> *)points calculateIfNeeded:(BOOL)calculateIfNeeded
+{
+    NSMutableArray<NSNumber *> *roadSegmentIndexes = [NSMutableArray new];
+    OAGpxTrkSeg *s = [[OAGpxTrkSeg alloc] init];
+    [segments addObject:s];
+    BOOL defaultMode = YES;
+    if (points.count > 1)
+    {
+        for (NSInteger i = 0; i < points.count; i++)
+        {
+            OAGpxTrkPt *point = points[i];
+            s.points = [s.points arrayByAddingObject:point];
+            NSString *profileType = point.getProfileType;
+            if (profileType != nil)
+            {
+                BOOL isDefault = [profileType isEqualToString:OAApplicationMode.DEFAULT.stringKey];
+                BOOL isGap = point.isGap;
+                if (defaultMode && !isDefault && !isGap)
+                {
+                    [roadSegmentIndexes addObject:@(segments.count - 1)];
+                    defaultMode = NO;
+                }
+                if (isGap)
+                {
+                    if (s.points.count > 0)
+                    {
+                        s = [[OAGpxTrkSeg alloc] init];
+                        [segments addObject:s];
+                        defaultMode = YES;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        s.points = [s.points arrayByAddingObjectsFromArray:points];
+    }
+    if (s.points.count == 0)
+        [segments removeObject:s];
+    
+    if (segments.count > 0)
+    {
+        for (OAGpxTrkSeg *segment in segments)
+        {
+            OAGpxTrkSeg *segmentForSnap = [[OAGpxTrkSeg alloc] init];
+            for (NSInteger i = 0; i < segment.points.count - 1; i++)
+            {
+                NSArray<OAGpxTrkPt *> *pair = @[segment.points[i], segment.points[i + 1]];
+                OARoadSegmentData *data = _roadSegmentData[pair];
+                NSArray<OAGpxTrkPt *> *pts = data != nil ? data.points : nil;
+                if (pts != nil)
+                {
+                    segmentForSnap.points = [segmentForSnap.points arrayByAddingObjectsFromArray:pts];
+                }
+                else
+                {
+                    if (calculateIfNeeded && [roadSegmentIndexes containsObject:@(segmentsForSnap.count)])
+                        [self scheduleRouteCalculateIfNotEmpty];
+                    
+                    segmentForSnap.points = [segmentForSnap.points arrayByAddingObjectsFromArray:pair];
+                }
+            }
+            if (segmentForSnap.points.count == 0)
+                segmentForSnap.points = [segmentForSnap.points arrayByAddingObjectsFromArray:segment.points];
+            [segmentsForSnap addObject:segmentForSnap];
+        }
+    }
+    else if (points.count > 0)
+    {
+        OAGpxTrkSeg *segmentForSnap = [[OAGpxTrkSeg alloc] init];
+        segmentForSnap.points = points;
+        [segmentsForSnap addObject:segmentForSnap];
+    }
+}
+
+- (void) addPoints
+{
+    OAGpxData *gpxData = self.gpxData;
+    if (gpxData == nil || gpxData.gpxFile == nil)
+        return;
+    NSArray<OAGpxTrkSeg *> *segments = gpxData.gpxFile.getNonEmptyTrkSegments(false);
+    if (Algorithms.isEmpty(segments)) {
+        return;
+    }
+    for (int si = 0; si < segments.size(); si++) {
+        TrkSegment segment = segments.get(si);
+        List<WptPt> points = segment.points;
+        if (segment.hasRoute()) {
+            RouteImporter routeImporter = new RouteImporter(segment);
+            List<RouteSegmentResult> routeSegments = routeImporter.importRoute();
+            List<WptPt> routePoints = gpxData.getGpxFile().getRoutePoints(si);
+            int prevPointIndex = 0;
+            if (routePoints.isEmpty() && points.size() > 1) {
+                routePoints.add(points.get(0));
+                routePoints.add(points.get(points.size() - 1));
+            }
+            for (int i = 0; i < routePoints.size() - 1; i++) {
+                Pair<WptPt, WptPt> pair = new Pair<>(routePoints.get(i), routePoints.get(i + 1));
+                int startIndex = pair.first.getTrkPtIndex();
+                if (startIndex < 0 || startIndex < prevPointIndex || startIndex >= points.size()) {
+                    startIndex = findPointIndex(pair.first, points, prevPointIndex);
+                }
+                int endIndex = pair.second.getTrkPtIndex();
+                if (endIndex < 0 || endIndex < startIndex || endIndex >= points.size()) {
+                    endIndex = findPointIndex(pair.second, points, startIndex);
+                }
+                if (startIndex >= 0 && endIndex >= 0) {
+                    List<WptPt> pairPoints = new ArrayList<>();
+                    for (int j = startIndex; j < endIndex && j < points.size(); j++) {
+                        pairPoints.add(points.get(j));
+                        prevPointIndex = j;
+                    }
+                    if (points.size() > prevPointIndex + 1) {
+                        pairPoints.add(points.get(prevPointIndex + 1));
+                    }
+                    Iterator<RouteSegmentResult> it = routeSegments.iterator();
+                    int k = endIndex - startIndex - 1;
+                    List<RouteSegmentResult> pairSegments = new ArrayList<>();
+                    if (k == 0 && !routeSegments.isEmpty()) {
+                        pairSegments.add(routeSegments.remove(0));
+                    } else {
+                        while (it.hasNext() && k > 0) {
+                            RouteSegmentResult s = it.next();
+                            pairSegments.add(s);
+                            it.remove();
+                            k -= Math.abs(s.getEndPointIndex() - s.getStartPointIndex());
+                        }
+                    }
+                    ApplicationMode appMode = ApplicationMode.valueOfStringKey(pair.first.getProfileType(), DEFAULT_APP_MODE);
+                    roadSegmentData.put(pair, new RoadSegmentData(appMode, pair.first, pair.second, pairPoints, pairSegments));
+                }
+            }
+            if (!routePoints.isEmpty() && si < segments.size() - 1) {
+                routePoints.get(routePoints.size() - 1).setGap();
+            }
+            addPoints(routePoints);
+        } else {
+            addPoints(points);
+            if (!points.isEmpty() && si < segments.size() - 1) {
+                points.get(points.size() - 1).setGap();
+            }
+        }
+    }
+}
 //private void recreateCacheForSnap(TrkSegment cache, TrkSegment original, boolean calculateIfNeeded) {
 //    boolean hasDefaultModeOnly = true;
 //    if (original.points.size() > 1) {
@@ -626,19 +775,29 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     && gpxData.gpxFile.routes.count > 0;
 }
 
-//private void updateCacheForSnap(boolean both) {
-//    recreateCacheForSnap(beforeCacheForSnap = new TrkSegment(), before, true);
-//    if (both) {
-//        recreateCacheForSnap(afterCacheForSnap = new TrkSegment(), after, true);
-//    }
-//}
-//
-//private void updateCacheForSnap(boolean both, boolean calculateIfNeeded) {
-//    recreateCacheForSnap(beforeCacheForSnap = new TrkSegment(), before, calculateIfNeeded);
-//    if (both) {
-//        recreateCacheForSnap(afterCacheForSnap = new TrkSegment(), after, calculateIfNeeded);
-//    }
-//}
+- (void) updateSegmentsForSnap:(BOOL)both
+{
+    [self updateSegmentsForSnap:both calculateIfNeeded:YES];
+}
+
+- (void) updateSegmentsForSnap:(BOOL)both calculateIfNeeded:(BOOL)calculateIfNeeded
+{
+    [_beforeSegments removeAllObjects];
+    [_beforeSegmentsForSnap removeAllObjects];
+    [self recreateSegments:_beforeSegments
+           segmentsForSnap:_beforeSegmentsForSnap
+                    points:_before.points
+         calculateIfNeeded:calculateIfNeeded];
+    if (both)
+    {
+        [_afterSegments removeAllObjects];
+        [_afterSegmentsForSnap removeAllObjects];
+        [self recreateSegments:_afterSegments
+               segmentsForSnap:_afterSegmentsForSnap
+                        points:_after.points
+             calculateIfNeeded:calculateIfNeeded];
+    }
+}
 
 
 //void cancelSnapToRoad() {

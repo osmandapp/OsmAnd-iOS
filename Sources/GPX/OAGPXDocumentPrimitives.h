@@ -122,7 +122,9 @@ typedef enum
 
 @property (nonatomic) NSDictionary *attributes;
 @property (nonatomic) NSString *value;
-@property (nonatomic) NSArray *extensions;
+@property (nonatomic) NSMutableDictionary<NSString *, NSString *> *extensions;
+
+- (void) copyExtensions:(OAGpxExtensions *)e;
 
 @end
 
@@ -177,6 +179,10 @@ typedef enum
 @property (nonatomic) int dgpsStationId;
 
 - (instancetype) initWithPoint:(OAGpxTrkPt *)point;
+
+- (NSString *) getProfileType;
+- (void) setProfileType:(NSString *)profileType;
+- (BOOL) isGap;
 
 @end
 

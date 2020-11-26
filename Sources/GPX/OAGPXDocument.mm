@@ -989,5 +989,18 @@
     }
 }
 
+- (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly
+{
+            List<TrkSegment> segments = new ArrayList<>();
+            for (Track t : tracks) {
+                for (TrkSegment s : t.segments) {
+                    if (!s.generalSegment && s.points.size() > 0 && (!routesOnly || s.hasRoute())) {
+                        segments.add(s);
+                    }
+                }
+            }
+            return segments;
+        }
+
 @end
 

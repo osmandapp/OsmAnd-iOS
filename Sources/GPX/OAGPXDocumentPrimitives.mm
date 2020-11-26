@@ -11,6 +11,13 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 
+#define ICON_NAME_EXTENSION @"icon"
+#define DEFAULT_ICON_NAME @"special_star"
+#define BACKGROUND_TYPE_EXTENSION @"background"
+#define PROFILE_TYPE_EXTENSION @"profile"
+#define GAP_PROFILE_TYPE @"gap"
+#define TRKPT_INDEX_EXTENSION @"trkpt_idx"
+
 @implementation OAMetadata
 @end
 @implementation OALink
@@ -18,6 +25,17 @@
 @implementation OAGpxExtension
 @end
 @implementation OAGpxExtensions
+
+- (NSDictionary<NSString *,NSString *> *)extensions
+{
+    return _extensions ? _extensions : @{};
+}
+
+- (void) copyExtensions:(OAGpxExtensions *)e
+{
+    _extensions = e.extensions;
+}
+
 @end
 @implementation OARoute
 @end
@@ -221,6 +239,22 @@
     return self;
 }
 
+- (NSString *) getProfileType
+{
+    return ((OAGpxExtensions *)self.extraData).extensions[PROFILE_TYPE_EXTENSION];
+}
+
+- (void) setProfileType:(NSString *)profileType
+{
+    ((OAGpxExtensions *)self.extraData).extensions[PROFILE_TYPE_EXTENSION] = profileType;
+}
+
+- (BOOL) isGap
+{
+    NSString *profileType = [self getProfileType];
+    return [GAP_PROFILE_TYPE isEqualToString:profileType];
+}
+
 @end
 
 @implementation OAGpxTrkSeg
@@ -241,7 +275,6 @@
     [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:self];
     return [OAGPXTrackAnalysis convert:splitSegments];
 }
-
 
 @end
 

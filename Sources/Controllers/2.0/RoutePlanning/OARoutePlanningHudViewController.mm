@@ -37,6 +37,7 @@
 #import "OAInfoBottomView.h"
 #import "OAMovePointCommand.h"
 #import "OAClearPointsCommand.h"
+#import "OASegmentOptionsBottomSheetViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -192,16 +193,16 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     CGRect buttonsFrame = _actionButtonsContainer.frame;
     if (OAUtilities.isLandscapeIpadAware)
-        buttonsFrame.origin = CGPointMake(16. + self.scrollableView.frame.size.width, DeviceScreenHeight - 15.);
+        buttonsFrame.origin = CGPointMake(self.scrollableView.frame.size.width, DeviceScreenHeight - buttonsFrame.size.height - 15. - OAUtilities.getBottomMargin);
     else
-        buttonsFrame.origin = CGPointMake(16., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
+        buttonsFrame.origin = CGPointMake(0., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
     _actionButtonsContainer.frame = buttonsFrame;
 }
 
 - (void) changeMapRulerPosition
 {
     CGFloat bottomMargin = OAUtilities.isLandscapeIpadAware ? kDefaultMapRulerMarginBottom : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
-    CGFloat leftMargin = OAUtilities.isLandscapeIpadAware ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 : kDefaultMapRulerMarginLeft;
+    CGFloat leftMargin = OAUtilities.isLandscapeIpadAware ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 + self.actionButtonsContainer.frame.size.width : kDefaultMapRulerMarginLeft;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
@@ -317,7 +318,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self addCenterPoint];
 }
 
-- (IBAction)modeButtonPressed:(id)sender {
+- (IBAction)modeButtonPressed:(id)sender
+{
+    OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] init];
+    [bottomSheet presentInViewController:self];
 }
 
 - (NSString *) getSuggestedFileName

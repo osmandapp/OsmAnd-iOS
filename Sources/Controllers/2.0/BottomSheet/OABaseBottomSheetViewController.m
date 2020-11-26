@@ -111,11 +111,16 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     [self show:YES];
 }
 
+- (CGFloat)initialHeight
+{
+    return DeviceScreenHeight - DeviceScreenHeight / 4;
+}
+
 - (CGFloat) getViewHeight
 {
     switch (_currentState) {
         case EOAScrollableMenuStateInitial:
-            return DeviceScreenHeight - DeviceScreenHeight / 4;
+            return self.initialHeight;
         case EOAScrollableMenuStateFullScreen:
             return DeviceScreenHeight - OAUtilities.getTopMargin;
         default:

@@ -44,11 +44,14 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 @property (nonatomic) EOAAddPointMode addPointMode;
 
+@property (nonatomic) NSDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *roadSegmentData;
+
 - (NSArray<OAGpxTrkPt *> *) getAllPoints;
 - (NSArray<OAGpxTrkPt *> *) getPoints;
 - (NSArray<OAGpxTrkPt *> *) getBeforePoints;
 - (NSArray<OAGpxTrkPt *> *) getAfterPoints;
 - (NSInteger) getPointsCount;
+- (void) clearPoints;
 
 - (OAGpxTrkPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad;
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt;

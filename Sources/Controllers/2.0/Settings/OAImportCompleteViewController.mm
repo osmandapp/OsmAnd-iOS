@@ -25,6 +25,7 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAIndexConstants.h"
+#import "OAIAPHelper.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -371,9 +372,19 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     }
     else if (dataType == EOAImportDataTypeOsmNotes || dataType == EOAImportDataTypeOsmEdits)
     {
-        UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-        [myPlacesViewController setSelectedIndex:2];
-        [rootController.navigationController pushViewController:myPlacesViewController animated:YES];
+        BOOL isOsmEditingEnabled = [[OAIAPHelper sharedInstance].osmEditing isActive];
+        if (isOsmEditingEnabled)
+        {
+            UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+            [myPlacesViewController setSelectedIndex:2];
+            [rootController.navigationController pushViewController:myPlacesViewController animated:YES];
+        }
+        else
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_edit_disabled_importing") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     }
 }
 

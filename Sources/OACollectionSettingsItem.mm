@@ -80,4 +80,9 @@
     return nil;
 }
 
+- (BOOL)shouldShowDuplicates
+{
+    return NO;
+}
+
 @end

@@ -515,8 +515,9 @@
         }
         else if ([item isKindOfClass:OACollectionSettingsItem.class])
         {
-            NSArray *duplicates = [(OACollectionSettingsItem *)item processDuplicateItems];
-            if (duplicates.count > 0)
+            OACollectionSettingsItem *settingsItem = (OACollectionSettingsItem *) item;
+            NSArray *duplicates = [settingsItem processDuplicateItems];
+            if (duplicates.count > 0 && settingsItem.shouldShowDuplicates)
                 [duplicateItems addObjectsFromArray:duplicates];
         }
         else if ([item isKindOfClass:OAFileSettingsItem.class])

@@ -171,6 +171,30 @@
     }
 }
 
++ (NSString *) getTitle:(OAOsmPoint *)osmPoint
+{
+    NSString *title = [self getName:osmPoint];
+    if (!title || title.length == 0)
+        title = [self getCategory:osmPoint];
+    return title;
+}
+
++ (NSString *) getName:(OAOsmPoint *)point
+{
+    if ([point getGroup] == POI)
+    {
+        return [((OAOpenStreetMapPoint *)point) getName];
+    }
+    else if ([point getGroup] == BUG)
+    {
+        return [((OAOsmNotesPoint *)point) getText];
+    }
+    else
+    {
+        return @"";
+    }
+}
+
 + (NSString *) getCategory:(OAOsmPoint *)point
 {
     NSString *category = @"";

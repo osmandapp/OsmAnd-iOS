@@ -215,6 +215,18 @@
     return UNDEFINED;
 }
 
++(NSString *)stringType:(EOAEntityType)entityType
+{
+    if (entityType == NODE) {
+        return @"NODE";
+    } else if (entityType == WAY) {
+        return @"WAY";
+    } else if (entityType == RELATION) {
+        return @"RELATION";
+    }
+    return @"UNDEFINED";
+}
+
 +(NSString *)stringTypeOf:(OAEntity *)entity
 {
     if ([entity isKindOfClass:[OANode class]]) {

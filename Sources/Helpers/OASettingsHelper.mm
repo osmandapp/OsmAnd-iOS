@@ -2949,15 +2949,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         long long iD = [entityJson[@"id"] longLongValue];
         double lat = [entityJson[@"lat"] doubleValue];
         double lon = [entityJson[@"lon"] doubleValue];
-        NSString *tags = entityJson[@"tags"];
-        
-        NSData *jsonData = [tags dataUsingEncoding:NSUTF8StringEncoding];
-        NSError *error;
-        NSDictionary *tagMap = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&error];
-        
+        NSDictionary *tagMap = entityJson[@"tags"];
         NSString *action = entityJson[@"action"];
         OAEntity *entity;
-        if ([entityJson[@"type"] isEqualToString: [OAEntity stringTypeOf:OANode.class]])
+        if ([entityJson[@"type"] isEqualToString: [OAEntity stringType:NODE]])
         {
             entity = [[OANode alloc] initWithId:iD latitude:lat longitude:lon];
         }

@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void) openOsmNote:(double)latitude longitude:(double)longitude message:(NSString *)message autoFill:(BOOL)autofill;
 
++ (NSString *) getTitle:(OAOsmPoint *)osmPoint;
 + (NSString *) getCategory:(OAOsmPoint *)point;
 
 @end

@@ -28,6 +28,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAOsmNotesPoint.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OAOsmEditingPlugin.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -233,6 +234,7 @@
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     NSMutableArray<OAOsmNotesPoint *> *notesPointList  = [NSMutableArray array];
+    NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
         switch (item.type)
@@ -300,6 +302,15 @@
                     [notesPointList addObjectsFromArray:osmNotesSettingsItem.items];
                 break;
             }
+            case EOASettingsItemTypeOsmEdits:
+            {
+                OAOsmEditsSettingsItem *osmEditsSettingsItem = (OAOsmEditsSettingsItem *) item;
+                if (importComplete)
+                    [osmEditsPointList addObjectsFromArray:osmEditsSettingsItem.appliedItems];
+                else
+                    [osmEditsPointList addObjectsFromArray:osmEditsSettingsItem.items];
+                break;
+            }
             default:
                 break;
         }
@@ -324,6 +335,8 @@
         [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
     if (notesPointList.count > 0)
         [settingsToOperate setObject:notesPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmNotes]];
+    if (osmEditsPointList.count > 0)
+        [settingsToOperate setObject:osmEditsPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmEdits]];
         
     return settingsToOperate;
 }
@@ -340,7 +353,8 @@
     OATableGroupToImport *customGPXSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customObfMapSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *avoidRoadsStyleSection = [[OATableGroupToImport alloc] init];
-    OATableGroupToImport *notesPoinStyleSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *notesPointStyleSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *editsPointStyleSection = [[OATableGroupToImport alloc] init];
     for (NSString *type in [_itemsMap allKeys])
     {
         EOAExportSettingsType itemType = [OAExportSettingsType parseType:type];
@@ -509,20 +523,37 @@
             }
             case EOAExportSettingsTypeOsmNotes:
             {
-                notesPoinStyleSection.groupName = OALocalizedString(@"osm_notes");
-                notesPoinStyleSection.type = kCellTypeSectionHeader;
-                notesPoinStyleSection.isOpen = NO;
+                notesPointStyleSection.groupName = OALocalizedString(@"osm_notes");
+                notesPointStyleSection.type = kCellTypeSectionHeader;
+                notesPointStyleSection.isOpen = NO;
                 
                 for (OAOsmNotesPoint *item in settings)
                 {
                     NSString *caption = [item getText];
-                    [notesPoinStyleSection.groupItems addObject:@{
+                    [notesPointStyleSection.groupItems addObject:@{
                         @"icon" : @"ic_action_add_osm_note",
                         @"title" : caption,
                         @"type" : kCellTypeTitle,
                     }];
                 }
-                [data addObject:notesPoinStyleSection];
+                [data addObject:notesPointStyleSection];
+                break;
+            }
+            case EOAExportSettingsTypeOsmEdits:
+            {
+                editsPointStyleSection.groupName = OALocalizedString(@"osm_edits_title");
+                editsPointStyleSection.type = kCellTypeSectionHeader;
+                editsPointStyleSection.isOpen = NO;
+                for (OAOsmPoint *item in settings)
+                {
+                    NSString *caption = [OAOsmEditingPlugin getTitle:item];
+                    [editsPointStyleSection.groupItems addObject:@{
+                        @"icon" : @"ic_action_openstreetmap_logo",
+                        @"title" : caption,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
+                [data addObject:editsPointStyleSection];
                 break;
             }
             default:
@@ -624,6 +655,7 @@
     NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     NSMutableArray<OAOsmNotesPoint *> *osmNotesPointList = [NSMutableArray array];
+    NSMutableArray<OAOsmPoint *> *osmEditsPointList = [NSMutableArray array];
     
     
     for (NSObject *object in _selectedItems)
@@ -642,6 +674,8 @@
             [avoidRoads addObject:(OAAvoidRoadInfo *)object];
         else if ([object isKindOfClass:OAOsmNotesPoint.class])
             [osmNotesPointList addObject:(OAOsmNotesPoint *)object];
+        else if ([object isKindOfClass:OAOsmPoint.class])
+            [osmEditsPointList addObject:(OAOsmPoint *)object];
         else if ([object isKindOfClass:OAFileSettingsItem.class])
             [settingsItems addObject:(OAFileSettingsItem *)object];
     }
@@ -659,6 +693,11 @@
     if (osmNotesPointList.count > 0)
     {
         OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmNotes clazz:OAOsmNotesSettingsItem.class];
+        [settingsItems addObject:baseItem];
+    }
+    if (osmEditsPointList.count > 0)
+    {
+        OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmEdits clazz:OAOsmEditsSettingsItem.class];
         [settingsItems addObject:baseItem];
     }
     return settingsItems;

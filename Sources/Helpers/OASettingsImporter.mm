@@ -290,6 +290,9 @@
         case EOASettingsItemTypeOsmNotes:
             item = [[OAOsmNotesSettingsItem alloc] initWithJson:json error:&error];
             break;
+        case EOASettingsItemTypeOsmEdits:
+            item = [[OAOsmEditsSettingsItem alloc] initWithJson:json error:&error];
+            break;
         default:
             item = nil;
             break;

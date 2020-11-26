@@ -40,7 +40,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeAvoidRoads,
     EOAImportDataTypeGpxTrips,
     EOAImportDataTypeMaps,
-    EOAImportDataTypeOsmNotes
+    EOAImportDataTypeOsmNotes,
+    EOAImportDataTypeOsmEdits
 };
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -94,6 +95,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     NSInteger avoidRoadsCount = 0;
     NSInteger mapsCount = 0;
     NSInteger osmNotesCount = 0;
+    NSInteger osmEditsCount = 0;
     
     for (id item in _settingsItems)
     {
@@ -123,7 +125,9 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         else if ([item isKindOfClass:OAAvoidRoadInfo.class])
             avoidRoadsCount += 1;
         else if ([item isKindOfClass:OAOsmNotesSettingsItem.class])
-            osmNotesCount += 1;
+            osmNotesCount += ((OAOsmNotesSettingsItem *)item).items.count;
+        else if ([item isKindOfClass:OAOsmEditsSettingsItem.class])
+            osmEditsCount += ((OAOsmEditsSettingsItem *)item).items.count;
     }
     
     if (profilesCount > 0)
@@ -222,6 +226,16 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             @"label": OALocalizedString(@"osm_notes"),
             @"iconName": @"ic_action_add_osm_note",
             @"count": [NSString stringWithFormat:@"%ld", osmNotesCount],
+            @"category" : @(EOAImportDataTypeOsmNotes)
+            }
+         ];
+    }
+    if (osmEditsCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"osm_edits_title"),
+            @"iconName": @"ic_action_openstreetmap_logo",
+            @"count": [NSString stringWithFormat:@"%ld", osmEditsCount],
             @"category" : @(EOAImportDataTypeOsmNotes)
             }
          ];
@@ -355,9 +369,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         UIViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
         [rootController.navigationController pushViewController:resourcesViewController animated:YES];
     }
-    else if (dataType == EOAImportDataTypeOsmNotes)
+    else if (dataType == EOAImportDataTypeOsmNotes || dataType == EOAImportDataTypeOsmEdits)
     {
-        
         UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
         [myPlacesViewController setSelectedIndex:2];
         [rootController.navigationController pushViewController:myPlacesViewController animated:YES];

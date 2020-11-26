@@ -82,7 +82,7 @@
 
 - (BOOL)shouldShowDuplicates
 {
-    return NO;
+    return YES;
 }
 
 @end

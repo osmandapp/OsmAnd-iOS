@@ -20,11 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationLocalUtil;
 - (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationRemoteUtil;
 
-- (id<OAOsmBugsUtilsProtocol>)getOsmNotesLocalUtil;
+- (id<OAOsmBugsUtilsProtocol>)getLocalOsmNotesUtil;
 - (id<OAOsmBugsUtilsProtocol>)getOsmNotesRemoteUtil;
-
-- (OAOsmBugsDBHelper *) getDBBug;
-- (OAOpenstreetmapsDbHelper *) getDBPOI;
 
 -(void) openOsmNote:(double)latitude longitude:(double)longitude message:(NSString *)message autoFill:(BOOL)autofill;
 

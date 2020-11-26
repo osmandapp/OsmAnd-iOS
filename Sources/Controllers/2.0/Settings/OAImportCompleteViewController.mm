@@ -234,7 +234,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"osm_edits_title"),
-            @"iconName": @"ic_action_openstreetmap_logo",
+            @"iconName": @"ic_custom_poi",
             @"count": [NSString stringWithFormat:@"%ld", osmEditsCount],
             @"category" : @(EOAImportDataTypeOsmNotes)
             }

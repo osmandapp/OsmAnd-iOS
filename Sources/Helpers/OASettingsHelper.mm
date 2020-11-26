@@ -52,6 +52,18 @@
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
+#define kID_KEY @"id"
+#define kTEXT_KEY @"text"
+#define kLAT_KEY @"lat"
+#define kLON_KEY @"lon"
+#define kAUTHOR_KEY @"author"
+#define kACTION_KEY @"action"
+#define kNAME_KEY @"name"
+#define kCOMMENT_KEY @"comment"
+#define kTYPE_KEY @"type"
+#define kTAGS_KEY @"tags"
+#define kENTITY_KEY @"entity"
+
 NSString *const kSettingsHelperErrorDomain = @"SettingsHelper";
 
 NSInteger const kSettingsHelperErrorCodeNoTypeField = 1;
@@ -1172,7 +1184,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @implementation OAPluginSettingsItem
 {
     OAPlugin *_plugin;
-    NSMutableArray<OASettingsItem *> *_pluginDependentItems;
+    NSArray<OASettingsItem *> *_pluginDependentItems;
 }
 
 @dynamic type, name, fileName;
@@ -1192,7 +1204,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return _plugin.getName;
 }
 
-- (NSMutableArray<OASettingsItem *> *) getPluginDependentItems
+- (NSArray<OASettingsItem *> *) getPluginDependentItems
 {
     return _pluginDependentItems;
 }
@@ -2739,7 +2751,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
         if (osmEditingPlugin)
-            [self setExistingItems: [NSMutableArray arrayWithArray:[[osmEditingPlugin getDBBug] getOsmbugsPoints]]];
+            [self setExistingItems: [NSMutableArray arrayWithArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmbugsPoints]]];
     }
     return self;
 }
@@ -2763,7 +2775,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
         if (osmEditingPlugin)
         {
-            OAOsmBugsDBHelper *db = [osmEditingPlugin getDBBug];
+            OAOsmBugsDBHelper *db = [OAOsmBugsDBHelper sharedDatabase];
             for (OAOsmNotesPoint *point in self.appliedItems)
             {
                 [db addOsmbugs:point];
@@ -2805,13 +2817,13 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     
     for (id object in itemsJson)
     {
-        long long iD = [object[@"id"] longLongValue];
-        NSString *text = object[@"text"];
-        double lat = [object[@"lat"] doubleValue];
-        double lon = [object[@"lon"] doubleValue];
-        NSString *author = object[@"author"];
+        long long iD = [object[kID_KEY] longLongValue];
+        NSString *text = object[kTEXT_KEY];
+        double lat = [object[kLAT_KEY] doubleValue];
+        double lon = [object[kLON_KEY] doubleValue];
+        NSString *author = object[kAUTHOR_KEY];
         author = author.length > 0 ? author : nil;        
-        NSString *action = object[@"action"];
+        NSString *action = object[kACTION_KEY];
         OAOsmNotesPoint *point = [[OAOsmNotesPoint alloc] init];
         [point setId:iD];
         [point setText:text];
@@ -2831,12 +2843,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         for (OAOsmNotesPoint *point in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            jsonObject[@"id"] = [NSNumber numberWithLongLong: [point getId]];
-            jsonObject[@"text"] = [point getText];
-            jsonObject[@"lat"] = [NSString stringWithFormat:@"%0.5f", [point getLatitude]];
-            jsonObject[@"lon"] = [NSString stringWithFormat:@"%0.5f", [point getLongitude]];
-            jsonObject[@"author"] = [point getAuthor];
-            jsonObject[@"action"] = [OAOsmPoint getStringAction][[NSNumber numberWithInteger:[point getAction]]];
+            jsonObject[kID_KEY] = [NSNumber numberWithLongLong: [point getId]];
+            jsonObject[kTEXT_KEY] = [point getText];
+            jsonObject[kLAT_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLatitude]];
+            jsonObject[kLON_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLongitude]];
+            jsonObject[kAUTHOR_KEY] = [point getAuthor];
+            jsonObject[kACTION_KEY] = [OAOsmPoint getStringAction][[NSNumber numberWithInteger:[point getAction]]];
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;
@@ -2877,7 +2889,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
         if (osmEditingPlugin)
-            [self setExistingItems: [NSMutableArray arrayWithArray:[[osmEditingPlugin getDBPOI] getOpenstreetmapPoints]]];
+            [self setExistingItems: [NSMutableArray arrayWithArray:[[OAOpenstreetmapsDbHelper sharedDatabase] getOpenstreetmapPoints]]];
     }
     return self;
 }
@@ -2901,7 +2913,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
         if (osmEditingPlugin)
         {
-            OAOpenstreetmapsDbHelper *db = [osmEditingPlugin getDBPOI];
+            OAOpenstreetmapsDbHelper *db = [OAOpenstreetmapsDbHelper sharedDatabase];
             for (OAOpenStreetMapPoint *point in self.appliedItems)
             {
                 [db addOpenstreetmap:point];
@@ -2943,16 +2955,16 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     
     for (id jsonPoint in itemsJson)
     {
-        NSString *comment = jsonPoint[@"comment"];
+        NSString *comment = jsonPoint[kCOMMENT_KEY];
         comment = comment.length > 0 ? comment : nil;
-        NSDictionary *entityJson = jsonPoint[@"entity"];
-        long long iD = [entityJson[@"id"] longLongValue];
-        double lat = [entityJson[@"lat"] doubleValue];
-        double lon = [entityJson[@"lon"] doubleValue];
-        NSDictionary *tagMap = entityJson[@"tags"];
-        NSString *action = entityJson[@"action"];
+        NSDictionary *entityJson = jsonPoint[kENTITY_KEY];
+        long long iD = [entityJson[kID_KEY] longLongValue];
+        double lat = [entityJson[kLAT_KEY] doubleValue];
+        double lon = [entityJson[kLON_KEY] doubleValue];
+        NSDictionary *tagMap = entityJson[kTAGS_KEY];
+        NSString *action = entityJson[kACTION_KEY];
         OAEntity *entity;
-        if ([entityJson[@"type"] isEqualToString: [OAEntity stringType:NODE]])
+        if ([entityJson[kTYPE_KEY] isEqualToString: [OAEntity stringType:NODE]])
         {
             entity = [[OANode alloc] initWithId:iD latitude:lat longitude:lon];
         }
@@ -2978,16 +2990,16 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         {
             NSMutableDictionary *jsonPoint = [NSMutableDictionary dictionary];
             NSMutableDictionary *jsonEntity = [NSMutableDictionary dictionary];
-            jsonEntity[@"id"] = [NSNumber numberWithLongLong: [point getId]];
-            jsonEntity[@"text"] = [point getTagsString];
-            jsonEntity[@"lat"] = [NSString stringWithFormat:@"%0.5f", [point getLatitude]];
-            jsonEntity[@"lon"] = [NSString stringWithFormat:@"%0.5f", [point getLongitude]];
-            jsonEntity[@"type"] = [OAEntity stringTypeOf:[point getEntity]];
+            jsonEntity[kID_KEY] = [NSNumber numberWithLongLong: [point getId]];
+            jsonEntity[kTEXT_KEY] = [point getTagsString];
+            jsonEntity[kLAT_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLatitude]];
+            jsonEntity[kLON_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLongitude]];
+            jsonEntity[kTYPE_KEY] = [OAEntity stringTypeOf:[point getEntity]];
             NSDictionary *jsonTags = [NSDictionary dictionaryWithDictionary:[[point getEntity] getTags]];
-            jsonEntity[@"tags"] = jsonTags;
-            jsonPoint[@"comment"] = [point getComment];
-            jsonEntity[@"action"] = [OAOsmPoint getStringAction][[NSNumber numberWithInteger:[point getAction]]];
-            jsonPoint[@"entity"] = jsonEntity;
+            jsonEntity[kTAGS_KEY] = jsonTags;
+            jsonPoint[kCOMMENT_KEY] = [point getComment];
+            jsonEntity[kACTION_KEY] = [OAOsmPoint getStringAction][[NSNumber numberWithInteger:[point getAction]]];
+            jsonPoint[kENTITY_KEY] = jsonEntity;
             [jsonArray addObject:jsonPoint];
         }
         json[@"items"] = jsonArray;

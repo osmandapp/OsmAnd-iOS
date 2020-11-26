@@ -211,7 +211,7 @@
 - (void) saveNote
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        id<OAOsmBugsUtilsProtocol> util = [_plugin getOsmNotesLocalUtil];
+        id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
         OAOsmNotesPoint *p = _bugPoints.firstObject;
         if (!p)
             return;

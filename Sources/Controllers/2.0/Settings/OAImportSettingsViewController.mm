@@ -548,7 +548,7 @@
                 {
                     NSString *caption = [OAOsmEditingPlugin getTitle:item];
                     [editsPointStyleSection.groupItems addObject:@{
-                        @"icon" : @"ic_action_openstreetmap_logo",
+                        @"icon" : @"ic_custom_poi",
                         @"title" : caption,
                         @"type" : kCellTypeTitle,
                     }];

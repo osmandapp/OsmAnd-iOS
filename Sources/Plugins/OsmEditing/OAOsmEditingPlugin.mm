@@ -78,6 +78,7 @@
         _settings = [OAAppSettings sharedManager];
         _helper = [OADestinationsHelper instance];
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+        _dbbug = [OAOsmBugsDBHelper sharedDatabase];
         _dbpoi = [OAOpenstreetmapsDbHelper sharedDatabase];
         _localUtil = [[OAOpenStreetMapLocalUtil alloc] init];
         _localNotesUtil = [[OAOsmBugsLocalUtil alloc] init];
@@ -90,15 +91,6 @@
 + (NSString *) getId
 {
     return PLUGIN_ID;
-}
-
-- (OAOpenstreetmapsDbHelper *) getDBPOI
-{
-    if (!_dbpoi)
-    {
-        _dbpoi = [[OAOpenstreetmapsDbHelper alloc] init];
-    }
-    return _dbpoi;
 }
 
 - (void) registerLayers
@@ -141,14 +133,9 @@
     return _remoteNotesUtil;
 }
 
--(id<OAOsmBugsUtilsProtocol>)getOsmNotesLocalUtil
+-(id<OAOsmBugsUtilsProtocol>)getLocalOsmNotesUtil
 {
     return _localNotesUtil;
-}
-
-- (OAOsmBugsDBHelper *) getDBBug
-{
-    return [OAOsmBugsDBHelper sharedDatabase];
 }
 
 -(void) openOsmNote:(double)latitude longitude:(double)longitude message:(NSString *)message autoFill:(BOOL)autofill

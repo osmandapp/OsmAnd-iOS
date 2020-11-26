@@ -23,6 +23,7 @@
 #import "OAPluginSettingsItem.h"
 #import "OAProfileSettingsItem.h"
 #import "OAGlobalSettingsItem.h"
+#import "OAExportSettingsType.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -525,6 +526,101 @@
         }
     }
     return duplicateItems;
+}
+
+- (NSDictionary *) getSettingsToOperate:(NSArray <OASettingsItem *> *)settingsItems importComplete:(BOOL)importComplete
+{
+    NSMutableDictionary *settingsToOperate = [NSMutableDictionary dictionary];
+    NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
+    NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
+    NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
+    NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
+    NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
+    NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
+    NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
+    NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
+    NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    for (OASettingsItem *item in settingsItems)
+    {
+        switch (item.type)
+        {
+            case EOASettingsItemTypeProfile:
+            {
+                [profiles addObject:[(OAProfileSettingsItem *)item modeBean]];
+                break;
+            }
+            case EOASettingsItemTypeFile:
+            {
+                OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
+                if (fileItem.subtype == EOASettingsItemFileSubtypeRenderingStyle)
+                    [renderFilesList addObject:fileItem.filePath];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
+                    [routingFilesList addObject:fileItem.filePath];
+                else if (fileItem.subtype == EOASettingsItemFileSubtypeGpx)
+                    [gpxFilesList addObject:fileItem.filePath];
+                else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
+                    [mapFilesList addObject:fileItem];
+                break;
+            }
+            case EOASettingsItemTypeQuickActions:
+            {
+                OAQuickActionsSettingsItem *quickActionsItem = (OAQuickActionsSettingsItem *) item;
+                if (importComplete)
+                    [quickActions addObjectsFromArray:quickActionsItem.appliedItems];
+                else
+                    [quickActions addObjectsFromArray:quickActionsItem.items];
+                break;
+            }
+            case EOASettingsItemTypePoiUIFilters:
+            {
+                OAPoiUiFilterSettingsItem *poiUiFilterItem = (OAPoiUiFilterSettingsItem *) item;
+                if (importComplete)
+                    [poiUIFilters addObjectsFromArray:poiUiFilterItem.appliedItems];
+                else
+                    [poiUIFilters addObjectsFromArray:poiUiFilterItem.items];
+                break;
+            }
+            case EOASettingsItemTypeMapSources:
+            {
+                OAMapSourcesSettingsItem *mapSourcesItem = (OAMapSourcesSettingsItem *) item;
+                if (importComplete)
+                    [tileSourceTemplates addObjectsFromArray:mapSourcesItem.appliedItems];
+                else
+                    [tileSourceTemplates addObjectsFromArray:mapSourcesItem.items];
+                break;
+            }
+            case EOASettingsItemTypeAvoidRoads:
+            {
+                OAAvoidRoadsSettingsItem *avoidRoadsItem = (OAAvoidRoadsSettingsItem *) item;
+                if (importComplete)
+                    [avoidRoads addObjectsFromArray:avoidRoadsItem.appliedItems];
+                else
+                    [avoidRoads addObjectsFromArray:avoidRoadsItem.items];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    if (profiles.count > 0)
+        [settingsToOperate setObject:profiles forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeProfile]];
+    if (quickActions.count > 0)
+        [settingsToOperate setObject:quickActions forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeQuickActions]];
+    if (poiUIFilters.count > 0)
+        [settingsToOperate setObject:poiUIFilters forKey:[OAExportSettingsType typeName:EOAExportSettingsTypePoiTypes]];
+    if (tileSourceTemplates.count > 0)
+        [settingsToOperate setObject:tileSourceTemplates forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapSources]];
+    if (renderFilesList.count > 0)
+        [settingsToOperate setObject:renderFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRendererStyles]];
+    if (routingFilesList.count > 0)
+        [settingsToOperate setObject:routingFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRouting]];
+    if (gpxFilesList.count > 0)
+        [settingsToOperate setObject:gpxFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeGPX]];
+    if (mapFilesList.count > 0)
+        [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
+    if (avoidRoads.count > 0)
+        [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
+    return settingsToOperate;
 }
 
 @end

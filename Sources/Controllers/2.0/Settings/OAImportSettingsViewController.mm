@@ -170,7 +170,7 @@
     
     if (_settingsItems)
     {
-        _itemsMap = [NSMutableDictionary dictionaryWithDictionary:[self getSettingsToOperate:_settingsItems importComplete:NO]];
+        _itemsMap = [NSMutableDictionary dictionaryWithDictionary:[importTask getSettingsToOperate:_settingsItems importComplete:NO]];
         _itemsType = [NSArray arrayWithArray:[_itemsMap allKeys]];
         [self generateData];
     }
@@ -541,7 +541,6 @@
                 return profileItem;
         }
     }
-    
     return nil;
 }
 
@@ -594,7 +593,6 @@
     NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     
-    
     for (NSObject *object in _selectedItems)
     {
         if ([object isKindOfClass:OAApplicationModeBean.class])
@@ -622,7 +620,7 @@
     if (tileSourceTemplates.count > 0)
         [settingsItems addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
-        [settingsItems addObject:[self getBaseAvoidRoadsSettingsItem]];
+        [settingsItems addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
     return settingsItems;
 }
 
@@ -977,8 +975,7 @@
     if (succeed)
     {
         [self.tableView reloadData];
-        
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:items fileName:[_file lastPathComponent]];
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[_settingsHelper.importTask getSettingsToOperate:items importComplete:YES] fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }

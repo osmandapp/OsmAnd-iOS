@@ -29,6 +29,9 @@
 #import "OAFileSettingsItem.h"
 #import "OAMapSourcesSettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
+#import "OAExportSettingsType.h"
+#import "OAMapSourcesSettingsItem.h"
+#import "OAAvoidRoadsSettingsItem.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -52,7 +55,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
 
 @implementation OAImportCompleteViewController
 {
-    NSArray<OASettingsItem *> * _settingsItems;
+    NSDictionary<NSString *, NSArray *> *_itemsMap;
+    NSArray <NSString *>*_itemsType;
     NSString *_fileName;
     NSMutableArray<NSDictionary *> * _data;
 }
@@ -67,12 +71,13 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     return self;
 }
 
-- (instancetype) initWithSettingsItems:(NSArray<OASettingsItem *> *)settingsItems fileName:(NSString *)fileName
+- (instancetype) initWithSettingsItems:(NSDictionary<NSString *, NSArray *> *)settingsItems fileName:(NSString *)fileName
 {
     self = [super init];
     if (self)
     {
-        _settingsItems = settingsItems;
+        _itemsMap = settingsItems;
+        _itemsType = [NSArray arrayWithArray:[settingsItems allKeys]];
         _fileName = fileName;
         [self commonInit];
     }
@@ -97,33 +102,60 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     NSInteger avoidRoadsCount = 0;
     NSInteger mapsCount = 0;
     
-    for (id item in _settingsItems)
+    for (NSString *type in [_itemsMap allKeys])
     {
-        if ([item isKindOfClass:OAProfileSettingsItem.class])
-            profilesCount += 1;
-        else if ([item isKindOfClass:OAQuickAction.class])
-            actionsCount += 1;
-        else if ([item isKindOfClass:OAPOIUIFilter.class])
-            filtersCount += 1;
-        else if ([item isKindOfClass:OAMapSourcesSettingsItem.class])
+        EOAExportSettingsType itemType = [OAExportSettingsType parseType:type];
+        NSArray *settings = [NSArray arrayWithArray:[_itemsMap objectForKey:type]];
+        switch (itemType)
         {
-            OAMapSourcesSettingsItem *mapSourcesItem = (OAMapSourcesSettingsItem *) item;
-            tileSourcesCount = mapSourcesItem.items.count;
+            case EOAExportSettingsTypeProfile:
+            {
+                profilesCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeQuickActions:
+            {
+                actionsCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypePoiTypes:
+            {
+                filtersCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeMapSources:
+            {
+                tileSourcesCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeCustomRendererStyles:
+            {
+                renderFilesCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeMapFiles:
+            {
+                mapsCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeCustomRouting:
+            {
+                routingFilesCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeGPX:
+            {
+                gpxFilesCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeAvoidRoads:
+            {
+                avoidRoadsCount = settings.count;
+                break;
+            }
+            default:
+                break;
         }
-        else if ([item isKindOfClass:OAFileSettingsItem.class])
-        {
-            EOASettingsItemFileSubtype subType = ((OAFileSettingsItem *)item).subtype;
-            if (subType == EOASettingsItemFileSubtypeRenderingStyle)
-                renderFilesCount += 1;
-            else if (subType == EOASettingsItemFileSubtypeRoutingConfig)
-                routingFilesCount += 1;
-            else if (subType == EOASettingsItemFileSubtypeGpx)
-                gpxFilesCount += 1;
-            else if ([OAFileSettingsItemFileSubtype isMap:subType])
-                mapsCount += 1;
-        }
-        else if ([item isKindOfClass:OAAvoidRoadsSettingsItem.class])
-            avoidRoadsCount += 1;
     }
     
     if (profilesCount > 0)
@@ -141,7 +173,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_screen_quick_action"),
             @"iconName": @"ic_custom_quick_action",
-            @"count": [NSString stringWithFormat:@"%ld", profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld", actionsCount],
             @"category" : @(EOAImportDataTypeQuickActions)
             }
          ];
@@ -151,7 +183,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"search_activity"),
             @"iconName": @"ic_custom_search",
-            @"count": [NSString stringWithFormat:@"%ld", profilesCount],
+            @"count": [NSString stringWithFormat:@"%ld", filtersCount],
             @"category" : @(EOAImportDataTypePoiFilters)
             }
          ];
@@ -335,10 +367,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     }
     else if (dataType == EOAImportDataTypeAvoidRoads)
     {
-        // TODO: change this while implementing Avoid roads import!
-        [self loadCurrentRoutingMode];
         OARouteAvoidSettingsViewController *avoidController = [[OARouteAvoidSettingsViewController alloc] init];
-        [rootController.navigationController pushViewController:avoidController animated:YES];
+        [self presentViewController:avoidController animated:YES completion:nil];
     }
     else if (dataType == EOAImportDataTypeMaps)
     {

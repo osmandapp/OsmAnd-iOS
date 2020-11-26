@@ -11,6 +11,6 @@
 
 @interface OAImportCompleteViewController : OABaseSettingsWithBottomButtonsViewController
 
-- (instancetype) initWithSettingsItems:(NSArray<OASettingsItem *> *)settingsItems fileName:(NSString *)fileName;
+- (instancetype) initWithSettingsItems:(NSDictionary<NSString *, NSArray *> *)settingsItems fileName:(NSString *)fileName;
 
 @end

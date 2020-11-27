@@ -40,9 +40,11 @@
 
 - (NSUInteger) hash
 {
-    NSInteger result = self.location.coordinate.latitude * 10000.0;
+    NSUInteger result = self.location.coordinate.latitude * 10000.0;
     result = 31 * result + (self.location.coordinate.longitude * 10000.0);
     result = 31 * result + [self.name hash];
+    result = 31 * result + [self.appModeKey hash];
+    result = 31 * result + [@(self.roadId) hash];
     return result;
 }
 
@@ -55,7 +57,7 @@
           return NO;
     
     OAAvoidRoadInfo *other = object;
-    return [OAUtilities isCoordEqual:self.location.coordinate.latitude srcLon:self.location.coordinate.longitude destLat:other.location.coordinate.latitude destLon:other.location.coordinate.longitude] && (self.name == other.name || [self.name isEqualToString:other.name]);
+    return [OAUtilities isCoordEqual:self.location.coordinate.latitude srcLon:self.location.coordinate.longitude destLat:other.location.coordinate.latitude destLon:other.location.coordinate.longitude] && [self.name isEqualToString:other.name] && self.roadId == other.roadId && [self.appModeKey isEqualToString:other.appModeKey];
 }
 
 @end

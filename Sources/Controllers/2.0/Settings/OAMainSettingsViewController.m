@@ -119,17 +119,19 @@
         @{
             @"name" : @"current_profile",
             @"app_mode" : appMode,
-            @"type" : kCellTypeCheck
+            @"type" : kCellTypeCheck,
+            @"isColored" : @YES
         }
     ]];
     
-    NSMutableArray *profilesSection = [NSMutableArray new];
-    for (OAApplicationMode *am in OAApplicationMode.allPossibleValues)
+    NSMutableArray *profilesSection = [NSMutableArray new];    
+    for (int i = 0; i < OAApplicationMode.allPossibleValues.count; i++)
     {
         [profilesSection addObject:@{
             @"name" : @"profile_val",
-            @"app_mode" : am,
-            @"type" : kCellTypeProfileSwitch
+            @"app_mode" : OAApplicationMode.allPossibleValues[i],
+            @"type" : i == 0 ? kCellTypeCheck : kCellTypeProfileSwitch,
+            @"isColored" : @NO
         }];
     }
     
@@ -236,7 +238,10 @@
         cell.textView.text = am.toHumanString;
         cell.descView.text = [self getProfileDescription:am];
         cell.contentView.backgroundColor = UIColor.clearColor;
-        cell.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
+        if ([item[@"isColored"] boolValue])
+            cell.backgroundColor = [UIColorFromRGB(am.getIconColor) colorWithAlphaComponent:0.1];
+        else
+            cell.backgroundColor = UIColor.whiteColor;
         return cell;
     }
     else if ([type isEqualToString:kCellTypeProfileSwitch])

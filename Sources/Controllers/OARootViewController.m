@@ -29,6 +29,7 @@
 #import "OAGPXListViewController.h"
 #import "OAFileImportHelper.h"
 #import "OASettingsHelper.h"
+#import "OAWhatsNewBottomSheetViewController.h"
 
 #import "Localization.h"
 #import "OAGPXDatabase.h"
@@ -133,6 +134,17 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPurchase:) name:OAIAPRequestPurchaseProductNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    [self showWhatsNewDialog];
+}
+
+- (void) showWhatsNewDialog
+{
+    if ([OAAppSettings sharedManager].shouldShowWhatsNew)
+    {
+        OAWhatsNewBottomSheetViewController *screen = [[OAWhatsNewBottomSheetViewController alloc] init];
+        [screen show];
+    }
 }
 
 - (BOOL) prefersStatusBarHidden

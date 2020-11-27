@@ -10,6 +10,7 @@
 #import "OAMenuSimpleCellNoIcon.h"
 #import "Localization.h"
 #import "OAWebViewController.h"
+#import "OAAppVersionDependedConstants.h"
 
 #define kLinkInternalType @"internal_link"
 #define kLinkExternalType @"ext_link"
@@ -277,6 +278,14 @@ static const NSInteger groupCount = 5;
     // Other
     [dataArr addObject:
      @{
+       @"name" : @"what_is_new",
+       @"title" : OALocalizedString(@"help_what_is_new"),
+       @"type" : kLinkExternalType,
+       @"description" : kLatestChangesUrl
+       }];
+    
+    [dataArr addObject:
+     @{
        @"name" : @"install_and_troublesoot",
        @"title" : OALocalizedString(@"help_install_and_troubleshoot"),
        @"type" : kLinkInternalType,
@@ -351,6 +360,14 @@ static const NSInteger groupCount = 5;
        @"name" : @"facebook",
        @"title" : OALocalizedString(@"facebook"),
        @"description" : @"https://www.facebook.com/osmandapp",
+       @"type" : kLinkExternalType
+       }];
+    
+    [dataArr addObject:
+     @{
+       @"name" : @"vk",
+       @"title" : OALocalizedString(@"vk"),
+       @"description" : @"https://vk.com/osmandapp",
        @"type" : kLinkExternalType
        }];
     

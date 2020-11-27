@@ -650,4 +650,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *arrowsOnMap;
 @property (nonatomic) OAProfileBoolean *directionLines;
 
+@property (nonatomic) BOOL shouldShowWhatsNew;
+
 @end

@@ -65,6 +65,9 @@
 - (NSArray*) splitByTime:(int)seconds;
 - (NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit;
 
+- (NSArray<OAGpxRtePt *> *) getRoutePoints;
+- (NSArray<OAGpxRtePt *> *) getRoutePoints:(NSInteger)routeIndex;
+
 
 + (OAGpxWpt *)fetchWpt:(const std::shared_ptr<const OsmAnd::GpxDocument::GpxWpt>)mark;
 + (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::GpxWpt>)wpt usingWpt:(OAGpxWpt *)w;

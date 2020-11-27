@@ -8,7 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAApplicationMode, OAGpxTrkPt, RouteSegmentResult;
+#include <vector.h>
+
+@class OAApplicationMode, OAGpxTrkPt;
+
+struct RouteSegmentResult;
 
 @interface OARoadSegmentData : NSObject
 
@@ -18,5 +22,7 @@
 @property (nonatomic, readonly) NSArray<OAGpxTrkPt *> *points;
 @property (nonatomic, readonly) std::vector<std::shared_ptr<RouteSegmentResult>> segments;
 @property (nonatomic, readonly) double distance;
+
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode start:(OAGpxTrkPt *)start end:(OAGpxTrkPt *)end points:(NSArray<OAGpxTrkPt *> *)points segments:(std::vector<std::shared_ptr<RouteSegmentResult>>)segments;
 
 @end

@@ -991,16 +991,40 @@
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly
 {
-            List<TrkSegment> segments = new ArrayList<>();
-            for (Track t : tracks) {
-                for (TrkSegment s : t.segments) {
-                    if (!s.generalSegment && s.points.size() > 0 && (!routesOnly || s.hasRoute())) {
-                        segments.add(s);
-                    }
-                }
-            }
-            return segments;
+    NSMutableArray<OAGpxTrkSeg *> *segments = [NSMutableArray new];
+    for (OAGpxTrk *t in _tracks)
+    {
+        for (OAGpxTrkSeg *s in t.segments)
+        {
+            if (!s.generalSegment && s.points.count > 0 && (!routesOnly || s.hasRoute))
+                [segments addObject:s];
         }
+    }
+    return segments;
+}
+
+- (NSArray<OAGpxRtePt *> *) getRoutePoints
+{
+    NSMutableArray<OAGpxRtePt *> *points = [NSMutableArray new];
+    for (NSInteger i = 0; i < _routes.count; i++)
+    {
+        OAGpxRte *rt = _routes[i];
+        
+        [points addObjectsFromArray:rt.points];
+    }
+    return points;
+}
+
+- (NSArray<OAGpxRtePt *> *) getRoutePoints:(NSInteger)routeIndex
+{
+    NSMutableArray<OAGpxRtePt *> *points = [NSMutableArray new];
+    if (_routes.count > routeIndex)
+    {
+        OAGpxRte *rt = _routes[routeIndex];
+        [points addObjectsFromArray:rt.points];
+    }
+    return points;
+}
 
 @end
 

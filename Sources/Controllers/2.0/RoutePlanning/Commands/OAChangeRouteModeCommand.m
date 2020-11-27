@@ -14,8 +14,8 @@
 
 @implementation OAChangeRouteModeCommand
 {
-    NSArray<OAGpxTrkPt *> *_oldPoints;
-    NSArray<OAGpxTrkPt *> *_newPoints;
+    NSMutableArray<OAGpxTrkPt *> *_oldPoints;
+    NSMutableArray<OAGpxTrkPt *> *_newPoints;
     NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
     NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *_newRoadSegmentData;
     OAApplicationMode *_oldMode;
@@ -40,7 +40,7 @@
 - (BOOL)execute
 {
     OAMeasurementEditingContext *editingCtx = self.getEditingCtx;
-    _oldPoints = [NSArray arrayWithArray:editingCtx.getPoints];
+    _oldPoints = [NSMutableArray arrayWithArray:editingCtx.getPoints];
     _oldRoadSegmentData = [NSMutableDictionary dictionaryWithDictionary:editingCtx.roadSegmentData];
     _newPoints = [NSMutableArray arrayWithCapacity:_oldPoints.count];
     _newRoadSegmentData = [NSMutableDictionary dictionaryWithDictionary:_oldRoadSegmentData];;
@@ -56,7 +56,7 @@
         {
             case LAST_SEGMENT:
             {
-                [self updateProfileType:newPoints[_newPoints.count - 1]];
+                [self updateProfileType:_newPoints[_newPoints.count - 1]];
                 editingCtx.lastCalculationMode = NEXT_SEGMENT;
                 _newRoadSegmentData = nil;
                 break;
@@ -82,25 +82,25 @@
             }
             case ALL_NEXT_SEGMENTS:
             {
-                for (NSInteger i = _pointIndex; i >= 0 && i < newPoints.count; i++)
+                for (NSInteger i = _pointIndex; i >= 0 && i < _newPoints.count; i++)
                 {
-                    [self updateProfileType:newPoints[i]];
+                    [self updateProfileType:_newPoints[i]];
                     [_newRoadSegmentData removeObjectForKey:[self getPairAt:i]];
                 }
                 break;
             }
             case PREV_SEGMENT:
             {
-                if (_pointIndex > 0 && _pointIndex < newPoints.count)
+                if (_pointIndex > 0 && _pointIndex < _newPoints.count)
                 {
-                    [self updateProfileType:_newPoints[pointIndex - 1]];
-                    [_newRoadSegmentData removeObjectForKey:[self getPairAt:pointIndex - 1]];
+                    [self updateProfileType:_newPoints[_pointIndex - 1]];
+                    [_newRoadSegmentData removeObjectForKey:[self getPairAt:_pointIndex - 1]];
                 }
                 break;
             }
             case ALL_PREV_SEGMENTS:
             {
-                for (NSInteger i = 0; i < pointIndex && i < newPoints.count; i++)
+                for (NSInteger i = 0; i < _pointIndex && i < _newPoints.count; i++)
                 {
                     [self updateProfileType:_newPoints[i]];
                     [_newRoadSegmentData removeObjectForKey:[self getPairAt:i]];
@@ -123,51 +123,51 @@
     [editingCtx updateSegmentsForSnap];
 }
 
-    @Override
-    public void undo() {
-        
-    }
+- (void)redo
+{
+    [self executeCommand];
+}
 
-    @Override
-    public void redo() {
-        executeCommand();
-    }
+- (EOAMeasurementCommandType)getType
+{
+    return CHANGE_ROUTE_MODE;
+}
 
-    @Override
-    public MeasurementCommandType getType() {
-        return MeasurementCommandType.CHANGE_ROUTE_MODE;
-    }
+- (NSArray<OAGpxTrkPt *> *) getPairAt:(NSInteger)pointIndex
+{
+    OAGpxTrkPt *first = pointIndex >= 0 && pointIndex < _newPoints.count ? _newPoints[pointIndex] : nil;
+    OAGpxTrkPt *second = pointIndex >= 0 && pointIndex < _newPoints.count - 1 ? _newPoints[pointIndex + 1] : nil;
+    return @[first, second];
+}
 
-    private Pair<WptPt, WptPt> getPairAt(int pointIndex) {
-        WptPt first = pointIndex >= 0 && pointIndex < newPoints.size() ? newPoints.get(pointIndex) : null;
-        WptPt second = pointIndex >= 0 && pointIndex < newPoints.size() - 1 ? newPoints.get(pointIndex + 1) : null;
-        return new Pair<>(first, second);
+- (void) executeCommand
+{
+    OAMeasurementEditingContext *editingCtx = [self getEditingCtx];
+    [editingCtx clearPoints];
+    [editingCtx addPoints:_newPoints];
+    if (_newPoints.count == 0)
+    {
+        editingCtx.appMode = _newMode;
     }
+    else
+    {
+        OAGpxTrkPt *lastPoint = _newPoints[_newPoints.count - 1];
+        editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
+    }
+    if (_newRoadSegmentData != nil)
+        editingCtx.roadSegmentData = _newRoadSegmentData;
+    [editingCtx updateSegmentsForSnap];
+}
 
-    private void executeCommand() {
-        MeasurementEditingContext editingCtx = getEditingCtx();
-        editingCtx.getPoints().clear();
-        editingCtx.addPoints(newPoints);
-        if (newPoints.isEmpty()) {
-            editingCtx.setAppMode(newMode);
-        } else {
-            WptPt lastPoint = newPoints.get(newPoints.size() - 1);
-            editingCtx.setAppMode(ApplicationMode.valueOfStringKey(lastPoint.getProfileType(), DEFAULT_APP_MODE));
-        }
-        if (newRoadSegmentData != null) {
-            editingCtx.setRoadSegmentData(newRoadSegmentData);
-        }
-        editingCtx.updateSegmentsForSnap();
+- (void) updateProfileType:(OAGpxTrkPt *)pt
+{
+    if (!pt.isGap)
+    {
+        if (_newMode != nil && _newMode != OAApplicationMode.DEFAULT)
+            [pt setProfileType:_newMode.stringKey];
+        else
+            [pt removeProfileType];
     }
-
-    private void updateProfileType(WptPt pt) {
-        if (!pt.isGap()) {
-            if (newMode != null && newMode != DEFAULT_APP_MODE) {
-                pt.setProfileType(newMode.getStringKey());
-            } else {
-                pt.removeProfileType();
-            }
-        }
-    }
+}
 
 @end

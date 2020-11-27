@@ -13,9 +13,12 @@
 #import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OARoadSegmentData.h"
+#import "OARouteImporter.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
+
+#include <routeSegmentResult.h>
 
 static OAApplicationMode *DEFAULT_APP_MODE;
 
@@ -503,67 +506,76 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     OAGpxData *gpxData = self.gpxData;
     if (gpxData == nil || gpxData.gpxFile == nil)
         return;
-    NSArray<OAGpxTrkSeg *> *segments = gpxData.gpxFile.getNonEmptyTrkSegments(false);
-    if (Algorithms.isEmpty(segments)) {
+    NSArray<OAGpxTrkSeg *> *segments = [gpxData.gpxFile getNonEmptyTrkSegments:NO];
+    if (segments.count == 0)
         return;
-    }
-    for (int si = 0; si < segments.size(); si++) {
-        TrkSegment segment = segments.get(si);
-        List<WptPt> points = segment.points;
-        if (segment.hasRoute()) {
-            RouteImporter routeImporter = new RouteImporter(segment);
-            List<RouteSegmentResult> routeSegments = routeImporter.importRoute();
-            List<WptPt> routePoints = gpxData.getGpxFile().getRoutePoints(si);
-            int prevPointIndex = 0;
-            if (routePoints.isEmpty() && points.size() > 1) {
-                routePoints.add(points.get(0));
-                routePoints.add(points.get(points.size() - 1));
+
+    for (NSInteger si = 0; si < segments.count; si++)
+    {
+        OAGpxTrkSeg *segment = segments[si];
+        NSArray<OAGpxTrkPt *> *points = segment.points;
+        if (segment.hasRoute)
+        {
+            OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithTrkSeg:segment];
+            auto routeSegments = [routeImporter importRoute];
+            NSMutableArray<OAGpxRtePt *> *routePoints = [NSMutableArray arrayWithArray:[gpxData.gpxFile getRoutePoints:si]];
+            NSInteger prevPointIndex = 0;
+            if (routePoints.count == 0 && points.count > 1)
+            {
+                [routePoints addObject:points[0]];
+                [routePoints addObject:points[points.count - 1]];
             }
-            for (int i = 0; i < routePoints.size() - 1; i++) {
-                Pair<WptPt, WptPt> pair = new Pair<>(routePoints.get(i), routePoints.get(i + 1));
-                int startIndex = pair.first.getTrkPtIndex();
-                if (startIndex < 0 || startIndex < prevPointIndex || startIndex >= points.size()) {
-                    startIndex = findPointIndex(pair.first, points, prevPointIndex);
-                }
-                int endIndex = pair.second.getTrkPtIndex();
-                if (endIndex < 0 || endIndex < startIndex || endIndex >= points.size()) {
-                    endIndex = findPointIndex(pair.second, points, startIndex);
-                }
-                if (startIndex >= 0 && endIndex >= 0) {
-                    List<WptPt> pairPoints = new ArrayList<>();
-                    for (int j = startIndex; j < endIndex && j < points.size(); j++) {
-                        pairPoints.add(points.get(j));
+            for (NSInteger i = 0; i < routePoints.count - 1; i++)
+            {
+                NSArray<OAGpxTrkPt *> *pair = @[routePoints[i], routePoints[i + 1]];
+                NSInteger startIndex = pair.firstObject.getTrkPtIndex;
+                if (startIndex < 0 || startIndex < prevPointIndex || startIndex >= points.count)
+                    startIndex = [self findPointIndex:pair.firstObject points:points firstIndex:prevPointIndex];
+                NSInteger endIndex = pair.lastObject.getTrkPtIndex;
+                if (endIndex < 0 || endIndex < startIndex || endIndex >= points.count)
+                    endIndex = [self findPointIndex:pair.lastObject points:points firstIndex:startIndex];
+                if (startIndex >= 0 && endIndex >= 0)
+                {
+                    NSMutableArray<OAGpxTrkPt *> *pairPoints = [NSMutableArray new];
+                    for (NSInteger j = startIndex; j < endIndex && j < points.count; j++)
+                    {
+                        [pairPoints addObject:points[j]];
                         prevPointIndex = j;
                     }
-                    if (points.size() > prevPointIndex + 1) {
-                        pairPoints.add(points.get(prevPointIndex + 1));
+                    if (points.count > prevPointIndex + 1)
+                        [pairPoints addObject:points[prevPointIndex + 1]];
+                    
+                    auto it = routeSegments.begin();
+                    NSInteger k = endIndex - startIndex - 1;
+                    std::vector<std::shared_ptr<RouteSegmentResult>> pairSegments;
+                    if (k == 0 && !routeSegments.empty())
+                    {
+                        pairSegments.push_back(*routeSegments.erase(routeSegments.begin()));
                     }
-                    Iterator<RouteSegmentResult> it = routeSegments.iterator();
-                    int k = endIndex - startIndex - 1;
-                    List<RouteSegmentResult> pairSegments = new ArrayList<>();
-                    if (k == 0 && !routeSegments.isEmpty()) {
-                        pairSegments.add(routeSegments.remove(0));
-                    } else {
-                        while (it.hasNext() && k > 0) {
-                            RouteSegmentResult s = it.next();
-                            pairSegments.add(s);
-                            it.remove();
-                            k -= Math.abs(s.getEndPointIndex() - s.getStartPointIndex());
+                    else
+                    {
+                        while (it + 1 != routeSegments.end() && k > 0)
+                        {
+                            const auto s = *it;
+                            pairSegments.push_back(s);
+                            routeSegments.erase(it);
+                            it++;
+                            k -= abs(s->getEndPointIndex() - s->getStartPointIndex());
                         }
                     }
-                    ApplicationMode appMode = ApplicationMode.valueOfStringKey(pair.first.getProfileType(), DEFAULT_APP_MODE);
-                    roadSegmentData.put(pair, new RoadSegmentData(appMode, pair.first, pair.second, pairPoints, pairSegments));
+                    OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:pair.firstObject.getProfileType def:OAApplicationMode.DEFAULT];
+                    _roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:appMode start:pair.firstObject end:pair.lastObject points:pairPoints segments:pairSegments];
                 }
             }
-            if (!routePoints.isEmpty() && si < segments.size() - 1) {
-                routePoints.get(routePoints.size() - 1).setGap();
-            }
-            addPoints(routePoints);
-        } else {
-            addPoints(points);
-            if (!points.isEmpty() && si < segments.size() - 1) {
-                points.get(points.size() - 1).setGap();
-            }
+            if (routePoints.count > 0 && si < segments.count - 1)
+                [routePoints[routePoints.count - 1] setGap];
+            [self addPoints:routePoints];
+        }
+        else
+        {
+            [self addPoints:points];
+            if (points.count > 0 && si < segments.count - 1)
+                [points[points.count - 1] setGap];
         }
     }
 }
@@ -596,64 +608,6 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //        cache.points.addAll(original.points);
 //    }
 //}
-
-- (void) addPoints
-{
-    OAGpxData *gpxData = _gpxData;
-    if (gpxData == nil || gpxData.trkSegment == nil || gpxData.trkSegment.points.count == 0)
-        return;
-    
-    NSArray<OAGpxTrkPt *> *points = gpxData.trkSegment.points;
-//    if (isTrackSnappedToRoad()) {
-//        RouteImporter routeImporter = new RouteImporter(gpxData.getGpxFile());
-//        List<RouteSegmentResult> segments = routeImporter.importRoute();
-//        List<WptPt> routePoints = gpxData.getGpxFile().getRoutePoints();
-//        int prevPointIndex = 0;
-//        if (routePoints.isEmpty() && points.size() > 1) {
-//            routePoints.add(points.get(0));
-//            routePoints.add(points.get(points.size() - 1));
-//        }
-//        for (int i = 0; i < routePoints.size() - 1; i++) {
-//            Pair<WptPt, WptPt> pair = new Pair<>(routePoints.get(i), routePoints.get(i + 1));
-//            int startIndex = pair.first.getTrkPtIndex();
-//            if (startIndex < 0 || startIndex < prevPointIndex || startIndex >= points.size()) {
-//                startIndex = findPointIndex(pair.first, points, prevPointIndex);
-//            }
-//            int endIndex = pair.second.getTrkPtIndex();
-//            if (endIndex < 0 || endIndex < startIndex || endIndex >= points.size()) {
-//                endIndex = findPointIndex(pair.second, points, startIndex);
-//            }
-//            if (startIndex >= 0 && endIndex >= 0) {
-//                List<WptPt> pairPoints = new ArrayList<>();
-//                for (int j = startIndex; j < endIndex && j < points.size(); j++) {
-//                    pairPoints.add(points.get(j));
-//                    prevPointIndex = j;
-//                }
-//                if (points.size() > prevPointIndex + 1) {
-//                    pairPoints.add(points.get(prevPointIndex + 1));
-//                }
-//                Iterator<RouteSegmentResult> it = segments.iterator();
-//                int k = endIndex - startIndex - 1;
-//                List<RouteSegmentResult> pairSegments = new ArrayList<>();
-//                if (k == 0 && !segments.isEmpty()) {
-//                    pairSegments.add(segments.remove(0));
-//                } else {
-//                    while (it.hasNext() && k > 0) {
-//                        RouteSegmentResult s = it.next();
-//                        pairSegments.add(s);
-//                        it.remove();
-//                        k -= Math.abs(s.getEndPointIndex() - s.getStartPointIndex());
-//                    }
-//                }
-//                ApplicationMode appMode = ApplicationMode.valueOfStringKey(pair.first.getProfileType(), DEFAULT_APP_MODE);
-//                roadSegmentData.put(pair, new RoadSegmentData(appMode, pair.first, pair.second, pairPoints, pairSegments));
-//            }
-//        }
-//        addPoints(routePoints);
-//    } else {
-    [self addPoints:points];
-//    }
-}
 
 //- (void) setPoints(GpxRouteApproximation gpxApproximation, ApplicationMode mode) {
 //    if (gpxApproximation == null || Algorithms.isEmpty(gpxApproximation.finalPoints) || Algorithms.isEmpty(gpxApproximation.result)) {

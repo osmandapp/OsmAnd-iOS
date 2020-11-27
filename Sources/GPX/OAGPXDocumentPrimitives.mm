@@ -18,6 +18,64 @@
 #define GAP_PROFILE_TYPE @"gap"
 #define TRKPT_INDEX_EXTENSION @"trkpt_idx"
 
+@implementation OARouteSegment
+
+- (instancetype)initWithDictionary:(NSDictionary<NSString *,NSString *> *)dict
+{
+    self = [super init];
+    if (self) {
+        _identifier = dict[@"id"];
+        _length = dict[@"length"];
+        _segmentTime = dict[@"segmentTime"];
+        _speed = dict[@"speed"];
+        _turnType = dict[@"turnType"];
+        _turnAngle = dict[@"turnAngle"];
+        _types = dict[@"types"];
+        _pointTypes = dict[@"pointTypes"];
+        _names = dict[@"names"];
+    }
+    return self;
+}
+
+- (NSDictionary<NSString *,NSString *> *)toDictionary
+{
+    return @{
+        @"id" : _identifier,
+        @"length" : _length,
+        @"segmentTime" : _segmentTime,
+        @"speed" : _speed,
+        @"turnType" : _turnType,
+        @"turnAngle" : _turnAngle,
+        @"types" : _types,
+        @"pointTypes" : _pointTypes,
+        @"names" : _names
+    };
+}
+
+@end
+
+@implementation OARouteType
+
+- (instancetype)initWithDictionary:(NSDictionary<NSString *,NSString *> *)dict
+{
+    self = [super init];
+    if (self) {
+        _tag = dict[@"t"];
+        _value = dict[@"v"];
+    }
+    return self;
+}
+
+- (NSDictionary<NSString *,NSString *> *)toDictionary
+{
+    return @{
+        @"t" : _tag,
+        @"v" : _value
+    };
+}
+
+@end
+
 @implementation OAMetadata
 @end
 @implementation OALink
@@ -249,15 +307,51 @@
     ((OAGpxExtensions *)self.extraData).extensions[PROFILE_TYPE_EXTENSION] = profileType;
 }
 
+- (void) removeProfileType
+{
+    [((OAGpxExtensions *)self.extraData).extensions removeObjectForKey:PROFILE_TYPE_EXTENSION];
+}
+
+- (NSInteger) getTrkPtIndex
+{
+    NSString *n = ((OAGpxExtensions *)self.extraData).extensions[TRKPT_INDEX_EXTENSION];
+    return n ? n.integerValue : -1;
+}
+
+- (void) setTrkPtIndex:(NSInteger)index
+{
+    ((OAGpxExtensions *)self.extraData).extensions[TRKPT_INDEX_EXTENSION] = [NSString stringWithFormat:@"%ld", index];
+}
+
 - (BOOL) isGap
 {
     NSString *profileType = [self getProfileType];
     return [GAP_PROFILE_TYPE isEqualToString:profileType];
 }
 
+- (void)setGap
+{
+    [self setProfileType:GAP_PROFILE_TYPE];
+}
+
+- (void) copyExtensions:(OAGpxTrkPt *)pt
+{
+    self.extraData = pt.extraData;
+}
+
 @end
 
 @implementation OAGpxTrkSeg
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _routeTypes = [NSMutableArray new];
+        _routeSegments = [NSMutableArray new];
+    }
+    return self;
+}
 
 -(NSArray*) splitByDistance:(double)meters
 {
@@ -274,6 +368,11 @@
     NSMutableArray *splitSegments = [NSMutableArray array];
     [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:self];
     return [OAGPXTrackAnalysis convert:splitSegments];
+}
+
+- (BOOL) hasRoute
+{
+    return _routeSegments.count > 0 && _routeTypes.count > 0;
 }
 
 @end

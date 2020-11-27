@@ -10,6 +10,8 @@
 #import "OAApplicationMode.h"
 #import "OAGPXDocumentPrimitives.h"
 
+#include <routeSegmentResult.h>
+
 @implementation OARoadSegmentData
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode start:(OAGpxTrkPt *)start end:(OAGpxTrkPt *)end points:(NSArray<OAGpxTrkPt *> *)points segments:(std::vector<std::shared_ptr<RouteSegmentResult>>)segments
@@ -38,7 +40,7 @@
                 distance += segment->distance;
             }
         }
-        _distance = distnce;
+        _distance = distance;
     }
     return self;
 }

@@ -4934,6 +4934,8 @@
 		DA65CC2A256E58C400DC896F /* OAChangeRouteModeCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = DA65CC28256E58C400DC896F /* OAChangeRouteModeCommand.m */; };
 		DA65CC2F256E597A00DC896F /* OARoadSegmentData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA65CC2E256E597A00DC896F /* OARoadSegmentData.mm */; };
 		DA65CC30256E597A00DC896F /* OARoadSegmentData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA65CC2E256E597A00DC896F /* OARoadSegmentData.mm */; };
+		DA65CC452571226700DC896F /* OARouteImporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA65CC442571226700DC896F /* OARouteImporter.mm */; };
+		DA65CC462571226700DC896F /* OARouteImporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA65CC442571226700DC896F /* OARouteImporter.mm */; };
 		DA66731D23AE4AFD00499F76 /* OAFilledButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA66731C23AE4AFD00499F76 /* OAFilledButtonCell.xib */; };
 		DA66731E23AE4AFD00499F76 /* OAFilledButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA66731C23AE4AFD00499F76 /* OAFilledButtonCell.xib */; };
 		DA66732123AE4B2B00499F76 /* OAFilledButtonCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA66732023AE4B2A00499F76 /* OAFilledButtonCell.mm */; };
@@ -9564,6 +9566,8 @@
 		DA65CC28256E58C400DC896F /* OAChangeRouteModeCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAChangeRouteModeCommand.m; sourceTree = "<group>"; };
 		DA65CC2D256E597A00DC896F /* OARoadSegmentData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoadSegmentData.h; sourceTree = "<group>"; };
 		DA65CC2E256E597A00DC896F /* OARoadSegmentData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoadSegmentData.mm; sourceTree = "<group>"; };
+		DA65CC432571226700DC896F /* OARouteImporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteImporter.h; sourceTree = "<group>"; };
+		DA65CC442571226700DC896F /* OARouteImporter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteImporter.mm; sourceTree = "<group>"; };
 		DA66731C23AE4AFD00499F76 /* OAFilledButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAFilledButtonCell.xib; path = Resources/Controllers/Cells/OAFilledButtonCell.xib; sourceTree = "<group>"; };
 		DA66731F23AE4B2A00499F76 /* OAFilledButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAFilledButtonCell.h; path = Controllers/Cells/OAFilledButtonCell.h; sourceTree = "<group>"; };
 		DA66732023AE4B2A00499F76 /* OAFilledButtonCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAFilledButtonCell.mm; path = Controllers/Cells/OAFilledButtonCell.mm; sourceTree = "<group>"; };
@@ -13586,6 +13590,8 @@
 				DA303D4E24210AF9006F8BC7 /* OATransportRouteCalculationParams.mm */,
 				DAE7C565252C6BD400114A77 /* OAExitInfo.h */,
 				DAE7C566252C6BD400114A77 /* OAExitInfo.m */,
+				DA65CC432571226700DC896F /* OARouteImporter.h */,
+				DA65CC442571226700DC896F /* OARouteImporter.mm */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -20927,6 +20933,7 @@
 				847A1CC11DF94E9B003C1246 /* OAPOIMyLocationType.m in Sources */,
 				84FF0C4C1F3D89AF00AD1029 /* OARoutingTargetCell.m in Sources */,
 				84354D5C1F06A19E0046F2CE /* OARouteCalculationResult.mm in Sources */,
+				DA65CC462571226700DC896F /* OARouteImporter.mm in Sources */,
 				78D57B96238D30550068CF48 /* OAContourLinesAction.mm in Sources */,
 				DAFCB01D23AA1B5000CFBA58 /* OARouteInfoCell.m in Sources */,
 				DA1605B222FEB971001E02AD /* OASwitchableAction.m in Sources */,
@@ -22107,6 +22114,7 @@
 				8431E7651B3715A00063C9AF /* OAGPXWptListViewController.mm in Sources */,
 				849E81401AFA158D00549953 /* OADateTimePickerTableViewCell.m in Sources */,
 				84772BB21E0AE32100E65884 /* OACollatorStringMatcher.m in Sources */,
+				DA65CC452571226700DC896F /* OARouteImporter.mm in Sources */,
 				8474246E1E49F302001C1F35 /* OADiscountHelper.mm in Sources */,
 				84F989421B515569009C443C /* OADestinationCardBaseController.mm in Sources */,
 				84B524171EF2B01000E580DC /* OATspAnt.m in Sources */,

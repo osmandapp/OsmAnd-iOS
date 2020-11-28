@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#include <vector.h>
+#include <vector>
 
 @class OAApplicationMode, OAGpxTrkPt;
 

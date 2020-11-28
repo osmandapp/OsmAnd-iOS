@@ -9,8 +9,6 @@
 #import "OARouteImporter.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
-#import "OARouteRegion.h"
-#import "OARouteDataResources.h"
 
 @implementation OARouteImporter
 {

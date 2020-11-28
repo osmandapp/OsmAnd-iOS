@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
     EOAAddPointModeAfter
 };
 
-@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxTrkSeg;
+@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxTrkSeg, OARoadSegmentData;
 
 @interface OAMeasurementEditingContext : NSObject
 
@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 @property (nonatomic) EOAAddPointMode addPointMode;
 
-@property (nonatomic) NSDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *roadSegmentData;
+@property (nonatomic) NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *roadSegmentData;
 
 - (NSArray<OAGpxTrkPt *> *) getAllPoints;
 - (NSArray<OAGpxTrkPt *> *) getPoints;

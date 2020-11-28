@@ -14,13 +14,21 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OARoadSegmentData.h"
 #import "OARouteImporter.h"
+#import "OARoutingHelper.h"
+#import "OARouteCalculationParams.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 
 #include <routeSegmentResult.h>
+#include <routeCalculationProgress.h>
+#include <routePlannerFrontEnd.h>
 
 static OAApplicationMode *DEFAULT_APP_MODE;
+
+@interface OAMeasurementEditingContext() <OARouteCalculationProgressCallback, OARouteCalculationResultListener>
+
+@end
 
 @implementation OAMeasurementEditingContext
 {
@@ -33,6 +41,9 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     
     NSInteger _calculatedPairs;
     NSInteger _pointsToCalculateSize;
+    
+    OARouteCalculationParams *_params;
+    NSArray<OAGpxTrkPt *> *_currentPair;
     
     
     //    private SnapToRoadProgressListener progressListener;
@@ -402,18 +413,22 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //    }
 //}
 //
-//private List<Pair<WptPt, WptPt>> getPointsToCalculate() {
-//    List<Pair<WptPt, WptPt>> res = new ArrayList<>();
-//    for (List<WptPt> points : Arrays.asList(before.points, after.points)) {
-//        for (int i = 0; i < points.size() - 1; i++) {
-//            Pair<WptPt, WptPt> pair = new Pair<>(points.get(i), points.get(i + 1));
-//            if (roadSegmentData.get(pair) == null) {
-//                res.add(pair);
-//            }
-//        }
-//    }
-//    return res;
-//}
+- (NSArray<NSArray<OAGpxTrkPt *> *> *) getPointsToCalculate
+{
+    NSMutableArray<NSArray<OAGpxTrkPt *> *> *res = [NSMutableArray new];
+    for (NSArray<OAGpxTrkPt *> *points in @[_before.points, _after.points])
+    {
+        for (NSInteger i = 0; i < points.count - 1; i++)
+        {
+            OAGpxTrkPt *startPoint = points[i];
+            OAGpxTrkPt *endPoint = points[i + 1];
+            NSArray<OAGpxTrkPt *> *pair = @[startPoint, endPoint];
+            if (_roadSegmentData[pair] == nil && startPoint.hasProfile)
+                [res addObject:pair];
+        }
+    }
+    return res;
+}
 //
 //private List<Pair<WptPt, WptPt>> getOrderedRoadSegmentDataKeys() {
 //    List<Pair<WptPt, WptPt>> keys = new ArrayList<>();
@@ -424,6 +439,28 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //    }
 //    return keys;
 //}
+
+- (void) scheduleRouteCalculateIfNotEmpty
+{
+    if (_before.points.count == 0 && _after.points.count == 0)
+        return;
+    OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
+    if (/*progressListener != null &&*/!routingHelper.isRouteBeingCalculated)
+    {
+        OARouteCalculationParams *params = [self getParams:YES];
+        if (params != nil)
+        {
+            [routingHelper startRouteCalculationThread:params paramsChanged:YES updateProgress:YES];
+            
+//            application.runInUIThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    progressListener.showProgressBar();
+//                }
+//            });
+        }
+    }
+}
   
 - (void) recreateSegments:(NSMutableArray<OAGpxTrkSeg *> *)segments segmentsForSnap:(NSMutableArray<OAGpxTrkSeg *> *)segmentsForSnap points:(NSArray<OAGpxTrkPt *> *)points calculateIfNeeded:(BOOL)calculateIfNeeded
 {
@@ -761,104 +798,44 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //    }
 //}
 
-//private RouteCalculationParams getParams(boolean resetCounter) {
-//    List<Pair<WptPt, WptPt>> pointsToCalculate = getPointsToCalculate();
-//    if (Algorithms.isEmpty(pointsToCalculate)) {
-//        return null;
-//    }
-//    if (resetCounter) {
-//        calculatedPairs = 0;
-//        pointsToCalculateSize = pointsToCalculate.size();
-//    }
-//    final Pair<WptPt, WptPt> currentPair = pointsToCalculate.get(0);
-//    Location start = new Location("");
-//    start.setLatitude(currentPair.first.getLatitude());
-//    start.setLongitude(currentPair.first.getLongitude());
-//
-//    LatLon end = new LatLon(currentPair.second.getLatitude(), currentPair.second.getLongitude());
-//
+- (OARouteCalculationParams *) getParams:(BOOL)resetCounter
+{
+    NSArray<NSArray<OAGpxTrkPt *> *> *pointsToCalculate = [self getPointsToCalculate];
+    if (pointsToCalculate.count == 0)
+        return nil;
+    if (resetCounter)
+    {
+        _calculatedPairs = 0;
+        _pointsToCalculateSize = pointsToCalculate.count;
+    }
+    NSArray<OAGpxTrkPt *> *currentPair = pointsToCalculate.firstObject;
+    CLLocation *start = [[CLLocation alloc] initWithLatitude:currentPair.firstObject.getLatitude longitude:currentPair.firstObject.getLongitude];
+    
+    CLLocation *end = [[CLLocation alloc] initWithLatitude:currentPair.lastObject.getLatitude longitude:currentPair.lastObject.getLongitude];
+    
 //    RouteRegion reg = new RouteRegion();
 //    reg.initRouteEncodingRule(0, "highway", RouteResultPreparation.UNMATCHED_HIGHWAY_TYPE);
-//
-//    final RouteCalculationParams params = new RouteCalculationParams();
-//    params.inSnapToRoadMode = true;
-//    params.start = start;
-//
-//    ApplicationMode appMode = ApplicationMode.valueOfStringKey(currentPair.first.getProfileType(), DEFAULT_APP_MODE);
-//    params.end = end;
-//    RoutingHelper.applyApplicationSettings(params, application.getSettings(), appMode);
-//    params.mode = appMode;
-//    params.ctx = application;
+    
+    OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
+    params.inSnapToRoadMode = YES;
+    params.start = start;
+    
+    OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:currentPair.firstObject.getProfileType def:OAApplicationMode.DEFAULT];
+    params.end = end;
+    [OARoutingHelper applyApplicationSettings:params appMode:appMode];
+    params.mode = appMode;
+    
+    params.calculationProgress = std::make_shared<RouteCalculationProgress>();
+    params.calculationProgressCallback = self;
 //    params.calculationProgress = calculationProgress = new RouteCalculationProgress();
-//    params.calculationProgressCallback = new RouteCalculationProgressCallback() {
-//
-//        @Override
-//        public void start() {
-//        }
-//
-//        @Override
-//        public void updateProgress(int progress) {
-//            int pairs = pointsToCalculateSize;
-//            if (pairs != 0) {
-//                float pairProgress = 100f / pairs;
-//                progress = (int)(calculatedPairs * pairProgress + (float) progress / pairs);
-//            }
-//            progressListener.updateProgress(progress);
-//        }
-//
-//        @Override
-//        public void requestPrivateAccessRouting() {
-//        }
-//
-//        @Override
-//        public void finish() {
-//            calculatedPairs = 0;
-//            pointsToCalculateSize = 0;
-//        }
-//    };
-//    params.resultListener = new RouteCalculationResultListener() {
-//        @Override
-//        public void onRouteCalculated(RouteCalculationResult route) {
-//            List<Location> locations = route.getRouteLocations();
-//            ArrayList<WptPt> pts = new ArrayList<>(locations.size());
-//            double prevAltitude = Double.NaN;
-//            for (Location loc : locations) {
-//                WptPt pt = new WptPt();
-//                pt.lat = loc.getLatitude();
-//                pt.lon = loc.getLongitude();
-//                if (loc.hasAltitude()) {
-//                    prevAltitude = loc.getAltitude();
-//                    pt.ele = prevAltitude;
-//                } else if (!Double.isNaN(prevAltitude)) {
-//                    pt.ele = prevAltitude;
-//                }
-//                pts.add(pt);
-//            }
-//            calculatedPairs++;
-//            params.calculationProgressCallback.updateProgress(0);
-//            List<RouteSegmentResult> originalRoute = route.getOriginalRoute();
-//            if (Algorithms.isEmpty(originalRoute)) {
-//                originalRoute = Collections.singletonList(RoutePlannerFrontEnd.generateStraightLineSegment(
-//                                                                                                           DEFAULT_APP_MODE.getDefaultSpeed(), new LocationsHolder(pts).getLatLonList()));
-//            }
-//            roadSegmentData.put(currentPair, new RoadSegmentData(route.getAppMode(), currentPair.first, currentPair.second, pts, originalRoute));
-//            application.runInUIThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    updateCacheForSnap(true, false);
-//                    progressListener.refresh();
-//                    RouteCalculationParams params = getParams(false);
-//                    if (params != null) {
-//                        application.getRoutingHelper().startRouteCalculationThread(params, true, true);
-//                    } else {
-//                        progressListener.hideProgressBar();
-//                    }
-//                }
-//            });
-//        }
-//    };
-//    return params;
-//}
+
+    params.resultListener = self;
+    
+    _params = params;
+    _currentPair = currentPair;
+    
+    return params;
+}
 
 - (NSArray<OAGpxTrkPt *> *) getRoutePoints
 {
@@ -908,6 +885,35 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return nil;
 }
 
+#pragma mark OARouteCalculationProgressCallback
+
+- (void)finish {
+    _calculatedPairs = 0;
+    _pointsToCalculateSize = 0;
+}
+
+- (void)requestPrivateAccessRouting
+{
+}
+
+- (void)startProgress
+{
+}
+
+- (void)updateProgress:(int)progress
+{
+    NSInteger pairs = _pointsToCalculateSize;
+    if (pairs != 0)
+    {
+        double pairProgress = 100. / pairs;
+        progress = (int) (_calculatedPairs * pairProgress + (double) progress / pairs);
+    }
+//    progressListener.updateProgress(progress);
+}
+
+#pragma mark - OARouteCalculationResultListener
+
+
 //interface SnapToRoadProgressListener {
 //    
 //    void showProgressBar();
@@ -918,5 +924,55 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //    
 //    void refresh();
 //}
+
+- (void)onRouteCalculated:(OARouteCalculationResult *)route segment:(OAWalkingRouteSegment *)segment
+{
+    NSArray<CLLocation *> *locations = route.getRouteLocations;
+    NSMutableArray<OAGpxTrkPt *> *pts = [NSMutableArray arrayWithCapacity:locations.count];
+    double prevAltitude = NAN;
+    for (CLLocation *loc in locations)
+    {
+        OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+        pt.position = loc.coordinate;
+        if (loc.verticalAccuracy > 0)
+        {
+            prevAltitude = loc.altitude;
+            pt.elevation = prevAltitude;
+        }
+        else if (prevAltitude != NAN)
+        {
+            pt.elevation = prevAltitude;
+        }
+        [pts addObject:pt];
+    }
+    _calculatedPairs++;
+    [_params.calculationProgressCallback updateProgress:0];
+    auto originalRoute = route.getOriginalRoute;
+    if (originalRoute.size() == 0)
+        originalRoute = { RoutePlannerFrontEnd::generateStraightLineSegment(DEFAULT_APP_MODE.getDefaultSpeed, [self waypointsToLocations:pts]) };
+    
+    _roadSegmentData[_currentPair] = [[OARoadSegmentData alloc] initWithAppMode:route.appMode start:_currentPair.firstObject end:_currentPair.lastObject points:pts segments:originalRoute];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateSegmentsForSnap:YES calculateIfNeeded:NO];
+//        progressListener.refresh();
+        OARouteCalculationParams *params = [self getParams:NO];
+        if (params)
+            [OARoutingHelper.sharedInstance startRouteCalculationThread:params paramsChanged:YES updateProgress:YES];
+        else
+        {
+//            progressListener.hideProgressBar();
+        }
+    });
+}
+
+- (std::vector<std::pair<double, double>>) waypointsToLocations:(NSArray<OAGpxTrkPt *> *)points
+{
+    std::vector<std::pair<double, double>> res;
+    for (OAGpxTrkPt *pt in points)
+    {
+        res.push_back({pt.getLatitude, pt.getLongitude});
+    }
+    return res;
+}
 
 @end

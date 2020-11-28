@@ -212,6 +212,7 @@ typedef enum
 - (NSString *) getProfileType;
 - (void) setProfileType:(NSString *)profileType;
 - (void) removeProfileType;
+- (BOOL) hasProfile;
 - (BOOL) isGap;
 - (void) setGap;
 - (void) copyExtensions:(OAGpxTrkPt *)pt;

@@ -312,6 +312,12 @@
     [((OAGpxExtensions *)self.extraData).extensions removeObjectForKey:PROFILE_TYPE_EXTENSION];
 }
 
+- (BOOL) hasProfile
+{
+    NSString *profileType = self.getProfileType;
+    return profileType != nil && ![GAP_PROFILE_TYPE isEqualToString:profileType];
+}
+
 - (NSInteger) getTrkPtIndex
 {
     NSString *n = ((OAGpxExtensions *)self.extraData).extensions[TRKPT_INDEX_EXTENSION];

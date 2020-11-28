@@ -109,7 +109,7 @@
         [description setTextColor: UIColorFromRGB(color_text_footer)];
         
         if (boldFragment && boldFragment.length > 0)
-            description.attributedText = [OAUtilities getStringWithBoldPart:descriptionText mainString:descriptionText boldString:boldFragment lineSpacing:4. highlightColor:UIColor.blackColor];
+            description.attributedText = [OAUtilities getStringWithBoldPart:descriptionText mainString:descriptionText boldString:boldFragment lineSpacing:4. fontSize:15. highlightColor:UIColor.blackColor];
         else
         {
             NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];

@@ -245,6 +245,11 @@
             if (settingsItem)
                 [_items addObject:settingsItem];
         }
+        if ([item[@"type"] isEqualToString:@"AVOID_ROADS"])
+        {
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
+        }
         // TODO: implement custom plugins
 //        NSString *pluginId = item.pluginId;
 //        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
@@ -521,8 +526,9 @@
         }
         else if ([item isKindOfClass:OACollectionSettingsItem.class])
         {
-            NSArray *duplicates = [(OACollectionSettingsItem *)item processDuplicateItems];
-            if (duplicates.count > 0)
+            OACollectionSettingsItem *settingsItem = (OACollectionSettingsItem *) item;
+            NSArray *duplicates = [settingsItem processDuplicateItems];
+            if (duplicates.count > 0 && settingsItem.shouldShowDuplicates)
                 [duplicateItems addObjectsFromArray:duplicates];
         }
         else if ([item isKindOfClass:OAFileSettingsItem.class])

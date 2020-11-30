@@ -51,7 +51,17 @@
 
 - (BOOL) isDuplicate:(OAAvoidRoadInfo *)item
 {
-    return [self.existingItems containsObject:item];
+    for (OAAvoidRoadInfo *info in self.existingItems)
+    {
+        if (info.roadId == item.roadId)
+            return YES;
+    }
+    return NO;
+}
+
+- (BOOL)shouldShowDuplicates
+{
+    return NO;
 }
 
 - (void) apply
@@ -62,40 +72,14 @@
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
         for (OAAvoidRoadInfo *duplicate in self.duplicateItems)
         {
-            if ([self shouldReplace])
-            {
-                if ([_settings removeImpassableRoad:duplicate.location])
-                    [_settings addImpassableRoad:duplicate];
-            }
-            else
-            {
-                OAAvoidRoadInfo *roadInfo = [self renameItem:duplicate];
-                [_settings addImpassableRoad:roadInfo];
-            }
+            if ([_settings removeImpassableRoad:duplicate.location])
+                [_settings addImpassableRoad:duplicate];
         }
         for (OAAvoidRoadInfo *roadInfo in self.appliedItems)
             [_settings addImpassableRoad:roadInfo];
 
         [_specificRoads loadImpassableRoads];
         [_specificRoads initRouteObjects:YES];
-    }
-}
-
-- (OAAvoidRoadInfo *) renameItem:(OAAvoidRoadInfo *)item
-{
-    int number = 0;
-    while (true)
-    {
-        number++;
-        OAAvoidRoadInfo *renamedItem = [[OAAvoidRoadInfo alloc] init];
-        renamedItem.name = [NSString stringWithFormat:@"%@_%d", item.name, number];
-        if (![self isDuplicate:renamedItem])
-        {
-            renamedItem.roadId = item.roadId;
-            renamedItem.location = item.location;
-            renamedItem.appModeKey = item.appModeKey;
-            return renamedItem;
-        }
     }
 }
 
@@ -121,8 +105,9 @@
         double longitude = [object[@"longitude"] doubleValue];
         NSString *name = object[@"name"];
         NSString *appModeKey = object[@"appModeKey"];
+        unsigned long long roadId = [object[@"roadId"] unsignedLongLongValue];
         OAAvoidRoadInfo *roadInfo = [[OAAvoidRoadInfo alloc] init];
-        roadInfo.roadId = 0;
+        roadInfo.roadId = roadId;
         roadInfo.location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
         roadInfo.name = name;
         if ([OAApplicationMode valueOfStringKey:appModeKey def:nil])
@@ -146,6 +131,7 @@
             jsonObject[@"longitude"] = [NSString stringWithFormat:@"%0.5f", avoidRoad.location.coordinate.longitude];
             jsonObject[@"name"] = avoidRoad.name;
             jsonObject[@"appModeKey"] = avoidRoad.appModeKey;
+            jsonObject[@"roadId"] = @(avoidRoad.roadId);
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;

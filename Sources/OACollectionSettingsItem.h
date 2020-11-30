@@ -21,5 +21,6 @@
 - (NSArray<ObjectType> *) getNewItems;
 - (BOOL) isDuplicate:(ObjectType)item;
 - (ObjectType) renameItem:(ObjectType)item;
+- (BOOL) shouldShowDuplicates;
 
 @end

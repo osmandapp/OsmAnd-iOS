@@ -403,7 +403,14 @@
                 avoidRoadsStyleSection.groupName = OALocalizedString(@"impassable_road");
                 avoidRoadsStyleSection.type = kCellTypeSectionHeader;
                 avoidRoadsStyleSection.isOpen = NO;
-                
+                for (OAAvoidRoadsSettingsItem *avoidRoads in settings)
+                {
+                    [avoidRoadsStyleSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_alert",
+                        @"title" : [avoidRoads name],
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
                 [data addObject:avoidRoadsStyleSection];
                 break;
             }
@@ -461,7 +468,6 @@
                 return profileItem;
         }
     }
-    
     return nil;
 }
 
@@ -544,7 +550,7 @@
     if (tileSourceTemplates.count > 0)
         [settingsItems addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
-        [settingsItems addObject:[self getBaseAvoidRoadsSettingsItem]];
+        [settingsItems addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
     if (favoiriteItems.count > 0)
         [settingsItems addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoiriteItems]];
     return settingsItems;
@@ -901,8 +907,7 @@
     if (succeed)
     {
         [self.tableView reloadData];
-        
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:items fileName:[_file lastPathComponent]];
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[_settingsHelper.importTask getSettingsToOperate:items importComplete:YES] fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }

@@ -1916,3 +1916,10 @@
 "shared_string_preparing" = "Preparando";
 "shared_string_deselect_all" = "Desmarcar tudo";
 "shared_string_continue" = "Continuar";
+"shared_string_max" = "Max.";
+"shared_string_min" = "Min.";
+"road_speeds" = "Velocidades da estrada";
+"road_max_speed_descr" = "Define a velocidade máxima de viagem para todas as estradas da rota. Reduz a prioridade para estradas com uma velocidade possível maior que o máximo.";
+"road_min_speed_descr" = "Define a velocidade mínima de viagem para todas as estradas da rota. Aumenta a prioridade para estradas com velocidades recomendadas menores que o mínimo.";
+"road_speeds_descr" = "Esses parâmetros podem afetar o cálculo da rota.";
+"maximum_speed" = "Velocidade máxima";

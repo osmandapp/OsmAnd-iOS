@@ -32,6 +32,8 @@
             return @"MAP_FILE";
         case EOAExportSettingsTypeAvoidRoads:
             return @"AVOID_ROADS";
+        case EOAExportSettingsTypeFavorites:
+            return @"FAVOURITES";
         default:
             return nil;
     }
@@ -57,6 +59,8 @@
         return EOAExportSettingsTypeMapFiles;
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOAExportSettingsTypeAvoidRoads;
+    if ([typeName isEqualToString:@"FAVOURITES"])
+        return EOAExportSettingsTypeFavorites;
     return EOAExportSettingsTypeUnknown;
 }
 

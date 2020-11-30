@@ -541,6 +541,7 @@
 // My Places
 "favorites" = "Favorites";
 "tracks" = "Trips";
+"personal_category_name" = "Personal";
 
 // GPX
 "gpx_point" = "Point";

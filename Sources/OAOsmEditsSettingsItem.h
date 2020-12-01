@@ -6,7 +6,8 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OASettingsHelper.h"
+#import "OACollectionSettingsItem.h"
+#import "OAOpenStreetMapPoint.h"
 
 @interface OAOsmEditsSettingsItem : OACollectionSettingsItem<OAOpenStreetMapPoint *>
 

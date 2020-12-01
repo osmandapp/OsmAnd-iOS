@@ -6,7 +6,8 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OASettingsHelper.h"
+#import "OACollectionSettingsItem.h"
+#import "OAOsmNotePoint.h"
 
 @interface OAOsmNotesSettingsItem : OACollectionSettingsItem<OAOsmNotePoint *>
 

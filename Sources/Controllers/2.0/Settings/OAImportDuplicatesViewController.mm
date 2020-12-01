@@ -31,6 +31,8 @@
 #import "OASettingsItem.h"
 #import "OASettingsHelper.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OAOsmNotePoint.h"
+#import "OAOpenStreetMapPoint.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"

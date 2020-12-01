@@ -84,6 +84,11 @@
     return item;
 }
 
+- (BOOL) isDuplicate:(OAOpenStreetMapPoint *)item
+ {
+     return NO;
+ }
+
 - (NSString *) getName
 {
     return @"osm_edits";

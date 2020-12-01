@@ -77,6 +77,11 @@
     return item;
 }
 
+- (BOOL) isDuplicate:(OAOsmNotePoint *)item
+ {
+     return NO;
+ }
+
 - (NSString *) getName
 {
     return @"osm_notes";

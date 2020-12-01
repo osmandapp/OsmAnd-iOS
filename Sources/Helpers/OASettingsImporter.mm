@@ -520,6 +520,8 @@
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
+    NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
         switch (item.type)
@@ -578,6 +580,24 @@
                     [avoidRoads addObjectsFromArray:avoidRoadsItem.items];
                 break;
             }
+            case EOASettingsItemTypeOsmNotes:
+            {
+                OAOsmNotesSettingsItem *osmNotesItem = (OAOsmNotesSettingsItem *) item;
+                if (importComplete)
+                    [notesPointList addObjectsFromArray:osmNotesItem.appliedItems];
+                else
+                    [notesPointList addObjectsFromArray:osmNotesItem.items];
+                break;
+            }
+            case EOASettingsItemTypeOsmEdits:
+            {
+                OAOsmEditsSettingsItem *osmEditsItem = (OAOsmEditsSettingsItem *) item;
+                if (importComplete)
+                    [osmEditsPointList addObjectsFromArray:osmEditsItem.appliedItems];
+                else
+                    [osmEditsPointList addObjectsFromArray:osmEditsItem.items];
+                break;
+            }
             default:
                 break;
         }
@@ -600,6 +620,10 @@
         [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
     if (avoidRoads.count > 0)
         [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
+    if (notesPointList.count > 0)
+        [settingsToOperate setObject:notesPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmNotes]];
+    if (osmEditsPointList.count > 0)
+        [settingsToOperate setObject:osmEditsPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmEdits]];
     return settingsToOperate;
 }
 

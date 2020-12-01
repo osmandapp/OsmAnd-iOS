@@ -36,6 +36,9 @@
 #import "OAExportSettingsType.h"
 #import "OAMapSourcesSettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
+#import "OAOsmNotesSettingsItem.h"
+#import "OAOsmEditsSettingsItem.h"
+#import "OAAvoidRoadInfo.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -161,15 +164,19 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
                 avoidRoadsCount = settings.count;
                 break;
             }
+            case EOAExportSettingsTypeOsmNotes:
+            {
+                osmNotesCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeOsmEdits:
+            {
+                osmEditsCount += settings.count;
+                break;
+            }
             default:
                 break;
         }
-        else if ([item isKindOfClass:OAAvoidRoadInfo.class])
-            avoidRoadsCount += 1;
-        else if ([item isKindOfClass:OAOsmNotesSettingsItem.class])
-            osmNotesCount += ((OAOsmNotesSettingsItem *)item).items.count;
-        else if ([item isKindOfClass:OAOsmEditsSettingsItem.class])
-            osmEditsCount += ((OAOsmEditsSettingsItem *)item).items.count;
     }
     
     if (profilesCount > 0)

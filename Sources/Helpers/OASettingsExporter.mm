@@ -8,6 +8,7 @@
 
 #import "OASettingsExporter.h"
 #import "OASettingsHelper.h"
+#import "OASettingsItem.h"
 #import "OAAppSettings.h"
 #import "OrderedDictionary.h"
 #import "OsmAndApp.h"
@@ -16,21 +17,19 @@
 #include <OsmAndCore/ArchiveWriter.h>
 
 #define kVersion 1
-
 #define kTmpProfileFolder @"tmpProfileData"
 
 #pragma mark - OASettingsExporter
 
 @implementation OASettingsExporter
 {
-
     MutableOrderedDictionary *_items;
     MutableOrderedDictionary *_additionalParams;
     BOOL _exportItemsFiles;
     
     OsmAndAppInstance _app;
     
-     NSString *_tmpFilesDir;
+    NSString *_tmpFilesDir;
 }
 
 - (instancetype) initWithExportParam:(BOOL)exportItemsFiles

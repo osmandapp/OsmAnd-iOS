@@ -127,6 +127,10 @@
 "default_speed" = "Default speed";
 "min_speed" = "Min. speed";
 "max_speed" = "Max. speed";
+"maximum_speed" = "Maximum speed";
+"road_speeds_descr" = "These parameters can affect the route calculation.";
+"road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
+"road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
 
 // Trip recording settings
 "save_global_track_interval" = "General logging interval";
@@ -307,6 +311,7 @@
 "routing_settings_2" = "Navigation settings";
 "gpx_navigation" = "Follow trip";
 "impassable_road" = "Avoid roads";
+"road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
 "consider_limitations_param" = "Consider temporary limitations";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
@@ -478,6 +483,8 @@
 "shared_string_continue" = "Continue";
 "shared_string_deselect_all" = "Deselect all";
 "shared_string_preparing" = "Preparing";
+"shared_string_min" = "Min.";
+"shared_string_max" = "Max.";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -1246,6 +1253,7 @@
 "help_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Other";
+"help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
 "help_tech_articles" = "Technical articles";
 "help_versions" = "Versions";
@@ -1255,6 +1263,7 @@
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "reddit" = "Reddit";
+"vk" = "VK";
 
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
@@ -2044,3 +2053,24 @@
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
+
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "You have the latest version: %@";
+
+"ios_release_3_80" = "• Introduced \“Application Profiles\" with independent settings\n
+• New arrangement of settings by profiles and types: navigation, general, map and screen\n
+• Ability to import or export profile settings\n
+• Added data sources for Online photos\n
+• Added ability to download online maps to cache\n
+• Improved \"Search\" algorithms";
+
+"ios_release_3_90" = "• Introduced \“Application Profiles\" with independent settings\n
+• New arrangement of settings by profiles and types: navigation, general, map and screen\n
+• Ability to import or export profile settings\n
+• Added data sources for Online photos\n
+• Added ability to download online maps to cache\n
+• Improved \"Search\" algorithms";

@@ -1916,3 +1916,10 @@
 "shared_string_preparing" = "Ammaniende";
 "shared_string_deselect_all" = "De-ischerta totu";
 "shared_string_continue" = "Sighi";
+"shared_string_max" = "Màss.";
+"shared_string_min" = "Mìn.";
+"road_speeds" = "Lestresas de sos caminos";
+"road_max_speed_descr" = "Imposta sa lestresa màssima de biàgiu pro totu sos caminos de s'àndala. Abbassat sa prioridade pro sos caminos cun lestresas possìbiles prus artas de su màssimu.";
+"road_min_speed_descr" = "Imposta sa lestresa mìnima de biàgiu pro totu sos caminos de s'àndala. Faghat artziare sa prioridade pro sos caminos cun lestresas racumandadas prus bassas de su mìnimu.";
+"road_speeds_descr" = "Custos paràmetros diant pòdere influentzare su càrculu de s'àndala.";
+"maximum_speed" = "Lestresa màssima";

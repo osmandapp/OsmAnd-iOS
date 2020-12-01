@@ -1835,7 +1835,7 @@
 "osm_editing_settings_descr" = "Los ajustes de este complemento son globales y se aplica a todos los perfiles.";
 // Menu
 "menu" = "Menú";
-"plugin_settings_reset" = "Restablecer ajustes del complemento a valores predefinidos";
+"plugin_settings_reset" = "Restablecer complemento a valores predefinidos";
 "trip_rec_actions_descr" = "Puedes encontrar todas las trazas grabadas en %@";
 "logging_accuracy" = "Precisión de registro";
 "shared_string_account_add" = "Añadir cuenta";
@@ -1917,3 +1917,10 @@
 "shared_string_preparing" = "Preparando";
 "shared_string_deselect_all" = "Desmarcar todo";
 "shared_string_continue" = "Continuar";
+"shared_string_max" = "Máx.";
+"shared_string_min" = "Min.";
+"road_speeds" = "Velocidades de caminos";
+"road_max_speed_descr" = "Define la velocidad máxima de viaje para todos los caminos de la ruta. Reduce la prioridad para los caminos con una posible velocidad superior a la máxima.";
+"road_min_speed_descr" = "Define la velocidad mínima de viaje para todos los caminos de la ruta. Aumenta la prioridad para los caminos con velocidades recomendadas inferiores a la mínima.";
+"road_speeds_descr" = "Estos parámetros pueden afectar al cálculo de la ruta.";
+"maximum_speed" = "Velocidad máxima";

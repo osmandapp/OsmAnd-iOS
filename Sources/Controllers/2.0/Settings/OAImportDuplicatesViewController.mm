@@ -27,6 +27,9 @@
 #import "OAActivityViewWithTitleCell.h"
 #import "OAMapSource.h"
 #import "OAIndexConstants.h"
+#import "OAFileSettingsItem.h"
+#import "OASettingsItem.h"
+#import "OASettingsHelper.h"
 #import "OAFileNameTranslationHelper.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
@@ -388,7 +391,7 @@
             else if ([currentItem isKindOfClass:OAAvoidRoadInfo.class])
             {
                 item[@"label"] = ((OAAvoidRoadInfo *)currentItem).name;
-                item[@"icon"] = [UIImage imageNamed:@"ic_action_alert"];
+                item[@"icon"] = [UIImage imageNamed:@"ic_custom_alert"];
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }
@@ -605,7 +608,7 @@
 - (void)onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items {
     if (succeed)
     {
-        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:items fileName:[_file lastPathComponent]];
+        OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[_settingsHelper.importTask getSettingsToOperate:items importComplete:YES] fileName:[_file lastPathComponent]];
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }

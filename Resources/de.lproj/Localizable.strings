@@ -1916,3 +1916,10 @@
 "shared_string_preparing" = "Vorbereitung";
 "shared_string_deselect_all" = "Alle abwählen";
 "shared_string_continue" = "Fortfahren";
+"shared_string_max" = "Max.";
+"shared_string_min" = "Min.";
+"road_speeds" = "Geschwindigkeiten der Straßen";
+"road_min_speed_descr" = "Legt die minimale Fahrgeschwindigkeit für alle Straßen auf der Route fest. Erhöht die Priorität für Straßen mit empfohlenen Geschwindigkeiten unter der Mindestgeschwindigkeit.";
+"road_max_speed_descr" = "Legt die maximale Fahrgeschwindigkeit für alle Straßen auf der Route fest. Verringert die Priorität für Straßen mit einer möglichen Geschwindigkeit, die höher als die Höchstgeschwindigkeit ist.";
+"road_speeds_descr" = "Diese Parameter können die Routenberechnung beeinflussen.";
+"maximum_speed" = "Höchstgeschwindigkeit";

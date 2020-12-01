@@ -1900,3 +1900,5 @@
 "plan_route" = "Kavanda teekonda";
 "checking_for_duplicate_description" = "OsmAnd kontrollib %1$s rakenduses korduvate kirjete osas. Selleks võib kuluda aega.";
 "import_complete_description" = "Kõik andmed %@-st on imporditud, rakenduse vajaliku osaga töötamiseks võid kasutada nuppe allpool";
+"road_speeds_descr" = "Need parameetrid võivad mõjutada teekonna koostamist.";
+"maximum_speed" = "Suurim kiirus";

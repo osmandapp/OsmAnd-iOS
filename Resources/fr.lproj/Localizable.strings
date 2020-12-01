@@ -632,7 +632,7 @@
 "driving_region_europe_asia" = "Europe, Asie, Amérique latine et équivalent";
 "history" = "Historique";
 "search_map" = "Recherche des cartes …";
-"skip_map_downloading_desc" = "Aucune carte hors-ligne n'est installée. Vous pouvez  sélectionner une carte dans la liste ou télécharger ultérieurement une carte depuis le menu - Gérer les fichiers de cartes";
+"skip_map_downloading_desc" = "Aucune carte hors-ligne n'est installée. Vous pouvez sélectionner une carte dans la liste ou télécharger ultérieurement une carte depuis le menu « Gérer les fichiers de cartes »";
 "map_widget_battery" = "Niveau de batterie";
 "map_widget_plain_time" = "Heure actuelle";
 "map_widget_max_speed" = "Limite de vitesse";
@@ -650,7 +650,7 @@
 "plugin_popup_wiki_ask" = "Pour télécharger des données Wikipédia vous devez activer le plugin : <b>Wikipédia</b>";
 "plugin_popup_srtm_title" = "Télécharger les courbes de niveaux";
 "plugin_popup_nautical_title" = "Télécharger les cartes nautiques";
-"plugin_popup_trip_planning_ask" = "Pour commencer à planifier l'itinéraire, vous devez activer le plugin: <b>Planification d'itinéraire</b>";
+"plugin_popup_trip_planning_ask" = "Pour commencer à planifier l'itinéraire, vous devez activer le plugin : <b>Planification d'itinéraire</b>";
 "no_internet_avail_desc_first" = "Veuillez activer la connexion Internet pour télécharger la liste de cartes";
 "show_region_on_map_desc" = "La carte de %@ a été téléchargée. Rendez-vous sur la carte pour l'utiliser.";
 "sqlitedb_import_already_exists" = "Le fichier sqlitedb spécifié existe déjà. Veuillez choisir une action.";
@@ -763,7 +763,7 @@
 "transport_routes" = "Lignes";
 "new_destination_point_dialog" = "Vous avez déjà défini une destination";
 "logging_interval_navigation" = "Intervalle d'enregistrement durant la navigation";
-"logging_min_speed_descr" = "Filtre: enregistrement inactif en-dessous de vitesse sélectionnée";
+"logging_min_speed_descr" = "Filtre : enregistrement inactif en-dessous de vitesse sélectionnée";
 "route_stops_before" = "%d arrêts avant";
 "transport_stop" = "Arrêt";
 "facebook" = "Facebook";
@@ -815,7 +815,7 @@
 "monthly_map_updates" = "Mise à jour des cartes : tous les mois";
 "daily_map_updates" = "Mise à jour des cartes : toutes les heures";
 "donation_to_osm" = "Don à la communauté OpenStreetMap";
-"unlock_all_features" = "Activez toutes les fonctionnalités d'OsmAnd";
+"unlock_all_features" = "Débloquer toutes les fonctionnalités d'OsmAnd";
 "shared_string_email_address" = "Adresse courriel";
 "osm_live_enter_email" = "Veuillez saisir une adresse courriel valide";
 "shared_string_unexpected_error" = "Erreur inattendue";
@@ -1427,7 +1427,7 @@
 "rendering_attr_contourColorScheme_name" = "Couleurs des courbes de niveau";
 "rendering_value_pedestrian_name" = "À pied";
 "rendering_attr_trainLightrailRoutes_name" = "Itinéraires de chemin de fer";
-"day_short" = "j";
+"day_short" = "J";
 "week_short" = "sem";
 "weeks_short" = "sem";
 "online_webpage_warning" = "Page accessible uniquement en ligne. Souhaitez-vous l’ouvrir dans un navigateur web ?";
@@ -1596,7 +1596,7 @@
 "selected_roads" = "Routes sélectionnées";
 "select_work_point" = "Sélectionnez votre lieu de travail";
 "consider_limitations_param" = "Prendre en compte les restrictions temporaires";
-"allow_3d_descr" = "Activez cette option pour voir la carte en perspective 2,5D";
+"allow_3d_descr" = "Activer cette option pour permettre la vue 2,5D";
 "active_markers" = "Marques actives";
 "shared_string_exit" = "Quitter";
 "base_profile_descr_aircraft" = "Avion, parapente";
@@ -1649,7 +1649,7 @@
 "specify_number_of_dir_indicators" = "Spécifiez le nombre d'indicateurs de direction, cela affecte tous les paramètres ci-dessous.";
 "direction_lines" = "Indications de direction";
 // Dirrection appearance
-"one" = "Un";
+"one" = "Un(e)";
 "configure_screen_descr" = "Sélectionnez les options d'écran pour le profil";
 "logging_accuracy" = "Précision de l'enregistrement";
 "get_discount_first_few_parts" = "%@ pour premier %@";
@@ -1708,7 +1708,7 @@
 "profile_type_custom_string" = "Profil personnalisé";
 "profile_type_base_string" = "Profil de base";
 "shared_string_account" = "Compte";
-"res_zoom_warning" = "La valeur du zoom minimal ne peut être égale ou supérieure à celle du zoom maximal.";
+"res_zoom_warning" = "La valeur du zoom minimal ne peut être égale ou supérieure à celle du zoom maximal";
 "res_name_warning" = "Le nom du fichier ne peut être vide";
 "res_expire_time_desc" = "Temps d'expiration en minutes. Après la durée définie, les tuiles dans le cache seront rechargées. Laissez ce champ vide si vous n'avez pas besoin de recharger des tuiles depuis cette source.\nUn jour équivaut à 1440 minutes.\nUne semaine équivaut à 10 080 minutes.\n30 jours équivalent à 43 200 minutes.";
 "res_zoom_levels_desc" = "Ces paramètres vont affecter l'affichage de la carte lorsque celle-ci est utilisée en tant que sur-couche ou sous-couche.\n\nType de carte : la carte sera limitée aux zooms sélectionnés.\n\nSur-couche ou sous-couche : les niveaux de zoom auxquels les tuiles seront visibles. L'agrandissement ou le rétrécissement auront lieu au-dessus ou en-dessous des valeurs choisies.";
@@ -1739,3 +1739,31 @@
 "profile_alert_delete_msg" = "Voulez-vous vraiment supprimer complètement le profil « %@ » ?";
 "copy_from_other_profile_descr" = "Vous pouvez copier tous les paramètres de n'importe quel profil vers le profil sélectionné : ";
 "shared_string_next" = "Suivant";
+"nav_type_hint" = "Type de navigation : %@";
+"selected_profiles" = "%d sur %d";
+"default_speed_dialog_msg" = "Estime l'heure d'arrivée pour les types de route inconnus et limite la vitesse sur toutes les routes (peut modifier le calcul d'itinéraire)";
+"width_limit_description" = "Indiquez la largeur de votre véhicule, certaines restrictions d'itinéraire peuvent s'appliquer aux véhicules larges.";
+"height_limit_description" = "Indiquez la hauteur de votre véhicule, certaines restrictions d'itinéraire peuvent s'appliquer aux véhicules hauts.";
+"selected_profile" = "Profil sélectionné";
+"quick_action_map_source_title" = "Sources des cartes";
+"configure_screen_quick_action" = "Action rapide";
+"search_activity" = "Rechercher";
+"shared_string_deselect_all" = "Tout désélectionner";
+"shared_string_settings" = "Paramètres";
+"avoid_road" = "Éviter la route";
+"shared_string_continue" = "Continuer";
+"shared_string_finish" = "Terminer";
+"shared_string_routing" = "Calcul d'itinéraire";
+"import_duplicates_title" = "Certains éléments existent déjà";
+"import_duplicates_description" = "Des éléments portant les mêmes noms existent déjà dans OsmAnd.\n\nQue souhaitez-vous faire ?";
+"keep_both_desc" = "Les éléments seront importés avec un préfixe";
+"keep_both" = "Conserver les deux";
+"replace_all" = "Tout remplacer";
+"replace_all_desc" = "Les éléments actuels seront remplacés par les éléments du fichier";
+"shared_string_profiles" = "Profils";
+"shared_string_quick_actions" = "Actions rapides";
+"shared_string_nothing_selected" = "Aucun élément sélectionné";
+"shared_string_poi_types" = "Types de PI";
+"shared_string_preparing" = "Préparation en cours";
+"shared_string_import_complete" = "Import terminé";
+"shared_string_importing" = "Import en cours";

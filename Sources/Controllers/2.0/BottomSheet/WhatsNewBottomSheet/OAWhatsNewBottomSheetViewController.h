@@ -11,6 +11,4 @@
 
 @interface OAWhatsNewBottomSheetViewController : OABaseBottomSheetViewController
 
-@property (nonatomic, weak) id delegate;
-
 @end

@@ -26,7 +26,7 @@
     }
     else
     {
-        return [NSString stringWithFormat:@"3%@80", separator, subversions[1]];
+        return [NSString stringWithFormat:@"3%@80", separator];
     }
 }
 

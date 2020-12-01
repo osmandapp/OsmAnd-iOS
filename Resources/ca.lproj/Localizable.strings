@@ -1911,3 +1911,10 @@
 "selected_profiles" = "%d de %d";
 "import_profile_select_descr" = "Seleccioneu les dades que voleu importar.";
 "shared_string_import" = "Importa el perfil";
+"shared_string_max" = "Màx.";
+"shared_string_min" = "Mín.";
+"road_speeds" = "Velocitat de les carreteres";
+"road_min_speed_descr" = "Estableix la velocitat mínima de circulació de totes les carreteres de la ruta. Prioritza les carreteres amb velocitats recomanades inferiors a la mínima.";
+"road_max_speed_descr" = "Estableix la velocitat màxima de circulació de totes les carreteres de la ruta. Intenta evitar les carreteres on es permet velocitats superiors a la màxima.";
+"road_speeds_descr" = "Aquests paràmetres podrien afectar el càlcul de la ruta.";
+"maximum_speed" = "Velocitat màxima";

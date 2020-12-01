@@ -351,7 +351,8 @@
                @"ic_action_go_cart",
                @"ic_action_openstreetmap_logo",
                @"ic_action_kayak",
-               @"ic_action_motorboat"];
+               @"ic_action_motorboat",
+               @"ic_action_light_aircraft"];
 }
 
 - (NSArray<UIImage *> *) getIconsAtRest

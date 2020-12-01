@@ -31,6 +31,8 @@
 #import "OASettingsItem.h"
 #import "OASettingsHelper.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoritesSettingsItem.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -164,6 +166,7 @@
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray new];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray new];
     NSMutableArray<NSString *> *mapFiles = [NSMutableArray new];
+    NSMutableArray<OAFavoriteGroup *> *favoriteItems = [NSMutableArray new];
     
     for (id object in duplicatesList)
     {
@@ -190,6 +193,8 @@
         }
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject: (OAAvoidRoadInfo *)object];
+        else if ([object isKindOfClass:OAFavoriteGroup.class])
+            [favoriteItems addObject: (OAFavoriteGroup *)object];
     }
     if (profiles.count > 0)
     {
@@ -253,6 +258,13 @@
         [mapsSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"maps")]];
         [mapsSection addObjectsFromArray:mapFiles];
         [duplicates addObject:mapsSection];
+    }
+    if (favoriteItems.count > 0)
+    {
+        NSMutableArray *favoritesSection = [NSMutableArray new];
+        [favoritesSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"favorites")]];
+        [favoritesSection addObjectsFromArray:favoriteItems];
+        [duplicates addObject:favoritesSection];
     }
     return duplicates;
 }
@@ -376,6 +388,13 @@
             {
                 item[@"label"] = ((OAAvoidRoadInfo *)currentItem).name;
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_alert"];
+                item[@"description"] = @"";
+                item[@"cellType"] = kTitleTwoIconsRoundCell;
+            }
+            else if ([currentItem isKindOfClass:OAFavoriteGroup.class])
+            {
+                item[@"label"] = [OAFavoritesHelper getDisplayName:((OAFavoriteGroup *)currentItem).name];
+                item[@"icon"] = [UIImage imageNamed:@"ic_custom_favorites"];
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }

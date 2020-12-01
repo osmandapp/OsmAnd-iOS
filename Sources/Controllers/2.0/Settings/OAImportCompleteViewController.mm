@@ -28,7 +28,8 @@
 #import "OAProfileSettingsItem.h"
 #import "OAFileSettingsItem.h"
 #import "OAMapSourcesSettingsItem.h"
-#import "OAAvoidRoadsSettingsItem.h"
+#import "OAFavoritesHelper.h"
+#import "OAFavoritesSettingsItem.h"
 #import "OAExportSettingsType.h"
 #import "OAMapSourcesSettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
@@ -46,7 +47,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeRoutingSettings,
     EOAImportDataTypeAvoidRoads,
     EOAImportDataTypeGpxTrips,
-    EOAImportDataTypeMaps
+    EOAImportDataTypeMaps,
+    EOAImportDataTypeFavorites
 };
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -101,6 +103,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     NSInteger gpxFilesCount = 0;
     NSInteger avoidRoadsCount = 0;
     NSInteger mapsCount = 0;
+    NSInteger favoritesCount = 0;
     
     for (NSString *type in [_itemsMap allKeys])
     {
@@ -151,6 +154,11 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             case EOAExportSettingsTypeAvoidRoads:
             {
                 avoidRoadsCount = settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeFavorites:
+            {
+                favoritesCount = settings.count;
                 break;
             }
             default:
@@ -245,6 +253,16 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             @"iconName": @"ic_custom_map",
             @"count": [NSString stringWithFormat:@"%ld", mapsCount],
             @"category" : @(EOAImportDataTypeMaps)
+            }
+         ];
+    }
+    if (favoritesCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"favorites"),
+            @"iconName": @"ic_custom_favorites",
+            @"count": [NSString stringWithFormat:@"%ld", favoritesCount],
+            @"category" : @(EOAImportDataTypeFavorites)
             }
          ];
     }
@@ -374,6 +392,11 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         UIViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
         [rootController.navigationController pushViewController:resourcesViewController animated:YES];
+    }
+    else if (dataType == EOAImportDataTypeFavorites)
+    {
+        UIViewController* favoritesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+        [rootController.navigationController pushViewController:favoritesViewController animated:YES];
     }
 }
 

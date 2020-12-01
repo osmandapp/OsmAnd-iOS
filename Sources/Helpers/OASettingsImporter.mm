@@ -23,7 +23,9 @@
 #import "OAPluginSettingsItem.h"
 #import "OAProfileSettingsItem.h"
 #import "OAGlobalSettingsItem.h"
+#import "OAFavoritesSettingsItem.h"
 #import "OAExportSettingsType.h"
+#import "OAFavoritesHelper.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -237,6 +239,12 @@
             if (settingsItem)
                 [_items addObject:settingsItem];
         }
+        if ([item[@"type"] isEqualToString:@"FAVOURITES"])
+        {
+            OASettingsItem *settingsItem = [self createItem:item];
+            if (settingsItem)
+                [_items addObject:settingsItem];
+        }
         if ([item[@"type"] isEqualToString:@"AVOID_ROADS"])
         {
             OASettingsItem *settingsItem = [self createItem:item];
@@ -325,6 +333,9 @@
             break;
         case EOASettingsItemTypeAvoidRoads:
             item = [[OAAvoidRoadsSettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeFavorites:
+            item = [[OAFavoritesSettingsItem alloc] initWithJson:json error:&error];
             break;
         default:
             item = nil;
@@ -541,6 +552,7 @@
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
         switch (item.type)
@@ -599,6 +611,15 @@
                     [avoidRoads addObjectsFromArray:avoidRoadsItem.items];
                 break;
             }
+            case EOASettingsItemTypeFavorites:
+            {
+                OAFavoritesSettingsItem *favoritesItem = (OAFavoritesSettingsItem *) item;
+                if (importComplete)
+                    [favorites addObjectsFromArray:favoritesItem.appliedItems];
+                else
+                    [favorites addObjectsFromArray:favoritesItem.items];
+                break;
+            }
             default:
                 break;
         }
@@ -621,6 +642,8 @@
         [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
     if (avoidRoads.count > 0)
         [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
+    if (favorites.count > 0)
+        [settingsToOperate setObject:favorites forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeFavorites]];
     return settingsToOperate;
 }
 

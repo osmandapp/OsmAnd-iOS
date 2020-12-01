@@ -34,6 +34,8 @@
 #import "OAMapSourcesSettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OAFavoritesSettingsItem.h"
+#import "OAFavoritesHelper.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -238,6 +240,7 @@
     OATableGroupToImport *customGPXSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customObfMapSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *avoidRoadsStyleSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *favoritesSection = [[OATableGroupToImport alloc] init];
     for (NSString *type in [_itemsMap allKeys])
     {
         EOAExportSettingsType itemType = [OAExportSettingsType parseType:type];
@@ -411,6 +414,25 @@
                 [data addObject:avoidRoadsStyleSection];
                 break;
             }
+            case EOAExportSettingsTypeFavorites:
+            {
+                favoritesSection.groupName = OALocalizedString(@"my_places");
+                favoritesSection.type = kCellTypeSectionHeader;
+                favoritesSection.isOpen = NO;
+                
+                for (OAFavoriteGroup *group in settings)
+                {
+                    NSString *groupName = [OAFavoritesHelper getDisplayName:group.name];
+                    [favoritesSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_folder",
+                        @"color" : group.color,
+                        @"title" : groupName,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
+                [data addObject:favoritesSection];
+                break;
+            }
             default:
                 break;
         }
@@ -497,6 +519,7 @@
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    NSMutableArray<OAFavoriteGroup *> *favoiriteItems = [NSMutableArray array];
     
     for (NSObject *object in _selectedItems)
     {
@@ -514,6 +537,8 @@
             [avoidRoads addObject:(OAAvoidRoadInfo *)object];
         else if ([object isKindOfClass:OAFileSettingsItem.class])
             [settingsItems addObject:(OAFileSettingsItem *)object];
+        else if ([object isKindOfClass:OAFavoriteGroup.class])
+            [favoiriteItems addObject:(OAFavoriteGroup *)object];
     }
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)
@@ -526,6 +551,8 @@
         [settingsItems addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
         [settingsItems addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
+    if (favoiriteItems.count > 0)
+        [settingsItems addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoiriteItems]];
     return settingsItems;
 }
 

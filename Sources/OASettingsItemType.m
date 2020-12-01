@@ -32,6 +32,8 @@
             return @"MAP_SOURCES";
         case EOASettingsItemTypeAvoidRoads:
             return @"AVOID_ROADS";
+        case EOASettingsItemTypeFavorites:
+            return @"FAVOURITES";
         default:
             return nil;
     }
@@ -57,6 +59,8 @@
         return EOASettingsItemTypeMapSources;
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOASettingsItemTypeAvoidRoads;
+    if ([typeName isEqualToString:@"FAVOURITES"])
+        return EOASettingsItemTypeFavorites;
     
     return EOASettingsItemTypeUnknown;
 }

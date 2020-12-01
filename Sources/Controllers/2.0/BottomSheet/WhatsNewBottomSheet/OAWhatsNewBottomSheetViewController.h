@@ -6,17 +6,11 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABottomSheetTwoButtonsViewController.h"
 
-@class OAWhatsNewBottomSheetViewController;
+#import "OABaseBottomSheetViewController.h"
 
-@interface OAWhatsNewBottomSheetScreen : NSObject<OABottomSheetScreen>
+@interface OAWhatsNewBottomSheetViewController : OABaseBottomSheetViewController
 
-- (id) initWithTable:(UITableView *)tableView viewController:(OABottomSheetTwoButtonsViewController *)viewController
-               param:(id)param;
-
-@end
-
-@interface OAWhatsNewBottomSheetViewController : OABottomSheetTwoButtonsViewController
+@property (nonatomic, weak) id delegate;
 
 @end

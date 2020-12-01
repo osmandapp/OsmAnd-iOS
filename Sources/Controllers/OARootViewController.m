@@ -142,8 +142,8 @@ typedef enum : NSUInteger {
 {
     if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen)
     {
-        OAWhatsNewBottomSheetViewController *screen = [[OAWhatsNewBottomSheetViewController alloc] init];
-        [screen show];
+        OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];
+        [bottomSheet presentInViewController:self];
     }
 }
 

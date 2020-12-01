@@ -8,133 +8,107 @@
 
 #import "OAWhatsNewBottomSheetViewController.h"
 #import "OAAppVersionDependedConstants.h"
-#import "Localization.h"
-#import "OABottomSheetHeaderButtonCell.h"
-#import "OAColors.h"
+#import "OATitleIconRoundCell.h"
 #import "OADescrTitleCell.h"
-#import "OADividerCell.h"
+#import "Localization.h"
+#import "OAColors.h"
 
-#define kButtonsTag 1
-#define kButtonsDividerTag 150
-#define kBottomSheetHeaderButtonCell @"OABottomSheetHeaderButtonCell"
+#define kIconTitleIconRoundCell @"OATitleIconRoundCell"
 #define kDescrTitleCell @"OADescrTitleCell"
 
-
-@interface OAWhatsNewBottomSheetScreen ()
+@interface OAWhatsNewBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OAWhatsNewBottomSheetScreen
+@implementation OAWhatsNewBottomSheetViewController
 {
-    OAWhatsNewBottomSheetViewController *vwController;
-    NSArray* _data;
-}
-@synthesize tableData, tblView;
-
-- (id) initWithTable:(UITableView *)tableView viewController:(OAWhatsNewBottomSheetViewController *)viewController param:(id)param
-{
-    self = [super init];
-    if (self)
-    {
-        [self initOnConstruct:tableView viewController:viewController];
-    }
-    return self;
+    NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (void) initOnConstruct:(UITableView *)tableView viewController:(OAWhatsNewBottomSheetViewController *)viewController
-{
-    vwController = viewController;
-    tblView = tableView;
-    tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self initData];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.sectionHeaderHeight = 16.;
+    [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_poi.png"]];
 }
 
-- (void) setupView
+- (void) applyLocalization
 {
-    [[vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
-    NSMutableArray *model = [NSMutableArray new];
-    NSMutableArray *arr = [NSMutableArray array];
+    self.titleView.text = [NSString stringWithFormat:OALocalizedString(@"help_what_is_new")];
+    [self.leftButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
+    [self.rightButton setTitle:OALocalizedString(@"shared_string_read_more") forState:UIControlStateNormal];
+}
+
+- (void) generateData
+{
+    NSMutableArray *data = [NSMutableArray new];
     
-    [arr addObject:@{
-                     @"type" : kBottomSheetHeaderButtonCell,
-                     @"title" : OALocalizedString(@"help_what_is_new"),
-                     @"description" : @"",
-                     @"img" : @"ic_custom_poi.png"
-                     }];
-    [model addObject:[NSArray arrayWithArray:arr]];
-    [arr removeAllObjects];
-
     NSString *fullAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), fullAppVersion];
     NSString *releaseNotesKey = [NSString stringWithFormat:@"ios_release_%@", [OAAppVersionDependedConstants getShortAppVersionWithSeparator:@"_"]];
     
-    [arr addObject:@{
-                     @"type" : kDescrTitleCell,
-                     @"title" : title,
-                     @"description" : OALocalizedString(releaseNotesKey)
-                     }];
-    [model addObject:[NSArray arrayWithArray:arr]];
-
-    _data = [NSArray arrayWithArray:model];
+    [data addObject:@[
+        @{
+             @"type" : kDescrTitleCell,
+             @"title" : title,
+             @"description" : OALocalizedString(releaseNotesKey)
+        }]];
+    _data = data;
 }
 
-- (NSDictionary *) getItem:(NSIndexPath *)indexPath
+- (void) onRightButtonPressed
 {
-    return _data[indexPath.section][indexPath.row];
-}
-
-- (void) initData
-{
-}
-
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    return UITableViewAutomaticDimension;
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kLatestChangesUrl] options: @{} completionHandler:nil];
+    [super onRightButtonPressed];
 }
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return _data.count;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    NSArray *sectionData = _data[section];
-    return sectionData.count;
-}
-
-- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
     
-    if ([item[@"type"] isEqualToString:kBottomSheetHeaderButtonCell])
+    if ([item[@"type"] isEqualToString:kIconTitleIconRoundCell])
     {
-        static NSString* const identifierCell = kBottomSheetHeaderButtonCell;
-        OABottomSheetHeaderDescrButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = kIconTitleIconRoundCell;
+        OATitleIconRoundCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetHeaderButtonCell owner:self options:nil];
-            cell = (OABottomSheetHeaderButtonCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
+            cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.iconView.tintColor = UIColorFromRGB(color_osmand_orange);
         }
         if (cell)
         {
+            [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
             cell.titleView.text = item[@"title"];
-            [cell.iconView setImage:[[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-            cell.iconView.hidden = !cell.iconView.image;
-            [cell.closeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.closeButton addTarget:self action:@selector(onCloseButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            
+            
+            UIColor *tintColor = item[@"custom_color"];
+            if (tintColor)
+            {
+                cell.iconColorNormal = tintColor;
+                cell.textColorNormal = tintColor;
+                cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            }
+            else
+            {
+                cell.textColorNormal = nil;
+                cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+                cell.titleView.textColor = UIColor.blackColor;
+                cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+            }
         }
         return cell;
     }
     else if ([item[@"type"] isEqualToString:kDescrTitleCell])
     {
         OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:kDescrTitleCell];
+        cell = (OADescrTitleCell *)[self.tableView dequeueReusableCellWithIdentifier:kDescrTitleCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kDescrTitleCell owner:self options:nil];
@@ -167,88 +141,17 @@
         }
         return cell;
     }
-    else
-    {
-        return nil;
-    }
+    return nil;
 }
 
-- (void) onCloseButtonPressed:(id)sender
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    [vwController dismiss];
+    return _data.count;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0.001;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 16.0;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    view.hidden = YES;
-}
-
-@end
-
-
-@interface OAWhatsNewBottomSheetViewController ()
-
-@end
-
-@implementation OAWhatsNewBottomSheetViewController
-
-- (void) setupView
-{
-    if (!self.screenObj)
-        self.screenObj = [[OAWhatsNewBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
-    
-    [super setupView];
-}
-
-- (void) setupButtons
-{
-    [super setupButtons];
-    self.doneButton.backgroundColor = UIColorFromRGB(color_primary_purple);
-    [self.doneButton setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    self.doneButton.tag = kButtonsTag;
-    self.cancelButton.tag = kButtonsTag;
-}
-
-- (void)additionalSetup
-{
-    [super additionalSetup];
-    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
-    self.buttonsView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
- 
-    for (UIView *v in self.buttonsView.subviews)
-    {
-        if (v.tag != kButtonsTag)
-            v.backgroundColor = UIColor.clearColor;
-    }
-}
-
-- (void)applyLocalization
-{
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_read_more") forState:UIControlStateNormal];
-}
-
-- (void) doneButtonPressed:(id)sender
-{
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kLatestChangesUrl] options: @{} completionHandler:nil];
-    [self dismiss];
+    return _data[section].count;
 }
 
 @end

@@ -571,7 +571,7 @@
 "map_widget_right" = "Pannello destro";
 "map_widget_left" = "Pannello sinistro";
 "select_gpx" = "Scegli GPX…";
-"announce_gpx_waypoints" = "Punti GPX di passaggio";
+"announce_gpx_waypoints" = "Traccia i waypoint";
 "speak_favorites" = "Preferiti nelle vicinanze";
 "speak_poi" = "PDI nelle vicinanze";
 "voice_pref_title" = "Voce";
@@ -615,7 +615,7 @@
 "settings_preset" = "Profilo predefinito";
 "settings_preset_descr" = "Le impostazioni di navigazione e di visualizzazione della mappa vengono ricordate per ciascun profilo di utilizzo. Impostare qui il profilo predefinito.";
 "unit_of_length" = "Unità di misura di lunghezza";
-"save_global_track_interval_descr" = "Scegli l'intervallo di tempo per la registrazione del percorso (abilitata attraverso il widget registrazione GPX sulla mappa).";
+"save_global_track_interval_descr" = "Scegli l'intervallo di registrazione per la registrazione generale del viaggio (abilitato tramite il widget di registrazione GPX sulla mappa).";
 "rotate_map_to_bearing" = "Orientamento della mappa";
 "map_widget_transparent" = "Widget trasparenti";
 "map_widget_next_turn" = "Prossima svolta";
@@ -768,12 +768,12 @@
 "transport_stop" = "Fermata";
 "route_stops_before" = "%d fermate prima";
 "logging_interval_navigation" = "Intervallo di registrazione durante la navigazione";
-"logging_interval_navigation_descr" = "Scegli l'intervallo di registrazione della traccia durante la navigazione";
-"logging_min_distance" = "Distanza minima di registrazione";
+"logging_interval_navigation_descr" = "Scegli l'intervallo di registrazione per la registrazione del viaggio durante la navigazione";
+"logging_min_distance" = "Spostamento minimo";
 "logging_min_distance_descr" = "Filtro: minima distanza per registrare un nuovo punto";
-"logging_min_accuracy" = "Minima precisione per la registrazione";
+"logging_min_accuracy" = "Precisione minima";
 "angular_units" = "Unità di misura degli angoli";
-"angular_units_descr" = "Cambia come l'azimuth è misurato.";
+"angular_units_descr" = "Modificare le unità di misura dell'azimut.";
 "day_short" = "G";
 "week_short" = "Sett";
 "weeks_short" = "Sett.ne";
@@ -1303,7 +1303,7 @@
 "general_settings_descr" = "Configura il display e le impostazioni comuni dell'applicazione";
 "voice_provider_descr" = "Scegli la voce guida per la navigazione";
 "logging_min_accuracy_descr" = "Filtro: nessuna registrazione se l'accuratezza non è sufficiente";
-"logging_min_speed" = "Velocità minima di registrazione";
+"logging_min_speed" = "Velocità minima";
 "logging_min_speed_descr" = "Filtro: nessuna registrazione a velocità inferiori a quella selezionata";
 "auto_split_gap_descr" = "Inizia un nuovo segmento dopo una pausa di 6 minuti, un nuovo percorso dopo una pausa di 2 ore, o un nuovo file dopo una pausa più lunga.";
 "recording_preferences_descr" = "Preferenze per la registrazione del percorso";
@@ -1618,3 +1618,26 @@
 "shared_string_preparing" = "Preparando";
 "shared_string_import_complete" = "Importazione completata";
 "shared_string_importing" = "Importazione in corso";
+"specify_number_of_dir_indicators" = "Specificare il numero di indicatori di direzione, influisce su tutte le impostazioni seguenti.";
+"direction_lines" = "Linee di direzione";
+"arrows_on_map" = "Frecce sulla mappa";
+"distance_indication" = "Indicazione della distanza";
+"two" = "Due";
+
+// Dirrection appearance
+"one" = "Uno";
+"configure_screen_descr" = "Seleziona le opzioni dello schermo per il profilo";
+"plugin_settings_reset" = "Ripristina le impostazioni predefinite del plugin";
+"trip_rec_actions_descr" = "Puoi trovare tutti i tuoi percorsi registrati in%@";
+"logging_accuracy" = "Accuratezza della registrazione";
+"road_max_speed_descr" = "Imposta la velocità di viaggio massima per tutte le strade del percorso. Abbassa la priorità per le strade con una velocità possibile superiore a quella massima.";
+"road_min_speed_descr" = "Imposta la velocità di viaggio minima per tutte le strade del percorso. Aumenta la priorità per le strade con velocità consigliate inferiori al minimo.";
+"road_speeds_descr" = "Questi parametri possono influenzare il calcolo del percorso.";
+"maximum_speed" = "Velocità massima";
+"min_speed" = "Velocità min";
+"max_speed" = "Velocità max";
+"default_speed" = "Velocità predefinita";
+"send_anonymous_data_desc" = "Invia a OsmAnd le statistiche di download delle mappe, non raccogliamo dati sulla posizione o informazioni personali.";
+"default_profile_descr" = "Seleziona un profilo che verrà utilizzato all'avvio dell'applicazione.";
+"allow_3d_descr" = "Abilita questa opzione per poter visualizzare la mappa nella prospettiva a 2.5D";
+"allow_3d" = "Consenti la visualizzazione a 2.5D";

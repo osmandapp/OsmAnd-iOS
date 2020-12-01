@@ -54,14 +54,14 @@
         }
         switch (_changeRouteType)
         {
-            case LAST_SEGMENT:
+            case EOAChangeRouteLastSegment:
             {
                 [self updateProfileType:_newPoints[_newPoints.count - 1]];
                 editingCtx.lastCalculationMode = NEXT_SEGMENT;
                 _newRoadSegmentData = nil;
                 break;
             }
-            case WHOLE_ROUTE:
+            case EOAChangeRouteWhole:
             {
                 for (OAGpxTrkPt *pt in _newPoints)
                 {
@@ -71,7 +71,7 @@
                 [_newRoadSegmentData removeAllObjects];
                 break;
             }
-            case NEXT_SEGMENT:
+            case EOAChangeRouteNextSegment:
             {
                 if (_pointIndex >= 0 && _pointIndex < _newPoints.count)
                 {
@@ -80,7 +80,7 @@
                 [_newRoadSegmentData removeObjectForKey:[self getPairAt:_pointIndex]];
                 break;
             }
-            case ALL_NEXT_SEGMENTS:
+            case EOAChangeRouteAllNextSegments:
             {
                 for (NSInteger i = _pointIndex; i >= 0 && i < _newPoints.count; i++)
                 {
@@ -89,7 +89,7 @@
                 }
                 break;
             }
-            case PREV_SEGMENT:
+            case EOAChangeRoutePrevSegment:
             {
                 if (_pointIndex > 0 && _pointIndex < _newPoints.count)
                 {
@@ -98,7 +98,7 @@
                 }
                 break;
             }
-            case ALL_PREV_SEGMENTS:
+            case EOAChangeRouteAllPrevSegments:
             {
                 for (NSInteger i = 0; i < _pointIndex && i < _newPoints.count; i++)
                 {

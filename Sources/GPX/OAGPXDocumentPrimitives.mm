@@ -297,19 +297,56 @@
     return self;
 }
 
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key
+{
+    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
+    {
+        if ([e.name isEqualToString:PROFILE_TYPE_EXTENSION])
+        {
+            return e;
+        }
+    }
+    return nil;
+}
+
 - (NSString *) getProfileType
 {
-    return ((OAGpxExtensions *)self.extraData).extensions[PROFILE_TYPE_EXTENSION];
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    if (e)
+        return e.value;
+    return nil;
+}
+
+- (void) addExtension:(OAGpxExtension *)e
+{
+    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
+    if (![exts containsObject:e])
+        ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
 }
 
 - (void) setProfileType:(NSString *)profileType
 {
-    ((OAGpxExtensions *)self.extraData).extensions[PROFILE_TYPE_EXTENSION] = profileType;
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = PROFILE_TYPE_EXTENSION;
+        e.value = profileType;
+        [self addExtension:e];
+        return;
+    }
+    e.value = profileType;
 }
 
 - (void) removeProfileType
 {
-    [((OAGpxExtensions *)self.extraData).extensions removeObjectForKey:PROFILE_TYPE_EXTENSION];
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    if (e)
+    {
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:((OAGpxExtensions *)self.extraData).extensions];
+        [arr removeObject:e];
+        ((OAGpxExtensions *)self.extraData).extensions = arr;
+    }
 }
 
 - (BOOL) hasProfile
@@ -320,13 +357,25 @@
 
 - (NSInteger) getTrkPtIndex
 {
-    NSString *n = ((OAGpxExtensions *)self.extraData).extensions[TRKPT_INDEX_EXTENSION];
-    return n ? n.integerValue : -1;
+    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
+    if (e)
+        return e ? e.value.integerValue : -1;
+    return -1;
 }
 
 - (void) setTrkPtIndex:(NSInteger)index
 {
-    ((OAGpxExtensions *)self.extraData).extensions[TRKPT_INDEX_EXTENSION] = [NSString stringWithFormat:@"%ld", index];
+    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
+    NSString *stringValue = [NSString stringWithFormat:@"%ld", index];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = PROFILE_TYPE_EXTENSION;
+        e.value = stringValue;
+        [self addExtension:e];
+        return;
+    }
+    e.value = stringValue;
 }
 
 - (BOOL) isGap

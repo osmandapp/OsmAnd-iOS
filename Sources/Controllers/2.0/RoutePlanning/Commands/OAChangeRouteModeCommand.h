@@ -10,12 +10,12 @@
 
 typedef NS_ENUM(NSInteger, EOAChangeRouteType)
 {
-    LAST_SEGMENT = 0,
-    WHOLE_ROUTE,
-    NEXT_SEGMENT,
-    ALL_NEXT_SEGMENTS,
-    PREV_SEGMENT,
-    ALL_PREV_SEGMENTS
+    EOAChangeRouteLastSegment = 0,
+    EOAChangeRouteWhole,
+    EOAChangeRouteNextSegment,
+    EOAChangeRouteAllNextSegments,
+    EOAChangeRoutePrevSegment,
+    EOAChangeRouteAllPrevSegments
 };
 
 @interface OAChangeRouteModeCommand : OAMeasurementModeCommand

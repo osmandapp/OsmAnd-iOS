@@ -1002,26 +1002,31 @@
     }
     return segments;
 }
-
-- (NSArray<OAGpxRtePt *> *) getRoutePoints
+// TODO: Android uses RtePt (implement it here after refactoring the gpx)
+- (NSArray<OAGpxTrkPt *> *) getRoutePoints
 {
-    NSMutableArray<OAGpxRtePt *> *points = [NSMutableArray new];
-    for (NSInteger i = 0; i < _routes.count; i++)
+    NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray new];
+    for (NSInteger i = 0; i < _tracks.count; i++)
     {
-        OAGpxRte *rt = _routes[i];
-        
-        [points addObjectsFromArray:rt.points];
+        OAGpxTrk *rt = _tracks[i];
+        for (OAGpxTrkSeg *seg in rt.segments)
+        {
+            [points addObjectsFromArray:seg.points];
+        }
     }
     return points;
 }
 
-- (NSArray<OAGpxRtePt *> *) getRoutePoints:(NSInteger)routeIndex
+- (NSArray<OAGpxTrkPt *> *) getRoutePoints:(NSInteger)routeIndex
 {
-    NSMutableArray<OAGpxRtePt *> *points = [NSMutableArray new];
+    NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray new];
     if (_routes.count > routeIndex)
     {
-        OAGpxRte *rt = _routes[routeIndex];
-        [points addObjectsFromArray:rt.points];
+        OAGpxTrk *rt = _tracks[routeIndex];
+        for (OAGpxTrkSeg *seg in rt.segments)
+        {
+            [points addObjectsFromArray:seg.points];
+        }
     }
     return points;
 }

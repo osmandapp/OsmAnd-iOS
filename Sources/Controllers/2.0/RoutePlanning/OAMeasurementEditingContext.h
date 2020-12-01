@@ -70,4 +70,6 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) trimAfter:(NSInteger)selectedPointPosition;
 - (void) splitSegments:(NSInteger)position;
 
+- (void) updateSegmentsForSnap;
+
 @end

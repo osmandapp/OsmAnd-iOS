@@ -555,7 +555,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         {
             OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithTrkSeg:segment];
             auto routeSegments = [routeImporter importRoute];
-            NSMutableArray<OAGpxRtePt *> *routePoints = [NSMutableArray arrayWithArray:[gpxData.gpxFile getRoutePoints:si]];
+            NSMutableArray<OAGpxTrkPt *> *routePoints = [NSMutableArray arrayWithArray:[gpxData.gpxFile getRoutePoints:si]];
             NSInteger prevPointIndex = 0;
             if (routePoints.count == 0 && points.count > 1)
             {
@@ -764,6 +764,11 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return gpxData != nil && gpxData.trkSegment != nil
     && gpxData.trkSegment.points.count > 0
     && gpxData.gpxFile.routes.count > 0;
+}
+
+- (void) updateSegmentsForSnap
+{
+    [self updateSegmentsForSnap:YES];
 }
 
 - (void) updateSegmentsForSnap:(BOOL)both

@@ -136,7 +136,7 @@ typedef enum
 
 @end
 
-
+// TODO: Sync code with Android (get rid of OAGpxExtension)
 
 @interface OAGpxExtension : OAExtraData
 
@@ -149,9 +149,10 @@ typedef enum
 
 @interface OAGpxExtensions : OAExtraData
 
+// TODO: Sync with Android
 @property (nonatomic) NSDictionary *attributes;
 @property (nonatomic) NSString *value;
-@property (nonatomic) NSMutableDictionary<NSString *, NSString *> *extensions;
+@property (nonatomic) NSArray<OAGpxExtension *> *extensions;
 
 - (void) copyExtensions:(OAGpxExtensions *)e;
 

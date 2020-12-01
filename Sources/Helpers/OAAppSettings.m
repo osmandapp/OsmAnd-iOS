@@ -53,6 +53,7 @@
 #define lastReceiptValidationDateKey @"lastReceiptValidationDateKey"
 #define eligibleForIntroductoryPriceKey @"eligibleForIntroductoryPriceKey"
 #define eligibleForSubscriptionOfferKey @"eligibleForSubscriptionOfferKey"
+#define shouldShowWhatsNewScreenKey @"shouldShowWhatsNewScreenKey"
 
 #define mapSettingTrackRecordingKey @"mapSettingTrackRecordingKey"
 #define mapSettingSaveTrackIntervalKey @"mapSettingSaveTrackIntervalKey"
@@ -1859,6 +1860,8 @@
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
         _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
+        
+        _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
 
         // Map Settings
         _mapSettingShowFavorites = [OAProfileBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
@@ -2470,6 +2473,12 @@
 {
     _eligibleForSubscriptionOffer = eligibleForSubscriptionOffer;
     [[NSUserDefaults standardUserDefaults] setBool:_eligibleForSubscriptionOffer forKey:eligibleForSubscriptionOfferKey];
+}
+
+- (void) setShouldShowWhatsNewScreen:(BOOL)shouldShowWhatsNewScreen
+{
+    _shouldShowWhatsNewScreen = shouldShowWhatsNewScreen;
+    [[NSUserDefaults standardUserDefaults] setBool:_shouldShowWhatsNewScreen forKey:shouldShowWhatsNewScreenKey];
 }
 
 // Map Settings

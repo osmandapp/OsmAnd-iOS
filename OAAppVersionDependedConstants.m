@@ -26,7 +26,7 @@
     }
     else
     {
-        return @"3_80";
+        return [NSString stringWithFormat:@"3%@80", separator];
     }
 }
 

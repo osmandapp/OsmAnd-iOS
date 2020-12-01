@@ -380,10 +380,6 @@
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
-    else
-    {
-        [OAAppSettings sharedManager].shouldShowWhatsNewScreen = NO;
-    }
     
     // Copy regions.ocbf to Library/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];

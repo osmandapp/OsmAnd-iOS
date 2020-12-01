@@ -10,7 +10,7 @@
 
 @implementation OAAppVersionDependedConstants
 
-+ (NSString *) getShortAppVersionWithSeparator
++ (NSString *) getShortAppVersion
 {
     [self getShortAppVersionWithSeparator:@"_"];
 }

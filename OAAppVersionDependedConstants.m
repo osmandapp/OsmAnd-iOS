@@ -12,7 +12,7 @@
 
 + (NSString *) getShortAppVersion
 {
-    [self getShortAppVersionWithSeparator:@"_"];
+    return [self getShortAppVersionWithSeparator:@"_"];
 }
 
 + (NSString *) getShortAppVersionWithSeparator:(NSString *)separator

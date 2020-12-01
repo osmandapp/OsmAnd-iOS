@@ -1036,6 +1036,7 @@
 "save_poi_too_many_uppercase" = "The name contains too many capital letters. Continue?";
 "osm_editing_loading_poi" = "Loading POI information";
 "osm_editing_access_descr" = "You can view all your local edits and notes in %@. Already uploaded points are not listed in OsmAnd.";
+"osm_edit_disabled" = "OSM plugin disabled";
 "osm_edit_disabled_importing" = "Turn on OSM Editing plugin to view imported objects.";
 
 // Mapillary

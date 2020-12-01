@@ -7,7 +7,7 @@
 //
 
 #import "OAOsmBugsRemoteUtil.h"
-#import "OAOsmNotesPoint.h"
+#import "OAOsmNotePoint.h"
 #import "OAOsmBugResult.h"
 #import "OAAppSettings.h"
 
@@ -23,15 +23,15 @@ static const NSString* USERS_API_BASE_URL = @"https://api.openstreetmap.org/api/
     BOOL _anonymous;
 }
 
-- (OAOsmBugResult *)commit:(OAOsmNotesPoint *)point text:(NSString *)text action:(EOAAction)action {
+- (OAOsmBugResult *)commit:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action {
     return [self commit:point text:text action:action anonymous:NO];
 }
 
-- (OAOsmBugResult *)modify:(OAOsmNotesPoint *)point text:(NSString *)text {
+- (OAOsmBugResult *)modify:(OAOsmNotePoint *)point text:(NSString *)text {
     return nil;
 }
 
--(OAOsmBugResult *)commit:(OAOsmNotesPoint *) point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL) anonymous
+-(OAOsmBugResult *)commit:(OAOsmNotePoint *) point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL) anonymous
 {
     NSString *result = @"";
     NSString *msg = @"";

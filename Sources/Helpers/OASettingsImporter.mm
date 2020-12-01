@@ -10,6 +10,8 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
+#import "OAOsmNotesSettingsItem.h"
+#import "OAOsmEditsSettingsItem.h"
 #import "Localization.h"
 
 #include <OsmAndCore/ArchiveReader.h>
@@ -193,44 +195,43 @@
         NSLog(@"Error: unsupported version");
         return;
     }
-    NSMutableDictionary *pluginItems = [NSMutableDictionary new];
+
     for (NSDictionary* itemJSON in itemsJson)
+//    NSMutableDictionary *pluginItems = [NSMutableDictionary new];
+    
     {
         OASettingsItem *item = [self createItem:itemJSON];
         [_items addObject:item];
         
         // TODO: implement custom plugins
-        NSString *pluginId = item.pluginId;
-        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
-        {
-            NSMutableArray<OASettingsItem *> *items = pluginItems[pluginId];
-            if (items)
-            {
-                [items addObject:item];
-            }
-            else
-            {
-                items = [NSMutableArray new];
-                [items addObject:item];
-                pluginItems[pluginId] = items;
-            }
-        }
+//        NSString *pluginId = item.pluginId;
+//        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
+//        {
+//            List<SettingsItem> items = pluginItems.get(pluginId);
+//            if (items != null) {
+//                items.add(item);
+//            } else {
+//                items = new ArrayList<>();
+//                items.add(item);
+//                pluginItems.put(pluginId, items);
+//            }
+//        }
     }
     if ([_items count] == 0)
     {
         NSLog(@"No items");
         return;
     }
-    for (OASettingsItem *item in _items)
-    {
-        if ([item isKindOfClass:OAPluginSettingsItem.class])
-        {
-            OAPluginSettingsItem *pluginSettingsItem = (OAPluginSettingsItem *)item;
-            NSMutableArray *pluginDependentItems = pluginItems[pluginSettingsItem.name];
-            if (pluginDependentItems && pluginDependentItems.count > 0)
-                [[pluginSettingsItem getPluginDependentItems] addObjectsFromArray:pluginDependentItems];
-        }
-    }
+    //    for (OASettingsItem *item in self.items)
+    //    {
+    //        if (item instanceof PluginSettingsItem) {
+    //            PluginSettingsItem pluginSettingsItem = ((PluginSettingsItem) item);
+    //            List<SettingsItem> pluginDependentItems = pluginItems.get(pluginSettingsItem.getName());
+    //            if (!Algorithms.isEmpty(pluginDependentItems)) {
+    //                pluginSettingsItem.getPluginDependentItems().addAll(pluginDependentItems);
+    //            }
+    //        }
+    //    }
 }
 
 - (NSArray<OASettingsItem *> *) getItems

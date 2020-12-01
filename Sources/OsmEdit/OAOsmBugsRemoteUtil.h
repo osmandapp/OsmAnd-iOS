@@ -11,13 +11,13 @@
 #import <Foundation/Foundation.h>
 #import "OAOsmBugsUtilsProtocol.h"
 
-@class OAOsmNotesPoint;
+@class OAOsmNotePoint;
 @class OAOsmBugResult;
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OAOsmBugsRemoteUtil : NSObject <OAOsmBugsUtilsProtocol, NSURLSessionDelegate>
 
--(OAOsmBugResult *)commit:(OAOsmNotesPoint *) point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL) anonymous;
+-(OAOsmBugResult *)commit:(OAOsmNotePoint *) point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL) anonymous;
 -(OAOsmBugResult *)validateLoginDetails;
 
 @end

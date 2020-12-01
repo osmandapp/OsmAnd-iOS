@@ -26,7 +26,9 @@
 #import "OAAvoidRoadInfo.h"
 #import "OASQLiteTileSource.h"
 #import "OAResourcesUIHelper.h"
-#import "OAOsmNotesPoint.h"
+#import "OAOsmNotePoint.h"
+#import "OAOsmNotesSettingsItem.h"
+#import "OAOsmEditsSettingsItem.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAOsmEditingPlugin.h"
 
@@ -233,7 +235,7 @@
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
-    NSMutableArray<OAOsmNotesPoint *> *notesPointList  = [NSMutableArray array];
+    NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
@@ -527,7 +529,7 @@
                 notesPointStyleSection.type = kCellTypeSectionHeader;
                 notesPointStyleSection.isOpen = NO;
                 
-                for (OAOsmNotesPoint *item in settings)
+                for (OAOsmNotePoint *item in settings)
                 {
                     NSString *caption = [item getText];
                     [notesPointStyleSection.groupItems addObject:@{
@@ -654,7 +656,7 @@
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
-    NSMutableArray<OAOsmNotesPoint *> *osmNotesPointList = [NSMutableArray array];
+    NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
     NSMutableArray<OAOsmPoint *> *osmEditsPointList = [NSMutableArray array];
     
     
@@ -672,8 +674,8 @@
             [settingsItems addObject:[[OAFileSettingsItem alloc] initWithFilePath:(NSString *)object error:nil]];
         else if ([object isKindOfClass:OAAvoidRoadInfo.class])
             [avoidRoads addObject:(OAAvoidRoadInfo *)object];
-        else if ([object isKindOfClass:OAOsmNotesPoint.class])
-            [osmNotesPointList addObject:(OAOsmNotesPoint *)object];
+        else if ([object isKindOfClass:OAOsmNotePoint.class])
+            [osmNotesPointList addObject:(OAOsmNotePoint *)object];
         else if ([object isKindOfClass:OAOsmPoint.class])
             [osmEditsPointList addObject:(OAOsmPoint *)object];
         else if ([object isKindOfClass:OAFileSettingsItem.class])

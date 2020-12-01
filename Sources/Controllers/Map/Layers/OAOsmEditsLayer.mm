@@ -14,7 +14,7 @@
 #import "OAMapRendererView.h"
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
-#import "OAOpenstreetmapsDbHelper.h"
+#import "OAOsmEditsDBHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmBugsDBHelper.h"
@@ -22,7 +22,7 @@
 #import "OAPOI.h"
 #import "OAPOIType.h"
 #import "OAPlugin.h"
-#import "OAOsmNotesPoint.h"
+#import "OAOsmNotePoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAPOIHelper.h"
 #import "OAAutoObserverProxy.h"
@@ -180,7 +180,7 @@
 
 - (NSArray *)getAllPoints {
     NSMutableArray *data = [NSMutableArray new];
-    [data addObjectsFromArray:[[OAOpenstreetmapsDbHelper sharedDatabase] getOpenstreetmapPoints]];
+    [data addObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
     [data addObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmbugsPoints]];
     return [NSArray arrayWithArray:data];
 }
@@ -225,11 +225,11 @@
         if ([p isKindOfClass:OAOpenStreetMapPoint.class])
         {
             OAOpenStreetMapPoint *point = (OAOpenStreetMapPoint *)p;
-            [[OAOpenstreetmapsDbHelper sharedDatabase] updateEditLocation:point.getId newPosition:position];
+            [[OAOsmEditsDBHelper sharedDatabase] updateEditLocation:point.getId newPosition:position];
         }
-        else if ([p isKindOfClass:OAOsmNotesPoint.class])
+        else if ([p isKindOfClass:OAOsmNotePoint.class])
         {
-            OAOsmNotesPoint *point = (OAOsmNotesPoint *) p;
+            OAOsmNotePoint *point = (OAOsmNotePoint *) p;
             [[OAOsmBugsDBHelper sharedDatabase] updateOsmBugLocation:point.getId newPosition:position];
         }
         [self.app.osmEditsChangeObservable notifyEvent];

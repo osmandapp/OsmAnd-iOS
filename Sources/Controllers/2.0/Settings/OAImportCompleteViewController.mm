@@ -26,6 +26,9 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OAIndexConstants.h"
 #import "OAIAPHelper.h"
+#import "OAPluginPopupViewController.h"
+#import "OAOsmNotesSettingsItem.h"
+#import "OAOsmEditsSettingsItem.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -381,9 +384,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         }
         else
         {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_edit_disabled_importing") preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
+            [OAPluginPopupViewController showOsmEditingDisabled];
         }
     }
 }

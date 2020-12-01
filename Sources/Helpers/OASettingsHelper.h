@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAImportAsyncTask, OAExportAsyncTask, OACheckDuplicates, OALocalResourceItem;
 @class OASettingsItem;
-@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode, OAApplicationModeBean, OAOsmNotesPoint, OAOpenStreetMapPoint;
+@class OAQuickAction, OAPOIUIFilter, OAAvoidRoadInfo, OAApplicationMode, OAApplicationModeBean, OAOsmNotePoint, OAOpenStreetMapPoint;
 
 @protocol OASettingsImportExportDelegate <NSObject>
 
@@ -327,18 +327,6 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
 #pragma mark - OAAvoidRoadsSettingsItem
 
 @interface OAAvoidRoadsSettingsItem : OACollectionSettingsItem<OAAvoidRoadInfo *>
-
-@end
-
-#pragma mark - OAOsmNotesSettingsItem
-
-@interface OAOsmNotesSettingsItem : OACollectionSettingsItem<OAOsmNotesPoint *>
-
-@end
-
-#pragma mark - OAOsmEditsSettingsItem
-
-@interface OAOsmEditsSettingsItem : OACollectionSettingsItem<OAOpenStreetMapPoint *>
 
 @end
 

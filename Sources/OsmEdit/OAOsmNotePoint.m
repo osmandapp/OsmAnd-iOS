@@ -6,11 +6,11 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAOsmNotesPoint.h"
+#import "OAOsmNotePoint.h"
 
 // static const long serialVersionUID = 729654300829771468L;
 
-@implementation OAOsmNotesPoint
+@implementation OAOsmNotePoint
 {
     long long _id;
     NSString *_text;

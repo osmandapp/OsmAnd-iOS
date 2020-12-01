@@ -161,7 +161,7 @@
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray new];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray new];
     NSMutableArray<NSString *> *mapFiles = [NSMutableArray new];
-    NSMutableArray<OAOsmNotesPoint *> *osmNotesPointList = [NSMutableArray new];
+    NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray new];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList = [NSMutableArray new];
     
     for (id object in duplicatesList)

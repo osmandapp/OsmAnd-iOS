@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAOsmNotesPoint : OAOsmPoint <OAOsmPointProtocol>
+@interface OAOsmNotePoint : OAOsmPoint <OAOsmPointProtocol>
 
 -(NSString *)getText;
 -(NSString *) getAuthor;

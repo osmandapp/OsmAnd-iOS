@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAOsmBugsDBHelper, OAOpenstreetmapsDbHelper;
+@class OAOsmBugsDBHelper, OAOsmEditsDBHelper;
 
 @interface OAOsmEditingPlugin : OAPlugin
 

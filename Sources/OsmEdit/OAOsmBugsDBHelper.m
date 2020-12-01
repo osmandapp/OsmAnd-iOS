@@ -9,7 +9,7 @@
 #import "OAOsmBugsDBHelper.h"
 
 #import "OALog.h"
-#import "OAOsmNotesPoint.h"
+#import "OAOsmNotePoint.h"
 #import "OAOsmPoint.h"
 
 #import <sqlite3.h>
@@ -37,7 +37,7 @@
     sqlite3 *osmBugsDB;
     dispatch_queue_t dbQueue;
     
-    NSArray<OAOsmNotesPoint *> *_cache;
+    NSArray<OAOsmNotePoint *> *_cache;
 }
 
 + (OAOsmBugsDBHelper *)sharedDatabase
@@ -110,16 +110,16 @@
     });
 }
 
--(NSArray<OAOsmNotesPoint *> *) getOsmbugsPoints
+-(NSArray<OAOsmNotePoint *> *) getOsmbugsPoints
 {
     if(!_cache)
         return [self checkOsmBugsPoints];
     return _cache;
 }
 
--(NSArray<OAOsmNotesPoint *> *) checkOsmBugsPoints
+-(NSArray<OAOsmNotePoint *> *) checkOsmBugsPoints
 {
-    NSMutableArray<OAOsmNotesPoint * > *result = [NSMutableArray new];
+    NSMutableArray<OAOsmNotePoint * > *result = [NSMutableArray new];
     
     dispatch_sync(dbQueue, ^{
         
@@ -138,7 +138,7 @@
             {
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
-                    OAOsmNotesPoint *p = [[OAOsmNotesPoint alloc] init];
+                    OAOsmNotePoint *p = [[OAOsmNotePoint alloc] init];
                     [p setId:sqlite3_column_int64(statement, 0)];
                     [p setText:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 1)]];
                     [p setLatitude:sqlite3_column_double(statement, 2)];
@@ -213,7 +213,7 @@
     [self checkOsmBugsPoints];
 }
 
--(void)addOsmbugs:(OAOsmNotesPoint *)point
+-(void)addOsmbugs:(OAOsmNotePoint *)point
 {
     dispatch_async(dbQueue, ^{
         sqlite3_stmt *statement;
@@ -245,7 +245,7 @@
     [self checkOsmBugsPoints];
 }
 
--(void)deleteAllBugModifications:(OAOsmNotesPoint *) point
+-(void)deleteAllBugModifications:(OAOsmNotePoint *) point
 {
     dispatch_async(dbQueue, ^{
         sqlite3_stmt *statement;

@@ -289,6 +289,32 @@ static NSMutableArray *activePopups;
     [popup show];
 }
 
++ (void)showOsmEditingDisabled
+{
+    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] initWithType:OAPluginPopupTypeNoInternet];
+    popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
+
+    NSString *title = OALocalizedString(@"osm_edit_disabled");
+    NSString *descText = OALocalizedString(@"osm_edit_disabled_importing");
+    NSString *okButtonName = OALocalizedString(@"shared_string_ok");
+    
+    [popup.okButton addTarget:popup action:@selector(closePressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIViewController *top = [OARootViewController instance].navigationController.topViewController;
+    
+    popup.icon.image = [UIImage imageNamed:@"ic_custom_osm_edits"];
+    popup.titleLabel.text = title;
+    
+    NSString *styledText = [self.class styledHTMLwithHTML:descText];
+    popup.descTextView.attributedText = [self.class attributedStringWithHTML:styledText];
+    
+    [popup.okButton setTitle:okButtonName forState:UIControlStateNormal];
+    popup.cancelButton.hidden = YES;
+    
+    [top addChildViewController:popup];
+    [popup show];
+}
+
 + (void) hideNoInternetConnection
 {
     for (OAPluginPopupViewController *popup in activePopups)

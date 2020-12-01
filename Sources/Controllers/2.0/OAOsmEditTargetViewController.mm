@@ -25,7 +25,7 @@
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAEditPOIData.h"
-#import "OAOpenstreetmapsDbHelper.h"
+#import "OAOsmEditsDBHelper.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmEditingBottomSheetViewController.h"
 #import "OAOsmNoteBottomSheetViewController.h"
@@ -80,9 +80,9 @@
 - (void) leftControlButtonPressed
 {
     if (_osmPoint.getGroup == BUG)
-        [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotesPoint *)_osmPoint];
+        [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)_osmPoint];
     else if (_osmPoint.getGroup == POI)
-        [[OAOpenstreetmapsDbHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_osmPoint];
+        [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_osmPoint];
     [_app.osmEditsChangeObservable notifyEvent];
     [[OARootViewController instance].mapPanel targetHide];
 }

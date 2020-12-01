@@ -8,12 +8,12 @@
 #import "OAOsmPoint.h"
 
 @class OAOsmBugResult;
-@class OAOsmNotesPoint;
+@class OAOsmNotePoint;
 
 @protocol OAOsmBugsUtilsProtocol <NSObject>
 
 @required
--(OAOsmBugResult *)commit:(OAOsmNotesPoint *)point text:(NSString *)text action:(EOAAction)action;
--(OAOsmBugResult *)modify:(OAOsmNotesPoint *)point text:(NSString *)text;
+-(OAOsmBugResult *)commit:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action;
+-(OAOsmBugResult *)modify:(OAOsmNotePoint *)point text:(NSString *)text;
 
 @end

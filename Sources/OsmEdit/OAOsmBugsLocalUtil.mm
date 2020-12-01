@@ -9,12 +9,12 @@
 #import "OAOsmBugsLocalUtil.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmBugResult.h"
-#import "OAOsmNotesPoint.h"
+#import "OAOsmNotePoint.h"
 #import "OsmAndApp.h"
 
 @implementation OAOsmBugsLocalUtil
 
-- (OAOsmBugResult *)commit:(OAOsmNotesPoint *)point text:(NSString *)text action:(EOAAction)action
+- (OAOsmBugResult *)commit:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action
 {
     OAOsmBugsDBHelper *bugsDb = [OAOsmBugsDBHelper sharedDatabase];
     if(action == CREATE)
@@ -25,7 +25,7 @@
     }
     else
     {
-        OAOsmNotesPoint *pnt = [[OAOsmNotesPoint alloc] init];
+        OAOsmNotePoint *pnt = [[OAOsmNotePoint alloc] init];
         [pnt setId:[point getId]];
         [pnt setLatitude:[point getLatitude]];
         [pnt setLongitude:[point getLongitude]];
@@ -38,9 +38,9 @@
     return [self wrap:point success:/*db.addOsmbugs(point)*/YES];
 }
 
-- (OAOsmBugResult *)modify:(OAOsmNotesPoint *)point text:(NSString *)text
+- (OAOsmBugResult *)modify:(OAOsmNotePoint *)point text:(NSString *)text
 {
-    OAOsmNotesPoint *pnt = [[OAOsmNotesPoint alloc] init];
+    OAOsmNotePoint *pnt = [[OAOsmNotePoint alloc] init];
     [pnt setId:[point getId]];
     [pnt setLatitude:[point getLatitude]];
     [pnt setLongitude:[point getLongitude]];
@@ -51,7 +51,7 @@
     return [self wrap:point success:/*db.updateOsmBug(point.getId(), text*/YES];
 }
 
--(OAOsmBugResult *)wrap:(OAOsmNotesPoint *) point success:(BOOL)success
+-(OAOsmBugResult *)wrap:(OAOsmNotePoint *) point success:(BOOL)success
 {
     OAOsmBugResult *s = [[OAOsmBugResult alloc] init];
     s.localPoint = point;

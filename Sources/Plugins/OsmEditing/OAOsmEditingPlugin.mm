@@ -25,7 +25,7 @@
 #import "OAMapViewController.h"
 #import "OANativeUtilities.h"
 #import "OAOsmEditsLayer.h"
-#import "OAOpenstreetmapsDbHelper.h"
+#import "OAOsmEditsDBHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OANode.h"
 #import "OAMapViewController.h"
@@ -37,7 +37,7 @@
 #import "OAOsmBugsLocalUtil.h"
 #import "Reachability.h"
 #import "OAEditPOIData.h"
-#import "OAOsmNotesPoint.h"
+#import "OAOsmNotePoint.h"
 #import "OAOsmNoteBottomSheetViewController.h"
 #import "OAAddPOIAction.h"
 #import "OAAddOSMBugAction.h"
@@ -61,7 +61,7 @@
 
 @implementation OAOsmEditingPlugin
 {
-    OAOpenstreetmapsDbHelper *_dbpoi;
+    OAOsmEditsDBHelper *_dbpoi;
     OAOsmBugsDBHelper *_dbbug;
     OAOpenStreetMapLocalUtil *_localUtil;
     OAOpenStreetMapRemoteUtil *_remoteUtil;
@@ -79,7 +79,7 @@
         _helper = [OADestinationsHelper instance];
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
         _dbbug = [OAOsmBugsDBHelper sharedDatabase];
-        _dbpoi = [OAOpenstreetmapsDbHelper sharedDatabase];
+        _dbpoi = [OAOsmEditsDBHelper sharedDatabase];
         _localUtil = [[OAOpenStreetMapLocalUtil alloc] init];
         _localNotesUtil = [[OAOsmBugsLocalUtil alloc] init];
         _remoteUtil = [[OAOpenStreetMapRemoteUtil alloc] init];
@@ -140,7 +140,7 @@
 
 -(void) openOsmNote:(double)latitude longitude:(double)longitude message:(NSString *)message autoFill:(BOOL)autofill
 {
-    OAOsmNotesPoint *p = [[OAOsmNotesPoint alloc] init];
+    OAOsmNotePoint *p = [[OAOsmNotePoint alloc] init];
     [p setLatitude:latitude];
     [p setLongitude:longitude];
     [p setAuthor:@""];
@@ -174,7 +174,7 @@
     }
     else if ([point getGroup] == BUG)
     {
-        return [((OAOsmNotesPoint *)point) getText];
+        return [((OAOsmNotePoint *)point) getText];
     }
     else
     {

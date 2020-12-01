@@ -38,6 +38,7 @@
 #import "OAMovePointCommand.h"
 #import "OAClearPointsCommand.h"
 #import "OASegmentOptionsBottomSheetViewController.h"
+#import "OAChangeRouteModeCommand.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -62,7 +63,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     EOAHudModeAddPoints
 };
 
-@interface OARoutePlanningHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate>
+@interface OARoutePlanningHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate,
+    OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate, OASegmentOptionsDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
@@ -321,6 +323,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (IBAction)modeButtonPressed:(id)sender
 {
     OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] init];
+    bottomSheet.delegate = self;
     [bottomSheet presentInViewController:self];
 }
 
@@ -860,6 +863,41 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
         
         [self onPointsListChanged];
         [_layer updateLayer];
+    }
+}
+
+#pragma mark - OASegmentOptionsDelegate
+
+- (void)onApplicationModeChanged:(OAApplicationMode *)mode dialogType:(EOARouteBetweenPointsDialogType)dialogType dialogMode:(EOARouteBetweenPointsDialogMode)dialogMode
+{
+    if (_layer != nil) {
+        EOAChangeRouteType changeRouteType = EOAChangeRouteNextSegment;
+        switch (dialogType) {
+            case EOADialogTypeWholeRouteCalculation:
+            {
+                changeRouteType = dialogMode == EOARouteBetweenPointsDialogModeSingle
+                ? EOAChangeRouteLastSegment : EOAChangeRouteWhole;
+                break;
+            }
+            case EOADialogTypeNextRouteCalculation:
+            {
+                changeRouteType = dialogMode == EOARouteBetweenPointsDialogModeSingle
+                ? EOAChangeRouteNextSegment : EOAChangeRouteAllNextSegments;
+                break;
+            }
+            case EOADialogTypePrevRouteCalculation:
+            {
+                changeRouteType = dialogMode == EOARouteBetweenPointsDialogModeSingle
+                ? EOAChangeRoutePrevSegment : EOAChangeRouteAllPrevSegments;
+                break;
+            }
+        }
+        [_editingContext.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:_layer appMode:mode changeRouteType:changeRouteType pointIndex:_editingContext.selectedPointPosition]];
+//        updateUndoRedoButton(false, redoBtn);
+//        updateUndoRedoButton(true, undoBtn);
+//        disable(upDownBtn);
+//        updateSnapToRoadControls();
+        [self updateDistancePointsText];
     }
 }
 

@@ -18,6 +18,10 @@ typedef NS_ENUM(NSInteger, EOAChangeRouteType)
     EOAChangeRouteAllPrevSegments
 };
 
+@class OAApplicationMode;
+
 @interface OAChangeRouteModeCommand : OAMeasurementModeCommand
+
+- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer appMode:(OAApplicationMode *)appMode changeRouteType:(EOAChangeRouteType)changeRouteType pointIndex:(NSInteger)pointIndex;
 
 @end

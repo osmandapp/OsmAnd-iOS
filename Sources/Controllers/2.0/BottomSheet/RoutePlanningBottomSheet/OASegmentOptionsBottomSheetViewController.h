@@ -10,6 +10,27 @@
 #import "OAClearPointsCommand.h"
 #import "OAInfoBottomView.h"
 
+typedef NS_ENUM(NSInteger, EOARouteBetweenPointsDialogType)
+{
+    EOADialogTypeWholeRouteCalculation = 0,
+    EOADialogTypeNextRouteCalculation,
+    EOADialogTypePrevRouteCalculation
+};
+
+typedef NS_ENUM(NSInteger, EOARouteBetweenPointsDialogMode)
+{
+    EOARouteBetweenPointsDialogModeSingle = 0,
+    EOARouteBetweenPointsDialogModeAll
+};
+
+@protocol OASegmentOptionsDelegate <NSObject>
+
+- (void) onApplicationModeChanged:(OAApplicationMode *)mode dialogType:(EOARouteBetweenPointsDialogType)dialogType dialogMode:(EOARouteBetweenPointsDialogMode)dialogMode;
+
+@end
+
 @interface OASegmentOptionsBottomSheetViewController : OABaseBottomSheetViewController
+
+@property (nonatomic) id<OASegmentOptionsDelegate> delegate;
 
 @end

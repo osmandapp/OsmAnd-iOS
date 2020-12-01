@@ -1252,6 +1252,7 @@
 "help_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Other";
+"help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
 "help_tech_articles" = "Technical articles";
 "help_versions" = "Versions";
@@ -1261,6 +1262,7 @@
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "reddit" = "Reddit";
+"vk" = "VK";
 
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
@@ -2049,3 +2051,24 @@
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
+
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "You have the latest version: %@";
+
+"ios_release_3_80" = "• Introduced \“Application Profiles\" with independent settings\n
+• New arrangement of settings by profiles and types: navigation, general, map and screen\n
+• Ability to import or export profile settings\n
+• Added data sources for Online photos\n
+• Added ability to download online maps to cache\n
+• Improved \"Search\" algorithms";
+
+"ios_release_3_90" = "• Introduced \“Application Profiles\" with independent settings\n
+• New arrangement of settings by profiles and types: navigation, general, map and screen\n
+• Ability to import or export profile settings\n
+• Added data sources for Online photos\n
+• Added ability to download online maps to cache\n
+• Improved \"Search\" algorithms";

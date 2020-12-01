@@ -278,7 +278,7 @@ static const NSInteger groupCount = 5;
     // Other
     [dataArr addObject:
      @{
-       @"name" : @"what_is_new",
+       @"name" : @"help_what_is_new",
        @"title" : OALocalizedString(@"help_what_is_new"),
        @"type" : kLinkExternalType,
        @"description" : kLatestChangesUrl

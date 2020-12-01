@@ -360,6 +360,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL settingMapLanguageShowLocal;
 @property (assign, nonatomic) BOOL settingMapLanguageTranslit;
 
+@property (assign, nonatomic) BOOL shouldShowWhatsNewScreen;
+
 #define APPEARANCE_MODE_DAY 0
 #define APPEARANCE_MODE_NIGHT 1
 #define APPEARANCE_MODE_AUTO 2
@@ -649,7 +651,5 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileDistanceIndicationConstant *distanceIndication;
 @property (nonatomic) OAProfileBoolean *arrowsOnMap;
 @property (nonatomic) OAProfileBoolean *directionLines;
-
-@property (nonatomic) BOOL shouldShowWhatsNew;
 
 @end

@@ -2249,8 +2249,6 @@
         _directionLines = [OAProfileBoolean withKey:mapDirectionLinesKey defValue:YES];
         [_registeredPreferences setObject:_directionLines forKey:@"show_lines_to_first_markers"];
         
-        _shouldShowWhatsNew = NO;
-        
         [self fetchImpassableRoads];
     }
     return self;

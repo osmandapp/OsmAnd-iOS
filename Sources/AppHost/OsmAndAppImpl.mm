@@ -359,7 +359,7 @@
     {
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         _resourcesManager->installOsmAndOnlineTileSource();
-        [OAAppSettings sharedManager].shouldShowWhatsNew = YES;
+        [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
     else if (currentVersion != prevVersion)
     {
@@ -378,7 +378,11 @@
             OAAppSettings.sharedManager.availableApplicationModes = @"car,bicycle,pedestrian,public_transport,";
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
-        [OAAppSettings sharedManager].shouldShowWhatsNew = YES;
+        [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
+    }
+    else
+    {
+        [OAAppSettings sharedManager].shouldShowWhatsNewScreen = NO;
     }
     
     // Copy regions.ocbf to Library/Resources if needed

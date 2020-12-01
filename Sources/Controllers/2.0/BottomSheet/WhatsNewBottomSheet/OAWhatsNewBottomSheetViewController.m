@@ -57,7 +57,7 @@
     
     [arr addObject:@{
                      @"type" : kBottomSheetHeaderButtonCell,
-                     @"title" : OALocalizedString(@"what_is_new"),
+                     @"title" : OALocalizedString(@"help_what_is_new"),
                      @"description" : @"",
                      @"img" : @"ic_custom_poi.png"
                      }];

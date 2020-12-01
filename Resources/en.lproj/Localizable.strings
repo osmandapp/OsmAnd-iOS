@@ -1,8 +1,7 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
-"what_is_new" = "What\'s news";
-"latest_version" = "You have the latest %@ version";
+"latest_version" = "You have the latest version: %@";
 
 "ios_release_3_80" = "• Introduced \“Application Profiles\" with independent settings\n
 • New arrangement of settings by profiles and types: navigation, general, map and screen\n
@@ -1267,7 +1266,7 @@
 "help_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Other";
-"help_what_is_new" = "What\'s news";
+"help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
 "help_tech_articles" = "Technical articles";
 "help_versions" = "Versions";

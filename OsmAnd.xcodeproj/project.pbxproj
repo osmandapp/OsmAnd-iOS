@@ -352,6 +352,8 @@
 		324B735E25653CB100B6EE52 /* OATextCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 324B735925653CB000B6EE52 /* OATextCardView.xib */; };
 		324D553A25703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */; };
 		324D553B25703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */; };
+		32FE27F225763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */; };
+		32FE27F325763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BB2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BC2507804400266047 /* ic_custom_logo_wikidata.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B52507803500266047 /* ic_custom_logo_wikidata.png */; };
@@ -6510,6 +6512,7 @@
 		324D553825703A0B0043FB64 /* OAWhatsNewBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWhatsNewBottomSheetViewController.h; sourceTree = "<group>"; };
 		324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWhatsNewBottomSheetViewController.m; sourceTree = "<group>"; };
 		3253CEEE2571B1A5008DED25 /* OAAppVersionDependedConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAppVersionDependedConstants.h; sourceTree = "<group>"; };
+		32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAppVersionDependedConstants.m; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B52507803500266047 /* ic_custom_logo_wikidata.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_logo_wikidata.png; path = Resources/Icons/ic_custom_logo_wikidata.png; sourceTree = "<group>"; };
 		333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@3x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@3x.png"; sourceTree = "<group>"; };
@@ -14917,6 +14920,7 @@
 				84D2A7E31FADFDCB00B2D3DD /* OAColors.h */,
 				DA6B6C1E255EB2F300300363 /* OAIndexConstants.h */,
 				3253CEEE2571B1A5008DED25 /* OAAppVersionDependedConstants.h */,
+				32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */,
 				843394721FF41F33006205A5 /* LaunchScreen.xib */,
 			);
 			name = Resources;
@@ -21060,6 +21064,7 @@
 				8490B1BB20600D63007694A5 /* OAWaypointHeaderCell.m in Sources */,
 				DA2558A224ADE40F0081D155 /* OANavigationTypeViewController.mm in Sources */,
 				847A1CEC1DF94E9B003C1246 /* OAUtilities.m in Sources */,
+				32FE27F325763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */,
 				84DE41482000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm in Sources */,
 				847A1CEE1DF94E9B003C1246 /* OAPointTableViewCell.m in Sources */,
 				DA08F15C216776C8009584C1 /* OARulerWidget.mm in Sources */,
@@ -21810,6 +21815,7 @@
 				78A5C1EB23FAF2CF00312FC4 /* OATitleSliderTableViewCell.m in Sources */,
 				84F05E5B1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm in Sources */,
 				8A3F030721C7D65A0043797E /* OAPurchaseDialogCardRow.m in Sources */,
+				32FE27F225763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */,
 				BB54F70B198913E000AB40D1 /* OAAppearance.m in Sources */,
 				841AD0111F5322E200E3191E /* OATargetTurnViewController.m in Sources */,
 				DA188D2125444A220033A809 /* OAAddPointCommand.mm in Sources */,

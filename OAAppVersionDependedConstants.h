@@ -6,11 +6,12 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#ifndef OAAppVersionDependedConstants_h
-#define OAAppVersionDependedConstants_h
+#import <Foundation/Foundation.h>
 
-#define kShortAppVersion @"3_80"
 #define kLatestChangesUrl @"http://osmand.net/blog/osmand-ios-3-80-released"
 
+@interface OAAppVersionDependedConstants : NSObject
 
-#endif /* OAAppVersionDependedConstants_h */
++ (NSString *) getShortAppVersionWithSeparator:(NSString *)separator;
+
+@end

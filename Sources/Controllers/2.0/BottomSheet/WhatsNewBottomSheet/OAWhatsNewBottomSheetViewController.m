@@ -66,7 +66,7 @@
 
     NSString *fullAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), fullAppVersion];
-    NSString *releaseNotesKey = [NSString stringWithFormat:@"ios_release_%@", kShortAppVersion];
+    NSString *releaseNotesKey = [NSString stringWithFormat:@"ios_release_%@", [OAAppVersionDependedConstants getShortAppVersionWithSeparator:@"_"]];
     
     [arr addObject:@{
                      @"type" : kDescrTitleCell,

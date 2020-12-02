@@ -10,6 +10,7 @@
 #import "OAQuickActionType.h"
 #import "OAQuickActionRegistry.h"
 #import "OrderedDictionary.h"
+#import "OADefaultFavorite.h"
 
 static NSInteger SEQ = 0;
 
@@ -111,6 +112,15 @@ static NSInteger SEQ = 0;
 -(void) setParams:(NSDictionary<NSString *, NSString *> *) params
 {
     _params = params;
+}
+
++(NSInteger) prepareDefaultColorNumberFromValue:(NSInteger)value
+{
+    NSInteger defaultColor = value;
+    NSArray *colors = [OADefaultFavorite builtinColors];
+    if (defaultColor < 0 || defaultColor >= colors.count)
+        defaultColor = 0;
+    return defaultColor;
 }
 
 -(BOOL) isActionWithSlash

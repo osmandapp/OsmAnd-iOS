@@ -158,16 +158,10 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_name_footer")
                           }
                       ] forKey:kSectionNoName];
-    OAFavoriteColor *color = nil;
-    NSInteger defaultColor = 0;
     
-    if (self.getParams[KEY_CATEGORY_COLOR])
-        defaultColor = [self.getParams[KEY_CATEGORY_COLOR] integerValue];
     
-    NSArray *colors = [OADefaultFavorite builtinColors];
-    if (defaultColor < 0 || defaultColor >= colors.count)
-        defaultColor = 0;
-    color = colors[defaultColor];
+    NSInteger defaultColor = [OAQuickAction prepareDefaultColorNumberFromValue: [self.getParams[KEY_CATEGORY_COLOR] integerValue]];
+    OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
     
     [data setObject:@[@{
                           @"type" : @"OAIconTitleValueCell",

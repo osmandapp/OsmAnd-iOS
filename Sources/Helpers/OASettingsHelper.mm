@@ -2110,9 +2110,22 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         
         if (quickAction)
         {
-            NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary: [self serializeToDictionary:object[@"params"]]];
-            if (params[@"styles"])
-                params[@"styles"] = [self serializeToArray:params[@"styles"]];
+            NSMutableDictionary *params;
+            if ([object[@"params"] isKindOfClass:NSDictionary.class])
+            {
+                params = object[@"params"];
+            }
+            else
+            {
+                NSString *stringValue = (NSString *)object[@"params"];
+                NSError *jsonError;
+                NSData* stringData = [stringValue dataUsingEncoding:NSUTF8StringEncoding];
+                params = [NSJSONSerialization JSONObjectWithData:stringData options:kNilOptions error:&jsonError];
+            }
+            
+            if (params[@"styles"] && ![params[@"styles"] isKindOfClass:NSArray.class])
+                params[@"styles"] = [(NSString *)object componentsSeparatedByString:@","];
+            
             [quickAction setParams:params];
             
             if (name.length > 0)
@@ -2123,25 +2136,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             [self.warnings addObject:OALocalizedString(@"settings_item_read_error", self.name)];
         }
     }
-}
-
-- (NSDictionary *)serializeToDictionary:(id)object
-{
-    if ([object isKindOfClass:NSString.class])
-    {
-        NSString *stringValue = (NSString *)object;
-        NSError *jsonError;
-        NSData* stringData = [stringValue dataUsingEncoding:NSUTF8StringEncoding];
-        return [NSJSONSerialization JSONObjectWithData:stringData options:kNilOptions error:&jsonError];
-    }
-    return object;
-}
-
-- (NSArray *)serializeToArray:(id)object
-{
-    if (![object isKindOfClass:NSArray.class])
-        return [(NSString *)object componentsSeparatedByString:@","];
-    return object;
 }
 
 - (void) writeItemsToJson:(id)json

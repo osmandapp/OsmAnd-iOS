@@ -137,7 +137,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [_data addObject: @{
             @"label": OALocalizedString(@"configure_screen_quick_action"),
             @"iconName": @"ic_custom_quick_action",
-            @"count": [NSString stringWithFormat:@"%ld",(long)actionsCount],
+            @"count": [NSString stringWithFormat:@"%ld", actionsCount],
             @"category" : @(EOAImportDataTypeQuickActions)
             }
          ];

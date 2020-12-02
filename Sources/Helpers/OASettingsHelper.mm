@@ -7,6 +7,7 @@
 //
 
 #import "OASettingsHelper.h"
+#import "OASettingsItem.h"
 #import "OASettingsImporter.h"
 #import "OASettingsExporter.h"
 #import "OARootViewController.h"

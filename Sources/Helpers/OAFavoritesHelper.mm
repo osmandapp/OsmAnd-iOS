@@ -29,6 +29,7 @@
     if (self)
     {
         _favoriteGroups = [NSArray arrayWithArray:[self getGroupedFavorites:[self.class getFavoriteItems]]];
+        _flatGroups = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -84,7 +85,6 @@
 - (NSArray<OAFavoriteGroup *> *) getGroupedFavorites:(NSArray<OAFavoriteItem *> *)items
 {
     NSMutableArray<OAFavoriteGroup *> *groupedItems = [NSMutableArray array];
-    _flatGroups = [NSMutableDictionary dictionary];
     for (OAFavoriteItem *item in items)
     {
         OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];

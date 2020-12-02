@@ -7,6 +7,7 @@
 //
 
 #import "OASettingsItemWriter.h"
+#import "OASettingsItem.h"
 
 @interface OASettingsItemWriter<__covariant ObjectType : OASettingsItem *>()
 

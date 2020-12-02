@@ -148,6 +148,11 @@
     self.bottomBarView.hidden = NO;
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
+}
+
 - (void) setupView
 {
     OAImportAsyncTask *importTask = _settingsHelper.importTask;
@@ -735,7 +740,6 @@
 
 - (IBAction) backButtonPressed:(id)sender
 {
-    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -1072,7 +1076,6 @@
         [self.navigationController pushViewController:importCompleteVC animated:YES];
         _settingsHelper.importTask = nil;
     }
-    [NSFileManager.defaultManager removeItemAtPath:_file error:nil];
 }
 
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items

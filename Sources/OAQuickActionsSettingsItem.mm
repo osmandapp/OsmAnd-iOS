@@ -10,7 +10,6 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
-#import "OAQuickAction.h"
 #import "OAQuickActionType.h"
 
 @interface OAQuickActionsSettingsItem()

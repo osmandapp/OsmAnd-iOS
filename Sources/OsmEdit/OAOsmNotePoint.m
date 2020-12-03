@@ -89,5 +89,26 @@
     return _text ? _text : @"";
 }
 
+- (BOOL)isEqual:(id)other
+{
+    if (other == self) {
+        return YES;
+    } if (![self isKindOfClass:[other class]]) {
+        return NO;
+    } else {
+        OAOsmNotePoint *otherPoint = (OAOsmNotePoint *)other;
+        BOOL res = [_text isEqualToString:otherPoint.getText];
+        res = res || [OAUtilities isCoordEqual:_latitude srcLon:_longitude destLat:otherPoint.getLatitude destLon:otherPoint.getLongitude];
+        return res;
+    }
+}
+
+- (NSUInteger)hash
+{
+    NSUInteger result = _text != nil ? _text.hash : 0;
+    result = 31 * result + @(_latitude).hash;
+    result = 31 * result + @(_longitude).hash;
+    return result;
+}
 
 @end

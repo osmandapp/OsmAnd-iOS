@@ -109,7 +109,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [_headerView setTitleText:[self getLocalizedHeaderTitle]];
     NSMutableArray *dataArr = [NSMutableArray new];
     NSArray *poi = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
-    NSArray *notes = [[OAOsmBugsDBHelper sharedDatabase] getOsmbugsPoints];
+    NSArray *notes = [[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints];
     if (_screenType == EDITS_ALL || _screenType == EDITS_POI)
     {
         for (OAOpenStreetMapPoint *p in poi)

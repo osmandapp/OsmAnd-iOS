@@ -11,8 +11,8 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmNotePoint.h"
+#import "OsmAndApp.h"
 
-#define kID_KEY @"id"
 #define kTEXT_KEY @"text"
 #define kLAT_KEY @"lat"
 #define kLON_KEY @"lon"
@@ -32,16 +32,10 @@
 
 @dynamic items, appliedItems, duplicateItems, existingItems;
 
-- (instancetype) init
+- (void)initialization
 {
-    self = [super init];
-    if (self)
-    {
-        OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
-        if (osmEditingPlugin)
-            [self setExistingItems: [NSMutableArray arrayWithArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmbugsPoints]]];
-    }
-    return self;
+    [super initialization];
+    self.existingItems = [NSMutableArray arrayWithArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
 }
 
 - (EOASettingsItemType) type
@@ -55,20 +49,22 @@
     if (newItems.count > 0 || [self duplicateItems].count > 0)
     {
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
-        
+        OAOsmBugsDBHelper *db = [OAOsmBugsDBHelper sharedDatabase];
         for (OAOsmNotePoint *duplicate in [self duplicateItems])
         {
-            [self.appliedItems addObject: self.shouldReplace ? duplicate : [self renameItem:duplicate]];
-        }
-        OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
-        if (osmEditingPlugin)
-        {
-            OAOsmBugsDBHelper *db = [OAOsmBugsDBHelper sharedDatabase];
-            for (OAOsmNotePoint *point in self.appliedItems)
+            NSInteger ind = [self.existingItems indexOfObject:duplicate];
+            if (ind != NSNotFound && ind < self.existingItems.count)
             {
-                [db addOsmbugs:point];
+                OAOsmNotePoint *original = self.existingItems[ind];
+                [db deleteAllBugModifications:original];
             }
+            [db addOsmbugs:duplicate];
         }
+        for (OAOsmNotePoint *point in self.appliedItems)
+        {
+            [db addOsmbugs:point];
+        }
+        [OsmAndApp.instance.osmEditsChangeObservable notifyEvent];
     }
 }
 
@@ -79,7 +75,7 @@
 
 - (BOOL) isDuplicate:(OAOsmNotePoint *)item
  {
-     return NO;
+     return [self.existingItems containsObject:item];
  }
 
 - (NSString *) getName
@@ -97,15 +93,21 @@
     return YES;
 }
 
+- (BOOL)shouldShowDuplicates
+{
+    return NO;
+}
+
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error
 {
     NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
     if (itemsJson.count == 0)
         return;
     
+    int idOffset = 0;
+    long long minId = OAOsmBugsDBHelper.sharedDatabase.getMinID - 1;
     for (id object in itemsJson)
     {
-        long long iD = [object[kID_KEY] longLongValue];
         NSString *text = object[kTEXT_KEY];
         double lat = [object[kLAT_KEY] doubleValue];
         double lon = [object[kLON_KEY] doubleValue];
@@ -113,13 +115,14 @@
         author = author.length > 0 ? author : nil;
         NSString *action = object[kACTION_KEY];
         OAOsmNotePoint *point = [[OAOsmNotePoint alloc] init];
-        [point setId:iD];
+        [point setId:MIN(-2, minId - idOffset)];
         [point setText:text];
         [point setLatitude:lat];
         [point setLongitude:lon];
         [point setAuthor:author];
         [point setAction:[OAOsmPoint getActionByName:action]];
         [self.items addObject:point];
+        idOffset++;
     }
 }
 
@@ -131,7 +134,6 @@
         for (OAOsmNotePoint *point in self.items)
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
-            jsonObject[kID_KEY] = [NSNumber numberWithLongLong: [point getId]];
             jsonObject[kTEXT_KEY] = [point getText];
             jsonObject[kLAT_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLatitude]];
             jsonObject[kLON_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLongitude]];

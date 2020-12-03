@@ -110,7 +110,7 @@
     });
 }
 
--(NSArray<OAOsmNotePoint *> *) getOsmbugsPoints
+-(NSArray<OAOsmNotePoint *> *) getOsmBugsPoints
 {
     if(!_cache)
         return [self checkOsmBugsPoints];

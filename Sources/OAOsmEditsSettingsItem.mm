@@ -15,6 +15,7 @@
 #import "OANode.h"
 #import "OAWay.h"
 #import "OAOpenStreetMapPoint.h"
+#import "OsmAndApp.h"
 
 #define kID_KEY @"id"
 #define kTEXT_KEY @"text"
@@ -39,16 +40,11 @@
 
 @dynamic items, appliedItems, duplicateItems, existingItems;
 
-- (instancetype) init
+
+- (void)initialization
 {
-    self = [super init];
-    if (self)
-    {
-        OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
-        if (osmEditingPlugin)
-            [self setExistingItems: [NSMutableArray arrayWithArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]]];
-    }
-    return self;
+    [super initialization];
+    [self setExistingItems: [NSMutableArray arrayWithArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]]];
 }
 
 - (EOASettingsItemType) type
@@ -62,20 +58,17 @@
     if (newItems.count > 0 || [self duplicateItems].count > 0)
     {
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
-        
+        OAOsmEditsDBHelper *db = [OAOsmEditsDBHelper sharedDatabase];
         for (OAOpenStreetMapPoint *duplicate in [self duplicateItems])
         {
-            [self.appliedItems addObject: self.shouldReplace ? duplicate : [self renameItem:duplicate]];
+            [db deletePOI:duplicate];
+            [db addOpenstreetmap:duplicate];
         }
-        OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
-        if (osmEditingPlugin)
+        for (OAOpenStreetMapPoint *point in self.appliedItems)
         {
-            OAOsmEditsDBHelper *db = [OAOsmEditsDBHelper sharedDatabase];
-            for (OAOpenStreetMapPoint *point in self.appliedItems)
-            {
-                [db addOpenstreetmap:point];
-            }
+            [db addOpenstreetmap:point];
         }
+        [OsmAndApp.instance.osmEditsChangeObservable notifyEvent];
     }
 }
 
@@ -86,8 +79,13 @@
 
 - (BOOL) isDuplicate:(OAOpenStreetMapPoint *)item
  {
-     return NO;
+     return [self.existingItems containsObject:item];
  }
+
+- (BOOL)shouldShowDuplicates
+{
+    return NO;
+}
 
 - (NSString *) getName
 {
@@ -147,7 +145,7 @@
         {
             NSMutableDictionary *jsonPoint = [NSMutableDictionary dictionary];
             NSMutableDictionary *jsonEntity = [NSMutableDictionary dictionary];
-            jsonEntity[kID_KEY] = [NSNumber numberWithLongLong: [point getId]];
+            jsonEntity[kID_KEY] = [NSNumber numberWithLongLong:[point getId]];
             jsonEntity[kTEXT_KEY] = [point getTagsString];
             jsonEntity[kLAT_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLatitude]];
             jsonEntity[kLON_KEY] = [NSString stringWithFormat:@"%0.5f", [point getLongitude]];

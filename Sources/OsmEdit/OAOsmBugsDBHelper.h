@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (OAOsmBugsDBHelper *)sharedDatabase;
 
--(NSArray<OAOsmNotePoint *> *) getOsmbugsPoints;
+-(NSArray<OAOsmNotePoint *> *) getOsmBugsPoints;
 -(void) updateOsmBug:(long) identifier text:(NSString *)text;
 -(void) addOsmbugs:(OAOsmNotePoint *)point;
 -(void) deleteAllBugModifications:(OAOsmNotePoint *) point;

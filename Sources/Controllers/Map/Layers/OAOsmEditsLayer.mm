@@ -181,7 +181,7 @@
 - (NSArray *)getAllPoints {
     NSMutableArray *data = [NSMutableArray new];
     [data addObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
-    [data addObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmbugsPoints]];
+    [data addObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
     return [NSArray arrayWithArray:data];
 }
 

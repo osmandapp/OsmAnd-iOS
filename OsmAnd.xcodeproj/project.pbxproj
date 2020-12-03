@@ -388,9 +388,7 @@
 		324D553A25703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */; };
 		324D553B25703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */; };
 		324D9C092576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 324D9C082576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm */; };
-		324D9C0A2576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 324D9C082576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm */; };
 		324D9C392576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 324D9C382576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm */; };
-		324D9C3A2576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 324D9C382576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm */; };
 		32FE27F225763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */; };
 		32FE27F325763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
@@ -7779,6 +7777,7 @@
 		847936561FED546300503D09 /* OAAmenityLocationPoint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAmenityLocationPoint.mm; sourceTree = "<group>"; };
 		847936EC2008B3D6006EBC7C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		847A209A1DF94E9B003C1246 /* OsmAnd Maps DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd Maps DEV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+        847A209A1DF94E9B003C1246 /* OsmAnd Maps DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd Maps DEV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		847A20A61DF9DD70003C1246 /* OACollapsableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableView.h; path = Sources/Controllers/2.0/OACollapsableView.h; sourceTree = "<group>"; };
 		847A20A71DF9DD70003C1246 /* OACollapsableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OACollapsableView.m; path = Sources/Controllers/2.0/OACollapsableView.m; sourceTree = "<group>"; };
 		847A20AA1DF9E150003C1246 /* OACollapsableLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableLabelView.h; path = Sources/Controllers/2.0/OACollapsableLabelView.h; sourceTree = "<group>"; };
@@ -14351,6 +14350,7 @@
 				BB098CF31793F7FD00423944 /* Frameworks */,
 				BB098CF21793F7FD00423944 /* Products */,
 				0FBE528DFE22A018C3A5A9D9 /* Pods */,
+                847A209B1DF94E9B003C1246 /* OsmAnd Maps copy-Info.plist */,
 				8A41EAD02309AD2C002F2515 /* Recovered References */,
 				DA7F2587231A68CD00E54F77 /* Libraries */,
 			);

@@ -427,7 +427,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         }
         else
         {
-            [OAPluginPopupViewController showOsmEditingDisabled];
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_OsmEditing];
         }
     }
 }

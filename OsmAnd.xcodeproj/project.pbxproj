@@ -14350,7 +14350,7 @@
 				BB098CF31793F7FD00423944 /* Frameworks */,
 				BB098CF21793F7FD00423944 /* Products */,
 				0FBE528DFE22A018C3A5A9D9 /* Pods */,
-                847A209B1DF94E9B003C1246 /* OsmAnd Maps copy-Info.plist */,
+				847A209B1DF94E9B003C1246 /* OsmAnd Maps copy-Info.plist */,
 				8A41EAD02309AD2C002F2515 /* Recovered References */,
 				DA7F2587231A68CD00E54F77 /* Libraries */,
 			);

@@ -16,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OACollapsableView.h"
 #import "OACollapsableWaypointsView.h"
+#import "OAQuickAction.h"
 #import <UIAlertView+Blocks.h>
 
 #include <OsmAndCore.h>
@@ -68,14 +69,11 @@
         QString title = QString::fromNSString(formattedLocation);
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSInteger defaultColor = 0;
-        if ([userDefaults objectForKey:kFavoriteDefaultColorKey])
-            defaultColor = [userDefaults integerForKey:kFavoriteDefaultColorKey];
-        
         NSString *groupName;
         if ([userDefaults objectForKey:kFavoriteDefaultGroupKey])
             groupName = [userDefaults stringForKey:kFavoriteDefaultGroupKey];
         
+        NSInteger defaultColor = [OAQuickAction prepareDefaultColorNumberFromValue: [[userDefaults objectForKey:kFavoriteDefaultColorKey] integerValue]];
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
         
         UIColor* color_ = favCol.color;

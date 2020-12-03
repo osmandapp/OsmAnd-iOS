@@ -387,6 +387,8 @@
 		324B735E25653CB100B6EE52 /* OATextCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 324B735925653CB000B6EE52 /* OATextCardView.xib */; };
 		324D553A25703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */; };
 		324D553B25703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */; };
+		32867A9D25781CAF00DDAD44 /* OAQuickActionsSettingsItemReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 32867A9C25781CAF00DDAD44 /* OAQuickActionsSettingsItemReader.m */; };
+		32867A9E25781CAF00DDAD44 /* OAQuickActionsSettingsItemReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 32867A9C25781CAF00DDAD44 /* OAQuickActionsSettingsItemReader.m */; };
 		32FE27F225763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */; };
 		32FE27F325763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
@@ -6579,6 +6581,8 @@
 		324D553825703A0B0043FB64 /* OAWhatsNewBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWhatsNewBottomSheetViewController.h; sourceTree = "<group>"; };
 		324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWhatsNewBottomSheetViewController.m; sourceTree = "<group>"; };
 		3253CEEE2571B1A5008DED25 /* OAAppVersionDependedConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAppVersionDependedConstants.h; sourceTree = "<group>"; };
+		32867A9B25781C6E00DDAD44 /* OAQuickActionsSettingsItemReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickActionsSettingsItemReader.h; sourceTree = "<group>"; };
+		32867A9C25781CAF00DDAD44 /* OAQuickActionsSettingsItemReader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAQuickActionsSettingsItemReader.m; sourceTree = "<group>"; };
 		32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAppVersionDependedConstants.m; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B52507803500266047 /* ic_custom_logo_wikidata.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_logo_wikidata.png; path = Resources/Icons/ic_custom_logo_wikidata.png; sourceTree = "<group>"; };
@@ -10563,6 +10567,8 @@
 				1581A3922566C3FB004CB4B3 /* OASettingsItemWriter.m */,
 				1581A38B2566C3BB004CB4B3 /* OASettingsItemReader.h */,
 				1581A38C2566C3C5004CB4B3 /* OASettingsItemReader.m */,
+				32867A9B25781C6E00DDAD44 /* OAQuickActionsSettingsItemReader.h */,
+				32867A9C25781CAF00DDAD44 /* OAQuickActionsSettingsItemReader.m */,
 				1565BA30256BCC0F003C6278 /* OASettingsItemType.h */,
 				1565BA33256BCC23003C6278 /* OASettingsItemType.m */,
 				1565BA68256C0EF9003C6278 /* OAExportSettingsType.h */,
@@ -21134,6 +21140,7 @@
 				8438B8161EEDC43F007AEF77 /* OAGPXLayer.mm in Sources */,
 				847A1CD91DF94E9B003C1246 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				DA87A48A24D44C12002F8C77 /* OATitleRightIconCell.m in Sources */,
+				32867A9E25781CAF00DDAD44 /* OAQuickActionsSettingsItemReader.m in Sources */,
 				DAB854A623053043002566A6 /* OAAddQuickActionViewController.m in Sources */,
 				DA71EAAA2346232E00B9D7F3 /* OARouteAvoidSettingsViewController.mm in Sources */,
 				DA6D07A625543735004FE017 /* OAClearPointsCommand.mm in Sources */,
@@ -22175,6 +22182,7 @@
 				DA2640842201ADBD00A554AD /* OAOsmBugsLocalUtil.mm in Sources */,
 				BBA3AF5E197FC4BB0039D991 /* OAAutoObserverProxy.m in Sources */,
 				DA6A1C4321FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */,
+				32867A9D25781CAF00DDAD44 /* OAQuickActionsSettingsItemReader.m in Sources */,
 				844E08001E465A3400EFC525 /* OANameStringMatcher.m in Sources */,
 				842BFC641A94DD3A008CF87B /* OAGpxWptItem.mm in Sources */,
 				DA5793D022A0040200750C8F /* OAFirstMapillaryBottomSheetViewController.mm in Sources */,

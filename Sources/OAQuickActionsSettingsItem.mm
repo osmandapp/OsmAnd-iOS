@@ -7,6 +7,7 @@
 //
 
 #import "OAQuickActionsSettingsItem.h"
+#import "OAQuickActionsSettingsItemReader.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
@@ -91,7 +92,7 @@
 
 - (OASettingsItemReader *) getReader
 {
-    return [self getJsonReader];
+    return [[OAQuickActionsSettingsItemReader alloc] initWithItem:self];
 }
 
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
@@ -113,11 +114,35 @@
         
         if (quickAction)
         {
-            NSDictionary *params = object[@"params"];
+            NSMutableDictionary *params;
+            if ([object[@"params"] isKindOfClass:NSDictionary.class])
+            {
+                params = [NSMutableDictionary dictionaryWithDictionary:object[@"params"]];
+            }
+            else
+            {
+                NSString *stringValue = (NSString *)object[@"params"];
+                NSError *jsonError;
+                NSData* stringData = [stringValue dataUsingEncoding:NSUTF8StringEncoding];
+                params = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:stringData options:kNilOptions error:&jsonError]];
+            }
+            
+            if (params[@"styles"] && ![params[@"styles"] isKindOfClass:NSArray.class])
+                params[@"styles"] = [((NSString *) params[@"styles"]) componentsSeparatedByString:@","];
+            
+            if (params[@"overlays"] && ![params[@"overlays"] isKindOfClass:NSArray.class])
+            {
+                NSString *overlaysString = (NSString *)params[@"overlays"];
+                NSError *overlayJsonError;
+                NSData* overlaysData = [overlaysString dataUsingEncoding:NSUTF8StringEncoding];
+                params[@"overlays"] = [NSJSONSerialization JSONObjectWithData:overlaysData options:kNilOptions error:&overlayJsonError];
+            }
+            
+            [quickAction setParams:params];
+            
             if (name.length > 0)
                 [quickAction setName:name];
             
-            [quickAction setParams:params];
             [self.items addObject:quickAction];
         } else {
             [self.warnings addObject:OALocalizedString(@"settings_item_read_error", self.name)];

@@ -63,9 +63,6 @@
 - (NSArray<OASettingsItem *> *) processItems:(NSString *)file items:(NSArray<OASettingsItem *> *)items
 {
     NSFileManager *fileManager = NSFileManager.defaultManager;
-    // Clear temp profile data
-    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-    [fileManager createDirectoryAtPath:_tmpFilesDir withIntermediateDirectories:YES attributes:nil error:nil];
     
     BOOL collecting = items == nil;
     if (collecting)
@@ -228,8 +225,8 @@
         }
         if ([item[@"type"] isEqualToString:@"QUICK_ACTIONS"])
         {
-//            OASettingsItem *settingsItem = [self createItem:item];
-//            [_items addObject:settingsItem];
+            OASettingsItem *settingsItem = [self createItem:item];
+            [_items addObject:settingsItem];
         }
         if ([item[@"type"] isEqualToString:@"FILE"])
         {

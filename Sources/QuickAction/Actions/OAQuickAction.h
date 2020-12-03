@@ -92,5 +92,6 @@
 -(NSString *) getListKey;
 
 + (OAQuickActionType *) TYPE;
++(NSInteger) prepareDefaultColorNumberFromValue:(NSInteger)value;
 
 @end

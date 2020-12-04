@@ -1393,7 +1393,7 @@
 "routeInfo_tracktype_name" = "Þéttleiki yfirborðs";
 "routing_attr_avoid_shuttle_train_name" = "Forðast tengilestir";
 "rendering_attr_piste_difficulty_aerialway_name" = "Víralyfta";
-"rendering_value_bicycle_name" = "Reiðhjól";
+"rendering_value_bicycle_name" = "Hjólandi";
 "rendering_attr_smoothness_impassable_name" = "Ófært";
 "rendering_attr_surface_gravel_name" = "Möl";
 "routing_attr_avoid_ice_roads_fords_name" = "Forðast hála vegi eða vöð";
@@ -1406,7 +1406,7 @@
 "rendering_value_germanRoadAtlas_name" = "Þýsk vegakort";
 "routing_attr_allow_advanced_description" = "Erfiðar leiðir, með hættulegum hindrunum og bröttum hlutum.";
 "rendering_value_translucent_orange_name" = "Hálfgegnsætt appelsínugult";
-"rendering_value_car_name" = "Bíll";
+"rendering_value_car_name" = "Akandi";
 "rendering_attr_hideWaterPolygons_description" = "Vatn";
 "rendering_attr_surface_salt_name" = "Salt";
 "routing_attr_difficulty_preference_name" = "Ákjósanlegt erfiðleikastig";
@@ -1500,7 +1500,7 @@
 "routing_attr_short_way_name" = "Leið með hagkvæmri eldsneytisnýtingu";
 "rendering_attr_roadStyle_name" = "Stíll götu";
 "rendering_attr_surface_fine_gravel_name" = "Fín möl";
-"rendering_value_purple_name" = "Fjólublátt";
+"rendering_value_purple_name" = "Purpurablátt";
 "rendering_attr_piste_type_hike_name" = "Gönguferðir";
 "rendering_value_high_name" = "Hár";
 "rendering_attr_lessDetailed_name" = "Færri smáatriði";
@@ -1909,3 +1909,21 @@
 "shared_string_preparing" = "Undirbý";
 "shared_string_import_complete" = "Innflutningi lokið";
 "shared_string_importing" = "Innflutningur í gangi";
+"ios_release_3_80" = "• Kynnt til sögunnar “Forritssnið\" með sjálfstæðum stillingum\n• Ný framsetning stillinga eftir sniðum og gerðum: leiðsögn, almennt, kort og skjár\n• Hægt að flytja stillingar inn/út\n• Bætt við gagnagjöfum fyrir myndir af netinu\n• Hægt að sækja nettengd kort í skyndiminni\n• Lagfærð reiknirit fyrir \"Leit\"";
+"road_max_speed_descr" = "Setur hámarksferðahraða fyrir alla vegi á leiðinni. Lækkar forgang vega sem merktir eru með hraðamörkum sem eru hærri en hámarkið.";
+"road_min_speed_descr" = "Setur lágmarksferðahraða fyrir alla vegi á leiðinni. Hækkar forgang vega sem merktir eru með hraðamörkum sem eru lægri en lágmarkið.";
+"ios_release_3_90" = "• Kynnt til sögunnar “Forritssnið\" með sjálfstæðum stillingum\n• Ný framsetning stillinga eftir sniðum og gerðum: leiðsögn, almennt, kort og skjár\n• Hægt að flytja stillingar inn/út\n• Bætt við gagnagjöfum fyrir myndir af netinu\n• Hægt að sækja nettengd kort í skyndiminni\n• Lagfærð reiknirit fyrir \"Leit\"";
+"vk" = "VK";
+"road_speeds_descr" = "Þessi viðföng geta haft áhrif á útreikning leiða.";
+"road_speeds" = "Hraði á vegum";
+
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "Þú ert með nýjustu útgáfuna: %@";
+"shared_string_min" = "Lágm.";
+"shared_string_max" = "Hám.";
+"help_what_is_new" = "Hvað er nýtt";
+"maximum_speed" = "Hámarkshraði";

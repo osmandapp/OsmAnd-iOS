@@ -139,14 +139,14 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
-    NSArray<NSDictionary <NSString *, NSString *> *> *sources = self.getParams[self.getListKey];
+    NSArray<NSArray <NSString *> *> *sources = self.getParams[self.getListKey];
     NSMutableArray *arr = [NSMutableArray new];
-    for (NSDictionary <NSString *, NSString *> *source in sources)
+    for (NSArray *source in sources)
     {
         [arr addObject:@{
                          @"type" : @"OATitleDescrDraggableCell",
-                         @"title" : source[@"first"],
-                         @"value" : source[@"second"],
+                         @"title" : source.lastObject,
+                         @"value" : source.firstObject,
                          @"img" : @"ic_custom_map_style"
                          }];
     }

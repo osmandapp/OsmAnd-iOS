@@ -135,7 +135,11 @@
                 NSString *overlaysString = (NSString *)params[@"overlays"];
                 NSError *overlayJsonError;
                 NSData* overlaysData = [overlaysString dataUsingEncoding:NSUTF8StringEncoding];
-                params[@"overlays"] = [NSJSONSerialization JSONObjectWithData:overlaysData options:kNilOptions error:&overlayJsonError];
+                NSDictionary *overlaysJson = [NSJSONSerialization JSONObjectWithData:overlaysData options:kNilOptions error:&overlayJsonError];
+                NSMutableArray *resultArray = [NSMutableArray new];
+                for (NSDictionary *layer in overlaysJson)
+                    [resultArray addObject:@[layer[@"first"], layer[@"second"]]];
+                params[@"overlays"] = resultArray;
             }
             
             [quickAction setParams:params];

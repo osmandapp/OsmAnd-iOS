@@ -211,7 +211,7 @@ static NSInteger SEQ = 0;
     return nil;
 }
 
-+(NSInteger) prepareDefaultColorNumberFromValue:(NSInteger)value
++ (NSInteger)prepareDefaultColorNumberFromValue:(NSInteger)value
  {
      NSInteger defaultColor = value;
      NSArray *colors = [OADefaultFavorite builtinColors];

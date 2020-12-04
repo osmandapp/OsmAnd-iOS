@@ -439,7 +439,8 @@ static const NSInteger groupCount = 5;
         [cell.descriptionView setText:item[@"description"]];
         [cell.textView setFont:[UIFont systemFontOfSize:16]];
         [cell.descriptionView setFont:[UIFont systemFontOfSize:12]];
-        [cell updateConstraints];
+        if ([cell needsUpdateConstraints])
+            [cell updateConstraints];
     }
     return cell;
 }
@@ -476,11 +477,6 @@ static const NSInteger groupCount = 5;
         [[UIApplication sharedApplication] openURL: [NSURL URLWithString:contactEmailUrl]];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 48.0;
 }
 
 @end

@@ -606,6 +606,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     NSString *editTag = nil;
     NSString *editValue = nil;
     BOOL nonEditable = NO;
+    BOOL top = NO;
     int order = 0;
     BOOL mapOnly = NO;
     BOOL reference = NO;
@@ -738,6 +739,16 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             
             excludedPoiAdditionalCategories = [value componentsSeparatedByString:@","];
         }
+        else if (0 == strncmp((const char*)attributes[i].localname, kTopAttributeName,
+                              kTopAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+            
+            top = [[value lowercaseString] isEqualToString:@"true"];
+        }
     }
     
     if (deprecatedOf)
@@ -753,6 +764,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     poiType.tag2 = tag2;
     poiType.value2 = value2;
     poiType.nonEditableOsm = nonEditable;
+    poiType.top = top;
     poiType.editTag = editTag;
     poiType.editValue = editValue;
     poiType.reference = reference;

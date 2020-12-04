@@ -7,6 +7,7 @@
 //
 
 #import "OAProfileSettingsItem.h"
+#import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAMapStyleTitles.h"

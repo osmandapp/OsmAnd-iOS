@@ -155,8 +155,7 @@ static OAQuickActionType *TYPE;
                           }
                       ] forKey:kSectionNoName];
     
-    NSInteger defaultColor = [OAQuickAction prepareDefaultColorNumberFromValue:[self.getParams[KEY_CATEGORY_COLOR] integerValue]];
-    
+    NSInteger defaultColor = [OADefaultFavorite validateBuiltInColorNumber:[self.getParams[KEY_CATEGORY_COLOR] integerValue]];
     OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
     
     [data setObject:@[@{

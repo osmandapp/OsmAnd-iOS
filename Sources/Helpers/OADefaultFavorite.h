@@ -35,4 +35,6 @@
 
 + (NSArray *)builtinColors;
 
++ (NSInteger) validateBuiltInColorNumber:(NSInteger)number;
+
 @end

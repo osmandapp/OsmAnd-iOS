@@ -73,7 +73,7 @@
         if ([userDefaults objectForKey:kFavoriteDefaultGroupKey])
             groupName = [userDefaults stringForKey:kFavoriteDefaultGroupKey];
         
-        NSInteger defaultColor = [OAQuickAction prepareDefaultColorNumberFromValue:[[userDefaults objectForKey:kFavoriteDefaultColorKey] integerValue]];
+        NSInteger defaultColor = [OADefaultFavorite validateBuiltInColorNumber:[[userDefaults objectForKey:kFavoriteDefaultColorKey] integerValue]];
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
         
         UIColor* color_ = favCol.color;

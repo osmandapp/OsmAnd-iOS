@@ -550,6 +550,11 @@
             if (p.top)
                 [lf addObject:p];
         }
+        for (OAPOIType *p in pc.poiTypes)
+        {
+            if (p.top)
+                [lf addObject:p];
+        }
     }
     [lf sortUsingComparator:^NSComparisonResult(OAPOIBaseType * _Nonnull obj1, OAPOIBaseType * _Nonnull obj2) {
         return [obj1.nameLocalized localizedCompare:obj2.nameLocalized];

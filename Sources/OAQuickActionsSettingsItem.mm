@@ -114,14 +114,14 @@
         
         if (quickAction)
         {
-            NSMutableDictionary *params;
-            if ([object[@"params"] isKindOfClass:NSDictionary.class])
+            NSMutableDictionary *params = object[@"params"];
+            if ([params isKindOfClass:NSDictionary.class])
             {
-                params = [NSMutableDictionary dictionaryWithDictionary:object[@"params"]];
+                params = [NSMutableDictionary dictionaryWithDictionary:params];
             }
             else
             {
-                NSString *stringValue = (NSString *)object[@"params"];
+                NSString *stringValue = (NSString *)params;
                 NSError *jsonError;
                 NSData* stringData = [stringValue dataUsingEncoding:NSUTF8StringEncoding];
                 params = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:stringData options:kNilOptions error:&jsonError]];

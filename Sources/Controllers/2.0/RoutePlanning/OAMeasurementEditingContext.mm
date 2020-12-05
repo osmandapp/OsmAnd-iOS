@@ -170,7 +170,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (void) clearSnappedToRoadPoints
 {
-    _roadSegmentData = [NSDictionary new];
+    [_roadSegmentData removeAllObjects];
 }
 
 - (NSArray<OAGpxTrkSeg *> *) getBeforeTrkSegmentLine
@@ -296,7 +296,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 - (void) addPoint:(OAGpxTrkPt *)pt
 {
     _before.points = [_before.points arrayByAddingObject:pt];
-//    [self updateCacheForSnap:NO];
+    [self updateSegmentsForSnap:NO];
 }
 
 - (void) addPoint:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode
@@ -964,13 +964,15 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     _roadSegmentData[_currentPair] = [[OARoadSegmentData alloc] initWithAppMode:route.appMode start:_currentPair.firstObject end:_currentPair.lastObject points:pts segments:originalRoute];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateSegmentsForSnap:YES calculateIfNeeded:NO];
-//        progressListener.refresh();
+        if (self.progressDelegate)
+            [self.progressDelegate refresh];
         OARouteCalculationParams *params = [self getParams:NO];
         if (params)
             [OARoutingHelper.sharedInstance startRouteCalculationThread:params paramsChanged:YES updateProgress:YES];
         else
         {
-//            progressListener.hideProgressBar();
+            if (self.progressDelegate)
+                [self.progressDelegate hideProgressBar];
         }
     });
 }

@@ -64,7 +64,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 };
 
 @interface OARoutePlanningHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate,
-    OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate, OASegmentOptionsDelegate>
+    OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate, OASegmentOptionsDelegate, OASnapToRoadProgressDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
@@ -114,6 +114,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         _layer = _mapPanel.mapViewController.mapLayers.routePlanningLayer;
         // TODO: port later public void openPlanRoute()
         _editingContext = [[OAMeasurementEditingContext alloc] init];
+        _editingContext.progressDelegate = self;
         
         _layer.editingCtx = _editingContext;
     }
@@ -436,8 +437,8 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
         if (weakSelf == nil)
             return;
         NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:_editingContext.getPoints];
-        OATrackSegment *before = _editingContext.getBeforeTrkSegmentLine;
-        OATrackSegment *after = _editingContext.getAfterTrkSegmentLine;
+        NSArray<OAGpxTrkSeg *> *before = _editingContext.getBeforeTrkSegmentLine;
+        NSArray<OAGpxTrkSeg *> *after = _editingContext.getAfterTrkSegmentLine;
         if (gpxFile == nil)
         {
             NSString *fileName = outFile.lastPathComponent;
@@ -446,14 +447,17 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
             if (saveType == LINE)
             {
                 OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
+                NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray new];
+                for (OAGpxTrkSeg *seg in [before arrayByAddingObjectsFromArray:after])
+                {
+                    [points addObjectsFromArray:seg.points];
+                }
 //                if (_editingContext.hasRoute)
 //                {
 //                    segment.points = [NSArray arrayWithArray:_editingContext.getRoutePoints];
 //                }
 //                else
 //                {
-                NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:before.points];
-                [points addObjectsFromArray:after.points];
                 segment.points = [NSArray arrayWithArray:points];
 //                }
                 OAGpxTrk *track = [[OAGpxTrk alloc] init];
@@ -899,6 +903,26 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 //        updateSnapToRoadControls();
         [self updateDistancePointsText];
     }
+}
+
+#pragma mark - OASnapToRoadProgressDelegate
+
+- (void)hideProgressBar
+{
+
+}
+
+- (void)refresh
+{
+    [_layer updateLayer];
+}
+
+- (void)showProgressBar {
+    
+}
+
+- (void)updateProgress:(int)progress {
+    
 }
 
 @end

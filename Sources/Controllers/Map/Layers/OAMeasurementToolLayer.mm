@@ -296,7 +296,6 @@
 
 - (void) resetLayer
 {
-    
     [self.mapView removeKeyedSymbolsProvider:_collection];
     [self.mapView removeKeyedSymbolsProvider:_lastLineCollection];
     [self.mapView removeKeyedSymbolsProvider:_pointMarkers];
@@ -450,32 +449,40 @@
 - (void) drawBeforeAfterPath:(QVector<OsmAnd::PointI> &)points
 {
     // TODO: refactor this logic to be identical with Android and use after implementing gaps
-    OATrackSegment *before = _editingCtx.getBeforeTrkSegmentLine;
-    OATrackSegment *after = _editingCtx.getAfterTrkSegmentLine;
-    if (before.points.count > 0 || after.points.count > 0)
-    {
-        if (before.points.count > 0)
-        {
-            OAGpxTrkPt *pt = before.points[before.points.count - 1];
-            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
-        }
-        if (after.points.count > 0)
-        {
-            if (before.points.count == 0)
-            {
-                points.push_back(self.mapViewController.mapView.target31);
-            }
-            OAGpxTrkPt *pt = after.points[0];
-            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
-        }
-        
-        [self drawRouteSegment:points];
-    }
+//    OATrackSegment *before = _editingCtx.getBeforeTrkSegmentLine;
+//    OATrackSegment *after = _editingCtx.getAfterTrkSegmentLine;
+//    if (before.points.count > 0 || after.points.count > 0)
+//    {
+//        if (before.points.count > 0)
+//        {
+//            OAGpxTrkPt *pt = before.points[before.points.count - 1];
+//            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
+//        }
+//        if (after.points.count > 0)
+//        {
+//            if (before.points.count == 0)
+//            {
+//                points.push_back(self.mapViewController.mapView.target31);
+//            }
+//            OAGpxTrkPt *pt = after.points[0];
+//            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
+//        }
+//
+//        [self drawRouteSegment:points];
+//    }
 }
 
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points {
     [self.mapViewController runWithRenderSync:^{
-        [self drawLines:points collection:_collection modeAware:YES];
+        QVector<OsmAnd::PointI> routePoints;
+        NSArray<OAGpxTrkSeg *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
+        NSArray<OAGpxTrkSeg *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;
+        for (OAGpxTrkSeg *seg in [beforeSegs arrayByAddingObjectsFromArray:afterSegs])
+        {
+            for (OAGpxTrkPt *pt in seg.points)
+                routePoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
+        }
+        [self drawLines:routePoints collection:_collection modeAware:YES];
         [self addPointMarkers:points collection:_pointMarkers];
         
         [self.mapView addKeyedSymbolsProvider:_collection];

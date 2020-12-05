@@ -293,6 +293,17 @@
         self.ageOfGpsData = point.ageOfGpsData;
         self.source = point.source;
         self.symbol = point.symbol;
+        self.position = point.position;
+        self.firstPoint = point.firstPoint;
+        self.lastPoint = point.lastPoint;
+        self.name = point.name;
+        self.desc = point.desc;
+        self.elevation = point.elevation;
+        self.time = point.time;
+        self.comment = point.comment;
+        self.type = point.type;
+        self.links = point.links;
+        self.distance = point.distance;
     }
     return self;
 }

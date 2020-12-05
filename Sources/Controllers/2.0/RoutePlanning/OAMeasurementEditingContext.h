@@ -27,7 +27,18 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 @class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxTrkSeg, OARoadSegmentData;
 
+@protocol OASnapToRoadProgressDelegate
+
+- (void) showProgressBar;
+- (void) updateProgress:(int)progress;
+- (void) hideProgressBar;
+- (void) refresh;
+
+@end
+
 @interface OAMeasurementEditingContext : NSObject
+
+@property (nonatomic, weak) id<OASnapToRoadProgressDelegate> progressDelegate;
 
 @property (nonatomic, readonly) OAMeasurementCommandManager *commandManager;
 @property (nonatomic) OAApplicationMode *appMode;
@@ -57,8 +68,8 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt;
 - (void) addPoints:(NSArray<OAGpxTrkPt *> *)points;
 
-- (OAGpxTrkSeg *) getBeforeTrkSegmentLine;
-- (OAGpxTrkSeg *) getAfterTrkSegmentLine;
+- (NSArray<OAGpxTrkSeg *> *) getBeforeTrkSegmentLine;
+- (NSArray<OAGpxTrkSeg *> *) getAfterTrkSegmentLine;
 
 - (void) addPoint:(OAGpxTrkPt *)pt;
 

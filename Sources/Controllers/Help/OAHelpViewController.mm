@@ -439,6 +439,8 @@ static const NSInteger groupCount = 5;
         [cell.descriptionView setText:item[@"description"]];
         [cell.textView setFont:[UIFont systemFontOfSize:16]];
         [cell.descriptionView setFont:[UIFont systemFontOfSize:12]];
+        if ([cell needsUpdateConstraints])
+            [cell updateConstraints];
     }
     return cell;
 }

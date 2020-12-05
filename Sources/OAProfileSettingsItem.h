@@ -7,7 +7,8 @@
 //
 
 #import "OASettingsItem.h"
-#import "OAApplicationMode.h"
+
+@class OAApplicationMode, OAApplicationModeBean;
 
 @interface OAProfileSettingsItem : OASettingsItem
 

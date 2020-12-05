@@ -84,9 +84,9 @@
 @end
 @implementation OAGpxExtensions
 
-- (NSDictionary<NSString *,NSString *> *)extensions
+- (NSArray<OAGpxExtension *> *)extensions
 {
-    return _extensions ? _extensions : @{};
+    return _extensions ? _extensions : [NSArray new];
 }
 
 - (void) copyExtensions:(OAGpxExtensions *)e
@@ -319,6 +319,8 @@
 
 - (void) addExtension:(OAGpxExtension *)e
 {
+    if (!self.extraData)
+        self.extraData = [[OAGpxExtensions alloc] init];
     NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
     if (![exts containsObject:e])
         ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];

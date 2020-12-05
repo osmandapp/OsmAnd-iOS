@@ -69,8 +69,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         
         _before = [[OAGpxTrkSeg alloc] init];
         _before.points = @[];
+        _beforeSegments = [NSMutableArray new];
         _after = [[OAGpxTrkSeg alloc] init];
         _after.points = @[];
+        _afterSegments = [NSMutableArray new];
     }
     return self;
 }
@@ -418,7 +420,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     NSMutableArray<NSArray<OAGpxTrkPt *> *> *res = [NSMutableArray new];
     for (NSArray<OAGpxTrkPt *> *points in @[_before.points, _after.points])
     {
-        for (NSInteger i = 0; i < points.count - 1; i++)
+        for (NSInteger i = 0; points.count > 0 && i < points.count - 1; i++)
         {
             OAGpxTrkPt *startPoint = points[i];
             OAGpxTrkPt *endPoint = points[i + 1];
@@ -466,6 +468,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 {
     NSMutableArray<NSNumber *> *roadSegmentIndexes = [NSMutableArray new];
     OAGpxTrkSeg *s = [[OAGpxTrkSeg alloc] init];
+    s.points = [NSArray new];
     [segments addObject:s];
     BOOL defaultMode = YES;
     if (points.count > 1)
@@ -489,6 +492,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
                     if (s.points.count > 0)
                     {
                         s = [[OAGpxTrkSeg alloc] init];
+                        s.points = [NSArray new];
                         [segments addObject:s];
                         defaultMode = YES;
                     }
@@ -508,7 +512,8 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         for (OAGpxTrkSeg *segment in segments)
         {
             OAGpxTrkSeg *segmentForSnap = [[OAGpxTrkSeg alloc] init];
-            for (NSInteger i = 0; i < segment.points.count - 1; i++)
+            segmentForSnap.points = [NSArray new];
+            for (NSInteger i = 0; segment.points.count > 0 && i < segment.points.count - 1; i++)
             {
                 NSArray<OAGpxTrkPt *> *pair = @[segment.points[i], segment.points[i + 1]];
                 OARoadSegmentData *data = _roadSegmentData[pair];
@@ -778,16 +783,16 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (void) updateSegmentsForSnap:(BOOL)both calculateIfNeeded:(BOOL)calculateIfNeeded
 {
-    [_beforeSegments removeAllObjects];
-    [_beforeSegmentsForSnap removeAllObjects];
+    _beforeSegments = [NSMutableArray new];
+    _beforeSegmentsForSnap = [NSMutableArray new];
     [self recreateSegments:_beforeSegments
            segmentsForSnap:_beforeSegmentsForSnap
                     points:_before.points
          calculateIfNeeded:calculateIfNeeded];
     if (both)
     {
-        [_afterSegments removeAllObjects];
-        [_afterSegmentsForSnap removeAllObjects];
+        _afterSegments = [NSMutableArray new];
+        _afterSegmentsForSnap = [NSMutableArray new];
         [self recreateSegments:_afterSegments
                segmentsForSnap:_afterSegmentsForSnap
                         points:_after.points

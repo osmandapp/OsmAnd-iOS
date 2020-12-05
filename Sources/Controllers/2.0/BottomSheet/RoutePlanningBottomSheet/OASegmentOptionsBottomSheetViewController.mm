@@ -16,12 +16,6 @@
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
 #define kSegmentedControlCell @"OASegmentedControllCell"
 
-typedef NS_ENUM(NSInteger, EOASegmentModeType)
-{
-    EOASegmentModeTypeNextSeg = 0,
-    EOASegmentModeTypeWholeTrack
-};
-
 @interface OASegmentOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
@@ -32,7 +26,8 @@ typedef NS_ENUM(NSInteger, EOASegmentModeType)
     
     UIView *_tableHeaderView;
     
-    EOASegmentModeType _segmentModeType;
+    EOARouteBetweenPointsDialogMode _dialogMode;
+    EOARouteBetweenPointsDialogType _dialogType;
 }
 
 - (void)viewDidLoad
@@ -50,7 +45,8 @@ typedef NS_ENUM(NSInteger, EOASegmentModeType)
     [self.rightButton removeFromSuperview];
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
     
-    _segmentModeType = EOASegmentModeTypeWholeTrack;
+    _dialogMode = EOARouteBetweenPointsDialogModeAll;
+    _dialogType = EOADialogTypeWholeRouteCalculation;
 }
 
 - (void) applyLocalization
@@ -85,7 +81,7 @@ typedef NS_ENUM(NSInteger, EOASegmentModeType)
     
     for (OAApplicationMode *mode in OAApplicationMode.values)
     {
-        if ([mode.getRoutingProfile isEqualToString:@"public_transport"])
+        if ([mode.getRoutingProfile isEqualToString:@"public_transport"] || mode == OAApplicationMode.DEFAULT)
             continue;
         
         [sectionData addObject:
@@ -110,7 +106,7 @@ typedef NS_ENUM(NSInteger, EOASegmentModeType)
     if (segment)
     {
         [self.tableView beginUpdates];
-        _segmentModeType = (EOASegmentModeType) segment.selectedSegmentIndex;
+        _dialogMode = (EOARouteBetweenPointsDialogMode) segment.selectedSegmentIndex;
         [self.tableView footerViewForSection:0].textLabel.text = [self tableView:self.tableView titleForFooterInSection:0];
         [[self.tableView footerViewForSection:0] sizeToFit];
         [self.tableView endUpdates];
@@ -149,7 +145,7 @@ typedef NS_ENUM(NSInteger, EOASegmentModeType)
             [cell.segmentedControl setTitle:item[@"first_item_title"] forSegmentAtIndex:0];
             [cell.segmentedControl setTitle:item[@"second_item_title"] forSegmentAtIndex:1];
             [cell.segmentedControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
-            [cell.segmentedControl setSelectedSegmentIndex:_segmentModeType == EOASegmentModeTypeNextSeg ? 0 : 1];
+            [cell.segmentedControl setSelectedSegmentIndex:_dialogMode == EOARouteBetweenPointsDialogModeSingle ? 0 : 1];
         }
         return cell;
     }
@@ -202,7 +198,7 @@ typedef NS_ENUM(NSInteger, EOASegmentModeType)
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     if (section == 0)
-        return _segmentModeType == EOASegmentModeTypeNextSeg ? OALocalizedString(@"next_seg_descr") : OALocalizedString(@"whole_track_descr");
+        return _dialogMode == EOARouteBetweenPointsDialogModeSingle ? OALocalizedString(@"next_seg_descr") : OALocalizedString(@"whole_track_descr");
     return nil;
 }
 
@@ -212,7 +208,13 @@ typedef NS_ENUM(NSInteger, EOASegmentModeType)
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *key = item[@"key"];
-    
+    if (self.delegate)
+    {
+        if ([key isEqualToString:@"straight_line_mode"])
+            [self.delegate onApplicationModeChanged:OAApplicationMode.DEFAULT dialogType:_dialogType dialogMode:_dialogMode];
+        else
+            [self.delegate onApplicationModeChanged:item[@"mode"] dialogType:_dialogType dialogMode:_dialogMode];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
 }

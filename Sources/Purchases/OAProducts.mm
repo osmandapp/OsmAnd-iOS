@@ -1658,7 +1658,6 @@
         
         self.inAppMaps = @[self.allWorld,
                            self.russia,
-                           self.antarctica,
                            self.africa,
                            self.asia,
                            self.australia,

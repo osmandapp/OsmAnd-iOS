@@ -17,7 +17,6 @@
 #import "OAOsmEditsDBHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmEditingPlugin.h"
-#import "OAOsmEditsDBHelper.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAEntity.h"
 #import "OAPOI.h"

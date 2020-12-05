@@ -25,7 +25,6 @@
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOpenStreetMapRemoteUtil.h"
 #import "MaterialTextFields.h"
-#import "OAEntity.h"
 #import "OAPOI.h"
 #import "OAEditPOIData.h"
 #import "OASizes.h"

@@ -88,9 +88,59 @@
     return [_entity getLongitude];
 }
 
+- (NSString *)getTagsString
+{
+    NSMutableString *sb;
+    for (NSString *tag in [_entity getTags].allKeys)
+    {
+        NSString *val = [_entity getTags][tag];
+        if ([_entity isNotValid:tag])
+        {
+            continue;
+        }
+        [sb appendString:[NSString stringWithFormat:@"%@ : %@; ", tag, val]];
+    }
+    return sb;
+}
+
 -(NSDictionary<NSString *, NSString *> *)getTags
 {
     return _entity ? _entity.getTags : [NSDictionary new];
 }
+
+- (BOOL)isEqual:(id)other
+{
+    if (other == self) {
+        return YES;
+    }
+    if (![self isKindOfClass:[other class]]) {
+        return NO;
+    } else {
+        OAOpenStreetMapPoint *otherPoint = (OAOpenStreetMapPoint *)other;
+        BOOL res = [self.getName isEqualToString:otherPoint.getName];
+        res = res || [OAUtilities isCoordEqual:self.getLatitude srcLon:self.getLongitude destLat:otherPoint.getLatitude destLon:otherPoint.getLongitude];
+        if (self.getType)
+            res = res || [self.getType isEqualToString:otherPoint.getType];
+        if (self.getSubType)
+            res = res || [self.getSubType isEqualToString:otherPoint.getSubType];
+        if (self.getTagsString)
+            res = res || [self.getTagsString isEqualToString:otherPoint.getTagsString];
+        res = res || self.getId == otherPoint.getId;
+        return res;
+    }
+}
+
+- (NSUInteger)hash
+{
+    NSUInteger result = self.getName ? self.getName.hash : 0;
+    result = 31 * result + @(self.getLatitude).hash;
+    result = 31 * result + @(self.getLongitude).hash;
+    result = 31 * result + (self.getType ? self.getType.hash : 0);
+    result = 31 * result + (self.getSubType ? self.getSubType.hash : 0);
+    result = 31 * result + (self.getTagsString ? self.getTagsString.hash : 0);
+    result = 31 * result + @(self.getId).hash;
+    return result;
+}
+
 
 @end

@@ -1049,7 +1049,6 @@
 "osm_editing_loading_poi" = "Loading POI information";
 "osm_editing_access_descr" = "You can view all your local edits and notes in %@. Already uploaded points are not listed in OsmAnd.";
 
-
 // Mapillary
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
@@ -1535,6 +1534,8 @@
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
+"plugin_popup_osm_editing_title" = "Turn on OpenSteetMap Editing";
+"plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
 
 "plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
 
@@ -1915,6 +1916,7 @@
 "rendering_attr_tracktype_grade3_name" = "Mostly solid";
 "rendering_attr_showSurfaces_name" = "Show road surface";
 "routing_attr_allow_advanced_description" = "Difficult routes, with dangerous obstacles and steep sections.";
+"osm_notes" = "OSM notes";
 "rendering_attr_hidePOILabels_name" = "POI labels";
 "rendering_attr_piste_difficulty_novice_name" = "Novice";
 "rendering_attr_hideUnderground_name" = "Underground objects";

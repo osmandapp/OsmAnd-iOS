@@ -32,6 +32,10 @@
             return @"MAP_FILE";
         case EOAExportSettingsTypeAvoidRoads:
             return @"AVOID_ROADS";
+        case EOAExportSettingsTypeOsmNotes:
+            return @"OSM_NOTES";
+        case EOAExportSettingsTypeOsmEdits:
+            return @"OSM_EDITS";
         default:
             return nil;
     }
@@ -57,6 +61,10 @@
         return EOAExportSettingsTypeMapFiles;
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOAExportSettingsTypeAvoidRoads;
+    if ([typeName isEqualToString:@"OSM_NOTES"])
+        return EOAExportSettingsTypeOsmNotes;
+    if ([typeName isEqualToString:@"OSM_EDITS"])
+        return EOAExportSettingsTypeOsmEdits;
     return EOAExportSettingsTypeUnknown;
 }
 

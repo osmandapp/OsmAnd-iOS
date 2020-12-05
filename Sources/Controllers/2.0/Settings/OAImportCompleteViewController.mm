@@ -25,6 +25,10 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAIndexConstants.h"
+#import "OAIAPHelper.h"
+#import "OAPluginPopupViewController.h"
+#import "OAOsmNotesSettingsItem.h"
+#import "OAOsmEditsSettingsItem.h"
 #import "OAProfileSettingsItem.h"
 #import "OAFileSettingsItem.h"
 #import "OAMapSourcesSettingsItem.h"
@@ -32,6 +36,9 @@
 #import "OAExportSettingsType.h"
 #import "OAMapSourcesSettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
+#import "OAOsmNotesSettingsItem.h"
+#import "OAOsmEditsSettingsItem.h"
+#import "OAAvoidRoadInfo.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -46,7 +53,9 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeRoutingSettings,
     EOAImportDataTypeAvoidRoads,
     EOAImportDataTypeGpxTrips,
-    EOAImportDataTypeMaps
+    EOAImportDataTypeMaps,
+    EOAImportDataTypeOsmNotes,
+    EOAImportDataTypeOsmEdits
 };
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -101,6 +110,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     NSInteger gpxFilesCount = 0;
     NSInteger avoidRoadsCount = 0;
     NSInteger mapsCount = 0;
+    NSInteger osmNotesCount = 0;
+    NSInteger osmEditsCount = 0;
     
     for (NSString *type in [_itemsMap allKeys])
     {
@@ -151,6 +162,16 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             case EOAExportSettingsTypeAvoidRoads:
             {
                 avoidRoadsCount = settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeOsmNotes:
+            {
+                osmNotesCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeOsmEdits:
+            {
+                osmEditsCount += settings.count;
                 break;
             }
             default:
@@ -245,6 +266,26 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             @"iconName": @"ic_custom_map",
             @"count": [NSString stringWithFormat:@"%ld", mapsCount],
             @"category" : @(EOAImportDataTypeMaps)
+            }
+         ];
+    }
+    if (osmNotesCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"osm_notes"),
+            @"iconName": @"ic_action_add_osm_note",
+            @"count": [NSString stringWithFormat:@"%ld", osmNotesCount],
+            @"category" : @(EOAImportDataTypeOsmNotes)
+            }
+         ];
+    }
+    if (osmEditsCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"osm_edits_title"),
+            @"iconName": @"ic_custom_poi",
+            @"count": [NSString stringWithFormat:@"%ld", osmEditsCount],
+            @"category" : @(EOAImportDataTypeOsmNotes)
             }
          ];
     }
@@ -374,6 +415,20 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         UIViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
         [rootController.navigationController pushViewController:resourcesViewController animated:YES];
+    }
+    else if (dataType == EOAImportDataTypeOsmNotes || dataType == EOAImportDataTypeOsmEdits)
+    {
+        BOOL isOsmEditingEnabled = [[OAIAPHelper sharedInstance].osmEditing isActive];
+        if (isOsmEditingEnabled)
+        {
+            UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+            [myPlacesViewController setSelectedIndex:2];
+            [rootController.navigationController pushViewController:myPlacesViewController animated:YES];
+        }
+        else
+        {
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_OsmEditing];
+        }
     }
 }
 

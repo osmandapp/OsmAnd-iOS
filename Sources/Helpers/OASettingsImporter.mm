@@ -10,6 +10,8 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
+#import "OAOsmNotesSettingsItem.h"
+#import "OAOsmEditsSettingsItem.h"
 #import "Localization.h"
 
 #import "OASettingsItem.h"
@@ -158,7 +160,6 @@
             NSString *itemsJson = [NSString stringWithContentsOfFile:tmpFileName encoding:NSUTF8StringEncoding error:nil];
             OASettingsItemsFactory *factory = [[OASettingsItemsFactory alloc] initWithJSON:itemsJson];
             [items addObjectsFromArray:factory.getItems];
-            [fileManager removeItemAtPath:_tmpFilesDir error:nil];
             break;
         }
     }
@@ -198,50 +199,21 @@
         return;
     }
     
+    NSArray* itemsJson = json[@"items"];
     NSInteger version = json[@"version"] ? [json[@"version"] integerValue] : 1;
     if (version > kVersion)
     {
         NSLog(@"Error: unsupported version");
         return;
     }
-    
-    NSArray* itemsJson = json[@"items"];
+
+    for (NSDictionary* itemJSON in itemsJson)
 //    NSMutableDictionary *pluginItems = [NSMutableDictionary new];
     
-    for (NSDictionary* item in itemsJson)
     {
-        // TODO: import other item types later and clean up
-        if ([item[@"type"] isEqualToString:@"PROFILE"])
-        {
-            OASettingsItem *settingsItem = [self createItem:item];
-            [_items addObject:settingsItem];
-        }
-        if ([item[@"type"] isEqualToString:@"GLOBAL"])
-        {
-            OASettingsItem *settingsItem = [self createItem:item];
-            [_items addObject:settingsItem];
-        }
-        if ([item[@"type"] isEqualToString:@"MAP_SOURCES"])
-        {
-            OASettingsItem *settingsItem = [self createItem:item];
-            [_items addObject:settingsItem];
-        }
-        if ([item[@"type"] isEqualToString:@"QUICK_ACTIONS"])
-        {
-//            OASettingsItem *settingsItem = [self createItem:item];
-//            [_items addObject:settingsItem];
-        }
-        if ([item[@"type"] isEqualToString:@"FILE"])
-        {
-            OASettingsItem *settingsItem = [self createItem:item];
-            if (settingsItem)
-                [_items addObject:settingsItem];
-        }
-        if ([item[@"type"] isEqualToString:@"AVOID_ROADS"])
-        {
-            OASettingsItem *settingsItem = [self createItem:item];
-            [_items addObject:settingsItem];
-        }
+        OASettingsItem *item = [self createItem:itemJSON];
+        [_items addObject:item];
+        
         // TODO: implement custom plugins
 //        NSString *pluginId = item.pluginId;
 //        if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
@@ -261,16 +233,16 @@
         NSLog(@"No items");
         return;
     }
-//    for (OASettingsItem *item in self.items)
-//    {
-//        if (item instanceof PluginSettingsItem) {
-//            PluginSettingsItem pluginSettingsItem = ((PluginSettingsItem) item);
-//            List<SettingsItem> pluginDependentItems = pluginItems.get(pluginSettingsItem.getName());
-//            if (!Algorithms.isEmpty(pluginDependentItems)) {
-//                pluginSettingsItem.getPluginDependentItems().addAll(pluginDependentItems);
-//            }
-//        }
-//    }
+    //    for (OASettingsItem *item in self.items)
+    //    {
+    //        if (item instanceof PluginSettingsItem) {
+    //            PluginSettingsItem pluginSettingsItem = ((PluginSettingsItem) item);
+    //            List<SettingsItem> pluginDependentItems = pluginItems.get(pluginSettingsItem.getName());
+    //            if (!Algorithms.isEmpty(pluginDependentItems)) {
+    //                pluginSettingsItem.getPluginDependentItems().addAll(pluginDependentItems);
+    //            }
+    //        }
+    //    }
 }
 
 - (NSArray<OASettingsItem *> *) getItems
@@ -297,6 +269,7 @@
         return nil;
     
     NSError *error;
+    // TODO: import other item types later and clean up
     switch (type)
     {
         case EOASettingsItemTypeGlobal:
@@ -325,6 +298,12 @@
             break;
         case EOASettingsItemTypeAvoidRoads:
             item = [[OAAvoidRoadsSettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeOsmNotes:
+            item = [[OAOsmNotesSettingsItem alloc] initWithJson:json error:&error];
+            break;
+        case EOASettingsItemTypeOsmEdits:
+            item = [[OAOsmEditsSettingsItem alloc] initWithJson:json error:&error];
             break;
         default:
             item = nil;
@@ -541,6 +520,8 @@
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
+    NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
         switch (item.type)
@@ -599,6 +580,24 @@
                     [avoidRoads addObjectsFromArray:avoidRoadsItem.items];
                 break;
             }
+            case EOASettingsItemTypeOsmNotes:
+            {
+                OAOsmNotesSettingsItem *osmNotesItem = (OAOsmNotesSettingsItem *) item;
+                if (importComplete)
+                    [notesPointList addObjectsFromArray:osmNotesItem.appliedItems];
+                else
+                    [notesPointList addObjectsFromArray:osmNotesItem.items];
+                break;
+            }
+            case EOASettingsItemTypeOsmEdits:
+            {
+                OAOsmEditsSettingsItem *osmEditsItem = (OAOsmEditsSettingsItem *) item;
+                if (importComplete)
+                    [osmEditsPointList addObjectsFromArray:osmEditsItem.appliedItems];
+                else
+                    [osmEditsPointList addObjectsFromArray:osmEditsItem.items];
+                break;
+            }
             default:
                 break;
         }
@@ -621,6 +620,10 @@
         [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
     if (avoidRoads.count > 0)
         [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
+    if (notesPointList.count > 0)
+        [settingsToOperate setObject:notesPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmNotes]];
+    if (osmEditsPointList.count > 0)
+        [settingsToOperate setObject:osmEditsPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmEdits]];
     return settingsToOperate;
 }
 

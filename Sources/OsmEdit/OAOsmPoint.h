@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, EOAAction)
 + (NSDictionary<NSString *, NSNumber *> *)getActionString;
 
 -(EOAAction) getAction;
++(EOAAction) getActionByName:(NSString *)name;
 -(NSString *) getActionString;
 -(void) setActionString:(NSString *) action;
 -(void) setAction:(EOAAction) action;

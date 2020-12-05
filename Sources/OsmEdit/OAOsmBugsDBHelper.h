@@ -21,8 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(NSArray<OAOsmNotePoint *> *) getOsmBugsPoints;
 -(void) updateOsmBug:(long) identifier text:(NSString *)text;
--(void)addOsmBug:(OAOsmNotePoint *)point;
--(void)deleteAllBugModifications:(OAOsmNotePoint *) point;
+-(void) addOsmbugs:(OAOsmNotePoint *)point;
+-(void) deleteAllBugModifications:(OAOsmNotePoint *) point;
 -(long long) getMinID;
 
 - (void) updateOsmBugLocation:(long long)identifier newPosition:(CLLocationCoordinate2D)newPosition;

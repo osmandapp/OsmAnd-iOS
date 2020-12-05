@@ -18,18 +18,6 @@
 #import "Localization.h"
 #import "OAImportSettingsViewController.h"
 
-#define kID_KEY @"id"
-#define kTEXT_KEY @"text"
-#define kLAT_KEY @"lat"
-#define kLON_KEY @"lon"
-#define kAUTHOR_KEY @"author"
-#define kACTION_KEY @"action"
-#define kNAME_KEY @"name"
-#define kCOMMENT_KEY @"comment"
-#define kTYPE_KEY @"type"
-#define kTAGS_KEY @"tags"
-#define kENTITY_KEY @"entity"
-
 NSString *const kSettingsHelperErrorDomain = @"SettingsHelper";
 
 NSInteger const kSettingsHelperErrorCodeNoTypeField = 1;

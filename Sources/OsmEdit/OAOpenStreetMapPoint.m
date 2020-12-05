@@ -98,8 +98,7 @@
         {
             continue;
         }
-        [sb appendString: [NSString stringWithFormat:@"%@ : ", tag]];
-        [sb appendString: [NSString stringWithFormat:@"%@; ", val]];
+        [sb appendString:[NSString stringWithFormat:@"%@ : %@; ", tag, val]];
     }
     return sb;
 }

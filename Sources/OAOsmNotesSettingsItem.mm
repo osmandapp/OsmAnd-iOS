@@ -112,7 +112,7 @@
         double lat = [object[kLAT_KEY] doubleValue];
         double lon = [object[kLON_KEY] doubleValue];
         NSString *author = object[kAUTHOR_KEY];
-        author = author.length > 0 ? author : nil;
+        author = author != nil ? author : @"";
         NSString *action = object[kACTION_KEY];
         OAOsmNotePoint *point = [[OAOsmNotePoint alloc] init];
         [point setId:MIN(-2, minId - idOffset)];

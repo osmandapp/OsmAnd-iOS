@@ -33,6 +33,7 @@
 #define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
+#define mapSettingShowPoiLabelKey @"mapSettingShowPoiLabelKey"
 #define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
 #define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
 #define layerTransparencySeekbarModeKey @"layerTransparencySeekbarModeKey"
@@ -1791,7 +1792,7 @@
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, appearanceMode=_appearanceMode;
-@synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
+@synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowPoiLabel=_mapSettingShowPoiLabel, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
 @synthesize mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, settingPrefMapLanguage=_settingPrefMapLanguage;
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
 
@@ -1865,11 +1866,13 @@
 
         // Map Settings
         _mapSettingShowFavorites = [OAProfileBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
+        _mapSettingShowPoiLabel = [OAProfileBoolean withKey:_mapSettingShowPoiLabel defValue:NO];
         _mapSettingShowOfflineEdits = [OAProfileBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
         _mapSettingShowOnlineNotes = [OAProfileBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
         _layerTransparencySeekbarMode = [OAProfileInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF];
         
         [_registeredPreferences setObject:_mapSettingShowFavorites forKey:@"show_favorites"];
+        [_registeredPreferences setObject:_mapSettingShowPoiLabel forKey:@"show_poi_label"];
         [_registeredPreferences setObject:_mapSettingShowOfflineEdits forKey:@"show_osm_edits"];
         [_registeredPreferences setObject:_mapSettingShowOnlineNotes forKey:@"show_osm_bugs"];
         [_registeredPreferences setObject:_layerTransparencySeekbarMode forKey:@"layer_transparency_seekbar_mode"];
@@ -2506,6 +2509,12 @@
                                            Visibility:NO];
         }
     }
+}
+
+- (void) setShowPoiLabel:(BOOL)mapSettingShowPoiLabel
+{
+    [_mapSettingShowPoiLabel set:mapSettingShowPoiLabel];
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits

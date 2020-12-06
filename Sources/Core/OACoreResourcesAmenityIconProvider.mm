@@ -20,16 +20,36 @@
 #import "OAPOIHelper.h"
 #import "OAPOIType.h"
 #import "OAUtilities.h"
+#import "OAColors.h"
+
+const static float kTextSize = 13.0f;
 
 OACoreResourcesAmenityIconProvider::OACoreResourcesAmenityIconProvider(
-                                                                       const std::shared_ptr<const OsmAnd::ICoreResourcesProvider>& coreResourcesProvider_ /*= getCoreResourcesProvider()*/,
-                                                                       const float displayDensityFactor_ /*= 1.0f*/,
-                                                                       const float symbolsScaleFactor_ /*= 1.0f*/)
+    const std::shared_ptr<const OsmAnd::ICoreResourcesProvider>& coreResourcesProvider_ /*= getCoreResourcesProvider()*/,
+    const float displayDensityFactor_ /*= 1.0f*/,
+    const float symbolsScaleFactor_ /*= 1.0f*/,
+    const float textScaleFactor_ /*= 1.0f*/,
+    const bool nightMode_ /*= false*/,
+    const bool showCaptions_ /*= false*/,
+    const QString lang_ /*= QString::null*/,
+    const bool transliterate_ /*= false*/)
 : coreResourcesProvider(coreResourcesProvider_)
 , displayDensityFactor(displayDensityFactor_)
 , symbolsScaleFactor(symbolsScaleFactor_)
+, textScaleFactor(textScaleFactor_)
+, nightMode(nightMode_)
+, showCaptions(showCaptions_)
+, lang(lang_)
+, transliterate(transliterate_)
 {
-    
+    textStyle
+        .setWrapWidth(20)
+        .setBold(false)
+        .setItalic(false)
+        .setColor(OsmAnd::ColorARGB(nightMode ? color_widgettext_night_argb : color_widgettext_day_argb))
+        .setSize(textScaleFactor * kTextSize * displayDensityFactor)
+        .setHaloColor(OsmAnd::ColorARGB(nightMode ? color_widgettext_shadow_night_argb : color_widgettext_shadow_day_argb))
+        .setHaloRadius(5);
 }
 
 OACoreResourcesAmenityIconProvider::~OACoreResourcesAmenityIconProvider()
@@ -37,9 +57,9 @@ OACoreResourcesAmenityIconProvider::~OACoreResourcesAmenityIconProvider()
 }
 
 std::shared_ptr<SkBitmap> OACoreResourcesAmenityIconProvider::getIcon(
-                                                                      const std::shared_ptr<const OsmAnd::Amenity>& amenity,
-                                                                      const OsmAnd::ZoomLevel zoomLevel,
-                                                                      const bool largeIcon /*= false*/) const
+    const std::shared_ptr<const OsmAnd::Amenity>& amenity,
+    const OsmAnd::ZoomLevel zoomLevel,
+    const bool largeIcon /*= false*/) const
 {
     @autoreleasepool
     {
@@ -93,3 +113,18 @@ std::shared_ptr<SkBitmap> OACoreResourcesAmenityIconProvider::getIcon(
         return nullptr;
     }
 }
+
+OsmAnd::TextRasterizer::Style OACoreResourcesAmenityIconProvider::getCaptionStyle(
+    const std::shared_ptr<const OsmAnd::Amenity>& amenity,
+    const OsmAnd::ZoomLevel zoomLevel) const
+{
+    return textStyle;
+}
+
+QString OACoreResourcesAmenityIconProvider::getCaption(
+    const std::shared_ptr<const OsmAnd::Amenity>& amenity,
+    const OsmAnd::ZoomLevel zoomLevel) const
+{
+    return showCaptions && zoomLevel > OsmAnd::ZoomLevel9 ? amenity->getName(lang, transliterate) : QString::null;
+}
+

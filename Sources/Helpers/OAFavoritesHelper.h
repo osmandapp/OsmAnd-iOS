@@ -27,6 +27,7 @@
 @property (nonatomic) NSString* name;
 @property (nonatomic) UIColor* color;
 @property (nonatomic) BOOL isHidden;
+@property (nonatomic) NSMutableArray<OAFavoriteItem*> *points;
 
 - (instancetype) initWithName:(NSString *)name isHidden:(BOOL)isHidden color:(UIColor *)color;
 - (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isHidden:(BOOL)isHidden color:(UIColor *)color;

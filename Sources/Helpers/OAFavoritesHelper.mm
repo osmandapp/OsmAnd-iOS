@@ -115,9 +115,6 @@
 @end
 
 @implementation OAFavoriteGroup
-{
-    NSMutableArray<OAFavoriteItem*> *_points;
-}
 
 - (instancetype) initWithName:(NSString *)name isHidden:(BOOL)isHidden color:(UIColor *)color
 {

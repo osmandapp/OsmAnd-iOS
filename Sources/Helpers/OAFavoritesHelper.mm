@@ -13,26 +13,10 @@
 #import "Localization.h"
 
 #include <OsmAndCore.h>
-#include <OsmAndCore/IFavoriteLocation.h>
 
 #define kPersonalCategory @"personal"
 
 @implementation OAFavoritesHelper
-{
-    NSArray<OAFavoriteGroup *> *_favoriteGroups;
-    NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
-}
-
-- (instancetype) init
-{
-    self = [super init];
-    if (self)
-    {
-        _favoriteGroups = [NSArray arrayWithArray:[self getGroupedFavorites:[self.class getFavoriteItems]]];
-        _flatGroups = [NSMutableDictionary dictionary];
-    }
-    return self;
-}
 
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems
 {
@@ -67,49 +51,29 @@
     return res;
 }
 
-+ (NSString *) getDisplayName:(NSString *)name
++ (NSArray<OAFavoriteGroup *> *) getGroupedFavorites:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)allFavorites
 {
-    if ([name isEqualToString:kPersonalCategory])
-        return OALocalizedString(@"personal_category_name");
-    else if (name.length == 0)
-        return OALocalizedString(@"favorites");
-    else
-        return name;
-}
-
-- (NSArray<OAFavoriteGroup *> *) getFavoriteGroups;
-{
-    return _favoriteGroups;
-}
-
-- (NSArray<OAFavoriteGroup *> *) getGroupedFavorites:(NSArray<OAFavoriteItem *> *)items
-{
-    NSMutableArray<OAFavoriteGroup *> *groupedItems = [NSMutableArray array];
-    for (OAFavoriteItem *item in items)
+    NSMutableDictionary<NSString *, OAFavoriteGroup *> *flatGroups = [NSMutableDictionary dictionary];
+    NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
+    for (const auto& favorite : allFavorites)
     {
         OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-        favData.favorite = item.favorite;
-        NSString *groupName = item.favorite->getGroup().toNSString();
+        favData.favorite = favorite;
+        NSString *groupName = favData.favorite->getGroup().toNSString();
         BOOL isHidden = favData.favorite->isHidden();
         UIColor *color = favData.getColor;
-        OAFavoriteGroup *group = [_flatGroups objectForKey:groupName];
+        OAFavoriteGroup *group = [flatGroups objectForKey:groupName];
         if (!group)
         {
             group = [[OAFavoriteGroup alloc] initWithName:groupName isHidden:isHidden color:color];
-            [_flatGroups setObject:group forKey:groupName];
-            [groupedItems addObject:group];
+            [flatGroups setObject:group forKey:groupName];
+            [favorites addObject:group];
         }
-        [group addPoint:item];
+        [group addPoint:favData];
     }
-    return groupedItems;
-}
-
-- (OAFavoriteGroup *) getGroup:(NSString *)nameId
-{
-    if ([_flatGroups objectForKey:nameId])
-        return [_flatGroups objectForKey:nameId];
-    else
-        return nil;
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    [favorites sortUsingDescriptors:[NSArray arrayWithObject:sort]];
+    return favorites;
 }
 
 @end
@@ -150,6 +114,30 @@
 - (void) addPoint:(OAFavoriteItem *)point
 {
     [_points addObject:point];
+}
+
+- (BOOL) isPersonalCategoryDisplayName:(NSString *)name
+{
+    return [name isEqualToString:OALocalizedString(@"personal_category_name")];
+}
+
+- (NSString *) getDisplayName:(NSString *)name
+{
+    if ([name isEqualToString:kPersonalCategory])
+        return OALocalizedString(@"personal_category_name");
+    else if (name.length == 0)
+        return OALocalizedString(@"favorites");
+    else
+        return name;
+}
+
+- (NSString *) convertDisplayNameToGroupIdName:(NSString *)name
+{
+    if ([self isPersonalCategoryDisplayName:name])
+        return kPersonalCategory;
+    else if ([name isEqualToString:OALocalizedString(@"favorites")])
+        return @"";
+    return name;
 }
 
 @end

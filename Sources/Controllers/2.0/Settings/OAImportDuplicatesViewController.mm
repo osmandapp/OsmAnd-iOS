@@ -411,7 +411,8 @@
             }
             else if ([currentItem isKindOfClass:OAFavoriteGroup.class])
             {
-                item[@"label"] = [OAFavoritesHelper getDisplayName:((OAFavoriteGroup *)currentItem).name];
+                OAFavoriteGroup *group = (OAFavoriteGroup *)currentItem;
+                item[@"label"] = [group getDisplayName:group.name];
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_favorites"];
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;

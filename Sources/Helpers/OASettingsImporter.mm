@@ -213,7 +213,6 @@
 //    NSMutableDictionary *pluginItems = [NSMutableDictionary new];
     
     {
-        // TODO: import other item types later and clean up
         OASettingsItem *item = [self createItem:itemJSON];
         [_items addObject:item];
         
@@ -304,6 +303,7 @@
             break;
         case EOASettingsItemTypeFavorites:
             item = [[OAFavoritesSettingsItem alloc] initWithJson:json error:&error];
+            break;
         case EOASettingsItemTypeOsmNotes:
             item = [[OAOsmNotesSettingsItem alloc] initWithJson:json error:&error];
             break;
@@ -593,6 +593,7 @@
                     [favorites addObjectsFromArray:favoritesItem.appliedItems];
                 else
                     [favorites addObjectsFromArray:favoritesItem.items];
+                break;
             }
             case EOASettingsItemTypeOsmNotes:
             {

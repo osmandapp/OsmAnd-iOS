@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#include <OsmAndCore/IFavoriteLocation.h>
 
 @class OAFavoriteItem, OAFavoriteGroup;
 
@@ -14,11 +15,7 @@
 
 + (NSArray<OAFavoriteItem *> *) getFavoriteItems;
 + (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems;
-+ (NSString *) getDisplayName:(NSString *)name;
-
-- (NSArray<OAFavoriteGroup *> *) getFavoriteGroups;
-- (NSArray<OAFavoriteGroup *> *) getGroupedFavorites:(NSArray<OAFavoriteItem *> *)items;
-- (OAFavoriteGroup *) getGroup:(NSString *)nameId;
++ (NSArray<OAFavoriteGroup *> *) getGroupedFavorites:(QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >)allFavorites;
 
 @end
 
@@ -33,5 +30,7 @@
 - (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isHidden:(BOOL)isHidden color:(UIColor *)color;
 - (NSArray<OAFavoriteItem*> *) getPoints;
 - (void) addPoint:(OAFavoriteItem *)point;
+- (NSString *) getDisplayName:(NSString *)name;
+- (NSString *) convertDisplayNameToGroupIdName:(NSString *)name;
 
 @end

@@ -26,8 +26,8 @@
 
 @implementation OAFavoritesSettingsItem
 {
-    OAFavoritesHelper *_favoritesHelper;
     OAAppSettings *_settings;
+    NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
 }
 
 @dynamic items, appliedItems, existingItems;
@@ -36,9 +36,10 @@
 {
     [super initialization];
 
-    _favoritesHelper = [[OAFavoritesHelper alloc] init];
     _settings = [OAAppSettings sharedManager];
-    self.existingItems =  [[_favoritesHelper getFavoriteGroups] mutableCopy];
+    const auto& allFavorites = [OsmAndApp instance].favoritesCollection->getFavoriteLocations();
+    self.existingItems  = [[NSArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]] mutableCopy];
+    _flatGroups = [NSMutableDictionary dictionary];
 }
 
 - (EOASettingsItemType) type
@@ -67,7 +68,7 @@
         {
             if ([self shouldReplace])
             {
-                OAFavoriteGroup *existingGroup = [_favoritesHelper getGroup:duplicate.name];
+                OAFavoriteGroup *existingGroup = [self getGroup:duplicate.name];
                 if (existingGroup)
                 {
                     NSMutableArray<OAFavoriteItem *> *favouriteItems = [NSMutableArray arrayWithArray:[existingGroup getPoints]];
@@ -82,6 +83,14 @@
             app.favoritesCollection->copyFavoriteLocation(favorite.favorite);
         [app saveFavoritesToPermamentStorage];
     }
+}
+
+- (OAFavoriteGroup *) getGroup:(NSString *)nameId
+{
+    if ([_flatGroups objectForKey:nameId])
+        return [_flatGroups objectForKey:nameId];
+    else
+        return nil;
 }
 
 - (BOOL) isDuplicate:(OAFavoriteGroup *)item
@@ -144,29 +153,7 @@
     std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
     favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(filePath));
     if (favoritesCollection)
-    {
-        NSMutableDictionary<NSString *, OAFavoriteGroup *> *flatGroups = [NSMutableDictionary dictionary];
-        NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
-        for(const auto& favorite : favoritesCollection->getFavoriteLocations())
-        {
-            OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-            favData.favorite = favorite;
-            NSString *groupName = favData.favorite->getGroup().toNSString();
-            BOOL isHidden = favData.favorite->isHidden();
-            UIColor *color = favData.getColor;
-            OAFavoriteGroup *group = [flatGroups objectForKey:groupName];
-            if (!group)
-            {
-                group = [[OAFavoriteGroup alloc] initWithName:groupName isHidden:isHidden color:color];
-                [flatGroups setObject:group forKey:groupName];
-                [favorites addObject:group];
-            }
-            [group addPoint:favData];
-        }
-        NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-        [favorites sortUsingDescriptors:[NSArray arrayWithObject:sort]];
-        [self.item.items addObjectsFromArray:favorites];
-    }
+        [self.item.items addObjectsFromArray:[OAFavoritesHelper getGroupedFavorites:favoritesCollection->getFavoriteLocations()]];
     return YES;
 }
 

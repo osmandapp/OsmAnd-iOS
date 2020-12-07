@@ -191,30 +191,7 @@
     self.groupsAndFavorites = [[NSMutableArray alloc] init];
 
     const auto allFavorites = _favoritesCollection->getFavoriteLocations();
-    
-    // maybe there's sense to move this method to helper
-    NSMutableDictionary<NSString *, OAFavoriteGroup *> *flatGroups = [NSMutableDictionary dictionary];
-    NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
-    for (const auto& favorite : allFavorites)
-    {
-        OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-        favData.favorite = favorite;
-        NSString *groupName = favData.favorite->getGroup().toNSString();
-        BOOL isHidden = favData.favorite->isHidden();
-        UIColor *color = favData.getColor;
-        OAFavoriteGroup *group = [flatGroups objectForKey:groupName];
-        if (!group)
-        {
-            group = [[OAFavoriteGroup alloc] initWithName:groupName isHidden:isHidden color:color];
-            [flatGroups setObject:group forKey:groupName];
-            [favorites addObject:group];
-        }
-        [group addPoint:favData];
-    }
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-    [favorites sortUsingDescriptors:[NSArray arrayWithObject:sort]];
-    [self.groupsAndFavorites addObjectsFromArray:favorites];
-    
+    [self.groupsAndFavorites addObjectsFromArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
     [self.favoriteTableView reloadData];
 }
 
@@ -276,7 +253,8 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [OAFavoritesHelper getDisplayName:((OAFavoriteGroup*)[self.groupsAndFavorites objectAtIndex:section]).name];
+    OAFavoriteGroup *group = [self.groupsAndFavorites objectAtIndex:section];
+    return [group getDisplayName:group.name];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

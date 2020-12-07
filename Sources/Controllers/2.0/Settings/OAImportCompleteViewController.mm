@@ -170,6 +170,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             case EOAExportSettingsTypeFavorites:
             {
                 favoritesCount = settings.count;
+                break;
             }
             case EOAExportSettingsTypeOsmNotes:
             {

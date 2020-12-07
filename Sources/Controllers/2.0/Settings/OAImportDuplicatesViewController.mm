@@ -33,6 +33,8 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoritesSettingsItem.h"
+#import "OAOsmNotePoint.h"
+#import "OAOpenStreetMapPoint.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -167,6 +169,8 @@
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray new];
     NSMutableArray<NSString *> *mapFiles = [NSMutableArray new];
     NSMutableArray<OAFavoriteGroup *> *favoriteItems = [NSMutableArray new];
+    NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray new];
+    NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList = [NSMutableArray new];
     
     for (id object in duplicatesList)
     {
@@ -244,6 +248,20 @@
         [avoidRoadsSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"avoid_road")]];
         [avoidRoadsSection addObjectsFromArray:avoidRoads];
         [duplicates addObject:avoidRoadsSection];
+    }
+    if (osmNotesPointList.count > 0)
+    {
+        NSMutableArray *osmNotesPointSection = [NSMutableArray new];
+        [osmNotesPointSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"osm_notes")]];
+        [osmNotesPointSection addObjectsFromArray:osmNotesPointList];
+        [duplicates addObject:osmNotesPointSection];
+    }
+    if (osmEditsPointList.count > 0)
+    {
+        NSMutableArray *osmEditsPointSection = [NSMutableArray new];
+        [osmEditsPointSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"osm_notes")]];
+        [osmEditsPointSection addObjectsFromArray:osmEditsPointList];
+        [duplicates addObject:osmEditsPointSection];
     }
     if (gpxFilesList.count > 0)
     {

@@ -9,8 +9,6 @@
 #import "OADataSettingsItem.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
-#import "OASettingsItemReader.h"
-#import "OASettingsItemWriter.h"
 
 @interface OADataSettingsItem()
 

@@ -63,6 +63,7 @@
 #import "OAAvoidSpecificRoads.h"
 
 #import "OASubscriptionCancelViewController.h"
+#import "OAWhatsNewBottomSheetViewController.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -534,6 +535,18 @@
             !worldMap && (showMapIterator == 1 || showMapIterator % 6 == 0))
             
             [OAPluginPopupViewController askForWorldMap];
+    }
+    
+    [self showWhatsNewDialogIfNeeded];
+}
+
+- (void) showWhatsNewDialogIfNeeded
+{
+    if ([OAAppSettings sharedManager].shouldShowWhatsNewScreen)
+    {
+        OAWhatsNewBottomSheetViewController *bottomSheet = [[OAWhatsNewBottomSheetViewController alloc] init];
+        [bottomSheet presentInViewController:self];
+        [OAAppSettings sharedManager].shouldShowWhatsNewScreen = NO;
     }
 }
 

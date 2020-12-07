@@ -10,6 +10,7 @@
 #import "OAMenuSimpleCellNoIcon.h"
 #import "Localization.h"
 #import "OAWebViewController.h"
+#import "OAAppVersionDependedConstants.h"
 
 #define kLinkInternalType @"internal_link"
 #define kLinkExternalType @"ext_link"
@@ -277,6 +278,14 @@ static const NSInteger groupCount = 5;
     // Other
     [dataArr addObject:
      @{
+       @"name" : @"help_what_is_new",
+       @"title" : OALocalizedString(@"help_what_is_new"),
+       @"type" : kLinkExternalType,
+       @"description" : kLatestChangesUrl
+       }];
+    
+    [dataArr addObject:
+     @{
        @"name" : @"install_and_troublesoot",
        @"title" : OALocalizedString(@"help_install_and_troubleshoot"),
        @"type" : kLinkInternalType,
@@ -354,6 +363,14 @@ static const NSInteger groupCount = 5;
        @"type" : kLinkExternalType
        }];
     
+    [dataArr addObject:
+     @{
+       @"name" : @"vk",
+       @"title" : OALocalizedString(@"vk"),
+       @"description" : @"https://vk.com/osmandapp",
+       @"type" : kLinkExternalType
+       }];
+    
     _followData = [NSArray arrayWithArray:dataArr];
     [dataArr removeAllObjects];
     
@@ -422,6 +439,8 @@ static const NSInteger groupCount = 5;
         [cell.descriptionView setText:item[@"description"]];
         [cell.textView setFont:[UIFont systemFontOfSize:16]];
         [cell.descriptionView setFont:[UIFont systemFontOfSize:12]];
+        if ([cell needsUpdateConstraints])
+            [cell updateConstraints];
     }
     return cell;
 }

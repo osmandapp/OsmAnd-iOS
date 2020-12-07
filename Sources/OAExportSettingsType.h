@@ -22,6 +22,8 @@ typedef NS_ENUM(NSInteger, EOAExportSettingsType) {
     EOAExportSettingsTypeMapFiles,
     EOAExportSettingsTypeAvoidRoads,
     EOAExportSettingsTypeFavorites,
+    EOAExportSettingsTypeOsmNotes,
+    EOAExportSettingsTypeOsmEdits
 };
 
 @interface OAExportSettingsType : NSObject

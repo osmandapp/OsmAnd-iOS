@@ -149,6 +149,13 @@
     NSString *description = [self getPOIDescription];
     [section0poi setObject:description forKey:@"value"];
     [section0poi setObject:@"OASettingsCell" forKey:@"type"];
+    
+    NSMutableDictionary *section0labels = [NSMutableDictionary dictionary];
+    [section0labels setObject:OALocalizedString(@"layer_amenity_label") forKey:@"name"];
+    [section0labels setObject:@"" forKey:@"value"];
+    [section0labels setObject:@"OASwitchCell" forKey:@"type"];
+    [section0labels setObject:@"layer_amenity_label" forKey:@"key"];
+    
     BOOL hasOsmEditing = [_iapHelper.osmEditing isActive];
     NSMutableDictionary *section0edits = [NSMutableDictionary dictionary];
     NSMutableDictionary *section0notes = [NSMutableDictionary dictionary];
@@ -181,6 +188,7 @@
     NSMutableArray *section0 = [NSMutableArray array];
     [section0 addObject:section0fav];
     [section0 addObject:section0poi];
+    [section0 addObject:section0labels];
     if (hasOsmEditing)
     {
         [section0 addObject:section0edits];
@@ -462,6 +470,11 @@
                 [cell.switchView setOn:[_settings.mapSettingShowFavorites get]];
                 [cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
             }
+            else if ([data[@"key"] isEqualToString:@"layer_amenity_label"])
+            {
+                [cell.switchView setOn:[_settings.mapSettingShowPoiLabel get]];
+                [cell.switchView addTarget:self action:@selector(showPoiLabelChanged:) forControlEvents:UIControlEventValueChanged];
+            }
             else if ([data[@"key"] isEqualToString:@"osm_edits_offline_layer"])
             {
                 [cell.switchView setOn:[_settings.mapSettingShowOfflineEdits get]];
@@ -658,6 +671,13 @@
         [_settings setShowFavorites:switchView.isOn];
 }
 
+- (void) showPoiLabelChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+        [_settings setShowPoiLabel:switchView.isOn];
+}
+
 - (void) showOfflineEditsChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
@@ -706,15 +726,12 @@
     {
         case 0:
         {
-            if (indexPath.row == 1) {
+            if (indexPath.row == 1)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenPOI];
-            }
-            else if (indexPath.row == tripsRow) {
+            else if (indexPath.row == tripsRow)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
-            }
-            else if (indexPath.row == mapillaryRow) {
+            else if (indexPath.row == mapillaryRow)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapillaryFilter];
-            }
                 
             break;
         }

@@ -160,6 +160,19 @@
                 }
                 return cell;
             }
+            else if ([res.object isKindOfClass:[OAPOIType class]])
+            {
+                NSString *name = [item getName];
+                NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
+                UIImage *icon = [((OAPOIType *)res.object) icon];
+                OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:typeName icon:icon];
+                OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithBasePoiType:(OAPOIFilter *)res.object idSuffix:@""];
+                [self prepareCell:cell uiFilter:filter];
+                if ([cell needsUpdateConstraints])
+                    [cell setNeedsUpdateConstraints];
+                
+                return cell;
+            }
         }
     }
     else
@@ -250,6 +263,12 @@
         {
             OAPOICategory *poiCategory = (OAPOICategory *) res.object;
             OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""];
+            filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
+        }
+        else if ([res.object isKindOfClass:[OAPOIType class]])
+        {
+            OAPOIType *poiType = (OAPOIType *) res.object;
+            OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiType idSuffix:@""];
             filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
         }
     } else if ([item getType] == BUTTON) {

@@ -72,7 +72,7 @@
             OAOsmPoint *osmPoint = _points[i];
             if (osmPoint.getGroup == POI)
             {
-                OAOpenStreetMapRemoteUtil *editsUtil = (OAOpenStreetMapRemoteUtil *)_plugin.getOnlineModificationUtil;
+                OAOpenStreetMapRemoteUtil *editsUtil = (OAOpenStreetMapRemoteUtil *)_plugin.getPoiModificationRemoteUtil;
                 OAEntityInfo *entityInfo = nil;
                 OAOpenStreetMapPoint *point  = (OAOpenStreetMapPoint *) osmPoint;
                 if (point.getAction != CREATE)
@@ -90,7 +90,7 @@
             }
             else if (osmPoint.getGroup == BUG)
             {
-                OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
+                OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getOsmNotesRemoteUtil];
                 OAOsmNotePoint *p = (OAOsmNotePoint *) osmPoint;
                 NSString *message = [util commit:p text:p.getText action:p.getAction anonymous:_loadAnonymous].warning;
                 

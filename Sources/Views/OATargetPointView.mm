@@ -1369,7 +1369,7 @@ static const NSInteger _buttonsCount = 4;
     _headerOffset = 0;
     
     _fullHeight = DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
-    _fullOffset = _targetPoint.type == OATargetImpassableRoadSelection ? DeviceScreenHeight / 3 : ([self.customController mapHeightKoef] > 0 ? DeviceScreenHeight * [self.customController mapHeightKoef] : _headerY - (DeviceScreenHeight - _fullHeight));
+    _fullOffset = [self getFullOffset];
     
     _fullScreenHeight = _headerHeight + contentViewHeight;
     _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
@@ -1518,6 +1518,18 @@ static const NSInteger _buttonsCount = 4;
     }
     
     return newOffset;
+}
+
+- (CGFloat) getFullOffset
+{
+    if (_targetPoint.type == OATargetImpassableRoadSelection)
+        return DeviceScreenHeight / 3;
+    else if (_targetPoint.type == OATargetGPX)
+        return DeviceScreenHeight / 2 - _toolbarHeight;
+    else if ([self.customController mapHeightKoef] > 0)
+        return DeviceScreenHeight * [self.customController mapHeightKoef];
+    else
+        return _headerY - (DeviceScreenHeight - _fullHeight);
 }
 
 - (CGRect) getMapFrame:(CGFloat)width

@@ -7,8 +7,11 @@
 //
 
 #import "OASettingsHelper.h"
+#import "OASettingsItem.h"
 #import "OASettingsImporter.h"
 #import "OASettingsExporter.h"
+#import "OASettingsItemType.h"
+#import "OAExportSettingsType.h"
 #import "OARootViewController.h"
 #import "OAIndexConstants.h"
 #import "OAPluginSettingsItem.h"

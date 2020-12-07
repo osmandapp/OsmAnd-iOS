@@ -349,6 +349,18 @@ static NSMutableArray *activePopups;
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if ([kInAppId_Addon_OsmEditing isEqualToString:productIdentifier])
+    {
+        needShow = YES;
+        product = helper.osmEditing;
+        
+        title = OALocalizedString(@"plugin_popup_osm_editing_title");
+        descText = OALocalizedString(@"plugin_popup_osm_editing_ask");
+        okButtonName = OALocalizedString(@"plugins");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        
+        [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     if (needShow)
     {

@@ -47,6 +47,12 @@
     return actionString;
 }
 
++(EOAAction) getActionByName:(NSString *)name
+{
+    NSNumber *actionNumber = [self getActionString][name];
+    return (EOAAction)[actionNumber intValue];
+}
+
 -(EOAAction) getAction
 {
     return _action;

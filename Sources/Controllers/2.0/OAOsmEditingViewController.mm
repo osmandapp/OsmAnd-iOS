@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     if (self) {
         _editPoiData = [[OAEditPOIData alloc] initWithEntity:entity];
         _editingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
-        _editingUtil = _editingPlugin.getOfflineModificationUtil;
+        _editingUtil = _editingPlugin.getPoiModificationLocalUtil;
     }
     return self;
 }
@@ -208,7 +208,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_delete_confirmation_descr") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingPlugin.getOfflineModificationUtil changedTags:nil callback:^(OAEntity * entity){
+        [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingPlugin.getPoiModificationLocalUtil changedTags:nil callback:^(OAEntity * entity){
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.navigationController popViewControllerAnimated:YES];
                 [[OARootViewController instance].mapPanel targetHide];
@@ -241,7 +241,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         else
         {
             [self.navigationController popViewControllerAnimated:YES];
-            [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO editingDelegate:self.delegate];
+            [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getPoiModificationLocalUtil closeChangeSet:NO editingDelegate:self.delegate];
         }
     }
     else if ([self testTooManyCapitalLetters:[_editPoiData getTag:[OAOSMSettings getOSMKey:NAME]]])
@@ -251,7 +251,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     else
     {
         [self.navigationController popViewControllerAnimated:YES];
-        [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO editingDelegate:self.delegate];
+        [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getPoiModificationLocalUtil closeChangeSet:NO editingDelegate:self.delegate];
     }
 }
 
@@ -297,7 +297,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         {
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self.navigationController popViewControllerAnimated:YES];
-                [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO editingDelegate:self.delegate];
+                [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getPoiModificationLocalUtil closeChangeSet:NO editingDelegate:self.delegate];
             }]];
         }
         

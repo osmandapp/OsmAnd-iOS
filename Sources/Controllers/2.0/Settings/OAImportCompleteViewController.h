@@ -7,7 +7,6 @@
 //
 
 #import "OABaseSettingsWithBottomButtonsViewController.h"
-#import "OASettingsHelper.h"
 
 @interface OAImportCompleteViewController : OABaseSettingsWithBottomButtonsViewController
 

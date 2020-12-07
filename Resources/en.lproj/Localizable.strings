@@ -630,6 +630,7 @@
 "m_style_pulic_transport" = "Public transport";
 
 "map_settings_map" = "Map";
+"layer_amenity_label" = "POI overlay labels";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
 "map_settings_mode" = "Application mode";
@@ -1045,7 +1046,6 @@
 "osm_editing_loading_poi" = "Loading POI information";
 "osm_editing_access_descr" = "You can view all your local edits and notes in %@. Already uploaded points are not listed in OsmAnd.";
 
-
 // Mapillary
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
@@ -1253,6 +1253,7 @@
 "help_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Other";
+"help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
 "help_tech_articles" = "Technical articles";
 "help_versions" = "Versions";
@@ -1262,6 +1263,7 @@
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "reddit" = "Reddit";
+"vk" = "VK";
 
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
@@ -1529,6 +1531,8 @@
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
+"plugin_popup_osm_editing_title" = "Turn on OpenSteetMap Editing";
+"plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
 
 "plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
 
@@ -1909,6 +1913,7 @@
 "rendering_attr_tracktype_grade3_name" = "Mostly solid";
 "rendering_attr_showSurfaces_name" = "Show road surface";
 "routing_attr_allow_advanced_description" = "Difficult routes, with dangerous obstacles and steep sections.";
+"osm_notes" = "OSM notes";
 "rendering_attr_hidePOILabels_name" = "POI labels";
 "rendering_attr_piste_difficulty_novice_name" = "Novice";
 "rendering_attr_hideUnderground_name" = "Underground objects";
@@ -2050,3 +2055,24 @@
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
+
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "You have the latest version: %@";
+
+"ios_release_3_80" = "• Introduced \“Application Profiles\" with independent settings\n
+• New arrangement of settings by profiles and types: navigation, general, map and screen\n
+• Ability to import or export profile settings\n
+• Added data sources for Online photos\n
+• Added ability to download online maps to cache\n
+• Improved \"Search\" algorithms";
+
+"ios_release_3_90" = "• Introduced \“Application Profiles\" with independent settings\n
+• New arrangement of settings by profiles and types: navigation, general, map and screen\n
+• Ability to import or export profile settings\n
+• Added data sources for Online photos\n
+• Added ability to download online maps to cache\n
+• Improved \"Search\" algorithms";

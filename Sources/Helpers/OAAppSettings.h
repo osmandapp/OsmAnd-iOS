@@ -360,6 +360,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL settingMapLanguageShowLocal;
 @property (assign, nonatomic) BOOL settingMapLanguageTranslit;
 
+@property (assign, nonatomic) BOOL shouldShowWhatsNewScreen;
+
 #define APPEARANCE_MODE_DAY 0
 #define APPEARANCE_MODE_NIGHT 1
 #define APPEARANCE_MODE_AUTO 2
@@ -414,6 +416,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
 
 @property (nonatomic) OAProfileBoolean *mapSettingShowFavorites;
+@property (nonatomic) OAProfileBoolean *mapSettingShowPoiLabel;
 @property (nonatomic) OAProfileBoolean *mapSettingShowOfflineEdits;
 @property (nonatomic) OAProfileBoolean *mapSettingShowOnlineNotes;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
@@ -616,6 +619,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits;
 - (void) setAppearanceMode:(int)settingAppMode;
 - (void) setShowFavorites:(BOOL)mapSettingShowFavorites;
+- (void) setShowPoiLabel:(BOOL)mapSettingShowPoiLabel;
 
 - (void) addImpassableRoad:(OAAvoidRoadInfo *)roadInfo;
 - (void) updateImpassableRoad:(OAAvoidRoadInfo *)roadInfo;

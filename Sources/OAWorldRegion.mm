@@ -488,8 +488,8 @@
 
 - (BOOL) purchased
 {
-    // world map
-    if (_regionId == nil)
+    // world map or Antarctica
+    if (_regionId == nil || [_regionId isEqualToString:OsmAnd::WorldRegions::AntarcticaRegionId.toNSString()])
         return YES;
     if ([[OAIAPHelper sharedInstance].allWorld isPurchased])
         return YES;

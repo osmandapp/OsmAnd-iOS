@@ -1,5 +1,5 @@
 //
-//  OAOsmNotePoint.h
+//  OAOsmNotesPoint.h
 //  OsmAnd
 //
 //  Created by Paul on 1/30/19.
@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setText:(NSString *)text;
 -(void)setLatitude:(double) latitude;
 -(void)setLongitude:(double)longitude;
+-(double)getLatitude;
+-(double)getLongitude;
 -(void)setAuthor:(NSString *)author;
 
 @end

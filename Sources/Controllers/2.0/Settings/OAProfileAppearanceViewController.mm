@@ -436,8 +436,9 @@
         [mode setIconColor:_changedProfile.color];
         [mode setLocationIcon:_changedProfile.locationIcon];
         [mode setNavigationIcon:_changedProfile.navigationIcon];
+        
+        [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
     }
-    [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
 }
 
 - (void) saveNewProfile

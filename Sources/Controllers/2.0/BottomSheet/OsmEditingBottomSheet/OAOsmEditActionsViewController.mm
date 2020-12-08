@@ -266,7 +266,7 @@
     if (_point.getGroup == POI)
     {
         OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                         initWithEditingUtils:_plugin.getOnlineModificationUtil
+                                                         initWithEditingUtils:_plugin.getPoiModificationRemoteUtil
                                                          points:[NSArray arrayWithObject:_point]];
         dialog.delegate = vwController.delegate;
         [dialog show];

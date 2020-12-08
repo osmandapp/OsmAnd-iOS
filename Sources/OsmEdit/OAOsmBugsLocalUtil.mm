@@ -33,7 +33,7 @@
         [pnt setText:[point getText]];
         point = pnt;
     }
-    [bugsDb addOsmBug:point];
+    [bugsDb addOsmbugs:point];
     [[OsmAndApp instance].osmEditsChangeObservable notifyEvent];
     return [self wrap:point success:/*db.addOsmbugs(point)*/YES];
 }

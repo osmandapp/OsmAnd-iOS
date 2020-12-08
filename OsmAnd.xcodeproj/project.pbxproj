@@ -389,6 +389,8 @@
 		32AE6B9F257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */; };
 		32AE6BA3257A1433005D0139 /* OAQuickActionsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */; };
 		32AE6BA4257A1433005D0139 /* OAQuickActionsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */; };
+		324D9C092576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 324D9C082576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm */; };
+		324D9C392576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 324D9C382576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm */; };
 		32FE27F225763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */; };
 		32FE27F325763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
@@ -6579,6 +6581,10 @@
 		324B735A25653CB100B6EE52 /* OATextCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATextCardView.h; sourceTree = "<group>"; };
 		324D553825703A0B0043FB64 /* OAWhatsNewBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWhatsNewBottomSheetViewController.h; sourceTree = "<group>"; };
 		324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWhatsNewBottomSheetViewController.m; sourceTree = "<group>"; };
+		324D9C072576A7D400EA7F8F /* OAOsmNotesSettingsItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmNotesSettingsItem.h; sourceTree = "<group>"; };
+		324D9C082576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmNotesSettingsItem.mm; sourceTree = "<group>"; };
+		324D9C372576B6B500EA7F8F /* OAOsmEditsSettingsItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmEditsSettingsItem.h; sourceTree = "<group>"; };
+		324D9C382576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmEditsSettingsItem.mm; sourceTree = "<group>"; };
 		3253CEEE2571B1A5008DED25 /* OAAppVersionDependedConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAppVersionDependedConstants.h; sourceTree = "<group>"; };
 		32867A9B25781C6E00DDAD44 /* OAQuickActionsSettingsItemReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickActionsSettingsItemReader.h; sourceTree = "<group>"; };
 		32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQuickActionsSettingsItemReader.m; sourceTree = "<group>"; };
@@ -10573,6 +10579,10 @@
 				1565BA33256BCC23003C6278 /* OASettingsItemType.m */,
 				1565BA68256C0EF9003C6278 /* OAExportSettingsType.h */,
 				1565BA69256C0F05003C6278 /* OAExportSettingsType.m */,
+				324D9C072576A7D400EA7F8F /* OAOsmNotesSettingsItem.h */,
+				324D9C082576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm */,
+				324D9C372576B6B500EA7F8F /* OAOsmEditsSettingsItem.h */,
+				324D9C382576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm */,
 			);
 			name = Backup;
 			sourceTree = "<group>";
@@ -21134,6 +21144,7 @@
 				DAD10FDC2226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm in Sources */,
 				8AFD2DA0210E1D2E007AA07D /* OATransportRouteToolbarViewController.mm in Sources */,
 				DAD228A12410E6F600D4D9DC /* OACollapsableWaypointsView.mm in Sources */,
+				324D9C0A2576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm in Sources */,
 				DA6D51E821F33B2800EC84E2 /* OAOsmPoint.m in Sources */,
 				847A1CD81DF94E9B003C1246 /* OAPOIHistoryType.mm in Sources */,
 				8AF3C81F20F656F3006C86AA /* OATransportStopType.m in Sources */,
@@ -21434,6 +21445,7 @@
 				324B735C25653CB100B6EE52 /* OATextCardView.m in Sources */,
 				847A1D3C1DF94E9B003C1246 /* OARootViewController.m in Sources */,
 				8490B1CE20652F66007694A5 /* OAWaypointsPOIScreen.mm in Sources */,
+				324D9C3A2576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm in Sources */,
 				847A1D3D1DF94E9B003C1246 /* OASavingTrackHelper.mm in Sources */,
 				847A1D3E1DF94E9B003C1246 /* OAAppData.m in Sources */,
 				DA4B981421F74EAD00CED009 /* OrderedDictionary.m in Sources */,
@@ -21725,6 +21737,7 @@
 				DAA864192304131C000E1900 /* OAShowHideFavoritesAction.m in Sources */,
 				3ACE8D4219F4F53E003F1D42 /* OAMapRulerView.m in Sources */,
 				84E441841AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
+				324D9C092576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm in Sources */,
 				84E12BFE1F04EDE000F141AD /* OARouteDirectionInfo.mm in Sources */,
 				DA8EEF8A24D562C400E3CA75 /* OAConfigureProfileViewController.m in Sources */,
 				845E05DB1B58F59300DFC2A7 /* OAGPXRouteCardHeaderView.mm in Sources */,
@@ -21868,6 +21881,7 @@
 				DAB3E54E23BB537500EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */,
 				3A2D893E1A2DBFDB00511A5C /* OAAutocompleteManager.mm in Sources */,
 				DAAB2F4021A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.mm in Sources */,
+				324D9C392576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm in Sources */,
 				848A65981F8A852F00F1DC93 /* OACurrentPositionHelper.mm in Sources */,
 				8AD63B6721CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm in Sources */,
 				840B7D5C1F84250500477A3C /* OASettingSwitchCell.m in Sources */,

@@ -77,6 +77,7 @@
         filtersHelper = [OAPOIFiltersHelper sharedInstance];
         app = [OsmAndApp instance];
         
+        _isActive = YES;
         isStandardFilter = YES;
         filterId = STD_PREFIX;
     }

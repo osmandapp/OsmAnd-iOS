@@ -21,7 +21,6 @@
 #import "OAEditPOIData.h"
 #import "OAOSMSettings.h"
 #import "OATargetPoint.h"
-#import "OAOsmEditsDBHelper.h"
 #import "OATransportStop.h"
 #import "OAPOILocationType.h"
 

@@ -144,7 +144,8 @@
                     [p setLatitude:sqlite3_column_double(statement, 2)];
                     [p setLongitude:sqlite3_column_double(statement, 3)];
                     [p setActionString:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)]];
-                    [p setAuthor:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)]];
+                    if (sqlite3_column_text(statement, 5))
+                        [p setAuthor:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)]];
                     [result addObject:p];
                 }
                 sqlite3_finalize(statement);
@@ -212,7 +213,7 @@
     [self checkOsmBugsPoints];
 }
 
--(void)addOsmBug:(OAOsmNotePoint *)point
+-(void)addOsmbugs:(OAOsmNotePoint *)point
 {
     dispatch_async(dbQueue, ^{
         sqlite3_stmt *statement;

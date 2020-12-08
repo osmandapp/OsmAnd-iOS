@@ -44,5 +44,6 @@ typedef NS_ENUM(NSInteger, OAPluginPopupType)
 + (void)hideNoInternetConnection;
 
 + (void)showRegionOnMap:(OAWorldRegion *)region;
++ (void)showOsmEditingDisabled;
 
 @end

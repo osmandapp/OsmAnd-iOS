@@ -50,8 +50,6 @@
 {
     if (other == self) {
         return YES;
-    } else if (![super isEqual:other]) {
-        return NO;
     } else {
         OAApplicationProfileObject *that = (OAApplicationProfileObject *) other;
 

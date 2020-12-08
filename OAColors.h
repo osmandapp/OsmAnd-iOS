@@ -22,6 +22,9 @@
 
 #define color_map_widget_stroke_argb 0x4c000000
 #define color_widgettext_shadow_night_argb 0xdc262626
+#define color_widgettext_shadow_day_argb 0xffffffff
+#define color_widgettext_night_argb 0xffC8C8C8
+#define color_widgettext_day_argb 0xff000000
 
 #define color_icon_color 0x727272
 #define color_icon_color_light 0xcccccc

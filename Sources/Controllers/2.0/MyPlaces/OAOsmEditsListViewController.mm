@@ -355,7 +355,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         }
         if (edits.count > 0)
         {
-            OAOsmEditingBottomSheetViewController *editsBottomsheet = [[OAOsmEditingBottomSheetViewController alloc] initWithEditingUtils:((OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class]).getOnlineModificationUtil points:edits];
+            OAOsmEditingBottomSheetViewController *editsBottomsheet = [[OAOsmEditingBottomSheetViewController alloc] initWithEditingUtils:((OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class]).getPoiModificationRemoteUtil points:edits];
             editsBottomsheet.delegate = self;
             _pendingNotes = notes;
             [editsBottomsheet show];

@@ -60,7 +60,9 @@ typedef enum
     
     BOOL isDecelerating;
 }
-    @property (strong, nonatomic) UIDocumentInteractionController *exportController;
+    @property (strong, nonatomic) NSArray*  menuItems;
+    @property (strong, nonatomic) UIDocumentInteractionController* exportController;
+    @property (strong, nonatomic) NSMutableArray*  sortedFavoriteItems;
     @property NSUInteger sortingType;
 @end
 
@@ -70,8 +72,6 @@ typedef enum
     OAMultiselectableHeaderView *_menuHeaderView;
     NSArray *_unsortedHeaderViews;
     NSMutableArray<NSArray *> *_data;
-    NSMutableArray<OAFavoriteItem *> *_sortedFavoriteItems;
-    NSArray<NSDictionary *> *_menuItems;
 
     EFavoriteAction _favAction;
     OAEditColorViewController *_colorController;
@@ -177,7 +177,7 @@ static UIViewController *parentController;
         ? newLocation.course
         : newHeading;
         
-        [_sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
+        [self.sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
             const auto& favoritePosition31 = itemData.favorite->getPosition31();
             const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
             const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
@@ -195,11 +195,11 @@ static UIViewController *parentController;
             
          }];
         
-        if (self.sortingType == 1 && [_sortedFavoriteItems count] > 0) {
-            NSArray *sortedArray = [_sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+        if (self.sortingType == 1 && [self.sortedFavoriteItems count] > 0) {
+            NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
                 return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
             }];
-            [_sortedFavoriteItems setArray:sortedArray];
+            [self.sortedFavoriteItems setArray:sortedArray];
         }
 
         if (isDecelerating)
@@ -227,7 +227,7 @@ static UIViewController *parentController;
                 if (self.directionButton.tag == 1)
                 {
                     if (i.section == 0)
-                        item = [_sortedFavoriteItems objectAtIndex:i.row];
+                        item = [self.sortedFavoriteItems objectAtIndex:i.row];
                 }
                 else
                 {
@@ -317,8 +317,8 @@ static UIViewController *parentController;
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     NSMutableArray *allGroups = [[NSMutableArray alloc] init];
-    _menuItems = [[NSArray alloc] init];
-    _sortedFavoriteItems = [[NSMutableArray alloc] init];
+    self.menuItems = [[NSArray alloc] init];
+    self.sortedFavoriteItems = [[NSMutableArray alloc] init];
     
     NSMutableArray *headerViews = [NSMutableArray array];
     
@@ -338,14 +338,14 @@ static UIViewController *parentController;
         [itemData.favoriteGroup.points setArray:sortedArrayItems];
         
         for (OAFavoriteItem *item in group.points)
-            [_sortedFavoriteItems addObject:item];
+            [self.sortedFavoriteItems addObject:item];
         [allGroups addObject:itemData];
     }
     
-    NSArray *sortedArray = [_sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+    NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
         return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
     }];
-    [_sortedFavoriteItems setArray:sortedArray];
+    [self.sortedFavoriteItems setArray:sortedArray];
     
     for (FavoriteTableGroup *group in allGroups) {
         NSMutableArray *groupData = [NSMutableArray array];
@@ -366,7 +366,7 @@ static UIViewController *parentController;
     }
     
     // Generate menu items
-    _menuItems = @[@{@"type" : @"actionItem",
+    self.menuItems = @[@{@"type" : @"actionItem",
                          @"text": OALocalizedString(@"fav_import_title"),
                          @"icon": @"favorite_import_icon",
                          @"action": @"onImportClicked"},
@@ -374,7 +374,7 @@ static UIViewController *parentController;
                          @"text": OALocalizedString(@"fav_export_title"),
                          @"icon": @"favorite_export_icon.png",
                          @"action": @"onExportClicked"}];
-    [tableData addObject:_menuItems];
+    [tableData addObject:self.menuItems];
     
     OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     [headerView setTitleText:OALocalizedString(@"import_export")];
@@ -519,7 +519,7 @@ static UIViewController *parentController;
             if (self.directionButton.tag == 1)
             {
                 if (indexPath.section == 0)
-                    item = [_sortedFavoriteItems objectAtIndex:indexPath.row];
+                    item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
             }
             else
             {
@@ -569,7 +569,7 @@ static UIViewController *parentController;
             if (self.directionButton.tag == 1)
             {
                 if (indexPath.section == 0)
-                    item = [_sortedFavoriteItems objectAtIndex:indexPath.row];
+                    item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
             }
             else
             {
@@ -609,7 +609,7 @@ static UIViewController *parentController;
     if (self.directionButton.tag == 1) { // Sorted
         [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop)
         {
-            [itemList addObject:[_sortedFavoriteItems objectAtIndex:path.row]];
+            [itemList addObject:[self.sortedFavoriteItems objectAtIndex:path.row]];
         }];
     }
     else
@@ -738,7 +738,7 @@ static UIViewController *parentController;
 -(void)onExportClicked
 {
     
-    if (_sortedFavoriteItems.count == 0)
+    if (self.sortedFavoriteItems.count == 0)
         return;
     
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -812,7 +812,7 @@ static UIViewController *parentController;
 
 -(NSInteger)getSortedNumberOfRowsInSection:(NSInteger)section {
     if (section == 0)
-        return [_sortedFavoriteItems count];
+        return [self.sortedFavoriteItems count];
     return _data.lastObject.count;
 }
 
@@ -851,7 +851,7 @@ static UIViewController *parentController;
         
         if (cell)
         {
-            OAFavoriteItem* item = [_sortedFavoriteItems objectAtIndex:indexPath.row];
+            OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
             [cell.titleView setText:item.favorite->getTitle().toNSString()];
 
             UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
@@ -880,7 +880,7 @@ static UIViewController *parentController;
         }
         
         if (cell) {
-            NSDictionary* item = [_menuItems objectAtIndex:indexPath.row];
+            NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
             [cell.textView setText:[item objectForKey:@"text"]];
             [cell.iconView setImage: [UIImage imageNamed:[item objectForKey:@"icon"]]];
         }
@@ -1059,11 +1059,11 @@ static UIViewController *parentController;
 - (void)removeItemFromSortedFavoriteItems:(NSIndexPath *)indexPath
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    OAFavoriteItem* item = [_sortedFavoriteItems objectAtIndex:indexPath.row];
+    OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
     
     [self.favoriteTableView beginUpdates];
     app.favoritesCollection->removeFavoriteLocation(item.favorite);
-    [_sortedFavoriteItems removeObjectAtIndex:indexPath.row];
+    [self.sortedFavoriteItems removeObjectAtIndex:indexPath.row];
     [self.favoriteTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:indexPath.row inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
     [self.favoriteTableView endUpdates];
     [app saveFavoritesToPermamentStorage];
@@ -1097,11 +1097,11 @@ static UIViewController *parentController;
     {
         NSInteger dataIndex = selectedItem.row;
         
-        OAFavoriteItem* item = [_sortedFavoriteItems objectAtIndex:dataIndex];
+        OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:dataIndex];
         
         [self.favoriteTableView beginUpdates];
         app.favoritesCollection->removeFavoriteLocation(item.favorite);
-        [_sortedFavoriteItems removeObjectAtIndex:dataIndex];
+        [self.sortedFavoriteItems removeObjectAtIndex:dataIndex];
         [self.favoriteTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:dataIndex inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
         [self.favoriteTableView endUpdates];
         [app saveFavoritesToPermamentStorage];
@@ -1375,7 +1375,7 @@ static UIViewController *parentController;
     }
     
     if (indexPath.section == 0) {
-        OAFavoriteItem* item = [_sortedFavoriteItems objectAtIndex:indexPath.row];
+        OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
         [self doPush];
         [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item pushed:YES];
 

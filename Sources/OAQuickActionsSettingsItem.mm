@@ -77,6 +77,7 @@
         }
         [newActions addObjectsFromArray:self.appliedItems];
         [_actionsRegistry updateQuickActions:newActions];
+        [_actionsRegistry.quickActionListChangedObservable notifyEvent];
     }
 }
 

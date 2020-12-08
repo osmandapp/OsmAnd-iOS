@@ -39,7 +39,6 @@
 #import "OAMultilineTextViewCell.h"
 #import "OAEditPOIData.h"
 #import "OAEntity.h"
-
 #import "OAMapOverlayAction.h"
 
 #import <AudioToolbox/AudioServices.h>

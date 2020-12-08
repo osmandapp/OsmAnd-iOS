@@ -7,10 +7,14 @@
 //
 
 #import "OAQuickActionsSettingsItem.h"
+#import "OAQuickActionsSettingsItemReader.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
 #import "OAQuickActionType.h"
+
+#import "OAMapStyleAction.h"
+#import "OASwitchableAction.h"
 
 @interface OAQuickActionsSettingsItem()
 
@@ -76,6 +80,7 @@
         }
         [newActions addObjectsFromArray:self.appliedItems];
         [_actionsRegistry updateQuickActions:newActions];
+        [_actionsRegistry.quickActionListChangedObservable notifyEvent];
     }
 }
 
@@ -91,7 +96,7 @@
 
 - (OASettingsItemReader *) getReader
 {
-    return [self getJsonReader];
+    return [[OAQuickActionsSettingsItemReader alloc] initWithItem:self];
 }
 
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
@@ -113,10 +118,24 @@
         
         if (quickAction)
         {
-            NSDictionary *params = object[@"params"];
+            NSString *paramsString = object[@"params"];
+            NSError *jsonError;
+            NSData* paramsData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
+            NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:paramsData options:kNilOptions error:&jsonError]];
+            if ([quickAction isKindOfClass:OAMapStyleAction.class])
+            {
+                NSString *styles = params[quickAction.getListKey];
+                if (styles)
+                    params[quickAction.getListKey] = [styles componentsSeparatedByString:@","];
+            }
+            else if ([quickAction isKindOfClass:OASwitchableAction.class])
+            {
+                NSString *values = params[quickAction.getListKey];
+                if (values)
+                    params[quickAction.getListKey] = [self parseParamsFromString:values];
+            }
             if (name.length > 0)
                 [quickAction setName:name];
-            
             [quickAction setParams:params];
             [self.items addObject:quickAction];
         } else {
@@ -135,11 +154,72 @@
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
             jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
             jsonObject[@"actionType"] = action.actionType.stringId;
-            jsonObject[@"params"] = [action getParams];
+            jsonObject[@"params"] = [self adjustParamsForExport:[action getParams] action:action];
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;
     }
+}
+
+- (NSDictionary *) adjustParamsForExport:(NSDictionary *)params action:(OAQuickAction *)action
+{
+    if ([action isKindOfClass:OAMapStyleAction.class])
+    {
+        NSMutableDictionary *paramsCopy = [NSMutableDictionary dictionaryWithDictionary:params];
+        NSArray<NSString *> *styles = params[action.getListKey];
+        NSMutableString *res = [NSMutableString new];
+        if (styles)
+        {
+            for (NSInteger i = 0; i < styles.count - 1; i++)
+            {
+                [res appendString:styles[i]];
+                [res appendString:@","];
+            }
+            [res appendString:styles.lastObject];
+            paramsCopy[action.getListKey] = res;
+        }
+        return paramsCopy;
+    }
+    else if ([action isKindOfClass:OASwitchableAction.class])
+    {
+        NSMutableDictionary *paramsCopy = [NSMutableDictionary dictionaryWithDictionary:params];
+        NSArray<NSArray<NSString *> *> *values = params[action.getListKey];
+        if (values)
+        {
+            paramsCopy[action.getListKey] = [self paramsToExportArray:values];
+        }
+        return paramsCopy;
+    }
+    return params;
+}
+
+- (NSArray<NSArray<NSString *> *> *) parseParamsFromString:(NSString *)params
+{
+    NSMutableArray<NSArray<NSString *> *> *res = [NSMutableArray new];
+    NSData *jsonData = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error;
+    NSArray *jsonArr = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&error];
+    if (!error)
+    {
+        for(NSDictionary *pair in jsonArr)
+        {
+            NSString *first = pair[@"first"];
+            NSString *second = pair[@"second"];
+            if (first && second)
+                [res addObject:@[first, second]];
+        }
+    }
+    return res;
+}
+
+- (NSArray<NSDictionary *> *) paramsToExportArray:(NSArray<NSArray<NSString *> *> *)params
+{
+    NSMutableArray<NSDictionary *> *res = [NSMutableArray new];
+    for (NSArray<NSString *> *pair in params)
+    {
+        [res addObject:@{@"first" : pair.firstObject, @"second" : pair.lastObject}];
+    }
+    return res;
 }
 
 @end

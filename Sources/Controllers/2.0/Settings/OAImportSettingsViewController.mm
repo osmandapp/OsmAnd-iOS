@@ -293,12 +293,12 @@
                 quickActionsSection.groupName = OALocalizedString(@"shared_string_quick_actions");
                 quickActionsSection.type = kCellTypeSectionHeader;
                 quickActionsSection.isOpen = NO;
-                for (OAQuickActionType *quickAction in [_itemsMap objectForKey:type])
+                for (OAQuickAction *quickAction in [_itemsMap objectForKey:type])
                 {
                     [quickActionsSection.groupItems addObject:@{
-                        @"icon" : [quickAction iconName],
+                        @"icon" : [quickAction getIconResName],
                         @"color" : UIColor.orangeColor,
-                        @"title" : [quickAction name],
+                        @"title" : [quickAction name] ? [quickAction name] : quickAction.actionType.name,
                         @"type" : kCellTypeTitle,
                     }];
                 }
@@ -577,7 +577,7 @@
         for (OAApplicationModeBean *modeBean in appModeBeans)
             [settingsItems addObject:[self getBaseProfileSettingsItem:modeBean]];
     if (quickActions.count > 0)
-        [settingsItems addObject:[self getBaseQuickActionsSettingsItem]];
+        [settingsItems addObject: [[OAQuickActionsSettingsItem alloc] initWithItems:quickActions]];
     if (poiUIFilters.count > 0)
         [settingsItems addObject:[self getBasePoiUiFiltersSettingsItem]];
     if (tileSourceTemplates.count > 0)

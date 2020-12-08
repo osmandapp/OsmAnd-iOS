@@ -97,4 +97,11 @@ static NSArray *colors;
     return distance;
 }
 
++ (NSInteger) getValidBuiltInColorNumber:(NSInteger)number
+{
+    if (number < 0 || number >= [OADefaultFavorite builtinColors].count)
+        return 0;
+    return number;
+}
+
 @end

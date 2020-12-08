@@ -139,7 +139,7 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
-    NSArray<NSArray <NSString *> *> *sources = self.getParams[self.getListKey];
+    NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
     NSMutableArray *arr = [NSMutableArray new];
     for (NSArray *source in sources)
     {
@@ -190,7 +190,5 @@ static OAQuickActionType *TYPE;
 {
     return [self getParams][self.getListKey];
 }
-
-
 
 @end

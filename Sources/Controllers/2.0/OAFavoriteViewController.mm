@@ -16,7 +16,6 @@
 #import "OAUtilities.h"
 #import "OACollapsableView.h"
 #import "OACollapsableWaypointsView.h"
-#import "OAQuickAction.h"
 #import <UIAlertView+Blocks.h>
 
 #include <OsmAndCore.h>

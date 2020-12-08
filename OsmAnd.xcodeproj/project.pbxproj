@@ -384,15 +384,11 @@
 		324B735D25653CB100B6EE52 /* OATextCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 324B735925653CB000B6EE52 /* OATextCardView.xib */; };
 		324B735E25653CB100B6EE52 /* OATextCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 324B735925653CB000B6EE52 /* OATextCardView.xib */; };
 		324D553A25703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */; };
-		324D553B25703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */; };
 		32AE6B9E257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */; };
-		32AE6B9F257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */; };
 		32AE6BA3257A1433005D0139 /* OAQuickActionsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */; };
-		32AE6BA4257A1433005D0139 /* OAQuickActionsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */; };
 		324D9C092576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 324D9C082576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm */; };
 		324D9C392576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 324D9C382576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm */; };
 		32FE27F225763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */; };
-		32FE27F325763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependedConstants.m */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BB2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BC2507804400266047 /* ic_custom_logo_wikidata.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B52507803500266047 /* ic_custom_logo_wikidata.png */; };

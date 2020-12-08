@@ -37,7 +37,6 @@
 #import "OAMapSourcesSettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
 #import "OAFileNameTranslationHelper.h"
-#import "OAMapStyleAction.h"
 #import "OAOsmEditingPlugin.h"
 
 #import "Localization.h"

@@ -10,7 +10,6 @@
 #import "OAQuickActionType.h"
 #import "OAQuickActionRegistry.h"
 #import "OrderedDictionary.h"
-#import "OADefaultFavorite.h"
 
 static NSInteger SEQ = 0;
 

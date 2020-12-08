@@ -19,7 +19,7 @@
     self = [[OALaunchScreenViewController alloc] initWithNibName:@"OALaunchScreenViewController" bundle:nil];
     if (self)
     {
-        self.view.frame = [UIScreen mainScreen].applicationFrame;
+        self.view.frame = [UIScreen mainScreen].bounds;
     }
     return self;
 }
@@ -29,7 +29,7 @@
     self = [[OALaunchScreenViewController alloc] initWithNibName:@"OALaunchScreenViewController" bundle:nil];
     if (self)
     {
-        self.view.frame = [UIScreen mainScreen].applicationFrame;
+        self.view.frame = [UIScreen mainScreen].bounds;
     }
     return self;
 }

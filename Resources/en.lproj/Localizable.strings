@@ -629,6 +629,7 @@
 "m_style_pulic_transport" = "Public transport";
 
 "map_settings_map" = "Map";
+"layer_amenity_label" = "POI overlay labels";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
 "map_settings_mode" = "Application mode";

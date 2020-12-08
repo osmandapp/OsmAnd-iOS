@@ -416,6 +416,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;
 
 @property (nonatomic) OAProfileBoolean *mapSettingShowFavorites;
+@property (nonatomic) OAProfileBoolean *mapSettingShowPoiLabel;
 @property (nonatomic) OAProfileBoolean *mapSettingShowOfflineEdits;
 @property (nonatomic) OAProfileBoolean *mapSettingShowOnlineNotes;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
@@ -618,6 +619,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 - (void) setShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits;
 - (void) setAppearanceMode:(int)settingAppMode;
 - (void) setShowFavorites:(BOOL)mapSettingShowFavorites;
+- (void) setShowPoiLabel:(BOOL)mapSettingShowPoiLabel;
 
 - (void) addImpassableRoad:(OAAvoidRoadInfo *)roadInfo;
 - (void) updateImpassableRoad:(OAAvoidRoadInfo *)roadInfo;

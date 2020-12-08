@@ -15,6 +15,7 @@
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
 #import "OAAppSettings.h"
+#import "OsmAndApp.h"
 
 #import "OATextInputCell.h"
 #import "OAColorsTableViewCell.h"
@@ -436,6 +437,7 @@
         [mode setLocationIcon:_changedProfile.locationIcon];
         [mode setNavigationIcon:_changedProfile.navigationIcon];
     }
+    [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
 }
 
 - (void) saveNewProfile

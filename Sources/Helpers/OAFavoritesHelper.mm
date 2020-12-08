@@ -106,11 +106,6 @@
     return self;
 }
 
-- (NSArray<OAFavoriteItem*> *) getPoints
-{
-    return _points;
-}
-
 - (void) addPoint:(OAFavoriteItem *)point
 {
     [_points addObject:point];
@@ -121,7 +116,7 @@
     return [name isEqualToString:OALocalizedString(@"personal_category_name")];
 }
 
-- (NSString *) getDisplayName:(NSString *)name
++ (NSString *) getDisplayName:(NSString *)name
 {
     if ([name isEqualToString:kPersonalCategory])
         return OALocalizedString(@"personal_category_name");
@@ -131,9 +126,9 @@
         return name;
 }
 
-- (NSString *) convertDisplayNameToGroupIdName:(NSString *)name
++ (NSString *) convertDisplayNameToGroupIdName:(NSString *)name
 {
-    if ([self isPersonalCategoryDisplayName:name])
+    if ([self.class isPersonalCategoryDisplayName:name])
         return kPersonalCategory;
     else if ([name isEqualToString:OALocalizedString(@"favorites")])
         return @"";

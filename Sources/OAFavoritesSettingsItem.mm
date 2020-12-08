@@ -71,7 +71,7 @@
                 OAFavoriteGroup *existingGroup = [self getGroup:duplicate.name];
                 if (existingGroup)
                 {
-                    NSMutableArray<OAFavoriteItem *> *favouriteItems = [NSMutableArray arrayWithArray:[existingGroup getPoints]];
+                    NSMutableArray<OAFavoriteItem *> *favouriteItems = [NSMutableArray arrayWithArray:existingGroup.points];
                     for (OAFavoriteItem *favouriteItem in favouriteItems)
                         app.favoritesCollection->removeFavoriteLocation(favouriteItem.favorite);
                 }
@@ -108,7 +108,7 @@
 {
     NSMutableArray<OAFavoriteItem *> *favouriteItems = [NSMutableArray array];
     for (OAFavoriteGroup *group in groups)
-        [favouriteItems addObjectsFromArray:[group getPoints]];
+        [favouriteItems addObjectsFromArray:group.points];
     return favouriteItems;
 }
 
@@ -124,10 +124,10 @@
     {
         number++;
         NSString *name = [NSString stringWithFormat:@"%@ (%d)", item.name, number];
-        OAFavoriteGroup *renamedItem = [[OAFavoriteGroup alloc] initWithPoints:[item getPoints] name:name isHidden:item.isHidden color:item.color];
+        OAFavoriteGroup *renamedItem = [[OAFavoriteGroup alloc] initWithPoints:item.points name:name isHidden:item.isHidden color:item.color];
         if (![self isDuplicate:renamedItem])
         {
-            for (OAFavoriteItem *point in [renamedItem getPoints])
+            for (OAFavoriteItem *point in renamedItem.points)
             {
                 point.favorite->setGroup(QString::fromNSString(renamedItem.name));
             }

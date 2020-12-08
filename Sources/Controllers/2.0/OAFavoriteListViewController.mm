@@ -324,7 +324,7 @@ static UIViewController *parentController;
     
     const auto allFavorites = app.favoritesCollection->getFavoriteLocations();
     NSMutableArray *tableData = [NSMutableArray array];
-    NSMutableArray *favorites = [NSMutableArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
+    NSArray *favorites = [NSMutableArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
 
     for (OAFavoriteGroup *group in favorites)
     {
@@ -920,7 +920,7 @@ static UIViewController *parentController;
     if (cell)
     {
         OAFavoriteGroup* group = groupData.favoriteGroup;
-        [cell.groupTitle setText:[group getDisplayName:group.name]];
+        [cell.groupTitle setText:[OAFavoriteGroup getDisplayName:group.name]];
         cell.folderIcon.tintColor = UIColorFromRGB(color_tint_gray);
         
         cell.openCloseGroupButton.tag = indexPath.section << 10 | indexPath.row;
@@ -1041,11 +1041,7 @@ static UIViewController *parentController;
 -(BOOL)canEditUnsortedRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][0];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:@"group"])
-    {
-        return YES;
-    }
-    return NO;
+    return [cellType isEqualToString:@"group"];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath

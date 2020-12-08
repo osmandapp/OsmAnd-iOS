@@ -254,12 +254,12 @@
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     OAFavoriteGroup *group = [self.groupsAndFavorites objectAtIndex:section];
-    return [group getDisplayName:group.name];
+    return [OAFavoriteGroup getDisplayName:group.name];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [((OAFavoriteGroup*)[self.groupsAndFavorites objectAtIndex:section]).getPoints count];
+    return [((OAFavoriteGroup*)[self.groupsAndFavorites objectAtIndex:section]).points count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -283,7 +283,7 @@
     
     if (cell)
     {
-        OAFavoriteItem* item = [groupData.getPoints objectAtIndex:indexPath.row];
+        OAFavoriteItem* item = [groupData.points objectAtIndex:indexPath.row];
         [cell.titleView setText:item.favorite->getTitle().toNSString()];
         UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
 

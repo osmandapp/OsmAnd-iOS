@@ -428,7 +428,7 @@
                 
                 for (OAFavoriteGroup *group in settings)
                 {
-                    NSString *groupName = [group getDisplayName:group.name];
+                    NSString *groupName = [OAFavoriteGroup getDisplayName:group.name];
                     [favoritesSection.groupItems addObject:@{
                         @"icon" : @"ic_custom_folder",
                         @"color" : group.color,

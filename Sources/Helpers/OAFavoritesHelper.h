@@ -28,9 +28,9 @@
 
 - (instancetype) initWithName:(NSString *)name isHidden:(BOOL)isHidden color:(UIColor *)color;
 - (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isHidden:(BOOL)isHidden color:(UIColor *)color;
-- (NSArray<OAFavoriteItem*> *) getPoints;
 - (void) addPoint:(OAFavoriteItem *)point;
-- (NSString *) getDisplayName:(NSString *)name;
-- (NSString *) convertDisplayNameToGroupIdName:(NSString *)name;
+
++ (NSString *) getDisplayName:(NSString *)name;
++ (NSString *) convertDisplayNameToGroupIdName:(NSString *)name;
 
 @end

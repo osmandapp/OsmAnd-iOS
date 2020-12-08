@@ -10,6 +10,7 @@
 
 #import "OAPointTableViewCell.h"
 #import "OAFavoriteItem.h"
+#import "OAFavoritesHelper.h"
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 
@@ -20,48 +21,17 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-
 #define kAlertConflictWarning -2
 #define kAlertConflictRename -4
 
-typedef enum
+@interface OAFavoriteImportViewController ()
 {
-    kFavoriteCellTypeGrouped = 0,
-    kFavoriteCellTypeUngrouped,
-    kFavoriteCellTypeMenu
-}
-kFavoriteCellType;
-
-@interface FavoriteTableGroup : NSObject
-@property int type;
-@property NSString* groupName;
-@property NSMutableArray*  groupItems;
-@end
-@implementation FavoriteTableGroup
-
--(id) init {
-    self = [super init];
-    if (self) {
-        self.groupItems = [[NSMutableArray alloc] init];
-    }
-    return self;
-}
-
-@end
-
-
-@interface OAFavoriteImportViewController () {
-    
     OsmAndAppInstance _app;
-
     std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> _favoritesCollection;
-    
     NSURL *_url;
-
 }
 
-@property (strong, nonatomic) NSMutableArray* groupsAndFavorites;
-@property (strong, nonatomic) NSArray*  menuItems;
+@property (strong, nonatomic) NSMutableArray<OAFavoriteGroup *> *groupsAndFavorites;
 
 @end
 
@@ -96,7 +66,8 @@ kFavoriteCellType;
     return self;
 }
 
--(BOOL)isFavoritesValid {
+- (BOOL)isFavoritesValid
+{
     for(const auto& favorite : _favoritesCollection->getFavoriteLocations())
     {
         NSString* favoriteTitle = favorite->getTitle().toNSString();
@@ -115,8 +86,8 @@ kFavoriteCellType;
 }
 
 #pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     if (alertView.tag == kAlertConflictWarning) {
         
         // Cancel
@@ -182,124 +153,67 @@ kFavoriteCellType;
         }
         [self importClicked:nil];
     }
-    
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"fav_import_title");
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [_importButton setTitle:OALocalizedString(@"fav_import") forState:UIControlStateNormal];
 }
 
-- (void)viewDidLoad {
-
+- (void) viewDidLoad
+{
     [super viewDidLoad];
-    
     self.ignoredNames = [[NSMutableArray alloc] init];
-
 }
 
--(void)viewWillAppear:(BOOL)animated {
-    
+- (void) viewWillAppear:(BOOL)animated
+{
     [self generateData];
     [self setupView];
     
     [super viewWillAppear:animated];
 }
 
--(UIView *) getTopView
+- (UIView *) getTopView
 {
     return _navBarView;
 }
 
--(UIView *) getMiddleView
+- (UIView *) getMiddleView
 {
     return _favoriteTableView;
 }
 
--(void)generateData {
-    
+- (void) generateData
+{
     self.groupsAndFavorites = [[NSMutableArray alloc] init];
-    self.menuItems = [[NSArray alloc] init];
 
     const auto allFavorites = _favoritesCollection->getFavoriteLocations();
-    QHash< QString, QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > > groupedFavorites;
-    QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > ungroupedFavorites;
-    QSet<QString> groupNames;
-    
-    // create favorite groups
-    for(const auto& favorite : allFavorites)
-    {
-        const auto& groupName = favorite->getGroup();
-        if (groupName.isEmpty())
-            ungroupedFavorites.push_back(favorite);
-        else
-        {
-            groupNames.insert(groupName);
-            groupedFavorites[groupName].push_back(favorite);
-        }
-    }
-    
-    // Generate groups array
-    if (!groupNames.isEmpty())
-    {
-        for (const auto& groupName : groupNames)
-        {
-            FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
-            itemData.groupName = groupName.toNSString();
-            itemData.type = kFavoriteCellTypeGrouped;
-            for(const auto& favorite : groupedFavorites[groupName]) {
-                OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-                favData.favorite = favorite;
-                [itemData.groupItems addObject:favData];
-            }
-            
-            [self.groupsAndFavorites addObject:itemData];
-        }
-    }
-    
-    // Generate ungrouped array
-    if (!ungroupedFavorites.isEmpty())
-    {
-        FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
-        itemData.groupName = OALocalizedString(@"favorites");
-        itemData.type = kFavoriteCellTypeUngrouped;
-        
-        for (const auto& favorite : ungroupedFavorites)
-        {
-            OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
-            favData.favorite = favorite;
-            [itemData.groupItems addObject:favData];
-        }
-        
-        [self.groupsAndFavorites insertObject:itemData atIndex:0];
-    }
-    
+    [self.groupsAndFavorites addObjectsFromArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
     [self.favoriteTableView reloadData];
-    
 }
 
--(void)setupView
+-(void) setupView
 {
     [self applySafeAreaMargins];
     [self.favoriteTableView setDataSource:self];
     [self.favoriteTableView setDelegate:self];
     self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.favoriteTableView reloadData];
-    
 }
 
-- (void)didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Actions
 
-
-- (IBAction)importClicked:(id)sender {
-
+- (IBAction) importClicked:(id)sender
+{
     if (_favoritesCollection) {
         // IOS-214
         if (![self isFavoritesValid])
@@ -314,51 +228,48 @@ kFavoriteCellType;
     }
 }
 
-
-- (IBAction)cancelClicked:(id)sender {
+- (IBAction) cancelClicked:(id)sender
+{
     [self.navigationController popViewControllerAnimated:YES];
     //[self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
     return [self getUnsortedNumberOfSectionsInTableView];
 }
 
--(NSInteger)getUnsortedNumberOfSectionsInTableView {
+- (NSInteger) getUnsortedNumberOfSectionsInTableView
+{
     return [self.groupsAndFavorites count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 60.;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [self getUnsortedTitleForHeaderInSection:section];
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    OAFavoriteGroup *group = [self.groupsAndFavorites objectAtIndex:section];
+    return [OAFavoriteGroup getDisplayName:group.name];
 }
 
--(NSString*)getUnsortedTitleForHeaderInSection:(NSInteger)section {
-    return ((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupName;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [((OAFavoriteGroup*)[self.groupsAndFavorites objectAtIndex:section]).points count];
 }
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self getUnsortedNumberOfRowsInSection:section];
-}
-
--(NSInteger)getUnsortedNumberOfRowsInSection:(NSInteger)section {
-    return [((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupItems count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return [self getUnsortedcellForRowAtIndexPath:indexPath];
 }
 
-- (UITableViewCell*)getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+- (UITableViewCell*) getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAFavoriteGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
     
     static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
     
@@ -370,9 +281,9 @@ kFavoriteCellType;
         cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
     }
     
-    if (cell) {
-        
-        OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
+    if (cell)
+    {
+        OAFavoriteItem* item = [groupData.points objectAtIndex:indexPath.row];
         [cell.titleView setText:item.favorite->getTitle().toNSString()];
         UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
 
@@ -391,22 +302,18 @@ kFavoriteCellType;
         cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-        
     }
-    
     return cell;
-    
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return nil;
 }
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-
+- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return NO;
 }
-
 
 @end

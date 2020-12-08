@@ -32,11 +32,12 @@
             return @"MAP_SOURCES";
         case EOASettingsItemTypeAvoidRoads:
             return @"AVOID_ROADS";
+        case EOASettingsItemTypeFavorites:
+            return @"FAVOURITES";
         case EOASettingsItemTypeOsmNotes:
             return @"OSM_NOTES";
         case EOASettingsItemTypeOsmEdits:
             return @"OSM_EDITS";
-            
         default:
             return nil;
     }
@@ -62,6 +63,8 @@
         return EOASettingsItemTypeMapSources;
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOASettingsItemTypeAvoidRoads;
+    if ([typeName isEqualToString:@"FAVOURITES"])
+        return EOASettingsItemTypeFavorites;
     if ([typeName isEqualToString:@"OSM_NOTES"])
         return EOASettingsItemTypeOsmNotes;
     if ([typeName isEqualToString:@"OSM_EDITS"])

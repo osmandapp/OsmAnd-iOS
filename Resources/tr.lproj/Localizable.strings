@@ -396,7 +396,7 @@
 "plugin_popup_srtm_title" = "Eş yükselti eğrilerini indir";
 "plugin_popup_srtm_desc" = "Eş yükselti eğrileri özelliğini kullanmaya başlamak için lütfen önce bir bölgenin eş yükselti eğrilerini indirin";
 "plugin_popup_srtm_ask" = "Eş yükselti eğrilerini indirmek için eklentiyi etkinleştirmeniz gerekmektedir: <b>Eş yükselti eğrileri</b>";
-"plugin_popup_nautical_title" = "Deniz haritalarını indirin";
+"plugin_popup_nautical_title" = "Deniz haritalarını indir";
 "plugin_popup_trip_planning_ask" = "Seyahat planlamaya başlamak için eklentiyi etkinleştirmeniz gerekmektedir: <b>Seyahat planlama</b>";
 "go_to_downloads" = "İndirmelere git";
 "turn_on_plugin" = "Eklenti açın";
@@ -818,7 +818,7 @@
 "logging_min_accuracy_descr" = "Filtre: bu doğruluğa ulaşılmadıkça kaydetme yok";
 "logging_min_speed" = "En düşük hız";
 "logging_min_speed_descr" = "Filtre: seçili hızın altında kaydetme yok";
-"auto_split_gap" = "Boşluktan sonra kayıtları otomatik bölme";
+"auto_split_gap" = "Boşluktan sonra kayıtları otomatik böl";
 "angular_units" = "Açısal ölçüm birimleri";
 "angular_units_descr" = "Azimut ölçüm birimlerini değiştirin.";
 "get_discount_title" = "%d %@ %%%d indirimli edinin.";
@@ -1927,3 +1927,7 @@
 "road_min_speed_descr" = "Güzergahdaki tüm yollar için en düşük seyahat hızını ayarlar. En düşük hızın altında tavsiye edilen hızlara sahip yollar için önceliği artırır.";
 "road_speeds_descr" = "Bu parametreler güzergah hesaplamasını etkileyebilir.";
 "maximum_speed" = "En yüksek hız";
+"osm_notes" = "OSM notları";
+"plugin_popup_osm_editing_ask" = "Harita düzenlemeleri ve notları eklemek ve yönetmek için lütfen OpenStreetMap Düzenleme eklentisini etkinleştirin";
+"plugin_popup_osm_editing_title" = "OpenStreetMap Düzenlemeyi aç";
+"layer_amenity_label" = "POI üst katmanı etiketleri";

@@ -1928,3 +1928,7 @@
 
 "latest_version" = "Teniu la versió més recent: %@";
 "help_what_is_new" = "Novetats";
+"osm_notes" = "Notes OSM";
+"plugin_popup_osm_editing_ask" = "Activeu el connector d’edició d’OpenStreetMap per afegir i gestionar edicions i notes del mapa";
+"plugin_popup_osm_editing_title" = "Activa l'edició d'OpenSteetMap";
+"layer_amenity_label" = "Etiquetes superposades de PDIs";

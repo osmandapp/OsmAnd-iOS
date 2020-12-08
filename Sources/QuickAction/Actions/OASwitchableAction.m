@@ -54,26 +54,14 @@
     return nil;
 }
 
-- (void)saveListToParams:(NSArray *)list
+- (NSString *)getTitle:(NSArray *)filters
 {
-}
-
-- (BOOL)fillParams:(NSDictionary *)model
-{
-    NSMutableArray *sources = [NSMutableArray new];
-    for (NSArray *arr in model.allValues)
-    {
-        for (NSDictionary *item in arr)
-        {
-            if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
-            {
-                NSString *value = item[@"value"] ? item[@"value"] : @"";
-                [sources addObject:@{@"first":value, @"second":item[@"title"]}];
-            }
-        }
-    }
-    [self saveListToParams:sources];
-    return sources.count > 0;
+    if (filters.count == 0)
+        return @"";
+    
+    return filters.count > 1
+    ? [NSString stringWithFormat:@"%@ +%ld", filters[0], filters.count - 1]
+    : filters[0];
 }
 
 @end

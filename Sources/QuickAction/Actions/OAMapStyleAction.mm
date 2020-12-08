@@ -79,7 +79,7 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    NSArray<NSString *> *mapStyles = [self loadListFromParams];
+    NSArray<NSString *> *mapStyles = [self getFilteredStyles];
     if (mapStyles.count > 0)
     {
         BOOL showBottomSheetStyles = [self.getParams[KEY_DIALOG] boolValue];
@@ -130,7 +130,7 @@ static OAQuickActionType *TYPE;
 
 - (NSArray<NSString *> *) getFilteredStyles
 {
-    NSMutableArray *list = [NSMutableArray arrayWithArray:[self loadListFromParams]];
+    NSMutableArray *list = [NSMutableArray arrayWithArray:self.getParams[self.getListKey]];
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
     if (![iapHelper.skiMap isActive])
     {
@@ -168,16 +168,6 @@ static OAQuickActionType *TYPE;
     return KEY_STYLES;
 }
 
-- (NSString *)getTitle:(NSArray *)filters
-{
-    if (filters.count == 0)
-        return @"";
-    
-    return filters.count > 1
-    ? [NSString stringWithFormat:@"%@ +%ld", filters[0], filters.count - 1]
-    : filters[0];
-}
-
 - (OrderedDictionary *)getUIModel
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
@@ -191,7 +181,7 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
-    NSArray<NSString *> *sources = [self loadListFromParams];
+    NSArray<NSString *> *sources = self.getParams[self.getListKey];
     
     NSMutableArray *arr = [NSMutableArray new];
     for (NSString *source in sources)
@@ -220,11 +210,16 @@ static OAQuickActionType *TYPE;
     for (NSArray *arr in model.allValues)
     {
         for (NSDictionary *item in arr)
+        {
             if ([item[@"key"] isEqualToString:KEY_DIALOG])
                 [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+                     [sources addObject:item[@"title"]];
+        }
     }
+    [params setObject:sources forKey:KEY_STYLES];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
-    return [super fillParams:model];
+    return sources.count > 0;
 }
 
 - (NSString *)getActionText
@@ -242,25 +237,7 @@ static OAQuickActionType *TYPE;
 
 - (NSArray *)loadListFromParams
 {
-    NSArray *styles = @[];
-    NSString *filtersId = self.getParams[self.getListKey];
-    if (filtersId && filtersId.length > 0)
-    {
-        styles = [filtersId componentsSeparatedByString:@","];
-    }
-    return styles;
-}
-
-- (void)saveListToParams:(NSArray<NSString *> *)list
-{
-    NSMutableString *result = [NSMutableString new];
-    for (NSDictionary *style in list)
-        [result appendString:[NSString stringWithFormat:@"%@,", style[@"second"]]];
-    [result deleteCharactersInRange:NSMakeRange([result length]-1, 1)];
-    
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
-    params[self.getListKey] = [NSString stringWithString:result];
-    [super setParams:[NSMutableDictionary dictionaryWithDictionary:params]];
+    return [self getParams][self.getListKey];
 }
 
 @end

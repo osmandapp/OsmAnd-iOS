@@ -32,6 +32,8 @@
             return @"MAP_FILE";
         case EOAExportSettingsTypeAvoidRoads:
             return @"AVOID_ROADS";
+        case EOAExportSettingsTypeFavorites:
+            return @"FAVOURITES";
         case EOAExportSettingsTypeOsmNotes:
             return @"OSM_NOTES";
         case EOAExportSettingsTypeOsmEdits:
@@ -61,6 +63,8 @@
         return EOAExportSettingsTypeMapFiles;
     if ([typeName isEqualToString:@"AVOID_ROADS"])
         return EOAExportSettingsTypeAvoidRoads;
+    if ([typeName isEqualToString:@"FAVOURITES"])
+        return EOAExportSettingsTypeFavorites;
     if ([typeName isEqualToString:@"OSM_NOTES"])
         return EOAExportSettingsTypeOsmNotes;
     if ([typeName isEqualToString:@"OSM_EDITS"])

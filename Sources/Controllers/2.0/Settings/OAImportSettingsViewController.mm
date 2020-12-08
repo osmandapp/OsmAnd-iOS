@@ -37,6 +37,8 @@
 #import "OAMapSourcesSettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OAFavoritesSettingsItem.h"
+#import "OAFavoritesHelper.h"
 #import "OAOsmEditingPlugin.h"
 
 #import "Localization.h"
@@ -242,6 +244,7 @@
     OATableGroupToImport *customGPXSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *customObfMapSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *avoidRoadsStyleSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *favoritesSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *notesPointStyleSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *editsPointStyleSection = [[OATableGroupToImport alloc] init];
     for (NSString *type in [_itemsMap allKeys])
@@ -417,6 +420,25 @@
                 [data addObject:avoidRoadsStyleSection];
                 break;
             }
+            case EOAExportSettingsTypeFavorites:
+            {
+                favoritesSection.groupName = OALocalizedString(@"my_places");
+                favoritesSection.type = kCellTypeSectionHeader;
+                favoritesSection.isOpen = NO;
+                
+                for (OAFavoriteGroup *group in settings)
+                {
+                    NSString *groupName = [OAFavoriteGroup getDisplayName:group.name];
+                    [favoritesSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_folder",
+                        @"color" : group.color,
+                        @"title" : groupName,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
+                [data addObject:favoritesSection];
+                break;
+            }
             case EOAExportSettingsTypeOsmNotes:
             {
                 notesPointStyleSection.groupName = OALocalizedString(@"osm_notes");
@@ -549,6 +571,7 @@
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    NSMutableArray<OAFavoriteGroup *> *favoiriteItems = [NSMutableArray array];
     NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
     NSMutableArray<OAOsmPoint *> *osmEditsPointList = [NSMutableArray array];
     
@@ -572,6 +595,8 @@
             [osmEditsPointList addObject:(OAOsmPoint *)object];
         else if ([object isKindOfClass:OAFileSettingsItem.class])
             [settingsItems addObject:(OAFileSettingsItem *)object];
+        else if ([object isKindOfClass:OAFavoriteGroup.class])
+            [favoiriteItems addObject:(OAFavoriteGroup *)object];
     }
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)
@@ -584,6 +609,8 @@
         [settingsItems addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
         [settingsItems addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
+    if (favoiriteItems.count > 0)
+        [settingsItems addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoiriteItems]];
     if (osmNotesPointList.count > 0)
     {
         OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmNotes clazz:OAOsmNotesSettingsItem.class];

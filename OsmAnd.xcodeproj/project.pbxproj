@@ -305,6 +305,15 @@
 		1586E120242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */; };
 		1586E124242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */; };
+		158A3818257E65CD0038056A /* img_text_openstreetmap.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A380F257E65C90038056A /* img_text_openstreetmap.png */; };
+		158A3819257E65CD0038056A /* img_text_osmand_maps.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3810257E65CA0038056A /* img_text_osmand_maps.png */; };
+		158A381A257E65CD0038056A /* img_text_osmand_maps@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3811257E65CB0038056A /* img_text_osmand_maps@3x.png */; };
+		158A381B257E65CD0038056A /* img_text_openstreetmap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3812257E65CB0038056A /* img_text_openstreetmap@2x.png */; };
+		158A381C257E65CD0038056A /* img_text_osmand_maps@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3813257E65CB0038056A /* img_text_osmand_maps@2x.png */; };
+		158A381D257E65CD0038056A /* img_logo_osmand_120pt@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3814257E65CC0038056A /* img_logo_osmand_120pt@3x.png */; };
+		158A381E257E65CD0038056A /* img_text_openstreetmap@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3815257E65CC0038056A /* img_text_openstreetmap@3x.png */; };
+		158A381F257E65CD0038056A /* img_logo_osmand_120pt.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3816257E65CD0038056A /* img_logo_osmand_120pt.png */; };
+		158A3820257E65CD0038056A /* img_logo_osmand_120pt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3817257E65CD0038056A /* img_logo_osmand_120pt@2x.png */; };
 		158B1F762487B838007BC45A /* OASelectMapSourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158B1F702487B836007BC45A /* OASelectMapSourceViewController.xib */; };
 		158B1F772487B838007BC45A /* OADownloadMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 158B1F722487B837007BC45A /* OADownloadMapViewController.xib */; };
 		158B1F782487B838007BC45A /* OASelectMapSourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 158B1F732487B837007BC45A /* OASelectMapSourceViewController.mm */; };
@@ -6484,6 +6493,15 @@
 		1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointHeaderCell.xib; path = Resources/Controllers/Cells/OAPointHeaderCell.xib; sourceTree = "<group>"; };
 		1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointHeaderTableViewCell.m; path = Controllers/Cells/OAPointHeaderTableViewCell.m; sourceTree = "<group>"; };
 		1586E122242209F300DA5625 /* OAPointHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointHeaderTableViewCell.h; path = Controllers/Cells/OAPointHeaderTableViewCell.h; sourceTree = "<group>"; };
+		158A380F257E65C90038056A /* img_text_openstreetmap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_text_openstreetmap.png; path = Resources/IntroImages/img_text_openstreetmap.png; sourceTree = "<group>"; };
+		158A3810257E65CA0038056A /* img_text_osmand_maps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_text_osmand_maps.png; path = Resources/IntroImages/img_text_osmand_maps.png; sourceTree = "<group>"; };
+		158A3811257E65CB0038056A /* img_text_osmand_maps@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_text_osmand_maps@3x.png"; path = "Resources/IntroImages/img_text_osmand_maps@3x.png"; sourceTree = "<group>"; };
+		158A3812257E65CB0038056A /* img_text_openstreetmap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_text_openstreetmap@2x.png"; path = "Resources/IntroImages/img_text_openstreetmap@2x.png"; sourceTree = "<group>"; };
+		158A3813257E65CB0038056A /* img_text_osmand_maps@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_text_osmand_maps@2x.png"; path = "Resources/IntroImages/img_text_osmand_maps@2x.png"; sourceTree = "<group>"; };
+		158A3814257E65CC0038056A /* img_logo_osmand_120pt@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_logo_osmand_120pt@3x.png"; path = "Resources/IntroImages/img_logo_osmand_120pt@3x.png"; sourceTree = "<group>"; };
+		158A3815257E65CC0038056A /* img_text_openstreetmap@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_text_openstreetmap@3x.png"; path = "Resources/IntroImages/img_text_openstreetmap@3x.png"; sourceTree = "<group>"; };
+		158A3816257E65CD0038056A /* img_logo_osmand_120pt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_logo_osmand_120pt.png; path = Resources/IntroImages/img_logo_osmand_120pt.png; sourceTree = "<group>"; };
+		158A3817257E65CD0038056A /* img_logo_osmand_120pt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_logo_osmand_120pt@2x.png"; path = "Resources/IntroImages/img_logo_osmand_120pt@2x.png"; sourceTree = "<group>"; };
 		158B1F702487B836007BC45A /* OASelectMapSourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OASelectMapSourceViewController.xib; path = Resources/Controllers/DownloadMapSource/OASelectMapSourceViewController.xib; sourceTree = "<group>"; };
 		158B1F712487B837007BC45A /* OASelectMapSourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASelectMapSourceViewController.h; path = Resources/Controllers/DownloadMapSource/OASelectMapSourceViewController.h; sourceTree = "<group>"; };
 		158B1F722487B837007BC45A /* OADownloadMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADownloadMapViewController.xib; path = Resources/Controllers/DownloadMapSource/OADownloadMapViewController.xib; sourceTree = "<group>"; };
@@ -10732,6 +10750,15 @@
 				841A111F1DEC454F009558D3 /* osmand_logo@2x.png */,
 				841A11201DEC454F009558D3 /* osmand_logo@3x.png */,
 				842431671AE939B400925821 /* welcome_wide.png */,
+				158A3816257E65CD0038056A /* img_logo_osmand_120pt.png */,
+				158A3817257E65CD0038056A /* img_logo_osmand_120pt@2x.png */,
+				158A3814257E65CC0038056A /* img_logo_osmand_120pt@3x.png */,
+				158A380F257E65C90038056A /* img_text_openstreetmap.png */,
+				158A3812257E65CB0038056A /* img_text_openstreetmap@2x.png */,
+				158A3815257E65CC0038056A /* img_text_openstreetmap@3x.png */,
+				158A3810257E65CA0038056A /* img_text_osmand_maps.png */,
+				158A3813257E65CB0038056A /* img_text_osmand_maps@2x.png */,
+				158A3811257E65CB0038056A /* img_text_osmand_maps@3x.png */,
 			);
 			name = IntroImages;
 			sourceTree = "<group>";
@@ -18472,6 +18499,7 @@
 				DA5CA679211ECD6500E2B79B /* article_style.css in Resources */,
 				84F3A8E91B4DA93100D16EBC /* ic_trip_car@3x.png in Resources */,
 				84630FF61A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */,
+				158A381C257E65CD0038056A /* img_text_osmand_maps@2x.png in Resources */,
 				849E81991AFA5D6700549953 /* btn_map_type_icon_view@2x.png in Resources */,
 				847AF5881F8A3D4900FC7F90 /* widget_max_speed_day@2x.png in Resources */,
 				1571CE2A24ADEE2F00083F92 /* ic_custom_ruler@2x.png in Resources */,
@@ -18806,6 +18834,7 @@
 				8476E2A01F6C1EEC00EC274F /* map_default_location_night@3x.png in Resources */,
 				84C102951FBDC10800D3E5EE /* warnings_traffic_calming@3x.png in Resources */,
 				8A13FEDE20EFA2EE0029B2EE /* OAMyLocationViewController.xib in Resources */,
+				158A381B257E65CD0038056A /* img_text_openstreetmap@2x.png in Resources */,
 				15B4E4B024AB401C00119365 /* ic_custom_length_limit@2x.png in Resources */,
 				84E442101AF8A07500F87542 /* track_new_segement@2x.png in Resources */,
 				DAF3459722F4482C009E2EB6 /* ic_custom_sun.png in Resources */,
@@ -19019,6 +19048,7 @@
 				84147A481B25E0EA0091E57F /* OAEditTargetViewController.xib in Resources */,
 				DA1340C2243DC5A70039D214 /* ic_action_aircraft@3x.png in Resources */,
 				8431E7B91B3877B80063C9AF /* check@2x.png in Resources */,
+				158A3820257E65CD0038056A /* img_logo_osmand_120pt@2x.png in Resources */,
 				8AFC2BDD24334A4E0095BA9F /* map_navigation_car_bottom@3x.png in Resources */,
 				DAA4EDF7240E85B800F16073 /* ic_custom_online@3x.png in Resources */,
 				84E4421C1AF8A07500F87542 /* track_recording_stop@3x.png in Resources */,
@@ -19058,6 +19088,7 @@
 				DA134190243DC5A80039D214 /* ic_action_subway.png in Resources */,
 				DA6471AB22CF5433008F937F /* ic_custom_contour_lines.png in Resources */,
 				DABA3DDD22686E72005BB777 /* ic_tabbar_osm_edits@2x.png in Resources */,
+				158A381E257E65CD0038056A /* img_text_openstreetmap@3x.png in Resources */,
 				847B2DB41F7A6B5E008C7AD9 /* OASettingsTitleCell.xib in Resources */,
 				DAF3459122F4482C009E2EB6 /* ic_action_osm_note@3x.png in Resources */,
 				847C0FA01FC5D6F4003891F3 /* HUD_compass_bg_night@3x.png in Resources */,
@@ -20024,6 +20055,7 @@
 				DA98A0292109D99300BB32D0 /* it_tts.js in Resources */,
 				843E5D891AB341E000BE14BE /* menu_direction_icon@3x.png in Resources */,
 				DA6BF94424DBF21B00F7DC7B /* ic_custom_remove_outlined@3x.png in Resources */,
+				158A3819257E65CD0038056A /* img_text_osmand_maps.png in Resources */,
 				842034101FB5FC05002784EF /* ic_action_next_turn@3x.png in Resources */,
 				DA2B40B1241A7E8A008E5409 /* OAPublicTransportRouteCell.xib in Resources */,
 				843E5CE41AB341E000BE14BE /* icon_favorite_item_direction.png in Resources */,
@@ -20368,12 +20400,14 @@
 				845E06BE1B5FF17400DFC2A7 /* ic_plugin_wikipedia.png in Resources */,
 				3A426F461A18F2E900DE5B1D /* OASwitchCell.xib in Resources */,
 				84DE41662001258F00F022F9 /* map_pin_avoid_road@2x.png in Resources */,
+				158A381D257E65CD0038056A /* img_logo_osmand_120pt@3x.png in Resources */,
 				84B6E0882073CF55002CA15B /* ic_action_route_subsequent_destination@2x.png in Resources */,
 				DA9C623F221C46590087E140 /* ic_custom_osm_edits@3x.png in Resources */,
 				84263A181B39D36A00CECF1C /* my_course_marker_icon.png in Resources */,
 				8476E29A1F6C1EEC00EC274F /* map_car_location@3x.png in Resources */,
 				DAB985B1212423710081F8F8 /* en-gb_tts.js in Resources */,
 				DA5AA2D32351C88200DF0B7B /* OAHomeWorkCell.xib in Resources */,
+				158A3818257E65CD0038056A /* img_text_openstreetmap.png in Resources */,
 				DAA88913241BCD2A0057722C /* ic_small_pedestrian@3x.png in Resources */,
 				0CF58556244072EC0081238D /* widget_marker_triangle_pin_4@2x.png in Resources */,
 				841AD02C1F54048B00E3191E /* ic_prev@2x.png in Resources */,
@@ -20483,12 +20517,14 @@
 				8476E2661F6C1EEC00EC274F /* map_bicycle_location_view_angle.png in Resources */,
 				843E5CFC1AB341E000BE14BE /* icon_remove.png in Resources */,
 				3AC639F51A220A96001D5E57 /* icon_edit@2x.png in Resources */,
+				158A381F257E65CD0038056A /* img_logo_osmand_120pt.png in Resources */,
 				DAF345BD22F4482C009E2EB6 /* ic_custom_sound.png in Resources */,
 				84F3A9211B4E7FBA00D16EBC /* ic_coordinates_disable.png in Resources */,
 				DA6BF94824DBF21B00F7DC7B /* ic_custom_copy@3x.png in Resources */,
 				BBA3AFDD197FC4BB0039D991 /* HUD_debug_pin_button.png in Resources */,
 				DAF2F80A254825BA00967935 /* map_plan_route_point_normal.png in Resources */,
 				84185AE61AAA11B600F70328 /* ic_favorite_7@3x.png in Resources */,
+				158A381A257E65CD0038056A /* img_text_osmand_maps@3x.png in Resources */,
 				DA99919023F6AE6000784994 /* OATextViewResizingCell.xib in Resources */,
 				8AFC2BBF24334A4E0095BA9F /* map_location_car_center@3x.png in Resources */,
 				DA45DA66230EE05A0083DFA2 /* img_mapstyle_default@3x.png in Resources */,

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" launchScreen="YES" colorMatched="YES">
-    <device id="retina4_0" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,52 +14,78 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" misplaced="YES" id="3gO-t7-roK">
-                    <rect key="frame" x="20" y="140" width="280" height="354"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3gO-t7-roK">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="img_splash_osmand_logo.png" id="A9r-2G-HpT">
-                            <rect key="frame" x="0.0" y="0.0" width="280" height="200"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_text_openstreetmap.png" translatesAutoresizingMaskIntoConstraints="NO" id="Nii-cE-fcN">
+                            <rect key="frame" x="40" y="530" width="240" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="240" id="RGe-rW-g5k"/>
+                                <constraint firstAttribute="height" constant="30" id="RcG-VW-P6A"/>
+                            </constraints>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="aFM-SG-Ltg">
-                            <rect key="frame" x="0.0" y="254" width="280" height="33"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <attributedString key="attributedText">
-                                <fragment content="OsmAnd">
-                                    <attributes>
-                                        <color key="NSColor" red="0.71764705882352942" green="0.71764705882352942" blue="0.71764705882352942" alpha="1" colorSpace="calibratedRGB"/>
-                                        <font key="NSFont" size="26" name="Avenir-Medium"/>
-                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                    </attributes>
-                                </fragment>
-                                <fragment content=" ">
-                                    <attributes>
-                                        <color key="NSColor" red="0.71764705882352942" green="0.71764705882352942" blue="0.71764705882352942" alpha="1" colorSpace="calibratedRGB"/>
-                                        <font key="NSFont" size="30" name="Avenir-Book"/>
-                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                    </attributes>
-                                </fragment>
-                                <fragment content="Maps">
-                                    <attributes>
-                                        <color key="NSColor" red="0.71764705882352942" green="0.71764705882352942" blue="0.71764705882352942" alpha="1" colorSpace="calibratedRGB"/>
-                                        <font key="NSFont" size="26" name="Avenir-Black"/>
-                                        <font key="NSOriginalFont" size="26" name="Avenir-Black"/>
-                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                    </attributes>
-                                </fragment>
-                            </attributedString>
-                            <nil key="highlightedColor"/>
-                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zRb-V1-xNB">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="173"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JPt-zZ-LQr">
+                            <rect key="frame" x="0.0" y="315" width="320" height="173"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_text_osmand_maps.png" translatesAutoresizingMaskIntoConstraints="NO" id="CPV-2n-7Kb">
+                                    <rect key="frame" x="53.5" y="68" width="213" height="37"/>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="CPV-2n-7Kb" firstAttribute="centerY" secondItem="JPt-zZ-LQr" secondAttribute="centerY" id="LdK-qq-Rkm"/>
+                                <constraint firstItem="CPV-2n-7Kb" firstAttribute="centerX" secondItem="JPt-zZ-LQr" secondAttribute="centerX" id="x3S-2P-wGO"/>
+                            </constraints>
+                        </view>
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_logo_osmand_120pt.png" translatesAutoresizingMaskIntoConstraints="NO" id="A9r-2G-HpT">
+                            <rect key="frame" x="95" y="173" width="131" height="142"/>
+                        </imageView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sjn-Ib-R2z">
+                            <rect key="frame" x="0.0" y="496" width="320" height="26"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="26" id="YAT-th-mLJ"/>
+                            </constraints>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="zRb-V1-xNB" firstAttribute="top" secondItem="3gO-t7-roK" secondAttribute="top" id="3tB-pM-m5Z"/>
+                        <constraint firstItem="Sjn-Ib-R2z" firstAttribute="leading" secondItem="3gO-t7-roK" secondAttribute="leading" id="50l-Ft-Nnn"/>
+                        <constraint firstItem="JPt-zZ-LQr" firstAttribute="height" secondItem="zRb-V1-xNB" secondAttribute="height" id="9Ev-uS-uyi"/>
+                        <constraint firstItem="Sjn-Ib-R2z" firstAttribute="top" secondItem="JPt-zZ-LQr" secondAttribute="bottom" constant="8" symbolic="YES" id="A6F-gq-wAw"/>
+                        <constraint firstItem="A9r-2G-HpT" firstAttribute="top" secondItem="zRb-V1-xNB" secondAttribute="bottom" id="AgE-Vy-mAb"/>
+                        <constraint firstAttribute="bottom" secondItem="Nii-cE-fcN" secondAttribute="bottom" constant="8" id="BR9-Za-csj"/>
+                        <constraint firstAttribute="trailing" secondItem="Sjn-Ib-R2z" secondAttribute="trailing" id="DaW-6C-tkd"/>
+                        <constraint firstItem="JPt-zZ-LQr" firstAttribute="top" secondItem="A9r-2G-HpT" secondAttribute="bottom" id="LuO-79-VBc"/>
+                        <constraint firstItem="zRb-V1-xNB" firstAttribute="leading" secondItem="3gO-t7-roK" secondAttribute="leading" id="ZoJ-ID-Rgl"/>
+                        <constraint firstAttribute="trailing" secondItem="JPt-zZ-LQr" secondAttribute="trailing" id="aTb-9K-WOP"/>
+                        <constraint firstItem="JPt-zZ-LQr" firstAttribute="leading" secondItem="3gO-t7-roK" secondAttribute="leading" id="bje-st-7TK"/>
+                        <constraint firstItem="Nii-cE-fcN" firstAttribute="centerX" secondItem="3gO-t7-roK" secondAttribute="centerX" id="bmx-N3-hdM"/>
+                        <constraint firstItem="A9r-2G-HpT" firstAttribute="centerX" secondItem="3gO-t7-roK" secondAttribute="centerX" id="epd-FD-Xsz"/>
+                        <constraint firstItem="Nii-cE-fcN" firstAttribute="top" secondItem="Sjn-Ib-R2z" secondAttribute="bottom" constant="8" symbolic="YES" id="hqe-yf-Wfs"/>
+                        <constraint firstAttribute="trailing" secondItem="zRb-V1-xNB" secondAttribute="trailing" id="u1H-7B-aUc"/>
+                    </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="350-KX-KPn"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="33" y="69"/>
+            <constraints>
+                <constraint firstItem="3gO-t7-roK" firstAttribute="trailing" secondItem="350-KX-KPn" secondAttribute="trailing" id="2g3-Qq-GGb"/>
+                <constraint firstItem="3gO-t7-roK" firstAttribute="top" secondItem="350-KX-KPn" secondAttribute="top" id="YoG-iw-igs"/>
+                <constraint firstItem="3gO-t7-roK" firstAttribute="leading" secondItem="350-KX-KPn" secondAttribute="leading" id="gQt-bI-Xsr"/>
+                <constraint firstItem="3gO-t7-roK" firstAttribute="bottom" secondItem="350-KX-KPn" secondAttribute="bottom" id="k3T-o7-fx9"/>
+            </constraints>
+            <point key="canvasLocation" x="46.875" y="45.422535211267608"/>
         </view>
     </objects>
     <resources>
-        <image name="img_splash_osmand_logo.png" width="160" height="160"/>
+        <image name="img_logo_osmand_120pt.png" width="131" height="141.5"/>
+        <image name="img_text_openstreetmap.png" width="251" height="24"/>
+        <image name="img_text_osmand_maps.png" width="213" height="36.5"/>
     </resources>
 </document>

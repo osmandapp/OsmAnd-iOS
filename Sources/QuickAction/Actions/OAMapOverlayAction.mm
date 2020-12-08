@@ -37,7 +37,7 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
+    NSArray<NSArray<NSString *> *> *sources = [self loadListFromParams];
     if (sources.count > 0)
     {
         BOOL showBottomSheetStyles = [self.getParams[KEY_DIALOG] boolValue];
@@ -126,6 +126,16 @@ static OAQuickActionType *TYPE;
     return KEY_OVERLAYS;
 }
 
+- (NSString *)getTitle:(NSArray *)filters
+{
+    if (filters.count == 0)
+        return @"";
+    
+    return filters.count > 1
+    ? [NSString stringWithFormat:@"%@ +%ld", filters[0], filters.count - 1]
+    : filters[0];
+}
+
 - (OrderedDictionary *)getUIModel
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
@@ -139,7 +149,7 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
-    NSArray<NSArray <NSString *> *> *sources = self.getParams[self.getListKey];
+    NSArray<NSArray <NSString *> *> *sources = [self loadListFromParams];
     NSMutableArray *arr = [NSMutableArray new];
     for (NSArray *source in sources)
     {
@@ -162,20 +172,16 @@ static OAQuickActionType *TYPE;
 - (BOOL)fillParams:(NSDictionary *)model
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
-    NSMutableArray *sources = [NSMutableArray new];
     for (NSArray *arr in model.allValues)
     {
         for (NSDictionary *item in arr)
         {
             if ([item[@"key"] isEqualToString:KEY_DIALOG])
                 [params setValue:item[@"value"] forKey:KEY_DIALOG];
-            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
-                [sources addObject:@[item[@"value"], item[@"title"]]];
         }
     }
-    [params setObject:sources forKey:KEY_OVERLAYS];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
-    return sources.count > 0;
+    return [super fillParams:model];
 }
 
 + (OAQuickActionType *) TYPE
@@ -188,9 +194,29 @@ static OAQuickActionType *TYPE;
 
 - (NSArray *)loadListFromParams
 {
-    return [self getParams][self.getListKey];
+    NSString *json = self.getParams[self.getListKey];
+    if (!json || json.length == 0)
+        return @[];
+    
+    NSError *jsonError;
+    NSData* jsonData = [json dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:&jsonError];
+    
+    NSMutableArray *paramsArray = [NSMutableArray new];
+    for (NSDictionary *overlay in jsonDict)
+        [paramsArray addObject:@[overlay[@"first"], overlay[@"second"]]];
+    return paramsArray;
 }
 
-
+- (void)saveListToParams:(NSArray<NSArray <NSString *> *> *)list
+{
+    NSArray *myArray = list;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:myArray options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
+    params[self.getListKey] = jsonString;
+    [super setParams:[NSMutableDictionary dictionaryWithDictionary:params]];
+}
 
 @end

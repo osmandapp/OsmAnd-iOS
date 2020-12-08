@@ -114,39 +114,13 @@
         
         if (quickAction)
         {
-            NSMutableDictionary *params = object[@"params"];
-            if ([params isKindOfClass:NSDictionary.class])
-            {
-                params = [NSMutableDictionary dictionaryWithDictionary:params];
-            }
-            else
-            {
-                NSString *stringValue = (NSString *)params;
-                NSError *jsonError;
-                NSData* stringData = [stringValue dataUsingEncoding:NSUTF8StringEncoding];
-                params = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:stringData options:kNilOptions error:&jsonError]];
-            }
-            
-            if (params[@"styles"] && ![params[@"styles"] isKindOfClass:NSArray.class])
-                params[@"styles"] = [((NSString *) params[@"styles"]) componentsSeparatedByString:@","];
-            
-            if (params[@"overlays"] && ![params[@"overlays"] isKindOfClass:NSArray.class])
-            {
-                NSString *overlaysString = (NSString *)params[@"overlays"];
-                NSError *overlayJsonError;
-                NSData* overlaysData = [overlaysString dataUsingEncoding:NSUTF8StringEncoding];
-                NSDictionary *overlaysJson = [NSJSONSerialization JSONObjectWithData:overlaysData options:kNilOptions error:&overlayJsonError];
-                NSMutableArray *resultArray = [NSMutableArray new];
-                for (NSDictionary *layer in overlaysJson)
-                    [resultArray addObject:@[layer[@"first"], layer[@"second"]]];
-                params[@"overlays"] = resultArray;
-            }
-            
-            [quickAction setParams:params];
-            
+            NSString *paramsString = object[@"params"];
+            NSError *jsonError;
+            NSData* paramsData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
+            NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:paramsData options:kNilOptions error:&jsonError]];
             if (name.length > 0)
                 [quickAction setName:name];
-            
+            [quickAction setParams:params];
             [self.items addObject:quickAction];
         } else {
             [self.warnings addObject:OALocalizedString(@"settings_item_read_error", self.name)];

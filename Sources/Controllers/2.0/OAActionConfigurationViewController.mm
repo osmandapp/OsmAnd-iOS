@@ -40,6 +40,8 @@
 #import "OAEditPOIData.h"
 #import "OAEntity.h"
 
+#import "OAMapOverlayAction.h"
+
 #import <AudioToolbox/AudioServices.h>
 
 #include <OsmAndCore.h>
@@ -1061,7 +1063,7 @@
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"quick_action_name_str")].firstObject];
     NSString *nameKey = OALocalizedString(@"quick_action_name_str");
-    NSString *oldTitle = [_action getTitle:_action.getParams[_action.getListKey]];
+    NSString *oldTitle = [_action getTitle:[((OASwitchableAction* )_action) loadListFromParams]];
     NSString *defaultName = [_action getDefaultName];
     
     if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
@@ -1095,7 +1097,7 @@
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    [self renameAction:titles oldTitle:[_action getTitle:_action.getParams[_action.getListKey]]];
+    [self renameAction:titles oldTitle:[_action getTitle:[((OASwitchableAction* )_action) loadListFromParams]]];
     [_tableView reloadData];
 }
 

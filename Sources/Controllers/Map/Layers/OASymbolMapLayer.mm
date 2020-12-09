@@ -9,6 +9,19 @@
 #import "OASymbolMapLayer.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OAColors.h"
+
+#import <OsmAndCore/TextRasterizer.h>
+
+const static float kTextSize = 13.0f;
+
+@interface OASymbolMapLayer()
+
+@property (nonatomic) BOOL showCaptions;
+@property (nonatomic) OsmAnd::TextRasterizer::Style captionStyle;
+@property (nonatomic) double captionTopSpace;
+
+@end
 
 @implementation OASymbolMapLayer
 
@@ -20,6 +33,37 @@
         _baseOrder = baseOrder;
     }
     return self;
+}
+
+- (void) initLayer
+{
+    [super initLayer];
+    
+    _captionTopSpace = 2 * self.displayDensityFactor;
+    [self updateCaptionStyle];
+}
+
+- (BOOL) updateLayer
+{
+    [super updateLayer];
+    
+    [self updateCaptionStyle];
+}
+
+- (void) updateCaptionStyle
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    _showCaptions = settings.mapSettingShowPoiLabel.get;
+    float textSize = settings.textSize.get;
+    
+    _captionStyle
+        .setWrapWidth(20)
+        .setBold(false)
+        .setItalic(false)
+        .setColor(OsmAnd::ColorARGB(self.nightMode ? color_widgettext_night_argb : color_widgettext_day_argb))
+        .setSize(textSize * kTextSize * self.displayDensityFactor)
+        .setHaloColor(OsmAnd::ColorARGB(self.nightMode ? color_widgettext_shadow_night_argb : color_widgettext_shadow_day_argb))
+        .setHaloRadius(5);
 }
 
 @end

@@ -184,15 +184,22 @@
                 UIColor* color = [self getWptColor:locationMark->extraData];
                 OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
                 
-                OsmAnd::MapMarkerBuilder()
-                .setIsAccuracyCircleSupported(false)
+                OsmAnd::MapMarkerBuilder builder;
+                builder.setIsAccuracyCircleSupported(false)
                 .setBaseOrder(baseOrder--)
                 .setIsHidden(false)
                 .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
                 .setPosition(OsmAnd::Utilities::convertLatLonTo31(locationMark->position))
                 .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
-                .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
-                .buildAndAddToCollection(_markersCollection);
+                .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+                
+                if (self.showCaptions && !locationMark->name.isEmpty())
+                {
+                    builder.setCaption(locationMark->name);
+                    builder.setCaptionStyle(self.captionStyle);
+                    builder.setCaptionTopSpace(self.captionTopSpace);
+                }
+                builder.buildAndAddToCollection(_markersCollection);
             }
         }
 

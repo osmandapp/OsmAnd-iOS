@@ -156,7 +156,7 @@
 "new_filter_desc" = "Введіть назву для нового фільтра. Ви зможете його знайти у списку Категорії.";
 "skip_map_downloading" = "Пропустити завантаження мап";
 "search_another_country" = "Виберіть інший регіон";
-"first_usage_wizard_desc" = "OsmAnd визначить ваше місце розташування і запропонує завантажити мапи для цього регіону.";
+"first_usage_wizard_desc" = "OsmAnd визначить ваше розташування і запропонує завантажити мапи для цього регіону.";
 "location_not_found" = "Неможливо визначити місце розташування";
 "no_inet_connection" = "З’єднання з Інтернетом відсутнє";
 "no_inet_connection_desc_map" = "Необхідно завантажити мапи.";
@@ -1929,3 +1929,7 @@
 "latest_version" = "У вас найновіша версія: %@";
 "vk" = "VK";
 "help_what_is_new" = "Що нового";
+"layer_amenity_label" = "Підписи до цікавих місць";
+"osm_notes" = "Примітки OSM";
+"plugin_popup_osm_editing_ask" = "Увімкніть втулок редагування OpenStreetMap, щоб додавати та керувати редагуванням мапи та примітками";
+"plugin_popup_osm_editing_title" = "Увімкнути редагування OpenSteetMap";

@@ -25,7 +25,9 @@
 #import "OAPluginSettingsItem.h"
 #import "OAProfileSettingsItem.h"
 #import "OAGlobalSettingsItem.h"
+#import "OAFavoritesSettingsItem.h"
 #import "OAExportSettingsType.h"
+#import "OAFavoritesHelper.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -65,9 +67,6 @@
 - (NSArray<OASettingsItem *> *) processItems:(NSString *)file items:(NSArray<OASettingsItem *> *)items
 {
     NSFileManager *fileManager = NSFileManager.defaultManager;
-    // Clear temp profile data
-    [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-    [fileManager createDirectoryAtPath:_tmpFilesDir withIntermediateDirectories:YES attributes:nil error:nil];
     
     BOOL collecting = items == nil;
     if (collecting)
@@ -299,6 +298,9 @@
         case EOASettingsItemTypeAvoidRoads:
             item = [[OAAvoidRoadsSettingsItem alloc] initWithJson:json error:&error];
             break;
+        case EOASettingsItemTypeFavorites:
+            item = [[OAFavoritesSettingsItem alloc] initWithJson:json error:&error];
+            break;
         case EOASettingsItemTypeOsmNotes:
             item = [[OAOsmNotesSettingsItem alloc] initWithJson:json error:&error];
             break;
@@ -520,6 +522,7 @@
     NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
+    NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
     NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
@@ -580,6 +583,15 @@
                     [avoidRoads addObjectsFromArray:avoidRoadsItem.items];
                 break;
             }
+            case EOASettingsItemTypeFavorites:
+            {
+                OAFavoritesSettingsItem *favoritesItem = (OAFavoritesSettingsItem *) item;
+                if (importComplete)
+                    [favorites addObjectsFromArray:favoritesItem.appliedItems];
+                else
+                    [favorites addObjectsFromArray:favoritesItem.items];
+                break;
+            }
             case EOASettingsItemTypeOsmNotes:
             {
                 OAOsmNotesSettingsItem *osmNotesItem = (OAOsmNotesSettingsItem *) item;
@@ -620,6 +632,8 @@
         [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
     if (avoidRoads.count > 0)
         [settingsToOperate setObject:avoidRoads forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeAvoidRoads]];
+    if (favorites.count > 0)
+        [settingsToOperate setObject:favorites forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeFavorites]];
     if (notesPointList.count > 0)
         [settingsToOperate setObject:notesPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmNotes]];
     if (osmEditsPointList.count > 0)

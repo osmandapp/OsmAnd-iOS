@@ -13,6 +13,7 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAQuickAction.h"
 #import "OAIAPHelper.h"
+#import "OAMapSourceAction.h"
 #import "OAMapStyleAction.h"
 #import "OAQuickActionType.h"
 #import "OANewAction.h"
@@ -118,13 +119,12 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OAShowHideFavoritesAction.TYPE];
     [quickActionTypes addObject:OAShowHideGPXTracksAction.TYPE];
     [quickActionTypes addObject:OAShowHidePoiAction.TYPE];
+    [quickActionTypes addObject:OAMapSourceAction.TYPE];
     [quickActionTypes addObject:OAMapOverlayAction.TYPE];
     [quickActionTypes addObject:OAMapUnderlayAction.TYPE];
     [quickActionTypes addObject:OAMapStyleAction.TYPE];
     [quickActionTypes addObject:OADayNightModeAction.TYPE];
     [quickActionTypes addObject:OAShowHideTransportLinesAction.TYPE];
-    [quickActionTypes addObject:OAMapOverlayAction.TYPE];
-    [quickActionTypes addObject:OAMapUnderlayAction.TYPE];
     // navigation
     [quickActionTypes addObject:OANavVoiceAction.TYPE];
     [quickActionTypes addObject:OANavDirectionsFromAction.TYPE];

@@ -13,6 +13,13 @@
 
 #include <OsmAndCore/Utilities.h>
 
+@interface OAMapLayer()
+
+@property (nonatomic) BOOL nightMode;
+@property (nonatomic) CGFloat displayDensityFactor;
+
+@end
+
 @implementation OAMapLayer
 {
     MBProgressHUD *_progressHUD;
@@ -26,12 +33,15 @@
         _app = [OsmAndApp instance];
         _mapViewController = mapViewController;
         _mapView = mapViewController.mapView;
+        _displayDensityFactor = mapViewController.displayDensityFactor;
     }
     return self;
 }
 
 - (void) initLayer
 {
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    _nightMode = settings.nightMode;
 }
 
 - (void) deinitLayer

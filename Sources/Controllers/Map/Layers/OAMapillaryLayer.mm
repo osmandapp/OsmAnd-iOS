@@ -83,6 +83,8 @@
 
 - (BOOL) updateLayer
 {
+    [super updateLayer];
+
     if (self.app.data.mapillary)
     {
         auto mapillaryMapProvider = std::make_shared<OAMapillaryTilesProvider>(self.mapView.displayDensityFactor, [NSProcessInfo processInfo].physicalMemory);

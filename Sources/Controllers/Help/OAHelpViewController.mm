@@ -10,7 +10,7 @@
 #import "OAMenuSimpleCellNoIcon.h"
 #import "Localization.h"
 #import "OAWebViewController.h"
-#import "OAAppVersionDependedConstants.h"
+#import "OAAppVersionDependentConstants.h"
 
 #define kLinkInternalType @"internal_link"
 #define kLinkExternalType @"ext_link"

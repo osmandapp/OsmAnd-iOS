@@ -60,6 +60,8 @@
 
 - (BOOL) updateLayer
 {
+    [super updateLayer];
+
     EOATerrainType type = self.app.data.terrainType;
     if (type != EOATerrainTypeDisabled && [[OAIAPHelper sharedInstance].srtm isActive])
     {

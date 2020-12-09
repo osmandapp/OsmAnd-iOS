@@ -93,6 +93,8 @@
 
 - (BOOL) updateLayer
 {
+    [super updateLayer];
+
     [self updateVisiblePoiFilter];
     return YES;
 }

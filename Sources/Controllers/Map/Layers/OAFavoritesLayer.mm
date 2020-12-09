@@ -24,6 +24,7 @@
 @implementation OAFavoritesLayer
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _favoritesMarkersCollection;
+    BOOL _showCaptionsCache;
 }
 
 - (NSString *) layerId
@@ -34,6 +35,8 @@
 - (void) initLayer
 {
     [super initLayer];
+ 
+    _showCaptionsCache = self.showCaptions;
     
     self.app.favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
                                                                 [self]
@@ -56,15 +59,24 @@
                                     Visibility:self.isVisible];
 }
 
-- (BOOL)updateLayer
+- (BOOL) updateLayer
 {
+    [super updateLayer];
+    
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                         Visibility:self.isVisible];
+
+    if (self.showCaptions != _showCaptionsCache)
+    {
+        _showCaptionsCache = self.showCaptions;
+        [self reloadFavorites];
+    }
+    
     return YES;
 }
 
 
-- (BOOL)isVisible
+- (BOOL) isVisible
 {
     return [OAAppSettings.sharedManager.mapSettingShowFavorites get];
 }
@@ -91,15 +103,22 @@
         UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
         OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
         
-        OsmAnd::MapMarkerBuilder()
-        .setIsAccuracyCircleSupported(false)
+        OsmAnd::MapMarkerBuilder builder;
+        builder.setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.baseOrder)
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
         .setPosition(favLoc->getPosition31())
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
-        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
-        .buildAndAddToCollection(_favoritesMarkersCollection);
+        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
+        
+        if (self.showCaptions && !favLoc->getTitle().isEmpty())
+        {
+            builder.setCaption(favLoc->getTitle());
+            builder.setCaptionStyle(self.captionStyle);
+            builder.setCaptionTopSpace(self.captionTopSpace);
+        }
+        builder.buildAndAddToCollection(_favoritesMarkersCollection);
     }
 }
 
@@ -119,14 +138,15 @@
 
 - (void) onFavoritesCollectionChanged
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self hide];
-        [self refreshFavoritesMarkersCollection];
-        [self show];
-    });
+    [self reloadFavorites];
 }
 
 - (void) onFavoriteLocationChanged:(const std::shared_ptr<const OsmAnd::IFavoriteLocation>)favoriteLocation
+{
+    [self reloadFavorites];
+}
+
+- (void) reloadFavorites
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hide];

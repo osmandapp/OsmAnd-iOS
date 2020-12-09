@@ -68,6 +68,8 @@
 
 - (BOOL) updateLayer
 {
+    [super updateLayer];
+
     [self updateOpacitySliderVisibility];
     
     if (self.app.data.overlayMapSource)

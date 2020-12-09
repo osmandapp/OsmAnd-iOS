@@ -394,8 +394,6 @@
 		324B735D25653CB100B6EE52 /* OATextCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 324B735925653CB000B6EE52 /* OATextCardView.xib */; };
 		324B735E25653CB100B6EE52 /* OATextCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 324B735925653CB000B6EE52 /* OATextCardView.xib */; };
 		324D553A25703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324D553925703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m */; };
-		32AE6B9E257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */; };
-		32AE6BA3257A1433005D0139 /* OAQuickActionsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */; };
 		324D9C092576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 324D9C082576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm */; };
 		324D9C392576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 324D9C382576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm */; };
 		326B4FA7257FD02F00ABAB1D /* ic_action_kayak.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FA4257FD02E00ABAB1D /* ic_action_kayak.png */; };
@@ -21094,7 +21092,6 @@
 				DAEB14CD2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
 				DABD5E7722E06BD800E88D2E /* OAKml2Gpx.m in Sources */,
 				847A1CB21DF94E9B003C1246 /* OATargetMenuViewController.mm in Sources */,
-				32AE6B9F257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m in Sources */,
 				84E370522059597200959B94 /* OATableView.m in Sources */,
 				78D57B85238D2F690068CF48 /* OAMapSettingsContourLinesScreen.mm in Sources */,
 				DA49C1BB25499A0800CD48DC /* OARemovePointCommand.mm in Sources */,
@@ -21176,7 +21173,6 @@
 				847A1CC51DF94E9B003C1246 /* OAGPXRouteCardHeaderView.mm in Sources */,
 				1581A38E2566C3C5004CB4B3 /* OASettingsItemReader.m in Sources */,
 				84594F651FB1A30200813D6A /* OALanesControl.mm in Sources */,
-				32AE6BA4257A1433005D0139 /* OAQuickActionsSettingsItem.mm in Sources */,
 				DADBC61324237AE7008B7423 /* OATrsansportRouteDetailsViewController.mm in Sources */,
 				847A1CC61DF94E9B003C1246 /* OAFirstUsageWizardController.mm in Sources */,
 				DAE37DBB220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */,
@@ -21237,7 +21233,6 @@
 				DAD10FDC2226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm in Sources */,
 				8AFD2DA0210E1D2E007AA07D /* OATransportRouteToolbarViewController.mm in Sources */,
 				DAD228A12410E6F600D4D9DC /* OACollapsableWaypointsView.mm in Sources */,
-				324D9C0A2576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm in Sources */,
 				DA6D51E821F33B2800EC84E2 /* OAOsmPoint.m in Sources */,
 				847A1CD81DF94E9B003C1246 /* OAPOIHistoryType.mm in Sources */,
 				8AF3C81F20F656F3006C86AA /* OATransportStopType.m in Sources */,
@@ -21280,7 +21275,6 @@
 				848B28B01EEB0D4F00F1A19D /* OADestinationsLayer.mm in Sources */,
 				844E08011E465A3400EFC525 /* OANameStringMatcher.m in Sources */,
 				844E08181E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */,
-				324D553B25703A1D0043FB64 /* OAWhatsNewBottomSheetViewController.m in Sources */,
 				848A65991F8A852F00F1DC93 /* OACurrentPositionHelper.mm in Sources */,
 				8457F8211ED88B1700500FF2 /* OAQuickSearchHeaderListItem.mm in Sources */,
 				DAA74BD4219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */,
@@ -21291,7 +21285,6 @@
 				8490B1BB20600D63007694A5 /* OAWaypointHeaderCell.m in Sources */,
 				DA2558A224ADE40F0081D155 /* OANavigationTypeViewController.mm in Sources */,
 				847A1CEC1DF94E9B003C1246 /* OAUtilities.m in Sources */,
-				32FE27F325763F5000CBDDFA /* OAAppVersionDependedConstants.m in Sources */,
 				84DE41482000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm in Sources */,
 				847A1CEE1DF94E9B003C1246 /* OAPointTableViewCell.m in Sources */,
 				DA08F15C216776C8009584C1 /* OARulerWidget.mm in Sources */,
@@ -21538,7 +21531,6 @@
 				324B735C25653CB100B6EE52 /* OATextCardView.m in Sources */,
 				847A1D3C1DF94E9B003C1246 /* OARootViewController.m in Sources */,
 				8490B1CE20652F66007694A5 /* OAWaypointsPOIScreen.mm in Sources */,
-				324D9C3A2576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm in Sources */,
 				847A1D3D1DF94E9B003C1246 /* OASavingTrackHelper.mm in Sources */,
 				847A1D3E1DF94E9B003C1246 /* OAAppData.m in Sources */,
 				DA4B981421F74EAD00CED009 /* OrderedDictionary.m in Sources */,
@@ -22784,7 +22776,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.90.1.2;
+				CURRENT_PROJECT_VERSION = 3.90.1.3;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -22839,7 +22831,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.90.1.2;
+				CURRENT_PROJECT_VERSION = 3.90.1.3;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -106,6 +106,8 @@
 
 - (BOOL) updateLayer
 {
+    [super updateLayer];
+
     [self refreshRoute];
     return YES;
 }

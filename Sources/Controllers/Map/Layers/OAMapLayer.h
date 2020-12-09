@@ -19,6 +19,8 @@
 @property (nonatomic, readonly) OsmAndAppInstance app;
 @property (nonatomic, readonly) OAMapViewController *mapViewController;
 @property (nonatomic, readonly) OAMapRendererView *mapView;
+@property (nonatomic, readonly) BOOL nightMode;
+@property (nonatomic, readonly) CGFloat displayDensityFactor;
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController;
 

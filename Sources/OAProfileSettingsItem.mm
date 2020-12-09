@@ -118,22 +118,25 @@
 {
     const auto router = [OARouteProvider getRouter:self.appMode];
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    const auto& params = router->getParameters();
-    [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
-        const auto& param = params.find(std::string([paramName UTF8String]));
-        if (param != params.end())
-        {
-            if (param->second.type == RoutingParameterType::BOOLEAN)
+    if (router)
+    {
+        const auto& params = router->getParameters();
+        [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
+            const auto& param = params.find(std::string([paramName UTF8String]));
+            if (param != params.end())
             {
-                [[settings getCustomRoutingBooleanProperty:paramName defaultValue:param->second.defaultBoolean] set:[obj isEqualToString:@"true"] mode:self.appMode];
+                if (param->second.type == RoutingParameterType::BOOLEAN)
+                {
+                    [[settings getCustomRoutingBooleanProperty:paramName defaultValue:param->second.defaultBoolean] set:[obj isEqualToString:@"true"] mode:self.appMode];
+                }
+                else
+                {
+                    [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"] set:obj mode:self.appMode];
+                }
             }
-            else
-            {
-                [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"] set:obj mode:self.appMode];
-            }
-        }
-    }];
+        }];
+    }
 }
 
 + (NSString *) getRendererByName:(NSString *)rendererName

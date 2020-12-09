@@ -210,8 +210,13 @@
 //    NSMutableDictionary *pluginItems = [NSMutableDictionary new];
     
     {
-        OASettingsItem *item = [self createItem:itemJSON];
-        [_items addObject:item];
+        //TODO: Remove after OAPoiUiFilterSettingsItem complete implementation
+        if (![itemJSON[@"type"] isEqualToString:@"POI_UI_FILTERS"])
+        {
+            OASettingsItem *item = [self createItem:itemJSON];
+            if (item)
+                [_items addObject:item];
+        }
         
         // TODO: implement custom plugins
 //        NSString *pluginId = item.pluginId;

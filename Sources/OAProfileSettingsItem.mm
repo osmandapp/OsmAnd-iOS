@@ -117,26 +117,25 @@
 - (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs
 {
     const auto router = [OARouteProvider getRouter:self.appMode];
+    if (router == nullptr)
+        return;
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    if (router)
-    {
-        const auto& params = router->getParameters();
-        [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
-            const auto& param = params.find(std::string([paramName UTF8String]));
-            if (param != params.end())
+    const auto& params = router->getParameters();
+    [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        NSString *paramName = [key substringFromIndex:[key lastIndexOf:@"_"] + 1];
+        const auto& param = params.find(std::string([paramName UTF8String]));
+        if (param != params.end())
+        {
+            if (param->second.type == RoutingParameterType::BOOLEAN)
             {
-                if (param->second.type == RoutingParameterType::BOOLEAN)
-                {
-                    [[settings getCustomRoutingBooleanProperty:paramName defaultValue:param->second.defaultBoolean] set:[obj isEqualToString:@"true"] mode:self.appMode];
-                }
-                else
-                {
-                    [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"] set:obj mode:self.appMode];
-                }
+                [[settings getCustomRoutingBooleanProperty:paramName defaultValue:param->second.defaultBoolean] set:[obj isEqualToString:@"true"] mode:self.appMode];
             }
-        }];
-    }
+            else
+            {
+                [[settings getCustomRoutingProperty:paramName defaultValue:param->second.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"] set:obj mode:self.appMode];
+            }
+        }
+    }];
 }
 
 + (NSString *) getRendererByName:(NSString *)rendererName

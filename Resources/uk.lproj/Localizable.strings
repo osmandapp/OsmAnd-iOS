@@ -1933,3 +1933,4 @@
 "osm_notes" = "Примітки OSM";
 "plugin_popup_osm_editing_ask" = "Увімкніть втулок редагування OpenStreetMap, щоб додавати та керувати редагуванням мапи та примітками";
 "plugin_popup_osm_editing_title" = "Увімкнути редагування OpenSteetMap";
+"personal_category_name" = "Особистий";

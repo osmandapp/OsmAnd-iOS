@@ -1931,3 +1931,4 @@
 "plugin_popup_osm_editing_ask" = "Harita düzenlemeleri ve notları eklemek ve yönetmek için lütfen OpenStreetMap Düzenleme eklentisini etkinleştirin";
 "plugin_popup_osm_editing_title" = "OpenStreetMap Düzenlemeyi aç";
 "layer_amenity_label" = "POI üst katmanı etiketleri";
+"personal_category_name" = "Kişisel";

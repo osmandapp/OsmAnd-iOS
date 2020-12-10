@@ -1531,7 +1531,7 @@
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
-"plugin_popup_osm_editing_title" = "Turn on OpenSteetMap Editing";
+"plugin_popup_osm_editing_title" = "Turn on OpenStreetMap Editing";
 "plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
 
 "plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";

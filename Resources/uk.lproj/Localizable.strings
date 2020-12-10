@@ -1932,5 +1932,5 @@
 "layer_amenity_label" = "Підписи до цікавих місць";
 "osm_notes" = "Примітки OSM";
 "plugin_popup_osm_editing_ask" = "Увімкніть втулок редагування OpenStreetMap, щоб додавати та керувати редагуванням мапи та примітками";
-"plugin_popup_osm_editing_title" = "Увімкнути редагування OpenSteetMap";
+"plugin_popup_osm_editing_title" = "Увімкнути редагування OpenStreetMap";
 "personal_category_name" = "Особистий";

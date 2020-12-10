@@ -1,14 +1,14 @@
 //
-//  OAAppVersionDependedConstants.m
+//  OAAppVersionDependentConstants.m
 //  OsmAnd
 //
 //  Created by nnngrach on 01.12.2020.
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAAppVersionDependedConstants.h"
+#import "OAAppVersionDependentConstants.h"
 
-@implementation OAAppVersionDependedConstants
+@implementation OAAppVersionDependentConstants
 
 + (NSString *) getShortAppVersion
 {

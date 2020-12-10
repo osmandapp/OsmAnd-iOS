@@ -1609,3 +1609,6 @@
 "shared_string_preparing" = "Pripravujem";
 "shared_string_deselect_all" = "Zrušiť výber všetkých";
 "shared_string_continue" = "Pokračovať";
+"layer_amenity_label" = "Prekrývacie popisy bodov";
+"osm_notes" = "OSM poznámky";
+"personal_category_name" = "Osobné";

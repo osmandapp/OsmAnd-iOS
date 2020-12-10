@@ -1935,3 +1935,7 @@
 "latest_version" = "Tienes la última versión: %@";
 "vk" = "VK";
 "help_what_is_new" = "Novedades";
+"osm_notes" = "Notas de OSM";
+"plugin_popup_osm_editing_ask" = "Activa el complemento de edición de OpenStreetMap para añadir y gestionar ediciones y notas de mapas";
+"plugin_popup_osm_editing_title" = "Activar la edición de OpenSteetMap";
+"layer_amenity_label" = "Nombres de PDI superpuestos";

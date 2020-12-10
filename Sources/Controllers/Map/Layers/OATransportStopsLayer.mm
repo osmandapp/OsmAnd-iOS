@@ -71,6 +71,8 @@
 
 - (BOOL) updateLayer
 {
+    [super updateLayer];
+    
     OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
     OAMapStyleParameter *param = [styleSettings getParameter:@"transportStops"];
     _showStopsOnMap = [param.value boolValue];

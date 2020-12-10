@@ -313,6 +313,8 @@
 
 - (BOOL) updateLayer
 {
+    [super updateLayer];
+
     const auto points = [self calculatePointsToDraw];
     [self resetLayer];
     [self drawRouteSegment:points];

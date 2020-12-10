@@ -1938,3 +1938,4 @@
 "plugin_popup_osm_editing_ask" = "Ativar o plugin de edição do OpenStreetMap para adicionar e gerenciar edições e notas de mapas";
 "plugin_popup_osm_editing_title" = "Ativar a edição do OpenStreetMap";
 "layer_amenity_label" = "Rótulos de POIs";
+"personal_category_name" = "Pessoal";

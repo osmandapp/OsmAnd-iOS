@@ -1938,3 +1938,4 @@
 "plugin_popup_osm_editing_ask" = "Bitte aktivieren Sie die Erweiterung OpenStreetMap-Bearbeitung, um Kartenbearbeitungen und OSM-Hinweise hinzuzufügen und zu verwalten";
 "plugin_popup_osm_editing_title" = "OpenSteetMap Bearbeitung einschalten";
 "layer_amenity_label" = "POI-Overlay-Bezeichnungen";
+"personal_category_name" = "Persönlich";

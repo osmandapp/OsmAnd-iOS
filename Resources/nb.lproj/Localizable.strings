@@ -1367,7 +1367,7 @@
 "routeInfo_piste_type_name" = "Løypetype";
 "rendering_attr_contourWidth_name" = "Kotebredde";
 "rendering_attr_surface_sand_name" = "Sand";
-"routing_attr_avoid_ice_roads_fords_name" = "Ingen isete veier eller vadesteder";
+"routing_attr_avoid_ice_roads_fords_name" = "Ingen veier på is eller vadesteder";
 "routing_attr_avoid_unpaved_description" = "Unngår veier uten fast dekke";
 "routing_attr_avoid_train_name" = "Ingen tog";
 "rendering_attr_showMtbRoutes_name" = "Vis terrengsykkelruter";
@@ -1431,7 +1431,7 @@
 "rendering_value_light_brown_name" = "Lysebrun";
 "rendering_attr_currentTrackWidth_name" = "GPX-bredde";
 "rendering_value_bicycle_name" = "Sykkel";
-"routing_attr_avoid_ice_roads_fords_description" = "Unngår isete veier og vadesteder.";
+"routing_attr_avoid_ice_roads_fords_description" = "Unngår veier på is og vadesteder.";
 "rendering_attr_moreDetailed_name" = "Flere detaljer";
 "routing_attr_avoid_ferries_name" = "Ingen ferger";
 "rendering_attr_trolleybusRoutes_name" = "Trolleybussruter";
@@ -1671,3 +1671,4 @@
 "shared_string_copy" = "Kopier";
 "profile_alert_delete_title" = "Slett profil";
 "new_profile" = "Ny profil";
+"shared_string_next" = "Neste";

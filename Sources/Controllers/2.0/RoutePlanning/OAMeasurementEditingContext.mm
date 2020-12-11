@@ -979,6 +979,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     _calculatedPairs++;
     [_params.calculationProgressCallback updateProgress:0];
     auto originalRoute = route.getOriginalRoute;
+    originalRoute.clear();
     if (originalRoute.size() == 0)
         originalRoute = { RoutePlannerFrontEnd::generateStraightLineSegment(DEFAULT_APP_MODE.getDefaultSpeed, [self waypointsToLocations:pts]) };
     

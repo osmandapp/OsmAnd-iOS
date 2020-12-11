@@ -135,25 +135,27 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         {
             OAGpxTrkPt *first = points[i];
             OAGpxTrkPt *second = points[i + 1];
-            //            RoadSegmentData data = this.roadSegmentData.get(pair);
-            //            if (data == null) {
-            if (_appMode != OAApplicationMode.DEFAULT || !first.lastPoint || !second.firstPoint)
+            OARoadSegmentData *data = _roadSegmentData[@[first, second]];
+            
+            if (data == nil)
             {
-                double localDist = getDistance(first.getLatitude, first.getLongitude,
-                                               second.getLatitude, second.getLongitude);
-                if(!isnan(first.elevation) && !isnan(second.elevation) &&
-                   first.elevation != 0 && second.elevation != 0)
+                if (_appMode != OAApplicationMode.DEFAULT || !first.lastPoint || !second.firstPoint)
                 {
-                    double h = fabs(first.elevation - second.elevation);
-                    localDist = sqrt(localDist * localDist + h * h);
+                    double localDist = getDistance(first.getLatitude, first.getLongitude,
+                                                   second.getLatitude, second.getLongitude);
+                    if(!isnan(first.elevation) && !isnan(second.elevation) &&
+                       first.elevation != 0 && second.elevation != 0)
+                    {
+                        double h = fabs(first.elevation - second.elevation);
+                        localDist = sqrt(localDist * localDist + h * h);
+                    }
+                    distance += localDist;
                 }
-                distance += localDist;
             }
-            //            }
-//            else
-//            {
-//                distance += data.getDistance();
-//            }
+            else
+            {
+                distance += data.distance;
+            }
         }
     }
     return distance;

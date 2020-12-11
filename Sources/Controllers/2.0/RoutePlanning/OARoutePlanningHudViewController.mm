@@ -952,6 +952,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void)refresh
 {
     [_layer updateLayer];
+    [self updateDistancePointsText];
 }
 
 - (void)showProgressBar

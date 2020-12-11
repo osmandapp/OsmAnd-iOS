@@ -1930,6 +1930,6 @@
 "vk" = "VK";
 "osm_notes" = "ملاحظات OSM";
 "plugin_popup_osm_editing_ask" = "يرجى تمكين برنامج OpenStreetMap تحرير البرنامج المساعد لإضافة وإدارة التعديلات خريطة والملاحظات";
-"plugin_popup_osm_editing_title" = "تشغيل تحرير OpenSteetMap";
+"plugin_popup_osm_editing_title" = "تشغيل تحرير OpenStreetMap";
 "layer_amenity_label" = "عرض أسماء المفضلة";
 "personal_category_name" = "شخصي";

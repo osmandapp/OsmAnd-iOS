@@ -123,6 +123,11 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     }
 }
 
+- (CGFloat) getHeaderViewHeight
+{
+    return _headerView.frame.size.height;
+}
+
 - (void) adjustFrame
 {
     CGRect f = _bottomSheetView.frame;

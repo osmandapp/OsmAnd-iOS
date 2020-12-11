@@ -9,6 +9,7 @@
 #import "OARootViewController.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import <SafariServices/SafariServices.h>
 
 #import <JASidePanelController.h>
 #import <UIAlertView+Blocks.h>
@@ -43,7 +44,7 @@ typedef enum : NSUInteger {
     EOARestorePurchasesProgressType
 } EOAProgressType;
 
-@interface OARootViewController () <UIPopoverControllerDelegate>
+@interface OARootViewController () <UIPopoverControllerDelegate, SFSafariViewControllerDelegate>
 @end
 
 @implementation OARootViewController
@@ -851,6 +852,20 @@ typedef enum : NSUInteger {
         if (canOpenURL)
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
+}
+
+#pragma mark SFSafariViewControllerDelegate
+
+- (void)openSafariWithURL:(NSString *)url
+{
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
+    safariViewController.delegate = self;
+    [self.navigationController pushViewController:safariViewController animated:YES];
+}
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

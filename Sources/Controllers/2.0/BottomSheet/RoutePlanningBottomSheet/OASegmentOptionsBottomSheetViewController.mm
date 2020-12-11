@@ -12,6 +12,11 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapLayers.h"
+#import "OAMeasurementToolLayer.h"
+#import "OAGPXDocumentPrimitives.h"
 
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
 #define kSegmentedControlCell @"OASegmentedControllCell"
@@ -28,6 +33,20 @@
     
     EOARouteBetweenPointsDialogMode _dialogMode;
     EOARouteBetweenPointsDialogType _dialogType;
+    
+    OAApplicationMode *_appMode;
+}
+
+- (instancetype) initWithType:(EOARouteBetweenPointsDialogType)dialogType dialogMode:(EOARouteBetweenPointsDialogMode)dialogMode appMode:(OAApplicationMode *)appMode
+{
+    self = [super init];
+    if (self)
+    {
+        _dialogMode = dialogMode;
+        _dialogType = dialogType;
+        _appMode = appMode;
+    }
+    return self;
 }
 
 - (void)viewDidLoad
@@ -44,9 +63,6 @@
     
     [self.rightButton removeFromSuperview];
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
-    
-    _dialogMode = EOARouteBetweenPointsDialogModeAll;
-    _dialogType = EOADialogTypeWholeRouteCalculation;
 }
 
 - (void) applyLocalization
@@ -62,8 +78,8 @@
     [data addObject:@[
         @{
             @"type" : kSegmentedControlCell,
-            @"first_item_title" : OALocalizedString(@"next_seg"),
-            @"second_item_title" : OALocalizedString(@"whole_track")
+            @"first_item_title" : [self getButtonText:EOARouteBetweenPointsDialogModeSingle],
+            @"second_item_title" : [self getButtonText:EOARouteBetweenPointsDialogModeAll]
         }
     ]];
     
@@ -98,6 +114,122 @@
     [data addObject:sectionData];
     
     _data = data;
+}
+
+- (NSString *) getButtonText:(EOARouteBetweenPointsDialogMode)dialogMode
+{
+    switch (_dialogType) {
+        case EOADialogTypeWholeRouteCalculation:
+        {
+            switch (dialogMode)
+            {
+                case EOARouteBetweenPointsDialogModeSingle:
+                    return OALocalizedString(@"next_seg");
+                case EOARouteBetweenPointsDialogModeAll:
+                    return OALocalizedString(@"whole_track");
+            }
+            break;
+        }
+        case EOADialogTypeNextRouteCalculation:
+        {
+            NSString *nextDescr = [self getDescription:NO dialogMode:dialogMode];
+            switch (dialogMode)
+            {
+                case EOARouteBetweenPointsDialogModeSingle:
+                    return [NSString stringWithFormat:OALocalizedString(@"next_seg_dist"), nextDescr];
+                case EOARouteBetweenPointsDialogModeAll:
+                    return [NSString stringWithFormat:OALocalizedString(@"next_segs_dist"), nextDescr];
+            }
+            break;
+        }
+        case EOADialogTypePrevRouteCalculation:
+        {
+            NSString *prevDescr = [self getDescription:YES dialogMode:dialogMode];
+            switch (dialogMode) {
+                case EOARouteBetweenPointsDialogModeSingle:
+                    return [NSString stringWithFormat:OALocalizedString(@"prev_seg_dist"), prevDescr];
+                case EOARouteBetweenPointsDialogModeAll:
+                    return [NSString stringWithFormat:OALocalizedString(@"prev_segs_dist"), prevDescr];
+            }
+            break;
+        }
+    }
+    return @"";
+}
+
+- (NSString *) getDescription:(BOOL)before dialogMode:(EOARouteBetweenPointsDialogMode)dialogMode
+{
+    OAMeasurementEditingContext *editingCtx = OARootViewController.instance.mapPanel.mapViewController.mapLayers.routePlanningLayer.editingCtx;
+    NSInteger pos = editingCtx.selectedPointPosition;
+    NSArray<OAGpxTrkPt *> *points = editingCtx.getPoints;
+    
+    double dist = 0;
+    if (dialogMode == EOARouteBetweenPointsDialogModeSingle)
+    {
+        OAGpxTrkPt *selectedPoint = points[pos];
+        OAGpxTrkPt *second = points[before ? pos - 1 : pos + 1];
+        dist += getDistance(selectedPoint.getLatitude, selectedPoint.getLongitude, second.getLatitude, second.getLongitude);
+    }
+    else
+    {
+        NSInteger startIdx, endIdx;
+        if (before)
+        {
+            startIdx = 1;
+            endIdx = pos;
+        }
+        else
+        {
+            startIdx = pos + 1;
+            endIdx = points.count - 1;
+        }
+        for (NSInteger i = startIdx; i <= endIdx; i++)
+        {
+            OAGpxTrkPt *first = points[i - 1];
+            OAGpxTrkPt *second = points[i];
+            dist += getDistance(first.getLatitude, first.getLongitude, second.getLatitude, second.getLongitude);
+        }
+    }
+    return [OsmAndApp.instance getFormattedDistance:dist];
+}
+
+- (NSString *) getFooterText:(EOARouteBetweenPointsDialogMode)dialogMode
+{
+    switch (_dialogType)
+    {
+        case EOADialogTypeWholeRouteCalculation:
+        {
+            switch (dialogMode) {
+                case EOARouteBetweenPointsDialogModeSingle:
+                    return OALocalizedString(@"next_seg_descr");
+                case EOARouteBetweenPointsDialogModeAll:
+                    return OALocalizedString(@"whole_track_descr");
+            }
+            break;
+        }
+        case EOADialogTypeNextRouteCalculation:
+        {
+            switch (dialogMode)
+            {
+                case EOARouteBetweenPointsDialogModeSingle:
+                    return OALocalizedString(@"selected_seg_recalc_descr");
+                case EOARouteBetweenPointsDialogModeAll:
+                    return OALocalizedString(@"next_segs_recalc_descr");
+            }
+            break;
+        }
+        case EOADialogTypePrevRouteCalculation:
+        {
+            switch (dialogMode) {
+                case EOARouteBetweenPointsDialogModeSingle:
+                    return OALocalizedString(@"selected_seg_recalc_descr");
+                case EOARouteBetweenPointsDialogModeAll:
+                    return OALocalizedString(@"prev_segs_recalc_descr");
+            }
+            break;
+        }
+    }
+    return @"";
 }
 
 - (void) segmentChanged:(id)sender
@@ -198,7 +330,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     if (section == 0)
-        return _dialogMode == EOARouteBetweenPointsDialogModeSingle ? OALocalizedString(@"next_seg_descr") : OALocalizedString(@"whole_track_descr");
+        return [self getFooterText:_dialogMode];
     return nil;
 }
 

@@ -23,6 +23,7 @@
                 <outlet property="leftImageVIew" destination="Aod-ON-ikl" id="hEe-Rf-FRm"/>
                 <outlet property="modeButton" destination="oTM-Ht-rdV" id="FkB-ug-cZZ"/>
                 <outlet property="optionsButton" destination="OjE-FK-TpN" id="2Sa-49-Amu"/>
+                <outlet property="progressView" destination="zFE-tM-QGM" id="rQT-Gg-kRR"/>
                 <outlet property="redoButton" destination="FIz-se-4BK" id="Tju-by-mBp"/>
                 <outlet property="scrollableView" destination="7aH-3y-W6U" id="W3f-q3-2Rm"/>
                 <outlet property="sliderView" destination="YKP-RZ-ZK0" id="Iz3-UJ-XmB"/>
@@ -133,7 +134,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yao-ZD-271">
-                                    <rect key="frame" x="0.0" y="9" width="417" height="50"/>
+                                    <rect key="frame" x="0.0" y="12" width="417" height="50"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_routes.png" translatesAutoresizingMaskIntoConstraints="NO" id="Aod-ON-ikl">
                                             <rect key="frame" x="20" y="10" width="30" height="30"/>
@@ -185,7 +186,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YKP-RZ-ZK0">
-                                    <rect key="frame" x="197" y="3" width="32" height="3"/>
+                                    <rect key="frame" x="197" y="6" width="32" height="3"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
                                 </view>
@@ -194,11 +195,17 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </tableView>
+                                <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="zFE-tM-QGM">
+                                    <rect key="frame" x="0.0" y="0.0" width="417" height="4"/>
+                                </progressView>
                             </subviews>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
+                                <constraint firstAttribute="trailing" secondItem="zFE-tM-QGM" secondAttribute="trailing" id="3AA-5m-PrD"/>
                                 <constraint firstItem="yao-ZD-271" firstAttribute="leading" secondItem="jw8-H4-X89" secondAttribute="leading" id="I8v-S9-lJT"/>
-                                <constraint firstItem="yao-ZD-271" firstAttribute="top" secondItem="jw8-H4-X89" secondAttribute="top" constant="9" id="S3b-0R-1H9"/>
+                                <constraint firstItem="zFE-tM-QGM" firstAttribute="top" secondItem="jw8-H4-X89" secondAttribute="top" id="JHq-yW-1ah"/>
+                                <constraint firstItem="yao-ZD-271" firstAttribute="top" secondItem="jw8-H4-X89" secondAttribute="top" constant="12" id="S3b-0R-1H9"/>
+                                <constraint firstItem="zFE-tM-QGM" firstAttribute="leading" secondItem="jw8-H4-X89" secondAttribute="leading" id="dN0-kq-qXC"/>
                                 <constraint firstAttribute="trailing" secondItem="yao-ZD-271" secondAttribute="trailing" id="tOw-YC-eaM"/>
                             </constraints>
                         </view>

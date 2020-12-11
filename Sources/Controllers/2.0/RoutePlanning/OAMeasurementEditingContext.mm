@@ -45,11 +45,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     OARouteCalculationParams *_params;
     NSArray<OAGpxTrkPt *> *_currentPair;
     
-    
-    //    private SnapToRoadProgressListener progressListener;
-    
     //    private RouteCalculationProgress calculationProgress;
-    //    private Map<Pair<WptPt, WptPt>, RoadSegmentData> roadSegmentData = new ConcurrentHashMap<>();
 }
 
 + (void) initialize
@@ -187,6 +183,17 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return _afterSegments;
 }
 
+- (NSArray<OAGpxTrkSeg *> *)getBeforeSegments
+{
+    return _beforeSegments;
+}
+
+- (NSArray<OAGpxTrkSeg *> *)getAfterSegments
+{
+    return _afterSegments;
+}
+
+
 - (NSArray<OAGpxTrkPt *> *) getAllPoints
 {
     return [_before.points arrayByAddingObjectsFromArray:_after.points];
@@ -240,80 +247,108 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     _before.points = [points subarrayWithRange:NSMakeRange(0, position)];
     _after.points = [points subarrayWithRange:NSMakeRange(position, points.count - position)];
     
-//    [self updateCacheForSnap:YES];
+    [self updateSegmentsForSnap:YES];
 }
 
-//- (void) preAddPoint:(NSInteger)position mode:(EOAAddPointMode)mode point:(OAGpxTrkPt *)point
-//{
-//    switch (mode) {
-//        case EOAAddPointModeUndefined:
-//        {
-//            //                if (appMode != MeasurementEditingContext.DEFAULT_APP_MODE) {
-//            //                    point.setProfileType(appMode.getStringKey());
-//            //                }
-//            break;
-//        }
-//        case EOAAddPointModeAfter:
-//        {
-//            NSArray<OAGpxTrkPt *> *points = [self getBeforePoints];
-//            if (position > 0 && position <= points.count)
-//            {
-//                OAGpxTrkPt *prevPt = points[position - 1];
-//                //                    if (prevPt.isGap()) {
-//                //                        point.setGap();
-//                if (position > 1)
-//                {
-//                    OAGpxTrkPt *pt = points[position - 2];
-//                    if (pt.hasProfile()) {
-//                        prevPt.setProfileType(pt.getProfileType());
-//                    } else {
-//                        prevPt.removeProfileType();
-//                    }
-//                }
-//                //                    } else if (prevPt.hasProfile()) {
-//                //                        point.setProfileType(prevPt.getProfileType());
-//                //                    }
-//            } else if (appMode != MeasurementEditingContext.DEFAULT_APP_MODE) {
-//                point.setProfileType(appMode.getStringKey());
-//            }
-//            break;
-//        }
-//        case EOAAddPointModeBefore: {
-//            List<WptPt> points = getAfterPoints();
-//            if (position >= -1 && position + 1 < points.size()) {
-//                WptPt nextPt = points.get(position + 1);
-//                if (nextPt.hasProfile()) {
-//                    point.setProfileType(nextPt.getProfileType());
-//                }
-//            } else if (appMode != MeasurementEditingContext.DEFAULT_APP_MODE) {
-//                point.setProfileType(appMode.getStringKey());
-//            }
-//            break;
-//        }
-//    }
-//}
+- (void) preAddPoint:(NSInteger)position mode:(EOAAddPointMode)mode point:(OAGpxTrkPt *)point
+{
+    switch (mode) {
+        case EOAAddPointModeUndefined:
+        {
+            if (_appMode != DEFAULT_APP_MODE)
+            {
+                [point setProfileType:_appMode.stringKey];
+            }
+            break;
+        }
+        case EOAAddPointModeAfter:
+        {
+            NSArray<OAGpxTrkPt *> *points = self.getBeforePoints;
+            if (position > 0 && position <= points.count)
+            {
+                OAGpxTrkPt *prevPt = points.lastObject;
+                if (prevPt.isGap)
+                {
+                    if (position == points.count && self.getAfterPoints.count == 0)
+                    {
+                        if (_appMode != DEFAULT_APP_MODE)
+                        {
+                            [point setProfileType:_appMode.stringKey];
+                        }
+                    }
+                    else
+                    {
+                        [point setGap];
+                        if (position > 1)
+                        {
+                            OAGpxTrkPt *pt = points[position - 2];
+                            if ([pt hasProfile])
+                            {
+                                [prevPt setProfileType:pt.getProfileType];
+                            }
+                            else
+                            {
+                                [prevPt removeProfileType];
+                            }
+                        }
+                    }
+                }
+                else if ([prevPt hasProfile])
+                {
+                    [point setProfileType:prevPt.getProfileType];
+                }
+            }
+            else if (_appMode != DEFAULT_APP_MODE)
+            {
+                [point setProfileType:_appMode.stringKey];
+            }
+            break;
+        }
+        case EOAAddPointModeBefore: {
+            NSArray<OAGpxTrkPt *> *points = self.getAfterPoints;
+            if (position >= -1 && position + 1 < points.count)
+            {
+                OAGpxTrkPt *nextPt = points[position + 1];
+                if ([nextPt hasProfile])
+                {
+                    [point setProfileType:nextPt.getProfileType];
+                }
+            }
+            else if (_appMode != DEFAULT_APP_MODE)
+            {
+                [point setProfileType:_appMode.stringKey];
+            }
+            break;
+        }
+    }
+}
 
 - (void) addPoint:(OAGpxTrkPt *)pt
 {
-    _before.points = [_before.points arrayByAddingObject:pt];
-    [self updateSegmentsForSnap:NO];
+    [self addPoint:pt mode:EOAAddPointModeUndefined];
 }
 
 - (void) addPoint:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode
 {
-//    if (mode == EOAAddPointModeAfter || mode == EOAAddPointModeBefore)
-//        self preAddPoint:(additionMode == AdditionMode.ADD_BEFORE ? -1 : getBeforePoints().size(), additionMode, pt);
-
+    if (mode == EOAAddPointModeAfter || mode == EOAAddPointModeBefore)
+        [self preAddPoint:(mode == EOAAddPointModeBefore ? -1 : self.getBeforePoints.count) mode:mode point:pt];
     _before.points = [_before.points arrayByAddingObject:pt];
-//    updateSegmentsForSnap(false);
+    [self updateSegmentsForSnap:NO];
 }
 
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt
 {
+    [self addPoint:position point:pt mode:EOAAddPointModeUndefined];
+}
+
+- (void) addPoint:(NSInteger)position point:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode
+{
+    if (mode == EOAAddPointModeAfter || mode == EOAAddPointModeBefore)
+        [self preAddPoint:position mode:mode point:pt];
     NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:_before.points];
     [points insertObject:pt atIndex:position];
     _before.points = points;
-//    [self updateCacheForSnap:NO];
+    [self updateSegmentsForSnap:false];
 }
 
 - (void) addPoints:(NSArray<OAGpxTrkPt *> *)points
@@ -321,7 +356,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     NSMutableArray<OAGpxTrkPt *> *pnts = [NSMutableArray arrayWithArray:_before.points];
     [pnts addObjectsFromArray:points];
     _before.points = pnts;
-//    [self updateCacheForSnap:NO];
+    [self updateSegmentsForSnap:NO];
 }
 
 - (OAGpxTrkPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad
@@ -330,10 +365,16 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         return [[OAGpxTrkPt alloc] init];
     NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:_before.points];
     OAGpxTrkPt *pt = points[position];
+    if (position > 0 && pt.isGap)
+    {
+        OAGpxTrkPt *prevPt = _before.points[position - 1];
+        if (!prevPt.isGap)
+            [prevPt setGap];
+    }
     [points removeObjectAtIndex:position];
     _before.points = points;
-//    if (updateSnapToRoad)
-//        [self updateCacheForSnap:NO];
+    if (updateSnapToRoad)
+        [self updateSegmentsForSnap:NO];
     return pt;
 }
 
@@ -353,7 +394,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 {
     [self clearBeforeSegments];
     [self clearAfterSegments];
-//    [self clearSnappedToRoadPoints];
+    [self clearSnappedToRoadPoints];
 }
 
 - (void) clearBeforeSegments
@@ -380,6 +421,11 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     return _selectedPointPosition == [self getPoints].count - 1;
 }
 
+- (BOOL)isInAddPointMode
+{
+    return _addPointMode != EOAAddPointModeUndefined;
+}
+
 - (OAApplicationMode *) getSelectedPointAppMode
 {
     return [self getPointAppMode:_selectedPointPosition];
@@ -392,29 +438,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (OAApplicationMode *) getPointAppMode:(NSInteger)pointPosition
 {
-    NSString *profileType = nil; //[self getPoints][pointPosition].profileType;
+    NSString *profileType = [self getPoints][pointPosition].getProfileType;
     return [OAApplicationMode valueOfStringKey:profileType def:OAApplicationMode.DEFAULT];
 }
 
-//public void scheduleRouteCalculateIfNotEmpty() {
-//    if (application == null || (before.points.size() == 0 && after.points.size() == 0)) {
-//        return;
-//    }
-//    RoutingHelper routingHelper = application.getRoutingHelper();
-//    if (progressListener != null && !routingHelper.isRouteBeingCalculated()) {
-//        RouteCalculationParams params = getParams(true);
-//        if (params != null) {
-//            routingHelper.startRouteCalculationThread(params, true, true);
-//            application.runInUIThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    progressListener.showProgressBar();
-//                }
-//            });
-//        }
-//    }
-//}
-//
 - (NSArray<NSArray<OAGpxTrkPt *> *> *) getPointsToCalculate
 {
     NSMutableArray<NSArray<OAGpxTrkPt *> *> *res = [NSMutableArray new];
@@ -425,7 +452,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
             OAGpxTrkPt *startPoint = points[i];
             OAGpxTrkPt *endPoint = points[i + 1];
             NSArray<OAGpxTrkPt *> *pair = @[startPoint, endPoint];
-            if (_roadSegmentData[pair] == nil && startPoint.hasProfile)
+            if (_roadSegmentData[pair] == nil && (startPoint.hasProfile || self.hasRoute))
                 [res addObject:pair];
         }
     }
@@ -453,13 +480,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         if (params != nil)
         {
             [routingHelper startRouteCalculationThread:params paramsChanged:YES updateProgress:YES];
-            
-//            application.runInUIThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    progressListener.showProgressBar();
-//                }
-//            });
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.progressDelegate)
+                    [self.progressDelegate showProgressBar];
+            });
         }
     }
 }
@@ -801,12 +825,16 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 }
 
 
-//void cancelSnapToRoad() {
-//    progressListener.hideProgressBar();
+- (void) cancelSnapToRoad
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.progressDelegate)
+            [self.progressDelegate hideProgressBar];
+    });
 //    if (calculationProgress != null) {
 //        calculationProgress.isCancelled = true;
 //    }
-//}
+}
 
 - (OARouteCalculationParams *) getParams:(BOOL)resetCounter
 {
@@ -866,7 +894,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (OAGPXDocument *) exportRouteAsGpx:(NSString *)gpxName
 {
-    if (_before.points.count == 0 /*|| ![self hasRoute]*/)
+    if (_before.points.count == 0 || ![self hasRoute])
     {
         return nil;
     }
@@ -918,22 +946,13 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         double pairProgress = 100. / pairs;
         progress = (int) (_calculatedPairs * pairProgress + (double) progress / pairs);
     }
-//    progressListener.updateProgress(progress);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.progressDelegate)
+           [self.progressDelegate updateProgress:progress];
+    });
 }
 
 #pragma mark - OARouteCalculationResultListener
-
-
-//interface SnapToRoadProgressListener {
-//    
-//    void showProgressBar();
-//    
-//    void updateProgress(int progress);
-//    
-//    void hideProgressBar();
-//    
-//    void refresh();
-//}
 
 - (void)onRouteCalculated:(OARouteCalculationResult *)route segment:(OAWalkingRouteSegment *)segment
 {
@@ -971,8 +990,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
             [OARoutingHelper.sharedInstance startRouteCalculationThread:params paramsChanged:YES updateProgress:YES];
         else
         {
-            if (self.progressDelegate)
-                [self.progressDelegate hideProgressBar];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.progressDelegate)
+                    [self.progressDelegate hideProgressBar];
+            });
         }
     });
 }
@@ -985,6 +1006,20 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         res.push_back({pt.getLatitude, pt.getLongitude});
     }
     return res;
+}
+
+- (OsmAnd::ColorARGB) getLineColor
+{
+    if (_appMode == DEFAULT_APP_MODE)
+        return OsmAnd::ColorARGB(0xff, 0xff, 0x88, 0x00);
+    else
+    {
+        UIColor *profileColor = UIColorFromRGB(_appMode.getIconColor);
+        
+        CGFloat red, green, blue, alpha;
+        [profileColor getRed:&red green:&green blue:&blue alpha:&alpha];
+        return OsmAnd::ColorARGB(alpha * 255, red * 255, green * 255, blue * 255);
+    }
 }
 
 @end

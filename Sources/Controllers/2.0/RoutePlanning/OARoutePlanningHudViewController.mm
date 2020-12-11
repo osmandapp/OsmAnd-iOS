@@ -82,6 +82,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIView *actionButtonsContainer;
 @property (weak, nonatomic) IBOutlet UIButton *modeButton;
+@property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 
 @end
 
@@ -137,6 +138,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _undoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     _redoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     
+    [self setupModeButton];
+    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setEditing:YES];
@@ -174,7 +177,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (CGFloat)initialMenuHeight
 {
-    return _hudMode == EOAHudModeRoutePlanning ? 58. + self.toolBarView.frame.size.height : _infoView.getViewHeight;
+    return _hudMode == EOAHudModeRoutePlanning ? 62. + self.toolBarView.frame.size.height : _infoView.getViewHeight;
 }
 
 - (CGFloat)expandedMenuHeight
@@ -256,6 +259,24 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
 }
 
+- (void)setupModeButton
+{
+    UIImage *img;
+    UIColor *tint;
+    if (_editingContext.appMode != OAApplicationMode.DEFAULT)
+    {
+        img = [_editingContext.appMode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        tint = UIColorFromRGB(_editingContext.appMode.getIconColor);
+    }
+    else
+    {
+        img = [[UIImage imageNamed:@"ic_custom_straight_line"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        tint = UIColorFromRGB(color_chart_orange);
+    }
+    [_modeButton setImage:img forState:UIControlStateNormal];
+    [_modeButton setTintColor:tint];
+}
+
 
 - (IBAction)closePressed:(id)sender
 {
@@ -308,12 +329,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     [_editingContext.commandManager undo];
     [self onPointsListChanged];
+    [self setupModeButton];
 }
 
 - (IBAction)onRedoButtonPressed:(id)sender
 {
     [_editingContext.commandManager redo];
     [self onPointsListChanged];
+    [self setupModeButton];
 }
 
 - (IBAction)onAddPointPressed:(id)sender
@@ -323,7 +346,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (IBAction)modeButtonPressed:(id)sender
 {
-    OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] init];
+    OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeWholeRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeAll appMode:_editingContext.appMode];
     bottomSheet.delegate = self;
     [bottomSheet presentInViewController:self];
 }
@@ -708,7 +731,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _editingContext.selectedPointPosition = indexPath.row;
-    OAPointOptionsBottomSheetViewController *bottomSheet = [[OAPointOptionsBottomSheetViewController alloc] initWithPoint:_editingContext.getPoints[indexPath.row] index:indexPath.row];
+    OAPointOptionsBottomSheetViewController *bottomSheet = [[OAPointOptionsBottomSheetViewController alloc] initWithPoint:_editingContext.getPoints[indexPath.row] index:indexPath.row editingContext:_editingContext];
     bottomSheet.delegate = self;
     [bottomSheet presentInViewController:self];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -866,8 +889,21 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
             _editingContext.selectedPointPosition = selectedPoint + 1;
         
         [self onPointsListChanged];
-        [_layer updateLayer];
     }
+}
+
+- (void)onChangeRouteTypeBefore
+{
+    OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypePrevRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeSingle appMode:_editingContext.getBeforeSelectedPointAppMode];
+    bottomSheet.delegate = self;
+    [bottomSheet presentInViewController:self];
+}
+
+- (void)onChangeRouteTypeAfter
+{
+    OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeNextRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeSingle appMode:_editingContext.getSelectedPointAppMode];
+    bottomSheet.delegate = self;
+    [bottomSheet presentInViewController:self];
 }
 
 #pragma mark - OASegmentOptionsDelegate
@@ -902,6 +938,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 //        disable(upDownBtn);
 //        updateSnapToRoadControls();
         [self updateDistancePointsText];
+        [self setupModeButton];
     }
 }
 
@@ -909,7 +946,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 
 - (void)hideProgressBar
 {
-
+    _progressView.hidden = YES;
 }
 
 - (void)refresh
@@ -917,12 +954,14 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
     [_layer updateLayer];
 }
 
-- (void)showProgressBar {
-    
+- (void)showProgressBar
+{
+    _progressView.hidden = NO;
 }
 
-- (void)updateProgress:(int)progress {
-    
+- (void)updateProgress:(int)progress
+{
+    [_progressView setProgress:progress / 100.];
 }
 
 @end

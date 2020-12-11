@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 
 #include <OsmAndCore/GpxDocument.h>
+#include <OsmAndCore/Color.h>
 
 typedef NS_ENUM(NSInteger, EOACalculationMode)
 {
@@ -71,10 +72,20 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (NSArray<OAGpxTrkSeg *> *) getBeforeTrkSegmentLine;
 - (NSArray<OAGpxTrkSeg *> *) getAfterTrkSegmentLine;
 
+- (NSArray<OAGpxTrkSeg *> *) getBeforeSegments;
+- (NSArray<OAGpxTrkSeg *> *) getAfterSegments;
+
+- (OAApplicationMode *) getBeforeSelectedPointAppMode;
+- (OAApplicationMode *) getSelectedPointAppMode;
+
 - (void) addPoint:(OAGpxTrkPt *)pt;
+- (void) addPoint:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode;
+- (void) addPoint:(NSInteger)position point:(OAGpxTrkPt *)pt mode:(EOAAddPointMode)mode;
 
 - (double) getRouteDistance;
 - (BOOL) isNewData;
+
+- (BOOL) isInAddPointMode;
 
 - (void) clearSegments;
 - (void) trimBefore:(NSInteger)selectedPointPosition;
@@ -82,5 +93,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) splitSegments:(NSInteger)position;
 
 - (void) updateSegmentsForSnap;
+
+- (OsmAnd::ColorARGB) getLineColor;
 
 @end

@@ -867,6 +867,13 @@
 "whole_track_descr" = "The whole track will be recalculated using selected profile.";
 "next_seg" = "Next segment";
 "whole_track" = "Whole track";
+"next_seg_dist" = "Next segment %@";
+"next_segs_dist" = "All subsequent segments %@";
+"prev_seg_dist" = "Previous segment %@";
+"prev_segs_dist" = "All Previous segments %@";
+"selected_seg_recalc_descr" = "Only the selected segment will be recalculated using the selected profile";
+"next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
+"prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

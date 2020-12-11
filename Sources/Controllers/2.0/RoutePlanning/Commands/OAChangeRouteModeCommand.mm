@@ -11,6 +11,7 @@
 #import "OAApplicationMode.h"
 #import "OARoadSegmentData.h"
 #import "OAMeasurementEditingContext.h"
+#import "OAMeasurementToolLayer.h"
 
 @implementation OAChangeRouteModeCommand
 {
@@ -121,6 +122,7 @@
     editingCtx.appMode = _oldMode;
     editingCtx.roadSegmentData = _oldRoadSegmentData;
     [editingCtx updateSegmentsForSnap];
+    [self refreshMap];
 }
 
 - (void)redo
@@ -157,6 +159,7 @@
     if (_newRoadSegmentData != nil)
         editingCtx.roadSegmentData = _newRoadSegmentData;
     [editingCtx updateSegmentsForSnap];
+    [self refreshMap];
 }
 
 - (void) updateProfileType:(OAGpxTrkPt *)pt

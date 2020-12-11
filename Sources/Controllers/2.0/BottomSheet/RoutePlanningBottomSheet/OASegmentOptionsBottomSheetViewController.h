@@ -10,6 +10,8 @@
 #import "OAClearPointsCommand.h"
 #import "OAInfoBottomView.h"
 
+@class OAApplicationMode;
+
 typedef NS_ENUM(NSInteger, EOARouteBetweenPointsDialogType)
 {
     EOADialogTypeWholeRouteCalculation = 0,
@@ -32,5 +34,7 @@ typedef NS_ENUM(NSInteger, EOARouteBetweenPointsDialogMode)
 @interface OASegmentOptionsBottomSheetViewController : OABaseBottomSheetViewController
 
 @property (nonatomic) id<OASegmentOptionsDelegate> delegate;
+
+- (instancetype) initWithType:(EOARouteBetweenPointsDialogType)dialogType dialogMode:(EOARouteBetweenPointsDialogMode)dialogMode appMode:(OAApplicationMode *)appMode;
 
 @end

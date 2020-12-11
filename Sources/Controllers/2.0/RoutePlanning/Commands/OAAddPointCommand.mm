@@ -15,14 +15,16 @@
 {
     NSInteger _position;
     OAGpxTrkPt *_point;
+    NSString *_prevPointProfile;
     BOOL _center;
+    BOOL _addPointBefore;
 }
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer center:(BOOL)center
 {
     self = [super initWithLayer:measurementLayer];
     if (self) {
-        [self commonInit:measurementLayer location:nil center:center];
+        [self commonInit:nil center:center];
     }
     return self;
 }
@@ -31,58 +33,73 @@
 {
     self = [super initWithLayer:measurementLayer];
     if (self) {
-        [self commonInit:measurementLayer location:latLon center:NO];
+        [self commonInit:latLon center:NO];
     }
     return self;
 }
 
-- (void) commonInit:(OAMeasurementToolLayer *)measurementLayer location:(CLLocation *)latLon center:(BOOL)center
+- (void) commonInit:(CLLocation *)latLon center:(BOOL)center
 {
+    OAMeasurementEditingContext *ctx = self.getEditingCtx;
     if (latLon != nil)
     {
         _point = [[OAGpxTrkPt alloc] init];
         [_point setPosition:latLon.coordinate];
-//        OAApplicationMode *appMode = measurementLayer.editingCtx.appMode;
-//        if (appMode != MeasurementEditingContext.DEFAULT_APP_MODE) {
-//            point.setProfileType(appMode.getStringKey());
-//        }
     }
     _center = center;
-    _position = measurementLayer.editingCtx.getPointsCount;
+    _position = ctx.getPointsCount;
 }
 
 
 - (BOOL) execute
 {
-    if (_point != nil)
+    OAMeasurementEditingContext *ctx = self.getEditingCtx;
+    _addPointBefore = ctx.addPointMode == EOAAddPointModeBefore;
+    NSArray<OAGpxTrkPt *> *points = ctx.getPoints;
+    if (points.count > 0)
     {
-        [[self getEditingCtx] addPoint:_point];
+        OAGpxTrkPt *prevPt = points.lastObject;
+        _prevPointProfile = prevPt.getProfileType;
+    }
+    if (_point)
+    {
+        [ctx addPoint:_point mode:_addPointBefore ? EOAAddPointModeBefore : EOAAddPointModeAfter];
 //        [self.measurementLayer moveMapToPoint:position];
     }
     else if (_center)
     {
-        _point = [self.measurementLayer addCenterPoint];
+        _point = [self.measurementLayer addCenterPoint:_addPointBefore];
     }
-//    else
-//    {
-//        _point = [self.measurementLayer addPoint];
-//    }
-    // Skip unnecessary refresh if adding more points
-    if (self.getEditingCtx.addPointMode == EOAAddPointModeUndefined)
-        [self.measurementLayer updateLayer];
+    /*else {
+        point = [self.measurementLayer addPoint:_addPointBefore];
+    }*/
+    [self refreshMap];
     return _point != nil;
 }
 
 - (void) undo
 {
-    [[self getEditingCtx] removePoint:_position updateSnapToRoad:NO];
-    [self.measurementLayer updateLayer];
+    OAMeasurementEditingContext *ctx = self.getEditingCtx;
+    if (_position > 0) {
+        OAGpxTrkPt *prevPt = ctx.getPoints[_position - 1];
+        if (_prevPointProfile != nil)
+        {
+            [prevPt setProfileType:_prevPointProfile];
+        }
+        else
+        {
+            [prevPt removeProfileType];
+        }
+    }
+    [ctx removePoint:_position updateSnapToRoad:YES];
+    [self refreshMap];
 }
 
 - (void) redo
 {
-    [[self getEditingCtx] addPoint:_position pt:_point];
+    [self.getEditingCtx addPoint:_position point:_point mode:_addPointBefore ? EOAAddPointModeBefore : EOAAddPointModeAfter];
     [self.measurementLayer updateLayer];
+    //        [self.measurementLayer moveMapToPoint:position];
 }
 
 - (EOAMeasurementCommandType) getType

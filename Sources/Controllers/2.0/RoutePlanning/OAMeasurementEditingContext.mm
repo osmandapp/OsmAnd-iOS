@@ -610,7 +610,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
                         [pairPoints addObject:points[j]];
                         prevPointIndex = j;
                     }
-                    if (points.count > prevPointIndex + 1)
+                    if (points.count > prevPointIndex + 1 && i == routePoints.count - 2)
                         [pairPoints addObject:points[prevPointIndex + 1]];
                     
                     auto it = routeSegments.begin();

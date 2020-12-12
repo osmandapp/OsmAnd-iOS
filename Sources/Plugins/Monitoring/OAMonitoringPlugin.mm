@@ -394,7 +394,7 @@
         }
         else
         {
-            if (!_settings.mapSettingSaveTrackIntervalApproved)
+            if (![_settings.mapSettingSaveTrackIntervalApproved get:_settings.applicationMode])
             {
                 OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 136.0)];
                 

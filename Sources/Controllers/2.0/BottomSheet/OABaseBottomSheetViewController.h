@@ -19,6 +19,9 @@
 @property (weak, nonatomic) IBOutlet UIView *bottomSheetView;
 
 - (void) presentInViewController:(UIViewController *)viewController;
+
+@property (nonatomic, readonly) CGFloat initialHeight;
+
 - (CGFloat) getHeaderViewHeight;
 - (void) onRightButtonPressed;
 

@@ -36,18 +36,6 @@
             ReferencedContainer = "container:OsmAnd.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-         <AdditionalOption
-            key = "MallocStackLogging"
-            value = ""
-            isEnabled = "YES">
-         </AdditionalOption>
-         <AdditionalOption
-            key = "PrefersMallocStackLoggingLite"
-            value = ""
-            isEnabled = "YES">
-         </AdditionalOption>
-      </AdditionalOptions>
       <Testables>
          <TestableReference
             skipped = "NO">

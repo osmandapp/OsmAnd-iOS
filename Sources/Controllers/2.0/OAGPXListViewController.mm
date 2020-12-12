@@ -1166,7 +1166,7 @@ static UIViewController *parentController;
     }
     else
     {
-        if (![settings.mapSettingSaveTrackIntervalApproved get:settings.applicationMode] && ![_savingHelper hasData])
+        if (![settings.mapSettingSaveTrackIntervalApproved get] && ![_savingHelper hasData])
         {
             OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 136.0)];
             

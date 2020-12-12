@@ -55,7 +55,7 @@
 
 - (void) refreshMap
 {
-//    [_measurementLayer refreshMap];
+    [_measurementLayer updateLayer];
 }
 
 @end

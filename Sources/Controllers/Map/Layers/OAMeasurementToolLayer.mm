@@ -46,14 +46,10 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _selectedMarkerCollection;
     
     std::shared_ptr<SkBitmap> _pointMarkerIcon;
+    std::shared_ptr<SkBitmap> _selectedMarkerIcon;
     
     OsmAnd::PointI _cachedCenter;
-    OAGpxTrkPt *_cachedLastPoint;
-    
     BOOL _isInMovingMode;
-    std::shared_ptr<OsmAnd::MapMarker> _markerToMove;
-    OsmAnd::PointI _prevPosition;
-    OsmAnd::PointI _nextPosition;
     
     BOOL _initDone;
 }
@@ -73,6 +69,7 @@
     _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     
     _pointMarkerIcon = [OANativeUtilities skBitmapFromPngResource:@"map_plan_route_point_normal"];
+    _selectedMarkerIcon = [OANativeUtilities skBitmapFromPngResource:@"map_plan_route_point_movable"];
     
     _initDone = YES;
     
@@ -113,18 +110,10 @@
 
 - (void)drawLines:(const QVector<OsmAnd::PointI> &)points collection:(std::shared_ptr<OsmAnd::VectorLinesCollection>&)collection
 {
-    [self drawLines:points collection:collection modeAware:NO];
-}
-
-- (void)drawLines:(const QVector<OsmAnd::PointI> &)points collection:(std::shared_ptr<OsmAnd::VectorLinesCollection>&)collection modeAware:(BOOL)modeAware
-{
     if (points.size() < 2)
         return;
     
-    OsmAnd::ColorARGB lineColor = OsmAnd::ColorARGB(0xff, 0xff, 0x88, 0x00);
-    
-    EOAAddPointMode mode = _editingCtx.addPointMode;
-    int selectedPoint = (int) _editingCtx.selectedPointPosition;
+    OsmAnd::ColorARGB lineColor = _editingCtx.getLineColor;
     
     OsmAnd::VectorLineBuilder builder;
     builder.setBaseOrder(self.baseOrder)
@@ -133,58 +122,11 @@
     .setLineWidth(30);
     
     builder.setFillColor(lineColor);
-    
-    if (modeAware && (mode != EOAAddPointModeUndefined || _isInMovingMode))
-    {
-        int beforeOffset = mode == EOAAddPointModeBefore || _isInMovingMode ? 0 : -1;
-        int afterOffset = mode == EOAAddPointModeAfter || _isInMovingMode ? 1 : 0;
-        QVector<OsmAnd::PointI> beforePoints = points.mid(0, selectedPoint - beforeOffset);
-        QVector<OsmAnd::PointI> afterPoints = points.mid(selectedPoint + afterOffset, points.size() - selectedPoint - afterOffset);
-        [self buildLine:builder collection:collection linePoints:beforePoints];
-        [self buildLine:builder collection:collection linePoints:afterPoints];
-    }
-    else
-    {
-        [self buildLine:builder collection:collection linePoints:points];
-    }
+
+    [self buildLine:builder collection:collection linePoints:points];
 }
 
-- (void)drawMovePointLines
-{
-    const auto center = self.mapViewController.mapView.target31;
-    if (center == _cachedCenter)
-        return;
-    _cachedCenter = center;
-    QVector<OsmAnd::PointI> pointsBefore;
-    pointsBefore.push_back(_prevPosition);
-    pointsBefore.push_back(center);
-    QVector<OsmAnd::PointI> pointsAfter;
-    pointsAfter.push_back(_nextPosition);
-    pointsAfter.push_back(center);
-    if (!_lastLineCollection->getLines().isEmpty())
-    {
-        if (_prevPosition.x != 0 && _prevPosition.y != 0)
-            _lastLineCollection->getLines().first()->setPoints(pointsBefore);
-        if (_nextPosition.x != 0 && _nextPosition.y != 0)
-            _lastLineCollection->getLines().last()->setPoints(pointsAfter);
-    }
-    else
-    {
-        if (_prevPosition.x != 0 && _prevPosition.y != 0)
-            [self drawLines:pointsBefore collection:_lastLineCollection];
-        if (_nextPosition.x != 0 && _nextPosition.y != 0)
-            [self drawLines:pointsAfter collection:_lastLineCollection];
-        
-        [self.mapView addKeyedSymbolsProvider:_lastLineCollection];
-    }
-    
-    if (_markerToMove)
-    {
-        _markerToMove->setPosition(center);
-    }
-}
-
-- (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)posiotion collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
+- (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection bitmap:(std::shared_ptr<SkBitmap>&)bitmap
 {
     OsmAnd::MapMarkerBuilder pointMarkerBuilder;
     pointMarkerBuilder.setIsAccuracyCircleSupported(false);
@@ -192,111 +134,28 @@
     pointMarkerBuilder.setIsHidden(false);
     pointMarkerBuilder.setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
     pointMarkerBuilder.setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical);
-    pointMarkerBuilder.setPinIcon(_pointMarkerIcon);
+    pointMarkerBuilder.setPinIcon(bitmap);
     pointMarkerBuilder.setMarkerId(collection->getMarkers().count());
     
     auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
-    marker->setPosition(posiotion);
+    marker->setPosition(position);
     return marker;
 }
 
-- (void) drawAddPointLines
+- (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
-    NSArray<OAGpxTrkPt *> *allPoints = _editingCtx.getAllPoints;
-    OAGpxTrkPt *prevPt = allPoints[_editingCtx.selectedPointPosition];
-    const auto prevPos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(prevPt.getLatitude, prevPt.getLongitude));
-    NSInteger nextInd = _editingCtx.selectedPointPosition + (_editingCtx.addPointMode == EOAAddPointModeBefore ? -1 : 1);
-    OAGpxTrkPt *nextPt = nil;
-    if (nextInd >= 0 && nextInd < allPoints.count)
-        nextPt = allPoints[nextInd];
-    const auto nextPos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(nextPt.getLatitude, nextPt.getLongitude));
-    const auto center = self.mapViewController.mapView.target31;
-    if (center == _cachedCenter)
-        return;
-    _cachedCenter = center;
-    QVector<OsmAnd::PointI> pointsBefore;
-    pointsBefore.push_back(prevPos);
-    pointsBefore.push_back(center);
-    QVector<OsmAnd::PointI> pointsAfter;
-    pointsAfter.push_back(nextPos);
-    pointsAfter.push_back(center);
-    if (!_lastLineCollection->getLines().isEmpty())
-    {
-        _lastLineCollection->getLines().first()->setPoints(pointsBefore);
-        if (nextPt)
-            _lastLineCollection->getLines().last()->setPoints(pointsAfter);
-    }
-    else
-    {
-        [self drawLines:pointsBefore collection:_lastLineCollection];
-        if (nextPt)
-            [self drawLines:pointsAfter collection:_lastLineCollection];
-        
-        [self.mapView addKeyedSymbolsProvider:_lastLineCollection];
-    }
-    
-    if (_selectedMarkerCollection->getMarkers().size() == 0)
-    {
-        [self drawMarker:center collection:_selectedMarkerCollection];
-        [self.mapView addKeyedSymbolsProvider:_selectedMarkerCollection];
-    }
-    else
-    {
-        _selectedMarkerCollection->getMarkers().first()->setPosition(center);
-    }
-}
-
-- (void)drawLineFromLastPoint
-{
-    OAGpxTrkPt *lastBeforePoint = nil;
-    if (_editingCtx.getBeforePoints.count > 0)
-        lastBeforePoint = _editingCtx.getBeforePoints.lastObject;
-    if (lastBeforePoint)
-    {
-        const auto center = self.mapViewController.mapView.target31;
-        if (center == _cachedCenter && _cachedLastPoint == lastBeforePoint)
-            return;
-        _cachedLastPoint = lastBeforePoint;
-        _cachedCenter = center;
-        const auto lastBeforePnt = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastBeforePoint.getLatitude, lastBeforePoint.getLongitude));
-        QVector<OsmAnd::PointI> points;
-        points.push_back(lastBeforePnt);
-        points.push_back(center);
-        if (_lastLineCollection->getLines().size() != 0)
-        {
-            const auto lastLine = _lastLineCollection->getLines().last();
-            lastLine->setPoints(points);
-        }
-        else
-        {
-            [self drawLines:points collection:_lastLineCollection];
-            [self.mapView addKeyedSymbolsProvider:_lastLineCollection];
-        }
-    }
+    return [self drawMarker:position collection:collection bitmap:_pointMarkerIcon];
 }
 
 - (void) updateLastPointToCenter
 {
     [self.mapViewController runWithRenderSync:^{
-        if (_editingCtx && _editingCtx.selectedPointPosition != -1 && _isInMovingMode)
-        {
-            [self drawMovePointLines];
-        }
-        else if (_editingCtx && _editingCtx.selectedPointPosition != -1 && _editingCtx.addPointMode != EOAAddPointModeUndefined)
-        {
-            [self drawAddPointLines];
-        }
-        else
-        {
-            [self drawLineFromLastPoint];
-        }
+        [self drawBeforeAfterPath];
     }];
-    
 }
 
 - (void) resetLayer
 {
-    
     [self.mapView removeKeyedSymbolsProvider:_collection];
     [self.mapView removeKeyedSymbolsProvider:_lastLineCollection];
     [self.mapView removeKeyedSymbolsProvider:_pointMarkers];
@@ -308,7 +167,6 @@
     _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     
     _cachedCenter = OsmAnd::PointI(0, 0);
-    _cachedLastPoint = nil;
 }
 
 - (BOOL) updateLayer
@@ -324,17 +182,16 @@
 - (void) enterMovingPointMode
 {
     _isInMovingMode = YES;
+//    moveMapToPoint(editingCtx.getSelectedPointPosition());
+    OAGpxTrkPt *pt = [_editingCtx removePoint:_editingCtx.selectedPointPosition updateSnapToRoad:NO];
+    _editingCtx.originalPointToMove = pt;
+    [_editingCtx splitSegments:_editingCtx.selectedPointPosition];
     [self updateLayer];
-    //    moveMapToPoint(editingCtx.getSelectedPointPosition());
-    //    editingCtx.splitSegments(editingCtx.getSelectedPointPosition());
 }
 
 - (void) exitMovingMode
 {
     _isInMovingMode = NO;
-    _prevPosition = OsmAnd::PointI(0, 0);
-    _nextPosition = OsmAnd::PointI(0, 0);
-    _markerToMove = nullptr;
 }
 
 - (OAGpxTrkPt *) getMovedPointToApply
@@ -344,12 +201,12 @@
     OAGpxTrkPt *originalPoint = _editingCtx.originalPointToMove;
     OAGpxTrkPt *point = [[OAGpxTrkPt alloc] initWithPoint:originalPoint];
     point.position = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-//    point.trkpt->position = latLon;
-//    [point copyExtensions:originalPoint];
+    [point copyExtensions:originalPoint];
     return point;
 }
 
-//- (OAGpxTrkPt *) addPoint:(EOAAddPointMode)mode
+// TODO: implement map interaction events
+//- (OAGpxTrkPt *) addPoint:(BOOL)addPointBefore
 //{
 //    if (pressedPointLatLon != null) {
 //        WptPt pt = new WptPt();
@@ -360,11 +217,7 @@
 //        pressedPointLatLon = null;
 //        boolean allowed = editingCtx.getPointsCount() == 0 || !editingCtx.getPoints().get(editingCtx.getPointsCount() - 1).equals(pt);
 //        if (allowed) {
-//            ApplicationMode applicationMode = editingCtx.getAppMode();
-//            if (applicationMode != MeasurementEditingContext.DEFAULT_APP_MODE) {
-//                pt.setProfileType(applicationMode.getStringKey());
-//            }
-//            editingCtx.addPoint(pt);
+//            editingCtx.addPoint(pt, addPointBefore ? AdditionMode.ADD_BEFORE : AdditionMode.ADD_AFTER);
 //            moveMapToLatLon(lat, lon);
 //            return pt;
 //        }
@@ -372,7 +225,7 @@
 //    return null;
 //}
 
-- (OAGpxTrkPt *) addCenterPoint
+- (OAGpxTrkPt *) addCenterPoint:(BOOL)addPointBefore
 {
     const auto center = self.mapViewController.mapView.target31;
     const auto latLon = OsmAnd::Utilities::convert31ToLatLon(center);
@@ -381,11 +234,7 @@
     [pt setPosition:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
     BOOL allowed = _editingCtx.getPointsCount == 0 || ![_editingCtx.getAllPoints containsObject:pt];
     if (allowed) {
-        // TODO: add routing profile later
-//        OAApplicationMode *applicationMode = _editingCtx.appMode;
-//        if (applicationMode != OAApplicationMode.DEFAULT)
-//            [pt setProfileType:applicationMode.stringKey];
-        [_editingCtx addPoint:pt];
+        [_editingCtx addPoint:pt mode:addPointBefore ? EOAAddPointModeBefore : EOAAddPointModeAfter];
         return pt;
     }
     return nil;
@@ -407,8 +256,6 @@
         auto marker = pointMarkerBuilder.buildAndAddToCollection(collection);
         marker->setPosition(point);
         pointMarkerBuilder.setMarkerId(collection->getMarkers().count());
-        if (i == _editingCtx.selectedPointPosition && _isInMovingMode)
-            _markerToMove = marker;
     }
 }
 
@@ -431,53 +278,110 @@
     {
         OAGpxRtePt *pt = beforePoints[i];
         points.append(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
-        if (i == _editingCtx.selectedPointPosition && _isInMovingMode)
-        {
-            if (i > 0)
-            {
-                _prevPosition = points[i - 1];
-            }
-            if (i < beforePoints.count - 1)
-            {
-                OAGpxRtePt *nextPt = beforePoints[i + 1];
-                const auto pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(nextPt.getLatitude, nextPt.getLongitude));
-                _nextPosition = pos;
-            }
-        }
     }
     
     return points;
 }
 
-- (void) drawBeforeAfterPath:(QVector<OsmAnd::PointI> &)points
+- (void) drawBeforeAfterPath
 {
-    // TODO: refactor this logic to be identical with Android and use after implementing gaps
-    OATrackSegment *before = _editingCtx.getBeforeTrkSegmentLine;
-    OATrackSegment *after = _editingCtx.getAfterTrkSegmentLine;
-    if (before.points.count > 0 || after.points.count > 0)
+    NSArray<OAGpxTrkSeg *> *before = _editingCtx.getBeforeSegments;
+    NSArray<OAGpxTrkSeg *> *after = _editingCtx.getAfterSegments;
+    const auto& center = self.mapViewController.mapView.target31;
+    if (center == _cachedCenter)
+        return;
+    _cachedCenter = center;
+    QVector<OsmAnd::PointI> points;
+    if (before.count > 0 || after.count > 0)
     {
-        if (before.points.count > 0)
+        BOOL hasPointsBefore = NO;
+        BOOL hasGapBefore = NO;
+        if (before.count > 0)
         {
-            OAGpxTrkPt *pt = before.points[before.points.count - 1];
-            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
-        }
-        if (after.points.count > 0)
-        {
-            if (before.points.count == 0)
+            OAGpxTrkSeg *segment = before.lastObject;
+            if (segment.points.count > 0)
             {
-                points.push_back(self.mapViewController.mapView.target31);
+                hasPointsBefore = YES;
+                OAGpxTrkPt *pt = segment.points.lastObject;
+                hasGapBefore = pt.isGap;
+                if (!pt.isGap || (_editingCtx.isInAddPointMode && _editingCtx.addPointMode != EOAAddPointModeBefore))
+                {
+                    points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
+                }
+                points.push_back(center);
             }
-            OAGpxTrkPt *pt = after.points[0];
-            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
+        }
+        if (after.count > 0)
+        {
+            OAGpxTrkSeg *segment = after.firstObject;
+            if (segment.points.count > 0)
+            {
+                if (!hasPointsBefore)
+                {
+                    points.push_back(center);
+                }
+                if (!hasGapBefore || (_editingCtx.isInAddPointMode && _editingCtx.addPointMode != EOAAddPointModeBefore))
+                {
+                    OAGpxTrkPt *pt = segment.points.firstObject;
+                    points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
+                }
+            }
         }
         
-        [self drawRouteSegment:points];
+        if (_lastLineCollection->getLines().size() != 0)
+        {
+            const auto lastLine = _lastLineCollection->getLines().last();
+            lastLine->setPoints(points);
+        }
+        else
+        {
+            [self drawLines:points collection:_lastLineCollection];
+            [self.mapView addKeyedSymbolsProvider:_lastLineCollection];
+        }
+        
+        if (_isInMovingMode || _editingCtx.isInAddPointMode)
+        {
+            if (_selectedMarkerCollection->getMarkers().isEmpty())
+            {
+                [self drawMarker:center collection:_selectedMarkerCollection bitmap:_selectedMarkerIcon];
+                [self.mapView addKeyedSymbolsProvider:_selectedMarkerCollection];
+            }
+            else
+            {
+                _selectedMarkerCollection->getMarkers().first()->setPosition(center);
+            }
+        }
     }
+}
+
+- (void)drawRouteSegments
+{
+    QVector<OsmAnd::PointI> beforePoints;
+    QVector<OsmAnd::PointI> afterPoints;
+    NSArray<OAGpxTrkSeg *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
+    NSArray<OAGpxTrkSeg *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;
+    for (OAGpxTrkSeg *seg in beforeSegs)
+    {
+        for (OAGpxTrkPt *pt in seg.points)
+        {
+            beforePoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
+        }
+    }
+    [self drawLines:beforePoints collection:_collection];
+    
+    for (OAGpxTrkSeg *seg in afterSegs)
+    {
+        for (OAGpxTrkPt *pt in seg.points)
+        {
+            afterPoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
+        }
+    }
+    [self drawLines:afterPoints collection:_collection];
 }
 
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points {
     [self.mapViewController runWithRenderSync:^{
-        [self drawLines:points collection:_collection modeAware:YES];
+        [self drawRouteSegments];
         [self addPointMarkers:points collection:_pointMarkers];
         
         [self.mapView addKeyedSymbolsProvider:_collection];

@@ -49,8 +49,7 @@
 {
     NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:self.getEditingCtx.getPoints];
     [points exchangeObjectAtIndex:from withObjectAtIndex:to];
-    self.getEditingCtx.getBeforeTrkSegmentLine.points = points;
-    //    [self.getEditingCtx updateCacheForSnap];
+    [self.getEditingCtx updateSegmentsForSnap];
     [self.measurementLayer updateLayer];
 }
 

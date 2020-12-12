@@ -11,6 +11,71 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 
+#define ICON_NAME_EXTENSION @"icon"
+#define DEFAULT_ICON_NAME @"special_star"
+#define BACKGROUND_TYPE_EXTENSION @"background"
+#define PROFILE_TYPE_EXTENSION @"profile"
+#define GAP_PROFILE_TYPE @"gap"
+#define TRKPT_INDEX_EXTENSION @"trkpt_idx"
+
+@implementation OARouteSegment
+
+- (instancetype)initWithDictionary:(NSDictionary<NSString *,NSString *> *)dict
+{
+    self = [super init];
+    if (self) {
+        _identifier = dict[@"id"];
+        _length = dict[@"length"];
+        _segmentTime = dict[@"segmentTime"];
+        _speed = dict[@"speed"];
+        _turnType = dict[@"turnType"];
+        _turnAngle = dict[@"turnAngle"];
+        _types = dict[@"types"];
+        _pointTypes = dict[@"pointTypes"];
+        _names = dict[@"names"];
+    }
+    return self;
+}
+
+- (NSDictionary<NSString *,NSString *> *)toDictionary
+{
+    return @{
+        @"id" : _identifier,
+        @"length" : _length,
+        @"segmentTime" : _segmentTime,
+        @"speed" : _speed,
+        @"turnType" : _turnType,
+        @"turnAngle" : _turnAngle,
+        @"types" : _types,
+        @"pointTypes" : _pointTypes,
+        @"names" : _names
+    };
+}
+
+@end
+
+@implementation OARouteType
+
+- (instancetype)initWithDictionary:(NSDictionary<NSString *,NSString *> *)dict
+{
+    self = [super init];
+    if (self) {
+        _tag = dict[@"t"];
+        _value = dict[@"v"];
+    }
+    return self;
+}
+
+- (NSDictionary<NSString *,NSString *> *)toDictionary
+{
+    return @{
+        @"t" : _tag,
+        @"v" : _value
+    };
+}
+
+@end
+
 @implementation OAMetadata
 @end
 @implementation OALink
@@ -18,6 +83,17 @@
 @implementation OAGpxExtension
 @end
 @implementation OAGpxExtensions
+
+- (NSArray<OAGpxExtension *> *)extensions
+{
+    return _extensions ? _extensions : [NSArray new];
+}
+
+- (void) copyExtensions:(OAGpxExtensions *)e
+{
+    _extensions = e.extensions;
+}
+
 @end
 @implementation OARoute
 @end
@@ -217,13 +293,133 @@
         self.ageOfGpsData = point.ageOfGpsData;
         self.source = point.source;
         self.symbol = point.symbol;
+        self.position = point.position;
+        self.firstPoint = point.firstPoint;
+        self.lastPoint = point.lastPoint;
+        self.name = point.name;
+        self.desc = point.desc;
+        self.elevation = point.elevation;
+        self.time = point.time;
+        self.comment = point.comment;
+        self.type = point.type;
+        self.links = point.links;
+        self.distance = point.distance;
     }
     return self;
+}
+
+- (OAGpxExtension *)getExtensionByKey:(NSString *)key
+{
+    for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
+    {
+        if ([e.name isEqualToString:PROFILE_TYPE_EXTENSION])
+        {
+            return e;
+        }
+    }
+    return nil;
+}
+
+- (NSString *) getProfileType
+{
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    if (e)
+        return e.value;
+    return nil;
+}
+
+- (void) addExtension:(OAGpxExtension *)e
+{
+    if (!self.extraData)
+        self.extraData = [[OAGpxExtensions alloc] init];
+    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
+    if (![exts containsObject:e])
+        ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
+}
+
+- (void) setProfileType:(NSString *)profileType
+{
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = PROFILE_TYPE_EXTENSION;
+        e.value = profileType;
+        [self addExtension:e];
+        return;
+    }
+    e.value = profileType;
+}
+
+- (void) removeProfileType
+{
+    OAGpxExtension *e = [self getExtensionByKey:PROFILE_TYPE_EXTENSION];
+    if (e)
+    {
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:((OAGpxExtensions *)self.extraData).extensions];
+        [arr removeObject:e];
+        ((OAGpxExtensions *)self.extraData).extensions = arr;
+    }
+}
+
+- (BOOL) hasProfile
+{
+    NSString *profileType = self.getProfileType;
+    return profileType != nil && ![GAP_PROFILE_TYPE isEqualToString:profileType];
+}
+
+- (NSInteger) getTrkPtIndex
+{
+    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
+    if (e)
+        return e ? e.value.integerValue : -1;
+    return -1;
+}
+
+- (void) setTrkPtIndex:(NSInteger)index
+{
+    OAGpxExtension *e = [self getExtensionByKey:TRKPT_INDEX_EXTENSION];
+    NSString *stringValue = [NSString stringWithFormat:@"%ld", index];
+    if (!e)
+    {
+        e = [[OAGpxExtension alloc] init];
+        e.name = PROFILE_TYPE_EXTENSION;
+        e.value = stringValue;
+        [self addExtension:e];
+        return;
+    }
+    e.value = stringValue;
+}
+
+- (BOOL) isGap
+{
+    NSString *profileType = [self getProfileType];
+    return [GAP_PROFILE_TYPE isEqualToString:profileType];
+}
+
+- (void)setGap
+{
+    [self setProfileType:GAP_PROFILE_TYPE];
+}
+
+- (void) copyExtensions:(OAGpxTrkPt *)pt
+{
+    self.extraData = pt.extraData;
 }
 
 @end
 
 @implementation OAGpxTrkSeg
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _routeTypes = [NSMutableArray new];
+        _routeSegments = [NSMutableArray new];
+    }
+    return self;
+}
 
 -(NSArray*) splitByDistance:(double)meters
 {
@@ -242,6 +438,10 @@
     return [OAGPXTrackAnalysis convert:splitSegments];
 }
 
+- (BOOL) hasRoute
+{
+    return _routeSegments.count > 0 && _routeTypes.count > 0;
+}
 
 @end
 

@@ -11,6 +11,7 @@
 #import "Localization.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAColors.h"
+#import "OAApplicationMode.h"
 
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
 
@@ -23,14 +24,17 @@
     OAGpxTrkPt *_point;
     NSInteger _pointIndex;
     NSArray<NSArray<NSDictionary *> *> *_data;
+    
+    OAMeasurementEditingContext *_editingCtx;
 }
 
-- (instancetype) initWithPoint:(OAGpxTrkPt *)point index:(NSInteger)pointIndex
+- (instancetype) initWithPoint:(OAGpxTrkPt *)point index:(NSInteger)pointIndex editingContext:(OAMeasurementEditingContext *)editingContext
 {
     self = [super init];
     if (self) {
         _point = point;
         _pointIndex = pointIndex;
+        _editingCtx = editingContext;
     }
     return self;
 }
@@ -97,18 +101,21 @@
         }
     ]];
     
-//    [data addObject:@[
-//        @{
-//            @"type" : kIconTitleIconRoundCell,
-//            @"title" : OALocalizedString(@"change_route_type_before"),
-//            @"img" : @"ic_custom_straight_line"
-//        },
-//        @{
-//            @"type" : kIconTitleIconRoundCell,
-//            @"title" : OALocalizedString(@"change_route_type_after"),
-//            @"img" : @"ic_custom_straight_line"
-//        }
-//    ]];
+    [data addObject:@[
+        @{
+            @"type" : kIconTitleIconRoundCell,
+            @"title" : OALocalizedString(@"change_route_type_before"),
+            @"img" : [self getRouteTypeIcon:YES],
+            @"key" : @"change_route_before",
+        },
+        @{
+            @"type" : kIconTitleIconRoundCell,
+            @"title" : OALocalizedString(@"change_route_type_after"),
+            @"img" : [self getRouteTypeIcon:NO],
+            @"key" : @"change_route_after",
+            
+        }
+    ]];
     
     [data addObject:@[
         @{
@@ -120,6 +127,18 @@
         }
     ]];
     _data = data;
+}
+
+- (NSString *) getRouteTypeIcon:(BOOL)before
+{
+    OAApplicationMode *routeAppMode = before ? _editingCtx.getBeforeSelectedPointAppMode : _editingCtx.getSelectedPointAppMode;
+    NSString *icon;
+    if (OAApplicationMode.DEFAULT == routeAppMode)
+        icon = @"ic_custom_straight_line";
+    else
+        icon = routeAppMode.getIconName;
+        
+    return icon;
 }
 
 #pragma mark - UITableViewDataSource
@@ -203,6 +222,20 @@
     {
         if (self.delegate)
             [self.delegate onDeletePoint];
+    }
+    else if ([key isEqualToString:@"change_route_before"])
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onChangeRouteTypeBefore];
+        return;
+    }
+    else if ([key isEqualToString:@"change_route_after"])
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onChangeRouteTypeAfter];
+        return;
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];

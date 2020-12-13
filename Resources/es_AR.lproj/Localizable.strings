@@ -1940,3 +1940,9 @@
 "plugin_popup_osm_editing_title" = "Activar la edición de OpenSteetMap";
 "layer_amenity_label" = "Nombres de PDI superpuestos";
 "personal_category_name" = "Personal";
+"next_seg_dist" = "Siguiente segmento %@";
+"whole_track" = "Traza completa";
+"next_seg" = "Siguiente segmento";
+"whole_track_descr" = "Recalcular toda la traza usando el perfil elegido.";
+"next_seg_descr" = "El siguiente segmento será recalculado usando el perfil elegido.";
+"route_betw_points_descr" = "Elige cómo conectar los puntos: con una línea recta o calculando una ruta usando uno de los perfiles listados a continuación.";

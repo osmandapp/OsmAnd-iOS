@@ -117,6 +117,8 @@
 - (void) applyRoutingPreferences:(NSDictionary<NSString *,NSString *> *)prefs
 {
     const auto router = [OARouteProvider getRouter:self.appMode];
+    if (router == nullptr)
+        return;
     OAAppSettings *settings = OAAppSettings.sharedManager;
     const auto& params = router->getParameters();
     [prefs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {

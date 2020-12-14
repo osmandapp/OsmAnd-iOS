@@ -862,6 +862,18 @@
 "change_route_type_after" = "Change route type after this point";
 "delete_point" = "Delete point";
 "add_one_more_pnt" = "Add one more point";
+"route_betw_points_descr" = "Choose how to connect connect the poits: with a straight line or by calculating a route using one of profiles listed below.";
+"next_seg_descr" = "The next segment will be recalculated using selected profile.";
+"whole_track_descr" = "The whole track will be recalculated using selected profile.";
+"next_seg" = "Next segment";
+"whole_track" = "Whole track";
+"next_seg_dist" = "Next segment %@";
+"next_segs_dist" = "All subsequent segments %@";
+"prev_seg_dist" = "Previous segment %@";
+"prev_segs_dist" = "All Previous segments %@";
+"selected_seg_recalc_descr" = "Only the selected segment will be recalculated using the selected profile";
+"next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
+"prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 
 // Resources
 "res_mapsres" = "Maps & Resources";
@@ -1531,7 +1543,7 @@
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
-"plugin_popup_osm_editing_title" = "Turn on OpenSteetMap Editing";
+"plugin_popup_osm_editing_title" = "Turn on OpenStreetMap Editing";
 "plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
 
 "plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";

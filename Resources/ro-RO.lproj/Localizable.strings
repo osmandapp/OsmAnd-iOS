@@ -740,7 +740,7 @@
 "routing_attr_max_num_changes_name" = "Numărul de modificări";
 "rendering_attr_highway_class_path_name" = "Cale";
 "rendering_attr_highway_class_track_grade1_name" = "Gradul 1";
-"routing_attr_driving_style_prefer_unpaved_description" = "Prefer drumurile nepavate";
+"routing_attr_driving_style_prefer_unpaved_description" = "Prefer drumurile nepavate.";
 "rendering_attr_smoothness_impassable_name" = "De netrecut";
 "rendering_attr_surface_dirt_name" = "Pământ";
 "rendering_attr_piste_difficulty_easy_name" = "Uşor";

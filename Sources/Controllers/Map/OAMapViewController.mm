@@ -96,6 +96,7 @@
 #include <OsmAndCore/Map/IOnSurfaceMapSymbol.h>
 #include <OsmAndCore/Map/MapSymbolsGroup.h>
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
+#include <OsmAndCore/IFavoriteLocation.h>
 
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
@@ -2340,10 +2341,10 @@
 
 - (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location
 {
-    for (const auto& fav : [_mapLayers.favoritesLayer getFavoritesMarkersCollection]->getMarkers())
+    for (const auto& fav : _app.favoritesCollection->getFavoriteLocations())
     {
-        double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
-        double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
+        double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition31().x);
+        double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition31().y);
         if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:location.latitude destLon:location.longitude])
         {
             return YES;

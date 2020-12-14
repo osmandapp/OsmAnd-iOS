@@ -14,6 +14,4 @@
 
 @interface OAFavoritesLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
-- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getFavoritesMarkersCollection;
-
 @end

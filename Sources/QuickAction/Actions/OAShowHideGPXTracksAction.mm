@@ -34,7 +34,7 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return [OAAppSettings sharedManager].mapSettingShowFavorites;
+    return [OASelectedGPXHelper instance].isShowingAnyGpxFiles;
 }
 
 - (NSString *)getActionText
@@ -50,7 +50,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:28 stringId:@"gpx.showhide" class:self.class name:OALocalizedString(@"add_first_inermediate") category:CONFIGURE_MAP iconName:@"ic_custom_trip" secondaryIconName:nil editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:28 stringId:@"gpx.showhide" class:self.class name:OALocalizedString(@"show_hide_gpx") category:CONFIGURE_MAP iconName:@"ic_custom_trip" secondaryIconName:nil editable:NO];
        
     return TYPE;
 }

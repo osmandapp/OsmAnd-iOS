@@ -27,7 +27,6 @@
 @implementation OAFavoritesSettingsItem
 {
     OAAppSettings *_settings;
-    NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
 }
 
 @dynamic items, appliedItems, existingItems;
@@ -39,7 +38,6 @@
     _settings = [OAAppSettings sharedManager];
     const auto& allFavorites = [OsmAndApp instance].favoritesCollection->getFavoriteLocations();
     self.existingItems  = [[NSArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]] mutableCopy];
-    _flatGroups = [NSMutableDictionary dictionary];
 }
 
 - (EOASettingsItemType) type
@@ -89,10 +87,10 @@
 
 - (OAFavoriteGroup *) getGroup:(NSString *)nameId
 {
-    if ([_flatGroups objectForKey:nameId])
-        return [_flatGroups objectForKey:nameId];
-    else
-        return nil;
+    for (OAFavoriteGroup *group in self.existingItems)
+        if ([nameId isEqualToString:group.name])
+            return group;
+    return nil;
 }
 
 - (BOOL) isDuplicate:(OAFavoriteGroup *)item

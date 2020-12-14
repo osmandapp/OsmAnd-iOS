@@ -66,7 +66,7 @@
         locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
         
         QString title = QString::fromNSString(formattedLocation);
-        QString description = QString::null; // not sure about it, maybe should be [self getItemDesc]; ???
+        QString description = QString::fromNSString([self getItemDesc]);
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *groupName;

@@ -1676,10 +1676,12 @@
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
         const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode]);
+        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode]);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
+        self.referenceTileSizeRasterOrigInPixels = rasterTileSizeOrig;
 
         // Release previously-used resources (if any)
         [_mapLayers resetLayers];

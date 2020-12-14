@@ -100,17 +100,6 @@
     }
 }
 
-- (std::shared_ptr<OsmAnd::MapMarker>) getMapMarkerAtPos:(OsmAnd::PointI)position31
-{
-    const auto& mapMarkers = self.markersCollection->getMarkers();
-    for (const auto& marker : mapMarkers)
-    {
-        if (marker->getPosition() == position31)
-            return marker;
-    }
-    return nullptr;
-}
-
 #pragma mark - OAContextMenuProvider
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation

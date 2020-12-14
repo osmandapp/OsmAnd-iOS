@@ -15,7 +15,6 @@
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
 #import "OAFavoritesMapLayerProvider.h"
-#import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -72,7 +71,8 @@
     if (self.showCaptions != _showCaptionsCache)
     {
         _showCaptionsCache = self.showCaptions;
-        [self reloadFavorites];
+        if (self.isVisible)
+            [self reloadFavorites];
     }
     
     return YES;
@@ -100,7 +100,7 @@
             [self.mapView removeTiledSymbolsProvider:_favoritesMapProvider];
             _favoritesMapProvider = nullptr;
         }
-        const auto rasterTileSize = (unsigned int)(256 * self.displayDensityFactor * [OAAppSettings.sharedManager.mapDensity get:OAAppSettings.sharedManager.applicationMode]);
+        const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
         QList<OsmAnd::PointI> hiddenPoints;
         if (_hiddenPointPos31 != OsmAnd::PointI())
             hiddenPoints.append(_hiddenPointPos31);
@@ -115,6 +115,7 @@
 {
     [self.mapViewController runWithRenderSync:^{
         [self.mapView removeTiledSymbolsProvider:_favoritesMapProvider];
+        _favoritesMapProvider = nullptr;
     }];
 }
 
@@ -180,16 +181,19 @@
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
-    if (const auto mapSymbol = dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo->mapSymbol))
+    if (self.isVisible)
     {
-        const auto symbolPos31 = mapSymbol->getPosition31();
-        for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
+        if (const auto mapSymbol = dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo->mapSymbol))
         {
-            if (favLoc->getPosition31() == symbolPos31)
+            const auto symbolPos31 = mapSymbol->getPosition31();
+            for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
             {
-                OATargetPoint *targetPoint = [self getTargetPointCpp:favLoc.get()];
-                if (![found containsObject:targetPoint])
-                    [found addObject:targetPoint];
+                if (favLoc->getPosition31() == symbolPos31)
+                {
+                    OATargetPoint *targetPoint = [self getTargetPointCpp:favLoc.get()];
+                    if (![found containsObject:targetPoint])
+                        [found addObject:targetPoint];
+                }
             }
         }
     }
@@ -197,12 +201,12 @@
 
 #pragma mark - OAMoveObjectProvider
 
-- (BOOL)isObjectMovable:(id)object
+- (BOOL) isObjectMovable:(id)object
 {
     return [object isKindOfClass:OAFavoriteItem.class];
 }
 
-- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (void) applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (object && [self isObjectMovable:object])
     {
@@ -225,7 +229,7 @@
     }
 }
 
-- (UIImage *)getPointIcon:(id)object
+- (UIImage *) getPointIcon:(id)object
 {
     if (object && [self isObjectMovable:object])
     {
@@ -238,7 +242,7 @@
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }
 
-- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+- (void) setPointVisibility:(id)object hidden:(BOOL)hidden
 {
     if (object && [self isObjectMovable:object])
     {

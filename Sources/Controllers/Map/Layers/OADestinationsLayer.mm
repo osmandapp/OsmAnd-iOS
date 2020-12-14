@@ -24,6 +24,7 @@
 #import "OAMapHudViewController.h"
 #import "OAReverseGeocoder.h"
 #import "OAPointDescription.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -44,6 +45,9 @@
     
     OATargetPointsHelper *_targetPoints;
     OADestinationsLineWidget *_destinationLayerWidget;
+
+    BOOL _showCaptionsCache;
+    double _textSize;
 }
 
 - (NSString *) layerId
@@ -55,6 +59,9 @@
 {
     [super initLayer];
     
+    _showCaptionsCache = self.showCaptions;
+    _textSize = OAAppSettings.sharedManager.textSize.get;
+
     _destinationAddObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onDestinationAdded:withKey:)
                                                             andObserve:self.app.data.destinationAddObservable];
@@ -116,6 +123,24 @@
     }
 }
 
+- (BOOL) updateLayer
+{
+    [super updateLayer];
+    
+    if (self.showCaptions != _showCaptionsCache || _textSize != OAAppSettings.sharedManager.textSize.get)
+    {
+        _showCaptionsCache = self.showCaptions;
+        _textSize = OAAppSettings.sharedManager.textSize.get;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self hide];
+            [self refreshDestinationsMarkersCollection];
+            [self show];
+        });
+    }
+    
+    return YES;
+}
+
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getDestinationsMarkersCollection
 {
     return _destinationsMarkersCollection;
@@ -128,13 +153,13 @@
     for (OADestination *destination in self.app.data.destinations)
         if (!destination.routePoint && !destination.hidden)
         {
-            [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+            [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
             [_destinationLayerWidget drawLineArrowWidget:destination];
         }
 
 }
 
-- (void) addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude
+- (void) addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude description:(NSString *)description
 {
     CGFloat r,g,b,a;
     [color getRed:&r green:&g blue:&b alpha:&a];
@@ -142,16 +167,24 @@
     
     const OsmAnd::LatLon latLon(latitude, longitude);
     
-    OsmAnd::MapMarkerBuilder()
-    .setIsAccuracyCircleSupported(false)
+    OsmAnd::MapMarkerBuilder builder;
+    builder.setIsAccuracyCircleSupported(false)
     .setBaseOrder(self.baseOrder)
     .setIsHidden(false)
     .setPinIcon([OANativeUtilities skBitmapFromPngResource:markerResourceName])
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
-    .setAccuracyCircleBaseColor(col)
-    .buildAndAddToCollection(_destinationsMarkersCollection);
+    .setAccuracyCircleBaseColor(col);
+    
+    if (self.showCaptions && description.length > 0)
+    {
+        builder.setCaption(QString::fromNSString(description));
+        builder.setCaptionStyle(self.captionStyle);
+        builder.setCaptionTopSpace(self.captionTopSpace);
+    }
+    
+    builder.buildAndAddToCollection(_destinationsMarkersCollection);
 }
 
 - (void) removeDestinationPin:(double)latitude longitude:(double)longitude;
@@ -187,7 +220,7 @@
 {
     OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+        [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
         [_destinationLayerWidget drawLineArrowWidget:destination];
     });
 }
@@ -222,7 +255,7 @@
         
         if (!exists)
         {
-            [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+            [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
             [_destinationLayerWidget drawLineArrowWidget:destination];
         }
     }

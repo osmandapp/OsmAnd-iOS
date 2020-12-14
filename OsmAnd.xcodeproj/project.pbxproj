@@ -3502,6 +3502,7 @@
 		8A475C2221D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */; };
 		8A475C2321D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */; };
 		8A47B84A25875CB700FE5DE5 /* IOAMapTiledCollectionProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A47B84925875CB700FE5DE5 /* IOAMapTiledCollectionProvider.mm */; };
+		8A47B8552587A62700FE5DE5 /* OAWaypointsMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A47B8542587A62700FE5DE5 /* OAWaypointsMapLayerProvider.mm */; };
 		8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
 		8A5D78AB2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
 		8A5D78AC2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
@@ -8661,6 +8662,8 @@
 		8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OANetworkUtilities.m; path = Helpers/OANetworkUtilities.m; sourceTree = "<group>"; };
 		8A47B84825875CB600FE5DE5 /* IOAMapTiledCollectionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOAMapTiledCollectionProvider.h; path = Core/IOAMapTiledCollectionProvider.h; sourceTree = "<group>"; };
 		8A47B84925875CB700FE5DE5 /* IOAMapTiledCollectionProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOAMapTiledCollectionProvider.mm; path = Core/IOAMapTiledCollectionProvider.mm; sourceTree = "<group>"; };
+		8A47B8532587A62700FE5DE5 /* OAWaypointsMapLayerProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWaypointsMapLayerProvider.h; path = Core/OAWaypointsMapLayerProvider.h; sourceTree = "<group>"; };
+		8A47B8542587A62700FE5DE5 /* OAWaypointsMapLayerProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAWaypointsMapLayerProvider.mm; path = Core/OAWaypointsMapLayerProvider.mm; sourceTree = "<group>"; };
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
 		8A4D82C623C1CD85003DC887 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A55FDAB22C2791F004B27B1 /* ro-RO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ro-RO"; path = "ro-RO.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -14205,6 +14208,15 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		8A47B8522587A61600FE5DE5 /* Waypoints */ = {
+			isa = PBXGroup;
+			children = (
+				8A47B8532587A62700FE5DE5 /* OAWaypointsMapLayerProvider.h */,
+				8A47B8542587A62700FE5DE5 /* OAWaypointsMapLayerProvider.mm */,
+			);
+			name = Waypoints;
+			sourceTree = "<group>";
+		};
 		8A755A3621CBF92400E42699 /* ChoosePlan */ = {
 			isa = PBXGroup;
 			children = (
@@ -15082,6 +15094,7 @@
 		BBBE40B01854DD7C00F1C144 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				8A47B8522587A61600FE5DE5 /* Waypoints */,
 				8A91B02A25837B1D000E403E /* Favorites */,
 				8A78D93D2293274D007F2E6E /* Amenity */,
 				8A78D93C2293271B007F2E6E /* Transport */,
@@ -21927,6 +21940,7 @@
 				8417663C1B721E58002A08CB /* NSData+CRC32.m in Sources */,
 				8AB1ACC224374AD500D8C0AC /* OAResourcesUIHelper.mm in Sources */,
 				DAFE4D492216A472009731CA /* OAOsmEditTargetViewController.mm in Sources */,
+				8A47B8552587A62700FE5DE5 /* OAWaypointsMapLayerProvider.mm in Sources */,
 				8474ABAD1E1CE22300355F88 /* OAIconTextCollapseCell.m in Sources */,
 				BBA3AF3D197FC4BB0039D991 /* OADefaultFavorite.m in Sources */,
 				840ED4861B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,

@@ -85,7 +85,8 @@ static OAQuickActionType *TYPE;
     UIColor* color;
     if (self.getParams[KEY_CATEGORY_COLOR])
     {
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][[self.getParams[KEY_CATEGORY_COLOR] integerValue]];
+        NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[KEY_CATEGORY_COLOR] integerValue]];
+        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
         color = favCol.color;
     }
     else

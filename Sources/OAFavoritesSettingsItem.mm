@@ -79,8 +79,10 @@
             [self.appliedItems addObject:[self shouldReplace] ? duplicate : [self renameItem:duplicate]];
         }
         NSArray<OAFavoriteItem *> *favourites = [NSArray arrayWithArray:[self getPointsFromGroups:self.appliedItems]];
+        std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoriteCollection(new OsmAnd::FavoriteLocationsGpxCollection());
         for (OAFavoriteItem *favorite in favourites)
-            app.favoritesCollection->copyFavoriteLocation(favorite.favorite);
+            favoriteCollection->copyFavoriteLocation(favorite.favorite);
+        app.favoritesCollection->mergeFrom(favoriteCollection);
         [app saveFavoritesToPermamentStorage];
     }
 }

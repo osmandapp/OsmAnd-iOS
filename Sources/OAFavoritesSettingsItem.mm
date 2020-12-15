@@ -69,9 +69,11 @@
                 OAFavoriteGroup *existingGroup = [self getGroup:duplicate.name];
                 if (existingGroup)
                 {
-                    NSMutableArray<OAFavoriteItem *> *favouriteItems = [NSMutableArray arrayWithArray:existingGroup.points];
-                    for (OAFavoriteItem *favouriteItem in favouriteItems)
-                        app.favoritesCollection->removeFavoriteLocation(favouriteItem.favorite);
+                    QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
+                    NSArray<OAFavoriteItem *> *favoriteItems = existingGroup.points;
+                    for (OAFavoriteItem *favoriteItem in favoriteItems)
+                        toDelete.push_back(favoriteItem.favorite);
+                    app.favoritesCollection->removeFavoriteLocations(toDelete);
                 }
             }
             [self.appliedItems addObject:[self shouldReplace] ? duplicate : [self renameItem:duplicate]];
@@ -88,8 +90,10 @@
 - (OAFavoriteGroup *) getGroup:(NSString *)nameId
 {
     for (OAFavoriteGroup *group in self.existingItems)
+    {
         if ([nameId isEqualToString:group.name])
             return group;
+    }
     return nil;
 }
 

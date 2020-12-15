@@ -283,6 +283,8 @@
 
                     [profilesSection.groupItems addObject:@{
                         @"app_mode" : appMode,
+                        @"icon" : appMode.getIcon,
+                        @"color" : UIColorFromRGB(appMode.getIconColor),
                         @"title" : title,
                         @"description" : routingProfile,
                         @"type" : kCellTypeTitleDescription,
@@ -429,11 +431,14 @@
                 for (OAFavoriteGroup *group in settings)
                 {
                     NSString *groupName = [OAFavoriteGroup getDisplayName:group.name];
+                    NSString *groupDescription = [NSString stringWithFormat:@"%@ %ld", OALocalizedString(@"points_count"), group.points.count];
+                    UIImage *favoriteIcon = [UIImage imageNamed:@"ic_custom_folder"];
                     [favoritesSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_folder",
+                        @"icon" : favoriteIcon,
                         @"color" : group.color,
                         @"title" : groupName,
-                        @"type" : kCellTypeTitle,
+                        @"description" : groupDescription,
+                        @"type" : kCellTypeTitleDescription,
                     }];
                 }
                 [data addObject:favoritesSection];
@@ -789,10 +794,8 @@
             }
             if (cell)
             {
-                OAApplicationMode *am = item[@"app_mode"];
-                UIImage *img = am.getIcon;
-                cell.imgView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.imgView.tintColor = UIColorFromRGB(am.getIconColor);
+                cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.tintColor = item[@"color"];
                 cell.textView.text = item[@"title"];
                 cell.descriptionView.text = item[@"description"];
                 cell.descriptionView.hidden = ((NSString *)item[@"description"]).length == 0;

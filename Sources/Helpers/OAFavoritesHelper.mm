@@ -11,6 +11,8 @@
 #import "OALocationPoint.h"
 #import "OAFavoriteItem.h"
 #import "Localization.h"
+#import "OAColors.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore.h>
 
@@ -109,6 +111,11 @@
 - (void) addPoint:(OAFavoriteItem *)point
 {
     [_points addObject:point];
+}
+
+- (UIColor *) color
+{
+    return [OAUtilities areColorsEqual:_color color2:UIColor.whiteColor] ? UIColorFromRGB(color_chart_orange) : _color;
 }
 
 - (BOOL) isPersonalCategoryDisplayName:(NSString *)name

@@ -1939,3 +1939,15 @@
 "plugin_popup_osm_editing_title" = "Ativar a edição do OpenStreetMap";
 "layer_amenity_label" = "Rótulos de POIs";
 "personal_category_name" = "Pessoal";
+"prev_segs_recalc_descr" = "Todos os segmentos anteriores serão recalculados usando o perfil selecionado";
+"next_segs_recalc_descr" = "Todos os segmentos subsequentes serão recalculados usando o perfil selecionado";
+"selected_seg_recalc_descr" = "Apenas o segmento selecionado será recalculado usando o perfil selecionado";
+"prev_segs_dist" = "Todos os segmentos anteriores %@";
+"prev_seg_dist" = "Segmento anterior %@";
+"next_segs_dist" = "Todos os segmentos subsequentes %@";
+"next_seg_dist" = "Próximo segmento %@";
+"whole_track" = "Trilha inteira";
+"next_seg" = "Próximo segmento";
+"whole_track_descr" = "A trilha inteira será recalculada usando o perfil selecionado.";
+"next_seg_descr" = "O próximo segmento será recalculado usando o perfil selecionado.";
+"route_betw_points_descr" = "Escolha como conectar os pontos de conexão: com uma linha reta ou calculando uma rota usando um dos perfis listados abaixo.";

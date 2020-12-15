@@ -1932,3 +1932,15 @@
 "plugin_popup_osm_editing_title" = "OpenStreetMap Düzenlemeyi aç";
 "layer_amenity_label" = "POI üst katmanı etiketleri";
 "personal_category_name" = "Kişisel";
+"prev_segs_recalc_descr" = "Önceki tüm bölümler, seçilen profil kullanılarak yeniden hesaplanacak";
+"next_segs_recalc_descr" = "Sonraki tüm bölümler, seçilen profil kullanılarak yeniden hesaplanacak";
+"selected_seg_recalc_descr" = "Yalnızca seçilen bölüm, seçilen profil kullanılarak yeniden hesaplanacak";
+"prev_segs_dist" = "Önceki tüm bölümler %@";
+"prev_seg_dist" = "Önceki bölüm %@";
+"next_segs_dist" = "Sonraki tüm bölümler %@";
+"next_seg_dist" = "Sonraki bölüm %@";
+"next_seg" = "Sonraki bölüm";
+"whole_track_descr" = "Tüm yol, seçilen profil kullanılarak yeniden hesaplanacak.";
+"next_seg_descr" = "Sonraki bölüm, seçilen profil kullanılarak yeniden hesaplanacak.";
+"route_betw_points_descr" = "Noktaların nasıl birleştirileceğini seçin: düz bir çizgi ile veya aşağıda listelenen profillerden birini kullanarak bir güzergah hesaplayarak.";
+"whole_track" = "Tüm yol";

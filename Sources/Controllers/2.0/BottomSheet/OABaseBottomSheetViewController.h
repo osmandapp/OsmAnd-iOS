@@ -23,7 +23,6 @@
 
 @property (nonatomic, readonly) CGFloat initialHeight;
 
-- (void) generateData;
 - (void) onRightButtonPressed;
 
 @end

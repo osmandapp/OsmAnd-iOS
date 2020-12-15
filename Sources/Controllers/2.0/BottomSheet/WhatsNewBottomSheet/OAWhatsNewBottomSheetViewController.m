@@ -26,11 +26,9 @@
 @implementation OAWhatsNewBottomSheetViewController
 {
     NSArray<NSArray<NSDictionary *> *> *_data;
-    NSMutableAttributedString *_attribitedText;
 }
 
 - (void)viewDidLoad {
-    [self generateData];
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -48,13 +46,11 @@
 
 - (void) generateData
 {
-    [super generateData];
-    _attribitedText = [self getAttributedContentText];
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
              @"type" : kDescrTitleCell,
-             @"attributedText" : _attribitedText
+             @"attributedText" : [self getAttributedContentText]
         }]];
     _data = data;
 }
@@ -87,7 +83,7 @@
 {
     CGFloat width = DeviceScreenWidth - 2 * kHorisontelMargin;
     CGFloat headerHeight = self.headerView.frame.size.height;
-    CGFloat contentHeight = [OAUtilities calculateTextBounds:_attribitedText width:width].height;
+    CGFloat contentHeight = [OAUtilities calculateTextBounds:[self getAttributedContentText] width:width].height;
     CGFloat buttonsHeight = 60. + [OAUtilities getBottomMargin];
     return headerHeight + contentHeight + buttonsHeight + 2 * kVerticalMargin;
 }

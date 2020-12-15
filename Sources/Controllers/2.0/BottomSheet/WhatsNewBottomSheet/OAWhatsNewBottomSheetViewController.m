@@ -26,6 +26,7 @@
 @implementation OAWhatsNewBottomSheetViewController
 {
     NSArray<NSArray<NSDictionary *> *> *_data;
+    NSMutableAttributedString *_attribitedText;
 }
 
 - (void)viewDidLoad {
@@ -47,21 +48,23 @@
 
 - (void) generateData
 {
+    [super generateData];
+    _attribitedText = [self getAttributedContentText];
     NSMutableArray *data = [NSMutableArray new];
-    NSString *fullAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), fullAppVersion];
-    NSString *releaseNotesKey = [NSString stringWithFormat:@"ios_release_%@", [OAAppVersionDependentConstants getShortAppVersion]];
     [data addObject:@[
         @{
              @"type" : kDescrTitleCell,
-             @"title" : title,
-             @"description" : OALocalizedString(releaseNotesKey)
+             @"attributedText" : _attribitedText
         }]];
     _data = data;
 }
 
-- (NSMutableAttributedString *)getAttributedContentTextWithTitle:(NSString *)title description:(NSString *)description
+- (NSMutableAttributedString *)getAttributedContentText
 {
+    NSString *fullAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), fullAppVersion];
+    NSString *description = OALocalizedString([NSString stringWithFormat:@"ios_release_%@", [OAAppVersionDependentConstants getShortAppVersion]]);
+    
     NSString *labelText = [NSString stringWithFormat:@"%@\n\n%@", title, description];
     NSRange boldRange = NSMakeRange(0, title.length);
     NSRange fullRange = NSMakeRange(0, labelText.length);
@@ -82,10 +85,9 @@
 
 - (CGFloat)initialHeight
 {
-    NSDictionary *item = _data[0][0];
     CGFloat width = DeviceScreenWidth - 2 * kHorisontelMargin;
     CGFloat headerHeight = self.headerView.frame.size.height;
-    CGFloat contentHeight = [OAUtilities calculateTextBounds:[self getAttributedContentTextWithTitle:item[@"title"] description:item[@"description"]] width:width].height;
+    CGFloat contentHeight = [OAUtilities calculateTextBounds:_attribitedText width:width].height;
     CGFloat buttonsHeight = 60. + [OAUtilities getBottomMargin];
     return headerHeight + contentHeight + buttonsHeight + 2 * kVerticalMargin;
 }
@@ -118,7 +120,7 @@
         }
         if (cell)
         {
-            cell.descriptionView.attributedText = [self getAttributedContentTextWithTitle:item[@"title"] description:item[@"description"]];
+            cell.descriptionView.attributedText = item[@"attributedText"];
         }
         return cell;
     }

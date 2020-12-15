@@ -29,6 +29,7 @@
 }
 
 - (void)viewDidLoad {
+    [self generateData];
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -47,20 +48,20 @@
 - (void) generateData
 {
     NSMutableArray *data = [NSMutableArray new];
+    NSString *fullAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), fullAppVersion];
+    NSString *releaseNotesKey = [NSString stringWithFormat:@"ios_release_%@", [OAAppVersionDependentConstants getShortAppVersion]];
     [data addObject:@[
         @{
              @"type" : kDescrTitleCell,
+             @"title" : title,
+             @"description" : OALocalizedString(releaseNotesKey)
         }]];
     _data = data;
 }
 
-- (NSMutableAttributedString *)getAttributedContentText
+- (NSMutableAttributedString *)getAttributedContentTextWithTitle:(NSString *)title description:(NSString *)description
 {
-    NSString *fullAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), fullAppVersion];
-    NSString *releaseNotesKey = [NSString stringWithFormat:@"ios_release_%@", [OAAppVersionDependentConstants getShortAppVersion]];
-    NSString *description = OALocalizedString(releaseNotesKey);
-    
     NSString *labelText = [NSString stringWithFormat:@"%@\n\n%@", title, description];
     NSRange boldRange = NSMakeRange(0, title.length);
     NSRange fullRange = NSMakeRange(0, labelText.length);
@@ -79,11 +80,12 @@
     return attributedString;
 }
 
-- (CGFloat) getViewHeight
+- (CGFloat)initialHeight
 {
+    NSDictionary *item = _data[0][0];
     CGFloat width = DeviceScreenWidth - 2 * kHorisontelMargin;
-    CGFloat headerHeight = [super getHeaderViewHeight];
-    CGFloat contentHeight = [OAUtilities calculateTextBounds:[self getAttributedContentText] width:width].height;
+    CGFloat headerHeight = self.headerView.frame.size.height;
+    CGFloat contentHeight = [OAUtilities calculateTextBounds:[self getAttributedContentTextWithTitle:item[@"title"] description:item[@"description"]] width:width].height;
     CGFloat buttonsHeight = 60. + [OAUtilities getBottomMargin];
     return headerHeight + contentHeight + buttonsHeight + 2 * kVerticalMargin;
 }
@@ -116,7 +118,7 @@
         }
         if (cell)
         {
-            cell.descriptionView.attributedText = [self getAttributedContentText];
+            cell.descriptionView.attributedText = [self getAttributedContentTextWithTitle:item[@"title"] description:item[@"description"]];
         }
         return cell;
     }

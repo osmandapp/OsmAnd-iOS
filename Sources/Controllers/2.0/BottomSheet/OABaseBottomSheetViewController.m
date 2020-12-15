@@ -22,7 +22,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
-@property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 
@@ -126,11 +125,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         default:
             return 0.0;
     }
-}
-
-- (CGFloat) getHeaderViewHeight
-{
-    return _headerView.frame.size.height;
 }
 
 - (void) adjustFrame

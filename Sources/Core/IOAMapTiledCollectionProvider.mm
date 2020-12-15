@@ -79,7 +79,7 @@ bool IOAMapTiledCollectionProvider::intersects(CollectionQuadTree& boundIntersec
     QList<OsmAnd::AreaD> result;
     const auto visibleRect = calculateRect(x, y, width, height);
     boundIntersections.query(visibleRect, result);
-    for (const auto r : result)
+    for (const auto &r : result)
         if (r.intersects(visibleRect))
             return true;
 

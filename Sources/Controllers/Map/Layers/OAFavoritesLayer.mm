@@ -240,14 +240,12 @@
         if (favorite != nullptr)
         {
             QString title = favorite->getTitle();
-            QString description = favorite->getDescription();
             QString group = favorite->getGroup();
             OsmAnd::ColorRGB color = favorite->getColor();
             
             self.app.favoritesCollection->removeFavoriteLocation(favorite);
             self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
                                                             title,
-                                                            description,
                                                             group,
                                                             color);
             [self.app saveFavoritesToPermamentStorage];

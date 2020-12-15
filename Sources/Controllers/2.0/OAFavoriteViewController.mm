@@ -66,7 +66,6 @@
         locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
         
         QString title = QString::fromNSString(formattedLocation);
-        QString description = QString::fromNSString([self getItemDesc]);
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *groupName;
@@ -92,7 +91,6 @@
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
         fav.favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                        title,
-                                                                       description,
                                                                        group,
                                                                        OsmAnd::FColorRGB(r,g,b));
         self.favorite = fav;

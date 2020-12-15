@@ -88,11 +88,14 @@
         else
             group = QString::null;
         
+        QString description = QString::null;
+
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
         fav.favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
-                                                                       title,
-                                                                       group,
-                                                                       OsmAnd::FColorRGB(r,g,b));
+                                                                        title,
+                                                                        description,
+                                                                        group,
+                                                                        OsmAnd::FColorRGB(r,g,b));
         self.favorite = fav;
         [_app saveFavoritesToPermamentStorage];
         

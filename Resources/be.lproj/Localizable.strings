@@ -1671,9 +1671,9 @@
 "search_results" = "Вынікі пошуку";
 "hide_edits" = "Схаваць лакальныя праўкі";
 "show_edits" = "Паказаць лакальныя праўкі";
-"hide_gpx" = "Схаваць паездкі";
-"show_gpx" = "Паказаць паездкі";
-"show_hide_gpx" = "Паказаць/схаваць паездкі";
+"quick_action_gpx_tracks_hide" = "Схаваць паездкі";
+"quick_action_gpx_tracks_show" = "Паказаць паездкі";
+"quick_action_show_hide_gpx_tracks" = "Паказаць/схаваць паездкі";
 "unmute_voice" = "Уключыць голас";
 "mute_voice" = "Прыглушыць голас";
 "toggle_day_night" = "Пераключыць дзённы/начны рэжым";

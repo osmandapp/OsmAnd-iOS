@@ -1163,7 +1163,7 @@
 "pause_resume_nav" = "Atura/continua la navegació";
 "toggle_nav" = "Inicia/atura la navegació";
 "toggle_day_night" = "Canvia mode diürn/nocturn";
-"show_hide_gpx" = "Mostra/amaga trajectes";
+"quick_action_show_hide_gpx_tracks" = "Mostra/amaga trajectes";
 "search_results" = "Resultats de la cerca";
 "quick_action_name_str" = "Nom de l'acció";
 "quick_action_name_alert" = "El nom de l'acció directa ha canviat a %@ per evitar duplicitats.";
@@ -1260,8 +1260,8 @@
 "day_mode" = "Mode diürn";
 "mute_voice" = "Desactiva la veu";
 "unmute_voice" = "Torna a activar la veu";
-"show_gpx" = "Mostra trajectes";
-"hide_gpx" = "Amaga trajectes";
+"quick_action_gpx_tracks_show" = "Mostra trajectes";
+"quick_action_gpx_tracks_hide" = "Amaga trajectes";
 "show_notes" = "Mostra notes OSM";
 "hide_notes" = "Amaga notes OSM";
 "show_edits" = "Mostra edicions properes";

@@ -1190,7 +1190,7 @@
 "pause_resume_nav" = "Призупинити/відновити навігацію";
 "toggle_nav" = "Розпочати/зупинити навігацію";
 "toggle_day_night" = "Перемкнути Денний/Нічний режим";
-"show_hide_gpx" = "Показати/сховати подорожі";
+"quick_action_show_hide_gpx_tracks" = "Показати/сховати подорожі";
 "search_results" = "Результати пошуку";
 "fav_show" = "Показати обрані";
 "fav_hide" = "Сховати обрані";
@@ -1203,8 +1203,8 @@
 "day_mode" = "Денний режим";
 "mute_voice" = "Вимкнути голос";
 "unmute_voice" = "Увімкнути голос";
-"show_gpx" = "Показати подорожі";
-"hide_gpx" = "Сховати подорожі";
+"quick_action_gpx_tracks_show" = "Показати подорожі";
+"quick_action_gpx_tracks_hide" = "Сховати подорожі";
 "show_notes" = "Показати нотатки OSM";
 "hide_notes" = "Сховати нотатки OSM";
 "show_edits" = "Показати місцеві зміни";

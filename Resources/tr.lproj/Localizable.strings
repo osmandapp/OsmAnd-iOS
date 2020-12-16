@@ -1208,7 +1208,7 @@
 "add_destination" = "Hedef ekle";
 "toggle_auto_zoom" = "Otomatik yakınlaştırma açık/kapalı";
 "toggle_day_night" = "Gündüz/Gece modunu değiştir";
-"show_hide_gpx" = "Seyahatleri göster/gizle";
+"quick_action_show_hide_gpx_tracks" = "Seyahatleri göster/gizle";
 "search_results" = "Arama sonuçları";
 "quick_action_name_alert" = "Hızlı eylem adı, yinelemeyi önlemek için %@ olarak değiştirildi.";
 "quick_action_screen_header" = "Ekran %ld";
@@ -1255,8 +1255,8 @@
 "pause_nav" = "Navigasyonu duraklat";
 "mute_voice" = "Sesi kapat";
 "unmute_voice" = "Sesi aç";
-"show_gpx" = "Seyahatleri göster";
-"hide_gpx" = "Seyahatleri gizle";
+"quick_action_gpx_tracks_show" = "Seyahatleri göster";
+"quick_action_gpx_tracks_hide" = "Seyahatleri gizle";
 "show_notes" = "OSM notlarını göster";
 "hide_notes" = "OSM notlarını gizle";
 "show_edits" = "Yerel düzenlemeleri göster";

@@ -1161,7 +1161,7 @@
 "pause_resume_nav" = "Halda áfram/Setja leiðsögn í bið";
 "toggle_nav" = "Hefja/Stöðva leiðsögn";
 "toggle_day_night" = "Skipta á milli Dags/Næturhams";
-"show_hide_gpx" = "Birta/Fela ferla";
+"quick_action_show_hide_gpx_tracks" = "Birta/Fela ferla";
 "search_results" = "Leitarniðurstöður";
 "quick_action_name_str" = "Heiti aðgerðar";
 "quick_action_name_alert" = "Nafni á flýtiaðgerð var breytt í %@ til að koma í veg fyrir tvítekningu.";
@@ -1223,8 +1223,8 @@
 "day_mode" = "Dagshamur";
 "mute_voice" = "Þagga niður í tali";
 "unmute_voice" = "Kveikja á tali";
-"show_gpx" = "Birta ferðir";
-"hide_gpx" = "Fela ferðir";
+"quick_action_gpx_tracks_show" = "Birta ferðir";
+"quick_action_gpx_tracks_hide" = "Fela ferðir";
 "show_notes" = "Birta OSM-minnispunkta";
 "hide_notes" = "Fela OSM-minnispunkta";
 "show_edits" = "Sýna staðværar breytingar";

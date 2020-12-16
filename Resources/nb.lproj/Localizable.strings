@@ -790,9 +790,9 @@
 "day_mode" = "Dagmodus";
 "mute_voice" = "Slå av tale";
 "unmute_voice" = "Slå på tale";
-"show_hide_gpx" = "Show/hide trips";
-"show_gpx" = "Show trips";
-"hide_gpx" = "Hide trips";
+"quick_action_show_hide_gpx_tracks" = "Show/hide trips";
+"quick_action_gpx_tracks_show" = "Show trips";
+"quick_action_gpx_tracks_hide" = "Hide trips";
 "show_notes" = "Vis OSM-notater";
 "hide_notes" = "Skjul OSM-notater";
 "show_edits" = "Show local edits";

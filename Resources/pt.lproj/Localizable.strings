@@ -1109,7 +1109,7 @@
 "pause_resume_nav" = "Pausar/reatar navegação";
 "toggle_nav" = "Iniciar/parar navegação";
 "toggle_day_night" = "Mudar de modo Dia/Nocturno";
-"show_hide_gpx" = "Mostrar/ocultar viagens";
+"quick_action_show_hide_gpx_tracks" = "Mostrar/ocultar viagens";
 "quick_action_name_str" = "Nome da ação";
 "fav_add_group" = "Adicionar um grupo";
 "poi_list" = "Lista de POIs";
@@ -1228,8 +1228,8 @@
 "hide_poi_action" = "Ocultar POI";
 "auto_zoom_on" = "Zoom automático ativado";
 "auto_zoom_off" = "Zoom automático desativado";
-"show_gpx" = "Mostrar viagens";
-"hide_gpx" = "Ocultar viagens";
+"quick_action_gpx_tracks_show" = "Mostrar viagens";
+"quick_action_gpx_tracks_hide" = "Ocultar viagens";
 "show_edits" = "Mostrar edições locais";
 "hide_edits" = "Ocultar edições locais";
 "quick_action_edit_list" = "Editar lista de ações";

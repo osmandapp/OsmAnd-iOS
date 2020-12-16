@@ -1162,7 +1162,7 @@
 "pause_resume_nav" = "إيقاف/مواصلة الملاحة";
 "toggle_nav" = "بدء/إنهاء الملاحة";
 "toggle_day_night" = "نمط ليلي/نهاري";
-"show_hide_gpx" = "إظهار/إخفاء المسارات";
+"quick_action_show_hide_gpx_tracks" = "إظهار/إخفاء المسارات";
 "search_results" = "نتائج البحث";
 "quick_action_name_str" = "اسم الإجراء";
 "quick_action_name_alert" = "تم تغيير اسم الاختصار السريع إلى٪ @ لتجنب التكرار.";
@@ -1223,8 +1223,8 @@
 "day_mode" = "نهاري";
 "mute_voice" = "كتم الصوت";
 "unmute_voice" = "إلغاء كتم الصوت";
-"show_gpx" = "إظهار المسارات";
-"hide_gpx" = "إخفاء المسارات";
+"quick_action_gpx_tracks_show" = "إظهار المسارات";
+"quick_action_gpx_tracks_hide" = "إخفاء المسارات";
 "show_notes" = "إظهار ملاحظات OSM";
 "hide_notes" = "إخفاء ملاحظات OSM";
 "show_edits" = "إظهار التعديلات المحلية";

@@ -1164,7 +1164,7 @@
 "pause_resume_nav" = "Navigation pausieren/fortsetzen";
 "toggle_nav" = "Navigation starten/stoppen";
 "toggle_day_night" = "Tag-/Nacht-Modus umschalten";
-"show_hide_gpx" = "Strecken anzeigen/verstecken";
+"quick_action_show_hide_gpx_tracks" = "Strecken anzeigen/verstecken";
 "search_results" = "Suchergebnisse";
 "quick_action_name_str" = "Aktionsname";
 "quick_action_name_alert" = "Schnellaktions-Name wurde geändert zu %@ um Duplikate zu verhindern.";
@@ -1228,8 +1228,8 @@
 "day_mode" = "Tag-Modus";
 "mute_voice" = "Sprachausgabe stummschalten";
 "unmute_voice" = "Sprachausgabe aktivieren";
-"show_gpx" = "Strecken anzeigen";
-"hide_gpx" = "Strecken ausblenden";
+"quick_action_gpx_tracks_show" = "Strecken anzeigen";
+"quick_action_gpx_tracks_hide" = "Strecken ausblenden";
 "show_notes" = "OSM-Hinweise einblenden";
 "hide_notes" = "OSM-Hinweise ausblenden";
 "show_edits" = "Lokale Bearbeitungen anzeigen";

@@ -1164,7 +1164,7 @@
 "pause_resume_nav" = "Pause/genoptag navigation";
 "toggle_nav" = "Start/stop navigation";
 "toggle_day_night" = "Skift dag/nat tilstand";
-"show_hide_gpx" = "Vis/skjul ruter";
+"quick_action_show_hide_gpx_tracks" = "Vis/skjul ruter";
 "search_results" = "Søgeresultater";
 "quick_action_name_str" = "Genvejsnavn";
 "quick_action_name_alert" = "Navnet på genvejen blev ændret til %@ for at undgå dubletter.";
@@ -1226,8 +1226,8 @@
 "day_mode" = "Dag tilstand";
 "mute_voice" = "Deaktiver talevejledning";
 "unmute_voice" = "Aktiver talevejledning";
-"show_gpx" = "Vis ruter";
-"hide_gpx" = "Skjul ruter";
+"quick_action_gpx_tracks_show" = "Vis ruter";
+"quick_action_gpx_tracks_hide" = "Skjul ruter";
 "show_notes" = "Vis OSM-noter";
 "hide_notes" = "Skjul OSM-noter";
 "show_edits" = "Vis lokale redigeringer";

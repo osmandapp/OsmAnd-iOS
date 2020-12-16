@@ -37,6 +37,8 @@
 #import "OAInfoBottomView.h"
 #import "OAMovePointCommand.h"
 #import "OAClearPointsCommand.h"
+#import "OASegmentOptionsBottomSheetViewController.h"
+#import "OAChangeRouteModeCommand.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -61,7 +63,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     EOAHudModeAddPoints
 };
 
-@interface OARoutePlanningHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate>
+@interface OARoutePlanningHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate,
+    OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate, OASegmentOptionsDelegate, OASnapToRoadProgressDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
@@ -77,6 +80,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIImageView *leftImageVIew;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+@property (weak, nonatomic) IBOutlet UIView *actionButtonsContainer;
+@property (weak, nonatomic) IBOutlet UIButton *modeButton;
+@property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 
 @end
 
@@ -109,6 +115,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         _layer = _mapPanel.mapViewController.mapLayers.routePlanningLayer;
         // TODO: port later public void openPlanRoute()
         _editingContext = [[OAMeasurementEditingContext alloc] init];
+        _editingContext.progressDelegate = self;
         
         _layer.editingCtx = _editingContext;
     }
@@ -130,6 +137,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     _undoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     _redoButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+    
+    [self setupModeButton];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -155,6 +164,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     [self adjustMapViewPort];
     [self changeMapRulerPosition];
+    [self adjustActionButtonsPosition:self.getViewHeight];
     
     self.tableView.userInteractionEnabled = YES;
     [self.view bringSubviewToFront:self.tableView];
@@ -167,7 +177,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (CGFloat)initialMenuHeight
 {
-    return _hudMode == EOAHudModeRoutePlanning ? 58. + self.toolBarView.frame.size.height : _infoView.getViewHeight;
+    return _hudMode == EOAHudModeRoutePlanning ? 62. + self.toolBarView.frame.size.height : _infoView.getViewHeight;
 }
 
 - (CGFloat)expandedMenuHeight
@@ -185,10 +195,20 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return 100.;
 }
 
+- (void) adjustActionButtonsPosition:(CGFloat)height
+{
+    CGRect buttonsFrame = _actionButtonsContainer.frame;
+    if (OAUtilities.isLandscapeIpadAware)
+        buttonsFrame.origin = CGPointMake(self.scrollableView.frame.size.width, DeviceScreenHeight - buttonsFrame.size.height - 15. - OAUtilities.getBottomMargin);
+    else
+        buttonsFrame.origin = CGPointMake(0., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
+    _actionButtonsContainer.frame = buttonsFrame;
+}
+
 - (void) changeMapRulerPosition
 {
     CGFloat bottomMargin = OAUtilities.isLandscapeIpadAware ? kDefaultMapRulerMarginBottom : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
-    CGFloat leftMargin = OAUtilities.isLandscapeIpadAware ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 : kDefaultMapRulerMarginLeft;
+    CGFloat leftMargin = OAUtilities.isLandscapeIpadAware ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 + self.actionButtonsContainer.frame.size.width : kDefaultMapRulerMarginLeft;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
@@ -237,6 +257,24 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         NSString *distanceStr = [_app getFormattedDistance:_editingContext.getRouteDistance];
         self.titleLabel.text = [NSString stringWithFormat:@"%@, %@ %ld", distanceStr, OALocalizedString(@"points_count"), _editingContext.getPointsCount];
     }
+}
+
+- (void)setupModeButton
+{
+    UIImage *img;
+    UIColor *tint;
+    if (_editingContext.appMode != OAApplicationMode.DEFAULT)
+    {
+        img = [_editingContext.appMode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        tint = UIColorFromRGB(_editingContext.appMode.getIconColor);
+    }
+    else
+    {
+        img = [[UIImage imageNamed:@"ic_custom_straight_line"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        tint = UIColorFromRGB(color_chart_orange);
+    }
+    [_modeButton setImage:img forState:UIControlStateNormal];
+    [_modeButton setTintColor:tint];
 }
 
 
@@ -291,17 +329,26 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     [_editingContext.commandManager undo];
     [self onPointsListChanged];
+    [self setupModeButton];
 }
 
 - (IBAction)onRedoButtonPressed:(id)sender
 {
     [_editingContext.commandManager redo];
     [self onPointsListChanged];
+    [self setupModeButton];
 }
 
 - (IBAction)onAddPointPressed:(id)sender
 {
     [self addCenterPoint];
+}
+
+- (IBAction)modeButtonPressed:(id)sender
+{
+    OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeWholeRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeAll appMode:_editingContext.appMode];
+    bottomSheet.delegate = self;
+    [bottomSheet presentInViewController:self];
 }
 
 - (NSString *) getSuggestedFileName
@@ -413,8 +460,8 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
         if (weakSelf == nil)
             return;
         NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:_editingContext.getPoints];
-        OATrackSegment *before = _editingContext.getBeforeTrkSegmentLine;
-        OATrackSegment *after = _editingContext.getAfterTrkSegmentLine;
+        NSArray<OAGpxTrkSeg *> *before = _editingContext.getBeforeTrkSegmentLine;
+        NSArray<OAGpxTrkSeg *> *after = _editingContext.getAfterTrkSegmentLine;
         if (gpxFile == nil)
         {
             NSString *fileName = outFile.lastPathComponent;
@@ -423,14 +470,17 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
             if (saveType == LINE)
             {
                 OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
+                NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray new];
+                for (OAGpxTrkSeg *seg in [before arrayByAddingObjectsFromArray:after])
+                {
+                    [points addObjectsFromArray:seg.points];
+                }
 //                if (_editingContext.hasRoute)
 //                {
 //                    segment.points = [NSArray arrayWithArray:_editingContext.getRoutePoints];
 //                }
 //                else
 //                {
-                NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:before.points];
-                [points addObjectsFromArray:after.points];
                 segment.points = [NSArray arrayWithArray:points];
 //                }
                 OAGpxTrk *track = [[OAGpxTrk alloc] init];
@@ -560,6 +610,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 {
     [self changeCenterOffset:height];
     [_mapPanel targetSetBottomControlsVisible:YES menuHeight:OAUtilities.isLandscapeIpadAware ? 0. : (height - 30.) animated:YES];
+    [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];
     [self adjustMapViewPort];
 }
@@ -680,7 +731,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _editingContext.selectedPointPosition = indexPath.row;
-    OAPointOptionsBottomSheetViewController *bottomSheet = [[OAPointOptionsBottomSheetViewController alloc] initWithPoint:_editingContext.getPoints[indexPath.row] index:indexPath.row];
+    OAPointOptionsBottomSheetViewController *bottomSheet = [[OAPointOptionsBottomSheetViewController alloc] initWithPoint:_editingContext.getPoints[indexPath.row] index:indexPath.row editingContext:_editingContext];
     bottomSheet.delegate = self;
     [bottomSheet presentInViewController:self];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -838,8 +889,80 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
             _editingContext.selectedPointPosition = selectedPoint + 1;
         
         [self onPointsListChanged];
-        [_layer updateLayer];
     }
+}
+
+- (void)onChangeRouteTypeBefore
+{
+    OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypePrevRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeSingle appMode:_editingContext.getBeforeSelectedPointAppMode];
+    bottomSheet.delegate = self;
+    [bottomSheet presentInViewController:self];
+}
+
+- (void)onChangeRouteTypeAfter
+{
+    OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeNextRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeSingle appMode:_editingContext.getSelectedPointAppMode];
+    bottomSheet.delegate = self;
+    [bottomSheet presentInViewController:self];
+}
+
+#pragma mark - OASegmentOptionsDelegate
+
+- (void)onApplicationModeChanged:(OAApplicationMode *)mode dialogType:(EOARouteBetweenPointsDialogType)dialogType dialogMode:(EOARouteBetweenPointsDialogMode)dialogMode
+{
+    if (_layer != nil) {
+        EOAChangeRouteType changeRouteType = EOAChangeRouteNextSegment;
+        switch (dialogType) {
+            case EOADialogTypeWholeRouteCalculation:
+            {
+                changeRouteType = dialogMode == EOARouteBetweenPointsDialogModeSingle
+                ? EOAChangeRouteLastSegment : EOAChangeRouteWhole;
+                break;
+            }
+            case EOADialogTypeNextRouteCalculation:
+            {
+                changeRouteType = dialogMode == EOARouteBetweenPointsDialogModeSingle
+                ? EOAChangeRouteNextSegment : EOAChangeRouteAllNextSegments;
+                break;
+            }
+            case EOADialogTypePrevRouteCalculation:
+            {
+                changeRouteType = dialogMode == EOARouteBetweenPointsDialogModeSingle
+                ? EOAChangeRoutePrevSegment : EOAChangeRouteAllPrevSegments;
+                break;
+            }
+        }
+        [_editingContext.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:_layer appMode:mode changeRouteType:changeRouteType pointIndex:_editingContext.selectedPointPosition]];
+//        updateUndoRedoButton(false, redoBtn);
+//        updateUndoRedoButton(true, undoBtn);
+//        disable(upDownBtn);
+//        updateSnapToRoadControls();
+        [self updateDistancePointsText];
+        [self setupModeButton];
+    }
+}
+
+#pragma mark - OASnapToRoadProgressDelegate
+
+- (void)hideProgressBar
+{
+    _progressView.hidden = YES;
+}
+
+- (void)refresh
+{
+    [_layer updateLayer];
+    [self updateDistancePointsText];
+}
+
+- (void)showProgressBar
+{
+    _progressView.hidden = NO;
+}
+
+- (void)updateProgress:(int)progress
+{
+    [_progressView setProgress:progress / 100.];
 }
 
 @end

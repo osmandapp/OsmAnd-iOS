@@ -21,7 +21,7 @@
 @property (nonatomic) OAMeasurementEditingContext *editingCtx;
 @property (nonatomic, weak) id<OAMeasurementLayerDelegate> delegate;
 
-- (OAGpxTrkPt *) addCenterPoint;
+- (OAGpxTrkPt *) addCenterPoint:(BOOL)addPointBefore;
 
 - (void) enterMovingPointMode;
 - (void) exitMovingMode;

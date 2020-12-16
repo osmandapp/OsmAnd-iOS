@@ -160,13 +160,15 @@
         BOOL transliterate = settings.settingMapLanguageTranslit;
         float textSize = settings.textSize.get;
 
+        const auto displayDensityFactor = self.mapViewController.displayDensityFactor;
+        const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
         if (categoriesFilter.count() > 0)
         {
-            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.mapViewController.displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate)));
+            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate)));
         }
         else
         {
-            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.mapViewController.displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate)));
+            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, textSize, nightMode, showLabels, QString::fromNSString(lang), transliterate)));
         }
         
         [self.mapView addTiledSymbolsProvider:_amenitySymbolsProvider];

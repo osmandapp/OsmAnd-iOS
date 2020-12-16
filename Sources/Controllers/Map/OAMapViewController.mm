@@ -96,6 +96,7 @@
 #include <OsmAndCore/Map/IOnSurfaceMapSymbol.h>
 #include <OsmAndCore/Map/MapSymbolsGroup.h>
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
+#include <OsmAndCore/IFavoriteLocation.h>
 
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
@@ -1675,10 +1676,12 @@
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
         const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode]);
+        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode]);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
+        self.referenceTileSizeRasterOrigInPixels = rasterTileSizeOrig;
 
         // Release previously-used resources (if any)
         [_mapLayers resetLayers];
@@ -2340,10 +2343,10 @@
 
 - (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location
 {
-    for (const auto& fav : [_mapLayers.favoritesLayer getFavoritesMarkersCollection]->getMarkers())
+    for (const auto& fav : _app.favoritesCollection->getFavoriteLocations())
     {
-        double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
-        double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
+        double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition31().x);
+        double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition31().y);
         if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:location.latitude destLon:location.longitude])
         {
             return YES;

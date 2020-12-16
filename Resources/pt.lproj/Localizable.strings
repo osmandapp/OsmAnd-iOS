@@ -1656,3 +1656,4 @@
 "shared_string_poi_types" = "Tipos de PDI";
 "layer_amenity_label" = "Rótulos de sobreposições de POI";
 "osm_notes" = "Anotações do OSM";
+"personal_category_name" = "Pessoal";

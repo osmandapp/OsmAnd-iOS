@@ -10,7 +10,7 @@
 #import "OAClearPointsCommand.h"
 #import "OAInfoBottomView.h"
 
-@class OAGpxTrkPt;
+@class OAGpxTrkPt, OAMeasurementEditingContext;
 
 @protocol OAPointOptionsBottmSheetDelegate <NSObject>
 
@@ -19,12 +19,15 @@
 - (void) onAddPoints:(EOAAddPointMode)type;
 - (void) onDeletePoint;
 
+- (void) onChangeRouteTypeBefore;
+- (void) onChangeRouteTypeAfter;
+
 @end
 
 @interface OAPointOptionsBottomSheetViewController : OABaseBottomSheetViewController
 
 @property (nonatomic, weak) id<OAPointOptionsBottmSheetDelegate> delegate;
 
-- (instancetype) initWithPoint:(OAGpxTrkPt *)point index:(NSInteger)pointIndex;
+- (instancetype) initWithPoint:(OAGpxTrkPt *)point index:(NSInteger)pointIndex editingContext:(OAMeasurementEditingContext *)editingContext;
 
 @end

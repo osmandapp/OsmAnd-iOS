@@ -1088,20 +1088,20 @@ static UIViewController *parentController;
     NSSortDescriptor *sectionDescriptor = [[NSSortDescriptor alloc] initWithKey:@"section" ascending:NO];
     NSArray<NSIndexPath *> *sortedArray = [_selectedItems sortedArrayUsingDescriptors:@[sectionDescriptor, rowDescriptor]];
     OsmAndAppInstance app = [OsmAndApp instance];
-    
+    QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
     for (NSIndexPath *selectedItem in sortedArray)
     {
         NSInteger dataIndex = selectedItem.row;
         
         OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:dataIndex];
-        
+        toDelete.push_back(item.favorite);
         [self.favoriteTableView beginUpdates];
-        app.favoritesCollection->removeFavoriteLocation(item.favorite);
         [self.sortedFavoriteItems removeObjectAtIndex:dataIndex];
         [self.favoriteTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:dataIndex inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
         [self.favoriteTableView endUpdates];
         [app saveFavoritesToPermamentStorage];
     }
+    app.favoritesCollection->removeFavoriteLocations(toDelete);
 }
 
 - (void)removeGroupHeader:(NSIndexPath *)indexPath{

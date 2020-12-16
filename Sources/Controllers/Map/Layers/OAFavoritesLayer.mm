@@ -14,6 +14,7 @@
 #import "OAMapRendererView.h"
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
+#import "OAFavoritesMapLayerProvider.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -24,7 +25,9 @@
 @implementation OAFavoritesLayer
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _favoritesMarkersCollection;
+    std::shared_ptr<OAFavoritesMapLayerProvider> _favoritesMapProvider;
     BOOL _showCaptionsCache;
+    OsmAnd::PointI _hiddenPointPos31;
 }
 
 - (NSString *) layerId
@@ -36,6 +39,7 @@
 {
     [super initLayer];
  
+    _hiddenPointPos31 = OsmAnd::PointI();
     _showCaptionsCache = self.showCaptions;
     
     self.app.favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
@@ -52,8 +56,6 @@
                                                                       {
                                                                           [self onFavoriteLocationChanged:favoriteLocation];
                                                                       });
-
-    [self refreshFavoritesMarkersCollection];
     
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                     Visibility:self.isVisible];
@@ -69,7 +71,8 @@
     if (self.showCaptions != _showCaptionsCache)
     {
         _showCaptionsCache = self.showCaptions;
-        [self reloadFavorites];
+        if (self.isVisible)
+            [self reloadFavorites];
     }
     
     return YES;
@@ -89,50 +92,30 @@
     self.app.favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
 }
 
-- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getFavoritesMarkersCollection
-{
-    return _favoritesMarkersCollection;
-}
-
-- (void) refreshFavoritesMarkersCollection
-{
-    _favoritesMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
-    
-    for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
-    {
-        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        
-        OsmAnd::MapMarkerBuilder builder;
-        builder.setIsAccuracyCircleSupported(false)
-        .setBaseOrder(self.baseOrder)
-        .setIsHidden(false)
-        .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
-        .setPosition(favLoc->getPosition31())
-        .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
-        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
-        
-        if (self.showCaptions && !favLoc->getTitle().isEmpty())
-        {
-            builder.setCaption(favLoc->getTitle());
-            builder.setCaptionStyle(self.captionStyle);
-            builder.setCaptionTopSpace(self.captionTopSpace);
-        }
-        builder.buildAndAddToCollection(_favoritesMarkersCollection);
-    }
-}
-
 - (void) show
 {
     [self.mapViewController runWithRenderSync:^{
-        [self.mapView addKeyedSymbolsProvider:_favoritesMarkersCollection];
+        if (_favoritesMapProvider)
+        {
+            [self.mapView removeTiledSymbolsProvider:_favoritesMapProvider];
+            _favoritesMapProvider = nullptr;
+        }
+        const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
+        QList<OsmAnd::PointI> hiddenPoints;
+        if (_hiddenPointPos31 != OsmAnd::PointI())
+            hiddenPoints.append(_hiddenPointPos31);
+        
+        _favoritesMapProvider.reset(new OAFavoritesMapLayerProvider(self.app.favoritesCollection->getFavoriteLocations(),
+                                                                    self.baseOrder, hiddenPoints, self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
+        [self.mapView addTiledSymbolsProvider:_favoritesMapProvider];
     }];
 }
 
 - (void) hide
 {
     [self.mapViewController runWithRenderSync:^{
-        [self.mapView removeKeyedSymbolsProvider:_favoritesMarkersCollection];
+        [self.mapView removeTiledSymbolsProvider:_favoritesMapProvider];
+        _favoritesMapProvider = nullptr;
     }];
 }
 
@@ -149,8 +132,6 @@
 - (void) reloadFavorites
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self hide];
-        [self refreshFavoritesMarkersCollection];
         [self show];
     });
 }
@@ -200,24 +181,18 @@
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    if (self.isVisible)
     {
-        for (const auto& fav : _favoritesMarkersCollection->getMarkers())
+        if (const auto mapSymbol = dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo->mapSymbol))
         {
-            if (markerGroup->getMapMarker() == fav.get())
+            const auto symbolPos31 = mapSymbol->getPosition31();
+            for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
             {
-                double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
-                double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
-                for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
+                if (favLoc->getPosition31() == symbolPos31)
                 {
-                    double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
-                    double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
-                    if ([OAUtilities isCoordEqual:favLat srcLon:favLon destLat:lat destLon:lon])
-                    {
-                        OATargetPoint *targetPoint = [self getTargetPointCpp:favLoc.get()];
-                        if (![found containsObject:targetPoint])
-                            [found addObject:targetPoint];
-                    }
+                    OATargetPoint *targetPoint = [self getTargetPointCpp:favLoc.get()];
+                    if (![found containsObject:targetPoint])
+                        [found addObject:targetPoint];
                 }
             }
         }
@@ -226,34 +201,37 @@
 
 #pragma mark - OAMoveObjectProvider
 
-- (BOOL)isObjectMovable:(id)object
+- (BOOL) isObjectMovable:(id)object
 {
     return [object isKindOfClass:OAFavoriteItem.class];
 }
 
-- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (void) applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (object && [self isObjectMovable:object])
     {
         OAFavoriteItem *item = (OAFavoriteItem *)object;
+        _hiddenPointPos31 = OsmAnd::PointI();
         const auto& favorite = item.favorite;
         if (favorite != nullptr)
         {
             QString title = favorite->getTitle();
+            QString description = favorite->getDescription();
             QString group = favorite->getGroup();
             OsmAnd::ColorRGB color = favorite->getColor();
             
             self.app.favoritesCollection->removeFavoriteLocation(favorite);
             self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
-                                                            title,
-                                                            group,
-                                                            color);
+                                                                        title,
+                                                                        description,
+                                                                        group,
+                                                                        color);
             [self.app saveFavoritesToPermamentStorage];
         }
     }
 }
 
-- (UIImage *)getPointIcon:(id)object
+- (UIImage *) getPointIcon:(id)object
 {
     if (object && [self isObjectMovable:object])
     {
@@ -266,19 +244,13 @@
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }
 
-- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+- (void) setPointVisibility:(id)object hidden:(BOOL)hidden
 {
     if (object && [self isObjectMovable:object])
     {
         OAFavoriteItem *item = (OAFavoriteItem *)object;
-        const auto& pos = item.favorite->getPosition31();
-        for (const auto& marker : _favoritesMarkersCollection->getMarkers())
-        {
-            if (pos == marker->getPosition())
-            {
-                marker->setIsHidden(hidden);
-            }
-        }
+        _hiddenPointPos31 = hidden ? item.favorite->getPosition31() : OsmAnd::PointI();
+        [self reloadFavorites];
     }
 }
 

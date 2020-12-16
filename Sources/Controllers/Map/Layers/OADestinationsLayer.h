@@ -16,7 +16,7 @@
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getDestinationsMarkersCollection;
 
-- (void) addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;
+- (void) addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude description:(NSString *)description;
 - (void) removeDestinationPin:(double)latitude longitude:(double)longitude;
 
 @end

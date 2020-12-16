@@ -58,6 +58,7 @@ const static float kTextSize = 13.0f;
     
     _captionStyle
         .setWrapWidth(20)
+        .setMaxLines(3)
         .setBold(false)
         .setItalic(false)
         .setColor(OsmAnd::ColorARGB(self.nightMode ? color_widgettext_night_argb : color_widgettext_day_argb))

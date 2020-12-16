@@ -24,6 +24,35 @@ typedef enum
     
 } OAGpxFixType;
 
+@interface OARouteSegment : NSObject
+
+@property (nonatomic) NSString *identifier;
+@property (nonatomic) NSString *length;
+@property (nonatomic) NSString *segmentTime;
+@property (nonatomic) NSString *speed;
+@property (nonatomic) NSString *turnType;
+@property (nonatomic) NSString *turnAngle;
+@property (nonatomic) NSString *types;
+@property (nonatomic) NSString *pointTypes;
+@property (nonatomic) NSString *names;
+
+- (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
+
+- (NSDictionary<NSString *, NSString *> *) toDictionary;
+
+@end
+
+@interface OARouteType : NSObject
+
+@property (nonatomic) NSString *tag;
+@property (nonatomic) NSString *value;
+
+- (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
+
+- (NSDictionary<NSString *, NSString *> *) toDictionary;
+
+@end
+
 
 @interface OAExtraData : NSObject
 @end
@@ -107,7 +136,7 @@ typedef enum
 
 @end
 
-
+// TODO: Sync code with Android (get rid of OAGpxExtension)
 
 @interface OAGpxExtension : OAExtraData
 
@@ -120,9 +149,12 @@ typedef enum
 
 @interface OAGpxExtensions : OAExtraData
 
+// TODO: Sync with Android
 @property (nonatomic) NSDictionary *attributes;
 @property (nonatomic) NSString *value;
-@property (nonatomic) NSArray *extensions;
+@property (nonatomic) NSArray<OAGpxExtension *> *extensions;
+
+- (void) copyExtensions:(OAGpxExtensions *)e;
 
 @end
 
@@ -178,6 +210,17 @@ typedef enum
 
 - (instancetype) initWithPoint:(OAGpxTrkPt *)point;
 
+- (NSString *) getProfileType;
+- (void) setProfileType:(NSString *)profileType;
+- (void) removeProfileType;
+- (BOOL) hasProfile;
+- (BOOL) isGap;
+- (void) setGap;
+- (void) copyExtensions:(OAGpxTrkPt *)pt;
+
+- (NSInteger) getTrkPtIndex;
+- (void) setTrkPtIndex:(NSInteger)index;
+
 @end
 
 @class OASplitMetric;
@@ -187,9 +230,14 @@ typedef enum
 @property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxTrkSeg> trkseg;
 @property (nonatomic) BOOL generalSegment;
 
+@property (nonatomic) NSMutableArray<OARouteSegment *> *routeSegments;
+@property (nonatomic) NSMutableArray<OARouteType *> *routeTypes;
+
 -(NSArray*) splitByDistance:(double)meters;
 -(NSArray*) splitByTime:(int)seconds;
 -(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit;
+
+- (BOOL) hasRoute;
 
 @end
 

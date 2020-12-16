@@ -72,6 +72,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 @property (nonatomic, readonly) OAMapRendererView *mapView;
 @property (weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
 @property (nonatomic, readonly) OAMapLayers *mapLayers;
+@property unsigned int referenceTileSizeRasterOrigInPixels;
 
 @property (readonly) OAObservable* stateObservable;
 @property (readonly) OAObservable* settingsObservable;

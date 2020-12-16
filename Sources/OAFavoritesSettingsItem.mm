@@ -37,7 +37,7 @@
 
     _settings = [OAAppSettings sharedManager];
     const auto& allFavorites = [OsmAndApp instance].favoritesCollection->getFavoriteLocations();
-    self.existingItems  = [[NSArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]] mutableCopy];
+    self.existingItems = [NSMutableArray arrayWithArray:[OAFavoritesHelper getGroupedFavorites:allFavorites]];
 }
 
 - (EOASettingsItemType) type
@@ -62,6 +62,7 @@
     if (newItems.count > 0 || self.duplicateItems.count > 0)
     {
         self.appliedItems = [NSMutableArray arrayWithArray:newItems];
+        QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toDelete;
         for (OAFavoriteGroup *duplicate in self.duplicateItems)
         {
             if ([self shouldReplace])
@@ -69,13 +70,17 @@
                 OAFavoriteGroup *existingGroup = [self getGroup:duplicate.name];
                 if (existingGroup)
                 {
-                    NSMutableArray<OAFavoriteItem *> *favouriteItems = [NSMutableArray arrayWithArray:existingGroup.points];
-                    for (OAFavoriteItem *favouriteItem in favouriteItems)
-                        app.favoritesCollection->removeFavoriteLocation(favouriteItem.favorite);
+                    [self.existingItems removeObject:existingGroup];
+                    NSArray<OAFavoriteItem *> *favoriteItems = existingGroup.points;
+                    for (OAFavoriteItem *favoriteItem in favoriteItems)
+                    {
+                        toDelete.push_back(favoriteItem.favorite);
+                    }
                 }
             }
             [self.appliedItems addObject:[self shouldReplace] ? duplicate : [self renameItem:duplicate]];
         }
+        app.favoritesCollection->removeFavoriteLocations(toDelete);
         NSArray<OAFavoriteItem *> *favourites = [NSArray arrayWithArray:[self getPointsFromGroups:self.appliedItems]];
         std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoriteCollection(new OsmAnd::FavoriteLocationsGpxCollection());
         for (OAFavoriteItem *favorite in favourites)
@@ -88,8 +93,10 @@
 - (OAFavoriteGroup *) getGroup:(NSString *)nameId
 {
     for (OAFavoriteGroup *group in self.existingItems)
+    {
         if ([nameId isEqualToString:group.name])
             return group;
+    }
     return nil;
 }
 
@@ -150,8 +157,7 @@
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
-    favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(filePath));
+    const auto favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(filePath));
     if (favoritesCollection)
         [self.item.items addObjectsFromArray:[OAFavoritesHelper getGroupedFavorites:favoritesCollection->getFavoriteLocations()]];
     return YES;

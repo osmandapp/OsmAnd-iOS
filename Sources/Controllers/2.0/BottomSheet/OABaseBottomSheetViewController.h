@@ -20,6 +20,8 @@
 
 - (void) presentInViewController:(UIViewController *)viewController;
 
+@property (nonatomic, readonly) CGFloat initialHeight;
+
 - (void) onRightButtonPressed;
 
 @end

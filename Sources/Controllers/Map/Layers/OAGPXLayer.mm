@@ -18,6 +18,7 @@
 #import "OAGpxWptItem.h"
 #import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
+#import "OAWaypointsMapLayerProvider.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -27,6 +28,11 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
 @implementation OAGPXLayer
+{
+    std::shared_ptr<OAWaypointsMapLayerProvider> _waypointsMapProvider;
+    BOOL _showCaptionsCache;
+    OsmAnd::PointI _hiddenPointPos31;
+}
 
 - (NSString *) layerId
 {
@@ -35,22 +41,41 @@
 
 - (void) initLayer
 {
-    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
-    _markersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+    [super initLayer];
+    
+    _hiddenPointPos31 = OsmAnd::PointI();
+    _showCaptionsCache = self.showCaptions;
 
+    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    
     [self.mapView addKeyedSymbolsProvider:_linesCollection];
-    [self.mapView addKeyedSymbolsProvider:_markersCollection];
 }
 
 - (void) resetLayer
 {
-    [self.mapView removeKeyedSymbolsProvider:_markersCollection];
+    [super resetLayer];
+
+    [self.mapView removeTiledSymbolsProvider:_waypointsMapProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
-    _markersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     
     _gpxDocs.clear();
+}
+
+- (BOOL) updateLayer
+{
+    [super updateLayer];
+    
+    if (self.showCaptions != _showCaptionsCache)
+    {
+        _showCaptionsCache = self.showCaptions;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self refreshGpxWaypoints];
+        });
+    }
+    
+    return YES;
 }
 
 - (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs
@@ -110,7 +135,6 @@
     if (!_gpxDocs.empty())
     {
         QList<QPair<OsmAnd::ColorARGB, QVector<OsmAnd::PointI>>> pointsList;
-        QList<QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>>> locationMarksList;
         QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >::iterator it;
         for (it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
         {
@@ -148,9 +172,6 @@
                     pointsList.push_back(qMakePair(OsmAnd::ColorARGB(kDefaultTrackColor), points));
                 }
             }
-            
-            if (!it.value()->locationMarks.empty())
-                locationMarksList.push_back(it.value()->locationMarks);
         }
         
         int baseOrder = self.baseOrder;
@@ -176,35 +197,42 @@
                 builder.buildAndAddToCollection(_linesCollection);
             }
         }
-        
-        for (const auto& locationMarks : locationMarksList)
-        {
-            for (const auto& locationMark : locationMarks)
-            {
-                UIColor* color = [self getWptColor:locationMark->extraData];
-                OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-                
-                OsmAnd::MapMarkerBuilder builder;
-                builder.setIsAccuracyCircleSupported(false)
-                .setBaseOrder(baseOrder--)
-                .setIsHidden(false)
-                .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
-                .setPosition(OsmAnd::Utilities::convertLatLonTo31(locationMark->position))
-                .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
-                .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal);
-                
-                if (self.showCaptions && !locationMark->name.isEmpty())
-                {
-                    builder.setCaption(locationMark->name);
-                    builder.setCaptionStyle(self.captionStyle);
-                    builder.setCaptionTopSpace(self.captionTopSpace);
-                }
-                builder.buildAndAddToCollection(_markersCollection);
-            }
-        }
 
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
-        [self.mapView addKeyedSymbolsProvider:_markersCollection];
+    }
+    
+    [self refreshGpxWaypoints];
+}
+
+- (void) refreshGpxWaypoints
+{
+    if (_waypointsMapProvider)
+    {
+        [self.mapView removeTiledSymbolsProvider:_waypointsMapProvider];
+        _waypointsMapProvider = nullptr;
+    }
+
+    if (!_gpxDocs.empty())
+    {
+        QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>> locationMarks;
+        QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >::iterator it;
+        for (it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
+        {
+            if (!it.value())
+                continue;
+            
+            if (!it.value()->locationMarks.empty())
+                locationMarks.append(it.value()->locationMarks);
+        }
+        
+        const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
+        QList<OsmAnd::PointI> hiddenPoints;
+        if (_hiddenPointPos31 != OsmAnd::PointI())
+            hiddenPoints.append(_hiddenPointPos31);
+        
+        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(locationMarks, self.baseOrder + 1, hiddenPoints,
+                                                                    self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
+        [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
     }
 }
 
@@ -262,12 +290,12 @@
 
 #pragma mark - OAMoveObjectProvider
 
-- (BOOL)isObjectMovable:(id)object
+- (BOOL) isObjectMovable:(id)object
 {
     return [object isKindOfClass:OAGpxWptItem.class];
 }
 
-- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (void) applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (object && [self isObjectMovable:object])
     {
@@ -297,7 +325,7 @@
     }
 }
 
-- (UIImage *)getPointIcon:(id)object
+- (UIImage *) getPointIcon:(id)object
 {
     if (object && [self isObjectMovable:object])
     {
@@ -308,19 +336,14 @@
     return [OADefaultFavorite nearestFavColor:OADefaultFavorite.builtinColors.firstObject].icon;
 }
 
-- (void)setPointVisibility:(id)object hidden:(BOOL)hidden
+- (void) setPointVisibility:(id)object hidden:(BOOL)hidden
 {
     if (object && [self isObjectMovable:object])
     {
         OAGpxWptItem *point = (OAGpxWptItem *)object;
         const auto& pos = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.point.getLatitude, point.point.getLongitude));
-        for (const auto& marker : self.markersCollection->getMarkers())
-        {
-            if (pos == marker->getPosition())
-            {
-                marker->setIsHidden(hidden);
-            }
-        }
+        _hiddenPointPos31 = hidden ? pos : OsmAnd::PointI();
+        [self refreshGpxWaypoints];
     }
 }
 

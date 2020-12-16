@@ -1939,3 +1939,15 @@
 "plugin_popup_osm_editing_title" = "OpenStreetMap Bearbeitung einschalten";
 "layer_amenity_label" = "POI-Overlay-Bezeichnungen";
 "personal_category_name" = "Persönlich";
+"prev_segs_recalc_descr" = "Alle vorherigen Segmente werden unter Verwendung des ausgewählten Profils neu errechnet";
+"next_segs_recalc_descr" = "Alle weiteren Segmente werden unter Verwendung des gewählten Profils neu berechnet";
+"selected_seg_recalc_descr" = "Nur das ausgewählte Segment wird unter Verwendung des ausgewählten Profils neu berechnet";
+"prev_segs_dist" = "Alle vorherigen Segmente %@";
+"prev_seg_dist" = "Vorheriges Segment %@";
+"next_segs_dist" = "Alle weiteren Segmente %@";
+"next_seg_dist" = "Nächstes Segment %@";
+"whole_track" = "Ganzer Track";
+"next_seg" = "Nächstes Segment";
+"whole_track_descr" = "Der gesamte Track wird mit dem ausgewählten Profil neu berechnet.";
+"next_seg_descr" = "Das nächste Segment wird mit dem ausgewählten Profil neu berechnet.";
+"route_betw_points_descr" = "Wählen Sie, wie Sie die Punkte verbinden möchten: mit einer geraden Linie oder durch Berechnung einer Route mit einem der unten aufgeführten Profile.";

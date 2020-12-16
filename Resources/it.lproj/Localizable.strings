@@ -1459,7 +1459,7 @@
 "add_destination" = "Aggiungi destinazione";
 "toggle_auto_zoom" = "Zoom automatico acceso/spento";
 "toggle_day_night" = "Inverti modo Giorno/Notte";
-"quick_action_show_hide_gpx_tracks" = "Mostra/nascondi viaggi";
+"show_hide_gpx" = "Mostra/nascondi viaggi";
 "search_results" = "Cerca risultati";
 "quick_action_name_alert" = "Il nome dell'azione veloce è stato cambiato in %@ per evitare duplicati.";
 "quick_action_screen_header" = "Schermo %ld";
@@ -1492,8 +1492,8 @@
 "pause_nav" = "Metti in pausa la navigazione";
 "mute_voice" = "Azzera il volume della voce";
 "unmute_voice" = "Ripristina il volume della voce";
-"quick_action_gpx_tracks_show" = "Mostra viaggi";
-"quick_action_gpx_tracks_hide" = "Nascondi viaggi";
+"show_gpx" = "Mostra viaggi";
+"hide_gpx" = "Nascondi viaggi";
 "show_edits" = "Mostra le modifiche locali";
 "hide_edits" = "Nascondi modifiche locali";
 "quick_action_edit_list" = "Mod";

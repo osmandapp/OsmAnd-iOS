@@ -1138,9 +1138,9 @@
 "day_mode" = "Day mode";
 "mute_voice" = "Mute voice";
 "unmute_voice" = "Unmute voice";
-"quick_action_show_hide_gpx_tracks" = "Show/hide trips";
-"quick_action_gpx_tracks_show" = "Show trips";
-"quick_action_gpx_tracks_hide" = "Hide trips";
+"show_hide_gpx" = "Show/hide trips";
+"show_gpx" = "Show trips";
+"hide_gpx" = "Hide trips";
 "show_notes" = "Show OSM notes";
 "hide_notes" = "Hide OSM notes";
 "show_edits" = "Show local edits";

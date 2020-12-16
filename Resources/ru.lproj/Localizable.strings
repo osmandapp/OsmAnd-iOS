@@ -1017,8 +1017,8 @@
 "pause_nav" = "Приостановить навигацию";
 "night_mode" = "Ночной режим";
 "day_mode" = "Дневной режим";
-"quick_action_gpx_tracks_show" = "Показать поездки";
-"quick_action_gpx_tracks_hide" = "Скрыть поездки";
+"show_gpx" = "Показать поездки";
+"hide_gpx" = "Скрыть поездки";
 "show_notes" = "Показать заметки OSM";
 "hide_notes" = "Скрыть заметки OSM";
 "show_edits" = "Показать локальные правки";
@@ -1211,7 +1211,7 @@
 "toggle_local_edits" = "Показать/спрятать локальные правки OSM";
 "change_map_overlay" = "Изменить карту наложения";
 "replace_destination" = "Заменить пункт назначения";
-"quick_action_show_hide_gpx_tracks" = "Показать/спрятать путешествия";
+"show_hide_gpx" = "Показать/спрятать путешествия";
 "quick_action_name_str" = "Название действия";
 "quick_action_name_alert" = "Название быстрого действия было изменено на %@, чтобы избежать дублирования.";
 "group_properties" = "Свойства группы";

@@ -1162,7 +1162,7 @@
 "pause_resume_nav" = "Zatrzymaj/wznów nawigację";
 "toggle_nav" = "Rozpocznij/zakończ nawigację";
 "toggle_day_night" = "Zmień tryb dzienny/nocny";
-"quick_action_show_hide_gpx_tracks" = "Wyświetl/Ukryj ślady";
+"show_hide_gpx" = "Wyświetl/Ukryj ślady";
 "search_results" = "Wyniki wyszukiwania";
 "quick_action_name_str" = "Nazwa czynności";
 "quick_action_name_alert" = "Zmieniono nazwę szybkiej czynności na %@ by uniknąć duplikacji.";
@@ -1223,8 +1223,8 @@
 "day_mode" = "Tryb dzienny";
 "mute_voice" = "Wycisz głos";
 "unmute_voice" = "Włącz głos";
-"quick_action_gpx_tracks_show" = "Wyświetl ślady";
-"quick_action_gpx_tracks_hide" = "Ukryj ślady";
+"show_gpx" = "Wyświetl ślady";
+"hide_gpx" = "Ukryj ślady";
 "show_notes" = "Wyświetl uwagi OSM";
 "hide_notes" = "Ukryj uwagi OSM";
 "show_edits" = "Wyświetl lokalne edycje";

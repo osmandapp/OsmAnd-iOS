@@ -794,9 +794,9 @@
 "day_mode" = "昼モード";
 "mute_voice" = "音声をミュート";
 "unmute_voice" = "音声ミュートを解除";
-"quick_action_show_hide_gpx_tracks" = "旅程の表示/非表示";
-"quick_action_gpx_tracks_show" = "旅程を表示";
-"quick_action_gpx_tracks_hide" = "旅程を非表示";
+"show_hide_gpx" = "旅程の表示/非表示";
+"show_gpx" = "旅程を表示";
+"hide_gpx" = "旅程を非表示";
 "show_notes" = "OSMメモを表示";
 "hide_notes" = "OSMメモを非表示";
 "show_edits" = "オフライン編集を表示";

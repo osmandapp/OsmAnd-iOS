@@ -1522,9 +1522,9 @@
 "search_results" = "Résultats de recherche";
 "hide_edits" = "Masquer les modifications locales";
 "show_edits" = "Afficher les modifications locales";
-"quick_action_gpx_tracks_hide" = "Masquer les voyages";
-"quick_action_gpx_tracks_show" = "Afficher les voyages";
-"quick_action_show_hide_gpx_tracks" = "Afficher/masquer les voyages";
+"hide_gpx" = "Masquer les voyages";
+"show_gpx" = "Afficher les voyages";
+"show_hide_gpx" = "Afficher/masquer les voyages";
 "resume_nav" = "Poursuivre la navigation";
 "auto_zoom_off" = "Autozoom désactivé";
 "auto_zoom_on" = "Auto zoom on";

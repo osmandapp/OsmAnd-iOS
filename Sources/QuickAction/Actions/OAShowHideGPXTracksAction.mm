@@ -44,13 +44,13 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return [self isActionWithSlash] ? OALocalizedString(@"quick_action_gpx_tracks_hide") : OALocalizedString(@"quick_action_gpx_tracks_show");
+    return [self isActionWithSlash] ? OALocalizedString(@"hide_gpx") : OALocalizedString(@"show_gpx");
 }
 
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:28 stringId:@"gpx.showhide" class:self.class name:OALocalizedString(@"quick_action_show_hide_gpx_tracks") category:CONFIGURE_MAP iconName:@"ic_custom_trip" secondaryIconName:nil editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:28 stringId:@"gpx.showhide" class:self.class name:OALocalizedString(@"show_hide_gpx") category:CONFIGURE_MAP iconName:@"ic_custom_trip" secondaryIconName:nil editable:NO];
        
     return TYPE;
 }

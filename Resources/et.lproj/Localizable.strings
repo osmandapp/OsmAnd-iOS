@@ -801,9 +801,9 @@
 "day_mode" = "Day mode";
 "mute_voice" = "Vaigista hääl";
 "unmute_voice" = "Tühista hääle vaigistus";
-"quick_action_show_hide_gpx_tracks" = "Kuva/peida reisid";
-"quick_action_gpx_tracks_show" = "Kuva reisid";
-"quick_action_gpx_tracks_hide" = "Peida reisid";
+"show_hide_gpx" = "Kuva/peida reisid";
+"show_gpx" = "Kuva reisid";
+"hide_gpx" = "Peida reisid";
 "show_notes" = "Kuva OSM märkmed";
 "hide_notes" = "Peida OSM märkmed";
 "show_edits" = "Kuva kohalikud muudatused";

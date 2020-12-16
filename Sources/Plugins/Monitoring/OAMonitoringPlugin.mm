@@ -396,7 +396,7 @@
         {
             if (![_settings.mapSettingSaveTrackIntervalApproved get])
             {
-                OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 136.0)];
+                OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 176.0)];
                 
                 [PXAlertView showAlertWithTitle:OALocalizedString(@"track_start_rec")
                                         message:nil
@@ -412,6 +412,8 @@
                                              [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[[view getInterval]] intValue]];
                                              if (view.swRemember.isOn)
                                                  [_settings.mapSettingSaveTrackIntervalApproved set:YES];
+                                             
+                                             _settings.mapSettingShowRecordingTrack = view.swShowOnMap.isOn;
                                              
                                              _settings.mapSettingTrackRecording = YES;
                                          }

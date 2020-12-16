@@ -17,7 +17,7 @@
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
 #define kDescrTitleCell @"OADescrTitleCell"
 #define kVerticalMargin 16.
-#define kHorisontelMargin 20.
+#define kHorizontalMargin 20.
 
 @interface OAWhatsNewBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -81,7 +81,7 @@
 
 - (CGFloat)initialHeight
 {
-    CGFloat width = DeviceScreenWidth - 2 * kHorisontelMargin;
+    CGFloat width = DeviceScreenWidth - 2 * kHorizontalMargin;
     CGFloat headerHeight = self.headerView.frame.size.height;
     CGFloat contentHeight = [OAUtilities calculateTextBounds:[self getAttributedContentText] width:width].height;
     CGFloat buttonsHeight = 60. + [OAUtilities getBottomMargin];

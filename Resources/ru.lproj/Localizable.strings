@@ -1952,7 +1952,7 @@
 
 "latest_version" = "У вас последняя версия: %@";
 "osm_notes" = "Заметки OSM";
-"plugin_popup_osm_editing_title" = "Включить редактирование OpenSteetMap";
+"plugin_popup_osm_editing_title" = "Включить редактирование OpenStreetMap";
 "vk" = "ВК";
 "help_what_is_new" = "Что нового";
 "personal_category_name" = "";

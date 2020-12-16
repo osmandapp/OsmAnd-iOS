@@ -1925,10 +1925,6 @@
             @"app_mode_order",
             @"app_mode_icon_res_name"
         ];
-        
-        _applicationMode = [OAApplicationMode valueOfStringKey:[[NSUserDefaults standardUserDefaults] objectForKey:applicationModeKey] def:[OAApplicationMode DEFAULT]];
-
-        _defaultApplicationMode = [OAApplicationMode valueOfStringKey:[[NSUserDefaults standardUserDefaults] objectForKey:defaultApplicationModeKey] def:[OAApplicationMode DEFAULT]];
 
         _availableApplicationModes = [[NSUserDefaults standardUserDefaults] objectForKey:availableApplicationModesKey];
         if (!_availableApplicationModes)
@@ -3152,6 +3148,12 @@
 {
     _customAppModes = customAppModes;
     [[NSUserDefaults standardUserDefaults] setObject:_customAppModes forKey:customAppModesKey];
+}
+
+- (void) setupAppMode
+{
+    _applicationMode = [OAApplicationMode valueOfStringKey:[[NSUserDefaults standardUserDefaults] objectForKey:applicationModeKey] def:[OAApplicationMode DEFAULT]];
+    _defaultApplicationMode = [OAApplicationMode valueOfStringKey:[[NSUserDefaults standardUserDefaults] objectForKey:defaultApplicationModeKey] def:[OAApplicationMode DEFAULT]];
 }
 
 @end

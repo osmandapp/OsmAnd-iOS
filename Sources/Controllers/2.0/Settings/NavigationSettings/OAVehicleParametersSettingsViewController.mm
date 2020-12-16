@@ -203,7 +203,7 @@
         _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].doubleValue];
     OAProfileString *property = [[OAAppSettings sharedManager] getCustomRoutingProperty:_vehicleParameter[@"name"] defaultValue:@"0"];
     [property set:_measurementValue mode:self.appMode];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewController];
     if (self.delegate)
         [self.delegate onSettingsChanged];
 }

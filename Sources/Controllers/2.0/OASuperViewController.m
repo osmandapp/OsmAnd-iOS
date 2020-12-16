@@ -47,10 +47,23 @@
 
 - (IBAction) backButtonClicked:(id)sender
 {
+    [self dismissViewController];
+}
+
+- (void) dismissViewController
+{
     if ([self isModal])
         [self dismissViewControllerAnimated:YES completion:nil];
     else
         [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void) segueToViewController:(UIViewController *)viewController
+{
+    if ([self isModal])
+        [self presentViewController:viewController animated:YES completion:nil];
+    else
+        [self.navigationController pushViewController:viewController animated:YES];
 }
 
 

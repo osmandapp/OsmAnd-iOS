@@ -9410,7 +9410,6 @@
 		DA25586E24ADE40F0081D155 /* OANavigationTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavigationTypeViewController.h; sourceTree = "<group>"; };
 		DA25586F24ADE40F0081D155 /* OAVehicleParametersSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAVehicleParametersSettingsViewController.mm; sourceTree = "<group>"; };
 		DA25587024ADE40F0081D155 /* OAAutoCenterMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAutoCenterMapViewController.h; sourceTree = "<group>"; };
-		DA25587124ADE40F0081D155 /* OAVoiceAnouncesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVoiceAnouncesViewController.h; sourceTree = "<group>"; };
 		DA25587224ADE40F0081D155 /* OAAutoZoomMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAutoZoomMapViewController.m; sourceTree = "<group>"; };
 		DA25587324ADE40F0081D155 /* OAArrivalAnnouncementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAArrivalAnnouncementViewController.m; sourceTree = "<group>"; };
 		DA25587424ADE40F0081D155 /* OASettingsModalPresentationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OASettingsModalPresentationViewController.xib; sourceTree = "<group>"; };
@@ -15504,7 +15503,6 @@
 				DA25586F24ADE40F0081D155 /* OAVehicleParametersSettingsViewController.mm */,
 				DA25585324ADE40E0081D155 /* OAVehicleParametersViewController.h */,
 				DA25586A24ADE40F0081D155 /* OAVehicleParametersViewController.mm */,
-				DA25587124ADE40F0081D155 /* OAVoiceAnouncesViewController.h */,
 				DA25586324ADE40F0081D155 /* OAVoicePromptsViewController.h */,
 				DA25587824ADE40F0081D155 /* OAVoicePromptsViewController.mm */,
 				DA54AA7C24EFAB3A001E6560 /* OARouteParameterValuesViewController.h */,

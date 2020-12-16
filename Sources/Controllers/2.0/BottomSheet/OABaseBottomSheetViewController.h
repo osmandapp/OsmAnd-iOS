@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *bottomSheetView;
+@property (weak, nonatomic) IBOutlet UIView *headerView;
 
 - (void) presentInViewController:(UIViewController *)viewController;
 

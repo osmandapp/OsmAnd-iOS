@@ -15,7 +15,6 @@
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
-#import "OANavigationSettingsViewController.h"
 #import "OAUtilities.h"
 #import "OASettingsTitleTableViewCell.h"
 

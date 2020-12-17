@@ -16,7 +16,6 @@
 #import "OAColors.h"
 #import "OARoutingHelper.h"
 #import "OASettingsTableViewCell.h"
-#import "OANavigationSettingsViewController.h"
 #import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
 #import "OAIconTitleValueCell.h"

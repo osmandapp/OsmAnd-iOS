@@ -14,7 +14,6 @@
 #import "Localization.h"
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
-#import "OANavigationSettingsViewController.h"
 #import "OATripRecordingSettingsViewController.h"
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAApplicationMode.h"

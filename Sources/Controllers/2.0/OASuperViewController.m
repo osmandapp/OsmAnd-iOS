@@ -58,7 +58,7 @@
         [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void) segueToViewController:(UIViewController *)viewController
+- (void) showViewController:(UIViewController *)viewController
 {
     if ([self isModal])
         [self presentViewController:viewController animated:YES completion:nil];

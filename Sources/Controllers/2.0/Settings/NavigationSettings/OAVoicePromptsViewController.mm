@@ -381,7 +381,7 @@
         settingsViewController = [[OARepeatNavigationInstructionsViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"arrivalAnnouncement"])
         settingsViewController = [[OAArrivalAnnouncementViewController alloc] initWithAppMode:self.appMode];
-    [self segueToViewController:settingsViewController];
+    [self showViewController:settingsViewController];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -339,7 +339,7 @@
     else if ([itemKey isEqualToString:@"mapBehavior"])
         settingsViewController = [[OAMapBehaviorViewController alloc] initWithAppMode:self.appMode];
     settingsViewController.delegate = self;
-    [self segueToViewController:settingsViewController];
+    [self showViewController:settingsViewController];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

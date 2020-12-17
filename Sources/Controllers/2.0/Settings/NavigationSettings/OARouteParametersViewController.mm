@@ -469,7 +469,7 @@
         settingsViewController = [[OARoadSpeedsViewController alloc] initWithApplicationMode:self.appMode speedParameters:item];
 
     settingsViewController.delegate = self;
-    [self segueToViewController:settingsViewController];
+    [self showViewController:settingsViewController];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -510,7 +510,7 @@
 {
     OARouteParameterValuesViewController *settingsViewController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameterGroup:group appMode:self.appMode];
     settingsViewController.delegate = self;
-    [self segueToViewController:settingsViewController];
+    [self showViewController:settingsViewController];
 }
 
 - (void)updateParameters

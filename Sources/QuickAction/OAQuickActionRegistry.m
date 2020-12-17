@@ -67,7 +67,7 @@ static OAQuickActionType *TYPE_NAVIGATION;
     TYPE_NAVIGATION = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"routing_settings") category:NAVIGATION iconName:nil];
 }
 
-+ (instancetype)sharedInstance
++ (OAQuickActionRegistry *)sharedInstance
 {
     static OAQuickActionRegistry *_sharedInstance = nil;
     static dispatch_once_t onceToken;
@@ -135,7 +135,7 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OANavStartStopAction.TYPE];
     [quickActionTypes addObject:OANavResumePauseAction.TYPE];
     //        [quickActionTypes addObject:OASwitchProfileAction.TYPE];
-    [self registerPluginDependedActions:quickActionTypes];
+    [OAPlugin registerQuickActionTypesPlugins:quickActionTypes];
     
     NSMutableDictionary<NSNumber *, OAQuickActionType *> *quickActionTypesInt = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, OAQuickActionType *> *quickActionTypesStr = [NSMutableDictionary new];
@@ -151,34 +151,9 @@ static OAQuickActionType *TYPE_NAVIGATION;
     _quickActions = [self parseActiveActionsList:_settings.quickActionsList];
 }
 
-- (void) registerPluginDependedActions:(NSMutableArray<OAQuickActionType *> *)quickActionTypes
-{
-    [OAPlugin registerQuickActionTypesPlugins:quickActionTypes];
-}
-
 -(NSArray<OAQuickAction *> *) getQuickActions
 {
     return [NSArray arrayWithArray:_quickActions];
-}
-
--(NSArray<OAQuickAction *> *) getEnabledQuickActions
-{
-    NSMutableSet<OAQuickActionType *> *enabledActionTypes = [NSMutableSet setWithArray:_quickActionTypes];
-    
-    NSMutableSet<OAQuickActionType *> *userAddedActionTypes = [NSMutableSet new];
-    for (OAQuickAction *action in _quickActions)
-        [userAddedActionTypes addObject:action.actionType];
-    
-    [userAddedActionTypes intersectSet:enabledActionTypes];
-    
-    NSMutableArray<OAQuickAction *> *resultActions = [NSMutableArray new];
-    for (OAQuickAction *action in _quickActions)
-    {
-        if ([userAddedActionTypes containsObject:action.actionType])
-            [resultActions addObject:action];
-    }
-    
-    return resultActions;
 }
 
 -(void) addQuickAction:(OAQuickAction *) action

@@ -73,7 +73,7 @@
 -(void) commonInit
 {
     _registry = [OAQuickActionRegistry sharedInstance];
-    _data = [NSMutableArray arrayWithArray:_registry.getEnabledQuickActions];
+    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
     
     _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
     if (!UIAccessibilityIsReduceTransparencyEnabled())

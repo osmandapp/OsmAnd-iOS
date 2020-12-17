@@ -20,14 +20,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (readonly) OAObservable* quickActionListChangedObservable;
 
-+ (instancetype)sharedInstance;
++ (OAQuickActionRegistry *)sharedInstance;
 
 + (OAQuickActionType *) TYPE_ADD_ITEMS;
 + (OAQuickActionType *) TYPE_CONFIGURE_MAP;
 + (OAQuickActionType *) TYPE_NAVIGATION;
 
 -(NSArray<OAQuickAction *> *) getQuickActions;
--(NSArray<OAQuickAction *> *) getEnabledQuickActions;
 
 -(void) addQuickAction:(OAQuickAction *) action;
 -(void) updateQuickAction:(OAQuickAction *) action;

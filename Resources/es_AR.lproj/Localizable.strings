@@ -1946,3 +1946,9 @@
 "whole_track_descr" = "Recalcular toda la traza usando el perfil elegido.";
 "next_seg_descr" = "El siguiente segmento será recalculado usando el perfil elegido.";
 "route_betw_points_descr" = "Elige cómo conectar los puntos: con una línea recta o calculando una ruta usando uno de los perfiles listados a continuación.";
+"prev_segs_recalc_descr" = "Todos los segmentos anteriores serán recalculados usando el perfil elegido";
+"next_segs_recalc_descr" = "Todos los segmentos posteriores serán recalculados usando el perfil elegido";
+"selected_seg_recalc_descr" = "Sólo el segmento marcado será recalculado usando el perfil elegido";
+"prev_segs_dist" = "Todos los segmentos anteriores %@";
+"prev_seg_dist" = "Segmento anterior %@";
+"next_segs_dist" = "Todos los segmentos posteriores %@";

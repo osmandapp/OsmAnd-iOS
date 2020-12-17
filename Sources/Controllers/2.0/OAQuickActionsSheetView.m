@@ -196,7 +196,7 @@
 
 - (void) refreshActionList
 {
-    NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:[OAQuickActionRegistry sharedInstance].getQuickActions];
+    NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:[OAQuickActionRegistry sharedInstance].getEnabledQuickActions];
     [tmpActions addObject:[[OANewAction alloc] init]];
     NSInteger actionsCount = tmpActions.count;
     NSInteger remainder = actionsCount % 6;

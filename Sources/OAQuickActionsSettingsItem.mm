@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
+#import "OAQuickActionFullRegistry.h"
 #import "OAQuickActionType.h"
 
 #import "OAMapStyleAction.h"
@@ -28,6 +29,7 @@
 @implementation OAQuickActionsSettingsItem
 {
     OAQuickActionRegistry *_actionsRegistry;
+    OAQuickActionFullRegistry *_fullActionsRegistry;
 }
 
 @dynamic items, appliedItems, existingItems, warnings;
@@ -37,6 +39,7 @@
     [super initialization];
     
     _actionsRegistry = [OAQuickActionRegistry sharedInstance];
+    _fullActionsRegistry = [OAQuickActionFullRegistry sharedInstance];
     self.existingItems = [_actionsRegistry getQuickActions].mutableCopy;
 }
 
@@ -112,9 +115,9 @@
         NSString *type = object[@"type"];
         OAQuickAction *quickAction = nil;
         if (actionType)
-            quickAction = [_actionsRegistry newActionByStringType:actionType];
+            quickAction = [_fullActionsRegistry newActionByStringType:actionType];
         else if (type)
-            quickAction = [_actionsRegistry newActionByType:type.integerValue];
+            quickAction = [_fullActionsRegistry newActionByType:type.integerValue];
         
         if (quickAction)
         {

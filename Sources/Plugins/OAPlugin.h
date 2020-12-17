@@ -49,6 +49,7 @@
 + (void) createLayers;
 + (void) updateLocationPlugins:(CLLocation *)location;
 + (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types;
++ (void) registerAllQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types;
 
 - (void) updateLayers;
 - (void) registerLayers;

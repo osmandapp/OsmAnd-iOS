@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,6 +12,7 @@
                 <outlet property="backBtn" destination="wIR-hG-J8L" id="KgN-bO-9B5"/>
                 <outlet property="btnAdd" destination="TOj-Zt-z4Z" id="Igg-6d-U4c"/>
                 <outlet property="btnCancel" destination="9yT-fO-CgK" id="qsF-sx-oZS"/>
+                <outlet property="btnDone" destination="J2Z-Aw-IRf" id="8hs-xR-8ps"/>
                 <outlet property="btnEdit" destination="UOa-Cg-QCt" id="GL2-8U-bVF"/>
                 <outlet property="deleteAction" destination="zLl-qS-4O5" id="oYf-fH-R3B"/>
                 <outlet property="navBarView" destination="VFd-dL-Uso" id="xRU-Gf-kWT"/>
@@ -79,7 +80,18 @@
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
-                                <action selector="editPressed:" destination="-1" eventType="touchUpInside" id="dN6-K7-Th4"/>
+                                <action selector="cancelPressed:" destination="-1" eventType="touchUpInside" id="KJi-l4-dqJ"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2Z-Aw-IRf">
+                            <rect key="frame" x="341" y="19" width="58" height="43"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Done">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="donePressed:" destination="-1" eventType="touchUpInside" id="wfk-Dp-Gby"/>
                             </connections>
                         </button>
                     </subviews>

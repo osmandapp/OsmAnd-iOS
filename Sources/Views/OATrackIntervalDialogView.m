@@ -58,6 +58,9 @@
     _slInterval.value = index * delta;
     [self updateIntervalLabel:index];
     _lbRemember.text = OALocalizedString(@"track_interval_remember");
+    _lbShowOnMap.text = OALocalizedString(@"map_settings_show");
+    
+    [_swShowOnMap setOn:_settings.mapSettingShowRecordingTrack];
 }
 
 - (void)updateInterval

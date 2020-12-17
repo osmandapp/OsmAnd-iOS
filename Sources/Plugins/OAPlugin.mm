@@ -591,6 +591,14 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
     }
 }
 
++ (void) registerAllQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types
+{
+    for (OAPlugin *p in allPlugins)
+    {
+        [types addObjectsFromArray:p.getQuickActionTypes];
+    }
+}
+
 /*
 public static boolean isDevelopment() {
     return getEnabledPlugin(OsmandDevelopmentPlugin.class) != null;

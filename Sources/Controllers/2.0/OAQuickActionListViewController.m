@@ -34,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *selectAllAction;
 @property (weak, nonatomic) IBOutlet UIButton *deleteAction;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
+@property (weak, nonatomic) IBOutlet UIButton *btnDone;
 
 @end
 
@@ -95,6 +96,7 @@
     [_deleteAction setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
     [_selectAllAction setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
     [_btnCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [_btnDone setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
 - (void)applySafeAreaMargins
@@ -142,39 +144,52 @@
 - (IBAction)editPressed:(id)sender
 {
     [self.tableView beginUpdates];
-    BOOL shouldEdit = ![self.tableView isEditing];
-    [self.tableView setEditing:shouldEdit animated:YES];
-    if (shouldEdit)
-    {
+    [self.tableView setEditing:YES animated:YES];
+    _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
+    _toolBarView.hidden = NO;
+    _btnCancel.hidden = NO;
+    _btnDone.hidden = NO;
+    _btnAdd.hidden = YES;
+    _btnEdit.hidden = YES;
+    _backBtn.hidden = YES;
+    [UIView animateWithDuration:.3 animations:^{
+        _titleView.text = OALocalizedString(@"quick_action_edit_list");
+        [self applySafeAreaMargins];
+    }];
+    [self.tableView endUpdates];
+}
+
+- (IBAction)donePressed:(id)sender
+{
+    [self disableEditing];
+    [self saveChanges];
+}
+
+- (IBAction)cancelPressed:(id)sender
+{
+    [self disableEditing];
+    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
+    [self.tableView reloadData];
+}
+
+- (void) disableEditing
+{
+    [self.tableView beginUpdates];
+    [self.tableView setEditing:NO animated:YES];
+    _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight - _toolBarView.bounds.size.height, DeviceScreenWidth, _toolBarView.bounds.size.height);
+    _btnAdd.hidden = NO;
+    _btnEdit.hidden = NO;
+    _backBtn.hidden = NO;
+    _btnCancel.hidden = YES;
+    _btnDone.hidden = YES;
+    [UIView animateWithDuration:.3 animations:^{
+        _titleView.text = OALocalizedString(@"quick_action_name");
+        [self.tabBarController.tabBar setHidden:NO];
         _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
-        _toolBarView.hidden = NO;
-        _btnCancel.hidden = NO;
-        _btnAdd.hidden = YES;
-        _btnEdit.hidden = YES;
-        _backBtn.hidden = YES;
-        [UIView animateWithDuration:.3 animations:^{
-            _titleView.text = OALocalizedString(@"quick_action_edit_list");
-            [self applySafeAreaMargins];
-        }];
-    }
-    else
-    {
-        _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight - _toolBarView.bounds.size.height, DeviceScreenWidth, _toolBarView.bounds.size.height);
-        _btnAdd.hidden = NO;
-        _btnEdit.hidden = NO;
-        _backBtn.hidden = NO;
-        _btnCancel.hidden = YES;
-        [UIView animateWithDuration:.3 animations:^{
-            _titleView.text = OALocalizedString(@"quick_action_name");
-            [self.tabBarController.tabBar setHidden:NO];
-            _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
-        } completion:^(BOOL finished) {
-            _toolBarView.hidden = YES;
-            [self applySafeAreaMargins];
-        }];
-    }
-    if (!shouldEdit)
-        [self saveChanges];
+    } completion:^(BOOL finished) {
+        _toolBarView.hidden = YES;
+        [self applySafeAreaMargins];
+    }];
     [self.tableView endUpdates];
 }
 

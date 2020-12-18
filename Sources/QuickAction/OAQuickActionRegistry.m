@@ -161,24 +161,16 @@ static OAQuickActionType *TYPE_NAVIGATION;
     return [NSArray arrayWithArray:_quickActions];
 }
 
--(NSArray<OAQuickAction *> *) getEnabledQuickActions
+- (NSArray<OAQuickAction *> *) getDisplayingQuickActions
 {
-    NSMutableSet<OAQuickActionType *> *enabledActionTypes = [NSMutableSet setWithArray:_quickActionTypes];
-    
-    NSMutableSet<OAQuickActionType *> *userAddedActionTypes = [NSMutableSet new];
-    for (OAQuickAction *action in _quickActions)
-        [userAddedActionTypes addObject:action.actionType];
-    
-    [userAddedActionTypes intersectSet:enabledActionTypes];
-    
-    NSMutableArray<OAQuickAction *> *resultActions = [NSMutableArray new];
-    for (OAQuickAction *action in _quickActions)
+    NSMutableArray<OAQuickAction *> *displayingActions = [NSMutableArray new];
+    NSArray<OAQuickActionType *> *allEnabledActionTypes = _quickActionTypes;
+    for (OAQuickAction *userAddedAction in _quickActions)
     {
-        if ([userAddedActionTypes containsObject:action.actionType])
-            [resultActions addObject:action];
+        if ([allEnabledActionTypes containsObject:userAddedAction.actionType])
+            [displayingActions addObject:userAddedAction];
     }
-    
-    return resultActions;
+    return [NSArray arrayWithArray:displayingActions];
 }
 
 -(void) addQuickAction:(OAQuickAction *) action

@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAQuickActionType *) TYPE_NAVIGATION;
 
 -(NSArray<OAQuickAction *> *) getQuickActions;
--(NSArray<OAQuickAction *> *) getEnabledQuickActions;
+-(NSArray<OAQuickAction *> *) getDisplayingQuickActions;
 
 -(void) addQuickAction:(OAQuickAction *) action;
 -(void) updateQuickAction:(OAQuickAction *) action;

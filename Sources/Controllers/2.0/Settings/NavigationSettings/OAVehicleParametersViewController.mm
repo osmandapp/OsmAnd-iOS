@@ -240,7 +240,7 @@
         settingsViewController = [[OAVehicleParametersSettingsViewController alloc] initWithApplicationMode:self.appMode vehicleParameter:item];
     
     settingsViewController.delegate = self;
-    [self presentViewController:settingsViewController animated:YES completion:nil];
+    [self showViewController:(UIViewController *)settingsViewController];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

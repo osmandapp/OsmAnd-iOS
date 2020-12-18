@@ -125,7 +125,7 @@
     [self.appMode setDefaultSpeed:_selectedValue / _ratio];
     if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
         [routingHelper recalculateRouteDueToSettingsChange];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewController];
 }
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath

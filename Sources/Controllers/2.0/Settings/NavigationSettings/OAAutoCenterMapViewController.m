@@ -127,7 +127,7 @@
 - (void) selectAutoFollowRoute:(NSDictionary *)item
 {
     [_settings.autoFollowRoute set:((NSNumber *)item[@"name"]).intValue mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 @end

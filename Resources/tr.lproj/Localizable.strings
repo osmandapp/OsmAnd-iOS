@@ -1909,8 +1909,8 @@
 "shared_string_preparing" = "Hazırlama";
 "shared_string_deselect_all" = "Tüm seçimleri kaldır";
 "shared_string_continue" = "Devam et";
-"ios_release_3_90" = "• Bağımsız ayarlara sahip \"Uygulama Profilleri\" kullanıma sunuldu\n• Profillere ve türlere göre ayarlar yeniden düzenlendi: navigasyon, genel, harita ve ekran\n• Profil ayarlarını içe veya dışa aktarma yeteneği\n• Çevrim içi fotoğraflar için veri kaynakları eklendi\n• Çevrim içi haritaları önbelleğe indirme özelliği eklendi\n• \"Arama\" algoritmaları iyileştirildi";
-"ios_release_3_80" = "• Bağımsız ayarlara sahip \"Uygulama Profilleri\" kullanıma sunuldu\n• Profillere ve türlere göre ayarlar yeniden düzenlendi: navigasyon, genel, harita ve ekran\n• Profil ayarlarını içe veya dışa aktarma yeteneği\n• Çevrim içi fotoğraflar için veri kaynakları eklendi\n• Çevrim içi haritaları önbelleğe indirme özelliği eklendi\n• \"Arama\" algoritmaları iyileştirildi";
+"ios_release_3_90" = "• Bağımsız ayarlara sahip \"Uygulama Profilleri\" kullanıma sunuldu\n• Profillere ve türlere göre ayarlar yeniden düzenlendi: navigasyon, genel, harita ve ekran\n• Profil ayarlarını içe veya dışa aktarma yeteneği\n• Çevrim içi fotoğraflar için veri kaynakları eklendi\n• Çevrim içi haritaları önbelleğe indirme özelliği eklendi\n• \"Arama\" algoritmaları iyileştirildi\n";
+"ios_release_3_80" = "• Bağımsız ayarlara sahip \"Uygulama Profilleri\" kullanıma sunuldu\n• Profillere ve türlere göre ayarlar yeniden düzenlendi: navigasyon, genel, harita ve ekran\n• Profil ayarlarını içe veya dışa aktarma yeteneği\n• Çevrim içi fotoğraflar için veri kaynakları eklendi\n• Çevrim içi haritaları önbelleğe indirme özelliği eklendi\n• \"Arama\" algoritmaları iyileştirildi\n";
 
 
 // Release Notes

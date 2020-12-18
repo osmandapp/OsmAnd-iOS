@@ -132,7 +132,7 @@
 - (void) selectArrivalDistanceFactor:(NSDictionary *)item
 {
     [_settings.arrivalDistanceFactor set:((NSNumber *)item[@"name"]).doubleValue mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 @end

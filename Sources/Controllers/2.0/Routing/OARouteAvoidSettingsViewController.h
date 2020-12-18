@@ -7,7 +7,8 @@
 //
 
 #import "OARouteSettingsBaseViewController.h"
-#import "OANavigationSettingsViewController.h"
+#import "OACompoundViewController.h"
+#import "OABaseSettingsViewController.h"
 
 @class OAAvoidRoadInfo;
 

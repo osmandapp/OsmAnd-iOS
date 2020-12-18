@@ -225,7 +225,7 @@
         settingsViewController = [[OAAutoZoomMapViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"mapOrientation"])
         settingsViewController = [[OAMapOrientationThresholdViewController alloc] initWithAppMode:self.appMode];
-    [self.navigationController pushViewController:settingsViewController animated:YES];
+    [self showViewController:settingsViewController];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

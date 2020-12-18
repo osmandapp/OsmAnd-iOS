@@ -14,5 +14,7 @@
 
 - (void) applyLocalization;
 - (BOOL) isModal;
+- (void) dismissViewController;
+- (void) showViewController:(UIViewController *)viewController;
 
 @end

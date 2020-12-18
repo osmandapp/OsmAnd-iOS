@@ -137,7 +137,7 @@
 
 - (IBAction) backButtonPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath

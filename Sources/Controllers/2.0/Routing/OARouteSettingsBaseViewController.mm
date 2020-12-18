@@ -11,6 +11,8 @@
 #import "OARouteTripSettingsViewController.h"
 #import "OARouteSettingsParameterController.h"
 #import "OARouteAvoidTransportSettingsViewController.h"
+#import "OAProfileNavigationSettingsViewController.h"
+#import "OANavigationLanguageViewController.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
@@ -28,7 +30,6 @@
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OABaseSettingsViewController.h"
-#import "OANavigationSettingsViewController.h"
 #import "OARootViewController.h"
 #import "OASelectedGPXHelper.h"
 #import "OAGPXDatabase.h"
@@ -327,7 +328,7 @@
 
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenVoiceGudanceLanguage applicationMode:[[OARoutingHelper sharedInstance] getAppMode]];
+    OANavigationLanguageViewController *settingsViewController = [[OANavigationLanguageViewController alloc] initWithAppMode:[[OARoutingHelper sharedInstance] getAppMode]];
     [self presentViewController:settingsViewController animated:YES completion:nil];
 }
 
@@ -340,8 +341,7 @@
 
 - (void) openNavigationSettings
 {
-    OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral applicationMode:[[OARoutingHelper sharedInstance] getAppMode]];
-    settingsViewController.delegate = self;
+    OAProfileNavigationSettingsViewController *settingsViewController = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:[[OARoutingHelper sharedInstance] getAppMode]];
     [self presentViewController:settingsViewController animated:YES completion:nil];
 }
 

@@ -5255,6 +5255,8 @@
 		DA73D289223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA73D286223264A600FB2084 /* OABottomSheetHeaderCell.m */; };
 		DA73D28B223264E500FB2084 /* OABottomSheetHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA73D28A223264E400FB2084 /* OABottomSheetHeaderCell.xib */; };
 		DA73D28C223264E500FB2084 /* OABottomSheetHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA73D28A223264E400FB2084 /* OABottomSheetHeaderCell.xib */; };
+		DA758D83258C9B0F003A2920 /* OAPlanningOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA758D81258C9B0E003A2920 /* OAPlanningOptionsBottomSheetViewController.mm */; };
+		DA758D84258C9B0F003A2920 /* OAPlanningOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA758D81258C9B0E003A2920 /* OAPlanningOptionsBottomSheetViewController.mm */; };
 		DA796662220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */; };
 		DA796663220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */; };
 		DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
@@ -9870,6 +9872,8 @@
 		DA73D286223264A600FB2084 /* OABottomSheetHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OABottomSheetHeaderCell.m; path = Controllers/Cells/OABottomSheetHeaderCell.m; sourceTree = "<group>"; };
 		DA73D287223264A700FB2084 /* OABottomSheetHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OABottomSheetHeaderCell.h; path = Controllers/Cells/OABottomSheetHeaderCell.h; sourceTree = "<group>"; };
 		DA73D28A223264E400FB2084 /* OABottomSheetHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OABottomSheetHeaderCell.xib; path = Resources/Controllers/Cells/OABottomSheetHeaderCell.xib; sourceTree = "<group>"; };
+		DA758D81258C9B0E003A2920 /* OAPlanningOptionsBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanningOptionsBottomSheetViewController.mm; sourceTree = "<group>"; };
+		DA758D82258C9B0F003A2920 /* OAPlanningOptionsBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPlanningOptionsBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA796660220D6BF600AA90CF /* OAOsmBaseStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmBaseStorage.h; sourceTree = "<group>"; };
 		DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmBaseStorage.m; sourceTree = "<group>"; };
 		DA79C41C2371745400CEAF0D /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -15650,6 +15654,8 @@
 		DA60C349254D8C750056D276 /* RoutePlanningBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				DA758D82258C9B0F003A2920 /* OAPlanningOptionsBottomSheetViewController.h */,
+				DA758D81258C9B0E003A2920 /* OAPlanningOptionsBottomSheetViewController.mm */,
 				DA65CC14256D0E8800DC896F /* OASegmentOptionsBottomSheetViewController.h */,
 				DA65CC15256D0E8800DC896F /* OASegmentOptionsBottomSheetViewController.mm */,
 				DA60C34A254D8CAF0056D276 /* OAPointOptionsBottomSheetViewController.h */,
@@ -21281,6 +21287,7 @@
 				8474AB961E1CD73000355F88 /* OAPOIFilterViewController.mm in Sources */,
 				845B98EA1FE66F7F00434B53 /* OARoutePreferencesParameters.mm in Sources */,
 				84686AB11E05282500DA09BC /* OACategoriesTableViewController.mm in Sources */,
+				DA758D84258C9B0F003A2920 /* OAPlanningOptionsBottomSheetViewController.mm in Sources */,
 				84D0C8A01F1AA31600B0856B /* OATargetPointsHelper.mm in Sources */,
 				847A1CD11DF94E9B003C1246 /* OATableViewCellWithButton.m in Sources */,
 				8AE4E33221BFED24000CBE16 /* OAProducts.mm in Sources */,
@@ -21816,6 +21823,7 @@
 				84185B011AAA13C600F70328 /* OAPurchasesViewController.mm in Sources */,
 				DA66732123AE4B2B00499F76 /* OAFilledButtonCell.mm in Sources */,
 				846F0BCE1FA9C72600177B8D /* OAParkingPositionPlugin.mm in Sources */,
+				DA758D83258C9B0F003A2920 /* OAPlanningOptionsBottomSheetViewController.mm in Sources */,
 				1581A3AD2566C4D1004CB4B3 /* OADataSettingsItem.mm in Sources */,
 				8474ABA21E1CDCE000355F88 /* OAIconTextFieldCell.m in Sources */,
 				BBA3B01919878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,

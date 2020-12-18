@@ -97,6 +97,31 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //    return null;
 //}
 
+- (BOOL) isAddNewSegmentAllowed
+{
+    return _beforeSegments.count > 0 && _beforeSegments.lastObject.points.count >= 2;
+}
+
+- (BOOL) isApproximationNeeded
+{
+    BOOL hasDefaultPointsOnly = NO;
+    BOOL newData = self.isNewData;
+    if (!newData)
+    {
+        NSArray<OAGpxTrkPt *> *points = self.getPoints;
+        hasDefaultPointsOnly = YES;
+        for (OAGpxTrkPt *point in points)
+        {
+            if (point.hasProfile)
+            {
+                hasDefaultPointsOnly = NO;
+                break;
+            }
+        }
+    }
+    return !newData && hasDefaultPointsOnly && self.getPoints.count > 2;
+}
+
 
 - (BOOL) isNewData
 {

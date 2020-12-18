@@ -38,6 +38,7 @@
 #import "OAMovePointCommand.h"
 #import "OAClearPointsCommand.h"
 #import "OASegmentOptionsBottomSheetViewController.h"
+#import "OAPlanningOptionsBottomSheetViewController.h"
 #import "OAChangeRouteModeCommand.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
@@ -64,7 +65,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 };
 
 @interface OARoutePlanningHudViewController () <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate,
-    OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate, OASegmentOptionsDelegate, OASnapToRoadProgressDelegate>
+    OAMeasurementLayerDelegate, OAPointOptionsBottmSheetDelegate, OAInfoBottomViewDelegate, OASegmentOptionsDelegate, OASnapToRoadProgressDelegate, OAPlanningOptionsDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
 @property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
@@ -323,6 +324,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 }
 - (IBAction)onOptionsButtonPressed:(id)sender
 {
+    BOOL trackSnappedToRoad = !_editingContext.isApproximationNeeded;
+    BOOL addNewSegmentAllowed = _editingContext.isAddNewSegmentAllowed;
+    OAPlanningOptionsBottomSheetViewController *bottomSheet = [[OAPlanningOptionsBottomSheetViewController alloc] initWithRouteAppModeKey:_editingContext.appMode.stringKey trackSnappedToRoad:trackSnappedToRoad addNewSegmentAllowed:addNewSegmentAllowed];
+    bottomSheet.delegate = self;
+    [bottomSheet presentInViewController:self];
 }
 
 - (IBAction)onUndoButtonPressed:(id)sender

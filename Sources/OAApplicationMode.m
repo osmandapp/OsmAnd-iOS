@@ -190,19 +190,18 @@ static OAApplicationMode *_SKI;
     return m;
 }
 
-+ (OAApplicationMode *) fromModeBean:(OAApplicationModeBean *)modeBean
++ (OAApplicationModeBuilder *) fromModeBean:(OAApplicationModeBean *)modeBean
 {
-    OAApplicationMode *am = [[OAApplicationMode alloc] initWithName:modeBean.userProfileName stringKey:modeBean.stringKey];
-    [am setParent:[OAApplicationMode valueOfStringKey:modeBean.parent def:nil]];
-    [am setUserProfileName:modeBean.userProfileName];
-    [am setIconName:modeBean.iconName];
-    [am setIconColor:modeBean.iconColor];
-    [am setRoutingProfile:modeBean.routingProfile];
-    [am setRouterService:modeBean.routeService];
-    [am setLocationIcon:modeBean.locIcon];
-    [am setNavigationIcon:modeBean.navIcon];
-    [am setOrder:modeBean.order];
-    return am;
+    OAApplicationModeBuilder *builder = [OAApplicationMode createCustomMode:[OAApplicationMode valueOfStringKey:modeBean.parent def:nil] stringKey:modeBean.stringKey];
+    [builder setUserProfileName:modeBean.userProfileName];
+    [builder setIconResName:modeBean.iconName];
+    [builder setIconColor:modeBean.iconColor];
+    [builder setRoutingProfile:modeBean.routingProfile];
+    [builder setRouteService:modeBean.routeService];
+    [builder setLocationIcon:modeBean.locIcon];
+    [builder setNavigationIcon:modeBean.navIcon];
+    [builder setOrder:modeBean.order];
+    return builder;
 }
 
 - (instancetype)initWithName:(NSString *)name stringKey:(NSString *)stringKey
@@ -601,26 +600,27 @@ static OAApplicationMode *_SKI;
     return customModes;
 }
 
-+ (void) saveProfile:(OAApplicationMode *)appMode
++ (void) saveProfile:(OAApplicationModeBuilder *)builder
 {
-    OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:appMode.stringKey def:nil];
+    OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:builder.am.stringKey def:nil];
     if (mode != nil)
     {
-        [mode setParent:appMode.parent];
-        [mode setUserProfileName:appMode.getUserProfileName];
-        [mode setIconName:appMode.getIconName];
-        [mode setRoutingProfile:appMode.getRoutingProfile];
-        [mode setRouterService:appMode.getRouterService];
-        [mode setIconColor:appMode.getIconColor];
-        [mode setLocationIcon:appMode.getLocationIcon];
-        [mode setNavigationIcon:appMode.getNavigationIcon];
-        [mode setOrder:appMode.getOrder];
-        [mode setBaseMinSpeed:appMode.baseMinSpeed];
-        [mode setBaseMaxSpeed:appMode.baseMaxSpeed];
+        [mode setParent:builder.am.parent];
+        [mode setUserProfileName:builder.userProfileName];
+        [mode setIconName:builder.iconResName];
+        [mode setRoutingProfile:builder.routingProfile];
+        [mode setRouterService:builder.routeService];
+        [mode setIconColor:(int)builder.iconColor];
+        [mode setLocationIcon:builder.locationIcon];
+        [mode setNavigationIcon:builder.navigationIcon];
+        [mode setOrder:(int)builder.order];
+        [mode setBaseMinSpeed:builder.baseMinSpeed];
+        [mode setBaseMaxSpeed:builder.baseMaxSpeed];
     }
-    else if (![_values containsObject:appMode])
+    else if (![_values containsObject:mode])
     {
-        [_values addObject:appMode];
+        mode = [builder customReg];
+        [_values addObject:mode];
     }
     
     [self reorderAppModes];
@@ -760,6 +760,21 @@ static OAApplicationMode *_SKI;
     return [set containsObject:self];
 }
 
++ (OAApplicationModeBuilder *) createBase:(NSString *) stringKey
+{
+    OAApplicationModeBuilder *builder = [[OAApplicationModeBuilder alloc] init];
+    builder.am = [[OAApplicationMode alloc] initWithName:@"" stringKey:stringKey];
+    return builder;
+}
+
++ (OAApplicationModeBuilder *) createCustomMode:(OAApplicationMode *) parent stringKey:(NSString *) stringKey
+{
+    OAApplicationModeBuilder *builder = [[OAApplicationModeBuilder alloc] init];
+    builder.am = [[OAApplicationMode alloc] initWithName:@"" stringKey:stringKey];
+    builder.am.parent = parent;
+    return builder;
+}
+
 @end
 
 @implementation OAApplicationModeBean
@@ -843,6 +858,29 @@ static OAApplicationMode *_SKI;
     else if ([color isEqualToString:@"MAGENTA"])
         return profile_icon_color_magenta_light;
     return profile_icon_color_blue_light_default;
+}
+
+@end
+
+@implementation OAApplicationModeBuilder
+
+- (OAApplicationMode *) customReg
+{
+    OAApplicationMode *parent = _am.parent;
+    
+    [_am setParent:parent];
+    [_am setUserProfileName:_userProfileName];
+    [_am setIconName:_iconResName];
+    [_am setRoutingProfile:_routingProfile];
+    [_am setRouterService:_routeService];
+    [_am setIconColor:(int)_iconColor];
+    [_am setLocationIcon:_locationIcon];
+    [_am setNavigationIcon:_navigationIcon];
+    [_am setOrder:_order ? (int)_order : (int)OAApplicationMode.values.count];
+    [_am setBaseMinSpeed:_baseMinSpeed];
+    [_am setBaseMaxSpeed:_baseMaxSpeed];
+    
+    return _am;
 }
 
 @end

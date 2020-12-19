@@ -8,7 +8,7 @@
 
 #import "OAPlanningOptionsBottomSheetViewController.h"
 #import "OATitleIconRoundCell.h"
-#import "OASegmentedControllCell.h"
+#import "OATitleDescriptionIconRoundCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
@@ -19,7 +19,7 @@
 #import "OAGPXDocumentPrimitives.h"
 
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-#define kSegmentedControlCell @"OASegmentedControllCell"
+#define kTitleDescrIconRoundCell @"OATitleDescriptionIconRoundCell"
 
 @interface OAPlanningOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -105,11 +105,10 @@
     
     [data addObject:@[
         @{
-            @"type" : kIconTitleIconRoundCell,
+            @"type" : kTitleDescrIconRoundCell,
             @"title" : OALocalizedString(@"route_betw_points"),
             @"img" : icon,
             @"descr" : descr,
-            @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"route_betw_points"
         }
     ]];
@@ -144,7 +143,7 @@
             @"title" : OALocalizedString(@"directions"),
             @"img" : @"left_menu_icon_navigation",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
-            @"key" : @"route_betw_points"
+            @"key" : @"directions"
         },
         @{
             @"type" : kIconTitleIconRoundCell,
@@ -172,7 +171,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    
     if ([item[@"type"] isEqualToString:kIconTitleIconRoundCell])
     {
         static NSString* const identifierCell = kIconTitleIconRoundCell;
@@ -193,6 +191,39 @@
             
             
             UIColor *tintColor = item[@"tintColor"];
+            if (tintColor)
+            {
+                cell.iconColorNormal = tintColor;
+                cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            }
+            else
+            {
+                cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+            }
+            cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kTitleDescrIconRoundCell])
+    {
+        static NSString* const identifierCell = kTitleDescrIconRoundCell;
+        OATitleDescriptionIconRoundCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kTitleDescrIconRoundCell owner:self options:nil];
+            cell = (OATitleDescriptionIconRoundCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.clearColor;
+            cell.textColorNormal = UIColor.blackColor;
+        }
+        if (cell)
+        {
+            [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
+            cell.titleView.text = item[@"title"];
+            cell.descrView.text = item[@"descr"];
+            
+            UIColor *tintColor = _routeAppMode && _routeAppMode != OAApplicationMode.DEFAULT ? UIColorFromRGB(_routeAppMode.getIconColor) : UIColorFromRGB(color_osmand_orange);
             if (tintColor)
             {
                 cell.iconColorNormal = tintColor;
@@ -228,7 +259,22 @@
     NSString *key = item[@"key"];
     if (self.delegate)
     {
-        
+        if ([key isEqualToString:@"start_new_segment"])
+            [self.delegate addNewSegmentSelected];
+        else if ([key isEqualToString:@"route_betw_points"])
+            [self.delegate snapToRoadOptionSelected];
+        else if ([key isEqualToString:@"save_changes"])
+            [self.delegate saveChangesSelected];
+        else if ([key isEqualToString:@"save_new_track"])
+            [self.delegate saveAsNewTrackSelected];
+        else if ([key isEqualToString:@"add_to_track"])
+            [self.delegate addToTrackSelected];
+        else if ([key isEqualToString:@"directions"])
+            [self.delegate directionsSelected];
+        else if ([key isEqualToString:@"reverse_route"])
+            [self.delegate reverseRouteSelected];
+        else if ([key isEqualToString:@"clear_all"])
+            [self.delegate clearAllSelected];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];

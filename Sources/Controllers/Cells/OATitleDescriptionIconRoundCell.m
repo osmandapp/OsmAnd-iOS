@@ -1,23 +1,24 @@
 //
-//  OATitleIconRoundCell.h
+//  OATitleDescriptionIconRoundCell.h
 //  OsmAnd
 //
 //  Created by Paul on 31/05/2019.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OATitleIconRoundCell.h"
+#import "OATitleDescriptionIconRoundCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 
 #define defaultCellHeight 48.0
 #define titleTextWidthDelta 64.0
 #define maxButtonWidth 30.0
-#define textMarginVertical 6.0
+#define textMarginVertical 9.0
 
 static UIFont *_titleFont;
+static UIFont *_descrFont;
 
-@implementation OATitleIconRoundCell
+@implementation OATitleDescriptionIconRoundCell
 {
     BOOL _bottomCorners;
     BOOL _topCorners;
@@ -26,6 +27,11 @@ static UIFont *_titleFont;
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    if (!_titleFont)
+        _titleFont = [UIFont systemFontOfSize:17.0];
+    if (!_descrFont)
+        _descrFont = [UIFont systemFontOfSize:15.0];
+    
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
@@ -65,19 +71,16 @@ static UIFont *_titleFont;
     }
 }
 
-- (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth
+- (CGFloat) getHeight:(NSString *)text descr:(NSString *)descr cellWidth:(CGFloat)cellWidth
 {
     CGFloat textWidth = cellWidth - titleTextWidthDelta - maxButtonWidth;
-    return MAX(48., [self getTitleViewHeightWithWidth:textWidth text:text]);
+    return MAX(60., [self getViewHeightWithWidth:textWidth text:text font:_titleFont] + [self getViewHeightWithWidth:textWidth text:descr font:_descrFont] + 2 + textMarginVertical);
 
 }
 
-- (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
+- (CGFloat) getViewHeightWithWidth:(CGFloat)width text:(NSString *)text font:(UIFont *)font
 {
-    if (!_titleFont)
-        _titleFont = [UIFont systemFontOfSize:17.0];
-
-    return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical * 2;
+    return [OAUtilities calculateTextBounds:text width:width font:font].height;
 }
 
 - (void)layoutSubviews
@@ -89,7 +92,7 @@ static UIFont *_titleFont;
 - (void) applyCornerRadius
 {
     CGFloat width = self.bounds.size.width - 40.;
-    CGFloat height = [self getHeight:_titleView.text cellWidth:width];
+    CGFloat height = [self getHeight:_titleView.text descr:_descrView.text cellWidth:width];
     _contentContainer.frame = CGRectMake(20., 0., width, height);
     UIRectCorner corners;
     if (_topCorners && _bottomCorners)

@@ -42,6 +42,7 @@
 - (void) clearPointToNavigate:(BOOL)updateRoute;
 - (void) clearStartPoint:(BOOL)updateRoute;
 - (void) clearAllIntermediatePoints:(BOOL)updateRoute;
+- (void) clearAllPoints:(BOOL)updateRoute;
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute;
 - (void) makeWayPointDestination:(BOOL)updateRoute index:(int)index;
 - (void) removeWayPoint:(BOOL)updateRoute index:(int)index;

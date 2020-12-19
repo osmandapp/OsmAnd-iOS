@@ -255,6 +255,19 @@
     [self updateRouteAndRefresh:updateRoute];
 }
 
+- (void) clearAllPoints:(BOOL)updateRoute
+{
+//    [self cancelStartPointAddressRequest];
+//    [self cancelAllIntermediatePointsAddressRequests];
+//    [self cancelTargetPointAddressRequest];
+    [_app.data clearPointToStart];
+    [_app.data clearIntermediatePoints];
+    [_app.data clearPointToNavigate];
+    [_intermediatePoints removeAllObjects];
+    [self readFromSettings];
+    [self updateRouteAndRefresh:updateRoute];
+}
+
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute
 {
     _app.data.pointToNavigate = nil;

@@ -14,6 +14,15 @@
 
 @protocol OAPlanningOptionsDelegate <NSObject>
 
+- (void) snapToRoadOptionSelected;
+- (void) addNewSegmentSelected;
+- (void) saveChangesSelected;
+- (void) saveAsNewTrackSelected;
+- (void) addToTrackSelected;
+- (void) directionsSelected;
+- (void) reverseRouteSelected;
+- (void) clearAllSelected;
+
 @end
 
 @interface OAPlanningOptionsBottomSheetViewController : OABaseBottomSheetViewController

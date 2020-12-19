@@ -64,6 +64,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (NSArray<OAGpxTrkPt *> *) getAfterPoints;
 - (NSInteger) getPointsCount;
 - (void) clearPoints;
+- (void) clearSnappedToRoadPoints;
 
 - (OAGpxTrkPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad;
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt;
@@ -86,6 +87,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (BOOL) isNewData;
 - (BOOL) isApproximationNeeded;
 - (BOOL) isAddNewSegmentAllowed;
+- (BOOL) hasRoute;
 
 - (BOOL) isInAddPointMode;
 
@@ -95,6 +97,8 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) splitSegments:(NSInteger)position;
 
 - (void) updateSegmentsForSnap;
+
+- (void) cancelSnapToRoad;
 
 - (OsmAnd::ColorARGB) getLineColor;
 

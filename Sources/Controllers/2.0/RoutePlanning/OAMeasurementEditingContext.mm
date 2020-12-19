@@ -45,7 +45,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     OARouteCalculationParams *_params;
     NSArray<OAGpxTrkPt *> *_currentPair;
     
-    //    private RouteCalculationProgress calculationProgress;
+    std::shared_ptr<RouteCalculationProgress> _calculationProgress;
 }
 
 + (void) initialize
@@ -427,6 +427,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 - (void) clearBeforeSegments
 {
     _before.points = [NSArray new];
+    [_beforeSegments removeAllObjects];
     if (_beforeSegmentsForSnap != nil)
         [_beforeSegmentsForSnap removeAllObjects];
 }
@@ -434,6 +435,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 - (void) clearAfterSegments
 {
     _after.points = [NSArray new];
+    [_afterSegments removeAllObjects];
     if (_afterSegmentsForSnap != nil)
         [_afterSegmentsForSnap removeAllObjects];
 }
@@ -858,9 +860,8 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         if (self.progressDelegate)
             [self.progressDelegate hideProgressBar];
     });
-//    if (calculationProgress != null) {
-//        calculationProgress.isCancelled = true;
-//    }
+    if (_calculationProgress != nullptr)
+        _calculationProgress->cancelled = true;
 }
 
 - (OARouteCalculationParams *) getParams:(BOOL)resetCounter
@@ -890,7 +891,8 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     [OARoutingHelper applyApplicationSettings:params appMode:appMode];
     params.mode = appMode;
     
-    params.calculationProgress = std::make_shared<RouteCalculationProgress>();
+    _calculationProgress = std::make_shared<RouteCalculationProgress>();
+    params.calculationProgress = _calculationProgress;
     params.calculationProgressCallback = self;
 //    params.calculationProgress = calculationProgress = new RouteCalculationProgress();
 

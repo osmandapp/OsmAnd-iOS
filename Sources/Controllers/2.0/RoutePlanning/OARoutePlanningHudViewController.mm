@@ -11,6 +11,8 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapActions.h"
+#import "OARoutingHelper.h"
 #import "OAMapRendererView.h"
 #import "OAColors.h"
 #import "OANativeUtilities.h"
@@ -37,15 +39,22 @@
 #import "OAInfoBottomView.h"
 #import "OAMovePointCommand.h"
 #import "OAClearPointsCommand.h"
+#import "OAReversePointsCommand.h"
 #import "OASegmentOptionsBottomSheetViewController.h"
 #import "OAPlanningOptionsBottomSheetViewController.h"
 #import "OAChangeRouteModeCommand.h"
+#import "OATargetPointsHelper.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
 #define kDefaultMapRulerMarginBottom -17.0
 #define kDefaultMapRulerMarginLeft 120.0
+
+#define PLAN_ROUTE_MODE 0x1
+#define DIRECTION_MODE 0x2
+#define FOLLOW_TRACK_MODE 0x4
+#define UNDO_MODE 0x8
 
 typedef NS_ENUM(NSInteger, EOAFinalSaveAction) {
     SHOW_SNACK_BAR_AND_CLOSE = 0,
@@ -102,6 +111,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     EOAHudMode _hudMode;
     
     OAInfoBottomView *_infoView;
+    
+    int _modes;
 }
 
 - (instancetype) init
@@ -119,6 +130,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         _editingContext.progressDelegate = self;
         
         _layer.editingCtx = _editingContext;
+        
+        _modes = 0x0;
     }
     return self;
 }
@@ -355,6 +368,36 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeWholeRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeAll appMode:_editingContext.appMode];
     bottomSheet.delegate = self;
     [bottomSheet presentInViewController:self];
+}
+
+- (void) setMode:(int)mode on:(BOOL)on
+{
+    int modes = _modes;
+    if (on)
+        modes |= mode;
+    else
+        modes &= ~mode;
+    _modes = modes;
+}
+
+- (BOOL)isPlanRouteMode
+{
+    return (_modes & PLAN_ROUTE_MODE) == PLAN_ROUTE_MODE;
+}
+
+- (BOOL) isDirectionMode
+{
+    return (_modes & DIRECTION_MODE) == DIRECTION_MODE;
+}
+
+- (BOOL) isFollowTrackMode
+{
+    return (_modes & FOLLOW_TRACK_MODE) == FOLLOW_TRACK_MODE;
+}
+
+- (BOOL) isUndoMode
+{
+    return (_modes & UNDO_MODE) == UNDO_MODE;
 }
 
 - (NSString *) getSuggestedFileName
@@ -969,6 +1012,167 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void)updateProgress:(int)progress
 {
     [_progressView setProgress:progress / 100.];
+}
+
+#pragma mark - OAPlanningOptionsDelegate
+
+- (void) snapToRoadOptionSelected
+{
+//    [self startSnapToRoad:YES];
+}
+
+- (void) addNewSegmentSelected
+{
+//    [self onSplitPointsAfter];
+}
+
+- (void) saveChangesSelected
+{
+//    if (self.isFollowTrackMode)
+//        [self startTrackNavigation];
+//    else
+        [self saveChanges:SHOW_TOAST showDialog:YES];
+}
+
+- (void) saveAsNewTrackSelected
+{
+//    [self openSaveAsNewTrackMenu];
+}
+
+- (void) addToTrackSelected
+{
+//    if (_editingContext.getPointsCount > 0)
+//        [self showAddToTrackDialog];
+//    else
+//        NSLog(@"No points to add");
+//        Toast.makeText(mapActivity, getString(R.string.none_point_error), Toast.LENGTH_SHORT).show();
+}
+
+- (void) directionsSelected
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OATargetPointsHelper *targetPointsHelper = OATargetPointsHelper.sharedInstance;
+    OAApplicationMode *appMode = _editingContext.appMode;
+    if (appMode == OAApplicationMode.DEFAULT)
+        appMode = nil;
+    
+    NSArray<OAGpxTrkPt *> *points = _editingContext.getPoints;
+    if (points.count > 0)
+    {
+        if (points.count == 1)
+        {
+            [targetPointsHelper clearAllPoints:NO];
+            [targetPointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:points.firstObject.getLatitude longitude:points.firstObject.getLongitude] updateRoute:NO intermediate:-1];
+            
+            [self onCloseButtonPressed];
+            [mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+        }
+        else
+        {
+//            NSString *trackName = [self getSuggestedFileName];
+//            if (_editingContext.hasRoute)
+//            {
+//                OAGPX *gpx = [_editingCtx exportGpx:trackName];
+//                if (gpx != nil)
+//                {
+//                    [self onCloseButtonPressed];
+//                    [self runNavigation:gpx appMode:appMode];
+//                }
+//                else
+//                {
+//                    NSLog(@"Trip planning error occured while saving gpx");
+////                    Toast.makeText(mapActivity, getString(R.string.error_occurred_saving_gpx), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//            else
+//            {
+//                if (_editingCtx.isApproximationNeeded)
+//                {
+//                    self setMode:(DIRECTION_MODE, true);
+//                    self enterApproximationMode(mapActivity);
+//                }
+//                else
+//                {
+//                    OAGPX *gpx = [[OAGPX alloc] init];
+//                    gpx.poi
+//                    GPXFile gpx = new GPXFile(Version.getFullVersion(requireMyApplication()));
+//                    gpx.addRoutePoints(points, true);
+//                    dismiss(mapActivity);
+//                    targetPointsHelper.clearAllPoints(false);
+//                    mapActions.enterRoutePlanningModeGivenGpx(gpx, appMode, null, null, true, true, MenuState.HEADER_ONLY);
+//                }
+//            }
+        }
+    }
+    else
+    {
+        // TODO: notify about the error
+//        Toast.makeText(mapActivity, getString(R.string.none_point_error), Toast.LENGTH_SHORT).show();
+    }
+}
+
+- (void) reverseRouteSelected
+{
+    NSArray<OAGpxTrkPt *> *points = _editingContext.getPoints;
+    if (points.count > 1)
+    {
+        [_editingContext.commandManager execute:[[OAReversePointsCommand alloc] initWithLayer:_layer]];
+        [self goMinimized];
+//        updateUndoRedoButton(false, redoBtn);
+//        updateUndoRedoButton(true, undoBtn);
+        [self.tableView reloadData];
+        [self updateDistancePointsText];
+    }
+    else
+    {
+//        Toast.makeText(mapActivity, getString(R.string.one_point_error), Toast.LENGTH_SHORT).show();
+        NSLog(@"Can't reverse one point");
+    }
+}
+
+- (void) clearAllSelected
+{
+    [_editingContext.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:_layer mode:EOAClearPointsModeAll]];
+    [_editingContext cancelSnapToRoad];
+    [self goMinimized];
+//    updateUndoRedoButton(false, redoBtn);
+    [self.tableView reloadData];
+    [self updateDistancePointsText];
+}
+
+- (void) runNavigation:(OAGPX *)gpx appMode:(OAApplicationMode *)appMode
+{
+    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+    OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
+    if (routingHelper.isFollowingMode)
+    {
+        if ([self isFollowTrackMode])
+        {
+            [mapPanel.mapActions setGPXRouteParams:gpx];
+            [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
+            [routingHelper recalculateRouteDueToSettingsChange];
+        }
+        else
+        {
+            
+            [mapPanel.mapActions stopNavigationActionConfirm];
+            // TODO
+//            mapActivity.getMapActions().stopNavigationActionConfirm(null , new Runnable() {
+//                @Override
+//                public void run() {
+//                    MapActivity mapActivity = getMapActivity();
+//                    if (mapActivity != null) {
+//                        mapActivity.getMapActions().enterRoutePlanningModeGivenGpx(gpx, appMode, null, null, true, true, MenuState.HEADER_ONLY);
+//                    }
+//                }
+//            });
+        }
+    }
+    else
+    {
+        [mapPanel.mapActions stopNavigationWithoutConfirm];
+        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+    }
 }
 
 @end

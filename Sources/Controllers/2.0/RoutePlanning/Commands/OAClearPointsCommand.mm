@@ -10,11 +10,12 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAMeasurementToolLayer.h"
+#import "OARoadSegmentData.h"
 
 @implementation OAClearPointsCommand
 {
     NSArray<OAGpxTrkPt *> *_points;
-//        private Map<Pair<WptPt, WptPt>, RoadSegmentData> roadSegmentData;
+    NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *_roadSegmentData;
     EOAClearPointsMode _clearMode;
     NSInteger _pointPosition;
 }
@@ -39,10 +40,11 @@
 {
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
     _points = [NSArray arrayWithArray:ctx.getPoints];
-//    roadSegmentData = ctx.getRoadSegmentData();
+    _roadSegmentData = ctx.roadSegmentData;
     switch (_clearMode) {
         case EOAClearPointsModeAll:
         {
+            [ctx clearPoints];
             [ctx clearSegments];
             break;
         }
@@ -63,7 +65,7 @@
 {
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
     [ctx clearSegments];
-    //        ctx.setRoadSegmentData(roadSegmentData);
+    ctx.roadSegmentData = _roadSegmentData;
     [ctx addPoints:_points];
     [self.measurementLayer updateLayer];
 }

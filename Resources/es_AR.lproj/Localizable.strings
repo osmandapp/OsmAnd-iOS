@@ -1924,8 +1924,8 @@
 "road_min_speed_descr" = "Define la velocidad mínima de viaje para todos los caminos de la ruta. Aumenta la prioridad para los caminos con velocidades recomendadas inferiores a la mínima.";
 "road_speeds_descr" = "Estos parámetros pueden afectar al cálculo de la ruta.";
 "maximum_speed" = "Velocidad máxima";
-"ios_release_3_90" = "• Se ha añadido «Perfiles de aplicación» con ajustes independientes\n• Nueva disposición de ajustes por perfiles y tipos: navegación, general, mapa y pantalla\n• Posibilidad de importar o exportar ajustes de perfil\n• Se han añadido respositorios de datos para las fotos en línea\n• Se ha añadido capacidad para descargar mapas en línea y almacenar en caché\n• Algoritmos de búsqueda mejorados";
-"ios_release_3_80" = "• Se ha añadido «Perfiles de aplicación» con ajustes independientes\n• Nueva disposición de ajustes por perfiles y tipos: navegación, general, mapa y pantalla\n• Posibilidad de importar o exportar ajustes de perfil\n• Se han añadido respositorios de datos para las fotos en línea\n• Se ha añadido capacidad para descargar mapas en línea y almacenar en caché\n• Algoritmos de búsqueda mejorados";
+"ios_release_3_90" = "• Se ha añadido «Perfiles de aplicación» con ajustes independientes\n• Nueva disposición de ajustes por perfiles y tipos: navegación, general, mapa y pantalla\n• Posibilidad de importar o exportar ajustes de perfil\n• Se han añadido respositorios de datos para las fotos en línea\n• Se ha añadido capacidad para descargar mapas en línea y almacenar en caché\n• Algoritmos de búsqueda mejorados\n";
+"ios_release_3_80" = "• Se ha añadido «Perfiles de aplicación» con ajustes independientes\n• Nueva disposición de ajustes por perfiles y tipos: navegación, general, mapa y pantalla\n• Posibilidad de importar o exportar ajustes de perfil\n• Se han añadido respositorios de datos para las fotos en línea\n• Se ha añadido capacidad para descargar mapas en línea y almacenar en caché\n• Algoritmos de búsqueda mejorados\n";
 
 
 // Release Notes
@@ -1946,3 +1946,9 @@
 "whole_track_descr" = "Recalcular toda la traza usando el perfil elegido.";
 "next_seg_descr" = "El siguiente segmento será recalculado usando el perfil elegido.";
 "route_betw_points_descr" = "Elige cómo conectar los puntos: con una línea recta o calculando una ruta usando uno de los perfiles listados a continuación.";
+"prev_segs_recalc_descr" = "Todos los segmentos anteriores serán recalculados usando el perfil elegido";
+"next_segs_recalc_descr" = "Todos los segmentos posteriores serán recalculados usando el perfil elegido";
+"selected_seg_recalc_descr" = "Sólo el segmento marcado será recalculado usando el perfil elegido";
+"prev_segs_dist" = "Todos los segmentos anteriores %@";
+"prev_seg_dist" = "Segmento anterior %@";
+"next_segs_dist" = "Todos los segmentos posteriores %@";

@@ -141,7 +141,7 @@
                 params[@"title"] = title;
                 params[@"ellipsoid"] = ellipsoid ? @(1) : @(0);
                 params[@"inverted_y"] = invertedY ? @(1) : @(0);
-                params[@"expireminutes"] = expire != -1 ? [NSString stringWithFormat:@"%ld", expire / 60000] : @"";
+                params[@"expireminutes"] = expire != -1 ? [NSString stringWithFormat:@"%ld", expire] : @"";
                 params[@"timecolumn"] = timesupported ? @"yes" : @"no";
                 params[@"rule"] = rule;
                 params[@"randoms"] = randoms;

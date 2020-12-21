@@ -12,9 +12,12 @@
 #import "OADescrTitleCell.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OARootViewController.h"
 
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
 #define kDescrTitleCell @"OADescrTitleCell"
+#define kVerticalMargin 16.
+#define kHorizontalMargin 20.
 
 @interface OAWhatsNewBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -30,7 +33,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.sectionHeaderHeight = 16.;
+    self.tableView.sectionHeaderHeight = kVerticalMargin;
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_poi.png"]];
 }
 
@@ -44,24 +47,51 @@
 - (void) generateData
 {
     NSMutableArray *data = [NSMutableArray new];
-    
-    NSString *fullAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), fullAppVersion];
-    NSString *releaseNotesKey = [NSString stringWithFormat:@"ios_release_%@", [OAAppVersionDependentConstants getShortAppVersion]];
-    
     [data addObject:@[
         @{
              @"type" : kDescrTitleCell,
-             @"title" : title,
-             @"description" : OALocalizedString(releaseNotesKey)
+             @"attributedText" : [self getAttributedContentText]
         }]];
     _data = data;
 }
 
+- (NSMutableAttributedString *)getAttributedContentText
+{
+    NSString *fullAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), fullAppVersion];
+    NSString *description = OALocalizedString([NSString stringWithFormat:@"ios_release_%@", [OAAppVersionDependentConstants getShortAppVersion]]);
+    
+    NSString *labelText = [NSString stringWithFormat:@"%@\n\n%@", title, description];
+    NSRange boldRange = NSMakeRange(0, title.length);
+    NSRange fullRange = NSMakeRange(0, labelText.length);
+    
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:labelText];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:5];
+    [paragraphStyle setLineHeightMultiple:0.8];
+    [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:fullRange];
+    
+    UIFont *regularFont = [UIFont systemFontOfSize:17 weight:UIFontWeightRegular];
+    UIFont *semiboldFont = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
+    [attributedString addAttribute:NSFontAttributeName value:regularFont range:fullRange];
+    [attributedString addAttribute:NSFontAttributeName value:semiboldFont range:boldRange];
+    
+    return attributedString;
+}
+
+- (CGFloat)initialHeight
+{
+    CGFloat width = DeviceScreenWidth - 2 * kHorizontalMargin;
+    CGFloat headerHeight = self.headerView.frame.size.height;
+    CGFloat contentHeight = [OAUtilities calculateTextBounds:[self getAttributedContentText] width:width].height;
+    CGFloat buttonsHeight = 60. + [OAUtilities getBottomMargin];
+    return headerHeight + contentHeight + buttonsHeight + 2 * kVerticalMargin;
+}
+
 - (void) onRightButtonPressed
 {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kLatestChangesUrl] options: @{} completionHandler:nil];
     [super onRightButtonPressed];
+    [OARootViewController.instance openSafariWithURL:kLatestChangesUrl];
 }
 
 #pragma mark - UITableViewDataSource
@@ -69,43 +99,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    
-    if ([item[@"type"] isEqualToString:kIconTitleIconRoundCell])
-    {
-        static NSString* const identifierCell = kIconTitleIconRoundCell;
-        OATitleIconRoundCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconTitleIconRoundCell owner:self options:nil];
-            cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColor.clearColor;
-        }
-        if (cell)
-        {
-            [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
-            cell.titleView.text = item[@"title"];
-            
-            
-            UIColor *tintColor = item[@"custom_color"];
-            if (tintColor)
-            {
-                cell.iconColorNormal = tintColor;
-                cell.textColorNormal = tintColor;
-                cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            }
-            else
-            {
-                cell.textColorNormal = nil;
-                cell.iconView.image = [UIImage imageNamed:item[@"img"]];
-                cell.titleView.textColor = UIColor.blackColor;
-                cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            }
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:kDescrTitleCell])
+    if ([item[@"type"] isEqualToString:kDescrTitleCell])
     {
         OADescrTitleCell* cell;
         cell = (OADescrTitleCell *)[self.tableView dequeueReusableCellWithIdentifier:kDescrTitleCell];
@@ -122,22 +116,7 @@
         }
         if (cell)
         {
-            NSString *labelText = [NSString stringWithFormat:@"%@\n\n%@", item[@"title"], item[@"description"]];
-            NSRange boldRange = NSMakeRange(0, ((NSString *)item[@"title"]).length);
-            NSRange fullRange = NSMakeRange(0, labelText.length);
-            
-            NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:labelText];
-            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-            [paragraphStyle setLineSpacing:5];
-            [paragraphStyle setLineHeightMultiple:0.8];
-            [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:fullRange];
-            
-            UIFont *regularFont = [UIFont systemFontOfSize:17 weight:UIFontWeightRegular];
-            UIFont *semiboldFont = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
-            [attributedString addAttribute:NSFontAttributeName value:regularFont range:fullRange];
-            [attributedString addAttribute:NSFontAttributeName value:semiboldFont range:boldRange];
-            
-            cell.descriptionView.attributedText = attributedString;
+            cell.descriptionView.attributedText = item[@"attributedText"];
         }
         return cell;
     }
@@ -152,6 +131,11 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _data[section].count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return kVerticalMargin;
 }
 
 @end

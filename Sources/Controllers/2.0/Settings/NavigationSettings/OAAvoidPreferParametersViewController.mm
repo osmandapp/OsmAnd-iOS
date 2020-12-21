@@ -125,7 +125,7 @@
 
 - (IBAction) backButtonPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 #pragma mark - TableView

@@ -1168,7 +1168,7 @@ static UIViewController *parentController;
     {
         if (![settings.mapSettingSaveTrackIntervalApproved get] && ![_savingHelper hasData])
         {
-            OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 136.0)];
+            OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 176.0)];
             
             [PXAlertView showAlertWithTitle:OALocalizedString(@"track_start_rec")
                                     message:nil
@@ -1184,6 +1184,8 @@ static UIViewController *parentController;
                                          [settings.mapSettingSaveTrackIntervalGlobal set:[settings.trackIntervalArray[[view getInterval]] intValue]];
                                          if (view.swRemember.isOn)
                                              [settings.mapSettingSaveTrackIntervalApproved set:YES];
+                                         
+                                         settings.mapSettingShowRecordingTrack = view.swShowOnMap.isOn;
 
                                          settings.mapSettingTrackRecording = YES;
                                          dispatch_async(dispatch_get_main_queue(), ^{

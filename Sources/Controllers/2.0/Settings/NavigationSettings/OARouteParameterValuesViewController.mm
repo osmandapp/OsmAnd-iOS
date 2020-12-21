@@ -140,7 +140,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     if (self.delegate)
         [self.delegate onSettingsChanged];
     
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 @end

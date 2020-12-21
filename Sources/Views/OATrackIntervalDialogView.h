@@ -10,10 +10,12 @@
 
 @interface OATrackIntervalDialogView : UIView
 
-@property (nonatomic, strong) IBOutlet UILabel *lbInterval;
-@property (nonatomic, strong) IBOutlet UISlider *slInterval;
-@property (nonatomic, strong) IBOutlet UILabel *lbRemember;
-@property (nonatomic, strong) IBOutlet UISwitch *swRemember;
+@property (nonatomic, weak) IBOutlet UILabel *lbInterval;
+@property (nonatomic, weak) IBOutlet UISlider *slInterval;
+@property (nonatomic, weak) IBOutlet UILabel *lbRemember;
+@property (nonatomic, weak) IBOutlet UISwitch *swRemember;
+@property (nonatomic, weak) IBOutlet UILabel *lbShowOnMap;
+@property (nonatomic, weak) IBOutlet UISwitch *swShowOnMap;
 
 - (int)getInterval;
 

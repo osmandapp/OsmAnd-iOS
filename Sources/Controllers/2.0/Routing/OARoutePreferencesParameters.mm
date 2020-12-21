@@ -8,7 +8,6 @@
 
 #import "OARoutePreferencesParameters.h"
 #import "OARootViewController.h"
-#import "OANavigationSettingsViewController.h"
 #import "Localization.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"

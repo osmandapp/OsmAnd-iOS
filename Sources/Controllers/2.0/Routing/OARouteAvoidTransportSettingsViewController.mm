@@ -24,7 +24,6 @@
 #import "OASwitchTableViewCell.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
-#import "OANavigationSettingsViewController.h"
 #import "OARootViewController.h"
 #import "OASelectedGPXHelper.h"
 #import "OAGPXDatabase.h"

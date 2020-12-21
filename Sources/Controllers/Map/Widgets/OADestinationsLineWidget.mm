@@ -217,13 +217,13 @@
 {
     [self updateAttributes];
     UIColor *color = lineColor;
-    CGFloat dashPattern[] = {10, 15};
+    CGFloat dashPattern[] = {3, 10};
     CGContextSaveGState(ctx);
     {
         BOOL hasAttributes = _lineAttrs != nil;
         double scaleFactor = [_settings.mapDensity get:_settings.applicationMode];
         float strokeWidth = hasAttributes && _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 2.0;
-        strokeWidth = scaleFactor < 1.0 ? 1.0 : strokeWidth / [[UIScreen mainScreen] scale] / scaleFactor;
+        strokeWidth = scaleFactor < 1.0 ? 1.0 : 2 * strokeWidth / [[UIScreen mainScreen] scale] / scaleFactor;
         CGContextSetLineWidth(ctx, strokeWidth * 2);
         CGContextSetLineCap(ctx, kCGLineCapRound);
         CGContextBeginPath(ctx);

@@ -18,7 +18,6 @@
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
 #import "OAFileNameTranslationHelper.h"
-#import "OASettingsViewController.h"
 #import "OASavingTrackHelper.h"
 #import "OAIconTitleValueCell.h"
 #import "OASettingSwitchCell.h"

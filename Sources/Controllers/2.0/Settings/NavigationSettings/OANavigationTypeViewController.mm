@@ -160,7 +160,7 @@
         [settings.routerService set:routeService mode:self.appMode];
         if (self.delegate)
             [self.delegate onSettingsChanged];
-        [self.navigationController popViewControllerAnimated:YES];
+        [self dismissViewController];
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

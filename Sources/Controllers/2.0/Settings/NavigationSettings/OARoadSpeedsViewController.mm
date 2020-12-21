@@ -173,7 +173,7 @@
     [self.appMode setMaxSpeed:(_maxValue / _ratio)];
     if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
         [routingHelper recalculateRouteDueToSettingsChange];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 #pragma mark - TableView

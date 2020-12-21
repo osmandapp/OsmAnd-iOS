@@ -454,8 +454,6 @@
     [builder setLocationIcon:_changedProfile.locationIcon];
     [builder setNavigationIcon:_changedProfile.navigationIcon];
     [builder setOrder:(int) OAApplicationMode.allPossibleValues.count];
-    [builder setBaseMinSpeed:_changedProfile.minSpeed];
-    [builder setBaseMaxSpeed:_changedProfile.maxSpeed];
     
     [OAApplicationMode saveProfile:builder];
     if (![OAApplicationMode.values containsObject:builder.am])

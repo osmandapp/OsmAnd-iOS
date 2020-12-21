@@ -614,8 +614,6 @@ static OAApplicationMode *_SKI;
         [mode setLocationIcon:builder.locationIcon];
         [mode setNavigationIcon:builder.navigationIcon];
         [mode setOrder:(int)builder.order];
-        [mode setBaseMinSpeed:builder.baseMinSpeed];
-        [mode setBaseMaxSpeed:builder.baseMaxSpeed];
     }
     else if (![_values containsObject:mode])
     {
@@ -877,8 +875,6 @@ static OAApplicationMode *_SKI;
     [_am setLocationIcon:_locationIcon];
     [_am setNavigationIcon:_navigationIcon];
     [_am setOrder:_order ? (int)_order : (int)OAApplicationMode.values.count];
-    [_am setBaseMinSpeed:_baseMinSpeed];
-    [_am setBaseMaxSpeed:_baseMaxSpeed];
     
     return _am;
 }

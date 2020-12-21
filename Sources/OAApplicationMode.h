@@ -130,8 +130,6 @@
 @property (nonatomic) EOALocationIcon locationIcon;
 @property (nonatomic) EOANavigationIcon navigationIcon;
 @property (nonatomic) NSInteger order;
-@property (nonatomic) NSInteger baseMinSpeed;
-@property (nonatomic) NSInteger baseMaxSpeed;
 
 - (OAApplicationMode *) customReg;
 

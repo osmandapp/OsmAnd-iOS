@@ -91,6 +91,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 - (BOOL) isInAddPointMode;
 
+- (void) splitPoints:(NSInteger) selectedPointPosition after:(BOOL)after;
 - (void) clearSegments;
 - (void) trimBefore:(NSInteger)selectedPointPosition;
 - (void) trimAfter:(NSInteger)selectedPointPosition;

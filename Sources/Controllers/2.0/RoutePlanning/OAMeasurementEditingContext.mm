@@ -417,6 +417,29 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     [self clearAfterSegments];
 }
 
+- (void) splitPoints:(NSInteger) selectedPointPosition after:(BOOL)after
+{
+    NSInteger pointIndex = after ? selectedPointPosition : selectedPointPosition - 1;
+    if (pointIndex >=0 && pointIndex < _before.points.count)
+    {
+        OAGpxTrkPt *point = _before.points[pointIndex];
+        OAGpxTrkPt *nextPoint = _before.points.count > pointIndex + 1 ? _before.points[pointIndex + 1] : nil;
+        OAGpxTrkPt *newPoint = [[OAGpxTrkPt alloc] initWithPoint:point];
+        [newPoint setGap];
+        
+        //before.points.remove(pointIndex);
+        //before.points.add(pointIndex, newPoint);
+        NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:_before.points];
+        [points removeObjectAtIndex:pointIndex];
+        [points insertObject:newPoint atIndex:pointIndex];
+        _before.points = points;
+        
+        if (newPoint)
+            [_roadSegmentData removeObjectForKey:[NSArray arrayWithObjects:point, nextPoint, nil]];
+        [self updateSegmentsForSnap:NO];
+    }
+}
+
 - (void) clearSegments
 {
     [self clearBeforeSegments];

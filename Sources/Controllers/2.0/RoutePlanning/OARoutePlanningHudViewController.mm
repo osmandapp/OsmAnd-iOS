@@ -44,6 +44,8 @@
 #import "OAPlanningOptionsBottomSheetViewController.h"
 #import "OAChangeRouteModeCommand.h"
 #import "OATargetPointsHelper.h"
+#import "OASplitPointsCommand.h"
+#import "OAJoinPointsCommand.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -955,6 +957,36 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
     [bottomSheet presentInViewController:self];
 }
 
+- (void) onSplitPointsAfter
+{
+    [_editingContext.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:_layer after:YES]];
+    //collapseInfoViewIfExpanded();
+    [_editingContext setSelectedPointPosition:-1];
+    //updateUndoRedoButton(false, redoBtn);
+    //updateUndoRedoButton(true, undoBtn);
+    [self updateDistancePointsText];
+}
+
+- (void) onSplitPointsBefore
+{
+    [_editingContext.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:_layer after:NO]];
+    //collapseInfoViewIfExpanded();
+    [_editingContext setSelectedPointPosition:-1];
+    //updateUndoRedoButton(false, redoBtn);
+    //updateUndoRedoButton(true, undoBtn);
+    [self updateDistancePointsText];
+}
+
+- (void) onJoinPoints
+{
+    [_editingContext.commandManager execute:[[OAJoinPointsCommand alloc] initWithLayer:_layer]];
+    //collapseInfoViewIfExpanded();
+    [_editingContext setSelectedPointPosition:-1];
+    //updateUndoRedoButton(false, redoBtn);
+    //updateUndoRedoButton(true, undoBtn);
+    [self updateDistancePointsText];
+}
+
 #pragma mark - OASegmentOptionsDelegate
 
 - (void)onApplicationModeChanged:(OAApplicationMode *)mode dialogType:(EOARouteBetweenPointsDialogType)dialogType dialogMode:(EOARouteBetweenPointsDialogMode)dialogMode
@@ -1023,7 +1055,7 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 
 - (void) addNewSegmentSelected
 {
-//    [self onSplitPointsAfter];
+    [self onSplitPointsAfter];
 }
 
 - (void) saveChangesSelected

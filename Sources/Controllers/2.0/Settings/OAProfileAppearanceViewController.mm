@@ -445,22 +445,19 @@
 {
     _changedProfile.stringKey = [self getUniqueStringKey:_changedProfile.parent];
     
-    OAApplicationMode *newMode = [[OAApplicationMode alloc] initWithName:@"" stringKey:_changedProfile.stringKey];
-    [newMode setParent:_changedProfile.parent];
-    [newMode setIconName:_changedProfile.iconName];
-    [newMode setUserProfileName:_changedProfile.name.trim];
-    [newMode setRoutingProfile:_changedProfile.routingProfile];
-    [newMode setRouterService:_changedProfile.routeService];
-    [newMode setIconColor:_changedProfile.color];
-    [newMode setLocationIcon:_changedProfile.locationIcon];
-    [newMode setNavigationIcon:_changedProfile.navigationIcon];
-    [newMode setOrder:(int) OAApplicationMode.allPossibleValues.count];
-    [newMode setBaseMinSpeed:_changedProfile.minSpeed];
-    [newMode setBaseMaxSpeed:_changedProfile.maxSpeed];
+    OAApplicationModeBuilder *builder = [OAApplicationMode createCustomMode:_changedProfile.parent stringKey:_changedProfile.stringKey];
+    [builder setIconResName:_changedProfile.iconName];
+    [builder setUserProfileName:_changedProfile.name.trim];
+    [builder setRoutingProfile:_changedProfile.routingProfile];
+    [builder setRouteService:_changedProfile.routeService];
+    [builder setIconColor:_changedProfile.color];
+    [builder setLocationIcon:_changedProfile.locationIcon];
+    [builder setNavigationIcon:_changedProfile.navigationIcon];
+    [builder setOrder:(int) OAApplicationMode.allPossibleValues.count];
     
-    [OAApplicationMode saveProfile:newMode];
-    if (![OAApplicationMode.values containsObject:newMode])
-        [OAApplicationMode changeProfileAvailability:newMode isSelected:YES];
+    [OAApplicationMode saveProfile:builder];
+    if (![OAApplicationMode.values containsObject:builder.am])
+        [OAApplicationMode changeProfileAvailability:builder.am isSelected:YES];
 }
 
 - (NSString *) getUniqueStringKey:(OAApplicationMode *)am

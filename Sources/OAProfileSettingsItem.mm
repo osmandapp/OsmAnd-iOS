@@ -21,6 +21,7 @@
 {
     NSDictionary *_additionalPrefs;
     NSSet<NSString *> *_appModeBeanPrefsIds;
+    OAApplicationModeBuilder *_builder;
 }
 
 @dynamic type, name, fileName;
@@ -66,8 +67,8 @@
     [super readFromJson:json error:error];
     NSDictionary *appModeJson = json[@"appMode"];
     _modeBean = [OAApplicationModeBean fromJson:appModeJson];
-    
-    OAApplicationMode *am = [OAApplicationMode fromModeBean:_modeBean];
+    _builder = [OAApplicationMode fromModeBean:_modeBean];
+    OAApplicationMode *am = _builder.am;
     if (![am isCustomProfile])
         am = [OAApplicationMode valueOfStringKey:am.stringKey def:am];
     _appMode = am;
@@ -233,23 +234,30 @@
 {
     if (!_appMode.isCustomProfile && !self.shouldReplace)
     {
+        OAApplicationMode *parent = [OAApplicationMode valueOfStringKey:_modeBean.stringKey def:nil];
         [self renameProfile];
-        OAApplicationMode *am = [OAApplicationMode fromModeBean:_modeBean];
-       
+        OAApplicationModeBuilder *builder = [OAApplicationMode createCustomMode:parent stringKey:_modeBean.stringKey];
+        [builder setIconResName:_modeBean.iconName];
+        [builder setUserProfileName:_modeBean.userProfileName];
+        [builder setRoutingProfile:_modeBean.routingProfile];
+        [builder setRouteService:_modeBean.routeService];
+        [builder setIconColor:_modeBean.iconColor];
+        [builder setLocationIcon:_modeBean.locIcon];
+        [builder setNavigationIcon:_modeBean.navIcon];
 //        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
 //        appMode = ApplicationMode.saveProfile(builder, app);
-        [OAApplicationMode saveProfile:am];
+        [OAApplicationMode saveProfile:builder];
     }
     else if (!self.shouldReplace && [self exists])
     {
         [self renameProfile];
-        _appMode = [OAApplicationMode fromModeBean:_modeBean];
-        [OAApplicationMode saveProfile:_appMode];
+        OAApplicationModeBuilder *builder = [OAApplicationMode fromModeBean:_modeBean];
+        [OAApplicationMode saveProfile:builder];
     }
     else
     {
-        _appMode = [OAApplicationMode fromModeBean:_modeBean];
-        [OAApplicationMode saveProfile:_appMode];
+        OAApplicationModeBuilder *builder = [OAApplicationMode fromModeBean:_modeBean];
+        [OAApplicationMode saveProfile:builder];
     }
     [OAApplicationMode changeProfileAvailability:_appMode isSelected:YES];
 }

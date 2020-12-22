@@ -71,7 +71,7 @@ static OAQuickActionType *TYPE_NAVIGATION;
     TYPE_NAVIGATION = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"routing_settings") category:NAVIGATION iconName:nil];
 }
 
-+ (instancetype)sharedInstance
++ (OAQuickActionRegistry *)sharedInstance
 {
     static OAQuickActionRegistry *_sharedInstance = nil;
     static dispatch_once_t onceToken;
@@ -151,12 +151,12 @@ static OAQuickActionType *TYPE_NAVIGATION;
     _quickActionTypes = [NSArray arrayWithArray:quickActionTypes];
     _quickActionTypesInt = [NSDictionary dictionaryWithDictionary:quickActionTypesInt];
     _quickActionTypesStr = [NSDictionary dictionaryWithDictionary:quickActionTypesStr];
-    [self getAllPluginDependedActionsStrings];
+    [self registerAllPluginDependedActions];
     // reparse to get new quick actions
     _quickActions = [self parseActiveActionsList:_settings.quickActionsList];
 }
 
-- (void) getAllPluginDependedActionsStrings
+- (void) registerAllPluginDependedActions
 {
     _pluginDependedQuickActionTypes = [OAPlugin getAllQuickActionTypesPlugins];
     NSMutableDictionary<NSNumber *, OAQuickActionType *> *quickActionTypesInt = [NSMutableDictionary new];
@@ -287,7 +287,6 @@ static OAQuickActionType *TYPE_NAVIGATION;
 - (OAQuickAction *) newActionByStringType:(NSString *) actionType
 {
     OAQuickActionType *quickActionType = _quickActionTypesStr[actionType];
-    
     if (quickActionType)
         return [quickActionType createNew];
     
@@ -301,11 +300,11 @@ static OAQuickActionType *TYPE_NAVIGATION;
 - (OAQuickAction *) newActionByType:(NSInteger) type
 {
     OAQuickActionType *quickActionType = _quickActionTypesInt[@(type)];
-    if (quickActionType != nil)
+    if (quickActionType)
         return [quickActionType createNew];
     
     quickActionType = _pluginDependedQuickActionTypesInt[@(type)];
-    if (quickActionType != nil)
+    if (quickActionType)
         return [quickActionType createNew];
     
     return nil;

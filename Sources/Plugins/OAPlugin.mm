@@ -595,9 +595,7 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
 {
     NSMutableArray<OAQuickActionType *> *allPluginQuickActions = [NSMutableArray new];
     for (OAPlugin *p in allPlugins)
-    {
         [allPluginQuickActions addObjectsFromArray:p.getQuickActionTypes];
-    }
     return [NSArray arrayWithArray:allPluginQuickActions];
 }
 

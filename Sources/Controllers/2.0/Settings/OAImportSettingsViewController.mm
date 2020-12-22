@@ -312,10 +312,9 @@
                         @"icon" : [quickAction getIconResName],
                         @"color" : UIColor.orangeColor,
                         @"title" : name,
-                        @"type" : kCellTypeTitle,
                         @"unsupportedTitle" : unsupportedTitle,
+                        @"type" : kCellTypeTitle,
                     }];
-                    
                 }
                 [data addObject:quickActionsSection];
                 break;

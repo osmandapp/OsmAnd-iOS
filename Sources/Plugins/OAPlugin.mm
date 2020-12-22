@@ -591,12 +591,14 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
     }
 }
 
-+ (void) registerAllQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types
++ (NSArray<OAQuickActionType *> *) getAllQuickActionTypesPlugins
 {
+    NSMutableArray<OAQuickActionType *> *allPluginQuickActions = [NSMutableArray new];
     for (OAPlugin *p in allPlugins)
     {
-        [types addObjectsFromArray:p.getQuickActionTypes];
+        [allPluginQuickActions addObjectsFromArray:p.getQuickActionTypes];
     }
+    return [NSArray arrayWithArray:allPluginQuickActions];
 }
 
 /*

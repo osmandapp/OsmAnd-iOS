@@ -11,8 +11,8 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
-#import "OAQuickActionFullRegistry.h"
 #import "OAQuickActionType.h"
+#import "OAUnsupportedAction.h"
 
 #import "OAMapStyleAction.h"
 #import "OASwitchableAction.h"
@@ -29,7 +29,6 @@
 @implementation OAQuickActionsSettingsItem
 {
     OAQuickActionRegistry *_actionsRegistry;
-    OAQuickActionFullRegistry *_fullActionsRegistry;
 }
 
 @dynamic items, appliedItems, existingItems, warnings;
@@ -39,7 +38,6 @@
     [super initialization];
     
     _actionsRegistry = [OAQuickActionRegistry sharedInstance];
-    _fullActionsRegistry = [OAQuickActionFullRegistry sharedInstance];
     self.existingItems = [_actionsRegistry getQuickActions].mutableCopy;
 }
 
@@ -50,6 +48,9 @@
 
 - (BOOL) isDuplicate:(OAQuickAction *)item
 {
+    if ([item isKindOfClass:OAUnsupportedAction.class])
+        return [_actionsRegistry.getQuickActions containsObject:item];
+        
     return ![_actionsRegistry isNameUnique:item];
 }
 
@@ -71,7 +72,7 @@
             {
                 for (OAQuickAction *duplicateItem in self.duplicateItems)
                     for (OAQuickAction *savedAction in self.existingItems)
-                        if ([duplicateItem.getName isEqualToString:savedAction.name])
+                        if ([duplicateItem isEqual:savedAction])
                             [newActions removeObject:savedAction];
             }
             else
@@ -115,9 +116,12 @@
         NSString *type = object[@"type"];
         OAQuickAction *quickAction = nil;
         if (actionType)
-            quickAction = [_fullActionsRegistry newActionByStringType:actionType];
+            quickAction = [_actionsRegistry newActionByStringType:actionType];
         else if (type)
-            quickAction = [_fullActionsRegistry newActionByType:type.integerValue];
+            quickAction = [_actionsRegistry newActionByType:type.integerValue];
+        
+        if (!quickAction && actionType)
+            quickAction = [[OAUnsupportedAction alloc] initWithJSON:object];
         
         if (quickAction)
         {

@@ -113,6 +113,11 @@ static NSInteger SEQ = 0;
     _params = params;
 }
 
+-(void) setActionType:(OAQuickActionType *) actionType
+{
+    _actionType = actionType;
+}
+
 -(BOOL) isActionWithSlash
 {
     return NO;

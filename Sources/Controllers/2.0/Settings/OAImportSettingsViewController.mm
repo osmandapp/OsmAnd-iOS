@@ -40,6 +40,7 @@
 #import "OAFavoritesSettingsItem.h"
 #import "OAFavoritesHelper.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAUnsupportedAction.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -300,12 +301,21 @@
                 quickActionsSection.isOpen = NO;
                 for (OAQuickAction *quickAction in [_itemsMap objectForKey:type])
                 {
+                    NSString *name = [quickAction name];
+                    name = name ? name : quickAction.actionType.name;
+                    
+                    NSString *unsupportedTitle = @"";
+                    if (name.length == 0 && [quickAction isKindOfClass:OAUnsupportedAction.class])
+                        unsupportedTitle = [quickAction getDefaultName];
+                        
                     [quickActionsSection.groupItems addObject:@{
                         @"icon" : [quickAction getIconResName],
                         @"color" : UIColor.orangeColor,
-                        @"title" : [quickAction name] ? [quickAction name] : quickAction.actionType.name,
+                        @"title" : name,
                         @"type" : kCellTypeTitle,
+                        @"unsupportedTitle" : unsupportedTitle,
                     }];
+                    
                 }
                 [data addObject:quickActionsSection];
                 break;
@@ -818,7 +828,8 @@
             }
             if (cell)
             {
-                cell.textView.text = item[@"title"];
+                cell.textView.text = ((NSString *)item[@"unsupportedTitle"]).length > 0 ? item[@"unsupportedTitle"] : item[@"title"];
+
                 cell.iconView.image = [[UIImage imageNamed:item[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.iconView.tintColor = item[@"color"] ? item[@"color"] : UIColorFromRGB(color_tint_gray);
             }

@@ -1200,6 +1200,8 @@
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
 "public_transport_hide" = "Hide public transport";
+"unsupported_action" = "Unsupported action";
+"unsupported_action_descr" = "This quick action in not suppotred now. This can be fixed in new app versions.";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

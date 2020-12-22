@@ -75,6 +75,7 @@
 -(NSDictionary *) getParams;
 -(void) setName:(NSString *) name;
 -(void) setParams:(NSDictionary<NSString *, NSString *> *) params;
+-(void) setActionType:(OAQuickActionType *) actionType;
 -(BOOL) isActionWithSlash;
 -(NSString *) getActionText;
 -(NSString *) getActionStateName;

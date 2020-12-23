@@ -11,6 +11,8 @@
 #import "OANavigationIcon.h"
 #import "OALocationIcon.h"
 
+@class OAApplicationModeBuilder;
+
 @interface OAApplicationModeBean : NSObject
 
 @property (nonatomic) NSString *stringKey;
@@ -40,7 +42,7 @@
 
 @property (nonatomic, readonly) OAApplicationMode *parent;
 
-+ (OAApplicationMode *) fromModeBean:(OAApplicationModeBean *)modeBean;
++ (OAApplicationModeBuilder *) fromModeBean:(OAApplicationModeBean *)modeBean;
 
 + (OAApplicationMode *) DEFAULT;
 + (OAApplicationMode *) CAR;
@@ -57,7 +59,7 @@
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def;
 
 + (void) onApplicationStart;
-+ (void) saveProfile:(OAApplicationMode *)appMode;
++ (void) saveProfile:(OAApplicationModeBuilder *)appMode;
 + (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected;
 + (BOOL) isProfileNameAvailable:(NSString *)profileName;
 
@@ -112,5 +114,23 @@
 + (void) deleteCustomModes:(NSArray<OAApplicationMode *> *) modes;
 + (NSSet<OAApplicationMode *> *) regWidgetAvailability:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am;
 - (BOOL) isWidgetAvailable:(NSString *)key;
++ (OAApplicationModeBuilder *) createBase:(NSString *) stringKey;
++ (OAApplicationModeBuilder *) createCustomMode:(OAApplicationMode *) parent stringKey:(NSString *) stringKey;
+
+@end
+
+@interface OAApplicationModeBuilder : NSObject
+
+@property (nonatomic) OAApplicationMode *am;
+@property (nonatomic) NSString *userProfileName;
+@property (nonatomic) NSInteger routeService;
+@property (nonatomic) NSString *routingProfile;
+@property (nonatomic) NSString *iconResName;
+@property (nonatomic) NSInteger iconColor;
+@property (nonatomic) EOALocationIcon locationIcon;
+@property (nonatomic) EOANavigationIcon navigationIcon;
+@property (nonatomic) NSInteger order;
+
+- (OAApplicationMode *) customReg;
 
 @end

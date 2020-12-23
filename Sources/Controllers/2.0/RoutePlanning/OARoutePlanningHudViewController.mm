@@ -960,7 +960,6 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void) onSplitPointsAfter
 {
     [_editingContext.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:_layer after:YES]];
-    //collapseInfoViewIfExpanded();
     [_editingContext setSelectedPointPosition:-1];
     //updateUndoRedoButton(false, redoBtn);
     //updateUndoRedoButton(true, undoBtn);
@@ -970,7 +969,6 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void) onSplitPointsBefore
 {
     [_editingContext.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:_layer after:NO]];
-    //collapseInfoViewIfExpanded();
     [_editingContext setSelectedPointPosition:-1];
     //updateUndoRedoButton(false, redoBtn);
     //updateUndoRedoButton(true, undoBtn);
@@ -980,7 +978,6 @@ saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveActi
 - (void) onJoinPoints
 {
     [_editingContext.commandManager execute:[[OAJoinPointsCommand alloc] initWithLayer:_layer]];
-    //collapseInfoViewIfExpanded();
     [_editingContext setSelectedPointPosition:-1];
     //updateUndoRedoButton(false, redoBtn);
     //updateUndoRedoButton(true, undoBtn);

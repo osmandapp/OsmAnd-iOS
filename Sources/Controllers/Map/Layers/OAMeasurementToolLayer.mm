@@ -356,27 +356,27 @@
 
 - (void)drawRouteSegments
 {
-    QVector<OsmAnd::PointI> beforePoints;
-    QVector<OsmAnd::PointI> afterPoints;
     NSArray<OAGpxTrkSeg *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
     NSArray<OAGpxTrkSeg *> *afterSegs = _editingCtx.getAfterTrkSegmentLine;
     for (OAGpxTrkSeg *seg in beforeSegs)
     {
+        QVector<OsmAnd::PointI> beforePoints;
         for (OAGpxTrkPt *pt in seg.points)
         {
             beforePoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
+        [self drawLines:beforePoints collection:_collection];
     }
-    [self drawLines:beforePoints collection:_collection];
     
     for (OAGpxTrkSeg *seg in afterSegs)
     {
+        QVector<OsmAnd::PointI> afterPoints;
         for (OAGpxTrkPt *pt in seg.points)
         {
             afterPoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
+        [self drawLines:afterPoints collection:_collection];
     }
-    [self drawLines:afterPoints collection:_collection];
 }
 
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points {

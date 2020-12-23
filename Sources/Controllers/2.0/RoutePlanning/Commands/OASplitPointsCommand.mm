@@ -17,7 +17,6 @@
     NSArray<OAGpxTrkPt *> *_points;
     NSMutableDictionary<NSArray<OAGpxTrkPt *> *, OARoadSegmentData *> *_roadSegmentData;
     NSInteger _pointPosition;
-   
 }
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer after:(BOOL)after

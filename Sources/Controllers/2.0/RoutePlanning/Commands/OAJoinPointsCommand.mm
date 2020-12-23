@@ -36,7 +36,7 @@
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
     _points = [NSArray arrayWithArray:ctx.getPoints];
     _roadSegmentData = ctx.roadSegmentData;
-    //[ctx joinPoints:_pointPosition];
+    [ctx joinPoints:_pointPosition];
     [self refreshMap];
 }
 

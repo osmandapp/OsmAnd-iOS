@@ -51,7 +51,7 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), _pointIndex];
+    self.titleView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), _pointIndex + 1];
     [self.leftButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
@@ -100,6 +100,33 @@
             @"value" : @(EOAClearPointsModeAfter)
         }
     ]];
+    
+    if ([_editingCtx isFirstPointSelected:YES])
+    {
+        // skip
+    }
+    else if ([_editingCtx isLastPointSelected:YES])
+    {
+        [data addObject:@[
+            @{
+                @"type" : kIconTitleIconRoundCell,
+                @"title" : OALocalizedString(@"track_new_segment"),
+                @"img" : @"ic_custom_new_segment",
+                @"key" : @"new_segment"
+            }
+        ]];
+    }
+    else if ([_editingCtx isFirstPointSelected:NO] || [_editingCtx isLastPointSelected:NO])
+    {
+        [data addObject:@[
+            @{
+                @"type" : kIconTitleIconRoundCell,
+                @"title" : OALocalizedString(@"join_segments"),
+                @"img" : @"ic_custom_straight_line",
+                @"key" : @"join_segments"
+            }
+        ]];
+    }
     
     [data addObject:@[
         @{
@@ -235,6 +262,20 @@
         [self dismissViewControllerAnimated:NO completion:nil];
         if (self.delegate)
             [self.delegate onChangeRouteTypeAfter];
+        return;
+    }
+    else if ([key isEqualToString:@"new_segment"])
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onSplitPointsAfter];
+        return;
+    }
+    else if ([key isEqualToString:@"join_segments"])
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onJoinPoints];
         return;
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

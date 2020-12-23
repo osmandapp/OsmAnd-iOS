@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <JASidePanelController.h>
 #import "OAMapPanelViewController.h"
+#import "OAObservable.h"
 
 @class OAProduct;
 
@@ -16,6 +17,7 @@
 
 @property (nonatomic, weak, readonly) OAMapPanelViewController* mapPanel;
 @property(readonly) BOOL isMenuOpened;
+@property(readonly) OAObservable* onAllMenusHidingObservable;
 
 + (OARootViewController*) instance;
 

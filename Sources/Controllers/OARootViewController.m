@@ -134,6 +134,8 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPurchase:) name:OAIAPRequestPurchaseProductNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    _onAllMenusHidingObservable = [[OAObservable alloc] init];
 }
 
 - (BOOL) prefersStatusBarHidden
@@ -504,6 +506,7 @@ typedef enum : NSUInteger {
     }
     else if ([ext caseInsensitiveCompare:@"osf"] == NSOrderedSame)
     {
+        [_onAllMenusHidingObservable notifyEvent];        
         OASettingsHelper *helper = OASettingsHelper.sharedInstance;
         [helper collectSettings:url.path latestChanges:@"" version:1];
     }

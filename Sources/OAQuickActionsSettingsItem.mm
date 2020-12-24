@@ -13,6 +13,7 @@
 #import "OAQuickActionRegistry.h"
 #import "OAQuickActionType.h"
 
+#import "OAUnsupportedAction.h"
 #import "OAMapStyleAction.h"
 #import "OASwitchableAction.h"
 
@@ -68,7 +69,7 @@
             {
                 for (OAQuickAction *duplicateItem in self.duplicateItems)
                     for (OAQuickAction *savedAction in self.existingItems)
-                        if ([duplicateItem.getName isEqualToString:savedAction.name])
+                        if ([duplicateItem.getName isEqualToString:savedAction.getName])
                             [newActions removeObject:savedAction];
             }
             else
@@ -80,6 +81,7 @@
         }
         [newActions addObjectsFromArray:self.appliedItems];
         [_actionsRegistry updateQuickActions:newActions];
+        [_actionsRegistry updateActionTypes];
         [_actionsRegistry.quickActionListChangedObservable notifyEvent];
     }
 }
@@ -115,6 +117,9 @@
             quickAction = [_actionsRegistry newActionByStringType:actionType];
         else if (type)
             quickAction = [_actionsRegistry newActionByType:type.integerValue];
+        
+        if (!quickAction && actionType)
+            quickAction = [[OAUnsupportedAction alloc] initWithActionTypeId:actionType];
         
         if (quickAction)
         {
@@ -153,7 +158,7 @@
         {
             NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
             jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
-            jsonObject[@"actionType"] = action.actionType.stringId;
+            jsonObject[@"actionType"] = action.getActionTypeId;
             jsonObject[@"params"] = [self adjustParamsForExport:[action getParams] action:action];
             [jsonArray addObject:jsonObject];
         }

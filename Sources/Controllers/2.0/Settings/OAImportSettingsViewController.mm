@@ -304,7 +304,7 @@
                     [quickActionsSection.groupItems addObject:@{
                         @"icon" : [quickAction getIconResName],
                         @"color" : UIColor.orangeColor,
-                        @"title" : [quickAction name] ? [quickAction name] : quickAction.actionType.name,
+                        @"title" : quickAction.getName ? quickAction.getName : quickAction.actionType.name,
                         @"type" : kCellTypeTitle,
                     }];
                 }

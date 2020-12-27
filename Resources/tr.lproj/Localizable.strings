@@ -1944,3 +1944,7 @@
 "next_seg_descr" = "Sonraki bölüm, seçilen profil kullanılarak yeniden hesaplanacak.";
 "route_betw_points_descr" = "Noktaların nasıl birleştirileceğini seçin: düz bir çizgi ile veya aşağıda listelenen profillerden birini kullanarak bir güzergah hesaplayarak.";
 "whole_track" = "Tüm yol";
+"unsupported_action_descr" = "Bu hızlı eylem şu anda desteklenmiyor. Bu, yeni uygulama sürümlerinde düzeltilebilir.";
+"unsupported_action_title" = "Desteklenmeyen eylem (%@)";
+"unsupported_action" = "Desteklenmeyen eylem";
+"unsupported_items" = "Desteklenmeyen ögeler";

@@ -1951,3 +1951,7 @@
 "whole_track_descr" = "Der gesamte Track wird mit dem ausgewählten Profil neu berechnet.";
 "next_seg_descr" = "Das nächste Segment wird mit dem ausgewählten Profil neu berechnet.";
 "route_betw_points_descr" = "Wählen Sie, wie Sie die Punkte verbinden möchten: mit einer geraden Linie oder durch Berechnung einer Route mit einem der unten aufgeführten Profile.";
+"unsupported_action_descr" = "Diese Schnellaktion wird derzeit nicht unterstützt. Dies kann sich in neuen App-Versionen ändern.";
+"unsupported_action_title" = "Nicht unterstützte Aktion (%@)";
+"unsupported_action" = "Nicht unterstützte Aktion";
+"unsupported_items" = "Nicht unterstützte Elemente";

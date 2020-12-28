@@ -114,6 +114,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tabs;
 
+
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
 @property NSTimeInterval lastUpdate;

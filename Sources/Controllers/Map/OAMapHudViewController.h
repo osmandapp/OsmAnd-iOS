@@ -80,4 +80,6 @@
 - (void) recreateControls;
 - (void) updateInfo;
 
+- (void) closeQuickActionBottomSheet;
+
 @end

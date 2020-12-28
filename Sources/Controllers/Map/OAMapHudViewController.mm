@@ -214,6 +214,11 @@
 #endif // !defined(OSMAND_IOS_DEV)
 }
 
+- (void) closeQuickActionBottomSheet
+{
+    [self.quickActionController hideActionsSheetAnimated];
+}
+
 - (void)applyCorrectViewSize
 {
     CGFloat bottomMargin = [OAUtilities getBottomMargin];

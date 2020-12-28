@@ -996,6 +996,11 @@ typedef enum
     [self.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
+- (void) closeSearch
+{
+    [_searchViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
 {
     if (!target && !intermediate)

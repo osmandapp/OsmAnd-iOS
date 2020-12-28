@@ -43,7 +43,6 @@
     NSArray<OAQuickAction *> *_actions;
     
     OAAutoObserverProxy* _actionsChangedObserver;
-    OAAutoObserverProxy* _onAllMenusHidingObserver;
     
     UILongPressGestureRecognizer *_longPress;
     UIPanGestureRecognizer *_panGesture;
@@ -109,10 +108,6 @@
     _actionsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onActionsChanged)
                                                          andObserve:registry.quickActionListChangedObservable];
-    
-    _onAllMenusHidingObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(onAllMenusHiding)
-                                                         andObserve:[OARootViewController instance].onAllMenusHidingObservable];
     
     [self refreshActionList];
     
@@ -255,13 +250,6 @@
         [self refreshActionList];
         [_collectionView reloadData];
         [self setupPageControls];
-    });
-}
-
--(void)onAllMenusHiding
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self closePressed:nil];
     });
 }
 

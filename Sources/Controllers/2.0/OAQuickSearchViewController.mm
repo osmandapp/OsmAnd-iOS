@@ -114,9 +114,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tabs;
 
-
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
-@property (strong, nonatomic) OAAutoObserverProxy* onAllMenusHidingObserver;
 @property CGFloat azimuthDirection;
 @property NSTimeInterval lastUpdate;
 
@@ -284,10 +282,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
-    
-    self.onAllMenusHidingObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(onAllMenusHiding)
-                                                                     andObserve:[OARootViewController instance].onAllMenusHidingObservable];
     
     [self registerForKeyboardNotifications];
     
@@ -1747,13 +1741,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
         [self updateData:rows append:append];
     }
-}
-
-- (void) onAllMenusHiding
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self btnCancelClicked:nil];
-    });
 }
 
 #pragma mark - UITextFieldDelegate

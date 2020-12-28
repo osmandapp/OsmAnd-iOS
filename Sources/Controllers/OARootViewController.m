@@ -30,7 +30,7 @@
 #import "OAGPXListViewController.h"
 #import "OAFileImportHelper.h"
 #import "OASettingsHelper.h"
-
+#import "OAMapHudViewController.h"
 #import "Localization.h"
 #import "OAGPXDatabase.h"
 
@@ -134,8 +134,6 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPurchase:) name:OAIAPRequestPurchaseProductNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-    
-    _onAllMenusHidingObservable = [[OAObservable alloc] init];
 }
 
 - (BOOL) prefersStatusBarHidden
@@ -506,12 +504,18 @@ typedef enum : NSUInteger {
     }
     else if ([ext caseInsensitiveCompare:@"osf"] == NSOrderedSame)
     {
-        [_onAllMenusHidingObservable notifyEvent];        
+        [self onHandleIncomingURL];
         OASettingsHelper *helper = OASettingsHelper.sharedInstance;
         [helper collectSettings:url.path latestChanges:@"" version:1];
     }
     
     return YES;
+}
+
+- (void) onHandleIncomingURL
+{
+    [[self mapPanel].hudViewController closeQuickActionBottomSheet];
+    [[self mapPanel] closeSearch];
 }
 
 - (BOOL) isGpx:(NSURL *)url

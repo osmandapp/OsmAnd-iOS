@@ -53,8 +53,6 @@
 
 @property (nonatomic, readonly) OAQuickActionType *actionType;
 @property (nonatomic) long identifier;
-@property (nonatomic, readonly) NSString *name;
-@property (nonatomic) NSDictionary<NSString *, NSString *> *params;
 
 - (instancetype) initWithActionType:(OAQuickActionType *)type;
 - (instancetype) initWithAction:(OAQuickAction *)action;
@@ -71,6 +69,7 @@
 -(NSString *) getDefaultName;
 -(NSString *) getName;
 -(BOOL) hasCustomName;
+-(NSString *) getActionTypeId;
 
 -(NSDictionary *) getParams;
 -(void) setName:(NSString *) name;

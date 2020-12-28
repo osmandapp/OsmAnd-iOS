@@ -39,6 +39,7 @@
 #import "OAMapUnderlayAction.h"
 #import "OASwitchProfileAction.h"
 #import "OANavRemoveNextDestination.h"
+#import "OAUnsupportedAction.h"
 
 #define kType @"type"
 #define kName @"name"
@@ -59,6 +60,9 @@ static OAQuickActionType *TYPE_NAVIGATION;
     NSArray<OAQuickActionType *> *_quickActionTypes;
     NSDictionary<NSNumber *, OAQuickActionType *> *_quickActionTypesInt;
     NSDictionary<NSString *, OAQuickActionType *> *_quickActionTypesStr;
+    NSArray<OAQuickActionType *> *_disabledQuickActionTypes;
+    NSDictionary<NSNumber *, OAQuickActionType *> *_disabledQuickActionTypesInt;
+    NSDictionary<NSString *, OAQuickActionType *> *_disabledQuickActionTypesStr;
 }
 
 + (void)initialize
@@ -100,6 +104,9 @@ static OAQuickActionType *TYPE_NAVIGATION;
         _quickActionTypes = [NSArray new];
         _quickActionTypesInt = [NSDictionary new];
         _quickActionTypesStr = [NSDictionary new];
+        _disabledQuickActionTypes = [NSArray new];
+        _disabledQuickActionTypesInt = [NSDictionary new];
+        _disabledQuickActionTypesStr = [NSDictionary new];
         _quickActions = [NSMutableArray new];
         _settings = [OAAppSettings sharedManager];
         _quickActionListChangedObservable = [[OAObservable alloc] init];
@@ -137,7 +144,7 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OANavStartStopAction.TYPE];
     [quickActionTypes addObject:OANavResumePauseAction.TYPE];
     [quickActionTypes addObject:OASwitchProfileAction.TYPE];
-    [OAPlugin registerQuickActionTypesPlugins:quickActionTypes];
+    [OAPlugin registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
     
     NSMutableDictionary<NSNumber *, OAQuickActionType *> *quickActionTypesInt = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, OAQuickActionType *> *quickActionTypesStr = [NSMutableDictionary new];
@@ -149,6 +156,20 @@ static OAQuickActionType *TYPE_NAVIGATION;
     _quickActionTypes = [NSArray arrayWithArray:quickActionTypes];
     _quickActionTypesInt = [NSDictionary dictionaryWithDictionary:quickActionTypesInt];
     _quickActionTypesStr = [NSDictionary dictionaryWithDictionary:quickActionTypesStr];
+    
+    NSMutableArray<OAQuickActionType *> *disabledQuickActionTypes = [NSMutableArray new];
+    [OAPlugin registerQuickActionTypesPlugins:disabledQuickActionTypes disabled:YES];
+    NSMutableDictionary<NSNumber *, OAQuickActionType *> *disabledQuickActionTypesInt = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, OAQuickActionType *> *disabledQuickActionTypesStr = [NSMutableDictionary new];
+    for (OAQuickActionType *qt in disabledQuickActionTypes)
+    {
+        [disabledQuickActionTypesInt setObject:qt forKey:@(qt.identifier)];
+        [disabledQuickActionTypesStr setObject:qt forKey:qt.stringId];
+    }
+    _disabledQuickActionTypes = [NSArray arrayWithArray:disabledQuickActionTypes];
+    _disabledQuickActionTypesInt = [NSDictionary dictionaryWithDictionary:disabledQuickActionTypesInt];
+    _disabledQuickActionTypesStr = [NSDictionary dictionaryWithDictionary:disabledQuickActionTypesStr];
+
     // reparse to get new quick actions
     _quickActions = [self parseActiveActionsList:_settings.quickActionsList];
 }
@@ -259,9 +280,12 @@ static OAQuickActionType *TYPE_NAVIGATION;
 {
     OAQuickActionType *quickActionType = _quickActionTypesStr[actionType];
     if (quickActionType)
-    {
         return [quickActionType createNew];
-    }
+    
+    quickActionType = _disabledQuickActionTypesStr[actionType];
+    if (quickActionType)
+        return [quickActionType createNew];
+
     return nil;
 }
 
@@ -271,6 +295,10 @@ static OAQuickActionType *TYPE_NAVIGATION;
     if (quickActionType != nil)
         return [quickActionType createNew];
     
+    quickActionType = _disabledQuickActionTypesInt[@(type)];
+    if (quickActionType != nil)
+        return [quickActionType createNew];
+
     return nil;
 }
 
@@ -290,19 +318,22 @@ static OAQuickActionType *TYPE_NAVIGATION;
         for (NSDictionary *data in arr)
         {
             OAQuickActionType *found = nil;
-            if (data[kActionType])
+            NSString *actionType = data[kActionType];
+            BOOL disabled = NO;
+            if (actionType)
             {
-                NSString *actionType = data[kActionType];
                 found = _quickActionTypesStr[actionType];
+                disabled = _disabledQuickActionTypesStr[actionType] != nil;
             }
-            else if (data[kType])
+            if (!found && !actionType && data[kType])
             {
                 NSInteger type = [data[kType] integerValue];
                 found = _quickActionTypesInt[@(type)];
             }
-            if (found != nil)
+            if (!disabled && (found || actionType))
             {
-                OAQuickAction *qa = [found createNew];
+                OAQuickAction *qa = found ? [found createNew] : [[OAUnsupportedAction alloc] initWithActionTypeId:actionType];
+                
                 if (data[kName])
                     qa.name = data[kName];
                 if (data[kId])
@@ -328,7 +359,7 @@ static OAQuickActionType *TYPE_NAVIGATION;
                          kName : action.getName,
                          kParams : action.getParams,
                          kId : @(action.getId),
-                         kActionType : action.actionType.stringId
+                         kActionType : action.getActionTypeId
                          }];
     }
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:arr options:NSJSONWritingPrettyPrinted error:nil];

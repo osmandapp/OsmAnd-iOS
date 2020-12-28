@@ -1951,3 +1951,7 @@
 "whole_track_descr" = "Sa rasta intrea s'at a torrare a carculare impreende su profilu ischertadu.";
 "next_seg_descr" = "Su segmentu imbeniente s'at a torrare a carculare impreende su profilu ischertadu.";
 "route_betw_points_descr" = "Issèbera comente ligare sos puntos: cun una lìnia drita o carculende un'àndala impreende unu de sos profilos allistados inoghe in suta.";
+"unsupported_action_descr" = "Custa optzione no est suportada, in custu momentu. Custu problema diat pòdere èssere risoltu in versiones noas de s'aplicatzione.";
+"unsupported_action_title" = "Atzione non suportada (%@)";
+"unsupported_action" = "Atzione non suportada";
+"unsupported_items" = "Elementos non suportados";

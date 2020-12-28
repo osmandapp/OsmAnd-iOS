@@ -1876,3 +1876,24 @@
 "shared_string_max" = "Maks.";
 "shared_string_min" = "Min.";
 "maximum_speed" = "Maksymalna prędkość";
+"checking_for_duplicates" = "Sprawdzanie duplikatów...";
+
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "Masz najnowszą wersję: %@";
+"plugin_popup_osm_editing_ask" = "Proszę włączyć wtyczkę do edytowania OpenStreetMap, aby dodawać i zarządzać edycjami mapy oraz uwagami";
+"osm_notes" = "Uwagi OSM";
+"shared_string_required" = "Wymagane";
+"plugin_popup_osm_editing_title" = "Włącz edytowanie OpenStreetMap";
+"vk" = "VK";
+"help_what_is_new" = "Co nowego";
+"toggle_public_transport" = "Pokaż/ukryj transport publiczny";
+"add_one_more_pnt" = "Dodaj jeszcze jeden punkt";
+"add_after" = "Dodaj punkty po";
+"add_before" = "Dodaj punkty przed";
+"layer_amenity_label" = "Etykiety punktów";
+"personal_category_name" = "Osobiste";
+"road_speeds_descr" = "Te parametry mogą mieć wpływ na obliczanie trasy.";

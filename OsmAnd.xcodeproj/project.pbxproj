@@ -3467,6 +3467,8 @@
 		8A09960E2430D130007192AD /* OAProfileIconColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A09960C2430D130007192AD /* OAProfileIconColor.m */; };
 		8A0996112430D9CB007192AD /* OAProfileIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A0996102430D9CB007192AD /* OAProfileIcon.m */; };
 		8A0996122430D9CB007192AD /* OAProfileIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A0996102430D9CB007192AD /* OAProfileIcon.m */; };
+		8A0F247125949A3D0086ABB2 /* OAUnsupportedAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F247025949A3D0086ABB2 /* OAUnsupportedAction.m */; };
+		8A0F247225949A3D0086ABB2 /* OAUnsupportedAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A0F247025949A3D0086ABB2 /* OAUnsupportedAction.m */; };
 		8A13FED320EF99DE0029B2EE /* OATspAnt.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B524151EF2B01000E580DC /* OATspAnt.m */; };
 		8A13FEDC20EFA2EE0029B2EE /* OAMyLocationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FEDA20EFA2EE0029B2EE /* OAMyLocationViewController.mm */; };
 		8A13FEDD20EFA2EE0029B2EE /* OAMyLocationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FEDA20EFA2EE0029B2EE /* OAMyLocationViewController.mm */; };
@@ -8641,6 +8643,8 @@
 		8A09960F2430D9CB007192AD /* OAProfileIcon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAProfileIcon.h; sourceTree = "<group>"; };
 		8A0996102430D9CB007192AD /* OAProfileIcon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAProfileIcon.m; sourceTree = "<group>"; };
 		8A0DF07B23942D47000A1D4B /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8A0F246F25949A3D0086ABB2 /* OAUnsupportedAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUnsupportedAction.h; sourceTree = "<group>"; };
+		8A0F247025949A3D0086ABB2 /* OAUnsupportedAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUnsupportedAction.m; sourceTree = "<group>"; };
 		8A13FED920EFA2EE0029B2EE /* OAMyLocationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMyLocationViewController.h; path = Sources/Controllers/2.0/OAMyLocationViewController.h; sourceTree = "<group>"; };
 		8A13FEDA20EFA2EE0029B2EE /* OAMyLocationViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMyLocationViewController.mm; path = Sources/Controllers/2.0/OAMyLocationViewController.mm; sourceTree = "<group>"; };
 		8A13FEDB20EFA2EE0029B2EE /* OAMyLocationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAMyLocationViewController.xib; path = Sources/Controllers/2.0/OAMyLocationViewController.xib; sourceTree = "<group>"; };
@@ -15535,6 +15539,8 @@
 			children = (
 				DA261E3522F972EC00D0D441 /* OAQuickAction.h */,
 				DA261E3622F972EC00D0D441 /* OAQuickAction.m */,
+				8A0F246F25949A3D0086ABB2 /* OAUnsupportedAction.h */,
+				8A0F247025949A3D0086ABB2 /* OAUnsupportedAction.m */,
 				DA261E3B22F9A67300D0D441 /* OAAddOSMBugAction.h */,
 				DA261E3C22F9A67300D0D441 /* OAAddOSMBugAction.mm */,
 				DAD1DF9422FA9780009C3D90 /* OAAddPOIAction.h */,
@@ -21723,6 +21729,7 @@
 				844E07FB1E45BE8E00EFC525 /* OATargetAddressViewController.mm in Sources */,
 				847A1D581DF94E9B003C1246 /* OAGPXDocumentPrimitives.mm in Sources */,
 				DA2558C824ADE40F0081D155 /* OACreateProfileViewController.mm in Sources */,
+				8A0F247225949A3D0086ABB2 /* OAUnsupportedAction.m in Sources */,
 				DA540D9A229E83F40069201E /* OAMapillaryPlugin.mm in Sources */,
 				DA2267AA240E697A00FFEA91 /* OAWikiArticleHelper.mm in Sources */,
 				847A1D591DF94E9B003C1246 /* OAWikiMenuViewController.m in Sources */,
@@ -22030,6 +22037,7 @@
 				DA1605B122FEB971001E02AD /* OASwitchableAction.m in Sources */,
 				BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,
 				BBA3AF43197FC4BB0039D991 /* OsmAndApp.mm in Sources */,
+				8A0F247125949A3D0086ABB2 /* OAUnsupportedAction.m in Sources */,
 				84F3A93C1B4EC3C900D16EBC /* MGSwipeButton.m in Sources */,
 				8417A6841B25C29300EA1D17 /* OAEditGroupViewController.m in Sources */,
 				156F4E6124FA5123008ED1DD /* OADeleteProfileBottomSheetViewController.m in Sources */,
@@ -22888,7 +22896,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.90.1.3;
+				CURRENT_PROJECT_VERSION = 3.90.1.5;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -22943,7 +22951,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.90.1.3;
+				CURRENT_PROJECT_VERSION = 3.90.1.5;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

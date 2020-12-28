@@ -19,6 +19,7 @@
 #import "OATextInfoWidget.h"
 #import "OAMapInfoController.h"
 #import "OAInstallMapillaryBottomSheetViewController.h"
+#import "OAShowHideMapillaryAction.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -111,6 +112,11 @@
         OAInstallMapillaryBottomSheetViewController *bottomSheet = [[OAInstallMapillaryBottomSheetViewController alloc] init];
         [bottomSheet show];
     }
+}
+
+- (NSArray *)getQuickActionTypes
+{
+    return @[OAShowHideMapillaryAction.TYPE];
 }
 
 @end

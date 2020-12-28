@@ -21,6 +21,7 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAMapillaryPlugin.h"
+#import "OASRTMPlugin.h"
 
 @implementation OAPlugin
 {
@@ -229,6 +230,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
+    [allPlugins addObject:[[OASRTMPlugin alloc] init]];
     
     [self activatePlugins:enabledPlugins];
 }

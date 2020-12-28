@@ -93,6 +93,24 @@
             }
         }
     }
+    else if (vwController.type == EOAMapSourceTypeProfile)
+    {
+        NSArray *names = _action.params[@"names"] ? _action.params[@"names"] : @[];
+        NSArray *stringKeys = _action.params[@"stringKeys"] ? _action.params[@"stringKeys"] : @[];
+        NSArray *iconNames = _action.params[@"iconsNames"] ? _action.params[@"iconsNames"] : @[];
+        NSArray *iconColors = _action.params[@"iconsColors"] ? _action.params[@"iconsColors"] : @[];
+        for (int i = 0; i < stringKeys.count; i++)
+        {
+            [arr addObject:@{
+                             @"type" : kBottomSheetActionCell,
+                             @"title" : names[i],
+                             @"value" : stringKeys[i],
+                             @"param" : stringKeys[i],
+                             @"img" : iconNames[i],
+                             @"iconColor" : iconColors[i]
+                             }];
+        }
+    }
     else
     {
         for (NSArray *pair in params)
@@ -165,14 +183,19 @@
         {
             UIImage *img = nil;
             NSString *imgName = item[@"img"];
-            if (imgName)
-                img = [UIImage imageNamed:imgName];
+            NSString *imgColor = item[@"iconColor"];
+            if (imgName && imgColor)
+            {
+                cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
+            }
+            else if (imgName)
+                cell.imgView.image = [UIImage imageNamed:imgName];
             
             cell.textView.text = item[@"title"];
             NSString *desc = item[@"descr"];
             cell.descriptionView.text = desc;
             cell.descriptionView.hidden = desc.length == 0;
-            cell.imgView.image = img;
             if (!cell.accessoryView)
                 cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected"]];
             if ([cell needsUpdateConstraints])
@@ -196,6 +219,11 @@
                 {
                     isActive = [_app.data.underlayMapSource.name isEqualToString:item[@"title"]]
                     || (_app.data.underlayMapSource == nil && [item[@"value"] isEqualToString:@"no_underlay"]);
+                    break;
+                }
+                case EOAMapSourceTypeProfile:
+                {
+                    isActive = [item[@"stringKey"] isEqualToString:[OAAppSettings sharedManager].applicationMode.stringKey];
                     break;
                 }
                 default:

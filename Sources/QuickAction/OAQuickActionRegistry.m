@@ -37,7 +37,8 @@
 #import "OANavResumePauseAction.h"
 #import "OAMapOverlayAction.h"
 #import "OAMapUnderlayAction.h"
-//#import "OASwitchProfileAction.h"
+#import "OASwitchProfileAction.h"
+#import "OANavRemoveNextDestination.h"
 
 #define kType @"type"
 #define kName @"name"
@@ -129,12 +130,13 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OANavVoiceAction.TYPE];
     [quickActionTypes addObject:OANavDirectionsFromAction.TYPE];
     [quickActionTypes addObject:OANavAddDestinationAction.TYPE];
+    [quickActionTypes addObject:OANavRemoveNextDestination.TYPE];
     [quickActionTypes addObject:OANavAddFirstIntermediateAction.TYPE];
     [quickActionTypes addObject:OANavReplaceDestinationAction.TYPE];
     [quickActionTypes addObject:OANavAutoZoomMapAction.TYPE];
     [quickActionTypes addObject:OANavStartStopAction.TYPE];
     [quickActionTypes addObject:OANavResumePauseAction.TYPE];
-    //        [quickActionTypes addObject:OASwitchProfileAction.TYPE];
+    [quickActionTypes addObject:OASwitchProfileAction.TYPE];
     [OAPlugin registerQuickActionTypesPlugins:quickActionTypes];
     
     NSMutableDictionary<NSNumber *, OAQuickActionType *> *quickActionTypesInt = [NSMutableDictionary new];

@@ -42,7 +42,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FM2-7w-sAd" customClass="TTRangeSlider">
-                        <rect key="frame" x="0.0" y="34" width="375" height="35"/>
+                        <rect key="frame" x="8" y="34" width="359" height="35"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="tintColor" red="0.47058823529411764" green="0.47058823529411764" blue="0.50196078431372548" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <constraints>
@@ -65,14 +65,14 @@
                     <constraint firstItem="gZD-5G-Et2" firstAttribute="top" secondItem="FM2-7w-sAd" secondAttribute="bottom" constant="2" id="4fq-Qq-ljB"/>
                     <constraint firstItem="xN9-IC-unb" firstAttribute="top" secondItem="SRd-8Q-YGB" secondAttribute="top" constant="11" id="6jK-S1-NdK"/>
                     <constraint firstItem="lDC-fs-asB" firstAttribute="top" secondItem="FM2-7w-sAd" secondAttribute="bottom" constant="2" id="8Wt-o9-CFJ"/>
-                    <constraint firstAttribute="trailing" secondItem="FM2-7w-sAd" secondAttribute="trailing" id="9RT-HW-3DG"/>
+                    <constraint firstAttribute="trailing" secondItem="FM2-7w-sAd" secondAttribute="trailing" constant="8" id="9RT-HW-3DG"/>
                     <constraint firstAttribute="trailing" secondItem="xN9-IC-unb" secondAttribute="trailing" constant="16" id="BmU-ZK-4pc"/>
                     <constraint firstAttribute="bottom" secondItem="lDC-fs-asB" secondAttribute="bottom" constant="11" id="JDv-Nh-qhu"/>
                     <constraint firstItem="FM2-7w-sAd" firstAttribute="centerX" secondItem="SRd-8Q-YGB" secondAttribute="centerX" id="JUx-Dl-vJp"/>
                     <constraint firstAttribute="trailing" secondItem="gZD-5G-Et2" secondAttribute="trailing" constant="16" id="Py6-TJ-qAy"/>
                     <constraint firstItem="972-v0-xbc" firstAttribute="leading" secondItem="SRd-8Q-YGB" secondAttribute="leading" constant="16" id="c36-hA-T6h"/>
                     <constraint firstAttribute="bottom" secondItem="gZD-5G-Et2" secondAttribute="bottom" constant="11" id="kTs-fw-Xlz"/>
-                    <constraint firstItem="FM2-7w-sAd" firstAttribute="leading" secondItem="SRd-8Q-YGB" secondAttribute="leading" id="kfl-9Q-b2D"/>
+                    <constraint firstItem="FM2-7w-sAd" firstAttribute="leading" secondItem="SRd-8Q-YGB" secondAttribute="leading" constant="8" id="kfl-9Q-b2D"/>
                     <constraint firstItem="FM2-7w-sAd" firstAttribute="top" secondItem="xN9-IC-unb" secondAttribute="bottom" constant="2" id="mWD-Q1-XdB"/>
                     <constraint firstItem="FM2-7w-sAd" firstAttribute="top" secondItem="972-v0-xbc" secondAttribute="bottom" constant="2" id="nBU-Md-Urj"/>
                     <constraint firstItem="lDC-fs-asB" firstAttribute="leading" secondItem="SRd-8Q-YGB" secondAttribute="leading" constant="16" id="qJc-Ka-Pfd"/>

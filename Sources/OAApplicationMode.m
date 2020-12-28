@@ -619,6 +619,7 @@ static OAApplicationMode *_SKI;
     {
         mode = [builder customReg];
         [_values addObject:mode];
+        [OAApplicationMode initRegVisibility];
     }
     
     [self reorderAppModes];

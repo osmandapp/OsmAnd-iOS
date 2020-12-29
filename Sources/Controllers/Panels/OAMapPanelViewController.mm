@@ -1571,6 +1571,14 @@ typedef enum
         (_activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute));
 }
 
+- (void) onHandleIncomingURL:(NSString *)ext
+ {
+     if (_searchViewController)
+         [_searchViewController dismissViewControllerAnimated:YES completion:nil];
+     if (_hudViewController)
+         [_hudViewController.quickActionController hideActionsSheetAnimated];
+ }
+
 #pragma mark - OATargetPointViewDelegate
 
 - (void) targetResetCustomStatusBarStyle

@@ -381,7 +381,9 @@ typedef enum : NSUInteger {
     path = url.path;
     fileName = [url.path lastPathComponent];
     ext = [[path pathExtension] lowercaseString];
-
+    
+    [[self mapPanel] onHandleIncomingURL:ext];
+    
     if ([ext isEqualToString:@"sqlitedb"])
     {
         NSString *newFileName = [[OAMapCreatorHelper sharedInstance] getNewNameIfExists:fileName];
@@ -504,7 +506,6 @@ typedef enum : NSUInteger {
     }
     else if ([ext caseInsensitiveCompare:@"osf"] == NSOrderedSame)
     {
-        [[self mapPanel] onHandleIncomingURL:ext];
         OASettingsHelper *helper = OASettingsHelper.sharedInstance;
         [helper collectSettings:url.path latestChanges:@"" version:1];
     }

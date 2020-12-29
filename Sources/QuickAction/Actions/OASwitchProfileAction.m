@@ -185,7 +185,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:32 stringId:@"profile.change" class:self.class name:OALocalizedString(@"change_application_profile") category:NAVIGATION iconName:@"ic_profile_car" secondaryIconName:nil];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:32 stringId:@"profile.change" class:self.class name:OALocalizedString(@"change_application_profile") category:NAVIGATION iconName:@"ic_custom_manage_profiles" secondaryIconName:nil];
 
     return TYPE;
 }

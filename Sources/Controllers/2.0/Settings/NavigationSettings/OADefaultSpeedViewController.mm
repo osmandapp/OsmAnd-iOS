@@ -15,6 +15,7 @@
 #import "OsmAndApp.h"
 #import "OsmAndAppImpl.h"
 #import "OARoutingHelper.h"
+#import "OARouteProvider.h"
 
 #define kCellTypeSpeed @"time_cell"
 #define kCellTypeSlider @"OASliderWithValuesCell"
@@ -89,15 +90,18 @@
             break;
     }
     
-    if (self.appMode.getRouterService == STRAIGHT || self.appMode.getRouterService == DIRECT_TO)
+    CGFloat settingsDefaultSpeed = self.appMode.getDefaultSpeed;
+    
+    auto router = [OARouteProvider getRouter:self.appMode];
+    if (!router || self.appMode.getRouterService == STRAIGHT || self.appMode.getRouterService == DIRECT_TO)
     {
-        _minValue = round([_speedParameters[@"minSpeed"] floatValue] * _ratio);
-        _maxValue = round([_speedParameters[@"maxSpeed"] floatValue] * _ratio);
+        _minValue = round(MIN(1, settingsDefaultSpeed) * _ratio);
+        _maxValue = round(MAX(300, settingsDefaultSpeed) * _ratio);
     }
     else
     {
-        _minValue = round([_speedParameters[@"minSpeed"] floatValue] * _ratio / 2.);
-        _maxValue = round([_speedParameters[@"maxSpeed"] floatValue] * _ratio * 1.5);
+        _minValue = round(router->getMinSpeed() * _ratio / 2.);
+        _maxValue = round(router->getMaxSpeed() * _ratio * 1.5);
     }
     _defaultValue = round(self.appMode.getDefaultSpeed * _ratio);
 }

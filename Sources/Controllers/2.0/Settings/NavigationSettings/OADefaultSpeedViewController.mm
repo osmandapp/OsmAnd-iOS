@@ -96,7 +96,7 @@
     CGFloat maxSpeedValue = settingsMaxSpeed > 0 ? settingsMaxSpeed : [_speedParameters[@"maxSpeed"] floatValue];
 
     CGFloat min = round(MIN(minSpeedValue, settingsDefaultSpeed) * _ratio);
-    CGFloat max = round(MAX(maxSpeedValue, settingsMaxSpeed) * _ratio);
+    CGFloat max = round(MAX(maxSpeedValue, settingsDefaultSpeed) * _ratio);
     
     _minValue = round(MIN(min, [_speedParameters[@"minSpeed"] floatValue] * _ratio / 2.));
     _maxValue = round(MAX(max, [_speedParameters[@"maxSpeed"] floatValue] * _ratio * 1.5));

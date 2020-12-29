@@ -142,7 +142,7 @@
     CGFloat maxSpeedValue = settingsMaxSpeed > 0 ? settingsMaxSpeed : router->getMaxSpeed();
 
     _minValue = round(MIN(minSpeedValue, settingsDefaultSpeed) * _ratio);
-    _maxValue = round(MAX(maxSpeedValue, settingsMaxSpeed) * _ratio);
+    _maxValue = round(MAX(maxSpeedValue, settingsDefaultSpeed) * _ratio);
     
     _baseMinSpeed = round(MIN(_minValue, router->getMinSpeed() * _ratio / 2.));
     _baseMaxSpeed = round(MAX(_maxValue, router->getMaxSpeed() * _ratio * 1.5));

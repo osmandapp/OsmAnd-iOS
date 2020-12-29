@@ -417,7 +417,7 @@
 
 - (void) addProfile
 {
-    NSArray * arr = _action.params[@"stringKeys"] ? [NSMutableArray arrayWithArray:(NSArray *)_action.params[@"stringKeys"]] : [NSMutableArray new];
+    NSArray *arr = [_action getParams][@"stringKeys"] ? [NSMutableArray arrayWithArray:(NSArray *)[_action getParams][@"stringKeys"]] : [NSMutableArray new];
     OAActionAddProfileViewController *profilesScreen = [[OAActionAddProfileViewController alloc] initWithNames:arr];
     profilesScreen.delegate = self;
     [self.navigationController pushViewController:profilesScreen animated:YES];

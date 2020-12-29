@@ -95,10 +95,11 @@
     }
     else if (vwController.type == EOAMapSourceTypeProfile)
     {
-        NSArray *names = _action.params[@"names"] ? _action.params[@"names"] : @[];
-        NSArray *stringKeys = _action.params[@"stringKeys"] ? _action.params[@"stringKeys"] : @[];
-        NSArray *iconNames = _action.params[@"iconsNames"] ? _action.params[@"iconsNames"] : @[];
-        NSArray *iconColors = _action.params[@"iconsColors"] ? _action.params[@"iconsColors"] : @[];
+        NSDictionary *profileParams = [_action getParams];
+        NSArray *names = profileParams[@"names"] ? profileParams[@"names"] : @[];
+        NSArray *stringKeys = profileParams[@"stringKeys"] ? profileParams[@"stringKeys"] : @[];
+        NSArray *iconNames = profileParams[@"iconsNames"] ? profileParams[@"iconsNames"] : @[];
+        NSArray *iconColors = profileParams[@"iconsColors"] ? profileParams[@"iconsColors"] : @[];
         for (int i = 0; i < stringKeys.count; i++)
         {
             [arr addObject:@{

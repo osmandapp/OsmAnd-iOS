@@ -246,18 +246,18 @@
         [builder setNavigationIcon:_modeBean.navIcon];
 //        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
 //        appMode = ApplicationMode.saveProfile(builder, app);
-        [OAApplicationMode saveProfile:builder];
+        _appMode = [OAApplicationMode saveProfile:builder];
     }
     else if (!self.shouldReplace && [self exists])
     {
         [self renameProfile];
-        OAApplicationModeBuilder *builder = [OAApplicationMode fromModeBean:_modeBean];
-        [OAApplicationMode saveProfile:builder];
+        _builder = [OAApplicationMode fromModeBean:_modeBean];
+        _appMode = [OAApplicationMode saveProfile:_builder];
     }
     else
     {
-        OAApplicationModeBuilder *builder = [OAApplicationMode fromModeBean:_modeBean];
-        [OAApplicationMode saveProfile:builder];
+        _builder = [OAApplicationMode fromModeBean:_modeBean];
+        _appMode = [OAApplicationMode saveProfile:_builder];
     }
     [OAApplicationMode changeProfileAvailability:_appMode isSelected:YES];
 }

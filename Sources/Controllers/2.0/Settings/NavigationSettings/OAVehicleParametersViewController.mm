@@ -150,6 +150,8 @@
         @"title" : OALocalizedString(@"default_speed"),
         @"icon" : @"ic_action_speed",
         @"name" : @"defaultSpeed",
+        @"minSpeed" : [NSNumber numberWithFloat:router->getMinSpeed()],
+        @"maxSpeed" : [NSNumber numberWithFloat:router->getMaxSpeed()],
     }];
     if (parametersArr.count > 0)
         [tableData addObject:parametersArr];

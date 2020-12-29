@@ -88,8 +88,18 @@
             _ratio = 1;
             break;
     }
-    _minValue = MAX(1, floor(self.appMode.baseMinSpeed * _ratio));
-    _maxValue = round(self.appMode.baseMaxSpeed * _ratio);
+    CGFloat settingsMinSpeed = self.appMode.getMinSpeed;
+    CGFloat settingsMaxSpeed = self.appMode.getMaxSpeed;
+    CGFloat settingsDefaultSpeed = self.appMode.getDefaultSpeed;
+    
+    CGFloat minSpeedValue = settingsMinSpeed > 0 ? settingsMinSpeed : [_speedParameters[@"minSpeed"] floatValue];
+    CGFloat maxSpeedValue = settingsMaxSpeed > 0 ? settingsMaxSpeed : [_speedParameters[@"maxSpeed"] floatValue];
+
+    CGFloat min = round(MIN(minSpeedValue, settingsDefaultSpeed) * _ratio);
+    CGFloat max = round(MAX(maxSpeedValue, settingsMaxSpeed) * _ratio);
+    
+    _minValue = round(MIN(min, [_speedParameters[@"minSpeed"] floatValue] * _ratio / 2.));
+    _maxValue = round(MAX(max, [_speedParameters[@"maxSpeed"] floatValue] * _ratio * 1.5));
     _defaultValue = round(self.appMode.getDefaultSpeed * _ratio);
 }
 

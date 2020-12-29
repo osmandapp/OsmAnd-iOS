@@ -145,13 +145,15 @@
             }
         }
     }
+    CGFloat minSpeed = router ? router->getMinSpeed() : 1;
+    CGFloat maxSpeed = router ? router->getMaxSpeed() : 300;
     [defaultSpeedArr addObject:@{
         @"type" : kCellTypeIconText,
         @"title" : OALocalizedString(@"default_speed"),
         @"icon" : @"ic_action_speed",
         @"name" : @"defaultSpeed",
-        @"minSpeed" : [NSNumber numberWithFloat:router->getMinSpeed()],
-        @"maxSpeed" : [NSNumber numberWithFloat:router->getMaxSpeed()],
+        @"minSpeed" : [NSNumber numberWithFloat:minSpeed],
+        @"maxSpeed" : [NSNumber numberWithFloat:maxSpeed],
     }];
     if (parametersArr.count > 0)
         [tableData addObject:parametersArr];

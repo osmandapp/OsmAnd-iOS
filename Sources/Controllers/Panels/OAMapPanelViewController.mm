@@ -996,11 +996,6 @@ typedef enum
     [self.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
-- (void) closeSearch
-{
-    [_searchViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
 {
     if (!target && !intermediate)
@@ -1575,6 +1570,12 @@ typedef enum
     return (_activeTargetActive &&
         (_activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute));
 }
+
+- (void) onHandleIncomingURL:(NSString *)ext
+ {
+     [_searchViewController dismissViewControllerAnimated:YES completion:nil];
+     [_hudViewController.quickActionController hideActionsSheetAnimated];
+ }
 
 #pragma mark - OATargetPointViewDelegate
 

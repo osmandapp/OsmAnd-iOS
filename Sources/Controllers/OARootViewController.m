@@ -505,18 +505,12 @@ typedef enum : NSUInteger {
     }
     else if ([ext caseInsensitiveCompare:@"osf"] == NSOrderedSame)
     {
-        [self onHandleIncomingURL];
+        [[self mapPanel] onHandleIncomingURL:ext];
         OASettingsHelper *helper = OASettingsHelper.sharedInstance;
         [helper collectSettings:url.path latestChanges:@"" version:1];
     }
     
     return YES;
-}
-
-- (void) onHandleIncomingURL
-{
-    [[self mapPanel].hudViewController closeQuickActionBottomSheet];
-    [[self mapPanel] closeSearch];
 }
 
 - (BOOL) isGpx:(NSURL *)url

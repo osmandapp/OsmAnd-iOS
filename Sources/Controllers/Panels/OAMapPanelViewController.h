@@ -167,4 +167,6 @@
 
 - (void) refreshToolbar;
 
+- (void) onHandleIncomingURL:(NSString *)ext;
+
 @end

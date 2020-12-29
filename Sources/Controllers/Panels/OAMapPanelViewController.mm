@@ -1573,8 +1573,10 @@ typedef enum
 
 - (void) onHandleIncomingURL:(NSString *)ext
  {
-     [_searchViewController dismissViewControllerAnimated:YES completion:nil];
-     [_hudViewController.quickActionController hideActionsSheetAnimated];
+     if (_searchViewController)
+         [_searchViewController dismissViewControllerAnimated:YES completion:nil];
+     if (_hudViewController)
+         [_hudViewController.quickActionController hideActionsSheetAnimated];
  }
 
 #pragma mark - OATargetPointViewDelegate

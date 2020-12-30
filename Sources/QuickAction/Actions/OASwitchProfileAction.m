@@ -47,10 +47,9 @@ static OAQuickActionType *TYPE;
     if (profiles.count == 0)
         return;
     
-    BOOL showDialog = [[self getParams][KEY_DIALOG] boolValue]; //1?
+    BOOL showDialog = [[self getParams][KEY_DIALOG] boolValue];
     if (showDialog)
     {
-        //OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeProfile];
         OAProfileSelectionBottomSheetViewController *bottomSheet = [[OAProfileSelectionBottomSheetViewController alloc] initWithParam:self];
         [bottomSheet show];
         return;

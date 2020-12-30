@@ -19,7 +19,6 @@ static OAQuickActionType *TYPE;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAMapStyleSettings *_styleSettings;
-    OAMapStyleParameter *_parameter;
 }
 
 - (instancetype) init
@@ -28,21 +27,25 @@ static OAQuickActionType *TYPE;
     if (self) {
         _settings = [OAAppSettings sharedManager];
         _styleSettings = [OAMapStyleSettings sharedInstance];
-        _parameter = [_styleSettings getParameter:@"contourLines"];
     }
     return self;
 }
 
+- (OAMapStyleParameter *) parameter
+{
+    return [_styleSettings getParameter:@"contourLines"];
+}
+
 - (BOOL) isContourLinesOn
 {
-    return ![_parameter.value isEqual:@"disabled"];
+    return ![[self parameter].value isEqual:@"disabled"];
 }
 
 - (void)execute
 {
-    _parameter = [_styleSettings getParameter:@"contourLines"];
-    _parameter.value = ![self isContourLinesOn] ? [_settings.contourLinesZoom get] : @"disabled";
-    [_styleSettings save:_parameter];
+    OAMapStyleParameter *parameter = [self parameter];
+    parameter.value = [self isContourLinesOn] ? @"disabled" : [_settings.contourLinesZoom get];
+    [_styleSettings save:parameter];
 }
 
 - (NSString *)getIconResName

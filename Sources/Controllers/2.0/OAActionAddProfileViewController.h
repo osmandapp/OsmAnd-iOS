@@ -20,6 +20,6 @@
 
 @property (nonatomic) id<OAAddProfileDelegate> delegate;
 
--(instancetype)initWithNames:(NSMutableArray<NSString *> *)names;
+-(instancetype)initWithNames:(NSArray<NSString *> *)names;
 
 @end

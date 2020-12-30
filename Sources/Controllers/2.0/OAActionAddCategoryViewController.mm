@@ -64,6 +64,18 @@
     [self.tableView setEditing:YES];
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
+    
+    [self selectCells];
+}
+
+- (void) selectCells
+{
+    for (int i = 0; i < _data.count; i ++)
+    {
+        NSString *name = [self getNameFromCategory:_data[i]];
+        if ([_initialValues containsObject:name])
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -191,17 +203,7 @@
     {
         cell.contentView.backgroundColor = [UIColor whiteColor];
         [cell.textView setTextColor:[UIColor blackColor]];
-        NSString *name = @"";
-        if ([category isKindOfClass:OAPOIUIFilter.class])
-        {
-            OAPOIUIFilter *filter = (OAPOIUIFilter *)category;
-            name = filter.getName;
-        }
-        else if ([category isKindOfClass:OAPOIBaseType.class])
-        {
-            OAPOIBaseType *filter = (OAPOIBaseType *)category;
-            name = filter.nameLocalized;
-        }
+        NSString *name = [self getNameFromCategory:category];
         [cell.textView setText:name];
         if ([_initialValues containsObject:name])
         {
@@ -210,6 +212,20 @@
         }
     }
     return cell;
+}
+
+- (NSString *) getNameFromCategory:(id)category
+{
+    if ([category isKindOfClass:OAPOIUIFilter.class])
+    {
+        OAPOIUIFilter *filter = (OAPOIUIFilter *)category;
+        return filter.getName;
+    }
+    else if ([category isKindOfClass:OAPOIBaseType.class])
+    {
+        OAPOIBaseType *filter = (OAPOIBaseType *)category;
+        return filter.nameLocalized;
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

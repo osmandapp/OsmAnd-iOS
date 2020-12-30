@@ -59,7 +59,7 @@
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def;
 
 + (void) onApplicationStart;
-+ (void) saveProfile:(OAApplicationModeBuilder *)appMode;
++ (OAApplicationMode *) saveProfile:(OAApplicationModeBuilder *)appMode;
 + (void) changeProfileAvailability:(OAApplicationMode *) mode isSelected:(BOOL) isSelected;
 + (BOOL) isProfileNameAvailable:(NSString *)profileName;
 

@@ -469,7 +469,10 @@
         settingsViewController = [[OARoadSpeedsViewController alloc] initWithApplicationMode:self.appMode speedParameters:item];
 
     settingsViewController.delegate = self;
-    [self showViewController:settingsViewController];
+    if ([itemKey isEqualToString:@"roadSpeeds"])
+        [self presentViewController:settingsViewController animated:YES completion:nil];
+    else
+        [self showViewController:settingsViewController];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

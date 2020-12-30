@@ -1,12 +1,12 @@
 //
-//  OAQuickActionSelectionBottomSheetViewController.m
+//  OAProfileSelectionBottomSheetViewController.m
 //  OsmAnd
 //
-//  Created by Paul on 4/18/19.
-//  Copyright © 2019 OsmAnd. All rights reserved.
+//  Created by nnngrach on 30.12.2020.
+//  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OAProfileSelectionBottomSheetViewController.h"
 #import "OAActionConfigurationViewController.h"
 #import "Localization.h"
 #import "OABottomSheetHeaderCell.h"
@@ -16,28 +16,20 @@
 #import "OARootViewController.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
-#import "OASwitchableAction.h"
 #import "OAMenuSimpleCell.h"
 #import "OAMapSource.h"
 #import "OAMapStyleAction.h"
 
 #define kButtonsDividerTag 150
-#define kMessageFieldIndex 1
-
 #define kBottomSheetActionCell @"OAMenuSimpleCell"
 
-@interface OAQuickActionSelectionBottomSheetScreen ()
 
-@end
-
-@implementation OAQuickActionSelectionBottomSheetScreen
+@implementation OAProfileSelectionBottomSheetScreen
 {
     OsmAndAppInstance _app;
     OAQuickActionSelectionBottomSheetViewController *vwController;
     NSArray* _data;
-    
     OASwitchableAction *_action;
-    EOAMapSourceType _type;
 }
 
 @synthesize tableData, tblView;
@@ -74,37 +66,22 @@
                      @"title" : _action.getDescrTitle,
                      @"description" : @""
                      }];
-    if (vwController.type == EOAMapSourceTypeStyle)
+    
+    NSDictionary *profileParams = [_action getParams];
+    NSArray *names = profileParams[@"names"] ? profileParams[@"names"] : @[];
+    NSArray *stringKeys = profileParams[@"stringKeys"] ? profileParams[@"stringKeys"] : @[];
+    NSArray *iconNames = profileParams[@"iconsNames"] ? profileParams[@"iconsNames"] : @[];
+    NSArray *iconColors = profileParams[@"iconsColors"] ? profileParams[@"iconsColors"] : @[];
+    for (int i = 0; i < stringKeys.count; i++)
     {
-        if ([_action isKindOfClass:OAMapStyleAction.class])
-        {
-            OAMapStyleAction *mapStyleAction = (OAMapStyleAction *) _action;
-            for (NSString *param in params)
-            {
-                OAMapSource *source = mapStyleAction.offlineMapSources[param];
-                if (!source)
-                    continue;
-                [arr addObject:@{
-                    @"type" : kBottomSheetActionCell,
-                    @"title" : param,
-                    @"source" : source,
-                    @"img" : [NSString stringWithFormat:@"img_mapstyle_%@", [source.resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]]
-                }];
-            }
-        }
-    }
-    else
-    {
-        for (NSArray *pair in params)
-        {
-            [arr addObject:@{
-                             @"type" : kBottomSheetActionCell,
-                             @"title" : pair.lastObject,
-                             @"value" : pair.firstObject,
-                             @"param" : pair,
-                             @"img" : @"ic_custom_map_style"
-                             }];
-        }
+        [arr addObject:@{
+                         @"type" : kBottomSheetActionCell,
+                         @"title" : names[i],
+                         @"value" : stringKeys[i],
+                         @"param" : stringKeys[i],
+                         @"img" : iconNames[i],
+                         @"iconColor" : iconColors[i]
+                         }];
     }
     _data = [NSArray arrayWithArray:arr];
 }
@@ -165,45 +142,24 @@
         {
             UIImage *img = nil;
             NSString *imgName = item[@"img"];
-            if (imgName)
-                img = [UIImage imageNamed:imgName];
+            NSString *imgColor = item[@"iconColor"];
+            if (imgName && imgColor)
+            {
+                cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
+            }
+            else if (imgName)
+                cell.imgView.image = [UIImage imageNamed:imgName];
             
             cell.textView.text = item[@"title"];
             NSString *desc = item[@"descr"];
             cell.descriptionView.text = desc;
             cell.descriptionView.hidden = desc.length == 0;
-            cell.imgView.image = img;
             if (!cell.accessoryView)
                 cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected"]];
             if ([cell needsUpdateConstraints])
                 [cell setNeedsUpdateConstraints];
-            BOOL isActive;
-            switch (vwController.type)
-            {
-                case EOAMapSourceTypeSource:
-                case EOAMapSourceTypeStyle:
-                {
-                    isActive = [_app.data.lastMapSource.name isEqualToString:item[@"title"]];
-                    break;
-                }
-                case EOAMapSourceTypeOverlay:
-                {
-                    isActive = [_app.data.overlayMapSource.name isEqualToString:item[@"title"]]
-                    || (_app.data.overlayMapSource == nil && [item[@"value"] isEqualToString:@"no_overlay"]);
-                    break;
-                }
-                case EOAMapSourceTypeUnderlay:
-                {
-                    isActive = [_app.data.underlayMapSource.name isEqualToString:item[@"title"]]
-                    || (_app.data.underlayMapSource == nil && [item[@"value"] isEqualToString:@"no_underlay"]);
-                    break;
-                }
-                default:
-                {
-                    isActive = NO;
-                    break;
-                }
-            }
+            BOOL isActive = [item[@"stringKey"] isEqualToString:[OAAppSettings sharedManager].applicationMode.stringKey];
             cell.accessoryView.hidden = !isActive;
         }
         return cell;
@@ -248,15 +204,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    if (vwController.type == EOAMapSourceTypeStyle)
-    {
-        OAMapSource *newMapSource = item[@"source"];
-        _app.data.lastMapSource = newMapSource;
-    }
-    else
-    {
-        [_action executeWithParams:item[@"param"]];
-    }
+    [_action executeWithParams:item[@"param"]];
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     [self.vwController dismiss];
 }
@@ -272,22 +220,16 @@
 
 @end
 
-@interface OAQuickActionSelectionBottomSheetViewController ()
+@interface OAProfileSelectionBottomSheetViewController ()
 
 @end
 
-@implementation OAQuickActionSelectionBottomSheetViewController
-
-- (instancetype) initWithAction:(OASwitchableAction *)action type:(EOAMapSourceType)type
-{
-    _type = type;
-    return [super initWithParam:action];
-}
+@implementation OAProfileSelectionBottomSheetViewController
 
 - (void) setupView
 {
     if (!self.screenObj)
-        self.screenObj = [[OAQuickActionSelectionBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
+        self.screenObj = [[OAProfileSelectionBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
     
     [super setupView];
 }

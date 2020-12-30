@@ -1212,7 +1212,7 @@
 "shared_string_add_profile" = "Add profile";
 "quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
 "application_profiles" = "App profiles";
-"select_map_style" = "Select app profile";
+"select_application_profile" = "Select app profile";
 "profile_type_user_string" = "User profile";
 "profile_type_osmand_string" = "OsmAnd rofile";
 "unsupported_action" = "Unsupported action";

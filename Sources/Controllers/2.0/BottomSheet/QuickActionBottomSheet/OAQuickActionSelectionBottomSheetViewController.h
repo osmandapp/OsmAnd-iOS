@@ -14,8 +14,7 @@ typedef NS_ENUM(NSInteger, EOAMapSourceType)
     EOAMapSourceTypeStyle = 0,
     EOAMapSourceTypeSource,
     EOAMapSourceTypeOverlay,
-    EOAMapSourceTypeUnderlay,
-    EOAMapSourceTypeProfile
+    EOAMapSourceTypeUnderlay
 };
 
 @class OASwitchableAction;

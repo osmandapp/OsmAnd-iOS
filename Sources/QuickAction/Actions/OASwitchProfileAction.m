@@ -12,7 +12,8 @@
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
-#import "OAQuickActionSelectionBottomSheetViewController.h"
+//#import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OAProfileSelectionBottomSheetViewController.h"
 
 #define kNames @"names"
 #define kStringKeys @"stringKeys"
@@ -49,7 +50,8 @@ static OAQuickActionType *TYPE;
     BOOL showDialog = [[self getParams][KEY_DIALOG] boolValue]; //1?
     if (showDialog)
     {
-        OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeProfile];
+        //OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeProfile];
+        OAProfileSelectionBottomSheetViewController *bottomSheet = [[OAProfileSelectionBottomSheetViewController alloc] initWithParam:self];
         [bottomSheet show];
         return;
     }

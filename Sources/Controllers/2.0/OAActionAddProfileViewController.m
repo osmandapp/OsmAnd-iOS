@@ -72,7 +72,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"application_profiles");
+    _titleView.text = OALocalizedString(@"select_application_profile");
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 

@@ -10,6 +10,7 @@
 
 #import <Foundation/Foundation.h>
 
+#define UNSUPPORTED -1
 #define CREATE_CATEGORY 0
 #define CONFIGURE_MAP 1
 #define NAVIGATION 2

@@ -26,7 +26,8 @@ static NSDictionary<NSString *, NSString *> *stylesTitlesOffline;
                                 @"Topo" : @"Topo",
                                 @"Offroad by ZLZK" : @"Offroad",
                                 @"Depends-template" : @"Mapnik",
-                                @"desert" : @"Desert"
+                                @"desert" : @"Desert",
+                                @"snowmobile" : @"Snowmobile"
                                 };
     }
     return stylesTitlesOffline;
@@ -50,8 +51,10 @@ static NSDictionary<NSString *, NSString *> *stylesTitlesOffline;
         return 6;
     else if ([title isEqualToString:@"Desert"])
         return 7;
-    else
+    else if ([title isEqualToString:@"Snowmobile"])
         return 8;
+    else
+        return 9;
 }
 
 @end

@@ -39,7 +39,7 @@ static OAQuickActionType *TYPE;
         if (self.getParams.count == 0)
             [plugin openOsmNote:latLon.latitude longitude:latLon.longitude message:@"" autoFill:YES];
         else
-            [plugin openOsmNote:latLon.latitude longitude:latLon.longitude message:self.params[KEY_MESSAGE] autoFill:![self.params[KEY_DIALOG] boolValue]];
+            [plugin openOsmNote:latLon.latitude longitude:latLon.longitude message:self.getParams[KEY_MESSAGE] autoFill:![self.getParams[KEY_DIALOG] boolValue]];
     }
 }
 

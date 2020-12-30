@@ -1928,3 +1928,10 @@
 "next_segs_recalc_descr" = "Kõik järgnevad lõigud arvutatakse valitud profiili alusel ümber";
 "personal_category_name" = "Isiklik";
 "whole_track" = "Terve rada";
+"ios_release_3_90" = "• Tutvustasime sõltumatute seadetega rakenduse profiile\n• Seadete uus paigutus profiilide ja tüüpide järgi: navigeerimine, üldine, kaart ja ekraan\n• Võimalus profiili seadeid importida või eksportida\n• Lisatud veebialaste fotode andmeallikaid\n• Lisatud võimalus veebikaarte vahemällu alla laadida\n• Täiustatud otsingu algoritme\n";
+"ios_release_3_80" = "• Tutvustasime sõltumatute seadetega rakenduse profiile\n• Seadete uus paigutus profiilide ja tüüpide järgi: navigeerimine, üldine, kaart ja ekraan\n• Võimalus profiili seadeid importida või eksportida\n• Lisatud veebialaste fotode andmeallikaid\n• Lisatud võimalus veebikaarte vahemällu alla laadida\n• Täiustatud otsingu algoritme\n";
+"shared_string_max" = "Maks.";
+"shared_string_min" = "Min.";
+"road_speeds" = "Kiirused teedel";
+"road_max_speed_descr" = "Määrab kõigi marsruudil olevate teede maksimaalse sõidukiiruse. Alandab prioriteeti maanteedel, mille võimalik kiirus on üle maksimaalse.";
+"road_min_speed_descr" = "Määrab kõigi marsruudil olevate teede minimaalse sõidukiiruse. Tõstab prioriteedi maanteedele, mille soovitatav kiirus on alla miinimumi.";

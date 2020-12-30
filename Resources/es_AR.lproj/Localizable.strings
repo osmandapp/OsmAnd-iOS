@@ -1952,3 +1952,7 @@
 "prev_segs_dist" = "Todos los segmentos anteriores %@";
 "prev_seg_dist" = "Segmento anterior %@";
 "next_segs_dist" = "Todos los segmentos posteriores %@";
+"unsupported_action_descr" = "Esta rápida acción no está admitida por ahora. Esto se puede solucionarse en nuevas versiones de la aplicación.";
+"unsupported_action_title" = "Acción no admitida (%@)";
+"unsupported_action" = "Acción no admitida";
+"unsupported_items" = "Elementos no admitidos";

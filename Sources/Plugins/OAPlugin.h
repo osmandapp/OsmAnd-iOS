@@ -48,7 +48,7 @@
 + (BOOL) onDestinationReached;
 + (void) createLayers;
 + (void) updateLocationPlugins:(CLLocation *)location;
-+ (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types;
++ (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled;
 
 - (void) updateLayers;
 - (void) registerLayers;

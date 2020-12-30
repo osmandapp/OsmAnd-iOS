@@ -1209,12 +1209,12 @@
 "quick_action_remove_next_destination" = "Delete nearest destination point";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
 "change_application_profile" = "Change app profile";
+"select_application_profile" = "Select app profile";
 "shared_string_add_profile" = "Add profile";
 "quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
 "application_profiles" = "App profiles";
-"select_application_profile" = "Select app profile";
 "profile_type_user_string" = "User profile";
-"profile_type_osmand_string" = "OsmAnd rofile";
+"profile_type_osmand_string" = "OsmAnd profile";
 "unsupported_action" = "Unsupported action";
 "unsupported_action_title" = "Unsupported action (%@)";
 "unsupported_action_descr" = "This quick action in not suppotred now. This can be fixed in new app versions.";

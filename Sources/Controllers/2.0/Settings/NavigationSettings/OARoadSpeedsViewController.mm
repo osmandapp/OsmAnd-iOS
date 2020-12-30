@@ -136,13 +136,12 @@
     }
     CGFloat settingsMinSpeed = self.appMode.getMinSpeed;
     CGFloat settingsMaxSpeed = self.appMode.getMaxSpeed;
-    CGFloat settingsDefaultSpeed = self.appMode.getDefaultSpeed;
     
     CGFloat minSpeedValue = settingsMinSpeed > 0 ? settingsMinSpeed : router->getMinSpeed();
     CGFloat maxSpeedValue = settingsMaxSpeed > 0 ? settingsMaxSpeed : router->getMaxSpeed();
 
-    _minValue = round(MIN(minSpeedValue, settingsDefaultSpeed) * _ratio);
-    _maxValue = round(MAX(maxSpeedValue, settingsDefaultSpeed) * _ratio);
+    _minValue = round(minSpeedValue * _ratio);
+    _maxValue = round(maxSpeedValue * _ratio);
     
     _baseMinSpeed = round(MIN(_minValue, router->getMinSpeed() * _ratio / 2.));
     _baseMaxSpeed = round(MAX(_maxValue, router->getMaxSpeed() * _ratio * 1.5));

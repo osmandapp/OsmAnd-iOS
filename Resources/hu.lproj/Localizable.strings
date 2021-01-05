@@ -999,7 +999,7 @@
 "rendering_attr_showRoadMaps_name" = "Csak-út térképek";
 "rendering_attr_piste_difficulty_expert_name" = "Profi";
 "rendering_attr_piste_type_sled_name" = "Szánkó";
-"rendering_value_car_name" = "Autó";
+"rendering_value_car_name" = "Személyautó";
 "rendering_attr_hideUnderground_name" = "Földalatti objektumok";
 "rendering_value_highContrastRoads_name" = "Nagy kontrasztú utak";
 "rendering_attr_OSMMapperAssistant_name" = "OSM térképezősegéd";
@@ -1302,7 +1302,7 @@
 "app_mode_default" = "Térképböngészés";
 "app_mode_horse" = "Ló";
 "app_mode_pickup_truck" = "Kisteherautó";
-"app_mode_car" = "Vezetés";
+"app_mode_car" = "Autóvezetés";
 "app_mode_taxi" = "Taxi";
 "app_mode_pedestrian" = "Gyaloglás";
 "app_mode_subway" = "Metró";

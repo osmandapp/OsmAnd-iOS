@@ -1538,7 +1538,7 @@
 "routeInfo_smoothness_name" = "Uniformitat";
 "rendering_attr_hideWaterPolygons_description" = "Hidràulic";
 "rendering_attr_hidePOILabels_name" = "Etiquetes PDI";
-"routing_attr_freeride_policy_description" = "Camp a través i fora pistes són vies no oficials. Normalment so estan condicionades ni mantingudes per treballadors ni revisades per la nit. Si hi entreu en sereu responsables del que passi.";
+"routing_attr_freeride_policy_description" = "'Camp a través' i 'Fora pistes' són vies no oficials. Normalment no estan regulades ni mantingudes ni revisades de nit. Entrant-hi, sereu responsables del que passi.";
 "rendering_attr_piste_type_downhill_name" = "Descens";
 "routing_attr_allow_classic_only_name" = "Restringeix a rutes clàssiques";
 "rendering_attr_currentTrackWidth_description" = "Amplada traça GPX";
@@ -1918,8 +1918,8 @@
 "road_max_speed_descr" = "Estableix la velocitat màxima de circulació de totes les carreteres de la ruta. Intenta evitar les carreteres on es permet velocitats superiors a la màxima.";
 "road_speeds_descr" = "Aquests paràmetres podrien afectar el càlcul de la ruta.";
 "maximum_speed" = "Velocitat màxima";
-"ios_release_3_90" = "• S'han introduït \"Perfils d'aplicació\" amb configuracions independents\n• Nova disposició de la configuració per perfils i tipus: navegació, general, mapa i pantalla\n• Possibilitat d'importar o exportar paràmetres de perfil\n• S'han afegit fonts de dades per a fotos en línia\n• S'ha afegit la possibilitat de baixar mapes en línia a la memòria cau\n• S'han millorat els algorismes de cerca";
-"ios_release_3_80" = "• S'han introduït \"Perfils d'aplicació\" amb configuracions independents\n• Nova disposició de la configuració per perfils i tipus: navegació, general, mapa i pantalla\n• Possibilitat d'importar o exportar paràmetres de perfil\n• S'han afegit fonts de dades per a fotos en línia\n• S'ha afegit la possibilitat de baixar mapes en línia a la memòria cau\n• S'han millorat els algorismes de cerca";
+"ios_release_3_90" = "• S'han introduït \"Perfils d'aplicació\" amb configuracions independents\n• Nova disposició de la configuració per perfils i tipus: navegació, general, mapa i pantalla\n• Possibilitat d'importar o exportar paràmetres de perfil\n• S'han afegit fonts de dades per a fotos en línia\n• S'ha afegit la possibilitat de baixar mapes en línia a la memòria cau\n• S'han millorat els algorismes de cerca\n";
+"ios_release_3_80" = "• S'han introduït \"Perfils d'aplicació\" amb configuracions independents\n• Nova disposició de la configuració per perfils i tipus: navegació, general, mapa i pantalla\n• Possibilitat d'importar o exportar paràmetres de perfil\n• S'han afegit fonts de dades per a fotos en línia\n• S'ha afegit la possibilitat de baixar mapes en línia a la memòria cau\n• S'han millorat els algorismes de cerca\n";
 
 
 // Release Notes
@@ -1932,3 +1932,22 @@
 "plugin_popup_osm_editing_ask" = "Activeu el connector d’edició d’OpenStreetMap per afegir i gestionar edicions i notes del mapa";
 "plugin_popup_osm_editing_title" = "Activa l'edició d'OpenStreetMap";
 "layer_amenity_label" = "Etiquetes superposades de PDIs";
+"vk" = "VK";
+"prev_segs_recalc_descr" = "Tots els segments anteriors es tornaran a calcular amb el perfil seleccionat";
+"next_segs_recalc_descr" = "Tots els segments següents es tornaran a calcular amb el perfil seleccionat";
+"selected_seg_recalc_descr" = "Només es tornarà a calcular el segment seleccionat amb el perfil seleccionat";
+"prev_segs_dist" = "Tots els segments %@ anteriors";
+"prev_seg_dist" = "Segment %@ anterior";
+"next_segs_dist" = "Tots els segments %@ següents";
+"next_seg_dist" = "Segment %@ següent";
+"whole_track" = "Pista sencera";
+"next_seg" = "Segment següent";
+"whole_track_descr" = "Tota la traça es tornarà a calcular fent ús del perfil seleccionat.";
+"next_seg_descr" = "El segment següent es tornarà a calcular fent ús del perfil seleccionat.";
+"route_betw_points_descr" = "Trieu com connectar els punts: amb una línia recta o calculant-ne una ruta mitjançant un dels perfils llistats a sota.";
+"personal_category_name" = "Personal";
+"nav_type_brouter" = "BRouter";
+"unsupported_action_descr" = "Aquesta drecera ara no s'admet. Això es podria resoldre en noves versions de l'aplicació.";
+"unsupported_action_title" = "Acció no admesa (%@)";
+"unsupported_action" = "Acció no admesa";
+"unsupported_items" = "Elements no admesos";

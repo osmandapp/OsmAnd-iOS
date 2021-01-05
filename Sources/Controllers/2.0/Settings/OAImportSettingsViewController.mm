@@ -260,10 +260,12 @@
                 profilesSection.isOpen = NO;
                 for (OAApplicationModeBean *modeBean in settings)
                 {
-                    OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:[OAApplicationMode fromModeBean:modeBean]];
                     NSString *title = modeBean.userProfileName;
                     if (!title || title.length == 0)
-                        title = appMode.name;
+                    {
+                        OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
+                        title = [appMode toHumanString];
+                    }
 
                     NSString *routingProfile = @"";
                     NSString *routingProfileValue = modeBean.routingProfile;
@@ -282,9 +284,8 @@
                     }
 
                     [profilesSection.groupItems addObject:@{
-                        @"app_mode" : appMode,
-                        @"icon" : appMode.getIcon,
-                        @"color" : UIColorFromRGB(appMode.getIconColor),
+                        @"icon" :  [UIImage imageNamed:modeBean.iconName],
+                        @"color" : UIColorFromRGB(modeBean.iconColor),
                         @"title" : title,
                         @"description" : routingProfile,
                         @"type" : kCellTypeTitleDescription,
@@ -303,7 +304,7 @@
                     [quickActionsSection.groupItems addObject:@{
                         @"icon" : [quickAction getIconResName],
                         @"color" : UIColor.orangeColor,
-                        @"title" : [quickAction name] ? [quickAction name] : quickAction.actionType.name,
+                        @"title" : quickAction.getName ? quickAction.getName : quickAction.actionType.name,
                         @"type" : kCellTypeTitle,
                     }];
                 }

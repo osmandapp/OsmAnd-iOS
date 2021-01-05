@@ -1923,8 +1923,8 @@
 "road_min_speed_descr" = "Imposta sa lestresa mìnima de biàgiu pro totu sos caminos de s'àndala. Faghat artziare sa prioridade pro sos caminos cun lestresas racumandadas prus bassas de su mìnimu.";
 "road_speeds_descr" = "Custos paràmetros diant pòdere influentzare su càrculu de s'àndala.";
 "maximum_speed" = "Lestresa màssima";
-"ios_release_3_90" = "• Introdutzione de “Profilos de s'aplicatziones\" cun impostatziones indipendentes\n• Organizatzione noa de sas impostatziones pro profilu e casta: navigatzione, generales, mapa e ischermu\n• Possibilidade de importare o esportare sas impostatziones de profilu\n• Annanghidura de fontes de datos pro sas fotografias in lìnia\n• Annanghidura de sa possibilidade de iscarrigare mapas in lìnia in sa memòria temporànea\n• Algoritmu de chirca megioradu";
-"ios_release_3_80" = "• Introdutzione de “Profilos de s'aplicatziones\" cun impostatziones indipendentes\n• Organizatzione noa de sas impostatziones pro profilu e casta: navigatzione, generales, mapa e ischermu\n• Possibilidade de importare o esportare sas impostatziones de profilu\n• Annanghidura de fontes de datos pro sas fotografias in lìnia\n• Annanghidura de sa possibilidade de iscarrigare mapas in lìnia in sa memòria temporànea\n• Algoritmu de chirca megioradu";
+"ios_release_3_90" = "• Introdutzione de “Profilos de s'aplicatziones\" cun impostatziones indipendentes\n• Organizatzione noa de sas impostatziones pro profilu e casta: navigatzione, generales, mapa e ischermu\n• Possibilidade de importare o esportare sas impostatziones de profilu\n• Annanghidura de fontes de datos pro sas fotografias in lìnia\n• Annanghidura de sa possibilidade de iscarrigare mapas in lìnia in sa memòria temporànea\n• Algoritmu de chirca megioradu\n";
+"ios_release_3_80" = "• Introdutzione de “Profilos de s'aplicatziones\" cun impostatziones indipendentes\n• Organizatzione noa de sas impostatziones pro profilu e casta: navigatzione, generales, mapa e ischermu\n• Possibilidade de importare o esportare sas impostatziones de profilu\n• Annanghidura de fontes de datos pro sas fotografias in lìnia\n• Annanghidura de sa possibilidade de iscarrigare mapas in lìnia in sa memòria temporànea\n• Algoritmu de chirca megioradu\n";
 
 
 // Release Notes
@@ -1951,3 +1951,7 @@
 "whole_track_descr" = "Sa rasta intrea s'at a torrare a carculare impreende su profilu ischertadu.";
 "next_seg_descr" = "Su segmentu imbeniente s'at a torrare a carculare impreende su profilu ischertadu.";
 "route_betw_points_descr" = "Issèbera comente ligare sos puntos: cun una lìnia drita o carculende un'àndala impreende unu de sos profilos allistados inoghe in suta.";
+"unsupported_action_descr" = "Custa optzione no est suportada, in custu momentu. Custu problema diat pòdere èssere risoltu in versiones noas de s'aplicatzione.";
+"unsupported_action_title" = "Atzione non suportada (%@)";
+"unsupported_action" = "Atzione non suportada";
+"unsupported_items" = "Elementos non suportados";

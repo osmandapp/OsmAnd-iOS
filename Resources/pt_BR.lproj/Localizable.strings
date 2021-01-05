@@ -1923,8 +1923,8 @@
 "road_min_speed_descr" = "Define a velocidade mínima de viagem para todas as estradas da rota. Aumenta a prioridade para estradas com velocidades recomendadas menores que o mínimo.";
 "road_speeds_descr" = "Esses parâmetros podem afetar o cálculo da rota.";
 "maximum_speed" = "Velocidade máxima";
-"ios_release_3_90" = "• Introduziu \"Perfis de aplicativo\" com configurações independentes\n• Nova organização de configurações por perfis e tipos: navegação, geral, mapa e tela\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas fontes de dados para fotos online\n• Capacidade de baixar mapas online para cache\n• Algoritmos de \"Pesquisa\" aprimorados";
-"ios_release_3_80" = "• Introduziu \"Perfis de aplicativo\" com configurações independentes\n• Nova organização de configurações por perfis e tipos: navegação, geral, mapa e tela\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas fontes de dados para fotos online\n• Capacidade de baixar mapas online para cache\n• Algoritmos de \"Pesquisa\" aprimorados";
+"ios_release_3_90" = "• Introduziu \"Perfis de aplicativo\" com configurações independentes\n• Nova organização de configurações por perfis e tipos: navegação, geral, mapa e tela\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas fontes de dados para fotos online\n• Capacidade de baixar mapas online para cache\n• Algoritmos de \"Pesquisa\" aprimorados\n";
+"ios_release_3_80" = "• Introduziu \"Perfis de aplicativo\" com configurações independentes\n• Nova organização de configurações por perfis e tipos: navegação, geral, mapa e tela\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas fontes de dados para fotos online\n• Capacidade de baixar mapas online para cache\n• Algoritmos de \"Pesquisa\" aprimorados\n";
 
 
 // Release Notes
@@ -1951,3 +1951,7 @@
 "whole_track_descr" = "A trilha inteira será recalculada usando o perfil selecionado.";
 "next_seg_descr" = "O próximo segmento será recalculado usando o perfil selecionado.";
 "route_betw_points_descr" = "Escolha como conectar os pontos de conexão: com uma linha reta ou calculando uma rota usando um dos perfis listados abaixo.";
+"unsupported_action_descr" = "Esta ação rápida não é suportada agora. Isso pode ser corrigido em novas versões do aplicativo.";
+"unsupported_action_title" = "Ação não suportada (%@)";
+"unsupported_action" = "Ação não suportada";
+"unsupported_items" = "Itens não suportados";

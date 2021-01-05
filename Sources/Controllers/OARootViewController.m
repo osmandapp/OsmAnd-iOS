@@ -381,7 +381,9 @@ typedef enum : NSUInteger {
     path = url.path;
     fileName = [url.path lastPathComponent];
     ext = [[path pathExtension] lowercaseString];
-
+    
+    [[self mapPanel] onHandleIncomingURL:ext];
+    
     if ([ext isEqualToString:@"sqlitedb"])
     {
         NSString *newFileName = [[OAMapCreatorHelper sharedInstance] getNewNameIfExists:fileName];

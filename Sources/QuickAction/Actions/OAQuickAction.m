@@ -13,6 +13,13 @@
 
 static NSInteger SEQ = 0;
 
+@interface OAQuickAction()
+
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSDictionary<NSString *, NSString *> *params;
+
+@end
+
 @implementation OAQuickAction
 
 - (instancetype) init
@@ -93,6 +100,11 @@ static NSInteger SEQ = 0;
 - (BOOL) hasCustomName
 {
     return ![[self getName] isEqualToString:[self getDefaultName]];
+}
+
+- (NSString *) getActionTypeId
+{
+    return _actionType ? _actionType.stringId : nil;
 }
 
 -(NSDictionary *) getParams

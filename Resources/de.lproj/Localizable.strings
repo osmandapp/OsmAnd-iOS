@@ -246,7 +246,7 @@
 "units_min" = "min";
 "units_sec" = "sek";
 "cannot_access_calendar" = "Kalender nicht aufrufbar";
-"reminder_not_set_text" = "Die Erinnerung wurde nicht gesetzt, da kein Zugangsrecht zum Kalender besteht.";
+"reminder_not_set_text" = "Die Erinnerung wurde nicht gesetzt, da kein Zugangsrecht zum Kalender besteht";
 "product_title_parking" = "Park-Position";
 "product_desc_parking" = "Erinnerungshilfe, wann das Fahrzeug geparkt wurde und wieviel Parkzeit übrig ist";
 "product_title_skimap" = "Ski-Karte";
@@ -1086,7 +1086,7 @@
 "osm_upload_complete" = "Hochladen abgeschlossen";
 "sett_ext_input_desc" = "Wählen Sie ein Gerät wie eine Tastatur oder WunderLINQ für externe Steuerelemente aus.";
 "sett_ext_input" = "Externe Eingabegeräte";
-"sett_no_ext_input" = "Keine";
+"sett_no_ext_input" = "Keines";
 "sett_generic_ext_input" = "Tastatur";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Hineinzoomen";
@@ -1749,7 +1749,7 @@
 "rearrange_profiles" = "Profile neu anordnen";
 "empty_profile_name_warning" = "Profilname darf nicht leer sein.";
 "desert" = "Wüste";
-"change_map_behavior" = "Ändere das Kartenverhalten während der Navigation";
+"change_map_behavior" = "Kartenverhalten während der Navigation ändern";
 "map_behavior" = "Kartenverhalten";
 "voice_anounces" = "Sprachansagen";
 "osmand_routing" = "OsmAnd-Routing";
@@ -1924,8 +1924,8 @@
 "road_speeds_descr" = "Diese Parameter können die Routenberechnung beeinflussen.";
 "maximum_speed" = "Höchstgeschwindigkeit";
 "vk" = "VKontakte";
-"ios_release_3_90" = "• \"Anwendungsprofile\" mit unabhängigen Einstellungen eingeführt\n• Neue Anordnung der Einstellungen nach Profilen und Typen: Navigation, Allgemein, Karte und Bildschirm\n• Möglichkeit hinzugefügt, Profileinstellungen zu importieren oder zu exportieren\n• Datenquellen für Online-Fotos hinzugefügt\n• Möglichkeit zum Herunterladen von Online-Karten in den Cache hinzugefügt\n• Verbesserte \"Such\"-Algorithmen";
-"ios_release_3_80" = "• \"Anwendungsprofile\" mit unabhängigen Einstellungen eingeführt\n• Neue Anordnung der Einstellungen nach Profilen und Typen: Navigation, Allgemein, Karte und Bildschirm\n• Möglichkeit hinzugefügt, Profileinstellungen zu importieren oder zu exportieren\n• Datenquellen für Online-Fotos hinzugefügt\n• Möglichkeit zum Herunterladen von Online-Karten in den Cache hinzugefügt\n• Verbesserte \"Such\"-Algorithmen";
+"ios_release_3_90" = "• \"Anwendungsprofile\" mit unabhängigen Einstellungen eingeführt\n• Neue Anordnung der Einstellungen nach Profilen und Typen: Navigation, Allgemein, Karte und Bildschirm\n• Möglichkeit hinzugefügt, Profileinstellungen zu importieren oder zu exportieren\n• Datenquellen für Online-Fotos hinzugefügt\n• Möglichkeit zum Herunterladen von Online-Karten in den Cache hinzugefügt\n• Verbesserte \"Such\"-Algorithmen\n";
+"ios_release_3_80" = "• \"Anwendungsprofile\" mit unabhängigen Einstellungen eingeführt\n• Neue Anordnung der Einstellungen nach Profilen und Typen: Navigation, Allgemein, Karte und Bildschirm\n• Möglichkeit hinzugefügt, Profileinstellungen zu importieren oder zu exportieren\n• Datenquellen für Online-Fotos hinzugefügt\n• Möglichkeit zum Herunterladen von Online-Karten in den Cache hinzugefügt\n• Verbesserte \"Such\"-Algorithmen\n";
 
 
 // Release Notes
@@ -1951,3 +1951,7 @@
 "whole_track_descr" = "Der gesamte Track wird mit dem ausgewählten Profil neu berechnet.";
 "next_seg_descr" = "Das nächste Segment wird mit dem ausgewählten Profil neu berechnet.";
 "route_betw_points_descr" = "Wählen Sie, wie Sie die Punkte verbinden möchten: mit einer geraden Linie oder durch Berechnung einer Route mit einem der unten aufgeführten Profile.";
+"unsupported_action_descr" = "Diese Schnellaktion wird derzeit nicht unterstützt. Dies kann sich in neuen App-Versionen ändern.";
+"unsupported_action_title" = "Nicht unterstützte Aktion (%@)";
+"unsupported_action" = "Nicht unterstützte Aktion";
+"unsupported_items" = "Nicht unterstützte Elemente";

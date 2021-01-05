@@ -28,6 +28,7 @@
 #import "OAFavoritesSettingsItem.h"
 #import "OAExportSettingsType.h"
 #import "OAFavoritesHelper.h"
+#import "OAMarkersSettingsItem.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -312,6 +313,9 @@
         case EOASettingsItemTypeOsmEdits:
             item = [[OAOsmEditsSettingsItem alloc] initWithJson:json error:&error];
             break;
+        case EOASettingsItemTypeActiveMarkers:
+            item = [[OAMarkersSettingsItem alloc] initWithJson:json error:&error];
+            break;
         default:
             item = nil;
             break;
@@ -530,6 +534,7 @@
     NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
     NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
+    NSMutableArray *markers = [NSMutableArray array]; // type is needed
     for (OASettingsItem *item in settingsItems)
     {
         switch (item.type)
@@ -615,6 +620,15 @@
                     [osmEditsPointList addObjectsFromArray:osmEditsItem.items];
                 break;
             }
+            case EOASettingsItemTypeActiveMarkers:
+            {
+                OAMarkersSettingsItem *markersItem = (OAMarkersSettingsItem *) item;
+                if (importComplete)
+                    [markers addObjectsFromArray:markersItem.appliedItems];
+                else
+                    [markers addObjectsFromArray:markersItem.items];
+                break;
+            }
             default:
                 break;
         }
@@ -643,6 +657,8 @@
         [settingsToOperate setObject:notesPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmNotes]];
     if (osmEditsPointList.count > 0)
         [settingsToOperate setObject:osmEditsPointList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeOsmEdits]];
+    if (markers.count > 0)
+        [settingsToOperate setObject:markers forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeActiveMarkers]];
     return settingsToOperate;
 }
 

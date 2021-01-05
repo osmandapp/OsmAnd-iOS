@@ -35,6 +35,7 @@
 #import "OAFavoritesSettingsItem.h"
 #import "OAOsmNotePoint.h"
 #import "OAOpenStreetMapPoint.h"
+#import "OAMarkersSettingsItem.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"

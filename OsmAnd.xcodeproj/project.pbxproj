@@ -387,6 +387,7 @@
 		15C428E024A7723B00B21005 /* OAHorizontalCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C428DF24A7723B00B21005 /* OAHorizontalCollectionViewCell.m */; };
 		15C428E324A7753C00B21005 /* OALabelCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C428E224A7753C00B21005 /* OALabelCollectionViewCell.xib */; };
 		15C428E524A776BE00B21005 /* OALabelCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C428E424A776BE00B21005 /* OALabelCollectionViewCell.m */; };
+		15C49ED425A4972E00BE2FA2 /* OAMarkersSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15C49ED325A4972E00BE2FA2 /* OAMarkersSettingsItem.mm */; };
 		15DF4052242B3437004AF26B /* OASettingsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15DF4051242B3437004AF26B /* OASettingsHelper.mm */; };
 		15EC0ED3256FA49F00F1F03C /* OAFavoritesSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15EC0ED2256FA49E00F1F03C /* OAFavoritesSettingsItem.mm */; };
 		324B735B25653CB100B6EE52 /* OATextCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 324B735825653CB000B6EE52 /* OATextCardView.m */; };
@@ -6616,6 +6617,8 @@
 		15C428E224A7753C00B21005 /* OALabelCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OALabelCollectionViewCell.xib; path = Resources/Controllers/Cells/OALabelCollectionViewCell.xib; sourceTree = "<group>"; };
 		15C428E424A776BE00B21005 /* OALabelCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OALabelCollectionViewCell.m; path = Controllers/Cells/OALabelCollectionViewCell.m; sourceTree = "<group>"; };
 		15C428E624A776D900B21005 /* OALabelCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OALabelCollectionViewCell.h; path = Controllers/Cells/OALabelCollectionViewCell.h; sourceTree = "<group>"; };
+		15C49ED325A4972E00BE2FA2 /* OAMarkersSettingsItem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMarkersSettingsItem.mm; sourceTree = "<group>"; };
+		15C49ED925A4975500BE2FA2 /* OAMarkersSettingsItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMarkersSettingsItem.h; sourceTree = "<group>"; };
 		15DF4051242B3437004AF26B /* OASettingsHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OASettingsHelper.mm; path = Helpers/OASettingsHelper.mm; sourceTree = "<group>"; };
 		15EC0ED1256FA49300F1F03C /* OAFavoritesSettingsItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesSettingsItem.h; sourceTree = "<group>"; };
 		15EC0ED2256FA49E00F1F03C /* OAFavoritesSettingsItem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesSettingsItem.mm; sourceTree = "<group>"; };
@@ -10650,6 +10653,8 @@
 				324D9C082576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm */,
 				324D9C372576B6B500EA7F8F /* OAOsmEditsSettingsItem.h */,
 				324D9C382576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm */,
+				15C49ED325A4972E00BE2FA2 /* OAMarkersSettingsItem.mm */,
+				15C49ED925A4975500BE2FA2 /* OAMarkersSettingsItem.h */,
 			);
 			name = Backup;
 			sourceTree = "<group>";
@@ -22308,6 +22313,7 @@
 				84E4417F1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				DACCEBCA2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm in Sources */,
 				DA503D9C23239443006F34E7 /* OATableViewCustomHeaderView.m in Sources */,
+				15C49ED425A4972E00BE2FA2 /* OAMarkersSettingsItem.mm in Sources */,
 				84DD6FEC1F5AA554009F26E3 /* OADashboardViewController.mm in Sources */,
 				DAB854A523053043002566A6 /* OAAddQuickActionViewController.m in Sources */,
 				DA2558C524ADE40F0081D155 /* OASpeedLimitToleranceViewController.m in Sources */,

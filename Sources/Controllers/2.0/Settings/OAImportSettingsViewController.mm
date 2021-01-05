@@ -40,6 +40,7 @@
 #import "OAFavoritesSettingsItem.h"
 #import "OAFavoritesHelper.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAMarkersSettingsItem.h"
 
 #import "Localization.h"
 #import "OAColors.h"

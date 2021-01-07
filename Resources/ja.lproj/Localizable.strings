@@ -136,7 +136,7 @@
 "max_speed_none" = "なし";
 "access_arrival_time" = "到着時刻";
 "map_widget_time" = "出発時刻";
-"map_widget_radius_ruler" = "同心円測定器";
+"map_widget_ruler_control" = "同心円測定器";
 "shared_string_collapse" = "詳細を閉じる";
 "shared_string_topbar" = "画面上部のバー";
 "shared_string_widgets" = "ウィジェット";

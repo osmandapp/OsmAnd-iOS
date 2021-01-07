@@ -818,7 +818,7 @@
 "actions" = "Aktionen";
 "directions_more_options" = "Navigiere von";
 "nearby_search" = "In der Nähe suchen";
-"map_widget_radius_ruler" = "Zirkel";
+"map_widget_ruler_control" = "Zirkel";
 "import_from_docs" = "Aus Dokumenten importieren";
 "osm_live_routing" = "OsmAnd Live Navigation";
 "osm_live_routing_descr" = "Verwenden Sie OsmAnd Live-Updates zur Navigation";

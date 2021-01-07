@@ -649,7 +649,7 @@
 "search_radius_proximity" = "之间";
 "add_as_first_destination_point" = "添加为第一个中转点";
 "auto_split_gap" = "自动拆分录音后的间隙";
-"map_widget_radius_ruler" = "半径量尺";
+"map_widget_ruler_control" = "半径量尺";
 "show_tunnels" = "隧道";
 "towards" = "向";
 "route_kl" = "靠左行驶";

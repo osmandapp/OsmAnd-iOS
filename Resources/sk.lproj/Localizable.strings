@@ -814,7 +814,7 @@
 "actions" = "Akcie";
 "directions_more_options" = "Pokyny odtiaľto";
 "nearby_search" = "Hľadať v okolí";
-"map_widget_radius_ruler" = "Kruhové pravítko";
+"map_widget_ruler_control" = "Kruhové pravítko";
 "import_from_docs" = "Importovať z dokumentov";
 "osm_live_routing" = "Navigácia OsmAnd Live";
 "osm_live_routing_descr" = "Použiť aktualizácie OsmAnd Live pre navigáciu";

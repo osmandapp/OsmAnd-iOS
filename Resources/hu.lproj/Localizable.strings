@@ -979,7 +979,7 @@
 "osm_note_reopen" = "Újranyitás";
 "map_overlays" = "Térképrátétek";
 "help_map_viewing" = "Térkép böngészése";
-"map_widget_radius_ruler" = "Sugaras vonalzó";
+"map_widget_ruler_control" = "Sugaras vonalzó";
 "help_faq" = "GYIK";
 "translucent_lightblue" = "Átlátszó világoskék";
 "tile_cache" = "Csempegyorsítótár";

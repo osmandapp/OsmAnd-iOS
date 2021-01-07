@@ -418,6 +418,8 @@
 		326B4FC2257FD11400ABAB1D /* ic_action_light_aircraft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */; };
 		32AE6B9E257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */; };
 		32AE6BA3257A1433005D0139 /* OAQuickActionsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */; };
+		32C91E4725A70AE700FA6470 /* OACompassRulerWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C91E4625A70AE700FA6470 /* OACompassRulerWidgetState.m */; };
+		32C91E4825A70AE700FA6470 /* OACompassRulerWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C91E4625A70AE700FA6470 /* OACompassRulerWidgetState.m */; };
 		32FE27F225763F5000CBDDFA /* OAAppVersionDependentConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependentConstants.m */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BB2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
@@ -6645,6 +6647,8 @@
 		32867A9B25781C6E00DDAD44 /* OAQuickActionsSettingsItemReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickActionsSettingsItemReader.h; sourceTree = "<group>"; };
 		32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQuickActionsSettingsItemReader.m; sourceTree = "<group>"; };
 		32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickActionsSettingsItem.mm; sourceTree = "<group>"; };
+		32C91E4525A70AD100FA6470 /* OACompassRulerWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACompassRulerWidgetState.h; sourceTree = "<group>"; };
+		32C91E4625A70AE700FA6470 /* OACompassRulerWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACompassRulerWidgetState.m; sourceTree = "<group>"; };
 		32FE27F125763F4F00CBDDFA /* OAAppVersionDependentConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAppVersionDependentConstants.m; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B52507803500266047 /* ic_custom_logo_wikidata.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_logo_wikidata.png; path = Resources/Icons/ic_custom_logo_wikidata.png; sourceTree = "<group>"; };
@@ -10702,6 +10706,8 @@
 				334E3B6625264DAB0076C175 /* OATimeWidgetState.m */,
 				334E3B6B25264FAB0076C175 /* OABearingWidgetState.h */,
 				334E3B6D25264FCC0076C175 /* OABearingWidgetState.m */,
+				32C91E4525A70AD100FA6470 /* OACompassRulerWidgetState.h */,
+				32C91E4625A70AE700FA6470 /* OACompassRulerWidgetState.m */,
 			);
 			path = WidgetStates;
 			sourceTree = "<group>";
@@ -21654,6 +21660,7 @@
 				DAA8641223040FE9000E1900 /* OANavVoiceAction.mm in Sources */,
 				8A3F030F21C7FBB20043797E /* OAPurchaseDialogCardButton.m in Sources */,
 				DA4B983021F89B5800CED009 /* OAOsmMapUtils.mm in Sources */,
+				32C91E4825A70AE700FA6470 /* OACompassRulerWidgetState.m in Sources */,
 				8A0996122430D9CB007192AD /* OAProfileIcon.m in Sources */,
 				DA84E84321D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */,
 				847A1D541DF94E9B003C1246 /* OAEditTargetViewController.mm in Sources */,
@@ -22398,6 +22405,7 @@
 				84AB9D9020738455009DA206 /* OABottomSheetViewController.mm in Sources */,
 				84B4FD601A91C7FB00A147BA /* OAMapStyleSettings.mm in Sources */,
 				DACC0EF7254186A700904F66 /* OAMeasurementCommandManager.m in Sources */,
+				32C91E4725A70AE700FA6470 /* OACompassRulerWidgetState.m in Sources */,
 				84D0C89B1F1A3D2C00B0856B /* OAVoiceRouter.mm in Sources */,
 				84DE41472000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm in Sources */,
 				8A755A8121CC0F8F00E42699 /* OAPurchaseDialogItemView.m in Sources */,

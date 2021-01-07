@@ -946,7 +946,7 @@
 "shared_setting_always_ask" = "Всегда спрашивать";
 "menu_help" = "Справка";
 "nearby_search" = "Искать рядом";
-"map_widget_radius_ruler" = "Радиус-линейка";
+"map_widget_ruler_control" = "Радиус-линейка";
 "osm_live_routing" = "Навигация OsmAnd Live";
 "osmand_live_last_live_update" = "Последнее обновление: %@";
 "osmand_live_not_updated" = "Еще не обновлено";

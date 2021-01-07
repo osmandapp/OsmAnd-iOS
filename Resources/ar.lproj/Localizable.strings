@@ -859,7 +859,7 @@
 "actions" = "الإجراءات";
 "directions_more_options" = "الاتجاهات من";
 "nearby_search" = "بحث بالقرب من هنا";
-"map_widget_radius_ruler" = "مسطرة البوصلة";
+"map_widget_ruler_control" = "مسطرة البوصلة";
 "import_from_docs" = "الاستيراد من المستندات";
 "osm_live_routing" = "الملاحة عبر أوسماند لايف";
 "osm_live_routing_descr" = "استخدم تحديثات أوسماند لايف للتنقل";

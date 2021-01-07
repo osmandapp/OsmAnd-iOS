@@ -814,7 +814,7 @@
 "plugin_popup_trip_planning_ask" = "Aby rozpocząć planowanie podróży, musisz aktywować wtyczkę: <b>Planowanie podróży</b>";
 "show_region_on_map_desc" = "Mapa %@ została pobrana. Przejdź do mapy, aby rozpocząć korzystanie z niej.";
 "wiki_buy_description" = "Aby przeczytać pełne artykuły - kup Wikipedię i pobierz dane z Wikipedii %@";
-"map_widget_radius_ruler" = "Promień linijki";
+"map_widget_ruler_control" = "Promień linijki";
 "import_from_docs" = "Importuj z dokumentów";
 "osm_live_routing" = "Nawigacja OsmAnd na żywo";
 "osm_live_routing_descr" = "Użyj nawigacji OsmAnd na żywo";

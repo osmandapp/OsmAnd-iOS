@@ -819,7 +819,7 @@
 "help_follow_us" = "Síguenos";
 "directions_more_options" = "Ir desde aquí";
 "nearby_search" = "Buscar cerca";
-"map_widget_radius_ruler" = "Regla radial";
+"map_widget_ruler_control" = "Regla radial";
 "import_from_docs" = "Importar desde documentos";
 "osm_live_routing" = "Navegación con OsmAnd Live";
 "osm_live_routing_descr" = "Utilizar las actualizaciones de OsmAnd Live para la navegación";

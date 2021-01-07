@@ -193,7 +193,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_ruler",
-      @"title" : OALocalizedString(@"map_widget_radius_ruler"),
+      @"title" : OALocalizedString(@"map_widget_ruler_control"),
       @"type" : kLinkInternalType,
       @"html" : @"ruler"
       }];

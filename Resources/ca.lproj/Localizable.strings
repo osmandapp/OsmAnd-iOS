@@ -816,7 +816,7 @@
 "actions" = "Accions";
 "directions_more_options" = "Indicacions des de";
 "nearby_search" = "Cerca pel voltant";
-"map_widget_radius_ruler" = "Radi de distància";
+"map_widget_ruler_control" = "Radi de distància";
 "import_from_docs" = "Importa des de documents";
 "osm_live_routing" = "Navegació OsmAnd Live";
 "osm_live_routing_descr" = "Utilitza les actualitzacions OsmAnd Live per la navegació";

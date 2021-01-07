@@ -136,7 +136,7 @@
 "max_speed_none" = "ingen";
 "access_arrival_time" = "Ankomsttid";
 "map_widget_time" = "Resterende tid";
-"map_widget_radius_ruler" = "Radiusmåler";
+"map_widget_ruler_control" = "Radiusmåler";
 "shared_string_collapse" = "Fold sammen";
 "shared_string_topbar" = "Topplinje";
 "shared_string_widgets" = "Moduler";

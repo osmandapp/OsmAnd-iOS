@@ -18,6 +18,8 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAFingerRulerDelegate.h"
+#import "OAMapViewTrackingUtilities.h"
+#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -26,6 +28,7 @@
 #define LABEL_OFFSET 15
 #define CIRCLE_ANGLE_STEP 5
 #define TITLE_PADDING 2
+#define COMPASS_INDEX 2
 
 @interface OARulerWidget ()
 
@@ -47,6 +50,7 @@
     float _cachedMapElevation;
     float _cachedMapAzimuth;
     float _cachedMapZoom;
+    CLLocationDirection _cachedHeading;
     double _mapScale;
     double _mapScaleUnrounded;
     float _mapDensity;
@@ -73,6 +77,7 @@
     CALayer *_fingerDistanceSublayer;
     OAFingerRulerDelegate *_fingerRulerDelegate;
     
+    OAAutoObserverProxy* _locationUpdateObserver;
 }
 
 - (instancetype) init
@@ -148,6 +153,8 @@
     _imageView.image = _settings.nightMode ? _centerIconNight : _centerIconDay;
     _cachedMapMode = _settings.nightMode;
     self.hidden = YES;
+    
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onLocationUpdate) andObserve:_app.locationServices.updateObserver];
 }
 
 - (BOOL) updateInfo
@@ -201,6 +208,7 @@
             _cachedMapAzimuth = mapAzimuth;
             _cachedMapZoom = mapZoom;
             _cachedViewportScale = viewportScale;
+            _cachedHeading = _app.locationServices.lastKnownLocation.course;
             _mapScaleUnrounded = fullMapScale;
             _mapScale = [_app calculateRoundedDist:_mapScaleUnrounded];
             _radius = (_mapScale / _mapDensity) / [[UIScreen mainScreen] scale];
@@ -258,6 +266,7 @@
 {
     UIGraphicsPushContext(ctx);
     [self updateAttributes];
+    BOOL isCompassRulerVisible = [_settings.showCompassControlRuler get];
     
     if (layer == self.layer)
     {
@@ -393,6 +402,22 @@
                     CGContextStrokePath(ctx);
                 }
                 
+                if (i == COMPASS_INDEX && isCompassRulerVisible)
+                {
+                    for (NSArray<NSValue *> *points in arrays)
+                    {
+                        for (NSInteger j = 1; j < points.count; j++)
+                        {
+                            
+                            [self drawCentsForPoints:points index:int(j) centerPoint:viewCenter color:circleColor ctx:ctx];
+                            [self drawCardinalLabels:points index:int(j) centerPoint:viewCenter color:textColor shadowColor:textShadowColor strokeWidth:strokeWidthText];
+                        }
+                    }
+                    [self drawAzimuthLabel:textAnchor1 color:textColor shadowColor:textShadowColor strokeWidth:strokeWidthText];
+                    [self drawCompassArrowWithAngle:0 radius:r color:UIColor.redColor inContext:ctx];
+                    [self drawCompassArrowWithAngle:_cachedHeading radius:r color:UIColor.blueColor inContext:ctx];
+                }
+
                 NSString *dist = [_app getFormattedDistance:_mapScale * i];
                 NSAttributedString *distString = [OAUtilities createAttributedString:dist font:font color:textColor strokeColor:nil strokeWidth:0];
                 NSAttributedString *distShadowString = [OAUtilities createAttributedString:dist font:font color:textColor strokeColor:textShadowColor strokeWidth:strokeWidthText];
@@ -403,9 +428,12 @@
                     CGRect titleRect1 = CGRectMake(textAnchor1.x - titlePadding, textAnchor1.y - titlePadding, titleSize.width + titlePadding * 2.0, titleSize.height + titlePadding * 2.0);
                     if (CGRectIsNull(prevTitleRect1) || !CGRectIntersectsRect(prevTitleRect1, titleRect1))
                     {
-                        [distShadowString drawAtPoint:CGPointMake(textAnchor1.x - titleSize.width / 2, textAnchor1.y - titleSize.height / 2)];
-                        [distString drawAtPoint:CGPointMake(textAnchor1.x - titleSize.width / 2, textAnchor1.y - titleSize.height / 2)];
-                        prevTitleRect1 = titleRect1;
+                        if (i != COMPASS_INDEX || !isCompassRulerVisible)
+                        {
+                            [distShadowString drawAtPoint:CGPointMake(textAnchor1.x - titleSize.width / 2, textAnchor1.y - titleSize.height / 2)];
+                            [distString drawAtPoint:CGPointMake(textAnchor1.x - titleSize.width / 2, textAnchor1.y - titleSize.height / 2)];
+                            prevTitleRect1 = titleRect1;
+                        }
                     }
                 }
                 if (!CGPointEqualToPoint(textAnchor2, CGPointZero))
@@ -414,8 +442,9 @@
                     BOOL intersectsWithFirstTitle = !CGRectIsNull(prevTitleRect1) && CGRectIntersectsRect(prevTitleRect1, titleRect2);
                     if ((CGRectIsNull(prevTitleRect2) || !CGRectIntersectsRect(prevTitleRect2, titleRect2)) && !intersectsWithFirstTitle)
                     {
-                        [distShadowString drawAtPoint:CGPointMake(textAnchor2.x - titleSize.width / 2, textAnchor2.y - titleSize.height / 2)];
-                        [distString drawAtPoint:CGPointMake(textAnchor2.x - titleSize.width / 2, textAnchor2.y - titleSize.height / 2)];
+                        double offsetFactor = (i == COMPASS_INDEX && isCompassRulerVisible) ? -0.7 : 0.5;
+                        [distShadowString drawAtPoint:CGPointMake(textAnchor2.x - titleSize.width / 2, textAnchor2.y - titleSize.height * offsetFactor)];
+                        [distString drawAtPoint:CGPointMake(textAnchor2.x - titleSize.width / 2, textAnchor2.y - titleSize.height * offsetFactor)];
                         prevTitleRect2 = titleRect2;
                     }
                 }
@@ -424,6 +453,88 @@
         }
     }
     UIGraphicsPopContext();
+}
+
+- (NSInteger) getCompassLineHeight:(int)index
+{
+    if (index % 6 == 0)
+        return 8;
+    else if (index % 9 == 0 || index % 2 != 0)
+        return 3;
+    else
+        return 6;
+}
+
+- (CGPoint) latLonToScreenPoint:(OsmAnd::LatLon)latLon
+{
+    auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    CGPoint screenPoint;
+    [_mapViewController.mapView convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
+    return screenPoint;
+}
+
+- (void) drawCentsForPoints:(NSArray<NSValue *> *)points index:(int)index centerPoint:(CGPoint)centerPoint color:(UIColor *)color ctx:(CGContextRef)ctx
+{
+    CGPoint centOuterPoint = points[index].CGPointValue;
+    CGContextMoveToPoint(ctx, centOuterPoint.x, centOuterPoint.y);
+    
+    UIColor * lineColor = index % 9 == 0 ? UIColor.redColor : color;
+    [lineColor set];
+    
+    CGFloat lengthPercentage = 0.01 * [self getCompassLineHeight:index];
+    CGFloat centInnerPointX = centOuterPoint.x + (centerPoint.x - centOuterPoint.x) * lengthPercentage;
+    CGFloat centInnerPointY = centOuterPoint.y + (centerPoint.y - centOuterPoint.y) * lengthPercentage;
+    
+    CGContextAddLineToPoint(ctx, centInnerPointX, centInnerPointY);
+    CGContextStrokePath(ctx);
+}
+
+- (void) drawCardinalLabels:(NSArray<NSValue *> *)points index:(int)index centerPoint:(CGPoint)centerPoint color:(UIColor *)color shadowColor:(UIColor *)shadowColor strokeWidth:(float)strokeWidth
+{
+    if (index % 9 == 0)
+    {
+        NSArray<NSString *> *cardinalNames = @[@"SW", @"W", @"NW", @"N", @"NE", @"E", @"SE", @"S"];
+        NSString *cardinalName = cardinalNames[int(index/9) - 1];
+        UIFont *font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold];
+        NSAttributedString *cardinalString = [OAUtilities createAttributedString:cardinalName font:font color:color strokeColor:nil strokeWidth:0];
+        NSAttributedString *cardinalShadowString = [OAUtilities createAttributedString:cardinalName font:font color:color strokeColor:shadowColor strokeWidth:strokeWidth];
+        CGSize titleSize = [cardinalString size];
+        CGPoint point = points[index].CGPointValue;
+        CGFloat textInnerPointX = point.x + (centerPoint.x - point.x) * 0.16;
+        CGFloat textInnerPointY = point.y + (centerPoint.y - point.y) * 0.16;
+        [cardinalShadowString drawAtPoint:CGPointMake(textInnerPointX - titleSize.width / 2, textInnerPointY - titleSize.height / 2)];
+        [cardinalString drawAtPoint:CGPointMake(textInnerPointX - titleSize.width / 2, textInnerPointY - titleSize.height / 2)];
+    }
+}
+
+- (void) drawAzimuthLabel:(CGPoint)anchor color:(UIColor *)color shadowColor:(UIColor *)shadowColor strokeWidth:(float)strokeWidth
+{
+    NSString *azimuthName = [NSString stringWithFormat:@"%i° N", int(_cachedHeading)];
+    UIFont *boldFont = [UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold];
+    NSAttributedString *azimuthString = [OAUtilities createAttributedString:azimuthName font:boldFont color:color strokeColor:nil strokeWidth:0];
+    NSAttributedString *azimuthShadowString = [OAUtilities createAttributedString:azimuthName font:boldFont color:color strokeColor:shadowColor strokeWidth:strokeWidth];
+    CGSize titleSize = [azimuthString size];
+    [azimuthShadowString drawAtPoint:CGPointMake(anchor.x - titleSize.width / 2, anchor.y - titleSize.height * 1.5)];
+    [azimuthString drawAtPoint:CGPointMake(anchor.x - titleSize.width / 2, anchor.y - titleSize.height * 1.5)];
+}
+
+- (void) drawCompassArrowWithAngle:(int)angle radius:(double)radius color:(UIColor *)color inContext:(CGContextRef)ctx
+{
+    auto centerLatLon = OsmAnd::Utilities::convert31ToLatLon(_mapViewController.mapView.target31);
+    OsmAnd::LatLon latLonT = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, radius*1.05, angle);
+    OsmAnd::LatLon latLonBL = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, radius*0.98, angle-2);
+    OsmAnd::LatLon latLonBR = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, radius*0.98, angle+2);
+    CGPoint screenPointT = [self latLonToScreenPoint:latLonT];
+    CGPoint screenPointBL = [self latLonToScreenPoint:latLonBL];
+    CGPoint screenPointBR = [self latLonToScreenPoint:latLonBR];
+    
+    CGContextSetFillColorWithColor(ctx, color.CGColor);
+    CGContextMoveToPoint(ctx, screenPointT.x, screenPointT.y);
+    CGContextAddLineToPoint(ctx, screenPointT.x, screenPointT.y);
+    CGContextAddLineToPoint(ctx, screenPointBL.x, screenPointBL.y);
+    CGContextAddLineToPoint(ctx, screenPointBR.x, screenPointBR.y);
+    CGContextClosePath(ctx);
+    CGContextFillPath(ctx);
 }
 
 -(void) drawFingerRulerLayer:(CALayer *)layer inContext:(CGContextRef)ctx
@@ -598,6 +709,17 @@
 {
     if ([self rulerWidgetOn])
         [self setNeedsDisplay];
+}
+
+- (void) onLocationUpdate
+{
+    if (_cachedHeading != _app.locationServices.lastKnownLocation.course)
+    {
+        _cachedHeading = _app.locationServices.lastKnownLocation.course;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setNeedsDisplay];
+        });
+    }
 }
 
 - (BOOL) rulerWidgetOn

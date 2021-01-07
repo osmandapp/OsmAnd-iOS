@@ -913,7 +913,7 @@
 "change_map_style" = "Cambia lo stile della mappa";
 "osmand_live_weekly" = "Settimanale";
 "osm_editing_lost_changes_descr" = "Tutte le modifiche non salvate andranno perse. Continuare?";
-"map_widget_radius_ruler" = "Righello radiale";
+"map_widget_ruler_control" = "Righello radiale";
 "osm_live_routing" = "Navigazione OsmAnd Live";
 "osmand_live_hourly" = "Orario";
 "intermediate_point" = "Destinazione intermedia %@";

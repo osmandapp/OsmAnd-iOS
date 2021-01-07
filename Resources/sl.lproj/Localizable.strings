@@ -684,7 +684,7 @@
 "go_to_downloads" = "Skoči v mapo prejemov";
 "transport_stop" = "Postaja";
 "auto_split_gap" = "Samodejno razdeli beleženje po vmesnih točkah";
-"map_widget_radius_ruler" = "Krožno ravnilo";
+"map_widget_ruler_control" = "Krožno ravnilo";
 "speak_tunnels" = "Tuneli";
 "shared_setting_always_ask" = "Vedno vprašaj";
 "osm_live_routing" = "Navigacija s storitvijo OsmAnd Live";

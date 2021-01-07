@@ -416,8 +416,6 @@
 		326B4FC2257FD11400ABAB1D /* ic_action_light_aircraft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */; };
 		32AE6B9E257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */; };
 		32AE6BA3257A1433005D0139 /* OAQuickActionsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */; };
-		32BD81582598D3F800A54BB5 /* OASRTMPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD81572598D3F800A54BB5 /* OASRTMPlugin.m */; };
-		32BD81592598D3F800A54BB5 /* OASRTMPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD81572598D3F800A54BB5 /* OASRTMPlugin.m */; };
 		32BD81602598F5C900A54BB5 /* OAShowHideMapillaryAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD815F2598F5C900A54BB5 /* OAShowHideMapillaryAction.m */; };
 		32BD81612598F5C900A54BB5 /* OAShowHideMapillaryAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD815F2598F5C900A54BB5 /* OAShowHideMapillaryAction.m */; };
 		32BD81682599062600A54BB5 /* OANavRemoveNextDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD81672599062600A54BB5 /* OANavRemoveNextDestination.m */; };
@@ -6664,8 +6662,6 @@
 		32867A9B25781C6E00DDAD44 /* OAQuickActionsSettingsItemReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickActionsSettingsItemReader.h; sourceTree = "<group>"; };
 		32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQuickActionsSettingsItemReader.m; sourceTree = "<group>"; };
 		32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickActionsSettingsItem.mm; sourceTree = "<group>"; };
-		32BD81562598D3E800A54BB5 /* OASRTMPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASRTMPlugin.h; sourceTree = "<group>"; };
-		32BD81572598D3F800A54BB5 /* OASRTMPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASRTMPlugin.m; sourceTree = "<group>"; };
 		32BD815E2598F5B800A54BB5 /* OAShowHideMapillaryAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideMapillaryAction.h; sourceTree = "<group>"; };
 		32BD815F2598F5C900A54BB5 /* OAShowHideMapillaryAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAShowHideMapillaryAction.m; sourceTree = "<group>"; };
 		32BD81662599061400A54BB5 /* OANavRemoveNextDestination.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANavRemoveNextDestination.h; sourceTree = "<group>"; };
@@ -10730,15 +10726,6 @@
 			path = WhatsNewBottomSheet;
 			sourceTree = "<group>";
 		};
-		32BD81552598D3BE00A54BB5 /* SRTM */ = {
-			isa = PBXGroup;
-			children = (
-				32BD81562598D3E800A54BB5 /* OASRTMPlugin.h */,
-				32BD81572598D3F800A54BB5 /* OASRTMPlugin.m */,
-			);
-			path = SRTM;
-			sourceTree = "<group>";
-		};
 		32BD81CE259CC00C00A54BB5 /* ProfileSelectionBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
@@ -13592,7 +13579,6 @@
 		8483D3AF1FA5B9A000A985CF /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				32BD81552598D3BE00A54BB5 /* SRTM */,
 				DA540D96229E83530069201E /* Mapillary */,
 				DAB2A54E21F1E4DE00D9F01A /* OsmEditing */,
 				846F0BCB1FA9C70800177B8D /* Parking */,
@@ -21218,7 +21204,6 @@
 				847A1CAF1DF94E9B003C1246 /* OAPurchasesViewController.mm in Sources */,
 				8AE0658E2291426500D3CB56 /* OAMapillaryLayer.mm in Sources */,
 				847A1CB01DF94E9B003C1246 /* OADownloadTask_AFURLSessionManager.m in Sources */,
-				32BD81592598D3F800A54BB5 /* OASRTMPlugin.m in Sources */,
 				DA09D00922C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m in Sources */,
 				847A1CB11DF94E9B003C1246 /* OAMapViewState.m in Sources */,
 				DAEB14CD2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
@@ -22027,7 +22012,6 @@
 				BBA3AF3E197FC4BB0039D991 /* OAObservable.m in Sources */,
 				1571CE4524AE2A2600083F92 /* OACoordinatesFormatViewController.m in Sources */,
 				84CCE7F91B73C2230059A82A /* OAPOIHistoryType.mm in Sources */,
-				32BD81582598D3F800A54BB5 /* OASRTMPlugin.m in Sources */,
 				DA49C1C32549B16C00CD48DC /* OABaseBottomSheetViewController.m in Sources */,
 				DA796662220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */,
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,

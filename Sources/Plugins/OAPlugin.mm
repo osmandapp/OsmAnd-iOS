@@ -21,7 +21,8 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAMapillaryPlugin.h"
-#import "OASRTMPlugin.h"
+#import "OAContourLinesAction.h"
+#import "OATerrainAction.h"
 
 @implementation OAPlugin
 {
@@ -230,7 +231,6 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
     [allPlugins addObject:[[OAOsmEditingPlugin alloc] init]];
-    [allPlugins addObject:[[OASRTMPlugin alloc] init]];
     
     [self activatePlugins:enabledPlugins];
 }
@@ -593,6 +593,9 @@ public static boolean onMapActivityKeyUp(MapActivity mapActivity, int keyCode) {
     else
         for (OAPlugin *p in [self.class getNotEnabledPlugins])
             [types addObjectsFromArray:p.getQuickActionTypes];
+    
+    if ([OAIAPHelper.sharedInstance.srtm isActive] != disabled)
+        [types addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
 }
 
 /*

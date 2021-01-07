@@ -275,7 +275,8 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            [[OAQuickActionRegistry sharedInstance].quickActionListChangedObservable notifyEvent];
+            [OAQuickActionRegistry.sharedInstance updateActionTypes];
+            [OAQuickActionRegistry.sharedInstance.quickActionListChangedObservable notifyEvent];
         });
         return;
     }

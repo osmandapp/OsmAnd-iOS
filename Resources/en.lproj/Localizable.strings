@@ -814,7 +814,6 @@
 "profile_prefs_reset_successful" = "All profile settings restored to default";
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Base profile";
-"osmand_profile" = "OsmAnd profile";
 "selected_profile" = "Selected profile";
 "app_profiles" = "App profiles";
 "profile_sett_descr" = "Affect selected application profile";
@@ -1202,14 +1201,14 @@
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
 "public_transport_hide" = "Hide public transport";
-"quick_action_showhide_mapillary_title" = "Show/hide Mapillary";
+"quick_action_showhide_mapillary" = "Show/hide Mapillary";
 "quick_action_showhide_mapillary_descr" = "A toggle to show or hide the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
 "quick_action_remove_next_destination" = "Delete nearest destination point";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
-"change_application_profile" = "Change app profile";
-"select_application_profile" = "Select app profile";
+"change_application_profile" = "Change application profile";
+"select_application_profile" = "Select application profile";
 "shared_string_add_profile" = "Add profile";
 "quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
 "profile_type_user_string" = "User profile";

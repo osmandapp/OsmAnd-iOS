@@ -155,7 +155,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return OALocalizedString(@"application_profiles");
+    return OALocalizedString(@"app_profiles");
 }
 
 @end

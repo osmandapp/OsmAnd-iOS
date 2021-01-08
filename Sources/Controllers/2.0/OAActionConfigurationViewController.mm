@@ -164,21 +164,6 @@
     _titleView.text = _action.getName;
 }
 
--(UIView *) getTopView
-{
-    return _navBarView;
-}
-
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
-
-- (UIView *)getBottomView
-{
-    return _buttonBackgroundView;
-}
-
 -(CGFloat) getToolBarHeight
 {
     return customSearchToolBarHeight;

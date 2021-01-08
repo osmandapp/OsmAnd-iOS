@@ -1203,7 +1203,7 @@
 "public_transport_hide" = "Hide public transport";
 "unsupported_action" = "Unsupported action";
 "unsupported_action_title" = "Unsupported action (%@)";
-"unsupported_action_descr" = "This quick action in not suppotred now. This can be fixed in new app versions.";
+"unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

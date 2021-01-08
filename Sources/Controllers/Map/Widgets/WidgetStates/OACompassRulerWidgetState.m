@@ -51,9 +51,7 @@
 
 - (NSArray<NSString *> *) getMenuIconIds
 {
-    //TODO: add icons"
-//    return @[ @"ic_action_compass_widget", @"ic_action_compass_widget_hide" ];
-    return @[ @"ic_action_ruler_circle", @"ic_action_ruler_circle" ];
+    return @[ @"ic_custom_compass_widget", @"ic_custom_compass_widget_hide" ];
 }
 
 - (NSArray<NSString *> *) getMenuItemIds

@@ -1752,3 +1752,9 @@
 "shared_string_import_complete" = "Importación completa";
 "shared_string_importing" = "Importando";
 "whole_track" = "Traza completa";
+"arrows_on_map" = "Flechas en el mapa";
+"trip_rec_actions_descr" = "Puede encontrar todas sus pistas grabadas en% @";
+"road_max_speed_descr" = "Establecer la velocidad máxima de viaje para todas las carreteras de la ruta. Reduce la prioridad para carreteras con una posible velocidad superior a la máxima.";
+"road_min_speed_descr" = "Establecer la velocidad mínima de desplazamiento para todas las carreteras de la ruta. Aumenta la prioridad para carreteras con velocidades recomendadas inferiores a la mínima.";
+"road_speeds_descr" = "Estos parámetros pueden afectar el cálculo de la ruta.";
+"send_anonymous_data_desc" = "Enviar a OsmAnd estadísticas de descarga de mapas, no recopilamos datos de ubicación ni información personal.";

@@ -999,7 +999,7 @@
 "rendering_attr_showRoadMaps_name" = "Csak-út térképek";
 "rendering_attr_piste_difficulty_expert_name" = "Profi";
 "rendering_attr_piste_type_sled_name" = "Szánkó";
-"rendering_value_car_name" = "Autó";
+"rendering_value_car_name" = "Személyautó";
 "rendering_attr_hideUnderground_name" = "Földalatti objektumok";
 "rendering_value_highContrastRoads_name" = "Nagy kontrasztú utak";
 "rendering_attr_OSMMapperAssistant_name" = "OSM térképezősegéd";
@@ -1302,7 +1302,7 @@
 "app_mode_default" = "Térképböngészés";
 "app_mode_horse" = "Ló";
 "app_mode_pickup_truck" = "Kisteherautó";
-"app_mode_car" = "Vezetés";
+"app_mode_car" = "Autóvezetés";
 "app_mode_taxi" = "Taxi";
 "app_mode_pedestrian" = "Gyaloglás";
 "app_mode_subway" = "Metró";
@@ -1367,3 +1367,17 @@
 "osm_notes" = "OSM-jegyzetek";
 "personal_category_name" = "Személyes";
 "whole_track" = "Teljes nyomvonal";
+"subsequent_dest_description" = "Célpont följebb mozgatása, vagy létrehozása";
+"new_destination_point_dialog" = "Már be van állítva célpont";
+"start_navigation" = "Navigáció elindítása";
+"route_stops_before" = "%d megálló eddig:";
+"allow_3d" = "2,5D-s nézet engedélyezése";
+"shared_string_next" = "Következő";
+"poi_overlay" = "POI-rátétréteg";
+"amenity" = "Hasznos és fontos létesítmény";
+"angular_units" = "Szögmérés mértékegysége";
+"get_discount_first_few_parts" = "%@ az első %@";
+"get_discount_first_part" = "%@ az első %@";
+"get_discount_short_descr" = "%@ %d %@, utána %@";
+"get_free_trial_title" = "%d %@ szóló próbaidőszak elkezdése.";
+"get_discount_title" = "Szerezze be %d %@ %d%% kedvezménnyel.";

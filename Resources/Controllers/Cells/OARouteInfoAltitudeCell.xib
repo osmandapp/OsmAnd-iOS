@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -44,7 +44,7 @@
                             <constraint firstAttribute="width" constant="30" id="Oze-7c-ewS"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average altitude" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xhd-83-aLA">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average altitude" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xhd-83-aLA">
                         <rect key="frame" x="54" y="14" width="99" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="999" constant="99" id="bAL-4e-xJu"/>
@@ -53,7 +53,7 @@
                         <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average altitude" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zcZ-Em-nmH">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average altitude" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zcZ-Em-nmH">
                         <rect key="frame" x="295" y="14" width="99" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="999" constant="99" id="yYr-7X-FkL"/>
@@ -62,13 +62,13 @@
                         <color key="textColor" red="0.59215686270000001" green="0.56078431370000004" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average altitude" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OcL-Pc-sdB">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average altitude" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OcL-Pc-sdB">
                         <rect key="frame" x="295" y="80" width="99" height="16"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.59215686270000001" green="0.56078431370000004" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average altitude" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nfS-Gg-vCD">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Average altitude" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nfS-Gg-vCD">
                         <rect key="frame" x="54" y="80" width="99" height="16"/>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" red="0.59215686270000001" green="0.56078431370000004" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -132,7 +132,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="zcZ-Em-nmH" secondAttribute="trailing" id="Oto-cm-5M7"/>
                     <constraint firstItem="OcL-Pc-sdB" firstAttribute="leading" secondItem="S5r-Wh-5J3" secondAttribute="trailing" constant="8" id="PKh-7l-9IN"/>
                     <constraint firstItem="S5r-Wh-5J3" firstAttribute="top" secondItem="7kN-Uh-cL5" secondAttribute="bottom" constant="19" id="RAG-Dj-McX"/>
-                    <constraint firstItem="tOU-Uk-Q8y" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Xhd-83-aLA" secondAttribute="trailing" constant="26" id="TKi-GX-Jd9"/>
+                    <constraint firstItem="tOU-Uk-Q8y" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Xhd-83-aLA" secondAttribute="trailing" constant="8" id="TKi-GX-Jd9"/>
                     <constraint firstItem="0v0-5Q-MO5" firstAttribute="top" secondItem="Tjp-Ic-c7l" secondAttribute="top" constant="22" id="Ta6-89-0TC"/>
                     <constraint firstItem="nfS-Gg-vCD" firstAttribute="top" secondItem="89j-Yn-RZd" secondAttribute="bottom" constant="11" id="TvK-F7-ci1"/>
                     <constraint firstItem="sve-UR-1RB" firstAttribute="leading" secondItem="Tjp-Ic-c7l" secondAttribute="leadingMargin" constant="-4" id="VAk-JJ-wfJ"/>
@@ -151,7 +151,7 @@
                     <constraint firstItem="nfS-Gg-vCD" firstAttribute="leading" secondItem="sve-UR-1RB" secondAttribute="trailing" constant="8" id="hXt-iQ-UEw"/>
                     <constraint firstItem="k8p-3H-Xli" firstAttribute="width" secondItem="zcZ-Em-nmH" secondAttribute="width" id="hi4-Ps-HXA"/>
                     <constraint firstItem="89j-Yn-RZd" firstAttribute="top" secondItem="7kN-Uh-cL5" secondAttribute="bottom" constant="-1" id="is0-sM-Gjs"/>
-                    <constraint firstItem="S5r-Wh-5J3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="nfS-Gg-vCD" secondAttribute="trailing" constant="26" id="lyH-88-jrA"/>
+                    <constraint firstItem="S5r-Wh-5J3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="nfS-Gg-vCD" secondAttribute="trailing" constant="8" id="lyH-88-jrA"/>
                     <constraint firstItem="zcZ-Em-nmH" firstAttribute="top" secondItem="Tjp-Ic-c7l" secondAttribute="top" constant="14" id="n6j-6f-mDz"/>
                     <constraint firstItem="Kq5-HX-6Bf" firstAttribute="leading" secondItem="tOU-Uk-Q8y" secondAttribute="trailing" constant="8" id="ooS-nB-hRS"/>
                     <constraint firstItem="do0-rV-szd" firstAttribute="top" secondItem="Xhd-83-aLA" secondAttribute="bottom" constant="5" id="rUo-WZ-7LH"/>

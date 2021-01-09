@@ -286,7 +286,7 @@
                     [profilesSection.groupItems addObject:@{
                         @"icon" :  [UIImage imageNamed:modeBean.iconName],
                         @"color" : UIColorFromRGB(modeBean.iconColor),
-                        @"title" : title,
+                        @"title" : title ? title : @"",
                         @"description" : routingProfile,
                         @"type" : kCellTypeTitleDescription,
                     }];

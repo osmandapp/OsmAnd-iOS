@@ -78,6 +78,7 @@
     OAFingerRulerDelegate *_fingerRulerDelegate;
     
     OAAutoObserverProxy* _locationUpdateObserver;
+    NSArray<NSString *> *_cardinalDirections;
 }
 
 - (instancetype) init
@@ -155,6 +156,8 @@
     self.hidden = YES;
     
     _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onLocationUpdate) andObserve:_app.locationServices.updateObserver];
+    
+    _cardinalDirections = @[ @"N", @"NE", @"E", @"SE", @"S", @"SW", @"W", @"NW"];
 }
 
 - (BOOL) updateInfo
@@ -306,6 +309,12 @@
             CGRect prevTitleRect1 = CGRectNull;
             CGRect prevTitleRect2 = CGRectNull;
             CGFloat titlePadding = TITLE_PADDING * [[UIScreen mainScreen] scale];
+            
+            auto circleCenterLatLon = OsmAnd::Utilities::convert31ToLatLon(_mapViewController.mapView.target31);
+            auto circleCenterPos31 = OsmAnd::Utilities::convertLatLonTo31(circleCenterLatLon);
+            CGPoint circleCenterPoint;
+            [_mapViewController.mapView convert:&circleCenterPos31 toScreen:&circleCenterPoint checkOffScreen:YES];
+            
             for (int i = 1; maxRadiusCopy > _radius && _radius != 0; i++)
             {
                 [circleColor set];
@@ -408,9 +417,8 @@
                     {
                         for (NSInteger j = 1; j < points.count; j++)
                         {
-                            
-                            [self drawCentsForPoints:points index:int(j) centerPoint:viewCenter color:circleColor ctx:ctx];
-                            [self drawCardinalLabels:points index:int(j) centerPoint:viewCenter color:textColor shadowColor:textShadowColor strokeWidth:strokeWidthText];
+                            [self drawCentsForPoints:points index:int(j) centerPoint:circleCenterPoint color:circleColor ctx:ctx];
+                            [self drawCardinalLabels:points index:int(j) centerPoint:circleCenterPoint color:textColor shadowColor:textShadowColor strokeWidth:strokeWidthText];
                         }
                     }
                     [self drawAzimuthLabel:textAnchor1 color:textColor shadowColor:textShadowColor strokeWidth:strokeWidthText];
@@ -493,8 +501,7 @@
 {
     if (index % 9 == 0)
     {
-        NSArray<NSString *> *cardinalNames = @[@"SW", @"W", @"NW", @"N", @"NE", @"E", @"SE", @"S"];
-        NSString *cardinalName = cardinalNames[int(index/9) - 1];
+        NSString *cardinalName = [self getCardinalDirection: index];
         UIFont *font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold];
         NSAttributedString *cardinalString = [OAUtilities createAttributedString:cardinalName font:font color:color strokeColor:nil strokeWidth:0];
         NSAttributedString *cardinalShadowString = [OAUtilities createAttributedString:cardinalName font:font color:color strokeColor:shadowColor strokeWidth:strokeWidth];
@@ -509,10 +516,11 @@
 
 - (void) drawAzimuthLabel:(CGPoint)anchor color:(UIColor *)color shadowColor:(UIColor *)shadowColor strokeWidth:(float)strokeWidth
 {
-    NSString *azimuthName = [NSString stringWithFormat:@"%i° N", int(_cachedHeading)];
+    NSString *primaryDirectionLabel = [self getCardinalDirectionForDegrees:int(_cachedHeading)];
+    NSString *azimuthText = [NSString stringWithFormat:@"%i° %@", int(_cachedHeading), primaryDirectionLabel];
     UIFont *boldFont = [UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold];
-    NSAttributedString *azimuthString = [OAUtilities createAttributedString:azimuthName font:boldFont color:color strokeColor:nil strokeWidth:0];
-    NSAttributedString *azimuthShadowString = [OAUtilities createAttributedString:azimuthName font:boldFont color:color strokeColor:shadowColor strokeWidth:strokeWidth];
+    NSAttributedString *azimuthString = [OAUtilities createAttributedString:azimuthText font:boldFont color:color strokeColor:nil strokeWidth:0];
+    NSAttributedString *azimuthShadowString = [OAUtilities createAttributedString:azimuthText font:boldFont color:color strokeColor:shadowColor strokeWidth:strokeWidth];
     CGSize titleSize = [azimuthString size];
     [azimuthShadowString drawAtPoint:CGPointMake(anchor.x - titleSize.width / 2, anchor.y - titleSize.height * 1.5)];
     [azimuthString drawAtPoint:CGPointMake(anchor.x - titleSize.width / 2, anchor.y - titleSize.height * 1.5)];
@@ -657,6 +665,39 @@
         CGContextStrokePath(ctx);
     }
     CGContextRestoreGState(ctx);
+}
+
+- (NSString *) getCardinalDirection:(int)i
+{
+    if (i == 0 || i == 72)
+        return _cardinalDirections[4];
+    else if (i == 9)
+        return _cardinalDirections[5];
+    else if (i == 18)
+        return _cardinalDirections[6];
+    else if (i == 27)
+        return _cardinalDirections[7];
+    else if (i == 36)
+        return _cardinalDirections[0];
+    else if (i == 45)
+        return _cardinalDirections[1];
+    else if (i == 54)
+        return _cardinalDirections[2];
+    else if (i == 63)
+        return _cardinalDirections[3];
+    return nil;
+}
+
+- (NSString *) getCardinalDirectionForDegrees:(int)degrees
+{
+    while (degrees < 0)
+        degrees += 360;
+    
+    int index = floor(((degrees + 23) % 360) / 45);
+    if (index >= 0 && _cardinalDirections.count > index)
+        return _cardinalDirections[index];
+    else
+        return @"";
 }
 
 - (void) touchDetected:(UITapGestureRecognizer *)recognizer

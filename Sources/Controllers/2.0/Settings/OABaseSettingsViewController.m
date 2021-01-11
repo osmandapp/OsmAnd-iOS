@@ -50,6 +50,7 @@
     return UIStatusBarStyleDefault;
 }
 
+- (void) setupNavBarHeight
 {
     if ([self isModal])
         self.navBarHeightConstraint.constant = modalNavBarHeight;

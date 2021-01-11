@@ -8,6 +8,7 @@
 
 #import "OABaseSettingsViewController.h"
 #import "OAColors.h"
+#import "OASizes.h"
 #import "OAApplicationMode.h"
 
 #define kSidePadding 20
@@ -47,6 +48,11 @@
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleDefault;
+}
+
+{
+    if ([self isModal])
+        self.navBarHeightConstraint.constant = modalNavBarHeight;
 }
 
 - (void) setupTableHeaderViewWithText:(NSString *)text

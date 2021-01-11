@@ -63,6 +63,7 @@
     self.doneButton.hidden = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.alwaysBounceVertical = NO;
     _footerAttrString = [[NSAttributedString alloc] initWithAttributedString: [self getFooterDescription]];
     [self setupTableHeaderViewWithText:OALocalizedString(@"road_speeds_descr")];
     [self setupView];

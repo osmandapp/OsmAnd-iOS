@@ -1201,7 +1201,7 @@
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
 "public_transport_hide" = "Hide public transport";
-"quick_action_showhide_mapillary" = "Show/hide Mapillary";
+"quick_action_showhide_mapillary_title" = "Show/hide Mapillary";
 "quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";

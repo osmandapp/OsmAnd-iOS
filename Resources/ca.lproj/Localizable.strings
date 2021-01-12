@@ -1947,3 +1947,7 @@
 "route_betw_points_descr" = "Trieu com connectar els punts: amb una línia recta o calculant-ne una ruta mitjançant un dels perfils llistats a sota.";
 "personal_category_name" = "Personal";
 "nav_type_brouter" = "BRouter";
+"unsupported_action_descr" = "Aquesta drecera ara no s'admet. Això es podria resoldre en noves versions de l'aplicació.";
+"unsupported_action_title" = "Acció no admesa (%@)";
+"unsupported_action" = "Acció no admesa";
+"unsupported_items" = "Elements no admesos";

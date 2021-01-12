@@ -161,6 +161,8 @@
 		151558BC24A34C470081BB8E /* img_settings_device_bottom_light@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 151558BB24A34C470081BB8E /* img_settings_device_bottom_light@3x.png */; };
 		151558BE24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 151558BD24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png */; };
 		151558C024A3557E0081BB8E /* OADeviceScreenTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 151558BF24A3557D0081BB8E /* OADeviceScreenTableViewCell.xib */; };
+		1526689B259B8FCC0026997E /* snowmobile.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 1526689A259B8FCB0026997E /* snowmobile.render.xml */; };
+		1526689C259B8FCC0026997E /* snowmobile.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 1526689A259B8FCB0026997E /* snowmobile.render.xml */; };
 		152911B624542D8B008A6757 /* OADirectionAppearanceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 152911B524542D8B008A6757 /* OADirectionAppearanceViewController.xib */; };
 		152911B8245705BC008A6757 /* OADistanceToMapMarkerControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 152911B7245705BC008A6757 /* OADistanceToMapMarkerControl.xib */; };
 		152911BA24570A91008A6757 /* OADistanceToMapMarkerControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 152911B924570A91008A6757 /* OADistanceToMapMarkerControl.mm */; };
@@ -6360,6 +6362,7 @@
 		151558BB24A34C470081BB8E /* img_settings_device_bottom_light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_settings_device_bottom_light@3x.png"; path = "Resources/Icons/img_settings_device_bottom_light@3x.png"; sourceTree = "<group>"; };
 		151558BD24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_settings_sreen_route_parameters@3x.png"; path = "Resources/Icons/img_settings_sreen_route_parameters@3x.png"; sourceTree = "<group>"; };
 		151558BF24A3557D0081BB8E /* OADeviceScreenTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADeviceScreenTableViewCell.xib; path = Resources/Controllers/Cells/OADeviceScreenTableViewCell.xib; sourceTree = "<group>"; };
+		1526689A259B8FCB0026997E /* snowmobile.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = snowmobile.render.xml; sourceTree = "<group>"; };
 		152911B524542D8B008A6757 /* OADirectionAppearanceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADirectionAppearanceViewController.xib; sourceTree = "<group>"; };
 		152911B7245705BC008A6757 /* OADistanceToMapMarkerControl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADistanceToMapMarkerControl.xib; sourceTree = "<group>"; };
 		152911B924570A91008A6757 /* OADistanceToMapMarkerControl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADistanceToMapMarkerControl.mm; sourceTree = "<group>"; };
@@ -13188,6 +13191,7 @@
 				84F648D51E5B49C9001A7373 /* mapnik.render.xml */,
 				84E297551E2FD80A006EA6B1 /* topo.render.xml */,
 				844499B71AAF816E00ACA20D /* skimap.render.xml */,
+				1526689A259B8FCB0026997E /* snowmobile.render.xml */,
 				84CC524B1AA5A539000063CF /* nautical.render.xml */,
 				846310051A8E463B005B39F2 /* default.render.xml */,
 				84630FCF1A8E197E005B39F2 /* LightRS.render.xml */,
@@ -17435,6 +17439,7 @@
 				0CBDD0A2245038EC00C94BC2 /* map_marker_direction_arrow_p2_color_pin_1@3x.png in Resources */,
 				DA6471AC22CF5433008F937F /* ic_custom_contour_lines.png in Resources */,
 				8AFC2BDE24334A4E0095BA9F /* map_navigation_car_bottom@3x.png in Resources */,
+				1526689C259B8FCC0026997E /* snowmobile.render.xml in Resources */,
 				8476E2591F6C1EEC00EC274F /* map_bicycle_location_lost@3x.png in Resources */,
 				DA1341BD243DC5A90039D214 /* map_action_pedestrian_dark@2x.png in Resources */,
 				8AFC2BE224334A4E0095BA9F /* map_navigation_default_bottom@3x.png in Resources */,
@@ -20059,6 +20064,7 @@
 				0CEF2C4124B7237800BAAC4B /* ic_action_wheelchair_forward.png in Resources */,
 				8415030D1DEED6AE007FAC50 /* ic_wifi_off@2x.png in Resources */,
 				DAF7A4E221786B5700FB94FD /* ic_action_ruler_circle@3x.png in Resources */,
+				1526689B259B8FCC0026997E /* snowmobile.render.xml in Resources */,
 				DA540D92229E63270069201E /* ic_custom_photo@3x.png in Resources */,
 				8A755A7921CBF92400E42699 /* ic_live_osmand_logo@3x.png in Resources */,
 				DABA3DE522686E72005BB777 /* ic_custom_overflow_menu.png in Resources */,
@@ -22840,7 +22846,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.90.1.5;
+				CURRENT_PROJECT_VERSION = 3.90.1.6;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -22895,7 +22901,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.90.1.5;
+				CURRENT_PROJECT_VERSION = 3.90.1.6;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

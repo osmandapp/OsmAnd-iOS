@@ -455,9 +455,9 @@
     [builder setNavigationIcon:_changedProfile.navigationIcon];
     [builder setOrder:(int) OAApplicationMode.allPossibleValues.count];
     
-    [OAApplicationMode saveProfile:builder];
-    if (![OAApplicationMode.values containsObject:builder.am])
-        [OAApplicationMode changeProfileAvailability:builder.am isSelected:YES];
+    OAApplicationMode *mode = [OAApplicationMode saveProfile:builder];
+    if (![OAApplicationMode.values containsObject:mode])
+        [OAApplicationMode changeProfileAvailability:mode isSelected:YES];
 }
 
 - (NSString *) getUniqueStringKey:(OAApplicationMode *)am

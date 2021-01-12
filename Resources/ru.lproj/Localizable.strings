@@ -1956,3 +1956,10 @@
 "vk" = "ВК";
 "help_what_is_new" = "Что нового";
 "personal_category_name" = "";
+"unsupported_action_title" = "Неподдерживаемое действие (%@)";
+"unsupported_action" = "Неподдерживаемое действие";
+"unsupported_items" = "Неподдерживаемые элементы";
+"prev_seg_dist" = "Предыдущий сегмент %@";
+"next_seg_dist" = "Следующий сегмент %@";
+"whole_track" = "Весь трек";
+"next_seg" = "Следующий сегмент";

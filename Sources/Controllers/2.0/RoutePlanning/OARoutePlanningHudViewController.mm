@@ -44,6 +44,7 @@
 #import "OAPlanningOptionsBottomSheetViewController.h"
 #import "OAChangeRouteModeCommand.h"
 #import "OATargetPointsHelper.h"
+#import "OASaveGpxRouteAsyncTask.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -291,6 +292,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_modeButton setTintColor:tint];
 }
 
+- (void) cancelModes
+{
+    _editingContext.selectedPointPosition = -1;
+    _editingContext.originalPointToMove = nil;
+    _editingContext.addPointMode = EOAAddPointModeUndefined;
+    [_editingContext splitSegments:_editingContext.getBeforePoints.count + _editingContext.getAfterPoints.count];
+    if (_hudMode == EOAHudModeMovePoint)
+        [_layer exitMovingMode];
+    [_layer updateLayer];
+    _hudMode = EOAHudModeRoutePlanning;
+}
 
 - (IBAction)closePressed:(id)sender
 {
@@ -456,7 +468,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 //            if (showDialog) {
 //                openSaveAsNewTrackMenu(mapActivity);
 //            } else {
-            [self saveNewGpx:nil fileName:[self getSuggestedFileName] showOnMap:YES simplifiedTrack:YES finalSaveAction:finalSaveAction];
+            [self saveNewGpx:nil fileName:[self getSuggestedFileName] showOnMap:YES simplifiedTrack:NO finalSaveAction:finalSaveAction];
         }
 //        } else {
 //            addToGpx(mapActivity, finalSaveAction);
@@ -473,184 +485,29 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (folderName != nil && ![gpxPath.lastPathComponent isEqualToString:folderName])
         gpxPath = [gpxPath stringByAppendingPathComponent:folderName];
     fileName = [fileName stringByAppendingPathExtension:@"gpx"];
-    EOASaveType saveType = simplifiedTrack ? LINE : ROUTE_POINT;
-    [self saveNewGpx:gpxPath fileName:fileName showOnMap:showOnMap saveType:saveType finalSaveAction:finalSaveAction];
+    [self saveNewGpx:gpxPath fileName:fileName showOnMap:showOnMap simplified:simplifiedTrack finalSaveAction:finalSaveAction];
 }
 
-- (void) saveNewGpx:(NSString *)dir fileName:(NSString *)fileName showOnMap:(BOOL)showOnMap saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveAction
+- (void) saveNewGpx:(NSString *)dir fileName:(NSString *)fileName showOnMap:(BOOL)showOnMap simplified:(BOOL)simplified finalSaveAction:(EOAFinalSaveAction)finalSaveAction
 {
-    [self saveGpx:[dir stringByAppendingPathComponent:fileName] gpxFile:nil actionType:UNDEFINED saveType:saveType finalSaveAction:finalSaveAction showOnMap:showOnMap];
+    [self saveGpx:[dir stringByAppendingPathComponent:fileName] gpxFile:nil simplified:simplified addToTrack:NO finalSaveAction:finalSaveAction showOnMap:showOnMap];
 }
 
-- (void) saveGpx:(NSString *)outFile gpxFile:(OAGPXDocument *)gpxFile actionType:(EOAActionType)actionType
-saveType:(EOASaveType)saveType finalSaveAction:(EOAFinalSaveAction)finalSaveAction showOnMap:(BOOL)showOnMap
+- (void) saveGpx:(NSString *)outFile gpxFile:(OAGPXDocument *)gpxFile simplified:(BOOL)simplified addToTrack:(BOOL)addToTrack finalSaveAction:(EOAFinalSaveAction)finalSaveAction showOnMap:(BOOL)showOnMap
 {
-//        SaveGpxRouteListener saveGpxRouteListener = new SaveGpxRouteListener() {
-//            @Override
-//            public void gpxSavingFinished(Exception warning, GPXFile savedGpxFile, File backupFile) {
-//                onGpxSaved(warning, savedGpxFile, outFile, backupFile, actionType, finalSaveAction, showOnMap);
-//            }
-//        };
-    [self saveGpxRoute:outFile gpxFile:gpxFile actionType:actionType saveType:saveType showOnMap:showOnMap onComplete:^(OAGPXDocument * gpx, NSString *) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"File saved to %@", gpx.fileName]  preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
-        });
+    OASaveGpxRouteAsyncTask *task = [[OASaveGpxRouteAsyncTask alloc] initWithHudController:self outFile:outFile gpxFile:gpxFile simplified:simplified addToTrack:addToTrack showOnMap:showOnMap];
+    [task execute:^(OAGPXDocument * gpx, NSString * outFile) {
+        [self onGpxSaved:gpx outFile:outFile finalSaveAction:finalSaveAction showOnMap:showOnMap];
     }];
 }
 
-- (void) saveGpxRoute:(NSString *)outFile gpxFile:(OAGPXDocument *)gpxFile actionType:(EOAActionType)actionType saveType:(EOASaveType)saveType showOnMap:(BOOL)showOnMap
-           onComplete:(void(^)(OAGPXDocument *, NSString *))onComplete
+- (void) onGpxSaved:(OAGPXDocument *)savedGpxFile outFile:(NSString *)outFile finalSaveAction:(EOAFinalSaveAction)finalSaveAction showOnMap:(BOOL)showOnMap
 {
-    OARoutePlanningHudViewController * __weak weakSelf = self;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (weakSelf == nil)
-            return;
-        NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:_editingContext.getPoints];
-        NSArray<OAGpxTrkSeg *> *before = _editingContext.getBeforeTrkSegmentLine;
-        NSArray<OAGpxTrkSeg *> *after = _editingContext.getAfterTrkSegmentLine;
-        if (gpxFile == nil)
-        {
-            NSString *fileName = outFile.lastPathComponent;
-            NSString *trackName = [fileName stringByReplacingOccurrencesOfString:@".gpx" withString:@""];
-            OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-            if (saveType == LINE)
-            {
-                OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
-                NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray new];
-                for (OAGpxTrkSeg *seg in [before arrayByAddingObjectsFromArray:after])
-                {
-                    [points addObjectsFromArray:seg.points];
-                }
-//                if (_editingContext.hasRoute)
-//                {
-//                    segment.points = [NSArray arrayWithArray:_editingContext.getRoutePoints];
-//                }
-//                else
-//                {
-                segment.points = [NSArray arrayWithArray:points];
-//                }
-                OAGpxTrk *track = [[OAGpxTrk alloc] init];
-                track.name = trackName;
-                track.segments = @[segment];
-                [gpx addTrack:track];
-            }
-            else if (saveType == ROUTE_POINT)
-            {
-//                if (_editingContext.hasRoute)
-//                {
-//                    GPXFile newGpx = editingCtx.exportRouteAsGpx(trackName);
-//                    if (newGpx != null) {
-//                        gpx = newGpx;
-//                    }
-//                }
-                NSMutableArray *rtePoints = [NSMutableArray new];
-                for (OAGpxTrkPt *pt in points)
-                {
-                    [rtePoints addObject:[[OAGpxRtePt alloc] initWithTrkPt:pt]];
-                }
-                [gpx addRoutePoints:rtePoints];
-            }
-            gpx.fileName = fileName;
-            [gpx saveTo:outFile];
-            OAGPXTrackAnalysis *analysis = [gpx getAnalysis:0];
-            [[OAGPXDatabase sharedDb] addGpxItem:[outFile lastPathComponent] title:gpx.metadata.name desc:gpx.metadata.desc bounds:gpx.bounds analysis:analysis];
-            [[OAGPXDatabase sharedDb] save];
-            if (showOnMap)
-            {
-                [self showGpxOnMap:gpx actionType:actionType isNewGpx:YES];
-            }
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                onComplete(gpx, outFile);
-            });
-        }
-//        else {
-//                    GPXFile gpx = gpxFile;
-//                    backupFile = FileUtils.backupFile(app, outFile);
-//                    String trackName = Algorithms.getFileNameWithoutExtension(outFile);
-//                    if (measurementLayer != null) {
-//                        if (fragment.isPlanRouteMode()) {
-//                            if (saveType == MeasurementToolFragment.SaveType.LINE) {
-//                                TrkSegment segment = new TrkSegment();
-//                                if (editingCtx.hasRoute()) {
-//                                    segment.points.addAll(editingCtx.getRoutePoints());
-//                                } else {
-//                                    segment.points.addAll(before.points);
-//                                    segment.points.addAll(after.points);
-//                                }
-//                                Track track = new Track();
-//                                track.name = trackName;
-//                                track.segments.add(segment);
-//                                gpx.tracks.add(track);
-//                            } else if (saveType == MeasurementToolFragment.SaveType.ROUTE_POINT) {
-//                                if (editingCtx.hasRoute()) {
-//                                    GPXFile newGpx = editingCtx.exportRouteAsGpx(trackName);
-//                                    if (newGpx != null) {
-//                                        gpx = newGpx;
-//                                    }
-//                                }
-//                                gpx.addRoutePoints(points);
-//                            }
-//                        } else if (actionType != null) {
-//                            GpxData gpxData = editingCtx.getGpxData();
-//                            switch (actionType) {
-//                                case ADD_SEGMENT: {
-//                                    List<WptPt> snappedPoints = new ArrayList<>();
-//                                    snappedPoints.addAll(before.points);
-//                                    snappedPoints.addAll(after.points);
-//                                    gpx.addTrkSegment(snappedPoints);
-//                                    break;
-//                                }
-//                                case ADD_ROUTE_POINTS: {
-//                                    gpx.replaceRoutePoints(points);
-//                                    break;
-//                                }
-//                                case EDIT_SEGMENT: {
-//                                    if (gpxData != null) {
-//                                        TrkSegment segment = new TrkSegment();
-//                                        segment.points.addAll(points);
-//                                        gpx.replaceSegment(gpxData.getTrkSegment(), segment);
-//                                    }
-//                                    break;
-//                                }
-//                                case OVERWRITE_SEGMENT: {
-//                                    if (gpxData != null) {
-//                                        List<WptPt> snappedPoints = new ArrayList<>();
-//                                        snappedPoints.addAll(before.points);
-//                                        snappedPoints.addAll(after.points);
-//                                        TrkSegment segment = new TrkSegment();
-//                                        segment.points.addAll(snappedPoints);
-//                                        gpx.replaceSegment(gpxData.getTrkSegment(), segment);
-//                                    }
-//                                    break;
-//                                }
-//                            }
-//                        } else {
-//                            gpx.addRoutePoints(points);
-//                        }
-//                    }
-//                    Exception res = null;
-//                    if (!gpx.showCurrentTrack) {
-//                        res = GPXUtilities.writeGpxFile(outFile, gpx);
-//                    }
-//                    savedGpxFile = gpx;
-//                    if (showOnMap) {
-//                        MeasurementToolFragment.showGpxOnMap(app, gpx, actionType, false);
-//                    }
-//                    return res;
-    });
-}
-
-- (void) showGpxOnMap:(OAGPXDocument *)gpx actionType:(EOAActionType)actionType isNewGpx:(BOOL)isNewGpx
-{
-    [_settings showGpx:@[gpx.fileName]];
-//    if (sf != null && !isNewGpx) {
-//        if (actionType == ActionType.ADD_SEGMENT || actionType == ActionType.EDIT_SEGMENT) {
-//            sf.processPoints(app);
-//        }
-//    }
+    OAGPXTrackAnalysis *analysis = [savedGpxFile getAnalysis:0];
+    [[OAGPXDatabase sharedDb] addGpxItem:[outFile lastPathComponent] title:savedGpxFile.metadata.name desc:savedGpxFile.metadata.desc bounds:savedGpxFile.bounds analysis:analysis];
+    [[OAGPXDatabase sharedDb] save];
+    if (showOnMap)
+        [_settings showGpx:@[savedGpxFile.fileName]];
 }
 
 #pragma mark - OADraggableViewActions

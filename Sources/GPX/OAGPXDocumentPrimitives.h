@@ -24,6 +24,8 @@ typedef enum
     
 } OAGpxFixType;
 
+struct RouteDataBundle;
+
 @interface OARouteSegment : NSObject
 
 @property (nonatomic) NSString *identifier;
@@ -36,6 +38,8 @@ typedef enum
 @property (nonatomic) NSString *pointTypes;
 @property (nonatomic) NSString *names;
 
++ (OARouteSegment *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle;
+
 - (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
 
 - (NSDictionary<NSString *, NSString *> *) toDictionary;
@@ -46,6 +50,8 @@ typedef enum
 
 @property (nonatomic) NSString *tag;
 @property (nonatomic) NSString *value;
+
++ (OARouteType *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle;
 
 - (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
 
@@ -188,6 +194,7 @@ typedef enum
 @property (nonatomic) NSString *profileType;
 
 - (void) fillWithWpt:(OAGpxWpt *)gpxWpt;
+- (void) fillWithTrkPt:(OAGpxTrkPt *)gpxWpt;
 
 @end
 
@@ -238,6 +245,8 @@ typedef enum
 -(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit;
 
 - (BOOL) hasRoute;
+
+- (void) fillExtensions;
 
 @end
 

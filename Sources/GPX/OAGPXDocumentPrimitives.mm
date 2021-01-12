@@ -11,6 +11,8 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 
+#include <routeSegmentResult.h>
+
 #define ICON_NAME_EXTENSION @"icon"
 #define DEFAULT_ICON_NAME @"special_star"
 #define BACKGROUND_TYPE_EXTENSION @"background"
@@ -36,6 +38,35 @@
     }
     return self;
 }
+
++ (OARouteSegment *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
+{
+    OARouteSegment *s = [[OARouteSegment alloc] init];
+    s.identifier = [NSString stringWithUTF8String:bundle->getString("id").c_str()];
+    s.length = [NSString stringWithUTF8String:bundle->getString("length").c_str()];
+    s.segmentTime = [NSString stringWithUTF8String:bundle->getString("segmentTime").c_str()];
+    s.speed = [NSString stringWithUTF8String:bundle->getString("speed").c_str()];
+    s.turnType = [NSString stringWithUTF8String:bundle->getString("turnType").c_str()];
+    s.turnAngle = [NSString stringWithUTF8String:bundle->getString("turnAngle").c_str()];
+    s.types = [NSString stringWithUTF8String:bundle->getString("types").c_str()];
+    s.pointTypes = [NSString stringWithUTF8String:bundle->getString("pointTypes").c_str()];
+    s.names = [NSString stringWithUTF8String:bundle->getString("names").c_str()];
+    return s;
+}
+
+//public StringBundle toStringBundle() {
+//    StringBundle bundle = new StringBundle();
+//    bundle.putString("id", id);
+//    bundle.putString("length", length);
+//    bundle.putString("segmentTime", segmentTime);
+//    bundle.putString("speed", speed);
+//    bundle.putString("turnType", turnType);
+//    bundle.putString("turnAngle", turnAngle);
+//    bundle.putString("types", types);
+//    bundle.putString("pointTypes", pointTypes);
+//    bundle.putString("names", names);
+//    return bundle;
+//}
 
 - (NSDictionary<NSString *,NSString *> *)toDictionary
 {
@@ -66,6 +97,21 @@
     return self;
 }
 
++ (OARouteType *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
+{
+    OARouteType *t = [[OARouteType alloc] init];
+    t.tag = [NSString stringWithUTF8String:bundle->getString("t").c_str()];
+    t.value = [NSString stringWithUTF8String:bundle->getString("v").c_str()];
+    return t;
+}
+
+//public StringBundle toStringBundle() {
+//    StringBundle bundle = new StringBundle();
+//    bundle.putString("t", tag);
+//    bundle.putString("v", value);
+//    return bundle;
+//}
+
 - (NSDictionary<NSString *,NSString *> *)toDictionary
 {
     return @{
@@ -86,7 +132,9 @@
 
 - (NSArray<OAGpxExtension *> *)extensions
 {
-    return _extensions ? _extensions : [NSArray new];
+    if (!_extensions)
+        _extensions = @[];
+    return _extensions;
 }
 
 - (void) copyExtensions:(OAGpxExtensions *)e
@@ -244,6 +292,33 @@
     self.extraData = gpxWpt.extraData;
 }
 
+- (void) fillWithTrkPt:(OAGpxTrkPt *)gpxWpt
+{
+    self.position = gpxWpt.position;
+    self.name = gpxWpt.name;
+    self.desc = gpxWpt.desc;
+    self.elevation = gpxWpt.elevation;
+    self.time = gpxWpt.time;
+    self.comment = gpxWpt.comment;
+    self.type = gpxWpt.type;
+    
+    self.magneticVariation = gpxWpt.magneticVariation;
+    self.geoidHeight = gpxWpt.geoidHeight;
+    self.source = gpxWpt.source;
+    self.symbol = gpxWpt.symbol;
+    self.fixType = gpxWpt.fixType;
+    self.satellitesUsedForFixCalculation = gpxWpt.satellitesUsedForFixCalculation;
+    self.horizontalDilutionOfPrecision = gpxWpt.horizontalDilutionOfPrecision;
+    self.verticalDilutionOfPrecision = gpxWpt.verticalDilutionOfPrecision;
+    self.positionDilutionOfPrecision = gpxWpt.positionDilutionOfPrecision;
+    self.ageOfGpsData = gpxWpt.ageOfGpsData;
+    self.dgpsStationId = gpxWpt.dgpsStationId;
+    self.distance = gpxWpt.distance;
+    
+    self.links = gpxWpt.links;
+    self.extraData = gpxWpt.extraData;
+}
+
 - (UIColor *) getColor
 {
     return [OAUtilities colorFromString:self.color];
@@ -312,10 +387,8 @@
 {
     for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
     {
-        if ([e.name isEqualToString:PROFILE_TYPE_EXTENSION])
-        {
+        if ([e.name isEqualToString:key])
             return e;
-        }
     }
     return nil;
 }
@@ -383,7 +456,7 @@
     if (!e)
     {
         e = [[OAGpxExtension alloc] init];
-        e.name = PROFILE_TYPE_EXTENSION;
+        e.name = TRKPT_INDEX_EXTENSION;
         e.value = stringValue;
         [self addExtension:e];
         return;
@@ -441,6 +514,49 @@
 - (BOOL) hasRoute
 {
     return _routeSegments.count > 0 && _routeTypes.count > 0;
+}
+
+- (void) fillExtensions
+{
+    if (_routeSegments.count > 0)
+    {
+        OAGpxExtension *ext = [[OAGpxExtension alloc] init];
+        ext.name = @"route";
+        NSMutableArray<OAGpxExtension *> *subexts = [NSMutableArray new];
+        for (OARouteSegment *seg in _routeSegments)
+        {
+            OAGpxExtension *subExt = [[OAGpxExtension alloc] init];
+            subExt.name = @"segment";
+            subExt.attributes = seg.toDictionary;
+            [subexts addObject:subExt];
+        }
+        ext.subextensions = subexts;
+        [self addExtension:ext];
+    }
+    if (_routeTypes.count > 0)
+    {
+        OAGpxExtension *ext = [[OAGpxExtension alloc] init];
+        ext.name = @"types";
+        NSMutableArray<OAGpxExtension *> *subexts = [NSMutableArray new];
+        for (OARouteType *type in _routeTypes)
+        {
+            OAGpxExtension *subExt = [[OAGpxExtension alloc] init];
+            subExt.name = @"type";
+            subExt.attributes = type.toDictionary;
+            [subexts addObject:subExt];
+        }
+        ext.subextensions = subexts;
+        [self addExtension:ext];
+    }
+}
+
+- (void) addExtension:(OAGpxExtension *)e
+{
+    if (!self.extraData)
+        self.extraData = [[OAGpxExtensions alloc] init];
+    NSArray<OAGpxExtension *> *exts = ((OAGpxExtensions *)self.extraData).extensions;
+    if (![exts containsObject:e])
+        ((OAGpxExtensions *)self.extraData).extensions = [exts arrayByAddingObject:e];
 }
 
 @end

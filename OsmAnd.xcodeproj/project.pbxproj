@@ -3968,6 +3968,10 @@
 		DA08A0D3227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
 		DA08F15B216776C8009584C1 /* OARulerWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA08F15A216776C8009584C1 /* OARulerWidget.mm */; };
 		DA08F15C216776C8009584C1 /* OARulerWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA08F15A216776C8009584C1 /* OARulerWidget.mm */; };
+		DA09990F25A83F4100F22A19 /* OASaveGpxRouteAsyncTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA09990E25A83F4100F22A19 /* OASaveGpxRouteAsyncTask.mm */; };
+		DA09991025A83F4100F22A19 /* OASaveGpxRouteAsyncTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA09990E25A83F4100F22A19 /* OASaveGpxRouteAsyncTask.mm */; };
+		DA09991725A8897000F22A19 /* OARouteExporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA09991625A8897000F22A19 /* OARouteExporter.mm */; };
+		DA09991825A8897000F22A19 /* OARouteExporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA09991625A8897000F22A19 /* OARouteExporter.mm */; };
 		DA09D00822C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA09D00722C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m */; };
 		DA09D00922C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA09D00722C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m */; };
 		DA09D00B22C37FFA00557FFF /* OAProgressBarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA09D00A22C37FF900557FFF /* OAProgressBarCell.xib */; };
@@ -9086,6 +9090,10 @@
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
 		DA08F159216776C8009584C1 /* OARulerWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARulerWidget.h; sourceTree = "<group>"; };
 		DA08F15A216776C8009584C1 /* OARulerWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARulerWidget.mm; sourceTree = "<group>"; };
+		DA09990D25A83F4100F22A19 /* OASaveGpxRouteAsyncTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASaveGpxRouteAsyncTask.h; sourceTree = "<group>"; };
+		DA09990E25A83F4100F22A19 /* OASaveGpxRouteAsyncTask.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASaveGpxRouteAsyncTask.mm; sourceTree = "<group>"; };
+		DA09991525A8897000F22A19 /* OARouteExporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteExporter.h; sourceTree = "<group>"; };
+		DA09991625A8897000F22A19 /* OARouteExporter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteExporter.mm; sourceTree = "<group>"; };
 		DA09D00622C37BF000557FFF /* OAUploadOsmPointsAsyncTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUploadOsmPointsAsyncTask.h; sourceTree = "<group>"; };
 		DA09D00722C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadOsmPointsAsyncTask.m; sourceTree = "<group>"; };
 		DA09D00A22C37FF900557FFF /* OAProgressBarCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAProgressBarCell.xib; path = Resources/Controllers/Cells/OAProgressBarCell.xib; sourceTree = "<group>"; };
@@ -15621,6 +15629,10 @@
 				DA6D079E25518D90004FE017 /* OAInfoBottomView.xib */,
 				DA65CC2D256E597A00DC896F /* OARoadSegmentData.h */,
 				DA65CC2E256E597A00DC896F /* OARoadSegmentData.mm */,
+				DA09990D25A83F4100F22A19 /* OASaveGpxRouteAsyncTask.h */,
+				DA09990E25A83F4100F22A19 /* OASaveGpxRouteAsyncTask.mm */,
+				DA09991525A8897000F22A19 /* OARouteExporter.h */,
+				DA09991625A8897000F22A19 /* OARouteExporter.mm */,
 			);
 			name = RoutePlanning;
 			path = Sources/Controllers/2.0/RoutePlanning;
@@ -21330,6 +21342,7 @@
 				DA1605B622FEF023001E02AD /* OAMapUnderlayAction.mm in Sources */,
 				DABB8E4D2308165A00DBD77F /* OAQuickActionListViewController.m in Sources */,
 				DA49C1B32549982900CD48DC /* OAReorderPointCommand.mm in Sources */,
+				DA09991825A8897000F22A19 /* OARouteExporter.mm in Sources */,
 				847A1CDA1DF94E9B003C1246 /* OANativeUtilities.mm in Sources */,
 				847A1CDB1DF94E9B003C1246 /* OAMultiDestinationCell.mm in Sources */,
 				845AFB581E264ED200170026 /* OASearchCoreFactory.mm in Sources */,
@@ -21486,6 +21499,7 @@
 				DA26408A2201B03600A554AD /* OAOsmBugResult.m in Sources */,
 				1586E124242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */,
 				DAB2A55221F1E4FC00D9F01A /* OAOsmEditingPlugin.mm in Sources */,
+				DA09991025A83F4100F22A19 /* OASaveGpxRouteAsyncTask.mm in Sources */,
 				847424741E4A0AAC001C1F35 /* OADiscountToolbarViewController.mm in Sources */,
 				DAFC00C5226724400024CE23 /* OAOsmEditsListViewController.mm in Sources */,
 				844E079D1E3C82F400EFC525 /* OAQuickSearchViewController.mm in Sources */,
@@ -22223,6 +22237,7 @@
 				84387B3A1ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,
 				DA2558A124ADE40F0081D155 /* OANavigationTypeViewController.mm in Sources */,
 				84CC87D91FAB553100B4941F /* OATurnDrawable.mm in Sources */,
+				DA09990F25A83F4100F22A19 /* OASaveGpxRouteAsyncTask.mm in Sources */,
 				84C3C1841E3B88F2000C77A5 /* OAQuickSearchHelper.mm in Sources */,
 				84CC87E01FAB711700B4941F /* OATurnPathHelper.mm in Sources */,
 				DABB8E552308206200DBD77F /* OATitleDescrDraggableCell.m in Sources */,
@@ -22317,6 +22332,7 @@
 				BBA3AF5A197FC4BB0039D991 /* UIViewController+OARootViewController.m in Sources */,
 				3AFEEE981A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
 				840ED48B1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */,
+				DA09991725A8897000F22A19 /* OARouteExporter.mm in Sources */,
 				846F03711E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA357C5622A689E400A1F82D /* OAUsernameFilterViewController.mm in Sources */,
 				1581A3BF2566C57B004CB4B3 /* OACollectionSettingsItem.mm in Sources */,

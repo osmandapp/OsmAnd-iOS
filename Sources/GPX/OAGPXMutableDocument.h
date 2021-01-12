@@ -23,12 +23,15 @@
 - (void) updateDocAndMetadata;
 - (void) addWpt:(OAGpxWpt *)w;
 - (void) addTrack:(OAGpxTrk *)t;
+- (void) addTracks:(NSArray<OAGpxTrk *> *)tracks;
 - (void) addTrackSegment:(OAGpxTrkSeg *)s track:(OAGpxTrk *)track;
 - (void) addTrackPoint:(OAGpxTrkPt *)p segment:(OAGpxTrkSeg *)segment;
 - (void) addRoutePoints:(NSArray<OAGpxRtePt *> *)points;
+- (void) addRoutes:(NSArray<OAGpxRte *> *)routes;
 
 - (void)deleteWpt:(OAGpxWpt *)w;
 - (void)deleteAllWpts;
+- (void) addWpts:(NSArray<OAGpxWpt *> *)wpts;
 
 - (BOOL) saveTo:(NSString *)filename;
 

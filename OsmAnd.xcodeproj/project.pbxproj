@@ -10656,8 +10656,8 @@
 				324D9C082576A7FD00EA7F8F /* OAOsmNotesSettingsItem.mm */,
 				324D9C372576B6B500EA7F8F /* OAOsmEditsSettingsItem.h */,
 				324D9C382576B7CD00EA7F8F /* OAOsmEditsSettingsItem.mm */,
-				15C49ED325A4972E00BE2FA2 /* OAMarkersSettingsItem.mm */,
 				15C49ED925A4975500BE2FA2 /* OAMarkersSettingsItem.h */,
+				15C49ED325A4972E00BE2FA2 /* OAMarkersSettingsItem.mm */,
 			);
 			name = Backup;
 			sourceTree = "<group>";

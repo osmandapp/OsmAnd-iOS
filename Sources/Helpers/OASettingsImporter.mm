@@ -29,6 +29,7 @@
 #import "OAExportSettingsType.h"
 #import "OAFavoritesHelper.h"
 #import "OAMarkersSettingsItem.h"
+#import "OADestination.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -534,7 +535,7 @@
     NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
     NSMutableArray<OAOsmNotePoint *> *notesPointList  = [NSMutableArray array];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList  = [NSMutableArray array];
-    NSMutableArray *markers = [NSMutableArray array]; // type is needed
+    NSMutableArray<OADestination *> *markers = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
         switch (item.type)

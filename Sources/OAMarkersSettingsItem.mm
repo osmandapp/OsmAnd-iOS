@@ -9,6 +9,11 @@
 #import "OAMarkersSettingsItem.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OADestination.h"
+#import "OADestinationsHelper.h"
+#import "OAGPXDocument.h"
+#import "OAGPXDocumentPrimitives.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -24,14 +29,14 @@
 
 @implementation OAMarkersSettingsItem
 {
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _destinationsMarkersCollection;
     OAAppSettings *_settings;
-    //private MapMarkersHelper markersHelper;
+    OsmAndAppInstance _app;
+    OADestinationsHelper *_destinationsHelper;
 }
 
 @dynamic items, appliedItems, existingItems;
 
-- (instancetype) initWithMarkers:(NSArray *)items // type is needed
+- (instancetype) initWithMarkers:(NSArray<OADestination *> *)items
 {
     return [super initWithItems:items];
 }
@@ -49,21 +54,14 @@
     return self;
 }
 
- /*
-@Override
-protected void init() {
-    super.init();
-    markersHelper = app.getMapMarkersHelper();
-    existingItems = new ArrayList<>(markersHelper.getMapMarkersFromDefaultGroups(false));
-}
-*/
-
 - (void) initialization
 {
     [super initialization];
 
+    _app = OsmAndApp.instance;
     _settings = [OAAppSettings sharedManager];
-    
+    _destinationsHelper = [OADestinationsHelper instance];
+    self.existingItems = [NSMutableArray arrayWithArray:[_destinationsHelper sortedDestinationsWithoutParking]];
 }
  
 - (EOASettingsItemType) type
@@ -81,30 +79,28 @@ protected void init() {
     return @".gpx";
 }
 
-/*
-public void apply() {
-    List<MapMarker> newItems = getNewItems();
-    if (!newItems.isEmpty() || !duplicateItems.isEmpty()) {
-        appliedItems = new ArrayList<>(newItems);
-        
-        for (MapMarker duplicate : duplicateItems) {
-            if (shouldReplace) {
-                MapMarker existingMarker = markersHelper.getMapMarker(duplicate.point);
-                markersHelper.removeMarker(existingMarker);
-            }
-            appliedItems.add(shouldReplace ? duplicate : renameItem(duplicate));
-        }
-        
-        for (MapMarker marker : appliedItems) {
-            markersHelper.addMarker(marker);
-        }
-    }
-}
-*/
-
 - (void) apply
 {
-
+   NSArray<OADestination *> *newItems = [self getNewItems];
+    if (newItems.count > 0 || self.duplicateItems.count > 0)
+    {
+        self.appliedItems = [NSMutableArray arrayWithArray:newItems];
+        
+        for (OADestination *duplicate in self.duplicateItems)
+        {
+            if ([self shouldReplace])
+            {
+                [_destinationsHelper removeDestination:duplicate];
+            }
+            [self.appliedItems addObject:[self shouldReplace] ? duplicate : [self renameItem:duplicate]];
+        }
+        
+        for (OADestination *marker in self.appliedItems)
+        {
+            [_destinationsHelper addDestination:marker];
+        }
+    }
+    
 }
 
 /*
@@ -119,7 +115,7 @@ public boolean isDuplicate(@NonNull MapMarker mapMarker) {
 }
  */
 
-- (BOOL) isDuplicate:(OASettingsItem *)item // type is needed
+- (BOOL) isDuplicate:(OADestination *)mapMarker
 {
     return NO;
 }
@@ -148,7 +144,7 @@ public boolean isDuplicate(@NonNull MapMarker mapMarker) {
      }
  */
 
-- (OASettingsItem *) renameItem:(OASettingsItem *)item // type is needed
+- (OADestination *) renameItem:(OADestination *)item
 {
     int number = 0;
     while (true)
@@ -185,23 +181,18 @@ public MapMarkersGroup getMarkersGroup() {
 
 @implementation OAMarkersSettingsItemReader
 
-/*
-public void readFromStream(@NonNull InputStream inputStream, String entryName) throws IllegalArgumentException {
-    GPXFile gpxFile = GPXUtilities.loadGPXFile(inputStream);
-    if (gpxFile.error != null) {
-        warnings.add(app.getString(R.string.settings_item_read_error, String.valueOf(getType())));
-        SettingsHelper.LOG.error("Failed read gpx file", gpxFile.error);
-    } else {
-        List<MapMarker> mapMarkers = markersHelper.readMarkersFromGpx(gpxFile, false);
-        items.addAll(mapMarkers);
-    }
-}
- */
-
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    NSLog(@"Import markers");
-    
+   OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
+    if (gpxFile)
+    {
+        for (OAGpxWpt *wpt in gpxFile.locationMarks)
+        {
+            OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
+            dest.color = [OAUtilities colorFromString:wpt.color];
+            [self.item.items addObject:dest];
+        }
+    }
     return YES;
 }
 

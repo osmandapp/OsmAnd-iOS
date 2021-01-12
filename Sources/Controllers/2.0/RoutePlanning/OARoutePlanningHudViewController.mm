@@ -375,11 +375,16 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self addCenterPoint];
 }
 
-- (IBAction)modeButtonPressed:(id)sender
+- (void)showSegmentRouteOptions
 {
     OASegmentOptionsBottomSheetViewController *bottomSheet = [[OASegmentOptionsBottomSheetViewController alloc] initWithType:EOADialogTypeWholeRouteCalculation dialogMode:EOARouteBetweenPointsDialogModeAll appMode:_editingContext.appMode];
     bottomSheet.delegate = self;
     [bottomSheet presentInViewController:self];
+}
+
+- (IBAction)modeButtonPressed:(id)sender
+{
+    [self showSegmentRouteOptions];
 }
 
 - (void) setMode:(int)mode on:(BOOL)on
@@ -875,7 +880,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) snapToRoadOptionSelected
 {
-//    [self startSnapToRoad:YES];
+    [self showSegmentRouteOptions];
 }
 
 - (void) addNewSegmentSelected
@@ -982,7 +987,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     else
     {
-//        Toast.makeText(mapActivity, getString(R.string.one_point_error), Toast.LENGTH_SHORT).show();
         NSLog(@"Can't reverse one point");
     }
 }

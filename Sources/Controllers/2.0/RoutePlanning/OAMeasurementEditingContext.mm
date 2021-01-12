@@ -895,7 +895,6 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     _calculationProgress = std::make_shared<RouteCalculationProgress>();
     params.calculationProgress = _calculationProgress;
     params.calculationProgressCallback = self;
-//    params.calculationProgress = calculationProgress = new RouteCalculationProgress();
 
     params.resultListener = self;
     

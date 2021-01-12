@@ -729,7 +729,7 @@
 "shared_string_info" = "資訊";
 "shared_string_go" = "執行";
 "error_avoid_specific_road" = "沒發現支道";
-"road_blocked" = "道路堵塞";
+"road_blocked" = "道路封閉";
 "starting_point" = "起始標點";
 "shared_string_select_avoid_road_on_map" = "選擇路線裡要避開的道路";
 "shared_string_road" = "道路";
@@ -1477,3 +1477,17 @@
 "osm_notes" = "OSM 註記";
 "personal_category_name" = "個人";
 "whole_track" = "整個軌道";
+"maximum_speed" = "最大速度";
+"max_speed" = "最大速度";
+"min_speed" = "最小速度";
+"default_speed" = "預設速度";
+"start_navigation" = "開始導航";
+"get_free_trial_title" = "開始您的 %d %@ 免費體驗版。";
+"get_discount_title" = "獲取 %d %@ at %d%% 折優惠。";
+"years_short" = "年";
+"year_short" = "年";
+"months_short" = "月";
+"month_short" = "月";
+"weeks_short" = "週";
+"week_short" = "週";
+"day_short" = "天";

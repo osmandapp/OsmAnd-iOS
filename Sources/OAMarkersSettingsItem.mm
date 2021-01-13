@@ -7,17 +7,10 @@
 //
 
 #import "OAMarkersSettingsItem.h"
-#import "OAAppSettings.h"
-#import "OsmAndApp.h"
 #import "OADestination.h"
 #import "OADestinationsHelper.h"
 #import "OAGPXDocument.h"
-#import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
-
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/MapMarker.h>
-#include <OsmAndCore/Map/MapMarkerBuilder.h>
 
 @interface OAMarkersSettingsItem()
 
@@ -29,8 +22,6 @@
 
 @implementation OAMarkersSettingsItem
 {
-    OAAppSettings *_settings;
-    OsmAndAppInstance _app;
     OADestinationsHelper *_destinationsHelper;
 }
 
@@ -58,8 +49,6 @@
 {
     [super initialization];
 
-    _app = OsmAndApp.instance;
-    _settings = [OAAppSettings sharedManager];
     _destinationsHelper = [OADestinationsHelper instance];
     self.existingItems = [NSMutableArray arrayWithArray:[_destinationsHelper sortedDestinationsWithoutParking]];
 }
@@ -96,27 +85,18 @@
         }
         
         for (OADestination *marker in self.appliedItems)
-        {
             [_destinationsHelper addDestination:marker];
-        }
     }
     
 }
 
-/*
-public boolean isDuplicate(@NonNull MapMarker mapMarker) {
-    for (MapMarker marker : existingItems) {
-        if (marker.equals(mapMarker)
-            && Algorithms.objectEquals(marker.getOnlyName(), mapMarker.getOnlyName())) {
-            return true;
-        }
-    }
-    return false;
-}
- */
-
 - (BOOL) isDuplicate:(OADestination *)mapMarker
 {
+    for (OADestination *marker in self.existingItems)
+    {
+        if ([OAUtilities isCoordEqual:marker.latitude srcLon:marker.longitude destLat:mapMarker.latitude destLon:mapMarker.longitude] && [marker.desc isEqualToString:mapMarker.desc])
+            return YES;
+    }
     return NO;
 }
 
@@ -125,48 +105,19 @@ public boolean isDuplicate(@NonNull MapMarker mapMarker) {
     return YES;
 }
 
-/*
- public MapMarker renameItem(@NonNull MapMarker item) {
-         int number = 0;
-         while (true) {
-             number++;
-             String name = item.getOnlyName() + " " + number;
-             PointDescription description = new PointDescription(PointDescription.POINT_TYPE_LOCATION, name);
-             MapMarker renamedMarker = new MapMarker(item.point, description, item.colorIndex, item.selected, item.index);
-             if (!isDuplicate(renamedMarker)) {
-                 renamedMarker.history = false;
-                 renamedMarker.visitedDate = item.visitedDate;
-                 renamedMarker.creationDate = item.creationDate;
-                 renamedMarker.nextKey = MapMarkersDbHelper.TAIL_NEXT_VALUE;
-                 return renamedMarker;
-             }
-         }
-     }
- */
-
 - (OADestination *) renameItem:(OADestination *)item
 {
     int number = 0;
     while (true)
     {
         number++;
-        
+        NSString *name = [NSString stringWithFormat:@"%@ %d", item.desc, number];
+        OADestination *renamedMarker = [[OADestination alloc] initWithDesc:name latitude:item.latitude longitude:item.longitude];
+        renamedMarker.color = item.color;
+        renamedMarker.markerResourceName = item.markerResourceName;
+        if (![self isDuplicate:renamedMarker])
+            return renamedMarker;
     }
-    return nil;
-}
-
-/*
-public MapMarkersGroup getMarkersGroup() {
-    String name = app.getString(R.string.map_markers);
-    String groupId = ExportSettingsType.ACTIVE_MARKERS.name();
-    MapMarkersGroup markersGroup = new MapMarkersGroup(groupId, name, MapMarkersGroup.ANY_TYPE);
-    markersGroup.setMarkers(items);
-    return markersGroup;
-}
- */
-
-- () getMarkersGroup
-{
     return nil;
 }
 
@@ -181,6 +132,25 @@ public MapMarkersGroup getMarkersGroup() {
 
 @implementation OAMarkersSettingsItemReader
 
+- (NSString *) getResourceName:(NSString *)color
+{
+    if ([color isEqualToString:@"#ff9800"])
+        return @"ic_destination_pin_1"; // orange
+    else if ([color isEqualToString:@"#26a69a"])
+        return @"ic_destination_pin_2"; // teal
+    else if ([color isEqualToString:@"#73b825"])
+        return @"ic_destination_pin_3"; // green
+    else if ([color isEqualToString:@"#e53935"])
+        return @"ic_destination_pin_4"; // red
+    else if ([color isEqualToString:@"#fdd835"])
+        return @"ic_destination_pin_5"; // yellow
+    else if ([color isEqualToString:@"#ab47bc"])
+        return @"ic_destination_pin_6"; // purple
+    else if ([color isEqualToString:@"#2196f3"])
+        return @"ic_destination_pin_7"; // blue
+    return nil;
+}
+
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
@@ -190,6 +160,7 @@ public MapMarkersGroup getMarkersGroup() {
         {
             OADestination *dest = [[OADestination alloc] initWithDesc:wpt.name latitude:wpt.getLatitude longitude:wpt.getLongitude];
             dest.color = [OAUtilities colorFromString:wpt.color];
+            dest.markerResourceName = [self getResourceName:wpt.color];
             [self.item.items addObject:dest];
         }
     }

@@ -491,7 +491,7 @@
                 for (OADestination *item in settings)
                 {
                     [activeMarkersStyleSection.groupItems addObject:@{
-                        @"icon" : @"ic_custom_poi", // change the icon
+                        @"icon" : @"ic_custom_marker",
                         @"title" : item.desc,
                         @"type" : kCellTypeTitle,
                     }];

@@ -320,7 +320,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     {
         [_data addObject: @{
             @"label": OALocalizedString(@"map_markers"),
-            @"iconName": @"ic_custom_poi", // change icon
+            @"iconName": @"ic_custom_marker",
             @"count": [NSString stringWithFormat:@"%ld", markersCount],
             @"category" : @(EOAImportDataTypeActiveMarkers)
             }
@@ -471,6 +471,10 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         {
             [OAPluginPopupViewController askForPlugin:kInAppId_Addon_OsmEditing];
         }
+    }
+    else if (dataType == EOAImportDataTypeActiveMarkers)
+    {
+        [rootController.mapPanel showCards];
     }
 }
 

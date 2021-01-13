@@ -72,12 +72,14 @@
         self.parkingColor = UIColorFromRGB(parking_pin_color_blue);
 
         self.colors = @[UIColorFromRGB(marker_pin_color_orange),
-                        UIColorFromRGB(marker_pin_color_blue),
+                        UIColorFromRGB(marker_pin_color_teal),
                         UIColorFromRGB(marker_pin_color_green),
                         UIColorFromRGB(marker_pin_color_red),
-                        UIColorFromRGB(marker_pin_color_light_green)];
+                        UIColorFromRGB(marker_pin_color_light_green),
+                        UIColorFromRGB(marker_pin_color_purple),
+                        UIColorFromRGB(marker_pin_color_blue)];
         
-        self.markerNames = @[@"ic_destination_pin_1", @"ic_destination_pin_2", @"ic_destination_pin_3", @"ic_destination_pin_4", @"ic_destination_pin_5"];
+        self.markerNames = @[@"ic_destination_pin_1", @"ic_destination_pin_2", @"ic_destination_pin_3", @"ic_destination_pin_4", @"ic_destination_pin_5", @"ic_destination_pin_6", @"ic_destination_pin_7"];
         
         _gpxRouteDefinedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onRouteDefined)

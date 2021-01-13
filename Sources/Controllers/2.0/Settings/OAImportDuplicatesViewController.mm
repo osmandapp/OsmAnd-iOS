@@ -433,7 +433,7 @@
             {
                 OADestination *marker = (OADestination *)currentItem;
                 item[@"label"] = marker.desc;
-                item[@"icon"] = [UIImage imageNamed:@"ic_custom_favorites"]; // change icon
+                item[@"icon"] = [UIImage imageNamed:@"ic_custom_marker"];
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }

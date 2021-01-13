@@ -5245,8 +5245,6 @@
 		DA71B75E214B985000FE8B7E /* OAHelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA71B75A214B984F00FE8B7E /* OAHelpViewController.xib */; };
 		DA71B75F214B985000FE8B7E /* OAHelpViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA71B75B214B985000FE8B7E /* OAHelpViewController.mm */; };
 		DA71B760214B985000FE8B7E /* OAHelpViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA71B75B214B985000FE8B7E /* OAHelpViewController.mm */; };
-		DA71B7B3214B9F2800FE8B7E /* technical-articles.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7AE214B9F2700FE8B7E /* technical-articles.html */; };
-		DA71B7B4214B9F2800FE8B7E /* technical-articles.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7AE214B9F2700FE8B7E /* technical-articles.html */; };
 		DA71B7B7214B9F2800FE8B7E /* faq.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7B0214B9F2800FE8B7E /* faq.html */; };
 		DA71B7B8214B9F2800FE8B7E /* faq.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7B0214B9F2800FE8B7E /* faq.html */; };
 		DA71B7BB214B9F2800FE8B7E /* map-legend.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7B2214B9F2800FE8B7E /* map-legend.html */; };
@@ -9913,7 +9911,6 @@
 		DA71B75A214B984F00FE8B7E /* OAHelpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAHelpViewController.xib; sourceTree = "<group>"; };
 		DA71B75B214B985000FE8B7E /* OAHelpViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHelpViewController.mm; sourceTree = "<group>"; };
 		DA71B75C214B985000FE8B7E /* OAHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHelpViewController.h; sourceTree = "<group>"; };
-		DA71B7AE214B9F2700FE8B7E /* technical-articles.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "technical-articles.html"; path = "../help/website/help/technical-articles.html"; sourceTree = "<group>"; };
 		DA71B7B0214B9F2800FE8B7E /* faq.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = faq.html; path = ../help/website/help/faq.html; sourceTree = "<group>"; };
 		DA71B7B2214B9F2800FE8B7E /* map-legend.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "map-legend.html"; path = "../help/website/help/map-legend.html"; sourceTree = "<group>"; };
 		DA71B7BE214B9F4600FE8B7E /* trip-recording-plugin.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "trip-recording-plugin.html"; path = "../help/website/feature_articles/trip-recording-plugin.html"; sourceTree = "<group>"; };
@@ -15897,7 +15894,6 @@
 				DA71B7BE214B9F4600FE8B7E /* trip-recording-plugin.html */,
 				DA71B7B0214B9F2800FE8B7E /* faq.html */,
 				DA71B7B2214B9F2800FE8B7E /* map-legend.html */,
-				DA71B7AE214B9F2700FE8B7E /* technical-articles.html */,
 				DA1F1E4F251CCCC4003CAA55 /* navigation-profiles.html */,
 			);
 			name = HelpResources;
@@ -17162,7 +17158,6 @@
 				DAB854CD23058218002566A6 /* ic_custom_poi.png in Resources */,
 				DA2DC41C23B2116300F40D1D /* ic_custom_arrow_down@3x.png in Resources */,
 				DA13414F243DC5A80039D214 /* ic_action_helicopter@3x.png in Resources */,
-				DA71B7B4214B9F2800FE8B7E /* technical-articles.html in Resources */,
 				DA134199243DC5A80039D214 /* map_action_utv@3x.png in Resources */,
 				DA52CE1624AE087F00CC309D /* ic_custom_contrast@3x.png in Resources */,
 				8AFC2C0A24334A4E0095BA9F /* map_navigation_car_top@2x.png in Resources */,
@@ -20234,7 +20229,6 @@
 				DAF3455322F4482B009E2EB6 /* ic_custom_compound_action_remove@2x.png in Resources */,
 				8476E2E21F6C1EEC00EC274F /* map_pedestrian_location@3x.png in Resources */,
 				DA6D0788255173C5004FE017 /* ic_custom_trim_after.png in Resources */,
-				DA71B7B3214B9F2800FE8B7E /* technical-articles.html in Resources */,
 				DA2F091F2217FF75006C7F05 /* ic_plugin_osm_edit.png in Resources */,
 				843E5CED1AB341E000BE14BE /* icon_gpx_fill@3x.png in Resources */,
 				DAA4EDF1240E85B800F16073 /* ic_custom_download@2x.png in Resources */,

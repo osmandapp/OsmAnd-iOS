@@ -754,7 +754,7 @@
 
 - (void) onLocationUpdate
 {
-    if (_cachedHeading != _app.locationServices.lastKnownLocation.course)
+    if(abs(int(_cachedHeading) - int(_app.locationServices.lastKnownLocation.course)) >= 1)
     {
         _cachedHeading = _app.locationServices.lastKnownLocation.course;
         dispatch_async(dispatch_get_main_queue(), ^{

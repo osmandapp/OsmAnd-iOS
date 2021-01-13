@@ -41,6 +41,7 @@
     NSInteger _baseMaxSpeed;
     NSString *_units;
     NSAttributedString *_footerAttrString;
+    NSMutableArray<NSNumber *> *_gestureRecognizersStateBackup;
 }
 
 - (instancetype) initWithApplicationMode:(OAApplicationMode *)am speedParameters:(NSDictionary *)speedParameters
@@ -272,6 +273,40 @@
     _maxValue = selectedMaximum;
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)didStartTouchesInRangeSlider:(TTRangeSlider *)sender
+{
+    [self disableAllGestureRecognizers];
+}
+
+- (void)didEndTouchesInRangeSlider:(TTRangeSlider *)sender
+{
+    [self restoreAllGestureRecognizersState];
+}
+
+- (void) disableAllGestureRecognizers
+{
+    _gestureRecognizersStateBackup = [NSMutableArray new];
+    NSArray<__kindof UIGestureRecognizer *> *recognizers = self.presentationController.presentedView.gestureRecognizers;
+    
+    for (int i = 0; i < recognizers.count; i++)
+    {
+        UIGestureRecognizer *recognizer = recognizers[i];
+        [_gestureRecognizersStateBackup addObject:[NSNumber numberWithBool:recognizer.isEnabled]];
+        [recognizer setEnabled:NO];
+    }
+}
+
+- (void) restoreAllGestureRecognizersState
+{
+    NSArray<__kindof UIGestureRecognizer *> *recognizers = self.presentationController.presentedView.gestureRecognizers;
+    
+    for (int i = 0; i < recognizers.count; i++)
+    {
+        UIGestureRecognizer *recognizer = recognizers[i];
+        [recognizer setEnabled:_gestureRecognizersStateBackup[i]];
+    }
 }
 
 @end

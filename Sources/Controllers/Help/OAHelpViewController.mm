@@ -292,13 +292,13 @@ static const NSInteger groupCount = 5;
        @"html" : @"installation-and-troubleshooting"
        }];
     
-    [dataArr addObject:
-     @{
-       @"name" : @"tech_articles",
-       @"title" : OALocalizedString(@"help_tech_articles"),
-       @"type" : kLinkInternalType,
-       @"html" : @"technical-articles"
-       }];
+//    [dataArr addObject:
+//     @{
+//       @"name" : @"tech_articles",
+//       @"title" : OALocalizedString(@"help_tech_articles"),
+//       @"type" : kLinkInternalType,
+//       @"html" : @"technical-articles"
+//       }];
     // issue #355 no versions html for ios
     /*
     [dataArr addObject:

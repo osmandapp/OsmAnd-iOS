@@ -257,9 +257,6 @@
 
 - (void) clearAllPoints:(BOOL)updateRoute
 {
-//    [self cancelStartPointAddressRequest];
-//    [self cancelAllIntermediatePointsAddressRequests];
-//    [self cancelTargetPointAddressRequest];
     [_app.data clearPointToStart];
     [_app.data clearIntermediatePoints];
     [_app.data clearPointToNavigate];

@@ -55,17 +55,6 @@
     [self.tableView setEditing:YES];
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
-    
-    [self selectCells];
-}
-
-- (void) selectCells
-{
-    for (int i = 0; i < _data.count; i ++)
-    {
-        if ([_initialValues containsObject:_data[i].stringKey])
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -127,6 +116,11 @@
         cell.imgView.image = [[UIImage imageNamed:item.iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.imgView.tintColor = UIColorFromRGB(item.iconColor);
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        if ([_initialValues containsObject:item.stringKey])
+        {
+            [_tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [_initialValues removeObject:item.stringKey];
+        }
     }
     return cell;
 }

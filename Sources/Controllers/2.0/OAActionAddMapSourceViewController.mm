@@ -67,18 +67,6 @@
     self.tableView.estimatedRowHeight = 48.;
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
-    
-    [self selectCells];
-}
-
-- (void) selectCells
-{
-    for (int i = 0; i < _data.count; i ++)
-    {
-        OAOnlineTilesResourceItem *item = _data[i];
-        if ([_initialValues containsObject:item.mapSource.name])
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -197,6 +185,11 @@
         cell.textView.text = item.mapSource.name;
         cell.imgView.image = img;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        if ([_initialValues containsObject:item.mapSource.name])
+        {
+            [_tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            [_initialValues removeObject:item.mapSource.name];
+        }
     }
     return cell;
 }

@@ -38,6 +38,8 @@
             return @"OSM_NOTES";
         case EOAExportSettingsTypeOsmEdits:
             return @"OSM_EDITS";
+        case EOAExportSettingsTypeActiveMarkers:
+            return @"ACTIVE_MARKERS";
         default:
             return nil;
     }
@@ -69,6 +71,8 @@
         return EOAExportSettingsTypeOsmNotes;
     if ([typeName isEqualToString:@"OSM_EDITS"])
         return EOAExportSettingsTypeOsmEdits;
+    if ([typeName isEqualToString:@"ACTIVE_MARKERS"])
+        return EOAExportSettingsTypeActiveMarkers;
     return EOAExportSettingsTypeUnknown;
 }
 

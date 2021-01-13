@@ -24,7 +24,8 @@ typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypeAvoidRoads,
     EOASettingsItemTypeFavorites,
     EOASettingsItemTypeOsmNotes,
-    EOASettingsItemTypeOsmEdits
+    EOASettingsItemTypeOsmEdits,
+    EOASettingsItemTypeActiveMarkers
 };
 
 @interface OASettingsItemType : NSObject

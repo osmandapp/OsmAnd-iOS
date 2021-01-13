@@ -146,10 +146,12 @@
 #define location_icon_color_lost 0x999999
 
 #define marker_pin_color_orange 0xFF9207
-#define marker_pin_color_blue 0x00BCD4
+#define marker_pin_color_teal 0x00BCD4
 #define marker_pin_color_green 0x7FBD4D
 #define marker_pin_color_red 0xFF444A
 #define marker_pin_color_light_green 0xCDDC39
+#define marker_pin_color_purple 0xAB47BC
+#define marker_pin_color_blue 0x2196F3
 
 #define parking_pin_color_blue 0x4A69EC
 

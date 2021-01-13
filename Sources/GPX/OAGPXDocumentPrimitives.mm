@@ -70,17 +70,23 @@
 
 - (NSDictionary<NSString *,NSString *> *)toDictionary
 {
-    return @{
-        @"id" : _identifier,
-        @"length" : _length,
-        @"segmentTime" : _segmentTime,
-        @"speed" : _speed,
-        @"turnType" : _turnType,
-        @"turnAngle" : _turnAngle,
-        @"types" : _types,
-        @"pointTypes" : _pointTypes,
-        @"names" : _names
-    };
+    NSMutableDictionary<NSString *, NSString *> *res = [NSMutableDictionary new];
+    [self addIfValueNotEmpty:res key:@"id" value:_identifier];
+    [self addIfValueNotEmpty:res key:@"length" value:_length];
+    [self addIfValueNotEmpty:res key:@"segmentTime" value:_segmentTime];
+    [self addIfValueNotEmpty:res key:@"speed" value:_speed];
+    [self addIfValueNotEmpty:res key:@"turnType" value:_turnType];
+    [self addIfValueNotEmpty:res key:@"turnAngle" value:_turnAngle];
+    [self addIfValueNotEmpty:res key:@"types" value:_types];
+    [self addIfValueNotEmpty:res key:@"pointTypes" value:_pointTypes];
+    [self addIfValueNotEmpty:res key:@"names" value:_names];
+    return res;
+}
+
+- (void) addIfValueNotEmpty:(NSMutableDictionary<NSString *, NSString *> *)dict key:(NSString *)key value:(NSString *)value
+{
+    if (value.length > 0)
+        dict[key] = value;
 }
 
 @end

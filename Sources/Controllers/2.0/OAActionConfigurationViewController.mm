@@ -32,6 +32,7 @@
 #import "OATitleDescrDraggableCell.h"
 #import "OAActionAddMapStyleViewController.h"
 #import "OAActionAddMapSourceViewController.h"
+#import "OAActionAddProfileViewController.h"
 #import "OATableViewCustomFooterView.h"
 #import "OATextInputFloatingCellWithIcon.h"
 #import "OAPoiTypeSelectionViewController.h"
@@ -62,7 +63,7 @@
 #define kHeaderId @"TableViewSectionHeader"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
-@interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate>
+@interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -161,21 +162,6 @@
 - (void)applyLocalization
 {
     _titleView.text = _action.getName;
-}
-
--(UIView *) getTopView
-{
-    return _navBarView;
-}
-
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
-
-- (UIView *)getBottomView
-{
-    return _buttonBackgroundView;
 }
 
 -(CGFloat) getToolBarHeight
@@ -412,6 +398,14 @@
     OAActionAddMapSourceViewController *mapSourceScreen = [[OAActionAddMapSourceViewController alloc] initWithNames:arr type:EOAMapSourceTypePrimary];
     mapSourceScreen.delegate = self;
     [self.navigationController pushViewController:mapSourceScreen animated:YES];
+}
+
+- (void) addProfile
+{
+    NSArray *arr = [_action getParams][@"stringKeys"] ? [NSMutableArray arrayWithArray:(NSArray *)[_action getParams][@"stringKeys"]] : @[];
+    OAActionAddProfileViewController *profilesScreen = [[OAActionAddProfileViewController alloc] initWithNames:arr];
+    profilesScreen.delegate = self;
+    [self.navigationController pushViewController:profilesScreen animated:YES];
 }
 
 - (void) addTagValue:(id)sender
@@ -658,7 +652,13 @@
         {
             [cell.textView setText:item[@"title"]];
             cell.descView.hidden = YES;
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            if (item[@"iconColor"])
+            {
+                cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.iconView.tintColor = UIColorFromRGB([item[@"iconColor"] intValue]);
+            }
+            else
+                [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
             if (cell.iconView.subviews.count > 0)
                 [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             cell.delegate = self;
@@ -1092,6 +1092,32 @@
                               @"img" : @"ic_custom_map_style"
                               }];
         [titles addObject:item.lastObject];
+    }
+    [newItems addObject:button];
+    [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
+    [self renameAction:titles oldTitle:[_action getTitle:_action.getParams[_action.getListKey]]];
+    [_tableView reloadData];
+}
+
+#pragma mark - OAAddProfileDelegate
+
+- (void)onProfileSelected:(NSArray *)items
+{
+    NSString *key = _data.allKeys.lastObject;
+    NSArray *rows = _data[key];
+    NSDictionary *button = rows.lastObject;
+    NSMutableArray *newItems = [NSMutableArray new];
+    NSMutableArray *titles = [NSMutableArray new];
+    for (NSDictionary *item in items)
+    {
+        [newItems addObject:@{
+                              @"type" : @"OATitleDescrDraggableCell",
+                              @"title" : item[@"name"],
+                              @"stringKey" : item[@"stringKey"],
+                              @"img" : item[@"img"],
+                              @"iconColor" : item[@"iconColor"]
+                              }];
+        [titles addObject:item[@"name"]];
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];

@@ -135,16 +135,6 @@
     }
 }
 
--(UIView *) getTopView
-{
-    return _navBarView;
-}
-
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
-
 - (IBAction)backPressed:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];

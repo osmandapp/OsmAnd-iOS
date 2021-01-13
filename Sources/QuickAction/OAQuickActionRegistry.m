@@ -37,8 +37,11 @@
 #import "OANavResumePauseAction.h"
 #import "OAMapOverlayAction.h"
 #import "OAMapUnderlayAction.h"
+#import "OASwitchProfileAction.h"
+#import "OANavRemoveNextDestination.h"
 #import "OAUnsupportedAction.h"
-//#import "OASwitchProfileAction.h"
+#import "OAContourLinesAction.h"
+#import "OATerrainAction.h"
 
 #define kType @"type"
 #define kName @"name"
@@ -136,14 +139,17 @@ static OAQuickActionType *TYPE_NAVIGATION;
     [quickActionTypes addObject:OANavVoiceAction.TYPE];
     [quickActionTypes addObject:OANavDirectionsFromAction.TYPE];
     [quickActionTypes addObject:OANavAddDestinationAction.TYPE];
+    [quickActionTypes addObject:OANavRemoveNextDestination.TYPE];
     [quickActionTypes addObject:OANavAddFirstIntermediateAction.TYPE];
     [quickActionTypes addObject:OANavReplaceDestinationAction.TYPE];
     [quickActionTypes addObject:OANavAutoZoomMapAction.TYPE];
     [quickActionTypes addObject:OANavStartStopAction.TYPE];
     [quickActionTypes addObject:OANavResumePauseAction.TYPE];
-    //        [quickActionTypes addObject:OASwitchProfileAction.TYPE];
-
+    [quickActionTypes addObject:OASwitchProfileAction.TYPE];
     [OAPlugin registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
+    if ([OAIAPHelper.sharedInstance.srtm isActive])
+        [quickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
+    
     NSMutableDictionary<NSNumber *, OAQuickActionType *> *quickActionTypesInt = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, OAQuickActionType *> *quickActionTypesStr = [NSMutableDictionary new];
     for (OAQuickActionType *qt in quickActionTypes)
@@ -157,6 +163,8 @@ static OAQuickActionType *TYPE_NAVIGATION;
     
     NSMutableArray<OAQuickActionType *> *disabledQuickActionTypes = [NSMutableArray new];
     [OAPlugin registerQuickActionTypesPlugins:disabledQuickActionTypes disabled:YES];
+    if (![OAIAPHelper.sharedInstance.srtm isActive])
+        [disabledQuickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
     NSMutableDictionary<NSNumber *, OAQuickActionType *> *disabledQuickActionTypesInt = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, OAQuickActionType *> *disabledQuickActionTypesStr = [NSMutableDictionary new];
     for (OAQuickActionType *qt in disabledQuickActionTypes)

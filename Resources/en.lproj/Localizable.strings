@@ -572,6 +572,7 @@
 "import_from_docs" = "Import from documents";
 "import_from_files" = "Import from files";
 "gpx_no_tracks" = "There are no trips";
+"gpx_export_failed" = "Could not save created route";
 
 "gpx_remove" = "Remove trip?";
 "gpx_stat" = "Statistics";
@@ -874,6 +875,7 @@
 "selected_seg_recalc_descr" = "Only the selected segment will be recalculated using the selected profile";
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
+"reverse_route" = "Reverse route";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

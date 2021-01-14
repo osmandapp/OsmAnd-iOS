@@ -6722,8 +6722,8 @@
 		32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@3x.png"; path = "Resources/Icons/ic_custom_manage_profiles@3x.png"; sourceTree = "<group>"; };
 		32BD81C6259CBFA000A54BB5 /* OAProfileSelectionBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAProfileSelectionBottomSheetViewController.h; sourceTree = "<group>"; };
 		32BD81C7259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAProfileSelectionBottomSheetViewController.m; sourceTree = "<group>"; };
-		32D7D4C525AF30C900868E80 /* OARangeSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARangeSlider.h; sourceTree = "<group>"; };
-		32D7D4C625AF313B00868E80 /* OARangeSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARangeSlider.m; sourceTree = "<group>"; };
+		32D7D4C525AF30C900868E80 /* OARangeSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OARangeSlider.h; path = ../OARangeSlider.h; sourceTree = "<group>"; };
+		32D7D4C625AF313B00868E80 /* OARangeSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OARangeSlider.m; path = ../OARangeSlider.m; sourceTree = "<group>"; };
 		32FE27F125763F4F00CBDDFA /* OAAppVersionDependentConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAppVersionDependentConstants.m; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B52507803500266047 /* ic_custom_logo_wikidata.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_logo_wikidata.png; path = Resources/Icons/ic_custom_logo_wikidata.png; sourceTree = "<group>"; };
@@ -14717,6 +14717,8 @@
 		BB2545B31798161500E80B58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				32D7D4C525AF30C900868E80 /* OARangeSlider.h */,
+				32D7D4C625AF313B00868E80 /* OARangeSlider.m */,
 				3A8314841A07EB4C00473C38 /* OATargetPointView.h */,
 				3A8314851A07EB4C00473C38 /* OATargetPointView.mm */,
 				84BEEE4F1DFF021000750848 /* OATargetMultiView.h */,
@@ -15283,8 +15285,6 @@
 				3253CEEE2571B1A5008DED25 /* OAAppVersionDependentConstants.h */,
 				32FE27F125763F4F00CBDDFA /* OAAppVersionDependentConstants.m */,
 				843394721FF41F33006205A5 /* LaunchScreen.xib */,
-				32D7D4C525AF30C900868E80 /* OARangeSlider.h */,
-				32D7D4C625AF313B00868E80 /* OARangeSlider.m */,
 			);
 			name = Resources;
 			sourceTree = "<group>";

@@ -28,14 +28,13 @@
 
 - (void) disableHostVCScroll
 {
-    if ([self.delegate isKindOfClass:UIViewController.class])
+    if (self.delegate.presentationController)
     {
-        UIViewController *hostVC = (UIViewController *)self.delegate;
-        NSArray<__kindof UIGestureRecognizer *> *recognizers = hostVC.presentationController.presentedView.gestureRecognizers;
+        NSArray<__kindof UIGestureRecognizer *> *hostVCRecognizers = self.delegate.presentationController.presentedView.gestureRecognizers;
         
-        for (int i = 0; i < recognizers.count; i++)
+        for (int i = 0; i < hostVCRecognizers.count; i++)
         {
-            UIGestureRecognizer *recognizer = recognizers[i];
+            UIGestureRecognizer *recognizer = hostVCRecognizers[i];
             [_hostVCGestureRecognizersStateBackup addObject:[NSNumber numberWithBool:recognizer.isEnabled]];
             [recognizer setEnabled:NO];
         }
@@ -44,13 +43,12 @@
 
 - (void) restoreHostVCScroll
 {
-    if ([self.delegate isKindOfClass:UIViewController.class])
+    if (self.delegate.presentationController)
     {
-        UIViewController *hostVC = (UIViewController *)self.delegate;
-        NSArray<__kindof UIGestureRecognizer *> *recognizers = hostVC.presentationController.presentedView.gestureRecognizers;
-        for (int i = 0; i < recognizers.count; i++)
+        NSArray<__kindof UIGestureRecognizer *> *hostVCRecognizers = self.delegate.presentationController.presentedView.gestureRecognizers;
+        for (int i = 0; i < hostVCRecognizers.count; i++)
         {
-            UIGestureRecognizer *recognizer = recognizers[i];
+            UIGestureRecognizer *recognizer = hostVCRecognizers[i];
             [recognizer setEnabled:_hostVCGestureRecognizersStateBackup[i]];
         }
     }

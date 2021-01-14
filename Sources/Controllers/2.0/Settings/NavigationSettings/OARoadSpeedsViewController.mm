@@ -18,13 +18,14 @@
 #import "OATimeTableViewCell.h"
 #import "OASliderWithValuesCell.h"
 #import "OARangeSliderCell.h"
+#import "OARangeSliderDelegate.h"
 
 #define kCellTypeSpeed @"time_cell"
 #define kCellTypeSlider @"OASliderWithValuesCell"
 #define kSidePadding 16
 #define kTopPadding 16
 
-@interface OARoadSpeedsViewController() <UITableViewDelegate, UITableViewDataSource, TTRangeSliderDelegate>
+@interface OARoadSpeedsViewController() <UITableViewDelegate, UITableViewDataSource, OARangeSliderDelegate>
 
 @end
 
@@ -265,7 +266,7 @@
     return 17.0;
 }
 
-#pragma mark TTRangeSliderViewDelegate
+#pragma mark OARangeSliderDelegate
 
 - (void) rangeSlider:(TTRangeSlider *)sender didChangeSelectedMinimumValue:(float)selectedMinimum andMaximumValue:(float)selectedMaximum
 {

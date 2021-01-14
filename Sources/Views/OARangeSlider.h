@@ -7,8 +7,11 @@
 //
 
 #import "TTRangeSlider.h"
+#import "OARangeSliderDelegate.h"
 
 
 @interface OARangeSlider : TTRangeSlider
+
+@property (nonatomic, weak) IBOutlet id<OARangeSliderDelegate> delegate;
 
 @end

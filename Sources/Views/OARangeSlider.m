@@ -29,7 +29,6 @@
 - (void) disableHostVCScroll
 {
     NSArray<__kindof UIGestureRecognizer *> *hostVCRecognizers = [self.delegate getAllGestureRecognizers];
-    
     for (int i = 0; i < hostVCRecognizers.count; i++)
     {
         UIGestureRecognizer *recognizer = hostVCRecognizers[i];

@@ -190,6 +190,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return NO;
 }
 
+- (BOOL) showStatusBarWhenFullScreen
+{
+    return NO;
+}
+
 - (CGFloat)initialMenuHeight
 {
     return _hudMode == EOAHudModeRoutePlanning ? 62. + self.toolBarView.frame.size.height : _infoView.getViewHeight;

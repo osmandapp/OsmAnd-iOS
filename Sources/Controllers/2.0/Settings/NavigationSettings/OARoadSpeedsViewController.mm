@@ -276,4 +276,9 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
+- (NSArray<__kindof UIGestureRecognizer *> *) getAllGestureRecognizers
+{
+    return self.presentationController.presentedView.gestureRecognizers;
+}
+
 @end

@@ -11,6 +11,6 @@
 
 @protocol OARangeSliderDelegate <TTRangeSliderDelegate>
 
-@property (nullable, nonatomic,readonly) UIPresentationController *presentationController API_AVAILABLE(ios(8.0));
+- (NSArray<__kindof UIGestureRecognizer *> *) getAllGestureRecognizers;
 
 @end

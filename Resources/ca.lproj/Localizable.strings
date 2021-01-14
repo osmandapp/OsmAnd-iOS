@@ -1951,3 +1951,14 @@
 "unsupported_action_title" = "Acció no admesa (%@)";
 "unsupported_action" = "Acció no admesa";
 "unsupported_items" = "Elements no admesos";
+
+"shared_string_add_profile" = "Afegeix un perfil";
+"profile_type_user_string" = "Perfil d\'usuari";
+"quick_action_remove_next_destination" = "Suprimeix la fita més propera";
+"quick_action_mapillary_hide" = "Amaga Mapillary";
+"profile_type_osmand_string" = "Perfil OsmAnd";
+"quick_action_remove_next_destination_descr" = "Esborra la propera fita de la vostra ruta. Si aquesta fos la Destinació, la navegació s\'aturaria.";
+"quick_action_mapillary_show" = "Mostra Mapillary";
+"arrived_at_destination" = "Heu arribat.";
+"quick_action_showhide_mapillary_title" = "Mostra/amaga Mapil·lary";
+"reverse_route" = "Ruta inversa";

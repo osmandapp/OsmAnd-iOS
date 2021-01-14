@@ -1948,3 +1948,15 @@
 "unsupported_action_title" = "Óstudd aðgerð (%@)";
 "unsupported_action" = "Óstudd aðgerð";
 "unsupported_items" = "Óstudd atriði";
+
+"reverse_route" = "Snúa við leið";
+"quick_action_mapillary_hide" = "Fela Mapillary";
+"quick_action_switch_profile_descr" = "Efýtt er á þennan aðgerðahnapp verður skipt á milli valinna notkunarsniða.";
+"profile_type_user_string" = "Notandasnið";
+"shared_string_add_profile" = "Bæta við sniði";
+"profile_type_osmand_string" = "OsmAnd-snið";
+"quick_action_remove_next_destination_descr" = "Eyðir næsta áfangastað leiðarinnar. Ef þetta er sjálfur áfangastaðurinn, mun leiðsögn stöðvast.";
+"arrived_at_destination" = "Þú hefur náð á áfangastað.";
+"quick_action_remove_next_destination" = "Eyða næsta markpunkti";
+"quick_action_mapillary_show" = "Sýna Mapillary";
+"quick_action_showhide_mapillary_title" = "Sýna/fela Mapillary";

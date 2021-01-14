@@ -12,6 +12,8 @@
 #import "OAGPXMutableDocument.h"
 
 #include <routeSegmentResult.h>
+#include <routeDataBundle.h>
+#include <routeDataResources.h>
 
 @implementation OARouteExporter
 {

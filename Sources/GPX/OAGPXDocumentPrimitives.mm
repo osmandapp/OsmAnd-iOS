@@ -12,6 +12,8 @@
 #import "OAPointDescription.h"
 
 #include <routeSegmentResult.h>
+#include <routeDataBundle.h>
+#include <routeDataResources.h>
 
 #define ICON_NAME_EXTENSION @"icon"
 #define DEFAULT_ICON_NAME @"special_star"

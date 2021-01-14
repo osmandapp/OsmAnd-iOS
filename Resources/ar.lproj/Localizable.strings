@@ -1949,3 +1949,15 @@
 "unsupported_action_title" = "إجراء غير مدعوم (%@)";
 "unsupported_action" = "إجراء غير مدعوم";
 "unsupported_items" = "عناصر غير مدعومة";
+
+"profile_type_osmand_string" = "ملف تعريف أوسماند";
+"quick_action_showhide_mapillary_title" = "إظهار/إخفاء مابيلاري";
+"profile_type_user_string" = "ملف تعريف المستخدم";
+"quick_action_switch_profile_descr" = "سيتم تبديل زر الإجراء التسجيل بين التشكيلات الجانبية المحددة.";
+"arrived_at_destination" = "تم الوصول.";
+"quick_action_remove_next_destination" = "حذف نقطة الوجهة التالية";
+"quick_action_mapillary_show" = "إظهار مابيلاري";
+"reverse_route" = "عكس الطريق";
+"quick_action_mapillary_hide" = "إخفاء مابيلاري";
+"quick_action_remove_next_destination_descr" = "سيتم حذف نقطة الوجهة الحالية على المسار. إذا كانت هي الوجهة الرئيسية، سوف تتوقف الملاحة.";
+"shared_string_add_profile" = "إضافة وضع";

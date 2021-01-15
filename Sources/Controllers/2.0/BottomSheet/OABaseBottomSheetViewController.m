@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    return [super initWithNibName:@"OABaseBottomSheetViewController"
+    return [super initWithNibName:nibNameOrNil == nil ? @"OABaseBottomSheetViewController" : nibNameOrNil
                            bundle:nil];
 }
 

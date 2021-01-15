@@ -45,6 +45,7 @@
 #import "OAChangeRouteModeCommand.h"
 #import "OATargetPointsHelper.h"
 #import "OASaveGpxRouteAsyncTask.h"
+#import "OASaveTrackViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -515,6 +516,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_settings showGpx:@[savedGpxFile.fileName]];
 }
 
+- (void) openSaveAsNewTrackMenu
+{
+//    if (_editingContext.getPointsCount > 0)
+//    {
+        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithParams:[self getSuggestedFileName] showOnMap:YES simplifiedTrack:YES];
+        [self presentViewController:saveTrackViewController animated:YES completion:nil];
+//    }
+}
+
 #pragma mark - OADraggableViewActions
 
 - (void)onViewHeightChanged:(CGFloat)height
@@ -898,7 +908,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) saveAsNewTrackSelected
 {
-//    [self openSaveAsNewTrackMenu];
+    [self openSaveAsNewTrackMenu];
 }
 
 - (void) addToTrackSelected

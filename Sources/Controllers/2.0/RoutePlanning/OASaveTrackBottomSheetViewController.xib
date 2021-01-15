@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OASaveTrackBottomSheetViewController">
+            <connections>
+                <outlet property="bottomSheetView" destination="rWn-tG-qWp" id="Fg8-hh-sWV"/>
+                <outlet property="closeBottomSheetButton" destination="cis-J3-QG7" id="AXV-dQ-KLC"/>
+                <outlet property="contentContainer" destination="EoM-fT-Da1" id="x0m-90-cje"/>
+                <outlet property="createNewRouteButton" destination="X2t-V9-sYK" id="YKb-Vx-kof"/>
+                <outlet property="iconImageView" destination="Dm1-xR-WYJ" id="v53-QK-mz2"/>
+                <outlet property="openSavedTrackButton" destination="sUs-nr-9q7" id="BC7-V3-Yj0"/>
+                <outlet property="shareButton" destination="bqf-eJ-bn3" id="egz-iG-beK"/>
+                <outlet property="statusBarBackgroundView" destination="fIg-qS-g80" id="ni1-Ba-aUn"/>
+                <outlet property="titleLabel" destination="NV7-7k-V4d" id="6KH-1N-0lT"/>
+                <outlet property="view" destination="cDK-WF-ddq" id="hBk-2p-6Tx"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="cDK-WF-ddq">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" id="rWn-tG-qWp">
+                    <rect key="frame" x="0.0" y="453" width="414" height="443"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" id="fIg-qS-g80">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
+                        <view contentMode="scaleToFill" id="EoM-fT-Da1">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="542"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cis-J3-QG7">
+                                    <rect key="frame" x="16" y="342.5" width="382" height="42"/>
+                                    <color key="backgroundColor" red="0.87843137250000003" green="0.86666666670000003" blue="0.89019607840000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="42" id="Hae-0e-QGN"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                    <state key="normal" title="Close">
+                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="closeBottomSheetButtonPressed:" destination="-1" eventType="touchUpInside" id="EDY-Fw-iDD"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bqf-eJ-bn3">
+                                    <rect key="frame" x="16" y="268.5" width="382" height="42"/>
+                                    <color key="backgroundColor" red="0.87843137250000003" green="0.86666666670000003" blue="0.89019607840000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="42" id="xph-IN-1TE"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                    <state key="normal" title="Share">
+                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="shareButtonPressed:" destination="-1" eventType="touchUpInside" id="uid-Wm-Vcf"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X2t-V9-sYK">
+                                    <rect key="frame" x="16" y="210.5" width="382" height="42"/>
+                                    <color key="backgroundColor" red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="42" id="zoU-pz-E52"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                    <state key="normal" title="Create a new route">
+                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="createNewTrackButtonPressed:" destination="-1" eventType="touchUpInside" id="X7Y-yg-e7v"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sUs-nr-9q7">
+                                    <rect key="frame" x="16" y="152.5" width="382" height="42"/>
+                                    <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="42" id="hTu-zI-xJq"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                    <state key="normal" title="Open saved track">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="openSavedTrackPressed:" destination="-1" eventType="touchUpInside" id="fX2-yV-Lwe"/>
+                                    </connections>
+                                </button>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_save_complete.png" translatesAutoresizingMaskIntoConstraints="NO" id="Dm1-xR-WYJ">
+                                    <rect key="frame" x="177" y="24" width="60" height="60"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="60" id="4da-H2-eTN"/>
+                                        <constraint firstAttribute="height" constant="60" id="z3U-IB-Mrw"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track is saved!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NV7-7k-V4d">
+                                    <rect key="frame" x="150.5" y="100" width="113" height="20.5"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="sUs-nr-9q7" secondAttribute="trailing" constant="16" id="44r-aH-BhC"/>
+                                <constraint firstAttribute="trailing" secondItem="bqf-eJ-bn3" secondAttribute="trailing" constant="16" id="6vE-cv-2Yj"/>
+                                <constraint firstItem="NV7-7k-V4d" firstAttribute="top" secondItem="Dm1-xR-WYJ" secondAttribute="bottom" constant="16" id="Cv3-bm-YVq"/>
+                                <constraint firstItem="cis-J3-QG7" firstAttribute="top" secondItem="bqf-eJ-bn3" secondAttribute="bottom" constant="32" id="SwL-r3-TEV"/>
+                                <constraint firstAttribute="trailing" secondItem="X2t-V9-sYK" secondAttribute="trailing" constant="16" id="XES-Ak-iYf"/>
+                                <constraint firstItem="cis-J3-QG7" firstAttribute="leading" secondItem="EoM-fT-Da1" secondAttribute="leading" constant="16" id="XJ3-0r-wbb"/>
+                                <constraint firstAttribute="trailing" secondItem="cis-J3-QG7" secondAttribute="trailing" constant="16" id="ZCX-Yr-tok"/>
+                                <constraint firstItem="bqf-eJ-bn3" firstAttribute="top" secondItem="X2t-V9-sYK" secondAttribute="bottom" constant="16" id="aQF-1Y-fro"/>
+                                <constraint firstItem="X2t-V9-sYK" firstAttribute="top" secondItem="sUs-nr-9q7" secondAttribute="bottom" constant="16" id="biG-Rc-u5a"/>
+                                <constraint firstItem="Dm1-xR-WYJ" firstAttribute="centerX" secondItem="EoM-fT-Da1" secondAttribute="centerX" id="dJ4-lL-hKJ"/>
+                                <constraint firstItem="NV7-7k-V4d" firstAttribute="centerX" secondItem="EoM-fT-Da1" secondAttribute="centerX" id="dtk-Rf-wwl"/>
+                                <constraint firstItem="sUs-nr-9q7" firstAttribute="leading" secondItem="EoM-fT-Da1" secondAttribute="leading" constant="16" id="eIb-4T-O3r"/>
+                                <constraint firstItem="bqf-eJ-bn3" firstAttribute="leading" secondItem="EoM-fT-Da1" secondAttribute="leading" constant="16" id="qvQ-vG-BtN"/>
+                                <constraint firstItem="sUs-nr-9q7" firstAttribute="top" secondItem="NV7-7k-V4d" secondAttribute="bottom" constant="32" id="sBf-7Z-MGT"/>
+                                <constraint firstItem="Dm1-xR-WYJ" firstAttribute="top" secondItem="EoM-fT-Da1" secondAttribute="top" constant="24" id="vQ5-h9-Yd9"/>
+                                <constraint firstItem="X2t-V9-sYK" firstAttribute="leading" secondItem="EoM-fT-Da1" secondAttribute="leading" constant="16" id="zuB-1T-M75"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="BCp-Mb-MhH"/>
+                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="xAH-Nt-hxz"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <point key="canvasLocation" x="137.68115942028987" y="83.705357142857139"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_custom_save_complete.png" width="30" height="30"/>
+    </resources>
+</document>

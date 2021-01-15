@@ -1492,4 +1492,26 @@ static const double d180PI = 180.0 / M_PI_2;
     return descriptionAttributedString;
 }
 
++ (NSAttributedString *) getColoredString:(NSString *)wholeString highlightedString:(NSString *)hs highlightColor:(UIColor *)highlightColor fontSize:(CGFloat)fontSize centered:(BOOL)centered
+{
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:wholeString
+                                                                                                    attributes:@{NSParagraphStyleAttributeName : style}];
+    NSString *highlightedString = hs;
+    NSString *mainString = wholeString;
+    NSRange highlightedRange = [wholeString rangeOfString:highlightedString];
+    NSRange mainRange = [wholeString rangeOfString:mainString];
+    [attributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
+    [attributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize > 0 ? fontSize : 15] range:highlightedRange];
+    if (highlightColor)
+        [attributedString addAttribute: NSForegroundColorAttributeName value:highlightColor range:highlightedRange];
+    if (centered)
+    {
+        NSMutableParagraphStyle *paragraphStyle = NSMutableParagraphStyle.new;
+        paragraphStyle.alignment = NSTextAlignmentCenter;
+        [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attributedString.length)];
+    }
+    return attributedString;
+}
+
 @end

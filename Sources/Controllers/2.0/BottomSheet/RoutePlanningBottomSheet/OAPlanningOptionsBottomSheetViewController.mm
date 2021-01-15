@@ -276,6 +276,7 @@
         }
         else if ([key isEqualToString:@"save_new_track"])
         {
+            [self dismissViewControllerAnimated:NO completion:nil];
             [self.delegate saveAsNewTrackSelected];
         }
         else if ([key isEqualToString:@"add_to_track"])

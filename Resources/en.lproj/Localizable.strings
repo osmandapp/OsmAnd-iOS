@@ -876,6 +876,9 @@
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Reverse route";
+"plan_route_create_new_route" = "Create new route";
+"plan_route_open_existing_track" = "Open existing track";
+"plan_route_last_modified" = "Last modified";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

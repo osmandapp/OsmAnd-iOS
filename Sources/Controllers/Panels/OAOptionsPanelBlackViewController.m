@@ -17,6 +17,7 @@
 #import "OAColors.h"
 
 #import "OARoutePlanningHudViewController.h"
+#import "OARoutePlanningMenuBottomSheetViewController.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -301,9 +302,9 @@
 
 - (IBAction)planRouteButtonClicked:(id)sender
 {
-    // TODO: for test only, change later!
     [self.sidePanelController toggleLeftPanel:self];
-    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
+    OARoutePlanningMenuBottomSheetViewController *bottomSheet = [[OARoutePlanningMenuBottomSheetViewController alloc] init];
+    [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
 }
 
 - (IBAction) configureScreenButtonClicked:(id)sender

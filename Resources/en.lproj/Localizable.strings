@@ -1672,6 +1672,8 @@
 "poi_opening_hours" = "Opening hours";
 "poi_select_category" = "Select category";
 "poi_select_type" = "Select type";
+"shared_a_z" = "A - Z";
+"shared_z_a" = "Z - A";
 
 "city_type_suburb" = "Suburb";
 "city_type_hamlet" = "Hamlet";

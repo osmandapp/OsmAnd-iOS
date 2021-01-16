@@ -9,6 +9,7 @@
 #import "OARoutePlanningMenuBottomSheetViewController.h"
 #import "OARootViewController.h"
 #import "OARoutePlanningHudViewController.h"
+#import "OAOpenExistingTrackViewController.h"
 #import "OATitleIconRoundCell.h"
 #import "OAGPXRouteRoundCell.h"
 #import "OAHeaderRoundCell.h"
@@ -16,13 +17,14 @@
 #import "OAGPXRouter.h"
 #import "OAGPXRouteDocument.h"
 #import "OsmAndApp.h"
+#import "OAUtilities.h"
 
 #import "Localization.h"
 #import "OAColors.h"
 
 #define kIconTitleIconRoundCell @"OATitleIconRoundCell"
-#define kIconGPXRouteRoundCell @"OAGPXRouteRoundCell"
-#define kIconHeaderRoundCell @"OAHeaderRoundCell"
+#define kGPXRouteRoundCell @"OAGPXRouteRoundCell"
+#define kHeaderRoundCell @"OAHeaderRoundCell"
 
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
@@ -93,13 +95,17 @@
         }];
 
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    NSArray *gpxList = [NSMutableArray arrayWithArray:db.gpxList];
+    NSArray *gpxList = [db.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
+        NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.gpxFileName];
+        NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFileName];
+        return [time2 compare:time1];
+    }];
 
     [existingTracksSection addObject:@{
-            @"type" : kIconHeaderRoundCell,
-            @"title" : OALocalizedString(@"plan_route_last_modified"),
-            @"key" : @"header"
-        }];
+        @"type" : kHeaderRoundCell,
+        @"title" : OALocalizedString(@"plan_route_last_modified"),
+        @"key" : @"header"
+    }];
 
     for (OAGPX *gpx in gpxList)
     {
@@ -109,7 +115,7 @@
         NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:duration shortFormat:NO];
         
         [existingTracksSection addObject:@{
-                @"type" : kIconGPXRouteRoundCell,
+                @"type" : kGPXRouteRoundCell,
                 @"track" : gpx,
                 @"title" : [gpx getNiceTitle],
                 @"distance" : [NSString stringWithFormat:@"%f.", distance],
@@ -163,15 +169,15 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kIconHeaderRoundCell])
+    else if ([type isEqualToString:kHeaderRoundCell])
     {
-        static NSString* const identifierCell = kIconHeaderRoundCell;
+        static NSString* const identifierCell = kHeaderRoundCell;
         OAHeaderRoundCell* cell = nil;
         
         cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconHeaderRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kHeaderRoundCell owner:self options:nil];
             cell = (OAHeaderRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -182,15 +188,15 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:kIconGPXRouteRoundCell])
+    else if ([type isEqualToString:kGPXRouteRoundCell])
     {
-        static NSString* const identifierCell = kIconGPXRouteRoundCell;
+        static NSString* const identifierCell = kGPXRouteRoundCell;
         OAGPXRouteRoundCell* cell = nil;
         
         cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kIconGPXRouteRoundCell owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXRouteRoundCell owner:self options:nil];
             cell = (OAGPXRouteRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -206,7 +212,7 @@
         }
         return cell;
     }
-    return [[UITableViewCell alloc] init];
+    return nil;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -233,7 +239,8 @@
     }
     else if ([key isEqualToString:@"open_track"])
     {
-        [self dismissViewControllerAnimated:NO completion:nil];
+        OAOpenExistingTrackViewController *openExistingTrackViewController = [[OAOpenExistingTrackViewController alloc] init];
+        [self presentViewController:openExistingTrackViewController animated:YES completion:nil];
         return;
     }
     else if ([key isEqualToString:@"gpx_route"])

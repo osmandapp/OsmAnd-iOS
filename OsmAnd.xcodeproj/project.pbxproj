@@ -451,6 +451,8 @@
 		32BD81B1259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */; };
 		32BD81C8259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD81C7259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m */; };
 		32BD81C9259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD81C7259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m */; };
+		32D7D4C725AF313B00868E80 /* OARangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D7D4C625AF313B00868E80 /* OARangeSlider.m */; };
+		32D7D4C825AF313B00868E80 /* OARangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D7D4C625AF313B00868E80 /* OARangeSlider.m */; };
 		32FE27F225763F5000CBDDFA /* OAAppVersionDependentConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependentConstants.m */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BB2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
@@ -6597,7 +6599,7 @@
 		15A3B4F12524785F00331177 /* OAExitInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExitInfo.h; sourceTree = "<group>"; };
 		15AAEE0B2563D263006EF9F0 /* OARoadSpeedsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoadSpeedsViewController.h; sourceTree = "<group>"; };
 		15AAEE0C2563D286006EF9F0 /* OARoadSpeedsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoadSpeedsViewController.mm; sourceTree = "<group>"; };
-		15AAEE162563FBFA006EF9F0 /* OARangeSliderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARangeSliderCell.xib; sourceTree = "<group>"; };
+		15AAEE162563FBFA006EF9F0 /* OARangeSliderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OARangeSliderCell.xib; path = Resources/Controllers/Cells/OARangeSliderCell.xib; sourceTree = "<group>"; };
 		15AAEE1A2563FDC8006EF9F0 /* OARangeSliderCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARangeSliderCell.h; sourceTree = "<group>"; };
 		15AAEE1B2563FDD6006EF9F0 /* OARangeSliderCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARangeSliderCell.m; sourceTree = "<group>"; };
 		15B4E48924AB3F8400119365 /* ic_custom_minimal_distance.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_minimal_distance.png; path = Resources/Icons/ic_custom_minimal_distance.png; sourceTree = "<group>"; };
@@ -6718,6 +6720,8 @@
 		32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@3x.png"; path = "Resources/Icons/ic_custom_manage_profiles@3x.png"; sourceTree = "<group>"; };
 		32BD81C6259CBFA000A54BB5 /* OAProfileSelectionBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAProfileSelectionBottomSheetViewController.h; sourceTree = "<group>"; };
 		32BD81C7259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAProfileSelectionBottomSheetViewController.m; sourceTree = "<group>"; };
+		32D7D4C525AF30C900868E80 /* OARangeSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OARangeSlider.h; path = Views/OARangeSlider.h; sourceTree = "<group>"; };
+		32D7D4C625AF313B00868E80 /* OARangeSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OARangeSlider.m; path = Views/OARangeSlider.m; sourceTree = "<group>"; };
 		32FE27F125763F4F00CBDDFA /* OAAppVersionDependentConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAppVersionDependentConstants.m; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B52507803500266047 /* ic_custom_logo_wikidata.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_logo_wikidata.png; path = Resources/Icons/ic_custom_logo_wikidata.png; sourceTree = "<group>"; };
@@ -14761,6 +14765,8 @@
 				DA2DC41F23B2244400F40D1D /* OARouteInfoLegendItemView.h */,
 				DA2DC42023B2244400F40D1D /* OARouteInfoLegendItemView.m */,
 				DAADA2E623B5EF1E00A5E414 /* OARouteInfoLegendItemView.xib */,
+				32D7D4C525AF30C900868E80 /* OARangeSlider.h */,
+				32D7D4C625AF313B00868E80 /* OARangeSlider.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -21801,6 +21807,7 @@
 				847A1D4E1DF94E9B003C1246 /* OAMapMarker.mm in Sources */,
 				847A1D4F1DF94E9B003C1246 /* OADestinationsHelper.mm in Sources */,
 				847A1D501DF94E9B003C1246 /* PXAlertView.m in Sources */,
+				32D7D4C825AF313B00868E80 /* OARangeSlider.m in Sources */,
 				1565BA38256BD2FA003C6278 /* OASettingsHelper.mm in Sources */,
 				847A1D511DF94E9B003C1246 /* OAButton.m in Sources */,
 				DA6D076D25515FFB004FE017 /* OAMovePointCommand.mm in Sources */,
@@ -22395,6 +22402,7 @@
 				DA2FA7042302F707006DB2E5 /* OANavAutoZoomMapAction.m in Sources */,
 				84BFC2471A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm in Sources */,
 				DA2558BB24ADE40F0081D155 /* OAAutoZoomMapViewController.m in Sources */,
+				32D7D4C725AF313B00868E80 /* OARangeSlider.m in Sources */,
 				DA261E3722F972EC00D0D441 /* OAQuickAction.m in Sources */,
 				8489EEC71CAA623E00BC0C38 /* OAWebClient.mm in Sources */,
 				DA68B40B233B92D500F5ACCC /* OAAddDestinationBottomSheetViewController.mm in Sources */,

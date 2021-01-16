@@ -18,7 +18,7 @@
 #include <OsmAndCore/GpxDocument.h>
 
 @class OAGPXTrackAnalysis;
-@class OASplitMetric;
+@class OASplitMetric, QuadRect;
 
 @interface OAGPXDocument : NSObject
 
@@ -86,7 +86,9 @@
 - (UIColor *) getColor:(NSArray<OAGpxExtension *> *)extensions;
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
 
-- (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly; 
+- (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
+
+- (QuadRect *)getRect;
 
 @end
 

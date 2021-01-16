@@ -39,6 +39,7 @@ struct RouteDataBundle;
 @property (nonatomic) NSString *names;
 
 + (OARouteSegment *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle;
+- (std::shared_ptr<RouteDataBundle>) toStringBundle;
 
 - (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
 
@@ -52,6 +53,7 @@ struct RouteDataBundle;
 @property (nonatomic) NSString *value;
 
 + (OARouteType *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle;
+- (std::shared_ptr<RouteDataBundle>) toStringBundle;
 
 - (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
 

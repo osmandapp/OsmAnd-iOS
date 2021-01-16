@@ -69,6 +69,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (OAGpxTrkPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad;
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt;
 - (void) addPoints:(NSArray<OAGpxTrkPt *> *)points;
+- (void) addPoints;
 
 - (NSArray<OAGpxTrkSeg *> *) getBeforeTrkSegmentLine;
 - (NSArray<OAGpxTrkSeg *> *) getAfterTrkSegmentLine;
@@ -104,5 +105,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 - (OAGPXMutableDocument *) exportGpx:(NSString *)gpxName;
 - (NSArray<NSArray<OAGpxRtePt *> *> *) getRoutePoints;
+
+- (void) scheduleRouteCalculateIfNotEmpty;
 
 @end

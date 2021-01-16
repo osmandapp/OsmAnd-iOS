@@ -45,6 +45,7 @@
 #import "OAChangeRouteModeCommand.h"
 #import "OATargetPointsHelper.h"
 #import "OASaveGpxRouteAsyncTask.h"
+#import "OASelectedGPXHelper.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -114,6 +115,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAInfoBottomView *_infoView;
     
     int _modes;
+    
+    NSString *_fileName;
 }
 
 - (instancetype) init
@@ -122,19 +125,37 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                            bundle:nil];
     if (self)
     {
-        _app = OsmAndApp.instance;
-        _settings = [OAAppSettings sharedManager];
-        _mapPanel = OARootViewController.instance.mapPanel;
-        _layer = _mapPanel.mapViewController.mapLayers.routePlanningLayer;
-        // TODO: port later public void openPlanRoute()
+        [self commonInit];
         _editingContext = [[OAMeasurementEditingContext alloc] init];
         _editingContext.progressDelegate = self;
-        
         _layer.editingCtx = _editingContext;
-        
-        _modes = 0x0;
     }
     return self;
+}
+
+- (instancetype) initWithFileName:(NSString *)fileName
+{
+    self = [super initWithNibName:@"OARoutePlanningHudViewController"
+                           bundle:nil];
+    if (self)
+    {
+        [self commonInit];
+        _editingContext = [[OAMeasurementEditingContext alloc] init];
+        _editingContext.progressDelegate = self;
+        _layer.editingCtx = _editingContext;
+        
+        _fileName = fileName;
+    }
+    return self;
+}
+
+- (void) commonInit
+{
+    _app = OsmAndApp.instance;
+    _settings = [OAAppSettings sharedManager];
+    _mapPanel = OARootViewController.instance.mapPanel;
+    _layer = _mapPanel.mapViewController.mapLayers.routePlanningLayer;
+    _modes = 0x0;
 }
 
 - (void)viewDidLoad
@@ -183,6 +204,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     self.tableView.userInteractionEnabled = YES;
     [self.view bringSubviewToFront:self.tableView];
+    
+    if (_fileName)
+        [self addNewGpxData:[self getGpxFile:_fileName]];
+//    else if (editingCtx.isApproximationNeeded() && isFollowTrackMode())
+//        enterApproximationMode(mapActivity);
 }
 
 - (BOOL)supportsFullScreen
@@ -307,6 +333,77 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_layer exitMovingMode];
     [_layer updateLayer];
     _hudMode = EOAHudModeRoutePlanning;
+}
+
+- (OAGPXMutableDocument *) getGpxFile:(NSString *)gpxFileName
+{
+    OAGPXMutableDocument *gpxFile = nil;
+    OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
+    const auto selectedFileConst = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName)]);
+    const auto selectedFile = std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFileConst);
+    if (selectedFile != nullptr)
+        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxDocument:selectedFile];
+    else
+        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpxFileName]];
+    
+    return gpxFile;
+}
+
+- (void) addNewGpxData:(OAGPXMutableDocument *)gpxFile
+{
+    OAGpxData *gpxData = [self setupGpxData:gpxFile];
+    [self initMeasurementMode:gpxData addPoints:YES];
+    if (gpxData) {
+        QuadRect *qr = gpxData.rect;
+        // TODO: cener map on gpx
+//        mapActivity.getMapView().fitRectToMap(qr.left, qr.right, qr.top, qr.bottom,
+//                                              (int) qr.width(), (int) qr.height(), 0);
+    }
+}
+
+- (OAGpxData *) setupGpxData:(OAGPXMutableDocument *)gpxFile
+{
+    OAGpxData *gpxData = nil;
+    if (gpxFile != nil)
+        gpxData = [[OAGpxData alloc] initWithFile:gpxFile];
+    _editingContext.gpxData = gpxData;
+    return gpxData;
+}
+
+- (void) initMeasurementMode:(OAGpxData *)gpxData addPoints:(BOOL)addPoints
+{
+    [_editingContext.commandManager setMeasurementLayer:_layer];
+//    [self enterMeasurementMode];
+    if (gpxData != nil && addPoints)
+    {
+        if (!self.isUndoMode)
+        {
+            NSArray<OAGpxTrkPt *> *points = gpxData.gpxFile.getRoutePoints;
+            if (points.count > 0)
+            {
+                OAApplicationMode *snapToRoadAppMode = [OAApplicationMode valueOfStringKey:points.lastObject.getProfileType def:nil];
+                if (snapToRoadAppMode)
+                    [self setAppMode:snapToRoadAppMode];
+            }
+        }
+        [self collectPoints];
+    }
+    [self setupModeButton];
+    [self setMode:UNDO_MODE on:NO];
+}
+
+- (void) setAppMode:(OAApplicationMode *)appMode
+{
+    _editingContext.appMode = appMode;
+    [_editingContext scheduleRouteCalculateIfNotEmpty];
+    [self setupModeButton];
+}
+
+- (void) collectPoints
+{
+    if (!self.isUndoMode)
+        [_editingContext addPoints];
+    [self updateDistancePointsText];
 }
 
 - (IBAction)closePressed:(id)sender

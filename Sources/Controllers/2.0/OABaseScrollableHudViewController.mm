@@ -136,7 +136,7 @@
     }
     
     BOOL isFullScreen = _currentState == EOADraggableMenuStateFullScreen;
-    _statusBarBackgroundView.frame = isFullScreen ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
+    _statusBarBackgroundView.frame = isFullScreen && [self showStatusBarWhenFullScreen] ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
     
     CGRect sliderFrame = _sliderView.frame;
     sliderFrame.origin.x = _scrollableView.bounds.size.width / 2 - sliderFrame.size.width / 2;
@@ -226,6 +226,11 @@
 - (BOOL) useGestureRecognizer
 {
     return YES;
+}
+
+- (BOOL) showStatusBarWhenFullScreen
+{
+    return NO;
 }
 
 - (CGFloat) getViewHeight:(EOADraggableMenuState)state
@@ -404,7 +409,7 @@
             frame.size.height = DeviceScreenHeight - newY;
             _scrollableView.frame = frame;
             
-            _statusBarBackgroundView.frame = newY == 0 ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
+            _statusBarBackgroundView.frame = newY == 0 && [self showStatusBarWhenFullScreen] ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
             
             CGRect buttonsFrame = _toolBarView.frame;
             buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;

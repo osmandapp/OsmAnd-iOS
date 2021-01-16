@@ -157,7 +157,7 @@
 		0CF5859C2440745F0081238D /* ic_custom_direction_topbar_two@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF5857F2440745D0081238D /* ic_custom_direction_topbar_two@2x.png */; };
 		0CF5859D2440745F0081238D /* ic_custom_direction_widget_two@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF585802440745E0081238D /* ic_custom_direction_widget_two@3x.png */; };
 		0CF5859E2440745F0081238D /* ic_custom_direction_widget_two@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF585802440745E0081238D /* ic_custom_direction_widget_two@3x.png */; };
-		1508C74925B22D2900637126 /* OABaseTablViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1508C74825B22D2900637126 /* OABaseTablViewController.xib */; };
+		1508C74925B22D2900637126 /* OABaseTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1508C74825B22D2900637126 /* OABaseTableViewController.xib */; };
 		151558B924A349270081BB8E /* OADeviceScreenTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 151558B824A349270081BB8E /* OADeviceScreenTableViewCell.m */; };
 		151558BC24A34C470081BB8E /* img_settings_device_bottom_light@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 151558BB24A34C470081BB8E /* img_settings_device_bottom_light@3x.png */; };
 		151558BE24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 151558BD24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png */; };
@@ -6423,7 +6423,7 @@
 		0CF5857F2440745D0081238D /* ic_custom_direction_topbar_two@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_topbar_two@2x.png"; path = "Resources/Icons/ic_custom_direction_topbar_two@2x.png"; sourceTree = SOURCE_ROOT; };
 		0CF585802440745E0081238D /* ic_custom_direction_widget_two@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_widget_two@3x.png"; path = "Resources/Icons/ic_custom_direction_widget_two@3x.png"; sourceTree = SOURCE_ROOT; };
 		1282460E521223DA0F804AE7 /* Pods-OsmAnd Maps DEV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps DEV.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV.release.xcconfig"; sourceTree = "<group>"; };
-		1508C74825B22D2900637126 /* OABaseTablViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseTablViewController.xib; sourceTree = "<group>"; };
+		1508C74825B22D2900637126 /* OABaseTableViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseTableViewController.xib; sourceTree = "<group>"; };
 		151558B824A349270081BB8E /* OADeviceScreenTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OADeviceScreenTableViewCell.m; path = Controllers/Cells/OADeviceScreenTableViewCell.m; sourceTree = "<group>"; };
 		151558BA24A349390081BB8E /* OADeviceScreenTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OADeviceScreenTableViewCell.h; path = Controllers/Cells/OADeviceScreenTableViewCell.h; sourceTree = "<group>"; };
 		151558BB24A34C470081BB8E /* img_settings_device_bottom_light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_settings_device_bottom_light@3x.png"; path = "Resources/Icons/img_settings_device_bottom_light@3x.png"; sourceTree = "<group>"; };
@@ -15803,7 +15803,7 @@
 				DA09991625A8897000F22A19 /* OARouteExporter.mm */,
 				15CD7E8025B1AD0500BCB36A /* InitialRoutePlanningBottomSheetViewController.h */,
 				15CD7E8125B1AD1500BCB36A /* InitialRoutePlanningBottomSheetViewController.mm */,
-				1508C74825B22D2900637126 /* OABaseTablViewController.xib */,
+				1508C74825B22D2900637126 /* OABaseTableViewController.xib */,
 				1543B2EF25B22E2F003E0FB1 /* OABaseTableViewController.h */,
 				1543B2F225B22E3F003E0FB1 /* OABaseTableViewController.m */,
 				1543B2F625B23107003E0FB1 /* OAOpenExistingTrackViewController.h */,
@@ -20384,7 +20384,7 @@
 				BBA3AFC8197FC4BB0039D991 /* HUD_menu_button@2x.png in Resources */,
 				8474AB971E1CD73000355F88 /* OAPOIFilterViewController.xib in Resources */,
 				84F3A8EC1B4DA93100D16EBC /* ic_trip_directions.png in Resources */,
-				1508C74925B22D2900637126 /* OABaseTablViewController.xib in Resources */,
+				1508C74925B22D2900637126 /* OABaseTableViewController.xib in Resources */,
 				84F3A8D41B4DA93100D16EBC /* ic_parking_pin_small@2x.png in Resources */,
 				84E4420D1AF8A07500F87542 /* track_new_segement.png in Resources */,
 				842431F11AEFDD1900925821 /* ic_action_rec_start.png in Resources */,

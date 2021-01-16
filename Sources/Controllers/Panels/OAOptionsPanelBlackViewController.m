@@ -17,7 +17,7 @@
 #import "OAColors.h"
 
 #import "OARoutePlanningHudViewController.h"
-#import "OARoutePlanningMenuBottomSheetViewController.h"
+#import "InitialRoutePlanningBottomSheetViewController.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -303,7 +303,7 @@
 - (IBAction)planRouteButtonClicked:(id)sender
 {
     [self.sidePanelController toggleLeftPanel:self];
-    OARoutePlanningMenuBottomSheetViewController *bottomSheet = [[OARoutePlanningMenuBottomSheetViewController alloc] init];
+    InitialRoutePlanningBottomSheetViewController *bottomSheet = [[InitialRoutePlanningBottomSheetViewController alloc] init];
     [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
 }
 

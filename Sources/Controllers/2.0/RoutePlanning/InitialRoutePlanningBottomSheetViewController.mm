@@ -1,12 +1,12 @@
 //
-//  OARoutePlanningMenuBottomSheetViewController.m
+//  InitialRoutePlanningBottomSheetViewController.m
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 15.01.2021.
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OARoutePlanningMenuBottomSheetViewController.h"
+#import "InitialRoutePlanningBottomSheetViewController.h"
 #import "OARootViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAOpenExistingTrackViewController.h"
@@ -29,11 +29,11 @@
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
 
-@interface OARoutePlanningMenuBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface InitialRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
-@implementation OARoutePlanningMenuBottomSheetViewController
+@implementation InitialRoutePlanningBottomSheetViewController
 {
     NSArray<NSArray *> *_data;
 }

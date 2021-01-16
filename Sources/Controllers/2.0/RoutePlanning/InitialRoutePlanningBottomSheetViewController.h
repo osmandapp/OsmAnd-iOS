@@ -1,5 +1,5 @@
 //
-//  OARoutePlanningMenuBottomSheetViewController.h
+//  InitialRoutePlanningBottomSheetViewController.h
 //  OsmAnd
 //
 //  Created by Anna Bibyk on 15.01.2021.
@@ -8,6 +8,6 @@
 
 #import "OABaseBottomSheetViewController.h"
 
-@interface OARoutePlanningMenuBottomSheetViewController : OABaseBottomSheetViewController
+@interface InitialRoutePlanningBottomSheetViewController : OABaseBottomSheetViewController
 
 @end

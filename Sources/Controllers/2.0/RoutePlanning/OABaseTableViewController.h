@@ -1,5 +1,5 @@
 //
-//  OABaseTableViewViewController.h
+//  OABaseTableViewController.h
 //  OsmAnd
 //
 //  Created by Anna Bibyk on 15.01.2021.
@@ -8,7 +8,7 @@
 
 #import "OACompoundViewController.h"
 
-@interface OABaseTableViewViewController : OACompoundViewController
+@interface OABaseTableViewController : OACompoundViewController
 
 @property (strong, nonatomic) IBOutlet UIView *navbarView;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;

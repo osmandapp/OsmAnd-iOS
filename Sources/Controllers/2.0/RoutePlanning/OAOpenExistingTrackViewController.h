@@ -6,8 +6,8 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseTableViewViewController.h"
+#import "OABaseTableViewController.h"
 
-@interface OAOpenExistingTrackViewController : OABaseTableViewViewController
+@interface OAOpenExistingTrackViewController : OABaseTableViewController
 
 @end

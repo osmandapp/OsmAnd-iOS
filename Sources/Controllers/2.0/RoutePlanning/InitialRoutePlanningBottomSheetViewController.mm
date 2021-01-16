@@ -29,7 +29,7 @@
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
 
-@interface InitialRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface InitialRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenExistingTrackDelegate>
 
 @end
 
@@ -129,6 +129,11 @@
     [data addObject:existingTracksSection];
     
     _data = data;
+}
+
+- (void) onRightButtonPressed
+{
+    [super onRightButtonPressed];
 }
 
 #pragma mark - UITableViewDataSource
@@ -239,7 +244,8 @@
     }
     else if ([key isEqualToString:@"open_track"])
     {
-        OAOpenExistingTrackViewController *openExistingTrackViewController = [[OAOpenExistingTrackViewController alloc] init];
+        OAOpenExistingTrackViewController *openExistingTrackViewController = [[OAOpenExistingTrackViewController alloc] initWithScreen:EOAOpenExistingTrack];
+        openExistingTrackViewController.delegate = self;
         [self presentViewController:openExistingTrackViewController animated:YES completion:nil];
         return;
     }
@@ -252,6 +258,13 @@
     }
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 //    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - OAOpenExistingTrackDelegate
+
+- (void) closeBottomSheet
+{
+    [self onRightButtonPressed];
 }
 
 @end

@@ -22,6 +22,9 @@
 #define kGPXTrackCell @"OAGPXTrackCell"
 #define kCellTypeSegment @"OASegmentTableViewCell"
 
+#define kVerticalMargin 16.
+#define kHorizontalMargin 16.
+
 typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOAModifiedDate = 0,
     EOANameAscending,
@@ -36,13 +39,15 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     NSArray<NSArray<NSDictionary *> *> *_data;
     EOASortingMode _sortingMode;
+    EOAScreenType _screenType;
 }
 
-- (instancetype) init
+- (instancetype) initWithScreen:(EOAScreenType)screenType
 {
     self = [super init];
     if (self)
     {
+        _screenType = screenType;
         [self generateData];
     }
     return self;
@@ -56,12 +61,24 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    if (_screenType == EOAAddToATrack)
+        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_add_track_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
 }
 
 - (void) applyLocalization
 {
     [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"plan_route_open_existing_track");
+}
+
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    if (_screenType == EOAAddToATrack)
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_add_track_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+            [self.tableView reloadData];
+        } completion:nil];
 }
 
 - (void) generateData
@@ -190,8 +207,23 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
     OAGPX* track = item[@"track"];
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [[OARootViewController instance].mapPanel openTargetViewWithGPX:track pushed:YES];
+    if (_screenType == EOAOpenExistingTrack)
+    {
+        [self.delegate closeBottomSheet];
+        [self dismissViewControllerAnimated:YES completion:nil];
+        [[OARootViewController instance].mapPanel openTargetViewWithGPX:track pushed:YES];
+    }
+    else
+    {
+        OAGPXTrackCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.checkmarkImageView.hidden = NO;
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
+        //TODO: - uncomment when OASaveTrackBottomSheetViewController is in the current branch
+//        OASaveTrackBottomSheetViewController *bottomSheet = [[OASaveTrackBottomSheetViewController alloc] initWithNewTrack:track];
+//        [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
+    }
     return;
 }
 

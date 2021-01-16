@@ -45,6 +45,7 @@
 #import "OAChangeRouteModeCommand.h"
 #import "OATargetPointsHelper.h"
 #import "OASaveGpxRouteAsyncTask.h"
+#import "OAOpenExistingTrackViewController.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -520,6 +521,12 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_settings showGpx:@[savedGpxFile.fileName]];
 }
 
+- (void) showAddToTrackDialog
+{
+    OAOpenExistingTrackViewController *saveTrackViewController = [[OAOpenExistingTrackViewController alloc] initWithScreen:EOAAddToATrack];
+    [self presentViewController:saveTrackViewController animated:YES completion:nil];
+}
+
 #pragma mark - OADraggableViewActions
 
 - (void)onViewHeightChanged:(CGFloat)height
@@ -908,8 +915,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) addToTrackSelected
 {
-//    if (_editingContext.getPointsCount > 0)
-//        [self showAddToTrackDialog];
+    if (_editingContext.getPointsCount > 0)
+        [self showAddToTrackDialog];
 //    else
 //        NSLog(@"No points to add");
 //        Toast.makeText(mapActivity, getString(R.string.none_point_error), Toast.LENGTH_SHORT).show();

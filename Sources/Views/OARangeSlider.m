@@ -28,23 +28,47 @@
 
 - (void) disableHostVCScroll
 {
-    NSArray<__kindof UIGestureRecognizer *> *hostVCRecognizers = [self.delegate getAllGestureRecognizers];
-    for (int i = 0; i < hostVCRecognizers.count; i++)
+    NSArray<__kindof UIGestureRecognizer *> *hostVCRecognizers = [self getHostVCGestureRecognizers];
+    if (hostVCRecognizers)
     {
-        UIGestureRecognizer *recognizer = hostVCRecognizers[i];
-        [_hostVCGestureRecognizersStateBackup addObject:[NSNumber numberWithBool:recognizer.isEnabled]];
-        [recognizer setEnabled:NO];
+        for (int i = 0; i < hostVCRecognizers.count; i++)
+        {
+            UIGestureRecognizer *recognizer = hostVCRecognizers[i];
+            [_hostVCGestureRecognizersStateBackup addObject:[NSNumber numberWithBool:recognizer.isEnabled]];
+            [recognizer setEnabled:NO];
+        }
     }
 }
 
 - (void) restoreHostVCScroll
 {
-    NSArray<__kindof UIGestureRecognizer *> *hostVCRecognizers = [self.delegate getAllGestureRecognizers];
-    for (int i = 0; i < hostVCRecognizers.count; i++)
+    NSArray<__kindof UIGestureRecognizer *> *hostVCRecognizers = [self getHostVCGestureRecognizers];
+    if (hostVCRecognizers)
     {
-        UIGestureRecognizer *recognizer = hostVCRecognizers[i];
-        [recognizer setEnabled:_hostVCGestureRecognizersStateBackup[i]];
+        for (int i = 0; i < hostVCRecognizers.count; i++)
+        {
+            UIGestureRecognizer *recognizer = hostVCRecognizers[i];
+            [recognizer setEnabled:_hostVCGestureRecognizersStateBackup[i]];
+        }
     }
+}
+
+- (NSArray<__kindof UIGestureRecognizer *> *) getHostVCGestureRecognizers
+{
+    UIViewController *hostVC = [self findHostViewController];
+    if (hostVC)
+        return hostVC.presentationController.presentedView.gestureRecognizers;
+    else
+        return nil;
+}
+
+- (UIViewController *) findHostViewController
+{
+    UIResponder *host = self;
+    while (![host isKindOfClass: [UIViewController class]])
+        host = [host nextResponder];
+    
+    return (UIViewController *)host;
 }
 
 @end

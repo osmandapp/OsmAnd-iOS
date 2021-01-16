@@ -18,14 +18,13 @@
 #import "OATimeTableViewCell.h"
 #import "OASliderWithValuesCell.h"
 #import "OARangeSliderCell.h"
-#import "OARangeSliderDelegate.h"
 
 #define kCellTypeSpeed @"time_cell"
 #define kCellTypeSlider @"OASliderWithValuesCell"
 #define kSidePadding 16
 #define kTopPadding 16
 
-@interface OARoadSpeedsViewController() <UITableViewDelegate, UITableViewDataSource, OARangeSliderDelegate>
+@interface OARoadSpeedsViewController() <UITableViewDelegate, UITableViewDataSource, TTRangeSliderDelegate>
 
 @end
 
@@ -42,7 +41,6 @@
     NSInteger _baseMaxSpeed;
     NSString *_units;
     NSAttributedString *_footerAttrString;
-    NSMutableArray<NSNumber *> *_gestureRecognizersStateBackup;
 }
 
 - (instancetype) initWithApplicationMode:(OAApplicationMode *)am speedParameters:(NSDictionary *)speedParameters
@@ -266,7 +264,7 @@
     return 17.0;
 }
 
-#pragma mark OARangeSliderDelegate
+#pragma mark TTRangeSliderViewDelegate
 
 - (void) rangeSlider:(TTRangeSlider *)sender didChangeSelectedMinimumValue:(float)selectedMinimum andMaximumValue:(float)selectedMaximum
 {
@@ -274,11 +272,6 @@
     _maxValue = selectedMaximum;
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-- (NSArray<__kindof UIGestureRecognizer *> *) getAllGestureRecognizers
-{
-    return self.presentationController.presentedView.gestureRecognizers;
 }
 
 @end

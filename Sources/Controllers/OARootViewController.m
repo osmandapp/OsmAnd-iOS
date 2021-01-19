@@ -17,6 +17,7 @@
 #import <Reachability.h>
 
 #import "OAAppDelegate.h"
+#import "OAMapViewTrackingUtilities.h"
 #import "OAMenuOriginViewControllerProtocol.h"
 #import "OAMenuViewControllerProtocol.h"
 #import "OAFavoriteImportViewController.h"
@@ -824,9 +825,13 @@ typedef enum : NSUInteger {
 
 - (NSArray *) keyCommands
 {
-    return @[[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(zoomOut) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_out")],
-             [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(zoomIn) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_in")],
-             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack) discoverabilityTitle:OALocalizedString(@"key_hint_goback")]];
+    return @[[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(zoomOut)],
+             [UIKeyCommand keyCommandWithInput:@"-" modifierFlags:UIKeyModifierCommand action:@selector(zoomOut) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_out")],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(zoomIn)],
+             [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_in")],
+             [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack) discoverabilityTitle:OALocalizedString(@"key_hint_goback")],
+             [UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap) discoverabilityTitle:OALocalizedString(@"key_hint_recenter_map")]];
 }
 
 - (void) zoomOut
@@ -854,6 +859,13 @@ typedef enum : NSUInteger {
         if (canOpenURL)
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
+}
+
+- (void) recenterMap
+{
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
+        [[OAMapViewTrackingUtilities instance] backToLocationImpl];
+    
 }
 
 #pragma mark SFSafariViewControllerDelegate

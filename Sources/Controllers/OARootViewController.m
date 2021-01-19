@@ -831,7 +831,7 @@ typedef enum : NSUInteger {
              [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_in")],
              [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
              [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack) discoverabilityTitle:OALocalizedString(@"key_hint_goback")],
-             [UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap) discoverabilityTitle:OALocalizedString(@"sett_arr_map")]];
+             [UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap) discoverabilityTitle:OALocalizedString(@"key_hint_recenter_map")]];
 }
 
 - (void) zoomOut

@@ -75,6 +75,13 @@
                             <constraint firstAttribute="height" constant="20" id="b8H-1L-19x"/>
                         </constraints>
                     </imageView>
+                    <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_checmark_default.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rd6-6I-3X9">
+                        <rect key="frame" x="364" y="20" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="hM6-Ts-ENf"/>
+                            <constraint firstAttribute="height" constant="30" id="jbV-pg-UA3"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="3EO-DW-iW9" firstAttribute="leading" secondItem="jmc-x6-8Tp" secondAttribute="trailing" constant="6" id="0C6-5W-UgM"/>
@@ -83,8 +90,10 @@
                     <constraint firstItem="Sag-Oa-hqC" firstAttribute="leading" secondItem="64D-zO-yLt" secondAttribute="trailing" constant="16" id="65d-lW-kOD"/>
                     <constraint firstItem="foQ-3a-5YH" firstAttribute="leading" secondItem="4UK-Ow-keo" secondAttribute="trailing" constant="6" id="Fm5-ZO-8EN"/>
                     <constraint firstAttribute="bottom" secondItem="BtU-Gk-L5K" secondAttribute="bottom" id="Ijw-RE-VKo"/>
+                    <constraint firstAttribute="trailing" secondItem="Rd6-6I-3X9" secondAttribute="trailing" constant="20" symbolic="YES" id="JFu-be-OlR"/>
                     <constraint firstItem="X0C-qa-DFK" firstAttribute="top" secondItem="Sag-Oa-hqC" secondAttribute="bottom" constant="8" id="JNN-7y-i0L"/>
                     <constraint firstAttribute="trailing" secondItem="BtU-Gk-L5K" secondAttribute="trailing" id="JRm-qa-c6D"/>
+                    <constraint firstItem="Rd6-6I-3X9" firstAttribute="centerY" secondItem="AZA-wp-OC7" secondAttribute="centerY" id="N9L-ke-IAN"/>
                     <constraint firstAttribute="trailing" secondItem="Sag-Oa-hqC" secondAttribute="trailing" constant="16" id="OIa-Ks-s7b"/>
                     <constraint firstItem="foQ-3a-5YH" firstAttribute="top" secondItem="Sag-Oa-hqC" secondAttribute="bottom" constant="8" id="QE1-cL-Vik"/>
                     <constraint firstItem="Sag-Oa-hqC" firstAttribute="top" secondItem="AZA-wp-OC7" secondAttribute="top" constant="13" id="SND-sW-o8E"/>
@@ -101,6 +110,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="checkmarkImageView" destination="Rd6-6I-3X9" id="8o7-eU-V6S"/>
                 <outlet property="distanceImageView" destination="4UK-Ow-keo" id="l6r-f4-eKf"/>
                 <outlet property="distanceLabel" destination="foQ-3a-5YH" id="xcB-9Q-J07"/>
                 <outlet property="leftIconImageView" destination="64D-zO-yLt" id="zfS-nj-EIJ"/>
@@ -115,6 +125,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="ic_checmark_default.png" width="30" height="30"/>
         <image name="ic_custom_trip.png" width="30" height="30"/>
         <image name="ic_small_distance.png" width="20" height="20"/>
         <image name="ic_small_time_start.png" width="20" height="20"/>

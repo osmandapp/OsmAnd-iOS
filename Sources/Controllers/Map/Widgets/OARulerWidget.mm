@@ -35,6 +35,7 @@
 
 #define SHOW_RULER_MIN_ZOOM 8
 #define SHOW_COMPASS_MIN_ZOOM 8
+#define FIRST_RENDER_SECONDS_DELAY 0.2
 #define ZOOM_UPDATING_THRESHOLD 0.05
 #define RULER_ROTATION_UPDATING_THRESHOLD 1
 #define ARROW_ROTATION_UPDATING_THRESHOLD 2
@@ -115,6 +116,8 @@
     
     UIImage *_centerIconDay;
     UIImage *_centerIconNight;
+    
+    BOOL isFirstLaunch;
 }
 
 - (instancetype) init
@@ -206,7 +209,6 @@
     _centerIconDay = [UIImage imageNamed:@"ic_ruler_center.png"];
     _centerIconNight = [UIImage imageNamed:@"ic_ruler_center_light.png"];
     _imageView.image = _settings.nightMode ? _centerIconNight : _centerIconDay;
-    //_cachedMapMode = _settings.nightMode;
     self.hidden = YES;
 
     _degrees = [NSMutableArray arrayWithCapacity:72];
@@ -216,6 +218,7 @@
     }
     
     _cachedTimestamp = [[NSDate date] timeIntervalSince1970];
+    isFirstLaunch = YES;
 }
 
 - (void) updateStyles
@@ -433,7 +436,7 @@
         
         for (int a = -180; a <= 180; a+= CIRCLE_ANGLE_STEP)
         {
-            int angleWithoutRotation = a + int(_cachedMapAzimuth);
+            float angleWithoutRotation = a + _cachedMapAzimuth;
             if (angleWithoutRotation <= -180)
                 angleWithoutRotation += 360;
             else if (angleWithoutRotation > 180)
@@ -844,6 +847,9 @@
     BOOL visible = [self rulerWidgetOn];
     if (visible)
     {
+        if (isFirstLaunch && ([[NSDate date] timeIntervalSince1970]) - _cachedTimestamp < FIRST_RENDER_SECONDS_DELAY)
+            return NO;
+        
         if (!_fingerDistanceSublayer)
             [self initFingerLayer];
         

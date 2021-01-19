@@ -99,6 +99,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     self.closeButton.tintColor = UIColorFromRGB(color_primary_purple);
     
     _currentState = EOAScrollableMenuStateInitial;
+    _isFullScreenAvailable = YES;
     
     [self applyLocalization];
     [self layoutSubviews];
@@ -374,7 +375,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             {
                 _currentState = EOAScrollableMenuStateInitial;
             }
-            else if (newY < fullScreenAnchor || fastUpSlide)
+            else if (_isFullScreenAvailable && (newY < fullScreenAnchor || fastUpSlide))
             {
                 _currentState = EOAScrollableMenuStateFullScreen;
             }

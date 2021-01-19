@@ -16,6 +16,8 @@
 
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
+#define kVerticalMargin 16.
+#define kHorizontalMargin 20.
 
 @interface OASaveTrackBottomSheetViewController ()
 
@@ -24,7 +26,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *openSavedTrackButton;
 @property (strong, nonatomic) IBOutlet UIButton *createNewRouteButton;
 @property (strong, nonatomic) IBOutlet UIButton *shareButton;
-@property (strong, nonatomic) IBOutlet UIButton *closeBottomSheetButton;
 
 @end
 
@@ -57,11 +58,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.iconImageView setImage:[UIImage imageNamed:@"ic_custom_save_complete.png"]];
+    [self.iconImageView setImage:[[UIImage imageNamed:@"ic_custom_save_complete.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    self.iconImageView.tintColor = UIColorFromRGB(color_primary_purple);
     self.openSavedTrackButton.layer.cornerRadius = 9.;
     self.createNewRouteButton.layer.cornerRadius = 9.;
     self.shareButton.layer.cornerRadius = 9.;
-    self.closeBottomSheetButton.layer.cornerRadius = 9.;
+    
+    self.isFullScreenAvailable = NO;
     
     NSString *titleString = [NSString stringWithFormat:OALocalizedString(@"track_is_saved"), _track.gpxFileName];
     self.titleLabel.attributedText = [OAUtilities getColoredString:titleString highlightedString:_track.gpxFileName highlightColor:UIColorFromRGB(color_primary_purple) fontSize:17. centered:YES];
@@ -76,8 +79,12 @@
 
 - (CGFloat) initialHeight
 {
-    return self.bottomSheetView.frame.size.height;
+    CGFloat width = DeviceScreenWidth - 2 * kHorizontalMargin;
+    CGFloat contentHeight = self.iconImageView.frame.size.height + [OAUtilities calculateTextBounds:[NSString stringWithFormat:OALocalizedString(@"track_is_saved"), _track.gpxFileName] width:width font:[UIFont systemFontOfSize:15.]].height + self.openSavedTrackButton.frame.size.height + self.createNewRouteButton.frame.size.height + self.shareButton.frame.size.height + kVerticalMargin * 6;
+    CGFloat buttonsHeight = 60. + [OAUtilities getBottomMargin];
+    return contentHeight + buttonsHeight + kVerticalMargin * 2;
 }
+
 
 - (IBAction)openSavedTrackPressed:(id)sender
 {
@@ -94,11 +101,6 @@
 - (IBAction)shareButtonPressed:(id)sender
 {
     
-}
-
-- (IBAction)closeBottomSheetButtonPressed:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

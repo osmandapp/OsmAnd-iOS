@@ -1241,6 +1241,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
+"units_nm" = "nmi";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
 

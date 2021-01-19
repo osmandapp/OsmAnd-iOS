@@ -76,6 +76,8 @@
     _impassableRoadsLayer = [[OAImpassableRoadsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-206000];
     [self addLayer:_impassableRoadsLayer];
     
+    //compass
+    
     _transportStopsLayer = [[OATransportStopsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
     [self addLayer:_transportStopsLayer];
     

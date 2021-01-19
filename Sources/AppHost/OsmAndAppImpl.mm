@@ -86,6 +86,7 @@
     NSString *_unitsMi;
     NSString *_unitsYd;
     NSString *_unitsFt;
+    NSString *_unitsNm;
     NSString *_unitsKmh;
     NSString *_unitsMph;
     
@@ -154,6 +155,7 @@
         _unitsMi = OALocalizedString(@"units_mi");
         _unitsYd = OALocalizedString(@"units_yd");
         _unitsFt = OALocalizedString(@"units_ft");
+        _unitsNm = OALocalizedString(@"units_nm");
         _unitsKmh = OALocalizedString(@"units_kmh");
         _unitsMph = OALocalizedString(@"units_mph");
         
@@ -840,46 +842,88 @@
     }
 }
 
-- (NSString*) getFormattedDistance:(float) meters
+- (NSString *) getFormattedDistance:(float)meters
 {
-    OAAppSettings* settings = [OAAppSettings sharedManager];
-    NSString* mainUnitStr = _unitsKm;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    EOAMetricsConstant mc = [settings.metricSystem get];
+    
+    NSString *mainUnitStr;
     float mainUnitInMeters;
-    if ([settings.metricSystem get] == KILOMETERS_AND_METERS) {
+    if (mc == KILOMETERS_AND_METERS)
+    {
+        mainUnitStr = _unitsKm;
         mainUnitInMeters = METERS_IN_KILOMETER;
-    } else {
+    }
+    else if (mc == NAUTICAL_MILES)
+    {
+        mainUnitStr = _unitsNm;
+        mainUnitInMeters = METERS_IN_ONE_NAUTICALMILE;
+    }
+    else
+    {
         mainUnitStr = _unitsMi;
         mainUnitInMeters = METERS_IN_ONE_MILE;
     }
-    if (meters >= 100 * mainUnitInMeters) {
+    
+    if (meters >= 100 * mainUnitInMeters)
+    {
         return [NSString stringWithFormat:@"%d %@",  (int) (meters / mainUnitInMeters + 0.5), mainUnitStr];
-        
-    } else if (meters > 9.99f * mainUnitInMeters) {
-        float num = ((float) meters) / mainUnitInMeters;
+    }
+    else if (meters > 9.99f * mainUnitInMeters)
+    {
+        float num = meters / mainUnitInMeters;
         NSString *numStr = [NSString stringWithFormat:@"%.1f", num];
         if ([[numStr substringFromIndex:numStr.length - 1] isEqualToString:@"0"])
             numStr = [numStr substringToIndex:numStr.length - 2];
         return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
-        
-    } else if (meters > 0.999f * mainUnitInMeters) {
-        float num = ((float) meters) / mainUnitInMeters;
-        NSString *numStr = [NSString stringWithFormat:@"%.2f", num];
-        if ([[numStr substringFromIndex:numStr.length - 2] isEqualToString:@"00"])
-            numStr = [numStr substringToIndex:numStr.length - 3];
-        return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
-        
-    } else {
-        if ([settings.metricSystem get] == KILOMETERS_AND_METERS) {
+    }
+    else if (meters > 0.999f * mainUnitInMeters)
+    {
+        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
+    }
+    else if (mc == MILES_AND_FEET && meters > 0.249f * mainUnitInMeters)
+    {
+        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
+    }
+    else if (mc == MILES_AND_METERS && meters > 0.249f * mainUnitInMeters)
+    {
+        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
+    }
+    else if (mc == MILES_AND_YARDS && meters > 0.249f * mainUnitInMeters)
+    {
+        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
+    }
+    else if (mc == NAUTICAL_MILES && meters > 0.99f * mainUnitInMeters)
+    {
+        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
+    }
+    else
+    {
+        if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS)
+        {
             return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), _unitsm];
-        } else if ([settings.metricSystem get] == MILES_AND_FEET) {
-            int foots = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
-            return [NSString stringWithFormat:@"%d %@", foots, _unitsFt];
-        } else if ([settings.metricSystem get] == MILES_AND_YARDS) {
+        }
+        else if (mc == MILES_AND_FEET)
+        {
+            int feet = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
+            return [NSString stringWithFormat:@"%d %@", feet, _unitsFt];
+        }
+        else if (mc == MILES_AND_YARDS)
+        {
             int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
             return [NSString stringWithFormat:@"%d %@", yards, _unitsYd];
         }
         return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), _unitsm];
     }
+}
+
+- (NSString *) getMilesFormattedStringWithMeters:(float)meters mainUnitInMeters:(float)mainUnitInMeters mainUnitStr:(NSString *)mainUnitStr
+{
+    float num = meters / mainUnitInMeters;
+    NSString *numStr = [NSString stringWithFormat:@"%.2f", num];
+    if ([[numStr substringFromIndex:numStr.length - 2] isEqualToString:@"00"])
+        numStr = [numStr substringToIndex:numStr.length - 3];
+    return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
 }
 
 - (NSString *) getFormattedAlt:(double) alt

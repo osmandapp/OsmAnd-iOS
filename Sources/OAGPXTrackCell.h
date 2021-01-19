@@ -19,5 +19,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *wptImageView;
 @property (strong, nonatomic) IBOutlet UILabel *wptLabel;
 @property (strong, nonatomic) IBOutlet UIView *separatorView;
+@property (strong, nonatomic) IBOutlet UIImageView *checkmarkImageView;
 
 @end

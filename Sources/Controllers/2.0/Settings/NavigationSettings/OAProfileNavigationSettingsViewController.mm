@@ -380,6 +380,8 @@
 {
     [self generateData];
     [super onSettingsChanged];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
 }
 
 @end

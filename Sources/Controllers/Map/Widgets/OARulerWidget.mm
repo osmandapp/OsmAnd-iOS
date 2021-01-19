@@ -35,7 +35,6 @@
 
 #define SHOW_RULER_MIN_ZOOM 8
 #define SHOW_COMPASS_MIN_ZOOM 8
-#define FIRST_RENDER_SECONDS_DELAY 0.2
 #define ZOOM_UPDATING_THRESHOLD 0.05
 #define RULER_ROTATION_UPDATING_THRESHOLD 1
 #define ARROW_ROTATION_UPDATING_THRESHOLD 2
@@ -349,7 +348,7 @@
 
 - (void) updateData:(CGPoint)center
 {
-    if (self.bounds.size.height > 0 && self.bounds.size.width > 0 && _maxRadius > 0 && _app.locationServices.lastKnownLocation.coordinate.longitude &&  _app.locationServices.lastKnownLocation.coordinate.latitude)
+    if (self.bounds.size.height > 0 && self.bounds.size.width > 0 && _maxRadius > 0)
     {
         if (_cachedCenter.y != center.y || _cachedCenter.x != center.x)
         {
@@ -847,9 +846,6 @@
     BOOL visible = [self rulerWidgetOn];
     if (visible)
     {
-        if (isFirstLaunch && ([[NSDate date] timeIntervalSince1970]) - _cachedTimestamp < FIRST_RENDER_SECONDS_DELAY)
-            return NO;
-        
         if (!_fingerDistanceSublayer)
             [self initFingerLayer];
         

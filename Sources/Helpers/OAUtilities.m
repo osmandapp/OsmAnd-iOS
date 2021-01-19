@@ -1514,4 +1514,15 @@ static const double d180PI = 180.0 / M_PI_2;
     return attributedString;
 }
 
++ (NSDate *) getFileLastModificationDate:(NSString *)fileName
+{
+    NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:fileName];
+    if (path)
+    {
+        NSDictionary* fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
+        return [fileAttribs objectForKey:NSFileModificationDate];
+    }
+    return nil;
+}
+
 @end

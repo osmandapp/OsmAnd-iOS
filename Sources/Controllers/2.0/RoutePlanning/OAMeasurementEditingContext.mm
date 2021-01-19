@@ -11,6 +11,7 @@
 #import "OAMeasurementCommandManager.h"
 #import "OAGpxData.h"
 #import "OAGPXDocument.h"
+#import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OARoadSegmentData.h"
 #import "OARouteImporter.h"
@@ -815,14 +816,6 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         }
     }
     return index;
-}
-
-- (BOOL) isTrackSnappedToRoad
-{
-    OAGpxData *gpxData = _gpxData;
-    return gpxData != nil && gpxData.trkSegment != nil
-    && gpxData.trkSegment.points.count > 0
-    && gpxData.gpxFile.routes.count > 0;
 }
 
 - (void) updateSegmentsForSnap

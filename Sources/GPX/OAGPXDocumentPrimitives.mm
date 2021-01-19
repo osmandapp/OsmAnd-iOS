@@ -12,6 +12,8 @@
 #import "OAPointDescription.h"
 
 #include <routeSegmentResult.h>
+#include <routeDataBundle.h>
+#include <routeDataResources.h>
 
 #define ICON_NAME_EXTENSION @"icon"
 #define DEFAULT_ICON_NAME @"special_star"
@@ -42,31 +44,32 @@
 + (OARouteSegment *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
 {
     OARouteSegment *s = [[OARouteSegment alloc] init];
-    s.identifier = [NSString stringWithUTF8String:bundle->getString("id").c_str()];
-    s.length = [NSString stringWithUTF8String:bundle->getString("length").c_str()];
-    s.segmentTime = [NSString stringWithUTF8String:bundle->getString("segmentTime").c_str()];
-    s.speed = [NSString stringWithUTF8String:bundle->getString("speed").c_str()];
-    s.turnType = [NSString stringWithUTF8String:bundle->getString("turnType").c_str()];
-    s.turnAngle = [NSString stringWithUTF8String:bundle->getString("turnAngle").c_str()];
-    s.types = [NSString stringWithUTF8String:bundle->getString("types").c_str()];
-    s.pointTypes = [NSString stringWithUTF8String:bundle->getString("pointTypes").c_str()];
-    s.names = [NSString stringWithUTF8String:bundle->getString("names").c_str()];
+    s.identifier = [NSString stringWithUTF8String:bundle->getString("id", "").c_str()];
+    s.length = [NSString stringWithUTF8String:bundle->getString("length", "").c_str()];
+    s.segmentTime = [NSString stringWithUTF8String:bundle->getString("segmentTime", "").c_str()];
+    s.speed = [NSString stringWithUTF8String:bundle->getString("speed", "").c_str()];
+    s.turnType = [NSString stringWithUTF8String:bundle->getString("turnType", "").c_str()];
+    s.turnAngle = [NSString stringWithUTF8String:bundle->getString("turnAngle", "").c_str()];
+    s.types = [NSString stringWithUTF8String:bundle->getString("types", "").c_str()];
+    s.pointTypes = [NSString stringWithUTF8String:bundle->getString("pointTypes", "").c_str()];
+    s.names = [NSString stringWithUTF8String:bundle->getString("names", "").c_str()];
     return s;
 }
 
-//public StringBundle toStringBundle() {
-//    StringBundle bundle = new StringBundle();
-//    bundle.putString("id", id);
-//    bundle.putString("length", length);
-//    bundle.putString("segmentTime", segmentTime);
-//    bundle.putString("speed", speed);
-//    bundle.putString("turnType", turnType);
-//    bundle.putString("turnAngle", turnAngle);
-//    bundle.putString("types", types);
-//    bundle.putString("pointTypes", pointTypes);
-//    bundle.putString("names", names);
-//    return bundle;
-//}
+- (std::shared_ptr<RouteDataBundle>) toStringBundle
+{
+	auto bundle = std::make_shared<RouteDataBundle>();
+    bundle->put("id", _identifier.UTF8String);
+    bundle->put("length", _length.UTF8String);
+    bundle->put("segmentTime", _segmentTime.UTF8String);
+    bundle->put("speed", _speed.UTF8String);
+    bundle->put("turnType", _turnType.UTF8String);
+    bundle->put("turnAngle", _turnAngle.UTF8String);
+    bundle->put("types", _types.UTF8String);
+    bundle->put("pointTypes", _pointTypes.UTF8String);
+    bundle->put("names", _names.UTF8String);
+    return bundle;
+}
 
 - (NSDictionary<NSString *,NSString *> *)toDictionary
 {
@@ -106,17 +109,18 @@
 + (OARouteType *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
 {
     OARouteType *t = [[OARouteType alloc] init];
-    t.tag = [NSString stringWithUTF8String:bundle->getString("t").c_str()];
-    t.value = [NSString stringWithUTF8String:bundle->getString("v").c_str()];
+    t.tag = [NSString stringWithUTF8String:bundle->getString("t", "").c_str()];
+    t.value = [NSString stringWithUTF8String:bundle->getString("v", "").c_str()];
     return t;
 }
 
-//public StringBundle toStringBundle() {
-//    StringBundle bundle = new StringBundle();
-//    bundle.putString("t", tag);
-//    bundle.putString("v", value);
-//    return bundle;
-//}
+- (std::shared_ptr<RouteDataBundle>) toStringBundle
+{
+	auto bundle = std::make_shared<RouteDataBundle>();
+    bundle->put("t", _tag.UTF8String);
+    bundle->put("v", _value.UTF8String);
+    return bundle;
+}
 
 - (NSDictionary<NSString *,NSString *> *)toDictionary
 {

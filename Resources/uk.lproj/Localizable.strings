@@ -1950,3 +1950,15 @@
 "unsupported_action_title" = "Непідтримувана дія (%@)";
 "unsupported_action" = "Непідтримувана дія";
 "unsupported_items" = "Непідтримувані елементи";
+
+"quick_action_showhide_mapillary_title" = "Увімкнути/вимкнути Mapillary";
+"arrived_at_destination" = "Ви прибули.";
+"profile_type_osmand_string" = "Профіль OsmAnd";
+"quick_action_switch_profile_descr" = "Перемикання між профілями здійснюється торканням до кнопки дій.";
+"quick_action_mapillary_show" = "Показати Mapillary";
+"quick_action_remove_next_destination_descr" = "Видаляє наступний пункт призначення з маршруту. Якщо це кінцевий пункт призначення, навігація зупиниться.";
+"shared_string_add_profile" = "Додати профіль";
+"quick_action_remove_next_destination" = "Видалити найближчу точку призначення";
+"reverse_route" = "Зворотний маршрут";
+"quick_action_mapillary_hide" = "Вимкнути Mapillary";
+"profile_type_user_string" = "Профіль користувача";

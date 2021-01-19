@@ -1955,3 +1955,15 @@
 "unsupported_action_title" = "Nicht unterstützte Aktion (%@)";
 "unsupported_action" = "Nicht unterstützte Aktion";
 "unsupported_items" = "Nicht unterstützte Elemente";
+
+"quick_action_mapillary_hide" = "Mapillary ausblenden";
+"quick_action_remove_next_destination_descr" = "Löscht das nächste Ziel auf Ihrer Route. Wenn dies das endgültige Ziel ist, wird die Navigation gestoppt.";
+"reverse_route" = "Route umkehren";
+"profile_type_osmand_string" = "OsmAnd-Profil";
+"shared_string_add_profile" = "Profil hinzufügen";
+"profile_type_user_string" = "Benutzerprofil";
+"quick_action_mapillary_show" = "Mapillary anzeigen";
+"quick_action_showhide_mapillary_title" = "Mapillary ein-/ausblenden";
+"quick_action_switch_profile_descr" = "Die Aktionsschaltfläche schaltet zwischen den ausgewählten Profilen um.";
+"quick_action_remove_next_destination" = "Nächstgelegenen Zielpunkt löschen";
+"arrived_at_destination" = "Sie sind angekommen.";

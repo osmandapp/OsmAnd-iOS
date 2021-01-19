@@ -170,4 +170,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSMutableAttributedString *) getStringWithBoldPart:(NSString *)wholeString mainString:(NSString *)ms boldString:(NSString *)bs lineSpacing:(CGFloat)lineSpacing fontSize:(CGFloat)fontSize;
 + (NSAttributedString *) getColoredString:(NSString *)wholeString highlightedString:(NSString *)hs highlightColor:(UIColor *)highlightColor fontSize:(CGFloat)fontSize centered:(BOOL)centered;
 
++ (NSDate *) getFileLastModificationDate:(NSString *)fileName;
+
 @end

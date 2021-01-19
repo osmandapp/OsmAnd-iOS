@@ -128,14 +128,14 @@
             @"img" : @"ic_custom_save_as_new_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_new_track"
-        }
-        /*@{
+        },
+        @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"add_to_track"),
             @"img" : @"ic_custom_add_to_track",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"add_to_track"
-        }*/
+        }
     ]];
     
     [data addObject:@[
@@ -281,6 +281,7 @@
         }
         else if ([key isEqualToString:@"add_to_track"])
         {
+            [self dismissViewControllerAnimated:NO completion:nil];
             [self.delegate addToTrackSelected];
         }
         else if ([key isEqualToString:@"directions"])

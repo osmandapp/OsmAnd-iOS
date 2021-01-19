@@ -9,6 +9,7 @@
 #import "OAGPXDocument.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAUtilities.h"
+#import "QuadRect.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -916,6 +917,72 @@
     return g;
 }
 
+- (QuadRect *)getRect
+{
+    double left = 0, right = 0;
+    double top = 0, bottom = 0;
+    for (OAGpxTrk *track in _tracks)
+    {
+        for (OAGpxTrkSeg *segment in track.segments)
+        {
+            for (OAGpxTrkPt *p in segment.points)
+            {
+                if (left == 0 && right == 0)
+                {
+                    left = p.getLongitude;
+                    right = p.getLongitude;
+                    top = p.getLatitude;
+                    bottom = p.getLatitude;
+                }
+                else
+                {
+                    left = fmin(left, p.getLongitude);
+                    right = fmax(right, p.getLongitude);
+                    top = fmax(top, p.getLatitude);
+                    bottom = fmin(bottom, p.getLatitude);
+                }
+            }
+        }
+    }
+    for (OAGpxWpt *p in _locationMarks)
+    {
+        if (left == 0 && right == 0)
+        {
+            left = p.getLongitude;
+            right = p.getLongitude;
+            top = p.getLatitude;
+            bottom = p.getLatitude;
+        }
+        else
+        {
+            left = fmin(left, p.getLongitude);
+            right = fmax(right, p.getLongitude);
+            top = fmax(top, p.getLatitude);
+            bottom = fmin(bottom, p.getLatitude);
+        }
+    }
+    for (OAGpxRte *route in _routes)
+    {
+        for (OAGpxRtePt *p in route.points)
+        {
+            if (left == 0 && right == 0)
+            {
+                left = p.getLongitude;
+                right = p.getLongitude;
+                top = p.getLatitude;
+                bottom = p.getLatitude;
+            }
+            else
+            {
+                left = fmin(left, p.getLongitude);
+                right = fmax(right, p.getLongitude);
+                top = fmax(top, p.getLatitude);
+                bottom = fmin(bottom, p.getLatitude);
+            }
+        }
+    }
+    return [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
+}
 
 -(NSArray*) splitByDistance:(int)meters
 {
@@ -1002,7 +1069,7 @@
     }
     return segments;
 }
-// TODO: Android uses RtePt (implement it here after refactoring the gpx)
+
 - (NSArray<OAGpxTrkPt *> *) getRoutePoints
 {
     NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray new];

@@ -11,4 +11,6 @@
 
 @interface OARoutePlanningHudViewController : OABaseScrollableHudViewController
 
+- (void) cancelModes;
+
 @end

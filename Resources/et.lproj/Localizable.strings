@@ -1935,3 +1935,15 @@
 "road_speeds" = "Kiirused teedel";
 "road_max_speed_descr" = "Määrab kõigi marsruudil olevate teede maksimaalse sõidukiiruse. Alandab prioriteeti maanteedel, mille võimalik kiirus on üle maksimaalse.";
 "road_min_speed_descr" = "Määrab kõigi marsruudil olevate teede minimaalse sõidukiiruse. Tõstab prioriteedi maanteedele, mille soovitatav kiirus on alla miinimumi.";
+
+"reverse_route" = "Pööra marsruut teistpidi";
+"quick_action_remove_next_destination" = "Kustuta lähim sihtpunkt";
+"quick_action_showhide_mapillary_title" = "Näita või peida Mapillary andmed";
+"shared_string_add_profile" = "Lisa profiil";
+"profile_type_osmand_string" = "OsmAnd profiil";
+"quick_action_mapillary_hide" = "Peida Mapillary andmed";
+"quick_action_switch_profile_descr" = "Toimingunupp lülitub valitud profiilide vahel.";
+"arrived_at_destination" = "Oled kohale jõudnud.";
+"quick_action_mapillary_show" = "Näita Mapillary andmeid";
+"quick_action_remove_next_destination_descr" = "Kustutab järgmise marsruudi sihtkoha. Kui see on lõppsihtkoht, siis navigeerimine peatub.";
+"profile_type_user_string" = "Kasutajaprofiil";

@@ -22,6 +22,7 @@
 
 #define kHeaderId @"TableViewSectionHeader"
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
+#define toolbarHeight 64
 
 @interface OAQuickActionListViewController () <UITableViewDelegate, UITableViewDataSource, MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -35,6 +36,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *deleteAction;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 @property (weak, nonatomic) IBOutlet UIButton *btnDone;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeight;
 
 @end
 
@@ -62,6 +64,7 @@
     [self.btnEdit setImage:[[UIImage imageNamed:@"ic_custom_edit"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.btnEdit setTintColor:UIColor.whiteColor];
     self.tableView.tableHeaderView = _tableHeaderView;
+    _bottomViewHeight.constant = 0;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -115,26 +118,6 @@
     _deleteAction.frame = CGRectMake(CGRectGetMaxX(_selectAllAction.frame), 13.0, btnWidth, 22.0);
 }
 
--(UIView *) getTopView
-{
-    return _navBarView;
-}
-
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
-
-- (UIView *)getBottomView
-{
-    return _toolBarView;
-}
-
--(CGFloat) getToolBarHeight
-{
-    return [self.tableView isEditing] ? favoritesToolBarHeight : 0.;
-}
-
 - (void)saveChanges
 {
     [_registry updateQuickActions:[NSArray arrayWithArray:_data]];
@@ -145,7 +128,6 @@
 {
     [self.tableView beginUpdates];
     [self.tableView setEditing:YES animated:YES];
-    _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
     _toolBarView.hidden = NO;
     _btnCancel.hidden = NO;
     _btnDone.hidden = NO;
@@ -154,6 +136,7 @@
     _backBtn.hidden = YES;
     [UIView animateWithDuration:.3 animations:^{
         _titleView.text = OALocalizedString(@"quick_action_edit_list");
+        _bottomViewHeight.constant = toolbarHeight;
         [self applySafeAreaMargins];
     }];
     [self.tableView endUpdates];
@@ -176,7 +159,6 @@
 {
     [self.tableView beginUpdates];
     [self.tableView setEditing:NO animated:YES];
-    _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight - _toolBarView.bounds.size.height, DeviceScreenWidth, _toolBarView.bounds.size.height);
     _btnAdd.hidden = NO;
     _btnEdit.hidden = NO;
     _backBtn.hidden = NO;
@@ -185,7 +167,7 @@
     [UIView animateWithDuration:.3 animations:^{
         _titleView.text = OALocalizedString(@"quick_action_name");
         [self.tabBarController.tabBar setHidden:NO];
-        _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
+        _bottomViewHeight.constant = 0;
     } completion:^(BOOL finished) {
         _toolBarView.hidden = YES;
         [self applySafeAreaMargins];

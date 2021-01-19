@@ -35,6 +35,8 @@
 #import "OAFavoritesSettingsItem.h"
 #import "OAOsmNotePoint.h"
 #import "OAOpenStreetMapPoint.h"
+#import "OAMarkersSettingsItem.h"
+#import "OADestination.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -171,6 +173,7 @@
     NSMutableArray<OAFavoriteGroup *> *favoriteItems = [NSMutableArray new];
     NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray new];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList = [NSMutableArray new];
+    NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray new];
     
     for (id object in duplicatesList)
     {
@@ -199,6 +202,8 @@
             [avoidRoads addObject: (OAAvoidRoadInfo *)object];
         else if ([object isKindOfClass:OAFavoriteGroup.class])
             [favoriteItems addObject: (OAFavoriteGroup *)object];
+        else if ([object isKindOfClass:OADestination.class])
+            [activeMarkersList addObject: (OADestination *)object];
     }
     if (profiles.count > 0)
     {
@@ -283,6 +288,13 @@
         [favoritesSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"favorites")]];
         [favoritesSection addObjectsFromArray:favoriteItems];
         [duplicates addObject:favoritesSection];
+    }
+    if (activeMarkersList.count > 0)
+    {
+        NSMutableArray *markersSection = [NSMutableArray new];
+        [markersSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"map_markers")]];
+        [markersSection addObjectsFromArray:activeMarkersList];
+        [duplicates addObject:markersSection];
     }
     return duplicates;
 }
@@ -414,6 +426,14 @@
                 OAFavoriteGroup *group = (OAFavoriteGroup *)currentItem;
                 item[@"label"] = [OAFavoriteGroup getDisplayName:group.name];
                 item[@"icon"] = [UIImage imageNamed:@"ic_custom_favorites"];
+                item[@"description"] = @"";
+                item[@"cellType"] = kTitleTwoIconsRoundCell;
+            }
+            else if ([currentItem isKindOfClass:OADestination.class])
+            {
+                OADestination *marker = (OADestination *)currentItem;
+                item[@"label"] = marker.desc;
+                item[@"icon"] = [UIImage imageNamed:@"ic_custom_marker"];
                 item[@"description"] = @"";
                 item[@"cellType"] = kTitleTwoIconsRoundCell;
             }

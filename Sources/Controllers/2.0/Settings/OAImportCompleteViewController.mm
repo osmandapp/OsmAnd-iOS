@@ -40,6 +40,8 @@
 #import "OAOsmNotesSettingsItem.h"
 #import "OAOsmEditsSettingsItem.h"
 #import "OAAvoidRoadInfo.h"
+#import "OAMarkersSettingsItem.h"
+#import "OADestination.h"
 
 #define kMenuSimpleCell @"OAMenuSimpleCell"
 #define kMenuSimpleCellNoIcon @"OAMenuSimpleCellNoIcon"
@@ -57,7 +59,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeMaps,
     EOAImportDataTypeFavorites,
     EOAImportDataTypeOsmNotes,
-    EOAImportDataTypeOsmEdits
+    EOAImportDataTypeOsmEdits,
+    EOAImportDataTypeActiveMarkers
 };
 
 @interface OAImportCompleteViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -115,6 +118,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     NSInteger favoritesCount = 0;
     NSInteger osmNotesCount = 0;
     NSInteger osmEditsCount = 0;
+    NSInteger markersCount = 0;
     
     for (NSString *type in [_itemsMap allKeys])
     {
@@ -180,6 +184,11 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             case EOAExportSettingsTypeOsmEdits:
             {
                 osmEditsCount += settings.count;
+                break;
+            }
+            case EOAExportSettingsTypeActiveMarkers:
+            {
+                markersCount += settings.count;
                 break;
             }
             default:
@@ -304,6 +313,16 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             @"iconName": @"ic_custom_poi",
             @"count": [NSString stringWithFormat:@"%ld", osmEditsCount],
             @"category" : @(EOAImportDataTypeOsmNotes)
+            }
+         ];
+    }
+    if (markersCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"map_markers"),
+            @"iconName": @"ic_custom_marker",
+            @"count": [NSString stringWithFormat:@"%ld", markersCount],
+            @"category" : @(EOAImportDataTypeActiveMarkers)
             }
          ];
     }
@@ -452,6 +471,10 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         {
             [OAPluginPopupViewController askForPlugin:kInAppId_Addon_OsmEditing];
         }
+    }
+    else if (dataType == EOAImportDataTypeActiveMarkers)
+    {
+        [rootController.mapPanel showCards];
     }
 }
 

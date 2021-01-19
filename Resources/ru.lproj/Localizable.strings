@@ -1963,3 +1963,16 @@
 "next_seg_dist" = "Следующий сегмент %@";
 "whole_track" = "Весь трек";
 "next_seg" = "Следующий сегмент";
+
+"quick_action_showhide_mapillary_title" = "Показать/скрыть Mapillary";
+"quick_action_mapillary_show" = "Показать Mapillary";
+"quick_action_remove_next_destination" = "Удалить ближайший пункт";
+"layer_amenity_label" = "Названия точек";
+"quick_action_mapillary_hide" = "Скрыть Mapillary";
+"shared_string_add_profile" = "Добавить профиль";
+"arrived_at_destination" = "Вы прибыли.";
+"profile_type_user_string" = "Профиль пользователя";
+"quick_action_switch_profile_descr" = "Нажатие кнопки «Действия» переключает между выбранными профилями.";
+"reverse_route" = "Обратный маршрут";
+"profile_type_osmand_string" = "Профиль OsmAnd";
+"quick_action_remove_next_destination_descr" = "Следующая точка маршрута будет удалена. Если это конечный пункт, навигация завершится.";

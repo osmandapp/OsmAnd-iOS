@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,11 +17,12 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="48"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lMm-Of-Cn0">
+                    <view contentMode="scaleToFill" id="lMm-Of-Cn0">
                         <rect key="frame" x="16" y="0.0" width="288" height="48"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jQ0-wT-faZ">
-                                <rect key="frame" x="16" y="13" width="214" height="22"/>
+                                <rect key="frame" x="16" y="13.5" width="214" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="rLu-SZ-pvC"/>
                                 </constraints>
@@ -47,20 +48,17 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Qor-vC-51U" secondAttribute="trailing" id="1Nf-FR-PgS"/>
-                            <constraint firstAttribute="bottom" secondItem="jQ0-wT-faZ" secondAttribute="bottom" constant="13" id="5fg-n9-c7O"/>
                             <constraint firstItem="6M0-5x-Pr0" firstAttribute="leading" secondItem="jQ0-wT-faZ" secondAttribute="trailing" constant="20" id="7O1-UE-TqF"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6M0-5x-Pr0" secondAttribute="trailing" id="Mte-NS-5SU"/>
                             <constraint firstAttribute="bottom" secondItem="Qor-vC-51U" secondAttribute="bottom" id="Ofw-Hb-r0X"/>
+                            <constraint firstItem="jQ0-wT-faZ" firstAttribute="centerY" secondItem="lMm-Of-Cn0" secondAttribute="centerY" id="RfM-3v-qjg"/>
                             <constraint firstItem="6M0-5x-Pr0" firstAttribute="centerY" secondItem="lMm-Of-Cn0" secondAttribute="centerY" id="WxP-sW-qkb"/>
-                            <constraint firstItem="jQ0-wT-faZ" firstAttribute="top" secondItem="lMm-Of-Cn0" secondAttribute="top" constant="13" id="X17-6p-c1G"/>
                             <constraint firstItem="jQ0-wT-faZ" firstAttribute="leading" secondItem="lMm-Of-Cn0" secondAttribute="leading" constant="16" id="pGp-J1-m4V"/>
                             <constraint firstItem="Qor-vC-51U" firstAttribute="leading" secondItem="jQ0-wT-faZ" secondAttribute="leading" id="xx1-WF-4u4"/>
                         </constraints>
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailingMargin" secondItem="lMm-Of-Cn0" secondAttribute="trailing" id="Aga-Yf-BN1"/>
-                    <constraint firstItem="lMm-Of-Cn0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="fdP-bc-IsI"/>
                     <constraint firstAttribute="bottom" secondItem="lMm-Of-Cn0" secondAttribute="bottom" id="k1G-l4-2KT"/>
                     <constraint firstItem="lMm-Of-Cn0" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="ylq-n3-6eK"/>
                 </constraints>

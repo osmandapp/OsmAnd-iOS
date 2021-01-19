@@ -1879,3 +1879,23 @@
 "routing_attr_length_name" = "Længdegrænse";
 "default_profile_descr" = "Vælg en profil, der skal bruges til programstart.";
 "shared_string_next" = "Næste";
+
+"quick_action_remove_next_destination" = "Slet næste destinationspunkt";
+"quick_action_mapillary_show" = "Vis Mapillary";
+"next_seg" = "Næste segment";
+"arrived_at_destination" = "Ankommet.";
+"import_complete_description" = "Alle data fra %@ er importeret, brug knapperne nedenfor til atåbne den nødvendige del af programmet til at håndtere det.";
+"personal_category_name" = "Personlig";
+"osm_notes" = "OSM-noter";
+"reverse_route" = "Omvendt rute";
+"quick_action_switch_profile_descr" = "Handlingsknappen skifter mellem valgte profiler.";
+"maximum_speed" = "Maksimal hastighed";
+"units_t" = "t";
+"create_profile_descr" = "Basér den brugerdefinerede profil på en af standardprofilerne, dette definerer den grundlæggende opsætning som standard synlighed for moduler og enheder for hastighed og distance. Dette er standardprofilerne, sammen med eksempler på brugerdefinerede profiler, de kan udvides til:";
+"shared_string_max" = "Maks";
+"whole_track" = "Hele sporet";
+"shared_string_min" = "Min";
+"quick_action_showhide_mapillary_title" = "Vis/skjul Mapillary";
+"quick_action_mapillary_hide" = "Skjul Mapillary";
+"layer_amenity_label" = "Overlejring af IP-etiketter";
+"shared_string_add_profile" = "Tilføj profil";

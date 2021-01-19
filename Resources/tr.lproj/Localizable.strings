@@ -1948,3 +1948,15 @@
 "unsupported_action_title" = "Desteklenmeyen eylem (%@)";
 "unsupported_action" = "Desteklenmeyen eylem";
 "unsupported_items" = "Desteklenmeyen ögeler";
+
+"quick_action_switch_profile_descr" = "Eylem düğmesi seçilen profiller arasında geçiş yapar.";
+"reverse_route" = "Ters güzergah";
+"quick_action_remove_next_destination_descr" = "Güzergahınızdaki bir sonraki hedefi siler. Bu son hedefse, navigasyon duracaktır.";
+"quick_action_mapillary_show" = "Mapillary\'i göster";
+"profile_type_user_string" = "Kullanıcı profili";
+"quick_action_mapillary_hide" = "Mapillary\'i gizle";
+"profile_type_osmand_string" = "OsmAnd profili";
+"arrived_at_destination" = "Hedefinize ulaştınız.";
+"shared_string_add_profile" = "Profil ekle";
+"quick_action_remove_next_destination" = "En yakın varış noktasını sil";
+"quick_action_showhide_mapillary_title" = "Mapillary\'i göster/gizle";

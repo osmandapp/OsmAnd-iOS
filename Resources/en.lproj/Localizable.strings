@@ -1700,6 +1700,7 @@
 "key_hint_select" = "Select";
 "key_hint_deselect" = "Deselect";
 "key_hint_goback" = "Go Back";
+"key_hint_recenter_map" = "Recenter Map"
 
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";

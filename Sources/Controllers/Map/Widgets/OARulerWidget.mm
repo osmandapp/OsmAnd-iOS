@@ -115,8 +115,6 @@
     
     UIImage *_centerIconDay;
     UIImage *_centerIconNight;
-    
-    BOOL isFirstLaunch;
 }
 
 - (instancetype) init
@@ -217,7 +215,6 @@
     }
     
     _cachedTimestamp = [[NSDate date] timeIntervalSince1970];
-    isFirstLaunch = YES;
 }
 
 - (void) updateStyles
@@ -421,9 +418,6 @@
 
 - (void) drawCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
 {
-    [_circleColor set];
-    CGContextSetLineWidth(ctx, _strokeWidth);
-
     if (!_mapViewController.zoomingByGesture)
     {
         double circleRadius = _radius * circleNumber;
@@ -474,7 +468,7 @@
 
         for (NSMutableArray<NSValue *> *points in arrays)
         {
-            [self drawLineByPoints:points color:_textShadowColor strokeWidth:_strokeWidth*2 inContext:ctx];
+            [self drawLineByPoints:points color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
             [self drawLineByPoints:points color:_circleColor strokeWidth:_strokeWidth inContext:ctx];
         }
         
@@ -591,7 +585,7 @@
 
         for (NSMutableArray<NSValue *> *points in arrays)
         {
-            [self drawLineByPoints:points color:_textShadowColor strokeWidth:_strokeWidth*2 inContext:ctx];
+            [self drawLineByPoints:points color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
             [self drawLineByPoints:points color:_circleColor strokeWidth:_strokeWidth inContext:ctx];
         }
         
@@ -635,21 +629,21 @@
             
             CGPoint startPoint3D = [self transformTo3D:CGPointMake(center.x, startY)];
             CGPoint stopPoint3D = [self transformTo3D:CGPointMake(center.x, stopY)];
-            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_textShadowColor strokeWidth:_strokeWidth*2 inContext:ctx];
+            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
             [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_cardinalLinesColor strokeWidth:_strokeWidth inContext:ctx];
         }
         else
         {
             CGPoint startPoint3D = [self transformTo3D:CGPointMake(lineStartX, lineStartY)];
             CGPoint stopPoint3D = [self transformTo3D:CGPointMake(lineStopX, lineStopY)];
-            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_textShadowColor strokeWidth:_strokeWidth*2 inContext:ctx];
+            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
             [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_circleColor strokeWidth:_strokeWidth inContext:ctx];
         }
         if (i % 9 == 0 && i != 18)
         {
             CGPoint startPoint3D = [self transformTo3D:CGPointMake(lineStartX, lineStartY)];
             CGPoint stopPoint3D = [self transformTo3D:CGPointMake(lineStopX, lineStopY)];
-            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_textShadowColor strokeWidth:_strokeWidth*2 inContext:ctx];
+            [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
             [self drawLineFrom:startPoint3D stopPoint:stopPoint3D color:_cardinalLinesColor strokeWidth:_strokeWidth inContext:ctx];
         }
     }
@@ -774,7 +768,7 @@
     CGPoint thirdPoint3D = [self transformTo3D:CGPointMake(thirdPointX, thirdPointY)];
     
     [_textShadowColor set];
-    CGContextSetLineWidth(ctx, 1);
+    CGContextSetLineWidth(ctx, _strokeWidth*2);
     CGContextMoveToPoint(ctx, firstPoint3D.x, firstPoint3D.y);
     CGContextAddLineToPoint(ctx, secondPoint3D.x, secondPoint3D.y);
     CGContextAddLineToPoint(ctx, thirdPoint3D.x, thirdPoint3D.y);

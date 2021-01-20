@@ -268,6 +268,13 @@
                     {
                         OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
                         title = [appMode toHumanString];
+                        
+                        if (!title || title.length == 0)
+                        {
+                            NSString *defaultProfileName = [NSString stringWithFormat:OALocalizedString(@"unnamed_imported_profile_format"), modeBean.stringKey];
+                            title = defaultProfileName;
+                            modeBean.userProfileName = defaultProfileName;
+                        }
                     }
 
                     NSString *routingProfile = @"";

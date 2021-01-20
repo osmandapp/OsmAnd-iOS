@@ -765,6 +765,7 @@
 "avoid_road" = "Avoid road";
 "shared_string_importing" = "Importing";
 "importing_from" = "Importing data from %@";
+"unnamed_imported_profile_format" = "Unnamed profile <%@>";
 
 "shared_string_settings" = "Settings";
 "configure_screen_quick_action" = "Quick action";

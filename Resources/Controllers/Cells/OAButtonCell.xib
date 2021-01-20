@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -38,6 +38,7 @@
                     <constraint firstAttribute="bottom" secondItem="hcA-mw-eMe" secondAttribute="bottom" id="gkA-RM-pzh"/>
                     <constraint firstItem="hcA-mw-eMe" firstAttribute="top" secondItem="fhG-DN-kdS" secondAttribute="top" id="j6Q-sD-QEh"/>
                     <constraint firstItem="hcA-mw-eMe" firstAttribute="leading" secondItem="fhG-DN-kdS" secondAttribute="leadingMargin" priority="750" id="oX8-lo-f6f"/>
+                    <constraint firstItem="cci-Fd-2dH" firstAttribute="top" relation="greaterThanOrEqual" secondItem="fhG-DN-kdS" secondAttribute="top" constant="9" id="pW7-ce-GLV"/>
                     <constraint firstItem="cci-Fd-2dH" firstAttribute="leading" secondItem="fhG-DN-kdS" secondAttribute="leading" constant="16" id="xvr-hh-R9V"/>
                 </constraints>
             </tableViewCellContentView>
@@ -48,7 +49,7 @@
                 <outlet property="buttonLeadingToIcon" destination="DS3-5P-oBS" id="tuH-vq-XZ0"/>
                 <outlet property="iconView" destination="cci-Fd-2dH" id="Vso-68-mnK"/>
             </connections>
-            <point key="canvasLocation" x="218" y="155"/>
+            <point key="canvasLocation" x="217.59999999999999" y="154.72263868065968"/>
         </tableViewCell>
     </objects>
 </document>

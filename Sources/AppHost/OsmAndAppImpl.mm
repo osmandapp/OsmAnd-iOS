@@ -877,29 +877,29 @@
             numStr = [numStr substringToIndex:numStr.length - 2];
         return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
     }
-    else if (meters > 0.999f * mainUnitInMeters)
+    else if (meters > 0.999f * mainUnitInMeters && mc != NAUTICAL_MILES)
     {
         return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
     }
-    else if (mc == MILES_AND_FEET && meters > 0.249f * mainUnitInMeters)
+    else if (mc == MILES_AND_FEET && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:FOOTS_IN_ONE_METER])
     {
         return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
     }
-    else if (mc == MILES_AND_METERS && meters > 0.249f * mainUnitInMeters)
+    else if (mc == MILES_AND_METERS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:METERS_IN_ONE_METER])
     {
         return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
     }
-    else if (mc == MILES_AND_YARDS && meters > 0.249f * mainUnitInMeters)
+    else if (mc == MILES_AND_YARDS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:YARDS_IN_ONE_METER])
     {
         return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
     }
-    else if (mc == NAUTICAL_MILES && meters > 0.99f * mainUnitInMeters)
+    else if (mc == NAUTICAL_MILES && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:METERS_IN_ONE_METER])
     {
         return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnitStr];
     }
     else
     {
-        if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS)
+        if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS || mc == NAUTICAL_MILES)
         {
             return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), _unitsm];
         }
@@ -924,6 +924,14 @@
     if ([[numStr substringFromIndex:numStr.length - 2] isEqualToString:@"00"])
         numStr = [numStr substringToIndex:numStr.length - 3];
     return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
+}
+
+- (BOOL) isCleanValue:(float)meters inUnits:(float)unitsInOneMeter
+{
+    if ( int(meters) % int(METERS_IN_ONE_NAUTICALMILE) == 0)
+        return NO;
+
+    return (int((meters * unitsInOneMeter) * 100) % 100) < 1;
 }
 
 - (NSString *) getFormattedAlt:(double) alt

@@ -261,12 +261,14 @@
     _northArrowColor = UIColor.redColor;
     _headingArrowColor = UIColor.blueColor;
     
-    BOOL showDarkCenterIcon = NO;
+    BOOL showLightCenterIcon;
     if (_cachedRulerMode == RULER_MODE_NO_CIRCLES)
-        showDarkCenterIcon = _settings.nightMode;
+        showLightCenterIcon = _settings.nightMode;
+    else if (!_settings.nightMode)
+        showLightCenterIcon = _cachedRulerMode == RULER_MODE_LIGHT;
     else
-        showDarkCenterIcon = (_cachedRulerMode == RULER_MODE_DARK) ? _settings.nightMode : !_settings.nightMode;
-    _imageView.image = showDarkCenterIcon ? _centerIconNight:  _centerIconDay;
+        showLightCenterIcon = YES;
+    _imageView.image = showLightCenterIcon ? _centerIconNight : _centerIconDay;
 }
 
 - (void) layoutSubviews
@@ -435,15 +437,8 @@
         
         for (int a = -180; a <= 180; a+= CIRCLE_ANGLE_STEP)
         {
-            float angleWithoutRotation = a + _cachedMapAzimuth;
-            if (angleWithoutRotation <= -180)
-                angleWithoutRotation += 360;
-            else if (angleWithoutRotation > 180)
-                angleWithoutRotation -= 360;
-            
-            
             double pixelDensity = _cachedMapDensity * [[UIScreen mainScreen] scale];
-            auto latLon = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, circleRadius * pixelDensity, angleWithoutRotation);
+            auto latLon = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, circleRadius * pixelDensity, a);
             if (ABS(latLon.latitude) > 90 || ABS(latLon.longitude) > 180)
             {
                 if (points.count > 0)
@@ -545,6 +540,7 @@
         topOrLeftCoordinate.y = center.y - drawingTextRadius - boundsHeading.height / 2;
         rightOrBottomCoordinate.x = center.x - boundsDistance.width / 2;
         rightOrBottomCoordinate.y = center.y + drawingTextRadius - boundsDistance.height / 2;
+        return @[ [NSValue valueWithCGPoint:[self transformTo3D:topOrLeftCoordinate compensateMapRotation:YES]], [NSValue valueWithCGPoint:[self transformTo3D:rightOrBottomCoordinate compensateMapRotation:YES]]];
     }
     else if ([_textSide isEqualToString:TEXT_SIDE_HORIZONTAL])
     {
@@ -552,9 +548,8 @@
         topOrLeftCoordinate.y = center.y - boundsHeading.height / 2;
         rightOrBottomCoordinate.x = center.x + drawingTextRadius;
         rightOrBottomCoordinate.y = center.y - boundsDistance.height / 2;
+        return @[ [NSValue valueWithCGPoint:topOrLeftCoordinate], [NSValue valueWithCGPoint:rightOrBottomCoordinate]];
     }
-    
-    return @[ [NSValue valueWithCGPoint:[self transformTo3D:topOrLeftCoordinate compensateMapRotation:YES]], [NSValue valueWithCGPoint:[self transformTo3D:rightOrBottomCoordinate compensateMapRotation:YES]]];
 }
 
 - (void) drawCompassCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx

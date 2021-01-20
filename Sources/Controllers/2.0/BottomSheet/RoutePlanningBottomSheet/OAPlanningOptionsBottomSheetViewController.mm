@@ -112,15 +112,15 @@
             @"key" : @"route_betw_points"
         }
     ]];
-    
+    // TODO: uncomment after implementing saving to exsisting track
     [data addObject:@[
-        @{
+        /*@{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"save_changes"),
             @"img" : @"ic_custom_save_to_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_changes"
-        },
+        },*/
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"save_new_track"),
@@ -260,21 +260,40 @@
     if (self.delegate)
     {
         if ([key isEqualToString:@"start_new_segment"])
+        {
             [self.delegate addNewSegmentSelected];
+        }
         else if ([key isEqualToString:@"route_betw_points"])
+        {
+            [self dismissViewControllerAnimated:NO completion:nil];
             [self.delegate snapToRoadOptionSelected];
+            return;
+        }
         else if ([key isEqualToString:@"save_changes"])
+        {
             [self.delegate saveChangesSelected];
+        }
         else if ([key isEqualToString:@"save_new_track"])
+        {
             [self.delegate saveAsNewTrackSelected];
+        }
         else if ([key isEqualToString:@"add_to_track"])
+        {
+            [self dismissViewControllerAnimated:NO completion:nil];
             [self.delegate addToTrackSelected];
+        }
         else if ([key isEqualToString:@"directions"])
+        {
             [self.delegate directionsSelected];
+        }
         else if ([key isEqualToString:@"reverse_route"])
+        {
             [self.delegate reverseRouteSelected];
+        }
         else if ([key isEqualToString:@"clear_all"])
+        {
             [self.delegate clearAllSelected];
+        }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];

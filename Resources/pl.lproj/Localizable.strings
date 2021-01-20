@@ -1876,3 +1876,40 @@
 "shared_string_max" = "Maks.";
 "shared_string_min" = "Min.";
 "maximum_speed" = "Maksymalna prędkość";
+"checking_for_duplicates" = "Sprawdzanie duplikatów...";
+
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "Masz najnowszą wersję: %@";
+"plugin_popup_osm_editing_ask" = "Proszę włączyć wtyczkę do edytowania OpenStreetMap, aby dodawać i zarządzać edycjami mapy oraz uwagami";
+"osm_notes" = "Uwagi OSM";
+"shared_string_required" = "Wymagane";
+"plugin_popup_osm_editing_title" = "Włącz edytowanie OpenStreetMap";
+"vk" = "VK";
+"help_what_is_new" = "Co nowego";
+"toggle_public_transport" = "Pokaż/ukryj transport publiczny";
+"add_one_more_pnt" = "Dodaj jeszcze jeden punkt";
+"add_after" = "Dodaj punkty po";
+"add_before" = "Dodaj punkty przed";
+"layer_amenity_label" = "Etykiety punktów";
+"personal_category_name" = "Osobiste";
+"road_speeds_descr" = "Te parametry mogą mieć wpływ na obliczanie trasy.";
+
+"shared_string_add_profile" = "Dodaj profil";
+"whole_track" = "Cała trasa";
+"arrived_at_destination" = "Osiągnięto cel.";
+"quick_action_mapillary_hide" = "Ukryj Mapillary";
+"profile_type_user_string" = "Profil użytkownika";
+"next_seg" = "Nowy segment";
+"reverse_route" = "Odwróć trasę";
+"vessel_width_limit_description" = "Ustaw szerokość statku, by unikać wąskich mostów";
+"quick_action_switch_profile_descr" = "Przycisk akcji przełącza między wybranymi profilami.";
+"quick_action_remove_next_destination_descr" = "Usuwa następny cel na trasie. Jeśli jest to miejsce docelowe, nawigacja zostanie zatrzymana.";
+"create_profile_descr" = "Profil dostosowany można oprzeć na jednym z domyślnych profili aplikacji. Określają one podstawowe ustawienia, takie jak domyślna widoczność widżetów i jednostek prędkości i odległości. Są to domyślne profile aplikacji, wraz z przykładami profili dostosowanych, które można rozszerzyć na:";
+"quick_action_mapillary_show" = "Pokaż Mapillary";
+"quick_action_showhide_mapillary_title" = "Pokaż/ukryj Mapillary";
+"profile_type_osmand_string" = "Profil OsmAnd";
+"quick_action_remove_next_destination" = "Usuń najbliższy punkt docelowy";

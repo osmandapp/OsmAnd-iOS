@@ -59,7 +59,6 @@
     {
         metadata->name = QString::fromNSString(self.metadata.name);
         metadata->description = QString::fromNSString(self.metadata.desc);
-        metadata->timestamp = QDateTime::currentDateTimeUtc();
         
         [self.class fillLinks:metadata->links linkArray:self.metadata.links];
         
@@ -74,6 +73,13 @@
     
 }
 
+- (void) addWpts:(NSArray<OAGpxWpt *> *)wpts
+{
+    [wpts enumerateObjectsUsingBlock:^(OAGpxWpt * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self addWpt:obj];
+    }];
+}
+
 - (void) addWpt:(OAGpxWpt *)w
 {
     std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> wpt;
@@ -86,7 +92,7 @@
     wpt->name = QString::fromNSString(w.name);
     wpt->description = QString::fromNSString(w.desc);
     wpt->elevation = w.elevation;
-    wpt->timestamp = QDateTime::fromTime_t(w.time).toUTC();
+    wpt->timestamp = w.time != 0 ? QDateTime::fromTime_t(w.time).toUTC() : QDateTime();
     wpt->magneticVariation = w.magneticVariation;
     wpt->geoidHeight = w.geoidHeight;
     wpt->comment = QString::fromNSString(w.comment);
@@ -183,6 +189,13 @@
 //    self.modifiedTime = System.currentTimeMillis();
 }
 
+- (void) addRoutes:(NSArray<OAGpxRte *> *)routes
+{
+    [routes enumerateObjectsUsingBlock:^(OAGpxRte * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self addRoute:obj];
+    }];
+}
+
 - (void) addRoute:(OAGpxRte *)r
 {
     std::shared_ptr<OsmAnd::GpxDocument::GpxRte> rte;
@@ -209,7 +222,7 @@
         rtept->name = QString::fromNSString(p.name);
         rtept->description = QString::fromNSString(p.desc);
         rtept->elevation = p.elevation;
-        rtept->timestamp = QDateTime::fromTime_t(p.time);
+        rtept->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
         rtept->magneticVariation = p.magneticVariation;
         rtept->geoidHeight = p.geoidHeight;
         rtept->comment = QString::fromNSString(p.comment);
@@ -226,12 +239,15 @@
         
         [self.class fillLinks:rtept->links linkArray:p.links];
         
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = @"speed";
-        e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-        ext.extensions = @[e];
-        p.extraData = ext;
+        if (!isnan(p.speed))
+        {
+            OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+            OAGpxExtension *e = [[OAGpxExtension alloc] init];
+            e.name = @"speed";
+            e.value = [NSString stringWithFormat:@"%.3f", p.speed];
+            ext.extensions = @[e];
+            p.extraData = ext;
+        }
 
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
         if (p.extraData)
@@ -275,7 +291,7 @@
     rtept->name = QString::fromNSString(p.name);
     rtept->description = QString::fromNSString(p.desc);
     rtept->elevation = p.elevation;
-    rtept->timestamp = QDateTime::fromTime_t(p.time).toUTC();
+    rtept->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime();
     rtept->magneticVariation = p.magneticVariation;
     rtept->geoidHeight = p.geoidHeight;
     rtept->comment = QString::fromNSString(p.comment);
@@ -292,12 +308,15 @@
     
     [self.class fillLinks:rtept->links linkArray:p.links];
     
-    OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-    OAGpxExtension *e = [[OAGpxExtension alloc] init];
-    e.name = @"speed";
-    e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-    ext.extensions = @[e];
-    p.extraData = ext;
+    if (!isnan(p.speed))
+    {
+        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = @"speed";
+        e.value = [NSString stringWithFormat:@"%.3f", p.speed];
+        ext.extensions = @[e];
+        p.extraData = ext;
+    }
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
     if (p.extraData)
@@ -314,6 +333,12 @@
     [((NSMutableArray *)route.points) addObject:p];
 }
 
+- (void) addTracks:(NSArray<OAGpxTrk *> *)tracks
+{
+    [tracks enumerateObjectsUsingBlock:^(OAGpxTrk * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self addTrack:obj];
+    }];
+}
 
 - (void) addTrack:(OAGpxTrk *)t
 {
@@ -346,7 +371,7 @@
             trkpt->name = QString::fromNSString(p.name);
             trkpt->description = QString::fromNSString(p.desc);
             trkpt->elevation = p.elevation;
-            trkpt->timestamp = QDateTime::fromTime_t(p.time);
+            trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
             trkpt->magneticVariation = p.magneticVariation;
             trkpt->geoidHeight = p.geoidHeight;
             trkpt->comment = QString::fromNSString(p.comment);
@@ -363,12 +388,15 @@
             
             [self.class fillLinks:trkpt->links linkArray:p.links];
             
-            OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-            OAGpxExtension *e = [[OAGpxExtension alloc] init];
-            e.name = @"speed";
-            e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-            ext.extensions = @[e];
-            p.extraData = ext;
+            if (!isnan(p.speed))
+            {
+                OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+                OAGpxExtension *e = [[OAGpxExtension alloc] init];
+                e.name = @"speed";
+                e.value = [NSString stringWithFormat:@"%.3f", p.speed];
+                ext.extensions = @[e];
+                p.extraData = ext;
+            }
 
             extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
             if (p.extraData)
@@ -429,7 +457,7 @@
         trkpt->name = QString::fromNSString(p.name);
         trkpt->description = QString::fromNSString(p.desc);
         trkpt->elevation = p.elevation;
-        trkpt->timestamp = QDateTime::fromTime_t(p.time);
+        trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
         trkpt->magneticVariation = p.magneticVariation;
         trkpt->geoidHeight = p.geoidHeight;
         trkpt->comment = QString::fromNSString(p.comment);
@@ -446,12 +474,15 @@
         
         [self.class fillLinks:trkpt->links linkArray:p.links];
         
-        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = @"speed";
-        e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-        ext.extensions = @[e];
-        p.extraData = ext;
+        if (!isnan(p.speed))
+        {
+            OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+            OAGpxExtension *e = [[OAGpxExtension alloc] init];
+            e.name = @"speed";
+            e.value = [NSString stringWithFormat:@"%.3f", p.speed];
+            ext.extensions = @[e];
+            p.extraData = ext;
+        }
 
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
         if (p.extraData)
@@ -491,7 +522,7 @@
     trkpt->name = QString::fromNSString(p.name);
     trkpt->description = QString::fromNSString(p.desc);
     trkpt->elevation = p.elevation;
-    trkpt->timestamp = QDateTime::fromTime_t(p.time).toUTC();
+    trkpt->timestamp = p.time != 0 ? QDateTime::fromTime_t(p.time).toUTC() : QDateTime();
     trkpt->magneticVariation = p.magneticVariation;
     trkpt->geoidHeight = p.geoidHeight;
     trkpt->comment = QString::fromNSString(p.comment);
@@ -508,12 +539,15 @@
     
     [self.class fillLinks:trkpt->links linkArray:p.links];
     
-    OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-    OAGpxExtension *e = [[OAGpxExtension alloc] init];
-    e.name = @"speed";
-    e.value = [NSString stringWithFormat:@"%.3f", p.speed];
-    ext.extensions = @[e];
-    p.extraData = ext;
+    if (!isnan(p.speed))
+    {
+        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = @"speed";
+        e.value = [NSString stringWithFormat:@"%.3f", p.speed];
+        ext.extensions = @[e];
+        p.extraData = ext;
+    }
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
     if (p.extraData)

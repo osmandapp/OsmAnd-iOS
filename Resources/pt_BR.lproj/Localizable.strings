@@ -1951,3 +1951,19 @@
 "whole_track_descr" = "A trilha inteira será recalculada usando o perfil selecionado.";
 "next_seg_descr" = "O próximo segmento será recalculado usando o perfil selecionado.";
 "route_betw_points_descr" = "Escolha como conectar os pontos de conexão: com uma linha reta ou calculando uma rota usando um dos perfis listados abaixo.";
+"unsupported_action_descr" = "Esta ação rápida não é suportada agora. Isso pode ser corrigido em novas versões do aplicativo.";
+"unsupported_action_title" = "Ação não suportada (%@)";
+"unsupported_action" = "Ação não suportada";
+"unsupported_items" = "Itens não suportados";
+
+"quick_action_remove_next_destination_descr" = "Exclui o próximo destino da sua rota. Se esse for o destino final, a navegação será interrompida.";
+"profile_type_osmand_string" = "Perfil do OsmAnd";
+"reverse_route" = "Rota reversa";
+"quick_action_switch_profile_descr" = "O botão de ação alterna entre os perfis selecionados.";
+"quick_action_showhide_mapillary_title" = "Mostrar/ocultar Mapillary";
+"profile_type_user_string" = "Perfil de usuário";
+"quick_action_remove_next_destination" = "Apagar o ponto de destino mais próximo";
+"arrived_at_destination" = "Você chegou.";
+"quick_action_mapillary_hide" = "Ocultar Mapillary";
+"quick_action_mapillary_show" = "Mostrar Mapillary";
+"shared_string_add_profile" = "Adicionar perfil";

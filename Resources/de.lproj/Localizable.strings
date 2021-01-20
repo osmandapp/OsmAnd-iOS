@@ -1086,7 +1086,7 @@
 "osm_upload_complete" = "Hochladen abgeschlossen";
 "sett_ext_input_desc" = "Wählen Sie ein Gerät wie eine Tastatur oder WunderLINQ für externe Steuerelemente aus.";
 "sett_ext_input" = "Externe Eingabegeräte";
-"sett_no_ext_input" = "Keine";
+"sett_no_ext_input" = "Keines";
 "sett_generic_ext_input" = "Tastatur";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Hineinzoomen";
@@ -1749,7 +1749,7 @@
 "rearrange_profiles" = "Profile neu anordnen";
 "empty_profile_name_warning" = "Profilname darf nicht leer sein.";
 "desert" = "Wüste";
-"change_map_behavior" = "Ändere das Kartenverhalten während der Navigation";
+"change_map_behavior" = "Kartenverhalten während der Navigation ändern";
 "map_behavior" = "Kartenverhalten";
 "voice_anounces" = "Sprachansagen";
 "osmand_routing" = "OsmAnd-Routing";
@@ -1951,3 +1951,19 @@
 "whole_track_descr" = "Der gesamte Track wird mit dem ausgewählten Profil neu berechnet.";
 "next_seg_descr" = "Das nächste Segment wird mit dem ausgewählten Profil neu berechnet.";
 "route_betw_points_descr" = "Wählen Sie, wie Sie die Punkte verbinden möchten: mit einer geraden Linie oder durch Berechnung einer Route mit einem der unten aufgeführten Profile.";
+"unsupported_action_descr" = "Diese Schnellaktion wird derzeit nicht unterstützt. Dies kann sich in neuen App-Versionen ändern.";
+"unsupported_action_title" = "Nicht unterstützte Aktion (%@)";
+"unsupported_action" = "Nicht unterstützte Aktion";
+"unsupported_items" = "Nicht unterstützte Elemente";
+
+"quick_action_mapillary_hide" = "Mapillary ausblenden";
+"quick_action_remove_next_destination_descr" = "Löscht das nächste Ziel auf Ihrer Route. Wenn dies das endgültige Ziel ist, wird die Navigation gestoppt.";
+"reverse_route" = "Route umkehren";
+"profile_type_osmand_string" = "OsmAnd-Profil";
+"shared_string_add_profile" = "Profil hinzufügen";
+"profile_type_user_string" = "Benutzerprofil";
+"quick_action_mapillary_show" = "Mapillary anzeigen";
+"quick_action_showhide_mapillary_title" = "Mapillary ein-/ausblenden";
+"quick_action_switch_profile_descr" = "Die Aktionsschaltfläche schaltet zwischen den ausgewählten Profilen um.";
+"quick_action_remove_next_destination" = "Nächstgelegenen Zielpunkt löschen";
+"arrived_at_destination" = "Sie sind angekommen.";

@@ -41,6 +41,7 @@
     NSInteger _baseMaxSpeed;
     NSString *_units;
     NSAttributedString *_footerAttrString;
+    NSMutableArray<NSNumber *> *_gestureRecognizersStateBackup;
 }
 
 - (instancetype) initWithApplicationMode:(OAApplicationMode *)am speedParameters:(NSDictionary *)speedParameters
@@ -136,13 +137,15 @@
     }
     CGFloat settingsMinSpeed = self.appMode.getMinSpeed;
     CGFloat settingsMaxSpeed = self.appMode.getMaxSpeed;
+    
     CGFloat minSpeedValue = settingsMinSpeed > 0 ? settingsMinSpeed : router->getMinSpeed();
     CGFloat maxSpeedValue = settingsMaxSpeed > 0 ? settingsMaxSpeed : router->getMaxSpeed();
 
     _minValue = round(minSpeedValue * _ratio);
     _maxValue = round(maxSpeedValue * _ratio);
-    _baseMinSpeed = MAX(1, floor(self.appMode.baseMinSpeed * _ratio));
-    _baseMaxSpeed = round(self.appMode.baseMaxSpeed * _ratio);
+    
+    _baseMinSpeed = round(MIN(_minValue, router->getMinSpeed() * _ratio / 2.));
+    _baseMaxSpeed = round(MAX(_maxValue, router->getMaxSpeed() * _ratio * 1.5));
 }
 
 - (void) setupView
@@ -270,6 +273,40 @@
     _maxValue = selectedMaximum;
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0], [NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void)didStartTouchesInRangeSlider:(TTRangeSlider *)sender
+{
+    [self disableAllGestureRecognizers];
+}
+
+- (void)didEndTouchesInRangeSlider:(TTRangeSlider *)sender
+{
+    [self restoreAllGestureRecognizersState];
+}
+
+- (void) disableAllGestureRecognizers
+{
+    _gestureRecognizersStateBackup = [NSMutableArray new];
+    NSArray<__kindof UIGestureRecognizer *> *recognizers = self.presentationController.presentedView.gestureRecognizers;
+    
+    for (int i = 0; i < recognizers.count; i++)
+    {
+        UIGestureRecognizer *recognizer = recognizers[i];
+        [_gestureRecognizersStateBackup addObject:[NSNumber numberWithBool:recognizer.isEnabled]];
+        [recognizer setEnabled:NO];
+    }
+}
+
+- (void) restoreAllGestureRecognizersState
+{
+    NSArray<__kindof UIGestureRecognizer *> *recognizers = self.presentationController.presentedView.gestureRecognizers;
+    
+    for (int i = 0; i < recognizers.count; i++)
+    {
+        UIGestureRecognizer *recognizer = recognizers[i];
+        [recognizer setEnabled:_gestureRecognizersStateBackup[i]];
+    }
 }
 
 @end

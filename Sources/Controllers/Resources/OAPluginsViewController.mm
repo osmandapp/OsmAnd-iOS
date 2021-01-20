@@ -24,6 +24,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"
+#import "OAQuickActionRegistry.h"
 
 @interface OAPluginsViewController ()<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, OAOsmLiveBannerViewDelegate>
 
@@ -274,6 +275,8 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            [OAQuickActionRegistry.sharedInstance updateActionTypes];
+            [OAQuickActionRegistry.sharedInstance.quickActionListChangedObservable notifyEvent];
         });
         return;
     }

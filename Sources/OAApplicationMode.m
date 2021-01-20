@@ -600,7 +600,7 @@ static OAApplicationMode *_SKI;
     return customModes;
 }
 
-+ (void) saveProfile:(OAApplicationModeBuilder *)builder
++ (OAApplicationMode *) saveProfile:(OAApplicationModeBuilder *)builder
 {
     OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:builder.am.stringKey def:nil];
     if (mode != nil)
@@ -619,10 +619,12 @@ static OAApplicationMode *_SKI;
     {
         mode = [builder customReg];
         [_values addObject:mode];
+        [OAApplicationMode initRegVisibility];
     }
     
     [self reorderAppModes];
     [self saveCustomAppModesToSettings];
+    return mode;
 }
 
 + (BOOL) isProfileNameAvailable:(NSString *)profileName

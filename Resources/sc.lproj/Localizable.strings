@@ -1951,3 +1951,19 @@
 "whole_track_descr" = "Sa rasta intrea s'at a torrare a carculare impreende su profilu ischertadu.";
 "next_seg_descr" = "Su segmentu imbeniente s'at a torrare a carculare impreende su profilu ischertadu.";
 "route_betw_points_descr" = "Issèbera comente ligare sos puntos: cun una lìnia drita o carculende un'àndala impreende unu de sos profilos allistados inoghe in suta.";
+"unsupported_action_descr" = "Custa optzione no est suportada, in custu momentu. Custu problema diat pòdere èssere risoltu in versiones noas de s'aplicatzione.";
+"unsupported_action_title" = "Atzione non suportada (%@)";
+"unsupported_action" = "Atzione non suportada";
+"unsupported_items" = "Elementos non suportados";
+
+"profile_type_user_string" = "Profilu de s\'impreadore";
+"quick_action_mapillary_show" = "Ammustra Mapillary";
+"quick_action_remove_next_destination" = "Iscantzella su puntu de destinatzione prus a curtzu";
+"profile_type_osmand_string" = "Profilu de OsmAnd";
+"quick_action_switch_profile_descr" = "Su butone de atzione faghet colare dae unu profilu ischertadu a s\'àteru.";
+"quick_action_mapillary_hide" = "Cua Mapillary";
+"shared_string_add_profile" = "Annanghe unu profilu";
+"quick_action_showhide_mapillary_title" = "Ammustra/cua Mapillary";
+"reverse_route" = "Fùrria s\'àndala";
+"quick_action_remove_next_destination_descr" = "Iscantzellat su puntu de destinatzione imbeniente in s\'àndala tua. Si est sa destinatzione, sa navigatzione s\'at a firmare.";
+"arrived_at_destination" = "Ses arribadu.";

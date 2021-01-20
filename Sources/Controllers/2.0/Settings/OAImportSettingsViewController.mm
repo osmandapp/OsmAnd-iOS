@@ -40,6 +40,8 @@
 #import "OAFavoritesSettingsItem.h"
 #import "OAFavoritesHelper.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAMarkersSettingsItem.h"
+#import "OADestination.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -247,6 +249,7 @@
     OATableGroupToImport *favoritesSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *notesPointStyleSection = [[OATableGroupToImport alloc] init];
     OATableGroupToImport *editsPointStyleSection = [[OATableGroupToImport alloc] init];
+    OATableGroupToImport *activeMarkersStyleSection = [[OATableGroupToImport alloc] init];
     for (NSString *type in [_itemsMap allKeys])
     {
         EOAExportSettingsType itemType = [OAExportSettingsType parseType:type];
@@ -286,7 +289,7 @@
                     [profilesSection.groupItems addObject:@{
                         @"icon" :  [UIImage imageNamed:modeBean.iconName],
                         @"color" : UIColorFromRGB(modeBean.iconColor),
-                        @"title" : title,
+                        @"title" : title ? title : @"",
                         @"description" : routingProfile,
                         @"type" : kCellTypeTitleDescription,
                     }];
@@ -304,7 +307,7 @@
                     [quickActionsSection.groupItems addObject:@{
                         @"icon" : [quickAction getIconResName],
                         @"color" : UIColor.orangeColor,
-                        @"title" : [quickAction name] ? [quickAction name] : quickAction.actionType.name,
+                        @"title" : quickAction.getName ? quickAction.getName : quickAction.actionType.name,
                         @"type" : kCellTypeTitle,
                     }];
                 }
@@ -480,6 +483,23 @@
                 [data addObject:editsPointStyleSection];
                 break;
             }
+            case EOAExportSettingsTypeActiveMarkers:
+            {
+                activeMarkersStyleSection.groupName = OALocalizedString(@"map_markers");
+                activeMarkersStyleSection.type = kCellTypeSectionHeader;
+                activeMarkersStyleSection.isOpen = NO;
+                for (OADestination *item in settings)
+                {
+                    [activeMarkersStyleSection.groupItems addObject:@{
+                        @"icon" : @"ic_custom_marker",
+                        @"title" : item.desc,
+                        @"type" : kCellTypeTitle,
+                    }];
+                }
+                
+                [data addObject:activeMarkersStyleSection];
+                break;
+            }
             default:
                 break;
         }
@@ -580,6 +600,7 @@
     NSMutableArray<OAFavoriteGroup *> *favoiriteItems = [NSMutableArray array];
     NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
     NSMutableArray<OAOsmPoint *> *osmEditsPointList = [NSMutableArray array];
+    NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray array];
     
     for (NSObject *object in _selectedItems)
     {
@@ -603,6 +624,8 @@
             [settingsItems addObject:(OAFileSettingsItem *)object];
         else if ([object isKindOfClass:OAFavoriteGroup.class])
             [favoiriteItems addObject:(OAFavoriteGroup *)object];
+        else if ([object isKindOfClass:OADestination.class])
+            [activeMarkersList addObject:(OADestination *)object];
     }
     if (appModeBeans.count > 0)
         for (OAApplicationModeBean *modeBean in appModeBeans)
@@ -626,6 +649,10 @@
     {
         OAOsmNotesSettingsItem  *baseItem = [self getBaseItem:EOASettingsItemTypeOsmEdits clazz:OAOsmEditsSettingsItem.class];
         [settingsItems addObject:baseItem];
+    }
+    if (activeMarkersList.count > 0)
+    {
+        [settingsItems addObject:[[OAMarkersSettingsItem alloc] initWithItems:activeMarkersList]];
     }
     return settingsItems;
 }

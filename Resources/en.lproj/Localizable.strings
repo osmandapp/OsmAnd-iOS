@@ -360,6 +360,7 @@
 "starting_point_too_far" = "Starting point too far from nearest road.";
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
+"arrived_at_destination" = "You have arrived";
 
 "towards" = "toward";
 "route_roundabout" = "Roundabout: take %d exit and go";
@@ -572,6 +573,7 @@
 "import_from_docs" = "Import from documents";
 "import_from_files" = "Import from files";
 "gpx_no_tracks" = "There are no trips";
+"gpx_export_failed" = "Could not save created route";
 
 "gpx_remove" = "Remove trip?";
 "gpx_stat" = "Statistics";
@@ -813,7 +815,6 @@
 "profile_prefs_reset_successful" = "All profile settings restored to default";
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Base profile";
-"osmand_profile" = "OsmAnd profile";
 "selected_profile" = "Selected profile";
 "app_profiles" = "App profiles";
 "profile_sett_descr" = "Affect selected application profile";
@@ -876,6 +877,10 @@
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Reverse route";
 "join_segments" = "Join segments";
+"plan_route_create_new_route" = "Create new route";
+"plan_route_open_existing_track" = "Open existing track";
+"plan_route_last_modified" = "Last modified";
+"route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
 
 // Resources
 "res_mapsres" = "Maps & Resources";
@@ -1097,6 +1102,7 @@
 "map_sources" = "Map sources";
 "map_styles" = "Map styles";
 "add_action" = "Add action";
+"unsupported_items" = "Unsupported items";
 "create_items" = "Create items";
 "configure_map" = "Configure map";
 "configure_map_descr" = "Map appearance";
@@ -1202,6 +1208,21 @@
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
 "public_transport_hide" = "Hide public transport";
+"quick_action_showhide_mapillary_title" = "Show/hide Mapillary";
+"quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
+"quick_action_mapillary_hide" = "Hide Mapillary";
+"quick_action_mapillary_show" = "Show Mapillary";
+"quick_action_remove_next_destination" = "Delete nearest destination point";
+"quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
+"change_application_profile" = "Change application profile";
+"select_application_profile" = "Select application profile";
+"shared_string_add_profile" = "Add profile";
+"quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
+"profile_type_user_string" = "User profile";
+"profile_type_osmand_string" = "OsmAnd profile";
+"unsupported_action" = "Unsupported action";
+"unsupported_action_title" = "Unsupported action (%@)";
+"unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -1653,6 +1674,8 @@
 "poi_opening_hours" = "Opening hours";
 "poi_select_category" = "Select category";
 "poi_select_type" = "Select type";
+"shared_a_z" = "A - Z";
+"shared_z_a" = "Z - A";
 
 "city_type_suburb" = "Suburb";
 "city_type_hamlet" = "Hamlet";

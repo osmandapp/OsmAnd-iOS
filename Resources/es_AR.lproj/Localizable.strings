@@ -1952,3 +1952,19 @@
 "prev_segs_dist" = "Todos los segmentos anteriores %@";
 "prev_seg_dist" = "Segmento anterior %@";
 "next_segs_dist" = "Todos los segmentos posteriores %@";
+"unsupported_action_descr" = "Esta rápida acción no está admitida por ahora. Esto se puede solucionarse en nuevas versiones de la aplicación.";
+"unsupported_action_title" = "Acción no admitida (%@)";
+"unsupported_action" = "Acción no admitida";
+"unsupported_items" = "Elementos no admitidos";
+
+"shared_string_add_profile" = "Añadir perfil";
+"profile_type_osmand_string" = "Perfil de OsmAnd";
+"quick_action_remove_next_destination" = "Borrar el punto de destino más cercano";
+"reverse_route" = "Ruta inversa";
+"quick_action_switch_profile_descr" = "El botón de acción alterna entre los perfiles elegidos.";
+"quick_action_showhide_mapillary_title" = "Mostrar u ocultar Mapillary";
+"quick_action_remove_next_destination_descr" = "Quita el siguiente destino de la ruta. Si es el destino final, la navegación se detendrá.";
+"arrived_at_destination" = "Has llegado.";
+"profile_type_user_string" = "Perfil de usuario";
+"quick_action_mapillary_hide" = "Ocultar Mapillary";
+"quick_action_mapillary_show" = "Mostrar Mapillary";

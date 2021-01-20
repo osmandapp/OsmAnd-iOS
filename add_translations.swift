@@ -1,3 +1,4 @@
+#!/usr/bin/env swift
 //
 //  main.swift
 //  addTranslation

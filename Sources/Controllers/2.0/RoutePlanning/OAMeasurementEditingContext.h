@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
     EOAAddPointModeAfter
 };
 
-@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxTrkSeg, OARoadSegmentData;
+@class OAApplicationMode, OAMeasurementCommandManager, OAGpxData, OAGpxTrkPt, OAGpxRtePt, OAGpxTrkSeg, OARoadSegmentData, OAGPXMutableDocument;
 
 @protocol OASnapToRoadProgressDelegate
 
@@ -69,6 +69,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (OAGpxTrkPt *) removePoint:(NSInteger)position updateSnapToRoad:(BOOL)updateSnapToRoad;
 - (void) addPoint:(NSInteger)position pt:(OAGpxTrkPt *)pt;
 - (void) addPoints:(NSArray<OAGpxTrkPt *> *)points;
+- (void) addPoints;
 
 - (NSArray<OAGpxTrkSeg *> *) getBeforeTrkSegmentLine;
 - (NSArray<OAGpxTrkSeg *> *) getAfterTrkSegmentLine;
@@ -108,5 +109,10 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) cancelSnapToRoad;
 
 - (OsmAnd::ColorARGB) getLineColor;
+
+- (OAGPXMutableDocument *) exportGpx:(NSString *)gpxName;
+- (NSArray<NSArray<OAGpxRtePt *> *> *) getRoutePoints;
+
+- (void) scheduleRouteCalculateIfNotEmpty;
 
 @end

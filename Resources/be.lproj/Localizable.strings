@@ -1000,7 +1000,7 @@
 "osm_live_routing" = "Навігацыя OsmAnd Live";
 "product_title_wikivoyage" = "Турыстычны даведнік";
 "osm_note_comment" = "Каментар";
-"map_widget_radius_ruler" = "Радыусная лінейка";
+"map_widget_ruler_control" = "Радыусная лінейка";
 "quick_action_no_underlay" = "Няма падкладкі";
 "res_elliptic_mercator" = "Эліптычны меркатар";
 "hide_notes" = "Схаваць OSM-нататкі";

@@ -908,7 +908,7 @@
 "shared_string_category" = "Catégorie";
 "poi_opening_hours" = "Heures d'ouverture";
 "poi_select_category" = "Sélectionner une catégorie";
-"map_widget_radius_ruler" = "Règle de rayon";
+"map_widget_ruler_control" = "Règle de rayon";
 "shared_string_upload" = "Téléverser";
 "poi_overlay" = "Superposition POI";
 "poi_type" = "Type de POI";

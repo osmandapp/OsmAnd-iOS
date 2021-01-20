@@ -905,7 +905,7 @@
 "osm_editing_lost_changes_descr" = "Niet-bewaarde wijzigingen gaan verloren. Doorgaan?";
 "modify_edit_short" = "Verander OSM-wijziging";
 "translucent_blue" = "Doorschijnend blauw";
-"map_widget_radius_ruler" = "Cirkel";
+"map_widget_ruler_control" = "Cirkel";
 "prev_route" = "Vorige route";
 "product_title_wikivoyage" = "Reisgids";
 "quick_action_add_underlay" = "Underlay-kaart toevoegen";

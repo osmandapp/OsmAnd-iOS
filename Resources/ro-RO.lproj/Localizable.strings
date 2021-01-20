@@ -511,7 +511,7 @@
 "res_wiki" = "Wikipedia (wiki)";
 "yellow" = "Galben";
 "shared_string_read_more" = "Citește mai mult";
-"map_widget_radius_ruler" = "Riglă circulară";
+"map_widget_ruler_control" = "Riglă circulară";
 "key_hint_select" = "Selectează";
 "replace_destination" = "Înlocuiește destinația";
 "apply_filters" = "Aplică filtrele";

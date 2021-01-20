@@ -169,7 +169,9 @@
 "max_speed_none" = "none";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
-"map_widget_radius_ruler" = "Radius ruler";
+"map_widget_ruler_control" = "Radius ruler";
+"show_compass_ruler" = "Show compass ruler";
+"hide_compass_ruler" = "Hide compass ruler";
 
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";
@@ -1257,6 +1259,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
+"units_nm" = "nmi";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
 
@@ -1706,6 +1709,7 @@
 "key_hint_select" = "Select";
 "key_hint_deselect" = "Deselect";
 "key_hint_goback" = "Go Back";
+"key_hint_recenter_map" = "Recenter Map";
 
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";

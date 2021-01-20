@@ -458,7 +458,7 @@
 "max_speed_none" = "Nenhum";
 "access_arrival_time" = "Hora de chegada";
 "map_widget_time" = "Tempo para chegar";
-"map_widget_radius_ruler" = "Régua de raio";
+"map_widget_ruler_control" = "Régua de raio";
 "shared_string_collapse" = "Recolher";
 "map_widget_right" = "Painel direito";
 "map_widget_left" = "Painel esquerdo";

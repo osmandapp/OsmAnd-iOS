@@ -913,7 +913,7 @@
 "osm_note_created" = "ایجاد یادداشت OSM";
 "work_pt" = "محل کار";
 "add_map_source" = "افزودن منبع نقشه";
-"map_widget_radius_ruler" = "خط‌کش شعاعی";
+"map_widget_ruler_control" = "خط‌کش شعاعی";
 "quick_action_name_str" = "نام عملیات";
 "help_versions" = "نسخه‌ها";
 "gpx_slope" = "شیب";

@@ -898,7 +898,7 @@
 "region_others" = "Diğer haritalar";
 "osm_target_modified" = "Modifiye OSM POI";
 "change_map_source" = "Harita kaynağını değiştir";
-"map_widget_radius_ruler" = "Yarıçap cetveli";
+"map_widget_ruler_control" = "Yarıçap cetveli";
 "map_settings_text_size" = "Yazı boyutu";
 "coordinates_example" = "Örnek";
 "lightblue" = "Açık mavi";

@@ -169,7 +169,9 @@
 "max_speed_none" = "none";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
-"map_widget_radius_ruler" = "Radius ruler";
+"map_widget_ruler_control" = "Radius ruler";
+"show_compass_ruler" = "Show compass ruler";
+"hide_compass_ruler" = "Hide compass ruler";
 
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";
@@ -1253,6 +1255,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
+"units_nm" = "nmi";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
 

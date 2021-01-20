@@ -30,6 +30,7 @@
 #import "OARulerWidget.h"
 #import "OATimeWidgetState.h"
 #import "OABearingWidgetState.h"
+#import "OACompassRulerWidgetState.h"
 
 @interface OATextState : NSObject
 
@@ -606,7 +607,7 @@
     [self registerSideWidget:battery imageId:@"ic_action_battery" message:OALocalizedString(@"map_widget_battery") key:@"battery" left:false priorityOrder:42];
     
     OATextInfoWidget *ruler = [mic createRulerControl];
-    [self registerSideWidget:ruler imageId:@"ic_action_ruler_circle" message:OALocalizedString(@"map_widget_radius_ruler") key:@"radius_ruler" left:false priorityOrder:43];
+    [self registerSideWidget:ruler widgetState:[[OACompassRulerWidgetState alloc] init] key:@"radius_ruler" left:NO priorityOrder:43];
 }
 
 - (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts

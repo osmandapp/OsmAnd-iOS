@@ -99,7 +99,7 @@
 "max_speed_none" = "none";
 "access_arrival_time" = "Hora da chegada";
 "map_widget_time" = "Tempo para chegar";
-"map_widget_radius_ruler" = "Radius ruler";
+"map_widget_ruler_control" = "Radius ruler";
 "shared_string_collapse" = "Agochar";
 "shared_string_topbar" = "Barra de enriba";
 "shared_string_widgets" = "Widgets";

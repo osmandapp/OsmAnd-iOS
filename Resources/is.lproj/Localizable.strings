@@ -813,7 +813,7 @@
 "actions" = "Aðgerðir";
 "directions_more_options" = "Leiðir frá";
 "nearby_search" = "Leita í nágrenninu";
-"map_widget_radius_ruler" = "Mælistika út frá miðju hrings";
+"map_widget_ruler_control" = "Mælistika út frá miðju hrings";
 "import_from_docs" = "Flytja inn úr skjölum";
 "osm_live_routing" = "OsmAnd Live leiðsögn";
 "osm_live_routing_descr" = "Nota uppfærslur OsmAnd Live fyrir leiðsögn";

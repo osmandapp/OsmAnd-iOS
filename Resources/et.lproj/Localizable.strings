@@ -137,7 +137,7 @@
 "max_speed_none" = "määramata";
 "access_arrival_time" = "Saabumisaeg";
 "map_widget_time" = "Aeg minna";
-"map_widget_radius_ruler" = "Raadiuse joonlaud";
+"map_widget_ruler_control" = "Raadiuse joonlaud";
 "shared_string_collapse" = "Paki kokku";
 "shared_string_topbar" = "Ülemine riba";
 "shared_string_widgets" = "Vidinad";

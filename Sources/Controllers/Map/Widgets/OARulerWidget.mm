@@ -33,7 +33,7 @@
 #define TEXT_SIDE_VERTICAL @"VERTICAL"
 #define TEXT_SIDE_HORIZONTAL @"HORIZONTAL"
 
-#define SHOW_RULER_MIN_ZOOM 8
+#define SHOW_RULER_MIN_ZOOM 3
 #define SHOW_COMPASS_MIN_ZOOM 8
 #define ZOOM_UPDATING_THRESHOLD 0.05
 #define RULER_ROTATION_UPDATING_THRESHOLD 1
@@ -592,7 +592,7 @@
         NSString *distance = _cacheDistances[circleNumber - 1];
         NSString *heading = [NSString stringWithFormat:@"%@ %@", [_app getFormattedAzimuth:_cachedHeading], [self getCardinalDirectionForDegrees:_cachedHeading]];
         
-        double offset = [_textSide isEqualToString:TEXT_SIDE_HORIZONTAL] ? 5 : 16;
+        double offset = [_textSide isEqualToString:TEXT_SIDE_HORIZONTAL] ? 5 : 20;
         double drawingTextRadius = radiusLength + offset;
         
         NSArray<NSValue *> *textCoords = [self calculateTextCoords:heading rightOrBottomText:distance drawingTextRadius:drawingTextRadius center:center];
@@ -674,7 +674,7 @@
             CGFloat textHeight = cardinalString.size.height;
             
             double textRadius = radiusLength - textMargin;
-            CGPoint point = [self getPointFromCenterByRadius:textRadius angle: i*5 - 90];
+            CGPoint point = [self getPointFromCenterByRadius:textRadius angle: -i*5 + 90];
             [cardinalShadowString drawAtPoint:CGPointMake(point.x - textWidth / 2, point.y - textHeight / 2)];
             [cardinalString drawAtPoint:CGPointMake(point.x - textWidth / 2, point.y - textHeight / 2)];
         }
@@ -704,7 +704,7 @@
 
 - (NSString *) getCardinalDirectionForDegrees:(double)doubleDegrees
 {
-    int degrees = (int)(-doubleDegrees);
+    int degrees = (int)(doubleDegrees);
     while (degrees < 0)
         degrees += 360;
     

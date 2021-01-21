@@ -69,8 +69,7 @@
 
 - (CGFloat) initialHeight
 {
-    //TODO: - probably need to be dynamic
-    return DeviceScreenHeight - DeviceScreenHeight / 3;
+    return DeviceScreenHeight - DeviceScreenHeight / ([OAGPXDatabase sharedDb].gpxList.count > 1 ? 3 : 2);
 }
 
 - (void) generateData
@@ -102,8 +101,10 @@
         NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFileName];
         return [time2 compare:time1];
     }];
+    
+    NSArray *gpxTopList = [gpxList subarrayWithRange:NSMakeRange(0, min(5, (int) gpxList.count))];
 
-    if (gpxList.count > 0)
+    if (gpxTopList.count > 0)
     {
         [existingTracksSection addObject:@{
             @"type" : kHeaderRoundCell,
@@ -112,7 +113,7 @@
         }];
 
         OsmAndAppInstance app = OsmAndApp.instance;
-        for (OAGPX *gpx in gpxList)
+        for (OAGPX *gpx in gpxTopList)
         {
             [existingTracksSection addObject:@{
                     @"type" : kGPXRouteRoundCell,

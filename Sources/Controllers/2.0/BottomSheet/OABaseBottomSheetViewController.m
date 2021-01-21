@@ -48,8 +48,8 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    return [super initWithNibName:@"OABaseBottomSheetViewController"
-                           bundle:nil];
+    return [super initWithNibName:nibNameOrNil == nil ? @"OABaseBottomSheetViewController" : nibNameOrNil
+                               bundle:nil];
 }
 
 - (void) presentInViewController:(UIViewController *)viewController
@@ -99,6 +99,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     self.closeButton.tintColor = UIColorFromRGB(color_primary_purple);
     
     _currentState = EOAScrollableMenuStateInitial;
+    _isFullScreenAvailable = YES;
     
     [self applyLocalization];
     [self layoutSubviews];
@@ -113,6 +114,11 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 - (CGFloat)initialHeight
 {
     return DeviceScreenHeight - DeviceScreenHeight / 4;
+}
+
+- (CGFloat) buttonsViewHeight
+{
+    return 60.;
 }
 
 - (CGFloat) getViewHeight
@@ -138,8 +144,8 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         f.origin = CGPointMake(DeviceScreenWidth/2 - f.size.width / 2, 0.);
         
         CGRect buttonsFrame = _buttonsView.frame;
-        buttonsFrame.origin.y = f.size.height - 60. - bottomMargin;
-        buttonsFrame.size.height = 60. + bottomMargin;
+        buttonsFrame.origin.y = f.size.height - self.buttonsViewHeight - bottomMargin;
+        buttonsFrame.size.height = self.buttonsViewHeight + bottomMargin;
         _buttonsView.frame = buttonsFrame;
         
         CGRect contentFrame = _contentContainer.frame;
@@ -150,7 +156,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     else
     {
         CGRect buttonsFrame = _buttonsView.frame;
-        buttonsFrame.size.height = 60. + bottomMargin;
+        buttonsFrame.size.height = self.buttonsViewHeight + bottomMargin;
         f.size.height = [self getViewHeight];
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
@@ -374,7 +380,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             {
                 _currentState = EOAScrollableMenuStateInitial;
             }
-            else if (newY < fullScreenAnchor || fastUpSlide)
+            else if (_isFullScreenAvailable && (newY < fullScreenAnchor || fastUpSlide))
             {
                 _currentState = EOAScrollableMenuStateFullScreen;
             }

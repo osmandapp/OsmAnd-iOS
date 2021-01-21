@@ -42,6 +42,7 @@
 #import "OAReversePointsCommand.h"
 #import "OASegmentOptionsBottomSheetViewController.h"
 #import "OAPlanningOptionsBottomSheetViewController.h"
+#import "OAExitRoutePlanningBottomSheetViewController.h"
 #import "OAChangeRouteModeCommand.h"
 #import "OATargetPointsHelper.h"
 #import "OASaveGpxRouteAsyncTask.h"
@@ -420,13 +421,21 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (IBAction)closePressed:(id)sender
 {
-    [self hide:YES duration:.2 onComplete:^{
-        [_mapPanel targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
-        [self restoreMapViewPort];
-        [OARootViewController.instance.mapPanel hideScrollableHudViewController];
-        _layer.editingCtx = nil;
-        [_layer resetLayer];
-    }];
+    if (_editingContext.getPointsCount > 0)
+    {
+        OAExitRoutePlanningBottomSheetViewController *bottomSheet = [[OAExitRoutePlanningBottomSheetViewController alloc] init];
+        [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
+    }
+    else
+    {
+        [self hide:YES duration:.2 onComplete:^{
+            [_mapPanel targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
+            [self restoreMapViewPort];
+            [OARootViewController.instance.mapPanel hideScrollableHudViewController];
+            _layer.editingCtx = nil;
+            [_layer resetLayer];
+        }];
+    }
 }
 
 - (IBAction)donePressed:(id)sender

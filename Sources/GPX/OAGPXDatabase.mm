@@ -75,6 +75,16 @@
     return gpx;
 }
 
+- (void) replaceGpxItem:(OAGPX *)gpx
+{
+    NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
+    OAGPX *existing = [self getGPXItem:gpx.gpxFileName];
+    if (existing)
+        [res removeObject:existing];
+    [res addObject:gpx];
+    gpxList = res;
+}
+
 -(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
     OAGPX *gpx = [[OAGPX alloc] init];

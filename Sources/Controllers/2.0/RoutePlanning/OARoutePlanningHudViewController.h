@@ -11,6 +11,8 @@
 
 @interface OARoutePlanningHudViewController : OABaseScrollableHudViewController
 
+- (instancetype) initWithFileName:(NSString *)fileName;
+
 - (void) cancelModes;
 
 @end

@@ -42,7 +42,7 @@
     return self;
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) importRoute
+- (std::vector<std::shared_ptr<RouteSegmentResult>> &) importRoute
 {
     if (_gpxFile != nil || _segment != nil)
     {
@@ -76,12 +76,12 @@
 
 - (void) parseRoute:(OAGpxTrkSeg *)segment
 {
-    RoutingIndex region;
+    RoutingIndex *region = new RoutingIndex();
     auto resources = std::make_shared<RouteDataResources>();
     
     [self collectLocations:resources segment:segment];
-    auto route = [self collectRouteSegments:&region resources:resources segment:segment];
-    [self collectRouteTypes:&region segment:segment];
+    auto route = [self collectRouteSegments:region resources:resources segment:segment];
+    [self collectRouteTypes:region segment:segment];
     for (auto& routeSegment : route)
     {
         routeSegment->fillNames(resources);
@@ -117,11 +117,16 @@
     std::vector<std::shared_ptr<RouteSegmentResult>> route;
     for (OARouteSegment *routeSegment in segment.routeSegments)
     {
-        auto object = std::make_shared<RouteDataObject>(region, true);
+        auto object = std::make_shared<RouteDataObject>(region);
         auto segmentResult = std::make_shared<RouteSegmentResult>(object);
 		auto bundle = std::make_shared<RouteDataBundle>(resources, routeSegment.toStringBundle);
         segmentResult->readFromBundle(bundle);
         route.push_back(segmentResult);
+    }
+    if (!route.empty())
+    {
+        // Take ownership over region only for one RouteDataObject
+        (*route.begin())->object->ownsRegion = true;
     }
     return route;
 }

@@ -71,6 +71,8 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         _after = [[OAGpxTrkSeg alloc] init];
         _after.points = @[];
         _afterSegments = [NSMutableArray new];
+        
+        _roadSegmentData = [NSMutableDictionary new];
     }
     return self;
 }
@@ -85,19 +87,6 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 {
     [_commandManager resetChangesCounter];
 }
-
-//- (void) updateCacheForSnap
-//{
-//    [self updateCacheForSnap:YES];
-//}
-
-//public List<WptPt> getOriginalTrackPointList() {
-//    MeasurementModeCommand command = commandManager.getLastCommand();
-//    if (command.getType() == APPROXIMATE_POINTS) {
-//        return ((ApplyGpxApproximationCommand) command).getPoints();
-//    }
-//    return null;
-//}
 
 - (BOOL) isAddNewSegmentAllowed
 {
@@ -129,7 +118,6 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 {
     return !_gpxData;
 }
-
 
 - (BOOL) hasRoutePoints
 {
@@ -252,20 +240,6 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 {
     _before.points = [NSArray new];
 }
-
-//public List<RouteSegmentResult> getAllRouteSegments() {
-//    List<RouteSegmentResult> allSegments = new ArrayList<>();
-//    for (Pair<WptPt, WptPt> key : getOrderedRoadSegmentDataKeys()) {
-//        RoadSegmentData data = roadSegmentData.get(key);
-//        if (data != null) {
-//            List<RouteSegmentResult> segments = data.getSegments();
-//            if (segments != null) {
-//                allSegments.addAll(segments);
-//            }
-//        }
-//    }
-//    return allSegments.size() > 0 ? allSegments : null;
-//}
 
 - (void) splitSegments:(NSInteger)position
 {
@@ -615,7 +589,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         {
             OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithTrkSeg:segment];
             auto routeSegments = [routeImporter importRoute];
-            NSMutableArray<OAGpxTrkPt *> *routePoints = [NSMutableArray arrayWithArray:[gpxData.gpxFile getRoutePoints:si]];
+            NSMutableArray<OAGpxRtePt *> *routePointsRte = [NSMutableArray arrayWithArray:[gpxData.gpxFile getRoutePoints:si]];
+            NSMutableArray<OAGpxTrkPt *> *routePoints = [NSMutableArray new];
+            for (OAGpxRtePt *pt in routePointsRte)
+                [routePoints addObject:[[OAGpxTrkPt alloc] initWithRtePt:pt]];
             NSInteger prevPointIndex = 0;
             if (routePoints.count == 0 && points.count > 1)
             {
@@ -647,16 +624,17 @@ static OAApplicationMode *DEFAULT_APP_MODE;
                     std::vector<std::shared_ptr<RouteSegmentResult>> pairSegments;
                     if (k == 0 && !routeSegments.empty())
                     {
-                        pairSegments.push_back(*routeSegments.erase(routeSegments.begin()));
+                        const auto seg = routeSegments[0];
+                        pairSegments.push_back(seg);
+                        routeSegments.erase(routeSegments.begin());
                     }
                     else
                     {
-                        while (it + 1 != routeSegments.end() && k > 0)
+                        while (it != routeSegments.end() && k > 0)
                         {
                             const auto s = *it;
                             pairSegments.push_back(s);
-                            routeSegments.erase(it);
-                            it++;
+                            it = routeSegments.erase(it);
                             k -= abs(s->getEndPointIndex() - s->getStartPointIndex());
                         }
                     }
@@ -676,35 +654,6 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         }
     }
 }
-//private void recreateCacheForSnap(TrkSegment cache, TrkSegment original, boolean calculateIfNeeded) {
-//    boolean hasDefaultModeOnly = true;
-//    if (original.points.size() > 1) {
-//        for (int i = 0; i < original.points.size(); i++) {
-//            String profileType = original.points.get(i).getProfileType();
-//            if (profileType != null && !profileType.equals(DEFAULT_APP_MODE.getStringKey())) {
-//                hasDefaultModeOnly = false;
-//                break;
-//            }
-//        }
-//    }
-//    if (original.points.size() > 1) {
-//        for (int i = 0; i < original.points.size() - 1; i++) {
-//            Pair<WptPt, WptPt> pair = new Pair<>(original.points.get(i), original.points.get(i + 1));
-//            RoadSegmentData data = this.roadSegmentData.get(pair);
-//            List<WptPt> pts = data != null ? data.getPoints() : null;
-//            if (pts != null) {
-//                cache.points.addAll(pts);
-//            } else {
-//                if (calculateIfNeeded && !hasDefaultModeOnly) {
-//                    scheduleRouteCalculateIfNotEmpty();
-//                }
-//                cache.points.addAll(Arrays.asList(pair.first, pair.second));
-//            }
-//        }
-//    } else {
-//        cache.points.addAll(original.points);
-//    }
-//}
 
 //- (void) setPoints(GpxRouteApproximation gpxApproximation, ApplicationMode mode) {
 //    if (gpxApproximation == null || Algorithms.isEmpty(gpxApproximation.finalPoints) || Algorithms.isEmpty(gpxApproximation.result)) {
@@ -789,17 +738,6 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //    if (includeEndPoint) {
 //        addPointToArray(points, seg, ind, heightArray);
 //    }
-//}
-//
-//private void addPointToArray(List<WptPt> points, RouteSegmentResult seg, int index, float[] heightArray) {
-//    LatLon l = seg.getPoint(index);
-//    WptPt pt = new WptPt();
-//    if (heightArray != null && heightArray.length > index * 2 + 1) {
-//        pt.ele = heightArray[index * 2 + 1];
-//    }
-//    pt.lat = l.getLatitude();
-//    pt.lon = l.getLongitude();
-//    points.add(pt);
 //}
 
 - (NSInteger) findPointIndex:(OAGpxTrkPt *)point points:(NSArray<OAGpxTrkPt *> *)points firstIndex:(NSInteger)firstIndex

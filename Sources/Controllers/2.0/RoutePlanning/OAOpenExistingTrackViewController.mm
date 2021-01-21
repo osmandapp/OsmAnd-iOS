@@ -17,6 +17,7 @@
 #import "OsmAndApp.h"
 #import "OAGPXTrackCell.h"
 #import "OASegmentTableViewCell.h"
+#import "OARoutePlanningHudViewController.h"
 #import "OAUtilities.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
@@ -42,9 +43,10 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOAScreenType _screenType;
 }
 
-- (instancetype) initWithScreen:(EOAScreenType)screenType
+- (instancetype) initWithScreenType:(EOAScreenType)screenType
 {
-    self = [super init];
+    self = [super initWithNibName:@"OABaseTableViewController"
+                           bundle:nil];
     if (self)
     {
         _screenType = screenType;
@@ -95,19 +97,16 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         @"title2" : OALocalizedString(@"shared_z_a"),
         @"key" : @"segment_control"
     }];
+    
+    OsmAndAppInstance app = OsmAndApp.instance;
     for (OAGPX *gpx in gpxList)
     {
-        // TODO: check these parameters
-        double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
-        NSTimeInterval duration = [[OAGPXRouter sharedInstance] getRouteDuration];
-        NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:duration shortFormat:NO];
-        
         [existingTracksSection addObject:@{
                 @"type" : kGPXTrackCell,
                 @"track" : gpx,
                 @"title" : [gpx getNiceTitle],
-                @"distance" : [NSString stringWithFormat:@"%f.", distance],
-                @"time" : timeMovingStr,
+                @"distance" : [app getFormattedDistance:gpx.totalDistance],
+                @"time" : [app getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
                 @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
                 @"key" : @"gpx_route"
             }];
@@ -207,11 +206,12 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     
     OAGPX* track = item[@"track"];
-    if (_screenType == EOAOpenExistingTrack)
+    if (_screenType == EOAOpenExistingTrack && track)
     {
         [self.delegate closeBottomSheet];
         [self dismissViewControllerAnimated:YES completion:nil];
-        [[OARootViewController instance].mapPanel openTargetViewWithGPX:track pushed:YES];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFileName]];
+        return;
     }
     else
     {

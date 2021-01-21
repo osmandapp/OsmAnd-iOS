@@ -59,8 +59,9 @@
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
     OAGpxTrk *track = [[OAGpxTrk alloc] init];
     track.name = name;
-    track.segments = trkSegments;
     [gpx addTrack:track];
+    for (OAGpxTrkSeg *seg in trkSegments)
+        [gpx addTrackSegment:seg track:track];
     if (points != nil)
     {
         for (OAGpxTrkPt *pt in points)

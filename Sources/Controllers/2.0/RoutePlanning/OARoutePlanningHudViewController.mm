@@ -47,6 +47,7 @@
 #import "OASaveGpxRouteAsyncTask.h"
 #import "OAOpenExistingTrackViewController.h"
 #import "OASelectedGPXHelper.h"
+#import "QuadRect.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -354,12 +355,18 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     OAGpxData *gpxData = [self setupGpxData:gpxFile];
     [self initMeasurementMode:gpxData addPoints:YES];
-    if (gpxData) {
+    if (gpxData)
+    {
         QuadRect *qr = gpxData.rect;
-        // TODO: cener map on gpx
-//        mapActivity.getMapView().fitRectToMap(qr.left, qr.right, qr.top, qr.bottom,
-//                                              (int) qr.width(), (int) qr.height(), 0);
+        [self centerMapOnBBox:qr];
     }
+}
+
+- (void)centerMapOnBBox:(QuadRect *)routeBBox
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    BOOL landscape = [OAUtilities isLandscapeIpadAware];
+    [mapPanel displayAreaOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) zoom:0 bottomInset:!landscape ? self.getViewHeight : 0 leftInset:landscape ? self.tableView.frame.size.width : 0];
 }
 
 - (OAGpxData *) setupGpxData:(OAGPXMutableDocument *)gpxFile
@@ -379,10 +386,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         if (!self.isUndoMode)
         {
-            NSArray<OAGpxTrkPt *> *points = gpxData.gpxFile.getRoutePoints;
+            NSArray<OAGpxRtePt *> *points = gpxData.gpxFile.getRoutePoints;
             if (points.count > 0)
             {
-                OAApplicationMode *snapToRoadAppMode = [OAApplicationMode valueOfStringKey:points.lastObject.getProfileType def:nil];
+                OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] initWithRtePt:points.lastObject];
+                OAApplicationMode *snapToRoadAppMode = [OAApplicationMode valueOfStringKey:pt.getProfileType def:nil];
                 if (snapToRoadAppMode)
                     [self setAppMode:snapToRoadAppMode];
             }
@@ -403,7 +411,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) collectPoints
 {
     if (!self.isUndoMode)
+    {
         [_editingContext addPoints];
+        [_layer updateLayer];
+    }
     [self updateDistancePointsText];
 }
 
@@ -570,20 +581,39 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     if (_editingContext.getPointsCount > 0)
     {
-//        OAGpxData *gpxData = _editingContext.gpxData;
-        if ([_editingContext isNewData] /*|| (isInEditMode() && gpxData.getActionType() == ActionType.EDIT_SEGMENT)*/)
+        if ([_editingContext isNewData])
         {
 //            if (showDialog) {
 //                openSaveAsNewTrackMenu(mapActivity);
 //            } else {
             [self saveNewGpx:nil fileName:[self getSuggestedFileName] showOnMap:YES simplifiedTrack:NO finalSaveAction:finalSaveAction];
         }
-//        } else {
-//            addToGpx(mapActivity, finalSaveAction);
-//        }
+        else
+        {
+            [self addToGpx:finalSaveAction];
+        }
     }
 //    else
 //        Toast.makeText(mapActivity, getString(R.string.none_point_error), Toast.LENGTH_SHORT).show();
+}
+
+- (void) addToGpx:(EOAFinalSaveAction)finalSaveAction
+{
+    OAGpxData *gpxData = _editingContext.gpxData;
+    OAGPXDocument *gpx = gpxData != nil ? gpxData.gpxFile : nil;
+    if (gpx != nil)
+    {
+//        SelectedGpxFile selectedGpxFile =
+//        mapActivity.getMyApplication().getSelectedGpxHelper().getSelectedFileByPath(gpx.path);
+//        boolean showOnMap = selectedGpxFile != null;
+        [self saveExistingGpx:gpx showOnMap:NO simplified:NO addToTrack:NO finalSaveAction:finalSaveAction];
+    }
+}
+
+- (void) saveExistingGpx:(OAGPXDocument *)gpx showOnMap:(BOOL)showOnMap
+                                 simplified:(BOOL)simplified addToTrack:(BOOL)addToTrack finalSaveAction:(EOAFinalSaveAction)finalSaveAction
+{
+    [self saveGpx:gpx.fileName gpxFile:gpx simplified:simplified addToTrack:addToTrack finalSaveAction:finalSaveAction showOnMap:showOnMap];
 }
 
 - (void) saveNewGpx:(NSString *)folderName fileName:(NSString *)fileName showOnMap:(BOOL)showOnMap
@@ -612,15 +642,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) onGpxSaved:(OAGPXDocument *)savedGpxFile outFile:(NSString *)outFile finalSaveAction:(EOAFinalSaveAction)finalSaveAction showOnMap:(BOOL)showOnMap
 {
     OAGPXTrackAnalysis *analysis = [savedGpxFile getAnalysis:0];
-    [[OAGPXDatabase sharedDb] addGpxItem:[outFile lastPathComponent] title:savedGpxFile.metadata.name desc:savedGpxFile.metadata.desc bounds:savedGpxFile.bounds analysis:analysis];
-    [[OAGPXDatabase sharedDb] save];
+    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+    OAGPX *gpx = [gpxDb buildGpxItem:[outFile lastPathComponent] title:savedGpxFile.metadata.name desc:savedGpxFile.metadata.desc bounds:savedGpxFile.bounds analysis:analysis];
+    [gpxDb replaceGpxItem:gpx];
+    [gpxDb save];
     if (showOnMap)
         [_settings showGpx:@[savedGpxFile.fileName]];
 }
 
 - (void) showAddToTrackDialog
 {
-    OAOpenExistingTrackViewController *saveTrackViewController = [[OAOpenExistingTrackViewController alloc] initWithScreen:EOAAddToATrack];
+    OAOpenExistingTrackViewController *saveTrackViewController = [[OAOpenExistingTrackViewController alloc] initWithScreenType:EOAAddToATrack];
     [self presentViewController:saveTrackViewController animated:YES completion:nil];
 }
 

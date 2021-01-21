@@ -23,6 +23,6 @@ typedef NS_ENUM(NSInteger, EOAScreenType) {
 
 @property (nonatomic, weak) id<OAOpenExistingTrackDelegate> delegate;
 
-- (instancetype) initWithScreen:(EOAScreenType)screenType;
+- (instancetype) initWithScreenType:(EOAScreenType)screenType;
 
 @end

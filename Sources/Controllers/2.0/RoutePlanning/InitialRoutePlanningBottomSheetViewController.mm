@@ -93,6 +93,8 @@
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"open_track"
         }];
+    
+    [data addObject:actionSection];
 
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
     NSArray *gpxList = [db.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
@@ -101,32 +103,29 @@
         return [time2 compare:time1];
     }];
 
-    [existingTracksSection addObject:@{
-        @"type" : kHeaderRoundCell,
-        @"title" : OALocalizedString(@"plan_route_last_modified"),
-        @"key" : @"header"
-    }];
-
-    for (OAGPX *gpx in gpxList)
+    if (gpxList.count > 0)
     {
-        // TODO: check these parameters
-        double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
-        NSTimeInterval duration = [[OAGPXRouter sharedInstance] getRouteDuration];
-        NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:duration shortFormat:NO];
-        
         [existingTracksSection addObject:@{
-                @"type" : kGPXRouteRoundCell,
-                @"track" : gpx,
-                @"title" : [gpx getNiceTitle],
-                @"distance" : [NSString stringWithFormat:@"%f.", distance],
-                @"time" : timeMovingStr,
-                @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
-                @"key" : @"gpx_route"
-            }];
-    }
+            @"type" : kHeaderRoundCell,
+            @"title" : OALocalizedString(@"plan_route_last_modified"),
+            @"key" : @"header"
+        }];
 
-    [data addObject:actionSection];
-    [data addObject:existingTracksSection];
+        OsmAndAppInstance app = OsmAndApp.instance;
+        for (OAGPX *gpx in gpxList)
+        {
+            [existingTracksSection addObject:@{
+                    @"type" : kGPXRouteRoundCell,
+                    @"track" : gpx,
+                    @"title" : [gpx getNiceTitle],
+                    @"distance" : [app getFormattedDistance:gpx.totalDistance],
+                    @"time" : [app getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
+                    @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
+                    @"key" : @"gpx_route"
+                }];
+        }
+        [data addObject:existingTracksSection];
+    }
     
     _data = data;
 }
@@ -244,7 +243,7 @@
     }
     else if ([key isEqualToString:@"open_track"])
     {
-        OAOpenExistingTrackViewController *openExistingTrackViewController = [[OAOpenExistingTrackViewController alloc] initWithScreen:EOAOpenExistingTrack];
+        OAOpenExistingTrackViewController *openExistingTrackViewController = [[OAOpenExistingTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack];
         openExistingTrackViewController.delegate = self;
         [self presentViewController:openExistingTrackViewController animated:YES completion:nil];
         return;
@@ -253,11 +252,9 @@
     {
         OAGPX* track = item[@"track"];
         [self dismissViewControllerAnimated:YES completion:nil];
-        [[OARootViewController instance].mapPanel openTargetViewWithGPX:track pushed:YES];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFileName]];
         return;
     }
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - OAOpenExistingTrackDelegate

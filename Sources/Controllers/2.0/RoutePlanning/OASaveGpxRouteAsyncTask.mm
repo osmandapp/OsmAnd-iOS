@@ -84,24 +84,25 @@
         //                MeasurementToolFragment.showGpxOnMap(app, gpx, true);
         //            }
     }
-    // TODO: handle exsisting gpx files
-    //        else
-    //        {
-    //            backupFile = FileUtils.backupFile(app, outFile);
-    //            String trackName = Algorithms.getFileNameWithoutExtension(outFile);
-    //            GPXFile gpx = generateGpxFile(measurementLayer, editingCtx, trackName, gpxFile);
-    //            if (gpxFile.metadata != null) {
-    //                gpx.metadata = new Metadata();
-    //                gpx.metadata.getExtensionsToWrite().putAll(gpxFile.metadata.getExtensionsToRead());
-    //            }
-    //            if (!gpx.showCurrentTrack) {
-    //                res = GPXUtilities.writeGpxFile(outFile, gpx);
-    //            }
-    //            savedGpxFile = gpx;
-    //            if (showOnMap) {
-    //                MeasurementToolFragment.showGpxOnMap(app, gpx, false);
-    //            }
-    //        }
+    else
+    {
+//        backupFile = FileUtils.backupFile(app, outFile);
+        NSString *trackName = [_outFile.lastPathComponent stringByDeletingPathExtension];
+        OAGPXDocument *gpx = [self generateGpxFile:trackName gpx:(OAGPXMutableDocument *)_gpxFile];
+        if (gpx.metadata != nil)
+        {
+            gpx.metadata = [[OAMetadata alloc] init];
+            gpx.metadata.extraData = _gpxFile.metadata.extraData;
+        }
+//        if (!gpx.showCurrentTrack) {
+//            res = GPXUtilities.writeGpxFile(outFile, gpx);
+//        }
+        _savedGpxFile = gpx;
+        success = [_savedGpxFile saveTo:_outFile];
+//        if (showOnMap) {
+//            MeasurementToolFragment.showGpxOnMap(app, gpx, false);
+//        }
+    }
     return success;
 }
 

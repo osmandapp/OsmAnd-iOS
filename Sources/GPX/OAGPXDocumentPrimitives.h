@@ -25,6 +25,7 @@ typedef enum
 } OAGpxFixType;
 
 struct RouteDataBundle;
+@class OAGpxExtension;
 
 @interface OARouteSegment : NSObject
 
@@ -42,6 +43,7 @@ struct RouteDataBundle;
 - (std::shared_ptr<RouteDataBundle>) toStringBundle;
 
 - (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
+- (instancetype) initWithGpxExtension:(OAGpxExtension *)ext;
 
 - (NSDictionary<NSString *, NSString *> *) toDictionary;
 
@@ -56,6 +58,7 @@ struct RouteDataBundle;
 - (std::shared_ptr<RouteDataBundle>) toStringBundle;
 
 - (instancetype) initWithDictionary:(NSDictionary<NSString *, NSString *> *)dict;
+- (instancetype) initWithGpxExtension:(OAGpxExtension *)ext;
 
 - (NSDictionary<NSString *, NSString *> *) toDictionary;
 
@@ -218,6 +221,7 @@ struct RouteDataBundle;
 @property (nonatomic) int dgpsStationId;
 
 - (instancetype) initWithPoint:(OAGpxTrkPt *)point;
+- (instancetype) initWithRtePt:(OAGpxRtePt *)point;
 
 - (NSString *) getProfileType;
 - (void) setProfileType:(NSString *)profileType;
@@ -249,6 +253,7 @@ struct RouteDataBundle;
 - (BOOL) hasRoute;
 
 - (void) fillExtensions;
+- (void) fillRouteDetails;
 
 @end
 

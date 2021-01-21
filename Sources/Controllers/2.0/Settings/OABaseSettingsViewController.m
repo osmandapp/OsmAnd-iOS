@@ -34,6 +34,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    [self setupNavBarHeight];
 }
 
 - (void)applyLocalization

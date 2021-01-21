@@ -455,22 +455,6 @@
 		326B4FC2257FD11400ABAB1D /* ic_action_light_aircraft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */; };
 		32AE6B9E257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */; };
 		32AE6BA3257A1433005D0139 /* OAQuickActionsSettingsItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */; };
-		32C91E4725A70AE700FA6470 /* OACompassRulerWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C91E4625A70AE700FA6470 /* OACompassRulerWidgetState.m */; };
-		32C91E4825A70AE700FA6470 /* OACompassRulerWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C91E4625A70AE700FA6470 /* OACompassRulerWidgetState.m */; };
-		32C91E5B25A86A5700FA6470 /* ic_custom_compass_widget_hide@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */; };
-		32C91E5C25A86A5700FA6470 /* ic_custom_compass_widget_hide@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */; };
-		32C91E5D25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
-		32C91E5E25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
-		32C91E5F25A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */; };
-		32C91E6025A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */; };
-		32C91E6125A86A5700FA6470 /* ic_custom_compass_widget_hide.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5825A86A5600FA6470 /* ic_custom_compass_widget_hide.png */; };
-		32C91E6225A86A5700FA6470 /* ic_custom_compass_widget_hide.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5825A86A5600FA6470 /* ic_custom_compass_widget_hide.png */; };
-		32C91E6325A86A5700FA6470 /* ic_custom_compass_widget.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5925A86A5700FA6470 /* ic_custom_compass_widget.png */; };
-		32C91E6425A86A5700FA6470 /* ic_custom_compass_widget.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5925A86A5700FA6470 /* ic_custom_compass_widget.png */; };
-		32C91E6525A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
-		32C91E6625A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
-		32D7D4D725B0C35900868E80 /* OARulerControlLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D7D4D625B0C35900868E80 /* OARulerControlLayer.m */; };
-		32D7D4D825B0C35900868E80 /* OARulerControlLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D7D4D625B0C35900868E80 /* OARulerControlLayer.m */; };
 		32BD81602598F5C900A54BB5 /* OAShowHideMapillaryAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD815F2598F5C900A54BB5 /* OAShowHideMapillaryAction.m */; };
 		32BD81612598F5C900A54BB5 /* OAShowHideMapillaryAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD815F2598F5C900A54BB5 /* OAShowHideMapillaryAction.m */; };
 		32BD81682599062600A54BB5 /* OANavRemoveNextDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD81672599062600A54BB5 /* OANavRemoveNextDestination.m */; };
@@ -491,6 +475,20 @@
 		32BD81B1259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */; };
 		32BD81C8259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD81C7259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m */; };
 		32BD81C9259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD81C7259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m */; };
+		32C91E4725A70AE700FA6470 /* OACompassRulerWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C91E4625A70AE700FA6470 /* OACompassRulerWidgetState.m */; };
+		32C91E4825A70AE700FA6470 /* OACompassRulerWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C91E4625A70AE700FA6470 /* OACompassRulerWidgetState.m */; };
+		32C91E5B25A86A5700FA6470 /* ic_custom_compass_widget_hide@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */; };
+		32C91E5C25A86A5700FA6470 /* ic_custom_compass_widget_hide@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */; };
+		32C91E5D25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
+		32C91E5E25A86A5700FA6470 /* ic_custom_compass_widget@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */; };
+		32C91E5F25A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */; };
+		32C91E6025A86A5700FA6470 /* ic_custom_compass_widget@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */; };
+		32C91E6125A86A5700FA6470 /* ic_custom_compass_widget_hide.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5825A86A5600FA6470 /* ic_custom_compass_widget_hide.png */; };
+		32C91E6225A86A5700FA6470 /* ic_custom_compass_widget_hide.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5825A86A5600FA6470 /* ic_custom_compass_widget_hide.png */; };
+		32C91E6325A86A5700FA6470 /* ic_custom_compass_widget.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5925A86A5700FA6470 /* ic_custom_compass_widget.png */; };
+		32C91E6425A86A5700FA6470 /* ic_custom_compass_widget.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5925A86A5700FA6470 /* ic_custom_compass_widget.png */; };
+		32C91E6525A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
+		32C91E6625A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */; };
 		32D7D4C725AF313B00868E80 /* OARangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D7D4C625AF313B00868E80 /* OARangeSlider.m */; };
 		32D7D4C825AF313B00868E80 /* OARangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D7D4C625AF313B00868E80 /* OARangeSlider.m */; };
 		32FE27F225763F5000CBDDFA /* OAAppVersionDependentConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 32FE27F125763F4F00CBDDFA /* OAAppVersionDependentConstants.m */; };
@@ -6772,16 +6770,6 @@
 		32867A9B25781C6E00DDAD44 /* OAQuickActionsSettingsItemReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickActionsSettingsItemReader.h; sourceTree = "<group>"; };
 		32AE6B9D257A12C2005D0139 /* OAQuickActionsSettingsItemReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQuickActionsSettingsItemReader.m; sourceTree = "<group>"; };
 		32AE6BA2257A1433005D0139 /* OAQuickActionsSettingsItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickActionsSettingsItem.mm; sourceTree = "<group>"; };
-		32C91E4525A70AD100FA6470 /* OACompassRulerWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACompassRulerWidgetState.h; sourceTree = "<group>"; };
-		32C91E4625A70AE700FA6470 /* OACompassRulerWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACompassRulerWidgetState.m; sourceTree = "<group>"; };
-		32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@3x.png"; sourceTree = "<group>"; };
-		32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@3x.png"; sourceTree = "<group>"; };
-		32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@2x.png"; sourceTree = "<group>"; };
-		32C91E5825A86A5600FA6470 /* ic_custom_compass_widget_hide.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_compass_widget_hide.png; path = Resources/Icons/Widgets/ic_custom_compass_widget_hide.png; sourceTree = "<group>"; };
-		32C91E5925A86A5700FA6470 /* ic_custom_compass_widget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_compass_widget.png; path = Resources/Icons/Widgets/ic_custom_compass_widget.png; sourceTree = "<group>"; };
-		32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@2x.png"; sourceTree = "<group>"; };
-		32D7D4D525B0C34400868E80 /* OARulerControlLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARulerControlLayer.h; sourceTree = "<group>"; };
-		32D7D4D625B0C35900868E80 /* OARulerControlLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARulerControlLayer.m; sourceTree = "<group>"; };
 		32BD815E2598F5B800A54BB5 /* OAShowHideMapillaryAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideMapillaryAction.h; sourceTree = "<group>"; };
 		32BD815F2598F5C900A54BB5 /* OAShowHideMapillaryAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAShowHideMapillaryAction.m; sourceTree = "<group>"; };
 		32BD81662599061400A54BB5 /* OANavRemoveNextDestination.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANavRemoveNextDestination.h; sourceTree = "<group>"; };
@@ -6798,6 +6786,14 @@
 		32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@3x.png"; path = "Resources/Icons/ic_custom_manage_profiles@3x.png"; sourceTree = "<group>"; };
 		32BD81C6259CBFA000A54BB5 /* OAProfileSelectionBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAProfileSelectionBottomSheetViewController.h; sourceTree = "<group>"; };
 		32BD81C7259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAProfileSelectionBottomSheetViewController.m; sourceTree = "<group>"; };
+		32C91E4525A70AD100FA6470 /* OACompassRulerWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACompassRulerWidgetState.h; sourceTree = "<group>"; };
+		32C91E4625A70AE700FA6470 /* OACompassRulerWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACompassRulerWidgetState.m; sourceTree = "<group>"; };
+		32C91E5525A86A5500FA6470 /* ic_custom_compass_widget_hide@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@3x.png"; sourceTree = "<group>"; };
+		32C91E5625A86A5600FA6470 /* ic_custom_compass_widget@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@3x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@3x.png"; sourceTree = "<group>"; };
+		32C91E5725A86A5600FA6470 /* ic_custom_compass_widget@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget@2x.png"; sourceTree = "<group>"; };
+		32C91E5825A86A5600FA6470 /* ic_custom_compass_widget_hide.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_compass_widget_hide.png; path = Resources/Icons/Widgets/ic_custom_compass_widget_hide.png; sourceTree = "<group>"; };
+		32C91E5925A86A5700FA6470 /* ic_custom_compass_widget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_compass_widget.png; path = Resources/Icons/Widgets/ic_custom_compass_widget.png; sourceTree = "<group>"; };
+		32C91E5A25A86A5700FA6470 /* ic_custom_compass_widget_hide@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_widget_hide@2x.png"; path = "Resources/Icons/Widgets/ic_custom_compass_widget_hide@2x.png"; sourceTree = "<group>"; };
 		32D7D4C525AF30C900868E80 /* OARangeSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OARangeSlider.h; path = Views/OARangeSlider.h; sourceTree = "<group>"; };
 		32D7D4C625AF313B00868E80 /* OARangeSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OARangeSlider.m; path = Views/OARangeSlider.m; sourceTree = "<group>"; };
 		32FE27F125763F4F00CBDDFA /* OAAppVersionDependentConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAppVersionDependentConstants.m; sourceTree = "<group>"; };
@@ -13237,8 +13233,6 @@
 				8AE0658C2291426500D3CB56 /* OAMapillaryLayer.mm */,
 				DACC0EE625417F7800904F66 /* OAMeasurementToolLayer.h */,
 				DACC0EE725417F7800904F66 /* OAMeasurementToolLayer.mm */,
-				32D7D4D525B0C34400868E80 /* OARulerControlLayer.h */,
-				32D7D4D625B0C35900868E80 /* OARulerControlLayer.m */,
 			);
 			name = Layers;
 			path = Controllers/Map/Layers;
@@ -21951,7 +21945,6 @@
 				DAC0278822A1450600D1689E /* OAMapSettingsMapillaryScreen.mm in Sources */,
 				841511911FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */,
 				847A1D4E1DF94E9B003C1246 /* OAMapMarker.mm in Sources */,
-				32D7D4D825B0C35900868E80 /* OARulerControlLayer.m in Sources */,
 				847A1D4F1DF94E9B003C1246 /* OADestinationsHelper.mm in Sources */,
 				847A1D501DF94E9B003C1246 /* PXAlertView.m in Sources */,
 				32D7D4C825AF313B00868E80 /* OARangeSlider.m in Sources */,
@@ -22814,7 +22807,6 @@
 				848300C71CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */,
 				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				DABD68AD230FC09E009DFBDE /* OAQuickActionSelectionBottomSheetViewController.mm in Sources */,
-				32D7D4D725B0C35900868E80 /* OARulerControlLayer.m in Sources */,
 				DA84E84221D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */,
 				DAA864092303F70D000E1900 /* OANavResumePauseAction.mm in Sources */,
 				84BE7D431CF7238D001D8D78 /* OAPOILocationType.mm in Sources */,

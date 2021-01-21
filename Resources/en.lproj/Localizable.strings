@@ -880,6 +880,7 @@
 "plan_route_open_existing_track" = "Open existing track";
 "plan_route_last_modified" = "Last modified";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
+"plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

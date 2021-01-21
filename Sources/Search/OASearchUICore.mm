@@ -29,6 +29,7 @@ static const double TIMEOUT_BETWEEN_CHARS = 0.7;  // seconds
 static const double TIMEOUT_BEFORE_SEARCH = 0.05; // seconds
 static const double TIMEOUT_BEFORE_FILTER = 0.02; // seconds
 static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
+static const NSSet<NSString *> *FILTER_DUPLICATE_POI_SUBTYPE = [NSSet setWithArray: @[@"building", @"internet_access_yes"]];
 
 typedef NS_ENUM(NSInteger, EOAResultCompareStep) {
     EOATopVisible = 0,
@@ -201,13 +202,29 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
             }
             else if (am1 && am2)
             {
+                // here 2 points are amenity
                 const auto& a1 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o1.amenity);
                 const auto& a2 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o2.amenity);
-                NSComparisonResult cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->type, a2->type);
+                
+                QString type1 = a1->type;
+                QString type2 = a2->type;
+                QString subType1 = a1->subType == nullptr ? "" : a1->subType;
+                QString subType2 = a2->subType == nullptr ? "" : a2->subType;
+                
+                NSComparisonResult cmp = NSOrderedSame;
+                BOOL subtypeFilter1 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:subType1.toNSString()];
+                BOOL subtypeFilter2 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:subType2.toNSString()];
+                if (subtypeFilter1 != subtypeFilter2)
+                {
+                    // to filter second
+                    return subtypeFilter1 ? NSOrderedDescending : NSOrderedAscending;
+                }
+                
+                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(type1, type1);
                 if (cmp != NSOrderedSame)
                     return cmp;
                 
-                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->subType, a2->subType);
+                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(subType1, subType2);
                 if (cmp != NSOrderedSame)
                     return cmp;
             }
@@ -396,20 +413,26 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
             if (a1 && a2)
             {
                 // here 2 points are amenity
-                if (a1->id.id == a2->id.id && (a1->subType == QStringLiteral("building") || a2->subType == QStringLiteral("building")))
-                    return true;
+                QString type1 = a1->type;
+                QString type2 = a2->type;
+                QString subType1 = a1->subType == nullptr ? "" : a1->subType;
+                QString subType2 = a2->subType == nullptr ? "" : a2->subType;
                 
-                if (a1->type != a2->type)
+                BOOL isEqualId = a1->id.id == a2->id.id;
+                
+                if (isEqualId && ([FILTER_DUPLICATE_POI_SUBTYPE containsObject:subType1.toNSString()] || [FILTER_DUPLICATE_POI_SUBTYPE containsObject:subType2.toNSString()]))
+                    return true;
+                else if (type1 != type2)
                     return false;
                 
-                if (a1->type == QStringLiteral("natural"))
+                if (type1 == QStringLiteral("natural"))
                 {
                     similarityRadius = 50000;
                 }
-                else if (a1->subType == a2->subType)
+                else if (subType1 == subType2)
                 {
-                    if (a1->subType.contains(QStringLiteral("cn_ref")) || a1->subType.contains(QStringLiteral("wn_ref"))
-                        || (a1->subType.startsWith(QStringLiteral("route_hiking_")) && a1->subType.endsWith(QStringLiteral("n_poi"))))
+                    if (subType1.contains(QStringLiteral("cn_ref")) || subType1.contains(QStringLiteral("wn_ref"))
+                        || (subType1.startsWith(QStringLiteral("route_hiking_")) && subType1.endsWith(QStringLiteral("n_poi"))))
                     {
                         similarityRadius = 50000;
                     }

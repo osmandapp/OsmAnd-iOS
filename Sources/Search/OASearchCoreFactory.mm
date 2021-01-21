@@ -901,8 +901,9 @@
         if(res)
             results[res.pt.name] = res;
     }
-    if (nmAdditional)
-        [self addAditonals:nmAdditional results:results type:_types.otherMapCategory];
+    // don't spam results with unsearchable additionals like 'description', 'email', ...
+    //if (nmAdditional)
+    //    [self addAditonals:nmAdditional results:results type:_types.otherMapCategory];
     
     for (OAPOICategory *c in _categories)
     {

@@ -45,6 +45,7 @@
 #import "OAChangeRouteModeCommand.h"
 #import "OATargetPointsHelper.h"
 #import "OASaveGpxRouteAsyncTask.h"
+#import "OASaveTrackViewController.h"
 #import "OAOpenExistingTrackViewController.h"
 #import "OASelectedGPXHelper.h"
 #import "OAExitRoutePlanningBottomSheetViewController.h"
@@ -627,6 +628,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_settings showGpx:@[savedGpxFile.fileName]];
 }
 
+- (void) openSaveAsNewTrackMenu
+{
+//    if (_editingContext.getPointsCount > 0)
+//    {
+        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithParams:[self getSuggestedFileName] showOnMap:YES simplifiedTrack:YES];
+        [self presentViewController:saveTrackViewController animated:YES completion:nil];
+//    }
+}
+
 - (void) showAddToTrackDialog
 {
     OAOpenExistingTrackViewController *saveTrackViewController = [[OAOpenExistingTrackViewController alloc] initWithScreen:EOAAddToATrack];
@@ -1016,7 +1026,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) saveAsNewTrackSelected
 {
-//    [self openSaveAsNewTrackMenu];
+    [self openSaveAsNewTrackMenu];
 }
 
 - (void) addToTrackSelected

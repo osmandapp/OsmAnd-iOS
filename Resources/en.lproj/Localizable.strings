@@ -876,6 +876,11 @@
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Reverse route";
+"simplified_track" = "Simplified track";
+"simplified_track_description" = "Only the route line will be saved, the waypoints will be deleted.";
+"open_saved_track" = "Open saved track";
+"plan_route_create_new_route" = "Create new route";
+"track_is_saved" = "%@\nis saved!";
 "plan_route_create_new_route" = "Create new route";
 "plan_route_open_existing_track" = "Open existing track";
 "plan_route_last_modified" = "Last modified";

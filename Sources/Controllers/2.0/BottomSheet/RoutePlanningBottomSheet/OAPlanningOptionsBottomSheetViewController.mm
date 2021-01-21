@@ -113,15 +113,14 @@
             @"key" : @"route_betw_points"
         }
     ]];
-    // TODO: uncomment after implementing saving to exsisting track
     [data addObject:@[
-        /*@{
+        @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"save_changes"),
             @"img" : @"ic_custom_save_to_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_changes"
-        },*/
+        },
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"save_new_track"),

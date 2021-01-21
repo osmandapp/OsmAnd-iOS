@@ -9,7 +9,7 @@
 #import "InitialRoutePlanningBottomSheetViewController.h"
 #import "OARootViewController.h"
 #import "OARoutePlanningHudViewController.h"
-#import "OAOpenExistingTrackViewController.h"
+#import "OAOpenAddTrackViewController.h"
 #import "OATitleIconRoundCell.h"
 #import "OAGPXRouteRoundCell.h"
 #import "OAHeaderRoundCell.h"
@@ -29,7 +29,7 @@
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
 
-@interface InitialRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenExistingTrackDelegate>
+@interface InitialRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate>
 
 @end
 
@@ -244,7 +244,7 @@
     }
     else if ([key isEqualToString:@"open_track"])
     {
-        OAOpenExistingTrackViewController *openExistingTrackViewController = [[OAOpenExistingTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack];
+        OAOpenAddTrackViewController *openExistingTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack];
         openExistingTrackViewController.delegate = self;
         [self presentViewController:openExistingTrackViewController animated:YES completion:nil];
         return;
@@ -263,6 +263,10 @@
 - (void) closeBottomSheet
 {
     [self onRightButtonPressed];
+}
+
+- (void)onFileSelected:(NSString *)gpxFileName
+{
 }
 
 @end

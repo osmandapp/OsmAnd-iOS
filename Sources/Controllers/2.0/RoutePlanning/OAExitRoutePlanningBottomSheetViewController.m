@@ -79,12 +79,16 @@
 
 - (IBAction)exitButtonPressed:(id)sender
 {
-  
+    [self dismissViewControllerAnimated:NO completion:nil];
+    if (_delegate)
+        [_delegate onExitRoutePlanningPressed];
 }
 
 - (IBAction)saveButtonPressed:(id)sender
 {
-    
+    [self dismissViewControllerAnimated:NO completion:nil];
+    if (_delegate)
+        [_delegate onSaveResultPressed];
 }
 
 

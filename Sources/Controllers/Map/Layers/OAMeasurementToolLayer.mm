@@ -366,8 +366,9 @@
         {
             beforePoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
+        [self drawLines:beforePoints collection:_collection];
+        beforePoints.clear();
     }
-    [self drawLines:beforePoints collection:_collection];
     
     for (OAGpxTrkSeg *seg in afterSegs)
     {
@@ -375,8 +376,9 @@
         {
             afterPoints.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
         }
+        [self drawLines:afterPoints collection:_collection];
+        afterPoints.clear();
     }
-    [self drawLines:afterPoints collection:_collection];
 }
 
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points {

@@ -11,6 +11,6 @@
 
 @interface OASaveTrackBottomSheetViewController : OABaseBottomSheetViewController
 
-- (instancetype) initWithNewTrack:(OAGPX *)track;
+- (instancetype) initWithFileName:(NSString *)fileName;
 
 @end

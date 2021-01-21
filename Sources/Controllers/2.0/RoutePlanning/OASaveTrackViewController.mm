@@ -31,9 +31,15 @@
     OAAppSettings *_settings;
     
     NSString *_fileName;
+    NSString *_sourceFileName;
     BOOL _showSimplifiedButton;
+    BOOL _rightButtonEnabled;
+    
     BOOL _simplifiedTrack;
     BOOL _showOnMap;
+    
+    NSString *_inputFieldError;
+
 }
 
 - (instancetype) initWithParams:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
@@ -43,8 +49,12 @@
     {
         _settings = [OAAppSettings sharedManager];
         _fileName = fileName;
+        _sourceFileName = fileName;
         _showSimplifiedButton = simplifiedTrack;
         _showOnMap = showOnMap;
+        
+        _rightButtonEnabled = YES;
+        _simplifiedTrack = NO;
         
         [self commonInit];
     }
@@ -60,6 +70,8 @@
     
     self.cancelButton.layer.cornerRadius = 9.0;
     self.saveButton.layer.cornerRadius = 9.0;
+    
+    [self updateBottomButtons];
 }
 
 - (void) applyLocalization
@@ -87,7 +99,7 @@
             @"key" : @"input_name",
         }
     ]];
-    
+    // TODO: add gpx groups
 //    [data addObject:@[
 //        @{
 //            @"type" : kRouteGroupsCell,
@@ -121,6 +133,12 @@
     _data = data;
 }
 
+- (void) updateBottomButtons
+{
+    self.saveButton.userInteractionEnabled = _rightButtonEnabled;
+    [self.saveButton setBackgroundColor:_rightButtonEnabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive)];
+}
+
 - (IBAction)cancelButtonPressed:(id)sender
 {
     [self dismissViewController];
@@ -128,32 +146,12 @@
 
 - (IBAction)saveButtonPressed:(id)sender
 {
-    OAGPX *track = [[OAGPX alloc] init];
-    track.gpxFileName = _fileName;
-    
     [self dismissViewControllerAnimated:NO completion:nil];
-    OASaveTrackBottomSheetViewController *bottomSheet = [[OASaveTrackBottomSheetViewController alloc] initWithNewTrack:track];
-    [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
+    if (self.delegate)
+        [self.delegate onSaveAsNewTrack:_fileName showOnMap:_showOnMap simplifiedTrack:_simplifiedTrack];
 }
 
-- (NSString *) renameFile
-{
-    return nil;
-}
-
-- (BOOL) fileExists
-{
-    OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    NSArray *gpxList = [NSMutableArray arrayWithArray:db.gpxList];
-    for (OAGPX *gpx in gpxList)
-    {
-        if ([_fileName isEqualToString:gpx.gpxFileName])
-            return YES;
-    }
-    return NO;
-}
-
-#pragma mark - TableView
+#pragma mark - UITableViewDataSource
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
@@ -226,7 +224,7 @@
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor = UIColorFromRGB(color_text_footer);
+        headerView.textLabel.textColor = _inputFieldError != nil && section == 0 ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer);
     }
 }
 
@@ -239,6 +237,8 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
+    if (section == 0)
+        return _inputFieldError;
     NSDictionary *item = ((NSArray *)_data[section]).firstObject;
     
     return item[@"footer"];
@@ -266,11 +266,13 @@
     NSString *key = item[@"key"];
     if ([key isEqualToString:@"simplified_track"])
     {
-        
+        _simplifiedTrack = !_simplifiedTrack;
+        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     if ([key isEqualToString:@"map_settings_show"])
     {
-        
+        _showOnMap = !_showOnMap;
+        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
@@ -278,11 +280,42 @@
 
 - (void) textViewDidChange:(UITextView *)textView
 {
-    _fileName = textView.text;
+    [self updateFileNameFromEditText:textView.text];
     
     [textView sizeToFit];
     [self.tableView beginUpdates];
+    UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
+    footer.textLabel.textColor = _inputFieldError != nil ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer);
+    footer.textLabel.text = _inputFieldError;
+    [footer sizeToFit];
     [self.tableView endUpdates];
+}
+
+- (void) updateFileNameFromEditText:(NSString *)name
+{
+    _rightButtonEnabled = NO;
+    NSString *text = name.trim;
+    if (text.length == 0)
+    {
+        _inputFieldError = OALocalizedString(@"empty_filename");
+    }
+    else if ([self isFileExist:name])
+    {
+        _inputFieldError = OALocalizedString(@"gpx_already_exsists");
+    }
+    else
+    {
+        _inputFieldError = nil;
+        _fileName = text;
+        _rightButtonEnabled = YES;
+    }
+    [self updateBottomButtons];
+}
+
+- (BOOL) isFileExist:(NSString *)name
+{
+    NSString *filePath = [[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
+    return [NSFileManager.defaultManager fileExistsAtPath:filePath];
 }
 
 @end

@@ -290,7 +290,7 @@
                             _p.name = p->name.toNSString();
                             _p.desc = p->description.toNSString();
                             _p.elevation = p->elevation;
-                            _p.time = p->timestamp.toTime_t();
+                            _p.time = p->timestamp.isNull() ? 0 : p->timestamp.toTime_t();
                             _p.comment = p->comment.toNSString();
                             _p.type = p->type.toNSString();
                             _p.links = [self.class fetchLinks:p->links];

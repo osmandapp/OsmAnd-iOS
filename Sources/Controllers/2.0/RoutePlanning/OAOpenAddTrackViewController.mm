@@ -1,12 +1,12 @@
 //
-//  OAOpenExistingTrackViewController.m
+//  OAOpenAddTrackViewController.m
 //  OsmAnd Maps
 //
 //  Created by Anna Bibyk on 15.01.2021.
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OAOpenExistingTrackViewController.h"
+#import "OAOpenAddTrackViewController.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 #import "Localization.h"
@@ -18,6 +18,7 @@
 #import "OAGPXTrackCell.h"
 #import "OASegmentTableViewCell.h"
 #import "OARoutePlanningHudViewController.h"
+#import "OASaveTrackBottomSheetViewController.h"
 #import "OAUtilities.h"
 
 #define kGPXTrackCell @"OAGPXTrackCell"
@@ -32,18 +33,18 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOANameDescending
 };
 
-@interface OAOpenExistingTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
+@interface OAOpenAddTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
 @end
 
-@implementation OAOpenExistingTrackViewController
+@implementation OAOpenAddTrackViewController
 {
     NSArray<NSArray<NSDictionary *> *> *_data;
     EOASortingMode _sortingMode;
-    EOAScreenType _screenType;
+    EOAPlanningTrackScreenType _screenType;
 }
 
-- (instancetype) initWithScreenType:(EOAScreenType)screenType
+- (instancetype) initWithScreenType:(EOAPlanningTrackScreenType)screenType
 {
     self = [super initWithNibName:@"OABaseTableViewController"
                            bundle:nil];
@@ -70,7 +71,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"plan_route_open_existing_track");
+    self.titleLabel.text = _screenType == EOAOpenExistingTrack ? OALocalizedString(@"plan_route_open_existing_track") : OALocalizedString(@"add_to_track");
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -99,6 +100,19 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     }];
     
     OsmAndAppInstance app = OsmAndApp.instance;
+    
+    if ([self isShowCurrentGpx])
+    {
+        [existingTracksSection addObject:@{
+                @"type" : kGPXTrackCell,
+                @"title" : OALocalizedString(@"track_recording_name"),
+                @"distance" : [app getFormattedDistance:0],
+                @"time" : [app getFormattedTimeInterval:0 shortFormat:YES],
+                @"wpt" : [NSString stringWithFormat:@"%d", 0],
+                @"key" : @"gpx_route"
+            }];
+    }
+    
     for (OAGPX *gpx in gpxList)
     {
         [existingTracksSection addObject:@{
@@ -134,6 +148,11 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         }
     }];
     return sortedData;
+}
+
+- (BOOL) isShowCurrentGpx
+{
+    return _screenType == EOAAddToATrack;
 }
 
 #pragma mark - TableView
@@ -208,21 +227,22 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     OAGPX* track = item[@"track"];
     if (_screenType == EOAOpenExistingTrack && track)
     {
-        [self.delegate closeBottomSheet];
+        if (self.delegate)
+            [self.delegate closeBottomSheet];
         [self dismissViewControllerAnimated:YES completion:nil];
         [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFileName]];
         return;
     }
     else
     {
-        OAGPXTrackCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        cell.checkmarkImageView.hidden = NO;
+        OAGPX* track = item[@"track"];
+        NSString *filename = nil;
+        if (track)
+            filename = track.gpxFileName;
+        if (self.delegate)
+            [self.delegate onFileSelected:filename];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
-        
-        //TODO: - uncomment when OASaveTrackBottomSheetViewController is in the current branch
-//        OASaveTrackBottomSheetViewController *bottomSheet = [[OASaveTrackBottomSheetViewController alloc] initWithNewTrack:track];
-//        [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
     }
     return;
 }

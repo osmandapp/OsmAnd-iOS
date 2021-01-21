@@ -9,10 +9,17 @@
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OARootViewController.h"
 #import "OARoutePlanningHudViewController.h"
+#import "OAGPXDatabase.h"
 #import "OAUtilities.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
 
 #import "Localization.h"
 #import "OAColors.h"
+
+#include <OsmAndCore/Utilities.h>
 
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -31,22 +38,17 @@
 
 @implementation OASaveTrackBottomSheetViewController
 {
-    OAGPX* _track;
+    NSString* _fileName;
 }
 
-- (instancetype) initWithNewTrack:(OAGPX *)track
+- (instancetype) initWithFileName:(NSString *)fileName
 {
     self = [super init];
     if (self)
     {
-        [self commonInit];
-        _track = track;
+        _fileName = fileName;
     }
     return self;
-}
-
-- (void) commonInit
-{
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -66,8 +68,9 @@
     
     self.isFullScreenAvailable = NO;
     
-    NSString *titleString = [NSString stringWithFormat:OALocalizedString(@"track_is_saved"), _track.gpxFileName];
-    self.titleLabel.attributedText = [OAUtilities getColoredString:titleString highlightedString:_track.gpxFileName highlightColor:UIColorFromRGB(color_primary_purple) fontSize:17. centered:YES];
+    NSString *gpxTitle = _fileName.lastPathComponent.stringByDeletingPathExtension;
+    NSString *titleString = [NSString stringWithFormat:OALocalizedString(@"track_is_saved"), gpxTitle];
+    self.titleLabel.attributedText = [OAUtilities getColoredString:titleString highlightedString:gpxTitle highlightColor:UIColorFromRGB(color_primary_purple) fontSize:17. centered:YES];
 }
 
 - (void) applyLocalization
@@ -80,8 +83,8 @@
 - (CGFloat) initialHeight
 {
     CGFloat width = DeviceScreenWidth - 2 * kHorizontalMargin;
-    CGFloat contentHeight = self.iconImageView.frame.size.height + [OAUtilities calculateTextBounds:[NSString stringWithFormat:OALocalizedString(@"track_is_saved"), _track.gpxFileName] width:width font:[UIFont systemFontOfSize:15.]].height + self.openSavedTrackButton.frame.size.height + self.createNewRouteButton.frame.size.height + self.shareButton.frame.size.height + kVerticalMargin * 6;
-    CGFloat buttonsHeight = 60. + [OAUtilities getBottomMargin];
+    CGFloat contentHeight = self.iconImageView.frame.size.height + [OAUtilities calculateTextBounds:[NSString stringWithFormat:OALocalizedString(@"track_is_saved"), _fileName.lastPathComponent.stringByDeletingPathExtension] width:width font:[UIFont systemFontOfSize:15.]].height + self.openSavedTrackButton.frame.size.height + self.createNewRouteButton.frame.size.height + self.shareButton.frame.size.height + kVerticalMargin * 6;
+    CGFloat buttonsHeight = self.buttonsViewHeight + [OAUtilities getBottomMargin];
     return contentHeight + buttonsHeight + kVerticalMargin * 2;
 }
 
@@ -89,18 +92,30 @@
 - (IBAction)openSavedTrackPressed:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-    [[OARootViewController instance].mapPanel openTargetViewWithGPX:_track pushed:YES];
+    OAGPX *gpx = [OAGPXDatabase.sharedDb getGPXItem:_fileName.lastPathComponent];
+    if (gpx)
+        [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx pushed:YES];
 }
 
 - (IBAction)createNewTrackButtonPressed:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] init]];
+    const auto point = OsmAnd::Utilities::convert31ToLatLon(OARootViewController.instance.mapPanel.mapViewController.mapView.target31);
+    CLLocation *coord = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
+    [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithInitialPoint:coord]];
 }
 
 - (IBAction)shareButtonPressed:(id)sender
 {
+    [self dismissViewControllerAnimated:NO completion:nil];
+    NSURL* gpxUrl = [NSURL fileURLWithPath:_fileName];
     
+    UIDocumentInteractionController *exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
+    exportController.UTI = @"net.osmand.gpx";
+    exportController.name = [_fileName.lastPathComponent stringByDeletingPathExtension];
+    [exportController presentOptionsMenuFromRect:CGRectZero
+                                           inView:OARootViewController.instance.view
+                                         animated:YES];
 }
 
 @end

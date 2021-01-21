@@ -8,13 +8,21 @@
 
 #import "OACompoundViewController.h"
 
+@protocol OASaveTrackViewControllerDelegate <NSObject>
+
+- (void) onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack;
+
+@end
+
 @interface OASaveTrackViewController : OACompoundViewController
 
-@property (strong, nonatomic) IBOutlet UIView *navbarView;
-@property (strong, nonatomic) IBOutlet UILabel *titleLabel;
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet UIButton *cancelButton;
-@property (strong, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIView *navbarView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
+
+@property (weak, nonatomic) id<OASaveTrackViewControllerDelegate> delegate;
 
 - (instancetype) initWithParams:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack;
 

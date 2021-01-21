@@ -108,4 +108,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 - (void) scheduleRouteCalculateIfNotEmpty;
 
+- (void) setChangesSaved;
+- (BOOL) hasChanges;
+
 @end

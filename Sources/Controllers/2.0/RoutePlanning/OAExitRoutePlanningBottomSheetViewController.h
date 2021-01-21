@@ -8,6 +8,15 @@
 
 #import "OABaseBottomSheetViewController.h"
 
+@protocol OAExitRoutePlanningDelegate <NSObject>
+
+- (void) onExitRoutePlanningPressed;
+- (void) onSaveResultPressed;
+
+@end
+
 @interface OAExitRoutePlanningBottomSheetViewController : OABaseBottomSheetViewController
+
+@property (nonatomic, weak) id<OAExitRoutePlanningDelegate> delegate;
 
 @end

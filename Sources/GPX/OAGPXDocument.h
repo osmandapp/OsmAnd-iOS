@@ -88,8 +88,6 @@
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
 
-- (QuadRect *)getRect;
-
 @end
 
 

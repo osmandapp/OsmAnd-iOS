@@ -9,7 +9,6 @@
 #import "OAGpxData.h"
 #import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "QuadRect.h"
 
 #include <OsmAndCore/GpxDocument.h>
 
@@ -21,9 +20,16 @@
     if (self) {
         _gpxFile = gpxFile;
         if (_gpxFile)
-            _rect = _gpxFile.getRect;
+            _rect = _gpxFile.bounds;
         else
-            _rect = [[QuadRect alloc] initWithLeft:0. top:0. right:0. bottom:.0];
+        {
+            OAGpxBounds bounds;
+            bounds.topLeft.latitude = 0;
+            bounds.topLeft.longitude = 0;
+            bounds.bottomRight.latitude = 0;
+            bounds.bottomRight.longitude = 0;
+            _rect = bounds;
+        }
     }
     return self;
 }

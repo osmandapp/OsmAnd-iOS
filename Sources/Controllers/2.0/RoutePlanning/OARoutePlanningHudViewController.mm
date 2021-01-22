@@ -391,16 +391,16 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self initMeasurementMode:gpxData addPoints:YES];
     if (gpxData)
     {
-        QuadRect *qr = gpxData.rect;
-        [self centerMapOnBBox:qr];
+        OAGpxBounds bounds = gpxData.rect;
+        [self centerMapOnBBox:bounds];
     }
 }
 
-- (void)centerMapOnBBox:(QuadRect *)routeBBox
+- (void)centerMapOnBBox:(OAGpxBounds)routeBBox
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     BOOL landscape = [OAUtilities isLandscapeIpadAware];
-    [mapPanel displayAreaOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) zoom:0 bottomInset:!landscape ? self.getViewHeight : 0 leftInset:landscape ? self.tableView.frame.size.width : 0];
+    [mapPanel displayAreaOnMap:routeBBox.topLeft bottomRight:routeBBox.bottomRight zoom:0 bottomInset:!landscape ? self.getViewHeight : 0 leftInset:landscape ? self.tableView.frame.size.width : 0];
 }
 
 - (OAGpxData *) setupGpxData:(OAGPXMutableDocument *)gpxFile

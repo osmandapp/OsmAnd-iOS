@@ -70,11 +70,6 @@ typedef NS_ENUM(NSInteger, EOAFinalSaveAction) {
     SHOW_IS_SAVED_FRAGMENT
 };
 
-typedef NS_ENUM(NSInteger, EOASaveType) {
-    ROUTE_POINT = 0,
-    LINE
-};
-
 typedef NS_ENUM(NSInteger, EOAHudMode) {
     EOAHudModeRoutePlanning = 0,
     EOAHudModeMovePoint,
@@ -379,6 +374,13 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         gpxFile = [[OAGPXMutableDocument alloc] initWithGpxDocument:selectedFile];
     else
         gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpxFileName]];
+    
+    if (!gpxFile.routes)
+        gpxFile.routes = [NSMutableArray new];
+    if (!gpxFile.tracks)
+        gpxFile.tracks = [NSMutableArray new];
+    if (!gpxFile.locationMarks)
+        gpxFile.locationMarks = [NSMutableArray new];
     
     return gpxFile;
 }
@@ -777,8 +779,18 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             }
         }
     }
+    OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
+    if ([_settings.mapSettingVisibleGpx containsObject:outFile.lastPathComponent])
+    {
+        // Refresh track if visible
+        [_settings hideGpx:@[outFile.lastPathComponent] update:YES];
+        helper.activeGpx.remove(QString::fromNSString(outFile));
+        [helper buildGpxList];
+    }
     if (showOnMap)
-        [_settings showGpx:@[outFile.lastPathComponent] update:YES];
+    {
+        [_settings showGpx:@[outFile.lastPathComponent]];
+    }
 }
 
 - (void)showNoPointsAlert

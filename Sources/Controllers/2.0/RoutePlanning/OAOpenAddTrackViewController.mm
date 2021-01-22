@@ -101,7 +101,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     
     OsmAndAppInstance app = OsmAndApp.instance;
     
-    if ([self isShowCurrentGpx])
+    /*if ([self isShowCurrentGpx])
     {
         [existingTracksSection addObject:@{
                 @"type" : kGPXTrackCell,
@@ -111,7 +111,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
                 @"wpt" : [NSString stringWithFormat:@"%d", 0],
                 @"key" : @"gpx_route"
             }];
-    }
+    }*/
     
     for (OAGPX *gpx in gpxList)
     {

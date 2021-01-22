@@ -18,7 +18,7 @@
 #include <OsmAndCore/GpxDocument.h>
 
 @class OAGPXTrackAnalysis;
-@class OASplitMetric;
+@class OASplitMetric, QuadRect;
 
 @interface OAGPXDocument : NSObject
 
@@ -65,8 +65,8 @@
 - (NSArray*) splitByTime:(int)seconds;
 - (NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit;
 
-- (NSArray<OAGpxTrkPt *> *) getRoutePoints;
-- (NSArray<OAGpxTrkPt *> *) getRoutePoints:(NSInteger)routeIndex;
+- (NSArray<OAGpxRtePt *> *) getRoutePoints;
+- (NSArray<OAGpxRtePt *> *) getRoutePoints:(NSInteger)routeIndex;
 
 
 + (OAGpxWpt *)fetchWpt:(const std::shared_ptr<const OsmAnd::GpxDocument::GpxWpt>)mark;
@@ -86,7 +86,7 @@
 - (UIColor *) getColor:(NSArray<OAGpxExtension *> *)extensions;
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
 
-- (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly; 
+- (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
 
 @end
 

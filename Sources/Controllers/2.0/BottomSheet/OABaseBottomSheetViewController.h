@@ -22,6 +22,8 @@
 - (void) presentInViewController:(UIViewController *)viewController;
 
 @property (nonatomic, readonly) CGFloat initialHeight;
+@property (nonatomic, readonly) CGFloat buttonsViewHeight;
+@property (nonatomic) BOOL isFullScreenAvailable;
 
 - (void) onRightButtonPressed;
 

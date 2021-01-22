@@ -878,6 +878,20 @@
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Reverse route";
+"simplified_track" = "Simplified track";
+"simplified_track_description" = "Only the route line will be saved, the waypoints will be deleted.";
+"open_saved_track" = "Open saved track";
+"plan_route_create_new_route" = "Create new route";
+"track_is_saved" = "%@\nis saved!";
+"plan_route_create_new_route" = "Create new route";
+"plan_route_open_existing_track" = "Open existing track";
+"plan_route_last_modified" = "Last modified";
+"route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
+"plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
+"gpx_saved_successfully" = "GPX file saved to %@";
+"none_point_error" = "Please add at least one point.";
+"empty_filename" = "Filename cannot be empty";
+"gpx_already_exsists" = "File with this name already exists";
 
 // Resources
 "res_mapsres" = "Maps & Resources";
@@ -1672,6 +1686,8 @@
 "poi_opening_hours" = "Opening hours";
 "poi_select_category" = "Select category";
 "poi_select_type" = "Select type";
+"shared_a_z" = "A - Z";
+"shared_z_a" = "Z - A";
 
 "city_type_suburb" = "Suburb";
 "city_type_hamlet" = "Hamlet";

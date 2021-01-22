@@ -17,6 +17,7 @@
 #import "OAMeasurementEditingContext.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAGPXDatabase.h"
 
 @implementation OASaveGpxRouteAsyncTask
 {
@@ -84,25 +85,37 @@
         //                MeasurementToolFragment.showGpxOnMap(app, gpx, true);
         //            }
     }
-    // TODO: handle exsisting gpx files
-    //        else
-    //        {
-    //            backupFile = FileUtils.backupFile(app, outFile);
-    //            String trackName = Algorithms.getFileNameWithoutExtension(outFile);
-    //            GPXFile gpx = generateGpxFile(measurementLayer, editingCtx, trackName, gpxFile);
-    //            if (gpxFile.metadata != null) {
-    //                gpx.metadata = new Metadata();
-    //                gpx.metadata.getExtensionsToWrite().putAll(gpxFile.metadata.getExtensionsToRead());
-    //            }
-    //            if (!gpx.showCurrentTrack) {
-    //                res = GPXUtilities.writeGpxFile(outFile, gpx);
-    //            }
-    //            savedGpxFile = gpx;
-    //            if (showOnMap) {
-    //                MeasurementToolFragment.showGpxOnMap(app, gpx, false);
-    //            }
-    //        }
+    else
+    {
+//        backupFile = FileUtils.backupFile(app, outFile);
+        NSString *trackName = [_outFile.lastPathComponent stringByDeletingPathExtension];
+        OAGPXDocument *gpx = [self generateGpxFile:trackName gpx:(OAGPXMutableDocument *)_gpxFile];
+        if (gpx.metadata != nil)
+        {
+            gpx.metadata = [[OAMetadata alloc] init];
+            gpx.metadata.extraData = _gpxFile.metadata.extraData;
+        }
+//        if (!gpx.showCurrentTrack) {
+//            res = GPXUtilities.writeGpxFile(outFile, gpx);
+//        }
+        _savedGpxFile = gpx;
+        success = [_savedGpxFile saveTo:_outFile];
+//        if (showOnMap) {
+//            MeasurementToolFragment.showGpxOnMap(app, gpx, false);
+//        }
+    }
+    if (success)
+        [self saveGpxToDatabase];
     return success;
+}
+
+- (void) saveGpxToDatabase
+{
+    OAGPXTrackAnalysis *analysis = [_savedGpxFile getAnalysis:0];
+    OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
+    OAGPX *gpx = [gpxDb buildGpxItem:[_outFile lastPathComponent] title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds analysis:analysis];
+    [gpxDb replaceGpxItem:gpx];
+    [gpxDb save];
 }
 
 - (OAGPXDocument *) generateGpxFile:(NSString *)trackName gpx:(OAGPXMutableDocument *)gpx

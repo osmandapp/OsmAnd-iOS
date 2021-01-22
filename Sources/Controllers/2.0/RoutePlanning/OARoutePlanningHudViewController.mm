@@ -53,6 +53,8 @@
 #import "OASavingTrackHelper.h"
 #import "QuadRect.h"
 
+#include <OsmAndCore/Utilities.h>
+
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
@@ -120,6 +122,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     NSString *_fileName;
     CLLocation *_initialPoint;
+    
+    UITapGestureRecognizer *_tapRecognizer;
 }
 
 - (instancetype) init
@@ -229,6 +233,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self addNewGpxData:[self getGpxFile:_fileName]];
 //    else if (editingCtx.isApproximationNeeded() && isFollowTrackMode())
 //        enterApproximationMode(mapActivity);
+    
+    _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
+    [_tapRecognizer setNumberOfTapsRequired:1];
+    [self.view addGestureRecognizer:_tapRecognizer];
 }
 
 - (BOOL)supportsFullScreen
@@ -461,6 +469,58 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         _layer.editingCtx = nil;
         [_layer resetLayer];
     }];
+}
+
+- (void) handleMapTap:(UITapGestureRecognizer *)sender
+{
+    CGPoint touchPoint = [sender locationInView:self.view];
+    CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
+    
+    if (!_editingContext.isInAddPointMode && _editingContext.selectedPointPosition == -1)
+    {
+        if (!overlapped) {
+            selectPoint(point.x, point.y, true);
+        }
+        if (editingCtx.getSelectedPointPosition() == -1) {
+            pressedPointLatLon = tileBox.getLatLonFromPixel(point.x, point.y);
+            if (singleTapListener != null) {
+                singleTapListener.onAddPoint();
+            }
+        }
+    }
+}
+
+- (void) selectPoint:(CLLocationCoordinate2D)location
+{
+    double lowestDistance = 5;
+    for (NSInteger i = 0; i < _editingContext.pointsCount; i++)
+    {
+        OAGpxTrkPt *pt = _editingContext.getPoints[i];
+        if (tb.containsLatLon(pt.getLatitude(), pt.getLongitude())) {
+            double xDiff = tb.getPixXFromLonNoRot(pt.getLongitude()) - x;
+            double yDiff = tb.getPixYFromLatNoRot(pt.getLatitude()) - y;
+            double distToPoint = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+            if (distToPoint < lowestDistance) {
+                lowestDistance = distToPoint;
+                editingCtx.setSelectedPointPosition(i);
+            }
+        }
+    }
+    if (singleTap && singleTapListener != null) {
+        singleTapListener.onSelectPoint(editingCtx.getSelectedPointPosition());
+    }
+}
+
+- (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint
+{
+    OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
+    touchPoint.x *= mapViewController.mapView.contentScaleFactor;
+    touchPoint.y *= mapViewController.mapView.contentScaleFactor;
+    OsmAnd::PointI touchLocation;
+    [mapViewController.mapView convert:touchPoint toLocation:&touchLocation];
+    double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
+    double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+    return CLLocationCoordinate2DMake(lat, lon);
 }
 
 - (IBAction)closePressed:(id)sender

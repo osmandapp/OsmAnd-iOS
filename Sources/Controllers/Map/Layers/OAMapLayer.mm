@@ -109,10 +109,8 @@
 
 - (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint
 {
-    touchPoint.x *= _mapViewController.mapView.contentScaleFactor;
-    touchPoint.y *= _mapViewController.mapView.contentScaleFactor;
     OsmAnd::PointI touchLocation;
-    [_mapViewController.mapView convert:touchPoint toLocation:&touchLocation];
+    [self.mapView convert:touchPoint toLocation:&touchLocation];
     double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
     return CLLocationCoordinate2DMake(lat, lon);

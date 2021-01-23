@@ -278,6 +278,11 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     [self hide:YES];
 }
 
+- (void) onBottomSheetDismissed
+{
+    // Override
+}
+
 - (IBAction)rightButtonPressed:(id)sender
 {
     [self onRightButtonPressed];
@@ -286,10 +291,13 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 - (IBAction)leftButtonPressed:(id)sender
 {
     [self hide:YES];
+    [self onBottomSheetDismissed];
 }
+
 - (IBAction)closeButtonPressed:(id)sender
 {
     [self hide:YES];
+    [self onBottomSheetDismissed];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

@@ -17,6 +17,7 @@
 #import "OANativeUtilities.h"
 #import "OAColors.h"
 #import "OAAutoObserverProxy.h"
+#import "OANativeUtilities.h"
 
 #import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -182,7 +183,7 @@
 - (void) enterMovingPointMode
 {
     _isInMovingMode = YES;
-//    moveMapToPoint(editingCtx.getSelectedPointPosition());
+    [self moveMapToPoint:_editingCtx.selectedPointPosition];
     OAGpxTrkPt *pt = [_editingCtx removePoint:_editingCtx.selectedPointPosition updateSnapToRoad:NO];
     _editingCtx.originalPointToMove = pt;
     [_editingCtx splitSegments:_editingCtx.selectedPointPosition];
@@ -205,25 +206,22 @@
     return point;
 }
 
-// TODO: implement map interaction events
-//- (OAGpxTrkPt *) addPoint:(BOOL)addPointBefore
-//{
-//    if (pressedPointLatLon != null) {
-//        WptPt pt = new WptPt();
-//        double lat = pressedPointLatLon.getLatitude();
-//        double lon = pressedPointLatLon.getLongitude();
-//        pt.lat = lat;
-//        pt.lon = lon;
-//        pressedPointLatLon = null;
-//        boolean allowed = editingCtx.getPointsCount() == 0 || !editingCtx.getPoints().get(editingCtx.getPointsCount() - 1).equals(pt);
-//        if (allowed) {
-//            editingCtx.addPoint(pt, addPointBefore ? AdditionMode.ADD_BEFORE : AdditionMode.ADD_AFTER);
-//            moveMapToLatLon(lat, lon);
-//            return pt;
-//        }
-//    }
-//    return null;
-//}
+- (OAGpxTrkPt *) addPoint:(BOOL)addPointBefore
+{
+    if (_pressPointLocation)
+    {
+        OAGpxTrkPt *pt = [[OAGpxTrkPt alloc] init];
+        [pt setPosition:_pressPointLocation.coordinate];
+        _pressPointLocation = nil;
+        BOOL allowed = _editingCtx.getPointsCount == 0 || ![_editingCtx.getAllPoints containsObject:pt];
+        if (allowed)
+        {
+            [_editingCtx addPoint:pt mode:addPointBefore ? EOAAddPointModeBefore : EOAAddPointModeAfter];
+            return pt;
+        }
+    }
+    return nil;
+}
 
 - (OAGpxTrkPt *) addCenterPoint:(BOOL)addPointBefore
 {
@@ -389,6 +387,32 @@
         [self.mapView addKeyedSymbolsProvider:_collection];
         [self.mapView addKeyedSymbolsProvider:_pointMarkers];
     }];
+}
+
+- (BOOL)isVisible
+{
+    return _editingCtx != nil;
+}
+
+- (void) onMapPointSelected:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress
+{
+    if (self.isVisible && self.delegate)
+        [self.delegate onTouch:coordinate longPress:longPress];
+}
+
+- (void) moveMapToPoint:(NSInteger)pos
+{
+    if (_editingCtx.getPointsCount > 0)
+    {
+        if (pos >= _editingCtx.getPointsCount)
+            pos = _editingCtx.getPointsCount - 1;
+        else if (pos < 0)
+            pos = 0;
+        OAGpxTrkPt *pt = _editingCtx.getPoints[pos];
+        auto point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
+        auto point31 = [OANativeUtilities convertFromPointI:point];
+        [self.mapViewController goToPosition:point31 animated:YES];
+    }
 }
 
 @end

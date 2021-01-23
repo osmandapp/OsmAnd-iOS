@@ -22,6 +22,9 @@
 - (void) onChangeRouteTypeBefore;
 - (void) onChangeRouteTypeAfter;
 
+- (void) onCloseMenu;
+- (void) onClearSelection;
+
 @end
 
 @interface OAPointOptionsBottomSheetViewController : OABaseBottomSheetViewController

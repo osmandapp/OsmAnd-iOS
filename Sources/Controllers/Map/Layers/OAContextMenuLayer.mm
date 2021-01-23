@@ -359,6 +359,9 @@
 
     [mapViewController.mapLayers.myPositionLayer collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
     [mapViewController.mapLayers.mapillaryLayer collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:nil found:found unknownLocation:showUnknownLocation];
+    
+    // Handle route planning touch events separately
+    [mapViewController.mapLayers.routePlanningLayer onMapPointSelected:coord longPress:showUnknownLocation];
 
     for (const auto symbolInfo : symbolInfos)
     {

@@ -122,8 +122,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     NSString *_fileName;
     CLLocation *_initialPoint;
-    
-    UITapGestureRecognizer *_tapRecognizer;
 }
 
 - (instancetype) init
@@ -233,10 +231,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self addNewGpxData:[self getGpxFile:_fileName]];
 //    else if (editingCtx.isApproximationNeeded() && isFollowTrackMode())
 //        enterApproximationMode(mapActivity);
-    
-    _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleMapTap:)];
-    [_tapRecognizer setNumberOfTapsRequired:1];
-    [self.view addGestureRecognizer:_tapRecognizer];
 }
 
 - (BOOL)supportsFullScreen
@@ -471,43 +465,45 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }];
 }
 
-- (void) handleMapTap:(UITapGestureRecognizer *)sender
+- (void) handleMapTap:(CLLocationCoordinate2D)coord longPress:(BOOL)longPress
 {
-    CGPoint touchPoint = [sender locationInView:self.view];
-    CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
-    
     if (!_editingContext.isInAddPointMode && _editingContext.selectedPointPosition == -1)
-    {
-        if (!overlapped) {
-            selectPoint(point.x, point.y, true);
-        }
-        if (editingCtx.getSelectedPointPosition() == -1) {
-            pressedPointLatLon = tileBox.getLatLonFromPixel(point.x, point.y);
-            if (singleTapListener != null) {
-                singleTapListener.onAddPoint();
-            }
-        }
-    }
+        [self selectPoint:coord longPress:longPress];
 }
 
-- (void) selectPoint:(CLLocationCoordinate2D)location
+- (void) selectPoint:(CLLocationCoordinate2D)location longPress:(BOOL)longPress
 {
-    double lowestDistance = 5;
-    for (NSInteger i = 0; i < _editingContext.pointsCount; i++)
+    OAMapRendererView *mapView = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    
+    double lowestDistance = 40.;
+    for (NSInteger i = 0; i < _editingContext.getPointsCount; i++)
     {
         OAGpxTrkPt *pt = _editingContext.getPoints[i];
-        if (tb.containsLatLon(pt.getLatitude(), pt.getLongitude())) {
-            double xDiff = tb.getPixXFromLonNoRot(pt.getLongitude()) - x;
-            double yDiff = tb.getPixYFromLatNoRot(pt.getLatitude()) - y;
-            double distToPoint = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-            if (distToPoint < lowestDistance) {
+        const auto latLon = OsmAnd::LatLon(pt.getLatitude, pt.getLongitude);
+        const auto point = OsmAnd::Utilities::convertLatLonTo31(latLon);
+        
+        if (mapView.getVisibleBBox31.contains(point))
+        {
+            double distToPoint = getDistance(location.latitude, location.longitude, latLon.latitude, latLon.longitude);
+            if (distToPoint < lowestDistance)
+            {
                 lowestDistance = distToPoint;
-                editingCtx.setSelectedPointPosition(i);
+                _editingContext.selectedPointPosition = i;
             }
         }
     }
-    if (singleTap && singleTapListener != null) {
-        singleTapListener.onSelectPoint(editingCtx.getSelectedPointPosition());
+    if (_editingContext.selectedPointPosition != -1)
+    {
+        if (longPress)
+            [self onMovePoint:_editingContext.selectedPointPosition];
+        else
+            [self openSelectedPointMenu];
+    }
+    else if (!longPress)
+    {
+        _layer.pressPointLocation = [[CLLocation alloc] initWithLatitude:location.latitude longitude:location.longitude];
+        [_editingContext.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:_layer center:NO]];
+        [self onPointsListChanged];
     }
 }
 
@@ -1005,12 +1001,18 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return YES;
 }
 
+- (void)openSelectedPointMenu
+{
+    NSInteger selectedPos = _editingContext.selectedPointPosition;
+    OAPointOptionsBottomSheetViewController *bottomSheet = [[OAPointOptionsBottomSheetViewController alloc] initWithPoint:_editingContext.getPoints[selectedPos] index:selectedPos editingContext:_editingContext];
+    bottomSheet.delegate = self;
+    [bottomSheet presentInViewController:self];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _editingContext.selectedPointPosition = indexPath.row;
-    OAPointOptionsBottomSheetViewController *bottomSheet = [[OAPointOptionsBottomSheetViewController alloc] initWithPoint:_editingContext.getPoints[indexPath.row] index:indexPath.row editingContext:_editingContext];
-    bottomSheet.delegate = self;
-    [bottomSheet presentInViewController:self];
+    [self openSelectedPointMenu];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -1021,6 +1023,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [_app getFormattedDistance:distance], [OsmAndApp.instance getFormattedAzimuth:bearing]];
     });
+}
+
+- (void)onTouch:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress
+{
+    [self handleMapTap:coordinate longPress:longPress];
 }
 
 #pragma mark - OAPointOptionsBottmSheetDelegate
@@ -1086,7 +1093,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _infoView.clipsToBounds = NO;
     _infoView.layer.masksToBounds = YES;
     
-    //                measurementLayer.moveMapToPoint(editingCtx.getSelectedPointPosition());
+    [_layer moveMapToPoint:_editingContext.selectedPointPosition];
     _editingContext.addPointMode = type;
     [_editingContext splitSegments:_editingContext.selectedPointPosition + (type == EOAAddPointModeAfter ? 1 : 0)];
     
@@ -1106,6 +1113,16 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self.tableView endUpdates];
     [self updateDistancePointsText];
     _editingContext.selectedPointPosition = -1;
+}
+
+- (void)onClearSelection
+{
+    _editingContext.selectedPointPosition = -1;
+}
+
+- (void)onCloseMenu
+{
+    
 }
 
 #pragma mark - OAInfoBottomViewDelegate

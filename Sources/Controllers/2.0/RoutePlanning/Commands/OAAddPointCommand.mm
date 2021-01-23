@@ -64,15 +64,16 @@
     if (_point)
     {
         [ctx addPoint:_point mode:_addPointBefore ? EOAAddPointModeBefore : EOAAddPointModeAfter];
-//        [self.measurementLayer moveMapToPoint:position];
+        [self.measurementLayer moveMapToPoint:_position];
     }
     else if (_center)
     {
         _point = [self.measurementLayer addCenterPoint:_addPointBefore];
     }
-    /*else {
-        point = [self.measurementLayer addPoint:_addPointBefore];
-    }*/
+    else
+    {
+        _point = [self.measurementLayer addPoint:_addPointBefore];
+    }
     [self refreshMap];
     return _point != nil;
 }
@@ -99,7 +100,7 @@
 {
     [self.getEditingCtx addPoint:_position point:_point mode:_addPointBefore ? EOAAddPointModeBefore : EOAAddPointModeAfter];
     [self.measurementLayer updateLayer];
-    //        [self.measurementLayer moveMapToPoint:position];
+    [self.measurementLayer moveMapToPoint:_position];
 }
 
 - (EOAMeasurementCommandType) getType

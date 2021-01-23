@@ -51,7 +51,7 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), _pointIndex];
+    self.titleView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), _pointIndex + 1];
     [self.leftButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
@@ -139,6 +139,12 @@
         icon = routeAppMode.getIconName;
         
     return icon;
+}
+
+- (void) onBottomSheetDismissed
+{
+    if (self.delegate)
+        [self.delegate onClearSelection];
 }
 
 #pragma mark - UITableViewDataSource

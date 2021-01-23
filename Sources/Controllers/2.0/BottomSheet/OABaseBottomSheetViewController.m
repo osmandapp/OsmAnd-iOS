@@ -380,6 +380,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             CGFloat newY = touchPoint.y - _initialTouchPoint;
             if ((newY - initialPoint.y > 180 || fastDownSlide) && _currentState == EOAScrollableMenuStateInitial)
             {
+                [self onBottomSheetDismissed];
                 [self hide:YES];
                 break;
             }

@@ -422,7 +422,7 @@ static OAApplicationMode *_SKI;
     return [OAAppSettings.sharedManager.routerService get:self];
 }
 
-- (void) setRouterService:(NSInteger) routerService
+- (void) setRouterService:(NSInteger)routerService
 {
     [OAAppSettings.sharedManager.routerService set:(int) routerService mode:self];
 }
@@ -800,7 +800,8 @@ static OAApplicationMode *_SKI;
     res.locIcon = [self parseLocationIcon:jsonData[@"locIcon"]];
     res.navIcon = [self parseNavIcon:jsonData[@"navIcon"]];
     res.order = [jsonData[@"order"] intValue];
-    res.routeService = [jsonData[@"routeService"] integerValue];
+    NSInteger routerService = [self.class parseRouterService:jsonData[@"routeService"]];
+    res.routeService =  routerService;
     res.routingProfile = jsonData[@"routingProfile"];
     res.parent = jsonData[@"parent"];
     res.stringKey = jsonData[@"stringKey"];

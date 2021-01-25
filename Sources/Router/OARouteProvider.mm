@@ -856,7 +856,6 @@
     rp.start = routeParams.start;
     rp.end = routeParams.end;
     rp.leftSide = routeParams.leftSide;
-    rp.type = routeParams.type;
     rp.fast = routeParams.fast;
     rp.onlyStartPointChanged = routeParams.onlyStartPointChanged;
     rp.previousToRecalculate =  routeParams.previousToRecalculate;
@@ -923,12 +922,23 @@
     newParams.end = end;
     newParams.calculationProgress = rParams.calculationProgress;
     newParams.mode = rParams.mode;
-    newParams.type = EOARouteService::OSMAND;
     newParams.leftSide = rParams.leftSide;
     OARouteCalculationResult *newRes = nil;
     try
     {
-        newRes = [self findVectorMapsRoute:newParams calcGPXRoute:NO];
+        if (rParams.mode.getRouterService == OSMAND)
+        {
+            newRes = [self findVectorMapsRoute:newParams calcGPXRoute:NO];
+        }
+//        else if (rParams.mode.getRouteService() == RouteService.BROUTER)
+//        {
+//            newRes= findBROUTERRoute(newParams);
+//        }
+        else if (rParams.mode.getRouterService == STRAIGHT ||
+                   rParams.mode.getRouterService == DIRECT_TO)
+        {
+            newRes = [self findStraightRoute:newParams];
+        }
     }
     catch (NSException *e)
     {
@@ -1126,7 +1136,7 @@
     NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
     if (params.start && params.end)
     {
-        NSLog(@"Start finding route from %@ to %@ using %@", params.start, params.end, [OARouteService getName:params.type]);
+        NSLog(@"Start finding route from %@ to %@ using %@", params.start, params.end, [OARouteService getName:(EOARouteService)params.mode.getRouterService]);
         try
         {
             OARouteCalculationResult *res = nil;
@@ -1135,23 +1145,15 @@
             {
                 res = [self calculateGpxRoute:params];
             }
-            else if (params.type == OSMAND)
+            else if (params.mode.getRouterService == OSMAND)
             {
                 res = [self findVectorMapsRoute:params calcGPXRoute:calcGPXRoute];
             }
-//            else if (params.type == BROUTER)
+//            else if (params.mode.getRouterService == BROUTER)
 //            {
 //                //res = findBROUTERRoute(params);
 //            }
-//            else if (params.type == YOURS)
-//            {
-//                //res = findYOURSRoute(params);
-//            }
-//            else if (params.type == OSRM)
-//            {
-//                //res = findOSRMRoute(params);
-//            }
-            else if (params.type == STRAIGHT || params.type == DIRECT_TO)
+            else if (params.mode.getRouterService == STRAIGHT || params.mode.getRouterService == DIRECT_TO)
             {
                 res = [self findStraightRoute:params];
             }

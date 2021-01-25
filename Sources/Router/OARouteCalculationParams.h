@@ -34,7 +34,6 @@
 @property (nonatomic) NSArray<CLLocation *> *intermediates;
 
 @property (nonatomic) OAApplicationMode *mode;
-@property (nonatomic) EOARouteService type;
 @property (nonatomic) OAGPXRouteParams *gpxRoute;
 @property (nonatomic) OARouteCalculationResult *previousToRecalculate;
 @property (nonatomic) BOOL onlyStartPointChanged;

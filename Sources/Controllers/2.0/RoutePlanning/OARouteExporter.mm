@@ -59,8 +59,9 @@
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
     OAGpxTrk *track = [[OAGpxTrk alloc] init];
     track.name = name;
-    track.segments = trkSegments;
     [gpx addTrack:track];
+    for (OAGpxTrkSeg *seg in trkSegments)
+        [gpx addTrackSegment:seg track:track];
     if (points != nil)
     {
         for (OAGpxTrkPt *pt in points)
@@ -75,7 +76,7 @@
 
 - (OAGpxTrkSeg *) generateRouteSegment
 {
-    std::shared_ptr<RouteDataResources> resources = std::make_shared<RouteDataResources>([self coordinatesToVector:_locations]);
+    std::shared_ptr<RouteDataResources> resources = std::make_shared<RouteDataResources>([self coordinatesToLocationVector:_locations]);
     std::vector<std::shared_ptr<RouteDataBundle>> routeItems;
     if (_route.size() > 0)
     {
@@ -138,12 +139,14 @@
     return trkSegment;
 }
 
-- (std::vector<std::pair<double, double>>) coordinatesToVector:(NSArray<CLLocation *> *)points
+- (std::vector<Location>) coordinatesToLocationVector:(NSArray<CLLocation *> *)points
 {
-    std::vector<std::pair<double, double>> res;
+    std::vector<Location> res;
     for (CLLocation *pt in points)
     {
-        res.push_back({pt.coordinate.latitude, pt.coordinate.longitude});
+        Location loc(pt.coordinate.latitude, pt.coordinate.longitude);
+        loc.altitude = pt.altitude;
+        res.push_back(loc);
     }
     return res;
 }

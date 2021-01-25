@@ -138,7 +138,7 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
         }
         return;
     }
-    BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:_params.type] && [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable;
+    BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:(EOARouteService)_params.mode.getRouterService] && [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable;
     if (onlineSourceWithoutInternet && _settings.gpxRouteCalcOsmandParts)
     {
         if (_params.previousToRecalculate && [_params.previousToRecalculate isCalculated])
@@ -171,7 +171,7 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
     }
     if ([res isCalculated])
     {
-        if (!_helper.isPublicTransportMode /*&& !params.inSnapToRoadMode */)
+        if (!_helper.isPublicTransportMode && !_params.inSnapToRoadMode)
             [_helper setNewRoute:prev res:res start:_params.start];
     }
     else if (onlineSourceWithoutInternet)
@@ -744,9 +744,8 @@ static BOOL _isDeviatedFromRoute = false;
         }
         params.leftSide = [OADrivingRegion isLeftHandDriving:[_settings.drivingRegion get:_mode]];
         params.fast = [_settings.fastRouteMode get:_mode];
-        params.type = (EOARouteService)[_settings.routerService get:_mode];
         params.mode = _mode;
-        if (params.type == OSMAND)
+        if (params.mode.getRouterService == OSMAND)
         {
             params.calculationProgress = std::make_shared<RouteCalculationProgress>();
             [self updateProgress:params];

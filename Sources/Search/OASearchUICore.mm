@@ -499,6 +499,11 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
 
 - (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher
 {
+    return [self shallowSearch:cl text:text matcher:matcher resortAll:YES removeDuplicates:YES];
+}
+
+- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
+{
     OASearchCoreAPI *api = [self getApiByClass:cl];
     if (api)
     {
@@ -509,7 +514,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
         [api search:sphrase resultMatcher:rm];
         
         OASearchResultCollection *collection = [[OASearchResultCollection alloc] initWithPhrase:sphrase];
-        [collection addSearchResults:[rm getRequestResults] resortAll:YES removeDuplicates:YES];
+        [collection addSearchResults:[rm getRequestResults] resortAll:resortAll removeDuplicates:removeDuplicates];
 
         NSLog(@">> Shallow Search phrase %@ %d", [_phrase toString], (int)([rm getRequestResults].count));
 

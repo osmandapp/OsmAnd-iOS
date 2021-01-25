@@ -796,7 +796,7 @@
     if ([p hasObjectType:POI_TYPE])
         return -1;
     
-    if ([p getUnknownWordToSearch].length >= FIRST_WORD_MIN_LENGTH || [p getRadiusLevel] > 1)
+    if ([p getUnknownWordToSearch].length >= FIRST_WORD_MIN_LENGTH || [p isFirstUnknownSearchWordComplete])
         return SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR;
     
     return -1;
@@ -1013,7 +1013,7 @@
     else
     {
         BOOL includeAdditional = ![phrase hasMoreThanOneUnknownSearchWord];
-        OANameStringMatcher *nmAdditional = includeAdditional ? [[OANameStringMatcher alloc] initWithNamePart:phrase.getLastUnknownSearchWord mode:CHECK_EQUALS_FROM_SPACE] : nil;
+        OANameStringMatcher *nmAdditional = includeAdditional ? [[OANameStringMatcher alloc] initWithNamePart:phrase.getFirstUnknownSearchWord mode:CHECK_EQUALS_FROM_SPACE] : nil;
         NSDictionary<NSString *, OAPoiTypeResult *> *poiTypes = [self getPoiTypeResults:nm additionalMatcher:nmAdditional];
         for (OAPoiTypeResult *ptr in poiTypes.allValues)
         {
@@ -1116,6 +1116,7 @@
 @implementation OASearchAmenityByTypeAPI
 {
     int BBOX_RADIUS;
+    int BBOX_RADIUS_NEAREST;
     OASearchAmenityTypesAPI *_typesAPI;
     OAPOIHelper *_types;
     NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *_acceptedTypes;
@@ -1134,6 +1135,7 @@
     if (self)
     {
         BBOX_RADIUS = 10000;
+        BBOX_RADIUS_NEAREST = 1000;
         _types = [OAPOIHelper sharedInstance];
         _acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
         _typesAPI = typesAPI;
@@ -1191,7 +1193,14 @@
     _lang = QString::fromNSString([[phrase getSettings] getLang]);
     _transliterate = [[phrase getSettings] isTransliterate];
     
-    QuadRect *bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS];
+    int radius = BBOX_RADIUS;
+    if (phrase.getRadiusLevel == 1 && [poiTypeFilter isKindOfClass:OACustomSearchPoiFilter.class])
+    {
+        NSString *name = ((OACustomSearchPoiFilter *) poiTypeFilter).getFilterId;
+        if ([@"std_null" isEqualToString:name])
+            radius = BBOX_RADIUS_NEAREST;
+    }
+    QuadRect *bbox = [phrase getRadiusBBoxToSearch:radius];
     
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]

@@ -271,7 +271,7 @@
                         
                         if (!title || title.length == 0)
                         {
-                            NSString *defaultProfileName = [NSString stringWithFormat:OALocalizedString(@"unnamed_imported_profile_format"), modeBean.stringKey];
+                            NSString *defaultProfileName = modeBean.stringKey;
                             title = defaultProfileName;
                             modeBean.userProfileName = defaultProfileName;
                         }

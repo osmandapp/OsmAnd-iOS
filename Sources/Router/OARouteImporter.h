@@ -22,7 +22,7 @@ struct RouteSegmentResult;
 - (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile;
 - (instancetype) initWithTrkSeg:(OAGpxTrkSeg *)segment;
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) importRoute;
+- (std::vector<std::shared_ptr<RouteSegmentResult>> &) importRoute;
 
 @end
 

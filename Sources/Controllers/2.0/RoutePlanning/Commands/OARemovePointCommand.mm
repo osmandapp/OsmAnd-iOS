@@ -36,7 +36,7 @@
 {
     [self.getEditingCtx addPoint:_position pt:_point];
     [self.measurementLayer updateLayer];
-//    measurementLayer.moveMapToPoint(position);
+    [self.measurementLayer moveMapToPoint:_position];
 }
 
 - (void)redo

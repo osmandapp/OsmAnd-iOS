@@ -168,6 +168,12 @@
     return icon;
 }
 
+- (void) onBottomSheetDismissed
+{
+    if (self.delegate)
+        [self.delegate onClearSelection];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

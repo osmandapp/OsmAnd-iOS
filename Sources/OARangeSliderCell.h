@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TTRangeSlider.h"
+#import "OARangeSlider.h"
 
 @interface OARangeSliderCell : UITableViewCell
 
@@ -15,6 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *maxLabel;
 @property (weak, nonatomic) IBOutlet UILabel *minValueLabel;
 @property (weak, nonatomic) IBOutlet UILabel *maxValueLabel;
-@property (weak, nonatomic) IBOutlet TTRangeSlider *rangeSlider;
+@property (weak, nonatomic) IBOutlet OARangeSlider *rangeSlider;
 
 @end

@@ -24,6 +24,9 @@
 - (void) onSplitPointsAfter;
 - (void) onJoinPoints;
 
+- (void) onCloseMenu;
+- (void) onClearSelection;
+
 @end
 
 @interface OAPointOptionsBottomSheetViewController : OABaseBottomSheetViewController

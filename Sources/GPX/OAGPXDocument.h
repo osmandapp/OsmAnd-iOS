@@ -65,8 +65,8 @@
 - (NSArray*) splitByTime:(int)seconds;
 - (NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit;
 
-- (NSArray<OAGpxTrkPt *> *) getRoutePoints;
-- (NSArray<OAGpxTrkPt *> *) getRoutePoints:(NSInteger)routeIndex;
+- (NSArray<OAGpxRtePt *> *) getRoutePoints;
+- (NSArray<OAGpxRtePt *> *) getRoutePoints:(NSInteger)routeIndex;
 
 
 + (OAGpxWpt *)fetchWpt:(const std::shared_ptr<const OsmAnd::GpxDocument::GpxWpt>)mark;
@@ -87,8 +87,6 @@
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
 
 - (NSArray<OAGpxTrkSeg *> *) getNonEmptyTrkSegments:(BOOL)routesOnly;
-
-- (QuadRect *)getRect;
 
 @end
 

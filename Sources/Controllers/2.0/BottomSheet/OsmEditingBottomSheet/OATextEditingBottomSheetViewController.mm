@@ -117,6 +117,7 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     OATextInputFloatingCell *cell = _data.firstObject[@"cell"];
+    [cell.inputField resignFirstResponder];
     switch (_inputType) {
         case USERNAME_INPUT:
             [settings setOsmUserName:cell.inputField.text];

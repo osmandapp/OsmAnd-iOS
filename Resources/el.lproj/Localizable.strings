@@ -293,7 +293,7 @@
 "prev_route" = "Προηγούμενη διαδρομή";
 "replace_destination" = "Αντικατέστησε προορισμό";
 "postcode" = "Ταχυδρομικός κώδικας";
-"map_widget_radius_ruler" = "Κανόνας ακτίνας";
+"map_widget_ruler_control" = "Κανόνας ακτίνας";
 "quick_actions_show_dialog" = "Εμφάνιση ενδιάμεσου διαλόγου";
 "shared_string_distance" = "Απόσταση";
 "edit_filter" = "Επεξεργασία κατηγοριών";

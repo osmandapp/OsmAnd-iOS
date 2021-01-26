@@ -290,7 +290,7 @@
                             _p.name = p->name.toNSString();
                             _p.desc = p->description.toNSString();
                             _p.elevation = p->elevation;
-                            _p.time = p->timestamp.toTime_t();
+                            _p.time = p->timestamp.isNull() ? 0 : p->timestamp.toTime_t();
                             _p.comment = p->comment.toNSString();
                             _p.type = p->type.toNSString();
                             _p.links = [self.class fetchLinks:p->links];
@@ -325,7 +325,7 @@
                     }
                     
                     _s.extraData = [self.class fetchExtra:s->extraData];
-                    
+                    [_s fillRouteDetails];
                     [seg addObject:_s];
                 }
                 
@@ -373,7 +373,7 @@
                     _p.name = p->name.toNSString();
                     _p.desc = p->description.toNSString();
                     _p.elevation = p->elevation;
-                    _p.time = p->timestamp.toTime_t();
+                    _p.time = p->timestamp.isNull() ? 0 : p->timestamp.toTime_t();
                     _p.comment = p->comment.toNSString();
                     _p.type = p->type.toNSString();
                     _p.links = [self.class fetchLinks:p->links];
@@ -475,7 +475,7 @@
 {
     meta->name = QString::fromNSString(m.name);
     meta->description = QString::fromNSString(m.desc);
-    meta->timestamp = QDateTime::fromTime_t(m.time);
+    meta->timestamp = m.time > 0 ? QDateTime::fromTime_t(m.time) : QDateTime();
     
     [self fillLinks:meta->links linkArray:m.links];
     
@@ -494,7 +494,7 @@
     wpt->name = QString::fromNSString(w.name);
     wpt->description = QString::fromNSString(w.desc);
     wpt->elevation = w.elevation;
-    wpt->timestamp = QDateTime::fromTime_t(w.time);
+    wpt->timestamp = w.time > 0 ? QDateTime::fromTime_t(w.time) : QDateTime();
     wpt->magneticVariation = w.magneticVariation;
     wpt->geoidHeight = w.geoidHeight;
     wpt->comment = QString::fromNSString(w.comment);
@@ -669,7 +669,7 @@
         rtept->name = QString::fromNSString(p.name);
         rtept->description = QString::fromNSString(p.desc);
         rtept->elevation = p.elevation;
-        rtept->timestamp = QDateTime::fromTime_t(p.time);
+        rtept->timestamp = p.time > 0 ? QDateTime::fromTime_t(p.time) : QDateTime();
         rtept->magneticVariation = p.magneticVariation;
         rtept->geoidHeight = p.geoidHeight;
         rtept->comment = QString::fromNSString(p.comment);
@@ -917,73 +917,6 @@
     return g;
 }
 
-- (QuadRect *)getRect
-{
-    double left = 0, right = 0;
-    double top = 0, bottom = 0;
-    for (OAGpxTrk *track in _tracks)
-    {
-        for (OAGpxTrkSeg *segment in track.segments)
-        {
-            for (OAGpxTrkPt *p in segment.points)
-            {
-                if (left == 0 && right == 0)
-                {
-                    left = p.getLongitude;
-                    right = p.getLongitude;
-                    top = p.getLatitude;
-                    bottom = p.getLatitude;
-                }
-                else
-                {
-                    left = fmin(left, p.getLongitude);
-                    right = fmax(right, p.getLongitude);
-                    top = fmax(top, p.getLatitude);
-                    bottom = fmin(bottom, p.getLatitude);
-                }
-            }
-        }
-    }
-    for (OAGpxWpt *p in _locationMarks)
-    {
-        if (left == 0 && right == 0)
-        {
-            left = p.getLongitude;
-            right = p.getLongitude;
-            top = p.getLatitude;
-            bottom = p.getLatitude;
-        }
-        else
-        {
-            left = fmin(left, p.getLongitude);
-            right = fmax(right, p.getLongitude);
-            top = fmax(top, p.getLatitude);
-            bottom = fmin(bottom, p.getLatitude);
-        }
-    }
-    for (OAGpxRte *route in _routes)
-    {
-        for (OAGpxRtePt *p in route.points)
-        {
-            if (left == 0 && right == 0)
-            {
-                left = p.getLongitude;
-                right = p.getLongitude;
-                top = p.getLatitude;
-                bottom = p.getLatitude;
-            }
-            else
-            {
-                left = fmin(left, p.getLongitude);
-                right = fmax(right, p.getLongitude);
-                top = fmax(top, p.getLatitude);
-                bottom = fmin(bottom, p.getLatitude);
-            }
-        }
-    }
-    return [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
-}
-
 -(NSArray*) splitByDistance:(int)meters
 {
     return [self split:[[OADistanceMetric alloc] init] secondaryMetric:[[OATimeSplit alloc] init] metricLimit:meters];
@@ -1070,30 +1003,24 @@
     return segments;
 }
 
-- (NSArray<OAGpxTrkPt *> *) getRoutePoints
+- (NSArray<OAGpxRtePt *> *) getRoutePoints
 {
-    NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray new];
-    for (NSInteger i = 0; i < _tracks.count; i++)
+    NSMutableArray<OAGpxRtePt *> *points = [NSMutableArray new];
+    for (NSInteger i = 0; i < _routes.count; i++)
     {
-        OAGpxTrk *rt = _tracks[i];
-        for (OAGpxTrkSeg *seg in rt.segments)
-        {
-            [points addObjectsFromArray:seg.points];
-        }
+        OAGpxRte *rt = _routes[i];
+        [points addObjectsFromArray:rt.points];
     }
     return points;
 }
 
-- (NSArray<OAGpxTrkPt *> *) getRoutePoints:(NSInteger)routeIndex
+- (NSArray<OAGpxRtePt *> *) getRoutePoints:(NSInteger)routeIndex
 {
-    NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray new];
+    NSMutableArray<OAGpxRtePt *> *points = [NSMutableArray new];
     if (_routes.count > routeIndex)
     {
-        OAGpxTrk *rt = _tracks[routeIndex];
-        for (OAGpxTrkSeg *seg in rt.segments)
-        {
-            [points addObjectsFromArray:seg.points];
-        }
+        OAGpxRte *rt = _routes[routeIndex];
+        [points addObjectsFromArray:rt.points];
     }
     return points;
 }

@@ -169,7 +169,9 @@
 "max_speed_none" = "none";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
-"map_widget_radius_ruler" = "Radius ruler";
+"map_widget_ruler_control" = "Radius ruler";
+"show_compass_ruler" = "Show compass ruler";
+"hide_compass_ruler" = "Hide compass ruler";
 
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";
@@ -877,10 +879,20 @@
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Reverse route";
 "join_segments" = "Join segments";
+"simplified_track" = "Simplified track";
+"simplified_track_description" = "Only the route line will be saved, the waypoints will be deleted.";
+"open_saved_track" = "Open saved track";
+"plan_route_create_new_route" = "Create new route";
+"track_is_saved" = "%@\nis saved!";
 "plan_route_create_new_route" = "Create new route";
 "plan_route_open_existing_track" = "Open existing track";
 "plan_route_last_modified" = "Last modified";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
+"plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
+"gpx_saved_successfully" = "GPX file saved to %@";
+"none_point_error" = "Please add at least one point.";
+"empty_filename" = "Filename cannot be empty";
+"gpx_already_exsists" = "File with this name already exists";
 
 // Resources
 "res_mapsres" = "Maps & Resources";
@@ -1258,6 +1270,7 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
+"units_nm" = "nmi";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
 
@@ -1707,6 +1720,7 @@
 "key_hint_select" = "Select";
 "key_hint_deselect" = "Deselect";
 "key_hint_goback" = "Go Back";
+"key_hint_recenter_map" = "Recenter Map";
 
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";

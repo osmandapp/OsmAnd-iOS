@@ -9,7 +9,7 @@
 #import "InitialRoutePlanningBottomSheetViewController.h"
 #import "OARootViewController.h"
 #import "OARoutePlanningHudViewController.h"
-#import "OAOpenExistingTrackViewController.h"
+#import "OAOpenAddTrackViewController.h"
 #import "OATitleIconRoundCell.h"
 #import "OAGPXRouteRoundCell.h"
 #import "OAHeaderRoundCell.h"
@@ -29,7 +29,7 @@
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
 
-@interface InitialRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenExistingTrackDelegate>
+@interface InitialRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate>
 
 @end
 
@@ -69,8 +69,7 @@
 
 - (CGFloat) initialHeight
 {
-    //TODO: - probably need to be dynamic
-    return DeviceScreenHeight - DeviceScreenHeight / 3;
+    return DeviceScreenHeight - DeviceScreenHeight / ([OAGPXDatabase sharedDb].gpxList.count > 1 ? 3 : 2);
 }
 
 - (void) generateData
@@ -93,6 +92,8 @@
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"open_track"
         }];
+    
+    [data addObject:actionSection];
 
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
     NSArray *gpxList = [db.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
@@ -100,33 +101,32 @@
         NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFileName];
         return [time2 compare:time1];
     }];
+    
+    NSArray *gpxTopList = [gpxList subarrayWithRange:NSMakeRange(0, min(5, (int) gpxList.count))];
 
-    [existingTracksSection addObject:@{
-        @"type" : kHeaderRoundCell,
-        @"title" : OALocalizedString(@"plan_route_last_modified"),
-        @"key" : @"header"
-    }];
-
-    for (OAGPX *gpx in gpxList)
+    if (gpxTopList.count > 0)
     {
-        // TODO: check these parameters
-        double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
-        NSTimeInterval duration = [[OAGPXRouter sharedInstance] getRouteDuration];
-        NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:duration shortFormat:NO];
-        
         [existingTracksSection addObject:@{
-                @"type" : kGPXRouteRoundCell,
-                @"track" : gpx,
-                @"title" : [gpx getNiceTitle],
-                @"distance" : [NSString stringWithFormat:@"%f.", distance],
-                @"time" : timeMovingStr,
-                @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
-                @"key" : @"gpx_route"
-            }];
-    }
+            @"type" : kHeaderRoundCell,
+            @"title" : OALocalizedString(@"plan_route_last_modified"),
+            @"key" : @"header"
+        }];
 
-    [data addObject:actionSection];
-    [data addObject:existingTracksSection];
+        OsmAndAppInstance app = OsmAndApp.instance;
+        for (OAGPX *gpx in gpxTopList)
+        {
+            [existingTracksSection addObject:@{
+                    @"type" : kGPXRouteRoundCell,
+                    @"track" : gpx,
+                    @"title" : [gpx getNiceTitle],
+                    @"distance" : [app getFormattedDistance:gpx.totalDistance],
+                    @"time" : [app getFormattedTimeInterval:gpx.timeSpan shortFormat:YES],
+                    @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
+                    @"key" : @"gpx_route"
+                }];
+        }
+        [data addObject:existingTracksSection];
+    }
     
     _data = data;
 }
@@ -244,7 +244,7 @@
     }
     else if ([key isEqualToString:@"open_track"])
     {
-        OAOpenExistingTrackViewController *openExistingTrackViewController = [[OAOpenExistingTrackViewController alloc] initWithScreen:EOAOpenExistingTrack];
+        OAOpenAddTrackViewController *openExistingTrackViewController = [[OAOpenAddTrackViewController alloc] initWithScreenType:EOAOpenExistingTrack];
         openExistingTrackViewController.delegate = self;
         [self presentViewController:openExistingTrackViewController animated:YES completion:nil];
         return;
@@ -253,11 +253,9 @@
     {
         OAGPX* track = item[@"track"];
         [self dismissViewControllerAnimated:YES completion:nil];
-        [[OARootViewController instance].mapPanel openTargetViewWithGPX:track pushed:YES];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFileName]];
         return;
     }
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - OAOpenExistingTrackDelegate
@@ -265,6 +263,10 @@
 - (void) closeBottomSheet
 {
     [self onRightButtonPressed];
+}
+
+- (void)onFileSelected:(NSString *)gpxFileName
+{
 }
 
 @end

@@ -20,7 +20,7 @@
 
 - (instancetype)init
 {
-    return [super initWithNibName:@"OABaseTableViewViewController" bundle:nil];
+    return [super initWithNibName:@"OABaseTableViewController" bundle:nil];
 }
 
 - (void) viewDidLoad

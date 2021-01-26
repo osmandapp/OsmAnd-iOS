@@ -342,6 +342,7 @@
 - (void) openNavigationSettings
 {
     OAProfileNavigationSettingsViewController *settingsViewController = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:[[OARoutingHelper sharedInstance] getAppMode]];
+    settingsViewController.delegate = self;
     [self presentViewController:settingsViewController animated:YES completion:nil];
 }
 
@@ -373,6 +374,8 @@
 
 - (void) onSettingsChanged
 {
+    [self generateData];
+    [self setupView];
     [self.tableView reloadData];
 }
 

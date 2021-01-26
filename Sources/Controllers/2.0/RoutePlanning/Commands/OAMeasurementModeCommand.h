@@ -23,7 +23,9 @@ typedef NS_ENUM(NSInteger, EOAMeasurementCommandType)
     SNAP_TO_ROAD,
     CHANGE_ROUTE_MODE,
     APPROXIMATE_POINTS,
-    REVERSE_POINTS
+    REVERSE_POINTS,
+    SPLIT_POINTS,
+    JOIN_POINTS
 };
 
 @protocol OACommand <NSObject>

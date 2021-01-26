@@ -46,6 +46,8 @@
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OAChangeRouteModeCommand.h"
 #import "OATargetPointsHelper.h"
+#import "OASplitPointsCommand.h"
+#import "OAJoinPointsCommand.h"
 #import "OASaveGpxRouteAsyncTask.h"
 #import "OASaveTrackViewController.h"
 #import "OAOpenAddTrackViewController.h"
@@ -1198,6 +1200,33 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [bottomSheet presentInViewController:self];
 }
 
+- (void) onSplitPointsAfter
+{
+    [_editingContext.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:_layer after:YES]];
+    [_editingContext setSelectedPointPosition:-1];
+    //updateUndoRedoButton(false, redoBtn);
+    //updateUndoRedoButton(true, undoBtn);
+    [self updateDistancePointsText];
+}
+
+- (void) onSplitPointsBefore
+{
+    [_editingContext.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:_layer after:NO]];
+    [_editingContext setSelectedPointPosition:-1];
+    //updateUndoRedoButton(false, redoBtn);
+    //updateUndoRedoButton(true, undoBtn);
+    [self updateDistancePointsText];
+}
+
+- (void) onJoinPoints
+{
+    [_editingContext.commandManager execute:[[OAJoinPointsCommand alloc] initWithLayer:_layer]];
+    [_editingContext setSelectedPointPosition:-1];
+    //updateUndoRedoButton(false, redoBtn);
+    //updateUndoRedoButton(true, undoBtn);
+    [self updateDistancePointsText];
+}
+
 #pragma mark - OASegmentOptionsDelegate
 
 - (void)onApplicationModeChanged:(OAApplicationMode *)mode dialogType:(EOARouteBetweenPointsDialogType)dialogType dialogMode:(EOARouteBetweenPointsDialogMode)dialogMode
@@ -1266,7 +1295,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) addNewSegmentSelected
 {
-//    [self onSplitPointsAfter];
+    [self onSplitPointsAfter];
 }
 
 - (void) saveChangesSelected

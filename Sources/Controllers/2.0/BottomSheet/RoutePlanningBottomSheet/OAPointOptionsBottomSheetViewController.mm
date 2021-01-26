@@ -122,10 +122,54 @@
             @{
                 @"type" : kIconTitleIconRoundCell,
                 @"title" : OALocalizedString(@"join_segments"),
-                @"img" : @"ic_custom_straight_line",
+                @"img" : @"ic_custom_join_segments",
                 @"key" : @"join_segments"
             }
         ]];
+    }
+    else
+    {
+        BOOL splitBefore = [_editingCtx canSplit:NO];
+        BOOL splitAfter = [_editingCtx canSplit:YES];
+        if (splitBefore && splitAfter)
+        {
+            [data addObject:@[
+                @{
+                    @"type" : kIconTitleIconRoundCell,
+                    @"title" : OALocalizedString(@"split_before"),
+                    @"img" : @"ic_custom_split_before",
+                    @"key" : @"split_before"
+                },
+                @{
+                    @"type" : kIconTitleIconRoundCell,
+                    @"title" : OALocalizedString(@"split_after"),
+                    @"img" : @"ic_custom_split_after",
+                    @"key" : @"split_after"
+                }
+            ]];
+        }
+        else if (splitBefore)
+        {
+            [data addObject:@[
+                @{
+                    @"type" : kIconTitleIconRoundCell,
+                    @"title" : OALocalizedString(@"split_before"),
+                    @"img" : @"ic_custom_split_before",
+                    @"key" : @"split_before"
+                }
+            ]];
+        }
+        else if (splitAfter)
+        {
+            [data addObject:@[
+                @{
+                    @"type" : kIconTitleIconRoundCell,
+                    @"title" : OALocalizedString(@"split_after"),
+                    @"img" : @"ic_custom_split_after",
+                    @"key" : @"split_after"
+                }
+            ]];
+        }
     }
     
     [data addObject:@[
@@ -282,6 +326,20 @@
         [self dismissViewControllerAnimated:NO completion:nil];
         if (self.delegate)
             [self.delegate onJoinPoints];
+        return;
+    }
+    else if ([key isEqualToString:@"split_before"])
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onSplitPointsBefore];
+        return;
+    }
+    else if ([key isEqualToString:@"split_after"])
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onSplitPointsAfter];
         return;
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

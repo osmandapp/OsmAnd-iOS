@@ -118,4 +118,6 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 - (void) setChangesSaved;
 - (BOOL) hasChanges;
 
+- (BOOL) canSplit:(BOOL)after;
+
 @end

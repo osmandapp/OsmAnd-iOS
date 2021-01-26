@@ -21,6 +21,7 @@
 
 - (void) onChangeRouteTypeBefore;
 - (void) onChangeRouteTypeAfter;
+- (void) onSplitPointsBefore;
 - (void) onSplitPointsAfter;
 - (void) onJoinPoints;
 

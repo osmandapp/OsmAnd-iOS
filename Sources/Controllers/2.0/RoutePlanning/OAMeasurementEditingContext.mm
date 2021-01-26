@@ -841,6 +841,21 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 //    }
 //}
 
+- (BOOL) canSplit:(BOOL)after
+{
+    OAGpxTrkPt *selectedPoint = [self getPoints][self.selectedPointPosition];
+    NSArray<OAGpxTrkSeg *> *segments = [self getBeforeSegments];
+    for (OAGpxTrkSeg *segment in segments)
+    {
+        NSInteger i = [segment.points indexOfObject:selectedPoint];
+        if (i != NSNotFound)
+        {
+            return after ? i < segment.points.count - 2 : i > 1;
+        }
+    }
+    return NO;
+}
+
 - (NSInteger) findPointIndex:(OAGpxTrkPt *)point points:(NSArray<OAGpxTrkPt *> *)points firstIndex:(NSInteger)firstIndex
 {
     double minDistance = DBL_MAX;

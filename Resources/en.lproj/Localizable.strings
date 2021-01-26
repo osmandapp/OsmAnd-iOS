@@ -893,6 +893,8 @@
 "none_point_error" = "Please add at least one point.";
 "empty_filename" = "Filename cannot be empty";
 "gpx_already_exsists" = "File with this name already exists";
+"split_before" = "Split before";
+"split_after" = "Split after";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

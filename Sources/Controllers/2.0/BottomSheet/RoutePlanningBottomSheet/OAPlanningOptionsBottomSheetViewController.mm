@@ -70,8 +70,7 @@
 {
     NSMutableArray *data = [NSMutableArray new];
     
-    // TODO: uncomment after implementing addNewSegement functionality
-    /*if (addNewSegmentAllowed)
+    if (addNewSegmentAllowed)
     {
         [data addObject:@[
             @{
@@ -82,7 +81,7 @@
                 @"key" : @"start_new_segment"
             }
         ]];
-    }*/
+    }
     
     NSString *descr;
     NSString *icon;

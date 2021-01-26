@@ -282,6 +282,10 @@
 		157F3CEF24A23A94000A66F0 /* ic_custom_undo_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */; };
 		157F3CF024A23A94000A66F0 /* ic_custom_undo_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CED24A23A94000A66F0 /* ic_custom_undo_button@3x.png */; };
 		1580854D254067E700CE52F0 /* OAImportSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1580854C254067E600CE52F0 /* OAImportSettingsViewController.mm */; };
+		1580F69E2590B9E1002608E9 /* OASplitPointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1580F69D2590B9E1002608E9 /* OASplitPointsCommand.mm */; };
+		1580F69F2590B9E1002608E9 /* OASplitPointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1580F69D2590B9E1002608E9 /* OASplitPointsCommand.mm */; };
+		1580F6A62590CB2F002608E9 /* OAJoinPointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1580F6A52590CB2F002608E9 /* OAJoinPointsCommand.mm */; };
+		1580F6A72590CB2F002608E9 /* OAJoinPointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1580F6A52590CB2F002608E9 /* OAJoinPointsCommand.mm */; };
 		1581A3872566C36A004CB4B3 /* OASettingsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1581A3862566C36A004CB4B3 /* OASettingsItem.m */; };
 		1581A3882566C36A004CB4B3 /* OASettingsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1581A3862566C36A004CB4B3 /* OASettingsItem.m */; };
 		1581A38D2566C3C5004CB4B3 /* OASettingsItemReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1581A38C2566C3C5004CB4B3 /* OASettingsItemReader.m */; };
@@ -6591,6 +6595,10 @@
 		157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo_button@2x.png"; path = "Resources/Icons/ic_custom_undo_button@2x.png"; sourceTree = "<group>"; };
 		157F3CED24A23A94000A66F0 /* ic_custom_undo_button@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo_button@3x.png"; path = "Resources/Icons/ic_custom_undo_button@3x.png"; sourceTree = "<group>"; };
 		1580854C254067E600CE52F0 /* OAImportSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAImportSettingsViewController.mm; sourceTree = "<group>"; };
+		1580F69C2590B9CE002608E9 /* OASplitPointsCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASplitPointsCommand.h; sourceTree = "<group>"; };
+		1580F69D2590B9E1002608E9 /* OASplitPointsCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASplitPointsCommand.mm; sourceTree = "<group>"; };
+		1580F6A42590CB21002608E9 /* OAJoinPointsCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAJoinPointsCommand.h; sourceTree = "<group>"; };
+		1580F6A52590CB2F002608E9 /* OAJoinPointsCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAJoinPointsCommand.mm; sourceTree = "<group>"; };
 		1581A3852566C343004CB4B3 /* OASettingsItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASettingsItem.h; sourceTree = "<group>"; };
 		1581A3862566C36A004CB4B3 /* OASettingsItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASettingsItem.m; sourceTree = "<group>"; };
 		1581A38B2566C3BB004CB4B3 /* OASettingsItemReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASettingsItemReader.h; sourceTree = "<group>"; };
@@ -16243,6 +16251,10 @@
 				DA65CC28256E58C400DC896F /* OAChangeRouteModeCommand.mm */,
 				DA12B8B2258E0ABF00D44915 /* OAReversePointsCommand.h */,
 				DA12B8B3258E0ABF00D44915 /* OAReversePointsCommand.mm */,
+				1580F69C2590B9CE002608E9 /* OASplitPointsCommand.h */,
+				1580F69D2590B9E1002608E9 /* OASplitPointsCommand.mm */,
+				1580F6A42590CB21002608E9 /* OAJoinPointsCommand.h */,
+				1580F6A52590CB2F002608E9 /* OAJoinPointsCommand.mm */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -21869,6 +21881,7 @@
 				847A1D291DF94E9B003C1246 /* OAHistoryCardController.mm in Sources */,
 				DA9D549722D48410003AD7F9 /* OAOsmLiveCardView.m in Sources */,
 				DA73D289223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */,
+				1580F6A72590CB2F002608E9 /* OAJoinPointsCommand.mm in Sources */,
 				33BE664324A2771800245A78 /* OAShowHideTransportLinesAction.mm in Sources */,
 				847A1D2B1DF94E9B003C1246 /* UITableViewCell+getTableView.m in Sources */,
 				84E37046205920D300959B94 /* OAWaypointsViewController.mm in Sources */,
@@ -21976,6 +21989,7 @@
 				1581A3C02566C57B004CB4B3 /* OACollectionSettingsItem.mm in Sources */,
 				847A1D4C1DF94E9B003C1246 /* OAPOIFilter.m in Sources */,
 				8A253F9A21DDF09B0047FA3C /* OAOsmLiveBannerView.m in Sources */,
+				1580F69F2590B9E1002608E9 /* OASplitPointsCommand.mm in Sources */,
 				847A1D4D1DF94E9B003C1246 /* OAGPXRecTableViewCell.m in Sources */,
 				DAC0278822A1450600D1689E /* OAMapSettingsMapillaryScreen.mm in Sources */,
 				841511911FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */,
@@ -22382,6 +22396,7 @@
 				848A65981F8A852F00F1DC93 /* OACurrentPositionHelper.mm in Sources */,
 				8AD63B6721CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm in Sources */,
 				840B7D5C1F84250500477A3C /* OASettingSwitchCell.m in Sources */,
+				1580F69E2590B9E1002608E9 /* OASplitPointsCommand.mm in Sources */,
 				848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
 				84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				15DF4052242B3437004AF26B /* OASettingsHelper.mm in Sources */,
@@ -22745,6 +22760,7 @@
 				156F4E6624FA98ED008ED1DD /* OASliderWithValuesCell.m in Sources */,
 				84D81EEE1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				DAF06701238FE94A00210E60 /* OAMapSettingsOnlineSourcesScreen.mm in Sources */,
+				1580F6A62590CB2F002608E9 /* OAJoinPointsCommand.mm in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				8417664C1B7355DD002A08CB /* OAHistoryViewController.mm in Sources */,
 				15720BEE24BF36B400BFC84F /* OAGlobalSettingsViewController.m in Sources */,

@@ -393,6 +393,60 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     [self clearAfterSegments];
 }
 
+- (void) splitPoints:(NSInteger) selectedPointPosition after:(BOOL)after
+{
+    NSInteger pointIndex = after ? selectedPointPosition : selectedPointPosition - 1;
+    if (pointIndex >=0 && pointIndex < _before.points.count)
+    {
+        OAGpxTrkPt *point = _before.points[pointIndex];
+        OAGpxTrkPt *nextPoint = _before.points.count > pointIndex + 1 ? _before.points[pointIndex + 1] : nil;
+        OAGpxTrkPt *newPoint = [[OAGpxTrkPt alloc] initWithPoint:point];
+        [newPoint copyExtensions:point];
+        [newPoint setGap];
+        
+        NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:_before.points];
+        [points removeObjectAtIndex:pointIndex];
+        [points insertObject:newPoint atIndex:pointIndex];
+        _before.points = points;
+        
+        if (newPoint)
+            [_roadSegmentData removeObjectForKey:[NSArray arrayWithObjects:point, nextPoint, nil]];
+        [self updateSegmentsForSnap:NO];
+    }
+}
+
+- (void) joinPoints:(NSInteger) selectedPointPosition
+{
+    OAGpxTrkPt *gapPoint = [[OAGpxTrkPt alloc] init];
+    NSInteger gapIndex = -1;
+    if ([self isFirstPointSelected:selectedPointPosition outer:NO])
+    {
+        if (selectedPointPosition - 1 >= 0)
+        {
+            gapPoint = _before.points[selectedPointPosition - 1];
+            gapIndex = selectedPointPosition - 1;
+        }
+    }
+    else if ([self isLastPointSelected:selectedPointPosition outer:NO])
+    {
+        gapPoint = _before.points[selectedPointPosition];
+        gapIndex = selectedPointPosition;
+    }
+    if (gapPoint)
+    {
+        OAGpxTrkPt *newPoint = [[OAGpxTrkPt alloc] initWithPoint:gapPoint];
+        [newPoint copyExtensions:gapPoint];
+        [newPoint removeProfileType];
+
+        NSMutableArray<OAGpxTrkPt *> *points = [NSMutableArray arrayWithArray:_before.points];
+        [points removeObjectAtIndex:gapIndex];
+        [points insertObject:newPoint atIndex:gapIndex];
+        _before.points = points;
+        
+        [self updateSegmentsForSnap:NO];
+    }
+}
+
 - (void) clearSegments
 {
     [self clearBeforeSegments];
@@ -424,6 +478,53 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 - (BOOL) isLastPointSelected
 {
     return _selectedPointPosition == [self getPoints].count - 1;
+}
+
+- (BOOL) isFirstPointSelected:(BOOL)outer
+{
+    return [self isFirstPointSelected:_selectedPointPosition outer:outer];
+}
+
+- (BOOL) isFirstPointSelected:(NSInteger)selectedPointPosition outer:(BOOL)outer
+{
+    if (outer)
+        return _selectedPointPosition == 0;
+    else
+        return [self isBorderPointSelected:selectedPointPosition first:YES];
+}
+
+- (BOOL) isLastPointSelected:(BOOL)outer
+{
+    return [self isLastPointSelected:_selectedPointPosition outer:outer];
+}
+
+- (BOOL) isLastPointSelected:(NSInteger)selectedPointPosition outer:(BOOL)outer
+{
+    if (outer)
+        return _selectedPointPosition == [self getPoints].count - 1;
+    else
+        return [self isBorderPointSelected:selectedPointPosition first:NO];
+}
+
+- (BOOL) isBorderPointSelected:(NSInteger) selectedPointPosition first:(BOOL)first
+{
+    OAGpxTrkPt *selectedPoint = [self getPoints][selectedPointPosition];
+    NSArray <OAGpxTrkSeg *> *segments = [NSArray arrayWithArray: [self getBeforeSegments]];
+    NSInteger count = 0;
+    for (OAGpxTrkSeg *segment in segments)
+    {
+        NSInteger i = [segment.points indexOfObject:selectedPoint];
+        if (i != -1)
+        {
+            NSInteger segmentPosition = selectedPointPosition - count;
+            return first ? segmentPosition == 0 : segmentPosition == segment.points.count - 1;
+        }
+        else
+        {
+            count += segment.points.count;
+        }
+    }
+    return NO;
 }
 
 - (BOOL)isInAddPointMode

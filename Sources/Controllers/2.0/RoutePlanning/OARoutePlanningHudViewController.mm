@@ -1312,32 +1312,27 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         }
         else
         {
-//            NSString *trackName = [self getSuggestedFileName];
-//            if (_editingContext.hasRoute)
-//            {
-//                OAGPX *gpx = [_editingCtx exportGpx:trackName];
-//                if (gpx != nil)
-//                {
-//                    [self onCloseButtonPressed];
-//                    [self runNavigation:gpx appMode:appMode];
-//                }
+            NSString *trackName = [self getSuggestedFileName];
+            if (_editingContext.hasRoute)
+            {
+                OAGPXDocument *gpx = [_editingContext exportGpx:trackName];
+                if (gpx != nil)
+                {
+                    [self onCloseButtonPressed];
+                    [self runNavigation:gpx appMode:appMode];
+                }
 //                else
 //                {
-//                    NSLog(@"Trip planning error occured while saving gpx");
-////                    Toast.makeText(mapActivity, getString(R.string.error_occurred_saving_gpx), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mapActivity, getString(R.string.error_occurred_saving_gpx), Toast.LENGTH_SHORT).show();
 //                }
-//            }
+            }
+            // TODO: add approximation
 //            else
 //            {
-//                if (_editingCtx.isApproximationNeeded)
-//                {
-//                    self setMode:(DIRECTION_MODE, true);
-//                    self enterApproximationMode(mapActivity);
-//                }
-//                else
-//                {
-//                    OAGPX *gpx = [[OAGPX alloc] init];
-//                    gpx.poi
+//                if (editingCtx.isApproximationNeeded()) {
+//                    setMode(DIRECTION_MODE, true);
+//                    enterApproximationMode(mapActivity);
+//                } else {
 //                    GPXFile gpx = new GPXFile(Version.getFullVersion(requireMyApplication()));
 //                    gpx.addRoutePoints(points, true);
 //                    dismiss(mapActivity);
@@ -1351,6 +1346,32 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         // TODO: notify about the error
 //        Toast.makeText(mapActivity, getString(R.string.none_point_error), Toast.LENGTH_SHORT).show();
+    }
+}
+
+- (void) runNavigation:(OAGPXDocument *)gpx appMode:(OAApplicationMode *)appMode
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
+    OAGPX *track = [OAGPXDatabase.sharedDb getGPXItem:gpx.fileName];
+    if (routingHelper.isFollowingMode)
+    {
+        if ([self isFollowTrackMode])
+        {
+            [mapPanel.mapActions setGPXRouteParams:track];
+            [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
+            [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+        }
+        else
+        {
+            [mapPanel.mapActions stopNavigationWithoutConfirm];
+            [mapPanel.mapActions enterRoutePlanningModeGivenGpx:track from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+        }
+    }
+    else
+    {
+        [mapPanel.mapActions stopNavigationWithoutConfirm];
+        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:track from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
     }
 }
 
@@ -1380,41 +1401,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 //    updateUndoRedoButton(false, redoBtn);
     [self.tableView reloadData];
     [self updateDistancePointsText];
-}
-
-- (void) runNavigation:(OAGPX *)gpx appMode:(OAApplicationMode *)appMode
-{
-    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
-    OARoutingHelper *routingHelper = OARoutingHelper.sharedInstance;
-    if (routingHelper.isFollowingMode)
-    {
-        if ([self isFollowTrackMode])
-        {
-            [mapPanel.mapActions setGPXRouteParams:gpx];
-            [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
-            [routingHelper recalculateRouteDueToSettingsChange];
-        }
-        else
-        {
-            
-            [mapPanel.mapActions stopNavigationActionConfirm];
-            // TODO
-//            mapActivity.getMapActions().stopNavigationActionConfirm(null , new Runnable() {
-//                @Override
-//                public void run() {
-//                    MapActivity mapActivity = getMapActivity();
-//                    if (mapActivity != null) {
-//                        mapActivity.getMapActions().enterRoutePlanningModeGivenGpx(gpx, appMode, null, null, true, true, MenuState.HEADER_ONLY);
-//                    }
-//                }
-//            });
-        }
-    }
-    else
-    {
-        [mapPanel.mapActions stopNavigationWithoutConfirm];
-        [mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
-    }
 }
 
 #pragma mark - OAOpenAddTrackDelegate

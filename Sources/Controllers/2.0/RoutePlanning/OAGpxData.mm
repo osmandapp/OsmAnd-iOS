@@ -7,34 +7,29 @@
 //
 
 #import "OAGpxData.h"
-#import "OAGPXDocument.h"
+#import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "QuadRect.h"
 
 #include <OsmAndCore/GpxDocument.h>
 
 @implementation OAGpxData
 
-- (instancetype) initWithFile:(OAGPXDocument *)gpxFile rect:(QuadRect *)rect actionType:(EOAActionType)actionType trkSegment:(OATrackSegment *)trkSegment
+- (instancetype) initWithFile:(OAGPXMutableDocument *)gpxFile
 {
     self = [super init];
     if (self) {
         _gpxFile = gpxFile;
-        _rect = rect;
-        _actionType = actionType;
-        _trkSegment = trkSegment;
-    }
-    return self;
-}
-
-- (instancetype) initWithFile:(OAGPXDocument *)gpxFile gpxData:(OAGpxData *)gpxData
-{
-    self = [super init];
-    if (self) {
-        _gpxFile = gpxFile;
-        _rect = gpxData.rect;
-        _actionType = gpxData.actionType;
-        _trkSegment = gpxData.trkSegment;
+        if (_gpxFile)
+            _rect = _gpxFile.bounds;
+        else
+        {
+            OAGpxBounds bounds;
+            bounds.topLeft.latitude = 0;
+            bounds.topLeft.longitude = 0;
+            bounds.bottomRight.latitude = 0;
+            bounds.bottomRight.longitude = 0;
+            _rect = bounds;
+        }
     }
     return self;
 }

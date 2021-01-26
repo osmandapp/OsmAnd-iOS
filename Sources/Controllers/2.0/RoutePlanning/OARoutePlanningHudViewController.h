@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "OABaseScrollableHudViewController.h"
 
 @interface OARoutePlanningHudViewController : OABaseScrollableHudViewController
+
+- (instancetype) initWithFileName:(NSString *)fileName;
+- (instancetype) initWithInitialPoint:(CLLocation *)latLon;
 
 - (void) cancelModes;
 

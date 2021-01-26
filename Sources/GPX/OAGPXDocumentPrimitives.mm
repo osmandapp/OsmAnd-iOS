@@ -41,34 +41,58 @@
     return self;
 }
 
+- (instancetype) initWithGpxExtension:(OAGpxExtension *)ext
+{
+    self = [super init];
+    if (self) {
+        _identifier = ext.attributes[@"id"];
+        _length = ext.attributes[@"length"];
+        _segmentTime = ext.attributes[@"segmentTime"];
+        _speed = ext.attributes[@"speed"];
+        _turnType = ext.attributes[@"turnType"];
+        _turnAngle = ext.attributes[@"turnAngle"];
+        _types = ext.attributes[@"types"];
+        _pointTypes = ext.attributes[@"pointTypes"];
+        _names = ext.attributes[@"names"];
+    }
+    return self;
+}
+
 + (OARouteSegment *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
 {
     OARouteSegment *s = [[OARouteSegment alloc] init];
-    s.identifier = [NSString stringWithUTF8String:bundle->getString("id").c_str()];
-    s.length = [NSString stringWithUTF8String:bundle->getString("length").c_str()];
-    s.segmentTime = [NSString stringWithUTF8String:bundle->getString("segmentTime").c_str()];
-    s.speed = [NSString stringWithUTF8String:bundle->getString("speed").c_str()];
-    s.turnType = [NSString stringWithUTF8String:bundle->getString("turnType").c_str()];
-    s.turnAngle = [NSString stringWithUTF8String:bundle->getString("turnAngle").c_str()];
-    s.types = [NSString stringWithUTF8String:bundle->getString("types").c_str()];
-    s.pointTypes = [NSString stringWithUTF8String:bundle->getString("pointTypes").c_str()];
-    s.names = [NSString stringWithUTF8String:bundle->getString("names").c_str()];
+    s.identifier = [NSString stringWithUTF8String:bundle->getString("id", "").c_str()];
+    s.length = [NSString stringWithUTF8String:bundle->getString("length", "").c_str()];
+    s.segmentTime = [NSString stringWithUTF8String:bundle->getString("segmentTime", "").c_str()];
+    s.speed = [NSString stringWithUTF8String:bundle->getString("speed", "").c_str()];
+    s.turnType = [NSString stringWithUTF8String:bundle->getString("turnType", "").c_str()];
+    s.turnAngle = [NSString stringWithUTF8String:bundle->getString("turnAngle", "").c_str()];
+    s.types = [NSString stringWithUTF8String:bundle->getString("types", "").c_str()];
+    s.pointTypes = [NSString stringWithUTF8String:bundle->getString("pointTypes", "").c_str()];
+    s.names = [NSString stringWithUTF8String:bundle->getString("names", "").c_str()];
     return s;
 }
 
-//public StringBundle toStringBundle() {
-//    StringBundle bundle = new StringBundle();
-//    bundle.putString("id", id);
-//    bundle.putString("length", length);
-//    bundle.putString("segmentTime", segmentTime);
-//    bundle.putString("speed", speed);
-//    bundle.putString("turnType", turnType);
-//    bundle.putString("turnAngle", turnAngle);
-//    bundle.putString("types", types);
-//    bundle.putString("pointTypes", pointTypes);
-//    bundle.putString("names", names);
-//    return bundle;
-//}
+- (std::shared_ptr<RouteDataBundle>) toStringBundle
+{
+	auto bundle = std::make_shared<RouteDataBundle>();
+    [self addToBundleIfNotNull:"id" value:_identifier bundle:bundle];
+    [self addToBundleIfNotNull:"length" value:_length bundle:bundle];
+    [self addToBundleIfNotNull:"segmentTime" value:_segmentTime bundle:bundle];
+    [self addToBundleIfNotNull:"speed" value:_speed bundle:bundle];
+    [self addToBundleIfNotNull:"turnType" value:_turnType bundle:bundle];
+    [self addToBundleIfNotNull:"turnAngle" value:_turnAngle bundle:bundle];
+    [self addToBundleIfNotNull:"types" value:_types bundle:bundle];
+    [self addToBundleIfNotNull:"pointTypes" value:_pointTypes bundle:bundle];
+    [self addToBundleIfNotNull:"names" value:_names bundle:bundle];
+    return bundle;
+}
+
+- (void) addToBundleIfNotNull:(const string&)key value:(NSString *)value bundle:(std::shared_ptr<RouteDataBundle> &)bundle
+{
+    if (value)
+        bundle->put(key, value.UTF8String);
+}
 
 - (NSDictionary<NSString *,NSString *> *)toDictionary
 {
@@ -105,20 +129,33 @@
     return self;
 }
 
+- (instancetype) initWithGpxExtension:(OAGpxExtension *)ext
+{
+    self = [super init];
+    if (self) {
+        _tag = ext.attributes[@"t"];
+        _value = ext.attributes[@"v"];
+    }
+    return self;
+}
+
 + (OARouteType *) fromStringBundle:(const std::shared_ptr<RouteDataBundle> &)bundle
 {
     OARouteType *t = [[OARouteType alloc] init];
-    t.tag = [NSString stringWithUTF8String:bundle->getString("t").c_str()];
-    t.value = [NSString stringWithUTF8String:bundle->getString("v").c_str()];
+    t.tag = [NSString stringWithUTF8String:bundle->getString("t", "").c_str()];
+    t.value = [NSString stringWithUTF8String:bundle->getString("v", "").c_str()];
     return t;
 }
 
-//public StringBundle toStringBundle() {
-//    StringBundle bundle = new StringBundle();
-//    bundle.putString("t", tag);
-//    bundle.putString("v", value);
-//    return bundle;
-//}
+- (std::shared_ptr<RouteDataBundle>) toStringBundle
+{
+	auto bundle = std::make_shared<RouteDataBundle>();
+    if (_tag)
+        bundle->put("t", _tag.UTF8String);
+    if (_value)
+        bundle->put("v", _value.UTF8String);
+    return bundle;
+}
 
 - (NSDictionary<NSString *,NSString *> *)toDictionary
 {
@@ -391,6 +428,39 @@
     return self;
 }
 
+- (instancetype) initWithRtePt:(OAGpxRtePt *)point
+{
+    self = [super init];
+    if (self) {
+        self.ageOfGpsData = point.ageOfGpsData;
+        self.dgpsStationId = point.dgpsStationId;
+        self.fixType = point.fixType;
+        self.geoidHeight = point.geoidHeight;
+        self.horizontalDilutionOfPrecision = point.horizontalDilutionOfPrecision;
+        self.magneticVariation = point.magneticVariation;
+        self.positionDilutionOfPrecision = point.positionDilutionOfPrecision;
+        self.satellitesUsedForFixCalculation = point.satellitesUsedForFixCalculation;
+        self.source = point.source;
+        self.speed = point.speed;
+        self.symbol = point.symbol;
+        self.verticalDilutionOfPrecision = point.verticalDilutionOfPrecision;
+        
+        self.firstPoint = point.firstPoint;
+        self.lastPoint = point.lastPoint;
+        self.position = point.position;
+        self.name = point.name;
+        self.desc = point.desc;
+        self.elevation = point.elevation;
+        self.time = point.time;
+        self.comment = point.comment;
+        self.type = point.type;
+        self.links = point.links;
+        self.extraData = point.extraData;
+        self.distance = point.distance;
+    }
+    return self;
+}
+
 - (OAGpxExtension *)getExtensionByKey:(NSString *)key
 {
     for (OAGpxExtension *e in ((OAGpxExtensions *)self.extraData).extensions)
@@ -524,6 +594,29 @@
     return _routeSegments.count > 0 && _routeTypes.count > 0;
 }
 
+- (void) fillRouteDetails
+{
+    for (OAGpxExtension *ext in ((OAGpxExtensions *) self.extraData).extensions)
+    {
+        if ([ext.name isEqualToString:@"route"])
+        {
+            _routeSegments = [NSMutableArray new];
+            for (OAGpxExtension *subext in ext.subextensions)
+            {
+                [_routeSegments addObject:[[OARouteSegment alloc] initWithGpxExtension:subext]];
+            }
+        }
+        if ([ext.name isEqualToString:@"types"])
+        {
+            _routeTypes = [NSMutableArray new];
+            for (OAGpxExtension *subext in ext.subextensions)
+            {
+                [_routeTypes addObject:[[OARouteType alloc] initWithGpxExtension:subext]];
+            }
+        }
+    }
+}
+
 - (void) fillExtensions
 {
     if (_routeSegments.count > 0)
@@ -572,6 +665,26 @@
 @implementation OAGpxRte
 @end
 @implementation OAGpxRtePt
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        self.satellitesUsedForFixCalculation = -1;
+        self.dgpsStationId = -1;
+        self.speed = NAN;
+        self.magneticVariation = NAN;
+        self.geoidHeight = NAN;
+        self.fixType = Unknown;
+        self.horizontalDilutionOfPrecision = NAN;
+        self.verticalDilutionOfPrecision = NAN;
+        self.positionDilutionOfPrecision = NAN;
+        self.ageOfGpsData = NAN;
+        self.time = 0;
+    }
+    return self;
+}
 
 - (instancetype) initWithTrkPt:(OAGpxTrkPt *)point
 {

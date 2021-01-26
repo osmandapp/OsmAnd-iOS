@@ -113,29 +113,28 @@
             @"key" : @"route_betw_points"
         }
     ]];
-    // TODO: uncomment after implementing saving to exsisting track
     [data addObject:@[
-        /*@{
+        @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"save_changes"),
             @"img" : @"ic_custom_save_to_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_changes"
-        },*/
+        },
         @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"save_new_track"),
             @"img" : @"ic_custom_save_as_new_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_new_track"
-        }
-        /*@{
+        },
+        @{
             @"type" : kIconTitleIconRoundCell,
             @"title" : OALocalizedString(@"add_to_track"),
             @"img" : @"ic_custom_add_to_track",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"add_to_track"
-        }*/
+        }
     ]];
     
     [data addObject:@[
@@ -276,10 +275,12 @@
         }
         else if ([key isEqualToString:@"save_new_track"])
         {
+            [self dismissViewControllerAnimated:NO completion:nil];
             [self.delegate saveAsNewTrackSelected];
         }
         else if ([key isEqualToString:@"add_to_track"])
         {
+            [self dismissViewControllerAnimated:NO completion:nil];
             [self.delegate addToTrackSelected];
         }
         else if ([key isEqualToString:@"directions"])

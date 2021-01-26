@@ -98,7 +98,7 @@
     } else {
         OAOsmNotePoint *otherPoint = (OAOsmNotePoint *)other;
         BOOL res = [_text isEqualToString:otherPoint.getText];
-        res = res || [OAUtilities isCoordEqual:_latitude srcLon:_longitude destLat:otherPoint.getLatitude destLon:otherPoint.getLongitude];
+        res = res && [OAUtilities isCoordEqual:_latitude srcLon:_longitude destLat:otherPoint.getLatitude destLon:otherPoint.getLongitude];
         return res;
     }
 }

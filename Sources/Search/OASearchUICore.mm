@@ -208,8 +208,8 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
                 
                 QString type1 = a1->type;
                 QString type2 = a2->type;
-                QString subType1 = a1->subType == nullptr ? "" : a1->subType;
-                QString subType2 = a2->subType == nullptr ? "" : a2->subType;
+                QString subType1 = a1->subType;
+                QString subType2 = a2->subType;
                 
                 NSComparisonResult cmp = NSOrderedSame;
                 BOOL subtypeFilter1 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:subType1.toNSString()];

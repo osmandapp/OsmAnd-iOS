@@ -326,7 +326,7 @@
                     profileName = appMode.name;
                     
                     if (!profileName || profileName.length == 0)
-                        profileName = [NSString stringWithFormat:OALocalizedString(@"unnamed_imported_profile_format"), modeBean.stringKey];
+                        profileName = modeBean.stringKey.capitalizedString;
                 }
                 item[@"label"] = profileName;
                 NSString *routingProfile = @"";

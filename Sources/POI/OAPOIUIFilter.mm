@@ -91,8 +91,8 @@
     if (self)
     {
         isStandardFilter = YES;
-        standardIconId = (!type ? nil : type.name);
-        filterId = [[STD_PREFIX stringByAppendingString:(standardIconId ? standardIconId : @"")] stringByAppendingString:idSuffix];
+        standardIconId = (!type ? @"null" : type.name);
+        filterId = [[STD_PREFIX stringByAppendingString:standardIconId] stringByAppendingString:idSuffix];
         
         name = !type ? OALocalizedString(@"poi_filter_closest_poi") : ([type.nameLocalized stringByAppendingString:idSuffix]);
         if (!type)

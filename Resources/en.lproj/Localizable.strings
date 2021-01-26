@@ -552,6 +552,7 @@
 "favorites" = "Favorites";
 "tracks" = "Trips";
 "personal_category_name" = "Personal";
+"visible" = "Visible";
 
 // GPX
 "gpx_point" = "Point";
@@ -562,12 +563,13 @@
 
 "import_export" = "Import/Export";
 
-"gpx_import_title" = "Import trip";
+"gpx_import_title" = "Import trips";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
+"tracks_on_map" = "Tracks on map";
 
 "gpx_export_title" = "Export trip";
 "gpx_export_select_track" = "Please select trip for Export";

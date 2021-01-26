@@ -128,19 +128,19 @@
         {
             OAGpxTrk *track = [[OAGpxTrk alloc] init];
             track.name = trackName;
+            [gpx addTrack:track];
             for (OAGpxTrkSeg *s in before)
             {
                 OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
                 segment.points = s.points;
-                track.segments = [track.segments arrayByAddingObject:segment];
+                [gpx addTrackSegment:segment track:track];
             }
             for (OAGpxTrkSeg *s in after)
             {
                 OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
                 segment.points = s.points;
-                track.segments = [track.segments arrayByAddingObject:segment];
+                [gpx addTrackSegment:segment track:track];
             }
-            [gpx addTrack:track];
         }
         else
         {

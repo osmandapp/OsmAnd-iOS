@@ -107,4 +107,10 @@ static UIFont *_titleFont;
     _topCorners = topCorners;
 }
 
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    _contentContainer.layer.mask = nil;
+}
+
 @end

@@ -93,5 +93,10 @@
     _topCorners = topCorners;
 }
 
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    _contentContainer.layer.mask = nil;
+}
 
 @end

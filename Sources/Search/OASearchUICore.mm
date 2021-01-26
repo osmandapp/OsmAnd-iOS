@@ -413,26 +413,20 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
             if (a1 && a2)
             {
                 // here 2 points are amenity
-                QString type1 = a1->type;
-                QString type2 = a2->type;
-                QString subType1 = a1->subType == nullptr ? "" : a1->subType;
-                QString subType2 = a2->subType == nullptr ? "" : a2->subType;
-                
                 BOOL isEqualId = a1->id.id == a2->id.id;
-                
-                if (isEqualId && ([FILTER_DUPLICATE_POI_SUBTYPE containsObject:subType1.toNSString()] || [FILTER_DUPLICATE_POI_SUBTYPE containsObject:subType2.toNSString()]))
+                if (isEqualId && ([FILTER_DUPLICATE_POI_SUBTYPE containsObject:a1->subType.toNSString()] || [FILTER_DUPLICATE_POI_SUBTYPE containsObject:a2->subType.toNSString()]))
                     return true;
-                else if (type1 != type2)
+                else if (a1->type != a2->type)
                     return false;
                 
-                if (type1 == QStringLiteral("natural"))
+                if (a1->type == QStringLiteral("natural"))
                 {
                     similarityRadius = 50000;
                 }
-                else if (subType1 == subType2)
+                else if (a1->subType == a2->subType)
                 {
-                    if (subType1.contains(QStringLiteral("cn_ref")) || subType1.contains(QStringLiteral("wn_ref"))
-                        || (subType1.startsWith(QStringLiteral("route_hiking_")) && subType1.endsWith(QStringLiteral("n_poi"))))
+                    if (a1->subType.contains(QStringLiteral("cn_ref")) || a1->subType.contains(QStringLiteral("wn_ref"))
+                        || (a1->subType.startsWith(QStringLiteral("route_hiking_")) && a1->subType.endsWith(QStringLiteral("n_poi"))))
                     {
                         similarityRadius = 50000;
                     }

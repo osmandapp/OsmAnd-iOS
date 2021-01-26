@@ -206,25 +206,20 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
                 const auto& a1 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o1.amenity);
                 const auto& a2 = std::dynamic_pointer_cast<const OsmAnd::Amenity>(o2.amenity);
                 
-                QString type1 = a1->type;
-                QString type2 = a2->type;
-                QString subType1 = a1->subType;
-                QString subType2 = a2->subType;
-                
                 NSComparisonResult cmp = NSOrderedSame;
-                BOOL subtypeFilter1 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:subType1.toNSString()];
-                BOOL subtypeFilter2 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:subType2.toNSString()];
+                BOOL subtypeFilter1 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:a1->subType.toNSString()];
+                BOOL subtypeFilter2 = [FILTER_DUPLICATE_POI_SUBTYPE containsObject:a2->subType.toNSString()];
                 if (subtypeFilter1 != subtypeFilter2)
                 {
                     // to filter second
                     return subtypeFilter1 ? NSOrderedDescending : NSOrderedAscending;
                 }
                 
-                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(type1, type1);
+                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->type, a2->type);
                 if (cmp != NSOrderedSame)
                     return cmp;
                 
-                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(subType1, subType2);
+                cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->subType, a2->subType);
                 if (cmp != NSOrderedSame)
                     return cmp;
             }

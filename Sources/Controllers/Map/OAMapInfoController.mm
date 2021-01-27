@@ -135,7 +135,7 @@
 - (void) onMapRendererFramePrepared
 {
     NSTimeInterval currentTime = CACurrentMediaTime();
-    if (currentTime - _lastUpdateTime > 1)
+    if (currentTime - _lastUpdateTime > 0.1)
     {
         _lastUpdateTime = currentTime;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -392,8 +392,16 @@
     if (_rightWidgetsView.superview)
     {
         CGRect f = _rightWidgetsView.superview.frame;
-        _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
+        _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, [self getHudLayerWidth], maxContainerHeight);
     }
+}
+
+- (CGFloat) getHudLayerWidth
+{
+    CGFloat offset = 50.0;
+    CGFloat width = OARootViewController.instance.view.frame.size.width;
+    width = OAUtilities.isLandscape ?  width - 2*offset : width;
+    return width;
 }
 
 - (CGFloat) getLeftBottomY

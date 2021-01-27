@@ -729,15 +729,19 @@ typedef enum
 
 - (void) closeRouteInfo
 {
-    [self closeRouteInfoWithDuration:.3];
+    [self closeRouteInfo:nil];
 }
 
-- (void) closeRouteInfoWithDuration:(CGFloat)duration
+- (void) closeRouteInfo:(void (^)(void))onComplete
 {
     if (self.routeInfoView.superview)
     {
-        [self.routeInfoView hide:YES duration:duration onComplete:^{
+        [self.routeInfoView hide:YES duration:.2 onComplete:^{
+            [self setTopControlsVisible:YES];
+            [self setBottomControlsVisible:YES menuHeight:0 animated:YES];
             [_hudViewController.quickActionController updateViewVisibility];
+            if (onComplete)
+                onComplete();
         }];
         
         [self destroyShadowButton];

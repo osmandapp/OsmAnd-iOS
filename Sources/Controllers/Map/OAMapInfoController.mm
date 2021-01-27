@@ -400,7 +400,7 @@
 {
     CGFloat offset = 50.0;
     CGFloat width = OARootViewController.instance.view.frame.size.width;
-    width = OAUtilities.isLandscape ?  width - 2*offset : width;
+    width = OAUtilities.isLandscape ? width - 2*offset : width;
     return width;
 }
 

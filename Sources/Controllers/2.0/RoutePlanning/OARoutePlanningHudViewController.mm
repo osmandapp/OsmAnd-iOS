@@ -471,11 +471,29 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self selectPoint:coord longPress:longPress];
 }
 
+- (double) getLowestDistance:(OAMapRendererView *)mapView
+{
+    CGPoint first = CGPointZero;
+    // 44 is the height of a point in px
+    CGPoint second = CGPointMake(0., 44.);
+    
+    OsmAnd::PointI firstPoint;
+    OsmAnd::PointI secondPoint;
+    
+    [mapView convert:first toLocation:&firstPoint];
+    [mapView convert:second toLocation:&secondPoint];
+    
+    OsmAnd::LatLon firstLatLon = OsmAnd::Utilities::convert31ToLatLon(firstPoint);
+    OsmAnd::LatLon secondLatLon = OsmAnd::Utilities::convert31ToLatLon(secondPoint);
+    
+    return getDistance(firstLatLon.latitude, firstLatLon.longitude, secondLatLon.latitude, secondLatLon.longitude);
+}
+
 - (void) selectPoint:(CLLocationCoordinate2D)location longPress:(BOOL)longPress
 {
     OAMapRendererView *mapView = OARootViewController.instance.mapPanel.mapViewController.mapView;
     
-    double lowestDistance = 40.;
+    double lowestDistance = [self getLowestDistance:mapView];
     for (NSInteger i = 0; i < _editingContext.getPointsCount; i++)
     {
         OAGpxTrkPt *pt = _editingContext.getPoints[i];

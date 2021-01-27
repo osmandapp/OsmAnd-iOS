@@ -1197,7 +1197,7 @@
     if (phrase.getRadiusLevel == 1 && [poiTypeFilter isKindOfClass:OACustomSearchPoiFilter.class])
     {
         NSString *name = ((OACustomSearchPoiFilter *) poiTypeFilter).getFilterId;
-        if ([@"std_null" isEqualToString:name])
+        if ([@"std_" isEqualToString:name])
             radius = BBOX_RADIUS_NEAREST;
     }
     QuadRect *bbox = [phrase getRadiusBBoxToSearch:radius];

@@ -128,7 +128,6 @@
             @{
                 @"type" : kSwitchCell,
                 @"title" : OALocalizedString(@"simplified_track"),
-                @"value" : @(_simplifiedTrack),
                 @"key" : @"simplified_track",
                 @"footer" : OALocalizedString(@"simplified_track_description")
             }
@@ -139,7 +138,6 @@
         @{
             @"type" : kSwitchCell,
             @"title" : OALocalizedString(@"map_settings_show"),
-            @"value" : @(_showOnMap),
             @"key" : @"map_settings_show"
         }
     ]];
@@ -151,6 +149,15 @@
 {
     self.saveButton.userInteractionEnabled = _rightButtonEnabled;
     [self.saveButton setBackgroundColor:_rightButtonEnabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive)];
+}
+
+- (BOOL) cellValueByKey:(NSString *)key
+{
+    if ([key isEqualToString:@"simplified_track"])
+        return _simplifiedTrack;
+    if ([key isEqualToString:@"map_settings_show"])
+        return _showOnMap;
+    return NO;
 }
 
 - (IBAction)cancelButtonPressed:(id)sender
@@ -206,14 +213,16 @@
         if (cell)
         {
             [cell.textView setText: item[@"title"]];
-            cell.switchView.on = [item[@"value"] boolValue];
+            NSString *itemKey = item[@"key"];
+            BOOL value = [self cellValueByKey:itemKey];
+            cell.switchView.on = value;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
     
-    return [[UITableViewCell alloc] init];
+    return nil;
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section

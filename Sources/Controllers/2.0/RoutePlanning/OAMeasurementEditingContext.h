@@ -92,10 +92,17 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 - (BOOL) isInAddPointMode;
 
+- (void) splitPoints:(NSInteger) selectedPointPosition after:(BOOL)after;
+- (void) joinPoints:(NSInteger) selectedPointPosition;
 - (void) clearSegments;
 - (void) trimBefore:(NSInteger)selectedPointPosition;
 - (void) trimAfter:(NSInteger)selectedPointPosition;
 - (void) splitSegments:(NSInteger)position;
+
+- (BOOL) isFirstPointSelected:(BOOL)outer;
+- (BOOL) isFirstPointSelected:(NSInteger)selectedPointPosition outer:(BOOL)outer;
+- (BOOL) isLastPointSelected:(BOOL) outer;
+- (BOOL) isLastPointSelected:(NSInteger)selectedPointPosition outer:(BOOL)outer;
 
 - (void) updateSegmentsForSnap;
 
@@ -110,5 +117,7 @@ typedef NS_ENUM(NSInteger, EOAAddPointMode) {
 
 - (void) setChangesSaved;
 - (BOOL) hasChanges;
+
+- (BOOL) canSplit:(BOOL)after;
 
 @end

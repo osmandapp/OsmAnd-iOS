@@ -10,6 +10,14 @@
 
 @implementation OAUserInteractionPassThroughView
 
+@synthesize lastUpdatingTime;
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    self.lastUpdatingTime = CACurrentMediaTime();
+}
+
 - (BOOL) pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
     for (UIView* view in [self subviews])

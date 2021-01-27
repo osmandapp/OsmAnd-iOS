@@ -10,4 +10,6 @@
 
 @interface OAUserInteractionPassThroughView : UIView
 
+@property NSTimeInterval lastUpdatingTime;
+
 @end

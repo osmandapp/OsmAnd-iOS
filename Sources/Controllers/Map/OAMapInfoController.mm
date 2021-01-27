@@ -31,6 +31,7 @@
 #import "OATimeWidgetState.h"
 #import "OABearingWidgetState.h"
 #import "OACompassRulerWidgetState.h"
+#import "OAUserInteractionPassThroughView.h"
 
 @interface OATextState : NSObject
 
@@ -134,14 +135,18 @@
 
 - (void) onMapRendererFramePrepared
 {
-    NSTimeInterval currentTime = CACurrentMediaTime();
-    if (currentTime - _lastUpdateTime > 0.1)
-    {
-        _lastUpdateTime = currentTime;
-        dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_rightWidgetsView.superview)
+            [_rightWidgetsView.superview layoutSubviews];
+        
+        NSTimeInterval currentTime = CACurrentMediaTime();
+        if (currentTime - _lastUpdateTime > 1)
+        {
+            _lastUpdateTime = currentTime;
             [self onDraw];
-        });
-    }
+        }
+    });
+    
     // Render the ruler more often
     [self updateRuler];
 }
@@ -392,16 +397,8 @@
     if (_rightWidgetsView.superview)
     {
         CGRect f = _rightWidgetsView.superview.frame;
-        _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, [self getHudLayerWidth], maxContainerHeight);
+        _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
     }
-}
-
-- (CGFloat) getHudLayerWidth
-{
-    CGFloat offset = 50.0;
-    CGFloat width = OARootViewController.instance.view.frame.size.width;
-    width = OAUtilities.isLandscape ? width - 2*offset : width;
-    return width;
 }
 
 - (CGFloat) getLeftBottomY
@@ -633,12 +630,16 @@
 
 - (void) widgetChanged:(OATextInfoWidget *)widget
 {
-    [self layoutWidgets:widget];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self layoutWidgets:widget];
+    });
 }
 
 - (void) widgetVisibilityChanged:(OATextInfoWidget *)widget visible:(BOOL)visible
 {
-    [self layoutWidgets:widget];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self layoutWidgets:widget];
+    });
 }
 
 - (void) widgetClicked:(OATextInfoWidget *)widget

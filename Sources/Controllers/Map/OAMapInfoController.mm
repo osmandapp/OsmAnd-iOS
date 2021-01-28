@@ -31,7 +31,6 @@
 #import "OATimeWidgetState.h"
 #import "OABearingWidgetState.h"
 #import "OACompassRulerWidgetState.h"
-#import "OAUserInteractionPassThroughView.h"
 
 @interface OATextState : NSObject
 
@@ -79,6 +78,7 @@
     OAAutoObserverProxy* _mapSourceUpdatedObserver;
 
     NSTimeInterval _lastUpdateTime;
+    CGFloat _lastRightWidgetSuperviewWidth;
     int _themeId;
 }
 
@@ -122,6 +122,8 @@
         _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onMapSourceUpdated)
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
+        
+        _lastRightWidgetSuperviewWidth = 0;
 
     }
     return self;
@@ -136,19 +138,37 @@
 - (void) onMapRendererFramePrepared
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_rightWidgetsView.superview)
-            [_rightWidgetsView.superview layoutSubviews];
-        
         NSTimeInterval currentTime = CACurrentMediaTime();
-        if (currentTime - _lastUpdateTime > 1)
+        CGFloat currentWidth = _rightWidgetsView.superview.frame.size.width;
+        
+        if (currentTime - _lastUpdateTime > 1 || _lastRightWidgetSuperviewWidth != currentWidth)
         {
             _lastUpdateTime = currentTime;
+            _lastRightWidgetSuperviewWidth = currentWidth;
             [self onDraw];
+        }
+        else
+        {
+            [self delayedCheckForLayoutChanging];
         }
     });
     
     // Render the ruler more often
     [self updateRuler];
+}
+
+- (void) delayedCheckForLayoutChanging
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [NSThread sleepForTimeInterval:0.1f];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CGFloat currentWidth = _rightWidgetsView.superview.frame.size.width;
+            if (_lastRightWidgetSuperviewWidth != currentWidth && abs(_lastRightWidgetSuperviewWidth - currentWidth) == 100)
+            {
+                [self onMapRendererFramePrepared];
+            }
+        });
+    });
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode

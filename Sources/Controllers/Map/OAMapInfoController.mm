@@ -128,9 +128,6 @@
             _rightWidgetSuperviewDidLayoutObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onRightWidgetSuperviewLayout)
                                                           andObserve:((OAUserInteractionPassThroughView *)_rightWidgetsView.superview).didLayoutObservable];
-        
-        _lastRightWidgetSuperviewWidth = 0;
-
     }
     return self;
 }
@@ -157,6 +154,7 @@
 
 - (void) onRightWidgetSuperviewLayout
 {
+    _lastUpdateTime = CACurrentMediaTime();
     dispatch_async(dispatch_get_main_queue(), ^{
         [self onDraw];
     });

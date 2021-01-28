@@ -149,7 +149,7 @@
         }
         else
         {
-            [self delayedCheckForLayoutChanging];
+            [self delayedCheckingForLayoutChanging];
         }
     });
     
@@ -157,16 +157,13 @@
     [self updateRuler];
 }
 
-- (void) delayedCheckForLayoutChanging
+- (void) delayedCheckingForLayoutChanging
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [NSThread sleepForTimeInterval:0.1f];
         dispatch_async(dispatch_get_main_queue(), ^{
-            CGFloat currentWidth = _rightWidgetsView.superview.frame.size.width;
-            if (_lastRightWidgetSuperviewWidth != currentWidth && abs(_lastRightWidgetSuperviewWidth - currentWidth) == 100)
-            {
+            if (_lastRightWidgetSuperviewWidth != _rightWidgetsView.superview.frame.size.width)
                 [self onMapRendererFramePrepared];
-            }
         });
     });
 }

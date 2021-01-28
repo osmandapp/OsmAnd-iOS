@@ -1181,7 +1181,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         [self exitMovePointMode:YES];
     }
-    else
+    else if (_hudMode == EOAHudModeAddPoints)
     {
         [self exitAddPointMode];
     }

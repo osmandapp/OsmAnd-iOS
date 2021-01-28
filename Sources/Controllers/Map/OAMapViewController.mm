@@ -2473,8 +2473,9 @@
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         const auto& doc = it.value();
-        for (auto& loc : doc->locationMarks)
+        for (auto locIt = doc->locationMarks.begin(); locIt != doc->locationMarks.end(); ++locIt)
         {
+            auto loc = *locIt;
             if (!loc->type.isEmpty())
                 groups.insert(loc->type);
 

@@ -26,6 +26,7 @@
 
 #define kVerticalMargin 16.
 #define kHorizontalMargin 16.
+#define kGPXCellTextLeftOffset 62.
 
 typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOAModifiedDate = 0,
@@ -63,7 +64,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     _sortingMode = EOAModifiedDate;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     if (_screenType == EOAAddToATrack)
         self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_add_track_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
 }
@@ -171,6 +172,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASegmentTableViewCell" owner:self options:nil];
             cell = (OASegmentTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
             [cell.segmentControl insertSegmentWithTitle:item[@"title2"] atIndex:2 animated:NO];
         }
         if (cell)
@@ -190,6 +192,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0, self.tableView.safeAreaInsets.left + kGPXCellTextLeftOffset, 0, 0);
         }
         if (cell)
         {
@@ -197,7 +200,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.distanceLabel.text = item[@"distance"];
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
-            cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
         }
         return cell;
     }

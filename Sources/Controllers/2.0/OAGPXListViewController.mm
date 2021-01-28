@@ -754,11 +754,6 @@ static UIViewController *parentController;
 
 #pragma mark - Actions
 
-- (void) allTripsClicked
-{
-    [self generateData];
-    [_gpxTableView reloadData];
-}
 
 - (IBAction) backButtonClicked:(id)sender
 {

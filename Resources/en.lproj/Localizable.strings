@@ -550,7 +550,7 @@
 
 // My Places
 "favorites" = "Favorites";
-"tracks" = "Trips";
+"tracks" = "Tracks";
 "personal_category_name" = "Personal";
 "visible" = "Visible";
 
@@ -563,23 +563,23 @@
 
 "import_export" = "Import/Export";
 
-"gpx_import_title" = "Import trips";
-"gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
+"gpx_import_title" = "Import tracks";
+"gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "tracks_on_map" = "Tracks on map";
 
-"gpx_export_title" = "Export trip";
-"gpx_export_select_track" = "Please select trip for Export";
+"gpx_export_title" = "Export track";
+"gpx_export_select_track" = "Please select track for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "import_from_docs" = "Import from documents";
 "import_from_files" = "Import from files";
-"gpx_no_tracks" = "There are no trips";
+"gpx_no_tracks" = "There are no tracks";
 "gpx_export_failed" = "Could not save created route";
 
-"gpx_remove" = "Remove trip?";
+"gpx_remove" = "Remove track?";
 "gpx_stat" = "Statistics";
 "gpx_route" = "Route";
 "gpx_analyze" = "Analyze";
@@ -600,9 +600,9 @@
 "track_recording_name" = "Currently recording track";
 "track_stop_rec" = "Stop recording";
 "track_new_segment" = "Start new segment";
-"track_save" = "Save current trip";
-"displayed_route_save" = "Save to OsmAnd Trips";
-"track_save_descr" = "Save current trip as GPX file now.";
+"track_save" = "Save current track";
+"displayed_route_save" = "Save to OsmAnd Tracks";
+"track_save_descr" = "Save current track as GPX file now.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "rec_interval" = "Logging interval";
@@ -994,7 +994,7 @@
 // Menu
 "menu" = "Menu";
 "menu_my_places" = "My Places";
-"menu_my_trips" = "My Trips";
+"menu_my_trips" = "My Tracks";
 "menu_my_directions" = "My Directions";
 "menu_feedback" = "Feedback";
 "menu_help" = "Help";
@@ -1162,9 +1162,9 @@
 "day_mode" = "Day mode";
 "mute_voice" = "Mute voice";
 "unmute_voice" = "Unmute voice";
-"show_hide_gpx" = "Show/hide trips";
-"show_gpx" = "Show trips";
-"hide_gpx" = "Hide trips";
+"show_hide_gpx" = "Show/hide tracks";
+"show_gpx" = "Show track";
+"hide_gpx" = "Hide track";
 "show_notes" = "Show OSM notes";
 "hide_notes" = "Hide OSM notes";
 "show_edits" = "Show local edits";
@@ -1329,8 +1329,8 @@
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Trip";
-"trip_name" = "Trip name";
-"trip_hint" = "Enter trip name";
+"trip_name" = "Track name";
+"trip_hint" = "Enter track name";
 
 // Alerts
 "alert_inet_needed" = "Internet connection required to perform this action. Please check your Internet connection.";
@@ -1524,7 +1524,7 @@
 "time_will_open" = "Will open in";
 
 "menu_active_trips" = "Active";
-"menu_all_trips" = "All Trips";
+"menu_all_trips" = "All Tracks";
 
 "public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
 "calc_pedestrian_route" = "Calculate pedestrian route";
@@ -1545,16 +1545,16 @@
 "change_color" = "Change color";
 "wpt_select" = "Please select waypoints";
 "gpx_remove_wpts_q" = "Do you want to remove selected waypoints?";
-"create_new_trip" = "Create new trip";
+"create_new_trip" = "Create new track";
 "editing_waypoints" = "Editing waypoints";
 "select_wpt_on_map" = "Select point on map to add to the trip";
-"gpx_rename_q" = "Rename trip";
+"gpx_rename_q" = "Rename track";
 "gpx_enter_new_name" = "Please enter new name for the trip";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";
-"gpx_trip_groups" = "Trip groups";
+"gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
 "directions" = "Directions";

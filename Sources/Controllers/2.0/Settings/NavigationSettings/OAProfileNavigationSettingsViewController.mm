@@ -136,6 +136,13 @@
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
+}
+
 + (NSDictionary<NSString *, OARoutingProfileDataObject *> *) getRoutingProfiles
 {
     NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *profilesObjects = [NSMutableDictionary new];

@@ -644,16 +644,12 @@
 
 - (void) widgetChanged:(OATextInfoWidget *)widget
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self layoutWidgets:widget];
-    });
+    [self layoutWidgets:widget];
 }
 
 - (void) widgetVisibilityChanged:(OATextInfoWidget *)widget visible:(BOOL)visible
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self layoutWidgets:widget];
-    });
+    [self layoutWidgets:widget];
 }
 
 - (void) widgetClicked:(OATextInfoWidget *)widget

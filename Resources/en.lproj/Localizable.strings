@@ -2123,9 +2123,10 @@
 • Added ability to download online maps to cache\n
 • Improved \"Search\" algorithms\n";
 
-"ios_release_3_90" = "• Introduced \“Application Profiles\" with independent settings\n
-• New arrangement of settings by profiles and types: navigation, general, map and screen\n
-• Ability to import or export profile settings\n
-• Added data sources for Online photos\n
-• Added ability to download online maps to cache\n
-• Improved \"Search\" algorithms\n";
+"ios_release_3_90" = "• Introduced \"Plan a route\", planning future trips, ability to create segments with different navigation types\n
+• Adding option to enable сompass over the \"Radius Ruler\" tool\n
+• Added \"POI label overlays\" allows to show names for favorites, tracks waypoints and markers on the map\n
+• Aded new Quick actions, for control visibility of contour lines and terrain on the map, channgi application profile, delete neares intermediate point\n
+• Fixed issues with missing Wikipedia search category\n
+• Import: fixed bugs, addes support for all data available in OsmAnd\n
+• OpenStreetMap editing, fixed time picker\n";

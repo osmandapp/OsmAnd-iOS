@@ -80,7 +80,6 @@
     OAAutoObserverProxy* _rightWidgetSuperviewDidLayoutObserver;
 
     NSTimeInterval _lastUpdateTime;
-    CGFloat _lastRightWidgetSuperviewWidth;
     int _themeId;
 }
 

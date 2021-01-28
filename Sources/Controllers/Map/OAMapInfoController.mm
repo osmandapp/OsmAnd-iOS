@@ -31,6 +31,7 @@
 #import "OATimeWidgetState.h"
 #import "OABearingWidgetState.h"
 #import "OACompassRulerWidgetState.h"
+#import "OAUserInteractionPassThroughView.h"
 
 @interface OATextState : NSObject
 
@@ -76,6 +77,7 @@
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     OAAutoObserverProxy* _mapZoomObserver;
     OAAutoObserverProxy* _mapSourceUpdatedObserver;
+    OAAutoObserverProxy* _rightWidgetSuperviewDidLayoutObserver;
 
     NSTimeInterval _lastUpdateTime;
     CGFloat _lastRightWidgetSuperviewWidth;
@@ -123,6 +125,11 @@
                                                      withHandler:@selector(onMapSourceUpdated)
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
         
+        if (_rightWidgetsView.superview && [_rightWidgetsView.superview isKindOfClass:OAUserInteractionPassThroughView.class])
+            _rightWidgetSuperviewDidLayoutObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onRightWidgetSuperviewLayout)
+                                                          andObserve:((OAUserInteractionPassThroughView *)_rightWidgetsView.superview).didLayoutObservable];
+        
         _lastRightWidgetSuperviewWidth = 0;
 
     }
@@ -137,31 +144,22 @@
 
 - (void) onMapRendererFramePrepared
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSTimeInterval currentTime = CACurrentMediaTime();
-        CGFloat currentWidth = _rightWidgetsView.superview.frame.size.width;
-        
-        if (currentTime - _lastUpdateTime > 1 || _lastRightWidgetSuperviewWidth != currentWidth)
-        {
-            _lastUpdateTime = currentTime;
-            _lastRightWidgetSuperviewWidth = currentWidth;
+    NSTimeInterval currentTime = CACurrentMediaTime();
+    if (currentTime - _lastUpdateTime > 1)
+    {
+        _lastUpdateTime = currentTime;
+        dispatch_async(dispatch_get_main_queue(), ^{
             [self onDraw];
-        }
-        else
-        {
-            [self delayedCheckingForLayoutChanging];
-        }
-    });
-    
+        });
+    }
     // Render the ruler more often
     [self updateRuler];
 }
 
-- (void) delayedCheckingForLayoutChanging
+- (void) onRightWidgetSuperviewLayout
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (_lastRightWidgetSuperviewWidth != _rightWidgetsView.superview.frame.size.width)
-            [self onMapRendererFramePrepared];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self onDraw];
     });
 }
 

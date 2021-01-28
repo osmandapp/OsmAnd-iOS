@@ -895,6 +895,8 @@
 "gpx_already_exsists" = "File with this name already exists";
 "split_before" = "Split before";
 "split_after" = "Split after";
+"follow_track" = "Follow track";
+"track" = "Track";
 
 // Resources
 "res_mapsres" = "Maps & Resources";

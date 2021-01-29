@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAProduct;
+@class OAProduct, OAPointIContainer;
 
 @interface OAWorldRegion : NSObject
 
@@ -47,6 +47,8 @@
 - (OAWorldRegion *) findAtLat:(double)latitude lon:(double)longitude;
 - (double) getArea;
 - (BOOL) contain:(double) lat lon:(double) lon;
+- (void) getPoints31:(OAPointIContainer *)container;
+
 - (NSInteger) getLevel;
 - (BOOL) containsSubregion:(NSString *)regionId;
 - (OAWorldRegion *) getSubregion:(NSString *)regionId;

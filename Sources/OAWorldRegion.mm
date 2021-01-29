@@ -21,6 +21,7 @@
 #import "OALog.h"
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
+#import "OAPointIContainer.h"
 
 @implementation OAWorldRegion
 {
@@ -165,6 +166,12 @@
         return t % 2 == 1;
     }
     return res;
+}
+
+- (void) getPoints31:(OAPointIContainer *)container;
+{
+    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _worldRegion->mapObject->points31.count() > 1)
+        container.qPoints = _worldRegion->mapObject->points31;
 }
 
 + (int) ray_intersect_x:(int) x y:(int) y middleY:(int) middleY prevX:(int) prevX prevY:(int) prevY

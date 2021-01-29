@@ -88,6 +88,9 @@
     _mapillaryLayer = [[OAMapillaryLayer alloc] initWithMapViewController:_mapViewController layerIndex:10];
     [self addLayer:_mapillaryLayer];
 
+    _downloadedRegionsLayer = [[OADownloadedRegionsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-10000];
+    [self addLayer:_downloadedRegionsLayer];
+
     [OAPlugin createLayers];
 }
 

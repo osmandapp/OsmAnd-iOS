@@ -200,6 +200,15 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.distanceLabel.text = item[@"distance"];
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
+            cell.distanceLabel.font = [UIFont systemFontOfSize:13];
+            cell.timeLabel.font = [UIFont systemFontOfSize:13];
+            cell.wptLabel.font = [UIFont systemFontOfSize:13];
+            cell.distanceLabel.textColor = UIColorFromRGB(color_text_footer);
+            cell.timeLabel.textColor = UIColorFromRGB(color_text_footer);
+            cell.wptLabel.textColor = UIColorFromRGB(color_text_footer);
+            cell.distanceImageView.tintColor = UIColorFromRGB(color_osmand_orange);
+            cell.timeImageView.tintColor = UIColorFromRGB(color_osmand_orange);
+            cell.wptImageView.tintColor = UIColorFromRGB(color_osmand_orange);
         }
         return cell;
     }

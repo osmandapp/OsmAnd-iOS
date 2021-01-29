@@ -54,8 +54,10 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.tableView.sectionHeaderHeight = 16.;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+    self.tableView.contentInset = UIEdgeInsetsMake(-14, 0, 0, 0);
     
     [self.rightButton removeFromSuperview];
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
@@ -69,7 +71,17 @@
 
 - (CGFloat) initialHeight
 {
-    return DeviceScreenHeight - DeviceScreenHeight / ([OAGPXDatabase sharedDb].gpxList.count > 1 ? 3 : 2);
+    int tracksCount = (int)[OAGPXDatabase sharedDb].gpxList.count;
+    int maxHeight = DeviceScreenHeight / 3 * 2;
+    
+    int estimatedHeight = 60 + 18 + 2 * 48 + 16 + 60 + OAUtilities.getBottomMargin;
+    if (tracksCount > 0)
+        estimatedHeight += (38 + tracksCount * 70 + 16);
+    
+    if (estimatedHeight > maxHeight)
+        estimatedHeight = maxHeight;
+    
+    return estimatedHeight;
 }
 
 - (void) generateData
@@ -171,6 +183,7 @@
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);;
         }
         return cell;
     }
@@ -214,6 +227,7 @@
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
         }
         return cell;
     }

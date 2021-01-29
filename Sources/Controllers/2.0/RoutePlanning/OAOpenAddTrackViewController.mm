@@ -64,6 +64,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
     if (_screenType == EOAAddToATrack)
         self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_add_track_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
 }
@@ -198,6 +200,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
         }
         return cell;
     }

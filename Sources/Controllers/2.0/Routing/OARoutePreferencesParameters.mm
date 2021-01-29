@@ -150,6 +150,9 @@
         
         if ([self routeAware])
             [self.routingHelper recalculateRouteDueToSettingsChange];
+        
+        if (self.delegate)
+            [self.delegate updateParameters];
     }
 }
 

@@ -410,6 +410,7 @@
                 OALocalRoutingParameter *value = v;
                 cell.switchView.on = [value isSelected];
                 [value setControlAction:cell.switchView];
+                value.delegate = self;
             }
             else
             {
@@ -494,8 +495,12 @@
         {
             [_settings.enableTimeConditionalRouting set:isChecked mode:self.appMode];
         }
+        if (self.delegate)
+            [self.delegate onSettingsChanged];
+        
         [self setupView];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadData];
     }
 }
 
@@ -503,6 +508,9 @@
 
 - (void) onSettingsChanged;
 {
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
+    
     [self setupView];
     [self.tableView reloadData];
 }

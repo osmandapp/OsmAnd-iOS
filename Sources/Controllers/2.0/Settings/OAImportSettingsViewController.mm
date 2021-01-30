@@ -42,6 +42,8 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
+#import "OAGpxSettingsItem.h"
+#import "OAGPXDatabase.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -398,9 +400,9 @@
                 customGPXSection.groupName = OALocalizedString(@"tracks");
                 customGPXSection.type = kCellTypeSectionHeader;
                 customGPXSection.isOpen = NO;
-                for (NSString *gpxItem in settings)
+                for (OAGpxSettingsItem *gpxItem in settings)
                 {
-                    NSString *gpxName = [[[gpxItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    NSString *gpxName = [[[gpxItem.name stringByDeletingPathExtension] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     [customGPXSection.groupItems addObject:@{
                         @"icon" : @"ic_custom_trip",
                         @"title" : gpxName,

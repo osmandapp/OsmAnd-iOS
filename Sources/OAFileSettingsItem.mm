@@ -251,7 +251,12 @@
         }
         else
         {
-            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
+            //TODO: check if additional check is necessary
+            NSString *path = json[@"file"];
+            NSArray *components = [path pathComponents];
+            NSString *subtypeFolder = components[components.count - 2];
+            NSString *subfolderPath = [subtypeFolder stringByAppendingPathComponent:self.name];
+            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:subfolderPath];
         }
     }
     return self;

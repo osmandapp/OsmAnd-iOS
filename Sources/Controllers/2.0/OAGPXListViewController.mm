@@ -117,11 +117,6 @@
     OAGPXRecTableViewCell* _recCell;
     OAAutoObserverProxy* _trackRecordingObserver;
 
-    NSInteger _recSectionIndex;
-    NSInteger _routeSectionIndex;
-    NSInteger _tripsSectionIndex;
-    NSInteger _createTripSectionIndex;
-    NSInteger _menuSectionIndex;
     NSArray *_data;
     NSMutableArray<NSIndexPath *> *_selectedIndexPaths;
     NSMutableArray<OAGPX *> *_selectedItems;
@@ -517,8 +512,8 @@ static UIViewController *parentController;
     [self updateButtons];
 }
 
-- (void) viewWillAppear:(BOOL)animated {
-    
+- (void) viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     
     [self generateData];
@@ -530,28 +525,7 @@ static UIViewController *parentController;
     _gpxRouteCanceledObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                           withHandler:@selector(onGpxRouteCanceled)
                                                            andObserve:[OAGPXRouter sharedInstance].routeCanceledObservable];
-    
     [self applySafeAreaMargins];
-}
-
-- (UIView *) getTopView
-{
-    return _navBarView;
-}
-
-- (UIView *) getMiddleView
-{
-    return _gpxTableView;
-}
-
-- (CGFloat) getToolBarHeight
-{
-    return self.tabBarController.tabBar.bounds.size.height;
-}
-
-- (CGFloat) getNavBarHeight
-{
-    return navBarWithSegmentControl;
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -595,37 +569,8 @@ static UIViewController *parentController;
 - (void) onGpxRouteCanceled
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        if (_routeSectionIndex > -1)
-        {
-            NSInteger prevTripsSectionIndex = _tripsSectionIndex;
-            NSInteger prevRouteSectionIndex = _routeSectionIndex;
-            NSString *routeFileName = _routeItem.gpxFileName;
-            
-            [self generateData];
-            [self.gpxTableView beginUpdates];
-
-            [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:prevRouteSectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-            
-            if (prevTripsSectionIndex < 0 && _tripsSectionIndex >= 0)
-                [self.gpxTableView insertSections:[NSIndexSet indexSetWithIndex:_tripsSectionIndex] withRowAnimation:UITableViewRowAnimationRight];
-
-            [self.gpxList enumerateObjectsUsingBlock:^(OAGPX *item, NSUInteger idx, BOOL *stop)
-            {
-                if ([item.gpxFileName isEqualToString:routeFileName])
-                {
-                    [self.gpxTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:_tripsSectionIndex]] withRowAnimation:UITableViewRowAnimationFade];
-                    *stop = YES;
-                }
-            }];
-            
-            [self.gpxTableView endUpdates];
-        }
-        else
-        {
-            [self generateData];
-            [self.gpxTableView reloadData];
-        }
+        [self generateData];
+        [self.gpxTableView reloadData];
     });
 }
  
@@ -661,6 +606,7 @@ static UIViewController *parentController;
             @"title" : OALocalizedString(@"track_recording_name"),
             @"icon" : @"ic_custom_reverse_direction.png",
             @"type" : kCellTypeTrackRecord,
+            @"header" : OALocalizedString(@"record_trip"),
             @"key" : @"track_recording",
         }]
         ];
@@ -668,6 +614,7 @@ static UIViewController *parentController;
         [tableData addObject:@[@{
             @"title" : OALocalizedString(@"track_rec_addon_q"),
             @"type" : kCellTypeTrackRecordMessage,
+            @"header" : OALocalizedString(@"record_trip"),
             @"key" : @"track_recording",
         }]
         ];
@@ -678,7 +625,22 @@ static UIViewController *parentController;
         NSArray *sortedArrayGroups = [self.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX* obj1, OAGPX* obj2) {
             return [obj2.importDate compare:obj1.importDate];
         }];
-        [_gpxList setArray:sortedArrayGroups];
+        [self.gpxList setArray:sortedArrayGroups];
+    }
+    
+    if (_routeItem)
+    {
+        [tableData addObject:@[@{
+            @"title" : [_routeItem getNiceTitle],
+            @"track" : _routeItem,
+            @"distance" : [_app getFormattedDistance:_routeItem.totalDistance],
+            @"time" : [_app getFormattedTimeInterval:_routeItem.timeSpan shortFormat:YES],
+            @"wpt" : [NSString stringWithFormat:@"%d", _routeItem.wptPoints],
+            @"type" : kGPXTrackCell,
+            @"header" : OALocalizedString(@"gpx_route"),
+            @"key" : @"route_item",
+        }]
+        ];
     }
     
     OAGpxTableGroup* visibleGroup = [[OAGpxTableGroup alloc] init];
@@ -695,6 +657,7 @@ static UIViewController *parentController;
                  @"icon" : @"ic_custom_trip.png",
                  @"track" : item,
                  @"type" : kCellTypeSwitch,
+                 @"header" : @"",
                  @"key" : @"track_group"
              }
              ];
@@ -723,13 +686,15 @@ static UIViewController *parentController;
     }
     tracksGroup.groupItems = [NSMutableArray arrayWithArray:allTracks];
     tracksGroup.isOpen = NO;
-    [tableData addObject:tracksGroup];
+    if (tracksGroup.groupItems.count > 0)
+        [tableData addObject:tracksGroup];
     
     // Generate menu items
     self.menuItems = @[@{@"type" : kCellMenu,
                          @"key" : @"import_track",
                          @"title": OALocalizedString(@"gpx_import_title"),
-                         @"icon": @"ic_custom_import"},
+                         @"icon": @"ic_custom_import",
+                         @"header" : OALocalizedString(@"actions")},
                        @{@"type" : kCellMenu,
                          @"key" : @"create_new_trip",
                          @"title": OALocalizedString(@"create_new_trip"),
@@ -1041,6 +1006,8 @@ static UIViewController *parentController;
         [_settings showGpx:@[gpx.gpxFileName] update:NO];
     else if ([_settings.mapSettingVisibleGpx containsObject:gpx.gpxFileName])
         [_settings hideGpx:@[gpx.gpxFileName] update:NO];
+    [self.gpxTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.gpxTableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [self.gpxTableView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
     return NO;
 }
 
@@ -1058,7 +1025,10 @@ static UIViewController *parentController;
     if (section == kRecordTrackSection)
         return OALocalizedString(@"record_trip");
     if ([sectionObject isKindOfClass:NSArray.class])
-        return OALocalizedString(@"actions");
+    {
+        NSDictionary *item = ((NSArray *)_data[section]).firstObject;
+        return item[@"header"];
+    }
     else
         return @"";
 }
@@ -1152,6 +1122,33 @@ static UIViewController *parentController;
             }
             return cell;
         }
+        else if (kGPXTrackCell)
+        {
+            static NSString* const identifierCell = kGPXTrackCell;
+            OAGPXTrackCell* cell = nil;
+            cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
+                cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
+            }
+            if (cell)
+            {
+                cell.titleLabel.text = item[@"title"];
+                cell.distanceLabel.text = item[@"distance"];
+                cell.timeLabel.text = item[@"time"];
+                cell.wptLabel.text = item[@"wpt"];
+                cell.leftIconImageView.image = [[UIImage imageNamed:@"ic_custom_route"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.leftIconImageView.tintColor = UIColorFromRGB(color_chart_orange);
+                cell.checkmarkImageView.hidden = YES;
+                cell.closeButton.hidden = NO;
+                [cell.closeButton setImage:[[UIImage imageNamed:@"ic_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+                cell.closeButton.tintColor = UIColorFromRGB(color_tint_gray);
+                [cell.closeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [cell.closeButton addTarget:self action:@selector(cancelRoutePressed) forControlEvents:UIControlEventTouchUpInside];
+            }
+            return cell;
+        }
     }
     OAGpxTableGroup* groupData = sectionObject;
     if (indexPath.row == kGPXGroupHeaderRow)
@@ -1220,7 +1217,7 @@ static UIViewController *parentController;
                 [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
                 cell.switchView.on = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFileName];
                 [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
-                cell.imgView.tintColor = UIColorFromRGB(color_chart_orange);
+                cell.imgView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFileName] ? UIColorFromRGB(color_chart_orange) :  UIColorFromRGB(color_tint_gray);
                 cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             }
             return cell;
@@ -1244,6 +1241,8 @@ static UIViewController *parentController;
                 cell.checkmarkImageView.hidden = NO;
                 cell.checkmarkImageView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.checkmarkImageView.tintColor = UIColorFromRGB(color_tint_gray);
+                cell.leftIconImageView.image = [[UIImage imageNamed:@"ic_custom_trip"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.leftIconImageView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFileName] ? UIColorFromRGB(color_chart_orange) :  UIColorFromRGB(color_tint_gray);
             }
             return cell;
         }
@@ -1311,6 +1310,11 @@ static UIViewController *parentController;
                     pluginsViewController.openFromCustomPlace = YES;
                     [self.navigationController pushViewController:pluginsViewController animated:YES];
                 }
+            }
+            else if ([cellKey isEqualToString:@"route_item"])
+            {
+                [self doPush];
+                [[OARootViewController instance].mapPanel openTargetViewWithGPXRoute:_routeItem pushed:YES];
             }
         }
         else if (indexPath.row == 0)

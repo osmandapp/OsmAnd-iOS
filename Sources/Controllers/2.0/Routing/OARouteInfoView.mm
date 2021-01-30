@@ -881,10 +881,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     BOOL isPublicTransport = [_routingHelper isPublicTransportMode];
     if ([_pointsHelper getPointToNavigate] || isPublicTransport)
-        [[OARootViewController instance].mapPanel closeRouteInfo];
-    
-    if (!isPublicTransport)
-        [[OARootViewController instance].mapPanel startNavigation];
+    {
+        [[OARootViewController instance].mapPanel closeRouteInfo:^{
+            if (!isPublicTransport)
+                [[OARootViewController instance].mapPanel startNavigation];
+        }];
+    }
 }
 
 - (void) swapPressed:(id)sender
@@ -1032,10 +1034,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     visible = NO;
     _isHiding = YES;
-    
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    [mapPanel setTopControlsVisible:YES];
-    [mapPanel setBottomControlsVisible:YES menuHeight:0 animated:YES];
 
     if (self.superview)
     {

@@ -31,6 +31,7 @@
 #import "OATimeWidgetState.h"
 #import "OABearingWidgetState.h"
 #import "OACompassRulerWidgetState.h"
+#import "OAUserInteractionPassThroughView.h"
 
 @interface OATextState : NSObject
 
@@ -76,6 +77,7 @@
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     OAAutoObserverProxy* _mapZoomObserver;
     OAAutoObserverProxy* _mapSourceUpdatedObserver;
+    OAAutoObserverProxy* _rightWidgetSuperviewDidLayoutObserver;
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
@@ -121,7 +123,11 @@
         _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onMapSourceUpdated)
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
-
+        
+        if (_rightWidgetsView.superview && [_rightWidgetsView.superview isKindOfClass:OAUserInteractionPassThroughView.class])
+            _rightWidgetSuperviewDidLayoutObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onRightWidgetSuperviewLayout)
+                                                          andObserve:((OAUserInteractionPassThroughView *)_rightWidgetsView.superview).didLayoutObservable];
     }
     return self;
 }
@@ -144,6 +150,14 @@
     }
     // Render the ruler more often
     [self updateRuler];
+}
+
+- (void) onRightWidgetSuperviewLayout
+{
+    _lastUpdateTime = CACurrentMediaTime();
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self onDraw];
+    });
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode

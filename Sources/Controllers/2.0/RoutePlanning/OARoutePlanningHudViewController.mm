@@ -364,6 +364,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_layer exitMovingMode];
     [_layer updateLayer];
     _hudMode = EOAHudModeRoutePlanning;
+    
+    [self onPointsListChanged];
 }
 
 - (OAGPXMutableDocument *) getGpxFile:(NSString *)gpxFileName
@@ -471,11 +473,29 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [self selectPoint:coord longPress:longPress];
 }
 
+- (double) getLowestDistance:(OAMapRendererView *)mapView
+{
+    CGPoint first = CGPointZero;
+    // 44 is the height of a point in px
+    CGPoint second = CGPointMake(0., 44.);
+    
+    OsmAnd::PointI firstPoint;
+    OsmAnd::PointI secondPoint;
+    
+    [mapView convert:first toLocation:&firstPoint];
+    [mapView convert:second toLocation:&secondPoint];
+    
+    OsmAnd::LatLon firstLatLon = OsmAnd::Utilities::convert31ToLatLon(firstPoint);
+    OsmAnd::LatLon secondLatLon = OsmAnd::Utilities::convert31ToLatLon(secondPoint);
+    
+    return getDistance(firstLatLon.latitude, firstLatLon.longitude, secondLatLon.latitude, secondLatLon.longitude);
+}
+
 - (void) selectPoint:(CLLocationCoordinate2D)location longPress:(BOOL)longPress
 {
     OAMapRendererView *mapView = OARootViewController.instance.mapPanel.mapViewController.mapView;
     
-    double lowestDistance = 40.;
+    double lowestDistance = [self getLowestDistance:mapView];
     for (NSInteger i = 0; i < _editingContext.getPointsCount; i++)
     {
         OAGpxTrkPt *pt = _editingContext.getPoints[i];
@@ -1063,6 +1083,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAGpxTrkPt *pt = _editingContext.getPoints[pointPosition];
     _editingContext.originalPointToMove = pt;
     [_layer enterMovingPointMode];
+    [self onPointsListChanged];
 }
 
 - (void) onClearPoints:(EOAClearPointsMode)mode
@@ -1098,6 +1119,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_editingContext splitSegments:_editingContext.selectedPointPosition + (type == EOAAddPointModeAfter ? 1 : 0)];
     
     [_layer updateLayer];
+    
+    [self onPointsListChanged];
     
     _infoView.delegate = self;
     [self.scrollableView addSubview:_infoView];
@@ -1141,26 +1164,32 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                                                                                  oldPoint:_editingContext.originalPointToMove
                                                                                  newPoint:newPoint
                                                                                  position:_editingContext.selectedPointPosition]];
+        [_editingContext addPoint:newPoint];
+        [self exitMovePointMode:NO];
     }
     else if (_hudMode == EOAHudModeAddPoints)
     {
         [self onAddOneMorePointPressed:_editingContext.addPointMode];
+        [self exitAddPointMode];
     }
-    
-    [self onCloseButtonPressed];
+    [self hideInfoView];
 }
 
 - (void)onCloseButtonPressed
 {
-    _editingContext.selectedPointPosition = -1;
-    _editingContext.originalPointToMove = nil;
-    _editingContext.addPointMode = EOAAddPointModeUndefined;
-    [_editingContext splitSegments:_editingContext.getBeforePoints.count + _editingContext.getAfterPoints.count];
     if (_hudMode == EOAHudModeMovePoint)
-        [_layer exitMovingMode];
-    [_layer updateLayer];
-    _hudMode = EOAHudModeRoutePlanning;
-    
+    {
+        [self exitMovePointMode:YES];
+    }
+    else if (_hudMode == EOAHudModeAddPoints)
+    {
+        [self exitAddPointMode];
+    }
+    [self hideInfoView];
+}
+
+- (void)hideInfoView
+{
     [UIView animateWithDuration:.2 animations:^{
         _infoView.alpha = 0.;
         [self goMinimized];
@@ -1169,6 +1198,33 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_infoView removeFromSuperview];
         _infoView = nil;
     }];
+}
+
+- (void) exitMovePointMode:(BOOL)cancelled
+{
+    if (cancelled)
+    {
+        OAGpxTrkPt *pt = _editingContext.originalPointToMove;
+        [_editingContext addPoint:pt];
+    }
+    _editingContext.selectedPointPosition = -1;
+    _editingContext.originalPointToMove = nil;
+    [_editingContext splitSegments:_editingContext.getBeforePoints.count + _editingContext.getAfterPoints.count];
+    [_layer exitMovingMode];
+    [_layer updateLayer];
+    _hudMode = EOAHudModeRoutePlanning;
+    [self onPointsListChanged];
+}
+
+- (void)exitAddPointMode
+{
+    _editingContext.selectedPointPosition = -1;
+    _editingContext.originalPointToMove = nil;
+    _editingContext.addPointMode = EOAAddPointModeUndefined;
+    [_editingContext splitSegments:_editingContext.getBeforePoints.count + _editingContext.getAfterPoints.count];
+    [_layer updateLayer];
+    _hudMode = EOAHudModeRoutePlanning;
+    [self onPointsListChanged];
 }
 
 - (void) onAddOneMorePointPressed:(EOAAddPointMode)mode
@@ -1428,8 +1484,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_editingContext cancelSnapToRoad];
     [self goMinimized];
 //    updateUndoRedoButton(false, redoBtn);
-    [self.tableView reloadData];
-    [self updateDistancePointsText];
+    [self onPointsListChanged];
 }
 
 #pragma mark - OAOpenAddTrackDelegate

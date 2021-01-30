@@ -80,6 +80,7 @@
 - (void) searchButtonClick:(id)sender;
 - (void) showRouteInfo;
 - (void) closeRouteInfo;
+- (void) closeRouteInfo:(void (^)(void))onComplete;
 - (void) updateRouteInfo;
 - (void) showWaypoints;
 - (void) showRoutePreferences;

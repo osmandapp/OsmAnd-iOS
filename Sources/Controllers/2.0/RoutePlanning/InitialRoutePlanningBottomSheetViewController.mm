@@ -28,6 +28,9 @@
 
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
+#define kApproximateEmptyMenuHeight 250.
+#define kApproximateGpxHeaderHeight 38.
+#define kApproximateGpxCellHeight 70.
 
 @interface InitialRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate>
 
@@ -74,9 +77,9 @@
     int tracksCount = (int)[OAGPXDatabase sharedDb].gpxList.count;
     int maxHeight = DeviceScreenHeight / 3 * 2;
     
-    int estimatedHeight = 60 + 18 + 2 * 48 + 16 + 60 + OAUtilities.getBottomMargin;
+    int estimatedHeight = kApproximateEmptyMenuHeight + OAUtilities.getBottomMargin;
     if (tracksCount > 0)
-        estimatedHeight += (38 + tracksCount * 70 + 16);
+        estimatedHeight += (kApproximateGpxHeaderHeight + tracksCount * kApproximateGpxCellHeight + kVerticalMargin);
     
     if (estimatedHeight > maxHeight)
         estimatedHeight = maxHeight;
@@ -183,7 +186,7 @@
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
         }
         return cell;
     }

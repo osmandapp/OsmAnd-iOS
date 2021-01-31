@@ -26,6 +26,7 @@
 
 #define kVerticalMargin 16.
 #define kHorizontalMargin 16.
+#define kGPXCellTextLeftOffset 62.
 
 typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOAModifiedDate = 0,
@@ -173,6 +174,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASegmentTableViewCell" owner:self options:nil];
             cell = (OASegmentTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
             [cell.segmentControl insertSegmentWithTitle:item[@"title2"] atIndex:2 animated:NO];
         }
         if (cell)
@@ -192,6 +194,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0, self.tableView.safeAreaInsets.left + kGPXCellTextLeftOffset, 0, 0);
         }
         if (cell)
         {
@@ -201,6 +204,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.wptLabel.text = item[@"wpt"];
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.wptImageView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         return cell;
     }

@@ -63,6 +63,8 @@ struct RoutingParameter;
 - (void) setControlAction:(UIControl *)control;
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 
+- (void)applyNewParameterValue:(BOOL)isChecked;
+
 @end
 
 @interface OALocalNonAvoidParameter : OALocalRoutingParameter

@@ -37,6 +37,7 @@
 #import "OASizes.h"
 #import "OAMapLayers.h"
 #import "OAAddDestinationBottomSheetViewController.h"
+#import "OAFollowTrackBottomSheetViewController.h"
 #import "OARoutingSettingsCell.h"
 #import "OAHomeWorkCell.h"
 #import "OAGPXDatabase.h"
@@ -1640,6 +1641,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if ([item[@"type"] isEqualToString:@"intermediate"])
     {
         [self editDestinationsPressed:nil];
+    }
+    else if ([item[@"type"] isEqualToString:@"gpx_route"])
+    {
+        OAFollowTrackBottomSheetViewController *bottomSheet = [[OAFollowTrackBottomSheetViewController alloc] initWithFile:_routingHelper.getCurrentGPXRoute.file];
+        [bottomSheet presentInViewController:OARootViewController.instance];
     }
     else if ([item[@"key"] isEqualToString:@"prev_route"])
     {

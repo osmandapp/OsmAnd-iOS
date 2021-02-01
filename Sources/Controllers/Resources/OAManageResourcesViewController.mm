@@ -785,7 +785,7 @@ static BOOL _lackOfResources;
     
     for (OAWorldRegion* subregion in self.region.flattenedSubregions)
     {
-        if ((!self.region.superregion && ([subregion.regionId isEqualToString:_otherRegionId] || [subregion.regionId isEqualToString:_nauticalRegionId])) || [subregion.downloadsIdPrefix isEqualToString:self.region.downloadsIdPrefix])
+        if ((!self.region.superregion && ([subregion.regionId isEqualToString:_otherRegionId] || [subregion.regionId isEqualToString:_nauticalRegionId])) || [self isAntarcticaSubregion])
             continue;
 
         if (subregion.superregion == self.region)
@@ -797,6 +797,11 @@ static BOOL _lackOfResources;
         }
     }
     
+}
+
+- (BOOL) isAntarcticaSubregion
+{
+    return [self.region.downloadsIdPrefix hasPrefix:@"antarctica"];
 }
 
 - (void) collectSubregionItems:(OAWorldRegion *) region

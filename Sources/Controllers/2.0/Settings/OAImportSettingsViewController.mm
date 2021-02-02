@@ -274,9 +274,7 @@
                         }
                         else
                         {
-                            NSString *defaultProfileName = modeBean.stringKey.capitalizedString;
-                            title = defaultProfileName;
-                            modeBean.userProfileName = defaultProfileName;
+                            title = modeBean.stringKey.capitalizedString;;
                         }
                     }
 

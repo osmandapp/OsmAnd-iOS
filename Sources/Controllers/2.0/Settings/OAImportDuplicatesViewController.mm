@@ -323,8 +323,8 @@
                 if ([self isEmpty:profileName])
                 {
                     OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
-                    if (![self isEmpty:profileName])
-                        profileName = appMode.name;
+                    if (appMode)
+                        profileName = appMode.toHumanString;
                     else
                         profileName = modeBean.stringKey.capitalizedString;
                 }

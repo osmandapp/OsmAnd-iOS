@@ -31,7 +31,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" id="goB-A3-eLa">
-                    <rect key="frame" x="0.0" y="547" width="414" height="349"/>
+                    <rect key="frame" x="0.0" y="557" width="414" height="349"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" id="m2C-hM-oZL">
@@ -111,24 +111,25 @@
                                                         <action selector="closeButtonPressed:" destination="-1" eventType="touchUpInside" id="ZnB-8G-Eo1"/>
                                                     </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exit without saving?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xid-FU-OZT">
-                                                    <rect key="frame" x="16" y="12" width="150.5" height="20.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exit without saving?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xid-FU-OZT">
+                                                    <rect key="frame" x="62" y="12" width="290" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
+                                                <constraint firstItem="Xid-FU-OZT" firstAttribute="centerX" secondItem="eVA-sk-3Sv" secondAttribute="centerX" id="5VB-g8-XIg"/>
                                                 <constraint firstAttribute="trailing" secondItem="eHt-m2-Iq4" secondAttribute="trailing" constant="16" id="Fq5-oX-6Dv"/>
                                                 <constraint firstAttribute="bottom" secondItem="Xid-FU-OZT" secondAttribute="bottom" constant="16.5" id="JFL-t5-N3M"/>
                                                 <constraint firstAttribute="bottom" secondItem="eHt-m2-Iq4" secondAttribute="bottom" constant="13.5" id="LjI-1v-FvT"/>
-                                                <constraint firstItem="Xid-FU-OZT" firstAttribute="leading" secondItem="eVA-sk-3Sv" secondAttribute="leading" constant="16" id="Nbc-eA-F3n"/>
+                                                <constraint firstItem="eHt-m2-Iq4" firstAttribute="leading" secondItem="Xid-FU-OZT" secondAttribute="trailing" constant="16" id="XBi-WG-tNh"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aAU-nP-YfN">
                                             <rect key="frame" x="0.0" y="58" width="414" height="1"/>
-                                            <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="Zbu-QJ-gWg"/>
                                             </constraints>

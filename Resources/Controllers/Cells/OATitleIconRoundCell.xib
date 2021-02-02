@@ -49,11 +49,11 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Qor-vC-51U" secondAttribute="trailing" id="1Nf-FR-PgS"/>
                             <constraint firstItem="6M0-5x-Pr0" firstAttribute="leading" secondItem="jQ0-wT-faZ" secondAttribute="trailing" constant="20" id="7O1-UE-TqF"/>
-                            <constraint firstAttribute="trailing" secondItem="6M0-5x-Pr0" secondAttribute="trailing" constant="16" id="Mte-NS-5SU"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="6M0-5x-Pr0" secondAttribute="trailing" constant="8" id="Mte-NS-5SU"/>
                             <constraint firstAttribute="bottom" secondItem="Qor-vC-51U" secondAttribute="bottom" id="Ofw-Hb-r0X"/>
                             <constraint firstItem="jQ0-wT-faZ" firstAttribute="centerY" secondItem="lMm-Of-Cn0" secondAttribute="centerY" id="RfM-3v-qjg"/>
                             <constraint firstItem="6M0-5x-Pr0" firstAttribute="centerY" secondItem="lMm-Of-Cn0" secondAttribute="centerY" id="WxP-sW-qkb"/>
-                            <constraint firstItem="jQ0-wT-faZ" firstAttribute="leading" secondItem="lMm-Of-Cn0" secondAttribute="leading" constant="16" id="pGp-J1-m4V"/>
+                            <constraint firstItem="jQ0-wT-faZ" firstAttribute="leading" secondItem="lMm-Of-Cn0" secondAttribute="leadingMargin" constant="8" id="pGp-J1-m4V"/>
                             <constraint firstItem="Qor-vC-51U" firstAttribute="leading" secondItem="jQ0-wT-faZ" secondAttribute="leading" id="xx1-WF-4u4"/>
                         </constraints>
                     </view>

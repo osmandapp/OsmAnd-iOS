@@ -498,14 +498,18 @@
         if (self.delegate)
             [self.delegate onSettingsChanged];
         
-        NSMutableArray *newData = [NSMutableArray arrayWithArray:_data];
-        NSMutableDictionary *newItem= [NSMutableDictionary dictionaryWithDictionary:item];
-        newItem[@"value"] = [NSNumber numberWithBool:isChecked];
-        newData[indexPath.section][indexPath.row] = [NSDictionary dictionaryWithDictionary:newItem];;
-        _data = [NSArray arrayWithArray:newData];
-        
+        [self setSwicthValue:isChecked forIndexPath:indexPath];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+}
+
+- (void) setSwicthValue:(BOOL)isChecked forIndexPath:(NSIndexPath *)indexPath
+{
+    NSMutableArray *newData = [NSMutableArray arrayWithArray:_data];
+    NSMutableDictionary *newItem= [NSMutableDictionary dictionaryWithDictionary:_data[indexPath.section][indexPath.row]];
+    newItem[@"value"] = [NSNumber numberWithBool:isChecked];
+    newData[indexPath.section][indexPath.row] = [NSDictionary dictionaryWithDictionary:newItem];;
+    _data = [NSArray arrayWithArray:newData];
 }
 
 #pragma mark - OASettingsDataDelegate

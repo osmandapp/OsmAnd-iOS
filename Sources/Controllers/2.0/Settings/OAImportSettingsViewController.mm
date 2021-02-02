@@ -267,9 +267,12 @@
                     if (!title || title.length == 0)
                     {
                         OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
-                        title = [appMode toHumanString];
                         
-                        if (!title || title.length == 0)
+                        if (appMode)
+                        {
+                            title = [appMode toHumanString];
+                        }
+                        else
                         {
                             NSString *defaultProfileName = modeBean.stringKey.capitalizedString;
                             title = defaultProfileName;

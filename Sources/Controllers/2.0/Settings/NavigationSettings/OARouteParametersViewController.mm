@@ -498,9 +498,13 @@
         if (self.delegate)
             [self.delegate onSettingsChanged];
         
-        [self setupView];
+        NSMutableArray *newData = [NSMutableArray arrayWithArray:_data];
+        NSMutableDictionary *newItem= [NSMutableDictionary dictionaryWithDictionary:item];
+        newItem[@"value"] = [NSNumber numberWithBool:isChecked];
+        newData[indexPath.section][indexPath.row] = [NSDictionary dictionaryWithDictionary:newItem];;
+        _data = [NSArray arrayWithArray:newData];
+        
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tableView reloadData];
     }
 }
 

@@ -117,12 +117,13 @@
             @"wpt" : [NSString stringWithFormat:@"%d", gpx.wptPoints],
             @"key" : @"gpx_route"
         },
-        @{
+        // TODO: add the ability to select another track to follow
+        /*@{
             @"type" : kIconTitleDescrCell,
             @"title" : OALocalizedString(@"select_another_track"),
             @"img" : @"ic_custom_folder",
             @"key" : @"select_another"
-        },
+        },*/
         @{
             @"type" : kCellTypeProfileSwitch,
             @"title" : OALocalizedString(@"reverse_track_dir"),
@@ -248,8 +249,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsZero;
-            
-            [cell setRightButtonVisibility:YES];
+            // TODO: add ability to edit the track in route planning
+//            [cell setRightButtonVisibility:YES];
             cell.editButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)

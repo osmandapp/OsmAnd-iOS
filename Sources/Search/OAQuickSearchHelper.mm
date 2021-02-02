@@ -151,9 +151,9 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     for (auto gpxIt = _geoDocList.begin(); gpxIt != _geoDocList.end(); ++gpxIt)
     {
         const auto& gpx = *gpxIt;
-        for (auto pointIt = gpx->locationMarks.begin(); pointIt != gpx->locationMarks.end(); ++pointIt)
+        for (auto it = gpx->locationMarks.begin(); it != gpx->locationMarks.end(); ++it)
         {
-            const auto& point = *pointIt;
+            const auto& point = *it;
             OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
             sr.localeName = point->name.toNSString();
             sr.wpt = point;

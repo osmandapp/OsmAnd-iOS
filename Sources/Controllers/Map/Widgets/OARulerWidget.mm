@@ -30,9 +30,6 @@
 #define TITLE_PADDING 2
 #define COMPASS_INDEX 2
 
-#define TEXT_SIDE_VERTICAL @"VERTICAL"
-#define TEXT_SIDE_HORIZONTAL @"HORIZONTAL"
-
 #define SHOW_RULER_MIN_ZOOM 3
 #define SHOW_COMPASS_MIN_ZOOM 8
 #define ZOOM_UPDATING_THRESHOLD 0.05
@@ -41,6 +38,11 @@
 #define ELEVATION_UPDATING_THRESHOLD 2
 #define TARGET31_UPDATING_THRESHOLD 1000000
 #define FRAMES_PER_SECOND 10
+
+typedef NS_ENUM(NSInteger, EOATextSide) {
+    EOATextSideVertical = 0,
+    EOATextSideHorizontal
+};
 
 @interface OARulerWidget ()
 
@@ -53,7 +55,7 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAMapViewController *_mapViewController;
-    NSString *_textSide;
+    EOATextSide _textSide;
     double _radius;
     double _maxRadius;
     double _roundedDist;
@@ -73,7 +75,7 @@
     OAProfileDouble *_mapDensity;
     double _cachedMapDensity;
     EOAMetricsConstant _cacheMetricSystem;
-    int _cachedRulerMode;
+    EOARulerWidgetMode _cachedRulerMode;
     BOOL _cachedMapMode;
     
     OsmAnd::PointI _cachedCenter31;
@@ -386,12 +388,12 @@
     if (maxVertical >= maxHorizontal)
     {
         _maxRadius = maxVertical;
-        _textSide = TEXT_SIDE_VERTICAL;
+        _textSide = EOATextSideVertical;
     }
     else
     {
         _maxRadius = maxHorizontal;
-        _textSide = TEXT_SIDE_HORIZONTAL;
+        _textSide = EOATextSideHorizontal;
     }
     if (_radius != 0)
         [self updateText];
@@ -448,14 +450,14 @@
             [_mapViewController.mapView convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
             [points addObject:[NSValue valueWithCGPoint:screenPoint]];
             
-            if ([_textSide isEqualToString:TEXT_SIDE_VERTICAL])
+            if (_textSide == EOATextSideVertical)
             {
                 if (a == 0)
                     topOrLeftPoint = CGPointMake(screenPoint.x, screenPoint.y);
                 else if (a == 180)
                     rightOrBottomPoint = CGPointMake(screenPoint.x, screenPoint.y);
             }
-            else if ([_textSide isEqualToString:TEXT_SIDE_HORIZONTAL])
+            else if (_textSide == EOATextSideHorizontal)
             {
                 if (a == -90)
                     topOrLeftPoint = CGPointMake(screenPoint.x, screenPoint.y);
@@ -528,22 +530,22 @@
     CGPoint topOrLeftCoordinate = CGPointZero;
     CGPoint rightOrBottomCoordinate = CGPointZero;
     
-    if ([_textSide isEqualToString:TEXT_SIDE_VERTICAL])
+    if (_textSide == EOATextSideVertical)
     {
         topOrLeftCoordinate.x = center.x - boundsHeading.width / 2;
         topOrLeftCoordinate.y = center.y - drawingTextRadius - boundsHeading.height / 2;
         rightOrBottomCoordinate.x = center.x - boundsDistance.width / 2;
         rightOrBottomCoordinate.y = center.y + drawingTextRadius - boundsDistance.height / 2;
-        return @[ [NSValue valueWithCGPoint:[self transformTo3D:topOrLeftCoordinate compensateMapRotation:YES]], [NSValue valueWithCGPoint:[self transformTo3D:rightOrBottomCoordinate compensateMapRotation:YES]]];
+        return @[[NSValue valueWithCGPoint:[self transformTo3D:topOrLeftCoordinate compensateMapRotation:YES]], [NSValue valueWithCGPoint:[self transformTo3D:rightOrBottomCoordinate compensateMapRotation:YES]]];
     }
-    else if ([_textSide isEqualToString:TEXT_SIDE_HORIZONTAL])
+    else if (_textSide == EOATextSideHorizontal)
     {
         topOrLeftCoordinate.x = center.x - drawingTextRadius - boundsHeading.width;
         topOrLeftCoordinate.y = center.y - boundsHeading.height / 2;
         rightOrBottomCoordinate.x = center.x + drawingTextRadius;
         rightOrBottomCoordinate.y = center.y - boundsDistance.height / 2;
-        return @[ [NSValue valueWithCGPoint:topOrLeftCoordinate], [NSValue valueWithCGPoint:rightOrBottomCoordinate]];
     }
+    return @[[NSValue valueWithCGPoint:topOrLeftCoordinate], [NSValue valueWithCGPoint:rightOrBottomCoordinate]];
 }
 
 - (void) drawCompassCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
@@ -592,7 +594,7 @@
         NSString *distance = _cacheDistances[circleNumber - 1];
         NSString *heading = [NSString stringWithFormat:@"%@ %@", [_app getFormattedAzimuth:_cachedHeading], [self getCardinalDirectionForDegrees:_cachedHeading]];
         
-        double offset = [_textSide isEqualToString:TEXT_SIDE_HORIZONTAL] ? 5 : 20;
+        double offset = _textSide == EOATextSideHorizontal ? 5 : 20;
         double drawingTextRadius = radiusLength + offset;
         
         NSArray<NSValue *> *textCoords = [self calculateTextCoords:heading rightOrBottomText:distance drawingTextRadius:drawingTextRadius center:center];

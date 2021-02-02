@@ -498,12 +498,12 @@
         if (self.delegate)
             [self.delegate onSettingsChanged];
         
-        [self setSwicthValue:isChecked forIndexPath:indexPath];
+        [self setSwitchValue:isChecked forIndexPath:indexPath];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
-- (void) setSwicthValue:(BOOL)isChecked forIndexPath:(NSIndexPath *)indexPath
+- (void) setSwitchValue:(BOOL)isChecked forIndexPath:(NSIndexPath *)indexPath
 {
     NSMutableArray *newData = [NSMutableArray arrayWithArray:_data];
     NSMutableDictionary *newItem= [NSMutableDictionary dictionaryWithDictionary:_data[indexPath.section][indexPath.row]];

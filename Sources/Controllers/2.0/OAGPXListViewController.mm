@@ -1140,12 +1140,11 @@ static UIViewController *parentController;
                 cell.wptLabel.text = item[@"wpt"];
                 cell.leftIconImageView.image = [[UIImage imageNamed:@"ic_custom_route"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.leftIconImageView.tintColor = UIColorFromRGB(color_chart_orange);
-                cell.checkmarkImageView.hidden = YES;
-                cell.closeButton.hidden = NO;
-                [cell.closeButton setImage:[[UIImage imageNamed:@"ic_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-                cell.closeButton.tintColor = UIColorFromRGB(color_tint_gray);
-                [cell.closeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
-                [cell.closeButton addTarget:self action:@selector(cancelRoutePressed) forControlEvents:UIControlEventTouchUpInside];
+                [cell setRightButtonVisibility:YES];
+                [cell.editButton setImage:[[UIImage imageNamed:@"ic_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+                cell.editButton.tintColor = UIColorFromRGB(color_tint_gray);
+                [cell.editButton removeTarget:NULL action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [cell.editButton addTarget:self action:@selector(cancelRoutePressed) forControlEvents:UIControlEventTouchUpInside];
             }
             return cell;
         }
@@ -1238,9 +1237,9 @@ static UIViewController *parentController;
                 cell.distanceLabel.text = item[@"distance"];
                 cell.timeLabel.text = item[@"time"];
                 cell.wptLabel.text = item[@"wpt"];
-                cell.checkmarkImageView.hidden = NO;
-                cell.checkmarkImageView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.checkmarkImageView.tintColor = UIColorFromRGB(color_tint_gray);
+                [cell setRightButtonVisibility:YES];
+                [cell.editButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+                cell.editButton.tintColor = UIColorFromRGB(color_tint_gray);
                 cell.leftIconImageView.image = [[UIImage imageNamed:@"ic_custom_trip"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 cell.leftIconImageView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFileName] ? UIColorFromRGB(color_chart_orange) :  UIColorFromRGB(color_tint_gray);
             }

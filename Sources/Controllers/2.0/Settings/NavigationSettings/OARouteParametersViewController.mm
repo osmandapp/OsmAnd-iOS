@@ -410,6 +410,7 @@
                 OALocalRoutingParameter *value = v;
                 cell.switchView.on = [value isSelected];
                 [value setControlAction:cell.switchView];
+                value.delegate = self;
             }
             else
             {
@@ -494,15 +495,30 @@
         {
             [_settings.enableTimeConditionalRouting set:isChecked mode:self.appMode];
         }
-        [self setupView];
+        if (self.delegate)
+            [self.delegate onSettingsChanged];
+        
+        [self setSwitchValue:isChecked forIndexPath:indexPath];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+}
+
+- (void) setSwitchValue:(BOOL)isChecked forIndexPath:(NSIndexPath *)indexPath
+{
+    NSMutableArray *newData = [NSMutableArray arrayWithArray:_data];
+    NSMutableDictionary *newItem= [NSMutableDictionary dictionaryWithDictionary:_data[indexPath.section][indexPath.row]];
+    newItem[@"value"] = [NSNumber numberWithBool:isChecked];
+    newData[indexPath.section][indexPath.row] = [NSDictionary dictionaryWithDictionary:newItem];;
+    _data = [NSArray arrayWithArray:newData];
 }
 
 #pragma mark - OASettingsDataDelegate
 
 - (void) onSettingsChanged;
 {
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
+    
     [self setupView];
     [self.tableView reloadData];
 }

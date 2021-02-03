@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -36,6 +36,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="89O-4B-FGn" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="0aP-2z-9X1"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="89O-4B-FGn" secondAttribute="trailing" priority="999" id="4ka-k4-zmC"/>
                     <constraint firstAttribute="trailingMargin" secondItem="4Ja-QP-zZg" secondAttribute="trailing" id="DWY-LJ-mmO"/>
                     <constraint firstItem="4Ja-QP-zZg" firstAttribute="leading" secondItem="89O-4B-FGn" secondAttribute="trailing" constant="16" id="Gn1-hz-Lw6"/>
                     <constraint firstItem="89O-4B-FGn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="JaX-5l-GjH"/>
@@ -46,6 +47,9 @@
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
                 <outlet property="iconView" destination="4Ja-QP-zZg" id="oHV-6l-dEQ"/>
+                <outlet property="textBottomMargin" destination="u6P-Ef-4sJ" id="7tU-VY-FaF"/>
+                <outlet property="textTrailingMarginNoIcon" destination="4ka-k4-zmC" id="DiW-QG-vHG"/>
+                <outlet property="textTrailingMasrginWithIcon" destination="Gn1-hz-Lw6" id="64r-bD-3XJ"/>
                 <outlet property="titleView" destination="89O-4B-FGn" id="Oeg-RC-yAB"/>
             </connections>
             <point key="canvasLocation" x="139" y="135"/>

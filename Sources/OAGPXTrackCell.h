@@ -19,7 +19,14 @@
 @property (weak, nonatomic) IBOutlet UIImageView *wptImageView;
 @property (weak, nonatomic) IBOutlet UILabel *wptLabel;
 @property (weak, nonatomic) IBOutlet UIView *separatorView;
-@property (weak, nonatomic) IBOutlet UIImageView *checkmarkImageView;
-@property (weak, nonatomic) IBOutlet UIButton *closeButton;
+@property (weak, nonatomic) IBOutlet UIButton *editButton;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonHiddenWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonFullWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleRelativeToButtonConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleRelativeToMarginConstraint;
+
+
+- (void) setRightButtonVisibility:(BOOL)visible;
 
 @end

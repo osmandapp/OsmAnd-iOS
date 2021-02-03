@@ -132,11 +132,11 @@
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
 
-// Trip recording settings
+// Track recording settings
 "save_global_track_interval" = "General logging interval";
-"save_global_track_interval_descr" = "Choose logging interval for the general trip recording (enabled via the GPX logging widget on the map).";
+"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "logging_interval_navigation" = "Logging interval during navigation";
-"logging_interval_navigation_descr" = "Choose logging interval for trip recording during navigation";
+"logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
 "logging_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_accuracy" = "Logging accuracy";
@@ -145,7 +145,7 @@
 "logging_min_speed" = "Minimum speed";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
 "auto_split_gap" = "Auto-split recordings after gap";
-"auto_split_gap_descr" = "Start a new segment after 6 min gap, new trip after 2 h gap, or new file after a longer gap";
+"auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
 "plugin_settings_reset" = "Reset plugin settings to default";
 
@@ -296,7 +296,7 @@
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
-"recording_preferences_descr" = "Trip recording preferences";
+"recording_preferences_descr" = "Track recording preferences";
 "routing_settings" = "Navigation";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
@@ -311,7 +311,7 @@
 "use_points_as_intermediates" = "Calculate route between points";
 "calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
 "routing_settings_2" = "Navigation settings";
-"gpx_navigation" = "Follow trip";
+"gpx_navigation" = "Follow track";
 "impassable_road" = "Avoid roads";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
@@ -337,9 +337,9 @@
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";
 "cancel_route" = "Dismiss route";
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
-"navigation_over_track" = "Start navigation along trip?";
-"use_displayed_track_for_navigation" = "Do you want to use displayed trip for navigation?";
-"displayed_trips" = "Displayed trips";
+"navigation_over_track" = "Start navigation along track?";
+"use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
+"displayed_trips" = "Displayed tracks";
 "prev_route" = "Previous route";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Select on map";
@@ -607,19 +607,19 @@
 "track_continue_rec_q" = "Do you want to continue recording?";
 "rec_interval" = "Logging interval";
 "rec_interval_minimum" = "Minimum";
-"track_start_rec" = "Start trip recording";
-"track_rec_addon_q" = "Please activate Trip recording addon to record and save your trips";
+"track_start_rec" = "Start track recording";
+"track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
-"track_clear" = "Clear current trip";
-"track_clear_q" = "Do you want to clear current trip?";
+"track_clear" = "Clear current track";
+"track_clear_q" = "Do you want to clear current track?";
 "show_info" = "Show Info";
-"record_trip" = "Record your trip";
+"record_trip" = "Record your track";
 "poi_clear" = "Clear";
 "poi_list" = "POI list";
 
 
-"track_during_nav" = "Auto-record trip";
-"track_during_nav_descr" = "Turn on to automatically save a trip during navigation";
+"track_during_nav" = "Auto-record track";
+"track_during_nav_descr" = "Turn on to automatically save a track during navigation";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
@@ -1251,7 +1251,7 @@
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
-"add_waypoint" = "Add waypoint to trip";
+"add_waypoint" = "Add waypoint to track";
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
 "modify_poi_short" = "Modify POI";
@@ -1336,7 +1336,7 @@
 "import_favorite" = "Favorite";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
-"import_gpx" = "GPX Trip";
+"import_gpx" = "GPX Track";
 "trip_name" = "Track name";
 "trip_hint" = "Enter track name";
 
@@ -1430,9 +1430,9 @@
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 
-"product_title_track_recording" = "Trip recording";
-"product_desc_track_recording" = "Activates the functionality to record and save your trips";
-"product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
+"product_title_track_recording" = "Track recording";
+"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
+"product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
@@ -1491,7 +1491,7 @@
 
 "latitude" = "Latitude";
 "longitude" = "Longitude";
-"track_save_short_q" = "Trip is too short, do you want to save?";
+"track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
 
@@ -1511,8 +1511,8 @@
 "open_url" = "Open page in browser";
 "no_other_translations" = "There are no other translations";
 "wpt_remove_q" = "Remove waypoint?";
-"gpx_select_track" = "Select trip";
-"gpx_curr_new_track" = "Current trip";
+"gpx_select_track" = "Select track";
+"gpx_curr_new_track" = "Current track";
 "enter_name" = "Enter name";
 "not_selected" = "Not selected";
 "language" = "Language";
@@ -1555,9 +1555,9 @@
 "gpx_remove_wpts_q" = "Do you want to remove selected waypoints?";
 "create_new_trip" = "Create new track";
 "editing_waypoints" = "Editing waypoints";
-"select_wpt_on_map" = "Select point on map to add to the trip";
+"select_wpt_on_map" = "Select point on map to add to the track";
 "gpx_rename_q" = "Rename track";
-"gpx_enter_new_name" = "Please enter new name for the trip";
+"gpx_enter_new_name" = "Please enter new name for the track";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";

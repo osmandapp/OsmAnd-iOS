@@ -818,7 +818,7 @@ static UIViewController *parentController;
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"yyyy-MM-dd"];
     
-    NSString *fileName = [NSString stringWithFormat:@"Trip_%@.gpx", [fmt stringFromDate:[NSDate date]]];
+    NSString *fileName = [NSString stringWithFormat:@"Track_%@.gpx", [fmt stringFromDate:[NSDate date]]];
     NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
     
     NSFileManager *fileMan = [NSFileManager defaultManager];

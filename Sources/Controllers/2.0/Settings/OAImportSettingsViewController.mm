@@ -269,13 +269,9 @@
                         OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
                         
                         if (appMode)
-                        {
                             title = [appMode toHumanString];
-                        }
                         else
-                        {
-                            title = modeBean.stringKey.capitalizedString;;
-                        }
+                            title = modeBean.stringKey.capitalizedString;
                     }
 
                     NSString *routingProfile = @"";

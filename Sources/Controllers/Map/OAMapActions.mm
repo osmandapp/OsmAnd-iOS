@@ -132,14 +132,10 @@
         _settings.followTheGpxRoute = path;
         if (ps.count > 0)
         {
-            CLLocation *loc = ps[ps.count - 1];
             OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
+            [tg clearStartPoint:NO];
+            CLLocation *loc = ps.lastObject;
             [tg navigateToPoint:loc updateRoute:false intermediate:-1];
-//            if (![tg getPointToStart])
-//            {
-            loc = ps[0];
-            [tg setStartPoint:loc updateRoute:false name:nil];
-//            }
         }
     }
 }

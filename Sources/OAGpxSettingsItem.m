@@ -69,7 +69,7 @@
             *error = readError;
         return;
     }
-    //_appearanceInfo = GpxAppearanceInfo.fromJson(json);
+    _appearanceInfo = [OAGpxAppearanceInfo fromJson:json];
 }
 
 - (void) writeToJson:(id)json
@@ -77,7 +77,7 @@
     [super writeToJson:json];
     if (_appearanceInfo)
     {
-        //_appearanceInfo.toJson(json);
+        [_appearanceInfo toJson:json];
     }
 }
  
@@ -103,8 +103,6 @@
     }
  */
 
-
- 
  /*
     private void updateGpxParams(@NonNull GPXDatabase.GpxDataItem dataItem) {
         GpxDbHelper gpxDbHelper = app.getGpxDbHelper();
@@ -140,7 +138,7 @@
 
 - (void) createGpxAppearanceInfo
 {
-    
+    //OAGPX *dataItem = [OAGPXDatabase.sharedDb getGPXItem:gpx.fileName];
 }
 
 

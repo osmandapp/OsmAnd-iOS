@@ -203,6 +203,8 @@
 		1565BAFB256C6CFC003C6278 /* ic_control_knob.png in Resources */ = {isa = PBXBuildFile; fileRef = 1565BAF8256C6CFC003C6278 /* ic_control_knob.png */; };
 		1565BAFC256C6CFC003C6278 /* ic_control_knob@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1565BAF9256C6CFC003C6278 /* ic_control_knob@3x.png */; };
 		1565BAFD256C6CFC003C6278 /* ic_control_knob@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1565BAFA256C6CFC003C6278 /* ic_control_knob@2x.png */; };
+		1566730B25C8741A00123DE8 /* OAGpxInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 1566730A25C8741A00123DE8 /* OAGpxInfo.m */; };
+		1566731225C8746900123DE8 /* OALoadGpxTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 1566731125C8746900123DE8 /* OALoadGpxTask.m */; };
 		156A5D1A2497626C00BE44CD /* OADownloadMapProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 156A5D192497626C00BE44CD /* OADownloadMapProgressViewController.xib */; };
 		156A5D202497684C00BE44CD /* OADownloadMapProgressViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 156A5D1F2497684C00BE44CD /* OADownloadMapProgressViewController.mm */; };
 		156A5D2224976B6B00BE44CD /* OADownloadProgressBarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 156A5D2124976B6B00BE44CD /* OADownloadProgressBarCell.xib */; };
@@ -6539,6 +6541,10 @@
 		1565BAF8256C6CFC003C6278 /* ic_control_knob.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_control_knob.png; path = Resources/Icons/ic_control_knob.png; sourceTree = "<group>"; };
 		1565BAF9256C6CFC003C6278 /* ic_control_knob@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_control_knob@3x.png"; path = "Resources/Icons/ic_control_knob@3x.png"; sourceTree = "<group>"; };
 		1565BAFA256C6CFC003C6278 /* ic_control_knob@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_control_knob@2x.png"; path = "Resources/Icons/ic_control_knob@2x.png"; sourceTree = "<group>"; };
+		1566730925C873F500123DE8 /* OAGpxInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGpxInfo.h; sourceTree = "<group>"; };
+		1566730A25C8741A00123DE8 /* OAGpxInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGpxInfo.m; sourceTree = "<group>"; };
+		1566731025C8743900123DE8 /* OALoadGpxTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OALoadGpxTask.h; sourceTree = "<group>"; };
+		1566731125C8746900123DE8 /* OALoadGpxTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OALoadGpxTask.m; sourceTree = "<group>"; };
 		156A5D192497626C00BE44CD /* OADownloadMapProgressViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OADownloadMapProgressViewController.xib; path = Resources/Controllers/DownloadMapSource/OADownloadMapProgressViewController.xib; sourceTree = "<group>"; };
 		156A5D1E2497682B00BE44CD /* OADownloadMapProgressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OADownloadMapProgressViewController.h; path = Resources/Controllers/DownloadMapSource/OADownloadMapProgressViewController.h; sourceTree = "<group>"; };
 		156A5D1F2497684C00BE44CD /* OADownloadMapProgressViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadMapProgressViewController.mm; path = Resources/Controllers/DownloadMapSource/OADownloadMapProgressViewController.mm; sourceTree = "<group>"; };
@@ -13548,6 +13554,10 @@
 				84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */,
 				84B4FD571A912F7E00A147BA /* OAGPXDatabase.h */,
 				84B4FD581A912F7E00A147BA /* OAGPXDatabase.mm */,
+				1566730925C873F500123DE8 /* OAGpxInfo.h */,
+				1566730A25C8741A00123DE8 /* OAGpxInfo.m */,
+				1566731025C8743900123DE8 /* OALoadGpxTask.h */,
+				1566731125C8746900123DE8 /* OALoadGpxTask.m */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -22434,6 +22444,7 @@
 				8438B8191EEDC44E007AEF77 /* OARouteLayer.mm in Sources */,
 				84BFC22A1A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				8438B81D1EEDC7E6007AEF77 /* OAPOILayer.mm in Sources */,
+				1566731225C8746900123DE8 /* OALoadGpxTask.m in Sources */,
 				DAA88900241BC1340057722C /* OARouteSegmentShieldView.mm in Sources */,
 				84F3A9121B4E671B00D16EBC /* OAGPXRouteWaypointTableViewCell.m in Sources */,
 				8483D3B21FA5B9B900A985CF /* OAPlugin.mm in Sources */,
@@ -22515,6 +22526,7 @@
 				DA65833422BBB2760095B03D /* OAUploadFinishedBottomSheetViewController.mm in Sources */,
 				8AD63B6321CFA98200BDC4E6 /* OAChoosePlanMapControllers.mm in Sources */,
 				15C428E024A7723B00B21005 /* OAHorizontalCollectionViewCell.m in Sources */,
+				1566730B25C8741A00123DE8 /* OAGpxInfo.m in Sources */,
 				84D0C89F1F1AA31600B0856B /* OATargetPointsHelper.mm in Sources */,
 				DA261E3D22F9A67300D0D441 /* OAAddOSMBugAction.mm in Sources */,
 				3AFEEE801A0E64DC00900A47 /* OAFavoriteItem.mm in Sources */,

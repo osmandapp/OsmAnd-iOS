@@ -729,7 +729,7 @@
 "shared_string_info" = "資訊";
 "shared_string_go" = "執行";
 "error_avoid_specific_road" = "沒發現支道";
-"road_blocked" = "道路堵塞";
+"road_blocked" = "道路封閉";
 "starting_point" = "起始標點";
 "shared_string_select_avoid_road_on_map" = "選擇路線裡要避開的道路";
 "shared_string_road" = "道路";

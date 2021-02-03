@@ -145,7 +145,7 @@
 "keep_informing" = "Opakovat navigační pokyny";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "Oznámení příjezdu";
-"arrival_distance_descr" = "Jak brzo oznamovat příjezd do cíle?";
+"arrival_distance_descr" = "Jak brzy oznamovat příjezd do cíle?";
 "default_speed_system" = "Jednotka rychlosti";
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "Tolerance překročení rychlosti";

@@ -469,7 +469,8 @@
         if (fromLoc)
             distanceToNextTurn += [fromLoc distanceFromLocation:l];
         
-        time += distanceToNextTurn / current.averageSpeed;
+        if (!isnan(current.averageSpeed))
+            time += distanceToNextTurn / current.averageSpeed;
     }
     return time;
 }

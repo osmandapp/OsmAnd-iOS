@@ -232,7 +232,8 @@
         for (OAPOIBaseType *type in _data)
         {
             NSRange nameRange = [type.nameLocalized rangeOfString:textView.text options:NSCaseInsensitiveSearch];
-            if (nameRange.location != NSNotFound)
+            NSRange nameTagRange = [type.name rangeOfString:textView.text options:NSCaseInsensitiveSearch];
+            if (nameRange.location != NSNotFound || nameTagRange.location != NSNotFound)
                 [_filteredData addObject:type];
         }
     }

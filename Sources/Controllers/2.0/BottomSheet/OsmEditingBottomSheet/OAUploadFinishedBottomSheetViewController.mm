@@ -82,12 +82,17 @@
     [_floatingTextFieldControllers removeAllObjects];
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
-    [arr addObject:@{
-                     @"type" : _hasFailedPoints ? @"OABottomSheetHeaderIconCell" : @"OABottomSheetHeaderCell",
-                     @"title" : _hasFailedPoints ? OALocalizedString(@"osm_upload_failed_title") : @"",
-                     @"description" : @"",
-                     @"img" : _hasFailedPoints ? @"ic_custom_failure" : @""
-                     }];
+    
+    if (_hasFailedPoints)
+    {
+        [arr addObject:@{
+                         @"type" : @"OABottomSheetHeaderIconCell",
+                         @"title" : OALocalizedString(@"osm_upload_failed_title"),
+                         @"description" : @"",
+                         @"img" : @"ic_custom_failure"
+                         }];
+    }
+
     if (!_hasFailedPoints)
     {
         [arr addObject:@{
@@ -280,6 +285,7 @@
             cell.descriptionView.textColor = [UIColor blackColor];
             cell.backgroundColor = [UIColor clearColor];
             cell.textView.hidden = YES;
+            cell.textViewZeroHeightConstraint.priority = 1000;
         }
         return cell;
     }
@@ -327,7 +333,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 32.0;
+    return _hasFailedPoints ? 16.0 : 32.0;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section

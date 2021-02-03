@@ -4779,12 +4779,6 @@
 		DA31EDFE22CB9C480038AB49 /* OALocationConvert.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EDFB22CB9C480038AB49 /* OALocationConvert.mm */; };
 		DA31EE0122CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */; };
 		DA31EE0222CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */; };
-		DA32BBF025C443F200ED7100 /* ic_custom_attach_track@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */; };
-		DA32BBF125C443F200ED7100 /* ic_custom_attach_track@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */; };
-		DA32BBF225C443F200ED7100 /* ic_custom_attach_track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */; };
-		DA32BBF325C443F200ED7100 /* ic_custom_attach_track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */; };
-		DA32BBF425C443F200ED7100 /* ic_custom_attach_track.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBEF25C443F200ED7100 /* ic_custom_attach_track.png */; };
-		DA32BBF525C443F200ED7100 /* ic_custom_attach_track.png in Resources */ = {isa = PBXBuildFile; fileRef = DA32BBEF25C443F200ED7100 /* ic_custom_attach_track.png */; };
 		DA32E02821EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
 		DA32E02921EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
 		DA3305C121D391BE0081BA1D /* OADonationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */; };
@@ -9728,9 +9722,6 @@
 		DA31EDFC22CB9C480038AB49 /* OALocationConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocationConvert.h; path = Data/Coordinates/OALocationConvert.h; sourceTree = "<group>"; };
 		DA31EDFF22CB9D7B0038AB49 /* OACollapsableLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableLabelView.h; path = Sources/Controllers/2.0/OACollapsableLabelView.h; sourceTree = "<group>"; };
 		DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACollapsableCoordinatesView.mm; path = Sources/Controllers/2.0/OACollapsableCoordinatesView.mm; sourceTree = "<group>"; };
-		DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_attach_track@3x.png"; path = "Resources/Icons/ic_custom_attach_track@3x.png"; sourceTree = "<group>"; };
-		DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_attach_track@2x.png"; path = "Resources/Icons/ic_custom_attach_track@2x.png"; sourceTree = "<group>"; };
-		DA32BBEF25C443F200ED7100 /* ic_custom_attach_track.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_attach_track.png; path = Resources/Icons/ic_custom_attach_track.png; sourceTree = "<group>"; };
 		DA32E02621EF1444003D6227 /* OAGPXTrackColorCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAGPXTrackColorCollection.h; path = Helpers/OAGPXTrackColorCollection.h; sourceTree = "<group>"; };
 		DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXTrackColorCollection.mm; path = Helpers/OAGPXTrackColorCollection.mm; sourceTree = "<group>"; };
 		DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADonationSettingsViewController.xib; path = Controllers/Resources/OADonationSettingsViewController.xib; sourceTree = "<group>"; };
@@ -11476,9 +11467,6 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				DA32BBEF25C443F200ED7100 /* ic_custom_attach_track.png */,
-				DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */,
-				DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */,
 				DA22DC7C25C181B10070FFCA /* ic_map_configure.png */,
 				DA22DC7E25C181B20070FFCA /* ic_map_configure@2x.png */,
 				DA22DC7A25C181B00070FFCA /* ic_map_configure@3x.png */,
@@ -17617,7 +17605,6 @@
 				DA13A03C2345FA0100C1A1A8 /* ic_custom_altitude@3x.png in Resources */,
 				847A1F041DF94E9B003C1246 /* left_menu_icon_about@3x.png in Resources */,
 				847A1F051DF94E9B003C1246 /* img_plugin_nautical.jpg in Resources */,
-				DA32BBF525C443F200ED7100 /* ic_custom_attach_track.png in Resources */,
 				8476E2CB1F6C1EEC00EC274F /* map_pedestrian_location_lost@3x.png in Resources */,
 				DA835FF923438512003374B5 /* ic_small_direction@3x.png in Resources */,
 				847A1F061DF94E9B003C1246 /* ic_dialog_export.png in Resources */,
@@ -17884,7 +17871,6 @@
 				DA45DA73230EE05A0083DFA2 /* img_mapstyle_offroad.png in Resources */,
 				DA6D0787255173C5004FE017 /* ic_custom_trim_before@2x.png in Resources */,
 				DAA4EDF6240E85B800F16073 /* ic_custom_download.png in Resources */,
-				DA32BBF125C443F200ED7100 /* ic_custom_attach_track@3x.png in Resources */,
 				847A1F501DF94E9B003C1246 /* menu_share_icon@3x.png in Resources */,
 				DA1341FD243DC5A90039D214 /* map_action_monowheel@2x.png in Resources */,
 				847A1F511DF94E9B003C1246 /* selection_checked@2x.png in Resources */,
@@ -18055,7 +18041,6 @@
 				847A1F961DF94E9B003C1246 /* icon_star_fill.png in Resources */,
 				84F648D71E5B49CF001A7373 /* mapnik.render.xml in Resources */,
 				8476E2871F6C1EEC00EC274F /* map_car_location_night@2x.png in Resources */,
-				DA32BBF325C443F200ED7100 /* ic_custom_attach_track@2x.png in Resources */,
 				DAC0279822A1566600D1689E /* ic_custom_overlay_map.png in Resources */,
 				DA6471B022CF5433008F937F /* ic_custom_contour_lines@3x.png in Resources */,
 				DA1340E7243DC5A80039D214 /* ic_action_monowheel.png in Resources */,
@@ -19766,7 +19751,6 @@
 				8AFC2BCF24334A4E0095BA9F /* map_navigation_nautical_center.png in Resources */,
 				DA22DC5625C05F130070FFCA /* ic_custom_join_segments@2x.png in Resources */,
 				845E06D61B5FF17400DFC2A7 /* ic_tabbar_purchases_selected@3x.png in Resources */,
-				DA32BBF225C443F200ED7100 /* ic_custom_attach_track@2x.png in Resources */,
 				843257BB1A9DAEE400A7964E /* ic_update@3x.png in Resources */,
 				1571CE3C24ADEF1900083F92 /* ic_custom_angular_unit@3x.png in Resources */,
 				DA9C623B221C46590087E140 /* ic_custom_osm_edits.png in Resources */,
@@ -19875,7 +19859,6 @@
 				DA6D0780255173C5004FE017 /* ic_custom_trim_before.png in Resources */,
 				847777341FAA260E00CA8C1F /* widget_parking_night@2x.png in Resources */,
 				844499991AAA1FFA00ACA20D /* img_app_purchase_1.png in Resources */,
-				DA32BBF025C443F200ED7100 /* ic_custom_attach_track@3x.png in Resources */,
 				845E05CB1B55129100DFC2A7 /* ic_destination_pin_3_small.png in Resources */,
 				DA45DA84230EE05A0083DFA2 /* img_mapstyle_lightrs@3x.png in Resources */,
 				843E5CBA1AB341E000BE14BE /* favorite_share_icon.png in Resources */,
@@ -21330,7 +21313,6 @@
 				DA835FF823438512003374B5 /* ic_small_direction@3x.png in Resources */,
 				849E81841AFA5D6700549953 /* btn_map_type_icon_car.png in Resources */,
 				84EC52A71F8BF26600AFC252 /* ic_action_play_dark@3x.png in Resources */,
-				DA32BBF425C443F200ED7100 /* ic_custom_attach_track.png in Resources */,
 				8412224E1B39CC5200F80F9E /* map_car_bearing@2x.png in Resources */,
 				DA1994AF224CDAF200B25BB0 /* ic_custom_add@2x.png in Resources */,
 				843394C71FF54A19006205A5 /* list_warnings_traffic_calming_us@3x.png in Resources */,

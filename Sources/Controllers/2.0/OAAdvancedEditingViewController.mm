@@ -87,7 +87,8 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kInputImage owner:self options:nil];
         resultCell = (OATextInputFloatingCellWithIcon *)[nib objectAtIndex:0];
     }
-    if (item[@"img"] && ![item[@"img"] isEqualToString:@""]) {
+    if (item[@"img"] && ![item[@"img"] isEqualToString:@""])
+    {
         resultCell.buttonView.hidden = NO;
         [resultCell.buttonView setImage:[UIImage imageNamed:item[@"img"]] forState:UIControlStateNormal];
         [resultCell.buttonView addTarget:self action:@selector(deleteSectionPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -134,7 +135,8 @@
     return cell;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 }
 
@@ -241,7 +243,8 @@
     return pair[indexPath.row];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     if ([item[@"type"] isEqualToString:kButtonCell])
@@ -251,7 +254,8 @@
         [cell becomeFirstResponder];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:kDescrText])
         return [self getTextCellWithDescr:indexPath];
@@ -262,9 +266,11 @@
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-    if ([cell isKindOfClass:OATextInputFloatingCellWithIcon.class]) {
+    if ([cell isKindOfClass:OATextInputFloatingCellWithIcon.class])
+    {
         return ((OATextInputFloatingCellWithIcon *)cell).textField.intrinsicContentSize.height + kVerticalMargin;
     }
     
@@ -335,11 +341,13 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return _fieldPairs.count;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     NSArray *pair = _fieldPairs[section];
     return pair.count;
 }
@@ -352,7 +360,8 @@
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
     UIEdgeInsets insets = [[self tableView] contentInset];
-    if (!_isKeyboardShown) {
+    if (!_isKeyboardShown)
+    {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
             [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 44.0, insets.right)];
             [self.tableView setScrollIndicatorInsets:UIEdgeInsetsMake(insets.top, insets.left, 44.0, insets.right)];
@@ -378,7 +387,8 @@
     _isKeyboardShown = NO;
 }
 
-- (NSIndexPath *)indexPathForCellContainingView:(UIView *)view inTableView:(UITableView *)tableView {
+- (NSIndexPath *)indexPathForCellContainingView:(UIView *)view inTableView:(UITableView *)tableView
+{
     CGPoint viewCenterRelativeToTableview = [tableView convertPoint:CGPointMake(CGRectGetMidX(view.bounds), CGRectGetMidY(view.bounds)) fromView:view];
     NSIndexPath *cellIndexPath = [tableView indexPathForRowAtPoint:viewCenterRelativeToTableview];
     return cellIndexPath;

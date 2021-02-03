@@ -23,6 +23,7 @@
 #define kDescrText @"OADescrTitleCell"
 #define kInputImage @"OATextInputFloatingCellWithIcon"
 #define kButtonCell @"OAButtonCell"
+#define kVerticalMargin 8.
 
 @interface OAAdvancedEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
 
@@ -261,9 +262,13 @@
     return nil;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-     return UITableViewAutomaticDimension;
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:OATextInputFloatingCellWithIcon.class]) {
+        return ((OATextInputFloatingCellWithIcon *)cell).textField.intrinsicContentSize.height + kVerticalMargin;
+    }
+    
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITextViewDelegate

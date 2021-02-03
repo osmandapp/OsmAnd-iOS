@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6QZ-eh-lvr">
-                        <rect key="frame" x="62" y="6" width="214" height="20"/>
+                        <rect key="frame" x="66" y="6" width="209" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="QxD-CC-kgE"/>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="751" constant="36" id="d9L-xl-AJO"/>
@@ -27,7 +27,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXz-m7-fDz">
-                        <rect key="frame" x="62" y="27" width="214" height="15"/>
+                        <rect key="frame" x="66" y="27" width="209" height="15"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="15" id="TmO-dC-mgG"/>
                         </constraints>
@@ -43,7 +43,7 @@
                         </constraints>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_cell_pointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="i7x-fl-kCw">
-                        <rect key="frame" x="284" y="13.5" width="21" height="21"/>
+                        <rect key="frame" x="283" y="13.5" width="21" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="21" id="D5x-fd-d1g"/>
                             <constraint firstAttribute="height" constant="21" id="WCR-ul-dnF"/>
@@ -55,15 +55,15 @@
                     <constraint firstItem="i7x-fl-kCw" firstAttribute="leading" secondItem="XXz-m7-fDz" secondAttribute="trailing" constant="8" id="FYa-5W-5Tq"/>
                     <constraint firstItem="XXz-m7-fDz" firstAttribute="top" secondItem="6QZ-eh-lvr" secondAttribute="bottom" constant="1" id="OrS-hy-Xjb"/>
                     <constraint firstAttribute="trailingMargin" secondItem="i7x-fl-kCw" secondAttribute="trailing" id="RcM-vj-dpS"/>
-                    <constraint firstItem="6QZ-eh-lvr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="62" id="Vax-wD-Oiu"/>
-                    <constraint firstItem="XXz-m7-fDz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="751" constant="16" id="WZq-1u-wKt"/>
-                    <constraint firstItem="XXz-m7-fDz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="62" id="Xcr-TF-LTs"/>
+                    <constraint firstItem="6QZ-eh-lvr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="66" id="Vax-wD-Oiu"/>
+                    <constraint firstItem="XXz-m7-fDz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" priority="751" id="WZq-1u-wKt"/>
+                    <constraint firstItem="XXz-m7-fDz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="66" id="Xcr-TF-LTs"/>
                     <constraint firstAttribute="bottom" secondItem="6QZ-eh-lvr" secondAttribute="bottom" priority="751" constant="6" id="bia-8B-sxK"/>
                     <constraint firstItem="8j3-TG-nwo" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="cve-19-lXb"/>
                     <constraint firstItem="i7x-fl-kCw" firstAttribute="leading" secondItem="6QZ-eh-lvr" secondAttribute="trailing" constant="8" id="jir-ST-zWA"/>
-                    <constraint firstItem="6QZ-eh-lvr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="751" constant="16" id="qDY-iJ-Yax"/>
+                    <constraint firstItem="6QZ-eh-lvr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" priority="751" id="qDY-iJ-Yax"/>
                     <constraint firstAttribute="bottom" secondItem="XXz-m7-fDz" secondAttribute="bottom" constant="6" id="qWq-6O-hue"/>
-                    <constraint firstItem="8j3-TG-nwo" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="tSh-04-VIg"/>
+                    <constraint firstItem="8j3-TG-nwo" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="tSh-04-VIg"/>
                     <constraint firstItem="i7x-fl-kCw" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="zEf-0w-lp7"/>
                 </constraints>
             </tableViewCellContentView>

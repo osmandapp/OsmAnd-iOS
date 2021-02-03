@@ -13,4 +13,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textTrailingMarginNoIcon;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textTrailingMasrginWithIcon;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textBottomMargin;
+
+- (void) setIconVisibility:(BOOL)visible;
+- (void) setBottomOffset:(CGFloat)offset;
+
 @end

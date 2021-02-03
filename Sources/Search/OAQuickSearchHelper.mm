@@ -148,8 +148,9 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         dispatch_sync(dispatch_get_main_queue(), onMain);
 
     int i = 0;
-    for (const auto& gpx : _geoDocList)
+    for (auto gpxIt = _geoDocList.begin(); gpxIt != _geoDocList.end(); ++gpxIt)
     {
+        const auto& gpx = *gpxIt;
         for (auto it = gpx->locationMarks.begin(); it != gpx->locationMarks.end(); ++it)
         {
             const auto& point = *it;

@@ -60,7 +60,7 @@
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.tableView.sectionHeaderHeight = 16.;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-    self.tableView.contentInset = UIEdgeInsetsMake(-14, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(-8, 0, 0, 0);
     
     [self.rightButton removeFromSuperview];
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];

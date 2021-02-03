@@ -107,7 +107,8 @@ static const NSInteger _contactInfoSectionCount = 5;
     return resultCell;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 }
 
@@ -169,7 +170,8 @@ static const NSInteger _contactInfoSectionCount = 5;
     NSMutableArray *dataArr = [NSMutableArray new];
     NSArray *hints = @[OALocalizedString(@"osm_str_name"), OALocalizedString(@"osm_building_num"),
                        OALocalizedString(@"osm_phone"), OALocalizedString(@"osm_website"), OALocalizedString(@"description")];
-    for (NSInteger i = 0; i < _contactInfoSectionCount; i++) {
+    for (NSInteger i = 0; i < _contactInfoSectionCount; i++)
+    {
         OATextInputFloatingCell *cell = [self getInputCellWithHint:hints[i] text:[self getDataForField:i] isFloating:YES tag:i];
         cell.inputField.contentScaleFactor = 0.5;
         [dataArr addObject:cell];
@@ -216,12 +218,15 @@ static const NSInteger _contactInfoSectionCount = 5;
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 4;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    switch (section) {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    switch (section)
+    {
         case _nameSectionIndex:
             return _nameSectionItemCount;
         case _poiSectionIndex:
@@ -236,14 +241,16 @@ static const NSInteger _contactInfoSectionCount = 5;
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath];
     if (indexPath.section == _nameSectionIndex && indexPath.row == 0)
         return _poiNameCell;
     else if (indexPath.section == _contactInfoSectionIndex)
     {
         OATextInputFloatingCell *cell = _contactInfoItems[indexPath.row];
-        switch (indexPath.row) {
+        switch (indexPath.row)
+        {
             case 1:
                 cell.inputField.textView.keyboardType = UIKeyboardTypeNumberPad;
                 break;
@@ -269,7 +276,8 @@ static const NSInteger _contactInfoSectionCount = 5;
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
+        if (cell)
+        {
             [cell.textView setText:item[@"title"]];
             [cell.descriptionView setText:item[@"value"]];
         }
@@ -304,7 +312,8 @@ static const NSInteger _contactInfoSectionCount = 5;
     [self.navigationController pushViewController:openingHoursSelection animated:YES];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath];
     if (indexPath.section == _nameSectionIndex)
         return MAX(_poiNameCell.inputField.intrinsicContentSize.height, 44.0);
@@ -352,7 +361,8 @@ static const NSInteger _contactInfoSectionCount = 5;
 
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:kCellTypeSetting] && indexPath.section == _poiSectionIndex)
     {
@@ -377,7 +387,8 @@ static const NSInteger _contactInfoSectionCount = 5;
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
     UIEdgeInsets insets = [[self tableView] contentInset];
-    if (!_isKeyboardShown) {
+    if (!_isKeyboardShown)
+    {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
             [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 44.0, insets.right)];
         } completion:nil];

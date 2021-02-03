@@ -267,7 +267,11 @@
                     if (!title || title.length == 0)
                     {
                         OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
-                        title = [appMode toHumanString];
+                        
+                        if (appMode)
+                            title = [appMode toHumanString];
+                        else
+                            title = modeBean.stringKey.capitalizedString;
                     }
 
                     NSString *routingProfile = @"";

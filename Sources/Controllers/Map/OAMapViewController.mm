@@ -458,23 +458,10 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Tell view to create context
-    _mapView.userInteractionEnabled = YES;
-    _mapView.multipleTouchEnabled = YES;
 
+    // Tell view to create context
     _mapView.displayDensityFactor = self.displayDensityFactor;
     [_mapView createContext];
-    
-    // Attach gesture recognizers:
-    [_mapView addGestureRecognizer:_grZoom];
-    [_mapView addGestureRecognizer:_grMove];
-    [_mapView addGestureRecognizer:_grRotate];
-    [_mapView addGestureRecognizer:_grZoomIn];
-    [_mapView addGestureRecognizer:_grZoomOut];
-    [_mapView addGestureRecognizer:_grElevation];
-    [_mapView addGestureRecognizer:_grSymbolContextMenu];
-    [_mapView addGestureRecognizer:_grPointContextMenu];
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
     if (_app.initialURLMapState)
@@ -580,6 +567,19 @@
         [rootViewController.mapPanel showContextMenu:targetPoint];
         _app.initialURLMapState = nil;
     }
+    
+    _mapView.userInteractionEnabled = YES;
+    _mapView.multipleTouchEnabled = YES;
+    
+    // Attach gesture recognizers:
+    [_mapView addGestureRecognizer:_grZoom];
+    [_mapView addGestureRecognizer:_grMove];
+    [_mapView addGestureRecognizer:_grRotate];
+    [_mapView addGestureRecognizer:_grZoomIn];
+    [_mapView addGestureRecognizer:_grZoomOut];
+    [_mapView addGestureRecognizer:_grElevation];
+    [_mapView addGestureRecognizer:_grSymbolContextMenu];
+    [_mapView addGestureRecognizer:_grPointContextMenu];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication*)application

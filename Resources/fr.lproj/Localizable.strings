@@ -1789,22 +1789,16 @@
 "osm_notes" = "Notes OSM";
 "personal_category_name" = "Personnel";
 "whole_track" = "Trace entière";
-<<<<<<< HEAD
 
 "add_point" = "Ajouter un point";
 "next_seg" = "Segment suivant";
 "total" = "Total";
-"app_profiles" = "Profils de l\'appli";
 "units_t" = "t";
-"create_profile_descr" = "Basez votre profil personnel sur l\'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l\'application ainsi que des exemples de profils personnalisés :";
-"listed_exist" = "Les %@ listés existent déjà dans OsmAnd.";
 "quick_action_mapillary_show" = "Afficher Mapillary";
 "public_transport_hide" = "Masquer les transports publics";
-"position_icon_at_rest" = "Icône de votre position à l\'arrêt";
 "public_transport_show" = "Afficher les transports publics";
 "quick_action_mapillary_hide" = "Masquer Mapillary";
 "public_transport_empty_warning_descr" = "Essayez de modifier les paramètres.";
-"import_complete_description" = "Les données de %@ ont été importées, vous pouvez utiliser les boutons ci-dessous pour ouvrir la partie adéquate de l\'application pour les gérer.";
 "reverse_route" = "Inverser l\'itinéraire";
 "walk" = "Marche";
 "res_online_source_cache_alert" = "Appliquer ces modifications effacera les données mises en cache pour cette source de tuiles";
@@ -1815,7 +1809,6 @@
 "quick_action_remove_next_destination_descr" = "Supprime la prochaineétape de votre route. S\'il s\'agit de la destination finale, la navigation s\'arrêtera.";
 "num_stops" = "arrêts";
 "help_nav_profiles" = "Profils de navigation";
-"ui_customization_descr" = "Éléments du panneau déroulant, menu contextuel";
 "vessel_width_limit_description" = "Définir la largeur du navire pour éviter les ponts étroits";
 "route_betw_points" = "Itinéraire entre points";
 "save_new_track" = "Enregistrer comme nouvelle trace";
@@ -1824,12 +1817,10 @@
 "add_to_track" = "Ajouterà une trace";
 "public_transport_menu" = "Transport";
 "shared_string_add_profile" = "Ajouter un profil";
-"position_icon_while_moving" = "Icône de votre position en déplacement";
 "profile_type_user_string" = "Profil utilisateur";
 "quick_action_switch_profile_descr" = "Le bouton d’action bascule entre les profils sélectionnés.";
 "save_changes" = "Enregistrer les modifications";
 "quick_action_remove_next_destination" = "Supprimer le prochain point";
-=======
 "profile_sett_descr" = "Affecter le profil de l'application sélectionnée";
 "listed_exist" = "Les %@ listés existent déjà dans OsmAnd.";
 "export_profile_descr" = "Vous pouvez exporter tous les paramètres du profil, copier tous les paramètres d'un autre profil ou réinitialiser tous les paramètres du profil à l'état par défaut.";
@@ -1845,4 +1836,3 @@
 "ui_customization_descr" = "Éléments du panneau déroulant, menu contextuel";
 "create_profile_descr" = "Basez votre profil personnel sur l'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l'application ainsi que des exemples de profils personnalisés :";
 "import_complete_description" = "Les données de %@ ont été importées, vous pouvez utiliser les boutons ci-dessous pour ouvrir la partie adéquate de l'application pour les gérer";
->>>>>>> weblate/master

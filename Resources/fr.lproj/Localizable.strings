@@ -1789,30 +1789,29 @@
 "osm_notes" = "Notes OSM";
 "personal_category_name" = "Personnel";
 "whole_track" = "Trace entière";
-<<<<<<< HEAD
-
+"<<<<<<< HEAD"  "";
 "add_point" = "Ajouter un point";
 "next_seg" = "Segment suivant";
 "total" = "Total";
-"app_profiles" = "Profils de l\'appli";
+"app_profiles" = "Profils de l'appli";
 "units_t" = "t";
-"create_profile_descr" = "Basez votre profil personnel sur l\'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l\'application ainsi que des exemples de profils personnalisés :";
+"create_profile_descr" = "Basez votre profil personnel sur l'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l'application ainsi que des exemples de profils personnalisés :";
 "listed_exist" = "Les %@ listés existent déjà dans OsmAnd.";
 "quick_action_mapillary_show" = "Afficher Mapillary";
 "public_transport_hide" = "Masquer les transports publics";
-"position_icon_at_rest" = "Icône de votre position à l\'arrêt";
+"position_icon_at_rest" = "Icône de votre position à l'arrêt";
 "public_transport_show" = "Afficher les transports publics";
 "quick_action_mapillary_hide" = "Masquer Mapillary";
 "public_transport_empty_warning_descr" = "Essayez de modifier les paramètres.";
-"import_complete_description" = "Les données de %@ ont été importées, vous pouvez utiliser les boutons ci-dessous pour ouvrir la partie adéquate de l\'application pour les gérer.";
-"reverse_route" = "Inverser l\'itinéraire";
+"import_complete_description" = "Les données de %@ ont été importées, vous pouvez utiliser les boutons ci-dessous pour ouvrir la partie adéquate de l'application pour les gérer.";
+"reverse_route" = "Inverser l'itinéraire";
 "walk" = "Marche";
 "res_online_source_cache_alert" = "Appliquer ces modifications effacera les données mises en cache pour cette source de tuiles";
 "res_slope" = "Pente";
 "menu" = "Menu";
 "profile_type_osmand_string" = "Profil OsmAnd";
 "configure_map_descr" = "Apparence de la carte";
-"quick_action_remove_next_destination_descr" = "Supprime la prochaineétape de votre route. S\'il s\'agit de la destination finale, la navigation s\'arrêtera.";
+"quick_action_remove_next_destination_descr" = "Supprime la prochaineétape de votre route. S'il s'agit de la destination finale, la navigation s'arrêtera.";
 "num_stops" = "arrêts";
 "help_nav_profiles" = "Profils de navigation";
 "ui_customization_descr" = "Éléments du panneau déroulant, menu contextuel";
@@ -1829,8 +1828,7 @@
 "quick_action_switch_profile_descr" = "Le bouton d’action bascule entre les profils sélectionnés.";
 "save_changes" = "Enregistrer les modifications";
 "quick_action_remove_next_destination" = "Supprimer le prochain point";
-=======
-"profile_sett_descr" = "Affecter le profil de l'application sélectionnée";
+"" = "======\"profile_sett_descr\" = \"Affecter le profil de l'application sélectionnée";
 "listed_exist" = "Les %@ listés existent déjà dans OsmAnd.";
 "export_profile_descr" = "Vous pouvez exporter tous les paramètres du profil, copier tous les paramètres d'un autre profil ou réinitialiser tous les paramètres du profil à l'état par défaut.";
 "import_profile_descr" = "Pour importer un profil, appuyez sur le fichier voulu (*.osf) dans n'importe quelle application et sélectionnez \"Copier vers les cartes OsmAnd\"";
@@ -1845,4 +1843,45 @@
 "ui_customization_descr" = "Éléments du panneau déroulant, menu contextuel";
 "create_profile_descr" = "Basez votre profil personnel sur l'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l'application ainsi que des exemples de profils personnalisés :";
 "import_complete_description" = "Les données de %@ ont été importées, vous pouvez utiliser les boutons ci-dessous pour ouvrir la partie adéquate de l'application pour les gérer";
->>>>>>> weblate/master
+">>>>>>> weblate/master"  "";
+"lenght_limit_description" = "Indiquez la longueur de votre véhicule, certaines restrictions d'itinéraire peuvent s'appliquer aux véhicules longs.";
+"shared_a_z" = "A - Z";
+"trip_name" = "Nom du voyage";
+"vk" = "VK";
+"select_application_profile" = "Sélectionner le profil d'application";
+"quick_action_template_name" = "Nom de modèle";
+"quick_action_screen_header" = "Écran %ld";
+"nearest_point" = "Point le plus proche";
+"start_of_track" = "Début de la trace";
+"reverse_track_dir" = "Inverser le sens de la trace";
+"select_another_track" = "Sélectionner une autre trace";
+"track" = "Trace";
+"follow_track" = "Suivre la trace";
+"gpx_already_exsists" = "Un fichier avec ce nom existe déjà";
+"empty_filename" = "Le nom du fichier ne peut être vide";
+"plan_route_exit_message" = "Voulez-vous vraiment fermer l'itinéraire planifié sans enregistrer ? Vous perdrez toutes les modifications.";
+"plan_route_open_existing_track" = "Ouvrir une trace existante";
+"plan_route_create_new_route" = "Créer un nouvel itinéraire";
+"open_saved_track" = "Ouvrir la trace enregistrée";
+"simplified_track" = "Trace simplifiée";
+"prev_segs_recalc_descr" = "Tous les segments précédents seront recalculés avec le profil sélectionné";
+"next_segs_recalc_descr" = "Tous les segments suivants seront recalculés avec le profil sélectionné";
+"selected_seg_recalc_descr" = "Seul le segment sélectionné sera recalculé avec le profil sélectionné";
+"prev_segs_dist" = "Tous les segments précédents %@";
+"prev_seg_dist" = "Segment précédent %@";
+"next_segs_dist" = "Tous les segments suivants %@";
+"next_seg_dist" = "Segment suivant %@";
+"move_point" = "Déplacer le point";
+"points_count" = "Points :";
+
+// Route planning
+"plan_route" = "Planifier un itinéraire";
+"quick_action_poi_add_descr" = "Appuyer sur ce bouton d’action vous permet d’ajouter rapidement des points d'intérêt sur la carte avec un type et des étiquettes prédéfinis";
+"quick_action_contour_lines_descr" = "Appuyer sur ce bouton affiche ou cache la couche des courbes de niveau.";
+"quick_action_day_night_descr" = "Ce bouton permet de basculer entre les modes Jour et Nuit de la carte";
+"split_after" = "Couper après";
+"split_before" = "Couper avant";
+"plan_route_last_modified" = "Dernière modification";
+"point_num" = "Point %d";
+"hide_compass_ruler" = "Masquer la boussole";
+"show_compass_ruler" = "Afficher la boussole";

@@ -1885,3 +1885,4 @@
 "point_num" = "Point %d";
 "hide_compass_ruler" = "Masquer la boussole";
 "show_compass_ruler" = "Afficher la boussole";
+"gpx_export_failed" = "L'enregistrement de l'itinéraire a échoué";

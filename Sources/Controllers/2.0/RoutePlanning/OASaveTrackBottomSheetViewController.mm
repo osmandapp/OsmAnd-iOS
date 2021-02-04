@@ -120,8 +120,8 @@
     _exportController.delegate = self;
     _exportController.name = [tempFolderPath.lastPathComponent stringByDeletingPathExtension];
     
-    [_exportController presentOptionsMenuFromRect:CGRectZero
-                                           inView:self.view
+    [_exportController presentOptionsMenuFromRect:self.shareButton.frame
+                                           inView:[self.shareButton superview]
                                          animated:YES];
 }
 

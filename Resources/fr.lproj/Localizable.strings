@@ -1829,7 +1829,6 @@
 "quick_action_switch_profile_descr" = "Le bouton d’action bascule entre les profils sélectionnés.";
 "save_changes" = "Enregistrer les modifications";
 "quick_action_remove_next_destination" = "Supprimer le prochain point";
-=======
 "profile_sett_descr" = "Affecter le profil de l'application sélectionnée";
 "listed_exist" = "Les %@ listés existent déjà dans OsmAnd.";
 "export_profile_descr" = "Vous pouvez exporter tous les paramètres du profil, copier tous les paramètres d'un autre profil ou réinitialiser tous les paramètres du profil à l'état par défaut.";

@@ -134,22 +134,27 @@
 {
 }
 
+- (void)applyNewParameterValue:(BOOL)isChecked
+{
+    if (self.routingParameter.id == "short_way")
+        [self.settings.fastRouteMode set:!isChecked mode:[self.routingHelper getAppMode]];
+    
+    [self setSelected:isChecked];
+    
+    if ([self isKindOfClass:[OAOtherLocalRoutingParameter class]])
+        [self updateGpxRoutingParameter:((OAOtherLocalRoutingParameter *) self)];
+    
+    if ([self routeAware])
+        [self.routingHelper recalculateRouteDueToSettingsChange];
+}
+
 - (void) applyRoutingParameter:(id)sender
 {
     if ([sender isKindOfClass:[UISwitch class]])
     {
         BOOL isChecked = ((UISwitch *) sender).on;
         // if short way that it should set valut to fast mode opposite of current
-        if (self.routingParameter.id == "short_way")
-            [self.settings.fastRouteMode set:!isChecked mode:[self.routingHelper getAppMode]];
-        
-        [self setSelected:isChecked];
-        
-        if ([self isKindOfClass:[OAOtherLocalRoutingParameter class]])
-            [self updateGpxRoutingParameter:((OAOtherLocalRoutingParameter *) self)];
-        
-        if ([self routeAware])
-            [self.routingHelper recalculateRouteDueToSettingsChange];
+        [self applyNewParameterValue:isChecked];
     }
 }
 

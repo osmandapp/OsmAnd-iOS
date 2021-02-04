@@ -785,7 +785,7 @@ static BOOL _lackOfResources;
     
     for (OAWorldRegion* subregion in self.region.flattenedSubregions)
     {
-        if ((!self.region.superregion && ([subregion.regionId isEqualToString:_otherRegionId] || [subregion.regionId isEqualToString:_nauticalRegionId])) || [subregion.downloadsIdPrefix isEqualToString:self.region.downloadsIdPrefix])
+        if (!self.region.superregion && ([subregion.regionId isEqualToString:_otherRegionId] || [subregion.regionId isEqualToString:_nauticalRegionId]))
             continue;
 
         if (subregion.superregion == self.region)

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -14,6 +14,7 @@
                 <outlet property="buttonsView" destination="Wg5-91-0hA" id="Mmj-Mg-17l"/>
                 <outlet property="closeButton" destination="zUj-mw-mBr" id="TDb-YP-9rQ"/>
                 <outlet property="contentContainer" destination="ufI-sT-0Ac" id="3mU-Bv-gdT"/>
+                <outlet property="headerDividerView" destination="2WI-Sn-Wv2" id="2XY-ER-i0c"/>
                 <outlet property="headerView" destination="875-IQ-1ra" id="Aw0-BA-5Ph"/>
                 <outlet property="leftButton" destination="LCM-lH-OSo" id="dQO-yp-XsH"/>
                 <outlet property="leftIconView" destination="YEg-ba-U1g" id="pKC-Rn-oh9"/>
@@ -98,7 +99,7 @@
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2WI-Sn-Wv2">
                                             <rect key="frame" x="0.0" y="58" width="414" height="1"/>
-                                            <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="5UK-fc-EFD"/>
                                             </constraints>
@@ -163,7 +164,7 @@
                                 </stackView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r1V-eM-Gj6">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
-                                    <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="Sbp-1h-11a"/>
                                     </constraints>

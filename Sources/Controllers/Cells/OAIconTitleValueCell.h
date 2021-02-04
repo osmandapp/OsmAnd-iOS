@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *leftImageView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *noImageTextLeadingMargin;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageTextLeadingMargin;
+@property (weak, nonatomic) IBOutlet UIButton *openCloseGroupButton;
 
 -(void)showImage:(BOOL)show;
 

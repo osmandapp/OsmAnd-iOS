@@ -12,6 +12,7 @@
 #import "OAMapViewController.h"
 #import "OAMenuSimpleCellNoIcon.h"
 #import "OAGpxInfo.h"
+#import "OALoadGpxTask.h"
 
 #import "OAGPXTableViewCell.h"
 #import "OAGPXRecTableViewCell.h"
@@ -505,8 +506,13 @@ static UIViewController *parentController;
     _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
     _gpxFolders = [NSMutableDictionary dictionary];
-    _gpxList = [NSMutableArray array];
+    //_gpxList = [NSMutableArray array];
     
+    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
+    [task execute:^(NSArray <OAGpxInfo *>* gpxList) {
+        _gpxList = [NSMutableArray arrayWithArray:gpxList];
+        [self generateData];
+    }];
     [self updateButtons];
 }
 

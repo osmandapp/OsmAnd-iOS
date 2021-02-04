@@ -7,7 +7,6 @@
 //
 
 #import "OALoadGpxTask.h"
-#import "OAGpxInfo.h"
 #import "OsmAndApp.h"
 
 //public static final String GPX_INDEX_DIR = "tracks/";
@@ -16,7 +15,19 @@
 
 @implementation OALoadGpxTask
 {
-    NSArray <OAGpxInfo *> *_result;
+    NSMutableArray <OAGpxInfo *> *_result;
+    NSMutableDictionary<NSString *, NSArray<OAGpxInfo *> *> *_gpxFolders;
+}
+
+- (void) execute:(void(^)(NSArray <OAGpxInfo *>*))onComplete
+{
+    //[self onPreExecute];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self doInBackground];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self onPostExecute:onComplete];
+        });
+    });
 }
 
 /*
@@ -29,47 +40,11 @@ protected List<GpxInfo> doInBackground(Activity... params) {
 
 - (NSArray <OAGpxInfo *> *) doInBackground
 {
-    NSArray *result = [NSArray array];
-    [self loadGPXData:OsmAndApp.instance.gpxPath result:result loadTask:self];
-    return result;
+    _result = [NSMutableArray array];
+    [self loadGPXData:OsmAndApp.instance.gpxPath];
+    return _result;
 }
 
-/*
-public void loadFile(GpxInfo... loaded) {
-    publishProgress(loaded);
-}
- */
- 
-- (void) loadFile
-{
-    
-}
-
-- (void) execute:(void(^)(NSArray <OAGpxInfo *>*))onComplete
-{
-    [self onPreExecute];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self doInBackground];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self onPostExecute:onComplete];
-        });
-    });
-}
-
-/*
-@Override
-protected void onPreExecute() {
-    showProgressBar();
-    listView.setEmptyView(null);
-    allGpxAdapter.clear();
-}
- */
-
-- (void) onPreExecute
-{
-    
-}
- 
  /*
 @Override
 protected void onProgressUpdate(GpxInfo... values) {
@@ -82,7 +57,7 @@ protected void onProgressUpdate(GpxInfo... values) {
 
 - (void) onProgressUpdate
 {
-    
+    NSLog(@"onProgressUpdate");
 }
   
  /*
@@ -104,8 +79,6 @@ protected void onPostExecute(List<GpxInfo> result) {
     if (onComplete)
         onComplete(_result);
 }
-
-
  
  /*
 private File[] listFilesSorted(File dir) {
@@ -153,16 +126,72 @@ private void loadGPXData(File mapPath, List<GpxInfo> result, LoadGpxTask loadTas
 }
  */
 
-- (void) loadGPXData:(NSString *) mapPath result:(NSArray <OAGpxInfo *> *)result loadTask:(OALoadGpxTask *)loadTask
+- (void) loadGPXData:(NSString *) mapPath
 {
-    NSMutableArray *progress = [NSMutableArray array];
-    [self loadGPXFolder:mapPath result:result loadTask:loadTask progress:progress gpxSubfolder:@""];
-    if (progress.count > 0)
+    [self loadGPXFolder:mapPath gpxSubfolder:@""];
+//    if (progress.count > 0)
+//    {
+//
+//    }
+}
+
+ /*
+private void loadGPXFolder(File mapPath, List<GpxInfo> result, LoadGpxTask loadTask, List<GpxInfo> progress,
+                           String gpxSubfolder) {
+    File[] listFiles = listFilesSorted(mapPath);
+    for (File gpxFile : listFiles) {
+        if (gpxFile.isDirectory()) {
+            String sub = gpxSubfolder.length() == 0 ? gpxFile.getName() : gpxSubfolder + "/"
+            + gpxFile.getName();
+            loadGPXFolder(gpxFile, result, loadTask, progress, sub);
+        } else if (gpxFile.isFile() && gpxFile.getName().toLowerCase().endsWith(IndexConstants.GPX_FILE_EXT)) {
+            GpxInfo info = new GpxInfo();
+            info.subfolder = gpxSubfolder;
+            info.file = gpxFile;
+            result.add(info);
+            progress.add(info);
+            if (progress.size() > 7) {
+                loadTask.loadFile(progress.toArray(new GpxInfo[0]));
+                progress.clear();
+            }
+        }
+    }
+}
+ */
+
+- (void) loadGPXFolder:(NSString *)mapPath gpxSubfolder:(NSString *)gpxSubfolder
+{
+    NSArray* listFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:mapPath error:Nil];
+    for (NSString *gpxFile in listFiles)
     {
-        
+        if (![[gpxFile pathExtension] isEqual:@"gpx"])
+        {
+            if([gpxFile hasPrefix:@"."])
+                continue;
+            NSString *sub = gpxFile;
+            [self loadGPXFolder:[mapPath stringByAppendingPathComponent:gpxFile] gpxSubfolder:sub];
+        }
+        else
+        {
+            OAGpxInfo *info = [[OAGpxInfo alloc] init];
+            info.subfolder = gpxSubfolder;
+            info.file = gpxFile;
+            [_result addObject:info];
+        }
     }
 }
 
+//- (void) loadGPXFolder:(NSString *) mapPath result:(NSArray <OAGpxInfo *> *)result loadTask:(OALoadGpxTask *)loadTask progress:(NSArray <OAGpxInfo *>*)progress gpxSubfolder:(NSString *)gpxSubfolder
+//{
+//
+//
+//}
+
+@end
+
+
+
+/*
 - (void) getAllFolders
 {
     NSMutableDictionary *folders = [NSMutableDictionary dictionary];
@@ -205,47 +234,5 @@ private void loadGPXData(File mapPath, List<GpxInfo> result, LoadGpxTask loadTas
         [folders setObject:tracksFolder forKey:@"tracks"];
     //_gpxFolders = [NSMutableDictionary dictionaryWithDictionary:folders];
 }
- 
- /*
-private void loadGPXFolder(File mapPath, List<GpxInfo> result, LoadGpxTask loadTask, List<GpxInfo> progress,
-                           String gpxSubfolder) {
-    File[] listFiles = listFilesSorted(mapPath);
-    for (File gpxFile : listFiles) {
-        if (gpxFile.isDirectory()) {
-            String sub = gpxSubfolder.length() == 0 ? gpxFile.getName() : gpxSubfolder + "/"
-            + gpxFile.getName();
-            loadGPXFolder(gpxFile, result, loadTask, progress, sub);
-        } else if (gpxFile.isFile() && gpxFile.getName().toLowerCase().endsWith(IndexConstants.GPX_FILE_EXT)) {
-            GpxInfo info = new GpxInfo();
-            info.subfolder = gpxSubfolder;
-            info.file = gpxFile;
-            result.add(info);
-            progress.add(info);
-            if (progress.size() > 7) {
-                loadTask.loadFile(progress.toArray(new GpxInfo[0]));
-                progress.clear();
-            }
-        }
-    }
-}
  */
-
-- (void) loadGPXFolder:(NSString *) mapPath result:(NSArray <OAGpxInfo *> *)result loadTask:(OALoadGpxTask *)loadTask progress:(NSArray <OAGpxInfo *>*)progress gpxSubfolder:(NSString *)gpxSubfolder
-{
-  
-    
-}
  
- /*
-public List<GpxInfo> getResult() {
-    return result;
-}
-}
-*/
-
-- (NSArray <OAGpxInfo *> *) getResult
-{
-    return _result;
-}
-
-@end

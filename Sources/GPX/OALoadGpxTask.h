@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAGpxInfo.h"
 
 @interface OALoadGpxTask : NSObject
 
+- (void) execute:(void(^)(NSArray <OAGpxInfo *>*))onComplete;
 
 @end

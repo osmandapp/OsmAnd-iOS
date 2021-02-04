@@ -1261,9 +1261,7 @@ static UIViewController *parentController;
     {
         NSDictionary *menuItem = groupData.groupItems[indexPath.row];
         NSString *menuCellType = menuItem[@"key"];
-        if ([menuCellType isEqualToString:@"track_recording"] && [_iapHelper.trackRecording isActive])
-            return YES;
-        return NO;
+        return  [menuCellType isEqualToString:@"track_recording"] && [_iapHelper.trackRecording isActive];
     }
     else
         return YES;

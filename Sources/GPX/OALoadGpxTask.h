@@ -11,6 +11,6 @@
 
 @interface OALoadGpxTask : NSObject
 
-- (void) execute:(void(^)(NSArray <OAGpxInfo *>*))onComplete;
+- (void) execute:(void(^)(NSDictionary<NSString *, NSArray<OAGpxInfo *> *> *))onComplete;
 
 @end

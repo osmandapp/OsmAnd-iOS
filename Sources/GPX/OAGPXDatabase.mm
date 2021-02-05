@@ -279,12 +279,33 @@
             
         }
         
-        NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFileName];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+        if ([self fileExists:gpx.gpxFileName])
             [res addObject:gpx];
     }
-    
     gpxList = res;
+}
+
+- (BOOL) fileExists:(NSString *) fileName
+{
+    NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
+    NSString *filePath;
+    for (NSString *item in dirs)
+    {
+        if (![[item pathExtension] isEqual:@"gpx"])
+        {
+            if([item hasPrefix:@"."])
+                continue;
+            NSString *dirPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item];
+            filePath = [dirPath stringByAppendingPathComponent:fileName];
+        }
+        else
+        {
+            filePath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:fileName];
+        }
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
+            return YES;
+    }
+    return NO;
 }
 
 -(void) save

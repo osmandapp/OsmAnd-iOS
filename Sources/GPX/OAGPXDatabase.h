@@ -67,7 +67,8 @@
 -(BOOL)containsGPXItem:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)fileName pointsCount:(int)pointsCount;
 -(BOOL)updateGPXItemColor:(NSString *)fileName color:(int)color;
-+ (BOOL) fileExists:(NSString *) fileName;
+- (BOOL) fileExists:(NSString *) fileName;
+- (NSString *) getFilePath:(NSString *)fileName filePath:(NSString *)filePath;
 
 -(void) load;
 -(void) save;

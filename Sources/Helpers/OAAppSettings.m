@@ -2804,7 +2804,7 @@
         if ([fileName hasSuffix:@"_osmand_backup"])
             filenameWithoutPrefix = [fileName stringByReplacingOccurrencesOfString:@"_osmand_backup" withString:@""];
         
-        if (![OAGPXDatabase fileExists:filenameWithoutPrefix ? filenameWithoutPrefix : fileName])
+        if (![[OAGPXDatabase sharedDb] fileExists:filenameWithoutPrefix ? filenameWithoutPrefix : fileName])
             [arrToDelete addObject:fileName];
     }
     [arr removeObjectsInArray:arrToDelete];

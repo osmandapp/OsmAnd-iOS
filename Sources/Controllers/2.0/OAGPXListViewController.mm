@@ -526,12 +526,7 @@ static UIViewController *parentController;
 {
     [super viewWillAppear:animated];
     
-    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
-    [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
-        _gpxFolders = [NSMutableDictionary dictionaryWithDictionary:gpxFolders];
-        [self generateData];
-        [self.gpxTableView reloadData];
-    }];
+    [self reloadData];
     
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onTrackRecordingChanged)
@@ -578,6 +573,16 @@ static UIViewController *parentController;
         }
         
     });
+}
+
+- (void) reloadData
+{
+    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
+    [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
+        _gpxFolders = [NSMutableDictionary dictionaryWithDictionary:gpxFolders];
+        [self generateData];
+        [self.gpxTableView reloadData];
+    }];
 }
 
 - (void) onGpxRouteCanceled
@@ -695,7 +700,7 @@ static UIViewController *parentController;
     {
         OAGpxTableGroup* tracksGroup = [[OAGpxTableGroup alloc] init];
         NSMutableArray *allTracks = [NSMutableArray array];
-        tracksGroup.groupName = OALocalizedString(key);
+        tracksGroup.groupName = [OALocalizedString(key) capitalizedString];
         tracksGroup.groupIcon = @"ic_custom_folder";
         tracksGroup.isMenu = NO;
         tracksGroup.type = kGPXGroupHeaderRow;
@@ -1029,6 +1034,7 @@ static UIViewController *parentController;
                                  }
                              }];
     }
+    [self reloadData];
 }
 
 - (BOOL) onSwitchClick:(id)sender

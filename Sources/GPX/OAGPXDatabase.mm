@@ -301,13 +301,13 @@
             
         }
         
-        if ([self.class fileExists:gpx.gpxFileName])
+        if ([self fileExists:gpx.gpxFileName])
             [res addObject:gpx];
     }
     gpxList = res;
 }
 
-+ (BOOL) fileExists:(NSString *) fileName
+- (BOOL) fileExists:(NSString *) fileName
 {
     NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
     NSString *filePath;

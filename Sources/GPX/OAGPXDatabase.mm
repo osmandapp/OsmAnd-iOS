@@ -152,8 +152,30 @@
     }
     gpxList = arr;
     
-    OsmAndAppInstance app = [OsmAndApp instance];
-    [[NSFileManager defaultManager] removeItemAtPath:[app.gpxPath stringByAppendingPathComponent:fileName] error:nil];
+    NSString *path = [self getFilePath:fileName filePath:OsmAndApp.instance.gpxPath];
+    if (path.length > 0)
+        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+}
+
+- (NSString *) getFilePath:(NSString *)fileName filePath:(NSString *)filePath
+{
+    NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:filePath error:nil];
+    NSString *path = [filePath stringByAppendingPathComponent:fileName];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+        return path;
+    for (NSString *item in dirs)
+    {
+        if (![[item pathExtension] isEqual:@"gpx"])
+        {
+            if([item hasPrefix:@"."])
+                continue;
+            NSString* dirPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item];
+            path = [self getFilePath:fileName filePath:dirPath];
+            if (path.length > 0)
+                return path;
+        }
+    }
+    return @"";
 }
 
 -(BOOL)containsGPXItem:(NSString *)fileName
@@ -279,13 +301,13 @@
             
         }
         
-        if ([self fileExists:gpx.gpxFileName])
+        if ([self.class fileExists:gpx.gpxFileName])
             [res addObject:gpx];
     }
     gpxList = res;
 }
 
-- (BOOL) fileExists:(NSString *) fileName
++ (BOOL) fileExists:(NSString *) fileName
 {
     NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
     NSString *filePath;

@@ -15,6 +15,7 @@
 #import "OANavigationIcon.h"
 #import "OALocationIcon.h"
 #import "OAAvoidRoadInfo.h"
+#import "OAGPXDatabase.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -2795,7 +2796,6 @@
 
 - (void) hideRemovedGpx
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
     NSMutableArray *arrToDelete = [NSMutableArray array];
     for (NSString *fileName in arr)
@@ -2804,8 +2804,7 @@
         if ([fileName hasSuffix:@"_osmand_backup"])
             filenameWithoutPrefix = [fileName stringByReplacingOccurrencesOfString:@"_osmand_backup" withString:@""];
         
-        NSString *path = [app.gpxPath stringByAppendingPathComponent:filenameWithoutPrefix ? filenameWithoutPrefix : fileName];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:path])
+        if (![OAGPXDatabase fileExists:filenameWithoutPrefix ? filenameWithoutPrefix : fileName])
             [arrToDelete addObject:fileName];
     }
     [arr removeObjectsInArray:arrToDelete];

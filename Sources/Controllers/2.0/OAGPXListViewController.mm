@@ -506,17 +506,12 @@ static UIViewController *parentController;
     CGRect frame = self.backButton.frame;
     frame.size.width =  kMaxCancelButtonWidth;
     self.cancelButton.frame = frame;
+    [self setupView];
     
     _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
     _gpxFolders = [NSMutableDictionary dictionary];
     
-    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
-    [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
-        _gpxFolders = [NSMutableDictionary dictionaryWithDictionary:gpxFolders];
-        [self generateData];
-        [self.gpxTableView reloadData];
-    }];
     [self updateButtons];
 }
 
@@ -531,8 +526,12 @@ static UIViewController *parentController;
 {
     [super viewWillAppear:animated];
     
-    [self generateData];
-    [self setupView];
+    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
+    [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
+        _gpxFolders = [NSMutableDictionary dictionaryWithDictionary:gpxFolders];
+        [self generateData];
+        [self.gpxTableView reloadData];
+    }];
     
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onTrackRecordingChanged)

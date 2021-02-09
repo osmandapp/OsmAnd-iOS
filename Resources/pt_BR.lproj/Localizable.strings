@@ -1923,7 +1923,7 @@
 "road_min_speed_descr" = "Define a velocidade mínima de viagem para todas as estradas da rota. Aumenta a prioridade para estradas com velocidades recomendadas menores que o mínimo.";
 "road_speeds_descr" = "Esses parâmetros podem afetar o cálculo da rota.";
 "maximum_speed" = "Velocidade máxima";
-"ios_release_3_90" = "• Introduziu \"Perfis de aplicativo\" com configurações independentes\n• Nova organização de configurações por perfis e tipos: navegação, geral, mapa e tela\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas fontes de dados para fotos online\n• Capacidade de baixar mapas online para cache\n• Algoritmos de \"Pesquisa\" aprimorados\n";
+"ios_release_3_90" = "• Introduziu um recurso \"Planejar uma rota\" para planejar viagens futuras com a capacidade de criar segmentos de trilha usando diferentes tipos de navegação\n• Adicionada uma opção para habilitar uma bússola sobre a ferramenta \"Régua de raio\"\n• Adicionada opção \"Sobreposições de rótulos de POI\" que permite mostrar nomes de favoritos, rastrear pontos de passagem e marcadores no mapa\n• Adicionadas novas ações rápidas para visibilidade de curvas de nível e terreno no mapa, alterando um perfil de aplicação, excluindo um ponto intermediário mais próximo\n• Corrigidos problemas com a falta da categoria de pesquisa da Wikipedia\n• Importação de configurações: bugs corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n• Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário de registro de mudanças\n";
 "ios_release_3_80" = "• Introduziu \"Perfis de aplicativo\" com configurações independentes\n• Nova organização de configurações por perfis e tipos: navegação, geral, mapa e tela\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas fontes de dados para fotos online\n• Capacidade de baixar mapas online para cache\n• Algoritmos de \"Pesquisa\" aprimorados\n";
 
 
@@ -1950,12 +1950,11 @@
 "next_seg" = "Próximo segmento";
 "whole_track_descr" = "A trilha inteira será recalculada usando o perfil selecionado.";
 "next_seg_descr" = "O próximo segmento será recalculado usando o perfil selecionado.";
-"route_betw_points_descr" = "Escolha como conectar os pontos de conexão: com uma linha reta ou calculando uma rota usando um dos perfis listados abaixo.";
+"route_betw_points_descr" = "Escolha como conectar os pontos: com uma linha reta ou calculando uma rota usando um dos perfis listados abaixo.";
 "unsupported_action_descr" = "Esta ação rápida não é suportada agora. Isso pode ser corrigido em novas versões do aplicativo.";
 "unsupported_action_title" = "Ação não suportada (%@)";
 "unsupported_action" = "Ação não suportada";
 "unsupported_items" = "Itens não suportados";
-
 "quick_action_remove_next_destination_descr" = "Exclui o próximo destino da sua rota. Se esse for o destino final, a navegação será interrompida.";
 "profile_type_osmand_string" = "Perfil do OsmAnd";
 "reverse_route" = "Rota reversa";
@@ -1967,3 +1966,38 @@
 "quick_action_mapillary_hide" = "Ocultar Mapillary";
 "quick_action_mapillary_show" = "Mostrar Mapillary";
 "shared_string_add_profile" = "Adicionar perfil";
+"key_hint_recenter_map" = "Mapa recente";
+"shared_z_a" = "Z - A";
+"shared_a_z" = "A - Z";
+"units_nm" = "mn";
+"select_application_profile" = "Selecione o perfil do aplicativo";
+"change_application_profile" = "Alterar perfil do aplicativo";
+"quick_action_showhide_mapillary_descr" = "Uma alternância para mostrar ou ocultar a camada Mapillary no mapa.";
+"nearest_point" = "Ponto próximo";
+"start_of_track" = "Início da pista";
+"point_to_navigate" = "Navegar para";
+"reverse_track_dir" = "Inverter direção da trilha";
+"attach_to_the_roads" = "Anexar às estradas";
+"select_another_track" = "Selecionar outra trilha";
+"track" = "Trilha";
+"follow_track" = "Seguir a trilha";
+"split_after" = "Dividir depois";
+"split_before" = "Dividir antes";
+"gpx_already_exsists" = "Já existe um arquivo com este nome";
+"empty_filename" = "O nome do arquivo não pode estar vazio";
+"none_point_error" = "Favor adicionar ao menos um ponto.";
+"gpx_saved_successfully" = "Arquivo GPX salvo em %@";
+"plan_route_exit_message" = "Tem certeza de que deseja fechar Plano de rota sem salvar? Você perderá todas as alterações.";
+"route_between_points_add_track_desc" = "Selecione um arquivo de trilha para o qual um novo segmento será adicionado.";
+"plan_route_last_modified" = "Última modificação";
+"plan_route_open_existing_track" = "Abrir trilha existente";
+"track_is_saved" = "%@\nestá salvo!";
+"plan_route_create_new_route" = "Criar nova rota";
+"open_saved_track" = "Abrir trilha salva";
+"simplified_track_description" = "Apenas a linha da rota será salva, os pontos de passagem serão excluídos.";
+"simplified_track" = "Trilha simplificada";
+"join_segments" = "Unir segmentos";
+"gpx_export_failed" = "Não foi possível salvar a rota criada";
+"hide_compass_ruler" = "Ocultar a régua de bússola";
+"show_compass_ruler" = "Mostrar régua de bússola";
+"map_widget_ruler_control" = "Régua de raio";

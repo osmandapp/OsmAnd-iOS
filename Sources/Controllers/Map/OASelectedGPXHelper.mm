@@ -9,6 +9,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OAGPXDatabase.h"
 
 #define kBackupSuffix @"_osmand_backup"
 
@@ -66,7 +67,7 @@
             [_selectedGPXFilesBackup addObject:fileName];
             continue;
         }
-        NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+        NSString __block *path = [[OAGPXDatabase sharedDb] getFilePath:fileName filePath:_app.gpxPath];
         QString qPath = QString::fromNSString(path);
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && !_activeGpx.contains(qPath))
         {

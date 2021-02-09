@@ -377,7 +377,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (selectedFile != nullptr)
         gpxFile = [[OAGPXMutableDocument alloc] initWithGpxDocument:selectedFile];
     else
-        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpxFileName]];
+        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[[OAGPXDatabase sharedDb] getFilePath:gpxFileName filePath:_app.gpxPath]];
     
     if (!gpxFile.routes)
         gpxFile.routes = [NSMutableArray new];

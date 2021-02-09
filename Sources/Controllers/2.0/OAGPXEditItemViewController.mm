@@ -155,7 +155,7 @@
     if (gpxRouter.gpx && [gpxRouter.gpx.gpxFileName isEqualToString:self.gpx.gpxFileName])
         [gpxRouter cancelRoute];
     
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+    NSString *path = [[OAGPXDatabase sharedDb] getFilePath:self.gpx.gpxFileName filePath:_app.gpxPath];
     self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
 }
 
@@ -507,7 +507,7 @@
                                  }
                                  else
                                  {
-                                     NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+                                     NSString *path = [[OAGPXDatabase sharedDb] getFilePath:self.gpx.gpxFileName filePath:_app.gpxPath];
                                      [_mapViewController deleteWpts:items docPath:path];
                                      [self loadDoc];
                                  }
@@ -541,7 +541,7 @@
     
     if (!_showCurrentTrack)
     {
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+        NSString *path = [[OAGPXDatabase sharedDb] getFilePath:self.gpx.gpxFileName filePath:_app.gpxPath];
         [_mapViewController updateWpts:items docPath:path updateMap:YES];
     }
     else
@@ -636,7 +636,7 @@
                 
                 metadata.name = newName;
                 
-                NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+                NSString *path = [[self.doc.fileName stringByDeletingLastPathComponent] stringByAppendingPathComponent:self.gpx.gpxFileName];
                 if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
                     [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
                 

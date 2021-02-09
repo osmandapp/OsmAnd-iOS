@@ -1924,7 +1924,7 @@
 "road_speeds_descr" = "Diese Parameter können die Routenberechnung beeinflussen.";
 "maximum_speed" = "Höchstgeschwindigkeit";
 "vk" = "VKontakte";
-"ios_release_3_90" = "• \"Anwendungsprofile\" mit unabhängigen Einstellungen eingeführt\n• Neue Anordnung der Einstellungen nach Profilen und Typen: Navigation, Allgemein, Karte und Bildschirm\n• Möglichkeit hinzugefügt, Profileinstellungen zu importieren oder zu exportieren\n• Datenquellen für Online-Fotos hinzugefügt\n• Möglichkeit zum Herunterladen von Online-Karten in den Cache hinzugefügt\n• Verbesserte \"Such\"-Algorithmen\n";
+"ios_release_3_90" = "• Einführung der Funktion \"Eine Route planen\" zur Planung zukünftiger Strecken mit der Möglichkeit, Streckenabschnitte mit verschiedenen Navigationsarten zu erstellen\n• Option zum Aktivieren eines Kompasses über das Werkzeug \"Radiuslineal\" hinzugefügt\n• Option \"POI-Overlay-Bezeichnungen\" hinzugefügt, die es erlaubt, Namen für Favoriten, Track-Wegpunkte und Markierungen auf der Karte anzuzeigen\n• Neue Schnellaktionen für die Sichtbarkeit von Höhenlinien und Gelände auf der Karte, das Ändern eines Anwendungsprofils und das Löschen eines nächstgelegenen Zwischenpunkts hinzugefügt\n• Probleme mit fehlender Wikipedia-Suchkategorie behoben\n• Import von Einstellungen: Fehler behoben, Unterstützung für alle in OsmAnd verfügbaren Datentypen hinzugefügt\n• OpenStreetMap-Bearbeitung: Die Zeitauswahl und die Unmöglichkeit, den Changeset-Kommentar zu ändern, wurden korrigiert\n";
 "ios_release_3_80" = "• \"Anwendungsprofile\" mit unabhängigen Einstellungen eingeführt\n• Neue Anordnung der Einstellungen nach Profilen und Typen: Navigation, Allgemein, Karte und Bildschirm\n• Möglichkeit hinzugefügt, Profileinstellungen zu importieren oder zu exportieren\n• Datenquellen für Online-Fotos hinzugefügt\n• Möglichkeit zum Herunterladen von Online-Karten in den Cache hinzugefügt\n• Verbesserte \"Such\"-Algorithmen\n";
 
 
@@ -1955,7 +1955,6 @@
 "unsupported_action_title" = "Nicht unterstützte Aktion (%@)";
 "unsupported_action" = "Nicht unterstützte Aktion";
 "unsupported_items" = "Nicht unterstützte Elemente";
-
 "quick_action_mapillary_hide" = "Mapillary ausblenden";
 "quick_action_remove_next_destination_descr" = "Löscht das nächste Ziel auf Ihrer Route. Wenn dies das endgültige Ziel ist, wird die Navigation gestoppt.";
 "reverse_route" = "Route umkehren";
@@ -1967,3 +1966,37 @@
 "quick_action_switch_profile_descr" = "Die Aktionsschaltfläche schaltet zwischen den ausgewählten Profilen um.";
 "quick_action_remove_next_destination" = "Nächstgelegenen Zielpunkt löschen";
 "arrived_at_destination" = "Sie sind angekommen.";
+"key_hint_recenter_map" = "Karte wieder zentrieren";
+"shared_z_a" = "Z - A";
+"shared_a_z" = "A - Z";
+"units_nm" = "sm";
+"select_application_profile" = "App-Profil auswählen";
+"change_application_profile" = "App-Profil ändern";
+"quick_action_showhide_mapillary_descr" = "Eine Umschaltfläche zum Ein- oder Ausblenden des Mapillary-Layers auf der Karte.";
+"nearest_point" = "Nächstgelegener Punkt";
+"start_of_track" = "Startpunkt des Tracks";
+"point_to_navigate" = "Navigation";
+"track" = "Track";
+"reverse_track_dir" = "Trackrichtung umkehren";
+"attach_to_the_roads" = "Auf Straßen einrasten";
+"select_another_track" = "Anderen Track wählen";
+"follow_track" = "Track folgen";
+"split_after" = "Teilen nach";
+"split_before" = "Teilen vor";
+"gpx_already_exsists" = "Datei mit diesem Namen existiert bereits";
+"empty_filename" = "Dateiname darf nicht leer sein";
+"none_point_error" = "Bitte mindestens einen Punkt hinzufügen.";
+"gpx_saved_successfully" = "GPX Datei nach %@ gespeichert";
+"plan_route_exit_message" = "Sind Sie sicher, dass Sie die Routenplanung schließen wollen, ohne zu speichern? Sie verlieren dann alle Änderungen.";
+"route_between_points_add_track_desc" = "Wählen Sie eine Trackdatei, für die ein neues Segment hinzugefügt werden soll.";
+"plan_route_last_modified" = "Zuletzt geändert";
+"plan_route_open_existing_track" = "Vorhandenen Track öffnen";
+"track_is_saved" = "%@\nwurde gespeichert!";
+"plan_route_create_new_route" = "Neue Route erstellen";
+"open_saved_track" = "Gespeicherten Track öffnen";
+"simplified_track_description" = "Nur die Routenlinie wird gespeichert, die Wegpunkte werden gelöscht.";
+"simplified_track" = "Vereinfachter Track";
+"join_segments" = "Segmente verbinden";
+"gpx_export_failed" = "Erstellte Route konnte nicht gespeichert werden";
+"hide_compass_ruler" = "Kompasslineal ausblenden";
+"show_compass_ruler" = "Kompasslineal anzeigen";

@@ -19,11 +19,13 @@
 #import "OASettingsTableViewCell.h"
 #import "OASelectTrackFolderBottomSheetViewController.h"
 #import "OAAddTrackFolderBottomSheetViewController.h"
+#import "OsmAndApp.h"
 
 #define kTextInputCell @"OATextViewResizingCell"
 #define kRouteGroupsCell @""
 #define kSwitchCell @"OASwitchTableViewCell"
 #define kCellTypeTitle @"OASettingsCell"
+#define kTracksFolder @"Tracks"
 
 @interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAAddTrackFolderDelegate>
 
@@ -165,8 +167,9 @@
 
 - (NSString *) getFolderName
 {
-    //TODO: Fetch real data
-    return @"Folder name";
+    NSString *filePath = [OAGPXDatabase.sharedDb getFilePath:[_fileName stringByAppendingPathExtension:@"gpx"] filePath:OsmAndApp.instance.gpxPath];
+    BOOL isInRootFolder = [[filePath stringByDeletingLastPathComponent] isEqualToString:OsmAndApp.instance.gpxPath];
+    return isInRootFolder ? kTracksFolder : [[filePath stringByDeletingLastPathComponent] lastPathComponent];
 }
 
 - (void) updateBottomButtons
@@ -210,10 +213,9 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) showSelectFolderScreen
+- (void) showSelectFolderScreen:(NSString *)selectedFolderName fileName:(NSString *)fileName
 {
-    OASelectTrackFolderBottomSheetViewController *selectFolderView = [[OASelectTrackFolderBottomSheetViewController alloc] init];
-    selectFolderView.delegate = self;
+    OASelectTrackFolderBottomSheetViewController *selectFolderView = [[OASelectTrackFolderBottomSheetViewController alloc] initWithFolderName:selectedFolderName fileName:fileName delegate:self];
     [self presentViewController:selectFolderView animated:YES completion:nil];
 }
 
@@ -344,11 +346,8 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeTitle])
-    {
-        [self showSelectFolderScreen];
-    }
+    if ([item[@"type"] isEqualToString:kCellTypeTitle])
+        [self showSelectFolderScreen:item[@"value"] fileName:[_fileName stringByAppendingPathExtension:@"gpx"]];
 }
 
 -(void) clearButtonPressed:(UIButton *)sender

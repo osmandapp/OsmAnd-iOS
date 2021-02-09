@@ -10,7 +10,7 @@
 
 @protocol OAAddTrackFolderDelegate <NSObject>
 
-- (void) updateFolderName;
+- (void) onTrackFolderAdded:(NSString *)folderName;
 
 @end
 

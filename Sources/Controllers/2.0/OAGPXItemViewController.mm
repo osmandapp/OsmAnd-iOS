@@ -39,6 +39,8 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
+#define kTracksFolder @"Tracks"
+
 
 @implementation OAGPXItemViewControllerState
 @end
@@ -958,9 +960,12 @@
 
 - (void) selectTrackClicked
 {
-    OASelectTrackFolderBottomSheetViewController *selectFolderView = [[OASelectTrackFolderBottomSheetViewController alloc] init];
+    NSString *filePath = [OAGPXDatabase.sharedDb getFilePath:_gpx.gpxFileName filePath:OsmAndApp.instance.gpxPath];
+    BOOL isInRootFolder = [[filePath stringByDeletingLastPathComponent] isEqualToString:OsmAndApp.instance.gpxPath];
+    NSString *folderName = isInRootFolder ? kTracksFolder : [[filePath stringByDeletingLastPathComponent] lastPathComponent];
+    
+    OASelectTrackFolderBottomSheetViewController *selectFolderView = [[OASelectTrackFolderBottomSheetViewController alloc] initWithFolderName:folderName fileName:_gpx.gpxFileName delegate:self];
     [[OARootViewController instance].mapPanel presentModalViewController:selectFolderView animated:YES];
-    return;
 }
 
 - (void)renameTrip
@@ -1498,6 +1503,8 @@
 
 - (void) updateSelectedFolder
 {
+    [self loadDoc];
+    [self.tableView reloadData];
 }
 
 @end

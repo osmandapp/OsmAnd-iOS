@@ -14,11 +14,14 @@
 #import "OATitleRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAAddTrackFolderBottomSheetViewController.h"
+#import "OsmAndApp.h"
+#import "OALoadGpxTask.h"
 
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kMultiIconTextDescCell @"OAMultiIconTextDescCell"
 #define kAddNewFolderSection 0
 #define kFoldersListSection 1
+#define kTracksFolder @"Tracks"
 
 @interface OASelectTrackFolderBottomSheetViewController() <UITableViewDelegate, UITableViewDataSource, OAAddTrackFolderDelegate>
 
@@ -26,15 +29,21 @@
 
 @implementation OASelectTrackFolderBottomSheetViewController
 {
+    id<OASelectTrackFolderDelegate> _delegate;
+    NSString *_selectedFolderName;
+    NSString *_fileName;
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype) init
+- (instancetype) initWithFolderName:(NSString *)selectedFolderName fileName:(NSString *)fileName delegate:(id<OASelectTrackFolderDelegate>)delegate
 {
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
-        [self generateData];
+        _selectedFolderName = selectedFolderName;
+        _fileName = fileName;
+        _delegate = delegate;
+        [self reloadData];
     }
     return self;
 }
@@ -53,10 +62,9 @@
     self.titleLabel.text = OALocalizedString(@"plan_route_select_folder");
 }
 
-- (void) generateData
+- (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
 {
     NSMutableArray *data = [NSMutableArray new];
-    
     [data addObject:@[
         @{
             @"type" : kCellTypeAction,
@@ -66,35 +74,41 @@
         },
     ]];
     
-    //TODO: delete fake data and fetch real
-    [data addObject:@[
-        @{
+    NSMutableArray *cellFoldersData = [NSMutableArray new];
+    for (NSString *folderName in allFolderNames)
+    {
+        NSArray *folderItems = foldersData[folderName];
+        int tracksCount = folderItems ? folderItems.count : 0;
+        [cellFoldersData addObject:@{
             @"type" : kMultiIconTextDescCell,
             @"header" : OALocalizedString(@"plan_route_folder"),
-            @"title" : @"My First Folder Name",
-            @"description" : @"42",
-            @"isSelected" : @YES,
+            @"title" : folderName,
+            @"description" : [NSString stringWithFormat:@"%i", tracksCount],
+            @"isSelected" : [NSNumber numberWithBool:[folderName isEqualToString: _selectedFolderName]],
             @"img" : @"ic_custom_folder"
-        },
-        @{
-            @"type" : kMultiIconTextDescCell,
-            @"header" : OALocalizedString(@"plan_route_folder"),
-            @"title" : @"My Second Folder Name",
-            @"description" : @"5",
-            @"isSelected" : @NO,
-            @"img" : @"ic_custom_folder"
-        },
-        @{
-            @"type" : kMultiIconTextDescCell,
-            @"header" : OALocalizedString(@"plan_route_folder"),
-            @"title" : @"My Third Folder Name",
-            @"description" : @"451",
-            @"isSelected" : @NO,
-            @"img" : @"ic_custom_folder"
-        },
-    ]];
+        }];
+    }
     
+    [data addObject: [NSArray arrayWithArray:cellFoldersData]];
     _data = data;
+}
+
+- (void) reloadData
+{
+    NSMutableArray<NSString *> *allFoldersNames = [NSMutableArray new];
+    [allFoldersNames addObject:kTracksFolder];
+    NSArray* filesList = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
+    for (NSString *name in filesList)
+    {
+        if (![name hasPrefix:@"."] && ![name.lowerCase hasSuffix:@".gpx"])
+            [allFoldersNames addObject:name];
+    }
+        
+    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
+    [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
+        [self generateData:allFoldersNames foldersData:gpxFolders];
+        [self.tableView reloadData];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -183,18 +197,39 @@
     }
     if (indexPath.section == kFoldersListSection)
     {
-        //TODO: save new data
-        [self.delegate updateSelectedFolder];
+        NSDictionary *item = _data[indexPath.section][indexPath.row];
+        [self moveTrackToFolder:item[@"title"]];
+        [_delegate updateSelectedFolder];
         [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void) moveTrackToFolder:(NSString *)destinationFolderName
+{
+    NSString *sourcePath = [OAGPXDatabase.sharedDb getFilePath:_fileName filePath:OsmAndApp.instance.gpxPath];
+    
+    NSString *destinationPath = OsmAndApp.instance.gpxPath;
+    if (![destinationFolderName isEqualToString:kTracksFolder])
+        destinationPath = [destinationPath stringByAppendingPathComponent:destinationFolderName];
+    destinationPath = [destinationPath stringByAppendingPathComponent:_fileName];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:destinationPath])
+    {
+        [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
     }
 }
 
 #pragma mark - OAAddTrackFolderDelegate
 
-- (void) updateFolderName
+- (void) onTrackFolderAdded:(NSString *)folderName
 {
-    [self generateData];
-    [self.tableView reloadData];
+    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:folderName];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:newFolderPath])
+
+        [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
+    
+    [self reloadData];
 }
 
 @end

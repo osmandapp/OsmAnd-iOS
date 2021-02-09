@@ -16,6 +16,6 @@
 
 @interface OASelectTrackFolderBottomSheetViewController : OABaseTableViewController
 
-@property (nonatomic, weak) id<OASelectTrackFolderDelegate> delegate;
+- (instancetype) initWithFolderName:(NSString *)selectedFolderName fileName:(NSString *)fileName delegate:(id<OASelectTrackFolderDelegate>)delegate;
 
 @end

@@ -11,8 +11,10 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OATextInputCell.h"
+#import "OsmAndApp.h"
 
 #define kCellTypeInput @"OATextInputCell"
+#define kTracksFolder @"Tracks"
 
 @interface OAAddTrackFolderBottomSheetViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
@@ -41,27 +43,21 @@
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.doneButton.hidden = NO;
-    _newName = [self getName];
+    self.doneButton.enabled = NO;
+    _newName = @"";
 }
 
 - (void) generateData
 {
     NSMutableArray *data = [NSMutableArray new];
-    
     [data addObject:@[
         @{
            @"type" : kCellTypeInput,
-           @"title" : [self getName]
+           @"title" : @""
         }
     ]];
     
     _data = data;
-}
-
-- (NSString *) getName
-{
-    //TODO: fetch data
-    return @"";
 }
 
 - (void) applyLocalization
@@ -72,8 +68,7 @@
 
 - (IBAction)doneButtonPressed:(id)sender
 {
-    //TODO: save _newName
-    [self.delegate updateFolderName];
+    [self.delegate onTrackFolderAdded:_newName];
     [super doneButtonPressed:sender];
 }
 
@@ -129,7 +124,24 @@
 
 - (void) textViewDidChange:(UITextView *)textView
 {
-    _newName = textView.text;
+    if (textView.text.length == 0 ||
+        [self isIncorrectFileName: textView.text] ||
+        [textView.text isEqualToString:kTracksFolder] ||
+        [[NSFileManager defaultManager] fileExistsAtPath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:textView.text]])
+    {
+        self.doneButton.enabled = NO;
+    }
+    else
+    {
+        _newName = textView.text;
+        self.doneButton.enabled = YES;
+    }
+}
+
+- (BOOL) isIncorrectFileName:(NSString *)fileName
+{
+    NSCharacterSet* illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>:;.,"];
+    return [fileName rangeOfCharacterFromSet:illegalFileNameCharacters].length != 0;
 }
 
 @end

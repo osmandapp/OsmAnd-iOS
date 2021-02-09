@@ -69,7 +69,7 @@
     
     OAGPX *gpx = [self buildGpxItem:fileName title:title desc:desc bounds:bounds analysis:analysis];
     
-    if (![self fileExists:fileName])
+    if (![self containsGPXItem:fileName])
         [res addObject:gpx];
     
     gpxList = res;

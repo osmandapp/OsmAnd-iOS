@@ -211,6 +211,7 @@
     NSString *destinationPath = OsmAndApp.instance.gpxPath;
     if (![destinationFolderName isEqualToString:kTracksFolder])
         destinationPath = [destinationPath stringByAppendingPathComponent:destinationFolderName];
+    
     destinationPath = [destinationPath stringByAppendingPathComponent:_fileName];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:destinationPath])
@@ -226,7 +227,6 @@
 {
     NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:folderName];
     if (![[NSFileManager defaultManager] fileExistsAtPath:newFolderPath])
-
         [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
     
     [self reloadData];

@@ -119,28 +119,15 @@
             @"key" : @"input_name",
         }
     ]];
-    // TODO: add gpx groups
-//    [data addObject:@[
-//        @{
-//            @"type" : kRouteGroupsCell,
-//            @"header" : OALocalizedString(@"fav_group"),
-//            @"key" : @"route_groups",
-//        }
-//    ]];
     
     [data addObject:@[
-            @{
-                @"type" : kCellTypeTitle,
-                @"header" : OALocalizedString(@"plan_route_folder"),
-                @"title" : @"Select folder",
-                @"value" : [self getFolderName],
-            },
-    //        @{
-    //           @"type" : @"OAFolderCardsCell",
-    //           @"selectedValue" : [self getSelectedFolderNumber],
-    //           @"values" : [self getFoldersList],
-    //        },
-        ]];
+        @{
+            @"type" : kCellTypeTitle,
+            @"header" : OALocalizedString(@"plan_route_folder"),
+            @"title" : @"Select folder",
+            @"value" : [self getFolderName],
+        }
+    ]];
     
     if (_showSimplifiedButton)
     {
@@ -462,15 +449,6 @@
 
 - (void) updateSelectedFolder
 {
-    [self generateData];
-    [self.tableView reloadData];
-}
-
-#pragma mark - OAAddTrackFolderDelegate
-
-- (void) updateFolderName
-{
-    //TODO: add new folder
     [self generateData];
     [self.tableView reloadData];
 }

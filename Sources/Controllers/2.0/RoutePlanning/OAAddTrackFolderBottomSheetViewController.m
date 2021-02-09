@@ -23,7 +23,7 @@
 @implementation OAAddTrackFolderBottomSheetViewController
 {
     NSArray<NSArray<NSDictionary *> *> *_data;
-    NSString *_newName;
+    NSString *_newFolderName;
 }
 
 - (instancetype) init
@@ -44,7 +44,7 @@
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.doneButton.hidden = NO;
     self.doneButton.enabled = NO;
-    _newName = @"";
+    _newFolderName = @"";
 }
 
 - (void) generateData
@@ -56,7 +56,6 @@
            @"title" : @""
         }
     ]];
-    
     _data = data;
 }
 
@@ -68,7 +67,7 @@
 
 - (IBAction)doneButtonPressed:(id)sender
 {
-    [self.delegate onTrackFolderAdded:_newName];
+    [self.delegate onTrackFolderAdded:_newFolderName];
     [super doneButtonPressed:sender];
 }
 
@@ -133,7 +132,7 @@
     }
     else
     {
-        _newName = textView.text;
+        _newFolderName = textView.text;
         self.doneButton.enabled = YES;
     }
 }

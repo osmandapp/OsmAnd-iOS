@@ -2,7 +2,7 @@
 "shared_string_previous" = "السابق";
 "route_stops_before" = "%d توقف قبل";
 "transport_routes" = "طرق";
-"transport_nearby_routes_within" = "الطرق القريبة التي في الداخل";
+"transport_nearby_routes_within" = "الطرق الداخلية المجاورة";
 "transport_nearby_routes" = "في غضون";
 "transport_stop" = "إيقاف";
 "cancel_navigation" = "إيقاف التوجيه";
@@ -94,7 +94,7 @@
 "map_widget_right" = "العدادات على اليسار";
 "map_widget_left" = "العدادات على اليمين";
 "layer_map_appearance" = "الاختصارات";
-"map_markers" = "التوجيه المباشر";
+"map_markers" = "علامات الخريطة";
 "select_gpx" = "اختر GPX…";
 "confirm_usage_speed_cameras" = "غير مسموح استخدام تحذيرات كاميرا السرعة بالقانون في العديد من البلدان (ألمانيا وفرنسا، وإيطاليا، وغيرها). أوسماند لا تتحمل أي مسؤولية إذا كنت تنتهك القانون. الرجاء انقر فوق \"نعم\" فقط إذا كنت مؤهلاً استخدام هذه الميزة.";
 "show_traffic_warnings" = "تحذيرات حركة المرور";
@@ -159,7 +159,7 @@
 "choose_audio_stream_descr" = "اختيار قناة لتشغيل التوجيه الصوتي";
 "guidance_preferences_descr" = "تفضيلات الملاحة";
 "routing_preferences_descr" = "تفضيلات الطريق";
-"routing_settings" = "التوجيه مع الطرق";
+"routing_settings" = "التوجيه";
 "app_mode_bus" = "حافلة";
 "app_mode_train" = "قطار";
 "app_mode_truck" = "شاحنة";
@@ -569,8 +569,8 @@
 "help_quiz" = "استطلاع";
 // Rendering categories
 "rendering_category_hide" = "إخفاء";
-"rendering_category_routes" = "المسارات الرياضية";
-"rendering_category_details" = "تفاصيل إضافية";
+"rendering_category_routes" = "الطرق";
+"rendering_category_details" = "التفاصيل";
 "rendering_category_transport" = "وسائل المواصلات";
 "rendering_category_others" = "سمات أخرى للخريطة";
 // Rendering attributes
@@ -728,7 +728,7 @@
 "search_another_country" = "حدد منطقة أخرى";
 "skip_map_downloading" = "تخط التحميل";
 "skip_map_downloading_desc" = "ليس لديك خريطة مثبتة في وضع عدم الاتصال. يمكنك اختيار خريطة من القائمة أو تنزيل الخرائط لاحقًا عبر القائمة - إدارة ملفات الخرائط";
-"wiki_around" = "مقالات ويكيبيديا قريبة";
+"wiki_around" = "مقالات ويكيبيديا القريبة";
 "categories" = "فئات";
 "items_selected" = "%d محدد";
 "custom_search" = "بحث مخصص";
@@ -859,7 +859,7 @@
 "actions" = "الإجراءات";
 "directions_more_options" = "الاتجاهات من";
 "nearby_search" = "بحث بالقرب من هنا";
-"map_widget_ruler_control" = "مسطرة البوصلة";
+"map_widget_ruler_control" = "دوائر القياس";
 "import_from_docs" = "الاستيراد من المستندات";
 "osm_live_routing" = "الملاحة عبر أوسماند لايف";
 "osm_live_routing_descr" = "استخدم تحديثات أوسماند لايف للتنقل";
@@ -1242,7 +1242,7 @@
 "select_favorite" = "اختر المفضلة";
 "select_manually" = "تحديد يدويا";
 "avoid_by_type" = "تجنب حسب النوع";
-"select_map_marker" = "حدد توجيه مباشر";
+"select_map_marker" = "اختر علامة";
 "parking_place" = "إضافة مكان موقف";
 "add_start" = "إضافه نقطه البداية";
 "add_intermediate" = "إضافة نقطة وسيطة";
@@ -1366,7 +1366,7 @@
 "routeInfo_winter_ice_road_name" = "طرق الشتاء والجليد";
 "rendering_value_white_name" = "أبيض";
 "rendering_value_high_name" = "عالي";
-"rendering_attr_horseRoutes_name" = "مسارات الخيول";
+"rendering_attr_horseRoutes_name" = "طرق الخيول";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "مسطح";
 "routing_attr_piste_type_downhill_description" = "التزلج على جبال الألب أو الانحدار.";
 "rendering_value_translucent_purple_name" = "بنفسجي فاتح";
@@ -1432,10 +1432,10 @@
 "rendering_attr_piste_difficulty_undefined_name" = "غير محدد";
 "rendering_attr_surface_ice_name" = "جليد";
 "rendering_attr_undefined_name" = "غير محدد";
-"rendering_attr_publicTransportMode_name" = "حافلة، ترامواي وغيرها";
+"rendering_attr_publicTransportMode_name" = "حافلة، عربة وغيرها";
 "rendering_attr_piste_type_hike_name" = "حركلة";
 "routing_attr_avoid_tram_name" = "لامركبة ترام";
-"rendering_attr_shareTaxiRoutes_name" = "شارك طرق التاكسي";
+"rendering_attr_shareTaxiRoutes_name" = "تاكسي مشاركة الطرق";
 "routing_attr_driving_style_balance_name" = "متوازن";
 "rendering_value_translucent_blue_name" = "أزرق فاتح";
 "rendering_attr_piste_difficulty_novice_name" = "مبتدئ";
@@ -1505,7 +1505,7 @@
 "rendering_attr_ice_road_name" = "طريق جليد";
 "rendering_attr_piste_type_sleigh_name" = "زلاجة";
 "routing_attr_short_way_description" = "استخدم طريق أقل استهلاكا للوقود (عادة أقصر).";
-"routing_attr_allow_skating_only_description" = "الطريق مصممة خصيصا بحرية أو التزلج على الجليد.";
+"routing_attr_allow_skating_only_description" = "طرق مصممة للأسلوب الحر أو التزلج فقط بدون المسارات الكلاسيكية.";
 "routing_attr_height_description" = "تحديد الارتفاع الأعلى المسموح به على الطرق.";
 "rendering_attr_OSMMapperAssistant_name" = "مساعد تخطيط OSM";
 "routing_attr_avoid_shuttle_train_description" = "يتجنب استخدام القطارات المكوكية";
@@ -1517,7 +1517,7 @@
 "routing_attr_avoid_sett_description" = "تجنب الحصى والطرق المرصوفة";
 "rendering_attr_surfaceIntegrity_name" = "سلامة سطح الطرق";
 "rendering_attr_surface_sett_name" = "ضبط";
-"routing_attr_allow_intermediate_name" = "السماح بالمسارات المتوسطة";
+"routing_attr_allow_intermediate_name" = "السماح بالطرق المتوسطة";
 "rendering_attr_smoothness_impassable_name" = "غير سالك";
 "rendering_attr_alpineHiking_name" = "مقياس التنزه في جبال الألب (SAC)";
 "routing_attr_driving_style_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
@@ -1579,16 +1579,16 @@
 "rendering_value_translucent_red_name" = "أحمر فاتح";
 "rendering_attr_surface_asphalt_name" = "إسفلت";
 "rendering_value_purple_name" = "بنفسجي";
-"rendering_attr_showCycleRoutes_name" = "إظهار مسارات الدراجات";
+"rendering_attr_showCycleRoutes_name" = "إظهار طرق الدراجات";
 "rendering_attr_surface_grass_paver_name" = "مرصف العشب";
-"routing_attr_allow_intermediate_description" = "طرق أكثر صعوبة مع أقسام أكثر حدة. بعض العقبات التي ينبغي تجنبها.";
+"routing_attr_allow_intermediate_description" = "طرق أكثر صعوبة مع أقسام أكثر حدة. بعض العقبات ينبغي تجنبها.";
 "rendering_attr_coloredBuildings_name" = "تلوين المباني حسب النوع";
 "rendering_attr_highway_class_track_grade2_name" = "الصف 2";
 "routing_attr_avoid_stairs_description" = "تجنب السلالم";
 "rendering_attr_highway_class_footway_name" = "طريق للمشاة";
 "rendering_attr_surface_ground_name" = "الأرض";
 "rendering_attr_contourDensity_description" = "كثافة الخط الكنتوري";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "إظهار شبكة مسارات الدارجات الهوائية";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "إظهار شبكة طرق الدارجات الهوائية";
 "rendering_attr_showLez_name" = "إظهار مناطق الانبعاثات المنخفضة";
 "routing_attr_avoid_borders_name" = "تخطي الحدود";
 "rendering_value__name" = "الافتراضي";
@@ -1745,7 +1745,7 @@
 "shared_string_exit" = "خروج";
 "import_routing_file_descr" = "يمكنك استيراد ملف التوجيه من أي تطبيق تخزين سحابي أو بوضعه في مجلد التوجيه في آيتوينز.";
 "osmand_routing" = "توجيه أوسماند";
-"select_nav_profile_dialog_message" = "يؤثر نوع التنقل على قواعد حسابات المسار.";
+"select_nav_profile_dialog_message" = "يؤثر نوع التنقل على قواعد حساب الطرق.";
 "vehicle_parameters" = "معلمات المركبات";
 "screen_alerts" = "تنبيهات الشاشة";
 "voice_anounces" = "إعلام صوتي";
@@ -1895,7 +1895,7 @@
 "quick_action_map_source_title" = "مصادر الخريطة";
 "shared_string_poi_types" = "أنواع نقاط الاهتمام";
 "shared_string_quick_actions" = "زر الإجراء السريع";
-"shared_string_profiles" = "ملفات التعريف";
+"shared_string_profiles" = "الأوضاع";
 "replace_all_desc" = "سيتم استبدال العناصر الحالية بالعناصر التي في الملف";
 "replace_all" = "استبدل الكل";
 "keep_both_desc" = "سيتم إضافة العناصر المستوردة مع زيادة قبل اسمها";
@@ -1949,9 +1949,9 @@
 "unsupported_action_title" = "إجراء غير مدعوم (%@)";
 "unsupported_action" = "إجراء غير مدعوم";
 "unsupported_items" = "عناصر غير مدعومة";
-"profile_type_osmand_string" = "ملف تعريف أوسماند";
+"profile_type_osmand_string" = "وضع التطبيق";
 "quick_action_showhide_mapillary_title" = "إظهار/إخفاء مابيلاري";
-"profile_type_user_string" = "ملف تعريف المستخدم";
+"profile_type_user_string" = "حساب المستخدم";
 "quick_action_switch_profile_descr" = "سيتم تبديل زر الإجراء التسجيل بين التشكيلات الجانبية المحددة.";
 "arrived_at_destination" = "تم الوصول";
 "quick_action_remove_next_destination" = "حذف نقطة الوجهة التالية";
@@ -1981,3 +1981,16 @@
 "route_between_points_add_track_desc" = "حدد ملف المسار الذي سيتم إضافة مقطع جديد إليه.";
 "plan_route_last_modified" = "آخر تغيير";
 "gpx_export_failed" = "تعذر حفظ المسار الذي تم إنشاؤه";
+"none_point_error" = "الرجاء إضافة نقطة واحدة على الأقل.";
+"hide_compass_ruler" = "إخفاء مسطرة البوصلة";
+"show_compass_ruler" = "إظهار مسطرة البوصلة";
+"join_segments" = "ربط الأجزاء";
+"plan_route_open_existing_track" = "فتح مسار موجود";
+"plan_route_create_new_route" = "إنشاء طريق جديد";
+"follow_track" = "اتبع المسار";
+"select_another_track" = "حدد مساراً آخر";
+"nearest_point" = "أقرب نقطة";
+"attach_to_the_roads" = "إرفاق بالطرق";
+"simplified_track" = "مسار مبسط";
+"simplified_track_description" = "سيتم حفظ خط الطريق فقط، وسيتم حذف نقاط المسار.";
+"open_saved_track" = "فتح المسار المحفوظ";

@@ -48,6 +48,8 @@
 
 #define ACCURACY_FOR_GPX_AND_ROUTING 50.0
 
+#define recordedTrackFolder @"/rec/"
+
 @implementation OASavingTrackHelper
 {
     OsmAndAppInstance _app;
@@ -345,7 +347,7 @@
         NSString *fout;
         for (NSString *f in data.allKeys)
         {
-            fout = [NSString stringWithFormat:@"%@/rec/%@.gpx", _app.gpxPath, f];
+            fout = [NSString stringWithFormat:@"%@%@%@.gpx", _app.gpxPath, recordedTrackFolder, f];
             OAGPXMutableDocument *doc = data[f];
             if (![doc isEmpty])
             {
@@ -355,10 +357,10 @@
                 [simpleFormat setDateFormat:@"HH-mm_EEE"];
                 
                 NSString *fileName = [NSString stringWithFormat:@"%@_%@", f, [simpleFormat stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time]]];
-                fout = [NSString stringWithFormat:@"%@/rec/%@.gpx", _app.gpxPath, fileName];
+                fout = [NSString stringWithFormat:@"%@%@%@.gpx", _app.gpxPath, recordedTrackFolder, fileName];
                 int ind = 1;
                 while ([fileManager fileExistsAtPath:fout]) {
-                    fout = [NSString stringWithFormat:@"%@/rec/%@_%d.gpx", _app.gpxPath, fileName, ++ind];
+                    fout = [NSString stringWithFormat:@"%@%@%@_%d.gpx", _app.gpxPath, recordedTrackFolder, fileName, ++ind];
                 }
             }
             

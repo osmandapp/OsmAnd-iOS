@@ -68,7 +68,9 @@
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
     
     OAGPX *gpx = [self buildGpxItem:fileName title:title desc:desc bounds:bounds analysis:analysis];
-    [res addObject:gpx];
+    
+    if (![self fileExists:fileName])
+        [res addObject:gpx];
     
     gpxList = res;
     

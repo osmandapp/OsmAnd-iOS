@@ -16,12 +16,16 @@
 #import "OAGPXDatabase.h"
 #import "OAMapLayers.h"
 #import "OAMapRendererView.h"
+#import "OASettingsTableViewCell.h"
+#import "OASelectTrackFolderBottomSheetViewController.h"
+#import "OAAddTrackFolderBottomSheetViewController.h"
 
 #define kTextInputCell @"OATextViewResizingCell"
 #define kRouteGroupsCell @""
 #define kSwitchCell @"OASwitchTableViewCell"
+#define kCellTypeTitle @"OASettingsCell"
 
-@interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
+@interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAAddTrackFolderDelegate>
 
 @end
 
@@ -122,6 +126,20 @@
 //        }
 //    ]];
     
+    [data addObject:@[
+            @{
+                @"type" : kCellTypeTitle,
+                @"header" : OALocalizedString(@"plan_route_folder"),
+                @"title" : @"Select folder",
+                @"value" : [self getFolderName],
+            },
+    //        @{
+    //           @"type" : @"OAFolderCardsCell",
+    //           @"selectedValue" : [self getSelectedFolderNumber],
+    //           @"values" : [self getFoldersList],
+    //        },
+        ]];
+    
     if (_showSimplifiedButton)
     {
         [data addObject:@[
@@ -143,6 +161,12 @@
     ]];
     
     _data = data;
+}
+
+- (NSString *) getFolderName
+{
+    //TODO: Fetch real data
+    return @"Folder name";
 }
 
 - (void) updateBottomButtons
@@ -184,6 +208,20 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"empty_filename") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) showSelectFolderScreen
+{
+    OASelectTrackFolderBottomSheetViewController *selectFolderView = [[OASelectTrackFolderBottomSheetViewController alloc] init];
+    selectFolderView.delegate = self;
+    [self presentViewController:selectFolderView animated:YES completion:nil];
+}
+
+- (void) showAddFolderScreen
+{
+    OAAddTrackFolderBottomSheetViewController *addFolderView = [[OAAddTrackFolderBottomSheetViewController alloc] init];
+    addFolderView.delegate = self;
+    [self presentViewController:addFolderView animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -235,6 +273,28 @@
         }
         return cell;
     }
+    else if ([cellType isEqualToString:kCellTypeTitle])
+    {
+        static NSString* const identifierCell = kCellTypeTitle;
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.numberOfLines = 1;
+            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.separatorInset = UIEdgeInsetsMake(0., 0, 0, CGFLOAT_MAX);
+        }
+        if (cell)
+        {
+            cell.textView.text = item[@"title"];
+            cell.descriptionView.text = item[@"value"];
+        }
+        return cell;
+    }
     
     return nil;
 }
@@ -279,6 +339,16 @@
     NSDictionary *item = ((NSArray *)_data[section]).firstObject;
     
     return item[@"footer"];
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *cellType = item[@"type"];
+    if ([cellType isEqualToString:kCellTypeTitle])
+    {
+        [self showSelectFolderScreen];
+    }
 }
 
 -(void) clearButtonPressed:(UIButton *)sender
@@ -387,6 +457,23 @@
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         self.view.frame = CGRectMake(0., 0., self.view.frame.size.width, DeviceScreenHeight - OAUtilities.getStatusBarHeight - [self getModalPresentationOffset:NO]);
     } completion:nil];
+}
+
+#pragma mark - OASelectTrackFolderDelegate
+
+- (void) updateSelectedFolder
+{
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+#pragma mark - OAAddTrackFolderDelegate
+
+- (void) updateFolderName
+{
+    //TODO: add new folder
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

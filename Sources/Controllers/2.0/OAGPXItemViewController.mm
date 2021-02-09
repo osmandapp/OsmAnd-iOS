@@ -25,6 +25,8 @@
 #import "OAGPXRouter.h"
 #import "OASizes.h"
 #import "OAColors.h"
+#import "OAOpenAddTrackViewController.h"
+#import "OASelectTrackFolderBottomSheetViewController.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -42,7 +44,7 @@
 @end
 
 
-@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAEditGPXColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate> {
+@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAEditGPXColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate, OASelectTrackFolderDelegate> {
 
     OsmAndAppInstance _app;
     NSDateFormatter *dateTimeFormatter;
@@ -668,9 +670,10 @@
                                     otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")),
                                                   OALocalizedString(@"gpx_export"),
                                                   OALocalizedString(@"gpx_edit_mode"),
-                                                  OALocalizedString(@"product_title_trip_planning")]
+                                                  OALocalizedString(@"product_title_trip_planning"),
+                                                  OALocalizedString(@"plan_route_change_folder")]
                                       otherDesc:nil
-                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_edit.png", @"ic_action_route_distance.png"]
+                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_edit.png", @"ic_action_route_distance.png", @"ic_dialog_move.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          if (!cancelled)
                                          {
@@ -691,6 +694,9 @@
                                                      break;
                                                  case 4:
                                                      [[OARootViewController instance].mapPanel targetGoToGPXRoute];
+                                                     break;
+                                                 case 5:
+                                                     [self selectTrackClicked];
                                                      break;
 
                                                  default:
@@ -948,6 +954,13 @@
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.navController.view
                                          animated:YES];
+}
+
+- (void) selectTrackClicked
+{
+    OASelectTrackFolderBottomSheetViewController *selectFolderView = [[OASelectTrackFolderBottomSheetViewController alloc] init];
+    [[OARootViewController instance].mapPanel presentModalViewController:selectFolderView animated:YES];
+    return;
 }
 
 - (void)renameTrip
@@ -1479,6 +1492,12 @@
                 [self.delegate contentChanged];
         }
     }
+}
+
+#pragma mark - OASelectTrackFolderDelegate
+
+- (void) updateSelectedFolder
+{
 }
 
 @end

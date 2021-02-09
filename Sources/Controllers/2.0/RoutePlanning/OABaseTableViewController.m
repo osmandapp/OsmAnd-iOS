@@ -39,6 +39,11 @@
     [self dismissViewController];
 }
 
+- (IBAction)doneButtonPressed:(id)sender
+{
+    [self dismissViewController];
+}
+
 - (IBAction)backButtonPressed:(id)sender
 {
     [self dismissViewController];

@@ -16,6 +16,7 @@
 @interface OAGPX : NSObject
 
 @property (nonatomic) NSString *gpxFileName;
+@property (nonatomic) NSString *gpxFilePath;
 @property (nonatomic) NSString *gpxTitle;
 @property (nonatomic) NSString *gpxDescription;
 @property (nonatomic) NSDate   *importDate;
@@ -59,14 +60,15 @@
 
 + (OAGPXDatabase *)sharedDb;
 
--(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)buildGpxItem:(NSString *)fileName filePath:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)addGpxItem:(NSString *)fileName filePath:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
 -(OAGPX *)getGPXItem:(NSString *)fileName;
 - (void)replaceGpxItem:(OAGPX *)gpx;
 -(void)removeGpxItem:(NSString *)fileName;
 -(BOOL)containsGPXItem:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)fileName pointsCount:(int)pointsCount;
 -(BOOL)updateGPXItemColor:(NSString *)fileName color:(int)color;
+-(BOOL)updateGPXFilePath:(NSString *)filePath newFilePath:(NSString *)newFilePath;
 - (BOOL) fileExists:(NSString *) fileName;
 - (NSString *) getFilePath:(NSString *)fileName filePath:(NSString *)filePath;
 

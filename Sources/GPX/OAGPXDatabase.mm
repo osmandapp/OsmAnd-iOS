@@ -63,11 +63,11 @@
     return self;
 }
 
--(OAGPX *)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
+-(OAGPX *)addGpxItem:(NSString *)fileName filePath:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
     
-    OAGPX *gpx = [self buildGpxItem:fileName title:title desc:desc bounds:bounds analysis:analysis];
+    OAGPX *gpx = [self buildGpxItem:fileName filePath:filePath title:title desc:desc bounds:bounds analysis:analysis];
     
     if (![self containsGPXItem:fileName])
         [res addObject:gpx];
@@ -87,7 +87,7 @@
     gpxList = res;
 }
 
--(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
+-(OAGPX *)buildGpxItem:(NSString *)fileName filePath:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
     OAGPX *gpx = [[OAGPX alloc] init];
     gpx.bounds = bounds;
@@ -102,6 +102,9 @@
         gpx.gpxDescription = desc;
     else
         gpx.gpxDescription = @"";
+    
+    if (filePath)
+        gpx.gpxFilePath = filePath;
     
     gpx.color = 0;
     
@@ -215,6 +218,17 @@
     return NO;
 }
 
+-(BOOL)updateGPXFilePath:(NSString *)filePath newFilePath:(NSString *)newFilePath
+{
+    for (OAGPX *item in gpxList) {
+        if ([item.gpxFilePath isEqualToString:filePath]) {
+            item.gpxFilePath = newFilePath;
+            return YES;
+        }
+    }
+    return NO;
+}
+
 -(void) load
 {
     NSMutableArray *res = [NSMutableArray array];
@@ -235,6 +249,8 @@
             
             if ([key isEqualToString:@"gpxFileName"]) {
                 gpx.gpxFileName = value;
+//            } else if ([key isEqualToString:@"gpxFilePath"]) {
+//                gpx.gpxFilePath = value;
             } else if ([key isEqualToString:@"gpxTitle"]) {
                 gpx.gpxTitle = value;
             } else if ([key isEqualToString:@"gpxDescription"]) {
@@ -341,6 +357,7 @@
         NSMutableDictionary *d = [NSMutableDictionary dictionary];
         
         [d setObject:gpx.gpxFileName forKey:@"gpxFileName"];
+//        [d setObject:gpx.gpxFilePath forKey:@"gpxFilePath"];
         [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
         [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
         [d setObject:gpx.importDate forKey:@"importDate"];

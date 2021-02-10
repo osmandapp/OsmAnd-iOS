@@ -163,6 +163,8 @@ static const NSInteger _buttonsCount = 4;
     CGFloat _bottomBarHeight;
     
     NSArray<OATransportStopRoute *> *_visibleTransportRoutes;
+    
+    NSString *_gpxTrackFolder;
 }
 
 - (instancetype) init

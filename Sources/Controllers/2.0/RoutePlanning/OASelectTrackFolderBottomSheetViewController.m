@@ -30,17 +30,17 @@
 @implementation OASelectTrackFolderBottomSheetViewController
 {
     id<OASelectTrackFolderDelegate> _delegate;
-    NSString *_selectedFolderName;
+    NSString *_filePath;
     NSString *_fileName;
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype) initWithFolderName:(NSString *)selectedFolderName fileName:(NSString *)fileName delegate:(id<OASelectTrackFolderDelegate>)delegate
+- (instancetype) initWithFolderName:(NSString *)fileName filePath:(NSString *)filePath delegate:(id<OASelectTrackFolderDelegate>)delegate
 {
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
-        _selectedFolderName = selectedFolderName;
+        _filePath = filePath;
         _fileName = fileName;
         _delegate = delegate;
         [self reloadData];
@@ -64,6 +64,9 @@
 
 - (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
 {
+    BOOL isInRootFolder = [[_filePath stringByDeletingLastPathComponent] isEqualToString:OsmAndApp.instance.gpxPath];
+    NSString *selectedFolderName = isInRootFolder ? kTracksFolder : [[_filePath stringByDeletingLastPathComponent] lastPathComponent];
+    
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
@@ -84,7 +87,7 @@
             @"header" : OALocalizedString(@"plan_route_folder"),
             @"title" : folderName,
             @"description" : [NSString stringWithFormat:@"%i", tracksCount],
-            @"isSelected" : [NSNumber numberWithBool:[folderName isEqualToString: _selectedFolderName]],
+            @"isSelected" : [NSNumber numberWithBool:[folderName isEqualToString: selectedFolderName]],
             @"img" : @"ic_custom_folder"
         }];
     }
@@ -206,7 +209,7 @@
 
 - (void) moveTrackToFolder:(NSString *)destinationFolderName
 {
-    NSString *sourcePath = [OAGPXDatabase.sharedDb getFilePath:_fileName filePath:OsmAndApp.instance.gpxPath];
+    NSString *sourcePath = _filePath ? _filePath : [OAGPXDatabase.sharedDb getFilePath:_fileName filePath:OsmAndApp.instance.gpxPath];
     
     NSString *destinationPath = OsmAndApp.instance.gpxPath;
     if (![destinationFolderName isEqualToString:kTracksFolder])
@@ -219,6 +222,8 @@
         [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
     }
+    
+    [self reloadData];
 }
 
 #pragma mark - OAAddTrackFolderDelegate

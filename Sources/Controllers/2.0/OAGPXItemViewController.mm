@@ -460,6 +460,8 @@
     _arrowDown = [[NSTextAttachment alloc] init];
     _arrowDown.image = [UIImage imageNamed:@"ic_arrow_down"];
     [_arrowDown setBounds:CGRectMake(0, roundf(_upDownFont.capHeight - 16.)/ 2., 16., 16.)];
+    
+    self.view.backgroundColor = UIColor.redColor;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -960,11 +962,10 @@
 
 - (void) selectTrackClicked
 {
-    NSString *filePath = [OAGPXDatabase.sharedDb getFilePath:_gpx.gpxFileName filePath:OsmAndApp.instance.gpxPath];
+    NSString *filePath = _gpx.gpxFilePath ? _gpx.gpxFilePath : [OAGPXDatabase.sharedDb getFilePath:_gpx.gpxFileName filePath:OsmAndApp.instance.gpxPath];
     BOOL isInRootFolder = [[filePath stringByDeletingLastPathComponent] isEqualToString:OsmAndApp.instance.gpxPath];
     NSString *folderName = isInRootFolder ? kTracksFolder : [[filePath stringByDeletingLastPathComponent] lastPathComponent];
-    
-    OASelectTrackFolderBottomSheetViewController *selectFolderView = [[OASelectTrackFolderBottomSheetViewController alloc] initWithFolderName:folderName fileName:_gpx.gpxFileName delegate:self];
+    OASelectTrackFolderBottomSheetViewController *selectFolderView = [[OASelectTrackFolderBottomSheetViewController alloc] initWithFolderName:_gpx.gpxFileName filePath:_gpx.gpxFilePath delegate:self];
     [[OARootViewController instance].mapPanel presentModalViewController:selectFolderView animated:YES];
 }
 

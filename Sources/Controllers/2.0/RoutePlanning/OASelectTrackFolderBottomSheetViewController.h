@@ -16,6 +16,6 @@
 
 @interface OASelectTrackFolderBottomSheetViewController : OABaseTableViewController
 
-- (instancetype) initWithFolderName:(NSString *)selectedFolderName fileName:(NSString *)fileName delegate:(id<OASelectTrackFolderDelegate>)delegate;
+- (instancetype) initWithFolderName:(NSString *)fileName filePath:(NSString *)filePath delegate:(id<OASelectTrackFolderDelegate>)delegate;
 
 @end

@@ -1951,7 +1951,7 @@
 "unsupported_items" = "عناصر غير مدعومة";
 "profile_type_osmand_string" = "وضع التطبيق";
 "quick_action_showhide_mapillary_title" = "إظهار/إخفاء مابيلاري";
-"profile_type_user_string" = "حساب المستخدم";
+"profile_type_user_string" = "ملف تعريف المستخدم";
 "quick_action_switch_profile_descr" = "سيتم تبديل زر الإجراء التسجيل بين التشكيلات الجانبية المحددة.";
 "arrived_at_destination" = "تم الوصول";
 "quick_action_remove_next_destination" = "حذف نقطة الوجهة التالية";

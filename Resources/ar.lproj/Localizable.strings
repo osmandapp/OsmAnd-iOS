@@ -173,7 +173,7 @@
 "use_points_as_intermediates" = "حساب الطريق بين النقاط";
 "calculate_osmand_route_without_internet" = "حساب جزء طريق أوسماند دون الإنترنت";
 "routing_settings_2" = "إعدادات الملاحة";
-"gpx_navigation" = "تابع الرحلة";
+"gpx_navigation" = "تابع المسار";
 "impassable_road" = "تجنب طرقات";
 "impassable_road_desc" = "حدد الطرق التي تريد تجنبها أثناء التنقل";
 "interrupt_music_descr" = "قم بإيقاف الموسيقى مؤقتًا أثناء المطالبات الصوتية (لايكفي خفض مستوى الصوت)";
@@ -192,7 +192,7 @@
 "cancel_route" = "إلغاء مسار";
 "route_is_too_long_v2" = "قد يكون المسار طويلا جداً للحساب. يرجى إضافة وجهات وسطى إذا لم يتم العثور على نتيجة خلال 10 دقائق.";
 "navigation_over_track" = "بدء الملاحة على طول المسار؟";
-"use_displayed_track_for_navigation" = "هل تريد استخدام الرحلة المعروضة للتنقل؟";
+"use_displayed_track_for_navigation" = "هل تريد استخدام المسارالمعروض للتنقل؟";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "تحديد على الخريطة";
 "shared_string_my_location" = "موقعي";
@@ -346,16 +346,16 @@
 "gpx_points" = "نقاط";
 "gpx_export" = "تصدير";
 "import_export" = "استيراد/تصدير";
-"gpx_import_title" = "استيراد الرحلة";
-"gpx_import_already_exists" = "الملف بهذا الاسم موجود مسبقا. الرجاء تحديد إجراء.";
+"gpx_import_title" = "استيراد المسارات";
+"gpx_import_already_exists" = "ملف المسار بهذا الاسم موجود مسبقا. الرجاء تحديد إجراء.";
 "gpx_add_new" = "إضافة ملف جديد";
 "gpx_overwrite" = "إعادة الكتابة";
 "gpx_cannot_import" = "لا يمكن استيراد ملف GPX المحدد";
-"gpx_export_title" = "تصدير الرحلة";
+"gpx_export_title" = "تصدير المسار";
 "gpx_export_select_track" = "يرجى اختيار رحلة للتصدير";
 "gpx_import_desc" = "لاستيراد ملفات GPX (تنسيق بيانات GPS الشائعة) من Dropbox أو البريد الإلكتروني أو أي مصدر آخر استخدم خيار \"نسخ إلى خرائط أوسماند\"";
 "gpx_no_tracks" = "لا توجد مسارات";
-"gpx_remove" = "إزالة الرحلة؟";
+"gpx_remove" = "إزالة المسار؟";
 "gpx_stat" = "الإحصائيات";
 "gpx_route" = "توجيه";
 "gpx_route_time" = "وقت التوجيه";
@@ -372,7 +372,7 @@
 "track_recording_name" = "المسار الجاري تسجيله";
 "track_stop_rec" = "إيقاف التسجيل";
 "track_new_segment" = "بدء تسجيل جديد";
-"track_save" = "حفظ الرحلة الحالية";
+"track_save" = "حفظ المسارالحالي";
 "track_continue_rec" = "متابعه التسجيل";
 "track_continue_rec_q" = "هل ترغب في متابعة التسجيل؟";
 "rec_interval" = "فاصل التسجيل";
@@ -380,8 +380,8 @@
 "track_start_rec" = "بدء تسجيل المسار";
 "track_rec_addon_q" = "يرجى تفعيل سجل السفر الملحق والدخول لتسجيل وحفظ رحلتك";
 "track_interval_remember" = "تذكر اختياري";
-"track_clear" = "مسح الرحلة الحالية";
-"track_clear_q" = "هل تريد مسح الرحلة الحالية؟";
+"track_clear" = "مسح المسارالحالي";
+"track_clear_q" = "هل تريد مسح المسار الحالي؟";
 "show_info" = "عرض المعلومات";
 "record_trip" = "تسجيل رحلتك";
 "gpx_distance_points" = "المسافة (نقاط)";
@@ -536,7 +536,7 @@
 "import_favorite" = "المفضلة";
 "import_failed" = "فشل الاستيراد";
 "import_cannot" = "لا يمكن استيراد الملف المحدد";
-"import_gpx" = "رحلة GPX";
+"import_gpx" = "مسار GPX";
 // Alerts
 "alert_inet_needed" = "الاتصال بالإنترنت مطلوب لتنفيذ هذا الإجراء. الرجاء التحقق من اتصال الانترنت الخاص بك.";
 // Context menu
@@ -593,7 +593,7 @@
 "product_desc_ext_track_recording" = "قم بتسجيل المسارات وحفظها يدويًا باستخدام البرنامج الإضافي لتسجيل الرحلة. قم بتصدير مساراتك كملف gpx أو شاركه أو استخدمه للمساهمة في مشروع خريطة الشارع المفتوح. أداة مفيدة للعدائين والمتنزهين وأي شخص مهتم بتسجيل مساراتهم.";
 "product_title_trip_planning" = "قياس المسافة";
 "product_desc_trip_planning" = "خطط لرحلتك ، أضف نقاط طريق ، وقياس المسافة إلى وجهتك باستخدام هذا البرنامج المساعد";
-"product_desc_ext_trip_planning" = "يسمح لك المكون الإضافي لتخطيط الرحلة بإنشاء رحلتك على الخريطة وحفظها وقياس المسافة بين النقاط المتصلة بالخطوط المستقيمة وما إلى ذلك.";
+"product_desc_ext_trip_planning" = "يسمح لك المكون الإضافي لتخطيط الرحلة بإنشاء مساراتك على الخريطة وحفظها وقياس المسافة بين النقاط المتصلة بالخطوط المستقيمة وما إلى ذلك.";
 "product_title_africa" = "أفريقيا";
 "product_desc_africa" = "تنزيل خريطة غير محدوده لافريقيا";
 "product_title_australia" = "أستراليا";
@@ -623,7 +623,7 @@
 "get_unlimited_access" = "تحصل على نفاذ بلا حدود";
 "latitude" = "خط العرض";
 "longitude" = "خط الطول";
-"track_save_short_q" = "الرحلة قصيرة جدًا ، هل تريد الحفظ؟";
+"track_save_short_q" = "المسارقصير جدا ، هل تريد الحفظ؟";
 "add_as" = "إضافة";
 "make_call" = "إجراء مكالمة";
 "enter_description" = "ادخل الوصف";
@@ -639,8 +639,8 @@
 "open_url" = "افتح الصفحة في المتصفح";
 "no_other_translations" = "لا توجد ترجمات أخرى";
 "wpt_remove_q" = "إزالة إحداثية؟";
-"gpx_select_track" = "تحديد رحلة";
-"gpx_curr_new_track" = "الرحلة الحالية";
+"gpx_select_track" = "تحديد مسار";
+"gpx_curr_new_track" = "المسارالحالي";
 "enter_name" = "أدخل الاسم";
 "not_selected" = "غير محدد";
 "language" = "اللغة";
@@ -663,14 +663,14 @@
 "change_color" = "تعديل اللون";
 "wpt_select" = "الرجاء تحديد نقاط الطرق";
 "gpx_remove_wpts_q" = "هل تريد إزالة نقاط الطريق المحددة؟";
-"create_new_trip" = "إنشاء رحلة جديدة";
+"create_new_trip" = "إنشاء مسار جديد";
 "editing_waypoints" = "تحرير نقاط الطريق";
-"select_wpt_on_map" = "حدد نقطة على الخريطة لإضافتها إلى الرحلة";
-"gpx_rename_q" = "إعادة تسمية الرحلة";
-"gpx_enter_new_name" = "الرجاء إدخال اسم جديد للرحلة";
+"select_wpt_on_map" = "حدد نقطة على الخريطة لإضافتها إلى المسار";
+"gpx_rename_q" = "إعادة تسمية المسار";
+"gpx_enter_new_name" = "الرجاء إدخال اسم جديد للمسار";
 "gpx_cancel_route_q" = "هل تريد إلغاء هذا المسار؟";
 "gpx_deactivated" = "معطلة";
-"gpx_trip_groups" = "مجموعات الرحلة";
+"gpx_trip_groups" = "مجموعات المسار";
 "gpx_group_select" = "اختيار المجموعة";
 "show_all" = "إظهار الكل";
 "directions" = "التوجيه مع الطرق";
@@ -833,7 +833,7 @@
 "auto_split_gap_descr" = "قم ببدء شريحة جديدة بعد 6 دقائق أو رحلة جديدة بعد ساعتين أو ملف جديد بعد وقت أطول";
 "shared_setting_always_ask" = "السؤال دائماً";
 "recording_preferences_descr" = "تفضيلات تسجيل المسار";
-"track_save_descr" = "احفظ الرحلة الحالية كملف GPX الآن.";
+"track_save_descr" = "احفظ المسارالحالي كملف GPX الآن.";
 "track_during_nav" = "تسجيل المسار أثناء الملاحة";
 "track_during_nav_descr" = "سيتم حفظ المسار إلى مجلد المسارات أثناء الملاحة";
 "menu_help" = "مساعدة";
@@ -1297,8 +1297,8 @@
 "res_del_cache_not_supported" = "حذف ذاكرة التخزين المؤقت للخرائط SQLite دون اتصال غير معتمد";
 "gpx_analyze" = "تحليل";
 "displayed_route_save" = "حفظ إلى مسارات أوسماند";
-"trip_name" = "اسم الرحلة";
-"trip_hint" = "إدخال اسم الرحلة";
+"trip_name" = "اسم المسار";
+"trip_hint" = "إدخال اسم المسار";
 "res_elliptic_mercator" = "نموذج مركتور البيضوي";
 "res_url" = "الرابط";
 "shared_string_maximum" = "الحد الاقصي";

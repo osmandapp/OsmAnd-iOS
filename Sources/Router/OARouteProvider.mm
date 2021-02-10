@@ -527,9 +527,9 @@
     
     float mb = (1 << 20);
     // make visible
-    int memoryLimit = (int) (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb)); // TODO
-    int memoryTotal = (int) ([NSProcessInfo processInfo].physicalMemory / mb);
-    NSLog(@"Use %d MB of %d", memoryLimit, memoryTotal);
+    long memoryLimit = (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb)); // TODO
+    long memoryTotal = (long) ([NSProcessInfo processInfo].physicalMemory / mb);
+    NSLog(@"Use %ld MB of %ld", memoryLimit, memoryTotal);
     
     auto cf = config->build(profileName, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : -360, memoryLimit, paramsR);
     if ([OAAppSettings.sharedManager.enableTimeConditionalRouting get:params.mode])

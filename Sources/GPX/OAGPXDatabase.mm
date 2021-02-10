@@ -249,8 +249,6 @@
             
             if ([key isEqualToString:@"gpxFileName"]) {
                 gpx.gpxFileName = value;
-//            } else if ([key isEqualToString:@"gpxFilePath"]) {
-//                gpx.gpxFilePath = value;
             } else if ([key isEqualToString:@"gpxTitle"]) {
                 gpx.gpxTitle = value;
             } else if ([key isEqualToString:@"gpxDescription"]) {
@@ -357,7 +355,6 @@
         NSMutableDictionary *d = [NSMutableDictionary dictionary];
         
         [d setObject:gpx.gpxFileName forKey:@"gpxFileName"];
-//        [d setObject:gpx.gpxFilePath forKey:@"gpxFilePath"];
         [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
         [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
         [d setObject:gpx.importDate forKey:@"importDate"];

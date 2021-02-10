@@ -25,7 +25,6 @@
 #import "OAGPXRouter.h"
 #import "OASizes.h"
 #import "OAColors.h"
-#import "OAOpenAddTrackViewController.h"
 #import "OASelectTrackFolderBottomSheetViewController.h"
 
 #import "OAMapRendererView.h"
@@ -460,8 +459,6 @@
     _arrowDown = [[NSTextAttachment alloc] init];
     _arrowDown.image = [UIImage imageNamed:@"ic_arrow_down"];
     [_arrowDown setBounds:CGRectMake(0, roundf(_upDownFont.capHeight - 16.)/ 2., 16., 16.)];
-    
-    self.view.backgroundColor = UIColor.redColor;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -67,7 +67,8 @@
             [_selectedGPXFilesBackup addObject:fileName];
             continue;
         }
-        NSString __block *path = [[OAGPXDatabase sharedDb] getFilePath:fileName filePath:_app.gpxPath];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:fileName];
+        NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilepath];
         QString qPath = QString::fromNSString(path);
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && !_activeGpx.contains(qPath))
         {

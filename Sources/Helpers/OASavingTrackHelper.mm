@@ -372,7 +372,7 @@
             [doc saveTo:fout];
             
             OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] path:fout title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
             [[OAGPXDatabase sharedDb] save];
         }
         

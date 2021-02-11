@@ -249,19 +249,15 @@
                 *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFileSubtype userInfo:nil];
             return nil;
         }
+        else if (self.subtype == EOASettingsItemFileSubtypeGpx)
+        {
+            NSString *path = json[@"file"];
+            NSString *subfolderPath = [path stringByReplacingOccurrencesOfString:@"/tracks/" withString:@""];
+            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:subfolderPath];
+        }
         else
         {
-            //TODO: check if additional check is necessary
-            NSString *path = json[@"file"];
-            NSArray *components = [path pathComponents];
-            NSString *subtypeFolder = components[components.count - 2];
-            if ([subtypeFolder isEqualToString:@"tracks"])
-                _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
-            else
-            {
-                NSString *subfolderPath = [subtypeFolder stringByAppendingPathComponent:self.name];
-                _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:subfolderPath];
-            }
+            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
         }
     }
     return self;
@@ -276,7 +272,7 @@
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:destFilePath];
             [doc saveTo:destFilePath];
             OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            [[OAGPXDatabase sharedDb] addGpxItem:[destFilePath lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] addGpxItem:[destFilePath lastPathComponent] path:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
             [[OAGPXDatabase sharedDb] save];
             break;
         }

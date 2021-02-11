@@ -1727,7 +1727,8 @@ typedef enum
     OAAppSettings *settings = [OAAppSettings sharedManager];
     for (NSString *fileName in settings.mapSettingVisibleGpx)
     {
-        NSString *path = [[OAGPXDatabase sharedDb] getFilePath:fileName filePath:_app.gpxPath];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:fileName];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilepath];
         if ([[NSFileManager defaultManager] fileExistsAtPath:path])
         {
             [names addObject:[fileName stringByDeletingPathExtension]];
@@ -1743,7 +1744,7 @@ typedef enum
             if (_activeTargetObj)
             {
                 OAGPX *gpx = (OAGPX *)_activeTargetObj;
-                NSString *path = [[OAGPXDatabase sharedDb] getFilePath:gpx.gpxFileName filePath:_app.gpxPath];
+                NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilepath];
                 [self targetPointAddWaypoint:path];
             }
             else

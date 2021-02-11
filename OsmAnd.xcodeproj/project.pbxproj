@@ -5939,6 +5939,11 @@
 		DACB92B323E0405400771E40 /* OARouteDetailsGraphViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACB92B123E0405400771E40 /* OARouteDetailsGraphViewController.mm */; };
 		DACB92B623E06A0100771E40 /* OARouteBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACB92B523E06A0100771E40 /* OARouteBaseViewController.mm */; };
 		DACB92B723E06A0100771E40 /* OARouteBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACB92B523E06A0100771E40 /* OARouteBaseViewController.mm */; };
+		DACBB96425D2BEA300378C47 /* CarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DACBB96325D2BEA200378C47 /* CarPlay.framework */; };
+		DACBB96825D2C00500378C47 /* OACarPlaySceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DACBB96725D2C00500378C47 /* OACarPlaySceneDelegate.m */; };
+		DACBB96925D2C00500378C47 /* OACarPlaySceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DACBB96725D2C00500378C47 /* OACarPlaySceneDelegate.m */; };
+		DACBB97025D2C5A700378C47 /* OACarPlayDashboardSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DACBB96F25D2C5A700378C47 /* OACarPlayDashboardSceneDelegate.m */; };
+		DACBB97125D2C5A700378C47 /* OACarPlayDashboardSceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DACBB96F25D2C5A700378C47 /* OACarPlayDashboardSceneDelegate.m */; };
 		DACC0EE825417F7800904F66 /* OAMeasurementToolLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACC0EE725417F7800904F66 /* OAMeasurementToolLayer.mm */; };
 		DACC0EE925417F7800904F66 /* OAMeasurementToolLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACC0EE725417F7800904F66 /* OAMeasurementToolLayer.mm */; };
 		DACC0EF0254185C200904F66 /* OAMeasurementEditingContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACC0EEF254185C200904F66 /* OAMeasurementEditingContext.mm */; };
@@ -10461,6 +10466,11 @@
 		DACB92B123E0405400771E40 /* OARouteDetailsGraphViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARouteDetailsGraphViewController.mm; path = Sources/Controllers/2.0/OARouteDetailsGraphViewController.mm; sourceTree = "<group>"; };
 		DACB92B423E06A0100771E40 /* OARouteBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OARouteBaseViewController.h; path = Sources/Controllers/2.0/OARouteBaseViewController.h; sourceTree = "<group>"; };
 		DACB92B523E06A0100771E40 /* OARouteBaseViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OARouteBaseViewController.mm; path = Sources/Controllers/2.0/OARouteBaseViewController.mm; sourceTree = "<group>"; };
+		DACBB96325D2BEA200378C47 /* CarPlay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarPlay.framework; path = System/Library/Frameworks/CarPlay.framework; sourceTree = SDKROOT; };
+		DACBB96625D2C00500378C47 /* OACarPlaySceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlaySceneDelegate.h; sourceTree = "<group>"; };
+		DACBB96725D2C00500378C47 /* OACarPlaySceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACarPlaySceneDelegate.m; sourceTree = "<group>"; };
+		DACBB96E25D2C5A700378C47 /* OACarPlayDashboardSceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayDashboardSceneDelegate.h; sourceTree = "<group>"; };
+		DACBB96F25D2C5A700378C47 /* OACarPlayDashboardSceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACarPlayDashboardSceneDelegate.m; sourceTree = "<group>"; };
 		DACC0EE625417F7800904F66 /* OAMeasurementToolLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMeasurementToolLayer.h; sourceTree = "<group>"; };
 		DACC0EE725417F7800904F66 /* OAMeasurementToolLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMeasurementToolLayer.mm; sourceTree = "<group>"; };
 		DACC0EEE254185C200904F66 /* OAMeasurementEditingContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMeasurementEditingContext.h; sourceTree = "<group>"; };
@@ -10777,6 +10787,7 @@
 				8440E2DC1ABEA7370088856A /* libgif_static.a in Frameworks */,
 				8440E2DD1ABEA7370088856A /* libicu4c_static.a in Frameworks */,
 				8440E2DE1ABEA7370088856A /* libjpeg_static.a in Frameworks */,
+				DACBB96425D2BEA300378C47 /* CarPlay.framework in Frameworks */,
 				8440E2DF1ABEA7370088856A /* libpng_static.a in Frameworks */,
 				8440E2E01ABEA7370088856A /* libprotobuf_static.a in Frameworks */,
 				8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */,
@@ -14808,6 +14819,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DACBB96325D2BEA200378C47 /* CarPlay.framework */,
 				DA80DAD2251F13F6008E6267 /* libarchive_static.a */,
 				DA80DAD4251F13F6008E6267 /* libexpat_static.a */,
 				DA80DACE251E3440008E6267 /* UIKit.framework */,
@@ -14873,6 +14885,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				DACBB96525D2BFCE00378C47 /* CarPlay */,
 				8A8C1171242FB4E800E47052 /* Profiles */,
 				DAF2736722ED8B9C00B22A16 /* QuickAction */,
 				DAD49D87229D59420050751B /* Cards */,
@@ -16304,6 +16317,17 @@
 			name = voice;
 			sourceTree = "<group>";
 		};
+		DACBB96525D2BFCE00378C47 /* CarPlay */ = {
+			isa = PBXGroup;
+			children = (
+				DACBB96625D2C00500378C47 /* OACarPlaySceneDelegate.h */,
+				DACBB96725D2C00500378C47 /* OACarPlaySceneDelegate.m */,
+				DACBB96E25D2C5A700378C47 /* OACarPlayDashboardSceneDelegate.h */,
+				DACBB96F25D2C5A700378C47 /* OACarPlayDashboardSceneDelegate.m */,
+			);
+			path = CarPlay;
+			sourceTree = "<group>";
+		};
 		DACC0EF42541868A00904F66 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
@@ -16495,9 +16519,7 @@
 						LastSwiftMigration = 1020;
 					};
 					BBA3AF30197FC4BB0039D991 = {
-						DevelopmentTeam = LM67P5MQ23;
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -21777,6 +21799,7 @@
 				33EA857F251A09ED0030A4C9 /* OABottomSheetHeaderButtonCell.m in Sources */,
 				847A1CE51DF94E9B003C1246 /* OAEditGroupViewController.m in Sources */,
 				DA9D54A922D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm in Sources */,
+				DACBB96925D2C00500378C47 /* OACarPlaySceneDelegate.m in Sources */,
 				84CC87E11FAB711700B4941F /* OATurnPathHelper.mm in Sources */,
 				DAF06702238FE94A00210E60 /* OAMapSettingsOnlineSourcesScreen.mm in Sources */,
 				847A1CE61DF94E9B003C1246 /* OAMapSettingsViewController.mm in Sources */,
@@ -21926,6 +21949,7 @@
 				DAE2D489230D3A76006A3F7D /* OATextInputIconCell.mm in Sources */,
 				8A7A4C962109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
 				84DE415C2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */,
+				DACBB97125D2C5A700378C47 /* OACarPlayDashboardSceneDelegate.m in Sources */,
 				847A1D171DF94E9B003C1246 /* OADirectionsCardController.mm in Sources */,
 				8AF3C82320F65BD0006C86AA /* OATransportStopRoute.mm in Sources */,
 				DA48614721F9D72100106848 /* OAOpenStreetMapPoint.m in Sources */,
@@ -22399,6 +22423,7 @@
 				32BD81C8259CC00300A54BB5 /* OAProfileSelectionBottomSheetViewController.m in Sources */,
 				DAFE4D492216A472009731CA /* OAOsmEditTargetViewController.mm in Sources */,
 				8A47B8552587A62700FE5DE5 /* OAWaypointsMapLayerProvider.mm in Sources */,
+				DACBB96825D2C00500378C47 /* OACarPlaySceneDelegate.m in Sources */,
 				8474ABAD1E1CE22300355F88 /* OAIconTextCollapseCell.m in Sources */,
 				BBA3AF3D197FC4BB0039D991 /* OADefaultFavorite.m in Sources */,
 				840ED4861B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
@@ -22748,6 +22773,7 @@
 				84A8CEAA1B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */,
 				336FFBB424CEE1300000AA88 /* OATargetInfoCollapsableCoordinatesViewCell.m in Sources */,
 				32AE6BA3257A1433005D0139 /* OAQuickActionsSettingsItem.mm in Sources */,
+				DACBB97025D2C5A700378C47 /* OACarPlayDashboardSceneDelegate.m in Sources */,
 				848D173F1B1C916A00A656F4 /* OATextLineViewCell.m in Sources */,
 				DA2558C724ADE40F0081D155 /* OACreateProfileViewController.mm in Sources */,
 				157540A02452F3D900327879 /* OASettingsCheckmarkCell.m in Sources */,
@@ -23331,7 +23357,7 @@
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 3.90.2.2;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -23366,7 +23392,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = CarPlay;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -23386,7 +23412,7 @@
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 3.90.2.2;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -23421,7 +23447,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = CarPlay;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

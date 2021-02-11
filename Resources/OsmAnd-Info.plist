@@ -473,5 +473,38 @@
 			</dict>
 		</dict>
 	</array>
+	<!--<key>UIApplicationSceneManifest</key>
+	<dict>
+    <key>UIApplicationSupportsMultipleScenes</key>
+    <true/>
+    <key>CPSupportsDashboardNavigationScene</key>
+    <true/>
+    <key>UISceneConfigurations</key>
+    <dict>
+        <key>CPTemplateApplicationSceneSessionRoleApplication</key>
+        <array> 
+            <dict>
+                <key>UISceneClassName</key>
+                <string>CPTemplateApplicationScene</string>
+                <key>UISceneConfigurationName</key>
+                <string>CarPlaySceneConfiguration</string>
+                <key>UISceneDelegateClassName</key>
+                <string>OACarPlaySceneDelegate</string> 
+            </dict>
+        </array>
+        <key>CPTemplateApplicationDashboardSceneSessionRoleApplication</key>
+		<array> 
+    		<dict>
+        		<key>UISceneClassName</key>
+        		<string>CPTemplateApplicationDashboardScene</string>
+        		<key>UISceneConfigurationName</key>
+        		<string>CarPlayDashboardSceneConfiguration</string>
+        		<key>UISceneDelegateClassName</key>
+        		<string>OACarPlayDashboardSceneDelegate</string> 
+    		</dict>
+		</array>
+    </dict>
+</dict> -->  
+
 </dict>
 </plist>

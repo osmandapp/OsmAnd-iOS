@@ -94,7 +94,7 @@
 
 -(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
-    return [self buildGpxItem:fileName path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:title] title:title desc:desc bounds:bounds analysis:analysis];
+    return [self buildGpxItem:fileName path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds analysis:analysis];
 }
 
 -(OAGPX *)buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
@@ -294,7 +294,8 @@
             }
             
         }
-        
+        if (!gpx.gpxFilepath)
+            gpx.gpxFilepath = gpx.gpxFileName;
         if ([[NSFileManager defaultManager] fileExistsAtPath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpx.gpxFilepath]])
             [res addObject:gpx];
     }
@@ -311,7 +312,7 @@
         
         [d setObject:gpx.gpxFileName forKey:@"gpxFileName"];
         [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
-        [d setObject:gpx.gpxFilepath forKey:@"gpxFilepath"];
+        [d setObject:gpx.gpxFilepath ? gpx.gpxFilepath : gpx.gpxTitle forKey:@"gpxFilepath"];
         [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
         [d setObject:gpx.importDate forKey:@"importDate"];
         

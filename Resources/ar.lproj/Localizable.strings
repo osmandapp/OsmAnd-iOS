@@ -93,7 +93,7 @@
 "shared_string_widgets" = "شريط جانبي";
 "map_widget_right" = "العدادات على اليسار";
 "map_widget_left" = "العدادات على اليمين";
-"layer_map_appearance" = "الاختصارات";
+"layer_map_appearance" = "عدادات الشاشة";
 "map_markers" = "العلامات";
 "select_gpx" = "اختر GPX…";
 "confirm_usage_speed_cameras" = "غير مسموح استخدام تحذيرات كاميرا السرعة بالقانون في العديد من البلدان (ألمانيا وفرنسا، وإيطاليا، وغيرها). أوسماند لا تتحمل أي مسؤولية إذا كنت تنتهك القانون. الرجاء انقر فوق \"نعم\" فقط إذا كنت مؤهلاً استخدام هذه الميزة.";
@@ -728,7 +728,7 @@
 "search_another_country" = "حدد منطقة أخرى";
 "skip_map_downloading" = "تخط التحميل";
 "skip_map_downloading_desc" = "ليس لديك خريطة مثبتة في وضع عدم الاتصال. يمكنك اختيار خريطة من القائمة أو تنزيل الخرائط لاحقًا عبر القائمة - إدارة ملفات الخرائط";
-"wiki_around" = "مقالات ويكيبيديا القريبة";
+"wiki_around" = "مقالات ويكيبيديا المجاورة";
 "categories" = "فئات";
 "items_selected" = "%d محدد";
 "custom_search" = "بحث مخصص";
@@ -1701,7 +1701,7 @@
 "appearance_on_map" = "المظهر على الخريطة";
 "choose_how_display_distance" = "اختر كيفية عرض المسافة إلى العلامات النشطة";
 "specify_number_of_dir_indicators" = "تحديد عدد من مؤشرات الاتجاه ، سيؤثر على جميع الإعدادات أدناه.";
-"active_markers" = "عدد خطوط التوجيه";
+"active_markers" = "العلامات النشطة";
 "direction_lines" = "خطوط الاتجاه";
 "arrows_on_map" = "الأسهم على الخريطة";
 "distance_indication" = "مؤشر المسافة";

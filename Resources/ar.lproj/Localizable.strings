@@ -1745,7 +1745,7 @@
 "shared_string_exit" = "خروج";
 "import_routing_file_descr" = "يمكنك استيراد ملف التوجيه من أي تطبيق تخزين سحابي أو بوضعه في مجلد التوجيه في آيتوينز.";
 "osmand_routing" = "توجيه أوسماند";
-"select_nav_profile_dialog_message" = "يؤثر نوع التنقل على قواعد حسابات المسار.";
+"select_nav_profile_dialog_message" = "يؤثر نوع التنقل على كييفية حساب المسارات.";
 "vehicle_parameters" = "معلمات المركبات";
 "screen_alerts" = "تنبيهات الشاشة";
 "voice_anounces" = "إعلام صوتي";

@@ -4,7 +4,7 @@
 "select_street" = "选择街道";
 "shared_string_in_name" = "";
 "select_city" = "选择城市";
-"type_city_town" = "输入城市或城镇";
+"type_city_town" = "输入城市或乡镇";
 "select_postcode" = "选择邮政编码";
 "type_postcode" = "输入邮政编码";
 "coords_search" = "坐标搜索";
@@ -156,7 +156,7 @@
 "sett_settings" = "设置";
 "sett_units" = "";
 "sett_lang" = "地图的语言";
-"sett_km" = "公里";
+"sett_km" = "千米";
 "sett_ml" = "英里";
 "sett_zoom" = "";
 "sett_show" = "显示";
@@ -308,7 +308,7 @@
 "rendering_category_hide" = "隐藏";
 "rendering_category_routes" = "线路";
 "rendering_category_details" = "详细资料";
-"rendering_category_transport" = "运输";
+"rendering_category_transport" = "公共交通";
 "rendering_category_others" = "其他地图属性";
 // Rendering attributes
 "units_minutes_short" = "分";
@@ -470,7 +470,7 @@
 "items_selected" = "%d 已选中";
 "custom_search" = "自定义搜索";
 "poi_filter_custom_filter" = "自定义过滤器";
-"poi_filter_closest_poi" = "最近的POI";
+"poi_filter_closest_poi" = "最近的兴趣点";
 "shared_string_is_open_24_7" = "24小时开放";
 "shared_string_is_open" = "打开";
 "poi_filter_by_name" = "按名称搜索";
@@ -490,7 +490,7 @@
 "city_type_suburb" = "市郊";
 "city_type_hamlet" = "村庄";
 "city_type_village" = "村";
-"city_type_town" = "镇";
+"city_type_town" = "乡镇";
 "city_type_city" = "城市";
 "city_type_district" = "区";
 "city_type_neighbourhood" = "邻近";
@@ -535,7 +535,7 @@
 "app_mode_hiking" = "徒步";
 "app_mode_motorcycle" = "摩托车";
 "app_mode_boat" = "小船";
-"app_mode_aircraft" = "航空器";
+"app_mode_aircraft" = "飞机";
 "int_seconds" = "秒";
 "shared_string_never" = "总不";
 "general_settings_2" = "常规设置";
@@ -617,7 +617,7 @@
 "osm_live_payment_renews_annually" = "每年更新";
 "show_traffic_warnings" = "交通警示";
 "show_cameras" = "高速摄像机";
-"show_lanes" = "显示车道";
+"show_lanes" = "车道";
 "speak_street_names" = "播报街道名称(TTS)";
 "speak_speed_limit" = "播报限速";
 "speak_cameras" = "播报测速电子眼";
@@ -1193,7 +1193,7 @@
 "app_mode_subway" = "地铁";
 "app_mode_shuttle_bus" = "班车";
 "app_mode_pedestrian" = "走路";
-"app_mode_bicycle" = "自行车出行";
+"app_mode_bicycle" = "自行车";
 "app_mode_car" = "驾驶";
 "app_mode_default" = "浏览地图";
 "app_mode_helicopter" = "直升机";
@@ -1382,3 +1382,15 @@
 "plan_route_open_existing_track" = "打开一个存在的轨迹";
 "plan_route_create_new_route" = "创建新的路线";
 "shared_string_turn" = "转弯";
+"consider_limitations_param" = "考虑临时限制";
+"copy_from_other_profile" = "从其他配置文件复制";
+"rearrange_profiles" = "重新排列配置文件";
+"shared_string_add_profile" = "添加配置文件";
+"width_limit_description" = "提供你的车辆宽度，较宽的车辆可能会受到一些路线限制。";
+"height_limit_description" = "提供你的车辆高度，较高的车辆可能会受到一些路线限制。";
+"weight_limit_description" = "提供你的车辆重量，较重的车辆可能会受到一些路线限制。";
+"gpx_parse_error" = "OsmAnd GPX 格式不正确，请联系支持团队进一步调查。";
+"simplified_track_description" = "只有路线线会被保存，航点会被删除。";
+"open_saved_track" = "打开保存的轨迹";
+"profile_type_osmand_string" = "OsmAnd 配置文件";
+"profile_type_user_string" = "用户配置文件";

@@ -8,6 +8,7 @@
 
 #import "OAGpxAppearanceInfo.h"
 #import "OAGPXTrackAnalysis.h"
+#import "OAGPXDocument.h"
 
 @interface OAGpxAppearanceInfo()
 
@@ -31,13 +32,14 @@
 //        _gradientSlopeColor = dataItem.getGradientSlopeColor;
 //        _gradientAltitudeColor = dataItem.getGradientAltitudeColor;
 //
-//        OAGPXTrackAnalysis *analysis = [dataItem getAnalysis];
-//        if (analysis)
-//        {
-            _timeSpan = dataItem.timeSpan; // analysis.timeSpan
-            _wptPoints = dataItem.wptPoints; // analysis.wptPoints
-            _totalDistance = dataItem.totalDistance; // analysis.totalDistance
-//        }
+        OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:dataItem.gpxFileName];
+        OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
+        if (analysis)
+        {
+            _timeSpan = analysis.timeSpan;
+            _wptPoints = analysis.wptPoints;
+            _totalDistance = analysis.totalDistance;
+        }
     }
     return self;
 }

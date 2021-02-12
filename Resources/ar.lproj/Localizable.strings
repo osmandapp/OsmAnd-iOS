@@ -569,7 +569,7 @@
 "help_quiz" = "استطلاع";
 // Rendering categories
 "rendering_category_hide" = "إخفاء";
-"rendering_category_routes" = "الطرق";
+"rendering_category_routes" = "المسارات الرياضية";
 "rendering_category_details" = "تفاصيل إضافية";
 "rendering_category_transport" = "وسائل المواصلات";
 "rendering_category_others" = "سمات أخرى للخريطة";
@@ -1701,7 +1701,7 @@
 "appearance_on_map" = "المظهر على الخريطة";
 "choose_how_display_distance" = "اختر كيفية عرض المسافة إلى العلامات النشطة";
 "specify_number_of_dir_indicators" = "تحديد عدد من مؤشرات الاتجاه ، سيؤثر على جميع الإعدادات أدناه.";
-"active_markers" = "العلامات النشطة";
+"active_markers" = "عدد خطوط التوجيه";
 "direction_lines" = "خطوط الاتجاه";
 "arrows_on_map" = "الأسهم على الخريطة";
 "distance_indication" = "مؤشر المسافة";
@@ -1745,7 +1745,7 @@
 "shared_string_exit" = "خروج";
 "import_routing_file_descr" = "يمكنك استيراد ملف التوجيه من أي تطبيق تخزين سحابي أو بوضعه في مجلد التوجيه في آيتوينز.";
 "osmand_routing" = "توجيه أوسماند";
-"select_nav_profile_dialog_message" = "يؤثر نوع التنقل على قواعد حسابات الطرق.";
+"select_nav_profile_dialog_message" = "يؤثر نوع التنقل على قواعد حسابات المسار.";
 "vehicle_parameters" = "معلمات المركبات";
 "screen_alerts" = "تنبيهات الشاشة";
 "voice_anounces" = "إعلام صوتي";

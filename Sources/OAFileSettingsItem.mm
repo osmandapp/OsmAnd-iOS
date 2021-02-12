@@ -252,8 +252,17 @@
         else if (self.subtype == EOASettingsItemFileSubtypeGpx)
         {
             NSString *path = json[@"file"];
-            NSString *subfolderPath = [path stringByReplacingOccurrencesOfString:@"/tracks/" withString:@""];
-            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:subfolderPath];
+            NSArray *pathComponents = [path pathComponents];
+            if (pathComponents.count > 2)
+            {
+                NSArray *filePathComponents = [pathComponents subarrayWithRange:NSMakeRange(2, pathComponents.count - 2)];
+                NSString *subfolderPath = [NSString pathWithComponents:filePathComponents];
+                _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:subfolderPath];
+            }
+            else
+            {
+                _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path];
+            }
         }
         else
         {

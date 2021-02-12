@@ -58,7 +58,7 @@
         NSDictionary *attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:_file error:&error];
         if (attrs) {
             NSString *size = [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleBinary];
-            _sz = [size intValue];
+            _sz = [size integerValue];
         }
     }
     return _sz;

@@ -30,10 +30,10 @@
 {
     _result = [NSMutableArray array];
     [self loadGPXData:OsmAndApp.instance.gpxPath];
-    _gpxFolders = [NSMutableDictionary dictionaryWithDictionary:[self getFilesInFolders]];
+    _gpxFolders = [NSMutableDictionary dictionaryWithDictionary:[self getTracksByFolder]];
 }
 
-- (NSDictionary *) getFilesInFolders
+- (NSDictionary<NSString *, NSArray<OAGpxInfo *> *> *) getTracksByFolder
 {
     NSMutableDictionary *folders = [NSMutableDictionary dictionary];
     NSMutableArray *tracksFolder = [NSMutableArray array];

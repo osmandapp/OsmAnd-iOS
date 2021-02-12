@@ -698,7 +698,7 @@ static UIViewController *parentController;
         tracksGroup.isMenu = NO;
         tracksGroup.type = kGPXGroupHeaderRow;
         tracksGroup.header = @"";
-        for (OAGpxInfo *track in [_gpxFolders objectForKey:key])
+        for (OAGpxInfo *track in _gpxFolders[key])
         {
             [tracksGroup.groupItems addObject:@{
                 @"type" : kGPXTrackCell,

@@ -22,6 +22,8 @@
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
 #import "OAMapViewState.h"
+#import "OACarPlayMapViewController.h"
+#import "OACarPlayDashboardInterfaceController.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -51,9 +53,8 @@
     NSURL *loadedURL;
     NSTimer *_checkLiveTimer;
 	
-	CPWindow *_carWindow;
-	CPInterfaceController *_interfaceController;
-	CPMapTemplate *_mapTemplate;
+	OACarPlayMapViewController *_carPlayMapController API_AVAILABLE(ios(12.0));
+	OACarPlayDashboardInterfaceController *_carPlayDashboardController API_AVAILABLE(ios(12.0));
 }
 
 @synthesize window = _window;
@@ -349,73 +350,32 @@
 }
 
 #pragma mark - CFCarPlayDelegate
-- (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window
+
+- (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
 {
-	// Keep references to the CPInterfaceController (handles your templates) and the CPMapContentWindow (to draw/load your own ViewController's with a navigation map onto)
-	_interfaceController = interfaceController;
-	_carWindow = window;
-	
-	// Create a map template and set it as the root on the interfacecontroller (you may push/pop templates like a UINavigationController) Also assign delegate for the callbacks
-//	CPMapTemplate *mapTemplate = [self createTemplate];
-//	mapTemplate.mapDelegate = self;
-	
-//	_mapTemplate = mapTemplate;
-	
 	OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
 	if (!mapVc)
 	{
 		[self initialize];
 		mapVc = OARootViewController.instance.mapPanel.mapViewController;
 	}
-	[mapVc.mapView suspendRendering];
-	[mapVc removeFromParentViewController];
-	[mapVc.view removeFromSuperview];
-//	[interfaceController setRootTemplate:_mapTemplate animated:YES];
-	window.rootViewController = mapVc;
-	[mapVc.mapView resumeRendering];
+	_carPlayMapController = [[OACarPlayMapViewController alloc] initWithCarPlayWindow:window mapViewController:mapVc];
+	
+//	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_carPlayMapController];
+	window.rootViewController = _carPlayMapController;
+	
+	_carPlayDashboardController = [[OACarPlayDashboardInterfaceController alloc] initWithInterfaceController:interfaceController];
+	_carPlayDashboardController.delegate = _carPlayMapController;
+	[_carPlayDashboardController present];
 }
 
-- (CPMapTemplate *) createTemplate
+- (void)application:(UIApplication *)application didDisconnectCarInterfaceController:(CPInterfaceController *)interfaceController fromWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
 {
-	// Create the default CPMapTemplate objcet (you may subclass this at your leasure)
-	CPMapTemplate *mapTemplate = [[CPMapTemplate alloc] init];
-	
-	// Create the different CPBarButtons
-//	let searchBarButton = createBarButton(.search)
-//	mapTemplate.leadingNavigationBarButtons = [searchBarButton]
-	
-	[_mapTemplate showPanningInterfaceAnimated:YES];
-	CPBarButton *button = [[CPBarButton alloc] initWithType:CPBarButtonTypeText handler:^(CPBarButton * _Nonnull) {
-		
-	}];
-	mapTemplate.trailingNavigationBarButtons = @[button];
-	
-	// Always show the NavigationBar
-	mapTemplate.automaticallyHidesNavigationBar = NO;
-	
-	return mapTemplate;
-}
-
-// MARK: - CPMapTemplate delegate method
-
-- (void)mapTemplateWillDismissPanningInterface:(CPMapTemplate *)mapTemplate
-{
-	
-}
-
-- (void)application:(UIApplication *)application didDisconnectCarInterfaceController:(CPInterfaceController *)interfaceController fromWindow:(CPWindow *)window
-{
-	OAMapViewController *mapVc = (OAMapViewController *) window.rootViewController;
+	[_carPlayMapController detachFromCarPlayWindow];
+	_carPlayDashboardController = nil;
+	[_carPlayMapController.navigationController popViewControllerAnimated:YES];
 	window.rootViewController = nil;
-	if (!mapVc)
-	{
-		[self initialize];
-		mapVc = OARootViewController.instance.mapPanel.mapViewController;
-	}
-	[mapVc.mapView suspendRendering];
-	[OARootViewController.instance.mapPanel addChildViewController:mapVc];
-	[OARootViewController.instance.mapPanel.view addSubview:mapVc.view];
-	[mapVc.mapView resumeRendering];
+	_carPlayMapController = nil;
 }
 
 @end

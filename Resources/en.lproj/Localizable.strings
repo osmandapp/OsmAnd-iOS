@@ -354,6 +354,7 @@
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Error calculating route";
+"route_calc_progress" = "Calculating: %d%%";
 "internet_connection_required_for_online_route" = "An online navigation service is selected but no Internet connection is available.";
 "empty_route_calculated" = "Error: Calculated route is empty";
 "destination_point" = "Destination %@";

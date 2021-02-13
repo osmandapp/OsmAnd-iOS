@@ -1847,7 +1847,6 @@
 "gpx_parse_error" = "OsmAnd стварыў GPX не зусім правільна. Калі ласка, звяжыцеся са службай падтрымкі.";
 "nothing_found_empty" = "Нічога не знойдзена";
 "shared_string_next" = "Далей";
-
 "import_complete_description" = "Усе даныя з %@ імпартаваныя, вы можаце выкарыстоўваць кнопкі ніжэй, каб адкрыць адпаведны раздзел праграмы для кіравання імі.";
 "route_betw_points" = "Маршрут паміж пунктамі";
 "importing_from" = "Імпарт даных з %@";
@@ -1898,3 +1897,5 @@
 "shared_string_deselect_all" = "Адкінуць выбар усяго";
 "shared_string_importing" = "Імпарт";
 "shared_string_nothing_selected" = "Нічога не абрана";
+"profile_type_user_string" = "Профіль карыстальніка";
+"profile_type_osmand_string" = "Профіль OsmAnd";

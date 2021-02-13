@@ -15,6 +15,7 @@
 #import "OANavigationIcon.h"
 #import "OALocationIcon.h"
 #import "OAAvoidRoadInfo.h"
+#import "OAGPXDatabase.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -2800,11 +2801,12 @@
     NSMutableArray *arrToDelete = [NSMutableArray array];
     for (NSString *fileName in arr)
     {
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:fileName];
         NSString *filenameWithoutPrefix = nil;
         if ([fileName hasSuffix:@"_osmand_backup"])
             filenameWithoutPrefix = [fileName stringByReplacingOccurrencesOfString:@"_osmand_backup" withString:@""];
         
-        NSString *path = [app.gpxPath stringByAppendingPathComponent:filenameWithoutPrefix ? filenameWithoutPrefix : fileName];
+        NSString *path = [app.gpxPath stringByAppendingPathComponent:filenameWithoutPrefix ? filenameWithoutPrefix : gpx.gpxFilepath];
         if (![[NSFileManager defaultManager] fileExistsAtPath:path])
             [arrToDelete addObject:fileName];
     }

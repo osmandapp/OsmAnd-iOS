@@ -48,6 +48,8 @@
 
 #define ACCURACY_FOR_GPX_AND_ROUTING 50.0
 
+#define recordedTrackFolder @"/rec/"
+
 @implementation OASavingTrackHelper
 {
     OsmAndAppInstance _app;
@@ -345,7 +347,7 @@
         NSString *fout;
         for (NSString *f in data.allKeys)
         {
-            fout = [NSString stringWithFormat:@"%@/%@.gpx", _app.gpxPath, f];
+            fout = [NSString stringWithFormat:@"%@%@%@.gpx", _app.gpxPath, recordedTrackFolder, f];
             OAGPXMutableDocument *doc = data[f];
             if (![doc isEmpty])
             {
@@ -355,17 +357,22 @@
                 [simpleFormat setDateFormat:@"HH-mm_EEE"];
                 
                 NSString *fileName = [NSString stringWithFormat:@"%@_%@", f, [simpleFormat stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time]]];
-                fout = [NSString stringWithFormat:@"%@/%@.gpx", _app.gpxPath, fileName];
+                fout = [NSString stringWithFormat:@"%@%@%@.gpx", _app.gpxPath, recordedTrackFolder, fileName];
                 int ind = 1;
                 while ([fileManager fileExistsAtPath:fout]) {
-                    fout = [NSString stringWithFormat:@"%@/%@_%d.gpx", _app.gpxPath, fileName, ++ind];
+                    fout = [NSString stringWithFormat:@"%@%@%@_%d.gpx", _app.gpxPath, recordedTrackFolder, fileName, ++ind];
                 }
             }
             
+            NSFileManager *fileManager = NSFileManager.defaultManager;
+            NSString *directory = [fout stringByDeletingLastPathComponent];
+            if (![fileManager fileExistsAtPath:directory])
+                [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
+
             [doc saveTo:fout];
             
             OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] path:fout title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
             [[OAGPXDatabase sharedDb] save];
         }
         

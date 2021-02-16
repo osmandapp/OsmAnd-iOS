@@ -1697,7 +1697,7 @@
 "map_settings_slopes_legend" = "يمكنك قراءة المزيد حول المنحدرات على ويكيبيديا";
 "map_settings_layer_transparency" = "شفافية الطبقة";
 "map_settings_terrain" = "تضاريس";
-"arrows_direction_to_markers" = "الأسهم تظهر الاتجاه إلى التوجيه المباشر إذا كانت موجودة خارج الشاشة. سترسم خطوط الاتجاه على شكل خط مباشر.";
+"arrows_direction_to_markers" = "الأسهم تظهر الاتجاه إلى علامات الخريطة إذا كانت موجودة خارج الشاشة. سترسم خطوط الاتجاه على شكل خط مباشر.";
 "appearance_on_map" = "المظهر على الخريطة";
 "choose_how_display_distance" = "اختر كيفية عرض المسافة إلى العلامات النشطة";
 "specify_number_of_dir_indicators" = "تحديد عدد من مؤشرات الاتجاه ، سيؤثر على جميع الإعدادات أدناه.";

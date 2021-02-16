@@ -94,7 +94,7 @@
 "map_widget_right" = "العدادات على اليسار";
 "map_widget_left" = "العدادات على اليمين";
 "layer_map_appearance" = "الاختصارات";
-"map_markers" = "";
+"map_markers" = "توجيه مباشر";
 "select_gpx" = "اختر GPX…";
 "confirm_usage_speed_cameras" = "غير مسموح استخدام تحذيرات كاميرا السرعة بالقانون في العديد من البلدان (ألمانيا وفرنسا، وإيطاليا، وغيرها). أوسماند لا تتحمل أي مسؤولية إذا كنت تنتهك القانون. الرجاء انقر فوق \"نعم\" فقط إذا كنت مؤهلاً استخدام هذه الميزة.";
 "show_traffic_warnings" = "تحذيرات حركة المرور";
@@ -543,7 +543,7 @@
 "ctx_mnu_edit_fav" = "تحرير المفضلة";
 "ctx_mnu_add_fav" = "إضافة للمفضلة";
 "ctx_mnu_share" = "مشاركة";
-"ctx_mnu_direction" = "علامة";
+"ctx_mnu_direction" = "توجيه مباشر";
 // Location Services
 "loc_access_denied" = "تم رفض الوصول";
 "loc_access_denied_desc" = "تم رفض الوصول إلى خدمه الموقع";

@@ -543,7 +543,7 @@
 "ctx_mnu_edit_fav" = "تحرير المفضلة";
 "ctx_mnu_add_fav" = "إضافة للمفضلة";
 "ctx_mnu_share" = "مشاركة";
-"ctx_mnu_direction" = "توجيه مباشر";
+"ctx_mnu_direction" = "علامة";
 // Location Services
 "loc_access_denied" = "تم رفض الوصول";
 "loc_access_denied_desc" = "تم رفض الوصول إلى خدمه الموقع";
@@ -1141,7 +1141,7 @@
 "add_action" = "إضافة إجراء";
 "create_items" = "إنشاء عناصر";
 "configure_map" = "ضبط الخريطة";
-"add_map_marker" = "إضافة توجيه مباشر للخريطة";
+"add_map_marker" = "إضافة علامة للخريطة";
 "add_gpx_waypoint" = "إضافة الإحداثية GPX";
 "toggle_fav" = "إظهار/إخفاء المفضلة";
 "toggle_poi" = "إظهار/إخفاء POI";

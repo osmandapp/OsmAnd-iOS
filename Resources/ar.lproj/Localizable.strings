@@ -543,7 +543,7 @@
 "ctx_mnu_edit_fav" = "تحرير المفضلة";
 "ctx_mnu_add_fav" = "إضافة للمفضلة";
 "ctx_mnu_share" = "مشاركة";
-"ctx_mnu_direction" = "توجيه مباشر";
+"ctx_mnu_direction" = "علامة";
 // Location Services
 "loc_access_denied" = "تم رفض الوصول";
 "loc_access_denied_desc" = "تم رفض الوصول إلى خدمه الموقع";

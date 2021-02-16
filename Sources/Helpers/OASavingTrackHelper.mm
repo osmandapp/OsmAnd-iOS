@@ -365,14 +365,14 @@
             }
             
             NSFileManager *fileManager = NSFileManager.defaultManager;
-            NSString *directory = [fout stringByDeletingLastPathComponent];
+            NSString *directory = [[fout stringByDeletingLastPathComponent] lastPathComponent];
             if (![fileManager fileExistsAtPath:directory])
                 [fileManager createDirectoryAtPath:directory withIntermediateDirectories:NO attributes:nil error:nil];
 
             [doc saveTo:fout];
             
             OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] filePath:fout title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] folderName:directory title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
             [[OAGPXDatabase sharedDb] save];
         }
         
@@ -931,7 +931,7 @@
 {
     OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
     [currentTrack applyBounds];
-    return [[OAGPXDatabase sharedDb] buildGpxItem:@"" filePath:nil title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds analysis:analysis];
+    return [[OAGPXDatabase sharedDb] buildGpxItem:@"" folderName:@"" title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds analysis:analysis];
 }
 
 @end

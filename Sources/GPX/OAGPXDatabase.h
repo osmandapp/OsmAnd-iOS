@@ -16,7 +16,7 @@
 @interface OAGPX : NSObject
 
 @property (nonatomic) NSString *gpxFileName;
-@property (nonatomic) NSString *gpxFilePath;
+@property (nonatomic) NSString *gpxFolder;
 @property (nonatomic) NSString *gpxTitle;
 @property (nonatomic) NSString *gpxDescription;
 @property (nonatomic) NSDate   *importDate;
@@ -60,17 +60,19 @@
 
 + (OAGPXDatabase *)sharedDb;
 
--(OAGPX *)buildGpxItem:(NSString *)fileName filePath:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)addGpxItem:(NSString *)fileName filePath:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)buildGpxItem:(NSString *)fileName folderName:(NSString *)folderName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)addGpxItem:(NSString *)fileName folderName:(NSString *)folderName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
 -(OAGPX *)getGPXItem:(NSString *)fileName;
+-(OAGPX *)getGPXItemByFileName:(NSString *)fileName inFolder:(NSString *)folderName;
 - (void)replaceGpxItem:(OAGPX *)gpx;
 -(void)removeGpxItem:(NSString *)fileName;
 -(BOOL)containsGPXItem:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)fileName pointsCount:(int)pointsCount;
 -(BOOL)updateGPXItemColor:(NSString *)fileName color:(int)color;
--(BOOL)updateGPXFilePath:(NSString *)filePath newFilePath:(NSString *)newFilePath;
-- (BOOL) fileExists:(NSString *) fileName;
-- (NSString *) getFilePath:(NSString *)fileName filePath:(NSString *)filePath;
+-(BOOL)updateGPXFolderName:(NSString *)newFolderName oldFolderName:(NSString *)oldFolderName newFileName:(NSString *)newFileName oldFileName:(NSString *)oldFileName;
+- (BOOL) fileExists:(NSString *)fileName folderName:(NSString *)folderName;
+- (NSString *) getFilePath:(NSString *)fileName folderName:(NSString *)folderName;
+- (NSString *) getSuperFolderNameByFilePath:(NSString *)filePath;
 
 -(void) load;
 -(void) save;

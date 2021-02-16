@@ -41,7 +41,12 @@
 
 - (IBAction)doneButtonPressed:(id)sender
 {
+    [self onDoneButtonPressed];
     [self dismissViewController];
+}
+
+- (void)onDoneButtonPressed
+{
 }
 
 - (IBAction)backButtonPressed:(id)sender

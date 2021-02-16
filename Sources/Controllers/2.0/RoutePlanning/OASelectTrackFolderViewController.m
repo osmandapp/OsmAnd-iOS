@@ -1,47 +1,45 @@
 //
-//  OASelectTrackFolderBottomSheetViewController.m
+//  OASelectTrackFolderViewController.m
 //  OsmAnd
 //
 //  Created by nnngrach on 05.02.2021.
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OASelectTrackFolderBottomSheetViewController.h"
+#import "OASelectTrackFolderViewController.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OASettingsTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
-#import "OAAddTrackFolderBottomSheetViewController.h"
+#import "OAAddTrackFolderViewController.h"
 #import "OsmAndApp.h"
 #import "OALoadGpxTask.h"
+//#import "OASelectedGPXHelper.h"
 
 #define kCellTypeAction @"OATitleRightIconCell"
 #define kMultiIconTextDescCell @"OAMultiIconTextDescCell"
 #define kAddNewFolderSection 0
 #define kFoldersListSection 1
-#define kTracksFolder @"Tracks"
 
-@interface OASelectTrackFolderBottomSheetViewController() <UITableViewDelegate, UITableViewDataSource, OAAddTrackFolderDelegate>
+@interface OASelectTrackFolderViewController() <UITableViewDelegate, UITableViewDataSource, OAAddTrackFolderDelegate>
 
 @end
 
-@implementation OASelectTrackFolderBottomSheetViewController
+@implementation OASelectTrackFolderViewController
 {
     id<OASelectTrackFolderDelegate> _delegate;
-    NSString *_filePath;
-    NSString *_fileName;
+    OAGPX *_gpx;
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype) initWithFolderName:(NSString *)fileName filePath:(NSString *)filePath delegate:(id<OASelectTrackFolderDelegate>)delegate
+- (instancetype) initWithGPX:(OAGPX *)gpx delegate:(id<OASelectTrackFolderDelegate>)delegate;
 {
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
-        _filePath = filePath;
-        _fileName = fileName;
+        _gpx = gpx;
         _delegate = delegate;
         [self reloadData];
     }
@@ -64,14 +62,13 @@
 
 - (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
 {
-    BOOL isInRootFolder = [[_filePath stringByDeletingLastPathComponent] isEqualToString:OsmAndApp.instance.gpxPath];
-    NSString *selectedFolderName = isInRootFolder ? kTracksFolder : [[_filePath stringByDeletingLastPathComponent] lastPathComponent];
+    BOOL isInRootFolder = [_gpx.gpxFolder isEqualToString: @""];
+    NSString *selectedFolderName = isInRootFolder ? OALocalizedString(@"tracks") : _gpx.gpxFolder;
     
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
             @"type" : kCellTypeAction,
-            @"header" : @"",
             @"title" : @"Add new folder",
             @"img" : @"ic_custom_add",
         },
@@ -99,7 +96,7 @@
 - (void) reloadData
 {
     NSMutableArray<NSString *> *allFoldersNames = [NSMutableArray new];
-    [allFoldersNames addObject:kTracksFolder];
+    [allFoldersNames addObject:OALocalizedString(@"tracks")];
     NSArray* filesList = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
     for (NSString *name in filesList)
     {
@@ -193,37 +190,53 @@
 {
     if (indexPath.section == kAddNewFolderSection)
     {
-        OAAddTrackFolderBottomSheetViewController * addFolderVC = [[OAAddTrackFolderBottomSheetViewController alloc] init];
+        OAAddTrackFolderViewController * addFolderVC = [[OAAddTrackFolderViewController alloc] init];
         addFolderVC.delegate = self;
         [self presentViewController:addFolderVC animated:YES completion:nil];
         
     }
-    if (indexPath.section == kFoldersListSection)
+    else if (indexPath.section == kFoldersListSection)
     {
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         [self moveTrackToFolder:item[@"title"]];
-        [_delegate updateSelectedFolder];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
-- (void) moveTrackToFolder:(NSString *)destinationFolderName
+- (void) moveTrackToFolder:(NSString *)dysplayingDestinationFolder
 {
-    NSString *sourcePath = _filePath ? _filePath : [OAGPXDatabase.sharedDb getFilePath:_fileName filePath:OsmAndApp.instance.gpxPath];
+    NSString *sourcePath = [OAGPXDatabase.sharedDb getFilePath:_gpx.gpxFileName folderName:_gpx.gpxFolder];
+    NSString *oldFileName = _gpx.gpxFileName;
+    NSString *oldFolder = _gpx.gpxFolder;
     
-    NSString *destinationPath = OsmAndApp.instance.gpxPath;
-    if (![destinationFolderName isEqualToString:kTracksFolder])
-        destinationPath = [destinationPath stringByAppendingPathComponent:destinationFolderName];
+    NSString *destinationFolderName = dysplayingDestinationFolder;
+    NSString *destinationFolderPath = OsmAndApp.instance.gpxPath;
+    if ([dysplayingDestinationFolder isEqualToString:OALocalizedString(@"tracks")])
+        destinationFolderName = @"";
+    else
+        destinationFolderPath = [destinationFolderPath stringByAppendingPathComponent:dysplayingDestinationFolder];
     
-    destinationPath = [destinationPath stringByAppendingPathComponent:_fileName];
+    NSString *uniqueFileName = [self getUniqueFileName:[sourcePath lastPathComponent] inFolderPath:destinationFolderPath];
+    NSString *destinationFilePath = [destinationFolderPath stringByAppendingPathComponent:uniqueFileName];
+    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationFilePath error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:destinationPath])
+    [OAGPXDatabase.sharedDb updateGPXFolderName:destinationFolderName oldFolderName:_gpx.gpxFolder newFileName:uniqueFileName oldFileName:oldFileName];
+    [OAGPXDatabase.sharedDb save];
+    [_delegate updateSelectedFolder:_gpx  oldFileName:oldFileName newFileName:uniqueFileName oldFolder:oldFolder newFolder:destinationFolderName];
+}
+
+- (NSString *) getUniqueFileName:(NSString *)fileName inFolderPath:(NSString *)folderPath
+{
+    NSString *name = [fileName stringByDeletingPathExtension];
+    NSString *newName = name;
+    int i = 2;
+    while ([[NSFileManager defaultManager] fileExistsAtPath:[[folderPath stringByAppendingPathComponent:newName] stringByAppendingPathExtension:@"gpx"]])
     {
-        [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
-        [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
+        newName = [NSString stringWithFormat:@"%@ %i", name, i];
+        i++;
     }
-    
-    [self reloadData];
+    return [newName stringByAppendingPathExtension:@"gpx"];
 }
 
 #pragma mark - OAAddTrackFolderDelegate

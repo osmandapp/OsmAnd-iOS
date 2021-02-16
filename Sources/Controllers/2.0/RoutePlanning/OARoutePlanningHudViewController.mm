@@ -377,7 +377,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (selectedFile != nullptr)
         gpxFile = [[OAGPXMutableDocument alloc] initWithGpxDocument:selectedFile];
     else
-        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[[OAGPXDatabase sharedDb] getFilePath:gpxFileName filePath:_app.gpxPath]];
+        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[[OAGPXDatabase sharedDb] getFilePath:gpxFileName folderName:@""]];
     
     if (!gpxFile.routes)
         gpxFile.routes = [NSMutableArray new];
@@ -865,7 +865,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     if (showOnMap)
     {
-        [_settings showGpx:@[outFile.lastPathComponent]];
+        NSString *folderName = [[OAGPXDatabase sharedDb] getSuperFolderNameByFilePath:outFile];
+        NSString *savingPath = [folderName stringByAppendingPathComponent:outFile.lastPathComponent];
+        [_settings showGpx:@[savingPath]];
     }
 }
 

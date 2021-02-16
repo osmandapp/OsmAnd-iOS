@@ -87,8 +87,8 @@
             OAGpxInfo *info = [[OAGpxInfo alloc] init];
             info.subfolder = gpxSubfolder;
             info.file = gpxFile;
-            info.gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxFile];
-            info.gpx.gpxFilePath = [mapPath stringByAppendingPathComponent:gpxFile];
+            info.gpx = [OAGPXDatabase.sharedDb getGPXItemByFileName:gpxFile inFolder:gpxSubfolder];
+            info.gpx.gpxFolder = gpxSubfolder;
             [_result addObject:info];
         }
     }

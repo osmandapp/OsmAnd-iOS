@@ -67,7 +67,7 @@
             [_selectedGPXFilesBackup addObject:fileName];
             continue;
         }
-        NSString __block *path = [[OAGPXDatabase sharedDb] getFilePath:fileName filePath:_app.gpxPath];
+        NSString __block *path = [[OAGPXDatabase sharedDb] getFilePath:[fileName lastPathComponent] folderName:[fileName stringByDeletingLastPathComponent]];
         QString qPath = QString::fromNSString(path);
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && !_activeGpx.contains(qPath))
         {
@@ -88,7 +88,10 @@
     }
     for (auto it = _activeGpx.begin(); it != _activeGpx.end(); )
     {
-        if (![_settings.mapSettingVisibleGpx containsObject:[it.key().toNSString() lastPathComponent]])
+        NSString *path = it.key().toNSString();
+        NSString *folderName = [[OAGPXDatabase sharedDb] getSuperFolderNameByFilePath:path];
+        NSString *storingPath = [folderName stringByAppendingPathComponent:[path lastPathComponent]];
+        if (![_settings.mapSettingVisibleGpx containsObject:storingPath])
             it = _activeGpx.erase(it);
         else
             ++it;
@@ -109,7 +112,8 @@
         NSArray *currentlyVisible = _settings.mapSettingVisibleGpx;
         for (NSString *filename in currentlyVisible)
         {
-            [backedUp addObject:[filename stringByAppendingString:kBackupSuffix]];
+            NSString *folderName = [OAGPXDatabase.sharedDb getSuperFolderNameByFilePath:filename];
+            [backedUp addObject:[folderName stringByAppendingPathComponent:[filename.lastPathComponent stringByAppendingString:kBackupSuffix]]];
         }
     }
     _activeGpx.clear();
@@ -135,16 +139,16 @@
     [_selectedGPXFilesBackup removeAllObjects];
 }
 
-+ (void) renameVisibleTrack:(NSString *)oldName newName:(NSString *) newName
++ (void) renameVisibleTrack:(NSString *)oldName newName:(NSString *)newName oldFolder:(NSString *)oldFolder newFolder:(NSString *)newFolder
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx];
     for (NSString *gpx in settings.mapSettingVisibleGpx)
     {
-        if ([gpx isEqualToString:oldName])
+        if ([gpx isEqualToString:[oldFolder stringByAppendingPathComponent:oldName]])
         {
             [visibleGpx removeObject:gpx];
-            [visibleGpx addObject:newName];
+            [visibleGpx addObject:[newFolder stringByAppendingPathComponent:newName]]; 
             break;
         }
     }

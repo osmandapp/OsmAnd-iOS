@@ -2798,14 +2798,17 @@
 {
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
     NSMutableArray *arrToDelete = [NSMutableArray array];
-    for (NSString *fileName in arr)
+    for (NSString *path in arr)
     {
+        NSString *fileName = [path lastPathComponent];
+        NSString *folderName = [path stringByDeletingLastPathComponent];
         NSString *filenameWithoutPrefix = nil;
         if ([fileName hasSuffix:@"_osmand_backup"])
+            
             filenameWithoutPrefix = [fileName stringByReplacingOccurrencesOfString:@"_osmand_backup" withString:@""];
         
-        if (![[OAGPXDatabase sharedDb] fileExists:filenameWithoutPrefix ? filenameWithoutPrefix : fileName])
-            [arrToDelete addObject:fileName];
+        if (![[OAGPXDatabase sharedDb] fileExists:(filenameWithoutPrefix ? filenameWithoutPrefix : fileName) folderName:folderName])
+            [arrToDelete addObject:path];
     }
     [arr removeObjectsInArray:arrToDelete];
     self.mapSettingVisibleGpx = [NSArray arrayWithArray:arr];

@@ -2237,7 +2237,8 @@
         if (![_gpxDocFileTemp isEqualToString:fileName] || _gpxDocsTemp.isEmpty()) {
             _gpxDocsTemp.clear();
             _gpxDocFileTemp = [fileName copy];
-            NSString *path = [[OAGPXDatabase sharedDb] getFilePath:fileName filePath:_app.gpxPath];
+            NSString *folderName = [[OAGPXDatabase sharedDb] getSuperFolderNameByFilePath:fileName];
+            NSString *path = [[OAGPXDatabase sharedDb] getFilePath:[fileName lastPathComponent] folderName:folderName];
             _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
         }
         
@@ -2312,7 +2313,7 @@
         return;
 
     std::shared_ptr<const OsmAnd::GeoInfoDocument> doc = _gpxDocsTemp.first();
-    NSString *path =  [[OAGPXDatabase sharedDb] getFilePath:_gpxDocFileTemp filePath:_app.gpxPath]; 
+    NSString *path =  [[OAGPXDatabase sharedDb] getFilePath:_gpxDocFileTemp folderName:@""];
     QString qPath = QString::fromNSString(path);
     if (![[OAAppSettings sharedManager].mapSettingVisibleGpx containsObject:_gpxDocFileTemp])
     {

@@ -1,5 +1,5 @@
 //
-//  OAAddTrackFolderBottomSheetViewController.h
+//  OAAddTrackFolderViewController.h
 //  OsmAnd
 //
 //  Created by nnngrach on 07.02.2021.
@@ -14,7 +14,7 @@
 
 @end
 
-@interface OAAddTrackFolderBottomSheetViewController : OABaseTableViewController
+@interface OAAddTrackFolderViewController : OABaseTableViewController
 
 @property (nonatomic, weak) id<OAAddTrackFolderDelegate> delegate;
 

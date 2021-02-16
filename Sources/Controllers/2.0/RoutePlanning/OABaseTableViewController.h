@@ -17,6 +17,6 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 
-- (IBAction)doneButtonPressed:(id)sender;
+- (void)onDoneButtonPressed;
 
 @end

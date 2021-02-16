@@ -1,12 +1,12 @@
 //
-//  OAAddTrackFolderBottomSheetViewController.m
+//  OAAddTrackFolderViewController.m
 //  OsmAnd
 //
 //  Created by nnngrach on 07.02.2021.
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OAAddTrackFolderBottomSheetViewController.h"
+#import "OAAddTrackFolderViewController.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import "OAUtilities.h"
@@ -14,13 +14,12 @@
 #import "OsmAndApp.h"
 
 #define kCellTypeInput @"OATextInputCell"
-#define kTracksFolder @"Tracks"
 
-@interface OAAddTrackFolderBottomSheetViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+@interface OAAddTrackFolderViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @end
 
-@implementation OAAddTrackFolderBottomSheetViewController
+@implementation OAAddTrackFolderViewController
 {
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSString *_newFolderName;
@@ -62,13 +61,12 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"add_new_folder");
+    self.titleLabel.text = OALocalizedString(@"add_folder");
 }
 
-- (IBAction)doneButtonPressed:(id)sender
+- (void)onDoneButtonPressed
 {
     [self.delegate onTrackFolderAdded:_newFolderName];
-    [super doneButtonPressed:sender];
 }
 
 #pragma mark - UITableViewDataSource
@@ -125,7 +123,7 @@
 {
     if (textView.text.length == 0 ||
         [self isIncorrectFileName: textView.text] ||
-        [textView.text isEqualToString:kTracksFolder] ||
+        [textView.text isEqualToString:OALocalizedString(@"tracks")] ||
         [[NSFileManager defaultManager] fileExistsAtPath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:textView.text]])
     {
         self.doneButton.enabled = NO;

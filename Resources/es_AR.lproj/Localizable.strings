@@ -478,13 +478,13 @@
 "apply_filters" = "Aplicar filtros";
 "filter_poi_hint" = "Filtrar por nombre";
 "shared_string_from" = "desde";
-"city_type_suburb" = "Barrio";
+"city_type_suburb" = "Suburbio";
 "city_type_hamlet" = "Aldea";
 "city_type_village" = "Pueblo";
 "city_type_town" = "Ciudad pequeña";
 "city_type_city" = "Ciudad";
 "city_type_district" = "Distrito";
-"city_type_neighbourhood" = "Vecindario";
+"city_type_neighbourhood" = "Barrio chico;Vecindario";
 "postcode" = "Código postal";
 "show_something_on_map" = "Mostrar %@ en el mapa";
 "search_POI_level_btn" = "Aumentar radio de búsqueda";

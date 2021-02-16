@@ -543,7 +543,7 @@
 "ctx_mnu_edit_fav" = "تحرير المفضلة";
 "ctx_mnu_add_fav" = "إضافة للمفضلة";
 "ctx_mnu_share" = "مشاركة";
-"ctx_mnu_direction" = "علامة";
+"ctx_mnu_direction" = "التوجيه";
 // Location Services
 "loc_access_denied" = "تم رفض الوصول";
 "loc_access_denied_desc" = "تم رفض الوصول إلى خدمه الموقع";
@@ -591,7 +591,7 @@
 "product_title_track_recording" = "تسجيل المسار";
 "product_desc_track_recording" = "تنشيط الوظيفة لتسجيل مساراتك وحفظها";
 "product_desc_ext_track_recording" = "قم بتسجيل المسارات وحفظها يدويًا باستخدام البرنامج الإضافي لتسجيل الرحلة. قم بتصدير مساراتك كملف gpx أو شاركه أو استخدمه للمساهمة في مشروع خريطة الشارع المفتوح. أداة مفيدة للعدائين والمتنزهين وأي شخص مهتم بتسجيل مساراتهم.";
-"product_title_trip_planning" = "قياس المسافة";
+"product_title_trip_planning" = "تخطيط رحلة";
 "product_desc_trip_planning" = "خطط لرحلتك ، أضف نقاط طريق ، وقياس المسافة إلى وجهتك باستخدام هذا البرنامج المساعد";
 "product_desc_ext_trip_planning" = "يسمح لك المكون الإضافي لتخطيط الرحلة بإنشاء مساراتك على الخريطة وحفظها وقياس المسافة بين النقاط المتصلة بالخطوط المستقيمة وما إلى ذلك.";
 "product_title_africa" = "أفريقيا";

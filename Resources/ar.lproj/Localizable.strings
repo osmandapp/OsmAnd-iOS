@@ -1141,7 +1141,7 @@
 "add_action" = "إضافة إجراء";
 "create_items" = "إنشاء عناصر";
 "configure_map" = "ضبط الخريطة";
-"add_map_marker" = "إضافة علامة للخريطة";
+"add_map_marker" = "إضافة توجيه مباشر للخريطة";
 "add_gpx_waypoint" = "إضافة الإحداثية GPX";
 "toggle_fav" = "إظهار/إخفاء المفضلة";
 "toggle_poi" = "إظهار/إخفاء POI";
@@ -1697,7 +1697,7 @@
 "map_settings_slopes_legend" = "يمكنك قراءة المزيد حول المنحدرات على ويكيبيديا";
 "map_settings_layer_transparency" = "شفافية الطبقة";
 "map_settings_terrain" = "تضاريس";
-"arrows_direction_to_markers" = "الأسهم تظهر الاتجاه إلى علامات الخريطة إذا كانت موجودة خارج الشاشة. سترسم خطوط الاتجاه على شكل خط مباشر.";
+"arrows_direction_to_markers" = "الأسهم تظهر الاتجاه إلى التوجيه المباشر إذا كانت موجودة خارج الشاشة. سترسم خطوط الاتجاه على شكل خط مباشر.";
 "appearance_on_map" = "المظهر على الخريطة";
 "choose_how_display_distance" = "اختر كيفية عرض المسافة إلى العلامات النشطة";
 "specify_number_of_dir_indicators" = "تحديد عدد من مؤشرات الاتجاه ، سيؤثر على جميع الإعدادات أدناه.";

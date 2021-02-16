@@ -543,7 +543,7 @@
 "ctx_mnu_edit_fav" = "تحرير المفضلة";
 "ctx_mnu_add_fav" = "إضافة للمفضلة";
 "ctx_mnu_share" = "مشاركة";
-"ctx_mnu_direction" = "توجيه مباشر";
+"ctx_mnu_direction" = "علامة";
 // Location Services
 "loc_access_denied" = "تم رفض الوصول";
 "loc_access_denied_desc" = "تم رفض الوصول إلى خدمه الموقع";
@@ -1197,7 +1197,7 @@
 "quick_action_poi_add_descr" = "يتيح لك النقر فوق زر الإجراء هذا إضافة POI بسرعة على الخريطة بنوع وعلامات محددة مسبقًا.";
 "quick_action_day_night_descr" = "يؤدي النقر فوق زر الإجراء هذا إلى التبديل بين وضع خريطة النهار والليل.";
 "quick_action_parking_descr" = "انقر على زر التشغيل هذا لإضافة موقف للسيارات في وسط الخريطة.";
-"quick_action_marker_descr" = "انقر على زر هذه العملية لإضافة توجيه مباشرعلى الخريطة في وسط الخريطة.";
+"quick_action_marker_descr" = "انقر على زر هذه العملية لإضافة علامةعلى الخريطة في وسط الخريطة.";
 "quick_action_show_gpx_descr" = "انقر على زر التشغيل هذا لعرض أو إخفاء المسارات الحالية GPX.";
 "quick_action_voice_descr" = "يؤدي النقر فوق هذا الإجراء إلى تعطيل التوجيه الصوتي أو تمكينه أثناء التنقل.";
 "quick_action_add_dest_descr" = "يؤدي النقر فوق زر الإجراء هذا إلى تعيين الوجهة إلى مركز الخريطة. تصبح أي وجهة محددة مسبقًا هي الوجهة الوسيطة الأخيرة.";
@@ -1242,7 +1242,7 @@
 "select_favorite" = "اختر المفضلة";
 "select_manually" = "تحديد يدويا";
 "avoid_by_type" = "تجنب حسب النوع";
-"select_map_marker" = "حدد توجيه مباشر";
+"select_map_marker" = "حدد علامة";
 "parking_place" = "إضافة مكان موقف";
 "add_start" = "إضافه نقطه البداية";
 "add_intermediate" = "إضافة نقطة وسيطة";
@@ -1697,7 +1697,7 @@
 "map_settings_slopes_legend" = "يمكنك قراءة المزيد حول المنحدرات على ويكيبيديا";
 "map_settings_layer_transparency" = "شفافية الطبقة";
 "map_settings_terrain" = "تضاريس";
-"arrows_direction_to_markers" = "الأسهم تظهر الاتجاه إلى التوجيه المباشر إذا كانت موجودة خارج الشاشة. سترسم خطوط الاتجاه على شكل خط مباشر.";
+"arrows_direction_to_markers" = "الأسهم تظهر الاتجاه إلى علامات الخريطة إذا كانت موجودة خارج الشاشة. سترسم خطوط الاتجاه على شكل خط مباشر.";
 "appearance_on_map" = "المظهر على الخريطة";
 "choose_how_display_distance" = "اختر كيفية عرض المسافة إلى العلامات النشطة";
 "specify_number_of_dir_indicators" = "تحديد عدد من مؤشرات الاتجاه ، سيؤثر على جميع الإعدادات أدناه.";

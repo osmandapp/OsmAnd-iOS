@@ -93,8 +93,8 @@
 "shared_string_widgets" = "شريط جانبي";
 "map_widget_right" = "العدادات على اليسار";
 "map_widget_left" = "العدادات على اليمين";
-"layer_map_appearance" = "عدادات الشاشة";
-"map_markers" = "علامات الخريطة";
+"layer_map_appearance" = "الاختصارات";
+"map_markers" = "التوجيه المباشر";
 "select_gpx" = "اختر GPX…";
 "confirm_usage_speed_cameras" = "غير مسموح استخدام تحذيرات كاميرا السرعة بالقانون في العديد من البلدان (ألمانيا وفرنسا، وإيطاليا، وغيرها). أوسماند لا تتحمل أي مسؤولية إذا كنت تنتهك القانون. الرجاء انقر فوق \"نعم\" فقط إذا كنت مؤهلاً استخدام هذه الميزة.";
 "show_traffic_warnings" = "تحذيرات حركة المرور";
@@ -543,7 +543,7 @@
 "ctx_mnu_edit_fav" = "تحرير المفضلة";
 "ctx_mnu_add_fav" = "إضافة للمفضلة";
 "ctx_mnu_share" = "مشاركة";
-"ctx_mnu_direction" = "علامة";
+"ctx_mnu_direction" = "توجيه مباشر";
 // Location Services
 "loc_access_denied" = "تم رفض الوصول";
 "loc_access_denied_desc" = "تم رفض الوصول إلى خدمه الموقع";
@@ -591,7 +591,7 @@
 "product_title_track_recording" = "تسجيل المسار";
 "product_desc_track_recording" = "تنشيط الوظيفة لتسجيل مساراتك وحفظها";
 "product_desc_ext_track_recording" = "قم بتسجيل المسارات وحفظها يدويًا باستخدام البرنامج الإضافي لتسجيل الرحلة. قم بتصدير مساراتك كملف gpx أو شاركه أو استخدمه للمساهمة في مشروع خريطة الشارع المفتوح. أداة مفيدة للعدائين والمتنزهين وأي شخص مهتم بتسجيل مساراتهم.";
-"product_title_trip_planning" = "تخطيط رحلة";
+"product_title_trip_planning" = "قياس المسافة";
 "product_desc_trip_planning" = "خطط لرحلتك ، أضف نقاط طريق ، وقياس المسافة إلى وجهتك باستخدام هذا البرنامج المساعد";
 "product_desc_ext_trip_planning" = "يسمح لك المكون الإضافي لتخطيط الرحلة بإنشاء مساراتك على الخريطة وحفظها وقياس المسافة بين النقاط المتصلة بالخطوط المستقيمة وما إلى ذلك.";
 "product_title_africa" = "أفريقيا";
@@ -728,7 +728,7 @@
 "search_another_country" = "حدد منطقة أخرى";
 "skip_map_downloading" = "تخط التحميل";
 "skip_map_downloading_desc" = "ليس لديك خريطة مثبتة في وضع عدم الاتصال. يمكنك اختيار خريطة من القائمة أو تنزيل الخرائط لاحقًا عبر القائمة - إدارة ملفات الخرائط";
-"wiki_around" = "مقالات ويكيبيديا المجاورة";
+"wiki_around" = "مقالات ويكيبيديا القريبة";
 "categories" = "فئات";
 "items_selected" = "%d محدد";
 "custom_search" = "بحث مخصص";
@@ -1141,7 +1141,7 @@
 "add_action" = "إضافة إجراء";
 "create_items" = "إنشاء عناصر";
 "configure_map" = "ضبط الخريطة";
-"add_map_marker" = "إضافة علامة للخريطة";
+"add_map_marker" = "إضافة توجيه مباشر للخريطة";
 "add_gpx_waypoint" = "إضافة الإحداثية GPX";
 "toggle_fav" = "إظهار/إخفاء المفضلة";
 "toggle_poi" = "إظهار/إخفاء POI";
@@ -1197,7 +1197,7 @@
 "quick_action_poi_add_descr" = "يتيح لك النقر فوق زر الإجراء هذا إضافة POI بسرعة على الخريطة بنوع وعلامات محددة مسبقًا.";
 "quick_action_day_night_descr" = "يؤدي النقر فوق زر الإجراء هذا إلى التبديل بين وضع خريطة النهار والليل.";
 "quick_action_parking_descr" = "انقر على زر التشغيل هذا لإضافة موقف للسيارات في وسط الخريطة.";
-"quick_action_marker_descr" = "انقر على زر هذه العملية لإضافة علامةعلى الخريطة في وسط الخريطة.";
+"quick_action_marker_descr" = "انقر على زر هذه العملية لإضافة توجيه مباشرعلى الخريطة في وسط الخريطة.";
 "quick_action_show_gpx_descr" = "انقر على زر التشغيل هذا لعرض أو إخفاء المسارات الحالية GPX.";
 "quick_action_voice_descr" = "يؤدي النقر فوق هذا الإجراء إلى تعطيل التوجيه الصوتي أو تمكينه أثناء التنقل.";
 "quick_action_add_dest_descr" = "يؤدي النقر فوق زر الإجراء هذا إلى تعيين الوجهة إلى مركز الخريطة. تصبح أي وجهة محددة مسبقًا هي الوجهة الوسيطة الأخيرة.";
@@ -1242,7 +1242,7 @@
 "select_favorite" = "اختر المفضلة";
 "select_manually" = "تحديد يدويا";
 "avoid_by_type" = "تجنب حسب النوع";
-"select_map_marker" = "حدد علامة";
+"select_map_marker" = "حدد توجيه مباشر";
 "parking_place" = "إضافة مكان موقف";
 "add_start" = "إضافه نقطه البداية";
 "add_intermediate" = "إضافة نقطة وسيطة";
@@ -1517,7 +1517,7 @@
 "routing_attr_avoid_sett_description" = "تجنب الحصى والطرق المرصوفة";
 "rendering_attr_surfaceIntegrity_name" = "سلامة سطح الطرق";
 "rendering_attr_surface_sett_name" = "ضبط";
-"routing_attr_allow_intermediate_name" = "السماح بالطرق المتوسطة";
+"routing_attr_allow_intermediate_name" = "السماح بالمسارات المتوسطة";
 "rendering_attr_smoothness_impassable_name" = "غير سالك";
 "rendering_attr_alpineHiking_name" = "مقياس التنزه في جبال الألب (SAC)";
 "routing_attr_driving_style_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
@@ -1588,7 +1588,7 @@
 "rendering_attr_highway_class_footway_name" = "طريق للمشاة";
 "rendering_attr_surface_ground_name" = "الأرض";
 "rendering_attr_contourDensity_description" = "كثافة الخط الكنتوري";
-"rendering_attr_showCycleNodeNetworkRoutes_name" = "إظهار شبكة طرق الدارجات الهوائية";
+"rendering_attr_showCycleNodeNetworkRoutes_name" = "إظهار شبكة مسارات الدارجات الهوائية";
 "rendering_attr_showLez_name" = "إظهار مناطق الانبعاثات المنخفضة";
 "routing_attr_avoid_borders_name" = "تخطي الحدود";
 "rendering_value__name" = "الافتراضي";
@@ -1697,7 +1697,7 @@
 "map_settings_slopes_legend" = "يمكنك قراءة المزيد حول المنحدرات على ويكيبيديا";
 "map_settings_layer_transparency" = "شفافية الطبقة";
 "map_settings_terrain" = "تضاريس";
-"arrows_direction_to_markers" = "تعرض الأسهم الاتجاه للعلامة النشطة إذا كانت موجودة خارج الشاشة. ترسم خطوط الاتجاه خطًا للعلامات النشطة.";
+"arrows_direction_to_markers" = "الأسهم تظهر الاتجاه إلى التوجيه المباشر إذا كانت موجودة خارج الشاشة. سترسم خطوط الاتجاه على شكل خط مباشر.";
 "appearance_on_map" = "المظهر على الخريطة";
 "choose_how_display_distance" = "اختر كيفية عرض المسافة إلى العلامات النشطة";
 "specify_number_of_dir_indicators" = "تحديد عدد من مؤشرات الاتجاه ، سيؤثر على جميع الإعدادات أدناه.";
@@ -1745,7 +1745,7 @@
 "shared_string_exit" = "خروج";
 "import_routing_file_descr" = "يمكنك استيراد ملف التوجيه من أي تطبيق تخزين سحابي أو بوضعه في مجلد التوجيه في آيتوينز.";
 "osmand_routing" = "توجيه أوسماند";
-"select_nav_profile_dialog_message" = "يؤثر نوع التنقل على كييفية حساب المسارات.";
+"select_nav_profile_dialog_message" = "يؤثر نوع التنقل على قواعد حسابات المسار.";
 "vehicle_parameters" = "معلمات المركبات";
 "screen_alerts" = "تنبيهات الشاشة";
 "voice_anounces" = "إعلام صوتي";

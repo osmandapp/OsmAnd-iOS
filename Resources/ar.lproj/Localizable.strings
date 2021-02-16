@@ -1242,7 +1242,7 @@
 "select_favorite" = "اختر المفضلة";
 "select_manually" = "تحديد يدويا";
 "avoid_by_type" = "تجنب حسب النوع";
-"select_map_marker" = "حدد علامة";
+"select_map_marker" = "حدد توجيه مباشر";
 "parking_place" = "إضافة مكان موقف";
 "add_start" = "إضافه نقطه البداية";
 "add_intermediate" = "إضافة نقطة وسيطة";

@@ -1141,7 +1141,7 @@
 "add_action" = "إضافة إجراء";
 "create_items" = "إنشاء عناصر";
 "configure_map" = "ضبط الخريطة";
-"add_map_marker" = "إضافة علامة للخريطة";
+"add_map_marker" = "إضافة توجيه مباشر للخريطة";
 "add_gpx_waypoint" = "إضافة الإحداثية GPX";
 "toggle_fav" = "إظهار/إخفاء المفضلة";
 "toggle_poi" = "إظهار/إخفاء POI";

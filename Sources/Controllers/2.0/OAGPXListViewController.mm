@@ -11,6 +11,8 @@
 #import "OAIconTextTableViewCell.h"
 #import "OAMapViewController.h"
 #import "OAMenuSimpleCellNoIcon.h"
+#import "OAGpxInfo.h"
+#import "OALoadGpxTask.h"
 
 #import "OAGPXTableViewCell.h"
 #import "OAGPXRecTableViewCell.h"
@@ -124,6 +126,8 @@
     NSArray *_data;
     NSMutableArray<NSIndexPath *> *_selectedIndexPaths;
     NSMutableArray<OAGPX *> *_selectedItems;
+    NSMutableArray<OAGpxInfo *> *_gpxList;
+    NSMutableDictionary<NSString *, NSArray<OAGpxInfo *> *> *_gpxFolders;
     
     CALayer *_horizontalLine;
     
@@ -502,9 +506,11 @@ static UIViewController *parentController;
     CGRect frame = self.backButton.frame;
     frame.size.width =  kMaxCancelButtonWidth;
     self.cancelButton.frame = frame;
+    [self setupView];
     
     _selectedIndexPaths = [[NSMutableArray alloc] init];
     _selectedItems = [[NSMutableArray alloc] init];
+    _gpxFolders = [NSMutableDictionary dictionary];
     
     [self updateButtons];
 }
@@ -520,8 +526,7 @@ static UIViewController *parentController;
 {
     [super viewWillAppear:animated];
     
-    [self generateData];
-    [self setupView];
+    [self reloadData];
     
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onTrackRecordingChanged)
@@ -570,6 +575,16 @@ static UIViewController *parentController;
     });
 }
 
+- (void) reloadData
+{
+    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
+    [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
+        _gpxFolders = [NSMutableDictionary dictionaryWithDictionary:gpxFolders];
+        [self generateData];
+        [self.gpxTableView reloadData];
+    }];
+}
+
 - (void) onGpxRouteCanceled
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -577,7 +592,7 @@ static UIViewController *parentController;
         [self.gpxTableView reloadData];
     });
 }
- 
+
 - (void) generateData
 {
     self.menuItems = [[NSArray alloc] init];
@@ -606,25 +621,23 @@ static UIViewController *parentController;
     }
     
     OAGpxTableGroup *trackRecordingGroup = [[OAGpxTableGroup alloc] init];
-    NSMutableArray *trackRecords = [NSMutableArray array];
     trackRecordingGroup.isMenu = YES;
     trackRecordingGroup.type = kCellMenu;
     trackRecordingGroup.header = OALocalizedString(@"record_trip");
     
     if ([_iapHelper.trackRecording isActive])
-        [trackRecords addObject:@{
+        [trackRecordingGroup.groupItems addObject:@{
             @"title" : OALocalizedString(@"track_recording_name"),
             @"icon" : @"ic_custom_reverse_direction.png",
             @"type" : kCellTypeTrackRecord,
             @"key" : @"track_recording"}
         ];
     else
-        [trackRecords addObject:@{
+        [trackRecordingGroup.groupItems addObject:@{
             @"title" : OALocalizedString(@"track_rec_addon_q"),
             @"type" : kCellTypeTrackRecordMessage,
             @"key" : @"track_recording"}
         ];
-    trackRecordingGroup.groupItems = [NSMutableArray arrayWithArray:trackRecords];
     [tableData addObject:trackRecordingGroup];
     
     if (self.gpxList.count > 0)
@@ -639,11 +652,10 @@ static UIViewController *parentController;
     if (_routeItem)
     {
         OAGpxTableGroup *routePlanningGroup = [[OAGpxTableGroup alloc] init];
-        NSMutableArray *route = [NSMutableArray array];
         routePlanningGroup.isMenu = YES;
         routePlanningGroup.header = OALocalizedString(@"gpx_route");
         
-        [route addObject:@{
+        [routePlanningGroup.groupItems addObject:@{
             @"title" : [_routeItem getNiceTitle],
             @"track" : _routeItem,
             @"distance" : [_app getFormattedDistance:_routeItem.totalDistance],
@@ -652,12 +664,10 @@ static UIViewController *parentController;
             @"type" : kGPXTrackCell,
             @"key" : @"route_item"}
         ];
-        routePlanningGroup.groupItems = [NSMutableArray arrayWithArray:route];
         [tableData addObject:routePlanningGroup];
     }
     
     OAGpxTableGroup* visibleGroup = [[OAGpxTableGroup alloc] init];
-    NSMutableArray *visableTracks = [NSMutableArray array];
     visibleGroup.groupName = OALocalizedString(@"tracks_on_map");
     visibleGroup.groupIcon = @"ic_custom_map";
     visibleGroup.isMenu = NO;
@@ -667,7 +677,7 @@ static UIViewController *parentController;
     {
         if ([_visible containsObject:item.gpxFileName])
         {
-            [visableTracks addObject:
+            [visibleGroup.groupItems addObject:
              @{
                  @"title" : [item getNiceTitle],
                  @"icon" : @"ic_custom_trip.png",
@@ -676,34 +686,34 @@ static UIViewController *parentController;
                  @"key" : @"track_group"}];
         }
     }
-    visibleGroup.groupItems = [NSMutableArray arrayWithArray:visableTracks];
     visibleGroup.isOpen = YES;
     if (visibleGroup.groupItems.count > 0)
         [tableData addObject:visibleGroup];
     
-    OAGpxTableGroup* tracksGroup = [[OAGpxTableGroup alloc] init];
-    NSMutableArray *allTracks = [NSMutableArray array];
-    tracksGroup.groupName = OALocalizedString(@"tracks");
-    tracksGroup.groupIcon = @"ic_custom_folder";
-    tracksGroup.isMenu = NO;
-    tracksGroup.type = kGPXGroupHeaderRow;
-    tracksGroup.header = @"";
-    for (OAGPX *item in _gpxList)
+    for (NSString *key in _gpxFolders.allKeys)
     {
-        [allTracks addObject:@{
+        OAGpxTableGroup* tracksGroup = [[OAGpxTableGroup alloc] init];
+        tracksGroup.groupName = [OALocalizedString(key) capitalizedString];
+        tracksGroup.groupIcon = @"ic_custom_folder";
+        tracksGroup.isMenu = NO;
+        tracksGroup.type = kGPXGroupHeaderRow;
+        tracksGroup.header = @"";
+        for (OAGpxInfo *track in _gpxFolders[key])
+        {
+            [tracksGroup.groupItems addObject:@{
                 @"type" : kGPXTrackCell,
-                @"title" : [item getNiceTitle],
-                @"track" : item,
-                @"distance" : [_app getFormattedDistance:item.totalDistance],
-                @"time" : [_app getFormattedTimeInterval:item.timeSpan shortFormat:YES],
-                @"wpt" : [NSString stringWithFormat:@"%d", item.wptPoints],
+                @"title" : [track getName],
+                @"track" : track.gpx,
+                @"distance" : [_app getFormattedDistance:track.gpx.totalDistance],
+                @"time" : [_app getFormattedTimeInterval:track.gpx.timeSpan shortFormat:YES],
+                @"wpt" : [NSString stringWithFormat:@"%d", track.gpx.wptPoints],
                 @"key" : @"track_group"
             }];
+        }
+        tracksGroup.isOpen = NO;
+        if (tracksGroup.groupItems.count > 0)
+            [tableData addObject:tracksGroup];
     }
-    tracksGroup.groupItems = [NSMutableArray arrayWithArray:allTracks];
-    tracksGroup.isOpen = NO;
-    if (tracksGroup.groupItems.count > 0)
-        [tableData addObject:tracksGroup];
     
     // Generate menu items
     OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
@@ -713,7 +723,8 @@ static UIViewController *parentController;
     self.menuItems = @[@{@"type" : kCellMenu,
                          @"key" : @"import_track",
                          @"title": OALocalizedString(@"gpx_import_title"),
-                         @"icon": @"ic_custom_import"},
+                         @"icon": @"ic_custom_import",
+                         @"header" : OALocalizedString(@"actions")},
                        @{@"type" : kCellMenu,
                          @"key" : @"create_new_trip",
                          @"title": OALocalizedString(@"create_new_trip"),
@@ -1013,6 +1024,7 @@ static UIViewController *parentController;
                                  }
                              }];
     }
+    [self reloadData];
 }
 
 - (BOOL) onSwitchClick:(id)sender
@@ -1234,6 +1246,7 @@ static UIViewController *parentController;
                 {
                     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
                     cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
+                    cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
                 }
                 if (cell)
                 {
@@ -1331,7 +1344,8 @@ static UIViewController *parentController;
         }
         else
         {
-            OAGPX* gpxItem = [self.gpxList objectAtIndex:indexPath.row - 1];
+            NSDictionary *gpxInfo = item.groupItems[indexPath.row - 1];
+            OAGPX* gpxItem = gpxInfo[@"track"];
             [self doPush];
             [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxItem pushed:YES];
         }

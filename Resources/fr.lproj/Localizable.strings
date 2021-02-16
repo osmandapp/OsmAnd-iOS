@@ -233,7 +233,7 @@
 "res_inst_avail_wifi_q" = "L’installation de %@ a besoin de télécharger %@ via le réseau WiFi.";
 "res_cancel_upd_q" = "Vous allez annuler la mise de %@.";
 "res_cancel_inst_q" = "Vous allez annuler l'installation de %@.";
-"menu_my_trips" = "Mes voyages";
+"menu_my_trips" = "Mes traces";
 "add_parking_short" = "Ajouter un Parking";
 "time_limited" = "Limité dans le temps";
 "cannot_add_marker" = "Impossible d'ajouter un Parking";
@@ -268,7 +268,7 @@
 "yesterday" = "Hier";
 "gpx_edit_mode" = "Mode édition";
 "show_region_on_map_title" = "Carte téléchargée";
-"tracks" = "Voyages";
+"tracks" = "Traces";
 "gpx_import_title" = "Importer un voyage";
 "gpx_export_title" = "Exporter le voyage";
 "gpx_export_select_track" = "Merci de sélectionner le voyage à exporter";
@@ -350,7 +350,7 @@
 // Menu
 "menu_my_places" = "Mes lieux";
 "add_parking" = "Ajouter comme position de stationnement";
-"add_waypoint" = "Ajouter un point de passage au trajet";
+"add_waypoint" = "Ajouter un point de passage à la trace";
 "add_waypoint_short" = "Ajouter un point de passage";
 "edit_waypoint_short" = "Modifier le point de passage";
 "parking_marker" = "Marquer l'emplacement de stationnement";
@@ -532,7 +532,7 @@
 "use_points_as_intermediates" = "Calculer un itinéraire entre des points";
 "calculate_osmand_route_without_internet" = "Calculer un itinéraire OsmAnd hors-ligne";
 "routing_settings_2" = "Paramètres de navigation";
-"gpx_navigation" = "Suivre un itinéraire";
+"gpx_navigation" = "Suivre la trace";
 "impassable_road" = "Éviter les routes";
 "impassable_road_desc" = "Sélectionnez les routes à éviter";
 "interrupt_music" = "Interrompre la musique";
@@ -780,7 +780,7 @@
 "shared_setting_always_ask" = "Toujours demander";
 "osm_live_routing_descr" = "Utiliser les mises à jour d'OsmAnd Live pour la navigation";
 "traffic_warning_tunnel" = "En approche d'un tunnel";
-"track_save_descr" = "Enregistrer le trajet au format GPX.";
+"track_save_descr" = "Enregistrer la trace en cours comme fichier GPX.";
 "track_during_nav" = "Auto-enregistrement du trajet";
 "track_during_nav_descr" = "Activez pour enregistrer automatiquement un trajet durant la navigation";
 "osmand_live_title" = "OsmAnd Live";
@@ -1789,7 +1789,6 @@
 "osm_notes" = "Notes OSM";
 "personal_category_name" = "Personnel";
 "whole_track" = "Trace entière";
-
 "add_point" = "Ajouter un point";
 "next_seg" = "Segment suivant";
 "total" = "Total";
@@ -1811,7 +1810,7 @@
 "menu" = "Menu";
 "profile_type_osmand_string" = "Profil OsmAnd";
 "configure_map_descr" = "Apparence de la carte";
-"quick_action_remove_next_destination_descr" = "Supprime la prochaineétape de votre route. S'il s'agit de la destination finale, la navigation s'arrêtera.";
+"quick_action_remove_next_destination_descr" = "Supprime la prochaine étape de votre route. S'il s'agit de la destination finale, la navigation s'arrêtera.";
 "num_stops" = "arrêts";
 "help_nav_profiles" = "Profils de navigation";
 "vessel_width_limit_description" = "Définir la largeur du navire pour éviter les ponts étroits";
@@ -1841,10 +1840,9 @@
 "ui_customization_descr" = "Éléments du panneau déroulant, menu contextuel";
 "create_profile_descr" = "Basez votre profil personnel sur l'un des profils par défaut pour définir les unités de vitesse, de distance ou la visibilité des widgets. Voici les profils par défaut de l'application ainsi que des exemples de profils personnalisés :";
 "import_complete_description" = "Les données de %@ ont été importées, vous pouvez utiliser les boutons ci-dessous pour ouvrir la partie adéquate de l'application pour les gérer";
-
 "lenght_limit_description" = "Indiquez la longueur de votre véhicule, certaines restrictions d'itinéraire peuvent s'appliquer aux véhicules longs.";
 "shared_a_z" = "A - Z";
-"trip_name" = "Nom du voyage";
+"trip_name" = "Nom du trajet";
 "vk" = "VK";
 "select_application_profile" = "Sélectionner le profil d'application";
 "quick_action_template_name" = "Nom de modèle";
@@ -1884,3 +1882,5 @@
 "hide_compass_ruler" = "Masquer la boussole";
 "show_compass_ruler" = "Afficher la boussole";
 "gpx_export_failed" = "L'enregistrement de l'itinéraire a échoué";
+"attach_to_the_roads" = "Déplacer sur les routes";
+"join_segments" = "Joindre les segments";

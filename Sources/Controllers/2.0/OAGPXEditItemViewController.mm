@@ -155,7 +155,7 @@
     if (gpxRouter.gpx && [gpxRouter.gpx.gpxFileName isEqualToString:self.gpx.gpxFileName])
         [gpxRouter cancelRoute];
     
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilepath];
     self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
 }
 
@@ -507,7 +507,7 @@
                                  }
                                  else
                                  {
-                                     NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+                                     NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilepath];
                                      [_mapViewController deleteWpts:items docPath:path];
                                      [self loadDoc];
                                  }
@@ -541,7 +541,7 @@
     
     if (!_showCurrentTrack)
     {
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilepath];
         [_mapViewController updateWpts:items docPath:path updateMap:YES];
     }
     else
@@ -598,6 +598,7 @@
                 NSString *oldFileName = self.gpx.gpxFileName;
                 self.gpx.gpxTitle = newName;
                 self.gpx.gpxFileName = [self.gpx.gpxTitle stringByAppendingPathExtension:@"gpx"];
+                self.gpx.gpxFilepath = [[self.gpx.gpxFilepath stringByDeletingLastPathComponent] stringByAppendingPathComponent:self.gpx.gpxFileName];
                 [[OAGPXDatabase sharedDb] save];
                 
                 OAGpxMetadata *metadata;
@@ -636,7 +637,7 @@
                 
                 metadata.name = newName;
                 
-                NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+                NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilepath];
                 if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
                     [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
                 

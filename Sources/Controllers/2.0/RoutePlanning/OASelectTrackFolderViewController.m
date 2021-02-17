@@ -144,6 +144,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kMultiIconTextDescCell owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.textView.numberOfLines = 3;
+            cell.textView.lineBreakMode = NSLineBreakByTruncatingTail;
         }
         if (cell)
         {
@@ -201,6 +203,16 @@
         [self moveTrackToFolder:item[@"title"]];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+        NSDictionary *item = _data[indexPath.section][indexPath.row];
+        NSString *cellType = item[@"type"];
+        if ([cellType isEqualToString:kMultiIconTextDescCell])
+            return 60;
+        else
+            return UITableViewAutomaticDimension;
 }
 
 - (void) moveTrackToFolder:(NSString *)selectedFolderName

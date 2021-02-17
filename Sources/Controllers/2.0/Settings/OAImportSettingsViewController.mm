@@ -406,7 +406,7 @@
                 customGPXSection.isOpen = NO;
                 for (OAGpxSettingsItem *gpxItem in settings)
                 {
-                    NSString *gpxName = [[[gpxItem.name stringByDeletingPathExtension] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    NSString *gpxName = [[gpxItem.name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     [customGPXSection.groupItems addObject:@{
                         @"icon" : @"ic_custom_trip",
                         @"title" : gpxName,

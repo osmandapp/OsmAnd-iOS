@@ -249,19 +249,24 @@
                 *error = [NSError errorWithDomain:kSettingsHelperErrorDomain code:kSettingsHelperErrorCodeUnknownFileSubtype userInfo:nil];
             return nil;
         }
-        else
+        else if (self.subtype == EOASettingsItemFileSubtypeGpx)
         {
-            //TODO: check if additional check is necessary
             NSString *path = json[@"file"];
-            NSArray *components = [path pathComponents];
-            NSString *subtypeFolder = components[components.count - 2];
-            if ([subtypeFolder isEqualToString:@"tracks"])
-                _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
-            else
+            NSArray *pathComponents = [path pathComponents];
+            if (pathComponents.count > 2)
             {
-                NSString *subfolderPath = [subtypeFolder stringByAppendingPathComponent:self.name];
+                NSArray *filePathComponents = [pathComponents subarrayWithRange:NSMakeRange(2, pathComponents.count - 2)];
+                NSString *subfolderPath = [NSString pathWithComponents:filePathComponents];
                 _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:subfolderPath];
             }
+            else
+            {
+                _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path];
+            }
+        }
+        else
+        {
+            _filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:self.name];
         }
     }
     return self;
@@ -276,7 +281,7 @@
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:destFilePath];
             [doc saveTo:destFilePath];
             OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            [[OAGPXDatabase sharedDb] addGpxItem:[destFilePath lastPathComponent] folderName:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] addGpxItem:[destFilePath lastPathComponent] path:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
             [[OAGPXDatabase sharedDb] save];
             break;
         }

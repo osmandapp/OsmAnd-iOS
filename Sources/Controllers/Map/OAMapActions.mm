@@ -104,7 +104,7 @@
     else
     {
         const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
-        NSString *path = [[OAGPXDatabase sharedDb] getFilePath:result.gpxFileName folderName:result.gpxFolder];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:result.gpxFilePath];
         QString qPath = QString::fromNSString(path);
         OAGPXDocument *doc = nil;
         if (gpxMap.contains(qPath))

@@ -75,11 +75,12 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
         _routePointActivatedObservable = [[OAObservable alloc] init];
  
         // Init active route
-        NSString *activeRouteFileName = [[OAAppSettings sharedManager] mapSettingActiveRouteFileName];
-        if (activeRouteFileName)
+        NSString *activeRouteFilePath = [[OAAppSettings sharedManager] mapSettingActiveRouteFilePath];
+        if (activeRouteFilePath)
         {
-            _gpx = [[OAGPXDatabase sharedDb] getGPXItem:activeRouteFileName];
-            NSString *path = [[OAGPXDatabase sharedDb] getFilePath:activeRouteFileName folderName:@""];
+            _gpx = [[OAGPXDatabase sharedDb] getGPXItem:activeRouteFilePath];
+
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
             self.routeDoc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
         }
         
@@ -100,9 +101,10 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 - (void)setRouteWithGpx:(OAGPX *)gpx
 {
     _gpx = gpx;
-    NSString *path = [[OAGPXDatabase sharedDb] getFilePath:gpx.gpxFileName folderName:gpx.gpxFolder];
+    
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
     self.routeDoc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
-    [[OAAppSettings sharedManager] setMapSettingActiveRouteFileName:gpx.gpxFileName];
+    [[OAAppSettings sharedManager] setMapSettingActiveRouteFilePath:gpx.gpxFilePath];
     
     OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
     if (mode == [OAApplicationMode CAR])
@@ -129,12 +131,12 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 
 - (void)cancelRoute
 {
-    NSString *path = [[OAGPXDatabase sharedDb] getFilePath:_gpx.gpxFileName folderName:_gpx.gpxFolder];
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
     [_routeDoc clearAndSaveTo:path];
     
     _routeDoc = nil;
     _gpx = nil;
-    [[OAAppSettings sharedManager] setMapSettingActiveRouteFileName:nil];
+    [[OAAppSettings sharedManager] setMapSettingActiveRouteFilePath:nil];
 
     [self refreshDestinations];
     [self.routeCanceledObservable notifyEvent];
@@ -147,7 +149,7 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
         if (_gpx && _routeDoc)
         {
             _isModified = NO;
-            NSString *path = [[OAGPXDatabase sharedDb] getFilePath:_gpx.gpxFileName folderName:_gpx.gpxFolder];
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
             [_routeDoc saveTo:path];
         }
     }

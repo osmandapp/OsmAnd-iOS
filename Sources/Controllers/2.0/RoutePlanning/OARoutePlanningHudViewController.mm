@@ -51,7 +51,6 @@
 #import "OASaveGpxRouteAsyncTask.h"
 #import "OASaveTrackViewController.h"
 #import "OAOpenAddTrackViewController.h"
-#import "OASelectedGPXHelper.h"
 #import "OASavingTrackHelper.h"
 #import "QuadRect.h"
 
@@ -120,7 +119,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     int _modes;
     
-    NSString *_fileName;
+    NSString *_filePath;
     CLLocation *_initialPoint;
 }
 
@@ -136,7 +135,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return self;
 }
 
-- (instancetype) initWithFileName:(NSString *)fileName
+- (instancetype) initWithFileName:(NSString *)filePath
 {
     self = [super initWithNibName:@"OARoutePlanningHudViewController"
                            bundle:nil];
@@ -144,7 +143,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     {
         [self commonInit];
         
-        _fileName = fileName;
+        _filePath = filePath;
         
         [self setMode:PLAN_ROUTE_MODE on:YES];
     }
@@ -227,8 +226,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     [self addInitialPoint];
     
-    if (_fileName)
-        [self addNewGpxData:[self getGpxFile:_fileName]];
+    if (_filePath)
+        [self addNewGpxData:[self getGpxFile:_filePath]];
 //    else if (editingCtx.isApproximationNeeded() && isFollowTrackMode())
 //        enterApproximationMode(mapActivity);
 }
@@ -368,16 +367,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self onPointsListChanged];
 }
 
-- (OAGPXMutableDocument *) getGpxFile:(NSString *)gpxFileName
+- (OAGPXMutableDocument *) getGpxFile:(NSString *)gpxFilePath
 {
     OAGPXMutableDocument *gpxFile = nil;
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
-    const auto selectedFileConst = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(selectedGpxHelper.activeGpx[QString::fromNSString(gpxFileName)]);
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
+    const auto selectedFileConst = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(selectedGpxHelper.activeGpx[QString::fromNSString(gpxFilePath.lastPathComponent)]);
     const auto selectedFile = std::const_pointer_cast<OsmAnd::GpxDocument>(selectedFileConst);
     if (selectedFile != nullptr)
         gpxFile = [[OAGPXMutableDocument alloc] initWithGpxDocument:selectedFile];
     else
-        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[[OAGPXDatabase sharedDb] getFilePath:gpxFileName folderName:@""]];
+        gpxFile = [[OAGPXMutableDocument alloc] initWithGpxFile:[_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]];
     
     if (!gpxFile.routes)
         gpxFile.routes = [NSMutableArray new];
@@ -856,18 +856,18 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         }
     }
     OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
-    if ([_settings.mapSettingVisibleGpx containsObject:outFile.lastPathComponent])
+    NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:outFile];
+    
+    if ([_settings.mapSettingVisibleGpx containsObject:gpxFilePath])
     {
         // Refresh track if visible
-        [_settings hideGpx:@[outFile.lastPathComponent] update:YES];
+        [_settings hideGpx:@[gpxFilePath] update:YES];
         helper.activeGpx.remove(QString::fromNSString(outFile));
         [helper buildGpxList];
     }
     if (showOnMap)
     {
-        NSString *folderName = [[OAGPXDatabase sharedDb] getSuperFolderNameByFilePath:outFile];
-        NSString *savingPath = [folderName stringByAppendingPathComponent:outFile.lastPathComponent];
-        [_settings showGpx:@[savingPath]];
+        [_settings showGpx:@[gpxFilePath]];
     }
 }
 
@@ -1495,15 +1495,15 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
 }
 
-- (void)onFileSelected:(NSString *)gpxFileName
+- (void)onFileSelected:(NSString *)gpxFilePath
 {
     OAGPXMutableDocument *gpxFile;
-    if (!gpxFileName)
+    if (!gpxFilePath)
         gpxFile = OASavingTrackHelper.sharedInstance.currentTrack;
     else
-        gpxFile = [self getGpxFile:gpxFileName];
+        gpxFile = [self getGpxFile:gpxFilePath];
     OASelectedGPXHelper *selectedGpxHelper = OASelectedGPXHelper.instance;
-    BOOL showOnMap = selectedGpxHelper.activeGpx.find(QString::fromNSString(gpxFileName)) != selectedGpxHelper.activeGpx.end();
+    BOOL showOnMap = selectedGpxHelper.activeGpx.find(QString::fromNSString(gpxFilePath.lastPathComponent)) != selectedGpxHelper.activeGpx.end();
     [self saveExistingGpx:gpxFile showOnMap:showOnMap simplified:NO addToTrack:YES finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
 }
 

@@ -270,7 +270,7 @@
     {
         OAGPX* track = item[@"track"];
         [self dismissViewControllerAnimated:YES completion:nil];
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFileName]];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
         return;
     }
 }
@@ -282,7 +282,7 @@
     [self onRightButtonPressed];
 }
 
-- (void)onFileSelected:(NSString *)gpxFileName
+- (void)onFileSelected:(NSString *)gpxFilePath
 {
 }
 

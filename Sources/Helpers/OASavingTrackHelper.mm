@@ -64,7 +64,7 @@
     OAAutoObserverProxy* _locationServicesUpdateObserver;
 }
 
-@synthesize lastTimeUpdated, points, isRecording, distance, currentTrack;
+@synthesize lastTimeUpdated, points, isRecording, distance, currentTrack, currentTrackPath;
 
 + (OASavingTrackHelper*)sharedInstance
 {
@@ -333,6 +333,8 @@
     [currentTrack initBounds];
     currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
     
+    currentTrackPath = @"";
+    
     [self prepareCurrentTrackForRecording];
 }
 
@@ -372,7 +374,8 @@
             [doc saveTo:fout];
             
             OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] folderName:directory title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:fout];
+            [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] path:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
             [[OAGPXDatabase sharedDb] save];
         }
         
@@ -931,7 +934,7 @@
 {
     OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
     [currentTrack applyBounds];
-    return [[OAGPXDatabase sharedDb] buildGpxItem:@"" folderName:@"" title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds analysis:analysis];
+    return [[OAGPXDatabase sharedDb] buildGpxItem:@"" path:@"" title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds analysis:analysis];
 }
 
 @end

@@ -90,6 +90,7 @@
 - (OsmAnd::ColorARGB) getTrackColor:(QString)filename
 {
     NSString *filenameNS = filename.toNSString();
+    filenameNS = [[OAGPXDatabase sharedDb] getGpxStoringPathByFullPath:filenameNS];
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filenameNS];
     int colorValue = kDefaultTrackColor;
     if (gpx && gpx.color != 0)

@@ -1252,7 +1252,7 @@
 "routing_attr_height_description" = "Adja meg az útvonalakon a járművekre vonatkozó magasságkorlátozást.";
 "routing_attr_allow_motorway_name" = "Autópálya használata";
 "rendering_attr_showSurfaces_name" = "Útfelszín megjelenítése";
-"routing_attr_allow_classic_only_description" = "Klasszikus stílushoz karbantartott útvonalak, korcsolyázó nyomok nélkül. Ide tartoznak a kisebb hójárókkal karbantartott lazább pályájú útvonalak és a síelők által kézzel karbantartott nyomok is.";
+"routing_attr_allow_classic_only_description" = "Klasszikus stílushoz karbantartott útvonalak, korcsolyázó nyomok nélkül. Ide tartoznak a kisebb motoros szánokkal karbantartott lazább pályájú útvonalak és a síelők által kézzel karbantartott nyomok is.";
 "routing_attr_prefer_motorway_description" = "Autópályák előnyben részesítése";
 "rendering_attr_tramRoutes_name" = "Villamosvonalak";
 "routing_attr_avoid_unpaved_description" = "Elkerüli a burkolatlan utakat";
@@ -1381,7 +1381,6 @@
 "get_discount_short_descr" = "%@ %d %@, utána %@";
 "get_free_trial_title" = "%d %@ szóló próbaidőszak elkezdése.";
 "get_discount_title" = "Szerezze be %d %@ %d%% kedvezménnyel.";
-
 "vessel_width_limit_description" = "Adja meg a hajószélességet a keskeny hidak elkerüléséhez";
 "profile_type_osmand_string" = "OsmAnd profil";
 "logging_min_accuracy" = "Legkisebb pontosság";
@@ -1399,7 +1398,7 @@
 "nav_type_geocoding" = "Geokódolás";
 "res_source_sqlite" = "SQLiteDB fájl";
 "menu" = "Menü";
-"arrival_announcement_frequency" = "Milyen korán szeretnéd hallani az érkezés bejelentését\?";
+"arrival_announcement_frequency" = "Milyen korán szeretnéd hallani az érkezés bejelentését?";
 "announce" = "Bejelentés";
 "public_transport_hide" = "Tömegközlekedés elrejtése";
 "res_online_source_cache_alert" = "A módosítások alkalmazása esetén a csempeforrás gyorsítótárazott adatai törlésre kerülnek";

@@ -62,8 +62,9 @@
 
 - (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
 {
-    BOOL isInRootFolder = [_gpx.gpxFolder isEqualToString: @""];
-    NSString *selectedFolderName = isInRootFolder ? OALocalizedString(@"tracks") : _gpx.gpxFolder;
+    NSString *selectedFolderName = [_gpx.gpxFilePath stringByDeletingLastPathComponent];
+    if ([selectedFolderName isEqualToString:@""])
+        selectedFolderName = OALocalizedString(@"tracks");
     
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
@@ -203,27 +204,22 @@
     }
 }
 
-- (void) moveTrackToFolder:(NSString *)dysplayingDestinationFolder
+- (void) moveTrackToFolder:(NSString *)selectedFolderName
 {
-    NSString *sourcePath = [OAGPXDatabase.sharedDb getFilePath:_gpx.gpxFileName folderName:_gpx.gpxFolder];
-    NSString *oldFileName = _gpx.gpxFileName;
-    NSString *oldFolder = _gpx.gpxFolder;
+    NSString *oldPath = _gpx.gpxFilePath;
+    NSString *oldName = _gpx.gpxFileName;
+    NSString *sourcePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldPath];
     
-    NSString *destinationFolderName = dysplayingDestinationFolder;
-    NSString *destinationFolderPath = OsmAndApp.instance.gpxPath;
-    if ([dysplayingDestinationFolder isEqualToString:OALocalizedString(@"tracks")])
-        destinationFolderName = @"";
-    else
-        destinationFolderPath = [destinationFolderPath stringByAppendingPathComponent:dysplayingDestinationFolder];
+    NSString *newFolder = [selectedFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : selectedFolderName;
+    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFolder];
+    NSString *newName = [self getUniqueFileName:oldName inFolderPath:newFolderPath];
+    NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
     
-    NSString *uniqueFileName = [self getUniqueFileName:[sourcePath lastPathComponent] inFolderPath:destinationFolderPath];
-    NSString *destinationFilePath = [destinationFolderPath stringByAppendingPathComponent:uniqueFileName];
-    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationFilePath error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
-    
-    [OAGPXDatabase.sharedDb updateGPXFolderName:destinationFolderName oldFolderName:_gpx.gpxFolder newFileName:uniqueFileName oldFileName:oldFileName];
+    [OAGPXDatabase.sharedDb updateGPXFolderName:[newFolder stringByAppendingPathComponent:newName] oldFilePath:oldPath];
     [OAGPXDatabase.sharedDb save];
-    [_delegate updateSelectedFolder:_gpx  oldFileName:oldFileName newFileName:uniqueFileName oldFolder:oldFolder newFolder:destinationFolderName];
+    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
+    [_delegate updateSelectedFolder:_gpx oldFilePath:oldPath newFilePath:[newFolder stringByAppendingPathComponent:newName]];
 }
 
 - (NSString *) getUniqueFileName:(NSString *)fileName inFolderPath:(NSString *)folderPath

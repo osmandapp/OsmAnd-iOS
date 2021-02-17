@@ -155,7 +155,8 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         if (_docPath)
         {
             OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-            gpx = [gpxDb getGPXItem:_docPath.lastPathComponent];
+            NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:_docPath];
+            gpx = [gpxDb getGPXItem:gpxFilePath];
         }
         else
         {

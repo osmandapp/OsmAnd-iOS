@@ -2213,12 +2213,12 @@
     }
 }
 
-- (void) showTempGpxTrack:(NSString *)fileName
+- (void) showTempGpxTrack:(NSString *)filePath
 {
-    [self showTempGpxTrack:fileName update:YES];
+    [self showTempGpxTrack:filePath update:YES];
 }
 
-- (void) showTempGpxTrack:(NSString *)fileName update:(BOOL)update
+- (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update
 {
     if (_recTrackShowing)
         [self hideRecGpxTrack];
@@ -2226,7 +2226,7 @@
     @synchronized(_rendererSync)
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        if ([settings.mapSettingVisibleGpx containsObject:fileName]) {
+        if ([settings.mapSettingVisibleGpx containsObject:filePath]) {
             _gpxDocsTemp.clear();
             _gpxDocFileTemp = nil;
             return;
@@ -2234,11 +2234,11 @@
         
         _tempTrackShowing = YES;
 
-        if (![_gpxDocFileTemp isEqualToString:fileName] || _gpxDocsTemp.isEmpty()) {
+        if (![_gpxDocFileTemp isEqualToString:filePath] || _gpxDocsTemp.isEmpty()) {
             _gpxDocsTemp.clear();
-            _gpxDocFileTemp = [fileName copy];
-            NSString *folderName = [[OAGPXDatabase sharedDb] getSuperFolderNameByFilePath:fileName];
-            NSString *path = [[OAGPXDatabase sharedDb] getFilePath:[fileName lastPathComponent] folderName:folderName];
+            _gpxDocFileTemp = [filePath copy];
+            OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
             _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
         }
         
@@ -2313,7 +2313,8 @@
         return;
 
     std::shared_ptr<const OsmAnd::GeoInfoDocument> doc = _gpxDocsTemp.first();
-    NSString *path =  [[OAGPXDatabase sharedDb] getFilePath:_gpxDocFileTemp folderName:@""];
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxDocFileTemp];
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]; 
     QString qPath = QString::fromNSString(path);
     if (![[OAAppSettings sharedManager].mapSettingVisibleGpx containsObject:_gpxDocFileTemp])
     {
@@ -3120,7 +3121,8 @@
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
             if (it.value())
-                docs[QFileInfo(it.key()).fileName()] = it.value();
+                docs[it.key()] = it.value();
+                //docs[QFileInfo(it.key()).fileName()] = it.value();
         }
         if (_gpxDocFileRoute && !_gpxDocsRoute.isEmpty())
             docs[QString::fromNSString(_gpxDocFileRoute)] = _gpxDocsRoute.first();

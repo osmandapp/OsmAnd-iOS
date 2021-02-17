@@ -9,12 +9,6 @@
 #import "OAGpxInfo.h"
 #import "OAUtilities.h"
 
-@interface OAGpxInfo ()
-{
-}
-
-@end
-
 @implementation OAGpxInfo
 {
     NSString *_name;
@@ -45,7 +39,7 @@
 
 - (NSString *) formatName:(NSString *)name
 {
-    return [[[name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim]; // ???
+    return [[name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 }
 
 - (BOOL) isCorrupted
@@ -59,12 +53,12 @@
     {
         if (!_file)
             return -1;
-        unsigned long long fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:_file error:nil] fileSize];
+        NSUInteger fileSize = [[[NSFileManager defaultManager] attributesOfItemAtPath:_file error:nil] fileSize];
         NSError *error = nil;
         NSDictionary *attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:_file error:&error];
         if (attrs) {
             NSString *size = [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleBinary];
-            _sz = [size intValue];
+            _sz = [size integerValue];
         }
     }
     return _sz;

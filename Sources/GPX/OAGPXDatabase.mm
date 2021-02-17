@@ -63,13 +63,13 @@
     return self;
 }
 
--(OAGPX *)addGpxItem:(NSString *)fileName folderName:(NSString *)folderName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
+-(OAGPX *)addGpxItem:(NSString *)fileName path:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
     
-    OAGPX *gpx = [self buildGpxItem:fileName folderName:folderName title:title desc:desc bounds:bounds analysis:analysis];
+    OAGPX *gpx = [self buildGpxItem:fileName path:filePath title:title desc:desc bounds:bounds analysis:analysis];
     
-    if (![self containsGPXItem:fileName])
+    if (![self containsGPXItem:filePath])
         [res addObject:gpx];
     
     gpxList = res;
@@ -80,18 +80,20 @@
 - (void) replaceGpxItem:(OAGPX *)gpx
 {
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
-    OAGPX *existing = [self getGPXItemByFileName:gpx.gpxFileName inFolder:gpx.gpxFolder];
+    OAGPX *existing = [self getGPXItem:gpx.gpxFilePath];
     if (existing)
         [res removeObject:existing];
     [res addObject:gpx];
     gpxList = res;
 }
 
--(OAGPX *)buildGpxItem:(NSString *)fileName folderName:(NSString *)folderName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
+-(OAGPX *)buildGpxItem:(NSString *)fileName path:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
     OAGPX *gpx = [[OAGPX alloc] init];
+    NSString *pathToRemove = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
     gpx.bounds = bounds;
     gpx.gpxFileName = fileName;
+    gpx.gpxFilePath = [filePath stringByReplacingOccurrencesOfString:pathToRemove withString:@""];
     title = [title length] != 0 ? title : nil;
     if (title)
         gpx.gpxTitle = title;
@@ -102,8 +104,6 @@
         gpx.gpxDescription = desc;
     else
         gpx.gpxDescription = @"";
-    
-    gpx.gpxFolder = folderName.length == 0 ? @"" : folderName;
     
     gpx.color = 0;
     
@@ -134,7 +134,18 @@
     return gpx;
 }
 
--(OAGPX *)getGPXItem:(NSString *)fileName
+-(OAGPX *)getGPXItem:(NSString *)filePath
+{
+    for (OAGPX *item in gpxList) {
+        if ([item.gpxFilePath isEqualToString:filePath])
+        {
+            return item;
+        }
+    }
+    return nil;
+}
+
+-(OAGPX *)getGPXItemByFileName:(NSString *)fileName
 {
     for (OAGPX *item in gpxList) {
         if ([item.gpxFileName isEqualToString:fileName])
@@ -145,66 +156,50 @@
     return nil;
 }
 
--(OAGPX *)getGPXItemByFileName:(NSString *)fileName inFolder:(NSString *)folderName
-{
-    for (OAGPX *item in gpxList) {
-        if ([item.gpxFileName isEqualToString:fileName] && ([item.gpxFolder isEqualToString:folderName] || ([folderName isEqualToString:@""] && !item.gpxFolder)))
-        {
-            return item;
-        }
-    }
-    return nil;
-}
-
--(void)removeGpxItem:(NSString *)fileName
+-(void)removeGpxItem:(NSString *)filePath
 {
     NSMutableArray *arr = [NSMutableArray arrayWithArray:gpxList];
+    NSString *path;
     for (OAGPX *item in arr) {
-        if ([item.gpxFileName isEqualToString:fileName])
-        {
+        if ([item.gpxFilePath isEqualToString:filePath]) {
+            path = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:item.gpxFilePath];
             [arr removeObject:item];
             break;
         }
     }
     gpxList = arr;
     
-    NSString *path = [self getFilePath:fileName folderName:@""];
-    if (path.length > 0)
-        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 
-- (NSString *) getFilePath:(NSString *)fileName folderName:(NSString *)folderName
+- (NSString *) getGpxStoringPathByFullPath:(NSString *)fullFilePath
 {
-    NSString *searchFolder = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:folderName];
-    NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:searchFolder error:nil];
-    NSString *path = [searchFolder stringByAppendingPathComponent:fileName];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path])
-        return path;
-    for (NSString *item in dirs)
-    {
-        if (![[item pathExtension] isEqual:@"gpx"])
-        {
-            if([item hasPrefix:@"."])
-                continue;
-            NSString* dirPath = [searchFolder stringByAppendingPathComponent:item];
-            path = [self getFilePath:fileName folderName:dirPath];
-            if (path.length > 0)
-                return path;
-        }
-    }
-    return @"";
+    NSString *trackFolderName = [self getGPXFolderNameByFilePath:fullFilePath];
+    return [trackFolderName stringByAppendingPathComponent:fullFilePath.lastPathComponent];
 }
 
-- (NSString *) getSuperFolderNameByFilePath:(NSString *)filePath
+- (NSString *) getGPXFolderNameByFilePath:(NSString *)path
 {
-    NSArray<NSString *> *pathComponents = [filePath componentsSeparatedByString:@"/"];
+    NSArray<NSString *> *pathComponents = [path componentsSeparatedByString:@"/"];
     if (pathComponents.count > 3)
         return [pathComponents[pathComponents.count - 3] isEqualToString:@"Documents"] ? @"" : pathComponents[pathComponents.count - 2];
+    else if (pathComponents.count == 2)
+        return pathComponents[pathComponents.count - 2];
     else
         return @"";
 }
 
--(BOOL)containsGPXItem:(NSString *)fileName
+-(BOOL)containsGPXItem:(NSString *)filePath
+{
+    for (OAGPX *item in gpxList) {
+        if ([item.gpxFilePath isEqualToString:filePath]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+-(BOOL)containsGPXItemByFileName:(NSString *)fileName
 {
     for (OAGPX *item in gpxList) {
         if ([item.gpxFileName isEqualToString:fileName]) {
@@ -214,10 +209,10 @@
     return NO;
 }
 
--(BOOL)updateGPXItemColor:(NSString *)fileName color:(int)color
+-(BOOL)updateGPXItemColor:(NSString *)filePath color:(int)color
 {
     for (OAGPX *item in gpxList) {
-        if ([item.gpxFileName isEqualToString:fileName]) {
+        if ([item.gpxFilePath isEqualToString:filePath]) {
             item.color = color;
             return YES;
         }
@@ -225,12 +220,12 @@
     return NO;
 }
 
--(BOOL)updateGPXItemPointsCount:(NSString *)fileName pointsCount:(int)pointsCount
+-(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount
 {
     for (OAGPX *item in gpxList) {
-        if ([item.gpxFileName isEqualToString:fileName]) {
+        if ([item.gpxFilePath isEqualToString:filePath]) {
             item.wptPoints = pointsCount;
-            NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item.gpxFileName];
+            NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item.gpxFilePath];
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:path];
             item.bounds = doc.bounds;
             return YES;
@@ -239,13 +234,14 @@
     return NO;
 }
 
--(BOOL)updateGPXFolderName:(NSString *)newFolderName oldFolderName:(NSString *)oldFolderName newFileName:(NSString *)newFileName oldFileName:(NSString *)oldFileName
+-(BOOL)updateGPXFolderName:(NSString *)newFilePath oldFilePath:(NSString *)oldFilePath
 {
     for (OAGPX *item in gpxList) {
-        if ([item.gpxFileName isEqualToString:oldFileName] && [item.gpxFolder isEqualToString:oldFolderName]) {
-            item.gpxFileName = newFileName;
-            item.gpxTitle = [newFileName stringByDeletingPathExtension];
-            item.gpxFolder = newFolderName;
+        if ([item.gpxFilePath isEqualToString:oldFilePath]) {
+            item.gpxFilePath = newFilePath;
+            item.gpxFileName = [newFilePath lastPathComponent];
+            item.gpxTitle = [item.gpxFileName stringByDeletingPathExtension];
+            
             return YES;
         }
     }
@@ -272,10 +268,10 @@
             
             if ([key isEqualToString:@"gpxFileName"]) {
                 gpx.gpxFileName = value;
-            } else if ([key isEqualToString:@"gpxFolder"]) {
-                gpx.gpxFolder = value;
             } else if ([key isEqualToString:@"gpxTitle"]) {
                 gpx.gpxTitle = value;
+            } else if ([key isEqualToString:@"gpxFilePath"]) {
+                gpx.gpxFilePath = value;
             } else if ([key isEqualToString:@"gpxDescription"]) {
                 gpx.gpxDescription = value;
             } else if ([key isEqualToString:@"importDate"]) {
@@ -341,51 +337,12 @@
             }
             
         }
-        
-        if ([self fileExists:gpx.gpxFileName folderName:gpx.gpxFolder])
+        if (!gpx.gpxFilePath)
+            gpx.gpxFilePath = gpx.gpxFileName;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]])
             [res addObject:gpx];
     }
     gpxList = res;
-}
-
-- (BOOL) fileExists:(NSString *) fileName
-{
-    NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
-    NSString *filePath;
-    for (NSString *item in dirs)
-    {
-        if (![[item pathExtension] isEqual:@"gpx"])
-        {
-            if([item hasPrefix:@"."])
-                continue;
-            NSString *dirPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item];
-            filePath = [dirPath stringByAppendingPathComponent:fileName];
-        }
-        else
-        {
-            filePath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:fileName];
-        }
-        if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-            return YES;
-    }
-    return NO;
-}
-
-- (BOOL) fileExists:(NSString *)fileName folderName:(NSString *)folderName
-{
-    NSString *searchFolder = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:folderName];
-    NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:searchFolder error:nil];
-    NSString *filePath;
-    for (NSString *item in dirs)
-    {
-        if ([[item pathExtension] isEqual:@"gpx"])
-        {
-            filePath = [searchFolder stringByAppendingPathComponent:fileName];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])
-                return YES;
-        }
-    }
-    return NO;
 }
 
 -(void) save
@@ -397,8 +354,8 @@
         NSMutableDictionary *d = [NSMutableDictionary dictionary];
         
         [d setObject:gpx.gpxFileName forKey:@"gpxFileName"];
-        [d setObject:gpx.gpxFolder forKey:@"gpxFolder"];
         [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
+        [d setObject:gpx.gpxFilePath ? gpx.gpxFilePath : gpx.gpxTitle forKey:@"gpxFilePath"];
         [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
         [d setObject:gpx.importDate forKey:@"importDate"];
         

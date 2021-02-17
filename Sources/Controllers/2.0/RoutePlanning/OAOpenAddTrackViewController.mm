@@ -239,7 +239,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         if (self.delegate)
             [self.delegate closeBottomSheet];
         [self dismissViewControllerAnimated:YES completion:nil];
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFileName]];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
         return;
     }
     else
@@ -249,7 +249,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         if (track)
             filename = track.gpxFileName;
         if (self.delegate)
-            [self.delegate onFileSelected:filename];
+            [self.delegate onFileSelected:track.gpxFilePath];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
     }

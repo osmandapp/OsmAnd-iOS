@@ -271,7 +271,7 @@
         }
         else
         {
-            [[OAAppSettings sharedManager] showGpx:@[gpx.gpxFileName]];
+            [[OAAppSettings sharedManager] showGpx:@[gpx.gpxFilePath]];
             [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:gpx];
             [self updateParameters];
             [self.routingHelper recalculateRouteDueToSettingsChange];

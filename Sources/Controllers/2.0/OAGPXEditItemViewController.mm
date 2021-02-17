@@ -155,7 +155,7 @@
     if (gpxRouter.gpx && [gpxRouter.gpx.gpxFileName isEqualToString:self.gpx.gpxFileName])
         [gpxRouter cancelRoute];
     
-    NSString *path = [[OAGPXDatabase sharedDb] getFilePath:self.gpx.gpxFileName folderName:self.gpx.gpxFolder];
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
     self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
 }
 
@@ -177,13 +177,13 @@
         }
         else
         {
-            if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
-                [settings hideGpx:@[self.gpx.gpxFileName]];
+            if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFilePath]) {
+                [settings hideGpx:@[self.gpx.gpxFilePath]];
                 [_mapViewController hideTempGpxTrack];
                 [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
             }
             
-            [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
+            [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
             [[OAGPXDatabase sharedDb] save];
         }
     }
@@ -507,7 +507,7 @@
                                  }
                                  else
                                  {
-                                     NSString *path = [[OAGPXDatabase sharedDb] getFilePath:self.gpx.gpxFileName folderName:self.gpx.gpxFolder];
+                                     NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
                                      [_mapViewController deleteWpts:items docPath:path];
                                      [self loadDoc];
                                  }
@@ -541,7 +541,7 @@
     
     if (!_showCurrentTrack)
     {
-        NSString *path = [[OAGPXDatabase sharedDb] getFilePath:self.gpx.gpxFileName folderName:self.gpx.gpxFolder];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
         [_mapViewController updateWpts:items docPath:path updateMap:YES];
     }
     else
@@ -596,8 +596,12 @@
             if (newName.length > 0)
             {
                 NSString *oldFileName = self.gpx.gpxFileName;
+                NSString *oldFilePath = self.gpx.gpxFilePath;
+                NSString *oldPath = [_app.gpxPath stringByAppendingPathComponent:oldFilePath];
                 self.gpx.gpxTitle = newName;
-                self.gpx.gpxFileName = [self.gpx.gpxTitle stringByAppendingPathExtension:@"gpx"];
+                self.gpx.gpxFileName = [newName stringByAppendingPathExtension:@"gpx"];
+                self.gpx.gpxFilePath = [[self.gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:self.gpx.gpxFileName];
+                NSString *newPath = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
                 [[OAGPXDatabase sharedDb] save];
                 
                 OAGpxMetadata *metadata;
@@ -636,18 +640,18 @@
                 
                 metadata.name = newName;
                 
-                NSString *path = [[self.doc.fileName stringByDeletingLastPathComponent] stringByAppendingPathComponent:self.gpx.gpxFileName];
+                
                 if ([NSFileManager.defaultManager fileExistsAtPath:self.doc.fileName])
                     [NSFileManager.defaultManager removeItemAtPath:self.doc.fileName error:nil];
                 
-                BOOL saveFailed = ![_mapViewController updateMetadata:metadata oldPath:self.doc.fileName docPath:path];
-                self.doc.fileName = path;
+                BOOL saveFailed = ![_mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
+                self.doc.fileName = newPath;
                 self.doc.metadata = metadata;
                 
                 if (saveFailed)
-                    [self.doc saveTo:path];
+                    [self.doc saveTo:newPath];
                 
-                [OASelectedGPXHelper renameVisibleTrack:oldFileName newName:path.lastPathComponent oldFolder:self.gpx.gpxFolder newFolder:self.gpx.gpxFolder];
+                [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:self.gpx.gpxFilePath];
                 
                 [_mapViewController hideTempGpxTrack];
                 
@@ -671,13 +675,13 @@
             }
             else
             {
-                if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
-                    [settings hideGpx:@[self.gpx.gpxFileName]];
+                if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFilePath]) {
+                    [settings hideGpx:@[self.gpx.gpxFilePath]];
                     [_mapViewController hideTempGpxTrack];
                     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
                 }
                 
-                [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
+                [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
                 [[OAGPXDatabase sharedDb] save];
             }
             

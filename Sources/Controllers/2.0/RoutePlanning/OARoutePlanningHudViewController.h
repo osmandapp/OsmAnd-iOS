@@ -12,7 +12,7 @@
 
 @interface OARoutePlanningHudViewController : OABaseScrollableHudViewController
 
-- (instancetype) initWithFileName:(NSString *)fileName;
+- (instancetype) initWithFileName:(NSString *)filePath;
 - (instancetype) initWithInitialPoint:(CLLocation *)latLon;
 
 - (void) cancelModes;

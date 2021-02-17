@@ -50,23 +50,23 @@
 "poi_hide" = "Ocultar";
 // My Places
 "favorites" = "Favoritos";
-"tracks" = "Viagens";
+"tracks" = "Trilhas";
 // GPX
 "gpx_point" = "Ponto";
 "gpx_waypoints" = "Pontos de parada";
 "gpx_points" = "Ponto(s)";
 "gpx_export" = "Exportar";
 "import_export" = "Importar/Exportar";
-"gpx_import_title" = "Importar viagem";
-"gpx_import_already_exists" = "A viagem especificada já existe na lista. Por favor, escolha a ação.";
+"gpx_import_title" = "Importar trilha";
+"gpx_import_already_exists" = "A trilha especificada já existe na lista. Por favor, escolha a ação.";
 "gpx_add_new" = "Adicionar novo arquivo";
 "gpx_overwrite" = "Sobrescrever";
 "gpx_cannot_import" = "Não é possível importar arquivo GPX especificado";
-"gpx_export_title" = "Exportar viagem";
-"gpx_export_select_track" = "Por favor selecione a viagem para Exportar";
+"gpx_export_title" = "Exportar trilha";
+"gpx_export_select_track" = "Por favor selecione a trilha para exportar";
 "gpx_import_desc" = "Para importar seus arquivos GPX (formato de dados comuns do GPS) do Dropbox, Email ou qualquer outra fonte, use a opção \"Copiar para osmAnd Maps\"";
-"gpx_no_tracks" = "Não há viagens";
-"gpx_remove" = "Apagar viagem?";
+"gpx_no_tracks" = "Não há trilhas";
+"gpx_remove" = "Apagar trilha?";
 "gpx_stat" = "Estatísticas";
 "gpx_route_time" = "Tempo de percurso";
 "gpx_uphldownhl" = "Subidas/Descidas";
@@ -82,16 +82,16 @@
 "track_recording_name" = "Gravando trilha";
 "track_stop_rec" = "Parar gravação";
 "track_new_segment" = "Iniciar novo segmento";
-"track_save" = "Salvar viagem atual";
+"track_save" = "Salvar trilha atual";
 "track_continue_rec" = "Continuar gravação";
 "track_continue_rec_q" = "Você quer continuar a gravação?";
 "rec_interval" = "Intervalo de registro";
 "rec_interval_minimum" = "Mínimo";
-"track_start_rec" = "Iniciar gravação de viagem";
-"track_rec_addon_q" = "Por favor, ative o complemento de gravação de viagem para gravar e salvar suas viagens";
+"track_start_rec" = "Iniciar gravação de trilha";
+"track_rec_addon_q" = "Por favor, ative o complemento de gravação de trilha para gravar e salvar suas trilhas";
 "track_interval_remember" = "Lembrar minha escolha";
-"track_clear" = "Limpar viagem atual";
-"track_clear_q" = "Você quer limpar a viagem atual?";
+"track_clear" = "Limpar trilha atual";
+"track_clear_q" = "Você quer limpar a trilha atual?";
 "show_info" = "Mostrar informações";
 // Map settings
 "m_style_overview" = "Explorar";
@@ -204,7 +204,7 @@
 "other_options" = "Outras opções";
 "add_parking" = "Adicionar como posição de estacionamento";
 "add_parking_short" = "Adicionar estacionamento";
-"add_waypoint" = "Adicionar parada à viagem";
+"add_waypoint" = "Adicionar parada à trilha";
 "add_waypoint_short" = "Adicionar parada";
 "more" = "Mais";
 "parking_marker" = "Marcador de estacionamento";
@@ -239,7 +239,7 @@
 "import_favorite" = "Favorito";
 "import_failed" = "Importação falhou";
 "import_cannot" = "O arquivo especificado não pode ser importado";
-"import_gpx" = "Viagem GPX";
+"import_gpx" = "Trilha GPX";
 // Alerts
 "alert_inet_needed" = "Conexão com a Internet necessária para executar esta ação. Por favor, verifique sua conexão.";
 // Context menu
@@ -288,8 +288,8 @@
 "product_desc_parking" = "Permite lembrar facilmente onde o carro foi estacionado e quanto tempo resta, caso o estacionamento seja com tempo limitado";
 "product_title_skimap" = "Mapa de esqui";
 "product_desc_skimap" = "Pistas de esqui para todas as estações de esqui do mundo";
-"product_title_track_recording" = "Gravação de viagem";
-"product_desc_track_recording" = "Ativa a funcionalidade para gravar e salvar suas viagens";
+"product_title_track_recording" = "Gravação de trilha";
+"product_desc_track_recording" = "Ativa a funcionalidade para gravar e salvar suas trilhas";
 "product_title_africa" = "África";
 "product_desc_africa" = "Downloads ilimitados de mapas para a África";
 "product_title_australia" = "Austrália";
@@ -313,7 +313,7 @@
 "get_unlimited_access" = "Obtenha acesso ilimitado";
 "latitude" = "Latitude";
 "longitude" = "Longitude";
-"track_save_short_q" = "Viagem é muito curta, você quer salvar?";
+"track_save_short_q" = "Trilha é muito curta, você quer salvar?";
 "add_as" = "Adicionar como";
 "make_call" = "Ligar";
 "fav_select" = "Por favor, selecione favoritos";
@@ -334,8 +334,8 @@
 "no_other_translations" = "Não há outras traduções";
 "shared_string_edit" = "Editar";
 "wpt_remove_q" = "Remover ponto de parada?";
-"gpx_select_track" = "Selecionar viagem";
-"gpx_curr_new_track" = "Viagem atual";
+"gpx_select_track" = "Selecionar trilha";
+"gpx_curr_new_track" = "Trilha atual";
 "enter_name" = "Inserir nome";
 "not_selected" = "Nada selecionado";
 "language" = "Idioma";
@@ -351,11 +351,11 @@
 "time_closed" = "Fechado";
 "time_will_close" = "Fechará em";
 "time_will_open" = "Abrirá em";
-"menu_my_trips" = "Minhas Viagens";
+"menu_my_trips" = "Minhas trilhas";
 "menu_active_trips" = "Ativar";
-"menu_all_trips" = "Todas as Viagens";
+"menu_all_trips" = "Todas as trilhas";
 "my_favorites" = "Meus Favoritos";
-"record_trip" = "Gravar sua viagem";
+"record_trip" = "Gravar sua trilha";
 "shared_string_remove" = "Excluir";
 "gpx_distance_points" = "Distância (pontos)";
 "gpx_max_speed" = "Velocidade máxima";
@@ -366,15 +366,15 @@
 "change_color" = "Alterar cor";
 "wpt_select" = "Por favor, selecione pontos de parada";
 "gpx_remove_wpts_q" = "Você quer apagar o ponto de parada selecionado?";
-"create_new_trip" = "Criar nova viagem";
+"create_new_trip" = "Criar nova trilha";
 "editing_waypoints" = "Editando paradas";
-"select_wpt_on_map" = "Selecionar ponto no mapa para adicionar à viagem";
-"gpx_rename_q" = "Renomear viagem";
-"gpx_enter_new_name" = "Por favor, insira novo nome para a viagem";
+"select_wpt_on_map" = "Selecionar ponto no mapa para adicionar à trilha";
+"gpx_rename_q" = "Renomear trilha";
+"gpx_enter_new_name" = "Por favor, insira novo nome para a trilha";
 "gpx_route" = "Rota";
 "gpx_cancel_route_q" = "Você quer cancelar esta rota?";
 "gpx_deactivated" = "Desativado";
-"gpx_trip_groups" = "Grupos de viagem";
+"gpx_trip_groups" = "Grupos de trilha";
 "gpx_group_select" = "Selecionar grupo";
 "show_all" = "Mostrar todos";
 "directions" = "Direções";
@@ -389,7 +389,7 @@
 "product_desc_ext_nautical" = "OsmAnd Cartas Náuticas é um complemento para o app OsmAnd Mapas e Navegação. É uma representação gráfica detalhada de oceanos, mares, rios e zonas costeiras. Os gráficos podem conter várias informações como rotas, luzes de navegação, áreas perigosas, áreas onde é permitido ou proibido velejar e atracar, etc.\n\nInstruções de uso: é altamente recomendável baixar o mapa náutico base para ver os mapas, independentemente da presença de mapa detalhado. Para ativar cartas náuticas, toque no botão do mapa e defina o tipo de mapa para náuticas.\n\nNota: Todos os navegadores profissionais são obrigados a ter cartas náuticas oficiais em suas embarcações.\n\nCartas náuticas OsmAnd baseiam-se nos dados do projeto OpenSeaMap. Apesar de cartas do OpenSeaMap no momento não poderem substituir as cartas náuticas oficiais, elas podem ser usadas por navegadores amadores para orientação ou planejamento de rota.";
 "product_desc_ext_parking" = "O complemento de posição de estacionamento memoriza onde seu carro está estacionado. É um complemento para o app OsmAnd Mapas e Navegação.\nEscolha um marcador da posição de estacionamento no mapa ou defina o limite de tempo para ser lembrado ((também inclui um marcador no mapa). Para usar o plugin, ative-o no menu de complementos.";
 "product_desc_ext_skimap" = "OsmAnd Mapas de esqui é um complemento para o app OsmAnd Mapas e Navegação projetado para navegar em locais de desportos de inverno. Informa sobre as pistas de esqui, marcadores de teleférico e linhas coloridas indicando a complexidade de cada faixa. Você pode se informar sobre pistas de esqui propriamente ditas, bem como a infraestrutura ao redor.\n\nInstruções de uso: Para ativar o complemento no aplicativo OsmAnd, toque no botão do mapa e defina o tipo para Visão de mapas de esqui.";
-"product_desc_ext_track_recording" = "Grave suas viagens e as salve manualmente usando o complemento OsmAnd Gravação de viagem. Exporte sua viagem como um arquivo gpx, compartilhe ou até mesmo use para contribuir com o projeto OpenStreetMap. Uma ferramenta útil para corredores, caminhantes e qualquer pessoa interessada na gravação de suas viagens.";
+"product_desc_ext_track_recording" = "Grave suas trilhas e as salve manualmente usando o complemento OsmAnd Gravação de trilha. Exporte sua trilha como um arquivo gpx, compartilhe ou até mesmo use para contribuir com o projeto OpenStreetMap. Uma ferramenta útil para corredores, caminhantes e qualquer pessoa interessada na gravação de suas trilhas.";
 "product_desc_ext_wiki" = "Obter informações sobre pontos de interesse da Wikipédia. É o seu guia de bolso off-line - só ativar o complemento Wikipédia e desfrutar de artigos sobre os elementos ao seu redor.";
 "product_desc_ext_srtm" = "Este complemento fornece curva de nível e camada de sombra de colinas (relevo) por cima dos mapas off-line do OsmAnd. Cuvas de nível fornecem as informações sobre altura da área enquanto sombra de colina é sua visualização. Veja os nomes dos cumes das montanhas e características específicas do terreno usando este complemento.\n\nOs dados globais (entre as latitudes 70º norte e 70º sul) são baseados em medições do SRTM (Shuttle Radar Topography Mission) e ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), um instrumento de imagens da Terra, o principal satélite do Sistema de Observação da Terra da NASA. ASTER é um esforço conjunto da NASA, do Ministério Japonês da Economia, Comércio e Indústria (METI) e do Sistema Espacial Japonês (J-spacesystems).";
 "open_map_settings" = "Abrir configurações do mapa";
@@ -539,8 +539,8 @@
 "stop_routing_confirm" = "Confirma que quer parar a navegação?";
 "cancel_route" = "Descartar rota";
 "route_is_too_long_v2" = "Esta rota pode ser muito longa para calcular. Por favor, adicione destinos intermediários se nenhum resultado for encontrado dentro de 10 minutos.";
-"navigation_over_track" = "Iniciar a navegação ao longo da viagem?";
-"use_displayed_track_for_navigation" = "Você quer usar a viagem apresentada para navegação?";
+"navigation_over_track" = "Iniciar a navegação ao longo da trilha?";
+"use_displayed_track_for_navigation" = "Quer usar a trilha exibida para navegação?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Selecione no mapa";
 "shared_string_my_location" = "Minha posição";
@@ -624,7 +624,7 @@
 "keep_informing_never" = "Apenas manualmente (toque na seta)";
 "gpx_option_from_start_point" = "Percorrer toda a trilha";
 "gpx_option_reverse_route" = "Inverter direção GPX";
-"gpx_navigation" = "Seguir viagem";
+"gpx_navigation" = "Seguir a trilha";
 "internet_connection_required_for_online_route" = "Um serviço de navegação on-line está selecionado, mas não há conexão com a Internet.";
 "poi_filter_by_name" = "Pesquisar por nome";
 "city_type_suburb" = "Bairro";
@@ -694,7 +694,7 @@
 "transport_nearby_routes" = "Cerca de";
 "transport_stop" = "Parada";
 "shared_string_close" = "Fechar";
-"save_global_track_interval_descr" = "Escolha o intervalo de registo para a gravação geral da viagem (ativado via widget de registo GPX no mapa).";
+"save_global_track_interval_descr" = "Escolha o intervalo de registro para a gravação de trilha geral (habilitado por meio do widget de registro GPX no mapa).";
 "show_pedestrian_warnings" = "Faixas de pedestre";
 "speak_tunnels" = "Túneis";
 "route_stops_before" = "%d paradas antes";
@@ -717,7 +717,7 @@
 "rotate_map_none_opt" = "Não gire (o norte está para cima)";
 "driving_region_descr" = "Selecione a região de condução: EUA, Europa, Reino Unido, Ásia e outros.";
 "logging_interval_navigation" = "Intervalo de registro durante a navegação";
-"logging_interval_navigation_descr" = "Escolha o intervalo de registro para a gravação de viagem durante a navegação";
+"logging_interval_navigation_descr" = "Escolha o intervalo de registro para gravação de trilha durante a navegação";
 "logging_min_distance" = "Deslocamento mínimo";
 "logging_min_distance_descr" = "Filtro: distância mínima para registrar um novo ponto";
 "logging_min_accuracy" = "Precisão mínima";
@@ -725,7 +725,7 @@
 "logging_min_speed" = "Velocidade mínima";
 "logging_min_speed_descr" = "Filtro: sem registro abaixo da velocidade selecionada";
 "auto_split_gap" = "Autodividir gravações após um intervalo";
-"auto_split_gap_descr" = "Inicie um novo segmento após um intervalo de 6 min, uma nova viagem após um intervalo de 2 h ou um novo arquivo após um intervalo maior";
+"auto_split_gap_descr" = "Comece um novo segmento após intervalo de 6 min, nova trilha após intervalo de 2 h ou novo arquivo após intervalo maior";
 "map_widget_radius_ruler" = "Régua de raio";
 "confirm_usage_speed_cameras" = "Em diversos países (Alemanha, França, Itália, etc.) o uso de alertas de radar é ilegal. OsmAnd não assume qualquer responsabilidade se você violar a lei. Por favor, toque em \"Sim\" somente se você pode aceitar o uso deste recurso.";
 "show_cameras" = "Radares";
@@ -748,7 +748,7 @@
 "choose_audio_stream_descr" = "Escolha o canal para orientação por voz";
 "osm_live_routing" = "Navegação OsmAnd Live";
 "osm_live_routing_descr" = "Use as atualizações do OsmAnd Live para navegação";
-"recording_preferences_descr" = "Preferências de gravação de viagem";
+"recording_preferences_descr" = "Acompanhar preferências de gravação";
 "impassable_road_desc" = "Escolha as vias que quer evitar durante a navegação";
 "interrupt_music_descr" = "Interromper totalmente qualquer música durante as instruções de voz (não apenas diminuir o volume)";
 "interrupt_music" = "Pausar música";
@@ -771,10 +771,10 @@
 "poi_overlay" = "Sobreposição de POIs";
 "gpx_waypoint" = "Ponto de trajeto";
 "import_from_docs" = "Importar de documentos";
-"track_save_descr" = "Salvar a viagem atual como arquivo GPX agora.";
+"track_save_descr" = "Salvar a trilha atual como arquivo GPX agora.";
 "poi_clear" = "Limpar";
-"track_during_nav" = "Auto-registrar a viagem";
-"track_during_nav_descr" = "Ativar para salvar automaticamente uma viagem durante a navegação";
+"track_during_nav" = "Auto-registrar a trilha";
+"track_during_nav_descr" = "Ativar para salvar automaticamente uma trilha durante a navegação";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Atualização ao vivo";
 "osmand_live_available_maps" = "Mapas disponíveis";
@@ -1163,7 +1163,7 @@
 "pause_resume_nav" = "Pausar/voltar navegação";
 "toggle_nav" = "Iniciar/parar navegação";
 "toggle_day_night" = "Alternar modo dia/noite";
-"show_hide_gpx" = "Mostrar/ocultar viagens";
+"show_hide_gpx" = "Mostrar/ocultar trilhas";
 "search_results" = "Procurar resultados";
 "quick_action_name_str" = "Nome da ação";
 "quick_action_name_alert" = "O nome da ação rápida foi alterado para %@ para evitar duplicação.";
@@ -1225,8 +1225,8 @@
 "day_mode" = "Modo diurno";
 "mute_voice" = "Silenciar a voz";
 "unmute_voice" = "Ativar som da voz";
-"show_gpx" = "Mostrar viagens";
-"hide_gpx" = "Ocultar viagens";
+"show_gpx" = "Mostrar trilhas";
+"hide_gpx" = "Ocultar trilhas";
 "show_notes" = "Mostrar notas do OSM";
 "hide_notes" = "Ocultar notas do OSM";
 "show_edits" = "Mostrar edições locais";
@@ -1260,7 +1260,7 @@
 "select_route_intermediate" = "Selecionar um ponto intermediário";
 "select_home" = "Selecionar ponto inicial";
 "select_work_point" = "Selecionar ponto de trabalho";
-"displayed_trips" = "Viagens exibidas";
+"displayed_trips" = "Trilhas exibidas";
 "prev_route" = "Rota anterior";
 "shared_string_on" = "Ativado";
 "shared_string_off" = "Desativado";
@@ -1299,9 +1299,9 @@
 "res_confirmation_clear_cache" = "Tem certeza de que deseja limpar o cache para %@?";
 "res_del_cache_not_supported" = "A exclusão de cache para mapas SQLite offline não é suportada";
 "gpx_analyze" = "Analisar";
-"displayed_route_save" = "Salvar em Viagens do OsmAnd";
-"trip_name" = "Nome da viagem";
-"trip_hint" = "Digite o nome da viagem";
+"displayed_route_save" = "Salvar em trilhas do OsmAnd";
+"trip_name" = "Nome da trilha";
+"trip_hint" = "Digite o nome da trilha";
 "shared_string_maximum" = "Máximo";
 "res_edit_online_map" = "Editar fonte de mapa online";
 "res_online_name_descr" = "Forneça o nome da fonte online";
@@ -1923,7 +1923,7 @@
 "road_min_speed_descr" = "Define a velocidade mínima de viagem para todas as estradas da rota. Aumenta a prioridade para estradas com velocidades recomendadas menores que o mínimo.";
 "road_speeds_descr" = "Esses parâmetros podem afetar o cálculo da rota.";
 "maximum_speed" = "Velocidade máxima";
-"ios_release_3_90" = "• Introduziu \"Perfis de aplicativo\" com configurações independentes\n• Nova organização de configurações por perfis e tipos: navegação, geral, mapa e tela\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas fontes de dados para fotos online\n• Capacidade de baixar mapas online para cache\n• Algoritmos de \"Pesquisa\" aprimorados\n";
+"ios_release_3_90" = "• Introduziu um recurso \"Planejar uma rota\" para planejar viagens futuras com a capacidade de criar segmentos de trilha usando diferentes tipos de navegação\n• Adicionada uma opção para habilitar uma bússola sobre a ferramenta \"Régua de raio\"\n• Adicionada opção \"Sobreposições de rótulos de POI\" que permite mostrar nomes de favoritos, rastrear pontos de passagem e marcadores no mapa\n• Adicionadas novas ações rápidas para visibilidade de curvas de nível e terreno no mapa, alterando um perfil de aplicação, excluindo um ponto intermediário mais próximo\n• Corrigidos problemas com a falta da categoria de pesquisa da Wikipedia\n• Importação de configurações: bugs corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n• Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário de registro de mudanças\n";
 "ios_release_3_80" = "• Introduziu \"Perfis de aplicativo\" com configurações independentes\n• Nova organização de configurações por perfis e tipos: navegação, geral, mapa e tela\n• Capacidade de importar ou exportar configurações de perfil\n• Adicionadas fontes de dados para fotos online\n• Capacidade de baixar mapas online para cache\n• Algoritmos de \"Pesquisa\" aprimorados\n";
 
 
@@ -1950,12 +1950,11 @@
 "next_seg" = "Próximo segmento";
 "whole_track_descr" = "A trilha inteira será recalculada usando o perfil selecionado.";
 "next_seg_descr" = "O próximo segmento será recalculado usando o perfil selecionado.";
-"route_betw_points_descr" = "Escolha como conectar os pontos de conexão: com uma linha reta ou calculando uma rota usando um dos perfis listados abaixo.";
+"route_betw_points_descr" = "Escolha como conectar os pontos: com uma linha reta ou calculando uma rota usando um dos perfis listados abaixo.";
 "unsupported_action_descr" = "Esta ação rápida não é suportada agora. Isso pode ser corrigido em novas versões do aplicativo.";
 "unsupported_action_title" = "Ação não suportada (%@)";
 "unsupported_action" = "Ação não suportada";
 "unsupported_items" = "Itens não suportados";
-
 "quick_action_remove_next_destination_descr" = "Exclui o próximo destino da sua rota. Se esse for o destino final, a navegação será interrompida.";
 "profile_type_osmand_string" = "Perfil do OsmAnd";
 "reverse_route" = "Rota reversa";
@@ -1967,3 +1966,40 @@
 "quick_action_mapillary_hide" = "Ocultar Mapillary";
 "quick_action_mapillary_show" = "Mostrar Mapillary";
 "shared_string_add_profile" = "Adicionar perfil";
+"key_hint_recenter_map" = "Mapa recente";
+"shared_z_a" = "Z - A";
+"shared_a_z" = "A - Z";
+"units_nm" = "mn";
+"select_application_profile" = "Selecione o perfil do aplicativo";
+"change_application_profile" = "Alterar perfil do aplicativo";
+"quick_action_showhide_mapillary_descr" = "Uma alternância para mostrar ou ocultar a camada Mapillary no mapa.";
+"nearest_point" = "Ponto próximo";
+"start_of_track" = "Início da pista";
+"point_to_navigate" = "Navegar para";
+"reverse_track_dir" = "Inverter direção da trilha";
+"attach_to_the_roads" = "Anexar às estradas";
+"select_another_track" = "Selecionar outra trilha";
+"track" = "Trilha";
+"follow_track" = "Seguir a trilha";
+"split_after" = "Dividir depois";
+"split_before" = "Dividir antes";
+"gpx_already_exsists" = "Já existe um arquivo com este nome";
+"empty_filename" = "O nome do arquivo não pode estar vazio";
+"none_point_error" = "Favor adicionar ao menos um ponto.";
+"gpx_saved_successfully" = "Arquivo GPX salvo em %@";
+"plan_route_exit_message" = "Tem certeza de que deseja fechar Plano de rota sem salvar? Você perderá todas as alterações.";
+"route_between_points_add_track_desc" = "Selecione um arquivo de trilha para o qual um novo segmento será adicionado.";
+"plan_route_last_modified" = "Última modificação";
+"plan_route_open_existing_track" = "Abrir trilha existente";
+"track_is_saved" = "%@\nestá salvo!";
+"plan_route_create_new_route" = "Criar nova rota";
+"open_saved_track" = "Abrir trilha salva";
+"simplified_track_description" = "Apenas a linha da rota será salva, os pontos de passagem serão excluídos.";
+"simplified_track" = "Trilha simplificada";
+"join_segments" = "Unir segmentos";
+"gpx_export_failed" = "Não foi possível salvar a rota criada";
+"hide_compass_ruler" = "Ocultar a régua de bússola";
+"show_compass_ruler" = "Mostrar régua de bússola";
+"map_widget_ruler_control" = "Régua de raio";
+"tracks_on_map" = "trilhas no mapa";
+"visible" = "Visível";

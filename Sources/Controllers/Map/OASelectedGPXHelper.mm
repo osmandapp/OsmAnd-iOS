@@ -60,14 +60,15 @@
     BOOL loading = NO;
     [_settings hideRemovedGpx];
 
-    for (NSString *fileName in _settings.mapSettingVisibleGpx)
+    for (NSString *filePath in _settings.mapSettingVisibleGpx)
     {
-        if ([fileName hasSuffix:kBackupSuffix])
+        if ([filePath hasSuffix:kBackupSuffix])
         {
-            [_selectedGPXFilesBackup addObject:fileName];
+            [_selectedGPXFilesBackup addObject:filePath];
             continue;
         }
-        NSString __block *path = [[OAGPXDatabase sharedDb] getFilePath:[fileName lastPathComponent] folderName:[fileName stringByDeletingLastPathComponent]];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
+        NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
         QString qPath = QString::fromNSString(path);
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && !_activeGpx.contains(qPath))
         {
@@ -88,10 +89,8 @@
     }
     for (auto it = _activeGpx.begin(); it != _activeGpx.end(); )
     {
-        NSString *path = it.key().toNSString();
-        NSString *folderName = [[OAGPXDatabase sharedDb] getSuperFolderNameByFilePath:path];
-        NSString *storingPath = [folderName stringByAppendingPathComponent:[path lastPathComponent]];
-        if (![_settings.mapSettingVisibleGpx containsObject:storingPath])
+        NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:it.key().toNSString()];
+        if (![_settings.mapSettingVisibleGpx containsObject:gpxFilePath])
             it = _activeGpx.erase(it);
         else
             ++it;
@@ -110,10 +109,9 @@
     if (backupSelection)
     {
         NSArray *currentlyVisible = _settings.mapSettingVisibleGpx;
-        for (NSString *filename in currentlyVisible)
+        for (NSString *filePath in currentlyVisible)
         {
-            NSString *folderName = [OAGPXDatabase.sharedDb getSuperFolderNameByFilePath:filename];
-            [backedUp addObject:[folderName stringByAppendingPathComponent:[filename.lastPathComponent stringByAppendingString:kBackupSuffix]]];
+            [backedUp addObject:[filePath stringByAppendingString:kBackupSuffix]];
         }
     }
     _activeGpx.clear();
@@ -139,16 +137,16 @@
     [_selectedGPXFilesBackup removeAllObjects];
 }
 
-+ (void) renameVisibleTrack:(NSString *)oldName newName:(NSString *)newName oldFolder:(NSString *)oldFolder newFolder:(NSString *)newFolder
++ (void) renameVisibleTrack:(NSString *)oldPath newPath:(NSString *)newPath
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx];
     for (NSString *gpx in settings.mapSettingVisibleGpx)
     {
-        if ([gpx isEqualToString:[oldFolder stringByAppendingPathComponent:oldName]])
+        if ([gpx isEqualToString:oldPath])
         {
             [visibleGpx removeObject:gpx];
-            [visibleGpx addObject:[newFolder stringByAppendingPathComponent:newName]]; 
+            [visibleGpx addObject:newPath];
             break;
         }
     }

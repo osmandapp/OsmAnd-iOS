@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class CPInterfaceController;
+@class CPInterfaceController, CPListItem, CPListTemplate;
 
 API_AVAILABLE(ios(12.0))
 @interface OABaseCarPlayInterfaceController : NSObject
@@ -20,6 +21,8 @@ API_AVAILABLE(ios(12.0))
 - (instancetype) initWithInterfaceController:(CPInterfaceController *)interfaceController;
 
 - (void) present;
+
+- (void) startNavigationGivenLocation:(CLLocation *)loc;
 
 @end
 

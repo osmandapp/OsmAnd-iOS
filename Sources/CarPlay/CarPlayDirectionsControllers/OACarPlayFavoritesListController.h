@@ -1,5 +1,5 @@
 //
-//  OANavigationPointsListController.h
+//  OACarPlayFavoritesListController.h
 //  OsmAnd Maps
 //
 //  Created by Paul on 12.02.2021.
@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 API_AVAILABLE(ios(12.0))
-@interface OANavigationPointsListController : OABaseCarPlayInterfaceController
+@interface OACarPlayFavoritesListController : OABaseCarPlayInterfaceController
 
 @end
 

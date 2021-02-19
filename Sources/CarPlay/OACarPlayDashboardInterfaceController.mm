@@ -19,6 +19,9 @@
 #import "OsmAndAppImpl.h"
 #import "OAAutoObserverProxy.h"
 #import "OARouteDirectionInfo.h"
+#import "OAMapActions.h"
+#import "OALocationSimulation.h"
+#import "OACommonTypes.h"
 
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 	EOACarPlayButtonTypeDismiss = 0,
@@ -44,6 +47,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 	OARoutingHelper *_routingHelper;
 	
 	BOOL _isInRouteCalculation;
+	BOOL _isInRoutePreview;
 	
 	int _calculationProgress;
 	
@@ -67,6 +71,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 	[_locationServicesUpdateObserver detach];
 }
 
+- (void) stopNavigation
+{
+	[OARootViewController.instance.mapPanel.mapActions stopNavigationWithoutConfirm];
+	OsmAndAppInstance app = OsmAndApp.instance;
+	if (OAAppSettings.sharedManager.simulateRouting && [app.locationServices.locationSimulation isRouteAnimating])
+		[app.locationServices.locationSimulation startStopRouteAnimation];
+}
+
 - (void) present
 {
 	_mapTemplate = [[CPMapTemplate alloc] init];
@@ -79,6 +91,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (void) enterBrowsingState
 {
 	_isInRouteCalculation = NO;
+	_isInRoutePreview = NO;
 	
 	CPBarButton *panningButton = [self createBarButton:EOACarPlayButtonTypePanMap];
 	_mapTemplate.trailingNavigationBarButtons = @[panningButton];
@@ -117,8 +130,30 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 	CPTripPreviewTextConfiguration *config = [[CPTripPreviewTextConfiguration alloc] initWithStartButtonTitle:OALocalizedString(@"gpx_start") additionalRoutesButtonTitle:nil overviewButtonTitle:nil];
 	
 	[_mapTemplate showTripPreviews:@[trip] textConfiguration:config];
-	
 	_mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeCancelRoute]];
+	
+	_isInRoutePreview = YES;
+	
+	[self centerMapOnRoute];
+}
+
+- (void)exitNavigationMode
+{
+	_currentDirectionInfo = nil;
+	[_navigationSession finishTrip];
+	[self enterBrowsingState];
+}
+
+- (void) centerMapOnRoute
+{
+	if ([_routingHelper isRouteCalculated])
+	{
+		OABBox routeBBox = [_routingHelper getBBox];
+		CLLocationCoordinate2D topLeft = CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left);
+		CLLocationCoordinate2D bottomRight = CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right);
+		if (_delegate)
+			[_delegate centerMapOnRoute:topLeft bottomRight:bottomRight];
+	}
 }
 
 - (CPMapButton *) createMapButton:(EOACarPlayButtonType)type
@@ -173,7 +208,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 				[directionsGrid present];
 			}
 			case EOACarPlayButtonTypeCancelRoute: {
-				[[OARootViewController instance].mapPanel stopNavigation];
+				[self stopNavigation];
 				[_mapTemplate hideTripPreviews];
 				[self enterBrowsingState];
 			}
@@ -233,8 +268,12 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
 	if (_isInRouteCalculation)
 		[self enterRouteCalculationMode];
+	else if (_navigationSession || _isInRoutePreview)
+		_mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeCancelRoute]];
 	else
 		[self enterBrowsingState];
+	
+	_mapTemplate.trailingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypePanMap]];
 }
 
 - (void)mapTemplate:(CPMapTemplate *)mapTemplate panWithDirection:(CPPanDirection)direction
@@ -243,15 +282,21 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 		[_delegate onMapControlPressed:direction];
 }
 
-- (void)mapTemplate:(CPMapTemplate *)mapTemplate selectedPreviewForTrip:(CPTrip *)trip usingRouteChoice:(CPRouteChoice *)routeChoice
+- (void)updateTripEstimates:(CPTrip * _Nonnull)trip
 {
 	CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:[self getFormattedDistance:_routingHelper.getLeftDistance] timeRemaining:(NSTimeInterval)_routingHelper.getLeftTime];
 	[_mapTemplate updateTravelEstimates:estimates forTrip:trip];
 }
 
+- (void)mapTemplate:(CPMapTemplate *)mapTemplate selectedPreviewForTrip:(CPTrip *)trip usingRouteChoice:(CPRouteChoice *)routeChoice
+{
+	[self updateTripEstimates:trip];
+}
+
 - (void)mapTemplate:(CPMapTemplate *)mapTemplate startedTrip:(CPTrip *)trip usingRouteChoice:(CPRouteChoice *)routeChoice
 {
 	[mapTemplate hideTripPreviews];
+	_isInRoutePreview = NO;
 	
 	_navigationSession = [_mapTemplate startNavigationSessionForTrip:trip];
 	[[OARootViewController instance].mapPanel startNavigation];
@@ -261,14 +306,13 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-//	if (!newRoute)
-//	{
-//		dispatch_async(dispatch_get_main_queue(), ^{
-//			BOOL animated = _calculatingRoute;
-//			_calculatingRoute = NO;
-//			[self reloadDataAnimated:animated];
-//		});
-//	}
+	if (newRoute)
+	{
+		dispatch_async(dispatch_get_main_queue(), ^{
+			_isInRouteCalculation = NO;
+			[self enterRoutePreviewMode];
+		});
+	}
 }
 
 - (void) routeWasUpdated
@@ -278,14 +322,12 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) routeWasCancelled
 {
-	[_navigationSession finishTrip];
-	[self enterBrowsingState];
+	[self exitNavigationMode];
 }
 
 - (void) routeWasFinished
 {
-	[_navigationSession finishTrip];
-	[self enterBrowsingState];
+	[self exitNavigationMode];
 }
 
 // MARK: - OARouteCalculationProgressCallback
@@ -319,8 +361,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) finish
 {
-	_isInRouteCalculation = NO;
-	[self enterRoutePreviewMode];
 }
 
 // MARK: distance formatting methods
@@ -433,10 +473,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 			if (!maneuver || nextTurn.directionInfoInd != _currentDirectionInfo.directionInfoInd)
 			{
 				maneuver = [[CPManeuver alloc] init];
-				maneuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:[UIImage imageNamed:@"ic_custom_navigation_arrow"] darkContentImage:[UIImage imageNamed:@"ic_custom_navigation_arrow"]];
+				UIImage *turnImage = [self imageForTurnType:turnType];
+				maneuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:turnImage darkContentImage:turnImage];
 				
 				maneuver.initialTravelEstimates = estimates;
-				maneuver.instructionVariants = @[nextTurn.directionInfo.getDescriptionRoute];
+				if (nextTurn.directionInfo.getDescriptionRoutePart && nextTurn.directionInfo.getDescriptionRoutePart.length > 0)
+					maneuver.instructionVariants = @[nextTurn.directionInfo.getDescriptionRoute, nextTurn.directionInfo.getDescriptionRoutePart];
+				else
+					maneuver.instructionVariants = @[nextTurn.directionInfo.getDescriptionRoute];
 				_navigationSession.upcomingManeuvers = @[maneuver];
 				_currentDirectionInfo = nextTurn;
 			}
@@ -445,39 +489,40 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 				[_navigationSession updateTravelEstimates:estimates forManeuver:maneuver];
 			}
 		}
-		
-//		if (nextTurn)
-//		{
-//			OANextDirectionInfo *nextNextTurn = [_routingHelper getNextRouteDirectionInfoAfter:nextTurn to:[[OANextDirectionInfo alloc] init] toSpeak:YES];
-//			if (nextNextTurn && nextNextTurn.distanceTo > 0 && nextNextTurn.directionInfo)
-//			{
-//				turnType = nextNextTurn.directionInfo.turnType;
-//				nextTurnDistance = nextNextTurn.distanceTo;
-//				turnImminent = nextNextTurn.imminent;
-//
-//				CPManeuver *maneuver = _navigationSession.upcomingManeuvers.firstObject;
-//				NSMeasurement<NSUnitLength *> * dist = [self getFormattedDistance:nextTurnDistance];
-//				CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:-1];
-//				if (!maneuver)
-//				{
-//					maneuver = [[CPManeuver alloc] init];
-//					maneuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:[UIImage imageNamed:@"ic_custom_navigation_arrow"] darkContentImage:[UIImage imageNamed:@"ic_custom_navigation_arrow"]];
-//
-//					maneuver.initialTravelEstimates = estimates;
-//					maneuver.instructionVariants = @[nextTurn.directionInfo.getDescriptionRoute];
-//				}
-//				else
-//				{
-//					[_navigationSession updateTravelEstimates:estimates forManeuver:maneuver];
-//				}
-//
-//				[maneuvers addObject:maneuver];
-//			}
-//		}
-//
-//		_navigationSession.upcomingManeuvers = maneuvers;
+		[self updateTripEstimates:_navigationSession.trip];
 	}
 }
 
+- (UIImage *) imageForTurnType:(std::shared_ptr<TurnType> &)turnType
+{
+	if (turnType->getValue() == TurnType::C) {
+		return [UIImage imageNamed:@"map_turn_forward"];
+	} else if (turnType->getValue() == TurnType::TSLL) {
+		return [UIImage imageNamed:@"map_turn_slight_left"];
+	} else if (turnType->getValue() == TurnType::TL) {
+		return [UIImage imageNamed:@"map_turn_left"];
+	} else if (turnType->getValue() == TurnType::TSHL) {
+		return [UIImage imageNamed:@"map_turn_sharp_left"];
+	} else if (turnType->getValue() == TurnType::TSLR) {
+		return [UIImage imageNamed:@"map_turn_slight_right"];
+	} else if (turnType->getValue() == TurnType::TR) {
+		return [UIImage imageNamed:@"map_turn_right"];
+	} else if (turnType->getValue() == TurnType::TSHR) {
+		return [UIImage imageNamed:@"map_turn_sharp_right"];
+	} else if (turnType->getValue() == TurnType::TU) {
+		return [UIImage imageNamed:@"map_turn_uturn"];
+	} else if (turnType->getValue() == TurnType::TRU) {
+		return [UIImage imageNamed:@"map_turn_uturn_right"];
+	} else if (turnType->getValue() == TurnType::KL) {
+		return [UIImage imageNamed:@"map_turn_keep_left"];
+	} else if (turnType->getValue() == TurnType::KR) {
+		return [UIImage imageNamed:@"map_turn_keep_right"];
+	} else if (turnType->getValue() == TurnType::RNDB) {
+		return [UIImage imageNamed:@"map_turn_roundabout"];
+	} else if (turnType->getValue() == TurnType::KR) {
+		return [UIImage imageNamed:@"map_turn_roundablot_left"];
+	}
+	return nil;
+}
 
 @end

@@ -3121,11 +3121,16 @@ typedef enum
 
 - (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset
 {
-    OAToolbarViewController *toolbar = [self getTopToolbar];
-    CGFloat topInset = 0.0;
-    if (toolbar && [toolbar.navBarView superview])
-        topInset = toolbar.navBarView.frame.size.height;
+	OAToolbarViewController *toolbar = [self getTopToolbar];
+	CGFloat topInset = 0.0;
+	if (toolbar && [toolbar.navBarView superview])
+		topInset = toolbar.navBarView.frame.size.height;
+	CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
+	[self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset];
+}
 
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset
+{
     OAGpxBounds bounds;
     bounds.topLeft = topLeft;
     bounds.bottomRight = bottomRight;
@@ -3136,8 +3141,7 @@ typedef enum
         return;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-
-    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
+	
     _targetZoom = (zoom <= 0 ? [self getZoomForBounds:bounds mapSize:screenBBox] : zoom);
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
     

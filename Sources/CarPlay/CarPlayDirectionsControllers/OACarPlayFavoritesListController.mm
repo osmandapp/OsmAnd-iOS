@@ -1,45 +1,31 @@
 //
-//  OANavigationPointsListController.m
+//  OACarPlayFavoritesListController.m
 //  OsmAnd Maps
 //
 //  Created by Paul on 12.02.2021.
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OANavigationPointsListController.h"
+#import "OACarPlayFavoritesListController.h"
 #import "Localization.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OsmAndApp.h"
-#import "OATargetPointsHelper.h"
-#import "OARoutingHelper.h"
-#import "OAMapActions.h"
-#import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
 
 #import <CarPlay/CarPlay.h>
 
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 
-@interface OANavigationPointsListController() <CPListTemplateDelegate>
+@interface OACarPlayFavoritesListController() <CPListTemplateDelegate>
 
 @end
 
-@implementation OANavigationPointsListController
+@implementation OACarPlayFavoritesListController
 {
 	CPListTemplate *_listTemplate;
 	
 	NSArray<OAFavoriteGroup *> *_favoriteGroups;
-	
-	OATargetPointsHelper *_pointsHelper;
-	OARoutingHelper *_routingHelper;
-}
-
-- (void) commonInit
-{
-	_pointsHelper = OATargetPointsHelper.sharedInstance;
-	_routingHelper = OARoutingHelper.sharedInstance;
 }
 
 - (void) present
@@ -55,20 +41,17 @@
 	
 	_favoriteGroups = [OAFavoritesHelper getGroupedFavorites:OsmAndApp.instance.favoritesCollection->getFavoriteLocations()];
 	
-	for (OAFavoriteGroup *group in _favoriteGroups)
+	for (NSInteger groupIndex = 0; groupIndex < _favoriteGroups.count; groupIndex++)
 	{
+		OAFavoriteGroup *group = _favoriteGroups[groupIndex];
 		NSMutableArray<CPListItem *> *items = [NSMutableArray new];
-		for (OAFavoriteItem *item in group.points)
+		for (NSInteger favIndex = 0; favIndex < group.points.count; favIndex++)
 		{
+			OAFavoriteItem *item = group.points[favIndex];
 			item.distance = [self calculateDistanceToItem:item];
 			CPListItem *listItem;
-			if (@available(iOS 13.0, *)) {
-				UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
-				listItem = [[CPListItem alloc] initWithText:item.favorite->getTitle().toNSString() detailText:item.distance image:[[UIImage imageNamed:@"ic_custom_favorites"] imageWithTintColor:color] showsDisclosureIndicator:YES];
-				
-			} else {
-				listItem = [[CPListItem alloc] initWithText:item.favorite->getTitle().toNSString() detailText:item.distance image:[UIImage imageNamed:@"ic_custom_favorites"] showsDisclosureIndicator:YES];
-			}
+			listItem = [[CPListItem alloc] initWithText:item.favorite->getTitle().toNSString() detailText:item.distance image:[UIImage imageNamed:@"ic_custom_favorites"] showsDisclosureIndicator:YES];
+			listItem.userInfo = [NSIndexPath indexPathForRow:favIndex inSection:groupIndex];
 			
 			if (@available(iOS 14.0, *)) {
 				[listItem setHandler:^(id <CPSelectableListItem> item,
@@ -110,28 +93,16 @@
 
 - (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
 {
-	NSIndexPath *indexPath = nil;
-	NSArray<CPListSection *> *sections = listTemplate.sections;
-	for (NSInteger section = 0; section < sections.count; section++)
-	{
-		NSArray<id<CPListTemplateItem>> *items = sections[section].items;
-		for (NSInteger row = 0; row < items.count; row++)
-		{
-			if (items[row] == item)
-			{
-				indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-				break;
-			}
-		}
-	}
+	NSIndexPath* indexPath = item.userInfo;
 	if (!indexPath)
+	{
+		completionHandler();
 		return;
+	}
 	OAFavoriteItem *favoritePoint = _favoriteGroups[indexPath.section].points[indexPath.row];
 	if (favoritePoint)
 	{
-		[_routingHelper setAppMode:OAApplicationMode.CAR];
-		[_pointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:favoritePoint.getLatitude longitude:favoritePoint.getLongitude] updateRoute:YES intermediate:-1];
-		[OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:NO showDialog:NO];
+		[self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:favoritePoint.getLatitude longitude:favoritePoint.getLongitude]];
 	}
 	[self.interfaceController popToRootTemplateAnimated:YES];
 	

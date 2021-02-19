@@ -151,4 +151,13 @@
 	[[OAMapViewTrackingUtilities instance] backToLocationImpl];
 }
 
+- (void) centerMapOnRoute:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
+{
+	UIEdgeInsets safeAreaInsets = self.view.safeAreaInsets;
+	CGFloat viewWidth = self.view.frame.size.width;
+	CGFloat leftInset = viewWidth * 0.48;
+	CGSize screenBBox = CGSizeMake(viewWidth - leftInset, self.view.frame.size.height - safeAreaInsets.top - safeAreaInsets.bottom);
+	[[OARootViewController instance].mapPanel displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0. screenBBox:screenBBox bottomInset:safeAreaInsets.bottom leftInset:leftInset topInset:safeAreaInsets.top];
+}
+
 @end

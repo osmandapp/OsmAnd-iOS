@@ -8,6 +8,7 @@
 
 #import "OABaseCarPlayInterfaceController.h"
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 #import <CarPlay/CarPlay.h>
 
@@ -18,6 +19,8 @@ API_AVAILABLE(ios(12.0))
 - (void) onZoomInPressed;
 - (void) onZoomOutPressed;
 - (void) onCenterMapPressed;
+
+- (void) centerMapOnRoute:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
 
 @end
 

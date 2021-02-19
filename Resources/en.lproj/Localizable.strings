@@ -70,6 +70,7 @@
 
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Search";
+"address_search" = "Address search";
 "search_radius" = "Search radius";
 "targets" = "Destinations";
 "search_radius_proximity" = "Within";
@@ -436,6 +437,7 @@
 "nearest_cities" = "Nearest cities";
 "type_address" = "Type address";
 "search_poi_category_hint" = "Type to search all";
+"poi_categories" = "POI categories";
 
 // Shared Strings
 "shared_string_apply" = "Apply";
@@ -1653,6 +1655,7 @@
 "no_inet_connection_desc_map" = "Required to download maps.";
 "try_again" = "Try again";
 
+"search_preogress" = "Searching…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Select another region";

@@ -58,7 +58,7 @@
     
     [arr addObject:@{
         @"type" : kBottomSheetHeaderButtonCell,
-        @"title" : [NSString stringWithFormat:@"%@?", OALocalizedString(@"profile_alert_delete_title")],
+        @"title" : [NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString],
         @"img" : @"ic_custom_remove_outlined",
         @"description" : @""
     }];

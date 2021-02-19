@@ -298,8 +298,11 @@ static OAApplicationMode *_SKI;
 - (NSString *) toHumanString
 {
     NSString *userProfileName = [self getUserProfileName];
-    if (userProfileName.length == 0 && _name.length > 0)
-        return _name;
+    if (userProfileName.length == 0)
+        if (_name.length > 0)
+            return _name;
+        else
+            return _stringKey.capitalizedString;
     else
         return userProfileName;
 }

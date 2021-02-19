@@ -58,7 +58,7 @@
     
     [arr addObject:@{
         @"type" : kBottomSheetHeaderButtonCell,
-        @"title" : [NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString],
+        @"title" : [NSString stringWithFormat:@"%@?", OALocalizedString(@"profile_alert_delete_title")],
         @"img" : @"ic_custom_remove_outlined",
         @"description" : @""
     }];
@@ -142,7 +142,7 @@
     CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionString width:textWidth font:[UIFont systemFontOfSize:15] lineSpacing:6.] + 16;
     UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
-    description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), _appMode.toHumanString] boldString:_appMode.toHumanString lineSpacing:4.];
+    description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:[NSString stringWithFormat:OALocalizedString(@"profile_alert_delete_msg"), @""] boldString:_appMode.toHumanString lineSpacing:4. fontSize:15 highlightColor:UIColor.blackColor];
     description.numberOfLines = 0;
     description.lineBreakMode = NSLineBreakByWordWrapping;
     description.autoresizingMask = UIViewAutoresizingFlexibleWidth;

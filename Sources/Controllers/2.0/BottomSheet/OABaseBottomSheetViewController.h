@@ -19,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UIView *bottomSheetView;
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UIView *headerDividerView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *headerSeparatorHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *buttonsSeparatorHeightConstraint;
 
 - (void) presentInViewController:(UIViewController *)viewController;
 

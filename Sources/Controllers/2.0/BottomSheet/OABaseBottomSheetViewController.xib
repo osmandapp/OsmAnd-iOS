@@ -11,10 +11,12 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OABaseBottomSheetViewController">
             <connections>
                 <outlet property="bottomSheetView" destination="qJc-MO-2cY" id="0Q3-Qo-Ea3"/>
+                <outlet property="buttonsSeparatorHeightConstraint" destination="Sbp-1h-11a" id="1za-4z-Vtv"/>
                 <outlet property="buttonsView" destination="Wg5-91-0hA" id="Mmj-Mg-17l"/>
                 <outlet property="closeButton" destination="zUj-mw-mBr" id="TDb-YP-9rQ"/>
                 <outlet property="contentContainer" destination="ufI-sT-0Ac" id="3mU-Bv-gdT"/>
                 <outlet property="headerDividerView" destination="2WI-Sn-Wv2" id="2XY-ER-i0c"/>
+                <outlet property="headerSeparatorHeightConstraint" destination="5UK-fc-EFD" id="F8A-Q0-gZt"/>
                 <outlet property="headerView" destination="875-IQ-1ra" id="Aw0-BA-5Ph"/>
                 <outlet property="leftButton" destination="LCM-lH-OSo" id="dQO-yp-XsH"/>
                 <outlet property="leftIconView" destination="YEg-ba-U1g" id="pKC-Rn-oh9"/>

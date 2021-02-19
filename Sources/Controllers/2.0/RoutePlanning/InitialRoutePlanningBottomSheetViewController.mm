@@ -187,6 +187,7 @@
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
         }
         return cell;
     }
@@ -231,6 +232,7 @@
             cell.wptLabel.text = item[@"wpt"];
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
+            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
         }
         return cell;
     }

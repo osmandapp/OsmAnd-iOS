@@ -3729,18 +3729,18 @@ typedef enum
 
 - (void) onCarPlayConnected
 {
-	_carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
-	_carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
-	[self presentViewController:_carPlayActiveController animated:YES completion:nil];
+    _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
+    _carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:_carPlayActiveController animated:YES completion:nil];
 }
 
 - (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete
 {
-	[_carPlayActiveController dismissViewControllerAnimated:YES completion:^{
-		_carPlayActiveController = nil;
-		if (onComplete)
-			onComplete();
-	}];
+    [_carPlayActiveController dismissViewControllerAnimated:YES completion:^{
+        _carPlayActiveController = nil;
+        if (onComplete)
+            onComplete();
+    }];
 }
 
 @end

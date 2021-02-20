@@ -167,9 +167,23 @@
 
 - (IBAction)saveButtonPressed:(id)sender
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
-    if (self.delegate)
-        [self.delegate onSaveAsNewTrack:_fileName showOnMap:_showOnMap simplifiedTrack:_simplifiedTrack];
+    if (_fileName.length == 0)
+    {
+        [self showEmptyNameAlert];
+    }
+    else
+    {
+        [self dismissViewControllerAnimated:NO completion:nil];
+        if (self.delegate)
+            [self.delegate onSaveAsNewTrack:_fileName showOnMap:_showOnMap simplifiedTrack:_simplifiedTrack];
+    }
+}
+
+- (void) showEmptyNameAlert
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"empty_filename") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource

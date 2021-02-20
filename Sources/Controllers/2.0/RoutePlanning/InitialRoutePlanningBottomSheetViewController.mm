@@ -28,6 +28,9 @@
 
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
+#define kApproximateEmptyMenuHeight 250.
+#define kApproximateGpxHeaderHeight 38.
+#define kApproximateGpxCellHeight 70.
 
 @interface InitialRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate>
 
@@ -54,8 +57,10 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.tableView.sectionHeaderHeight = 16.;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+    self.tableView.contentInset = UIEdgeInsetsMake(-8, 0, 0, 0);
     
     [self.rightButton removeFromSuperview];
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
@@ -69,7 +74,17 @@
 
 - (CGFloat) initialHeight
 {
-    return DeviceScreenHeight - DeviceScreenHeight / ([OAGPXDatabase sharedDb].gpxList.count > 1 ? 3 : 2);
+    int tracksCount = (int)[OAGPXDatabase sharedDb].gpxList.count;
+    int maxHeight = DeviceScreenHeight / 3 * 2;
+    
+    int estimatedHeight = kApproximateEmptyMenuHeight + OAUtilities.getBottomMargin;
+    if (tracksCount > 0)
+        estimatedHeight += (kApproximateGpxHeaderHeight + tracksCount * kApproximateGpxCellHeight + kVerticalMargin);
+    
+    if (estimatedHeight > maxHeight)
+        estimatedHeight = maxHeight;
+    
+    return estimatedHeight;
 }
 
 - (void) generateData
@@ -171,6 +186,7 @@
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
         }
         return cell;
     }
@@ -214,6 +230,7 @@
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
+            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
         }
         return cell;
     }

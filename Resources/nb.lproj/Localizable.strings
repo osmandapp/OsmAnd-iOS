@@ -1676,7 +1676,6 @@
 "base_profile_descr_public_transport" = "Offentlige transporttyper";
 "base_profile_descr_bicycle" = "Terrengsykkel, moped, hest";
 "base_profile_descr_car" = "Bil, lastebil, motorsykkel";
-
 "public_transport_menu" = "Transport";
 "shared_string_preparing" = "Forbereder";
 "import_profile_select_descr" = "Velg dataå importere.";
@@ -1726,7 +1725,7 @@
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "profile_type_custom_string" = "Egendefinert profil";
 "shared_string_add_profile" = "Legg til profil";
-"arrival_announcement_frequency" = "Hvor raskt vil du ha ankomstmeldingen\?";
+"arrival_announcement_frequency" = "Hvor raskt vil du ha ankomstmeldingen?";
 "edit_profile_list" = "Rediger profilliste";
 "quick_action_showhide_mapillary_title" = "Vis/skjul Mapillary";
 "whole_track" = "Hele sporet";
@@ -1791,3 +1790,80 @@
 "units_t" = "t";
 "layer_amenity_label" = "Overleggspåskrifter for interessepunkter";
 "announce" = "Kunngjør";
+
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "Du har siste versjon: %@";
+"desert" = "Ørken";
+"send_anonymous_data" = "Send anonym data";
+"shared_z_a" = "Å-A";
+"shared_a_z" = "A-Å";
+"shared_string_email" = "E-post";
+"shared_string_account_add" = "Legg til konto";
+"shared_string_required" = "Påkrevd";
+"plugin_popup_osm_editing_title" = "Skru på OpenStreetMap-redigering";
+"help_what_is_new" = "Nyheter";
+"unsupported_action_title" = "Ustøttet handling (%@)";
+"unsupported_action" = "Ustøttet handling";
+"select_application_profile" = "Velg programprofil";
+"change_application_profile" = "Endre programprofil";
+"toggle_hillshade" = "Vis/skjul terreng";
+"toggle_contour_lines" = "Vis/skjul konturlinjer";
+"hide_terrain" = "Skjul terreng";
+"show_terrain" = "Vis terreng";
+"nearest_point" = "Nærmeste punkt";
+"start_of_track" = "Starten av sporet";
+"point_to_navigate" = "Naviger til";
+"attach_to_the_roads" = "Fest til veier";
+"select_another_track" = "Velg et annet spor";
+"track" = "Spor";
+"follow_track" = "Følg spor";
+"split_before" = "Del opp før";
+"split_after" = "Del opp etter";
+"gpx_already_exsists" = "Fil med dette navnet finnes allerede";
+"empty_filename" = "Filnavn kan ikke være tomt";
+"none_point_error" = "Legg til minst ett punkt.";
+"gpx_saved_successfully" = "GPX-fil lagret til %@";
+"plan_route_last_modified" = "Sist endret";
+"plan_route_open_existing_track" = "Åpne eksisterende spor";
+"track_is_saved" = "%@\ner lagret!";
+"plan_route_create_new_route" = "Opprett ny rute";
+"open_saved_track" = "Åpne lagret spor";
+"simplified_track" = "Forenklet spor";
+"prev_segs_dist" = "Alle foregående segmenter %@";
+"prev_seg_dist" = "Foregående segment %@";
+"next_segs_dist" = "Alle påfølgende segmenter %@";
+"next_seg_dist" = "Neste segment %@";
+"add_one_more_pnt" = "Legg til enda et punkt";
+"delete_point" = "Slett punkt";
+"change_route_type_after" = "Endre rutetype etter dette punktet";
+"change_route_type_before" = "Endre rutetype før dette punktet";
+"trim_after" = "Forkort etter dette punktet";
+"trim_before" = "Forkort før dette punktet";
+"add_after" = "Legg til punkter etter";
+"add_before" = "Legg til punkter før";
+"move_point" = "Flytt punkt";
+"points_count" = "Punkter:";
+"point_num" = "Punkt %d";
+
+// Route planning
+"plan_route" = "Planlegg rute";
+"downloading" = "Laster ned …";
+"empty_profile_name_warning" = "Profilnavnet kan ikke være tomt";
+"profile_appearance_descr" = "Ikon, farge og navn";
+"profile_settings" = "Profilinnstillinger";
+"added_items" = "Tillagte elementer: %@";
+"shared_string_rendering_style" = "Opptegningsstiler";
+"nav_type_hint" = "Navigasjonstype: %@";
+"shared_string_import" = "Importer profil";
+"device_settings" = "Enhetsinnstillinger";
+"do_not_rotate" = "Ikke roter";
+"settings_app_theme" = "Drakt";
+"gpx_export_failed" = "Kunne ikke lagre opprettet rute";
+"tracks_on_map" = "Spor på kartet";
+"visible" = "Synlig";
+"only_manually" = "Kun manuelt";
+"repeat_after" = "Gjenta etter";

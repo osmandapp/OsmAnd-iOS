@@ -118,8 +118,8 @@
                             <rect key="frame" x="0.0" y="338" width="414" height="103"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B5O-pm-t5C">
-                                    <rect key="frame" x="16" y="8" width="382" height="42"/>
-                                    <color key="backgroundColor" red="0.87843137250000003" green="0.86666666670000003" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <rect key="frame" x="16" y="9" width="382" height="42"/>
+                                    <color key="backgroundColor" red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="42" id="5fT-ab-vEU"/>
                                     </constraints>
@@ -136,7 +136,7 @@
                             <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstItem="B5O-pm-t5C" firstAttribute="leading" secondItem="W5A-wO-sxs" secondAttribute="leading" constant="16" id="9fS-v6-5Jl"/>
-                                <constraint firstItem="B5O-pm-t5C" firstAttribute="top" secondItem="W5A-wO-sxs" secondAttribute="top" constant="8" id="hKS-TJ-rog"/>
+                                <constraint firstItem="B5O-pm-t5C" firstAttribute="top" secondItem="W5A-wO-sxs" secondAttribute="top" constant="9" id="hKS-TJ-rog"/>
                                 <constraint firstAttribute="trailing" secondItem="B5O-pm-t5C" secondAttribute="trailing" constant="16" id="twX-qp-h3D"/>
                             </constraints>
                         </view>

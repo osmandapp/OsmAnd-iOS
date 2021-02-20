@@ -65,10 +65,17 @@
 
 -(OAGPX *)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
+    return [self addGpxItem:fileName path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds analysis:analysis];
+}
+
+-(OAGPX *)addGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
+{
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
     
-    OAGPX *gpx = [self buildGpxItem:fileName title:title desc:desc bounds:bounds analysis:analysis];
-    [res addObject:gpx];
+    OAGPX *gpx = [self buildGpxItem:fileName path:filepath title:title desc:desc bounds:bounds analysis:analysis];
+    
+    if (![self containsGPXItem:fileName])
+        [res addObject:gpx];
     
     gpxList = res;
     
@@ -87,9 +94,16 @@
 
 -(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
+    return [self buildGpxItem:fileName path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds analysis:analysis];
+}
+
+-(OAGPX *)buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
+{
     OAGPX *gpx = [[OAGPX alloc] init];
+    NSString *pathToRemove = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
     gpx.bounds = bounds;
     gpx.gpxFileName = fileName;
+    gpx.gpxFilepath = [filepath stringByReplacingOccurrencesOfString:pathToRemove withString:@""];
     title = [title length] != 0 ? title : nil;
     if (title)
         gpx.gpxTitle = title;
@@ -143,17 +157,17 @@
 -(void)removeGpxItem:(NSString *)fileName
 {
     NSMutableArray *arr = [NSMutableArray arrayWithArray:gpxList];
+    NSString *path;
     for (OAGPX *item in arr) {
         if ([item.gpxFileName isEqualToString:fileName]) {
-            
+            path = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:item.gpxFilepath];
             [arr removeObject:item];
             break;
         }
     }
     gpxList = arr;
     
-    OsmAndAppInstance app = [OsmAndApp instance];
-    [[NSFileManager defaultManager] removeItemAtPath:[app.gpxPath stringByAppendingPathComponent:fileName] error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 
 -(BOOL)containsGPXItem:(NSString *)fileName
@@ -182,7 +196,7 @@
     for (OAGPX *item in gpxList) {
         if ([item.gpxFileName isEqualToString:fileName]) {
             item.wptPoints = pointsCount;
-            NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item.gpxFileName];
+            NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item.gpxFilepath];
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:path];
             item.bounds = doc.bounds;
             return YES;
@@ -213,6 +227,8 @@
                 gpx.gpxFileName = value;
             } else if ([key isEqualToString:@"gpxTitle"]) {
                 gpx.gpxTitle = value;
+            } else if ([key isEqualToString:@"gpxFilepath"]) {
+                gpx.gpxFilepath = value;
             } else if ([key isEqualToString:@"gpxDescription"]) {
                 gpx.gpxDescription = value;
             } else if ([key isEqualToString:@"importDate"]) {
@@ -278,12 +294,11 @@
             }
             
         }
-        
-        NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFileName];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+        if (!gpx.gpxFilepath)
+            gpx.gpxFilepath = gpx.gpxFileName;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpx.gpxFilepath]])
             [res addObject:gpx];
     }
-    
     gpxList = res;
 }
 
@@ -297,6 +312,7 @@
         
         [d setObject:gpx.gpxFileName forKey:@"gpxFileName"];
         [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
+        [d setObject:gpx.gpxFilepath ? gpx.gpxFilepath : gpx.gpxTitle forKey:@"gpxFilepath"];
         [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
         [d setObject:gpx.importDate forKey:@"importDate"];
         

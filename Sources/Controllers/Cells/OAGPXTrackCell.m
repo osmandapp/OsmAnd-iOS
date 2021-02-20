@@ -25,11 +25,37 @@
     _distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
     _timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
     _wptImageView.tintColor = UIColorFromRGB(color_tint_gray);
+    
+    [self setRightButtonVisibility:NO];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
+}
+
+- (void) setRightButtonVisibility:(BOOL)visible
+{
+    _editButton.hidden = !visible;
+    if (visible)
+    {
+        _titleRelativeToMarginConstraint.active = NO;
+        _titleRelativeToButtonConstraint.active = YES;
+        
+        _buttonFullWidthConstraint.active = YES;
+        _buttonHiddenWidthConstraint.active = NO;
+    }
+    else
+    {
+        _titleRelativeToMarginConstraint.active = YES;
+        _titleRelativeToButtonConstraint.active = NO;
+        
+        _buttonFullWidthConstraint.active = NO;
+        _buttonHiddenWidthConstraint.active = YES;
+    }
+    
+    [self setNeedsUpdateConstraints];
+    [self updateConstraintsIfNeeded];
 }
 
 @end

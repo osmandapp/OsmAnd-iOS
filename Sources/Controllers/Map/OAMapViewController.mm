@@ -447,6 +447,11 @@
         [_mapLayers didReceiveMemoryWarning];
 }
 
+- (BOOL) isDisplayedInCarPlay
+{
+    return self.parentViewController != OARootViewController.instance.mapPanel;
+}
+
 #pragma mark - OAMapRendererDelegate
 
 - (void) frameRendered
@@ -458,23 +463,10 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Tell view to create context
-    _mapView.userInteractionEnabled = YES;
-    _mapView.multipleTouchEnabled = YES;
 
+    // Tell view to create context
     _mapView.displayDensityFactor = self.displayDensityFactor;
     [_mapView createContext];
-    
-    // Attach gesture recognizers:
-    [_mapView addGestureRecognizer:_grZoom];
-    [_mapView addGestureRecognizer:_grMove];
-    [_mapView addGestureRecognizer:_grRotate];
-    [_mapView addGestureRecognizer:_grZoomIn];
-    [_mapView addGestureRecognizer:_grZoomOut];
-    [_mapView addGestureRecognizer:_grElevation];
-    [_mapView addGestureRecognizer:_grSymbolContextMenu];
-    [_mapView addGestureRecognizer:_grPointContextMenu];
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
     if (_app.initialURLMapState)
@@ -580,6 +572,19 @@
         [rootViewController.mapPanel showContextMenu:targetPoint];
         _app.initialURLMapState = nil;
     }
+    
+    _mapView.userInteractionEnabled = YES;
+    _mapView.multipleTouchEnabled = YES;
+    
+    // Attach gesture recognizers:
+    [_mapView addGestureRecognizer:_grZoom];
+    [_mapView addGestureRecognizer:_grMove];
+    [_mapView addGestureRecognizer:_grRotate];
+    [_mapView addGestureRecognizer:_grZoomIn];
+    [_mapView addGestureRecognizer:_grZoomOut];
+    [_mapView addGestureRecognizer:_grElevation];
+    [_mapView addGestureRecognizer:_grSymbolContextMenu];
+    [_mapView addGestureRecognizer:_grPointContextMenu];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication*)application
@@ -2237,7 +2242,8 @@
         if (![_gpxDocFileTemp isEqualToString:fileName] || _gpxDocsTemp.isEmpty()) {
             _gpxDocsTemp.clear();
             _gpxDocFileTemp = [fileName copy];
-            NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+            OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:fileName];
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilepath];
             _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
         }
         
@@ -2312,7 +2318,8 @@
         return;
 
     std::shared_ptr<const OsmAnd::GeoInfoDocument> doc = _gpxDocsTemp.first();
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpxDocFileTemp];
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxDocFileTemp];
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilepath]; 
     QString qPath = QString::fromNSString(path);
     if (![[OAAppSettings sharedManager].mapSettingVisibleGpx containsObject:_gpxDocFileTemp])
     {
@@ -3343,7 +3350,10 @@
     if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+            if (![self isDisplayedInCarPlay])
+            {
+                [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+            }
         });
     }
 }

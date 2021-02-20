@@ -182,7 +182,7 @@
 "record_trip" = "Zaznamenajte svoj výlet";
 "gpx_distance_points" = "Vzdialenosť (body)";
 "gpx_max_speed" = "Max. rýchlosť";
-"sett_lang_trans" = "translit";
+"sett_lang_trans" = "transliterované";
 "prch_nau_q1" = "Prosím zapnite \"Námorný\" štýl v Nastaveniach mapy a nainštalujte celosvetovú mapu námorných značiek.";
 "prch_nau_q2_cell" = "Sťahovanie vyžaduje %@ cez mobilnú sieť.";
 "incur_high_charges" = "Môžu byť účtované vysoké poplatky.";
@@ -585,7 +585,7 @@
 "stop_routing_confirm" = "Naozaj chcete vypnúť navigáciu?";
 "cancel_route" = "Zrušiť cestu";
 "route_is_too_long_v2" = "Táto trasa môže byť príliš dlhá na výpočet. Ak sa nenájde výsledok do 10 minút, vložte prosím tranzitné ciele.";
-"navigation_over_track" = "Spustiť navigáciu pozdĺž výletu?";
+"navigation_over_track" = "Spustiť navigáciu pozdĺž stopy?";
 "use_displayed_track_for_navigation" = "Chcete použiť zobrazený výlet pre navigáciu?";
 "gpx_option_calculate_first_last_segment" = "Vypočítať OsmAnd trasu pre prvý a posledný úsek";
 "gpx_option_from_start_point" = "Prejsť pozdĺž celej trasy";
@@ -1613,7 +1613,6 @@
 "osm_notes" = "OSM poznámky";
 "personal_category_name" = "Osobné";
 "whole_track" = "Celá stopa";
-
 "select_distance_for_recalculation" = "Zvoľte vzdialenosť, po ktorej bude trasa prepočítaná.";
 "logging_accuracy" = "Presnosť záznamu";
 "nav_type_geocoding" = "Georeferencovanie";
@@ -1625,7 +1624,7 @@
 "ui_customization_descr" = "Položky v úvodnom paneli a kontextovom menu";
 "nav_type_ski" = "Lyžovanie";
 "configure_map_descr" = "Zobrazenie mapy";
-"vessel_width_limit_description" = "Nastavtešírku plavidla, aby sa dalo vyhnúť úzkym mostom";
+"vessel_width_limit_description" = "Nastavte šírku plavidla, aby sa dalo vyhnúť úzkym mostom.";
 "profile_type_user_string" = "Profil používateľa";
 "quick_action_mapillary_hide" = "Skryť Mapillary";
 "map_settings_terrain" = "Terén";
@@ -1643,7 +1642,7 @@
 "product_title_antarctica" = "Antarktída";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "quick_action_remove_next_destination" = "Vymazať najbližší cieľový bod";
-"profile_prefs_reset_successful" = "Všetky nastavenia profilov obnovené do východzieho stavu.";
+"profile_prefs_reset_successful" = "Všetky nastavenia profilov obnovené do východzieho stavu";
 "route_betw_points" = "Trasa medzi bodmi";
 "select_icon" = "Zvoľte ikonu";
 "res_pseudo_mercator" = "Pseudo-Mercatorovo zobrazenie";
@@ -1665,7 +1664,7 @@
 "nav_type_straight_line" = "Rovná čiara";
 "position_icon_while_moving" = "Ikona polohy pri pohybe";
 "arrival_announcement_frequency" = "Ako skoro má byť oznámený príjazd do cieľa?";
-"import_complete_description" = "Všetky údaje z %@ sú naimportované, môžete použiť tlačidlá nižšie pre otvorenie príslušnej časti aplikácie pre ich správu.";
+"import_complete_description" = "Všetky údaje z %@ sú naimportované, môžete použiť tlačidlá nižšie pre otvorenie príslušnej časti aplikácie pre ich správu";
 "shared_string_min" = "Min";
 "shared_string_account" = "Účet";
 "update_map" = "Aktualizovať mapu";
@@ -1702,4 +1701,17 @@
 "default_speed" = "Predvolená rýchlosť";
 "help_osmand_live" = "Predplatné - OsmAnd Live";
 "public_transport_show" = "Zobraziť verejnú dopravu";
-"arrived_at_destination" = "Dorazili ste do cieľa.";
+"arrived_at_destination" = "Dorazili ste do cieľa";
+"nearest_point" = "Najbližší bod";
+"attach_to_the_roads" = "Pripojiť k cestám";
+"select_another_track" = "Zvoliť inú stopu";
+"follow_track" = "Nasledovať stopu";
+"none_point_error" = "Prosím pridajte aspoň jeden bod.";
+"plan_route_open_existing_track" = "Otvoriť existujúcu stopu";
+"plan_route_create_new_route" = "Vytvoriť novú trasu";
+"open_saved_track" = "Otvoriť uloženú stopu";
+"simplified_track" = "Zjednodušená stopa";
+"join_segments" = "Spojiť úseky";
+"simplified_track_description" = "Bude uložená len čiara trasy, prechodné body budú odstránené.";
+"hide_compass_ruler" = "Skryť stupnicu kompasu";
+"show_compass_ruler" = "Zobraziť stupnicu kompasu";

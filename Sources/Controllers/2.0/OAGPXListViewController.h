@@ -17,8 +17,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *gpxTableView;
 
-@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
-
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;

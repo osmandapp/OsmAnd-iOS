@@ -104,7 +104,7 @@
     else
     {
         const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:result.gpxFileName];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:result.gpxFilepath];
         QString qPath = QString::fromNSString(path);
         OAGPXDocument *doc = nil;
         if (gpxMap.contains(qPath))
@@ -132,14 +132,10 @@
         _settings.followTheGpxRoute = path;
         if (ps.count > 0)
         {
-            CLLocation *loc = ps[ps.count - 1];
             OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
+            [tg clearStartPoint:NO];
+            CLLocation *loc = ps.lastObject;
             [tg navigateToPoint:loc updateRoute:false intermediate:-1];
-//            if (![tg getPointToStart])
-//            {
-            loc = ps[0];
-            [tg setStartPoint:loc updateRoute:false name:nil];
-//            }
         }
     }
 }

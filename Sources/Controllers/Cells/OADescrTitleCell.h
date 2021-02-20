@@ -12,5 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewZeroHeightConstraint;
 
 @end

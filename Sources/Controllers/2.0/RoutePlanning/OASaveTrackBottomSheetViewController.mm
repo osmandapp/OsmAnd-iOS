@@ -26,13 +26,14 @@
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
 
-@interface OASaveTrackBottomSheetViewController ()
+@interface OASaveTrackBottomSheetViewController () <UIDocumentInteractionControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIImageView *iconImageView;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UIButton *openSavedTrackButton;
 @property (strong, nonatomic) IBOutlet UIButton *createNewRouteButton;
 @property (strong, nonatomic) IBOutlet UIButton *shareButton;
+@property (strong, nonatomic) UIDocumentInteractionController* exportController;
 
 @end
 
@@ -109,15 +110,27 @@
 
 - (IBAction)shareButtonPressed:(id)sender
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
-    NSURL* gpxUrl = [NSURL fileURLWithPath:_fileName];
+    NSURL* sourceGpxUrl = [NSURL fileURLWithPath:_fileName];
+    NSString* tempFolderPath = [NSTemporaryDirectory() stringByAppendingString:[_fileName lastPathComponent]];
+    NSURL* destinationGpxUrl = [NSURL fileURLWithPath:tempFolderPath];
+    [[NSData dataWithContentsOfURL:sourceGpxUrl] writeToURL:destinationGpxUrl options:NSDataWritingAtomic error:nil];
     
-    UIDocumentInteractionController *exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
-    exportController.UTI = @"net.osmand.gpx";
-    exportController.name = [_fileName.lastPathComponent stringByDeletingPathExtension];
-    [exportController presentOptionsMenuFromRect:CGRectZero
-                                           inView:OARootViewController.instance.view
+    _exportController = [UIDocumentInteractionController interactionControllerWithURL:destinationGpxUrl];
+    _exportController.UTI = @"net.osmand.gpx";
+    _exportController.delegate = self;
+    _exportController.name = [tempFolderPath.lastPathComponent stringByDeletingPathExtension];
+    
+    [_exportController presentOptionsMenuFromRect:self.shareButton.frame
+                                           inView:[self.shareButton superview]
                                          animated:YES];
+}
+
+
+#pragma mark - UIDocumentInteractionControllerDelegate
+
+- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

@@ -320,10 +320,13 @@
             {
                 OAApplicationModeBean *modeBean = (OAApplicationModeBean *)currentItem;
                 NSString *profileName = modeBean.userProfileName;
-                if (!profileName || profileName.length == 0)
+                if (profileName.length == 0)
                 {
                     OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
-                    profileName = appMode.name;
+                    if (appMode)
+                        profileName = appMode.toHumanString;
+                    else
+                        profileName = modeBean.stringKey.capitalizedString;
                 }
                 item[@"label"] = profileName;
                 NSString *routingProfile = @"";
@@ -341,7 +344,7 @@
                         NSLog(@"Error trying to get routing resource for %@ \n %@ %@", routingProfileValue, e.name, e.reason);
                     }
                 }
-                if (!routingProfile || routingProfile.length == 0)
+                if (routingProfile.length == 0)
                     item[@"description"] = @"";
                 else
                     item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"nav_type_hint"), routingProfile];

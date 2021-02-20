@@ -30,6 +30,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
+#import "OAGpxSettingsItem.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -317,6 +318,9 @@
         case EOASettingsItemTypeActiveMarkers:
             item = [[OAMarkersSettingsItem alloc] initWithJson:json error:&error];
             break;
+        case EOASettingsItemTypeGpx:
+            item = [[OAGpxSettingsItem alloc] initWithJson:json error:&error];
+            break;
         default:
             item = nil;
             break;
@@ -529,7 +533,7 @@
     NSMutableArray<NSDictionary *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
-    NSMutableArray<NSString *> *gpxFilesList = [NSMutableArray array];
+    NSMutableArray<OAFileSettingsItem *> *tracksFilesList = [NSMutableArray array];
     NSMutableArray<OAFileSettingsItem *> *mapFilesList = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
     NSMutableArray<OAFavoriteGroup *> *favorites = [NSMutableArray array];
@@ -553,7 +557,7 @@
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig)
                     [routingFilesList addObject:fileItem.filePath];
                 else if (fileItem.subtype == EOASettingsItemFileSubtypeGpx)
-                    [gpxFilesList addObject:fileItem.filePath];
+                    [tracksFilesList addObject:fileItem];
                 else if ([OAFileSettingsItemFileSubtype isMap:fileItem.subtype])
                     [mapFilesList addObject:fileItem];
                 break;
@@ -646,8 +650,8 @@
         [settingsToOperate setObject:renderFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRendererStyles]];
     if (routingFilesList.count > 0)
         [settingsToOperate setObject:routingFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeCustomRouting]];
-    if (gpxFilesList.count > 0)
-        [settingsToOperate setObject:gpxFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeGPX]];
+    if (tracksFilesList.count > 0)
+        [settingsToOperate setObject:tracksFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeGPX]];
     if (mapFilesList.count > 0)
         [settingsToOperate setObject:mapFilesList forKey:[OAExportSettingsType typeName:EOAExportSettingsTypeMapFiles]];
     if (avoidRoads.count > 0)

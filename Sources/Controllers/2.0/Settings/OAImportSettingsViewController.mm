@@ -42,6 +42,8 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAMarkersSettingsItem.h"
 #import "OADestination.h"
+#import "OAGpxSettingsItem.h"
+#import "OAGPXDatabase.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -267,7 +269,11 @@
                     if (!title || title.length == 0)
                     {
                         OAApplicationMode* appMode = [OAApplicationMode valueOfStringKey:modeBean.stringKey def:nil];
-                        title = [appMode toHumanString];
+                        
+                        if (appMode)
+                            title = [appMode toHumanString];
+                        else
+                            title = modeBean.stringKey.capitalizedString;
                     }
 
                     NSString *routingProfile = @"";
@@ -398,9 +404,9 @@
                 customGPXSection.groupName = OALocalizedString(@"tracks");
                 customGPXSection.type = kCellTypeSectionHeader;
                 customGPXSection.isOpen = NO;
-                for (NSString *gpxItem in settings)
+                for (OAGpxSettingsItem *gpxItem in settings)
                 {
-                    NSString *gpxName = [[[gpxItem lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    NSString *gpxName = [[gpxItem.name stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     [customGPXSection.groupItems addObject:@{
                         @"icon" : @"ic_custom_trip",
                         @"title" : gpxName,

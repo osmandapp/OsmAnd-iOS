@@ -15,6 +15,7 @@
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
+#define kButttonsHeight 116.
 
 @interface OAExitRoutePlanningBottomSheetViewController ()
 
@@ -69,7 +70,8 @@
 
 - (CGFloat) buttonsViewHeight
 {
-    return 132.;
+    CGFloat extraBottomOffset = [OAUtilities getBottomMargin] > 0 ? 0 : kVerticalMargin;
+    return kButttonsHeight + extraBottomOffset;
 }
 
 - (CGFloat) getViewHeight

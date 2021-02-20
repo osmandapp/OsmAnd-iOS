@@ -40,6 +40,8 @@
             return @"OSM_EDITS";
         case EOASettingsItemTypeActiveMarkers:
             return @"ACTIVE_MARKERS";
+        case EOASettingsItemTypeGpx:
+            return @"GPX";
         default:
             return nil;
     }
@@ -73,6 +75,8 @@
         return EOASettingsItemTypeOsmEdits;
     if ([typeName isEqualToString:@"ACTIVE_MARKERS"])
         return EOASettingsItemTypeActiveMarkers;
+    if ([typeName isEqualToString:@"GPX"])
+        return EOASettingsItemTypeGpx;
     
     return EOASettingsItemTypeUnknown;
 }

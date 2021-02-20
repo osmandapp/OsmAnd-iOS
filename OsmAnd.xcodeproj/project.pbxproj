@@ -4931,6 +4931,11 @@
 		DA526AB3253AE29100E489D3 /* OARoutePlanningHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA526AB0253AE29100E489D3 /* OARoutePlanningHudViewController.xib */; };
 		DA526AB4253AE29100E489D3 /* OARoutePlanningHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA526AB0253AE29100E489D3 /* OARoutePlanningHudViewController.xib */; };
 		DA52780B25DFC3DF0012CC89 /* OACarPlayAddressSearchController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA52780A25DFC3DF0012CC89 /* OACarPlayAddressSearchController.mm */; };
+		DA52783F25E0F2A90012CC89 /* OACarPlayMarkersListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA52783E25E0F2A90012CC89 /* OACarPlayMarkersListController.mm */; };
+		DA52784625E0FF5C0012CC89 /* OACarPlayTracksListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA52784525E0FF5C0012CC89 /* OACarPlayTracksListController.mm */; };
+		DA52784D25E11D440012CC89 /* OABaseCarPlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA52784C25E11D440012CC89 /* OABaseCarPlayListController.m */; };
+		DA52785325E13CA30012CC89 /* OACarPlayActiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA52785125E13CA30012CC89 /* OACarPlayActiveViewController.m */; };
+		DA52785425E13CA30012CC89 /* OACarPlayActiveViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA52785225E13CA30012CC89 /* OACarPlayActiveViewController.xib */; };
 		DA52CDCE24ADFAA900CC309D /* OAProfileDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA52CDCD24ADFAA900CC309D /* OAProfileDataObject.m */; };
 		DA52CDCF24ADFAA900CC309D /* OAProfileDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DA52CDCD24ADFAA900CC309D /* OAProfileDataObject.m */; };
 		DA52CDE924AE087F00CC309D /* img_help_weight_limit_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA52CDD024AE087700CC309D /* img_help_weight_limit_day@3x.png */; };
@@ -9898,6 +9903,15 @@
 		DA526AB0253AE29100E489D3 /* OARoutePlanningHudViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARoutePlanningHudViewController.xib; sourceTree = "<group>"; };
 		DA52780925DFC3DF0012CC89 /* OACarPlayAddressSearchController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayAddressSearchController.h; sourceTree = "<group>"; };
 		DA52780A25DFC3DF0012CC89 /* OACarPlayAddressSearchController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayAddressSearchController.mm; sourceTree = "<group>"; };
+		DA52783D25E0F2A90012CC89 /* OACarPlayMarkersListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayMarkersListController.h; sourceTree = "<group>"; };
+		DA52783E25E0F2A90012CC89 /* OACarPlayMarkersListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayMarkersListController.mm; sourceTree = "<group>"; };
+		DA52784425E0FF5C0012CC89 /* OACarPlayTracksListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayTracksListController.h; sourceTree = "<group>"; };
+		DA52784525E0FF5C0012CC89 /* OACarPlayTracksListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayTracksListController.mm; sourceTree = "<group>"; };
+		DA52784B25E11D440012CC89 /* OABaseCarPlayListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseCarPlayListController.h; sourceTree = "<group>"; };
+		DA52784C25E11D440012CC89 /* OABaseCarPlayListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseCarPlayListController.m; sourceTree = "<group>"; };
+		DA52785025E13CA30012CC89 /* OACarPlayActiveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayActiveViewController.h; sourceTree = "<group>"; };
+		DA52785125E13CA30012CC89 /* OACarPlayActiveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACarPlayActiveViewController.m; sourceTree = "<group>"; };
+		DA52785225E13CA30012CC89 /* OACarPlayActiveViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACarPlayActiveViewController.xib; sourceTree = "<group>"; };
 		DA52CDCC24ADFAA900CC309D /* OAProfileDataObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAProfileDataObject.h; sourceTree = "<group>"; };
 		DA52CDCD24ADFAA900CC309D /* OAProfileDataObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAProfileDataObject.m; sourceTree = "<group>"; };
 		DA52CDD024AE087700CC309D /* img_help_weight_limit_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_help_weight_limit_day@3x.png"; path = "Resources/Icons/img_help_weight_limit_day@3x.png"; sourceTree = "<group>"; };
@@ -16437,6 +16451,12 @@
 				DA8A928C25DE981E00F5320A /* OACarPlayCategoryResultListController.mm */,
 				DA52780925DFC3DF0012CC89 /* OACarPlayAddressSearchController.h */,
 				DA52780A25DFC3DF0012CC89 /* OACarPlayAddressSearchController.mm */,
+				DA52783D25E0F2A90012CC89 /* OACarPlayMarkersListController.h */,
+				DA52783E25E0F2A90012CC89 /* OACarPlayMarkersListController.mm */,
+				DA52784425E0FF5C0012CC89 /* OACarPlayTracksListController.h */,
+				DA52784525E0FF5C0012CC89 /* OACarPlayTracksListController.mm */,
+				DA52784B25E11D440012CC89 /* OABaseCarPlayListController.h */,
+				DA52784C25E11D440012CC89 /* OABaseCarPlayListController.m */,
 			);
 			path = CarPlayDirectionsControllers;
 			sourceTree = "<group>";
@@ -16540,6 +16560,9 @@
 				DACBB9A325D6B67F00378C47 /* OADirectionsGridController.m */,
 				DACBB9AC25D6BC2000378C47 /* OABaseCarPlayInterfaceController.h */,
 				DACBB9AD25D6BC2000378C47 /* OABaseCarPlayInterfaceController.mm */,
+				DA52785025E13CA30012CC89 /* OACarPlayActiveViewController.h */,
+				DA52785125E13CA30012CC89 /* OACarPlayActiveViewController.m */,
+				DA52785225E13CA30012CC89 /* OACarPlayActiveViewController.xib */,
 			);
 			path = CarPlay;
 			sourceTree = "<group>";
@@ -21212,6 +21235,7 @@
 				84B6E0882073CF55002CA15B /* ic_action_route_subsequent_destination@2x.png in Resources */,
 				DA9C623F221C46590087E140 /* ic_custom_osm_edits@3x.png in Resources */,
 				84263A181B39D36A00CECF1C /* my_course_marker_icon.png in Resources */,
+				DA52785425E13CA30012CC89 /* OACarPlayActiveViewController.xib in Resources */,
 				8476E29A1F6C1EEC00EC274F /* map_car_location@3x.png in Resources */,
 				DAB985B1212423710081F8F8 /* en-gb_tts.js in Resources */,
 				DA5AA2D32351C88200DF0B7B /* OAHomeWorkCell.xib in Resources */,
@@ -22600,6 +22624,7 @@
 				DAFCB01C23AA1B5000CFBA58 /* OARouteInfoCell.m in Sources */,
 				DAA86421230429F5000E1900 /* OAShowHideOSMBugAction.m in Sources */,
 				787AC305242A39D10007944C /* OAImageDescTableViewCell.m in Sources */,
+				DA52783F25E0F2A90012CC89 /* OACarPlayMarkersListController.mm in Sources */,
 				8476E1EB1F6BB5DC00EC274F /* OARoutingProgressView.m in Sources */,
 				84F1F9B91DE83C64001AA520 /* OAAnalyticsHelper.m in Sources */,
 				DAA8641D230415F3000E1900 /* OAShowHideGPXTracksAction.mm in Sources */,
@@ -22974,6 +22999,7 @@
 				84CC87D91FAB553100B4941F /* OATurnDrawable.mm in Sources */,
 				DA09990F25A83F4100F22A19 /* OASaveGpxRouteAsyncTask.mm in Sources */,
 				84C3C1841E3B88F2000C77A5 /* OAQuickSearchHelper.mm in Sources */,
+				DA52784D25E11D440012CC89 /* OABaseCarPlayListController.m in Sources */,
 				84CC87E01FAB711700B4941F /* OATurnPathHelper.mm in Sources */,
 				DABB8E552308206200DBD77F /* OATitleDescrDraggableCell.m in Sources */,
 				84FF0C441F3CB89300AD1029 /* OAAppModeCell.m in Sources */,
@@ -23030,6 +23056,7 @@
 				841766461B72942A002A08CB /* OAHistoryCardController.mm in Sources */,
 				DA835FEB23436F1A003374B5 /* OADestinationItemsListViewController.mm in Sources */,
 				8490B1A4205FEF74007694A5 /* OARadiusCell.m in Sources */,
+				DA52785325E13CA30012CC89 /* OACarPlayActiveViewController.m in Sources */,
 				841511901FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */,
 				15C428CC24A75F5800B21005 /* OAInputCellWithTitle.m in Sources */,
 				DA2558C124ADE40F0081D155 /* OAAvoidPreferParametersViewController.mm in Sources */,
@@ -23265,6 +23292,7 @@
 				844E08101E48C76600EFC525 /* OAToolbarViewController.mm in Sources */,
 				DA3305C321D391BE0081BA1D /* OADonationSettingsViewController.mm in Sources */,
 				848300C71CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */,
+				DA52784625E0FF5C0012CC89 /* OACarPlayTracksListController.mm in Sources */,
 				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				DABD68AD230FC09E009DFBDE /* OAQuickActionSelectionBottomSheetViewController.mm in Sources */,
 				DA84E84221D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */,
@@ -23631,7 +23659,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3.90.3.2;
+				CURRENT_PROJECT_VERSION = 3.90.3.3;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -23686,7 +23714,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3.90.3.2;
+				CURRENT_PROJECT_VERSION = 3.90.3.3;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

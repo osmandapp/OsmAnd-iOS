@@ -10,6 +10,8 @@
 #import "OACarPlayFavoritesListController.h"
 #import "OASearchCategoriesListController.h"
 #import "OACarPlayAddressSearchController.h"
+#import "OACarPlayMarkersListController.h"
+#import "OACarPlayTracksListController.h"
 #import "Localization.h"
 
 #import <CarPlay/CarPlay.h>
@@ -26,6 +28,8 @@
 	OACarPlayAddressSearchController *_searchController;
 	OACarPlayFavoritesListController *_favoritesListController;
 	OASearchCategoriesListController *_categoriesListController;
+	OACarPlayMarkersListController *_markersListController;
+	OACarPlayTracksListController *_tracksListController;
 	
 }
 
@@ -52,7 +56,17 @@
 		[_searchController present];
 	}];
 	
-	return @[btnFav, btnCategories, btnSearch];
+	CPGridButton *btnMarkers = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"map_markers")] image:[UIImage imageNamed:@"ic_carplay_map_markers"] handler:^(CPGridButton * _Nonnull barButton) {
+		_markersListController = [[OACarPlayMarkersListController alloc] initWithInterfaceController:self.interfaceController];
+		[_markersListController present];
+	}];
+	
+	CPGridButton *btnTracks = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"tracks")] image:[UIImage imageNamed:@"ic_carplay_tracks"] handler:^(CPGridButton * _Nonnull barButton) {
+		_tracksListController = [[OACarPlayTracksListController alloc] initWithInterfaceController:self.interfaceController];
+		[_tracksListController present];
+	}];
+	
+	return @[btnSearch, btnCategories, btnFav, btnMarkers, btnTracks];
 }
 
 @end

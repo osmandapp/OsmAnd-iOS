@@ -81,6 +81,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) present
 {
+	// Dismiss any previous navigation
+	[self stopNavigation];
+	
 	_mapTemplate = [[CPMapTemplate alloc] init];
 	_mapTemplate.mapDelegate = self;
 	[self enterBrowsingState];

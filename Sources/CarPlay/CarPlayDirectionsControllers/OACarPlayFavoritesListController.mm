@@ -17,54 +17,38 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 
-@interface OACarPlayFavoritesListController() <CPListTemplateDelegate>
-
-@end
-
 @implementation OACarPlayFavoritesListController
-{
-	CPListTemplate *_listTemplate;
-	
-	NSArray<OAFavoriteGroup *> *_favoriteGroups;
-}
 
-- (void) present
+- (NSString *)screenTitle
 {
-	_listTemplate = [[CPListTemplate alloc] initWithTitle:OALocalizedString(@"favorites") sections:[self generateSections]];
-	_listTemplate.delegate = self;
-	[self.interfaceController pushTemplate:_listTemplate animated:YES];
+	return OALocalizedString(@"favorites");
 }
 
 - (NSArray<CPListSection *> *) generateSections
 {
 	NSMutableArray<CPListSection *> *sections = [NSMutableArray new];
 	
-	_favoriteGroups = [OAFavoritesHelper getGroupedFavorites:OsmAndApp.instance.favoritesCollection->getFavoriteLocations()];
+	NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getGroupedFavorites:OsmAndApp.instance.favoritesCollection->getFavoriteLocations()];
 	
-	for (NSInteger groupIndex = 0; groupIndex < _favoriteGroups.count; groupIndex++)
+	if (favoriteGroups.count > 0)
 	{
-		OAFavoriteGroup *group = _favoriteGroups[groupIndex];
-		NSMutableArray<CPListItem *> *items = [NSMutableArray new];
-		for (NSInteger favIndex = 0; favIndex < group.points.count; favIndex++)
-		{
-			OAFavoriteItem *item = group.points[favIndex];
-			item.distance = [self calculateDistanceToItem:item];
-			CPListItem *listItem;
-			listItem = [[CPListItem alloc] initWithText:item.favorite->getTitle().toNSString() detailText:item.distance image:[UIImage imageNamed:@"ic_custom_favorites"] showsDisclosureIndicator:YES];
-			listItem.userInfo = [NSIndexPath indexPathForRow:favIndex inSection:groupIndex];
-			
-			if (@available(iOS 14.0, *)) {
-				[listItem setHandler:^(id <CPSelectableListItem> item,
-									  dispatch_block_t completionBlock) {
-					[self listTemplate:_listTemplate didSelectListItem:item completionHandler:completionBlock];
-				}];
-			}
-			
-			[items addObject:listItem];
-		}
-		NSString *groupName = group.name.length == 0 ? OALocalizedString(@"favorites") : group.name;
-		CPListSection *section = [[CPListSection alloc] initWithItems:items header:groupName sectionIndexTitle:[groupName substringToIndex:1]];
-		[sections addObject:section];
+		[favoriteGroups enumerateObjectsUsingBlock:^(OAFavoriteGroup * _Nonnull group, NSUInteger idx, BOOL * _Nonnull stop) {
+			NSMutableArray<CPListItem *> *items = [NSMutableArray new];
+			[group.points enumerateObjectsUsingBlock:^(OAFavoriteItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
+				item.distance = [self calculateDistanceToItem:item];
+				CPListItem *listItem;
+				listItem = [[CPListItem alloc] initWithText:item.favorite->getTitle().toNSString() detailText:item.distance image:[UIImage imageNamed:@"ic_custom_favorites"] showsDisclosureIndicator:YES];
+				listItem.userInfo = item;
+				[items addObject:listItem];
+			}];
+			NSString *groupName = group.name.length == 0 ? OALocalizedString(@"favorites") : group.name;
+			CPListSection *section = [[CPListSection alloc] initWithItems:items header:groupName sectionIndexTitle:[groupName substringToIndex:1]];
+			[sections addObject:section];
+		}];
+	}
+	else
+	{
+		return [self generateSingleItemSectionWithTitle:OALocalizedString(@"favorites_empty")];
 	}
 	return sections;
 }
@@ -93,17 +77,13 @@
 
 - (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
 {
-	NSIndexPath* indexPath = item.userInfo;
-	if (!indexPath)
+	OAFavoriteItem* favoritePoint = item.userInfo;
+	if (!favoritePoint)
 	{
 		completionHandler();
 		return;
 	}
-	OAFavoriteItem *favoritePoint = _favoriteGroups[indexPath.section].points[indexPath.row];
-	if (favoritePoint)
-	{
-		[self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:favoritePoint.getLatitude longitude:favoritePoint.getLongitude]];
-	}
+	[self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:favoritePoint.getLatitude longitude:favoritePoint.getLongitude]];
 	[self.interfaceController popToRootTemplateAnimated:YES];
 	
 	completionHandler();

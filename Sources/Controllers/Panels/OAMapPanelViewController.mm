@@ -97,6 +97,7 @@
 #import "OAMapLayers.h"
 #import "OAFavoritesLayer.h"
 #import "OAImpassableRoadsLayer.h"
+#import "OACarPlayActiveViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -181,6 +182,8 @@ typedef enum
     
     BOOL _reopenSettings;
     OAApplicationMode *_targetAppMode;
+	
+	OACarPlayActiveViewController *_carPlayActiveController;
 }
 
 - (instancetype) init
@@ -3720,6 +3723,24 @@ typedef enum
 
 - (void) routeWasFinished
 {
+}
+
+#pragma mark - CarPlay related actions
+
+- (void) onCarPlayConnected
+{
+	_carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
+	_carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
+	[self presentViewController:_carPlayActiveController animated:YES completion:nil];
+}
+
+- (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete
+{
+	[_carPlayActiveController dismissViewControllerAnimated:YES completion:^{
+		_carPlayActiveController = nil;
+		if (onComplete)
+			onComplete();
+	}];
 }
 
 @end

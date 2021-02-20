@@ -109,14 +109,17 @@
 	NSMutableString *res = [NSMutableString new];
 	NSString *typeName = [OAQuickSearchListItem getTypeName:item.getSearchResult];
 	OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:NO];
+	BOOL needsSeparator = NO;
 	
 	if (distDir && distDir.distance.length > 0)
 	{
 		[res appendString:distDir.distance];
+		needsSeparator = YES;
 	}
 	if (typeName.length > 0)
 	{
-		[res appendString:@" • "];
+		if (needsSeparator)
+			[res appendString:@" • "];
 		[res appendString:typeName];
 	}
 	return res;
@@ -132,13 +135,20 @@
 
 - (void)searchTemplate:(CPSearchTemplate *)searchTemplate updatedSearchText:(NSString *)searchText completionHandler:(void (^)(NSArray<CPListItem *> * _Nonnull))completionHandler
 {
+	if ([_currentSearchPhrase isEqualToString:searchText] && _searchItems.count > 0)
+		return;
+	
 	_currentSearchPhrase = searchText;
 	[_searchUICore cancelSearch];
 	[_searchUICore resetPhrase];
 	
-	OASearchResultCollection *results = [_searchUICore shallowSearch:OASearchAddressByNameAPI.class text:searchText matcher:nil resortAll:YES removeDuplicates:YES];
-	[self updateSearchResult:results];
-	completionHandler([self generateItemList]);
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		OASearchResultCollection *results = [_searchUICore shallowSearch:OASearchAddressByNameAPI.class text:searchText matcher:nil resortAll:YES removeDuplicates:YES];
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self updateSearchResult:results];
+			completionHandler([self generateItemList]);
+		});
+	});
 }
 
 - (void)searchTemplateSearchButtonPressed:(CPSearchTemplate *)searchTemplate

@@ -47,4 +47,11 @@
 	}
 }
 
+- (NSArray<CPListSection *> *) generateSingleItemSectionWithTitle:(NSString *)title
+{
+	CPListItem *item = [[CPListItem alloc] initWithText:title detailText:nil];
+	CPListSection *section = [[CPListSection alloc] initWithItems:@[item]];
+	return @[section];
+}
+
 @end

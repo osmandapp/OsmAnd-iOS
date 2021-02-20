@@ -183,6 +183,11 @@
 "configure_screen_descr" = "Select screen options for the profile";
 "map_markers" = "Map markers";
 "confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
+"map_markers_empty" = "You have no active map markers";
+"tracks_empty" = "Your track list is empty";
+"favorites_empty" = "You have not saved any favorite points";
+
+"carplay_active_message" = "Map is displayed via CarPlay";
 
 "show_traffic_warnings" = "Traffic warnings";
 "show_pedestrian_warnings" = "Pedestrian crosswalks";
@@ -1015,6 +1020,7 @@
 "closing_changeset" = "Closing changeset…";
 "commiting_node" = "Committing node…";
 "loading_poi_obj" = "Loading POI…";
+"shared_string_loading" = "Loading…";
 
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";

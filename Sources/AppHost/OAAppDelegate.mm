@@ -353,29 +353,33 @@
 
 - (void)application:(UIApplication *)application didConnectCarInterfaceController:(CPInterfaceController *)interfaceController toWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
 {
+	OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
 	OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
 	if (!mapVc)
 	{
 		[self initialize];
-		mapVc = OARootViewController.instance.mapPanel.mapViewController;
+		mapVc = mapPanel.mapViewController;
 	}
 	_carPlayMapController = [[OACarPlayMapViewController alloc] initWithCarPlayWindow:window mapViewController:mapVc];
 	
-//	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_carPlayMapController];
 	window.rootViewController = _carPlayMapController;
 	
 	_carPlayDashboardController = [[OACarPlayDashboardInterfaceController alloc] initWithInterfaceController:interfaceController];
 	_carPlayDashboardController.delegate = _carPlayMapController;
 	[_carPlayDashboardController present];
+	
+	[mapPanel onCarPlayConnected];
 }
 
 - (void)application:(UIApplication *)application didDisconnectCarInterfaceController:(CPInterfaceController *)interfaceController fromWindow:(CPWindow *)window API_AVAILABLE(ios(12.0))
 {
-	[_carPlayMapController detachFromCarPlayWindow];
-	_carPlayDashboardController = nil;
-	[_carPlayMapController.navigationController popViewControllerAnimated:YES];
-	window.rootViewController = nil;
-	_carPlayMapController = nil;
+	[OARootViewController.instance.mapPanel onCarPlayDisconnected:^{
+		[_carPlayMapController detachFromCarPlayWindow];
+		_carPlayDashboardController = nil;
+		[_carPlayMapController.navigationController popViewControllerAnimated:YES];
+		window.rootViewController = nil;
+		_carPlayMapController = nil;
+	}];
 }
 
 @end

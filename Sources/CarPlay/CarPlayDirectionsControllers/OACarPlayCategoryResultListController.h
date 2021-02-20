@@ -6,14 +6,14 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OABaseCarPlayInterfaceController.h"
+#import "OABaseCarPlayListController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class OASearchResult;
 
 API_AVAILABLE(ios(12.0))
-@interface OACarPlayCategoryResultListController : OABaseCarPlayInterfaceController
+@interface OACarPlayCategoryResultListController : OABaseCarPlayListController
 
 - (instancetype) initWithInterfaceController:(CPInterfaceController *)interfaceController searchResult:(OASearchResult *)sr;
 

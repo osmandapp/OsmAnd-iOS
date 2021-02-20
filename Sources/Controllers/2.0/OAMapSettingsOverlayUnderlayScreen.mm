@@ -115,10 +115,22 @@ static NSInteger kButtonsSection;
     _sqlitedbResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onSqlitedbResourcesChanged:) andObserve:[OAMapCreatorHelper sharedInstance].sqlitedbResourcesChangedObservable];
     
     _onlineMapSources = [NSMutableArray array];
+	
+	[self setupInitialState];
 }
 
 - (void)deinit
 {
+}
+
+- (void) setupInitialState
+{
+	if (_mapSettingType == EMapSettingOverlay)
+		_isEnabled = _app.data.overlayMapSource != nil;
+	else if (_mapSettingType == EMapSettingUnderlay)
+		_isEnabled = _app.data.underlayMapSource != nil;
+	else
+		_isEnabled = NO;
 }
 
 - (void)setupView
@@ -177,13 +189,6 @@ static NSInteger kButtonsSection;
     
     tblView.estimatedRowHeight = kEstimatedRowHeight;
     tblView.rowHeight = UITableViewAutomaticDimension;
-
-    if (_mapSettingType == EMapSettingOverlay)
-        _isEnabled = _app.data.overlayMapSource != nil;
-    else if (_mapSettingType == EMapSettingUnderlay)
-        _isEnabled = _app.data.underlayMapSource != nil;
-    else
-        _isEnabled = NO;
 
     kButtonsSection = _mapSettingType == EMapSettingOverlay ? 3 : 4;
 }

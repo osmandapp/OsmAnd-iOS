@@ -171,4 +171,7 @@
 
 - (void) onHandleIncomingURL:(NSString *)ext;
 
+- (void) onCarPlayConnected;
+- (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete;
+
 @end

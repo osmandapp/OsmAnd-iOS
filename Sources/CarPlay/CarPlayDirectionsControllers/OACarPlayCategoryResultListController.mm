@@ -26,18 +26,11 @@
 
 #import <CarPlay/CarPlay.h>
 
-@interface OACarPlayCategoryResultListController() <CPListTemplateDelegate>
-
-@end
-
 @implementation OACarPlayCategoryResultListController
 {
 	OASearchResult *_searchResult;
 	OASearchUICore *_searchUICore;
 	OAQuickSearchHelper *_searchHelper;
-	
-	CPListTemplate *_listTemplate;
-	NSArray<OAQuickSearchListItem *> *_searchItems;
 }
 
 - (instancetype) initWithInterfaceController:(CPInterfaceController *)interfaceController searchResult:(OASearchResult *)sr
@@ -61,20 +54,20 @@
 	[_searchUICore updateSettings:settings];
 }
 
+- (NSString *)screenTitle
+{
+	return _searchResult.localeName;
+}
+
 - (void) present
 {
-	_listTemplate = [[CPListTemplate alloc] initWithTitle:_searchResult.localeName sections:[self generateSingleItemSectionWithTitle:OALocalizedString(@"search_preogress")]];
-	_listTemplate.delegate = self;
-	
-	[self.interfaceController pushTemplate:_listTemplate animated:YES];
+	[super present];
 	[self searchAndDisplayResult];
 }
 
-- (NSArray<CPListSection *> *) generateSingleItemSectionWithTitle:(NSString *)title
+- (NSArray<CPListSection *> *) generateSections
 {
-	CPListItem *item = [[CPListItem alloc] initWithText:title detailText:nil];
-	CPListSection *section = [[CPListSection alloc] initWithItems:@[item]];
-	return @[section];
+	return [self generateSingleItemSectionWithTitle:OALocalizedString(@"search_preogress")];
 }
 
 - (void) searchAndDisplayResult
@@ -128,38 +121,28 @@
 
 - (void) updateData:(NSArray<OAQuickSearchListItem *> *)data
 {
-	_searchItems = data;
-	[_listTemplate updateSections:[self generateSections]];
+	[self updateSections:[self generateSections:data]];
 }
 
-- (NSArray<CPListSection *> *) generateSections
+- (NSArray<CPListSection *> *) generateSections:(NSArray<OAQuickSearchListItem *> *)data
 {
 	NSMutableArray<CPListItem *> *items = [NSMutableArray new];
-	// Since the number of items is limited by the system, no need to do extra computations
-	NSInteger maximumItemsCount = MIN(500, _searchItems.count);
-	if (@available(iOS 14.0, *))
-		maximumItemsCount = MIN(CPListTemplate.maximumItemCount, _searchItems.count);
 	
-	
-	for (NSInteger i = 0; i < maximumItemsCount; i++)
+	if (data.count > 0)
 	{
-		OAQuickSearchListItem *item = _searchItems[i];
-		CPListItem *listItem = [self createListItem:item];
-		if (@available(iOS 14.0, *)) {
-			[listItem setHandler:^(id <CPSelectableListItem> item,
-								   dispatch_block_t completionBlock) {
-				[self listTemplate:_listTemplate didSelectListItem:item completionHandler:completionBlock];
-			}];
-			listItem.userInfo = @(i);
+		// Since the number of items is limited by the system, no need to do extra computations
+		NSInteger maximumItemsCount = MIN(500, data.count);
+		if (@available(iOS 14.0, *))
+			maximumItemsCount = MIN(CPListTemplate.maximumItemCount, data.count);
+		
+		for (NSInteger i = 0; i < maximumItemsCount; i++)
+		{
+			OAQuickSearchListItem *item = data[i];
+			[items addObject:[self createListItem:item]];
 		}
-		[items addObject:listItem];
-	}
-	
-	if (_searchItems.count > 0)
 		return @[[[CPListSection alloc] initWithItems:items header:nil sectionIndexTitle:nil]];
-	else
-		return [self generateSingleItemSectionWithTitle:OALocalizedString(@"nothing_found_empty")];
-	
+	}
+	return [self generateSingleItemSectionWithTitle:OALocalizedString(@"nothing_found_empty")];
 }
 
 - (CPListItem *) createListItem:(OAQuickSearchListItem *)item
@@ -174,7 +157,7 @@
 			{
 				OAPOI *poi = (OAPOI *)res.object;
 				CPListItem *listItem = [[CPListItem alloc] initWithText:item.getName detailText:[self generatePoiDescription:poi searchItem:item] image:poi.icon];
-				
+				listItem.userInfo = item;
 				return listItem;
 			}
 			default:
@@ -191,19 +174,24 @@
 	NSMutableString *res = [NSMutableString new];
 	NSString *typeName = [OAQuickSearchListItem getTypeName:item.getSearchResult];
 	OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:NO];
+	BOOL needsSeparator = NO;
 	
 	if (distDir && distDir.distance.length > 0)
 	{
 		[res appendString:distDir.distance];
+		needsSeparator = YES;
 	}
 	if (typeName.length > 0)
 	{
-		[res appendString:@" • "];
+		if (needsSeparator)
+			[res appendString:@" • "];
 		[res appendString:typeName];
+		needsSeparator = YES;
 	}
 	if (poi.hasOpeningHours)
 	{
-		[res appendString:@" • "];
+		if (needsSeparator)
+			[res appendString:@" • "];
 		[res appendString:poi.openingHours];
 	}
 	
@@ -214,14 +202,12 @@
 
 - (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
 {
-	NSNumber *indexNum = item.userInfo;
-	if (!indexNum)
+	OAQuickSearchListItem *searchItem = item.userInfo;
+	if (!searchItem)
 	{
 		completionHandler();
 		return;
 	}
-	NSInteger index = indexNum.integerValue;
-	OAQuickSearchListItem *searchItem = _searchItems[index];
 	CLLocation *loc = searchItem.getSearchResult.location;
 	[self startNavigationGivenLocation:loc];
 	[self.interfaceController popToRootTemplateAnimated:YES];

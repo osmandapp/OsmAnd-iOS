@@ -19,17 +19,11 @@
 
 #import <CarPlay/CarPlay.h>
 
-@interface OASearchCategoriesListController() <CPListTemplateDelegate>
-
-@end
-
 @implementation OASearchCategoriesListController
 {
-	CPListTemplate *_listTemplate;
-	
 	OAQuickSearchHelper *_quickSearchHelper;
 	
-	NSArray<OAQuickSearchListItem *> *_searchItems;
+	OACarPlayCategoryResultListController *_categoryResultController;
 }
 
 - (void) commonInit
@@ -37,41 +31,28 @@
 	_quickSearchHelper = OAQuickSearchHelper.instance;
 }
 
-- (void) present
+- (NSString *) screenTitle
 {
-	_listTemplate = [[CPListTemplate alloc] initWithTitle:OALocalizedString(@"poi_categories") sections:[self generateSections]];
-	_listTemplate.delegate = self;
-	[self.interfaceController pushTemplate:_listTemplate animated:YES];
+	return OALocalizedString(@"poi_categories");
 }
 
 - (NSArray<CPListSection *> *) generateSections
 {
 	OASearchResultCollection *res = [[_quickSearchHelper getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
-	NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
 	NSMutableArray<CPListItem *> *items = [NSMutableArray new];
 	if (res)
 	{
-		for (NSInteger i = 0; i < res.getCurrentSearchResults.count; i++)
-		{
-			OASearchResult *sr = res.getCurrentSearchResults[i];
+		[res.getCurrentSearchResults enumerateObjectsUsingBlock:^(OASearchResult * _Nonnull sr, NSUInteger idx, BOOL * _Nonnull stop) {
 			OAQuickSearchListItem *item = [[OAQuickSearchListItem alloc] initWithSearchResult:sr];
-			[rows addObject:item];
-			CPListItem *listItem = [self createListItem:item index:i];
-			if (@available(iOS 14.0, *)) {
-				[listItem setHandler:^(id <CPSelectableListItem> item,
-									  dispatch_block_t completionBlock) {
-					[self listTemplate:_listTemplate didSelectListItem:item completionHandler:completionBlock];
-				}];
-			}
+			CPListItem *listItem = [self createListItem:item];
 			[items addObject:listItem];
-		}
+		}];
 	}
-	_searchItems = rows;
 	CPListSection *section = [[CPListSection alloc] initWithItems:items header:nil sectionIndexTitle:nil];
 	return @[section];
 }
 
-- (CPListItem *) createListItem:(OAQuickSearchListItem *)item index:(NSInteger)index
+- (CPListItem *) createListItem:(OAQuickSearchListItem *)item
 {
 	OASearchResult *res = item.getSearchResult;
 	CPListItem *listItem = nil;
@@ -105,7 +86,7 @@
 	}
 	
 	if (listItem)
-		listItem.userInfo = @(index);
+		listItem.userInfo = item;
 	
 	return listItem;
 }
@@ -114,16 +95,14 @@
 
 - (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
 {
-	NSNumber *indexNum = item.userInfo;
-	if (!indexNum)
+	OAQuickSearchListItem *searchItem = item.userInfo;
+	if (!searchItem)
 	{
 		completionHandler();
 		return;
 	}
-	NSInteger index = indexNum.integerValue;
-	OAQuickSearchListItem *searchItem = _searchItems[index];
-	OACarPlayCategoryResultListController *results = [[OACarPlayCategoryResultListController alloc] initWithInterfaceController:self.interfaceController searchResult:searchItem.getSearchResult];
-	[results present];
+	_categoryResultController = [[OACarPlayCategoryResultListController alloc] initWithInterfaceController:self.interfaceController searchResult:searchItem.getSearchResult];
+	[_categoryResultController present];
 	
 	completionHandler();
 }

@@ -70,6 +70,7 @@
 
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Search";
+"address_search" = "Address search";
 "search_radius" = "Search radius";
 "targets" = "Destinations";
 "search_radius_proximity" = "Within";
@@ -182,6 +183,11 @@
 "configure_screen_descr" = "Select screen options for the profile";
 "map_markers" = "Map markers";
 "confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
+"map_markers_empty" = "You have no active map markers";
+"tracks_empty" = "Your track list is empty";
+"favorites_empty" = "You have not saved any favorite points";
+
+"carplay_active_message" = "Map is displayed via CarPlay";
 
 "show_traffic_warnings" = "Traffic warnings";
 "show_pedestrian_warnings" = "Pedestrian crosswalks";
@@ -354,6 +360,7 @@
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Error calculating route";
+"route_calc_progress" = "Calculating: %d%%";
 "internet_connection_required_for_online_route" = "An online navigation service is selected but no Internet connection is available.";
 "empty_route_calculated" = "Error: Calculated route is empty";
 "destination_point" = "Destination %@";
@@ -435,6 +442,7 @@
 "nearest_cities" = "Nearest cities";
 "type_address" = "Type address";
 "search_poi_category_hint" = "Type to search all";
+"poi_categories" = "POI categories";
 
 // Shared Strings
 "shared_string_apply" = "Apply";
@@ -1012,6 +1020,7 @@
 "closing_changeset" = "Closing changeset…";
 "commiting_node" = "Committing node…";
 "loading_poi_obj" = "Loading POI…";
+"shared_string_loading" = "Loading…";
 
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
@@ -1652,6 +1661,7 @@
 "no_inet_connection_desc_map" = "Required to download maps.";
 "try_again" = "Try again";
 
+"search_preogress" = "Searching…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Select another region";

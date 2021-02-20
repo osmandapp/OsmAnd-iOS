@@ -447,6 +447,11 @@
         [_mapLayers didReceiveMemoryWarning];
 }
 
+- (BOOL) isDisplayedInCarPlay
+{
+    return self.parentViewController != OARootViewController.instance.mapPanel;
+}
+
 #pragma mark - OAMapRendererDelegate
 
 - (void) frameRendered
@@ -3345,7 +3350,10 @@
     if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+            if (![self isDisplayedInCarPlay])
+            {
+                [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+            }
         });
     }
 }

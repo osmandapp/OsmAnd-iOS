@@ -71,10 +71,12 @@
     
     [self updateAttributes];
     _markerColors = @{ UIColorFromRGB(marker_pin_color_orange) : @"map_marker_direction_arrow_p2_color_pin_1",
-                       UIColorFromRGB(marker_pin_color_blue) : @"map_marker_direction_arrow_p2_color_pin_2",
+                       UIColorFromRGB(marker_pin_color_teal) : @"map_marker_direction_arrow_p2_color_pin_2",
                        UIColorFromRGB(marker_pin_color_green) : @"map_marker_direction_arrow_p2_color_pin_3",
                        UIColorFromRGB(marker_pin_color_red) : @"map_marker_direction_arrow_p2_color_pin_4",
-                       UIColorFromRGB(marker_pin_color_light_green) : @"map_marker_direction_arrow_p2_color_pin_5" };
+                       UIColorFromRGB(marker_pin_color_light_green) : @"map_marker_direction_arrow_p2_color_pin_5",
+                       UIColorFromRGB(marker_pin_color_purple) : @"map_marker_direction_arrow_p2_color_pin_6",
+                       UIColorFromRGB(marker_pin_color_blue) : @"map_marker_direction_arrow_p2_color_pin_7" };
     
     self.hidden = NO;
     self.opaque = NO;

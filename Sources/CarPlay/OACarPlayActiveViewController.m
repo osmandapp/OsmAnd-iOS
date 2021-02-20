@@ -13,7 +13,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	_messageLabel.text = OALocalizedString(@"carplay_active_message");
+    _messageLabel.text = OALocalizedString(@"carplay_active_message");
 }
 
 @end

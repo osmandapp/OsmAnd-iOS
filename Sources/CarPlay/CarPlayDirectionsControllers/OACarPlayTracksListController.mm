@@ -26,100 +26,100 @@
 
 - (NSString *)screenTitle
 {
-	return OALocalizedString(@"tracks");
+    return OALocalizedString(@"tracks");
 }
 
 - (NSArray<CPListSection *> *)generateSections
 {
-	return [self generateSingleItemSectionWithTitle:OALocalizedString(@"shared_string_loading")];
+    return [self generateSingleItemSectionWithTitle:OALocalizedString(@"shared_string_loading")];
 }
 
 - (void) present
 {
-	[super present];
-	[self populateListWithTracks];
+    [super present];
+    [self populateListWithTracks];
 }
 
 - (void) populateListWithTracks
 {
-	OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
-	[task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
-		[self updateList:gpxFolders];
-	}];
+    OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
+    [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {
+        [self updateList:gpxFolders];
+    }];
 }
 
 - (void) updateList:(NSDictionary<NSString *, NSArray<OAGpxInfo *> *> *)gpxByFolder
 {
-	NSMutableArray<CPListSection *> *sections = [NSMutableArray new];
-	if (gpxByFolder.count > 0)
-	{
-		[gpxByFolder enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSArray<OAGpxInfo *> * _Nonnull obj, BOOL * _Nonnull stop) {
-			NSMutableArray<CPListItem *> *items = [NSMutableArray new];
-			for (OAGpxInfo *info in obj)
-			{
-				CPListItem *item = [[CPListItem alloc] initWithText:info.getName detailText:[self getTrackDescription:info.gpx] image:[UIImage imageNamed:@"ic_custom_trip"]];
-				item.userInfo = info;
-				[items addObject:item];
-			}
-			[sections addObject:[[CPListSection alloc] initWithItems:items header:key sectionIndexTitle:[key substringToIndex:1]]];
-		}];
-	}
-	else
-	{
-		[self generateSingleItemSectionWithTitle:OALocalizedString(@"tracks_empty")];
-	}
-	[self updateSections:sections];
+    NSMutableArray<CPListSection *> *sections = [NSMutableArray new];
+    if (gpxByFolder.count > 0)
+    {
+        [gpxByFolder enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSArray<OAGpxInfo *> * _Nonnull obj, BOOL * _Nonnull stop) {
+            NSMutableArray<CPListItem *> *items = [NSMutableArray new];
+            for (OAGpxInfo *info in obj)
+            {
+                CPListItem *item = [[CPListItem alloc] initWithText:info.getName detailText:[self getTrackDescription:info.gpx] image:[UIImage imageNamed:@"ic_custom_trip"]];
+                item.userInfo = info;
+                [items addObject:item];
+            }
+            [sections addObject:[[CPListSection alloc] initWithItems:items header:key sectionIndexTitle:[key substringToIndex:1]]];
+        }];
+    }
+    else
+    {
+        [self generateSingleItemSectionWithTitle:OALocalizedString(@"tracks_empty")];
+    }
+    [self updateSections:sections];
 }
 
 - (NSString *) getTrackDescription:(OAGPX *)gpx
 {
-	NSMutableString *res = [NSMutableString new];
-	OsmAndAppInstance app = OsmAndApp.instance;
-	BOOL needsSeparator = NO;
-	if (!isnan(gpx.totalDistance) && gpx.totalDistance > 0)
-	{
-		[res appendString:[app getFormattedDistance:gpx.totalDistance]];
-		needsSeparator = YES;
-	}
-	if (!isnan(gpx.timeSpan) && gpx.timeSpan > 0)
-	{
-		if (needsSeparator)
-			[res appendString:@" • "];
-		[res appendString:[app getFormattedTimeInterval:gpx.timeSpan shortFormat:YES]];
-		needsSeparator = YES;
-	}
-	if (gpx.wptPoints > 0)
-	{
-		if (needsSeparator)
-			[res appendString:@" • "];
-		[res appendFormat:@"%@: %d", OALocalizedString(@"gpx_waypoints"), gpx.wptPoints];
-	}
-	return res;
+    NSMutableString *res = [NSMutableString new];
+    OsmAndAppInstance app = OsmAndApp.instance;
+    BOOL needsSeparator = NO;
+    if (!isnan(gpx.totalDistance) && gpx.totalDistance > 0)
+    {
+        [res appendString:[app getFormattedDistance:gpx.totalDistance]];
+        needsSeparator = YES;
+    }
+    if (!isnan(gpx.timeSpan) && gpx.timeSpan > 0)
+    {
+        if (needsSeparator)
+            [res appendString:@" • "];
+        [res appendString:[app getFormattedTimeInterval:gpx.timeSpan shortFormat:YES]];
+        needsSeparator = YES;
+    }
+    if (gpx.wptPoints > 0)
+    {
+        if (needsSeparator)
+            [res appendString:@" • "];
+        [res appendFormat:@"%@: %d", OALocalizedString(@"gpx_waypoints"), gpx.wptPoints];
+    }
+    return res;
 }
 
 // MARK: - CPListTemplateDelegate
 
 - (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
 {
-	OAGpxInfo *info = item.userInfo;
-	if (!info)
-	{
-		completionHandler();
-		return;
-	}
-	const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
-	if (activeGpx.find(QString::fromNSString(info.gpx.gpxFilepath)) == activeGpx.end())
-	{
-		[OAAppSettings.sharedManager showGpx:@[info.gpx.gpxFileName]];
-	}
-	[OARoutingHelper.sharedInstance setAppMode:OAApplicationMode.CAR];
-	[OARootViewController.instance.mapPanel.mapActions setGPXRouteParams:info.gpx];
-	CLLocation *loc = [[CLLocation alloc] initWithLatitude:info.gpx.locationEnd.getLatitude longitude:info.gpx.locationEnd.getLongitude];
-	[OATargetPointsHelper.sharedInstance navigateToPoint:loc updateRoute:YES intermediate:-1];
-	[OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:info.gpx from:nil fromName:nil useIntermediatePointsByDefault:NO showDialog:NO];
-	
-	[self.interfaceController popToRootTemplateAnimated:YES];
-	completionHandler();
+    OAGpxInfo *info = item.userInfo;
+    if (!info)
+    {
+        completionHandler();
+        return;
+    }
+    const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
+    if (activeGpx.find(QString::fromNSString(info.gpx.gpxFilepath)) == activeGpx.end())
+    {
+        [OAAppSettings.sharedManager showGpx:@[info.gpx.gpxFileName]];
+    }
+    [OARoutingHelper.sharedInstance setAppMode:OAApplicationMode.CAR];
+    [OARootViewController.instance.mapPanel.mapActions setGPXRouteParams:info.gpx];
+    CLLocation *loc = [[CLLocation alloc] initWithLatitude:info.gpx.locationEnd.getLatitude longitude:info.gpx.locationEnd.getLongitude];
+    [OATargetPointsHelper.sharedInstance navigateToPoint:loc updateRoute:YES intermediate:-1];
+    [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:info.gpx from:nil fromName:nil useIntermediatePointsByDefault:NO showDialog:NO];
+    
+    [self.interfaceController popToRootTemplateAnimated:YES];
+    completionHandler();
 }
 
 @end

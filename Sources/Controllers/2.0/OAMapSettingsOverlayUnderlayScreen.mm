@@ -115,8 +115,8 @@ static NSInteger kButtonsSection;
     _sqlitedbResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onSqlitedbResourcesChanged:) andObserve:[OAMapCreatorHelper sharedInstance].sqlitedbResourcesChangedObservable];
     
     _onlineMapSources = [NSMutableArray array];
-	
-	[self setupInitialState];
+    
+    [self setupInitialState];
 }
 
 - (void)deinit
@@ -125,12 +125,12 @@ static NSInteger kButtonsSection;
 
 - (void) setupInitialState
 {
-	if (_mapSettingType == EMapSettingOverlay)
-		_isEnabled = _app.data.overlayMapSource != nil;
-	else if (_mapSettingType == EMapSettingUnderlay)
-		_isEnabled = _app.data.underlayMapSource != nil;
-	else
-		_isEnabled = NO;
+    if (_mapSettingType == EMapSettingOverlay)
+        _isEnabled = _app.data.overlayMapSource != nil;
+    else if (_mapSettingType == EMapSettingUnderlay)
+        _isEnabled = _app.data.underlayMapSource != nil;
+    else
+        _isEnabled = NO;
 }
 
 - (void)setupView

@@ -182,8 +182,8 @@ typedef enum
     
     BOOL _reopenSettings;
     OAApplicationMode *_targetAppMode;
-	
-	OACarPlayActiveViewController *_carPlayActiveController;
+    
+    OACarPlayActiveViewController *_carPlayActiveController;
 }
 
 - (instancetype) init
@@ -3124,12 +3124,12 @@ typedef enum
 
 - (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset
 {
-	OAToolbarViewController *toolbar = [self getTopToolbar];
-	CGFloat topInset = 0.0;
-	if (toolbar && [toolbar.navBarView superview])
-		topInset = toolbar.navBarView.frame.size.height;
-	CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
-	[self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset];
+    OAToolbarViewController *toolbar = [self getTopToolbar];
+    CGFloat topInset = 0.0;
+    if (toolbar && [toolbar.navBarView superview])
+        topInset = toolbar.navBarView.frame.size.height;
+    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset];
 }
 
 - (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset

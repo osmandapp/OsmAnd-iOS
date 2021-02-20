@@ -16,37 +16,37 @@
 
 @implementation OABaseCarPlayListController
 {
-	CPListTemplate *_listTemplate;
+    CPListTemplate *_listTemplate;
 }
 
 
 - (NSString *) screenTitle
 {
-	return @""; // Override
+    return @""; // Override
 }
 
 - (void) present
 {
-	_listTemplate = [[CPListTemplate alloc] initWithTitle:self.screenTitle sections:[self generateSections]];
-	_listTemplate.delegate = self;
-	[self.interfaceController pushTemplate:_listTemplate animated:YES];
+    _listTemplate = [[CPListTemplate alloc] initWithTitle:self.screenTitle sections:[self generateSections]];
+    _listTemplate.delegate = self;
+    [self.interfaceController pushTemplate:_listTemplate animated:YES];
 }
 
 - (NSArray<CPListSection *> *) generateSections
 {
-	return @[]; // Override
+    return @[]; // Override
 }
 
 - (void) updateSections:(NSArray<CPListSection *> *)sections
 {
-	[_listTemplate updateSections:sections];
+    [_listTemplate updateSections:sections];
 }
 
 // MARK: - CPListTemplateDelegate
 
 - (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
 {
-	// Override
+    // Override
 }
 
 @end

@@ -15,53 +15,53 @@
 
 @implementation OACarPlayMarkersListController
 {
-	OADestinationsHelper *_destinationsHelper;
+    OADestinationsHelper *_destinationsHelper;
 }
 
 - (void) commonInit
 {
-	_destinationsHelper = OADestinationsHelper.instance;
+    _destinationsHelper = OADestinationsHelper.instance;
 }
 
 - (NSString *) screenTitle
 {
-	return OALocalizedString(@"map_markers");
+    return OALocalizedString(@"map_markers");
 }
 
 - (NSArray<CPListSection *> *) generateSections
 {
-	NSMutableArray<CPListItem *> *items = [NSMutableArray new];
-	if (_destinationsHelper.sortedDestinations.count > 0)
-	{
-		[_destinationsHelper.sortedDestinations enumerateObjectsUsingBlock:^(OADestination * _Nonnull destination, NSUInteger idx, BOOL * _Nonnull stop) {
-			NSString *imageName = destination.parking ? @"ic_parking_pin_small" : [destination.markerResourceName stringByAppendingString:@"_small"];
-			CPListItem *item = [[CPListItem alloc] initWithText:destination.desc detailText:nil image:[UIImage imageNamed:imageName]];
-			item.userInfo = destination;
-			[items addObject:item];
-		}];
-	}
-	else
-	{
-		[items addObject:[[CPListItem alloc] initWithText:OALocalizedString(@"map_markers_empty") detailText:nil]];
-	}
-	
-	return @[[[CPListSection alloc] initWithItems:items]];
+    NSMutableArray<CPListItem *> *items = [NSMutableArray new];
+    if (_destinationsHelper.sortedDestinations.count > 0)
+    {
+        [_destinationsHelper.sortedDestinations enumerateObjectsUsingBlock:^(OADestination * _Nonnull destination, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *imageName = destination.parking ? @"ic_parking_pin_small" : [destination.markerResourceName stringByAppendingString:@"_small"];
+            CPListItem *item = [[CPListItem alloc] initWithText:destination.desc detailText:nil image:[UIImage imageNamed:imageName]];
+            item.userInfo = destination;
+            [items addObject:item];
+        }];
+    }
+    else
+    {
+        [items addObject:[[CPListItem alloc] initWithText:OALocalizedString(@"map_markers_empty") detailText:nil]];
+    }
+    
+    return @[[[CPListSection alloc] initWithItems:items]];
 }
 
 // MARK: CPListTemplateDelegate
 
 - (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
 {
-	OADestination *destination = item.userInfo;
-	if (!destination)
-	{
-		completionHandler();
-		return;
-	}
-	[self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:destination.latitude longitude:destination.longitude]];
-	[self.interfaceController popToRootTemplateAnimated:YES];
-	
-	completionHandler();
+    OADestination *destination = item.userInfo;
+    if (!destination)
+    {
+        completionHandler();
+        return;
+    }
+    [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:destination.latitude longitude:destination.longitude]];
+    [self.interfaceController popToRootTemplateAnimated:YES];
+    
+    completionHandler();
 }
 
 @end

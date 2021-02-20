@@ -18,40 +18,40 @@
 
 - (instancetype) initWithInterfaceController:(CPInterfaceController *)interfaceController
 {
-	self = [super init];
-	if (self) {
-		_interfaceController = interfaceController;
-		[self commonInit];
-	}
-	return self;
+    self = [super init];
+    if (self) {
+        _interfaceController = interfaceController;
+        [self commonInit];
+    }
+    return self;
 }
 
 - (void) commonInit
 {
-	// override
+    // override
 }
 
 - (void) present
 {
-	// override
+    // override
 }
 
 - (void) startNavigationGivenLocation:(CLLocation *)loc
 {
-	if (loc)
-	{
-		// TODO: implement CarPlay app profile and use it instead
-		[OARoutingHelper.sharedInstance setAppMode:OAApplicationMode.CAR];
-		[OATargetPointsHelper.sharedInstance navigateToPoint:loc updateRoute:YES intermediate:-1];
-		[OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:NO showDialog:NO];
-	}
+    if (loc)
+    {
+        // TODO: implement CarPlay app profile and use it instead
+        [OARoutingHelper.sharedInstance setAppMode:OAApplicationMode.CAR];
+        [OATargetPointsHelper.sharedInstance navigateToPoint:loc updateRoute:YES intermediate:-1];
+        [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:NO showDialog:NO];
+    }
 }
 
 - (NSArray<CPListSection *> *) generateSingleItemSectionWithTitle:(NSString *)title
 {
-	CPListItem *item = [[CPListItem alloc] initWithText:title detailText:nil];
-	CPListSection *section = [[CPListSection alloc] initWithItems:@[item]];
-	return @[section];
+    CPListItem *item = [[CPListItem alloc] initWithText:title detailText:nil];
+    CPListSection *section = [[CPListSection alloc] initWithItems:@[item]];
+    return @[section];
 }
 
 @end

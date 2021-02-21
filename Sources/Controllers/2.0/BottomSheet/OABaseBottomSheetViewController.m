@@ -117,7 +117,9 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGFloat) buttonsViewHeight
 {
-    return 60.;
+    CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    bottomMargin = bottomMargin == 0 ? 9 : bottomMargin;
+    return 51 + bottomMargin;
 }
 
 - (CGFloat) getViewHeight
@@ -144,8 +146,9 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.origin.y = f.size.height - self.buttonsViewHeight - bottomMargin;
-        buttonsFrame.size.height = self.buttonsViewHeight + bottomMargin;
+        buttonsFrame.size.height = self.buttonsViewHeight;
         _buttonsView.frame = buttonsFrame;
+        _buttonsViewHeightConstraint.constant = self.buttonsViewHeight;
         
         CGRect contentFrame = _contentContainer.frame;
         contentFrame.size.height = f.size.height - buttonsFrame.size.height;
@@ -154,14 +157,15 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     }
     else
     {
-        CGRect buttonsFrame = _buttonsView.frame;
-        buttonsFrame.size.height = self.buttonsViewHeight + bottomMargin;
         f.size.height = [self getViewHeight];
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
         
+        CGRect buttonsFrame = _buttonsView.frame;
+        buttonsFrame.size.height = self.buttonsViewHeight;
         buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
         _buttonsView.frame = buttonsFrame;
+        _buttonsViewHeightConstraint.constant = self.buttonsViewHeight;
         
         CGRect contentFrame = _contentContainer.frame;
         contentFrame.size.height = f.size.height - buttonsFrame.size.height;

@@ -13,6 +13,7 @@
                 <outlet property="bottomSheetView" destination="qJc-MO-2cY" id="0Q3-Qo-Ea3"/>
                 <outlet property="buttonsSeparatorHeightConstraint" destination="Sbp-1h-11a" id="1za-4z-Vtv"/>
                 <outlet property="buttonsView" destination="Wg5-91-0hA" id="Mmj-Mg-17l"/>
+                <outlet property="buttonsViewHeightConstraint" destination="FNd-ti-KZD" id="smu-ef-ldF"/>
                 <outlet property="closeButton" destination="zUj-mw-mBr" id="TDb-YP-9rQ"/>
                 <outlet property="contentContainer" destination="ufI-sT-0Ac" id="3mU-Bv-gdT"/>
                 <outlet property="headerDividerView" destination="2WI-Sn-Wv2" id="2XY-ER-i0c"/>
@@ -137,7 +138,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wg5-91-0hA">
-                            <rect key="frame" x="0.0" y="448" width="414" height="94"/>
+                            <rect key="frame" x="0.0" y="482" width="414" height="60"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="17" translatesAutoresizingMaskIntoConstraints="NO" id="8zN-yK-hvp">
                                     <rect key="frame" x="16" y="9" width="382" height="42"/>
@@ -182,6 +183,7 @@
                             <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstItem="r1V-eM-Gj6" firstAttribute="leading" secondItem="Wg5-91-0hA" secondAttribute="leading" id="5jn-US-kwM"/>
+                                <constraint firstAttribute="height" constant="60" id="FNd-ti-KZD"/>
                                 <constraint firstItem="8zN-yK-hvp" firstAttribute="leading" secondItem="Wg5-91-0hA" secondAttribute="leading" constant="16" id="TwR-5c-vw4"/>
                                 <constraint firstAttribute="trailing" secondItem="8zN-yK-hvp" secondAttribute="trailing" constant="16" id="dIs-7W-evw"/>
                                 <constraint firstItem="8zN-yK-hvp" firstAttribute="top" secondItem="Wg5-91-0hA" secondAttribute="top" constant="9" id="iNg-O9-wYC"/>
@@ -193,7 +195,6 @@
                     <viewLayoutGuide key="safeArea" id="dn5-pz-8Hf"/>
                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <constraints>
-                        <constraint firstItem="dn5-pz-8Hf" firstAttribute="bottom" secondItem="Wg5-91-0hA" secondAttribute="top" priority="750" constant="60" id="5eK-6h-AJ6"/>
                         <constraint firstItem="Wg5-91-0hA" firstAttribute="trailing" secondItem="qJc-MO-2cY" secondAttribute="trailing" id="9cs-fS-aOg"/>
                         <constraint firstItem="Wg5-91-0hA" firstAttribute="trailing" secondItem="qJc-MO-2cY" secondAttribute="trailing" id="H9D-y7-Kw8"/>
                         <constraint firstItem="Wg5-91-0hA" firstAttribute="leading" secondItem="qJc-MO-2cY" secondAttribute="leading" id="HbO-wG-H5q"/>

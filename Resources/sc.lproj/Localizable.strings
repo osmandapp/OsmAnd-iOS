@@ -2003,3 +2003,12 @@
 "hide_compass_ruler" = "Cua su righellu de sa bùssola";
 "show_compass_ruler" = "Ammustra su righellu de sa bùssola";
 "map_widget_ruler_control" = "Medidura cun su raju";
+"search_preogress" = "Chirchende…";
+"shared_string_loading" = "Carrighende…";
+"poi_categories" = "Categorias de sos PDI";
+"route_calc_progress" = "Carculende: %d%%";
+"carplay_active_message" = "Sa mapa benit ammustrada pro mèdiu de CarPlay";
+"favorites_empty" = "No as sarvadu perunu puntu preferidu";
+"tracks_empty" = "Sa lista de rastas tua est bòida";
+"map_markers_empty" = "Non tenes perunu marcadore de mapa ativu";
+"address_search" = "Chirca de sos indiritzos";

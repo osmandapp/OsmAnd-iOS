@@ -25,6 +25,7 @@
 @property (nonatomic, readonly) CGFloat initialHeight;
 @property (nonatomic, readonly) CGFloat buttonsViewHeight;
 @property (nonatomic) BOOL isFullScreenAvailable;
+@property (nonatomic) BOOL isContentHeightChangable;
 
 - (void) onRightButtonPressed;
 

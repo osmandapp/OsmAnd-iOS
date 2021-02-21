@@ -99,6 +99,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     
     _currentState = EOAScrollableMenuStateInitial;
     _isFullScreenAvailable = YES;
+    _isContentHeightChangable = YES;
     
     [self applyLocalization];
     [self layoutSubviews];
@@ -365,7 +366,8 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             CGRect contentFrame = _contentContainer.frame;
             contentFrame.size.width = _bottomSheetView.bounds.size.width;
             contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
-            contentFrame.size.height = frame.size.height - buttonsFrame.size.height - contentFrame.origin.y;
+            if (_isContentHeightChangable)
+                contentFrame.size.height = frame.size.height - buttonsFrame.size.height - contentFrame.origin.y;
             _contentContainer.frame = contentFrame;
             
             CGFloat tableViewY = CGRectGetMaxY(_headerView.frame);

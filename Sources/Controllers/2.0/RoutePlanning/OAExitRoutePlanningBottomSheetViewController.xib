@@ -111,8 +111,8 @@
                                                         <action selector="closeButtonPressed:" destination="-1" eventType="touchUpInside" id="ZnB-8G-Eo1"/>
                                                     </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exit without saving?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xid-FU-OZT">
-                                                    <rect key="frame" x="62" y="12" width="290" height="20.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exit without saving?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xid-FU-OZT">
+                                                    <rect key="frame" x="16" y="12" width="336" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -120,7 +120,7 @@
                                             </subviews>
                                             <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstItem="Xid-FU-OZT" firstAttribute="centerX" secondItem="eVA-sk-3Sv" secondAttribute="centerX" id="5VB-g8-XIg"/>
+                                                <constraint firstItem="Xid-FU-OZT" firstAttribute="leading" secondItem="eVA-sk-3Sv" secondAttribute="leading" constant="16" id="C0K-5B-Xen"/>
                                                 <constraint firstAttribute="trailing" secondItem="eHt-m2-Iq4" secondAttribute="trailing" constant="16" id="Fq5-oX-6Dv"/>
                                                 <constraint firstAttribute="bottom" secondItem="Xid-FU-OZT" secondAttribute="bottom" constant="16.5" id="JFL-t5-N3M"/>
                                                 <constraint firstAttribute="bottom" secondItem="eHt-m2-Iq4" secondAttribute="bottom" constant="13.5" id="LjI-1v-FvT"/>
@@ -162,7 +162,7 @@
                                         <action selector="exitButtonPressed:" destination="-1" eventType="touchUpInside" id="x27-Om-HKA"/>
                                     </connections>
                                 </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Are you sure you want to close Plan route without saving? You will lost all changes." lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Von-GO-s5g">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Are you sure you want to close Plan route without saving? You will lost all changes." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Von-GO-s5g">
                                     <rect key="frame" x="16" y="69" width="382" height="36"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <nil key="textColor"/>

@@ -68,6 +68,7 @@
     self.shareButton.layer.cornerRadius = 9.;
     
     self.isFullScreenAvailable = NO;
+    self.isContentHeightChangable = NO;
     
     NSString *gpxTitle = _fileName.lastPathComponent.stringByDeletingPathExtension;
     NSString *titleString = [NSString stringWithFormat:OALocalizedString(@"track_is_saved"), gpxTitle];

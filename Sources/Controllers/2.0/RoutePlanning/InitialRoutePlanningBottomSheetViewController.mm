@@ -26,7 +26,7 @@
 #define kGPXRouteRoundCell @"OAGPXRouteRoundCell"
 #define kHeaderRoundCell @"OAHeaderRoundCell"
 
-#define kVerticalMargin 16.
+#define kVerticalMargin 18.
 #define kHorizontalMargin 20.
 #define kApproximateEmptyMenuHeight 250.
 #define kApproximateGpxHeaderHeight 38.
@@ -39,6 +39,7 @@
 @implementation InitialRoutePlanningBottomSheetViewController
 {
     NSArray<NSArray *> *_data;
+    CGFloat _separatorHeight;
 }
 
 - (instancetype) init
@@ -57,10 +58,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
-    self.tableView.sectionHeaderHeight = 16.;
-    self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-    self.tableView.contentInset = UIEdgeInsetsMake(-8, 0, 0, 0);
+    _separatorHeight = 1.0 / [UIScreen mainScreen].scale;
     
     [self.rightButton removeFromSuperview];
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
@@ -187,7 +185,7 @@
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
+            cell.separatorHeightConstraint.constant = _separatorHeight;
         }
         return cell;
     }
@@ -232,7 +230,7 @@
             cell.wptLabel.text = item[@"wpt"];
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
             cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-            cell.separatorHeightConstraint.constant = 1.0 / [UIScreen mainScreen].scale;
+            cell.separatorHeightConstraint.constant = _separatorHeight;
         }
         return cell;
     }
@@ -247,6 +245,11 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _data[section].count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return kVerticalMargin;
 }
 
 #pragma mark - UItableViewDelegate

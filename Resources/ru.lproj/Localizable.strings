@@ -1979,3 +1979,4 @@
 "visible" = "Видимые";
 "hide_compass_ruler" = "Скрыть компас линейку";
 "show_compass_ruler" = "Показать компас линейку";
+"address_search" = "Поиск адреса";

@@ -1423,3 +1423,9 @@
 "size_of_downloaded_data" = "缩放级别之间的巨大差异会增加下载数据的大小。";
 "online_sources" = "在线资源";
 "select_online_source" = "选择来源";
+
+// Route planning
+"plan_route" = "规划路线";
+"downloading" = "正在下载";
+"global_settings" = "全局设置";
+"empty_filename" = "文件名不能为空";

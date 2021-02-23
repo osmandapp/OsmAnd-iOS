@@ -172,21 +172,21 @@
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 
-- (NSString *) getGpxStoringPathByFullPath:(NSString *)fullFilePath
+- (NSString *) getGpxStoringPathByFullPath:(NSString *)filePath
 {
-    NSString *trackFolderName = [self getGPXFolderNameByFilePath:fullFilePath];
-    return [trackFolderName stringByAppendingPathComponent:fullFilePath.lastPathComponent];
+    NSString *trackFolderName = [self getFileDir:filePath];
+    return [trackFolderName stringByAppendingPathComponent:filePath.lastPathComponent];
 }
 
-- (NSString *) getGPXFolderNameByFilePath:(NSString *)path
+- (NSString *) getFileDir:(NSString *)filePath
 {
-    NSArray<NSString *> *pathComponents = [path componentsSeparatedByString:@"/"];
-    if (pathComponents.count > 3)
-        return [pathComponents[pathComponents.count - 3] isEqualToString:@"Documents"] ? @"" : pathComponents[pathComponents.count - 2];
-    else if (pathComponents.count == 2)
-        return pathComponents[pathComponents.count - 2];
-    else
-        return @"";
+    if (filePath.length < 25)
+    {
+        NSLog(filePath);
+    }
+    
+    NSString *pathToDelete = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
+    return [[filePath stringByReplacingOccurrencesOfString:pathToDelete withString:@""] stringByDeletingLastPathComponent];
 }
 
 -(BOOL)containsGPXItem:(NSString *)filePath

@@ -151,7 +151,7 @@
             // Check for updates every hour when the app is in the foreground
             _checkLiveTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckLiveIntervalHour target:self selector:@selector(performUpdateCheck) userInfo:nil repeats:YES];
             
-            // show map in carPlay if launched from the cold start
+            // show map in carPlay if it is a cold start
             if (@available(iOS 12.0, *)) {
                 if (_windowToAttach && _carPlayInterfaceController)
                 {

@@ -99,7 +99,7 @@
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2WI-Sn-Wv2">
                                             <rect key="frame" x="0.0" y="58" width="414" height="1"/>
-                                            <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="1" id="5UK-fc-EFD"/>
                                             </constraints>
@@ -127,8 +127,9 @@
                             </subviews>
                             <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wg5-91-0hA">
+                        <view contentMode="scaleToFill" id="Wg5-91-0hA">
                             <rect key="frame" x="0.0" y="448" width="414" height="94"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="17" translatesAutoresizingMaskIntoConstraints="NO" id="8zN-yK-hvp">
                                     <rect key="frame" x="16" y="9" width="382" height="42"/>
@@ -164,7 +165,7 @@
                                 </stackView>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r1V-eM-Gj6">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
-                                    <color key="backgroundColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="Sbp-1h-11a"/>
                                     </constraints>
@@ -184,7 +185,6 @@
                     <viewLayoutGuide key="safeArea" id="dn5-pz-8Hf"/>
                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <constraints>
-                        <constraint firstItem="dn5-pz-8Hf" firstAttribute="bottom" secondItem="Wg5-91-0hA" secondAttribute="top" priority="750" constant="60" id="5eK-6h-AJ6"/>
                         <constraint firstItem="Wg5-91-0hA" firstAttribute="trailing" secondItem="qJc-MO-2cY" secondAttribute="trailing" id="9cs-fS-aOg"/>
                         <constraint firstItem="Wg5-91-0hA" firstAttribute="trailing" secondItem="qJc-MO-2cY" secondAttribute="trailing" id="H9D-y7-Kw8"/>
                         <constraint firstItem="Wg5-91-0hA" firstAttribute="leading" secondItem="qJc-MO-2cY" secondAttribute="leading" id="HbO-wG-H5q"/>

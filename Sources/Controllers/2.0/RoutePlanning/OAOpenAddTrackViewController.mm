@@ -64,7 +64,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     _sortingMode = EOAModifiedDate;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
     if (_screenType == EOAAddToATrack)
@@ -195,6 +194,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kGPXTrackCell owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0, self.tableView.safeAreaInsets.left + kGPXCellTextLeftOffset, 0, 0);
+            cell.separatorView.hidden = YES;
         }
         if (cell)
         {
@@ -202,8 +202,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.distanceLabel.text = item[@"distance"];
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
-            cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
             cell.distanceImageView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.timeImageView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.wptImageView.tintColor = UIColorFromRGB(color_tint_gray);

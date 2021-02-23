@@ -90,10 +90,9 @@
 -(OAGPX *)buildGpxItem:(NSString *)fileName path:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
     OAGPX *gpx = [[OAGPX alloc] init];
-    NSString *pathToRemove = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
     gpx.bounds = bounds;
     gpx.gpxFileName = fileName;
-    gpx.gpxFilePath = [filePath stringByReplacingOccurrencesOfString:pathToRemove withString:@""];
+    gpx.gpxFilePath = [self getFileDir:filePath];
     title = [title length] != 0 ? title : nil;
     if (title)
         gpx.gpxTitle = title;

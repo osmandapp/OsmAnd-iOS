@@ -18,6 +18,8 @@
 
 #include <QtMath>
 
+#define kViewportXNonShifted 1.0
+
 @interface OACarPlayMapViewController ()
 
 @end
@@ -28,6 +30,7 @@
     OAMapViewController *_mapVc;
     
     CGFloat _cachedViewportX;
+    CGFloat _cachedViewportY;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -40,10 +43,27 @@
     return self;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self attachMapToWindow];
+    _cachedViewportY = _mapVc.mapView.viewportYScale;
+}
+
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    [self attachMapToWindow];
+    
+    UIEdgeInsets insets = _window.safeAreaInsets;
+    
+    CGFloat w = self.view.frame.size.width;
+    CGFloat h = self.view.frame.size.height;
+    
+    CGFloat widthOffset = insets.left / w;
+    CGFloat heightOffset = insets.top / h;
+    
+    _mapVc.mapView.viewportXScale = 1.0 + widthOffset;
+    _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
 }
 
 - (void) attachMapToWindow
@@ -67,6 +87,9 @@
 {
     if (_mapVc)
     {
+        _mapVc.mapView.viewportXScale = kViewportXNonShifted;
+        _mapVc.mapView.viewportYScale = _cachedViewportY;
+        
         [_mapVc.mapView suspendRendering];
         
         [_mapVc removeFromParentViewController];

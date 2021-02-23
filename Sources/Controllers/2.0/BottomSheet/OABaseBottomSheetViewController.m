@@ -119,17 +119,9 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGFloat) buttonsViewHeight
 {
-//    if ([OAUtilities isLandscape])
-//    {
-//        CGFloat bottomPadding = [OAUtilities getBottomMargin];
-//        return bottomPadding == 0 ? kButtonsHeightWithoutBottomPadding + kButtonsNoSafeAreaBottomPadding : kButtonsHeightWithoutBottomPadding;
-//    }
-//    else
-//    {
-        CGFloat bottomPadding = [OAUtilities getBottomMargin];
-        bottomPadding = bottomPadding == 0 ? kButtonsNoSafeAreaBottomPadding : bottomPadding;
-        return kButtonsHeightWithoutBottomPadding + bottomPadding;
-//    }
+    CGFloat bottomPadding = [OAUtilities getBottomMargin];
+    bottomPadding = bottomPadding == 0 ? kButtonsNoSafeAreaBottomPadding : bottomPadding;
+    return kButtonsHeightWithoutBottomPadding + bottomPadding;
 }
 
 - (CGFloat) getViewHeight

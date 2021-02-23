@@ -22,8 +22,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 @interface OABaseBottomSheetViewController () <UIGestureRecognizerDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *buttonsView;
-@property (weak, nonatomic) IBOutlet UIView *contentContainer;
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *sliderView;
 

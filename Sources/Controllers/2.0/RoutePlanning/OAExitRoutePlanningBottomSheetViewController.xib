@@ -40,7 +40,7 @@
                             <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MYX-dw-zcu">
-                            <rect key="frame" x="0.0" y="189" width="414" height="160"/>
+                            <rect key="frame" x="0.0" y="189" width="414" height="126"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nue-bd-tOV">
                                     <rect key="frame" x="16" y="74" width="382" height="42"/>
@@ -184,8 +184,7 @@
                     <viewLayoutGuide key="safeArea" id="JAP-oL-gmO"/>
                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <constraints>
-                        <constraint firstItem="JAP-oL-gmO" firstAttribute="bottom" secondItem="MYX-dw-zcu" secondAttribute="top" priority="750" constant="132" id="3O0-YA-S8N"/>
-                        <constraint firstAttribute="bottom" secondItem="MYX-dw-zcu" secondAttribute="bottom" id="EvF-fN-Dvi"/>
+                        <constraint firstItem="JAP-oL-gmO" firstAttribute="bottom" secondItem="MYX-dw-zcu" secondAttribute="bottom" id="EvF-fN-Dvi"/>
                         <constraint firstItem="MYX-dw-zcu" firstAttribute="top" secondItem="9ed-Gg-chO" secondAttribute="bottom" id="MVS-hi-Sfn"/>
                         <constraint firstItem="MYX-dw-zcu" firstAttribute="leading" secondItem="JAP-oL-gmO" secondAttribute="leading" id="etM-3o-uGv"/>
                         <constraint firstItem="MYX-dw-zcu" firstAttribute="trailing" secondItem="JAP-oL-gmO" secondAttribute="trailing" id="nqf-xx-51T"/>

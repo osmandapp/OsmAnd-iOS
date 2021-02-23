@@ -15,7 +15,7 @@
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
-#define kButttonsHeight 116.
+#define kButtonsHeightWithoutBottomPadding 116.0
 
 @interface OAExitRoutePlanningBottomSheetViewController ()
 
@@ -61,22 +61,70 @@
 
 - (CGFloat) initialHeight
 {
-    CGFloat width = DeviceScreenWidth - 2 * kHorizontalMargin;
+    CGFloat width;
+    if ([OAUtilities isLandscape])
+        width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
+    else
+        width = DeviceScreenWidth;
+    
     CGFloat headerHeight = self.headerView.frame.size.height;
-    CGFloat contentHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"plan_route_exit_message") width:width font:[UIFont systemFontOfSize:15.]].height + _exitButton.frame.size.height + kVerticalMargin * 2;
-    CGFloat buttonsHeight = 132. + [OAUtilities getBottomMargin];
+    CGFloat contentHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"plan_route_exit_message") width:width font:[UIFont systemFontOfSize:15.]].height;
+    contentHeight += _exitButton.frame.size.height + kVerticalMargin * 2;
+    CGFloat buttonsHeight = [self buttonsViewHeight];
     return headerHeight + contentHeight + buttonsHeight + kVerticalMargin * 2;
 }
 
 - (CGFloat) buttonsViewHeight
 {
-    CGFloat extraBottomOffset = [OAUtilities getBottomMargin] > 0 ? 0 : kVerticalMargin;
-    return kButttonsHeight + extraBottomOffset;
+    CGFloat bottomPadding = [OAUtilities getBottomMargin];
+    bottomPadding = bottomPadding == 0 ? kVerticalMargin : bottomPadding;
+    return kButtonsHeightWithoutBottomPadding + bottomPadding;
 }
 
 - (CGFloat) getViewHeight
 {
-    return self.initialHeight;
+    return [self initialHeight];
+}
+
+- (void) adjustFrame
+{
+    CGRect f = self.bottomSheetView.frame;
+    CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    if ([OAUtilities isLandscape])
+    {
+        f.size.height = [self getViewHeight];
+        f.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
+        f.origin = CGPointMake(DeviceScreenWidth/2 - f.size.width / 2, DeviceScreenHeight - f.size.height);
+
+        CGRect buttonsFrame = self.buttonsView.frame;
+        buttonsFrame.origin.y = f.size.height - self.buttonsViewHeight;
+        buttonsFrame.size.height = self.buttonsViewHeight;
+        buttonsFrame.size.width = f.size.width;
+        self.buttonsView.frame = buttonsFrame;
+
+        CGRect contentFrame = self.contentContainer.frame;
+        contentFrame.size.height = f.size.height - buttonsFrame.size.height;
+        contentFrame.origin = CGPointZero;
+        self.contentContainer.frame = contentFrame;
+    }
+    else
+    {
+        f.size.height = [self getViewHeight];
+        f.size.width = DeviceScreenWidth;
+        f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
+        
+        CGRect buttonsFrame = self.buttonsView.frame;
+        buttonsFrame.size.height = self.buttonsViewHeight;
+        buttonsFrame.size.width = f.size.width;
+        buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
+        self.buttonsView.frame = buttonsFrame;
+        
+        CGRect contentFrame = self.contentContainer.frame;
+        contentFrame.size.height = f.size.height - buttonsFrame.size.height;
+        contentFrame.origin = CGPointZero;
+        self.contentContainer.frame = contentFrame;
+    }
+    self.bottomSheetView.frame = f;
 }
 
 - (IBAction)exitButtonPressed:(id)sender
@@ -93,5 +141,15 @@
         [_delegate onSaveResultPressed];
 }
 
+#pragma mark - UIPanGestureRecognizer
+
+- (void) onDragged:(UIPanGestureRecognizer *)recognizer
+{
+    CGFloat heightBackup = self.contentContainer.frame.size.height;
+    [super onDragged: recognizer];
+    CGRect editedContentFrame = self.contentContainer.frame;
+    editedContentFrame.size.height = heightBackup;
+    self.contentContainer.frame = editedContentFrame;
+}
 
 @end

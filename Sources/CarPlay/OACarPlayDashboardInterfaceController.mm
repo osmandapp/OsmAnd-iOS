@@ -137,6 +137,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     _isInRoutePreview = YES;
     
+    if (_delegate)
+        [_delegate enterNavigationMode];
+    
     [self centerMapOnRoute];
 }
 
@@ -144,7 +147,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     _currentDirectionInfo = nil;
     [_navigationSession finishTrip];
+    _navigationSession = nil;
     [self enterBrowsingState];
+    
+    if (_delegate)
+        [_delegate exitNavigationMode];
 }
 
 - (void) centerMapOnRoute

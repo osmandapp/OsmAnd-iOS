@@ -17,6 +17,9 @@
 
 @interface OASelectTrackFolderViewController : OABaseTableViewController
 
-- (instancetype) initWithGPX:(OAGPX *)gpx delegate:(id<OASelectTrackFolderDelegate>)delegate;
+@property (nonatomic, weak) id<OASelectTrackFolderDelegate> delegate;
+
+- (instancetype) initWithGPX:(OAGPX *)gpx;
+
 
 @end

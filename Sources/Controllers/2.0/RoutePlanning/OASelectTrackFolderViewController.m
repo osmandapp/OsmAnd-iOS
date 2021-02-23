@@ -28,18 +28,16 @@
 
 @implementation OASelectTrackFolderViewController
 {
-    id<OASelectTrackFolderDelegate> _delegate;
     OAGPX *_gpx;
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype) initWithGPX:(OAGPX *)gpx delegate:(id<OASelectTrackFolderDelegate>)delegate;
+- (instancetype) initWithGPX:(OAGPX *)gpx
 {
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
         _gpx = gpx;
-        _delegate = delegate;
         [self reloadData];
     }
     return self;
@@ -69,7 +67,7 @@
     [data addObject:@[
         @{
             @"type" : kCellTypeAction,
-            @"title" : @"Add new folder",
+            @"title" : OALocalizedString(@"add_folder"),
             @"img" : @"ic_custom_add",
         },
     ]];
@@ -237,7 +235,7 @@
 {
     NSString *name = [fileName stringByDeletingPathExtension];
     NSString *newName = name;
-    int i = 2;
+    int i = 1;
     while ([[NSFileManager defaultManager] fileExistsAtPath:[[folderPath stringByAppendingPathComponent:newName] stringByAppendingPathExtension:@"gpx"]])
     {
         newName = [NSString stringWithFormat:@"%@ %i", name, i];

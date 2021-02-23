@@ -384,10 +384,12 @@ static UIViewController *parentController;
     
     OAGPXTrackAnalysis *analysis = [_doc getAnalysis:0];
     if (_newGpxName) {
-        item = [[OAGPXDatabase sharedDb] addGpxItem:_newGpxName path:_newGpxName title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        NSString *storingPathInRootFolder = _newGpxName;
+        item = [[OAGPXDatabase sharedDb] addGpxItem:_newGpxName path:storingPathInRootFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     } else {
         NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
-        item = [[OAGPXDatabase sharedDb] addGpxItem:name path:name title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        NSString *storingPathInRootFolder = name;
+        item = [[OAGPXDatabase sharedDb] addGpxItem:name path:storingPathInRootFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     }
     [[OAGPXDatabase sharedDb] save];
     [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
@@ -402,7 +404,6 @@ static UIViewController *parentController;
     }
     return item;
 }
-
 
 - (NSString *)getCorrectedFilename:(NSString *)filename
 {
@@ -1042,9 +1043,9 @@ static UIViewController *parentController;
     NSDictionary* item = [groupData.groupItems objectAtIndex:dataIndex];
     OAGPX *gpx = item[@"track"];
     if (sw.isOn)
-        [_settings showGpx:@[gpx.gpxFilePath] update:YES];
+        [_settings showGpx:@[gpx.gpxFilePath] update:NO];
     else if ([_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath])
-        [_settings hideGpx:@[gpx.gpxFilePath] update:YES];
+        [_settings hideGpx:@[gpx.gpxFilePath] update:NO];
     [self.gpxTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.gpxTableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [self.gpxTableView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
     return NO;

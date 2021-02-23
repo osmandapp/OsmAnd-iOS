@@ -956,7 +956,8 @@
 
 - (void) selectTrackClicked
 {
-    OASelectTrackFolderViewController *selectFolderView = [[OASelectTrackFolderViewController alloc] initWithGPX:_gpx delegate:self];
+    OASelectTrackFolderViewController *selectFolderView = [[OASelectTrackFolderViewController alloc] initWithGPX:_gpx];
+    selectFolderView.delegate = self;
     [[OARootViewController instance].mapPanel presentModalViewController:selectFolderView animated:YES];
 }
 
@@ -1508,8 +1509,9 @@
 
 - (void)showAlertWithText:(NSString *)text
 {
-   UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil, nil];
-   [alert show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:text preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - OASelectTrackFolderDelegate

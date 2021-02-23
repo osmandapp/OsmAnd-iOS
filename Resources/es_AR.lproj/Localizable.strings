@@ -2004,3 +2004,12 @@
 "map_widget_ruler_control" = "Regla radial";
 "tracks_on_map" = "Trazas en el mapa";
 "visible" = "Visible";
+"search_preogress" = "Buscando…";
+"shared_string_loading" = "Cargando…";
+"poi_categories" = "Categorías de PDI";
+"route_calc_progress" = "Calculando: %d%%";
+"carplay_active_message" = "El mapa se muestra a través de CarPlay";
+"favorites_empty" = "Ningún punto de favorito guardado";
+"tracks_empty" = "Lista de trazas vacía";
+"map_markers_empty" = "No existen marcadores de mapa activos";
+"address_search" = "Buscar dirección";

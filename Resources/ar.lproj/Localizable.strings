@@ -504,7 +504,7 @@
 "add_waypoint_short" = "إضافة إحداثية";
 "edit_waypoint_short" = "تحرير إحداثية";
 "more" = "More";
-"parking_marker" = "علامة وقوف السيارات";
+"parking_marker" = "موقف السيارة";
 "time_limited" = "وقت محدود";
 "pickup_car" = "سيارة بيك أب";
 "pickup_car_at" = "سيارة بيك أب في";
@@ -1745,7 +1745,7 @@
 "shared_string_exit" = "خروج";
 "import_routing_file_descr" = "يمكنك استيراد ملف التوجيه من أي تطبيق تخزين سحابي أو بوضعه في مجلد التوجيه في آيتوينز.";
 "osmand_routing" = "توجيه أوسماند";
-"select_nav_profile_dialog_message" = "يؤثر نوع التنقل على قواعد حسابات المسار.";
+"select_nav_profile_dialog_message" = "يؤثر نوع التنقل على كييفية حساب المسارات.";
 "vehicle_parameters" = "معلمات المركبات";
 "screen_alerts" = "تنبيهات الشاشة";
 "voice_anounces" = "إعلام صوتي";
@@ -1996,3 +1996,12 @@
 "open_saved_track" = "فتح المسار المحفوظ";
 "tracks_on_map" = "المسارات على الخريطة";
 "visible" = "مرئي";
+"search_preogress" = "جار البحث…";
+"shared_string_loading" = "جارٍ التحميل…";
+"poi_categories" = "فئات النقاط";
+"route_calc_progress" = "الحساب: %d%%";
+"carplay_active_message" = "يتم عرض الخريطة عبر CarPlay";
+"favorites_empty" = "لايوجد لديك نقاط مفضلة";
+"tracks_empty" = "قائمة المسارات فارغة";
+"map_markers_empty" = "لايوجد لديك توجيه مباشر نشط";
+"address_search" = "البحث عن عنوان";

@@ -26,6 +26,8 @@
 {
     CPWindow *_window;
     OAMapViewController *_mapVc;
+    
+    CGFloat _cachedViewportX;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -158,6 +160,18 @@
     CGFloat leftInset = viewWidth * 0.48;
     CGSize screenBBox = CGSizeMake(viewWidth - leftInset, self.view.frame.size.height - safeAreaInsets.top - safeAreaInsets.bottom);
     [[OARootViewController instance].mapPanel displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0. screenBBox:screenBBox bottomInset:safeAreaInsets.bottom leftInset:leftInset topInset:safeAreaInsets.top];
+}
+
+- (void) enterNavigationMode
+{
+    _cachedViewportX = _mapVc.mapView.viewportXScale;
+    _mapVc.mapView.viewportXScale = 1.5;
+}
+
+- (void) exitNavigationMode
+{
+    _mapVc.mapView.viewportXScale = _cachedViewportX;
+    _cachedViewportX = 1.0;
 }
 
 @end

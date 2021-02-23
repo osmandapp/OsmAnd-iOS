@@ -92,6 +92,8 @@
     
     BOOL _firstLaunch;
     std::map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
+    
+    BOOL _carPlayActive;
 }
 
 @synthesize dataPath = _dataPath;
@@ -128,6 +130,8 @@
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
+
+@synthesize carPlayActive = _carPlayActive;
 
 #if defined(OSMAND_IOS_DEV)
 @synthesize debugSettings = _debugSettings;

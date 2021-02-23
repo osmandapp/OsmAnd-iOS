@@ -104,9 +104,12 @@
     if ([settings getRadiusLevel] != 1)
         [_searchUICore updateSettings:[settings setRadiusLevel:1]];
     
-    OASearchResultCollection *result = [_searchUICore shallowSearch:OASearchAmenityByTypeAPI.class text:txt matcher:nil resortAll:YES removeDuplicates:YES];
-    
-    [self updateSearchResult:result];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        OASearchResultCollection *result = [_searchUICore shallowSearch:OASearchAmenityByTypeAPI.class text:txt matcher:nil resortAll:YES removeDuplicates:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateSearchResult:result];
+        });
+    });
 }
 
 - (void) updateSearchResult:(OASearchResultCollection *)res

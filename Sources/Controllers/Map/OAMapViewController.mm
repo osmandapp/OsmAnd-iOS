@@ -547,7 +547,7 @@
 {
     [super viewDidDisappear:animated];
     
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
         [_mapView suspendRendering];
@@ -592,7 +592,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
         [_mapView suspendRendering];
@@ -601,7 +601,7 @@
 
 - (void) applicationWillEnterForeground:(UIApplication*)application
 {
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Resume rendering
         [_mapView resumeRendering];
@@ -622,6 +622,9 @@
 
 - (void) showProgressHUD
 {
+    if (_app.carPlayActive)
+        return;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         BOOL wasVisible = NO;
         if (_progressHUD)

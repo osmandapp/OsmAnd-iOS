@@ -377,6 +377,8 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             CGFloat tableViewY = CGRectGetMaxY(_headerView.frame);
             _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
             
+            [self applyCornerRadius:self.headerView];
+            [self applyCornerRadius:self.contentContainer];
             return;
         }
         case UIGestureRecognizerStateEnded:

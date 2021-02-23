@@ -11,6 +11,8 @@
 
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
+#define kButtonsHeightWithoutBottomPadding 51.0
+#define kButtonsNoSafeAreaBottomPadding 9.0
 
 typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 {
@@ -117,9 +119,17 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGFloat) buttonsViewHeight
 {
-    CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    bottomMargin = bottomMargin == 0 ? 9 : bottomMargin;
-    return 51 + bottomMargin;
+    if ([OAUtilities isLandscape])
+    {
+        CGFloat bottomPadding = [OAUtilities getBottomMargin];
+        return bottomPadding == 0 ? kButtonsHeightWithoutBottomPadding + kButtonsNoSafeAreaBottomPadding : kButtonsHeightWithoutBottomPadding;
+    }
+    else
+    {
+        CGFloat bottomPadding = [OAUtilities getBottomMargin];
+        bottomPadding = bottomPadding == 0 ? kButtonsNoSafeAreaBottomPadding : bottomPadding;
+        return kButtonsHeightWithoutBottomPadding + bottomPadding;
+    }
 }
 
 - (CGFloat) getViewHeight
@@ -147,8 +157,8 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.origin.y = f.size.height - self.buttonsViewHeight - bottomMargin;
         buttonsFrame.size.height = self.buttonsViewHeight;
+        buttonsFrame.size.width = f.size.width;
         _buttonsView.frame = buttonsFrame;
-        _buttonsViewHeightConstraint.constant = self.buttonsViewHeight;
         
         CGRect contentFrame = _contentContainer.frame;
         contentFrame.size.height = f.size.height - buttonsFrame.size.height;
@@ -163,9 +173,9 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.size.height = self.buttonsViewHeight;
+        buttonsFrame.size.width = f.size.width;
         buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
         _buttonsView.frame = buttonsFrame;
-        _buttonsViewHeightConstraint.constant = self.buttonsViewHeight;
         
         CGRect contentFrame = _contentContainer.frame;
         contentFrame.size.height = f.size.height - buttonsFrame.size.height;

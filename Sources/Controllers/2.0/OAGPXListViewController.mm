@@ -766,9 +766,14 @@ static UIViewController *parentController;
 - (IBAction) goRootScreen:(id)sender
 {
     if (_popToParent)
+    {
         [super backButtonClicked:sender];
+    }
     else
+    {
+        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
         [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 - (void) updateRecButtonsAnimated

@@ -49,6 +49,8 @@
 
 @property(nonatomic) OAMapViewState* initialURLMapState;
 
+@property (nonatomic) BOOL carPlayActive;
+
 - (void) loadWorldRegions;
 
 - (void) saveDataToPermamentStorage;

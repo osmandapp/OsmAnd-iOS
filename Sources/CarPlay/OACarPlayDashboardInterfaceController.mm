@@ -370,88 +370,30 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (NSMeasurement<NSUnitLength *> *) getFormattedDistance:(int)meters
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    EOAMetricsConstant mc = [settings.metricSystem get];
+    NSString *distString = [OsmAndApp.instance getFormattedDistance:meters];
     
-    NSUnitLength *mainUnit;
-    float mainUnitInMeters;
-    if (mc == KILOMETERS_AND_METERS)
-    {
-        mainUnit = NSUnitLength.kilometers;
-        mainUnitInMeters = METERS_IN_KILOMETER;
-    }
-    else if (mc == NAUTICAL_MILES)
-    {
-        mainUnit = NSUnitLength.nauticalMiles;
-        mainUnitInMeters = METERS_IN_ONE_NAUTICALMILE;
-    }
-    else
-    {
-        mainUnit = NSUnitLength.miles;
-        mainUnitInMeters = METERS_IN_ONE_MILE;
-    }
-    
-    if (meters >= 100 * mainUnitInMeters)
-    {
-        return [[NSMeasurement alloc] initWithDoubleValue:(int)(meters / mainUnitInMeters + 0.5) unit:mainUnit];
-    }
-    else if (meters > 9.99f * mainUnitInMeters)
-    {
-        float num = meters / mainUnitInMeters;
-        return [[NSMeasurement alloc] initWithDoubleValue:num unit:mainUnit];
-    }
-    else if (meters > 0.999f * mainUnitInMeters && mc != NAUTICAL_MILES)
-    {
-        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnit];
-    }
-    else if (mc == MILES_AND_FEET && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:FOOTS_IN_ONE_METER])
-    {
-        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnit];
-    }
-    else if (mc == MILES_AND_METERS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:METERS_IN_ONE_METER])
-    {
-        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnit];
-    }
-    else if (mc == MILES_AND_YARDS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:YARDS_IN_ONE_METER])
-    {
-        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnit];
-    }
-    else if (mc == NAUTICAL_MILES && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:METERS_IN_ONE_METER])
-    {
-        return [self getMilesFormattedStringWithMeters:meters mainUnitInMeters:mainUnitInMeters mainUnitStr:mainUnit];
-    }
-    else
-    {
-        if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS || mc == NAUTICAL_MILES)
-        {
-            return [[NSMeasurement alloc] initWithDoubleValue:(int)(meters + 0.5) unit:NSUnitLength.meters];
-        }
-        else if (mc == MILES_AND_FEET)
-        {
-            int feet = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
-            return [[NSMeasurement alloc] initWithDoubleValue:feet unit:NSUnitLength.feet];
-        }
-        else if (mc == MILES_AND_YARDS)
-        {
-            int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
-            return [[NSMeasurement alloc] initWithDoubleValue:yards unit:NSUnitLength.yards];
-        }
-        return [[NSMeasurement alloc] initWithDoubleValue:((int) (meters + 0.5)) unit:NSUnitLength.meters];
-    }
+    NSArray<NSString *> *components = [distString componentsSeparatedByString:@" "];
+    if (components.count == 2)
+        return [[NSMeasurement alloc] initWithDoubleValue:components.firstObject.doubleValue unit:[self getUnitByString:components.lastObject]];
+    return nil;
 }
 
-- (NSMeasurement<NSUnitLength *> *) getMilesFormattedStringWithMeters:(float)meters mainUnitInMeters:(float)mainUnitInMeters mainUnitStr:(NSUnitLength *)mainUnit
+- (NSUnitLength *) getUnitByString:(NSString *)unitStr
 {
-    float num = meters / mainUnitInMeters;
-    return [[NSMeasurement alloc] initWithDoubleValue:num unit:mainUnit];
-}
-
-- (BOOL) isCleanValue:(float)meters inUnits:(float)unitsInOneMeter
-{
-    if ( int(meters) % int(METERS_IN_ONE_NAUTICALMILE) == 0)
-        return NO;
+    if ([unitStr isEqualToString:@"m"])
+        return NSUnitLength.meters;
+    else if ([unitStr isEqualToString:@"km"])
+        return NSUnitLength.kilometers;
+    else if ([unitStr isEqualToString:@"mi"])
+        return NSUnitLength.miles;
+    else if ([unitStr isEqualToString:@"yd"])
+        return NSUnitLength.yards;
+    else if ([unitStr isEqualToString:@"ft"])
+        return NSUnitLength.feet;
+    else if ([unitStr isEqualToString:@"nmi"])
+        return NSUnitLength.nauticalMiles;
     
-    return (int((meters * unitsInOneMeter) * 100) % 100) < 1;
+    return nil;
 }
 
 // MARK: Location service updates

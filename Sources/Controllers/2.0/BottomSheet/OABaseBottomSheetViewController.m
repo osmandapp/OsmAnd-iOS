@@ -119,17 +119,17 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGFloat) buttonsViewHeight
 {
-    if ([OAUtilities isLandscape])
-    {
-        CGFloat bottomPadding = [OAUtilities getBottomMargin];
-        return bottomPadding == 0 ? kButtonsHeightWithoutBottomPadding + kButtonsNoSafeAreaBottomPadding : kButtonsHeightWithoutBottomPadding;
-    }
-    else
-    {
+//    if ([OAUtilities isLandscape])
+//    {
+//        CGFloat bottomPadding = [OAUtilities getBottomMargin];
+//        return bottomPadding == 0 ? kButtonsHeightWithoutBottomPadding + kButtonsNoSafeAreaBottomPadding : kButtonsHeightWithoutBottomPadding;
+//    }
+//    else
+//    {
         CGFloat bottomPadding = [OAUtilities getBottomMargin];
         bottomPadding = bottomPadding == 0 ? kButtonsNoSafeAreaBottomPadding : bottomPadding;
         return kButtonsHeightWithoutBottomPadding + bottomPadding;
-    }
+//    }
 }
 
 - (CGFloat) getViewHeight
@@ -155,7 +155,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         f.origin = CGPointMake(DeviceScreenWidth/2 - f.size.width / 2, 0.);
         
         CGRect buttonsFrame = _buttonsView.frame;
-        buttonsFrame.origin.y = f.size.height - self.buttonsViewHeight - bottomMargin;
+        buttonsFrame.origin.y = f.size.height - self.buttonsViewHeight;
         buttonsFrame.size.height = self.buttonsViewHeight;
         buttonsFrame.size.width = f.size.width;
         _buttonsView.frame = buttonsFrame;

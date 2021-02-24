@@ -61,7 +61,7 @@
 
 - (CGFloat) initialHeight
 {
-    CGFloat width = DeviceScreenWidth - 2 * kHorizontalMargin;
+    CGFloat width = OAUtilities.isLandscape ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
     CGFloat headerHeight = self.headerView.frame.size.height;
     CGFloat contentHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"plan_route_exit_message") width:width font:[UIFont systemFontOfSize:15.]].height + _exitButton.frame.size.height + kVerticalMargin * 2;
     CGFloat buttonsHeight = 132. + [OAUtilities getBottomMargin];

@@ -72,6 +72,9 @@
     _currentState = EOADraggableMenuStateInitial;
     
     _sliderView.layer.cornerRadius = 3.;
+    
+    _closeButtonContainerView.layer.cornerRadius = 12.;
+    _doneButtonContainerView.layer.cornerRadius = 12.;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -154,6 +157,8 @@
     
     _sliderView.hidden = isLandscape;
     
+    _navbarLeadingConstraint.constant = isLandscape ? contentFrame.size.width : 0.;
+    
     CGFloat tableViewY = CGRectGetMaxY(_topHeaderContainerView.frame);
     _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
     
@@ -166,7 +171,7 @@
 
 - (CGFloat) additionalLandscapeOffset
 {
-    return 0.;
+    return OAUtilities.isIPad ? OAUtilities.getStatusBarHeight : 0.;
 }
 
 - (void) adjustFrame
@@ -186,8 +191,9 @@
         
         CGRect contentFrame = _contentContainer.frame;
         contentFrame.size.height = f.size.height - buttonsFrame.size.height;
-        contentFrame.origin = f.origin;
         _contentContainer.frame = contentFrame;
+        
+        _navbarLeadingConstraint.constant = contentFrame.size.width;
     }
     else
     {

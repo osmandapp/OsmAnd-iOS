@@ -136,11 +136,11 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 {
     CGRect f = _bottomSheetView.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    if ([OAUtilities isLandscape])
+    if (OAUtilities.isLandscape || OAUtilities.isIPad)
     {
-        f.size.height = DeviceScreenHeight;
+        f.size.height = OAUtilities.isIPad ? [self getViewHeight] : DeviceScreenHeight;
         f.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
-        f.origin = CGPointMake(DeviceScreenWidth/2 - f.size.width / 2, 0.);
+        f.origin = CGPointMake(DeviceScreenWidth/2 - f.size.width / 2, DeviceScreenHeight - f.size.height);
         
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.origin.y = f.size.height - self.buttonsViewHeight - bottomMargin;
@@ -157,7 +157,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.size.height = self.buttonsViewHeight + bottomMargin;
         f.size.height = [self getViewHeight];
-        f.size.width = DeviceScreenWidth;
+        f.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
         
         buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
@@ -182,7 +182,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 {
     [_tableView setContentOffset:CGPointZero];
     _isHiding = NO;
-    _currentState = OAUtilities.isLandscape ? EOAScrollableMenuStateFullScreen : EOAScrollableMenuStateInitial;
+    _currentState = EOAScrollableMenuStateInitial;
     [_tableView setScrollEnabled:_currentState == EOAScrollableMenuStateFullScreen];
     [self generateData];
     [self adjustFrame];
@@ -190,7 +190,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     if (animated)
     {
         CGRect frame = _bottomSheetView.frame;
-        if (OAUtilities.isLandscape)
+        if (OAUtilities.isLandscape || OAUtilities.isIPad)
         {
             frame.origin.x = DeviceScreenWidth/2 - frame.size.width / 2;
             frame.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
@@ -254,8 +254,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     if (_isHiding || _isDragging)
         return;
     [self adjustFrame];
-    
-    _currentState = OAUtilities.isLandscape ? EOAScrollableMenuStateFullScreen : _currentState;
+
     [_tableView setScrollEnabled:_currentState == EOAScrollableMenuStateFullScreen];
 
     CGRect contentFrame = _contentContainer.frame;
@@ -405,11 +404,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             break;
         }
     }
-}
-
-- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    return !OAUtilities.isLandscape;
 }
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer

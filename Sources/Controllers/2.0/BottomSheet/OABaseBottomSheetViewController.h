@@ -19,8 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIView *bottomSheetView;
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UIView *headerDividerView;
-@property (weak, nonatomic) IBOutlet UIView *buttonsView;
-@property (weak, nonatomic) IBOutlet UIView *contentContainer;
+@property (weak, nonatomic) IBOutlet UIView *buttonsSectionDividerView;
 
 - (void) presentInViewController:(UIViewController *)viewController;
 
@@ -29,7 +28,6 @@
 @property (nonatomic) BOOL isFullScreenAvailable;
 
 - (void) onRightButtonPressed;
-- (void) onDragged:(UIPanGestureRecognizer *)recognizer;
 
 @end
 

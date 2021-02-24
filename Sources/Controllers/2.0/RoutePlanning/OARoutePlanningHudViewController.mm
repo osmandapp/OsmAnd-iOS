@@ -256,7 +256,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (BOOL) isLandscape
 {
     if (OAUtilities.isIPad)
-        return OAUtilities.isLandscape && _hudMode != EOAHudModeMovePoint;
+        return OAUtilities.isLandscape && _hudMode == EOAHudModeRoutePlanning;
     return OAUtilities.isLandscape;
 }
 

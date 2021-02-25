@@ -162,17 +162,17 @@
         OADestination *secondMarkerDestination = (destinations.count >= 2 ? destinations[1] : nil);
         if (layer == _destinationLineSublayer)
         {
-            if ([_settings.directionLines get])
-            {
-                CLLocation *currLoc = [_app.locationServices lastKnownLocation];
-                if (currLoc)
-                {
-                    if (firstMarkerDestination)
-                        [self drawLine:firstMarkerDestination fromLocation:currLoc inContext:ctx];
-                    if (secondMarkerDestination && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
-                        [self drawLine:secondMarkerDestination fromLocation:currLoc inContext:ctx];
-                }
-            }
+//            if ([_settings.directionLines get])
+//            {
+//                CLLocation *currLoc = [_app.locationServices lastKnownLocation];
+//                if (currLoc)
+//                {
+//                    if (firstMarkerDestination)
+//                        [self drawLine:firstMarkerDestination fromLocation:currLoc inContext:ctx];
+//                    if (secondMarkerDestination && [_settings.activeMarkers get] == TWO_ACTIVE_MARKERS)
+//                        [self drawLine:secondMarkerDestination fromLocation:currLoc inContext:ctx];
+//                }
+//            }
             
             if ([_settings.arrowsOnMap get])
             {

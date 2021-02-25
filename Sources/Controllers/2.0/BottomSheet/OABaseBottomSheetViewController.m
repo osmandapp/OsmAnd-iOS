@@ -36,7 +36,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     CGFloat _initialTouchPoint;
     BOOL _isDragging;
     BOOL _isHiding;
-    BOOL _isDraggingUpAvailable;
 }
 
 - (instancetype) init
@@ -102,7 +101,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     
     _currentState = EOAScrollableMenuStateInitial;
     _isFullScreenAvailable = YES;
-    _isDraggingUpAvailable = YES;
     
     [self applyLocalization];
     [self layoutSubviews];
@@ -281,9 +279,9 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     [self applyCornerRadius:self.contentContainer];
 }
 
-- (void) setDraggingUpAvailable:(BOOL)available
+- (BOOL) isDraggingUpAvailable
 {
-    _isDraggingUpAvailable = available;
+    return YES;  // override
 }
 
 - (void) onRightButtonPressed
@@ -331,7 +329,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 - (void) onDragged:(UIPanGestureRecognizer *)recognizer
 {
     BOOL isDraggedUp = [recognizer translationInView:self.view].y < 0;
-    if (!_isDraggingUpAvailable && isDraggedUp)
+    if (!self.isDraggingUpAvailable && isDraggedUp)
         return;
     
     CGFloat velocity = [recognizer velocityInView:self.view].y;

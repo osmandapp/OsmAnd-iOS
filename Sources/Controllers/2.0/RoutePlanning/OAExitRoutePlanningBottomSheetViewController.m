@@ -61,7 +61,6 @@
     self.cancelButton.layer.cornerRadius = 9.;
     
     self.isFullScreenAvailable = NO;
-    [self setDraggingUpAvailable:NO];
 }
 
 - (void) applyLocalization
@@ -112,6 +111,11 @@
         @"textColor" : UIColor.whiteColor,
         @"action": @"saveButtonPressed"
     }];
+}
+
+- (BOOL) isDraggingUpAvailable
+{
+    return NO;
 }
 
 #pragma mark - Actions

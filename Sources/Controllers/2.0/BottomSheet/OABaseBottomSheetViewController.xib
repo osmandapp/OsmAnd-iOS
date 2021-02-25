@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OABaseBottomSheetViewController">
             <connections>
                 <outlet property="bottomSheetView" destination="qJc-MO-2cY" id="0Q3-Qo-Ea3"/>
+                <outlet property="buttonsSectionDividerView" destination="r1V-eM-Gj6" id="862-sW-vNf"/>
                 <outlet property="buttonsView" destination="Wg5-91-0hA" id="Mmj-Mg-17l"/>
                 <outlet property="closeButton" destination="zUj-mw-mBr" id="TDb-YP-9rQ"/>
                 <outlet property="contentContainer" destination="ufI-sT-0Ac" id="3mU-Bv-gdT"/>

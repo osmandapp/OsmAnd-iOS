@@ -13,7 +13,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OASizes.h"
-#import "OAColors.h"
+#import "OAColors.h"Sources/Controllers/2.0/RoutePlanning/OARoutePlanningHudViewController.mm
 
 @interface OABaseScrollableHudViewController () <UIScrollViewDelegate>
 
@@ -154,8 +154,6 @@
     
     _sliderView.hidden = isLandscape;
     
-    _navbarLeadingConstraint.constant = isLandscape ? contentFrame.size.width : 0.;
-    
     CGFloat tableViewY = CGRectGetMaxY(_topHeaderContainerView.frame);
     _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
     
@@ -189,8 +187,6 @@
         CGRect contentFrame = _contentContainer.frame;
         contentFrame.size.height = f.size.height - buttonsFrame.size.height;
         _contentContainer.frame = contentFrame;
-        
-        _navbarLeadingConstraint.constant = contentFrame.size.width;
     }
     else
     {

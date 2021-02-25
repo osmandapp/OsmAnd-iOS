@@ -22,8 +22,8 @@
                 <outlet property="expandButton" destination="1a9-hh-9hN" id="qtD-HP-Bpb"/>
                 <outlet property="leftImageVIew" destination="Aod-ON-ikl" id="hEe-Rf-FRm"/>
                 <outlet property="modeButton" destination="oTM-Ht-rdV" id="FkB-ug-cZZ"/>
-                <outlet property="navbarLeadingConstraint" destination="1gI-y2-IBh" id="Eg2-Cn-K1k"/>
-                <outlet property="navbarView" destination="7MD-Wz-F5G" id="V0v-Zv-vv2"/>
+                <outlet property="navbarLeadingConstraint" destination="1gI-y2-IBh" id="kvc-d3-gnf"/>
+                <outlet property="navbarView" destination="7MD-Wz-F5G" id="1fQ-OZ-X3X"/>
                 <outlet property="optionsButton" destination="OjE-FK-TpN" id="2Sa-49-Amu"/>
                 <outlet property="progressView" destination="zFE-tM-QGM" id="rQT-Gg-kRR"/>
                 <outlet property="redoButton" destination="FIz-se-4BK" id="Tju-by-mBp"/>

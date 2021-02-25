@@ -99,6 +99,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 @property (weak, nonatomic) IBOutlet UIView *actionButtonsContainer;
 @property (weak, nonatomic) IBOutlet UIButton *modeButton;
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
+@property (weak, nonatomic) IBOutlet UIView *navbarView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
 
 @end
 
@@ -221,7 +223,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self adjustMapViewPort];
     [self changeMapRulerPosition];
     [self adjustActionButtonsPosition:self.getViewHeight];
-    
+    [self adjustNavbarPosition];
+
     self.tableView.userInteractionEnabled = YES;
     [self.view bringSubviewToFront:self.tableView];
     
@@ -327,6 +330,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
     if (mapView.viewportYScale != _cachedYViewPort)
         mapView.viewportYScale = _cachedYViewPort;
+}
+
+- (void) adjustNavbarPosition
+{
+    _navbarLeadingConstraint.constant = [self isLeftSidePresentation] ? self.scrollableView.frame.size.width : 0.;
 }
 
 - (void) updateDistancePointsText
@@ -909,6 +917,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];
     [self adjustMapViewPort];
+    [self adjustNavbarPosition];
 }
 
 - (void) onPointsListChanged

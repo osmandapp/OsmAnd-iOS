@@ -20,8 +20,6 @@ typedef NS_ENUM(NSInteger, EOADraggableMenuState)
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *toolBarView;
 @property (weak, nonatomic) IBOutlet UIView *scrollableView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *navbarLeadingConstraint;
-@property (weak, nonatomic) IBOutlet UIView *navbarView;
 
 @property (nonatomic, readonly) CGFloat initialMenuHeight;
 @property (nonatomic, readonly) CGFloat expandedMenuHeight;

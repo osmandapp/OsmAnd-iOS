@@ -11,7 +11,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATextLineViewCell.h"
-#import "OAButtonMenuCell.h"
+#import "OAFilledButtonCell.h"
 
 #define kOABottomSheetWidth 320.
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -20,7 +20,7 @@
 #define kButtonsVerticalMargin 32.
 #define kHorizontalMargin 20.
 #define kLabelCell @"OATextLineViewCell"
-#define kButtonCell @"OAButtonMenuCell"
+#define kButtonCell @"OAFilledButtonCell"
 
 @interface OAExitRoutePlanningBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -35,7 +35,6 @@
 {
     NSMutableArray<NSDictionary *> *_data;
 }
-
 
 - (instancetype) init
 {
@@ -167,21 +166,26 @@
     }
     else if ([type isEqualToString:kButtonCell])
     {
-        OAButtonMenuCell* cell = nil;
-        cell = [self.tableView dequeueReusableCellWithIdentifier:kButtonCell];
+        OAFilledButtonCell* cell;
+        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:kButtonCell];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kButtonCell owner:self options:nil];
-            cell = (OAButtonMenuCell *)[nib objectAtIndex:0];
+            cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
         }
         if (cell)
         {
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             [cell.button setBackgroundColor:item[@"buttonColor"]];
             [cell.button setTitleColor:item[@"textColor"] forState:UIControlStateNormal];
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
-            [cell.button addTarget:self action:NSSelectorFromString(item[@"action"]) forControlEvents:UIControlEventTouchDown];
             cell.button.layer.cornerRadius = 9.;
+            cell.topMarginConstraint.constant = 0;
+            cell.bottomMarginConstraint.constant = 0;
+            
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.button addTarget:self action:NSSelectorFromString(item[@"action"]) forControlEvents:UIControlEventTouchDown];
         }
         return cell;
     }
@@ -199,6 +203,14 @@
         return kButtonsVerticalMargin;
     else
         return kLabelVerticalMargin;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
+        return UITableViewAutomaticDimension;
+    else
+        return 42;
 }
 
 @end

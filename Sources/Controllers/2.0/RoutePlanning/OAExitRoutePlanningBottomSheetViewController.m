@@ -62,6 +62,7 @@
     self.cancelButton.layer.cornerRadius = 9.;
     
     self.isFullScreenAvailable = NO;
+    self.isDraggingUpAvailable = NO;
 }
 
 - (void) applyLocalization

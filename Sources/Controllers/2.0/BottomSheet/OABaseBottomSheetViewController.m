@@ -101,6 +101,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     
     _currentState = EOAScrollableMenuStateInitial;
     _isFullScreenAvailable = YES;
+    _isDraggingUpAvailable = YES;
     
     [self applyLocalization];
     [self layoutSubviews];
@@ -324,6 +325,10 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (void) onDragged:(UIPanGestureRecognizer *)recognizer
 {
+    BOOL isDraggedUp = [recognizer translationInView:self.view].y < 0;
+    if (!self.isDraggingUpAvailable && isDraggedUp)
+        return;
+    
     CGFloat velocity = [recognizer velocityInView:self.view].y;
     BOOL fastUpSlide = velocity < -1000.;
     BOOL fastDownSlide = velocity > 1500.;

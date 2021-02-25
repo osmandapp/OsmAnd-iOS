@@ -136,7 +136,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 {
     CGRect f = _bottomSheetView.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    if (OAUtilities.isLandscape || OAUtilities.isIPad)
+    if (OAUtilities.isLandscapeIpadAware)
     {
         f.size.height = OAUtilities.isIPad ? [self getViewHeight] : DeviceScreenHeight;
         f.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
@@ -157,7 +157,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.size.height = self.buttonsViewHeight + bottomMargin;
         f.size.height = [self getViewHeight];
-        f.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : DeviceScreenWidth;
+        f.size.width = OAUtilities.isIPad && !OAUtilities.isWindowed ? kOABottomSheetWidthIPad : DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
         
         buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
@@ -190,7 +190,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     if (animated)
     {
         CGRect frame = _bottomSheetView.frame;
-        if (OAUtilities.isLandscape || OAUtilities.isIPad)
+        if (OAUtilities.isLandscapeIpadAware)
         {
             frame.origin.x = DeviceScreenWidth/2 - frame.size.width / 2;
             frame.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;

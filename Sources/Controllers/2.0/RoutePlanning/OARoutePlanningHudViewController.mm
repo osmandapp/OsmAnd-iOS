@@ -83,7 +83,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     OAOpenAddTrackDelegate, OASaveTrackViewControllerDelegate, OAExitRoutePlanningDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *centerImageView;
+@property (weak, nonatomic) IBOutlet UIView *closeButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
+@property (weak, nonatomic) IBOutlet UIView *doneButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *optionsButton;
@@ -205,6 +207,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _centerImageView.image = [UIImage imageNamed:@"ic_ruler_center.png"];
     [self changeCenterOffset:[self getViewHeight]];
     
+    _closeButtonContainerView.layer.cornerRadius = 12.;
+    _doneButtonContainerView.layer.cornerRadius = 12.;
+    
     [_closeButton setImage:[[UIImage imageNamed:@"ic_navbar_close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     _closeButton.imageView.tintColor = UIColor.whiteColor;
     
@@ -253,10 +258,10 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return NO;
 }
 
-- (BOOL) isLandscape
+- (BOOL) isLeftSidePresentation
 {
     if (OAUtilities.isIPad)
-        return OAUtilities.isLandscape && _hudMode == EOAHudModeRoutePlanning;
+        return OAUtilities.isLandscape && _hudMode == EOAHudModeRoutePlanning && !OAUtilities.isWindowed;
     return OAUtilities.isLandscape;
 }
 
@@ -272,7 +277,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void) adjustActionButtonsPosition:(CGFloat)height
 {
     CGRect buttonsFrame = _actionButtonsContainer.frame;
-    if ([self isLandscape])
+    if ([self isLeftSidePresentation])
         buttonsFrame.origin = CGPointMake(self.scrollableView.frame.size.width, DeviceScreenHeight - buttonsFrame.size.height - 15. - OAUtilities.getBottomMargin);
     else
         buttonsFrame.origin = CGPointMake(0., DeviceScreenHeight - height - buttonsFrame.size.height - 15.);
@@ -281,14 +286,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void) changeMapRulerPosition
 {
-    CGFloat bottomMargin = [self isLandscape] ? kDefaultMapRulerMarginBottom : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
-    CGFloat leftMargin = [self isLandscape] ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 + self.actionButtonsContainer.frame.size.width : kDefaultMapRulerMarginLeft;
+    CGFloat bottomMargin = [self isLeftSidePresentation] ? kDefaultMapRulerMarginBottom : (-self.getViewHeight + OAUtilities.getBottomMargin - 25.);
+    CGFloat leftMargin = [self isLeftSidePresentation] ? self.scrollableView.frame.size.width - OAUtilities.getLeftMargin + 16.0 + self.actionButtonsContainer.frame.size.width : kDefaultMapRulerMarginLeft;
     [_mapPanel targetSetMapRulerPosition:bottomMargin left:leftMargin];
 }
 
 - (void) changeCenterOffset:(CGFloat)contentHeight
 {
-    if ([self isLandscape])
+    if ([self isLeftSidePresentation])
     {
         _centerImageView.center = CGPointMake(DeviceScreenWidth * 0.75,
                                         self.view.frame.size.height * 0.5);
@@ -303,7 +308,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)adjustMapViewPort
 {
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    if ([self isLandscape])
+    if ([self isLeftSidePresentation])
     {
         mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
         mapView.viewportYScale = VIEWPORT_NON_SHIFTED_SCALE;
@@ -401,7 +406,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)centerMapOnBBox:(OAGpxBounds)routeBBox
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    BOOL landscape = [self isLandscape];
+    BOOL landscape = [self isLeftSidePresentation];
     [mapPanel displayAreaOnMap:routeBBox.topLeft bottomRight:routeBBox.bottomRight zoom:0 bottomInset:!landscape ? self.getViewHeight : 0 leftInset:landscape ? self.tableView.frame.size.width : 0];
 }
 
@@ -900,7 +905,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)onViewHeightChanged:(CGFloat)height
 {
     [self changeCenterOffset:height];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLandscape] ? 0. : (height - ([OAUtilities isIPad] ? 0. : 30.)) animated:YES];
+    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self isLeftSidePresentation] ? 0. : (height - ([OAUtilities isIPad] ? 0. : 30.)) animated:YES];
     [self adjustActionButtonsPosition:height];
     [self changeMapRulerPosition];
     [self adjustMapViewPort];

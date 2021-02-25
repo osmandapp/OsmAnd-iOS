@@ -14,11 +14,11 @@
                 <outlet property="addPointButton" destination="EvX-Tp-Ber" id="S3h-JD-9vk"/>
                 <outlet property="centerImageView" destination="Lff-A9-ANx" id="dxe-VS-K1c"/>
                 <outlet property="closeButton" destination="onx-Gz-iEg" id="jlc-6l-4af"/>
-                <outlet property="closeButtonContainerView" destination="2JT-lW-dRA" id="U8V-YL-lgB"/>
+                <outlet property="closeButtonContainerView" destination="2JT-lW-dRA" id="Nd8-pt-72f"/>
                 <outlet property="contentContainer" destination="jw8-H4-X89" id="Hbo-xs-1cx"/>
                 <outlet property="descriptionLabel" destination="2s5-50-fXV" id="QyB-fE-Zq6"/>
                 <outlet property="doneButton" destination="fzm-by-GwC" id="TLk-p8-YWs"/>
-                <outlet property="doneButtonContainerView" destination="cZ1-QP-9LE" id="sCS-ur-Ajf"/>
+                <outlet property="doneButtonContainerView" destination="cZ1-QP-9LE" id="GN4-eV-3m1"/>
                 <outlet property="expandButton" destination="1a9-hh-9hN" id="qtD-HP-Bpb"/>
                 <outlet property="leftImageVIew" destination="Aod-ON-ikl" id="hEe-Rf-FRm"/>
                 <outlet property="modeButton" destination="oTM-Ht-rdV" id="FkB-ug-cZZ"/>

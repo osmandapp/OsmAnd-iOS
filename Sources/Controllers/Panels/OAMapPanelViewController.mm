@@ -97,6 +97,7 @@
 #import "OAMapLayers.h"
 #import "OAFavoritesLayer.h"
 #import "OAImpassableRoadsLayer.h"
+#import "OACarPlayActiveViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -181,6 +182,8 @@ typedef enum
     
     BOOL _reopenSettings;
     OAApplicationMode *_targetAppMode;
+    
+    OACarPlayActiveViewController *_carPlayActiveController;
 }
 
 - (instancetype) init
@@ -3125,7 +3128,12 @@ typedef enum
     CGFloat topInset = 0.0;
     if (toolbar && [toolbar.navBarView superview])
         topInset = toolbar.navBarView.frame.size.height;
+    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:zoom screenBBox:screenBBox bottomInset:bottomInset leftInset:leftInset topInset:topInset];
+}
 
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom screenBBox:(CGSize)screenBBox bottomInset:(float)bottomInset leftInset:(float)leftInset topInset:(float)topInset
+{
     OAGpxBounds bounds;
     bounds.topLeft = topLeft;
     bounds.bottomRight = bottomRight;
@@ -3136,8 +3144,7 @@ typedef enum
         return;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-
-    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
+	
     _targetZoom = (zoom <= 0 ? [self getZoomForBounds:bounds mapSize:screenBBox] : zoom);
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
     
@@ -3716,6 +3723,24 @@ typedef enum
 
 - (void) routeWasFinished
 {
+}
+
+#pragma mark - CarPlay related actions
+
+- (void) onCarPlayConnected
+{
+    _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
+    _carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:_carPlayActiveController animated:YES completion:nil];
+}
+
+- (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete
+{
+    [_carPlayActiveController dismissViewControllerAnimated:YES completion:^{
+        _carPlayActiveController = nil;
+        if (onComplete)
+            onComplete();
+    }];
 }
 
 @end

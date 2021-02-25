@@ -447,6 +447,11 @@
         [_mapLayers didReceiveMemoryWarning];
 }
 
+- (BOOL) isDisplayedInCarPlay
+{
+    return self.parentViewController != OARootViewController.instance.mapPanel;
+}
+
 #pragma mark - OAMapRendererDelegate
 
 - (void) frameRendered
@@ -542,7 +547,7 @@
 {
     [super viewDidDisappear:animated];
     
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
         [_mapView suspendRendering];
@@ -587,7 +592,7 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Suspend rendering
         [_mapView suspendRendering];
@@ -596,7 +601,7 @@
 
 - (void) applicationWillEnterForeground:(UIApplication*)application
 {
-    if (self.mapViewLoaded)
+    if (self.mapViewLoaded && !_app.carPlayActive)
     {
         // Resume rendering
         [_mapView resumeRendering];
@@ -617,6 +622,9 @@
 
 - (void) showProgressHUD
 {
+    if (_app.carPlayActive)
+        return;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         BOOL wasVisible = NO;
         if (_progressHUD)
@@ -3345,7 +3353,10 @@
     if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+            if (![self isDisplayedInCarPlay])
+            {
+                [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+            }
         });
     }
 }

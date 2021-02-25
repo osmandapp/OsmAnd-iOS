@@ -36,7 +36,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gLZ-F8-d1B">
-                                <rect key="frame" x="16" y="11" width="241" height="21"/>
+                                <rect key="frame" x="16" y="11" width="233" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -57,7 +57,7 @@
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_trip.png" translatesAutoresizingMaskIntoConstraints="NO" id="LqT-JX-834">
-                                <rect key="frame" x="265" y="20" width="30" height="30"/>
+                                <rect key="frame" x="257" y="20" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="30" id="Kqq-7o-zD7"/>
                                     <constraint firstAttribute="height" constant="30" id="MTd-k5-EcT"/>
@@ -83,14 +83,13 @@
                                 <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="ETz-0s-2SQ"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="hTF-mb-i1M"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="3gt-VC-wOR" secondAttribute="trailing" id="0Tr-Vx-AWD"/>
-                            <constraint firstAttribute="trailing" secondItem="LqT-JX-834" secondAttribute="trailing" constant="8" id="8hv-Lr-KhC"/>
+                            <constraint firstAttribute="trailing" secondItem="LqT-JX-834" secondAttribute="trailing" constant="16" id="8hv-Lr-KhC"/>
                             <constraint firstItem="4if-Cu-dlA" firstAttribute="top" secondItem="gLZ-F8-d1B" secondAttribute="bottom" constant="4" id="ChF-5f-KI1"/>
                             <constraint firstItem="SOu-J2-sIb" firstAttribute="top" secondItem="gLZ-F8-d1B" secondAttribute="bottom" constant="8" symbolic="YES" id="DSf-cz-MSS"/>
                             <constraint firstItem="sMc-Cm-HCw" firstAttribute="top" secondItem="gLZ-F8-d1B" secondAttribute="bottom" constant="8" symbolic="YES" id="Fgx-ps-gmV"/>
@@ -126,6 +125,7 @@
                 <outlet property="distanceLabel" destination="SOu-J2-sIb" id="DXU-s8-9Si"/>
                 <outlet property="fileName" destination="gLZ-F8-d1B" id="hMv-aJ-vMG"/>
                 <outlet property="rightIconImageVIew" destination="LqT-JX-834" id="eFF-S9-dKb"/>
+                <outlet property="separatorHeightConstraint" destination="ETz-0s-2SQ" id="mWa-wP-Tbb"/>
                 <outlet property="separatorView" destination="3gt-VC-wOR" id="EIj-di-Haw"/>
                 <outlet property="timeImageView" destination="2dZ-ec-SQ0" id="3RS-y6-X4O"/>
                 <outlet property="timeLabel" destination="YAZ-sX-f1S" id="2OZ-02-Pha"/>

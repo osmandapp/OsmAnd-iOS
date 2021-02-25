@@ -1963,7 +1963,6 @@
 "next_seg_dist" = "Следующий сегмент %@";
 "whole_track" = "Весь трек";
 "next_seg" = "Следующий сегмент";
-
 "quick_action_showhide_mapillary_title" = "Показать/скрыть Mapillary";
 "quick_action_mapillary_show" = "Показать Mapillary";
 "quick_action_remove_next_destination" = "Удалить ближайший пункт";
@@ -1976,3 +1975,8 @@
 "reverse_route" = "Обратный маршрут";
 "profile_type_osmand_string" = "Профиль OsmAnd";
 "quick_action_remove_next_destination_descr" = "Следующая точка маршрута будет удалена. Если это конечный пункт, навигация завершится.";
+"gpx_export_failed" = "Не удалось сохранить созданный маршрут";
+"visible" = "Видимые";
+"hide_compass_ruler" = "Скрыть компас линейку";
+"show_compass_ruler" = "Показать компас линейку";
+"address_search" = "Поиск адреса";

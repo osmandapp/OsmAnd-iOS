@@ -19,12 +19,14 @@
 @property (weak, nonatomic) IBOutlet UIView *bottomSheetView;
 @property (weak, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UIView *headerDividerView;
+@property (weak, nonatomic) IBOutlet UIView *buttonsSectionDividerView;
 
 - (void) presentInViewController:(UIViewController *)viewController;
 
 @property (nonatomic, readonly) CGFloat initialHeight;
 @property (nonatomic, readonly) CGFloat buttonsViewHeight;
 @property (nonatomic) BOOL isFullScreenAvailable;
+@property (nonatomic, readonly) BOOL isDraggingUpAvailable;
 
 - (void) onRightButtonPressed;
 

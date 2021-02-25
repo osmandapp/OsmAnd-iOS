@@ -2002,3 +2002,12 @@
 "show_compass_ruler" = "Kompasslineal anzeigen";
 "tracks_on_map" = "Angezeigte Tracks";
 "visible" = "Sichtbar";
+"search_preogress" = "Suche…";
+"shared_string_loading" = "Lade…";
+"poi_categories" = "POI Kategorien";
+"route_calc_progress" = "Berechne: %d%%";
+"carplay_active_message" = "Karte wird über CarPlay angezeigt";
+"favorites_empty" = "Sie haben keine Favoriten gespeichert";
+"tracks_empty" = "Ihre Trackliste ist leer";
+"map_markers_empty" = "Sie haben keine aktiven Kartenmarkierungen";
+"address_search" = "Adresssuche";

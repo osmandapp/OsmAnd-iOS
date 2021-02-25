@@ -11,6 +11,8 @@
 
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
+#define kButtonsHeightWithoutBottomPadding 51.0
+#define kButtonsNoSafeAreaBottomPadding 9.0
 
 typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 {
@@ -117,7 +119,9 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGFloat) buttonsViewHeight
 {
-    return 60.;
+    CGFloat bottomPadding = [OAUtilities getBottomMargin];
+    bottomPadding = bottomPadding == 0 ? kButtonsNoSafeAreaBottomPadding : bottomPadding;
+    return kButtonsHeightWithoutBottomPadding + bottomPadding;
 }
 
 - (CGFloat) getViewHeight
@@ -143,8 +147,9 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         f.origin = CGPointMake(DeviceScreenWidth/2 - f.size.width / 2, DeviceScreenHeight - f.size.height);
         
         CGRect buttonsFrame = _buttonsView.frame;
-        buttonsFrame.origin.y = f.size.height - self.buttonsViewHeight - bottomMargin;
-        buttonsFrame.size.height = self.buttonsViewHeight + bottomMargin;
+        buttonsFrame.origin.y = f.size.height - self.buttonsViewHeight;
+        buttonsFrame.size.height = self.buttonsViewHeight;
+        buttonsFrame.size.width = f.size.width;
         _buttonsView.frame = buttonsFrame;
         
         CGRect contentFrame = _contentContainer.frame;
@@ -154,12 +159,13 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     }
     else
     {
-        CGRect buttonsFrame = _buttonsView.frame;
-        buttonsFrame.size.height = self.buttonsViewHeight + bottomMargin;
         f.size.height = [self getViewHeight];
         f.size.width = OAUtilities.isIPad && !OAUtilities.isWindowed ? kOABottomSheetWidthIPad : DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
         
+        CGRect buttonsFrame = _buttonsView.frame;
+        buttonsFrame.size.height = self.buttonsViewHeight;
+        buttonsFrame.size.width = f.size.width;
         buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
         _buttonsView.frame = buttonsFrame;
         
@@ -272,6 +278,11 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     [self applyCornerRadius:self.contentContainer];
 }
 
+- (BOOL) isDraggingUpAvailable
+{
+    return YES;  // override
+}
+
 - (void) onRightButtonPressed
 {
     [self hide:YES];
@@ -307,7 +318,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     } completion:nil];
 }
 
-
 #pragma mark - UIPanGestureRecognizer
 
 - (CGPoint) calculateInitialPoint
@@ -317,6 +327,10 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (void) onDragged:(UIPanGestureRecognizer *)recognizer
 {
+    BOOL isDraggedUp = [recognizer translationInView:self.view].y < 0;
+    if (!self.isDraggingUpAvailable && isDraggedUp)
+        return;
+    
     CGFloat velocity = [recognizer velocityInView:self.view].y;
     BOOL fastUpSlide = velocity < -1000.;
     BOOL fastDownSlide = velocity > 1500.;
@@ -370,6 +384,8 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             CGFloat tableViewY = CGRectGetMaxY(_headerView.frame);
             _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
             
+            [self applyCornerRadius:self.headerView];
+            [self applyCornerRadius:self.contentContainer];
             return;
         }
         case UIGestureRecognizerStateEnded:

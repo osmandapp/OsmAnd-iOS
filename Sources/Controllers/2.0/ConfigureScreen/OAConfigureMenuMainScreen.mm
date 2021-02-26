@@ -121,6 +121,12 @@
                      @"cells" : controlsList,
                      } ];
     
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_distance_by_tap"),
+                               @"img" : @"ic_action_ruler_line",
+                               @"key" : @"map_widget_distance_by_tap",
+                               @"selected" : @([_settings.showDistanceRuler get]),
+                               @"type" : @"OASettingSwitchCell"} ];
+    
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_transparent"),
                                @"key" : @"map_widget_transparent",
                                @"selected" : @([_settings.transparentMapTheme get]),
@@ -194,6 +200,10 @@
         {
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
             [[OARootViewController instance].mapPanel recreateControls];
+        }
+        else if ([key isEqualToString:@"map_widget_distance_by_tap"])
+        {
+            [_settings.showDistanceRuler set:visible];
         }
         else if ([key isEqualToString:@"map_widget_transparent"])
         {

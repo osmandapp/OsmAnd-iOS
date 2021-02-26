@@ -327,6 +327,7 @@
 		1581D7C125C5A61E00C3FB80 /* OAGPXTrackCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1581D7C025C5A61D00C3FB80 /* OAGPXTrackCell.m */; };
 		1581D7C825C5A63700C3FB80 /* OAHeaderRoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1581D7C625C5A63700C3FB80 /* OAHeaderRoundCell.m */; };
 		1582989F24DC042600323768 /* OAIconTitleIconRoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1582989E24DC042600323768 /* OAIconTitleIconRoundCell.xib */; };
+		1583B36825E838DB00340F0B /* OARulerByTapControlLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1583B36725E838DB00340F0B /* OARulerByTapControlLayer.mm */; };
 		1586E11F242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E120242209BC00DA5625 /* OAPointHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */; };
 		1586E123242209F300DA5625 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */; };
@@ -6755,6 +6756,8 @@
 		1581D7C725C5A63700C3FB80 /* OAHeaderRoundCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHeaderRoundCell.h; path = Controllers/Cells/OAHeaderRoundCell.h; sourceTree = "<group>"; };
 		1582989E24DC042600323768 /* OAIconTitleIconRoundCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAIconTitleIconRoundCell.xib; path = Resources/Controllers/Cells/OAIconTitleIconRoundCell.xib; sourceTree = "<group>"; };
 		158298A224DC048F00323768 /* OAIconTitleIconRoundCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAIconTitleIconRoundCell.h; path = Controllers/Cells/OAIconTitleIconRoundCell.h; sourceTree = "<group>"; };
+		1583B36725E838DB00340F0B /* OARulerByTapControlLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARulerByTapControlLayer.mm; sourceTree = "<group>"; };
+		1583B36B25E838EA00340F0B /* OARulerByTapControlLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARulerByTapControlLayer.h; sourceTree = "<group>"; };
 		1586E11E242209BB00DA5625 /* OAPointHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointHeaderCell.xib; path = Resources/Controllers/Cells/OAPointHeaderCell.xib; sourceTree = "<group>"; };
 		1586E121242209F200DA5625 /* OAPointHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointHeaderTableViewCell.m; path = Controllers/Cells/OAPointHeaderTableViewCell.m; sourceTree = "<group>"; };
 		1586E122242209F300DA5625 /* OAPointHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointHeaderTableViewCell.h; path = Controllers/Cells/OAPointHeaderTableViewCell.h; sourceTree = "<group>"; };
@@ -13511,6 +13514,8 @@
 				8AE0658C2291426500D3CB56 /* OAMapillaryLayer.mm */,
 				DACC0EE625417F7800904F66 /* OAMeasurementToolLayer.h */,
 				DACC0EE725417F7800904F66 /* OAMeasurementToolLayer.mm */,
+				1583B36B25E838EA00340F0B /* OARulerByTapControlLayer.h */,
+				1583B36725E838DB00340F0B /* OARulerByTapControlLayer.mm */,
 			);
 			name = Layers;
 			path = Controllers/Map/Layers;
@@ -22641,6 +22646,7 @@
 				845B98E91FE66F7F00434B53 /* OARoutePreferencesParameters.mm in Sources */,
 				84ACE1B31DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */,
 				DA80939E226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */,
+				1583B36825E838DB00340F0B /* OARulerByTapControlLayer.mm in Sources */,
 				DAFCB01C23AA1B5000CFBA58 /* OARouteInfoCell.m in Sources */,
 				DAA86421230429F5000E1900 /* OAShowHideOSMBugAction.m in Sources */,
 				787AC305242A39D10007944C /* OAImageDescTableViewCell.m in Sources */,

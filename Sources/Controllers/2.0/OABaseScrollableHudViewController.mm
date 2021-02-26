@@ -263,7 +263,7 @@
 
 - (BOOL) isLeftSidePresentation
 {
-    return NO;
+    return isLandscapeIpadAware;
 }
 
 - (CGFloat) getViewWidthForPad

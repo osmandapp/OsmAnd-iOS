@@ -158,6 +158,9 @@
 		0CF5859D2440745F0081238D /* ic_custom_direction_widget_two@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF585802440745E0081238D /* ic_custom_direction_widget_two@3x.png */; };
 		0CF5859E2440745F0081238D /* ic_custom_direction_widget_two@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF585802440745E0081238D /* ic_custom_direction_widget_two@3x.png */; };
 		1508C74925B22D2900637126 /* OABaseTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1508C74825B22D2900637126 /* OABaseTableViewController.xib */; };
+		1509D52225E90F5600905CBC /* ic_action_ruler_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1509D51F25E90F5500905CBC /* ic_action_ruler_line@2x.png */; };
+		1509D52325E90F5600905CBC /* ic_action_ruler_line@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1509D52025E90F5500905CBC /* ic_action_ruler_line@3x.png */; };
+		1509D52425E90F5600905CBC /* ic_action_ruler_line.png in Resources */ = {isa = PBXBuildFile; fileRef = 1509D52125E90F5500905CBC /* ic_action_ruler_line.png */; };
 		151558B924A349270081BB8E /* OADeviceScreenTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 151558B824A349270081BB8E /* OADeviceScreenTableViewCell.m */; };
 		151558BC24A34C470081BB8E /* img_settings_device_bottom_light@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 151558BB24A34C470081BB8E /* img_settings_device_bottom_light@3x.png */; };
 		151558BE24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 151558BD24A34C510081BB8E /* img_settings_sreen_route_parameters@3x.png */; };
@@ -6561,6 +6564,9 @@
 		0CF585802440745E0081238D /* ic_custom_direction_widget_two@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_widget_two@3x.png"; path = "Resources/Icons/ic_custom_direction_widget_two@3x.png"; sourceTree = SOURCE_ROOT; };
 		1282460E521223DA0F804AE7 /* Pods-OsmAnd Maps DEV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps DEV.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV.release.xcconfig"; sourceTree = "<group>"; };
 		1508C74825B22D2900637126 /* OABaseTableViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseTableViewController.xib; sourceTree = "<group>"; };
+		1509D51F25E90F5500905CBC /* ic_action_ruler_line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_ruler_line@2x.png"; path = "Resources/Icons/ic_action_ruler_line@2x.png"; sourceTree = "<group>"; };
+		1509D52025E90F5500905CBC /* ic_action_ruler_line@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_ruler_line@3x.png"; path = "Resources/Icons/ic_action_ruler_line@3x.png"; sourceTree = "<group>"; };
+		1509D52125E90F5500905CBC /* ic_action_ruler_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_ruler_line.png; path = Resources/Icons/ic_action_ruler_line.png; sourceTree = "<group>"; };
 		151558B824A349270081BB8E /* OADeviceScreenTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OADeviceScreenTableViewCell.m; path = Controllers/Cells/OADeviceScreenTableViewCell.m; sourceTree = "<group>"; };
 		151558BA24A349390081BB8E /* OADeviceScreenTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OADeviceScreenTableViewCell.h; path = Controllers/Cells/OADeviceScreenTableViewCell.h; sourceTree = "<group>"; };
 		151558BB24A34C470081BB8E /* img_settings_device_bottom_light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_settings_device_bottom_light@3x.png"; path = "Resources/Icons/img_settings_device_bottom_light@3x.png"; sourceTree = "<group>"; };
@@ -11648,6 +11654,9 @@
 				DACBB98C25D690D800378C47 /* btn_map_zoom_out_day.png */,
 				DACBB98E25D690D900378C47 /* btn_map_zoom_out_day@2x.png */,
 				DACBB98F25D690D900378C47 /* btn_map_zoom_out_day@3x.png */,
+				1509D52125E90F5500905CBC /* ic_action_ruler_line.png */,
+				1509D51F25E90F5500905CBC /* ic_action_ruler_line@2x.png */,
+				1509D52025E90F5500905CBC /* ic_action_ruler_line@3x.png */,
 				DA32BBEF25C443F200ED7100 /* ic_custom_attach_track.png */,
 				DA32BBEE25C443F200ED7100 /* ic_custom_attach_track@2x.png */,
 				DA32BBED25C443F200ED7100 /* ic_custom_attach_track@3x.png */,
@@ -19924,6 +19933,7 @@
 				DAFE4D3322169B4D009731CA /* map_osm_note_unresolved@3x.png in Resources */,
 				DA0C641821245B4500B2A350 /* et_tts.js in Resources */,
 				15BDDEA124DAF3BE00079C83 /* ic_custom_reset.png in Resources */,
+				1509D52225E90F5600905CBC /* ic_action_ruler_line@2x.png in Resources */,
 				DA6BF95224DBF21B00F7DC7B /* ic_custom_reset@2x.png in Resources */,
 				DA2F09152217FF75006C7F05 /* ic_action_create_poi@2x.png in Resources */,
 				84FF0C4D1F3D89AF00AD1029 /* OARoutingTargetCell.xib in Resources */,
@@ -20212,6 +20222,7 @@
 				DA45DA76230EE05A0083DFA2 /* img_mapstyle_touring-view_(more-contrast-and-details).png in Resources */,
 				DA68B3AC233B81DB00F5ACCC /* ic_custom_fuel.png in Resources */,
 				841A11181DEC1893009558D3 /* OAFirstUsageWelcomeController.xib in Resources */,
+				1509D52425E90F5600905CBC /* ic_action_ruler_line.png in Resources */,
 				84770B931FA313CF00CCE930 /* ic_action_speed_limit@2x.png in Resources */,
 				843E5CCC1AB341E000BE14BE /* icon_drive_mode.png in Resources */,
 				84C41DDD1AB8600D0089EABB /* follow_map_mode_button@3x.png in Resources */,
@@ -20391,6 +20402,7 @@
 				84755A7D1B34640C005B95C1 /* my_location_marker_icon@2x.png in Resources */,
 				8476E2761F6C1EEC00EC274F /* map_car_bearing_night@3x.png in Resources */,
 				DA9D54AA22D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib in Resources */,
+				1509D52325E90F5600905CBC /* ic_action_ruler_line@3x.png in Resources */,
 				DA38B5E3245430370097D6EA /* OAPublicTransportRouteShieldCell.xib in Resources */,
 				BBA3AFB4197FC4BB0039D991 /* drive_mode_button@2x.png in Resources */,
 				DABA3DD922686E72005BB777 /* ic_tabbar_favorites@2x.png in Resources */,

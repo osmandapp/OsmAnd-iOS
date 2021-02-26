@@ -894,7 +894,6 @@
 "open_saved_track" = "Open saved track";
 "plan_route_create_new_route" = "Create new route";
 "track_is_saved" = "%@\nis saved!";
-"plan_route_create_new_route" = "Create new route";
 "plan_route_open_existing_track" = "Open existing track";
 "plan_route_last_modified" = "Last modified";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";

@@ -273,8 +273,9 @@
 - (void) showImage:(OAMapillaryImage *)image
 {
     _image = image;
-     _shouldHideLayer = !_app.data.mapillary;
-    if (_shouldHideLayer)
+    BOOL isMapillaryVisible = _app.data.mapillary;
+    _shouldHideLayer = _shouldHideLayer || !isMapillaryVisible;
+    if (!isMapillaryVisible)
         [_app.data setMapillary:YES];
     
     [self showUpdatedImage];

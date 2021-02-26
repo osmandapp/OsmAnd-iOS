@@ -111,7 +111,7 @@
     if (_isDragging || _isHiding)
         return;
     
-    BOOL isLandscape = [self isLandscape];
+    BOOL isLandscape = [self isLeftSidePresentation];
     _currentState = isLandscape ? EOADraggableMenuStateFullScreen : (!self.supportsFullScreen && _currentState == EOADraggableMenuStateFullScreen ? EOADraggableMenuStateExpanded : _currentState);
     
     [_tableView setScrollEnabled:_currentState == EOADraggableMenuStateFullScreen || (!self.supportsFullScreen && EOADraggableMenuStateExpanded)];
@@ -166,14 +166,14 @@
 
 - (CGFloat) additionalLandscapeOffset
 {
-    return 0.;
+    return OAUtilities.isIPad && !OAUtilities.isWindowed ? OAUtilities.getStatusBarHeight : 0.;
 }
 
 - (void) adjustFrame
 {
     CGRect f = _scrollableView.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    if ([self isLandscape])
+    if ([self isLeftSidePresentation])
     {
         f.origin = CGPointMake(0., self.additionalLandscapeOffset);
         f.size.height = DeviceScreenHeight - self.additionalLandscapeOffset;
@@ -186,7 +186,6 @@
         
         CGRect contentFrame = _contentContainer.frame;
         contentFrame.size.height = f.size.height - buttonsFrame.size.height;
-        contentFrame.origin = f.origin;
         _contentContainer.frame = contentFrame;
     }
     else
@@ -262,6 +261,11 @@
     return OAUtilities.isLandscapeIpadAware;
 }
 
+- (BOOL) isLeftSidePresentation
+{
+    return OAUtilities.isLandscapeIpadAware;
+}
+
 - (CGFloat) getViewWidthForPad
 {
     return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
@@ -270,7 +274,7 @@
 - (void) show:(BOOL)animated state:(EOADraggableMenuState)state onComplete:(void (^)(void))onComplete
 {
     [_tableView setContentOffset:CGPointZero];
-    _currentState = self.isLandscape ? EOADraggableMenuStateFullScreen : state;
+    _currentState = self.isLeftSidePresentation ? EOADraggableMenuStateFullScreen : state;
     [_tableView setScrollEnabled:YES];
     
     [self adjustFrame];
@@ -279,7 +283,7 @@
     if (animated)
     {
         CGRect frame = _scrollableView.frame;
-        if ([self isLandscape])
+        if ([self isLeftSidePresentation])
         {
             frame.origin.x = -_scrollableView.bounds.size.width;
             frame.origin.y = self.additionalLandscapeOffset;
@@ -308,7 +312,7 @@
     else
     {
         CGRect frame = _scrollableView.frame;
-        if ([self isLandscape])
+        if ([self isLeftSidePresentation])
             frame.origin.y = 0.0;
         else
             frame.origin.y = DeviceScreenHeight - _scrollableView.bounds.size.height;
@@ -495,7 +499,7 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    return ![self isLandscape];
+    return ![self isLeftSidePresentation];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer

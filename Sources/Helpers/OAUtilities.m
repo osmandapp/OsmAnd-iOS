@@ -1413,6 +1413,7 @@ static const double d180PI = 180.0 / M_PI_2;
     [label sizeToFit];
     CGRect frame = label.frame;
     frame.size.height = label.frame.size.height + (isTitle ? 0.0 : 30.0);
+    frame.size.width = textWidth;
     frame.origin.y = 8.0;
     label.frame = frame;
     UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 8)];

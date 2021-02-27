@@ -85,6 +85,8 @@
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:self.app.locationServices.updateObserver];
+    
+    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
 
     [self refreshDestinationsMarkersCollection];
     
@@ -92,8 +94,6 @@
     
     _targetPoints = [OATargetPointsHelper sharedInstance];
     [_targetPoints addListener:self];
-    
-    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
 
     _destinationLayerWidget = [[OADestinationsLineWidget alloc] init];
     [self.mapView addSubview:_destinationLayerWidget];
@@ -347,7 +347,7 @@
         builder.setBaseOrder(self.baseOrder)
         .setIsHidden(false)
         .setLineId(lineId)
-        .setLineWidth(15)
+        .setLineWidth(50)
         .setPoints(points)
         .setFillColor(color);
         

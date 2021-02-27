@@ -443,7 +443,7 @@
 "prch_nau_q2_cell" = "Downloading requires %@ over cellular network.";
 "incur_high_charges" = "This may incur high charges.";
 "prch_nau_q2_wifi" = "Downloading requires %@ over WiFi network.";
-"prch_nau_q3" = "You may install it later through the Maps & Resources.";
+"prch_nau_q3" = "Instalaci lze provést později přes Mapy a zdroje.";
 "proceed_q" = "Proceed?";
 "download" = "Download";
 "nothanks" = "No, thanks";
@@ -451,7 +451,7 @@
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 // Resources
-"res_mapsres" = "Maps & Resources";
+"res_mapsres" = "Mapy a zdroje";
 "res_installed" = "Installed";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
@@ -593,7 +593,7 @@
 "product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
-"product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
+"product_desc_ext_trip_planning" = "Modul pro plánování trasy vám umožní vytvořit si cestu na mapě, uložit ji, změřit vzdálenost mezi body spojenými přímkami atd. Vytvořeno pro předběžné plánování cesty, nikoli pro důkladné budování trasy.";
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Map of Africa";
 "product_title_australia" = "Australia";
@@ -885,7 +885,7 @@
 "shared_string_email_address" = "E-mail";
 "osm_live_enter_email" = "Prosím zadejte platnou e-mailovou adresu";
 "shared_string_unexpected_error" = "Neočekávaná chyba";
-"osm_live_payment_desc" = "Předplatné je strháváno měsíčně. Můžete jej kdykoliv zrušit přes App Store.";
+"osm_live_payment_desc" = "Předplatné můžete po zakoupení spravovat a zrušit v nastavení App Store účtu";
 "osm_live_unlock_all" = "Odemknout všechny funkce";
 "osm_live_unlock_updates" = "Odemknout hodinové aktualizace map";
 "osm_live_banner_descr" = "Předplaťte si OsmAnd Live a získejte neomezené <b>hodinové</b> aktualizace map a <b>všechny funkce</b> z %@";
@@ -1693,3 +1693,6 @@
 "by_dist" = "Podle vzdálenosti";
 "by_name" = "Podle názvu";
 "select_work_point" = "Zvolte bod pracoviště";
+"plugin_popup_osm_editing_ask" = "Povolte prosím modul pro úpravy OpenStreetMap pro možnost přidání a správy mapových úprav a poznámek";
+"settings_item_read_error" = "Nelze přečíst %@.";
+"quick_action_template_name" = "Název šablony";

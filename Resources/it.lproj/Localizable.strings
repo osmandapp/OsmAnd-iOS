@@ -797,7 +797,7 @@
 "get_free_trial_title" = "Inizia la tua %d %@ prova gratuita.";
 "get_discount_short_descr" = "%@ per %d %@, poi %@";
 "months_3" = "Tre mesi";
-"get_discount_first_part" = "%@ per %@";
+"get_discount_first_part" = "%@ per il primo %@";
 "get_discount_second_part" = "poi %@";
 "week" = "Settimana";
 "configure_map" = "Configura la mappa";
@@ -1312,7 +1312,7 @@
 "shared_string_end_date" = "Data fine";
 "get_discount_first_few_parts" = "%@ per prima %@";
 "start_navigation" = "Avvia la navigazione";
-"select_avoid_descr" = "Scegli le strade che vuoi evitare durante la navigazione. Puoi anche scegliere una strada nella mappa o scegliere un tipo dalla lista sotto.";
+"select_avoid_descr" = "Seleziona le strade che desideri evitare durante la navigazione. Puoi selezionare una strada sulla mappa o scegliere un tipo dall'elenco seguente.";
 "by_name" = "Per nome";
 "by_dist" = "Per distanza";
 "sort_by" = "Ordina";
@@ -1732,17 +1732,16 @@
 "arrows_direction_to_markers" = "";
 "appearance_on_map" = "";
 "choose_how_display_distance" = "";
-
 "shared_string_account" = "Account";
 "help_purchases" = "Acquisti OsmAnd";
 "shared_string_add_profile" = "Aggiungi profilo";
 "public_transport_hide" = "Nascondi i trasporti pubblici";
 "ui_customization_descr" = "Elementi pannello, menù contestuale";
-"create_profile_descr" = "Basa il tuo profilo personalizzato su uno di quelli di default dell\'applicazione, questo definisce le impostazioni di base come la visibilità dei widget, e le unità di misura di velocità e distanza. Questi sono i profili di default dell\'applicazione, assieme a esempi di profili personalizzati possono essere estesi a:";
+"create_profile_descr" = "Basa il tuo profilo personalizzato su uno di quelli di default dell'applicazione, questo definisce le impostazioni di base come la visibilità dei widget, e le unità di misura di velocità e distanza. Questi sono i profili di default dell'applicazione, assieme a esempi di profili personalizzati possono essere estesi a:";
 "public_transport_empty_warning_descr" = "Prova cambiando le impostazioni.";
 "profile_prefs_reset_successful" = "Tutte le impostazioni dei profili sono state riportate allo stato iniziale.";
 "walk" = "A piedi";
-"position_icon_at_rest" = "Seleziona l\'icona della mappa";
+"position_icon_at_rest" = "Seleziona l'icona della mappa";
 "app_profiles" = "Profili app";
 "add_to_track" = "Aggiungi ad una Traccia";
 "save_new_track" = "Salva come nuova traccia";
@@ -1763,10 +1762,10 @@
 "whole_track" = "Tutta la traccia";
 "width_limit_description" = "Indica la larghezza del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli larghi.";
 "configure_map_descr" = "Aspetto della mappa";
-"import_complete_description" = "Tutti i dati sono stati importati da %@, puoi utilizzare i bottoni sottostanti per aprire e gestire le parti dell\' applicazione di cui necessiti.";
+"import_complete_description" = "Tutti i dati sono stati importati da %@, puoi utilizzare i bottoni sottostanti per aprire e gestire le parti dell' applicazione di cui necessiti.";
 "public_transport_menu" = "Trasporti pubblici";
 "select_icon" = "Seleziona icona";
-"position_icon_while_moving" = "Seleziona l\'icona di navigazione";
+"position_icon_while_moving" = "Seleziona l'icona di navigazione";
 "quick_action_mapillary_show" = "Mostra Mapillary";
 "quick_action_showhide_mapillary_title" = "Mostra/nascondi Mapillary";
 "reverse_route" = "Inverti il percorso";
@@ -1780,11 +1779,11 @@
 "num_stops" = "fermate";
 "enter_profile_name" = "Inserisci il nome del profilo";
 "quick_action_mapillary_hide" = "Nascondi Mapillary";
-"default_speed_dialog_msg" = "Utilizzata per stimare l\'orario d\'arrivo per le strade di tipo sconosciute e come limite di velocità per tutte le strade (può influenzare il calcolo del percorso)";
+"default_speed_dialog_msg" = "Utilizzata per stimare l'orario d'arrivo per le strade di tipo sconosciute e come limite di velocità per tutte le strade (può influenzare il calcolo del percorso)";
 "res_slope" = "Pendenza";
 "help_nav_profiles" = "Profili di navigazione";
 "quick_action_remove_next_destination_descr" = "Il punto di destinazione corrente sul percorso verrà eliminato. Se sarà la Destinazione, la navigazione verrà interrotta.";
 "units_t" = "t";
 "total" = "Totale";
-"height_limit_description" = "Indica l\'altezza del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli alti.";
+"height_limit_description" = "Indica l'altezza del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli alti.";
 "menu" = "Menu";

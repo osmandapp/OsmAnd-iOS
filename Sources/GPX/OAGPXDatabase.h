@@ -15,8 +15,7 @@
 
 @interface OAGPX : NSObject
 
-@property (nonatomic) NSString *gpxFileName;
-@property (nonatomic) NSString *gpxFilePath;
+@property (nonatomic) NSString *file;
 @property (nonatomic) NSString *gpxTitle;
 @property (nonatomic) NSString *gpxDescription;
 @property (nonatomic) NSDate   *importDate;
@@ -50,6 +49,7 @@
 @property (nonatomic) OAGpxWpt *locationStart;
 @property (nonatomic) OAGpxWpt *locationEnd;
 
+-(instancetype)initWithFilePath:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
 - (NSString *)getNiceTitle;
 
 @end
@@ -60,20 +60,23 @@
 
 + (OAGPXDatabase *)sharedDb;
 
--(OAGPX *)buildGpxItem:(NSString *)fileName path:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)addGpxItem:(NSString *)fileName path:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)getGPXItem:(NSString *)filePath;
+-(OAGPX *)addGpxItem:(NSString *)file title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)getGPXItem:(NSString *)file;
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
 -(void)replaceGpxItem:(OAGPX *)gpx;
--(void)removeGpxItem:(NSString *)filePath;
--(BOOL)containsGPXItem:(NSString *)filePath;
+-(BOOL)removeGpxItem:(NSString *)file;
+-(BOOL)remove:(OAGPX *)item;
+-(BOOL)containsGPXItem:(NSString *)file;
 -(BOOL)containsGPXItemByFileName:(NSString *)fileName;
--(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
--(BOOL)updateGPXItemColor:(NSString *)filePath color:(int)color;
+-(BOOL)updateGPXItemPointsCount:(NSString *)file pointsCount:(int)pointsCount;
+-(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color;
 -(BOOL)updateGPXFolderName:(NSString *)newFilePath oldFilePath:(NSString *)oldFilePath;
+-(NSString *)getFileName:(NSString *)itemFile;
+-(NSString *)getFileDir:(NSString *)itemFile;
+
 -(NSString *)getGpxStoringPathByFullPath:(NSString *)fullFilePath;
 
--(void) load;
--(void) save;
+-(void)load;
+-(void)save;
 
 @end

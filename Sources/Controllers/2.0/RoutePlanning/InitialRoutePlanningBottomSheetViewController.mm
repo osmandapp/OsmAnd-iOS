@@ -112,8 +112,8 @@
 
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
     NSArray *gpxList = [db.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
-        NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.gpxFileName];
-        NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFileName];
+        NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.file];
+        NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.file];
         return [time2 compare:time1];
     }];
     
@@ -270,7 +270,7 @@
     {
         OAGPX* track = item[@"track"];
         [self dismissViewControllerAnimated:YES completion:nil];
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.file]];
         return;
     }
 }

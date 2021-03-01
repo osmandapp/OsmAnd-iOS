@@ -59,7 +59,7 @@
 
 - (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
 {
-    NSString *selectedFolderName = [_gpx.gpxFilePath stringByDeletingLastPathComponent];
+    NSString *selectedFolderName = [[_gpx.file  stringByDeletingLastPathComponent] lastPathComponent];
     if ([selectedFolderName isEqualToString:@""])
         selectedFolderName = OALocalizedString(@"tracks");
     
@@ -198,7 +198,8 @@
     else if (indexPath.section == kFoldersListSection)
     {
         NSDictionary *item = _data[indexPath.section][indexPath.row];
-        [self moveTrackToFolder:item[@"title"]];
+        if (![item[@"isSelected"] boolValue])
+            [self moveTrackToFolder:item[@"title"]];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -215,8 +216,8 @@
 
 - (void) moveTrackToFolder:(NSString *)selectedFolderName
 {
-    NSString *oldPath = _gpx.gpxFilePath;
-    NSString *oldName = _gpx.gpxFileName;
+    NSString *oldPath = _gpx.file;
+    NSString *oldName = [OAGPXDatabase.sharedDb getFileName:_gpx.file];
     NSString *sourcePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldPath];
     
     NSString *newFolder = [selectedFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : selectedFolderName;

@@ -1191,8 +1191,8 @@ typedef enum
         {
             if (isWaypoint)
             {
-                NSString *path = ((OAGPX *)_activeTargetObj).gpxFileName;
-                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:path])
+                NSString *path = ((OAGPX *)_activeTargetObj).file;
+                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:[path lastPathComponent]])
                 {
                     [_mapViewController hideContextPinMarker];
                     return NO;
@@ -1253,8 +1253,8 @@ typedef enum
             }
             else if (!isNone)
             {
-                NSString *path = [OAGPXRouter sharedInstance].gpx.gpxFileName;
-                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:path])
+                NSString *path = [OAGPXRouter sharedInstance].gpx.file;
+                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:[path lastPathComponent]])
                 {
                     [_mapViewController hideContextPinMarker];
                     return NO;
@@ -1470,7 +1470,7 @@ typedef enum
             OAGPXItemViewControllerState *gpxItemViewControllerState = (OAGPXItemViewControllerState *)([((OAGPXItemViewController *)self.targetMenuView.customController) getCurrentState]);
             gpxItemViewControllerState.showFull = self.targetMenuView.showFull;
             gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
-            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFileName.length == 0);
+            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).file.length == 0);
             
             _activeViewControllerState = gpxItemViewControllerState;
             break;
@@ -1480,7 +1480,7 @@ typedef enum
         {
             OAGPXEditItemViewControllerState *gpxItemViewControllerState = (OAGPXEditItemViewControllerState *)([((OAGPXEditItemViewController *)self.targetMenuView.customController) getCurrentState]);
             gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
-            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFileName.length == 0);
+            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).file.length == 0);
             
             _activeViewControllerState = gpxItemViewControllerState;
             break;
@@ -1490,7 +1490,7 @@ typedef enum
         {
             OAGPXRouteViewControllerState *gpxItemViewControllerState = (OAGPXRouteViewControllerState *)([((OAGPXRouteViewController *)self.targetMenuView.customController) getCurrentState]);
             gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
-            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFileName.length == 0);
+            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).file.length == 0);
             
             _activeViewControllerState = gpxItemViewControllerState;
             break;
@@ -1728,7 +1728,7 @@ typedef enum
     for (NSString *filePath in settings.mapSettingVisibleGpx)
     {
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.file];
         if ([[NSFileManager defaultManager] fileExistsAtPath:path])
         {
             [names addObject:[filePath.lastPathComponent stringByDeletingPathExtension]];
@@ -1744,7 +1744,7 @@ typedef enum
             if (_activeTargetObj)
             {
                 OAGPX *gpx = (OAGPX *)_activeTargetObj;
-                NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+                NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.file];
                 [self targetPointAddWaypoint:path];
             }
             else

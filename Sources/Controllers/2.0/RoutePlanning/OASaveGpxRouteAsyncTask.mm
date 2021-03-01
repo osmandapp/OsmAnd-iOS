@@ -114,7 +114,7 @@
     OAGPXTrackAnalysis *analysis = [_savedGpxFile getAnalysis:0];
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
     NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:_outFile];
-    OAGPX *gpx = [gpxDb buildGpxItem:[_outFile lastPathComponent] path:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds analysis:analysis];
+    OAGPX *gpx = [[OAGPX alloc] initWithFilePath:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds analysis:analysis];
     [gpxDb replaceGpxItem:gpx];
     [gpxDb save];
 }

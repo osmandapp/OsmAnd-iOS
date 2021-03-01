@@ -385,11 +385,11 @@ static UIViewController *parentController;
     OAGPXTrackAnalysis *analysis = [_doc getAnalysis:0];
     if (_newGpxName) {
         NSString *storingPathInRootFolder = _newGpxName;
-        item = [[OAGPXDatabase sharedDb] addGpxItem:_newGpxName path:storingPathInRootFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInRootFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     } else {
         NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
         NSString *storingPathInRootFolder = name;
-        item = [[OAGPXDatabase sharedDb] addGpxItem:name path:storingPathInRootFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInRootFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     }
     [[OAGPXDatabase sharedDb] save];
     [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
@@ -611,7 +611,7 @@ static UIViewController *parentController;
         _routeItem = [db getGPXItem:routeFilePath];
         for (OAGPX *item in self.gpxList)
         {
-            if ([item.gpxFilePath isEqualToString:routeFilePath])
+            if ([item.file isEqualToString:routeFilePath])
             {
                 [self.gpxList removeObject:item];
                 break;
@@ -678,7 +678,7 @@ static UIViewController *parentController;
     visibleGroup.header = @"";
     for (OAGPX *item in _gpxList)
     {
-        if ([_visible containsObject:item.gpxFilePath])
+        if ([_visible containsObject:item.file])
         {
             [visibleGroup.groupItems addObject:
              @{
@@ -815,9 +815,9 @@ static UIViewController *parentController;
         [gpxArrNew addObject:gpx];
     }
     for (OAGPX *gpx in gpxArrHide)
-        [gpxFilesHide addObject:gpx.gpxFilePath];
+        [gpxFilesHide addObject:gpx.file];
     for (OAGPX *gpx in gpxArrNew)
-        [gpxFilesNew addObject:gpx.gpxFilePath];
+        [gpxFilesNew addObject:gpx.file];
     
     _settings.mapSettingShowRecordingTrack = currentTripSelected;
     [_settings hideGpx:gpxFilesHide];
@@ -881,7 +881,7 @@ static UIViewController *parentController;
     
     NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:path];
     OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-    OAGPX* item = [[OAGPXDatabase sharedDb] addGpxItem:[path lastPathComponent] path:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+    OAGPX* item = [[OAGPXDatabase sharedDb] addGpxItem:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
     [[OAGPXDatabase sharedDb] save];
     
     item.newGpx = YES;
@@ -1048,9 +1048,9 @@ static UIViewController *parentController;
     NSDictionary* item = [groupData.groupItems objectAtIndex:dataIndex];
     OAGPX *gpx = item[@"track"];
     if (sw.isOn)
-        [_settings showGpx:@[gpx.gpxFilePath] update:NO];
-    else if ([_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath])
-        [_settings hideGpx:@[gpx.gpxFilePath] update:NO];
+        [_settings showGpx:@[gpx.file] update:NO];
+    else if ([_settings.mapSettingVisibleGpx containsObject:gpx.file])
+        [_settings hideGpx:@[gpx.file] update:NO];
     [self.gpxTableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.gpxTableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [self.gpxTableView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
     return NO;
@@ -1242,9 +1242,9 @@ static UIViewController *parentController;
                     cell.textView.text = groupItem[@"title"];
                     cell.imgView.image = [[UIImage imageNamed:groupItem[@"icon"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-                    cell.switchView.on = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath];
+                    cell.switchView.on = [_settings.mapSettingVisibleGpx containsObject:gpx.file];
                     [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
-                    cell.imgView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                    cell.imgView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.file] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
                     cell.switchView.tag = indexPath.section << 10 | indexPath.row;
                 }
                 return cell;
@@ -1270,7 +1270,7 @@ static UIViewController *parentController;
                     [cell.editButton setImage:[[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
                     cell.editButton.tintColor = UIColorFromRGB(color_tint_gray);
                     cell.leftIconImageView.image = [[UIImage imageNamed:@"ic_custom_trip"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    cell.leftIconImageView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.gpxFilePath] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                    cell.leftIconImageView.tintColor = [_settings.mapSettingVisibleGpx containsObject:gpx.file] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
                 }
                 return cell;
             }

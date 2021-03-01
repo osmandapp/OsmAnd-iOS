@@ -104,14 +104,14 @@
     else
     {
         const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:result.gpxFilePath];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:result.file];
         QString qPath = QString::fromNSString(path);
         OAGPXDocument *doc = nil;
         if (gpxMap.contains(qPath))
         {
             auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(gpxMap[qPath]);
             doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
-            doc.fileName = result.gpxFileName;
+            doc.fileName = result.file;
         }
         else
         {

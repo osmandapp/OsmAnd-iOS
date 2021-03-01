@@ -201,10 +201,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             selectedFolderName = @"";
         
         return[data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAGPX *object, NSDictionary *bindings) {
-            
-            //TODO:nnngrach object.gpxFilePath -> object.file
-            
-            NSString *folderName = object.gpxFilePath.stringByDeletingLastPathComponent;
+            NSString *folderName = object.file.stringByDeletingLastPathComponent;
             return [folderName isEqualToString:selectedFolderName];
         }]];
     }

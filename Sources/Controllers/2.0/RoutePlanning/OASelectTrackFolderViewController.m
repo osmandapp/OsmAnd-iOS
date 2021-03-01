@@ -43,13 +43,12 @@
     return self;
 }
 
-- (instancetype) initWithGPXFileName:(NSString *)fileName delegate:(id<OASelectTrackFolderDelegate>)delegate;
+- (instancetype) initWithGPXFileName:(NSString *)fileName;
 {
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
         _gpx = [OAGPXDatabase.sharedDb getGPXItem:fileName];
-        _delegate = delegate;
         [self reloadData];
     }
     return self;

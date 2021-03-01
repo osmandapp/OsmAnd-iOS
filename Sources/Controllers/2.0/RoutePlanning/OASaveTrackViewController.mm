@@ -207,7 +207,8 @@
 
 - (void) showSelectFolderScreen
 {
-    OASelectTrackFolderViewController *selectFolderView = [[OASelectTrackFolderViewController alloc] initWithGPXFileName:_filePath delegate:self];
+    OASelectTrackFolderViewController *selectFolderView = [[OASelectTrackFolderViewController alloc] initWithGPXFileName:_filePath];
+    selectFolderView.delegate = self;
     [self presentViewController:selectFolderView animated:YES completion:nil];
 }
 
@@ -515,13 +516,6 @@
 }
 
 #pragma mark - OASelectTrackFolderDelegate
-
-- (void) updateSelectedFolder
-{
-    //TODO:nnngrach delete
-    [self generateData];
-    [self.tableView reloadData];
-}
 
 - (void) onFolderSelected:(NSString *)selectedFolderName
 {

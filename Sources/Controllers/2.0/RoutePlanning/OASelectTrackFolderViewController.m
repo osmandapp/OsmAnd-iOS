@@ -28,18 +28,16 @@
 
 @implementation OASelectTrackFolderViewController
 {
-    id<OASelectTrackFolderDelegate> _delegate;
     OAGPX *_gpx;
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype) initWithGPX:(OAGPX *)gpx delegate:(id<OASelectTrackFolderDelegate>)delegate;
+- (instancetype) initWithGPX:(OAGPX *)gpx
 {
     self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
     if (self)
     {
         _gpx = gpx;
-        _delegate = delegate;
         [self reloadData];
     }
     return self;
@@ -73,7 +71,7 @@
 
 - (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
 {
-    NSString *selectedFolderName = [_gpx.gpxFilePath stringByDeletingLastPathComponent];
+    NSString *selectedFolderName = [[_gpx.file  stringByDeletingLastPathComponent] lastPathComponent];
     if ([selectedFolderName isEqualToString:@""])
         selectedFolderName = OALocalizedString(@"tracks");
     
@@ -81,13 +79,17 @@
     [data addObject:@[
         @{
             @"type" : kCellTypeAction,
-            @"title" : @"Add new folder",
+            @"title" : OALocalizedString(@"add_folder"),
             @"img" : @"ic_custom_add",
         },
     ]];
     
     NSMutableArray *cellFoldersData = [NSMutableArray new];
-    for (NSString *folderName in allFolderNames)
+    NSArray<NSString *> *sortedAllFolderNames = [allFolderNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    for (NSString *folderName in sortedAllFolderNames)
     {
         NSArray *folderItems = foldersData[folderName];
         int tracksCount = folderItems ? folderItems.count : 0;
@@ -212,7 +214,8 @@
     else if (indexPath.section == kFoldersListSection)
     {
         NSDictionary *item = _data[indexPath.section][indexPath.row];
-        [self moveTrackToFolder:item[@"title"]];
+        if (![item[@"isSelected"] boolValue] && _delegate)
+            [_delegate onFolderSelected:item[@"title"]];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -225,37 +228,6 @@
             return 60;
         else
             return UITableViewAutomaticDimension;
-}
-
-- (void) moveTrackToFolder:(NSString *)selectedFolderName
-{
-    NSString *oldPath = _gpx.gpxFilePath;
-    NSString *oldName = _gpx.gpxFileName;
-    NSString *sourcePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldPath];
-    
-    NSString *newFolder = [selectedFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : selectedFolderName;
-    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = [self getUniqueFileName:oldName inFolderPath:newFolderPath];
-    NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
-    
-    [OAGPXDatabase.sharedDb updateGPXFolderName:[newFolder stringByAppendingPathComponent:newName] oldFilePath:oldPath];
-    [OAGPXDatabase.sharedDb save];
-    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
-    [_delegate updateSelectedFolder:_gpx oldFilePath:oldPath newFilePath:[newFolder stringByAppendingPathComponent:newName]];
-}
-
-- (NSString *) getUniqueFileName:(NSString *)fileName inFolderPath:(NSString *)folderPath
-{
-    NSString *name = [fileName stringByDeletingPathExtension];
-    NSString *newName = name;
-    int i = 2;
-    while ([[NSFileManager defaultManager] fileExistsAtPath:[[folderPath stringByAppendingPathComponent:newName] stringByAppendingPathExtension:@"gpx"]])
-    {
-        newName = [NSString stringWithFormat:@"%@ %i", name, i];
-        i++;
-    }
-    return [newName stringByAppendingPathExtension:@"gpx"];
 }
 
 #pragma mark - OAAddTrackFolderDelegate

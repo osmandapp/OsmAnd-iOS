@@ -18,13 +18,59 @@
 
 @implementation OAGPX
 
+-(instancetype)initWithFilePath:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
+{
+    self = [super init];
+    if (self) {
+        self.file = filePath;
+        self.bounds = bounds;
+        title = [title length] != 0 ? title : nil;
+        if (title)
+            self.gpxTitle = title;
+        else
+            self.gpxTitle = [[filePath lastPathComponent] stringByDeletingPathExtension];
+        
+        if (desc)
+            self.gpxDescription = desc;
+        else
+            self.gpxDescription = @"";
+        
+        self.color = 0;
+        
+        self.importDate = [NSDate date];
+        
+        self.totalDistance = analysis.totalDistance;
+        self.totalTracks = analysis.totalTracks;
+        self.startTime = analysis.startTime;
+        self.endTime = analysis.endTime;
+        self.timeSpan = analysis.timeSpan;
+        self.timeMoving = analysis.timeMoving;
+        self.totalDistanceMoving = analysis.totalDistanceMoving;
+        self.diffElevationUp = analysis.diffElevationUp;
+        self.diffElevationDown = analysis.diffElevationDown;
+        
+        self.avgElevation = analysis.avgElevation;
+        self.minElevation = analysis.minElevation;
+        self.maxElevation = analysis.maxElevation;
+        self.maxSpeed = analysis.maxSpeed;
+        self.avgSpeed = analysis.avgSpeed;
+        self.points = analysis.points;
+        
+        self.wptPoints = analysis.wptPoints;
+        self.metricEnd = analysis.metricEnd;
+        self.locationStart = analysis.locationStart;
+        self.locationEnd = analysis.locationEnd;
+    }
+    return self;
+}
+
 - (NSString *) getNiceTitle
 {
     if (self.newGpx)
         return OALocalizedString(@"create_new_trip");
 
     if (self.gpxTitle)
-        return [[[self.gpxFileName stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
+        return [[[[self.file lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
 
     return self.gpxTitle;
 }
@@ -55,21 +101,21 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
-        
+    if (self)
+    {
         self.dbFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:kDbName];
         [self load];
     }
     return self;
 }
 
--(OAGPX *)addGpxItem:(NSString *)fileName path:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
+-(OAGPX *)addGpxItem:(NSString *)file title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
     
-    OAGPX *gpx = [self buildGpxItem:fileName path:filePath title:title desc:desc bounds:bounds analysis:analysis];
+    OAGPX *gpx = [[OAGPX alloc] initWithFilePath:file title:title desc:desc bounds:bounds analysis:analysis];
     
-    if (![self containsGPXItem:filePath])
+    if (![self containsGPXItem:file])
         [res addObject:gpx];
     
     gpxList = res;
@@ -80,64 +126,18 @@
 - (void) replaceGpxItem:(OAGPX *)gpx
 {
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
-    OAGPX *existing = [self getGPXItem:gpx.gpxFilePath];
+    OAGPX *existing = [self getGPXItem:gpx.file];
     if (existing)
         [res removeObject:existing];
     [res addObject:gpx];
     gpxList = res;
 }
 
--(OAGPX *)buildGpxItem:(NSString *)fileName path:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
+-(OAGPX *)getGPXItem:(NSString *)file
 {
-    OAGPX *gpx = [[OAGPX alloc] init];
-    NSString *pathToRemove = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
-    gpx.bounds = bounds;
-    gpx.gpxFileName = fileName;
-    gpx.gpxFilePath = [filePath stringByReplacingOccurrencesOfString:pathToRemove withString:@""];
-    title = [title length] != 0 ? title : nil;
-    if (title)
-        gpx.gpxTitle = title;
-    else
-        gpx.gpxTitle = [fileName stringByDeletingPathExtension];
-    
-    if (desc)
-        gpx.gpxDescription = desc;
-    else
-        gpx.gpxDescription = @"";
-    
-    gpx.color = 0;
-    
-    gpx.importDate = [NSDate date];
-    
-    gpx.totalDistance = analysis.totalDistance;
-    gpx.totalTracks = analysis.totalTracks;
-    gpx.startTime = analysis.startTime;
-    gpx.endTime = analysis.endTime;
-    gpx.timeSpan = analysis.timeSpan;
-    gpx.timeMoving = analysis.timeMoving;
-    gpx.totalDistanceMoving = analysis.totalDistanceMoving;
-    gpx.diffElevationUp = analysis.diffElevationUp;
-    gpx.diffElevationDown = analysis.diffElevationDown;
-    
-    gpx.avgElevation = analysis.avgElevation;
-    gpx.minElevation = analysis.minElevation;
-    gpx.maxElevation = analysis.maxElevation;
-    gpx.maxSpeed = analysis.maxSpeed;
-    gpx.avgSpeed = analysis.avgSpeed;
-    gpx.points = analysis.points;
-    
-    gpx.wptPoints = analysis.wptPoints;
-    gpx.metricEnd = analysis.metricEnd;
-    gpx.locationStart = analysis.locationStart;
-    gpx.locationEnd = analysis.locationEnd;
-    
-    return gpx;
-}
-
--(OAGPX *)getGPXItem:(NSString *)filePath
-{
-    for (OAGPX *item in gpxList) {
-        if ([item.gpxFilePath isEqualToString:filePath])
+    for (OAGPX *item in gpxList)
+    {
+        if ([item.file isEqualToString:file])
         {
             return item;
         }
@@ -147,8 +147,9 @@
 
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName
 {
-    for (OAGPX *item in gpxList) {
-        if ([item.gpxFileName isEqualToString:fileName])
+    for (OAGPX *item in gpxList)
+    {
+        if ([[item.file lastPathComponent] isEqualToString:fileName])
         {
             return item;
         }
@@ -156,13 +157,14 @@
     return nil;
 }
 
--(void)removeGpxItem:(NSString *)filePath
+-(void)removeGpxItem:(NSString *)file
 {
     NSMutableArray *arr = [NSMutableArray arrayWithArray:gpxList];
     NSString *path;
     for (OAGPX *item in arr) {
-        if ([item.gpxFilePath isEqualToString:filePath]) {
-            path = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:item.gpxFilePath];
+        if ([item.file isEqualToString:file])
+        {
+            path = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:item.file];
             [arr removeObject:item];
             break;
         }
@@ -172,27 +174,29 @@
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 
-- (NSString *) getGpxStoringPathByFullPath:(NSString *)fullFilePath
+- (NSString *) getGpxStoringPathByFullPath:(NSString *)filePath
 {
-    NSString *trackFolderName = [self getGPXFolderNameByFilePath:fullFilePath];
-    return [trackFolderName stringByAppendingPathComponent:fullFilePath.lastPathComponent];
+    NSString *trackFolderName = [self getFileDir:filePath];
+    return [trackFolderName stringByAppendingPathComponent:filePath.lastPathComponent];
 }
 
-- (NSString *) getGPXFolderNameByFilePath:(NSString *)path
+- (NSString *) getFileName:(NSString *)itemFile
 {
-    NSArray<NSString *> *pathComponents = [path componentsSeparatedByString:@"/"];
-    if (pathComponents.count > 3)
-        return [pathComponents[pathComponents.count - 3] isEqualToString:@"Documents"] ? @"" : pathComponents[pathComponents.count - 2];
-    else if (pathComponents.count == 2)
-        return pathComponents[pathComponents.count - 2];
-    else
-        return @"";
+    return itemFile.lastPathComponent;
 }
 
--(BOOL)containsGPXItem:(NSString *)filePath
+- (NSString *) getFileDir:(NSString *)itemFile
 {
-    for (OAGPX *item in gpxList) {
-        if ([item.gpxFilePath isEqualToString:filePath]) {
+    NSString *pathToDelete = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
+    return [[itemFile stringByReplacingOccurrencesOfString:pathToDelete withString:@""] stringByDeletingLastPathComponent];
+}
+
+-(BOOL)containsGPXItem:(NSString *)file
+{
+    for (OAGPX *item in gpxList)
+    {
+        if ([item.file isEqualToString:file])
+        {
             return YES;
         }
     }
@@ -201,31 +205,37 @@
 
 -(BOOL)containsGPXItemByFileName:(NSString *)fileName
 {
-    for (OAGPX *item in gpxList) {
-        if ([item.gpxFileName isEqualToString:fileName]) {
+    for (OAGPX *item in gpxList)
+    {
+        if ([[item.file lastPathComponent] isEqualToString:fileName])
+        {
             return YES;
         }
     }
     return NO;
 }
 
--(BOOL)updateGPXItemColor:(NSString *)filePath color:(int)color
+-(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color
 {
-    for (OAGPX *item in gpxList) {
-        if ([item.gpxFilePath isEqualToString:filePath]) {
-            item.color = color;
+    for (OAGPX *gpx in gpxList)
+    {
+        if ([gpx.file isEqualToString:item.file])
+        {
+            gpx.color = color;
             return YES;
         }
     }
     return NO;
 }
 
--(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount
+-(BOOL)updateGPXItemPointsCount:(NSString *)file pointsCount:(int)pointsCount
 {
-    for (OAGPX *item in gpxList) {
-        if ([item.gpxFilePath isEqualToString:filePath]) {
+    for (OAGPX *item in gpxList)
+    {
+        if ([item.file isEqualToString:file])
+        {
             item.wptPoints = pointsCount;
-            NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item.gpxFilePath];
+            NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item.file];
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:path];
             item.bounds = doc.bounds;
             return YES;
@@ -236,12 +246,12 @@
 
 -(BOOL)updateGPXFolderName:(NSString *)newFilePath oldFilePath:(NSString *)oldFilePath
 {
-    for (OAGPX *item in gpxList) {
-        if ([item.gpxFilePath isEqualToString:oldFilePath]) {
-            item.gpxFilePath = newFilePath;
-            item.gpxFileName = [newFilePath lastPathComponent];
-            item.gpxTitle = [item.gpxFileName stringByDeletingPathExtension];
-            
+    for (OAGPX *item in gpxList)
+    {
+        if ([item.file isEqualToString:oldFilePath])
+        {
+            item.file = newFilePath;
+            item.gpxTitle = [[item.file lastPathComponent] stringByDeletingPathExtension];
             return YES;
         }
     }
@@ -253,25 +263,27 @@
     NSMutableArray *res = [NSMutableArray array];
     NSArray *dbContent = [NSArray arrayWithContentsOfFile:self.dbFilePath];
     
-    for (NSDictionary *dict in dbContent) {
-
+    for (NSDictionary *dict in dbContent)
+    {
         OAGPX *gpx = [[OAGPX alloc] init];
         OAGpxBounds bounds;
         bounds.center = CLLocationCoordinate2DMake([dict[@"center_lat"] doubleValue], [dict[@"center_lon"] doubleValue]);
         bounds.topLeft = CLLocationCoordinate2DMake([dict[@"top_left_lat"] doubleValue], [dict[@"top_left_lon"] doubleValue]);
         bounds.bottomRight = CLLocationCoordinate2DMake([dict[@"bottom_right_lat"] doubleValue], [dict[@"bottom_right_lon"] doubleValue]);
         gpx.bounds = bounds;
+        NSString *fileName;
+        NSString *fileDir;
         
-        for (NSString *key in dict) {
-            
+        for (NSString *key in dict)
+        {
             id value = dict[key];
             
             if ([key isEqualToString:@"gpxFileName"]) {
-                gpx.gpxFileName = value;
+                fileName = value;
+            } else if ([key isEqualToString:@"gpxFileDir"]) {
+                fileDir = value;
             } else if ([key isEqualToString:@"gpxTitle"]) {
                 gpx.gpxTitle = value;
-            } else if ([key isEqualToString:@"gpxFilePath"]) {
-                gpx.gpxFilePath = value;
             } else if ([key isEqualToString:@"gpxDescription"]) {
                 gpx.gpxDescription = value;
             } else if ([key isEqualToString:@"importDate"]) {
@@ -335,11 +347,12 @@
                 wpt.speed = [value[@"speed"] doubleValue];
                 gpx.locationEnd = wpt;
             }
-            
         }
-        if (!gpx.gpxFilePath)
-            gpx.gpxFilePath = gpx.gpxFileName;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]])
+        
+        if (fileDir && fileName)
+            gpx.file = [fileDir stringByAppendingPathComponent:fileName];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpx.file]])
             [res addObject:gpx];
     }
     gpxList = res;
@@ -349,13 +362,14 @@
 {
     NSMutableArray *dbContent = [NSMutableArray array];
     
-    for (OAGPX *gpx in gpxList) {
-        
+    for (OAGPX *gpx in gpxList)
+    {
         NSMutableDictionary *d = [NSMutableDictionary dictionary];
-        
-        [d setObject:gpx.gpxFileName forKey:@"gpxFileName"];
+        NSString *fileName = [self getFileName:gpx.file];
+        NSString *fileDir = [self getFileDir:gpx.file];
+        [d setObject:fileName forKey:@"gpxFileName"];
+        [d setObject:fileDir forKey:@"gpxFileDir"];
         [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
-        [d setObject:gpx.gpxFilePath ? gpx.gpxFilePath : gpx.gpxTitle forKey:@"gpxFilePath"];
         [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
         [d setObject:gpx.importDate forKey:@"importDate"];
         
@@ -388,7 +402,8 @@
         [d setObject:@(gpx.wptPoints) forKey:@"wptPoints"];
         [d setObject:@(gpx.metricEnd) forKey:@"metricEnd"];
         
-        if (gpx.locationStart) {
+        if (gpx.locationStart)
+        {
             NSMutableDictionary *wpt = [NSMutableDictionary dictionary];
             [wpt setObject:@(gpx.locationStart.position.latitude) forKey:@"position_lat"];
             [wpt setObject:@(gpx.locationStart.position.longitude) forKey:@"position_lon"];
@@ -402,7 +417,8 @@
             [d setObject:wpt forKey:@"locationStart"];
         }
         
-        if (gpx.locationEnd) {
+        if (gpx.locationEnd)
+        {
             NSMutableDictionary *wpt = [NSMutableDictionary dictionary];
             [wpt setObject:@(gpx.locationEnd.position.latitude) forKey:@"position_lat"];
             [wpt setObject:@(gpx.locationEnd.position.longitude) forKey:@"position_lon"];

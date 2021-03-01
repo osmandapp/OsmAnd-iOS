@@ -216,8 +216,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         switch (_sortingMode) {
             case EOAModifiedDate:
             {
-                NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.gpxFileName];
-                NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.gpxFileName];
+                NSDate *time1 = [OAUtilities getFileLastModificationDate:obj1.file];
+                NSDate *time2 = [OAUtilities getFileLastModificationDate:obj2.file];
                 return [time2 compare:time1];
             }
             case EOANameAscending:
@@ -336,7 +336,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         if (self.delegate)
             [self.delegate closeBottomSheet];
         [self dismissViewControllerAnimated:YES completion:nil];
-        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.gpxFilePath]];
+        [[OARootViewController instance].mapPanel showScrollableHudViewController:[[OARoutePlanningHudViewController alloc] initWithFileName:track.file]];
         return;
     }
     else
@@ -344,9 +344,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         OAGPX* track = item[@"track"];
         NSString *filename = nil;
         if (track)
-            filename = track.gpxFileName;
+            filename = [OAGPXDatabase.sharedDb getFileName:track.file];
         if (self.delegate)
-            [self.delegate onFileSelected:track.gpxFilePath];
+            [self.delegate onFileSelected:track.file];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
     }

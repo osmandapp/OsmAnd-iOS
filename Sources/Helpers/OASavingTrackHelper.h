@@ -21,7 +21,6 @@
 @property (nonatomic, readonly) BOOL isRecording;
 
 @property (nonatomic, readonly) OAGPXMutableDocument *currentTrack;
-@property (nonatomic, readonly) NSString *currentTrackPath;
 
 + (OASavingTrackHelper *)sharedInstance;
 

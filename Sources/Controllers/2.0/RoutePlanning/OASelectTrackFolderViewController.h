@@ -19,7 +19,10 @@
 
 @interface OASelectTrackFolderViewController : OABaseTableViewController
 
-- (instancetype) initWithGPX:(OAGPX *)gpx delegate:(id<OASelectTrackFolderDelegate>)delegate;
-- (instancetype) initWithGPXFileName:(NSString *)fileName delegate:(id<OASelectTrackFolderDelegate>)delegate;
+@property (nonatomic, weak) id<OASelectTrackFolderDelegate> delegate;
+
+- (instancetype) initWithGPX:(OAGPX *)gpx;
+//- (instancetype) initWithGPX:(OAGPX *)gpx delegate:(id<OASelectTrackFolderDelegate>)delegate;     //TODO:nnngrach delete
+//- (instancetype) initWithGPXFileName:(NSString *)fileName delegate:(id<OASelectTrackFolderDelegate>)delegate;     //TODO:nnngrach delete
 
 @end

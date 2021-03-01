@@ -11,7 +11,7 @@
 
 @protocol OASelectTrackFolderDelegate <NSObject>
 
-- (void) updateSelectedFolder:(OAGPX *)gpx oldFilePath:(NSString *)oldFilePath newFilePath:(NSString *)newFilePath;
+- (void) onFolderSelected:(NSString *)selectedFolderName;
 
 @end
 

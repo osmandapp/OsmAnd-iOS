@@ -202,8 +202,8 @@
     else if (indexPath.section == kFoldersListSection)
     {
         NSDictionary *item = _data[indexPath.section][indexPath.row];
-        if (![item[@"isSelected"] boolValue])
-            [self moveTrackToFolder:item[@"title"]];
+        if (![item[@"isSelected"] boolValue] && _delegate)
+            [_delegate onFolderSelected:item[@"title"]];
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
@@ -216,37 +216,6 @@
             return 60;
         else
             return UITableViewAutomaticDimension;
-}
-
-- (void) moveTrackToFolder:(NSString *)selectedFolderName
-{
-    NSString *oldPath = _gpx.file;
-    NSString *oldName = [OAGPXDatabase.sharedDb getFileName:_gpx.file];
-    NSString *sourcePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldPath];
-    
-    NSString *newFolder = [selectedFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : selectedFolderName;
-    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = [self getUniqueFileName:oldName inFolderPath:newFolderPath];
-    NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
-    
-    [OAGPXDatabase.sharedDb updateGPXFolderName:[newFolder stringByAppendingPathComponent:newName] oldFilePath:oldPath];
-    [OAGPXDatabase.sharedDb save];
-    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
-    [_delegate updateSelectedFolder:_gpx oldFilePath:oldPath newFilePath:[newFolder stringByAppendingPathComponent:newName]];
-}
-
-- (NSString *) getUniqueFileName:(NSString *)fileName inFolderPath:(NSString *)folderPath
-{
-    NSString *name = [fileName stringByDeletingPathExtension];
-    NSString *newName = name;
-    int i = 1;
-    while ([[NSFileManager defaultManager] fileExistsAtPath:[[folderPath stringByAppendingPathComponent:newName] stringByAppendingPathExtension:@"gpx"]])
-    {
-        newName = [NSString stringWithFormat:@"%@ %i", name, i];
-        i++;
-    }
-    return [newName stringByAppendingPathExtension:@"gpx"];
 }
 
 #pragma mark - OAAddTrackFolderDelegate

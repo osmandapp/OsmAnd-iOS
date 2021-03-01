@@ -1513,12 +1513,39 @@
     [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
 }
 
+- (NSString *) getUniqueFileName:(NSString *)fileName inFolderPath:(NSString *)folderPath
+{
+    NSString *name = [fileName stringByDeletingPathExtension];
+    NSString *newName = name;
+    int i = 1;
+    while ([[NSFileManager defaultManager] fileExistsAtPath:[[folderPath stringByAppendingPathComponent:newName] stringByAppendingPathExtension:@"gpx"]])
+    {
+        newName = [NSString stringWithFormat:@"%@ %i", name, i];
+        i++;
+    }
+    return [newName stringByAppendingPathExtension:@"gpx"];
+}
+
 #pragma mark - OASelectTrackFolderDelegate
 
-- (void) updateSelectedFolder:(OAGPX *)gpx oldFilePath:(NSString *)oldFilePath newFilePath:(NSString *)newFilePath
+//Move track to selected folder
+- (void) onFolderSelected:(NSString *)selectedFolderName
 {
-    self.titleView.text = [newFilePath.lastPathComponent stringByDeletingPathExtension];
-    [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
+    NSString *oldPath = _gpx.file;
+    NSString *oldName = [OAGPXDatabase.sharedDb getFileName:_gpx.file];
+    NSString *sourcePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldPath];
+    
+    NSString *newFolder = [selectedFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : selectedFolderName;
+    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFolder];
+    NSString *newName = [self getUniqueFileName:oldName inFolderPath:newFolderPath];
+    NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
+    
+    [OAGPXDatabase.sharedDb updateGPXFolderName:[newFolder stringByAppendingPathComponent:newName] oldFilePath:oldPath];
+    [OAGPXDatabase.sharedDb save];
+    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
+    [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
+    self.titleView.text = [newName stringByDeletingPathExtension];
+    [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:[newFolder stringByAppendingPathComponent:newName]];
     if (self.delegate)
         [self.delegate contentChanged];
 }

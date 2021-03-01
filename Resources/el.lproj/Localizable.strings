@@ -348,7 +348,7 @@
 "settings_preset_descr" = "Η εμφάνιση χάρτη και οι ρυθμίσεις πλοήγησης απομνημονευονται ανά προφίλ χρήστη. Καθορίστε το προεπιλεγμένο προφίλ σας εδώ.";
 "green" = "Πράσινο";
 "road_blocked" = "Κλειστός δρόμος";
-"osm_alert_title" = "Commit";
+"osm_alert_title" = "Υποβολή";
 "min_mile" = "λεπτά/μίλι";
 "shared_string_is_open" = "Άνοιγμα";
 "day_night_info" = "Πληρ. Ημέρας/Νύχτας";
@@ -1014,7 +1014,6 @@
 "utm_description" = "Προσοχή, το OsmAnd χρησιμοποιεί το UTM Standard πρότυπο το οποίο είναι παρόμοιο αλλά όχι ίδιο με το UTM NATO.";
 "week_short" = "'Εβδ";
 "day_short" = "Μ";
-
 "consider_limitations_param" = "Λάβετε υπόψη τους προσωρινούς περιορισμούς";
 "base_profile_descr_bicycle" = "Ποδήλατο βουνού, μοτοποδήλατο, άλογο";
 "shared_string_profiles" = "Κατανομές";

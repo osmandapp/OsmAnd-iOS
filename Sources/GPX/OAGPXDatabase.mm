@@ -101,8 +101,8 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
-        
+    if (self)
+    {
         self.dbFilePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:kDbName];
         [self load];
     }
@@ -135,7 +135,8 @@
 
 -(OAGPX *)getGPXItem:(NSString *)file
 {
-    for (OAGPX *item in gpxList) {
+    for (OAGPX *item in gpxList)
+    {
         if ([item.file isEqualToString:file])
         {
             return item;
@@ -146,7 +147,8 @@
 
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName
 {
-    for (OAGPX *item in gpxList) {
+    for (OAGPX *item in gpxList)
+    {
         if ([[item.file lastPathComponent] isEqualToString:fileName])
         {
             return item;
@@ -160,7 +162,8 @@
     NSMutableArray *arr = [NSMutableArray arrayWithArray:gpxList];
     NSString *path;
     for (OAGPX *item in arr) {
-        if ([item.file isEqualToString:file]) {
+        if ([item.file isEqualToString:file])
+        {
             path = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:item.file];
             [arr removeObject:item];
             break;
@@ -190,8 +193,10 @@
 
 -(BOOL)containsGPXItem:(NSString *)file
 {
-    for (OAGPX *item in gpxList) {
-        if ([item.file isEqualToString:file]) {
+    for (OAGPX *item in gpxList)
+    {
+        if ([item.file isEqualToString:file])
+        {
             return YES;
         }
     }
@@ -200,8 +205,10 @@
 
 -(BOOL)containsGPXItemByFileName:(NSString *)fileName
 {
-    for (OAGPX *item in gpxList) {
-        if ([[item.file lastPathComponent] isEqualToString:fileName]) {
+    for (OAGPX *item in gpxList)
+    {
+        if ([[item.file lastPathComponent] isEqualToString:fileName])
+        {
             return YES;
         }
     }
@@ -210,8 +217,10 @@
 
 -(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color
 {
-    for (OAGPX *gpx in gpxList) {
-        if ([gpx.file isEqualToString:item.file]) {
+    for (OAGPX *gpx in gpxList)
+    {
+        if ([gpx.file isEqualToString:item.file])
+        {
             gpx.color = color;
             return YES;
         }
@@ -221,8 +230,10 @@
 
 -(BOOL)updateGPXItemPointsCount:(NSString *)file pointsCount:(int)pointsCount
 {
-    for (OAGPX *item in gpxList) {
-        if ([item.file isEqualToString:file]) {
+    for (OAGPX *item in gpxList)
+    {
+        if ([item.file isEqualToString:file])
+        {
             item.wptPoints = pointsCount;
             NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item.file];
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:path];
@@ -235,8 +246,10 @@
 
 -(BOOL)updateGPXFolderName:(NSString *)newFilePath oldFilePath:(NSString *)oldFilePath
 {
-    for (OAGPX *item in gpxList) {
-        if ([item.file isEqualToString:oldFilePath]) {
+    for (OAGPX *item in gpxList)
+    {
+        if ([item.file isEqualToString:oldFilePath])
+        {
             item.file = newFilePath;
             item.gpxTitle = [[item.file lastPathComponent] stringByDeletingPathExtension];
             return YES;
@@ -261,10 +274,10 @@
         NSString *fileName;
         NSString *fileDir;
         
-        for (NSString *key in dict) {
-            
+        for (NSString *key in dict)
+        {
             id value = dict[key];
-        
+            
             if ([key isEqualToString:@"gpxFileName"]) {
                 fileName = value;
             } else if ([key isEqualToString:@"gpxFileDir"]) {
@@ -349,8 +362,8 @@
 {
     NSMutableArray *dbContent = [NSMutableArray array];
     
-    for (OAGPX *gpx in gpxList) {
-        
+    for (OAGPX *gpx in gpxList)
+    {
         NSMutableDictionary *d = [NSMutableDictionary dictionary];
         NSString *fileName = [self getFileName:gpx.file];
         NSString *fileDir = [self getFileDir:gpx.file];
@@ -389,7 +402,8 @@
         [d setObject:@(gpx.wptPoints) forKey:@"wptPoints"];
         [d setObject:@(gpx.metricEnd) forKey:@"metricEnd"];
         
-        if (gpx.locationStart) {
+        if (gpx.locationStart)
+        {
             NSMutableDictionary *wpt = [NSMutableDictionary dictionary];
             [wpt setObject:@(gpx.locationStart.position.latitude) forKey:@"position_lat"];
             [wpt setObject:@(gpx.locationStart.position.longitude) forKey:@"position_lon"];
@@ -403,7 +417,8 @@
             [d setObject:wpt forKey:@"locationStart"];
         }
         
-        if (gpx.locationEnd) {
+        if (gpx.locationEnd)
+        {
             NSMutableDictionary *wpt = [NSMutableDictionary dictionary];
             [wpt setObject:@(gpx.locationEnd.position.latitude) forKey:@"position_lat"];
             [wpt setObject:@(gpx.locationEnd.position.longitude) forKey:@"position_lon"];

@@ -183,7 +183,7 @@
                 [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
             }
             
-            [[OAGPXDatabase sharedDb] remove:self.gpx];
+            [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.file];
             [[OAGPXDatabase sharedDb] save];
         }
     }
@@ -680,7 +680,7 @@
                     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
                 }
                 
-                [[OAGPXDatabase sharedDb] remove:self.gpx];
+                [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.file];
                 [[OAGPXDatabase sharedDb] save];
             }
             

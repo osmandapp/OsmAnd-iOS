@@ -3122,7 +3122,6 @@
         {
             if (it.value())
                 docs[it.key()] = it.value();
-                //docs[QFileInfo(it.key()).fileName()] = it.value();
         }
         if (_gpxDocFileRoute && !_gpxDocsRoute.isEmpty())
             docs[QString::fromNSString(_gpxDocFileRoute)] = _gpxDocsRoute.first();

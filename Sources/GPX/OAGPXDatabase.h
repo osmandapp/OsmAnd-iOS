@@ -65,15 +65,14 @@
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
 -(void)replaceGpxItem:(OAGPX *)gpx;
 -(BOOL)removeGpxItem:(NSString *)file;
--(BOOL)remove:(OAGPX *)item;
 -(BOOL)containsGPXItem:(NSString *)file;
 -(BOOL)containsGPXItemByFileName:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)file pointsCount:(int)pointsCount;
 -(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color;
 -(BOOL)updateGPXFolderName:(NSString *)newFilePath oldFilePath:(NSString *)oldFilePath;
+
 -(NSString *)getFileName:(NSString *)itemFile;
 -(NSString *)getFileDir:(NSString *)itemFile;
-
 -(NSString *)getGpxStoringPathByFullPath:(NSString *)fullFilePath;
 
 -(void)load;

@@ -249,7 +249,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         if (track)
             filename = [OAGPXDatabase.sharedDb getFileName:track.file];
         if (self.delegate)
-            [self.delegate onFileSelected:[OAGPXDatabase.sharedDb getFileDir:track.file]];
+            [self.delegate onFileSelected:track.file];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self dismissViewControllerAnimated:YES completion:nil];
     }

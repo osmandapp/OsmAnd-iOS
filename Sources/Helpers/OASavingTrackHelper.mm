@@ -64,7 +64,7 @@
     OAAutoObserverProxy* _locationServicesUpdateObserver;
 }
 
-@synthesize lastTimeUpdated, points, isRecording, distance, currentTrack, currentTrackPath;
+@synthesize lastTimeUpdated, points, isRecording, distance, currentTrack;
 
 + (OASavingTrackHelper*)sharedInstance
 {
@@ -332,8 +332,6 @@
     [currentTrack.tracks removeAllObjects];
     [currentTrack initBounds];
     currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
-    
-    currentTrackPath = @"";
     
     [self prepareCurrentTrackForRecording];
 }

@@ -73,7 +73,11 @@
     ]];
     
     NSMutableArray *cellFoldersData = [NSMutableArray new];
-    for (NSString *folderName in allFolderNames)
+    NSArray<NSString *> *sortedAllFolderNames = [allFolderNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    for (NSString *folderName in sortedAllFolderNames)
     {
         NSArray *folderItems = foldersData[folderName];
         int tracksCount = folderItems ? folderItems.count : 0;

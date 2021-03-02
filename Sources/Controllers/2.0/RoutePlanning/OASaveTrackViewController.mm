@@ -16,18 +16,12 @@
 #import "OAGPXDatabase.h"
 #import "OAMapLayers.h"
 #import "OAMapRendererView.h"
-#import "OASettingsTableViewCell.h"
-#import "OAFolderCardsCell.h"
-#import "OASelectTrackFolderViewController.h"
-#import "OAAddTrackFolderViewController.h"
 
 #define kTextInputCell @"OATextViewResizingCell"
 #define kRouteGroupsCell @""
 #define kSwitchCell @"OASwitchTableViewCell"
-#define kCellTypeTitle @"OASettingsCell"
-#define kFolderCardsCell @"OAFolderCardsCell"
 
-@interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
+@interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
 @end
 
@@ -35,13 +29,9 @@
 {
     NSArray<NSArray<NSDictionary *> *> *_data;
     OAAppSettings *_settings;
-    OAGPX *_gpx;
     
     NSString *_fileName;
     NSString *_sourceFileName;
-    NSString *_filePath;
-    NSString *_selectedFolderName;
-    NSArray<NSString *> *_allFolders;
     BOOL _showSimplifiedButton;
     BOOL _rightButtonEnabled;
     
@@ -49,10 +39,10 @@
     BOOL _showOnMap;
     
     NSString *_inputFieldError;
-    int _selectedFolderIndex;
+
 }
 
-- (instancetype) initWithFileName:(NSString *)fileName filePath:(NSString *)filePath showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
+- (instancetype) initWithParams:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
 {
     self = [super init];
     if (self)
@@ -60,10 +50,8 @@
         _settings = [OAAppSettings sharedManager];
         _fileName = fileName;
         _sourceFileName = fileName;
-        _filePath = filePath;
         _showSimplifiedButton = simplifiedTrack;
         _showOnMap = showOnMap;
-        _gpx = [OAGPXDatabase.sharedDb getGPXItem:filePath];
         
         _rightButtonEnabled = YES;
         _simplifiedTrack = NO;
@@ -82,6 +70,7 @@
     
     self.cancelButton.layer.cornerRadius = 9.0;
     self.saveButton.layer.cornerRadius = 9.0;
+    
     [self updateBottomButtons];
 }
 
@@ -91,15 +80,6 @@
     self.titleLabel.text = OALocalizedString(@"save_new_track");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
-}
-
-- (NSString *) getDisplayingFolderName:(NSString *)filePath
-{
-    NSString *folderName = [filePath stringByDeletingLastPathComponent];
-    if (folderName.length == 0)
-        return OALocalizedString(@"tracks");
-    else
-        return folderName;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -118,26 +98,7 @@
 
 - (void) commonInit
 {
-    [self updateAllFoldersList];
-    _selectedFolderName = [self getDisplayingFolderName:_filePath];
-    _selectedFolderIndex = (int)[_allFolders indexOfObject:_selectedFolderName];
     [self generateData];
-}
-
-- (void) updateAllFoldersList
-{
-    NSMutableArray<NSString *> *allFoldersNames = [NSMutableArray new];
-    [allFoldersNames addObject:OALocalizedString(@"tracks")];
-    NSArray* filesList = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
-    for (NSString *name in filesList)
-    {
-        if (![name hasPrefix:@"."] && ![name.lowerCase hasSuffix:@".gpx"])
-            [allFoldersNames addObject:name];
-    }
-    NSArray<NSString *> *sortedAllFolderNames = [allFoldersNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-        return [obj1 compare:obj2];
-    }];
-    _allFolders = sortedAllFolderNames;
 }
 
 - (void) generateData
@@ -152,20 +113,14 @@
             @"key" : @"input_name",
         }
     ]];
-    
-    [data addObject:@[
-        @{
-            @"type" : kCellTypeTitle,
-            @"header" : OALocalizedString(@"plan_route_folder"),
-            @"title" : @"Select folder",
-            @"value" : _selectedFolderName,
-        },
-        @{
-            @"type" : @"OAFolderCardsCell",
-            @"selectedValue" : [NSNumber numberWithInt:_selectedFolderIndex],
-            @"values" : _allFolders,
-        },
-    ]];
+    // TODO: add gpx groups
+//    [data addObject:@[
+//        @{
+//            @"type" : kRouteGroupsCell,
+//            @"header" : OALocalizedString(@"fav_group"),
+//            @"key" : @"route_groups",
+//        }
+//    ]];
     
     if (_showSimplifiedButton)
     {
@@ -205,28 +160,6 @@
     return NO;
 }
 
-- (void) showSelectFolderScreen
-{
-    OASelectTrackFolderViewController *selectFolderView = [[OASelectTrackFolderViewController alloc] initWithGPXFileName:_filePath delegate:self];
-    [self presentViewController:selectFolderView animated:YES completion:nil];
-}
-
-- (void) showAddFolderScreen
-{
-    OAAddTrackFolderViewController * addFolderVC = [[OAAddTrackFolderViewController alloc] init];
-    addFolderVC.delegate = self;
-    [self presentViewController:addFolderVC animated:YES completion:nil];
-}
-
-- (void) showEmptyNameAlert
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"empty_filename") preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
-#pragma mark - Actions
-
 - (IBAction)cancelButtonPressed:(id)sender
 {
     [self dismissViewController];
@@ -241,15 +174,16 @@
     else
     {
         [self dismissViewControllerAnimated:NO completion:nil];
-        NSString *savingPath;
-        if ([_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
-            savingPath = _fileName;
-        else
-            savingPath = [_selectedFolderName stringByAppendingPathComponent:_fileName];
-        
         if (self.delegate)
-            [self.delegate onSaveAsNewTrack:savingPath showOnMap:_showOnMap simplifiedTrack:_simplifiedTrack];
+            [self.delegate onSaveAsNewTrack:_fileName showOnMap:_showOnMap simplifiedTrack:_simplifiedTrack];
     }
+}
+
+- (void) showEmptyNameAlert
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"empty_filename") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -301,45 +235,6 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:kCellTypeTitle])
-    {
-        static NSString* const identifierCell = kCellTypeTitle;
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
-            cell.descriptionView.numberOfLines = 1;
-            cell.iconView.image = [[UIImage imageNamed:@"ic_custom_arrow_right"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 0, 0, CGFLOAT_MAX);
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:kFolderCardsCell])
-    {
-        static NSString* const identifierCell = kFolderCardsCell;
-        OAFolderCardsCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OAFolderCardsCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
-            cell.delegate = self;
-            [cell setValues:item[@"values"] withSelectedIndex:(int)[item[@"selectedValue"] intValue]];
-        }
-        return cell;
-    }
     
     return nil;
 }
@@ -384,26 +279,6 @@
     NSDictionary *item = ((NSArray *)_data[section]).firstObject;
     
     return item[@"footer"];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kFolderCardsCell])
-        return 77;
-
-    return UITableViewAutomaticDimension;
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:kCellTypeTitle])
-    {
-        [self showSelectFolderScreen];
-    }
 }
 
 -(void) clearButtonPressed:(UIButton *)sender
@@ -512,57 +387,6 @@
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         self.view.frame = CGRectMake(0., 0., self.view.frame.size.width, DeviceScreenHeight - OAUtilities.getStatusBarHeight - [self getModalPresentationOffset:NO]);
     } completion:nil];
-}
-
-#pragma mark - OASelectTrackFolderDelegate
-
-- (void) updateSelectedFolder
-{
-    //TODO:nnngrach delete
-    [self generateData];
-    [self.tableView reloadData];
-}
-
-- (void) onFolderSelected:(NSString *)selectedFolderName
-{
-    _selectedFolderName = selectedFolderName;
-    _selectedFolderIndex = [_allFolders indexOfObject:selectedFolderName];
-    [self generateData];
-    [self.tableView reloadData];
-}
-
-- (void) onNewFolderAdded
-{
-    [self updateAllFoldersList];
-    _selectedFolderIndex = [_allFolders indexOfObject:_selectedFolderName];
-    [self generateData];
-    [self.tableView reloadData];
-}
-
-#pragma mark - OAAddTrackFolderDelegate
-
-- (void) onTrackFolderAdded:(NSString *)folderName
-{
-    NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:folderName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:newFolderPath])
-        [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
-    
-    [self onNewFolderAdded];
-}
-
-#pragma mark - OAFolderCardsCellDelegate
-
-- (void) onItemSelected:(int)index
-{
-    _selectedFolderIndex = index;
-    _selectedFolderName = _allFolders[index];
-    [self generateData];
-    [self.tableView reloadData];
-}
-
-- (void) onAddFolderButtonPressed
-{
-    [self showAddFolderScreen];
 }
 
 @end

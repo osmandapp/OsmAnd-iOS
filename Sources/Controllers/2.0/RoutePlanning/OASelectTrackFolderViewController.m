@@ -43,18 +43,6 @@
     return self;
 }
 
-- (instancetype) initWithGPXFileName:(NSString *)fileName delegate:(id<OASelectTrackFolderDelegate>)delegate;
-{
-    self = [super initWithNibName:@"OABaseTableViewController" bundle:nil];
-    if (self)
-    {
-        _gpx = [OAGPXDatabase.sharedDb getGPXItem:fileName];
-        _delegate = delegate;
-        [self reloadData];
-    }
-    return self;
-}
-
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -239,9 +227,6 @@
         [[NSFileManager defaultManager] createDirectoryAtPath:newFolderPath withIntermediateDirectories:NO attributes:nil error:nil];
     
     [self reloadData];
-    
-    if (_delegate)
-        [_delegate onNewFolderAdded];
 }
 
 @end

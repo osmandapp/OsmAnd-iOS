@@ -679,15 +679,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     return displayedName;
 }
 
-- (NSString *) getSuggestedFilePath
-{
-    OAGpxData *gpxData = _editingContext.gpxData;
-    if (gpxData != nil && gpxData.gpxFile.fileName.length > 0)
-        return [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:gpxData.gpxFile.fileName];
-    else
-        return [[self getSuggestedFileName] stringByAppendingPathExtension:@"gpx"];
-}
-
 - (NSString *) createUniqueFileName:(NSString *)fileName
 {
     NSString *path = [[_app.gpxPath stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:@"gpx"];
@@ -890,7 +881,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     if (_editingContext.getPointsCount > 0)
     {
-        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:[self getSuggestedFileName] filePath:[self getSuggestedFilePath] showOnMap:YES simplifiedTrack:YES];
+        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithParams:[self getSuggestedFileName] showOnMap:YES simplifiedTrack:YES];
         saveTrackViewController.delegate = self;
         [self presentViewController:saveTrackViewController animated:YES completion:nil];
     }
@@ -1519,8 +1510,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
 {
-    
-    [self saveNewGpx:fileName.stringByDeletingLastPathComponent fileName:fileName.lastPathComponent showOnMap:showOnMap simplifiedTrack:simplifiedTrack finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
+    [self saveNewGpx:@"" fileName:fileName showOnMap:showOnMap simplifiedTrack:simplifiedTrack finalSaveAction:SHOW_IS_SAVED_FRAGMENT];
 }
 
 #pragma mark - OAExitRoutePlanningDelegate

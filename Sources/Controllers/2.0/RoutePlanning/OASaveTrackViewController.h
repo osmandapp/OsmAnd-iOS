@@ -24,6 +24,6 @@
 
 @property (weak, nonatomic) id<OASaveTrackViewControllerDelegate> delegate;
 
-- (instancetype) initWithFileName:(NSString *)fileName filePath:(NSString *)filePath showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack;
+- (instancetype) initWithParams:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack;
 
 @end

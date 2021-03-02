@@ -26,6 +26,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OASelectTrackFolderViewController.h"
+#import "OASaveTrackViewController.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -43,7 +44,7 @@
 @end
 
 
-@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAEditGPXColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate, OASelectTrackFolderDelegate> {
+@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAEditGPXColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate, OASelectTrackFolderDelegate, OASaveTrackViewControllerDelegate> {
 
     OsmAndAppInstance _app;
     NSDateFormatter *dateTimeFormatter;
@@ -1059,6 +1060,20 @@
     }
 }
 
+- (void)documentInteractionController:(UIDocumentInteractionController *)controller willBeginSendingToApplication:(NSString *)application
+{
+    if ([application isEqualToString:@"net.osmand.maps"])
+    {
+        [_exportController dismissMenuAnimated:YES];
+        _exportFilePath = nil;
+        _exportController = nil;
+        
+        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc] initWithFileName:_gpx.file.lastPathComponent.stringByDeletingPathExtension filePath:_gpx.file showOnMap:YES simplifiedTrack:YES];
+        saveTrackViewController.delegate = self;
+        [OARootViewController.instance presentViewController:saveTrackViewController animated:YES completion:nil];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -1526,28 +1541,57 @@
     return [newName stringByAppendingPathExtension:@"gpx"];
 }
 
-#pragma mark - OASelectTrackFolderDelegate
-
-//Move track to selected folder
-- (void) onFolderSelected:(NSString *)selectedFolderName
+- (void) copyGPXToNewFolder:(NSString *)newFolderName renameToNewName:(NSString *)newFileName deleteOriginalFile:(BOOL)deleteOriginalFile
 {
     NSString *oldPath = _gpx.file;
     NSString *oldName = [OAGPXDatabase.sharedDb getFileName:_gpx.file];
     NSString *sourcePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldPath];
     
-    NSString *newFolder = [selectedFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : selectedFolderName;
+    NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = [self getUniqueFileName:oldName inFolderPath:newFolderPath];
+    NSString *newName = newFileName ? newFileName : oldName;
+    newName = [self getUniqueFileName:newName inFolderPath:newFolderPath];
+    NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
     NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
     
-    [OAGPXDatabase.sharedDb updateGPXFolderName:[newFolder stringByAppendingPathComponent:newName] oldFilePath:oldPath];
-    [OAGPXDatabase.sharedDb save];
     [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
-    [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
-    self.titleView.text = [newName stringByDeletingPathExtension];
-    [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:[newFolder stringByAppendingPathComponent:newName]];
+    
+    if (deleteOriginalFile)
+    {
+        [OAGPXDatabase.sharedDb updateGPXFolderName:newStoringPath oldFilePath:oldPath];
+        [OAGPXDatabase.sharedDb save];
+        [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
+        
+        self.titleView.text = [newName stringByDeletingPathExtension];
+        [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:newStoringPath];
+    }
+    else
+    {
+        OAGPXDocument *gpxDoc = [[OAGPXDocument alloc] initWithGpxFile:sourcePath];
+        OAGPXTrackAnalysis *analysis = [gpxDoc getAnalysis:0];
+        [OAGPXDatabase.sharedDb addGpxItem:[newFolder stringByAppendingPathComponent:newName] title:newName desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds analysis:analysis];
+        
+        NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:OAAppSettings.sharedManager.mapSettingVisibleGpx];
+        if ([visibleGpx containsObject:oldPath])
+            [OAAppSettings.sharedManager showGpx:@[newStoringPath]];
+    }
+    
     if (self.delegate)
         [self.delegate contentChanged];
+}
+
+#pragma mark - OASelectTrackFolderDelegate
+
+- (void) onFolderSelected:(NSString *)selectedFolderName
+{
+    [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES];
+}
+
+#pragma mark - OASaveTrackViewControllerDelegate
+
+- (void)onSaveAsNewTrack:(NSString *)fileName showOnMap:(BOOL)showOnMap simplifiedTrack:(BOOL)simplifiedTrack
+{
+    [self copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"] deleteOriginalFile:NO];
 }
 
 @end

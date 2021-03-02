@@ -49,7 +49,7 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"map_settings_mapillary");
+    self.titleView.text = OALocalizedString(@"mapillary");
     self.noConnectionLabel.text = OALocalizedString(@"no_inet_connection");
     self.noConnectionDescr.text = OALocalizedString(@"mapil_no_inet_descr");
     [self.retryButton setTitle:OALocalizedString(@"shared_string_retry") forState:UIControlStateNormal];

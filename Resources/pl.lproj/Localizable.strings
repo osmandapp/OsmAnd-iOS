@@ -92,7 +92,7 @@
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Wyświetl na mapie";
 "map_settings_type" = "Rodzaj mapy";
-"map_settings_mode" = "Tryb aplikacji";
+"map_mode" = "Tryb aplikacji";
 "map_settings_day" = "Dzień";
 "map_settings_night" = "Noc";
 "map_settings_style" = "Styl mapy";
@@ -133,7 +133,7 @@
 "prch_failed" = "Nie udało się zakupić „%@”";
 // Resources
 "res_mapsres" = "Mapy i zasoby";
-"res_installed" = "Zainstalowane";
+"download_tab_local" = "Zainstalowane";
 "res_search_world" = "Szukaj na całym świecie";
 "res_world_map" = "Mapa świata";
 "res_updates" = "Aktualizacje";
@@ -149,7 +149,7 @@
 "gpx_max_speed" = "Prędkość maksymalna";
 "gpx_speed" = "Prędkość";
 // Map settings
-"m_style_overview" = "Przegląd";
+"rendering_value_browse_map_name" = "Przegląd";
 "m_style_car" = "Samochód";
 "m_style_walk" = "Pieszo";
 "m_style_bicycle" = "Rower";
@@ -657,7 +657,7 @@
 "wpt_select" = "Wybierz punkty trasy";
 "gpx_remove_wpts_q" = "Czy chcesz usunąć wybrane punkty trasy?";
 "editing_waypoints" = "Edytuj punkty trasy";
-"directions" = "Nawigacja";
+"get_directions" = "Nawigacja";
 "est_travel_time" = "Szacunkowy czas podróży";
 "open_map_settings" = "Otwórz ustawienia mapy";
 "go_to_downloads" = "Idź do Pobranych";
@@ -1049,7 +1049,7 @@
 "mapil_pano_only" = "Wyświetlaj tylko obrazy 360°";
 "osm_note_comment_title" = "Skomentuj uwagę OSM";
 "osm_notes_online_layer" = "Uwagi OSM (online)";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "tile_cache" = "Pamięć podręczna kafelków";
 "osmand_live_updates_size" = "Rozmiar pobranych aktualizacji";
 "mapil_select_user" = "Wybierz użytkownika";
@@ -1234,7 +1234,7 @@
 "gpx_slope" = "Nachylenie";
 "simulate_navigation" = "Symulacja nawigacji";
 "select_avoid_descr" = "Wybierz drogi, których chcesz unikać podczas nawigacji. Możesz wybrać drogę na mapie lub wybrać z listy poniżej.";
-"route_params" = "Parametry drogi";
+"route_parameters" = "Parametry drogi";
 "by_name" = "Alfabetycznie";
 "by_dist" = "Według odległości";
 "sort_by" = "Sortuj";
@@ -1723,8 +1723,8 @@
 "nav_type_osmand" = "OsmAnd (nawigowanie offline)";
 "nav_type_descr" = "Wybierz sposób obliczania trasy dla tego profilu";
 "change_map_behavior" = "Zmienia zachowanie się mapy podczas nawigacji";
-"map_behavior" = "Zachowanie mapy";
-"voice_prompts" = "Komunikaty głosowe";
+"map_during_navigation" = "Zachowanie mapy";
+"voice_announces" = "Komunikaty głosowe";
 "nav_type_title" = "Typ nawigacji";
 "arrows_direction_to_markers" = "Strzałki pokazują kierunek do aktywnego znacznika, jeśli jest on poza ekranem. Linie kierunków rysują linię do aktywnych znaczników.";
 "appearance_on_map" = "Wygląd na mapie";
@@ -1750,7 +1750,7 @@
 "map_settings_add_maps_hillshade" = "Cieniowanie wzniesień wymaga dodatkowych map";
 "map_settings_slopes_description" = "Mapy nachylenia używają różnych kolorów do wizualizacji terenu";
 "map_settings_layer_transparency" = "Przezroczystość warstwy";
-"map_settings_terrain" = "Teren";
+"shared_string_terrain" = "Teren";
 "import_from_files" = "Importuj z plików";
 "shared_string_copy" = "Skopiuj";
 "recalculate_wrong_dir" = "Przelicz trasę w przypadku zmiany kierunku";
@@ -1789,7 +1789,7 @@
 "width_limit_description" = "Wprowadź szerokość pojazdu, niektóre restrykcje dróg mogą dotyczyć szerokich pojazdów.";
 "height_limit_description" = "Wprowadź wysokość pojazdu, niektóre restrykcje dróg mogą dotyczyć wysokich pojazdów.";
 "weight_limit_description" = "Wprowadź wagę pojazdu, niektóre restrykcje dróg mogą dotyczyć ciężkich pojazdów.";
-"global_settings" = "Ustawienia ogólne";
+"osmand_settings" = "Ustawienia ogólne";
 "device_settings" = "Ustawienia urządzenia";
 "allow_3D_view" = "Widok 2.5D";
 "app_theme_light" = "Jasny";

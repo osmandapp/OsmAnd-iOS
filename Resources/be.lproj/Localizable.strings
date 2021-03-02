@@ -31,7 +31,7 @@
 "gpx_stat" = "Статыстыка";
 "rec_interval" = "Інтэрвал запісу";
 // Map settings
-"m_style_overview" = "Агляд";
+"rendering_value_browse_map_name" = "Агляд";
 "m_style_car" = "Аўтамабіль";
 "m_style_bicycle" = "Ровар";
 "map_settings_map" = "Мапа";
@@ -185,7 +185,7 @@
 "track_clear_q" = "Сапраўды хочаце ачысціць бягучы след?";
 "show_info" = "Паказаць інфармацыю";
 "m_style_walk" = "Пешаход";
-"map_settings_mode" = "Рэжым праграмы";
+"map_mode" = "Рэжым праграмы";
 "sett_zoom" = "Кнопкі маштабу";
 "sett_notshow" = "Не паказваць";
 "sett_loc_fmt" = "Фармат каардынат";
@@ -206,7 +206,7 @@
 "prch_items_failed" = "аб'екты не былі адноўленыя. Паспрабуйце яшчэ раз.";
 // Resources
 "res_mapsres" = "Мапы і рэсурсы";
-"res_installed" = "Усталявана";
+"download_tab_local" = "Усталявана";
 "res_banner_no_free_maps_title" = "У вас няма бясплатных мапаў!";
 "res_search_world" = "Шукаць па ўсім свеце";
 "res_catalog_upd" = "Абнаўленне каталога";
@@ -377,7 +377,7 @@
 "gpx_trip_groups" = "Групы слядоў";
 "gpx_group_select" = "Выбар групы";
 "show_all" = "Паказаць усе";
-"directions" = "Навігацыя";
+"get_directions" = "Навігацыя";
 "shared_string_dismiss" = "Адхіліць";
 "shared_string_modify" = "Змяніць";
 "parking" = "Паркоўка";
@@ -851,7 +851,7 @@
 "purple" = "Фіялетавы";
 "osm_editing_contact_info" = "Кантакты";
 "osm_note" = "Нататка OSM";
-"route_params" = "Параметры маршруту";
+"route_parameters" = "Параметры маршруту";
 "add_parking_place" = "Дадаць месца паркоўкі";
 "add_gpx_waypoint" = "Дадаць пункт GPX";
 "region_nautical" = "Марскія мапы";
@@ -988,7 +988,7 @@
 "osm_edits_notes" = "Нататкі";
 "help_install_and_troubleshoot" = "Усталёўка і вырашэнне праблемаў";
 "gpx_avg_altitude" = "Сярэдняя вышыня";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "osm_alert_button_ok" = "Стварыць нататку";
 "help_about" = "Пра праграму";
 "map_overlays" = "Накладзеная мапа";
@@ -1410,7 +1410,7 @@
 "sett_deg180" = "180 градусаў";
 "plugin_settings_descr" = "Налады ўбудовы для абранага профілю.";
 "global_settings_descr" = "Уплывае на ўсю праграму.";
-"global_settings" = "Агульныя налады";
+"osmand_settings" = "Агульныя налады";
 "angular_measurment_units" = "Адзінкі вымярэння вуглоў";
 "map_settings_hillshade_description" = "Мапы схілаў візуалізуюць схілы, вяршыні і нізіны пры дапамозе розных адценняў шэрага колеру";
 "allow_3D_view" = "Выгляд 2.5D";
@@ -1423,7 +1423,7 @@
 "map_settings_legend" = "Легенда";
 "map_settings_add_maps_hillshade" = "Для адлюстравання схілаў на мапе патрабуюцца дадатковыя мапы";
 "map_settings_slopes_legend" = "Больш падрабязна пра схілы можна прачытаць у Вікіпедыі";
-"map_settings_terrain" = "Рэльеф";
+"shared_string_terrain" = "Рэльеф";
 "map_settings_install_maps" = "Абярыце мапы для ўсталёўкі альбо абнаўлення";
 "stats_select_graph_data" = "Абраць даныя графіка";
 "track_during_nav" = "Аўтазапіс следу";
@@ -1456,7 +1456,7 @@
 "nav_type_direct_to" = "Наўпрост-да-пункта";
 "nav_type_osmand" = "OsmAnd (аўтаномная маршрутызацыя)";
 "change_map_behavior" = "Змена паводзін мапы падчас навігацыі";
-"voice_prompts" = "Галасавыя падказкі";
+"voice_announces" = "Галасавыя падказкі";
 "logging_interval_navigation_descr" = "Абраць інтэрвал захоўвання пунктаў следу падчас навігацыі";
 "device_settings" = "Налады прылады";
 "units_of_speed" = "Адзінка вымярэння хуткасці";
@@ -1514,7 +1514,7 @@
 "nav_type_brouter" = "BRouter";
 "nav_type_straight_line" = "Прамая лінія";
 "nav_type_descr" = "Абярыце спосаб разліку маршруту для гэтага профілю";
-"map_behavior" = "Паводзіны мапы";
+"map_during_navigation" = "Паводзіны мапы";
 "nav_type_title" = "Тып навігацыі";
 "arrows_direction_to_markers" = "Стрэлкі паказваюць кірунак актыўнай адзнакі, калі яна знаходзіцца па-за межамі экрана. Лініі кірунку паказваюць шлях да актыўных адзнак.";
 "appearance_on_map" = "Выгляд на мапе";

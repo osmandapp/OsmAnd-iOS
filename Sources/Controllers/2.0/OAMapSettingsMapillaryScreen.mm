@@ -261,7 +261,7 @@ static const NSInteger panoImageFilterSection = 3;
 
 - (void) setupView
 {
-    title = OALocalizedString(@"map_settings_mapillary");
+    title = OALocalizedString(@"street_level_imagery");
 }
 
 - (BOOL)datePickerIsShown

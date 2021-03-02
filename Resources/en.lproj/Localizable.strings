@@ -236,13 +236,13 @@
 "map_orientation_change_in_accordance_with_speed" = "Map orientation threshold";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 
-"route_params" = "Route parameters";
+"route_parameters" = "Route parameters";
 "fast_route_mode" = "Fastest route";
 "nav_type_title" = "Navigation type";
-"voice_prompts" = "Voice prompts";
+"voice_announces" = "Voice prompts";
 "screen_alerts" = "Screen alerts";
 "vehicle_parameters" = "Vehicle parameters";
-"map_behavior" = "Map behavior";
+"map_during_navigation" = "Map during navigation";
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
@@ -304,6 +304,7 @@
 "routing_preferences_descr" = "Routing preferences";
 "recording_preferences_descr" = "Track recording preferences";
 "routing_settings" = "Navigation";
+"get_directions" = "Directions";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
 "app_mode_truck" = "Truck";
@@ -637,7 +638,7 @@
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
-"m_style_overview" = "Overview";
+"rendering_value_browse_map_name" = "Browse map";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
@@ -647,7 +648,7 @@
 "layer_amenity_label" = "POI overlay labels";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
-"map_settings_mode" = "Application mode";
+"map_mode" = "Map mode";
 "map_settings_map_magnifier" = "Map magnifier";
 "map_settings_text_size" = "Text size";
 "map_settings_day" = "Day";
@@ -665,8 +666,9 @@
 "map_settings_base_transp" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
-"map_settings_mapillary" = "Mapillary";
-"map_settings_terrain" = "Terrain";
+"mapillary" = "Mapillary";
+"street_level_imagery" = "Street-level imagery";
+"shared_string_terrain" = "Terrain";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
 "map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
@@ -697,7 +699,7 @@
 "angular_measurment_units" = "Angular measurment units";
 "units_and_formats" = "Units & formats";
 "device_settings" = "Device settings";
-"global_settings" = "Global settings";
+"osmand_settings" = "OsmAnd settings";
 "global_settings_descr" = "Affect the entire application.";
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
@@ -915,7 +917,7 @@
 
 // Resources
 "res_mapsres" = "Maps & Resources";
-"res_installed" = "Installed";
+"download_tab_local" = "Local";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Live updates";
 "osmand_live_available_maps" = "Available maps";
@@ -1010,7 +1012,6 @@
 "menu" = "Menu";
 "menu_my_places" = "My Places";
 "menu_my_trips" = "My Tracks";
-"menu_my_directions" = "My Directions";
 "menu_feedback" = "Feedback";
 "menu_help" = "Help";
 
@@ -1355,7 +1356,7 @@
 "ctx_mnu_edit_fav" = "Edit favorite";
 "ctx_mnu_add_fav" = "Add favorite";
 "ctx_mnu_share" = "Share";
-"ctx_mnu_direction" = "Direction";
+"ctx_mnu_direction" = "Map marker";
 
 // Location Services
 "loc_access_denied" = "Access denied";
@@ -1573,7 +1574,6 @@
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
-"directions" = "Directions";
 "parking" = "Parking";
 
 "directions_more_options" = "Directions from";

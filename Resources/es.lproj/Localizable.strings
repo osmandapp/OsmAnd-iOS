@@ -81,14 +81,14 @@
 "gpx_updown" = "Arriba/Abajo";
 "gpx_uphills_total" = "Ascenso total";
 // Map settings
-"m_style_overview" = "Resumen";
+"rendering_value_browse_map_name" = "Resumen";
 "m_style_car" = "Automóvil";
 "m_style_walk" = "Peatón";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Mostrar en el mapa";
 "map_settings_type" = "Tipo de mapa";
-"map_settings_mode" = "Modo de aplicación";
+"map_mode" = "Modo de aplicación";
 "map_settings_day" = "Día";
 "map_settings_night" = "Noche";
 "map_settings_style" = "Estilo del mapa";
@@ -134,7 +134,7 @@
 "prch_items_failed" = "elemento(s) no se restauraron. Intente de nuevo.";
 // Resources
 "res_mapsres" = "Mapas y Recursos";
-"res_installed" = "Instalado";
+"download_tab_local" = "Instalado";
 "res_banner_many" = "Hay %d mapas gratuitos disponibles para descargar";
 "res_banner_one" = "Hay un mapa gratuito disponible para descargar";
 "res_banner_no" = "No tiene mapas gratuitos disponibles para descargar";
@@ -381,7 +381,7 @@
 "gpx_trip_groups" = "Grupos de trazas";
 "gpx_group_select" = "Grupo elegido";
 "show_all" = "Mostrar todo";
-"directions" = "Indicaciones";
+"get_directions" = "Indicaciones";
 "shared_string_dismiss" = "Descartar";
 "shared_string_modify" = "Modificar";
 "parking" = "Aparcamiento";
@@ -1029,7 +1029,7 @@
 "map_settings_text_size" = "Tamaño del texto";
 "osm_confirm_bulk_delete" = "¿Borrar %d ediciones?";
 "translucent_red" = "Rojo translúcido";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "mapillary_image" = "Imagen de Mapillary";
 "shared_string_retry" = "Reintentar";
 // Mapillary
@@ -1239,7 +1239,7 @@
 "shared_string_time_of_day" = "Hora del día";
 "gpx_slope" = "Pendiente";
 "simulate_navigation" = "Simular navegación";
-"route_params" = "Parámetros de ruta";
+"route_parameters" = "Parámetros de ruta";
 "by_name" = "Por nombre";
 "by_dist" = "Por distancia";
 "sort_by" = "Ordenar";
@@ -1660,11 +1660,11 @@
 "import_profile_select_descr" = "Marca los datos a importar.";
 "create_profile" = "Crear perfil";
 "shared_string_import" = "Importar perfil";
-"global_settings" = "Ajustes globales";
+"osmand_settings" = "Ajustes globales";
 "app_theme_light" = "Claro";
 "map_settings_add_online_source" = "Añadir repositorio en línea";
 "map_settings_legend" = "Leyenda";
-"map_settings_terrain" = "Terreno";
+"shared_string_terrain" = "Terreno";
 "m_style_pulic_transport" = "Transporte público";
 "displayed_route_save" = "Guardar en las trazas de OsmAnd";
 "import_from_files" = "Importar desde archivos";
@@ -1703,8 +1703,8 @@
 "nav_type_osmand" = "OsmAnd (navegación sin conexión)";
 "nav_type_descr" = "Elige cómo calcular una ruta para este perfil";
 "change_map_behavior" = "Cambiar el comportamiento del mapa durante la navegación";
-"map_behavior" = "Comportamiento del mapa";
-"voice_prompts" = "Indicaciones por voz";
+"map_during_navigation" = "Comportamiento del mapa";
+"voice_announces" = "Indicaciones por voz";
 "nav_type_title" = "Tipo de navegación";
 "arrows_direction_to_markers" = "Las flechas muestran la dirección del marcador activo si se encuentra fuera de la pantalla. Las líneas de dirección dibujan una línea hacia los marcadores activos.";
 "appearance_on_map" = "Aspecto en el mapa";

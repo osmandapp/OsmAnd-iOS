@@ -99,14 +99,14 @@
 "track_clear_q" = "Você quer limpar a viagem atual?";
 "show_info" = "Mostrar informações";
 // Map settings
-"m_style_overview" = "Visão Geral";
+"rendering_value_browse_map_name" = "Visão Geral";
 "m_style_car" = "Carro";
 "m_style_walk" = "Caminhando";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Mostrar no mapa";
 "map_settings_type" = "Tipo de mapa";
-"map_settings_mode" = "Modo Dia/Noite";
+"map_mode" = "Modo Dia/Noite";
 "map_settings_day" = "Dia";
 "map_settings_night" = "Noite";
 "map_settings_style" = "Estilo de renderização";
@@ -157,7 +157,7 @@
 "prch_items_failed" = "Item(ns) não foram restaurados. Por favor, tente novamente.";
 // Resources
 "res_mapsres" = "Mapas & Recursos";
-"res_installed" = "Instalado";
+"download_tab_local" = "Instalado";
 "res_banner_free_maps_title" = "Você tem %d mapas gratuitos!";
 "res_banner_no_free_maps_title" = "Você não tem nenhum mapa gratuito!";
 "res_banner_no_free_maps_desc" = "Por favor, compre mapas da região ou mapas de todo o mundo";
@@ -672,7 +672,7 @@
 "moving_time" = "Tempo em movimento";
 "gpx_deactivated" = "Desativado";
 "show_all" = "Mostrar tudo";
-"directions" = "Navegação";
+"get_directions" = "Navegação";
 "parking" = "Estacionamento";
 "directions_more_options" = "Direções desde";
 "nearby_search" = "Pesquisar nas proximidades";
@@ -1025,7 +1025,7 @@
 "already_has_subscription" = "Você já se inscreveu no OsmAnd Live e tem todas as funcionalidades desbloqueadas.";
 "already_has_inapp" = "Você já se inscreveu em %@.";
 "inapp_not_found" = "O %@ não é encontrado no OsmAnd. Provavelmente foi cancelado.";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "mapillary_image" = "Imagem do Mapillary";
 "shared_string_retry" = "Repetir";
 // Mapillary
@@ -1237,7 +1237,7 @@
 "gpx_slope" = "Inclinação";
 "simulate_navigation" = "Simular navegação";
 "select_avoid_descr" = "Selecione as estradas que você deseja evitar durante a navegação. Você pode selecionar uma estrada no mapa ou escolher um tipo na lista abaixo.";
-"route_params" = "Parâmetros de rota";
+"route_parameters" = "Parâmetros de rota";
 "by_dist" = "Pela distância";
 "sort_by" = "Ordenar";
 "swap_points" = "Inverter partida e destino";
@@ -1690,7 +1690,7 @@
 "arrived_at_destination" = "Chegou.";
 "next_seg" = "Próximo segmento";
 "default_speed" = "Velocidade predefinida";
-"voice_prompts" = "Avisos de voz";
+"voice_announces" = "Avisos de voz";
 "nav_type_ski" = "Esqui";
 "arrival_announcement_frequency" = "Quão cedo quer o anúncio da chegada\?";
 "maximum_speed" = "Velocidade máxima";
@@ -1698,7 +1698,7 @@
 "public_transport_show" = "Mostrar transporte público";
 "app_profiles" = "Perfis da app";
 "quick_action_remove_next_destination" = "Apagar o ponto de destino mais próximo";
-"map_settings_terrain" = "Terreno";
+"shared_string_terrain" = "Terreno";
 "announce" = "Anunciar";
 "profile_prefs_reset_successful" = "Todas as configurações de perfil são restauradas à predefinição.";
 "consider_limitations_param" = "Considerar limitações temporárias";

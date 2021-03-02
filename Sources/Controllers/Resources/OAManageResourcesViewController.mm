@@ -266,7 +266,7 @@ static BOOL _lackOfResources;
     if (self.region != _app.worldRegion)
         [self.titleView setText:self.region.name];
     else if (_currentScope == kLocalResourcesScope) {
-        [self.titleView setText:OALocalizedString(@"res_installed")];
+        [self.titleView setText:OALocalizedString(@"download_tab_local")];
     }
 
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -1635,7 +1635,7 @@ static BOOL _lackOfResources;
         if (section == _resourcesSection)
             return OALocalizedString(@"res_worldwide");
         if (section == _localResourcesSection)
-            return OALocalizedString(@"res_installed");
+            return OALocalizedString(@"download_tab_local");
         if (section == _regionMapSection)
             return OALocalizedString(@"res_world_map");
         if (section == _otherMapsSection)
@@ -1653,7 +1653,7 @@ static BOOL _lackOfResources;
     if (section == _resourcesSection)
         return OALocalizedString(@"res_mapsres");
     if (section == _localResourcesSection)
-        return OALocalizedString(@"res_installed");
+        return OALocalizedString(@"download_tab_local");
     if (section == _regionMapSection)
         return OALocalizedString(@"res_region_map");
     if (section == _otherMapsSection)
@@ -1803,7 +1803,7 @@ static BOOL _lackOfResources;
         else if (indexPath.section == _localResourcesSection && _localResourcesSection >= 0)
         {
             cellTypeId = installedResourcesSubmenuCell;
-            title = OALocalizedString(@"res_installed");
+            title = OALocalizedString(@"download_tab_local");
             
             subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)(_localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count + _localOnlineTileSources.count), OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
         }

@@ -49,7 +49,7 @@
 "track_interval_remember" = "Husk valg";
 "show_info" = "Vis Infoformation";
 // Map settings
-"m_style_overview" = "Oversigt";
+"rendering_value_browse_map_name" = "Oversigt";
 "m_style_car" = "Bil";
 "m_style_bicycle" = "Cykel";
 "map_settings_map" = "Kort";
@@ -215,7 +215,7 @@
 "res_deleting" = "Sletter…";
 "res_maps_inst" = "Kort";
 "res_search_world" = "Søg på verdensplan";
-"res_installed" = "Installeret";
+"download_tab_local" = "Installeret";
 "download_now" = "Hent kort nu";
 "proceed_q" = "Fortsæt?";
 "shared_string_update" = "Opdater";
@@ -228,7 +228,7 @@
 "track_continue_rec_q" = "Fortsæt optagelsen?";
 "m_style_walk" = "Gang";
 "map_settings_type" = "Korttype";
-"map_settings_mode" = "Programtilstand";
+"map_mode" = "Programtilstand";
 "map_settings_over" = "Overlejret";
 "map_settings_offline" = "Stil for offline kort";
 "map_settings_transp" = "Gennemsigtighed";
@@ -377,7 +377,7 @@
 "gpx_trip_groups" = "Rutegrupper";
 "gpx_group_select" = "Vælg gruppe";
 "show_all" = "Vis alle";
-"directions" = "Rutevejledning";
+"get_directions" = "Rutevejledning";
 "shared_string_dismiss" = "Annuller";
 "shared_string_modify" = "Ændre";
 "parking" = "Parkering";
@@ -1026,7 +1026,7 @@
 "show_tunnels" = "Tunneler";
 "map_settings_map_magnifier" = "Kortlup";
 "map_settings_text_size" = "Tekststørrelse";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "mapillary_image" = "Mapillary-foto";
 "shared_string_retry" = "Prøv igen";
 // Mapillary
@@ -1237,7 +1237,7 @@
 "gpx_slope" = "Hældning";
 "simulate_navigation" = "Simulere navigation";
 "select_avoid_descr" = "Vælg veje, der skal undgås under navigation, enten ved at vælge en vej på kortet eller vælge en type fra nedenstående liste.";
-"route_params" = "Ruteparametre";
+"route_parameters" = "Ruteparametre";
 "by_name" = "Efter navn";
 "by_dist" = "Efter afstand";
 "sort_by" = "Sorter";
@@ -1700,7 +1700,7 @@
 "map_settings_slopes_legend" = "Læs mere om skråninger på Wikipedia";
 "map_settings_slopes_description" = "Skråningskort bruger forskellige farver til at visualisere terrænet";
 "map_settings_layer_transparency" = "Lagets gennemsigtighed";
-"map_settings_terrain" = "Terræn";
+"shared_string_terrain" = "Terræn";
 "arrows_direction_to_markers" = "Pile viser retning til den aktive markør, hvis den er placeret uden for skærmen. Retningslinjer tegner en linje til aktive markører.";
 "appearance_on_map" = "Udseende på kortet";
 "choose_how_display_distance" = "Vælg hvordan afstanden til de aktive markører skal vises";
@@ -1743,7 +1743,7 @@
 "screen_alerts" = "Alarmer på skærmen";
 "voice_anounces" = "Talevejledning";
 "nav_type_title" = "Navigationstype";
-"voice_prompts" = "Talevejledning";
+"voice_announces" = "Talevejledning";
 "configure_screen_descr" = "Vælg skærmindstillinger for profilen";
 "min_speed" = "Min. hastighed";
 "shared_string_account" = "Konto";
@@ -1784,7 +1784,7 @@
 "reset_to_default" = "Nulstil til standard";
 "copy_from_other_profile" = "Kopiér fra en anden profil";
 "global_settings_descr" = "Påvirke hele programmet.";
-"global_settings" = "Globale indstillinger";
+"osmand_settings" = "Globale indstillinger";
 "device_settings" = "Indstillinger for enhed";
 "angular_measurment_units" = "Enhed for vinkelmåling";
 "allow_3D_view" = "2.5D-visning";

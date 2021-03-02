@@ -61,14 +61,14 @@
 "track_save" = "Aktuellen Track speichern";
 "track_continue_rec" = "Aufnahme fortsetzen";
 // Map settings
-"m_style_overview" = "Übersicht";
+"rendering_value_browse_map_name" = "Übersicht";
 "m_style_car" = "Auto";
 "m_style_walk" = "Gehen";
 "m_style_bicycle" = "Fahrrad";
 "map_settings_map" = "Karte";
 "map_settings_show" = "Zeige auf Karte";
 "map_settings_type" = "Kartentyp";
-"map_settings_mode" = "Anwendungsmodus";
+"map_mode" = "Anwendungsmodus";
 "map_settings_day" = "Tag";
 "map_settings_night" = "Nacht";
 "map_settings_style" = "Kartenstil";
@@ -114,7 +114,7 @@
 "sett_deg" = "Grad";
 "incur_high_charges" = "Dies kann hohe Kosten verursachen.";
 "prch_failed" = "Kauf von \"%@\" ist fehlgeschlagen";
-"res_installed" = "Installiert";
+"download_tab_local" = "Installiert";
 "res_search_world" = "Weltweite Suche";
 "res_world_map" = "Weltkarte";
 "res_updates" = "Aktualisierungen";
@@ -376,7 +376,7 @@
 "gpx_trip_groups" = "Trackgruppen";
 "gpx_group_select" = "Gruppenauswahl";
 "show_all" = "Alle anzeigen";
-"directions" = "Wegbeschreibung";
+"get_directions" = "Wegbeschreibung";
 "parking" = "Parkplatz";
 "est_travel_time" = "Reisezeit abschätzen";
 "pedestrian" = "Fußgänger";
@@ -1028,7 +1028,7 @@
 "show_tunnels" = "Tunnel";
 "map_settings_map_magnifier" = "Kartenlupe";
 "map_settings_text_size" = "Schriftgröße";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "mapillary_image" = "Mapillary-Foto";
 "shared_string_retry" = "Wiederholen";
 // Mapillary
@@ -1239,7 +1239,7 @@
 "gpx_slope" = "Hangneigung";
 "simulate_navigation" = "Navigation simulieren";
 "select_avoid_descr" = "Wählen Sie während der Navigation die Straßen aus, die Sie meiden möchten. Sie können entweder eine Straße auf der Karte auswählen oder einen Typ aus der untenstehenden Liste auswählen.";
-"route_params" = "Routenparameter";
+"route_parameters" = "Routenparameter";
 "by_name" = "Nach Namen";
 "by_dist" = "Nach Entfernung";
 "sort_by" = "Sortieren";
@@ -1685,7 +1685,7 @@
 "allow_3d" = "2½D-Ansicht zulassen";
 "map_settings_zoom_level_description" = "Legen Sie die minimale und maximale Zoomstufe für die Anzeige der Ebene fest";
 "map_settings_layer_transparency" = "Transparenz der Ebene";
-"map_settings_terrain" = "Gelände";
+"shared_string_terrain" = "Gelände";
 "arrows_direction_to_markers" = "Pfeile zeigen die Richtung zur aktiven Markierung an, wenn sie sich außerhalb des Bildschirms befindet. Richtungslinien zeichnen eine Linie zu aktiven Markierungen.";
 "appearance_on_map" = "Darstellung auf der Karte";
 "choose_how_display_distance" = "Wählen Sie, wie die Entfernung zu aktiven Markierungen angezeigt werden soll";
@@ -1750,7 +1750,7 @@
 "empty_profile_name_warning" = "Profilname darf nicht leer sein.";
 "desert" = "Wüste";
 "change_map_behavior" = "Kartenverhalten während der Navigation ändern";
-"map_behavior" = "Kartenverhalten";
+"map_during_navigation" = "Kartenverhalten";
 "voice_anounces" = "Sprachansagen";
 "osmand_routing" = "OsmAnd-Routing";
 "settings_item_read_error" = "Konnte nicht von '%1$s' lesen.";
@@ -1792,7 +1792,7 @@
 "nav_type_geocoding" = "Geokodierung";
 "nav_type_ski" = "Ski";
 "nav_type_brouter" = "BRouter";
-"voice_prompts" = "Sprachansagen";
+"voice_announces" = "Sprachansagen";
 "max_speed" = "Max. Geschwindigkeit";
 "min_speed" = "Min. Geschwindigkeit";
 "default_speed" = "Std. Geschwindigkeit";
@@ -1813,7 +1813,7 @@
 "osmand_profile" = "OsmAnd-Profil";
 "will_be_show_while_moving" = "Es wird während der Bewegung angezeigt";
 "ui_customization" = "Anpassung der Benutzeroberfläche";
-"global_settings" = "Globale Einstellungen";
+"osmand_settings" = "Globale Einstellungen";
 "width_limit_description" = "Geben Sie Ihre Fahrzeugbreite an. Für breite Fahrzeuge können einige Routenbeschränkungen gelten.";
 "weight_limit_description" = "Geben Sie Ihr Fahrzeuggewicht an, für schwere Fahrzeuge können einige Routenbeschränkungen gelten.";
 "send_anonymous_data" = "Anonyme Daten senden";

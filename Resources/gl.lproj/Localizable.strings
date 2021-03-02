@@ -410,14 +410,14 @@
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Speed";
 // Map settings
-"m_style_overview" = "Overview";
+"rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
-"map_settings_mode" = "Application mode";
+"map_mode" = "Application mode";
 "map_settings_day" = "Day";
 "map_settings_night" = "Night";
 "map_settings_style" = "Map style";
@@ -474,7 +474,7 @@
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 // Resources
 "res_mapsres" = "Maps & Resources";
-"res_installed" = "Installed";
+"download_tab_local" = "Installed";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";
@@ -716,7 +716,7 @@
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
-"directions" = "Directions";
+"get_directions" = "Directions";
 "parking" = "Parking";
 "directions_more_options" = "Directions from";
 "nearby_search" = "Search nearby";
@@ -870,7 +870,7 @@
 "add_work" = "Engadir o meu lugar de traballo";
 "map_settings_map_magnifier" = "Achegamento do mapa";
 "add_home" = "Engadir a miña casa";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "shared_string_distance" = "Distancia";
 "offline_vector_maps" = "Mapas vectoriais sen conexión";
 "osm_alert_button_ok" = "Crear unha nota";
@@ -890,7 +890,7 @@
 "osm_target_deleted" = "PDI do OSM eliminado";
 "osm_working_days" = "Días laborábeis";
 "osmand_live_update_now" = "Actualizar agora";
-"route_params" = "Parámetros de rota";
+"route_parameters" = "Parámetros de rota";
 "lightblue" = "Azul claro";
 "key_hint_select" = "Seleccionar";
 "shared_string_on" = "Activado";
@@ -1421,7 +1421,7 @@
 "arrival_announcement_frequency" = "Cando desexa o anuncio da chegada\?";
 "personal_category_name" = "Persoal";
 "quick_action_switch_profile_descr" = "O botón de acción troca entre os perfís escollidos.";
-"voice_prompts" = "Indicacións por voz";
+"voice_announces" = "Indicacións por voz";
 "shared_string_continue" = "Continuar";
 "res_source_sqlite" = "Ficheiro SQLiteDB";
 "shared_string_importing" = "Estase a importar";
@@ -1431,7 +1431,7 @@
 "res_slope" = "Costa";
 "vehicle_parameters" = "Parámetros do vehículo";
 "profile_prefs_reset_successful" = "Todos os axustes do perfil restabelecéronse por defecto.";
-"map_settings_terrain" = "Terreo";
+"shared_string_terrain" = "Terreo";
 "base_profile_descr_bicycle" = "Bicicleta de montaña, ciclomotor, cabalo";
 "appearance_on_map" = "Aparencia no mapa";
 "special_routing" = "Enrutamento especial";

@@ -72,7 +72,7 @@
 "sett_lang_local" = "Adigan";
 "shared_string_address" = "Tansa";
 "categories" = "Taggayin";
-"directions" = "Iwellihen";
+"get_directions" = "Iwellihen";
 "language" = "Tutlayt";
 "rendering_value_bicycle_name" = "Azlalam";
 "osm_note_comment" = "Awennit";
@@ -203,7 +203,7 @@
 "rendering_category_hide" = "Ffer";
 "help_legend" = "Taneffust";
 "col_green" = "Adal";
-"m_style_overview" = "Agzul";
+"rendering_value_browse_map_name" = "Agzul";
 "map_markers" = "Ticraḍ n tkarḍa";
 "fav_name" = "Isem";
 "int_seconds" = "Tasinin";
@@ -497,12 +497,12 @@
 "shared_string_exit" = "Tuffɣa";
 "default_speed_system" = "Tayunt n urured";
 "change_map_behavior" = "Beddel tiddin n tkarḍa deg tunigin";
-"map_behavior" = "Tiddin n tkarḍa";
+"map_during_navigation" = "Tiddin n tkarḍa";
 "nav_type_descr" = "Fren amek ara tessiḍneḍ abrid i umaɣnu-a";
 "screen_alerts" = "Ilɣa n ugdil";
 "nav_type_title" = "Anaw n tugniwin";
 "fast_route_mode" = "Abrid arurad akk";
-"route_params" = "Iɣewwaṛen n ubrid";
+"route_parameters" = "Iɣewwaṛen n ubrid";
 "arrival_distance_factor_at_last" = "Deg lmitrat tineggura";
 "routing_settings_descr" = "Swel tunigin";
 "general_settings_descr" = "Asentel n usnas, tayunin, tamnaḍt";

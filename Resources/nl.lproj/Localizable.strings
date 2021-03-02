@@ -388,14 +388,14 @@
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Speed";
 // Map settings
-"m_style_overview" = "Overview";
+"rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
-"map_settings_mode" = "Application mode";
+"map_mode" = "Application mode";
 "map_settings_day" = "Day";
 "map_settings_night" = "Night";
 "map_settings_style" = "Map style";
@@ -452,7 +452,7 @@
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 // Resources
 "res_mapsres" = "Maps & Resources";
-"res_installed" = "Installed";
+"download_tab_local" = "Installed";
 "res_banner_free_maps_title" = "U heeft %d gratis kaarten!";
 "res_banner_free_maps_desc" = "U kunt %d gratis kaarten downloaden, zonder updates";
 "res_banner_no_free_maps_title" = "U heeft geen gratis kaarten!";
@@ -673,7 +673,7 @@
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
-"directions" = "Directions";
+"get_directions" = "Directions";
 "parking" = "Parking";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -847,7 +847,7 @@
 "osm_phone" = "Telefoon";
 "map_settings_text_size" = "Tekstgrootte";
 "night_mode" = "Nacht modus";
-"route_params" = "Routeberekening";
+"route_parameters" = "Routeberekening";
 "osm_close_changeset" = "Sluit changeset";
 "shared_setting_always_ask" = "Altijd vragen";
 "toggle_nav" = "Start/stop navigatie";
@@ -969,7 +969,7 @@
 "osmand_live_donations" = "Donaties";
 "help_about" = "Over";
 "sett_ext_input" = "Uitwendig invoer apparaat";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "quick_action_tags" = "Tags";
 "opening_changeset" = "Wijzigingenset openen…";
 "quick_action_name" = "Sneltoets";
@@ -1454,7 +1454,7 @@
 "save_new_track" = "Bewaar als nieuwe track";
 "reverse_route" = "Route omkeren";
 "layer_amenity_label" = "Extra laag met namen van POI’s";
-"map_settings_terrain" = "Terrein";
+"shared_string_terrain" = "Terrein";
 "quick_action_remove_next_destination" = "Het volgende routepunt verwijderen";
 "help_osmand_live" = "Abonnement - OsmAnd Live";
 "arrival_announcement_frequency" = "Wanneer melden dat de bestemming bereikt is?";
@@ -1465,7 +1465,7 @@
 "num_stops" = "Haltes";
 "public_transport_hide" = "OV-informatie verbergen";
 "enter_profile_name" = "Profielnaam invoeren";
-"voice_prompts" = "Gesproken aanwijzingen";
+"voice_announces" = "Gesproken aanwijzingen";
 "plugin_settings_reset" = "Herstel plugin instellingen naar standaard";
 "menu" = "Menu";
 "edit_profile_list" = "Wijzig lijst met profielen";

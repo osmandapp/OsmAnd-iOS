@@ -81,14 +81,14 @@
 "gpx_updown" = "Su/giù";
 "gpx_uphills_total" = "Totale salite";
 // Map settings
-"m_style_overview" = "Panoramica";
+"rendering_value_browse_map_name" = "Panoramica";
 "m_style_car" = "Auto";
 "m_style_walk" = "A piedi";
 "m_style_bicycle" = "Bicicletta";
 "map_settings_map" = "Mappa";
 "map_settings_show" = "Mostra nella mappa";
 "map_settings_type" = "Tipo mappa";
-"map_settings_mode" = "Modalità applicazione";
+"map_mode" = "Modalità applicazione";
 "map_settings_day" = "Giorno";
 "map_settings_night" = "Notte";
 "map_settings_style" = "Stile mappa";
@@ -139,7 +139,7 @@
 "prch_items_failed" = "elementi non sono stati ripristinati. Si prega di riprovare.";
 // Resources
 "res_mapsres" = "Mappe & Risorse";
-"res_installed" = "Installate";
+"download_tab_local" = "Installate";
 "res_banner_many" = "Ci sono %d mappe gratuite disponibili da scaricare";
 "res_banner_one" = "C'è una mappa gratuita disponibile da scaricare";
 "res_banner_no" = "Non hai nessuna mappa gratuita disponibile da scaricare";
@@ -393,7 +393,7 @@
 "pedestrian" = "Pedone";
 "open_map_settings" = "Impostazioni Open Map";
 "gpx_group_select" = "Scelta gruppo";
-"directions" = "Indicazioni";
+"get_directions" = "Indicazioni";
 "sorting" = "Ordine";
 "plugins" = "Componenti aggiuntivi";
 "device_memory" = "Memoria dispositivo";
@@ -864,7 +864,7 @@
 "osm_alert_title" = "Esegui";
 "show_contour_lines" = "Visualizza le isoipse";
 "black" = "Nero";
-"route_params" = "Parametri del percorso";
+"route_parameters" = "Parametri del percorso";
 "quick_action_add_overlay" = "Aggiungi sovrapposizione";
 "shared_string_category" = "Categoria";
 "add_action" = "Aggiungi azione";
@@ -984,7 +984,7 @@
 "snap_to_road_descr" = "Blocca la posizione sulle strade durante la navigazione.";
 "prev_route" = "Percorsi precedenti";
 "help_install_and_troubleshoot" = "Installazione e risoluzione dei problemi";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "shared_setting_always_ask" = "Chiedi sempre";
 "map_settings_text_size" = "Dimensione del testo";
 "history" = "Cronologia";
@@ -1653,7 +1653,7 @@
 "export_profile" = "Esporta profilo";
 "plugin_settings_descr" = "Impostazioni del plugin per il profilo selezionato.";
 "global_settings_descr" = "Ha effetto sull'intera applicazione.";
-"global_settings" = "Impostazioni globali";
+"osmand_settings" = "Impostazioni globali";
 "device_settings" = "Impostazioni del dispositivo";
 "angular_measurment_units" = "Unità di misura angolari";
 "units_of_speed" = "Unità di misura della velocità";
@@ -1679,7 +1679,7 @@
 "map_settings_slopes_description" = "Le mappe delle pendenze utilizzano colori diversi per visualizzare il terreno";
 "map_settings_slopes_legend" = "Puoi leggere di più sulle piste su Wikipedia";
 "map_settings_layer_transparency" = "Trasparenza del livello";
-"map_settings_terrain" = "Terreno";
+"shared_string_terrain" = "Terreno";
 "m_style_pulic_transport" = "Trasporto pubblico";
 "import_from_files" = "Importare da file";
 "gpx_parse_error" = "OsmAnd GPX non è ben formato, contatta il team di supporto per approfondire.";
@@ -1726,8 +1726,8 @@
 "nav_type_osmand" = "OsmAnd (instradamento offline)";
 "nav_type_descr" = "Seleziona come calcolare un percorso per questo profilo";
 "change_map_behavior" = "Modifica il comportamento della mappa durante la navigazione";
-"map_behavior" = "Comportamento della mappa";
-"voice_prompts" = "Istruzioni vocali";
+"map_during_navigation" = "Comportamento della mappa";
+"voice_announces" = "Istruzioni vocali";
 "nav_type_title" = "Tipo di navigazione";
 "arrows_direction_to_markers" = "";
 "appearance_on_map" = "";

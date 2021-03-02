@@ -95,7 +95,7 @@
     if (section == 0)
         return nil;
     else if (section == 1)
-        return OALocalizedString(@"route_params");
+        return OALocalizedString(@"route_parameters");
     else if (section == 2)
         return OALocalizedString(@"osm_edits_advanced");
     

@@ -275,10 +275,10 @@
 - (void)loadDoc
 {
     OAGPXRouter *gpxRouter = [OAGPXRouter sharedInstance];
-    if (gpxRouter.gpx && [gpxRouter.gpx.file isEqualToString:self.gpx.file])
+    if (gpxRouter.gpx && [gpxRouter.gpx.gpxFilePath isEqualToString:self.gpx.gpxFilePath])
         [gpxRouter cancelRoute];
     
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.file];
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
     self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
 }
 
@@ -436,7 +436,7 @@
     else
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_mapViewController showTempGpxTrack:self.gpx.file];
+            [_mapViewController showTempGpxTrack:self.gpx.gpxFilePath];
         });
     }
     
@@ -773,7 +773,7 @@
                                  }
                                  else
                                  {
-                                     NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.file];
+                                     NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
                                      [_mapViewController deleteWpts:items docPath:path];
                                      [self loadDoc];
                                  }
@@ -939,8 +939,8 @@
     }
     else
     {
-        _exportFileName = [_gpx.file lastPathComponent];
-        _exportFilePath = [_app.gpxPath stringByAppendingPathComponent:self.gpx.file];
+        _exportFileName = _gpx.gpxFileName;
+        _exportFilePath = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
     }
     
     NSURL* gpxUrl = [NSURL fileURLWithPath:_exportFilePath];
@@ -1001,13 +1001,13 @@
                                      }
                                      else
                                      {
-                                         if ([settings.mapSettingVisibleGpx containsObject:self.gpx.file]) {
-                                             [settings hideGpx:@[self.gpx.file]];
+                                         if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFilePath]) {
+                                             [settings hideGpx:@[self.gpx.gpxFilePath]];
                                              [_mapViewController hideTempGpxTrack];
                                              [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
                                          }
                                          
-                                         [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.file];
+                                         [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
                                          [[OAGPXDatabase sharedDb] save];
                                      }
                                      [self cancelPressed];
@@ -1113,7 +1113,7 @@
                     OAAppSettings *settings = [OAAppSettings sharedManager];
                     cell.textView.text = OALocalizedString(@"map_settings_show");
                     cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-                    [cell.switchView setOn:[settings.mapSettingVisibleGpx containsObject:self.gpx.file]];
+                    [cell.switchView setOn:[settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFilePath]];
                     [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
                 }
                 return cell;
@@ -1303,14 +1303,14 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (sw.isOn)
     {
-        [settings showGpx:@[self.gpx.file] update:NO];
+        [settings showGpx:@[self.gpx.gpxFilePath] update:NO];
         [_mapViewController hideTempGpxTrack:NO];
         [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     }
-    else if ([settings.mapSettingVisibleGpx containsObject:self.gpx.file])
+    else if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFilePath])
     {
-        [settings hideGpx:@[self.gpx.file] update:NO];
-        [_mapViewController showTempGpxTrack:self.gpx.file update:NO];
+        [settings hideGpx:@[self.gpx.gpxFilePath] update:NO];
+        [_mapViewController showTempGpxTrack:self.gpx.gpxFilePath update:NO];
     }
     return NO;
 }
@@ -1358,7 +1358,7 @@
 
     if (!_showCurrentTrack)
     {
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.file];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
         [_mapViewController updateWpts:items docPath:path updateMap:NO];
     }
     
@@ -1399,7 +1399,7 @@
     
     if (!_showCurrentTrack)
     {
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.file];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
         [_mapViewController updateWpts:items docPath:path updateMap:YES];
     }
     else
@@ -1429,16 +1429,17 @@
         NSString* newName = [alertView textFieldAtIndex:0].text;
         if (newName.length > 0)
         {
-            NSString *oldFileName = [self.gpx.file lastPathComponent];
-            NSString *oldFilePath = self.gpx.file;
-            NSString *oldPath = [_app.gpxPath stringByAppendingPathComponent:self.gpx.file];
+            NSString *oldFileName = self.gpx.gpxFileName;
+            NSString *oldFilePath = self.gpx.gpxFilePath;
+            NSString *oldPath = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
             NSString *newFileName = [newName stringByAppendingPathExtension:@"gpx"];
-            NSString *newFilePath = [[self.gpx.file stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName];
+            NSString *newFilePath = [[self.gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName];
             NSString *newPath = [_app.gpxPath stringByAppendingPathComponent:newFilePath];
             if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
             {
                 self.gpx.gpxTitle = newName;
-                self.gpx.file = newFilePath;
+                self.gpx.gpxFileName = newFileName;
+                self.gpx.gpxFilePath = newFilePath;
                 [[OAGPXDatabase sharedDb] save];
                 
                 OAGpxMetadata *metadata;
@@ -1531,8 +1532,8 @@
 //Move track to selected folder
 - (void) onFolderSelected:(NSString *)selectedFolderName
 {
-    NSString *oldPath = _gpx.file;
-    NSString *oldName = [OAGPXDatabase.sharedDb getFileName:_gpx.file];
+    NSString *oldPath = _gpx.gpxFilePath;
+    NSString *oldName = _gpx.gpxFileName;
     NSString *sourcePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:oldPath];
     
     NSString *newFolder = [selectedFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : selectedFolderName;

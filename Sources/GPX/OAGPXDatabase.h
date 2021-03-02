@@ -15,7 +15,8 @@
 
 @interface OAGPX : NSObject
 
-@property (nonatomic) NSString *file;
+@property (nonatomic) NSString *gpxFileName;
+@property (nonatomic) NSString *gpxFilePath;
 @property (nonatomic) NSString *gpxTitle;
 @property (nonatomic) NSString *gpxDescription;
 @property (nonatomic) NSDate   *importDate;
@@ -49,7 +50,6 @@
 @property (nonatomic) OAGpxWpt *locationStart;
 @property (nonatomic) OAGpxWpt *locationEnd;
 
--(instancetype)initWithFilePath:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
 - (NSString *)getNiceTitle;
 
 @end
@@ -60,19 +60,19 @@
 
 + (OAGPXDatabase *)sharedDb;
 
--(OAGPX *)addGpxItem:(NSString *)file title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)getGPXItem:(NSString *)file;
+-(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)getGPXItem:(NSString *)filePath;
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
 -(void)replaceGpxItem:(OAGPX *)gpx;
--(BOOL)removeGpxItem:(NSString *)file;
--(BOOL)containsGPXItem:(NSString *)file;
+-(BOOL)removeGpxItem:(NSString *)filePath;
+-(BOOL)containsGPXItem:(NSString *)filePath;
 -(BOOL)containsGPXItemByFileName:(NSString *)fileName;
--(BOOL)updateGPXItemPointsCount:(NSString *)file pointsCount:(int)pointsCount;
+-(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
 -(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color;
 -(BOOL)updateGPXFolderName:(NSString *)newFilePath oldFilePath:(NSString *)oldFilePath;
 
--(NSString *)getFileName:(NSString *)itemFile;
--(NSString *)getFileDir:(NSString *)itemFile;
+-(NSString *)getFileDir:(NSString *)filePath;
 -(NSString *)getGpxStoringPathByFullPath:(NSString *)fullFilePath;
 
 -(void)load;

@@ -1628,7 +1628,7 @@
             
             [_gpxRouter.routeDoc buildRouteTrack];
             [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
-            [self setDocFileRoute:_gpxRouter.gpx.file];
+            [self setDocFileRoute:_gpxRouter.gpx.gpxFilePath];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self refreshGpxTracks];
@@ -1978,7 +1978,7 @@
         {
             [_gpxRouter.routeDoc buildRouteTrack];
             [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
-            [self setDocFileRoute:_gpxRouter.gpx.file];
+            [self setDocFileRoute:_gpxRouter.gpx.gpxFilePath];
         }
         
         [_selectedGpxHelper buildGpxList];
@@ -2238,7 +2238,7 @@
             _gpxDocsTemp.clear();
             _gpxDocFileTemp = [filePath copy];
             OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
-            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.file];
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
             _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
         }
         
@@ -2314,7 +2314,7 @@
 
     std::shared_ptr<const OsmAnd::GeoInfoDocument> doc = _gpxDocsTemp.first();
     OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:_gpxDocFileTemp];
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.file]; 
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath]; 
     QString qPath = QString::fromNSString(path);
     if (![[OAAppSettings sharedManager].mapSettingVisibleGpx containsObject:_gpxDocFileTemp])
     {

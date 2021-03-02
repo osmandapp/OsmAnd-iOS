@@ -932,7 +932,7 @@
 {
     OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
     [currentTrack applyBounds];
-    return [[OAGPX alloc] initWithFilePath:@"" title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds analysis:analysis];
+    return [[OAGPXDatabase sharedDb] buildGpxItem:@"" title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds analysis:analysis];
 }
 
 @end

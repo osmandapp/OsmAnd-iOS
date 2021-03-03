@@ -147,7 +147,7 @@
 -(OAGPX *)getGPXItem:(NSString *)fileName
 {
     for (OAGPX *item in gpxList) {
-        if ([item.gpxFileName isEqualToString:fileName]) {
+        if ([[item.gpxFileName precomposedStringWithCanonicalMapping] isEqualToString:[fileName precomposedStringWithCanonicalMapping]]) {
             return item;
         }
     }

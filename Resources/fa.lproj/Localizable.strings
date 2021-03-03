@@ -353,14 +353,14 @@
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Speed";
 // Map settings
-"m_style_overview" = "Overview";
+"rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
-"map_settings_mode" = "Application mode";
+"map_mode" = "Application mode";
 "map_settings_day" = "Day";
 "map_settings_night" = "Night";
 "map_settings_style" = "Map style";
@@ -417,7 +417,7 @@
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 // Resources
 "res_mapsres" = "Maps & Resources";
-"res_installed" = "Installed";
+"download_tab_local" = "Installed";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";
@@ -638,7 +638,7 @@
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
-"directions" = "Directions";
+"get_directions" = "Directions";
 "parking" = "Parking";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -903,7 +903,7 @@
 "osm_target_created" = "ایجاد POI";
 "osm_website" = "وبسایت";
 "quick_action_no_underlay" = "بدون لایهٔ زیری";
-"route_params" = "پارامترهای مسیر";
+"route_parameters" = "پارامترهای مسیر";
 "osm_alert_button_ok" = "نوشتن یادداشت";
 "quick_action_tags" = "برچسب‌ها";
 "replace_destination" = "تغییر مقصد";
@@ -1005,7 +1005,7 @@
 "day_mode" = "حالت روز";
 "osmand_live_donation_switch_title" = "کمک مالی به جامعهٔ OpenStreetMap";
 "osm_target_deleted" = "حذف POI";
-"map_settings_mapillary" = "مپیلاری";
+"mapillary" = "مپیلاری";
 "help_follow_us" = "ما را دنبال کنید";
 "osm_note_upload_anonymously" = "آپلود به‌صورت ناشناس";
 "map_settings_map_magnifier" = "ذره‌بین نقشه";
@@ -1425,7 +1425,7 @@
 "configure_screen_descr" = "انتخاب گزینه‌های صفحه برای این پروفایل";
 "search_activity" = "جست‌وجو";
 "shared_string_finish" = "پایان";
-"map_settings_terrain" = "ناهمواری‌ها";
+"shared_string_terrain" = "ناهمواری‌ها";
 "position_icon_at_rest" = "نماد موقعیت هنگام توقف";
 "route_betw_points" = "مسیر بین نقطه‌ها";
 "nav_type_ski" = "اسکی";
@@ -1501,7 +1501,7 @@
 "import_complete_description" = "همهٔ داده از %@ درون‌برد شد. با استفاده از دکمه‌های زیر می‌توانید بخش موردنیاز برنامه را برای مدیریت آن باز کنید.";
 "map_settings_legend" = "کلید";
 "quick_action_switch_profile_descr" = "با لمس دکمهٔ عملیاتی بین پروفایل‌های انتخاب‌شده جابه‌جا شوید.";
-"voice_prompts" = "پیام‌های گفتاری";
+"voice_announces" = "پیام‌های گفتاری";
 "distance_indication" = "نشانگر مسافت";
 "arrived_at_destination" = "رسیدید.";
 "public_transport_show" = "نمایش حمل‌ونقل عمومی";

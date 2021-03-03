@@ -139,10 +139,10 @@
     [data addObject:@[
         @{
             @"type" : kIconTitleIconRoundCell,
-            @"title" : OALocalizedString(@"directions"),
+            @"title" : OALocalizedString(@"get_directions"),
             @"img" : @"left_menu_icon_navigation",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
-            @"key" : @"directions"
+            @"key" : @"get_directions"
         },
         @{
             @"type" : kIconTitleIconRoundCell,
@@ -282,7 +282,7 @@
             [self dismissViewControllerAnimated:NO completion:nil];
             [self.delegate addToTrackSelected];
         }
-        else if ([key isEqualToString:@"directions"])
+        else if ([key isEqualToString:@"get_directions"])
         {
             [self.delegate directionsSelected];
         }

@@ -75,7 +75,7 @@
 "gpx_updown" = "Вверх/Вниз";
 "gpx_uphills_total" = "Всего подъем";
 // Map settings
-"m_style_overview" = "Обзор";
+"rendering_value_browse_map_name" = "Обзор";
 "m_style_car" = "Авто";
 "m_style_walk" = "Пешеход";
 "m_style_bicycle" = "Велосипед";
@@ -84,7 +84,7 @@
 "map_settings_tracks" = "Треки";
 "map_settings_show" = "Показать на карте";
 "map_settings_type" = "Тип карты";
-"map_settings_mode" = "Режим приложения";
+"map_mode" = "Режим приложения";
 "map_settings_day" = "День";
 "map_settings_night" = "Ночь";
 "map_settings_style" = "Стиль карты";
@@ -132,7 +132,7 @@
 "prch_item_failed" = "1 объект не был восстановлен. Попробуйте еще раз.";
 // Resources
 "res_mapsres" = "Карты и Ресурсы";
-"res_installed" = "Установлено";
+"download_tab_local" = "Установлено";
 "res_banner_many" = "Доступно %d бесплатных карт для загрузки";
 "res_banner_no" = "У вас нет бесплатных карт для загрузки";
 "res_search_world" = "Искать по всему миру";
@@ -412,7 +412,7 @@
 "gpx_trip_groups" = "Группы";
 "gpx_group_select" = "Выбор групп";
 "show_all" = "Показать все";
-"directions" = "Направления";
+"get_directions" = "Направления";
 "parking" = "Парковка";
 "est_travel_time" = "Время в пути";
 "pedestrian" = "Пешеход";
@@ -746,7 +746,7 @@
 "search_radius" = "Радиус поиска";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_wifi_only" = "Обновление только по Wi-Fi";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "shared_string_enabled" = "Включено";
 "osm_failed_uploads" = "Ошибка";
 "shared_string_close" = "Закрыть";
@@ -1025,7 +1025,7 @@
 "hide_edits" = "Скрыть локальные правки";
 "shared_string_time_of_day" = "Время суток";
 "gpx_slope" = "Уклон";
-"route_params" = "Параметры маршрута";
+"route_parameters" = "Параметры маршрута";
 "by_dist" = "По расстоянию";
 "sort_by" = "Сортировать";
 "select_manually" = "Выбрать вручную";
@@ -1724,7 +1724,7 @@
 "map_settings_slopes_description" = "Карты склонов используют разные цвета для визуализации ландшафта";
 "map_settings_slopes_legend" = "Вы можете узнать больше о склонах в Википедии";
 "map_settings_layer_transparency" = "Прозрачность слоя";
-"map_settings_terrain" = "Рельеф";
+"shared_string_terrain" = "Рельеф";
 "m_style_pulic_transport" = "Общественный транспорт";
 "displayed_route_save" = "Сохранить в OsmAnd поездки";
 "transfers" = "Пересадки:";
@@ -1771,7 +1771,7 @@
 "shared_string_exit" = "Выход";
 "select_nav_profile_dialog_message" = "Режим навигации определяет правила расчёта маршрутов.";
 "change_map_behavior" = "Изменение поведения карты во время навигации";
-"map_behavior" = "Поведение карты";
+"map_during_navigation" = "Поведение карты";
 "vehicle_parameters" = "Параметры транспортного средства";
 "screen_alerts" = "Экранные оповещения";
 "voice_anounces" = "Голосовые анонсы";
@@ -1798,7 +1798,7 @@
 "nav_type_geocoding" = "Геокодирование";
 "nav_type_ski" = "Лыжи";
 "nav_type_brouter" = "BRouter";
-"voice_prompts" = "Голосовые подсказки";
+"voice_announces" = "Голосовые подсказки";
 "max_speed" = "Макс. скорость";
 "min_speed" = "Мин. скорость";
 "default_speed" = "Скорость по умолчанию";
@@ -1838,7 +1838,7 @@
 "profile_settings" = "Настройки профиля";
 "plugin_settings_descr" = "Настройки плагина для выбранного профиля.";
 "global_settings_descr" = "Влияет на всё приложение.";
-"global_settings" = "Глобальные настройки";
+"osmand_settings" = "Глобальные настройки";
 "angular_measurment_units" = "Угловые единицы измерения";
 "units_of_speed" = "Единицы скорости";
 "meters" = "метров";

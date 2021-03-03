@@ -88,13 +88,13 @@
     }];
     [navigationArr addObject:@{
         @"type" : kCellTypeIconText,
-        @"title" : OALocalizedString(@"route_params"),
+        @"title" : OALocalizedString(@"route_parameters"),
         @"icon" : @"ic_custom_route",
         @"key" : @"routeParams",
     }];
     [navigationArr addObject:@{
         @"type" : kCellTypeIconText,
-        @"title" : OALocalizedString(@"voice_prompts"),
+        @"title" : OALocalizedString(@"voice_announces"),
         @"icon" : @"ic_custom_sound",
         @"key" : @"voicePrompts",
     }];
@@ -112,7 +112,7 @@
     }];
     [otherArr addObject:@{
         @"type" : kCellTypeTitle,
-        @"title" : OALocalizedString(@"map_behavior"),
+        @"title" : OALocalizedString(@"map_during_navigation"),
         @"key" : @"mapBehavior",
     }];
     [tableData addObject:navigationArr];

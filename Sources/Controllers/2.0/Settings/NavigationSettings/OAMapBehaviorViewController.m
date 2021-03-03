@@ -41,7 +41,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"map_behavior");
+    self.titleLabel.text = OALocalizedString(@"map_during_navigation");
 }
 
 - (void) viewDidLoad

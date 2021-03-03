@@ -68,7 +68,7 @@
         _settings = [OAAppSettings sharedManager];
         _iapHelper = [OAIAPHelper sharedInstance];
 
-        title = OALocalizedString(@"map_settings_map");
+        title = OALocalizedString(@"configure_map");
 
         settingsScreen = EMapSettingsScreenMain;
         
@@ -174,7 +174,7 @@
     }
     
     NSMutableDictionary *section0mapillary = [NSMutableDictionary dictionary];
-    [section0mapillary setObject:OALocalizedString(@"map_settings_mapillary") forKey:@"name"];
+    [section0mapillary setObject:OALocalizedString(@"street_level_imagery") forKey:@"name"];
     [section0mapillary setObject:@"" forKey:@"description"];
     [section0mapillary setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
     [section0mapillary setObject:@"OASettingSwitchCell" forKey:@"type"];
@@ -243,7 +243,7 @@
         else
             modeStr = OALocalizedString(@"-");
 
-        [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_mode"),
+        [categoriesList addObject:@{@"name": OALocalizedString(@"map_mode"),
                                     @"value": modeStr,
                                     @"type": @"OASettingsCell"}];
         
@@ -311,7 +311,7 @@
     if ([_iapHelper.srtm isActive])
     {
         NSMutableDictionary *terrain = [NSMutableDictionary dictionary];
-        [terrain setObject:OALocalizedString(@"map_settings_terrain") forKey:@"name"];
+        [terrain setObject:OALocalizedString(@"shared_string_terrain") forKey:@"name"];
         [terrain setObject:@"" forKey:@"description"];
         [terrain setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
         [terrain setObject:@"OASettingSwitchCell" forKey:@"type"];

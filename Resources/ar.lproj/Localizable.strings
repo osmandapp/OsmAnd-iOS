@@ -388,14 +388,14 @@
 "gpx_max_speed" = "السرعة القصوى";
 "gpx_speed" = "سرعة";
 // Map settings
-"m_style_overview" = "نظرة عامة";
+"rendering_value_browse_map_name" = "نظرة عامة";
 "m_style_car" = "سيارة";
 "m_style_walk" = "مشي";
 "m_style_bicycle" = "دراجة";
 "map_settings_map" = "الخرائط العادية";
 "map_settings_show" = "عرض على الخريطة";
 "map_settings_type" = "نمط الخريطة";
-"map_settings_mode" = "وضع الخريطة";
+"map_mode" = "وضع الخريطة";
 "map_settings_day" = "نهاري";
 "map_settings_night" = "ليلي";
 "map_settings_style" = "مظهرالخريطة";
@@ -452,7 +452,7 @@
 "prch_items_failed" = "لم تتم استعادة العنصر (العناصر). حاول مرة أخرى.";
 // Resources
 "res_mapsres" = "إدارة الخرائط";
-"res_installed" = "الخرائط المثبتة";
+"download_tab_local" = "الخرائط المثبتة";
 "res_banner_free_maps_title" = "لديك %d خرائط مجانية!";
 "res_banner_free_maps_desc" = "يمكنك تنزيل %d خرائط مجانية ، دون تحديثات";
 "res_banner_no_free_maps_title" = "ليس لديك خرائط مجانية!";
@@ -673,7 +673,7 @@
 "gpx_trip_groups" = "مجموعات المسار";
 "gpx_group_select" = "اختيار المجموعة";
 "show_all" = "إظهار الكل";
-"directions" = "التوجيه مع الطرق";
+"get_directions" = "التوجيه مع الطرق";
 "parking" = "موقف السيارة";
 "est_travel_time" = "تقدير وقت السفر";
 "pedestrian" = "مشاة";
@@ -1051,7 +1051,7 @@
 "show_tunnels" = "الأنفاق";
 "map_settings_map_magnifier" = "حجم الخريطة";
 "map_settings_text_size" = "حجم النص";
-"map_settings_mapillary" = "مابيلاري";
+"mapillary" = "مابيلاري";
 "shared_string_retry" = "أعد المحاولة";
 // Mapillary
 "mapil_no_inet_descr" = "تحتاج إلى اتصال بالإنترنت لعرض الصور الفوتوغرافية.";
@@ -1234,7 +1234,7 @@
 "gpx_slope" = "الانحدار";
 "simulate_navigation" = "محاكاة الملاحة";
 "select_avoid_descr" = "حدد الطرق التي تريد تجنبها أثناء التنقل. يمكنك إما تحديد طريق على الخريطة أو اختيار نوع من القائمة أدناه.";
-"route_params" = "معلمات الطريق";
+"route_parameters" = "معلمات الطريق";
 "by_name" = "بالاسم";
 "by_dist" = "بالمسافة";
 "sort_by" = "فرز";
@@ -1696,7 +1696,7 @@
 "map_settings_slopes_description" = "تستخدم خرائط المنحدرات ألوانًا مختلفة لعرض التضاريس";
 "map_settings_slopes_legend" = "يمكنك قراءة المزيد حول المنحدرات على ويكيبيديا";
 "map_settings_layer_transparency" = "شفافية الطبقة";
-"map_settings_terrain" = "تضاريس";
+"shared_string_terrain" = "تضاريس";
 "arrows_direction_to_markers" = "الأسهم تظهر الاتجاه إلى التوجيه المباشر إذا كانت موجودة خارج الشاشة. سترسم خطوط الاتجاه على شكل خط مباشر.";
 "appearance_on_map" = "المظهر على الخريطة";
 "choose_how_display_distance" = "اختر كيفية عرض المسافة إلى العلامات النشطة";
@@ -1762,7 +1762,7 @@
 "move_map_to_select_area" = "نقل الخريطة لتحديد المساحة المطلوبة.";
 "update_map" = "تحديث الخريطة";
 "change_map_behavior" = "تغيير الخريطة أثناء التنقل";
-"map_behavior" = "خريطة أثناء التنقل";
+"map_during_navigation" = "خريطة أثناء التنقل";
 "quick_action_transport_descr" = "انقر على هذا الإجراء لإظهار أو إخفاء مسارات / محطات النقل العام على الخريطة.";
 "vehicle_height_descr" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
 "touting_specified_vehicle_parameters_descr" = "قد تؤثر معلمات المركبات المحددة على التوجيه.";
@@ -1790,7 +1790,7 @@
 "nav_type_geocoding" = "الترميز الجغرافي";
 "nav_type_ski" = "تزلج";
 "nav_type_brouter" = "توجيه";
-"voice_prompts" = "الإعلامات الصوتية";
+"voice_announces" = "الإعلامات الصوتية";
 "max_speed" = "الحد الأعلى للسرعة";
 "min_speed" = "الحد الأدنى للسرعة";
 "default_speed" = "السرعة الافتراضية";
@@ -1799,7 +1799,7 @@
 "send_anonymous_data" = "إرسال بيانات مجهولة المصدر";
 "profile_type_base_string" = "وضع أساسي";
 "global_settings_descr" = "تؤثر على التطبيق بأكمله.";
-"global_settings" = "الاعدادات العامة";
+"osmand_settings" = "الاعدادات العامة";
 "send_anonymous_data_desc" = "أرسل إلى أوسماند إحصائيات تنزيل الخريطة ، نحن لا نجمع بيانات الموقع ، أو أي معلومات شخصية.";
 "default_profile_descr" = "حدد ملف تعريف سيتم استخدامه عند تشغيل التطبيق.";
 "not_available_profile_name" = "يوجد ملف بهذا الاسم.";

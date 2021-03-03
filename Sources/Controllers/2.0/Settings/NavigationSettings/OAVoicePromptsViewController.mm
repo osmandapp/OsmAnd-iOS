@@ -54,7 +54,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"voice_prompts");
+    self.titleLabel.text = OALocalizedString(@"voice_announces");
 }
 
 - (void) viewDidLoad

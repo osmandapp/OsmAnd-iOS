@@ -94,7 +94,7 @@ static OAApplicationMode *_SKI;
     _values = [NSMutableArray array];
     _cachedFilteredValues = [NSMutableArray array];
     
-    _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_overview") stringKey:@"default"];
+    _DEFAULT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"rendering_value_browse_map_name") stringKey:@"default"];
     _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
     [_values addObject:_DEFAULT];
     

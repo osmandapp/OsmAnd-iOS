@@ -176,7 +176,7 @@
 "arrival_distance_factor_at_last" = "De siste meterne";
 "map_orientation_change_in_accordance_with_speed" = "Kartorienteringsterskel";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
-"route_params" = "Ruteparameter";
+"route_parameters" = "Ruteparameter";
 "fast_route_mode" = "Raskeste rute";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Unngå…";
@@ -482,14 +482,14 @@
 "gpx_speed" = "Hastighet";
 "gpx_slope" = "Helning";
 // Map settings
-"m_style_overview" = "Oversikt";
+"rendering_value_browse_map_name" = "Oversikt";
 "m_style_car" = "Bil";
 "m_style_walk" = "Gåing";
 "m_style_bicycle" = "Sykkel";
 "map_settings_map" = "Kart";
 "map_settings_show" = "Vis på kart";
 "map_settings_type" = "Map type";
-"map_settings_mode" = "Application mode";
+"map_mode" = "Application mode";
 "map_settings_map_magnifier" = "Kartforstørrelse";
 "map_settings_text_size" = "Tekststørrelse";
 "map_settings_day" = "Day";
@@ -504,7 +504,7 @@
 "map_settings_transp" = "Transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 // Intro
 "intro_skip" = "Hopp over";
 "intro_download" = "Download\nmap";
@@ -562,7 +562,7 @@
 "prch_items_failed" = "item(s) were not restored. Please try again.";
 // Resources
 "res_mapsres" = "Maps & Resources";
-"res_installed" = "Installed";
+"download_tab_local" = "Installed";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Live-oppdateringer";
 "osmand_live_available_maps" = "Tilgjengelige kart";
@@ -1082,7 +1082,7 @@
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
 "show_all" = "Vis alle";
-"directions" = "Anvisninger";
+"get_directions" = "Anvisninger";
 "parking" = "Parkering";
 "directions_more_options" = "Anvisninger fra";
 "nearby_search" = "Søk i nærheten";
@@ -1633,7 +1633,7 @@
 "create_profile" = "Opprett profil";
 "export_profile" = "Eksporter profil";
 "map_settings_layer_transparency" = "Lag-gjennomsiktighet";
-"map_settings_terrain" = "Terreng";
+"shared_string_terrain" = "Terreng";
 "import_from_files" = "Importer fra filer";
 "size_of_downloaded_data" = "Den store forskjellen mellom forstørrelsesnivåer kan øke størrelsen på nedlastet data.";
 "online_sources" = "Nettbaserte kilder";
@@ -1649,7 +1649,7 @@
 "nav_type_ski" = "Ski";
 "nav_type_brouter" = "BRouter";
 "nav_type_osmand" = "OsmAnd (frakoblet ruting)";
-"map_behavior" = "Kartoppførsel";
+"map_during_navigation" = "Kartoppførsel";
 "nav_type_title" = "Navigasjonstype";
 "appearance_on_map" = "Utseende på kartet";
 "choose_how_display_distance" = "Velg visning av avstand til aktive markører";
@@ -1734,7 +1734,7 @@
 "reset_to_default" = "Tilbakestill til forvalg";
 "selected_profiles" = "%d av %d";
 "position_icon_at_rest" = "Posisjonsikon i hviletilstand";
-"voice_prompts" = "Talemeldinger";
+"voice_announces" = "Talemeldinger";
 "configure_map_descr" = "Kartutseende";
 "profile_type_user_string" = "Brukerprofil";
 "shared_string_routing" = "Ruteplanlegging";

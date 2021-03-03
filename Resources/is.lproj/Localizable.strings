@@ -111,14 +111,14 @@
 "gpx_max_speed" = "Hámarkshraði";
 "gpx_speed" = "Hraði";
 // Map settings
-"m_style_overview" = "Yfirlit";
+"rendering_value_browse_map_name" = "Yfirlit";
 "m_style_car" = "Akandi";
 "m_style_walk" = "Gangandi";
 "m_style_bicycle" = "Hjólandi";
 "map_settings_map" = "Kort";
 "map_settings_show" = "Birta á korti";
 "map_settings_type" = "Gerð korts";
-"map_settings_mode" = "Hamur forritsins";
+"map_mode" = "Hamur forritsins";
 "map_settings_day" = "Dagur";
 "map_settings_night" = "Nótt";
 "map_settings_style" = "Stíll korts";
@@ -175,7 +175,7 @@
 "prch_items_failed" = "atriði voru ekki endurheimt. Reyndu aftur.";
 // Resources
 "res_mapsres" = "Kort & tilföng";
-"res_installed" = "Uppsett";
+"download_tab_local" = "Uppsett";
 "res_banner_free_maps_title" = "Þú ert með %d ókeypis kort!";
 "res_banner_free_maps_desc" = "Þú getur náð í %d ókeypis kort, án uppfærslna";
 "res_banner_no_free_maps_title" = "Þú ert ekki með nein ókeypis kort!";
@@ -396,7 +396,7 @@
 "gpx_trip_groups" = "Hópar ferla";
 "gpx_group_select" = "Velja eftir hóp";
 "show_all" = "Sýna allt";
-"directions" = "Leiðarlýsingar";
+"get_directions" = "Leiðarlýsingar";
 "parking" = "Bílastæði";
 "est_travel_time" = "Áætla ferðatíma";
 "pedestrian" = "Fótgangandi";
@@ -1023,7 +1023,7 @@
 "show_tunnels" = "Veggöng";
 "map_settings_map_magnifier" = "Stækkun korts";
 "map_settings_text_size" = "Stærð texta";
-"map_settings_mapillary" = "Mapillary";
+"mapillary" = "Mapillary";
 "mapillary_image" = "Mapillary-mynd";
 "shared_string_retry" = "Reyna aftur";
 // Mapillary
@@ -1234,7 +1234,7 @@
 "gpx_slope" = "Halli";
 "simulate_navigation" = "Herma eftir leiðsögn";
 "select_avoid_descr" = "Veldu þá vegi sem þú vilt forðast á meðan leiðsögn stendur. Þú getur annað hvort valið veg á landakortinu eða valið gerð vegar úr listanum hér fyrir neðan.";
-"route_params" = "Viðföng leiðar";
+"route_parameters" = "Viðföng leiðar";
 "by_name" = "Eftir nafni";
 "by_dist" = "Eftir vegalengd";
 "sort_by" = "Röðun";
@@ -1665,7 +1665,7 @@
 // Dirrection appearance
 "one" = "Eitt";
 "arrows_on_map" = "Örvar á kortinu";
-"map_settings_terrain" = "Yfirborð";
+"shared_string_terrain" = "Yfirborð";
 "consider_limitations_param" = "Taka tillit til tímabundinna takmarkana";
 "help_purchases" = "Innkaup í OsmAnd";
 "appearance_on_map" = "Framsetning á kortinu";
@@ -1792,7 +1792,7 @@
 "route_recalculation_descr" = "Leiðin verður endurreiknuð ef vegalengd frá leiðinni að núverandi staðsetningu er lengri en uppgefið gildi.";
 "angular_measurment_units" = "Mælieiningar horna";
 "osmand_routing" = "OsmAnd leiðaval";
-"voice_prompts" = "Raddskilaboð";
+"voice_announces" = "Raddskilaboð";
 "select_color" = "Veldu lit";
 "select_distance_for_recalculation" = "Veldu þá vegalengd sem þarf til að leiðin verði endurreiknuð.";
 "select_icon" = "Veldu táknmynd";
@@ -1811,7 +1811,7 @@
 "speed_limit_tolerance_descr" = "Veldu þolvik hraðatakmarkana, ef þú ert þetta mikið fyrir ofan verður lesin aðvörun.";
 "recalculate_route" = "Endurreikna leið ef farið er út af fyrirfram gefinni leið";
 "base_profile_descr_public_transport" = "Tegundir almenningssamgangna";
-"global_settings" = "Víðværar stillingar";
+"osmand_settings" = "Víðværar stillingar";
 "settings_app_theme" = "Þema forrits";
 "tones" = "tónar";
 "select_nav_profile_dialog_message" = "Gerð leiðsagnar hefur áhrif á reglur þær sem notaðar eru við útreikning leiða.";
@@ -1823,7 +1823,7 @@
 "menu" = "Valmynd";
 "routing_attr_length_name" = "Takmörk á lengd";
 "send_anonymous_data" = "Senda nafnlaus gögn";
-"map_behavior" = "Hegðun landakorts";
+"map_during_navigation" = "Hegðun landakorts";
 "vehicle_parameters" = "Breytur varðandi farartæki";
 "configure_map_descr" = "Útlit landakorts";
 "number_of_tiles" = "Fjöldi flísa";

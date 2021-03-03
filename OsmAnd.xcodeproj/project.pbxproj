@@ -5749,8 +5749,8 @@
 		DAA738EC23E2FE1A00FAB0DE /* ic_share_folder_trips.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA738E723E2FE1900FAB0DE /* ic_share_folder_trips.png */; };
 		DAA738ED23E2FE1A00FAB0DE /* ic_share_folder_trips@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA738E823E2FE1A00FAB0DE /* ic_share_folder_trips@3x.png */; };
 		DAA738EE23E2FE1A00FAB0DE /* ic_share_folder_trips@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA738E823E2FE1A00FAB0DE /* ic_share_folder_trips@3x.png */; };
-		DAA74BD3219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
-		DAA74BD4219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
+		DAA74BD3219EBFDC006A3EE4 /* OAFingerRulerDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.mm */; };
+		DAA74BD4219EBFDC006A3EE4 /* OAFingerRulerDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.mm */; };
 		DAA864092303F70D000E1900 /* OANavResumePauseAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA864082303F70D000E1900 /* OANavResumePauseAction.mm */; };
 		DAA8640A2303F70D000E1900 /* OANavResumePauseAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA864082303F70D000E1900 /* OANavResumePauseAction.mm */; };
 		DAA8640D23040150000E1900 /* OANavStartStopAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA8640C23040150000E1900 /* OANavStartStopAction.mm */; };
@@ -10445,7 +10445,7 @@
 		DAA738E723E2FE1900FAB0DE /* ic_share_folder_trips.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_share_folder_trips.png; path = Resources/Icons/ic_share_folder_trips.png; sourceTree = "<group>"; };
 		DAA738E823E2FE1A00FAB0DE /* ic_share_folder_trips@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_share_folder_trips@3x.png"; path = "Resources/Icons/ic_share_folder_trips@3x.png"; sourceTree = "<group>"; };
 		DAA74BD1219EBFDC006A3EE4 /* OAFingerRulerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFingerRulerDelegate.h; sourceTree = "<group>"; };
-		DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAFingerRulerDelegate.m; sourceTree = "<group>"; };
+		DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFingerRulerDelegate.mm; sourceTree = "<group>"; };
 		DAA864072303F70D000E1900 /* OANavResumePauseAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANavResumePauseAction.h; sourceTree = "<group>"; };
 		DAA864082303F70D000E1900 /* OANavResumePauseAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANavResumePauseAction.mm; sourceTree = "<group>"; };
 		DAA8640B23040150000E1900 /* OANavStartStopAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANavStartStopAction.h; sourceTree = "<group>"; };
@@ -13349,7 +13349,7 @@
 				DA08F159216776C8009584C1 /* OARulerWidget.h */,
 				DA08F15A216776C8009584C1 /* OARulerWidget.mm */,
 				DAA74BD1219EBFDC006A3EE4 /* OAFingerRulerDelegate.h */,
-				DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */,
+				DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.mm */,
 				156E91E3244ED6D500B181BA /* OADestinationsLineWidget.h */,
 				156E91E1244ED6BE00B181BA /* OADestinationsLineWidget.mm */,
 				156E91EA2450609F00B181BA /* OADestinationLineDelegate.h */,
@@ -22133,7 +22133,7 @@
 				844E08181E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */,
 				848A65991F8A852F00F1DC93 /* OACurrentPositionHelper.mm in Sources */,
 				8457F8211ED88B1700500FF2 /* OAQuickSearchHeaderListItem.mm in Sources */,
-				DAA74BD4219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */,
+				DAA74BD4219EBFDC006A3EE4 /* OAFingerRulerDelegate.mm in Sources */,
 				847A1CE71DF94E9B003C1246 /* OADirectionTableViewCell.m in Sources */,
 				847A1CEA1DF94E9B003C1246 /* OAParkingViewController.mm in Sources */,
 				847A1CEB1DF94E9B003C1246 /* OALocationServices.mm in Sources */,
@@ -23326,7 +23326,7 @@
 				8417A6711B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */,
 				848A3EAF1B6A14030016F6F4 /* OASQLiteTileSource.mm in Sources */,
 				DAAB0B4F2452FF9B002AA2F3 /* OAPublicTransportCollapsableCell.m in Sources */,
-				DAA74BD3219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */,
+				DAA74BD3219EBFDC006A3EE4 /* OAFingerRulerDelegate.mm in Sources */,
 				844E08101E48C76600EFC525 /* OAToolbarViewController.mm in Sources */,
 				DA3305C321D391BE0081BA1D /* OADonationSettingsViewController.mm in Sources */,
 				848300C71CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */,

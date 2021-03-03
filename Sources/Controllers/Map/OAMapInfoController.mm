@@ -433,7 +433,7 @@
     [_widgetsView addSubview:_lanesControl];
     
     [_rulerControl removeFromSuperview];
-    [[OARootViewController instance].mapPanel.mapViewController.view addSubview:_rulerControl];
+    [[OARootViewController instance].mapPanel.mapViewController.view insertSubview:_rulerControl atIndex:0];
     [self updateRuler];
 
     [_alarmControl removeFromSuperview];
@@ -470,14 +470,6 @@
 {
     _expanded = !_expanded;
     [self recreateControls];
-}
-
-- (NSString *) getRulerWidgetDistance
-{
-    if (_rulerControl && (_rulerControl.oneFingerDist || _rulerControl.twoFingersDist)) {
-        return _rulerControl.rulerDistance;
-    }
-    return nil;
 }
 
 - (OATextState *) calculateTextState
@@ -571,7 +563,6 @@
     _alarmControl.delegate = self;
     
     _rulerControl = [ric createRulerControl];
-    _rulerControl.delegate = self;
   
     /*
     topToolbarView = new TopToolbarView(map);

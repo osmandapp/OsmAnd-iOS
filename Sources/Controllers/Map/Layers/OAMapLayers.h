@@ -23,6 +23,7 @@
 #import "OAOsmEditsLayer.h"
 #import "OAOsmBugsLayer.h"
 #import "OAMapillaryLayer.h"
+#import "OARulerByTapControlLayer.h"
 
 #import "OATerrainMapLayer.h"
 #import "OAOverlayMapLayer.h"
@@ -44,6 +45,7 @@
 @property (nonatomic, readonly) OAOsmEditsLayer *osmEditsLayer;
 @property (nonatomic, readonly) OAOsmBugsLayer *osmBugsLayer;
 @property (nonatomic, readonly) OAMapillaryLayer *mapillaryLayer;
+@property (nonatomic, readonly) OARulerByTapControlLayer *rulerByTapControlLayer;
 
 // Raster map layers
 @property (nonatomic, readonly) OATerrainMapLayer *terrainMapLayer;

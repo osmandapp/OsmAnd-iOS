@@ -6,12 +6,20 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OAMapLayer.h"
+#import "OASymbolMapLayer.h"
 
-@interface OARulerByTapControlLayer : OAMapLayer
+@protocol OAWidgetListener;
+
+@interface OARulerByTapControlLayer : OASymbolMapLayer
+
+@end
+
+@interface OARulerByTapView : UIView <UIGestureRecognizerDelegate>
 
 @property (nonatomic, readonly) NSString *rulerDistance;
+@property (nonatomic, weak) id<OAWidgetListener> delegate;
 
-//- (void) drawFingerRulerLayer:(CALayer *)layer inContext:(CGContextRef)ctx;
+- (void) drawFingerRulerLayer:(CALayer *)layer inContext:(CGContextRef)ctx;
+- (BOOL) updateLayer;
 
 @end

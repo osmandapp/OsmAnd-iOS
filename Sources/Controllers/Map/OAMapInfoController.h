@@ -33,7 +33,6 @@
 - (void) updateInfo;
 - (void) expandClicked:(id)sender;
 
-- (NSString *) getRulerWidgetDistance;
 - (void) updateRuler;
 
 @end

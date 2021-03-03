@@ -1525,4 +1525,11 @@ static const double d180PI = 180.0 / M_PI_2;
     return nil;
 }
 
++ (NSString *) getGpxShortPath:(NSString *)fullFilePath
+{
+    NSString *pathToDelete = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
+    NSString *trackFolderName =  [[fullFilePath stringByReplacingOccurrencesOfString:pathToDelete withString:@""] stringByDeletingLastPathComponent];
+    return [trackFolderName stringByAppendingPathComponent:fullFilePath.lastPathComponent];
+}
+
 @end

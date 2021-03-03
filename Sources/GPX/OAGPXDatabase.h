@@ -73,7 +73,6 @@
 -(BOOL)updateGPXFolderName:(NSString *)newFilePath oldFilePath:(NSString *)oldFilePath;
 
 -(NSString *)getFileDir:(NSString *)filePath;
--(NSString *)getGpxStoringPathByFullPath:(NSString *)fullFilePath;
 
 -(void)load;
 -(void)save;

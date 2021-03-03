@@ -181,12 +181,6 @@
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 }
 
-- (NSString *) getGpxStoringPathByFullPath:(NSString *)fullFilePath
-{
-    NSString *trackFolderName = [self getFileDir:fullFilePath];
-    return [trackFolderName stringByAppendingPathComponent:fullFilePath.lastPathComponent];
-}
-
 - (NSString *) getFileDir:(NSString *)filePath
 {
     NSString *pathToDelete = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];

@@ -856,7 +856,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         }
     }
     OASelectedGPXHelper *helper = OASelectedGPXHelper.instance;
-    NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:outFile];
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:outFile];
     if ([_settings.mapSettingVisibleGpx containsObject:gpxFilePath])
     {
         // Refresh track if visible

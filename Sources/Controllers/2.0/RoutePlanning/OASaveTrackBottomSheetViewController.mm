@@ -95,7 +95,7 @@
 - (IBAction)openSavedTrackPressed:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-    NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:_fileName];
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_fileName];
     OAGPX *gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxFilePath];
     if (gpx)
         [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx pushed:YES];

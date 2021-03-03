@@ -185,7 +185,7 @@ static UIViewController *parentController;
 
 - (void) removeFromDB
 {
-    NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:_importUrl.path];
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:_importUrl.path];
     [[OAGPXDatabase sharedDb] removeGpxItem:gpxFilePath];
     [[OAGPXDatabase sharedDb] save];
 }
@@ -879,7 +879,7 @@ static UIViewController *parentController;
     
     [doc saveTo:path];
     
-    NSString *gpxFilePath = [OAGPXDatabase.sharedDb getGpxStoringPathByFullPath:path];
+    NSString *gpxFilePath = [OAUtilities getGpxShortPath:path];
     OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
     OAGPX* item = [[OAGPXDatabase sharedDb] addGpxItem:gpxFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
     [[OAGPXDatabase sharedDb] save];

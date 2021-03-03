@@ -292,7 +292,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     auto activeGpx = helper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
-        OAGPX *gpx = [dbHelper getGPXItem:[it.key().toNSString() lastPathComponent]];
+        NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
+        OAGPX *gpx = [dbHelper getGPXItem:gpxFilePath];
         if (gpx)
         {
             auto doc = it.value();

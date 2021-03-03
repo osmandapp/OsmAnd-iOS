@@ -16,7 +16,7 @@
 @interface OAGPX : NSObject
 
 @property (nonatomic) NSString *gpxFileName;
-@property (nonatomic) NSString *gpxFilepath;
+@property (nonatomic) NSString *gpxFilePath;
 @property (nonatomic) NSString *gpxTitle;
 @property (nonatomic) NSString *gpxDescription;
 @property (nonatomic) NSDate   *importDate;
@@ -61,17 +61,20 @@
 + (OAGPXDatabase *)sharedDb;
 
 -(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)addGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
--(OAGPX *)getGPXItem:(NSString *)fileName;
-- (void)replaceGpxItem:(OAGPX *)gpx;
--(void)removeGpxItem:(NSString *)fileName;
--(BOOL)containsGPXItem:(NSString *)fileName;
--(BOOL)updateGPXItemPointsCount:(NSString *)fileName pointsCount:(int)pointsCount;
--(BOOL)updateGPXItemColor:(NSString *)fileName color:(int)color;
+-(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)getGPXItem:(NSString *)filePath;
+-(OAGPX *)getGPXItemByFileName:(NSString *)fileName;
+-(void)replaceGpxItem:(OAGPX *)gpx;
+-(BOOL)removeGpxItem:(NSString *)filePath;
+-(BOOL)containsGPXItem:(NSString *)filePath;
+-(BOOL)containsGPXItemByFileName:(NSString *)fileName;
+-(BOOL)updateGPXItemPointsCount:(NSString *)filePath pointsCount:(int)pointsCount;
+-(BOOL)updateGPXItemColor:(OAGPX *)item color:(int)color;
+-(BOOL)updateGPXFolderName:(NSString *)newFilePath oldFilePath:(NSString *)oldFilePath;
 
--(void) load;
--(void) save;
+-(NSString *)getFileDir:(NSString *)filePath;
+
+-(void)load;
+-(void)save;
 
 @end

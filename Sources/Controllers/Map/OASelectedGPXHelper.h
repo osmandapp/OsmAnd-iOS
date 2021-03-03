@@ -24,7 +24,7 @@
 -(void) clearAllGpxFilesToShow:(BOOL) backupSelection;
 -(void) restoreSelectedGpxFiles;
 
-+ (void) renameVisibleTrack:(NSString *)oldName newName:(NSString *) newName;
++ (void) renameVisibleTrack:(NSString *)oldPath newPath:(NSString *) newPath;
 
 
 @end

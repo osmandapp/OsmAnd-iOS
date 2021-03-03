@@ -60,15 +60,15 @@
     BOOL loading = NO;
     [_settings hideRemovedGpx];
 
-    for (NSString *fileName in _settings.mapSettingVisibleGpx)
+    for (NSString *filePath in _settings.mapSettingVisibleGpx)
     {
-        if ([fileName hasSuffix:kBackupSuffix])
+        if ([filePath hasSuffix:kBackupSuffix])
         {
-            [_selectedGPXFilesBackup addObject:fileName];
+            [_selectedGPXFilesBackup addObject:filePath];
             continue;
         }
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:fileName];
-        NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilepath];
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
+        NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
         QString qPath = QString::fromNSString(path);
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && !_activeGpx.contains(qPath))
         {
@@ -89,7 +89,8 @@
     }
     for (auto it = _activeGpx.begin(); it != _activeGpx.end(); )
     {
-        if (![_settings.mapSettingVisibleGpx containsObject:[it.key().toNSString() lastPathComponent]])
+        NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
+        if (![_settings.mapSettingVisibleGpx containsObject:gpxFilePath])
             it = _activeGpx.erase(it);
         else
             ++it;
@@ -108,9 +109,9 @@
     if (backupSelection)
     {
         NSArray *currentlyVisible = _settings.mapSettingVisibleGpx;
-        for (NSString *filename in currentlyVisible)
+        for (NSString *filePath in currentlyVisible)
         {
-            [backedUp addObject:[filename stringByAppendingString:kBackupSuffix]];
+            [backedUp addObject:[filePath stringByAppendingString:kBackupSuffix]];
         }
     }
     _activeGpx.clear();
@@ -136,16 +137,16 @@
     [_selectedGPXFilesBackup removeAllObjects];
 }
 
-+ (void) renameVisibleTrack:(NSString *)oldName newName:(NSString *) newName
++ (void) renameVisibleTrack:(NSString *)oldPath newPath:(NSString *)newPath
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSMutableArray *visibleGpx = [NSMutableArray arrayWithArray:settings.mapSettingVisibleGpx];
     for (NSString *gpx in settings.mapSettingVisibleGpx)
     {
-        if ([gpx isEqualToString:oldName])
+        if ([gpx isEqualToString:oldPath])
         {
             [visibleGpx removeObject:gpx];
-            [visibleGpx addObject:newName];
+            [visibleGpx addObject:newPath];
             break;
         }
     }

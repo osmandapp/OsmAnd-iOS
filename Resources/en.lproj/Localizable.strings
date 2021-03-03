@@ -914,6 +914,11 @@
 "point_to_navigate" = "Navigate to";
 "start_of_track" = "Start of the track";
 "nearest_point" = "Nearest point";
+"plan_route_folder" = "Folder";
+"plan_route_change_folder" = "Change folder";
+"plan_route_select_folder" = "Select folder";
+"select_folder_descr" = "Select folder or add a new one";
+"add_folder" = "Add folder";
 
 // Resources
 "res_mapsres" = "Maps & Resources";
